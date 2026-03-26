@@ -9,4 +9,12 @@ describe("classifyDictionaryEntry", () => {
   it("classifies a phrasal verb candidate", () => {
     expect(classifyDictionaryEntry("take off")).toBe("phrasal_verb");
   });
+
+  it("classifies a two-word phrase as a collocation", () => {
+    expect(classifyDictionaryEntry("strong coffee")).toBe("collocation");
+  });
+
+  it("classifies a three-word phrase as an idiom", () => {
+    expect(classifyDictionaryEntry("break the ice")).toBe("idiom");
+  });
 });

@@ -8,4 +8,11 @@ describe("normalizeDictionaryQuery", () => {
       cacheKey: "take off",
     });
   });
+
+  it("normalizes uppercase input and lowercases cacheKey", () => {
+    expect(normalizeDictionaryQuery("Take Off")).toEqual({
+      normalized: "Take Off",
+      cacheKey: "take off",
+    });
+  });
 });
