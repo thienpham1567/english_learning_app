@@ -54,7 +54,6 @@ const vietnameseSignals = new Set([
   "nghe",
   "oi",
   "qua",
-  "the",
   "thi",
   "tieng",
   "toi",
@@ -74,13 +73,22 @@ function tokenize(input: string) {
   return normalizeText(input).match(/[a-z0-9]+/g) ?? [];
 }
 
+function hasVietnamesePhraseSignal(normalizedText: string) {
+  return normalizedText.includes("co the");
+}
+
 export function detectLanguage(input: string): DetectedLanguage {
   const text = input.trim();
   if (!text) return "unknown";
 
+  const normalized = normalizeText(text);
   const tokens = tokenize(text);
   let englishScore = 0;
   let vietnameseScore = 0;
+
+  if (hasVietnamesePhraseSignal(normalized)) {
+    vietnameseScore += 1;
+  }
 
   for (const token of tokens) {
     if (englishSignals.has(token)) englishScore += 1;

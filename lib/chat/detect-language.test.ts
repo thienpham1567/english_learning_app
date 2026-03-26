@@ -24,6 +24,14 @@ describe("detectLanguage", () => {
     expect(detectLanguage("Thanks")).toBe("english");
   });
 
+  it("returns english for an ordinary sentence containing the", () => {
+    expect(detectLanguage("What is the problem?")).toBe("english");
+  });
+
+  it("returns english for another ordinary sentence containing the", () => {
+    expect(detectLanguage("Can you explain the sentence?")).toBe("english");
+  });
+
   it("returns vietnamese for a clearly Vietnamese message", () => {
     expect(
       detectLanguage("Mình muốn hỏi về cách dùng thì hiện tại đơn."),
