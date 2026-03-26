@@ -31,7 +31,7 @@ function countConsecutiveVietnameseTurns(messages: ChatMessage[]) {
 function buildOpenAiHistoryItem(message: ChatMessage): ResponseInputItem {
   if (message.role === "assistant") {
     return {
-      id: message.id,
+      id: message.id.startsWith("msg_") ? message.id : `msg_${message.id}`,
       type: "message",
       role: "assistant",
       status: "completed",
