@@ -42,6 +42,10 @@ describe("detectLanguage", () => {
     expect(detectLanguage("co the giai thich khong")).toBe("vietnamese");
   });
 
+  it("does not treat an English phrase containing co and the as Vietnamese", () => {
+    expect(detectLanguage("eco therapy")).toBe("unknown");
+  });
+
   it("returns vietnamese for a short accented Vietnamese word starting with đ", () => {
     expect(detectLanguage("đi")).toBe("vietnamese");
   });

@@ -78,20 +78,25 @@ function tokenize(input: string) {
   return normalizeText(input).match(/[a-z0-9]+/g) ?? [];
 }
 
-function hasVietnamesePhraseSignal(normalizedText: string) {
-  return normalizedText.includes("co the");
+function hasVietnamesePhraseSignal(tokens: string[]) {
+  for (let index = 0; index < tokens.length - 1; index += 1) {
+    if (tokens[index] === "co" && tokens[index + 1] === "the") {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 export function detectLanguage(input: string): DetectedLanguage {
   const text = input.trim();
   if (!text) return "unknown";
 
-  const normalized = normalizeText(text);
   const tokens = tokenize(text);
   let englishScore = 0;
   let vietnameseScore = 0;
 
-  if (hasVietnamesePhraseSignal(normalized)) {
+  if (hasVietnamesePhraseSignal(tokens)) {
     vietnameseScore += 1;
   }
 
