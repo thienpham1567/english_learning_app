@@ -1,6 +1,6 @@
 import { renderUi } from "@/test/render";
 import { screen } from "@testing-library/react";
-import { vi } from "vitest";
+import { expect, it, vi, describe } from "vitest";
 
 import { AppSidebar } from "@/components/app/AppSidebar";
 
