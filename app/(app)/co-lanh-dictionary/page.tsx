@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { message } from "antd";
 
 import { DictionaryResultCard } from "@/components/dictionary/DictionaryResultCard";
@@ -23,6 +23,7 @@ export default function CoLanhDictionaryPage() {
   const [result, setResult] = useState<Vocabulary | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+  const latestRequestIdRef = useRef(0);
 
   const handleSearch = async () => {
     const normalizedWord = query.trim();
@@ -39,6 +40,8 @@ export default function CoLanhDictionaryPage() {
 
     setHasSearched(true);
     setIsLoading(true);
+    const requestId = latestRequestIdRef.current + 1;
+    latestRequestIdRef.current = requestId;
 
     try {
       const response = await fetch("/api/dictionary", {
@@ -51,6 +54,10 @@ export default function CoLanhDictionaryPage() {
 
       const payload = (await response.json().catch(() => null)) as DictionaryResponse | null;
 
+      if (requestId !== latestRequestIdRef.current) {
+        return;
+      }
+
       if (!response.ok || !payload || !("data" in payload)) {
         const errorMessage =
           payload && "error" in payload ? payload.error : "Khong the tra cuu tu nay luc nay.";
@@ -60,9 +67,15 @@ export default function CoLanhDictionaryPage() {
 
       setResult(payload.data);
     } catch {
+      if (requestId !== latestRequestIdRef.current) {
+        return;
+      }
+
       messageApi.error("Da xay ra loi mang. Vui long thu lai sau.");
     } finally {
-      setIsLoading(false);
+      if (requestId === latestRequestIdRef.current) {
+        setIsLoading(false);
+      }
     }
   };
 

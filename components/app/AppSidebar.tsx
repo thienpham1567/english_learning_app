@@ -6,7 +6,7 @@ import { BookOpen, MessageCircleMore } from "lucide-react";
 
 const navItems = [
   { href: "/english-chatbot", label: "English Chatbot", icon: MessageCircleMore },
-  { href: "/co-lanh-dictionary", label: "Tu dien Co Lanh", icon: BookOpen },
+  { href: "/co-lanh-dictionary", label: "Từ điển Cô Lành", icon: BookOpen },
 ];
 
 export function AppSidebar() {

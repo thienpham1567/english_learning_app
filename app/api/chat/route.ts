@@ -39,7 +39,7 @@ Role 2: The Casual Conversationalist
 `;
 
 // A function to handle API errors and return a friendly persona-driven response instead of raw code errors
-function getFriendlyErrorMessage(error: unknown): string {
+function getFriendlyErrorMessage(): string {
   return `😤 Cô Minh đang gặp chút trục trặc kỹ thuật rồi. Trò ráng chờ lát nữa quay lại học tiếp nha! 🥲`;
 }
 
@@ -67,7 +67,7 @@ export async function POST(req: Request) {
     // Convert the raw token stream into an SSE (Server-Sent Events) response designed for the useChat() frontend hook
     return result.toUIMessageStreamResponse({
       // If the streaming disconnects or fails mid-way, attach our friendly error message into the UI stream
-      onError: (error) => getFriendlyErrorMessage(error),
+      onError: () => getFriendlyErrorMessage(),
     });
   } catch (error) {
     // If the code crashes BEFORE streamText can execute (e.g. req.json() fails, instant network failure)
@@ -76,7 +76,7 @@ export async function POST(req: Request) {
     console.error("Chat API error:", error);
 
     // Get the persona-driven error message
-    const friendlyMessage = getFriendlyErrorMessage(error);
+    const friendlyMessage = getFriendlyErrorMessage();
 
     // Manually construct and return an SSE HTTP Response.
     // This tricks the frontend (Browser) into thinking the AI system successfully sent a text message (which is actually an error message),
