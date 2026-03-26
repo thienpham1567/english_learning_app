@@ -78,6 +78,34 @@ describe("detectLanguage", () => {
     ).toBe("vietnamese");
   });
 
+  it("returns vietnamese for a simple Vietnamese sentence with cần giúp", () => {
+    expect(detectLanguage("Tôi cần giúp")).toBe("vietnamese");
+  });
+
+  it("returns vietnamese for a simple Vietnamese sentence with cần học", () => {
+    expect(detectLanguage("Tôi cần học")).toBe("vietnamese");
+  });
+
+  it("returns vietnamese for a simple Vietnamese sentence with Mình cần giúp", () => {
+    expect(detectLanguage("Mình cần giúp")).toBe("vietnamese");
+  });
+
+  it("returns vietnamese for a short Vietnamese request", () => {
+    expect(detectLanguage("Cần giúp")).toBe("vietnamese");
+  });
+
+  it("returns vietnamese for a Vietnamese greeting", () => {
+    expect(detectLanguage("Xin chao")).toBe("vietnamese");
+  });
+
+  it("returns vietnamese for a Vietnamese thanks message", () => {
+    expect(detectLanguage("Cam on")).toBe("vietnamese");
+  });
+
+  it("returns vietnamese for a Vietnamese identity sentence", () => {
+    expect(detectLanguage("minh la giao vien")).toBe("vietnamese");
+  });
+
   it("returns vietnamese for unaccented Vietnamese input", () => {
     expect(detectLanguage("co the giai thich khong")).toBe("vietnamese");
   });

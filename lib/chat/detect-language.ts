@@ -1,43 +1,54 @@
 import type { DetectedLanguage } from "@/lib/chat/types";
 
-const englishSignals = new Set([
-  "a",
+const englishPhrases = [
+  ["can", "you"],
+  ["help", "me"],
+  ["what", "is"],
+  ["what", "does"],
+  ["i", "want"],
+  ["will", "join"],
+  ["join", "the", "meeting"],
+  ["speak", "english"],
+  ["i", "am"],
+];
+
+const englishTokens = new Set([
   "am",
-  "and",
-  "are",
-  "can",
-  "do",
   "does",
   "english",
   "from",
   "help",
-  "i",
-  "in",
   "is",
-  "me",
-  "no",
-  "problem",
   "join",
   "meeting",
+  "problem",
   "practice",
   "sentence",
-  "speak",
-  "speaking",
   "thanks",
-  "this",
-  "to",
   "understand",
   "want",
+  "went",
   "what",
-  "when",
-  "where",
-  "why",
   "will",
-  "you",
+  "yesterday",
 ]);
 
-const vietnameseStrongSignals = new Set([
-  "cho",
+const vietnamesePhrases = [
+  ["co", "the"],
+  ["co", "oi"],
+  ["xin", "chao"],
+  ["cam", "on"],
+  ["giao", "vien"],
+  ["tieng", "anh"],
+  ["toi", "can"],
+  ["can", "giup"],
+  ["can", "hoc"],
+  ["toi", "muon"],
+  ["la", "ban"],
+  ["giai", "thich"],
+];
+
+const vietnameseTokens = new Set([
   "cach",
   "di",
   "dung",
@@ -50,29 +61,12 @@ const vietnameseStrongSignals = new Set([
   "muon",
   "nghia",
   "nghe",
-  "thi",
-  "tieng",
+  "noi",
+  "nua",
   "toi",
+  "tieng",
   "vua",
-]);
-
-const vietnameseContextWeakSignals = new Set([
-  "ban",
-  "co",
-  "la",
-  "moi",
-  "nao",
-  "oi",
-  "qua",
-  "roi",
-  "ve",
-]);
-
-const vietnameseNameWeakSignals = new Set([
-  "anh",
-  "lam",
-  "minh",
-  "viet",
+  "thich",
 ]);
 
 function normalizeText(input: string) {
@@ -87,9 +81,21 @@ function tokenize(input: string) {
   return normalizeText(input).match(/[a-z0-9]+/g) ?? [];
 }
 
-function hasVietnamesePhraseSignal(tokens: string[]) {
-  for (let index = 0; index < tokens.length - 1; index += 1) {
-    if (tokens[index] === "co" && tokens[index + 1] === "the") {
+function hasPhrase(tokens: string[], phrase: readonly string[]) {
+  if (phrase.length === 0 || tokens.length < phrase.length) {
+    return false;
+  }
+
+  for (let index = 0; index <= tokens.length - phrase.length; index += 1) {
+    let matched = true;
+    for (let offset = 0; offset < phrase.length; offset += 1) {
+      if (tokens[index + offset] !== phrase[offset]) {
+        matched = false;
+        break;
+      }
+    }
+
+    if (matched) {
       return true;
     }
   }
@@ -97,32 +103,40 @@ function hasVietnamesePhraseSignal(tokens: string[]) {
   return false;
 }
 
+function countPhraseMatches(tokens: string[], phrases: readonly (readonly string[])[]) {
+  let count = 0;
+  for (const phrase of phrases) {
+    if (hasPhrase(tokens, phrase)) {
+      count += 1;
+    }
+  }
+  return count;
+}
+
+function countTokenMatches(tokens: string[], signals: Set<string>) {
+  let count = 0;
+  for (const token of tokens) {
+    if (signals.has(token)) {
+      count += 1;
+    }
+  }
+  return count;
+}
+
 export function detectLanguage(input: string): DetectedLanguage {
   const text = input.trim();
   if (!text) return "unknown";
 
   const tokens = tokenize(text);
-  let englishScore = 0;
-  let vietnameseStrongScore = 0;
-  let vietnameseContextWeakScore = 0;
-  let vietnameseNameWeakScore = 0;
+  const englishScore =
+    countPhraseMatches(tokens, englishPhrases) +
+    countTokenMatches(tokens, englishTokens);
+  const vietnameseScore =
+    countPhraseMatches(tokens, vietnamesePhrases) +
+    countTokenMatches(tokens, vietnameseTokens);
 
-  if (hasVietnamesePhraseSignal(tokens)) {
-    vietnameseStrongScore += 1;
-  }
-
-  for (const token of tokens) {
-    if (englishSignals.has(token)) englishScore += 1;
-    if (vietnameseStrongSignals.has(token)) vietnameseStrongScore += 1;
-    if (vietnameseContextWeakSignals.has(token)) vietnameseContextWeakScore += 1;
-    if (vietnameseNameWeakSignals.has(token)) vietnameseNameWeakScore += 1;
-  }
-
-  if (englishScore > 0 && vietnameseStrongScore > 0) return "mixed";
-  if (englishScore > 0 && vietnameseContextWeakScore >= 2) return "mixed";
-  if (vietnameseStrongScore > 0) return "vietnamese";
+  if (englishScore > 0 && vietnameseScore > 0) return "mixed";
+  if (vietnameseScore > 0) return "vietnamese";
   if (englishScore > 0) return "english";
-  if (vietnameseContextWeakScore >= 2) return "vietnamese";
-  if (vietnameseNameWeakScore >= 2) return "unknown";
   return "unknown";
 }
