@@ -10,6 +10,7 @@ export default defineConfig({
     environment: "jsdom",
     globals: true,
     setupFiles: ["./test/setup.ts"],
+    exclude: [".superpowers/**", ".worktrees/**", "**/.superpowers/**", "**/.worktrees/**"],
   },
   resolve: {
     alias: {
