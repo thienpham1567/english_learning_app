@@ -24,7 +24,7 @@ export function DictionaryResultCard({
 }: DictionaryResultCardProps) {
   if (isLoading) {
     return (
-      <Card className="dictionary-card dictionary-result-card" bordered={false}>
+      <Card className="dictionary-card dictionary-result-card" variant="borderless">
         <div className="dictionary-result-card__loading">
           <Skeleton active paragraph={{ rows: 1, width: ["45%"] }} title={false} />
           <Skeleton active paragraph={{ rows: 4 }} title={{ width: "28%" }} />
@@ -36,7 +36,7 @@ export function DictionaryResultCard({
 
   if (!hasSearched || !vocabulary) {
     return (
-      <Card className="dictionary-card dictionary-result-card" bordered={false}>
+      <Card className="dictionary-card dictionary-result-card" variant="borderless">
         <div className="dictionary-empty-state">
           <div className="dictionary-empty-state__icon">
             {!hasSearched ? <Search size={26} /> : <SpellCheck2 size={26} />}
@@ -55,7 +55,7 @@ export function DictionaryResultCard({
   }
 
   return (
-    <Card className="dictionary-card dictionary-result-card" bordered={false}>
+    <Card className="dictionary-card dictionary-result-card" variant="borderless">
       <div className="dictionary-result-card__header">
         <div>
           <p className="dictionary-result-card__eyebrow">Ket qua tu dien</p>

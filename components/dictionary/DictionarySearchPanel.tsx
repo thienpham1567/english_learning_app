@@ -24,7 +24,7 @@ export function DictionarySearchPanel({
 }: DictionarySearchPanelProps) {
   return (
     <section className="dictionary-search-panel">
-      <Card className="dictionary-card dictionary-search-panel__card" bordered={false}>
+      <Card className="dictionary-card dictionary-search-panel__card" variant="borderless">
         <div className="dictionary-search-panel__eyebrow">
           <Sparkles size={16} />
           <span>Tra cuu co cau truc</span>
@@ -61,7 +61,7 @@ export function DictionarySearchPanel({
         </p>
       </Card>
 
-      <Card className="dictionary-card dictionary-tips-card" bordered={false}>
+      <Card className="dictionary-card dictionary-tips-card" variant="borderless">
         <div className="dictionary-tips-card__header">
           <BookOpenText size={18} />
           <span>Meo su dung</span>
