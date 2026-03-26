@@ -39,7 +39,9 @@ const vietnameseSignals = new Set([
   "cho",
   "co",
   "cach",
+  "di",
   "dung",
+  "duoc",
   "giai",
   "giup",
   "hoc",
@@ -52,8 +54,10 @@ const vietnameseSignals = new Set([
   "muon",
   "nghia",
   "nghe",
+  "nao",
   "oi",
   "qua",
+  "roi",
   "thi",
   "tieng",
   "toi",
@@ -64,6 +68,7 @@ const vietnameseSignals = new Set([
 
 function normalizeText(input: string) {
   return input
+    .replace(/[đĐ]/g, "d")
     .normalize("NFD")
     .replace(/[\u0300-\u036f]/g, "")
     .toLowerCase();

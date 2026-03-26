@@ -42,6 +42,22 @@ describe("detectLanguage", () => {
     expect(detectLanguage("co the giai thich khong")).toBe("vietnamese");
   });
 
+  it("returns vietnamese for a short accented Vietnamese word starting with đ", () => {
+    expect(detectLanguage("đi")).toBe("vietnamese");
+  });
+
+  it("returns vietnamese for an accented Vietnamese phrase starting with Đ", () => {
+    expect(detectLanguage("Đi nào")).toBe("vietnamese");
+  });
+
+  it("returns vietnamese for an accented Vietnamese word starting with Đ", () => {
+    expect(detectLanguage("Được")).toBe("vietnamese");
+  });
+
+  it("returns vietnamese for an accented Vietnamese phrase starting with Đ and another word", () => {
+    expect(detectLanguage("Đúng rồi")).toBe("vietnamese");
+  });
+
   it("returns vietnamese for a short unaccented Vietnamese phrase", () => {
     expect(detectLanguage("la ban")).toBe("vietnamese");
   });
