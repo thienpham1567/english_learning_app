@@ -17,6 +17,8 @@ const englishSignals = new Set([
   "me",
   "no",
   "problem",
+  "join",
+  "meeting",
   "practice",
   "sentence",
   "speak",
@@ -30,13 +32,13 @@ const englishSignals = new Set([
   "when",
   "where",
   "why",
+  "will",
   "you",
 ]);
 
 const vietnameseStrongSignals = new Set([
   "anh",
   "cho",
-  "co",
   "cach",
   "di",
   "dung",
@@ -46,8 +48,6 @@ const vietnameseStrongSignals = new Set([
   "hoc",
   "hoi",
   "khong",
-  "lam",
-  "moi",
   "minh",
   "muon",
   "nghia",
@@ -57,11 +57,11 @@ const vietnameseStrongSignals = new Set([
   "toi",
   "viet",
   "vua",
-  "ve",
 ]);
 
 const vietnameseWeakSignals = new Set([
   "ban",
+  "co",
   "la",
   "lam",
   "moi",
@@ -69,6 +69,7 @@ const vietnameseWeakSignals = new Set([
   "oi",
   "qua",
   "roi",
+  "ve",
 ]);
 
 function normalizeText(input: string) {
@@ -113,6 +114,7 @@ export function detectLanguage(input: string): DetectedLanguage {
   }
 
   if (englishScore > 0 && vietnameseStrongScore > 0) return "mixed";
+  if (englishScore > 0 && vietnameseWeakScore >= 2) return "mixed";
   if (vietnameseStrongScore > 0) return "vietnamese";
   if (englishScore > 0) return "english";
   if (vietnameseWeakScore >= 2) return "vietnamese";
