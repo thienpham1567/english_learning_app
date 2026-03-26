@@ -56,19 +56,22 @@ const vietnameseStrongSignals = new Set([
   "vua",
 ]);
 
-const vietnameseWeakSignals = new Set([
-  "anh",
+const vietnameseContextWeakSignals = new Set([
   "ban",
   "co",
   "la",
-  "lam",
-  "minh",
   "moi",
   "nao",
   "oi",
   "qua",
   "roi",
   "ve",
+]);
+
+const vietnameseNameWeakSignals = new Set([
+  "anh",
+  "lam",
+  "minh",
   "viet",
 ]);
 
@@ -101,7 +104,8 @@ export function detectLanguage(input: string): DetectedLanguage {
   const tokens = tokenize(text);
   let englishScore = 0;
   let vietnameseStrongScore = 0;
-  let vietnameseWeakScore = 0;
+  let vietnameseContextWeakScore = 0;
+  let vietnameseNameWeakScore = 0;
 
   if (hasVietnamesePhraseSignal(tokens)) {
     vietnameseStrongScore += 1;
@@ -110,13 +114,15 @@ export function detectLanguage(input: string): DetectedLanguage {
   for (const token of tokens) {
     if (englishSignals.has(token)) englishScore += 1;
     if (vietnameseStrongSignals.has(token)) vietnameseStrongScore += 1;
-    if (vietnameseWeakSignals.has(token)) vietnameseWeakScore += 1;
+    if (vietnameseContextWeakSignals.has(token)) vietnameseContextWeakScore += 1;
+    if (vietnameseNameWeakSignals.has(token)) vietnameseNameWeakScore += 1;
   }
 
   if (englishScore > 0 && vietnameseStrongScore > 0) return "mixed";
-  if (englishScore > 0 && vietnameseWeakScore >= 2) return "mixed";
+  if (englishScore > 0 && vietnameseContextWeakScore >= 2) return "mixed";
   if (vietnameseStrongScore > 0) return "vietnamese";
   if (englishScore > 0) return "english";
-  if (vietnameseWeakScore >= 2) return "vietnamese";
+  if (vietnameseContextWeakScore >= 2) return "vietnamese";
+  if (vietnameseNameWeakScore >= 2) return "unknown";
   return "unknown";
 }
