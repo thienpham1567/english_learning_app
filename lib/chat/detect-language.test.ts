@@ -44,6 +44,22 @@ describe("detectLanguage", () => {
     expect(detectLanguage("Our co founder can help")).toBe("english");
   });
 
+  it("returns english for a question request", () => {
+    expect(detectLanguage("Can I ask a question?")).toBe("english");
+  });
+
+  it("returns english for a polite request to explain a word", () => {
+    expect(detectLanguage("Please explain this word")).toBe("english");
+  });
+
+  it("returns english for a greeting", () => {
+    expect(detectLanguage("Hello teacher")).toBe("english");
+  });
+
+  it("returns english for a morning greeting", () => {
+    expect(detectLanguage("Good morning")).toBe("english");
+  });
+
   it("returns english for an ordinary sentence with Lam as a name", () => {
     expect(detectLanguage("Lam will join the meeting")).toBe("english");
   });
@@ -104,6 +120,14 @@ describe("detectLanguage", () => {
 
   it("returns vietnamese for a Vietnamese identity sentence", () => {
     expect(detectLanguage("minh la giao vien")).toBe("vietnamese");
+  });
+
+  it("returns vietnamese for a definition question", () => {
+    expect(detectLanguage("Đây là gì")).toBe("vietnamese");
+  });
+
+  it("returns vietnamese for a simple admission of not understanding", () => {
+    expect(detectLanguage("Em chưa hiểu")).toBe("vietnamese");
   });
 
   it("returns vietnamese for unaccented Vietnamese input", () => {
