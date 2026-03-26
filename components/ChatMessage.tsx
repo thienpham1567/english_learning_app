@@ -1,16 +1,9 @@
-import { UIMessage } from "ai";
 import ReactMarkdown from "react-markdown";
+import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 
-function getMessageText(m: UIMessage): string {
-  return (m.parts ?? [])
-    .filter((p) => p.type === "text")
-    .map((p) => (p as { type: "text"; text: string }).text)
-    .join("");
-}
-
-export function ChatMessage({ message }: { message: UIMessage }) {
+export function ChatMessage({ message }: { message: AppChatMessage }) {
   const isUser = message.role === "user";
-  const text = getMessageText(message);
+  const text = message.text.trim();
   if (!text) return null;
 
   return (

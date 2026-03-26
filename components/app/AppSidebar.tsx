@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { BookOpen, MessageCircleMore } from "lucide-react";
 
 const navItems = [
-  { href: "/english-chatbot", label: "English Chatbot", icon: MessageCircleMore },
+  { href: "/english-chatbot", label: "Trò chuyện tiếng Anh", icon: MessageCircleMore },
   { href: "/co-lanh-dictionary", label: "Từ điển Cô Lành", icon: BookOpen },
 ];
 
@@ -19,12 +19,12 @@ export function AppSidebar() {
           CM
         </div>
         <div className="app-sidebar__brand-text">
-          <p className="app-sidebar__eyebrow">English Learning App</p>
-          <h1 className="app-sidebar__title">Co Minh Studio</h1>
+          <p className="app-sidebar__eyebrow">Ứng dụng học tiếng Anh</p>
+          <h1 className="app-sidebar__title">Cô Minh Studio</h1>
         </div>
       </div>
 
-      <nav className="app-sidebar__nav" aria-label="App sections">
+      <nav className="app-sidebar__nav" aria-label="Các mục trong ứng dụng">
         {navItems.map(({ href, label, icon: Icon }) => {
           const active = pathname === href || pathname.startsWith(`${href}/`);
 

@@ -1,40 +1,146 @@
 "use client";
 
-import { useChat } from "@ai-sdk/react";
-import { DefaultChatTransport } from "ai";
 import { useEffect, useRef, useState } from "react";
 import { Input, Button } from "antd";
 
 import { ArrowUpOutlined } from "@ant-design/icons";
 import { TypingIndicator } from "@/components/TypingIndicator";
 import { ChatMessage } from "@/components/ChatMessage";
+import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 
 const SUGGESTED = [
-  "Check my grammar: I goed to school.",
-  "Give me a quick quiz!",
-  "What's an Aussie slang word?",
-  "Why is 'I am' correct, not 'I is'?",
+  "Sửa ngữ pháp giúp mình: I goed to school.",
+  "Cho mình một bài luyện nhanh bằng tiếng Anh.",
+  "Giải thích một từ lóng của người Úc nhé.",
+  "Vì sao phải nói 'I am' chứ không phải 'I is'?",
 ];
 
+const CHAT_ERROR_MESSAGE =
+  "Cô Minh đang gặp lỗi kỹ thuật. Bạn thử lại sau nhé.";
+
+type AssistantStreamEvent =
+  | { type: "assistant_start" }
+  | { type: "assistant_delta"; delta: string }
+  | { type: "assistant_done" }
+  | { type: "assistant_error"; message: string };
+
+function parseSsePayloads(chunk: string) {
+  return chunk
+    .split("\n")
+    .filter((line) => line.startsWith("data:"))
+    .map((line) => line.slice(5).trim())
+    .filter(Boolean);
+}
+
 export default function EnglishChatbotPage() {
-  const { messages, sendMessage, status, error, clearError } = useChat({
-    transport: new DefaultChatTransport({
-      api: "/api/chat",
-    }),
-  });
-  const isLoading = status === "streaming" || status === "submitted";
+  const [messages, setMessages] = useState<AppChatMessage[]>([]);
   const [input, setInput] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading, error]);
 
-  const send = (text?: string) => {
+  const removeEmptyAssistantMessage = (messageId: string) => {
+    setMessages((currentMessages) =>
+      currentMessages.filter(
+        (message) => message.id !== messageId || message.text.trim().length > 0,
+      ),
+    );
+  };
+
+  const send = async (text?: string) => {
     const t = (text ?? input).trim();
     if (!t || isLoading) return;
-    sendMessage({ text: t });
+
+    const userMessage: AppChatMessage = {
+      id: crypto.randomUUID(),
+      role: "user",
+      text: t,
+    };
+    const assistantMessageId = crypto.randomUUID();
+    const requestMessages = [...messages, userMessage];
+
+    setMessages([
+      ...requestMessages,
+      {
+        id: assistantMessageId,
+        role: "assistant",
+        text: "",
+      },
+    ]);
     setInput("");
+    setError(null);
+    setIsLoading(true);
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ messages: requestMessages }),
+      });
+
+      if (!response.ok || !response.body) {
+        throw new Error(CHAT_ERROR_MESSAGE);
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let buffer = "";
+      let finished = false;
+
+      while (!finished) {
+        const { value, done } = await reader.read();
+
+        if (done) {
+          break;
+        }
+
+        buffer += decoder.decode(value, { stream: true });
+
+        let eventBoundary = buffer.indexOf("\n\n");
+        while (eventBoundary !== -1) {
+          const rawEvent = buffer.slice(0, eventBoundary);
+          buffer = buffer.slice(eventBoundary + 2);
+
+          for (const payload of parseSsePayloads(rawEvent)) {
+            const event = JSON.parse(payload) as AssistantStreamEvent;
+
+            if (event.type === "assistant_delta" && event.delta) {
+              setMessages((currentMessages) =>
+                currentMessages.map((message) =>
+                  message.id === assistantMessageId
+                    ? { ...message, text: message.text + event.delta }
+                    : message,
+                ),
+              );
+            }
+
+            if (event.type === "assistant_error") {
+              setError(event.message);
+              removeEmptyAssistantMessage(assistantMessageId);
+              finished = true;
+            }
+
+            if (event.type === "assistant_done") {
+              finished = true;
+            }
+          }
+
+          eventBoundary = buffer.indexOf("\n\n");
+        }
+      }
+    } catch (streamError) {
+      console.error("Chat page stream error:", streamError);
+      setError(CHAT_ERROR_MESSAGE);
+      removeEmptyAssistantMessage(assistantMessageId);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -85,7 +191,7 @@ export default function EnglishChatbotPage() {
           >
             Cô Minh English
           </div>
-          <div style={{ fontSize: 12, color: "#4caf50" }}>● Online</div>
+          <div style={{ fontSize: 12, color: "#4caf50" }}>● Đang hoạt động</div>
         </div>
       </header>
 
@@ -132,7 +238,7 @@ export default function EnglishChatbotPage() {
                   color: "var(--text-primary)",
                 }}
               >
-                Cô Minh is here! 😏
+                Cô Minh đã sẵn sàng 😏
               </h2>
               <p
                 style={{
@@ -142,9 +248,8 @@ export default function EnglishChatbotPage() {
                   lineHeight: 1.6,
                 }}
               >
-                Ready to suffer… I mean, <em>learn</em>! Ask me anything in
-                English. I&apos;ll correct you, tease you, and make you better.
-                📚
+                Hãy trả lời bằng tiếng Anh để luyện phản xạ. Cô sẽ sửa lỗi rõ
+                ràng, giải thích ngắn gọn và giữ cuộc trò chuyện tiếp tục. 📚
               </p>
               <div
                 style={{ display: "flex", flexDirection: "column", gap: 10 }}
@@ -177,7 +282,6 @@ export default function EnglishChatbotPage() {
 
           {/* Chat history */}
           {messages
-            .filter((m) => m.role !== "system")
             .map((m) => (
               <ChatMessage key={m.id} message={m} />
             ))}
@@ -200,11 +304,10 @@ export default function EnglishChatbotPage() {
                 }}
               >
                 <p style={{ margin: "0 0 10px" }}>
-                  {error.message ||
-                    "😤 Cô Minh đang gặp vấn đề kỹ thuật! Thử lại sau nha! 🥲"}
+                  {error}
                 </p>
                 <button
-                  onClick={clearError}
+                  onClick={() => setError(null)}
                   style={{
                     background: "transparent",
                     border: "1px solid #e07050",
@@ -216,7 +319,7 @@ export default function EnglishChatbotPage() {
                     fontWeight: 600,
                   }}
                 >
-                  Dismiss ✕
+                  Đóng ✕
                 </button>
               </div>
             </div>
@@ -257,7 +360,7 @@ export default function EnglishChatbotPage() {
                 send();
               }
             }}
-            placeholder="Ask Cô Minh anything... 📚"
+            placeholder="Nhập câu hỏi hoặc câu trả lời bằng tiếng Anh... 📚"
             autoSize={{ minRows: 1, maxRows: 6 }}
             disabled={isLoading}
             style={{
@@ -301,7 +404,7 @@ export default function EnglishChatbotPage() {
             margin: "8px 0 0",
           }}
         >
-          Enter to send · Shift+Enter for new line
+          Enter để gửi · Shift+Enter để xuống dòng
         </p>
       </div>
     </div>

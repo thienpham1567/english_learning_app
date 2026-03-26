@@ -8,9 +8,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Cô Minh English — Your Witty AI Tutor",
+  title: "Cô Minh English | Luyện tiếng Anh cùng cô Minh",
   description:
-    "Practice English with Cô Minh, a legendary sassy Vietnamese-English teacher who teases your mistakes and celebrates your wins.",
+    "Luyện tiếng Anh cùng cô Minh với phản hồi trực tiếp, sửa lỗi rõ ràng và hội thoại tự nhiên mỗi ngày.",
 };
 
 export default function RootLayout({
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="vi">
       <body style={{ fontFamily: inter.style.fontFamily }}>{children}</body>
     </html>
   );
