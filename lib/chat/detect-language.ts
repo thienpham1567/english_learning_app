@@ -1,11 +1,67 @@
 import type { DetectedLanguage } from "@/lib/chat/types";
 
-const vietnameseChars =
-  /[ăâđêôơưáàảãạấầẩẫậắằẳẵặéèẻẽẹếềểễệíìỉĩịóòỏõọốồổỗộớờởỡợúùủũụứừửữựýỳỷỹỵ]/i;
-const englishWords =
-  /\b(and|is|are|what|how|why|when|where|practice|english|sentence|grammar|can|you|help|me|please|understand)\b/i;
-const vietnameseWords =
-  /\b(và|là|mình|bạn|cô|nghĩa|tiếng|anh|việt|giúp|cách|minh|muon|hoc|tieng|giai|thich|khong|co the|giai thich|the nao|lam on)\b/i;
+const englishSignals = new Set([
+  "a",
+  "am",
+  "and",
+  "are",
+  "can",
+  "do",
+  "does",
+  "english",
+  "from",
+  "help",
+  "i",
+  "in",
+  "is",
+  "me",
+  "no",
+  "problem",
+  "practice",
+  "sentence",
+  "speak",
+  "speaking",
+  "thanks",
+  "this",
+  "to",
+  "understand",
+  "want",
+  "what",
+  "when",
+  "where",
+  "why",
+  "you",
+]);
+
+const vietnameseSignals = new Set([
+  "anh",
+  "ban",
+  "cho",
+  "co",
+  "cach",
+  "dung",
+  "giai",
+  "giup",
+  "hoc",
+  "hoi",
+  "khong",
+  "la",
+  "lam",
+  "moi",
+  "minh",
+  "muon",
+  "nghia",
+  "nghe",
+  "oi",
+  "qua",
+  "the",
+  "thi",
+  "tieng",
+  "toi",
+  "viet",
+  "vua",
+  "ve",
+]);
 
 function normalizeText(input: string) {
   return input
@@ -14,16 +70,25 @@ function normalizeText(input: string) {
     .toLowerCase();
 }
 
+function tokenize(input: string) {
+  return normalizeText(input).match(/[a-z0-9]+/g) ?? [];
+}
+
 export function detectLanguage(input: string): DetectedLanguage {
   const text = input.trim();
   if (!text) return "unknown";
 
-  const hasVietnameseSignal =
-    vietnameseChars.test(text) || vietnameseWords.test(normalizeText(text));
-  const hasEnglishSignal = englishWords.test(text);
+  const tokens = tokenize(text);
+  let englishScore = 0;
+  let vietnameseScore = 0;
 
-  if (hasVietnameseSignal && hasEnglishSignal) return "mixed";
-  if (hasVietnameseSignal) return "vietnamese";
-  if (hasEnglishSignal) return "english";
+  for (const token of tokens) {
+    if (englishSignals.has(token)) englishScore += 1;
+    if (vietnameseSignals.has(token)) vietnameseScore += 1;
+  }
+
+  if (englishScore > 0 && vietnameseScore > 0) return "mixed";
+  if (vietnameseScore > 0) return "vietnamese";
+  if (englishScore > 0) return "english";
   return "unknown";
 }
