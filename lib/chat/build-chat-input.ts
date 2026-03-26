@@ -1,3 +1,5 @@
+import type { ResponseInputItem } from "openai/resources/responses/responses";
+
 import { buildChatInstructions } from "@/lib/chat/build-chat-instructions";
 import { detectLanguage } from "@/lib/chat/detect-language";
 import type { ChatMessage } from "@/lib/chat/types";
@@ -26,6 +28,35 @@ function countConsecutiveVietnameseTurns(messages: ChatMessage[]) {
   return consecutiveVietnameseTurns;
 }
 
+function buildOpenAiHistoryItem(message: ChatMessage): ResponseInputItem {
+  if (message.role === "assistant") {
+    return {
+      id: message.id,
+      type: "message",
+      role: "assistant",
+      status: "completed",
+      content: [
+        {
+          type: "output_text",
+          text: message.text,
+          annotations: [],
+        },
+      ],
+    };
+  }
+
+  return {
+    type: "message",
+    role: "user",
+    content: [
+      {
+        type: "input_text",
+        text: message.text,
+      },
+    ],
+  };
+}
+
 export function buildChatRequest(messages: ChatMessage[]) {
   const recentMessages = messages.slice(-MAX_CONTEXT_MESSAGES);
   const consecutiveVietnameseTurns =
@@ -33,15 +64,6 @@ export function buildChatRequest(messages: ChatMessage[]) {
 
   return {
     instructions: buildChatInstructions({ consecutiveVietnameseTurns }),
-    input: recentMessages.map((message) => ({
-      type: "message" as const,
-      role: message.role,
-      content: [
-        {
-          type: "input_text" as const,
-          text: message.text,
-        },
-      ],
-    })),
+    input: recentMessages.map(buildOpenAiHistoryItem),
   };
 }

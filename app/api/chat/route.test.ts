@@ -132,5 +132,46 @@ describe("chat route", () => {
     );
     expect(body).toContain('data: {"type":"assistant_done"}');
     expect(mockResponsesStream).toHaveBeenCalledTimes(1);
+    expect(mockResponsesStream).toHaveBeenCalledWith(
+      expect.objectContaining({
+        model: "gpt-4.1-mini",
+        instructions: expect.any(String),
+        input: [
+          {
+            type: "message",
+            role: "user",
+            content: [
+              {
+                type: "input_text",
+                text: "Mình muốn luyện nói tiếng Anh.",
+              },
+            ],
+          },
+          {
+            id: "assistant-1",
+            type: "message",
+            role: "assistant",
+            status: "completed",
+            content: [
+              {
+                type: "output_text",
+                text: "Tell me what you want to practice.",
+                annotations: [],
+              },
+            ],
+          },
+          {
+            type: "message",
+            role: "user",
+            content: [
+              {
+                type: "input_text",
+                text: "Can you fix my sentence?",
+              },
+            ],
+          },
+        ],
+      }),
+    );
   });
 });
