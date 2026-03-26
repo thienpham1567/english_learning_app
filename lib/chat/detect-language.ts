@@ -37,7 +37,6 @@ const englishSignals = new Set([
 ]);
 
 const vietnameseStrongSignals = new Set([
-  "anh",
   "cho",
   "cach",
   "di",
@@ -48,28 +47,29 @@ const vietnameseStrongSignals = new Set([
   "hoc",
   "hoi",
   "khong",
-  "minh",
   "muon",
   "nghia",
   "nghe",
   "thi",
   "tieng",
   "toi",
-  "viet",
   "vua",
 ]);
 
 const vietnameseWeakSignals = new Set([
+  "anh",
   "ban",
   "co",
   "la",
   "lam",
+  "minh",
   "moi",
   "nao",
   "oi",
   "qua",
   "roi",
   "ve",
+  "viet",
 ]);
 
 function normalizeText(input: string) {

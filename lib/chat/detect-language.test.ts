@@ -48,6 +48,18 @@ describe("detectLanguage", () => {
     expect(detectLanguage("Lam will join the meeting")).toBe("english");
   });
 
+  it("returns english for an ordinary sentence with Minh as a name", () => {
+    expect(detectLanguage("Minh can help")).toBe("english");
+  });
+
+  it("returns english for an ordinary sentence with Viet as a name", () => {
+    expect(detectLanguage("Viet will join the meeting")).toBe("english");
+  });
+
+  it("returns english for an ordinary sentence with Anh as a name", () => {
+    expect(detectLanguage("Anh can speak English")).toBe("english");
+  });
+
   it("returns vietnamese for a clearly Vietnamese message", () => {
     expect(
       detectLanguage("Mình muốn hỏi về cách dùng thì hiện tại đơn."),
