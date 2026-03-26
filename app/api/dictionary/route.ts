@@ -1,67 +1,63 @@
-import { generateObject } from "ai";
-import { openai } from "@ai-sdk/openai";
 import { NextResponse } from "next/server";
+import { zodToJsonSchema } from "zod-to-json-schema";
+import { openAiClient } from "@/lib/openai/client";
+import { openAiConfig } from "@/lib/openai/config";
 import { VocabularySchema } from "@/lib/schemas/vocabulary";
+import { normalizeDictionaryQuery } from "@/lib/dictionary/normalize-query";
+import { classifyDictionaryEntry } from "@/lib/dictionary/classify-entry";
+import { dictionaryCache } from "@/lib/dictionary/cache";
+import { buildDictionaryPrompt } from "@/lib/dictionary/prompt";
 
-const DICTIONARY_SYSTEM_PROMPT =
-  "You are Cô Minh, a lively Vietnamese-English dictionary. Return concise, helpful vocabulary data strictly matching the provided schema. Write the meaning in Vietnamese with a playful tone and include a natural example sentence.";
-
-function isUsableVocabularyWord(word: string) {
-  return /^[A-Za-z][A-Za-z'-]{0,47}$/.test(word);
-}
-
-function isUsableVocabularyResult(result: {
-  word: string;
-  phonetic: string;
-  meaning: string;
-  example: string;
-  grammar_notes: string[];
-}) {
-  return (
-    result.word.trim().length > 0 &&
-    result.phonetic.trim().length > 0 &&
-    result.meaning.trim().length > 0 &&
-    result.example.trim().length > 0 &&
-    result.grammar_notes.length > 0 &&
-    result.grammar_notes.every((note) => note.trim().length > 0)
-  );
-}
+const allowedQueryPattern = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
 
 export async function POST(req: Request) {
   try {
-    const body = (await req.json().catch(() => null)) as
-      | { word?: unknown }
-      | null;
+    const body = (await req.json().catch(() => null)) as { word?: unknown } | null;
+    const rawQuery = typeof body?.word === "string" ? body.word : "";
+    const { normalized, cacheKey } = normalizeDictionaryQuery(rawQuery);
 
-    const word = typeof body?.word === "string" ? body.word.trim() : "";
-
-    if (!word || !isUsableVocabularyWord(word)) {
+    if (!normalized) {
       return NextResponse.json(
-        { error: "Word must be a single English word." },
+        { error: "Vui lòng nhập từ hoặc cụm từ tiếng Anh trước khi tra cứu." },
         { status: 400 },
       );
     }
 
-    const result = await generateObject({
-      model: openai("gpt-4o-mini"),
-      system: DICTIONARY_SYSTEM_PROMPT,
-      prompt: `Define the English word ${JSON.stringify(word)} and return the result strictly in the required JSON format.`,
-      schema: VocabularySchema,
-    });
-
-    if (!isUsableVocabularyResult(result.object)) {
+    if (!allowedQueryPattern.test(normalized)) {
       return NextResponse.json(
-        { error: "Dictionary result was empty or incomplete." },
-        { status: 500 },
+        { error: "Chỉ hỗ trợ từ hoặc cụm từ tiếng Anh hợp lệ." },
+        { status: 400 },
       );
     }
 
-    return NextResponse.json({ data: result.object });
+    const cached = dictionaryCache.get(cacheKey);
+    if (cached) {
+      return NextResponse.json({ data: cached, cached: true });
+    }
+
+    const entryType = classifyDictionaryEntry(normalized);
+
+    const response = await openAiClient.responses.create({
+      model: openAiConfig.dictionaryModel,
+      input: buildDictionaryPrompt({ query: normalized, entryType }),
+      text: {
+        format: {
+          type: "json_schema",
+          name: "dictionary_entry",
+          strict: true,
+          schema: zodToJsonSchema(VocabularySchema),
+        },
+      },
+    });
+
+    const parsed = VocabularySchema.parse(JSON.parse(response.output_text));
+    dictionaryCache.set(cacheKey, parsed, openAiConfig.dictionaryCacheTtlMs);
+
+    return NextResponse.json({ data: parsed, cached: false });
   } catch (error) {
     console.error("Dictionary API error:", error);
-
     return NextResponse.json(
-      { error: "Internal server error." },
+      { error: "Không thể tra cứu mục này lúc này. Vui lòng thử lại sau." },
       { status: 500 },
     );
   }
