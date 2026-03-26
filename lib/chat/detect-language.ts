@@ -33,9 +33,8 @@ const englishSignals = new Set([
   "you",
 ]);
 
-const vietnameseSignals = new Set([
+const vietnameseStrongSignals = new Set([
   "anh",
-  "ban",
   "cho",
   "co",
   "cach",
@@ -47,23 +46,29 @@ const vietnameseSignals = new Set([
   "hoc",
   "hoi",
   "khong",
-  "la",
   "lam",
   "moi",
   "minh",
   "muon",
   "nghia",
   "nghe",
-  "nao",
-  "oi",
-  "qua",
-  "roi",
   "thi",
   "tieng",
   "toi",
   "viet",
   "vua",
   "ve",
+]);
+
+const vietnameseWeakSignals = new Set([
+  "ban",
+  "la",
+  "lam",
+  "moi",
+  "nao",
+  "oi",
+  "qua",
+  "roi",
 ]);
 
 function normalizeText(input: string) {
@@ -94,19 +99,22 @@ export function detectLanguage(input: string): DetectedLanguage {
 
   const tokens = tokenize(text);
   let englishScore = 0;
-  let vietnameseScore = 0;
+  let vietnameseStrongScore = 0;
+  let vietnameseWeakScore = 0;
 
   if (hasVietnamesePhraseSignal(tokens)) {
-    vietnameseScore += 1;
+    vietnameseStrongScore += 1;
   }
 
   for (const token of tokens) {
     if (englishSignals.has(token)) englishScore += 1;
-    if (vietnameseSignals.has(token)) vietnameseScore += 1;
+    if (vietnameseStrongSignals.has(token)) vietnameseStrongScore += 1;
+    if (vietnameseWeakSignals.has(token)) vietnameseWeakScore += 1;
   }
 
-  if (englishScore > 0 && vietnameseScore > 0) return "mixed";
-  if (vietnameseScore > 0) return "vietnamese";
+  if (englishScore > 0 && vietnameseStrongScore > 0) return "mixed";
+  if (vietnameseStrongScore > 0) return "vietnamese";
   if (englishScore > 0) return "english";
+  if (vietnameseWeakScore >= 2) return "vietnamese";
   return "unknown";
 }

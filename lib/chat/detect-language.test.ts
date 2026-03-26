@@ -32,6 +32,14 @@ describe("detectLanguage", () => {
     expect(detectLanguage("Can you explain the sentence?")).toBe("english");
   });
 
+  it("returns english for an ordinary sentence with a weak Vietnamese-looking token", () => {
+    expect(detectLanguage("I want to ban this word")).toBe("english");
+  });
+
+  it("returns english for an ordinary sentence with LA as a token", () => {
+    expect(detectLanguage("We went to LA yesterday")).toBe("english");
+  });
+
   it("returns vietnamese for a clearly Vietnamese message", () => {
     expect(
       detectLanguage("Mình muốn hỏi về cách dùng thì hiện tại đơn."),
