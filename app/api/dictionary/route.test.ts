@@ -43,6 +43,10 @@ describe("/api/dictionary", () => {
     );
 
     expect(response.status).toBe(200);
+
+    const body = await response.json();
+    expect(body).toHaveProperty("data.headword", "take off");
+    expect(body).toHaveProperty("cached", false);
   });
 
   it("rejects empty input", async () => {

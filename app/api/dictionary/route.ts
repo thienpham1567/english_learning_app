@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
-import { zodToJsonSchema } from "zod-to-json-schema";
+import { toJSONSchema } from "zod";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { VocabularySchema } from "@/lib/schemas/vocabulary";
 import { normalizeDictionaryQuery } from "@/lib/dictionary/normalize-query";
 import { classifyDictionaryEntry } from "@/lib/dictionary/classify-entry";
 import { dictionaryCache } from "@/lib/dictionary/cache";
-import { buildDictionaryPrompt } from "@/lib/dictionary/prompt";
+import { buildDictionaryInstructions } from "@/lib/dictionary/prompt";
 
 const allowedQueryPattern = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
 
@@ -39,13 +39,14 @@ export async function POST(req: Request) {
 
     const response = await openAiClient.responses.create({
       model: openAiConfig.dictionaryModel,
-      input: buildDictionaryPrompt({ query: normalized, entryType }),
+      instructions: buildDictionaryInstructions(entryType),
+      input: normalized,
       text: {
         format: {
           type: "json_schema",
           name: "dictionary_entry",
           strict: true,
-          schema: zodToJsonSchema(VocabularySchema),
+          schema: toJSONSchema(VocabularySchema),
         },
       },
     });
