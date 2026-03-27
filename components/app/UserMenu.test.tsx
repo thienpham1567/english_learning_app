@@ -32,6 +32,7 @@ describe("UserMenu", () => {
     fireEvent.click(screen.getByRole("button", { name: /cô lành/i }));
 
     expect(screen.getByRole("button", { name: "Đăng xuất" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Đăng xuất" }).parentElement).toHaveClass("z-50");
   });
 
   it("keeps the user name hidden through the 920px shell breakpoint", () => {
@@ -42,6 +43,31 @@ describe("UserMenu", () => {
       "font-medium",
       "text-[var(--ink)]",
       "max-[920px]:hidden",
+    );
+  });
+
+  it("keeps the trigger compact inside the shell header", () => {
+    renderUi(<UserMenu user={{ name: "Cô Lành", image: null }} />);
+
+    expect(screen.getByRole("button", { name: /cô lành/i })).toHaveClass(
+      "flex",
+      "items-center",
+      "gap-2",
+      "rounded-full",
+      "border",
+      "border-[var(--border)]",
+      "bg-[var(--surface)]",
+      "pl-[5px]",
+      "pr-[10px]",
+      "py-[5px]",
+      "text-left",
+      "shadow-[var(--shadow-sm)]",
+    );
+
+    expect(screen.getByText("CL")).toHaveClass(
+      "size-7",
+      "rounded-full",
+      "grid",
     );
   });
 });

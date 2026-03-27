@@ -14,7 +14,7 @@ function UserAvatar({ user }: { user: AuthUser }) {
       <img
         src={user.image}
         alt={user.name}
-        className="size-10 rounded-full object-cover"
+        className="size-7 rounded-full object-cover"
         referrerPolicy="no-referrer"
       />
     );
@@ -27,7 +27,7 @@ function UserAvatar({ user }: { user: AuthUser }) {
     .slice(0, 2)
     .toUpperCase();
 
-  return <div className="grid size-10 place-items-center rounded-full bg-[var(--ink)] text-xs font-semibold text-white">{initials}</div>;
+  return <div className="grid size-7 place-items-center rounded-full bg-[var(--ink)] text-[10px] font-semibold text-white">{initials}</div>;
 }
 
 export function UserMenu({ user }: { user: AuthUser }) {
@@ -53,7 +53,7 @@ export function UserMenu({ user }: { user: AuthUser }) {
   return (
     <div className="relative" ref={menuRef}>
       <button
-        className="flex items-center gap-3 rounded-full border border-[var(--border)] bg-[var(--surface)] px-2 py-2 text-left shadow-[var(--shadow-sm)] transition hover:border-[var(--border-strong)] hover:bg-[var(--surface-hover)]"
+        className="flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] pl-[5px] pr-[10px] py-[5px] text-left shadow-[var(--shadow-sm)] transition hover:border-[var(--border-strong)] hover:bg-[var(--surface-hover)]"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
       >
@@ -70,7 +70,7 @@ export function UserMenu({ user }: { user: AuthUser }) {
       <AnimatePresence>
         {open && (
           <motion.div
-            className="absolute right-0 top-[calc(100%+0.5rem)] min-w-40 overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-raised)] p-1 shadow-[var(--shadow-lg)]"
+            className="absolute right-0 top-[calc(100%+0.5rem)] z-50 min-w-40 overflow-hidden rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface-raised)] p-1 shadow-[var(--shadow-lg)]"
             initial={{ opacity: 0, y: -4, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -4, scale: 0.97 }}
