@@ -28,6 +28,9 @@ const LEVEL_COLORS: Record<string, string> = {
   C2: "volcano",
 };
 
+const SENSE_LIST_CLASS_NAME =
+  "list-disc space-y-2 pl-5 text-sm leading-6 text-[var(--text-primary)]";
+
 function SensePanel({ sense }: { sense: DictionarySense }) {
   return (
     <motion.div
@@ -54,7 +57,7 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
         <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
           Ví dụ
         </h3>
-        <ul className="space-y-2 text-sm leading-6 text-[var(--text-primary)]">
+        <ul className={SENSE_LIST_CLASS_NAME}>
           {sense.examplesVi.map((example) => (
             <li key={example}>{example}</li>
           ))}
@@ -75,7 +78,7 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
           <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
             Mẫu câu thường gặp
           </h3>
-          <ul className="space-y-2 text-sm leading-6 text-[var(--text-primary)]">
+          <ul className={SENSE_LIST_CLASS_NAME}>
             {sense.patterns.map((pattern) => (
               <li key={pattern}>{pattern}</li>
             ))}
@@ -88,7 +91,7 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
           <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
             Biểu đạt liên quan
           </h3>
-          <ul className="space-y-2 text-sm leading-6 text-[var(--text-primary)]">
+          <ul className={SENSE_LIST_CLASS_NAME}>
             {sense.relatedExpressions.map((expr) => (
               <li key={expr}>{expr}</li>
             ))}
@@ -101,7 +104,7 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
           <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
             Lỗi thường gặp
           </h3>
-          <ul className="space-y-2 text-sm leading-6 text-[var(--text-primary)]">
+          <ul className={SENSE_LIST_CLASS_NAME}>
             {sense.commonMistakesVi.map((mistake) => (
               <li key={mistake}>{mistake}</li>
             ))}

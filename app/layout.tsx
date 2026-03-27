@@ -36,7 +36,7 @@ export default function RootLayout({
       lang="vi"
       className={`${sourceSans.variable} ${fraunces.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="min-h-screen bg-[var(--bg)] [font-family:var(--font-body)] text-[var(--text-primary)] antialiased">
+      <body className="min-h-screen bg-[var(--bg)] text-[15px] leading-[1.6] [font-family:var(--font-body)] text-[var(--text-primary)] antialiased">
         {children}
       </body>
     </html>
