@@ -308,6 +308,78 @@ body {
   overflow: hidden;
 }
 
+.app-sidebar__spacer {
+  flex: 1;
+}
+
+.app-sidebar__user {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 10px;
+  overflow: hidden;
+}
+
+.app-sidebar__user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  object-fit: cover;
+}
+
+.app-sidebar__user-initials {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: grid;
+  place-items: center;
+  background: var(--bg-deep);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.app-sidebar__user-info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  opacity: 0;
+  transition: opacity 0.2s ease 0.1s;
+}
+
+.app-sidebar:hover .app-sidebar__user-info {
+  opacity: 1;
+}
+
+.app-sidebar__user-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.app-sidebar__sign-out {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: none;
+  border: none;
+  padding: 0;
+  font-size: 12px;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color 150ms ease;
+}
+
+.app-sidebar__sign-out:hover {
+  color: var(--accent);
+}
+
 /* ── Mobile ── */
 @media (max-width: 920px) {
   .app-shell {

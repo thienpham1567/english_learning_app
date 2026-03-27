@@ -1,17 +1,48 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { BookOpen, MessageCircleMore } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
+import { BookOpen, LogOut, MessageCircleMore } from "lucide-react";
 import { motion } from "motion/react";
+
+import { authClient } from "@/lib/auth-client";
+import type { AuthUser } from "@/components/app/AppShell";
 
 const navItems = [
   { href: "/english-chatbot", label: "Trò chuyện", icon: MessageCircleMore },
   { href: "/co-lanh-dictionary", label: "Từ điển", icon: BookOpen },
 ];
 
-export function AppSidebar() {
+function UserAvatar({ user }: { user: AuthUser }) {
+  if (user.image) {
+    return (
+      <img
+        src={user.image}
+        alt={user.name}
+        className="app-sidebar__user-avatar"
+        referrerPolicy="no-referrer"
+      />
+    );
+  }
+
+  const initials = user.name
+    .split(" ")
+    .map((w) => w[0])
+    .join("")
+    .slice(0, 2)
+    .toUpperCase();
+
+  return <div className="app-sidebar__user-initials">{initials}</div>;
+}
+
+export function AppSidebar({ user }: { user: AuthUser }) {
   const pathname = usePathname();
+  const router = useRouter();
+
+  const handleSignOut = async () => {
+    await authClient.signOut();
+    router.push("/sign-in");
+  };
 
   return (
     <aside className="app-sidebar">
@@ -57,6 +88,24 @@ export function AppSidebar() {
           );
         })}
       </nav>
+
+      {/* User section — pushed to bottom */}
+      <div className="app-sidebar__spacer" />
+      <div className="app-sidebar__divider" />
+      <div className="app-sidebar__user">
+        <UserAvatar user={user} />
+        <div className="app-sidebar__user-info">
+          <span className="app-sidebar__user-name">{user.name}</span>
+          <button
+            className="app-sidebar__sign-out"
+            onClick={handleSignOut}
+            title="Đăng xuất"
+          >
+            <LogOut size={14} />
+            <span>Đăng xuất</span>
+          </button>
+        </div>
+      </div>
     </aside>
   );
 }

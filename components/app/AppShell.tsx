@@ -2,10 +2,15 @@ import type { ReactNode } from "react";
 
 import { AppSidebar } from "@/components/app/AppSidebar";
 
-export function AppShell({ children }: { children: ReactNode }) {
+export type AuthUser = {
+  name: string;
+  image: string | null;
+};
+
+export function AppShell({ children, user }: { children: ReactNode; user: AuthUser }) {
   return (
     <div className="app-shell">
-      <AppSidebar />
+      <AppSidebar user={user} />
       <main className="app-shell__content">{children}</main>
     </div>
   );
