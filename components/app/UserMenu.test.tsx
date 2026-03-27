@@ -33,4 +33,15 @@ describe("UserMenu", () => {
 
     expect(screen.getByRole("button", { name: "Đăng xuất" })).toBeInTheDocument();
   });
+
+  it("keeps the user name hidden through the 920px shell breakpoint", () => {
+    renderUi(<UserMenu user={{ name: "Cô Lành", image: null }} />);
+
+    expect(screen.getByText("Cô Lành")).toHaveClass(
+      "text-sm",
+      "font-medium",
+      "text-[var(--ink)]",
+      "max-[920px]:hidden",
+    );
+  });
 });

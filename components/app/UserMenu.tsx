@@ -58,7 +58,7 @@ export function UserMenu({ user }: { user: AuthUser }) {
         aria-expanded={open}
       >
         <UserAvatar user={user} />
-        <span className="hidden text-sm font-medium text-[var(--ink)] md:inline">
+        <span className="text-sm font-medium text-[var(--ink)] max-[920px]:hidden">
           {user.name}
         </span>
         <ChevronDown
