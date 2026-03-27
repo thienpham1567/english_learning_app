@@ -1,8 +1,8 @@
-import { renderUi } from "@/test/render";
 import { screen } from "@testing-library/react";
 import { expect, it, vi, describe } from "vitest";
 
 import { AppSidebar } from "@/components/app/AppSidebar";
+import { renderUi } from "@/test/render";
 
 vi.mock("next/navigation", () => ({
   usePathname: () => "/english-chatbot",
