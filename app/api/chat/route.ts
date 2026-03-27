@@ -99,22 +99,31 @@ export async function POST(req: Request) {
                 if (conversationId && session && fullAssistantText) {
                   const lastUserMessage = messages[messages.length - 1];
                   if (lastUserMessage) {
-                    await db.insert(message).values([
-                      {
-                        conversationId,
-                        role: "user",
-                        content: lastUserMessage.text,
-                      },
-                      {
-                        conversationId,
-                        role: "assistant",
-                        content: fullAssistantText,
-                      },
-                    ]);
-                    await db
-                      .update(conversation)
-                      .set({ updatedAt: new Date() })
-                      .where(eq(conversation.id, conversationId));
+                    // Verify ownership before writing
+                    const [conv] = await db
+                      .select({ userId: conversation.userId })
+                      .from(conversation)
+                      .where(eq(conversation.id, conversationId))
+                      .limit(1);
+
+                    if (conv && conv.userId === session.user.id) {
+                      await db.insert(message).values([
+                        {
+                          conversationId,
+                          role: "user",
+                          content: lastUserMessage.text,
+                        },
+                        {
+                          conversationId,
+                          role: "assistant",
+                          content: fullAssistantText,
+                        },
+                      ]);
+                      await db
+                        .update(conversation)
+                        .set({ updatedAt: new Date() })
+                        .where(eq(conversation.id, conversationId));
+                    }
                   }
                 }
 
