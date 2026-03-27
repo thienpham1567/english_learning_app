@@ -264,7 +264,7 @@ export default function EnglishChatbotPage() {
             ))}
 
             {isLoading && (
-              <div className="mt-[16px]">
+              <div className="mt-[22px]">
                 <TypingIndicator />
               </div>
             )}
