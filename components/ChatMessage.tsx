@@ -1,4 +1,5 @@
 import ReactMarkdown from "react-markdown";
+import { motion } from "motion/react";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 
 export function ChatMessage({ message }: { message: AppChatMessage }) {
@@ -7,44 +8,21 @@ export function ChatMessage({ message }: { message: AppChatMessage }) {
   if (!text) return null;
 
   return (
-    <div
-      className="message-bubble"
-      style={{
-        display: "flex",
-        alignItems: "flex-end",
-        gap: 10,
-        marginBottom: 18,
-        // User → push to right; AI → push to left
-        justifyContent: isUser ? "flex-end" : "flex-start",
-        width: "100%",
-      }}
+    <motion.div
+      className={`chat-msg ${isUser ? "chat-msg--user" : "chat-msg--ai"}`}
+      initial={{ opacity: 0, y: 8, scale: 0.98 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.25, ease: "easeOut" }}
     >
-      {/* AI avatar — only on the left */}
+      {/* AI avatar */}
       {!isUser && (
-        <div style={{
-          width: 32, height: 32, borderRadius: "50%", flexShrink: 0,
-          background: "var(--accent)",
-          display: "flex", alignItems: "center", justifyContent: "center",
-          fontSize: 16,
-        }}>
+        <div className="chat-msg__avatar">
           👩‍🏫
         </div>
       )}
 
       {/* Bubble */}
-      <div style={{
-        maxWidth: "72%",
-        padding: "11px 16px",
-        borderRadius: isUser ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
-        background: isUser ? "var(--bubble-user)" : "var(--bubble-ai)",
-        color: isUser ? "#ffffff" : "var(--text-primary)",
-        fontSize: 15,
-        lineHeight: 1.65,
-        boxShadow: isUser
-          ? "0 2px 8px rgba(232,98,58,0.2)"
-          : "0 1px 4px rgba(0,0,0,0.07)",
-        border: isUser ? "none" : "1px solid var(--border)",
-      }}>
+      <div className="chat-msg__bubble">
         {isUser ? (
           <span style={{ whiteSpace: "pre-wrap" }}>{text}</span>
         ) : (
@@ -53,6 +31,6 @@ export function ChatMessage({ message }: { message: AppChatMessage }) {
           </div>
         )}
       </div>
-    </div>
+    </motion.div>
   );
 }

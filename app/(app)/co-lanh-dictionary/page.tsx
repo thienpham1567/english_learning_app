@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { message } from "antd";
+import { motion } from "motion/react";
 
 import { DictionaryResultCard } from "@/components/dictionary/DictionaryResultCard";
 import { DictionarySearchPanel } from "@/components/dictionary/DictionarySearchPanel";
@@ -83,28 +84,45 @@ export default function CoLanhDictionaryPage() {
     <>
       {contextHolder}
       <div className="dictionary-page">
-        <section className="dictionary-hero">
+        <motion.section
+          className="dictionary-hero"
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.45, ease: "easeOut" }}
+        >
           <div className="dictionary-hero__content">
-            <p className="dictionary-hero__eyebrow">Từ điển cô Lành</p>
-            <h1>Tra cứu từ vựng và cụm từ theo cách rõ ràng, dễ học lại</h1>
+            <p className="dictionary-hero__eyebrow">Từ điển Cô Lành</p>
+            <h1>Tra cứu từ vựng theo cách rõ ràng, dễ học lại</h1>
             <p className="dictionary-hero__description">
               Xem giải thích song ngữ, ví dụ tiếng Việt và ghi chú dùng cho từng nghĩa trong cùng một khung học tập.
             </p>
           </div>
-        </section>
+        </motion.section>
 
         <section className="dictionary-layout">
-          <DictionarySearchPanel
-            value={query}
-            onChange={setQuery}
-            onSearch={handleSearch}
-            isLoading={isLoading}
-          />
-          <DictionaryResultCard
-            vocabulary={result}
-            hasSearched={hasSearched}
-            isLoading={isLoading}
-          />
+          <motion.div
+            initial={{ opacity: 0, x: -12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.15, duration: 0.4, ease: "easeOut" }}
+          >
+            <DictionarySearchPanel
+              value={query}
+              onChange={setQuery}
+              onSearch={handleSearch}
+              isLoading={isLoading}
+            />
+          </motion.div>
+          <motion.div
+            initial={{ opacity: 0, x: 12 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.25, duration: 0.4, ease: "easeOut" }}
+          >
+            <DictionaryResultCard
+              vocabulary={result}
+              hasSearched={hasSearched}
+              isLoading={isLoading}
+            />
+          </motion.div>
         </section>
       </div>
     </>

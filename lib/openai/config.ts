@@ -21,8 +21,8 @@ if (!apiKey) {
 
 export const openAiConfig = {
   apiKey,
-  chatModel: process.env.OPENAI_CHAT_MODEL ?? "gpt-4.1-mini",
-  dictionaryModel: process.env.OPENAI_DICTIONARY_MODEL ?? "gpt-4.1-mini",
+  chatModel: process.env.OPENAI_CHAT_MODEL ?? "openai/gpt-5.4-nano",
+  dictionaryModel: process.env.OPENAI_DICTIONARY_MODEL ?? "openai/gpt-5.4-nano",
   dictionaryCacheTtlMs: parseDictionaryCacheTtlMs(
     process.env.DICTIONARY_CACHE_TTL_MS,
   ),

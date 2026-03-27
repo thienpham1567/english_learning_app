@@ -3,10 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BookOpen, MessageCircleMore } from "lucide-react";
+import { motion } from "motion/react";
 
 const navItems = [
-  { href: "/english-chatbot", label: "Trò chuyện tiếng Anh", icon: MessageCircleMore },
-  { href: "/co-lanh-dictionary", label: "Từ điển Cô Lành", icon: BookOpen },
+  { href: "/english-chatbot", label: "Trò chuyện", icon: MessageCircleMore },
+  { href: "/co-lanh-dictionary", label: "Từ điển", icon: BookOpen },
 ];
 
 export function AppSidebar() {
@@ -15,29 +16,44 @@ export function AppSidebar() {
   return (
     <aside className="app-sidebar">
       <div className="app-sidebar__brand">
-        <div className="app-sidebar__badge" aria-hidden="true">
+        <motion.div
+          className="app-sidebar__badge"
+          aria-hidden="true"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
           CM
-        </div>
+        </motion.div>
         <div className="app-sidebar__brand-text">
-          <p className="app-sidebar__eyebrow">Ứng dụng học tiếng Anh</p>
-          <h1 className="app-sidebar__title">Cô Minh Studio</h1>
+          <p className="app-sidebar__eyebrow">Học tiếng Anh</p>
+          <h1 className="app-sidebar__title">Cô Minh</h1>
         </div>
       </div>
 
+      <div className="app-sidebar__divider" />
+
       <nav className="app-sidebar__nav" aria-label="Các mục trong ứng dụng">
-        {navItems.map(({ href, label, icon: Icon }) => {
+        {navItems.map(({ href, label, icon: Icon }, index) => {
           const active = pathname === href || pathname.startsWith(`${href}/`);
 
           return (
-            <Link
+            <motion.div
               key={href}
-              href={href}
-              aria-current={active ? "page" : undefined}
-              className={active ? "app-sidebar__link is-active" : "app-sidebar__link"}
+              initial={{ opacity: 0, x: -8 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 + index * 0.05, duration: 0.3 }}
             >
-              <Icon size={18} strokeWidth={2} />
-              <span>{label}</span>
-            </Link>
+              <Link
+                href={href}
+                aria-current={active ? "page" : undefined}
+                className={active ? "app-sidebar__link is-active" : "app-sidebar__link"}
+              >
+                <span className="app-sidebar__link-icon">
+                  <Icon size={19} strokeWidth={active ? 2.2 : 1.8} />
+                </span>
+                <span className="app-sidebar__link-label">{label}</span>
+              </Link>
+            </motion.div>
           );
         })}
       </nav>

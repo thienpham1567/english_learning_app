@@ -2,6 +2,7 @@
 
 import { Card, Skeleton, Tabs, Tag } from "antd";
 import { Search, SpellCheck2 } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
 import type { DictionarySense, Vocabulary } from "@/lib/schemas/vocabulary";
 
@@ -29,7 +30,12 @@ const LEVEL_COLORS: Record<string, string> = {
 
 function SensePanel({ sense }: { sense: DictionarySense }) {
   return (
-    <div className="dictionary-sense-panel">
+    <motion.div
+      className="dictionary-sense-panel"
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3 }}
+    >
       <section>
         <h3>Nghĩa tiếng Việt</h3>
         <p>{sense.definitionVi}</p>
@@ -88,7 +94,7 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
           </ul>
         </section>
       )}
-    </div>
+    </motion.div>
   );
 }
 
@@ -114,7 +120,7 @@ export function DictionaryResultCard({
       <Card className="dictionary-card dictionary-result-card" variant="borderless">
         <div className="dictionary-empty-state">
           <div className="dictionary-empty-state__icon">
-            {!hasSearched ? <Search size={26} /> : <SpellCheck2 size={26} />}
+            {!hasSearched ? <Search size={24} /> : <SpellCheck2 size={24} />}
           </div>
           <h3>
             {!hasSearched
@@ -138,41 +144,63 @@ export function DictionaryResultCard({
   }));
 
   return (
-    <Card className="dictionary-card dictionary-result-card" variant="borderless">
-      <div className="dictionary-result-card__header">
-        <div>
-          <p className="dictionary-result-card__eyebrow">Kết quả tra cứu</p>
-          <h2>{vocabulary.headword}</h2>
-        </div>
-        <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-          <Tag className="dictionary-result-card__entry-type" color="default">
-            {ENTRY_TYPE_LABELS[vocabulary.entryType]}
-          </Tag>
-          {vocabulary.level && (
-            <Tag
-              color={LEVEL_COLORS[vocabulary.level] ?? "default"}
-              className="dictionary-result-card__tag"
+    <AnimatePresence mode="wait">
+      <motion.div
+        key={vocabulary.headword}
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        exit={{ opacity: 0, y: -6 }}
+        transition={{ duration: 0.35, ease: "easeOut" }}
+      >
+        <Card className="dictionary-card dictionary-result-card" variant="borderless">
+          <div className="dictionary-result-card__header">
+            <div>
+              <p className="dictionary-result-card__eyebrow">Kết quả tra cứu</p>
+              <h2>{vocabulary.headword}</h2>
+            </div>
+            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              <Tag className="dictionary-result-card__entry-type" color="default">
+                {ENTRY_TYPE_LABELS[vocabulary.entryType]}
+              </Tag>
+              {vocabulary.level && (
+                <Tag
+                  color={LEVEL_COLORS[vocabulary.level] ?? "default"}
+                  className="dictionary-result-card__tag"
+                >
+                  {vocabulary.level}
+                </Tag>
+              )}
+            </div>
+          </div>
+
+          {vocabulary.phonetic && (
+            <motion.p
+              className="dictionary-result-card__phonetic"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.15, duration: 0.3 }}
             >
-              {vocabulary.level}
-            </Tag>
+              {vocabulary.phonetic}
+            </motion.p>
           )}
-        </div>
-      </div>
 
-      {vocabulary.phonetic && (
-        <p className="dictionary-result-card__phonetic">{vocabulary.phonetic}</p>
-      )}
+          <motion.div
+            className="dictionary-result-card__overview"
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.3 }}
+          >
+            <p>{vocabulary.overviewVi}</p>
+            <p>{vocabulary.overviewEn}</p>
+          </motion.div>
 
-      <div className="dictionary-result-card__overview">
-        <p>{vocabulary.overviewVi}</p>
-        <p>{vocabulary.overviewEn}</p>
-      </div>
-
-      <Tabs
-        className="dictionary-result-card__tabs"
-        items={tabItems}
-        defaultActiveKey={vocabulary.senses[0]?.id}
-      />
-    </Card>
+          <Tabs
+            className="dictionary-result-card__tabs"
+            items={tabItems}
+            defaultActiveKey={vocabulary.senses[0]?.id}
+          />
+        </Card>
+      </motion.div>
+    </AnimatePresence>
   );
 }

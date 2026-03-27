@@ -1,29 +1,21 @@
+import { motion } from "motion/react";
+
 export function TypingIndicator() {
   return (
-    <div className="message-bubble" style={{ display: "flex", alignItems: "flex-end", gap: 10, marginBottom: 18, padding: "0 4px" }}>
-      {/* Avatar */}
-      <div style={{
-        width: 32, height: 32, borderRadius: "50%", flexShrink: 0,
-        background: "var(--accent)",
-        display: "flex", alignItems: "center", justifyContent: "center",
-        fontSize: 16,
-      }}>
+    <motion.div
+      className="chat-typing"
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.2 }}
+    >
+      <div className="chat-msg__avatar">
         👩‍🏫
       </div>
-
-      {/* Dots bubble */}
-      <div style={{
-        padding: "12px 18px",
-        borderRadius: "18px 18px 18px 4px",
-        background: "var(--bubble-ai)",
-        border: "1px solid var(--border)",
-        boxShadow: "0 1px 4px rgba(0,0,0,0.08)",
-        display: "flex", gap: 5, alignItems: "center",
-      }}>
+      <div className="chat-typing__bubble">
         <span className="typing-dot" />
         <span className="typing-dot" />
         <span className="typing-dot" />
       </div>
-    </div>
+    </motion.div>
   );
 }

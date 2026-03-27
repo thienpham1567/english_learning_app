@@ -2,8 +2,9 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Input, Button } from "antd";
+import { ArrowUp } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
-import { ArrowUpOutlined } from "@ant-design/icons";
 import { TypingIndicator } from "@/components/TypingIndicator";
 import { ChatMessage } from "@/components/ChatMessage";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
@@ -144,213 +145,102 @@ export default function EnglishChatbotPage() {
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        flex: 1,
-        minHeight: 0,
-        background: "var(--bg)",
-      }}
-    >
+    <div className="chat-page">
       {/* ── Header ── */}
-      <header
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 12,
-          padding: "14px 20px",
-          borderBottom: "1px solid var(--border)",
-          background: "var(--surface)",
-          flexShrink: 0,
-        }}
-      >
-        {/* Avatar */}
-        <div
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: "50%",
-            background: "var(--accent)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            fontSize: 20,
-            flexShrink: 0,
-          }}
-        >
+      <header className="chat-header">
+        <div className="chat-header__avatar">
           👩‍🏫
+          <span className="chat-header__status" />
         </div>
-        <div>
-          <div
-            style={{
-              fontWeight: 600,
-              fontSize: 15,
-              color: "var(--text-primary)",
-            }}
-          >
-            Cô Minh English
-          </div>
-          <div style={{ fontSize: 12, color: "#4caf50" }}>● Đang hoạt động</div>
+        <div className="chat-header__info">
+          <h2>Cô Minh English</h2>
+          <p>Gia sư tiếng Anh AI</p>
         </div>
       </header>
 
       {/* ── Messages ── */}
-      <div
-        style={{
-          flex: 1,
-          minHeight: 0,
-          overflowY: "auto",
-          padding: "24px 16px",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        {/* Inner centering wrapper */}
-        <div
-          style={{
-            maxWidth: 760,
-            width: "100%",
-            margin: "0 auto",
-            display: "flex",
-            flexDirection: "column",
-            flex: 1,
-            minHeight: 0,
-          }}
-        >
+      <div className="chat-messages">
+        <div className="chat-messages__inner">
           {/* Welcome */}
-          {messages.length === 0 && (
-            <div
-              className="message-bubble"
-              style={{
-                margin: "auto",
-                textAlign: "center",
-                maxWidth: 480,
-                padding: "0 8px",
-              }}
-            >
-              <div style={{ fontSize: 56, marginBottom: 16 }}>👩‍🏫</div>
-              <h2
-                style={{
-                  margin: "0 0 8px",
-                  fontSize: 22,
-                  fontWeight: 700,
-                  color: "var(--text-primary)",
-                }}
+          <AnimatePresence>
+            {messages.length === 0 && (
+              <motion.div
+                className="chat-welcome"
+                initial={{ opacity: 0, y: 16 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -12 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
               >
-                Cô Minh đã sẵn sàng 😏
-              </h2>
-              <p
-                style={{
-                  margin: "0 0 28px",
-                  color: "var(--text-secondary)",
-                  fontSize: 15,
-                  lineHeight: 1.6,
-                }}
-              >
-                Hãy trả lời bằng tiếng Anh để luyện phản xạ. Cô sẽ sửa lỗi rõ
-                ràng, giải thích ngắn gọn và giữ cuộc trò chuyện tiếp tục. 📚
-              </p>
-              <div
-                style={{ display: "flex", flexDirection: "column", gap: 10 }}
-              >
-                {SUGGESTED.map((s) => (
-                  <Button
-                    key={s}
-                    onClick={() => send(s)}
-                    style={{
-                      height: "auto",
-                      padding: "12px 16px",
-                      textAlign: "left",
-                      borderRadius: 12,
-                      fontSize: 14,
-                      color: "var(--text-primary)",
-                      background: "var(--surface)",
-                      border: "1px solid var(--border)",
-                      whiteSpace: "normal",
-                      lineHeight: 1.5,
-                      display: "block",
-                      width: "100%",
-                    }}
-                  >
-                    {s}
-                  </Button>
-                ))}
-              </div>
-            </div>
-          )}
+                <motion.div
+                  className="chat-welcome__icon"
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.15, duration: 0.4, type: "spring", stiffness: 200 }}
+                >
+                  👩‍🏫
+                </motion.div>
+                <h2>Cô Minh đã sẵn sàng</h2>
+                <p>
+                  Hãy trả lời bằng tiếng Anh để luyện phản xạ. Cô sẽ sửa lỗi rõ
+                  ràng, giải thích ngắn gọn và giữ cuộc trò chuyện tiếp tục.
+                </p>
+                <div className="chat-welcome__prompts">
+                  {SUGGESTED.map((s, i) => (
+                    <motion.div
+                      key={s}
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 + i * 0.08, duration: 0.3 }}
+                    >
+                      <Button
+                        className="chat-welcome__prompt-btn"
+                        onClick={() => send(s)}
+                      >
+                        {s}
+                      </Button>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           {/* Chat history */}
-          {messages
-            .map((m) => (
-              <ChatMessage key={m.id} message={m} />
-            ))}
+          {messages.map((m) => (
+            <ChatMessage key={m.id} message={m} />
+          ))}
 
           {isLoading && <TypingIndicator />}
 
           {/* Inline error */}
-          {error && (
-            <div className="message-bubble" style={{ marginBottom: 16 }}>
-              <div
-                style={{
-                  background: "#fff5f2",
-                  border: "1px solid #fdd0c0",
-                  borderRadius: 14,
-                  padding: "14px 18px",
-                  color: "#b34020",
-                  fontSize: 14,
-                  lineHeight: 1.65,
-                  maxWidth: 500,
-                }}
+          <AnimatePresence>
+            {error && (
+              <motion.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.25 }}
               >
-                <p style={{ margin: "0 0 10px" }}>
-                  {error}
-                </p>
-                <button
-                  onClick={() => setError(null)}
-                  style={{
-                    background: "transparent",
-                    border: "1px solid #e07050",
-                    color: "#b34020",
-                    padding: "4px 12px",
-                    borderRadius: 20,
-                    cursor: "pointer",
-                    fontSize: 12,
-                    fontWeight: 600,
-                  }}
-                >
-                  Đóng ✕
-                </button>
-              </div>
-            </div>
-          )}
+                <div className="chat-error">
+                  <p style={{ margin: "0 0 10px" }}>{error}</p>
+                  <button
+                    className="chat-error__dismiss"
+                    onClick={() => setError(null)}
+                  >
+                    Đóng
+                  </button>
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
 
           <div ref={bottomRef} />
         </div>
       </div>
 
       {/* ── Input ── */}
-      <div
-        style={{
-          padding: "12px 16px 20px",
-          borderTop: "1px solid var(--border)",
-          background: "var(--surface)",
-          flexShrink: 0,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            gap: 10,
-            alignItems: "flex-end",
-            background: "var(--bg)",
-            border: "1px solid var(--border)",
-            borderRadius: 20,
-            padding: "8px 10px 8px 16px",
-            maxWidth: 760,
-            margin: "0 auto",
-          }}
-        >
+      <div className="chat-input-bar">
+        <div className="chat-input__wrapper">
           <Input.TextArea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -360,7 +250,7 @@ export default function EnglishChatbotPage() {
                 send();
               }
             }}
-            placeholder="Nhập câu hỏi hoặc câu trả lời bằng tiếng Anh... 📚"
+            placeholder="Nhập câu hỏi hoặc câu trả lời bằng tiếng Anh..."
             autoSize={{ minRows: 1, maxRows: 6 }}
             disabled={isLoading}
             style={{
@@ -374,36 +264,19 @@ export default function EnglishChatbotPage() {
               color: "var(--text-primary)",
             }}
           />
-          <Button
-            type="primary"
-            shape="circle"
-            icon={<ArrowUpOutlined />}
-            onClick={() => send()}
-            loading={isLoading}
-            disabled={!input.trim() || isLoading}
-            style={{
-              background:
-                input.trim() && !isLoading ? "var(--accent)" : "#d4cec8",
-              border: "none",
-              width: 36,
-              height: 36,
-              minWidth: 36,
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              flexShrink: 0,
-              transition: "background 0.2s",
-            }}
-          />
+          <motion.div whileTap={{ scale: 0.9 }}>
+            <Button
+              type="primary"
+              shape="circle"
+              icon={<ArrowUp size={18} strokeWidth={2.5} />}
+              onClick={() => send()}
+              loading={isLoading}
+              disabled={!input.trim() || isLoading}
+              className="chat-input__send-btn"
+            />
+          </motion.div>
         </div>
-        <p
-          style={{
-            textAlign: "center",
-            fontSize: 11,
-            color: "var(--text-muted)",
-            margin: "8px 0 0",
-          }}
-        >
+        <p className="chat-input__hint">
           Enter để gửi · Shift+Enter để xuống dòng
         </p>
       </div>

@@ -2,6 +2,7 @@
 
 import { BookOpenText, Sparkles } from "lucide-react";
 import { Button, Card, Input } from "antd";
+import { motion } from "motion/react";
 
 type DictionarySearchPanelProps = {
   value: string;
@@ -26,7 +27,7 @@ export function DictionarySearchPanel({
     <section className="dictionary-search-panel">
       <Card className="dictionary-card dictionary-search-panel__card" variant="borderless">
         <div className="dictionary-search-panel__eyebrow">
-          <Sparkles size={16} />
+          <Sparkles size={14} />
           <span>Tra cứu có cấu trúc</span>
         </div>
 
@@ -44,15 +45,17 @@ export function DictionarySearchPanel({
             onPressEnter={onSearch}
             disabled={isLoading}
           />
-          <Button
-            type="primary"
-            size="large"
-            onClick={onSearch}
-            loading={isLoading}
-            className="dictionary-search-panel__button"
-          >
-            Tra cứu
-          </Button>
+          <motion.div whileTap={{ scale: 0.96 }}>
+            <Button
+              type="primary"
+              size="large"
+              onClick={onSearch}
+              loading={isLoading}
+              className="dictionary-search-panel__button"
+            >
+              Tra cứu
+            </Button>
+          </motion.div>
         </div>
 
         <p className="dictionary-search-panel__hint">
@@ -62,12 +65,19 @@ export function DictionarySearchPanel({
 
       <Card className="dictionary-card dictionary-tips-card" variant="borderless">
         <div className="dictionary-tips-card__header">
-          <BookOpenText size={18} />
+          <BookOpenText size={16} />
           <span>Mẹo sử dụng</span>
         </div>
         <ul className="dictionary-tips-card__list">
-          {HELPER_TIPS.map((tip) => (
-            <li key={tip}>{tip}</li>
+          {HELPER_TIPS.map((tip, i) => (
+            <motion.li
+              key={tip}
+              initial={{ opacity: 0, x: -6 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 + i * 0.08, duration: 0.3 }}
+            >
+              {tip}
+            </motion.li>
           ))}
         </ul>
       </Card>
