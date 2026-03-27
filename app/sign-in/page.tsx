@@ -66,21 +66,23 @@ function SignInContent() {
 
   return (
     <>
-      <motion.div
-        className="mb-5 grid size-14 place-items-center rounded-[var(--radius-lg)] bg-[var(--ink)] text-white"
-        initial={{ scale: 0.8, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        transition={{ delay: 0.1, duration: 0.35, type: "spring", stiffness: 200 }}
-      >
-        <GraduationCap size={24} strokeWidth={2} />
-      </motion.div>
+      <div className="flex flex-col items-center text-center">
+        <motion.div
+          className="mb-5 grid size-14 place-items-center rounded-[var(--radius-lg)] bg-[var(--ink)] text-white"
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.1, duration: 0.35, type: "spring", stiffness: 200 }}
+        >
+          <GraduationCap size={24} strokeWidth={2} />
+        </motion.div>
 
-      <h1 className="text-3xl [font-family:var(--font-display)] text-[var(--ink)]">
-        Trợ lý học tập
-      </h1>
-      <p className="mt-2 text-sm text-[var(--text-secondary)]">
-        Đăng nhập để bắt đầu luyện tiếng Anh
-      </p>
+        <h1 className="text-3xl [font-family:var(--font-display)] text-[var(--ink)]">
+          Trợ lý học tập
+        </h1>
+        <p className="mt-2 text-sm text-[var(--text-secondary)]">
+          Đăng nhập để bắt đầu luyện tiếng Anh
+        </p>
+      </div>
 
       <form className="mt-6 space-y-3" onSubmit={handleEmailSignIn}>
         <input
@@ -149,7 +151,7 @@ export default function SignInPage() {
     <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,rgba(196,109,46,0.12),transparent_38%),linear-gradient(180deg,var(--bg),var(--bg-deep))] px-4 py-12">
       <Suspense fallback={null}>
         <motion.div
-          className="w-full max-w-md rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[rgba(255,255,255,0.92)] p-8 shadow-[var(--shadow-lg)] backdrop-blur"
+          className="flex w-full max-w-md flex-col rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[rgba(255,255,255,0.92)] p-8 shadow-[var(--shadow-lg)] backdrop-blur"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
