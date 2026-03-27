@@ -183,11 +183,11 @@ export default function EnglishChatbotPage() {
   return (
     <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.7))] shadow-[var(--shadow-md)]">
       <div className="flex-1 min-h-0 overflow-y-auto px-4 py-6 md:px-8">
-        <div className="mx-auto flex min-h-full w-full max-w-5xl flex-col gap-5">
+        <div className="mx-auto flex min-h-full w-full max-w-5xl flex-col">
           <AnimatePresence>
             {!hasMessages && (
               <motion.div
-                className="mx-auto flex min-h-full max-w-3xl flex-1 flex-col items-center justify-center text-center"
+                className="mx-auto my-auto flex max-w-3xl flex-col items-center text-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.98 }}
@@ -254,26 +254,28 @@ export default function EnglishChatbotPage() {
             )}
           </AnimatePresence>
 
-          <div className="flex flex-col">
-            {messages.map((m, index) => (
-              <ChatMessage
-                key={m.id}
-                message={m}
-                className={getMessageSpacingClassName(m, messages[index - 1])}
-              />
-            ))}
+          {messages.length > 0 && (
+            <div className="flex flex-col">
+              {messages.map((m, index) => (
+                <ChatMessage
+                  key={m.id}
+                  message={m}
+                  className={getMessageSpacingClassName(m, messages[index - 1])}
+                />
+              ))}
 
-            {isLoading && (
-              <div className="mt-[22px]">
-                <TypingIndicator />
-              </div>
-            )}
-          </div>
+              {isLoading && (
+                <div className="mt-[22px]">
+                  <TypingIndicator />
+                </div>
+              )}
+            </div>
+          )}
 
           <AnimatePresence>
             {error && (
               <motion.div
-                className="rounded-[var(--radius)] border border-[rgba(239,68,68,0.16)] bg-[rgba(239,68,68,0.08)] px-4 py-3 text-sm text-[rgb(153,27,27)]"
+                className="mt-5 rounded-[var(--radius)] border border-[rgba(239,68,68,0.16)] bg-[rgba(239,68,68,0.08)] px-4 py-3 text-sm text-[rgb(153,27,27)]"
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
@@ -296,7 +298,7 @@ export default function EnglishChatbotPage() {
 
       <div className="border-t border-[var(--border)] bg-[rgba(255,255,255,0.72)] px-4 py-4 backdrop-blur md:px-8">
         <div className="mx-auto flex w-full max-w-5xl flex-col gap-3">
-          <div className="flex items-end gap-3 rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-3 shadow-[var(--shadow-sm)]">
+          <div className="flex items-end gap-3 rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-3 shadow-[var(--shadow-sm)] transition-[border-color,box-shadow] duration-200 focus-within:border-[var(--accent)] focus-within:ring-2 focus-within:ring-[var(--accent-muted)] focus-within:shadow-[var(--shadow-md)]">
             <textarea
               ref={textareaRef}
               value={input}
@@ -313,7 +315,7 @@ export default function EnglishChatbotPage() {
               placeholder="Nhập câu hỏi hoặc câu trả lời bằng tiếng Anh..."
               disabled={isLoading}
               rows={1}
-              className="min-h-[44px] flex-1 resize-none border-0 bg-transparent px-2 py-2 text-[15px] leading-6 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed"
+              className="min-h-[44px] flex-1 resize-none border-0 bg-transparent px-2 py-2 text-[15px] leading-6 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed focus:outline-none"
             />
             <motion.button
               className="grid size-11 shrink-0 place-items-center rounded-full bg-[var(--ink)] text-white shadow-[var(--shadow-sm)] transition enabled:hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:bg-[var(--border-strong)]"
