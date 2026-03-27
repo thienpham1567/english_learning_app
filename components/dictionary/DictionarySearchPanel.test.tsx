@@ -13,7 +13,14 @@ describe("DictionarySearchPanel", () => {
     );
 
     expect(getByText("Tra cứu có cấu trúc")).toBeInTheDocument();
-    expect(getByPlaceholderText("Ví dụ: take off")).toBeInTheDocument();
+    const searchInput = getByPlaceholderText("Ví dụ: take off");
+    expect(searchInput).toBeInTheDocument();
     expect(getByRole("button", { name: "Tra cứu" })).toBeInTheDocument();
+    expect(getByRole("button", { name: "Tra cứu" })).toHaveClass(
+      "max-[1120px]:w-full",
+    );
+    expect(searchInput.parentElement).toHaveClass(
+      "min-[1121px]:grid-cols-[minmax(0,1fr)_auto]",
+    );
   });
 });

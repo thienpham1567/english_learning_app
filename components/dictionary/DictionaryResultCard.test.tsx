@@ -31,13 +31,14 @@ describe("DictionaryResultCard", () => {
       ],
     };
 
-    const { getByRole, getByText } = renderUi(
+    const { getByRole, getByText, container } = renderUi(
       <DictionaryResultCard vocabulary={entry} hasSearched isLoading={false} />,
     );
 
     expect(getByText("Kết quả tra cứu")).toBeInTheDocument();
     expect(getByRole("tab", { name: "Nghĩa 1" })).toBeInTheDocument();
     expect(getByText("Cất cánh")).toBeInTheDocument();
+    expect(container.querySelector(".dictionary-result-card__tabs")).toBeInTheDocument();
   });
 
   it("shows empty state with diacritics before searching", () => {

@@ -218,7 +218,11 @@ export function DictionaryResultCard({
             <p>{vocabulary.overviewEn}</p>
           </motion.div>
 
-          <Tabs className="mt-6" items={tabItems} defaultActiveKey={vocabulary.senses[0]?.id} />
+          <Tabs
+            className="mt-6 dictionary-result-card__tabs"
+            items={tabItems}
+            defaultActiveKey={vocabulary.senses[0]?.id}
+          />
         </Card>
       </motion.div>
     </AnimatePresence>

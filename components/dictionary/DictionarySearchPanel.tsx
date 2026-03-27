@@ -26,7 +26,7 @@ export function DictionarySearchPanel({
   return (
     <section className="space-y-5">
       <Card
-        className="overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
+        className="overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)] min-[1121px]:sticky min-[1121px]:top-6"
         variant="borderless"
       >
         <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
@@ -41,7 +41,7 @@ export function DictionarySearchPanel({
           Công cụ này hỗ trợ từ đơn, collocation, phrasal verb và idiom để bạn học theo ngữ cảnh rõ ràng hơn.
         </p>
 
-        <div className="mt-5 flex flex-col gap-3">
+        <div className="mt-5 grid gap-2 min-[1121px]:grid-cols-[minmax(0,1fr)_auto]">
           <Input
             size="large"
             value={value}
@@ -49,6 +49,7 @@ export function DictionarySearchPanel({
             onChange={(event) => onChange(event.target.value)}
             onPressEnter={onSearch}
             disabled={isLoading}
+            className="min-h-[46px] rounded-[var(--radius)]"
           />
           <motion.div whileTap={{ scale: 0.96 }}>
             <Button
@@ -56,7 +57,7 @@ export function DictionarySearchPanel({
               size="large"
               onClick={onSearch}
               loading={isLoading}
-              className="!h-12 !rounded-[var(--radius)] !border-0 !bg-[var(--ink)] !px-5 !font-semibold hover:!bg-[var(--accent)]"
+              className="h-[46px] min-w-[110px] !rounded-[var(--radius)] !border-0 !bg-[var(--ink)] !px-5 !font-semibold hover:!bg-[var(--accent)] max-[1120px]:w-full"
             >
               Tra cứu
             </Button>

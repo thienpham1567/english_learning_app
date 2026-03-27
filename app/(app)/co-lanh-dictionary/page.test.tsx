@@ -16,7 +16,9 @@ vi.mock("antd", async () => {
 
 describe("CoLanhDictionaryPage", () => {
   it("renders the hero copy and search panel", () => {
-    renderUi(<CoLanhDictionaryPage />);
+    const { container } = renderUi(<CoLanhDictionaryPage />);
+    const pageWrapper = container.querySelector("div.min-h-full");
+    const layoutSection = container.querySelectorAll("section")[1];
 
     expect(
       screen.getByRole("heading", {
@@ -24,5 +26,9 @@ describe("CoLanhDictionaryPage", () => {
       }),
     ).toBeInTheDocument();
     expect(screen.getByText("Từ điển Cô Lành")).toBeInTheDocument();
+    expect(pageWrapper).toHaveClass("px-8", "pt-9", "pb-12");
+    expect(layoutSection).toHaveClass(
+      "min-[1121px]:grid-cols-[minmax(280px,360px)_minmax(0,1fr)]",
+    );
   });
 });

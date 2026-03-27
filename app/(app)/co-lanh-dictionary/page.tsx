@@ -64,9 +64,9 @@ export default function CoLanhDictionaryPage() {
   return (
     <>
       {contextHolder}
-      <div className="space-y-6">
+      <div className="min-h-full overflow-y-auto px-8 pb-12 pt-9 max-[720px]:px-4 max-[720px]:pb-8 max-[720px]:pt-5">
         <motion.section
-          className="relative overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[linear-gradient(135deg,rgba(255,255,255,0.96),rgba(253,243,235,0.9))] px-6 py-8 shadow-[var(--shadow-md)] md:px-8 md:py-10"
+          className="relative mb-7 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[linear-gradient(135deg,rgba(255,255,255,0.96),rgba(253,243,235,0.9))] px-6 py-8 shadow-[var(--shadow-md)] md:px-8 md:py-10 max-[720px]:rounded-[var(--radius-xl)] max-[720px]:px-5 max-[720px]:py-6"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, ease: "easeOut" }}
@@ -84,7 +84,7 @@ export default function CoLanhDictionaryPage() {
           </div>
         </motion.section>
 
-        <section className="grid gap-6 xl:grid-cols-[minmax(0,360px)_minmax(0,1fr)]">
+        <section className="grid items-start gap-6 min-[1121px]:grid-cols-[minmax(280px,360px)_minmax(0,1fr)]">
           <motion.div
             initial={{ opacity: 0, x: -12 }}
             animate={{ opacity: 1, x: 0 }}
