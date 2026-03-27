@@ -43,6 +43,62 @@ describe("DictionaryResultCard", () => {
     expect(tabs).not.toHaveClass("dictionary-result-card__tabs");
   });
 
+  it("keeps a stable result surface in loading and empty states", () => {
+    const { container, rerender } = renderUi(
+      <DictionaryResultCard vocabulary={null} hasSearched isLoading />,
+    );
+
+    expect(container.querySelector(".ant-card")).toHaveClass("min-h-[400px]");
+
+    rerender(
+      <DictionaryResultCard
+        vocabulary={null}
+        hasSearched={false}
+        isLoading={false}
+      />,
+    );
+
+    expect(container.querySelector(".ant-card")).toHaveClass("min-h-[400px]");
+  });
+
+  it("wraps the populated header on phones", () => {
+    const entry = {
+      query: "internationalization",
+      headword: "internationalization",
+      entryType: "word" as const,
+      phonetic: null,
+      level: null,
+      register: null,
+      overviewVi: "Một ví dụ từ dài để kiểm tra bố cục.",
+      overviewEn: "A long headword used to check the responsive header.",
+      senses: [
+        {
+          id: "sense-1",
+          label: "Nghĩa 1",
+          definitionVi: "Định nghĩa",
+          definitionEn: "Definition",
+          usageNoteVi: null,
+          examplesVi: [
+            "Ví dụ một.",
+            "Ví dụ hai.",
+            "Ví dụ ba.",
+          ],
+          patterns: [],
+          relatedExpressions: [],
+          commonMistakesVi: [],
+        },
+      ],
+    };
+
+    const { container } = renderUi(
+      <DictionaryResultCard vocabulary={entry} hasSearched isLoading={false} />,
+    );
+
+    expect(
+      container.querySelector(".flex.items-start.justify-between.gap-4"),
+    ).toHaveClass("max-[720px]:flex-col");
+  });
+
   it("shows empty state with diacritics before searching", () => {
     const { getByText } = renderUi(
       <DictionaryResultCard

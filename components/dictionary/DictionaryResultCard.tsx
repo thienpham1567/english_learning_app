@@ -120,7 +120,7 @@ export function DictionaryResultCard({
   if (isLoading) {
     return (
       <Card
-        className="overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
+        className="min-h-[400px] overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
         variant="borderless"
       >
         <div className="space-y-4">
@@ -135,10 +135,10 @@ export function DictionaryResultCard({
   if (!hasSearched || !vocabulary) {
     return (
       <Card
-        className="overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
+        className="min-h-[400px] overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
         variant="borderless"
       >
-        <div className="flex flex-col items-center gap-4 py-8 text-center">
+        <div className="flex min-h-[360px] flex-col items-center justify-center gap-4 py-8 text-center">
           <div className="grid size-14 place-items-center rounded-full bg-[var(--accent-light)] text-[var(--accent)] shadow-[var(--shadow-sm)]">
             {!hasSearched ? <Search size={24} /> : <SpellCheck2 size={24} />}
           </div>
@@ -173,19 +173,19 @@ export function DictionaryResultCard({
         transition={{ duration: 0.35, ease: "easeOut" }}
       >
         <Card
-          className="overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
+          className="min-h-[400px] overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
           variant="borderless"
         >
-          <div className="flex items-start justify-between gap-4">
-            <div>
+          <div className="flex items-start justify-between gap-4 max-[720px]:flex-col max-[720px]:gap-3">
+            <div className="min-w-0 flex-1">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
                 Kết quả tra cứu
               </p>
-              <h2 className="mt-2 text-3xl [font-family:var(--font-display)] text-[var(--ink)]">
+              <h2 className="mt-2 break-words text-3xl leading-tight [font-family:var(--font-display)] text-[var(--ink)]">
                 {vocabulary.headword}
               </h2>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex flex-wrap items-center gap-2 max-[720px]:justify-start">
               <Tag className="!rounded-full !px-3 !py-1" color="default">
                 {ENTRY_TYPE_LABELS[vocabulary.entryType]}
               </Tag>
