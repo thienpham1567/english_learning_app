@@ -21,9 +21,9 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Cô Minh English | Luyện tiếng Anh cùng cô Minh",
+  title: "Trợ lý học tập tiếng Anh | Luyện tiếng Anh mỗi ngày",
   description:
-    "Luyện tiếng Anh cùng cô Minh với phản hồi trực tiếp, sửa lỗi rõ ràng và hội thoại tự nhiên mỗi ngày.",
+    "Trợ lý học tập tiếng Anh với phản hồi trực tiếp, sửa lỗi rõ ràng và hội thoại tự nhiên mỗi ngày.",
 };
 
 export default function RootLayout({

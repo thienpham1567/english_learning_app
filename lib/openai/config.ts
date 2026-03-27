@@ -21,6 +21,7 @@ if (!apiKey) {
 
 export const openAiConfig = {
   apiKey,
+  baseURL: process.env.OPENAI_BASE_URL ?? "https://openrouter.ai/api/v1",
   chatModel: process.env.OPENAI_CHAT_MODEL ?? "openai/gpt-5.4-nano",
   dictionaryModel: process.env.OPENAI_DICTIONARY_MODEL ?? "openai/gpt-5.4-nano",
   dictionaryCacheTtlMs: parseDictionaryCacheTtlMs(

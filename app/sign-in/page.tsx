@@ -2,6 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import { GraduationCap } from "lucide-react";
 import { motion } from "motion/react";
 import { authClient } from "@/lib/auth-client";
 
@@ -17,6 +18,8 @@ const GoogleIcon = () => (
 function SignInContent() {
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(
     searchParams.get("error") ? "Đăng nhập thất bại. Vui lòng thử lại." : null,
   );
@@ -36,6 +39,31 @@ function SignInContent() {
     }
   };
 
+  const handleEmailSignIn = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!email.trim() || !password.trim()) return;
+
+    setIsLoading(true);
+    setError(null);
+
+    const normalizedEmail = email.trim().includes("@")
+      ? email.trim()
+      : `${email.trim()}@local.app`;
+
+    const result = await authClient.signIn.email({
+      email: normalizedEmail,
+      password,
+    });
+
+    if (result.error) {
+      setError("Email hoặc mật khẩu không đúng.");
+      setIsLoading(false);
+      return;
+    }
+
+    window.location.href = "/english-chatbot";
+  };
+
   return (
     <motion.div
       className="sign-in-card"
@@ -49,13 +77,46 @@ function SignInContent() {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.1, duration: 0.35, type: "spring", stiffness: 200 }}
       >
-        CM
+        <GraduationCap size={24} strokeWidth={2} />
       </motion.div>
 
-      <h1>Cô Minh English</h1>
+      <h1>Trợ lý học tập</h1>
       <p className="sign-in-card__subtitle">
         Đăng nhập để bắt đầu luyện tiếng Anh
       </p>
+
+      <form className="sign-in-card__form" onSubmit={handleEmailSignIn}>
+        <input
+          type="text"
+          className="sign-in-card__input"
+          placeholder="Tên đăng nhập"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          disabled={isLoading}
+          autoComplete="username"
+        />
+        <input
+          type="password"
+          className="sign-in-card__input"
+          placeholder="Mật khẩu"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          disabled={isLoading}
+          autoComplete="current-password"
+        />
+        <motion.button
+          type="submit"
+          className="sign-in-card__submit-btn"
+          disabled={isLoading || !email.trim() || !password.trim()}
+          whileTap={{ scale: 0.97 }}
+        >
+          {isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
+        </motion.button>
+      </form>
+
+      <div className="sign-in-card__divider">
+        <span>hoặc</span>
+      </div>
 
       <motion.button
         className="sign-in-card__google-btn"
@@ -64,7 +125,7 @@ function SignInContent() {
         whileTap={{ scale: 0.97 }}
       >
         <GoogleIcon />
-        {isLoading ? "Đang chuyển hướng..." : "Đăng nhập bằng Google"}
+        Đăng nhập bằng Google
       </motion.button>
 
       {error && (
@@ -78,7 +139,7 @@ function SignInContent() {
       )}
 
       <p className="sign-in-card__footer">
-        Ứng dụng học tiếng Anh cùng cô Minh
+        Trợ lý học tập tiếng Anh
       </p>
     </motion.div>
   );

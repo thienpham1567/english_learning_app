@@ -4,17 +4,11 @@ import { useRef, useState } from "react";
 import { message } from "antd";
 import { motion } from "motion/react";
 
+import axios from "axios";
+import http from "@/lib/http";
 import { DictionaryResultCard } from "@/components/dictionary/DictionaryResultCard";
 import { DictionarySearchPanel } from "@/components/dictionary/DictionarySearchPanel";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";
-
-type DictionaryResponse =
-  | {
-      data: Vocabulary;
-    }
-  | {
-      error: string;
-    };
 
 const QUERY_PATTERN = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
 
@@ -45,34 +39,21 @@ export default function CoLanhDictionaryPage() {
     latestRequestIdRef.current = requestId;
 
     try {
-      const response = await fetch("/api/dictionary", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ word: normalizedWord }),
+      const { data: payload } = await http.post<{ data: Vocabulary }>("/dictionary", {
+        word: normalizedWord,
       });
 
-      const payload = (await response.json().catch(() => null)) as DictionaryResponse | null;
-
-      if (requestId !== latestRequestIdRef.current) {
-        return;
-      }
-
-      if (!response.ok || !payload || !("data" in payload)) {
-        const errorMessage =
-          payload && "error" in payload ? payload.error : "Không thể tra cứu từ này lúc này.";
-        messageApi.error(errorMessage);
-        return;
-      }
+      if (requestId !== latestRequestIdRef.current) return;
 
       setResult(payload.data);
-    } catch {
-      if (requestId !== latestRequestIdRef.current) {
-        return;
-      }
+    } catch (error) {
+      if (requestId !== latestRequestIdRef.current) return;
 
-      messageApi.error("Đã xảy ra lỗi mạng. Vui lòng thử lại sau.");
+      if (axios.isAxiosError(error) && error.response?.data?.error) {
+        messageApi.error(error.response.data.error);
+      } else {
+        messageApi.error("Đã xảy ra lỗi mạng. Vui lòng thử lại sau.");
+      }
     } finally {
       if (requestId === latestRequestIdRef.current) {
         setIsLoading(false);

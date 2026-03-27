@@ -1,8 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Input, Button } from "antd";
-import { ArrowUp } from "lucide-react";
+import { ArrowUp, Sparkles, BookOpen, MessageCircle, Lightbulb } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import { TypingIndicator } from "@/components/TypingIndicator";
@@ -10,10 +9,22 @@ import { ChatMessage } from "@/components/ChatMessage";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 
 const SUGGESTED = [
-  "Sửa ngữ pháp giúp mình: I goed to school.",
-  "Cho mình một bài luyện nhanh bằng tiếng Anh.",
-  "Giải thích một từ lóng của người Úc nhé.",
-  "Vì sao phải nói 'I am' chứ không phải 'I is'?",
+  {
+    text: "Sửa ngữ pháp giúp mình: I goed to school.",
+    icon: BookOpen,
+  },
+  {
+    text: "Cho mình một bài luyện nhanh bằng tiếng Anh.",
+    icon: Sparkles,
+  },
+  {
+    text: "Giải thích một từ lóng của người Úc nhé.",
+    icon: MessageCircle,
+  },
+  {
+    text: "Vì sao phải nói 'I am' chứ không phải 'I is'?",
+    icon: Lightbulb,
+  },
 ];
 
 const CHAT_ERROR_MESSAGE =
@@ -39,10 +50,18 @@ export default function EnglishChatbotPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading, error]);
+
+  const autoResize = () => {
+    const el = textareaRef.current;
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = Math.min(el.scrollHeight, 160) + "px";
+  };
 
   const removeEmptyAssistantMessage = (messageId: string) => {
     setMessages((currentMessages) =>
@@ -73,6 +92,9 @@ export default function EnglishChatbotPage() {
       },
     ]);
     setInput("");
+    if (textareaRef.current) {
+      textareaRef.current.style.height = "auto";
+    }
     setError(null);
     setIsLoading(true);
 
@@ -144,62 +166,77 @@ export default function EnglishChatbotPage() {
     }
   };
 
+  const hasMessages = messages.length > 0;
+
   return (
     <div className="chat-page">
-      {/* ── Header ── */}
-      <header className="chat-header">
-        <div className="chat-header__avatar">
-          👩‍🏫
-          <span className="chat-header__status" />
-        </div>
-        <div className="chat-header__info">
-          <h2>Cô Minh English</h2>
-          <p>Gia sư tiếng Anh AI</p>
-        </div>
-      </header>
-
       {/* ── Messages ── */}
       <div className="chat-messages">
         <div className="chat-messages__inner">
           {/* Welcome */}
           <AnimatePresence>
-            {messages.length === 0 && (
+            {!hasMessages && (
               <motion.div
                 className="chat-welcome"
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -12 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0, y: -20, scale: 0.98 }}
+                transition={{ duration: 0.35, ease: "easeOut" }}
               >
                 <motion.div
-                  className="chat-welcome__icon"
-                  initial={{ scale: 0.8, opacity: 0 }}
+                  className="chat-welcome__avatar"
+                  initial={{ scale: 0.6, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.15, duration: 0.4, type: "spring", stiffness: 200 }}
+                  transition={{ delay: 0.1, duration: 0.5, type: "spring", stiffness: 180, damping: 14 }}
                 >
-                  👩‍🏫
+                  <span className="chat-welcome__emoji">👩‍🏫</span>
+                  <span className="chat-welcome__status" />
                 </motion.div>
-                <h2>Cô Minh đã sẵn sàng</h2>
-                <p>
-                  Hãy trả lời bằng tiếng Anh để luyện phản xạ. Cô sẽ sửa lỗi rõ
-                  ràng, giải thích ngắn gọn và giữ cuộc trò chuyện tiếp tục.
-                </p>
+
+                <motion.h2
+                  className="chat-welcome__title"
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.2, duration: 0.4 }}
+                >
+                  Xin chào! Cô Minh đây
+                </motion.h2>
+
+                <motion.p
+                  className="chat-welcome__subtitle"
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3, duration: 0.4 }}
+                >
+                  Hãy trả lời bằng tiếng Anh để luyện phản xạ. Cô sẽ sửa lỗi
+                  rõ ràng, giải thích ngắn gọn và giữ cuộc trò chuyện tiếp tục.
+                </motion.p>
+
                 <div className="chat-welcome__prompts">
-                  {SUGGESTED.map((s, i) => (
-                    <motion.div
-                      key={s}
-                      initial={{ opacity: 0, y: 8 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.3 + i * 0.08, duration: 0.3 }}
-                    >
-                      <Button
-                        className="chat-welcome__prompt-btn"
-                        onClick={() => send(s)}
+                  {SUGGESTED.map((s, i) => {
+                    const Icon = s.icon;
+                    return (
+                      <motion.button
+                        key={s.text}
+                        className="chat-prompt-card"
+                        onClick={() => send(s.text)}
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{
+                          delay: 0.35 + i * 0.08,
+                          duration: 0.35,
+                          ease: "easeOut",
+                        }}
+                        whileHover={{ y: -2 }}
+                        whileTap={{ scale: 0.97 }}
                       >
-                        {s}
-                      </Button>
-                    </motion.div>
-                  ))}
+                        <span className="chat-prompt-card__icon">
+                          <Icon size={16} strokeWidth={2} />
+                        </span>
+                        <span className="chat-prompt-card__text">{s.text}</span>
+                      </motion.button>
+                    );
+                  })}
                 </div>
               </motion.div>
             )}
@@ -216,20 +253,19 @@ export default function EnglishChatbotPage() {
           <AnimatePresence>
             {error && (
               <motion.div
+                className="chat-error"
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
                 transition={{ duration: 0.25 }}
               >
-                <div className="chat-error">
-                  <p style={{ margin: "0 0 10px" }}>{error}</p>
-                  <button
-                    className="chat-error__dismiss"
-                    onClick={() => setError(null)}
-                  >
-                    Đóng
-                  </button>
-                </div>
+                <p>{error}</p>
+                <button
+                  className="chat-error__dismiss"
+                  onClick={() => setError(null)}
+                >
+                  Đóng
+                </button>
               </motion.div>
             )}
           </AnimatePresence>
@@ -239,11 +275,15 @@ export default function EnglishChatbotPage() {
       </div>
 
       {/* ── Input ── */}
-      <div className="chat-input-bar">
+      <div className={`chat-input-bar ${hasMessages ? "has-messages" : ""}`}>
         <div className="chat-input__wrapper">
-          <Input.TextArea
+          <textarea
+            ref={textareaRef}
             value={input}
-            onChange={(e) => setInput(e.target.value)}
+            onChange={(e) => {
+              setInput(e.target.value);
+              autoResize();
+            }}
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
                 e.preventDefault();
@@ -251,30 +291,18 @@ export default function EnglishChatbotPage() {
               }
             }}
             placeholder="Nhập câu hỏi hoặc câu trả lời bằng tiếng Anh..."
-            autoSize={{ minRows: 1, maxRows: 6 }}
             disabled={isLoading}
-            style={{
-              background: "transparent",
-              border: "none",
-              boxShadow: "none",
-              fontSize: 15,
-              padding: "4px 0",
-              resize: "none",
-              flex: 1,
-              color: "var(--text-primary)",
-            }}
+            rows={1}
+            className="chat-input__textarea"
           />
-          <motion.div whileTap={{ scale: 0.9 }}>
-            <Button
-              type="primary"
-              shape="circle"
-              icon={<ArrowUp size={18} strokeWidth={2.5} />}
-              onClick={() => send()}
-              loading={isLoading}
-              disabled={!input.trim() || isLoading}
-              className="chat-input__send-btn"
-            />
-          </motion.div>
+          <motion.button
+            className={`chat-input__send ${input.trim() && !isLoading ? "is-active" : ""}`}
+            onClick={() => send()}
+            disabled={!input.trim() || isLoading}
+            whileTap={{ scale: 0.88 }}
+          >
+            <ArrowUp size={18} strokeWidth={2.5} />
+          </motion.button>
         </div>
         <p className="chat-input__hint">
           Enter để gửi · Shift+Enter để xuống dòng
