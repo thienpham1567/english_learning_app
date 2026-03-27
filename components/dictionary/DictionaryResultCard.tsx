@@ -219,7 +219,7 @@ export function DictionaryResultCard({
           </motion.div>
 
           <Tabs
-            className="mt-6 dictionary-result-card__tabs"
+            className="mt-6 [&_.ant-tabs-nav]:mb-5 [&_.ant-tabs-tab]:rounded-full [&_.ant-tabs-tab]:px-3.5 [&_.ant-tabs-tab]:py-1.5 [&_.ant-tabs-tab]:font-medium [&_.ant-tabs-tab]:text-sm"
             items={tabItems}
             defaultActiveKey={vocabulary.senses[0]?.id}
           />

@@ -38,7 +38,9 @@ describe("DictionaryResultCard", () => {
     expect(getByText("Kết quả tra cứu")).toBeInTheDocument();
     expect(getByRole("tab", { name: "Nghĩa 1" })).toBeInTheDocument();
     expect(getByText("Cất cánh")).toBeInTheDocument();
-    expect(container.querySelector(".dictionary-result-card__tabs")).toBeInTheDocument();
+    const tabs = container.querySelector(".ant-tabs");
+    expect(tabs).toHaveClass("mt-6");
+    expect(tabs).not.toHaveClass("dictionary-result-card__tabs");
   });
 
   it("shows empty state with diacritics before searching", () => {
