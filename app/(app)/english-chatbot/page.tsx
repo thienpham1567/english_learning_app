@@ -44,6 +44,15 @@ function parseSsePayloads(chunk: string) {
     .filter(Boolean);
 }
 
+export function getMessageSpacingClassName(
+  currentMessage: AppChatMessage,
+  previousMessage?: AppChatMessage,
+) {
+  if (!previousMessage) return "";
+
+  return currentMessage.role === previousMessage.role ? "mt-[4px]" : "mt-[22px]";
+}
+
 export default function EnglishChatbotPage() {
   const [messages, setMessages] = useState<AppChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -245,12 +254,20 @@ export default function EnglishChatbotPage() {
             )}
           </AnimatePresence>
 
-          <div className="flex flex-col gap-4">
-            {messages.map((m) => (
-              <ChatMessage key={m.id} message={m} />
+          <div className="flex flex-col">
+            {messages.map((m, index) => (
+              <ChatMessage
+                key={m.id}
+                message={m}
+                className={getMessageSpacingClassName(m, messages[index - 1])}
+              />
             ))}
 
-            {isLoading && <TypingIndicator />}
+            {isLoading && (
+              <div className="mt-[16px]">
+                <TypingIndicator />
+              </div>
+            )}
           </div>
 
           <AnimatePresence>

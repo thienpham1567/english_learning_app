@@ -64,7 +64,13 @@ function UserAvatar() {
   );
 }
 
-export function ChatMessage({ message }: { message: AppChatMessage }) {
+export function ChatMessage({
+  message,
+  className = "",
+}: {
+  message: AppChatMessage;
+  className?: string;
+}) {
   const isUser = message.role === "user";
   const text = message.text.trim();
   if (!text) return null;
@@ -74,8 +80,9 @@ export function ChatMessage({ message }: { message: AppChatMessage }) {
   return (
     <motion.div
       className={[
-        "flex items-end gap-3 [animation:fadeUp_0.25s_ease-out_forwards]",
+        "group flex items-end gap-3 [animation:fadeUp_0.25s_ease-out_forwards]",
         isUser ? "justify-end" : "justify-start",
+        className,
       ].join(" ")}
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
@@ -115,7 +122,7 @@ export function ChatMessage({ message }: { message: AppChatMessage }) {
             </div>
           )}
         </div>
-        <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
+        <div className="flex items-center gap-2 text-xs text-[var(--text-muted)] opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
           {time && <span>{time}</span>}
           {!isUser && <CopyButton text={text} />}
         </div>

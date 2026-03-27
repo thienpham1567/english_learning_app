@@ -14,4 +14,12 @@ describe("ChatMessage", () => {
 
     expect(screen.getByText("Hello")).toBeInTheDocument();
   });
+
+  it("keeps message meta hidden until hover", () => {
+    renderUi(<ChatMessage message={{ id: "1", role: "assistant", text: "Hello" }} />);
+
+    const meta = screen.getByText(/\d{2}:\d{2}/).parentElement;
+    expect(meta).toHaveClass("opacity-0");
+    expect(meta).toHaveClass("group-hover:opacity-100");
+  });
 });
