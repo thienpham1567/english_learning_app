@@ -1,7 +1,6 @@
 @import "tailwindcss";
 
 :root {
-  /* ── Palette: Editorial Study Companion ── */
   --bg: #f6f4f0;
   --bg-deep: #edeae4;
   --surface: #ffffff;
@@ -43,9 +42,9 @@
   --radius-xl: 20px;
   --radius-2xl: 24px;
 
-  --font-display: 'Fraunces', 'Georgia', serif;
-  --font-body: 'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+  --font-display: "Fraunces", "Georgia", serif;
+  --font-body: "Source Sans 3", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: "JetBrains Mono", "Fira Code", monospace;
 }
 
 * {
@@ -144,17 +143,6 @@ body {
 .ant-input::placeholder, textarea.ant-input::placeholder {
   color: var(--text-muted) !important;
   opacity: 1;
-}
-
-/* ═══════════════════════════════════════════
-   APP SHELL
-   ═══════════════════════════════════════════ */
-.app-shell {
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: var(--sidebar-width) minmax(0, 1fr);
-  grid-template-rows: minmax(0, 1fr);
-  transition: grid-template-columns 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* ── Sidebar ── */
@@ -298,42 +286,6 @@ body {
 .app-sidebar__link:focus-visible {
   outline: 2px solid var(--accent-muted);
   outline-offset: 2px;
-}
-
-/* ── Main content area ── */
-.app-shell__main {
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  min-height: 0;
-  overflow: hidden;
-}
-
-.app-shell__content {
-  flex: 1;
-  min-width: 0;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-/* ── Toolbar ── */
-.app-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  height: 52px;
-  padding: 0 20px;
-  border-bottom: 1px solid var(--border);
-  background: var(--surface);
-  flex-shrink: 0;
-}
-
-.app-toolbar__right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
 }
 
 /* ── User Menu ── */
@@ -483,15 +435,6 @@ body {
     opacity: 1;
     transform: none;
     font-size: 13px;
-  }
-
-  .app-shell__content {
-    min-height: 0;
-  }
-
-  .app-toolbar {
-    height: 48px;
-    padding: 0 16px;
   }
 
   .user-menu__name {

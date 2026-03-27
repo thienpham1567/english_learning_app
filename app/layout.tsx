@@ -32,8 +32,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={`${sourceSans.variable} ${fraunces.variable} ${jetbrainsMono.variable}`}>
-      <body style={{ fontFamily: "var(--font-body)" }}>{children}</body>
+    <html
+      lang="vi"
+      className={`${sourceSans.variable} ${fraunces.variable} ${jetbrainsMono.variable}`}
+    >
+      <body className="min-h-screen bg-[var(--bg)] [font-family:var(--font-body)] text-[var(--text-primary)] antialiased">
+        {children}
+      </body>
     </html>
   );
 }
