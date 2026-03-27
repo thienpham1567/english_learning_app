@@ -8,7 +8,6 @@
   --surface-raised: #ffffff;
 
   --accent: #c46d2e;
-  --accent-hover: #b35f22;
   --accent-light: #fdf3eb;
   --accent-muted: rgba(196, 109, 46, 0.12);
 
@@ -24,17 +23,11 @@
   --bubble-ai: #ffffff;
 
   --sage: #5a7a64;
-  --sage-light: #eef3ef;
-  --plum: #7c5a8a;
-  --plum-light: #f3eef5;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.07), 0 2px 4px rgba(0, 0, 0, 0.04);
   --shadow-lg: 0 10px 32px rgba(0, 0, 0, 0.08), 0 4px 12px rgba(0, 0, 0, 0.04);
-
-  --sidebar-width: 72px;
-  --sidebar-expanded: 264px;
 
   --radius-sm: 8px;
   --radius: 12px;

@@ -8,8 +8,12 @@ describe("TypingIndicator", () => {
   it("renders the assistant typing state", () => {
     renderUi(<TypingIndicator />);
 
-    expect(
-      screen.getByLabelText("Cô Minh đang nhập phản hồi"),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("status")).toHaveAttribute(
+      "aria-live",
+      "polite",
+    );
+    expect(screen.getByRole("status")).toHaveAccessibleName(
+      "Cô Minh đang nhập phản hồi",
+    );
   });
 });
