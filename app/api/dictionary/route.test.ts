@@ -1,5 +1,4 @@
-import { describe, expect, it, vi } from "vitest";
-import { POST } from "@/app/api/dictionary/route";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 vi.mock("@/lib/openai/client", () => ({
   openAiClient: {
@@ -9,6 +8,9 @@ vi.mock("@/lib/openai/client", () => ({
           query: "take off",
           headword: "take off",
           entryType: "phrasal_verb",
+          phonetic: null,
+          level: null,
+          register: null,
           overviewVi: "Một cụm động từ thông dụng.",
           overviewEn: "A common phrasal verb.",
           senses: [
@@ -17,6 +19,7 @@ vi.mock("@/lib/openai/client", () => ({
               label: "Nghĩa 1",
               definitionVi: "Cất cánh",
               definitionEn: "To leave the ground and begin flying.",
+              usageNoteVi: null,
               examplesVi: [
                 "Máy bay cất cánh đúng giờ.",
                 "Chuyến bay cất cánh lúc bình minh.",
@@ -33,8 +36,29 @@ vi.mock("@/lib/openai/client", () => ({
   },
 }));
 
+const originalOpenAiApiKey = process.env.OPENAI_API_KEY;
+
+function restoreOpenAiEnv() {
+  if (originalOpenAiApiKey === undefined) {
+    delete process.env.OPENAI_API_KEY;
+  } else {
+    process.env.OPENAI_API_KEY = originalOpenAiApiKey;
+  }
+}
+
+beforeEach(() => {
+  vi.resetModules();
+  process.env.OPENAI_API_KEY = "test";
+});
+
+afterEach(() => {
+  restoreOpenAiEnv();
+  vi.resetModules();
+});
+
 describe("/api/dictionary", () => {
   it("accepts a phrasal verb query", async () => {
+    const { POST } = await import("@/app/api/dictionary/route");
     const response = await POST(
       new Request("http://localhost/api/dictionary", {
         method: "POST",
@@ -50,6 +74,7 @@ describe("/api/dictionary", () => {
   });
 
   it("rejects empty input", async () => {
+    const { POST } = await import("@/app/api/dictionary/route");
     const response = await POST(
       new Request("http://localhost/api/dictionary", {
         method: "POST",
@@ -61,6 +86,7 @@ describe("/api/dictionary", () => {
   });
 
   it("rejects invalid characters", async () => {
+    const { POST } = await import("@/app/api/dictionary/route");
     const response = await POST(
       new Request("http://localhost/api/dictionary", {
         method: "POST",

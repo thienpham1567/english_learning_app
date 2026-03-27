@@ -63,7 +63,7 @@ describe("openai config", () => {
     const { openAiConfig } = await import("@/lib/openai/config");
 
     expect(openAiConfig.apiKey).toBe("test");
-    expect(openAiConfig.chatModel).toBe("gpt-4.1-mini");
+    expect(openAiConfig.chatModel).toBe("openai/gpt-5.4-nano");
   });
 });
 
@@ -148,7 +148,7 @@ describe("chat route", () => {
             ],
           },
           {
-            id: "assistant-1",
+            id: "msg_assistant-1",
             type: "message",
             role: "assistant",
             status: "completed",

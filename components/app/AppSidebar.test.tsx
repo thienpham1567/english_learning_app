@@ -12,7 +12,7 @@ describe("AppSidebar", () => {
   it("renders the Vietnamese sidebar labels", () => {
     renderUi(<AppSidebar />);
 
-    expect(screen.getByRole("link", { name: "Trò chuyện tiếng Anh" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Từ điển Cô Lành" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Trò chuyện" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Từ điển" })).toBeInTheDocument();
   });
 });
