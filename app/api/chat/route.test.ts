@@ -2,6 +2,32 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
 import { createMockResponseStream } from "@/test/mocks/openai";
 
+vi.mock("next/headers", () => ({
+  headers: vi.fn().mockResolvedValue(new Headers()),
+}));
+
+vi.mock("@/lib/auth", () => ({
+  auth: {
+    api: {
+      getSession: vi.fn().mockResolvedValue(null),
+    },
+  },
+}));
+
+vi.mock("@/lib/db", () => ({
+  db: {
+    insert: vi.fn().mockReturnValue({ values: vi.fn().mockResolvedValue([]) }),
+    update: vi.fn().mockReturnValue({
+      set: vi.fn().mockReturnValue({ where: vi.fn().mockResolvedValue([]) }),
+    }),
+  },
+}));
+
+vi.mock("@/lib/db/schema", () => ({
+  conversation: {},
+  message: {},
+}));
+
 const originalOpenAiApiKey = process.env.OPENAI_API_KEY;
 const originalOpenAiChatModel = process.env.OPENAI_CHAT_MODEL;
 const originalOpenAiDictionaryModel = process.env.OPENAI_DICTIONARY_MODEL;

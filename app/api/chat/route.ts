@@ -1,3 +1,9 @@
+import { eq } from "drizzle-orm";
+import { headers } from "next/headers";
+
+import { auth } from "@/lib/auth";
+import { db } from "@/lib/db";
+import { conversation, message } from "@/lib/db/schema";
 import { buildChatRequest } from "@/lib/chat/build-chat-input";
 import { createChatSse } from "@/lib/chat/create-chat-sse";
 import type { ChatMessage } from "@/lib/chat/types";
@@ -21,7 +27,6 @@ function writeSseEvent(
 
 function createErrorSseResponse() {
   const encoder = new TextEncoder();
-
   return createChatSse(
     new ReadableStream<Uint8Array>({
       start(controller) {
@@ -36,27 +41,31 @@ function createErrorSseResponse() {
 }
 
 function isChatMessage(value: unknown): value is ChatMessage {
-  if (typeof value !== "object" || value === null) {
-    return false;
-  }
-
-  const message = value as Record<string, unknown>;
-
+  if (typeof value !== "object" || value === null) return false;
+  const m = value as Record<string, unknown>;
   return (
-    typeof message.id === "string" &&
-    (message.role === "user" || message.role === "assistant") &&
-    typeof message.text === "string"
+    typeof m.id === "string" &&
+    (m.role === "user" || m.role === "assistant") &&
+    typeof m.text === "string"
   );
 }
 
 export async function POST(req: Request) {
   try {
-    const body = (await req.json().catch(() => null)) as
-      | { messages?: unknown }
-      | null;
+    const session = await auth.api.getSession({ headers: await headers() });
+
+    const body = (await req.json().catch(() => null)) as {
+      messages?: unknown;
+      conversationId?: unknown;
+    } | null;
+
     const messages = Array.isArray(body?.messages)
       ? body.messages.filter(isChatMessage)
       : [];
+
+    const conversationId =
+      typeof body?.conversationId === "string" ? body.conversationId : null;
+
     const { instructions, input } = buildChatRequest(messages);
     const encoder = new TextEncoder();
 
@@ -65,6 +74,7 @@ export async function POST(req: Request) {
         async start(controller) {
           let streamStarted = false;
           let doneSent = false;
+          let fullAssistantText = "";
 
           try {
             const stream = openAiClient.responses.stream({
@@ -78,6 +88,7 @@ export async function POST(req: Request) {
 
             for await (const event of stream) {
               if (event.type === "response.output_text.delta" && event.delta) {
+                fullAssistantText += event.delta;
                 writeSseEvent(controller, encoder, {
                   type: "assistant_delta",
                   delta: event.delta,
@@ -85,6 +96,28 @@ export async function POST(req: Request) {
               }
 
               if (event.type === "response.completed" && !doneSent) {
+                if (conversationId && session && fullAssistantText) {
+                  const lastUserMessage = messages[messages.length - 1];
+                  if (lastUserMessage) {
+                    await db.insert(message).values([
+                      {
+                        conversationId,
+                        role: "user",
+                        content: lastUserMessage.text,
+                      },
+                      {
+                        conversationId,
+                        role: "assistant",
+                        content: fullAssistantText,
+                      },
+                    ]);
+                    await db
+                      .update(conversation)
+                      .set({ updatedAt: new Date() })
+                      .where(eq(conversation.id, conversationId));
+                  }
+                }
+
                 writeSseEvent(controller, encoder, { type: "assistant_done" });
                 doneSent = true;
               }
