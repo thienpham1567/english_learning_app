@@ -228,7 +228,7 @@ export default function EnglishChatbotPage() {
                     return (
                       <motion.button
                         key={s.text}
-                        className="flex items-start gap-3 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-4 text-left shadow-[var(--shadow-sm)] transition hover:-translate-y-0.5 hover:border-[var(--border-strong)] hover:bg-[var(--surface-hover)]"
+                        className="flex items-start gap-3 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-4 text-left shadow-[var(--shadow-sm)] transition hover:-translate-y-0.5 hover:border-[var(--border-strong)] hover:bg-[var(--surface-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
                         onClick={() => send(s.text)}
                         initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -283,7 +283,7 @@ export default function EnglishChatbotPage() {
               >
                 <p>{error}</p>
                 <button
-                  className="mt-2 font-medium underline underline-offset-2"
+                  className="mt-2 font-medium underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
                   onClick={() => setError(null)}
                 >
                   Đóng
@@ -318,7 +318,7 @@ export default function EnglishChatbotPage() {
               className="min-h-[44px] flex-1 resize-none border-0 bg-transparent px-2 py-2 text-[15px] leading-6 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed focus:outline-none"
             />
             <motion.button
-              className="grid size-11 shrink-0 place-items-center rounded-full bg-[var(--ink)] text-white shadow-[var(--shadow-sm)] transition enabled:hover:-translate-y-0.5 disabled:cursor-not-allowed disabled:bg-[var(--border-strong)]"
+              className="grid size-11 shrink-0 place-items-center rounded-full bg-[var(--ink)] text-white shadow-[var(--shadow-sm)] transition enabled:hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed disabled:bg-[var(--border-strong)]"
               onClick={() => send()}
               disabled={!input.trim() || isLoading}
               whileTap={{ scale: 0.88 }}

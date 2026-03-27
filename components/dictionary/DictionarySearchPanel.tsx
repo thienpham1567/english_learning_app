@@ -41,7 +41,7 @@ export function DictionarySearchPanel({
           Công cụ này hỗ trợ từ đơn, collocation, phrasal verb và idiom để bạn học theo ngữ cảnh rõ ràng hơn.
         </p>
 
-        <div className="mt-5 grid gap-2 min-[1121px]:grid-cols-[minmax(0,1fr)_auto]">
+        <div className="mt-5 grid grid-cols-[minmax(0,1fr)_auto] gap-2 max-[720px]:grid-cols-1">
           <Input
             size="large"
             value={value}
@@ -57,7 +57,7 @@ export function DictionarySearchPanel({
               size="large"
               onClick={onSearch}
               loading={isLoading}
-              className="h-[46px] min-w-[110px] !rounded-[var(--radius)] !border-0 !bg-[var(--ink)] !px-5 !font-semibold hover:!bg-[var(--accent)] max-[1120px]:w-full"
+              className="h-[46px] min-w-[110px] !rounded-[var(--radius)] !border-0 !bg-[var(--ink)] !px-5 !font-semibold hover:!bg-[var(--accent)] max-[720px]:w-full focus-visible:!outline focus-visible:!outline-2 focus-visible:!outline-offset-2 focus-visible:!outline-[var(--accent)]"
             >
               Tra cứu
             </Button>

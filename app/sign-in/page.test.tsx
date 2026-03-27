@@ -43,6 +43,12 @@ describe("SignInPage", () => {
     expect(screen.getByRole("heading", { name: "Trợ lý học tập" })).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Tên đăng nhập")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Đăng nhập bằng Google" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Đăng nhập bằng Google" })).toHaveClass(
+      "focus-visible:outline",
+      "focus-visible:outline-2",
+      "focus-visible:outline-offset-2",
+      "focus-visible:outline-[var(--accent)]",
+    );
   });
 
   it("normalizes bare usernames before submitting email sign-in", async () => {
@@ -83,6 +89,22 @@ describe("SignInPage", () => {
     expect(screen.getByPlaceholderText("Mật khẩu")).toBeDisabled();
     expect(screen.getByRole("button", { name: "Đang đăng nhập..." })).toBeDisabled();
     expect(screen.getByRole("button", { name: "Đăng nhập bằng Google" })).toBeDisabled();
+  });
+
+  it("keeps the email submit button keyboard-visible", async () => {
+    const user = userEvent.setup();
+
+    renderUi(<SignInPage />);
+
+    await user.type(screen.getByPlaceholderText("Tên đăng nhập"), "alice");
+    await user.type(screen.getByPlaceholderText("Mật khẩu"), "secret");
+
+    expect(screen.getByRole("button", { name: "Đăng nhập" })).toHaveClass(
+      "focus-visible:outline",
+      "focus-visible:outline-2",
+      "focus-visible:outline-offset-2",
+      "focus-visible:outline-[var(--accent)]",
+    );
   });
 
   it("renders the query-param error banner", () => {

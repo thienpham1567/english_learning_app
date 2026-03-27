@@ -11,9 +11,12 @@ describe("EnglishChatbotPage", () => {
     expect(
       screen.getByRole("heading", { name: "Xin chào! Cô Minh đây" }),
     ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /I goed to school/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /I goed to school/i })).toHaveClass(
+      "focus-visible:outline",
+      "focus-visible:outline-2",
+      "focus-visible:outline-offset-2",
+      "focus-visible:outline-[var(--accent)]",
+    );
   });
 
   it("keeps grouped spacing between same-role and role-switch messages", () => {

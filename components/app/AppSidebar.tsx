@@ -47,7 +47,7 @@ export function AppSidebar() {
                 href={href}
                 aria-current={active ? "page" : undefined}
                 className={[
-                  "flex items-center gap-3 overflow-hidden rounded-[var(--radius)] px-3 py-3 text-sm font-medium transition max-[920px]:min-h-[38px] max-[920px]:px-[10px]",
+                  "flex items-center gap-3 overflow-hidden rounded-[var(--radius)] px-3 py-3 text-sm font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] max-[920px]:min-h-[38px] max-[920px]:px-[10px]",
                   active
                     ? "bg-[var(--accent-light)] text-[var(--accent)]"
                     : "text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--ink)]",

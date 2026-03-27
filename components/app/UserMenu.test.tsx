@@ -62,12 +62,29 @@ describe("UserMenu", () => {
       "py-[5px]",
       "text-left",
       "shadow-[var(--shadow-sm)]",
+      "focus-visible:outline",
+      "focus-visible:outline-2",
+      "focus-visible:outline-offset-2",
+      "focus-visible:outline-[var(--accent)]",
     );
 
     expect(screen.getByText("CL")).toHaveClass(
       "size-7",
       "rounded-full",
       "grid",
+    );
+  });
+
+  it("keeps a visible focus ring on menu actions", () => {
+    renderUi(<UserMenu user={{ name: "Cô Lành", image: null }} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /cô lành/i }));
+
+    expect(screen.getByRole("button", { name: "Đăng xuất" })).toHaveClass(
+      "focus-visible:outline",
+      "focus-visible:outline-2",
+      "focus-visible:outline-offset-2",
+      "focus-visible:outline-[var(--accent)]",
     );
   });
 });

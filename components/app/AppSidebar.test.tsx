@@ -14,6 +14,12 @@ describe("AppSidebar", () => {
 
     expect(screen.getByRole("link", { name: "Trò chuyện" })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: "Từ điển" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Trò chuyện" })).toHaveClass(
+      "focus-visible:outline",
+      "focus-visible:outline-2",
+      "focus-visible:outline-offset-2",
+      "focus-visible:outline-[var(--accent)]",
+    );
   });
 
   it("uses the 920px responsive mobile layout classes", () => {
