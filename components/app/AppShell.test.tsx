@@ -33,9 +33,16 @@ describe("AppShell", () => {
     );
     expect(screen.getByTestId("sidebar")).toBeInTheDocument();
     expect(screen.getByTestId("user-menu")).toHaveTextContent("Cô Lành");
+    expect(container.firstElementChild?.firstElementChild?.nextElementSibling).toHaveClass(
+      "flex",
+      "min-w-0",
+      "min-h-0",
+      "flex-col",
+    );
     expect(screen.getByRole("banner")).toHaveClass(
       "flex",
       "h-[52px]",
+      "max-[920px]:h-12",
       "shrink-0",
       "items-center",
       "justify-end",
@@ -43,6 +50,7 @@ describe("AppShell", () => {
       "border-[var(--border)]",
       "bg-[var(--surface)]",
       "px-5",
+      "max-[920px]:h-12",
       "max-[920px]:px-4",
     );
     expect(screen.getByRole("main")).toHaveClass(
