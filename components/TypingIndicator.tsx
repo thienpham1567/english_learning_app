@@ -13,9 +13,18 @@ export function TypingIndicator() {
         👩‍🏫
       </div>
       <div className="inline-flex items-center gap-1 rounded-[22px] rounded-bl-md border border-[var(--border)] bg-[var(--bubble-ai)] px-4 py-3 shadow-[var(--shadow-sm)]">
-        <span className="typing-dot" />
-        <span className="typing-dot" />
-        <span className="typing-dot" />
+        <span
+          className="inline-block size-1.5 rounded-full bg-[var(--text-muted)] [animation:blink_1.2s_ease-in-out_infinite]"
+          style={{ animationDelay: "0ms" }}
+        />
+        <span
+          className="inline-block size-1.5 rounded-full bg-[var(--text-muted)] [animation:blink_1.2s_ease-in-out_infinite]"
+          style={{ animationDelay: "0.15s" }}
+        />
+        <span
+          className="inline-block size-1.5 rounded-full bg-[var(--text-muted)] [animation:blink_1.2s_ease-in-out_infinite]"
+          style={{ animationDelay: "0.3s" }}
+        />
       </div>
     </motion.div>
   );

@@ -99,7 +99,18 @@ export function ChatMessage({ message }: { message: AppChatMessage }) {
           {isUser ? (
             <span className="whitespace-pre-wrap">{text}</span>
           ) : (
-            <div className="ai-markdown">
+            <div
+              className={[
+                "text-[15px] leading-8 text-[var(--text-primary)]",
+                "[&_p]:m-0 [&_p:not(:last-child)]:mb-2",
+                "[&_strong]:font-semibold [&_strong]:text-[var(--ink)]",
+                "[&_em]:italic [&_em]:text-[var(--text-secondary)]",
+                "[&_code]:rounded-[5px] [&_code]:bg-[var(--bg-deep)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:[font-family:var(--font-mono)] [&_code]:text-[0.86em] [&_code]:text-[var(--accent)]",
+                "[&_ul]:my-2 [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5",
+                "[&_ol]:my-2 [&_ol]:list-decimal [&_ol]:space-y-1 [&_ol]:pl-5",
+                "[&_li]:leading-7",
+              ].join(" ")}
+            >
               <ReactMarkdown>{text}</ReactMarkdown>
             </div>
           )}

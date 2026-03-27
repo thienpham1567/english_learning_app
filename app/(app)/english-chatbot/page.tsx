@@ -172,13 +172,13 @@ export default function EnglishChatbotPage() {
   const hasMessages = messages.length > 0;
 
   return (
-    <div className="relative flex min-h-[calc(100vh-8rem)] flex-col overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.7))] shadow-[var(--shadow-md)]">
-      <div className="flex-1 px-4 py-6 md:px-8">
-        <div className="mx-auto flex w-full max-w-5xl flex-col gap-5">
+    <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.7))] shadow-[var(--shadow-md)]">
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 py-6 md:px-8">
+        <div className="mx-auto flex min-h-full w-full max-w-5xl flex-col gap-5">
           <AnimatePresence>
             {!hasMessages && (
               <motion.div
-                className="mx-auto flex max-w-3xl flex-col items-center text-center"
+                className="mx-auto flex min-h-full max-w-3xl flex-1 flex-col items-center justify-center text-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.98 }}
@@ -245,11 +245,13 @@ export default function EnglishChatbotPage() {
             )}
           </AnimatePresence>
 
-          {messages.map((m) => (
-            <ChatMessage key={m.id} message={m} />
-          ))}
+          <div className="flex flex-col gap-4">
+            {messages.map((m) => (
+              <ChatMessage key={m.id} message={m} />
+            ))}
 
-          {isLoading && <TypingIndicator />}
+            {isLoading && <TypingIndicator />}
+          </div>
 
           <AnimatePresence>
             {error && (
