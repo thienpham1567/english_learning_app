@@ -11,9 +11,9 @@ type DictionarySearchPanelProps = {
 };
 
 const HELPER_TIPS = [
-  "Nhap mot tu tieng Anh duy nhat, vi du: curious, sturdy, whisper.",
-  "Nhan Enter de tra cuu nhanh ma khong can bam chuot.",
-  "Ket qua se hien thi nghia, vi du, muc do va ghi chu ngu phap.",
+  "Bạn có thể nhập từ đơn, collocation, phrasal verb hoặc idiom.",
+  "Nhấn Enter để tra cứu nhanh mà không cần bấm nút.",
+  "Mỗi nghĩa sẽ có giải thích song ngữ và ví dụ chỉ bằng tiếng Việt.",
 ];
 
 export function DictionarySearchPanel({
@@ -27,20 +27,19 @@ export function DictionarySearchPanel({
       <Card className="dictionary-card dictionary-search-panel__card" variant="borderless">
         <div className="dictionary-search-panel__eyebrow">
           <Sparkles size={16} />
-          <span>Tra cuu co cau truc</span>
+          <span>Tra cứu có cấu trúc</span>
         </div>
 
-        <h2 className="dictionary-search-panel__title">Nhap tu vung can giai nghia</h2>
+        <h2 className="dictionary-search-panel__title">Nhập mục từ cần tra cứu</h2>
         <p className="dictionary-search-panel__description">
-          Cong cu nay duoc thiet ke cho mot tu tieng Anh moi lan tra cuu, giup
-          ban doc nghia, cach doc va ghi chu ngu phap ro rang hon.
+          Công cụ này hỗ trợ từ đơn, collocation, phrasal verb và idiom để bạn học theo ngữ cảnh rõ ràng hơn.
         </p>
 
         <div className="dictionary-search-panel__controls">
           <Input
             size="large"
             value={value}
-            placeholder="Vi du: resilient"
+            placeholder="Ví dụ: take off"
             onChange={(event) => onChange(event.target.value)}
             onPressEnter={onSearch}
             disabled={isLoading}
@@ -52,19 +51,19 @@ export function DictionarySearchPanel({
             loading={isLoading}
             className="dictionary-search-panel__button"
           >
-            Tra cuu
+            Tra cứu
           </Button>
         </div>
 
         <p className="dictionary-search-panel__hint">
-          Chi ho tro tu tieng Anh don le, toi da 48 ky tu.
+          Hỗ trợ tối đa 80 ký tự, bao gồm khoảng trắng và dấu nháy hợp lệ.
         </p>
       </Card>
 
       <Card className="dictionary-card dictionary-tips-card" variant="borderless">
         <div className="dictionary-tips-card__header">
           <BookOpenText size={18} />
-          <span>Meo su dung</span>
+          <span>Mẹo sử dụng</span>
         </div>
         <ul className="dictionary-tips-card__list">
           {HELPER_TIPS.map((tip) => (

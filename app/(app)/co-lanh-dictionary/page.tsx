@@ -15,7 +15,7 @@ type DictionaryResponse =
       error: string;
     };
 
-const WORD_PATTERN = /^[A-Za-z][A-Za-z'-]{0,47}$/;
+const QUERY_PATTERN = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
 
 export default function CoLanhDictionaryPage() {
   const [messageApi, contextHolder] = message.useMessage();
@@ -29,12 +29,12 @@ export default function CoLanhDictionaryPage() {
     const normalizedWord = query.trim();
 
     if (!normalizedWord) {
-      messageApi.error("Vui long nhap mot tu tieng Anh truoc khi tra cuu.");
+      messageApi.error("Vui lòng nhập từ hoặc cụm từ tiếng Anh trước khi tra cứu.");
       return;
     }
 
-    if (!WORD_PATTERN.test(normalizedWord)) {
-      messageApi.error("Chi chap nhan mot tu tieng Anh don le, khong chua khoang trang.");
+    if (!QUERY_PATTERN.test(normalizedWord)) {
+      messageApi.error("Chỉ hỗ trợ từ hoặc cụm từ tiếng Anh hợp lệ.");
       return;
     }
 
@@ -60,7 +60,7 @@ export default function CoLanhDictionaryPage() {
 
       if (!response.ok || !payload || !("data" in payload)) {
         const errorMessage =
-          payload && "error" in payload ? payload.error : "Khong the tra cuu tu nay luc nay.";
+          payload && "error" in payload ? payload.error : "Không thể tra cứu từ này lúc này.";
         messageApi.error(errorMessage);
         return;
       }
@@ -71,7 +71,7 @@ export default function CoLanhDictionaryPage() {
         return;
       }
 
-      messageApi.error("Da xay ra loi mang. Vui long thu lai sau.");
+      messageApi.error("Đã xảy ra lỗi mạng. Vui lòng thử lại sau.");
     } finally {
       if (requestId === latestRequestIdRef.current) {
         setIsLoading(false);
@@ -85,11 +85,10 @@ export default function CoLanhDictionaryPage() {
       <div className="dictionary-page">
         <section className="dictionary-hero">
           <div className="dictionary-hero__content">
-            <p className="dictionary-hero__eyebrow">Tu dien Co Lanh</p>
-            <h1>Tra cuu tu vung theo cach ro rang, gon va de hoc lai</h1>
+            <p className="dictionary-hero__eyebrow">Từ điển cô Lành</p>
+            <h1>Tra cứu từ vựng và cụm từ theo cách rõ ràng, dễ học lại</h1>
             <p className="dictionary-hero__description">
-              Mot khong gian tra cuu co cau truc de ban xem ngay nghia tieng
-              Viet, phien am, cap do va ghi chu ngu phap cho tung tu.
+              Xem giải thích song ngữ, ví dụ tiếng Việt và ghi chú dùng cho từng nghĩa trong cùng một khung học tập.
             </p>
           </div>
         </section>
