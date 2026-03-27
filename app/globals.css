@@ -81,24 +81,27 @@ body {
   40%           { opacity: 1;    transform: scale(1); }
 }
 
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-@keyframes grain {
-  0%, 100% { transform: translate(0, 0); }
-  10% { transform: translate(-5%, -10%); }
-  30% { transform: translate(3%, -15%); }
-  50% { transform: translate(-15%, 5%); }
-  70% { transform: translate(7%, 12%); }
-  90% { transform: translate(-10%, 1%); }
-}
-
 /* ── Ant overrides ── */
 .ant-layout { background: var(--bg) !important; }
 .ant-input, .ant-input-affix-wrapper { background: transparent !important; }
 .ant-input::placeholder, textarea.ant-input::placeholder {
   color: var(--text-muted) !important;
   opacity: 1;
+}
+
+.dictionary-search-input.ant-input-outlined:hover,
+.dictionary-search-input.ant-input-outlined:focus,
+.dictionary-search-input.ant-input-outlined:focus-within {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--accent-muted) !important;
+}
+
+.dictionary-card .ant-card-body {
+  padding: 24px !important;
+}
+
+@media (max-width: 720px) {
+  .dictionary-card .ant-card-body {
+    padding: 20px !important;
+  }
 }

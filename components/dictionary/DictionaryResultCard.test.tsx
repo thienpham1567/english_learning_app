@@ -39,6 +39,7 @@ describe("DictionaryResultCard", () => {
     expect(getByRole("tab", { name: "Nghĩa 1" })).toBeInTheDocument();
     expect(getByText("Cất cánh")).toBeInTheDocument();
     expect(container.querySelector("ul")).toHaveClass("list-disc", "pl-5");
+    expect(container.querySelector(".ant-card")).toHaveClass("dictionary-card");
     const tabs = container.querySelector(".ant-tabs");
     expect(tabs).toHaveClass("mt-6");
     expect(tabs).not.toHaveClass("dictionary-result-card__tabs");

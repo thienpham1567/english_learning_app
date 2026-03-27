@@ -26,7 +26,7 @@ export function DictionarySearchPanel({
   return (
     <section className="space-y-5">
       <Card
-        className="overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)] min-[1121px]:sticky min-[1121px]:top-6"
+        className="dictionary-card overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)] min-[1121px]:sticky min-[1121px]:top-6"
         variant="borderless"
       >
         <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
@@ -49,7 +49,7 @@ export function DictionarySearchPanel({
             onChange={(event) => onChange(event.target.value)}
             onPressEnter={onSearch}
             disabled={isLoading}
-            className="min-h-[46px] rounded-[var(--radius)]"
+            className="dictionary-search-input min-h-[46px] rounded-[var(--radius)]"
           />
           <motion.div whileTap={{ scale: 0.96 }}>
             <Button
@@ -70,7 +70,7 @@ export function DictionarySearchPanel({
       </Card>
 
       <Card
-        className="overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]"
+        className="dictionary-card overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-sm)]"
         variant="borderless"
       >
         <div className="flex items-center gap-2 text-sm font-semibold text-[var(--ink)]">

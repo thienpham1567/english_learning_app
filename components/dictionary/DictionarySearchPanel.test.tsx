@@ -19,6 +19,8 @@ describe("DictionarySearchPanel", () => {
     expect(getByRole("button", { name: "Tra cứu" })).toHaveClass(
       "max-[720px]:w-full",
     );
+    expect(searchInput).toHaveClass("dictionary-search-input");
+    expect(searchInput.closest(".ant-card")).toHaveClass("dictionary-card");
     expect(searchInput.parentElement).toHaveClass(
       "grid-cols-[minmax(0,1fr)_auto]",
       "max-[720px]:grid-cols-1",

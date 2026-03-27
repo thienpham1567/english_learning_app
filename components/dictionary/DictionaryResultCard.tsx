@@ -121,9 +121,9 @@ export function DictionaryResultCard({
   isLoading,
 }: DictionaryResultCardProps) {
   if (isLoading) {
-    return (
-      <Card
-        className="min-h-[400px] overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
+      return (
+        <Card
+        className="dictionary-card min-h-[400px] overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
         variant="borderless"
       >
         <div className="space-y-4">
@@ -136,9 +136,9 @@ export function DictionaryResultCard({
   }
 
   if (!hasSearched || !vocabulary) {
-    return (
-      <Card
-        className="min-h-[400px] overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
+      return (
+        <Card
+        className="dictionary-card min-h-[400px] overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
         variant="borderless"
       >
         <div className="flex min-h-[360px] flex-col items-center justify-center gap-4 py-8 text-center">
@@ -176,7 +176,7 @@ export function DictionaryResultCard({
         transition={{ duration: 0.35, ease: "easeOut" }}
       >
         <Card
-          className="min-h-[400px] overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
+          className="dictionary-card min-h-[400px] overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
           variant="borderless"
         >
           <div className="flex items-start justify-between gap-4 max-[720px]:flex-col max-[720px]:gap-3">
