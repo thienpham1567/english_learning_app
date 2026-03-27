@@ -11,15 +11,15 @@ export type AuthUser = {
 
 export function AppShell({ children, user }: { children: ReactNode; user: AuthUser }) {
   return (
-    <div className="app-shell">
+    <div className="grid min-h-screen grid-cols-[72px_minmax(0,1fr)] grid-rows-[minmax(0,1fr)] bg-[var(--bg)] transition-[grid-template-columns] duration-300 max-[920px]:min-h-dvh max-[920px]:grid-cols-1 max-[920px]:grid-rows-[auto_minmax(0,1fr)]">
       <AppSidebar />
-      <div className="app-shell__main">
-        <header className="app-toolbar">
-          <div className="app-toolbar__right">
+      <div className="flex min-w-0 min-h-0 flex-col">
+        <header className="flex h-[52px] shrink-0 items-center justify-end border-b border-[var(--border)] bg-[var(--surface)] px-5 max-[920px]:h-12 max-[920px]:px-4">
+          <div className="flex items-center gap-3">
             <UserMenu user={user} />
           </div>
         </header>
-        <main className="app-shell__content">
+        <main className="flex min-h-0 flex-1 flex-col overflow-hidden">
           <UserProvider user={user}>{children}</UserProvider>
         </main>
       </div>

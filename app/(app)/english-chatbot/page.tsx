@@ -44,6 +44,15 @@ function parseSsePayloads(chunk: string) {
     .filter(Boolean);
 }
 
+export function getMessageSpacingClassName(
+  currentMessage: AppChatMessage,
+  previousMessage?: AppChatMessage,
+) {
+  if (!previousMessage) return "";
+
+  return currentMessage.role === previousMessage.role ? "mt-[4px]" : "mt-[22px]";
+}
+
 export default function EnglishChatbotPage() {
   const [messages, setMessages] = useState<AppChatMessage[]>([]);
   const [input, setInput] = useState("");
@@ -53,7 +62,10 @@ export default function EnglishChatbotPage() {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    const bottom = bottomRef.current;
+    if (bottom && typeof bottom.scrollIntoView === "function") {
+      bottom.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages, isLoading, error]);
 
   const autoResize = () => {
@@ -169,32 +181,30 @@ export default function EnglishChatbotPage() {
   const hasMessages = messages.length > 0;
 
   return (
-    <div className="chat-page">
-      {/* ── Messages ── */}
-      <div className="chat-messages">
-        <div className="chat-messages__inner">
-          {/* Welcome */}
+    <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.7))] shadow-[var(--shadow-md)]">
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 py-6 md:px-8">
+        <div className="mx-auto flex min-h-full w-full max-w-5xl flex-col">
           <AnimatePresence>
             {!hasMessages && (
               <motion.div
-                className="chat-welcome"
+                className="mx-auto my-auto flex max-w-3xl flex-col items-center text-center"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.98 }}
                 transition={{ duration: 0.35, ease: "easeOut" }}
               >
                 <motion.div
-                  className="chat-welcome__avatar"
+                  className="relative grid size-24 place-items-center rounded-full bg-[var(--surface)] text-4xl shadow-[var(--shadow-lg)]"
                   initial={{ scale: 0.6, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   transition={{ delay: 0.1, duration: 0.5, type: "spring", stiffness: 180, damping: 14 }}
                 >
-                  <span className="chat-welcome__emoji">👩‍🏫</span>
-                  <span className="chat-welcome__status" />
+                  <span>👩‍🏫</span>
+                  <span className="absolute bottom-2 right-2 size-3 rounded-full bg-[var(--sage)] ring-4 ring-[var(--surface)]" />
                 </motion.div>
 
                 <motion.h2
-                  className="chat-welcome__title"
+                  className="mt-6 text-4xl [font-family:var(--font-display)] text-[var(--ink)]"
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.2, duration: 0.4 }}
@@ -203,22 +213,22 @@ export default function EnglishChatbotPage() {
                 </motion.h2>
 
                 <motion.p
-                  className="chat-welcome__subtitle"
+                  className="mt-3 max-w-2xl text-base text-[var(--text-secondary)]"
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.4 }}
                 >
-                  Hãy trả lời bằng tiếng Anh để luyện phản xạ. Cô sẽ sửa lỗi
-                  rõ ràng, giải thích ngắn gọn và giữ cuộc trò chuyện tiếp tục.
+                  Hãy trả lời bằng tiếng Anh để luyện phản xạ. Cô sẽ sửa lỗi rõ
+                  ràng, giải thích ngắn gọn và giữ cuộc trò chuyện tiếp tục.
                 </motion.p>
 
-                <div className="chat-welcome__prompts">
+                <div className="mt-8 grid w-full gap-3 md:grid-cols-2">
                   {SUGGESTED.map((s, i) => {
                     const Icon = s.icon;
                     return (
                       <motion.button
                         key={s.text}
-                        className="chat-prompt-card"
+                        className="flex items-start gap-3 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-4 text-left shadow-[var(--shadow-sm)] transition hover:-translate-y-0.5 hover:border-[var(--border-strong)] hover:bg-[var(--surface-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
                         onClick={() => send(s.text)}
                         initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -230,10 +240,12 @@ export default function EnglishChatbotPage() {
                         whileHover={{ y: -2 }}
                         whileTap={{ scale: 0.97 }}
                       >
-                        <span className="chat-prompt-card__icon">
+                        <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-[var(--accent-light)] text-[var(--accent)]">
                           <Icon size={16} strokeWidth={2} />
                         </span>
-                        <span className="chat-prompt-card__text">{s.text}</span>
+                        <span className="text-sm leading-6 text-[var(--text-primary)]">
+                          {s.text}
+                        </span>
                       </motion.button>
                     );
                   })}
@@ -242,18 +254,28 @@ export default function EnglishChatbotPage() {
             )}
           </AnimatePresence>
 
-          {/* Chat history */}
-          {messages.map((m) => (
-            <ChatMessage key={m.id} message={m} />
-          ))}
+          {messages.length > 0 && (
+            <div className="flex flex-col">
+              {messages.map((m, index) => (
+                <ChatMessage
+                  key={m.id}
+                  message={m}
+                  className={getMessageSpacingClassName(m, messages[index - 1])}
+                />
+              ))}
 
-          {isLoading && <TypingIndicator />}
+              {isLoading && (
+                <div className="mt-[22px]">
+                  <TypingIndicator />
+                </div>
+              )}
+            </div>
+          )}
 
-          {/* Inline error */}
           <AnimatePresence>
             {error && (
               <motion.div
-                className="chat-error"
+                className="mt-5 rounded-[var(--radius)] border border-[rgba(239,68,68,0.16)] bg-[rgba(239,68,68,0.08)] px-4 py-3 text-sm text-[rgb(153,27,27)]"
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -4 }}
@@ -261,7 +283,7 @@ export default function EnglishChatbotPage() {
               >
                 <p>{error}</p>
                 <button
-                  className="chat-error__dismiss"
+                  className="mt-2 font-medium underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
                   onClick={() => setError(null)}
                 >
                   Đóng
@@ -274,39 +296,40 @@ export default function EnglishChatbotPage() {
         </div>
       </div>
 
-      {/* ── Input ── */}
-      <div className={`chat-input-bar ${hasMessages ? "has-messages" : ""}`}>
-        <div className="chat-input__wrapper">
-          <textarea
-            ref={textareaRef}
-            value={input}
-            onChange={(e) => {
-              setInput(e.target.value);
-              autoResize();
-            }}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                send();
-              }
-            }}
-            placeholder="Nhập câu hỏi hoặc câu trả lời bằng tiếng Anh..."
-            disabled={isLoading}
-            rows={1}
-            className="chat-input__textarea"
-          />
-          <motion.button
-            className={`chat-input__send ${input.trim() && !isLoading ? "is-active" : ""}`}
-            onClick={() => send()}
-            disabled={!input.trim() || isLoading}
-            whileTap={{ scale: 0.88 }}
-          >
-            <ArrowUp size={18} strokeWidth={2.5} />
-          </motion.button>
+      <div className="border-t border-[var(--border)] bg-[rgba(255,255,255,0.72)] px-4 py-4 backdrop-blur md:px-8">
+        <div className="mx-auto flex w-full max-w-5xl flex-col gap-3">
+          <div className="flex items-end gap-3 rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-3 shadow-[var(--shadow-sm)] transition-[border-color,box-shadow] duration-200 focus-within:border-[var(--accent)] focus-within:ring-2 focus-within:ring-[var(--accent-muted)] focus-within:shadow-[var(--shadow-md)]">
+            <textarea
+              ref={textareaRef}
+              value={input}
+              onChange={(e) => {
+                setInput(e.target.value);
+                autoResize();
+              }}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  send();
+                }
+              }}
+              placeholder="Nhập câu hỏi hoặc câu trả lời bằng tiếng Anh..."
+              disabled={isLoading}
+              rows={1}
+              className="min-h-[44px] flex-1 resize-none border-0 bg-transparent px-2 py-2 text-[15px] leading-6 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed focus:outline-none"
+            />
+            <motion.button
+              className="grid size-11 shrink-0 place-items-center rounded-full bg-[var(--ink)] text-white shadow-[var(--shadow-sm)] transition enabled:hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed disabled:bg-[var(--border-strong)]"
+              onClick={() => send()}
+              disabled={!input.trim() || isLoading}
+              whileTap={{ scale: 0.88 }}
+            >
+              <ArrowUp size={18} strokeWidth={2.5} />
+            </motion.button>
+          </div>
+          <p className="text-sm text-[var(--text-muted)]">
+            Enter để gửi · Shift+Enter để xuống dòng
+          </p>
         </div>
-        <p className="chat-input__hint">
-          Enter để gửi · Shift+Enter để xuống dòng
-        </p>
       </div>
     </div>
   );

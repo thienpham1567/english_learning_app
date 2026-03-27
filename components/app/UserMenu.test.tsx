@@ -4,8 +4,10 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { UserMenu } from "@/components/app/UserMenu";
 import { renderUi } from "@/test/render";
 
-const push = vi.fn();
-const signOut = vi.fn();
+const { push, signOut } = vi.hoisted(() => ({
+  push: vi.fn(),
+  signOut: vi.fn(),
+}));
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push }),
@@ -30,5 +32,59 @@ describe("UserMenu", () => {
     fireEvent.click(screen.getByRole("button", { name: /cô lành/i }));
 
     expect(screen.getByRole("button", { name: "Đăng xuất" })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: "Đăng xuất" }).parentElement).toHaveClass("z-50");
+  });
+
+  it("keeps the user name hidden through the 920px shell breakpoint", () => {
+    renderUi(<UserMenu user={{ name: "Cô Lành", image: null }} />);
+
+    expect(screen.getByText("Cô Lành")).toHaveClass(
+      "text-sm",
+      "font-medium",
+      "text-[var(--ink)]",
+      "max-[920px]:hidden",
+    );
+  });
+
+  it("keeps the trigger compact inside the shell header", () => {
+    renderUi(<UserMenu user={{ name: "Cô Lành", image: null }} />);
+
+    expect(screen.getByRole("button", { name: /cô lành/i })).toHaveClass(
+      "flex",
+      "items-center",
+      "gap-2",
+      "rounded-full",
+      "border",
+      "border-[var(--border)]",
+      "bg-[var(--surface)]",
+      "pl-[5px]",
+      "pr-[10px]",
+      "py-[5px]",
+      "text-left",
+      "shadow-[var(--shadow-sm)]",
+      "focus-visible:outline",
+      "focus-visible:outline-2",
+      "focus-visible:outline-offset-2",
+      "focus-visible:outline-[var(--accent)]",
+    );
+
+    expect(screen.getByText("CL")).toHaveClass(
+      "size-7",
+      "rounded-full",
+      "grid",
+    );
+  });
+
+  it("keeps a visible focus ring on menu actions", () => {
+    renderUi(<UserMenu user={{ name: "Cô Lành", image: null }} />);
+
+    fireEvent.click(screen.getByRole("button", { name: /cô lành/i }));
+
+    expect(screen.getByRole("button", { name: "Đăng xuất" })).toHaveClass(
+      "focus-visible:outline",
+      "focus-visible:outline-2",
+      "focus-visible:outline-offset-2",
+      "focus-visible:outline-[var(--accent)]",
+    );
   });
 });

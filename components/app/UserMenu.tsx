@@ -53,12 +53,12 @@ export function UserMenu({ user }: { user: AuthUser }) {
   return (
     <div className="relative" ref={menuRef}>
       <button
-        className="flex items-center gap-2 rounded-[var(--radius)] px-2 py-1.5 text-left transition hover:bg-[var(--surface-hover)]"
+        className="flex items-center gap-2 rounded-full border border-[var(--border)] bg-[var(--surface)] pl-[5px] pr-[10px] py-[5px] text-left shadow-[var(--shadow-sm)] transition hover:border-[var(--border-strong)] hover:bg-[var(--surface-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
       >
         <UserAvatar user={user} />
-        <span className="hidden text-sm font-medium text-[var(--ink)] md:inline">
+        <span className="text-sm font-medium text-[var(--ink)] max-[920px]:hidden">
           {user.name}
         </span>
         <ChevronDown
@@ -77,7 +77,7 @@ export function UserMenu({ user }: { user: AuthUser }) {
             transition={{ duration: 0.15 }}
           >
             <button
-              className="flex w-full items-center gap-2 rounded-[var(--radius)] px-3 py-2 text-sm text-[var(--text-secondary)] transition hover:bg-[var(--surface-hover)] hover:text-[var(--ink)]"
+              className="flex w-full items-center gap-2 rounded-[var(--radius)] px-3 py-2 text-sm text-[var(--text-secondary)] transition hover:bg-[var(--surface-hover)] hover:text-[var(--ink)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
               onClick={handleSignOut}
             >
               <LogOut size={15} />
