@@ -26,7 +26,7 @@ function CopyButton({ text }: { text: string }) {
 
   return (
     <motion.button
-      className="chat-msg__copy"
+      className="rounded-full p-1 text-[var(--text-muted)] transition hover:text-[var(--text-primary)]"
       onClick={handleCopy}
       whileTap={{ scale: 0.85 }}
       aria-label="Sao chép"
@@ -44,7 +44,7 @@ function UserAvatar() {
       <img
         src={user.image}
         alt={user.name}
-        className="chat-msg__avatar chat-msg__avatar--user"
+        className="size-10 rounded-full object-cover"
         referrerPolicy="no-referrer"
       />
     );
@@ -58,7 +58,7 @@ function UserAvatar() {
     .toUpperCase();
 
   return (
-    <div className="chat-msg__avatar chat-msg__avatar--user">
+    <div className="grid size-10 place-items-center rounded-full bg-[var(--ink)] text-xs font-semibold text-white">
       {initials}
     </div>
   );
@@ -73,35 +73,45 @@ export function ChatMessage({ message }: { message: AppChatMessage }) {
 
   return (
     <motion.div
-      className={`chat-msg ${isUser ? "chat-msg--user" : "chat-msg--ai"}`}
+      className={[
+        "flex items-end gap-3 [animation:fadeUp_0.25s_ease-out_forwards]",
+        isUser ? "justify-end" : "justify-start",
+      ].join(" ")}
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
       {!isUser && (
-        <div className="chat-msg__avatar-col">
-          <div className="chat-msg__avatar">👩‍🏫</div>
+        <div className="grid size-10 shrink-0 place-items-center rounded-full bg-[var(--accent-light)] text-lg shadow-[var(--shadow-sm)]">
+          👩‍🏫
         </div>
       )}
 
-      <div className="chat-msg__content">
-        <div className="chat-msg__bubble">
+      <div className={["flex max-w-[min(42rem,80%)] flex-col gap-2", isUser ? "items-end" : "items-start"].join(" ")}>
+        <div
+          className={[
+            "rounded-[22px] px-4 py-3 shadow-[var(--shadow-sm)]",
+            isUser
+              ? "rounded-br-md bg-[var(--bubble-user)] text-white"
+              : "rounded-bl-md border border-[var(--border)] bg-[var(--bubble-ai)] text-[var(--text-primary)]",
+          ].join(" ")}
+        >
           {isUser ? (
-            <span style={{ whiteSpace: "pre-wrap" }}>{text}</span>
+            <span className="whitespace-pre-wrap">{text}</span>
           ) : (
             <div className="ai-markdown">
               <ReactMarkdown>{text}</ReactMarkdown>
             </div>
           )}
         </div>
-        <div className="chat-msg__meta">
-          {time && <span className="chat-msg__time">{time}</span>}
+        <div className="flex items-center gap-2 text-xs text-[var(--text-muted)]">
+          {time && <span>{time}</span>}
           {!isUser && <CopyButton text={text} />}
         </div>
       </div>
 
       {isUser && (
-        <div className="chat-msg__avatar-col">
+        <div className="grid size-10 shrink-0 place-items-center overflow-hidden rounded-full bg-[var(--ink)] text-xs font-semibold text-white shadow-[var(--shadow-sm)]">
           <UserAvatar />
         </div>
       )}
