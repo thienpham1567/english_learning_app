@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState } from "react";
+import { Suspense, useState, type FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
 import { GraduationCap } from "lucide-react";
 import { motion } from "motion/react";
@@ -39,7 +39,7 @@ function SignInContent() {
     }
   };
 
-  const handleEmailSignIn = async (e: React.FormEvent) => {
+  const handleEmailSignIn = async (e: FormEvent) => {
     e.preventDefault();
     if (!email.trim() || !password.trim()) return;
 
@@ -65,14 +65,9 @@ function SignInContent() {
   };
 
   return (
-    <motion.div
-      className="sign-in-card"
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, ease: "easeOut" }}
-    >
+    <>
       <motion.div
-        className="sign-in-card__badge"
+        className="mb-5 grid size-14 place-items-center rounded-[var(--radius-lg)] bg-[var(--ink)] text-white"
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.1, duration: 0.35, type: "spring", stiffness: 200 }}
@@ -80,15 +75,17 @@ function SignInContent() {
         <GraduationCap size={24} strokeWidth={2} />
       </motion.div>
 
-      <h1>Trợ lý học tập</h1>
-      <p className="sign-in-card__subtitle">
+      <h1 className="text-3xl [font-family:var(--font-display)] text-[var(--ink)]">
+        Trợ lý học tập
+      </h1>
+      <p className="mt-2 text-sm text-[var(--text-secondary)]">
         Đăng nhập để bắt đầu luyện tiếng Anh
       </p>
 
-      <form className="sign-in-card__form" onSubmit={handleEmailSignIn}>
+      <form className="mt-6 space-y-3" onSubmit={handleEmailSignIn}>
         <input
           type="text"
-          className="sign-in-card__input"
+          className="w-full rounded-[var(--radius)] border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent-muted)]"
           placeholder="Tên đăng nhập"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -97,7 +94,7 @@ function SignInContent() {
         />
         <input
           type="password"
-          className="sign-in-card__input"
+          className="w-full rounded-[var(--radius)] border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent-muted)]"
           placeholder="Mật khẩu"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -106,7 +103,7 @@ function SignInContent() {
         />
         <motion.button
           type="submit"
-          className="sign-in-card__submit-btn"
+          className="w-full rounded-[var(--radius)] bg-[var(--ink)] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
           disabled={isLoading || !email.trim() || !password.trim()}
           whileTap={{ scale: 0.97 }}
         >
@@ -114,12 +111,14 @@ function SignInContent() {
         </motion.button>
       </form>
 
-      <div className="sign-in-card__divider">
+      <div className="my-5 flex items-center gap-3 text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">
+        <div className="h-px flex-1 bg-[var(--border)]" />
         <span>hoặc</span>
+        <div className="h-px flex-1 bg-[var(--border)]" />
       </div>
 
       <motion.button
-        className="sign-in-card__google-btn"
+        className="flex w-full items-center justify-center gap-3 rounded-[var(--radius)] border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm font-medium text-[var(--ink)] transition hover:bg-[var(--surface-hover)] disabled:cursor-not-allowed disabled:opacity-60"
         onClick={handleGoogleSignIn}
         disabled={isLoading}
         whileTap={{ scale: 0.97 }}
@@ -130,7 +129,7 @@ function SignInContent() {
 
       {error && (
         <motion.div
-          className="sign-in-card__error"
+          className="mt-4 rounded-[var(--radius)] border border-[rgba(239,68,68,0.2)] bg-[rgba(239,68,68,0.08)] px-4 py-3 text-sm text-[rgb(153,27,27)]"
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
         >
@@ -138,18 +137,25 @@ function SignInContent() {
         </motion.div>
       )}
 
-      <p className="sign-in-card__footer">
+      <p className="mt-6 text-center text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">
         Trợ lý học tập tiếng Anh
       </p>
-    </motion.div>
+    </>
   );
 }
 
 export default function SignInPage() {
   return (
-    <div className="sign-in-page">
+    <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,rgba(196,109,46,0.12),transparent_38%),linear-gradient(180deg,var(--bg),var(--bg-deep))] px-4 py-12">
       <Suspense fallback={null}>
-        <SignInContent />
+        <motion.div
+          className="w-full max-w-md rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[rgba(255,255,255,0.92)] p-8 shadow-[var(--shadow-lg)] backdrop-blur"
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+        >
+          <SignInContent />
+        </motion.div>
       </Suspense>
     </div>
   );
