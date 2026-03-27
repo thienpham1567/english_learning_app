@@ -31,24 +31,30 @@ const LEVEL_COLORS: Record<string, string> = {
 function SensePanel({ sense }: { sense: DictionarySense }) {
   return (
     <motion.div
-      className="dictionary-sense-panel"
+      className="space-y-5"
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <section>
-        <h3>Nghĩa tiếng Việt</h3>
-        <p>{sense.definitionVi}</p>
+      <section className="space-y-2 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
+        <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
+          Nghĩa tiếng Việt
+        </h3>
+        <p className="text-sm leading-6 text-[var(--text-primary)]">{sense.definitionVi}</p>
       </section>
 
-      <section>
-        <h3>Definition in English</h3>
-        <p>{sense.definitionEn}</p>
+      <section className="space-y-2 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
+        <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
+          Definition in English
+        </h3>
+        <p className="text-sm leading-6 text-[var(--text-primary)]">{sense.definitionEn}</p>
       </section>
 
-      <section>
-        <h3>Ví dụ</h3>
-        <ul>
+      <section className="space-y-2 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
+        <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
+          Ví dụ
+        </h3>
+        <ul className="space-y-2 text-sm leading-6 text-[var(--text-primary)]">
           {sense.examplesVi.map((example) => (
             <li key={example}>{example}</li>
           ))}
@@ -56,16 +62,20 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
       </section>
 
       {sense.usageNoteVi && (
-        <section>
-          <h3>Ghi chú sử dụng</h3>
-          <p>{sense.usageNoteVi}</p>
+        <section className="space-y-2 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
+          <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
+            Ghi chú sử dụng
+          </h3>
+          <p className="text-sm leading-6 text-[var(--text-primary)]">{sense.usageNoteVi}</p>
         </section>
       )}
 
       {sense.patterns.length > 0 && (
-        <section>
-          <h3>Mẫu câu thường gặp</h3>
-          <ul>
+        <section className="space-y-2 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
+          <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
+            Mẫu câu thường gặp
+          </h3>
+          <ul className="space-y-2 text-sm leading-6 text-[var(--text-primary)]">
             {sense.patterns.map((pattern) => (
               <li key={pattern}>{pattern}</li>
             ))}
@@ -74,9 +84,11 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
       )}
 
       {sense.relatedExpressions.length > 0 && (
-        <section>
-          <h3>Biểu đạt liên quan</h3>
-          <ul>
+        <section className="space-y-2 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
+          <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
+            Biểu đạt liên quan
+          </h3>
+          <ul className="space-y-2 text-sm leading-6 text-[var(--text-primary)]">
             {sense.relatedExpressions.map((expr) => (
               <li key={expr}>{expr}</li>
             ))}
@@ -85,9 +97,11 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
       )}
 
       {sense.commonMistakesVi.length > 0 && (
-        <section>
-          <h3>Lỗi thường gặp</h3>
-          <ul>
+        <section className="space-y-2 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
+          <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
+            Lỗi thường gặp
+          </h3>
+          <ul className="space-y-2 text-sm leading-6 text-[var(--text-primary)]">
             {sense.commonMistakesVi.map((mistake) => (
               <li key={mistake}>{mistake}</li>
             ))}
@@ -105,8 +119,11 @@ export function DictionaryResultCard({
 }: DictionaryResultCardProps) {
   if (isLoading) {
     return (
-      <Card className="dictionary-card dictionary-result-card" variant="borderless">
-        <div className="dictionary-result-card__loading">
+      <Card
+        className="overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
+        variant="borderless"
+      >
+        <div className="space-y-4">
           <Skeleton active paragraph={{ rows: 1, width: ["45%"] }} title={false} />
           <Skeleton active paragraph={{ rows: 4 }} title={{ width: "28%" }} />
           <Skeleton active paragraph={{ rows: 3 }} title={{ width: "22%" }} />
@@ -117,17 +134,20 @@ export function DictionaryResultCard({
 
   if (!hasSearched || !vocabulary) {
     return (
-      <Card className="dictionary-card dictionary-result-card" variant="borderless">
-        <div className="dictionary-empty-state">
-          <div className="dictionary-empty-state__icon">
+      <Card
+        className="overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
+        variant="borderless"
+      >
+        <div className="flex flex-col items-center gap-4 py-8 text-center">
+          <div className="grid size-14 place-items-center rounded-full bg-[var(--accent-light)] text-[var(--accent)] shadow-[var(--shadow-sm)]">
             {!hasSearched ? <Search size={24} /> : <SpellCheck2 size={24} />}
           </div>
-          <h3>
+          <h3 className="text-2xl [font-family:var(--font-display)] text-[var(--ink)]">
             {!hasSearched
               ? "Sẵn sàng cho lần tra cứu đầu tiên"
               : "Chưa có kết quả để hiển thị"}
           </h3>
-          <p>
+          <p className="max-w-xl text-sm leading-6 text-[var(--text-secondary)]">
             {!hasSearched
               ? "Nhập một từ vựng ở khung bên trái để xem nghĩa, cách đọc và ghi chú ngữ pháp."
               : "Hãy thử lại với một từ tiếng Anh hợp lệ để nhận kết quả có cấu trúc."}
@@ -152,21 +172,25 @@ export function DictionaryResultCard({
         exit={{ opacity: 0, y: -6 }}
         transition={{ duration: 0.35, ease: "easeOut" }}
       >
-        <Card className="dictionary-card dictionary-result-card" variant="borderless">
-          <div className="dictionary-result-card__header">
+        <Card
+          className="overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
+          variant="borderless"
+        >
+          <div className="flex items-start justify-between gap-4">
             <div>
-              <p className="dictionary-result-card__eyebrow">Kết quả tra cứu</p>
-              <h2>{vocabulary.headword}</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
+                Kết quả tra cứu
+              </p>
+              <h2 className="mt-2 text-3xl [font-family:var(--font-display)] text-[var(--ink)]">
+                {vocabulary.headword}
+              </h2>
             </div>
-            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-              <Tag className="dictionary-result-card__entry-type" color="default">
+            <div className="flex items-center gap-2">
+              <Tag className="!rounded-full !px-3 !py-1" color="default">
                 {ENTRY_TYPE_LABELS[vocabulary.entryType]}
               </Tag>
               {vocabulary.level && (
-                <Tag
-                  color={LEVEL_COLORS[vocabulary.level] ?? "default"}
-                  className="dictionary-result-card__tag"
-                >
+                <Tag color={LEVEL_COLORS[vocabulary.level] ?? "default"} className="!rounded-full !px-3 !py-1">
                   {vocabulary.level}
                 </Tag>
               )}
@@ -175,7 +199,7 @@ export function DictionaryResultCard({
 
           {vocabulary.phonetic && (
             <motion.p
-              className="dictionary-result-card__phonetic"
+              className="mt-4 text-sm [font-family:var(--font-mono)] text-[var(--accent)]"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.15, duration: 0.3 }}
@@ -185,7 +209,7 @@ export function DictionaryResultCard({
           )}
 
           <motion.div
-            className="dictionary-result-card__overview"
+            className="mt-5 space-y-3 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4 text-sm leading-6 text-[var(--text-secondary)]"
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.3 }}
@@ -194,11 +218,7 @@ export function DictionaryResultCard({
             <p>{vocabulary.overviewEn}</p>
           </motion.div>
 
-          <Tabs
-            className="dictionary-result-card__tabs"
-            items={tabItems}
-            defaultActiveKey={vocabulary.senses[0]?.id}
-          />
+          <Tabs className="mt-6" items={tabItems} defaultActiveKey={vocabulary.senses[0]?.id} />
         </Card>
       </motion.div>
     </AnimatePresence>

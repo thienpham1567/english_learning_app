@@ -3,7 +3,7 @@ import { DictionarySearchPanel } from "@/components/dictionary/DictionarySearchP
 
 describe("DictionarySearchPanel", () => {
   it("shows accented Vietnamese helper copy", () => {
-    const { getByText, getByPlaceholderText } = renderUi(
+    const { getByRole, getByText, getByPlaceholderText } = renderUi(
       <DictionarySearchPanel
         value=""
         onChange={() => {}}
@@ -14,5 +14,6 @@ describe("DictionarySearchPanel", () => {
 
     expect(getByText("Tra cứu có cấu trúc")).toBeInTheDocument();
     expect(getByPlaceholderText("Ví dụ: take off")).toBeInTheDocument();
+    expect(getByRole("button", { name: "Tra cứu" })).toBeInTheDocument();
   });
 });
