@@ -16,14 +16,22 @@ vi.mock("@/components/app/UserMenu", () => ({
 
 describe("AppShell", () => {
   it("renders the shell chrome and page content", () => {
-    renderUi(
+    const { container } = renderUi(
       <AppShell user={{ name: "Cô Lành", image: null }}>
         <div>Trang nội dung</div>
       </AppShell>,
     );
 
+    expect(container.firstElementChild).toHaveClass("grid", "min-h-dvh");
     expect(screen.getByTestId("sidebar")).toBeInTheDocument();
     expect(screen.getByTestId("user-menu")).toHaveTextContent("Cô Lành");
+    expect(screen.getByRole("main")).toHaveClass(
+      "flex",
+      "min-h-0",
+      "flex-1",
+      "flex-col",
+      "overflow-hidden",
+    );
     expect(screen.getByRole("main")).toHaveTextContent("Trang nội dung");
   });
 });

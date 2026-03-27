@@ -58,11 +58,6 @@ html, body {
 }
 
 body {
-  background: var(--bg);
-  color: var(--text-primary);
-  font-family: var(--font-body);
-  font-size: 15px;
-  line-height: 1.6;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
@@ -388,12 +383,6 @@ body {
 
 /* ── Mobile ── */
 @media (max-width: 920px) {
-  .app-shell {
-    grid-template-columns: 1fr;
-    grid-template-rows: auto minmax(0, 1fr);
-    min-height: 100dvh;
-  }
-
   .app-sidebar {
     position: relative;
     height: auto;
