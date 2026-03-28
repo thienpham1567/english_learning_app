@@ -110,7 +110,7 @@ function SignInContent() {
         />
         <motion.button
           type="submit"
-          className="btn-shimmer mt-6 w-full rounded-(--radius) bg-(--ink) py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+          className="btn-shimmer mt-6 w-full rounded-(--radius) bg-(--ink) py-3 text-sm font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-50"
           disabled={isLoading || !email.trim() || !password.trim()}
           whileTap={{ scale: 0.97 }}
         >
@@ -127,7 +127,7 @@ function SignInContent() {
 
       {/* Google sign-in */}
       <motion.button
-        className="flex w-full items-center justify-center gap-3 rounded-(--radius) border border-(--border) bg-transparent py-3 text-sm font-medium text-(--ink) transition-colors hover:bg-(--surface) disabled:cursor-not-allowed disabled:opacity-60"
+        className="flex w-full items-center justify-center gap-3 rounded-(--radius) border border-(--border) bg-transparent py-3 text-sm font-medium text-(--ink) transition-colors hover:bg-(--surface) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) disabled:cursor-not-allowed disabled:opacity-60"
         onClick={handleGoogleSignIn}
         disabled={isLoading}
         whileTap={{ scale: 0.97 }}
