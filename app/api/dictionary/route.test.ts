@@ -126,4 +126,56 @@ describe("/api/dictionary", () => {
 
     expect(response.status).toBe(400);
   });
+
+  it("returns cached:true when a cache hit exists", async () => {
+    const { db } = await import("@/lib/db");
+    const cachedData = {
+      query: "take off",
+      headword: "take off",
+      entryType: "phrasal_verb",
+      phonetic: null,
+      level: null,
+      register: null,
+      overviewVi: "Một cụm động từ thông dụng.",
+      overviewEn: "A common phrasal verb.",
+      senses: [
+        {
+          id: "sense-1",
+          label: "Nghĩa 1",
+          definitionVi: "Cất cánh",
+          definitionEn: "To leave the ground and begin flying.",
+          usageNoteVi: null,
+          examplesVi: [
+            "Máy bay cất cánh đúng giờ.",
+            "Chuyến bay cất cánh lúc bình minh.",
+            "Tôi nhìn qua cửa sổ khi máy bay cất cánh.",
+          ],
+          patterns: [],
+          relatedExpressions: [],
+          commonMistakesVi: [],
+        },
+      ],
+    };
+
+    vi.mocked(db.select).mockReturnValueOnce({
+      from: vi.fn(() => ({
+        where: vi.fn(() => ({
+          limit: vi.fn().mockResolvedValue([{ data: cachedData }]),
+        })),
+      })),
+    } as ReturnType<typeof db.select>);
+
+    const { POST } = await import("@/app/api/dictionary/route");
+    const response = await POST(
+      new Request("http://localhost/api/dictionary", {
+        method: "POST",
+        body: JSON.stringify({ word: "take off" }),
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body).toHaveProperty("cached", true);
+    expect(body).toHaveProperty("data.headword", "take off");
+  });
 });
