@@ -43,7 +43,8 @@ export function DictionarySearchPanel({
           placeholder="Ví dụ: take off"
           value={value}
           onChange={(e) => onChange(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && onSearch()}
+          aria-label="Nhập từ cần tra cứu"
+          onKeyDown={(e) => e.key === "Enter" && !isLoading && onSearch()}
           disabled={isLoading}
           maxLength={80}
           autoComplete="off"
