@@ -110,7 +110,7 @@ function SignInContent() {
         />
         <motion.button
           type="submit"
-          className="btn-shimmer mt-6 w-full rounded-(--radius) bg-(--ink) py-3 text-sm font-semibold text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-50"
+          className="btn-shimmer mt-6 w-full rounded-(--radius) bg-(--ink) py-3 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) disabled:cursor-not-allowed disabled:opacity-50"
           disabled={isLoading || !email.trim() || !password.trim()}
           whileTap={{ scale: 0.97 }}
         >
