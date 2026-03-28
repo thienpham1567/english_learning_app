@@ -5,6 +5,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { conversation, message } from "@/lib/db/schema";
 import { buildChatRequest } from "@/lib/chat/build-chat-input";
+import { DEFAULT_PERSONA_ID, PERSONA_IDS } from "@/lib/chat/personas";
 import { createChatSse } from "@/lib/chat/create-chat-sse";
 import type { ChatMessage } from "@/lib/chat/types";
 import { openAiClient } from "@/lib/openai/client";
@@ -57,6 +58,7 @@ export async function POST(req: Request) {
     const body = (await req.json().catch(() => null)) as {
       messages?: unknown;
       conversationId?: unknown;
+      personaId?: unknown;
     } | null;
 
     const messages = Array.isArray(body?.messages)
@@ -66,7 +68,12 @@ export async function POST(req: Request) {
     const conversationId =
       typeof body?.conversationId === "string" ? body.conversationId : null;
 
-    const { instructions, input } = buildChatRequest(messages);
+    const personaId =
+      typeof body?.personaId === "string" && PERSONA_IDS.includes(body.personaId)
+        ? body.personaId
+        : DEFAULT_PERSONA_ID;
+
+    const { instructions, input } = buildChatRequest(messages, personaId);
     const encoder = new TextEncoder();
 
     return createChatSse(

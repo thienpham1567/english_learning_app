@@ -124,6 +124,7 @@ describe("chat route", () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        personaId: "simon",
         messages: [
           {
             id: "user-1",
@@ -161,7 +162,7 @@ describe("chat route", () => {
     expect(mockResponsesStream).toHaveBeenCalledWith(
       expect.objectContaining({
         model: "gpt-4.1-mini",
-        instructions: expect.any(String),
+        instructions: expect.stringContaining("Simon Hosking"),
         input: [
           {
             type: "message",
