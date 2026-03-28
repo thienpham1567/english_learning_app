@@ -63,38 +63,40 @@ function SensePanel({
         <p className="text-sm leading-6 text-[var(--text-primary)]">{sense.definitionEn}</p>
       </section>
 
-      <section className="space-y-2">
-        <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
-          Ví dụ
-        </h3>
-        <ul className="space-y-2">
-          {(sense.examples ?? []).length > 0
-            ? (sense.examples ?? []).map((example) => (
-                <li key={example.en} className={SENSE_ITEM_CLASS}>
-                  <span className="flex items-baseline gap-1.5">
-                    <span>{example.en}</span>
-                    {example.vi && (
-                      <Tooltip placement="top" title={example.vi}>
-                        <span
-                          data-testid="translate-icon"
-                          className="inline-flex shrink-0 cursor-default items-center text-[var(--text-muted)] transition hover:text-[var(--accent)]"
-                        >
-                          <Languages size={13} />
-                        </span>
-                      </Tooltip>
-                    )}
-                  </span>
-                </li>
-              ))
-            : (sense.examplesVi ?? []).map((example) => (
-                <li key={example} className={SENSE_ITEM_CLASS}>
-                  {example}
-                </li>
-              ))}
-        </ul>
-      </section>
+      {(sense.examples.length > 0 || sense.examplesVi.length > 0) && (
+        <section className="space-y-2">
+          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
+            Ví dụ
+          </h3>
+          <ul className="space-y-2">
+            {sense.examples.length > 0
+              ? sense.examples.map((example, i) => (
+                  <li key={i} className={SENSE_ITEM_CLASS}>
+                    <span className="flex items-baseline gap-1.5">
+                      <span>{example.en}</span>
+                      {example.vi && (
+                        <Tooltip placement="top" title={example.vi}>
+                          <span
+                            data-testid="translate-icon"
+                            className="inline-flex shrink-0 cursor-default items-center text-[var(--text-muted)] transition hover:text-[var(--accent)]"
+                          >
+                            <Languages size={13} />
+                          </span>
+                        </Tooltip>
+                      )}
+                    </span>
+                  </li>
+                ))
+              : sense.examplesVi.map((example) => (
+                  <li key={example} className={SENSE_ITEM_CLASS}>
+                    {example}
+                  </li>
+                ))}
+          </ul>
+        </section>
+      )}
 
-      {sense.synonyms && sense.synonyms.length > 0 && (
+      {sense.synonyms.length > 0 && (
         <section className="space-y-2">
           <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
             Từ đồng nghĩa
