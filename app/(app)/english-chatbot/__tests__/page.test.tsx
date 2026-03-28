@@ -12,10 +12,9 @@ describe("EnglishChatbotPage", () => {
       screen.getByRole("heading", { name: "Xin chào! Cô Minh đây" }),
     ).toBeInTheDocument();
     expect(screen.getByRole("button", { name: /I goed to school/i })).toHaveClass(
-      "focus-visible:outline",
       "focus-visible:outline-2",
       "focus-visible:outline-offset-2",
-      "focus-visible:outline-[var(--accent)]",
+      "focus-visible:outline-(--accent)",
     );
   });
 
@@ -32,6 +31,6 @@ describe("EnglishChatbotPage", () => {
         { id: "2", role: "user", text: "User reply" },
         { id: "1", role: "assistant", text: "First assistant" },
       ),
-    ).toBe("mt-[22px]");
+    ).toBe("mt-[28px]");
   });
 });

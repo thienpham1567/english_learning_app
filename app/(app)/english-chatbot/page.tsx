@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowDown, ArrowUp, Sparkles, BookOpen, MessageCircle, Lightbulb } from "lucide-react";
+import { ArrowDown, ArrowUp, Sparkles, BookOpen, MessageCircle, Lightbulb, GraduationCap } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import { TypingIndicator } from "@/components/TypingIndicator";
@@ -40,7 +40,7 @@ export function getMessageSpacingClassName(
   previousMessage?: AppChatMessage,
 ) {
   if (!previousMessage) return "";
-  return currentMessage.role === previousMessage.role ? "mt-[4px]" : "mt-[22px]";
+  return currentMessage.role === previousMessage.role ? "mt-[4px]" : "mt-[28px]";
 }
 
 export default function EnglishChatbotPage() {
@@ -272,9 +272,26 @@ export default function EnglishChatbotPage() {
         <div
           ref={scrollContainerRef}
           onScroll={handleScroll}
-          className="flex-1 min-h-0 overflow-y-auto px-4 py-6 md:px-8"
+          className="relative flex-1 min-h-0 overflow-y-auto px-4 py-6 md:px-8"
         >
-          <div className="mx-auto flex min-h-full w-full max-w-5xl flex-col">
+          {/* Grain overlay */}
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.03]"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+              backgroundRepeat: "repeat",
+              backgroundSize: "128px 128px",
+            }}
+          />
+          {/* Warm radial glow */}
+          <div
+            className="pointer-events-none absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(196,109,46,0.07) 0%, transparent 70%)",
+            }}
+          />
+          <div className="relative mx-auto flex min-h-full w-full max-w-5xl flex-col">
             <AnimatePresence>
               {!hasMessages && (
                 <motion.div
@@ -285,17 +302,17 @@ export default function EnglishChatbotPage() {
                   transition={{ duration: 0.35, ease: "easeOut" }}
                 >
                   <motion.div
-                    className="relative grid size-24 place-items-center rounded-full bg-(--surface) text-4xl shadow-(--shadow-lg)"
+                    className="relative grid size-16 place-items-center rounded-full bg-(--ink) text-white shadow-(--shadow-lg)"
                     initial={{ scale: 0.6, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ delay: 0.1, duration: 0.5, type: "spring", stiffness: 180, damping: 14 }}
                   >
-                    <span>👩‍🏫</span>
-                    <span className="absolute bottom-2 right-2 size-3 rounded-full bg-(--sage) ring-4 ring-(--surface)" />
+                    <GraduationCap size={22} strokeWidth={2} />
+                    <span className="absolute bottom-1 right-1 size-3 rounded-full bg-(--sage) ring-2 ring-(--bg)" />
                   </motion.div>
 
                   <motion.h2
-                    className="mt-6 text-4xl [font-family:var(--font-display)] text-(--ink)"
+                    className="mt-6 text-5xl italic [font-family:var(--font-display)] text-(--ink)"
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.4 }}
@@ -304,7 +321,7 @@ export default function EnglishChatbotPage() {
                   </motion.h2>
 
                   <motion.p
-                    className="mt-3 max-w-2xl text-base text-(--text-secondary)"
+                    className="mt-3 max-w-sm text-base text-(--text-secondary)"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3, duration: 0.4 }}
@@ -319,7 +336,7 @@ export default function EnglishChatbotPage() {
                       return (
                         <motion.button
                           key={s.text}
-                          className="flex items-start gap-3 rounded-lg border border-(--border) bg-(--surface) p-4 text-left shadow-(--shadow-sm) transition hover:-translate-y-0.5 hover:border-(--border-strong) hover:bg-(--surface-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+                          className="flex items-start gap-3 rounded-lg border border-(--border) bg-(--surface) p-4 text-left shadow-(--shadow-sm) transition hover:-translate-y-0.5 hover:border-(--accent)/40 hover:bg-(--surface-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
                           onClick={() => send(s.text)}
                           initial={{ opacity: 0, y: 16 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -352,7 +369,7 @@ export default function EnglishChatbotPage() {
                   />
                 ))}
                 {isLoading && (
-                  <div className="mt-[22px]">
+                  <div className="mt-[28px]">
                     <TypingIndicator />
                   </div>
                 )}
@@ -380,13 +397,13 @@ export default function EnglishChatbotPage() {
             </AnimatePresence>
 
             <div ref={bottomRef} />
-          </div>
-        </div>
+          </div>  {/* closes the relative mx-auto wrapper */}
+        </div>  {/* closes the scroll container */}
 
         <AnimatePresence>
           {showScrollBtn && (
             <motion.button
-              className="absolute bottom-[88px] left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-(--border) bg-(--surface) px-3 py-1.5 text-xs font-medium text-(--text-secondary) shadow-(--shadow-md) transition hover:bg-(--surface-hover) hover:text-(--ink)"
+              className="absolute bottom-[88px] left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-(--border) bg-(--surface) px-3 py-1.5 text-xs font-medium text-(--text-secondary) shadow-(--shadow-lg) transition hover:bg-(--surface-hover) hover:text-(--ink)"
               onClick={scrollToBottom}
               initial={{ opacity: 0, y: 8, scale: 0.92 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -399,9 +416,9 @@ export default function EnglishChatbotPage() {
           )}
         </AnimatePresence>
 
-        <div className="border-t border-(--border) bg-[rgba(255,255,255,0.72)] px-4 py-4 backdrop-blur md:px-8">
+        <div className="bg-(--bg)/80 px-4 py-4 backdrop-blur-md md:px-8">
           <div className="mx-auto flex w-full max-w-5xl flex-col gap-3">
-            <div className="flex items-end gap-3 rounded-xl border border-(--border) bg-(--surface) p-3 shadow-(--shadow-sm) transition-[border-color,box-shadow] duration-200 focus-within:border-(--accent) focus-within:ring-2 focus-within:ring-(--accent-muted) focus-within:shadow-(--shadow-md)">
+            <div className="flex items-end gap-3 rounded-2xl border border-(--border) bg-(--surface) p-3 shadow-(--shadow-md) transition-[border-color,box-shadow] duration-200 focus-within:border-(--accent) focus-within:ring-2 focus-within:ring-(--accent-muted) focus-within:shadow-(--shadow-lg)">
               <textarea
                 ref={textareaRef}
                 value={input}
