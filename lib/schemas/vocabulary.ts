@@ -6,7 +6,11 @@ export const DictionarySenseSchema = z.object({
   definitionVi: z.string(),
   definitionEn: z.string(),
   usageNoteVi: z.string().nullable(),
-  examplesVi: z.array(z.string()).min(3).max(5),
+  examplesVi: z.array(z.string()).default([]),
+  examples: z
+    .array(z.object({ en: z.string(), vi: z.string() }))
+    .default([]),
+  synonyms: z.array(z.string()).default([]),
   patterns: z.array(z.string()),
   relatedExpressions: z.array(z.string()),
   commonMistakesVi: z.array(z.string()),
