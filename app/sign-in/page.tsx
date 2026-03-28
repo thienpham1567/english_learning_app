@@ -148,17 +148,62 @@ function SignInContent() {
 
 export default function SignInPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,rgba(196,109,46,0.12),transparent_38%),linear-gradient(180deg,var(--bg),var(--bg-deep))] px-4 py-12">
-      <Suspense fallback={null}>
-        <motion.div
-          className="flex w-full max-w-md flex-col rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[rgba(255,255,255,0.92)] p-8 shadow-[var(--shadow-lg)] backdrop-blur"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-        >
+    <div className="flex min-h-screen">
+      {/* Left editorial panel — hidden on mobile */}
+      <div className="relative hidden w-[45%] flex-col items-center justify-center overflow-hidden bg-(--ink) lg:flex">
+        {/* Grain overlay */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+            backgroundRepeat: "repeat",
+            backgroundSize: "128px 128px",
+          }}
+        />
+        {/* Warm radial glow */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 60% at 75% 15%, rgba(196,109,46,0.18) 0%, transparent 70%)",
+          }}
+        />
+
+        {/* Editorial content */}
+        <div className="relative z-10 mx-auto max-w-[340px] px-10 text-center">
+          <motion.p
+            className="text-[2.25rem] font-light italic leading-[1.35] text-white/90 [font-family:var(--font-display)]"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15, duration: 0.5, ease: "easeOut" }}
+          >
+            "Học tiếng Anh mỗi ngày, một câu chuyện mới mỗi ngày."
+          </motion.p>
+
+          <motion.div
+            className="mx-auto mt-6 h-px w-12 bg-[rgba(196,109,46,0.4)]"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
+          />
+
+          <motion.p
+            className="mt-4 text-xs uppercase tracking-[0.22em] text-white/40"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.42, duration: 0.5, ease: "easeOut" }}
+          >
+            Trợ lý học tập tiếng Anh
+          </motion.p>
+        </div>
+      </div>
+
+      {/* Right form panel */}
+      <div className="flex flex-1 items-center justify-center bg-(--bg) px-8 py-16">
+        <Suspense fallback={null}>
           <SignInContent />
-        </motion.div>
-      </Suspense>
+        </Suspense>
+      </div>
     </div>
   );
 }
