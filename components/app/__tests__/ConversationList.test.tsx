@@ -4,8 +4,8 @@ import { describe, it, expect, vi } from "vitest";
 import { ConversationList, truncateTitle } from "../ConversationList";
 
 const threads = [
-  { id: "1", title: "Thread one", updatedAt: new Date().toISOString() },
-  { id: "2", title: "Thread two", updatedAt: new Date().toISOString() },
+  { id: "1", title: "Thread one", updatedAt: new Date().toISOString(), personaId: "simon" },
+  { id: "2", title: "Thread two", updatedAt: new Date().toISOString(), personaId: "simon" },
 ];
 
 describe("ConversationList", () => {
@@ -70,7 +70,7 @@ describe("ConversationList", () => {
     const longTitle = "A".repeat(41); // 41 chars — over limit
     render(
       <ConversationList
-        conversations={[{ id: "1", title: longTitle, updatedAt: new Date().toISOString() }]}
+        conversations={[{ id: "1", title: longTitle, updatedAt: new Date().toISOString(), personaId: "simon" }]}
         activeId={null}
         onSelect={vi.fn()}
         onNew={vi.fn()}
@@ -85,7 +85,7 @@ describe("ConversationList", () => {
     const shortTitle = "Short title"; // under 40 chars
     render(
       <ConversationList
-        conversations={[{ id: "1", title: shortTitle, updatedAt: new Date().toISOString() }]}
+        conversations={[{ id: "1", title: shortTitle, updatedAt: new Date().toISOString(), personaId: "simon" }]}
         activeId={null}
         onSelect={vi.fn()}
         onNew={vi.fn()}
@@ -99,7 +99,7 @@ describe("ConversationList", () => {
     const exactTitle = "B".repeat(40); // exactly at limit — should NOT truncate
     render(
       <ConversationList
-        conversations={[{ id: "1", title: exactTitle, updatedAt: new Date().toISOString() }]}
+        conversations={[{ id: "1", title: exactTitle, updatedAt: new Date().toISOString(), personaId: "simon" }]}
         activeId={null}
         onSelect={vi.fn()}
         onNew={vi.fn()}

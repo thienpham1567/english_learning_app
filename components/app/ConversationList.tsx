@@ -63,7 +63,7 @@ export function ConversationList({
             <GraduationCap size={13} strokeWidth={2} />
           </div>
           <span className="text-sm italic text-white/80 [font-family:var(--font-display)]">
-            Cô Minh
+            English Tutor
           </span>
         </div>
         <button

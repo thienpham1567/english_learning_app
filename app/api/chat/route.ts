@@ -12,7 +12,7 @@ import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 
 const CHAT_ERROR_MESSAGE =
-  "Cô Minh đang gặp lỗi kỹ thuật. Bạn thử lại sau nhé.";
+  "Gia sư đang gặp lỗi kỹ thuật. Bạn thử lại sau nhé.";
 
 function writeSseEvent(
   controller: ReadableStreamDefaultController<Uint8Array>,
@@ -128,7 +128,7 @@ export async function POST(req: Request) {
                       ]);
                       await db
                         .update(conversation)
-                        .set({ updatedAt: new Date() })
+                        .set({ updatedAt: new Date(), personaId })
                         .where(eq(conversation.id, conversationId));
                     }
                   }
