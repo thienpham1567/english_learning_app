@@ -1,5 +1,36 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
+vi.mock("@/lib/db", () => ({
+  db: {
+    select: vi.fn(() => ({
+      from: vi.fn(() => ({
+        where: vi.fn(() => ({
+          limit: vi.fn().mockResolvedValue([]),
+        })),
+      })),
+    })),
+    insert: vi.fn(() => ({
+      values: vi.fn(() => ({
+        onConflictDoUpdate: vi.fn(() => ({
+          returning: vi.fn().mockResolvedValue([{ saved: false }]),
+        })),
+      })),
+    })),
+  },
+}));
+
+vi.mock("next/headers", () => ({
+  headers: vi.fn().mockResolvedValue({}),
+}));
+
+vi.mock("@/lib/auth", () => ({
+  auth: {
+    api: {
+      getSession: vi.fn().mockResolvedValue(null),
+    },
+  },
+}));
+
 vi.mock("@/lib/openai/client", () => ({
   openAiClient: {
     responses: {
@@ -23,13 +54,13 @@ vi.mock("@/lib/openai/client", () => ({
               examplesVi: [
                 "Máy bay cất cánh đúng giờ.",
                 "Chuyến bay cất cánh lúc bình minh.",
-                "Tôi nhìn qua cửa sổ khi máy bay cất cánh."
+                "Tôi nhìn qua cửa sổ khi máy bay cất cánh.",
               ],
               patterns: [],
               relatedExpressions: [],
-              commonMistakesVi: []
-            }
-          ]
+              commonMistakesVi: [],
+            },
+          ],
         }),
       })),
     },
@@ -57,7 +88,7 @@ afterEach(() => {
 });
 
 describe("/api/dictionary", () => {
-  it("accepts a phrasal verb query", async () => {
+  it("accepts a phrasal verb query and returns data with cached:false", async () => {
     const { POST } = await import("@/app/api/dictionary/route");
     const response = await POST(
       new Request("http://localhost/api/dictionary", {
@@ -67,7 +98,6 @@ describe("/api/dictionary", () => {
     );
 
     expect(response.status).toBe(200);
-
     const body = await response.json();
     expect(body).toHaveProperty("data.headword", "take off");
     expect(body).toHaveProperty("cached", false);
