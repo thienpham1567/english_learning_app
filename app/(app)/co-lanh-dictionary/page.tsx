@@ -22,8 +22,8 @@ export default function CoLanhDictionaryPage() {
   const [currentQuery, setCurrentQuery] = useState<string | null>(null);
   const latestRequestIdRef = useRef(0);
 
-  const handleSearch = async () => {
-    const normalizedWord = query.trim();
+  const searchFor = async (word: string) => {
+    const normalizedWord = word.trim();
 
     if (!normalizedWord) {
       messageApi.error("Vui lòng nhập từ hoặc cụm từ tiếng Anh trước khi tra cứu.");
@@ -66,6 +66,13 @@ export default function CoLanhDictionaryPage() {
         setIsLoading(false);
       }
     }
+  };
+
+  const handleSearch = () => searchFor(query);
+
+  const handleSynonymClick = (word: string) => {
+    setQuery(word);
+    searchFor(word);
   };
 
   const handleToggleSaved = async () => {
@@ -130,6 +137,7 @@ export default function CoLanhDictionaryPage() {
               isLoading={isLoading}
               saved={saved}
               onToggleSaved={handleToggleSaved}
+              onSynonymClick={handleSynonymClick}
             />
           </motion.div>
         </section>
