@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowUp, Sparkles, BookOpen, MessageCircle, Lightbulb } from "lucide-react";
+import { ArrowDown, ArrowUp, Sparkles, BookOpen, MessageCircle, Lightbulb } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import { TypingIndicator } from "@/components/TypingIndicator";
@@ -52,6 +52,9 @@ export default function EnglishChatbotPage() {
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const isNearBottomRef = useRef(true);
+  const [showScrollBtn, setShowScrollBtn] = useState(false);
 
   const loadConversations = useCallback(async () => {
     try {
@@ -71,10 +74,26 @@ export default function EnglishChatbotPage() {
 
   useEffect(() => {
     const bottom = bottomRef.current;
-    if (bottom && typeof bottom.scrollIntoView === "function") {
+    if (isNearBottomRef.current && bottom && typeof bottom.scrollIntoView === "function") {
       bottom.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, isLoading, error]);
+
+  const handleScroll = useCallback(() => {
+    const el = scrollContainerRef.current;
+    if (!el) return;
+    const distFromBottom = el.scrollHeight - el.scrollTop - el.clientHeight;
+    isNearBottomRef.current = distFromBottom < 80;
+    setShowScrollBtn(distFromBottom > 200);
+  }, []);
+
+  const scrollToBottom = () => {
+    isNearBottomRef.current = true;
+    const bottom = bottomRef.current;
+    if (bottom && typeof bottom.scrollIntoView === "function") {
+      bottom.scrollIntoView({ behavior: "smooth" });
+    }
+  };
 
   const autoResize = () => {
     const el = textareaRef.current;
@@ -250,7 +269,11 @@ export default function EnglishChatbotPage() {
 
       {/* Chat area */}
       <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
-        <div className="flex-1 min-h-0 overflow-y-auto px-4 py-6 md:px-8">
+        <div
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
+          className="flex-1 min-h-0 overflow-y-auto px-4 py-6 md:px-8"
+        >
           <div className="mx-auto flex min-h-full w-full max-w-5xl flex-col">
             <AnimatePresence>
               {!hasMessages && (
@@ -325,6 +348,7 @@ export default function EnglishChatbotPage() {
                     key={m.id}
                     message={m}
                     className={getMessageSpacingClassName(m, messages[index - 1])}
+                    isStreaming={isLoading && index === messages.length - 1 && m.role === "assistant"}
                   />
                 ))}
                 {isLoading && (
@@ -359,6 +383,22 @@ export default function EnglishChatbotPage() {
           </div>
         </div>
 
+        <AnimatePresence>
+          {showScrollBtn && (
+            <motion.button
+              className="absolute bottom-[88px] left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)] shadow-[var(--shadow-md)] transition hover:bg-[var(--surface-hover)] hover:text-[var(--ink)]"
+              onClick={scrollToBottom}
+              initial={{ opacity: 0, y: 8, scale: 0.92 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 8, scale: 0.92 }}
+              transition={{ duration: 0.18 }}
+            >
+              <ArrowDown size={12} strokeWidth={2.5} />
+              Xuống cuối
+            </motion.button>
+          )}
+        </AnimatePresence>
+
         <div className="border-t border-[var(--border)] bg-[rgba(255,255,255,0.72)] px-4 py-4 backdrop-blur md:px-8">
           <div className="mx-auto flex w-full max-w-5xl flex-col gap-3">
             <div className="flex items-end gap-3 rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-3 shadow-[var(--shadow-sm)] transition-[border-color,box-shadow] duration-200 focus-within:border-[var(--accent)] focus-within:ring-2 focus-within:ring-[var(--accent-muted)] focus-within:shadow-[var(--shadow-md)]">
@@ -378,7 +418,10 @@ export default function EnglishChatbotPage() {
                 className="min-h-[44px] flex-1 resize-none border-0 bg-transparent px-2 py-2 text-[15px] leading-6 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed focus:outline-none"
               />
               <motion.button
-                className="grid size-11 shrink-0 place-items-center rounded-full bg-[var(--ink)] text-white shadow-[var(--shadow-sm)] transition enabled:hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed disabled:bg-[var(--border-strong)]"
+                className={[
+                  "grid size-11 shrink-0 place-items-center rounded-full text-white shadow-[var(--shadow-sm)] transition-[background-color,transform] duration-200 enabled:hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed disabled:bg-[var(--border-strong)]",
+                  input.trim() && !isLoading ? "bg-[var(--accent)]" : "bg-[var(--ink)]",
+                ].join(" ")}
                 onClick={() => send()}
                 disabled={!input.trim() || isLoading}
                 whileTap={{ scale: 0.88 }}

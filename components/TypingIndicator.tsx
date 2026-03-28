@@ -14,18 +14,18 @@ export function TypingIndicator() {
       <div className="grid size-10 place-items-center rounded-full bg-[var(--accent-light)] text-lg shadow-[var(--shadow-sm)]">
         👩‍🏫
       </div>
-      <div className="inline-flex items-center gap-1 rounded-[22px] rounded-bl-md border border-[var(--border)] bg-[var(--bubble-ai)] px-4 py-3 shadow-[var(--shadow-sm)]">
+      <div className="inline-flex items-center gap-[5px] rounded-[22px] rounded-bl-md border border-[var(--border)] bg-[var(--bubble-ai)] px-4 py-[14px] shadow-[var(--shadow-sm)]">
         <span
-          className="inline-block size-1.5 rounded-full bg-[var(--text-muted)] [animation:blink_1.2s_ease-in-out_infinite]"
+          className="inline-block size-[5px] rounded-full bg-[var(--text-muted)] [animation:chatWave_1.4s_ease-in-out_infinite]"
           style={{ animationDelay: "0ms" }}
         />
         <span
-          className="inline-block size-1.5 rounded-full bg-[var(--text-muted)] [animation:blink_1.2s_ease-in-out_infinite]"
-          style={{ animationDelay: "0.15s" }}
+          className="inline-block size-[5px] rounded-full bg-[var(--text-muted)] [animation:chatWave_1.4s_ease-in-out_infinite]"
+          style={{ animationDelay: "0.14s" }}
         />
         <span
-          className="inline-block size-1.5 rounded-full bg-[var(--text-muted)] [animation:blink_1.2s_ease-in-out_infinite]"
-          style={{ animationDelay: "0.3s" }}
+          className="inline-block size-[5px] rounded-full bg-[var(--text-muted)] [animation:chatWave_1.4s_ease-in-out_infinite]"
+          style={{ animationDelay: "0.28s" }}
         />
       </div>
     </motion.div>

@@ -74,6 +74,16 @@ body {
   40%           { opacity: 1;    transform: scale(1); }
 }
 
+@keyframes chatWave {
+  0%, 60%, 100% { transform: translateY(0);   opacity: 0.35; }
+  30%           { transform: translateY(-4px); opacity: 1; }
+}
+
+@keyframes textCursor {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+
 /* ── Ant overrides ── */
 .ant-layout { background: var(--bg) !important; }
 .ant-input, .ant-input-affix-wrapper { background: transparent !important; }

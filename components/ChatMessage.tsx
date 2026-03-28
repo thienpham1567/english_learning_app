@@ -67,9 +67,11 @@ function UserAvatar() {
 export function ChatMessage({
   message,
   className = "",
+  isStreaming = false,
 }: {
   message: AppChatMessage;
   className?: string;
+  isStreaming?: boolean;
 }) {
   const isUser = message.role === "user";
   const text = message.text.trim();
@@ -119,6 +121,12 @@ export function ChatMessage({
               ].join(" ")}
             >
               <ReactMarkdown>{text}</ReactMarkdown>
+              {isStreaming && (
+                <span
+                  className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] rounded-[1px] bg-[var(--accent)] align-middle [animation:textCursor_0.7s_ease-in-out_infinite]"
+                  aria-hidden="true"
+                />
+              )}
             </div>
           )}
         </div>
