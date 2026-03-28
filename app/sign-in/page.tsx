@@ -73,14 +73,14 @@ function SignInContent() {
     >
       {/* Logo + heading */}
       <div className="flex flex-col items-center text-center">
-        <div className="grid size-10 place-items-center rounded-full bg-(--ink) text-white">
+        <div aria-hidden="true" className="grid size-10 place-items-center rounded-full bg-(--ink) text-white">
           <GraduationCap size={18} strokeWidth={2} />
         </div>
 
         <h1 className="mt-5 text-4xl italic [font-family:var(--font-display)] text-(--ink)">
           Xin chào
         </h1>
-        <p className="text-xl [font-family:var(--font-display)] text-(--text-secondary)">
+        <p className="text-xl font-normal [font-family:var(--font-display)] text-(--text-secondary)">
           Cô Minh đây
         </p>
         <p className="mt-2 text-sm text-(--text-secondary)">
@@ -110,7 +110,7 @@ function SignInContent() {
         />
         <motion.button
           type="submit"
-          className="btn-shimmer mt-2 w-full rounded-(--radius) bg-(--ink) py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
+          className="btn-shimmer mt-6 w-full rounded-(--radius) bg-(--ink) py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
           disabled={isLoading || !email.trim() || !password.trim()}
           whileTap={{ scale: 0.97 }}
         >
@@ -139,6 +139,7 @@ function SignInContent() {
       {/* Error banner */}
       {error && (
         <motion.div
+          role="alert"
           className="mt-4 rounded-(--radius) border border-[rgba(239,68,68,0.2)] bg-[rgba(239,68,68,0.08)] px-4 py-3 text-sm text-[rgb(153,27,27)]"
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
