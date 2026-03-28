@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookOpen, GraduationCap, MessageCircleMore } from "lucide-react";
+import { BookMarked, BookOpen, GraduationCap, MessageCircleMore } from "lucide-react";
 import { motion } from "motion/react";
 
 const navItems = [
   { href: "/english-chatbot", label: "Trò chuyện", icon: MessageCircleMore },
   { href: "/co-lanh-dictionary", label: "Từ điển", icon: BookOpen },
+  { href: "/my-vocabulary", label: "Từ vựng", icon: BookMarked },
 ];
 
 export function AppSidebar() {
