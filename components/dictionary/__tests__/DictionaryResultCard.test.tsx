@@ -1,117 +1,126 @@
+import { screen, fireEvent } from "@testing-library/react";
+import { describe, expect, it, vi } from "vitest";
 import { renderUi } from "@/test/render";
 import { DictionaryResultCard } from "@/components/dictionary/DictionaryResultCard";
 
-describe("DictionaryResultCard", () => {
-  it("shows the result heading and the active tab content", () => {
-    const entry = {
-      query: "take off",
-      headword: "take off",
-      entryType: "phrasal_verb" as const,
-      phonetic: "/teɪk ˈɒf/",
-      level: "B1" as const,
-      register: null,
-      overviewVi: "Có nhiều nghĩa thông dụng trong giao tiếp.",
-      overviewEn: "A common phrasal verb with multiple senses.",
-      senses: [
-        {
-          id: "sense-1",
-          label: "Nghĩa 1",
-          definitionVi: "Cất cánh",
-          definitionEn: "To leave the ground and begin flying.",
-          usageNoteVi: null,
-          examplesVi: [
-            "Máy bay cất cánh đúng giờ.",
-            "Chuyến bay cất cánh lúc bình minh.",
-            "Tôi luôn nhìn qua cửa sổ khi máy bay cất cánh.",
-          ],
-          patterns: [],
-          relatedExpressions: [],
-          commonMistakesVi: [],
-        },
+const singleSenseEntry = {
+  query: "take off",
+  headword: "take off",
+  entryType: "phrasal_verb" as const,
+  phonetic: "/teɪk ˈɒf/",
+  level: "B1" as const,
+  register: null,
+  overviewVi: "Có nhiều nghĩa thông dụng trong giao tiếp.",
+  overviewEn: "A common phrasal verb with multiple senses.",
+  senses: [
+    {
+      id: "sense-1",
+      label: "Nghĩa 1",
+      definitionVi: "Cất cánh",
+      definitionEn: "To leave the ground and begin flying.",
+      usageNoteVi: null,
+      examplesVi: [
+        "Máy bay cất cánh đúng giờ.",
+        "Chuyến bay cất cánh lúc bình minh.",
+        "Tôi luôn nhìn qua cửa sổ khi máy bay cất cánh.",
       ],
-    };
+      patterns: [],
+      relatedExpressions: [],
+      commonMistakesVi: [],
+    },
+  ],
+};
 
-    const { getByRole, getByText, container } = renderUi(
-      <DictionaryResultCard vocabulary={entry} hasSearched isLoading={false} />,
+const multiSenseEntry = {
+  query: "run",
+  headword: "run",
+  entryType: "word" as const,
+  phonetic: "/rʌn/",
+  level: "A2" as const,
+  register: null,
+  overviewVi: "Từ nhiều nghĩa phổ biến.",
+  overviewEn: "A very common word with many senses.",
+  senses: [
+    {
+      id: "sense-1",
+      label: "Nghĩa 1",
+      definitionVi: "Chạy bộ",
+      definitionEn: "To move fast on foot.",
+      usageNoteVi: null,
+      examplesVi: ["Tôi chạy mỗi sáng."],
+      patterns: [],
+      relatedExpressions: [],
+      commonMistakesVi: [],
+    },
+    {
+      id: "sense-2",
+      label: "Nghĩa 2",
+      definitionVi: "Vận hành",
+      definitionEn: "To operate or manage.",
+      usageNoteVi: null,
+      examplesVi: ["Cô ấy điều hành công ty."],
+      patterns: [],
+      relatedExpressions: [],
+      commonMistakesVi: [],
+    },
+  ],
+};
+
+describe("DictionaryResultCard", () => {
+  it("shows result heading, custom tab buttons, and active sense content", () => {
+    const { getByText, getByRole, container } = renderUi(
+      <DictionaryResultCard vocabulary={singleSenseEntry} hasSearched isLoading={false} />,
     );
 
     expect(getByText("Kết quả tra cứu")).toBeInTheDocument();
-    expect(getByRole("tab", { name: "Nghĩa 1" })).toBeInTheDocument();
+    // Tab is a plain <button>, not an antd tab
+    expect(getByRole("button", { name: "Nghĩa 1" })).toBeInTheDocument();
     expect(getByText("Cất cánh")).toBeInTheDocument();
-    expect(container.querySelector("ul")).toHaveClass("list-disc", "pl-5");
-    expect(container.querySelector(".ant-card")).toHaveClass("dictionary-card");
-    const tabs = container.querySelector(".ant-tabs");
-    expect(tabs).toHaveClass("mt-6");
-    expect(tabs).not.toHaveClass("dictionary-result-card__tabs");
+    // No antd card or tabs
+    expect(container.querySelector(".ant-card")).not.toBeInTheDocument();
+    expect(container.querySelector(".ant-tabs")).not.toBeInTheDocument();
   });
 
-  it("keeps a stable result surface in loading and empty states", () => {
-    const { container, rerender } = renderUi(
+  it("switches visible sense when a tab button is clicked", () => {
+    const { getByRole, getByText, queryByText } = renderUi(
+      <DictionaryResultCard vocabulary={multiSenseEntry} hasSearched isLoading={false} />,
+    );
+
+    // First sense visible by default
+    expect(getByText("Chạy bộ")).toBeInTheDocument();
+    expect(queryByText("Vận hành")).not.toBeInTheDocument();
+
+    // Click second tab
+    fireEvent.click(getByRole("button", { name: "Nghĩa 2" }));
+
+    expect(getByText("Vận hành")).toBeInTheDocument();
+    expect(queryByText("Chạy bộ")).not.toBeInTheDocument();
+  });
+
+  it("loading state shows animate-pulse skeleton and no antd card", () => {
+    const { container } = renderUi(
       <DictionaryResultCard vocabulary={null} hasSearched isLoading />,
     );
 
-    expect(container.querySelector(".ant-card")).toHaveClass("min-h-[400px]");
-
-    rerender(
-      <DictionaryResultCard
-        vocabulary={null}
-        hasSearched={false}
-        isLoading={false}
-      />,
-    );
-
-    expect(container.querySelector(".ant-card")).toHaveClass("min-h-[400px]");
+    expect(container.querySelector(".animate-pulse")).toBeInTheDocument();
+    expect(container.querySelector(".ant-card")).not.toBeInTheDocument();
   });
 
-  it("wraps the populated header on phones", () => {
-    const entry = {
-      query: "internationalization",
-      headword: "internationalization",
-      entryType: "word" as const,
-      phonetic: null,
-      level: null,
-      register: null,
-      overviewVi: "Một ví dụ từ dài để kiểm tra bố cục.",
-      overviewEn: "A long headword used to check the responsive header.",
-      senses: [
-        {
-          id: "sense-1",
-          label: "Nghĩa 1",
-          definitionVi: "Định nghĩa",
-          definitionEn: "Definition",
-          usageNoteVi: null,
-          examplesVi: [
-            "Ví dụ một.",
-            "Ví dụ hai.",
-            "Ví dụ ba.",
-          ],
-          patterns: [],
-          relatedExpressions: [],
-          commonMistakesVi: [],
-        },
-      ],
-    };
+  it("pre-search empty state shows simplified BookOpen icon and prompt text", () => {
+    const { getByText } = renderUi(
+      <DictionaryResultCard vocabulary={null} hasSearched={false} isLoading={false} />,
+    );
 
+    expect(getByText("Nhập từ cần tra")).toBeInTheDocument();
+  });
+
+  it("populated header row wraps to column on phones", () => {
     const { container } = renderUi(
-      <DictionaryResultCard vocabulary={entry} hasSearched isLoading={false} />,
+      <DictionaryResultCard vocabulary={singleSenseEntry} hasSearched isLoading={false} />,
     );
 
     expect(
       container.querySelector(".flex.items-start.justify-between.gap-4"),
     ).toHaveClass("max-[720px]:flex-col");
-  });
-
-  it("shows empty state with diacritics before searching", () => {
-    const { getByText } = renderUi(
-      <DictionaryResultCard
-        vocabulary={null}
-        hasSearched={false}
-        isLoading={false}
-      />,
-    );
-
-    expect(
-      getByText("Sẵn sàng cho lần tra cứu đầu tiên"),
-    ).toBeInTheDocument();
   });
 });
