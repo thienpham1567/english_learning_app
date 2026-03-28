@@ -7,9 +7,12 @@ import { motion, AnimatePresence } from "motion/react";
 
 import { TypingIndicator } from "@/components/TypingIndicator";
 import { ChatMessage } from "@/components/ChatMessage";
+import type { PageMessage } from "@/components/ChatMessage";
 import { ConversationList } from "@/components/app/ConversationList";
 import type { ConversationItem } from "@/components/app/ConversationList";
+import { PersonaSwitcher } from "@/components/app/PersonaSwitcher";
 import { deriveTitle } from "@/lib/chat/derive-title";
+import { DEFAULT_PERSONA_ID, PERSONAS } from "@/lib/chat/personas";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 
 const SUGGESTED = [
@@ -20,7 +23,7 @@ const SUGGESTED = [
 ];
 
 const CHAT_ERROR_MESSAGE =
-  "Cô Minh đang gặp lỗi kỹ thuật. Bạn thử lại sau nhé.";
+  "Gia sư đang gặp lỗi kỹ thuật. Bạn thử lại sau nhé.";
 
 type AssistantStreamEvent =
   | { type: "assistant_start" }
@@ -37,20 +40,21 @@ function parseSsePayloads(chunk: string) {
 }
 
 export function getMessageSpacingClassName(
-  currentMessage: AppChatMessage,
-  previousMessage?: AppChatMessage,
+  currentMessage: PageMessage,
+  previousMessage?: PageMessage,
 ) {
   if (!previousMessage) return "";
   return currentMessage.role === previousMessage.role ? "mt-[4px]" : "mt-[28px]";
 }
 
 export default function EnglishChatbotPage() {
-  const [messages, setMessages] = useState<AppChatMessage[]>([]);
+  const [messages, setMessages] = useState<PageMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [conversations, setConversations] = useState<ConversationItem[]>([]);
   const [activeConversationId, setActiveConversationId] = useState<string | null>(null);
+  const [selectedPersonaId, setSelectedPersonaId] = useState(DEFAULT_PERSONA_ID);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -105,7 +109,7 @@ export default function EnglishChatbotPage() {
 
   const removeEmptyAssistantMessage = (messageId: string) => {
     setMessages((curr) =>
-      curr.filter((m) => m.id !== messageId || m.text.trim().length > 0),
+      curr.filter((m) => m.id !== messageId || (m.role !== "divider" && m.text.trim().length > 0)),
     );
   };
 
@@ -114,12 +118,34 @@ export default function EnglishChatbotPage() {
     setInput("");
     setError(null);
     setActiveConversationId(null);
+    setSelectedPersonaId(DEFAULT_PERSONA_ID);
     if (textareaRef.current) textareaRef.current.style.height = "auto";
   };
 
-  const handleSelectConversation = async (id: string) => {
+  const handlePersonaChange = useCallback((personaId: string) => {
+    setSelectedPersonaId(personaId);
+    setMessages((curr) => {
+      if (curr.length === 0) return curr;
+      const persona = PERSONAS.find((p) => p.id === personaId);
+      if (!persona) return curr;
+      return [
+        ...curr,
+        {
+          id: crypto.randomUUID(),
+          role: "divider" as const,
+          text: `Switched to ${persona.label}`,
+        },
+      ];
+    });
+  }, []);
+
+  const handleSelectConversation = useCallback(async (id: string) => {
     setActiveConversationId(id);
     setError(null);
+    const conv = conversations.find((c) => c.id === id);
+    if (conv?.personaId) {
+      setSelectedPersonaId(conv.personaId);
+    }
     try {
       const res = await fetch(`/api/conversations/${id}/messages`);
       if (!res.ok) return;
@@ -132,7 +158,7 @@ export default function EnglishChatbotPage() {
     } catch {
       setError("Không thể tải cuộc trò chuyện này.");
     }
-  };
+  }, [conversations]);
 
   const handleDeleteConversation = async (id: string) => {
     await fetch(`/api/conversations/${id}`, { method: "DELETE" });
@@ -152,10 +178,10 @@ export default function EnglishChatbotPage() {
         const res = await fetch("/api/conversations", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ title: deriveTitle(t) }),
+          body: JSON.stringify({ title: deriveTitle(t), personaId: selectedPersonaId }),
         });
         if (res.ok) {
-          const created = await res.json() as { id: string; title: string };
+          const created = await res.json() as { id: string; title: string; personaId: string };
           convId = created.id;
           setActiveConversationId(convId);
           setConversations((curr) => [
@@ -163,6 +189,7 @@ export default function EnglishChatbotPage() {
               id: created.id,
               title: created.title,
               updatedAt: new Date().toISOString(),
+              personaId: created.personaId,
             },
             ...curr,
           ]);
@@ -178,10 +205,15 @@ export default function EnglishChatbotPage() {
       text: t,
     };
     const assistantMessageId = crypto.randomUUID();
-    const requestMessages = [...messages, userMessage];
 
-    setMessages([
-      ...requestMessages,
+    // Filter out client-only dividers before sending to API
+    const requestMessages = [...messages, userMessage].filter(
+      (m): m is AppChatMessage => m.role === "user" || m.role === "assistant",
+    );
+
+    setMessages((curr) => [
+      ...curr,
+      userMessage,
       { id: assistantMessageId, role: "assistant", text: "" },
     ]);
     setInput("");
@@ -193,7 +225,11 @@ export default function EnglishChatbotPage() {
       const response = await fetch("/api/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: requestMessages, conversationId: convId }),
+        body: JSON.stringify({
+          messages: requestMessages,
+          conversationId: convId,
+          personaId: selectedPersonaId,
+        }),
       });
 
       if (!response.ok || !response.body) {
@@ -310,7 +346,7 @@ export default function EnglishChatbotPage() {
                   >
                     <Image
                       src="/english-logo-app.svg"
-                      alt="Cô Minh"
+                      alt="English Tutor"
                       width={250}
                       height={150}
                       className="h-16 w-auto rounded-2xl shadow-(--shadow-lg)"
@@ -324,7 +360,7 @@ export default function EnglishChatbotPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.4 }}
                   >
-                    Xin chào! Cô Minh đây
+                    Xin chào! Chọn gia sư để bắt đầu
                   </motion.h2>
 
                   <motion.p
@@ -333,8 +369,7 @@ export default function EnglishChatbotPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3, duration: 0.4 }}
                   >
-                    Hãy trả lời bằng tiếng Anh để luyện phản xạ. Cô sẽ sửa lỗi rõ
-                    ràng, giải thích ngắn gọn và giữ cuộc trò chuyện tiếp tục.
+                    Chọn gia sư phù hợp với mục tiêu của bạn, rồi bắt đầu luyện tập nhé.
                   </motion.p>
 
                   <div className="mt-8 grid w-full gap-3 md:grid-cols-2">
@@ -404,8 +439,8 @@ export default function EnglishChatbotPage() {
             </AnimatePresence>
 
             <div ref={bottomRef} />
-          </div>  {/* closes the relative mx-auto wrapper */}
-        </div>  {/* closes the scroll container */}
+          </div>
+        </div>
 
         <AnimatePresence>
           {showScrollBtn && (
@@ -426,6 +461,11 @@ export default function EnglishChatbotPage() {
         <div className="bg-(--bg)/80 px-4 py-4 backdrop-blur-md md:px-8">
           <div className="mx-auto flex w-full max-w-5xl flex-col gap-3">
             <div className="flex items-end gap-3 rounded-2xl border border-(--border) bg-(--surface) p-3 shadow-(--shadow-md) transition-[border-color,box-shadow] duration-200 focus-within:border-(--accent) focus-within:ring-2 focus-within:ring-(--accent-muted) focus-within:shadow-(--shadow-lg)">
+              <PersonaSwitcher
+                value={selectedPersonaId}
+                onChange={handlePersonaChange}
+                disabled={isLoading}
+              />
               <textarea
                 ref={textareaRef}
                 value={input}
