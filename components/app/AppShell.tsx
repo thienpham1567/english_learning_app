@@ -29,21 +29,28 @@ export function AppShell({ children, user }: { children: ReactNode; user: AuthUs
   };
 
   return (
+    <>
+    {/* suppressHydrationWarning: sidebar width is stored in localStorage and rehydrated client-side.
+        The server renders collapsed (default) while the client may expand after mount — accepted trade-off. */}
     <div
+      suppressHydrationWarning
       className={`grid min-h-screen grid-rows-[minmax(0,1fr)] bg-(--bg) transition-[grid-template-columns] duration-300 ${isExpanded ? "grid-cols-[264px_minmax(0,1fr)]" : "grid-cols-[72px_minmax(0,1fr)]"} max-[920px]:min-h-dvh max-[920px]:grid-cols-1 max-[920px]:grid-rows-[auto_minmax(0,1fr)]`}
     >
       <AppSidebar isExpanded={isExpanded} onToggle={handleToggle} />
-      <div className="flex min-w-0 min-h-0 flex-col">
-        <header className="flex h-[52px] shrink-0 items-center justify-between border-b border-white/30 bg-white/70 backdrop-blur-xl px-5 max-[920px]:h-12 max-[920px]:px-4">
-          <ToolbarBreadcrumb />
-          <div className="flex items-center gap-3">
-            <UserMenu user={user} />
-          </div>
-        </header>
-        <main className="flex min-h-0 flex-1 flex-col overflow-hidden p-6 max-[920px]:p-4">
-          <UserProvider user={user}>{children}</UserProvider>
-        </main>
-      </div>
+      <UserProvider user={user}>
+        <div className="flex min-w-0 min-h-0 flex-col">
+          <header className="flex h-[52px] shrink-0 items-center justify-between border-b border-white/30 bg-white/70 backdrop-blur-xl px-5 max-[920px]:h-12 max-[920px]:px-4">
+            <ToolbarBreadcrumb />
+            <div className="flex items-center gap-3">
+              <UserMenu user={user} />
+            </div>
+          </header>
+          <main className="flex min-h-0 flex-1 flex-col overflow-hidden p-6 max-[920px]:p-4">
+            {children}
+          </main>
+        </div>
+      </UserProvider>
     </div>
+    </>
   );
 }
