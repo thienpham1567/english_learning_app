@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 
 import axios from "axios";
 import http from "@/lib/http";
+import { normalizeDictionaryQuery } from "@/lib/dictionary/normalize-query";
 import { DictionaryResultCard } from "@/components/dictionary/DictionaryResultCard";
 import { DictionarySearchPanel } from "@/components/dictionary/DictionarySearchPanel";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";
@@ -23,14 +24,14 @@ export default function CoLanhDictionaryPage() {
   const latestRequestIdRef = useRef(0);
 
   const searchFor = async (word: string) => {
-    const normalizedWord = word.trim();
+    const { normalized, cacheKey } = normalizeDictionaryQuery(word);
 
-    if (!normalizedWord) {
+    if (!normalized) {
       messageApi.error("Vui lòng nhập từ hoặc cụm từ tiếng Anh trước khi tra cứu.");
       return;
     }
 
-    if (!QUERY_PATTERN.test(normalizedWord)) {
+    if (!QUERY_PATTERN.test(normalized)) {
       messageApi.error("Chỉ hỗ trợ từ hoặc cụm từ tiếng Anh hợp lệ.");
       return;
     }
@@ -45,14 +46,14 @@ export default function CoLanhDictionaryPage() {
     try {
       const { data: payload } = await http.post<{ data: Vocabulary; saved: boolean }>(
         "/dictionary",
-        { word: normalizedWord },
+        { word: normalized },
       );
 
       if (requestId !== latestRequestIdRef.current) return;
 
       setResult(payload.data);
       setSaved(payload.saved);
-      setCurrentQuery(normalizedWord.toLowerCase().trim().replace(/\s+/g, " "));
+      setCurrentQuery(cacheKey);
     } catch (error) {
       if (requestId !== latestRequestIdRef.current) return;
 

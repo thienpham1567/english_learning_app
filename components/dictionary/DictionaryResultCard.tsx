@@ -42,6 +42,10 @@ function SensePanel({
   sense: DictionarySense;
   onSynonymClick: (word: string) => void;
 }) {
+  const examples = sense.examples ?? [];
+  const examplesVi = sense.examplesVi ?? [];
+  const synonyms = sense.synonyms ?? [];
+
   return (
     <motion.div
       className="space-y-5"
@@ -63,14 +67,14 @@ function SensePanel({
         <p className="text-sm leading-6 text-[var(--text-primary)]">{sense.definitionEn}</p>
       </section>
 
-      {((sense.examples ?? []).length > 0 || (sense.examplesVi ?? []).length > 0) && (
+      {(examples.length > 0 || examplesVi.length > 0) && (
         <section className="space-y-2">
           <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
             Ví dụ
           </h3>
           <ul className="space-y-2">
-            {(sense.examples ?? []).length > 0
-              ? (sense.examples ?? []).map((example, i) => (
+            {examples.length > 0
+              ? examples.map((example, i) => (
                   <li key={i} className={SENSE_ITEM_CLASS}>
                     <span className="flex items-baseline gap-1.5">
                       <span>{example.en}</span>
@@ -87,7 +91,7 @@ function SensePanel({
                     </span>
                   </li>
                 ))
-              : (sense.examplesVi ?? []).map((example) => (
+              : examplesVi.map((example) => (
                   <li key={example} className={SENSE_ITEM_CLASS}>
                     {example}
                   </li>
@@ -96,13 +100,13 @@ function SensePanel({
         </section>
       )}
 
-      {(sense.synonyms ?? []).length > 0 && (
+      {synonyms.length > 0 && (
         <section className="space-y-2">
           <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
             Từ đồng nghĩa
           </h3>
           <div className="flex flex-wrap gap-2">
-            {(sense.synonyms ?? []).map((synonym) => (
+            {synonyms.map((synonym) => (
               <button
                 key={synonym}
                 type="button"
@@ -132,10 +136,7 @@ function SensePanel({
           </h3>
           <ul className="space-y-2">
             {sense.patterns.map((pattern) => (
-              <li
-                key={pattern}
-                className={SENSE_ITEM_CLASS}
-              >
+              <li key={pattern} className={SENSE_ITEM_CLASS}>
                 {pattern}
               </li>
             ))}
@@ -150,10 +151,7 @@ function SensePanel({
           </h3>
           <ul className="space-y-2">
             {sense.relatedExpressions.map((expr) => (
-              <li
-                key={expr}
-                className={SENSE_ITEM_CLASS}
-              >
+              <li key={expr} className={SENSE_ITEM_CLASS}>
                 {expr}
               </li>
             ))}
@@ -168,10 +166,7 @@ function SensePanel({
           </h3>
           <ul className="space-y-2">
             {sense.commonMistakesVi.map((mistake) => (
-              <li
-                key={mistake}
-                className={SENSE_ITEM_CLASS}
-              >
+              <li key={mistake} className={SENSE_ITEM_CLASS}>
                 {mistake}
               </li>
             ))}
