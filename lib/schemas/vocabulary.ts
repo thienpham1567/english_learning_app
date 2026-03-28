@@ -8,7 +8,7 @@ export const DictionarySenseSchema = z.object({
   usageNoteVi: z.string().nullable(),
   examplesVi: z.array(z.string()).default([]),
   examples: z
-    .array(z.object({ en: z.string(), vi: z.string().optional() }))
+    .array(z.object({ en: z.string(), vi: z.string() }))
     .default([]),
   synonyms: z.array(z.string()).default([]),
   patterns: z.array(z.string()),
