@@ -2,7 +2,7 @@
 
 import { Suspense, useState, type FormEvent } from "react";
 import { useSearchParams } from "next/navigation";
-import { GraduationCap } from "lucide-react";
+import Image from "next/image";
 import { motion } from "motion/react";
 import { authClient } from "@/lib/auth-client";
 
@@ -73,9 +73,15 @@ function SignInContent() {
     >
       {/* Logo + heading */}
       <div className="flex flex-col items-center text-center">
-        <div aria-hidden="true" className="grid size-10 place-items-center rounded-full bg-(--ink) text-white">
-          <GraduationCap size={18} strokeWidth={2} />
-        </div>
+        <Image
+          src="/english-logo-app.svg"
+          alt="Thien English"
+          width={250}
+          height={150}
+          className="h-14 w-auto rounded-xl"
+          aria-hidden="true"
+          priority
+        />
 
         <h1 className="mt-5 text-4xl italic [font-family:var(--font-display)] text-(--ink)">
           Xin chào

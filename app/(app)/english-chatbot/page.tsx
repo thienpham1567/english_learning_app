@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowDown, ArrowUp, Sparkles, BookOpen, MessageCircle, Lightbulb, GraduationCap } from "lucide-react";
+import Image from "next/image";
+import { ArrowDown, ArrowUp, Sparkles, BookOpen, MessageCircle, Lightbulb } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import { TypingIndicator } from "@/components/TypingIndicator";
@@ -302,12 +303,18 @@ export default function EnglishChatbotPage() {
                   transition={{ duration: 0.35, ease: "easeOut" }}
                 >
                   <motion.div
-                    className="relative grid size-16 place-items-center rounded-full bg-(--ink) text-white shadow-(--shadow-lg)"
+                    className="relative"
                     initial={{ scale: 0.6, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ delay: 0.1, duration: 0.5, type: "spring", stiffness: 180, damping: 14 }}
                   >
-                    <GraduationCap size={22} strokeWidth={2} />
+                    <Image
+                      src="/english-logo-app.svg"
+                      alt="Cô Minh"
+                      width={250}
+                      height={150}
+                      className="h-16 w-auto rounded-2xl shadow-(--shadow-lg)"
+                    />
                     <span className="absolute bottom-1 right-1 size-3 rounded-full bg-(--sage) ring-2 ring-(--bg)" />
                   </motion.div>
 
