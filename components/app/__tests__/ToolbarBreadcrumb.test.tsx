@@ -1,5 +1,5 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
 const mockUsePathname = vi.fn();
 vi.mock("next/navigation", () => ({
@@ -9,6 +9,10 @@ vi.mock("next/navigation", () => ({
 import { ToolbarBreadcrumb } from "../ToolbarBreadcrumb";
 
 describe("ToolbarBreadcrumb", () => {
+  beforeEach(() => {
+    mockUsePathname.mockReset();
+  });
+
   it("renders eyebrow and title for /english-chatbot", () => {
     mockUsePathname.mockReturnValue("/english-chatbot");
     render(<ToolbarBreadcrumb />);
