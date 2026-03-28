@@ -1,6 +1,6 @@
 "use client";
 
-import { Plus, Trash2 } from "lucide-react";
+import { Plus, Trash2, GraduationCap } from "lucide-react";
 
 export type ConversationItem = {
   id: string;
@@ -34,20 +34,39 @@ export function ConversationList({
   onDelete,
 }: Props) {
   return (
-    <div className="flex h-full w-[220px] shrink-0 flex-col gap-1 overflow-hidden border-r border-[var(--border)] bg-[var(--surface)]">
-      <div className="px-3 pt-4 pb-2">
+    <div className="relative flex h-full w-[220px] shrink-0 flex-col overflow-hidden border-r border-white/10 bg-(--ink)">
+      {/* Grain overlay */}
+      <div
+        className="pointer-events-none absolute inset-0 opacity-[0.035]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          backgroundRepeat: "repeat",
+          backgroundSize: "128px 128px",
+        }}
+      />
+
+      {/* Header identity row */}
+      <div className="relative px-4 pt-5 pb-3">
+        <div className="mb-3 flex items-center gap-2">
+          <div className="grid size-6 shrink-0 place-items-center rounded-full bg-(--accent-light) text-(--accent)">
+            <GraduationCap size={13} strokeWidth={2} />
+          </div>
+          <span className="text-sm italic text-white/80 [font-family:var(--font-display)]">
+            Cô Minh
+          </span>
+        </div>
         <button
           onClick={onNew}
-          className="flex w-full items-center justify-center gap-2 rounded-[var(--radius)] border border-[var(--border)] px-3 py-2 text-sm font-medium text-[var(--text-secondary)] transition hover:bg-[var(--surface-hover)] hover:text-[var(--ink)]"
+          className="flex w-full items-center justify-center gap-2 rounded-(--radius) border border-white/15 px-3 py-2 text-sm font-medium text-white/70 transition hover:bg-white/8 hover:text-white/90"
         >
           <Plus size={15} strokeWidth={2} />
           New chat
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto px-2 pb-2">
+      <div className="relative flex-1 overflow-y-auto px-2 pb-2">
         {conversations.length === 0 ? (
-          <p className="px-2 py-3 text-xs text-[var(--text-muted)]">
+          <p className="px-2 py-3 text-xs text-white/30">
             No conversations yet
           </p>
         ) : (
@@ -58,16 +77,16 @@ export function ConversationList({
                 <button
                   onClick={() => onSelect(conv.id)}
                   className={[
-                    "flex w-full flex-col gap-0.5 rounded-[var(--radius)] px-3 py-2.5 text-left transition",
+                    "flex w-full flex-col gap-0.5 rounded-(--radius) border-l-2 px-3 py-2.5 text-left transition",
                     isActive
-                      ? "bg-[var(--accent-light)] text-[var(--accent)]"
-                      : "text-[var(--text-secondary)] hover:bg-[var(--surface-hover)] hover:text-[var(--ink)]",
+                      ? "border-(--accent) bg-white/6 text-white/90"
+                      : "border-transparent text-white/65 hover:bg-white/5 hover:text-white/80",
                   ].join(" ")}
                 >
                   <span className="line-clamp-2 pr-5 text-sm font-medium leading-snug">
                     {conv.title}
                   </span>
-                  <span className="text-[11px] text-[var(--text-muted)]">
+                  <span className="text-[11px] text-white/30">
                     {formatRelativeTime(conv.updatedAt)}
                   </span>
                 </button>
@@ -77,7 +96,7 @@ export function ConversationList({
                     e.stopPropagation();
                     onDelete(conv.id);
                   }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 grid size-6 place-items-center rounded text-[var(--text-muted)] opacity-0 transition hover:bg-[var(--surface-hover)] hover:text-[rgb(239,68,68)] group-hover:opacity-100"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 grid size-6 place-items-center rounded text-white/30 opacity-0 transition hover:bg-white/8 hover:text-red-400 group-hover:opacity-100"
                   aria-label="Delete conversation"
                 >
                   <Trash2 size={13} />
