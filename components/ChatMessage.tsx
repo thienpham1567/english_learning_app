@@ -3,7 +3,7 @@
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { motion } from "motion/react";
-import { Check, Copy } from "lucide-react";
+import { Check, Copy, GraduationCap } from "lucide-react";
 import { useUser } from "@/components/app/UserContext";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 
@@ -91,8 +91,8 @@ export function ChatMessage({
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
       {!isUser && (
-        <div className="grid size-10 shrink-0 place-items-center rounded-full bg-[var(--accent-light)] text-lg shadow-[var(--shadow-sm)]">
-          👩‍🏫
+        <div className="grid size-8 shrink-0 place-items-center rounded-full bg-(--ink) text-white shadow-(--shadow-sm)">
+          <GraduationCap size={14} strokeWidth={2} />
         </div>
       )}
 
