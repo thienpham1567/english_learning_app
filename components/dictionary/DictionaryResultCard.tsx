@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, Skeleton, Tabs, Tag } from "antd";
-import { Search, SpellCheck2 } from "lucide-react";
+import { Bookmark, BookmarkCheck, Search, SpellCheck2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import type { DictionarySense, Vocabulary } from "@/lib/schemas/vocabulary";
@@ -10,6 +10,8 @@ type DictionaryResultCardProps = {
   vocabulary: Vocabulary | null;
   hasSearched: boolean;
   isLoading: boolean;
+  saved?: boolean | null;
+  onToggleSaved?: () => void;
 };
 
 const ENTRY_TYPE_LABELS: Record<Vocabulary["entryType"], string> = {
@@ -119,10 +121,12 @@ export function DictionaryResultCard({
   vocabulary,
   hasSearched,
   isLoading,
+  saved,
+  onToggleSaved,
 }: DictionaryResultCardProps) {
   if (isLoading) {
-      return (
-        <Card
+    return (
+      <Card
         className="dictionary-card min-h-[400px] overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
         variant="borderless"
       >
@@ -136,8 +140,8 @@ export function DictionaryResultCard({
   }
 
   if (!hasSearched || !vocabulary) {
-      return (
-        <Card
+    return (
+      <Card
         className="dictionary-card min-h-[400px] overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
         variant="borderless"
       >
@@ -196,6 +200,19 @@ export function DictionaryResultCard({
                 <Tag color={LEVEL_COLORS[vocabulary.level] ?? "default"} className="!rounded-full !px-3 !py-1">
                   {vocabulary.level}
                 </Tag>
+              )}
+              {saved != null && onToggleSaved && (
+                <button
+                  onClick={onToggleSaved}
+                  className="grid size-8 place-items-center rounded-full text-[var(--text-muted)] transition hover:bg-[var(--surface-hover)] hover:text-[var(--accent)]"
+                  aria-label={saved ? "Bỏ lưu từ này" : "Lưu từ này"}
+                >
+                  {saved ? (
+                    <BookmarkCheck size={18} className="text-[var(--accent)]" />
+                  ) : (
+                    <Bookmark size={18} />
+                  )}
+                </button>
               )}
             </div>
           </div>
