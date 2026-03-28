@@ -1,8 +1,11 @@
-import type { ReactNode } from "react";
+"use client";
+
+import { useState, useEffect, type ReactNode } from "react";
 
 import { AppSidebar } from "@/components/app/AppSidebar";
 import { UserMenu } from "@/components/app/UserMenu";
 import { UserProvider } from "@/components/app/UserContext";
+import { ToolbarBreadcrumb } from "@/components/app/ToolbarBreadcrumb";
 
 export type AuthUser = {
   name: string;
@@ -10,11 +13,29 @@ export type AuthUser = {
 };
 
 export function AppShell({ children, user }: { children: ReactNode; user: AuthUser }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  useEffect(() => {
+    const saved = localStorage.getItem("sidebar-expanded");
+    if (saved !== null) {
+      setIsExpanded(saved === "true");
+    }
+  }, []);
+
+  const handleToggle = () => {
+    const next = !isExpanded;
+    setIsExpanded(next);
+    localStorage.setItem("sidebar-expanded", String(next));
+  };
+
   return (
-    <div className="grid min-h-screen grid-cols-[72px_minmax(0,1fr)] grid-rows-[minmax(0,1fr)] bg-(--bg) transition-[grid-template-columns] duration-300 max-[920px]:min-h-dvh max-[920px]:grid-cols-1 max-[920px]:grid-rows-[auto_minmax(0,1fr)]">
-      <AppSidebar />
+    <div
+      className={`grid min-h-screen grid-rows-[minmax(0,1fr)] bg-(--bg) transition-[grid-template-columns] duration-300 ${isExpanded ? "grid-cols-[264px_minmax(0,1fr)]" : "grid-cols-[72px_minmax(0,1fr)]"} max-[920px]:min-h-dvh max-[920px]:grid-cols-1 max-[920px]:grid-rows-[auto_minmax(0,1fr)]`}
+    >
+      <AppSidebar isExpanded={isExpanded} onToggle={handleToggle} />
       <div className="flex min-w-0 min-h-0 flex-col">
-        <header className="flex h-[52px] shrink-0 items-center justify-end border-b border-(--border) bg-(--surface) px-5 max-[920px]:h-12 max-[920px]:px-4">
+        <header className="flex h-[52px] shrink-0 items-center justify-between border-b border-white/30 bg-white/70 backdrop-blur-xl px-5 max-[920px]:h-12 max-[920px]:px-4">
+          <ToolbarBreadcrumb />
           <div className="flex items-center gap-3">
             <UserMenu user={user} />
           </div>
