@@ -13,6 +13,15 @@ const navItems = [
   { href: "/my-vocabulary", label: "Từ vựng", icon: BookMarked },
 ];
 
+const navItemVariants = {
+  hidden: { opacity: 0, x: -8 },
+  visible: (i: number) => ({
+    opacity: 1,
+    x: 0,
+    transition: { delay: 0.1 + i * 0.05, duration: 0.3 },
+  }),
+};
+
 type Props = {
   isExpanded: boolean;
   onToggle: () => void;
@@ -89,10 +98,10 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
               <span
                 className={[
                   "whitespace-nowrap text-[14px] max-[920px]:text-[13px]",
-                  !isExpanded ? "hidden max-[920px]:inline" : "",
+                  !isExpanded && "hidden max-[920px]:inline",
                 ]
-                  .join(" ")
-                  .trim()}
+                  .filter(Boolean)
+                  .join(" ")}
               >
                 {label}
               </span>
@@ -102,9 +111,10 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
           return (
             <motion.div
               key={href}
-              initial={{ opacity: 0, x: -8 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 + index * 0.05, duration: 0.3 }}
+              custom={index}
+              initial="hidden"
+              animate="visible"
+              variants={navItemVariants}
             >
               {!isExpanded ? (
                 <Tooltip placement="right" title={label}>
