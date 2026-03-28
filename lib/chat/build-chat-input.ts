@@ -57,13 +57,13 @@ function buildOpenAiHistoryItem(message: ChatMessage): ResponseInputItem {
   };
 }
 
-export function buildChatRequest(messages: ChatMessage[]) {
+export function buildChatRequest(messages: ChatMessage[], personaId: string) {
   const recentMessages = messages.slice(-MAX_CONTEXT_MESSAGES);
   const consecutiveVietnameseTurns =
     countConsecutiveVietnameseTurns(recentMessages);
 
   return {
-    instructions: buildChatInstructions({ consecutiveVietnameseTurns }),
+    instructions: buildChatInstructions({ consecutiveVietnameseTurns, personaId }),
     input: recentMessages.map(buildOpenAiHistoryItem),
   };
 }
