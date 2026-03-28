@@ -57,7 +57,7 @@ export function DictionarySearchPanel({
               size="large"
               onClick={onSearch}
               loading={isLoading}
-              className="h-[46px] min-w-[110px] !rounded-[var(--radius)] !border-0 !bg-[var(--ink)] !px-5 !font-semibold hover:!bg-[var(--accent)] max-[720px]:w-full focus-visible:!outline focus-visible:!outline-2 focus-visible:!outline-offset-2 focus-visible:!outline-[var(--accent)]"
+              className="h-[46px] min-w-[110px] !rounded-[var(--radius)] !border-0 !bg-[var(--accent)] !px-5 !font-semibold hover:!opacity-90 max-[720px]:w-full focus-visible:!outline focus-visible:!outline-2 focus-visible:!outline-offset-2 focus-visible:!outline-[var(--accent)]"
             >
               Tra cứu
             </Button>

@@ -41,14 +41,14 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <section className="space-y-2 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
+      <section className="space-y-2 rounded-[var(--radius-lg)] border-l-[3px] border-[var(--accent)] bg-[var(--bg-deep)] px-5 py-4">
         <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
           Nghĩa tiếng Việt
         </h3>
         <p className="text-sm leading-6 text-[var(--text-primary)]">{sense.definitionVi}</p>
       </section>
 
-      <section className="space-y-2 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
+      <section className="space-y-2 rounded-[var(--radius-lg)] border-l-[3px] border-[var(--accent)] bg-[var(--bg-deep)] px-5 py-4">
         <h3 className="text-sm font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
           Definition in English
         </h3>
@@ -130,10 +130,44 @@ export function DictionaryResultCard({
         className="dictionary-card min-h-[400px] overflow-hidden rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] shadow-[var(--shadow-md)]"
         variant="borderless"
       >
-        <div className="space-y-4">
-          <Skeleton active paragraph={{ rows: 1, width: ["45%"] }} title={false} />
-          <Skeleton active paragraph={{ rows: 4 }} title={{ width: "28%" }} />
-          <Skeleton active paragraph={{ rows: 3 }} title={{ width: "22%" }} />
+        <div className="animate-pulse space-y-5">
+          <div>
+            <div className="h-2.5 w-20 rounded-full bg-[var(--bg-deep)]" />
+            <div className="mt-3 h-8 w-44 rounded-lg bg-[var(--bg-deep)]" />
+            <div className="mt-4 flex items-center gap-2">
+              <div className="h-6 w-20 rounded-full bg-[var(--bg-deep)]" />
+              <div className="h-6 w-9 rounded-full bg-[var(--bg-deep)]" />
+            </div>
+          </div>
+          <div className="h-3.5 w-28 rounded bg-[var(--bg-deep)]" />
+          <div className="space-y-2.5 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
+            <div className="h-3.5 w-full rounded bg-[var(--border-strong)]" />
+            <div className="h-3.5 w-4/5 rounded bg-[var(--border-strong)]" />
+            <div className="h-3.5 w-full rounded bg-[var(--border-strong)]" />
+            <div className="h-3.5 w-3/5 rounded bg-[var(--border-strong)]" />
+          </div>
+          <div className="flex gap-2 pt-1">
+            <div className="h-8 w-24 rounded-full bg-[var(--bg-deep)]" />
+            <div className="h-8 w-24 rounded-full bg-[var(--bg-deep)]" />
+          </div>
+          <div className="space-y-4">
+            <div className="space-y-2 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
+              <div className="h-2.5 w-32 rounded bg-[var(--border-strong)]" />
+              <div className="h-3.5 w-full rounded bg-[var(--border-strong)]" />
+              <div className="h-3.5 w-3/4 rounded bg-[var(--border-strong)]" />
+            </div>
+            <div className="space-y-2 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
+              <div className="h-2.5 w-32 rounded bg-[var(--border-strong)]" />
+              <div className="h-3.5 w-full rounded bg-[var(--border-strong)]" />
+              <div className="h-3.5 w-4/5 rounded bg-[var(--border-strong)]" />
+            </div>
+            <div className="space-y-2 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
+              <div className="h-2.5 w-16 rounded bg-[var(--border-strong)]" />
+              <div className="h-3.5 w-full rounded bg-[var(--border-strong)]" />
+              <div className="h-3.5 w-full rounded bg-[var(--border-strong)]" />
+              <div className="h-3.5 w-2/3 rounded bg-[var(--border-strong)]" />
+            </div>
+          </div>
         </div>
       </Card>
     );
@@ -229,13 +263,19 @@ export function DictionaryResultCard({
           )}
 
           <motion.div
-            className="mt-5 space-y-3 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4 text-sm leading-6 text-[var(--text-secondary)]"
+            className="mt-5 space-y-3 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4"
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.3 }}
           >
-            <p>{vocabulary.overviewVi}</p>
-            <p>{vocabulary.overviewEn}</p>
+            <div className="flex items-start gap-2.5 text-sm leading-6 text-[var(--text-secondary)]">
+              <span className="mt-1 shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-[var(--accent-light)] text-[var(--accent)]">VI</span>
+              <p>{vocabulary.overviewVi}</p>
+            </div>
+            <div className="flex items-start gap-2.5 text-sm leading-6 text-[var(--text-secondary)]">
+              <span className="mt-1 shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-[var(--bg)] text-[var(--text-muted)]">EN</span>
+              <p>{vocabulary.overviewEn}</p>
+            </div>
           </motion.div>
 
           <Tabs
