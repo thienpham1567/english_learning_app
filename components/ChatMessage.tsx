@@ -91,7 +91,7 @@ export function ChatMessage({
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
       {!isUser && (
-        <div className="grid size-8 shrink-0 place-items-center rounded-full bg-(--ink) text-white shadow-(--shadow-sm)">
+        <div className="grid size-8 shrink-0 place-items-center rounded-full bg-[var(--ink)] text-white shadow-[var(--shadow-sm)]">
           <GraduationCap size={14} strokeWidth={2} />
         </div>
       )}

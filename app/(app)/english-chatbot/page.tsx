@@ -321,7 +321,7 @@ export default function EnglishChatbotPage() {
                   </motion.h2>
 
                   <motion.p
-                    className="mt-3 max-w-2xl text-base text-(--text-secondary)"
+                    className="mt-3 max-w-sm text-base text-(--text-secondary)"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3, duration: 0.4 }}
@@ -336,7 +336,7 @@ export default function EnglishChatbotPage() {
                       return (
                         <motion.button
                           key={s.text}
-                          className="flex items-start gap-3 rounded-lg border border-(--border) bg-(--surface) p-4 text-left shadow-(--shadow-sm) transition hover:-translate-y-0.5 hover:border-(--border-strong) hover:bg-(--surface-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
+                          className="flex items-start gap-3 rounded-lg border border-(--border) bg-(--surface) p-4 text-left shadow-(--shadow-sm) transition hover:-translate-y-0.5 hover:border-(--accent)/40 hover:bg-(--surface-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
                           onClick={() => send(s.text)}
                           initial={{ opacity: 0, y: 16 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -369,7 +369,7 @@ export default function EnglishChatbotPage() {
                   />
                 ))}
                 {isLoading && (
-                  <div className="mt-[22px]">
+                  <div className="mt-[28px]">
                     <TypingIndicator />
                   </div>
                 )}
@@ -403,7 +403,7 @@ export default function EnglishChatbotPage() {
         <AnimatePresence>
           {showScrollBtn && (
             <motion.button
-              className="absolute bottom-[88px] left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-(--border) bg-(--surface) px-3 py-1.5 text-xs font-medium text-(--text-secondary) shadow-(--shadow-md) transition hover:bg-(--surface-hover) hover:text-(--ink)"
+              className="absolute bottom-[88px] left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-(--border) bg-(--surface) px-3 py-1.5 text-xs font-medium text-(--text-secondary) shadow-(--shadow-lg) transition hover:bg-(--surface-hover) hover:text-(--ink)"
               onClick={scrollToBottom}
               initial={{ opacity: 0, y: 8, scale: 0.92 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
