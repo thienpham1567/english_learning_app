@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 
-import { ConversationList } from "./ConversationList";
+import { ConversationList } from "../ConversationList";
 
 const threads = [
   { id: "1", title: "Thread one", updatedAt: new Date().toISOString() },

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { deriveTitle } from "./derive-title";
+import { deriveTitle } from "../derive-title";
 
 describe("deriveTitle", () => {
   it("returns the text unchanged when 60 chars or fewer", () => {
