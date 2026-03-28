@@ -15,6 +15,13 @@
       "when": 1774632644043,
       "tag": "0001_flaky_wind_dancer",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1774717475795,
+      "tag": "0002_equal_exiles",
+      "breakpoints": true
     }
   ]
 }

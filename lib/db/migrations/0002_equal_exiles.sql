@@ -1,0 +1,1 @@
+ALTER TABLE "conversation" ADD COLUMN "persona_id" text DEFAULT 'simon' NOT NULL;
