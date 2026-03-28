@@ -15,6 +15,9 @@ type DictionaryResultCardProps = {
   onToggleSaved?: () => void;
 };
 
+const SENSE_ITEM_CLASS =
+  "border-l-2 border-[rgba(196,109,46,0.3)] pl-4 text-sm italic leading-6 text-[var(--text-secondary)]";
+
 const ENTRY_TYPE_LABELS: Record<Vocabulary["entryType"], string> = {
   word: "Từ đơn",
   collocation: "Cụm từ cố định",
@@ -61,7 +64,7 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
           {sense.examplesVi.map((example) => (
             <li
               key={example}
-              className="border-l-2 border-[rgba(196,109,46,0.3)] pl-4 text-sm italic leading-6 text-[var(--text-secondary)]"
+              className={SENSE_ITEM_CLASS}
             >
               {example}
             </li>
@@ -87,7 +90,7 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
             {sense.patterns.map((pattern) => (
               <li
                 key={pattern}
-                className="border-l-2 border-[rgba(196,109,46,0.3)] pl-4 text-sm italic leading-6 text-[var(--text-secondary)]"
+                className={SENSE_ITEM_CLASS}
               >
                 {pattern}
               </li>
@@ -105,7 +108,7 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
             {sense.relatedExpressions.map((expr) => (
               <li
                 key={expr}
-                className="border-l-2 border-[rgba(196,109,46,0.3)] pl-4 text-sm italic leading-6 text-[var(--text-secondary)]"
+                className={SENSE_ITEM_CLASS}
               >
                 {expr}
               </li>
@@ -123,7 +126,7 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
             {sense.commonMistakesVi.map((mistake) => (
               <li
                 key={mistake}
-                className="border-l-2 border-[rgba(196,109,46,0.3)] pl-4 text-sm italic leading-6 text-[var(--text-secondary)]"
+                className={SENSE_ITEM_CLASS}
               >
                 {mistake}
               </li>
@@ -142,11 +145,12 @@ export function DictionaryResultCard({
   saved,
   onToggleSaved,
 }: DictionaryResultCardProps) {
-  const [activeKey, setActiveKey] = useState(vocabulary?.senses[0]?.id ?? "");
+  const firstSenseId = vocabulary?.senses[0]?.id ?? "";
+  const [activeKey, setActiveKey] = useState(firstSenseId);
 
   useEffect(() => {
-    if (vocabulary) setActiveKey(vocabulary.senses[0]?.id ?? "");
-  }, [vocabulary?.headword]);
+    setActiveKey(firstSenseId);
+  }, [firstSenseId]);
 
   if (isLoading) {
     return (
@@ -302,6 +306,7 @@ export function DictionaryResultCard({
                 <button
                   key={sense.id}
                   type="button"
+                  aria-selected={activeKey === sense.id}
                   onClick={() => setActiveKey(sense.id)}
                   className={[
                     "shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition",
