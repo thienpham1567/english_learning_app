@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Tag } from "antd";
-import { Bookmark, BookmarkCheck, BookOpen } from "lucide-react";
+import { Tag, Tooltip } from "antd";
+import { Bookmark, BookmarkCheck, BookOpen, Languages } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import type { DictionarySense, Vocabulary } from "@/lib/schemas/vocabulary";
@@ -13,6 +13,7 @@ type DictionaryResultCardProps = {
   isLoading: boolean;
   saved?: boolean | null;
   onToggleSaved?: () => void;
+  onSynonymClick: (word: string) => void;
 };
 
 const SENSE_ITEM_CLASS =
@@ -34,7 +35,13 @@ const LEVEL_COLORS: Record<string, string> = {
   C2: "volcano",
 };
 
-function SensePanel({ sense }: { sense: DictionarySense }) {
+function SensePanel({
+  sense,
+  onSynonymClick,
+}: {
+  sense: DictionarySense;
+  onSynonymClick: (word: string) => void;
+}) {
   return (
     <motion.div
       className="space-y-5"
@@ -61,16 +68,51 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
           Ví dụ
         </h3>
         <ul className="space-y-2">
-          {sense.examplesVi.map((example) => (
-            <li
-              key={example}
-              className={SENSE_ITEM_CLASS}
-            >
-              {example}
-            </li>
-          ))}
+          {(sense.examples ?? []).length > 0
+            ? (sense.examples ?? []).map((example) => (
+                <li key={example.en} className={SENSE_ITEM_CLASS}>
+                  <span className="flex items-baseline gap-1.5">
+                    <span>{example.en}</span>
+                    {example.vi && (
+                      <Tooltip placement="top" title={example.vi}>
+                        <span
+                          data-testid="translate-icon"
+                          className="inline-flex shrink-0 cursor-default items-center text-[var(--text-muted)] transition hover:text-[var(--accent)]"
+                        >
+                          <Languages size={13} />
+                        </span>
+                      </Tooltip>
+                    )}
+                  </span>
+                </li>
+              ))
+            : (sense.examplesVi ?? []).map((example) => (
+                <li key={example} className={SENSE_ITEM_CLASS}>
+                  {example}
+                </li>
+              ))}
         </ul>
       </section>
+
+      {sense.synonyms && sense.synonyms.length > 0 && (
+        <section className="space-y-2">
+          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
+            Từ đồng nghĩa
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {sense.synonyms.map((synonym) => (
+              <button
+                key={synonym}
+                type="button"
+                onClick={() => onSynonymClick(synonym)}
+                className="rounded-full border border-(--border) bg-transparent px-3 py-1 text-sm text-[var(--text-secondary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+              >
+                {synonym}
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
 
       {sense.usageNoteVi && (
         <section className="space-y-2 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
@@ -144,6 +186,7 @@ export function DictionaryResultCard({
   isLoading,
   saved,
   onToggleSaved,
+  onSynonymClick,
 }: DictionaryResultCardProps) {
   const firstSenseId = vocabulary?.senses[0]?.id ?? "";
   const [activeKey, setActiveKey] = useState(firstSenseId);
@@ -319,7 +362,9 @@ export function DictionaryResultCard({
                 </button>
               ))}
             </div>
-            {activeSense && <SensePanel sense={activeSense} />}
+            {activeSense && (
+              <SensePanel sense={activeSense} onSynonymClick={onSynonymClick} />
+            )}
           </div>
         </div>
       </motion.div>

@@ -19,6 +19,8 @@ const singleSenseEntry = {
       definitionVi: "Cất cánh",
       definitionEn: "To leave the ground and begin flying.",
       usageNoteVi: null,
+      examples: [],
+      synonyms: [],
       examplesVi: [
         "Máy bay cất cánh đúng giờ.",
         "Chuyến bay cất cánh lúc bình minh.",
@@ -47,6 +49,8 @@ const multiSenseEntry = {
       definitionVi: "Chạy bộ",
       definitionEn: "To move fast on foot.",
       usageNoteVi: null,
+      examples: [],
+      synonyms: [],
       examplesVi: ["Tôi chạy mỗi sáng."],
       patterns: [],
       relatedExpressions: [],
@@ -58,7 +62,65 @@ const multiSenseEntry = {
       definitionVi: "Vận hành",
       definitionEn: "To operate or manage.",
       usageNoteVi: null,
+      examples: [],
+      synonyms: [],
       examplesVi: ["Cô ấy điều hành công ty."],
+      patterns: [],
+      relatedExpressions: [],
+      commonMistakesVi: [],
+    },
+  ],
+};
+
+const bilingualEntry = {
+  query: "take off",
+  headword: "take off",
+  entryType: "phrasal_verb" as const,
+  phonetic: null,
+  level: "B1" as const,
+  register: null,
+  overviewVi: "Có nhiều nghĩa.",
+  overviewEn: "A common phrasal verb.",
+  senses: [
+    {
+      id: "sense-1",
+      label: "Nghĩa 1",
+      definitionVi: "Cất cánh",
+      definitionEn: "To leave the ground and begin flying.",
+      usageNoteVi: null,
+      examples: [
+        { en: "The plane took off on time.", vi: "Máy bay cất cánh đúng giờ." },
+        { en: "The rocket took off at dawn.", vi: "Tên lửa cất cánh lúc bình minh." },
+        { en: "I always watch when the plane takes off.", vi: "Tôi luôn nhìn qua cửa sổ khi máy bay cất cánh." },
+      ],
+      synonyms: [],
+      examplesVi: [],
+      patterns: [],
+      relatedExpressions: [],
+      commonMistakesVi: [],
+    },
+  ],
+};
+
+const synonymEntry = {
+  query: "depart",
+  headword: "depart",
+  entryType: "word" as const,
+  phonetic: null,
+  level: "B2" as const,
+  register: null,
+  overviewVi: "Rời đi.",
+  overviewEn: "To leave a place.",
+  senses: [
+    {
+      id: "sense-1",
+      label: "Nghĩa 1",
+      definitionVi: "Rời đi",
+      definitionEn: "To leave.",
+      usageNoteVi: null,
+      examples: [],
+      examplesVi: ["Tàu rời đi lúc 9 giờ."],
+      synonyms: ["leave", "exit", "go"],
       patterns: [],
       relatedExpressions: [],
       commonMistakesVi: [],
@@ -69,7 +131,7 @@ const multiSenseEntry = {
 describe("DictionaryResultCard", () => {
   it("shows result heading, custom tab buttons, and active sense content", () => {
     const { getByText, getByRole, container } = renderUi(
-      <DictionaryResultCard vocabulary={singleSenseEntry} hasSearched isLoading={false} />,
+      <DictionaryResultCard vocabulary={singleSenseEntry} hasSearched isLoading={false} onSynonymClick={vi.fn()} />,
     );
 
     expect(getByText("Kết quả tra cứu")).toBeInTheDocument();
@@ -83,7 +145,7 @@ describe("DictionaryResultCard", () => {
 
   it("switches visible sense when a tab button is clicked", () => {
     const { getByRole, getByText, queryByText } = renderUi(
-      <DictionaryResultCard vocabulary={multiSenseEntry} hasSearched isLoading={false} />,
+      <DictionaryResultCard vocabulary={multiSenseEntry} hasSearched isLoading={false} onSynonymClick={vi.fn()} />,
     );
 
     // First sense visible by default
@@ -99,7 +161,7 @@ describe("DictionaryResultCard", () => {
 
   it("loading state shows animate-pulse skeleton and no antd card", () => {
     const { container } = renderUi(
-      <DictionaryResultCard vocabulary={null} hasSearched isLoading />,
+      <DictionaryResultCard vocabulary={null} hasSearched isLoading onSynonymClick={vi.fn()} />,
     );
 
     expect(container.querySelector(".animate-pulse")).toBeInTheDocument();
@@ -108,7 +170,7 @@ describe("DictionaryResultCard", () => {
 
   it("pre-search empty state shows simplified BookOpen icon and prompt text", () => {
     const { getByText } = renderUi(
-      <DictionaryResultCard vocabulary={null} hasSearched={false} isLoading={false} />,
+      <DictionaryResultCard vocabulary={null} hasSearched={false} isLoading={false} onSynonymClick={vi.fn()} />,
     );
 
     expect(getByText("Nhập từ cần tra")).toBeInTheDocument();
@@ -116,11 +178,89 @@ describe("DictionaryResultCard", () => {
 
   it("populated header row wraps to column on phones", () => {
     const { container } = renderUi(
-      <DictionaryResultCard vocabulary={singleSenseEntry} hasSearched isLoading={false} />,
+      <DictionaryResultCard vocabulary={singleSenseEntry} hasSearched isLoading={false} onSynonymClick={vi.fn()} />,
     );
 
     expect(
       container.querySelector(".flex.items-start.justify-between.gap-4"),
     ).toHaveClass("max-[720px]:flex-col");
+  });
+
+  it("renders English example text when examples array is populated", () => {
+    const { getByText } = renderUi(
+      <DictionaryResultCard
+        vocabulary={bilingualEntry}
+        hasSearched
+        isLoading={false}
+        onSynonymClick={vi.fn()}
+      />,
+    );
+    expect(getByText("The plane took off on time.")).toBeInTheDocument();
+  });
+
+  it("renders a translate icon for each bilingual example", () => {
+    const { container } = renderUi(
+      <DictionaryResultCard
+        vocabulary={bilingualEntry}
+        hasSearched
+        isLoading={false}
+        onSynonymClick={vi.fn()}
+      />,
+    );
+    const icons = container.querySelectorAll("[data-testid='translate-icon']");
+    expect(icons).toHaveLength(3);
+  });
+
+  it("falls back to examplesVi plain strings when examples is empty", () => {
+    const { getByText } = renderUi(
+      <DictionaryResultCard
+        vocabulary={singleSenseEntry}
+        hasSearched
+        isLoading={false}
+        onSynonymClick={vi.fn()}
+      />,
+    );
+    expect(getByText("Máy bay cất cánh đúng giờ.")).toBeInTheDocument();
+  });
+
+  it("renders synonym pills when synonyms array is populated", () => {
+    const { getByRole } = renderUi(
+      <DictionaryResultCard
+        vocabulary={synonymEntry}
+        hasSearched
+        isLoading={false}
+        onSynonymClick={vi.fn()}
+      />,
+    );
+    expect(getByRole("button", { name: "leave" })).toBeInTheDocument();
+    expect(getByRole("button", { name: "exit" })).toBeInTheDocument();
+    expect(getByRole("button", { name: "go" })).toBeInTheDocument();
+  });
+
+  it("calls onSynonymClick with the synonym word when a pill is clicked", () => {
+    const onSynonymClick = vi.fn();
+    const { getByRole } = renderUi(
+      <DictionaryResultCard
+        vocabulary={synonymEntry}
+        hasSearched
+        isLoading={false}
+        onSynonymClick={onSynonymClick}
+      />,
+    );
+    fireEvent.click(getByRole("button", { name: "leave" }));
+    expect(onSynonymClick).toHaveBeenCalledOnce();
+    expect(onSynonymClick).toHaveBeenCalledWith("leave");
+  });
+
+  it("does not render synonyms section when synonyms is empty", () => {
+    const { queryByText } = renderUi(
+      <DictionaryResultCard
+        vocabulary={singleSenseEntry}
+        hasSearched
+        isLoading={false}
+        onSynonymClick={vi.fn()}
+      />,
+    );
+    expect(queryByText("Từ đồng nghĩa")).not.toBeInTheDocument();
   });
 });
