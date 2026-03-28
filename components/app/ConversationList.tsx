@@ -1,5 +1,6 @@
 "use client";
 
+import { Tooltip } from "antd";
 import { Plus, Trash2, GraduationCap } from "lucide-react";
 
 export type ConversationItem = {
@@ -24,6 +25,15 @@ function formatRelativeTime(dateStr: string): string {
   const hours = Math.floor(mins / 60);
   if (hours < 24) return `${hours}h ago`;
   return `${Math.floor(hours / 24)}d ago`;
+}
+
+export function truncateTitle(
+  title: string,
+  max = 40,
+): { text: string; truncated: boolean } {
+  return title.length > max
+    ? { text: title.slice(0, max) + "…", truncated: true }
+    : { text: title, truncated: false };
 }
 
 export function ConversationList({
@@ -72,6 +82,12 @@ export function ConversationList({
         ) : (
           conversations.map((conv) => {
             const isActive = conv.id === activeId;
+            const { text, truncated } = truncateTitle(conv.title);
+            const titleSpan = (
+              <span className="pr-5 text-sm font-medium leading-snug">
+                {text}
+              </span>
+            );
             return (
               <div key={conv.id} className="group relative">
                 <button
@@ -83,9 +99,11 @@ export function ConversationList({
                       : "border-transparent text-white/65 hover:bg-white/5 hover:text-white/80",
                   ].join(" ")}
                 >
-                  <span className="line-clamp-2 pr-5 text-sm font-medium leading-snug">
-                    {conv.title}
-                  </span>
+                  {truncated ? (
+                    <Tooltip title={conv.title}>{titleSpan}</Tooltip>
+                  ) : (
+                    titleSpan
+                  )}
                   <span className="text-[11px] text-white/30">
                     {formatRelativeTime(conv.updatedAt)}
                   </span>
