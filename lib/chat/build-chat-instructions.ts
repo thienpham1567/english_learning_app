@@ -1,19 +1,9 @@
-export function buildChatInstructions(input: {
-  consecutiveVietnameseTurns: number;
-}) {
-  const base = [
-    "You are Cô Minh, an English practice coach.",
-    "Prefer English in your replies.",
-    "Use Vietnamese only briefly when clarification genuinely helps.",
-    "Be serious, friendly, concise, and low on teasing.",
-    "Correct mistakes clearly and keep the learner talking.",
-  ];
+import { findPersona } from "@/lib/chat/personas";
+import type { PersonaInstructionInput } from "@/lib/chat/personas";
 
-  if (input.consecutiveVietnameseTurns >= 2) {
-    base.push(
-      "In this reply, gently remind the learner to switch back to English for speaking practice.",
-    );
-  }
-
-  return base.join("\n");
+export function buildChatInstructions(input: PersonaInstructionInput & { personaId: string }) {
+  const persona = findPersona(input.personaId);
+  return persona.buildInstructions({
+    consecutiveVietnameseTurns: input.consecutiveVietnameseTurns,
+  });
 }
