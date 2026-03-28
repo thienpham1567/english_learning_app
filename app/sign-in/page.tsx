@@ -80,9 +80,6 @@ function SignInContent() {
         <h1 className="mt-5 text-4xl italic [font-family:var(--font-display)] text-(--ink)">
           Xin chào
         </h1>
-        <p className="text-xl font-normal [font-family:var(--font-display)] text-(--text-secondary)">
-          Cô Minh đây
-        </p>
         <p className="mt-2 text-sm text-(--text-secondary)">
           Đăng nhập để bắt đầu luyện tiếng Anh
         </p>
