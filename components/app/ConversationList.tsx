@@ -7,6 +7,7 @@ export type ConversationItem = {
   id: string;
   title: string;
   updatedAt: string;
+  personaId: string;
 };
 
 type Props = {
