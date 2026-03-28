@@ -68,7 +68,7 @@ function SignInContent() {
     <>
       <div className="flex flex-col items-center text-center">
         <motion.div
-          className="mb-5 grid size-14 place-items-center rounded-[var(--radius-lg)] bg-[var(--ink)] text-white"
+          className="mb-5 grid size-14 place-items-center rounded-lg bg-(--ink) text-white"
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.1, duration: 0.35, type: "spring", stiffness: 200 }}
@@ -76,10 +76,10 @@ function SignInContent() {
           <GraduationCap size={24} strokeWidth={2} />
         </motion.div>
 
-        <h1 className="text-3xl [font-family:var(--font-display)] text-[var(--ink)]">
+        <h1 className="text-3xl [font-family:var(--font-display)] text-(--ink)">
           Trợ lý học tập
         </h1>
-        <p className="mt-2 text-sm text-[var(--text-secondary)]">
+        <p className="mt-2 text-sm text-(--text-secondary)">
           Đăng nhập để bắt đầu luyện tiếng Anh
         </p>
       </div>
@@ -87,7 +87,7 @@ function SignInContent() {
       <form className="mt-6 space-y-3" onSubmit={handleEmailSignIn}>
         <input
           type="text"
-          className="w-full rounded-[var(--radius)] border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent-muted)]"
+          className="w-full rounded-(--radius) border border-(--border) bg-(--surface) px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent-muted)]"
           placeholder="Tên đăng nhập"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -96,7 +96,7 @@ function SignInContent() {
         />
         <input
           type="password"
-          className="w-full rounded-[var(--radius)] border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent-muted)]"
+          className="w-full rounded-(--radius) border border-(--border) bg-(--surface) px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent-muted)]"
           placeholder="Mật khẩu"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -105,7 +105,7 @@ function SignInContent() {
         />
         <motion.button
           type="submit"
-          className="w-full rounded-[var(--radius)] bg-[var(--ink)] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[var(--accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
+          className="w-full rounded-(--radius) bg-(--ink) px-4 py-3 text-sm font-semibold text-white transition hover:bg-[var(--accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
           disabled={isLoading || !email.trim() || !password.trim()}
           whileTap={{ scale: 0.97 }}
         >
@@ -113,14 +113,14 @@ function SignInContent() {
         </motion.button>
       </form>
 
-      <div className="my-5 flex items-center gap-3 text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">
-        <div className="h-px flex-1 bg-[var(--border)]" />
+      <div className="my-5 flex items-center gap-3 text-xs uppercase tracking-[0.18em] text-(--text-muted)">
+        <div className="h-px flex-1 bg-(--border)" />
         <span>hoặc</span>
-        <div className="h-px flex-1 bg-[var(--border)]" />
+        <div className="h-px flex-1 bg-(--border)" />
       </div>
 
       <motion.button
-        className="flex w-full items-center justify-center gap-3 rounded-[var(--radius)] border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm font-medium text-[var(--ink)] transition hover:bg-[var(--surface-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
+        className="flex w-full items-center justify-center gap-3 rounded-(--radius) border border-(--border) bg-(--surface) px-4 py-3 text-sm font-medium text-[var(--ink)] transition hover:bg-[var(--surface-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
         onClick={handleGoogleSignIn}
         disabled={isLoading}
         whileTap={{ scale: 0.97 }}
@@ -131,7 +131,7 @@ function SignInContent() {
 
       {error && (
         <motion.div
-          className="mt-4 rounded-[var(--radius)] border border-[rgba(239,68,68,0.2)] bg-[rgba(239,68,68,0.08)] px-4 py-3 text-sm text-[rgb(153,27,27)]"
+          className="mt-4 rounded-(--radius) border border-[rgba(239,68,68,0.2)] bg-[rgba(239,68,68,0.08)] px-4 py-3 text-sm text-[rgb(153,27,27)]"
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
         >
@@ -139,7 +139,7 @@ function SignInContent() {
         </motion.div>
       )}
 
-      <p className="mt-6 text-center text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">
+      <p className="mt-6 text-center text-xs uppercase tracking-[0.18em] text-(--text-muted)">
         Trợ lý học tập tiếng Anh
       </p>
     </>
@@ -151,7 +151,7 @@ export default function SignInPage() {
     <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,rgba(196,109,46,0.12),transparent_38%),linear-gradient(180deg,var(--bg),var(--bg-deep))] px-4 py-12">
       <Suspense fallback={null}>
         <motion.div
-          className="flex w-full max-w-md flex-col rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[rgba(255,255,255,0.92)] p-8 shadow-[var(--shadow-lg)] backdrop-blur"
+          className="flex w-full max-w-md flex-col rounded-2xl border border-(--border) bg-[rgba(255,255,255,0.92)] p-8 shadow-(--shadow-lg) backdrop-blur"
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: "easeOut" }}

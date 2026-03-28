@@ -257,7 +257,7 @@ export default function EnglishChatbotPage() {
   const hasMessages = messages.length > 0;
 
   return (
-    <div className="flex min-h-0 flex-1 overflow-hidden rounded-[var(--radius-2xl)] border border-[var(--border)] bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.7))] shadow-[var(--shadow-md)]">
+    <div className="flex min-h-0 flex-1 overflow-hidden rounded-2xl border border-(--border) bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.7))] shadow-(--shadow-md)">
       {/* Thread list */}
       <ConversationList
         conversations={conversations}
@@ -285,17 +285,17 @@ export default function EnglishChatbotPage() {
                   transition={{ duration: 0.35, ease: "easeOut" }}
                 >
                   <motion.div
-                    className="relative grid size-24 place-items-center rounded-full bg-[var(--surface)] text-4xl shadow-[var(--shadow-lg)]"
+                    className="relative grid size-24 place-items-center rounded-full bg-(--surface) text-4xl shadow-(--shadow-lg)"
                     initial={{ scale: 0.6, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     transition={{ delay: 0.1, duration: 0.5, type: "spring", stiffness: 180, damping: 14 }}
                   >
                     <span>👩‍🏫</span>
-                    <span className="absolute bottom-2 right-2 size-3 rounded-full bg-[var(--sage)] ring-4 ring-[var(--surface)]" />
+                    <span className="absolute bottom-2 right-2 size-3 rounded-full bg-(--sage) ring-4 ring-(--surface)" />
                   </motion.div>
 
                   <motion.h2
-                    className="mt-6 text-4xl [font-family:var(--font-display)] text-[var(--ink)]"
+                    className="mt-6 text-4xl [font-family:var(--font-display)] text-(--ink)"
                     initial={{ opacity: 0, y: 12 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2, duration: 0.4 }}
@@ -304,7 +304,7 @@ export default function EnglishChatbotPage() {
                   </motion.h2>
 
                   <motion.p
-                    className="mt-3 max-w-2xl text-base text-[var(--text-secondary)]"
+                    className="mt-3 max-w-2xl text-base text-(--text-secondary)"
                     initial={{ opacity: 0, y: 8 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.3, duration: 0.4 }}
@@ -319,7 +319,7 @@ export default function EnglishChatbotPage() {
                       return (
                         <motion.button
                           key={s.text}
-                          className="flex items-start gap-3 rounded-[var(--radius-lg)] border border-[var(--border)] bg-[var(--surface)] p-4 text-left shadow-[var(--shadow-sm)] transition hover:-translate-y-0.5 hover:border-[var(--border-strong)] hover:bg-[var(--surface-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+                          className="flex items-start gap-3 rounded-lg border border-(--border) bg-(--surface) p-4 text-left shadow-(--shadow-sm) transition hover:-translate-y-0.5 hover:border-(--border-strong) hover:bg-(--surface-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
                           onClick={() => send(s.text)}
                           initial={{ opacity: 0, y: 16 }}
                           animate={{ opacity: 1, y: 0 }}
@@ -327,10 +327,10 @@ export default function EnglishChatbotPage() {
                           whileHover={{ y: -2 }}
                           whileTap={{ scale: 0.97 }}
                         >
-                          <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-[var(--accent-light)] text-[var(--accent)]">
+                          <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-(--accent-light) text-(--accent)">
                             <Icon size={16} strokeWidth={2} />
                           </span>
-                          <span className="text-sm leading-6 text-[var(--text-primary)]">
+                          <span className="text-sm leading-6 text-(--text-primary)">
                             {s.text}
                           </span>
                         </motion.button>
@@ -362,7 +362,7 @@ export default function EnglishChatbotPage() {
             <AnimatePresence>
               {error && (
                 <motion.div
-                  className="mt-5 rounded-[var(--radius)] border border-[rgba(239,68,68,0.16)] bg-[rgba(239,68,68,0.08)] px-4 py-3 text-sm text-[rgb(153,27,27)]"
+                  className="mt-5 rounded-(--radius) border border-[rgba(239,68,68,0.16)] bg-[rgba(239,68,68,0.08)] px-4 py-3 text-sm text-[rgb(153,27,27)]"
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -4 }}
@@ -370,7 +370,7 @@ export default function EnglishChatbotPage() {
                 >
                   <p>{error}</p>
                   <button
-                    className="mt-2 font-medium underline underline-offset-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)]"
+                    className="mt-2 font-medium underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
                     onClick={() => setError(null)}
                   >
                     Đóng
@@ -386,7 +386,7 @@ export default function EnglishChatbotPage() {
         <AnimatePresence>
           {showScrollBtn && (
             <motion.button
-              className="absolute bottom-[88px] left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-[var(--border)] bg-[var(--surface)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)] shadow-[var(--shadow-md)] transition hover:bg-[var(--surface-hover)] hover:text-[var(--ink)]"
+              className="absolute bottom-[88px] left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-(--border) bg-(--surface) px-3 py-1.5 text-xs font-medium text-(--text-secondary) shadow-(--shadow-md) transition hover:bg-(--surface-hover) hover:text-(--ink)"
               onClick={scrollToBottom}
               initial={{ opacity: 0, y: 8, scale: 0.92 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -399,9 +399,9 @@ export default function EnglishChatbotPage() {
           )}
         </AnimatePresence>
 
-        <div className="border-t border-[var(--border)] bg-[rgba(255,255,255,0.72)] px-4 py-4 backdrop-blur md:px-8">
+        <div className="border-t border-(--border) bg-[rgba(255,255,255,0.72)] px-4 py-4 backdrop-blur md:px-8">
           <div className="mx-auto flex w-full max-w-5xl flex-col gap-3">
-            <div className="flex items-end gap-3 rounded-[var(--radius-xl)] border border-[var(--border)] bg-[var(--surface)] p-3 shadow-[var(--shadow-sm)] transition-[border-color,box-shadow] duration-200 focus-within:border-[var(--accent)] focus-within:ring-2 focus-within:ring-[var(--accent-muted)] focus-within:shadow-[var(--shadow-md)]">
+            <div className="flex items-end gap-3 rounded-xl border border-(--border) bg-(--surface) p-3 shadow-(--shadow-sm) transition-[border-color,box-shadow] duration-200 focus-within:border-(--accent) focus-within:ring-2 focus-within:ring-(--accent-muted) focus-within:shadow-(--shadow-md)">
               <textarea
                 ref={textareaRef}
                 value={input}
@@ -415,12 +415,12 @@ export default function EnglishChatbotPage() {
                 placeholder="Nhập câu hỏi hoặc câu trả lời bằng tiếng Anh..."
                 disabled={isLoading}
                 rows={1}
-                className="min-h-[44px] flex-1 resize-none border-0 bg-transparent px-2 py-2 text-[15px] leading-6 text-[var(--text-primary)] outline-none placeholder:text-[var(--text-muted)] disabled:cursor-not-allowed focus:outline-none"
+                className="min-h-11 flex-1 resize-none border-0 bg-transparent px-2 py-2 text-[15px] leading-6 text-(--text-primary) outline-none placeholder:text-(--text-muted) disabled:cursor-not-allowed focus:outline-none"
               />
               <motion.button
                 className={[
-                  "grid size-11 shrink-0 place-items-center rounded-full text-white shadow-[var(--shadow-sm)] transition-[background-color,transform] duration-200 enabled:hover:-translate-y-0.5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed disabled:bg-[var(--border-strong)]",
-                  input.trim() && !isLoading ? "bg-[var(--accent)]" : "bg-[var(--ink)]",
+                  "grid size-11 shrink-0 place-items-center rounded-full text-white shadow-(--shadow-sm) transition-[background-color,transform] duration-200 enabled:hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) disabled:cursor-not-allowed disabled:bg-(--border-strong)",
+                  input.trim() && !isLoading ? "bg-(--accent)" : "bg-(--ink)",
                 ].join(" ")}
                 onClick={() => send()}
                 disabled={!input.trim() || isLoading}
@@ -429,7 +429,7 @@ export default function EnglishChatbotPage() {
                 <ArrowUp size={18} strokeWidth={2.5} />
               </motion.button>
             </div>
-            <p className="text-sm text-[var(--text-muted)]">
+            <p className="text-sm text-(--text-muted)">
               Enter để gửi · Shift+Enter để xuống dòng
             </p>
           </div>
