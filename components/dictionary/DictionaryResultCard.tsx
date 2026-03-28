@@ -63,14 +63,14 @@ function SensePanel({
         <p className="text-sm leading-6 text-[var(--text-primary)]">{sense.definitionEn}</p>
       </section>
 
-      {(sense.examples.length > 0 || sense.examplesVi.length > 0) && (
+      {((sense.examples ?? []).length > 0 || (sense.examplesVi ?? []).length > 0) && (
         <section className="space-y-2">
           <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
             Ví dụ
           </h3>
           <ul className="space-y-2">
-            {sense.examples.length > 0
-              ? sense.examples.map((example, i) => (
+            {(sense.examples ?? []).length > 0
+              ? (sense.examples ?? []).map((example, i) => (
                   <li key={i} className={SENSE_ITEM_CLASS}>
                     <span className="flex items-baseline gap-1.5">
                       <span>{example.en}</span>
@@ -87,7 +87,7 @@ function SensePanel({
                     </span>
                   </li>
                 ))
-              : sense.examplesVi.map((example) => (
+              : (sense.examplesVi ?? []).map((example) => (
                   <li key={example} className={SENSE_ITEM_CLASS}>
                     {example}
                   </li>
@@ -96,13 +96,13 @@ function SensePanel({
         </section>
       )}
 
-      {sense.synonyms.length > 0 && (
+      {(sense.synonyms ?? []).length > 0 && (
         <section className="space-y-2">
           <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
             Từ đồng nghĩa
           </h3>
           <div className="flex flex-wrap gap-2">
-            {sense.synonyms.map((synonym) => (
+            {(sense.synonyms ?? []).map((synonym) => (
               <button
                 key={synonym}
                 type="button"
