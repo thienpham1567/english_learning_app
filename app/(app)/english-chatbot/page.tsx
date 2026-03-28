@@ -40,7 +40,7 @@ export function getMessageSpacingClassName(
   previousMessage?: AppChatMessage,
 ) {
   if (!previousMessage) return "";
-  return currentMessage.role === previousMessage.role ? "mt-[4px]" : "mt-[22px]";
+  return currentMessage.role === previousMessage.role ? "mt-[4px]" : "mt-[28px]";
 }
 
 export default function EnglishChatbotPage() {
