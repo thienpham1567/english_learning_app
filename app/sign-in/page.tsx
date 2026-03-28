@@ -65,29 +65,34 @@ function SignInContent() {
   };
 
   return (
-    <>
+    <motion.div
+      className="flex w-full max-w-[380px] flex-col"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, ease: "easeOut", delay: 0.1 }}
+    >
+      {/* Logo + heading */}
       <div className="flex flex-col items-center text-center">
-        <motion.div
-          className="mb-5 grid size-14 place-items-center rounded-lg bg-(--ink) text-white"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.1, duration: 0.35, type: "spring", stiffness: 200 }}
-        >
-          <GraduationCap size={24} strokeWidth={2} />
-        </motion.div>
+        <div aria-hidden="true" className="grid size-10 place-items-center rounded-full bg-(--ink) text-white">
+          <GraduationCap size={18} strokeWidth={2} />
+        </div>
 
-        <h1 className="text-3xl [font-family:var(--font-display)] text-(--ink)">
-          Trợ lý học tập
+        <h1 className="mt-5 text-4xl italic [font-family:var(--font-display)] text-(--ink)">
+          Xin chào
         </h1>
+        <p className="text-xl font-normal [font-family:var(--font-display)] text-(--text-secondary)">
+          Cô Minh đây
+        </p>
         <p className="mt-2 text-sm text-(--text-secondary)">
           Đăng nhập để bắt đầu luyện tiếng Anh
         </p>
       </div>
 
-      <form className="mt-6 space-y-3" onSubmit={handleEmailSignIn}>
+      {/* Email / password form */}
+      <form className="mt-8 flex flex-col gap-4" onSubmit={handleEmailSignIn}>
         <input
           type="text"
-          className="w-full rounded-(--radius) border border-(--border) bg-(--surface) px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent-muted)]"
+          className="w-full border-b border-(--border) bg-transparent px-1 py-3 text-[15px] text-(--text-primary) outline-none transition-colors placeholder:text-(--text-muted) focus:border-b-2 focus:border-(--accent) disabled:cursor-not-allowed"
           placeholder="Tên đăng nhập"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -96,7 +101,7 @@ function SignInContent() {
         />
         <input
           type="password"
-          className="w-full rounded-(--radius) border border-(--border) bg-(--surface) px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent-muted)]"
+          className="w-full border-b border-(--border) bg-transparent px-1 py-3 text-[15px] text-(--text-primary) outline-none transition-colors placeholder:text-(--text-muted) focus:border-b-2 focus:border-(--accent) disabled:cursor-not-allowed"
           placeholder="Mật khẩu"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -105,7 +110,7 @@ function SignInContent() {
         />
         <motion.button
           type="submit"
-          className="w-full rounded-(--radius) bg-(--ink) px-4 py-3 text-sm font-semibold text-white transition hover:bg-[var(--accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
+          className="btn-shimmer mt-6 w-full rounded-(--radius) bg-(--ink) py-3 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) disabled:cursor-not-allowed disabled:opacity-50"
           disabled={isLoading || !email.trim() || !password.trim()}
           whileTap={{ scale: 0.97 }}
         >
@@ -113,14 +118,16 @@ function SignInContent() {
         </motion.button>
       </form>
 
-      <div className="my-5 flex items-center gap-3 text-xs uppercase tracking-[0.18em] text-(--text-muted)">
+      {/* Divider */}
+      <div className="my-6 flex items-center gap-3 text-xs uppercase tracking-[0.18em] text-(--text-muted)">
         <div className="h-px flex-1 bg-(--border)" />
         <span>hoặc</span>
         <div className="h-px flex-1 bg-(--border)" />
       </div>
 
+      {/* Google sign-in */}
       <motion.button
-        className="flex w-full items-center justify-center gap-3 rounded-(--radius) border border-(--border) bg-(--surface) px-4 py-3 text-sm font-medium text-[var(--ink)] transition hover:bg-[var(--surface-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
+        className="flex w-full items-center justify-center gap-3 rounded-(--radius) border border-(--border) bg-transparent py-3 text-sm font-medium text-(--ink) transition-colors hover:bg-(--surface) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) disabled:cursor-not-allowed disabled:opacity-60"
         onClick={handleGoogleSignIn}
         disabled={isLoading}
         whileTap={{ scale: 0.97 }}
@@ -129,8 +136,10 @@ function SignInContent() {
         Đăng nhập bằng Google
       </motion.button>
 
+      {/* Error banner */}
       {error && (
         <motion.div
+          role="alert"
           className="mt-4 rounded-(--radius) border border-[rgba(239,68,68,0.2)] bg-[rgba(239,68,68,0.08)] px-4 py-3 text-sm text-[rgb(153,27,27)]"
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
@@ -138,27 +147,68 @@ function SignInContent() {
           {error}
         </motion.div>
       )}
-
-      <p className="mt-6 text-center text-xs uppercase tracking-[0.18em] text-(--text-muted)">
-        Trợ lý học tập tiếng Anh
-      </p>
-    </>
+    </motion.div>
   );
 }
 
 export default function SignInPage() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[radial-gradient(circle_at_top,rgba(196,109,46,0.12),transparent_38%),linear-gradient(180deg,var(--bg),var(--bg-deep))] px-4 py-12">
-      <Suspense fallback={null}>
-        <motion.div
-          className="flex w-full max-w-md flex-col rounded-2xl border border-(--border) bg-[rgba(255,255,255,0.92)] p-8 shadow-(--shadow-lg) backdrop-blur"
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-        >
+    <div className="flex min-h-screen">
+      {/* Left editorial panel — hidden on mobile */}
+      <div className="relative hidden w-[45%] flex-col items-center justify-center overflow-hidden bg-(--ink) lg:flex">
+        {/* Grain overlay */}
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+            backgroundRepeat: "repeat",
+            backgroundSize: "128px 128px",
+          }}
+        />
+        {/* Warm radial glow */}
+        <div
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(ellipse 70% 60% at 75% 15%, rgba(196,109,46,0.18) 0%, transparent 70%)",
+          }}
+        />
+
+        {/* Editorial content */}
+        <div className="relative z-10 mx-auto max-w-[340px] px-10 text-center">
+          <motion.p
+            className="text-[2.25rem] font-light italic leading-[1.35] text-white/90 [font-family:var(--font-display)]"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15, duration: 0.5, ease: "easeOut" }}
+          >
+            "Học tiếng Anh mỗi ngày, một câu chuyện mới mỗi ngày."
+          </motion.p>
+
+          <motion.div
+            className="mx-auto mt-6 h-px w-12 bg-[rgba(196,109,46,0.4)]"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
+          />
+
+          <motion.p
+            className="mt-4 text-xs uppercase tracking-[0.22em] text-white/40"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.42, duration: 0.5, ease: "easeOut" }}
+          >
+            Trợ lý học tập tiếng Anh
+          </motion.p>
+        </div>
+      </div>
+
+      {/* Right form panel */}
+      <div className="flex flex-1 items-center justify-center bg-(--bg) px-8 py-16">
+        <Suspense fallback={null}>
           <SignInContent />
-        </motion.div>
-      </Suspense>
+        </Suspense>
+      </div>
     </div>
   );
 }

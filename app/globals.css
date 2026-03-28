@@ -108,3 +108,21 @@ body {
     padding: 20px !important;
   }
 }
+
+/* ── Button shimmer ── */
+.btn-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.btn-shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(196, 109, 46, 0.18);
+  transform: translateX(-100%);
+  transition: transform 0.35s ease;
+  pointer-events: none;
+}
+.btn-shimmer:hover:not(:disabled)::after {
+  transform: translateX(0);
+}

@@ -34,20 +34,19 @@ beforeEach(() => {
 });
 
 describe("SignInPage", () => {
-  it("centers the hero copy in the migrated card", () => {
+  it("renders the hero heading and core form elements", () => {
     renderUi(<SignInPage />);
 
-    const hero = screen.getByRole("heading", { name: "Trợ lý học tập" }).parentElement;
+    const hero = screen.getByRole("heading", { name: "Xin chào" }).parentElement;
 
     expect(hero).toHaveClass("flex", "flex-col", "items-center", "text-center");
-    expect(screen.getByRole("heading", { name: "Trợ lý học tập" })).toBeInTheDocument();
+    expect(screen.getByRole("heading", { name: "Xin chào" })).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Tên đăng nhập")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Đăng nhập bằng Google" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Đăng nhập bằng Google" })).toHaveClass(
-      "focus-visible:outline",
       "focus-visible:outline-2",
       "focus-visible:outline-offset-2",
-      "focus-visible:outline-[var(--accent)]",
+      "focus-visible:outline-(--accent)",
     );
   });
 
@@ -91,7 +90,7 @@ describe("SignInPage", () => {
     expect(screen.getByRole("button", { name: "Đăng nhập bằng Google" })).toBeDisabled();
   });
 
-  it("keeps the email submit button keyboard-visible", async () => {
+  it("keeps the email submit button keyboard-accessible", async () => {
     const user = userEvent.setup();
 
     renderUi(<SignInPage />);
@@ -100,10 +99,9 @@ describe("SignInPage", () => {
     await user.type(screen.getByPlaceholderText("Mật khẩu"), "secret");
 
     expect(screen.getByRole("button", { name: "Đăng nhập" })).toHaveClass(
-      "focus-visible:outline",
       "focus-visible:outline-2",
       "focus-visible:outline-offset-2",
-      "focus-visible:outline-[var(--accent)]",
+      "focus-visible:outline-(--accent)",
     );
   });
 
