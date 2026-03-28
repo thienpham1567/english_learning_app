@@ -18,6 +18,8 @@ export default function CoLanhDictionaryPage() {
   const [result, setResult] = useState<Vocabulary | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
+  const [saved, setSaved] = useState<boolean | null>(null);
+  const [currentQuery, setCurrentQuery] = useState<string | null>(null);
   const latestRequestIdRef = useRef(0);
 
   const handleSearch = async () => {
@@ -35,17 +37,22 @@ export default function CoLanhDictionaryPage() {
 
     setHasSearched(true);
     setIsLoading(true);
+    setSaved(null);
+    setCurrentQuery(null);
     const requestId = latestRequestIdRef.current + 1;
     latestRequestIdRef.current = requestId;
 
     try {
-      const { data: payload } = await http.post<{ data: Vocabulary }>("/dictionary", {
-        word: normalizedWord,
-      });
+      const { data: payload } = await http.post<{ data: Vocabulary; saved: boolean }>(
+        "/dictionary",
+        { word: normalizedWord },
+      );
 
       if (requestId !== latestRequestIdRef.current) return;
 
       setResult(payload.data);
+      setSaved(payload.saved);
+      setCurrentQuery(normalizedWord.toLowerCase().trim().replace(/\s+/g, " "));
     } catch (error) {
       if (requestId !== latestRequestIdRef.current) return;
 
@@ -58,6 +65,21 @@ export default function CoLanhDictionaryPage() {
       if (requestId === latestRequestIdRef.current) {
         setIsLoading(false);
       }
+    }
+  };
+
+  const handleToggleSaved = async () => {
+    if (currentQuery === null || saved === null) return;
+    const next = !saved;
+    setSaved(next); // optimistic
+    try {
+      await fetch(`/api/vocabulary/${encodeURIComponent(currentQuery)}/saved`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ saved: next }),
+      });
+    } catch {
+      setSaved(!next); // rollback
     }
   };
 
@@ -106,6 +128,8 @@ export default function CoLanhDictionaryPage() {
               vocabulary={result}
               hasSearched={hasSearched}
               isLoading={isLoading}
+              saved={saved}
+              onToggleSaved={handleToggleSaved}
             />
           </motion.div>
         </section>
