@@ -65,29 +65,34 @@ function SignInContent() {
   };
 
   return (
-    <>
+    <motion.div
+      className="flex w-full max-w-[380px] flex-col"
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.45, ease: "easeOut", delay: 0.1 }}
+    >
+      {/* Logo + heading */}
       <div className="flex flex-col items-center text-center">
-        <motion.div
-          className="mb-5 grid size-14 place-items-center rounded-[var(--radius-lg)] bg-[var(--ink)] text-white"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.1, duration: 0.35, type: "spring", stiffness: 200 }}
-        >
-          <GraduationCap size={24} strokeWidth={2} />
-        </motion.div>
+        <div className="grid size-10 place-items-center rounded-full bg-(--ink) text-white">
+          <GraduationCap size={18} strokeWidth={2} />
+        </div>
 
-        <h1 className="text-3xl [font-family:var(--font-display)] text-[var(--ink)]">
-          Trợ lý học tập
+        <h1 className="mt-5 text-4xl italic [font-family:var(--font-display)] text-(--ink)">
+          Xin chào
         </h1>
-        <p className="mt-2 text-sm text-[var(--text-secondary)]">
+        <p className="text-xl [font-family:var(--font-display)] text-(--text-secondary)">
+          Cô Minh đây
+        </p>
+        <p className="mt-2 text-sm text-(--text-secondary)">
           Đăng nhập để bắt đầu luyện tiếng Anh
         </p>
       </div>
 
-      <form className="mt-6 space-y-3" onSubmit={handleEmailSignIn}>
+      {/* Email / password form */}
+      <form className="mt-8 flex flex-col gap-4" onSubmit={handleEmailSignIn}>
         <input
           type="text"
-          className="w-full rounded-[var(--radius)] border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent-muted)]"
+          className="w-full border-b border-(--border) bg-transparent px-1 py-3 text-[15px] text-(--text-primary) outline-none transition-colors placeholder:text-(--text-muted) focus:border-b-2 focus:border-(--accent) disabled:cursor-not-allowed"
           placeholder="Tên đăng nhập"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -96,7 +101,7 @@ function SignInContent() {
         />
         <input
           type="password"
-          className="w-full rounded-[var(--radius)] border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent-muted)]"
+          className="w-full border-b border-(--border) bg-transparent px-1 py-3 text-[15px] text-(--text-primary) outline-none transition-colors placeholder:text-(--text-muted) focus:border-b-2 focus:border-(--accent) disabled:cursor-not-allowed"
           placeholder="Mật khẩu"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
@@ -105,7 +110,7 @@ function SignInContent() {
         />
         <motion.button
           type="submit"
-          className="w-full rounded-[var(--radius)] bg-[var(--ink)] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[var(--accent)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
+          className="btn-shimmer mt-2 w-full rounded-(--radius) bg-(--ink) py-3 text-sm font-semibold text-white disabled:cursor-not-allowed disabled:opacity-50"
           disabled={isLoading || !email.trim() || !password.trim()}
           whileTap={{ scale: 0.97 }}
         >
@@ -113,14 +118,16 @@ function SignInContent() {
         </motion.button>
       </form>
 
-      <div className="my-5 flex items-center gap-3 text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">
-        <div className="h-px flex-1 bg-[var(--border)]" />
+      {/* Divider */}
+      <div className="my-6 flex items-center gap-3 text-xs uppercase tracking-[0.18em] text-(--text-muted)">
+        <div className="h-px flex-1 bg-(--border)" />
         <span>hoặc</span>
-        <div className="h-px flex-1 bg-[var(--border)]" />
+        <div className="h-px flex-1 bg-(--border)" />
       </div>
 
+      {/* Google sign-in */}
       <motion.button
-        className="flex w-full items-center justify-center gap-3 rounded-[var(--radius)] border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm font-medium text-[var(--ink)] transition hover:bg-[var(--surface-hover)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] disabled:cursor-not-allowed disabled:opacity-60"
+        className="flex w-full items-center justify-center gap-3 rounded-(--radius) border border-(--border) bg-transparent py-3 text-sm font-medium text-(--ink) transition-colors hover:bg-(--surface) disabled:cursor-not-allowed disabled:opacity-60"
         onClick={handleGoogleSignIn}
         disabled={isLoading}
         whileTap={{ scale: 0.97 }}
@@ -129,20 +136,17 @@ function SignInContent() {
         Đăng nhập bằng Google
       </motion.button>
 
+      {/* Error banner */}
       {error && (
         <motion.div
-          className="mt-4 rounded-[var(--radius)] border border-[rgba(239,68,68,0.2)] bg-[rgba(239,68,68,0.08)] px-4 py-3 text-sm text-[rgb(153,27,27)]"
+          className="mt-4 rounded-(--radius) border border-[rgba(239,68,68,0.2)] bg-[rgba(239,68,68,0.08)] px-4 py-3 text-sm text-[rgb(153,27,27)]"
           initial={{ opacity: 0, y: 4 }}
           animate={{ opacity: 1, y: 0 }}
         >
           {error}
         </motion.div>
       )}
-
-      <p className="mt-6 text-center text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">
-        Trợ lý học tập tiếng Anh
-      </p>
-    </>
+    </motion.div>
   );
 }
 
