@@ -7,6 +7,14 @@ import { Check, Copy, GraduationCap } from "lucide-react";
 import { useUser } from "@/components/app/UserContext";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 
+export type DividerMessage = {
+  id: string;
+  role: "divider";
+  text: string;
+};
+
+export type PageMessage = AppChatMessage | DividerMessage;
+
 function formatTime() {
   try {
     return new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
@@ -69,10 +77,20 @@ export function ChatMessage({
   className = "",
   isStreaming = false,
 }: {
-  message: AppChatMessage;
+  message: PageMessage;
   className?: string;
   isStreaming?: boolean;
 }) {
+  if (message.role === "divider") {
+    return (
+      <div className={["flex items-center gap-3 py-3", className].join(" ")}>
+        <div className="h-px flex-1 bg-[var(--border)]" />
+        <span className="text-xs text-[var(--text-muted)]">{message.text}</span>
+        <div className="h-px flex-1 bg-[var(--border)]" />
+      </div>
+    );
+  }
+
   const isUser = message.role === "user";
   const text = message.text.trim();
   if (!text) return null;

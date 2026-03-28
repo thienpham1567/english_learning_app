@@ -22,4 +22,15 @@ describe("ChatMessage", () => {
     expect(meta).toHaveClass("opacity-0");
     expect(meta).toHaveClass("group-hover:opacity-100");
   });
+
+  it("renders a divider with the persona switch label", () => {
+    renderUi(
+      <ChatMessage
+        message={{ id: "d1", role: "divider", text: "Switched to Christine Ho — IELTS Master" }}
+      />,
+    );
+    expect(
+      screen.getByText("Switched to Christine Ho — IELTS Master"),
+    ).toBeInTheDocument();
+  });
 });
