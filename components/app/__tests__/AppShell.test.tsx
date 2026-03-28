@@ -14,6 +14,10 @@ vi.mock("@/components/app/UserMenu", () => ({
   ),
 }));
 
+vi.mock("@/components/app/ToolbarBreadcrumb", () => ({
+  ToolbarBreadcrumb: () => <div data-testid="breadcrumb">Breadcrumb</div>,
+}));
+
 describe("AppShell", () => {
   it("renders the shell chrome and page content", () => {
     const { container } = renderUi(
@@ -33,22 +37,20 @@ describe("AppShell", () => {
     );
     expect(screen.getByTestId("sidebar")).toBeInTheDocument();
     expect(screen.getByTestId("user-menu")).toHaveTextContent("Cô Lành");
-    expect(container.firstElementChild?.firstElementChild?.nextElementSibling).toHaveClass(
-      "flex",
-      "min-w-0",
-      "min-h-0",
-      "flex-col",
-    );
+    expect(screen.getByTestId("breadcrumb")).toBeInTheDocument();
+    expect(
+      container.firstElementChild?.firstElementChild?.nextElementSibling,
+    ).toHaveClass("flex", "min-w-0", "min-h-0", "flex-col");
     expect(screen.getByRole("banner")).toHaveClass(
       "flex",
       "h-[52px]",
-      "max-[920px]:h-12",
       "shrink-0",
       "items-center",
-      "justify-end",
+      "justify-between",
       "border-b",
-      "border-[var(--border)]",
-      "bg-[var(--surface)]",
+      "border-white/30",
+      "bg-white/70",
+      "backdrop-blur-xl",
       "px-5",
       "max-[920px]:h-12",
       "max-[920px]:px-4",
