@@ -24,7 +24,7 @@ describe("ToolbarBreadcrumb", () => {
     mockUsePathname.mockReturnValue("/co-lanh-dictionary");
     render(<ToolbarBreadcrumb />);
     expect(screen.getByText("Từ điển")).toBeInTheDocument();
-    expect(screen.getByText("Cô Lãnh")).toBeInTheDocument();
+    expect(screen.getByText("Christine Ho")).toBeInTheDocument();
   });
 
   it("renders eyebrow and title for /my-vocabulary", () => {
