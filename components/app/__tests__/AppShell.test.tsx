@@ -31,7 +31,7 @@ describe("AppShell", () => {
       "h-screen",
       "max-h-screen",
       "min-h-screen",
-      "overflow-hidden",
+      "overflow-y-auto",
       "grid-cols-[72px_minmax(0,1fr)]",
       "grid-rows-[minmax(0,1fr)]",
       "max-[920px]:h-dvh",
@@ -48,10 +48,10 @@ describe("AppShell", () => {
     ).toHaveClass("flex", "min-w-0", "min-h-0", "flex-col");
     expect(screen.getByRole("banner")).toHaveClass(
       "relative",
-      "z-[120]",
+      "z-120",
       "overflow-visible",
       "flex",
-      "h-[52px]",
+      "h-13",
       "shrink-0",
       "items-center",
       "justify-between",
@@ -68,7 +68,7 @@ describe("AppShell", () => {
       "min-h-0",
       "flex-1",
       "flex-col",
-      "overflow-hidden",
+      "overflow-y-auto",
     );
     expect(screen.getByRole("main")).not.toHaveClass("px-4", "py-6", "md:px-8", "md:py-8");
     expect(screen.getByRole("main")).toHaveTextContent("Trang nội dung");

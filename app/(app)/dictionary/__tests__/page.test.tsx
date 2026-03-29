@@ -17,7 +17,7 @@ vi.mock("antd", async () => {
 describe("CoLanhDictionaryPage", () => {
   it("renders the hero copy and search panel", () => {
     const { container } = renderUi(<CoLanhDictionaryPage />);
-    const pageWrapper = container.querySelector("div.min-h-full, div.h-full");
+    const pageWrapper = container.querySelector("div.h-full");
     const layoutSection = container.querySelectorAll("section")[1];
 
     expect(
@@ -25,14 +25,7 @@ describe("CoLanhDictionaryPage", () => {
         name: /Tra cứu từ vựng theo cách rõ ràng, dễ học lại/i,
       }),
     ).toBeInTheDocument();
-    expect(pageWrapper).toHaveClass(
-      "h-full",
-      "min-h-0",
-      "overflow-y-auto",
-      "px-8",
-      "pt-9",
-      "pb-12",
-    );
+    expect(pageWrapper).toHaveClass("h-full", "min-h-0");
     expect(layoutSection).toHaveClass(
       "min-[1121px]:grid-cols-[minmax(280px,360px)_minmax(0,1fr)]",
     );

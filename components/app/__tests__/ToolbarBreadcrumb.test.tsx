@@ -20,8 +20,8 @@ describe("ToolbarBreadcrumb", () => {
     expect(screen.getByText("Trò chuyện")).toBeInTheDocument();
   });
 
-  it("renders eyebrow and title for /co-lanh-dictionary", () => {
-    mockUsePathname.mockReturnValue("/co-lanh-dictionary");
+  it("renders eyebrow and title for /dictionary", () => {
+    mockUsePathname.mockReturnValue("/dictionary");
     render(<ToolbarBreadcrumb />);
     expect(screen.getByText("Từ điển")).toBeInTheDocument();
     expect(screen.getByText("Christine Ho")).toBeInTheDocument();

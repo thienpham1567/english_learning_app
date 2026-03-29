@@ -239,7 +239,7 @@ describe("DictionaryResultCard", () => {
     expect(getByText("The plane took off on time.")).toBeInTheDocument();
   });
 
-  it("renders a translate icon for each bilingual example", () => {
+  it("wraps each bilingual example in a cursor-help tooltip span", () => {
     const { container } = renderUi(
       <DictionaryResultCard
         vocabulary={bilingualEntry}
@@ -248,8 +248,8 @@ describe("DictionaryResultCard", () => {
         onSynonymClick={vi.fn()}
       />,
     );
-    const icons = container.querySelectorAll("[data-testid='translate-icon']");
-    expect(icons).toHaveLength(3);
+    const tooltipSpans = container.querySelectorAll("span.cursor-help");
+    expect(tooltipSpans).toHaveLength(3);
   });
 
   it("falls back to examplesVi plain strings when examples is empty", () => {
