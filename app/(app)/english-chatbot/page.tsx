@@ -11,6 +11,7 @@ import type { PageMessage } from "@/components/ChatMessage";
 import { ConversationList } from "@/components/app/ConversationList";
 import type { ConversationItem } from "@/components/app/ConversationList";
 import { PersonaSwitcher } from "@/components/app/PersonaSwitcher";
+import { ChatHeader } from "@/components/app/ChatHeader";
 import { deriveTitle } from "@/lib/chat/derive-title";
 import { DEFAULT_PERSONA_ID, PERSONAS } from "@/lib/chat/personas";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
@@ -60,6 +61,10 @@ export default function EnglishChatbotPage() {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isNearBottomRef = useRef(true);
   const [showScrollBtn, setShowScrollBtn] = useState(false);
+  const lastMsg = messages.at(-1);
+  const streamingHasStarted =
+    isLoading && lastMsg?.role === "assistant" && (lastMsg.text.length ?? 0) > 0;
+  const activePersona = PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
 
   const loadConversations = useCallback(async () => {
     try {
@@ -306,6 +311,7 @@ export default function EnglishChatbotPage() {
 
       {/* Chat area */}
       <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
+        <ChatHeader personaId={selectedPersonaId} />
         <div
           ref={scrollContainerRef}
           onScroll={handleScroll}
@@ -410,11 +416,19 @@ export default function EnglishChatbotPage() {
                     isStreaming={isLoading && index === messages.length - 1 && m.role === "assistant"}
                   />
                 ))}
-                {isLoading && (
-                  <div className="mt-[28px]">
-                    <TypingIndicator />
-                  </div>
-                )}
+                <AnimatePresence>
+                  {isLoading && !streamingHasStarted && (
+                    <motion.div
+                      className="mt-[28px]"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      <TypingIndicator personaName={activePersona.label.split(" —")[0]} />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             )}
 
