@@ -13,7 +13,7 @@ import type { Vocabulary } from "@/lib/schemas/vocabulary";
 
 const QUERY_PATTERN = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
 
-export default function CoLanhDictionaryPage() {
+export default function DictionaryPage() {
   const [messageApi, contextHolder] = message.useMessage();
   const [query, setQuery] = useState("");
   const [result, setResult] = useState<Vocabulary | null>(null);

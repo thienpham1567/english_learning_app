@@ -15,6 +15,23 @@ import { buildDictionaryInstructions } from "@/lib/dictionary/prompt";
 
 const allowedQueryPattern = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
 
+/**
+ * Returns true if the headword is plausibly related to the query.
+ * Catches cases where the LLM translated a non-English word (e.g. "meo" → "cat"):
+ * the two strings would share almost no characters.
+ * Allows legitimate variation such as British/American spellings ("colour"/"color"),
+ * irregular forms ("ran"/"run"), or multi-word entries.
+ */
+function isHeadwordConsistentWithQuery(headword: string, query: string): boolean {
+  const h = headword.toLowerCase().replace(/\s+/g, "");
+  const q = query.toLowerCase().replace(/\s+/g, "");
+  if (h === q) return true;
+  const setH = new Set(h);
+  const setQ = new Set(q);
+  const overlap = [...setH].filter((c) => setQ.has(c)).length;
+  return overlap / Math.min(setH.size, setQ.size) >= 0.5;
+}
+
 async function upsertUserVocabulary(userId: string, query: string): Promise<boolean> {
   const [row] = await db
     .insert(userVocabulary)
@@ -56,8 +73,18 @@ export async function POST(req: Request) {
       .limit(1);
 
     if (hit) {
-      const saved = session ? await upsertUserVocabulary(session.user.id, cacheKey) : false;
-      return NextResponse.json({ data: hit.data, cached: true, saved });
+      const isBadEntry =
+        hit.data.overviewVi.startsWith("[NOT_ENGLISH]") ||
+        !isHeadwordConsistentWithQuery(hit.data.headword, cacheKey);
+
+      if (isBadEntry) {
+        // Purge the stale entry so the LLM gets a chance to re-evaluate
+        await db.delete(vocabularyCache).where(eq(vocabularyCache.query, cacheKey));
+        // Fall through to LLM call below
+      } else {
+        const saved = session ? await upsertUserVocabulary(session.user.id, cacheKey) : false;
+        return NextResponse.json({ data: hit.data, cached: true, saved });
+      }
     }
 
     const entryType = classifyDictionaryEntry(normalized);
@@ -76,6 +103,14 @@ export async function POST(req: Request) {
     });
 
     const parsed = VocabularySchema.parse(JSON.parse(response.output_text));
+
+    if (parsed.overviewVi.startsWith("[NOT_ENGLISH]")) {
+      return NextResponse.json(
+        { error: "Vui lòng nhập từ hoặc cụm từ tiếng Anh hợp lệ." },
+        { status: 400 },
+      );
+    }
+
     const expiresAt = new Date(Date.now() + openAiConfig.dictionaryCacheTtlMs);
 
     await db

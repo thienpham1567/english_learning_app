@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import CoLanhDictionaryPage from "@/app/(app)/co-lanh-dictionary/page";
+import CoLanhDictionaryPage from "@/app/(app)/dictionary/page";
 import { renderUi } from "@/test/render";
 
 vi.mock("antd", async () => {
