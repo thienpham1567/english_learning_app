@@ -75,12 +75,12 @@ function SignInContent() {
       <div className="flex flex-col items-center text-center">
         <Image
           src="/english-logo-app.svg"
-          alt="Thien English"
+          alt="English logo app"
           width={250}
           height={150}
           className="h-14 w-auto rounded-xl"
-          aria-hidden="true"
           priority
+          unoptimized
         />
 
         <h1 className="mt-5 text-4xl italic [font-family:var(--font-display)] text-(--ink)">

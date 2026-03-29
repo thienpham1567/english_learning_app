@@ -38,8 +38,10 @@ describe("SignInPage", () => {
     renderUi(<SignInPage />);
 
     const hero = screen.getByRole("heading", { name: "Xin chào" }).parentElement;
+    const logo = screen.getByAltText("English logo app");
 
     expect(hero).toHaveClass("flex", "flex-col", "items-center", "text-center");
+    expect(logo).toHaveAttribute("src", expect.stringContaining("english-logo-app.svg"));
     expect(screen.getByRole("heading", { name: "Xin chào" })).toBeInTheDocument();
     expect(screen.getByPlaceholderText("Tên đăng nhập")).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Đăng nhập bằng Google" })).toBeInTheDocument();

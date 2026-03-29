@@ -32,7 +32,7 @@ describe("UserMenu", () => {
     fireEvent.click(screen.getByRole("button", { name: /cô lành/i }));
 
     expect(screen.getByRole("button", { name: "Đăng xuất" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Đăng xuất" }).parentElement).toHaveClass("z-50");
+    expect(screen.getByRole("button", { name: "Đăng xuất" }).parentElement).toHaveClass("z-[200]");
   });
 
   it("keeps the user name hidden through the 920px shell breakpoint", () => {

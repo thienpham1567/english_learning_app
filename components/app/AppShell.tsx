@@ -39,7 +39,7 @@ export function AppShell({ children, user }: { children: ReactNode; user: AuthUs
       <AppSidebar isExpanded={isExpanded} onToggle={handleToggle} />
       <UserProvider user={user}>
         <div className="flex min-w-0 min-h-0 flex-col">
-          <header className="flex h-[52px] shrink-0 items-center justify-between border-b border-white/30 bg-white/70 backdrop-blur-xl px-5 max-[920px]:h-12 max-[920px]:px-4">
+          <header className="relative z-[120] flex h-[52px] shrink-0 items-center justify-between overflow-visible border-b border-white/30 bg-white/70 px-5 backdrop-blur-xl max-[920px]:h-12 max-[920px]:px-4">
             <ToolbarBreadcrumb />
             <div className="flex items-center gap-3">
               <UserMenu user={user} />

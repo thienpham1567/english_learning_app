@@ -42,6 +42,9 @@ describe("AppShell", () => {
       container.firstElementChild?.firstElementChild?.nextElementSibling,
     ).toHaveClass("flex", "min-w-0", "min-h-0", "flex-col");
     expect(screen.getByRole("banner")).toHaveClass(
+      "relative",
+      "z-[120]",
+      "overflow-visible",
       "flex",
       "h-[52px]",
       "shrink-0",
