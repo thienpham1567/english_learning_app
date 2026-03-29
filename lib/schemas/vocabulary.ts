@@ -11,6 +11,7 @@ export const DictionarySenseSchema = z.object({
     .array(z.object({ en: z.string(), vi: z.string() }))
     .default([]),
   synonyms: z.array(z.string()).default([]),
+  antonyms: z.array(z.string()).default([]),
   patterns: z.array(z.string()),
   relatedExpressions: z.array(z.string()),
   commonMistakesVi: z.array(z.string()),
