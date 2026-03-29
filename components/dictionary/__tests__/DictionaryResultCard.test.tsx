@@ -29,6 +29,7 @@ const singleSenseEntry = {
         "Chuyến bay cất cánh lúc bình minh.",
         "Tôi luôn nhìn qua cửa sổ khi máy bay cất cánh.",
       ],
+      antonyms: [],
       patterns: [],
       relatedExpressions: [],
       commonMistakesVi: [],
@@ -57,6 +58,7 @@ const multiSenseEntry = {
       usageNoteVi: null,
       examples: [],
       synonyms: [],
+      antonyms: [],
       examplesVi: ["Tôi chạy mỗi sáng."],
       patterns: [],
       relatedExpressions: [],
@@ -70,6 +72,7 @@ const multiSenseEntry = {
       usageNoteVi: null,
       examples: [],
       synonyms: [],
+      antonyms: [],
       examplesVi: ["Cô ấy điều hành công ty."],
       patterns: [],
       relatedExpressions: [],
@@ -103,6 +106,7 @@ const bilingualEntry = {
         { en: "I always watch when the plane takes off.", vi: "Tôi luôn nhìn qua cửa sổ khi máy bay cất cánh." },
       ],
       synonyms: [],
+      antonyms: [],
       examplesVi: [],
       patterns: [],
       relatedExpressions: [],
@@ -133,6 +137,7 @@ const synonymEntry = {
       examples: [],
       examplesVi: ["Tàu rời đi lúc 9 giờ."],
       synonyms: ["leave", "exit", "go"],
+      antonyms: [],
       patterns: [],
       relatedExpressions: [],
       commonMistakesVi: [],
@@ -161,6 +166,7 @@ const ipaEntry = {
       usageNoteVi: null,
       examples: [],
       synonyms: [],
+      antonyms: [],
       examplesVi: ["Tôi chạy mỗi sáng."],
       patterns: [],
       relatedExpressions: [],
@@ -172,7 +178,7 @@ const ipaEntry = {
 describe("DictionaryResultCard", () => {
   it("shows result heading, custom tab buttons, and active sense content", () => {
     const { getByText, getByRole, container } = renderUi(
-      <DictionaryResultCard vocabulary={singleSenseEntry} hasSearched isLoading={false} onSynonymClick={vi.fn()} />,
+      <DictionaryResultCard vocabulary={singleSenseEntry} hasSearched isLoading={false} />,
     );
 
     expect(getByText("Kết quả tra cứu")).toBeInTheDocument();
@@ -186,7 +192,7 @@ describe("DictionaryResultCard", () => {
 
   it("switches visible sense when a tab button is clicked", () => {
     const { getByRole, getByText, queryByText } = renderUi(
-      <DictionaryResultCard vocabulary={multiSenseEntry} hasSearched isLoading={false} onSynonymClick={vi.fn()} />,
+      <DictionaryResultCard vocabulary={multiSenseEntry} hasSearched isLoading={false} />,
     );
 
     // First sense visible by default
@@ -202,7 +208,7 @@ describe("DictionaryResultCard", () => {
 
   it("loading state shows animate-pulse skeleton and no antd card", () => {
     const { container } = renderUi(
-      <DictionaryResultCard vocabulary={null} hasSearched isLoading onSynonymClick={vi.fn()} />,
+      <DictionaryResultCard vocabulary={null} hasSearched isLoading />,
     );
 
     expect(container.querySelector(".animate-pulse")).toBeInTheDocument();
@@ -211,7 +217,7 @@ describe("DictionaryResultCard", () => {
 
   it("pre-search empty state shows simplified BookOpen icon and prompt text", () => {
     const { getByText } = renderUi(
-      <DictionaryResultCard vocabulary={null} hasSearched={false} isLoading={false} onSynonymClick={vi.fn()} />,
+      <DictionaryResultCard vocabulary={null} hasSearched={false} isLoading={false} />,
     );
 
     expect(getByText("Nhập từ cần tra")).toBeInTheDocument();
@@ -219,7 +225,7 @@ describe("DictionaryResultCard", () => {
 
   it("populated header row wraps to column on phones", () => {
     const { container } = renderUi(
-      <DictionaryResultCard vocabulary={singleSenseEntry} hasSearched isLoading={false} onSynonymClick={vi.fn()} />,
+      <DictionaryResultCard vocabulary={singleSenseEntry} hasSearched isLoading={false} />,
     );
 
     expect(
@@ -233,7 +239,6 @@ describe("DictionaryResultCard", () => {
         vocabulary={bilingualEntry}
         hasSearched
         isLoading={false}
-        onSynonymClick={vi.fn()}
       />,
     );
     expect(getByText("The plane took off on time.")).toBeInTheDocument();
@@ -245,7 +250,6 @@ describe("DictionaryResultCard", () => {
         vocabulary={bilingualEntry}
         hasSearched
         isLoading={false}
-        onSynonymClick={vi.fn()}
       />,
     );
     const tooltipSpans = container.querySelectorAll("span.cursor-help");
@@ -258,56 +262,30 @@ describe("DictionaryResultCard", () => {
         vocabulary={singleSenseEntry}
         hasSearched
         isLoading={false}
-        onSynonymClick={vi.fn()}
       />,
     );
     expect(getByText("Máy bay cất cánh đúng giờ.")).toBeInTheDocument();
   });
 
-  it("renders synonym pills when synonyms array is populated", () => {
+  it("renders Thesaurus button when vocabulary is present and calls onOpenThesaurus on click", () => {
+    const onOpenThesaurus = vi.fn();
     const { getByRole } = renderUi(
-      <DictionaryResultCard
-        vocabulary={synonymEntry}
-        hasSearched
-        isLoading={false}
-        onSynonymClick={vi.fn()}
-      />,
-    );
-    expect(getByRole("button", { name: "leave" })).toBeInTheDocument();
-    expect(getByRole("button", { name: "exit" })).toBeInTheDocument();
-    expect(getByRole("button", { name: "go" })).toBeInTheDocument();
-  });
-
-  it("calls onSynonymClick with the synonym word when a pill is clicked", () => {
-    const onSynonymClick = vi.fn();
-    const { getByRole } = renderUi(
-      <DictionaryResultCard
-        vocabulary={synonymEntry}
-        hasSearched
-        isLoading={false}
-        onSynonymClick={onSynonymClick}
-      />,
-    );
-    fireEvent.click(getByRole("button", { name: "leave" }));
-    expect(onSynonymClick).toHaveBeenCalledOnce();
-    expect(onSynonymClick).toHaveBeenCalledWith("leave");
-  });
-
-  it("does not render synonyms section when synonyms is empty", () => {
-    const { queryByText } = renderUi(
       <DictionaryResultCard
         vocabulary={singleSenseEntry}
         hasSearched
         isLoading={false}
-        onSynonymClick={vi.fn()}
+        onOpenThesaurus={onOpenThesaurus}
       />,
     );
-    expect(queryByText("Từ đồng nghĩa")).not.toBeInTheDocument();
+    const btn = getByRole("button", { name: /thesaurus/i });
+    expect(btn).toBeInTheDocument();
+    fireEvent.click(btn);
+    expect(onOpenThesaurus).toHaveBeenCalledOnce();
   });
 
   it("renders dual US and UK phonetics when phoneticsUs and phoneticsUk are set", () => {
     const { getByText } = renderUi(
-      <DictionaryResultCard vocabulary={ipaEntry} hasSearched isLoading={false} onSynonymClick={vi.fn()} />,
+      <DictionaryResultCard vocabulary={ipaEntry} hasSearched isLoading={false} />,
     );
     expect(getByText("/rʌn/")).toBeInTheDocument();
     expect(getByText("/rɑːn/")).toBeInTheDocument();
@@ -315,14 +293,14 @@ describe("DictionaryResultCard", () => {
 
   it("renders POS badge when partOfSpeech is set", () => {
     const { getByText } = renderUi(
-      <DictionaryResultCard vocabulary={ipaEntry} hasSearched isLoading={false} onSynonymClick={vi.fn()} />,
+      <DictionaryResultCard vocabulary={ipaEntry} hasSearched isLoading={false} />,
     );
     expect(getByText("verb")).toBeInTheDocument();
   });
 
   it("falls back to single phonetic when phoneticsUs and phoneticsUk are null", () => {
     const { getByText, queryByLabelText } = renderUi(
-      <DictionaryResultCard vocabulary={singleSenseEntry} hasSearched isLoading={false} onSynonymClick={vi.fn()} />,
+      <DictionaryResultCard vocabulary={singleSenseEntry} hasSearched isLoading={false} />,
     );
     expect(getByText("/teɪk ˈɒf/")).toBeInTheDocument();
     expect(queryByLabelText("Play US pronunciation")).not.toBeInTheDocument();
@@ -340,7 +318,7 @@ describe("DictionaryResultCard", () => {
     vi.stubGlobal("SpeechSynthesisUtterance", vi.fn(() => mockUtterance));
 
     const { getByLabelText } = renderUi(
-      <DictionaryResultCard vocabulary={ipaEntry} hasSearched isLoading={false} onSynonymClick={vi.fn()} />,
+      <DictionaryResultCard vocabulary={ipaEntry} hasSearched isLoading={false} />,
     );
 
     fireEvent.click(getByLabelText("Play US pronunciation"));

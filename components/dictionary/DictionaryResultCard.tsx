@@ -13,7 +13,7 @@ type DictionaryResultCardProps = {
   isLoading: boolean;
   saved?: boolean | null;
   onToggleSaved?: () => void;
-  onSynonymClick: (word: string) => void;
+  onOpenThesaurus?: () => void;
 };
 
 const SENSE_ITEM_CLASS =
@@ -38,16 +38,9 @@ const LEVEL_COLORS: Record<string, string> = {
 // Module-level: ensures only one utterance plays at a time across re-renders
 let activeUtterance: SpeechSynthesisUtterance | null = null;
 
-function SensePanel({
-  sense,
-  onSynonymClick,
-}: {
-  sense: DictionarySense;
-  onSynonymClick: (word: string) => void;
-}) {
+function SensePanel({ sense }: { sense: DictionarySense }) {
   const examples = sense.examples ?? [];
   const examplesVi = sense.examplesVi ?? [];
-  const synonyms = sense.synonyms ?? [];
 
   return (
     <motion.div
@@ -94,26 +87,6 @@ function SensePanel({
                   </li>
                 ))}
           </ul>
-        </section>
-      )}
-
-      {synonyms.length > 0 && (
-        <section className="space-y-2">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
-            Từ đồng nghĩa
-          </h3>
-          <div className="flex flex-wrap gap-2">
-            {synonyms.map((synonym) => (
-              <button
-                key={synonym}
-                type="button"
-                onClick={() => onSynonymClick(synonym)}
-                className="rounded-full border border-(--border) bg-transparent px-3 py-1 text-sm text-[var(--text-secondary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
-              >
-                {synonym}
-              </button>
-            ))}
-          </div>
         </section>
       )}
 
@@ -205,7 +178,7 @@ export function DictionaryResultCard({
   isLoading,
   saved,
   onToggleSaved,
-  onSynonymClick,
+  onOpenThesaurus,
 }: DictionaryResultCardProps) {
   const firstSenseId = vocabulary?.senses[0]?.id ?? "";
   const [activeKey, setActiveKey] = useState(firstSenseId);
@@ -341,6 +314,16 @@ export function DictionaryResultCard({
                   {vocabulary.partOfSpeech}
                 </Tag>
               )}
+              {vocabulary && onOpenThesaurus && (
+                <button
+                  type="button"
+                  onClick={onOpenThesaurus}
+                  aria-label="Thesaurus"
+                  className="flex items-center gap-1 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--text-secondary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                >
+                  Thesaurus
+                </button>
+              )}
               {saved != null && onToggleSaved && (
                 <button
                   onClick={onToggleSaved}
@@ -430,7 +413,7 @@ export function DictionaryResultCard({
               ))}
             </div>
             {activeSense && (
-              <SensePanel sense={activeSense} onSynonymClick={onSynonymClick} />
+              <SensePanel sense={activeSense} />
             )}
           </div>
         </div>
