@@ -40,6 +40,9 @@ vi.mock("@/lib/openai/client", () => ({
           headword: "take off",
           entryType: "phrasal_verb",
           phonetic: null,
+          phoneticsUs: "/teɪk ɒf/",
+          phoneticsUk: "/teɪk ɒf/",
+          partOfSpeech: "phrasal verb",
           level: null,
           register: null,
           overviewVi: "Một cụm động từ thông dụng.",
@@ -56,6 +59,8 @@ vi.mock("@/lib/openai/client", () => ({
                 "Chuyến bay cất cánh lúc bình minh.",
                 "Tôi nhìn qua cửa sổ khi máy bay cất cánh.",
               ],
+              examples: [],
+              synonyms: [],
               patterns: [],
               relatedExpressions: [],
               commonMistakesVi: [],
@@ -134,6 +139,9 @@ describe("/api/dictionary", () => {
       headword: "take off",
       entryType: "phrasal_verb",
       phonetic: null,
+      phoneticsUs: null,
+      phoneticsUk: null,
+      partOfSpeech: null,
       level: null,
       register: null,
       overviewVi: "Một cụm động từ thông dụng.",
@@ -177,5 +185,21 @@ describe("/api/dictionary", () => {
     const body = await response.json();
     expect(body).toHaveProperty("cached", true);
     expect(body).toHaveProperty("data.headword", "take off");
+  });
+
+  it("returns phoneticsUs, phoneticsUk, and partOfSpeech in the response data", async () => {
+    const { POST } = await import("@/app/api/dictionary/route");
+    const response = await POST(
+      new Request("http://localhost/api/dictionary", {
+        method: "POST",
+        body: JSON.stringify({ word: "take off" }),
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body.data).toHaveProperty("phoneticsUs", "/teɪk ɒf/");
+    expect(body.data).toHaveProperty("phoneticsUk", "/teɪk ɒf/");
+    expect(body.data).toHaveProperty("partOfSpeech", "phrasal verb");
   });
 });
