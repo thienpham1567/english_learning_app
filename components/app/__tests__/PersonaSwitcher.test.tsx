@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
@@ -31,6 +31,19 @@ describe("PersonaSwitcher", () => {
     await user.click(screen.getByText("Christine Ho — IELTS Master"));
 
     expect(onChange).toHaveBeenCalledWith("christine");
+  });
+
+  it("closes the dropdown after selecting a persona", async () => {
+    const user = userEvent.setup();
+    renderUi(<PersonaSwitcher value="simon" onChange={vi.fn()} />);
+
+    await user.click(screen.getByRole("button", { name: /persona/i }));
+    expect(screen.getByText("Christine Ho — IELTS Master")).toBeInTheDocument();
+
+    await user.click(screen.getByText("Christine Ho — IELTS Master"));
+    await waitFor(() =>
+      expect(screen.queryByText("Christine Ho — IELTS Master")).not.toBeInTheDocument()
+    );
   });
 
   it("button is disabled when disabled prop is true", () => {
