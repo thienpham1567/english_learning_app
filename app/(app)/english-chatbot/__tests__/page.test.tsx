@@ -22,6 +22,38 @@ describe("EnglishChatbotPage", () => {
       "focus-visible:outline-(--accent)",
     );
   });
+
+  it("keeps scrolling inside the transcript instead of the main page", () => {
+    const { container } = renderUi(<EnglishChatbotPage />);
+    const header = screen.getByText(/Chọn gia sư để bắt đầu/i)
+      .closest("div[class*='overflow-y-auto']")
+      ?.previousElementSibling as HTMLElement | null;
+    const transcript = screen.getByText(/Chọn gia sư để bắt đầu/i)
+      .closest("div[class*='overflow-y-auto']") as HTMLElement | null;
+    const composer = screen.getByPlaceholderText(/Nhập câu hỏi/i)
+      .closest("div[class*='backdrop-blur-md']") as HTMLElement | null;
+    const chatArea = transcript?.parentElement as HTMLElement | null;
+
+    expect(container.firstElementChild).toHaveClass(
+      "flex",
+      "h-full",
+      "max-h-full",
+      "min-h-0",
+      "flex-1",
+      "overflow-hidden",
+    );
+
+    expect(chatArea).toHaveClass("min-h-0", "overflow-hidden");
+    expect(header).toHaveClass("shrink-0");
+
+    expect(transcript).toHaveClass(
+      "flex-1",
+      "min-h-0",
+      "overflow-y-auto",
+    );
+
+    expect(composer).toHaveClass("shrink-0");
+  });
 });
 
 describe("getMessageSpacingClassName", () => {

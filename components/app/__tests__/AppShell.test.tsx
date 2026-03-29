@@ -28,9 +28,14 @@ describe("AppShell", () => {
 
     expect(container.firstElementChild).toHaveClass(
       "grid",
+      "h-screen",
+      "max-h-screen",
       "min-h-screen",
+      "overflow-hidden",
       "grid-cols-[72px_minmax(0,1fr)]",
       "grid-rows-[minmax(0,1fr)]",
+      "max-[920px]:h-dvh",
+      "max-[920px]:max-h-dvh",
       "max-[920px]:min-h-dvh",
       "max-[920px]:grid-cols-1",
       "max-[920px]:grid-rows-[auto_minmax(0,1fr)]",

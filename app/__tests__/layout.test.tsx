@@ -18,5 +18,7 @@ describe("RootLayout", () => {
 
     expect(markup).toContain("text-[15px]");
     expect(markup).toContain("leading-[1.6]");
+    expect(markup).toContain("h-full");
+    expect(markup).toContain("overflow-hidden");
   });
 });

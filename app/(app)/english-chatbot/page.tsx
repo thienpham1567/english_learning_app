@@ -298,7 +298,7 @@ export default function EnglishChatbotPage() {
   const hasMessages = messages.length > 0;
 
   return (
-    <div className="flex min-h-0 flex-1 overflow-hidden rounded-2xl border border-(--border) bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.7))] shadow-(--shadow-md)">
+    <div className="flex h-full max-h-full min-h-0 flex-1 overflow-hidden rounded-2xl border border-(--border) bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.7))] shadow-(--shadow-md)">
       {/* Thread list */}
       <ConversationList
         conversations={conversations}
@@ -309,7 +309,7 @@ export default function EnglishChatbotPage() {
       />
 
       {/* Chat area */}
-      <div className="relative flex min-h-0 flex-1 flex-col overflow-hidden">
+      <div className="relative flex h-full min-h-0 flex-1 flex-col overflow-hidden">
         <ChatHeader personaId={selectedPersonaId} />
         <div
           ref={scrollContainerRef}
@@ -471,7 +471,7 @@ export default function EnglishChatbotPage() {
           )}
         </AnimatePresence>
 
-        <div className="bg-(--bg)/80 px-4 py-4 backdrop-blur-md md:px-8">
+        <div className="shrink-0 bg-(--bg)/80 px-4 py-4 backdrop-blur-md md:px-8">
           <div className="mx-auto flex w-full max-w-5xl flex-col gap-3">
             <div className="flex items-end gap-3 rounded-2xl border border-(--border) bg-(--surface) p-3 shadow-(--shadow-md) transition-[border-color,box-shadow] duration-200 focus-within:border-(--accent) focus-within:ring-2 focus-within:ring-(--accent-muted) focus-within:shadow-(--shadow-lg)">
               <PersonaSwitcher

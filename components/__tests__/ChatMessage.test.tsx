@@ -44,4 +44,19 @@ describe("ChatMessage", () => {
     const cursor = container.querySelector('[aria-hidden="true"]');
     expect(cursor).not.toBeNull();
   });
+
+  it("keeps long assistant replies inside the main transcript scroller", () => {
+    const { container } = renderUi(
+      <ChatMessage
+        message={{
+          id: "long-1",
+          role: "assistant",
+          text: "Paragraph\n\n".repeat(80),
+        }}
+      />,
+    );
+
+    const markdownBody = container.querySelector(".rounded-bl-md > div");
+    expect(markdownBody).not.toHaveClass("max-h-[60vh]", "overflow-y-auto");
+  });
 });

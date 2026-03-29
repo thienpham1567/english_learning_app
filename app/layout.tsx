@@ -34,9 +34,9 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={`${sourceSans.variable} ${fraunces.variable} ${jetbrainsMono.variable}`}
+      className={`h-full overflow-hidden ${sourceSans.variable} ${fraunces.variable} ${jetbrainsMono.variable}`}
     >
-      <body className="min-h-screen bg-(--bg) text-[15px] leading-[1.6] [font-family:var(--font-body)] text-(--text-primary) antialiased">
+      <body className="h-full overflow-hidden bg-(--bg) text-[15px] leading-[1.6] [font-family:var(--font-body)] text-(--text-primary) antialiased">
         {children}
       </body>
     </html>
