@@ -181,4 +181,18 @@ describe("ThesaurusSheet", () => {
     );
     expect(screen.queryByText("leave")).not.toBeInTheDocument();
   });
+
+  it("closes sheet when Escape key is pressed", () => {
+    const onClose = vi.fn();
+    renderUi(
+      <ThesaurusSheet
+        vocabulary={vocabulary}
+        isOpen
+        onClose={onClose}
+        onWordClick={vi.fn()}
+      />,
+    );
+    fireEvent.keyDown(document, { key: "Escape" });
+    expect(onClose).toHaveBeenCalledOnce();
+  });
 });
