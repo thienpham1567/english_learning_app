@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 
 const BREADCRUMBS: Record<string, { eyebrow: string; title: string }> = {
   "/english-chatbot": { eyebrow: "Trợ lý học tập", title: "Trò chuyện" },
-  "/co-lanh-dictionary": { eyebrow: "Từ điển", title: "Christine Ho" },
+  "/dictionary": { eyebrow: "Từ điển", title: "Christine Ho" },
   "/my-vocabulary": { eyebrow: "Từ vựng của tôi", title: "Từ vựng" },
 };
 

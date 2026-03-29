@@ -9,7 +9,7 @@ import { motion } from "motion/react";
 
 const navItems = [
   { href: "/english-chatbot", label: "Trò chuyện", icon: MessageCircleMore },
-  { href: "/co-lanh-dictionary", label: "Từ điển", icon: BookOpen },
+  { href: "/dictionary", label: "Từ điển", icon: BookOpen },
   { href: "/my-vocabulary", label: "Từ vựng", icon: BookMarked },
 ];
 

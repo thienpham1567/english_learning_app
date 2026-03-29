@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Tag, Tooltip } from "antd";
-import { Bookmark, BookmarkCheck, BookOpen, Languages, Loader2, Volume2 } from "lucide-react";
+import { Bookmark, BookmarkCheck, BookOpen, Loader2, Volume2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import type { DictionarySense, Vocabulary } from "@/lib/schemas/vocabulary";
@@ -79,19 +79,13 @@ function SensePanel({
             {examples.length > 0
               ? examples.map((example, i) => (
                   <li key={i} className={SENSE_ITEM_CLASS}>
-                    <span className="flex items-baseline gap-1.5">
+                    {example.vi ? (
+                      <Tooltip placement="top" title={example.vi}>
+                        <span className="cursor-help">{example.en}</span>
+                      </Tooltip>
+                    ) : (
                       <span>{example.en}</span>
-                      {example.vi && (
-                        <Tooltip placement="top" title={example.vi}>
-                          <span
-                            data-testid="translate-icon"
-                            className="inline-flex shrink-0 cursor-default items-center text-[var(--text-muted)] transition hover:text-[var(--accent)]"
-                          >
-                            <Languages size={13} />
-                          </span>
-                        </Tooltip>
-                      )}
-                    </span>
+                    )}
                   </li>
                 ))
               : examplesVi.map((example) => (

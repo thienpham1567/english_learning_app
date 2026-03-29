@@ -151,7 +151,7 @@ export function VocabularyDetailSheet({
                   <p>Định nghĩa không còn trong bộ nhớ đệm.</p>
                   <p>Hãy tra lại từ này để xem đầy đủ.</p>
                   <a
-                    href={`/co-lanh-dictionary?q=${encodeURIComponent(query ?? "")}`}
+                    href={`/dictionary?q=${encodeURIComponent(query ?? "")}`}
                     className="inline-flex items-center gap-1 text-[var(--accent)] underline"
                   >
                     Tra lại <ExternalLink size={13} />
