@@ -1,4 +1,3 @@
-import { screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
 import { SimonAvatar } from "@/components/app/persona-avatars/SimonAvatar";
@@ -24,8 +23,22 @@ describe("Persona avatars", () => {
     expect(container.querySelector("svg")).not.toBeNull();
   });
 
+  it("ChristineAvatar respects size prop", () => {
+    const { container } = renderUi(<ChristineAvatar size={48} />);
+    const svg = container.querySelector("svg")!;
+    expect(svg.getAttribute("width")).toBe("48");
+    expect(svg.getAttribute("height")).toBe("48");
+  });
+
   it("EddieAvatar renders an svg", () => {
     const { container } = renderUi(<EddieAvatar />);
     expect(container.querySelector("svg")).not.toBeNull();
+  });
+
+  it("EddieAvatar respects size prop", () => {
+    const { container } = renderUi(<EddieAvatar size={48} />);
+    const svg = container.querySelector("svg")!;
+    expect(svg.getAttribute("width")).toBe("48");
+    expect(svg.getAttribute("height")).toBe("48");
   });
 });
