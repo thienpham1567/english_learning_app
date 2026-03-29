@@ -1,6 +1,10 @@
 import { motion } from "motion/react";
 
-export function TypingIndicator() {
+type Props = {
+  personaName?: string;
+};
+
+export function TypingIndicator({ personaName = "Gia sư" }: Props) {
   return (
     <motion.div
       className="flex items-end gap-3"
@@ -9,7 +13,7 @@ export function TypingIndicator() {
       transition={{ duration: 0.25 }}
       role="status"
       aria-live="polite"
-      aria-label="Cô Minh đang nhập phản hồi"
+      aria-label={`${personaName} đang nhập phản hồi`}
     >
       <div className="grid size-10 place-items-center rounded-full bg-[var(--accent-light)] text-lg shadow-[var(--shadow-sm)]">
         👩‍🏫
