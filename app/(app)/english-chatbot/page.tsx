@@ -62,8 +62,7 @@ export default function EnglishChatbotPage() {
   const isNearBottomRef = useRef(true);
   const [showScrollBtn, setShowScrollBtn] = useState(false);
   const lastMsg = messages.at(-1);
-  const streamingHasStarted =
-    isLoading && lastMsg?.role === "assistant" && (lastMsg.text.length ?? 0) > 0;
+  const streamingHasStarted = isLoading && lastMsg?.role === "assistant";
   const activePersona = PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
 
   const loadConversations = useCallback(async () => {

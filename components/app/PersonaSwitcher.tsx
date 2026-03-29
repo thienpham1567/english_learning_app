@@ -35,7 +35,11 @@ export function PersonaSwitcher({ value, onChange, disabled }: Props) {
   }
 
   return (
-    <div ref={containerRef} className="relative shrink-0">
+    <div
+      ref={containerRef}
+      className="relative shrink-0"
+      onKeyDown={(e) => { if (e.key === "Escape") setOpen(false); }}
+    >
       <button
         type="button"
         aria-label="Switch persona"
