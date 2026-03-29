@@ -14,7 +14,12 @@ export async function GET(_req: Request, { params }: { params: Params }) {
   }
 
   const { query } = await params;
-  const q = decodeURIComponent(query);
+  let q: string;
+  try {
+    q = decodeURIComponent(query);
+  } catch {
+    return Response.json({ error: "invalid_query" }, { status: 400 });
+  }
 
   const rows = await db
     .select({ data: vocabularyCache.data })

@@ -21,7 +21,6 @@ vi.mock("@/lib/db", () => ({
 }));
 
 beforeEach(() => {
-  vi.clearAllMocks();
   vi.resetModules();
 });
 
