@@ -8,6 +8,9 @@ const singleSenseEntry = {
   headword: "take off",
   entryType: "phrasal_verb" as const,
   phonetic: "/teɪk ˈɒf/",
+  phoneticsUs: null,
+  phoneticsUk: null,
+  partOfSpeech: null,
   level: "B1" as const,
   register: null,
   overviewVi: "Có nhiều nghĩa thông dụng trong giao tiếp.",
@@ -38,6 +41,9 @@ const multiSenseEntry = {
   headword: "run",
   entryType: "word" as const,
   phonetic: "/rʌn/",
+  phoneticsUs: null,
+  phoneticsUk: null,
+  partOfSpeech: null,
   level: "A2" as const,
   register: null,
   overviewVi: "Từ nhiều nghĩa phổ biến.",
@@ -77,6 +83,9 @@ const bilingualEntry = {
   headword: "take off",
   entryType: "phrasal_verb" as const,
   phonetic: null,
+  phoneticsUs: null,
+  phoneticsUk: null,
+  partOfSpeech: null,
   level: "B1" as const,
   register: null,
   overviewVi: "Có nhiều nghĩa.",
@@ -107,6 +116,9 @@ const synonymEntry = {
   headword: "depart",
   entryType: "word" as const,
   phonetic: null,
+  phoneticsUs: null,
+  phoneticsUk: null,
+  partOfSpeech: null,
   level: "B2" as const,
   register: null,
   overviewVi: "Rời đi.",
@@ -121,6 +133,35 @@ const synonymEntry = {
       examples: [],
       examplesVi: ["Tàu rời đi lúc 9 giờ."],
       synonyms: ["leave", "exit", "go"],
+      patterns: [],
+      relatedExpressions: [],
+      commonMistakesVi: [],
+    },
+  ],
+};
+
+const ipaEntry = {
+  query: "run",
+  headword: "run",
+  entryType: "word" as const,
+  phonetic: "/rʌn/",
+  phoneticsUs: "/rʌn/",
+  phoneticsUk: "/rɑːn/",
+  partOfSpeech: "verb",
+  level: "A1" as const,
+  register: null,
+  overviewVi: "Chạy.",
+  overviewEn: "To move fast.",
+  senses: [
+    {
+      id: "sense-1",
+      label: "Nghĩa 1",
+      definitionVi: "Chạy",
+      definitionEn: "Move fast on foot.",
+      usageNoteVi: null,
+      examples: [],
+      synonyms: [],
+      examplesVi: ["Tôi chạy mỗi sáng."],
       patterns: [],
       relatedExpressions: [],
       commonMistakesVi: [],
@@ -262,5 +303,52 @@ describe("DictionaryResultCard", () => {
       />,
     );
     expect(queryByText("Từ đồng nghĩa")).not.toBeInTheDocument();
+  });
+
+  it("renders dual US and UK phonetics when phoneticsUs and phoneticsUk are set", () => {
+    const { getByText } = renderUi(
+      <DictionaryResultCard vocabulary={ipaEntry} hasSearched isLoading={false} onSynonymClick={vi.fn()} />,
+    );
+    expect(getByText("/rʌn/")).toBeInTheDocument();
+    expect(getByText("/rɑːn/")).toBeInTheDocument();
+  });
+
+  it("renders POS badge when partOfSpeech is set", () => {
+    const { getByText } = renderUi(
+      <DictionaryResultCard vocabulary={ipaEntry} hasSearched isLoading={false} onSynonymClick={vi.fn()} />,
+    );
+    expect(getByText("verb")).toBeInTheDocument();
+  });
+
+  it("falls back to single phonetic when phoneticsUs and phoneticsUk are null", () => {
+    const { getByText, queryByLabelText } = renderUi(
+      <DictionaryResultCard vocabulary={singleSenseEntry} hasSearched isLoading={false} onSynonymClick={vi.fn()} />,
+    );
+    expect(getByText("/teɪk ˈɒf/")).toBeInTheDocument();
+    expect(queryByLabelText("Play US pronunciation")).not.toBeInTheDocument();
+  });
+
+  it("audio buttons call speechSynthesis.speak with correct lang", () => {
+    const mockSpeak = vi.fn();
+    const mockCancel = vi.fn();
+    Object.defineProperty(window, "speechSynthesis", {
+      value: { speak: mockSpeak, cancel: mockCancel },
+      writable: true,
+      configurable: true,
+    });
+    const mockUtterance = { lang: "", onstart: null as (() => void) | null, onend: null as (() => void) | null, onerror: null as (() => void) | null };
+    vi.stubGlobal("SpeechSynthesisUtterance", vi.fn(() => mockUtterance));
+
+    const { getByLabelText } = renderUi(
+      <DictionaryResultCard vocabulary={ipaEntry} hasSearched isLoading={false} onSynonymClick={vi.fn()} />,
+    );
+
+    fireEvent.click(getByLabelText("Play US pronunciation"));
+    expect(mockSpeak).toHaveBeenCalledOnce();
+    expect(mockUtterance.lang).toBe("en-US");
+
+    fireEvent.click(getByLabelText("Play UK pronunciation"));
+    expect(mockCancel).toHaveBeenCalled();
+    expect(mockUtterance.lang).toBe("en-GB");
   });
 });

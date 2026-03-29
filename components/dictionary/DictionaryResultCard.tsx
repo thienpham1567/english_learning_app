@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Tag, Tooltip } from "antd";
-import { Bookmark, BookmarkCheck, BookOpen, Languages } from "lucide-react";
+import { Bookmark, BookmarkCheck, BookOpen, Languages, Loader2, Volume2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import type { DictionarySense, Vocabulary } from "@/lib/schemas/vocabulary";
@@ -34,6 +34,9 @@ const LEVEL_COLORS: Record<string, string> = {
   C1: "orange",
   C2: "volcano",
 };
+
+// Module-level: ensures only one utterance plays at a time across re-renders
+let activeUtterance: SpeechSynthesisUtterance | null = null;
 
 function SensePanel({
   sense,
@@ -177,6 +180,31 @@ function SensePanel({
   );
 }
 
+function AudioButton({
+  locale,
+  speakingLocale,
+  onSpeak,
+}: {
+  locale: "en-US" | "en-GB";
+  speakingLocale: string | null;
+  onSpeak: (locale: "en-US" | "en-GB") => void;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={locale === "en-US" ? "Play US pronunciation" : "Play UK pronunciation"}
+      onClick={() => onSpeak(locale)}
+      className="grid size-6 place-items-center rounded text-[var(--text-muted)] transition hover:text-[var(--accent)]"
+    >
+      {speakingLocale === locale ? (
+        <Loader2 size={13} className="animate-spin" />
+      ) : (
+        <Volume2 size={13} />
+      )}
+    </button>
+  );
+}
+
 export function DictionaryResultCard({
   vocabulary,
   hasSearched,
@@ -187,10 +215,26 @@ export function DictionaryResultCard({
 }: DictionaryResultCardProps) {
   const firstSenseId = vocabulary?.senses[0]?.id ?? "";
   const [activeKey, setActiveKey] = useState(firstSenseId);
+  const [speakingLocale, setSpeakingLocale] = useState<string | null>(null);
 
   useEffect(() => {
     setActiveKey(firstSenseId);
   }, [firstSenseId]);
+
+  function speak(locale: "en-US" | "en-GB") {
+    if (!vocabulary) return;
+    if (activeUtterance) {
+      window.speechSynthesis.cancel();
+      activeUtterance = null;
+    }
+    const utterance = new SpeechSynthesisUtterance(vocabulary.headword);
+    utterance.lang = locale;
+    utterance.onstart = () => setSpeakingLocale(locale);
+    utterance.onend = () => { setSpeakingLocale(null); activeUtterance = null; };
+    utterance.onerror = () => { setSpeakingLocale(null); activeUtterance = null; };
+    activeUtterance = utterance;
+    window.speechSynthesis.speak(utterance);
+  }
 
   if (isLoading) {
     return (
@@ -264,6 +308,7 @@ export function DictionaryResultCard({
   }
 
   const activeSense = vocabulary.senses.find((s) => s.id === activeKey) ?? vocabulary.senses[0];
+  const hasDualPhonetics = vocabulary.phoneticsUs || vocabulary.phoneticsUk;
 
   return (
     <AnimatePresence mode="wait">
@@ -297,6 +342,11 @@ export function DictionaryResultCard({
                   {vocabulary.level}
                 </Tag>
               )}
+              {vocabulary.partOfSpeech && (
+                <Tag variant="outlined" className="!rounded-full !px-3 !py-1">
+                  {vocabulary.partOfSpeech}
+                </Tag>
+              )}
               {saved != null && onToggleSaved && (
                 <button
                   onClick={onToggleSaved}
@@ -313,7 +363,33 @@ export function DictionaryResultCard({
             </div>
           </div>
 
-          {vocabulary.phonetic && (
+          {hasDualPhonetics ? (
+            <motion.div
+              className="mt-3 flex flex-col gap-1.5"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.15, duration: 0.3 }}
+            >
+              {vocabulary.phoneticsUs && (
+                <div className="flex items-center gap-2">
+                  <span className="text-base">🇺🇸</span>
+                  <span className="rounded bg-[var(--bg-deep)] px-2 py-0.5 text-sm [font-family:var(--font-mono)] text-[var(--accent)]">
+                    {vocabulary.phoneticsUs}
+                  </span>
+                  <AudioButton locale="en-US" speakingLocale={speakingLocale} onSpeak={speak} />
+                </div>
+              )}
+              {vocabulary.phoneticsUk && (
+                <div className="flex items-center gap-2">
+                  <span className="text-base">🇬🇧</span>
+                  <span className="rounded bg-[var(--bg-deep)] px-2 py-0.5 text-sm [font-family:var(--font-mono)] text-[var(--accent)]">
+                    {vocabulary.phoneticsUk}
+                  </span>
+                  <AudioButton locale="en-GB" speakingLocale={speakingLocale} onSpeak={speak} />
+                </div>
+              )}
+            </motion.div>
+          ) : vocabulary.phonetic ? (
             <motion.span
               className="mt-3 inline-block rounded bg-[var(--bg-deep)] px-2 py-0.5 text-sm [font-family:var(--font-mono)] text-[var(--accent)]"
               initial={{ opacity: 0 }}
@@ -322,7 +398,7 @@ export function DictionaryResultCard({
             >
               {vocabulary.phonetic}
             </motion.span>
-          )}
+          ) : null}
 
           <motion.div
             className="mt-5 space-y-3 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4"
