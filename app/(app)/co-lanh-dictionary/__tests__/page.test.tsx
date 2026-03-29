@@ -25,7 +25,6 @@ describe("CoLanhDictionaryPage", () => {
         name: /Tra cứu từ vựng theo cách rõ ràng, dễ học lại/i,
       }),
     ).toBeInTheDocument();
-    expect(screen.getByText("Từ điển Cô Lành")).toBeInTheDocument();
     expect(pageWrapper).toHaveClass(
       "h-full",
       "min-h-0",

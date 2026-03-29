@@ -96,15 +96,12 @@ export default function CoLanhDictionaryPage() {
       {contextHolder}
       <div className="h-full min-h-0">
         <motion.section
-          className="relative mb-7 overflow-hidden rounded-2xl border border-(--border) bg-[linear-gradient(135deg,rgba(255,255,255,0.96),rgba(253,243,235,0.9))] px-6 py-8 shadow-(--shadow-md) md:px-8 md:py-10 max-[720px]:rounded-xl max-[720px]:px-5 max-[720px]:py-6"
+          className="relative mb-7 overflow-hidden rounded-2xl border border-(--border) bg-[linear-gradient(135deg,rgba(255,255,255,0.96),rgba(253,243,235,0.9))] p-5 shadow-(--shadow-md) md:p-6 max-[720px]:rounded-xl max-[720px]:px-4 max-[720px]:py-5"
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45, ease: "easeOut" }}
         >
           <div className="relative max-w-3xl">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-(--accent)">
-              Từ điển Cô Lành
-            </p>
             <h1 className="mt-3 text-4xl [font-family:var(--font-display)] text-(--ink)">
               Tra cứu từ vựng theo cách rõ ràng, dễ học lại
             </h1>
