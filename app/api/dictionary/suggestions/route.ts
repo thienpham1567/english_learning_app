@@ -1,8 +1,5 @@
 import { NextResponse } from "next/server";
-import { ilike, desc } from "drizzle-orm";
-
-import { db } from "@/lib/db";
-import { vocabularyCache } from "@/lib/db/schema";
+import axios from "axios";
 
 const allowedQueryPattern = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
 
@@ -15,12 +12,13 @@ export async function GET(req: Request) {
     return NextResponse.json({ suggestions: [] });
   }
 
-  const rows = await db
-    .select({ query: vocabularyCache.query })
-    .from(vocabularyCache)
-    .where(ilike(vocabularyCache.query, `%${q}%`))
-    .orderBy(desc(vocabularyCache.expiresAt))
-    .limit(6);
-
-  return NextResponse.json({ suggestions: rows.map((r) => r.query) });
+  try {
+    const { data } = await axios.get<{ word: string }[]>(
+      "https://api.datamuse.com/sug",
+      { params: { s: q, max: 8 } },
+    );
+    return NextResponse.json({ suggestions: data.map((item) => item.word) });
+  } catch {
+    return NextResponse.json({ suggestions: [] });
+  }
 }
