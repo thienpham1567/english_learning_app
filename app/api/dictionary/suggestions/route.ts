@@ -18,7 +18,7 @@ export async function GET(req: Request) {
   const rows = await db
     .select({ query: vocabularyCache.query })
     .from(vocabularyCache)
-    .where(ilike(vocabularyCache.query, `${q}%`))
+    .where(ilike(vocabularyCache.query, `%${q}%`))
     .orderBy(desc(vocabularyCache.expiresAt))
     .limit(6);
 

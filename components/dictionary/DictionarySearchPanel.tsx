@@ -20,11 +20,16 @@ const HELPER_TIPS = [
 function HighlightMatch({ text, query }: { text: string; query: string }) {
   const lowerText = text.toLowerCase();
   const lowerQuery = query.toLowerCase();
-  if (!query || !lowerText.startsWith(lowerQuery)) {
+  const idx = query ? lowerText.indexOf(lowerQuery) : -1;
+  if (idx === -1) {
     return <span>{text}</span>;
   }
   return (
-    <span><strong>{text.slice(0, query.length)}</strong>{text.slice(query.length)}</span>
+    <span>
+      {text.slice(0, idx)}
+      <strong>{text.slice(idx, idx + query.length)}</strong>
+      {text.slice(idx + query.length)}
+    </span>
   );
 }
 
