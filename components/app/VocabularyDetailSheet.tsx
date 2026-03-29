@@ -55,9 +55,12 @@ export function VocabularyDetailSheet({
       setStatus("idle");
       return;
     }
+    const controller = new AbortController();
     setStatus("loading");
     setData(null);
-    fetch(`/api/vocabulary/${encodeURIComponent(query)}/detail`)
+    fetch(`/api/vocabulary/${encodeURIComponent(query)}/detail`, {
+      signal: controller.signal,
+    })
       .then(async (res) => {
         if (!res.ok) throw new Error("not_found");
         return res.json() as Promise<Vocabulary>;
@@ -66,7 +69,11 @@ export function VocabularyDetailSheet({
         setData(d);
         setStatus("ok");
       })
-      .catch(() => setStatus("error"));
+      .catch((err: unknown) => {
+        if (err instanceof Error && err.name === "AbortError") return;
+        setStatus("error");
+      });
+    return () => controller.abort();
   }, [query]);
 
   useEffect(() => {
