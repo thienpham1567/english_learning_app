@@ -28,7 +28,7 @@ export function VocabularyStatsBar({ entries }: Props) {
   return (
     <div className="flex flex-wrap items-center gap-3 rounded-xl border border-[var(--border)] bg-[var(--surface)] px-4 py-3 text-sm shadow-[var(--shadow-sm)]">
       <span className="text-[var(--text-secondary)]">
-        <span className="font-semibold text-[var(--ink)]">{total}</span> từ
+        <span className="font-semibold text-[var(--ink)]">{total}</span> từ đã tra
       </span>
       <span className="text-[var(--text-muted)]">·</span>
       <span className="text-[var(--text-secondary)]">

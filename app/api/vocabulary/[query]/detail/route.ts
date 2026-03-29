@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { eq } from "drizzle-orm";
+import { and, eq, gt, sql } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -24,7 +24,7 @@ export async function GET(_req: Request, { params }: { params: Params }) {
   const rows = await db
     .select({ data: vocabularyCache.data })
     .from(vocabularyCache)
-    .where(eq(vocabularyCache.query, q))
+    .where(and(eq(vocabularyCache.query, q), gt(vocabularyCache.expiresAt, sql`now()`)))
     .limit(1);
 
   if (!rows[0]) {

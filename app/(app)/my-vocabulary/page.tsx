@@ -1,7 +1,7 @@
 // app/(app)/my-vocabulary/page.tsx
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { BookMarked, Trash2 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { VocabularyStatsBar } from "@/components/app/VocabularyStatsBar";
@@ -175,6 +175,8 @@ export default function MyVocabularyPage() {
 
   const selectedEntry = entries.find((e) => e.query === selectedQuery) ?? null;
 
+  const handleCloseSheet = useCallback(() => setSelectedQuery(null), []);
+
   return (
     <div className="min-h-full overflow-y-auto px-8 pb-12 pt-9 max-[720px]:px-4 max-[720px]:pb-8 max-[720px]:pt-5">
       <motion.div
@@ -339,7 +341,7 @@ export default function MyVocabularyPage() {
 
       <VocabularyDetailSheet
         query={selectedQuery}
-        onClose={() => setSelectedQuery(null)}
+        onClose={handleCloseSheet}
         saved={selectedEntry?.saved ?? false}
         onToggleSaved={() =>
           selectedEntry && handleToggleSaved(selectedEntry)
@@ -357,6 +359,7 @@ export default function MyVocabularyPage() {
             className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-full bg-[var(--ink)] px-5 py-2.5 text-sm text-white shadow-lg"
           >
             <span>Đã xoá</span>
+            <span aria-hidden="true">·</span>
             <button
               onClick={handleUndoDelete}
               className="font-semibold underline"
