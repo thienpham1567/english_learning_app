@@ -1,4 +1,5 @@
-import { describe, expect, it, vi } from "vitest";
+import { screen, fireEvent, waitFor, act } from "@testing-library/react";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import { renderUi } from "@/test/render";
 import { DictionarySearchPanel } from "@/components/dictionary/DictionarySearchPanel";
 
@@ -63,5 +64,135 @@ describe("DictionarySearchPanel", () => {
       expect(tip).toHaveClass("border-l-2");
       expect(tip).toHaveClass("pl-4");
     });
+  });
+
+  it("shows autocomplete suggestions after debounce when value has 2+ chars", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    global.fetch = vi.fn().mockResolvedValue({
+      json: async () => ({ suggestions: ["take off", "take on"] }),
+    } as Response);
+
+    renderUi(
+      <DictionarySearchPanel
+        value="ta"
+        onChange={() => {}}
+        onSearch={() => {}}
+        isLoading={false}
+      />,
+    );
+
+    await act(async () => {
+      await vi.runAllTimersAsync();
+    });
+
+    await waitFor(() => {
+      expect(screen.getByRole("option", { name: /take off/ })).toBeInTheDocument();
+      expect(screen.getByRole("option", { name: /take on/ })).toBeInTheDocument();
+    });
+
+    vi.useRealTimers();
+  });
+
+  it("calls onChange and onSearch when a suggestion is clicked", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    global.fetch = vi.fn().mockResolvedValue({
+      json: async () => ({ suggestions: ["take off"] }),
+    } as Response);
+
+    const onChange = vi.fn();
+    const onSearch = vi.fn();
+
+    renderUi(
+      <DictionarySearchPanel
+        value="ta"
+        onChange={onChange}
+        onSearch={onSearch}
+        isLoading={false}
+      />,
+    );
+
+    await act(async () => {
+      await vi.runAllTimersAsync();
+    });
+
+    await waitFor(() => screen.getByRole("option", { name: /take off/ }));
+    fireEvent.mouseDown(screen.getByRole("option", { name: /take off/ }));
+
+    expect(onChange).toHaveBeenCalledWith("take off");
+    expect(onSearch).toHaveBeenCalled();
+
+    vi.useRealTimers();
+  });
+
+  it("ArrowDown highlights the first suggestion", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    global.fetch = vi.fn().mockResolvedValue({
+      json: async () => ({ suggestions: ["take off", "take on"] }),
+    } as Response);
+
+    const { getByPlaceholderText } = renderUi(
+      <DictionarySearchPanel
+        value="ta"
+        onChange={() => {}}
+        onSearch={() => {}}
+        isLoading={false}
+      />,
+    );
+
+    await act(async () => { await vi.runAllTimersAsync(); });
+    await waitFor(() => screen.getByRole("option", { name: /take off/ }));
+
+    fireEvent.keyDown(getByPlaceholderText("Ví dụ: take off"), { key: "ArrowDown" });
+
+    expect(screen.getByRole("option", { name: /take off/ })).toHaveAttribute("aria-selected", "true");
+
+    vi.useRealTimers();
+  });
+
+  it("Escape clears suggestions", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    global.fetch = vi.fn().mockResolvedValue({
+      json: async () => ({ suggestions: ["take off"] }),
+    } as Response);
+
+    const { getByPlaceholderText } = renderUi(
+      <DictionarySearchPanel
+        value="ta"
+        onChange={() => {}}
+        onSearch={() => {}}
+        isLoading={false}
+      />,
+    );
+
+    await act(async () => { await vi.runAllTimersAsync(); });
+    await waitFor(() => screen.getByRole("option", { name: /take off/ }));
+
+    fireEvent.keyDown(getByPlaceholderText("Ví dụ: take off"), { key: "Escape" });
+
+    await waitFor(() => {
+      expect(screen.queryByRole("option", { name: /take off/ })).not.toBeInTheDocument();
+    });
+
+    vi.useRealTimers();
+  });
+
+  it("does not fetch suggestions when value is less than 2 chars", async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    global.fetch = vi.fn();
+
+    renderUi(
+      <DictionarySearchPanel
+        value="t"
+        onChange={() => {}}
+        onSearch={() => {}}
+        isLoading={false}
+      />,
+    );
+
+    await act(async () => { await vi.runAllTimersAsync(); });
+
+    expect(global.fetch).not.toHaveBeenCalled();
+
+    vi.useRealTimers();
   });
 });

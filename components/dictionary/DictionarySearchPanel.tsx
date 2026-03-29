@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { BookOpenText, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
 
@@ -16,12 +17,90 @@ const HELPER_TIPS = [
   "Mỗi nghĩa sẽ có giải thích song ngữ và ví dụ chỉ bằng tiếng Việt.",
 ];
 
+function HighlightMatch({ text, query }: { text: string; query: string }) {
+  const lowerText = text.toLowerCase();
+  const lowerQuery = query.toLowerCase();
+  if (!query || !lowerText.startsWith(lowerQuery)) {
+    return <span>{text}</span>;
+  }
+  return (
+    <span><strong>{text.slice(0, query.length)}</strong>{text.slice(query.length)}</span>
+  );
+}
+
 export function DictionarySearchPanel({
   value,
   onChange,
   onSearch,
   isLoading,
 }: DictionarySearchPanelProps) {
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Debounced fetch
+  useEffect(() => {
+    if (value.length < 2) {
+      setSuggestions([]);
+      setHighlightedIndex(-1);
+      return;
+    }
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `/api/dictionary/suggestions?q=${encodeURIComponent(value)}`,
+        );
+        const data = (await res.json()) as { suggestions: string[] };
+        setSuggestions(data.suggestions ?? []);
+        setHighlightedIndex(-1);
+      } catch {
+        setSuggestions([]);
+      }
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [value]);
+
+  // Outside click dismiss
+  useEffect(() => {
+    function handleMouseDown(e: MouseEvent) {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setSuggestions([]);
+        setHighlightedIndex(-1);
+      }
+    }
+    document.addEventListener("mousedown", handleMouseDown);
+    return () => document.removeEventListener("mousedown", handleMouseDown);
+  }, []);
+
+  function handleKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      setHighlightedIndex((i) => Math.min(i + 1, suggestions.length - 1));
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      setHighlightedIndex((i) => Math.max(i - 1, -1));
+    } else if (e.key === "Enter") {
+      if (highlightedIndex >= 0 && suggestions[highlightedIndex]) {
+        onChange(suggestions[highlightedIndex]);
+        setSuggestions([]);
+        setHighlightedIndex(-1);
+        onSearch();
+      } else if (!isLoading) {
+        onSearch();
+      }
+    } else if (e.key === "Escape") {
+      setSuggestions([]);
+      setHighlightedIndex(-1);
+    }
+  }
+
+  function selectSuggestion(s: string) {
+    onChange(s);
+    setSuggestions([]);
+    setHighlightedIndex(-1);
+    onSearch();
+  }
+
   return (
     <section className="space-y-5">
       <div className="rounded-2xl bg-[var(--surface)] shadow-[var(--shadow-lg)] p-6 min-[1121px]:sticky min-[1121px]:top-6">
@@ -37,18 +116,47 @@ export function DictionarySearchPanel({
           Công cụ này hỗ trợ từ đơn, collocation, phrasal verb và idiom để bạn học theo ngữ cảnh rõ ràng hơn.
         </p>
 
-        <input
-          type="text"
-          className="mt-5 w-full border-b border-(--border) bg-transparent px-1 py-3 text-[15px] text-(--text-primary) outline-none transition-colors placeholder:text-(--text-muted) focus:border-b-2 focus:border-(--accent) disabled:cursor-not-allowed"
-          placeholder="Ví dụ: take off"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          aria-label="Nhập từ cần tra cứu"
-          onKeyDown={(e) => e.key === "Enter" && !isLoading && onSearch()}
-          disabled={isLoading}
-          maxLength={80}
-          autoComplete="off"
-        />
+        <div ref={containerRef} className="relative mt-5">
+          <input
+            type="text"
+            className="w-full border-b border-(--border) bg-transparent px-1 py-3 text-[15px] text-(--text-primary) outline-none transition-colors placeholder:text-(--text-muted) focus:border-b-2 focus:border-(--accent) disabled:cursor-not-allowed"
+            placeholder="Ví dụ: take off"
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            aria-label="Nhập từ cần tra cứu"
+            onKeyDown={handleKeyDown}
+            disabled={isLoading}
+            maxLength={80}
+            autoComplete="off"
+          />
+
+          {suggestions.length > 0 && (
+            <ul
+              role="listbox"
+              className="absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded-xl border border-(--border) bg-[var(--surface)] shadow-[var(--shadow-lg)]"
+            >
+              {suggestions.map((s, i) => (
+                <li
+                  key={s}
+                  role="option"
+                  aria-selected={i === highlightedIndex}
+                  onMouseDown={(e) => {
+                    e.preventDefault();
+                    selectSuggestion(s);
+                  }}
+                  className={[
+                    "cursor-pointer px-4 py-2.5 text-sm text-[var(--text-primary)] transition",
+                    i === highlightedIndex
+                      ? "bg-[var(--surface-hover)]"
+                      : "hover:bg-[var(--surface-hover)]",
+                  ].join(" ")}
+                >
+                  <HighlightMatch text={s} query={value} />
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
         <motion.button
           type="button"
