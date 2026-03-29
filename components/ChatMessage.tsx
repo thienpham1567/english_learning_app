@@ -93,7 +93,7 @@ export function ChatMessage({
 
   const isUser = message.role === "user";
   const text = message.text.trim();
-  if (!text) return null;
+  if (!text && !isStreaming) return null;
 
   const time = formatTime();
 
