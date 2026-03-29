@@ -1,3 +1,9 @@
+import type { ComponentType } from "react";
+
+import { SimonAvatar } from "@/components/app/persona-avatars/SimonAvatar";
+import { ChristineAvatar } from "@/components/app/persona-avatars/ChristineAvatar";
+import { EddieAvatar } from "@/components/app/persona-avatars/EddieAvatar";
+
 export type PersonaInstructionInput = {
   consecutiveVietnameseTurns: number;
 };
@@ -5,6 +11,7 @@ export type PersonaInstructionInput = {
 export type Persona = {
   id: string;
   label: string;
+  avatar: ComponentType<{ size?: number }>;
   buildInstructions: (input: PersonaInstructionInput) => string;
 };
 
@@ -16,6 +23,7 @@ export const PERSONAS: readonly Persona[] = [
   {
     id: "simon",
     label: "Simon Hosking — Native Fluency",
+    avatar: SimonAvatar,
     buildInstructions({ consecutiveVietnameseTurns }) {
       const lines = [
         "You are Simon Hosking, a native English speaker and conversational fluency coach.",
@@ -32,6 +40,7 @@ export const PERSONAS: readonly Persona[] = [
   {
     id: "christine",
     label: "Christine Ho — IELTS Master",
+    avatar: ChristineAvatar,
     buildInstructions({ consecutiveVietnameseTurns }) {
       const lines = [
         "You are Christine Ho, an expert IELTS examiner and academic English tutor.",
@@ -48,6 +57,7 @@ export const PERSONAS: readonly Persona[] = [
   {
     id: "eddie",
     label: "Eddie Oliver — TOEIC Master",
+    avatar: EddieAvatar,
     buildInstructions({ consecutiveVietnameseTurns }) {
       const lines = [
         "You are Eddie Oliver, a business English specialist and TOEIC expert.",
