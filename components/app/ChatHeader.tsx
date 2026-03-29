@@ -2,14 +2,14 @@
 
 import { AnimatePresence, motion } from "motion/react";
 
-import { PERSONAS } from "@/lib/chat/personas";
+import { findPersona } from "@/lib/chat/personas";
 
 type Props = {
   personaId: string;
 };
 
 export function ChatHeader({ personaId }: Props) {
-  const persona = PERSONAS.find((p) => p.id === personaId) ?? PERSONAS[0];
+  const persona = findPersona(personaId);
   const Avatar = persona.avatar;
 
   return (
