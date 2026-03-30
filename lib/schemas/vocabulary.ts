@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+export const VocabularyEntryTypeSchema = z.enum(["word", "phrasal_verb", "idiom"]);
+
 export const DictionarySenseSchema = z.object({
   id: z.string(),
   label: z.string(),
@@ -8,6 +10,9 @@ export const DictionarySenseSchema = z.object({
   usageNoteVi: z.string().nullable(),
   examplesVi: z.array(z.string()).default([]),
   examples: z
+    .array(z.object({ en: z.string(), vi: z.string() }))
+    .default([]),
+  collocations: z
     .array(z.object({ en: z.string(), vi: z.string() }))
     .default([]),
   synonyms: z.array(z.string()).default([]),
@@ -20,7 +25,7 @@ export const DictionarySenseSchema = z.object({
 export const VocabularySchema = z.object({
   query: z.string(),
   headword: z.string(),
-  entryType: z.enum(["word", "collocation", "phrasal_verb", "idiom"]),
+  entryType: VocabularyEntryTypeSchema,
   phonetic: z.string().nullable(),
   phoneticsUs: z.string().nullable(),
   phoneticsUk: z.string().nullable(),
@@ -34,3 +39,27 @@ export const VocabularySchema = z.object({
 
 export type Vocabulary = z.infer<typeof VocabularySchema>;
 export type DictionarySense = z.infer<typeof DictionarySenseSchema>;
+
+export function normalizeVocabularyEntryType(entryType: string | null | undefined): Vocabulary["entryType"] | null {
+  if (!entryType) return null;
+
+  const normalized = entryType === "collocation" ? "word" : entryType;
+  const parsed = VocabularyEntryTypeSchema.safeParse(normalized);
+  return parsed.success ? parsed.data : null;
+}
+
+export function normalizeVocabulary(value: unknown): Vocabulary {
+  if (typeof value !== "object" || value === null) {
+    return VocabularySchema.parse(value);
+  }
+
+  const entry = value as Record<string, unknown>;
+  const normalizedEntryType = normalizeVocabularyEntryType(
+    typeof entry.entryType === "string" ? entry.entryType : null,
+  );
+
+  return VocabularySchema.parse({
+    ...entry,
+    ...(normalizedEntryType ? { entryType: normalizedEntryType } : {}),
+  });
+}

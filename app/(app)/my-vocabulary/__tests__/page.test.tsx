@@ -2,6 +2,25 @@
 import { render, screen, waitFor, fireEvent, act } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import MyVocabularyPage from "../page";
+import http from "@/lib/http";
+
+type QueryState = {
+  search: string;
+  level: string[];
+  type: string[];
+  saved: boolean;
+};
+
+let queryState: QueryState;
+let setFiltersCalls: Record<string, unknown>[];
+
+vi.mock("@/lib/http", () => ({
+  default: {
+    get: vi.fn(),
+    patch: vi.fn(),
+    delete: vi.fn(),
+  },
+}));
 
 vi.mock("nuqs", async () => {
   const { useState, useCallback } = await import("react");
@@ -21,15 +40,16 @@ vi.mock("nuqs", async () => {
       const defaults: Record<string, unknown> = {};
       for (const key of Object.keys(schema)) defaults[key] = (schema[key] as { _default?: unknown })._default ?? null;
       // Provide sensible defaults matching the app's withDefault calls
-      const initial = { search: "", level: [] as string[], type: [] as string[], saved: false };
+      const initial = queryState ?? { search: "", level: [] as string[], type: [] as string[], saved: false };
       const [state, setState] = useState(initial);
       const setter = useCallback(
         (patch: Record<string, unknown>) => {
+          setFiltersCalls.push(patch);
           setState((prev: typeof initial) => {
             const next = { ...prev };
             for (const [k, v] of Object.entries(patch)) {
               if (v === null) {
-                (next as Record<string, unknown>)[k] = (initial as Record<string, unknown>)[k];
+                (next as Record<string, unknown>)[k] = defaults[k];
               } else {
                 (next as Record<string, unknown>)[k] = v;
               }
@@ -80,6 +100,9 @@ const ENTRIES = [
 
 beforeEach(() => {
   vi.useFakeTimers();
+  vi.clearAllMocks();
+  queryState = { search: "", level: [], type: [], saved: false };
+  setFiltersCalls = [];
   Object.defineProperty(window, "matchMedia", {
     writable: true,
     value: vi.fn().mockImplementation((query: string) => ({
@@ -89,20 +112,23 @@ beforeEach(() => {
       removeEventListener: vi.fn(),
     })),
   });
-  vi.stubGlobal(
-    "fetch",
-    vi.fn().mockImplementation((url: string) => {
-      if (url === "/api/vocabulary") {
-        return Promise.resolve({ json: async () => ENTRIES });
-      }
-      return Promise.resolve({ ok: true, json: async () => ({}) });
-    }),
-  );
+  vi.mocked(http.get).mockImplementation((url: string) => {
+    if (url === "/vocabulary") {
+      return Promise.resolve({ data: ENTRIES });
+    }
+
+    if (String(url).includes("/detail")) {
+      return Promise.reject(new Error("not_found"));
+    }
+
+    return Promise.resolve({ data: {} });
+  });
+  vi.mocked(http.patch).mockResolvedValue({ data: {} });
+  vi.mocked(http.delete).mockResolvedValue({ data: {} });
 });
 
 afterEach(() => {
   vi.useRealTimers();
-  vi.unstubAllGlobals();
 });
 
 describe("MyVocabularyPage", () => {
@@ -119,6 +145,16 @@ describe("MyVocabularyPage", () => {
     render(<MyVocabularyPage />);
     await waitFor(() => expect(screen.getByText("3")).toBeInTheDocument());
     expect(screen.getByText("1")).toBeInTheDocument(); // saved count
+  });
+
+  it("uses a generic label for word entries in the history list", async () => {
+    render(<MyVocabularyPage />);
+    await waitFor(() => {
+      expect(screen.getByText("beautiful")).toBeInTheDocument();
+    });
+
+    expect(screen.getAllByText("Từ / cụm từ").length).toBeGreaterThan(0);
+    expect(screen.queryByText("Từ đơn")).not.toBeInTheDocument();
   });
 
   it("filters entries by search text", async () => {
@@ -158,14 +194,14 @@ describe("MyVocabularyPage", () => {
   });
 
   it("opens the detail sheet when a card is clicked", async () => {
-    vi.mocked(fetch).mockImplementation((url: string) => {
-      if (url === "/api/vocabulary") {
-        return Promise.resolve({ json: async () => ENTRIES });
+    vi.mocked(http.get).mockImplementation((url: string) => {
+      if (url === "/vocabulary") {
+        return Promise.resolve({ data: ENTRIES });
       }
       if (String(url).includes("/detail")) {
-        return Promise.resolve({ ok: false });
+        return Promise.reject(new Error("not_found"));
       }
-      return Promise.resolve({ ok: true, json: async () => ({}) });
+      return Promise.resolve({ data: {} });
     });
     render(<MyVocabularyPage />);
     await waitFor(() => screen.getByText("take off"));
@@ -199,9 +235,29 @@ describe("MyVocabularyPage", () => {
     await act(async () => {
       vi.advanceTimersByTime(5000);
     });
-    expect(vi.mocked(fetch)).toHaveBeenCalledWith(
+    expect(http.delete).toHaveBeenCalledWith(
       expect.stringContaining("take%20off"),
-      expect.objectContaining({ method: "DELETE" }),
     );
+  });
+
+  it("sanitizes invalid type filter values and does not filter entries", async () => {
+    queryState = {
+      search: "",
+      level: [],
+      type: ["collocation"],
+      saved: false,
+    };
+
+    render(<MyVocabularyPage />);
+
+    await act(async () => {
+      await Promise.resolve();
+    });
+
+    expect(screen.getByText("take off")).toBeInTheDocument();
+    expect(screen.getByText("beautiful")).toBeInTheDocument();
+    expect(screen.getByText("run out of")).toBeInTheDocument();
+
+    expect(setFiltersCalls).toContainEqual({ type: null });
   });
 });

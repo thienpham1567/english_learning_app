@@ -6,6 +6,14 @@ import { getMessageSpacingClassName } from "@/components/app/EnglishChatbotView"
 import type { PageMessage } from "@/components/ChatMessage";
 import { renderUi } from "@/test/render";
 
+vi.mock("@/lib/http", () => ({
+  default: {
+    get: vi.fn().mockResolvedValue({ data: [] }),
+    post: vi.fn(),
+    delete: vi.fn(),
+  },
+}));
+
 vi.mock("next/navigation", () => ({
   useRouter: () => ({
     push: vi.fn(),

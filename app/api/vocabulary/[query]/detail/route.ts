@@ -4,6 +4,7 @@ import { and, eq, gt, sql } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { vocabularyCache } from "@/lib/db/schema";
+import { normalizeVocabulary } from "@/lib/schemas/vocabulary";
 
 type Params = Promise<{ query: string }>;
 
@@ -31,5 +32,5 @@ export async function GET(_req: Request, { params }: { params: Params }) {
     return Response.json({ error: "not_found" }, { status: 404 });
   }
 
-  return Response.json(rows[0].data);
+  return Response.json(normalizeVocabulary(rows[0].data));
 }

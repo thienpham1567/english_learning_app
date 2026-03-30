@@ -7,6 +7,8 @@ import { BookMarked, Search, Trash2 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { VocabularyStatsBar } from "@/components/app/VocabularyStatsBar";
 import { VocabularyDetailSheet } from "@/components/app/VocabularyDetailSheet";
+import type { Vocabulary } from "@/lib/schemas/vocabulary";
+import http from "@/lib/http";
 
 export type VocabularyEntry = {
   id: string;
@@ -15,12 +17,11 @@ export type VocabularyEntry = {
   lookedUpAt: string;
   headword: string | null;
   level: string | null;
-  entryType: string | null;
+  entryType: Vocabulary["entryType"] | null;
 };
 
-const ENTRY_TYPE_LABELS: Record<string, string> = {
-  word: "Từ đơn",
-  collocation: "Cụm từ",
+const ENTRY_TYPE_LABELS: Record<Vocabulary["entryType"], string> = {
+  word: "Từ / cụm từ",
   phrasal_verb: "Cụm ĐT",
   idiom: "Thành ngữ",
 };
@@ -35,7 +36,8 @@ const LEVEL_COLORS: Record<string, string> = {
 };
 
 const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
-const ENTRY_TYPES = ["word", "collocation", "phrasal_verb", "idiom"];
+const ENTRY_TYPES: Vocabulary["entryType"][] = ["word", "phrasal_verb", "idiom"];
+const ENTRY_TYPE_SET = new Set<Vocabulary["entryType"]>(ENTRY_TYPES);
 
 function formatRelativeTime(dateStr: string): string {
   const diffMs = Date.now() - new Date(dateStr).getTime();
@@ -67,14 +69,38 @@ export default function MyVocabularyPage() {
   const { search, level: levelFilter, type: typeFilter, saved: savedOnly } = filters;
   const [pendingDelete, setPendingDelete] = useState<PendingDelete | null>(null);
   const pendingDeleteRef = useRef<PendingDelete | null>(null);
+  const sanitizedTypeFilter = typeFilter.filter((type): type is Vocabulary["entryType"] =>
+    ENTRY_TYPE_SET.has(type as Vocabulary["entryType"]),
+  );
 
   useEffect(() => {
-    fetch("/api/vocabulary")
-      .then((r) => r.json())
-      .then((data) => setEntries(Array.isArray(data) ? data : []))
-      .catch(() => {})
-      .finally(() => setIsLoading(false));
+    let cancelled = false;
+
+    (async () => {
+      try {
+        const { data } = await http.get<VocabularyEntry[]>("/vocabulary");
+        if (!cancelled) {
+          setEntries(Array.isArray(data) ? data : []);
+        }
+      } catch {
+        // Ignore load failures and keep the empty state.
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false);
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
+
+  useEffect(() => {
+    if (sanitizedTypeFilter.length !== typeFilter.length) {
+      void setFilters({ type: sanitizedTypeFilter.length > 0 ? sanitizedTypeFilter : null });
+    }
+  }, [sanitizedTypeFilter, setFilters, typeFilter.length]);
 
   useEffect(() => {
     pendingDeleteRef.current = pendingDelete;
@@ -86,9 +112,7 @@ export default function MyVocabularyPage() {
       const pd = pendingDeleteRef.current;
       if (pd) {
         clearTimeout(pd.timerId);
-        fetch(`/api/vocabulary/${encodeURIComponent(pd.entry.query)}`, {
-          method: "DELETE",
-        }).catch(() => {});
+        void http.delete(`/vocabulary/${encodeURIComponent(pd.entry.query)}`).catch(() => {});
       }
     };
   }, []);
@@ -99,11 +123,7 @@ export default function MyVocabularyPage() {
       curr.map((e) => (e.id === entry.id ? { ...e, saved: next } : e)),
     );
     try {
-      await fetch(`/api/vocabulary/${encodeURIComponent(entry.query)}/saved`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ saved: next }),
-      });
+      await http.patch(`/vocabulary/${encodeURIComponent(entry.query)}/saved`, { saved: next });
     } catch {
       setEntries((curr) =>
         curr.map((e) => (e.id === entry.id ? { ...e, saved: !next } : e)),
@@ -116,18 +136,14 @@ export default function MyVocabularyPage() {
 
     if (pendingDelete) {
       clearTimeout(pendingDelete.timerId);
-      fetch(`/api/vocabulary/${encodeURIComponent(pendingDelete.entry.query)}`, {
-        method: "DELETE",
-      }).catch(() => {});
+      void http.delete(`/vocabulary/${encodeURIComponent(pendingDelete.entry.query)}`).catch(() => {});
     }
 
     const index = entries.findIndex((e) => e.id === entry.id);
     setEntries((curr) => curr.filter((e) => e.id !== entry.id));
 
     const timerId = setTimeout(() => {
-      fetch(`/api/vocabulary/${encodeURIComponent(entry.query)}`, {
-        method: "DELETE",
-      }).catch(() => {});
+      void http.delete(`/vocabulary/${encodeURIComponent(entry.query)}`).catch(() => {});
       setPendingDelete(null);
     }, 5000);
 
@@ -153,14 +169,14 @@ export default function MyVocabularyPage() {
   };
 
   const toggleType = (type: string) => {
-    const next = typeFilter.includes(type)
-      ? typeFilter.filter((t) => t !== type)
-      : [...typeFilter, type];
+    const next = sanitizedTypeFilter.includes(type as Vocabulary["entryType"])
+      ? sanitizedTypeFilter.filter((t) => t !== type)
+      : [...sanitizedTypeFilter, type as Vocabulary["entryType"]];
     void setFilters({ type: next.length > 0 ? next : null });
   };
 
   const hasActiveFilter =
-    !!search || levelFilter.length > 0 || typeFilter.length > 0 || savedOnly;
+    !!search || levelFilter.length > 0 || sanitizedTypeFilter.length > 0 || savedOnly;
 
   const clearFilters = () => {
     void setFilters({ search: null, level: null, type: null, saved: null });
@@ -169,7 +185,10 @@ export default function MyVocabularyPage() {
   const visible = entries.filter((e) => {
     if (savedOnly && !e.saved) return false;
     if (levelFilter.length > 0 && !levelFilter.includes(e.level ?? "")) return false;
-    if (typeFilter.length > 0 && !typeFilter.includes(e.entryType ?? "")) return false;
+    if (sanitizedTypeFilter.length > 0) {
+      if (!e.entryType) return false;
+      if (!sanitizedTypeFilter.includes(e.entryType)) return false;
+    }
     if (search) {
       const q = search.toLowerCase();
       const hw = (e.headword ?? e.query).toLowerCase();

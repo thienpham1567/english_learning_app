@@ -2,6 +2,13 @@
 import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach } from "vitest";
 import { VocabularyDetailSheet } from "../VocabularyDetailSheet";
+import http from "@/lib/http";
+
+vi.mock("@/lib/http", () => ({
+  default: {
+    get: vi.fn(),
+  },
+}));
 
 const mockVocab = {
   query: "take off",
@@ -24,6 +31,7 @@ const mockVocab = {
       usageNoteVi: null,
       examplesVi: [],
       examples: [{ en: "The plane took off.", vi: "Máy bay cất cánh." }],
+      collocations: [],
       synonyms: [],
       patterns: [],
       relatedExpressions: [],
@@ -32,7 +40,28 @@ const mockVocab = {
   ],
 };
 
+const mockVocabWithCollocations = {
+  ...mockVocab,
+  senses: [
+    {
+      ...mockVocab.senses[0],
+      collocations: [{ en: "take off quickly", vi: "cất cánh nhanh" }],
+    },
+  ],
+};
+
+const mockMultiWordWord = {
+  ...mockVocab,
+  query: "strong coffee",
+  headword: "strong coffee",
+  entryType: "word",
+  partOfSpeech: "noun phrase",
+  overviewVi: "Một cụm từ thường gặp.",
+  overviewEn: "A common phrase.",
+};
+
 beforeEach(() => {
+  vi.clearAllMocks();
   Object.defineProperty(window, "matchMedia", {
     writable: true,
     value: vi.fn().mockImplementation((query: string) => ({
@@ -42,7 +71,6 @@ beforeEach(() => {
       removeEventListener: vi.fn(),
     })),
   });
-  vi.stubGlobal("fetch", vi.fn());
 });
 
 describe("VocabularyDetailSheet", () => {
@@ -59,7 +87,7 @@ describe("VocabularyDetailSheet", () => {
   });
 
   it("shows loading skeleton when query is set", async () => {
-    vi.mocked(fetch).mockReturnValue(new Promise(() => {}));
+    vi.mocked(http.get).mockReturnValue(new Promise(() => {}));
     render(
       <VocabularyDetailSheet
         query="take off"
@@ -72,10 +100,9 @@ describe("VocabularyDetailSheet", () => {
   });
 
   it("shows full data when loaded", async () => {
-    vi.mocked(fetch).mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockVocab,
-    } as Response);
+    vi.mocked(http.get).mockResolvedValueOnce({
+      data: mockVocab,
+    });
     render(
       <VocabularyDetailSheet
         query="take off"
@@ -91,10 +118,46 @@ describe("VocabularyDetailSheet", () => {
     expect(screen.getByText("The plane took off.")).toBeInTheDocument();
   });
 
+  it("uses a generic label for word entries in the saved detail sheet", async () => {
+    vi.mocked(http.get).mockResolvedValueOnce({
+      data: mockMultiWordWord,
+    });
+    render(
+      <VocabularyDetailSheet
+        query="strong coffee"
+        onClose={vi.fn()}
+        saved={false}
+        onToggleSaved={vi.fn()}
+      />,
+    );
+    await waitFor(() => {
+      expect(screen.getByText("strong coffee")).toBeInTheDocument();
+    });
+    expect(screen.getByText("Từ / cụm từ")).toBeInTheDocument();
+    expect(screen.queryByText("Từ đơn")).not.toBeInTheDocument();
+  });
+
+  it("does not render collocations in the saved detail sheet", async () => {
+    vi.mocked(http.get).mockResolvedValueOnce({
+      data: mockVocabWithCollocations,
+    });
+    render(
+      <VocabularyDetailSheet
+        query="take off"
+        onClose={vi.fn()}
+        saved={false}
+        onToggleSaved={vi.fn()}
+      />,
+    );
+    await waitFor(() => {
+      expect(screen.getByText("take off")).toBeInTheDocument();
+    });
+    expect(screen.queryByText("take off quickly")).not.toBeInTheDocument();
+    expect(screen.queryByText("cất cánh nhanh")).not.toBeInTheDocument();
+  });
+
   it("shows error state when fetch fails", async () => {
-    vi.mocked(fetch).mockResolvedValueOnce({
-      ok: false,
-    } as Response);
+    vi.mocked(http.get).mockRejectedValueOnce(new Error("not_found"));
     render(
       <VocabularyDetailSheet
         query="take off"
@@ -111,10 +174,9 @@ describe("VocabularyDetailSheet", () => {
   });
 
   it("calls onClose when Escape is pressed", async () => {
-    vi.mocked(fetch).mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockVocab,
-    } as Response);
+    vi.mocked(http.get).mockResolvedValueOnce({
+      data: mockVocab,
+    });
     const onClose = vi.fn();
     render(
       <VocabularyDetailSheet
@@ -129,10 +191,9 @@ describe("VocabularyDetailSheet", () => {
   });
 
   it("calls onToggleSaved when save button clicked", async () => {
-    vi.mocked(fetch).mockResolvedValueOnce({
-      ok: true,
-      json: async () => mockVocab,
-    } as Response);
+    vi.mocked(http.get).mockResolvedValueOnce({
+      data: mockVocab,
+    });
     const onToggleSaved = vi.fn();
     render(
       <VocabularyDetailSheet

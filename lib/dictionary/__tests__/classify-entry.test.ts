@@ -10,8 +10,8 @@ describe("classifyDictionaryEntry", () => {
     expect(classifyDictionaryEntry("take off")).toBe("phrasal_verb");
   });
 
-  it("classifies a two-word phrase as a collocation", () => {
-    expect(classifyDictionaryEntry("strong coffee")).toBe("collocation");
+  it("classifies a two-word phrase as a word", () => {
+    expect(classifyDictionaryEntry("strong coffee")).toBe("word");
   });
 
   it("classifies a three-word phrase as an idiom", () => {

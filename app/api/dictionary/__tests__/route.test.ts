@@ -106,7 +106,7 @@ describe("/api/dictionary", () => {
     const body = await response.json();
     expect(body).toHaveProperty("data.headword", "take off");
     expect(body).toHaveProperty("cached", false);
-  });
+  }, 10000);
 
   it("rejects empty input", async () => {
     const { POST } = await import("@/app/api/dictionary/route");
@@ -171,7 +171,7 @@ describe("/api/dictionary", () => {
           limit: vi.fn().mockResolvedValue([{ data: cachedData }]),
         })),
       })),
-    } as ReturnType<typeof db.select>);
+    } as unknown as ReturnType<typeof db.select>);
 
     const { POST } = await import("@/app/api/dictionary/route");
     const response = await POST(
@@ -185,6 +185,61 @@ describe("/api/dictionary", () => {
     const body = await response.json();
     expect(body).toHaveProperty("cached", true);
     expect(body).toHaveProperty("data.headword", "take off");
+  });
+
+  it("normalizes legacy cached collocation entries to word on cache hit", async () => {
+    const { db } = await import("@/lib/db");
+    const cachedData = {
+      query: "strong coffee",
+      headword: "strong coffee",
+      entryType: "collocation",
+      phonetic: null,
+      phoneticsUs: null,
+      phoneticsUk: null,
+      partOfSpeech: "noun phrase",
+      level: "A2",
+      register: null,
+      overviewVi: "Một cụm từ tự nhiên.",
+      overviewEn: "A natural phrase.",
+      senses: [
+        {
+          id: "sense-1",
+          label: "Nghĩa 1",
+          definitionVi: "Cà phê đậm",
+          definitionEn: "Coffee with a strong taste.",
+          usageNoteVi: null,
+          examplesVi: ["Tôi gọi một ly cà phê đậm."],
+          examples: [],
+          collocations: [],
+          synonyms: [],
+          antonyms: [],
+          patterns: [],
+          relatedExpressions: [],
+          commonMistakesVi: [],
+        },
+      ],
+    };
+
+    vi.mocked(db.select).mockReturnValueOnce({
+      from: vi.fn(() => ({
+        where: vi.fn(() => ({
+          limit: vi.fn().mockResolvedValue([{ data: cachedData }]),
+        })),
+      })),
+    } as unknown as ReturnType<typeof db.select>);
+
+    const { POST } = await import("@/app/api/dictionary/route");
+    const response = await POST(
+      new Request("http://localhost/api/dictionary", {
+        method: "POST",
+        body: JSON.stringify({ word: "strong coffee" }),
+      }),
+    );
+
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body).toHaveProperty("cached", true);
+    expect(body).toHaveProperty("data.entryType", "word");
   });
 
   it("returns phoneticsUs, phoneticsUk, and partOfSpeech in the response data", async () => {

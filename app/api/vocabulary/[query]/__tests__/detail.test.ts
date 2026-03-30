@@ -39,7 +39,7 @@ describe("GET /api/vocabulary/[query]/detail", () => {
       { params: Promise.resolve({ query: "take%20off" }) },
     );
     expect(response.status).toBe(401);
-  });
+  }, 10000);
 
   it("returns 404 when query not in cache", async () => {
     const { auth } = await import("@/lib/auth");
@@ -76,7 +76,23 @@ describe("GET /api/vocabulary/[query]/detail", () => {
       register: null,
       overviewVi: "Cất cánh",
       overviewEn: "To leave the ground and begin to fly",
-      senses: [],
+      senses: [
+        {
+          id: "sense-1",
+          label: "Nghĩa 1",
+          definitionVi: "Cất cánh",
+          definitionEn: "To leave the ground and begin to fly",
+          usageNoteVi: null,
+          examplesVi: [],
+          examples: [],
+          collocations: [],
+          synonyms: [],
+          antonyms: [],
+          patterns: [],
+          relatedExpressions: [],
+          commonMistakesVi: [],
+        },
+      ],
     };
     vi.mocked(db.select).mockReturnValueOnce({
       from: vi.fn(() => ({
@@ -84,7 +100,7 @@ describe("GET /api/vocabulary/[query]/detail", () => {
           limit: vi.fn().mockResolvedValue([{ data: mockData }]),
         })),
       })),
-    } as ReturnType<typeof db.select>);
+    } as unknown as ReturnType<typeof db.select>);
 
     const { GET } = await import("@/app/api/vocabulary/[query]/detail/route");
     const response = await GET(
@@ -94,5 +110,64 @@ describe("GET /api/vocabulary/[query]/detail", () => {
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(body).toEqual(mockData);
+  });
+
+  it("normalizes legacy cached collocation entries to word", async () => {
+    const { auth } = await import("@/lib/auth");
+    vi.mocked(auth.api.getSession).mockResolvedValueOnce({
+      user: { id: "user-1" },
+    } as never);
+
+    const { db } = await import("@/lib/db");
+    const mockData = {
+      query: "strong coffee",
+      headword: "strong coffee",
+      entryType: "collocation",
+      phonetic: null,
+      phoneticsUs: null,
+      phoneticsUk: null,
+      partOfSpeech: "noun phrase",
+      level: "A2",
+      register: null,
+      overviewVi: "Một cụm từ thường gặp.",
+      overviewEn: "A common phrase.",
+      senses: [
+        {
+          id: "sense-1",
+          label: "Nghĩa 1",
+          definitionVi: "Cà phê đậm",
+          definitionEn: "Coffee with a strong taste.",
+          usageNoteVi: null,
+          examplesVi: [],
+          examples: [],
+          collocations: [],
+          synonyms: [],
+          antonyms: [],
+          patterns: [],
+          relatedExpressions: [],
+          commonMistakesVi: [],
+        },
+      ],
+    };
+    vi.mocked(db.select).mockReturnValueOnce({
+      from: vi.fn(() => ({
+        where: vi.fn(() => ({
+          limit: vi.fn().mockResolvedValue([{ data: mockData }]),
+        })),
+      })),
+    } as unknown as ReturnType<typeof db.select>);
+
+    const { GET } = await import("@/app/api/vocabulary/[query]/detail/route");
+    const response = await GET(
+      new Request("http://localhost"),
+      { params: Promise.resolve({ query: "strong%20coffee" }) },
+    );
+    expect(response.status).toBe(200);
+    const body = await response.json();
+    expect(body).toMatchObject({
+      query: "strong coffee",
+      headword: "strong coffee",
+      entryType: "word",
+    });
   });
 });

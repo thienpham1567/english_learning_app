@@ -8,7 +8,7 @@ import { db } from "@/lib/db";
 import { vocabularyCache, userVocabulary } from "@/lib/db/schema";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { VocabularySchema } from "@/lib/schemas/vocabulary";
+import { VocabularySchema, normalizeVocabulary, type Vocabulary } from "@/lib/schemas/vocabulary";
 import { ALLOWED_QUERY_PATTERN, normalizeDictionaryQuery } from "@/lib/dictionary/normalize-query";
 import { classifyDictionaryEntry } from "@/lib/dictionary/classify-entry";
 import { buildDictionaryInstructions } from "@/lib/dictionary/prompt";
@@ -71,17 +71,26 @@ export async function POST(req: Request) {
       .limit(1);
 
     if (hit) {
-      const isBadEntry =
-        hit.data.overviewVi.startsWith("[NOT_ENGLISH]") ||
-        !isHeadwordConsistentWithQuery(hit.data.headword, cacheKey);
-
-      if (isBadEntry) {
-        // Purge the stale entry so the LLM gets a chance to re-evaluate
+      let cachedData: Vocabulary | null = null;
+      try {
+        cachedData = normalizeVocabulary(hit.data);
+      } catch {
         await db.delete(vocabularyCache).where(eq(vocabularyCache.query, cacheKey));
-        // Fall through to LLM call below
-      } else {
-        const saved = session ? await upsertUserVocabulary(session.user.id, cacheKey) : false;
-        return NextResponse.json({ data: hit.data, cached: true, saved });
+      }
+
+      if (cachedData) {
+      const isBadEntry =
+          cachedData.overviewVi.startsWith("[NOT_ENGLISH]") ||
+          !isHeadwordConsistentWithQuery(cachedData.headword, cacheKey);
+
+        if (isBadEntry) {
+          // Purge the stale entry so the LLM gets a chance to re-evaluate
+          await db.delete(vocabularyCache).where(eq(vocabularyCache.query, cacheKey));
+          // Fall through to LLM call below
+        } else {
+          const saved = session ? await upsertUserVocabulary(session.user.id, cacheKey) : false;
+          return NextResponse.json({ data: cachedData, cached: true, saved });
+        }
       }
     }
 

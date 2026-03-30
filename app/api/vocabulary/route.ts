@@ -4,6 +4,7 @@ import { desc, eq, sql } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { userVocabulary, vocabularyCache } from "@/lib/db/schema";
+import { normalizeVocabularyEntryType } from "@/lib/schemas/vocabulary";
 
 export async function GET() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -26,5 +27,10 @@ export async function GET() {
     .where(eq(userVocabulary.userId, session.user.id))
     .orderBy(desc(userVocabulary.lookedUpAt));
 
-  return Response.json(rows);
+  return Response.json(
+    rows.map((row) => ({
+      ...row,
+      entryType: normalizeVocabularyEntryType(row.entryType),
+    })),
+  );
 }

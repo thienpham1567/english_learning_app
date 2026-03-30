@@ -97,11 +97,7 @@ export default function DictionaryPage() {
     const next = !saved;
     setSaved(next); // optimistic
     try {
-      await fetch(`/api/vocabulary/${encodeURIComponent(currentQuery)}/saved`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ saved: next }),
-      });
+      await http.patch(`/vocabulary/${encodeURIComponent(currentQuery)}/saved`, { saved: next });
     } catch {
       setSaved(!next); // rollback
     }

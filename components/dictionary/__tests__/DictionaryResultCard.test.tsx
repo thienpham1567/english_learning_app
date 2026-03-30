@@ -33,6 +33,7 @@ const singleSenseEntry = {
       patterns: [],
       relatedExpressions: [],
       commonMistakesVi: [],
+      collocations: [],
     },
   ],
 };
@@ -63,6 +64,10 @@ const multiSenseEntry = {
       patterns: [],
       relatedExpressions: [],
       commonMistakesVi: [],
+      collocations: [
+        { en: "run a company", vi: "điều hành một công ty" },
+        { en: "run out of time", vi: "hết thời gian" },
+      ],
     },
     {
       id: "sense-2",
@@ -77,6 +82,7 @@ const multiSenseEntry = {
       patterns: [],
       relatedExpressions: [],
       commonMistakesVi: [],
+      collocations: [],
     },
   ],
 };
@@ -111,6 +117,7 @@ const bilingualEntry = {
       patterns: [],
       relatedExpressions: [],
       commonMistakesVi: [],
+      collocations: [],
     },
   ],
 };
@@ -141,6 +148,7 @@ const synonymEntry = {
       patterns: [],
       relatedExpressions: [],
       commonMistakesVi: [],
+      collocations: [],
     },
   ],
 };
@@ -171,6 +179,38 @@ const ipaEntry = {
       patterns: [],
       relatedExpressions: [],
       commonMistakesVi: [],
+      collocations: [],
+    },
+  ],
+};
+
+const multiWordWordEntry = {
+  query: "strong coffee",
+  headword: "strong coffee",
+  entryType: "word" as const,
+  phonetic: null,
+  phoneticsUs: null,
+  phoneticsUk: null,
+  partOfSpeech: "noun phrase",
+  level: "A2" as const,
+  register: null,
+  overviewVi: "Một cụm từ thông dụng.",
+  overviewEn: "A common phrase.",
+  senses: [
+    {
+      id: "sense-1",
+      label: "Nghĩa 1",
+      definitionVi: "Cà phê đậm",
+      definitionEn: "Coffee with a strong taste.",
+      usageNoteVi: null,
+      examples: [],
+      synonyms: [],
+      antonyms: [],
+      examplesVi: ["Tôi thích cà phê đậm vào buổi sáng."],
+      patterns: [],
+      relatedExpressions: [],
+      commonMistakesVi: [],
+      collocations: [],
     },
   ],
 };
@@ -190,6 +230,53 @@ describe("DictionaryResultCard", () => {
     expect(container.querySelector(".ant-tabs")).not.toBeInTheDocument();
   });
 
+  it("uses a generic label for word entries so multi-word headwords are not shown as single words", () => {
+    renderUi(
+      <DictionaryResultCard vocabulary={multiWordWordEntry} hasSearched isLoading={false} />,
+    );
+
+    expect(screen.getByText("Từ / cụm từ")).toBeInTheDocument();
+    expect(screen.queryByText("Từ đơn")).not.toBeInTheDocument();
+  });
+
+  it("shows a collapsed collocations toggle for the active sense and expands bilingual rows on click", () => {
+    const { getByRole, getByText, queryByText } = renderUi(
+      <DictionaryResultCard vocabulary={multiSenseEntry} hasSearched isLoading={false} />,
+    );
+
+    const toggle = getByRole("button", { name: "Collocations (2)" });
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    expect(queryByText("run a company")).not.toBeInTheDocument();
+    expect(queryByText("điều hành một công ty")).not.toBeInTheDocument();
+
+    fireEvent.click(toggle);
+
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
+    expect(getByText("run a company")).toBeInTheDocument();
+    expect(getByText("điều hành một công ty")).toBeInTheDocument();
+    expect(getByText("run out of time")).toBeInTheDocument();
+    expect(getByText("hết thời gian")).toBeInTheDocument();
+  });
+
+  it("resets the collocations toggle when switching senses away and back", () => {
+    const { getByRole, getByText, queryByText } = renderUi(
+      <DictionaryResultCard vocabulary={multiSenseEntry} hasSearched isLoading={false} />,
+    );
+
+    fireEvent.click(getByRole("button", { name: "Collocations (2)" }));
+    expect(getByText("run a company")).toBeInTheDocument();
+
+    fireEvent.click(getByRole("button", { name: "Nghĩa 2" }));
+    expect(queryByText("run a company")).not.toBeInTheDocument();
+
+    fireEvent.click(getByRole("button", { name: "Nghĩa 1" }));
+    const toggle = getByRole("button", { name: "Collocations (2)" });
+
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+    expect(queryByText("run a company")).not.toBeInTheDocument();
+    expect(queryByText("điều hành một công ty")).not.toBeInTheDocument();
+  });
+
   it("switches visible sense when a tab button is clicked", () => {
     const { getByRole, getByText, queryByText } = renderUi(
       <DictionaryResultCard vocabulary={multiSenseEntry} hasSearched isLoading={false} />,
@@ -204,6 +291,7 @@ describe("DictionaryResultCard", () => {
 
     expect(getByText("Vận hành")).toBeInTheDocument();
     expect(queryByText("Chạy bộ")).not.toBeInTheDocument();
+    expect(queryByText("Collocations (2)")).not.toBeInTheDocument();
   });
 
   it("loading state shows animate-pulse skeleton and no antd card", () => {

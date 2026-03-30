@@ -20,8 +20,7 @@ const SENSE_ITEM_CLASS =
   "border-l-2 border-[rgba(196,109,46,0.3)] pl-4 text-sm italic leading-6 text-[var(--text-secondary)]";
 
 const ENTRY_TYPE_LABELS: Record<Vocabulary["entryType"], string> = {
-  word: "Từ đơn",
-  collocation: "Cụm từ cố định",
+  word: "Từ / cụm từ",
   phrasal_verb: "Cụm động từ",
   idiom: "Thành ngữ",
 };
@@ -39,8 +38,10 @@ const LEVEL_COLORS: Record<string, string> = {
 let activeUtterance: SpeechSynthesisUtterance | null = null;
 
 function SensePanel({ sense }: { sense: DictionarySense }) {
+  const [isCollocationsOpen, setIsCollocationsOpen] = useState(false);
   const examples = sense.examples ?? [];
   const examplesVi = sense.examplesVi ?? [];
+  const collocations = sense.collocations ?? [];
 
   return (
     <motion.div
@@ -71,7 +72,7 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
           <ul className="space-y-2">
             {examples.length > 0
               ? examples.map((example, i) => (
-                  <li key={i} className={SENSE_ITEM_CLASS}>
+                  <li key={`${example.en}-${example.vi ?? i}`} className={SENSE_ITEM_CLASS}>
                     {example.vi ? (
                       <Tooltip placement="top" title={example.vi}>
                         <span className="cursor-help">{example.en}</span>
@@ -141,6 +142,46 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
               </li>
             ))}
           </ul>
+        </section>
+      )}
+
+      {collocations.length > 0 && (
+        <section className="space-y-2">
+          <button
+            type="button"
+            aria-expanded={isCollocationsOpen}
+            onClick={() => setIsCollocationsOpen((open) => !open)}
+            className="inline-flex items-center rounded-full border border-[rgba(196,109,46,0.18)] bg-white/70 px-3 py-1 text-xs font-medium text-[var(--accent)] transition hover:bg-white"
+          >
+            Collocations ({collocations.length})
+          </button>
+          <AnimatePresence initial={false}>
+            {isCollocationsOpen && (
+              <motion.div
+                className="space-y-2"
+                initial={{ opacity: 0, y: -4 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -4 }}
+                transition={{ duration: 0.2 }}
+              >
+                <ul className="space-y-2">
+                  {collocations.map((collocation) => (
+                    <li
+                      key={`${collocation.en}-${collocation.vi}`}
+                      className="rounded-[var(--radius-lg)] bg-white/70 px-4 py-3"
+                    >
+                      <p className="text-sm font-medium leading-6 text-[var(--text-primary)]">
+                        {collocation.en}
+                      </p>
+                      <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">
+                        {collocation.vi}
+                      </p>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </section>
       )}
     </motion.div>
@@ -413,7 +454,7 @@ export function DictionaryResultCard({
               ))}
             </div>
             {activeSense && (
-              <SensePanel sense={activeSense} />
+              <SensePanel key={activeSense.id} sense={activeSense} />
             )}
           </div>
         </div>

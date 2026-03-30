@@ -4,6 +4,8 @@
 import { useEffect, useState } from "react";
 import { X, BookMarked, ExternalLink } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+
+import http from "@/lib/http";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";
 
 type Props = {
@@ -24,9 +26,8 @@ const LEVEL_COLORS: Record<string, string> = {
   C2: "bg-red-100 text-red-800",
 };
 
-const ENTRY_TYPE_LABELS: Record<string, string> = {
-  word: "Từ đơn",
-  collocation: "Cụm từ cố định",
+const ENTRY_TYPE_LABELS: Record<Vocabulary["entryType"], string> = {
+  word: "Từ / cụm từ",
   phrasal_verb: "Cụm động từ",
   idiom: "Thành ngữ",
 };
@@ -58,19 +59,21 @@ export function VocabularyDetailSheet({
     const controller = new AbortController();
     setStatus("loading");
     setData(null);
-    fetch(`/api/vocabulary/${encodeURIComponent(query)}/detail`, {
-      signal: controller.signal,
-    })
-      .then(async (res) => {
-        if (!res.ok) throw new Error("not_found");
-        return res.json() as Promise<Vocabulary>;
+    http
+      .get<Vocabulary>(`/vocabulary/${encodeURIComponent(query)}/detail`, {
+        signal: controller.signal,
       })
       .then((d) => {
-        setData(d);
+        setData(d.data);
         setStatus("ok");
       })
       .catch((err: unknown) => {
-        if (err instanceof Error && err.name === "AbortError") return;
+        if (
+          (err instanceof Error && err.name === "AbortError")
+          || (typeof err === "object" && err !== null && "code" in err && err.code === "ERR_CANCELED")
+        ) {
+          return;
+        }
         setStatus("error");
       });
     return () => controller.abort();

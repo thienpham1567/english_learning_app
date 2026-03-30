@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { BookOpenText, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
 
+import http from "@/lib/http";
+
 type DictionarySearchPanelProps = {
   initialValue: string;
   onSubmit: (word: string) => void;
@@ -56,23 +58,28 @@ export function DictionarySearchPanel({
     }
     const timer = setTimeout(async () => {
       try {
-        const res = await fetch(
-          `/api/dictionary/suggestions?q=${encodeURIComponent(draft)}`,
+        const { data } = await http.get<{ suggestions: string[] }>(
+          "/dictionary/suggestions",
+          {
+            params: { q: draft },
+          },
         );
-        const data = (await res.json()) as { suggestions: string[] };
         setSuggestions(data.suggestions ?? []);
         setHighlightedIndex(-1);
       } catch {
         setSuggestions([]);
       }
-    }, 250);
+    }, 150);
     return () => clearTimeout(timer);
   }, [draft]);
 
   // Outside click dismiss
   useEffect(() => {
     function handleMouseDown(e: MouseEvent) {
-      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+      if (
+        containerRef.current &&
+        !containerRef.current.contains(e.target as Node)
+      ) {
         setSuggestions([]);
         setHighlightedIndex(-1);
       }
@@ -123,7 +130,8 @@ export function DictionarySearchPanel({
           Nhập mục từ cần tra cứu
         </h2>
         <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">
-          Công cụ này hỗ trợ từ đơn, collocation, phrasal verb và idiom để bạn học theo ngữ cảnh rõ ràng hơn.
+          Công cụ này hỗ trợ từ đơn, collocation, phrasal verb và idiom để bạn
+          học theo ngữ cảnh rõ ràng hơn.
         </p>
 
         <div ref={containerRef} className="relative mt-5">

@@ -16,6 +16,7 @@ import { ChatHeader } from "@/components/app/ChatHeader";
 import { deriveTitle } from "@/lib/chat/derive-title";
 import { DEFAULT_PERSONA_ID, PERSONAS } from "@/lib/chat/personas";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
+import http from "@/lib/http";
 
 const SUGGESTED = [
   { text: "Sửa ngữ pháp giúp mình: I goed to school.", icon: BookOpen },
@@ -72,11 +73,8 @@ export function EnglishChatbotView({ conversationId }: EnglishChatbotViewProps) 
 
   const loadConversations = useCallback(async () => {
     try {
-      const res = await fetch("/api/conversations");
-      if (res.ok) {
-        const data = await res.json() as ConversationItem[];
-        setConversations(data);
-      }
+      const { data } = await http.get<ConversationItem[]>("/conversations");
+      setConversations(data);
     } catch {
       // non-fatal: thread list just won't show
     }
@@ -103,13 +101,12 @@ export function EnglishChatbotView({ conversationId }: EnglishChatbotViewProps) 
     let cancelled = false;
     (async () => {
       try {
-        const res = await fetch(`/api/conversations/${conversationId}/messages`);
-        if (!res.ok || cancelled) return;
-        const rows = await res.json() as Array<{
+        const { data: rows } = await http.get<Array<{
           id: string;
           role: "user" | "assistant";
           content: string;
-        }>;
+        }>>(`/conversations/${conversationId}/messages`);
+        if (cancelled) return;
         if (!cancelled) {
           setMessages(rows.map((r) => ({ id: r.id, role: r.role, text: r.content })));
           setError(null);
@@ -187,10 +184,14 @@ export function EnglishChatbotView({ conversationId }: EnglishChatbotViewProps) 
   }, []);
 
   const handleDeleteConversation = async (id: string) => {
-    await fetch(`/api/conversations/${id}`, { method: "DELETE" });
-    setConversations((curr) => curr.filter((c) => c.id !== id));
-    if (conversationId === id) {
-      router.push("/english-chatbot");
+    try {
+      await http.delete(`/conversations/${id}`);
+      setConversations((curr) => curr.filter((c) => c.id !== id));
+      if (conversationId === id) {
+        router.push("/english-chatbot");
+      }
+    } catch {
+      // Keep the current list if deletion fails.
     }
   };
 
@@ -201,25 +202,21 @@ export function EnglishChatbotView({ conversationId }: EnglishChatbotViewProps) 
     let convId = conversationId;
     if (!convId) {
       try {
-        const res = await fetch("/api/conversations", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ title: deriveTitle(t), personaId: selectedPersonaId }),
-        });
-        if (res.ok) {
-          const created = await res.json() as { id: string; title: string; personaId: string };
-          convId = created.id;
-          setConversations((curr) => [
-            {
-              id: created.id,
-              title: created.title,
-              updatedAt: new Date().toISOString(),
-              personaId: created.personaId,
-            },
-            ...curr,
-          ]);
-          router.replace(`/english-chatbot/${created.id}`);
-        }
+        const { data: created } = await http.post<{ id: string; title: string; personaId: string }>(
+          "/conversations",
+          { title: deriveTitle(t), personaId: selectedPersonaId },
+        );
+        convId = created.id;
+        setConversations((curr) => [
+          {
+            id: created.id,
+            title: created.title,
+            updatedAt: new Date().toISOString(),
+            personaId: created.personaId,
+          },
+          ...curr,
+        ]);
+        router.replace(`/english-chatbot/${created.id}`);
       } catch {
         // proceed without persistence if conversation creation fails
       }

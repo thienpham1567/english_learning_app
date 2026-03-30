@@ -13,9 +13,18 @@ describe("buildDictionaryInstructions", () => {
     expect(instructions).toContain("synonyms");
   });
 
+  it("instructs returning bilingual collocations per sense", () => {
+    const instructions = buildDictionaryInstructions("word");
+    expect(instructions).toContain("For each sense");
+    expect(instructions).toContain("0 to N bilingual collocations");
+    expect(instructions).toContain("English phrase (en)");
+    expect(instructions).toContain("Vietnamese translation (vi)");
+  });
+
   it("includes the entry type in the instructions string", () => {
     expect(buildDictionaryInstructions("phrasal_verb")).toContain("phrasal_verb");
-    expect(buildDictionaryInstructions("collocation")).toContain("collocation");
+    expect(buildDictionaryInstructions("idiom")).toContain("idiom");
+    expect(buildDictionaryInstructions("word")).not.toContain("Entry type: collocation");
   });
 
   it("instructs populating US and UK IPA phonetics", () => {
