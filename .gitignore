@@ -27,6 +27,8 @@
 .superpowers/
 .worktrees/
 
+.claude
+
 # debug
 npm-debug.log*
 yarn-debug.log*
