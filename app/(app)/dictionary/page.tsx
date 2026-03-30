@@ -9,6 +9,7 @@ import http from "@/lib/http";
 import { normalizeDictionaryQuery } from "@/lib/dictionary/normalize-query";
 import { DictionaryResultCard } from "@/components/dictionary/DictionaryResultCard";
 import { DictionarySearchPanel } from "@/components/dictionary/DictionarySearchPanel";
+import { ThesaurusSheet } from "@/components/dictionary/ThesaurusSheet";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";
 
 const QUERY_PATTERN = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
@@ -21,6 +22,7 @@ export default function DictionaryPage() {
   const [hasSearched, setHasSearched] = useState(false);
   const [saved, setSaved] = useState<boolean | null>(null);
   const [currentQuery, setCurrentQuery] = useState<string | null>(null);
+  const [isThesaurusOpen, setIsThesaurusOpen] = useState(false);
   const latestRequestIdRef = useRef(0);
 
   const searchFor = async (word: string) => {
@@ -36,6 +38,7 @@ export default function DictionaryPage() {
       return;
     }
 
+    setIsThesaurusOpen(false);
     setHasSearched(true);
     setIsLoading(true);
     setSaved(null);
@@ -135,11 +138,20 @@ export default function DictionaryPage() {
               isLoading={isLoading}
               saved={saved}
               onToggleSaved={handleToggleSaved}
-              onSynonymClick={handleSynonymClick}
+              onOpenThesaurus={() => setIsThesaurusOpen(true)}
             />
           </motion.div>
         </section>
       </div>
+      <ThesaurusSheet
+        vocabulary={result}
+        isOpen={isThesaurusOpen}
+        onClose={() => setIsThesaurusOpen(false)}
+        onWordClick={(word) => {
+          setIsThesaurusOpen(false);
+          handleSynonymClick(word);
+        }}
+      />
     </>
   );
 }
