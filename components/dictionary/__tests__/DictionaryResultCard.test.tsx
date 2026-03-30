@@ -15,6 +15,9 @@ const singleSenseEntry = {
   register: null,
   overviewVi: "Có nhiều nghĩa thông dụng trong giao tiếp.",
   overviewEn: "A common phrasal verb with multiple senses.",
+  nearbyWords: [],
+  verbForms: null,
+  numberInfo: null,
   senses: [
     {
       id: "sense-1",
@@ -50,6 +53,9 @@ const multiSenseEntry = {
   register: null,
   overviewVi: "Từ nhiều nghĩa phổ biến.",
   overviewEn: "A very common word with many senses.",
+  nearbyWords: [],
+  verbForms: null,
+  numberInfo: null,
   senses: [
     {
       id: "sense-1",
@@ -99,6 +105,9 @@ const bilingualEntry = {
   register: null,
   overviewVi: "Có nhiều nghĩa.",
   overviewEn: "A common phrasal verb.",
+  nearbyWords: [],
+  verbForms: null,
+  numberInfo: null,
   senses: [
     {
       id: "sense-1",
@@ -134,6 +143,9 @@ const synonymEntry = {
   register: null,
   overviewVi: "Rời đi.",
   overviewEn: "To leave a place.",
+  nearbyWords: [],
+  verbForms: null,
+  numberInfo: null,
   senses: [
     {
       id: "sense-1",
@@ -165,6 +177,9 @@ const ipaEntry = {
   register: null,
   overviewVi: "Chạy.",
   overviewEn: "To move fast.",
+  nearbyWords: [],
+  verbForms: null,
+  numberInfo: null,
   senses: [
     {
       id: "sense-1",
@@ -176,6 +191,85 @@ const ipaEntry = {
       synonyms: [],
       antonyms: [],
       examplesVi: ["Tôi chạy mỗi sáng."],
+      patterns: [],
+      relatedExpressions: [],
+      commonMistakesVi: [],
+      collocations: [],
+    },
+  ],
+};
+
+const verbEntry = {
+  query: "run",
+  headword: "run",
+  entryType: "word" as const,
+  phonetic: null,
+  phoneticsUs: "/rʌn/",
+  phoneticsUk: "/rɑːn/",
+  partOfSpeech: "verb",
+  level: "A1" as const,
+  register: null,
+  overviewVi: "Chạy.",
+  overviewEn: "To move fast.",
+  nearbyWords: ["rum", "rump", "rune", "rung"],
+  verbForms: {
+    base: "run",
+    thirdPerson: "runs",
+    pastSimple: "ran",
+    pastParticiple: "run",
+    presentParticiple: "running",
+  },
+  numberInfo: null,
+  senses: [
+    {
+      id: "s1",
+      label: "Nghĩa 1",
+      definitionVi: "Chạy",
+      definitionEn: "Move fast on foot.",
+      usageNoteVi: null,
+      examples: [{ en: "She **ran** every day.", vi: "Cô ấy chạy mỗi ngày." }],
+      synonyms: [],
+      antonyms: [],
+      examplesVi: [],
+      patterns: [],
+      relatedExpressions: [],
+      commonMistakesVi: [],
+      collocations: [{ en: "**go** for a run", vi: "đi chạy bộ" }],
+    },
+  ],
+};
+
+const nounEntry = {
+  query: "child",
+  headword: "child",
+  entryType: "word" as const,
+  phonetic: null,
+  phoneticsUs: "/tʃaɪld/",
+  phoneticsUk: "/tʃaɪld/",
+  partOfSpeech: "noun",
+  level: "A1" as const,
+  register: "formal",
+  overviewVi: "Đứa trẻ.",
+  overviewEn: "A young person.",
+  nearbyWords: [],
+  verbForms: null,
+  numberInfo: {
+    plural: "children",
+    isUncountable: false,
+    isPluralOnly: false,
+    isSingularOnly: false,
+  },
+  senses: [
+    {
+      id: "s1",
+      label: "Nghĩa 1",
+      definitionVi: "Đứa trẻ",
+      definitionEn: "A young person.",
+      usageNoteVi: null,
+      examples: [],
+      synonyms: [],
+      antonyms: [],
+      examplesVi: [],
       patterns: [],
       relatedExpressions: [],
       commonMistakesVi: [],
@@ -196,6 +290,9 @@ const multiWordWordEntry = {
   register: null,
   overviewVi: "Một cụm từ thông dụng.",
   overviewEn: "A common phrase.",
+  nearbyWords: [],
+  verbForms: null,
+  numberInfo: null,
   senses: [
     {
       id: "sense-1",
@@ -416,5 +513,112 @@ describe("DictionaryResultCard", () => {
     fireEvent.click(getByLabelText("Play UK pronunciation"));
     expect(mockCancel).toHaveBeenCalled();
     expect(mockUtterance.lang).toBe("en-GB");
+  });
+
+  it("renders dual phonetics on a single row (not two stacked rows)", () => {
+    const { container } = renderUi(
+      <DictionaryResultCard vocabulary={verbEntry} hasSearched isLoading={false} />,
+    );
+    // Both flags appear; they must be siblings inside one flex-row container
+    const usFlag = container.querySelector("span.text-base");
+    const row = usFlag?.parentElement?.parentElement;
+    expect(row).not.toBeNull();
+    // The outer phonetics container must NOT have flex-col
+    expect(row?.className).not.toMatch(/flex-col/);
+  });
+
+  it("renders verb forms strip collapsed by default when verbForms is set", () => {
+    const { getByText, queryByText } = renderUi(
+      <DictionaryResultCard vocabulary={verbEntry} hasSearched isLoading={false} />,
+    );
+    expect(getByText(/Verb forms/)).toBeInTheDocument();
+    // Collapsed: individual forms not visible
+    expect(queryByText("runs")).not.toBeInTheDocument();
+  });
+
+  it("expands verb forms strip when toggle is clicked", () => {
+    const { getByText } = renderUi(
+      <DictionaryResultCard vocabulary={verbEntry} hasSearched isLoading={false} />,
+    );
+    fireEvent.click(getByText(/Verb forms/));
+    expect(getByText(/runs/)).toBeInTheDocument();
+  });
+
+  it("does not render verb forms strip when verbForms is null", () => {
+    const { queryByText } = renderUi(
+      <DictionaryResultCard vocabulary={nounEntry} hasSearched isLoading={false} />,
+    );
+    expect(queryByText(/Verb forms/)).not.toBeInTheDocument();
+  });
+
+  it("renders register pill when register is set", () => {
+    const { getByText } = renderUi(
+      <DictionaryResultCard vocabulary={nounEntry} hasSearched isLoading={false} />,
+    );
+    expect(getByText("formal")).toBeInTheDocument();
+  });
+
+  it("renders number pill with plural form when numberInfo has plural", () => {
+    const { getByText } = renderUi(
+      <DictionaryResultCard vocabulary={nounEntry} hasSearched isLoading={false} />,
+    );
+    expect(getByText("pl: children")).toBeInTheDocument();
+  });
+
+  it("renders Thesaurus button in the sense tab row (not in the header tags)", () => {
+    const { getByRole, container } = renderUi(
+      <DictionaryResultCard
+        vocabulary={verbEntry}
+        hasSearched
+        isLoading={false}
+        onOpenThesaurus={vi.fn()}
+      />,
+    );
+    const thesaurusBtn = getByRole("button", { name: /thesaurus/i });
+    // The sense tab row contains the sense label buttons
+    const senseTabRow = thesaurusBtn.closest(".flex.items-center");
+    expect(senseTabRow).not.toBeNull();
+    // Should NOT be inside the header tag wrapper
+    const headerTagWrapper = container.querySelector(".flex.items-start.justify-between");
+    expect(headerTagWrapper?.contains(thesaurusBtn)).toBe(false);
+  });
+
+  it("renders NearbyWordsBar when vocabulary has nearbyWords", () => {
+    const onSearch = vi.fn();
+    const { getByRole } = renderUi(
+      <DictionaryResultCard
+        vocabulary={verbEntry}
+        hasSearched
+        isLoading={false}
+        onSearch={onSearch}
+      />,
+    );
+    expect(getByRole("button", { name: "rum" })).toBeInTheDocument();
+    fireEvent.click(getByRole("button", { name: "rune" }));
+    expect(onSearch).toHaveBeenCalledWith("rune");
+  });
+
+  it("renders bold in example English text", () => {
+    const { container } = renderUi(
+      <DictionaryResultCard vocabulary={verbEntry} hasSearched isLoading={false} />,
+    );
+    // "She **ran** every day." — the <strong> tag should contain "ran"
+    const strongTags = container.querySelectorAll("strong");
+    const ranTag = [...strongTags].find((s) => s.textContent === "ran");
+    expect(ranTag).toBeDefined();
+  });
+
+  it("renders Oxford-style inline collocations", () => {
+    const { container, getByText } = renderUi(
+      <DictionaryResultCard vocabulary={verbEntry} hasSearched isLoading={false} />,
+    );
+    // Expand collocations first
+    fireEvent.click(getByText(/Collocations/));
+    // "**go** for a run" — bold "go", plain " for a run"
+    const strongTags = container.querySelectorAll("strong");
+    const goTag = [...strongTags].find((s) => s.textContent === "go");
+    expect(goTag).toBeDefined();
+    // Vietnamese shown with em dash separator
+    expect(getByText("đi chạy bộ")).toBeInTheDocument();
   });
 });

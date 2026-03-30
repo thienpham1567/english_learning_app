@@ -5,21 +5,24 @@ import { Tag, Tooltip } from "antd";
 import { Bookmark, BookmarkCheck, BookOpen, Loader2, Volume2 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
-import type { DictionarySense, Vocabulary } from "@/lib/schemas/vocabulary";
+import type { DictionarySense, VocabularyWithNearby } from "@/lib/schemas/vocabulary";
+import { parseBold } from "@/lib/utils/parse-bold";
+import { NearbyWordsBar } from "@/components/dictionary/NearbyWordsBar";
 
 type DictionaryResultCardProps = {
-  vocabulary: Vocabulary | null;
+  vocabulary: VocabularyWithNearby | null;
   hasSearched: boolean;
   isLoading: boolean;
   saved?: boolean | null;
   onToggleSaved?: () => void;
   onOpenThesaurus?: () => void;
+  onSearch?: (word: string) => void;
 };
 
 const SENSE_ITEM_CLASS =
   "border-l-2 border-[rgba(196,109,46,0.3)] pl-4 text-sm italic leading-6 text-[var(--text-secondary)]";
 
-const ENTRY_TYPE_LABELS: Record<Vocabulary["entryType"], string> = {
+const ENTRY_TYPE_LABELS: Record<VocabularyWithNearby["entryType"], string> = {
   word: "Từ / cụm từ",
   phrasal_verb: "Cụm động từ",
   idiom: "Thành ngữ",
@@ -36,6 +39,31 @@ const LEVEL_COLORS: Record<string, string> = {
 
 // Module-level: ensures only one utterance plays at a time across re-renders
 let activeUtterance: SpeechSynthesisUtterance | null = null;
+
+function getNumberLabel(numberInfo: NonNullable<VocabularyWithNearby["numberInfo"]>): string {
+  if (numberInfo.isUncountable) return "uncountable";
+  if (numberInfo.isPluralOnly) return "plural only";
+  if (numberInfo.isSingularOnly) return "singular only";
+  if (numberInfo.plural) return `pl: ${numberInfo.plural}`;
+  return "";
+}
+
+function BoldText({ text }: { text: string }) {
+  const segments = parseBold(text);
+  return (
+    <>
+      {segments.map((seg, i) =>
+        seg.bold ? (
+          <strong key={i} className="font-semibold not-italic">
+            {seg.text}
+          </strong>
+        ) : (
+          <span key={i}>{seg.text}</span>
+        ),
+      )}
+    </>
+  );
+}
 
 function SensePanel({ sense }: { sense: DictionarySense }) {
   const [isCollocationsOpen, setIsCollocationsOpen] = useState(false);
@@ -75,16 +103,18 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
                   <li key={`${example.en}-${example.vi ?? i}`} className={SENSE_ITEM_CLASS}>
                     {example.vi ? (
                       <Tooltip placement="top" title={example.vi}>
-                        <span className="cursor-help">{example.en}</span>
+                        <span className="cursor-help">
+                          <BoldText text={example.en} />
+                        </span>
                       </Tooltip>
                     ) : (
-                      <span>{example.en}</span>
+                      <BoldText text={example.en} />
                     )}
                   </li>
                 ))
               : examplesVi.map((example) => (
                   <li key={example} className={SENSE_ITEM_CLASS}>
-                    {example}
+                    <BoldText text={example} />
                   </li>
                 ))}
           </ul>
@@ -164,18 +194,17 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
                 exit={{ opacity: 0, y: -4 }}
                 transition={{ duration: 0.2 }}
               >
-                <ul className="space-y-2">
+                <ul className="space-y-1.5">
                   {collocations.map((collocation) => (
                     <li
                       key={`${collocation.en}-${collocation.vi}`}
-                      className="rounded-[var(--radius-lg)] bg-white/70 px-4 py-3"
+                      className="text-sm leading-6"
                     >
-                      <p className="text-sm font-medium leading-6 text-[var(--text-primary)]">
-                        {collocation.en}
-                      </p>
-                      <p className="mt-1 text-sm leading-6 text-[var(--text-secondary)]">
-                        {collocation.vi}
-                      </p>
+                      <span className="text-[var(--text-primary)]">
+                        <BoldText text={collocation.en} />
+                      </span>
+                      <span className="mx-1.5 text-[var(--text-muted)]">&mdash;</span>
+                      <span className="text-[var(--text-secondary)]">{collocation.vi}</span>
                     </li>
                   ))}
                 </ul>
@@ -220,13 +249,19 @@ export function DictionaryResultCard({
   saved,
   onToggleSaved,
   onOpenThesaurus,
+  onSearch,
 }: DictionaryResultCardProps) {
   const firstSenseId = vocabulary?.senses[0]?.id ?? "";
   const [activeKey, setActiveKey] = useState(firstSenseId);
   const [speakingLocale, setSpeakingLocale] = useState<string | null>(null);
+  const [verbFormsOpen, setVerbFormsOpen] = useState(false);
 
   useEffect(() => {
     setActiveKey(firstSenseId);
+  }, [firstSenseId]);
+
+  useEffect(() => {
+    setVerbFormsOpen(false);
   }, [firstSenseId]);
 
   function speak(locale: "en-US" | "en-GB") {
@@ -317,6 +352,7 @@ export function DictionaryResultCard({
 
   const activeSense = vocabulary.senses.find((s) => s.id === activeKey) ?? vocabulary.senses[0];
   const hasDualPhonetics = vocabulary.phoneticsUs || vocabulary.phoneticsUk;
+  const numberLabel = vocabulary.numberInfo ? getNumberLabel(vocabulary.numberInfo) : "";
 
   return (
     <AnimatePresence mode="wait">
@@ -328,6 +364,7 @@ export function DictionaryResultCard({
         transition={{ duration: 0.35, ease: "easeOut" }}
       >
         <div className="rounded-2xl bg-[var(--surface)] shadow-[var(--shadow-lg)] p-6 min-h-[400px]">
+          {/* Header */}
           <div className="flex items-start justify-between gap-4 max-[720px]:flex-col max-[720px]:gap-3">
             <div className="min-w-0 flex-1">
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
@@ -355,15 +392,18 @@ export function DictionaryResultCard({
                   {vocabulary.partOfSpeech}
                 </Tag>
               )}
-              {vocabulary && onOpenThesaurus && (
-                <button
-                  type="button"
-                  onClick={onOpenThesaurus}
-                  aria-label="Thesaurus"
-                  className="flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-200 transition hover:bg-emerald-100 hover:ring-emerald-300"
+              {vocabulary.register && (
+                <Tag
+                  variant="outlined"
+                  className="!rounded-full !px-3 !py-1 !border-amber-300 !text-amber-700 !bg-amber-50"
                 >
-                  Thesaurus
-                </button>
+                  {vocabulary.register}
+                </Tag>
+              )}
+              {numberLabel && (
+                <Tag variant="outlined" className="!rounded-full !px-3 !py-1">
+                  {numberLabel}
+                </Tag>
               )}
               {saved != null && onToggleSaved && (
                 <button
@@ -381,9 +421,10 @@ export function DictionaryResultCard({
             </div>
           </div>
 
+          {/* Pronunciation — single row */}
           {hasDualPhonetics ? (
             <motion.div
-              className="mt-3 flex flex-col gap-1.5"
+              className="mt-3 flex flex-wrap items-center gap-3"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.15, duration: 0.3 }}
@@ -396,6 +437,9 @@ export function DictionaryResultCard({
                   </span>
                   <AudioButton locale="en-US" speakingLocale={speakingLocale} onSpeak={speak} />
                 </div>
+              )}
+              {vocabulary.phoneticsUs && vocabulary.phoneticsUk && (
+                <span className="text-[var(--text-muted)]">·</span>
               )}
               {vocabulary.phoneticsUk && (
                 <div className="flex items-center gap-2">
@@ -418,6 +462,35 @@ export function DictionaryResultCard({
             </motion.span>
           ) : null}
 
+          {/* Verb forms strip */}
+          {vocabulary.verbForms && (
+            <div className="mt-3">
+              <button
+                type="button"
+                onClick={() => setVerbFormsOpen((v) => !v)}
+                className="inline-flex items-center gap-1 text-xs font-medium text-[var(--text-muted)] transition hover:text-[var(--text-secondary)]"
+              >
+                Verb forms {verbFormsOpen ? "▴" : "▾"}
+              </button>
+              <AnimatePresence initial={false}>
+                {verbFormsOpen && (
+                  <motion.p
+                    className="mt-1.5 text-sm [font-family:var(--font-mono)] text-[var(--text-secondary)]"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    {vocabulary.verbForms.base} · {vocabulary.verbForms.thirdPerson} ·{" "}
+                    {vocabulary.verbForms.pastSimple} · {vocabulary.verbForms.pastParticiple} ·{" "}
+                    {vocabulary.verbForms.presentParticiple}
+                  </motion.p>
+                )}
+              </AnimatePresence>
+            </div>
+          )}
+
+          {/* Overview */}
           <motion.div
             className="mt-5 space-y-3 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4"
             initial={{ opacity: 0, y: 4 }}
@@ -434,29 +507,54 @@ export function DictionaryResultCard({
             </div>
           </motion.div>
 
+          {/* Sense tabs + Thesaurus button */}
           <div className="mt-6">
-            <div className="flex gap-2 border-b border-(--border) pb-3 mb-5 overflow-x-auto">
-              {vocabulary.senses.map((sense) => (
+            <div className="flex items-center gap-2 border-b border-(--border) pb-3 mb-5 overflow-x-auto">
+              <div className="flex gap-2 flex-1 overflow-x-auto">
+                {vocabulary.senses.map((sense) => (
+                  <button
+                    key={sense.id}
+                    type="button"
+                    aria-selected={activeKey === sense.id}
+                    onClick={() => setActiveKey(sense.id)}
+                    className={[
+                      "shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition",
+                      activeKey === sense.id
+                        ? "bg-[rgba(196,109,46,0.12)] text-[var(--accent)]"
+                        : "text-[var(--text-secondary)] hover:bg-white/50 hover:text-[var(--ink)]",
+                    ].join(" ")}
+                  >
+                    {sense.label}
+                  </button>
+                ))}
+              </div>
+              {onOpenThesaurus && (
                 <button
-                  key={sense.id}
                   type="button"
-                  aria-selected={activeKey === sense.id}
-                  onClick={() => setActiveKey(sense.id)}
-                  className={[
-                    "shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition",
-                    activeKey === sense.id
-                      ? "bg-[rgba(196,109,46,0.12)] text-[var(--accent)]"
-                      : "text-[var(--text-secondary)] hover:bg-white/50 hover:text-[var(--ink)]",
-                  ].join(" ")}
+                  onClick={onOpenThesaurus}
+                  aria-label="Thesaurus"
+                  className="shrink-0 flex items-center gap-1.5 rounded-full border border-[var(--border-strong)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
                 >
-                  {sense.label}
+                  <BookOpen size={12} />
+                  Thesaurus
                 </button>
-              ))}
+              )}
             </div>
             {activeSense && (
               <SensePanel key={activeSense.id} sense={activeSense} />
             )}
           </div>
+
+          {/* Nearby words bar */}
+          {vocabulary.nearbyWords.length > 0 && onSearch && (
+            <div className="mt-6 border-t border-(--border) pt-5">
+              <NearbyWordsBar
+                words={vocabulary.nearbyWords}
+                headword={vocabulary.headword}
+                onSearch={onSearch}
+              />
+            </div>
+          )}
         </div>
       </motion.div>
     </AnimatePresence>
