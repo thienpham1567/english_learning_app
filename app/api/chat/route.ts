@@ -103,37 +103,6 @@ export async function POST(req: Request) {
               }
 
               if (event.type === "response.completed" && !doneSent) {
-                if (conversationId && session && fullAssistantText) {
-                  const lastUserMessage = messages[messages.length - 1];
-                  if (lastUserMessage) {
-                    // Verify ownership before writing
-                    const [conv] = await db
-                      .select({ userId: conversation.userId })
-                      .from(conversation)
-                      .where(eq(conversation.id, conversationId))
-                      .limit(1);
-
-                    if (conv && conv.userId === session.user.id) {
-                      await db.insert(message).values([
-                        {
-                          conversationId,
-                          role: "user",
-                          content: lastUserMessage.text,
-                        },
-                        {
-                          conversationId,
-                          role: "assistant",
-                          content: fullAssistantText,
-                        },
-                      ]);
-                      await db
-                        .update(conversation)
-                        .set({ updatedAt: new Date(), personaId })
-                        .where(eq(conversation.id, conversationId));
-                    }
-                  }
-                }
-
                 writeSseEvent(controller, encoder, { type: "assistant_done" });
                 doneSent = true;
               }
@@ -157,6 +126,42 @@ export async function POST(req: Request) {
             });
           } finally {
             controller.close();
+          }
+
+          // Persist conversation after stream is closed.
+          // Errors here are logged but never sent as SSE — the client already has the full exchange.
+          if (conversationId && session && fullAssistantText) {
+            const lastUserMessage = messages[messages.length - 1];
+            if (lastUserMessage) {
+              try {
+                const [conv] = await db
+                  .select({ userId: conversation.userId })
+                  .from(conversation)
+                  .where(eq(conversation.id, conversationId))
+                  .limit(1);
+
+                if (conv && conv.userId === session.user.id) {
+                  await db.insert(message).values([
+                    {
+                      conversationId,
+                      role: "user",
+                      content: lastUserMessage.text,
+                    },
+                    {
+                      conversationId,
+                      role: "assistant",
+                      content: fullAssistantText,
+                    },
+                  ]);
+                  await db
+                    .update(conversation)
+                    .set({ updatedAt: new Date(), personaId })
+                    .where(eq(conversation.id, conversationId));
+                }
+              } catch (dbError) {
+                console.error("Failed to persist conversation:", dbError);
+              }
+            }
           }
         },
       }),
