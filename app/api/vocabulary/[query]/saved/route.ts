@@ -13,7 +13,8 @@ export async function PATCH(req: Request, { params }: { params: Params }) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const { query } = await params;
+  const { query: rawQuery } = await params;
+  const query = decodeURIComponent(rawQuery);
   const body = (await req.json().catch(() => null)) as { saved?: unknown } | null;
 
   if (typeof body?.saved !== "boolean") {
