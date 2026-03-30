@@ -11,14 +11,14 @@ import { normalizeDictionaryQuery } from "@/lib/dictionary/normalize-query";
 import { DictionaryResultCard } from "@/components/dictionary/DictionaryResultCard";
 import { DictionarySearchPanel } from "@/components/dictionary/DictionarySearchPanel";
 import { ThesaurusSheet } from "@/components/dictionary/ThesaurusSheet";
-import type { Vocabulary } from "@/lib/schemas/vocabulary";
+import type { VocabularyWithNearby } from "@/lib/schemas/vocabulary";
 
 const QUERY_PATTERN = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
 
 export default function DictionaryPage() {
   const [messageApi, contextHolder] = message.useMessage();
   const [q, setQ] = useQueryState("q", parseAsString.withDefault(""));
-  const [result, setResult] = useState<Vocabulary | null>(null);
+  const [result, setResult] = useState<VocabularyWithNearby | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
   const [saved, setSaved] = useState<boolean | null>(null);
@@ -57,7 +57,7 @@ export default function DictionaryPage() {
     latestRequestIdRef.current = requestId;
 
     try {
-      const { data: payload } = await http.post<{ data: Vocabulary; saved: boolean }>(
+      const { data: payload } = await http.post<{ data: VocabularyWithNearby; saved: boolean }>(
         "/dictionary",
         { word: normalized },
       );
@@ -147,6 +147,7 @@ export default function DictionaryPage() {
               saved={saved}
               onToggleSaved={handleToggleSaved}
               onOpenThesaurus={() => setIsThesaurusOpen(true)}
+              onSearch={handleSubmit}
             />
           </motion.div>
         </section>
