@@ -2,6 +2,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import { useQueryState, useQueryStates, parseAsString, parseAsBoolean, parseAsArrayOf } from "nuqs";
 import { BookMarked, Search, Trash2 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { VocabularyStatsBar } from "@/components/app/VocabularyStatsBar";
@@ -55,11 +56,15 @@ type PendingDelete = {
 export default function MyVocabularyPage() {
   const [entries, setEntries] = useState<VocabularyEntry[]>([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [search, setSearch] = useState("");
-  const [levelFilter, setLevelFilter] = useState<string[]>([]);
-  const [typeFilter, setTypeFilter] = useState<string[]>([]);
-  const [savedOnly, setSavedOnly] = useState(false);
-  const [selectedQuery, setSelectedQuery] = useState<string | null>(null);
+  const [selected, setSelected] = useQueryState("selected", parseAsString);
+  const [filters, setFilters] = useQueryStates({
+    search: parseAsString.withDefault(""),
+    level: parseAsArrayOf(parseAsString, ",").withDefault([]),
+    type: parseAsArrayOf(parseAsString, ",").withDefault([]),
+    saved: parseAsBoolean.withDefault(false),
+  });
+
+  const { search, level: levelFilter, type: typeFilter, saved: savedOnly } = filters;
   const [pendingDelete, setPendingDelete] = useState<PendingDelete | null>(null);
   const pendingDeleteRef = useRef<PendingDelete | null>(null);
 
@@ -107,7 +112,7 @@ export default function MyVocabularyPage() {
   };
 
   const handleDelete = (entry: VocabularyEntry) => {
-    if (selectedQuery === entry.query) setSelectedQuery(null);
+    if (selected === entry.query) void setSelected(null);
 
     if (pendingDelete) {
       clearTimeout(pendingDelete.timerId);
@@ -140,24 +145,25 @@ export default function MyVocabularyPage() {
     setPendingDelete(null);
   };
 
-  const toggleLevel = (level: string) =>
-    setLevelFilter((curr) =>
-      curr.includes(level) ? curr.filter((l) => l !== level) : [...curr, level],
-    );
+  const toggleLevel = (level: string) => {
+    const next = levelFilter.includes(level)
+      ? levelFilter.filter((l) => l !== level)
+      : [...levelFilter, level];
+    void setFilters({ level: next.length > 0 ? next : null });
+  };
 
-  const toggleType = (type: string) =>
-    setTypeFilter((curr) =>
-      curr.includes(type) ? curr.filter((t) => t !== type) : [...curr, type],
-    );
+  const toggleType = (type: string) => {
+    const next = typeFilter.includes(type)
+      ? typeFilter.filter((t) => t !== type)
+      : [...typeFilter, type];
+    void setFilters({ type: next.length > 0 ? next : null });
+  };
 
   const hasActiveFilter =
     !!search || levelFilter.length > 0 || typeFilter.length > 0 || savedOnly;
 
   const clearFilters = () => {
-    setSearch("");
-    setLevelFilter([]);
-    setTypeFilter([]);
-    setSavedOnly(false);
+    void setFilters({ search: null, level: null, type: null, saved: null });
   };
 
   const visible = entries.filter((e) => {
@@ -172,8 +178,8 @@ export default function MyVocabularyPage() {
     return true;
   });
 
-  const selectedEntry = entries.find((e) => e.query === selectedQuery) ?? null;
-  const handleCloseSheet = useCallback(() => setSelectedQuery(null), []);
+  const selectedEntry = entries.find((e) => e.query === selected) ?? null;
+  const handleCloseSheet = useCallback(() => { void setSelected(null); }, [setSelected]);
 
   return (
     <div className="min-h-full overflow-y-auto">
@@ -220,7 +226,7 @@ export default function MyVocabularyPage() {
           <input
             type="text"
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => void setFilters({ search: e.target.value || null })}
             placeholder="Tìm từ..."
             aria-label="Tìm kiếm từ vựng"
             className="w-full border-b border-[var(--border)] bg-transparent pb-2.5 pl-7 pr-4 pt-1 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]"
@@ -250,7 +256,7 @@ export default function MyVocabularyPage() {
             })}
             <span className="text-[var(--border-strong)]">·</span>
             <button
-              onClick={() => setSavedOnly((v) => !v)}
+              onClick={() => void setFilters({ saved: !savedOnly || null })}
               className={[
                 "relative pb-1 text-xs font-medium transition-colors",
                 savedOnly
@@ -336,7 +342,7 @@ export default function MyVocabularyPage() {
                   initial={{ opacity: 0, y: 5 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.22, delay: idx * 0.04, ease: "easeOut" }}
-                  onClick={() => setSelectedQuery(entry.query)}
+                  onClick={() => void setSelected(entry.query)}
                   className="group relative flex cursor-pointer items-center gap-4 border-b border-[var(--border)] py-4 transition-colors hover:bg-[var(--surface-hover)]"
                 >
                   {/* Left accent bar */}
@@ -399,7 +405,7 @@ export default function MyVocabularyPage() {
       </motion.div>
 
       <VocabularyDetailSheet
-        query={selectedQuery}
+        query={selected}
         onClose={handleCloseSheet}
         saved={selectedEntry?.saved ?? false}
         onToggleSaved={() => selectedEntry && handleToggleSaved(selectedEntry)}
