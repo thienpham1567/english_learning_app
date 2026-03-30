@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
 import axios from "axios";
 
-const allowedQueryPattern = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
+import { ALLOWED_QUERY_PATTERN } from "@/lib/dictionary/normalize-query";
 
 export async function GET(req: Request) {
   const { searchParams } = new URL(req.url);
   const raw = searchParams.get("q") ?? "";
   const q = raw.trim().toLowerCase();
 
-  if (q.length < 2 || !allowedQueryPattern.test(q)) {
+  if (q.length < 2 || !ALLOWED_QUERY_PATTERN.test(q)) {
     return NextResponse.json({ suggestions: [] });
   }
 

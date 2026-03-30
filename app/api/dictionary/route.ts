@@ -9,11 +9,9 @@ import { vocabularyCache, userVocabulary } from "@/lib/db/schema";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { VocabularySchema } from "@/lib/schemas/vocabulary";
-import { normalizeDictionaryQuery } from "@/lib/dictionary/normalize-query";
+import { ALLOWED_QUERY_PATTERN, normalizeDictionaryQuery } from "@/lib/dictionary/normalize-query";
 import { classifyDictionaryEntry } from "@/lib/dictionary/classify-entry";
 import { buildDictionaryInstructions } from "@/lib/dictionary/prompt";
-
-const allowedQueryPattern = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
 
 /**
  * Returns true if the headword is plausibly related to the query.
@@ -59,7 +57,7 @@ export async function POST(req: Request) {
       );
     }
 
-    if (!allowedQueryPattern.test(normalized)) {
+    if (!ALLOWED_QUERY_PATTERN.test(normalized)) {
       return NextResponse.json(
         { error: "Chỉ hỗ trợ từ hoặc cụm từ tiếng Anh hợp lệ." },
         { status: 400 },
