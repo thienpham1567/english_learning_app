@@ -1,9 +1,23 @@
 import { screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import EnglishChatbotPage, { getMessageSpacingClassName } from "@/app/(app)/english-chatbot/page";
+import EnglishChatbotPage from "@/app/(app)/english-chatbot/page";
+import { getMessageSpacingClassName } from "@/components/app/EnglishChatbotView";
 import type { PageMessage } from "@/components/ChatMessage";
 import { renderUi } from "@/test/render";
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({
+    push: vi.fn(),
+    replace: vi.fn(),
+    back: vi.fn(),
+    forward: vi.fn(),
+    refresh: vi.fn(),
+    prefetch: vi.fn(),
+  }),
+  usePathname: () => "/english-chatbot",
+  useSearchParams: () => new URLSearchParams(),
+}));
 
 vi.mock("@/components/app/UserContext", () => ({
   useUser: () => ({ name: "Người học", image: null }),
