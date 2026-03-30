@@ -14,7 +14,7 @@ describe("ConversationList", () => {
       <ConversationList
         conversations={threads}
         activeId={null}
-        onSelect={vi.fn()}
+
         onNew={vi.fn()}
         onDelete={vi.fn()}
       />,
@@ -23,19 +23,17 @@ describe("ConversationList", () => {
     expect(screen.getByText("Thread two")).toBeInTheDocument();
   });
 
-  it("calls onSelect with the thread id when a thread is clicked", () => {
-    const onSelect = vi.fn();
+  it("renders conversation items as links with correct hrefs", () => {
     render(
       <ConversationList
         conversations={threads}
         activeId={null}
-        onSelect={onSelect}
         onNew={vi.fn()}
         onDelete={vi.fn()}
       />,
     );
-    fireEvent.click(screen.getByText("Thread one"));
-    expect(onSelect).toHaveBeenCalledWith("1");
+    const link = screen.getByText("Thread one").closest("a");
+    expect(link).toHaveAttribute("href", "/english-chatbot/1");
   });
 
   it("calls onNew when the New chat button is clicked", () => {
@@ -44,7 +42,7 @@ describe("ConversationList", () => {
       <ConversationList
         conversations={[]}
         activeId={null}
-        onSelect={vi.fn()}
+
         onNew={onNew}
         onDelete={vi.fn()}
       />,
@@ -58,7 +56,7 @@ describe("ConversationList", () => {
       <ConversationList
         conversations={[]}
         activeId={null}
-        onSelect={vi.fn()}
+
         onNew={vi.fn()}
         onDelete={vi.fn()}
       />,
@@ -72,7 +70,7 @@ describe("ConversationList", () => {
       <ConversationList
         conversations={[{ id: "1", title: longTitle, updatedAt: new Date().toISOString(), personaId: "simon" }]}
         activeId={null}
-        onSelect={vi.fn()}
+
         onNew={vi.fn()}
         onDelete={vi.fn()}
       />,
@@ -87,7 +85,7 @@ describe("ConversationList", () => {
       <ConversationList
         conversations={[{ id: "1", title: shortTitle, updatedAt: new Date().toISOString(), personaId: "simon" }]}
         activeId={null}
-        onSelect={vi.fn()}
+
         onNew={vi.fn()}
         onDelete={vi.fn()}
       />,
@@ -101,7 +99,7 @@ describe("ConversationList", () => {
       <ConversationList
         conversations={[{ id: "1", title: exactTitle, updatedAt: new Date().toISOString(), personaId: "simon" }]}
         activeId={null}
-        onSelect={vi.fn()}
+
         onNew={vi.fn()}
         onDelete={vi.fn()}
       />,

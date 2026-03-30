@@ -169,10 +169,6 @@ export function EnglishChatbotView({ conversationId }: EnglishChatbotViewProps) 
     router.push("/english-chatbot");
   }, [router]);
 
-  const handleSelectConversation = useCallback((id: string) => {
-    router.push(`/english-chatbot/${id}`);
-  }, [router]);
-
   const handlePersonaChange = useCallback((personaId: string) => {
     setSelectedPersonaId(personaId);
     setMessages((curr) => {
@@ -329,7 +325,7 @@ export function EnglishChatbotView({ conversationId }: EnglishChatbotViewProps) 
       <ConversationList
         conversations={conversations}
         activeId={conversationId}
-        onSelect={handleSelectConversation}
+
         onNew={handleNewChat}
         onDelete={handleDeleteConversation}
       />

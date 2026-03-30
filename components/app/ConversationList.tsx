@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Tooltip } from "antd";
 import { Plus, Trash2, GraduationCap } from "lucide-react";
 
@@ -13,7 +14,6 @@ export type ConversationItem = {
 type Props = {
   conversations: ConversationItem[];
   activeId: string | null;
-  onSelect: (id: string) => void;
   onNew: () => void;
   onDelete: (id: string) => void;
 };
@@ -40,7 +40,6 @@ export function truncateTitle(
 export function ConversationList({
   conversations,
   activeId,
-  onSelect,
   onNew,
   onDelete,
 }: Props) {
@@ -91,8 +90,8 @@ export function ConversationList({
             );
             return (
               <div key={conv.id} className="group relative">
-                <button
-                  onClick={() => onSelect(conv.id)}
+                <Link
+                  href={`/english-chatbot/${conv.id}`}
                   className={[
                     "flex w-full flex-col gap-0.5 rounded-(--radius) border-l-2 px-3 py-2.5 text-left transition",
                     isActive
@@ -108,7 +107,7 @@ export function ConversationList({
                   <span className="text-[11px] text-white/30">
                     {formatRelativeTime(conv.updatedAt)}
                   </span>
-                </button>
+                </Link>
 
                 <button
                   onClick={(e) => {
