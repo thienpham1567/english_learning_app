@@ -319,7 +319,7 @@ export function DictionaryResultCard({
                   type="button"
                   onClick={onOpenThesaurus}
                   aria-label="Thesaurus"
-                  className="flex items-center gap-1 rounded-full border border-[var(--border)] px-3 py-1 text-xs font-medium text-[var(--text-secondary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                  className="flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 ring-1 ring-emerald-200 transition hover:bg-emerald-100 hover:ring-emerald-300"
                 >
                   Thesaurus
                 </button>

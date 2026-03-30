@@ -37,7 +37,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
     : { initial: { x: "100%" }, animate: { x: 0 }, exit: { x: "100%" } };
 
   const sensesWithData = vocabulary?.senses.filter(
-    (s) => s.synonyms.length > 0 || s.antonyms.length > 0,
+    (s) => (s.synonyms?.length ?? 0) > 0 || (s.antonyms?.length ?? 0) > 0,
   ) ?? [];
 
   function handleWordClick(word: string) {
@@ -103,7 +103,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                         {sense.label}
                       </p>
 
-                      {sense.synonyms.length > 0 && (
+                      {(sense.synonyms?.length ?? 0) > 0 && (
                         <div className="space-y-2">
                           <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
                             Đồng nghĩa
@@ -123,7 +123,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                         </div>
                       )}
 
-                      {sense.antonyms.length > 0 && (
+                      {(sense.antonyms?.length ?? 0) > 0 && (
                         <div className="space-y-2">
                           <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
                             Trái nghĩa
