@@ -24,6 +24,15 @@ export const metadata: Metadata = {
   title: "Trợ lý học tập tiếng Anh | Luyện tiếng Anh mỗi ngày",
   description:
     "Trợ lý học tập tiếng Anh với phản hồi trực tiếp, sửa lỗi rõ ràng và hội thoại tự nhiên mỗi ngày.",
+  openGraph: {
+    title: "Trợ lý học tập tiếng Anh | Luyện tiếng Anh mỗi ngày",
+    description:
+      "Trợ lý học tập tiếng Anh với phản hồi trực tiếp, sửa lỗi rõ ràng và hội thoại tự nhiên mỗi ngày.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+  },
 };
 
 export default function RootLayout({
