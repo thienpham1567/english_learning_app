@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { auth } from "@/lib/auth";
 import { AppShell } from "@/components/app/AppShell";
@@ -19,5 +20,9 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
     image: session.user.image ?? null,
   };
 
-  return <AppShell user={user}>{children}</AppShell>;
+  return (
+    <NuqsAdapter>
+      <AppShell user={user}>{children}</AppShell>
+    </NuqsAdapter>
+  );
 }
