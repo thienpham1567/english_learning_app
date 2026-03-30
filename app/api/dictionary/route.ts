@@ -12,6 +12,7 @@ import { VocabularySchema, normalizeVocabulary, type Vocabulary } from "@/lib/sc
 import { ALLOWED_QUERY_PATTERN, normalizeDictionaryQuery } from "@/lib/dictionary/normalize-query";
 import { classifyDictionaryEntry } from "@/lib/dictionary/classify-entry";
 import { buildDictionaryInstructions } from "@/lib/dictionary/prompt";
+import { getNearbyWords } from "@/lib/dictionary/nearby-words";
 
 /**
  * Returns true if the headword is plausibly related to the query.
@@ -89,7 +90,8 @@ export async function POST(req: Request) {
           // Fall through to LLM call below
         } else {
           const saved = session ? await upsertUserVocabulary(session.user.id, cacheKey) : false;
-          return NextResponse.json({ data: cachedData, cached: true, saved });
+          const nearbyWords = getNearbyWords(cacheKey);
+          return NextResponse.json({ data: { ...cachedData, nearbyWords }, cached: true, saved });
         }
       }
     }
@@ -129,8 +131,9 @@ export async function POST(req: Request) {
       });
 
     const saved = session ? await upsertUserVocabulary(session.user.id, cacheKey) : false;
+    const nearbyWords = getNearbyWords(normalized);
 
-    return NextResponse.json({ data: parsed, cached: false, saved });
+    return NextResponse.json({ data: { ...parsed, nearbyWords }, cached: false, saved });
   } catch (error) {
     console.error("Dictionary API error:", error);
     return NextResponse.json(
