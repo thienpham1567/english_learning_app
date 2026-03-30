@@ -130,7 +130,7 @@ export async function POST(req: Request) {
 
           // Persist conversation after stream is closed.
           // Errors here are logged but never sent as SSE — the client already has the full exchange.
-          if (conversationId && session && fullAssistantText) {
+          if (conversationId && session && fullAssistantText && doneSent) {
             const lastUserMessage = messages[messages.length - 1];
             if (lastUserMessage) {
               try {
