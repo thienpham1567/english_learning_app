@@ -5,9 +5,8 @@ import { BookOpenText, Sparkles } from "lucide-react";
 import { motion } from "motion/react";
 
 type DictionarySearchPanelProps = {
-  value: string;
-  onChange: (value: string) => void;
-  onSearch: () => void;
+  initialValue: string;
+  onSubmit: (word: string) => void;
   isLoading: boolean;
 };
 
@@ -34,18 +33,23 @@ function HighlightMatch({ text, query }: { text: string; query: string }) {
 }
 
 export function DictionarySearchPanel({
-  value,
-  onChange,
-  onSearch,
+  initialValue,
+  onSubmit,
   isLoading,
 }: DictionarySearchPanelProps) {
+  const [draft, setDraft] = useState(initialValue);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const containerRef = useRef<HTMLDivElement>(null);
 
+  // Sync draft when initialValue changes (e.g. URL param update)
+  useEffect(() => {
+    setDraft(initialValue);
+  }, [initialValue]);
+
   // Debounced fetch
   useEffect(() => {
-    if (value.length < 2) {
+    if (draft.length < 2) {
       setSuggestions([]);
       setHighlightedIndex(-1);
       return;
@@ -53,7 +57,7 @@ export function DictionarySearchPanel({
     const timer = setTimeout(async () => {
       try {
         const res = await fetch(
-          `/api/dictionary/suggestions?q=${encodeURIComponent(value)}`,
+          `/api/dictionary/suggestions?q=${encodeURIComponent(draft)}`,
         );
         const data = (await res.json()) as { suggestions: string[] };
         setSuggestions(data.suggestions ?? []);
@@ -63,7 +67,7 @@ export function DictionarySearchPanel({
       }
     }, 250);
     return () => clearTimeout(timer);
-  }, [value]);
+  }, [draft]);
 
   // Outside click dismiss
   useEffect(() => {
@@ -86,12 +90,13 @@ export function DictionarySearchPanel({
       setHighlightedIndex((i) => Math.max(i - 1, -1));
     } else if (e.key === "Enter") {
       if (highlightedIndex >= 0 && suggestions[highlightedIndex]) {
-        onChange(suggestions[highlightedIndex]);
+        const word = suggestions[highlightedIndex];
+        setDraft(word);
         setSuggestions([]);
         setHighlightedIndex(-1);
-        onSearch();
+        onSubmit(word);
       } else if (!isLoading) {
-        onSearch();
+        onSubmit(draft);
       }
     } else if (e.key === "Escape") {
       setSuggestions([]);
@@ -100,10 +105,10 @@ export function DictionarySearchPanel({
   }
 
   function selectSuggestion(s: string) {
-    onChange(s);
+    setDraft(s);
     setSuggestions([]);
     setHighlightedIndex(-1);
-    onSearch();
+    onSubmit(s);
   }
 
   return (
@@ -126,8 +131,8 @@ export function DictionarySearchPanel({
             type="text"
             className="w-full border-b border-(--border) bg-transparent px-1 py-3 text-[15px] text-(--text-primary) outline-none transition-colors placeholder:text-(--text-muted) focus:border-b-2 focus:border-(--accent) disabled:cursor-not-allowed"
             placeholder="Ví dụ: take off"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
+            value={draft}
+            onChange={(e) => setDraft(e.target.value)}
             aria-label="Nhập từ cần tra cứu"
             onKeyDown={handleKeyDown}
             disabled={isLoading}
@@ -156,7 +161,7 @@ export function DictionarySearchPanel({
                       : "hover:bg-[var(--surface-hover)]",
                   ].join(" ")}
                 >
-                  <HighlightMatch text={s} query={value} />
+                  <HighlightMatch text={s} query={draft} />
                 </li>
               ))}
             </ul>
@@ -165,7 +170,7 @@ export function DictionarySearchPanel({
 
         <motion.button
           type="button"
-          onClick={onSearch}
+          onClick={() => onSubmit(draft)}
           disabled={isLoading}
           whileTap={{ scale: 0.97 }}
           className="mt-5 w-full rounded-full bg-(--accent) py-2.5 text-sm font-semibold text-white transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"

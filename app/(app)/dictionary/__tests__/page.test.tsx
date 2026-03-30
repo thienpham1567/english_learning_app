@@ -4,6 +4,11 @@ import { describe, expect, it, vi } from "vitest";
 import CoLanhDictionaryPage from "@/app/(app)/dictionary/page";
 import { renderUi } from "@/test/render";
 
+vi.mock("nuqs", () => ({
+  useQueryState: () => ["", vi.fn()],
+  parseAsString: { withDefault: () => ({}) },
+}));
+
 vi.mock("antd", async () => {
   const actual = await vi.importActual<typeof import("antd")>("antd");
   return {

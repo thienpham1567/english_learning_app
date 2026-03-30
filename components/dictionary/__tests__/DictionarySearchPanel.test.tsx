@@ -7,9 +7,8 @@ describe("DictionarySearchPanel", () => {
   it("renders the accent label, input placeholder, and search button", () => {
     const { getByText, getByPlaceholderText, getByRole } = renderUi(
       <DictionarySearchPanel
-        value=""
-        onChange={() => {}}
-        onSearch={() => {}}
+        initialValue=""
+        onSubmit={() => {}}
         isLoading={false}
       />,
     );
@@ -22,9 +21,8 @@ describe("DictionarySearchPanel", () => {
   it("input has bottom-border-only styling and no antd card wrapper", () => {
     const { getByPlaceholderText, container } = renderUi(
       <DictionarySearchPanel
-        value=""
-        onChange={() => {}}
-        onSearch={() => {}}
+        initialValue=""
+        onSubmit={() => {}}
         isLoading={false}
       />,
     );
@@ -37,9 +35,8 @@ describe("DictionarySearchPanel", () => {
   it("search button is full-width rounded pill", () => {
     const { getByRole } = renderUi(
       <DictionarySearchPanel
-        value=""
-        onChange={() => {}}
-        onSearch={() => {}}
+        initialValue=""
+        onSubmit={() => {}}
         isLoading={false}
       />,
     );
@@ -51,9 +48,8 @@ describe("DictionarySearchPanel", () => {
   it("tips render as 3 list items with left-border accent styling", () => {
     const { container } = renderUi(
       <DictionarySearchPanel
-        value=""
-        onChange={() => {}}
-        onSearch={() => {}}
+        initialValue=""
+        onSubmit={() => {}}
         isLoading={false}
       />,
     );
@@ -74,9 +70,8 @@ describe("DictionarySearchPanel", () => {
 
     renderUi(
       <DictionarySearchPanel
-        value="ta"
-        onChange={() => {}}
-        onSearch={() => {}}
+        initialValue="ta"
+        onSubmit={() => {}}
         isLoading={false}
       />,
     );
@@ -93,20 +88,18 @@ describe("DictionarySearchPanel", () => {
     vi.useRealTimers();
   });
 
-  it("calls onChange and onSearch when a suggestion is clicked", async () => {
+  it("calls onSubmit when a suggestion is clicked", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
     global.fetch = vi.fn().mockResolvedValue({
       json: async () => ({ suggestions: ["take off"] }),
     } as Response);
 
-    const onChange = vi.fn();
-    const onSearch = vi.fn();
+    const onSubmit = vi.fn();
 
     renderUi(
       <DictionarySearchPanel
-        value="ta"
-        onChange={onChange}
-        onSearch={onSearch}
+        initialValue="ta"
+        onSubmit={onSubmit}
         isLoading={false}
       />,
     );
@@ -118,8 +111,7 @@ describe("DictionarySearchPanel", () => {
     await waitFor(() => screen.getByRole("option", { name: /take off/ }));
     fireEvent.mouseDown(screen.getByRole("option", { name: /take off/ }));
 
-    expect(onChange).toHaveBeenCalledWith("take off");
-    expect(onSearch).toHaveBeenCalled();
+    expect(onSubmit).toHaveBeenCalledWith("take off");
 
     vi.useRealTimers();
   });
@@ -132,9 +124,8 @@ describe("DictionarySearchPanel", () => {
 
     const { getByPlaceholderText } = renderUi(
       <DictionarySearchPanel
-        value="ta"
-        onChange={() => {}}
-        onSearch={() => {}}
+        initialValue="ta"
+        onSubmit={() => {}}
         isLoading={false}
       />,
     );
@@ -157,9 +148,8 @@ describe("DictionarySearchPanel", () => {
 
     const { getByPlaceholderText } = renderUi(
       <DictionarySearchPanel
-        value="ta"
-        onChange={() => {}}
-        onSearch={() => {}}
+        initialValue="ta"
+        onSubmit={() => {}}
         isLoading={false}
       />,
     );
@@ -182,9 +172,8 @@ describe("DictionarySearchPanel", () => {
 
     renderUi(
       <DictionarySearchPanel
-        value="t"
-        onChange={() => {}}
-        onSearch={() => {}}
+        initialValue="t"
+        onSubmit={() => {}}
         isLoading={false}
       />,
     );

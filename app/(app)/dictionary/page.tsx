@@ -1,6 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useQueryState, parseAsString } from "nuqs";
 import { message } from "antd";
 import { motion } from "motion/react";
 
@@ -16,7 +17,7 @@ const QUERY_PATTERN = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
 
 export default function DictionaryPage() {
   const [messageApi, contextHolder] = message.useMessage();
-  const [query, setQuery] = useState("");
+  const [q, setQ] = useQueryState("q", parseAsString.withDefault(""));
   const [result, setResult] = useState<Vocabulary | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hasSearched, setHasSearched] = useState(false);
@@ -24,6 +25,15 @@ export default function DictionaryPage() {
   const [currentQuery, setCurrentQuery] = useState<string | null>(null);
   const [isThesaurusOpen, setIsThesaurusOpen] = useState(false);
   const latestRequestIdRef = useRef(0);
+  const initialSearchDone = useRef(false);
+
+  // Auto-search on mount when URL has ?q= (bookmark/link support)
+  useEffect(() => {
+    if (q && !initialSearchDone.current) {
+      initialSearchDone.current = true;
+      searchFor(q);
+    }
+  }, [q]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const searchFor = async (word: string) => {
     const { normalized, cacheKey } = normalizeDictionaryQuery(word);
@@ -72,10 +82,13 @@ export default function DictionaryPage() {
     }
   };
 
-  const handleSearch = () => searchFor(query);
+  const handleSubmit = (word: string) => {
+    setQ(word || null);
+    searchFor(word);
+  };
 
   const handleSynonymClick = (word: string) => {
-    setQuery(word);
+    setQ(word);
     searchFor(word);
   };
 
@@ -121,9 +134,8 @@ export default function DictionaryPage() {
             transition={{ delay: 0.15, duration: 0.4, ease: "easeOut" }}
           >
             <DictionarySearchPanel
-              value={query}
-              onChange={setQuery}
-              onSearch={handleSearch}
+              initialValue={q}
+              onSubmit={handleSubmit}
               isLoading={isLoading}
             />
           </motion.div>
