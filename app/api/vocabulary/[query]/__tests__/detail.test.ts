@@ -74,6 +74,8 @@ describe("GET /api/vocabulary/[query]/detail", () => {
       partOfSpeech: "verb",
       level: "B1",
       register: null,
+      verbForms: null,
+      numberInfo: null,
       overviewVi: "Cất cánh",
       overviewEn: "To leave the ground and begin to fly",
       senses: [
@@ -129,6 +131,8 @@ describe("GET /api/vocabulary/[query]/detail", () => {
       partOfSpeech: "noun phrase",
       level: "A2",
       register: null,
+      verbForms: null,
+      numberInfo: null,
       overviewVi: "Một cụm từ thường gặp.",
       overviewEn: "A common phrase.",
       senses: [

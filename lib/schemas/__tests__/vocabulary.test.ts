@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { DictionarySenseSchema, VocabularySchema } from "@/lib/schemas/vocabulary";
+import { DictionarySenseSchema, VocabularySchema, VocabularyWithNearbySchema } from "@/lib/schemas/vocabulary";
 
 describe("DictionarySenseSchema", () => {
   it("parses successfully when optional array fields are absent", () => {
@@ -50,6 +50,8 @@ describe("VocabularySchema", () => {
         partOfSpeech: null,
         level: null,
         register: null,
+        verbForms: null,
+        numberInfo: null,
         overviewVi: "Nghĩa",
         overviewEn: "Meaning",
         senses: [
@@ -79,6 +81,8 @@ describe("VocabularySchema", () => {
         partOfSpeech: null,
         level: null,
         register: null,
+        verbForms: null,
+        numberInfo: null,
         overviewVi: "Nghĩa",
         overviewEn: "Meaning",
         senses: [
@@ -92,5 +96,97 @@ describe("VocabularySchema", () => {
         ],
       })
     ).toThrow();
+  });
+});
+
+describe("VocabularySchema — verbForms and numberInfo", () => {
+  const base = {
+    query: "run",
+    headword: "run",
+    entryType: "word" as const,
+    phonetic: "/rʌn/",
+    phoneticsUs: null,
+    phoneticsUk: null,
+    partOfSpeech: "verb",
+    level: "A1" as const,
+    register: null,
+    overviewVi: "Chạy.",
+    overviewEn: "To move fast.",
+    verbForms: null,
+    numberInfo: null,
+    senses: [
+      {
+        id: "s1",
+        label: "Nghĩa 1",
+        definitionVi: "Chạy",
+        definitionEn: "Move fast on foot.",
+        usageNoteVi: null,
+      },
+    ],
+  };
+
+  it("parses when verbForms is null", () => {
+    const result = VocabularySchema.parse({ ...base });
+    expect(result.verbForms).toBeNull();
+    expect(result.numberInfo).toBeNull();
+  });
+
+  it("parses a complete verbForms object", () => {
+    const result = VocabularySchema.parse({
+      ...base,
+      verbForms: {
+        base: "run",
+        thirdPerson: "runs",
+        pastSimple: "ran",
+        pastParticiple: "run",
+        presentParticiple: "running",
+      },
+    });
+    expect(result.verbForms?.thirdPerson).toBe("runs");
+  });
+
+  it("parses a complete numberInfo object", () => {
+    const result = VocabularySchema.parse({
+      ...base,
+      partOfSpeech: "noun",
+      verbForms: null,
+      numberInfo: {
+        plural: "children",
+        isUncountable: false,
+        isPluralOnly: false,
+        isSingularOnly: false,
+      },
+    });
+    expect(result.numberInfo?.plural).toBe("children");
+  });
+});
+
+describe("VocabularyWithNearbySchema", () => {
+  it("defaults nearbyWords to [] when absent", () => {
+    const result = VocabularyWithNearbySchema.parse({
+      query: "run",
+      headword: "run",
+      entryType: "word" as const,
+      phonetic: "/rʌn/",
+      phoneticsUs: null,
+      phoneticsUk: null,
+      partOfSpeech: "verb",
+      level: "A1" as const,
+      register: null,
+      overviewVi: "Chạy.",
+      overviewEn: "To move fast.",
+      verbForms: null,
+      numberInfo: null,
+      senses: [
+        {
+          id: "s1",
+          label: "Nghĩa 1",
+          definitionVi: "Chạy",
+          definitionEn: "Move fast on foot.",
+          usageNoteVi: null,
+        },
+      ],
+    });
+    expect(result.nearbyWords).toEqual([]);
   });
 });

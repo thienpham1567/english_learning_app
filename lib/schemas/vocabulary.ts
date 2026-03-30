@@ -22,6 +22,21 @@ export const DictionarySenseSchema = z.object({
   commonMistakesVi: z.array(z.string()).default([]),
 });
 
+export const VerbFormsSchema = z.object({
+  base: z.string(),
+  thirdPerson: z.string(),
+  pastSimple: z.string(),
+  pastParticiple: z.string(),
+  presentParticiple: z.string(),
+});
+
+export const NumberInfoSchema = z.object({
+  plural: z.string().nullable(),
+  isUncountable: z.boolean(),
+  isPluralOnly: z.boolean(),
+  isSingularOnly: z.boolean(),
+});
+
 export const VocabularySchema = z.object({
   query: z.string(),
   headword: z.string(),
@@ -32,12 +47,19 @@ export const VocabularySchema = z.object({
   partOfSpeech: z.string().nullable(),
   level: z.enum(["A1", "A2", "B1", "B2", "C1", "C2"]).nullable(),
   register: z.string().nullable(),
+  verbForms: VerbFormsSchema.nullable(),
+  numberInfo: NumberInfoSchema.nullable(),
   overviewVi: z.string(),
   overviewEn: z.string(),
   senses: z.array(DictionarySenseSchema).min(1),
 });
 
+export const VocabularyWithNearbySchema = VocabularySchema.extend({
+  nearbyWords: z.array(z.string()).default([]),
+});
+
 export type Vocabulary = z.infer<typeof VocabularySchema>;
+export type VocabularyWithNearby = z.infer<typeof VocabularyWithNearbySchema>;
 export type DictionarySense = z.infer<typeof DictionarySenseSchema>;
 
 export function normalizeVocabularyEntryType(entryType: string | null | undefined): Vocabulary["entryType"] | null {

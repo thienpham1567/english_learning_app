@@ -45,6 +45,8 @@ vi.mock("@/lib/openai/client", () => ({
           partOfSpeech: "phrasal verb",
           level: null,
           register: null,
+          verbForms: null,
+          numberInfo: null,
           overviewVi: "Một cụm động từ thông dụng.",
           overviewEn: "A common phrasal verb.",
           senses: [
@@ -144,6 +146,8 @@ describe("/api/dictionary", () => {
       partOfSpeech: null,
       level: null,
       register: null,
+      verbForms: null,
+      numberInfo: null,
       overviewVi: "Một cụm động từ thông dụng.",
       overviewEn: "A common phrasal verb.",
       senses: [
@@ -199,6 +203,8 @@ describe("/api/dictionary", () => {
       partOfSpeech: "noun phrase",
       level: "A2",
       register: null,
+      verbForms: null,
+      numberInfo: null,
       overviewVi: "Một cụm từ tự nhiên.",
       overviewEn: "A natural phrase.",
       senses: [
