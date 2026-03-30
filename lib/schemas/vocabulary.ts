@@ -12,9 +12,9 @@ export const DictionarySenseSchema = z.object({
     .default([]),
   synonyms: z.array(z.string()).default([]),
   antonyms: z.array(z.string()).default([]),
-  patterns: z.array(z.string()),
-  relatedExpressions: z.array(z.string()),
-  commonMistakesVi: z.array(z.string()),
+  patterns: z.array(z.string()).default([]),
+  relatedExpressions: z.array(z.string()).default([]),
+  commonMistakesVi: z.array(z.string()).default([]),
 });
 
 export const VocabularySchema = z.object({
