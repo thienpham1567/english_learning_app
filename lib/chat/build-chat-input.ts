@@ -6,7 +6,7 @@ import type { ChatMessage } from "@/lib/chat/types";
 
 const MAX_CONTEXT_MESSAGES = 20;
 
-function countConsecutiveVietnameseTurns(messages: ChatMessage[]) {
+export function countConsecutiveVietnameseTurns(messages: ChatMessage[]) {
   const recentUserMessages = messages.filter((message) => message.role === "user");
   let consecutiveVietnameseTurns = 0;
 
@@ -18,11 +18,12 @@ function countConsecutiveVietnameseTurns(messages: ChatMessage[]) {
       continue;
     }
 
-    if (language === "english" && consecutiveVietnameseTurns === 0) {
-      return 0;
+    if (language === "english") {
+      if (consecutiveVietnameseTurns === 0) return 0;
+      break;
     }
 
-    break;
+    // "mixed" or "unknown": skip without breaking or incrementing the streak
   }
 
   return consecutiveVietnameseTurns;
