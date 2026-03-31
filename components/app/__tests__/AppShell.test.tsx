@@ -18,6 +18,20 @@ vi.mock("@/components/app/ToolbarBreadcrumb", () => ({
   ToolbarBreadcrumb: () => <div data-testid="breadcrumb">Breadcrumb</div>,
 }));
 
+const localStorageMock = (() => {
+  const store: Record<string, string> = {};
+  return {
+    getItem: (key: string) => store[key] ?? null,
+    setItem: (key: string, value: string) => { store[key] = value; },
+    removeItem: (key: string) => { delete store[key]; },
+    clear: () => { Object.keys(store).forEach((k) => delete store[k]); },
+    get length() { return Object.keys(store).length; },
+    key: (i: number) => Object.keys(store)[i] ?? null,
+  };
+})();
+
+Object.defineProperty(window, "localStorage", { value: localStorageMock });
+
 describe("AppShell", () => {
   it("renders the shell chrome and page content", () => {
     const { container } = renderUi(
