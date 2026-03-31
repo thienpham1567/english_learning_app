@@ -1,8 +1,12 @@
 "use client";
 
+import { useCallback } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Tooltip } from "antd";
 import { Plus, Trash2, GraduationCap } from "lucide-react";
+
+import { useChatConversations } from "@/components/app/ChatConversationProvider";
 
 export type ConversationItem = {
   id: string;
@@ -12,10 +16,7 @@ export type ConversationItem = {
 };
 
 type Props = {
-  conversations: ConversationItem[];
   activeId: string | null;
-  onNew: () => void;
-  onDelete: (id: string) => void;
 };
 
 function formatRelativeTime(dateStr: string): string {
@@ -37,12 +38,13 @@ export function truncateTitle(
     : { text: title, truncated: false };
 }
 
-export function ConversationList({
-  conversations,
-  activeId,
-  onNew,
-  onDelete,
-}: Props) {
+export function ConversationList({ activeId }: Props) {
+  const router = useRouter();
+  const { conversations, deleteConversation } = useChatConversations();
+
+  const handleNew = useCallback(() => {
+    router.push("/english-chatbot");
+  }, [router]);
   return (
     <div className="relative flex h-full w-[220px] shrink-0 flex-col overflow-hidden border-r border-white/10 bg-(--ink)">
       {/* Grain overlay */}
@@ -66,7 +68,7 @@ export function ConversationList({
           </span>
         </div>
         <button
-          onClick={onNew}
+          onClick={handleNew}
           className="flex w-full items-center justify-center gap-2 rounded-(--radius) border border-white/15 px-3 py-2 text-sm font-medium text-white/70 transition hover:bg-white/8 hover:text-white/90"
         >
           <Plus size={15} strokeWidth={2} />
@@ -112,7 +114,7 @@ export function ConversationList({
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    onDelete(conv.id);
+                    deleteConversation(conv.id);
                   }}
                   className="absolute right-2 top-1/2 -translate-y-1/2 grid size-6 place-items-center rounded text-white/30 opacity-0 transition hover:bg-white/8 hover:text-red-400 group-hover:opacity-100"
                   aria-label="Delete conversation"
