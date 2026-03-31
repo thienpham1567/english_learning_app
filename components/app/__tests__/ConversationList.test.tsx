@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from "@testing-library/react";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 
 import { ConversationList, truncateTitle } from "../ConversationList";
 
@@ -23,6 +23,10 @@ vi.mock("@/components/app/ChatConversationProvider", () => ({
 }));
 
 describe("ConversationList", () => {
+  beforeEach(() => {
+    mockDeleteConversation.mockClear();
+  });
+
   it("renders all thread titles", () => {
     render(<ConversationList activeId={null} />);
     expect(screen.getByText("Thread one")).toBeInTheDocument();
