@@ -18,8 +18,7 @@ import { useFuelChat } from "@/hooks/useFuelChat";
 import {
   UserAvatar,
   CopyButton,
-  ToolStatusCard,
-  TypingIndicator,
+  FuelExecutionTimeline,
   formatTime,
 } from "@/components/app/fuel-chat/FuelChatParts";
 import { useState } from "react";
@@ -48,7 +47,26 @@ const MARKDOWN_CLASSES = [
 
 /* ── Main Component ── */
 export function FuelPriceChat() {
-  const chat = useFuelChat();
+  const {
+    discordWebhookUrl,
+    setDiscordWebhookUrl,
+    hasMessages,
+    send,
+    scrollContainerRef,
+    handleScroll,
+    messages,
+    isLoading,
+    streamingHasStarted,
+    error,
+    clearError,
+    bottomRef,
+    showScrollBtn,
+    scrollToBottom,
+    input,
+    textareaRef,
+    setInput,
+    autoResize,
+  } = useFuelChat();
   const [showSettings, setShowSettings] = useState(false);
 
   return (
@@ -63,16 +81,16 @@ export function FuelPriceChat() {
       <AnimatePresence>
         {showSettings && (
           <SettingsPanel
-            discordWebhookUrl={chat.discordWebhookUrl}
-            onUrlChange={chat.setDiscordWebhookUrl}
+            discordWebhookUrl={discordWebhookUrl}
+            onUrlChange={setDiscordWebhookUrl}
           />
         )}
       </AnimatePresence>
 
       {/* ── Messages Area ── */}
       <div
-        ref={chat.scrollContainerRef}
-        onScroll={chat.handleScroll}
+        ref={scrollContainerRef}
+        onScroll={handleScroll}
         className="relative min-h-0 flex-1 overflow-y-auto px-4 py-6 md:px-8"
       >
         {/* Warm radial glow */}
@@ -87,16 +105,16 @@ export function FuelPriceChat() {
         <div className="relative mx-auto flex min-h-full w-full max-w-4xl flex-col">
           {/* Empty state */}
           <AnimatePresence>
-            {!chat.hasMessages && <EmptyState onSend={chat.send} />}
+            {!hasMessages && <EmptyState onSend={send} />}
           </AnimatePresence>
 
           {/* Message list */}
-          {chat.hasMessages && (
+          {hasMessages && (
             <div className="flex flex-col">
-              {chat.messages.map((m, index) => {
+              {messages.map((m, index) => {
                 const isLastAssistant =
-                  chat.isLoading &&
-                  index === chat.messages.length - 1 &&
+                  isLoading &&
+                  index === messages.length - 1 &&
                   m.role === "assistant";
 
                 return (
@@ -104,14 +122,9 @@ export function FuelPriceChat() {
                     key={m.id}
                     message={m}
                     isStreaming={isLastAssistant}
-                    toolStatus={isLastAssistant ? chat.toolStatus : null}
-                    isWaiting={
-                      isLastAssistant &&
-                      !chat.streamingHasStarted &&
-                      !chat.toolStatus
-                    }
+                    isWaiting={isLastAssistant && !streamingHasStarted}
                     showSpacing={
-                      index > 0 && chat.messages[index - 1].role !== m.role
+                      index > 0 && messages[index - 1].role !== m.role
                     }
                   />
                 );
@@ -121,21 +134,21 @@ export function FuelPriceChat() {
 
           {/* Error */}
           <AnimatePresence>
-            {chat.error && (
-              <ErrorBanner error={chat.error} onDismiss={chat.clearError} />
+            {error && (
+              <ErrorBanner error={error} onDismiss={clearError} />
             )}
           </AnimatePresence>
 
-          <div ref={chat.bottomRef} />
+          <div ref={bottomRef} />
         </div>
       </div>
 
       {/* ── Scroll to bottom ── */}
       <AnimatePresence>
-        {chat.showScrollBtn && (
+        {showScrollBtn && (
           <motion.button
             className="absolute bottom-22 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-(--border) bg-(--surface) px-3 py-1.5 text-xs font-medium text-(--text-secondary) shadow-(--shadow-lg) transition hover:bg-(--surface-hover) hover:text-(--ink)"
-            onClick={chat.scrollToBottom}
+            onClick={scrollToBottom}
             initial={{ opacity: 0, y: 8, scale: 0.92 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 8, scale: 0.92 }}
@@ -149,12 +162,12 @@ export function FuelPriceChat() {
 
       {/* ── Input Area ── */}
       <ChatInput
-        input={chat.input}
-        isLoading={chat.isLoading}
-        textareaRef={chat.textareaRef}
-        onInputChange={chat.setInput}
-        onAutoResize={chat.autoResize}
-        onSend={() => chat.send()}
+        input={input}
+        isLoading={isLoading}
+        textareaRef={textareaRef}
+        onInputChange={setInput}
+        onAutoResize={autoResize}
+        onSend={() => send()}
       />
     </div>
   );
@@ -332,22 +345,40 @@ function EmptyState({ onSend }: { onSend: (text: string) => void }) {
 function MessageBubble({
   message: m,
   isStreaming,
-  toolStatus,
   isWaiting,
   showSpacing,
 }: {
-  message: { id: string; role: "user" | "assistant"; text: string };
+  message: {
+    id: string;
+    role: "user" | "assistant";
+    text: string;
+    timeline?: Array<{
+      id: string;
+      kind: "agent" | "tool";
+      name: string;
+      status: "pending" | "running" | "done" | "error";
+      summary?: string;
+      params?: Record<string, unknown>;
+      resultPreview?: string;
+      error?: string;
+      parentId?: string;
+      tool?: string;
+      startedAt?: string;
+      finishedAt?: string;
+    }>;
+  };
   isStreaming: boolean;
-  toolStatus: { tool: string; status: "calling" | "done" } | null;
   isWaiting: boolean;
   showSpacing: boolean;
 }) {
   const isUser = m.role === "user";
   const text = m.text.trim();
-  const showStatus = !text && (isWaiting || toolStatus);
+  const timeline = m.timeline ?? [];
+  const showTimeline = !isUser && timeline.length > 0;
+  const showStatus = !text && isWaiting && !showTimeline;
 
   // Hide empty assistant messages that aren't actively loading
-  if (!text && !isStreaming) return null;
+  if (!text && !isStreaming && !showTimeline) return null;
 
   return (
     <motion.div
@@ -372,38 +403,34 @@ function MessageBubble({
           isUser ? "items-end" : "items-start",
         ].join(" ")}
       >
-        {/* Inline status: typing / tool calling */}
+        {/* Inline status: initial waiting state */}
         {showStatus && (
           <div className="rounded-2xl rounded-bl-md border border-(--border) bg-(--bubble-ai) px-4 py-3 shadow-(--shadow-sm)">
-            <AnimatePresence mode="wait">
-              {toolStatus ? (
-                <ToolStatusCard
-                  key={`${toolStatus.tool}-${toolStatus.status}`}
-                  tool={toolStatus.tool}
-                  status={toolStatus.status}
-                />
-              ) : (
+            <motion.span
+              className="flex items-center gap-1.5"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+            >
+              <span className="text-xs text-(--text-muted)">Đang xử lý</span>
+              {[0, 1, 2].map((i) => (
                 <motion.span
-                  key="typing"
-                  className="flex items-center gap-1.5"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                >
-                  <span className="text-xs text-(--text-muted)">Đang xử lý</span>
-                  {[0, 1, 2].map((i) => (
-                    <motion.span
-                      key={i}
-                      className="inline-block size-1.5 rounded-full bg-(--text-muted)"
-                      animate={{ y: [0, -4, 0], opacity: [0.3, 1, 0.3] }}
-                      transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.15, ease: "easeInOut" }}
-                    />
-                  ))}
-                </motion.span>
-              )}
-            </AnimatePresence>
+                  key={i}
+                  className="inline-block size-1.5 rounded-full bg-(--text-muted)"
+                  animate={{ y: [0, -4, 0], opacity: [0.3, 1, 0.3] }}
+                  transition={{
+                    duration: 1.2,
+                    repeat: Infinity,
+                    delay: i * 0.15,
+                    ease: "easeInOut",
+                  }}
+                />
+              ))}
+            </motion.span>
           </div>
         )}
+
+        {showTimeline && <FuelExecutionTimeline steps={timeline} />}
 
         {/* Actual message content */}
         {text && (

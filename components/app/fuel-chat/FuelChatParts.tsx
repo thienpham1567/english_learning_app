@@ -1,10 +1,20 @@
 "use client";
 
 import { useState } from "react";
-import { Fuel } from "lucide-react";
+import {
+  AlertTriangle,
+  Bot,
+  CheckCircle2,
+  ChevronDown,
+  ChevronRight,
+  Fuel,
+  LoaderCircle,
+  Wrench,
+} from "lucide-react";
 import { motion } from "motion/react";
 
 import { useUser } from "@/components/app/UserContext";
+import type { FuelExecutionStep } from "@/lib/fuel-prices/types";
 
 /* ── Tool Config ── */
 const TOOL_CONFIG: Record<
@@ -155,6 +165,209 @@ export function ToolStatusCard({
       )}
     </motion.div>
   );
+}
+
+export function FuelExecutionTimeline({
+  steps,
+}: {
+  steps: FuelExecutionStep[];
+}) {
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
+  const agents = steps.filter((step) => step.kind === "agent");
+  const tools = steps.filter((step) => step.kind === "tool");
+  const orphanTools = tools.filter(
+    (tool) => tool.parentId && !agents.some((agent) => agent.id === tool.parentId),
+  );
+  const hasRunningWork = steps.some(
+    (step) => step.status === "running" || step.status === "pending",
+  );
+
+  if (steps.length === 0) return null;
+
+  return (
+    <div className="w-full space-y-2.5">
+      {agents.map((agent) => {
+        const isExpanded = expanded[agent.id] ?? true;
+        const nestedTools = tools.filter((tool) => tool.parentId === agent.id);
+
+        return (
+          <motion.div
+            key={agent.id}
+            className="overflow-hidden rounded-[20px] border border-emerald-300/70 bg-white/95 shadow-[0_18px_50px_rgba(15,23,42,0.08)]"
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.22, ease: "easeOut" }}
+          >
+            <button
+              type="button"
+              className="flex w-full items-center gap-3 px-4 py-3 text-left"
+              onClick={() =>
+                setExpanded((current) => ({
+                  ...current,
+                  [agent.id]: !isExpanded,
+                }))
+              }
+            >
+              <StatusGlyph status={agent.status} />
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-700/80">
+                  <span>Call Agent</span>
+                  <span className="text-emerald-400">→</span>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-1 text-[10px] tracking-[0.08em] text-emerald-700 normal-case">
+                    <Bot size={12} />
+                    {agent.name}
+                  </span>
+                </div>
+                {agent.summary && (
+                  <p className="mt-1 text-sm text-(--text-secondary)">
+                    {agent.summary}
+                  </p>
+                )}
+              </div>
+              {isExpanded ? (
+                <ChevronDown
+                  size={16}
+                  className="shrink-0 text-emerald-700/70"
+                  aria-hidden="true"
+                />
+              ) : (
+                <ChevronRight
+                  size={16}
+                  className="shrink-0 text-emerald-700/70"
+                  aria-hidden="true"
+                />
+              )}
+            </button>
+
+            {isExpanded && (
+              <div className="border-t border-emerald-100 bg-emerald-50/45 px-4 py-3">
+                <div className="space-y-2.5">
+                  {nestedTools.map((tool) => (
+                    <ToolExecutionRow key={tool.id} step={tool} />
+                  ))}
+
+                  {(agent.resultPreview || agent.error) && (
+                    <div className="rounded-2xl border border-emerald-200/80 bg-white/90 px-3 py-2.5 text-sm text-(--text-primary)">
+                      <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-(--text-muted)">
+                        Result
+                      </div>
+                      <p className="mt-1">
+                        {agent.error ?? agent.resultPreview}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </motion.div>
+        );
+      })}
+
+      {orphanTools.map((tool) => (
+        <ToolExecutionRow key={tool.id} step={tool} />
+      ))}
+
+      {hasRunningWork && (
+        <div className="flex items-center gap-2 px-1 text-sm italic text-(--text-muted)">
+          <span className="flex items-center gap-0.5">
+            {[0, 1, 2].map((i) => (
+              <motion.span
+                key={i}
+                className="inline-block size-2 rounded-full bg-emerald-500"
+                animate={{ y: [0, -4, 0], opacity: [0.35, 1, 0.35] }}
+                transition={{
+                  duration: 1,
+                  repeat: Infinity,
+                  delay: i * 0.15,
+                  ease: "easeInOut",
+                }}
+              />
+            ))}
+          </span>
+          <span>AI is processing...</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ToolExecutionRow({ step }: { step: FuelExecutionStep }) {
+  return (
+    <div className="rounded-2xl border border-stone-200 bg-white px-3 py-3 shadow-[0_10px_24px_rgba(15,23,42,0.05)]">
+      <div className="flex items-start gap-2.5">
+        <StatusGlyph status={step.status} />
+        <div className="min-w-0 flex-1">
+          <div className="flex flex-wrap items-center gap-2 text-sm font-semibold text-(--ink)">
+            <span className="inline-flex items-center gap-1 rounded-full bg-stone-100 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-stone-600">
+              <Wrench size={11} />
+              Tool Call
+            </span>
+            <span>{step.name}</span>
+          </div>
+
+          {step.summary && (
+            <p className="mt-1 text-sm text-(--text-secondary)">{step.summary}</p>
+          )}
+
+          {step.params && Object.keys(step.params).length > 0 && (
+            <div className="mt-2 rounded-xl bg-stone-50 px-3 py-2 text-xs text-(--text-secondary)">
+              <div className="font-semibold uppercase tracking-[0.12em] text-stone-500">
+                Parameters
+              </div>
+              <p className="mt-1 font-mono text-[11px] leading-5 text-stone-700">
+                {formatExecutionPayload(step.params)}
+              </p>
+            </div>
+          )}
+
+          {(step.resultPreview || step.error) && (
+            <div className="mt-2 rounded-xl bg-stone-50 px-3 py-2 text-xs text-(--text-secondary)">
+              <div className="font-semibold uppercase tracking-[0.12em] text-stone-500">
+                Rendering
+              </div>
+              <p className="mt-1 text-sm text-stone-700">
+                {step.error ?? step.resultPreview}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function StatusGlyph({
+  status,
+}: {
+  status: FuelExecutionStep["status"];
+}) {
+  if (status === "done") {
+    return (
+      <span className="grid size-7 shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-700">
+        <CheckCircle2 size={15} />
+      </span>
+    );
+  }
+
+  if (status === "error") {
+    return (
+      <span className="grid size-7 shrink-0 place-items-center rounded-full bg-rose-100 text-rose-700">
+        <AlertTriangle size={15} />
+      </span>
+    );
+  }
+
+  return (
+    <span className="grid size-7 shrink-0 place-items-center rounded-full bg-amber-100 text-amber-700">
+      <LoaderCircle size={15} className="animate-spin" />
+    </span>
+  );
+}
+
+function formatExecutionPayload(params: Record<string, unknown>) {
+  return Object.entries(params)
+    .map(([key, value]) => `${key}: ${String(value)}`)
+    .join(" · ");
 }
 
 /* ── Typing Indicator ── */

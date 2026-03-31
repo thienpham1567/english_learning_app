@@ -158,30 +158,205 @@ async function executeToolCalls(
     output: string;
   }> = [];
 
-  for (const fc of functionCalls) {
-    writeSseEvent(controller, encoder, {
-      type: "tool_status",
-      tool: fc.name,
-      status: "calling",
-    });
-
+  for (const [index, fc] of functionCalls.entries()) {
     const args = JSON.parse(fc.arguments || "{}") as Record<string, unknown>;
-    const result = await executeFuelTool(fc.name, args, { discordWebhookUrl });
+    const agentMeta = getAgentMeta(fc.name);
+    const toolMeta = getToolMeta(fc.name);
+    const agentId = `agent-${fc.name}-${index + 1}`;
+    const startedAt = new Date().toISOString();
 
     writeSseEvent(controller, encoder, {
-      type: "tool_status",
-      tool: fc.name,
-      status: "done",
+      type: "agent_start",
+      agentId,
+      name: agentMeta.name,
+      summary: agentMeta.summary,
+      startedAt,
     });
 
-    toolOutputs.push({
-      type: "function_call_output",
-      call_id: fc.call_id,
-      output: result,
+    writeSseEvent(controller, encoder, {
+      type: "tool_call",
+      toolCallId: fc.call_id,
+      agentId,
+      name: toolMeta.name,
+      tool: fc.name,
+      summary: toolMeta.summary,
+      params: args,
+      startedAt,
     });
+
+    try {
+      const result = await executeFuelTool(fc.name, args, { discordWebhookUrl });
+      const finishedAt = new Date().toISOString();
+
+      writeSseEvent(controller, encoder, {
+        type: "tool_result",
+        toolCallId: fc.call_id,
+        agentId,
+        name: toolMeta.name,
+        tool: fc.name,
+        resultPreview: summarizeToolResult(fc.name, result),
+        finishedAt,
+      });
+
+      writeSseEvent(controller, encoder, {
+        type: "agent_done",
+        agentId,
+        resultPreview: agentMeta.donePreview,
+        finishedAt,
+      });
+
+      toolOutputs.push({
+        type: "function_call_output",
+        call_id: fc.call_id,
+        output: result,
+      });
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Không thể thực thi công cụ.";
+      const finishedAt = new Date().toISOString();
+
+      writeSseEvent(controller, encoder, {
+        type: "tool_error",
+        toolCallId: fc.call_id,
+        agentId,
+        name: toolMeta.name,
+        tool: fc.name,
+        message,
+        finishedAt,
+      });
+
+      writeSseEvent(controller, encoder, {
+        type: "agent_error",
+        agentId,
+        message: `Agent thất bại: ${message}`,
+        finishedAt,
+      });
+
+      toolOutputs.push({
+        type: "function_call_output",
+        call_id: fc.call_id,
+        output: JSON.stringify({ success: false, error: message }),
+      });
+    }
   }
 
   return toolOutputs;
+}
+
+function getAgentMeta(toolName: string) {
+  switch (toolName) {
+    case "get_fuel_prices":
+    case "send_discord_report":
+      return {
+        name: "Trợ lý giá xăng",
+        summary:
+          toolName === "send_discord_report"
+            ? "Chuẩn bị gửi báo cáo giá xăng lên Discord"
+            : "Phân tích yêu cầu tra cứu giá mới nhất",
+        donePreview:
+          toolName === "send_discord_report"
+            ? "Đã hoàn tất báo cáo giá xăng cho Discord."
+            : "Đã sẵn sàng tổng hợp bảng giá xăng dầu.",
+      };
+    case "compare_fuel_prices":
+      return {
+        name: "Trợ lý so sánh biến động",
+        summary: "Phân tích biến động giữa dữ liệu hiện tại và snapshot trước",
+        donePreview: "Đã sẵn sàng tổng hợp biến động giá xăng dầu.",
+      };
+    case "calculate_fuel_cost":
+      return {
+        name: "Trợ lý tính chi phí",
+        summary: "Phân tích hành trình và ước tính chi phí nhiên liệu",
+        donePreview: "Đã sẵn sàng tổng hợp chi phí chuyến đi.",
+      };
+    default:
+      return {
+        name: "Trợ lý giá xăng",
+        summary: "Đang xử lý yêu cầu giá xăng dầu",
+        donePreview: "Đã xử lý xong yêu cầu giá xăng dầu.",
+      };
+  }
+}
+
+function getToolMeta(toolName: string) {
+  switch (toolName) {
+    case "get_fuel_prices":
+      return {
+        name: "Lấy giá mới nhất",
+        summary: "Lấy bảng giá mới nhất từ PVOIL",
+      };
+    case "send_discord_report":
+      return {
+        name: "Gửi Discord",
+        summary: "Gửi báo cáo giá xăng dầu lên Discord",
+      };
+    case "compare_fuel_prices":
+      return {
+        name: "So sánh với snapshot trước",
+        summary: "So sánh giá hiện tại với dữ liệu đã lưu trước đó",
+      };
+    case "calculate_fuel_cost":
+      return {
+        name: "Tính tiền xăng",
+        summary: "Tính chi phí nhiên liệu theo quãng đường và mức tiêu thụ",
+      };
+    default:
+      return {
+        name: toolName,
+        summary: `Thực thi công cụ ${toolName}`,
+      };
+  }
+}
+
+function summarizeToolResult(toolName: string, result: string) {
+  const parsed = safeParseJson(result);
+
+  if (toolName === "get_fuel_prices") {
+    const count = Array.isArray(parsed?.prices) ? parsed.prices.length : 0;
+    if (count > 0) {
+      return `${count} loại nhiên liệu đã được cập nhật.`;
+    }
+  }
+
+  if (toolName === "compare_fuel_prices") {
+    const count = Array.isArray(parsed?.comparison) ? parsed.comparison.length : 0;
+    if (count > 0) {
+      return `${count} mục đã được so sánh với snapshot trước.`;
+    }
+  }
+
+  if (toolName === "calculate_fuel_cost" && parsed?.totalCost) {
+    return `Chi phí ước tính: ${String(parsed.totalCost)} VNĐ.`;
+  }
+
+  if (toolName === "send_discord_report") {
+    if (parsed?.success) {
+      return "Báo cáo đã được gửi lên Discord.";
+    }
+    if (parsed?.message) {
+      return String(parsed.message);
+    }
+  }
+
+  if (parsed?.message) {
+    return String(parsed.message);
+  }
+
+  return "Công cụ đã trả kết quả thành công.";
+}
+
+function safeParseJson(value: string): Record<string, unknown> | null {
+  try {
+    const parsed = JSON.parse(value) as unknown;
+    if (typeof parsed === "object" && parsed !== null) {
+      return parsed as Record<string, unknown>;
+    }
+  } catch {
+    return null;
+  }
+
+  return null;
 }
 
 // ── POST Handler ────────────────────────────────────────────

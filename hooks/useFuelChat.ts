@@ -2,19 +2,19 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-import type { SseEventPayload } from "@/lib/fuel-prices/types";
+import { applyFuelSseEvent } from "@/lib/fuel-prices/timeline";
+import type {
+  FuelExecutionStep,
+  FuelSseEventPayload,
+} from "@/lib/fuel-prices/types";
 
 /* ── Types ── */
 export type ChatMessage = {
   id: string;
   role: "user" | "assistant";
   text: string;
+  timeline?: FuelExecutionStep[];
 };
-
-export type ToolStatusState = {
-  tool: string;
-  status: "calling" | "done";
-} | null;
 
 const ERROR_MESSAGE = "Hệ thống đang gặp sự cố kỹ thuật. Vui lòng thử lại sau!";
 
@@ -33,7 +33,6 @@ export function useFuelChat() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [toolStatus, setToolStatus] = useState<ToolStatusState>(null);
 
   // Discord webhook URL (persisted in localStorage)
   const [discordWebhookUrl, setDiscordWebhookUrl] = useState(() => {
@@ -70,7 +69,7 @@ export function useFuelChat() {
     ) {
       bottom.scrollIntoView({ behavior: "smooth" });
     }
-  }, [messages, isLoading, error, toolStatus]);
+  }, [messages, isLoading, error]);
 
   const handleScroll = useCallback(() => {
     const el = scrollContainerRef.current;
@@ -111,12 +110,11 @@ export function useFuelChat() {
       setMessages((curr) => [
         ...curr,
         userMessage,
-        { id: assistantMessageId, role: "assistant", text: "" },
+        { id: assistantMessageId, role: "assistant", text: "", timeline: [] },
       ]);
       setInput("");
       if (textareaRef.current) textareaRef.current.style.height = "auto";
       setError(null);
-      setToolStatus(null);
       setIsLoading(true);
 
       try {
@@ -138,7 +136,6 @@ export function useFuelChat() {
           response.body,
           assistantMessageId,
           setMessages,
-          setToolStatus,
           setError,
         );
       } catch (streamError) {
@@ -147,12 +144,13 @@ export function useFuelChat() {
         setMessages((curr) =>
           curr.filter(
             (m) =>
-              m.id !== assistantMessageId || m.text.trim().length > 0,
+              m.id !== assistantMessageId ||
+              m.text.trim().length > 0 ||
+              (m.timeline?.length ?? 0) > 0,
           ),
         );
       } finally {
         setIsLoading(false);
-        setToolStatus(null);
       }
     },
     [input, isLoading, messages, discordWebhookUrl],
@@ -164,7 +162,6 @@ export function useFuelChat() {
     input,
     isLoading,
     error,
-    toolStatus,
     showScrollBtn,
     streamingHasStarted,
     discordWebhookUrl,
@@ -192,7 +189,6 @@ async function processSseStream(
   body: ReadableStream<Uint8Array>,
   assistantMessageId: string,
   setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>,
-  setToolStatus: React.Dispatch<React.SetStateAction<ToolStatusState>>,
   setError: React.Dispatch<React.SetStateAction<string | null>>,
 ) {
   const reader = body.getReader();
@@ -212,21 +208,10 @@ async function processSseStream(
       buffer = buffer.slice(eventBoundary + 2);
 
       for (const payload of parseSsePayloads(rawEvent)) {
-        const event = JSON.parse(payload) as SseEventPayload;
+        const event = JSON.parse(payload) as FuelSseEventPayload;
 
-        if (event.type === "assistant_delta" && event.delta) {
-          setMessages((curr) =>
-            curr.map((m) =>
-              m.id === assistantMessageId
-                ? { ...m, text: m.text + event.delta }
-                : m,
-            ),
-          );
-          setToolStatus(null);
-        }
-
-        if (event.type === "tool_status") {
-          setToolStatus({ tool: event.tool, status: event.status });
+        if (event.type !== "assistant_error" && event.type !== "assistant_done") {
+          setMessages((curr) => applyFuelSseEvent(curr, assistantMessageId, event));
         }
 
         if (event.type === "assistant_error") {
@@ -234,7 +219,9 @@ async function processSseStream(
           setMessages((curr) =>
             curr.filter(
               (m) =>
-                m.id !== assistantMessageId || m.text.trim().length > 0,
+                m.id !== assistantMessageId ||
+                m.text.trim().length > 0 ||
+                (m.timeline?.length ?? 0) > 0,
             ),
           );
           finished = true;
@@ -242,7 +229,6 @@ async function processSseStream(
 
         if (event.type === "assistant_done") {
           finished = true;
-          setToolStatus(null);
         }
       }
       eventBoundary = buffer.indexOf("\n\n");
