@@ -13,7 +13,7 @@ export function buildDictionaryInstructions(entryType: DictionaryEntryType) {
     "Populate phoneticsUs with the American English IPA transcription (e.g. /teɪk ɒf/). Use null if unavailable.",
     "Populate phoneticsUk with the British English IPA transcription. Use null if unavailable.",
     "Populate partOfSpeech with the grammatical category (e.g. phrasal verb, noun, adjective). Use null if unclear.",
-    "When partOfSpeech is a verb (including phrasal verb), populate verbForms with base, thirdPerson (third-person singular present), pastSimple, pastParticiple, and presentParticiple. Set verbForms to null for all other parts of speech.",
+    "If the entry is a verb (partOfSpeech contains 'verb'), populate `verbForms` with exactly 5 entries in this order: Infinitive, 3rd Person Singular, Past Simple, Past Participle, Present Participle. For each form, provide its own US IPA (phoneticsUs) and UK IPA (phoneticsUk) — pronunciation can differ between forms (e.g., read /riːd/ vs read /rɛd/). Set `isIrregular` to true for any form that does not follow standard English conjugation rules (adding -s, -ed, -ing). For non-verb entries, set `verbForms` to null.",
     "When partOfSpeech is a noun, populate numberInfo. Set plural to the standard plural form, or null if the noun is uncountable, plural-only, or singular-only. Set isUncountable, isPluralOnly, or isSingularOnly to true as appropriate — these are mutually exclusive. Set numberInfo to null for all other parts of speech.",
     `Entry type: ${entryType}`,
   ].join("\n");

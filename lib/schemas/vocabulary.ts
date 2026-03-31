@@ -30,14 +30,6 @@ export const DictionarySenseSchema = z.object({
   commonMistakesVi: z.array(z.string()).default([]),
 });
 
-export const VerbFormsSchema = z.object({
-  base: z.string(),
-  thirdPerson: z.string(),
-  pastSimple: z.string(),
-  pastParticiple: z.string(),
-  presentParticiple: z.string(),
-});
-
 export const NumberInfoSchema = z.object({
   plural: z.string().nullable(),
   isUncountable: z.boolean(),
@@ -55,12 +47,11 @@ export const VocabularySchema = z.object({
   partOfSpeech: z.string().nullable(),
   level: z.enum(["A1", "A2", "B1", "B2", "C1", "C2"]).nullable(),
   register: z.string().nullable(),
-  verbForms: VerbFormsSchema.nullable(),
-  numberInfo: NumberInfoSchema.nullable(),
+  verbForms: z.array(VerbFormSchema).nullable().default(null),
+  numberInfo: NumberInfoSchema.nullable().default(null),
   overviewVi: z.string(),
   overviewEn: z.string(),
   senses: z.array(DictionarySenseSchema).min(1),
-  verbForms: z.array(VerbFormSchema).nullable().default(null),
 });
 
 export const VocabularyWithNearbySchema = VocabularySchema.extend({
