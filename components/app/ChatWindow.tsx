@@ -1,7 +1,6 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   ArrowDown,
@@ -119,6 +118,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const streamingHasStarted = isLoading && lastMsg?.role === "assistant";
   const activePersona =
     PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
+  const ActiveAvatar = activePersona.avatar;
 
   const suggestions = useMemo(
     () => sampleSuggestions(activePersona, 4),
@@ -418,13 +418,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                     damping: 14,
                   }}
                 >
-                  <Image
-                    src="/english-logo-app.svg"
-                    alt="English Tutor"
-                    width={250}
-                    height={150}
-                    className="h-16 w-auto rounded-2xl shadow-(--shadow-lg)"
-                  />
+                  <ActiveAvatar size={64} />
                   <span className="absolute bottom-1 right-1 size-3 rounded-full bg-(--sage) ring-2 ring-(--bg)" />
                 </motion.div>
 
