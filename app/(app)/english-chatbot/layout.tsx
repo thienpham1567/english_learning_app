@@ -1,7 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
-import { usePathname } from "next/navigation";
+import { useParams } from "next/navigation";
 
 import { ChatConversationProvider } from "@/components/app/ChatConversationProvider";
 import { ConversationList } from "@/components/app/ConversationList";
@@ -11,11 +11,8 @@ export default function EnglishChatbotLayout({
 }: {
   children: ReactNode;
 }) {
-  const pathname = usePathname();
-
-  // Extract conversationId from path: /english-chatbot/{id}
-  const segments = pathname.split("/").filter(Boolean);
-  const activeId = segments.length >= 2 ? segments[1] : null;
+  const params = useParams<{ conversationId?: string }>();
+  const activeId = params.conversationId ?? null;
 
   return (
     <ChatConversationProvider>

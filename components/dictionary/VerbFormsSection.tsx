@@ -57,10 +57,19 @@ export function VerbFormsSection({ verbForms }: Props) {
             <span className="text-sm font-semibold text-[var(--ink)]">
               {vf.form}
             </span>
-            {vf.phoneticsUs && (
-              <span className="text-xs [font-family:var(--font-mono)] text-[var(--accent)]">
-                {vf.phoneticsUs}
-              </span>
+            {(vf.phoneticsUs || vf.phoneticsUk) && (
+              <div className="flex flex-col gap-0.5">
+                {vf.phoneticsUs && (
+                  <span className="text-xs [font-family:var(--font-mono)] text-[var(--accent)]">
+                    🇺🇸 {vf.phoneticsUs}
+                  </span>
+                )}
+                {vf.phoneticsUk && (
+                  <span className="text-xs [font-family:var(--font-mono)] text-[var(--accent)]">
+                    🇬🇧 {vf.phoneticsUk}
+                  </span>
+                )}
+              </div>
             )}
             <div className="flex items-center gap-2">
               <button

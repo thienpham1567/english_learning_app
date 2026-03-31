@@ -52,8 +52,8 @@ describe("VerbFormsSection", () => {
 
   it("renders IPA transcriptions", () => {
     render(<VerbFormsSection verbForms={REGULAR_FORMS} />);
-    expect(screen.getByText("/səˈsteɪn/")).toBeInTheDocument();
-    const sustainedIpa = screen.getAllByText("/səˈsteɪnd/");
+    expect(screen.getByText((_, el) => el?.textContent === "🇺🇸 /səˈsteɪn/")).toBeInTheDocument();
+    const sustainedIpa = screen.getAllByText((_, el) => el?.textContent === "🇺🇸 /səˈsteɪnd/");
     expect(sustainedIpa.length).toBe(2); // Past Simple + Past Participle
   });
 

@@ -104,6 +104,9 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const streamingHasStarted = isLoading && lastMsg?.role === "assistant";
   const activePersona = PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
 
+  const conversationsRef = useRef(conversations);
+  conversationsRef.current = conversations;
+
   // Load messages when conversationId changes (from URL)
   useEffect(() => {
     if (!conversationId) {
@@ -113,7 +116,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       return;
     }
 
-    const conv = conversations.find((c) => c.id === conversationId);
+    const conv = conversationsRef.current.find((c) => c.id === conversationId);
     if (conv?.personaId) {
       setSelectedPersonaId(conv.personaId);
     }
@@ -144,7 +147,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     })();
 
     return () => { cancelled = true; };
-  }, [conversationId, conversations]);
+  }, [conversationId]);
 
   useEffect(() => {
     const bottom = bottomRef.current;
