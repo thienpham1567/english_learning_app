@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from "motion/react";
 import type { DictionarySense, VocabularyWithNearby } from "@/lib/schemas/vocabulary";
 import { parseBold } from "@/lib/utils/parse-bold";
 import { NearbyWordsBar } from "@/components/dictionary/NearbyWordsBar";
+import { VerbFormsSection } from "@/components/dictionary/VerbFormsSection";
 
 type DictionaryResultCardProps = {
   vocabulary: VocabularyWithNearby | null;
@@ -254,7 +255,7 @@ export function DictionaryResultCard({
   const firstSenseId = vocabulary?.senses[0]?.id ?? "";
   const [activeKey, setActiveKey] = useState(firstSenseId);
   const [speakingLocale, setSpeakingLocale] = useState<string | null>(null);
-  const [verbFormsOpen, setVerbFormsOpen] = useState(false);
+
 
   useEffect(() => {
     setActiveKey(firstSenseId);
@@ -462,35 +463,11 @@ export function DictionaryResultCard({
             </motion.span>
           ) : null}
 
-          {/* Verb forms strip */}
-          {vocabulary.verbForms && (
-            <div className="mt-3">
-              <button
-                type="button"
-                onClick={() => setVerbFormsOpen((v) => !v)}
-                className="inline-flex items-center gap-1 text-xs font-medium text-[var(--text-muted)] transition hover:text-[var(--text-secondary)]"
-              >
-                Verb forms {verbFormsOpen ? "▴" : "▾"}
-              </button>
-              <AnimatePresence initial={false}>
-                {verbFormsOpen && (
-                  <motion.p
-                    className="mt-1.5 text-sm [font-family:var(--font-mono)] text-[var(--text-secondary)]"
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    {vocabulary.verbForms.base} · {vocabulary.verbForms.thirdPerson} ·{" "}
-                    {vocabulary.verbForms.pastSimple} · {vocabulary.verbForms.pastParticiple} ·{" "}
-                    {vocabulary.verbForms.presentParticiple}
-                  </motion.p>
-                )}
-              </AnimatePresence>
-            </div>
+          {vocabulary.verbForms && vocabulary.verbForms.length > 0 && (
+            <VerbFormsSection verbForms={vocabulary.verbForms} />
           )}
 
-          {/* Overview */}
+
           <motion.div
             className="mt-5 space-y-3 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4"
             initial={{ opacity: 0, y: 4 }}
