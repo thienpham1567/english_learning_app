@@ -14,6 +14,10 @@ type QueryState = {
 let queryState: QueryState;
 let setFiltersCalls: Record<string, unknown>[];
 
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: vi.fn() }),
+}));
+
 vi.mock("@/lib/http", () => ({
   default: {
     get: vi.fn(),
