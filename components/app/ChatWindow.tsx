@@ -1,15 +1,11 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   ArrowDown,
   ArrowUp,
-  Sparkles,
-  BookOpen,
-  MessageCircle,
-  Lightbulb,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -21,15 +17,22 @@ import { PersonaSwitcher } from "@/components/app/PersonaSwitcher";
 import { ChatHeader } from "@/components/app/ChatHeader";
 import { deriveTitle } from "@/lib/chat/derive-title";
 import { DEFAULT_PERSONA_ID, PERSONAS } from "@/lib/chat/personas";
+import type { Persona } from "@/lib/chat/personas";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 import http from "@/lib/http";
 
-const SUGGESTED = [
-  { text: "Sửa ngữ pháp giúp mình: I goed to school.", icon: BookOpen },
-  { text: "Cho mình một bài luyện nhanh bằng tiếng Anh.", icon: Sparkles },
-  { text: "Giải thích một từ lóng của người Úc nhé.", icon: MessageCircle },
-  { text: "Vì sao phải nói 'I am' chứ không phải 'I is'?", icon: Lightbulb },
-];
+export function sampleSuggestions(
+  persona: Persona,
+  count: number,
+): typeof persona.suggestions[number][] {
+  const pool = [...persona.suggestions];
+  const n = Math.min(count, pool.length);
+  for (let i = pool.length - 1; i > pool.length - n - 1 && i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  return pool.slice(pool.length - n);
+}
 
 const CHAT_ERROR_MESSAGE = "Gia sư đang gặp lỗi kỹ thuật. Bạn thử lại sau nhé.";
 
@@ -116,6 +119,11 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const streamingHasStarted = isLoading && lastMsg?.role === "assistant";
   const activePersona =
     PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
+
+  const suggestions = useMemo(
+    () => sampleSuggestions(activePersona, 4),
+    [activePersona],
+  );
 
   const conversationsRef = useRef(conversations);
   conversationsRef.current = conversations;
@@ -440,7 +448,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                 </motion.p>
 
                 <div className="mt-8 grid w-full gap-3 md:grid-cols-2">
-                  {SUGGESTED.map((s, i) => {
+                  {suggestions.map((s, i) => {
                     const Icon = s.icon;
                     return (
                       <motion.button
