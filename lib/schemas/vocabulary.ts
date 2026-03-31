@@ -2,6 +2,14 @@ import { z } from "zod";
 
 export const VocabularyEntryTypeSchema = z.enum(["word", "phrasal_verb", "idiom"]);
 
+export const VerbFormSchema = z.object({
+  label: z.string(),
+  form: z.string(),
+  phoneticsUs: z.string().nullable(),
+  phoneticsUk: z.string().nullable(),
+  isIrregular: z.boolean(),
+});
+
 export const DictionarySenseSchema = z.object({
   id: z.string(),
   label: z.string(),
@@ -52,6 +60,7 @@ export const VocabularySchema = z.object({
   overviewVi: z.string(),
   overviewEn: z.string(),
   senses: z.array(DictionarySenseSchema).min(1),
+  verbForms: z.array(VerbFormSchema).nullable().default(null),
 });
 
 export const VocabularyWithNearbySchema = VocabularySchema.extend({
@@ -61,6 +70,7 @@ export const VocabularyWithNearbySchema = VocabularySchema.extend({
 export type Vocabulary = z.infer<typeof VocabularySchema>;
 export type VocabularyWithNearby = z.infer<typeof VocabularyWithNearbySchema>;
 export type DictionarySense = z.infer<typeof DictionarySenseSchema>;
+export type VerbForm = z.infer<typeof VerbFormSchema>;
 
 export function normalizeVocabularyEntryType(entryType: string | null | undefined): Vocabulary["entryType"] | null {
   if (!entryType) return null;
