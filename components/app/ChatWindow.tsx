@@ -478,6 +478,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                   key={m.id}
                   message={m}
                   className={getMessageSpacingClassName(m, messages[index - 1])}
+                  persona={activePersona}
                   isStreaming={
                     isLoading &&
                     index === messages.length - 1 &&

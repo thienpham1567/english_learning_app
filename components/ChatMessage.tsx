@@ -6,6 +6,7 @@ import { motion } from "motion/react";
 import { Check, Copy, GraduationCap } from "lucide-react";
 import { useUser } from "@/components/app/UserContext";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
+import type { Persona } from "@/lib/chat/personas";
 
 export type DividerMessage = {
   id: string;
@@ -76,10 +77,12 @@ export function ChatMessage({
   message,
   className = "",
   isStreaming = false,
+  persona,
 }: {
   message: PageMessage;
   className?: string;
   isStreaming?: boolean;
+  persona?: Persona;
 }) {
   if (message.role === "divider") {
     return (
@@ -110,7 +113,7 @@ export function ChatMessage({
     >
       {!isUser && (
         <div className="grid size-8 shrink-0 place-items-center rounded-full bg-(--ink) text-white shadow-(--shadow-sm)">
-          <GraduationCap size={14} strokeWidth={2} />
+          {persona ? <persona.avatar size={5} /> : <GraduationCap size={14} strokeWidth={2} />}
         </div>
       )}
 
