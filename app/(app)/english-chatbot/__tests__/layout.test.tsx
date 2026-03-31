@@ -10,6 +10,18 @@ vi.mock("@/lib/http", () => ({
   },
 }));
 
+vi.mock("@/components/app/ChatConversationProvider", () => ({
+  ChatConversationProvider: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
+  useChatConversations: () => ({
+    conversations: [],
+    setConversations: vi.fn(),
+    loadConversations: vi.fn(),
+    deleteConversation: vi.fn(),
+  }),
+}));
+
 const mockUseParams = vi.fn();
 vi.mock("next/navigation", () => ({
   useParams: () => mockUseParams(),
