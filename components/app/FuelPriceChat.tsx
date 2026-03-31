@@ -93,38 +93,29 @@ export function FuelPriceChat() {
           {/* Message list */}
           {chat.hasMessages && (
             <div className="flex flex-col">
-              {chat.messages.map((m, index) => (
-                <MessageBubble
-                  key={m.id}
-                  message={m}
-                  isStreaming={
-                    chat.isLoading &&
-                    index === chat.messages.length - 1 &&
-                    m.role === "assistant"
-                  }
-                  showSpacing={
-                    index > 0 && chat.messages[index - 1].role !== m.role
-                  }
-                />
-              ))}
+              {chat.messages.map((m, index) => {
+                const isLastAssistant =
+                  chat.isLoading &&
+                  index === chat.messages.length - 1 &&
+                  m.role === "assistant";
 
-              {/* Tool status */}
-              <AnimatePresence mode="wait">
-                {chat.toolStatus && (
-                  <ToolStatusCard
-                    key={`${chat.toolStatus.tool}-${chat.toolStatus.status}`}
-                    tool={chat.toolStatus.tool}
-                    status={chat.toolStatus.status}
+                return (
+                  <MessageBubble
+                    key={m.id}
+                    message={m}
+                    isStreaming={isLastAssistant}
+                    toolStatus={isLastAssistant ? chat.toolStatus : null}
+                    isWaiting={
+                      isLastAssistant &&
+                      !chat.streamingHasStarted &&
+                      !chat.toolStatus
+                    }
+                    showSpacing={
+                      index > 0 && chat.messages[index - 1].role !== m.role
+                    }
                   />
-                )}
-              </AnimatePresence>
-
-              {/* Typing indicator */}
-              <AnimatePresence>
-                {chat.isLoading &&
-                  !chat.streamingHasStarted &&
-                  !chat.toolStatus && <TypingIndicator />}
-              </AnimatePresence>
+                );
+              })}
             </div>
           )}
 
@@ -341,21 +332,27 @@ function EmptyState({ onSend }: { onSend: (text: string) => void }) {
 function MessageBubble({
   message: m,
   isStreaming,
+  toolStatus,
+  isWaiting,
   showSpacing,
 }: {
   message: { id: string; role: "user" | "assistant"; text: string };
   isStreaming: boolean;
+  toolStatus: { tool: string; status: "calling" | "done" } | null;
+  isWaiting: boolean;
   showSpacing: boolean;
 }) {
   const isUser = m.role === "user";
   const text = m.text.trim();
+  const showStatus = !text && (isWaiting || toolStatus);
 
+  // Hide empty assistant messages that aren't actively loading
   if (!text && !isStreaming) return null;
 
   return (
     <motion.div
       className={[
-        "group flex items-end gap-3",
+        "group flex items-start gap-3",
         isUser ? "justify-end" : "justify-start",
         showSpacing ? "mt-7" : "mt-1",
       ].join(" ")}
@@ -375,32 +372,70 @@ function MessageBubble({
           isUser ? "items-end" : "items-start",
         ].join(" ")}
       >
-        <div
-          className={[
-            "rounded-[22px] px-4 py-3 shadow-(--shadow-sm)",
-            isUser
-              ? "rounded-br-md bg-(--bubble-user) text-white"
-              : "rounded-bl-md border border-(--border) bg-(--bubble-ai) text-(--text-primary)",
-          ].join(" ")}
-        >
-          {isUser ? (
-            <span className="whitespace-pre-wrap">{text}</span>
-          ) : (
-            <div className={MARKDOWN_CLASSES}>
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
-              {isStreaming && (
-                <span
-                  className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] rounded-[1px] bg-amber-500 align-middle [animation:textCursor_0.7s_ease-in-out_infinite]"
-                  aria-hidden="true"
+        {/* Inline status: typing / tool calling */}
+        {showStatus && (
+          <div className="rounded-2xl rounded-bl-md border border-(--border) bg-(--bubble-ai) px-4 py-3 shadow-(--shadow-sm)">
+            <AnimatePresence mode="wait">
+              {toolStatus ? (
+                <ToolStatusCard
+                  key={`${toolStatus.tool}-${toolStatus.status}`}
+                  tool={toolStatus.tool}
+                  status={toolStatus.status}
                 />
+              ) : (
+                <motion.span
+                  key="typing"
+                  className="flex items-center gap-1.5"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                >
+                  <span className="text-xs text-(--text-muted)">Đang xử lý</span>
+                  {[0, 1, 2].map((i) => (
+                    <motion.span
+                      key={i}
+                      className="inline-block size-1.5 rounded-full bg-(--text-muted)"
+                      animate={{ y: [0, -4, 0], opacity: [0.3, 1, 0.3] }}
+                      transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.15, ease: "easeInOut" }}
+                    />
+                  ))}
+                </motion.span>
+              )}
+            </AnimatePresence>
+          </div>
+        )}
+
+        {/* Actual message content */}
+        {text && (
+          <>
+            <div
+              className={[
+                "rounded-[22px] px-4 py-3 shadow-(--shadow-sm)",
+                isUser
+                  ? "rounded-br-md bg-(--bubble-user) text-white"
+                  : "rounded-bl-md border border-(--border) bg-(--bubble-ai) text-(--text-primary)",
+              ].join(" ")}
+            >
+              {isUser ? (
+                <span className="whitespace-pre-wrap">{text}</span>
+              ) : (
+                <div className={MARKDOWN_CLASSES}>
+                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
+                  {isStreaming && (
+                    <span
+                      className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] rounded-[1px] bg-amber-500 align-middle [animation:textCursor_0.7s_ease-in-out_infinite]"
+                      aria-hidden="true"
+                    />
+                  )}
+                </div>
               )}
             </div>
-          )}
-        </div>
-        <div className="flex items-center gap-2 text-xs text-(--text-muted) opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-          <span>{formatTime()}</span>
-          {!isUser && <CopyButton text={text} />}
-        </div>
+            <div className="flex items-center gap-2 text-xs text-(--text-muted) opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+              <span>{formatTime()}</span>
+              {!isUser && <CopyButton text={text} />}
+            </div>
+          </>
+        )}
       </div>
 
       {isUser && (

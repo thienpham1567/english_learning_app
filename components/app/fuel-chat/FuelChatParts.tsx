@@ -111,54 +111,48 @@ export function ToolStatusCard({
 
   return (
     <motion.div
-      className="mt-3 flex items-center gap-2 pl-11"
-      initial={{ opacity: 0, y: 8, scale: 0.95 }}
-      animate={{ opacity: 1, y: 0, scale: 1 }}
-      exit={{ opacity: 0, y: -4, scale: 0.95 }}
+      className={[
+        "flex items-center gap-2.5 text-sm",
+        isCalling ? "text-amber-800" : "text-emerald-800",
+      ].join(" ")}
+      initial={{ opacity: 0, y: 4 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -4 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
     >
-      <div
-        className={[
-          "flex items-center gap-2.5 rounded-2xl rounded-bl-md border px-4 py-2.5 text-sm shadow-(--shadow-sm)",
-          isCalling
-            ? "border-amber-200 bg-amber-50 text-amber-800"
-            : "border-emerald-200 bg-emerald-50 text-emerald-800",
-        ].join(" ")}
-      >
-        <span className="text-base">{info.icon}</span>
-        <span className="font-medium">{info.label}</span>
+      <span className="text-base">{info.icon}</span>
+      <span className="font-medium">{info.label}</span>
 
-        {isCalling && (
-          <span className="flex items-center gap-0.5">
-            {[0, 1, 2].map((i) => (
-              <motion.span
-                key={i}
-                className="inline-block size-1.5 rounded-full bg-amber-500"
-                animate={{
-                  y: [0, -4, 0],
-                  opacity: [0.4, 1, 0.4],
-                }}
-                transition={{
-                  duration: 1,
-                  repeat: Infinity,
-                  delay: i * 0.15,
-                  ease: "easeInOut",
-                }}
-              />
-            ))}
-          </span>
-        )}
+      {isCalling && (
+        <span className="flex items-center gap-0.5">
+          {[0, 1, 2].map((i) => (
+            <motion.span
+              key={i}
+              className="inline-block size-1.5 rounded-full bg-amber-500"
+              animate={{
+                y: [0, -4, 0],
+                opacity: [0.4, 1, 0.4],
+              }}
+              transition={{
+                duration: 1,
+                repeat: Infinity,
+                delay: i * 0.15,
+                ease: "easeInOut",
+              }}
+            />
+          ))}
+        </span>
+      )}
 
-        {!isCalling && (
-          <motion.span
-            initial={{ scale: 0 }}
-            animate={{ scale: 1 }}
-            transition={{ type: "spring", stiffness: 400, damping: 15 }}
-          >
-            ✅
-          </motion.span>
-        )}
-      </div>
+      {!isCalling && (
+        <motion.span
+          initial={{ scale: 0 }}
+          animate={{ scale: 1 }}
+          transition={{ type: "spring", stiffness: 400, damping: 15 }}
+        >
+          ✅
+        </motion.span>
+      )}
     </motion.div>
   );
 }

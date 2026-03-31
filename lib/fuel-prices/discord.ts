@@ -45,7 +45,7 @@ export async function sendDiscordMessage(
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        username: "Cô Minh ⛽ Báo Giá Xăng",
+        username: "Cô Kiều ⛽ Báo Giá Xăng",
         avatar_url: "https://cdn-icons-png.flaticon.com/512/2933/2933245.png",
         embeds: [embed],
       }),
@@ -84,11 +84,8 @@ function buildFuelPriceEmbed(content: string): DiscordEmbed {
     title: "⛽ Bảng Giá Xăng Dầu Hôm Nay",
     description: content,
     color: 0xf59e0b, // Amber-500
-    thumbnail: {
-      url: "https://cdn-icons-png.flaticon.com/512/2933/2933245.png",
-    },
     footer: {
-      text: "Cô Minh • Nguồn: PVOIL",
+      text: "Cô Kiều • Nguồn: PVOIL",
       icon_url: "https://cdn-icons-png.flaticon.com/512/2933/2933245.png",
     },
     timestamp: new Date().toISOString(),

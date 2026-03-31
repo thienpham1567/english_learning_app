@@ -17,7 +17,7 @@ import type { FuelChatMessage } from "@/lib/fuel-prices/types";
 const MAX_TOOL_STEPS = 5;
 
 const ERROR_MESSAGE =
-  "Cô Minh đang bị lỗi kỹ thuật rồi 😵 Thử lại sau nha con!";
+  "Cô Kiều đang bị lỗi kỹ thuật rồi 😵 Thử lại sau nha!";
 
 // ── Request Validation ──────────────────────────────────────
 
