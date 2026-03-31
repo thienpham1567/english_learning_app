@@ -64,24 +64,24 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
             key="thesaurus-sheet"
             {...sheetMotionProps}
             transition={{ duration: 0.22, ease: "easeOut" }}
-            className="fixed bottom-0 right-0 top-0 z-50 w-96 overflow-y-auto bg-[var(--bg-deep)] shadow-2xl max-[720px]:left-0 max-[720px]:top-auto max-[720px]:h-[80vh] max-[720px]:w-full max-[720px]:rounded-t-2xl"
+            className="fixed bottom-0 right-0 top-0 z-50 w-96 overflow-y-auto bg-(--bg-deep) shadow-2xl max-[720px]:left-0 max-[720px]:top-auto max-[720px]:h-[80vh] max-[720px]:w-full max-[720px]:rounded-t-2xl"
             aria-label="Từ đồng & trái nghĩa"
             role="dialog"
           >
-            <div className="sticky top-0 flex items-center justify-between border-b border-[var(--border)] bg-[var(--bg-deep)] px-5 py-3">
+            <div className="sticky top-0 flex items-center justify-between border-b border-(--border) bg-(--bg-deep) px-5 py-3">
               <div>
-                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-(--text-muted)">
                   Từ đồng & trái nghĩa
                 </p>
                 {vocabulary && (
-                  <p className="text-sm font-medium text-[var(--ink)]">
+                  <p className="text-sm font-medium text-(--ink)">
                     {vocabulary.headword}
                   </p>
                 )}
               </div>
               <button
                 onClick={onClose}
-                className="grid size-8 place-items-center rounded-full text-[var(--text-muted)] transition hover:bg-[var(--surface-hover)]"
+                className="grid size-8 place-items-center rounded-full text-(--text-muted) transition hover:bg-(--surface-hover)"
                 aria-label="Đóng"
               >
                 <X size={18} />
@@ -90,7 +90,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
 
             <div className="px-5 py-5">
               {vocabulary && sensesWithData.length === 0 && (
-                <p className="text-sm text-[var(--text-muted)]">
+                <p className="text-sm text-(--text-muted)">
                   Chưa có dữ liệu đồng/trái nghĩa.
                 </p>
               )}
@@ -99,13 +99,13 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                 <div className="space-y-6">
                   {sensesWithData.map((sense) => (
                     <div key={sense.id} className="space-y-4">
-                      <p className="[font-family:var(--font-display)] italic text-sm text-[var(--accent)]">
+                      <p className="[font-family:var(--font-display)] italic text-sm text-(--accent)">
                         {sense.label}
                       </p>
 
                       {(sense.synonyms?.length ?? 0) > 0 && (
                         <div className="space-y-2">
-                          <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                          <p className="text-[10px] uppercase tracking-[0.18em] text-(--text-muted)">
                             Đồng nghĩa
                           </p>
                           <div className="flex flex-wrap gap-2">
@@ -125,7 +125,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
 
                       {(sense.antonyms?.length ?? 0) > 0 && (
                         <div className="space-y-2">
-                          <p className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                          <p className="text-[10px] uppercase tracking-[0.18em] text-(--text-muted)">
                             Trái nghĩa
                           </p>
                           <div className="flex flex-wrap gap-2">

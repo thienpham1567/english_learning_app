@@ -3,7 +3,14 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { ArrowDown, ArrowUp, Sparkles, BookOpen, MessageCircle, Lightbulb } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  Sparkles,
+  BookOpen,
+  MessageCircle,
+  Lightbulb,
+} from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import { TypingIndicator } from "@/components/TypingIndicator";
@@ -24,8 +31,7 @@ const SUGGESTED = [
   { text: "Vì sao phải nói 'I am' chứ không phải 'I is'?", icon: Lightbulb },
 ];
 
-const CHAT_ERROR_MESSAGE =
-  "Gia sư đang gặp lỗi kỹ thuật. Bạn thử lại sau nhé.";
+const CHAT_ERROR_MESSAGE = "Gia sư đang gặp lỗi kỹ thuật. Bạn thử lại sau nhé.";
 
 type AssistantStreamEvent =
   | { type: "assistant_start" }
@@ -46,36 +52,38 @@ export function getMessageSpacingClassName(
   previousMessage?: PageMessage,
 ) {
   if (!previousMessage) return "";
-  return currentMessage.role === previousMessage.role ? "mt-[4px]" : "mt-[28px]";
+  return currentMessage.role === previousMessage.role
+    ? "mt-[4px]"
+    : "mt-[28px]";
 }
 
 function ChatSkeleton() {
   return (
     <div className="mx-auto w-full max-w-5xl animate-pulse space-y-6 py-6">
       <div className="flex gap-3">
-        <div className="h-8 w-8 shrink-0 rounded-full bg-[var(--bg-deep)]" />
+        <div className="h-8 w-8 shrink-0 rounded-full bg-(--bg-deep)" />
         <div className="flex-1 space-y-2">
-          <div className="h-4 w-3/4 rounded bg-[var(--bg-deep)]" />
-          <div className="h-4 w-1/2 rounded bg-[var(--bg-deep)]" />
+          <div className="h-4 w-3/4 rounded bg-(--bg-deep)" />
+          <div className="h-4 w-1/2 rounded bg-(--bg-deep)" />
         </div>
       </div>
       <div className="flex justify-end">
         <div className="space-y-2 w-2/3">
-          <div className="h-4 w-full rounded bg-[var(--bg-deep)]" />
-          <div className="h-4 w-4/5 rounded bg-[var(--bg-deep)]" />
+          <div className="h-4 w-full rounded bg-(--bg-deep)" />
+          <div className="h-4 w-4/5 rounded bg-(--bg-deep)" />
         </div>
       </div>
       <div className="flex gap-3">
-        <div className="h-8 w-8 shrink-0 rounded-full bg-[var(--bg-deep)]" />
+        <div className="h-8 w-8 shrink-0 rounded-full bg-(--bg-deep)" />
         <div className="flex-1 space-y-2">
-          <div className="h-4 w-full rounded bg-[var(--bg-deep)]" />
-          <div className="h-4 w-2/3 rounded bg-[var(--bg-deep)]" />
-          <div className="h-4 w-4/5 rounded bg-[var(--bg-deep)]" />
+          <div className="h-4 w-full rounded bg-(--bg-deep)" />
+          <div className="h-4 w-2/3 rounded bg-(--bg-deep)" />
+          <div className="h-4 w-4/5 rounded bg-(--bg-deep)" />
         </div>
       </div>
       <div className="flex justify-end">
         <div className="space-y-2 w-1/2">
-          <div className="h-4 w-full rounded bg-[var(--bg-deep)]" />
+          <div className="h-4 w-full rounded bg-(--bg-deep)" />
         </div>
       </div>
     </div>
@@ -88,21 +96,26 @@ interface ChatWindowProps {
 
 export function ChatWindow({ conversationId }: ChatWindowProps) {
   const router = useRouter();
-  const { conversations, setConversations, loadConversations } = useChatConversations();
+  const { conversations, setConversations, loadConversations } =
+    useChatConversations();
   const [messages, setMessages] = useState<PageMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedPersonaId, setSelectedPersonaId] = useState(DEFAULT_PERSONA_ID);
+  const [selectedPersonaId, setSelectedPersonaId] =
+    useState(DEFAULT_PERSONA_ID);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isNearBottomRef = useRef(true);
   const [showScrollBtn, setShowScrollBtn] = useState(false);
+  // Tracks whether we just created a new conversation to avoid refetching messages
+  const justCreatedRef = useRef(false);
   const lastMsg = messages.at(-1);
   const streamingHasStarted = isLoading && lastMsg?.role === "assistant";
-  const activePersona = PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
+  const activePersona =
+    PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
 
   const conversationsRef = useRef(conversations);
   conversationsRef.current = conversations;
@@ -116,6 +129,12 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       return;
     }
 
+    // Skip fetch if we just created this conversation — messages are already in local state
+    if (justCreatedRef.current) {
+      justCreatedRef.current = false;
+      return;
+    }
+
     const conv = conversationsRef.current.find((c) => c.id === conversationId);
     if (conv?.personaId) {
       setSelectedPersonaId(conv.personaId);
@@ -125,14 +144,18 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     setIsLoadingMessages(true);
     (async () => {
       try {
-        const { data: rows } = await http.get<Array<{
-          id: string;
-          role: "user" | "assistant";
-          content: string;
-        }>>(`/conversations/${conversationId}/messages`);
+        const { data: rows } = await http.get<
+          Array<{
+            id: string;
+            role: "user" | "assistant";
+            content: string;
+          }>
+        >(`/conversations/${conversationId}/messages`);
         if (cancelled) return;
         if (!cancelled) {
-          setMessages(rows.map((r) => ({ id: r.id, role: r.role, text: r.content })));
+          setMessages(
+            rows.map((r) => ({ id: r.id, role: r.role, text: r.content })),
+          );
           setError(null);
         }
       } catch {
@@ -146,12 +169,18 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       }
     })();
 
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [conversationId]);
 
   useEffect(() => {
     const bottom = bottomRef.current;
-    if (isNearBottomRef.current && bottom && typeof bottom.scrollIntoView === "function") {
+    if (
+      isNearBottomRef.current &&
+      bottom &&
+      typeof bottom.scrollIntoView === "function"
+    ) {
       bottom.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, isLoading, error]);
@@ -181,7 +210,11 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
 
   const removeEmptyAssistantMessage = (messageId: string) => {
     setMessages((curr) =>
-      curr.filter((m) => m.id !== messageId || (m.role !== "divider" && m.text.trim().length > 0)),
+      curr.filter(
+        (m) =>
+          m.id !== messageId ||
+          (m.role !== "divider" && m.text.trim().length > 0),
+      ),
     );
   };
 
@@ -209,10 +242,14 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     let convId = conversationId;
     if (!convId) {
       try {
-        const { data: created } = await http.post<{ id: string; title: string; personaId: string }>(
-          "/conversations",
-          { title: deriveTitle(t), personaId: selectedPersonaId },
-        );
+        const { data: created } = await http.post<{
+          id: string;
+          title: string;
+          personaId: string;
+        }>("/conversations", {
+          title: deriveTitle(t),
+          personaId: selectedPersonaId,
+        });
         convId = created.id;
         setConversations((curr) => [
           {
@@ -223,6 +260,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
           },
           ...curr,
         ]);
+        justCreatedRef.current = true;
         router.replace(`/english-chatbot/${created.id}`);
       } catch {
         // proceed without persistence if conversation creation fails
@@ -324,7 +362,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const hasMessages = messages.length > 0;
 
   return (
-    <div className="relative flex h-full min-h-0 flex-1 flex-col overflow-hidden">
+    <div className="relative flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-[linear-gradient(135deg,rgba(255,255,255,0.96),rgba(253,243,235,0.9))]">
       <ChatHeader personaId={selectedPersonaId} />
       <div
         ref={scrollContainerRef}
@@ -364,7 +402,13 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                   className="relative"
                   initial={{ scale: 0.6, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
-                  transition={{ delay: 0.1, duration: 0.5, type: "spring", stiffness: 180, damping: 14 }}
+                  transition={{
+                    delay: 0.1,
+                    duration: 0.5,
+                    type: "spring",
+                    stiffness: 180,
+                    damping: 14,
+                  }}
                 >
                   <Image
                     src="/english-logo-app.svg"
@@ -391,7 +435,8 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.4 }}
                 >
-                  Chọn gia sư phù hợp với mục tiêu của bạn, rồi bắt đầu luyện tập nhé.
+                  Chọn gia sư phù hợp với mục tiêu của bạn, rồi bắt đầu luyện
+                  tập nhé.
                 </motion.p>
 
                 <div className="mt-8 grid w-full gap-3 md:grid-cols-2">
@@ -404,7 +449,11 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                         onClick={() => send(s.text)}
                         initial={{ opacity: 0, y: 16 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.35 + i * 0.08, duration: 0.35, ease: "easeOut" }}
+                        transition={{
+                          delay: 0.35 + i * 0.08,
+                          duration: 0.35,
+                          ease: "easeOut",
+                        }}
                         whileHover={{ y: -2 }}
                         whileTap={{ scale: 0.97 }}
                       >
@@ -429,19 +478,25 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                   key={m.id}
                   message={m}
                   className={getMessageSpacingClassName(m, messages[index - 1])}
-                  isStreaming={isLoading && index === messages.length - 1 && m.role === "assistant"}
+                  isStreaming={
+                    isLoading &&
+                    index === messages.length - 1 &&
+                    m.role === "assistant"
+                  }
                 />
               ))}
               <AnimatePresence>
                 {isLoading && !streamingHasStarted && (
                   <motion.div
-                    className="mt-[28px]"
+                    className="mt-7"
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <TypingIndicator personaName={activePersona.label.split(" —")[0]} />
+                    <TypingIndicator
+                      personaName={activePersona.label.split(" —")[0]}
+                    />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -475,7 +530,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       <AnimatePresence>
         {showScrollBtn && (
           <motion.button
-            className="absolute bottom-[88px] left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-(--border) bg-(--surface) px-3 py-1.5 text-xs font-medium text-(--text-secondary) shadow-(--shadow-lg) transition hover:bg-(--surface-hover) hover:text-(--ink)"
+            className="absolute bottom-22 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-(--border) bg-(--surface) px-3 py-1.5 text-xs font-medium text-(--text-secondary) shadow-(--shadow-lg) transition hover:bg-(--surface-hover) hover:text-(--ink)"
             onClick={scrollToBottom}
             initial={{ opacity: 0, y: 8, scale: 0.92 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
@@ -499,7 +554,10 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
             <textarea
               ref={textareaRef}
               value={input}
-              onChange={(e) => { setInput(e.target.value); autoResize(); }}
+              onChange={(e) => {
+                setInput(e.target.value);
+                autoResize();
+              }}
               onKeyDown={(e) => {
                 if (e.key === "Enter" && !e.shiftKey) {
                   e.preventDefault();

@@ -111,25 +111,25 @@ export function VocabularyDetailSheet({
             key="sheet"
             {...sheetMotionProps}
             transition={{ duration: 0.22, ease: "easeOut" }}
-            className="fixed bottom-0 right-0 top-0 z-50 w-96 overflow-y-auto bg-[var(--surface)] shadow-2xl max-[720px]:left-0 max-[720px]:top-auto max-[720px]:h-[80vh] max-[720px]:w-full max-[720px]:rounded-t-2xl"
+            className="fixed bottom-0 right-0 top-0 z-50 w-96 overflow-y-auto bg-(--surface) shadow-2xl max-[720px]:left-0 max-[720px]:top-auto max-[720px]:h-[80vh] max-[720px]:w-full max-[720px]:rounded-t-2xl"
             aria-label="Chi tiết từ vựng"
             role="dialog"
           >
-            <div className="sticky top-0 flex items-center justify-between border-b border-[var(--border)] bg-[var(--surface)] px-5 py-3">
+            <div className="sticky top-0 flex items-center justify-between border-b border-(--border) bg-(--surface) px-5 py-3">
               <button
                 onClick={onToggleSaved}
-                className="flex items-center gap-1.5 text-sm text-[var(--text-secondary)] transition hover:text-[var(--accent)]"
+                className="flex items-center gap-1.5 text-sm text-(--text-secondary) transition hover:text-(--accent)"
                 aria-label={saved ? "Bỏ lưu" : "Lưu từ này"}
               >
                 <BookMarked
                   size={16}
-                  className={saved ? "text-[var(--accent)]" : ""}
+                  className={saved ? "text-(--accent)" : ""}
                 />
                 {saved ? "Đã lưu" : "Lưu"}
               </button>
               <button
                 onClick={onClose}
-                className="grid size-8 place-items-center rounded-full text-[var(--text-muted)] transition hover:bg-[var(--surface-hover)]"
+                className="grid size-8 place-items-center rounded-full text-(--text-muted) transition hover:bg-(--surface-hover)"
                 aria-label="Đóng"
               >
                 <X size={18} />
@@ -142,20 +142,20 @@ export function VocabularyDetailSheet({
                   className="animate-pulse space-y-3"
                   aria-label="Đang tải..."
                 >
-                  <div className="h-7 w-48 rounded bg-[var(--surface-hover)]" />
-                  <div className="h-4 w-32 rounded bg-[var(--surface-hover)]" />
-                  <div className="h-4 w-full rounded bg-[var(--surface-hover)]" />
-                  <div className="h-4 w-3/4 rounded bg-[var(--surface-hover)]" />
+                  <div className="h-7 w-48 rounded bg-(--surface-hover)" />
+                  <div className="h-4 w-32 rounded bg-(--surface-hover)" />
+                  <div className="h-4 w-full rounded bg-(--surface-hover)" />
+                  <div className="h-4 w-3/4 rounded bg-(--surface-hover)" />
                 </div>
               )}
 
               {status === "error" && (
-                <div className="space-y-3 text-sm text-[var(--text-secondary)]">
+                <div className="space-y-3 text-sm text-(--text-secondary)">
                   <p>Định nghĩa không còn trong bộ nhớ đệm.</p>
                   <p>Hãy tra lại từ này để xem đầy đủ.</p>
                   <a
                     href={`/dictionary?q=${encodeURIComponent(query ?? "")}`}
-                    className="inline-flex items-center gap-1 text-[var(--accent)] underline"
+                    className="inline-flex items-center gap-1 text-(--accent) underline"
                   >
                     Tra lại <ExternalLink size={13} />
                   </a>
@@ -165,18 +165,18 @@ export function VocabularyDetailSheet({
               {status === "ok" && data && (
                 <div className="space-y-5">
                   <div>
-                    <h2 className="text-2xl font-bold text-[var(--ink)]">
+                    <h2 className="text-2xl font-bold text-(--ink)">
                       {data.headword}
                     </h2>
                     {data.partOfSpeech && (
-                      <span className="mt-1 inline-block text-sm italic text-[var(--text-muted)]">
+                      <span className="mt-1 inline-block text-sm italic text-(--text-muted)">
                         {data.partOfSpeech}
                       </span>
                     )}
                   </div>
 
                   {(data.phoneticsUs || data.phoneticsUk) && (
-                    <div className="flex flex-wrap gap-3 text-sm text-[var(--text-muted)]">
+                    <div className="flex flex-wrap gap-3 text-sm text-(--text-muted)">
                       {data.phoneticsUs && <span>🇺🇸 {data.phoneticsUs}</span>}
                       {data.phoneticsUk && <span>🇬🇧 {data.phoneticsUk}</span>}
                     </div>
@@ -190,28 +190,28 @@ export function VocabularyDetailSheet({
                         {data.level}
                       </span>
                     )}
-                    <span className="rounded-full bg-[var(--bg-deep)] px-2 py-0.5 text-[11px] text-[var(--text-muted)]">
+                    <span className="rounded-full bg-(--bg-deep) px-2 py-0.5 text-[11px] text-(--text-muted)">
                       {ENTRY_TYPE_LABELS[data.entryType] ?? data.entryType}
                     </span>
                   </div>
 
-                  <p className="text-sm leading-6 text-[var(--text-secondary)]">
+                  <p className="text-sm leading-6 text-(--text-secondary)">
                     {data.overviewVi}
                   </p>
-                  <p className="text-sm leading-6 text-[var(--text-muted)]">
+                  <p className="text-sm leading-6 text-(--text-muted)">
                     {data.overviewEn}
                   </p>
 
-                  <div className="space-y-5 border-t border-[var(--border)] pt-4">
+                  <div className="space-y-5 border-t border-(--border) pt-4">
                     {data.senses.map((sense) => (
                       <div key={sense.id} className="space-y-2">
-                        <p className="text-[11px] font-semibold uppercase tracking-widest text-[var(--accent)]">
+                        <p className="text-[11px] font-semibold uppercase tracking-widest text-(--accent)">
                           {sense.label}
                         </p>
-                        <p className="text-sm font-medium text-[var(--ink)]">
+                        <p className="text-sm font-medium text-(--ink)">
                           {sense.definitionVi}
                         </p>
-                        <p className="text-sm text-[var(--text-muted)]">
+                        <p className="text-sm text-(--text-muted)">
                           {sense.definitionEn}
                         </p>
                         {sense.examples.slice(0, 3).map((ex, i) => (
@@ -219,10 +219,10 @@ export function VocabularyDetailSheet({
                             key={i}
                             className="border-l-2 border-[rgba(196,109,46,0.3)] pl-3 text-sm"
                           >
-                            <p className="text-[var(--text-secondary)]">
+                            <p className="text-(--text-secondary)">
                               {ex.en}
                             </p>
-                            <p className="text-[var(--text-muted)]">{ex.vi}</p>
+                            <p className="text-(--text-muted)">{ex.vi}</p>
                           </div>
                         ))}
                       </div>

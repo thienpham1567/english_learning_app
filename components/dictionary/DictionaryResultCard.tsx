@@ -21,7 +21,7 @@ type DictionaryResultCardProps = {
 };
 
 const SENSE_ITEM_CLASS =
-  "border-l-2 border-[rgba(196,109,46,0.3)] pl-4 text-sm italic leading-6 text-[var(--text-secondary)]";
+  "border-l-2 border-[rgba(196,109,46,0.3)] pl-4 text-sm italic leading-6 text-(--text-secondary)";
 
 const ENTRY_TYPE_LABELS: Record<VocabularyWithNearby["entryType"], string> = {
   word: "Từ / cụm từ",
@@ -79,23 +79,23 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3 }}
     >
-      <section className="space-y-2 rounded-[var(--radius-lg)] border-l-[3px] border-[var(--accent)] bg-[var(--bg-deep)] px-5 py-4">
-        <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
+      <section className="space-y-2 rounded-(--radius-lg) border-l-[3px] border-(--accent) bg-(--bg-deep) px-5 py-4">
+        <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-(--accent)">
           Nghĩa tiếng Việt
         </h3>
-        <p className="text-sm leading-6 text-[var(--text-primary)]">{sense.definitionVi}</p>
+        <p className="text-sm leading-6 text-(--text-primary)">{sense.definitionVi}</p>
       </section>
 
-      <section className="space-y-2 rounded-[var(--radius-lg)] border-l-[3px] border-[var(--accent)] bg-[var(--bg-deep)] px-5 py-4">
-        <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
+      <section className="space-y-2 rounded-(--radius-lg) border-l-[3px] border-(--accent) bg-(--bg-deep) px-5 py-4">
+        <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-(--accent)">
           Definition in English
         </h3>
-        <p className="text-sm leading-6 text-[var(--text-primary)]">{sense.definitionEn}</p>
+        <p className="text-sm leading-6 text-(--text-primary)">{sense.definitionEn}</p>
       </section>
 
       {(examples.length > 0 || examplesVi.length > 0) && (
         <section className="space-y-2">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
+          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-(--accent)">
             Ví dụ
           </h3>
           <ul className="space-y-2">
@@ -123,17 +123,17 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
       )}
 
       {sense.usageNoteVi && (
-        <section className="space-y-2 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
+        <section className="space-y-2 rounded-(--radius-lg) bg-(--bg-deep) px-5 py-4">
+          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-(--accent)">
             Ghi chú sử dụng
           </h3>
-          <p className="text-sm leading-6 text-[var(--text-primary)]">{sense.usageNoteVi}</p>
+          <p className="text-sm leading-6 text-(--text-primary)">{sense.usageNoteVi}</p>
         </section>
       )}
 
       {sense.patterns.length > 0 && (
         <section className="space-y-2">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
+          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-(--accent)">
             Mẫu câu thường gặp
           </h3>
           <ul className="space-y-2">
@@ -148,7 +148,7 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
 
       {sense.relatedExpressions.length > 0 && (
         <section className="space-y-2">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
+          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-(--accent)">
             Biểu đạt liên quan
           </h3>
           <ul className="space-y-2">
@@ -163,7 +163,7 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
 
       {sense.commonMistakesVi.length > 0 && (
         <section className="space-y-2">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
+          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-(--accent)">
             Lỗi thường gặp
           </h3>
           <ul className="space-y-2">
@@ -182,7 +182,7 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
             type="button"
             aria-expanded={isCollocationsOpen}
             onClick={() => setIsCollocationsOpen((open) => !open)}
-            className="inline-flex items-center rounded-full border border-[rgba(196,109,46,0.18)] bg-white/70 px-3 py-1 text-xs font-medium text-[var(--accent)] transition hover:bg-white"
+            className="inline-flex items-center rounded-full border border-[rgba(196,109,46,0.18)] bg-white/70 px-3 py-1 text-xs font-medium text-(--accent) transition hover:bg-white"
           >
             Collocations ({collocations.length})
           </button>
@@ -201,11 +201,11 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
                       key={`${collocation.en}-${collocation.vi}`}
                       className="text-sm leading-6"
                     >
-                      <span className="text-[var(--text-primary)]">
+                      <span className="text-(--text-primary)">
                         <BoldText text={collocation.en} />
                       </span>
-                      <span className="mx-1.5 text-[var(--text-muted)]">&mdash;</span>
-                      <span className="text-[var(--text-secondary)]">{collocation.vi}</span>
+                      <span className="mx-1.5 text-(--text-muted)">&mdash;</span>
+                      <span className="text-(--text-secondary)">{collocation.vi}</span>
                     </li>
                   ))}
                 </ul>
@@ -232,7 +232,7 @@ function AudioButton({
       type="button"
       aria-label={locale === "en-US" ? "Play US pronunciation" : "Play UK pronunciation"}
       onClick={() => onSpeak(locale)}
-      className="grid size-6 place-items-center rounded text-[var(--text-muted)] transition hover:text-[var(--accent)]"
+      className="grid size-6 place-items-center rounded text-(--text-muted) transition hover:text-(--accent)"
     >
       {speakingLocale === locale ? (
         <Loader2 size={13} className="animate-spin" />
@@ -279,43 +279,43 @@ export function DictionaryResultCard({
 
   if (isLoading) {
     return (
-      <div className="rounded-2xl bg-[var(--surface)] shadow-[var(--shadow-lg)] p-6 min-h-[400px]">
+      <div className="rounded-2xl bg-(--surface) shadow-(--shadow-lg) p-6 min-h-[400px]">
         <div className="animate-pulse space-y-5">
           <div>
-            <div className="h-2.5 w-20 rounded-full bg-[var(--bg-deep)]" />
-            <div className="mt-3 h-8 w-44 rounded-lg bg-[var(--bg-deep)]" />
+            <div className="h-2.5 w-20 rounded-full bg-(--bg-deep)" />
+            <div className="mt-3 h-8 w-44 rounded-lg bg-(--bg-deep)" />
             <div className="mt-4 flex items-center gap-2">
-              <div className="h-6 w-20 rounded-full bg-[var(--bg-deep)]" />
-              <div className="h-6 w-9 rounded-full bg-[var(--bg-deep)]" />
+              <div className="h-6 w-20 rounded-full bg-(--bg-deep)" />
+              <div className="h-6 w-9 rounded-full bg-(--bg-deep)" />
             </div>
           </div>
-          <div className="h-3.5 w-28 rounded bg-[var(--bg-deep)]" />
-          <div className="space-y-2.5 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
-            <div className="h-3.5 w-full rounded bg-[var(--border-strong)]" />
-            <div className="h-3.5 w-4/5 rounded bg-[var(--border-strong)]" />
-            <div className="h-3.5 w-full rounded bg-[var(--border-strong)]" />
-            <div className="h-3.5 w-3/5 rounded bg-[var(--border-strong)]" />
+          <div className="h-3.5 w-28 rounded bg-(--bg-deep)" />
+          <div className="space-y-2.5 rounded-(--radius-lg) bg-(--bg-deep) px-5 py-4">
+            <div className="h-3.5 w-full rounded bg-(--border-strong)" />
+            <div className="h-3.5 w-4/5 rounded bg-(--border-strong)" />
+            <div className="h-3.5 w-full rounded bg-(--border-strong)" />
+            <div className="h-3.5 w-3/5 rounded bg-(--border-strong)" />
           </div>
           <div className="flex gap-2 pt-1">
-            <div className="h-8 w-24 rounded-full bg-[var(--bg-deep)]" />
-            <div className="h-8 w-24 rounded-full bg-[var(--bg-deep)]" />
+            <div className="h-8 w-24 rounded-full bg-(--bg-deep)" />
+            <div className="h-8 w-24 rounded-full bg-(--bg-deep)" />
           </div>
           <div className="space-y-4">
-            <div className="space-y-2 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
-              <div className="h-2.5 w-32 rounded bg-[var(--border-strong)]" />
-              <div className="h-3.5 w-full rounded bg-[var(--border-strong)]" />
-              <div className="h-3.5 w-3/4 rounded bg-[var(--border-strong)]" />
+            <div className="space-y-2 rounded-(--radius-lg) bg-(--bg-deep) px-5 py-4">
+              <div className="h-2.5 w-32 rounded bg-(--border-strong)" />
+              <div className="h-3.5 w-full rounded bg-(--border-strong)" />
+              <div className="h-3.5 w-3/4 rounded bg-(--border-strong)" />
             </div>
-            <div className="space-y-2 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
-              <div className="h-2.5 w-32 rounded bg-[var(--border-strong)]" />
-              <div className="h-3.5 w-full rounded bg-[var(--border-strong)]" />
-              <div className="h-3.5 w-4/5 rounded bg-[var(--border-strong)]" />
+            <div className="space-y-2 rounded-(--radius-lg) bg-(--bg-deep) px-5 py-4">
+              <div className="h-2.5 w-32 rounded bg-(--border-strong)" />
+              <div className="h-3.5 w-full rounded bg-(--border-strong)" />
+              <div className="h-3.5 w-4/5 rounded bg-(--border-strong)" />
             </div>
-            <div className="space-y-2 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4">
-              <div className="h-2.5 w-16 rounded bg-[var(--border-strong)]" />
-              <div className="h-3.5 w-full rounded bg-[var(--border-strong)]" />
-              <div className="h-3.5 w-full rounded bg-[var(--border-strong)]" />
-              <div className="h-3.5 w-2/3 rounded bg-[var(--border-strong)]" />
+            <div className="space-y-2 rounded-(--radius-lg) bg-(--bg-deep) px-5 py-4">
+              <div className="h-2.5 w-16 rounded bg-(--border-strong)" />
+              <div className="h-3.5 w-full rounded bg-(--border-strong)" />
+              <div className="h-3.5 w-full rounded bg-(--border-strong)" />
+              <div className="h-3.5 w-2/3 rounded bg-(--border-strong)" />
             </div>
           </div>
         </div>
@@ -325,21 +325,21 @@ export function DictionaryResultCard({
 
   if (!hasSearched || !vocabulary) {
     return (
-      <div className="rounded-2xl bg-[var(--surface)] shadow-[var(--shadow-lg)] p-6 min-h-[400px]">
+      <div className="rounded-2xl bg-(--surface) shadow-(--shadow-lg) p-6 min-h-[400px]">
         {!hasSearched ? (
           <div className="flex min-h-[360px] flex-col items-center justify-center gap-3">
-            <BookOpen size={32} className="text-[var(--text-muted)]" />
-            <p className="text-sm text-[var(--text-muted)]">Nhập từ cần tra</p>
+            <BookOpen size={32} className="text-(--text-muted)" />
+            <p className="text-sm text-(--text-muted)">Nhập từ cần tra</p>
           </div>
         ) : (
           <div className="flex min-h-[360px] flex-col items-center justify-center gap-4 py-8 text-center">
-            <div className="grid size-14 place-items-center rounded-full bg-[var(--accent-light)] text-[var(--accent)] shadow-[var(--shadow-sm)]">
+            <div className="grid size-14 place-items-center rounded-full bg-(--accent-light) text-(--accent) shadow-(--shadow-sm)">
               <BookOpen size={24} />
             </div>
-            <h3 className="text-2xl [font-family:var(--font-display)] text-[var(--ink)]">
+            <h3 className="text-2xl [font-family:var(--font-display)] text-(--ink)">
               Chưa có kết quả để hiển thị
             </h3>
-            <p className="max-w-xl text-sm leading-6 text-[var(--text-secondary)]">
+            <p className="max-w-xl text-sm leading-6 text-(--text-secondary)">
               Hãy thử lại với một từ tiếng Anh hợp lệ để nhận kết quả có cấu trúc.
             </p>
           </div>
@@ -361,11 +361,11 @@ export function DictionaryResultCard({
         exit={{ opacity: 0, y: -6 }}
         transition={{ duration: 0.35, ease: "easeOut" }}
       >
-        <div className="rounded-2xl bg-[var(--surface)] shadow-[var(--shadow-lg)] p-6 min-h-[400px]">
+        <div className="rounded-2xl bg-(--surface) shadow-(--shadow-lg) p-6 min-h-[400px]">
           {/* Header */}
           <div className="flex items-start justify-between gap-4 max-[720px]:flex-col max-[720px]:gap-3">
             <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-(--accent)">
                 Kết quả tra cứu
               </p>
               <h2 className="mt-2 break-words text-4xl italic leading-tight [font-family:var(--font-display)] text-(--ink)">
@@ -406,11 +406,11 @@ export function DictionaryResultCard({
               {saved != null && onToggleSaved && (
                 <button
                   onClick={onToggleSaved}
-                  className="grid size-8 place-items-center rounded-full text-[var(--text-muted)] transition hover:bg-[var(--surface-hover)] hover:text-[var(--accent)]"
+                  className="grid size-8 place-items-center rounded-full text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--accent)"
                   aria-label={saved ? "Bỏ lưu từ này" : "Lưu từ này"}
                 >
                   {saved ? (
-                    <BookmarkCheck size={18} className="text-[var(--accent)]" />
+                    <BookmarkCheck size={18} className="text-(--accent)" />
                   ) : (
                     <Bookmark size={18} />
                   )}
@@ -430,19 +430,19 @@ export function DictionaryResultCard({
               {vocabulary.phoneticsUs && (
                 <div className="flex items-center gap-2">
                   <span className="text-base">🇺🇸</span>
-                  <span className="rounded bg-[var(--bg-deep)] px-2 py-0.5 text-sm [font-family:var(--font-mono)] text-[var(--accent)]">
+                  <span className="rounded bg-(--bg-deep) px-2 py-0.5 text-sm [font-family:var(--font-mono)] text-(--accent)">
                     {vocabulary.phoneticsUs}
                   </span>
                   <AudioButton locale="en-US" speakingLocale={speakingLocale} onSpeak={speak} />
                 </div>
               )}
               {vocabulary.phoneticsUs && vocabulary.phoneticsUk && (
-                <span className="text-[var(--text-muted)]">·</span>
+                <span className="text-(--text-muted)">·</span>
               )}
               {vocabulary.phoneticsUk && (
                 <div className="flex items-center gap-2">
                   <span className="text-base">🇬🇧</span>
-                  <span className="rounded bg-[var(--bg-deep)] px-2 py-0.5 text-sm [font-family:var(--font-mono)] text-[var(--accent)]">
+                  <span className="rounded bg-(--bg-deep) px-2 py-0.5 text-sm [font-family:var(--font-mono)] text-(--accent)">
                     {vocabulary.phoneticsUk}
                   </span>
                   <AudioButton locale="en-GB" speakingLocale={speakingLocale} onSpeak={speak} />
@@ -451,7 +451,7 @@ export function DictionaryResultCard({
             </motion.div>
           ) : vocabulary.phonetic ? (
             <motion.span
-              className="mt-3 inline-block rounded bg-[var(--bg-deep)] px-2 py-0.5 text-sm [font-family:var(--font-mono)] text-[var(--accent)]"
+              className="mt-3 inline-block rounded bg-(--bg-deep) px-2 py-0.5 text-sm [font-family:var(--font-mono)] text-(--accent)"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.15, duration: 0.3 }}
@@ -466,17 +466,17 @@ export function DictionaryResultCard({
 
 
           <motion.div
-            className="mt-5 space-y-3 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-5 py-4"
+            className="mt-5 space-y-3 rounded-(--radius-lg) bg-(--bg-deep) px-5 py-4"
             initial={{ opacity: 0, y: 4 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2, duration: 0.3 }}
           >
-            <div className="flex items-start gap-2.5 text-sm leading-6 text-[var(--text-secondary)]">
-              <span className="mt-1 shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-[var(--accent-light)] text-[var(--accent)]">VI</span>
+            <div className="flex items-start gap-2.5 text-sm leading-6 text-(--text-secondary)">
+              <span className="mt-1 shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-(--accent-light) text-(--accent)">VI</span>
               <p>{vocabulary.overviewVi}</p>
             </div>
-            <div className="flex items-start gap-2.5 text-sm leading-6 text-[var(--text-secondary)]">
-              <span className="mt-1 shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-[var(--bg)] text-[var(--text-muted)]">EN</span>
+            <div className="flex items-start gap-2.5 text-sm leading-6 text-(--text-secondary)">
+              <span className="mt-1 shrink-0 rounded px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wide bg-(--bg) text-(--text-muted)">EN</span>
               <p>{vocabulary.overviewEn}</p>
             </div>
           </motion.div>
@@ -494,8 +494,8 @@ export function DictionaryResultCard({
                     className={[
                       "shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition",
                       activeKey === sense.id
-                        ? "bg-[rgba(196,109,46,0.12)] text-[var(--accent)]"
-                        : "text-[var(--text-secondary)] hover:bg-white/50 hover:text-[var(--ink)]",
+                        ? "bg-[rgba(196,109,46,0.12)] text-(--accent)"
+                        : "text-(--text-secondary) hover:bg-white/50 hover:text-(--ink)",
                     ].join(" ")}
                   >
                     {sense.label}
@@ -507,7 +507,7 @@ export function DictionaryResultCard({
                   type="button"
                   onClick={onOpenThesaurus}
                   aria-label="Thesaurus"
-                  className="shrink-0 flex items-center gap-1.5 rounded-full border border-[var(--border-strong)] px-3 py-1.5 text-xs font-medium text-[var(--text-secondary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+                  className="shrink-0 flex items-center gap-1.5 rounded-full border border-(--border-strong) px-3 py-1.5 text-xs font-medium text-(--text-secondary) transition hover:border-(--accent) hover:text-(--accent)"
                 >
                   <BookOpen size={12} />
                   Thesaurus

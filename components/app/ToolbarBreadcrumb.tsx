@@ -16,10 +16,10 @@ export function ToolbarBreadcrumb() {
 
   return (
     <div className="flex flex-col justify-center">
-      <p className="text-[10px] uppercase tracking-[0.2em] text-[var(--text-muted)] leading-none">
+      <p className="text-[10px] uppercase tracking-[0.2em] text-(--text-muted) leading-none">
         {crumb.eyebrow}
       </p>
-      <h2 className="mt-0.5 text-sm font-semibold leading-snug text-[var(--ink)]">
+      <h2 className="mt-0.5 text-sm font-semibold leading-snug text-(--ink)">
         {crumb.title}
       </h2>
     </div>

@@ -18,7 +18,7 @@ export function NearbyWordsBar({ words, headword, onSearch }: NearbyWordsBarProp
 
   return (
     <div className="flex flex-wrap items-center gap-1.5">
-      <span className="text-[10px] font-semibold uppercase tracking-widest text-[var(--text-muted)] mr-1">
+      <span className="text-[10px] font-semibold uppercase tracking-widest text-(--text-muted) mr-1">
         Nearby
       </span>
       {before.map((word) => (
@@ -26,12 +26,12 @@ export function NearbyWordsBar({ words, headword, onSearch }: NearbyWordsBarProp
           key={word}
           type="button"
           onClick={() => onSearch(word)}
-          className="rounded-full border border-[var(--border)] bg-white/60 px-2.5 py-0.5 text-xs text-[var(--text-secondary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          className="rounded-full border border-(--border) bg-white/60 px-2.5 py-0.5 text-xs text-(--text-secondary) transition hover:border-(--accent) hover:text-(--accent)"
         >
           {word}
         </button>
       ))}
-      <span className="rounded-full bg-[rgba(196,109,46,0.1)] px-2.5 py-0.5 text-xs font-semibold text-[var(--accent)]">
+      <span className="rounded-full bg-[rgba(196,109,46,0.1)] px-2.5 py-0.5 text-xs font-semibold text-(--accent)">
         {headword}
       </span>
       {after.map((word) => (
@@ -39,7 +39,7 @@ export function NearbyWordsBar({ words, headword, onSearch }: NearbyWordsBarProp
           key={word}
           type="button"
           onClick={() => onSearch(word)}
-          className="rounded-full border border-[var(--border)] bg-white/60 px-2.5 py-0.5 text-xs text-[var(--text-secondary)] transition hover:border-[var(--accent)] hover:text-[var(--accent)]"
+          className="rounded-full border border-(--border) bg-white/60 px-2.5 py-0.5 text-xs text-(--text-secondary) transition hover:border-(--accent) hover:text-(--accent)"
         >
           {word}
         </button>

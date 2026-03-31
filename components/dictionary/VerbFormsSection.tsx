@@ -42,30 +42,30 @@ export function VerbFormsSection({ verbForms }: Props) {
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.18, duration: 0.3 }}
     >
-      <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-[var(--accent)]">
+      <h3 className="mb-3 text-xs font-semibold uppercase tracking-[0.14em] text-(--accent)">
         DẠNG ĐỘNG TỪ
       </h3>
       <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
         {verbForms.map((vf) => (
           <div
             key={vf.label}
-            className="flex flex-col gap-1.5 rounded-[var(--radius-lg)] bg-[var(--bg-deep)] px-3.5 py-3"
+            className="flex flex-col gap-1.5 rounded-(--radius-lg) bg-(--bg-deep) px-3.5 py-3"
           >
-            <span className="text-[11px] font-medium uppercase tracking-wide text-[var(--text-muted)]">
+            <span className="text-[11px] font-medium uppercase tracking-wide text-(--text-muted)">
               {vf.label}
             </span>
-            <span className="text-sm font-semibold text-[var(--ink)]">
+            <span className="text-sm font-semibold text-(--ink)">
               {vf.form}
             </span>
             {(vf.phoneticsUs || vf.phoneticsUk) && (
               <div className="flex flex-col gap-0.5">
                 {vf.phoneticsUs && (
-                  <span className="text-xs [font-family:var(--font-mono)] text-[var(--accent)]">
+                  <span className="text-xs [font-family:var(--font-mono)] text-(--accent)">
                     🇺🇸 {vf.phoneticsUs}
                   </span>
                 )}
                 {vf.phoneticsUk && (
-                  <span className="text-xs [font-family:var(--font-mono)] text-[var(--accent)]">
+                  <span className="text-xs [font-family:var(--font-mono)] text-(--accent)">
                     🇬🇧 {vf.phoneticsUk}
                   </span>
                 )}
@@ -76,7 +76,7 @@ export function VerbFormsSection({ verbForms }: Props) {
                 type="button"
                 aria-label={`Play pronunciation of ${vf.form}`}
                 onClick={() => speak(vf.form)}
-                className="grid size-6 place-items-center rounded text-[var(--text-muted)] transition hover:text-[var(--accent)]"
+                className="grid size-6 place-items-center rounded text-(--text-muted) transition hover:text-(--accent)"
               >
                 {speakingForm === vf.form ? (
                   <Loader2 size={13} className="animate-spin" />

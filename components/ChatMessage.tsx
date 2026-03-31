@@ -34,7 +34,7 @@ function CopyButton({ text }: { text: string }) {
 
   return (
     <motion.button
-      className="rounded-full p-1 text-[var(--text-muted)] transition hover:text-[var(--text-primary)]"
+      className="rounded-full p-1 text-(--text-muted) transition hover:text-(--text-primary)"
       onClick={handleCopy}
       whileTap={{ scale: 0.85 }}
       aria-label="Sao chép"
@@ -66,7 +66,7 @@ function UserAvatar() {
     .toUpperCase();
 
   return (
-    <div className="grid size-10 place-items-center rounded-full bg-[var(--ink)] text-xs font-semibold text-white">
+    <div className="grid size-10 place-items-center rounded-full bg-(--ink) text-xs font-semibold text-white">
       {initials}
     </div>
   );
@@ -84,9 +84,9 @@ export function ChatMessage({
   if (message.role === "divider") {
     return (
       <div className={["flex items-center gap-3 py-3", className].join(" ")}>
-        <div className="h-px flex-1 bg-[var(--border)]" />
-        <span className="text-xs text-[var(--text-muted)]">{message.text}</span>
-        <div className="h-px flex-1 bg-[var(--border)]" />
+        <div className="h-px flex-1 bg-(--border)" />
+        <span className="text-xs text-(--text-muted)">{message.text}</span>
+        <div className="h-px flex-1 bg-(--border)" />
       </div>
     );
   }
@@ -109,7 +109,7 @@ export function ChatMessage({
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
       {!isUser && (
-        <div className="grid size-8 shrink-0 place-items-center rounded-full bg-[var(--ink)] text-white shadow-[var(--shadow-sm)]">
+        <div className="grid size-8 shrink-0 place-items-center rounded-full bg-(--ink) text-white shadow-(--shadow-sm)">
           <GraduationCap size={14} strokeWidth={2} />
         </div>
       )}
@@ -117,10 +117,10 @@ export function ChatMessage({
       <div className={["flex max-w-[min(42rem,80%)] flex-col gap-2", isUser ? "items-end" : "items-start"].join(" ")}>
         <div
           className={[
-            "rounded-[22px] px-4 py-3 shadow-[var(--shadow-sm)]",
+            "rounded-[22px] px-4 py-3 shadow-(--shadow-sm)",
             isUser
-              ? "rounded-br-md bg-[var(--bubble-user)] text-white"
-              : "rounded-bl-md border border-[var(--border)] bg-[var(--bubble-ai)] text-[var(--text-primary)]",
+              ? "rounded-br-md bg-(--bubble-user) text-white"
+              : "rounded-bl-md border border-(--border) bg-(--bubble-ai) text-(--text-primary)",
           ].join(" ")}
         >
           {isUser ? (
@@ -128,11 +128,11 @@ export function ChatMessage({
           ) : (
             <div
               className={[
-                "text-[15px] leading-8 text-[var(--text-primary)]",
+                "text-[15px] leading-8 text-(--text-primary)",
                 "[&_p]:m-0 [&_p:not(:last-child)]:mb-2",
-                "[&_strong]:font-semibold [&_strong]:text-[var(--ink)]",
-                "[&_em]:italic [&_em]:text-[var(--text-secondary)]",
-                "[&_code]:rounded-[5px] [&_code]:bg-[var(--bg-deep)] [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:[font-family:var(--font-mono)] [&_code]:text-[0.86em] [&_code]:text-[var(--accent)]",
+                "[&_strong]:font-semibold [&_strong]:text-(--ink)",
+                "[&_em]:italic [&_em]:text-(--text-secondary)",
+                "[&_code]:rounded-[5px] [&_code]:bg-(--bg-deep) [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:[font-family:var(--font-mono)] [&_code]:text-[0.86em] [&_code]:text-(--accent)",
                 "[&_ul]:my-2 [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5",
                 "[&_ol]:my-2 [&_ol]:list-decimal [&_ol]:space-y-1 [&_ol]:pl-5",
                 "[&_li]:leading-7",
@@ -141,21 +141,21 @@ export function ChatMessage({
               <ReactMarkdown>{text}</ReactMarkdown>
               {isStreaming && (
                 <span
-                  className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] rounded-[1px] bg-[var(--accent)] align-middle [animation:textCursor_0.7s_ease-in-out_infinite]"
+                  className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] rounded-[1px] bg-(--accent) align-middle [animation:textCursor_0.7s_ease-in-out_infinite]"
                   aria-hidden="true"
                 />
               )}
             </div>
           )}
         </div>
-        <div className="flex items-center gap-2 text-xs text-[var(--text-muted)] opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
+        <div className="flex items-center gap-2 text-xs text-(--text-muted) opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
           {time && <span>{time}</span>}
           {!isUser && <CopyButton text={text} />}
         </div>
       </div>
 
       {isUser && (
-        <div className="grid size-10 shrink-0 place-items-center overflow-hidden rounded-full bg-[var(--ink)] text-xs font-semibold text-white shadow-[var(--shadow-sm)]">
+        <div className="grid size-10 shrink-0 place-items-center overflow-hidden rounded-full bg-(--ink) text-xs font-semibold text-white shadow-(--shadow-sm)">
           <UserAvatar />
         </div>
       )}

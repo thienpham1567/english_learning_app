@@ -57,7 +57,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
             <button
               onClick={onToggle}
               aria-label="Collapse sidebar"
-              className="ml-auto grid size-7 shrink-0 place-items-center rounded text-[var(--text-muted)] transition-colors hover:text-[var(--ink)] max-[920px]:hidden"
+              className="ml-auto grid size-7 shrink-0 place-items-center rounded text-(--text-muted) transition-colors hover:text-(--ink) max-[920px]:hidden"
             >
               <PanelLeftClose size={16} />
             </button>
@@ -66,14 +66,14 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
           <button
             onClick={onToggle}
             aria-label="Expand sidebar"
-            className="mx-auto grid size-7 shrink-0 place-items-center rounded text-[var(--text-muted)] transition-colors hover:text-[var(--ink)] max-[920px]:hidden"
+            className="mx-auto grid size-7 shrink-0 place-items-center rounded text-(--text-muted) transition-colors hover:text-(--ink) max-[920px]:hidden"
           >
             <PanelLeftOpen size={16} />
           </button>
         )}
       </div>
 
-      <div className="h-px bg-[var(--border)] max-[920px]:hidden" />
+      <div className="h-px bg-(--border) max-[920px]:hidden" />
 
       <nav
         aria-label="Các mục trong ứng dụng"
@@ -87,10 +87,10 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
               href={href}
               aria-current={active ? "page" : undefined}
               className={[
-                "flex items-center gap-3 overflow-hidden rounded-[var(--radius)] px-3 py-3 text-sm font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--accent)] max-[920px]:min-h-[38px] max-[920px]:px-[10px]",
+                "flex items-center gap-3 overflow-hidden rounded-(--radius) px-3 py-3 text-sm font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) max-[920px]:min-h-[38px] max-[920px]:px-[10px]",
                 active
-                  ? "bg-[rgba(196,109,46,0.12)] text-[var(--accent)]"
-                  : "text-[var(--text-secondary)] hover:bg-white/50 hover:text-[var(--ink)]",
+                  ? "bg-[rgba(196,109,46,0.12)] text-(--accent)"
+                  : "text-(--text-secondary) hover:bg-white/50 hover:text-(--ink)",
               ].join(" ")}
             >
               <span className="grid size-5 shrink-0 place-items-center max-[920px]:size-[18px]">

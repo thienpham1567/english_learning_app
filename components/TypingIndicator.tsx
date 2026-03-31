@@ -15,20 +15,20 @@ export function TypingIndicator({ personaName = "Gia sư" }: Props) {
       aria-live="polite"
       aria-label={`${personaName} đang nhập phản hồi`}
     >
-      <div className="grid size-10 place-items-center rounded-full bg-[var(--accent-light)] text-lg shadow-[var(--shadow-sm)]">
+      <div className="grid size-10 place-items-center rounded-full bg-(--accent-light) text-lg shadow-(--shadow-sm)">
         👩‍🏫
       </div>
-      <div className="inline-flex items-center gap-[5px] rounded-[22px] rounded-bl-md border border-[var(--border)] bg-[var(--bubble-ai)] px-4 py-[14px] shadow-[var(--shadow-sm)]">
+      <div className="inline-flex items-center gap-[5px] rounded-[22px] rounded-bl-md border border-(--border) bg-(--bubble-ai) px-4 py-[14px] shadow-(--shadow-sm)">
         <span
-          className="inline-block size-[5px] rounded-full bg-[var(--text-muted)] [animation:chatWave_1.4s_ease-in-out_infinite]"
+          className="inline-block size-[5px] rounded-full bg-(--text-muted) [animation:chatWave_1.4s_ease-in-out_infinite]"
           style={{ animationDelay: "0ms" }}
         />
         <span
-          className="inline-block size-[5px] rounded-full bg-[var(--text-muted)] [animation:chatWave_1.4s_ease-in-out_infinite]"
+          className="inline-block size-[5px] rounded-full bg-(--text-muted) [animation:chatWave_1.4s_ease-in-out_infinite]"
           style={{ animationDelay: "0.14s" }}
         />
         <span
-          className="inline-block size-[5px] rounded-full bg-[var(--text-muted)] [animation:chatWave_1.4s_ease-in-out_infinite]"
+          className="inline-block size-[5px] rounded-full bg-(--text-muted) [animation:chatWave_1.4s_ease-in-out_infinite]"
           style={{ animationDelay: "0.28s" }}
         />
       </div>

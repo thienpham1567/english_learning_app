@@ -29,22 +29,22 @@ export function VocabularyStatsBar({ entries }: Props) {
 
       {/* Total */}
       <div className="flex flex-col gap-0.5">
-        <span className="[font-family:var(--font-display)] text-3xl font-bold leading-none text-[var(--ink)]">
+        <span className="[font-family:var(--font-display)] text-3xl font-bold leading-none text-(--ink)">
           {total}
         </span>
-        <span className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
+        <span className="text-[10px] uppercase tracking-[0.18em] text-(--text-muted)">
           từ đã tra
         </span>
       </div>
 
-      <div className="h-8 w-px bg-[var(--border)]" />
+      <div className="h-8 w-px bg-(--border)" />
 
       {/* Saved */}
       <div className="flex flex-col gap-0.5">
-        <span className="[font-family:var(--font-display)] text-3xl font-bold leading-none text-[var(--accent)]">
+        <span className="[font-family:var(--font-display)] text-3xl font-bold leading-none text-(--accent)">
           {savedCount}
         </span>
-        <span className="text-[10px] uppercase tracking-[0.18em] text-[var(--text-muted)]">
+        <span className="text-[10px] uppercase tracking-[0.18em] text-(--text-muted)">
           đã lưu
         </span>
       </div>
@@ -52,7 +52,7 @@ export function VocabularyStatsBar({ entries }: Props) {
       {/* Level breakdown */}
       {hasLevels && (
         <>
-          <div className="h-8 w-px bg-[var(--border)]" />
+          <div className="h-8 w-px bg-(--border)" />
           <div className="flex flex-wrap items-center gap-1.5">
             {CEFR_LEVELS.filter((l) => levelCounts[l]).map((level) => (
               <span

@@ -115,6 +115,9 @@ export function ConversationList({ activeId }: Props) {
                   onClick={(e) => {
                     e.stopPropagation();
                     deleteConversation(conv.id);
+                    if (conv.id === activeId) {
+                      router.push("/english-chatbot");
+                    }
                   }}
                   className="absolute right-2 top-1/2 -translate-y-1/2 grid size-6 place-items-center rounded text-white/30 opacity-0 transition hover:bg-white/8 hover:text-red-400 group-hover:opacity-100"
                   aria-label="Delete conversation"

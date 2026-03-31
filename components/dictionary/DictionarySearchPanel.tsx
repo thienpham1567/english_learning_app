@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { BookOpenText, Sparkles } from "lucide-react";
-import { motion } from "motion/react";
+import { BookOpenText, Sparkles, X } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 
 import http from "@/lib/http";
 
@@ -42,6 +42,7 @@ export function DictionarySearchPanel({
   const [draft, setDraft] = useState(initialValue);
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
+  const [showTips, setShowTips] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Sync draft when initialValue changes (e.g. URL param update)
@@ -120,16 +121,65 @@ export function DictionarySearchPanel({
 
   return (
     <section className="space-y-5">
-      <div className="rounded-2xl bg-[var(--surface)] shadow-[var(--shadow-lg)] p-6 min-[1121px]:sticky min-[1121px]:top-6">
-        <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--accent)]">
-          <Sparkles size={14} />
-          <span>Tra cứu có cấu trúc</span>
+      <div className="relative rounded-2xl bg-[linear-gradient(135deg,rgba(255,255,255,0.96),rgba(253,243,235,0.9))] shadow-(--shadow-lg) p-6 min-[1121px]:sticky min-[1121px]:top-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-(--accent)">
+            <Sparkles size={14} />
+            <span>Tra cứu có cấu trúc</span>
+          </div>
+          <button
+            type="button"
+            onClick={() => setShowTips((v) => !v)}
+            className={[
+              "grid size-8 place-items-center rounded-full transition",
+              showTips
+                ? "bg-(--accent) text-white shadow-(--shadow-sm)"
+                : "text-(--text-muted) hover:bg-(--surface-hover) hover:text-(--accent)",
+            ].join(" ")}
+            aria-label="Mẹo sử dụng"
+          >
+            {showTips ? (
+              <X size={14} strokeWidth={2.5} />
+            ) : (
+              <BookOpenText size={15} strokeWidth={2} />
+            )}
+          </button>
         </div>
 
-        <h2 className="mt-4 text-3xl italic [font-family:var(--font-display)] text-(--ink)">
+        {/* Tips dropdown */}
+        <AnimatePresence>
+          {showTips && (
+            <motion.div
+              className="mt-4 overflow-hidden rounded-xl border border-(--border) bg-(--bg) p-4 shadow-(--shadow-sm)"
+              initial={{ opacity: 0, height: 0, marginTop: 0 }}
+              animate={{ opacity: 1, height: "auto", marginTop: 16 }}
+              exit={{ opacity: 0, height: 0, marginTop: 0 }}
+              transition={{ duration: 0.25, ease: "easeOut" }}
+            >
+              <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-(--ink)">
+                💡 Mẹo sử dụng
+              </p>
+              <ul className="space-y-2.5">
+                {HELPER_TIPS.map((tip, i) => (
+                  <motion.li
+                    key={tip}
+                    className="border-l-2 border-[rgba(196,109,46,0.3)] pl-3 text-sm leading-6 text-(--text-secondary)"
+                    initial={{ opacity: 0, x: -6 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.06, duration: 0.2 }}
+                  >
+                    {tip}
+                  </motion.li>
+                ))}
+              </ul>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        <h2 className="mt-4 text-2xl italic [font-family:var(--font-display)] text-(--ink)">
           Nhập mục từ cần tra cứu
         </h2>
-        <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">
+        <p className="mt-3 text-sm leading-6 text-(--text-secondary)">
           Công cụ này hỗ trợ từ đơn, phrasal verb và idiom để bạn học theo ngữ
           cảnh rõ ràng hơn.
         </p>
@@ -151,7 +201,7 @@ export function DictionarySearchPanel({
           {suggestions.length > 0 && (
             <ul
               role="listbox"
-              className="absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded-xl border border-(--border) bg-[var(--surface)] shadow-[var(--shadow-lg)]"
+              className="absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded-xl border border-(--border) bg-(--surface) shadow-(--shadow-lg)"
             >
               {suggestions.map((s, i) => (
                 <li
@@ -163,10 +213,10 @@ export function DictionarySearchPanel({
                     selectSuggestion(s);
                   }}
                   className={[
-                    "cursor-pointer px-4 py-2.5 text-sm text-[var(--text-primary)] transition",
+                    "cursor-pointer px-4 py-2.5 text-sm text-(--text-primary) transition",
                     i === highlightedIndex
-                      ? "bg-[var(--surface-hover)]"
-                      : "hover:bg-[var(--surface-hover)]",
+                      ? "bg-(--surface-hover)"
+                      : "hover:bg-(--surface-hover)",
                   ].join(" ")}
                 >
                   <HighlightMatch text={s} query={draft} />
@@ -186,29 +236,9 @@ export function DictionarySearchPanel({
           {isLoading ? "Đang tra cứu..." : "Tra cứu"}
         </motion.button>
 
-        <p className="mt-4 text-sm text-[var(--text-muted)]">
+        <p className="mt-4 text-sm text-(--text-muted)">
           Hỗ trợ tối đa 80 ký tự, bao gồm khoảng trắng và dấu nháy hợp lệ.
         </p>
-      </div>
-
-      <div className="rounded-2xl bg-[var(--surface)] shadow-[var(--shadow-lg)] p-6">
-        <div className="flex items-center gap-2 text-sm font-semibold text-[var(--ink)]">
-          <BookOpenText size={16} />
-          <span>Mẹo sử dụng</span>
-        </div>
-        <ul className="mt-4 space-y-3">
-          {HELPER_TIPS.map((tip, i) => (
-            <motion.li
-              key={tip}
-              className="border-l-2 border-[rgba(196,109,46,0.3)] pl-4 text-sm leading-6 text-[var(--text-secondary)]"
-              initial={{ opacity: 0, x: -6 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 + i * 0.08, duration: 0.3 }}
-            >
-              {tip}
-            </motion.li>
-          ))}
-        </ul>
       </div>
     </section>
   );

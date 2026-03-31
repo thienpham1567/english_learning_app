@@ -210,29 +210,29 @@ export default function MyVocabularyPage() {
 
         {/* ── Page Header ── */}
         <header className="mb-1">
-          <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-[var(--accent)]">
+          <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-(--accent)">
             Từ vựng của tôi
           </p>
           <div className="mt-2 flex items-end justify-between gap-4">
-            <h1 className="[font-family:var(--font-display)] text-4xl italic text-[var(--ink)] max-[720px]:text-3xl">
+            <h1 className="[font-family:var(--font-display)] text-4xl italic text-(--ink) max-[720px]:text-3xl">
               Lịch sử tra cứu
             </h1>
             {!isLoading && entries.length > 0 && (
-              <span className="mb-1 text-sm text-[var(--text-muted)]">
+              <span className="mb-1 text-sm text-(--text-muted)">
                 {visible.length !== entries.length
                   ? `${visible.length} / ${entries.length} từ`
                   : `${entries.length} từ`}
               </span>
             )}
           </div>
-          <div className="mt-4 h-px bg-[var(--border)]" />
+          <div className="mt-4 h-px bg-(--border)" />
         </header>
 
         {/* ── Stats bar ── */}
         {!isLoading && entries.length > 0 && (
           <>
             <VocabularyStatsBar entries={entries} />
-            <div className="h-px bg-[var(--border)]" />
+            <div className="h-px bg-(--border)" />
           </>
         )}
 
@@ -240,7 +240,7 @@ export default function MyVocabularyPage() {
         <div className="relative mt-6">
           <Search
             size={15}
-            className="absolute left-1 top-1/2 -translate-y-1/2 text-[var(--text-muted)]"
+            className="absolute left-1 top-1/2 -translate-y-1/2 text-(--text-muted)"
           />
           <input
             type="text"
@@ -248,7 +248,7 @@ export default function MyVocabularyPage() {
             onChange={(e) => void setFilters({ search: e.target.value || null })}
             placeholder="Tìm từ..."
             aria-label="Tìm kiếm từ vựng"
-            className="w-full border-b border-[var(--border)] bg-transparent pb-2.5 pl-7 pr-4 pt-1 text-sm text-[var(--text-primary)] outline-none transition placeholder:text-[var(--text-muted)] focus:border-[var(--accent)]"
+            className="w-full border-b border-(--border) bg-transparent pb-2.5 pl-7 pr-4 pt-1 text-sm text-(--text-primary) outline-none transition placeholder:text-(--text-muted) focus:border-(--accent)"
           />
         </div>
 
@@ -265,22 +265,22 @@ export default function MyVocabularyPage() {
                   className={[
                     "relative pb-1 text-xs font-medium transition-colors",
                     active
-                      ? "text-[var(--ink)] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-[var(--accent)]"
-                      : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]",
+                      ? "text-(--ink) after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-(--accent)"
+                      : "text-(--text-muted) hover:text-(--text-secondary)",
                   ].join(" ")}
                 >
                   {level}
                 </button>
               );
             })}
-            <span className="text-[var(--border-strong)]">·</span>
+            <span className="text-(--border-strong)">·</span>
             <button
               onClick={() => void setFilters({ saved: !savedOnly || null })}
               className={[
                 "relative pb-1 text-xs font-medium transition-colors",
                 savedOnly
-                  ? "text-[var(--accent)] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-[var(--accent)]"
-                  : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]",
+                  ? "text-(--accent) after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-(--accent)"
+                  : "text-(--text-muted) hover:text-(--text-secondary)",
               ].join(" ")}
             >
               Đã lưu
@@ -298,8 +298,8 @@ export default function MyVocabularyPage() {
                   className={[
                     "relative pb-1 text-xs font-medium transition-colors",
                     active
-                      ? "text-[var(--ink)] after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-[var(--accent)]"
-                      : "text-[var(--text-muted)] hover:text-[var(--text-secondary)]",
+                      ? "text-(--ink) after:absolute after:bottom-0 after:left-0 after:right-0 after:h-px after:bg-(--accent)"
+                      : "text-(--text-muted) hover:text-(--text-secondary)",
                   ].join(" ")}
                 >
                   {ENTRY_TYPE_LABELS[type]}
@@ -309,7 +309,7 @@ export default function MyVocabularyPage() {
             {hasActiveFilter && (
               <button
                 onClick={clearFilters}
-                className="text-[11px] text-[var(--text-muted)] italic transition hover:text-[var(--text-secondary)]"
+                className="text-[11px] text-(--text-muted) italic transition hover:text-(--text-secondary)"
               >
                 Xoá bộ lọc
               </button>
@@ -323,22 +323,22 @@ export default function MyVocabularyPage() {
             // Skeleton rows
             <div className="space-y-0">
               {[1, 2, 3, 4].map((i) => (
-                <div key={i} className="border-b border-[var(--border)] py-4">
+                <div key={i} className="border-b border-(--border) py-4">
                   <div className="flex items-center gap-3">
                     <div
-                      className="h-5 animate-pulse rounded bg-[var(--border)]"
+                      className="h-5 animate-pulse rounded bg-(--border)"
                       style={{ width: `${100 + i * 30}px` }}
                     />
-                    <div className="h-4 w-8 animate-pulse rounded bg-[var(--border)]" />
+                    <div className="h-4 w-8 animate-pulse rounded bg-(--border)" />
                   </div>
-                  <div className="mt-1.5 h-3 w-20 animate-pulse rounded bg-[var(--border)]" />
+                  <div className="mt-1.5 h-3 w-20 animate-pulse rounded bg-(--border)" />
                 </div>
               ))}
             </div>
           ) : visible.length === 0 ? (
             <div className="flex flex-col items-center gap-3 py-20 text-center">
-              <BookMarked size={28} className="text-[var(--border-strong)]" />
-              <p className="[font-family:var(--font-display)] text-xl italic text-[var(--text-muted)]">
+              <BookMarked size={28} className="text-(--border-strong)" />
+              <p className="[font-family:var(--font-display)] text-xl italic text-(--text-muted)">
                 {hasActiveFilter
                   ? "Không có từ nào khớp."
                   : entries.length === 0
@@ -346,7 +346,7 @@ export default function MyVocabularyPage() {
                     : "Chưa lưu từ nào."}
               </p>
               {!hasActiveFilter && (
-                <p className="text-xs text-[var(--text-muted)]">
+                <p className="text-xs text-(--text-muted)">
                   {entries.length === 0
                     ? "Hãy thử từ điển nhé!"
                     : "Nhấn dấu ★ khi tra từ nhé!"}
@@ -362,14 +362,14 @@ export default function MyVocabularyPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.22, delay: idx * 0.04, ease: "easeOut" }}
                   onClick={() => void setSelected(entry.query)}
-                  className="group relative flex cursor-pointer items-center gap-4 border-b border-[var(--border)] py-4 transition-colors hover:bg-[var(--surface-hover)]"
+                  className="group relative flex cursor-pointer items-center gap-4 border-b border-(--border) py-4 transition-colors hover:bg-(--surface-hover)"
                 >
                   {/* Left accent bar */}
-                  <div className="absolute bottom-0 left-0 top-0 w-0.5 bg-[var(--accent)] opacity-0 transition-opacity group-hover:opacity-100" />
+                  <div className="absolute bottom-0 left-0 top-0 w-0.5 bg-(--accent) opacity-0 transition-opacity group-hover:opacity-100" />
 
                   <div className="min-w-0 flex-1 pl-3">
                     <div className="flex flex-wrap items-baseline gap-2">
-                      <span className="[font-family:var(--font-display)] text-lg italic text-[var(--ink)]">
+                      <span className="[font-family:var(--font-display)] text-lg italic text-(--ink)">
                         {entry.headword ?? entry.query}
                       </span>
                       {entry.level && (
@@ -380,12 +380,12 @@ export default function MyVocabularyPage() {
                         </span>
                       )}
                       {entry.entryType && (
-                        <span className="text-[11px] text-[var(--text-muted)]">
+                        <span className="text-[11px] text-(--text-muted)">
                           {ENTRY_TYPE_LABELS[entry.entryType] ?? entry.entryType}
                         </span>
                       )}
                     </div>
-                    <p className="mt-0.5 text-[11px] tracking-wide text-[var(--text-muted)]">
+                    <p className="mt-0.5 text-[11px] tracking-wide text-(--text-muted)">
                       {formatRelativeTime(entry.lookedUpAt)}
                     </p>
                   </div>
@@ -396,7 +396,7 @@ export default function MyVocabularyPage() {
                         e.stopPropagation();
                         handleDelete(entry);
                       }}
-                      className="grid size-8 place-items-center rounded text-[var(--text-muted)] opacity-0 transition hover:text-red-500 group-hover:opacity-100 max-[720px]:opacity-100"
+                      className="grid size-8 place-items-center rounded text-(--text-muted) opacity-0 transition hover:text-red-500 group-hover:opacity-100 max-[720px]:opacity-100"
                       aria-label={idx === 0 ? "Xoá từ này" : `Xoá ${entry.headword ?? entry.query}`}
                     >
                       <Trash2 size={14} />
@@ -406,12 +406,12 @@ export default function MyVocabularyPage() {
                         e.stopPropagation();
                         handleToggleSaved(entry);
                       }}
-                      className="grid size-8 shrink-0 place-items-center rounded text-[var(--text-muted)] transition hover:text-[var(--accent)]"
+                      className="grid size-8 shrink-0 place-items-center rounded text-(--text-muted) transition hover:text-(--accent)"
                       aria-label={entry.saved ? "Bỏ lưu" : "Lưu từ này"}
                     >
                       <BookMarked
                         size={15}
-                        className={entry.saved ? "text-[var(--accent)]" : ""}
+                        className={entry.saved ? "text-(--accent)" : ""}
                       />
                     </button>
                   </div>
@@ -438,7 +438,7 @@ export default function MyVocabularyPage() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 16 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-full bg-[var(--ink)] px-5 py-2.5 text-sm text-white shadow-lg"
+            className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-full bg-(--ink) px-5 py-2.5 text-sm text-white shadow-lg"
           >
             <span>Đã xoá</span>
             <span aria-hidden="true">·</span>
