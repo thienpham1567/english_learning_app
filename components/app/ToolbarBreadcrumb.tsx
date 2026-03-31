@@ -6,6 +6,7 @@ const BREADCRUMBS: Record<string, { eyebrow: string; title: string }> = {
   "/english-chatbot": { eyebrow: "Trợ lý học tập", title: "Trò chuyện" },
   "/dictionary": { eyebrow: "Từ điển", title: "Christine Ho" },
   "/my-vocabulary": { eyebrow: "Từ vựng của tôi", title: "Từ vựng" },
+  "/fuel-prices": { eyebrow: "Giá xăng dầu", title: "Cây xăng cô Kiều" },
 };
 
 export function ToolbarBreadcrumb() {

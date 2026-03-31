@@ -39,7 +39,9 @@ export default function DictionaryPage() {
     const { normalized, cacheKey } = normalizeDictionaryQuery(word);
 
     if (!normalized) {
-      messageApi.error("Vui lòng nhập từ hoặc cụm từ tiếng Anh trước khi tra cứu.");
+      messageApi.error(
+        "Vui lòng nhập từ hoặc cụm từ tiếng Anh trước khi tra cứu.",
+      );
       return;
     }
 
@@ -57,10 +59,10 @@ export default function DictionaryPage() {
     latestRequestIdRef.current = requestId;
 
     try {
-      const { data: payload } = await http.post<{ data: VocabularyWithNearby; saved: boolean }>(
-        "/dictionary",
-        { word: normalized },
-      );
+      const { data: payload } = await http.post<{
+        data: VocabularyWithNearby;
+        saved: boolean;
+      }>("/dictionary", { word: normalized });
 
       if (requestId !== latestRequestIdRef.current) return;
 
@@ -97,7 +99,10 @@ export default function DictionaryPage() {
     const next = !saved;
     setSaved(next); // optimistic
     try {
-      await http.patch(`/vocabulary/${encodeURIComponent(currentQuery)}/saved`, { saved: next });
+      await http.patch(
+        `/vocabulary/${encodeURIComponent(currentQuery)}/saved`,
+        { saved: next },
+      );
     } catch {
       setSaved(!next); // rollback
     }
@@ -117,9 +122,6 @@ export default function DictionaryPage() {
             <h1 className="mt-3 text-4xl [font-family:var(--font-display)] text-(--ink)">
               Tra cứu từ vựng theo cách rõ ràng, dễ học lại
             </h1>
-            <p className="mt-4 text-base text-(--text-secondary)">
-              Xem giải thích song ngữ, ví dụ tiếng Việt và ghi chú dùng cho từng nghĩa trong cùng một khung học tập.
-            </p>
           </div>
         </motion.section>
 

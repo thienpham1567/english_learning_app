@@ -293,7 +293,7 @@ function EmptyState({ onSend }: { onSend: (text: string) => void }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4 }}
       >
-        Giá xăng ơi là giá xăng! ⛽
+        Cây xăng cô Kiều 💁‍♀️⛽
       </motion.h2>
 
       <motion.p
@@ -303,7 +303,7 @@ function EmptyState({ onSend }: { onSend: (text: string) => void }) {
         transition={{ delay: 0.3, duration: 0.4 }}
       >
         Cô Kiều sẽ giúp bạn theo dõi giá xăng dầu, phân tích biến động thị
-        trường, tính toán chi phí và xuất báo cáo.
+        trường và tính toán chi phí.
       </motion.p>
 
       <div className="mt-8 grid w-full gap-3 md:grid-cols-2">

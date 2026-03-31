@@ -13,7 +13,7 @@ type DictionarySearchPanelProps = {
 };
 
 const HELPER_TIPS = [
-  "Bạn có thể nhập từ đơn, collocation, phrasal verb hoặc idiom.",
+  "Bạn có thể nhập từ đơn, phrasal verb hoặc idiom.",
   "Nhấn Enter để tra cứu nhanh mà không cần bấm nút.",
   "Mỗi nghĩa sẽ có giải thích song ngữ và ví dụ chỉ bằng tiếng Việt.",
 ];
@@ -130,8 +130,8 @@ export function DictionarySearchPanel({
           Nhập mục từ cần tra cứu
         </h2>
         <p className="mt-3 text-sm leading-6 text-[var(--text-secondary)]">
-          Công cụ này hỗ trợ từ đơn, collocation, phrasal verb và idiom để bạn
-          học theo ngữ cảnh rõ ràng hơn.
+          Công cụ này hỗ trợ từ đơn, phrasal verb và idiom để bạn học theo ngữ
+          cảnh rõ ràng hơn.
         </p>
 
         <div ref={containerRef} className="relative mt-5">
