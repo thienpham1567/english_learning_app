@@ -131,18 +131,16 @@ describe("VocabularySchema — verbForms and numberInfo", () => {
     expect(result.numberInfo).toBeNull();
   });
 
-  it("parses a complete verbForms object", () => {
+  it("parses a complete verbForms array", () => {
     const result = VocabularySchema.parse({
       ...base,
-      verbForms: {
-        base: "run",
-        thirdPerson: "runs",
-        pastSimple: "ran",
-        pastParticiple: "run",
-        presentParticiple: "running",
-      },
+      verbForms: [
+        { label: "Base", form: "run", phoneticsUs: null, phoneticsUk: null, isIrregular: false },
+        { label: "3rd person", form: "runs", phoneticsUs: null, phoneticsUk: null, isIrregular: false },
+        { label: "Past simple", form: "ran", phoneticsUs: null, phoneticsUk: null, isIrregular: true },
+      ],
     });
-    expect(result.verbForms?.thirdPerson).toBe("runs");
+    expect(result.verbForms?.[1].form).toBe("runs");
   });
 
   it("parses a complete numberInfo object", () => {

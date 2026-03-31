@@ -17,7 +17,6 @@ const singleSenseEntry = {
   overviewVi: "Có nhiều nghĩa thông dụng trong giao tiếp.",
   overviewEn: "A common phrasal verb with multiple senses.",
   nearbyWords: [],
-  verbForms: null,
   numberInfo: null,
   senses: [
     {
@@ -56,7 +55,6 @@ const multiSenseEntry = {
   overviewVi: "Từ nhiều nghĩa phổ biến.",
   overviewEn: "A very common word with many senses.",
   nearbyWords: [],
-  verbForms: null,
   numberInfo: null,
   senses: [
     {
@@ -109,7 +107,6 @@ const bilingualEntry = {
   overviewVi: "Có nhiều nghĩa.",
   overviewEn: "A common phrasal verb.",
   nearbyWords: [],
-  verbForms: null,
   numberInfo: null,
   senses: [
     {
@@ -148,7 +145,6 @@ const synonymEntry = {
   overviewVi: "Rời đi.",
   overviewEn: "To leave a place.",
   nearbyWords: [],
-  verbForms: null,
   numberInfo: null,
   senses: [
     {
@@ -183,7 +179,6 @@ const ipaEntry = {
   overviewVi: "Chạy.",
   overviewEn: "To move fast.",
   nearbyWords: [],
-  verbForms: null,
   numberInfo: null,
   senses: [
     {
@@ -217,13 +212,13 @@ const verbEntry = {
   overviewVi: "Chạy.",
   overviewEn: "To move fast.",
   nearbyWords: ["rum", "rump", "rune", "rung"],
-  verbForms: {
-    base: "run",
-    thirdPerson: "runs",
-    pastSimple: "ran",
-    pastParticiple: "run",
-    presentParticiple: "running",
-  },
+  verbForms: [
+    { label: "Base", form: "run", phoneticsUs: null, phoneticsUk: null, isIrregular: false },
+    { label: "3rd person", form: "runs", phoneticsUs: null, phoneticsUk: null, isIrregular: false },
+    { label: "Past simple", form: "ran", phoneticsUs: null, phoneticsUk: null, isIrregular: true },
+    { label: "Past participle", form: "run", phoneticsUs: null, phoneticsUk: null, isIrregular: true },
+    { label: "Present participle", form: "running", phoneticsUs: null, phoneticsUk: null, isIrregular: false },
+  ],
   numberInfo: null,
   senses: [
     {
@@ -297,7 +292,6 @@ const multiWordWordEntry = {
   overviewVi: "Một cụm từ thông dụng.",
   overviewEn: "A common phrase.",
   nearbyWords: [],
-  verbForms: null,
   numberInfo: null,
   senses: [
     {
@@ -533,28 +527,20 @@ describe("DictionaryResultCard", () => {
     expect(row?.className).not.toMatch(/flex-col/);
   });
 
-  it("renders verb forms strip collapsed by default when verbForms is set", () => {
-    const { getByText, queryByText } = renderUi(
-      <DictionaryResultCard vocabulary={verbEntry} hasSearched isLoading={false} />,
-    );
-    expect(getByText(/Verb forms/)).toBeInTheDocument();
-    // Collapsed: individual forms not visible
-    expect(queryByText("runs")).not.toBeInTheDocument();
-  });
-
-  it("expands verb forms strip when toggle is clicked", () => {
+  it("renders verb forms section when verbForms is set", () => {
     const { getByText } = renderUi(
       <DictionaryResultCard vocabulary={verbEntry} hasSearched isLoading={false} />,
     );
-    fireEvent.click(getByText(/Verb forms/));
-    expect(getByText(/runs/)).toBeInTheDocument();
+    expect(getByText("DẠNG ĐỘNG TỪ")).toBeInTheDocument();
+    expect(getByText("runs")).toBeInTheDocument();
+    expect(getByText("running")).toBeInTheDocument();
   });
 
-  it("does not render verb forms strip when verbForms is null", () => {
+  it("does not render verb forms section when verbForms is null", () => {
     const { queryByText } = renderUi(
       <DictionaryResultCard vocabulary={nounEntry} hasSearched isLoading={false} />,
     );
-    expect(queryByText(/Verb forms/)).not.toBeInTheDocument();
+    expect(queryByText("DẠNG ĐỘNG TỪ")).not.toBeInTheDocument();
   });
 
   it("renders register pill when register is set", () => {

@@ -261,9 +261,6 @@ export function DictionaryResultCard({
     setActiveKey(firstSenseId);
   }, [firstSenseId]);
 
-  useEffect(() => {
-    setVerbFormsOpen(false);
-  }, [firstSenseId]);
 
   function speak(locale: "en-US" | "en-GB") {
     if (!vocabulary) return;

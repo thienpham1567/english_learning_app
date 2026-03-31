@@ -14,6 +14,7 @@ const vocabulary = {
   level: "B2" as const,
   register: null,
   verbForms: null,
+  numberInfo: null,
   overviewVi: "Rời đi.",
   overviewEn: "To leave a place.",
   senses: [
