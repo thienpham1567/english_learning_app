@@ -2,6 +2,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { X, BookMarked, ExternalLink } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 
@@ -38,6 +39,7 @@ export function VocabularyDetailSheet({
   saved,
   onToggleSaved,
 }: Props) {
+  const router = useRouter();
   const [data, setData] = useState<Vocabulary | null>(null);
   const [status, setStatus] = useState<Status>("idle");
   const [isMobile, setIsMobile] = useState(false);
@@ -126,6 +128,14 @@ export function VocabularyDetailSheet({
                   className={saved ? "text-(--accent)" : ""}
                 />
                 {saved ? "Đã lưu" : "Lưu"}
+              </button>
+              <button
+                onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
+                className="flex items-center gap-1.5 text-sm text-(--text-secondary) transition hover:text-(--accent)"
+                aria-label="Tra cứu trong từ điển"
+              >
+                <ExternalLink size={16} />
+                Tra cứu
               </button>
               <button
                 onClick={onClose}

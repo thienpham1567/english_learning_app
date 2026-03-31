@@ -10,6 +10,11 @@ vi.mock("@/lib/http", () => ({
   },
 }));
 
+const mockPush = vi.fn();
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: mockPush }),
+}));
+
 const mockVocab = {
   query: "take off",
   headword: "take off",
@@ -62,6 +67,7 @@ const mockMultiWordWord = {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  mockPush.mockClear();
   Object.defineProperty(window, "matchMedia", {
     writable: true,
     value: vi.fn().mockImplementation((query: string) => ({
@@ -188,6 +194,39 @@ describe("VocabularyDetailSheet", () => {
     );
     fireEvent.keyDown(document, { key: "Escape" });
     expect(onClose).toHaveBeenCalledOnce();
+  });
+
+  it("renders 'Tra cứu trong từ điển' button when data is loaded", async () => {
+    vi.mocked(http.get).mockResolvedValueOnce({ data: mockVocab });
+    render(
+      <VocabularyDetailSheet
+        query="take off"
+        onClose={vi.fn()}
+        saved={false}
+        onToggleSaved={vi.fn()}
+      />,
+    );
+    await waitFor(() => {
+      expect(screen.getByText("take off")).toBeInTheDocument();
+    });
+    expect(screen.getByLabelText("Tra cứu trong từ điển")).toBeInTheDocument();
+  });
+
+  it("navigates to dictionary page when 'Tra cứu trong từ điển' is clicked", async () => {
+    vi.mocked(http.get).mockResolvedValueOnce({ data: mockVocab });
+    render(
+      <VocabularyDetailSheet
+        query="take off"
+        onClose={vi.fn()}
+        saved={false}
+        onToggleSaved={vi.fn()}
+      />,
+    );
+    await waitFor(() => {
+      expect(screen.getByText("take off")).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByLabelText("Tra cứu trong từ điển"));
+    expect(mockPush).toHaveBeenCalledWith("/dictionary?q=take%20off");
   });
 
   it("calls onToggleSaved when save button clicked", async () => {
