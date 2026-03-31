@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Tag } from "antd";
 import { Loader2, Volume2 } from "lucide-react";
 import { motion } from "motion/react";
@@ -11,29 +11,27 @@ type Props = {
   verbForms: VerbForm[];
 };
 
-// Module-level: ensures only one utterance plays at a time
-let activeUtterance: SpeechSynthesisUtterance | null = null;
-
 export function VerbFormsSection({ verbForms }: Props) {
   const [speakingForm, setSpeakingForm] = useState<string | null>(null);
+  const activeUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
   function speak(form: string) {
-    if (activeUtterance) {
+    if (activeUtteranceRef.current) {
       window.speechSynthesis.cancel();
-      activeUtterance = null;
+      activeUtteranceRef.current = null;
     }
     const utterance = new SpeechSynthesisUtterance(form);
     utterance.lang = "en-US";
     utterance.onstart = () => setSpeakingForm(form);
     utterance.onend = () => {
       setSpeakingForm(null);
-      activeUtterance = null;
+      activeUtteranceRef.current = null;
     };
     utterance.onerror = () => {
       setSpeakingForm(null);
-      activeUtterance = null;
+      activeUtteranceRef.current = null;
     };
-    activeUtterance = utterance;
+    activeUtteranceRef.current = utterance;
     window.speechSynthesis.speak(utterance);
   }
 
