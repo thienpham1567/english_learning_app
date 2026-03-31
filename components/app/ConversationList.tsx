@@ -1,10 +1,10 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Tooltip } from "antd";
-import { Plus, Trash2, GraduationCap } from "lucide-react";
+import { Plus, Trash2, GraduationCap, Check, X } from "lucide-react";
 
 import { useChatConversations } from "@/components/app/ChatConversationProvider";
 
@@ -41,6 +41,8 @@ export function truncateTitle(
 export function ConversationList({ activeId }: Props) {
   const router = useRouter();
   const { conversations, deleteConversation } = useChatConversations();
+
+  const [confirmingId, setConfirmingId] = useState<string | null>(null);
 
   const handleNew = useCallback(() => {
     router.push("/english-chatbot");
@@ -84,12 +86,47 @@ export function ConversationList({ activeId }: Props) {
         ) : (
           conversations.map((conv) => {
             const isActive = conv.id === activeId;
+            const isConfirming = conv.id === confirmingId;
             const { text, truncated } = truncateTitle(conv.title);
             const titleSpan = (
               <span className="pr-5 text-sm font-medium leading-snug">
                 {text}
               </span>
             );
+
+            if (isConfirming) {
+              return (
+                <div
+                  key={conv.id}
+                  className="flex items-center gap-1 rounded-(--radius) border border-red-400 bg-red-500/10 px-3 py-2.5"
+                >
+                  <span className="flex-1 text-sm font-medium text-red-300">
+                    Xoá?
+                  </span>
+                  <button
+                    onClick={() => {
+                      deleteConversation(conv.id);
+                      setConfirmingId(null);
+                      if (conv.id === activeId) {
+                        router.push("/english-chatbot");
+                      }
+                    }}
+                    className="grid size-6 place-items-center rounded text-red-400 transition hover:bg-red-500/20"
+                    aria-label="Confirm delete"
+                  >
+                    <Check size={13} />
+                  </button>
+                  <button
+                    onClick={() => setConfirmingId(null)}
+                    className="grid size-6 place-items-center rounded text-white/50 transition hover:bg-white/8 hover:text-white/80"
+                    aria-label="Cancel delete"
+                  >
+                    <X size={13} />
+                  </button>
+                </div>
+              );
+            }
+
             return (
               <div key={conv.id} className="group relative">
                 <Link
@@ -114,10 +151,7 @@ export function ConversationList({ activeId }: Props) {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    deleteConversation(conv.id);
-                    if (conv.id === activeId) {
-                      router.push("/english-chatbot");
-                    }
+                    setConfirmingId(conv.id);
                   }}
                   className="absolute right-2 top-1/2 -translate-y-1/2 grid size-6 place-items-center rounded text-white/30 opacity-0 transition hover:bg-white/8 hover:text-red-400 group-hover:opacity-100"
                   aria-label="Delete conversation"
