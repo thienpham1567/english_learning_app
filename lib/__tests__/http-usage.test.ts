@@ -30,7 +30,7 @@ describe("http client usage", () => {
   );
 
   it("keeps fetch only for the streaming chat request", async () => {
-    const source = await readSource("components/app/EnglishChatbotView.tsx");
+    const source = await readSource("components/app/ChatWindow.tsx");
     const fetchCalls = [...source.matchAll(/\bfetch\s*\(/g)];
 
     expect(fetchCalls).toHaveLength(1);

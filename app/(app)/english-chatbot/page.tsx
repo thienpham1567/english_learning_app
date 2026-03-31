@@ -1,5 +1,5 @@
-import { EnglishChatbotView } from "@/components/app/EnglishChatbotView";
+import { ChatWindow } from "@/components/app/ChatWindow";
 
 export default function EnglishChatbotPage() {
-  return <EnglishChatbotView conversationId={null} />;
+  return <ChatWindow conversationId={null} />;
 }

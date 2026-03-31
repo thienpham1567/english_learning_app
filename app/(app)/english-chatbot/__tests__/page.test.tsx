@@ -2,7 +2,8 @@ import { screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
 import EnglishChatbotPage from "@/app/(app)/english-chatbot/page";
-import { getMessageSpacingClassName } from "@/components/app/EnglishChatbotView";
+import { ChatConversationProvider } from "@/components/app/ChatConversationProvider";
+import { getMessageSpacingClassName } from "@/components/app/ChatWindow";
 import type { PageMessage } from "@/components/ChatMessage";
 import { renderUi } from "@/test/render";
 
@@ -31,9 +32,17 @@ vi.mock("@/components/app/UserContext", () => ({
   useUser: () => ({ name: "Người học", image: null }),
 }));
 
+function renderPage() {
+  return renderUi(
+    <ChatConversationProvider>
+      <EnglishChatbotPage />
+    </ChatConversationProvider>,
+  );
+}
+
 describe("EnglishChatbotPage", () => {
   it("renders the welcome state and starter prompts", () => {
-    renderUi(<EnglishChatbotPage />);
+    renderPage();
 
     expect(
       screen.getByRole("heading", { name: "Xin chào! Chọn gia sư để bắt đầu" }),
@@ -46,7 +55,7 @@ describe("EnglishChatbotPage", () => {
   });
 
   it("keeps scrolling inside the transcript instead of the main page", () => {
-    const { container } = renderUi(<EnglishChatbotPage />);
+    renderPage();
     const header = screen.getByText(/Chọn gia sư để bắt đầu/i)
       .closest("div[class*='overflow-y-auto']")
       ?.previousElementSibling as HTMLElement | null;
@@ -56,16 +65,14 @@ describe("EnglishChatbotPage", () => {
       .closest("div[class*='backdrop-blur-md']") as HTMLElement | null;
     const chatArea = transcript?.parentElement as HTMLElement | null;
 
-    expect(container.firstElementChild).toHaveClass(
+    expect(chatArea).toHaveClass(
       "flex",
       "h-full",
-      "max-h-full",
       "min-h-0",
       "flex-1",
       "overflow-hidden",
     );
 
-    expect(chatArea).toHaveClass("min-h-0", "overflow-hidden");
     expect(header).toHaveClass("shrink-0");
 
     expect(transcript).toHaveClass(
