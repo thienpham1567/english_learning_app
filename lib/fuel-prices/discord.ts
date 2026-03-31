@@ -33,7 +33,7 @@ export async function sendDiscordMessage(
     return {
       success: false,
       message:
-        "Chưa cấu hình Discord Webhook URL. Vui lòng nhập URL trong giao diện hoặc thêm DISCORD_WEBHOOK_URL vào file .env.local",
+        "Chưa cấu hình Discord Webhook URL. Vui lòng nhập URL trong giao diện hoặc",
     };
   }
 
@@ -46,8 +46,7 @@ export async function sendDiscordMessage(
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         username: "Cô Minh ⛽ Báo Giá Xăng",
-        avatar_url:
-          "https://cdn-icons-png.flaticon.com/512/2933/2933245.png",
+        avatar_url: "https://cdn-icons-png.flaticon.com/512/2933/2933245.png",
         embeds: [embed],
       }),
       signal: AbortSignal.timeout(10_000),

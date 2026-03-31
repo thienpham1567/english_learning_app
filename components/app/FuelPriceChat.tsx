@@ -185,38 +185,32 @@ function ChatHeader({
       </div>
       <div className="flex-1">
         <h2 className="text-[15px] font-semibold text-(--ink)">
-          Giá Xăng Dầu ⛽
+          Cây xăng cô Kiều ⛽
         </h2>
         <p className="text-xs text-(--text-muted)">
           Tra giá · So sánh · Tính chi phí · Gửi Discord
         </p>
       </div>
-      <div className="hidden items-center gap-1.5 md:flex">
-        {["⛽", "📊", "🧮", "📤"].map((icon, i) => (
-          <span
-            key={i}
-            className="grid size-7 place-items-center rounded-lg bg-(--bg-deep) text-sm"
-            title={["Giá xăng", "So sánh", "Tính phí", "Discord"][i]}
-          >
-            {icon}
-          </span>
-        ))}
-        <button
-          onClick={onToggleSettings}
+      <button
+        onClick={onToggleSettings}
+        className={[
+          "flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium shadow-sm transition-all duration-200",
+          showSettings
+            ? "bg-linear-to-r from-amber-500 to-orange-600 text-white shadow-amber-200/50 shadow-md"
+            : "border border-(--border) bg-(--surface) text-(--text-secondary) hover:border-amber-400/60 hover:bg-amber-50 hover:text-amber-700 hover:shadow-md",
+        ].join(" ")}
+        title="Cài đặt Discord Webhook"
+      >
+        <Settings
+          size={15}
+          strokeWidth={2}
           className={[
-            "grid size-7 place-items-center rounded-lg text-sm transition-colors",
-            showSettings
-              ? "bg-amber-100 text-amber-700"
-              : "bg-(--bg-deep) text-(--text-muted) hover:text-(--text-primary)",
+            "transition-transform duration-300",
+            showSettings ? "rotate-90" : "",
           ].join(" ")}
-          title="Cài đặt"
-        >
-          <Settings
-            size={14}
-            className={showSettings ? "animate-spin-slow" : ""}
-          />
-        </button>
-      </div>
+        />
+        <span>Cài đặt</span>
+      </button>
     </div>
   );
 }
@@ -252,8 +246,8 @@ function SettingsPanel({
           className="w-full rounded-lg border border-(--border) bg-white px-3 py-2 text-sm text-(--text-primary) shadow-(--shadow-sm) placeholder:text-(--text-muted) focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500"
         />
         <p className="mt-1.5 text-xs text-(--text-muted)">
-          Dùng để gửi báo cáo giá xăng trực tiếp. Nếu để trống sẽ dùng URL
-          mặc định của hệ thống.
+          Dùng để gửi báo cáo giá xăng trực tiếp. Nếu để trống sẽ dùng URL mặc
+          định của hệ thống.
         </p>
       </div>
     </motion.div>
@@ -393,9 +387,7 @@ function MessageBubble({
             <span className="whitespace-pre-wrap">{text}</span>
           ) : (
             <div className={MARKDOWN_CLASSES}>
-              <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                {text}
-              </ReactMarkdown>
+              <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
               {isStreaming && (
                 <span
                   className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] rounded-[1px] bg-amber-500 align-middle [animation:textCursor_0.7s_ease-in-out_infinite]"
