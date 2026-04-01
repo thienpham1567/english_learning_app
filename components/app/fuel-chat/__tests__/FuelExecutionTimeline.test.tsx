@@ -1,60 +1,63 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { FuelExecutionTimeline } from "@/components/app/fuel-chat/FuelChatParts";
-import type { FuelExecutionStep } from "@/lib/fuel-prices/types";
+import { FuelExecutionPanel } from "@/components/app/fuel-chat/FuelChatParts";
+import type { FuelAssistantRun } from "@/lib/fuel-prices/types";
 
-describe("FuelExecutionTimeline", () => {
-  it("renders agent rows with their nested tool details and previews", () => {
-    const steps: FuelExecutionStep[] = [
-      {
-        id: "agent-price-1",
-        kind: "agent",
-        name: "Trợ lý giá xăng",
-        status: "done",
-        summary: "Phân tích yêu cầu tra cứu giá mới nhất",
-        resultPreview: "Đã sẵn sàng tổng hợp bảng giá xăng dầu.",
-      },
-      {
-        id: "tool-price-1",
-        parentId: "agent-price-1",
-        kind: "tool",
-        name: "Lấy giá mới nhất",
-        tool: "get_fuel_prices",
-        status: "done",
-        summary: "Lấy bảng giá mới nhất từ PVOIL",
-        params: {},
-        resultPreview: "5 loại nhiên liệu đã được cập nhật.",
-      },
-    ];
+describe("FuelExecutionPanel", () => {
+  it("renders tool cards with thinking, source, rendering, and result blocks", () => {
+    const run: FuelAssistantRun = {
+      status: "done",
+      startedAt: "2026-04-01T01:00:00.000Z",
+      finishedAt: "2026-04-01T01:00:03.000Z",
+      tools: [
+        {
+          id: "tool-1",
+          tool: "get_fuel_prices",
+          name: "Lấy giá mới nhất",
+          status: "done",
+          thinking: [
+            "Đang xác định nguồn có dữ liệu mới nhất",
+            "Đã chọn PVOIL vì trả về bảng giá trực tiếp",
+          ],
+          sources: [
+            {
+              label: "PVOIL (pvoil.com.vn)",
+              href: "https://www.pvoil.com.vn/tin-gia-xang-dau",
+              updatedAt: "08:52 01/04/2026",
+            },
+          ],
+          rendering: "Đang dựng bảng Markdown cho toàn bộ nhiên liệu",
+          resultMarkdown: "| Sản phẩm | Giá |",
+        },
+      ],
+    };
 
-    render(<FuelExecutionTimeline steps={steps} />);
+    render(<FuelExecutionPanel run={run} />);
 
-    expect(screen.getByText("Call Agent")).toBeInTheDocument();
-    expect(screen.getByText("Trợ lý giá xăng")).toBeInTheDocument();
     expect(screen.getByText("Lấy giá mới nhất")).toBeInTheDocument();
+    expect(screen.getByText("Thinking")).toBeInTheDocument();
+    expect(screen.getByText("Source")).toBeInTheDocument();
+    expect(screen.getByText("Rendering")).toBeInTheDocument();
+    expect(screen.getByText("Result")).toBeInTheDocument();
     expect(
-      screen.getByText("Phân tích yêu cầu tra cứu giá mới nhất"),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByText("5 loại nhiên liệu đã được cập nhật."),
-    ).toBeInTheDocument();
+      screen.getByRole("link", { name: "PVOIL (pvoil.com.vn)" }),
+    ).toHaveAttribute("href", "https://www.pvoil.com.vn/tin-gia-xang-dau");
+    expect(screen.queryByText("Call Agent")).not.toBeInTheDocument();
   });
 
-  it("shows live processing copy for a running agent", () => {
-    const steps: FuelExecutionStep[] = [
-      {
-        id: "agent-cost-1",
-        kind: "agent",
-        name: "Trợ lý tính chi phí",
-        status: "running",
-        summary: "Phân tích hành trình và ước tính chi phí nhiên liệu",
-      },
-    ];
+  it("shows a processing shell while the run is active", () => {
+    render(
+      <FuelExecutionPanel
+        run={{
+          status: "running",
+          startedAt: "2026-04-01T01:00:00.000Z",
+          tools: [],
+        }}
+      />,
+    );
 
-    render(<FuelExecutionTimeline steps={steps} />);
-
-    expect(screen.getByText("AI is processing...")).toBeInTheDocument();
-    expect(screen.getByText("Trợ lý tính chi phí")).toBeInTheDocument();
+    expect(screen.getByText("Running")).toBeInTheDocument();
+    expect(screen.getByText("Đang chuẩn bị gọi tool đầu tiên")).toBeInTheDocument();
   });
 });
