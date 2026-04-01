@@ -528,10 +528,12 @@ describe("DictionaryResultCard", () => {
   });
 
   it("renders verb forms section when verbForms is set", () => {
-    const { getByText } = renderUi(
+    const { getByText, getByRole } = renderUi(
       <DictionaryResultCard vocabulary={verbEntry} hasSearched isLoading={false} />,
     );
     expect(getByText("DẠNG ĐỘNG TỪ")).toBeInTheDocument();
+    // The accordion starts collapsed; expand it to verify form content.
+    fireEvent.click(getByRole("button", { name: /DẠNG ĐỘNG TỪ/i }));
     expect(getByText("runs")).toBeInTheDocument();
     expect(getByText("running")).toBeInTheDocument();
   });
