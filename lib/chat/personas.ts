@@ -16,9 +16,9 @@ import {
   BarChart3,
 } from "lucide-react";
 
-import { SimonAvatar } from "@/components/app/persona-avatars/SimonAvatar";
-import { ChristineAvatar } from "@/components/app/persona-avatars/ChristineAvatar";
-import { EddieAvatar } from "@/components/app/persona-avatars/EddieAvatar";
+import { SimonAvatar } from "@/components/app/english-chatbot/persona-avatars/SimonAvatar";
+import { ChristineAvatar } from "@/components/app/english-chatbot/persona-avatars/ChristineAvatar";
+import { EddieAvatar } from "@/components/app/english-chatbot/persona-avatars/EddieAvatar";
 
 export type PersonaInstructionInput = {
   consecutiveVietnameseTurns: number;

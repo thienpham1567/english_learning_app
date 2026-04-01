@@ -32,7 +32,7 @@ afterEach(() => {
 });
 
 describe("fuel prices route", () => {
-  it("streams gia_xang function-call events with empty input and JSON output", async () => {
+  it("streams gia_xang tool events with empty input, JSON output, and prose result", async () => {
     mockResponsesCreate
       .mockResolvedValueOnce({
         output: [
@@ -52,20 +52,21 @@ describe("fuel prices route", () => {
             content: [
               {
                 type: "output_text",
-                text: "Giá xăng mới nhất đây.",
+                text: "Giá xăng mới nhất đây.\n\nBạn có muốn tôi gửi báo cáo này lên Discord không?",
               },
             ],
           },
         ],
       });
 
-    mockExecuteFuelTool.mockResolvedValue(
-      JSON.stringify({
+    mockExecuteFuelTool.mockResolvedValue({
+      content: JSON.stringify({
         status: "success",
         update_time: "Giá điều chỉnh lúc 00:00 ngày 27/03/2026",
         prices: [{ product: "Xăng RON 95-III", price: "24.330 đ" }],
       }),
-    );
+      resultPreview: "1 loại nhiên liệu đã được cập nhật.",
+    });
 
     vi.doMock("@/lib/openai/client", () => ({
       openAiClient: {
@@ -106,18 +107,20 @@ describe("fuel prices route", () => {
     const body = await response.text();
 
     expect(response.status).toBe(200);
-    expect(body).toContain('data: {"type":"assistant_start"}');
+    expect(body).toContain('data: {"type":"run_start"');
     expect(body).toContain(
-      'data: {"type":"function_call_start","callId":"call_1","name":"gia_xang","input":{}',
+      'data: {"type":"tool_start","toolCallId":"call_1","tool":"get_fuel_prices","name":"gia_xang","input":{}',
     );
     expect(body).toContain(
-      'data: {"type":"function_call_result","callId":"call_1","name":"gia_xang","input":{},"output":{"status":"success","update_time":"Giá điều chỉnh lúc 00:00 ngày 27/03/2026","prices":[{"product":"Xăng RON 95-III","price":"24.330 đ"}]}',
+      'data: {"type":"tool_result","toolCallId":"call_1","output":{"status":"success","update_time":"Giá điều chỉnh lúc 00:00 ngày 27/03/2026","prices":[{"product":"Xăng RON 95-III","price":"24.330 đ"}]},"resultPreview":"1 loại nhiên liệu đã được cập nhật."',
     );
-    expect(body).toContain('data: {"type":"assistant_delta","delta":"Giá xăng"}');
-    expect(body).toContain('data: {"type":"assistant_done"}');
+    expect(body).toContain(
+      'data: {"type":"tool_result","toolCallId":"call_1","resultMarkdown":"Giá xăng mới nhất đây.\\n\\nBạn có muốn tôi gửi báo cáo này lên Discord không?"',
+    );
+    expect(body).toContain('data: {"type":"run_done"');
   });
 
-  it("streams send_discord_message_via_webhook with content input and success output", async () => {
+  it("streams Discord tool events with content input and success output", async () => {
     mockResponsesCreate
       .mockResolvedValueOnce({
         output: [
@@ -147,12 +150,13 @@ describe("fuel prices route", () => {
         ],
       });
 
-    mockExecuteFuelTool.mockResolvedValue(
-      JSON.stringify({
+    mockExecuteFuelTool.mockResolvedValue({
+      content: JSON.stringify({
         success: true,
         message: "Gửi tin nhắn thành công (đã tắt link preview)!",
       }),
-    );
+      resultPreview: "Gửi tin nhắn thành công (đã tắt link preview)!",
+    });
 
     vi.doMock("@/lib/openai/client", () => ({
       openAiClient: {
@@ -186,7 +190,10 @@ describe("fuel prices route", () => {
       },
       body: JSON.stringify({
         messages: [
-          { role: "assistant", text: "Bạn có muốn tôi gửi báo cáo này lên Discord không?" },
+          {
+            role: "assistant",
+            text: "Bạn có muốn tôi gửi báo cáo này lên Discord không?",
+          },
           { role: "user", text: "gửi" },
         ],
       }),
@@ -197,10 +204,10 @@ describe("fuel prices route", () => {
 
     expect(response.status).toBe(200);
     expect(body).toContain(
-      'data: {"type":"function_call_start","callId":"call_2","name":"send_discord_message_via_webhook","input":{"content":"Giá xăng dầu mới nhất (00:00 27/03/2026): Xăng RON 95-III 24.330 đ/lít"}',
+      'data: {"type":"tool_start","toolCallId":"call_2","tool":"send_discord_report","name":"send_discord_message_via_webhook","input":{"content":"Giá xăng dầu mới nhất (00:00 27/03/2026): Xăng RON 95-III 24.330 đ/lít"}',
     );
     expect(body).toContain(
-      'data: {"type":"function_call_result","callId":"call_2","name":"send_discord_message_via_webhook","input":{"content":"Giá xăng dầu mới nhất (00:00 27/03/2026): Xăng RON 95-III 24.330 đ/lít"},"output":{"success":true,"message":"Gửi tin nhắn thành công (đã tắt link preview)!"}',
+      'data: {"type":"tool_result","toolCallId":"call_2","output":{"success":true,"message":"Gửi tin nhắn thành công (đã tắt link preview)!"},"resultPreview":"Gửi tin nhắn thành công (đã tắt link preview)!"',
     );
   });
 });

@@ -9,9 +9,9 @@ vi.mock("better-auth/cookies", () => ({
   getSessionCookie: authMocks.getSessionCookie,
 }));
 
-import { middleware } from "@/middleware";
+import { proxy } from "@/proxy";
 
-describe("middleware", () => {
+describe("proxy", () => {
   beforeEach(() => {
     authMocks.getSessionCookie.mockReset();
   });
@@ -19,7 +19,7 @@ describe("middleware", () => {
   it("allows public asset requests without redirecting to sign-in", () => {
     authMocks.getSessionCookie.mockReturnValue(null);
 
-    const response = middleware(new NextRequest("http://localhost:3000/english-logo-app.svg"));
+    const response = proxy(new NextRequest("http://localhost:3000/english-logo-app.svg"));
 
     expect(response.headers.get("location")).toBeNull();
     expect(response.headers.get("x-middleware-next")).toBe("1");
@@ -28,7 +28,7 @@ describe("middleware", () => {
   it("redirects protected app routes to sign-in when there is no session", () => {
     authMocks.getSessionCookie.mockReturnValue(null);
 
-    const response = middleware(new NextRequest("http://localhost:3000/english-chatbot"));
+    const response = proxy(new NextRequest("http://localhost:3000/english-chatbot"));
 
     expect(response.status).toBe(307);
     expect(response.headers.get("location")).toBe("http://localhost:3000/sign-in");

@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from "react";
 
-import type { ConversationItem } from "@/components/app/ConversationList";
+import type { ConversationItem } from "@/components/app/english-chatbot/ConversationList";
 import http from "@/lib/http";
 
 type ChatConversationContextValue = {

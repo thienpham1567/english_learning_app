@@ -2,6 +2,12 @@ import type { Metadata } from "next";
 import { Source_Sans_3, Fraunces, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
+const metadataBase = new URL(
+  process.env.NEXT_PUBLIC_APP_URL ??
+    process.env.APP_URL ??
+    "http://localhost:3000",
+);
+
 const sourceSans = Source_Sans_3({
   subsets: ["latin", "vietnamese"],
   display: "swap",
@@ -21,6 +27,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase,
   title: "Trợ lý học tập tiếng Anh | Luyện tiếng Anh mỗi ngày",
   description:
     "Trợ lý học tập tiếng Anh với phản hồi trực tiếp, sửa lỗi rõ ràng và hội thoại tự nhiên mỗi ngày.",

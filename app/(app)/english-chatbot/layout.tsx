@@ -3,9 +3,9 @@
 import type { ReactNode } from "react";
 import { useParams } from "next/navigation";
 
-import { ChatConversationProvider } from "@/components/app/ChatConversationProvider";
-import { ConversationList } from "@/components/app/ConversationList";
-import { ChatWindow } from "@/components/app/ChatWindow";
+import { ChatConversationProvider } from "@/components/app/english-chatbot/ChatConversationProvider";
+import { ConversationList } from "@/components/app/english-chatbot/ConversationList";
+import { ChatWindow } from "@/components/app/english-chatbot/ChatWindow";
 
 export default function EnglishChatbotLayout({
   // children is intentionally not rendered: ChatWindow is mounted here directly

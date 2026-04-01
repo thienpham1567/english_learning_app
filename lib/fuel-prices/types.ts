@@ -9,48 +9,73 @@ export type ToolExecutorOptions = {
   discordWebhookUrl?: string;
 };
 
-export type FuelFunctionCallStatus = "running" | "success" | "error";
+export type FuelExecutionStatus = "pending" | "running" | "done" | "error";
 
-export type FuelFunctionCall = {
+export type FuelSourceInfo = {
+  label: string;
+  href?: string;
+  updatedAt?: string;
+};
+
+export type FuelToolExecutionStep = {
   id: string;
+  tool: string;
   name: string;
-  status: FuelFunctionCallStatus;
+  status: FuelExecutionStatus;
   input: Record<string, unknown>;
   output?: unknown;
+  resultMarkdown?: string;
+  resultPreview?: string;
   error?: string;
   startedAt?: string;
   finishedAt?: string;
 };
 
-export type FuelExecutionStep = FuelFunctionCall;
+export type FuelAssistantRun = {
+  status: FuelExecutionStatus;
+  tools: FuelToolExecutionStep[];
+  startedAt?: string;
+  finishedAt?: string;
+  error?: string;
+};
+
+export type FuelChatTurn =
+  | { id: string; role: "user"; text: string }
+  | { id: string; role: "assistant"; run: FuelAssistantRun };
+
+export type FuelToolExecutionOutput = {
+  content: string;
+  thinking?: string[];
+  sources?: FuelSourceInfo[];
+  renderingHint?: string;
+  resultPreview?: string;
+};
 
 export type FuelSseEventPayload =
-  | { type: "assistant_start" }
-  | { type: "assistant_delta"; delta: string }
-  | { type: "assistant_done" }
-  | { type: "assistant_error"; message: string }
+  | { type: "run_start"; startedAt?: string }
+  | { type: "run_done"; finishedAt?: string }
+  | { type: "run_error"; message: string; finishedAt?: string }
   | {
-      type: "function_call_start";
-      callId: string;
+      type: "tool_start";
+      toolCallId: string;
+      tool: string;
       name: string;
       input: Record<string, unknown>;
       startedAt?: string;
     }
   | {
-      type: "function_call_result";
-      callId: string;
-      name: string;
-      input: Record<string, unknown>;
-      output: unknown;
+      type: "tool_result";
+      toolCallId: string;
+      output?: unknown;
+      resultMarkdown?: string;
+      resultPreview?: string;
       finishedAt?: string;
     }
   | {
-      type: "function_call_error";
-      callId: string;
-      name: string;
-      input: Record<string, unknown>;
-      output?: unknown;
+      type: "tool_error";
+      toolCallId: string;
       message: string;
+      output?: unknown;
       finishedAt?: string;
     };
 

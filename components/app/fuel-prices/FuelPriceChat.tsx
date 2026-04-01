@@ -2,35 +2,25 @@
 
 import {
   ArrowDown,
-  ArrowUp,
   Fuel,
-  TrendingUp,
-  Sparkles,
-  Calculator,
-  Send,
   Settings,
+  Sparkles,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
+import { useState } from "react";
 
 import { useFuelChat } from "@/hooks/useFuelChat";
 import {
-  UserAvatar,
   CopyButton,
-  FuelExecutionTimeline,
+  FuelExecutionPanel,
+  UserAvatar,
   formatTime,
-} from "@/components/app/fuel-chat/FuelChatParts";
-import { useState } from "react";
+} from "@/components/app/fuel-prices/FuelChatParts";
+import type { FuelAssistantRun } from "@/lib/fuel-prices/types";
 
-/* ── Suggested prompts ── */
-const SUGGESTED = [
-  { text: "Xăng hôm nay bao nhiêu?", icon: Fuel },
-  { text: "Giá xăng tăng hay giảm so với lần trước?", icon: TrendingUp },
-  { text: "Đi Sài Gòn - Đà Lạt hết bao nhiêu tiền xăng?", icon: Calculator },
-];
+const SUGGESTED = [{ text: "Xăng hôm nay bao nhiêu?", icon: Fuel }];
 
-/* ── Markdown CSS classes ── */
 const MARKDOWN_CLASSES = [
   "fuel-chat-content text-[15px] leading-8 text-(--text-primary)",
   "[&_p]:m-0 [&_p:not(:last-child)]:mb-2",
@@ -45,7 +35,6 @@ const MARKDOWN_CLASSES = [
   "[&_td]:border [&_td]:border-(--border) [&_td]:px-3 [&_td]:py-2 [&_td]:text-sm",
 ].join(" ");
 
-/* ── Main Component ── */
 export function FuelPriceChat() {
   const {
     discordWebhookUrl,
@@ -56,7 +45,6 @@ export function FuelPriceChat() {
     handleScroll,
     messages,
     isLoading,
-    streamingHasStarted,
     error,
     clearError,
     bottomRef,
@@ -71,13 +59,11 @@ export function FuelPriceChat() {
 
   return (
     <div className="relative flex h-full min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-(--border) bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.7))] shadow-(--shadow-md)">
-      {/* ── Header ── */}
       <ChatHeader
         showSettings={showSettings}
         onToggleSettings={() => setShowSettings(!showSettings)}
       />
 
-      {/* ── Settings Panel ── */}
       <AnimatePresence>
         {showSettings && (
           <SettingsPanel
@@ -87,13 +73,11 @@ export function FuelPriceChat() {
         )}
       </AnimatePresence>
 
-      {/* ── Messages Area ── */}
       <div
         ref={scrollContainerRef}
         onScroll={handleScroll}
         className="relative min-h-0 flex-1 overflow-y-auto px-4 py-6 md:px-8"
       >
-        {/* Warm radial glow */}
         <div
           className="pointer-events-none absolute inset-0"
           style={{
@@ -103,47 +87,45 @@ export function FuelPriceChat() {
         />
 
         <div className="relative mx-auto flex min-h-full w-full max-w-4xl flex-col">
-          {/* Empty state */}
           <AnimatePresence>
             {!hasMessages && <EmptyState onSend={send} />}
           </AnimatePresence>
 
-          {/* Message list */}
           {hasMessages && (
             <div className="flex flex-col">
               {messages.map((m, index) => {
-                const isLastAssistant =
-                  isLoading &&
-                  index === messages.length - 1 &&
-                  m.role === "assistant";
+                const previous = index > 0 ? messages[index - 1] : undefined;
+                const showSpacing = index > 0 && previous?.role !== m.role;
+
+                if (m.role === "assistant") {
+                  return (
+                    <ExecutionTurn
+                      key={m.id}
+                      run={m.run}
+                      showSpacing={showSpacing}
+                    />
+                  );
+                }
 
                 return (
-                  <MessageBubble
+                  <UserPromptBubble
                     key={m.id}
-                    message={m}
-                    isStreaming={isLastAssistant}
-                    isWaiting={isLastAssistant && !streamingHasStarted}
-                    showSpacing={
-                      index > 0 && messages[index - 1].role !== m.role
-                    }
+                    text={m.text}
+                    showSpacing={showSpacing}
                   />
                 );
               })}
             </div>
           )}
 
-          {/* Error */}
           <AnimatePresence>
-            {error && (
-              <ErrorBanner error={error} onDismiss={clearError} />
-            )}
+            {error && <ErrorBanner error={error} onDismiss={clearError} />}
           </AnimatePresence>
 
           <div ref={bottomRef} />
         </div>
       </div>
 
-      {/* ── Scroll to bottom ── */}
       <AnimatePresence>
         {showScrollBtn && (
           <motion.button
@@ -160,7 +142,6 @@ export function FuelPriceChat() {
         )}
       </AnimatePresence>
 
-      {/* ── Input Area ── */}
       <ChatInput
         input={input}
         isLoading={isLoading}
@@ -172,8 +153,6 @@ export function FuelPriceChat() {
     </div>
   );
 }
-
-/* ── Sub-components (private to this file) ── */
 
 function ChatHeader({
   showSettings,
@@ -297,43 +276,27 @@ function EmptyState({ onSend }: { onSend: (text: string) => void }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4 }}
       >
-        Cây xăng cô Kiều 💁‍♀️⛽
+        Cây xăng cô Kiều 💁‍♀️
       </motion.h2>
 
-      <motion.p
-        className="mt-3 max-w-md text-base text-(--text-secondary)"
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.4 }}
-      >
-        Cô Kiều sẽ giúp bạn theo dõi giá xăng dầu, phân tích biến động thị
-        trường và tính toán chi phí.
-      </motion.p>
-
-      <div className="mt-8 grid w-full gap-3 md:grid-cols-2">
+      <div className="mt-8 flex w-full justify-center">
         {SUGGESTED.map((s, i) => {
           const Icon = s.icon;
           return (
             <motion.button
               key={s.text}
-              className="flex items-start gap-3 rounded-lg border border-(--border) bg-(--surface) p-4 text-left shadow-(--shadow-sm) transition hover:-translate-y-0.5 hover:border-amber-400/40 hover:bg-(--surface-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
+              className="group flex items-center gap-3 rounded-full border border-(--border) bg-white/60 px-5 py-2 shadow-[0_8px_20px_rgba(15,23,42,0.04)] ring-1 ring-black/5 backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_12px_24px_rgba(245,158,11,0.08)] hover:ring-amber-300/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
               onClick={() => onSend(s.text)}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{
-                delay: 0.35 + i * 0.08,
-                duration: 0.35,
-                ease: "easeOut",
-              }}
+              transition={{ delay: 0.4 + i * 0.08, duration: 0.35, ease: "easeOut" }}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.97 }}
             >
-              <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-amber-50 text-amber-600">
+              <span className="grid size-8 shrink-0 place-items-center rounded-full bg-linear-to-br from-amber-100 to-amber-50 text-amber-600 shadow-inner">
                 <Icon size={16} strokeWidth={2} />
               </span>
-              <span className="text-sm leading-6 text-(--text-primary)">
-                {s.text}
-              </span>
+              <span className="text-sm font-medium text-(--ink)">{s.text}</span>
             </motion.button>
           );
         })}
@@ -342,130 +305,78 @@ function EmptyState({ onSend }: { onSend: (text: string) => void }) {
   );
 }
 
-function MessageBubble({
-  message: m,
-  isStreaming,
-  isWaiting,
+function UserPromptBubble({
+  text,
   showSpacing,
 }: {
-  message: {
-    id: string;
-    role: "user" | "assistant";
-    text: string;
-    functionCalls?: Array<{
-      id: string;
-      name: string;
-      status: "running" | "success" | "error";
-      input: Record<string, unknown>;
-      output?: unknown;
-      error?: string;
-      startedAt?: string;
-      finishedAt?: string;
-    }>;
-  };
-  isStreaming: boolean;
-  isWaiting: boolean;
+  text: string;
   showSpacing: boolean;
 }) {
-  const isUser = m.role === "user";
-  const text = m.text.trim();
-  const functionCalls = m.functionCalls ?? [];
-  const showFunctionCalls = !isUser && functionCalls.length > 0;
-  const showStatus = !text && isWaiting && !showFunctionCalls;
-
-  // Hide empty assistant messages that aren't actively loading
-  if (!text && !isStreaming && !showFunctionCalls) return null;
-
   return (
     <motion.div
       className={[
-        "group flex items-start gap-3",
-        isUser ? "justify-end" : "justify-start",
+        "group flex items-start justify-end gap-3",
         showSpacing ? "mt-7" : "mt-1",
       ].join(" ")}
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
-      {!isUser && (
-        <div className="grid size-8 shrink-0 place-items-center rounded-full bg-linear-to-br from-amber-500 to-orange-600 text-white shadow-(--shadow-sm)">
-          <Fuel size={14} strokeWidth={2} />
+      <div className="flex max-w-[min(42rem,80%)] flex-col items-end gap-2">
+        <div className="rounded-[22px] rounded-br-md bg-(--bubble-user) px-4 py-3 text-white shadow-(--shadow-sm)">
+          <span className="whitespace-pre-wrap">{text}</span>
         </div>
-      )}
-
-      <div
-        className={[
-          "flex max-w-[min(42rem,80%)] flex-col gap-2",
-          isUser ? "items-end" : "items-start",
-        ].join(" ")}
-      >
-        {/* Inline status: initial waiting state */}
-        {showStatus && (
-          <div className="rounded-2xl rounded-bl-md border border-(--border) bg-(--bubble-ai) px-4 py-3 shadow-(--shadow-sm)">
-            <motion.span
-              className="flex items-center gap-1.5"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <span className="text-xs text-(--text-muted)">Đang xử lý</span>
-              {[0, 1, 2].map((i) => (
-                <motion.span
-                  key={i}
-                  className="inline-block size-1.5 rounded-full bg-(--text-muted)"
-                  animate={{ y: [0, -4, 0], opacity: [0.3, 1, 0.3] }}
-                  transition={{
-                    duration: 1.2,
-                    repeat: Infinity,
-                    delay: i * 0.15,
-                    ease: "easeInOut",
-                  }}
-                />
-              ))}
-            </motion.span>
-          </div>
-        )}
-
-        {showFunctionCalls && <FuelExecutionTimeline calls={functionCalls} />}
-
-        {/* Actual message content */}
-        {text && (
-          <>
-            <div
-              className={[
-                "rounded-[22px] px-4 py-3 shadow-(--shadow-sm)",
-                isUser
-                  ? "rounded-br-md bg-(--bubble-user) text-white"
-                  : "rounded-bl-md border border-(--border) bg-(--bubble-ai) text-(--text-primary)",
-              ].join(" ")}
-            >
-              {isUser ? (
-                <span className="whitespace-pre-wrap">{text}</span>
-              ) : (
-                <div className={MARKDOWN_CLASSES}>
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
-                  {isStreaming && (
-                    <span
-                      className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] rounded-[1px] bg-amber-500 align-middle [animation:textCursor_0.7s_ease-in-out_infinite]"
-                      aria-hidden="true"
-                    />
-                  )}
-                </div>
-              )}
-            </div>
-            <div className="flex items-center gap-2 text-xs text-(--text-muted) opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-              <span>{formatTime()}</span>
-              {!isUser && <CopyButton text={text} />}
-            </div>
-          </>
-        )}
+        <div className="flex items-center gap-2 text-xs text-(--text-muted) opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+          <span>{formatTime()}</span>
+        </div>
       </div>
 
-      {isUser && (
-        <div className="grid size-10 shrink-0 place-items-center overflow-hidden rounded-full bg-(--ink) text-xs font-semibold text-white shadow-(--shadow-sm)">
-          <UserAvatar />
-        </div>
-      )}
+      <div className="grid size-10 shrink-0 place-items-center overflow-hidden rounded-full bg-(--ink) text-xs font-semibold text-white shadow-(--shadow-sm)">
+        <UserAvatar />
+      </div>
+    </motion.div>
+  );
+}
+
+function ExecutionTurn({
+  run,
+  showSpacing,
+}: {
+  run: FuelAssistantRun;
+  showSpacing: boolean;
+}) {
+  const latestTool = [...run.tools].reverse().find((tool) => tool.resultMarkdown);
+  const resultMarkdown = latestTool?.resultMarkdown?.trim() ?? "";
+
+  return (
+    <motion.div
+      className={["flex justify-start", showSpacing ? "mt-7" : "mt-1"].join(" ")}
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+    >
+      <div className="flex max-w-[min(48rem,90%)] flex-col gap-3">
+        <FuelExecutionPanel run={run} />
+
+        {resultMarkdown && (
+          <div className="group flex items-start gap-3">
+            <div className="grid size-8 shrink-0 place-items-center rounded-full bg-linear-to-br from-amber-500 to-orange-600 text-white shadow-(--shadow-sm)">
+              <Fuel size={14} strokeWidth={2} />
+            </div>
+            <div className="flex flex-col gap-2">
+              <div className="rounded-[22px] rounded-bl-md border border-(--border) bg-(--bubble-ai) px-4 py-3 shadow-(--shadow-sm)">
+                <div className={MARKDOWN_CLASSES}>
+                  <ReactMarkdown>{resultMarkdown}</ReactMarkdown>
+                </div>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-(--text-muted) opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+                <span>{formatTime(run.finishedAt ?? latestTool?.finishedAt)}</span>
+                <CopyButton text={resultMarkdown} />
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </motion.div>
   );
 }
@@ -531,7 +442,7 @@ function ChatInput({
                 onSend();
               }
             }}
-            placeholder="Hỏi Cô Kiều về giá xăng, xu hướng thị trường, hoặc tính chi phí..."
+            placeholder="Hỏi Cô Kiều về giá xăng hoặc gửi Discord..."
             disabled={isLoading}
             rows={1}
             className="min-h-11 flex-1 resize-none border-0 bg-transparent px-2 py-2 text-[15px] leading-6 text-(--text-primary) outline-none placeholder:text-(--text-muted) disabled:cursor-not-allowed focus:outline-none"
@@ -541,31 +452,16 @@ function ChatInput({
               "grid size-11 shrink-0 place-items-center rounded-full text-white shadow-(--shadow-sm) transition-[background-color,transform] duration-200 enabled:hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500 disabled:cursor-not-allowed disabled:bg-(--border-strong)",
               input.trim() && !isLoading
                 ? "bg-linear-to-r from-amber-500 to-orange-600"
-                : "bg-(--ink)",
+                : "bg-(--border-strong)",
             ].join(" ")}
             onClick={onSend}
             disabled={!input.trim() || isLoading}
-            whileTap={{ scale: 0.88 }}
+            whileTap={{ scale: 0.96 }}
+            aria-label="Gửi"
           >
-            {isLoading ? (
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{
-                  duration: 1,
-                  repeat: Infinity,
-                  ease: "linear",
-                }}
-              >
-                <Send size={16} strokeWidth={2.5} />
-              </motion.div>
-            ) : (
-              <ArrowUp size={18} strokeWidth={2.5} />
-            )}
+            <Fuel size={17} strokeWidth={2.2} />
           </motion.button>
         </div>
-        <p className="text-sm text-(--text-muted)">
-          Enter để gửi · Shift+Enter để xuống dòng · 4 tools AI tự chọn
-        </p>
       </div>
     </div>
   );

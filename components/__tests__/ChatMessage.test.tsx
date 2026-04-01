@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest";
 import { ChatMessage } from "@/components/ChatMessage";
 import { renderUi } from "@/test/render";
 
-vi.mock("@/components/app/UserContext", () => ({
+vi.mock("@/components/app/shared/UserContext", () => ({
   useUser: () => ({ name: "Người học", image: null }),
 }));
 

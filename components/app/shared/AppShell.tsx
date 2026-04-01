@@ -2,10 +2,10 @@
 
 import { useState, useEffect, type ReactNode } from "react";
 
-import { AppSidebar } from "@/components/app/AppSidebar";
-import { UserMenu } from "@/components/app/UserMenu";
-import { UserProvider } from "@/components/app/UserContext";
-import { ToolbarBreadcrumb } from "@/components/app/ToolbarBreadcrumb";
+import { AppSidebar } from "@/components/app/shared/AppSidebar";
+import { UserMenu } from "@/components/app/shared/UserMenu";
+import { UserProvider } from "@/components/app/shared/UserContext";
+import { ToolbarBreadcrumb } from "@/components/app/shared/ToolbarBreadcrumb";
 
 export type AuthUser = {
   name: string;

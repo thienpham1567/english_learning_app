@@ -15,7 +15,7 @@ const mockConversations = [
 ];
 const mockDeleteConversation = vi.fn();
 
-vi.mock("@/components/app/ChatConversationProvider", () => ({
+vi.mock("@/components/app/english-chatbot/ChatConversationProvider", () => ({
   useChatConversations: () => ({
     conversations: mockConversations,
     deleteConversation: mockDeleteConversation,

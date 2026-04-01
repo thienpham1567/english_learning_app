@@ -24,7 +24,7 @@ function createMotionComponent(tag: string) {
   const cached = componentCache.get(tag);
   if (cached) return cached;
 
-  const component = React.forwardRef<unknown, Record<string, unknown> & { children?: React.ReactNode }>(
+  const component = React.forwardRef<HTMLElement, Record<string, unknown> & { children?: React.ReactNode }>(
     (
       {
         children,
@@ -45,9 +45,9 @@ function createMotionComponent(tag: string) {
       ref,
     ) =>
       React.createElement(
-        tag as keyof JSX.IntrinsicElements,
-        { ...rest, ref },
-        children,
+        tag,
+        { ...rest, ref } as React.HTMLAttributes<HTMLElement> & { ref: React.Ref<HTMLElement> },
+        children as React.ReactNode,
       ),
   );
   component.displayName = `motion.${tag}`;

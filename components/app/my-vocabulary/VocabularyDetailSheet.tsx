@@ -27,11 +27,11 @@ const LEVEL_COLORS: Record<string, string> = {
   C2: "bg-red-100 text-red-800",
 };
 
-const ENTRY_TYPE_LABELS: Record<Vocabulary["entryType"], string> = {
-  word: "Từ / cụm từ",
-  phrasal_verb: "Cụm động từ",
-  idiom: "Thành ngữ",
-};
+function getTypeLabel(data: Vocabulary): string {
+  if (data.entryType === "idiom") return "idiom";
+  if (data.entryType === "phrasal_verb") return "phrasal verb";
+  return data.partOfSpeech ?? "word";
+}
 
 export function VocabularyDetailSheet({
   query,
@@ -201,7 +201,7 @@ export function VocabularyDetailSheet({
                       </span>
                     )}
                     <span className="rounded-full bg-(--bg-deep) px-2 py-0.5 text-[11px] text-(--text-muted)">
-                      {ENTRY_TYPE_LABELS[data.entryType] ?? data.entryType}
+                      {getTypeLabel(data)}
                     </span>
                   </div>
 

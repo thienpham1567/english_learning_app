@@ -5,8 +5,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useQueryState, useQueryStates, parseAsString, parseAsBoolean, parseAsArrayOf } from "nuqs";
 import { BookMarked, Search, Trash2 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
-import { VocabularyStatsBar } from "@/components/app/VocabularyStatsBar";
-import { VocabularyDetailSheet } from "@/components/app/VocabularyDetailSheet";
+import { VocabularyStatsBar } from "@/components/app/my-vocabulary/VocabularyStatsBar";
+import { VocabularyDetailSheet } from "@/components/app/my-vocabulary/VocabularyDetailSheet";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";
 import http from "@/lib/http";
 

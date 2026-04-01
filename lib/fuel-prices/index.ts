@@ -7,4 +7,4 @@ export { sendDiscordMessage } from "./discord";
 export { scrapeFuelPrices, getPreviousPriceSnapshot, getCacheInfo } from "./scraper";
 export { fuelPriceCache } from "./cache";
 export { checkRateLimit } from "./rate-limiter";
-export { writeSseEvent, streamTextChunks } from "./sse-helpers";
+export { writeSseEvent } from "./sse-helpers";

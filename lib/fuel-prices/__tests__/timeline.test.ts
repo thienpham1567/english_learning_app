@@ -1,125 +1,136 @@
 import { describe, expect, it } from "vitest";
 
 import { applyFuelSseEvent } from "@/lib/fuel-prices/timeline";
-import type { FuelSseEventPayload } from "@/lib/fuel-prices/types";
-
-type TestMessage = {
-  id: string;
-  role: "user" | "assistant";
-  text: string;
-  functionCalls?: Array<{
-    id: string;
-    name: string;
-    status: "running" | "success" | "error";
-    input: Record<string, unknown>;
-    output?: unknown;
-    startedAt?: string;
-    finishedAt?: string;
-    error?: string;
-  }>;
-};
-
-function applySequence(
-  messages: TestMessage[],
-  assistantMessageId: string,
-  events: FuelSseEventPayload[],
-) {
-  return events.reduce(
-    (current, event) => applyFuelSseEvent(current, assistantMessageId, event),
-    messages,
-  );
-}
+import type { FuelChatTurn, FuelSseEventPayload } from "@/lib/fuel-prices/types";
 
 describe("applyFuelSseEvent", () => {
-  it("stores a completed function call with input and output on the active assistant message", () => {
-    const messages: TestMessage[] = [
+  it("stores a completed function-style tool with input, output, and markdown result", () => {
+    const turns: FuelChatTurn[] = [
       { id: "user-1", role: "user", text: "Giá xăng hôm nay bao nhiêu?" },
-      { id: "assistant-1", role: "assistant", text: "" },
+      { id: "assistant-1", role: "assistant", run: { status: "pending", tools: [] } },
     ];
 
-    const result = applySequence(messages, "assistant-1", [
+    const events: FuelSseEventPayload[] = [
       {
-        type: "function_call_start",
-        callId: "call-price-1",
+        type: "run_start",
+        startedAt: "2026-04-01T01:00:00.000Z",
+      },
+      {
+        type: "tool_start",
+        toolCallId: "call-price-1",
+        tool: "get_fuel_prices",
         name: "gia_xang",
         input: {},
         startedAt: "2026-04-01T01:00:00.000Z",
-      } as FuelSseEventPayload,
+      },
       {
-        type: "function_call_result",
-        callId: "call-price-1",
-        name: "gia_xang",
-        input: {},
+        type: "tool_result",
+        toolCallId: "call-price-1",
         output: {
           status: "success",
           update_time: "Giá điều chỉnh lúc 00:00 ngày 27/03/2026",
           prices: [{ product: "Xăng RON 95-III", price: "24.330 đ" }],
         },
         finishedAt: "2026-04-01T01:00:01.000Z",
-      } as FuelSseEventPayload,
-      {
-        type: "assistant_delta",
-        delta: "| Xăng RON 95 | 24.332 |",
       },
-    ]);
+      {
+        type: "tool_result",
+        toolCallId: "call-price-1",
+        resultMarkdown: "Bạn có muốn tôi gửi báo cáo này lên Discord không?",
+        finishedAt: "2026-04-01T01:00:02.000Z",
+      },
+      {
+        type: "run_done",
+        finishedAt: "2026-04-01T01:00:02.000Z",
+      },
+    ];
 
-    expect(result.at(-1)).toEqual({
+    const result = events.reduce(
+      (current, event) => applyFuelSseEvent(current, "assistant-1", event),
+      turns,
+    );
+
+    expect(result[1]).toEqual({
       id: "assistant-1",
       role: "assistant",
-      text: "| Xăng RON 95 | 24.332 |",
-      functionCalls: [
-        {
-          id: "call-price-1",
-          name: "gia_xang",
-          status: "success",
-          input: {},
-          output: {
-            status: "success",
-            update_time: "Giá điều chỉnh lúc 00:00 ngày 27/03/2026",
-            prices: [{ product: "Xăng RON 95-III", price: "24.330 đ" }],
+      run: {
+        status: "done",
+        startedAt: "2026-04-01T01:00:00.000Z",
+        finishedAt: "2026-04-01T01:00:02.000Z",
+        tools: [
+          {
+            id: "call-price-1",
+            tool: "get_fuel_prices",
+            name: "gia_xang",
+            status: "done",
+            input: {},
+            output: {
+              status: "success",
+              update_time: "Giá điều chỉnh lúc 00:00 ngày 27/03/2026",
+              prices: [{ product: "Xăng RON 95-III", price: "24.330 đ" }],
+            },
+            resultMarkdown: "Bạn có muốn tôi gửi báo cáo này lên Discord không?",
+            startedAt: "2026-04-01T01:00:00.000Z",
+            finishedAt: "2026-04-01T01:00:02.000Z",
           },
-          startedAt: "2026-04-01T01:00:00.000Z",
-          finishedAt: "2026-04-01T01:00:01.000Z",
-        },
-      ],
+        ],
+      },
     });
   });
 
-  it("marks a function call as failed and preserves its input", () => {
-    const messages: TestMessage[] = [
-      { id: "assistant-2", role: "assistant", text: "" },
+  it("marks a tool as failed and stores the error payload", () => {
+    const turns: FuelChatTurn[] = [
+      { id: "assistant-2", role: "assistant", run: { status: "pending", tools: [] } },
     ];
 
-    const result = applySequence(messages, "assistant-2", [
+    const result = [
       {
-        type: "function_call_start",
-        callId: "call-discord-1",
+        type: "tool_start",
+        toolCallId: "call-discord-1",
+        tool: "send_discord_report",
         name: "send_discord_message_via_webhook",
         input: { content: "Báo cáo test" },
         startedAt: "2026-04-01T01:05:00.000Z",
-      } as FuelSseEventPayload,
+      },
       {
-        type: "function_call_error",
-        callId: "call-discord-1",
-        name: "send_discord_message_via_webhook",
-        input: { content: "Báo cáo test" },
-        output: { success: false, message: "Webhook không hợp lệ." },
+        type: "tool_error",
+        toolCallId: "call-discord-1",
         message: "Webhook không hợp lệ.",
-        finishedAt: "2026-04-01T01:05:01.000Z",
-      } as FuelSseEventPayload,
-    ]);
-
-    expect(result[0].functionCalls).toEqual([
-      {
-        id: "call-discord-1",
-        name: "send_discord_message_via_webhook",
-        status: "error",
-        input: { content: "Báo cáo test" },
         output: { success: false, message: "Webhook không hợp lệ." },
-        error: "Webhook không hợp lệ.",
-        startedAt: "2026-04-01T01:05:00.000Z",
         finishedAt: "2026-04-01T01:05:01.000Z",
       },
-    ]);
+      {
+        type: "run_error",
+        message: "Webhook không hợp lệ.",
+        finishedAt: "2026-04-01T01:05:01.000Z",
+      },
+    ].reduce(
+      (current, event) =>
+        applyFuelSseEvent(current, "assistant-2", event as FuelSseEventPayload),
+      turns,
+    );
+
+    expect(result[0]).toEqual({
+      id: "assistant-2",
+      role: "assistant",
+      run: {
+        status: "error",
+        error: "Webhook không hợp lệ.",
+        finishedAt: "2026-04-01T01:05:01.000Z",
+        tools: [
+          {
+            id: "call-discord-1",
+            tool: "send_discord_report",
+            name: "send_discord_message_via_webhook",
+            status: "error",
+            input: { content: "Báo cáo test" },
+            output: { success: false, message: "Webhook không hợp lệ." },
+            error: "Webhook không hợp lệ.",
+            startedAt: "2026-04-01T01:05:00.000Z",
+            finishedAt: "2026-04-01T01:05:01.000Z",
+          },
+        ],
+      },
+    });
   });
 });

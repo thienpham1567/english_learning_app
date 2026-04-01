@@ -1,11 +1,15 @@
 import { headers } from "next/headers";
+import type {
+  ResponseFunctionToolCallOutputItem,
+  ResponseInputItem,
+} from "openai/resources/responses/responses";
 
 import { auth } from "@/lib/auth";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { createChatSse } from "@/lib/chat/create-chat-sse";
 import { checkRateLimit } from "@/lib/fuel-prices/rate-limiter";
-import { writeSseEvent, streamTextChunks } from "@/lib/fuel-prices/sse-helpers";
+import { writeSseEvent } from "@/lib/fuel-prices/sse-helpers";
 import {
   FUEL_TOOLS,
   FUEL_PRICE_INSTRUCTIONS,
@@ -19,7 +23,23 @@ const MAX_TOOL_STEPS = 5;
 const ERROR_MESSAGE =
   "Cô Kiều đang bị lỗi kỹ thuật rồi 😵 Thử lại sau nha!";
 
-// ── Request Validation ──────────────────────────────────────
+type ResponseFunctionCall = {
+  type: "function_call";
+  id: string;
+  call_id: string;
+  name: string;
+  arguments: string;
+};
+
+type ResponseOutputText = {
+  type: "output_text";
+  text: string;
+};
+
+type ResponseMessage = {
+  type: "message";
+  content: ResponseOutputText[];
+};
 
 type FuelChatRequestBody = {
   messages?: unknown;
@@ -44,15 +64,13 @@ function parseRequestBody(body: FuelChatRequestBody | null) {
   return { messages, discordWebhookUrl };
 }
 
-// ── Error SSE Response ──────────────────────────────────────
-
 function createErrorSseResponse(message: string) {
   const encoder = new TextEncoder();
   return createChatSse(
     new ReadableStream<Uint8Array>({
       start(controller) {
         writeSseEvent(controller, encoder, {
-          type: "assistant_error",
+          type: "run_error",
           message,
         });
         controller.close();
@@ -61,16 +79,19 @@ function createErrorSseResponse(message: string) {
   );
 }
 
-// ── Agentic Loop ────────────────────────────────────────────
-
 async function runAgenticLoop(
   controller: ReadableStreamDefaultController<Uint8Array>,
   encoder: TextEncoder,
   messages: FuelChatMessage[],
   discordWebhookUrl?: string,
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let currentInput: any[] = buildFuelChatInput(messages);
+  let currentInput: ResponseInputItem[] = buildFuelChatInput(messages);
+  let lastToolCallId: string | null = null;
+
+  writeSseEvent(controller, encoder, {
+    type: "run_start",
+    startedAt: new Date().toISOString(),
+  });
 
   for (let step = 0; step < MAX_TOOL_STEPS; step++) {
     const isLastStep = step === MAX_TOOL_STEPS - 1;
@@ -82,91 +103,97 @@ async function runAgenticLoop(
       tools: FUEL_TOOLS,
     });
 
-    const functionCalls = response.output.filter(
-      (o) => o.type === "function_call",
-    );
+    const functionCalls = response.output.filter(isFunctionCallItem);
 
-    // ── Final text response (no tool calls or last allowed step) ──
-    if (functionCalls.length === 0 || isLastStep) {
+    if (functionCalls.length === 0) {
       const finalText = extractTextFromResponse(response.output);
-      if (finalText) {
-        await streamTextChunks(controller, encoder, finalText);
+
+      if (finalText && lastToolCallId) {
+        writeSseEvent(controller, encoder, {
+          type: "tool_result",
+          toolCallId: lastToolCallId,
+          resultMarkdown: finalText,
+          finishedAt: new Date().toISOString(),
+        });
       }
-      writeSseEvent(controller, encoder, { type: "assistant_done" });
+
+      writeSseEvent(controller, encoder, {
+        type: "run_done",
+        finishedAt: new Date().toISOString(),
+      });
       return;
     }
 
-    // ── Execute tool calls ──
-    const toolOutputs = await executeToolCalls(
+    const execution = await executeToolCalls(
       functionCalls,
       controller,
       encoder,
       discordWebhookUrl,
     );
 
-    // Accumulate input for next iteration
+    lastToolCallId = execution.lastToolCallId ?? lastToolCallId;
+
     currentInput = [
       ...currentInput,
-      ...response.output.map((item) => {
-        if (item.type === "function_call") {
-          return {
-            type: "function_call" as const,
-            id: item.id,
-            call_id: item.call_id,
-            name: item.name,
-            arguments: item.arguments,
-          };
-        }
-        return item;
-      }),
-      ...toolOutputs,
+      ...functionCalls.map(
+        (item): ResponseInputItem => ({
+          type: "function_call",
+          id: item.id,
+          call_id: item.call_id,
+          name: item.name,
+          arguments: item.arguments,
+        }),
+      ),
+      ...execution.toolOutputs,
     ];
+
+    if (isLastStep) {
+      writeSseEvent(controller, encoder, {
+        type: "run_error",
+        message: "AI cần thêm bước xử lý nhưng đã chạm giới hạn tool steps.",
+        finishedAt: new Date().toISOString(),
+      });
+      return;
+    }
   }
 }
 
-// ── Helper: extract text from response output ───────────────
-
-function extractTextFromResponse(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  output: any[],
-): string {
+function extractTextFromResponse(output: unknown[]): string {
   let text = "";
   for (const item of output) {
-    if (item.type === "message") {
-      for (const content of item.content) {
-        if (content.type === "output_text") {
-          text += content.text;
-        }
+    if (!isMessageItem(item)) continue;
+
+    for (const content of item.content) {
+      if (content.type === "output_text") {
+        text += content.text;
       }
     }
   }
   return text;
 }
 
-// ── Helper: execute tool calls with SSE status updates ──────
-
 async function executeToolCalls(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  functionCalls: any[],
+  functionCalls: ResponseFunctionCall[],
   controller: ReadableStreamDefaultController<Uint8Array>,
   encoder: TextEncoder,
   discordWebhookUrl?: string,
 ) {
   const toolOutputs: Array<{
-    type: "function_call_output";
+    type: ResponseFunctionToolCallOutputItem["type"];
     call_id: string;
-    output: string;
+    output: ResponseFunctionToolCallOutputItem["output"];
   }> = [];
+  let lastToolCallId: string | null = null;
 
   for (const fc of functionCalls) {
     const args = JSON.parse(fc.arguments || "{}") as Record<string, unknown>;
     const startedAt = new Date().toISOString();
-    const functionName = getFunctionName(fc.name);
 
     writeSseEvent(controller, encoder, {
-      type: "function_call_start",
-      callId: fc.call_id,
-      name: functionName,
+      type: "tool_start",
+      toolCallId: fc.call_id,
+      tool: fc.name,
+      name: getFunctionName(fc.name),
       input: args,
       startedAt,
     });
@@ -174,21 +201,22 @@ async function executeToolCalls(
     try {
       const result = await executeFuelTool(fc.name, args, { discordWebhookUrl });
       const finishedAt = new Date().toISOString();
-      const parsedOutput = safeParseJson(result) ?? { raw: result };
+      const parsedOutput = safeParseJson(result.content) ?? { raw: result.content };
 
       writeSseEvent(controller, encoder, {
-        type: "function_call_result",
-        callId: fc.call_id,
-        name: functionName,
-        input: args,
+        type: "tool_result",
+        toolCallId: fc.call_id,
         output: parsedOutput,
+        resultPreview: result.resultPreview,
         finishedAt,
       });
+
+      lastToolCallId = fc.call_id;
 
       toolOutputs.push({
         type: "function_call_output",
         call_id: fc.call_id,
-        output: result,
+        output: result.content,
       });
     } catch (error) {
       const message =
@@ -196,12 +224,10 @@ async function executeToolCalls(
       const finishedAt = new Date().toISOString();
 
       writeSseEvent(controller, encoder, {
-        type: "function_call_error",
-        callId: fc.call_id,
-        name: functionName,
-        input: args,
-        output: { success: false, message },
+        type: "tool_error",
+        toolCallId: fc.call_id,
         message,
+        output: { success: false, message },
         finishedAt,
       });
 
@@ -213,7 +239,10 @@ async function executeToolCalls(
     }
   }
 
-  return toolOutputs;
+  return {
+    toolOutputs,
+    lastToolCallId,
+  };
 }
 
 function getFunctionName(toolName: string) {
@@ -244,7 +273,33 @@ function safeParseJson(value: string): Record<string, unknown> | null {
   return null;
 }
 
-// ── POST Handler ────────────────────────────────────────────
+function isFunctionCallItem(value: unknown): value is ResponseFunctionCall {
+  if (typeof value !== "object" || value === null) return false;
+  const item = value as Record<string, unknown>;
+  return (
+    item.type === "function_call" &&
+    typeof item.id === "string" &&
+    typeof item.call_id === "string" &&
+    typeof item.name === "string" &&
+    typeof item.arguments === "string"
+  );
+}
+
+function isMessageItem(value: unknown): value is ResponseMessage {
+  if (typeof value !== "object" || value === null) return false;
+  const item = value as Record<string, unknown>;
+  return (
+    item.type === "message" &&
+    Array.isArray(item.content) &&
+    item.content.every(isOutputTextItem)
+  );
+}
+
+function isOutputTextItem(value: unknown): value is ResponseOutputText {
+  if (typeof value !== "object" || value === null) return false;
+  const item = value as Record<string, unknown>;
+  return item.type === "output_text" && typeof item.text === "string";
+}
 
 export async function POST(req: Request) {
   try {
@@ -253,7 +308,6 @@ export async function POST(req: Request) {
       return new Response("Unauthorized", { status: 401 });
     }
 
-    // Rate limiting
     const rateCheck = checkRateLimit(session.user.id);
     if (!rateCheck.allowed) {
       return createErrorSseResponse(
@@ -274,13 +328,13 @@ export async function POST(req: Request) {
       new ReadableStream<Uint8Array>({
         async start(controller) {
           try {
-            writeSseEvent(controller, encoder, { type: "assistant_start" });
             await runAgenticLoop(controller, encoder, messages, discordWebhookUrl);
           } catch (error) {
             console.error("Fuel price API error:", error);
             writeSseEvent(controller, encoder, {
-              type: "assistant_error",
+              type: "run_error",
               message: ERROR_MESSAGE,
+              finishedAt: new Date().toISOString(),
             });
           } finally {
             controller.close();

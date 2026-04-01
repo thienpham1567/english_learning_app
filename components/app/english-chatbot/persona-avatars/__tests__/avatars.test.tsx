@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 
-import { SimonAvatar } from "@/components/app/persona-avatars/SimonAvatar";
-import { ChristineAvatar } from "@/components/app/persona-avatars/ChristineAvatar";
-import { EddieAvatar } from "@/components/app/persona-avatars/EddieAvatar";
+import { SimonAvatar } from "@/components/app/english-chatbot/persona-avatars/SimonAvatar";
+import { ChristineAvatar } from "@/components/app/english-chatbot/persona-avatars/ChristineAvatar";
+import { EddieAvatar } from "@/components/app/english-chatbot/persona-avatars/EddieAvatar";
 import { renderUi } from "@/test/render";
 
 describe("Persona avatars", () => {

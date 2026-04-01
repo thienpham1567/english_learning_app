@@ -1,7 +1,7 @@
 import { screen, fireEvent } from "@testing-library/react";
 import { expect, it, vi, describe } from "vitest";
 
-import { AppSidebar } from "@/components/app/AppSidebar";
+import { AppSidebar } from "@/components/app/shared/AppSidebar";
 import { renderUi } from "@/test/render";
 
 vi.mock("next/navigation", () => ({
@@ -22,7 +22,7 @@ describe("AppSidebar", () => {
       "focus-visible:outline",
       "focus-visible:outline-2",
       "focus-visible:outline-offset-2",
-      "focus-visible:outline-[var(--accent)]",
+      "focus-visible:outline-(--accent)",
     );
   });
 

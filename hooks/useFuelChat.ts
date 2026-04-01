@@ -3,22 +3,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { applyFuelSseEvent } from "@/lib/fuel-prices/timeline";
-import type {
-  FuelFunctionCall,
-  FuelSseEventPayload,
-} from "@/lib/fuel-prices/types";
-
-/* ── Types ── */
-export type ChatMessage = {
-  id: string;
-  role: "user" | "assistant";
-  text: string;
-  functionCalls?: FuelFunctionCall[];
-};
+import { buildFuelChatHistory } from "@/lib/fuel-prices/history";
+import type { FuelChatTurn, FuelSseEventPayload } from "@/lib/fuel-prices/types";
 
 const ERROR_MESSAGE = "Hệ thống đang gặp sự cố kỹ thuật. Vui lòng thử lại sau!";
 
-/* ── SSE Parser ── */
 function parseSsePayloads(chunk: string) {
   return chunk
     .split("\n")
@@ -27,14 +16,12 @@ function parseSsePayloads(chunk: string) {
     .filter(Boolean);
 }
 
-/* ── Hook ── */
 export function useFuelChat() {
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [messages, setMessages] = useState<FuelChatTurn[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  // Discord webhook URL (persisted in localStorage)
   const [discordWebhookUrl, setDiscordWebhookUrl] = useState(() => {
     if (typeof window !== "undefined") {
       return localStorage.getItem("fuelChatDiscordWebhookUrl") || "";
@@ -48,7 +35,6 @@ export function useFuelChat() {
     }
   }, [discordWebhookUrl]);
 
-  // Scroll management
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -57,9 +43,10 @@ export function useFuelChat() {
 
   const lastMsg = messages.at(-1);
   const streamingHasStarted =
-    isLoading && lastMsg?.role === "assistant" && lastMsg.text.length > 0;
+    isLoading &&
+    lastMsg?.role === "assistant" &&
+    lastMsg.run.tools.length > 0;
 
-  // Auto-scroll when new content arrives
   useEffect(() => {
     const bottom = bottomRef.current;
     if (
@@ -93,25 +80,25 @@ export function useFuelChat() {
 
   const clearError = useCallback(() => setError(null), []);
 
-  // ── Send message ──
   const send = useCallback(
     async (text?: string) => {
       const t = (text ?? input).trim();
       if (!t || isLoading) return;
 
-      const userMessage: ChatMessage = {
+      const userMessage: FuelChatTurn = {
         id: crypto.randomUUID(),
         role: "user",
         text: t,
       };
       const assistantMessageId = crypto.randomUUID();
+      const assistantTurn: FuelChatTurn = {
+        id: assistantMessageId,
+        role: "assistant",
+        run: { status: "pending", tools: [] },
+      };
       const allMessages = [...messages, userMessage];
 
-      setMessages((curr) => [
-        ...curr,
-        userMessage,
-        { id: assistantMessageId, role: "assistant", text: "", functionCalls: [] },
-      ]);
+      setMessages((curr) => [...curr, userMessage, assistantTurn]);
       setInput("");
       if (textareaRef.current) textareaRef.current.style.height = "auto";
       setError(null);
@@ -122,10 +109,7 @@ export function useFuelChat() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            messages: allMessages.map((m) => ({
-              role: m.role,
-              text: m.text,
-            })),
+            messages: buildFuelChatHistory(allMessages),
             discordWebhookUrl: discordWebhookUrl || undefined,
           }),
         });
@@ -141,14 +125,6 @@ export function useFuelChat() {
       } catch (streamError) {
         console.error("Fuel price chat error:", streamError);
         setError(ERROR_MESSAGE);
-        setMessages((curr) =>
-          curr.filter(
-            (m) =>
-              m.id !== assistantMessageId ||
-              m.text.trim().length > 0 ||
-              (m.functionCalls?.length ?? 0) > 0,
-          ),
-        );
       } finally {
         setIsLoading(false);
       }
@@ -157,7 +133,6 @@ export function useFuelChat() {
   );
 
   return {
-    // State
     messages,
     input,
     isLoading,
@@ -166,13 +141,9 @@ export function useFuelChat() {
     streamingHasStarted,
     discordWebhookUrl,
     hasMessages: messages.length > 0,
-
-    // Refs
     bottomRef,
     textareaRef,
     scrollContainerRef,
-
-    // Actions
     setInput,
     send,
     handleScroll,
@@ -183,12 +154,10 @@ export function useFuelChat() {
   };
 }
 
-// ── SSE Stream Processor ────────────────────────────────────
-
 async function processSseStream(
   body: ReadableStream<Uint8Array>,
   assistantMessageId: string,
-  setMessages: React.Dispatch<React.SetStateAction<ChatMessage[]>>,
+  setMessages: React.Dispatch<React.SetStateAction<FuelChatTurn[]>>,
   setError: React.Dispatch<React.SetStateAction<string | null>>,
 ) {
   const reader = body.getReader();
@@ -210,27 +179,18 @@ async function processSseStream(
       for (const payload of parseSsePayloads(rawEvent)) {
         const event = JSON.parse(payload) as FuelSseEventPayload;
 
-        if (event.type !== "assistant_error" && event.type !== "assistant_done") {
-          setMessages((curr) => applyFuelSseEvent(curr, assistantMessageId, event));
-        }
+        setMessages((curr) => applyFuelSseEvent(curr, assistantMessageId, event));
 
-        if (event.type === "assistant_error") {
+        if (event.type === "run_error") {
           setError(event.message);
-          setMessages((curr) =>
-            curr.filter(
-              (m) =>
-                m.id !== assistantMessageId ||
-                m.text.trim().length > 0 ||
-                (m.functionCalls?.length ?? 0) > 0,
-            ),
-          );
           finished = true;
         }
 
-        if (event.type === "assistant_done") {
+        if (event.type === "run_done") {
           finished = true;
         }
       }
+
       eventBoundary = buffer.indexOf("\n\n");
     }
   }

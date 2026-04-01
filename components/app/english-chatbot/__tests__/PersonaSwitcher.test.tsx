@@ -2,7 +2,7 @@ import { screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { describe, expect, it, vi } from "vitest";
 
-import { PersonaSwitcher } from "@/components/app/PersonaSwitcher";
+import { PersonaSwitcher } from "@/components/app/english-chatbot/PersonaSwitcher";
 import { renderUi } from "@/test/render";
 
 describe("PersonaSwitcher", () => {

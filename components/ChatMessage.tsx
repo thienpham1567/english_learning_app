@@ -4,7 +4,7 @@ import { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import { motion } from "motion/react";
 import { Check, Copy, GraduationCap } from "lucide-react";
-import { useUser } from "@/components/app/UserContext";
+import { useUser } from "@/components/app/shared/UserContext";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 import type { Persona } from "@/lib/chat/personas";
 
