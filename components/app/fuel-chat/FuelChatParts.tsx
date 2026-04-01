@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Copy, Check, ExternalLink } from "lucide-react";
-import { motion } from "motion/react";
+import { motion, AnimatePresence } from "motion/react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
@@ -87,14 +87,24 @@ export function CopyButton({ text }: { text: string }) {
 export function FuelExecutionPanel({ run }: { run: FuelAssistantRun }) {
   if (run.tools.length === 0) {
     return (
-      <div className="rounded-[22px] border border-emerald-200/80 bg-white/90 px-4 py-3 shadow-[0_12px_30px_rgba(15,23,42,0.06)]">
+      <motion.div
+        className="rounded-[22px] border border-emerald-200/80 bg-white/90 px-4 py-3 shadow-[0_12px_30px_rgba(15,23,42,0.06)]"
+        initial={{ opacity: 0, y: 10, scale: 0.97 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
         <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-700/80">
+          <motion.span
+            className="inline-block size-1.5 rounded-full bg-emerald-500"
+            animate={{ opacity: [0.3, 1, 0.3] }}
+            transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+          />
           <span>{run.status === "running" ? "Running" : "Pending"}</span>
         </div>
         <p className="mt-2 text-sm text-(--text-secondary)">
           Đang chuẩn bị gọi tool đầu tiên
         </p>
-      </div>
+      </motion.div>
     );
   }
 
@@ -106,52 +116,145 @@ export function FuelExecutionPanel({ run }: { run: FuelAssistantRun }) {
         : "Running";
 
   return (
-    <div className="w-full space-y-3">
+    <motion.div
+      className="w-full space-y-3"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.25 }}
+    >
       <div className="flex items-center justify-between px-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-700/80">
-        <span>{statusLabel}</span>
+        <div className="flex items-center gap-2">
+          {run.status === "running" && (
+            <motion.span
+              className="inline-block size-1.5 rounded-full bg-emerald-500"
+              animate={{ opacity: [0.3, 1, 0.3] }}
+              transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+            />
+          )}
+          <span>{statusLabel}</span>
+        </div>
         <span>{formatTime(run.finishedAt ?? run.startedAt)}</span>
       </div>
 
-      {run.tools.map((tool) => (
-        <FuelToolCard key={tool.id} step={tool} />
+      {run.tools.map((tool, i) => (
+        <FuelToolCard key={tool.id} step={tool} index={i} />
       ))}
+    </motion.div>
+  );
+}
+
+/* ── Collapsible Section ── */
+function CollapsibleSection({
+  label,
+  defaultOpen = false,
+  children,
+}: {
+  label: string;
+  defaultOpen?: boolean;
+  children: React.ReactNode;
+}) {
+  const [open, setOpen] = useState(defaultOpen);
+
+  return (
+    <div>
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="group flex w-full items-center gap-1.5 text-left"
+      >
+        <motion.span
+          className="inline-block text-[9px] text-stone-400"
+          animate={{ rotate: open ? 90 : 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          ▶
+        </motion.span>
+        <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-500 transition group-hover:text-stone-700">
+          {label}
+        </span>
+      </button>
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.div
+            className="overflow-hidden"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: "easeOut" }}
+          >
+            <div className="pt-2">{children}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
 
-function SectionLabel({ label }: { label: string }) {
+/* ── Tool Card ── */
+function FuelToolCard({
+  step,
+  index,
+}: {
+  step: FuelToolExecutionStep;
+  index: number;
+}) {
   return (
-    <div className="text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-500">
-      {label}
-    </div>
-  );
-}
-
-function FuelToolCard({ step }: { step: FuelToolExecutionStep }) {
-  return (
-    <div className="rounded-[22px] border border-emerald-200/80 bg-white/95 px-4 py-4 shadow-[0_16px_36px_rgba(15,23,42,0.08)]">
+    <motion.div
+      className="rounded-[22px] border border-emerald-200/80 bg-white/95 px-4 py-4 shadow-[0_16px_36px_rgba(15,23,42,0.08)]"
+      initial={{ opacity: 0, y: 12, scale: 0.97 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ duration: 0.35, delay: index * 0.08, ease: "easeOut" }}
+    >
       <div className="flex items-center gap-2 text-sm font-semibold text-(--ink)">
         <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-1 text-[10px] uppercase tracking-[0.14em] text-emerald-700">
           Tool
         </span>
         <span>{step.name}</span>
+        {step.status === "running" && (
+          <motion.span
+            className="ml-auto flex items-center gap-0.5"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+          >
+            {[0, 1, 2].map((i) => (
+              <motion.span
+                key={i}
+                className="inline-block size-1 rounded-full bg-emerald-500"
+                animate={{ opacity: [0.3, 1, 0.3] }}
+                transition={{
+                  duration: 1,
+                  repeat: Infinity,
+                  delay: i * 0.15,
+                  ease: "easeInOut",
+                }}
+              />
+            ))}
+          </motion.span>
+        )}
       </div>
 
       <div className="mt-3 space-y-3">
-        <div>
-          <SectionLabel label="Thinking" />
-          <ul className="mt-2 space-y-1 text-sm text-(--text-secondary)">
+        <CollapsibleSection label="Thinking">
+          <ul className="space-y-1 text-sm text-(--text-secondary)">
             {step.thinking.length > 0 ? (
-              step.thinking.map((line) => <li key={line}>{line}</li>)
+              step.thinking.map((line, i) => (
+                <motion.li
+                  key={line}
+                  initial={{ opacity: 0, x: -4 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05, duration: 0.2 }}
+                >
+                  {line}
+                </motion.li>
+              ))
             ) : (
               <li>Chưa có log xử lý chi tiết.</li>
             )}
           </ul>
-        </div>
+        </CollapsibleSection>
 
-        <div>
-          <SectionLabel label="Source" />
-          <div className="mt-2 space-y-2 text-sm text-(--text-secondary)">
+        <CollapsibleSection label="Source">
+          <div className="space-y-2 text-sm text-(--text-secondary)">
             {step.sources.length > 0 ? (
               step.sources.map((source) => (
                 <div key={`${source.label}-${source.href ?? ""}`}>
@@ -175,24 +278,27 @@ function FuelToolCard({ step }: { step: FuelToolExecutionStep }) {
               <p>Chưa có metadata nguồn.</p>
             )}
           </div>
-        </div>
+        </CollapsibleSection>
 
-        <div>
-          <SectionLabel label="Rendering" />
-          <p className="mt-2 text-sm text-(--text-secondary)">
+        <CollapsibleSection label="Rendering">
+          <p className="text-sm text-(--text-secondary)">
             {step.rendering ?? "Đang chờ AI dựng kết quả cuối"}
           </p>
-        </div>
+        </CollapsibleSection>
 
-        <div>
-          <SectionLabel label="Result" />
-          <div className="mt-2 rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3">
+        <CollapsibleSection label="Result" defaultOpen>
+          <div className="rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3">
             {step.resultMarkdown ? (
-              <div className={RESULT_MARKDOWN_CLASSES}>
+              <motion.div
+                className={RESULT_MARKDOWN_CLASSES}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
                 <ReactMarkdown remarkPlugins={[remarkGfm]}>
                   {step.resultMarkdown}
                 </ReactMarkdown>
-              </div>
+              </motion.div>
             ) : step.error ? (
               <p className="text-sm text-red-700">{step.error}</p>
             ) : (
@@ -201,8 +307,9 @@ function FuelToolCard({ step }: { step: FuelToolExecutionStep }) {
               </p>
             )}
           </div>
-        </div>
+        </CollapsibleSection>
       </div>
-    </div>
+    </motion.div>
   );
 }
+
