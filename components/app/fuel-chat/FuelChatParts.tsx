@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Copy, Check, ExternalLink, CheckCircle2, XCircle } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import ReactMarkdown from "react-markdown";
@@ -86,29 +86,23 @@ export function CopyButton({ text }: { text: string }) {
 
 export function FuelExecutionPanel({ run }: { run: FuelAssistantRun }) {
   if (run.tools.length === 0) {
-    if (run.status === "done") return null;
+    // Chỉ hiển thị hộp này nếu bị lỗi (không gọi được tool nào).
+    // Nếu đang chạy bình thường, chúng ta không hiện hộp chờ (để tránh bị chớp UI)
+    if (run.status !== "error") return null;
 
     return (
       <motion.div
-        className="mb-3 rounded-[22px] border border-emerald-200/80 bg-white/90 px-4 py-3 shadow-[0_12px_30px_rgba(15,23,42,0.06)]"
+        className="mb-3 rounded-[22px] border border-red-200/80 bg-red-50/90 px-4 py-3 shadow-[0_12px_30px_rgba(239,68,68,0.06)]"
         initial={{ opacity: 0, y: 10, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
-        <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-700/80">
-          {run.status === "running" && (
-            <motion.span
-              className="inline-block size-1.5 rounded-full bg-emerald-500"
-              animate={{ opacity: [0.3, 1, 0.3] }}
-              transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
-            />
-          )}
-          <span>{run.status === "running" ? "Thinking" : "Failed"}</span>
+        <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-red-700/80">
+          <XCircle size={14} className="text-red-500" />
+          <span>Failed</span>
         </div>
-        <p className="mt-2 text-sm text-(--text-secondary)">
-          {run.status === "running"
-            ? "Cô Kiều đang suy nghĩ..."
-            : run.error || "Rất tiếc, có lỗi kĩ thuật xảy ra."}
+        <p className="mt-2 text-sm text-red-700/90">
+          {run.error || "Rất tiếc, có lỗi kĩ thuật xảy ra từ máy chủ."}
         </p>
       </motion.div>
     );
@@ -149,17 +143,36 @@ export function FuelExecutionPanel({ run }: { run: FuelAssistantRun }) {
   );
 }
 
+/* ── Active Phase Detection ── */
+type Phase = "thinking" | "source" | "rendering" | "result";
+
+function getActivePhase(step: FuelToolExecutionStep): Phase {
+  if (step.resultMarkdown || step.error || step.status === "done" || step.status === "error") return "result";
+  if (step.rendering) return "rendering";
+  if (step.sources.length > 0) return "source";
+  return "thinking";
+}
+
 /* ── Collapsible Section ── */
 function CollapsibleSection({
   label,
   defaultOpen = false,
+  isActive,
   children,
 }: {
   label: string;
   defaultOpen?: boolean;
+  isActive?: boolean;
   children: React.ReactNode;
 }) {
-  const [open, setOpen] = useState(defaultOpen);
+  const [open, setOpen] = useState(defaultOpen || isActive === true);
+
+  // Sync open state when isActive changes
+  useEffect(() => {
+    if (isActive !== undefined) {
+      setOpen(isActive);
+    }
+  }, [isActive]);
 
   return (
     <div>
@@ -175,8 +188,18 @@ function CollapsibleSection({
         >
           ▶
         </motion.span>
-        <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-stone-500 transition group-hover:text-stone-700">
+        <span className={[
+          "text-[10px] font-semibold uppercase tracking-[0.18em] transition group-hover:text-stone-700",
+          isActive ? "text-emerald-600" : "text-stone-500",
+        ].join(" ")}>
           {label}
+          {isActive && (
+            <motion.span
+              className="ml-1.5 inline-block size-1 rounded-full bg-emerald-500 align-middle"
+              animate={{ opacity: [0.3, 1, 0.3] }}
+              transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }}
+            />
+          )}
         </span>
       </button>
       <AnimatePresence initial={false}>
@@ -205,6 +228,10 @@ function FuelToolCard({
   index: number;
 }) {
   const [isExpanded, setIsExpanded] = useState(step.status === "running");
+  const activePhase = useMemo(() => getActivePhase(step), [
+    step.status, step.thinking.length, step.sources.length, step.rendering, step.resultMarkdown, step.error,
+  ]);
+  const isRunning = step.status === "running";
 
   // Automatically expand when running, collapse when done
   useEffect(() => {
@@ -285,7 +312,7 @@ function FuelToolCard({
             transition={{ duration: 0.3, ease: "easeOut" }}
           >
             <div className="mt-3 space-y-3 border-t border-emerald-100/60 pt-3">
-              <CollapsibleSection label="Thinking">
+              <CollapsibleSection label="Thinking" isActive={isRunning && activePhase === "thinking"}>
                 <ul className="space-y-1 text-sm text-(--text-secondary)">
                   {step.thinking.length > 0 ? (
                     step.thinking.map((line, i) => (
@@ -304,7 +331,7 @@ function FuelToolCard({
                 </ul>
               </CollapsibleSection>
 
-              <CollapsibleSection label="Source">
+              <CollapsibleSection label="Source" isActive={isRunning && activePhase === "source"}>
                 <div className="space-y-2 text-sm text-(--text-secondary)">
                   {step.sources.length > 0 ? (
                     step.sources.map((source) => (
@@ -335,13 +362,13 @@ function FuelToolCard({
                 </div>
               </CollapsibleSection>
 
-              <CollapsibleSection label="Rendering">
+              <CollapsibleSection label="Rendering" isActive={isRunning && activePhase === "rendering"}>
                 <p className="text-sm text-(--text-secondary)">
                   {step.rendering ?? "Đang chờ AI dựng kết quả cuối"}
                 </p>
               </CollapsibleSection>
 
-              <CollapsibleSection label="Result" defaultOpen>
+              <CollapsibleSection label="Result" isActive={activePhase === "result"} defaultOpen={!isRunning}>
                 <div className="rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3">
                   {step.resultMarkdown ? (
                     <motion.div

@@ -467,13 +467,13 @@ export function DictionaryResultCard({
                   {vocabulary.level}
                 </Tag>
               )}
-              <Tag variant="outlined" className="rounded-full! px-3! py-1!">
-                  {vocabulary.entryType === "idiom"
-                    ? "idiom"
-                    : vocabulary.entryType === "phrasal_verb"
-                      ? "phrasal verb"
-                      : vocabulary.partOfSpeech ?? "word"}
-                </Tag>
+              <Tag variant="solid" className="rounded-full! px-3! py-1!">
+                {vocabulary.entryType === "idiom"
+                  ? "idiom"
+                  : vocabulary.entryType === "phrasal_verb"
+                    ? "phrasal verb"
+                    : (vocabulary.partOfSpeech ?? "word")}
+              </Tag>
               {vocabulary.register && (
                 <Tag
                   variant="outlined"
@@ -486,6 +486,19 @@ export function DictionaryResultCard({
                 <Tag variant="outlined" className="!rounded-full !px-3 !py-1">
                   {numberLabel}
                 </Tag>
+              )}
+              {onOpenThesaurus && (
+                <motion.button
+                  type="button"
+                  onClick={onOpenThesaurus}
+                  aria-label="Thesaurus"
+                  className="flex items-center gap-1.5 rounded-full bg-linear-to-r from-amber-50 to-orange-50 px-3 py-1 text-xs font-semibold text-amber-700 ring-1 ring-amber-200/60 transition hover:from-amber-100 hover:to-orange-100 hover:ring-amber-300"
+                  whileHover={{ scale: 1.04, y: -1 }}
+                  whileTap={{ scale: 0.96 }}
+                >
+                  <BookOpen size={12} />
+                  Thesaurus
+                </motion.button>
               )}
               {saved != null && onToggleSaved && (
                 <button
@@ -561,7 +574,7 @@ export function DictionaryResultCard({
             overviewEn={vocabulary.overviewEn}
           />
 
-          {/* Sense tabs + Thesaurus button */}
+          {/* Sense tabs */}
           <div className="mt-6">
             <div className="flex items-center gap-2 border-b border-(--border) pb-3 mb-5 overflow-x-auto">
               <div className="flex gap-2 flex-1 overflow-x-auto">
@@ -582,17 +595,6 @@ export function DictionaryResultCard({
                   </button>
                 ))}
               </div>
-              {onOpenThesaurus && (
-                <button
-                  type="button"
-                  onClick={onOpenThesaurus}
-                  aria-label="Thesaurus"
-                  className="shrink-0 flex items-center gap-1.5 rounded-full border border-(--border-strong) px-3 py-1.5 text-xs font-medium text-(--text-secondary) transition hover:border-(--accent) hover:text-(--accent)"
-                >
-                  <BookOpen size={12} />
-                  Thesaurus
-                </button>
-              )}
             </div>
             {activeSense && (
               <SensePanel key={activeSense.id} sense={activeSense} />
