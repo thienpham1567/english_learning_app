@@ -246,4 +246,39 @@ describe("VocabularyDetailSheet", () => {
     fireEvent.click(screen.getByLabelText("Lưu từ này"));
     expect(onToggleSaved).toHaveBeenCalledOnce();
   });
+
+  it("renders 'Xem trong từ điển' button in the content area when data is loaded", async () => {
+    vi.mocked(http.get).mockResolvedValueOnce({ data: mockVocab });
+    render(
+      <VocabularyDetailSheet
+        query="take off"
+        onClose={vi.fn()}
+        saved={false}
+        onToggleSaved={vi.fn()}
+      />,
+    );
+    await waitFor(() => {
+      expect(screen.getByText("take off")).toBeInTheDocument();
+    });
+    expect(
+      screen.getByRole("button", { name: "Xem trong từ điển" }),
+    ).toBeInTheDocument();
+  });
+
+  it("navigates to dictionary when 'Xem trong từ điển' button is clicked", async () => {
+    vi.mocked(http.get).mockResolvedValueOnce({ data: mockVocab });
+    render(
+      <VocabularyDetailSheet
+        query="take off"
+        onClose={vi.fn()}
+        saved={false}
+        onToggleSaved={vi.fn()}
+      />,
+    );
+    await waitFor(() => {
+      expect(screen.getByText("take off")).toBeInTheDocument();
+    });
+    fireEvent.click(screen.getByRole("button", { name: "Xem trong từ điển" }));
+    expect(mockPush).toHaveBeenCalledWith("/dictionary?q=take%20off");
+  });
 });

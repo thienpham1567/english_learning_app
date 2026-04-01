@@ -238,6 +238,17 @@ export function VocabularyDetailSheet({
                       </div>
                     ))}
                   </div>
+                  <button
+                    onClick={() =>
+                      router.push(
+                        `/dictionary?q=${encodeURIComponent(query ?? "")}`,
+                      )
+                    }
+                    className="flex w-full items-center justify-center gap-2 rounded-(--radius) border border-(--border) py-2.5 text-sm text-(--text-secondary) transition hover:border-(--accent)/40 hover:text-(--accent)"
+                  >
+                    <ExternalLink size={14} aria-hidden="true" />
+                    Xem trong từ điển
+                  </button>
                 </div>
               )}
             </div>
