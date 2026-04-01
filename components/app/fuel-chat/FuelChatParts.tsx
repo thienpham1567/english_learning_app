@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { Copy, Check, ExternalLink } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Copy, Check, ExternalLink, CheckCircle2, XCircle } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -86,23 +86,29 @@ export function CopyButton({ text }: { text: string }) {
 
 export function FuelExecutionPanel({ run }: { run: FuelAssistantRun }) {
   if (run.tools.length === 0) {
+    if (run.status === "done") return null;
+
     return (
       <motion.div
-        className="rounded-[22px] border border-emerald-200/80 bg-white/90 px-4 py-3 shadow-[0_12px_30px_rgba(15,23,42,0.06)]"
+        className="mb-3 rounded-[22px] border border-emerald-200/80 bg-white/90 px-4 py-3 shadow-[0_12px_30px_rgba(15,23,42,0.06)]"
         initial={{ opacity: 0, y: 10, scale: 0.97 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
       >
         <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-700/80">
-          <motion.span
-            className="inline-block size-1.5 rounded-full bg-emerald-500"
-            animate={{ opacity: [0.3, 1, 0.3] }}
-            transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
-          />
-          <span>{run.status === "running" ? "Running" : "Pending"}</span>
+          {run.status === "running" && (
+            <motion.span
+              className="inline-block size-1.5 rounded-full bg-emerald-500"
+              animate={{ opacity: [0.3, 1, 0.3] }}
+              transition={{ duration: 1.4, repeat: Infinity, ease: "easeInOut" }}
+            />
+          )}
+          <span>{run.status === "running" ? "Thinking" : "Failed"}</span>
         </div>
         <p className="mt-2 text-sm text-(--text-secondary)">
-          Đang chuẩn bị gọi tool đầu tiên
+          {run.status === "running"
+            ? "Cô Kiều đang suy nghĩ..."
+            : run.error || "Rất tiếc, có lỗi kĩ thuật xảy ra."}
         </p>
       </motion.div>
     );
@@ -198,21 +204,32 @@ function FuelToolCard({
   step: FuelToolExecutionStep;
   index: number;
 }) {
+  const [isExpanded, setIsExpanded] = useState(step.status === "running");
+
+  // Automatically expand when running, collapse when done
+  useEffect(() => {
+    setIsExpanded(step.status === "running");
+  }, [step.status]);
+
   return (
     <motion.div
-      className="rounded-[22px] border border-emerald-200/80 bg-white/95 px-4 py-4 shadow-[0_16px_36px_rgba(15,23,42,0.08)]"
+      className="rounded-[22px] border border-emerald-200/80 bg-white/95 px-4 py-3.5 shadow-[0_16px_36px_rgba(15,23,42,0.08)]"
       initial={{ opacity: 0, y: 12, scale: 0.97 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.35, delay: index * 0.08, ease: "easeOut" }}
     >
-      <div className="flex items-center gap-2 text-sm font-semibold text-(--ink)">
+      <button
+        type="button"
+        onClick={() => setIsExpanded((v) => !v)}
+        className="flex w-full items-center gap-2 text-left text-sm font-semibold text-(--ink) outline-none"
+      >
         <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-1 text-[10px] uppercase tracking-[0.14em] text-emerald-700">
           Tool
         </span>
         <span>{step.name}</span>
         {step.status === "running" && (
           <motion.span
-            className="ml-auto flex items-center gap-0.5"
+            className="ml-2 flex items-center gap-0.5"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
@@ -231,84 +248,125 @@ function FuelToolCard({
             ))}
           </motion.span>
         )}
-      </div>
+        {step.status === "done" && (
+          <motion.span
+            className="ml-2 text-emerald-500"
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+          >
+            <CheckCircle2 size={14} />
+          </motion.span>
+        )}
+        {step.status === "error" && (
+          <motion.span
+            className="ml-2 text-red-500"
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: 1, scale: 1 }}
+          >
+            <XCircle size={14} />
+          </motion.span>
+        )}
+        <motion.span
+          className="ml-auto inline-block text-[10px] text-stone-400"
+          animate={{ rotate: isExpanded ? 90 : 0 }}
+          transition={{ duration: 0.2 }}
+        >
+          ▶
+        </motion.span>
+      </button>
 
-      <div className="mt-3 space-y-3">
-        <CollapsibleSection label="Thinking">
-          <ul className="space-y-1 text-sm text-(--text-secondary)">
-            {step.thinking.length > 0 ? (
-              step.thinking.map((line, i) => (
-                <motion.li
-                  key={line}
-                  initial={{ opacity: 0, x: -4 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05, duration: 0.2 }}
-                >
-                  {line}
-                </motion.li>
-              ))
-            ) : (
-              <li>Chưa có log xử lý chi tiết.</li>
-            )}
-          </ul>
-        </CollapsibleSection>
-
-        <CollapsibleSection label="Source">
-          <div className="space-y-2 text-sm text-(--text-secondary)">
-            {step.sources.length > 0 ? (
-              step.sources.map((source) => (
-                <div key={`${source.label}-${source.href ?? ""}`}>
-                  {source.href ? (
-                    <a
-                      href={source.href}
-                      target="_blank"
-                      rel="noreferrer"
-                      className="inline-flex items-center gap-1 font-medium text-emerald-700 underline underline-offset-2"
-                    >
-                      <span>{source.label}</span>
-                      <ExternalLink size={12} />
-                    </a>
+      <AnimatePresence initial={false}>
+        {isExpanded && (
+          <motion.div
+            className="overflow-hidden"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: "easeOut" }}
+          >
+            <div className="mt-3 space-y-3 border-t border-emerald-100/60 pt-3">
+              <CollapsibleSection label="Thinking">
+                <ul className="space-y-1 text-sm text-(--text-secondary)">
+                  {step.thinking.length > 0 ? (
+                    step.thinking.map((line, i) => (
+                      <motion.li
+                        key={line}
+                        initial={{ opacity: 0, x: -4 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ delay: i * 0.05, duration: 0.2 }}
+                      >
+                        {line}
+                      </motion.li>
+                    ))
                   ) : (
-                    <span className="font-medium text-(--ink)">{source.label}</span>
+                    <li>Chưa có log xử lý chi tiết.</li>
                   )}
-                  {source.updatedAt && <p className="mt-0.5">{source.updatedAt}</p>}
+                </ul>
+              </CollapsibleSection>
+
+              <CollapsibleSection label="Source">
+                <div className="space-y-2 text-sm text-(--text-secondary)">
+                  {step.sources.length > 0 ? (
+                    step.sources.map((source) => (
+                      <div key={`${source.label}-${source.href ?? ""}`}>
+                        {source.href ? (
+                          <a
+                            href={source.href}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1 font-medium text-emerald-700 underline underline-offset-2"
+                          >
+                            <span>{source.label}</span>
+                            <ExternalLink size={12} />
+                          </a>
+                        ) : (
+                          <span className="font-medium text-(--ink)">
+                            {source.label}
+                          </span>
+                        )}
+                        {source.updatedAt && (
+                          <p className="mt-0.5">{source.updatedAt}</p>
+                        )}
+                      </div>
+                    ))
+                  ) : (
+                    <p>Chưa có metadata nguồn.</p>
+                  )}
                 </div>
-              ))
-            ) : (
-              <p>Chưa có metadata nguồn.</p>
-            )}
-          </div>
-        </CollapsibleSection>
+              </CollapsibleSection>
 
-        <CollapsibleSection label="Rendering">
-          <p className="text-sm text-(--text-secondary)">
-            {step.rendering ?? "Đang chờ AI dựng kết quả cuối"}
-          </p>
-        </CollapsibleSection>
+              <CollapsibleSection label="Rendering">
+                <p className="text-sm text-(--text-secondary)">
+                  {step.rendering ?? "Đang chờ AI dựng kết quả cuối"}
+                </p>
+              </CollapsibleSection>
 
-        <CollapsibleSection label="Result" defaultOpen>
-          <div className="rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3">
-            {step.resultMarkdown ? (
-              <motion.div
-                className={RESULT_MARKDOWN_CLASSES}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <ReactMarkdown remarkPlugins={[remarkGfm]}>
-                  {step.resultMarkdown}
-                </ReactMarkdown>
-              </motion.div>
-            ) : step.error ? (
-              <p className="text-sm text-red-700">{step.error}</p>
-            ) : (
-              <p className="text-sm text-(--text-secondary)">
-                Chưa có kết quả cuối.
-              </p>
-            )}
-          </div>
-        </CollapsibleSection>
-      </div>
+              <CollapsibleSection label="Result" defaultOpen>
+                <div className="rounded-2xl border border-stone-200 bg-stone-50 px-3 py-3">
+                  {step.resultMarkdown ? (
+                    <motion.div
+                      className={RESULT_MARKDOWN_CLASSES}
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {step.resultMarkdown}
+                      </ReactMarkdown>
+                    </motion.div>
+                  ) : step.error ? (
+                    <p className="text-sm text-red-700">{step.error}</p>
+                  ) : (
+                    <p className="text-sm text-(--text-secondary)">
+                      Chưa có kết quả cuối.
+                    </p>
+                  )}
+                </div>
+              </CollapsibleSection>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </motion.div>
   );
 }
