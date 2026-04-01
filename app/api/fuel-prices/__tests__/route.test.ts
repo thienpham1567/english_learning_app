@@ -59,12 +59,28 @@ describe("fuel prices route", () => {
         ],
       });
 
-    mockExecuteFuelTool.mockResolvedValue(
-      JSON.stringify({
+    mockExecuteFuelTool.mockResolvedValue({
+      content: JSON.stringify({
         success: true,
         prices: [{ name: "Xăng RON 95-III", price: "24.332" }],
+        updatedAt: "08:52 01/04/2026",
+        source: "PVOIL (pvoil.com.vn)",
+        articleUrl: "https://www.pvoil.com.vn/tin-gia-xang-dau",
       }),
-    );
+      thinking: [
+        "Đang kiểm tra nguồn giá xăng hiện có",
+        "Đã lấy dữ liệu từ PVOIL",
+      ],
+      sources: [
+        {
+          label: "PVOIL (pvoil.com.vn)",
+          href: "https://www.pvoil.com.vn/tin-gia-xang-dau",
+          updatedAt: "08:52 01/04/2026",
+        },
+      ],
+      renderingHint: "Đang dựng bảng Markdown cho toàn bộ nhiên liệu",
+      resultPreview: "1 loại nhiên liệu đã được cập nhật.",
+    });
 
     vi.doMock("@/lib/openai/client", () => ({
       openAiClient: {

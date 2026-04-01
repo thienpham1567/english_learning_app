@@ -3,7 +3,11 @@ import {
   getPreviousPriceSnapshot,
 } from "@/lib/fuel-prices/scraper";
 import { sendDiscordMessage } from "@/lib/fuel-prices/discord";
-import type { FuelChatMessage, ToolExecutorOptions } from "@/lib/fuel-prices/types";
+import type {
+  FuelChatMessage,
+  FuelToolExecutionOutput,
+  ToolExecutorOptions,
+} from "@/lib/fuel-prices/types";
 
 // Re-export for convenience (consumers can import from a single place)
 export { FUEL_TOOLS } from "@/lib/fuel-prices/tool-definitions";
@@ -16,7 +20,7 @@ export async function executeFuelTool(
   toolName: string,
   args: Record<string, unknown>,
   options?: ToolExecutorOptions,
-): Promise<string> {
+): Promise<FuelToolExecutionOutput> {
   switch (toolName) {
     case "get_fuel_prices":
       return handleGetFuelPrices();
@@ -31,7 +35,11 @@ export async function executeFuelTool(
       return handleCalculateFuelCost(args);
 
     default:
-      return JSON.stringify({ error: `Unknown tool: ${toolName}` });
+      return {
+        content: JSON.stringify({ error: `Unknown tool: ${toolName}` }),
+        thinking: ["Không nhận diện được công cụ được yêu cầu."],
+        resultPreview: "Tool không hợp lệ.",
+      };
   }
 }
 
@@ -49,32 +57,64 @@ export function buildFuelChatInput(messages: FuelChatMessage[]) {
 
 // ── Tool Handlers (private) ─────────────────────────────────
 
-async function handleGetFuelPrices(): Promise<string> {
+async function handleGetFuelPrices(): Promise<FuelToolExecutionOutput> {
   const result = await scrapeFuelPrices();
-  return JSON.stringify(result);
+  return {
+    content: JSON.stringify(result),
+    thinking: [
+      "Đang kiểm tra nguồn giá xăng hiện có",
+      `Đã lấy dữ liệu từ ${result.source}`,
+      "Đang chuẩn hóa dữ liệu để hiển thị đủ tất cả loại nhiên liệu",
+    ],
+    sources: [
+      {
+        label: result.source,
+        href: result.articleUrl ?? "https://www.pvoil.com.vn/tin-gia-xang-dau",
+        updatedAt: result.updatedAt,
+      },
+    ],
+    renderingHint: "Đang dựng bảng Markdown cho toàn bộ nhiên liệu",
+    resultPreview: `${result.prices.length} loại nhiên liệu đã được cập nhật.`,
+  };
 }
 
 async function handleSendDiscordReport(
   args: Record<string, unknown>,
   options?: ToolExecutorOptions,
-): Promise<string> {
+): Promise<FuelToolExecutionOutput> {
   const content =
     typeof args.content === "string" ? args.content : String(args.content);
   const result = await sendDiscordMessage(content, options?.discordWebhookUrl);
-  return JSON.stringify(result);
+  return {
+    content: JSON.stringify(result),
+    thinking: [
+      "Đang kiểm tra cấu hình webhook Discord",
+      "Đang gửi payload báo cáo giá xăng",
+    ],
+    renderingHint: "Đang tổng hợp trạng thái gửi báo cáo lên Discord",
+    resultPreview: result.message,
+  };
 }
 
-async function handleCompareFuelPrices(): Promise<string> {
+async function handleCompareFuelPrices(): Promise<FuelToolExecutionOutput> {
   const current = await scrapeFuelPrices();
   const previous = getPreviousPriceSnapshot();
 
   if (!previous) {
-    return JSON.stringify({
-      success: false,
-      message:
-        "Chưa có dữ liệu cũ để so sánh. Hãy tra cứu giá ít nhất 2 lần (cách nhau > 30 phút) để có dữ liệu so sánh.",
-      current: current.success ? current.prices : null,
-    });
+    return {
+      content: JSON.stringify({
+        success: false,
+        message:
+          "Chưa có dữ liệu cũ để so sánh. Hãy tra cứu giá ít nhất 2 lần (cách nhau > 30 phút) để có dữ liệu so sánh.",
+        current: current.success ? current.prices : null,
+      }),
+      thinking: [
+        "Đang tải snapshot hiện tại và lần tra cứu trước",
+        "Chưa tìm thấy dữ liệu cũ đủ điều kiện để so sánh",
+      ],
+      renderingHint: "Đang chuẩn bị thông báo chưa có dữ liệu so sánh",
+      resultPreview: "Chưa có dữ liệu cũ để so sánh.",
+    };
   }
 
   const comparison = current.prices.map((p) => {
@@ -101,27 +141,40 @@ async function handleCompareFuelPrices(): Promise<string> {
     };
   });
 
-  return JSON.stringify({
-    success: true,
-    comparison,
-    previousTime: previous.timestamp,
-    currentTime: current.updatedAt,
-  });
+  return {
+    content: JSON.stringify({
+      success: true,
+      comparison,
+      previousTime: previous.timestamp,
+      currentTime: current.updatedAt,
+    }),
+    thinking: [
+      "Đang tải snapshot hiện tại và lần tra cứu trước",
+      "Đang đối chiếu chênh lệch giá theo từng loại nhiên liệu",
+    ],
+    renderingHint: "Đang tổng hợp biến động giá xăng dầu",
+    resultPreview: `${comparison.length} mục đã được so sánh với snapshot trước.`,
+  };
 }
 
 async function handleCalculateFuelCost(
   args: Record<string, unknown>,
-): Promise<string> {
+): Promise<FuelToolExecutionOutput> {
   const distanceKm = Number(args.distance_km) || 0;
   const fuelConsumption = Number(args.fuel_consumption) || 6.5;
   const fuelType =
     typeof args.fuel_type === "string" ? args.fuel_type : "RON 95";
 
   if (distanceKm <= 0) {
-    return JSON.stringify({
-      success: false,
-      message: "Khoảng cách phải lớn hơn 0 km.",
-    });
+    return {
+      content: JSON.stringify({
+        success: false,
+        message: "Khoảng cách phải lớn hơn 0 km.",
+      }),
+      thinking: ["Đang kiểm tra tham số quãng đường người dùng nhập"],
+      renderingHint: "Đang chuẩn bị thông báo lỗi đầu vào",
+      resultPreview: "Khoảng cách phải lớn hơn 0 km.",
+    };
   }
 
   const priceResult = await scrapeFuelPrices();
@@ -144,23 +197,35 @@ async function handleCalculateFuelCost(
   const totalCost =
     pricePerLiter > 0 ? Math.round(litersNeeded * pricePerLiter) : 0;
 
-  return JSON.stringify({
-    success: true,
-    distanceKm,
-    fuelConsumption,
-    fuelType: matchedFuel,
-    litersNeeded: Math.round(litersNeeded * 100) / 100,
-    pricePerLiter:
-      pricePerLiter > 0
-        ? pricePerLiter.toLocaleString("vi-VN")
-        : "không xác định",
-    totalCost:
-      totalCost > 0 ? totalCost.toLocaleString("vi-VN") : "không xác định",
-    note:
-      pricePerLiter === 0
-        ? "Không tìm được giá xăng tương ứng, user cần cung cấp giá."
-        : undefined,
-  });
+  return {
+    content: JSON.stringify({
+      success: true,
+      distanceKm,
+      fuelConsumption,
+      fuelType: matchedFuel,
+      litersNeeded: Math.round(litersNeeded * 100) / 100,
+      pricePerLiter:
+        pricePerLiter > 0
+          ? pricePerLiter.toLocaleString("vi-VN")
+          : "không xác định",
+      totalCost:
+        totalCost > 0 ? totalCost.toLocaleString("vi-VN") : "không xác định",
+      note:
+        pricePerLiter === 0
+          ? "Không tìm được giá xăng tương ứng, user cần cung cấp giá."
+          : undefined,
+    }),
+    thinking: [
+      "Đang đọc thông tin quãng đường và mức tiêu thụ nhiên liệu",
+      "Đang ghép loại nhiên liệu với bảng giá hiện tại",
+      "Đang tính lượng xăng cần dùng và tổng chi phí",
+    ],
+    renderingHint: "Đang tổng hợp bảng ước tính chi phí chuyến đi",
+    resultPreview:
+      totalCost > 0
+        ? `Chi phí ước tính: ${totalCost.toLocaleString("vi-VN")} VNĐ.`
+        : "Chưa xác định được chi phí ước tính.",
+  };
 }
 
 // ── Helpers ─────────────────────────────────────────────────
