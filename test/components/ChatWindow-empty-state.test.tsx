@@ -1,7 +1,7 @@
 import { screen } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { ChatWindow } from "@/components/app/ChatWindow";
-import { ChatConversationProvider } from "@/components/app/ChatConversationProvider";
+import { ChatWindow } from "@/components/app/english-chatbot/ChatWindow";
+import { ChatConversationProvider } from "@/components/app/english-chatbot/ChatConversationProvider";
 import { renderUi } from "@/test/render";
 
 vi.mock("@/lib/http", () => ({

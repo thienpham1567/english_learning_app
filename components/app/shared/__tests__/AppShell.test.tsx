@@ -1,20 +1,20 @@
 import { describe, expect, it, vi } from "vitest";
 import { screen } from "@testing-library/react";
 
-import { AppShell } from "@/components/app/AppShell";
+import { AppShell } from "@/components/app/shared/AppShell";
 import { renderUi } from "@/test/render";
 
-vi.mock("@/components/app/AppSidebar", () => ({
+vi.mock("@/components/app/shared/AppSidebar", () => ({
   AppSidebar: () => <nav data-testid="sidebar">Sidebar</nav>,
 }));
 
-vi.mock("@/components/app/UserMenu", () => ({
+vi.mock("@/components/app/shared/UserMenu", () => ({
   UserMenu: ({ user }: { user: { name: string } }) => (
     <div data-testid="user-menu">{user.name}</div>
   ),
 }));
 
-vi.mock("@/components/app/ToolbarBreadcrumb", () => ({
+vi.mock("@/components/app/shared/ToolbarBreadcrumb", () => ({
   ToolbarBreadcrumb: () => <div data-testid="breadcrumb">Breadcrumb</div>,
 }));
 

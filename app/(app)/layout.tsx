@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { auth } from "@/lib/auth";
-import { AppShell } from "@/components/app/AppShell";
+import { AppShell } from "@/components/app/shared/AppShell";
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const session = await auth.api.getSession({

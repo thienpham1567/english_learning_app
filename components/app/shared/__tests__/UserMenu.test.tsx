@@ -1,7 +1,7 @@
 import { fireEvent, screen } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
-import { UserMenu } from "@/components/app/UserMenu";
+import { UserMenu } from "@/components/app/shared/UserMenu";
 import { renderUi } from "@/test/render";
 
 const { push, signOut } = vi.hoisted(() => ({

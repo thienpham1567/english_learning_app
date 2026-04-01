@@ -1,7 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
 
-import { FuelExecutionPanel } from "@/components/app/fuel-chat/FuelChatParts";
+import { FuelExecutionPanel } from "@/components/app/fuel-prices/FuelChatParts";
 import type { FuelAssistantRun } from "@/lib/fuel-prices/types";
 
 describe("FuelExecutionPanel", () => {

@@ -1,9 +1,9 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 
-import { FuelPriceChat } from "@/components/app/FuelPriceChat";
+import { FuelPriceChat } from "@/components/app/fuel-prices/FuelPriceChat";
 
-vi.mock("@/components/app/UserContext", () => ({
+vi.mock("@/components/app/shared/UserContext", () => ({
   useUser: () => ({
     name: "Test User",
     image: "",

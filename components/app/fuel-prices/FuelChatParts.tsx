@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "motion/react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 
-import { useUser } from "@/components/app/UserContext";
+import { useUser } from "@/components/app/shared/UserContext";
 import type {
   FuelAssistantRun,
   FuelToolExecutionStep,

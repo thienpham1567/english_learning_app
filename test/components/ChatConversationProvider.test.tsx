@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event";
 import {
   ChatConversationProvider,
   useChatConversations,
-} from "@/components/app/ChatConversationProvider";
+} from "@/components/app/english-chatbot/ChatConversationProvider";
 
 // Mock http module
 vi.mock("@/lib/http", () => ({

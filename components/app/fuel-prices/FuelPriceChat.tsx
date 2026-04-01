@@ -17,7 +17,7 @@ import {
   FuelExecutionPanel,
   UserAvatar,
   formatTime,
-} from "@/components/app/fuel-chat/FuelChatParts";
+} from "@/components/app/fuel-prices/FuelChatParts";
 import type { FuelAssistantRun } from "@/lib/fuel-prices/types";
 import { useState } from "react";
 

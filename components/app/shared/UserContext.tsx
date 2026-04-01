@@ -2,7 +2,7 @@
 
 import { createContext, useContext } from "react";
 import type { ReactNode } from "react";
-import type { AuthUser } from "@/components/app/AppShell";
+import type { AuthUser } from "@/components/app/shared/AppShell";
 
 const UserContext = createContext<AuthUser | null>(null);
 

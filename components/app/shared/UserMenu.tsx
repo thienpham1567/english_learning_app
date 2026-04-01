@@ -6,7 +6,7 @@ import { LogOut, ChevronDown } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 
 import { authClient } from "@/lib/auth-client";
-import type { AuthUser } from "@/components/app/AppShell";
+import type { AuthUser } from "@/components/app/shared/AppShell";
 
 function UserAvatar({ user }: { user: AuthUser }) {
   if (user.image) {
