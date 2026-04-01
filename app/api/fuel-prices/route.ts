@@ -22,6 +22,24 @@ const MAX_TOOL_STEPS = 5;
 const ERROR_MESSAGE =
   "Cô Kiều đang bị lỗi kỹ thuật rồi 😵 Thử lại sau nha!";
 
+type ResponseFunctionCall = {
+  type: "function_call";
+  id: string;
+  call_id: string;
+  name: string;
+  arguments: string;
+};
+
+type ResponseOutputText = {
+  type: "output_text";
+  text: string;
+};
+
+type ResponseMessage = {
+  type: "message";
+  content: ResponseOutputText[];
+};
+
 // ── Request Validation ──────────────────────────────────────
 
 type FuelChatRequestBody = {
@@ -72,8 +90,7 @@ async function runAgenticLoop(
   messages: FuelChatMessage[],
   discordWebhookUrl?: string,
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let currentInput: any[] = buildFuelChatInput(messages);
+  let currentInput: Array<Record<string, unknown>> = buildFuelChatInput(messages);
   let lastToolCallId: string | null = null;
   let lastToolResultPreview: string | undefined;
 
@@ -87,9 +104,7 @@ async function runAgenticLoop(
       tools: FUEL_TOOLS,
     });
 
-    const functionCalls = response.output.filter(
-      (o) => o.type === "function_call",
-    );
+    const functionCalls = response.output.filter(isFunctionCallItem);
 
     // ── Final text response (no tool calls) ──
     if (functionCalls.length === 0) {
@@ -127,7 +142,7 @@ async function runAgenticLoop(
     currentInput = [
       ...currentInput,
       ...response.output.map((item) => {
-        if (item.type === "function_call") {
+        if (isFunctionCallItem(item)) {
           return {
             type: "function_call" as const,
             id: item.id,
@@ -155,16 +170,15 @@ async function runAgenticLoop(
 // ── Helper: extract text from response output ───────────────
 
 function extractTextFromResponse(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  output: any[],
+  output: unknown[],
 ): string {
   let text = "";
   for (const item of output) {
-    if (item.type === "message") {
-      for (const content of item.content) {
-        if (content.type === "output_text") {
-          text += content.text;
-        }
+    if (!isMessageItem(item)) continue;
+
+    for (const content of item.content) {
+      if (content.type === "output_text") {
+        text += content.text;
       }
     }
   }
@@ -174,8 +188,7 @@ function extractTextFromResponse(
 // ── Helper: execute tool calls with SSE status updates ──────
 
 async function executeToolCalls(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  functionCalls: any[],
+  functionCalls: ResponseFunctionCall[],
   controller: ReadableStreamDefaultController<Uint8Array>,
   encoder: TextEncoder,
   discordWebhookUrl?: string,
@@ -399,6 +412,34 @@ function safeParseJson(value: string): Record<string, unknown> | null {
   }
 
   return null;
+}
+
+function isFunctionCallItem(value: unknown): value is ResponseFunctionCall {
+  if (typeof value !== "object" || value === null) return false;
+  const item = value as Record<string, unknown>;
+  return (
+    item.type === "function_call" &&
+    typeof item.id === "string" &&
+    typeof item.call_id === "string" &&
+    typeof item.name === "string" &&
+    typeof item.arguments === "string"
+  );
+}
+
+function isMessageItem(value: unknown): value is ResponseMessage {
+  if (typeof value !== "object" || value === null) return false;
+  const item = value as Record<string, unknown>;
+  return (
+    item.type === "message" &&
+    Array.isArray(item.content) &&
+    item.content.every(isOutputTextItem)
+  );
+}
+
+function isOutputTextItem(value: unknown): value is ResponseOutputText {
+  if (typeof value !== "object" || value === null) return false;
+  const item = value as Record<string, unknown>;
+  return item.type === "output_text" && typeof item.text === "string";
 }
 
 function isPriceRow(value: unknown): value is {
