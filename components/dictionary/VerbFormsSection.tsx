@@ -47,11 +47,12 @@ export function VerbFormsSection({ verbForms }: Props) {
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
+        aria-controls="verb-forms-grid"
         className="flex w-full items-center justify-between gap-2"
       >
-        <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-(--accent)">
+        <span className="text-xs font-semibold uppercase tracking-[0.14em] text-(--accent)">
           DẠNG ĐỘNG TỪ
-        </h3>
+        </span>
         <div className="flex items-center gap-2">
           <span className="text-xs text-(--text-muted)">{verbForms.length} dạng</span>
           <ChevronDown
@@ -65,6 +66,7 @@ export function VerbFormsSection({ verbForms }: Props) {
       <AnimatePresence initial={false}>
         {open && (
           <motion.div
+            id="verb-forms-grid"
             key="verb-forms-grid"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
