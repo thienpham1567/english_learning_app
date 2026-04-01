@@ -1,142 +1,137 @@
 import type {
-  FuelExecutionStep,
+  FuelAssistantRun,
+  FuelChatTurn,
   FuelSseEventPayload,
+  FuelToolExecutionStep,
 } from "@/lib/fuel-prices/types";
 
-type FuelAssistantMessage = {
-  id: string;
-  role: "user" | "assistant";
-  text: string;
-  timeline?: FuelExecutionStep[];
-};
+function ensureAssistantRun(
+  turn: Extract<FuelChatTurn, { role: "assistant" }>,
+): FuelAssistantRun {
+  return turn.run ?? { status: "pending", tools: [] };
+}
 
-export function applyFuelSseEvent<T extends FuelAssistantMessage>(
-  messages: T[],
+export function applyFuelSseEvent(
+  turns: FuelChatTurn[],
   assistantMessageId: string,
   event: FuelSseEventPayload,
-): T[] {
-  return messages.map((message) => {
-    if (message.id !== assistantMessageId || message.role !== "assistant") {
-      return message;
+): FuelChatTurn[] {
+  return turns.map((turn) => {
+    if (turn.id !== assistantMessageId || turn.role !== "assistant") {
+      return turn;
     }
 
-    if (event.type === "assistant_delta") {
-      return {
-        ...message,
-        text: message.text + event.delta,
-      };
-    }
-
-    if (
-      event.type === "assistant_start" ||
-      event.type === "assistant_done" ||
-      event.type === "assistant_error"
-    ) {
-      return message;
-    }
+    const run = ensureAssistantRun(turn);
 
     return {
-      ...message,
-      timeline: updateTimeline(message.timeline ?? [], event),
+      ...turn,
+      run: updateRun(run, event),
     };
   });
 }
 
-function updateTimeline(
-  timeline: FuelExecutionStep[],
-  event: Exclude<
-    FuelSseEventPayload,
-    | { type: "assistant_start" }
-    | { type: "assistant_delta"; delta: string }
-    | { type: "assistant_done" }
-    | { type: "assistant_error"; message: string }
-  >,
-) {
+function updateRun(run: FuelAssistantRun, event: FuelSseEventPayload) {
   switch (event.type) {
-    case "agent_start":
-      return upsertTimelineStep(timeline, {
-        id: event.agentId,
-        kind: "agent",
-        name: event.name,
+    case "run_start":
+      return {
+        ...run,
         status: "running",
-        summary: event.summary,
-        startedAt: event.startedAt,
-      });
+        startedAt: event.startedAt ?? run.startedAt,
+      };
 
-    case "agent_done":
-      return upsertTimelineStep(timeline, {
-        id: event.agentId,
-        kind: "agent",
-        status: "done",
-        resultPreview: event.resultPreview,
-        finishedAt: event.finishedAt,
-      });
+    case "run_done":
+      return {
+        ...run,
+        status: run.status === "error" ? "error" : "done",
+        finishedAt: event.finishedAt ?? run.finishedAt,
+      };
 
-    case "agent_error":
-      return upsertTimelineStep(timeline, {
-        id: event.agentId,
-        kind: "agent",
+    case "run_error":
+      return {
+        ...run,
         status: "error",
         error: event.message,
-        finishedAt: event.finishedAt,
-      });
+        finishedAt: event.finishedAt ?? run.finishedAt,
+      };
 
-    case "tool_call":
-      return upsertTimelineStep(timeline, {
-        id: event.toolCallId,
-        parentId: event.agentId,
-        kind: "tool",
-        name: event.name,
-        tool: event.tool,
+    case "tool_start":
+      return {
+        ...run,
         status: "running",
-        summary: event.summary,
-        params: event.params,
-        startedAt: event.startedAt,
-      });
+        tools: [
+          ...run.tools,
+          {
+            id: event.toolCallId,
+            tool: event.tool,
+            name: event.name,
+            status: "running",
+            params: event.params,
+            thinking: [],
+            sources: [],
+            startedAt: event.startedAt,
+          },
+        ],
+      };
+
+    case "tool_thinking":
+      return patchTool(run, event.toolCallId, (tool) => ({
+        ...tool,
+        thinking: [...tool.thinking, event.message],
+      }));
+
+    case "tool_source":
+      return patchTool(run, event.toolCallId, (tool) => ({
+        ...tool,
+        sources: tool.sources.some(
+          (source) =>
+            source.label === event.source.label &&
+            source.href === event.source.href &&
+            source.updatedAt === event.source.updatedAt,
+        )
+          ? tool.sources
+          : [...tool.sources, event.source],
+      }));
+
+    case "tool_rendering":
+      return patchTool(run, event.toolCallId, (tool) => ({
+        ...tool,
+        rendering: event.message,
+      }));
 
     case "tool_result":
-      return upsertTimelineStep(timeline, {
-        id: event.toolCallId,
-        parentId: event.agentId,
-        kind: "tool",
-        name: event.name,
-        tool: event.tool,
+      return patchTool(run, event.toolCallId, (tool) => ({
+        ...tool,
         status: "done",
+        resultMarkdown: event.resultMarkdown,
         resultPreview: event.resultPreview,
-        finishedAt: event.finishedAt,
-      });
+        finishedAt: event.finishedAt ?? tool.finishedAt,
+      }));
 
     case "tool_error":
-      return upsertTimelineStep(timeline, {
-        id: event.toolCallId,
-        parentId: event.agentId,
-        kind: "tool",
-        name: event.name,
-        tool: event.tool,
+      return patchTool(run, event.toolCallId, (tool) => ({
+        ...tool,
         status: "error",
         error: event.message,
-        finishedAt: event.finishedAt,
-      });
+        finishedAt: event.finishedAt ?? tool.finishedAt,
+      }));
   }
 }
 
-function upsertTimelineStep(
-  timeline: FuelExecutionStep[],
-  patch: Partial<FuelExecutionStep> & Pick<FuelExecutionStep, "id" | "kind">,
+function patchTool(
+  run: FuelAssistantRun,
+  toolCallId: string,
+  update: (tool: FuelToolExecutionStep) => FuelToolExecutionStep,
 ) {
-  const index = timeline.findIndex((step) => step.id === patch.id);
+  const index = run.tools.findIndex((tool) => tool.id === toolCallId);
 
   if (index === -1) {
-    const nextStep = {
-      name: "",
-      status: "pending",
-      ...patch,
-    } satisfies FuelExecutionStep;
-
-    return [...timeline, nextStep];
+    return run;
   }
 
-  return timeline.map((step, stepIndex) =>
-    stepIndex === index ? { ...step, ...patch } : step,
-  );
+  return {
+    ...run,
+    tools: run.tools.map((tool, toolIndex) =>
+      toolIndex === index ? update(tool) : tool,
+    ),
+  };
 }

@@ -11,70 +11,85 @@ export type ToolExecutorOptions = {
 
 export type FuelExecutionStatus = "pending" | "running" | "done" | "error";
 
-export type FuelExecutionStep = {
+export type FuelSourceInfo = {
+  label: string;
+  href?: string;
+  updatedAt?: string;
+};
+
+export type FuelToolExecutionStep = {
   id: string;
-  kind: "agent" | "tool";
+  tool: string;
   name: string;
   status: FuelExecutionStatus;
-  summary?: string;
+  thinking: string[];
+  rendering?: string;
+  sources: FuelSourceInfo[];
   params?: Record<string, unknown>;
+  resultMarkdown?: string;
   resultPreview?: string;
   error?: string;
-  parentId?: string;
-  tool?: string;
   startedAt?: string;
   finishedAt?: string;
 };
 
+export type FuelAssistantRun = {
+  status: FuelExecutionStatus;
+  tools: FuelToolExecutionStep[];
+  startedAt?: string;
+  finishedAt?: string;
+  error?: string;
+};
+
+export type FuelChatTurn =
+  | { id: string; role: "user"; text: string }
+  | { id: string; role: "assistant"; run: FuelAssistantRun };
+
+export type FuelToolExecutionOutput = {
+  content: string;
+  thinking?: string[];
+  sources?: FuelSourceInfo[];
+  renderingHint?: string;
+  resultPreview?: string;
+};
+
 export type FuelSseEventPayload =
-  | { type: "assistant_start" }
-  | { type: "assistant_delta"; delta: string }
-  | { type: "assistant_done" }
-  | { type: "assistant_error"; message: string }
+  | { type: "run_start"; startedAt?: string }
+  | { type: "run_done"; finishedAt?: string }
+  | { type: "run_error"; message: string; finishedAt?: string }
   | {
-      type: "agent_start";
-      agentId: string;
-      name: string;
-      summary?: string;
-      startedAt?: string;
-    }
-  | {
-      type: "agent_done";
-      agentId: string;
-      resultPreview?: string;
-      finishedAt?: string;
-    }
-  | {
-      type: "agent_error";
-      agentId: string;
-      message: string;
-      finishedAt?: string;
-    }
-  | {
-      type: "tool_call";
+      type: "tool_start";
       toolCallId: string;
-      agentId: string;
-      name: string;
       tool: string;
-      summary?: string;
+      name: string;
       params?: Record<string, unknown>;
       startedAt?: string;
     }
   | {
+      type: "tool_thinking";
+      toolCallId: string;
+      message: string;
+    }
+  | {
+      type: "tool_source";
+      toolCallId: string;
+      source: FuelSourceInfo;
+    }
+  | {
+      type: "tool_rendering";
+      toolCallId: string;
+      message: string;
+    }
+  | {
       type: "tool_result";
       toolCallId: string;
-      agentId: string;
-      name: string;
-      tool: string;
+      resultMarkdown?: string;
       resultPreview?: string;
       finishedAt?: string;
     }
   | {
       type: "tool_error";
       toolCallId: string;
-      agentId: string;
-      name: string;
-      tool: string;
       message: string;
       finishedAt?: string;
     };
