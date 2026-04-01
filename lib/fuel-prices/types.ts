@@ -80,3 +80,12 @@ export type FuelSseEventPayload =
     };
 
 export type SseEventPayload = FuelSseEventPayload;
+
+export type FuelFunctionCall = {
+  id: string;
+  name: string;
+  status: "running" | "success" | "error";
+  input: Record<string, unknown>;
+  output?: unknown;
+  error?: string;
+};

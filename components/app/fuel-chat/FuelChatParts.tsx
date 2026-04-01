@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 
-import { useUser } from "@/components/app/UserContext";
+import { useUser } from "@/components/app/shared/UserContext";
 import type { FuelFunctionCall } from "@/lib/fuel-prices/types";
 
 /* ── Tool Config ── */
