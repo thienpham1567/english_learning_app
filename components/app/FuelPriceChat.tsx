@@ -352,17 +352,13 @@ function MessageBubble({
     id: string;
     role: "user" | "assistant";
     text: string;
-    timeline?: Array<{
+    functionCalls?: Array<{
       id: string;
-      kind: "agent" | "tool";
       name: string;
-      status: "pending" | "running" | "done" | "error";
-      summary?: string;
-      params?: Record<string, unknown>;
-      resultPreview?: string;
+      status: "running" | "success" | "error";
+      input: Record<string, unknown>;
+      output?: unknown;
       error?: string;
-      parentId?: string;
-      tool?: string;
       startedAt?: string;
       finishedAt?: string;
     }>;
@@ -373,12 +369,12 @@ function MessageBubble({
 }) {
   const isUser = m.role === "user";
   const text = m.text.trim();
-  const timeline = m.timeline ?? [];
-  const showTimeline = !isUser && timeline.length > 0;
-  const showStatus = !text && isWaiting && !showTimeline;
+  const functionCalls = m.functionCalls ?? [];
+  const showFunctionCalls = !isUser && functionCalls.length > 0;
+  const showStatus = !text && isWaiting && !showFunctionCalls;
 
   // Hide empty assistant messages that aren't actively loading
-  if (!text && !isStreaming && !showTimeline) return null;
+  if (!text && !isStreaming && !showFunctionCalls) return null;
 
   return (
     <motion.div
@@ -430,7 +426,7 @@ function MessageBubble({
           </div>
         )}
 
-        {showTimeline && <FuelExecutionTimeline steps={timeline} />}
+        {showFunctionCalls && <FuelExecutionTimeline calls={functionCalls} />}
 
         {/* Actual message content */}
         {text && (

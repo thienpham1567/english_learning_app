@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 
 import { applyFuelSseEvent } from "@/lib/fuel-prices/timeline";
 import type {
-  FuelExecutionStep,
+  FuelFunctionCall,
   FuelSseEventPayload,
 } from "@/lib/fuel-prices/types";
 
@@ -13,7 +13,7 @@ export type ChatMessage = {
   id: string;
   role: "user" | "assistant";
   text: string;
-  timeline?: FuelExecutionStep[];
+  functionCalls?: FuelFunctionCall[];
 };
 
 const ERROR_MESSAGE = "Hệ thống đang gặp sự cố kỹ thuật. Vui lòng thử lại sau!";
@@ -110,7 +110,7 @@ export function useFuelChat() {
       setMessages((curr) => [
         ...curr,
         userMessage,
-        { id: assistantMessageId, role: "assistant", text: "", timeline: [] },
+        { id: assistantMessageId, role: "assistant", text: "", functionCalls: [] },
       ]);
       setInput("");
       if (textareaRef.current) textareaRef.current.style.height = "auto";
@@ -146,7 +146,7 @@ export function useFuelChat() {
             (m) =>
               m.id !== assistantMessageId ||
               m.text.trim().length > 0 ||
-              (m.timeline?.length ?? 0) > 0,
+              (m.functionCalls?.length ?? 0) > 0,
           ),
         );
       } finally {
@@ -221,7 +221,7 @@ async function processSseStream(
               (m) =>
                 m.id !== assistantMessageId ||
                 m.text.trim().length > 0 ||
-                (m.timeline?.length ?? 0) > 0,
+                (m.functionCalls?.length ?? 0) > 0,
             ),
           );
           finished = true;

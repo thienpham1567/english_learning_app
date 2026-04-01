@@ -9,22 +9,20 @@ export type ToolExecutorOptions = {
   discordWebhookUrl?: string;
 };
 
-export type FuelExecutionStatus = "pending" | "running" | "done" | "error";
+export type FuelFunctionCallStatus = "running" | "success" | "error";
 
-export type FuelExecutionStep = {
+export type FuelFunctionCall = {
   id: string;
-  kind: "agent" | "tool";
   name: string;
-  status: FuelExecutionStatus;
-  summary?: string;
-  params?: Record<string, unknown>;
-  resultPreview?: string;
+  status: FuelFunctionCallStatus;
+  input: Record<string, unknown>;
+  output?: unknown;
   error?: string;
-  parentId?: string;
-  tool?: string;
   startedAt?: string;
   finishedAt?: string;
 };
+
+export type FuelExecutionStep = FuelFunctionCall;
 
 export type FuelSseEventPayload =
   | { type: "assistant_start" }
@@ -32,49 +30,26 @@ export type FuelSseEventPayload =
   | { type: "assistant_done" }
   | { type: "assistant_error"; message: string }
   | {
-      type: "agent_start";
-      agentId: string;
+      type: "function_call_start";
+      callId: string;
       name: string;
-      summary?: string;
+      input: Record<string, unknown>;
       startedAt?: string;
     }
   | {
-      type: "agent_done";
-      agentId: string;
-      resultPreview?: string;
+      type: "function_call_result";
+      callId: string;
+      name: string;
+      input: Record<string, unknown>;
+      output: unknown;
       finishedAt?: string;
     }
   | {
-      type: "agent_error";
-      agentId: string;
-      message: string;
-      finishedAt?: string;
-    }
-  | {
-      type: "tool_call";
-      toolCallId: string;
-      agentId: string;
+      type: "function_call_error";
+      callId: string;
       name: string;
-      tool: string;
-      summary?: string;
-      params?: Record<string, unknown>;
-      startedAt?: string;
-    }
-  | {
-      type: "tool_result";
-      toolCallId: string;
-      agentId: string;
-      name: string;
-      tool: string;
-      resultPreview?: string;
-      finishedAt?: string;
-    }
-  | {
-      type: "tool_error";
-      toolCallId: string;
-      agentId: string;
-      name: string;
-      tool: string;
+      input: Record<string, unknown>;
+      output?: unknown;
       message: string;
       finishedAt?: string;
     };

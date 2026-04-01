@@ -1,5 +1,5 @@
 import type {
-  FuelExecutionStep,
+  FuelFunctionCall,
   FuelSseEventPayload,
 } from "@/lib/fuel-prices/types";
 
@@ -7,7 +7,7 @@ type FuelAssistantMessage = {
   id: string;
   role: "user" | "assistant";
   text: string;
-  timeline?: FuelExecutionStep[];
+  functionCalls?: FuelFunctionCall[];
 };
 
 export function applyFuelSseEvent<T extends FuelAssistantMessage>(
@@ -37,13 +37,13 @@ export function applyFuelSseEvent<T extends FuelAssistantMessage>(
 
     return {
       ...message,
-      timeline: updateTimeline(message.timeline ?? [], event),
+      functionCalls: updateFunctionCalls(message.functionCalls ?? [], event),
     };
   });
 }
 
-function updateTimeline(
-  timeline: FuelExecutionStep[],
+function updateFunctionCalls(
+  functionCalls: FuelFunctionCall[],
   event: Exclude<
     FuelSseEventPayload,
     | { type: "assistant_start" }
@@ -53,90 +53,56 @@ function updateTimeline(
   >,
 ) {
   switch (event.type) {
-    case "agent_start":
-      return upsertTimelineStep(timeline, {
-        id: event.agentId,
-        kind: "agent",
+    case "function_call_start":
+      return upsertFunctionCall(functionCalls, {
+        id: event.callId,
         name: event.name,
         status: "running",
-        summary: event.summary,
+        input: event.input,
         startedAt: event.startedAt,
       });
 
-    case "agent_done":
-      return upsertTimelineStep(timeline, {
-        id: event.agentId,
-        kind: "agent",
-        status: "done",
-        resultPreview: event.resultPreview,
+    case "function_call_result":
+      return upsertFunctionCall(functionCalls, {
+        id: event.callId,
+        name: event.name,
+        status: "success",
+        input: event.input,
+        output: event.output,
         finishedAt: event.finishedAt,
       });
 
-    case "agent_error":
-      return upsertTimelineStep(timeline, {
-        id: event.agentId,
-        kind: "agent",
+    case "function_call_error":
+      return upsertFunctionCall(functionCalls, {
+        id: event.callId,
+        name: event.name,
         status: "error",
-        error: event.message,
-        finishedAt: event.finishedAt,
-      });
-
-    case "tool_call":
-      return upsertTimelineStep(timeline, {
-        id: event.toolCallId,
-        parentId: event.agentId,
-        kind: "tool",
-        name: event.name,
-        tool: event.tool,
-        status: "running",
-        summary: event.summary,
-        params: event.params,
-        startedAt: event.startedAt,
-      });
-
-    case "tool_result":
-      return upsertTimelineStep(timeline, {
-        id: event.toolCallId,
-        parentId: event.agentId,
-        kind: "tool",
-        name: event.name,
-        tool: event.tool,
-        status: "done",
-        resultPreview: event.resultPreview,
-        finishedAt: event.finishedAt,
-      });
-
-    case "tool_error":
-      return upsertTimelineStep(timeline, {
-        id: event.toolCallId,
-        parentId: event.agentId,
-        kind: "tool",
-        name: event.name,
-        tool: event.tool,
-        status: "error",
+        input: event.input,
+        output: event.output,
         error: event.message,
         finishedAt: event.finishedAt,
       });
   }
 }
 
-function upsertTimelineStep(
-  timeline: FuelExecutionStep[],
-  patch: Partial<FuelExecutionStep> & Pick<FuelExecutionStep, "id" | "kind">,
+function upsertFunctionCall(
+  functionCalls: FuelFunctionCall[],
+  patch: Partial<FuelFunctionCall> & Pick<FuelFunctionCall, "id" | "name">,
 ) {
-  const index = timeline.findIndex((step) => step.id === patch.id);
+  const index = functionCalls.findIndex((call) => call.id === patch.id);
 
   if (index === -1) {
-    const nextStep = {
+    const nextCall = {
       name: "",
-      status: "pending",
+      input: {},
+      status: "running",
       ...patch,
-    } satisfies FuelExecutionStep;
+    } satisfies FuelFunctionCall;
 
-    return [...timeline, nextStep];
+    return [...functionCalls, nextCall];
   }
 
-  return timeline.map((step, stepIndex) =>
-    stepIndex === index ? { ...step, ...patch } : step,
+  return functionCalls.map((call, callIndex) =>
+    callIndex === index ? { ...call, ...patch } : call,
   );
 }

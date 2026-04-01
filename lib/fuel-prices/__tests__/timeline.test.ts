@@ -1,16 +1,22 @@
 import { describe, expect, it } from "vitest";
 
 import { applyFuelSseEvent } from "@/lib/fuel-prices/timeline";
-import type {
-  FuelExecutionStep,
-  FuelSseEventPayload,
-} from "@/lib/fuel-prices/types";
+import type { FuelSseEventPayload } from "@/lib/fuel-prices/types";
 
 type TestMessage = {
   id: string;
   role: "user" | "assistant";
   text: string;
-  timeline?: FuelExecutionStep[];
+  functionCalls?: Array<{
+    id: string;
+    name: string;
+    status: "running" | "success" | "error";
+    input: Record<string, unknown>;
+    output?: unknown;
+    startedAt?: string;
+    finishedAt?: string;
+    error?: string;
+  }>;
 };
 
 function applySequence(
@@ -25,7 +31,7 @@ function applySequence(
 }
 
 describe("applyFuelSseEvent", () => {
-  it("records a finished agent with its finished tool under the active assistant message", () => {
+  it("stores a completed function call with input and output on the active assistant message", () => {
     const messages: TestMessage[] = [
       { id: "user-1", role: "user", text: "Giá xăng hôm nay bao nhiêu?" },
       { id: "assistant-1", role: "assistant", text: "" },
@@ -33,37 +39,24 @@ describe("applyFuelSseEvent", () => {
 
     const result = applySequence(messages, "assistant-1", [
       {
-        type: "agent_start",
-        agentId: "agent-price-1",
-        name: "Trợ lý giá xăng",
-        summary: "Phân tích yêu cầu tra cứu giá mới nhất",
-        startedAt: "2026-03-31T13:00:00.000Z",
-      },
+        type: "function_call_start",
+        callId: "call-price-1",
+        name: "gia_xang",
+        input: {},
+        startedAt: "2026-04-01T01:00:00.000Z",
+      } as FuelSseEventPayload,
       {
-        type: "tool_call",
-        toolCallId: "tool-price-1",
-        agentId: "agent-price-1",
-        name: "Lấy giá mới nhất",
-        tool: "get_fuel_prices",
-        summary: "Lấy bảng giá mới nhất từ PVOIL",
-        params: {},
-        startedAt: "2026-03-31T13:00:01.000Z",
-      },
-      {
-        type: "tool_result",
-        toolCallId: "tool-price-1",
-        agentId: "agent-price-1",
-        name: "Lấy giá mới nhất",
-        tool: "get_fuel_prices",
-        resultPreview: "5 loại nhiên liệu đã được cập nhật.",
-        finishedAt: "2026-03-31T13:00:02.000Z",
-      },
-      {
-        type: "agent_done",
-        agentId: "agent-price-1",
-        resultPreview: "Đã sẵn sàng tổng hợp bảng giá xăng dầu.",
-        finishedAt: "2026-03-31T13:00:03.000Z",
-      },
+        type: "function_call_result",
+        callId: "call-price-1",
+        name: "gia_xang",
+        input: {},
+        output: {
+          status: "success",
+          update_time: "Giá điều chỉnh lúc 00:00 ngày 27/03/2026",
+          prices: [{ product: "Xăng RON 95-III", price: "24.330 đ" }],
+        },
+        finishedAt: "2026-04-01T01:00:01.000Z",
+      } as FuelSseEventPayload,
       {
         type: "assistant_delta",
         delta: "| Xăng RON 95 | 24.332 |",
@@ -74,95 +67,58 @@ describe("applyFuelSseEvent", () => {
       id: "assistant-1",
       role: "assistant",
       text: "| Xăng RON 95 | 24.332 |",
-      timeline: [
+      functionCalls: [
         {
-          id: "agent-price-1",
-          kind: "agent",
-          name: "Trợ lý giá xăng",
-          status: "done",
-          summary: "Phân tích yêu cầu tra cứu giá mới nhất",
-          resultPreview: "Đã sẵn sàng tổng hợp bảng giá xăng dầu.",
-          startedAt: "2026-03-31T13:00:00.000Z",
-          finishedAt: "2026-03-31T13:00:03.000Z",
-        },
-        {
-          id: "tool-price-1",
-          parentId: "agent-price-1",
-          kind: "tool",
-          name: "Lấy giá mới nhất",
-          tool: "get_fuel_prices",
-          status: "done",
-          summary: "Lấy bảng giá mới nhất từ PVOIL",
-          params: {},
-          resultPreview: "5 loại nhiên liệu đã được cập nhật.",
-          startedAt: "2026-03-31T13:00:01.000Z",
-          finishedAt: "2026-03-31T13:00:02.000Z",
+          id: "call-price-1",
+          name: "gia_xang",
+          status: "success",
+          input: {},
+          output: {
+            status: "success",
+            update_time: "Giá điều chỉnh lúc 00:00 ngày 27/03/2026",
+            prices: [{ product: "Xăng RON 95-III", price: "24.330 đ" }],
+          },
+          startedAt: "2026-04-01T01:00:00.000Z",
+          finishedAt: "2026-04-01T01:00:01.000Z",
         },
       ],
     });
   });
 
-  it("marks an agent and its tool as failed when error events arrive", () => {
+  it("marks a function call as failed and preserves its input", () => {
     const messages: TestMessage[] = [
       { id: "assistant-2", role: "assistant", text: "" },
     ];
 
     const result = applySequence(messages, "assistant-2", [
       {
-        type: "agent_start",
-        agentId: "agent-discord-1",
-        name: "Trợ lý giá xăng",
-        summary: "Chuẩn bị gửi báo cáo lên Discord",
-        startedAt: "2026-03-31T13:05:00.000Z",
-      },
+        type: "function_call_start",
+        callId: "call-discord-1",
+        name: "send_discord_message_via_webhook",
+        input: { content: "Báo cáo test" },
+        startedAt: "2026-04-01T01:05:00.000Z",
+      } as FuelSseEventPayload,
       {
-        type: "tool_call",
-        toolCallId: "tool-discord-1",
-        agentId: "agent-discord-1",
-        name: "Gửi Discord",
-        tool: "send_discord_report",
-        params: { content: "Báo cáo test" },
-        startedAt: "2026-03-31T13:05:01.000Z",
-      },
-      {
-        type: "tool_error",
-        toolCallId: "tool-discord-1",
-        agentId: "agent-discord-1",
-        name: "Gửi Discord",
-        tool: "send_discord_report",
+        type: "function_call_error",
+        callId: "call-discord-1",
+        name: "send_discord_message_via_webhook",
+        input: { content: "Báo cáo test" },
+        output: { success: false, message: "Webhook không hợp lệ." },
         message: "Webhook không hợp lệ.",
-        finishedAt: "2026-03-31T13:05:02.000Z",
-      },
-      {
-        type: "agent_error",
-        agentId: "agent-discord-1",
-        message: "Không thể gửi báo cáo lên Discord.",
-        finishedAt: "2026-03-31T13:05:03.000Z",
-      },
+        finishedAt: "2026-04-01T01:05:01.000Z",
+      } as FuelSseEventPayload,
     ]);
 
-    expect(result[0].timeline).toEqual([
+    expect(result[0].functionCalls).toEqual([
       {
-        id: "agent-discord-1",
-        kind: "agent",
-        name: "Trợ lý giá xăng",
+        id: "call-discord-1",
+        name: "send_discord_message_via_webhook",
         status: "error",
-        summary: "Chuẩn bị gửi báo cáo lên Discord",
-        error: "Không thể gửi báo cáo lên Discord.",
-        startedAt: "2026-03-31T13:05:00.000Z",
-        finishedAt: "2026-03-31T13:05:03.000Z",
-      },
-      {
-        id: "tool-discord-1",
-        parentId: "agent-discord-1",
-        kind: "tool",
-        name: "Gửi Discord",
-        tool: "send_discord_report",
-        status: "error",
-        params: { content: "Báo cáo test" },
+        input: { content: "Báo cáo test" },
+        output: { success: false, message: "Webhook không hợp lệ." },
         error: "Webhook không hợp lệ.",
-        startedAt: "2026-03-31T13:05:01.000Z",
-        finishedAt: "2026-03-31T13:05:02.000Z",
+        startedAt: "2026-04-01T01:05:00.000Z",
+        finishedAt: "2026-04-01T01:05:01.000Z",
       },
     ]);
   });

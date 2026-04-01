@@ -32,7 +32,7 @@ afterEach(() => {
 });
 
 describe("fuel prices route", () => {
-  it("streams agent and tool lifecycle events before the final assistant response", async () => {
+  it("streams gia_xang function-call events with empty input and JSON output", async () => {
     mockResponsesCreate
       .mockResolvedValueOnce({
         output: [
@@ -52,7 +52,7 @@ describe("fuel prices route", () => {
             content: [
               {
                 type: "output_text",
-                text: "| Xăng RON 95 | 24.332 |",
+                text: "Giá xăng mới nhất đây.",
               },
             ],
           },
@@ -61,8 +61,9 @@ describe("fuel prices route", () => {
 
     mockExecuteFuelTool.mockResolvedValue(
       JSON.stringify({
-        success: true,
-        prices: [{ name: "Xăng RON 95-III", price: "24.332" }],
+        status: "success",
+        update_time: "Giá điều chỉnh lúc 00:00 ngày 27/03/2026",
+        prices: [{ product: "Xăng RON 95-III", price: "24.330 đ" }],
       }),
     );
 
@@ -107,18 +108,99 @@ describe("fuel prices route", () => {
     expect(response.status).toBe(200);
     expect(body).toContain('data: {"type":"assistant_start"}');
     expect(body).toContain(
-      'data: {"type":"agent_start","agentId":"agent-get_fuel_prices-1","name":"Trợ lý giá xăng","summary":"Phân tích yêu cầu tra cứu giá mới nhất"',
+      'data: {"type":"function_call_start","callId":"call_1","name":"gia_xang","input":{}',
     );
     expect(body).toContain(
-      'data: {"type":"tool_call","toolCallId":"call_1","agentId":"agent-get_fuel_prices-1","name":"Lấy giá mới nhất","tool":"get_fuel_prices","summary":"Lấy bảng giá mới nhất từ PVOIL","params":{}',
+      'data: {"type":"function_call_result","callId":"call_1","name":"gia_xang","input":{},"output":{"status":"success","update_time":"Giá điều chỉnh lúc 00:00 ngày 27/03/2026","prices":[{"product":"Xăng RON 95-III","price":"24.330 đ"}]}',
     );
-    expect(body).toContain(
-      'data: {"type":"tool_result","toolCallId":"call_1","agentId":"agent-get_fuel_prices-1","name":"Lấy giá mới nhất","tool":"get_fuel_prices","resultPreview":"1 loại nhiên liệu đã được cập nhật."',
-    );
-    expect(body).toContain(
-      'data: {"type":"agent_done","agentId":"agent-get_fuel_prices-1","resultPreview":"Đã sẵn sàng tổng hợp bảng giá xăng dầu."',
-    );
-    expect(body).toContain('data: {"type":"assistant_delta","delta":"| Xăng R"}');
+    expect(body).toContain('data: {"type":"assistant_delta","delta":"Giá xăng"}');
     expect(body).toContain('data: {"type":"assistant_done"}');
+  });
+
+  it("streams send_discord_message_via_webhook with content input and success output", async () => {
+    mockResponsesCreate
+      .mockResolvedValueOnce({
+        output: [
+          {
+            type: "function_call",
+            id: "fc_2",
+            call_id: "call_2",
+            name: "send_discord_report",
+            arguments: JSON.stringify({
+              content:
+                "Giá xăng dầu mới nhất (00:00 27/03/2026): Xăng RON 95-III 24.330 đ/lít",
+            }),
+          },
+        ],
+      })
+      .mockResolvedValueOnce({
+        output: [
+          {
+            type: "message",
+            content: [
+              {
+                type: "output_text",
+                text: "Mình đã gửi thông tin lên Discord.",
+              },
+            ],
+          },
+        ],
+      });
+
+    mockExecuteFuelTool.mockResolvedValue(
+      JSON.stringify({
+        success: true,
+        message: "Gửi tin nhắn thành công (đã tắt link preview)!",
+      }),
+    );
+
+    vi.doMock("@/lib/openai/client", () => ({
+      openAiClient: {
+        responses: {
+          create: mockResponsesCreate,
+        },
+      },
+    }));
+
+    vi.doMock("@/lib/openai/config", () => ({
+      openAiConfig: {
+        apiKey: "test",
+        chatModel: "gpt-4.1-mini",
+        dictionaryModel: "gpt-4.1-mini",
+        dictionaryCacheTtlMs: 14 * 24 * 60 * 60 * 1000,
+      },
+    }));
+
+    vi.doMock("@/lib/fuel-prices/tools", () => ({
+      FUEL_TOOLS: [],
+      FUEL_PRICE_INSTRUCTIONS: "fuel instructions",
+      buildFuelChatInput: vi.fn((messages) => messages),
+      executeFuelTool: mockExecuteFuelTool,
+    }));
+
+    const { POST } = await import("@/app/api/fuel-prices/route");
+    const request = new Request("http://localhost/api/fuel-prices", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        messages: [
+          { role: "assistant", text: "Bạn có muốn tôi gửi báo cáo này lên Discord không?" },
+          { role: "user", text: "gửi" },
+        ],
+      }),
+    });
+
+    const response = await POST(request);
+    const body = await response.text();
+
+    expect(response.status).toBe(200);
+    expect(body).toContain(
+      'data: {"type":"function_call_start","callId":"call_2","name":"send_discord_message_via_webhook","input":{"content":"Giá xăng dầu mới nhất (00:00 27/03/2026): Xăng RON 95-III 24.330 đ/lít"}',
+    );
+    expect(body).toContain(
+      'data: {"type":"function_call_result","callId":"call_2","name":"send_discord_message_via_webhook","input":{"content":"Giá xăng dầu mới nhất (00:00 27/03/2026): Xăng RON 95-III 24.330 đ/lít"},"output":{"success":true,"message":"Gửi tin nhắn thành công (đã tắt link preview)!"}',
+    );
   });
 });
