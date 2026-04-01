@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 import { applyFuelSseEvent } from "@/lib/fuel-prices/timeline";
+import { buildFuelChatHistory } from "@/lib/fuel-prices/history";
 import type {
   FuelChatTurn,
   FuelSseEventPayload,
@@ -113,11 +114,7 @@ export function useFuelChat() {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            messages: allMessages.map((m) =>
-              m.role === "user"
-                ? { role: m.role, text: m.text }
-                : { role: m.role, text: "" },
-            ),
+            messages: buildFuelChatHistory(allMessages),
             discordWebhookUrl: discordWebhookUrl || undefined,
           }),
         });
