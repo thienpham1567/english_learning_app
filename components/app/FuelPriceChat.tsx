@@ -22,11 +22,7 @@ import type { FuelAssistantRun } from "@/lib/fuel-prices/types";
 import { useState } from "react";
 
 /* ── Suggested prompts ── */
-const SUGGESTED = [
-  { text: "Xăng hôm nay bao nhiêu?", icon: Fuel },
-  { text: "Giá xăng tăng hay giảm so với lần trước?", icon: TrendingUp },
-  { text: "Đi Sài Gòn - Đà Lạt hết bao nhiêu tiền xăng?", icon: Calculator },
-];
+const SUGGESTED = [{ text: "Xăng hôm nay bao nhiêu?", icon: Fuel }];
 
 /* ── Main Component ── */
 export function FuelPriceChat() {
@@ -120,9 +116,7 @@ export function FuelPriceChat() {
 
           {/* Error */}
           <AnimatePresence>
-            {error && (
-              <ErrorBanner error={error} onDismiss={clearError} />
-            )}
+            {error && <ErrorBanner error={error} onDismiss={clearError} />}
           </AnimatePresence>
 
           <div ref={bottomRef} />
@@ -283,43 +277,31 @@ function EmptyState({ onSend }: { onSend: (text: string) => void }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.2, duration: 0.4 }}
       >
-        Cây xăng cô Kiều 💁‍♀️⛽
+        Cây xăng cô Kiều 💁‍♀️
       </motion.h2>
 
-      <motion.p
-        className="mt-3 max-w-md text-base text-(--text-secondary)"
-        initial={{ opacity: 0, y: 8 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.4 }}
-      >
-        Cô Kiều sẽ giúp bạn theo dõi giá xăng dầu, phân tích biến động thị
-        trường và tính toán chi phí.
-      </motion.p>
-
-      <div className="mt-8 grid w-full gap-3 md:grid-cols-2">
+      <div className="mt-8 flex w-full justify-center">
         {SUGGESTED.map((s, i) => {
           const Icon = s.icon;
           return (
             <motion.button
               key={s.text}
-              className="flex items-start gap-3 rounded-lg border border-(--border) bg-(--surface) p-4 text-left shadow-(--shadow-sm) transition hover:-translate-y-0.5 hover:border-amber-400/40 hover:bg-(--surface-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
+              className="group flex items-center gap-3 rounded-full border border-(--border) bg-white/60 pl-2 pr-5 py-2 shadow-[0_8px_20px_rgba(15,23,42,0.04)] ring-1 ring-black/5 backdrop-blur-md transition hover:-translate-y-0.5 hover:bg-white hover:shadow-[0_12px_24px_rgba(245,158,11,0.08)] hover:ring-amber-300/40 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-500"
               onClick={() => onSend(s.text)}
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{
-                delay: 0.35 + i * 0.08,
-                duration: 0.35,
-                ease: "easeOut",
-              }}
+              transition={{ delay: 0.4, duration: 0.35, ease: "easeOut" }}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.97 }}
             >
-              <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-amber-50 text-amber-600">
-                <Icon size={16} strokeWidth={2} />
+              <span className="grid size-8 shrink-0 place-items-center rounded-full bg-linear-to-br from-amber-100 to-amber-50 text-amber-600 shadow-inner">
+                <Icon
+                  size={16}
+                  strokeWidth={2}
+                  className="transition-transform group-hover:scale-110"
+                />
               </span>
-              <span className="text-sm leading-6 text-(--text-primary)">
-                {s.text}
-              </span>
+              <span className="text-sm font-medium text-(--ink)">{s.text}</span>
             </motion.button>
           );
         })}
@@ -370,7 +352,9 @@ function ExecutionTurn({
 }) {
   return (
     <motion.div
-      className={["flex justify-start", showSpacing ? "mt-7" : "mt-1"].join(" ")}
+      className={["flex justify-start", showSpacing ? "mt-7" : "mt-1"].join(
+        " ",
+      )}
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
