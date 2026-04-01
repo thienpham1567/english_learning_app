@@ -22,15 +22,19 @@ export function applyFuelSseEvent(
     }
 
     const run = ensureAssistantRun(turn);
+    const nextRun = updateRun(run, event);
 
     return {
       ...turn,
-      run: updateRun(run, event),
+      run: nextRun,
     };
   });
 }
 
-function updateRun(run: FuelAssistantRun, event: FuelSseEventPayload) {
+function updateRun(
+  run: FuelAssistantRun,
+  event: FuelSseEventPayload,
+): FuelAssistantRun {
   switch (event.type) {
     case "run_start":
       return {
@@ -55,22 +59,21 @@ function updateRun(run: FuelAssistantRun, event: FuelSseEventPayload) {
       };
 
     case "tool_start":
+      const nextTool: FuelToolExecutionStep = {
+        id: event.toolCallId,
+        tool: event.tool,
+        name: event.name,
+        status: "running",
+        params: event.params,
+        thinking: [],
+        sources: [],
+        startedAt: event.startedAt,
+      };
+
       return {
         ...run,
         status: "running",
-        tools: [
-          ...run.tools,
-          {
-            id: event.toolCallId,
-            tool: event.tool,
-            name: event.name,
-            status: "running",
-            params: event.params,
-            thinking: [],
-            sources: [],
-            startedAt: event.startedAt,
-          },
-        ],
+        tools: [...run.tools, nextTool],
       };
 
     case "tool_thinking":
@@ -121,7 +124,7 @@ function patchTool(
   run: FuelAssistantRun,
   toolCallId: string,
   update: (tool: FuelToolExecutionStep) => FuelToolExecutionStep,
-) {
+): FuelAssistantRun {
   const index = run.tools.findIndex((tool) => tool.id === toolCallId);
 
   if (index === -1) {

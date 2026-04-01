@@ -1,4 +1,8 @@
 import { headers } from "next/headers";
+import type {
+  ResponseFunctionToolCallOutputItem,
+  ResponseInputItem,
+} from "openai/resources/responses/responses";
 
 import { auth } from "@/lib/auth";
 import { openAiClient } from "@/lib/openai/client";
@@ -90,7 +94,7 @@ async function runAgenticLoop(
   messages: FuelChatMessage[],
   discordWebhookUrl?: string,
 ) {
-  let currentInput: Array<Record<string, unknown>> = buildFuelChatInput(messages);
+  let currentInput: ResponseInputItem[] = buildFuelChatInput(messages);
   let lastToolCallId: string | null = null;
   let lastToolResultPreview: string | undefined;
 
@@ -141,18 +145,15 @@ async function runAgenticLoop(
     // Accumulate input for next iteration
     currentInput = [
       ...currentInput,
-      ...response.output.map((item) => {
-        if (isFunctionCallItem(item)) {
-          return {
-            type: "function_call" as const,
-            id: item.id,
-            call_id: item.call_id,
-            name: item.name,
-            arguments: item.arguments,
-          };
-        }
-        return item;
-      }),
+      ...functionCalls.map(
+        (item): ResponseInputItem => ({
+          type: "function_call",
+          id: item.id,
+          call_id: item.call_id,
+          name: item.name,
+          arguments: item.arguments,
+        }),
+      ),
       ...execution.toolOutputs,
     ];
 
@@ -194,9 +195,9 @@ async function executeToolCalls(
   discordWebhookUrl?: string,
 ) {
   const toolOutputs: Array<{
-    type: "function_call_output";
+    type: ResponseFunctionToolCallOutputItem["type"];
     call_id: string;
-    output: string;
+    output: ResponseFunctionToolCallOutputItem["output"];
   }> = [];
   let lastToolCallId: string | null = null;
   let lastToolResultPreview: string | undefined;

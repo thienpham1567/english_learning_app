@@ -1,3 +1,5 @@
+import type { ResponseInputItem } from "openai/resources/responses/responses";
+
 import {
   scrapeFuelPrices,
   getPreviousPriceSnapshot,
@@ -48,7 +50,9 @@ export async function executeFuelTool(
 /**
  * Converts client messages to OpenAI Responses API input format.
  */
-export function buildFuelChatInput(messages: FuelChatMessage[]) {
+export function buildFuelChatInput(
+  messages: FuelChatMessage[],
+): ResponseInputItem[] {
   return messages.map((m) => ({
     role: m.role as "user" | "assistant",
     content: m.text,

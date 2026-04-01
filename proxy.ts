@@ -3,7 +3,7 @@ import { getSessionCookie } from "better-auth/cookies";
 
 const PUBLIC_FILE_PATTERN = /\.[^/]+$/;
 
-export function middleware(request: NextRequest) {
+export function proxy(request: NextRequest) {
   if (PUBLIC_FILE_PATTERN.test(request.nextUrl.pathname)) {
     return NextResponse.next();
   }
