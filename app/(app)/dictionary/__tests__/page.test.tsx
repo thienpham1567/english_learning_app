@@ -23,11 +23,13 @@ describe("CoLanhDictionaryPage", () => {
   it("renders the hero copy and search panel", () => {
     const { container } = renderUi(<CoLanhDictionaryPage />);
     const pageWrapper = container.querySelector("div.h-full");
-    const layoutSection = container.querySelectorAll("section")[1];
+    const layoutSection = container.querySelector(
+      "section.grid.items-start.gap-6",
+    );
 
     expect(
       screen.getByRole("heading", {
-        name: /Tra cứu từ vựng theo cách rõ ràng, dễ học lại/i,
+        name: /Nhập mục từ cần tra cứu/i,
       }),
     ).toBeInTheDocument();
     expect(pageWrapper).toHaveClass("h-full", "min-h-0");

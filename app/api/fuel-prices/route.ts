@@ -5,19 +5,40 @@ import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { createChatSse } from "@/lib/chat/create-chat-sse";
 import { checkRateLimit } from "@/lib/fuel-prices/rate-limiter";
-import { writeSseEvent, streamTextChunks } from "@/lib/fuel-prices/sse-helpers";
+import { writeSseEvent } from "@/lib/fuel-prices/sse-helpers";
 import {
   FUEL_TOOLS,
   FUEL_PRICE_INSTRUCTIONS,
   executeFuelTool,
   buildFuelChatInput,
 } from "@/lib/fuel-prices/tools";
-import type { FuelChatMessage } from "@/lib/fuel-prices/types";
+import type {
+  FuelChatMessage,
+  FuelToolExecutionOutput,
+} from "@/lib/fuel-prices/types";
 
 const MAX_TOOL_STEPS = 5;
 
 const ERROR_MESSAGE =
   "Cô Kiều đang bị lỗi kỹ thuật rồi 😵 Thử lại sau nha!";
+
+type ResponseFunctionCall = {
+  type: "function_call";
+  id: string;
+  call_id: string;
+  name: string;
+  arguments: string;
+};
+
+type ResponseOutputText = {
+  type: "output_text";
+  text: string;
+};
+
+type ResponseMessage = {
+  type: "message";
+  content: ResponseOutputText[];
+};
 
 // ── Request Validation ──────────────────────────────────────
 
@@ -52,7 +73,7 @@ function createErrorSseResponse(message: string) {
     new ReadableStream<Uint8Array>({
       start(controller) {
         writeSseEvent(controller, encoder, {
-          type: "assistant_error",
+          type: "run_error",
           message,
         });
         controller.close();
@@ -69,8 +90,9 @@ async function runAgenticLoop(
   messages: FuelChatMessage[],
   discordWebhookUrl?: string,
 ) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let currentInput: any[] = buildFuelChatInput(messages);
+  let currentInput: Array<Record<string, unknown>> = buildFuelChatInput(messages);
+  let lastToolCallId: string | null = null;
+  let lastToolResultPreview: string | undefined;
 
   for (let step = 0; step < MAX_TOOL_STEPS; step++) {
     const isLastStep = step === MAX_TOOL_STEPS - 1;
@@ -82,33 +104,45 @@ async function runAgenticLoop(
       tools: FUEL_TOOLS,
     });
 
-    const functionCalls = response.output.filter(
-      (o) => o.type === "function_call",
-    );
+    const functionCalls = response.output.filter(isFunctionCallItem);
 
-    // ── Final text response (no tool calls or last allowed step) ──
-    if (functionCalls.length === 0 || isLastStep) {
+    // ── Final text response (no tool calls) ──
+    if (functionCalls.length === 0) {
       const finalText = extractTextFromResponse(response.output);
-      if (finalText) {
-        await streamTextChunks(controller, encoder, finalText);
+
+      if (finalText && lastToolCallId) {
+        writeSseEvent(controller, encoder, {
+          type: "tool_result",
+          toolCallId: lastToolCallId,
+          resultMarkdown: finalText,
+          resultPreview: lastToolResultPreview,
+          finishedAt: new Date().toISOString(),
+        });
       }
-      writeSseEvent(controller, encoder, { type: "assistant_done" });
+
+      writeSseEvent(controller, encoder, {
+        type: "run_done",
+        finishedAt: new Date().toISOString(),
+      });
       return;
     }
 
     // ── Execute tool calls ──
-    const toolOutputs = await executeToolCalls(
+    const execution = await executeToolCalls(
       functionCalls,
       controller,
       encoder,
       discordWebhookUrl,
     );
 
+    lastToolCallId = execution.lastToolCallId ?? lastToolCallId;
+    lastToolResultPreview = execution.lastToolResultPreview ?? lastToolResultPreview;
+
     // Accumulate input for next iteration
     currentInput = [
       ...currentInput,
       ...response.output.map((item) => {
-        if (item.type === "function_call") {
+        if (isFunctionCallItem(item)) {
           return {
             type: "function_call" as const,
             id: item.id,
@@ -119,24 +153,32 @@ async function runAgenticLoop(
         }
         return item;
       }),
-      ...toolOutputs,
+      ...execution.toolOutputs,
     ];
+
+    if (isLastStep) {
+      writeSseEvent(controller, encoder, {
+        type: "run_error",
+        message: "AI cần thêm bước xử lý nhưng đã chạm giới hạn tool steps.",
+        finishedAt: new Date().toISOString(),
+      });
+      return;
+    }
   }
 }
 
 // ── Helper: extract text from response output ───────────────
 
 function extractTextFromResponse(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  output: any[],
+  output: unknown[],
 ): string {
   let text = "";
   for (const item of output) {
-    if (item.type === "message") {
-      for (const content of item.content) {
-        if (content.type === "output_text") {
-          text += content.text;
-        }
+    if (!isMessageItem(item)) continue;
+
+    for (const content of item.content) {
+      if (content.type === "output_text") {
+        text += content.text;
       }
     }
   }
@@ -146,8 +188,7 @@ function extractTextFromResponse(
 // ── Helper: execute tool calls with SSE status updates ──────
 
 async function executeToolCalls(
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  functionCalls: any[],
+  functionCalls: ResponseFunctionCall[],
   controller: ReadableStreamDefaultController<Uint8Array>,
   encoder: TextEncoder,
   discordWebhookUrl?: string,
@@ -157,29 +198,19 @@ async function executeToolCalls(
     call_id: string;
     output: string;
   }> = [];
+  let lastToolCallId: string | null = null;
+  let lastToolResultPreview: string | undefined;
 
-  for (const [index, fc] of functionCalls.entries()) {
+  for (const fc of functionCalls) {
     const args = JSON.parse(fc.arguments || "{}") as Record<string, unknown>;
-    const agentMeta = getAgentMeta(fc.name);
     const toolMeta = getToolMeta(fc.name);
-    const agentId = `agent-${fc.name}-${index + 1}`;
     const startedAt = new Date().toISOString();
 
     writeSseEvent(controller, encoder, {
-      type: "agent_start",
-      agentId,
-      name: agentMeta.name,
-      summary: agentMeta.summary,
-      startedAt,
-    });
-
-    writeSseEvent(controller, encoder, {
-      type: "tool_call",
+      type: "tool_start",
       toolCallId: fc.call_id,
-      agentId,
-      name: toolMeta.name,
       tool: fc.name,
-      summary: toolMeta.summary,
+      name: toolMeta.name,
       params: args,
       startedAt,
     });
@@ -187,28 +218,45 @@ async function executeToolCalls(
     try {
       const result = await executeFuelTool(fc.name, args, { discordWebhookUrl });
       const finishedAt = new Date().toISOString();
+      lastToolCallId = fc.call_id;
+      lastToolResultPreview = result.resultPreview;
+
+      for (const line of result.thinking ?? []) {
+        writeSseEvent(controller, encoder, {
+          type: "tool_thinking",
+          toolCallId: fc.call_id,
+          message: line,
+        });
+      }
+
+      for (const source of result.sources ?? []) {
+        writeSseEvent(controller, encoder, {
+          type: "tool_source",
+          toolCallId: fc.call_id,
+          source,
+        });
+      }
+
+      if (result.renderingHint) {
+        writeSseEvent(controller, encoder, {
+          type: "tool_rendering",
+          toolCallId: fc.call_id,
+          message: result.renderingHint,
+        });
+      }
 
       writeSseEvent(controller, encoder, {
         type: "tool_result",
         toolCallId: fc.call_id,
-        agentId,
-        name: toolMeta.name,
-        tool: fc.name,
-        resultPreview: summarizeToolResult(fc.name, result),
-        finishedAt,
-      });
-
-      writeSseEvent(controller, encoder, {
-        type: "agent_done",
-        agentId,
-        resultPreview: agentMeta.donePreview,
+        resultMarkdown: buildToolResultMarkdown(fc.name, result),
+        resultPreview: result.resultPreview,
         finishedAt,
       });
 
       toolOutputs.push({
         type: "function_call_output",
         call_id: fc.call_id,
-        output: result,
+        output: result.content,
       });
     } catch (error) {
       const message =
@@ -218,17 +266,7 @@ async function executeToolCalls(
       writeSseEvent(controller, encoder, {
         type: "tool_error",
         toolCallId: fc.call_id,
-        agentId,
-        name: toolMeta.name,
-        tool: fc.name,
         message,
-        finishedAt,
-      });
-
-      writeSseEvent(controller, encoder, {
-        type: "agent_error",
-        agentId,
-        message: `Agent thất bại: ${message}`,
         finishedAt,
       });
 
@@ -240,43 +278,11 @@ async function executeToolCalls(
     }
   }
 
-  return toolOutputs;
-}
-
-function getAgentMeta(toolName: string) {
-  switch (toolName) {
-    case "get_fuel_prices":
-    case "send_discord_report":
-      return {
-        name: "Trợ lý giá xăng",
-        summary:
-          toolName === "send_discord_report"
-            ? "Chuẩn bị gửi báo cáo giá xăng lên Discord"
-            : "Phân tích yêu cầu tra cứu giá mới nhất",
-        donePreview:
-          toolName === "send_discord_report"
-            ? "Đã hoàn tất báo cáo giá xăng cho Discord."
-            : "Đã sẵn sàng tổng hợp bảng giá xăng dầu.",
-      };
-    case "compare_fuel_prices":
-      return {
-        name: "Trợ lý so sánh biến động",
-        summary: "Phân tích biến động giữa dữ liệu hiện tại và snapshot trước",
-        donePreview: "Đã sẵn sàng tổng hợp biến động giá xăng dầu.",
-      };
-    case "calculate_fuel_cost":
-      return {
-        name: "Trợ lý tính chi phí",
-        summary: "Phân tích hành trình và ước tính chi phí nhiên liệu",
-        donePreview: "Đã sẵn sàng tổng hợp chi phí chuyến đi.",
-      };
-    default:
-      return {
-        name: "Trợ lý giá xăng",
-        summary: "Đang xử lý yêu cầu giá xăng dầu",
-        donePreview: "Đã xử lý xong yêu cầu giá xăng dầu.",
-      };
-  }
+  return {
+    toolOutputs,
+    lastToolCallId,
+    lastToolResultPreview,
+  };
 }
 
 function getToolMeta(toolName: string) {
@@ -309,33 +315,82 @@ function getToolMeta(toolName: string) {
   }
 }
 
-function summarizeToolResult(toolName: string, result: string) {
-  const parsed = safeParseJson(result);
+function buildToolResultMarkdown(
+  toolName: string,
+  result: FuelToolExecutionOutput,
+) {
+  const parsed = safeParseJson(result.content);
 
   if (toolName === "get_fuel_prices") {
-    const count = Array.isArray(parsed?.prices) ? parsed.prices.length : 0;
-    if (count > 0) {
-      return `${count} loại nhiên liệu đã được cập nhật.`;
+    const prices = Array.isArray(parsed?.prices)
+      ? parsed.prices.filter(isPriceRow)
+      : [];
+    if (prices.length === 0) {
+      return parsed?.message ? String(parsed.message) : undefined;
     }
+
+    const rows = prices
+      .map(
+        (price) =>
+          `| ${price.name} | ${price.price} ${price.unit ?? ""} |`,
+      )
+      .join("\n");
+
+    return [
+      parsed?.updatedAt ? `Cập nhật lúc ${String(parsed.updatedAt)}.` : null,
+      "",
+      "| Sản phẩm | Giá |",
+      "| --- | ---: |",
+      rows,
+    ]
+      .filter(Boolean)
+      .join("\n");
   }
 
   if (toolName === "compare_fuel_prices") {
-    const count = Array.isArray(parsed?.comparison) ? parsed.comparison.length : 0;
-    if (count > 0) {
-      return `${count} mục đã được so sánh với snapshot trước.`;
+    const comparison = Array.isArray(parsed?.comparison)
+      ? parsed.comparison.filter(isComparisonRow)
+      : [];
+    if (comparison.length === 0) {
+      return parsed?.message ? String(parsed.message) : undefined;
     }
+
+    const rows = comparison
+      .map(
+        (item) =>
+          `| ${item.name} | ${item.currentPrice} | ${item.previousPrice} | ${item.change} |`,
+      )
+      .join("\n");
+
+    return [
+      "| Sản phẩm | Hiện tại | Trước đó | Biến động |",
+      "| --- | ---: | ---: | --- |",
+      rows,
+    ].join("\n");
   }
 
-  if (toolName === "calculate_fuel_cost" && parsed?.totalCost) {
-    return `Chi phí ước tính: ${String(parsed.totalCost)} VNĐ.`;
+  if (toolName === "calculate_fuel_cost") {
+    return [
+      parsed?.fuelType ? `Loại nhiên liệu: **${String(parsed.fuelType)}**` : null,
+      parsed?.litersNeeded
+        ? `Lượng tiêu thụ ước tính: **${String(parsed.litersNeeded)} lít**`
+        : null,
+      parsed?.pricePerLiter
+        ? `Giá mỗi lít: **${String(parsed.pricePerLiter)}**`
+        : null,
+      parsed?.totalCost ? `Tổng chi phí: **${String(parsed.totalCost)}**` : null,
+      parsed?.note ? String(parsed.note) : null,
+    ]
+      .filter(Boolean)
+      .join("\n\n");
   }
 
   if (toolName === "send_discord_report") {
-    if (parsed?.success) {
-      return "Báo cáo đã được gửi lên Discord.";
-    }
     if (parsed?.message) {
       return String(parsed.message);
+    }
+    if (parsed?.success) {
+      return "Đã gửi báo cáo lên Discord.";
     }
   }
 
@@ -343,7 +398,7 @@ function summarizeToolResult(toolName: string, result: string) {
     return String(parsed.message);
   }
 
-  return "Công cụ đã trả kết quả thành công.";
+  return undefined;
 }
 
 function safeParseJson(value: string): Record<string, unknown> | null {
@@ -357,6 +412,60 @@ function safeParseJson(value: string): Record<string, unknown> | null {
   }
 
   return null;
+}
+
+function isFunctionCallItem(value: unknown): value is ResponseFunctionCall {
+  if (typeof value !== "object" || value === null) return false;
+  const item = value as Record<string, unknown>;
+  return (
+    item.type === "function_call" &&
+    typeof item.id === "string" &&
+    typeof item.call_id === "string" &&
+    typeof item.name === "string" &&
+    typeof item.arguments === "string"
+  );
+}
+
+function isMessageItem(value: unknown): value is ResponseMessage {
+  if (typeof value !== "object" || value === null) return false;
+  const item = value as Record<string, unknown>;
+  return (
+    item.type === "message" &&
+    Array.isArray(item.content) &&
+    item.content.every(isOutputTextItem)
+  );
+}
+
+function isOutputTextItem(value: unknown): value is ResponseOutputText {
+  if (typeof value !== "object" || value === null) return false;
+  const item = value as Record<string, unknown>;
+  return item.type === "output_text" && typeof item.text === "string";
+}
+
+function isPriceRow(value: unknown): value is {
+  name: string;
+  price: string;
+  unit?: string;
+} {
+  if (typeof value !== "object" || value === null) return false;
+  const row = value as Record<string, unknown>;
+  return typeof row.name === "string" && typeof row.price === "string";
+}
+
+function isComparisonRow(value: unknown): value is {
+  name: string;
+  currentPrice: string;
+  previousPrice: string;
+  change: string;
+} {
+  if (typeof value !== "object" || value === null) return false;
+  const row = value as Record<string, unknown>;
+  return (
+    typeof row.name === "string" &&
+    typeof row.currentPrice === "string" &&
+    typeof row.previousPrice === "string" &&
+    typeof row.change === "string"
+  );
 }
 
 // ── POST Handler ────────────────────────────────────────────
@@ -389,13 +498,17 @@ export async function POST(req: Request) {
       new ReadableStream<Uint8Array>({
         async start(controller) {
           try {
-            writeSseEvent(controller, encoder, { type: "assistant_start" });
+            writeSseEvent(controller, encoder, {
+              type: "run_start",
+              startedAt: new Date().toISOString(),
+            });
             await runAgenticLoop(controller, encoder, messages, discordWebhookUrl);
           } catch (error) {
             console.error("Fuel price API error:", error);
             writeSseEvent(controller, encoder, {
-              type: "assistant_error",
+              type: "run_error",
               message: ERROR_MESSAGE,
+              finishedAt: new Date().toISOString(),
             });
           } finally {
             controller.close();

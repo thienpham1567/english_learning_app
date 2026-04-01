@@ -41,7 +41,7 @@ describe("UserMenu", () => {
     expect(screen.getByText("Cô Lành")).toHaveClass(
       "text-sm",
       "font-medium",
-      "text-[var(--ink)]",
+      "text-(--ink)",
       "max-[920px]:hidden",
     );
   });
@@ -55,17 +55,17 @@ describe("UserMenu", () => {
       "gap-2",
       "rounded-full",
       "border",
-      "border-[var(--border)]",
-      "bg-[var(--surface)]",
+      "border-(--border)",
+      "bg-(--surface)",
       "pl-[5px]",
       "pr-[10px]",
       "py-[5px]",
       "text-left",
-      "shadow-[var(--shadow-sm)]",
+      "shadow-(--shadow-sm)",
       "focus-visible:outline",
       "focus-visible:outline-2",
       "focus-visible:outline-offset-2",
-      "focus-visible:outline-[var(--accent)]",
+      "focus-visible:outline-(--accent)",
     );
 
     expect(screen.getByText("CL")).toHaveClass(
@@ -84,7 +84,7 @@ describe("UserMenu", () => {
       "focus-visible:outline",
       "focus-visible:outline-2",
       "focus-visible:outline-offset-2",
-      "focus-visible:outline-[var(--accent)]",
+      "focus-visible:outline-(--accent)",
     );
   });
 });

@@ -22,7 +22,7 @@ describe("AppSidebar", () => {
       "focus-visible:outline",
       "focus-visible:outline-2",
       "focus-visible:outline-offset-2",
-      "focus-visible:outline-[var(--accent)]",
+      "focus-visible:outline-(--accent)",
     );
   });
 

@@ -11,16 +11,14 @@ import {
   Settings,
 } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
-import ReactMarkdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 
 import { useFuelChat } from "@/hooks/useFuelChat";
 import {
+  FuelExecutionPanel,
   UserAvatar,
-  CopyButton,
-  FuelExecutionTimeline,
   formatTime,
 } from "@/components/app/fuel-chat/FuelChatParts";
+import type { FuelAssistantRun } from "@/lib/fuel-prices/types";
 import { useState } from "react";
 
 /* ── Suggested prompts ── */
@@ -29,21 +27,6 @@ const SUGGESTED = [
   { text: "Giá xăng tăng hay giảm so với lần trước?", icon: TrendingUp },
   { text: "Đi Sài Gòn - Đà Lạt hết bao nhiêu tiền xăng?", icon: Calculator },
 ];
-
-/* ── Markdown CSS classes ── */
-const MARKDOWN_CLASSES = [
-  "fuel-chat-content text-[15px] leading-8 text-(--text-primary)",
-  "[&_p]:m-0 [&_p:not(:last-child)]:mb-2",
-  "[&_strong]:font-semibold [&_strong]:text-(--ink)",
-  "[&_em]:italic [&_em]:text-(--text-secondary)",
-  "[&_code]:rounded-[5px] [&_code]:bg-(--bg-deep) [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:[font-family:var(--font-mono)] [&_code]:text-[0.86em] [&_code]:text-(--accent)",
-  "[&_ul]:my-2 [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5",
-  "[&_ol]:my-2 [&_ol]:list-decimal [&_ol]:space-y-1 [&_ol]:pl-5",
-  "[&_li]:leading-7",
-  "[&_table]:my-3 [&_table]:w-full [&_table]:border-collapse",
-  "[&_th]:border [&_th]:border-(--border) [&_th]:bg-(--bg-deep) [&_th]:px-3 [&_th]:py-2 [&_th]:text-left [&_th]:text-sm [&_th]:font-semibold",
-  "[&_td]:border [&_td]:border-(--border) [&_td]:px-3 [&_td]:py-2 [&_td]:text-sm",
-].join(" ");
 
 /* ── Main Component ── */
 export function FuelPriceChat() {
@@ -56,7 +39,6 @@ export function FuelPriceChat() {
     handleScroll,
     messages,
     isLoading,
-    streamingHasStarted,
     error,
     clearError,
     bottomRef,
@@ -112,20 +94,24 @@ export function FuelPriceChat() {
           {hasMessages && (
             <div className="flex flex-col">
               {messages.map((m, index) => {
-                const isLastAssistant =
-                  isLoading &&
-                  index === messages.length - 1 &&
-                  m.role === "assistant";
+                const previous = index > 0 ? messages[index - 1] : undefined;
+                const showSpacing = index > 0 && previous?.role !== m.role;
+
+                if (m.role === "assistant") {
+                  return (
+                    <ExecutionTurn
+                      key={m.id}
+                      run={m.run}
+                      showSpacing={showSpacing}
+                    />
+                  );
+                }
 
                 return (
-                  <MessageBubble
+                  <UserPromptBubble
                     key={m.id}
-                    message={m}
-                    isStreaming={isLastAssistant}
-                    isWaiting={isLastAssistant && !streamingHasStarted}
-                    showSpacing={
-                      index > 0 && messages[index - 1].role !== m.role
-                    }
+                    text={m.text}
+                    showSpacing={showSpacing}
                   />
                 );
               })}
@@ -342,134 +328,56 @@ function EmptyState({ onSend }: { onSend: (text: string) => void }) {
   );
 }
 
-function MessageBubble({
-  message: m,
-  isStreaming,
-  isWaiting,
+function UserPromptBubble({
+  text,
   showSpacing,
 }: {
-  message: {
-    id: string;
-    role: "user" | "assistant";
-    text: string;
-    timeline?: Array<{
-      id: string;
-      kind: "agent" | "tool";
-      name: string;
-      status: "pending" | "running" | "done" | "error";
-      summary?: string;
-      params?: Record<string, unknown>;
-      resultPreview?: string;
-      error?: string;
-      parentId?: string;
-      tool?: string;
-      startedAt?: string;
-      finishedAt?: string;
-    }>;
-  };
-  isStreaming: boolean;
-  isWaiting: boolean;
+  text: string;
   showSpacing: boolean;
 }) {
-  const isUser = m.role === "user";
-  const text = m.text.trim();
-  const timeline = m.timeline ?? [];
-  const showTimeline = !isUser && timeline.length > 0;
-  const showStatus = !text && isWaiting && !showTimeline;
-
-  // Hide empty assistant messages that aren't actively loading
-  if (!text && !isStreaming && !showTimeline) return null;
-
   return (
     <motion.div
       className={[
-        "group flex items-start gap-3",
-        isUser ? "justify-end" : "justify-start",
+        "group flex items-start justify-end gap-3",
         showSpacing ? "mt-7" : "mt-1",
       ].join(" ")}
       initial={{ opacity: 0, y: 6 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
-      {!isUser && (
-        <div className="grid size-8 shrink-0 place-items-center rounded-full bg-linear-to-br from-amber-500 to-orange-600 text-white shadow-(--shadow-sm)">
-          <Fuel size={14} strokeWidth={2} />
+      <div className="flex max-w-[min(42rem,80%)] flex-col items-end gap-2">
+        <div className="rounded-[22px] rounded-br-md bg-(--bubble-user) px-4 py-3 text-white shadow-(--shadow-sm)">
+          <span className="whitespace-pre-wrap">{text}</span>
         </div>
-      )}
-
-      <div
-        className={[
-          "flex max-w-[min(42rem,80%)] flex-col gap-2",
-          isUser ? "items-end" : "items-start",
-        ].join(" ")}
-      >
-        {/* Inline status: initial waiting state */}
-        {showStatus && (
-          <div className="rounded-2xl rounded-bl-md border border-(--border) bg-(--bubble-ai) px-4 py-3 shadow-(--shadow-sm)">
-            <motion.span
-              className="flex items-center gap-1.5"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-            >
-              <span className="text-xs text-(--text-muted)">Đang xử lý</span>
-              {[0, 1, 2].map((i) => (
-                <motion.span
-                  key={i}
-                  className="inline-block size-1.5 rounded-full bg-(--text-muted)"
-                  animate={{ y: [0, -4, 0], opacity: [0.3, 1, 0.3] }}
-                  transition={{
-                    duration: 1.2,
-                    repeat: Infinity,
-                    delay: i * 0.15,
-                    ease: "easeInOut",
-                  }}
-                />
-              ))}
-            </motion.span>
-          </div>
-        )}
-
-        {showTimeline && <FuelExecutionTimeline steps={timeline} />}
-
-        {/* Actual message content */}
-        {text && (
-          <>
-            <div
-              className={[
-                "rounded-[22px] px-4 py-3 shadow-(--shadow-sm)",
-                isUser
-                  ? "rounded-br-md bg-(--bubble-user) text-white"
-                  : "rounded-bl-md border border-(--border) bg-(--bubble-ai) text-(--text-primary)",
-              ].join(" ")}
-            >
-              {isUser ? (
-                <span className="whitespace-pre-wrap">{text}</span>
-              ) : (
-                <div className={MARKDOWN_CLASSES}>
-                  <ReactMarkdown remarkPlugins={[remarkGfm]}>{text}</ReactMarkdown>
-                  {isStreaming && (
-                    <span
-                      className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] rounded-[1px] bg-amber-500 align-middle [animation:textCursor_0.7s_ease-in-out_infinite]"
-                      aria-hidden="true"
-                    />
-                  )}
-                </div>
-              )}
-            </div>
-            <div className="flex items-center gap-2 text-xs text-(--text-muted) opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-              <span>{formatTime()}</span>
-              {!isUser && <CopyButton text={text} />}
-            </div>
-          </>
-        )}
+        <div className="flex items-center gap-2 text-xs text-(--text-muted) opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+          <span>{formatTime()}</span>
+        </div>
       </div>
 
-      {isUser && (
-        <div className="grid size-10 shrink-0 place-items-center overflow-hidden rounded-full bg-(--ink) text-xs font-semibold text-white shadow-(--shadow-sm)">
-          <UserAvatar />
-        </div>
-      )}
+      <div className="grid size-10 shrink-0 place-items-center overflow-hidden rounded-full bg-(--ink) text-xs font-semibold text-white shadow-(--shadow-sm)">
+        <UserAvatar />
+      </div>
+    </motion.div>
+  );
+}
+
+function ExecutionTurn({
+  run,
+  showSpacing,
+}: {
+  run: FuelAssistantRun;
+  showSpacing: boolean;
+}) {
+  return (
+    <motion.div
+      className={["flex justify-start", showSpacing ? "mt-7" : "mt-1"].join(" ")}
+      initial={{ opacity: 0, y: 6 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, ease: "easeOut" }}
+    >
+      <div className="max-w-[min(48rem,90%)]">
+        <FuelExecutionPanel run={run} />
+      </div>
     </motion.div>
   );
 }

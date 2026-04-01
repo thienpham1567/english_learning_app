@@ -58,7 +58,7 @@ describe("DictionarySearchPanel", () => {
   });
 
   it("tips render as 3 list items with left-border accent styling", () => {
-    const { container } = renderUi(
+    const { container, getByRole } = renderUi(
       <DictionarySearchPanel
         initialValue=""
         onSubmit={() => {}}
@@ -66,11 +66,13 @@ describe("DictionarySearchPanel", () => {
       />,
     );
 
+    fireEvent.click(getByRole("button", { name: "Mẹo sử dụng" }));
+
     const tips = container.querySelectorAll("li");
     expect(tips).toHaveLength(3);
     tips.forEach((tip) => {
       expect(tip).toHaveClass("border-l-2");
-      expect(tip).toHaveClass("pl-4");
+      expect(tip).toHaveClass("pl-3");
     });
   });
 
