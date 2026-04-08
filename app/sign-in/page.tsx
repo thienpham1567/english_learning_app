@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useState, type FormEvent } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { motion } from "motion/react";
@@ -30,8 +30,6 @@ const GoogleIcon = () => (
 function SignInContent() {
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(
     searchParams.get("error") ? "Đăng nhập thất bại. Vui lòng thử lại." : null,
   );
@@ -49,31 +47,6 @@ function SignInContent() {
       setError("Không thể kết nối đến Google. Vui lòng thử lại.");
       setIsLoading(false);
     }
-  };
-
-  const handleEmailSignIn = async (e: FormEvent) => {
-    e.preventDefault();
-    if (!email.trim() || !password.trim()) return;
-
-    setIsLoading(true);
-    setError(null);
-
-    const normalizedEmail = email.trim().includes("@")
-      ? email.trim()
-      : `${email.trim()}@local.app`;
-
-    const result = await authClient.signIn.email({
-      email: normalizedEmail,
-      password,
-    });
-
-    if (result.error) {
-      setError("Email hoặc mật khẩu không đúng.");
-      setIsLoading(false);
-      return;
-    }
-
-    window.location.href = "/english-chatbot";
   };
 
   return (
@@ -103,42 +76,7 @@ function SignInContent() {
         </p>
       </div>
 
-      {/* Email / password form */}
-      <form className="mt-8 flex flex-col gap-4" onSubmit={handleEmailSignIn}>
-        <input
-          type="text"
-          className="w-full border-b border-(--border) bg-transparent px-1 py-3 text-[15px] text-(--text-primary) outline-none transition-colors placeholder:text-(--text-muted) focus:border-b-2 focus:border-(--accent) disabled:cursor-not-allowed"
-          placeholder="Tên đăng nhập"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          disabled={isLoading}
-          autoComplete="username"
-        />
-        <input
-          type="password"
-          className="w-full border-b border-(--border) bg-transparent px-1 py-3 text-[15px] text-(--text-primary) outline-none transition-colors placeholder:text-(--text-muted) focus:border-b-2 focus:border-(--accent) disabled:cursor-not-allowed"
-          placeholder="Mật khẩu"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          disabled={isLoading}
-          autoComplete="current-password"
-        />
-        <motion.button
-          type="submit"
-          className="btn-shimmer mt-6 w-full rounded-(--radius) bg-(--ink) py-3 text-sm font-semibold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) disabled:cursor-not-allowed disabled:opacity-50"
-          disabled={isLoading || !email.trim() || !password.trim()}
-          whileTap={{ scale: 0.97 }}
-        >
-          {isLoading ? "Đang đăng nhập..." : "Đăng nhập"}
-        </motion.button>
-      </form>
-
-      {/* Divider */}
-      <div className="my-6 flex items-center gap-3 text-xs uppercase tracking-[0.18em] text-(--text-muted)">
-        <div className="h-px flex-1 bg-(--border)" />
-        <span>hoặc</span>
-        <div className="h-px flex-1 bg-(--border)" />
-      </div>
+      <div className="mt-8" />
 
       {/* Google sign-in */}
       <motion.button
