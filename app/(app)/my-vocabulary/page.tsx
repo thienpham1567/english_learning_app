@@ -7,6 +7,7 @@ import { BookMarked, Search, Trash2 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { VocabularyStatsBar } from "@/components/app/my-vocabulary/VocabularyStatsBar";
 import { VocabularyDetailSheet } from "@/components/app/my-vocabulary/VocabularyDetailSheet";
+import { ToeicVocabularySection } from "@/components/app/my-vocabulary/ToeicVocabularySection";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";
 import http from "@/lib/http";
 
@@ -235,6 +236,11 @@ export default function MyVocabularyPage() {
             <div className="h-px bg-(--border)" />
           </>
         )}
+
+        {/* ── TOEIC Vocabulary Categories ── */}
+        <ToeicVocabularySection className="mt-6 mb-2" />
+
+        <div className="h-px bg-(--border)" />
 
         {/* ── Search ── */}
         <div className="relative mt-6">
