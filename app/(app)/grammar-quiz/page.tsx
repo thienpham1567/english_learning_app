@@ -38,10 +38,10 @@ export default function GrammarQuizPage() {
         </div>
         <div className="flex-1">
           <h2 className="text-[15px] font-semibold text-(--ink)">
-            Luyện ngữ pháp 📝
+            TOEIC Part 5 📝
           </h2>
           <p className="text-xs text-(--text-muted)">
-            AI Grammar Quiz · Luyện tập theo cấp độ CEFR
+            Incomplete Sentences · Luyện tập theo độ khó
           </p>
         </div>
       </div>

@@ -20,6 +20,7 @@ export function useWritingPractice() {
   const [state, setState] = useState<PracticeState>("prompt-selection");
   const [category, setCategory] = useState<WritingCategory | null>(null);
   const [prompt, setPrompt] = useState("");
+  const [hints, setHints] = useState<string[]>([]);
   const [writtenText, setWrittenText] = useState("");
   const [feedback, setFeedback] = useState<WritingFeedback | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -40,11 +41,12 @@ export function useWritingPractice() {
     setState("generating-prompt");
     setError(null);
     try {
-      const { data } = await http.post<{ prompt: string }>(
+      const { data } = await http.post<{ prompt: string; hints: string[] }>(
         "/writing-practice/prompt",
         { category: cat },
       );
       setPrompt(data.prompt);
+      setHints(data.hints ?? []);
       setState("writing");
     } catch {
       setError("Không thể tạo đề bài. Vui lòng thử lại.");
@@ -91,6 +93,7 @@ export function useWritingPractice() {
   const startNew = useCallback(() => {
     setCategory(null);
     setPrompt("");
+    setHints([]);
     setWrittenText("");
     setFeedback(null);
     setError(null);
@@ -101,6 +104,7 @@ export function useWritingPractice() {
     state,
     category,
     prompt,
+    hints,
     writtenText,
     feedback,
     error,

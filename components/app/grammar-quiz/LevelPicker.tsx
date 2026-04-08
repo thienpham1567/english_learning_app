@@ -2,15 +2,16 @@
 
 import { motion } from "motion/react";
 
-const LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"] as const;
+const LEVELS = [
+  { id: "easy", label: "Dễ", desc: "Ngữ pháp cơ bản", color: "emerald" },
+  { id: "medium", label: "Trung bình", desc: "Ngữ pháp nâng cao", color: "amber" },
+  { id: "hard", label: "Khó", desc: "Ngữ pháp chuyên sâu", color: "rose" },
+] as const;
 
-const LEVEL_STYLES: Record<string, { bg: string; ring: string; text: string }> = {
-  A1: { bg: "bg-emerald-50", ring: "ring-emerald-300", text: "text-emerald-700" },
-  A2: { bg: "bg-teal-50", ring: "ring-teal-300", text: "text-teal-700" },
-  B1: { bg: "bg-sky-50", ring: "ring-sky-300", text: "text-sky-700" },
-  B2: { bg: "bg-amber-50", ring: "ring-amber-300", text: "text-amber-700" },
-  C1: { bg: "bg-orange-50", ring: "ring-orange-300", text: "text-orange-700" },
-  C2: { bg: "bg-rose-50", ring: "ring-rose-300", text: "text-rose-700" },
+const COLORS: Record<string, { bg: string; ring: string; text: string }> = {
+  emerald: { bg: "bg-emerald-50", ring: "ring-emerald-300", text: "text-emerald-700" },
+  amber: { bg: "bg-amber-50", ring: "ring-amber-300", text: "text-amber-700" },
+  rose: { bg: "bg-rose-50", ring: "ring-rose-300", text: "text-rose-700" },
 };
 
 type Props = {
@@ -29,31 +30,32 @@ export function LevelPicker({ selected, onSelect, onStart, isLoading }: Props) {
       transition={{ duration: 0.4 }}
     >
       <h2 className="[font-family:var(--font-display)] text-2xl italic text-(--ink)">
-        Chọn trình độ
+        TOEIC Part 5
       </h2>
       <p className="mt-2 text-sm text-(--text-muted)">
-        Chọn cấp độ CEFR để bắt đầu luyện ngữ pháp
+        Incomplete Sentences — Chọn độ khó để bắt đầu
       </p>
 
-      <div className="mt-6 flex flex-wrap justify-center gap-2.5">
+      <div className="mt-6 flex flex-col gap-2.5 w-full">
         {LEVELS.map((lvl, i) => {
-          const s = LEVEL_STYLES[lvl];
-          const isSelected = selected === lvl;
+          const s = COLORS[lvl.color];
+          const isSelected = selected === lvl.id;
           return (
             <motion.button
-              key={lvl}
-              className={`rounded-lg px-5 py-2.5 text-sm font-semibold ring-1 transition ${
+              key={lvl.id}
+              className={`flex items-center gap-3 rounded-xl px-5 py-3.5 text-left ring-1 transition ${
                 isSelected
                   ? `${s.bg} ${s.text} ${s.ring} ring-2 shadow-(--shadow-sm)`
                   : `bg-(--surface) text-(--text-secondary) ring-(--border) hover:${s.bg} hover:${s.text}`
               }`}
-              onClick={() => onSelect(lvl)}
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ delay: i * 0.05 }}
-              whileTap={{ scale: 0.95 }}
+              onClick={() => onSelect(lvl.id)}
+              initial={{ opacity: 0, x: -12 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: i * 0.07 }}
+              whileTap={{ scale: 0.97 }}
             >
-              {lvl}
+              <span className="text-lg font-bold">{lvl.label}</span>
+              <span className="text-xs opacity-70">{lvl.desc}</span>
             </motion.button>
           );
         })}

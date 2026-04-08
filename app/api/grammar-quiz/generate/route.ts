@@ -7,24 +7,34 @@ import { openAiConfig } from "@/lib/openai/config";
 import { QuizGenerationResponseSchema } from "@/lib/grammar-quiz/schema";
 
 const RequestBodySchema = z.object({
-  level: z.enum(["A1", "A2", "B1", "B2", "C1", "C2"]),
+  level: z.enum(["easy", "medium", "hard"]),
   count: z.number().int().min(1).max(20).default(10),
 });
 
-const SYSTEM_PROMPT = `You are a grammar quiz generator for English learners.
-Generate multiple-choice questions testing specific grammar points appropriate for the given CEFR level.
+const SYSTEM_PROMPT = `You are a TOEIC grammar quiz generator.
+Generate multiple-choice questions that follow the TOEIC Reading Part 5 (Incomplete Sentences) format.
+Each question presents a sentence with a blank that must be filled with the correct word or phrase.
 Each question must have exactly 4 options with exactly one correct answer.
-The explanation should include both English grammar rule and Vietnamese translation.
+Provide the grammar explanation in both English and Vietnamese (separate fields).
+Also provide exactly 2 short example sentences demonstrating the correct grammar usage.
+Topics should cover: verb forms/tenses, prepositions, conjunctions, relative pronouns, word forms (noun/verb/adjective/adverb), articles, conditionals, passive voice, and other common TOEIC grammar points.
+
+Difficulty levels:
+- easy: Basic grammar (simple tenses, common prepositions, basic word forms)
+- medium: Intermediate grammar (perfect tenses, conditionals, passive voice, relative clauses)
+- hard: Advanced grammar (subjunctive, inversion, complex noun phrases, subtle word choice)
 
 IMPORTANT: Return ONLY valid JSON matching this exact schema:
 {
   "questions": [
     {
-      "stem": "She _____ to the store yesterday.",
-      "options": ["go", "goes", "went", "going"],
+      "stem": "The manager _____ the report before the meeting started.",
+      "options": ["review", "reviews", "had reviewed", "reviewing"],
       "correctIndex": 2,
-      "explanation": "We use the past simple tense for completed actions in the past. 'Yesterday' is a past time marker.\\nChúng ta dùng thì quá khứ đơn cho hành động đã hoàn thành trong quá khứ. 'Yesterday' là dấu hiệu thời gian quá khứ.",
-      "grammarTopic": "past simple"
+      "explanationEn": "We use the past perfect tense for an action completed before another past action.",
+      "explanationVi": "Chúng ta dùng thì quá khứ hoàn thành cho hành động xảy ra trước một hành động khác trong quá khứ.",
+      "examples": ["She had finished lunch before I arrived.", "They had left the office by 6 PM."],
+      "grammarTopic": "past perfect"
     }
   ]
 }`;
@@ -79,7 +89,7 @@ export async function POST(request: Request) {
           { role: "system", content: SYSTEM_PROMPT },
           {
             role: "user",
-            content: `Generate exactly ${count} grammar quiz questions for CEFR level ${level}. Return JSON only.`,
+            content: `Generate exactly ${count} TOEIC Part 5 grammar questions at "${level}" difficulty. Return JSON only.`,
           },
         ],
       });

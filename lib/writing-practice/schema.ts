@@ -23,11 +23,11 @@ export const WritingFeedbackSchema = z.object({
 });
 
 export const PromptRequestSchema = z.object({
-  category: z.enum(["ielts-task-1", "ielts-task-2", "email", "free"]),
+  category: z.enum(["email-response", "opinion-essay", "describe-picture", "free"]),
 });
 
 export const ReviewRequestSchema = z.object({
   prompt: z.string().min(1),
-  category: z.enum(["ielts-task-1", "ielts-task-2", "email", "free"]),
+  category: z.enum(["email-response", "opinion-essay", "describe-picture", "free"]),
   text: z.string().min(10),
 });

@@ -7,8 +7,8 @@ const BREADCRUMBS: Record<string, { eyebrow: string; title: string }> = {
   "/dictionary": { eyebrow: "Từ điển", title: "Christine Ho" },
   "/my-vocabulary": { eyebrow: "Từ vựng của tôi", title: "Từ vựng" },
   "/flashcards": { eyebrow: "Ôn tập từ vựng", title: "Flashcards" },
-  "/grammar-quiz": { eyebrow: "Luyện ngữ pháp", title: "Grammar Quiz" },
-  "/writing-practice": { eyebrow: "Luyện viết", title: "Writing Practice" },
+  "/grammar-quiz": { eyebrow: "TOEIC Part 5", title: "Grammar Quiz" },
+  "/writing-practice": { eyebrow: "TOEIC Writing", title: "Luyện viết" },
   "/daily-challenge": { eyebrow: "Thử thách mỗi ngày", title: "Daily Challenge" },
 };
 

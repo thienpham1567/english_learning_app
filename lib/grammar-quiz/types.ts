@@ -2,7 +2,9 @@ export type GrammarQuestion = {
   stem: string;
   options: [string, string, string, string];
   correctIndex: number;
-  explanation: string;
+  explanationEn: string;
+  explanationVi: string;
+  examples: [string, string];
   grammarTopic: string;
 };
 

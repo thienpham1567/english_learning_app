@@ -34,18 +34,18 @@ export type WritingSubmission = {
   createdAt: string;
 };
 
-export type WritingCategory = "ielts-task-1" | "ielts-task-2" | "email" | "free";
+export type WritingCategory = "email-response" | "opinion-essay" | "describe-picture" | "free";
 
 export const CATEGORY_LABELS: Record<WritingCategory, string> = {
-  "ielts-task-1": "IELTS Task 1",
-  "ielts-task-2": "IELTS Task 2",
-  email: "Email",
+  "email-response": "Email Response",
+  "opinion-essay": "Opinion Essay",
+  "describe-picture": "Describe a Picture",
   free: "Chủ đề tự do",
 };
 
 export const MIN_WORDS: Record<WritingCategory, number> = {
-  "ielts-task-1": 150,
-  "ielts-task-2": 250,
-  email: 80,
+  "email-response": 80,
+  "opinion-essay": 200,
+  "describe-picture": 60,
   free: 50,
 };

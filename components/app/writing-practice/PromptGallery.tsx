@@ -1,14 +1,14 @@
 "use client";
 
 import { motion } from "motion/react";
-import { FileText, Mail, PenLine, Sparkles } from "lucide-react";
+import { Mail, PenLine, Image, Sparkles } from "lucide-react";
 import type { WritingCategory } from "@/lib/writing-practice/types";
 import { CATEGORY_LABELS } from "@/lib/writing-practice/types";
 
-const CATEGORIES: { id: WritingCategory; icon: typeof FileText; desc: string }[] = [
-  { id: "ielts-task-1", icon: FileText, desc: "Mô tả biểu đồ, bảng số liệu" },
-  { id: "ielts-task-2", icon: PenLine, desc: "Viết luận nghị luận 250+ từ" },
-  { id: "email", icon: Mail, desc: "Thư trang trọng hoặc thân mật" },
+const CATEGORIES: { id: WritingCategory; icon: typeof Mail; desc: string }[] = [
+  { id: "email-response", icon: Mail, desc: "Trả lời email yêu cầu (TOEIC Q6-7)" },
+  { id: "opinion-essay", icon: PenLine, desc: "Viết luận trình bày quan điểm (TOEIC Q8)" },
+  { id: "describe-picture", icon: Image, desc: "Mô tả hình ảnh bằng câu (TOEIC Q1-5)" },
   { id: "free", icon: Sparkles, desc: "Tự do sáng tạo, chủ đề bất kỳ" },
 ];
 
@@ -30,7 +30,7 @@ export function PromptGallery({ onSelect, isLoading, loadingCategory }: Props) {
         Chọn loại bài viết
       </h2>
       <p className="mt-2 text-center text-sm text-(--text-muted)">
-        AI sẽ tạo đề bài phù hợp cho bạn
+        Luyện viết theo format TOEIC Speaking & Writing
       </p>
 
       <div className="mt-6 grid grid-cols-2 gap-3 max-[520px]:grid-cols-1">

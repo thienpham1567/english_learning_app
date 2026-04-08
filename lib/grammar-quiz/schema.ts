@@ -4,7 +4,9 @@ export const GrammarQuestionSchema = z.object({
   stem: z.string().min(5),
   options: z.tuple([z.string(), z.string(), z.string(), z.string()]),
   correctIndex: z.number().int().min(0).max(3),
-  explanation: z.string().min(10),
+  explanationEn: z.string().min(10),
+  explanationVi: z.string().min(10),
+  examples: z.tuple([z.string(), z.string()]),
   grammarTopic: z.string().min(2),
 });
 

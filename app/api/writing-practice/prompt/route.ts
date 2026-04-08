@@ -6,14 +6,14 @@ import { openAiConfig } from "@/lib/openai/config";
 import { PromptRequestSchema } from "@/lib/writing-practice/schema";
 
 const PROMPT_INSTRUCTIONS: Record<string, string> = {
-  "ielts-task-1":
-    "Generate a realistic IELTS Writing Task 1 prompt. Describe a graph, chart, table, or diagram that the student must summarize in at least 150 words. Include a brief description of what the data shows.",
-  "ielts-task-2":
-    "Generate a realistic IELTS Writing Task 2 prompt. Present an argumentative or discussion question on a common topic (education, technology, environment, society). The student must write at least 250 words.",
-  email:
-    "Generate a realistic email writing prompt. Specify whether it is formal or informal, the recipient, and the purpose. The student must write at least 80 words.",
+  "email-response":
+    "Generate a realistic TOEIC Writing Question 6-7 style prompt. Present an email that the student must respond to with at least 80 words. Include the sender, subject, and 2-3 specific points to address in the reply.",
+  "opinion-essay":
+    "Generate a realistic TOEIC Writing Question 8 style prompt. Present a statement or question about a common topic (workplace, lifestyle, education, technology) and ask the student to write an opinion essay of at least 200 words with reasons and examples.",
+  "describe-picture":
+    "Generate a realistic TOEIC Writing Question 1-5 style prompt. Describe a picture scenario (e.g., people in an office, a busy street, a meeting room) and ask the student to write 2-3 sentences describing the scene using specific given words. Minimum 60 words.",
   free:
-    "Generate an interesting creative writing prompt suitable for English learners. It can be a story starter, opinion question, or descriptive task. Minimum 50 words.",
+    "Generate an interesting creative writing prompt suitable for English learners preparing for TOEIC. Topics should relate to workplace, business, daily life, or travel. Minimum 50 words.",
 };
 
 export async function POST(request: Request) {
@@ -51,12 +51,18 @@ export async function POST(request: Request) {
 
     const prompt = completion.choices[0]?.message?.content?.trim();
     if (!prompt) {
-      return Response.json({ error: "Failed to generate prompt" }, { status: 502 });
+      return Response.json(
+        { error: "Failed to generate prompt" },
+        { status: 502 },
+      );
     }
 
     return Response.json({ prompt });
   } catch (err) {
     console.error("[writing-practice] Prompt generation failed:", err);
-    return Response.json({ error: "Failed to generate prompt" }, { status: 502 });
+    return Response.json(
+      { error: "Failed to generate prompt" },
+      { status: 502 },
+    );
   }
 }

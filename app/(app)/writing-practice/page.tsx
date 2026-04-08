@@ -14,6 +14,7 @@ export default function WritingPracticePage() {
     state,
     category,
     prompt,
+    hints,
     writtenText,
     feedback,
     error,
@@ -40,7 +41,7 @@ export default function WritingPracticePage() {
             Luyện viết ✍️
           </h2>
           <p className="text-xs text-(--text-muted)">
-            AI Writing Review · Chấm bài theo tiêu chí IELTS
+            TOEIC Writing Practice · Chấm bài theo tiêu chí TOEIC
           </p>
         </div>
       </div>
@@ -111,6 +112,7 @@ export default function WritingPracticePage() {
                 <WritingEditor
                   prompt={prompt}
                   category={category}
+                  hints={hints}
                   onSubmit={submitWriting}
                   isSubmitting={false}
                 />

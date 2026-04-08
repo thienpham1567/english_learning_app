@@ -1,20 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "motion/react";
-import { Send } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
+import { Send, Lightbulb, ChevronDown } from "lucide-react";
 import type { WritingCategory } from "@/lib/writing-practice/types";
 import { MIN_WORDS, CATEGORY_LABELS } from "@/lib/writing-practice/types";
 
 type Props = {
   prompt: string;
   category: WritingCategory;
+  hints: string[];
   onSubmit: (text: string) => void;
   isSubmitting: boolean;
 };
 
-export function WritingEditor({ prompt, category, onSubmit, isSubmitting }: Props) {
+export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting }: Props) {
   const [text, setText] = useState("");
+  const [showHints, setShowHints] = useState(false);
   const wordCount = text.trim().split(/\s+/).filter(Boolean).length;
   const minWords = MIN_WORDS[category];
   const ratio = minWords > 0 ? wordCount / minWords : 1;
@@ -36,6 +38,41 @@ export function WritingEditor({ prompt, category, onSubmit, isSubmitting }: Prop
         </span>
         <p className="mt-2 text-sm leading-relaxed text-(--ink)">{prompt}</p>
       </div>
+
+      {/* Hints toggle */}
+      {hints.length > 0 && (
+        <div className="mt-3">
+          <button
+            className="flex w-full items-center gap-2 rounded-lg border border-amber-200 bg-amber-50/60 px-3 py-2 text-left text-sm font-medium text-amber-700 transition hover:bg-amber-50"
+            onClick={() => setShowHints(!showHints)}
+          >
+            <Lightbulb size={15} className="shrink-0" />
+            <span className="flex-1">Gợi ý viết bài</span>
+            <ChevronDown
+              size={14}
+              className={`shrink-0 transition-transform ${showHints ? "rotate-180" : ""}`}
+            />
+          </button>
+          <AnimatePresence>
+            {showHints && (
+              <motion.div
+                className="mt-1.5 space-y-1.5 rounded-lg border border-amber-100 bg-amber-50/40 px-3 py-2.5"
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.25 }}
+              >
+                {hints.map((hint, i) => (
+                  <p key={i} className="flex gap-2 text-[13px] leading-relaxed text-amber-800">
+                    <span className="shrink-0 font-semibold text-amber-600">{i + 1}.</span>
+                    {hint}
+                  </p>
+                ))}
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
+      )}
 
       {/* Editor */}
       <div className="relative mt-4">

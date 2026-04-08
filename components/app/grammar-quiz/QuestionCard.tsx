@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "motion/react";
 import { Check, X } from "lucide-react";
 import type { GrammarQuestion } from "@/lib/grammar-quiz/types";
@@ -26,6 +27,7 @@ export function QuestionCard({
   onNext,
 }: Props) {
   const isLastQuestion = questionNumber === total;
+  const [lang, setLang] = useState<"en" | "vi">("vi");
 
   return (
     <div className="mx-auto w-full max-w-xl">
@@ -88,7 +90,7 @@ export function QuestionCard({
           })}
         </div>
 
-        {/* Explanation */}
+        {/* Explanation with EN/VN toggle */}
         {isRevealed && (
           <motion.div
             className="mt-5 rounded-xl border border-amber-200 bg-amber-50/60 p-4"
@@ -96,12 +98,50 @@ export function QuestionCard({
             animate={{ opacity: 1, height: "auto" }}
             transition={{ duration: 0.3 }}
           >
-            <p className="text-xs font-semibold uppercase tracking-widest text-amber-700">
-              Giải thích
-            </p>
+            <div className="flex items-center justify-between">
+              <p className="text-xs font-semibold uppercase tracking-widest text-amber-700">
+                Giải thích
+              </p>
+              {/* Lang toggle */}
+              <div className="flex overflow-hidden rounded-md border border-amber-300">
+                <button
+                  className={`px-2.5 py-0.5 text-[11px] font-semibold transition-colors ${
+                    lang === "vi"
+                      ? "bg-amber-600 text-white"
+                      : "bg-amber-50 text-amber-700 hover:bg-amber-100"
+                  }`}
+                  onClick={() => setLang("vi")}
+                >
+                  VN
+                </button>
+                <button
+                  className={`px-2.5 py-0.5 text-[11px] font-semibold transition-colors ${
+                    lang === "en"
+                      ? "bg-amber-600 text-white"
+                      : "bg-amber-50 text-amber-700 hover:bg-amber-100"
+                  }`}
+                  onClick={() => setLang("en")}
+                >
+                  EN
+                </button>
+              </div>
+            </div>
+
             <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-amber-900">
-              {question.explanation}
+              {lang === "en" ? question.explanationEn : question.explanationVi}
             </p>
+
+            {/* Examples */}
+            <div className="mt-3 space-y-1">
+              <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-600">
+                Ví dụ
+              </p>
+              {question.examples.map((ex, i) => (
+                <p key={i} className="text-sm italic text-amber-800">
+                  {i + 1}. {ex}
+                </p>
+              ))}
+            </div>
           </motion.div>
         )}
 

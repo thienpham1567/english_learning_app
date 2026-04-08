@@ -10,9 +10,9 @@ export function useGrammarQuiz() {
   const [state, setState] = useState<QuizState>("idle");
   const [level, setLevel] = useState<string>(() => {
     if (typeof window !== "undefined") {
-      return localStorage.getItem(STORAGE_KEY) ?? "B1";
+      return localStorage.getItem(STORAGE_KEY) ?? "medium";
     }
-    return "B1";
+    return "medium";
   });
   const [questions, setQuestions] = useState<GrammarQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
