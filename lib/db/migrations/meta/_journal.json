@@ -22,6 +22,27 @@
       "when": 1774717475795,
       "tag": "0002_equal_exiles",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1775631505337,
+      "tag": "0003_ambiguous_deathstrike",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1775633947737,
+      "tag": "0004_narrow_jean_grey",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1775634495504,
+      "tag": "0005_yummy_catseye",
+      "breakpoints": true
     }
   ]
 }

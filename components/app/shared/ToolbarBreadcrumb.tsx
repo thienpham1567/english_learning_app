@@ -6,7 +6,10 @@ const BREADCRUMBS: Record<string, { eyebrow: string; title: string }> = {
   "/english-chatbot": { eyebrow: "Trợ lý học tập", title: "Trò chuyện" },
   "/dictionary": { eyebrow: "Từ điển", title: "Christine Ho" },
   "/my-vocabulary": { eyebrow: "Từ vựng của tôi", title: "Từ vựng" },
-  "/fuel-prices": { eyebrow: "Giá xăng dầu", title: "Cây xăng cô Kiều" },
+  "/flashcards": { eyebrow: "Ôn tập từ vựng", title: "Flashcards" },
+  "/grammar-quiz": { eyebrow: "Luyện ngữ pháp", title: "Grammar Quiz" },
+  "/writing-practice": { eyebrow: "Luyện viết", title: "Writing Practice" },
+  "/daily-challenge": { eyebrow: "Thử thách mỗi ngày", title: "Daily Challenge" },
 };
 
 export function ToolbarBreadcrumb() {

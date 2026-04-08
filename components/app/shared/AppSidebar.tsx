@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookMarked, BookOpen, Fuel, MessageCircleMore, PanelLeftClose, PanelLeftOpen } from "lucide-react";
+import { BookMarked, BookOpen, BrainCircuit, Flame, Layers, MessageCircleMore, PanelLeftClose, PanelLeftOpen, PenLine } from "lucide-react";
 import { Tooltip } from "antd";
 import { motion } from "motion/react";
 
@@ -11,7 +11,10 @@ const navItems = [
   { href: "/english-chatbot", label: "Trò chuyện", icon: MessageCircleMore },
   { href: "/dictionary", label: "Từ điển", icon: BookOpen },
   { href: "/my-vocabulary", label: "Từ vựng", icon: BookMarked },
-  { href: "/fuel-prices", label: "Giá Xăng", icon: Fuel },
+  { href: "/flashcards", label: "Ôn tập", icon: Layers },
+  { href: "/grammar-quiz", label: "Ngữ pháp", icon: BrainCircuit },
+  { href: "/writing-practice", label: "Luyện viết", icon: PenLine },
+  { href: "/daily-challenge", label: "Thử thách", icon: Flame },
 ];
 
 const navItemVariants = {
