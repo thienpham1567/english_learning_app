@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 
@@ -138,7 +138,10 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const activePersona = PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
   const ActiveAvatar = activePersona.avatar;
 
-  const suggestions = useMemo(() => sampleSuggestions(activePersona, 4), [activePersona]);
+  const [suggestions, setSuggestions] = useState<(typeof activePersona.suggestions)[number][]>([]);
+  useEffect(() => {
+    setSuggestions(sampleSuggestions(activePersona, 4));
+  }, [activePersona]);
 
   const conversationsRef = useRef(conversations);
   conversationsRef.current = conversations;

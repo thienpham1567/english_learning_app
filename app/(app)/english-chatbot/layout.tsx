@@ -23,14 +23,12 @@ export default function EnglishChatbotLayout({
       <div
         style={{
           display: "flex",
-          height: "100%",
-          maxHeight: "100%",
+          height: "calc(100% + 48px)",
+          maxHeight: "calc(100% + 48px)",
           minHeight: 0,
           flex: 1,
+          margin: -24,
           overflow: "hidden",
-          borderRadius: "var(--radius-lg)",
-          border: "1px solid var(--border)",
-          boxShadow: "var(--shadow-md)",
         }}
       >
         <ConversationList activeId={activeId} />

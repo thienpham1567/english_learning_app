@@ -48,7 +48,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
       placement="right"
       onClose={onClose}
       open={isOpen}
-      width={384}
+      size={384}
       styles={{ body: { padding: 20 } }}
     >
       {vocabulary && sensesWithData.length === 0 && (

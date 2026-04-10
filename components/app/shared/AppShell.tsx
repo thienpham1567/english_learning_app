@@ -1,14 +1,11 @@
 "use client";
 
 import { useState, useEffect, type ReactNode } from "react";
-import { Layout } from "antd";
 
 import { AppSidebar } from "@/components/app/shared/AppSidebar";
 import { UserMenu } from "@/components/app/shared/UserMenu";
 import { UserProvider } from "@/components/app/shared/UserContext";
 import { ToolbarBreadcrumb } from "@/components/app/shared/ToolbarBreadcrumb";
-
-const { Header, Content } = Layout;
 
 export type AuthUser = {
   name: string;
@@ -32,11 +29,11 @@ export function AppShell({ children, user }: { children: ReactNode; user: AuthUs
   };
 
   return (
-    <Layout style={{ minHeight: "100vh", maxHeight: "100vh", overflow: "hidden" }}>
+    <div style={{ display: "flex", minHeight: "100vh", maxHeight: "100vh", overflow: "hidden" }}>
       <AppSidebar isExpanded={isExpanded} onToggle={handleToggle} />
-      <Layout>
+      <div style={{ display: "flex", flexDirection: "column", flex: 1, minWidth: 0 }}>
         <UserProvider user={user}>
-          <Header
+          <header
             style={{
               display: "flex",
               alignItems: "center",
@@ -48,25 +45,28 @@ export function AppShell({ children, user }: { children: ReactNode; user: AuthUs
               backdropFilter: "blur(12px)",
               zIndex: 120,
               lineHeight: "normal",
+              flexShrink: 0,
             }}
           >
             <ToolbarBreadcrumb />
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <UserMenu user={user} />
             </div>
-          </Header>
-          <Content
+          </header>
+          <main
             style={{
+              display: "flex",
+              flexDirection: "column",
               flex: 1,
-              overflow: "auto",
+              overflow: "hidden",
               padding: 24,
               minHeight: 0,
             }}
           >
             {children}
-          </Content>
+          </main>
         </UserProvider>
-      </Layout>
-    </Layout>
+      </div>
+    </div>
   );
 }
