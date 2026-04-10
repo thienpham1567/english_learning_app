@@ -6,41 +6,57 @@ type NearbyWordsBarProps = {
   onSearch: (word: string) => void;
 };
 
+const wordBtnStyle: React.CSSProperties = {
+  borderRadius: 999,
+  border: "1px solid var(--border)",
+  background: "var(--surface)",
+  padding: "2px 10px",
+  fontSize: 12,
+  color: "var(--text-secondary)",
+  cursor: "pointer",
+  transition: "border-color 0.2s, color 0.2s",
+};
+
 export function NearbyWordsBar({ words, headword, onSearch }: NearbyWordsBarProps) {
   if (words.length === 0) return null;
 
-  // Split words into before/after groups around the headword's alphabetical position.
-  // The server returns: [before_0, before_1, ..., after_0, after_1, ...]
-  // We insert the headword marker between the two halves.
   const half = Math.floor(words.length / 2);
   const before = words.slice(0, half);
   const after = words.slice(half);
 
   return (
-    <div className="flex flex-wrap items-center gap-1.5">
-      <span className="text-[10px] font-semibold uppercase tracking-widest text-(--text-muted) mr-1">
+    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6 }}>
+      <span
+        style={{
+          fontSize: 10,
+          fontWeight: 600,
+          textTransform: "uppercase",
+          letterSpacing: "0.2em",
+          color: "var(--text-muted)",
+          marginRight: 4,
+        }}
+      >
         Nearby
       </span>
       {before.map((word) => (
-        <button
-          key={word}
-          type="button"
-          onClick={() => onSearch(word)}
-          className="rounded-full border border-(--border) bg-white/60 px-2.5 py-0.5 text-xs text-(--text-secondary) transition hover:border-(--accent) hover:text-(--accent)"
-        >
+        <button key={word} type="button" onClick={() => onSearch(word)} style={wordBtnStyle}>
           {word}
         </button>
       ))}
-      <span className="rounded-full bg-[rgba(196,109,46,0.1)] px-2.5 py-0.5 text-xs font-semibold text-(--accent)">
+      <span
+        style={{
+          borderRadius: 999,
+          background: "rgba(154,177,122,0.1)",
+          padding: "2px 10px",
+          fontSize: 12,
+          fontWeight: 600,
+          color: "var(--accent)",
+        }}
+      >
         {headword}
       </span>
       {after.map((word) => (
-        <button
-          key={word}
-          type="button"
-          onClick={() => onSearch(word)}
-          className="rounded-full border border-(--border) bg-white/60 px-2.5 py-0.5 text-xs text-(--text-secondary) transition hover:border-(--accent) hover:text-(--accent)"
-        >
+        <button key={word} type="button" onClick={() => onSearch(word)} style={wordBtnStyle}>
           {word}
         </button>
       ))}

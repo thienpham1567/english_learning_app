@@ -60,8 +60,7 @@ function buildOpenAiHistoryItem(message: ChatMessage): ResponseInputItem {
 
 export function buildChatRequest(messages: ChatMessage[], personaId: string) {
   const recentMessages = messages.slice(-MAX_CONTEXT_MESSAGES);
-  const consecutiveVietnameseTurns =
-    countConsecutiveVietnameseTurns(recentMessages);
+  const consecutiveVietnameseTurns = countConsecutiveVietnameseTurns(recentMessages);
 
   return {
     instructions: buildChatInstructions({ consecutiveVietnameseTurns, personaId }),

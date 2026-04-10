@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import ReactMarkdown from "react-markdown";
-import { motion } from "motion/react";
-import { Check, Copy, GraduationCap } from "lucide-react";
+import { CheckOutlined, CopyOutlined, TrophyOutlined } from "@ant-design/icons";
 import { useUser } from "@/components/app/shared/UserContext";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 import type { Persona } from "@/lib/chat/personas";
@@ -34,14 +33,25 @@ function CopyButton({ text }: { text: string }) {
   };
 
   return (
-    <motion.button
-      className="rounded-full p-1 text-(--text-muted) transition hover:text-(--text-primary)"
+    <button
+      style={{
+        borderRadius: "50%",
+        padding: 4,
+        color: "var(--text-muted)",
+        background: "none",
+        border: "none",
+        cursor: "pointer",
+        transition: "color 0.2s",
+      }}
       onClick={handleCopy}
-      whileTap={{ scale: 0.85 }}
       aria-label="Sao chép"
     >
-      {copied ? <Check size={13} strokeWidth={2.5} /> : <Copy size={13} strokeWidth={2} />}
-    </motion.button>
+      {copied ? (
+        <CheckOutlined style={{ fontSize: 13 }} />
+      ) : (
+        <CopyOutlined style={{ fontSize: 13 }} />
+      )}
+    </button>
   );
 }
 
@@ -53,7 +63,7 @@ function UserAvatar() {
       <img
         src={user.image}
         alt={user.name}
-        className="size-10 rounded-full object-cover"
+        style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover" }}
         referrerPolicy="no-referrer"
       />
     );
@@ -67,7 +77,19 @@ function UserAvatar() {
     .toUpperCase();
 
   return (
-    <div className="grid size-10 place-items-center rounded-full bg-(--ink) text-xs font-semibold text-white">
+    <div
+      style={{
+        display: "grid",
+        placeItems: "center",
+        width: 40,
+        height: 40,
+        borderRadius: "50%",
+        background: "var(--ink)",
+        fontSize: 12,
+        fontWeight: 600,
+        color: "#fff",
+      }}
+    >
       {initials}
     </div>
   );
@@ -75,7 +97,6 @@ function UserAvatar() {
 
 export function ChatMessage({
   message,
-  className = "",
   isStreaming = false,
   persona,
 }: {
@@ -86,10 +107,10 @@ export function ChatMessage({
 }) {
   if (message.role === "divider") {
     return (
-      <div className={["flex items-center gap-3 py-3", className].join(" ")}>
-        <div className="h-px flex-1 bg-(--border)" />
-        <span className="text-xs text-(--text-muted)">{message.text}</span>
-        <div className="h-px flex-1 bg-(--border)" />
+      <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 0" }}>
+        <div style={{ height: 1, flex: 1, background: "var(--border)" }} />
+        <span style={{ fontSize: 12, color: "var(--text-muted)" }}>{message.text}</span>
+        <div style={{ height: 1, flex: 1, background: "var(--border)" }} />
       </div>
     );
   }
@@ -101,67 +122,121 @@ export function ChatMessage({
   const time = formatTime();
 
   return (
-    <motion.div
-      className={[
-        "group flex items-end gap-3 [animation:fadeUp_0.25s_ease-out_forwards]",
-        isUser ? "justify-end" : "justify-start",
-        className,
-      ].join(" ")}
-      initial={{ opacity: 0, y: 6 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+    <div
+      className="anim-fade-up"
+      style={{
+        display: "flex",
+        alignItems: "flex-end",
+        gap: 12,
+        justifyContent: isUser ? "flex-end" : "flex-start",
+      }}
     >
       {!isUser && (
-        <div className="grid size-8 shrink-0 place-items-center rounded-full bg-(--ink) text-white shadow-(--shadow-sm)">
-          {persona ? <persona.avatar size={5} /> : <GraduationCap size={14} strokeWidth={2} />}
+        <div
+          style={{
+            display: "grid",
+            placeItems: "center",
+            width: 32,
+            height: 32,
+            flexShrink: 0,
+            borderRadius: "50%",
+            background: "var(--ink)",
+            color: "#fff",
+            boxShadow: "var(--shadow-sm)",
+          }}
+        >
+          {persona ? <persona.avatar size={5} /> : <TrophyOutlined style={{ fontSize: 14 }} />}
         </div>
       )}
 
-      <div className={["flex max-w-[min(42rem,80%)] flex-col gap-2", isUser ? "items-end" : "items-start"].join(" ")}>
+      <div
+        style={{
+          display: "flex",
+          maxWidth: "min(42rem, 80%)",
+          flexDirection: "column",
+          gap: 8,
+          alignItems: isUser ? "flex-end" : "flex-start",
+        }}
+      >
         <div
-          className={[
-            "rounded-[22px] px-4 py-3 shadow-(--shadow-sm)",
-            isUser
-              ? "rounded-br-md bg-(--bubble-user) text-white"
-              : "rounded-bl-md border border-(--border) bg-(--bubble-ai) text-(--text-primary)",
-          ].join(" ")}
+          style={{
+            borderRadius: 22,
+            padding: "12px 16px",
+            boxShadow: "var(--shadow-sm)",
+            ...(isUser
+              ? { borderBottomRightRadius: 6, background: "var(--bubble-user)", color: "#fff" }
+              : {
+                  borderBottomLeftRadius: 6,
+                  border: "1px solid var(--border)",
+                  background: "var(--bubble-ai)",
+                  color: "var(--text-primary)",
+                }),
+          }}
         >
           {isUser ? (
-            <span className="whitespace-pre-wrap">{text}</span>
+            <span style={{ whiteSpace: "pre-wrap" }}>{text}</span>
           ) : (
             <div
-              className={[
-                "text-[15px] leading-8 text-(--text-primary)",
-                "[&_p]:m-0 [&_p:not(:last-child)]:mb-2",
-                "[&_strong]:font-semibold [&_strong]:text-(--ink)",
-                "[&_em]:italic [&_em]:text-(--text-secondary)",
-                "[&_code]:rounded-[5px] [&_code]:bg-(--bg-deep) [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:[font-family:var(--font-mono)] [&_code]:text-[0.86em] [&_code]:text-(--accent)",
-                "[&_ul]:my-2 [&_ul]:list-disc [&_ul]:space-y-1 [&_ul]:pl-5",
-                "[&_ol]:my-2 [&_ol]:list-decimal [&_ol]:space-y-1 [&_ol]:pl-5",
-                "[&_li]:leading-7",
-              ].join(" ")}
+              className="chat-markdown"
+              style={{ fontSize: 15, lineHeight: 2, color: "var(--text-primary)" }}
             >
               <ReactMarkdown>{text}</ReactMarkdown>
               {isStreaming && (
                 <span
-                  className="ml-0.5 inline-block h-[1em] w-[2px] translate-y-[2px] rounded-[1px] bg-(--accent) align-middle [animation:textCursor_0.7s_ease-in-out_infinite]"
+                  style={{
+                    marginLeft: 2,
+                    display: "inline-block",
+                    height: "1em",
+                    width: 2,
+                    transform: "translateY(2px)",
+                    borderRadius: 1,
+                    background: "var(--accent)",
+                    verticalAlign: "middle",
+                    animation: "textCursor 0.7s ease-in-out infinite",
+                  }}
                   aria-hidden="true"
                 />
               )}
             </div>
           )}
         </div>
-        <div className="flex items-center gap-2 text-xs text-(--text-muted) opacity-0 transition-opacity duration-200 group-hover:opacity-100 group-focus-within:opacity-100">
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            fontSize: 12,
+            color: "var(--text-muted)",
+            opacity: 0,
+            transition: "opacity 0.2s",
+          }}
+          className="chat-meta"
+        >
           {time && <span>{time}</span>}
           {!isUser && <CopyButton text={text} />}
         </div>
       </div>
 
       {isUser && (
-        <div className="grid size-10 shrink-0 place-items-center overflow-hidden rounded-full bg-(--ink) text-xs font-semibold text-white shadow-(--shadow-sm)">
+        <div
+          style={{
+            display: "grid",
+            placeItems: "center",
+            width: 40,
+            height: 40,
+            flexShrink: 0,
+            overflow: "hidden",
+            borderRadius: "50%",
+            background: "var(--ink)",
+            fontSize: 12,
+            fontWeight: 600,
+            color: "#fff",
+            boxShadow: "var(--shadow-sm)",
+          }}
+        >
           <UserAvatar />
         </div>
       )}
-    </motion.div>
+    </div>
   );
 }

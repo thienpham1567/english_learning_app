@@ -14,10 +14,7 @@ export function getBadges(bestStreak: number): Badge[] {
   }));
 }
 
-export function getNewlyUnlockedBadges(
-  previousBestStreak: number,
-  newBestStreak: number,
-): Badge[] {
+export function getNewlyUnlockedBadges(previousBestStreak: number, newBestStreak: number): Badge[] {
   return BADGE_DEFINITIONS.filter(
     (b) => previousBestStreak < b.requiredStreak && newBestStreak >= b.requiredStreak,
   ).map((b) => ({ ...b, unlocked: true }));

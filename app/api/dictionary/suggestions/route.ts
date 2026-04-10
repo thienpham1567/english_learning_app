@@ -13,10 +13,9 @@ export async function GET(req: Request) {
   }
 
   try {
-    const { data } = await axios.get<{ word: string }[]>(
-      "https://api.datamuse.com/sug",
-      { params: { s: q, max: 8 } },
-    );
+    const { data } = await axios.get<{ word: string }[]>("https://api.datamuse.com/sug", {
+      params: { s: q, max: 8 },
+    });
     return NextResponse.json({ suggestions: data.map((item) => item.word) });
   } catch {
     return NextResponse.json({ suggestions: [] });

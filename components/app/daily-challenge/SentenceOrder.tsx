@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "motion/react";
 import type { SentenceOrderData } from "@/lib/daily-challenge/types";
 
 type Props = {
@@ -42,7 +41,7 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
           <span className="text-xs text-(--text-muted)">Nhấn vào các từ bên dưới...</span>
         )}
         {selected.map((w, i) => (
-          <motion.button
+          <button
             key={`s-${i}`}
             layout
             className="rounded bg-(--accent)/10 px-2.5 py-1 text-sm font-medium text-(--accent)"
@@ -50,14 +49,14 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
             disabled={disabled}
           >
             {w}
-          </motion.button>
+          </button>
         ))}
       </div>
 
       {/* Available words */}
       <div className="flex flex-wrap gap-1.5">
         {available.map((w, i) => (
-          <motion.button
+          <button
             key={`a-${i}`}
             layout
             className="rounded-lg border border-(--border) bg-(--surface) px-2.5 py-1 text-sm transition hover:border-(--accent)/40"
@@ -65,19 +64,17 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
             disabled={disabled}
           >
             {w}
-          </motion.button>
+          </button>
         ))}
       </div>
 
       {selected.length === data.scrambled.length && !disabled && (
-        <motion.button
+        <button
           className="mt-3 rounded-lg bg-(--accent) px-4 py-1.5 text-sm font-medium text-white"
           onClick={handleSubmit}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
         >
           Xác nhận
-        </motion.button>
+        </button>
       )}
     </div>
   );

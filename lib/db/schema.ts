@@ -52,9 +52,7 @@ export const userVocabulary = pgTable(
     saved: boolean("saved").default(false).notNull(),
     lookedUpAt: timestamp("looked_up_at", { withTimezone: true }).defaultNow().notNull(),
   },
-  (table) => [
-    uniqueIndex("user_vocabulary_user_query_idx").on(table.userId, table.query),
-  ],
+  (table) => [uniqueIndex("user_vocabulary_user_query_idx").on(table.userId, table.query)],
 );
 
 export const flashcardProgress = pgTable(
@@ -71,9 +69,7 @@ export const flashcardProgress = pgTable(
     nextReview: timestamp("next_review", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
   },
-  (table) => [
-    uniqueIndex("flashcard_progress_user_query_idx").on(table.userId, table.query),
-  ],
+  (table) => [uniqueIndex("flashcard_progress_user_query_idx").on(table.userId, table.query)],
 );
 
 export const writingSubmission = pgTable("writing_submission", {

@@ -13,7 +13,11 @@ import type {
 export function useDailyChallenge() {
   const [state, setState] = useState<ChallengeState>("loading");
   const [challenge, setChallenge] = useState<DailyChallenge | null>(null);
-  const [streak, setStreak] = useState<StreakInfo>({ currentStreak: 0, bestStreak: 0, lastCompletedDate: null });
+  const [streak, setStreak] = useState<StreakInfo>({
+    currentStreak: 0,
+    bestStreak: 0,
+    lastCompletedDate: null,
+  });
   const [badges, setBadges] = useState<Badge[]>([]);
   const [currentExercise, setCurrentExercise] = useState(0);
   const [userAnswers, setUserAnswers] = useState<{ exerciseIndex: number; answer: string }[]>([]);

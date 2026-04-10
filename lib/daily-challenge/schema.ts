@@ -51,11 +51,14 @@ export const ChallengeGenerationSchema = z.object({
 });
 
 export const SubmitAnswerSchema = z.object({
-  answers: z.array(
-    z.object({
-      exerciseIndex: z.number().int().min(0).max(4),
-      answer: z.string().min(1),
-    }),
-  ).min(1).max(5),
+  answers: z
+    .array(
+      z.object({
+        exerciseIndex: z.number().int().min(0).max(4),
+        answer: z.string().min(1),
+      }),
+    )
+    .min(1)
+    .max(5),
   timeElapsedMs: z.number().int().min(0),
 });

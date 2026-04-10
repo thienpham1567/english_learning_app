@@ -118,7 +118,10 @@ const bilingualEntry = {
       examples: [
         { en: "The plane took off on time.", vi: "Máy bay cất cánh đúng giờ." },
         { en: "The rocket took off at dawn.", vi: "Tên lửa cất cánh lúc bình minh." },
-        { en: "I always watch when the plane takes off.", vi: "Tôi luôn nhìn qua cửa sổ khi máy bay cất cánh." },
+        {
+          en: "I always watch when the plane takes off.",
+          vi: "Tôi luôn nhìn qua cửa sổ khi máy bay cất cánh.",
+        },
       ],
       synonyms: [],
       antonyms: [],
@@ -216,8 +219,20 @@ const verbEntry = {
     { label: "Base", form: "run", phoneticsUs: null, phoneticsUk: null, isIrregular: false },
     { label: "3rd person", form: "runs", phoneticsUs: null, phoneticsUk: null, isIrregular: false },
     { label: "Past simple", form: "ran", phoneticsUs: null, phoneticsUk: null, isIrregular: true },
-    { label: "Past participle", form: "run", phoneticsUs: null, phoneticsUk: null, isIrregular: true },
-    { label: "Present participle", form: "running", phoneticsUs: null, phoneticsUk: null, isIrregular: false },
+    {
+      label: "Past participle",
+      form: "run",
+      phoneticsUs: null,
+      phoneticsUk: null,
+      isIrregular: true,
+    },
+    {
+      label: "Present participle",
+      form: "running",
+      phoneticsUs: null,
+      phoneticsUk: null,
+      isIrregular: false,
+    },
   ],
   numberInfo: null,
   senses: [
@@ -413,29 +428,21 @@ describe("DictionaryResultCard", () => {
       <DictionaryResultCard vocabulary={singleSenseEntry} hasSearched isLoading={false} />,
     );
 
-    expect(
-      container.querySelector(".flex.items-start.justify-between.gap-4"),
-    ).toHaveClass("max-[720px]:flex-col");
+    expect(container.querySelector(".flex.items-start.justify-between.gap-4")).toHaveClass(
+      "max-[720px]:flex-col",
+    );
   });
 
   it("renders English example text when examples array is populated", () => {
     const { getByText } = renderUi(
-      <DictionaryResultCard
-        vocabulary={bilingualEntry}
-        hasSearched
-        isLoading={false}
-      />,
+      <DictionaryResultCard vocabulary={bilingualEntry} hasSearched isLoading={false} />,
     );
     expect(getByText("The plane took off on time.")).toBeInTheDocument();
   });
 
   it("wraps each bilingual example in a cursor-help tooltip span", () => {
     const { container } = renderUi(
-      <DictionaryResultCard
-        vocabulary={bilingualEntry}
-        hasSearched
-        isLoading={false}
-      />,
+      <DictionaryResultCard vocabulary={bilingualEntry} hasSearched isLoading={false} />,
     );
     const tooltipSpans = container.querySelectorAll("span.cursor-help");
     expect(tooltipSpans).toHaveLength(3);
@@ -443,11 +450,7 @@ describe("DictionaryResultCard", () => {
 
   it("falls back to examplesVi plain strings when examples is empty", () => {
     const { getByText } = renderUi(
-      <DictionaryResultCard
-        vocabulary={singleSenseEntry}
-        hasSearched
-        isLoading={false}
-      />,
+      <DictionaryResultCard vocabulary={singleSenseEntry} hasSearched isLoading={false} />,
     );
     expect(getByText("Máy bay cất cánh đúng giờ.")).toBeInTheDocument();
   });
@@ -499,8 +502,16 @@ describe("DictionaryResultCard", () => {
       writable: true,
       configurable: true,
     });
-    const mockUtterance = { lang: "", onstart: null as (() => void) | null, onend: null as (() => void) | null, onerror: null as (() => void) | null };
-    vi.stubGlobal("SpeechSynthesisUtterance", vi.fn(() => mockUtterance));
+    const mockUtterance = {
+      lang: "",
+      onstart: null as (() => void) | null,
+      onend: null as (() => void) | null,
+      onerror: null as (() => void) | null,
+    };
+    vi.stubGlobal(
+      "SpeechSynthesisUtterance",
+      vi.fn(() => mockUtterance),
+    );
 
     const { getByLabelText } = renderUi(
       <DictionaryResultCard vocabulary={ipaEntry} hasSearched isLoading={false} />,

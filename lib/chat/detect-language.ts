@@ -145,11 +145,9 @@ export function detectLanguage(input: string): DetectedLanguage {
 
   const tokens = tokenize(text);
   const englishScore =
-    countPhraseMatches(tokens, englishPhrases) +
-    countTokenMatches(tokens, englishTokens);
+    countPhraseMatches(tokens, englishPhrases) + countTokenMatches(tokens, englishTokens);
   const vietnameseScore =
-    countPhraseMatches(tokens, vietnamesePhrases) +
-    countTokenMatches(tokens, vietnameseTokens);
+    countPhraseMatches(tokens, vietnamesePhrases) + countTokenMatches(tokens, vietnameseTokens);
 
   if (englishScore > 0 && vietnameseScore > 0) return "mixed";
   if (vietnameseScore > 0) return "vietnamese";

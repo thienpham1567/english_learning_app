@@ -3,11 +3,13 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { X, BookMarked, ExternalLink } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { Button, Drawer, Flex, Skeleton, Space, Tag, Typography } from "antd";
+import { BookOutlined, LinkOutlined, StarFilled, StarOutlined } from "@ant-design/icons";
 
 import http from "@/lib/http";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";
+
+const { Title, Text, Paragraph } = Typography;
 
 type Props = {
   query: string | null;
@@ -19,12 +21,12 @@ type Props = {
 type Status = "idle" | "loading" | "ok" | "error";
 
 const LEVEL_COLORS: Record<string, string> = {
-  A1: "bg-green-100 text-green-800",
-  A2: "bg-cyan-100 text-cyan-800",
-  B1: "bg-blue-100 text-blue-800",
-  B2: "bg-yellow-100 text-yellow-800",
-  C1: "bg-orange-100 text-orange-800",
-  C2: "bg-red-100 text-red-800",
+  A1: "green",
+  A2: "cyan",
+  B1: "blue",
+  B2: "gold",
+  C1: "orange",
+  C2: "volcano",
 };
 
 function getTypeLabel(data: Vocabulary): string {
@@ -33,24 +35,10 @@ function getTypeLabel(data: Vocabulary): string {
   return data.partOfSpeech ?? "word";
 }
 
-export function VocabularyDetailSheet({
-  query,
-  onClose,
-  saved,
-  onToggleSaved,
-}: Props) {
+export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: Props) {
   const router = useRouter();
   const [data, setData] = useState<Vocabulary | null>(null);
   const [status, setStatus] = useState<Status>("idle");
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const mq = window.matchMedia("(max-width: 720px)");
-    setIsMobile(mq.matches);
-    const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-    mq.addEventListener("change", handler);
-    return () => mq.removeEventListener("change", handler);
-  }, []);
 
   useEffect(() => {
     if (!query) {
@@ -58,203 +46,149 @@ export function VocabularyDetailSheet({
       setStatus("idle");
       return;
     }
-    const controller = new AbortController();
-    setStatus("loading");
-    setData(null);
-    http
-      .get<Vocabulary>(`/vocabulary/${encodeURIComponent(query)}/detail`, {
-        signal: controller.signal,
-      })
-      .then((d) => {
-        setData(d.data);
-        setStatus("ok");
-      })
-      .catch((err: unknown) => {
-        if (
-          (err instanceof Error && err.name === "AbortError")
-          || (typeof err === "object" && err !== null && "code" in err && err.code === "ERR_CANCELED")
-        ) {
-          return;
-        }
-        setStatus("error");
-      });
-    return () => controller.abort();
-  }, [query]);
 
-  useEffect(() => {
-    if (!query) return;
-    function handleKeyDown(e: KeyboardEvent) {
-      if (e.key === "Escape") onClose();
-    }
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    let cancelled = false;
+    setStatus("loading");
+
+    (async () => {
+      try {
+        const { data: payload } = await http.get<{ data: Vocabulary }>(
+          `/vocabulary/${encodeURIComponent(query)}`,
+        );
+        if (!cancelled) {
+          setData(payload.data);
+          setStatus("ok");
+        }
+      } catch {
+        if (!cancelled) setStatus("error");
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
   }, [query, onClose]);
 
-  const sheetMotionProps = isMobile
-    ? { initial: { y: "100%" }, animate: { y: 0 }, exit: { y: "100%" } }
-    : { initial: { x: "100%" }, animate: { x: 0 }, exit: { x: "100%" } };
-
   return (
-    <AnimatePresence>
-      {query !== null && (
-        <>
-          <motion.div
-            key="backdrop"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-40 bg-black/30"
-            onClick={onClose}
-            aria-hidden="true"
-          />
-
-          <motion.div
-            key="sheet"
-            {...sheetMotionProps}
-            transition={{ duration: 0.22, ease: "easeOut" }}
-            className="fixed bottom-0 right-0 top-0 z-50 w-96 overflow-y-auto bg-(--surface) shadow-2xl max-[720px]:left-0 max-[720px]:top-auto max-[720px]:h-[80vh] max-[720px]:w-full max-[720px]:rounded-t-2xl"
-            aria-label="Chi tiết từ vựng"
-            role="dialog"
+    <Drawer
+      open={query !== null}
+      onClose={onClose}
+      title="Chi tiết từ vựng"
+      placement="right"
+      width={384}
+      extra={
+        <Space>
+          <Button
+            type="text"
+            icon={saved ? <StarFilled style={{ color: "var(--accent)" }} /> : <StarOutlined />}
+            onClick={onToggleSaved}
           >
-            <div className="sticky top-0 flex items-center justify-between border-b border-(--border) bg-(--surface) px-5 py-3">
-              <button
-                onClick={onToggleSaved}
-                className="flex items-center gap-1.5 text-sm text-(--text-secondary) transition hover:text-(--accent)"
-                aria-label={saved ? "Bỏ lưu" : "Lưu từ này"}
-              >
-                <BookMarked
-                  size={16}
-                  className={saved ? "text-(--accent)" : ""}
-                />
-                {saved ? "Đã lưu" : "Lưu"}
-              </button>
-              <button
-                onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
-                className="flex items-center gap-1.5 text-sm text-(--text-secondary) transition hover:text-(--accent)"
-                aria-label="Tra cứu trong từ điển"
-              >
-                <ExternalLink size={16} />
-                Tra cứu
-              </button>
-              <button
-                onClick={onClose}
-                className="grid size-8 place-items-center rounded-full text-(--text-muted) transition hover:bg-(--surface-hover)"
-                aria-label="Đóng"
-              >
-                <X size={18} />
-              </button>
-            </div>
+            {saved ? "Đã lưu" : "Lưu"}
+          </Button>
+          <Button
+            type="text"
+            icon={<LinkOutlined />}
+            onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
+          >
+            Tra cứu
+          </Button>
+        </Space>
+      }
+    >
+      {status === "loading" && <Skeleton active paragraph={{ rows: 6 }} />}
 
-            <div className="px-5 py-5">
-              {status === "loading" && (
-                <div
-                  className="animate-pulse space-y-3"
-                  aria-label="Đang tải..."
-                >
-                  <div className="h-7 w-48 rounded bg-(--surface-hover)" />
-                  <div className="h-4 w-32 rounded bg-(--surface-hover)" />
-                  <div className="h-4 w-full rounded bg-(--surface-hover)" />
-                  <div className="h-4 w-3/4 rounded bg-(--surface-hover)" />
-                </div>
-              )}
-
-              {status === "error" && (
-                <div className="space-y-3 text-sm text-(--text-secondary)">
-                  <p>Định nghĩa không còn trong bộ nhớ đệm.</p>
-                  <p>Hãy tra lại từ này để xem đầy đủ.</p>
-                  <a
-                    href={`/dictionary?q=${encodeURIComponent(query ?? "")}`}
-                    className="inline-flex items-center gap-1 text-(--accent) underline"
-                  >
-                    Tra lại <ExternalLink size={13} />
-                  </a>
-                </div>
-              )}
-
-              {status === "ok" && data && (
-                <div className="space-y-5">
-                  <div>
-                    <h2 className="text-2xl font-bold text-(--ink)">
-                      {data.headword}
-                    </h2>
-                    {data.partOfSpeech && (
-                      <span className="mt-1 inline-block text-sm italic text-(--text-muted)">
-                        {data.partOfSpeech}
-                      </span>
-                    )}
-                  </div>
-
-                  {(data.phoneticsUs || data.phoneticsUk) && (
-                    <div className="flex flex-wrap gap-3 text-sm text-(--text-muted)">
-                      {data.phoneticsUs && <span>🇺🇸 {data.phoneticsUs}</span>}
-                      {data.phoneticsUk && <span>🇬🇧 {data.phoneticsUk}</span>}
-                    </div>
-                  )}
-
-                  <div className="flex flex-wrap gap-2">
-                    {data.level && (
-                      <span
-                        className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${LEVEL_COLORS[data.level] ?? "bg-gray-100 text-gray-700"}`}
-                      >
-                        {data.level}
-                      </span>
-                    )}
-                    <span className="rounded-full bg-(--bg-deep) px-2 py-0.5 text-[11px] text-(--text-muted)">
-                      {getTypeLabel(data)}
-                    </span>
-                  </div>
-
-                  <p className="text-sm leading-6 text-(--text-secondary)">
-                    {data.overviewVi}
-                  </p>
-                  <p className="text-sm leading-6 text-(--text-muted)">
-                    {data.overviewEn}
-                  </p>
-
-                  <div className="space-y-5 border-t border-(--border) pt-4">
-                    {data.senses.map((sense) => (
-                      <div key={sense.id} className="space-y-2">
-                        <p className="text-[11px] font-semibold uppercase tracking-widest text-(--accent)">
-                          {sense.label}
-                        </p>
-                        <p className="text-sm font-medium text-(--ink)">
-                          {sense.definitionVi}
-                        </p>
-                        <p className="text-sm text-(--text-muted)">
-                          {sense.definitionEn}
-                        </p>
-                        {sense.examples.slice(0, 3).map((ex, i) => (
-                          <div
-                            key={i}
-                            className="border-l-2 border-[rgba(196,109,46,0.3)] pl-3 text-sm"
-                          >
-                            <p className="text-(--text-secondary)">
-                              {ex.en}
-                            </p>
-                            <p className="text-(--text-muted)">{ex.vi}</p>
-                          </div>
-                        ))}
-                      </div>
-                    ))}
-                  </div>
-                  <button
-                    onClick={() =>
-                      router.push(
-                        `/dictionary?q=${encodeURIComponent(query ?? "")}`,
-                      )
-                    }
-                    className="flex w-full items-center justify-center gap-2 rounded-(--radius) border border-(--border) py-2.5 text-sm text-(--text-secondary) transition hover:border-(--accent)/40 hover:text-(--accent)"
-                  >
-                    <ExternalLink size={14} aria-hidden="true" />
-                    Xem trong từ điển
-                  </button>
-                </div>
-              )}
-            </div>
-          </motion.div>
-        </>
+      {status === "error" && (
+        <Flex vertical gap={12}>
+          <Text type="secondary">Định nghĩa không còn trong bộ nhớ đệm.</Text>
+          <Text type="secondary">Hãy tra lại từ này để xem đầy đủ.</Text>
+          <Button
+            type="link"
+            icon={<LinkOutlined />}
+            href={`/dictionary?q=${encodeURIComponent(query ?? "")}`}
+          >
+            Tra lại
+          </Button>
+        </Flex>
       )}
-    </AnimatePresence>
+
+      {status === "ok" && data && (
+        <Flex vertical gap={20}>
+          <div>
+            <Title level={3} style={{ margin: 0 }}>
+              {data.headword}
+            </Title>
+            {data.partOfSpeech && (
+              <Text type="secondary" italic style={{ fontSize: 14 }}>
+                {data.partOfSpeech}
+              </Text>
+            )}
+          </div>
+
+          {(data.phoneticsUs || data.phoneticsUk) && (
+            <Space size={12}>
+              {data.phoneticsUs && <Text type="secondary">🇺🇸 {data.phoneticsUs}</Text>}
+              {data.phoneticsUk && <Text type="secondary">🇬🇧 {data.phoneticsUk}</Text>}
+            </Space>
+          )}
+
+          <Space wrap size={8}>
+            {data.level && <Tag color={LEVEL_COLORS[data.level] ?? "default"}>{data.level}</Tag>}
+            <Tag>{getTypeLabel(data)}</Tag>
+          </Space>
+
+          <Paragraph style={{ fontSize: 14, lineHeight: 1.6 }}>{data.overviewVi}</Paragraph>
+          <Text type="secondary" style={{ fontSize: 14 }}>
+            {data.overviewEn}
+          </Text>
+
+          <Flex vertical gap={20} style={{ borderTop: "1px solid var(--border)", paddingTop: 16 }}>
+            {data.senses.map((sense) => (
+              <Flex key={sense.id} vertical gap={8}>
+                <Text
+                  type="secondary"
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 600,
+                    textTransform: "uppercase",
+                    letterSpacing: "0.1em",
+                    color: "var(--accent)",
+                  }}
+                >
+                  {sense.label}
+                </Text>
+                <Text strong style={{ fontSize: 14 }}>
+                  {sense.definitionVi}
+                </Text>
+                <Text type="secondary" style={{ fontSize: 14 }}>
+                  {sense.definitionEn}
+                </Text>
+                {sense.examples.slice(0, 3).map((ex, i) => (
+                  <div
+                    key={i}
+                    style={{
+                      borderLeft: "2px solid rgba(154,177,122,0.3)",
+                      paddingLeft: 12,
+                      fontSize: 14,
+                    }}
+                  >
+                    <Text>{ex.en}</Text>
+                    <br />
+                    <Text type="secondary">{ex.vi}</Text>
+                  </div>
+                ))}
+              </Flex>
+            ))}
+          </Flex>
+
+          <Button
+            block
+            icon={<LinkOutlined />}
+            onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
+          >
+            Xem trong từ điển
+          </Button>
+        </Flex>
+      )}
+    </Drawer>
   );
 }

@@ -21,8 +21,20 @@ export function EddieAvatar({ size = 32 }: { size?: number }) {
       {/* Hair — dark brown */}
       <path d="M20,30 Q21,8 40,8 Q59,8 60,30 Q56,14 40,14 Q24,14 20,30Z" fill="#3C2415" />
       {/* Eyebrows — strong */}
-      <path d="M29,29 Q33,26 37,28" stroke="#3C2415" strokeWidth="2" fill="none" strokeLinecap="round" />
-      <path d="M43,28 Q47,26 51,29" stroke="#3C2415" strokeWidth="2" fill="none" strokeLinecap="round" />
+      <path
+        d="M29,29 Q33,26 37,28"
+        stroke="#3C2415"
+        strokeWidth="2"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path
+        d="M43,28 Q47,26 51,29"
+        stroke="#3C2415"
+        strokeWidth="2"
+        fill="none"
+        strokeLinecap="round"
+      />
       {/* Eyes */}
       <ellipse cx="33" cy="35" rx="3.5" ry="3" fill="#3C2415" />
       <ellipse cx="47" cy="35" rx="3.5" ry="3" fill="#3C2415" />
@@ -40,7 +52,13 @@ export function EddieAvatar({ size = 32 }: { size?: number }) {
       <circle cx="35" cy="44" r="0.8" fill="#9A6843" opacity="0.5" />
       <circle cx="44" cy="44" r="0.8" fill="#9A6843" opacity="0.5" />
       {/* Smile */}
-      <path d="M34,44 Q40,50 46,44" stroke="#A85C3A" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      <path
+        d="M34,44 Q40,50 46,44"
+        stroke="#A85C3A"
+        strokeWidth="1.5"
+        fill="none"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

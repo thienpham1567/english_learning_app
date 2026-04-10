@@ -11,8 +11,7 @@ import type { ChatMessage } from "@/lib/chat/types";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 
-const CHAT_ERROR_MESSAGE =
-  "Gia sư đang gặp lỗi kỹ thuật. Bạn thử lại sau nhé.";
+const CHAT_ERROR_MESSAGE = "Gia sư đang gặp lỗi kỹ thuật. Bạn thử lại sau nhé.";
 
 function writeSseEvent(
   controller: ReadableStreamDefaultController<Uint8Array>,
@@ -61,12 +60,9 @@ export async function POST(req: Request) {
       personaId?: unknown;
     } | null;
 
-    const messages = Array.isArray(body?.messages)
-      ? body.messages.filter(isChatMessage)
-      : [];
+    const messages = Array.isArray(body?.messages) ? body.messages.filter(isChatMessage) : [];
 
-    const conversationId =
-      typeof body?.conversationId === "string" ? body.conversationId : null;
+    const conversationId = typeof body?.conversationId === "string" ? body.conversationId : null;
 
     const personaId =
       typeof body?.personaId === "string" && PERSONA_IDS.includes(body.personaId)
@@ -107,10 +103,7 @@ export async function POST(req: Request) {
                 doneSent = true;
               }
 
-              if (
-                (event.type === "response.failed" || event.type === "error") &&
-                !doneSent
-              ) {
+              if ((event.type === "response.failed" || event.type === "error") && !doneSent) {
                 throw new Error("OpenAI chat stream failed");
               }
             }

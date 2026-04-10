@@ -1,8 +1,12 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion } from "motion/react";
-import type { DailyChallenge, StreakInfo, Badge, ExerciseAnswer } from "@/lib/daily-challenge/types";
+import type {
+  DailyChallenge,
+  StreakInfo,
+  Badge,
+  ExerciseAnswer,
+} from "@/lib/daily-challenge/types";
 import { StreakDisplay } from "./StreakDisplay";
 import { BadgeGallery } from "./BadgeGallery";
 
@@ -42,18 +46,12 @@ export function CompletedState({ challenge, streak, badges }: Props) {
   }, []);
 
   return (
-    <motion.div
-      className="mx-auto flex max-w-md flex-col items-center text-center"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-    >
+    <div className="mx-auto flex max-w-md flex-col items-center text-center">
       <span className="text-5xl">{emoji}</span>
       <h2 className="mt-3 [font-family:var(--font-display)] text-2xl italic text-(--ink)">
         Đã hoàn thành hôm nay!
       </h2>
-      <p className="mt-1 text-sm text-(--text-muted)">
-        Điểm: {challenge.score} / 5
-      </p>
+      <p className="mt-1 text-sm text-(--text-muted)">Điểm: {challenge.score} / 5</p>
 
       <div className="mt-4">
         <StreakDisplay currentStreak={streak.currentStreak} bestStreak={streak.bestStreak} />
@@ -65,10 +63,14 @@ export function CompletedState({ challenge, streak, badges }: Props) {
           <div
             key={i}
             className={`flex items-center justify-between rounded-lg border px-3 py-1.5 text-sm ${
-              a.isCorrect ? "border-emerald-200 bg-emerald-50 text-emerald-800" : "border-red-200 bg-red-50 text-red-800"
+              a.isCorrect
+                ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+                : "border-red-200 bg-red-50 text-red-800"
             }`}
           >
-            <span>Câu {i + 1}: {a.isCorrect ? "✓" : "✗"}</span>
+            <span>
+              Câu {i + 1}: {a.isCorrect ? "✓" : "✗"}
+            </span>
             {!a.isCorrect && <span className="text-xs">{a.explanation}</span>}
           </div>
         ))}
@@ -89,6 +91,6 @@ export function CompletedState({ challenge, streak, badges }: Props) {
       </div>
 
       <p className="mt-4 text-sm text-(--text-muted)">Quay lại mai nhé! 🌙</p>
-    </motion.div>
+    </div>
   );
 }

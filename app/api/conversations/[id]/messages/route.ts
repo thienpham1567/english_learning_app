@@ -7,10 +7,7 @@ import { conversation, message } from "@/lib/db/schema";
 
 type Params = Promise<{ id: string }>;
 
-export async function GET(
-  _req: Request,
-  { params }: { params: Params },
-) {
+export async function GET(_req: Request, { params }: { params: Params }) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });

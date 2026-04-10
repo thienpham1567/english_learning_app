@@ -21,8 +21,20 @@ export function SimonAvatar({ size = 32 }: { size?: number }) {
       {/* Hair — blond, wavy */}
       <path d="M20,32 Q20,10 40,10 Q60,10 60,32 Q55,20 40,20 Q25,20 20,32Z" fill="#D4A843" />
       {/* Eyebrows */}
-      <path d="M29,29 Q33,27 37,29" stroke="#B8902A" strokeWidth="1.5" fill="none" strokeLinecap="round" />
-      <path d="M43,29 Q47,27 51,29" stroke="#B8902A" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      <path
+        d="M29,29 Q33,27 37,29"
+        stroke="#B8902A"
+        strokeWidth="1.5"
+        fill="none"
+        strokeLinecap="round"
+      />
+      <path
+        d="M43,29 Q47,27 51,29"
+        stroke="#B8902A"
+        strokeWidth="1.5"
+        fill="none"
+        strokeLinecap="round"
+      />
       {/* Eyes */}
       <ellipse cx="33" cy="35" rx="3.5" ry="3" fill="#5B7FA6" />
       <ellipse cx="47" cy="35" rx="3.5" ry="3" fill="#5B7FA6" />
@@ -32,7 +44,13 @@ export function SimonAvatar({ size = 32 }: { size?: number }) {
       {/* Nose */}
       <circle cx="40" cy="41" r="1.5" fill="#E0A882" />
       {/* Smile */}
-      <path d="M33,44 Q40,51 47,44" stroke="#C47A5A" strokeWidth="1.5" fill="none" strokeLinecap="round" />
+      <path
+        d="M33,44 Q40,51 47,44"
+        stroke="#C47A5A"
+        strokeWidth="1.5"
+        fill="none"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

@@ -34,12 +34,7 @@ export async function POST(request: Request) {
   const existing = await db
     .select()
     .from(flashcardProgress)
-    .where(
-      and(
-        eq(flashcardProgress.userId, userId),
-        eq(flashcardProgress.query, query),
-      ),
-    )
+    .where(and(eq(flashcardProgress.userId, userId), eq(flashcardProgress.query, query)))
     .limit(1);
 
   const prevState = existing[0]

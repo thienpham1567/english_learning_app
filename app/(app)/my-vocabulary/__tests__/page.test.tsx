@@ -31,39 +31,39 @@ vi.mock("nuqs", async () => {
   return {
     useQueryState: (_key: string, _parser?: unknown) => {
       const [val, setVal] = useState<string | null>(null);
-      const setter = useCallback(
-        (v: string | null | ((prev: string | null) => string | null)) => {
-          setVal(v);
-          return Promise.resolve(null);
-        },
-        [],
-      );
+      const setter = useCallback((v: string | null | ((prev: string | null) => string | null)) => {
+        setVal(v);
+        return Promise.resolve(null);
+      }, []);
       return [val, setter];
     },
     useQueryStates: (schema: Record<string, unknown>) => {
       const defaults: Record<string, unknown> = {};
-      for (const key of Object.keys(schema)) defaults[key] = (schema[key] as { _default?: unknown })._default ?? null;
+      for (const key of Object.keys(schema))
+        defaults[key] = (schema[key] as { _default?: unknown })._default ?? null;
       // Provide sensible defaults matching the app's withDefault calls
-      const initial = queryState ?? { search: "", level: [] as string[], type: [] as string[], saved: false };
+      const initial = queryState ?? {
+        search: "",
+        level: [] as string[],
+        type: [] as string[],
+        saved: false,
+      };
       const [state, setState] = useState(initial);
-      const setter = useCallback(
-        (patch: Record<string, unknown>) => {
-          setFiltersCalls.push(patch);
-          setState((prev: typeof initial) => {
-            const next = { ...prev };
-            for (const [k, v] of Object.entries(patch)) {
-              if (v === null) {
-                (next as Record<string, unknown>)[k] = defaults[k];
-              } else {
-                (next as Record<string, unknown>)[k] = v;
-              }
+      const setter = useCallback((patch: Record<string, unknown>) => {
+        setFiltersCalls.push(patch);
+        setState((prev: typeof initial) => {
+          const next = { ...prev };
+          for (const [k, v] of Object.entries(patch)) {
+            if (v === null) {
+              (next as Record<string, unknown>)[k] = defaults[k];
+            } else {
+              (next as Record<string, unknown>)[k] = v;
             }
-            return next;
-          });
-          return Promise.resolve(null);
-        },
-        [],
-      );
+          }
+          return next;
+        });
+        return Promise.resolve(null);
+      }, []);
       return [state, setter];
     },
     parseAsString: { withDefault: (d: unknown) => ({ _default: d }) },
@@ -239,9 +239,7 @@ describe("MyVocabularyPage", () => {
     await act(async () => {
       vi.advanceTimersByTime(5000);
     });
-    expect(http.delete).toHaveBeenCalledWith(
-      expect.stringContaining("take%20off"),
-    );
+    expect(http.delete).toHaveBeenCalledWith(expect.stringContaining("take%20off"));
   });
 
   it("sanitizes invalid type filter values and does not filter entries", async () => {

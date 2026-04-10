@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
+import { Progress } from "antd";
 
 type Props = {
   current: number;
@@ -8,19 +8,21 @@ type Props = {
 };
 
 export function SessionProgress({ current, total }: Props) {
-  const pct = total > 0 ? (current / total) * 100 : 0;
+  const pct = total > 0 ? Math.round((current / total) * 100) : 0;
 
   return (
-    <div className="mb-6 flex items-center gap-3">
-      <div className="h-2 flex-1 overflow-hidden rounded-full bg-(--bg-deep)">
-        <motion.div
-          className="h-full rounded-full bg-linear-to-r from-(--accent) to-amber-500"
-          initial={{ width: 0 }}
-          animate={{ width: `${pct}%` }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
+    <div style={{ marginBottom: 24, display: "flex", alignItems: "center", gap: 12 }}>
+      <div style={{ flex: 1 }}>
+        <Progress
+          percent={pct}
+          showInfo={false}
+          strokeColor={{ from: "var(--accent)", to: "#f59e0b" }}
+          size="small"
         />
       </div>
-      <span className="shrink-0 text-sm font-medium text-(--text-secondary)">
+      <span
+        style={{ flexShrink: 0, fontSize: 14, fontWeight: 500, color: "var(--text-secondary)" }}
+      >
         {current} / {total}
       </span>
     </div>

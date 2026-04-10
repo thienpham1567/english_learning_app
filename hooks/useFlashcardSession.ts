@@ -88,7 +88,7 @@ export function useFlashcardSession() {
     }, 0);
   }, [fetchDueCards]);
 
-  const currentCard = state === "active" ? cards[currentIndex] ?? null : null;
+  const currentCard = state === "active" ? (cards[currentIndex] ?? null) : null;
   const totalDue = cards.length;
 
   return {
@@ -104,4 +104,3 @@ export function useFlashcardSession() {
     restart,
   };
 }
-

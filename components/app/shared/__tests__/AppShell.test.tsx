@@ -22,10 +22,18 @@ const localStorageMock = (() => {
   const store: Record<string, string> = {};
   return {
     getItem: (key: string) => store[key] ?? null,
-    setItem: (key: string, value: string) => { store[key] = value; },
-    removeItem: (key: string) => { delete store[key]; },
-    clear: () => { Object.keys(store).forEach((k) => delete store[k]); },
-    get length() { return Object.keys(store).length; },
+    setItem: (key: string, value: string) => {
+      store[key] = value;
+    },
+    removeItem: (key: string) => {
+      delete store[key];
+    },
+    clear: () => {
+      Object.keys(store).forEach((k) => delete store[k]);
+    },
+    get length() {
+      return Object.keys(store).length;
+    },
     key: (i: number) => Object.keys(store)[i] ?? null,
   };
 })();
@@ -57,9 +65,12 @@ describe("AppShell", () => {
     expect(screen.getByTestId("sidebar")).toBeInTheDocument();
     expect(screen.getByTestId("user-menu")).toHaveTextContent("Cô Lành");
     expect(screen.getByTestId("breadcrumb")).toBeInTheDocument();
-    expect(
-      container.firstElementChild?.firstElementChild?.nextElementSibling,
-    ).toHaveClass("flex", "min-w-0", "min-h-0", "flex-col");
+    expect(container.firstElementChild?.firstElementChild?.nextElementSibling).toHaveClass(
+      "flex",
+      "min-w-0",
+      "min-h-0",
+      "flex-col",
+    );
     expect(screen.getByRole("banner")).toHaveClass(
       "relative",
       "z-120",

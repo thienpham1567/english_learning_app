@@ -15,12 +15,40 @@ type Props = {
 export function ExerciseCard({ exercise, onAnswer, disabled }: Props) {
   switch (exercise.type) {
     case "fill-in-blank":
-      return <FillInBlank data={exercise.data} instruction={exercise.instruction} onAnswer={onAnswer} disabled={disabled} />;
+      return (
+        <FillInBlank
+          data={exercise.data}
+          instruction={exercise.instruction}
+          onAnswer={onAnswer}
+          disabled={disabled}
+        />
+      );
     case "sentence-order":
-      return <SentenceOrder data={exercise.data} instruction={exercise.instruction} onAnswer={onAnswer} disabled={disabled} />;
+      return (
+        <SentenceOrder
+          data={exercise.data}
+          instruction={exercise.instruction}
+          onAnswer={onAnswer}
+          disabled={disabled}
+        />
+      );
     case "translation":
-      return <TranslationExercise data={exercise.data} instruction={exercise.instruction} onAnswer={onAnswer} disabled={disabled} />;
+      return (
+        <TranslationExercise
+          data={exercise.data}
+          instruction={exercise.instruction}
+          onAnswer={onAnswer}
+          disabled={disabled}
+        />
+      );
     case "error-correction":
-      return <ErrorCorrection data={exercise.data} instruction={exercise.instruction} onAnswer={onAnswer} disabled={disabled} />;
+      return (
+        <ErrorCorrection
+          data={exercise.data}
+          instruction={exercise.instruction}
+          onAnswer={onAnswer}
+          disabled={disabled}
+        />
+      );
   }
 }

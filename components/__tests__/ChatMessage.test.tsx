@@ -29,17 +29,12 @@ describe("ChatMessage", () => {
         message={{ id: "d1", role: "divider", text: "Switched to Christine Ho — IELTS Master" }}
       />,
     );
-    expect(
-      screen.getByText("Switched to Christine Ho — IELTS Master"),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Switched to Christine Ho — IELTS Master")).toBeInTheDocument();
   });
 
   it("renders the blinking cursor when text is empty and isStreaming is true", () => {
     const { container } = renderUi(
-      <ChatMessage
-        message={{ id: "s1", role: "assistant", text: "" }}
-        isStreaming={true}
-      />,
+      <ChatMessage message={{ id: "s1", role: "assistant", text: "" }} isStreaming={true} />,
     );
     const cursor = container.querySelector('[aria-hidden="true"]');
     expect(cursor).not.toBeNull();

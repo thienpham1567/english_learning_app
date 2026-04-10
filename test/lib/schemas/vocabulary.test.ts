@@ -67,8 +67,20 @@ describe("VocabularySchema with verbForms", () => {
     const entry = VocabularySchema.parse({
       ...BASE_ENTRY,
       verbForms: [
-        { label: "Infinitive", form: "sustain", phoneticsUs: "/səˈsteɪn/", phoneticsUk: "/səˈsteɪn/", isIrregular: false },
-        { label: "Past Simple", form: "sustained", phoneticsUs: "/səˈsteɪnd/", phoneticsUk: "/səˈsteɪnd/", isIrregular: false },
+        {
+          label: "Infinitive",
+          form: "sustain",
+          phoneticsUs: "/səˈsteɪn/",
+          phoneticsUk: "/səˈsteɪn/",
+          isIrregular: false,
+        },
+        {
+          label: "Past Simple",
+          form: "sustained",
+          phoneticsUs: "/səˈsteɪnd/",
+          phoneticsUk: "/səˈsteɪnd/",
+          isIrregular: false,
+        },
       ],
     });
     expect(entry.verbForms).toHaveLength(2);

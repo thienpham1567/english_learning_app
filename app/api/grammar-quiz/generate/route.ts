@@ -61,10 +61,7 @@ export async function POST(request: Request) {
   }
 
   if (isRateLimited(session.user.id)) {
-    return Response.json(
-      { error: "Too many requests. Please wait a moment." },
-      { status: 429 },
-    );
+    return Response.json({ error: "Too many requests. Please wait a moment." }, { status: 429 });
   }
 
   const body = await request.json();
@@ -116,8 +113,5 @@ export async function POST(request: Request) {
     }
   }
 
-  return Response.json(
-    { error: "Failed to generate quiz. Please try again." },
-    { status: 502 },
-  );
+  return Response.json({ error: "Failed to generate quiz. Please try again." }, { status: 502 });
 }

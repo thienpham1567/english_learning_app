@@ -3,18 +3,15 @@
 import { useEffect, useState } from "react";
 import { Tag, Tooltip } from "antd";
 import {
-  Bookmark,
-  BookmarkCheck,
-  BookOpen,
-  Loader2,
-  Volume2,
-} from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+  BookOutlined,
+  LoadingOutlined,
+  SoundOutlined,
+  StarOutlined,
+  StarFilled,
+  ReadOutlined,
+} from "@ant-design/icons";
 
-import type {
-  DictionarySense,
-  VocabularyWithNearby,
-} from "@/lib/schemas/vocabulary";
+import type { DictionarySense, VocabularyWithNearby } from "@/lib/schemas/vocabulary";
 import { parseBold } from "@/lib/utils/parse-bold";
 import { NearbyWordsBar } from "@/components/dictionary/NearbyWordsBar";
 import { VerbFormsSection } from "@/components/dictionary/VerbFormsSection";
@@ -29,8 +26,14 @@ type DictionaryResultCardProps = {
   onSearch?: (word: string) => void;
 };
 
-const SENSE_ITEM_CLASS =
-  "border-l-2 border-[rgba(196,109,46,0.3)] pl-4 text-sm italic leading-6 text-(--text-secondary)";
+const SENSE_ITEM_STYLE: React.CSSProperties = {
+  borderLeft: "2px solid rgba(154,177,122,0.3)",
+  paddingLeft: 16,
+  fontSize: 14,
+  fontStyle: "italic",
+  lineHeight: 1.6,
+  color: "var(--text-secondary)",
+};
 
 const LEVEL_COLORS: Record<string, string> = {
   A1: "green",
@@ -41,12 +44,9 @@ const LEVEL_COLORS: Record<string, string> = {
   C2: "volcano",
 };
 
-// Module-level: ensures only one utterance plays at a time across re-renders
 let activeUtterance: SpeechSynthesisUtterance | null = null;
 
-function getNumberLabel(
-  numberInfo: NonNullable<VocabularyWithNearby["numberInfo"]>,
-): string {
+function getNumberLabel(numberInfo: NonNullable<VocabularyWithNearby["numberInfo"]>): string {
   if (numberInfo.isUncountable) return "uncountable";
   if (numberInfo.isPluralOnly) return "plural only";
   if (numberInfo.isSingularOnly) return "singular only";
@@ -60,7 +60,7 @@ function BoldText({ text }: { text: string }) {
     <>
       {segments.map((seg, i) =>
         seg.bold ? (
-          <strong key={i} className="font-semibold not-italic">
+          <strong key={i} style={{ fontWeight: 600, fontStyle: "normal" }}>
             {seg.text}
           </strong>
         ) : (
@@ -77,46 +77,84 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
   const examplesVi = sense.examplesVi ?? [];
   const collocations = sense.collocations ?? [];
 
+  const sectionStyle: React.CSSProperties = {
+    display: "flex",
+    flexDirection: "column",
+    gap: 8,
+    borderRadius: "var(--radius)",
+    borderLeft: "3px solid var(--accent)",
+    background: "var(--bg-deep)",
+    padding: "16px 20px",
+  };
+
   return (
-    <motion.div
-      className="space-y-5"
-      initial={{ opacity: 0, y: 6 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      <section className="space-y-2 rounded-lg border-l-[3px] border-(--accent) bg-(--bg-deep) px-5 py-4">
-        <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-(--accent)">
+    <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      <section style={sectionStyle}>
+        <h3
+          style={{
+            fontSize: 12,
+            fontWeight: 600,
+            textTransform: "uppercase",
+            letterSpacing: "0.14em",
+            color: "var(--accent)",
+            margin: 0,
+          }}
+        >
           Nghĩa tiếng Việt
         </h3>
-        <p className="text-sm leading-6 text-(--text-primary)">
+        <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
           {sense.definitionVi}
         </p>
       </section>
 
-      <section className="space-y-2 rounded-lg border-l-[3px] border-(--accent) bg-(--bg-deep) px-5 py-4">
-        <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-(--accent)">
+      <section style={sectionStyle}>
+        <h3
+          style={{
+            fontSize: 12,
+            fontWeight: 600,
+            textTransform: "uppercase",
+            letterSpacing: "0.14em",
+            color: "var(--accent)",
+            margin: 0,
+          }}
+        >
           Definition in English
         </h3>
-        <p className="text-sm leading-6 text-(--text-primary)">
+        <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
           {sense.definitionEn}
         </p>
       </section>
 
       {(examples.length > 0 || examplesVi.length > 0) && (
-        <section className="space-y-2">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-(--accent)">
+        <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <h3
+            style={{
+              fontSize: 12,
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "0.14em",
+              color: "var(--accent)",
+              margin: 0,
+            }}
+          >
             Ví dụ
           </h3>
-          <ul className="space-y-2">
+          <ul
+            style={{
+              listStyle: "none",
+              padding: 0,
+              margin: 0,
+              display: "flex",
+              flexDirection: "column",
+              gap: 8,
+            }}
+          >
             {examples.length > 0
               ? examples.map((example, i) => (
-                  <li
-                    key={`${example.en}-${example.vi ?? i}`}
-                    className={SENSE_ITEM_CLASS}
-                  >
+                  <li key={`${example.en}-${example.vi ?? i}`} style={SENSE_ITEM_STYLE}>
                     {example.vi ? (
                       <Tooltip placement="top" title={example.vi}>
-                        <span className="cursor-help">
+                        <span style={{ cursor: "help" }}>
                           <BoldText text={example.en} />
                         </span>
                       </Tooltip>
@@ -126,7 +164,7 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
                   </li>
                 ))
               : examplesVi.map((example) => (
-                  <li key={example} className={SENSE_ITEM_CLASS}>
+                  <li key={example} style={SENSE_ITEM_STYLE}>
                     <BoldText text={example} />
                   </li>
                 ))}
@@ -135,24 +173,51 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
       )}
 
       {sense.usageNoteVi && (
-        <section className="space-y-2 rounded-lg bg-(--bg-deep) px-5 py-4">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-(--accent)">
+        <section style={{ ...sectionStyle, borderLeft: "none" }}>
+          <h3
+            style={{
+              fontSize: 12,
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "0.14em",
+              color: "var(--accent)",
+              margin: 0,
+            }}
+          >
             Ghi chú sử dụng
           </h3>
-          <p className="text-sm leading-6 text-(--text-primary)">
+          <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
             {sense.usageNoteVi}
           </p>
         </section>
       )}
 
       {sense.patterns.length > 0 && (
-        <section className="space-y-2">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-(--accent)">
+        <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <h3
+            style={{
+              fontSize: 12,
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "0.14em",
+              color: "var(--accent)",
+              margin: 0,
+            }}
+          >
             Mẫu câu thường gặp
           </h3>
-          <ul className="space-y-2">
+          <ul
+            style={{
+              listStyle: "none",
+              padding: 0,
+              margin: 0,
+              display: "flex",
+              flexDirection: "column",
+              gap: 8,
+            }}
+          >
             {sense.patterns.map((pattern) => (
-              <li key={pattern} className={SENSE_ITEM_CLASS}>
+              <li key={pattern} style={SENSE_ITEM_STYLE}>
                 {pattern}
               </li>
             ))}
@@ -161,13 +226,31 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
       )}
 
       {sense.relatedExpressions.length > 0 && (
-        <section className="space-y-2">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-(--accent)">
+        <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <h3
+            style={{
+              fontSize: 12,
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "0.14em",
+              color: "var(--accent)",
+              margin: 0,
+            }}
+          >
             Biểu đạt liên quan
           </h3>
-          <ul className="space-y-2">
+          <ul
+            style={{
+              listStyle: "none",
+              padding: 0,
+              margin: 0,
+              display: "flex",
+              flexDirection: "column",
+              gap: 8,
+            }}
+          >
             {sense.relatedExpressions.map((expr) => (
-              <li key={expr} className={SENSE_ITEM_CLASS}>
+              <li key={expr} style={SENSE_ITEM_STYLE}>
                 {expr}
               </li>
             ))}
@@ -176,13 +259,31 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
       )}
 
       {sense.commonMistakesVi.length > 0 && (
-        <section className="space-y-2">
-          <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-(--accent)">
+        <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          <h3
+            style={{
+              fontSize: 12,
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "0.14em",
+              color: "var(--accent)",
+              margin: 0,
+            }}
+          >
             Lỗi thường gặp
           </h3>
-          <ul className="space-y-2">
+          <ul
+            style={{
+              listStyle: "none",
+              padding: 0,
+              margin: 0,
+              display: "flex",
+              flexDirection: "column",
+              gap: 8,
+            }}
+          >
             {sense.commonMistakesVi.map((mistake) => (
-              <li key={mistake} className={SENSE_ITEM_CLASS}>
+              <li key={mistake} style={SENSE_ITEM_STYLE}>
                 {mistake}
               </li>
             ))}
@@ -191,48 +292,60 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
       )}
 
       {collocations.length > 0 && (
-        <section className="space-y-2">
+        <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           <button
             type="button"
             aria-expanded={isCollocationsOpen}
             onClick={() => setIsCollocationsOpen((open) => !open)}
-            className="inline-flex items-center rounded-full border border-[rgba(196,109,46,0.18)] bg-white/70 px-3 py-1 text-xs font-medium text-(--accent) transition hover:bg-white"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              borderRadius: 999,
+              border: "1px solid rgba(154,177,122,0.18)",
+              background: "var(--surface)",
+              padding: "4px 12px",
+              fontSize: 12,
+              fontWeight: 500,
+              color: "var(--accent)",
+              cursor: "pointer",
+              width: "fit-content",
+            }}
           >
             Collocations ({collocations.length})
           </button>
-          <AnimatePresence initial={false}>
-            {isCollocationsOpen && (
-              <motion.div
-                className="space-y-2"
-                initial={{ opacity: 0, y: -4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.2 }}
+          {isCollocationsOpen && (
+            <div
+              className="anim-fade-in"
+              style={{ display: "flex", flexDirection: "column", gap: 6 }}
+            >
+              <ul
+                style={{
+                  listStyle: "none",
+                  padding: 0,
+                  margin: 0,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 6,
+                }}
               >
-                <ul className="space-y-1.5">
-                  {collocations.map((collocation) => (
-                    <li
-                      key={`${collocation.en}-${collocation.vi}`}
-                      className="text-sm leading-6"
-                    >
-                      <span className="text-(--text-primary)">
-                        <BoldText text={collocation.en} />
-                      </span>
-                      <span className="mx-1.5 text-(--text-muted)">
-                        &mdash;
-                      </span>
-                      <span className="text-(--text-secondary)">
-                        {collocation.vi}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                {collocations.map((collocation) => (
+                  <li
+                    key={`${collocation.en}-${collocation.vi}`}
+                    style={{ fontSize: 14, lineHeight: 1.6 }}
+                  >
+                    <span style={{ color: "var(--text-primary)" }}>
+                      <BoldText text={collocation.en} />
+                    </span>
+                    <span style={{ margin: "0 6px", color: "var(--text-muted)" }}>&mdash;</span>
+                    <span style={{ color: "var(--text-secondary)" }}>{collocation.vi}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </section>
       )}
-    </motion.div>
+    </div>
   );
 }
 
@@ -248,75 +361,88 @@ function AudioButton({
   return (
     <button
       type="button"
-      aria-label={
-        locale === "en-US" ? "Play US pronunciation" : "Play UK pronunciation"
-      }
+      aria-label={locale === "en-US" ? "Play US pronunciation" : "Play UK pronunciation"}
       onClick={() => onSpeak(locale)}
-      className="grid size-6 place-items-center rounded text-(--text-muted) transition hover:text-(--accent)"
+      style={{
+        display: "grid",
+        width: 24,
+        height: 24,
+        placeItems: "center",
+        borderRadius: 4,
+        color: "var(--text-muted)",
+        background: "none",
+        border: "none",
+        cursor: "pointer",
+        transition: "color 0.2s",
+      }}
     >
       {speakingLocale === locale ? (
-        <Loader2 size={13} className="animate-spin" />
+        <LoadingOutlined style={{ fontSize: 13 }} spin />
       ) : (
-        <Volume2 size={13} />
+        <SoundOutlined style={{ fontSize: 13 }} />
       )}
     </button>
   );
 }
 
-function OverviewToggle({
-  overviewVi,
-  overviewEn,
-}: {
-  overviewVi: string;
-  overviewEn: string;
-}) {
+function OverviewToggle({ overviewVi, overviewEn }: { overviewVi: string; overviewEn: string }) {
   const [lang, setLang] = useState<"vi" | "en">("vi");
 
   return (
-    <motion.div
-      className="mt-5 rounded-lg bg-(--bg-deep) px-5 py-4"
-      initial={{ opacity: 0, y: 4 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2, duration: 0.3 }}
+    <div
+      className="anim-fade-up"
+      style={{
+        marginTop: 20,
+        borderRadius: "var(--radius)",
+        background: "var(--bg-deep)",
+        padding: "16px 20px",
+      }}
     >
-      <div className="mb-3 flex items-center gap-1 rounded-full bg-(--border)/40 p-0.5 w-fit">
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 4,
+          borderRadius: 999,
+          background: "var(--border)",
+          padding: 2,
+          width: "fit-content",
+          opacity: 0.6,
+        }}
+      >
         {(["vi", "en"] as const).map((l) => (
           <button
             key={l}
             type="button"
             onClick={() => setLang(l)}
-            className={[
-              "relative rounded-full px-3 py-1 text-[10px] font-semibold uppercase tracking-wide transition",
-              lang === l
-                ? "text-(--accent)"
-                : "text-(--text-muted) hover:text-(--text-secondary)",
-            ].join(" ")}
+            style={{
+              position: "relative",
+              borderRadius: 999,
+              padding: "4px 12px",
+              fontSize: 10,
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "0.06em",
+              border: "none",
+              cursor: "pointer",
+              transition: "color 0.2s, background 0.2s",
+              color: lang === l ? "var(--accent)" : "var(--text-muted)",
+              background: lang === l ? "var(--accent-light)" : "transparent",
+            }}
           >
-            {lang === l && (
-              <motion.span
-                layoutId="overviewLangPill"
-                className="absolute inset-0 rounded-full bg-(--accent-light) shadow-sm"
-                transition={{ type: "spring", stiffness: 400, damping: 28 }}
-              />
-            )}
-            <span className="relative">{l === "vi" ? "VN" : "EN"}</span>
+            {l === "vi" ? "VN" : "EN"}
           </button>
         ))}
       </div>
 
-      <AnimatePresence mode="wait">
-        <motion.p
-          key={lang}
-          className="text-sm leading-6 text-(--text-secondary)"
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -4 }}
-          transition={{ duration: 0.2 }}
-        >
-          {lang === "vi" ? overviewVi : overviewEn}
-        </motion.p>
-      </AnimatePresence>
-    </motion.div>
+      <p
+        key={lang}
+        className="anim-fade-in"
+        style={{ marginTop: 12, fontSize: 14, lineHeight: 1.6, color: "var(--text-secondary)" }}
+      >
+        {lang === "vi" ? overviewVi : overviewEn}
+      </p>
+    </div>
   );
 }
 
@@ -358,47 +484,30 @@ export function DictionaryResultCard({
     window.speechSynthesis.speak(utterance);
   }
 
+  const cardStyle: React.CSSProperties = {
+    borderRadius: "var(--radius-lg)",
+    background: "var(--surface)",
+    boxShadow: "var(--shadow-lg)",
+    padding: 24,
+    minHeight: 400,
+  };
+
   if (isLoading) {
     return (
-      <div className="rounded-2xl bg-(--surface) shadow-(--shadow-lg) p-6 min-h-[400px]">
-        <div className="animate-pulse space-y-5">
-          <div>
-            <div className="h-2.5 w-20 rounded-full bg-(--bg-deep)" />
-            <div className="mt-3 h-8 w-44 rounded-lg bg-(--bg-deep)" />
-            <div className="mt-4 flex items-center gap-2">
-              <div className="h-6 w-20 rounded-full bg-(--bg-deep)" />
-              <div className="h-6 w-9 rounded-full bg-(--bg-deep)" />
-            </div>
-          </div>
-          <div className="h-3.5 w-28 rounded bg-(--bg-deep)" />
-          <div className="space-y-2.5 rounded-lg bg-(--bg-deep) px-5 py-4">
-            <div className="h-3.5 w-full rounded bg-(--border-strong)" />
-            <div className="h-3.5 w-4/5 rounded bg-(--border-strong)" />
-            <div className="h-3.5 w-full rounded bg-(--border-strong)" />
-            <div className="h-3.5 w-3/5 rounded bg-(--border-strong)" />
-          </div>
-          <div className="flex gap-2 pt-1">
-            <div className="h-8 w-24 rounded-full bg-(--bg-deep)" />
-            <div className="h-8 w-24 rounded-full bg-(--bg-deep)" />
-          </div>
-          <div className="space-y-4">
-            <div className="space-y-2 rounded-lg bg-(--bg-deep) px-5 py-4">
-              <div className="h-2.5 w-32 rounded bg-(--border-strong)" />
-              <div className="h-3.5 w-full rounded bg-(--border-strong)" />
-              <div className="h-3.5 w-3/4 rounded bg-(--border-strong)" />
-            </div>
-            <div className="space-y-2 rounded-lg bg-(--bg-deep) px-5 py-4">
-              <div className="h-2.5 w-32 rounded bg-(--border-strong)" />
-              <div className="h-3.5 w-full rounded bg-(--border-strong)" />
-              <div className="h-3.5 w-4/5 rounded bg-(--border-strong)" />
-            </div>
-            <div className="space-y-2 rounded-lg bg-(--bg-deep) px-5 py-4">
-              <div className="h-2.5 w-16 rounded bg-(--border-strong)" />
-              <div className="h-3.5 w-full rounded bg-(--border-strong)" />
-              <div className="h-3.5 w-full rounded bg-(--border-strong)" />
-              <div className="h-3.5 w-2/3 rounded bg-(--border-strong)" />
-            </div>
-          </div>
+      <div style={cardStyle}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          {[1, 2, 3, 4].map((i) => (
+            <div
+              key={i}
+              style={{
+                height: 16,
+                width: `${70 - i * 10}%`,
+                borderRadius: 8,
+                background: "var(--bg-deep)",
+                animation: "pulse 1.5s infinite",
+              }}
+            />
+          ))}
         </div>
       </div>
     );
@@ -406,213 +515,281 @@ export function DictionaryResultCard({
 
   if (!hasSearched || !vocabulary) {
     return (
-      <div className="rounded-2xl bg-(--surface) shadow-(--shadow-lg) p-6 min-h-[400px]">
-        {!hasSearched ? (
-          <div className="flex min-h-[360px] flex-col items-center justify-center gap-3">
-            <BookOpen size={32} className="text-(--text-muted)" />
-            <p className="text-sm text-(--text-muted)">Nhập từ cần tra</p>
-          </div>
-        ) : (
-          <div className="flex min-h-[360px] flex-col items-center justify-center gap-4 py-8 text-center">
-            <div className="grid size-14 place-items-center rounded-full bg-(--accent-light) text-(--accent) shadow-(--shadow-sm)">
-              <BookOpen size={24} />
-            </div>
-            <h3 className="text-2xl [font-family:var(--font-display)] text-(--ink)">
-              Chưa có kết quả để hiển thị
-            </h3>
-            <p className="max-w-xl text-sm leading-6 text-(--text-secondary)">
-              Hãy thử lại với một từ tiếng Anh hợp lệ để nhận kết quả có cấu
-              trúc.
-            </p>
-          </div>
-        )}
+      <div style={cardStyle}>
+        <div
+          style={{
+            display: "flex",
+            minHeight: 360,
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 12,
+          }}
+        >
+          <ReadOutlined style={{ fontSize: 32, color: "var(--text-muted)" }} />
+          <p style={{ fontSize: 14, color: "var(--text-muted)" }}>
+            {!hasSearched ? "Nhập từ cần tra" : "Chưa có kết quả để hiển thị"}
+          </p>
+        </div>
       </div>
     );
   }
 
-  const activeSense =
-    vocabulary.senses.find((s) => s.id === activeKey) ?? vocabulary.senses[0];
+  const activeSense = vocabulary.senses.find((s) => s.id === activeKey) ?? vocabulary.senses[0];
   const hasDualPhonetics = vocabulary.phoneticsUs || vocabulary.phoneticsUk;
-  const numberLabel = vocabulary.numberInfo
-    ? getNumberLabel(vocabulary.numberInfo)
-    : "";
+  const numberLabel = vocabulary.numberInfo ? getNumberLabel(vocabulary.numberInfo) : "";
 
   return (
-    <AnimatePresence mode="wait">
-      <motion.div
-        key={vocabulary.headword}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -6 }}
-        transition={{ duration: 0.35, ease: "easeOut" }}
+    <div key={vocabulary.headword} className="anim-fade-up" style={cardStyle}>
+      {/* Header */}
+      <div
+        style={{
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "space-between",
+          gap: 16,
+          flexWrap: "wrap",
+        }}
       >
-        <div className="rounded-2xl bg-(--surface) shadow-(--shadow-lg) p-6 min-h-100">
-          {/* Header */}
-          <div className="flex items-start justify-between gap-4 max-[720px]:flex-col max-[720px]:gap-3">
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-(--accent)">
-                Kết quả tra cứu
-              </p>
-              <h2 className="mt-2 wrap-break-word text-4xl italic leading-tight [font-family:var(--font-display)] text-(--ink)">
-                {vocabulary.headword}
-              </h2>
-            </div>
-            <div className="flex flex-wrap items-center gap-2 max-[720px]:justify-start">
-              {vocabulary.level && (
-                <Tag
-                  color={LEVEL_COLORS[vocabulary.level] ?? "default"}
-                  variant="outlined"
-                  className="rounded-full! px-3! py-1!"
-                >
-                  {vocabulary.level}
-                </Tag>
-              )}
-              <Tag variant="solid" className="rounded-full! px-3! py-1!">
-                {vocabulary.entryType === "idiom"
-                  ? "idiom"
-                  : vocabulary.entryType === "phrasal_verb"
-                    ? "phrasal verb"
-                    : (vocabulary.partOfSpeech ?? "word")}
-              </Tag>
-              {vocabulary.register && (
-                <Tag
-                  variant="outlined"
-                  className="!rounded-full !px-3 !py-1 border-amber-300! text-amber-700! bg-amber-50!"
-                >
-                  {vocabulary.register}
-                </Tag>
-              )}
-              {numberLabel && (
-                <Tag variant="outlined" className="!rounded-full !px-3 !py-1">
-                  {numberLabel}
-                </Tag>
-              )}
-              {onOpenThesaurus && (
-                <motion.button
-                  type="button"
-                  onClick={onOpenThesaurus}
-                  aria-label="Thesaurus"
-                  className="flex items-center gap-1.5 rounded-full bg-linear-to-r from-amber-50 to-orange-50 px-3 py-1 text-xs font-semibold text-amber-700 ring-1 ring-amber-200/60 transition hover:from-amber-100 hover:to-orange-100 hover:ring-amber-300"
-                  whileHover={{ scale: 1.04, y: -1 }}
-                  whileTap={{ scale: 0.96 }}
-                >
-                  <BookOpen size={12} />
-                  Thesaurus
-                </motion.button>
-              )}
-              {saved != null && onToggleSaved && (
-                <button
-                  onClick={onToggleSaved}
-                  className="grid size-8 place-items-center rounded-full text-(--text-muted) transition hover:bg-(--surface-hover) hover:text-(--accent)"
-                  aria-label={saved ? "Bỏ lưu từ này" : "Lưu từ này"}
-                >
-                  {saved ? (
-                    <BookmarkCheck size={18} className="text-(--accent)" />
-                  ) : (
-                    <Bookmark size={18} />
-                  )}
-                </button>
-              )}
-            </div>
-          </div>
-
-          {/* Pronunciation — single row */}
-          {hasDualPhonetics ? (
-            <motion.div
-              className="mt-3 flex flex-wrap items-center gap-3"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.15, duration: 0.3 }}
+        <div style={{ minWidth: 0, flex: 1 }}>
+          <p
+            style={{
+              fontSize: 12,
+              fontWeight: 600,
+              textTransform: "uppercase",
+              letterSpacing: "0.18em",
+              color: "var(--accent)",
+              margin: 0,
+            }}
+          >
+            Kết quả tra cứu
+          </p>
+          <h2
+            style={{
+              marginTop: 8,
+              fontSize: 36,
+              fontStyle: "italic",
+              lineHeight: 1.2,
+              fontFamily: "var(--font-display)",
+              color: "var(--ink)",
+              wordBreak: "break-word",
+            }}
+          >
+            {vocabulary.headword}
+          </h2>
+        </div>
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
+          {vocabulary.level && (
+            <Tag
+              color={LEVEL_COLORS[vocabulary.level] ?? "default"}
+              variant="outlined"
+              style={{ borderRadius: 999, padding: "2px 12px" }}
             >
-              {vocabulary.phoneticsUs && (
-                <div className="flex items-center gap-2">
-                  <span className="text-base">🇺🇸</span>
-                  <span className="rounded bg-(--bg-deep) px-2 py-0.5 text-sm font-mono text-(--accent)">
-                    {vocabulary.phoneticsUs}
-                  </span>
-                  <AudioButton
-                    locale="en-US"
-                    speakingLocale={speakingLocale}
-                    onSpeak={speak}
-                  />
-                </div>
-              )}
-              {vocabulary.phoneticsUs && vocabulary.phoneticsUk && (
-                <span className="text-(--text-muted)">·</span>
-              )}
-              {vocabulary.phoneticsUk && (
-                <div className="flex items-center gap-2">
-                  <span className="text-base">🇬🇧</span>
-                  <span className="rounded bg-(--bg-deep) px-2 py-0.5 text-sm font-mono text-(--accent)">
-                    {vocabulary.phoneticsUk}
-                  </span>
-                  <AudioButton
-                    locale="en-GB"
-                    speakingLocale={speakingLocale}
-                    onSpeak={speak}
-                  />
-                </div>
-              )}
-            </motion.div>
-          ) : vocabulary.phonetic ? (
-            <motion.span
-              className="mt-3 inline-block rounded bg-(--bg-deep) px-2 py-0.5 text-sm font-mono text-(--accent)"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.15, duration: 0.3 }}
-            >
-              {vocabulary.phonetic}
-            </motion.span>
-          ) : null}
-
-          {vocabulary.verbForms && vocabulary.verbForms.length > 0 && (
-            <VerbFormsSection verbForms={vocabulary.verbForms} />
+              {vocabulary.level}
+            </Tag>
           )}
+          <Tag variant="solid" style={{ borderRadius: 999, padding: "2px 12px" }}>
+            {vocabulary.entryType === "idiom"
+              ? "idiom"
+              : vocabulary.entryType === "phrasal_verb"
+                ? "phrasal verb"
+                : (vocabulary.partOfSpeech ?? "word")}
+          </Tag>
+          {vocabulary.register && (
+            <Tag
+              variant="outlined"
+              style={{
+                borderRadius: 999,
+                padding: "2px 12px",
+                borderColor: "#fcd34d",
+                color: "#5a7a64",
+                background: "#fffbeb",
+              }}
+            >
+              {vocabulary.register}
+            </Tag>
+          )}
+          {numberLabel && (
+            <Tag variant="outlined" style={{ borderRadius: 999, padding: "2px 12px" }}>
+              {numberLabel}
+            </Tag>
+          )}
+          {onOpenThesaurus && (
+            <button
+              type="button"
+              onClick={onOpenThesaurus}
+              aria-label="Thesaurus"
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                borderRadius: 999,
+                background: "linear-gradient(to right, #fffbeb, #fff7ed)",
+                padding: "4px 12px",
+                fontSize: 12,
+                fontWeight: 600,
+                color: "#5a7a64",
+                border: "1px solid rgba(217,119,6,0.3)",
+                cursor: "pointer",
+                transition: "background 0.2s",
+              }}
+            >
+              <ReadOutlined style={{ fontSize: 12 }} />
+              Thesaurus
+            </button>
+          )}
+          {saved != null && onToggleSaved && (
+            <button
+              onClick={onToggleSaved}
+              style={{
+                display: "grid",
+                width: 32,
+                height: 32,
+                placeItems: "center",
+                borderRadius: "50%",
+                color: "var(--text-muted)",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                transition: "color 0.2s",
+              }}
+              aria-label={saved ? "Bỏ lưu từ này" : "Lưu từ này"}
+            >
+              {saved ? (
+                <StarFilled style={{ fontSize: 18, color: "var(--accent)" }} />
+              ) : (
+                <StarOutlined style={{ fontSize: 18 }} />
+              )}
+            </button>
+          )}
+        </div>
+      </div>
 
-          <OverviewToggle
-            overviewVi={vocabulary.overviewVi}
-            overviewEn={vocabulary.overviewEn}
-          />
-
-          {/* Sense tabs */}
-          <div className="mt-6">
-            <div className="flex items-center gap-2 border-b border-(--border) pb-3 mb-5 overflow-x-auto">
-              <div className="flex gap-2 flex-1 overflow-x-auto">
-                {vocabulary.senses.map((sense) => (
-                  <button
-                    key={sense.id}
-                    type="button"
-                    aria-selected={activeKey === sense.id}
-                    onClick={() => setActiveKey(sense.id)}
-                    className={[
-                      "shrink-0 rounded-full px-4 py-1.5 text-sm font-medium transition",
-                      activeKey === sense.id
-                        ? "bg-[rgba(196,109,46,0.12)] text-(--accent)"
-                        : "text-(--text-secondary) hover:bg-white/50 hover:text-(--ink)",
-                    ].join(" ")}
-                  >
-                    {sense.label}
-                  </button>
-                ))}
-              </div>
+      {/* Pronunciation */}
+      {hasDualPhonetics ? (
+        <div
+          className="anim-fade-in"
+          style={{
+            marginTop: 12,
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            gap: 12,
+          }}
+        >
+          {vocabulary.phoneticsUs && (
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ fontSize: 16 }}>🇺🇸</span>
+              <span
+                style={{
+                  borderRadius: 4,
+                  background: "var(--bg-deep)",
+                  padding: "2px 8px",
+                  fontSize: 14,
+                  fontFamily: "var(--font-mono)",
+                  color: "var(--accent)",
+                }}
+              >
+                {vocabulary.phoneticsUs}
+              </span>
+              <AudioButton locale="en-US" speakingLocale={speakingLocale} onSpeak={speak} />
             </div>
-            {activeSense && (
-              <SensePanel key={activeSense.id} sense={activeSense} />
-            )}
-          </div>
-
-          {/* Nearby words bar */}
-          {vocabulary.nearbyWords.length > 0 && onSearch && (
-            <div className="mt-6 border-t border-(--border) pt-5">
-              <NearbyWordsBar
-                words={vocabulary.nearbyWords}
-                headword={vocabulary.headword}
-                onSearch={onSearch}
-              />
+          )}
+          {vocabulary.phoneticsUs && vocabulary.phoneticsUk && (
+            <span style={{ color: "var(--text-muted)" }}>·</span>
+          )}
+          {vocabulary.phoneticsUk && (
+            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <span style={{ fontSize: 16 }}>🇬🇧</span>
+              <span
+                style={{
+                  borderRadius: 4,
+                  background: "var(--bg-deep)",
+                  padding: "2px 8px",
+                  fontSize: 14,
+                  fontFamily: "var(--font-mono)",
+                  color: "var(--accent)",
+                }}
+              >
+                {vocabulary.phoneticsUk}
+              </span>
+              <AudioButton locale="en-GB" speakingLocale={speakingLocale} onSpeak={speak} />
             </div>
           )}
         </div>
-      </motion.div>
-    </AnimatePresence>
+      ) : vocabulary.phonetic ? (
+        <span
+          className="anim-fade-in"
+          style={{
+            marginTop: 12,
+            display: "inline-block",
+            borderRadius: 4,
+            background: "var(--bg-deep)",
+            padding: "2px 8px",
+            fontSize: 14,
+            fontFamily: "var(--font-mono)",
+            color: "var(--accent)",
+          }}
+        >
+          {vocabulary.phonetic}
+        </span>
+      ) : null}
+
+      {vocabulary.verbForms && vocabulary.verbForms.length > 0 && (
+        <VerbFormsSection verbForms={vocabulary.verbForms} />
+      )}
+
+      <OverviewToggle overviewVi={vocabulary.overviewVi} overviewEn={vocabulary.overviewEn} />
+
+      {/* Sense tabs */}
+      <div style={{ marginTop: 24 }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            borderBottom: "1px solid var(--border)",
+            paddingBottom: 12,
+            marginBottom: 20,
+            overflowX: "auto",
+          }}
+        >
+          {vocabulary.senses.map((sense) => (
+            <button
+              key={sense.id}
+              type="button"
+              aria-selected={activeKey === sense.id}
+              onClick={() => setActiveKey(sense.id)}
+              style={{
+                flexShrink: 0,
+                borderRadius: 999,
+                padding: "6px 16px",
+                fontSize: 14,
+                fontWeight: 500,
+                border: "none",
+                cursor: "pointer",
+                transition: "background 0.2s, color 0.2s",
+                background: activeKey === sense.id ? "rgba(154,177,122,0.12)" : "transparent",
+                color: activeKey === sense.id ? "var(--accent)" : "var(--text-secondary)",
+              }}
+            >
+              {sense.label}
+            </button>
+          ))}
+        </div>
+        {activeSense && <SensePanel key={activeSense.id} sense={activeSense} />}
+      </div>
+
+      {/* Nearby words bar */}
+      {vocabulary.nearbyWords.length > 0 && onSearch && (
+        <div style={{ marginTop: 24, borderTop: "1px solid var(--border)", paddingTop: 20 }}>
+          <NearbyWordsBar
+            words={vocabulary.nearbyWords}
+            headword={vocabulary.headword}
+            onSearch={onSearch}
+          />
+        </div>
+      )}
+    </div>
   );
 }

@@ -11,9 +11,7 @@ vi.mock("@/lib/http", () => ({
 }));
 
 vi.mock("@/components/app/ChatConversationProvider", () => ({
-  ChatConversationProvider: ({ children }: { children: React.ReactNode }) => (
-    <>{children}</>
-  ),
+  ChatConversationProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   useChatConversations: () => ({
     conversations: [],
     setConversations: vi.fn(),
@@ -30,10 +28,7 @@ vi.mock("next/navigation", () => ({
 
 vi.mock("@/components/app/ChatWindow", () => ({
   ChatWindow: ({ conversationId }: { conversationId: string | null }) => (
-    <div
-      data-testid="chat-window"
-      data-conversation-id={String(conversationId)}
-    />
+    <div data-testid="chat-window" data-conversation-id={String(conversationId)} />
   ),
 }));
 
@@ -48,19 +43,13 @@ beforeEach(() => {
 describe("EnglishChatbotLayout", () => {
   it("renders ChatWindow with null when there is no conversationId param", () => {
     renderUi(<EnglishChatbotLayout>{null}</EnglishChatbotLayout>);
-    expect(screen.getByTestId("chat-window")).toHaveAttribute(
-      "data-conversation-id",
-      "null",
-    );
+    expect(screen.getByTestId("chat-window")).toHaveAttribute("data-conversation-id", "null");
   });
 
   it("renders ChatWindow with the conversationId from URL params", () => {
     mockUseParams.mockReturnValue({ conversationId: "abc-123" });
     renderUi(<EnglishChatbotLayout>{null}</EnglishChatbotLayout>);
-    expect(screen.getByTestId("chat-window")).toHaveAttribute(
-      "data-conversation-id",
-      "abc-123",
-    );
+    expect(screen.getByTestId("chat-window")).toHaveAttribute("data-conversation-id", "abc-123");
   });
 
   it("renders ConversationList alongside ChatWindow", () => {

@@ -2,11 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  ArrowDown,
-  ArrowUp,
-} from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
 
 import { TypingIndicator } from "@/components/TypingIndicator";
 import { ChatMessage } from "@/components/ChatMessage";
@@ -23,7 +19,7 @@ import http from "@/lib/http";
 export function sampleSuggestions(
   persona: Persona,
   count: number,
-): typeof persona.suggestions[number][] {
+): (typeof persona.suggestions)[number][] {
   const pool = [...persona.suggestions];
   const n = Math.min(count, pool.length);
   for (let i = pool.length - 1; i > pool.length - n - 1 && i > 0; i--) {
@@ -49,43 +45,69 @@ function parseSsePayloads(chunk: string) {
     .filter(Boolean);
 }
 
-export function getMessageSpacingClassName(
+export function getMessageSpacingStyle(
   currentMessage: PageMessage,
   previousMessage?: PageMessage,
-) {
-  if (!previousMessage) return "";
-  return currentMessage.role === previousMessage.role
-    ? "mt-[4px]"
-    : "mt-[28px]";
+): React.CSSProperties {
+  if (!previousMessage) return {};
+  return { marginTop: currentMessage.role === previousMessage.role ? 4 : 28 };
 }
 
 function ChatSkeleton() {
   return (
-    <div className="mx-auto w-full max-w-5xl animate-pulse space-y-6 py-6">
-      <div className="flex gap-3">
-        <div className="h-8 w-8 shrink-0 rounded-full bg-(--bg-deep)" />
-        <div className="flex-1 space-y-2">
-          <div className="h-4 w-3/4 rounded bg-(--bg-deep)" />
-          <div className="h-4 w-1/2 rounded bg-(--bg-deep)" />
+    <div style={{ maxWidth: 900, width: "100%", margin: "0 auto", padding: "24px 0" }}>
+      <div style={{ display: "flex", gap: 12, marginBottom: 24 }}>
+        <div
+          style={{
+            width: 32,
+            height: 32,
+            borderRadius: "50%",
+            background: "var(--bg-deep)",
+            flexShrink: 0,
+            animation: "pulse 1.5s infinite",
+          }}
+        />
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
+          <div
+            style={{
+              height: 16,
+              width: "75%",
+              borderRadius: 8,
+              background: "var(--bg-deep)",
+              animation: "pulse 1.5s infinite",
+            }}
+          />
+          <div
+            style={{
+              height: 16,
+              width: "50%",
+              borderRadius: 8,
+              background: "var(--bg-deep)",
+              animation: "pulse 1.5s infinite",
+            }}
+          />
         </div>
       </div>
-      <div className="flex justify-end">
-        <div className="space-y-2 w-2/3">
-          <div className="h-4 w-full rounded bg-(--bg-deep)" />
-          <div className="h-4 w-4/5 rounded bg-(--bg-deep)" />
-        </div>
-      </div>
-      <div className="flex gap-3">
-        <div className="h-8 w-8 shrink-0 rounded-full bg-(--bg-deep)" />
-        <div className="flex-1 space-y-2">
-          <div className="h-4 w-full rounded bg-(--bg-deep)" />
-          <div className="h-4 w-2/3 rounded bg-(--bg-deep)" />
-          <div className="h-4 w-4/5 rounded bg-(--bg-deep)" />
-        </div>
-      </div>
-      <div className="flex justify-end">
-        <div className="space-y-2 w-1/2">
-          <div className="h-4 w-full rounded bg-(--bg-deep)" />
+      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 24 }}>
+        <div style={{ width: "66%", display: "flex", flexDirection: "column", gap: 8 }}>
+          <div
+            style={{
+              height: 16,
+              width: "100%",
+              borderRadius: 8,
+              background: "var(--bg-deep)",
+              animation: "pulse 1.5s infinite",
+            }}
+          />
+          <div
+            style={{
+              height: 16,
+              width: "80%",
+              borderRadius: 8,
+              background: "var(--bg-deep)",
+              animation: "pulse 1.5s infinite",
+            }}
+          />
         </div>
       </div>
     </div>
@@ -98,32 +120,25 @@ interface ChatWindowProps {
 
 export function ChatWindow({ conversationId }: ChatWindowProps) {
   const router = useRouter();
-  const { conversations, setConversations, loadConversations } =
-    useChatConversations();
+  const { conversations, setConversations, loadConversations } = useChatConversations();
   const [messages, setMessages] = useState<PageMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedPersonaId, setSelectedPersonaId] =
-    useState(DEFAULT_PERSONA_ID);
+  const [selectedPersonaId, setSelectedPersonaId] = useState(DEFAULT_PERSONA_ID);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const isNearBottomRef = useRef(true);
   const [showScrollBtn, setShowScrollBtn] = useState(false);
-  // Tracks whether we just created a new conversation to avoid refetching messages
   const justCreatedRef = useRef(false);
   const lastMsg = messages.at(-1);
   const streamingHasStarted = isLoading && lastMsg?.role === "assistant";
-  const activePersona =
-    PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
+  const activePersona = PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
   const ActiveAvatar = activePersona.avatar;
 
-  const suggestions = useMemo(
-    () => sampleSuggestions(activePersona, 4),
-    [activePersona],
-  );
+  const suggestions = useMemo(() => sampleSuggestions(activePersona, 4), [activePersona]);
 
   const conversationsRef = useRef(conversations);
   conversationsRef.current = conversations;
@@ -137,7 +152,6 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       return;
     }
 
-    // Skip fetch if we just created this conversation — messages are already in local state
     if (justCreatedRef.current) {
       justCreatedRef.current = false;
       return;
@@ -161,9 +175,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
         >(`/conversations/${conversationId}/messages`);
         if (cancelled) return;
         if (!cancelled) {
-          setMessages(
-            rows.map((r) => ({ id: r.id, role: r.role, text: r.content })),
-          );
+          setMessages(rows.map((r) => ({ id: r.id, role: r.role, text: r.content })));
           setError(null);
         }
       } catch {
@@ -184,11 +196,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
 
   useEffect(() => {
     const bottom = bottomRef.current;
-    if (
-      isNearBottomRef.current &&
-      bottom &&
-      typeof bottom.scrollIntoView === "function"
-    ) {
+    if (isNearBottomRef.current && bottom && typeof bottom.scrollIntoView === "function") {
       bottom.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, isLoading, error]);
@@ -218,11 +226,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
 
   const removeEmptyAssistantMessage = (messageId: string) => {
     setMessages((curr) =>
-      curr.filter(
-        (m) =>
-          m.id !== messageId ||
-          (m.role !== "divider" && m.text.trim().length > 0),
-      ),
+      curr.filter((m) => m.id !== messageId || (m.role !== "divider" && m.text.trim().length > 0)),
     );
   };
 
@@ -282,7 +286,6 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     };
     const assistantMessageId = crypto.randomUUID();
 
-    // Filter out client-only dividers before sending to API
     const requestMessages = [...messages, userMessage].filter(
       (m): m is AppChatMessage => m.role === "user" || m.role === "assistant",
     );
@@ -334,9 +337,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
             if (event.type === "assistant_delta" && event.delta) {
               setMessages((curr) =>
                 curr.map((m) =>
-                  m.id === assistantMessageId
-                    ? { ...m, text: m.text + event.delta }
-                    : m,
+                  m.id === assistantMessageId ? { ...m, text: m.text + event.delta } : m,
                 ),
               );
             }
@@ -370,185 +371,285 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const hasMessages = messages.length > 0;
 
   return (
-    <div className="relative flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-[linear-gradient(135deg,rgba(255,255,255,0.96),rgba(253,243,235,0.9))]">
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        height: "100%",
+        minHeight: 0,
+        flex: 1,
+        flexDirection: "column",
+        overflow: "hidden",
+        background: "linear-gradient(135deg, var(--surface), var(--bg))",
+      }}
+    >
       <ChatHeader personaId={selectedPersonaId} />
       <div
         ref={scrollContainerRef}
         onScroll={handleScroll}
-        className="relative flex-1 min-h-0 overflow-y-auto px-4 py-6 md:px-8"
+        style={{
+          position: "relative",
+          flex: 1,
+          minHeight: 0,
+          overflowY: "auto",
+          padding: "24px 16px",
+        }}
       >
         {/* Grain overlay */}
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.03]"
-          style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-            backgroundRepeat: "repeat",
-            backgroundSize: "128px 128px",
-          }}
-        />
+        <div className="grain-overlay" />
         {/* Warm radial glow */}
         <div
-          className="pointer-events-none absolute inset-0"
           style={{
+            pointerEvents: "none",
+            position: "absolute",
+            inset: 0,
             background:
-              "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(196,109,46,0.07) 0%, transparent 70%)",
+              "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(154,177,122,0.07) 0%, transparent 70%)",
           }}
         />
-        <div className="relative mx-auto flex min-h-full w-full max-w-5xl flex-col">
+        <div
+          style={{
+            position: "relative",
+            margin: "0 auto",
+            display: "flex",
+            minHeight: "100%",
+            width: "100%",
+            maxWidth: 900,
+            flexDirection: "column",
+          }}
+        >
           {isLoadingMessages && conversationId && <ChatSkeleton />}
 
-          <AnimatePresence>
-            {!hasMessages && !isLoadingMessages && (
-              <motion.div
-                className="mx-auto my-auto flex max-w-3xl flex-col items-center text-center"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0, y: -20, scale: 0.98 }}
-                transition={{ duration: 0.35, ease: "easeOut" }}
-              >
-                <motion.div
-                  className="relative"
-                  initial={{ scale: 0.6, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  transition={{
-                    delay: 0.1,
-                    duration: 0.5,
-                    type: "spring",
-                    stiffness: 180,
-                    damping: 14,
+          {!hasMessages && !isLoadingMessages && (
+            <div
+              className="anim-fade-in"
+              style={{
+                margin: "auto",
+                display: "flex",
+                maxWidth: 760,
+                flexDirection: "column",
+                alignItems: "center",
+                textAlign: "center",
+              }}
+            >
+              <div className="anim-pop-in" style={{ position: "relative" }}>
+                <ActiveAvatar size={64} />
+                <span
+                  style={{
+                    position: "absolute",
+                    bottom: 4,
+                    right: 4,
+                    width: 12,
+                    height: 12,
+                    borderRadius: "50%",
+                    background: "var(--sage)",
+                    boxShadow: "0 0 0 2px var(--bg)",
                   }}
-                >
-                  <ActiveAvatar size={64} />
-                  <span className="absolute bottom-1 right-1 size-3 rounded-full bg-(--sage) ring-2 ring-(--bg)" />
-                </motion.div>
-
-                <motion.h2
-                  className="mt-6 text-5xl italic [font-family:var(--font-display)] text-(--ink)"
-                  initial={{ opacity: 0, y: 12 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.4 }}
-                >
-                  Xin chào! Chọn gia sư để bắt đầu
-                </motion.h2>
-
-                <motion.p
-                  className="mt-3 max-w-sm text-base text-(--text-secondary)"
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.4 }}
-                >
-                  Chọn gia sư phù hợp với mục tiêu của bạn, rồi bắt đầu luyện
-                  tập nhé.
-                </motion.p>
-
-                <div className="mt-8 grid w-full gap-3 md:grid-cols-2">
-                  {suggestions.map((s, i) => {
-                    const Icon = s.icon;
-                    return (
-                      <motion.button
-                        key={s.text}
-                        className="flex items-start gap-3 rounded-lg border border-(--border) bg-(--surface) p-4 text-left shadow-(--shadow-sm) transition hover:-translate-y-0.5 hover:border-(--accent)/40 hover:bg-(--surface-hover) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
-                        onClick={() => send(s.text)}
-                        initial={{ opacity: 0, y: 16 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{
-                          delay: 0.35 + i * 0.08,
-                          duration: 0.35,
-                          ease: "easeOut",
-                        }}
-                        whileHover={{ y: -2 }}
-                        whileTap={{ scale: 0.97 }}
-                      >
-                        <span className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-(--accent-light) text-(--accent)">
-                          <Icon size={16} strokeWidth={2} />
-                        </span>
-                        <span className="text-sm leading-6 text-(--text-primary)">
-                          {s.text}
-                        </span>
-                      </motion.button>
-                    );
-                  })}
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-
-          {hasMessages && !isLoadingMessages && (
-            <div className="flex flex-col">
-              {messages.map((m, index) => (
-                <ChatMessage
-                  key={m.id}
-                  message={m}
-                  className={getMessageSpacingClassName(m, messages[index - 1])}
-                  persona={activePersona}
-                  isStreaming={
-                    isLoading &&
-                    index === messages.length - 1 &&
-                    m.role === "assistant"
-                  }
                 />
-              ))}
-              <AnimatePresence>
-                {isLoading && !streamingHasStarted && (
-                  <motion.div
-                    className="mt-7"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    <TypingIndicator
-                      personaName={activePersona.label.split(" —")[0]}
-                    />
-                  </motion.div>
-                )}
-              </AnimatePresence>
+              </div>
+
+              <h2
+                className="anim-fade-up anim-delay-2"
+                style={{
+                  marginTop: 24,
+                  fontSize: 40,
+                  fontStyle: "italic",
+                  fontFamily: "var(--font-display)",
+                  color: "var(--ink)",
+                }}
+              >
+                Xin chào! Chọn gia sư để bắt đầu
+              </h2>
+
+              <p
+                className="anim-fade-up anim-delay-3"
+                style={{
+                  marginTop: 12,
+                  maxWidth: 400,
+                  fontSize: 16,
+                  color: "var(--text-secondary)",
+                }}
+              >
+                Chọn gia sư phù hợp với mục tiêu của bạn, rồi bắt đầu luyện tập nhé.
+              </p>
+
+              <div
+                style={{
+                  marginTop: 32,
+                  display: "grid",
+                  width: "100%",
+                  gap: 12,
+                  gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+                }}
+              >
+                {suggestions.map((s, i) => {
+                  const Icon = s.icon;
+                  return (
+                    <button
+                      key={s.text}
+                      className={`anim-fade-up anim-delay-${Math.min(i + 4, 8)}`}
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: 12,
+                        borderRadius: "var(--radius)",
+                        border: "1px solid var(--border)",
+                        background: "var(--surface)",
+                        padding: 16,
+                        textAlign: "left",
+                        boxShadow: "var(--shadow-sm)",
+                        transition: "transform 0.2s, border-color 0.2s, background 0.2s",
+                        cursor: "pointer",
+                      }}
+                      onClick={() => send(s.text)}
+                    >
+                      <span
+                        style={{
+                          marginTop: 2,
+                          display: "grid",
+                          width: 32,
+                          height: 32,
+                          flexShrink: 0,
+                          placeItems: "center",
+                          borderRadius: "50%",
+                          background: "var(--accent-light)",
+                          color: "var(--accent)",
+                        }}
+                      >
+                        <Icon style={{ fontSize: 16 }} />
+                      </span>
+                      <span
+                        style={{
+                          fontSize: 14,
+                          lineHeight: 1.6,
+                          color: "var(--text-primary)",
+                        }}
+                      >
+                        {s.text}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
           )}
 
-          <AnimatePresence>
-            {error && (
-              <motion.div
-                className="mt-5 rounded-(--radius) border border-[rgba(239,68,68,0.16)] bg-[rgba(239,68,68,0.08)] px-4 py-3 text-sm text-[rgb(153,27,27)]"
-                initial={{ opacity: 0, y: 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -4 }}
-                transition={{ duration: 0.25 }}
+          {hasMessages && !isLoadingMessages && (
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              {messages.map((m, index) => (
+                <div key={m.id} style={getMessageSpacingStyle(m, messages[index - 1])}>
+                  <ChatMessage
+                    message={m}
+                    persona={activePersona}
+                    isStreaming={
+                      isLoading && index === messages.length - 1 && m.role === "assistant"
+                    }
+                  />
+                </div>
+              ))}
+              {isLoading && !streamingHasStarted && (
+                <div className="anim-fade-in" style={{ marginTop: 28 }}>
+                  <TypingIndicator personaName={activePersona.label.split(" —")[0]} />
+                </div>
+              )}
+            </div>
+          )}
+
+          {error && (
+            <div
+              className="anim-fade-up"
+              style={{
+                marginTop: 20,
+                borderRadius: "var(--radius)",
+                border: "1px solid rgba(239,68,68,0.16)",
+                background: "rgba(239,68,68,0.08)",
+                padding: "12px 16px",
+                fontSize: 14,
+                color: "rgb(153,27,27)",
+              }}
+            >
+              <p>{error}</p>
+              <button
+                style={{
+                  marginTop: 8,
+                  fontWeight: 500,
+                  textDecoration: "underline",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  color: "inherit",
+                }}
+                onClick={() => setError(null)}
               >
-                <p>{error}</p>
-                <button
-                  className="mt-2 font-medium underline underline-offset-2 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent)"
-                  onClick={() => setError(null)}
-                >
-                  Đóng
-                </button>
-              </motion.div>
-            )}
-          </AnimatePresence>
+                Đóng
+              </button>
+            </div>
+          )}
 
           <div ref={bottomRef} />
         </div>
       </div>
 
-      <AnimatePresence>
-        {showScrollBtn && (
-          <motion.button
-            className="absolute bottom-22 left-1/2 z-10 flex -translate-x-1/2 items-center gap-1.5 rounded-full border border-(--border) bg-(--surface) px-3 py-1.5 text-xs font-medium text-(--text-secondary) shadow-(--shadow-lg) transition hover:bg-(--surface-hover) hover:text-(--ink)"
-            onClick={scrollToBottom}
-            initial={{ opacity: 0, y: 8, scale: 0.92 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: 8, scale: 0.92 }}
-            transition={{ duration: 0.18 }}
-          >
-            <ArrowDown size={12} strokeWidth={2.5} />
-            Xuống cuối
-          </motion.button>
-        )}
-      </AnimatePresence>
+      {showScrollBtn && (
+        <button
+          className="anim-scale-in"
+          style={{
+            position: "absolute",
+            bottom: 88,
+            left: "50%",
+            transform: "translateX(-50%)",
+            zIndex: 10,
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            borderRadius: 999,
+            border: "1px solid var(--border)",
+            background: "var(--surface)",
+            padding: "6px 12px",
+            fontSize: 12,
+            fontWeight: 500,
+            color: "var(--text-secondary)",
+            boxShadow: "var(--shadow-lg)",
+            cursor: "pointer",
+            transition: "background 0.2s, color 0.2s",
+          }}
+          onClick={scrollToBottom}
+        >
+          <ArrowDownOutlined style={{ fontSize: 12 }} />
+          Xuống cuối
+        </button>
+      )}
 
-      <div className="shrink-0 bg-(--bg)/80 px-4 py-4 backdrop-blur-md md:px-8">
-        <div className="mx-auto flex w-full max-w-5xl flex-col gap-3">
-          <div className="flex items-end gap-3 rounded-2xl border border-(--border) bg-(--surface) p-3 shadow-(--shadow-md) transition-[border-color,box-shadow] duration-200 focus-within:border-(--accent) focus-within:ring-2 focus-within:ring-(--accent-muted) focus-within:shadow-(--shadow-lg)">
+      <div
+        style={{
+          flexShrink: 0,
+          background: "var(--bg)",
+          padding: "16px",
+          backdropFilter: "blur(12px)",
+        }}
+      >
+        <div
+          style={{
+            margin: "0 auto",
+            maxWidth: 900,
+            display: "flex",
+            flexDirection: "column",
+            gap: 12,
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "flex-end",
+              gap: 12,
+              borderRadius: "var(--radius-lg)",
+              border: "1px solid var(--border)",
+              background: "var(--surface)",
+              padding: 12,
+              boxShadow: "var(--shadow-md)",
+              transition: "border-color 0.2s, box-shadow 0.2s",
+            }}
+          >
             <PersonaSwitcher
               value={selectedPersonaId}
               onChange={handlePersonaChange}
@@ -570,21 +671,42 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
               placeholder="Nhập câu hỏi hoặc câu trả lời bằng tiếng Anh..."
               disabled={isLoading}
               rows={1}
-              className="min-h-11 flex-1 resize-none border-0 bg-transparent px-2 py-2 text-[15px] leading-6 text-(--text-primary) outline-none placeholder:text-(--text-muted) disabled:cursor-not-allowed focus:outline-none"
+              style={{
+                minHeight: 44,
+                flex: 1,
+                resize: "none",
+                border: 0,
+                background: "transparent",
+                padding: "8px",
+                fontSize: 15,
+                lineHeight: 1.6,
+                color: "var(--text-primary)",
+                outline: "none",
+              }}
             />
-            <motion.button
-              className={[
-                "grid size-11 shrink-0 place-items-center rounded-full text-white shadow-(--shadow-sm) transition-[background-color,transform] duration-200 enabled:hover:-translate-y-0.5 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) disabled:cursor-not-allowed disabled:bg-(--border-strong)",
-                input.trim() && !isLoading ? "bg-(--accent)" : "bg-(--ink)",
-              ].join(" ")}
+            <button
+              style={{
+                display: "grid",
+                width: 44,
+                height: 44,
+                flexShrink: 0,
+                placeItems: "center",
+                borderRadius: "50%",
+                border: "none",
+                color: "#fff",
+                boxShadow: "var(--shadow-sm)",
+                cursor: input.trim() && !isLoading ? "pointer" : "not-allowed",
+                background: input.trim() && !isLoading ? "var(--accent)" : "var(--ink)",
+                transition: "background 0.2s, transform 0.15s",
+                opacity: !input.trim() || isLoading ? 0.6 : 1,
+              }}
               onClick={() => send()}
               disabled={!input.trim() || isLoading}
-              whileTap={{ scale: 0.88 }}
             >
-              <ArrowUp size={18} strokeWidth={2.5} />
-            </motion.button>
+              <ArrowUpOutlined style={{ fontSize: 18 }} />
+            </button>
           </div>
-          <p className="text-sm text-(--text-muted)">
+          <p style={{ fontSize: 14, color: "var(--text-muted)", textAlign: "center" }}>
             Enter để gửi · Shift+Enter để xuống dòng
           </p>
         </div>

@@ -12,8 +12,7 @@ const PROMPT_INSTRUCTIONS: Record<string, string> = {
     "Generate a realistic TOEIC Writing Question 8 style prompt. Present a statement or question about a common topic (workplace, lifestyle, education, technology) and ask the student to write an opinion essay of at least 200 words with reasons and examples.",
   "describe-picture":
     "Generate a realistic TOEIC Writing Question 1-5 style prompt. Describe a picture scenario (e.g., people in an office, a busy street, a meeting room) and ask the student to write 2-3 sentences describing the scene using specific given words. Minimum 60 words.",
-  free:
-    "Generate an interesting creative writing prompt suitable for English learners preparing for TOEIC. Topics should relate to workplace, business, daily life, or travel. Minimum 50 words.",
+  free: "Generate an interesting creative writing prompt suitable for English learners preparing for TOEIC. Topics should relate to workplace, business, daily life, or travel. Minimum 50 words.",
 };
 
 export async function POST(request: Request) {
@@ -51,18 +50,12 @@ export async function POST(request: Request) {
 
     const prompt = completion.choices[0]?.message?.content?.trim();
     if (!prompt) {
-      return Response.json(
-        { error: "Failed to generate prompt" },
-        { status: 502 },
-      );
+      return Response.json({ error: "Failed to generate prompt" }, { status: 502 });
     }
 
     return Response.json({ prompt });
   } catch (err) {
     console.error("[writing-practice] Prompt generation failed:", err);
-    return Response.json(
-      { error: "Failed to generate prompt" },
-      { status: 502 },
-    );
+    return Response.json({ error: "Failed to generate prompt" }, { status: 502 });
   }
 }

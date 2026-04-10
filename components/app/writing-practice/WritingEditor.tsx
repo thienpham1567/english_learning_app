@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "motion/react";
-import { Send, Lightbulb, ChevronDown } from "lucide-react";
+import { SendOutlined, BulbOutlined, DownOutlined } from "@ant-design/icons";
 import type { WritingCategory } from "@/lib/writing-practice/types";
 import { MIN_WORDS, CATEGORY_LABELS } from "@/lib/writing-practice/types";
 
@@ -26,11 +25,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
   else if (ratio >= 1) countColor = "text-emerald-600";
 
   return (
-    <motion.div
-      className="mx-auto w-full max-w-2xl"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-    >
+    <div className="mx-auto w-full max-w-2xl">
       {/* Prompt display */}
       <div className="rounded-xl border border-(--border) bg-(--bg-deep) p-4">
         <span className="text-[11px] font-semibold uppercase tracking-widest text-(--accent)">
@@ -46,31 +41,28 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
             className="flex w-full items-center gap-2 rounded-lg border border-amber-200 bg-amber-50/60 px-3 py-2 text-left text-sm font-medium text-amber-700 transition hover:bg-amber-50"
             onClick={() => setShowHints(!showHints)}
           >
-            <Lightbulb size={15} className="shrink-0" />
+            <BulbOutlined style={{ fontSize: 15, flexShrink: 0 }} />
             <span className="flex-1">Gợi ý viết bài</span>
-            <ChevronDown
-              size={14}
-              className={`shrink-0 transition-transform ${showHints ? "rotate-180" : ""}`}
+            <DownOutlined
+              style={{
+                fontSize: 14,
+                flexShrink: 0,
+                transition: "transform 0.2s",
+                transform: showHints ? "rotate(180deg)" : "rotate(0)",
+              }}
             />
           </button>
-          <AnimatePresence>
-            {showHints && (
-              <motion.div
-                className="mt-1.5 space-y-1.5 rounded-lg border border-amber-100 bg-amber-50/40 px-3 py-2.5"
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.25 }}
-              >
-                {hints.map((hint, i) => (
-                  <p key={i} className="flex gap-2 text-[13px] leading-relaxed text-amber-800">
-                    <span className="shrink-0 font-semibold text-amber-600">{i + 1}.</span>
-                    {hint}
-                  </p>
-                ))}
-              </motion.div>
-            )}
-          </AnimatePresence>
+
+          {showHints && (
+            <div className="mt-1.5 space-y-1.5 rounded-lg border border-amber-100 bg-amber-50/40 px-3 py-2.5">
+              {hints.map((hint, i) => (
+                <p key={i} className="flex gap-2 text-[13px] leading-relaxed text-amber-800">
+                  <span className="shrink-0 font-semibold text-amber-600">{i + 1}.</span>
+                  {hint}
+                </p>
+              ))}
+            </div>
+          )}
         </div>
       )}
 
@@ -86,23 +78,22 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
           <span className={`text-xs font-medium ${countColor}`}>
             {wordCount} / {minWords} từ
           </span>
-          <motion.button
+          <button
             className="flex items-center gap-2 rounded-lg bg-linear-to-br from-(--accent) to-amber-600 px-5 py-2.5 text-sm font-semibold text-white shadow-(--shadow-sm) transition enabled:hover:opacity-90 disabled:opacity-40"
             disabled={wordCount < minWords || isSubmitting}
             onClick={() => onSubmit(text)}
-            whileTap={{ scale: 0.97 }}
           >
             {isSubmitting ? (
               "Đang chấm bài..."
             ) : (
               <>
-                <Send size={14} />
+                <SendOutlinedOutlined style={{ fontSize: 14 }} />
                 Nộp bài
               </>
             )}
-          </motion.button>
+          </button>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

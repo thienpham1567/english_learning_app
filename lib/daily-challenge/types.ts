@@ -1,8 +1,4 @@
-export type ChallengeType =
-  | "fill-in-blank"
-  | "sentence-order"
-  | "translation"
-  | "error-correction";
+export type ChallengeType = "fill-in-blank" | "sentence-order" | "translation" | "error-correction";
 
 export type Exercise =
   | { type: "fill-in-blank"; instruction: string; data: FillInBlankData }

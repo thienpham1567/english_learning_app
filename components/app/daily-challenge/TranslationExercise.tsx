@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "motion/react";
 import type { TranslationData } from "@/lib/daily-challenge/types";
 
 type Props = {
@@ -18,7 +17,9 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
     <div>
       <p className="mb-2 text-xs font-medium text-(--accent)">{instruction}</p>
       <div className="mb-3 rounded-lg bg-(--bg-deep) px-3 py-2">
-        <span className="text-[11px] font-semibold uppercase tracking-widest text-(--text-muted)">Tiếng Việt</span>
+        <span className="text-[11px] font-semibold uppercase tracking-widest text-(--text-muted)">
+          Tiếng Việt
+        </span>
         <p className="mt-1 text-sm text-(--ink)">{data.vietnamese}</p>
       </div>
       <input
@@ -32,14 +33,12 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
         }}
       />
       {text.trim() && !disabled && (
-        <motion.button
+        <button
           className="mt-2 rounded-lg bg-(--accent) px-4 py-1.5 text-sm font-medium text-white"
           onClick={() => onAnswer(text.trim())}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
         >
           Xác nhận
-        </motion.button>
+        </button>
       )}
     </div>
   );

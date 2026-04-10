@@ -1,15 +1,17 @@
 "use client";
 
-import { motion } from "motion/react";
-import { Mail, PenLine, Image, Sparkles } from "lucide-react";
+import { Button, Card, Col, Flex, Row, Space, Spin, Typography } from "antd";
+import { MailOutlined, EditOutlined, PictureOutlined, StarOutlined } from "@ant-design/icons";
 import type { WritingCategory } from "@/lib/writing-practice/types";
 import { CATEGORY_LABELS } from "@/lib/writing-practice/types";
 
-const CATEGORIES: { id: WritingCategory; icon: typeof Mail; desc: string }[] = [
-  { id: "email-response", icon: Mail, desc: "Trả lời email yêu cầu (TOEIC Q6-7)" },
-  { id: "opinion-essay", icon: PenLine, desc: "Viết luận trình bày quan điểm (TOEIC Q8)" },
-  { id: "describe-picture", icon: Image, desc: "Mô tả hình ảnh bằng câu (TOEIC Q1-5)" },
-  { id: "free", icon: Sparkles, desc: "Tự do sáng tạo, chủ đề bất kỳ" },
+const { Title, Text } = Typography;
+
+const CATEGORIES: { id: WritingCategory; icon: typeof MailOutlined; desc: string }[] = [
+  { id: "email-response", icon: MailOutlined, desc: "Trả lời email yêu cầu (TOEIC Q6-7)" },
+  { id: "opinion-essay", icon: EditOutlined, desc: "Viết luận trình bày quan điểm (TOEIC Q8)" },
+  { id: "describe-picture", icon: PictureOutlined, desc: "Mô tả hình ảnh bằng câu (TOEIC Q1-5)" },
+  { id: "free", icon: StarOutlined, desc: "Tự do sáng tạo, chủ đề bất kỳ" },
 ];
 
 type Props = {
@@ -20,48 +22,64 @@ type Props = {
 
 export function PromptGallery({ onSelect, isLoading, loadingCategory }: Props) {
   return (
-    <motion.div
-      className="mx-auto w-full max-w-lg"
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-    >
-      <h2 className="text-center [font-family:var(--font-display)] text-2xl italic text-(--ink)">
+    <Flex vertical align="center" style={{ width: "100%", maxWidth: 520, margin: "0 auto" }}>
+      <Title
+        level={3}
+        style={{ textAlign: "center", fontFamily: "var(--font-display)", fontStyle: "italic" }}
+      >
         Chọn loại bài viết
-      </h2>
-      <p className="mt-2 text-center text-sm text-(--text-muted)">
-        Luyện viết theo format TOEIC Speaking & Writing
-      </p>
+      </Title>
+      <Text type="secondary" style={{ textAlign: "center" }}>
+        Luyện viết theo format TOEIC Speaking &amp; Writing
+      </Text>
 
-      <div className="mt-6 grid grid-cols-2 gap-3 max-[520px]:grid-cols-1">
-        {CATEGORIES.map((cat, i) => {
+      <Row gutter={[12, 12]} style={{ marginTop: 24, width: "100%" }}>
+        {CATEGORIES.map((cat) => {
           const Icon = cat.icon;
           const isBusy = isLoading && loadingCategory === cat.id;
           return (
-            <motion.button
-              key={cat.id}
-              className="flex flex-col items-start gap-2 rounded-xl border border-(--border) bg-(--surface) p-4 text-left shadow-(--shadow-sm) transition hover:border-(--accent)/40 hover:shadow-(--shadow-md) disabled:opacity-50"
-              onClick={() => onSelect(cat.id)}
-              disabled={isLoading}
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: i * 0.07 }}
-              whileTap={{ scale: 0.97 }}
-            >
-              <div className="grid size-9 place-items-center rounded-lg bg-(--accent)/10 text-(--accent)">
-                <Icon size={18} />
-              </div>
-              <span className="text-sm font-semibold text-(--ink)">
-                {CATEGORY_LABELS[cat.id]}
-              </span>
-              <span className="text-xs text-(--text-muted)">{cat.desc}</span>
-              {isBusy && (
-                <span className="text-[11px] text-(--accent)">Đang tạo đề...</span>
-              )}
-            </motion.button>
+            <Col key={cat.id} xs={24} sm={12}>
+              <Card
+                hoverable
+                onClick={() => !isLoading && onSelect(cat.id)}
+                style={{
+                  opacity: isLoading ? 0.5 : 1,
+                  cursor: isLoading ? "not-allowed" : "pointer",
+                }}
+                styles={{ body: { padding: 16 } }}
+              >
+                <Flex vertical gap={8} align="flex-start">
+                  <Flex
+                    align="center"
+                    justify="center"
+                    style={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: "var(--radius-sm)",
+                      background: "var(--accent-muted)",
+                      color: "var(--accent)",
+                    }}
+                  >
+                    <Icon style={{ fontSize: 18 }} />
+                  </Flex>
+                  <Text strong>{CATEGORY_LABELS[cat.id]}</Text>
+                  <Text type="secondary" style={{ fontSize: 12 }}>
+                    {cat.desc}
+                  </Text>
+                  {isBusy && (
+                    <Space size={4}>
+                      <Spin size="small" />
+                      <Text type="success" style={{ fontSize: 11 }}>
+                        Đang tạo đề...
+                      </Text>
+                    </Space>
+                  )}
+                </Flex>
+              </Card>
+            </Col>
           );
         })}
-      </div>
-    </motion.div>
+      </Row>
+    </Flex>
   );
 }

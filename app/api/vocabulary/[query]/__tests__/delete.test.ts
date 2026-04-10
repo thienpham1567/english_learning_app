@@ -30,10 +30,9 @@ describe("DELETE /api/vocabulary/[query]", () => {
     vi.mocked(auth.api.getSession).mockResolvedValueOnce(null);
 
     const { DELETE } = await import("@/app/api/vocabulary/[query]/route");
-    const response = await DELETE(
-      new Request("http://localhost", { method: "DELETE" }),
-      { params: Promise.resolve({ query: "take%20off" }) },
-    );
+    const response = await DELETE(new Request("http://localhost", { method: "DELETE" }), {
+      params: Promise.resolve({ query: "take%20off" }),
+    });
     expect(response.status).toBe(401);
   });
 
@@ -44,10 +43,9 @@ describe("DELETE /api/vocabulary/[query]", () => {
     } as never);
 
     const { DELETE } = await import("@/app/api/vocabulary/[query]/route");
-    const response = await DELETE(
-      new Request("http://localhost", { method: "DELETE" }),
-      { params: Promise.resolve({ query: "take%20off" }) },
-    );
+    const response = await DELETE(new Request("http://localhost", { method: "DELETE" }), {
+      params: Promise.resolve({ query: "take%20off" }),
+    });
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(body).toEqual({ ok: true });

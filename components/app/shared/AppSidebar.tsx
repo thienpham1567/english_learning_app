@@ -3,28 +3,31 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BookMarked, BookOpen, BrainCircuit, Flame, Layers, MessageCircleMore, PanelLeftClose, PanelLeftOpen, PenLine } from "lucide-react";
+import {
+  CommentOutlined,
+  ReadOutlined,
+  BookOutlined,
+  AppstoreOutlined,
+  BulbOutlined,
+  EditOutlined,
+  FireOutlined,
+  MenuFoldOutlined,
+  MenuUnfoldOutlined,
+  SunOutlined,
+  MoonOutlined,
+} from "@ant-design/icons";
 import { Tooltip } from "antd";
-import { motion } from "motion/react";
+import { useTheme } from "@/components/app/shared/ThemeProvider";
 
 const navItems = [
-  { href: "/english-chatbot", label: "Trò chuyện", icon: MessageCircleMore },
-  { href: "/dictionary", label: "Từ điển", icon: BookOpen },
-  { href: "/my-vocabulary", label: "Từ vựng", icon: BookMarked },
-  { href: "/flashcards", label: "Ôn tập", icon: Layers },
-  { href: "/grammar-quiz", label: "Ngữ pháp", icon: BrainCircuit },
-  { href: "/writing-practice", label: "Luyện viết", icon: PenLine },
-  { href: "/daily-challenge", label: "Thử thách", icon: Flame },
+  { href: "/english-chatbot", label: "Trò chuyện", icon: CommentOutlined },
+  { href: "/dictionary", label: "Từ điển", icon: ReadOutlined },
+  { href: "/my-vocabulary", label: "Từ vựng", icon: BookOutlined },
+  { href: "/flashcards", label: "Ôn tập", icon: AppstoreOutlined },
+  { href: "/grammar-quiz", label: "Ngữ pháp", icon: BulbOutlined },
+  { href: "/writing-practice", label: "Luyện viết", icon: EditOutlined },
+  { href: "/daily-challenge", label: "Thử thách", icon: FireOutlined },
 ];
-
-const navItemVariants = {
-  hidden: { opacity: 0, x: -8 },
-  visible: (i: number) => ({
-    opacity: 1,
-    x: 0,
-    transition: { delay: 0.1 + i * 0.05, duration: 0.3 },
-  }),
-};
 
 type Props = {
   isExpanded: boolean;
@@ -33,54 +36,98 @@ type Props = {
 
 export function AppSidebar({ isExpanded, onToggle }: Props) {
   const pathname = usePathname();
+  const { mode, toggleTheme } = useTheme();
 
   return (
     <aside
-      className={`sticky top-0 z-50 flex h-screen flex-col gap-2 overflow-hidden border-r border-white/40 bg-white/80 backdrop-blur-md shadow-[1px_0_20px_rgba(28,25,23,0.06)] px-4 py-5 transition-[width] duration-300 ${isExpanded ? "w-[264px]" : "w-[72px]"} max-[920px]:relative max-[920px]:h-auto max-[920px]:w-full max-[920px]:flex-row max-[920px]:items-center max-[920px]:gap-4 max-[920px]:border-r-0 max-[920px]:border-b max-[920px]:px-4 max-[920px]:py-3`}
+      style={{
+        position: "sticky",
+        top: 0,
+        zIndex: 50,
+        display: "flex",
+        flexDirection: "column",
+        gap: 8,
+        overflow: "hidden",
+        borderRight: "1px solid rgba(255,255,255,0.1)",
+        background: "var(--sidebar-bg)",
+        padding: "20px 16px",
+        width: isExpanded ? 264 : 72,
+        height: "100vh",
+        transition: "width 0.3s ease",
+      }}
     >
       {/* Logo / toggle header */}
-      <div className="flex min-h-14 items-center px-0 pb-3 pt-1 max-[920px]:min-h-0 max-[920px]:shrink-0 max-[920px]:pb-0 max-[920px]:pt-0">
+      <div
+        style={{
+          display: "flex",
+          minHeight: 56,
+          alignItems: "center",
+          paddingBottom: 12,
+          paddingTop: 4,
+        }}
+      >
         {isExpanded ? (
           <>
-            <motion.div
-              aria-hidden="true"
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              className="shrink-0"
-            >
+            <div style={{ flexShrink: 0 }}>
               <Image
                 src="/english-logo-app.svg"
                 alt="Thien English"
                 width={250}
                 height={150}
-                className="h-10 w-auto rounded-lg"
+                style={{ height: 40, width: "auto", borderRadius: 8 }}
                 priority
               />
-            </motion.div>
+            </div>
             <button
               onClick={onToggle}
               aria-label="Collapse sidebar"
-              className="ml-auto grid size-7 shrink-0 place-items-center rounded text-(--text-muted) transition-colors hover:text-(--ink) max-[920px]:hidden"
+              style={{
+                marginLeft: "auto",
+                display: "grid",
+                placeItems: "center",
+                width: 28,
+                height: 28,
+                flexShrink: 0,
+                borderRadius: 6,
+                color: "var(--sidebar-text)",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                transition: "color 0.2s",
+              }}
             >
-              <PanelLeftClose size={16} />
+              <MenuFoldOutlined style={{ fontSize: 16 }} />
             </button>
           </>
         ) : (
           <button
             onClick={onToggle}
             aria-label="Expand sidebar"
-            className="mx-auto grid size-7 shrink-0 place-items-center rounded text-(--text-muted) transition-colors hover:text-(--ink) max-[920px]:hidden"
+            style={{
+              margin: "0 auto",
+              display: "grid",
+              placeItems: "center",
+              width: 28,
+              height: 28,
+              flexShrink: 0,
+              borderRadius: 6,
+              color: "var(--sidebar-text)",
+              background: "none",
+              border: "none",
+              cursor: "pointer",
+              transition: "color 0.2s",
+            }}
           >
-            <PanelLeftOpen size={16} />
+            <MenuUnfoldOutlined style={{ fontSize: 16 }} />
           </button>
         )}
       </div>
 
-      <div className="h-px bg-(--border) max-[920px]:hidden" />
+      <div style={{ height: 1, background: "var(--sidebar-border)" }} />
 
       <nav
         aria-label="Các mục trong ứng dụng"
-        className="flex flex-col gap-2 pt-2 max-[920px]:ml-auto max-[920px]:flex-row max-[920px]:gap-[6px] max-[920px]:p-0 max-[920px]:pt-0 max-[920px]:w-auto"
+        style={{ display: "flex", flexDirection: "column", gap: 4, paddingTop: 8, flex: 1 }}
       >
         {navItems.map(({ href, label, icon: Icon }, index) => {
           const active = pathname === href || pathname.startsWith(`${href}/`);
@@ -89,37 +136,39 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
             <Link
               href={href}
               aria-current={active ? "page" : undefined}
-              className={[
-                "flex items-center gap-3 overflow-hidden rounded-(--radius) px-3 py-3 text-sm font-medium transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) max-[920px]:min-h-[38px] max-[920px]:px-[10px]",
-                active
-                  ? "bg-[rgba(196,109,46,0.12)] text-(--accent)"
-                  : "text-(--text-secondary) hover:bg-white/50 hover:text-(--ink)",
-              ].join(" ")}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                overflow: "hidden",
+                borderRadius: "var(--radius)",
+                padding: "10px 12px",
+                fontSize: 14,
+                fontWeight: 500,
+                textDecoration: "none",
+                transition: "background 0.2s, color 0.2s",
+                background: active ? "var(--accent-muted)" : "transparent",
+                color: active ? "var(--accent)" : "var(--sidebar-text)",
+                animation: `fadeInLeft 0.3s ease-out ${0.1 + index * 0.05}s both`,
+              }}
             >
-              <span className="grid size-5 shrink-0 place-items-center max-[920px]:size-[18px]">
-                <Icon size={19} strokeWidth={active ? 2.2 : 1.8} />
-              </span>
               <span
-                className={[
-                  "whitespace-nowrap text-[14px] max-[920px]:text-[13px]",
-                  !isExpanded && "hidden max-[920px]:inline",
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
+                style={{
+                  display: "grid",
+                  placeItems: "center",
+                  width: 20,
+                  height: 20,
+                  flexShrink: 0,
+                }}
               >
-                {label}
+                <Icon style={{ fontSize: 18 }} />
               </span>
+              {isExpanded && <span style={{ whiteSpace: "nowrap", fontSize: 14 }}>{label}</span>}
             </Link>
           );
 
           return (
-            <motion.div
-              key={href}
-              custom={index}
-              initial="hidden"
-              animate="visible"
-              variants={navItemVariants}
-            >
+            <div key={href}>
               {!isExpanded ? (
                 <Tooltip placement="right" title={label}>
                   {linkContent}
@@ -127,10 +176,27 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
               ) : (
                 linkContent
               )}
-            </motion.div>
+            </div>
           );
         })}
       </nav>
+
+      {/* Theme toggle at bottom */}
+      <div style={{ marginTop: "auto", paddingTop: 8 }}>
+        <div style={{ height: 1, background: "var(--sidebar-border)", marginBottom: 12 }} />
+        <button
+          onClick={toggleTheme}
+          className="theme-toggle-btn"
+          aria-label={mode === "light" ? "Bật chế độ tối" : "Bật chế độ sáng"}
+        >
+          {mode === "light" ? (
+            <MoonOutlined style={{ fontSize: 16 }} />
+          ) : (
+            <SunOutlined style={{ fontSize: 16 }} />
+          )}
+          {isExpanded && <span>{mode === "light" ? "Chế độ tối" : "Chế độ sáng"}</span>}
+        </button>
+      </div>
     </aside>
   );
 }

@@ -1,7 +1,14 @@
 "use client";
 
-import { motion } from "motion/react";
-import { BarChart3, Brain, AlertTriangle, RefreshCw } from "lucide-react";
+import { Card, Flex, Space, Statistic, Typography, Button } from "antd";
+import {
+  BarChartOutlined,
+  ThunderboltOutlined,
+  WarningOutlined,
+  ReloadOutlined,
+} from "@ant-design/icons";
+
+const { Title, Text } = Typography;
 
 type Props = {
   totalReviewed: number;
@@ -17,95 +24,65 @@ export function SessionSummary({
   onRestart,
 }: Props) {
   const emoji =
-    averageQuality >= 4
-      ? "🎉"
-      : averageQuality >= 3
-        ? "👏"
-        : averageQuality >= 2
-          ? "👍"
-          : "💪";
+    averageQuality >= 4 ? "🎉" : averageQuality >= 3 ? "👏" : averageQuality >= 2 ? "👍" : "💪";
 
   return (
-    <motion.div
-      className="mx-auto flex max-w-md flex-col items-center text-center"
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.4 }}
+    <Flex
+      vertical
+      align="center"
+      className="anim-scale-in"
+      style={{ maxWidth: 480, margin: "0 auto" }}
     >
-      <motion.span
-        className="text-6xl"
-        initial={{ scale: 0, rotate: -20 }}
-        animate={{ scale: 1, rotate: 0 }}
-        transition={{ delay: 0.15, type: "spring", stiffness: 200, damping: 12 }}
-      >
+      <span className="anim-bounce-emoji" style={{ fontSize: 60 }}>
         {emoji}
-      </motion.span>
+      </span>
 
-      <h2 className="mt-4 [font-family:var(--font-display)] text-3xl italic text-(--ink)">
+      <Title
+        level={2}
+        style={{ marginTop: 16, fontFamily: "var(--font-display)", fontStyle: "italic" }}
+      >
         Hoàn thành!
-      </h2>
-      <p className="mt-2 text-sm text-(--text-secondary)">
-        Bạn đã ôn xong {totalReviewed} thẻ trong phiên này.
-      </p>
+      </Title>
+      <Text type="secondary">Bạn đã ôn xong {totalReviewed} thẻ trong phiên này.</Text>
 
-      <div className="mt-8 grid w-full grid-cols-3 gap-4">
-        <StatCard
-          icon={<BarChart3 size={18} />}
-          label="Đã ôn"
-          value={String(totalReviewed)}
-          delay={0.1}
-        />
-        <StatCard
-          icon={<Brain size={18} />}
-          label="Điểm TB"
-          value={averageQuality.toFixed(1)}
-          delay={0.2}
-        />
-        <StatCard
-          icon={<AlertTriangle size={18} />}
-          label="Quên"
-          value={String(forgottenCount)}
-          delay={0.3}
-        />
-      </div>
+      <Space size={16} style={{ marginTop: 32, width: "100%" }}>
+        {[
+          { icon: <BarChartOutlined />, label: "Đã ôn", value: totalReviewed, delay: 1 },
+          {
+            icon: <ThunderboltOutlined />,
+            label: "Điểm TB",
+            value: averageQuality.toFixed(1),
+            delay: 2,
+          },
+          { icon: <WarningOutlined />, label: "Quên", value: forgottenCount, delay: 3 },
+        ].map((stat) => (
+          <Card
+            key={stat.label}
+            size="small"
+            className={`anim-fade-up anim-delay-${stat.delay}`}
+            style={{ flex: 1, textAlign: "center" }}
+          >
+            <Statistic
+              title={stat.label}
+              value={stat.value}
+              prefix={stat.icon}
+              valueStyle={{ color: "var(--accent)", fontSize: 20 }}
+            />
+          </Card>
+        ))}
+      </Space>
 
       {onRestart && (
-        <motion.button
-          className="mt-8 flex items-center gap-2 rounded-lg border border-(--border) bg-(--surface) px-5 py-2.5 text-sm font-medium text-(--text-secondary) shadow-(--shadow-sm) transition hover:border-(--accent)/40 hover:text-(--accent)"
+        <Button
+          className="anim-fade-up anim-delay-5"
+          icon={<ReloadOutlined />}
           onClick={onRestart}
-          initial={{ opacity: 0, y: 8 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5, duration: 0.3 }}
+          size="large"
+          style={{ marginTop: 32 }}
         >
-          <RefreshCw size={14} />
           Ôn lại
-        </motion.button>
+        </Button>
       )}
-    </motion.div>
-  );
-}
-
-function StatCard({
-  icon,
-  label,
-  value,
-  delay,
-}: {
-  icon: React.ReactNode;
-  label: string;
-  value: string;
-  delay: number;
-}) {
-  return (
-    <motion.div
-      className="flex flex-col items-center gap-1.5 rounded-xl border border-(--border) bg-(--surface) p-4 shadow-(--shadow-sm)"
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay, duration: 0.3 }}
-    >
-      <span className="text-(--accent)">{icon}</span>
-      <span className="text-xl font-bold text-(--ink)">{value}</span>
-      <span className="text-[11px] text-(--text-muted)">{label}</span>
-    </motion.div>
+    </Flex>
   );
 }

@@ -68,11 +68,7 @@ describe("UserMenu", () => {
       "focus-visible:outline-(--accent)",
     );
 
-    expect(screen.getByText("CL")).toHaveClass(
-      "size-7",
-      "rounded-full",
-      "grid",
-    );
+    expect(screen.getByText("CL")).toHaveClass("size-7", "rounded-full", "grid");
   });
 
   it("keeps a visible focus ring on menu actions", () => {

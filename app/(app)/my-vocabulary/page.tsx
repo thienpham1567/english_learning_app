@@ -3,8 +3,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useQueryState, useQueryStates, parseAsString, parseAsBoolean, parseAsArrayOf } from "nuqs";
-import { BookMarked, Search, Trash2 } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { BookOutlined, SearchOutlined, DeleteOutlined } from "@ant-design/icons";
 import { VocabularyStatsBar } from "@/components/app/my-vocabulary/VocabularyStatsBar";
 import { VocabularyDetailSheet } from "@/components/app/my-vocabulary/VocabularyDetailSheet";
 import { ToeicVocabularySection } from "@/components/app/my-vocabulary/ToeicVocabularySection";
@@ -120,15 +119,11 @@ export default function MyVocabularyPage() {
 
   const handleToggleSaved = async (entry: VocabularyEntry) => {
     const next = !entry.saved;
-    setEntries((curr) =>
-      curr.map((e) => (e.id === entry.id ? { ...e, saved: next } : e)),
-    );
+    setEntries((curr) => curr.map((e) => (e.id === entry.id ? { ...e, saved: next } : e)));
     try {
       await http.patch(`/vocabulary/${encodeURIComponent(entry.query)}/saved`, { saved: next });
     } catch {
-      setEntries((curr) =>
-        curr.map((e) => (e.id === entry.id ? { ...e, saved: !next } : e)),
-      );
+      setEntries((curr) => curr.map((e) => (e.id === entry.id ? { ...e, saved: !next } : e)));
     }
   };
 
@@ -137,7 +132,9 @@ export default function MyVocabularyPage() {
 
     if (pendingDelete) {
       clearTimeout(pendingDelete.timerId);
-      void http.delete(`/vocabulary/${encodeURIComponent(pendingDelete.entry.query)}`).catch(() => {});
+      void http
+        .delete(`/vocabulary/${encodeURIComponent(pendingDelete.entry.query)}`)
+        .catch(() => {});
     }
 
     const index = entries.findIndex((e) => e.id === entry.id);
@@ -199,16 +196,13 @@ export default function MyVocabularyPage() {
   });
 
   const selectedEntry = entries.find((e) => e.query === selected) ?? null;
-  const handleCloseSheet = useCallback(() => { void setSelected(null); }, [setSelected]);
+  const handleCloseSheet = useCallback(() => {
+    void setSelected(null);
+  }, [setSelected]);
 
   return (
     <div className="min-h-full overflow-y-auto">
-      <motion.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-      >
-
+      <div>
         {/* ── Page Header ── */}
         <header className="mb-1">
           <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-(--accent)">
@@ -244,8 +238,8 @@ export default function MyVocabularyPage() {
 
         {/* ── Search ── */}
         <div className="relative mt-6">
-          <Search
-            size={15}
+          <SearchOutlined
+            style={{ fontSize: 15 }}
             className="absolute left-1 top-1/2 -translate-y-1/2 text-(--text-muted)"
           />
           <input
@@ -343,7 +337,7 @@ export default function MyVocabularyPage() {
             </div>
           ) : visible.length === 0 ? (
             <div className="flex flex-col items-center gap-3 py-20 text-center">
-              <BookMarked size={28} className="text-(--border-strong)" />
+              <BookOutlined style={{ fontSize: 28 }} className="text-(--border-strong)" />
               <p className="[font-family:var(--font-display)] text-xl italic text-(--text-muted)">
                 {hasActiveFilter
                   ? "Không có từ nào khớp."
@@ -353,20 +347,15 @@ export default function MyVocabularyPage() {
               </p>
               {!hasActiveFilter && (
                 <p className="text-xs text-(--text-muted)">
-                  {entries.length === 0
-                    ? "Hãy thử từ điển nhé!"
-                    : "Nhấn dấu ★ khi tra từ nhé!"}
+                  {entries.length === 0 ? "Hãy thử từ điển nhé!" : "Nhấn dấu ★ khi tra từ nhé!"}
                 </p>
               )}
             </div>
           ) : (
             <div>
               {visible.map((entry, idx) => (
-                <motion.div
+                <div
                   key={entry.id}
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.22, delay: idx * 0.04, ease: "easeOut" }}
                   onClick={() => void setSelected(entry.query)}
                   className="group relative flex cursor-pointer items-center gap-4 border-b border-(--border) py-4 transition-colors hover:bg-(--surface-hover)"
                 >
@@ -405,7 +394,7 @@ export default function MyVocabularyPage() {
                       className="grid size-8 place-items-center rounded text-(--text-muted) opacity-0 transition hover:text-red-500 group-hover:opacity-100 max-[720px]:opacity-100"
                       aria-label={idx === 0 ? "Xoá từ này" : `Xoá ${entry.headword ?? entry.query}`}
                     >
-                      <Trash2 size={14} />
+                      <DeleteOutlined style={{ fontSize: 14 }} />
                     </button>
                     <button
                       onClick={(e) => {
@@ -415,19 +404,18 @@ export default function MyVocabularyPage() {
                       className="grid size-8 shrink-0 place-items-center rounded text-(--text-muted) transition hover:text-(--accent)"
                       aria-label={entry.saved ? "Bỏ lưu" : "Lưu từ này"}
                     >
-                      <BookMarked
-                        size={15}
+                      <BookOutlined
+                        style={{ fontSize: 15 }}
                         className={entry.saved ? "text-(--accent)" : ""}
                       />
                     </button>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           )}
         </div>
-
-      </motion.div>
+      </div>
 
       <VocabularyDetailSheet
         query={selected}
@@ -437,22 +425,16 @@ export default function MyVocabularyPage() {
       />
 
       {pendingDelete && (
-        <AnimatePresence>
-          <motion.div
-            key="undo-toast"
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 16 }}
-            transition={{ duration: 0.2 }}
-            className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-full bg-(--ink) px-5 py-2.5 text-sm text-white shadow-lg"
-          >
-            <span>Đã xoá</span>
-            <span aria-hidden="true">·</span>
-            <button onClick={handleUndoDelete} className="font-semibold underline">
-              Hoàn tác
-            </button>
-          </motion.div>
-        </AnimatePresence>
+        <div
+          key="undo-toast"
+          className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-full bg-(--ink) px-5 py-2.5 text-sm text-white shadow-lg"
+        >
+          <span>Đã xoá</span>
+          <span aria-hidden="true">·</span>
+          <button onClick={handleUndoDelete} className="font-semibold underline">
+            Hoàn tác
+          </button>
+        </div>
       )}
     </div>
   );

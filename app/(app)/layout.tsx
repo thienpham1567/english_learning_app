@@ -5,6 +5,7 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { auth } from "@/lib/auth";
 import { AppShell } from "@/components/app/shared/AppShell";
+import { ThemeProvider } from "@/components/app/shared/ThemeProvider";
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const session = await auth.api.getSession({
@@ -21,8 +22,10 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
   };
 
   return (
-    <NuqsAdapter>
-      <AppShell user={user}>{children}</AppShell>
-    </NuqsAdapter>
+    <ThemeProvider>
+      <NuqsAdapter>
+        <AppShell user={user}>{children}</AppShell>
+      </NuqsAdapter>
+    </ThemeProvider>
   );
 }

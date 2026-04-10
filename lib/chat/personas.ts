@@ -1,20 +1,20 @@
 import type { ComponentType } from "react";
-import type { LucideProps } from "lucide-react";
+import type { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
 
 import {
-  BookOpen,
-  Sparkles,
-  MessageCircle,
-  Lightbulb,
-  PenLine,
-  ListChecks,
-  FileText,
-  GraduationCap,
-  BriefcaseBusiness,
-  Mail,
-  Headphones,
-  BarChart3,
-} from "lucide-react";
+  ReadOutlined,
+  StarOutlined,
+  MessageOutlined,
+  BulbOutlined,
+  EditOutlined,
+  OrderedListOutlined,
+  FileTextOutlined,
+  TrophyOutlined,
+  ShopOutlined,
+  MailOutlined,
+  CustomerServiceOutlined,
+  BarChartOutlined,
+} from "@ant-design/icons";
 
 import { SimonAvatar } from "@/components/app/english-chatbot/persona-avatars/SimonAvatar";
 import { ChristineAvatar } from "@/components/app/english-chatbot/persona-avatars/ChristineAvatar";
@@ -29,7 +29,7 @@ export type Persona = {
   label: string;
   avatar: ComponentType<{ size?: number }>;
   buildInstructions: (input: PersonaInstructionInput) => string;
-  suggestions: readonly { text: string; icon: ComponentType<LucideProps> }[];
+  suggestions: readonly { text: string; icon: ComponentType<Partial<AntdIconProps>> }[];
 };
 
 function viNudge(): string {
@@ -54,14 +54,14 @@ export const PERSONAS: readonly Persona[] = [
       return lines.join("\n");
     },
     suggestions: [
-      { text: "Sửa ngữ pháp giúp mình: I goed to school.", icon: BookOpen },
-      { text: "Giải thích một từ lóng của người Úc nhé.", icon: MessageCircle },
-      { text: "'Break a leg' nghĩa là gì vậy?", icon: Lightbulb },
-      { text: "Cho mình một bài luyện nhanh bằng tiếng Anh.", icon: Sparkles },
-      { text: "Sự khác nhau giữa 'fun' và 'funny' là gì?", icon: Lightbulb },
-      { text: "Vì sao phải nói 'I am' chứ không phải 'I is'?", icon: Lightbulb },
-      { text: "Dạy mình cách chào hỏi tự nhiên như người bản xứ.", icon: MessageCircle },
-      { text: "Cho mình 5 phrasal verb thông dụng nhất nhé.", icon: ListChecks },
+      { text: "Sửa ngữ pháp giúp mình: I goed to school.", icon: ReadOutlined },
+      { text: "Giải thích một từ lóng của người Úc nhé.", icon: MessageOutlined },
+      { text: "'Break a leg' nghĩa là gì vậy?", icon: BulbOutlined },
+      { text: "Cho mình một bài luyện nhanh bằng tiếng Anh.", icon: StarOutlined },
+      { text: "Sự khác nhau giữa 'fun' và 'funny' là gì?", icon: BulbOutlined },
+      { text: "Vì sao phải nói 'I am' chứ không phải 'I is'?", icon: BulbOutlined },
+      { text: "Dạy mình cách chào hỏi tự nhiên như người bản xứ.", icon: MessageOutlined },
+      { text: "Cho mình 5 phrasal verb thông dụng nhất nhé.", icon: OrderedListOutlined },
     ],
   },
   {
@@ -81,14 +81,14 @@ export const PERSONAS: readonly Persona[] = [
       return lines.join("\n");
     },
     suggestions: [
-      { text: "Chấm đoạn Writing Task 2 này theo tiêu chí IELTS.", icon: PenLine },
-      { text: "Cho mình từ vựng học thuật thay cho 'very good'.", icon: BookOpen },
-      { text: "Viết lại câu này cho giống band 7+.", icon: Sparkles },
-      { text: "Luyện Speaking Part 2: Describe a memorable trip.", icon: MessageCircle },
-      { text: "Giải thích cách dùng 'Although' và 'Despite'.", icon: Lightbulb },
-      { text: "Cho mình cấu trúc mở bài Writing Task 1.", icon: FileText },
-      { text: "Mình cần cải thiện Coherence & Cohesion, bắt đầu từ đâu?", icon: GraduationCap },
-      { text: "Chữa lỗi ngữ pháp phổ biến band 5-6 giúp mình.", icon: ListChecks },
+      { text: "Chấm đoạn Writing Task 2 này theo tiêu chí IELTS.", icon: EditOutlined },
+      { text: "Cho mình từ vựng học thuật thay cho 'very good'.", icon: ReadOutlined },
+      { text: "Viết lại câu này cho giống band 7+.", icon: StarOutlined },
+      { text: "Luyện Speaking Part 2: Describe a memorable trip.", icon: MessageOutlined },
+      { text: "Giải thích cách dùng 'Although' và 'Despite'.", icon: BulbOutlined },
+      { text: "Cho mình cấu trúc mở bài Writing Task 1.", icon: FileTextOutlined },
+      { text: "Mình cần cải thiện Coherence & Cohesion, bắt đầu từ đâu?", icon: TrophyOutlined },
+      { text: "Chữa lỗi ngữ pháp phổ biến band 5-6 giúp mình.", icon: OrderedListOutlined },
     ],
   },
   {
@@ -108,14 +108,14 @@ export const PERSONAS: readonly Persona[] = [
       return lines.join("\n");
     },
     suggestions: [
-      { text: "Viết email xin nghỉ phép bằng tiếng Anh.", icon: Mail },
-      { text: "Cho mình một bài luyện TOEIC Part 5.", icon: ListChecks },
-      { text: "Giải thích từ vựng kinh doanh: revenue vs. profit.", icon: BriefcaseBusiness },
-      { text: "Luyện nghe: tóm tắt đoạn hội thoại văn phòng.", icon: Headphones },
-      { text: "Viết báo cáo ngắn bằng tiếng Anh về doanh số tháng.", icon: BarChart3 },
-      { text: "Dạy mình cách trình bày ý kiến trong cuộc họp.", icon: MessageCircle },
-      { text: "Cho mình mẫu email follow-up sau cuộc họp.", icon: Mail },
-      { text: "Phân biệt 'make' và 'do' trong ngữ cảnh công việc.", icon: Lightbulb },
+      { text: "Viết email xin nghỉ phép bằng tiếng Anh.", icon: MailOutlined },
+      { text: "Cho mình một bài luyện TOEIC Part 5.", icon: OrderedListOutlined },
+      { text: "Giải thích từ vựng kinh doanh: revenue vs. profit.", icon: ShopOutlined },
+      { text: "Luyện nghe: tóm tắt đoạn hội thoại văn phòng.", icon: CustomerServiceOutlined },
+      { text: "Viết báo cáo ngắn bằng tiếng Anh về doanh số tháng.", icon: BarChartOutlined },
+      { text: "Dạy mình cách trình bày ý kiến trong cuộc họp.", icon: MessageOutlined },
+      { text: "Cho mình mẫu email follow-up sau cuộc họp.", icon: MailOutlined },
+      { text: "Phân biệt 'make' và 'do' trong ngữ cảnh công việc.", icon: BulbOutlined },
     ],
   },
 ];

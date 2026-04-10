@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { DictionarySenseSchema, VocabularySchema, VocabularyWithNearbySchema } from "@/lib/schemas/vocabulary";
+import {
+  DictionarySenseSchema,
+  VocabularySchema,
+  VocabularyWithNearbySchema,
+} from "@/lib/schemas/vocabulary";
 
 describe("DictionarySenseSchema", () => {
   it("parses successfully when optional array fields are absent", () => {
@@ -30,44 +34,43 @@ describe("DictionarySenseSchema", () => {
       collocations: [{ en: "strong coffee", vi: "cà phê đậm" }],
     });
 
-    expect(result.collocations).toEqual([
-      { en: "strong coffee", vi: "cà phê đậm" },
-    ]);
+    expect(result.collocations).toEqual([{ en: "strong coffee", vi: "cà phê đậm" }]);
   });
 });
 
 describe("VocabularySchema", () => {
-  it.each(["word", "phrasal_verb", "idiom"] as const)(
-    "parses allowed entry type %s",
-    (entryType) => {
-      const result = VocabularySchema.parse({
-        query: "strong coffee",
-        headword: "strong coffee",
-        entryType,
-        phonetic: null,
-        phoneticsUs: null,
-        phoneticsUk: null,
-        partOfSpeech: null,
-        level: null,
-        register: null,
-        verbForms: null,
-        numberInfo: null,
-        overviewVi: "Nghĩa",
-        overviewEn: "Meaning",
-        senses: [
-          {
-            id: "s1",
-            label: "Sense 1",
-            definitionVi: "Nghĩa",
-            definitionEn: "Meaning",
-            usageNoteVi: null,
-          },
-        ],
-      });
+  it.each([
+    "word",
+    "phrasal_verb",
+    "idiom",
+  ] as const)("parses allowed entry type %s", (entryType) => {
+    const result = VocabularySchema.parse({
+      query: "strong coffee",
+      headword: "strong coffee",
+      entryType,
+      phonetic: null,
+      phoneticsUs: null,
+      phoneticsUk: null,
+      partOfSpeech: null,
+      level: null,
+      register: null,
+      verbForms: null,
+      numberInfo: null,
+      overviewVi: "Nghĩa",
+      overviewEn: "Meaning",
+      senses: [
+        {
+          id: "s1",
+          label: "Sense 1",
+          definitionVi: "Nghĩa",
+          definitionEn: "Meaning",
+          usageNoteVi: null,
+        },
+      ],
+    });
 
-      expect(result.entryType).toBe(entryType);
-    }
-  );
+    expect(result.entryType).toBe(entryType);
+  });
 
   it("rejects collocation as an entry type", () => {
     expect(() =>
@@ -94,7 +97,7 @@ describe("VocabularySchema", () => {
             usageNoteVi: null,
           },
         ],
-      })
+      }),
     ).toThrow();
   });
 });
@@ -136,8 +139,20 @@ describe("VocabularySchema — verbForms and numberInfo", () => {
       ...base,
       verbForms: [
         { label: "Base", form: "run", phoneticsUs: null, phoneticsUk: null, isIrregular: false },
-        { label: "3rd person", form: "runs", phoneticsUs: null, phoneticsUk: null, isIrregular: false },
-        { label: "Past simple", form: "ran", phoneticsUs: null, phoneticsUk: null, isIrregular: true },
+        {
+          label: "3rd person",
+          form: "runs",
+          phoneticsUs: null,
+          phoneticsUk: null,
+          isIrregular: false,
+        },
+        {
+          label: "Past simple",
+          form: "ran",
+          phoneticsUs: null,
+          phoneticsUk: null,
+          isIrregular: true,
+        },
       ],
     });
     expect(result.verbForms?.[1].form).toBe("runs");

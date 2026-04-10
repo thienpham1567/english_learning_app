@@ -8,9 +8,7 @@ const words = ["rain", "rainbow", "raise", "rake", "rally"];
 
 describe("NearbyWordsBar", () => {
   it("renders nothing when words array is empty", () => {
-    const { container } = renderUi(
-      <NearbyWordsBar words={[]} headword="run" onSearch={vi.fn()} />,
-    );
+    const { container } = renderUi(<NearbyWordsBar words={[]} headword="run" onSearch={vi.fn()} />);
     expect(container.firstChild).toBeNull();
   });
 

@@ -1,6 +1,9 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { Breadcrumb, Flex, Typography } from "antd";
+
+const { Text, Title } = Typography;
 
 const BREADCRUMBS: Record<string, { eyebrow: string; title: string }> = {
   "/english-chatbot": { eyebrow: "Trợ lý học tập", title: "Trò chuyện" },
@@ -18,13 +21,21 @@ export function ToolbarBreadcrumb() {
   if (!crumb) return null;
 
   return (
-    <div className="flex flex-col justify-center">
-      <p className="text-[10px] uppercase tracking-[0.2em] text-(--text-muted) leading-none">
+    <Flex vertical justify="center">
+      <Text
+        type="secondary"
+        style={{
+          fontSize: 10,
+          textTransform: "uppercase",
+          letterSpacing: "0.2em",
+          lineHeight: 1,
+        }}
+      >
         {crumb.eyebrow}
-      </p>
-      <h2 className="mt-0.5 text-sm font-semibold leading-snug text-(--ink)">
+      </Text>
+      <Title level={5} style={{ margin: "2px 0 0", fontSize: 14, lineHeight: 1.4 }}>
         {crumb.title}
-      </h2>
-    </div>
+      </Title>
+    </Flex>
   );
 }

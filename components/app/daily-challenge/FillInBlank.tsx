@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "motion/react";
 import type { FillInBlankData } from "@/lib/daily-challenge/types";
 
 const LABELS = ["A", "B", "C", "D"] as const;
@@ -39,7 +38,7 @@ export function FillInBlank({ data, instruction, onAnswer, disabled }: Props) {
       </p>
       <div className="grid grid-cols-2 gap-2">
         {data.options.map((opt, i) => (
-          <motion.button
+          <button
             key={i}
             className={`rounded-lg border px-3 py-2 text-left text-sm transition ${
               selected === i
@@ -48,11 +47,10 @@ export function FillInBlank({ data, instruction, onAnswer, disabled }: Props) {
             }`}
             onClick={() => handleSelect(i)}
             disabled={disabled}
-            whileTap={{ scale: 0.97 }}
           >
             <span className="mr-2 text-xs font-bold text-(--text-muted)">{LABELS[i]}</span>
             {opt}
-          </motion.button>
+          </button>
         ))}
       </div>
     </div>

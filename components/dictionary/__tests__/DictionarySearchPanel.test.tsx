@@ -18,11 +18,7 @@ afterEach(() => {
 describe("DictionarySearchPanel", () => {
   it("renders the accent label, input placeholder, and search button", () => {
     const { getByText, getByPlaceholderText, getByRole } = renderUi(
-      <DictionarySearchPanel
-        initialValue=""
-        onSubmit={() => {}}
-        isLoading={false}
-      />,
+      <DictionarySearchPanel initialValue="" onSubmit={() => {}} isLoading={false} />,
     );
 
     expect(getByText("Tra cứu có cấu trúc")).toBeInTheDocument();
@@ -32,11 +28,7 @@ describe("DictionarySearchPanel", () => {
 
   it("input has bottom-border-only styling and no antd card wrapper", () => {
     const { getByPlaceholderText, container } = renderUi(
-      <DictionarySearchPanel
-        initialValue=""
-        onSubmit={() => {}}
-        isLoading={false}
-      />,
+      <DictionarySearchPanel initialValue="" onSubmit={() => {}} isLoading={false} />,
     );
 
     const input = getByPlaceholderText("Ví dụ: take off");
@@ -46,11 +38,7 @@ describe("DictionarySearchPanel", () => {
 
   it("search button is full-width rounded pill", () => {
     const { getByRole } = renderUi(
-      <DictionarySearchPanel
-        initialValue=""
-        onSubmit={() => {}}
-        isLoading={false}
-      />,
+      <DictionarySearchPanel initialValue="" onSubmit={() => {}} isLoading={false} />,
     );
 
     const button = getByRole("button", { name: "Tra cứu" });
@@ -59,11 +47,7 @@ describe("DictionarySearchPanel", () => {
 
   it("tips render as 3 list items with left-border accent styling", () => {
     const { container, getByRole } = renderUi(
-      <DictionarySearchPanel
-        initialValue=""
-        onSubmit={() => {}}
-        isLoading={false}
-      />,
+      <DictionarySearchPanel initialValue="" onSubmit={() => {}} isLoading={false} />,
     );
 
     fireEvent.click(getByRole("button", { name: "Mẹo sử dụng" }));
@@ -82,13 +66,7 @@ describe("DictionarySearchPanel", () => {
       data: { suggestions: ["take off", "take on"] },
     });
 
-    renderUi(
-      <DictionarySearchPanel
-        initialValue="ta"
-        onSubmit={() => {}}
-        isLoading={false}
-      />,
-    );
+    renderUi(<DictionarySearchPanel initialValue="ta" onSubmit={() => {}} isLoading={false} />);
 
     await act(async () => {
       await vi.runAllTimersAsync();
@@ -108,13 +86,7 @@ describe("DictionarySearchPanel", () => {
 
     const onSubmit = vi.fn();
 
-    renderUi(
-      <DictionarySearchPanel
-        initialValue="ta"
-        onSubmit={onSubmit}
-        isLoading={false}
-      />,
-    );
+    renderUi(<DictionarySearchPanel initialValue="ta" onSubmit={onSubmit} isLoading={false} />);
 
     await act(async () => {
       await vi.runAllTimersAsync();
@@ -133,19 +105,20 @@ describe("DictionarySearchPanel", () => {
     });
 
     const { getByPlaceholderText } = renderUi(
-      <DictionarySearchPanel
-        initialValue="ta"
-        onSubmit={() => {}}
-        isLoading={false}
-      />,
+      <DictionarySearchPanel initialValue="ta" onSubmit={() => {}} isLoading={false} />,
     );
 
-    await act(async () => { await vi.runAllTimersAsync(); });
+    await act(async () => {
+      await vi.runAllTimersAsync();
+    });
     await waitFor(() => screen.getByRole("option", { name: /take off/ }));
 
     fireEvent.keyDown(getByPlaceholderText("Ví dụ: take off"), { key: "ArrowDown" });
 
-    expect(screen.getByRole("option", { name: /take off/ })).toHaveAttribute("aria-selected", "true");
+    expect(screen.getByRole("option", { name: /take off/ })).toHaveAttribute(
+      "aria-selected",
+      "true",
+    );
   });
 
   it("Escape clears suggestions", async () => {
@@ -155,14 +128,12 @@ describe("DictionarySearchPanel", () => {
     });
 
     const { getByPlaceholderText } = renderUi(
-      <DictionarySearchPanel
-        initialValue="ta"
-        onSubmit={() => {}}
-        isLoading={false}
-      />,
+      <DictionarySearchPanel initialValue="ta" onSubmit={() => {}} isLoading={false} />,
     );
 
-    await act(async () => { await vi.runAllTimersAsync(); });
+    await act(async () => {
+      await vi.runAllTimersAsync();
+    });
     await waitFor(() => screen.getByRole("option", { name: /take off/ }));
 
     fireEvent.keyDown(getByPlaceholderText("Ví dụ: take off"), { key: "Escape" });
@@ -175,15 +146,11 @@ describe("DictionarySearchPanel", () => {
   it("does not fetch suggestions when value is less than 2 chars", async () => {
     vi.useFakeTimers({ shouldAdvanceTime: true });
 
-    renderUi(
-      <DictionarySearchPanel
-        initialValue="t"
-        onSubmit={() => {}}
-        isLoading={false}
-      />,
-    );
+    renderUi(<DictionarySearchPanel initialValue="t" onSubmit={() => {}} isLoading={false} />);
 
-    await act(async () => { await vi.runAllTimersAsync(); });
+    await act(async () => {
+      await vi.runAllTimersAsync();
+    });
 
     expect(http.get).not.toHaveBeenCalled();
   });

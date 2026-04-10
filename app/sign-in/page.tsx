@@ -3,8 +3,11 @@
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { motion } from "motion/react";
+import { Alert, Button, Card, Divider, Flex, Typography } from "antd";
+import { GoogleOutlined } from "@ant-design/icons";
 import { authClient } from "@/lib/auth-client";
+
+const { Title, Text, Paragraph } = Typography;
 
 const GoogleIcon = () => (
   <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
@@ -37,7 +40,6 @@ function SignInContent() {
   const handleGoogleSignIn = async () => {
     setIsLoading(true);
     setError(null);
-
     try {
       await authClient.signIn.social({
         provider: "google",
@@ -50,118 +52,134 @@ function SignInContent() {
   };
 
   return (
-    <motion.div
-      className="flex w-full max-w-[380px] flex-col"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.45, ease: "easeOut", delay: 0.1 }}
-    >
-      {/* Logo + heading */}
-      <div className="flex flex-col items-center text-center">
-        <Image
-          src="/english-logo-app.svg"
-          alt="English logo app"
-          width={250}
-          height={150}
-          className="h-14 w-auto rounded-xl"
-          priority
-          unoptimized
-        />
+    <Flex vertical align="center" className="anim-fade-up" style={{ width: "100%", maxWidth: 380 }}>
+      <Image
+        src="/english-logo-app.svg"
+        alt="English logo app"
+        width={250}
+        height={150}
+        style={{ height: 56, width: "auto", borderRadius: 12 }}
+        priority
+        unoptimized
+      />
 
-        <h1 className="mt-5 text-4xl italic [font-family:var(--font-display)] text-(--ink)">
-          Xin chào
-        </h1>
-        <p className="mt-2 text-sm text-(--text-secondary)">
-          Đăng nhập để bắt đầu luyện tiếng Anh
-        </p>
-      </div>
-
-      <div className="mt-8" />
-
-      {/* Google sign-in */}
-      <motion.button
-        className="flex w-full items-center justify-center gap-3 rounded-(--radius) border border-(--border) bg-transparent py-3 text-sm font-medium text-(--ink) transition-colors hover:bg-(--surface) focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-(--accent) disabled:cursor-not-allowed disabled:opacity-60"
-        onClick={handleGoogleSignIn}
-        disabled={isLoading}
-        whileTap={{ scale: 0.97 }}
+      <Title
+        level={1}
+        style={{
+          marginTop: 20,
+          fontStyle: "italic",
+          fontFamily: "var(--font-display)",
+        }}
       >
-        <GoogleIcon />
-        Đăng nhập bằng Google
-      </motion.button>
+        Xin chào
+      </Title>
+      <Text type="secondary">Đăng nhập để bắt đầu luyện tiếng Anh</Text>
 
-      {/* Error banner */}
+      <Divider />
+
+      <Button
+        block
+        size="large"
+        icon={<GoogleIcon />}
+        onClick={handleGoogleSignIn}
+        loading={isLoading}
+        style={{ borderRadius: "var(--radius)" }}
+      >
+        Đăng nhập bằng Google
+      </Button>
+
       {error && (
-        <motion.div
-          role="alert"
-          className="mt-4 rounded-(--radius) border border-[rgba(239,68,68,0.2)] bg-[rgba(239,68,68,0.08)] px-4 py-3 text-sm text-[rgb(153,27,27)]"
-          initial={{ opacity: 0, y: 4 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          {error}
-        </motion.div>
+        <Alert
+          className="anim-fade-up"
+          type="error"
+          message={error}
+          showIcon
+          style={{ marginTop: 16, width: "100%" }}
+        />
       )}
-    </motion.div>
+    </Flex>
   );
 }
 
 export default function SignInPage() {
   return (
-    <div className="flex min-h-screen">
+    <Flex style={{ minHeight: "100vh" }}>
       {/* Left editorial panel — hidden on mobile */}
-      <div className="relative hidden w-[45%] flex-col items-center justify-center overflow-hidden bg-(--ink) lg:flex">
+      <Flex
+        vertical
+        align="center"
+        justify="center"
+        className="desktop-only"
+        style={{
+          position: "relative",
+          width: "45%",
+          overflow: "hidden",
+          background: "var(--ink)",
+        }}
+      >
         {/* Grain overlay */}
+        <div className="grain-overlay" style={{ opacity: 0.04 }} />
+        {/* Warm radial glow — using new palette warm */}
         <div
-          className="pointer-events-none absolute inset-0 opacity-[0.04]"
           style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-            backgroundRepeat: "repeat",
-            backgroundSize: "128px 128px",
-          }}
-        />
-        {/* Warm radial glow */}
-        <div
-          className="pointer-events-none absolute inset-0"
-          style={{
+            pointerEvents: "none",
+            position: "absolute",
+            inset: 0,
             background:
-              "radial-gradient(ellipse 70% 60% at 75% 15%, rgba(196,109,46,0.18) 0%, transparent 70%)",
+              "radial-gradient(ellipse 70% 60% at 75% 15%, rgba(154,177,122,0.22) 0%, transparent 70%)",
           }}
         />
 
-        {/* Editorial content */}
-        <div className="relative z-10 mx-auto max-w-[340px] px-10 text-center">
-          <motion.p
-            className="text-[2.25rem] font-light italic leading-[1.35] text-white/90 [font-family:var(--font-display)]"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15, duration: 0.5, ease: "easeOut" }}
+        <Flex
+          vertical
+          align="center"
+          style={{ position: "relative", zIndex: 10, maxWidth: 340, padding: "0 40px" }}
+        >
+          <Paragraph
+            className="anim-fade-up anim-delay-1"
+            style={{
+              fontSize: 36,
+              fontWeight: 300,
+              fontStyle: "italic",
+              lineHeight: 1.35,
+              color: "rgba(255,255,255,0.9)",
+              fontFamily: "var(--font-display)",
+              textAlign: "center",
+            }}
           >
             &quot;Học tiếng Anh mỗi ngày, một câu chuyện mới mỗi ngày.&quot;
-          </motion.p>
+          </Paragraph>
 
-          <motion.div
-            className="mx-auto mt-6 h-px w-12 bg-[rgba(196,109,46,0.4)]"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3, duration: 0.5, ease: "easeOut" }}
+          <Divider
+            className="anim-fade-up anim-delay-3"
+            style={{ width: 48, minWidth: 48, borderColor: "rgba(154,177,122,0.4)" }}
           />
 
-          <motion.p
-            className="mt-4 text-xs uppercase tracking-[0.22em] text-white/40"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.42, duration: 0.5, ease: "easeOut" }}
+          <Text
+            className="anim-fade-up anim-delay-4"
+            style={{
+              fontSize: 12,
+              textTransform: "uppercase",
+              letterSpacing: "0.22em",
+              color: "rgba(255,255,255,0.4)",
+            }}
           >
             Trợ lý học tập tiếng Anh
-          </motion.p>
-        </div>
-      </div>
+          </Text>
+        </Flex>
+      </Flex>
 
       {/* Right form panel */}
-      <div className="flex flex-1 items-center justify-center bg-(--bg) px-8 py-16">
+      <Flex
+        flex={1}
+        align="center"
+        justify="center"
+        style={{ background: "var(--bg)", padding: "64px 32px" }}
+      >
         <Suspense fallback={null}>
           <SignInContent />
         </Suspense>
-      </div>
-    </div>
+      </Flex>
+    </Flex>
   );
 }

@@ -14,9 +14,7 @@ vi.mock("@/lib/auth", () => ({
   },
 }));
 
-const mockReturning = vi.fn().mockResolvedValue([
-  { id: "row-1", query: "take off", saved: true },
-]);
+const mockReturning = vi.fn().mockResolvedValue([{ id: "row-1", query: "take off", saved: true }]);
 const mockWhere = vi.fn(() => ({ returning: mockReturning }));
 const mockSet = vi.fn(() => ({ where: mockWhere }));
 const mockUpdate = vi.fn(() => ({ set: mockSet }));

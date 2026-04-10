@@ -20,7 +20,19 @@ export default function EnglishChatbotLayout({
 
   return (
     <ChatConversationProvider>
-      <div className="flex h-full max-h-full min-h-0 flex-1 overflow-hidden rounded-2xl border border-(--border) bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.7))] shadow-(--shadow-md)">
+      <div
+        style={{
+          display: "flex",
+          height: "100%",
+          maxHeight: "100%",
+          minHeight: 0,
+          flex: 1,
+          overflow: "hidden",
+          borderRadius: "var(--radius-lg)",
+          border: "1px solid var(--border)",
+          boxShadow: "var(--shadow-md)",
+        }}
+      >
         <ConversationList activeId={activeId} />
         <ChatWindow conversationId={activeId} />
       </div>

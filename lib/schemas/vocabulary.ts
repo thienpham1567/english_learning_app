@@ -17,12 +17,8 @@ export const DictionarySenseSchema = z.object({
   definitionEn: z.string(),
   usageNoteVi: z.string().nullable(),
   examplesVi: z.array(z.string()).default([]),
-  examples: z
-    .array(z.object({ en: z.string(), vi: z.string() }))
-    .default([]),
-  collocations: z
-    .array(z.object({ en: z.string(), vi: z.string() }))
-    .default([]),
+  examples: z.array(z.object({ en: z.string(), vi: z.string() })).default([]),
+  collocations: z.array(z.object({ en: z.string(), vi: z.string() })).default([]),
   synonyms: z.array(z.string()).default([]),
   antonyms: z.array(z.string()).default([]),
   patterns: z.array(z.string()).default([]),
@@ -63,7 +59,9 @@ export type VocabularyWithNearby = z.infer<typeof VocabularyWithNearbySchema>;
 export type DictionarySense = z.infer<typeof DictionarySenseSchema>;
 export type VerbForm = z.infer<typeof VerbFormSchema>;
 
-export function normalizeVocabularyEntryType(entryType: string | null | undefined): Vocabulary["entryType"] | null {
+export function normalizeVocabularyEntryType(
+  entryType: string | null | undefined,
+): Vocabulary["entryType"] | null {
   if (!entryType) return null;
 
   const normalized = entryType === "collocation" ? "word" : entryType;

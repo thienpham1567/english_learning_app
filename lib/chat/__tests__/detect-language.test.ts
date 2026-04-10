@@ -3,9 +3,7 @@ import { detectLanguage } from "@/lib/chat/detect-language";
 
 describe("detectLanguage", () => {
   it("returns english for an english message", () => {
-    expect(detectLanguage("I want to practice speaking every day.")).toBe(
-      "english",
-    );
+    expect(detectLanguage("I want to practice speaking every day.")).toBe("english");
   });
 
   it("returns english for a short common english reply", () => {
@@ -89,9 +87,7 @@ describe("detectLanguage", () => {
   });
 
   it("returns vietnamese for a clearly Vietnamese message", () => {
-    expect(
-      detectLanguage("Mình muốn hỏi về cách dùng thì hiện tại đơn."),
-    ).toBe("vietnamese");
+    expect(detectLanguage("Mình muốn hỏi về cách dùng thì hiện tại đơn.")).toBe("vietnamese");
   });
 
   it("returns vietnamese for a simple Vietnamese sentence with cần giúp", () => {
@@ -163,8 +159,6 @@ describe("detectLanguage", () => {
   });
 
   it("returns mixed for a bilingual message", () => {
-    expect(detectLanguage("Cô ơi, what does this sentence mean?")).toBe(
-      "mixed",
-    );
+    expect(detectLanguage("Cô ơi, what does this sentence mean?")).toBe("mixed");
   });
 });

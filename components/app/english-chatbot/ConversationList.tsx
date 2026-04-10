@@ -4,7 +4,13 @@ import { useCallback, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Tooltip } from "antd";
-import { Plus, Trash2, GraduationCap, Check, X } from "lucide-react";
+import {
+  PlusOutlined,
+  DeleteOutlined,
+  CheckOutlined,
+  CloseOutlined,
+  TrophyOutlined,
+} from "@ant-design/icons";
 
 import { useChatConversations } from "@/components/app/english-chatbot/ChatConversationProvider";
 
@@ -29,10 +35,7 @@ function formatRelativeTime(dateStr: string): string {
   return `${Math.floor(hours / 24)}d ago`;
 }
 
-export function truncateTitle(
-  title: string,
-  max = 40,
-): { text: string; truncated: boolean } {
+export function truncateTitle(title: string, max = 40): { text: string; truncated: boolean } {
   return title.length > max
     ? { text: title.slice(0, max) + "…", truncated: true }
     : { text: title, truncated: false };
@@ -47,40 +50,79 @@ export function ConversationList({ activeId }: Props) {
   const handleNew = useCallback(() => {
     router.push("/english-chatbot");
   }, [router]);
+
   return (
-    <div className="relative flex h-full w-[220px] shrink-0 flex-col overflow-hidden border-r border-white/10 bg-(--ink)">
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        height: "100%",
+        width: 220,
+        flexShrink: 0,
+        flexDirection: "column",
+        overflow: "hidden",
+        borderRight: "1px solid rgba(255,255,255,0.1)",
+        background: "var(--ink)",
+      }}
+    >
       {/* Grain overlay */}
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.035]"
-        style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          backgroundRepeat: "repeat",
-          backgroundSize: "128px 128px",
-        }}
-      />
+      <div className="grain-overlay" style={{ opacity: 0.035 }} />
 
       {/* Header identity row */}
-      <div className="relative px-4 pt-5 pb-3">
-        <div className="mb-3 flex items-center gap-2">
-          <div className="grid size-6 shrink-0 place-items-center rounded-full bg-(--accent-light) text-(--accent)">
-            <GraduationCap size={13} strokeWidth={2} />
+      <div style={{ position: "relative", padding: "20px 16px 12px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+          <div
+            style={{
+              display: "grid",
+              width: 24,
+              height: 24,
+              flexShrink: 0,
+              placeItems: "center",
+              borderRadius: "50%",
+              background: "var(--accent-light)",
+              color: "var(--accent)",
+            }}
+          >
+            <TrophyOutlined style={{ fontSize: 13 }} />
           </div>
-          <span className="text-sm italic text-white/80 [font-family:var(--font-display)]">
+          <span
+            style={{
+              fontSize: 14,
+              fontStyle: "italic",
+              color: "rgba(255,255,255,0.8)",
+              fontFamily: "var(--font-display)",
+            }}
+          >
             English Tutor
           </span>
         </div>
         <button
           onClick={handleNew}
-          className="flex w-full items-center justify-center gap-2 rounded-(--radius) border border-white/15 px-3 py-2 text-sm font-medium text-white/70 transition hover:bg-white/8 hover:text-white/90"
+          style={{
+            display: "flex",
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 8,
+            borderRadius: "var(--radius)",
+            border: "1px solid rgba(255,255,255,0.15)",
+            padding: "8px 12px",
+            fontSize: 14,
+            fontWeight: 500,
+            color: "rgba(255,255,255,0.7)",
+            background: "transparent",
+            cursor: "pointer",
+            transition: "background 0.2s, color 0.2s",
+          }}
         >
-          <Plus size={15} strokeWidth={2} />
+          <PlusOutlined style={{ fontSize: 15 }} />
           New chat
         </button>
       </div>
 
-      <div className="relative flex-1 overflow-y-auto px-2 pb-2">
+      <div style={{ position: "relative", flex: 1, overflowY: "auto", padding: "0 8px 8px" }}>
         {conversations.length === 0 ? (
-          <p className="px-2 py-3 text-xs text-white/30">
+          <p style={{ padding: "12px 8px", fontSize: 12, color: "rgba(255,255,255,0.3)" }}>
             No conversations yet
           </p>
         ) : (
@@ -89,7 +131,7 @@ export function ConversationList({ activeId }: Props) {
             const isConfirming = conv.id === confirmingId;
             const { text, truncated } = truncateTitle(conv.title);
             const titleSpan = (
-              <span className="pr-5 text-sm font-medium leading-snug">
+              <span style={{ paddingRight: 20, fontSize: 14, fontWeight: 500, lineHeight: 1.4 }}>
                 {text}
               </span>
             );
@@ -98,9 +140,17 @@ export function ConversationList({ activeId }: Props) {
               return (
                 <div
                   key={conv.id}
-                  className="flex items-center gap-1 rounded-(--radius) border border-red-400 bg-red-500/10 px-3 py-2.5"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 4,
+                    borderRadius: "var(--radius)",
+                    border: "1px solid #ef4444",
+                    background: "rgba(239,68,68,0.1)",
+                    padding: "10px 12px",
+                  }}
                 >
-                  <span className="flex-1 text-sm font-medium text-red-300">
+                  <span style={{ flex: 1, fontSize: 14, fontWeight: 500, color: "#fca5a5" }}>
                     Xoá?
                   </span>
                   <button
@@ -111,39 +161,63 @@ export function ConversationList({ activeId }: Props) {
                         router.push("/english-chatbot");
                       }
                     }}
-                    className="grid size-6 place-items-center rounded text-red-400 transition hover:bg-red-500/20"
+                    style={{
+                      display: "grid",
+                      width: 24,
+                      height: 24,
+                      placeItems: "center",
+                      borderRadius: 4,
+                      color: "#f87171",
+                      background: "transparent",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
                     aria-label="Confirm delete"
                   >
-                    <Check size={13} />
+                    <CheckOutlined style={{ fontSize: 13 }} />
                   </button>
                   <button
                     onClick={() => setConfirmingId(null)}
-                    className="grid size-6 place-items-center rounded text-white/50 transition hover:bg-white/8 hover:text-white/80"
+                    style={{
+                      display: "grid",
+                      width: 24,
+                      height: 24,
+                      placeItems: "center",
+                      borderRadius: 4,
+                      color: "rgba(255,255,255,0.5)",
+                      background: "transparent",
+                      border: "none",
+                      cursor: "pointer",
+                    }}
                     aria-label="Cancel delete"
                   >
-                    <X size={13} />
+                    <CloseOutlined style={{ fontSize: 13 }} />
                   </button>
                 </div>
               );
             }
 
             return (
-              <div key={conv.id} className="group relative">
+              <div key={conv.id} style={{ position: "relative" }} className="conv-item">
                 <Link
                   href={`/english-chatbot/${conv.id}`}
-                  className={[
-                    "flex w-full flex-col gap-0.5 rounded-(--radius) border-l-2 px-3 py-2.5 text-left transition",
-                    isActive
-                      ? "border-(--accent) bg-white/6 text-white/90"
-                      : "border-transparent text-white/65 hover:bg-white/5 hover:text-white/80",
-                  ].join(" ")}
+                  style={{
+                    display: "flex",
+                    width: "100%",
+                    flexDirection: "column",
+                    gap: 2,
+                    borderRadius: "var(--radius)",
+                    borderLeft: `2px solid ${isActive ? "var(--accent)" : "transparent"}`,
+                    padding: "10px 12px",
+                    textAlign: "left",
+                    transition: "background 0.2s, color 0.2s",
+                    background: isActive ? "rgba(255,255,255,0.06)" : "transparent",
+                    color: isActive ? "rgba(255,255,255,0.9)" : "rgba(255,255,255,0.65)",
+                    textDecoration: "none",
+                  }}
                 >
-                  {truncated ? (
-                    <Tooltip title={conv.title}>{titleSpan}</Tooltip>
-                  ) : (
-                    titleSpan
-                  )}
-                  <span className="text-[11px] text-white/30">
+                  {truncated ? <Tooltip title={conv.title}>{titleSpan}</Tooltip> : titleSpan}
+                  <span style={{ fontSize: 11, color: "rgba(255,255,255,0.3)" }}>
                     {formatRelativeTime(conv.updatedAt)}
                   </span>
                 </Link>
@@ -153,10 +227,27 @@ export function ConversationList({ activeId }: Props) {
                     e.stopPropagation();
                     setConfirmingId(conv.id);
                   }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 grid size-6 place-items-center rounded text-white/30 opacity-0 transition hover:bg-white/8 hover:text-red-400 group-hover:opacity-100"
+                  className="conv-delete-btn"
+                  style={{
+                    position: "absolute",
+                    right: 8,
+                    top: "50%",
+                    transform: "translateY(-50%)",
+                    display: "grid",
+                    width: 24,
+                    height: 24,
+                    placeItems: "center",
+                    borderRadius: 4,
+                    color: "rgba(255,255,255,0.3)",
+                    opacity: 0,
+                    transition: "opacity 0.2s, color 0.2s",
+                    background: "transparent",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
                   aria-label="Delete conversation"
                 >
-                  <Trash2 size={13} />
+                  <DeleteOutlined style={{ fontSize: 13 }} />
                 </button>
               </div>
             );

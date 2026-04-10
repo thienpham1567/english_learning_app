@@ -15,9 +15,7 @@ describe("GET /api/dictionary/suggestions", () => {
   it("returns empty suggestions for query shorter than 2 chars", async () => {
     const axios = await import("axios");
     const { GET } = await import("@/app/api/dictionary/suggestions/route");
-    const response = await GET(
-      new Request("http://localhost/api/dictionary/suggestions?q=t"),
-    );
+    const response = await GET(new Request("http://localhost/api/dictionary/suggestions?q=t"));
     expect(vi.mocked(axios.default.get)).not.toHaveBeenCalled();
     expect(response.status).toBe(200);
     const body = await response.json();
@@ -27,9 +25,7 @@ describe("GET /api/dictionary/suggestions", () => {
   it("returns empty suggestions for invalid pattern", async () => {
     const axios = await import("axios");
     const { GET } = await import("@/app/api/dictionary/suggestions/route");
-    const response = await GET(
-      new Request("http://localhost/api/dictionary/suggestions?q=he@llo"),
-    );
+    const response = await GET(new Request("http://localhost/api/dictionary/suggestions?q=he@llo"));
     expect(vi.mocked(axios.default.get)).not.toHaveBeenCalled();
     expect(response.status).toBe(200);
     const body = await response.json();
@@ -43,9 +39,7 @@ describe("GET /api/dictionary/suggestions", () => {
     });
 
     const { GET } = await import("@/app/api/dictionary/suggestions/route");
-    const response = await GET(
-      new Request("http://localhost/api/dictionary/suggestions?q=take"),
-    );
+    const response = await GET(new Request("http://localhost/api/dictionary/suggestions?q=take"));
     expect(vi.mocked(axios.default.get)).toHaveBeenCalledWith(
       "https://api.datamuse.com/sug",
       expect.objectContaining({ params: { s: "take", max: 8 } }),
@@ -58,9 +52,7 @@ describe("GET /api/dictionary/suggestions", () => {
   it("returns empty suggestions when no q param is provided", async () => {
     const axios = await import("axios");
     const { GET } = await import("@/app/api/dictionary/suggestions/route");
-    const response = await GET(
-      new Request("http://localhost/api/dictionary/suggestions"),
-    );
+    const response = await GET(new Request("http://localhost/api/dictionary/suggestions"));
     expect(vi.mocked(axios.default.get)).not.toHaveBeenCalled();
     expect(response.status).toBe(200);
     const body = await response.json();
@@ -71,9 +63,7 @@ describe("GET /api/dictionary/suggestions", () => {
     const axios = await import("axios");
     vi.mocked(axios.default.get).mockRejectedValueOnce(new Error("network error"));
     const { GET } = await import("@/app/api/dictionary/suggestions/route");
-    const response = await GET(
-      new Request("http://localhost/api/dictionary/suggestions?q=take"),
-    );
+    const response = await GET(new Request("http://localhost/api/dictionary/suggestions?q=take"));
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(body).toEqual({ suggestions: [] });

@@ -23,9 +23,7 @@ describe("CoLanhDictionaryPage", () => {
   it("renders the hero copy and search panel", () => {
     const { container } = renderUi(<CoLanhDictionaryPage />);
     const pageWrapper = container.querySelector("div.h-full");
-    const layoutSection = container.querySelector(
-      "section.grid.items-start.gap-6",
-    );
+    const layoutSection = container.querySelector("section.grid.items-start.gap-6");
 
     expect(
       screen.getByRole("heading", {
@@ -33,8 +31,6 @@ describe("CoLanhDictionaryPage", () => {
       }),
     ).toBeInTheDocument();
     expect(pageWrapper).toHaveClass("h-full", "min-h-0");
-    expect(layoutSection).toHaveClass(
-      "min-[1121px]:grid-cols-[minmax(280px,360px)_minmax(0,1fr)]",
-    );
+    expect(layoutSection).toHaveClass("min-[1121px]:grid-cols-[minmax(280px,360px)_minmax(0,1fr)]");
   });
 });

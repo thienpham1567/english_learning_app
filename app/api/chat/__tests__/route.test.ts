@@ -75,9 +75,7 @@ describe("openai config", () => {
   it("throws when OPENAI_API_KEY is missing", async () => {
     delete process.env.OPENAI_API_KEY;
 
-    await expect(import("@/lib/openai/config")).rejects.toThrow(
-      "Missing OPENAI_API_KEY",
-    );
+    await expect(import("@/lib/openai/config")).rejects.toThrow("Missing OPENAI_API_KEY");
   });
 
   it("reads the default OpenAI config when OPENAI_API_KEY is set", async () => {
@@ -96,9 +94,7 @@ describe("openai config", () => {
 describe("chat route", () => {
   it("streams assistant events for app-owned chat messages", async () => {
     process.env.OPENAI_API_KEY = "test";
-    mockResponsesStream.mockReturnValue(
-      createMockResponseStream(["Hello", " there"]),
-    );
+    mockResponsesStream.mockReturnValue(createMockResponseStream(["Hello", " there"]));
 
     vi.doMock("@/lib/openai/client", () => ({
       openAiClient: {
@@ -149,14 +145,10 @@ describe("chat route", () => {
     const body = await response.text();
 
     expect(response.status).toBe(200);
-    expect(response.headers.get("Content-Type")).toBe(
-      "text/event-stream; charset=utf-8",
-    );
+    expect(response.headers.get("Content-Type")).toBe("text/event-stream; charset=utf-8");
     expect(body).toContain('data: {"type":"assistant_start"}');
     expect(body).toContain('data: {"type":"assistant_delta","delta":"Hello"}');
-    expect(body).toContain(
-      'data: {"type":"assistant_delta","delta":" there"}',
-    );
+    expect(body).toContain('data: {"type":"assistant_delta","delta":" there"}');
     expect(body).toContain('data: {"type":"assistant_done"}');
     expect(mockResponsesStream).toHaveBeenCalledTimes(1);
     expect(mockResponsesStream).toHaveBeenCalledWith(

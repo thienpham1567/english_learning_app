@@ -3,9 +3,7 @@ import { Source_Sans_3, Fraunces, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
 const metadataBase = new URL(
-  process.env.NEXT_PUBLIC_APP_URL ??
-    process.env.APP_URL ??
-    "http://localhost:3000",
+  process.env.NEXT_PUBLIC_APP_URL ?? process.env.APP_URL ?? "http://localhost:3000",
 );
 
 const sourceSans = Source_Sans_3({
@@ -50,11 +48,10 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={`h-full overflow-hidden ${sourceSans.variable} ${fraunces.variable} ${jetbrainsMono.variable}`}
+      className={`${sourceSans.variable} ${fraunces.variable} ${jetbrainsMono.variable}`}
+      suppressHydrationWarning
     >
-      <body className="h-full overflow-hidden bg-(--bg) text-[15px] leading-[1.6] [font-family:var(--font-body)] text-(--text-primary) antialiased">
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

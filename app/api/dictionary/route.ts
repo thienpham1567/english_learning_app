@@ -80,7 +80,7 @@ export async function POST(req: Request) {
       }
 
       if (cachedData) {
-      const isBadEntry =
+        const isBadEntry =
           cachedData.overviewVi.startsWith("[NOT_ENGLISH]") ||
           !isHeadwordConsistentWithQuery(cachedData.headword, cacheKey);
 

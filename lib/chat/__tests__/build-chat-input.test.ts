@@ -12,9 +12,7 @@ describe("countConsecutiveVietnameseTurns", () => {
   });
 
   it("returns 0 when the most recent user message is English", () => {
-    expect(
-      countConsecutiveVietnameseTurns([msg("user", "I want to practice")]),
-    ).toBe(0);
+    expect(countConsecutiveVietnameseTurns([msg("user", "I want to practice")])).toBe(0);
   });
 
   it("counts consecutive Vietnamese user messages from the end", () => {

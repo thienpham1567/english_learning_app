@@ -1,13 +1,6 @@
 "use client";
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 
 import type { ConversationItem } from "@/components/app/english-chatbot/ConversationList";
 import http from "@/lib/http";
@@ -19,24 +12,17 @@ type ChatConversationContextValue = {
   deleteConversation: (id: string) => Promise<void>;
 };
 
-const ChatConversationContext =
-  createContext<ChatConversationContextValue | null>(null);
+const ChatConversationContext = createContext<ChatConversationContextValue | null>(null);
 
 export function useChatConversations(): ChatConversationContextValue {
   const ctx = useContext(ChatConversationContext);
   if (!ctx) {
-    throw new Error(
-      "useChatConversations must be used within ChatConversationProvider",
-    );
+    throw new Error("useChatConversations must be used within ChatConversationProvider");
   }
   return ctx;
 }
 
-export function ChatConversationProvider({
-  children,
-}: {
-  children: ReactNode;
-}) {
+export function ChatConversationProvider({ children }: { children: ReactNode }) {
   const [conversations, setConversations] = useState<ConversationItem[]>([]);
 
   const loadConversations = useCallback(async () => {

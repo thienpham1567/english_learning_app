@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "motion/react";
 import type { ErrorCorrectionData } from "@/lib/daily-challenge/types";
 
 type Props = {
@@ -32,14 +31,12 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
         }}
       />
       {text.trim() && !disabled && (
-        <motion.button
+        <button
           className="mt-2 rounded-lg bg-(--accent) px-4 py-1.5 text-sm font-medium text-white"
           onClick={() => onAnswer(text.trim())}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
         >
           Xác nhận
-        </motion.button>
+        </button>
       )}
     </div>
   );

@@ -34,10 +34,9 @@ describe("GET /api/vocabulary/[query]/detail", () => {
     vi.mocked(auth.api.getSession).mockResolvedValueOnce(null);
 
     const { GET } = await import("@/app/api/vocabulary/[query]/detail/route");
-    const response = await GET(
-      new Request("http://localhost"),
-      { params: Promise.resolve({ query: "take%20off" }) },
-    );
+    const response = await GET(new Request("http://localhost"), {
+      params: Promise.resolve({ query: "take%20off" }),
+    });
     expect(response.status).toBe(401);
   }, 10000);
 
@@ -48,10 +47,9 @@ describe("GET /api/vocabulary/[query]/detail", () => {
     } as never);
 
     const { GET } = await import("@/app/api/vocabulary/[query]/detail/route");
-    const response = await GET(
-      new Request("http://localhost"),
-      { params: Promise.resolve({ query: "nonexistent" }) },
-    );
+    const response = await GET(new Request("http://localhost"), {
+      params: Promise.resolve({ query: "nonexistent" }),
+    });
     expect(response.status).toBe(404);
     const body = await response.json();
     expect(body).toEqual({ error: "not_found" });
@@ -105,10 +103,9 @@ describe("GET /api/vocabulary/[query]/detail", () => {
     } as unknown as ReturnType<typeof db.select>);
 
     const { GET } = await import("@/app/api/vocabulary/[query]/detail/route");
-    const response = await GET(
-      new Request("http://localhost"),
-      { params: Promise.resolve({ query: "take%20off" }) },
-    );
+    const response = await GET(new Request("http://localhost"), {
+      params: Promise.resolve({ query: "take%20off" }),
+    });
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(body).toEqual(mockData);
@@ -162,10 +159,9 @@ describe("GET /api/vocabulary/[query]/detail", () => {
     } as unknown as ReturnType<typeof db.select>);
 
     const { GET } = await import("@/app/api/vocabulary/[query]/detail/route");
-    const response = await GET(
-      new Request("http://localhost"),
-      { params: Promise.resolve({ query: "strong%20coffee" }) },
-    );
+    const response = await GET(new Request("http://localhost"), {
+      params: Promise.resolve({ query: "strong%20coffee" }),
+    });
     expect(response.status).toBe(200);
     const body = await response.json();
     expect(body).toMatchObject({

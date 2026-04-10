@@ -28,7 +28,6 @@ export default defineConfig({
   resolve: {
     alias: {
       "@": path.resolve(root),
-      "motion/react": path.resolve(root, "test/mocks/motion-react.tsx"),
     },
   },
 });

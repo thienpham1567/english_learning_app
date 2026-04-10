@@ -23,12 +23,7 @@ export async function DELETE(_req: Request, { params }: { params: Params }) {
 
   await db
     .delete(userVocabulary)
-    .where(
-      and(
-        eq(userVocabulary.userId, session.user.id),
-        eq(userVocabulary.query, q),
-      ),
-    );
+    .where(and(eq(userVocabulary.userId, session.user.id), eq(userVocabulary.query, q)));
 
   return Response.json({ ok: true });
 }

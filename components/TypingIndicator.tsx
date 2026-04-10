@@ -1,37 +1,58 @@
-import { motion } from "motion/react";
-
 type Props = {
   personaName?: string;
 };
 
 export function TypingIndicator({ personaName = "Gia sư" }: Props) {
   return (
-    <motion.div
-      className="flex items-end gap-3"
-      initial={{ opacity: 0, y: 6 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.25 }}
+    <div
+      className="anim-fade-up"
+      style={{ display: "flex", alignItems: "flex-end", gap: 12 }}
       role="status"
       aria-live="polite"
       aria-label={`${personaName} đang nhập phản hồi`}
     >
-      <div className="grid size-10 place-items-center rounded-full bg-(--accent-light) text-lg shadow-(--shadow-sm)">
+      <div
+        style={{
+          display: "grid",
+          placeItems: "center",
+          width: 40,
+          height: 40,
+          borderRadius: "50%",
+          background: "var(--accent-light)",
+          fontSize: 18,
+          boxShadow: "var(--shadow-sm)",
+        }}
+      >
         👩‍🏫
       </div>
-      <div className="inline-flex items-center gap-[5px] rounded-[22px] rounded-bl-md border border-(--border) bg-(--bubble-ai) px-4 py-[14px] shadow-(--shadow-sm)">
-        <span
-          className="inline-block size-[5px] rounded-full bg-(--text-muted) [animation:chatWave_1.4s_ease-in-out_infinite]"
-          style={{ animationDelay: "0ms" }}
-        />
-        <span
-          className="inline-block size-[5px] rounded-full bg-(--text-muted) [animation:chatWave_1.4s_ease-in-out_infinite]"
-          style={{ animationDelay: "0.14s" }}
-        />
-        <span
-          className="inline-block size-[5px] rounded-full bg-(--text-muted) [animation:chatWave_1.4s_ease-in-out_infinite]"
-          style={{ animationDelay: "0.28s" }}
-        />
+      <div
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 5,
+          borderRadius: 22,
+          borderBottomLeftRadius: 6,
+          border: "1px solid var(--border)",
+          background: "var(--bubble-ai)",
+          padding: "14px 16px",
+          boxShadow: "var(--shadow-sm)",
+        }}
+      >
+        {[0, 1, 2].map((i) => (
+          <span
+            key={i}
+            style={{
+              display: "inline-block",
+              width: 5,
+              height: 5,
+              borderRadius: "50%",
+              background: "var(--text-muted)",
+              animation: "chatWave 1.4s ease-in-out infinite",
+              animationDelay: `${i * 0.14}s`,
+            }}
+          />
+        ))}
       </div>
-    </motion.div>
+    </div>
   );
 }

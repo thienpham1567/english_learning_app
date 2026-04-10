@@ -63,10 +63,7 @@ export async function GET() {
     .select()
     .from(dailyChallenge)
     .where(
-      and(
-        eq(dailyChallenge.userId, session.user.id),
-        eq(dailyChallenge.challengeDate, vnToday),
-      ),
+      and(eq(dailyChallenge.userId, session.user.id), eq(dailyChallenge.challengeDate, vnToday)),
     )
     .limit(1);
 
@@ -115,7 +112,10 @@ export async function GET() {
         response_format: { type: "json_object" },
         messages: [
           { role: "system", content: SYSTEM_PROMPT },
-          { role: "user", content: `Generate today's daily English challenge. Date: ${vnToday}. Return JSON only.` },
+          {
+            role: "user",
+            content: `Generate today's daily English challenge. Date: ${vnToday}. Return JSON only.`,
+          },
         ],
       });
 
@@ -154,7 +154,10 @@ export async function GET() {
         });
       }
 
-      console.warn(`[daily-challenge] AI validation failed (attempt ${attempt + 1}):`, validated.error.flatten());
+      console.warn(
+        `[daily-challenge] AI validation failed (attempt ${attempt + 1}):`,
+        validated.error.flatten(),
+      );
     } catch (err) {
       console.error(`[daily-challenge] Generation failed (attempt ${attempt + 1}):`, err);
     }

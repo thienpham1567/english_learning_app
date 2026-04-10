@@ -1,8 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "motion/react";
-import { Check, X } from "lucide-react";
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import type { GrammarQuestion } from "@/lib/grammar-quiz/types";
 
 const OPTION_LABELS = ["A", "B", "C", "D"] as const;
@@ -30,147 +29,258 @@ export function QuestionCard({
   const [lang, setLang] = useState<"en" | "vi">("vi");
 
   return (
-    <div className="mx-auto w-full max-w-xl">
+    <div style={{ margin: "0 auto", width: "100%", maxWidth: 580 }}>
       {/* Progress */}
-      <div className="mb-4 flex items-center justify-between">
-        <span className="text-xs font-medium text-(--text-muted)">
+      <div
+        style={{
+          marginBottom: 16,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        <span style={{ fontSize: 12, fontWeight: 500, color: "var(--text-muted)" }}>
           Câu {questionNumber} / {total}
         </span>
-        <span className="rounded-full bg-(--bg-deep) px-2.5 py-0.5 text-[11px] font-medium text-(--text-secondary)">
+        <span
+          style={{
+            borderRadius: 999,
+            background: "var(--bg-deep)",
+            padding: "2px 10px",
+            fontSize: 11,
+            fontWeight: 500,
+            color: "var(--text-secondary)",
+          }}
+        >
           {question.grammarTopic}
         </span>
       </div>
 
       {/* Stem */}
-      <div className="rounded-2xl border border-(--border) bg-(--surface) p-6 shadow-(--shadow-sm)">
-        <p className="text-base leading-relaxed text-(--ink)">
+      <div
+        style={{
+          borderRadius: "var(--radius-lg)",
+          border: "1px solid var(--border)",
+          background: "var(--surface)",
+          padding: 24,
+          boxShadow: "var(--shadow-sm)",
+        }}
+      >
+        <p style={{ fontSize: 16, lineHeight: 1.6, color: "var(--ink)" }}>
           {renderStem(question.stem)}
         </p>
 
         {/* Options */}
-        <div className="mt-6 space-y-2.5">
+        <div style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: 10 }}>
           {question.options.map((option, i) => {
             const isSelected = selectedAnswer === i;
             const isCorrect = i === question.correctIndex;
 
-            let optionStyle = "border-(--border) bg-(--surface) hover:border-(--accent)/40";
+            let bg = "var(--surface)";
+            let borderColor = "var(--border)";
+            let color = "inherit";
+            let opacity = 1;
+
             if (isRevealed) {
               if (isCorrect) {
-                optionStyle =
-                  "border-emerald-400 bg-emerald-50 text-emerald-800";
+                bg = "#ecfdf5";
+                borderColor = "#34d399";
+                color = "#065f46";
               } else if (isSelected && !isCorrect) {
-                optionStyle = "border-red-400 bg-red-50 text-red-800";
+                bg = "#fef2f2";
+                borderColor = "#f87171";
+                color = "#991b1b";
               } else {
-                optionStyle = "border-(--border) bg-(--bg-deep) opacity-50";
+                opacity = 0.5;
+                bg = "var(--bg-deep)";
               }
             } else if (isSelected) {
-              optionStyle = "border-(--accent) bg-(--accent)/5";
+              bg = "var(--accent-muted)";
+              borderColor = "var(--accent)";
             }
 
             return (
-              <motion.button
+              <button
                 key={i}
-                className={`flex w-full items-center gap-3 rounded-xl border px-4 py-3 text-left text-sm transition ${optionStyle}`}
+                style={{
+                  display: "flex",
+                  width: "100%",
+                  alignItems: "center",
+                  gap: 12,
+                  borderRadius: "var(--radius)",
+                  border: `1px solid ${borderColor}`,
+                  padding: "12px 16px",
+                  textAlign: "left",
+                  fontSize: 14,
+                  background: bg,
+                  color,
+                  opacity,
+                  cursor: isRevealed ? "default" : "pointer",
+                  transition: "all 0.2s",
+                }}
                 onClick={() => onAnswer(i)}
                 disabled={isRevealed}
-                whileTap={isRevealed ? undefined : { scale: 0.98 }}
               >
-                <span className="flex size-7 shrink-0 items-center justify-center rounded-lg bg-(--bg-deep) text-xs font-bold text-(--text-secondary)">
+                <span
+                  style={{
+                    display: "flex",
+                    width: 28,
+                    height: 28,
+                    flexShrink: 0,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    borderRadius: "var(--radius-sm)",
+                    background: "var(--bg-deep)",
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: "var(--text-secondary)",
+                  }}
+                >
                   {isRevealed && isCorrect ? (
-                    <Check size={14} className="text-emerald-600" />
+                    <CheckOutlined style={{ fontSize: 14, color: "#059669" }} />
                   ) : isRevealed && isSelected && !isCorrect ? (
-                    <X size={14} className="text-red-600" />
+                    <CloseOutlined style={{ fontSize: 14, color: "#dc2626" }} />
                   ) : (
                     OPTION_LABELS[i]
                   )}
                 </span>
-                <span className="flex-1">{option}</span>
-              </motion.button>
+                <span style={{ flex: 1 }}>{option}</span>
+              </button>
             );
           })}
         </div>
 
-        {/* Explanation with EN/VN toggle */}
+        {/* Explanation */}
         {isRevealed && (
-          <motion.div
-            className="mt-5 rounded-xl border border-amber-200 bg-amber-50/60 p-4"
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            transition={{ duration: 0.3 }}
+          <div
+            className="anim-fade-up"
+            style={{
+              marginTop: 20,
+              borderRadius: "var(--radius)",
+              border: "1px solid #fcd34d",
+              background: "rgba(254,243,199,0.6)",
+              padding: 16,
+            }}
           >
-            <div className="flex items-center justify-between">
-              <p className="text-xs font-semibold uppercase tracking-widest text-amber-700">
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <p
+                style={{
+                  fontSize: 12,
+                  fontWeight: 600,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  color: "#b45309",
+                  margin: 0,
+                }}
+              >
                 Giải thích
               </p>
-              {/* Lang toggle */}
-              <div className="flex overflow-hidden rounded-md border border-amber-300">
-                <button
-                  className={`px-2.5 py-0.5 text-[11px] font-semibold transition-colors ${
-                    lang === "vi"
-                      ? "bg-amber-600 text-white"
-                      : "bg-amber-50 text-amber-700 hover:bg-amber-100"
-                  }`}
-                  onClick={() => setLang("vi")}
-                >
-                  VN
-                </button>
-                <button
-                  className={`px-2.5 py-0.5 text-[11px] font-semibold transition-colors ${
-                    lang === "en"
-                      ? "bg-amber-600 text-white"
-                      : "bg-amber-50 text-amber-700 hover:bg-amber-100"
-                  }`}
-                  onClick={() => setLang("en")}
-                >
-                  EN
-                </button>
+              <div
+                style={{
+                  display: "flex",
+                  overflow: "hidden",
+                  borderRadius: 6,
+                  border: "1px solid #fcd34d",
+                }}
+              >
+                {(["vi", "en"] as const).map((l) => (
+                  <button
+                    key={l}
+                    onClick={() => setLang(l)}
+                    style={{
+                      padding: "2px 10px",
+                      fontSize: 11,
+                      fontWeight: 600,
+                      border: "none",
+                      cursor: "pointer",
+                      background: lang === l ? "#7a9660" : "#fffbeb",
+                      color: lang === l ? "#fff" : "#b45309",
+                    }}
+                  >
+                    {l === "vi" ? "VN" : "EN"}
+                  </button>
+                ))}
               </div>
             </div>
-
-            <p className="mt-2 whitespace-pre-line text-sm leading-relaxed text-amber-900">
+            <p
+              style={{
+                marginTop: 8,
+                whiteSpace: "pre-line",
+                fontSize: 14,
+                lineHeight: 1.6,
+                color: "#78350f",
+              }}
+            >
               {lang === "en" ? question.explanationEn : question.explanationVi}
             </p>
-
-            {/* Examples */}
-            <div className="mt-3 space-y-1">
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-amber-600">
+            <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>
+              <p
+                style={{
+                  fontSize: 11,
+                  fontWeight: 600,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.1em",
+                  color: "#7a9660",
+                  margin: 0,
+                }}
+              >
                 Ví dụ
               </p>
               {question.examples.map((ex, i) => (
-                <p key={i} className="text-sm italic text-amber-800">
+                <p
+                  key={i}
+                  style={{ fontSize: 14, fontStyle: "italic", color: "#92400e", margin: 0 }}
+                >
                   {i + 1}. {ex}
                 </p>
               ))}
             </div>
-          </motion.div>
+          </div>
         )}
 
         {/* Next button */}
         {isRevealed && (
-          <motion.button
-            className="mt-4 w-full rounded-xl bg-linear-to-br from-(--accent) to-amber-600 py-3 text-sm font-semibold text-white shadow-(--shadow-sm) transition hover:opacity-90"
+          <button
+            className="anim-fade-in"
             onClick={onNext}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
+            style={{
+              marginTop: 16,
+              width: "100%",
+              borderRadius: "var(--radius)",
+              background: "linear-gradient(135deg, var(--accent), #7a9660)",
+              padding: "12px 0",
+              fontSize: 14,
+              fontWeight: 600,
+              color: "#fff",
+              border: "none",
+              boxShadow: "var(--shadow-sm)",
+              cursor: "pointer",
+            }}
           >
             {isLastQuestion ? "Xem kết quả" : "Tiếp theo →"}
-          </motion.button>
+          </button>
         )}
       </div>
     </div>
   );
 }
 
-/** Renders stem with blank highlighted */
 function renderStem(stem: string) {
   const parts = stem.split("_____");
   if (parts.length < 2) return stem;
-
   return (
     <>
       {parts[0]}
-      <span className="inline-block rounded bg-(--accent)/10 px-2 py-0.5 font-semibold text-(--accent)">
+      <span
+        style={{
+          display: "inline-block",
+          borderRadius: 4,
+          background: "var(--accent-muted)",
+          padding: "2px 8px",
+          fontWeight: 600,
+          color: "var(--accent)",
+        }}
+      >
         _____
       </span>
       {parts[1]}

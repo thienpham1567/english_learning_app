@@ -41,13 +41,7 @@ export function BandScoreRadar({ scores, size = 200 }: Props) {
           return `${p.x},${p.y}`;
         }).join(" ");
         return (
-          <polygon
-            key={level}
-            points={pts}
-            fill="none"
-            stroke="var(--border)"
-            strokeWidth={0.5}
-          />
+          <polygon key={level} points={pts} fill="none" stroke="var(--border)" strokeWidth={0.5} />
         );
       })}
 
@@ -70,7 +64,7 @@ export function BandScoreRadar({ scores, size = 200 }: Props) {
       {/* Data polygon */}
       <polygon
         points={polygonPoints}
-        fill="rgba(196,109,46,0.15)"
+        fill="rgba(154,177,122,0.15)"
         stroke="var(--accent)"
         strokeWidth={2}
       />

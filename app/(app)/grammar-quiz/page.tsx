@@ -1,7 +1,6 @@
 "use client";
 
-import { AnimatePresence, motion } from "motion/react";
-import { BrainCircuit } from "lucide-react";
+import { BulbOutlined } from "@ant-design/icons";
 
 import { useGrammarQuiz } from "@/hooks/useGrammarQuiz";
 import { LevelPicker } from "@/components/app/grammar-quiz/LevelPicker";
@@ -30,96 +29,144 @@ export default function GrammarQuizPage() {
   } = useGrammarQuiz();
 
   return (
-    <div className="relative flex h-full min-h-0 flex-1 flex-col overflow-hidden rounded-2xl border border-(--border) bg-[linear-gradient(180deg,rgba(255,255,255,0.82),rgba(255,255,255,0.7))] shadow-(--shadow-md)">
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        height: "100%",
+        minHeight: 0,
+        flex: 1,
+        flexDirection: "column",
+        overflow: "hidden",
+        borderRadius: "var(--radius-lg)",
+        border: "1px solid var(--border)",
+        background: "linear-gradient(180deg, var(--surface), var(--bg))",
+        boxShadow: "var(--shadow-md)",
+      }}
+    >
       {/* Header */}
-      <div className="flex shrink-0 items-center gap-3 border-b border-(--border) bg-white/60 px-6 py-4 backdrop-blur-sm">
-        <div className="grid size-10 place-items-center rounded-xl bg-linear-to-br from-pink-500 to-rose-600 text-white shadow-(--shadow-sm)">
-          <BrainCircuit size={20} strokeWidth={2} />
+      <div
+        style={{
+          display: "flex",
+          flexShrink: 0,
+          alignItems: "center",
+          gap: 12,
+          borderBottom: "1px solid var(--border)",
+          background: "var(--surface)",
+          padding: "16px 24px",
+        }}
+      >
+        <div
+          style={{
+            display: "grid",
+            width: 40,
+            height: 40,
+            placeItems: "center",
+            borderRadius: "var(--radius)",
+            background: "linear-gradient(135deg, #ec4899, #e11d48)",
+            color: "#fff",
+            boxShadow: "var(--shadow-sm)",
+          }}
+        >
+          <BulbOutlined style={{ fontSize: 20 }} />
         </div>
-        <div className="flex-1">
-          <h2 className="text-[15px] font-semibold text-(--ink)">
+        <div style={{ flex: 1 }}>
+          <h2 style={{ fontSize: 15, fontWeight: 600, color: "var(--ink)", margin: 0 }}>
             TOEIC Part 5 📝
           </h2>
-          <p className="text-xs text-(--text-muted)">
+          <p style={{ fontSize: 12, color: "var(--text-muted)", margin: 0 }}>
             Incomplete Sentences · Luyện tập theo độ khó
           </p>
         </div>
       </div>
 
       {/* Content */}
-      <div className="relative min-h-0 flex-1 overflow-y-auto px-4 py-6 md:px-8">
+      <div
+        style={{
+          position: "relative",
+          minHeight: 0,
+          flex: 1,
+          overflowY: "auto",
+          padding: "24px 16px",
+        }}
+      >
         <div
-          className="pointer-events-none absolute inset-0"
           style={{
+            pointerEvents: "none",
+            position: "absolute",
+            inset: 0,
             background:
               "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(236,72,153,0.06) 0%, transparent 70%)",
           }}
         />
 
-        <div className="relative mx-auto flex min-h-full w-full max-w-2xl flex-col items-center justify-center">
-          <AnimatePresence mode="wait">
-            {(state === "idle" || state === "loading") && (
-              <motion.div
-                key="level-picker"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                className="w-full"
-              >
-                {error && (
-                  <div className="mx-auto mb-4 max-w-md rounded-lg border border-red-200 bg-red-50 px-4 py-2.5 text-center text-sm text-red-700">
-                    {error}
-                  </div>
-                )}
-                <LevelPicker
-                  selected={level}
-                  onSelect={selectLevel}
-                  onStart={() => generateQuiz()}
-                  isLoading={state === "loading"}
-                />
-              </motion.div>
-            )}
+        <div
+          style={{
+            position: "relative",
+            margin: "0 auto",
+            display: "flex",
+            minHeight: "100%",
+            width: "100%",
+            maxWidth: 700,
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          {(state === "idle" || state === "loading") && (
+            <div className="anim-fade-in" style={{ width: "100%" }}>
+              {error && (
+                <div
+                  style={{
+                    margin: "0 auto 16px",
+                    maxWidth: 480,
+                    borderRadius: "var(--radius)",
+                    border: "1px solid #fecaca",
+                    background: "#fef2f2",
+                    padding: "10px 16px",
+                    textAlign: "center",
+                    fontSize: 14,
+                    color: "#b91c1c",
+                  }}
+                >
+                  {error}
+                </div>
+              )}
+              <LevelPicker
+                selected={level}
+                onSelect={selectLevel}
+                onStart={() => generateQuiz()}
+                isLoading={state === "loading"}
+              />
+            </div>
+          )}
 
-            {state === "active" && currentQuestion && (
-              <motion.div
-                key={`q-${currentIndex}`}
-                className="w-full"
-                initial={{ opacity: 0, x: 30 }}
-                animate={{ opacity: 1, x: 0 }}
-                exit={{ opacity: 0, x: -30 }}
-                transition={{ duration: 0.25 }}
-              >
-                <QuestionCard
-                  question={currentQuestion}
-                  questionNumber={currentIndex + 1}
-                  total={questions.length}
-                  selectedAnswer={selectedAnswer}
-                  isRevealed={isRevealed}
-                  onAnswer={answerQuestion}
-                  onNext={nextQuestion}
-                />
-              </motion.div>
-            )}
+          {state === "active" && currentQuestion && (
+            <div key={`q-${currentIndex}`} className="anim-fade-in" style={{ width: "100%" }}>
+              <QuestionCard
+                question={currentQuestion}
+                questionNumber={currentIndex + 1}
+                total={questions.length}
+                selectedAnswer={selectedAnswer}
+                isRevealed={isRevealed}
+                onAnswer={answerQuestion}
+                onNext={nextQuestion}
+              />
+            </div>
+          )}
 
-            {state === "summary" && (
-              <motion.div
-                key="summary"
-                className="w-full"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-              >
-                <ScoreSummary
-                  questions={questions}
-                  answers={answers}
-                  score={score}
-                  topicBreakdown={topicBreakdown}
-                  onRetry={retryQuiz}
-                  onNewQuiz={newQuiz}
-                />
-              </motion.div>
-            )}
-          </AnimatePresence>
+          {state === "summary" && (
+            <div className="anim-fade-in" style={{ width: "100%" }}>
+              <ScoreSummary
+                questions={questions}
+                answers={answers}
+                score={score}
+                topicBreakdown={topicBreakdown}
+                onRetry={retryQuiz}
+                onNewQuiz={newQuiz}
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

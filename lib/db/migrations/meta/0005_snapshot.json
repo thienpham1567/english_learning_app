@@ -213,12 +213,8 @@
           "name": "flashcard_progress_query_vocabulary_cache_query_fk",
           "tableFrom": "flashcard_progress",
           "tableTo": "vocabulary_cache",
-          "columnsFrom": [
-            "query"
-          ],
-          "columnsTo": [
-            "query"
-          ],
+          "columnsFrom": ["query"],
+          "columnsTo": ["query"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -273,12 +269,8 @@
           "name": "message_conversation_id_conversation_id_fk",
           "tableFrom": "message",
           "tableTo": "conversation",
-          "columnsFrom": [
-            "conversation_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["conversation_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -401,12 +393,8 @@
           "name": "user_vocabulary_query_vocabulary_cache_query_fk",
           "tableFrom": "user_vocabulary",
           "tableTo": "vocabulary_cache",
-          "columnsFrom": [
-            "query"
-          ],
-          "columnsTo": [
-            "query"
-          ],
+          "columnsFrom": ["query"],
+          "columnsTo": ["query"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -535,10 +523,7 @@
     "public.message_role": {
       "name": "message_role",
       "schema": "public",
-      "values": [
-        "user",
-        "assistant"
-      ]
+      "values": ["user", "assistant"]
     }
   },
   "schemas": {},

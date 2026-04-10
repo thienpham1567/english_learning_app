@@ -47,7 +47,9 @@ describe("persona buildInstructions", () => {
   });
 
   it("christine: contains IELTS rubric reference", () => {
-    const instructions = findPersona("christine").buildInstructions({ consecutiveVietnameseTurns: 0 });
+    const instructions = findPersona("christine").buildInstructions({
+      consecutiveVietnameseTurns: 0,
+    });
     expect(instructions).toContain("Christine Ho");
     expect(instructions).toContain("IELTS");
     expect(instructions).toContain("Task Response");

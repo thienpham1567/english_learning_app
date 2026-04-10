@@ -1,7 +1,6 @@
 "use client";
 
-import { motion } from "motion/react";
-import { Clock, FileText } from "lucide-react";
+import { ClockCircleOutlined, FileTextOutlined } from "@ant-design/icons";
 import type { WritingSubmission } from "@/lib/writing-practice/types";
 import { CATEGORY_LABELS, type WritingCategory } from "@/lib/writing-practice/types";
 
@@ -10,18 +9,13 @@ type Props = {
   onView: (submission: WritingSubmission) => void;
 };
 
-export function SubmissionHistory({ submissions, onView }: Props) {
+export function SubmissionHistoryOutlined({ submissions, onView }: Props) {
   if (submissions.length === 0) return null;
 
   return (
-    <motion.div
-      className="mx-auto mt-8 w-full max-w-lg"
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2 }}
-    >
+    <div className="mx-auto mt-8 w-full max-w-lg">
       <h3 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
-        <Clock size={12} />
+        <ClockCircleOutlined style={{ fontSize: 12 }} />
         Bài viết gần đây
       </h3>
       <div className="space-y-2">
@@ -32,7 +26,7 @@ export function SubmissionHistory({ submissions, onView }: Props) {
             onClick={() => onView(s)}
           >
             <div className="flex items-center gap-3">
-              <FileText size={14} className="text-(--text-muted)" />
+              <FileTextOutlined style={{ fontSize: 14, color: "var(--text-muted)" }} />
               <div>
                 <span className="text-sm font-medium text-(--ink)">
                   {CATEGORY_LABELS[s.category as WritingCategory] ?? s.category}
@@ -51,6 +45,6 @@ export function SubmissionHistory({ submissions, onView }: Props) {
           </button>
         ))}
       </div>
-    </motion.div>
+    </div>
   );
 }

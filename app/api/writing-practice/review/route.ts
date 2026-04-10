@@ -5,10 +5,7 @@ import { db } from "@/lib/db";
 import { writingSubmission } from "@/lib/db/schema";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import {
-  ReviewRequestSchema,
-  WritingFeedbackSchema,
-} from "@/lib/writing-practice/schema";
+import { ReviewRequestSchema, WritingFeedbackSchema } from "@/lib/writing-practice/schema";
 
 const REVIEW_SYSTEM_PROMPT = `You are Christine Ho, an expert TOEIC Writing evaluator and English tutor.
 Review the student's writing based on TOEIC Writing scoring criteria.
@@ -62,10 +59,7 @@ export async function POST(request: Request) {
   }
 
   if (isRateLimited(session.user.id)) {
-    return Response.json(
-      { error: "Too many requests. Please wait a moment." },
-      { status: 429 },
-    );
+    return Response.json({ error: "Too many requests. Please wait a moment." }, { status: 429 });
   }
 
   const body = await request.json();
@@ -124,15 +118,9 @@ export async function POST(request: Request) {
         validated.error.flatten(),
       );
     } catch (err) {
-      console.error(
-        `[writing-practice] Review failed (attempt ${attempt + 1}):`,
-        err,
-      );
+      console.error(`[writing-practice] Review failed (attempt ${attempt + 1}):`, err);
     }
   }
 
-  return Response.json(
-    { error: "Failed to review writing. Please try again." },
-    { status: 502 },
-  );
+  return Response.json({ error: "Failed to review writing. Please try again." }, { status: 502 });
 }

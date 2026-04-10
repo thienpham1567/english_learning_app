@@ -94,25 +94,24 @@ export function useGrammarQuiz() {
     setState("idle");
   }, []);
 
-  const currentQuestion =
-    state === "active" ? questions[currentIndex] ?? null : null;
+  const currentQuestion = state === "active" ? (questions[currentIndex] ?? null) : null;
 
   const score = answers.reduce<number>(
-    (acc, ans, i) =>
-      ans !== null && ans === questions[i]?.correctIndex ? acc + 1 : acc,
+    (acc, ans, i) => (ans !== null && ans === questions[i]?.correctIndex ? acc + 1 : acc),
     0,
   );
 
   // Topic breakdown for summary
-  const topicBreakdown = questions.reduce<
-    Record<string, { correct: number; total: number }>
-  >((acc, q, i) => {
-    const topic = q.grammarTopic;
-    if (!acc[topic]) acc[topic] = { correct: 0, total: 0 };
-    acc[topic].total += 1;
-    if (answers[i] === q.correctIndex) acc[topic].correct += 1;
-    return acc;
-  }, {});
+  const topicBreakdown = questions.reduce<Record<string, { correct: number; total: number }>>(
+    (acc, q, i) => {
+      const topic = q.grammarTopic;
+      if (!acc[topic]) acc[topic] = { correct: 0, total: 0 };
+      acc[topic].total += 1;
+      if (answers[i] === q.correctIndex) acc[topic].correct += 1;
+      return acc;
+    },
+    {},
+  );
 
   return {
     state,

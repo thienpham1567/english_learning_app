@@ -42,7 +42,7 @@ describe("PersonaSwitcher", () => {
 
     await user.click(screen.getByText("Christine Ho — IELTS Master"));
     await waitFor(() =>
-      expect(screen.queryByText("Christine Ho — IELTS Master")).not.toBeInTheDocument()
+      expect(screen.queryByText("Christine Ho — IELTS Master")).not.toBeInTheDocument(),
     );
   });
 

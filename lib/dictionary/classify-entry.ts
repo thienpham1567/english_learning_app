@@ -1,7 +1,4 @@
-export type DictionaryEntryType =
-  | "word"
-  | "phrasal_verb"
-  | "idiom";
+export type DictionaryEntryType = "word" | "phrasal_verb" | "idiom";
 
 const phrasalVerbParticles = new Set([
   "up",

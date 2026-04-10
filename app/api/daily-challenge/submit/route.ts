@@ -20,17 +20,26 @@ function getVnYesterday(): string {
   return d.toLocaleDateString("en-CA", { timeZone: "Asia/Ho_Chi_Minh" });
 }
 
-function scoreExercise(exercise: Exercise, answer: string): { isCorrect: boolean; explanation: string } {
+function scoreExercise(
+  exercise: Exercise,
+  answer: string,
+): { isCorrect: boolean; explanation: string } {
   switch (exercise.type) {
     case "fill-in-blank": {
       const d = exercise.data;
       const isCorrect = d.options[d.correctIndex]?.toLowerCase() === answer.toLowerCase();
-      return { isCorrect, explanation: isCorrect ? "Chính xác!" : `Đáp án đúng: ${d.options[d.correctIndex]}` };
+      return {
+        isCorrect,
+        explanation: isCorrect ? "Chính xác!" : `Đáp án đúng: ${d.options[d.correctIndex]}`,
+      };
     }
     case "sentence-order": {
       const d = exercise.data;
       const isCorrect = d.correctOrder.join(" ").toLowerCase() === answer.toLowerCase();
-      return { isCorrect, explanation: isCorrect ? "Chính xác!" : `Câu đúng: ${d.correctOrder.join(" ")}` };
+      return {
+        isCorrect,
+        explanation: isCorrect ? "Chính xác!" : `Câu đúng: ${d.correctOrder.join(" ")}`,
+      };
     }
     case "translation": {
       const d = exercise.data;
@@ -38,12 +47,18 @@ function scoreExercise(exercise: Exercise, answer: string): { isCorrect: boolean
       const isCorrect = d.acceptableAnswers.some(
         (a) => a.toLowerCase().replace(/[.!?]/g, "").trim() === normalized,
       );
-      return { isCorrect, explanation: isCorrect ? "Chính xác!" : `Đáp án chấp nhận: ${d.acceptableAnswers[0]}` };
+      return {
+        isCorrect,
+        explanation: isCorrect ? "Chính xác!" : `Đáp án chấp nhận: ${d.acceptableAnswers[0]}`,
+      };
     }
     case "error-correction": {
       const d = exercise.data;
       const isCorrect = answer.toLowerCase().trim() === d.correction.toLowerCase().trim();
-      return { isCorrect, explanation: isCorrect ? "Chính xác!" : `${d.explanation} Đáp án: ${d.correction}` };
+      return {
+        isCorrect,
+        explanation: isCorrect ? "Chính xác!" : `${d.explanation} Đáp án: ${d.correction}`,
+      };
     }
   }
 }
@@ -57,7 +72,10 @@ export async function POST(request: Request) {
   const body = await request.json();
   const parsed = SubmitAnswerSchema.safeParse(body);
   if (!parsed.success) {
-    return Response.json({ error: "Invalid input", details: parsed.error.flatten() }, { status: 400 });
+    return Response.json(
+      { error: "Invalid input", details: parsed.error.flatten() },
+      { status: 400 },
+    );
   }
 
   const vnToday = getVnDate();
@@ -67,10 +85,7 @@ export async function POST(request: Request) {
     .select()
     .from(dailyChallenge)
     .where(
-      and(
-        eq(dailyChallenge.userId, session.user.id),
-        eq(dailyChallenge.challengeDate, vnToday),
-      ),
+      and(eq(dailyChallenge.userId, session.user.id), eq(dailyChallenge.challengeDate, vnToday)),
     )
     .limit(1);
 

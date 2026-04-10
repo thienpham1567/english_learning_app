@@ -3,11 +3,7 @@ import { eq, and, sql, asc } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import {
-  userVocabulary,
-  vocabularyCache,
-  flashcardProgress,
-} from "@/lib/db/schema";
+import { userVocabulary, vocabularyCache, flashcardProgress } from "@/lib/db/schema";
 
 export async function GET() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -38,10 +34,7 @@ export async function GET() {
     .innerJoin(vocabularyCache, eq(userVocabulary.query, vocabularyCache.query))
     .leftJoin(
       flashcardProgress,
-      and(
-        eq(flashcardProgress.userId, userId),
-        eq(flashcardProgress.query, userVocabulary.query),
-      ),
+      and(eq(flashcardProgress.userId, userId), eq(flashcardProgress.query, userVocabulary.query)),
     )
     .where(
       and(
@@ -79,12 +72,7 @@ export async function GET() {
         eq(userVocabulary.saved, true),
       ),
     )
-    .where(
-      and(
-        eq(flashcardProgress.userId, userId),
-        sql`${flashcardProgress.nextReview} > ${now}`,
-      ),
-    )
+    .where(and(eq(flashcardProgress.userId, userId), sql`${flashcardProgress.nextReview} > ${now}`))
     .orderBy(flashcardProgress.nextReview)
     .limit(1);
 

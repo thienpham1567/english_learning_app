@@ -73,9 +73,9 @@ describe("GET /api/conversations", () => {
 describe("POST /api/conversations", () => {
   it("stores the personaId when provided", async () => {
     const insertValues = vi.fn().mockReturnValue({
-      returning: vi.fn().mockResolvedValue([
-        { id: "conv-1", title: "Test", personaId: "christine" },
-      ]),
+      returning: vi
+        .fn()
+        .mockResolvedValue([{ id: "conv-1", title: "Test", personaId: "christine" }]),
     });
     mockInsert.mockReturnValue({ values: insertValues });
 
@@ -91,16 +91,12 @@ describe("POST /api/conversations", () => {
 
     expect(response.status).toBe(201);
     expect(data.personaId).toBe("christine");
-    expect(insertValues).toHaveBeenCalledWith(
-      expect.objectContaining({ personaId: "christine" }),
-    );
+    expect(insertValues).toHaveBeenCalledWith(expect.objectContaining({ personaId: "christine" }));
   });
 
   it("defaults personaId to 'simon' when omitted", async () => {
     const insertValues = vi.fn().mockReturnValue({
-      returning: vi.fn().mockResolvedValue([
-        { id: "conv-1", title: "Test", personaId: "simon" },
-      ]),
+      returning: vi.fn().mockResolvedValue([{ id: "conv-1", title: "Test", personaId: "simon" }]),
     });
     mockInsert.mockReturnValue({ values: insertValues });
 
@@ -113,16 +109,12 @@ describe("POST /api/conversations", () => {
 
     await POST(request);
 
-    expect(insertValues).toHaveBeenCalledWith(
-      expect.objectContaining({ personaId: "simon" }),
-    );
+    expect(insertValues).toHaveBeenCalledWith(expect.objectContaining({ personaId: "simon" }));
   });
 
   it("defaults personaId to 'simon' for unknown persona", async () => {
     const insertValues = vi.fn().mockReturnValue({
-      returning: vi.fn().mockResolvedValue([
-        { id: "conv-1", title: "Test", personaId: "simon" },
-      ]),
+      returning: vi.fn().mockResolvedValue([{ id: "conv-1", title: "Test", personaId: "simon" }]),
     });
     mockInsert.mockReturnValue({ values: insertValues });
 
@@ -135,8 +127,6 @@ describe("POST /api/conversations", () => {
 
     await POST(request);
 
-    expect(insertValues).toHaveBeenCalledWith(
-      expect.objectContaining({ personaId: "simon" }),
-    );
+    expect(insertValues).toHaveBeenCalledWith(expect.objectContaining({ personaId: "simon" }));
   });
 });

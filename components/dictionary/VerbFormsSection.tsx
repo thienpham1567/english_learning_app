@@ -2,8 +2,7 @@
 
 import { useRef, useState } from "react";
 import { Tag } from "antd";
-import { ChevronDown, Loader2, Volume2 } from "lucide-react";
-import { AnimatePresence, motion } from "motion/react";
+import { DownOutlined, LoadingOutlined, SoundOutlined } from "@ant-design/icons";
 
 import type { VerbForm } from "@/lib/schemas/vocabulary";
 
@@ -37,97 +36,145 @@ export function VerbFormsSection({ verbForms }: Props) {
   }
 
   return (
-    <motion.div
-      className="mt-5"
-      initial={{ opacity: 0, y: 4 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.18, duration: 0.3 }}
-    >
+    <div className="anim-fade-up" style={{ marginTop: 20 }}>
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-controls="verb-forms-grid"
-        className="flex w-full items-center justify-between gap-2"
+        style={{
+          display: "flex",
+          width: "100%",
+          alignItems: "center",
+          justifyContent: "space-between",
+          gap: 8,
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          padding: 0,
+        }}
       >
-        <span className="text-xs font-semibold uppercase tracking-[0.14em] text-(--accent)">
+        <span
+          style={{
+            fontSize: 12,
+            fontWeight: 600,
+            textTransform: "uppercase",
+            letterSpacing: "0.14em",
+            color: "var(--accent)",
+          }}
+        >
           DẠNG ĐỘNG TỪ
         </span>
-        <div className="flex items-center gap-2">
-          <span className="text-xs text-(--text-muted)">{verbForms.length} dạng</span>
-          <ChevronDown
-            size={14}
-            aria-hidden="true"
-            className={`text-(--text-muted) transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <span style={{ fontSize: 12, color: "var(--text-muted)" }}>{verbForms.length} dạng</span>
+          <DownOutlined
+            style={{
+              fontSize: 12,
+              color: "var(--text-muted)",
+              transition: "transform 0.2s",
+              transform: open ? "rotate(180deg)" : "rotate(0)",
+            }}
           />
         </div>
       </button>
 
-      <AnimatePresence initial={false}>
-        {open && (
-          <motion.div
-            id="verb-forms-grid"
-            key="verb-forms-grid"
-            initial={{ height: 0, opacity: 0 }}
-            animate={{ height: "auto", opacity: 1 }}
-            exit={{ height: 0, opacity: 0 }}
-            transition={{ duration: 0.22, ease: "easeInOut" }}
-            style={{ overflow: "hidden" }}
-          >
-            <div className="grid grid-cols-2 gap-2 pt-3 sm:grid-cols-3 lg:grid-cols-5">
-              {verbForms.map((vf) => (
-                <div
-                  key={vf.label}
-                  className="flex flex-col gap-1.5 rounded-(--radius-lg) bg-(--bg-deep) px-3.5 py-3"
-                >
-                  <span className="text-[11px] font-medium uppercase tracking-wide text-(--text-muted)">
-                    {vf.label}
-                  </span>
-                  <span className="text-sm font-semibold text-(--ink)">
-                    {vf.form}
-                  </span>
-                  {(vf.phoneticsUs || vf.phoneticsUk) && (
-                    <div className="flex flex-col gap-0.5">
-                      {vf.phoneticsUs && (
-                        <span className="text-xs [font-family:var(--font-mono)] text-(--accent)">
-                          🇺🇸 {vf.phoneticsUs}
-                        </span>
-                      )}
-                      {vf.phoneticsUk && (
-                        <span className="text-xs [font-family:var(--font-mono)] text-(--accent)">
-                          🇬🇧 {vf.phoneticsUk}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                  <div className="flex items-center gap-2">
-                    <button
-                      type="button"
-                      aria-label={`Play pronunciation of ${vf.form}`}
-                      onClick={() => speak(vf.form)}
-                      className="grid size-6 place-items-center rounded text-(--text-muted) transition hover:text-(--accent)"
+      {open && (
+        <div
+          id="verb-forms-grid"
+          className="anim-fade-in"
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
+            gap: 8,
+            paddingTop: 12,
+          }}
+        >
+          {verbForms.map((vf) => (
+            <div
+              key={vf.label}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 6,
+                borderRadius: "var(--radius-lg)",
+                background: "var(--bg-deep)",
+                padding: "12px 14px",
+              }}
+            >
+              <span
+                style={{
+                  fontSize: 11,
+                  fontWeight: 500,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.06em",
+                  color: "var(--text-muted)",
+                }}
+              >
+                {vf.label}
+              </span>
+              <span style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>{vf.form}</span>
+              {(vf.phoneticsUs || vf.phoneticsUk) && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  {vf.phoneticsUs && (
+                    <span
+                      style={{
+                        fontSize: 12,
+                        fontFamily: "var(--font-mono)",
+                        color: "var(--accent)",
+                      }}
                     >
-                      {speakingForm === vf.form ? (
-                        <Loader2 size={13} className="animate-spin" />
-                      ) : (
-                        <Volume2 size={13} />
-                      )}
-                    </button>
-                    {vf.isIrregular && (
-                      <Tag
-                        color="orange"
-                        className="!m-0 !text-[10px] !px-1.5 !py-0 !leading-4"
-                      >
-                        Bất quy tắc
-                      </Tag>
-                    )}
-                  </div>
+                      🇺🇸 {vf.phoneticsUs}
+                    </span>
+                  )}
+                  {vf.phoneticsUk && (
+                    <span
+                      style={{
+                        fontSize: 12,
+                        fontFamily: "var(--font-mono)",
+                        color: "var(--accent)",
+                      }}
+                    >
+                      🇬🇧 {vf.phoneticsUk}
+                    </span>
+                  )}
                 </div>
-              ))}
+              )}
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <button
+                  type="button"
+                  aria-label={`Play pronunciation of ${vf.form}`}
+                  onClick={() => speak(vf.form)}
+                  style={{
+                    display: "grid",
+                    width: 24,
+                    height: 24,
+                    placeItems: "center",
+                    borderRadius: 4,
+                    color: "var(--text-muted)",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  {speakingForm === vf.form ? (
+                    <LoadingOutlined style={{ fontSize: 13 }} spin />
+                  ) : (
+                    <SoundOutlined style={{ fontSize: 13 }} />
+                  )}
+                </button>
+                {vf.isIrregular && (
+                  <Tag
+                    color="orange"
+                    style={{ margin: 0, fontSize: 10, padding: "0 6px", lineHeight: "16px" }}
+                  >
+                    Bất quy tắc
+                  </Tag>
+                )}
+              </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
+          ))}
+        </div>
+      )}
+    </div>
   );
 }

@@ -19,15 +19,14 @@ async function readSource(relativePath: string) {
 }
 
 describe("http client usage", () => {
-  it.each(filesThatShouldUseHttpClient)(
-    "routes %s through the shared axios client instead of fetch",
-    async (relativePath) => {
-      const source = await readSource(relativePath);
+  it.each(
+    filesThatShouldUseHttpClient,
+  )("routes %s through the shared axios client instead of fetch", async (relativePath) => {
+    const source = await readSource(relativePath);
 
-      expect(source).not.toMatch(/\bfetch\s*\(/);
-      expect(source).toContain('from "@/lib/http"');
-    },
-  );
+    expect(source).not.toMatch(/\bfetch\s*\(/);
+    expect(source).toContain('from "@/lib/http"');
+  });
 
   it("keeps fetch only for the streaming chat request", async () => {
     const source = await readSource("components/app/ChatWindow.tsx");

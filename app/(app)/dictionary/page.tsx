@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useQueryState, parseAsString } from "nuqs";
 import { message } from "antd";
-import { motion } from "motion/react";
 
 import axios from "axios";
 import http from "@/lib/http";
@@ -39,9 +38,7 @@ export default function DictionaryPage() {
     const { normalized, cacheKey } = normalizeDictionaryQuery(word);
 
     if (!normalized) {
-      messageApi.error(
-        "Vui lòng nhập từ hoặc cụm từ tiếng Anh trước khi tra cứu.",
-      );
+      messageApi.error("Vui lòng nhập từ hoặc cụm từ tiếng Anh trước khi tra cứu.");
       return;
     }
 
@@ -99,10 +96,7 @@ export default function DictionaryPage() {
     const next = !saved;
     setSaved(next); // optimistic
     try {
-      await http.patch(
-        `/vocabulary/${encodeURIComponent(currentQuery)}/saved`,
-        { saved: next },
-      );
+      await http.patch(`/vocabulary/${encodeURIComponent(currentQuery)}/saved`, { saved: next });
     } catch {
       setSaved(!next); // rollback
     }
@@ -111,24 +105,19 @@ export default function DictionaryPage() {
   return (
     <>
       {contextHolder}
-      <div className="h-full min-h-0">
-        <section className="grid items-start gap-6 min-[1121px]:grid-cols-[minmax(280px,360px)_minmax(0,1fr)]">
-          <motion.div
-            initial={{ opacity: 0, x: -12 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.15, duration: 0.4, ease: "easeOut" }}
-          >
-            <DictionarySearchPanel
-              initialValue={q}
-              onSubmit={handleSubmit}
-              isLoading={isLoading}
-            />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, x: 12 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.25, duration: 0.4, ease: "easeOut" }}
-          >
+      <div style={{ height: "100%", minHeight: 0 }}>
+        <div
+          style={{
+            display: "grid",
+            alignItems: "start",
+            gap: 24,
+            gridTemplateColumns: "minmax(280px,360px) minmax(0,1fr)",
+          }}
+        >
+          <div>
+            <DictionarySearchPanel initialValue={q} onSubmit={handleSubmit} isLoading={isLoading} />
+          </div>
+          <div>
             <DictionaryResultCard
               vocabulary={result}
               hasSearched={hasSearched}
@@ -138,8 +127,8 @@ export default function DictionaryPage() {
               onOpenThesaurus={() => setIsThesaurusOpen(true)}
               onSearch={handleSubmit}
             />
-          </motion.div>
-        </section>
+          </div>
+        </div>
       </div>
       <ThesaurusSheet
         vocabulary={result}

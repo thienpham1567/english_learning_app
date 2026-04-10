@@ -1,6 +1,5 @@
 "use client";
 
-import { motion } from "motion/react";
 import type { WritingFeedback } from "@/lib/writing-practice/types";
 import { BandScoreRadar } from "./BandScoreRadar";
 import { AnnotatedText } from "./AnnotatedText";
@@ -13,11 +12,7 @@ type Props = {
 
 export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
   return (
-    <motion.div
-      className="mx-auto w-full max-w-4xl"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-    >
+    <div className="mx-auto w-full max-w-4xl">
       {/* Overall band */}
       <div className="mb-6 text-center">
         <span className="text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
@@ -56,9 +51,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
             <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
               Nhận xét
             </h3>
-            <p className="text-sm leading-relaxed text-(--ink)">
-              {feedback.generalFeedback}
-            </p>
+            <p className="text-sm leading-relaxed text-(--ink)">{feedback.generalFeedback}</p>
             <p className="mt-3 text-sm leading-relaxed text-(--text-secondary)">
               {feedback.generalFeedbackVi}
             </p>
@@ -85,6 +78,6 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
           ✍️ Viết bài mới
         </button>
       </div>
-    </motion.div>
+    </div>
   );
 }

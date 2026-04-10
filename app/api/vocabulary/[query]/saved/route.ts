@@ -24,12 +24,7 @@ export async function PATCH(req: Request, { params }: { params: Params }) {
   const [updated] = await db
     .update(userVocabulary)
     .set({ saved: body.saved })
-    .where(
-      and(
-        eq(userVocabulary.userId, session.user.id),
-        eq(userVocabulary.query, query),
-      ),
-    )
+    .where(and(eq(userVocabulary.userId, session.user.id), eq(userVocabulary.query, query)))
     .returning({ id: userVocabulary.id, query: userVocabulary.query, saved: userVocabulary.saved });
 
   if (!updated) {
