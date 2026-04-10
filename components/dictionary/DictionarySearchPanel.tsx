@@ -286,7 +286,6 @@ export function DictionarySearchPanel({
                 listStyle: "none",
                 padding: 0,
                 margin: 0,
-                marginTop: 4,
               }}
             >
               {suggestions.map((s, i) => (

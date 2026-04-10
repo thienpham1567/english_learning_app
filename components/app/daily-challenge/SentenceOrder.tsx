@@ -43,7 +43,6 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
         {selected.map((w, i) => (
           <button
             key={`s-${i}`}
-            layout
             className="rounded bg-(--accent)/10 px-2.5 py-1 text-sm font-medium text-(--accent)"
             onClick={() => removeWord(i)}
             disabled={disabled}
@@ -58,7 +57,6 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
         {available.map((w, i) => (
           <button
             key={`a-${i}`}
-            layout
             className="rounded-lg border border-(--border) bg-(--surface) px-2.5 py-1 text-sm transition hover:border-(--accent)/40"
             onClick={() => addWord(w, i)}
             disabled={disabled}

@@ -87,7 +87,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
               "Đang chấm bài..."
             ) : (
               <>
-                <SendOutlinedOutlined style={{ fontSize: 14 }} />
+                <SendOutlined style={{ fontSize: 14 }} />
                 Nộp bài
               </>
             )}
