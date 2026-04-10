@@ -9,7 +9,7 @@ type Props = {
   onView: (submission: WritingSubmission) => void;
 };
 
-export function SubmissionHistoryOutlined({ submissions, onView }: Props) {
+export function SubmissionHistory({ submissions, onView }: Props) {
   if (submissions.length === 0) return null;
 
   return (
