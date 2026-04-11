@@ -6,6 +6,7 @@ import { writingSubmission } from "@/lib/db/schema";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { ReviewRequestSchema, WritingFeedbackSchema } from "@/lib/writing-practice/schema";
+import { awardXP, XP_VALUES } from "@/lib/xp";
 
 const REVIEW_SYSTEM_PROMPT = `You are Christine Ho, an expert TOEIC Writing evaluator and English tutor.
 Review the student's writing based on TOEIC Writing scoring criteria.
@@ -109,6 +110,9 @@ export async function POST(request: Request) {
           scores: feedback.scores,
           feedback,
         });
+
+        // Award XP for writing submission
+        void awardXP(session.user.id, XP_VALUES.WRITING_SUBMISSION).catch(() => {});
 
         return Response.json({ feedback });
       }

@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import { CheckOutlined, CopyOutlined, TrophyOutlined } from "@ant-design/icons";
 import { useUser } from "@/components/app/shared/UserContext";
+import { HighlightedText } from "@/components/app/english-chatbot/HighlightedText";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 import type { Persona } from "@/lib/chat/personas";
 
@@ -95,15 +96,40 @@ function UserAvatar() {
   );
 }
 
+// Recursively process ReactMarkdown children to inject word highlighting
+function highlightChildren(
+  children: ReactNode,
+  onWordClick: (word: string, rect: DOMRect) => void,
+  savedWords?: Set<string>,
+): ReactNode {
+  if (typeof children === "string") {
+    return <HighlightedText text={children} onWordClick={onWordClick} savedWords={savedWords} />;
+  }
+  if (Array.isArray(children)) {
+    return children.map((child, i) =>
+      typeof child === "string" ? (
+        <HighlightedText key={i} text={child} onWordClick={onWordClick} savedWords={savedWords} />
+      ) : (
+        child
+      ),
+    );
+  }
+  return children;
+}
+
 export function ChatMessage({
   message,
   isStreaming = false,
   persona,
+  onWordClick,
+  savedWords,
 }: {
   message: PageMessage;
   className?: string;
   isStreaming?: boolean;
   persona?: Persona;
+  onWordClick?: (word: string, rect: DOMRect) => void;
+  savedWords?: Set<string>;
 }) {
   if (message.role === "divider") {
     return (
@@ -180,7 +206,16 @@ export function ChatMessage({
               className="chat-markdown"
               style={{ fontSize: 15, lineHeight: 2, color: "var(--text-primary)" }}
             >
-              <ReactMarkdown>{text}</ReactMarkdown>
+              <ReactMarkdown
+                components={onWordClick ? {
+                  p: ({ children }) => <p>{highlightChildren(children, onWordClick, savedWords)}</p>,
+                  li: ({ children }) => <li>{highlightChildren(children, onWordClick, savedWords)}</li>,
+                  strong: ({ children }) => <strong>{highlightChildren(children, onWordClick, savedWords)}</strong>,
+                  em: ({ children }) => <em>{highlightChildren(children, onWordClick, savedWords)}</em>,
+                } : undefined}
+              >
+                {text}
+              </ReactMarkdown>
               {isStreaming && (
                 <span
                   style={{

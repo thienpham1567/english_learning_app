@@ -1,11 +1,13 @@
 "use client";
 
-import { BulbOutlined } from "@ant-design/icons";
+import { useState } from "react";
+import { BulbOutlined, HistoryOutlined } from "@ant-design/icons";
 
 import { useGrammarQuiz } from "@/hooks/useGrammarQuiz";
-import { LevelPicker } from "@/components/app/grammar-quiz/LevelPicker";
+import { CEFRPath } from "@/components/app/grammar-quiz/CEFRPath";
 import { QuestionCard } from "@/components/app/grammar-quiz/QuestionCard";
 import { ScoreSummary } from "@/components/app/grammar-quiz/ScoreSummary";
+import { QuizHistory } from "@/components/app/grammar-quiz/QuizHistory";
 
 export default function GrammarQuizPage() {
   const {
@@ -18,6 +20,8 @@ export default function GrammarQuizPage() {
     selectedAnswer,
     isRevealed,
     score,
+    combo,
+    maxCombo,
     topicBreakdown,
     error,
     selectLevel,
@@ -27,8 +31,10 @@ export default function GrammarQuizPage() {
     retryQuiz,
     newQuiz,
   } = useGrammarQuiz();
+  const [historyOpen, setHistoryOpen] = useState(false);
 
   return (
+    <>
     <div
       style={{
         position: "relative",
@@ -78,6 +84,26 @@ export default function GrammarQuizPage() {
             Incomplete Sentences · Luyện tập theo độ khó
           </p>
         </div>
+        {/* History icon (AC: #4) */}
+        <button
+          type="button"
+          onClick={() => setHistoryOpen(true)}
+          title="Lịch sử làm bài"
+          style={{
+            display: "grid",
+            width: 36,
+            height: 36,
+            placeItems: "center",
+            borderRadius: "var(--radius)",
+            border: "1px solid var(--border)",
+            background: "var(--surface)",
+            cursor: "pointer",
+            color: "var(--text-secondary)",
+            transition: "all 0.15s",
+          }}
+        >
+          <HistoryOutlined style={{ fontSize: 16 }} />
+        </button>
       </div>
 
       {/* Content */}
@@ -132,7 +158,7 @@ export default function GrammarQuizPage() {
                   {error}
                 </div>
               )}
-              <LevelPicker
+              <CEFRPath
                 selected={level}
                 onSelect={selectLevel}
                 onStart={() => generateQuiz()}
@@ -142,13 +168,14 @@ export default function GrammarQuizPage() {
           )}
 
           {state === "active" && currentQuestion && (
-            <div key={`q-${currentIndex}`} className="anim-fade-in" style={{ width: "100%" }}>
+            <div key={`q-${currentIndex}`} className="anim-slide-in-left" style={{ width: "100%" }}>
               <QuestionCard
                 question={currentQuestion}
                 questionNumber={currentIndex + 1}
                 total={questions.length}
                 selectedAnswer={selectedAnswer}
                 isRevealed={isRevealed}
+                combo={combo}
                 onAnswer={answerQuestion}
                 onNext={nextQuestion}
               />
@@ -161,6 +188,7 @@ export default function GrammarQuizPage() {
                 questions={questions}
                 answers={answers}
                 score={score}
+                maxCombo={maxCombo}
                 topicBreakdown={topicBreakdown}
                 onRetry={retryQuiz}
                 onNewQuiz={newQuiz}
@@ -170,5 +198,9 @@ export default function GrammarQuizPage() {
         </div>
       </div>
     </div>
+
+    {/* History drawer (AC: #4) */}
+    <QuizHistory open={historyOpen} onClose={() => setHistoryOpen(false)} />
+    </>
   );
 }

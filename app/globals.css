@@ -49,6 +49,43 @@
   --sidebar-text: rgba(255, 255, 255, 0.7);
   --sidebar-text-active: rgba(255, 255, 255, 0.92);
   --sidebar-border: rgba(255, 255, 255, 0.1);
+
+  /* ── Semantic Colors ── */
+  --success: #10b981;
+  --error: #ef4444;
+  --warning: #f59e0b;
+  --info: #3b82f6;
+  --xp: #8b5cf6;
+  --fire: #f97316;
+
+  /* ── Typography Scale ── */
+  --text-xs: 11px;
+  --text-sm: 13px;
+  --text-base: 15px;
+  --text-lg: 18px;
+  --text-xl: 24px;
+  --text-2xl: 30px;
+  --text-3xl: 36px;
+
+  /* ── Spacing Scale ── */
+  /* Intentional gaps: matches Tailwind spacing convention (1-6, 8, 10, 12) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* ── Animation Durations ── */
+  --duration-fast: 200ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+
+  /* ── Extended Shadows ── */
+  --shadow-xl: 0 20px 48px rgba(45, 58, 36, 0.12), 0 8px 24px rgba(45, 58, 36, 0.06);
 }
 
 /* ── Dark Theme Tokens ── */
@@ -89,6 +126,19 @@
   --sidebar-text: rgba(255, 255, 255, 0.6);
   --sidebar-text-active: rgba(255, 255, 255, 0.9);
   --sidebar-border: rgba(255, 255, 255, 0.08);
+
+  /* ── Semantic Colors (Dark) ── */
+  --success: #34d399;
+  --error: #f87171;
+  --warning: #fbbf24;
+  --info: #60a5fa;
+  --xp: #a78bfa;
+  --fire: #fb923c;
+
+  /* ── Extended Shadows (Dark) ── */
+  --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.55), 0 8px 24px rgba(0, 0, 0, 0.3);
+
+  /* Note: typography, spacing, and duration tokens are theme-agnostic — defined once in :root only */
 }
 
 /* ── Global Reset ── */
@@ -308,6 +358,63 @@ body {
     transform: rotateY(0);
   }
 }
+
+@keyframes confettiFall {
+  0% {
+    transform: translateY(-10px) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+@keyframes flameFlicker {
+  0%, 100% {
+    transform: scaleY(1) scaleX(1);
+    opacity: 0.9;
+  }
+  25% {
+    transform: scaleY(1.1) scaleX(0.95);
+    opacity: 1;
+  }
+  50% {
+    transform: scaleY(0.95) scaleX(1.05);
+    opacity: 0.85;
+  }
+  75% {
+    transform: scaleY(1.05) scaleX(0.98);
+    opacity: 0.95;
+  }
+}
+
+@keyframes borderFlash {
+  0% {
+    box-shadow: 0 0 0 0 var(--success);
+    opacity: 1;
+  }
+  100% {
+    box-shadow: 0 0 0 8px transparent;
+    opacity: 0;
+  }
+}
+
+@keyframes scaleBounce {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.05);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
 
 /* Utility classes for CSS animations */
 .anim-fade-in {
@@ -538,4 +645,62 @@ textarea.ant-input::placeholder {
 }
 .anim-slide-in-up {
   animation: slideInUp 0.22s ease-out forwards;
+}
+.anim-slide-in-left {
+  animation: slideInLeft 0.25s ease-out forwards;
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(24px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+.anim-shake {
+  animation: shake 0.4s ease-in-out;
+}
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%, 60% { transform: translateX(-4px); }
+  40%, 80% { transform: translateX(4px); }
+}
+
+/* ── Utilities ── */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar { display: none; }
+
+/* ── Accessibility: Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+  }
+
+  .anim-fade-in,
+  .anim-fade-up,
+  .anim-fade-left,
+  .anim-fade-right,
+  .anim-scale-in,
+  .anim-pop-in,
+  .anim-bounce-emoji,
+  .anim-slide-in-right,
+  .anim-slide-in-up,
+  .anim-slide-in-left,
+  .anim-shake {
+    animation: none !important;
+    opacity: 1 !important;
+  }
+
+  /* Disable shimmer hover transition */
+  .btn-shimmer::after {
+    transition: none !important;
+  }
+
+  /* Disable celebration/confetti animations (AC: 6.2 #5) */
+  [data-tier] *,
+  [data-streak-size] * {
+    animation: none !important;
+    transition: none !important;
+  }
 }

@@ -15,6 +15,16 @@ const LEVEL_COLORS: Record<string, string> = {
   C2: "volcano",
 };
 
+const CEFR_GRADIENTS: Record<string, string> = {
+  A1: "linear-gradient(135deg, #f0fdf4, #dcfce7)",
+  A2: "linear-gradient(135deg, #ecfdf5, #d1fae5)",
+  B1: "linear-gradient(135deg, #fffbeb, #fef3c7)",
+  B2: "linear-gradient(135deg, #fefce8, #fef9c3)",
+  C1: "linear-gradient(135deg, #fff1f2, #ffe4e6)",
+  C2: "linear-gradient(135deg, #fdf2f8, #fce7f3)",
+};
+const DEFAULT_GRADIENT = "linear-gradient(135deg, var(--accent-muted), var(--bg))";
+
 type Props = {
   card: DueCard;
   onRate: (quality: number) => void;
@@ -51,6 +61,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
               inset: 0,
               backfaceVisibility: "hidden",
               boxShadow: "var(--shadow-lg)",
+              background: CEFR_GRADIENTS[card.level ?? ""] ?? DEFAULT_GRADIENT,
             }}
             styles={{
               body: {

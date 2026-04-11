@@ -1,14 +1,16 @@
 "use client";
 
-import { useEffect } from "react";
-import { AppstoreOutlined, ReloadOutlined, DisconnectOutlined } from "@ant-design/icons";
-import { Spin } from "antd";
+import { useEffect, useRef } from "react";
+import { AppstoreOutlined, ReloadOutlined } from "@ant-design/icons";
+import { Spin, Progress, Flex, Typography, Button, Result } from "antd";
 
 import { useFlashcardSession } from "@/hooks/useFlashcardSession";
 import { FlashcardCard } from "@/components/app/flashcards/FlashcardCard";
 import { SessionProgress } from "@/components/app/flashcards/SessionProgress";
 import { SessionSummary } from "@/components/app/flashcards/SessionSummary";
 import { EmptyState } from "@/components/app/flashcards/EmptyState";
+
+const { Text } = Typography;
 
 export function FlashcardSession() {
   const {
@@ -24,9 +26,22 @@ export function FlashcardSession() {
     restart,
   } = useFlashcardSession();
 
+  // Track session start time for estimated time remaining
+  const sessionStartRef = useRef<number | null>(null);
+  useEffect(() => {
+    if (state === "active" && sessionStartRef.current === null) {
+      sessionStartRef.current = Date.now();
+    }
+    if (state !== "active") {
+      sessionStartRef.current = null;
+    }
+  }, [state]);
+
   useEffect(() => {
     fetchDueCards();
   }, [fetchDueCards]);
+
+  const isImmersive = state === "active";
 
   return (
     <div
@@ -44,42 +59,55 @@ export function FlashcardSession() {
         boxShadow: "var(--shadow-md)",
       }}
     >
-      {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          flexShrink: 0,
-          alignItems: "center",
-          gap: 12,
-          borderBottom: "1px solid var(--border)",
-          background: "var(--surface)",
-          padding: "16px 24px",
-          backdropFilter: "blur(8px)",
-        }}
-      >
+      {/* Immersive mode: thin progress bar at the very top */}
+      {isImmersive && (
+        <Progress
+          percent={totalDue > 0 ? Math.round(((currentIndex + 1) / totalDue) * 100) : 0}
+          showInfo={false}
+          strokeColor={{ from: "var(--accent)", to: "#f59e0b" }}
+          size={["100%", 4]}
+          style={{ lineHeight: 0 }}
+        />
+      )}
+
+      {/* Module header — hidden during immersive (active) mode */}
+      {!isImmersive && (
         <div
           style={{
-            display: "grid",
-            width: 40,
-            height: 40,
-            placeItems: "center",
-            borderRadius: "var(--radius)",
-            background: "linear-gradient(135deg, #8b5cf6, #4f46e5)",
-            color: "#fff",
-            boxShadow: "var(--shadow-sm)",
+            display: "flex",
+            flexShrink: 0,
+            alignItems: "center",
+            gap: 12,
+            borderBottom: "1px solid var(--border)",
+            background: "var(--surface)",
+            padding: "16px 24px",
+            backdropFilter: "blur(8px)",
           }}
         >
-          <AppstoreOutlined style={{ fontSize: 20 }} />
+          <div
+            style={{
+              display: "grid",
+              width: 40,
+              height: 40,
+              placeItems: "center",
+              borderRadius: "var(--radius)",
+              background: "linear-gradient(135deg, #8b5cf6, #4f46e5)",
+              color: "#fff",
+              boxShadow: "var(--shadow-sm)",
+            }}
+          >
+            <AppstoreOutlined style={{ fontSize: 20 }} />
+          </div>
+          <div style={{ flex: 1 }}>
+            <h2 style={{ fontSize: 15, fontWeight: 600, color: "var(--ink)", margin: 0 }}>
+              Ôn tập từ vựng 🧠
+            </h2>
+            <p style={{ fontSize: 12, color: "var(--text-muted)", margin: 0 }}>
+              Spaced Repetition · Ghi nhớ lâu dài
+            </p>
+          </div>
         </div>
-        <div style={{ flex: 1 }}>
-          <h2 style={{ fontSize: 15, fontWeight: 600, color: "var(--ink)", margin: 0 }}>
-            Ôn tập từ vựng 🧠
-          </h2>
-          <p style={{ fontSize: 12, color: "var(--text-muted)", margin: 0 }}>
-            Spaced Repetition · Ghi nhớ lâu dài
-          </p>
-        </div>
-      </div>
+      )}
 
       {/* Content */}
       <div
@@ -115,79 +143,25 @@ export function FlashcardSession() {
           }}
         >
           {state === "loading" && (
-            <div
-              className="anim-fade-in"
-              style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 16 }}
-            >
-              <div style={{ display: "flex", gap: 6 }}>
-                {[0, 1, 2].map((i) => (
-                  <span
-                    key={i}
-                    style={{
-                      width: 10,
-                      height: 10,
-                      borderRadius: "50%",
-                      background: "var(--accent)",
-                      animation: `pulse 1.4s ease-in-out infinite ${i * 0.2}s`,
-                    }}
-                  />
-                ))}
-              </div>
-              <p style={{ fontSize: 14, color: "var(--text-muted)" }}>Đang tải thẻ ôn tập...</p>
-            </div>
+            <Flex vertical align="center" gap={16} className="anim-fade-in">
+              <Spin size="large" />
+              <Text type="secondary">Đang tải thẻ ôn tập...</Text>
+            </Flex>
           )}
 
           {state === "error" && (
-            <div
-              className="anim-fade-in"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 16,
-                textAlign: "center",
-              }}
-            >
-              <div
-                style={{
-                  display: "grid",
-                  width: 64,
-                  height: 64,
-                  placeItems: "center",
-                  borderRadius: "var(--radius-lg)",
-                  background: "#fef2f2",
-                  color: "#ef4444",
-                }}
-              >
-                <DisconnectOutlined style={{ fontSize: 28 }} />
-              </div>
-              <h3 style={{ fontSize: 18, fontWeight: 600, color: "var(--ink)", margin: 0 }}>
-                Không thể tải thẻ ôn tập
-              </h3>
-              <p style={{ fontSize: 14, color: "var(--text-muted)" }}>
-                Kiểm tra kết nối mạng và thử lại.
-              </p>
-              <button
-                onClick={restart}
-                style={{
-                  marginTop: 8,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                  borderRadius: "var(--radius)",
-                  background: "var(--accent)",
-                  padding: "8px 16px",
-                  fontSize: 14,
-                  fontWeight: 500,
-                  color: "#fff",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-              >
-                <ReloadOutlined style={{ fontSize: 14 }} />
-                Thử lại
-              </button>
-            </div>
+            <Flex vertical align="center" gap={16} className="anim-fade-in" style={{ textAlign: "center" }}>
+              <Result
+                status="error"
+                title="Không thể tải thẻ ôn tập"
+                subTitle="Kiểm tra kết nối mạng và thử lại."
+                extra={
+                  <Button type="primary" icon={<ReloadOutlined />} onClick={restart}>
+                    Thử lại
+                  </Button>
+                }
+              />
+            </Flex>
           )}
 
           {state === "empty" && (
@@ -198,7 +172,11 @@ export function FlashcardSession() {
 
           {state === "active" && currentCard && (
             <div key={`card-${currentIndex}`} className="anim-fade-in" style={{ width: "100%" }}>
-              <SessionProgress current={currentIndex + 1} total={totalDue} />
+              <SessionProgress
+                current={currentIndex + 1}
+                total={totalDue}
+                startTime={sessionStartRef.current ?? undefined}
+              />
               <FlashcardCard card={currentCard} onRate={submitReview} isSubmitting={isSubmitting} />
             </div>
           )}
@@ -211,6 +189,10 @@ export function FlashcardSession() {
                   stats.totalReviewed > 0 ? stats.totalQuality / stats.totalReviewed : 0
                 }
                 forgottenCount={stats.forgottenCount}
+                againCount={stats.againCount}
+                hardCount={stats.hardCount}
+                goodCount={stats.goodCount}
+                easyCount={stats.easyCount}
                 onRestart={restart}
               />
             </div>

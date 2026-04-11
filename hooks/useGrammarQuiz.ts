@@ -3,6 +3,7 @@
 import { useState, useCallback } from "react";
 import http from "@/lib/http";
 import type { GrammarQuestion, QuizState } from "@/lib/grammar-quiz/types";
+import { saveQuizHistory } from "@/components/app/grammar-quiz/QuizHistory";
 
 const STORAGE_KEY = "grammar-quiz-level";
 
@@ -20,6 +21,8 @@ export function useGrammarQuiz() {
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [isRevealed, setIsRevealed] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [combo, setCombo] = useState(0);
+  const [maxCombo, setMaxCombo] = useState(0);
 
   const selectLevel = useCallback((newLevel: string) => {
     setLevel(newLevel);
@@ -62,26 +65,47 @@ export function useGrammarQuiz() {
         next[currentIndex] = optionIndex;
         return next;
       });
+      // Combo tracking
+      const isCorrect = optionIndex === questions[currentIndex]?.correctIndex;
+      if (isCorrect) {
+        setCombo((prev) => {
+          const next = prev + 1;
+          setMaxCombo((prevMax) => Math.max(prevMax, next));
+          return next;
+        });
+      } else {
+        setCombo(0);
+      }
     },
-    [currentIndex, isRevealed],
+    [currentIndex, isRevealed, questions],
   );
 
   const nextQuestion = useCallback(() => {
     const nextIdx = currentIndex + 1;
     if (nextIdx >= questions.length) {
+      // Save to history before transitioning
+      const finalScore = answers.reduce<number>(
+        (acc, ans, i) => (ans !== null && ans === questions[i]?.correctIndex ? acc + 1 : acc),
+        0,
+      );
+      saveQuizHistory({ level, score: finalScore, total: questions.length });
+      // Award XP for quiz completion (fire-and-forget)
+      void http.post("/xp", { activity: "quiz_complete" }).catch(() => {});
       setState("summary");
     } else {
       setCurrentIndex(nextIdx);
       setSelectedAnswer(null);
       setIsRevealed(false);
     }
-  }, [currentIndex, questions.length]);
+  }, [currentIndex, questions, answers, level]);
 
   const retryQuiz = useCallback(() => {
     setAnswers(new Array(questions.length).fill(null));
     setCurrentIndex(0);
     setSelectedAnswer(null);
     setIsRevealed(false);
+    setCombo(0);
+    setMaxCombo(0);
     setState("active");
   }, [questions.length]);
 
@@ -91,6 +115,8 @@ export function useGrammarQuiz() {
     setCurrentIndex(0);
     setSelectedAnswer(null);
     setIsRevealed(false);
+    setCombo(0);
+    setMaxCombo(0);
     setState("idle");
   }, []);
 
@@ -123,6 +149,8 @@ export function useGrammarQuiz() {
     selectedAnswer,
     isRevealed,
     score,
+    combo,
+    maxCombo,
     topicBreakdown,
     error,
     selectLevel,

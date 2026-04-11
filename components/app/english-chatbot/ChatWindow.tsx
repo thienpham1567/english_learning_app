@@ -10,6 +10,8 @@ import type { PageMessage } from "@/components/ChatMessage";
 import { useChatConversations } from "@/components/app/english-chatbot/ChatConversationProvider";
 import { PersonaSwitcher } from "@/components/app/english-chatbot/PersonaSwitcher";
 import { ChatHeader } from "@/components/app/english-chatbot/ChatHeader";
+import { MiniDictionary } from "@/components/app/shared";
+import { useMiniDictionary } from "@/hooks/useMiniDictionary";
 import { deriveTitle } from "@/lib/chat/derive-title";
 import { DEFAULT_PERSONA_ID, PERSONAS } from "@/lib/chat/personas";
 import type { Persona } from "@/lib/chat/personas";
@@ -142,6 +144,21 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   useEffect(() => {
     setSuggestions(sampleSuggestions(activePersona, 4));
   }, [activePersona]);
+
+  // MiniDictionary integration (Story 4.2)
+  const miniDict = useMiniDictionary();
+  const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
+
+  // Fetch saved vocabulary on mount (AC: #5)
+  useEffect(() => {
+    http
+      .get<Array<{ query: string; saved: boolean }>>("/vocabulary")
+      .then(({ data }) => {
+        const saved = new Set(data.filter((v) => v.saved).map((v) => v.query.toLowerCase()));
+        setSavedWords(saved);
+      })
+      .catch(() => {}); // non-critical — highlighting still works without
+  }, []);
 
   const conversationsRef = useRef(conversations);
   conversationsRef.current = conversations;
@@ -435,50 +452,106 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                 textAlign: "center",
               }}
             >
-              <div className="anim-pop-in" style={{ position: "relative" }}>
-                <ActiveAvatar size={64} />
-                <span
-                  style={{
-                    position: "absolute",
-                    bottom: 4,
-                    right: 4,
-                    width: 12,
-                    height: 12,
-                    borderRadius: "50%",
-                    background: "var(--sage)",
-                    boxShadow: "0 0 0 2px var(--bg)",
-                  }}
-                />
-              </div>
-
               <h2
-                className="anim-fade-up anim-delay-2"
+                className="anim-fade-up anim-delay-1"
                 style={{
-                  marginTop: 24,
-                  fontSize: 40,
+                  fontSize: 36,
                   fontStyle: "italic",
                   fontFamily: "var(--font-display)",
                   color: "var(--ink)",
                 }}
               >
-                Xin chào! Chọn gia sư để bắt đầu
+                Chọn gia sư để bắt đầu
               </h2>
-
               <p
-                className="anim-fade-up anim-delay-3"
+                className="anim-fade-up anim-delay-2"
                 style={{
-                  marginTop: 12,
+                  marginTop: 8,
                   maxWidth: 400,
-                  fontSize: 16,
+                  fontSize: 15,
                   color: "var(--text-secondary)",
                 }}
               >
-                Chọn gia sư phù hợp với mục tiêu của bạn, rồi bắt đầu luyện tập nhé.
+                Mỗi gia sư có phong cách riêng — chọn người phù hợp nhất với bạn.
               </p>
 
+              {/* Persona cards grid (AC: #1) */}
               <div
                 style={{
-                  marginTop: 32,
+                  marginTop: 24,
+                  display: "grid",
+                  width: "100%",
+                  gap: 12,
+                  gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+                }}
+              >
+                {PERSONAS.map((persona, i) => {
+                  const Avatar = persona.avatar;
+                  const isSelected = persona.id === selectedPersonaId;
+                  return (
+                    <button
+                      key={persona.id}
+                      className={`anim-fade-up anim-delay-${Math.min(i + 3, 8)}`}
+                      onClick={() => setSelectedPersonaId(persona.id)}
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        gap: 8,
+                        borderRadius: "var(--radius-lg)",
+                        border: isSelected ? "2px solid var(--accent)" : "1px solid var(--border)",
+                        background: isSelected ? "var(--accent-light)" : "var(--surface)",
+                        padding: "20px 16px",
+                        textAlign: "center",
+                        boxShadow: isSelected ? "0 0 0 1px var(--accent)" : "var(--shadow-sm)",
+                        transition: "border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.15s",
+                        cursor: "pointer",
+                      }}
+                    >
+                      <Avatar size={48} />
+                      <span
+                        style={{
+                          marginTop: 4,
+                          fontSize: 15,
+                          fontWeight: 600,
+                          color: "var(--ink)",
+                        }}
+                      >
+                        {persona.label}
+                      </span>
+                      <span
+                        style={{
+                          display: "inline-block",
+                          padding: "2px 10px",
+                          borderRadius: 999,
+                          fontSize: 11,
+                          fontWeight: 500,
+                          background: isSelected ? "var(--accent)" : "var(--bg-deep)",
+                          color: isSelected ? "#fff" : "var(--text-secondary)",
+                          transition: "background 0.2s, color 0.2s",
+                        }}
+                      >
+                        {persona.specialty}
+                      </span>
+                      <span
+                        style={{
+                          marginTop: 2,
+                          fontSize: 13,
+                          lineHeight: 1.5,
+                          color: "var(--text-secondary)",
+                        }}
+                      >
+                        {persona.description}
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* Suggestion cards for selected persona */}
+              <div
+                style={{
+                  marginTop: 24,
                   display: "grid",
                   width: "100%",
                   gap: 12,
@@ -547,6 +620,8 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                     isStreaming={
                       isLoading && index === messages.length - 1 && m.role === "assistant"
                     }
+                    onWordClick={miniDict.openForWord}
+                    savedWords={savedWords}
                   />
                 </div>
               ))}
@@ -714,6 +789,15 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
           </p>
         </div>
       </div>
+
+      {/* MiniDictionary floating popup */}
+      <MiniDictionary
+        word={miniDict.word}
+        anchorRect={miniDict.anchorRect}
+        visible={miniDict.visible}
+        onClose={miniDict.close}
+        onSave={(w) => setSavedWords((prev) => new Set(prev).add(w.toLowerCase()))}
+      />
     </div>
   );
 }

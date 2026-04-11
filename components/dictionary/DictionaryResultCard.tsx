@@ -71,7 +71,28 @@ function BoldText({ text }: { text: string }) {
   );
 }
 
-function SensePanel({ sense }: { sense: DictionarySense }) {
+/** Highlight occurrences of `headword` within `text` using accent color (AC #3) */
+function HighlightWord({ text, headword }: { text: string; headword: string }) {
+  if (!headword) return <BoldText text={text} />;
+  const escaped = headword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const parts = text.split(new RegExp(`(${escaped})`, "gi"));
+  if (parts.length <= 1) return <BoldText text={text} />;
+  return (
+    <>
+      {parts.map((part, i) =>
+        part.toLowerCase() === headword.toLowerCase() ? (
+          <span key={i} style={{ color: "var(--accent)", fontWeight: 600 }}>
+            {part}
+          </span>
+        ) : (
+          <BoldText key={i} text={part} />
+        ),
+      )}
+    </>
+  );
+}
+
+function SensePanel({ sense, headword }: { sense: DictionarySense; headword: string }) {
   const [isCollocationsOpen, setIsCollocationsOpen] = useState(false);
   const examples = sense.examples ?? [];
   const examplesVi = sense.examplesVi ?? [];
@@ -155,11 +176,11 @@ function SensePanel({ sense }: { sense: DictionarySense }) {
                     {example.vi ? (
                       <Tooltip placement="top" title={example.vi}>
                         <span style={{ cursor: "help" }}>
-                          <BoldText text={example.en} />
+                          <HighlightWord text={example.en} headword={headword} />
                         </span>
                       </Tooltip>
                     ) : (
-                      <BoldText text={example.en} />
+                      <HighlightWord text={example.en} headword={headword} />
                     )}
                   </li>
                 ))
@@ -777,7 +798,7 @@ export function DictionaryResultCard({
             </button>
           ))}
         </div>
-        {activeSense && <SensePanel key={activeSense.id} sense={activeSense} />}
+        {activeSense && <SensePanel key={activeSense.id} sense={activeSense} headword={vocabulary.headword} />}
       </div>
 
       {/* Nearby words bar */}

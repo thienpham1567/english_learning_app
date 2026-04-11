@@ -1,28 +1,38 @@
 "use client";
 
+import { Flex, Tag, Typography } from "antd";
 import type { Badge } from "@/lib/daily-challenge/types";
+
+const { Text } = Typography;
 
 type Props = { badges: Badge[] };
 
 export function BadgeGallery({ badges }: Props) {
   return (
-    <div className="flex flex-wrap gap-2">
-      {badges.map((b, i) => (
-        <div
+    <Flex wrap gap={8}>
+      {badges.map((b) => (
+        <Tag
           key={b.id}
-          className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-sm ${
-            b.unlocked
-              ? "border-amber-300 bg-amber-50 text-amber-800"
-              : "border-(--border) bg-(--bg-deep) text-(--text-muted) opacity-50 grayscale"
-          }`}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "4px 12px",
+            borderRadius: "var(--radius)",
+            fontSize: 13,
+            border: b.unlocked ? "1px solid #fbbf24" : "1px solid var(--border)",
+            background: b.unlocked ? "#fffde7" : "var(--bg-deep)",
+            opacity: b.unlocked ? 1 : 0.5,
+            filter: b.unlocked ? "none" : "grayscale(1)",
+          }}
         >
-          <span className="text-lg">{b.emoji}</span>
-          <div>
-            <span className="text-xs font-semibold">{b.label}</span>
-            <span className="ml-1 text-[10px] opacity-70">{b.requiredStreak}d</span>
-          </div>
-        </div>
+          <span style={{ fontSize: 16 }}>{b.emoji}</span>
+          <Flex vertical gap={0}>
+            <Text strong style={{ fontSize: 11, lineHeight: 1.2 }}>{b.label}</Text>
+            <Text type="secondary" style={{ fontSize: 10, lineHeight: 1 }}>{b.requiredStreak}d</Text>
+          </Flex>
+        </Tag>
       ))}
-    </div>
+    </Flex>
   );
 }

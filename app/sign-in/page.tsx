@@ -3,8 +3,7 @@
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
-import { Alert, Button, Card, Divider, Flex, Typography } from "antd";
-import { GoogleOutlined } from "@ant-design/icons";
+import { Alert, Button, Divider, Flex, Typography } from "antd";
 import { authClient } from "@/lib/auth-client";
 
 const { Title, Text, Paragraph } = Typography;
@@ -75,6 +74,25 @@ function SignInContent() {
       </Title>
       <Text type="secondary">Đăng nhập để bắt đầu luyện tiếng Anh</Text>
 
+      {/* Value proposition bullets (AC: #1) */}
+      <Flex
+        vertical
+        gap={8}
+        className="anim-fade-up anim-delay-2"
+        style={{ marginTop: 20, width: "100%", textAlign: "left" }}
+      >
+        {[
+          { emoji: "🎯", text: "Luyện IELTS & TOEIC với gia sư AI" },
+          { emoji: "📚", text: "Tra từ, lưu từ, ôn tập tự động" },
+          { emoji: "🔥", text: "Thử thách mỗi ngày, giữ vững streak" },
+        ].map((item) => (
+          <Flex key={item.text} align="center" gap={10}>
+            <span style={{ fontSize: 18 }}>{item.emoji}</span>
+            <Text style={{ fontSize: 14, color: "var(--text-primary)" }}>{item.text}</Text>
+          </Flex>
+        ))}
+      </Flex>
+
       <Divider />
 
       <Button
@@ -97,6 +115,63 @@ function SignInContent() {
           style={{ marginTop: 16, width: "100%" }}
         />
       )}
+
+      {/* Feature preview cards (AC: #2) */}
+      <Divider style={{ margin: "20px 0 12px" }}>
+        <Text type="secondary" style={{ fontSize: 12, letterSpacing: "0.05em" }}>
+          Xem thêm
+        </Text>
+      </Divider>
+
+      <Flex
+        vertical
+        gap={10}
+        className="anim-fade-up anim-delay-3"
+        style={{ width: "100%" }}
+      >
+        {[
+          {
+            icon: "💬",
+            title: "Gia sư AI",
+            desc: "Trò chuyện tự nhiên, sửa lỗi ngay, 3 phong cách dạy.",
+          },
+          {
+            icon: "📖",
+            title: "Tra cứu từ điển",
+            desc: "Tra từ, nghe phát âm, lưu vào bộ flashcard để ôn.",
+          },
+          {
+            icon: "⚡",
+            title: "Thử thách hàng ngày",
+            desc: "5 câu hỏi mỗi ngày, tích điểm XP và giữ streak.",
+          },
+          {
+            icon: "✍️",
+            title: "Luyện viết & ngữ pháp",
+            desc: "Viết bài, AI chấm điểm chi tiết theo từng tiêu chí.",
+          },
+        ].map((card) => (
+          <Flex
+            key={card.title}
+            align="flex-start"
+            gap={12}
+            style={{
+              padding: "12px 14px",
+              borderRadius: "var(--radius)",
+              border: "1px solid var(--border)",
+              background: "var(--surface)",
+            }}
+          >
+            <span style={{ fontSize: 20, lineHeight: 1 }}>{card.icon}</span>
+            <Flex vertical gap={2}>
+              <Text strong style={{ fontSize: 13 }}>{card.title}</Text>
+              <Text type="secondary" style={{ fontSize: 12, lineHeight: 1.4 }}>
+                {card.desc}
+              </Text>
+            </Flex>
+          </Flex>
+        ))}
+      </Flex>
     </Flex>
   );
 }

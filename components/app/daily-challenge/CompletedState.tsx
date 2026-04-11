@@ -1,20 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Card, Flex, Typography } from "antd";
+import { CheckCircleFilled, CloseCircleFilled } from "@ant-design/icons";
+
 import type {
   DailyChallenge,
   StreakInfo,
   Badge,
   ExerciseAnswer,
 } from "@/lib/daily-challenge/types";
-import { StreakDisplay } from "./StreakDisplay";
+import { StreakFire } from "@/components/app/shared";
 import { BadgeGallery } from "./BadgeGallery";
 
-type Props = {
-  challenge: DailyChallenge;
-  streak: StreakInfo;
-  badges: Badge[];
-};
+const { Title, Text } = Typography;
 
 /** Milliseconds until midnight VN time (UTC+7). */
 function msUntilVnMidnight(): number {
@@ -34,7 +33,11 @@ function formatCountdown(ms: number): string {
   return `${h.toString().padStart(2, "0")}:${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
 }
 
-export function CompletedState({ challenge, streak, badges }: Props) {
+export function CompletedState({ challenge, streak, badges }: {
+  challenge: DailyChallenge;
+  streak: StreakInfo;
+  badges: Badge[];
+}) {
   const answers = (challenge.answers ?? []) as ExerciseAnswer[];
   const emoji = (challenge.score ?? 0) >= 4 ? "🎉" : "👍";
 
@@ -46,51 +49,83 @@ export function CompletedState({ challenge, streak, badges }: Props) {
   }, []);
 
   return (
-    <div className="mx-auto flex max-w-md flex-col items-center text-center">
-      <span className="text-5xl">{emoji}</span>
-      <h2 className="mt-3 [font-family:var(--font-display)] text-2xl italic text-(--ink)">
+    <Flex vertical align="center" className="anim-fade-in" style={{ maxWidth: 480, margin: "0 auto", textAlign: "center" }}>
+      <span style={{ fontSize: 48 }}>{emoji}</span>
+      <Title level={3} style={{ marginTop: 8, fontFamily: "var(--font-display)", fontStyle: "italic" }}>
         Đã hoàn thành hôm nay!
-      </h2>
-      <p className="mt-1 text-sm text-(--text-muted)">Điểm: {challenge.score} / 5</p>
+      </Title>
+      <Text type="secondary" style={{ fontSize: 13 }}>Điểm: {challenge.score} / 5</Text>
 
-      <div className="mt-4">
-        <StreakDisplay currentStreak={streak.currentStreak} bestStreak={streak.bestStreak} />
+      {/* Streak */}
+      <div style={{ marginTop: 16 }}>
+        <StreakFire streak={streak.currentStreak} />
       </div>
 
       {/* Answer review */}
-      <div className="mt-6 w-full space-y-1.5">
+      <Flex vertical gap={6} style={{ marginTop: 20, width: "100%" }}>
         {answers.map((a, i) => (
-          <div
+          <Card
             key={i}
-            className={`flex items-center justify-between rounded-lg border px-3 py-1.5 text-sm ${
-              a.isCorrect
-                ? "border-emerald-200 bg-emerald-50 text-emerald-800"
-                : "border-red-200 bg-red-50 text-red-800"
-            }`}
+            size="small"
+            style={{
+              borderColor: a.isCorrect ? "#86efac" : "#fca5a5",
+              background: a.isCorrect ? "#f0fdf4" : "#fef2f2",
+              borderRadius: "var(--radius)",
+            }}
+            styles={{ body: { padding: "6px 12px" } }}
           >
-            <span>
-              Câu {i + 1}: {a.isCorrect ? "✓" : "✗"}
-            </span>
-            {!a.isCorrect && <span className="text-xs">{a.explanation}</span>}
-          </div>
+            <Flex align="center" justify="space-between">
+              <Flex align="center" gap={8}>
+                {a.isCorrect ? (
+                  <CheckCircleFilled style={{ color: "#10b981", fontSize: 14 }} />
+                ) : (
+                  <CloseCircleFilled style={{ color: "#ef4444", fontSize: 14 }} />
+                )}
+                <Text style={{ fontSize: 13, color: a.isCorrect ? "#166534" : "#991b1b" }}>
+                  Câu {i + 1}: {a.isCorrect ? "Đúng" : "Sai"}
+                </Text>
+              </Flex>
+              {!a.isCorrect && a.explanation && (
+                <Text style={{ fontSize: 11, color: "#16a34a" }}>{a.explanation}</Text>
+              )}
+            </Flex>
+          </Card>
         ))}
-      </div>
+      </Flex>
 
-      <div className="mt-6 w-full">
+      {/* Badges */}
+      <div style={{ marginTop: 20, width: "100%" }}>
         <BadgeGallery badges={badges} />
       </div>
 
       {/* Countdown to next challenge */}
-      <div className="mt-6 rounded-lg bg-(--bg-deep) px-4 py-2.5">
-        <span className="text-[11px] font-semibold uppercase tracking-widest text-(--text-muted)">
+      <Card
+        style={{
+          marginTop: 20,
+          width: "100%",
+          borderRadius: "var(--radius-xl)",
+          background: "var(--bg-deep)",
+          textAlign: "center",
+        }}
+        styles={{ body: { padding: "12px 16px" } }}
+      >
+        <Text strong style={{ fontSize: 10, textTransform: "uppercase", letterSpacing: 1.5, color: "var(--text-muted)" }}>
           Thử thách tiếp theo
-        </span>
-        <p className="mt-0.5 font-mono text-lg font-bold text-(--accent)">
+        </Text>
+        <Title
+          level={4}
+          style={{
+            margin: "4px 0 0",
+            fontFamily: "var(--font-mono)",
+            color: "var(--accent)",
+            fontVariantNumeric: "tabular-nums",
+          }}
+        >
           {formatCountdown(countdown)}
-        </p>
-      </div>
+        </Title>
+      </Card>
 
-      <p className="mt-4 text-sm text-(--text-muted)">Quay lại mai nhé! 🌙</p>
-    </div>
+      <Text type="secondary" style={{ marginTop: 16, fontSize: 13 }}>Quay lại mai nhé! 🌙</Text>
+    </Flex>
   );
 }

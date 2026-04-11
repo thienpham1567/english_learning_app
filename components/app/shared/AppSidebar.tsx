@@ -3,7 +3,9 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Badge, Tooltip } from "antd";
 import {
+  HomeOutlined,
   CommentOutlined,
   ReadOutlined,
   BookOutlined,
@@ -16,10 +18,11 @@ import {
   SunOutlined,
   MoonOutlined,
 } from "@ant-design/icons";
-import { Tooltip } from "antd";
 import { useTheme } from "@/components/app/shared/ThemeProvider";
+import { useSidebarBadges } from "@/hooks/useSidebarBadges";
 
 const navItems = [
+  { href: "/home", label: "Trang chủ", icon: HomeOutlined },
   { href: "/english-chatbot", label: "Trò chuyện", icon: CommentOutlined },
   { href: "/dictionary", label: "Từ điển", icon: ReadOutlined },
   { href: "/my-vocabulary", label: "Từ vựng", icon: BookOutlined },
@@ -37,6 +40,29 @@ type Props = {
 export function AppSidebar({ isExpanded, onToggle }: Props) {
   const pathname = usePathname();
   const { mode, toggleTheme } = useTheme();
+  const badges = useSidebarBadges();
+
+  // Compute badge for each nav item
+  function getBadge(href: string): React.ReactNode {
+    if (!badges) return null;
+    if (href === "/flashcards" && badges.flashcardsDue > 0) {
+      return (
+        <Badge
+          count={badges.flashcardsDue}
+          size="small"
+          style={{ backgroundColor: "var(--accent)" }}
+        />
+      );
+    }
+    if (href === "/daily-challenge") {
+      return (
+        <span style={{ fontSize: 12, lineHeight: 1 }}>
+          {badges.dailyChallengeCompleted ? "✅" : "🔥"}
+        </span>
+      );
+    }
+    return null;
+  }
 
   return (
     <aside
@@ -163,7 +189,8 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
               >
                 <Icon style={{ fontSize: 18 }} />
               </span>
-              {isExpanded && <span style={{ whiteSpace: "nowrap", fontSize: 14 }}>{label}</span>}
+              {isExpanded && <span style={{ whiteSpace: "nowrap", fontSize: 14, flex: 1 }}>{label}</span>}
+              {getBadge(href)}
             </Link>
           );
 

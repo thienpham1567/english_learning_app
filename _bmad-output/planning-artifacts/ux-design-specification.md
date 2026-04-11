@@ -1,5 +1,6 @@
 ---
-stepsCompleted: [1, 2, 3, 4]
+stepsCompleted: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+lastStep: 14
 inputDocuments:
 - \_bmad-output/implementation-artifacts/1-1-flashcard-spaced-repetition.md
 - \_bmad-output/implementation-artifacts/1-2-grammar-quiz.md
@@ -471,3 +472,453 @@ Every module's empty state includes:
 3. **Create "just one more" moments** — After completing flashcards, suggest: "Daily challenge chưa làm. Thử luôn?" After a quiz, offer: "Muốn luyện thêm 5 câu?" The transition between modules should feel like a natural continuation, not a new decision.
 4. **Warmth in every word** — All Vietnamese copy should feel like a supportive tutor, not a software interface. "Bạn đã ôn xong! 🎉" not "Session complete." "Cố lên, bạn gần đạt rồi!" not "Below target."
 5. **Anticipation drives return** — The countdown to next challenge, the streak at stake, the flashcard due count — these create gentle FOMO that pulls users back without aggressive notifications.
+
+---
+
+## UX Pattern Analysis & Inspiration
+
+### Inspiring Products Analysis
+
+**1. Duolingo** — The retention king
+- **Core UX win:** Streak mechanic + daily XP goal creates an unbreakable habit loop.
+- **Navigation:** Bottom tab bar with 5 items. Home is a vertical skill tree — clear visual progression.
+- **Celebrations:** Over-the-top animations for milestones. Makes small wins feel massive.
+- **Weakness:** Repetitive lessons. No deep conversational practice. Superficial grammar explanations.
+
+**2. Anki** — The flashcard benchmark
+- **Core UX win:** SM-2 spaced repetition algorithm is proven. Users trust the system.
+- **Card interaction:** Tap to reveal → rate difficulty. Dead simple.
+- **Weakness:** Brutally utilitarian UI. Zero emotional reward. No streak system.
+- **Lesson:** Take Anki’s algorithm purity but wrap it in Duolingo’s emotional design.
+
+**3. Notion / Linear** — Information hierarchy masters
+- **Core UX win:** Sidebar navigation that scales without overwhelming. Clean typography, generous whitespace.
+- **Lesson:** Dictionary and vocabulary pages should borrow this calm information density.
+
+**4. Elsa Speak** — AI-powered coaching done right
+- **Core UX win:** Real-time pronunciation feedback. The AI feels like a patient personal tutor.
+- **Lesson:** Chatbot should feel this personal. AI corrections should be visual and specific.
+
+### Transferable UX Patterns
+
+**Navigation:** Duolingo’s bottom tab bar for mobile (4 tabs: Home, Chat, Learn, Profile). Notion’s collapsible sidebar for desktop with badge counts.
+
+**Interaction:** Anki’s reveal-then-rate (already built — enhance visually). Duolingo’s combo/streak counter for quizzes. Elsa’s inline feedback adapted for chatbot word highlighting.
+
+**Visual:** Duolingo’s tiered celebration hierarchy (flash → confetti → full-screen). Linear’s thin elegant progress bars. Notion’s clean information density for reference pages.
+
+**Gamification:** App-wide XP system (flashcard = 10 XP, quiz = 50 XP, writing = 100 XP, daily = 30 XP). Streak loss aversion via fire animation.
+
+### Anti-Patterns to Avoid
+
+1. **Anki’s blank-wall onboarding** — Pre-populate dashboard from day one.
+2. **Duolingo’s forced linearization** — Allow free exploration. Soft guidance, not hard locks.
+3. **Notification spam** — Gentle in-app nudges only.
+4. **Feature overload on mobile** — Bottom-tab-with-sub-hub pattern prevents this.
+5. **Inline ads or upsells** — No monetization UX. Keep it clean.
+
+### Design Inspiration Strategy
+
+**Adopt:** Streak mechanic + celebrations (Duolingo), reveal-then-rate (Anki), bottom tab bar (Duolingo), XP system.
+**Adapt:** CEFR path instead of skill tree (Duolingo), word highlighting instead of pronunciation (Elsa), sidebar with badges (Notion).
+**Avoid:** Forced lesson order, utilitarian UI, aggressive notifications, leaderboards/competition.
+
+---
+
+## Design System Foundation
+
+### Design System Choice
+
+**Hybrid: Ant Design v6 (base) + Custom Design Tokens + Vanilla CSS**
+
+The project already uses Ant Design v6 as its component library (migrated from Tailwind in a recent refactor). Rather than replacing it again, the redesign will:
+
+1. **Keep Ant Design** for structural components (Drawer, Tooltip, Spin, Modal, notification)
+2. **Custom-build** all feature-specific components (flashcards, quiz cards, streak display, dashboard widgets) with inline styles and CSS variables
+3. **Extend the design token system** in `globals.css` to cover all new patterns
+
+### Rationale for Selection
+
+| Factor | Decision |
+|---|---|
+| **Speed** | Ant Design provides battle-tested form controls, modals, and drawers — no need to rebuild |
+| **Uniqueness** | Feature components (cards, celebrations, progress bars) are all custom — these define the app’s personality |
+| **Consistency** | CSS custom properties (`--accent`, `--surface`, `--border`, etc.) enforce visual consistency without a CSS framework |
+| **Team size** | Solo developer — needs proven components for utilities, custom code for differentiators |
+| **Maintenance** | Ant Design handles accessibility, RTL, and edge cases for complex widgets. Custom components stay simple and focused |
+| **Migration cost** | Zero — already on Ant Design v6 |
+
+### Implementation Approach
+
+**Layer 1 — Design Tokens (globals.css):**
+All visual decisions flow from CSS custom properties. This is already partially implemented. Extend with:
+- Animation tokens: `--duration-fast: 200ms`, `--duration-normal: 300ms`, `--duration-slow: 500ms`
+- Spacing scale: `--space-xs: 4px` through `--space-3xl: 48px`
+- Module accent colors (already defined in the design system rules section)
+- Shadow elevation scale: `--shadow-sm`, `--shadow-md`, `--shadow-lg`, `--shadow-xl`
+
+**Layer 2 — Ant Design (utility components):**
+Use for: Drawer, Modal, Tooltip, Spin, notification, Dropdown, message. These are invisible plumbing — no brand impact.
+
+**Layer 3 — Custom Components (feature UI):**
+All visible, brand-defining components are custom: FlashcardCard, QuestionCard, StreakDisplay, DashboardWidget, ProgressBar, CelebrationOverlay, BadgeGallery, etc.
+
+### Customization Strategy
+
+**Ant Design theme override** via ConfigProvider:
+```
+borderRadius: 10 (var(--radius))
+colorPrimary: #c46d2e (var(--accent))
+fontFamily: 'Source Sans 3' (var(--font-body))
+colorBgContainer: var(--surface)
+```
+
+**Custom component conventions:**
+- All styles via inline `style={{}}` objects (consistent with existing codebase)
+- CSS custom properties for all color/spacing/shadow values
+- No Tailwind classes in new components
+- `motion/react` for all animations (AnimatePresence for mount/unmount)
+- Shared animation presets in a `lib/animations.ts` utility
+
+---
+
+## Defining Core Experience
+
+### The ThienGlish Defining Experience
+
+**"Open the app → see what’s due → do it → feel progress → come back tomorrow."**
+
+Like Tinder’s swipe or Snapchat’s disappearing photos, ThienGlish’s defining interaction is the **Daily Learning Loop**. If we nail this single flow, everything else follows.
+
+### User Mental Model
+
+Vietnamese English learners bring these mental models:
+- **“Learning English = studying”** — They expect structured exercises (grammar drills, vocabulary lists, writing tasks). The app should feel productive, not casual.
+- **“I need a teacher”** — The AI personas fulfill this expectation. Simon = conversation partner, Christine = IELTS coach, Eddie = pronunciation helper.
+- **“I should study every day”** — They know consistency matters but lack accountability tools. The streak mechanic fills this gap.
+- **“I don’t know what to study next”** — The #1 pain point. The Dashboard solves this by curating today’s plan automatically.
+
+### Success Criteria
+
+| Metric | Target | Measurement |
+|---|---|---|
+| Time to first activity | < 3 seconds from dashboard load | Click tracking on dashboard CTAs |
+| Daily return rate (D7) | > 40% | Session analytics |
+| Activities per session | ≥ 2 modules touched | Activity logging |
+| Streak maintenance | > 50% users maintain 7+ day streak | Streak database |
+| Vocabulary save rate | > 30% of looked-up words get saved | Save action / lookup ratio |
+
+### Experience Mechanics
+
+**1. Initiation:** User opens app → redirected to `/home` dashboard. Greeting card shows time-aware welcome + streak status. Today’s Plan shows prioritized activities.
+
+**2. Interaction:** User taps first suggested activity (e.g., "5 flashcards due"). Navigates to flashcards module. Reviews cards with reveal-then-rate flow. Auto-advances between cards.
+
+**3. Feedback:** Progress bar fills. Correct/incorrect gets immediate visual feedback. Session ends with summary + “just one more” suggestion.
+
+**4. Completion:** Returns to dashboard. Completed activity shows checkmark. Streak counter updates. XP increments. Next suggestion highlighted.
+
+---
+
+## Visual Design Foundation
+
+### Color System
+
+The existing palette is already established and distinctive. Preserve and extend:
+
+**Core palette (preserved):**
+
+| Token | Light | Dark | Usage |
+|---|---|---|---|
+| `--bg` | `#faf8f3` | `#141a10` | Page background |
+| `--surface` | `#ffffff` | `#1c2318` | Card/panel background |
+| `--accent` | `#9ab17a` | `#b1c892` | Primary actions, active states |
+| `--ink` | `#2d3a24` | `#e4eadc` | Primary text |
+| `--border` | `#e4dfb5` | `#2f3b26` | Dividers, card borders |
+
+**New tokens to add:**
+
+| Token | Light | Dark | Usage |
+|---|---|---|---|
+| `--success` | `#10b981` | `#34d399` | Correct answers, completed states |
+| `--error` | `#ef4444` | `#f87171` | Wrong answers, error states |
+| `--warning` | `#f59e0b` | `#fbbf24` | Streak warnings, time alerts |
+| `--info` | `#3b82f6` | `#60a5fa` | Tips, learning indicators |
+| `--xp` | `#8b5cf6` | `#a78bfa` | XP counters, level indicators |
+| `--fire` | `#f97316` | `#fb923c` | Streak fire, daily challenge |
+
+**Module accent colors:**
+Each module gets a unique gradient for its icon container (already defined in Unified Design System Rules section). These do NOT affect the global accent — they only color the 40×40px header icon.
+
+### Typography System
+
+**Preserved from current implementation:**
+
+| Role | Font | Weight | Size | Usage |
+|---|---|---|---|---|
+| Display | Fraunces (serif) | 400 italic | 24-36px | Page titles, headword in dictionary |
+| Body | Source Sans 3 (sans) | 400/500/600 | 13-15px | All body text, UI labels |
+| Mono | JetBrains Mono | 400 | 13px | Code, phonetics |
+
+**Type scale (add as tokens):**
+
+```
+--text-xs: 11px      /* Timestamps, meta labels */
+--text-sm: 13px      /* Secondary text, captions */
+--text-base: 15px    /* Body text (default) */
+--text-lg: 18px      /* Card titles, section headers */
+--text-xl: 24px      /* Page subtitles */
+--text-2xl: 30px     /* Page titles */
+--text-3xl: 36px     /* Hero/display text */
+```
+
+### Spacing & Layout Foundation
+
+**Base unit: 4px** (consistent with current `gap`, `padding` values)
+
+```
+--space-1: 4px       --space-2: 8px       --space-3: 12px
+--space-4: 16px      --space-5: 20px      --space-6: 24px
+--space-8: 32px      --space-10: 40px     --space-12: 48px
+```
+
+**Layout principles:**
+- Page content max-width: `800px` for single-column (writing, quiz), `1200px` for multi-column (dictionary, dashboard)
+- Card internal padding: `24px` (desktop), `16px` (mobile)
+- Section spacing: `24px` gap between major sections
+- Component spacing: `8-12px` between related elements
+
+### Accessibility Considerations
+
+- All text meets WCAG AA contrast ratios (4.5:1 for body, 3:1 for large text)
+- Focus indicators: `2px solid var(--accent)` with `2px offset` on all interactive elements
+- Touch targets: minimum `44×44px` for mobile interactions
+- Reduced motion: `@media (prefers-reduced-motion: reduce)` disables all animations
+- Screen reader: All interactive elements have `aria-label` in Vietnamese
+- Keyboard navigation: Tab order follows visual reading order; Enter/Space activates
+
+---
+
+## User Journey Flows
+
+### Journey 1: New User First Session
+
+```
+Sign-in page → Google OAuth → Dashboard (first visit)
+                                    │
+                         [Welcome card: "Chào mừng!"]
+                         [Pre-populated Today's Plan]
+                                    │
+                         User taps "Tra từ đầu tiên"
+                                    │
+                         Dictionary → searches word → saves
+                                    │
+                         Returns to Dashboard
+                         ["Thử thách mỗi ngày" suggested]
+                                    │
+                         Daily Challenge → completes 5 exercises
+                                    │
+                         Results celebration → first badge
+                                    │
+                         Dashboard: "1 ngày streak! 🔥"
+```
+
+### Journey 2: Returning Daily Learner
+
+```
+Open app → Dashboard loads
+              │
+     [Greeting: "Chào buổi sáng, Thiên! 🔥5 ngày"]
+     [Today: 5 flashcards due, Daily Challenge ready]
+              │
+     Tap "5 thẻ cần ôn" → Flashcard session
+     Review 5 cards (2 min) → Summary → "Đã ôn xong!"
+              │
+     "Daily challenge chưa làm. Thử luôn?" → tap
+     Daily Challenge → 5 exercises → Results
+              │
+     Dashboard: 2/3 done → streak updated
+     Optional: chatbot or writing practice
+```
+
+### Journey 3: Deep Study Session
+
+```
+Dashboard → Tap "Grammar Quiz"
+              │
+     Select B2 level → 10 questions
+     Score: 7/10 → Weak topic: "Conditionals"
+              │
+     "Luyện thêm với Christine?" → Tap
+              │
+     Chatbot opens with Christine persona
+     Practices conditional sentences in conversation
+     Taps highlighted word → mini dictionary → saves
+              │
+     Switches to Writing Practice
+     Writes IELTS Task 2 essay → submits
+     Feedback panel: Band 6.0 → sees improvement chart
+     Extracts 3 new vocabulary from corrections
+              │
+     Dashboard: XP +210, 4 new words learned
+```
+
+---
+
+## Component Strategy
+
+### Shared Components (New)
+
+| Component | Location | Purpose |
+|---|---|---|
+| `StreakFire` | `components/shared/` | Animated fire icon, scales with streak length |
+| `XPCounter` | `components/shared/` | Animated number counter for XP display |
+| `ProgressSegments` | `components/shared/` | Segmented progress bar (flashcards, quiz, daily) |
+| `CelebrationOverlay` | `components/shared/` | Confetti/scale-bounce overlay for achievements |
+| `BadgeCard` | `components/shared/` | Badge display with locked/unlocked states |
+| `MiniDictionary` | `components/shared/` | Floating word lookup card (used in chatbot, quiz) |
+| `ActivityCard` | `components/shared/` | Dashboard today’s plan item with completion state |
+| `EmptyStateCard` | `components/shared/` | Standardized empty state with icon + CTA |
+| `ModuleHeader` | `components/shared/` | Standardized page header (icon + title + action) |
+| `BottomTabBar` | `components/shared/` | Mobile bottom navigation (4 tabs) |
+
+### Dashboard Components (New)
+
+| Component | Purpose |
+|---|---|
+| `GreetingCard` | Time-aware welcome + streak + XP summary |
+| `TodaysPlan` | Prioritized activity checklist |
+| `QuickActions` | Pill buttons for immediate module access |
+| `RecentVocabulary` | Horizontal scroll strip of recent words |
+| `WeeklyProgress` | CSS bar chart of daily activity |
+| `StreakBadges` | Streak display + badge gallery |
+
+### Existing Components to Upgrade
+
+| Component | Current | Upgrade |
+|---|---|---|
+| `FlashcardCard` | Basic flip with 4 buttons | Immersive mode, CEFR-colored gradients, swipe optional |
+| `QuestionCard` | Static 4-option layout | Combo counter, slide transitions, expandable explanations |
+| `ExerciseCard` | Plain card wrapper | Game-like aesthetic, answer feedback animations |
+| `FeedbackPanel` | Single column feedback | Split-view with diff highlighting |
+| `StreakDisplay` | Text-only numbers | Animated fire particles, visual scale |
+| `AppSidebar` | Desktop only | Add badge counts, responsive hide for mobile |
+| `LevelPicker` | 6 pill buttons | Visual CEFR path with progress indicators |
+
+---
+
+## UX Consistency Patterns
+
+### Loading States
+
+All modules use the same loading pattern:
+- 3 pulsing dots (accent color) centered in content area
+- Text below: "[Đang tải/contextual message]..."
+- No Ant Design `Spin` component (replace with custom dots)
+
+### Error States
+
+All modules follow:
+- 64px icon in error container (module-specific icon, not generic)
+- Headline: "Không thể [action]" (Can’t [action])
+- Description: specific, helpful message
+- CTA: "Thử lại" (Try again) button with accent color
+
+### Success/Completion States
+
+Tiered celebration system:
+- **Small win** (correct answer): green border flash, 200ms
+- **Medium win** (session complete): scale-bounce + summary card with stats
+- **Big win** (streak milestone/badge): full-screen overlay with confetti + badge animation
+
+### Navigation Transitions
+
+- Page enter: `fadeInUp` 300ms
+- Page exit: `fadeOut` 200ms (handled by layout, not per-page)
+- Within-page state changes: `crossDissolve` 250ms
+- Card dealing (quiz/flashcard): `slideInRight` 300ms
+
+### Form Patterns
+
+- Text inputs: borderless bottom-border style (as in vocabulary search)
+- Buttons: filled accent for primary, ghost for secondary
+- Selection: highlighted pills/chips (as in level picker, filters)
+
+---
+
+## Responsive Design & Accessibility Strategy
+
+### Breakpoint System
+
+```css
+/* Mobile-first breakpoints */
+@media (min-width: 769px)  { /* Tablet */ }
+@media (min-width: 1025px) { /* Desktop */ }
+@media (max-width: 768px)  { /* Mobile-only */ }
+```
+
+### Mobile Adaptations
+
+| Feature | Desktop | Mobile |
+|---|---|---|
+| Navigation | Sidebar (collapsible) | Bottom tab bar (4 tabs) |
+| Dictionary | Two-column grid | Stacked: search → result |
+| Flashcards | Card in content area | Full-screen immersive |
+| Writing feedback | Side-by-side split | Tabbed view |
+| Dashboard | 2-column grid | Single-column stack |
+| Quiz | Centered card + header | Full-width card, no header |
+
+### Bottom Tab Bar Specification
+
+```
+┌─────────┬─────────┬─────────┬─────────┐
+│  🏠     │  💬     │  📚     │  👤     │
+│  Home   │  Chat   │  Learn  │ Profile │
+└─────────┴─────────┴─────────┴─────────┘
+```
+
+- Fixed at bottom, 56px height, `backdrop-filter: blur(12px)`
+- Active tab: accent color icon + label. Inactive: muted.
+- "Learn" tab opens sub-hub with: Flashcards, Grammar Quiz, Writing Practice, Daily Challenge as a grid of 4 cards.
+
+### Accessibility Checklist
+
+- [x] All interactive elements have `aria-label` (Vietnamese)
+- [x] Color is never the only indicator (always paired with icon/text)
+- [x] Focus indicators visible on all interactive elements
+- [x] Touch targets ≥ 44×44px on mobile
+- [x] `prefers-reduced-motion` respected
+- [x] Heading hierarchy: single `h1` per page, sequential `h2`/`h3`
+- [x] Images/icons have alt text
+- [x] Form inputs associated with labels
+- [x] Error messages are announced to screen readers
+
+---
+
+## Implementation Priority & Phasing
+
+### Phase 1: Foundation (Week 1-2)
+1. Extend `globals.css` with new tokens (colors, spacing, typography, animation)
+2. Build shared components: `ModuleHeader`, `ProgressSegments`, `EmptyStateCard`, `CelebrationOverlay`
+3. Create `BottomTabBar` component with responsive show/hide
+4. Build Home Dashboard page (`/home` route) with `GreetingCard`, `TodaysPlan`, `QuickActions`
+5. Add dashboard API endpoint aggregating cross-module data
+
+### Phase 2: High-Priority Module Upgrades (Week 3-4)
+6. Flashcards: immersive mode, card design upgrade, streak integration
+7. Daily Challenge: game aesthetics, progress bar, celebration animations
+8. Chatbot: word highlighting, persona cards
+9. Sign-in page: value proposition, feature preview
+
+### Phase 3: Medium-Priority Upgrades (Week 5-6)
+10. Grammar Quiz: CEFR path, combo scoring, quiz history
+11. Writing Practice: split-view feedback, word count bar, draft autosave
+12. Dictionary: recent lookups, word of the day, pronunciation
+13. My Vocabulary: mastery indicators, TOEIC tabs, migrate Tailwind
+
+### Phase 4: Polish & Integration (Week 7-8)
+14. Cross-module vocabulary flow (chatbot → save → flashcard)
+15. XP system implementation
+16. Weekly progress chart on dashboard
+17. Badge gallery and streak milestone celebrations
+18. Mobile responsive testing and optimization

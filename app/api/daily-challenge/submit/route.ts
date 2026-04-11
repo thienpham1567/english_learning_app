@@ -6,6 +6,7 @@ import { db } from "@/lib/db";
 import { dailyChallenge, userStreak } from "@/lib/db/schema";
 import { SubmitAnswerSchema } from "@/lib/daily-challenge/schema";
 import { getBadges, getNewlyUnlockedBadges } from "@/lib/daily-challenge/badges";
+import { awardXP, XP_VALUES } from "@/lib/xp";
 import type { Exercise, ExerciseAnswer } from "@/lib/daily-challenge/types";
 
 function getVnDate(): string {
@@ -169,6 +170,9 @@ export async function POST(request: Request) {
   const newBestStreak = Math.max(previousBestStreak, currentStreak);
   const allBadges = getBadges(newBestStreak);
   const newBadges = getNewlyUnlockedBadges(previousBestStreak, newBestStreak);
+
+  // Award XP for daily challenge completion
+  void awardXP(session.user.id, XP_VALUES.DAILY_CHALLENGE).catch(() => {});
 
   return Response.json({
     answers: scoredAnswers,

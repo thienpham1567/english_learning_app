@@ -6,6 +6,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { flashcardProgress } from "@/lib/db/schema";
 import { computeSm2, defaultSm2State } from "@/lib/flashcard/sm2";
+import { awardXP, XP_VALUES } from "@/lib/xp";
 
 const ReviewBodySchema = z.object({
   query: z.string().min(1),
@@ -73,6 +74,9 @@ export async function POST(request: Request) {
       updatedAt: now,
     });
   }
+
+  // Award XP for review (fire-and-forget)
+  void awardXP(userId, XP_VALUES.FLASHCARD_REVIEW).catch(() => {});
 
   return Response.json({ success: true, state: nextState });
 }

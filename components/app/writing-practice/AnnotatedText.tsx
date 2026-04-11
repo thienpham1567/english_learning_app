@@ -5,8 +5,8 @@ import type { InlineAnnotation } from "@/lib/writing-practice/types";
 
 const TYPE_COLORS: Record<string, string> = {
   grammar: "bg-red-100 border-b-2 border-red-400 cursor-pointer",
-  vocabulary: "bg-amber-100 border-b-2 border-amber-400 cursor-pointer",
-  coherence: "bg-blue-100 border-b-2 border-blue-400 cursor-pointer",
+  vocabulary: "bg-blue-100 border-b-2 border-blue-400 cursor-pointer",
+  coherence: "bg-amber-100 border-b-2 border-amber-400 cursor-pointer",
 };
 
 type Props = {

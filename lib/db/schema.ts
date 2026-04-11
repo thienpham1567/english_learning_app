@@ -102,6 +102,7 @@ export const userStreak = pgTable("user_streak", {
   currentStreak: integer("current_streak").notNull().default(0),
   bestStreak: integer("best_streak").notNull().default(0),
   lastCompletedDate: text("last_completed_date"), // YYYY-MM-DD (VN timezone)
+  xpTotal: integer("xp_total").notNull().default(0),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
 

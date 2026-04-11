@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import http from "@/lib/http";
+import { clearWritingDraft } from "@/components/app/writing-practice/WritingEditor";
 import type {
   WritingCategory,
   WritingFeedback,
@@ -97,6 +98,7 @@ export function useWritingPractice() {
     setWrittenText("");
     setFeedback(null);
     setError(null);
+    clearWritingDraft();
     setState("prompt-selection");
   }, []);
 

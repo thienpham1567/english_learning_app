@@ -1,20 +1,88 @@
-# Sprint Status
-# Project: english_learning_app
-# Last Updated: 2026-04-08
+# generated: 2026-04-10T23:39:00+07:00
+# last_updated: 2026-04-10T23:39:00+07:00
+# project: english_learning_app
+# project_key: NOKEY
+# tracking_system: file-system
+# story_location: _bmad-output/implementation-artifacts
 
 # STATUS DEFINITIONS:
-# backlog     - Not yet started
-# ready-for-dev - Story context created, ready for implementation
-# in-progress - Currently being developed
-# review      - Code review pending
-# done        - Completed and verified
+# ==================
+# Epic Status:
+#   - backlog: Epic not yet started
+#   - in-progress: Epic actively being worked on
+#   - done: All stories in epic completed
+#
+# Epic Status Transitions:
+#   - backlog → in-progress: Automatically when first story is created (via create-story)
+#   - in-progress → done: Manually when all stories reach 'done' status
+#
+# Story Status:
+#   - backlog: Story only exists in epic file
+#   - ready-for-dev: Story file created in stories folder
+#   - in-progress: Developer actively working on implementation
+#   - review: Ready for code review (via Dev's code-review workflow)
+#   - done: Story completed
+#
+# Retrospective Status:
+#   - optional: Can be completed but not required
+#   - done: Retrospective has been completed
+#
+# WORKFLOW NOTES:
+# ===============
+# - Epic transitions to 'in-progress' automatically when first story is created
+# - Stories can be worked in parallel if team capacity allows
+# - SM typically creates next story after previous one is 'done' to incorporate learnings
+# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
-sprint_goal: "Replace fuel-prices with English learning features"
+generated: 2026-04-10T23:39:00+07:00
+last_updated: 2026-04-11T08:54:00+07:00
+project: english_learning_app
+project_key: NOKEY
+tracking_system: file-system
+story_location: _bmad-output/implementation-artifacts
 
 development_status:
-  epic-1: in-progress  # Replace Fuel Prices with Learning Features
+  # ── Epic 1: Design System Foundation & Home Dashboard ──
+  epic-1: done
+  1-1-extend-design-tokens: done
+  1-2-shared-ui-components-moduleheader-progresssegments-emptystatecard: done
+  1-3-shared-ui-components-celebrationoverlay-streakfire-xpcounter: done
+  1-4-dashboard-api-endpoint: done
+  1-5-home-dashboard-page: done
+  epic-1-retrospective: optional
 
-  1-1-flashcard-spaced-repetition: done
-  1-2-grammar-quiz: done
-  1-3-writing-practice: done
-  1-4-daily-challenge: done
+  # ── Epic 2: Mobile Navigation & Responsive Layout ──
+  epic-2: done
+  2-1-bottom-tab-bar-component: done
+  2-2-responsive-appshell-sidebar-badges: done
+  epic-2-retrospective: optional
+
+  # ── Epic 3: Flashcards & Daily Challenge Upgrade ──
+  epic-3: done
+  3-1-flashcard-immersive-mode-card-redesign: done
+  3-2-flashcard-session-celebration-streak-integration: done
+  3-3-daily-challenge-game-aesthetics: done
+  3-4-daily-challenge-celebration-animations: done
+  epic-3-retrospective: optional
+
+  # ── Epic 4: Chatbot Intelligence & Sign-In Upgrade ──
+  epic-4: in-progress
+  4-1-minidictionary-component: done
+  4-2-chatbot-word-highlighting: done
+  4-3-chatbot-persona-cards: done
+  4-4-sign-in-page-value-proposition: done
+  epic-4-retrospective: optional
+
+  # ── Epic 5: Grammar Quiz, Writing & Dictionary Polish ──
+  epic-5: done
+  5-1-grammar-quiz-cefr-path-combo-scoring: done
+  5-2-grammar-quiz-expandable-explanations-history: done
+  5-3-writing-practice-split-view-autosave: done
+  5-4-dictionary-enhancements: done
+  epic-5-retrospective: optional
+
+  # ── Epic 6: Cross-Module Integration & Gamification ──
+  epic-6: done
+  6-1-vocabulary-mastery-levels-tabs: done
+  6-2-xp-system-cross-module-vocabulary-flow: done
+  epic-6-retrospective: optional

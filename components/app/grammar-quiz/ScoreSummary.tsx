@@ -2,6 +2,7 @@
 
 import { Button, Card, Flex, Space, Statistic, Tag, Typography } from "antd";
 import { ReloadOutlined, StarOutlined, WarningOutlined } from "@ant-design/icons";
+import { useRouter } from "next/navigation";
 import type { GrammarQuestion } from "@/lib/grammar-quiz/types";
 
 const { Title, Text } = Typography;
@@ -10,6 +11,7 @@ type Props = {
   questions: GrammarQuestion[];
   answers: (number | null)[];
   score: number;
+  maxCombo: number;
   topicBreakdown: Record<string, { correct: number; total: number }>;
   onRetry: () => void;
   onNewQuiz: () => void;
@@ -19,10 +21,12 @@ export function ScoreSummary({
   questions,
   answers,
   score,
+  maxCombo,
   topicBreakdown,
   onRetry,
   onNewQuiz,
 }: Props) {
+  const router = useRouter();
   const total = questions.length;
   const pct = total > 0 ? Math.round((score / total) * 100) : 0;
   const emoji = pct >= 90 ? "🎉" : pct >= 70 ? "👏" : pct >= 50 ? "👍" : "💪";
@@ -62,10 +66,32 @@ export function ScoreSummary({
         <Statistic
           value={score}
           suffix={`/ ${total}`}
-          valueStyle={{ fontSize: 28, fontWeight: 700, color: "#fff" }}
+          styles={{ content: { fontSize: 28, fontWeight: 700, color: "#fff" } }}
         />
         <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 12 }}>{pct}%</Text>
       </Card>
+
+      {/* Combo stat (AC: #4) */}
+      {maxCombo >= 2 && (
+        <div
+          className="anim-fade-up anim-delay-2"
+          style={{
+            marginTop: 12,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 6,
+            borderRadius: 999,
+            background: "linear-gradient(135deg, #f97316, #ef4444)",
+            padding: "5px 16px",
+            fontSize: 13,
+            fontWeight: 600,
+            color: "#fff",
+            boxShadow: "0 2px 8px rgba(249,115,22,0.25)",
+          }}
+        >
+          🔥 Combo cao nhất: x{maxCombo}
+        </div>
+      )}
 
       {/* Topic breakdown */}
       <Flex
@@ -114,13 +140,24 @@ export function ScoreSummary({
 
       {/* Weak topics callout */}
       {weakTopics.length > 0 && (
-        <Text
+        <Flex
+          vertical
+          gap={6}
           className="anim-fade-up anim-delay-4"
-          type="danger"
-          style={{ marginTop: 16, fontSize: 12 }}
+          style={{ marginTop: 16, width: "100%", alignItems: "center" }}
         >
-          ⚠️ Chủ đề cần ôn lại: {weakTopics.join(", ")}
-        </Text>
+          <Text type="danger" style={{ fontSize: 12 }}>
+            ⚠️ Chủ đề cần ôn lại: {weakTopics.join(", ")}
+          </Text>
+          <Button
+            type="link"
+            size="small"
+            style={{ fontSize: 12, padding: 0 }}
+            onClick={() => router.push("/english-chatbot?persona=christine")}
+          >
+            Luyện thêm với Christine (IELTS) →
+          </Button>
+        </Flex>
       )}
 
       {/* Buttons */}

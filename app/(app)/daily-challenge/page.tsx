@@ -1,15 +1,46 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { Button, Card, Flex, Result, Spin, Typography } from "antd";
-import { FireOutlined, ReloadOutlined } from "@ant-design/icons";
+import { ClockCircleOutlined, FireOutlined, ReloadOutlined } from "@ant-design/icons";
 
 import { useDailyChallenge } from "@/hooks/useDailyChallenge";
 import { ExerciseCard } from "@/components/app/daily-challenge/ExerciseCard";
 import { ChallengeResults } from "@/components/app/daily-challenge/ChallengeResults";
 import { CompletedState } from "@/components/app/daily-challenge/CompletedState";
-import { StreakDisplay } from "@/components/app/daily-challenge/StreakDisplay";
+import { ProgressSegments, StreakFire } from "@/components/app/shared";
 
 const { Title, Text } = Typography;
+
+// Exercise type labels with emoji (AC: #2)
+const EXERCISE_TYPE_LABELS: Record<string, string> = {
+  "fill-in-blank": "📝 Điền vào chỗ trống",
+  "sentence-order": "🔄 Sắp xếp câu",
+  "translation": "🌐 Dịch câu",
+  "error-correction": "🔍 Sửa lỗi",
+};
+
+// Live elapsed timer hook (AC: #4)
+function useElapsedTimer(isRunning: boolean) {
+  const [elapsed, setElapsed] = useState(0);
+  const startRef = useRef(Date.now());
+
+  useEffect(() => {
+    if (isRunning) {
+      startRef.current = Date.now();
+      setElapsed(0);
+      const interval = setInterval(() => {
+        setElapsed(Date.now() - startRef.current);
+      }, 1000);
+      return () => clearInterval(interval);
+    }
+  }, [isRunning]);
+
+  const totalSec = Math.floor(elapsed / 1000);
+  const min = Math.floor(totalSec / 60);
+  const sec = totalSec % 60;
+  return `${min}:${sec.toString().padStart(2, "0")}`;
+}
 
 export default function DailyChallengePage() {
   const {
@@ -23,6 +54,8 @@ export default function DailyChallengePage() {
     timeElapsedMs,
     answerExercise,
   } = useDailyChallenge();
+
+  const formattedTime = useElapsedTimer(state === "active");
 
   return (
     <Card
@@ -67,8 +100,18 @@ export default function DailyChallengePage() {
             Daily Challenge · 5 bài tập mỗi ngày
           </Text>
         </Flex>
+
+        {/* Live timer (AC: #4) */}
+        {state === "active" && (
+          <Text type="secondary" style={{ fontSize: 13, fontVariantNumeric: "tabular-nums" }}>
+            <ClockCircleOutlined style={{ marginRight: 4 }} />
+            {formattedTime}
+          </Text>
+        )}
+
+        {/* Streak fire (AC: #3) — replaces legacy StreakDisplay */}
         {state !== "loading" && (
-          <StreakDisplay currentStreak={streak.currentStreak} bestStreak={streak.bestStreak} />
+          <StreakFire streak={streak.currentStreak} />
         )}
       </Flex>
 
@@ -93,7 +136,7 @@ export default function DailyChallengePage() {
             />
           )}
 
-          {state === "loading" && <Spin size="large" tip="Đang tải thử thách..." />}
+          {state === "loading" && <Spin size="large" />}
 
           {state === "error" && (
             <Flex vertical align="center" gap={16}>
@@ -109,27 +152,19 @@ export default function DailyChallengePage() {
 
           {state === "active" && challenge && (
             <Flex vertical gap={16} style={{ width: "100%" }}>
-              {/* Progress dots */}
-              <Flex justify="center" gap={8}>
-                {challenge.exercises.map((_, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      width: 10,
-                      height: 10,
-                      borderRadius: "50%",
-                      transition: "all 0.2s",
-                      background:
-                        i < currentExercise
-                          ? "#10b981"
-                          : i === currentExercise
-                            ? "var(--accent)"
-                            : "var(--border)",
-                      boxShadow: i === currentExercise ? "0 0 0 3px var(--accent-muted)" : "none",
-                    }}
-                  />
-                ))}
-              </Flex>
+              {/* Segmented progress bar (AC: #1) — replaces dots */}
+              <ProgressSegments
+                current={currentExercise}
+                total={challenge.exercises.length}
+              />
+
+              {/* Exercise type label with emoji (AC: #2) */}
+              <Text
+                type="secondary"
+                style={{ fontSize: 13, fontWeight: 500, textAlign: "center" }}
+              >
+                {EXERCISE_TYPE_LABELS[challenge.exercises[currentExercise].type] ?? ""}
+              </Text>
 
               <Card>
                 <ExerciseCard
@@ -141,7 +176,7 @@ export default function DailyChallengePage() {
             </Flex>
           )}
 
-          {state === "submitting" && <Spin size="large" tip="Đang chấm bài..." />}
+          {state === "submitting" && <Spin size="large" />}
 
           {state === "results" && results && (
             <div style={{ width: "100%" }}>

@@ -12,6 +12,7 @@ type Props = {
   total: number;
   selectedAnswer: number | null;
   isRevealed: boolean;
+  combo: number;
   onAnswer: (index: number) => void;
   onNext: () => void;
 };
@@ -22,11 +23,13 @@ export function QuestionCard({
   total,
   selectedAnswer,
   isRevealed,
+  combo,
   onAnswer,
   onNext,
 }: Props) {
   const isLastQuestion = questionNumber === total;
   const [lang, setLang] = useState<"en" | "vi">("vi");
+  const [showExplanation, setShowExplanation] = useState(false);
 
   return (
     <div style={{ margin: "0 auto", width: "100%", maxWidth: 580 }}>
@@ -55,6 +58,36 @@ export function QuestionCard({
           {question.grammarTopic}
         </span>
       </div>
+
+      {/* Combo badge (AC: #2) */}
+      {combo >= 2 && (
+        <div
+          key={`combo-${combo}`}
+          className="anim-pop-in"
+          style={{
+            marginBottom: 12,
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              borderRadius: 999,
+              background: "linear-gradient(135deg, #f97316, #ef4444)",
+              padding: "6px 16px",
+              fontSize: 14,
+              fontWeight: 700,
+              color: "#fff",
+              boxShadow: "0 2px 12px rgba(249,115,22,0.35)",
+            }}
+          >
+            🔥 x{combo} Combo!
+          </span>
+        </div>
+      )}
 
       {/* Stem */}
       <div
@@ -149,92 +182,145 @@ export function QuestionCard({
             );
           })}
         </div>
-
-        {/* Explanation */}
+        {/* Compact result badge + collapsible explanation (AC: #1, #2) */}
         {isRevealed && (
-          <div
-            className="anim-fade-up"
-            style={{
-              marginTop: 20,
-              borderRadius: "var(--radius)",
-              border: "1px solid #fcd34d",
-              background: "rgba(254,243,199,0.6)",
-              padding: 16,
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <p
-                style={{
-                  fontSize: 12,
-                  fontWeight: 600,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.1em",
-                  color: "#b45309",
-                  margin: 0,
-                }}
-              >
-                Giải thích
-              </p>
-              <div
-                style={{
-                  display: "flex",
-                  overflow: "hidden",
-                  borderRadius: 6,
-                  border: "1px solid #fcd34d",
-                }}
-              >
-                {(["vi", "en"] as const).map((l) => (
-                  <button
-                    key={l}
-                    onClick={() => setLang(l)}
-                    style={{
-                      padding: "2px 10px",
-                      fontSize: 11,
-                      fontWeight: 600,
-                      border: "none",
-                      cursor: "pointer",
-                      background: lang === l ? "#7a9660" : "#fffbeb",
-                      color: lang === l ? "#fff" : "#b45309",
-                    }}
-                  >
-                    {l === "vi" ? "VN" : "EN"}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <p
+          <div className="anim-fade-up" style={{ marginTop: 20 }}>
+            {/* Compact result badge */}
+            <div
               style={{
-                marginTop: 8,
-                whiteSpace: "pre-line",
-                fontSize: 14,
-                lineHeight: 1.6,
-                color: "#78350f",
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                borderRadius: "var(--radius)",
+                border: `1px solid ${selectedAnswer === question.correctIndex ? "#34d399" : "#f87171"}`,
+                background: selectedAnswer === question.correctIndex ? "#ecfdf5" : "#fef2f2",
+                padding: "10px 16px",
               }}
             >
-              {lang === "en" ? question.explanationEn : question.explanationVi}
-            </p>
-            <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>
-              <p
+              <span style={{ fontSize: 16 }}>
+                {selectedAnswer === question.correctIndex ? "✓" : "✗"}
+              </span>
+              <span
                 style={{
-                  fontSize: 11,
+                  fontSize: 14,
                   fontWeight: 600,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.1em",
-                  color: "#7a9660",
-                  margin: 0,
+                  color: selectedAnswer === question.correctIndex ? "#065f46" : "#991b1b",
                 }}
               >
-                Ví dụ
-              </p>
-              {question.examples.map((ex, i) => (
-                <p
-                  key={i}
-                  style={{ fontSize: 14, fontStyle: "italic", color: "#92400e", margin: 0 }}
-                >
-                  {i + 1}. {ex}
-                </p>
-              ))}
+                {selectedAnswer === question.correctIndex ? "Đúng!" : "Sai!"} Đáp án:{" "}
+                {OPTION_LABELS[question.correctIndex]} —{" "}
+                {question.options[question.correctIndex]}
+              </span>
             </div>
+
+            {/* Toggle button */}
+            <button
+              type="button"
+              onClick={() => setShowExplanation((v) => !v)}
+              style={{
+                marginTop: 8,
+                display: "flex",
+                alignItems: "center",
+                gap: 6,
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontSize: 13,
+                fontWeight: 500,
+                color: "#b45309",
+                padding: "4px 0",
+              }}
+            >
+              {showExplanation ? "▾" : "▸"} Xem giải thích
+            </button>
+
+            {/* Expandable explanation */}
+            {showExplanation && (
+              <div
+                className="anim-fade-up"
+                style={{
+                  marginTop: 4,
+                  borderRadius: "var(--radius)",
+                  border: "1px solid #fcd34d",
+                  background: "rgba(254,243,199,0.6)",
+                  padding: 16,
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <p
+                    style={{
+                      fontSize: 12,
+                      fontWeight: 600,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.1em",
+                      color: "#b45309",
+                      margin: 0,
+                    }}
+                  >
+                    Giải thích
+                  </p>
+                  <div
+                    style={{
+                      display: "flex",
+                      overflow: "hidden",
+                      borderRadius: 6,
+                      border: "1px solid #fcd34d",
+                    }}
+                  >
+                    {(["vi", "en"] as const).map((l) => (
+                      <button
+                        key={l}
+                        onClick={() => setLang(l)}
+                        style={{
+                          padding: "2px 10px",
+                          fontSize: 11,
+                          fontWeight: 600,
+                          border: "none",
+                          cursor: "pointer",
+                          background: lang === l ? "#7a9660" : "#fffbeb",
+                          color: lang === l ? "#fff" : "#b45309",
+                        }}
+                      >
+                        {l === "vi" ? "VN" : "EN"}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <p
+                  style={{
+                    marginTop: 8,
+                    whiteSpace: "pre-line",
+                    fontSize: 14,
+                    lineHeight: 1.6,
+                    color: "#78350f",
+                  }}
+                >
+                  {lang === "en" ? question.explanationEn : question.explanationVi}
+                </p>
+                <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>
+                  <p
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 600,
+                      textTransform: "uppercase",
+                      letterSpacing: "0.1em",
+                      color: "#7a9660",
+                      margin: 0,
+                    }}
+                  >
+                    Ví dụ
+                  </p>
+                  {question.examples.map((ex, i) => (
+                    <p
+                      key={i}
+                      style={{ fontSize: 14, fontStyle: "italic", color: "#92400e", margin: 0 }}
+                    >
+                      {i + 1}. {ex}
+                    </p>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
 

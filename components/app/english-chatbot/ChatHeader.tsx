@@ -30,7 +30,7 @@ export function ChatHeader({ personaId }: Props) {
         style={{ display: "flex", alignItems: "center", gap: 12 }}
       >
         <Avatar size={28} />
-        <span style={{ fontSize: 14, fontWeight: 500, color: "var(--ink)" }}>{persona.label}</span>
+        <span style={{ fontSize: 14, fontWeight: 500, color: "var(--ink)" }}>{persona.label} — {persona.specialty}</span>
       </div>
     </div>
   );

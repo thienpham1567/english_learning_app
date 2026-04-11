@@ -1,30 +1,47 @@
 "use client";
 
-import { Progress } from "antd";
+import { Progress, Flex, Typography } from "antd";
+
+const { Text } = Typography;
+
+const DEFAULT_SECONDS_PER_CARD = 12;
 
 type Props = {
   current: number;
   total: number;
+  startTime?: number; // timestamp when session started
 };
 
-export function SessionProgress({ current, total }: Props) {
+export function SessionProgress({ current, total, startTime }: Props) {
   const pct = total > 0 ? Math.round((current / total) * 100) : 0;
 
+  // Calculate estimated time remaining
+  let timeLabel = "";
+  if (total > 0) {
+    const remaining = total - current;
+    let avgMs: number;
+    if (startTime && current > 0) {
+      avgMs = (Date.now() - startTime) / current;
+    } else {
+      avgMs = DEFAULT_SECONDS_PER_CARD * 1000;
+    }
+    const minutesLeft = Math.ceil((remaining * avgMs) / 60000);
+    timeLabel = ` · ~${minutesLeft} phút`;
+  }
+
   return (
-    <div style={{ marginBottom: 24, display: "flex", alignItems: "center", gap: 12 }}>
-      <div style={{ flex: 1 }}>
+    <Flex align="center" gap={12} style={{ marginBottom: 24 }}>
+      <Flex style={{ flex: 1 }}>
         <Progress
           percent={pct}
           showInfo={false}
           strokeColor={{ from: "var(--accent)", to: "#f59e0b" }}
           size="small"
         />
-      </div>
-      <span
-        style={{ flexShrink: 0, fontSize: 14, fontWeight: 500, color: "var(--text-secondary)" }}
-      >
-        {current} / {total}
-      </span>
-    </div>
+      </Flex>
+      <Text type="secondary" style={{ flexShrink: 0, fontSize: 13, fontWeight: 500 }}>
+        {current} of {total}{timeLabel}
+      </Text>
+    </Flex>
   );
 }

@@ -27,6 +27,8 @@ export type PersonaInstructionInput = {
 export type Persona = {
   id: string;
   label: string;
+  specialty: string;
+  description: string;
   avatar: ComponentType<{ size?: number }>;
   buildInstructions: (input: PersonaInstructionInput) => string;
   suggestions: readonly { text: string; icon: ComponentType<Partial<AntdIconProps>> }[];
@@ -39,7 +41,9 @@ function viNudge(): string {
 export const PERSONAS: readonly Persona[] = [
   {
     id: "simon",
-    label: "Simon Hosking — Native Fluency",
+    label: "Simon Hosking",
+    specialty: "Native Fluency",
+    description: "Luyện nói tự nhiên như người bản xứ, idioms và slang.",
     avatar: SimonAvatar,
     buildInstructions({ consecutiveVietnameseTurns }) {
       const lines = [
@@ -66,7 +70,9 @@ export const PERSONAS: readonly Persona[] = [
   },
   {
     id: "christine",
-    label: "Christine Ho — IELTS Master",
+    label: "Christine Ho",
+    specialty: "IELTS Master",
+    description: "Chấm bài, luyện Writing & Speaking theo chuẩn IELTS.",
     avatar: ChristineAvatar,
     buildInstructions({ consecutiveVietnameseTurns }) {
       const lines = [
@@ -93,7 +99,9 @@ export const PERSONAS: readonly Persona[] = [
   },
   {
     id: "eddie",
-    label: "Eddie Oliver — TOEIC Master",
+    label: "Eddie Oliver",
+    specialty: "TOEIC Master",
+    description: "Tiếng Anh thương mại, email, và luyện TOEIC.",
     avatar: EddieAvatar,
     buildInstructions({ consecutiveVietnameseTurns }) {
       const lines = [

@@ -10,6 +10,7 @@ import { normalizeDictionaryQuery } from "@/lib/dictionary/normalize-query";
 import { DictionaryResultCard } from "@/components/dictionary/DictionaryResultCard";
 import { DictionarySearchPanel } from "@/components/dictionary/DictionarySearchPanel";
 import { ThesaurusSheet } from "@/components/dictionary/ThesaurusSheet";
+import { RecentLookups, getRecentLookups, pushRecentLookup } from "@/components/dictionary/RecentLookups";
 import type { VocabularyWithNearby } from "@/lib/schemas/vocabulary";
 
 const QUERY_PATTERN = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
@@ -23,8 +24,14 @@ export default function DictionaryPage() {
   const [saved, setSaved] = useState<boolean | null>(null);
   const [currentQuery, setCurrentQuery] = useState<string | null>(null);
   const [isThesaurusOpen, setIsThesaurusOpen] = useState(false);
+  const [recentWords, setRecentWords] = useState<string[]>([]);
   const latestRequestIdRef = useRef(0);
   const initialSearchDone = useRef(false);
+
+  // Load recent lookups on mount
+  useEffect(() => {
+    setRecentWords(getRecentLookups());
+  }, []);
 
   // Auto-search on mount when URL has ?q= (bookmark/link support)
   useEffect(() => {
@@ -66,6 +73,9 @@ export default function DictionaryPage() {
       setResult(payload.data);
       setSaved(payload.saved);
       setCurrentQuery(cacheKey);
+      // Push to recent lookups (AC #1, #4)
+      pushRecentLookup(payload.data.headword);
+      setRecentWords(getRecentLookups());
     } catch (error) {
       if (requestId !== latestRequestIdRef.current) return;
 
@@ -115,6 +125,7 @@ export default function DictionaryPage() {
           }}
         >
           <div>
+            <RecentLookups words={recentWords} onSelect={handleSubmit} />
             <DictionarySearchPanel initialValue={q} onSubmit={handleSubmit} isLoading={isLoading} />
           </div>
           <div>
