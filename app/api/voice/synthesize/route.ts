@@ -9,11 +9,32 @@ import { auth } from "@/lib/auth";
  *
  * Body: { text: string, speed?: number }
  * Requires OPENAI_DIRECT_API_KEY env var (direct OpenAI key, not OpenRouter).
+ *
+ * Rate limited to 10 calls per user per minute (~$0.015/1K chars).
  */
+
+// Simple in-memory rate limiter (resets on server restart)
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_MAX = 10;
+const RATE_LIMIT_WINDOW_MS = 60_000;
+
 export async function POST(request: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Rate limit check
+  const now = Date.now();
+  const userId = session.user.id;
+  const entry = rateLimitMap.get(userId);
+  if (entry && entry.resetAt > now) {
+    if (entry.count >= RATE_LIMIT_MAX) {
+      return Response.json({ error: "Rate limit exceeded. Try again later." }, { status: 429 });
+    }
+    entry.count++;
+  } else {
+    rateLimitMap.set(userId, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
   }
 
   const apiKey = process.env.OPENAI_DIRECT_API_KEY;

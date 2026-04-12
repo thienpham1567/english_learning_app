@@ -18,8 +18,12 @@ export function useTextToSpeech() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
-  // Always supported — it's server-side, just needs fetch
-  const isSupported = typeof window !== "undefined";
+  const [isSupported, setIsSupported] = useState(false);
+
+  // Detect support after mount to avoid SSR hydration mismatch
+  useEffect(() => {
+    setIsSupported(typeof window !== "undefined");
+  }, []);
 
   // Cleanup on unmount
   useEffect(() => {

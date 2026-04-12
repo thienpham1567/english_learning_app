@@ -22,11 +22,15 @@ export function useVoiceInput() {
   const chunksRef = useRef<Blob[]>([]);
   const streamRef = useRef<MediaStream | null>(null);
 
-  const isSupported =
-    typeof window !== "undefined" &&
-    typeof navigator !== "undefined" &&
-    !!navigator.mediaDevices?.getUserMedia &&
-    typeof MediaRecorder !== "undefined";
+  const [isSupported, setIsSupported] = useState(false);
+
+  // Detect support after mount to avoid SSR hydration mismatch
+  useEffect(() => {
+    setIsSupported(
+      !!navigator.mediaDevices?.getUserMedia &&
+      typeof MediaRecorder !== "undefined"
+    );
+  }, []);
 
   // Cleanup on unmount
   useEffect(() => {

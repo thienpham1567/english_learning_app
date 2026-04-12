@@ -152,14 +152,17 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const [voiceExchanges, setVoiceExchanges] = useState(0);
   const voiceModeRef = useRef(false);
   voiceModeRef.current = voiceMode;
+  const messagesRef = useRef(messages);
+  messagesRef.current = messages;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const sendRef = useRef<(text?: string) => Promise<void>>(null as any);
 
   // When Whisper transcription completes, populate input (or auto-send in voice mode)
   useEffect(() => {
     if (voice.transcript && !voice.isTranscribing) {
       setInput(voice.transcript);
-      // In voice mode, auto-send after transcription
       if (voiceModeRef.current) {
-        setTimeout(() => send(voice.transcript), 100);
+        setTimeout(() => sendRef.current(voice.transcript), 100);
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -413,18 +416,19 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
 
       // Voice mode: auto-speak the last assistant message after streaming done
       if (voiceModeRef.current && tts.isSupported) {
-        // Small delay to let state settle
+        // Use ref to get latest messages (closure would be stale)
         setTimeout(() => {
-          const latestMessages = document.querySelectorAll('.chat-markdown');
-          const lastAiMsg = latestMessages[latestMessages.length - 1];
-          if (lastAiMsg?.textContent) {
-            tts.speak(lastAiMsg.textContent);
+          const latest = messagesRef.current;
+          const lastAssistant = [...latest].reverse().find(m => m.role === "assistant");
+          if (lastAssistant && "text" in lastAssistant && lastAssistant.text) {
+            tts.speak(lastAssistant.text);
             setVoiceExchanges((c) => c + 1);
           }
         }, 300);
       }
     }
   };
+  sendRef.current = send;
 
   const hasMessages = messages.length > 0;
 

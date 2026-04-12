@@ -26,6 +26,7 @@ export function logActivity(
       xpEarned,
       metadata,
     })
+    .execute()
     .catch((err) => {
       console.warn("[logActivity] Failed to log activity:", err);
     });
