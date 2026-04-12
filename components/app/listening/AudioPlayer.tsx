@@ -62,10 +62,13 @@ export function AudioPlayer({ audioUrl, speed, replaysUsed, maxReplays, onReplay
     if (!audioRef.current) return;
     if (isPlaying) {
       audioRef.current.pause();
+      setIsPlaying(false);
     } else {
-      audioRef.current.play();
+      audioRef.current.play().catch(() => {
+        // Browser may block autoplay — silently fail
+      });
+      setIsPlaying(true);
     }
-    setIsPlaying(!isPlaying);
   }, [isPlaying]);
 
   const handleSeek = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,7 +82,7 @@ export function AudioPlayer({ audioUrl, speed, replaysUsed, maxReplays, onReplay
   const handleReplay = useCallback(() => {
     if (onReplay() && audioRef.current) {
       audioRef.current.currentTime = 0;
-      audioRef.current.play();
+      audioRef.current.play().catch(() => {});
       setIsPlaying(true);
     }
   }, [onReplay]);
