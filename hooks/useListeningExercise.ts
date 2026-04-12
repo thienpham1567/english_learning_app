@@ -21,7 +21,7 @@ export function useListeningExercise() {
 
   const MAX_REPLAYS = 3;
 
-  const generate = useCallback(async (level: CefrLevel, exerciseType: ExerciseType) => {
+  const generate = useCallback(async (level: CefrLevel, exerciseType: ExerciseType, examMode?: string) => {
     setState("loading");
     setError(null);
     setResult(null);
@@ -30,7 +30,7 @@ export function useListeningExercise() {
       const res = await fetch("/api/listening/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ level, exerciseType }),
+        body: JSON.stringify({ level, exerciseType, examMode }),
       });
 
       if (!res.ok) {

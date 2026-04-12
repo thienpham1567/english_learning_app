@@ -8,15 +8,16 @@ import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { GenerateInputSchema } from "@/lib/listening/types";
 import type { ListeningQuestion } from "@/lib/db/schema";
+import { getExamContext, parseExamMode } from "@/lib/exam-mode/context";
 
-const SYSTEM_PROMPT = `You are an English listening comprehension exercise creator.
+function buildListeningSystemPrompt(examMode: "toeic" | "ielts"): string {
+  const ctx = getExamContext(examMode);
+  return `You are an English listening comprehension exercise creator for ${ctx.label} preparation.
 Generate a short English passage and multiple-choice comprehension questions.
 
 RULES:
 - Passage length: A1/A2 = 40-80 words, B1/B2 = 80-120 words, C1/C2 = 100-150 words
-- A1/A2 topics: daily life, greetings, shopping, weather
-- B1/B2 topics: travel, work, health, education
-- C1/C2 topics: business, technology, science, current events
+${ctx.listeningPromptSuffix}
 - Generate exactly 4 questions testing listening comprehension
 - Each question has 4 options with exactly 1 correct answer
 - Questions should test: main idea, details, inference, vocabulary in context
@@ -28,6 +29,7 @@ Return ONLY valid JSON (no markdown fences):
     { "question": "What is the main idea?", "options": ["A", "B", "C", "D"], "correctIndex": 0 }
   ]
 }`;
+}
 
 /**
  * POST /api/listening/generate
@@ -52,15 +54,16 @@ export async function POST(request: Request) {
       return Response.json({ error: "Invalid input", details: parsed.error.flatten() }, { status: 400 });
     }
 
-    const { level, exerciseType } = parsed.data;
+    const { level, exerciseType, examMode: rawMode } = parsed.data;
     const userId = session.user.id;
+    const examMode = parseExamMode(rawMode);
 
     // Step 1: Generate passage + questions via AI
     const completion = await openAiClient.chat.completions.create({
       model: openAiConfig.chatModel,
       messages: [
-        { role: "system", content: SYSTEM_PROMPT },
-        { role: "user", content: `Generate a ${level} level listening exercise. Exercise type: ${exerciseType}.` },
+        { role: "system", content: buildListeningSystemPrompt(examMode) },
+        { role: "user", content: `Generate a ${level} level ${examMode.toUpperCase()} listening exercise. Exercise type: ${exerciseType}.` },
       ],
       temperature: 0.8,
       response_format: { type: "json_object" },

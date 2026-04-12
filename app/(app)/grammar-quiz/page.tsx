@@ -4,6 +4,7 @@ import { useState } from "react";
 import { BulbOutlined, HistoryOutlined } from "@ant-design/icons";
 
 import { useGrammarQuiz } from "@/hooks/useGrammarQuiz";
+import { useExamMode } from "@/components/app/shared/ExamModeProvider";
 import { CEFRPath } from "@/components/app/grammar-quiz/CEFRPath";
 import { QuestionCard } from "@/components/app/grammar-quiz/QuestionCard";
 import { ScoreSummary } from "@/components/app/grammar-quiz/ScoreSummary";
@@ -31,6 +32,7 @@ export default function GrammarQuizPage() {
     retryQuiz,
     newQuiz,
   } = useGrammarQuiz();
+  const { examMode } = useExamMode();
   const [historyOpen, setHistoryOpen] = useState(false);
 
   return (
@@ -161,7 +163,7 @@ export default function GrammarQuizPage() {
               <CEFRPath
                 selected={level}
                 onSelect={selectLevel}
-                onStart={() => generateQuiz()}
+                onStart={() => generateQuiz(undefined, examMode)}
                 isLoading={state === "loading"}
               />
             </div>

@@ -32,14 +32,14 @@ export function useGrammarQuiz() {
   }, []);
 
   const generateQuiz = useCallback(
-    async (quizLevel?: string) => {
+    async (quizLevel?: string, examMode?: string) => {
       const targetLevel = quizLevel ?? level;
       setState("loading");
       setError(null);
       try {
         const { data } = await http.post<{ questions: GrammarQuestion[] }>(
           "/grammar-quiz/generate",
-          { level: targetLevel, count: 10 },
+          { level: targetLevel, count: 10, examMode },
         );
         setQuestions(data.questions);
         setAnswers(new Array(data.questions.length).fill(null));

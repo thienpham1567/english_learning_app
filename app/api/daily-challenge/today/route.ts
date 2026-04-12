@@ -3,17 +3,21 @@ import { eq, and } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { dailyChallenge, userStreak } from "@/lib/db/schema";
+import { dailyChallenge, userStreak, userPreferences } from "@/lib/db/schema";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { ChallengeGenerationSchema } from "@/lib/daily-challenge/schema";
 import { getBadges } from "@/lib/daily-challenge/badges";
+import { getExamContext } from "@/lib/exam-mode/context";
+import type { ExamMode } from "@/components/app/shared/ExamModeProvider";
 
 function getVnDate(): string {
   return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Ho_Chi_Minh" });
 }
 
-const SYSTEM_PROMPT = `You are a daily English challenge generator.
+function buildChallengeSystemPrompt(examMode: ExamMode): string {
+  const ctx = getExamContext(examMode);
+  return `You are a daily English challenge generator for ${ctx.label} preparation.
 Generate exactly 5 mini-exercises mixing 2-3 of these types:
 
 1. "fill-in-blank": A sentence with _____ and 4 options (correctIndex 0-3)
@@ -22,7 +26,7 @@ Generate exactly 5 mini-exercises mixing 2-3 of these types:
 4. "error-correction": Sentence with a grammar error, identify the wrong word and its correction
 
 Each exercise needs an "instruction" field in Vietnamese telling the learner what to do.
-Difficulty: intermediate (B1-B2). Topics: everyday situations, work, travel, education.
+Difficulty: intermediate (B1-B2). ${ctx.dailyChallengeTopics}
 
 Return ONLY valid JSON:
 {
@@ -49,6 +53,7 @@ Return ONLY valid JSON:
     }
   ]
 }`;
+}
 
 export async function GET() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -57,6 +62,14 @@ export async function GET() {
   }
 
   const vnToday = getVnDate();
+
+  // Fetch user's exam mode preference
+  const prefRows = await db
+    .select()
+    .from(userPreferences)
+    .where(eq(userPreferences.userId, session.user.id))
+    .limit(1);
+  const examMode: ExamMode = (prefRows[0]?.examMode as ExamMode) ?? "toeic";
 
   // Check if today's challenge already exists
   const existing = await db
@@ -111,7 +124,7 @@ export async function GET() {
         temperature: 0.8,
         response_format: { type: "json_object" },
         messages: [
-          { role: "system", content: SYSTEM_PROMPT },
+          { role: "system", content: buildChallengeSystemPrompt(examMode) },
           {
             role: "user",
             content: `Generate today's daily English challenge. Date: ${vnToday}. Return JSON only.`,

@@ -15,6 +15,7 @@ export type ExerciseType = (typeof EXERCISE_TYPES)[number];
 export const GenerateInputSchema = z.object({
   level: z.enum(CEFR_LEVELS),
   exerciseType: z.enum(EXERCISE_TYPES).default("comprehension"),
+  examMode: z.enum(["toeic", "ielts"]).optional(),
 });
 
 export const SubmitInputSchema = z.object({

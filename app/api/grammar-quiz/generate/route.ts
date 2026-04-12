@@ -5,19 +5,24 @@ import { auth } from "@/lib/auth";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { QuizGenerationResponseSchema } from "@/lib/grammar-quiz/schema";
+import { getExamContext, parseExamMode } from "@/lib/exam-mode/context";
 
 const RequestBodySchema = z.object({
   level: z.enum(["easy", "medium", "hard"]),
   count: z.number().int().min(1).max(20).default(10),
+  examMode: z.enum(["toeic", "ielts"]).optional(),
 });
 
-const SYSTEM_PROMPT = `You are a TOEIC grammar quiz generator.
-Generate multiple-choice questions that follow the TOEIC Reading Part 5 (Incomplete Sentences) format.
+function buildGrammarSystemPrompt(examMode: "toeic" | "ielts"): string {
+  const ctx = getExamContext(examMode);
+  return `You are a ${ctx.label} grammar quiz generator.
+Generate multiple-choice questions for ${ctx.label} exam preparation.
+${ctx.grammarPromptSuffix}
+
 Each question presents a sentence with a blank that must be filled with the correct word or phrase.
 Each question must have exactly 4 options with exactly one correct answer.
 Provide the grammar explanation in both English and Vietnamese (separate fields).
 Also provide exactly 2 short example sentences demonstrating the correct grammar usage.
-Topics should cover: verb forms/tenses, prepositions, conjunctions, relative pronouns, word forms (noun/verb/adjective/adverb), articles, conditionals, passive voice, and other common TOEIC grammar points.
 
 Difficulty levels:
 - easy: Basic grammar (simple tenses, common prepositions, basic word forms)
@@ -38,6 +43,7 @@ IMPORTANT: Return ONLY valid JSON matching this exact schema:
     }
   ]
 }`;
+}
 
 // Simple in-memory rate limiter: max 5 requests per user per minute
 const RATE_LIMIT_WINDOW_MS = 60_000;
@@ -73,7 +79,8 @@ export async function POST(request: Request) {
     );
   }
 
-  const { level, count } = parsed.data;
+  const { level, count, examMode: rawMode } = parsed.data;
+  const examMode = parseExamMode(rawMode);
 
   // Try up to 2 times to get valid output from AI
   for (let attempt = 0; attempt < 2; attempt++) {
@@ -83,10 +90,10 @@ export async function POST(request: Request) {
         temperature: 0.7,
         response_format: { type: "json_object" },
         messages: [
-          { role: "system", content: SYSTEM_PROMPT },
+          { role: "system", content: buildGrammarSystemPrompt(examMode) },
           {
             role: "user",
-            content: `Generate exactly ${count} TOEIC Part 5 grammar questions at "${level}" difficulty. Return JSON only.`,
+            content: `Generate exactly ${count} ${examMode === "ielts" ? "IELTS-style" : "TOEIC Part 5"} grammar questions at "${level}" difficulty. Return JSON only.`,
           },
         ],
       });

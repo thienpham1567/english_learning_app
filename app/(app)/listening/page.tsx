@@ -5,6 +5,7 @@ import { SoundOutlined } from "@ant-design/icons";
 
 import { useListeningExercise } from "@/hooks/useListeningExercise";
 import { useMiniDictionary } from "@/hooks/useMiniDictionary";
+import { useExamMode } from "@/components/app/shared/ExamModeProvider";
 import { LevelSelector } from "@/components/app/listening/LevelSelector";
 import { AudioPlayer } from "@/components/app/listening/AudioPlayer";
 import { QuestionCards } from "@/components/app/listening/QuestionCards";
@@ -32,6 +33,7 @@ export default function ListeningPage() {
 
   // MiniDictionary integration for transcript word lookup
   const miniDict = useMiniDictionary();
+  const { examMode } = useExamMode();
   const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
 
   const handleWordSaved = useCallback((word: string) => {
@@ -105,7 +107,7 @@ export default function ListeningPage() {
 
         {/* Idle: Level Selector */}
         {(state === "idle" || state === "loading") && (
-          <LevelSelector onStart={generate} isLoading={state === "loading"} />
+          <LevelSelector onStart={(level, type) => generate(level, type, examMode)} isLoading={state === "loading"} />
         )}
 
         {/* Active: Audio + Questions */}
