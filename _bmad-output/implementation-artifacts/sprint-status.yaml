@@ -66,7 +66,7 @@ development_status:
   epic-3-retrospective: optional
 
   # ── Epic 4: Chatbot Intelligence & Sign-In Upgrade ──
-  epic-4: in-progress
+  epic-4: done
   4-1-minidictionary-component: done
   4-2-chatbot-word-highlighting: done
   4-3-chatbot-persona-cards: done
