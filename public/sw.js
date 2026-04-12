@@ -84,3 +84,43 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 });
+
+// Push notification: display notification from server payload
+self.addEventListener("push", (event) => {
+  if (!event.data) return;
+
+  try {
+    const data = event.data.json();
+    event.waitUntil(
+      self.registration.showNotification(data.title || "ThienGlish", {
+        body: data.body || "",
+        icon: data.icon || "/icon-192.png",
+        badge: data.badge || "/icon-192.png",
+        data: data.data || {},
+        vibrate: [200, 100, 200],
+      })
+    );
+  } catch {
+    // Invalid push payload — ignore
+  }
+});
+
+// Notification click: navigate to app
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  const url = event.notification.data?.url || "/home";
+
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clients) => {
+      // Focus existing tab if available
+      for (const client of clients) {
+        if (client.url.includes(self.location.origin) && "focus" in client) {
+          client.navigate(url);
+          return client.focus();
+        }
+      }
+      // Otherwise open new tab
+      return self.clients.openWindow(url);
+    })
+  );
+});

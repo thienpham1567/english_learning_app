@@ -156,3 +156,16 @@ export const listeningExercise = pgTable("listening_exercise", {
 });
 
 export type ListeningExerciseRow = typeof listeningExercise.$inferSelect;
+
+/** Push Subscription — Web Push notification endpoints */
+export const pushSubscription = pgTable("push_subscription", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  endpoint: text("endpoint").notNull(),
+  p256dh: text("p256dh").notNull(),
+  auth: text("auth").notNull(),
+  enabled: boolean("enabled").notNull().default(true),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export type PushSubscriptionRow = typeof pushSubscription.$inferSelect;
