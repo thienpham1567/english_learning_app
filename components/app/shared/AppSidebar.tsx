@@ -20,6 +20,8 @@ import {
   BarChartOutlined,
   SoundOutlined,
   FileTextOutlined,
+  TrophyOutlined,
+  SwapOutlined,
 } from "@ant-design/icons";
 import { useTheme } from "@/components/app/shared/ThemeProvider";
 import { useExamMode } from "@/components/app/shared/ExamModeProvider";
@@ -229,7 +231,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
               aria-label={`Switch to ${examMode === "toeic" ? "IELTS" : "TOEIC"} mode`}
               style={{ marginBottom: 4 }}
             >
-              <span style={{ fontSize: 16 }}>{examMode === "toeic" ? "📊" : "🎓"}</span>
+              <span style={{ fontSize: 16 }}>{examMode === "toeic" ? <BarChartOutlined /> : <TrophyOutlined />}</span>
               {isExpanded && (
                 <span
                   style={{
@@ -251,7 +253,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
                       marginLeft: "auto",
                     }}
                   >
-                    ⇄
+                    <SwapOutlined style={{ fontSize: 10 }} />
                   </span>
                 </span>
               )}

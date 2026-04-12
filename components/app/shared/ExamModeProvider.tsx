@@ -21,8 +21,8 @@ const ExamModeContext = createContext<ExamModeContextType>({
 });
 
 const MODE_META: Record<ExamMode, { label: string; icon: string }> = {
-  toeic: { label: "TOEIC", icon: "📊" },
-  ielts: { label: "IELTS", icon: "🎓" },
+  toeic: { label: "TOEIC", icon: "bar-chart" },
+  ielts: { label: "IELTS", icon: "trophy" },
 };
 
 export function ExamModeProvider({ children }: { children: ReactNode }) {
