@@ -3,10 +3,9 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
+import { BoundedCache } from "@/lib/reading/utils";
 
-type CacheEntry = { data: unknown; ts: number };
-const grammarCache = new Map<string, CacheEntry>();
-const CACHE_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
+const grammarCache = new BoundedCache<unknown>(500, 24 * 60 * 60 * 1000); // 500 entries, 24h TTL
 
 function hashParagraph(text: string): string {
   let hash = 0;
@@ -29,14 +28,15 @@ export async function POST(req: Request) {
   const body = await req.json();
   const paragraph = body.paragraph as string;
 
-  if (!paragraph || paragraph.length < 10) {
+  // Input validation — prevent prompt injection and excessive token costs
+  if (!paragraph || paragraph.length < 10 || paragraph.length > 2000) {
     return Response.json({ patterns: [] });
   }
 
   const cacheKey = hashParagraph(paragraph);
   const cached = grammarCache.get(cacheKey);
-  if (cached && Date.now() - cached.ts < CACHE_TTL_MS) {
-    return Response.json(cached.data);
+  if (cached) {
+    return Response.json(cached);
   }
 
   try {
@@ -66,7 +66,7 @@ If no notable patterns found, return { "patterns": [] }`;
     const content = completion.choices[0]?.message?.content ?? '{"patterns":[]}';
     const data = JSON.parse(content);
 
-    grammarCache.set(cacheKey, { data, ts: Date.now() });
+    grammarCache.set(cacheKey, data);
 
     return Response.json(data);
   } catch (err) {

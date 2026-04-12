@@ -1,36 +1,13 @@
 import { NextRequest } from "next/server";
-
 import { headers } from "next/headers";
+
 import { auth } from "@/lib/auth";
+import { stripHtml, estimateDifficulty, BoundedCache } from "@/lib/reading/utils";
 
 const GUARDIAN_API_KEY = process.env.GUARDIAN_API_KEY ?? "test";
 const GUARDIAN_BASE = "https://content.guardianapis.com";
-const CACHE_TTL_MS = 5 * 60 * 1000; // 5 minutes
 
-type CacheEntry = { data: unknown; ts: number };
-const cache = new Map<string, CacheEntry>();
-
-function estimateDifficulty(text: string): "B1" | "B2" | "C1" {
-  const words = text.split(/\s+/).filter(Boolean);
-  if (words.length === 0) return "B1";
-  const avgLen = words.reduce((s, w) => s + w.length, 0) / words.length;
-  if (avgLen < 4.8) return "B1";
-  if (avgLen < 5.5) return "B2";
-  return "C1";
-}
-
-function stripHtml(html: string): string {
-  return html
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/\s+/g, " ")
-    .trim();
-}
+const cache = new BoundedCache<unknown>(100, 5 * 60 * 1000); // 100 entries, 5-min TTL
 
 /**
  * GET /api/reading/articles
@@ -50,8 +27,8 @@ export async function GET(req: NextRequest) {
 
   const cacheKey = `articles:${section}:${page}:${pageSize}`;
   const cached = cache.get(cacheKey);
-  if (cached && Date.now() - cached.ts < CACHE_TTL_MS) {
-    return Response.json(cached.data);
+  if (cached) {
+    return Response.json(cached);
   }
 
   try {
@@ -102,7 +79,7 @@ export async function GET(req: NextRequest) {
       totalPages: json.response?.pages ?? 1,
     };
 
-    cache.set(cacheKey, { data, ts: Date.now() });
+    cache.set(cacheKey, data);
 
     return Response.json(data);
   } catch (err) {

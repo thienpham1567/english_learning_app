@@ -1,35 +1,13 @@
 import { NextRequest } from "next/server";
 import { headers } from "next/headers";
+
 import { auth } from "@/lib/auth";
+import { stripHtml, estimateDifficulty, BoundedCache } from "@/lib/reading/utils";
 
 const GUARDIAN_API_KEY = process.env.GUARDIAN_API_KEY ?? "test";
 const GUARDIAN_BASE = "https://content.guardianapis.com";
 
-type CacheEntry = { data: unknown; ts: number };
-const articleCache = new Map<string, CacheEntry>();
-const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
-
-function stripHtml(html: string): string {
-  return html
-    .replace(/<[^>]+>/g, " ")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/\s+/g, " ")
-    .trim();
-}
-
-function estimateDifficulty(text: string): "B1" | "B2" | "C1" {
-  const words = text.split(/\s+/).filter(Boolean);
-  if (words.length === 0) return "B1";
-  const avgLen = words.reduce((s, w) => s + w.length, 0) / words.length;
-  if (avgLen < 4.8) return "B1";
-  if (avgLen < 5.5) return "B2";
-  return "C1";
-}
+const articleCache = new BoundedCache<unknown>(200, 60 * 60 * 1000); // 200 entries, 1-hour TTL
 
 /**
  * GET /api/reading/article/[id]
@@ -47,10 +25,9 @@ export async function GET(
   const { id } = await params;
   const articleId = decodeURIComponent(id);
 
-  // Check cache
   const cached = articleCache.get(articleId);
-  if (cached && Date.now() - cached.ts < CACHE_TTL_MS) {
-    return Response.json(cached.data);
+  if (cached) {
+    return Response.json(cached);
   }
 
   try {
@@ -96,7 +73,7 @@ export async function GET(
       bodyText,
     };
 
-    articleCache.set(articleId, { data, ts: Date.now() });
+    articleCache.set(articleId, data);
 
     return Response.json(data);
   } catch (err) {

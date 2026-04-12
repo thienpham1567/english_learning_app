@@ -63,8 +63,12 @@ export default function ArticleReaderPage() {
   const [grammarLoading, setGrammarLoading] = useState<Set<number>>(new Set());
   const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
   const [wordsLookedUp, setWordsLookedUp] = useState(0);
+
+  // Refs to avoid stale closures in IntersectionObserver
   const observerRef = useRef<IntersectionObserver | null>(null);
   const paragraphRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const analyzedRef = useRef<Set<number>>(new Set()); // tracks which paragraphs have been analyzed
+  const pendingRef = useRef<Set<number>>(new Set());  // tracks in-flight requests
 
   // Mini dictionary
   const miniDict = useMiniDictionary();
@@ -73,6 +77,8 @@ export default function ArticleReaderPage() {
   useEffect(() => {
     if (!articleId) return;
     setLoading(true);
+    analyzedRef.current.clear();
+    pendingRef.current.clear();
     fetch(`/api/reading/article/${articleId}`)
       .then((r) => {
         if (!r.ok) throw new Error("Not found");
@@ -83,10 +89,13 @@ export default function ArticleReaderPage() {
       .finally(() => setLoading(false));
   }, [articleId]);
 
-  // Grammar analysis via IntersectionObserver (lazy load)
+  // Grammar analysis — uses refs to prevent re-trigger
   const analyzeGrammar = useCallback(async (index: number, text: string) => {
-    if (grammarResults[index] || grammarLoading.has(index)) return;
+    if (analyzedRef.current.has(index) || pendingRef.current.has(index)) return;
+
+    pendingRef.current.add(index);
     setGrammarLoading((prev) => new Set(prev).add(index));
+
     try {
       const res = await fetch("/api/reading/grammar", {
         method: "POST",
@@ -94,18 +103,22 @@ export default function ArticleReaderPage() {
         body: JSON.stringify({ paragraph: text }),
       });
       const data = await res.json();
+      analyzedRef.current.add(index);
       setGrammarResults((prev) => ({ ...prev, [index]: data.patterns ?? [] }));
     } catch {
+      analyzedRef.current.add(index);
       setGrammarResults((prev) => ({ ...prev, [index]: [] }));
     } finally {
+      pendingRef.current.delete(index);
       setGrammarLoading((prev) => {
         const next = new Set(prev);
         next.delete(index);
         return next;
       });
     }
-  }, [grammarResults, grammarLoading]);
+  }, []); // No state dependencies — uses refs for guards
 
+  // IntersectionObserver — stable, no re-creation on state changes
   useEffect(() => {
     if (!article) return;
 
@@ -138,6 +151,21 @@ export default function ArticleReaderPage() {
       const rect = (e.target as HTMLElement).getBoundingClientRect();
       miniDict.openForWord(cleaned, rect);
       setWordsLookedUp((prev) => prev + 1);
+    },
+    [miniDict],
+  );
+
+  // Keyboard handler for accessibility
+  const handleWordKeyDown = useCallback(
+    (word: string, e: React.KeyboardEvent<HTMLSpanElement>) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        const cleaned = word.replace(/[^a-zA-Z'-]/g, "").toLowerCase();
+        if (cleaned.length < 2) return;
+        const rect = (e.target as HTMLElement).getBoundingClientRect();
+        miniDict.openForWord(cleaned, rect);
+        setWordsLookedUp((prev) => prev + 1);
+      }
     },
     [miniDict],
   );
@@ -226,14 +254,15 @@ export default function ArticleReaderPage() {
 
         {/* Thumbnail */}
         {article.thumbnail && (
-          <div
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={article.thumbnail}
+            alt={article.title}
             style={{
               width: "100%",
               height: 280,
               borderRadius: "var(--radius-lg)",
-              backgroundImage: `url(${article.thumbnail})`,
-              backgroundSize: "cover",
-              backgroundPosition: "center",
+              objectFit: "cover",
             }}
           />
         )}
@@ -260,6 +289,8 @@ export default function ArticleReaderPage() {
                     <span
                       key={ti}
                       onClick={(e) => handleWordClick(token, e)}
+                      onKeyDown={(e) => handleWordKeyDown(token, e)}
+                      className="reading-word"
                       style={{
                         cursor: "pointer",
                         borderBottom: isSaved
@@ -268,14 +299,6 @@ export default function ArticleReaderPage() {
                         transition: "border-color 0.2s, background 0.2s",
                         borderRadius: 2,
                         paddingBottom: 1,
-                      }}
-                      onMouseEnter={(e) => {
-                        (e.target as HTMLElement).style.borderBottomColor = "var(--accent-muted)";
-                        (e.target as HTMLElement).style.background = "var(--accent-light)";
-                      }}
-                      onMouseLeave={(e) => {
-                        (e.target as HTMLElement).style.borderBottomColor = isSaved ? "var(--accent)" : "transparent";
-                        (e.target as HTMLElement).style.background = "transparent";
                       }}
                       role="button"
                       tabIndex={0}
