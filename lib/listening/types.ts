@@ -28,7 +28,6 @@ export interface ListeningExerciseResponse {
   id: string;
   level: CefrLevel;
   exerciseType: ExerciseType;
-  passage: string;
   audioUrl: string;
   questions: {
     question: string;

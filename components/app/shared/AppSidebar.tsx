@@ -18,6 +18,7 @@ import {
   SunOutlined,
   MoonOutlined,
   BarChartOutlined,
+  SoundOutlined,
 } from "@ant-design/icons";
 import { useTheme } from "@/components/app/shared/ThemeProvider";
 import { useSidebarBadges } from "@/hooks/useSidebarBadges";
@@ -31,6 +32,7 @@ const navItems = [
   { href: "/grammar-quiz", label: "Ngữ pháp", icon: BulbOutlined },
   { href: "/writing-practice", label: "Luyện viết", icon: EditOutlined },
   { href: "/daily-challenge", label: "Thử thách", icon: FireOutlined },
+  { href: "/listening", label: "Luyện nghe", icon: SoundOutlined },
   { href: "/progress", label: "Tiến độ", icon: BarChartOutlined },
 ];
 
