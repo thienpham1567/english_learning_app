@@ -11,7 +11,14 @@ import { listeningExercise } from "@/lib/db/schema";
  * Generates and streams TTS audio for a listening exercise.
  * Uses OpenAI TTS API (tts-1 model, nova voice) via OPENAI_DIRECT_API_KEY.
  * Caches with long-lived Cache-Control since passage content is immutable.
+ * Rate limited to 5 calls per user per minute.
  */
+
+// Simple in-memory rate limiter (resets on server restart)
+const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_WINDOW_MS = 60_000;
+
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> },
@@ -19,6 +26,19 @@ export async function GET(
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
+  }
+
+  // Rate limit check
+  const now = Date.now();
+  const userId = session.user.id;
+  const entry = rateLimitMap.get(userId);
+  if (entry && entry.resetAt > now) {
+    if (entry.count >= RATE_LIMIT_MAX) {
+      return Response.json({ error: "Rate limit exceeded. Try again later." }, { status: 429 });
+    }
+    entry.count++;
+  } else {
+    rateLimitMap.set(userId, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
   }
 
   const { id } = await params;

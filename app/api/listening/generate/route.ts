@@ -1,18 +1,13 @@
 import { headers } from "next/headers";
-import { z } from "zod";
-import { eq } from "drizzle-orm";
+import { randomUUID } from "crypto";
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { listeningExercise } from "@/lib/db/schema";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
+import { GenerateInputSchema } from "@/lib/listening/types";
 import type { ListeningQuestion } from "@/lib/db/schema";
-
-const GenerateSchema = z.object({
-  level: z.enum(["A1", "A2", "B1", "B2", "C1", "C2"]),
-  exerciseType: z.enum(["comprehension", "dictation", "fill_blanks"]).default("comprehension"),
-});
 
 const SYSTEM_PROMPT = `You are an English listening comprehension exercise creator.
 Generate a short English passage and multiple-choice comprehension questions.
@@ -52,7 +47,7 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const parsed = GenerateSchema.safeParse(body);
+    const parsed = GenerateInputSchema.safeParse(body);
     if (!parsed.success) {
       return Response.json({ error: "Invalid input", details: parsed.error.flatten() }, { status: 400 });
     }
@@ -88,31 +83,27 @@ export async function POST(request: Request) {
       return Response.json({ error: "AI response missing required fields" }, { status: 502 });
     }
 
-    // Step 2: Save exercise to DB (audio will be generated on-demand via /api/listening/audio/[id])
+    // Step 2: Save exercise to DB with pre-generated ID for audioUrl
+    const id = randomUUID();
+    const audioUrl = `/api/listening/audio/${id}`;
+
     const [exercise] = await db
       .insert(listeningExercise)
       .values({
+        id,
         userId,
         level,
         exerciseType,
         passage: generated.passage,
-        audioUrl: "pending", // placeholder — updated below
+        audioUrl,
         questions: generated.questions,
       })
       .returning();
-
-    // Update audioUrl with the exercise id
-    const audioUrl = `/api/listening/audio/${exercise.id}`;
-    await db
-      .update(listeningExercise)
-      .set({ audioUrl })
-      .where(eq(listeningExercise.id, exercise.id));
 
     return Response.json({
       id: exercise.id,
       level,
       exerciseType,
-      passage: generated.passage,
       audioUrl,
       questions: generated.questions.map((q) => ({
         question: q.question,

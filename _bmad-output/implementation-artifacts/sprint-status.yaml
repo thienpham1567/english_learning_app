@@ -109,7 +109,7 @@ development_status:
 
   # ── Epic 10: Listening Practice Module ──
   epic-10: in-progress
-  10-1-listening-exercise-schema-api: review
+  10-1-listening-exercise-schema-api: done
   10-2-listening-practice-page: backlog
   10-3-listening-vocabulary-integration: backlog
   epic-10-retrospective: optional

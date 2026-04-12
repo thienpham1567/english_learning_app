@@ -1,6 +1,5 @@
 import { headers } from "next/headers";
 import { eq, and } from "drizzle-orm";
-import { z } from "zod";
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -8,11 +7,7 @@ import { listeningExercise } from "@/lib/db/schema";
 import type { ListeningQuestion } from "@/lib/db/schema";
 import { awardXP, XP_VALUES } from "@/lib/xp";
 import { logActivity } from "@/lib/activity-log";
-
-const SubmitSchema = z.object({
-  exerciseId: z.string().uuid(),
-  answers: z.array(z.number().int().min(0).max(3)),
-});
+import { SubmitInputSchema } from "@/lib/listening/types";
 
 /**
  * POST /api/listening/submit
@@ -28,7 +23,7 @@ export async function POST(request: Request) {
 
   try {
     const body = await request.json();
-    const parsed = SubmitSchema.safeParse(body);
+    const parsed = SubmitInputSchema.safeParse(body);
     if (!parsed.success) {
       return Response.json({ error: "Invalid input", details: parsed.error.flatten() }, { status: 400 });
     }
