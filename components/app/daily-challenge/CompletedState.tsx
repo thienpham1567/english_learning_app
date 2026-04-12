@@ -68,8 +68,10 @@ export function CompletedState({ challenge, streak, badges }: {
             key={i}
             size="small"
             style={{
-              borderColor: a.isCorrect ? "#86efac" : "#fca5a5",
-              background: a.isCorrect ? "#f0fdf4" : "#fef2f2",
+              borderColor: a.isCorrect ? "var(--success)" : "var(--error, #ef4444)",
+              background: a.isCorrect
+                ? "color-mix(in srgb, var(--success) 8%, var(--surface))"
+                : "color-mix(in srgb, var(--error, #ef4444) 8%, var(--surface))",
               borderRadius: "var(--radius)",
             }}
             styles={{ body: { padding: "6px 12px" } }}
@@ -81,12 +83,12 @@ export function CompletedState({ challenge, streak, badges }: {
                 ) : (
                   <CloseCircleFilled style={{ color: "#ef4444", fontSize: 14 }} />
                 )}
-                <Text style={{ fontSize: 13, color: a.isCorrect ? "#166534" : "#991b1b" }}>
+                <Text style={{ fontSize: 13, color: a.isCorrect ? "var(--success)" : "var(--error, #ef4444)" }}>
                   Câu {i + 1}: {a.isCorrect ? "Đúng" : "Sai"}
                 </Text>
               </Flex>
               {!a.isCorrect && a.explanation && (
-                <Text style={{ fontSize: 11, color: "#16a34a" }}>{a.explanation}</Text>
+                <Text style={{ fontSize: 11, color: "var(--success)" }}>{a.explanation}</Text>
               )}
             </Flex>
           </Card>

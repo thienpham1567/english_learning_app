@@ -53,9 +53,9 @@ export function ChallengeResults({
           <Title
             level={3}
             style={{
-              color: matched.tier === "big" ? "#fbbf24" : "#fff",
+              color: matched.tier === "big" ? "#fbbf24" : "var(--ink)",
               margin: 0,
-              textShadow: "0 2px 8px rgba(0,0,0,0.3)",
+              textShadow: "0 2px 8px rgba(0,0,0,0.15)",
             }}
           >
             {matched.emoji} {matched.label}
@@ -88,11 +88,11 @@ export function ChallengeResults({
               width: "100%",
               borderRadius: "var(--radius-xl)",
               borderColor: "var(--xp)",
-              background: "linear-gradient(135deg, #fffbeb, #fef3c7)",
+              background: "color-mix(in srgb, var(--xp) 8%, var(--surface))",
             }}
             styles={{ body: { padding: "12px 16px" } }}
           >
-            <Text strong style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 1.5, color: "#b45309" }}>
+            <Text strong style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 1.5, color: "var(--xp)" }}>
               🎊 Huy hiệu mới!
             </Text>
             <Flex gap={8} wrap style={{ marginTop: 8 }}>
@@ -104,8 +104,8 @@ export function ChallengeResults({
                     fontSize: 13,
                     padding: "4px 12px",
                     borderRadius: 999,
-                    border: "1px solid #fbbf24",
-                    background: "#fffde7",
+                    border: "1px solid var(--xp)",
+                    background: "color-mix(in srgb, var(--xp) 10%, var(--surface))",
                   }}
                 >
                   {b.emoji} {b.label}
@@ -123,8 +123,10 @@ export function ChallengeResults({
               size="small"
               className={`anim-fade-up anim-delay-${Math.min(i + 1, 8)} ${!a.isCorrect ? "anim-shake" : ""}`}
               style={{
-                borderColor: a.isCorrect ? "#86efac" : "#fca5a5",
-                background: a.isCorrect ? "#f0fdf4" : "#fef2f2",
+                borderColor: a.isCorrect ? "var(--success)" : "var(--error, #ef4444)",
+                background: a.isCorrect
+                  ? "color-mix(in srgb, var(--success) 8%, var(--surface))"
+                  : "color-mix(in srgb, var(--error, #ef4444) 8%, var(--surface))",
                 borderRadius: "var(--radius)",
               }}
               styles={{ body: { padding: "8px 12px" } }}
@@ -136,12 +138,12 @@ export function ChallengeResults({
                   ) : (
                     <CloseCircleFilled style={{ color: "#ef4444", fontSize: 16 }} />
                   )}
-                  <Text style={{ fontSize: 13, color: a.isCorrect ? "#166534" : "#991b1b" }}>
+                  <Text style={{ fontSize: 13, color: a.isCorrect ? "var(--success)" : "var(--error, #ef4444)" }}>
                     Câu {i + 1}: {a.isCorrect ? "Đúng" : "Sai"}
                   </Text>
                 </Flex>
                 {!a.isCorrect && a.explanation && (
-                  <Text style={{ fontSize: 11, color: "#16a34a", fontWeight: 500 }}>
+                  <Text style={{ fontSize: 11, color: "var(--success)", fontWeight: 500 }}>
                     {a.explanation}
                   </Text>
                 )}

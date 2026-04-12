@@ -23,32 +23,54 @@ export function FillInBlank({ data, instruction, onAnswer, disabled }: Props) {
 
   return (
     <div>
-      <p className="mb-2 text-xs font-medium text-(--accent)">{instruction}</p>
-      <p className="mb-4 text-base text-(--ink)">
+      <p style={{ marginBottom: 8, fontSize: 12, fontWeight: 500, color: "var(--accent)" }}>
+        {instruction}
+      </p>
+      <p style={{ marginBottom: 16, fontSize: 15, color: "var(--ink)", lineHeight: 1.7 }}>
         {data.sentence.split("_____").map((part, i, arr) => (
           <span key={i}>
             {part}
             {i < arr.length - 1 && (
-              <span className="inline-block rounded bg-(--accent)/10 px-2 py-0.5 font-semibold text-(--accent)">
+              <span
+                style={{
+                  display: "inline-block",
+                  borderRadius: 6,
+                  background: "color-mix(in srgb, var(--accent) 12%, transparent)",
+                  padding: "2px 10px",
+                  fontWeight: 600,
+                  color: "var(--accent)",
+                }}
+              >
                 _____
               </span>
             )}
           </span>
         ))}
       </p>
-      <div className="grid grid-cols-2 gap-2">
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
         {data.options.map((opt, i) => (
           <button
             key={i}
-            className={`rounded-lg border px-3 py-2 text-left text-sm transition ${
-              selected === i
-                ? "border-(--accent) bg-(--accent)/10 font-medium"
-                : "border-(--border) bg-(--surface) hover:border-(--accent)/40"
-            }`}
+            style={{
+              borderRadius: 10,
+              border: `1.5px solid ${selected === i ? "var(--accent)" : "var(--border)"}`,
+              background: selected === i
+                ? "color-mix(in srgb, var(--accent) 10%, transparent)"
+                : "var(--surface)",
+              padding: "10px 14px",
+              textAlign: "left",
+              fontSize: 14,
+              fontWeight: selected === i ? 600 : 400,
+              color: "var(--ink)",
+              cursor: disabled ? "default" : "pointer",
+              transition: "all 0.15s ease",
+            }}
             onClick={() => handleSelect(i)}
             disabled={disabled}
           >
-            <span className="mr-2 text-xs font-bold text-(--text-muted)">{LABELS[i]}</span>
+            <span style={{ marginRight: 8, fontSize: 12, fontWeight: 700, color: "var(--text-muted)" }}>
+              {LABELS[i]}
+            </span>
             {opt}
           </button>
         ))}

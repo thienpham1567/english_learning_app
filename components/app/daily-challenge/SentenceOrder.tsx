@@ -33,17 +33,45 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
 
   return (
     <div>
-      <p className="mb-2 text-xs font-medium text-(--accent)">{instruction}</p>
+      <p style={{ marginBottom: 8, fontSize: 12, fontWeight: 500, color: "var(--accent)" }}>
+        {instruction}
+      </p>
 
       {/* Selected words */}
-      <div className="mb-3 flex min-h-[48px] flex-wrap gap-1.5 rounded-lg border border-dashed border-(--border) bg-(--bg-deep) p-2.5">
+      <div
+        style={{
+          marginBottom: 12,
+          display: "flex",
+          flexWrap: "wrap",
+          minHeight: 48,
+          gap: 6,
+          borderRadius: 10,
+          border: "2px dashed var(--border)",
+          background: "var(--bg-deep)",
+          padding: 10,
+          alignItems: "flex-start",
+          alignContent: "flex-start",
+        }}
+      >
         {selected.length === 0 && (
-          <span className="text-xs text-(--text-muted)">Nhấn vào các từ bên dưới...</span>
+          <span style={{ fontSize: 12, color: "var(--text-muted)", padding: "4px 0" }}>
+            Nhấn vào các từ bên dưới...
+          </span>
         )}
         {selected.map((w, i) => (
           <button
             key={`s-${i}`}
-            className="rounded bg-(--accent)/10 px-2.5 py-1 text-sm font-medium text-(--accent)"
+            style={{
+              borderRadius: 8,
+              background: "color-mix(in srgb, var(--accent) 12%, transparent)",
+              padding: "5px 12px",
+              fontSize: 14,
+              fontWeight: 600,
+              color: "var(--accent)",
+              border: "none",
+              cursor: disabled ? "default" : "pointer",
+              transition: "all 0.15s ease",
+            }}
             onClick={() => removeWord(i)}
             disabled={disabled}
           >
@@ -53,11 +81,20 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
       </div>
 
       {/* Available words */}
-      <div className="flex flex-wrap gap-1.5">
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
         {available.map((w, i) => (
           <button
             key={`a-${i}`}
-            className="rounded-lg border border-(--border) bg-(--surface) px-2.5 py-1 text-sm transition hover:border-(--accent)/40"
+            style={{
+              borderRadius: 10,
+              border: "1.5px solid var(--border)",
+              background: "var(--surface)",
+              padding: "5px 12px",
+              fontSize: 14,
+              color: "var(--ink)",
+              cursor: disabled ? "default" : "pointer",
+              transition: "all 0.15s ease",
+            }}
             onClick={() => addWord(w, i)}
             disabled={disabled}
           >
@@ -68,7 +105,18 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
 
       {selected.length === data.scrambled.length && !disabled && (
         <button
-          className="mt-3 rounded-lg bg-(--accent) px-4 py-1.5 text-sm font-medium text-white"
+          style={{
+            marginTop: 14,
+            borderRadius: 10,
+            background: "var(--accent)",
+            padding: "8px 20px",
+            fontSize: 14,
+            fontWeight: 600,
+            color: "#fff",
+            border: "none",
+            cursor: "pointer",
+            transition: "all 0.15s ease",
+          }}
           onClick={handleSubmit}
         >
           Xác nhận

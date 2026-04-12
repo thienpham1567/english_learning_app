@@ -20,8 +20,8 @@ export function BadgeGallery({ badges }: Props) {
             padding: "4px 12px",
             borderRadius: "var(--radius)",
             fontSize: 13,
-            border: b.unlocked ? "1px solid #fbbf24" : "1px solid var(--border)",
-            background: b.unlocked ? "#fffde7" : "var(--bg-deep)",
+            border: b.unlocked ? "1px solid var(--xp)" : "1px solid var(--border)",
+            background: b.unlocked ? "color-mix(in srgb, var(--xp) 10%, var(--surface))" : "var(--bg-deep)",
             opacity: b.unlocked ? 1 : 0.5,
             filter: b.unlocked ? "none" : "grayscale(1)",
           }}
