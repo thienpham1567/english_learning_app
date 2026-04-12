@@ -7,14 +7,17 @@ import { pushSubscription, userStreak, flashcardProgress } from "@/lib/db/schema
 
 // VAPID keys — configured lazily to avoid build-time crash
 const VAPID_EMAIL = process.env.VAPID_EMAIL || "mailto:admin@thienglish.app";
+let vapidInitialized = false;
 
 function initWebPush() {
+  if (vapidInitialized) return;
   const pub = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
   const priv = process.env.VAPID_PRIVATE_KEY;
   if (!pub || !priv) {
     throw new Error("Missing VAPID keys");
   }
   webpush.setVapidDetails(VAPID_EMAIL, pub, priv);
+  vapidInitialized = true;
 }
 
 /**
@@ -58,6 +61,17 @@ export async function GET(request: Request) {
   let failed = 0;
   const staleEndpoints: string[] = [];
 
+  // Pre-fetch due flashcard counts for all users in one query (avoids N+1)
+  const dueCounts = await db
+    .select({
+      userId: flashcardProgress.userId,
+      count: sql<number>`count(*)`,
+    })
+    .from(flashcardProgress)
+    .where(sql`${flashcardProgress.nextReview} <= NOW()`)
+    .groupBy(flashcardProgress.userId);
+  const dueMap = new Map(dueCounts.map((r) => [r.userId, Number(r.count)]));
+
   for (const sub of subscriptions) {
     // Skip users who already completed activity today
     if (sub.lastCompletedDate === today) continue;
@@ -66,29 +80,16 @@ export async function GET(request: Request) {
     let title: string;
     let body: string;
 
-    if (sub.currentStreak && sub.currentStreak > 0) {
+    const dueCount = dueMap.get(sub.userId) ?? 0;
+    if (dueCount > 0) {
+      title = `📚 ${dueCount} flashcard đang chờ bạn ôn`;
+      body = "Ôn tập ngay để không quên từ vựng!";
+    } else if (sub.currentStreak && sub.currentStreak > 0) {
       title = `🔥 Streak ${sub.currentStreak} ngày!`;
       body = "Đừng để mất streak! Hoàn thành 1 bài tập ngay.";
     } else {
       title = "✨ Thử thách mỗi ngày đang chờ!";
       body = "Bắt đầu học tiếng Anh ngay hôm nay.";
-    }
-
-    // Check for due flashcards
-    try {
-      const dueResult = await db
-        .select({ count: sql<number>`count(*)` })
-        .from(flashcardProgress)
-        .where(
-          sql`${flashcardProgress.userId} = ${sub.userId} AND ${flashcardProgress.nextReview} <= NOW()`,
-        );
-      const dueCount = Number(dueResult[0]?.count ?? 0);
-      if (dueCount > 0) {
-        title = `📚 ${dueCount} flashcard đang chờ bạn ôn`;
-        body = "Ôn tập ngay để không quên từ vựng!";
-      }
-    } catch {
-      // Ignore flashcard query errors — send default message
     }
 
     // Send push notification

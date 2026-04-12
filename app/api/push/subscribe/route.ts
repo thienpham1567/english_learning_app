@@ -16,21 +16,37 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = await request.json();
-  const { endpoint, keys } = body;
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
 
-  if (!endpoint || !keys?.p256dh || !keys?.auth) {
+  const { endpoint, keys } = body as Record<string, unknown>;
+
+  if (
+    typeof endpoint !== "string" ||
+    !endpoint ||
+    !keys ||
+    typeof keys !== "object" ||
+    !("p256dh" in keys) ||
+    !("auth" in keys)
+  ) {
     return NextResponse.json({ error: "Invalid subscription" }, { status: 400 });
   }
 
-  // Upsert: delete any existing subscription for this endpoint, then insert
-  await db.delete(pushSubscription).where(eq(pushSubscription.endpoint, endpoint));
+  const { p256dh, auth: authKey } = keys as Record<string, string>;
 
+  // Atomic upsert using ON CONFLICT (requires unique index on endpoint)
   await db.insert(pushSubscription).values({
     userId: session.user.id,
     endpoint,
-    p256dh: keys.p256dh,
-    auth: keys.auth,
+    p256dh,
+    auth: authKey,
+  }).onConflictDoUpdate({
+    target: pushSubscription.endpoint,
+    set: { userId: session.user.id, p256dh, auth: authKey },
   });
 
   return NextResponse.json({ ok: true });
@@ -46,10 +62,16 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = await request.json();
-  const { endpoint } = body;
+  let body: unknown;
+  try {
+    body = await request.json();
+  } catch {
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
+  }
 
-  if (!endpoint) {
+  const { endpoint } = body as Record<string, unknown>;
+
+  if (typeof endpoint !== "string" || !endpoint) {
     return NextResponse.json({ error: "Missing endpoint" }, { status: 400 });
   }
 
