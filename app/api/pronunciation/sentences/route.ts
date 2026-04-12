@@ -26,25 +26,28 @@ export async function POST(request: Request) {
 
   let level = "intermediate";
   let count = 5;
-  let examMode: ExamMode = "toeic";
+  let examModeFromBody: string | undefined;
 
   try {
     const body = await request.json();
     if (body.level === "beginner" || body.level === "advanced") level = body.level;
     if (typeof body.count === "number" && body.count >= 1 && body.count <= 10) count = body.count;
-    examMode = parseExamMode(body.examMode);
+    examModeFromBody = body.examMode;
   } catch {
     // Use defaults
   }
 
-  // If no examMode in body, fetch from DB
-  if (!examMode || examMode === "toeic") {
+  // Use client-provided mode, otherwise fetch from DB
+  let examMode: ExamMode;
+  if (examModeFromBody === "toeic" || examModeFromBody === "ielts") {
+    examMode = examModeFromBody;
+  } else {
     const prefRows = await db
       .select()
       .from(userPreferences)
       .where(eq(userPreferences.userId, session.user.id))
       .limit(1);
-    if (prefRows[0]?.examMode) examMode = prefRows[0].examMode as ExamMode;
+    examMode = (prefRows[0]?.examMode as ExamMode) ?? "toeic";
   }
 
   const ctx = getExamContext(examMode);
@@ -94,6 +97,9 @@ Return ONLY valid JSON:
     }
 
     const parsed = JSON.parse(content);
+    if (!Array.isArray(parsed?.sentences) || parsed.sentences.length === 0) {
+      return Response.json({ error: "Invalid AI response format" }, { status: 502 });
+    }
     return Response.json(parsed);
   } catch (err) {
     console.error("[pronunciation/sentences] Error:", err);

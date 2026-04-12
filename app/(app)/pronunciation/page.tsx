@@ -12,6 +12,7 @@ import {
   InfoCircleOutlined,
   TrophyOutlined,
   BarChartOutlined,
+  BorderOutlined,
 } from "@ant-design/icons";
 import { Progress, Tag, Tooltip } from "antd";
 
@@ -96,9 +97,15 @@ export default function PronunciationPage() {
 
   // ─── Recording ───
   const startRecording = useCallback(async () => {
+    if (!navigator.mediaDevices?.getUserMedia) {
+      setError("Trình duyệt không hỗ trợ ghi âm. Vui lòng sử dụng Chrome hoặc Edge.");
+      return;
+    }
+
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream, { mimeType: "audio/webm" });
+      const mimeType = MediaRecorder.isTypeSupported("audio/webm") ? "audio/webm" : "audio/mp4";
+      const mediaRecorder = new MediaRecorder(stream, { mimeType });
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
 
@@ -471,7 +478,7 @@ export default function PronunciationPage() {
                   }}
                   aria-label="Dừng ghi âm"
                 >
-                  ⏹
+                  <BorderOutlined />
                 </button>
               )}
 
