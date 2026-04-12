@@ -17,9 +17,9 @@ Thêm voice I/O cho chatbot (nói tiếng Anh) và nâng cấp dashboard với S
 |---|---|---|---|---|---|
 | 1 | 8.1: Smart CTA "Bài Hôm Nay" | Epic 8 | 3 | ✅ DONE | None |
 | 2 | 8.2: Level System UI | Epic 8 | 3 | ✅ DONE | None |
-| 3 | 7.1: Voice Input Hook & Mic Button | Epic 7 | 5 | ⬜ TODO | None |
-| 4 | 7.2: Text-to-Speech for AI Responses | Epic 7 | 5 | ⬜ TODO | None |
-| 5 | 7.3: Voice Conversation Mode | Epic 7 | 8 | ⬜ TODO | 7.1, 7.2 |
+| 3 | 7.1: Voice Input Hook & Mic Button | Epic 7 | 5 | ✅ DONE | None |
+| 4 | 7.2: Text-to-Speech for AI Responses | Epic 7 | 5 | ✅ DONE | None |
+| 5 | 7.3: Voice Conversation Mode | Epic 7 | 8 | ✅ DONE | 7.1, 7.2 |
 
 **Total: 24 points**
 
