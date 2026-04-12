@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { eq, desc, and, sql, ilike } from "drizzle-orm";
+import { eq, desc, and, sql, ilike, inArray } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -122,12 +122,10 @@ export async function PATCH(request: Request) {
       return Response.json({ error: "No IDs provided" }, { status: 400 });
     }
 
-    for (const id of ids) {
-      await db
-        .update(errorLog)
-        .set({ isResolved: true, resolvedAt: new Date() })
-        .where(and(eq(errorLog.id, id), eq(errorLog.userId, session.user.id)));
-    }
+    await db
+      .update(errorLog)
+      .set({ isResolved: true, resolvedAt: new Date() })
+      .where(and(inArray(errorLog.id, ids), eq(errorLog.userId, session.user.id)));
 
     return Response.json({ resolved: ids.length });
   } catch (err) {

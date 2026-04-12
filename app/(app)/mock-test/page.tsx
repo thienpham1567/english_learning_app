@@ -14,6 +14,7 @@ import {
   BarChartOutlined,
   InfoCircleOutlined,
   FlagOutlined,
+  ReadOutlined,
 } from "@ant-design/icons";
 import { Progress, Tag, Tooltip, Collapse } from "antd";
 
@@ -52,20 +53,19 @@ export default function MockTestPage() {
 
   // ─── Timer ───
   useEffect(() => {
-    if (state === "active" && timeLeft > 0) {
-      timerRef.current = setInterval(() => {
-        setTimeLeft((prev) => {
-          if (prev <= 1) {
-            clearInterval(timerRef.current!);
-            setState("review");
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-      return () => clearInterval(timerRef.current!);
-    }
-  }, [state, timeLeft]);
+    if (state !== "active") return;
+    timerRef.current = setInterval(() => {
+      setTimeLeft((prev) => {
+        if (prev <= 1) {
+          clearInterval(timerRef.current!);
+          setState("review");
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => clearInterval(timerRef.current!);
+  }, [state]);
 
   const formatTime = (seconds: number) => {
     const m = Math.floor(seconds / 60);
@@ -125,7 +125,45 @@ export default function MockTestPage() {
   const submitTest = useCallback(() => {
     if (timerRef.current) clearInterval(timerRef.current);
     setState("review");
-  }, []);
+
+    // Log wrong answers to Error Notebook (fire-and-forget)
+    const wrongAnswers = questions
+      .map((q, i) => {
+        const isFillBlank = q.type === "fill-blank" || q.type === "fill_blank";
+        const userAns = isFillBlank
+          ? (fillBlankInputs[i] ?? "").trim()
+          : (q.options?.[answers[i] as number] ?? "(không trả lời)");
+        const correctAns = isFillBlank
+          ? (q.correctAnswer ?? "")
+          : (q.options?.[q.correctIndex ?? -1] ?? "");
+
+        const correct = isFillBlank
+          ? userAns.toLowerCase() === correctAns.toLowerCase()
+          : answers[i] === q.correctIndex;
+
+        if (correct) return null;
+
+        return {
+          sourceModule: "mock-test",
+          questionStem: q.stem,
+          options: q.options,
+          userAnswer: userAns || "(không trả lời)",
+          correctAnswer: correctAns,
+          explanationEn: q.explanationEn,
+          explanationVi: q.explanationVi,
+          grammarTopic: q.topic,
+        };
+      })
+      .filter(Boolean);
+
+    if (wrongAnswers.length > 0) {
+      fetch("/api/errors", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ errors: wrongAnswers }),
+      }).catch(() => {/* fire-and-forget */});
+    }
+  }, [questions, answers, fillBlankInputs]);
 
   // ─── Scoring ───
   const getScore = () => {
@@ -152,8 +190,12 @@ export default function MockTestPage() {
 
   const score = state === "review" ? getScore() : 0;
   const percentage = questions.length > 0 ? Math.round((score / questions.length) * 100) : 0;
-  const answeredCount = answers.filter((a) => a !== null).length +
-    Object.values(fillBlankInputs).filter((v) => v.trim().length > 0).length;
+  const answeredCount = questions.reduce((count, q, i) => {
+    if (q.type === "fill-blank" || q.type === "fill_blank") {
+      return count + (fillBlankInputs[i]?.trim().length > 0 ? 1 : 0);
+    }
+    return count + (answers[i] !== null ? 1 : 0);
+  }, 0);
 
   return (
     <div
@@ -330,7 +372,7 @@ export default function MockTestPage() {
               <Collapse
                 items={[{
                   key: "passage",
-                  label: "📖 Đọc bài đọc (nhấn để mở/đóng)",
+                  label: <span><ReadOutlined /> Đọc bài đọc (nhấn để mở/đóng)</span>,
                   children: (
                     <p style={{ whiteSpace: "pre-wrap", fontSize: 14, lineHeight: 1.7, margin: 0 }}>
                       {passage}
@@ -592,7 +634,7 @@ export default function MockTestPage() {
               <Collapse
                 items={[{
                   key: "passage-review",
-                  label: "📖 Bài đọc gốc",
+                  label: <span><ReadOutlined /> Bài đọc gốc</span>,
                   children: (
                     <p style={{ whiteSpace: "pre-wrap", fontSize: 14, lineHeight: 1.7, margin: 0 }}>
                       {passage}

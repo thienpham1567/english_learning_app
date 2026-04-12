@@ -77,10 +77,16 @@ export async function POST(request: Request) {
       return Response.json({ error: "Invalid AI response" }, { status: 502 });
     }
 
+    // Validate IELTS passage exists
+    if (examMode === "ielts" && !parsed.passage) {
+      console.warn("[mock-test/generate] IELTS response missing passage field");
+    }
+
     return Response.json({
       examMode,
       timeLimit: examMode === "toeic" ? questionCount * 40 : questionCount * 60, // seconds
       questions: parsed.questions,
+      passage: parsed.passage ?? null,
     });
   } catch (err) {
     console.error("[mock-test/generate] Error:", err);

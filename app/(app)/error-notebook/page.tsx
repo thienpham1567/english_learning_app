@@ -9,7 +9,6 @@ import {
   LoadingOutlined,
   ReloadOutlined,
   InfoCircleOutlined,
-  DeleteOutlined,
 } from "@ant-design/icons";
 import { Tag, Tooltip, Collapse, Select, Empty } from "antd";
 
