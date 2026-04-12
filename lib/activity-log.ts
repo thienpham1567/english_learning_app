@@ -7,7 +7,8 @@ export type ActivityType =
   | "writing_practice"
   | "daily_challenge"
   | "chatbot_session"
-  | "voice_practice";
+  | "voice_practice"
+  | "listening_practice";
 
 /**
  * Fire-and-forget activity logging — does NOT block the API response.

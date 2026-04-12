@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-04-10T23:39:00+07:00
-last_updated: 2026-04-11T08:54:00+07:00
+last_updated: 2026-04-12T11:56:00+07:00
 project: english_learning_app
 project_key: NOKEY
 tracking_system: file-system
@@ -86,3 +86,36 @@ development_status:
   6-1-vocabulary-mastery-levels-tabs: done
   6-2-xp-system-cross-module-vocabulary-flow: done
   epic-6-retrospective: optional
+
+  # ── Epic 7: Voice Chatbot ──
+  epic-7: done
+  7-1-voice-input-hook-microphone-button: done
+  7-2-text-to-speech-ai-responses: done
+  7-3-voice-conversation-mode: done
+  epic-7-retrospective: optional
+
+  # ── Epic 8: Smart Dashboard CTA & Level System ──
+  epic-8: done
+  8-1-smart-cta: done
+  8-2-level-system-ui: done
+  epic-8-retrospective: optional
+
+  # ── Epic 9: Progress Analytics ──
+  epic-9: done
+  9-1-activity-logging-infrastructure: done
+  9-2-analytics-api-endpoint: done
+  9-3-progress-analytics-page: done
+  epic-9-retrospective: optional
+
+  # ── Epic 10: Listening Practice Module ──
+  epic-10: in-progress
+  10-1-listening-exercise-schema-api: review
+  10-2-listening-practice-page: backlog
+  10-3-listening-vocabulary-integration: backlog
+  epic-10-retrospective: optional
+
+  # ── Epic 11: PWA & Push Notifications ──
+  epic-11: backlog
+  11-1-pwa-manifest-service-worker: backlog
+  11-2-push-notification-reminders: backlog
+  epic-11-retrospective: optional

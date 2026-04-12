@@ -8,6 +8,7 @@ export const XP_VALUES = {
   QUIZ_COMPLETE: 50,
   WRITING_SUBMISSION: 100,
   DAILY_CHALLENGE: 30,
+  LISTENING_PRACTICE: 40,
 } as const;
 
 /**

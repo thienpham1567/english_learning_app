@@ -21,6 +21,7 @@ export const activityTypeEnum = pgEnum("activity_type", [
   "daily_challenge",
   "chatbot_session",
   "voice_practice",
+  "listening_practice",
 ]);
 
 export const conversation = pgTable("conversation", {
@@ -132,3 +133,26 @@ export type WritingSubmissionRow = typeof writingSubmission.$inferSelect;
 export type DailyChallengeRow = typeof dailyChallenge.$inferSelect;
 export type UserStreakRow = typeof userStreak.$inferSelect;
 export type ActivityLogRow = typeof activityLog.$inferSelect;
+
+/** Listening Exercise — generated audio passage with MCQ questions */
+export interface ListeningQuestion {
+  question: string;
+  options: string[];
+  correctIndex: number;
+}
+
+export const listeningExercise = pgTable("listening_exercise", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  level: text("level").notNull(),
+  exerciseType: text("exercise_type").notNull(),
+  passage: text("passage").notNull(),
+  audioUrl: text("audio_url").notNull(),
+  questions: jsonb("questions").$type<ListeningQuestion[]>().notNull(),
+  answers: jsonb("answers").$type<number[]>(),
+  score: integer("score"),
+  completedAt: timestamp("completed_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export type ListeningExerciseRow = typeof listeningExercise.$inferSelect;
