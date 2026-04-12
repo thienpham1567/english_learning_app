@@ -6,14 +6,17 @@ import {
   TrophyOutlined,
   ReloadOutlined,
 } from "@ant-design/icons";
+import { HighlightedText } from "@/components/app/english-chatbot/HighlightedText";
 import type { ListeningSubmitResponse } from "@/lib/listening/types";
 
 type Props = {
   result: ListeningSubmitResponse;
   onNewExercise: () => void;
+  onWordClick?: (word: string, rect: DOMRect) => void;
+  savedWords?: Set<string>;
 };
 
-export function Results({ result, onNewExercise }: Props) {
+export function Results({ result, onNewExercise, onWordClick, savedWords }: Props) {
   const percentage = result.total > 0 ? Math.round((result.correct / result.total) * 100) : 0;
   const isGood = percentage >= 75;
 
@@ -114,7 +117,14 @@ export function Results({ result, onNewExercise }: Props) {
             fontStyle: "italic",
           }}
         >
-          {result.passage}
+          {onWordClick ? (
+            <HighlightedText text={result.passage} onWordClick={onWordClick} savedWords={savedWords} />
+          ) : (
+            result.passage
+          )}
+          <div style={{ marginTop: 8, fontSize: 11, color: "var(--text-muted)", fontStyle: "normal" }}>
+            💡 Nhấn vào từ để tra từ điển và lưu từ vựng
+          </div>
         </div>
       </div>
 

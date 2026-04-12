@@ -1,12 +1,15 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import { SoundOutlined } from "@ant-design/icons";
 
 import { useListeningExercise } from "@/hooks/useListeningExercise";
+import { useMiniDictionary } from "@/hooks/useMiniDictionary";
 import { LevelSelector } from "@/components/app/listening/LevelSelector";
 import { AudioPlayer } from "@/components/app/listening/AudioPlayer";
 import { QuestionCards } from "@/components/app/listening/QuestionCards";
 import { Results } from "@/components/app/listening/Results";
+import { MiniDictionary } from "@/components/app/shared";
 
 export default function ListeningPage() {
   const {
@@ -26,6 +29,14 @@ export default function ListeningPage() {
     cycleSpeed,
     reset,
   } = useListeningExercise();
+
+  // MiniDictionary integration for transcript word lookup
+  const miniDict = useMiniDictionary();
+  const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
+
+  const handleWordSaved = useCallback((word: string) => {
+    setSavedWords((prev) => new Set(prev).add(word.toLowerCase()));
+  }, []);
 
   return (
     <div
@@ -122,10 +133,24 @@ export default function ListeningPage() {
         {/* Submitted: Results */}
         {state === "submitted" && result && (
           <div style={{ maxWidth: 600, margin: "0 auto" }}>
-            <Results result={result} onNewExercise={reset} />
+            <Results
+              result={result}
+              onNewExercise={reset}
+              onWordClick={miniDict.openForWord}
+              savedWords={savedWords}
+            />
           </div>
         )}
       </div>
+
+      {/* MiniDictionary floating popup */}
+      <MiniDictionary
+        word={miniDict.word}
+        anchorRect={miniDict.anchorRect}
+        visible={miniDict.visible}
+        onClose={miniDict.close}
+        onSave={handleWordSaved}
+      />
     </div>
   );
 }

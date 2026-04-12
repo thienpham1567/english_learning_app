@@ -108,10 +108,10 @@ development_status:
   epic-9-retrospective: optional
 
   # ── Epic 10: Listening Practice Module ──
-  epic-10: in-progress
+  epic-10: done
   10-1-listening-exercise-schema-api: done
   10-2-listening-practice-page: done
-  10-3-listening-vocabulary-integration: backlog
+  10-3-listening-vocabulary-integration: done
   epic-10-retrospective: optional
 
   # ── Epic 11: PWA & Push Notifications ──
