@@ -27,6 +27,18 @@ type ErrorEntry = {
 
 type ReviewState = "loading" | "quiz" | "results" | "empty";
 
+function PageHeader({ title }: { title: string }) {
+  return (
+    <div style={{ padding: "24px 24px 16px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", gap: 10 }}>
+      <BulbOutlined style={{ fontSize: 22, color: "var(--accent)" }} />
+      <div>
+        <h1 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>{title}</h1>
+        <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)" }}>SRS — Hệ thống ôn tập thông minh</p>
+      </div>
+    </div>
+  );
+}
+
 export default function ReviewQuizPage() {
   const [state, setState] = useState<ReviewState>("loading");
   const [errors, setErrors] = useState<ErrorEntry[]>([]);
@@ -67,25 +79,18 @@ export default function ReviewQuizPage() {
     setAnswers((prev) => ({ ...prev, [currentIdx]: optionIdx }));
   }, [currentIdx]);
 
-  // Next question or submit
-  const handleNext = useCallback(() => {
-    if (currentIdx < errors.length - 1) {
-      setCurrentIdx((prev) => prev + 1);
-    } else {
-      // Submit all
-      submitReview();
-    }
-  }, [currentIdx, errors.length]);
-
+  // Submit review results
   const submitReview = useCallback(async () => {
     setSubmitting(true);
 
     const reviewResults = errors.map((err, i) => {
       const selectedIdx = answers[i];
-      // For errors with options, check if selected the correct one
-      const correctIdx = err.options?.indexOf(err.correctAnswer) ?? -1;
-      const correct = selectedIdx !== null && selectedIdx !== undefined && selectedIdx === correctIdx;
-      return { errorId: err.id, correct };
+      if (!err.options || err.options.length === 0) {
+        // No-option mode: 0 = "Đã nhớ" (correct), 1 = "Chưa nhớ" (wrong)
+        return { errorId: err.id, correct: selectedIdx === 0 };
+      }
+      const correctIdx = err.options.indexOf(err.correctAnswer);
+      return { errorId: err.id, correct: selectedIdx !== null && selectedIdx !== undefined && selectedIdx === correctIdx };
     });
 
     setResults(reviewResults);
@@ -106,17 +111,20 @@ export default function ReviewQuizPage() {
     setState("results");
   }, [errors, answers]);
 
+  // Next question or submit
+  const handleNext = useCallback(() => {
+    if (currentIdx < errors.length - 1) {
+      setCurrentIdx((prev) => prev + 1);
+    } else {
+      submitReview();
+    }
+  }, [currentIdx, errors.length, submitReview]);
+
   // Loading
   if (state === "loading") {
     return (
       <div style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "auto" }}>
-        <div style={{ padding: "24px 24px 16px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", gap: 10 }}>
-          <BulbOutlined style={{ fontSize: 22, color: "var(--accent)" }} />
-          <div>
-            <h1 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>Ôn tập lỗi sai</h1>
-            <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)" }}>SRS — Hệ thống ôn tập thông minh</p>
-          </div>
-        </div>
+        <PageHeader title="Ôn tập lỗi sai" />
         <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", gap: 12 }}>
           <LoadingOutlined style={{ fontSize: 32, color: "var(--accent)" }} />
           <p style={{ color: "var(--text-secondary)" }}>Đang tải lỗi sai cần ôn...</p>
@@ -129,13 +137,7 @@ export default function ReviewQuizPage() {
   if (state === "empty") {
     return (
       <div style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "auto" }}>
-        <div style={{ padding: "24px 24px 16px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", gap: 10 }}>
-          <BulbOutlined style={{ fontSize: 22, color: "var(--accent)" }} />
-          <div>
-            <h1 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>Ôn tập lỗi sai</h1>
-            <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)" }}>SRS — Hệ thống ôn tập thông minh</p>
-          </div>
-        </div>
+        <PageHeader title="Ôn tập lỗi sai" />
         <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center", padding: 32 }}>
           <Empty
             description={
@@ -159,13 +161,7 @@ export default function ReviewQuizPage() {
 
     return (
       <div style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "auto" }}>
-        <div style={{ padding: "24px 24px 16px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", gap: 10 }}>
-          <BulbOutlined style={{ fontSize: 22, color: "var(--accent)" }} />
-          <div>
-            <h1 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>Kết quả ôn tập</h1>
-            <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)" }}>SRS — Hệ thống ôn tập thông minh</p>
-          </div>
-        </div>
+        <PageHeader title="Kết quả ôn tập" />
         <div style={{ flex: 1, padding: 24, maxWidth: 640, margin: "0 auto", width: "100%" }}>
           {/* Score */}
           <div style={{ textAlign: "center", padding: 32, borderRadius: 16, background: "var(--card-bg)", border: "1px solid var(--border)", marginBottom: 20 }}>

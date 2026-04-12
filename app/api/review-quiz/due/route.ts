@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { eq, and, lte, sql } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";

@@ -1,9 +1,9 @@
 import { headers } from "next/headers";
-import { eq, and } from "drizzle-orm";
+import { eq, and, inArray } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { errorLog } from "@/lib/db/schema";
+import { errorLog, activityLog } from "@/lib/db/schema";
 
 // SRS intervals (Leitner): 1d, 3d, 7d, 14d → resolved
 const SRS_INTERVALS_DAYS = [1, 3, 7, 14];
@@ -31,14 +31,16 @@ export async function POST(request: Request) {
     let resolved = 0;
     let rescheduled = 0;
 
-    for (const { errorId, correct } of results) {
-      // Fetch current state
-      const [entry] = await db
-        .select()
-        .from(errorLog)
-        .where(and(eq(errorLog.id, errorId), eq(errorLog.userId, session.user.id)))
-        .limit(1);
+    // Batch fetch all entries to avoid N+1 SELECTs
+    const ids = results.map((r: { errorId: string }) => r.errorId);
+    const entries = await db
+      .select()
+      .from(errorLog)
+      .where(and(inArray(errorLog.id, ids), eq(errorLog.userId, session.user.id)));
+    const entryMap = new Map(entries.map((e) => [e.id, e]));
 
+    for (const { errorId, correct } of results) {
+      const entry = entryMap.get(errorId);
       if (!entry) continue;
 
       const now = new Date();
@@ -57,7 +59,7 @@ export async function POST(request: Request) {
               lastReviewedAt: now,
               nextReviewAt: null,
             })
-            .where(eq(errorLog.id, errorId));
+            .where(and(eq(errorLog.id, errorId), eq(errorLog.userId, session.user.id)));
           resolved++;
         } else {
           // Schedule next review
@@ -70,7 +72,7 @@ export async function POST(request: Request) {
               lastReviewedAt: now,
               nextReviewAt,
             })
-            .where(eq(errorLog.id, errorId));
+            .where(and(eq(errorLog.id, errorId), eq(errorLog.userId, session.user.id)));
           rescheduled++;
         }
       } else {
@@ -83,15 +85,29 @@ export async function POST(request: Request) {
             lastReviewedAt: now,
             nextReviewAt,
           })
-          .where(eq(errorLog.id, errorId));
+          .where(and(eq(errorLog.id, errorId), eq(errorLog.userId, session.user.id)));
         rescheduled++;
       }
+    }
+
+    // Award XP for review session (5 XP per correct answer)
+    const totalCorrect = results.filter((r: { correct: boolean }) => r.correct).length;
+    const xp = totalCorrect * 5;
+
+    if (xp > 0) {
+      await db.insert(activityLog).values({
+        userId: session.user.id,
+        activityType: "grammar_quiz", // closest existing type
+        xpEarned: xp,
+        metadata: { source: "review-quiz", reviewed: results.length, correct: totalCorrect },
+      });
     }
 
     return Response.json({
       total: results.length,
       resolved,
       rescheduled,
+      xpEarned: xp,
     });
   } catch (err) {
     console.error("[review-quiz/submit] Error:", err);
