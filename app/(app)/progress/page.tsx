@@ -8,6 +8,7 @@ import {
   BookOutlined,
   FireOutlined,
   ThunderboltOutlined,
+  RadarChartOutlined,
 } from "@ant-design/icons";
 
 const { Title, Text } = Typography;
@@ -19,6 +20,7 @@ interface AnalyticsData {
   dailyActivity: Array<{ date: string; count: number }>;
   vocabularyGrowth: Array<{ week: string; total_words: number }>;
   accuracyTrends: Array<{ week: string; accuracy: number }>;
+  skillRadar: Array<{ axis: string; icon: string; score: number; sessions: number; avgXp: number }>;
   totalStats: {
     totalXP: number;
     totalWords: number;
@@ -103,6 +105,122 @@ function BarChart({ data, labelKey, valueKey, color }: {
         );
       })}
     </Flex>
+  );
+}
+
+// ── Skill Radar Chart (SVG) ──
+
+function SkillRadar({ data }: { data: AnalyticsData["skillRadar"] }) {
+  const cx = 150;
+  const cy = 150;
+  const maxR = 110;
+  const levels = [20, 40, 60, 80, 100];
+  const n = data.length;
+
+  function polarToXY(angle: number, r: number) {
+    const rad = ((angle - 90) * Math.PI) / 180;
+    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+  }
+
+  const angleStep = 360 / n;
+
+  // Grid lines (pentagons/hexagons)
+  const gridPaths = levels.map((lv) => {
+    const r = (lv / 100) * maxR;
+    const points = Array.from({ length: n }, (_, i) => {
+      const { x, y } = polarToXY(i * angleStep, r);
+      return `${x},${y}`;
+    });
+    return points.join(" ");
+  });
+
+  // Data polygon
+  const dataPoints = data.map((d, i) => {
+    const r = (d.score / 100) * maxR;
+    return polarToXY(i * angleStep, r);
+  });
+  const dataPath = dataPoints.map((p) => `${p.x},${p.y}`).join(" ");
+
+  // Axis lines
+  const axes = data.map((_, i) => polarToXY(i * angleStep, maxR));
+
+  // Labels
+  const labels = data.map((d, i) => {
+    const pos = polarToXY(i * angleStep, maxR + 22);
+    return { ...d, x: pos.x, y: pos.y };
+  });
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+      <svg viewBox="0 0 300 300" width="100%" style={{ maxWidth: 320 }}>
+        {/* Grid */}
+        {gridPaths.map((points, i) => (
+          <polygon
+            key={i}
+            points={points}
+            fill="none"
+            stroke="var(--border)"
+            strokeWidth={0.5}
+            opacity={0.6}
+          />
+        ))}
+
+        {/* Axes */}
+        {axes.map((p, i) => (
+          <line key={i} x1={cx} y1={cy} x2={p.x} y2={p.y} stroke="var(--border)" strokeWidth={0.5} />
+        ))}
+
+        {/* Data fill */}
+        <polygon
+          points={dataPath}
+          fill="var(--accent)"
+          fillOpacity={0.2}
+          stroke="var(--accent)"
+          strokeWidth={2}
+        />
+
+        {/* Data dots */}
+        {dataPoints.map((p, i) => (
+          <circle key={i} cx={p.x} cy={p.y} r={4} fill="var(--accent)" />
+        ))}
+
+        {/* Labels */}
+        {labels.map((l, i) => (
+          <text
+            key={i}
+            x={l.x}
+            y={l.y}
+            textAnchor="middle"
+            dominantBaseline="middle"
+            fontSize={11}
+            fontWeight={600}
+            fill="var(--text-secondary)"
+          >
+            {l.axis}
+          </text>
+        ))}
+      </svg>
+
+      {/* Score list */}
+      <Flex gap={8} wrap style={{ justifyContent: "center" }}>
+        {data.map((d) => (
+          <div
+            key={d.axis}
+            style={{
+              padding: "4px 10px",
+              borderRadius: 8,
+              background: "var(--card-bg)",
+              border: "1px solid var(--border)",
+              fontSize: 12,
+            }}
+          >
+            <strong style={{ color: "var(--accent)" }}>{d.score}</strong>
+            <span style={{ color: "var(--text-secondary)", marginLeft: 4 }}>{d.axis}</span>
+            <span style={{ color: "var(--text-muted)", marginLeft: 4, fontSize: 10 }}>({d.sessions}x)</span>
+          </div>
+        ))}
+      </Flex>
+    </div>
   );
 }
 
@@ -274,7 +392,18 @@ export default function ProgressPage() {
           <StatCard icon={<TrophyOutlined />} label="Level" value={`Lv.${level}`} color="var(--secondary)" />
         </Flex>
 
-        {/* Section 2: Weekly XP Bar Chart */}
+        {/* Section 2: Skill Radar */}
+        {data.skillRadar && data.skillRadar.length > 0 && (
+          <Card
+            title={<span><RadarChartOutlined style={{ marginRight: 6 }} /> Biểu đồ kỹ năng</span>}
+            style={{ borderRadius: "var(--radius-xl)" }}
+            styles={{ header: { borderBottom: "1px solid var(--border)" } }}
+          >
+            <SkillRadar data={data.skillRadar} />
+          </Card>
+        )}
+
+        {/* Section 3: Weekly XP Bar Chart */}
         <Card
           title={<span><ThunderboltOutlined style={{ marginRight: 6 }} /> XP theo tuần (12 tuần)</span>}
           style={{ borderRadius: "var(--radius-xl)" }}

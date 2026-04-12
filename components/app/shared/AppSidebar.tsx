@@ -28,6 +28,7 @@ import {
   DownOutlined,
   RightOutlined,
   CheckCircleOutlined,
+  RedoOutlined,
 } from "@ant-design/icons";
 import { useTheme } from "@/components/app/shared/ThemeProvider";
 import { useExamMode } from "@/components/app/shared/ExamModeProvider";
@@ -70,6 +71,7 @@ const navGroups: (NavItem | NavGroup)[] = [
     items: [
       { href: "/daily-challenge", label: "Thử thách", icon: FireOutlined },
       { href: "/mock-test", label: "Thi thử", icon: FileSearchOutlined },
+      { href: "/review-quiz", label: "Ôn lỗi sai", icon: RedoOutlined },
       { href: "/error-notebook", label: "Sổ lỗi sai", icon: BookOutlined },
       { href: "/progress", label: "Tiến độ", icon: BarChartOutlined },
     ],

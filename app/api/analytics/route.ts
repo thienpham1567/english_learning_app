@@ -64,6 +64,7 @@ export async function GET() {
       quizCount,
       totalActivities,
       streakRows,
+      skillRadarRows,
     ] = await Promise.all([
       // 1. XP per week (last 12 weeks)
       db.select({
@@ -132,6 +133,16 @@ export async function GET() {
 
       // 6. Streak
       db.select().from(userStreak).where(eq(userStreak.userId, userId)).limit(1),
+
+      // 7. Skill Radar — sessions + avg XP per activity type
+      db.select({
+        type: activityLog.activityType,
+        sessions: sql<number>`count(*)::int`,
+        avgXp: sql<number>`coalesce(avg(${activityLog.xpEarned}), 0)::int`,
+      })
+        .from(activityLog)
+        .where(eq(activityLog.userId, userId))
+        .groupBy(activityLog.activityType),
     ]);
 
     // Merge sparse DB results into dense arrays
@@ -154,11 +165,37 @@ export async function GET() {
 
     const streak = streakRows[0] ?? { currentStreak: 0, bestStreak: 0, xpTotal: 0 };
 
+    // Skill Radar
+    const SKILL_MAP: Record<string, { axis: string; icon: string }> = {
+      grammar_quiz: { axis: "Grammar", icon: "BulbOutlined" },
+      listening_practice: { axis: "Listening", icon: "SoundOutlined" },
+      voice_practice: { axis: "Speaking", icon: "AudioOutlined" },
+      writing_practice: { axis: "Writing", icon: "EditOutlined" },
+      flashcard_review: { axis: "Vocabulary", icon: "BookOutlined" },
+      chatbot_session: { axis: "Fluency", icon: "CommentOutlined" },
+    };
+
+    const skillRadar = Object.entries(SKILL_MAP).map(([type, meta]) => {
+      const row = skillRadarRows.find((r) => r.type === type);
+      const sessions = row?.sessions ?? 0;
+      const avgXp = row?.avgXp ?? 0;
+      const frequencyScore = Math.min(sessions / 50, 1) * 50;
+      const qualityScore = Math.min(avgXp / 20, 1) * 50;
+      return {
+        axis: meta.axis,
+        icon: meta.icon,
+        score: Math.round(frequencyScore + qualityScore),
+        sessions,
+        avgXp,
+      };
+    });
+
     return Response.json({
       weeklyXP,
       dailyActivity,
       vocabularyGrowth,
       accuracyTrends,
+      skillRadar,
       totalStats: {
         totalXP: streak.xpTotal ?? 0,
         totalWords: vocabCount[0]?.count ?? 0,

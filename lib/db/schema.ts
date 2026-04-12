@@ -196,6 +196,10 @@ export const errorLog = pgTable("error_log", {
   grammarTopic: text("grammar_topic"),
   isResolved: boolean("is_resolved").notNull().default(false),
   resolvedAt: timestamp("resolved_at", { withTimezone: true }),
+  // SRS Review Queue
+  reviewCount: integer("review_count").notNull().default(0),
+  nextReviewAt: timestamp("next_review_at", { withTimezone: true }),
+  lastReviewedAt: timestamp("last_reviewed_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
