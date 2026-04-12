@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { eq, sql, and } from "drizzle-orm";
+import { eq, sql, and, gte } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -14,8 +14,7 @@ import {
  * GET /api/analytics
  *
  * Returns aggregated learning analytics for the authenticated user.
- * Refactored to avoid raw db.execute() CTEs — uses simpler queries
- * compatible with Supabase PgBouncer (transaction mode).
+ * Uses Drizzle query builder — compatible with Supabase PgBouncer.
  */
 export async function GET() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -35,7 +34,7 @@ export async function GET() {
       return monday.toISOString().slice(0, 10);
     }
 
-    // Generate date ranges client-side instead of using generate_series
+    // Generate date ranges client-side
     const now = new Date();
     const weeks12: string[] = [];
     for (let i = 11; i >= 0; i--) {
@@ -51,9 +50,11 @@ export async function GET() {
       days90.push(d.toISOString().slice(0, 10));
     }
 
-    const cutoff12Weeks = weeks12[0];
+    // Cutoff dates as Date objects for gte()
+    const cutoffDate = new Date(weeks12[0]);
+    const cutoff90Days = new Date(days90[0]);
 
-    // Parallel queries — all use Drizzle query builder (not raw SQL)
+    // Run all queries in parallel
     const [
       xpByWeekRows,
       activityByDayRows,
@@ -66,66 +67,66 @@ export async function GET() {
     ] = await Promise.all([
       // 1. XP per week (last 12 weeks)
       db.select({
-        week: sql<string>`date_trunc('week', ${activityLog.createdAt})::date::text`,
-        xp: sql<number>`COALESCE(SUM(${activityLog.xpEarned}), 0)::int`,
+        week: sql<string>`to_char(date_trunc('week', ${activityLog.createdAt}), 'YYYY-MM-DD')`,
+        xp: sql<number>`coalesce(sum(${activityLog.xpEarned}), 0)::int`,
       })
         .from(activityLog)
         .where(and(
           eq(activityLog.userId, userId),
-          sql`${activityLog.createdAt} >= ${cutoff12Weeks}::date`,
+          gte(activityLog.createdAt, cutoffDate),
         ))
-        .groupBy(sql`date_trunc('week', ${activityLog.createdAt})::date`),
+        .groupBy(sql`date_trunc('week', ${activityLog.createdAt})`),
 
       // 2. Activity count per day (last 90 days)
       db.select({
-        date: sql<string>`(${activityLog.createdAt})::date::text`,
-        count: sql<number>`COUNT(*)::int`,
+        date: sql<string>`to_char(${activityLog.createdAt}::date, 'YYYY-MM-DD')`,
+        count: sql<number>`count(*)::int`,
       })
         .from(activityLog)
         .where(and(
           eq(activityLog.userId, userId),
-          sql`${activityLog.createdAt} >= (CURRENT_DATE - INTERVAL '89 days')`,
+          gte(activityLog.createdAt, cutoff90Days),
         ))
-        .groupBy(sql`(${activityLog.createdAt})::date`),
+        .groupBy(sql`${activityLog.createdAt}::date`),
 
-      // 3. Cumulative vocabulary — total saved words before each week boundary
+      // 3. Vocabulary new saves per week
       db.select({
-        count: sql<number>`COUNT(*)::int`,
-        week: sql<string>`date_trunc('week', ${userVocabulary.lookedUpAt})::date::text`,
+        week: sql<string>`to_char(date_trunc('week', ${userVocabulary.lookedUpAt}), 'YYYY-MM-DD')`,
+        count: sql<number>`count(*)::int`,
       })
         .from(userVocabulary)
         .where(and(
           eq(userVocabulary.userId, userId),
           eq(userVocabulary.saved, true),
-          sql`${userVocabulary.lookedUpAt} >= ${cutoff12Weeks}::date`,
+          gte(userVocabulary.lookedUpAt, cutoffDate),
         ))
-        .groupBy(sql`date_trunc('week', ${userVocabulary.lookedUpAt})::date`),
+        .groupBy(sql`date_trunc('week', ${userVocabulary.lookedUpAt})`),
 
       // 4. Accuracy by week — daily challenge scores
       db.select({
-        week: sql<string>`date_trunc('week', ${dailyChallenge.completedAt})::date::text`,
-        accuracy: sql<number>`COALESCE(AVG(${dailyChallenge.score}), 0)::int`,
+        week: sql<string>`to_char(date_trunc('week', ${dailyChallenge.completedAt}), 'YYYY-MM-DD')`,
+        accuracy: sql<number>`coalesce(avg(${dailyChallenge.score}), 0)::int`,
       })
         .from(dailyChallenge)
         .where(and(
           eq(dailyChallenge.userId, userId),
-          sql`${dailyChallenge.completedAt} IS NOT NULL`,
-          sql`${dailyChallenge.completedAt} >= ${cutoff12Weeks}::date`,
+          sql`${dailyChallenge.completedAt} is not null`,
+          gte(dailyChallenge.completedAt, cutoffDate),
         ))
-        .groupBy(sql`date_trunc('week', ${dailyChallenge.completedAt})::date`),
+        .groupBy(sql`date_trunc('week', ${dailyChallenge.completedAt})`),
 
       // 5a. Total saved words
-      db.select({ count: sql<number>`COUNT(*)::int` })
+      db.select({ count: sql<number>`count(*)::int` })
         .from(userVocabulary)
         .where(and(eq(userVocabulary.userId, userId), eq(userVocabulary.saved, true))),
 
       // 5b. Total completed quizzes
-      db.select({ count: sql<number>`COUNT(*)::int` })
+      db.select({ count: sql<number>`count(*)::int` })
         .from(dailyChallenge)
-        .where(and(eq(dailyChallenge.userId, userId), sql`${dailyChallenge.completedAt} IS NOT NULL`)),
+        .where(and(eq(dailyChallenge.userId, userId), sql`${dailyChallenge.completedAt} is not null`)),
 
       // 5c. Total activities
-      db.select({ count: sql<number>`COUNT(*)::int` })
+      db.select({ count: sql<number>`count(*)::int` })
         .from(activityLog)
         .where(eq(activityLog.userId, userId)),
 
@@ -133,7 +134,7 @@ export async function GET() {
       db.select().from(userStreak).where(eq(userStreak.userId, userId)).limit(1),
     ]);
 
-    // Merge sparse DB results into dense arrays (fill missing weeks/days with 0)
+    // Merge sparse DB results into dense arrays
     const xpMap = new Map(xpByWeekRows.map((r) => [r.week, r.xp]));
     const weeklyXP = weeks12.map((w) => ({ week: w, xp: xpMap.get(w) ?? 0 }));
 
@@ -169,6 +170,9 @@ export async function GET() {
     });
   } catch (err) {
     console.error("[Analytics] Query error:", err);
-    return Response.json({ error: "Failed to load analytics" }, { status: 500 });
+    return Response.json(
+      { error: "Failed to load analytics", detail: err instanceof Error ? err.message : String(err) },
+      { status: 500 },
+    );
   }
 }
