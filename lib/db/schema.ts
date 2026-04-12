@@ -169,3 +169,15 @@ export const pushSubscription = pgTable("push_subscription", {
 });
 
 export type PushSubscriptionRow = typeof pushSubscription.$inferSelect;
+
+/** Exam Mode — TOEIC or IELTS */
+export const examModeEnum = pgEnum("exam_mode", ["toeic", "ielts"]);
+
+/** User Preferences — global settings per user */
+export const userPreferences = pgTable("user_preferences", {
+  userId: text("user_id").primaryKey(),
+  examMode: examModeEnum("exam_mode").notNull().default("toeic"),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export type UserPreferencesRow = typeof userPreferences.$inferSelect;

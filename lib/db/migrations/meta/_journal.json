@@ -43,6 +43,13 @@
       "when": 1775634495504,
       "tag": "0005_yummy_catseye",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1775990935501,
+      "tag": "0006_giant_lila_cheney",
+      "breakpoints": true
     }
   ]
 }
