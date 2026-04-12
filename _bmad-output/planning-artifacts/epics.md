@@ -532,3 +532,304 @@ So that I feel progress across the whole app and my learning loop is seamless.
 **And** the dashboard GreetingCard reflects the updated XP total
 **And** words saved from MiniDictionary (chatbot) automatically create flashcard entries via existing vocabulary → flashcard pipeline
 **And** `prefers-reduced-motion` disables all celebration/fire animations (static fallback shown)
+
+---
+
+## Phase 2 Epics (Post-UX Redesign)
+
+The following epics were identified during a multi-agent review session to close gaps vs. market leaders (Duolingo, ELSA, Cake) and enhance the app's competitive advantages (AI chatbot, writing practice, integrated dictionary).
+
+### FR Coverage Map (Phase 2)
+
+| FR | Epic | Description |
+|---|---|---|
+| FR36-FR38 | Epic 7 | Voice chatbot (STT + TTS + voice mode) |
+| FR39-FR40 | Epic 8 | Smart Dashboard CTA + Level System |
+| FR41-FR43 | Epic 9 | Activity logging + Analytics page |
+| FR44-FR46 | Epic 10 | Listening practice module |
+| FR47-FR49 | Epic 11 | PWA setup + Push notifications |
+
+### Phase 2 Requirements
+
+FR36: The Chatbot SHALL support voice input via Web Speech API SpeechRecognition
+FR37: The Chatbot SHALL support text-to-speech playback of AI responses via SpeechSynthesis
+FR38: The Chatbot SHALL offer a dedicated "Voice Practice" conversation mode
+FR39: The Dashboard SHALL display a smart CTA button that routes to the highest-priority activity
+FR40: The Dashboard SHALL show the user's current level computed from XP with a progress bar
+FR41: A new `activity_log` table SHALL record every learning activity with type, XP, and metadata
+FR42: A new `GET /api/analytics` endpoint SHALL return aggregated learning trends
+FR43: A new Progress Analytics page (`/progress`) SHALL visualize learning trends with CSS/SVG charts
+FR44: A new Listening Practice module SHALL generate audio passages with questions via AI
+FR45: The Listening module SHALL support comprehension, dictation, and fill-blank exercise types
+FR46: Difficult words from listening exercises SHALL be saveable to the vocabulary/flashcard pipeline
+FR47: The app SHALL be installable as a PWA with offline support
+FR48: The app SHALL support Web Push notifications for daily study reminders
+FR49: Users SHALL be able to configure notification timing and opt-out in settings
+
+---
+
+## Epic 7: Voice Chatbot
+
+Users can speak English to the AI tutor and hear responses read aloud, practicing pronunciation and speaking fluency with zero server cost using Web Speech API.
+
+**FRs covered:** FR36, FR37, FR38
+**NFRs covered:** NFR4, NFR7
+
+### Story 7.1: Voice Input Hook & Microphone Button
+
+As a learner,
+I want to speak English into the chatbot instead of typing,
+So that I can practice pronunciation and speaking fluency.
+
+**Acceptance Criteria:**
+
+**Given** a user on the chatbot page in a browser supporting Speech Recognition
+**When** the chat input area renders
+**Then** a microphone button (🎙️) appears next to the send button
+**And** pressing the mic button starts SpeechRecognition with a pulsing red indicator
+**And** recognized text appears in the input field in real-time (interim results in lighter color)
+**And** releasing or pressing again stops recording and populates the input (user sends manually)
+**And** a `useVoiceInput()` hook encapsulates: `{ isListening, transcript, start, stop, isSupported }`
+**And** if SpeechRecognition API is unavailable, the mic button is hidden (graceful degradation)
+**And** error states (permission denied, no speech detected) show a subtle toast notification
+
+### Story 7.2: Text-to-Speech for AI Responses
+
+As a learner,
+I want to hear the AI tutor's response spoken aloud,
+So that I can improve my listening and learn correct pronunciation.
+
+**Acceptance Criteria:**
+
+**Given** an AI message bubble in the chatbot
+**When** the message renders
+**Then** a small speaker icon (🔊) button appears on the message bubble
+**And** clicking the speaker reads the message aloud using SpeechSynthesis with an English voice
+**And** while speaking, the icon animates to indicate playback
+**And** a stop button appears during playback to cancel speech
+**And** speaking speed can be toggled: Normal (1x) / Slow (0.8x)
+**And** a `useTextToSpeech()` hook encapsulates: `{ speak, stop, isSpeaking, isSupported }`
+**And** if SpeechSynthesis is unavailable, the speaker button is hidden
+
+### Story 7.3: Voice Conversation Mode
+
+As a learner,
+I want a dedicated voice conversation mode,
+So that I can have continuous spoken exchanges with the AI tutor.
+
+**Acceptance Criteria:**
+
+**Given** a user on the chatbot page
+**When** the user activates "🎙️ Chế độ nói" toggle
+**Then** voice mode activates: user speaks → auto-transcribe → auto-send → AI replies → auto-read → auto-listen
+**And** a large waveform/pulse animation displays during listening state
+**And** user can interrupt AI speech by pressing the mic button
+**And** XP is awarded: +15 XP per voice turn (max 150 XP/day)
+**And** session counter shows voice exchange count ("🗣️ 8 câu trao đổi")
+**And** `prefers-reduced-motion` disables pulse animation (static mic icon instead)
+
+---
+
+## Epic 8: Smart Dashboard CTA & Level System
+
+Users see one prominent action button that intelligently routes them to their highest-priority learning activity, plus a level system that provides long-term progression beyond raw XP numbers.
+
+**FRs covered:** FR39, FR40
+
+### Story 8.1: Smart CTA "Bài Hôm Nay"
+
+As a learner,
+I want one prominent button that starts my most important activity,
+So that I don't waste time deciding what to do.
+
+**Acceptance Criteria:**
+
+**Given** an authenticated user viewing the dashboard
+**When** the page renders
+**Then** a large gradient CTA button appears prominently above the "Kế hoạch hôm nay" section
+**And** the CTA selects the highest-priority undone activity:
+  1. Flashcards due > 0 → "📚 Ôn {N} flashcard đang đến hạn" → `/flashcards`
+  2. Daily challenge not done → "🔥 Thử thách hôm nay" → `/daily-challenge`
+  3. No recent writing (>3 days) → "✍️ Luyện viết" → `/writing-practice`
+  4. Default → "💬 Chat với gia sư AI" → `/english-chatbot`
+**And** the priority logic is computed from existing dashboard API fields (no new endpoint needed)
+**And** the CTA has a shimmer animation gradient to draw attention
+**And** below the CTA, the existing today's plan checklist shows remaining activities
+**And** for new users, the existing EmptyStateCard takes priority over the CTA
+
+### Story 8.2: Level System UI
+
+As a learner,
+I want to see my current level and progress to the next level,
+So that I feel long-term progression beyond just XP numbers.
+
+**Acceptance Criteria:**
+
+**Given** a user with accumulated XP
+**When** the dashboard greeting card renders
+**Then** it shows "📊 Level {N}" with a thin progress bar showing progress to next level
+**And** XP thresholds use an exponential curve: Level 1=0, 2=100, 3=250, 4=500, 5=800, ... up to Level 50
+**And** a `getLevel(xp)` utility function computes level + progress from XP (pure formula, no DB column)
+**And** the level badge displays next to streak and XP in the greeting card
+**And** leveling up is NOT celebrated with overlay in this story (deferred to future enhancement)
+
+---
+
+## Epic 9: Progress Analytics
+
+Users see a dedicated page with visual charts showing their learning trends over time, enabling self-reflection and sustained motivation.
+
+**FRs covered:** FR41, FR42, FR43
+**NFRs covered:** NFR8
+
+### Story 9.1: Activity Logging Infrastructure
+
+As a developer,
+I want to log each learning activity with metadata,
+So that analytics can be computed from historical data.
+
+**Acceptance Criteria:**
+
+**Given** a user completing any learning activity
+**When** the activity API responds
+**Then** a row is inserted into the `activity_log` table: `id`, `userId`, `activityType` (enum), `xpEarned`, `metadata` (JSONB), `createdAt`
+**And** `activityType` supports: `flashcard_review`, `grammar_quiz`, `writing_practice`, `daily_challenge`, `chatbot_session`
+**And** a `logActivity()` utility function writes fire-and-forget (does not block API response)
+**And** existing API routes call `logActivity()` alongside `awardXP()`
+**And** the table has an index on `(userId, createdAt)` for efficient date-range queries
+**And** DB migration SQL is created at `drizzle/0005_add_activity_log.sql`
+
+### Story 9.2: Analytics API Endpoint
+
+As a user,
+I want to fetch my learning analytics,
+So that the progress page can display charts and trends.
+
+**Acceptance Criteria:**
+
+**Given** an authenticated user calling `GET /api/analytics`
+**When** the endpoint responds
+**Then** it returns: `weeklyXP` (12 weeks), `dailyActivity` (30 days), `vocabularyGrowth` (12 weeks), `accuracyTrends` (grammar quiz + daily challenge accuracy per week), `totalStats` (totalXP, totalWords, totalQuizzes, longestStreak, currentLevel)
+**And** `Promise.all()` is used for parallel DB queries
+**And** unauthenticated requests return 401
+
+### Story 9.3: Progress Analytics Page
+
+As a learner,
+I want a visual page showing my learning trends,
+So that I can track my improvement and stay motivated.
+
+**Acceptance Criteria:**
+
+**Given** a user navigating to `/progress`
+**When** the page renders
+**Then** Section 1 shows 4 stat cards (Total XP, Words Learned, Current Streak, Current Level)
+**And** Section 2 shows a CSS bar chart of weekly XP for 12 weeks
+**And** Section 3 shows a GitHub-style contribution heatmap for 90 days
+**And** Section 4 shows accuracy trends as SVG line charts
+**And** Section 5 shows vocabulary growth as an area chart
+**And** all charts are CSS/SVG only (no external chart library, per NFR8)
+**And** responsive: stacked on mobile, 2-column grid on desktop
+**And** the page is accessible from sidebar navigation
+
+---
+
+## Epic 10: Listening Practice Module
+
+Users practice listening comprehension through AI-generated audio passages with multiple exercise types, closing the biggest skill gap vs. competitor apps.
+
+**FRs covered:** FR44, FR45, FR46
+
+### Story 10.1: Listening Exercise Schema & API
+
+As a developer,
+I want a listening exercise API that generates audio-based exercises,
+So that users can practice listening comprehension.
+
+**Acceptance Criteria:**
+
+**Given** a user requesting a listening exercise
+**When** `POST /api/listening/generate` is called with `level` (A1-C2) and `exerciseType`
+**Then** AI generates a short passage (50-150 words) appropriate to the CEFR level
+**And** the passage is converted to audio via OpenAI TTS API (`tts-1` model)
+**And** audio is uploaded to Supabase Storage with a hash-based key for cache reuse
+**And** 3-4 MCQ questions are generated about the passage
+**And** the exercise is stored in `listening_exercise` table
+**And** `POST /api/listening/submit` scores answers and awards +40 XP
+**And** DB migration SQL is created at `drizzle/0006_add_listening_exercise.sql`
+
+### Story 10.2: Listening Practice Page
+
+As a learner,
+I want a page where I can practice listening to English audio,
+So that I can improve my listening comprehension skills.
+
+**Acceptance Criteria:**
+
+**Given** a user navigating to `/listening`
+**When** the page renders with no active exercise
+**Then** a CEFR level selector displays (matching grammar quiz visual style)
+**And** exercise type options show: Comprehension (MCQ), Dictation, Fill-blanks
+**And** starting an exercise generates audio + questions via the API
+**And** an audio player shows play/pause, seek bar, speed control (0.75x / 1x / 1.25x)
+**And** a "Nghe lại" replay button allows up to 3 replays
+**And** results show score, correct answers, and the full transcript
+**And** the page follows existing module patterns (ModuleHeader, loading/error states)
+
+### Story 10.3: Listening Vocabulary Integration
+
+As a learner,
+I want to save difficult words from listening exercises to my vocabulary,
+So that my listening practice feeds into flashcard reviews.
+
+**Acceptance Criteria:**
+
+**Given** a completed listening exercise showing the transcript
+**When** the transcript renders
+**Then** English words are highlighted and tappable (reusing chatbot word highlighting logic)
+**And** tapping a word opens MiniDictionary for lookup/save
+**And** saved words flow into the flashcard pipeline via existing vocabulary API
+
+---
+
+## Epic 11: PWA & Push Notifications
+
+The app becomes installable as a PWA with daily push reminders to protect streaks and drive daily engagement.
+
+**FRs covered:** FR47, FR48, FR49
+
+### Story 11.1: PWA Setup & Service Worker
+
+As a user,
+I want the app to be installable on my phone,
+So that I can access it like a native app.
+
+**Acceptance Criteria:**
+
+**Given** a user visiting the app in a supported browser
+**When** the app loads
+**Then** a valid `manifest.json` is served with app name "ThienGlish", icons, and theme color
+**And** a service worker is registered to enable PWA installation
+**And** "Add to Home Screen" prompt is supported on mobile
+**And** a basic offline fallback page displays when no network is available
+**And** the service worker does NOT aggressively cache API responses (only static assets)
+
+### Story 11.2: Push Notification System
+
+As a learner,
+I want daily reminders to study,
+So that I don't forget and break my streak.
+
+**Acceptance Criteria:**
+
+**Given** a user who has enabled push notifications
+**When** they haven't completed any activity by their reminder time (default 20:00 VN)
+**Then** a push notification is sent with personalized content:
+  - If streak > 0: "🔥 Streak {N} ngày! Đừng để mất!"
+  - If flashcards due: "📚 {N} flashcard đang chờ bạn ôn"
+  - Default: "✨ Thử thách mỗi ngày đang chờ!"
+**And** push subscriptions are stored in `push_subscription` table
+**And** a Vercel Cron job triggers daily push delivery
+**And** users can disable notifications in settings
+**And** on first visit, a non-intrusive banner (not modal) prompts for notification permission
+

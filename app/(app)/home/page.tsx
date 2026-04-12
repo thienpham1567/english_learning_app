@@ -16,13 +16,50 @@ import {
   ThunderboltOutlined,
   BookOutlined,
   BarChartOutlined,
+  RightOutlined,
 } from "@ant-design/icons";
 
-import { useDashboard } from "@/hooks/useDashboard";
+import { useDashboard, type DashboardData } from "@/hooks/useDashboard";
 import { useUser } from "@/components/app/shared/UserContext";
 import { StreakFire, XPCounter, EmptyStateCard } from "@/components/app/shared";
 
 const { Title, Text } = Typography;
+
+// ── Level System (Story 8.2) ──
+
+const LEVEL_THRESHOLDS = [
+  0, 100, 250, 500, 800, 1200, 1700, 2400, 3200, 4200,       // 1-10
+  5400, 6800, 8500, 10500, 13000, 16000, 19500, 23500, 28000, 33000, // 11-20
+  38500, 44500, 51000, 58000, 65500, 73500, 82000, 91000, 100500, 110500, // 21-30
+  121000, 132000, 143500, 155500, 168000, 181000, 194500, 208500, 223000, 238000, // 31-40
+  253500, 269500, 286000, 303000, 320500, 338500, 357000, 376000, 395500, 415500, // 41-50
+];
+
+function getLevel(xp: number): { level: number; currentXP: number; nextXP: number; progress: number } {
+  let level = 1;
+  for (let i = LEVEL_THRESHOLDS.length - 1; i >= 0; i--) {
+    if (xp >= LEVEL_THRESHOLDS[i]) {
+      level = i + 1;
+      break;
+    }
+  }
+  const currentThreshold = LEVEL_THRESHOLDS[level - 1] ?? 0;
+  const nextThreshold = LEVEL_THRESHOLDS[level] ?? currentThreshold + 1000;
+  const progress = Math.min((xp - currentThreshold) / (nextThreshold - currentThreshold), 1);
+  return { level, currentXP: xp - currentThreshold, nextXP: nextThreshold - currentThreshold, progress };
+}
+
+// ── Smart CTA Logic (Story 8.1) ──
+
+function getSuggestedActivity(data: DashboardData): { label: string; href: string; emoji: string } {
+  if (data.flashcardsDue > 0) {
+    return { label: `Ôn ${data.flashcardsDue} flashcard đang đến hạn`, href: "/flashcards", emoji: "📚" };
+  }
+  if (!data.dailyChallenge.completed) {
+    return { label: "Thử thách hôm nay", href: "/daily-challenge", emoji: "🔥" };
+  }
+  return { label: "Chat với gia sư AI", href: "/english-chatbot", emoji: "💬" };
+}
 
 // ── Helpers ──
 
@@ -106,9 +143,50 @@ export default function HomePage() {
             <Title level={4} style={{ color: "#fff", fontFamily: "var(--font-display)", margin: 0 }}>
               {getGreeting()}, {firstName}! 👋
             </Title>
-            <Space size="middle" style={{ marginTop: "var(--space-2)" }}>
+            <Space size="middle" style={{ marginTop: "var(--space-2)" }} wrap>
               <StreakFire streak={data.streak.currentStreak} />
               <XPCounter value={data.totalXP} label="XP" />
+              {/* Level Badge (Story 8.2) */}
+              {(() => {
+                const lvl = getLevel(data.totalXP);
+                return (
+                  <Flex align="center" gap={6}>
+                    <Tag
+                      style={{
+                        margin: 0,
+                        background: "rgba(255,255,255,0.2)",
+                        border: "1px solid rgba(255,255,255,0.3)",
+                        color: "#fff",
+                        fontWeight: 700,
+                        fontSize: 12,
+                        borderRadius: 999,
+                        padding: "2px 10px",
+                      }}
+                    >
+                      📊 Lv.{lvl.level}
+                    </Tag>
+                    <div
+                      style={{
+                        width: 60,
+                        height: 6,
+                        borderRadius: 3,
+                        background: "rgba(255,255,255,0.2)",
+                        overflow: "hidden",
+                      }}
+                    >
+                      <div
+                        style={{
+                          width: `${lvl.progress * 100}%`,
+                          height: "100%",
+                          borderRadius: 3,
+                          background: "#fff",
+                          transition: "width 0.5s ease",
+                        }}
+                      />
+                    </div>
+                  </Flex>
+                );
+              })()}
             </Space>
           </Flex>
         </Card>
@@ -125,6 +203,48 @@ export default function HomePage() {
             />
           </Card>
         )}
+
+        {/* ── Smart CTA (Story 8.1) ── */}
+        {!isNewUser && (() => {
+          const suggested = getSuggestedActivity(data);
+          return (
+            <button
+              className="cta-shimmer"
+              onClick={() => router.push(suggested.href)}
+              style={{
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 12,
+                padding: "18px 24px",
+                borderRadius: "var(--radius-xl)",
+                border: "none",
+                background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+                color: "#fff",
+                fontSize: 16,
+                fontWeight: 700,
+                fontFamily: "var(--font-body)",
+                cursor: "pointer",
+                boxShadow: "0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent)",
+                transition: "transform 0.15s ease, box-shadow 0.15s ease",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = "scale(1.01)";
+                e.currentTarget.style.boxShadow = "0 6px 24px color-mix(in srgb, var(--accent) 40%, transparent)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+                e.currentTarget.style.boxShadow = "0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent)";
+              }}
+              aria-label={`${suggested.emoji} ${suggested.label}`}
+            >
+              <span style={{ fontSize: 22 }}>{suggested.emoji}</span>
+              <span>▶ {suggested.label}</span>
+              <RightOutlined style={{ marginLeft: "auto", opacity: 0.7, fontSize: 14 }} />
+            </button>
+          );
+        })()}
 
         {/* ── TodaysPlan ── */}
         {!isNewUser && (

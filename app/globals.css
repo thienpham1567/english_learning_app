@@ -667,6 +667,33 @@ textarea.ant-input::placeholder {
   scrollbar-width: none;
   -ms-overflow-style: none;
 }
+/* ── Smart CTA Shimmer ── */
+@keyframes ctaShimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(200%); }
+}
+
+.cta-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+.cta-shimmer::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  animation: ctaShimmer 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
 .scrollbar-none::-webkit-scrollbar { display: none; }
 
 /* ── Accessibility: Reduced Motion ── */
@@ -693,7 +720,9 @@ textarea.ant-input::placeholder {
   }
 
   /* Disable shimmer hover transition */
-  .btn-shimmer::after {
+  .btn-shimmer::after,
+  .cta-shimmer::after {
+    animation: none !important;
     transition: none !important;
   }
 
