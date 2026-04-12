@@ -20,6 +20,7 @@ import {
   BarChartOutlined,
   SoundOutlined,
   FileTextOutlined,
+  AudioOutlined,
   TrophyOutlined,
   SwapOutlined,
 } from "@ant-design/icons";
@@ -37,6 +38,7 @@ const navItems = [
   { href: "/writing-practice", label: "Luyện viết", icon: EditOutlined },
   { href: "/daily-challenge", label: "Thử thách", icon: FireOutlined },
   { href: "/listening", label: "Luyện nghe", icon: SoundOutlined },
+  { href: "/pronunciation", label: "Luyện nói", icon: AudioOutlined },
   { href: "/reading", label: "Luyện đọc", icon: FileTextOutlined },
   { href: "/progress", label: "Tiến độ", icon: BarChartOutlined },
 ];
