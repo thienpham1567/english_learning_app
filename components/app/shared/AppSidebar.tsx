@@ -21,6 +21,7 @@ import {
   SoundOutlined,
   FileTextOutlined,
   AudioOutlined,
+  FileSearchOutlined,
   TrophyOutlined,
   SwapOutlined,
 } from "@ant-design/icons";
@@ -40,6 +41,7 @@ const navItems = [
   { href: "/listening", label: "Luyện nghe", icon: SoundOutlined },
   { href: "/pronunciation", label: "Luyện nói", icon: AudioOutlined },
   { href: "/reading", label: "Luyện đọc", icon: FileTextOutlined },
+  { href: "/mock-test", label: "Thi thử", icon: FileSearchOutlined },
   { href: "/progress", label: "Tiến độ", icon: BarChartOutlined },
 ];
 
