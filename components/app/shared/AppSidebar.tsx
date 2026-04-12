@@ -1,5 +1,6 @@
 "use client";
 
+import { useState, useCallback } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -24,25 +25,55 @@ import {
   FileSearchOutlined,
   TrophyOutlined,
   SwapOutlined,
+  DownOutlined,
+  RightOutlined,
+  CheckCircleOutlined,
 } from "@ant-design/icons";
 import { useTheme } from "@/components/app/shared/ThemeProvider";
 import { useExamMode } from "@/components/app/shared/ExamModeProvider";
 import { useSidebarBadges } from "@/hooks/useSidebarBadges";
 
-const navItems = [
+type NavItem = { href: string; label: string; icon: React.ComponentType<{ style?: React.CSSProperties }> };
+
+type NavGroup = {
+  key: string;
+  label: string;
+  items: NavItem[];
+};
+
+const navGroups: (NavItem | NavGroup)[] = [
   { href: "/home", label: "Trang chủ", icon: HomeOutlined },
-  { href: "/english-chatbot", label: "Trò chuyện", icon: CommentOutlined },
-  { href: "/dictionary", label: "Từ điển", icon: ReadOutlined },
-  { href: "/my-vocabulary", label: "Từ vựng", icon: BookOutlined },
-  { href: "/flashcards", label: "Ôn tập", icon: AppstoreOutlined },
-  { href: "/grammar-quiz", label: "Ngữ pháp", icon: BulbOutlined },
-  { href: "/writing-practice", label: "Luyện viết", icon: EditOutlined },
-  { href: "/daily-challenge", label: "Thử thách", icon: FireOutlined },
-  { href: "/listening", label: "Luyện nghe", icon: SoundOutlined },
-  { href: "/pronunciation", label: "Luyện nói", icon: AudioOutlined },
-  { href: "/reading", label: "Luyện đọc", icon: FileTextOutlined },
-  { href: "/mock-test", label: "Thi thử", icon: FileSearchOutlined },
-  { href: "/progress", label: "Tiến độ", icon: BarChartOutlined },
+  {
+    key: "practice",
+    label: "Luyện tập",
+    items: [
+      { href: "/english-chatbot", label: "Trò chuyện", icon: CommentOutlined },
+      { href: "/grammar-quiz", label: "Ngữ pháp", icon: BulbOutlined },
+      { href: "/listening", label: "Luyện nghe", icon: SoundOutlined },
+      { href: "/pronunciation", label: "Luyện nói", icon: AudioOutlined },
+      { href: "/writing-practice", label: "Luyện viết", icon: EditOutlined },
+      { href: "/reading", label: "Luyện đọc", icon: FileTextOutlined },
+    ],
+  },
+  {
+    key: "vocabulary",
+    label: "Từ vựng",
+    items: [
+      { href: "/dictionary", label: "Từ điển", icon: ReadOutlined },
+      { href: "/my-vocabulary", label: "Từ vựng của tôi", icon: BookOutlined },
+      { href: "/flashcards", label: "Ôn tập", icon: AppstoreOutlined },
+    ],
+  },
+  {
+    key: "assess",
+    label: "Đánh giá",
+    items: [
+      { href: "/daily-challenge", label: "Thử thách", icon: FireOutlined },
+      { href: "/mock-test", label: "Thi thử", icon: FileSearchOutlined },
+      { href: "/error-notebook", label: "Sổ lỗi sai", icon: BookOutlined },
+      { href: "/progress", label: "Tiến độ", icon: BarChartOutlined },
+    ],
+  },
 ];
 
 type Props = {
@@ -55,6 +86,31 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
   const { mode, toggleTheme } = useTheme();
   const { examMode, setExamMode } = useExamMode();
   const badges = useSidebarBadges();
+  const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(() => {
+    if (typeof window === "undefined") return new Set();
+    const collapsed = new Set<string>();
+    navGroups.forEach((entry) => {
+      if ("key" in entry) {
+        const stored = localStorage.getItem(`sidebar-group-${entry.key}`);
+        if (stored === "closed") collapsed.add(entry.key);
+      }
+    });
+    return collapsed;
+  });
+
+  const toggleGroup = useCallback((key: string) => {
+    setCollapsedGroups((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+        localStorage.setItem(`sidebar-group-${key}`, "open");
+      } else {
+        next.add(key);
+        localStorage.setItem(`sidebar-group-${key}`, "closed");
+      }
+      return next;
+    });
+  }, []);
 
   // Compute badge for each nav item
   function getBadge(href: string): React.ReactNode {
@@ -71,7 +127,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
     if (href === "/daily-challenge") {
       return (
         <span style={{ fontSize: 12, lineHeight: 1 }}>
-          {badges.dailyChallengeCompleted ? "✅" : "🔥"}
+          {badges.dailyChallengeCompleted ? <CheckCircleOutlined style={{ color: "#52c41a" }} /> : <FireOutlined style={{ color: "#ff4d4f" }} />}
         </span>
       );
     }
@@ -167,55 +223,165 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
 
       <nav
         aria-label="Các mục trong ứng dụng"
-        style={{ display: "flex", flexDirection: "column", gap: 4, paddingTop: 8, flex: 1 }}
+        style={{ display: "flex", flexDirection: "column", gap: 2, paddingTop: 8, flex: 1, overflow: "auto" }}
       >
-        {navItems.map(({ href, label, icon: Icon }, index) => {
-          const active = pathname === href || pathname.startsWith(`${href}/`);
-
-          const linkContent = (
-            <Link
-              href={href}
-              aria-current={active ? "page" : undefined}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 12,
-                overflow: "hidden",
-                borderRadius: "var(--radius)",
-                padding: "10px 12px",
-                fontSize: 14,
-                fontWeight: 500,
-                textDecoration: "none",
-                transition: "background 0.2s, color 0.2s",
-                background: active ? "var(--accent-muted)" : "transparent",
-                color: active ? "var(--accent)" : "var(--sidebar-text)",
-                animation: `fadeInLeft 0.3s ease-out ${0.1 + index * 0.05}s both`,
-              }}
-            >
-              <span
+        {navGroups.map((entry, groupIndex) => {
+          // Standalone item (Home)
+          if ("href" in entry) {
+            const { href, label, icon: Icon } = entry;
+            const active = pathname === href || pathname.startsWith(`${href}/`);
+            const linkContent = (
+              <Link
+                href={href}
+                aria-current={active ? "page" : undefined}
                 style={{
-                  display: "grid",
-                  placeItems: "center",
-                  width: 20,
-                  height: 20,
-                  flexShrink: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 12,
+                  overflow: "hidden",
+                  borderRadius: "var(--radius)",
+                  padding: "10px 12px",
+                  fontSize: 14,
+                  fontWeight: 500,
+                  textDecoration: "none",
+                  transition: "background 0.2s, color 0.2s",
+                  background: active ? "var(--accent-muted)" : "transparent",
+                  color: active ? "var(--accent)" : "var(--sidebar-text)",
+                  animation: `fadeInLeft 0.3s ease-out ${0.1 + groupIndex * 0.05}s both`,
                 }}
               >
-                <Icon style={{ fontSize: 18 }} />
-              </span>
-              {isExpanded && <span style={{ whiteSpace: "nowrap", fontSize: 14, flex: 1 }}>{label}</span>}
-              {getBadge(href)}
-            </Link>
-          );
+                <span style={{ display: "grid", placeItems: "center", width: 20, height: 20, flexShrink: 0 }}>
+                  <Icon style={{ fontSize: 18 }} />
+                </span>
+                {isExpanded && <span style={{ whiteSpace: "nowrap", fontSize: 14, flex: 1 }}>{label}</span>}
+                {getBadge(href)}
+              </Link>
+            );
+            return (
+              <div key={href}>
+                {!isExpanded ? <Tooltip placement="right" title={label}>{linkContent}</Tooltip> : linkContent}
+              </div>
+            );
+          }
 
+          // Group
+          const group = entry as NavGroup;
+          const groupHasActive = group.items.some(
+            (item) => pathname === item.href || pathname.startsWith(`${item.href}/`),
+          );
+          const isGroupOpen = groupHasActive || !collapsedGroups.has(group.key);
+
+          // When sidebar collapsed, show items flat with tooltips
+          if (!isExpanded) {
+            return (
+              <div key={group.key}>
+                {group.items.map((item) => {
+                  const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                  const Icon = item.icon;
+                  const linkEl = (
+                    <Link
+                      href={item.href}
+                      aria-current={active ? "page" : undefined}
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 12,
+                        overflow: "hidden",
+                        borderRadius: "var(--radius)",
+                        padding: "10px 12px",
+                        fontSize: 14,
+                        fontWeight: 500,
+                        textDecoration: "none",
+                        transition: "background 0.2s, color 0.2s",
+                        background: active ? "var(--accent-muted)" : "transparent",
+                        color: active ? "var(--accent)" : "var(--sidebar-text)",
+                      }}
+                    >
+                      <span style={{ display: "grid", placeItems: "center", width: 20, height: 20, flexShrink: 0 }}>
+                        <Icon style={{ fontSize: 18 }} />
+                      </span>
+                      {getBadge(item.href)}
+                    </Link>
+                  );
+                  return (
+                    <Tooltip key={item.href} placement="right" title={item.label}>
+                      {linkEl}
+                    </Tooltip>
+                  );
+                })}
+              </div>
+            );
+          }
+
+          // Expanded sidebar: collapsible group
           return (
-            <div key={href}>
-              {!isExpanded ? (
-                <Tooltip placement="right" title={label}>
-                  {linkContent}
-                </Tooltip>
-              ) : (
-                linkContent
+            <div
+              key={group.key}
+              style={{
+                animation: `fadeInLeft 0.3s ease-out ${0.1 + groupIndex * 0.08}s both`,
+              }}
+            >
+              <button
+                onClick={() => toggleGroup(group.key)}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  width: "100%",
+                  padding: "6px 12px",
+                  border: "none",
+                  background: "none",
+                  color: "var(--sidebar-text)",
+                  opacity: 0.6,
+                  fontSize: 11,
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.05em",
+                  cursor: "pointer",
+                  marginTop: groupIndex > 1 ? 8 : 4,
+                }}
+              >
+                <span style={{ flex: 1, textAlign: "left" }}>{group.label}</span>
+                {isGroupOpen ? (
+                  <DownOutlined style={{ fontSize: 9 }} />
+                ) : (
+                  <RightOutlined style={{ fontSize: 9 }} />
+                )}
+              </button>
+
+              {isGroupOpen && (
+                <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                  {group.items.map((item) => {
+                    const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                    const Icon = item.icon;
+                    return (
+                      <Link
+                        key={item.href}
+                        href={item.href}
+                        aria-current={active ? "page" : undefined}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 12,
+                          overflow: "hidden",
+                          borderRadius: "var(--radius)",
+                          padding: "8px 12px 8px 16px",
+                          fontSize: 13,
+                          fontWeight: 500,
+                          textDecoration: "none",
+                          transition: "background 0.2s, color 0.2s",
+                          background: active ? "var(--accent-muted)" : "transparent",
+                          color: active ? "var(--accent)" : "var(--sidebar-text)",
+                        }}
+                      >
+                        <span style={{ display: "grid", placeItems: "center", width: 18, height: 18, flexShrink: 0 }}>
+                          <Icon style={{ fontSize: 16 }} />
+                        </span>
+                        <span style={{ whiteSpace: "nowrap", fontSize: 13, flex: 1 }}>{item.label}</span>
+                        {getBadge(item.href)}
+                      </Link>
+                    );
+                  })}
+                </div>
               )}
             </div>
           );

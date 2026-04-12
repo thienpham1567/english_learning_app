@@ -181,3 +181,22 @@ export const userPreferences = pgTable("user_preferences", {
 });
 
 export type UserPreferencesRow = typeof userPreferences.$inferSelect;
+
+/** Error Log — tracks wrong answers across all modules */
+export const errorLog = pgTable("error_log", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  sourceModule: text("source_module").notNull(), // 'grammar-quiz' | 'mock-test' | 'daily-challenge' | 'listening'
+  questionStem: text("question_stem").notNull(),
+  options: jsonb("options").$type<string[]>(),
+  userAnswer: text("user_answer").notNull(),
+  correctAnswer: text("correct_answer").notNull(),
+  explanationEn: text("explanation_en"),
+  explanationVi: text("explanation_vi"),
+  grammarTopic: text("grammar_topic"),
+  isResolved: boolean("is_resolved").notNull().default(false),
+  resolvedAt: timestamp("resolved_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export type ErrorLogRow = typeof errorLog.$inferSelect;
