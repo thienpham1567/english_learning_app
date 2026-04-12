@@ -153,6 +153,18 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const voiceModeRef = useRef(false);
   voiceModeRef.current = voiceMode;
 
+  // When Whisper transcription completes, populate input (or auto-send in voice mode)
+  useEffect(() => {
+    if (voice.transcript && !voice.isTranscribing) {
+      setInput(voice.transcript);
+      // In voice mode, auto-send after transcription
+      if (voiceModeRef.current) {
+        setTimeout(() => send(voice.transcript), 100);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [voice.transcript, voice.isTranscribing]);
+
   const [suggestions, setSuggestions] = useState<(typeof activePersona.suggestions)[number][]>([]);
   useEffect(() => {
     setSuggestions(sampleSuggestions(activePersona, 4));
@@ -653,6 +665,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                       tts.speak(text);
                     } : undefined}
                     isSpeaking={tts.isSpeaking && speakingMsgId === m.id}
+                    isTtsLoading={tts.isLoading && speakingMsgId === m.id}
                     onStopSpeak={tts.isSupported ? () => {
                       tts.stop();
                       setSpeakingMsgId(null);
@@ -797,7 +810,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                 outline: "none",
               }}
             />
-            {/* Mic Button (Story 7.1) */}
+            {/* Mic Button (Story 7.1 — Whisper-powered) */}
             {voice.isSupported && (
               <button
                 style={{
@@ -807,29 +820,47 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                   flexShrink: 0,
                   placeItems: "center",
                   borderRadius: "50%",
-                  border: voice.isListening ? "2px solid #ef4444" : "1.5px solid var(--border)",
-                  color: voice.isListening ? "#ef4444" : "var(--text-muted)",
-                  background: voice.isListening ? "rgba(239,68,68,0.08)" : "transparent",
-                  cursor: isLoading ? "not-allowed" : "pointer",
+                  border: voice.isListening
+                    ? "2px solid #ef4444"
+                    : voice.isTranscribing
+                      ? "2px solid var(--accent)"
+                      : "1.5px solid var(--border)",
+                  color: voice.isListening
+                    ? "#ef4444"
+                    : voice.isTranscribing
+                      ? "var(--accent)"
+                      : "var(--text-muted)",
+                  background: voice.isListening
+                    ? "rgba(239,68,68,0.08)"
+                    : voice.isTranscribing
+                      ? "var(--accent-muted)"
+                      : "transparent",
+                  cursor: isLoading || voice.isTranscribing ? "not-allowed" : "pointer",
                   transition: "all 0.2s",
-                  animation: voice.isListening ? "pulse 1.5s infinite" : "none",
+                  animation: voice.isListening
+                    ? "pulse 1.5s infinite"
+                    : voice.isTranscribing
+                      ? "pulse 1.5s infinite"
+                      : "none",
                 }}
                 onClick={() => {
                   if (voice.isListening) {
                     voice.stop();
-                    // Populate input with transcript
-                    if (voice.fullTranscript.trim()) {
-                      setInput(voice.fullTranscript.trim());
-                    }
-                  } else {
+                  } else if (!voice.isTranscribing) {
                     voice.start();
                   }
                 }}
-                disabled={isLoading}
-                aria-label={voice.isListening ? "Dừng ghi âm" : "Nói tiếng Anh"}
+                disabled={isLoading || voice.isTranscribing}
+                aria-label={
+                  voice.isListening
+                    ? "Dừng ghi âm"
+                    : voice.isTranscribing
+                      ? "Đang nhận dạng..."
+                      : "Nói tiếng Anh"
+                }
               >
                 <span style={{ fontSize: 18 }}>
-                  {voice.isListening ? "⏹" : "🎙️"}
+                  {voice.isListening ? "⏹" : voice.isTranscribing ? "⏳" : "🎙️"}
                 </span>
               </button>
             )}

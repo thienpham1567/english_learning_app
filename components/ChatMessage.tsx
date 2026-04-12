@@ -56,28 +56,33 @@ function CopyButton({ text }: { text: string }) {
   );
 }
 
-function SpeakButton({ text, onSpeak, isSpeaking, onStop }: {
+function SpeakButton({ text, onSpeak, isSpeaking, isLoading, onStop }: {
   text: string;
   onSpeak: (text: string) => void;
   isSpeaking: boolean;
+  isLoading?: boolean;
   onStop: () => void;
 }) {
+  const active = isSpeaking || isLoading;
   return (
     <button
       style={{
         borderRadius: "50%",
         padding: 4,
-        color: isSpeaking ? "var(--accent)" : "var(--text-muted)",
+        color: active ? "var(--accent)" : "var(--text-muted)",
         background: "none",
         border: "none",
-        cursor: "pointer",
+        cursor: isLoading ? "wait" : "pointer",
         transition: "color 0.2s",
         animation: isSpeaking ? "pulse 1.5s infinite" : "none",
       }}
-      onClick={() => isSpeaking ? onStop() : onSpeak(text)}
-      aria-label={isSpeaking ? "Dừng phát" : "Nghe phát âm"}
+      onClick={() => active ? onStop() : onSpeak(text)}
+      disabled={isLoading}
+      aria-label={isSpeaking ? "Dừng phát" : isLoading ? "Đang tải..." : "Nghe phát âm"}
     >
-      {isSpeaking ? (
+      {isLoading ? (
+        <span style={{ fontSize: 12 }}>⏳</span>
+      ) : isSpeaking ? (
         <PauseCircleOutlined style={{ fontSize: 13 }} />
       ) : (
         <SoundOutlined style={{ fontSize: 13 }} />
@@ -155,6 +160,7 @@ export function ChatMessage({
   savedWords,
   onSpeak,
   isSpeaking = false,
+  isTtsLoading = false,
   onStopSpeak,
 }: {
   message: PageMessage;
@@ -167,6 +173,8 @@ export function ChatMessage({
   onSpeak?: (text: string) => void;
   /** Whether this specific message is currently being spoken */
   isSpeaking?: boolean;
+  /** Whether TTS audio is loading from API */
+  isTtsLoading?: boolean;
   /** Called to stop speaking */
   onStopSpeak?: () => void;
 }) {
@@ -288,7 +296,7 @@ export function ChatMessage({
         >
           {time && <span>{time}</span>}
           {!isUser && onSpeak && onStopSpeak && (
-            <SpeakButton text={text} onSpeak={onSpeak} isSpeaking={isSpeaking} onStop={onStopSpeak} />
+            <SpeakButton text={text} onSpeak={onSpeak} isSpeaking={isSpeaking} isLoading={isTtsLoading} onStop={onStopSpeak} />
           )}
           {!isUser && <CopyButton text={text} />}
         </div>

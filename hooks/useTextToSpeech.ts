@@ -2,60 +2,97 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 
+/**
+ * useTextToSpeech — OpenAI TTS-powered text-to-speech hook.
+ *
+ * Sends text to /api/voice/synthesize (OpenAI TTS API),
+ * receives MP3 audio and plays it via HTMLAudioElement.
+ *
+ * Voice: "nova" (natural female English voice, good for teaching)
+ * Speed: toggleable between 1.0 (normal) and 0.8 (slow)
+ */
 export function useTextToSpeech() {
   const [isSpeaking, setSpeaking] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [rate, setRate] = useState<1 | 0.8>(1);
-  const utteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const abortRef = useRef<AbortController | null>(null);
 
-  const isSupported = typeof window !== "undefined" && "speechSynthesis" in window;
+  // Always supported — it's server-side, just needs fetch
+  const isSupported = typeof window !== "undefined";
 
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (isSupported) {
-        window.speechSynthesis.cancel();
-      }
+      audioRef.current?.pause();
+      abortRef.current?.abort();
     };
-  }, [isSupported]);
+  }, []);
 
   const speak = useCallback(
-    (text: string) => {
-      if (!isSupported) return;
+    async (text: string) => {
+      if (!isSupported || !text.trim()) return;
 
-      // Cancel any current speech
-      window.speechSynthesis.cancel();
+      // Stop any current playback
+      audioRef.current?.pause();
+      abortRef.current?.abort();
 
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = "en-US";
-      utterance.rate = rate;
-      utterance.pitch = 1;
+      const abortController = new AbortController();
+      abortRef.current = abortController;
 
-      // Try to find a good English voice
-      const voices = window.speechSynthesis.getVoices();
-      const englishVoice = voices.find(
-        (v) => v.lang.startsWith("en") && v.name.includes("Google")
-      ) ?? voices.find((v) => v.lang.startsWith("en-US"))
-        ?? voices.find((v) => v.lang.startsWith("en"));
+      setIsLoading(true);
+      setSpeaking(false);
 
-      if (englishVoice) {
-        utterance.voice = englishVoice;
+      try {
+        const response = await fetch("/api/voice/synthesize", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ text: text.slice(0, 4000), speed: rate }),
+          signal: abortController.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error("TTS API error");
+        }
+
+        const audioBlob = await response.blob();
+        const audioUrl = URL.createObjectURL(audioBlob);
+
+        const audio = new Audio(audioUrl);
+        audioRef.current = audio;
+
+        audio.onplay = () => {
+          setIsLoading(false);
+          setSpeaking(true);
+        };
+        audio.onended = () => {
+          setSpeaking(false);
+          URL.revokeObjectURL(audioUrl);
+        };
+        audio.onerror = () => {
+          setSpeaking(false);
+          setIsLoading(false);
+          URL.revokeObjectURL(audioUrl);
+        };
+
+        await audio.play();
+      } catch (err) {
+        if ((err as Error).name !== "AbortError") {
+          console.warn("[useTextToSpeech] Error:", err);
+        }
+        setIsLoading(false);
+        setSpeaking(false);
       }
-
-      utterance.onstart = () => setSpeaking(true);
-      utterance.onend = () => setSpeaking(false);
-      utterance.onerror = () => setSpeaking(false);
-
-      utteranceRef.current = utterance;
-      window.speechSynthesis.speak(utterance);
     },
     [isSupported, rate],
   );
 
   const stop = useCallback(() => {
-    if (!isSupported) return;
-    window.speechSynthesis.cancel();
+    audioRef.current?.pause();
+    abortRef.current?.abort();
     setSpeaking(false);
-  }, [isSupported]);
+    setIsLoading(false);
+  }, []);
 
   const toggleRate = useCallback(() => {
     setRate((prev) => (prev === 1 ? 0.8 : 1));
@@ -65,6 +102,8 @@ export function useTextToSpeech() {
     speak,
     stop,
     isSpeaking,
+    /** Whether audio is being fetched from the API */
+    isLoading,
     isSupported,
     /** Current playback rate: 1 (normal) or 0.8 (slow) */
     rate,
