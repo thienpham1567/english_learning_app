@@ -1,6 +1,6 @@
 ---
 sprintNumber: 7
-status: planning
+status: in-progress
 startDate: 2026-04-12
 epics: [7, 8]
 ---
@@ -15,8 +15,8 @@ Thêm voice I/O cho chatbot (nói tiếng Anh) và nâng cấp dashboard với S
 
 | # | Story | Epic | Points | Status | Dependencies |
 |---|---|---|---|---|---|
-| 1 | 8.1: Smart CTA "Bài Hôm Nay" | Epic 8 | 3 | ⬜ TODO | None |
-| 2 | 8.2: Level System UI | Epic 8 | 3 | ⬜ TODO | None |
+| 1 | 8.1: Smart CTA "Bài Hôm Nay" | Epic 8 | 3 | ✅ DONE | None |
+| 2 | 8.2: Level System UI | Epic 8 | 3 | ✅ DONE | None |
 | 3 | 7.1: Voice Input Hook & Mic Button | Epic 7 | 5 | ⬜ TODO | None |
 | 4 | 7.2: Text-to-Speech for AI Responses | Epic 7 | 5 | ⬜ TODO | None |
 | 5 | 7.3: Voice Conversation Mode | Epic 7 | 8 | ⬜ TODO | 7.1, 7.2 |

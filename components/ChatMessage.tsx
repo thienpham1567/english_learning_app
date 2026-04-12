@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
-import { CheckOutlined, CopyOutlined, TrophyOutlined } from "@ant-design/icons";
+import { CheckOutlined, CopyOutlined, TrophyOutlined, SoundOutlined, PauseCircleOutlined } from "@ant-design/icons";
 import { useUser } from "@/components/app/shared/UserContext";
 import { HighlightedText } from "@/components/app/english-chatbot/HighlightedText";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
@@ -51,6 +51,36 @@ function CopyButton({ text }: { text: string }) {
         <CheckOutlined style={{ fontSize: 13 }} />
       ) : (
         <CopyOutlined style={{ fontSize: 13 }} />
+      )}
+    </button>
+  );
+}
+
+function SpeakButton({ text, onSpeak, isSpeaking, onStop }: {
+  text: string;
+  onSpeak: (text: string) => void;
+  isSpeaking: boolean;
+  onStop: () => void;
+}) {
+  return (
+    <button
+      style={{
+        borderRadius: "50%",
+        padding: 4,
+        color: isSpeaking ? "var(--accent)" : "var(--text-muted)",
+        background: "none",
+        border: "none",
+        cursor: "pointer",
+        transition: "color 0.2s",
+        animation: isSpeaking ? "pulse 1.5s infinite" : "none",
+      }}
+      onClick={() => isSpeaking ? onStop() : onSpeak(text)}
+      aria-label={isSpeaking ? "Dừng phát" : "Nghe phát âm"}
+    >
+      {isSpeaking ? (
+        <PauseCircleOutlined style={{ fontSize: 13 }} />
+      ) : (
+        <SoundOutlined style={{ fontSize: 13 }} />
       )}
     </button>
   );
@@ -123,6 +153,9 @@ export function ChatMessage({
   persona,
   onWordClick,
   savedWords,
+  onSpeak,
+  isSpeaking = false,
+  onStopSpeak,
 }: {
   message: PageMessage;
   className?: string;
@@ -130,6 +163,12 @@ export function ChatMessage({
   persona?: Persona;
   onWordClick?: (word: string, rect: DOMRect) => void;
   savedWords?: Set<string>;
+  /** Called to speak this message aloud */
+  onSpeak?: (text: string) => void;
+  /** Whether this specific message is currently being spoken */
+  isSpeaking?: boolean;
+  /** Called to stop speaking */
+  onStopSpeak?: () => void;
 }) {
   if (message.role === "divider") {
     return (
@@ -248,6 +287,9 @@ export function ChatMessage({
           className="chat-meta"
         >
           {time && <span>{time}</span>}
+          {!isUser && onSpeak && onStopSpeak && (
+            <SpeakButton text={text} onSpeak={onSpeak} isSpeaking={isSpeaking} onStop={onStopSpeak} />
+          )}
           {!isUser && <CopyButton text={text} />}
         </div>
       </div>

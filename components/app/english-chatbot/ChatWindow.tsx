@@ -12,6 +12,8 @@ import { PersonaSwitcher } from "@/components/app/english-chatbot/PersonaSwitche
 import { ChatHeader } from "@/components/app/english-chatbot/ChatHeader";
 import { MiniDictionary } from "@/components/app/shared";
 import { useMiniDictionary } from "@/hooks/useMiniDictionary";
+import { useVoiceInput } from "@/hooks/useVoiceInput";
+import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { deriveTitle } from "@/lib/chat/derive-title";
 import { DEFAULT_PERSONA_ID, PERSONAS } from "@/lib/chat/personas";
 import type { Persona } from "@/lib/chat/personas";
@@ -139,6 +141,11 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const streamingHasStarted = isLoading && lastMsg?.role === "assistant";
   const activePersona = PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
   const ActiveAvatar = activePersona.avatar;
+
+  // Voice hooks (Story 7.1 + 7.2)
+  const voice = useVoiceInput();
+  const tts = useTextToSpeech();
+  const [speakingMsgId, setSpeakingMsgId] = useState<string | null>(null);
 
   const [suggestions, setSuggestions] = useState<(typeof activePersona.suggestions)[number][]>([]);
   useEffect(() => {
@@ -622,6 +629,15 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                     }
                     onWordClick={miniDict.openForWord}
                     savedWords={savedWords}
+                    onSpeak={tts.isSupported ? (text) => {
+                      setSpeakingMsgId(m.id);
+                      tts.speak(text);
+                    } : undefined}
+                    isSpeaking={tts.isSpeaking && speakingMsgId === m.id}
+                    onStopSpeak={tts.isSupported ? () => {
+                      tts.stop();
+                      setSpeakingMsgId(null);
+                    } : undefined}
                   />
                 </div>
               ))}
@@ -762,6 +778,42 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                 outline: "none",
               }}
             />
+            {/* Mic Button (Story 7.1) */}
+            {voice.isSupported && (
+              <button
+                style={{
+                  display: "grid",
+                  width: 44,
+                  height: 44,
+                  flexShrink: 0,
+                  placeItems: "center",
+                  borderRadius: "50%",
+                  border: voice.isListening ? "2px solid #ef4444" : "1.5px solid var(--border)",
+                  color: voice.isListening ? "#ef4444" : "var(--text-muted)",
+                  background: voice.isListening ? "rgba(239,68,68,0.08)" : "transparent",
+                  cursor: isLoading ? "not-allowed" : "pointer",
+                  transition: "all 0.2s",
+                  animation: voice.isListening ? "pulse 1.5s infinite" : "none",
+                }}
+                onClick={() => {
+                  if (voice.isListening) {
+                    voice.stop();
+                    // Populate input with transcript
+                    if (voice.fullTranscript.trim()) {
+                      setInput(voice.fullTranscript.trim());
+                    }
+                  } else {
+                    voice.start();
+                  }
+                }}
+                disabled={isLoading}
+                aria-label={voice.isListening ? "Dừng ghi âm" : "Nói tiếng Anh"}
+              >
+                <span style={{ fontSize: 18 }}>
+                  {voice.isListening ? "⏹" : "🎙️"}
+                </span>
+              </button>
+            )}
             <button
               style={{
                 display: "grid",
@@ -785,7 +837,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
             </button>
           </div>
           <p style={{ fontSize: 14, color: "var(--text-muted)", textAlign: "center" }}>
-            Enter để gửi · Shift+Enter để xuống dòng
+            Enter để gửi · Shift+Enter để xuống dòng{voice.isSupported ? " · 🎙️ để nói" : ""}
           </p>
         </div>
       </div>
