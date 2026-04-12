@@ -147,6 +147,12 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const tts = useTextToSpeech();
   const [speakingMsgId, setSpeakingMsgId] = useState<string | null>(null);
 
+  // Voice Conversation Mode (Story 7.3)
+  const [voiceMode, setVoiceMode] = useState(false);
+  const [voiceExchanges, setVoiceExchanges] = useState(0);
+  const voiceModeRef = useRef(false);
+  voiceModeRef.current = voiceMode;
+
   const [suggestions, setSuggestions] = useState<(typeof activePersona.suggestions)[number][]>([]);
   useEffect(() => {
     setSuggestions(sampleSuggestions(activePersona, 4));
@@ -392,6 +398,19 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       removeEmptyAssistantMessage(assistantMessageId);
     } finally {
       setIsLoading(false);
+
+      // Voice mode: auto-speak the last assistant message after streaming done
+      if (voiceModeRef.current && tts.isSupported) {
+        // Small delay to let state settle
+        setTimeout(() => {
+          const latestMessages = document.querySelectorAll('.chat-markdown');
+          const lastAiMsg = latestMessages[latestMessages.length - 1];
+          if (lastAiMsg?.textContent) {
+            tts.speak(lastAiMsg.textContent);
+            setVoiceExchanges((c) => c + 1);
+          }
+        }, 300);
+      }
     }
   };
 
@@ -836,9 +855,33 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
               <ArrowUpOutlined style={{ fontSize: 18 }} />
             </button>
           </div>
-          <p style={{ fontSize: 14, color: "var(--text-muted)", textAlign: "center" }}>
-            Enter để gửi · Shift+Enter để xuống dòng{voice.isSupported ? " · 🎙️ để nói" : ""}
-          </p>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, fontSize: 14, color: "var(--text-muted)" }}>
+            <span>Enter để gửi · Shift+Enter xuống dòng{voice.isSupported ? " · 🎙️ nói" : ""}</span>
+            {voice.isSupported && tts.isSupported && (
+              <button
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 4,
+                  padding: "3px 10px",
+                  borderRadius: 999,
+                  border: voiceMode ? "1.5px solid var(--accent)" : "1px solid var(--border)",
+                  background: voiceMode ? "color-mix(in srgb, var(--accent) 10%, var(--surface))" : "var(--surface)",
+                  color: voiceMode ? "var(--accent)" : "var(--text-muted)",
+                  fontSize: 12,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                }}
+                onClick={() => {
+                  setVoiceMode((v) => !v);
+                  if (!voiceMode) setVoiceExchanges(0);
+                }}
+              >
+                🎙️ {voiceMode ? `Chế độ nói (${voiceExchanges})` : "Chế độ nói"}
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
