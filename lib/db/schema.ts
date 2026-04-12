@@ -14,6 +14,14 @@ import { jsonb } from "drizzle-orm/pg-core";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";
 
 export const messageRoleEnum = pgEnum("message_role", ["user", "assistant"]);
+export const activityTypeEnum = pgEnum("activity_type", [
+  "flashcard_review",
+  "grammar_quiz",
+  "writing_practice",
+  "daily_challenge",
+  "chatbot_session",
+  "voice_practice",
+]);
 
 export const conversation = pgTable("conversation", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -106,6 +114,15 @@ export const userStreak = pgTable("user_streak", {
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });
 
+export const activityLog = pgTable("activity_log", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  activityType: activityTypeEnum("activity_type").notNull(),
+  xpEarned: integer("xp_earned").notNull().default(0),
+  metadata: jsonb("metadata").$type<Record<string, unknown>>().default({}),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
 export type Conversation = typeof conversation.$inferSelect;
 export type Message = typeof message.$inferSelect;
 export type VocabularyCache = typeof vocabularyCache.$inferSelect;
@@ -114,3 +131,4 @@ export type FlashcardProgress = typeof flashcardProgress.$inferSelect;
 export type WritingSubmissionRow = typeof writingSubmission.$inferSelect;
 export type DailyChallengeRow = typeof dailyChallenge.$inferSelect;
 export type UserStreakRow = typeof userStreak.$inferSelect;
+export type ActivityLogRow = typeof activityLog.$inferSelect;

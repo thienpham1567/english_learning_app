@@ -7,6 +7,7 @@ import { dailyChallenge, userStreak } from "@/lib/db/schema";
 import { SubmitAnswerSchema } from "@/lib/daily-challenge/schema";
 import { getBadges, getNewlyUnlockedBadges } from "@/lib/daily-challenge/badges";
 import { awardXP, XP_VALUES } from "@/lib/xp";
+import { logActivity } from "@/lib/activity-log";
 import type { Exercise, ExerciseAnswer } from "@/lib/daily-challenge/types";
 
 function getVnDate(): string {
@@ -173,6 +174,7 @@ export async function POST(request: Request) {
 
   // Award XP for daily challenge completion
   void awardXP(session.user.id, XP_VALUES.DAILY_CHALLENGE).catch(() => {});
+  logActivity(session.user.id, "daily_challenge", XP_VALUES.DAILY_CHALLENGE, { score, streak: currentStreak });
 
   return Response.json({
     answers: scoredAnswers,
