@@ -57,10 +57,11 @@ export default function EnglishChatbotLayout({
                 position: "absolute",
                 inset: 0,
                 background: "rgba(0,0,0,0.5)",
+                backdropFilter: "blur(2px)",
               }}
             />
             {/* Sidebar panel */}
-            <div style={{ position: "relative", zIndex: 1 }}>
+            <div style={{ position: "relative", zIndex: 1, height: "100%" }} onClick={() => setSidebarOpen(false)}>
               <ConversationList activeId={activeId} />
             </div>
           </div>
