@@ -221,39 +221,50 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
         <div style={{ height: 1, background: "var(--sidebar-border)", marginBottom: 12 }} />
 
         {/* Exam Mode Switcher */}
-        <button
-          onClick={() => setExamMode(examMode === "toeic" ? "ielts" : "toeic")}
-          className="theme-toggle-btn"
-          aria-label={`Switch to ${examMode === "toeic" ? "IELTS" : "TOEIC"} mode`}
-          style={{ marginBottom: 4 }}
-        >
-          <span style={{ fontSize: 16 }}>{examMode === "toeic" ? "📊" : "🎓"}</span>
-          {isExpanded && (
-            <span
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                flex: 1,
-              }}
+        {(() => {
+          const examBtn = (
+            <button
+              onClick={() => setExamMode(examMode === "toeic" ? "ielts" : "toeic")}
+              className="theme-toggle-btn"
+              aria-label={`Switch to ${examMode === "toeic" ? "IELTS" : "TOEIC"} mode`}
+              style={{ marginBottom: 4 }}
             >
-              <span>{examMode === "toeic" ? "TOEIC" : "IELTS"}</span>
-              <span
-                style={{
-                  fontSize: 10,
-                  padding: "1px 6px",
-                  borderRadius: 99,
-                  background: examMode === "toeic" ? "#1890ff22" : "#722ed122",
-                  color: examMode === "toeic" ? "#1890ff" : "#722ed1",
-                  fontWeight: 600,
-                  marginLeft: "auto",
-                }}
-              >
-                ⇄
-              </span>
-            </span>
-          )}
-        </button>
+              <span style={{ fontSize: 16 }}>{examMode === "toeic" ? "📊" : "🎓"}</span>
+              {isExpanded && (
+                <span
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                    flex: 1,
+                  }}
+                >
+                  <span>{examMode === "toeic" ? "TOEIC" : "IELTS"}</span>
+                  <span
+                    style={{
+                      fontSize: 10,
+                      padding: "1px 6px",
+                      borderRadius: 99,
+                      background: examMode === "toeic" ? "#1890ff22" : "#722ed122",
+                      color: examMode === "toeic" ? "#1890ff" : "#722ed1",
+                      fontWeight: 600,
+                      marginLeft: "auto",
+                    }}
+                  >
+                    ⇄
+                  </span>
+                </span>
+              )}
+            </button>
+          );
+          return !isExpanded ? (
+            <Tooltip placement="right" title={`${examMode === "toeic" ? "TOEIC" : "IELTS"} → Nhấn để đổi`}>
+              {examBtn}
+            </Tooltip>
+          ) : (
+            examBtn
+          );
+        })()}
 
         <button
           onClick={toggleTheme}

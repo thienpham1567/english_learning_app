@@ -43,7 +43,8 @@ export function ExamModeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const setExamMode = useCallback(async (mode: ExamMode) => {
-    setExamModeState(mode);
+    const previousMode = examMode;
+    setExamModeState(mode); // Optimistic update
     try {
       await fetch("/api/preferences", {
         method: "PATCH",
@@ -51,10 +52,10 @@ export function ExamModeProvider({ children }: { children: ReactNode }) {
         body: JSON.stringify({ examMode: mode }),
       });
     } catch {
-      // Revert on failure
-      setExamModeState((prev) => prev);
+      // Revert to previous value on failure
+      setExamModeState(previousMode);
     }
-  }, []);
+  }, [examMode]);
 
   const meta = MODE_META[examMode];
 
