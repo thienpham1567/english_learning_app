@@ -91,6 +91,32 @@ export function useGrammarQuiz() {
       saveQuizHistory({ level, score: finalScore, total: questions.length });
       // Award XP for quiz completion (fire-and-forget)
       void http.post("/xp", { activity: "quiz_complete" }).catch(() => {});
+
+      // Log wrong answers to Error Notebook (fire-and-forget)
+      const wrongAnswers = questions
+        .map((q, i) => {
+          if (answers[i] === null || answers[i] === q.correctIndex) return null;
+          return {
+            sourceModule: "grammar-quiz",
+            questionStem: q.stem,
+            options: q.options,
+            userAnswer: q.options[answers[i] as number] ?? "(không trả lời)",
+            correctAnswer: q.options[q.correctIndex],
+            explanationEn: q.explanationEn,
+            explanationVi: q.explanationVi,
+            grammarTopic: q.grammarTopic,
+          };
+        })
+        .filter(Boolean);
+
+      if (wrongAnswers.length > 0) {
+        fetch("/api/errors", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ errors: wrongAnswers }),
+        }).catch(() => {/* fire-and-forget */});
+      }
+
       setState("summary");
     } else {
       setCurrentIndex(nextIdx);

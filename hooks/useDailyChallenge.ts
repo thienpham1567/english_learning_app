@@ -95,6 +95,33 @@ export function useDailyChallenge() {
         });
         setStreak(data.streak);
         setBadges(data.badges);
+
+        // Log wrong answers to Error Notebook (fire-and-forget)
+        const wrongAnswers = data.answers
+          .filter((a: ExerciseAnswer) => a.isCorrect === false)
+          .map((a: ExerciseAnswer) => {
+            const exercise = challenge?.exercises[a.exerciseIndex];
+            if (!exercise) return null;
+            const stem = exercise.instruction || JSON.stringify(exercise.data);
+            return {
+              sourceModule: "daily-challenge",
+              questionStem: stem,
+              userAnswer: a.answer,
+              correctAnswer: a.explanation ?? "N/A",
+              explanationVi: a.explanation,
+              grammarTopic: exercise.type,
+            };
+          })
+          .filter(Boolean);
+
+        if (wrongAnswers.length > 0) {
+          fetch("/api/errors", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ errors: wrongAnswers }),
+          }).catch(() => {});
+        }
+
         setState("results");
       } catch {
         setError("Không thể nộp bài. Vui lòng thử lại.");
