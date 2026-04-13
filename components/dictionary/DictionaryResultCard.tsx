@@ -509,13 +509,12 @@ export function DictionaryResultCard({
     borderRadius: "var(--radius-lg)",
     background: "var(--surface)",
     boxShadow: "var(--shadow-lg)",
-    padding: 24,
     minHeight: 400,
   };
 
   if (isLoading) {
     return (
-      <div style={cardStyle}>
+      <div className="dictionary-result-card" style={cardStyle}>
         <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
           {[1, 2, 3, 4].map((i) => (
             <div
@@ -536,7 +535,7 @@ export function DictionaryResultCard({
 
   if (!hasSearched || !vocabulary) {
     return (
-      <div style={cardStyle}>
+      <div className="dictionary-result-card" style={cardStyle}>
         <div
           style={{
             display: "flex",
@@ -561,7 +560,7 @@ export function DictionaryResultCard({
   const numberLabel = vocabulary.numberInfo ? getNumberLabel(vocabulary.numberInfo) : "";
 
   return (
-    <div key={vocabulary.headword} className="anim-fade-up" style={cardStyle}>
+    <div key={vocabulary.headword} className="anim-fade-up dictionary-result-card" style={cardStyle}>
       {/* Header */}
       <div
         style={{
@@ -586,9 +585,9 @@ export function DictionaryResultCard({
             Kết quả tra cứu
           </p>
           <h2
+            className="dictionary-result-heading"
             style={{
               marginTop: 8,
-              fontSize: 36,
               fontStyle: "italic",
               lineHeight: 1.2,
               fontFamily: "var(--font-display)",

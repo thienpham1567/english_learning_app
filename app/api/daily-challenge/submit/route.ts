@@ -25,22 +25,32 @@ function getVnYesterday(): string {
 function scoreExercise(
   exercise: Exercise,
   answer: string,
-): { isCorrect: boolean; explanation: string } {
+): { isCorrect: boolean; explanation: string; correctAnswer: string; questionStem: string } {
   switch (exercise.type) {
     case "fill-in-blank": {
       const d = exercise.data;
-      const isCorrect = d.options[d.correctIndex]?.toLowerCase() === answer.toLowerCase();
+      const correct = d.options[d.correctIndex];
+      const isCorrect = correct?.toLowerCase() === answer.toLowerCase();
       return {
         isCorrect,
-        explanation: isCorrect ? "Chính xác!" : `Đáp án đúng: ${d.options[d.correctIndex]}`,
+        correctAnswer: correct,
+        questionStem: d.sentence,
+        explanation: isCorrect
+          ? "Chính xác!"
+          : `Đáp án đúng là "${correct}". Trong câu "${d.sentence}", từ "${correct}" phù hợp về mặt ngữ pháp và ngữ nghĩa. Bạn đã chọn "${answer}" — hãy xem lại ngữ cảnh của câu để hiểu tại sao "${correct}" đúng hơn.`,
       };
     }
     case "sentence-order": {
       const d = exercise.data;
-      const isCorrect = d.correctOrder.join(" ").toLowerCase() === answer.toLowerCase();
+      const correctSentence = d.correctOrder.join(" ");
+      const isCorrect = correctSentence.toLowerCase() === answer.toLowerCase();
       return {
         isCorrect,
-        explanation: isCorrect ? "Chính xác!" : `Câu đúng: ${d.correctOrder.join(" ")}`,
+        correctAnswer: correctSentence,
+        questionStem: `Sắp xếp: ${d.scrambled.join(" / ")}`,
+        explanation: isCorrect
+          ? "Chính xác!"
+          : `Thứ tự đúng là: "${correctSentence}". Trong tiếng Anh, trật tự câu thường theo cấu trúc Chủ ngữ – Động từ – Tân ngữ (S-V-O). Hãy chú ý vị trí của trạng từ và giới từ trong câu.`,
       };
     }
     case "translation": {
@@ -51,7 +61,11 @@ function scoreExercise(
       );
       return {
         isCorrect,
-        explanation: isCorrect ? "Chính xác!" : `Đáp án chấp nhận: ${d.acceptableAnswers[0]}`,
+        correctAnswer: d.acceptableAnswers[0],
+        questionStem: d.vietnamese,
+        explanation: isCorrect
+          ? "Chính xác!"
+          : `Đáp án chấp nhận: "${d.acceptableAnswers[0]}"${d.acceptableAnswers.length > 1 ? ` (hoặc: "${d.acceptableAnswers.slice(1).join('", "')}")` : ""}. So sánh với câu trả lời của bạn "${answer}" — hãy chú ý cách dùng thì, giới từ và cấu trúc câu phù hợp.`,
       };
     }
     case "error-correction": {
@@ -59,7 +73,11 @@ function scoreExercise(
       const isCorrect = answer.toLowerCase().trim() === d.correction.toLowerCase().trim();
       return {
         isCorrect,
-        explanation: isCorrect ? "Chính xác!" : `${d.explanation} Đáp án: ${d.correction}`,
+        correctAnswer: d.correction,
+        questionStem: d.sentence,
+        explanation: isCorrect
+          ? "Chính xác!"
+          : `${d.explanation}. Từ sai là "${d.errorWord}", cần sửa thành "${d.correction}". Bạn đã trả lời "${answer}".`,
       };
     }
   }
@@ -106,7 +124,7 @@ export async function POST(request: Request) {
     const exercise = exercises[a.exerciseIndex];
     if (!exercise) return { ...a, isCorrect: false, explanation: "Câu hỏi không tồn tại." };
     const result = scoreExercise(exercise, a.answer);
-    return { ...a, ...result };
+    return { ...a, ...result, exerciseType: exercise.type };
   });
 
   const score = scoredAnswers.filter((a) => a.isCorrect).length;

@@ -112,13 +112,12 @@ export function DictionarySearchPanel({
   return (
     <section style={{ display: "flex", flexDirection: "column", gap: 20 }}>
       <div
-        className="anim-fade-left"
+        className="anim-fade-left dictionary-search-panel"
         style={{
           position: "relative",
           borderRadius: "var(--radius-lg)",
           background: "linear-gradient(135deg, var(--surface), var(--bg))",
           boxShadow: "var(--shadow-lg)",
-          padding: 24,
         }}
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>

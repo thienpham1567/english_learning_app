@@ -44,6 +44,9 @@ export type ExerciseAnswer = {
   answer: string;
   isCorrect?: boolean;
   explanation?: string;
+  correctAnswer?: string;
+  questionStem?: string;
+  exerciseType?: ChallengeType;
 };
 
 export type StreakInfo = {

@@ -115,15 +115,8 @@ export default function DictionaryPage() {
   return (
     <>
       {contextHolder}
-      <div style={{ height: "100%", minHeight: 0 }}>
-        <div
-          style={{
-            display: "grid",
-            alignItems: "start",
-            gap: 24,
-            gridTemplateColumns: "minmax(280px,360px) minmax(0,1fr)",
-          }}
-        >
+      <div style={{ height: "100%", minHeight: 0, overflowY: "auto" }}>
+        <div className="dictionary-grid">
           <div>
             <RecentLookups words={recentWords} onSelect={handleSubmit} />
             <DictionarySearchPanel initialValue={q} onSubmit={handleSubmit} isLoading={isLoading} />

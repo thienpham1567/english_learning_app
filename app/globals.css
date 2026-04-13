@@ -524,9 +524,54 @@ textarea.ant-input::placeholder {
   padding: 24px !important;
 }
 
-@media (max-width: 720px) {
+/* Dictionary responsive grid layout */
+.dictionary-grid {
+  display: grid;
+  align-items: start;
+  gap: 24px;
+  grid-template-columns: minmax(280px, 360px) minmax(0, 1fr);
+}
+
+.dictionary-search-panel {
+  padding: 24px;
+}
+
+.dictionary-result-card {
+  padding: 24px;
+}
+
+.dictionary-result-heading {
+  font-size: 36px;
+}
+
+@media (max-width: 768px) {
+  .dictionary-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .dictionary-search-panel {
+    padding: 16px;
+  }
+
+  .dictionary-result-card {
+    padding: 16px;
+    min-height: auto;
+  }
+
+  .dictionary-result-heading {
+    font-size: 28px;
+  }
+
   .dictionary-card .ant-card-body {
-    padding: 20px !important;
+    padding: 16px !important;
+  }
+}
+
+/* ── Daily Challenge answer comparison ── */
+@media (max-width: 480px) {
+  .answer-compare-grid {
+    grid-template-columns: 1fr !important;
   }
 }
 
