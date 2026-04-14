@@ -124,7 +124,7 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
           Nghĩa tiếng Việt
         </h3>
         <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
-          {sense.definitionVi}
+          <BoldText text={sense.definitionVi} />
         </p>
       </section>
 
@@ -142,7 +142,7 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
           Definition in English
         </h3>
         <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
-          {sense.definitionEn}
+          <BoldText text={sense.definitionEn} />
         </p>
       </section>
 
@@ -208,7 +208,7 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
             Ghi chú sử dụng
           </h3>
           <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
-            {sense.usageNoteVi}
+            <BoldText text={sense.usageNoteVi} />
           </p>
         </section>
       )}
@@ -239,7 +239,7 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
           >
             {sense.patterns.map((pattern) => (
               <li key={pattern} style={SENSE_ITEM_STYLE}>
-                {pattern}
+                <BoldText text={pattern} />
               </li>
             ))}
           </ul>
@@ -272,7 +272,7 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
           >
             {sense.relatedExpressions.map((expr) => (
               <li key={expr} style={SENSE_ITEM_STYLE}>
-                {expr}
+                <BoldText text={expr} />
               </li>
             ))}
           </ul>
@@ -305,7 +305,7 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
           >
             {sense.commonMistakesVi.map((mistake) => (
               <li key={mistake} style={SENSE_ITEM_STYLE}>
-                {mistake}
+                <BoldText text={mistake} />
               </li>
             ))}
           </ul>
@@ -461,7 +461,7 @@ function OverviewToggle({ overviewVi, overviewEn }: { overviewVi: string; overvi
         className="anim-fade-in"
         style={{ marginTop: 12, fontSize: 14, lineHeight: 1.6, color: "var(--text-secondary)" }}
       >
-        {lang === "vi" ? overviewVi : overviewEn}
+        <BoldText text={lang === "vi" ? overviewVi : overviewEn} />
       </p>
     </div>
   );
