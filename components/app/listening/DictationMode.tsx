@@ -111,21 +111,24 @@ export default function DictationMode({ examMode }: Props) {
     }
   }, [examMode]);
 
-  // ── TTS: Play sentence ──
+  // ── TTS: Play sentence (first play free, subsequent count as replays) ──
+  const [hasPlayedOnce, setHasPlayedOnce] = useState(false);
+
   const playSentence = useCallback(() => {
     if (!currentSentence) return;
+    if (hasPlayedOnce && replaysUsed >= MAX_REPLAYS) return;
+
     const utterance = new SpeechSynthesisUtterance(currentSentence.text);
     utterance.lang = "en-US";
     utterance.rate = 0.85;
     speechSynthesis.speak(utterance);
-  }, [currentSentence]);
 
-  // ── Replay (max 3) ──
-  const replay = useCallback(() => {
-    if (replaysUsed >= MAX_REPLAYS) return;
-    setReplaysUsed((p) => p + 1);
-    playSentence();
-  }, [replaysUsed, playSentence]);
+    if (hasPlayedOnce) {
+      setReplaysUsed((p) => p + 1);
+    } else {
+      setHasPlayedOnce(true);
+    }
+  }, [currentSentence, hasPlayedOnce, replaysUsed]);
 
   // ── Check answer ──
   const checkAnswer = useCallback(() => {
@@ -146,6 +149,7 @@ export default function DictationMode({ examMode }: Props) {
       setTypedText("");
       setDiff([]);
       setReplaysUsed(0);
+      setHasPlayedOnce(false);
       setState("ready");
       setTimeout(() => inputRef.current?.focus(), 100);
     } else {
@@ -159,6 +163,7 @@ export default function DictationMode({ examMode }: Props) {
     setDiff([]);
     setSessionScores((prev) => prev.slice(0, -1));
     setReplaysUsed(0);
+    setHasPlayedOnce(false);
     setState("ready");
     setTimeout(() => inputRef.current?.focus(), 100);
   }, []);
@@ -237,23 +242,21 @@ export default function DictationMode({ examMode }: Props) {
             <p style={{ fontSize: 14, color: "var(--text-secondary)", margin: "0 0 16px" }}>
               🎧 Nghe và gõ lại câu bạn nghe được
             </p>
-            <div style={{ display: "flex", gap: 12, justifyContent: "center", alignItems: "center" }}>
-              <button onClick={playSentence} style={{
+            <div style={{ display: "flex", gap: 12, justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
+              <button onClick={playSentence} disabled={hasPlayedOnce && replaysUsed >= MAX_REPLAYS} style={{
                 width: 64, height: 64, borderRadius: "50%", border: "none",
-                background: "linear-gradient(135deg, var(--accent), #8b5cf6)", color: "#fff",
-                fontSize: 24, cursor: "pointer", boxShadow: "0 4px 16px rgba(99,102,241,0.3)",
+                background: (hasPlayedOnce && replaysUsed >= MAX_REPLAYS) ? "var(--border)" : "linear-gradient(135deg, var(--accent), #8b5cf6)",
+                color: "#fff", fontSize: 24,
+                cursor: (hasPlayedOnce && replaysUsed >= MAX_REPLAYS) ? "not-allowed" : "pointer",
+                boxShadow: (hasPlayedOnce && replaysUsed >= MAX_REPLAYS) ? "none" : "0 4px 16px rgba(99,102,241,0.3)",
               }}>
                 <SoundOutlined />
               </button>
-              <button onClick={replay} disabled={replaysUsed >= MAX_REPLAYS} style={{
-                padding: "8px 16px", borderRadius: 8,
-                border: "1px solid var(--border)", background: "transparent",
-                color: replaysUsed >= MAX_REPLAYS ? "var(--text-muted)" : "var(--text-secondary)",
-                cursor: replaysUsed >= MAX_REPLAYS ? "not-allowed" : "pointer",
-                fontSize: 12, opacity: replaysUsed >= MAX_REPLAYS ? 0.5 : 1,
-              }}>
-                <ReloadOutlined /> Nghe lại ({replaysUsed}/{MAX_REPLAYS})
-              </button>
+              {hasPlayedOnce && (
+                <span style={{ fontSize: 12, color: replaysUsed >= MAX_REPLAYS ? "var(--text-muted)" : "var(--text-secondary)" }}>
+                  Đã nghe lại: {replaysUsed}/{MAX_REPLAYS}
+                </span>
+              )}
             </div>
           </div>
 
