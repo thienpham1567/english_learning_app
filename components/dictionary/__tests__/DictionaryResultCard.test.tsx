@@ -530,12 +530,22 @@ describe("DictionaryResultCard", () => {
     expect(getByText("The plane took off on time.")).toBeInTheDocument();
   });
 
-  it("wraps each bilingual example in a cursor-help tooltip span", () => {
+  it("shows Vietnamese translation inline below each English example", () => {
+    const { getByText } = renderUi(
+      <DictionaryResultCard vocabulary={bilingualEntry} hasSearched isLoading={false} />,
+    );
+    expect(getByText("The plane took off on time.")).toBeInTheDocument();
+    expect(getByText("Máy bay cất cánh đúng giờ.")).toBeInTheDocument();
+    expect(getByText("The rocket took off at dawn.")).toBeInTheDocument();
+    expect(getByText("Tên lửa cất cánh lúc bình minh.")).toBeInTheDocument();
+  });
+
+  it("does not render cursor-help tooltip spans for examples", () => {
     const { container } = renderUi(
       <DictionaryResultCard vocabulary={bilingualEntry} hasSearched isLoading={false} />,
     );
-    const tooltipSpans = container.querySelectorAll("span.cursor-help");
-    expect(tooltipSpans).toHaveLength(3);
+    const tooltipSpans = container.querySelectorAll("[style*='cursor: help']");
+    expect(tooltipSpans).toHaveLength(0);
   });
 
   it("falls back to examplesVi plain strings when examples is empty", () => {

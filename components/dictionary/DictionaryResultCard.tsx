@@ -205,15 +205,14 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
             {examples.length > 0
               ? examples.map((example, i) => (
                   <li key={`${example.en}-${example.vi ?? i}`} style={SENSE_ITEM_STYLE}>
-                    {example.vi ? (
-                      <Tooltip placement="top" title={example.vi}>
-                        <span style={{ cursor: "help" }}>
-                          <HighlightWord text={example.en} headword={headword} />
-                        </span>
-                      </Tooltip>
-                    ) : (
+                    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                       <HighlightWord text={example.en} headword={headword} />
-                    )}
+                      {example.vi && (
+                        <span style={{ fontSize: 13, color: "var(--text-muted)", fontStyle: "normal" }}>
+                          {example.vi}
+                        </span>
+                      )}
+                    </div>
                   </li>
                 ))
               : examplesVi.map((example) => (
