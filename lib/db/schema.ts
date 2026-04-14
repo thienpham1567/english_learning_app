@@ -241,3 +241,16 @@ export const diagnosticResult = pgTable("diagnostic_result", {
 });
 
 export type DiagnosticResultRow = typeof diagnosticResult.$inferSelect;
+
+/** Scenario Progress — tracks user progress through immersive scenarios (Story 15.2) */
+export const scenarioProgress = pgTable("scenario_progress", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  scenarioId: text("scenario_id").notNull(),
+  stepIndex: integer("step_index").notNull(),
+  score: integer("score"),
+  completedAt: timestamp("completed_at", { withTimezone: true }),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export type ScenarioProgressRow = typeof scenarioProgress.$inferSelect;
