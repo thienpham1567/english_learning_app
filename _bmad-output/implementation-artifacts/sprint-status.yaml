@@ -126,7 +126,7 @@ development_status:
   12-2-sm2-algorithm-service: done
   12-3-vocabulary-srs-review-quiz: done
   12-4-user-skill-profile-adaptive-grammar: done
-  12-5-adaptive-listening-integration: backlog
+  12-5-adaptive-listening-integration: done
   epic-12-retrospective: optional
 
   # ── Epic 13: Shadowing, Dictation & Voice AI Upgrade ──

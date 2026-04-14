@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { SoundOutlined, LoadingOutlined } from "@ant-design/icons";
 import { CEFR_LEVELS, EXERCISE_TYPES } from "@/lib/listening/types";
 import type { CefrLevel, ExerciseType } from "@/lib/listening/types";
@@ -23,11 +23,19 @@ const TYPE_META: Record<ExerciseType, { label: string; icon: string; desc: strin
 type Props = {
   onStart: (level: CefrLevel, exerciseType: ExerciseType) => void;
   isLoading: boolean;
+  recommendedLevel?: CefrLevel | null;
 };
 
-export function LevelSelector({ onStart, isLoading }: Props) {
+export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
   const [level, setLevel] = useState<CefrLevel | null>(null);
   const [exerciseType, setExerciseType] = useState<ExerciseType>("comprehension");
+
+  // Auto-select recommended level on mount
+  useEffect(() => {
+    if (recommendedLevel && !level) {
+      setLevel(recommendedLevel);
+    }
+  }, [recommendedLevel]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 28, padding: "24px 20px", maxWidth: 600, margin: "0 auto", width: "100%" }}>
@@ -68,6 +76,9 @@ export function LevelSelector({ onStart, isLoading }: Props) {
                 <div style={{ fontSize: 18, fontWeight: 800, color: meta.color }}>{l}</div>
                 <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>{meta.label}</div>
                 <div style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 2, opacity: 0.7 }}>{meta.desc}</div>
+                {recommendedLevel === l && (
+                  <div style={{ fontSize: 9, color: meta.color, fontWeight: 700, marginTop: 4 }}>★ Đề xuất</div>
+                )}
               </button>
             );
           })}

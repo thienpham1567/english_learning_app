@@ -8,6 +8,7 @@ import type { ListeningQuestion } from "@/lib/db/schema";
 import { awardXP, XP_VALUES } from "@/lib/xp";
 import { logActivity } from "@/lib/activity-log";
 import { SubmitInputSchema } from "@/lib/listening/types";
+import { updateSkillProfile } from "@/lib/adaptive/difficulty";
 
 /**
  * POST /api/listening/submit
@@ -87,6 +88,10 @@ export async function POST(request: Request) {
       totalQuestions: questions.length,
     });
 
+    // Update listening skill profile (adaptive difficulty)
+    const accuracy = correctCount / questions.length;
+    const skillUpdate = await updateSkillProfile(userId, "listening", accuracy);
+
     return Response.json({
       score,
       total: questions.length,
@@ -94,6 +99,13 @@ export async function POST(request: Request) {
       xpEarned: XP_VALUES.LISTENING_PRACTICE,
       results,
       passage: exercise.passage, // reveal full passage after submission
+      skill: {
+        cefr: skillUpdate.cefr,
+        levelUp: skillUpdate.levelUp,
+        levelChanged: skillUpdate.levelChanged,
+        previousLevel: skillUpdate.previousLevel,
+        newLevel: skillUpdate.newLevel,
+      },
     });
   } catch (err) {
     console.error("[Listening] Submit error:", err);

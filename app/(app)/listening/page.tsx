@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { SoundOutlined } from "@ant-design/icons";
 
 import { useListeningExercise } from "@/hooks/useListeningExercise";
@@ -11,6 +11,7 @@ import { AudioPlayer } from "@/components/app/listening/AudioPlayer";
 import { QuestionCards } from "@/components/app/listening/QuestionCards";
 import { Results } from "@/components/app/listening/Results";
 import { MiniDictionary } from "@/components/app/shared";
+import type { CefrLevel } from "@/lib/listening/types";
 
 export default function ListeningPage() {
   const {
@@ -35,10 +36,33 @@ export default function ListeningPage() {
   const miniDict = useMiniDictionary();
   const { examMode } = useExamMode();
   const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
+  const [recommendedLevel, setRecommendedLevel] = useState<CefrLevel | null>(null);
+  const [skillLevelUp, setSkillLevelUp] = useState<{ cefr: string; levelUp: boolean } | null>(null);
+
+  // Fetch listening skill profile for adaptive level recommendation
+  useEffect(() => {
+    fetch("/api/skill-profile?module=listening")
+      .then((r) => r.ok ? r.json() : null)
+      .then((data) => {
+        if (data?.cefr) {
+          setRecommendedLevel(data.cefr as CefrLevel);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   const handleWordSaved = useCallback((word: string) => {
     setSavedWords((prev) => new Set(prev).add(word.toLowerCase()));
   }, []);
+
+  // Update skill feedback when result arrives
+  useEffect(() => {
+    if (result?.skill) {
+      setSkillLevelUp({ cefr: result.skill.cefr, levelUp: result.skill.levelUp });
+      // Also update recommended level for next exercise
+      setRecommendedLevel(result.skill.cefr as CefrLevel);
+    }
+  }, [result]);
 
   return (
     <div
@@ -107,7 +131,11 @@ export default function ListeningPage() {
 
         {/* Idle: Level Selector */}
         {(state === "idle" || state === "loading") && (
-          <LevelSelector onStart={(level, type) => generate(level, type, examMode)} isLoading={state === "loading"} />
+          <LevelSelector
+            onStart={(level, type) => generate(level, type, examMode)}
+            isLoading={state === "loading"}
+            recommendedLevel={recommendedLevel}
+          />
         )}
 
         {/* Active: Audio + Questions */}
@@ -141,6 +169,23 @@ export default function ListeningPage() {
               onWordClick={miniDict.openForWord}
               savedWords={savedWords}
             />
+            {skillLevelUp && (
+              <div
+                style={{
+                  marginTop: 12,
+                  padding: "12px 16px",
+                  borderRadius: "var(--radius-md)",
+                  background: skillLevelUp.levelUp ? "#52c41a15" : "#faad1415",
+                  border: `1px solid ${skillLevelUp.levelUp ? "#52c41a40" : "#faad1440"}`,
+                  fontSize: 13,
+                  textAlign: "center",
+                }}
+              >
+                {skillLevelUp.levelUp
+                  ? `🎉 Trình độ nghe nâng lên: ${skillLevelUp.cefr}!`
+                  : `📊 Trình độ hiện tại: ${skillLevelUp.cefr}`}
+              </div>
+            )}
           </div>
         )}
       </div>

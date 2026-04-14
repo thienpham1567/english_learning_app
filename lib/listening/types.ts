@@ -50,4 +50,11 @@ export interface ListeningSubmitResponse {
     userAnswer: number;
     correct: boolean;
   }[];
+  skill?: {
+    cefr: string;
+    levelUp: boolean;
+    levelChanged: boolean;
+    previousLevel: number;
+    newLevel: number;
+  };
 }
