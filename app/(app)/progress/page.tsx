@@ -10,6 +10,7 @@ import {
   ThunderboltOutlined,
   RadarChartOutlined,
 } from "@ant-design/icons";
+import { PredictedScore } from "@/components/app/shared";
 
 const { Title, Text } = Typography;
 
@@ -391,6 +392,9 @@ export default function ProgressPage() {
           <StatCard icon={<FireOutlined />} label="Streak hiện tại" value={`${totalStats.currentStreak} ngày`} color="var(--fire)" />
           <StatCard icon={<TrophyOutlined />} label="Level" value={`Lv.${level}`} color="var(--secondary)" />
         </Flex>
+
+        {/* Section 1.5: Predicted TOEIC Score (Story 14.2) */}
+        <PredictedScore />
 
         {/* Section 2: Skill Radar */}
         {data.skillRadar && data.skillRadar.length > 0 && (
