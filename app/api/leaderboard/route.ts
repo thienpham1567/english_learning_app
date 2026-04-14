@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { eq, sql, gte, desc } from "drizzle-orm";
+import { sql, gte, desc } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -20,14 +20,17 @@ export async function GET() {
 
   const userId = session.user.id;
 
-  // Get start of current week (Monday 00:00 VN timezone)
-  const now = new Date();
-  const vnNow = new Date(now.toLocaleString("en-US", { timeZone: "Asia/Ho_Chi_Minh" }));
-  const dayOfWeek = vnNow.getDay(); // 0=Sun, 1=Mon...
+  // F2 fix: Get start of current week (Monday 00:00 VN = UTC+7) using explicit offset
+  const nowUtc = Date.now();
+  const VN_OFFSET_MS = 7 * 60 * 60 * 1000;
+  const vnNow = new Date(nowUtc + VN_OFFSET_MS);
+  const dayOfWeek = vnNow.getUTCDay(); // 0=Sun, 1=Mon...
   const diffToMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
   const monday = new Date(vnNow);
-  monday.setDate(monday.getDate() - diffToMonday);
-  monday.setHours(0, 0, 0, 0);
+  monday.setUTCDate(monday.getUTCDate() - diffToMonday);
+  monday.setUTCHours(0, 0, 0, 0);
+  // Convert back to UTC for DB comparison
+  const mondayUtc = new Date(monday.getTime() - VN_OFFSET_MS);
 
   // Top 10 users by weekly XP
   const topUsers = await db
@@ -36,7 +39,7 @@ export async function GET() {
       xp: sql<number>`coalesce(sum(${activityLog.xpEarned}), 0)::int`,
     })
     .from(activityLog)
-    .where(gte(activityLog.createdAt, monday))
+    .where(gte(activityLog.createdAt, mondayUtc))
     .groupBy(activityLog.userId)
     .orderBy(desc(sql`sum(${activityLog.xpEarned})`))
     .limit(10);
@@ -46,29 +49,29 @@ export async function GET() {
   let userRank: { rank: number; xp: number } | null = null;
 
   if (!userInTop) {
-    // Count users with more XP than current user
+    // Get user's XP for this week
     const [userXpRow] = await db
       .select({
         xp: sql<number>`coalesce(sum(${activityLog.xpEarned}), 0)::int`,
       })
       .from(activityLog)
       .where(
-        sql`${activityLog.userId} = ${userId} AND ${activityLog.createdAt} >= ${monday}`,
+        sql`${activityLog.userId} = ${userId} AND ${activityLog.createdAt} >= ${mondayUtc}`,
       );
 
     const userXp = userXpRow?.xp ?? 0;
 
-    const [rankRow] = await db
+    // F1 fix: Count users with more XP using a proper subquery with GROUP BY
+    const usersAbove = await db
       .select({
-        rank: sql<number>`count(distinct ${activityLog.userId})::int + 1`,
+        uid: activityLog.userId,
       })
       .from(activityLog)
-      .where(
-        sql`${activityLog.createdAt} >= ${monday}`,
-      )
+      .where(gte(activityLog.createdAt, mondayUtc))
+      .groupBy(activityLog.userId)
       .having(sql`sum(${activityLog.xpEarned}) > ${userXp}`);
 
-    userRank = { rank: rankRow?.rank ?? topUsers.length + 1, xp: userXp };
+    userRank = { rank: usersAbove.length + 1, xp: userXp };
   }
 
   // Build leaderboard entries (anonymized)
