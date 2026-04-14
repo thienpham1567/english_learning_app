@@ -146,9 +146,10 @@ export default function ShadowingMode({ examMode }: Props) {
       setSpokenText("");
       setState("ready");
     } else {
-      completeSession();
+      // Pass current scores to avoid stale closure (F1 fix)
+      completeSession(sessionScores);
     }
-  }, [currentIdx, sentences.length]);
+  }, [currentIdx, sentences.length, sessionScores]);
 
   const retryCurrent = useCallback(() => {
     setEvalResult(null);
@@ -157,9 +158,9 @@ export default function ShadowingMode({ examMode }: Props) {
     setState("ready");
   }, []);
 
-  const completeSession = useCallback(async () => {
+  const completeSession = useCallback(async (finalScores: number[]) => {
     setState("loading");
-    const scores = [...sessionScores];
+    const scores = [...finalScores];
     const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
     try {
       const res = await fetch("/api/shadowing/complete", {
@@ -174,7 +175,7 @@ export default function ShadowingMode({ examMode }: Props) {
       }
     } catch { /* continue to summary anyway */ }
     setState("summary");
-  }, [sessionScores]);
+  }, []);
 
   const avgScore = sessionScores.length
     ? Math.round(sessionScores.reduce((a, b) => a + b, 0) / sessionScores.length) : 0;
