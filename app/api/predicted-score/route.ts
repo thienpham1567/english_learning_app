@@ -105,7 +105,7 @@ export async function GET() {
 
   // 2. Listening accuracy (avg percentage)
   const listeningAvg = listeningScores.reduce((sum, l) => {
-    const total = l.total ?? 1;
+    const total = Math.max(l.total ?? 1, 1); // F4 fix: guard against 0-length questions
     return sum + ((l.score ?? 0) / total) * 100;
   }, 0) / totalListening;
 

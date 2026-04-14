@@ -56,18 +56,15 @@ export function WordOfTheDay() {
     if (!word || isSaved) return;
     setSaving(true);
     try {
-      const res = await fetch(`/api/dictionary/lookup?q=${encodeURIComponent(word.query)}`);
-      if (res.ok) {
-        // Save via the save endpoint
-        const saveRes = await fetch("/api/vocabulary/save", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query: word.query }),
-        });
-        if (saveRes.ok) {
-          setIsSaved(true);
-          message.success("Đã lưu vào từ vựng!");
-        }
+      // Save directly — word is already in vocabulary_cache (F1 fix)
+      const saveRes = await fetch("/api/vocabulary/save", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ query: word.query }),
+      });
+      if (saveRes.ok) {
+        setIsSaved(true);
+        message.success("Đã lưu vào từ vựng!");
       }
     } catch {
       message.error("Không thể lưu từ");
