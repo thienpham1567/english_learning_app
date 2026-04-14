@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { eq, and, sql, desc } from "drizzle-orm";
+import { eq, and, sql, desc, lte } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -36,6 +36,7 @@ export async function GET() {
     dailyChallengeRows,
     recentVocabularyRows,
     weeklyActivityRows,
+    vocabDueRows,
   ] = await Promise.all([
     // 1. Flashcard due count
     db
@@ -120,6 +121,18 @@ export async function GET() {
       GROUP BY dates.day
       ORDER BY dates.day ASC
     `),
+
+    // 6. Vocabulary SRS due count (Story 12.3)
+    db
+      .select({ count: sql<number>`COUNT(*)::int` })
+      .from(userVocabulary)
+      .where(
+        and(
+          eq(userVocabulary.userId, userId),
+          eq(userVocabulary.saved, true),
+          lte(userVocabulary.nextReview, now),
+        ),
+      ),
   ]);
 
   // ── Assemble response ──
@@ -151,9 +164,11 @@ export async function GET() {
   );
 
   const totalXP = streak.xpTotal ?? 0;
+  const vocabDue = vocabDueRows[0]?.count ?? 0;
 
   return Response.json({
     flashcardsDue,
+    vocabDue,
     dailyChallenge: dailyChallengeStatus,
     streak: {
       currentStreak: streak.currentStreak,

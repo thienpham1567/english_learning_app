@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 interface SidebarBadges {
   flashcardsDue: number;
+  vocabDue: number;
   dailyChallengeCompleted: boolean;
 }
 
@@ -17,6 +18,7 @@ export function useSidebarBadges() {
       const data = await res.json();
       setBadges({
         flashcardsDue: data.flashcardsDue ?? 0,
+        vocabDue: data.vocabDue ?? 0,
         dailyChallengeCompleted: data.dailyChallenge?.completed ?? false,
       });
     } catch {

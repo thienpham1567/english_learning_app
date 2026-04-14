@@ -126,6 +126,15 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
         />
       );
     }
+    if (href === "/review-quiz" && badges.vocabDue > 0) {
+      return (
+        <Badge
+          count={badges.vocabDue}
+          size="small"
+          style={{ backgroundColor: "#722ed1" }}
+        />
+      );
+    }
     if (href === "/daily-challenge") {
       return (
         <span style={{ fontSize: 12, lineHeight: 1 }}>
