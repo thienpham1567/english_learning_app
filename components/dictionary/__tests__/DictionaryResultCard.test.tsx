@@ -343,6 +343,80 @@ const multiWordWordEntry = {
   ],
 };
 
+const frequencyEntry = {
+  ...ipaEntry,
+  frequencyBand: "top1k" as const,
+  wordFamily: null,
+};
+
+const wordFamilyEntry = {
+  ...verbEntry,
+  wordFamily: [
+    { pos: "noun", words: ["runner", "running"] },
+    { pos: "adjective", words: ["runny"] },
+  ],
+};
+
+const manyCollocationsEntry = {
+  ...multiSenseEntry,
+  senses: [
+    {
+      ...multiSenseEntry.senses[0],
+      collocations: [
+        { en: "run a company", vi: "điều hành một công ty" },
+        { en: "run out of time", vi: "hết thời gian" },
+        { en: "run a risk", vi: "chấp nhận rủi ro" },
+        { en: "run a marathon", vi: "chạy marathon" },
+      ],
+    },
+    multiSenseEntry.senses[1],
+  ],
+};
+
+describe("FrequencyBar", () => {
+  it("renders frequency segments when frequencyBand is set", () => {
+    const { container } = renderUi(
+      <DictionaryResultCard vocabulary={frequencyEntry} hasSearched isLoading={false} />,
+    );
+    const segments = container.querySelectorAll("[data-frequency-segment]");
+    expect(segments).toHaveLength(5);
+  });
+
+  it("marks correct number of segments as filled for top1k", () => {
+    const { container } = renderUi(
+      <DictionaryResultCard vocabulary={frequencyEntry} hasSearched isLoading={false} />,
+    );
+    const filled = container.querySelectorAll("[data-frequency-segment='filled']");
+    expect(filled).toHaveLength(5);
+  });
+
+  it("renders the Vietnamese frequency label", () => {
+    const { getByText } = renderUi(
+      <DictionaryResultCard vocabulary={frequencyEntry} hasSearched isLoading={false} />,
+    );
+    expect(getByText("Rất phổ biến")).toBeInTheDocument();
+  });
+
+  it("does not render FrequencyBar when frequencyBand is null", () => {
+    const { queryByText } = renderUi(
+      <DictionaryResultCard vocabulary={ipaEntry} hasSearched isLoading={false} />,
+    );
+    expect(queryByText("Rất phổ biến")).not.toBeInTheDocument();
+    expect(queryByText("Phổ biến")).not.toBeInTheDocument();
+  });
+
+  it("renders correct filled count for top3k (4 filled)", () => {
+    const entry = { ...ipaEntry, frequencyBand: "top3k" as const };
+    const { container } = renderUi(
+      <DictionaryResultCard vocabulary={entry} hasSearched isLoading={false} />,
+    );
+    const filled = container.querySelectorAll("[data-frequency-segment='filled']");
+    const empty = container.querySelectorAll("[data-frequency-segment='empty']");
+    expect(filled).toHaveLength(4);
+    expect(empty).toHaveLength(1);
+  });
+});
+
 describe("DictionaryResultCard", () => {
   it("shows result heading, custom tab buttons, and active sense content", () => {
     const { getByText, getByRole, container } = renderUi(

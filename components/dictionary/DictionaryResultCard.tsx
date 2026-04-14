@@ -4,17 +4,25 @@ import { useEffect, useState } from "react";
 import { Tag, Tooltip } from "antd";
 import {
   BookOutlined,
+  BulbOutlined,
+  CodeOutlined,
+  EditOutlined,
+  LinkOutlined,
   LoadingOutlined,
-  SoundOutlined,
-  StarOutlined,
-  StarFilled,
   ReadOutlined,
+  SoundOutlined,
+  StarFilled,
+  StarOutlined,
+  ThunderboltOutlined,
+  TranslationOutlined,
+  WarningOutlined,
 } from "@ant-design/icons";
 
-import type { DictionarySense, VocabularyWithNearby } from "@/lib/schemas/vocabulary";
+import type { DictionarySense, FrequencyBand, VocabularyWithNearby } from "@/lib/schemas/vocabulary";
 import { parseBold } from "@/lib/utils/parse-bold";
 import { NearbyWordsBar } from "@/components/dictionary/NearbyWordsBar";
 import { VerbFormsSection } from "@/components/dictionary/VerbFormsSection";
+import { WordFamilySection } from "@/components/dictionary/WordFamilySection";
 
 type DictionaryResultCardProps = {
   vocabulary: VocabularyWithNearby | null;
@@ -43,6 +51,54 @@ const LEVEL_COLORS: Record<string, string> = {
   C1: "orange",
   C2: "volcano",
 };
+
+const SENSE_HEADER_STYLE: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  gap: 6,
+  fontSize: 12,
+  fontWeight: 600,
+  textTransform: "uppercase" as const,
+  letterSpacing: "0.14em",
+  color: "var(--accent)",
+  margin: 0,
+};
+
+const FREQUENCY_CONFIG: Record<FrequencyBand, { filled: number; labelVi: string; tooltipEn: string }> = {
+  top1k:  { filled: 5, labelVi: "Rất phổ biến", tooltipEn: "Top 1,000 most common words" },
+  top3k:  { filled: 4, labelVi: "Phổ biến",     tooltipEn: "Top 3,000 most common words" },
+  top5k:  { filled: 3, labelVi: "Khá phổ biến", tooltipEn: "Top 5,000 most common words" },
+  top10k: { filled: 2, labelVi: "Ít phổ biến",  tooltipEn: "Top 10,000 most common words" },
+  rare:   { filled: 1, labelVi: "Hiếm gặp",     tooltipEn: "Uncommon word" },
+};
+
+function FrequencyBar({ band }: { band: FrequencyBand }) {
+  const { filled, labelVi, tooltipEn } = FREQUENCY_CONFIG[band];
+  return (
+    <Tooltip title={tooltipEn} placement="top">
+      <div
+        className="anim-fade-in"
+        style={{ display: "inline-flex", alignItems: "center", gap: 8, marginTop: 12 }}
+      >
+        <div style={{ display: "flex", gap: 3 }}>
+          {Array.from({ length: 5 }, (_, i) => (
+            <div
+              key={i}
+              data-frequency-segment={i < filled ? "filled" : "empty"}
+              style={{
+                width: 20,
+                height: 5,
+                borderRadius: 999,
+                background: i < filled ? "var(--accent)" : "var(--border)",
+              }}
+            />
+          ))}
+        </div>
+        <span style={{ fontSize: 12, color: "var(--text-muted)" }}>{labelVi}</span>
+      </div>
+    </Tooltip>
+  );
+}
 
 let activeUtterance: SpeechSynthesisUtterance | null = null;
 
@@ -755,8 +811,14 @@ export function DictionaryResultCard({
         </span>
       ) : null}
 
+      {vocabulary.frequencyBand && <FrequencyBar band={vocabulary.frequencyBand} />}
+
       {vocabulary.verbForms && vocabulary.verbForms.length > 0 && (
         <VerbFormsSection verbForms={vocabulary.verbForms} />
+      )}
+
+      {vocabulary.wordFamily && vocabulary.wordFamily.length > 0 && onSearch && (
+        <WordFamilySection wordFamily={vocabulary.wordFamily} onSearch={onSearch} />
       )}
 
       <OverviewToggle overviewVi={vocabulary.overviewVi} overviewEn={vocabulary.overviewEn} />
