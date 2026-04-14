@@ -203,3 +203,67 @@ describe("VocabularyWithNearbySchema", () => {
     expect(result.nearbyWords).toEqual([]);
   });
 });
+
+describe("VocabularySchema — frequencyBand and wordFamily", () => {
+  const base = {
+    query: "run",
+    headword: "run",
+    entryType: "word" as const,
+    phonetic: null,
+    phoneticsUs: null,
+    phoneticsUk: null,
+    partOfSpeech: "verb",
+    level: "A1" as const,
+    register: null,
+    overviewVi: "Chạy.",
+    overviewEn: "To move fast.",
+    verbForms: null,
+    numberInfo: null,
+    senses: [
+      {
+        id: "s1",
+        label: "Nghĩa 1",
+        definitionVi: "Chạy",
+        definitionEn: "Move fast on foot.",
+        usageNoteVi: null,
+      },
+    ],
+  };
+
+  it("defaults frequencyBand to null when absent", () => {
+    const result = VocabularySchema.parse(base);
+    expect(result.frequencyBand).toBeNull();
+  });
+
+  it("defaults wordFamily to null when absent", () => {
+    const result = VocabularySchema.parse(base);
+    expect(result.wordFamily).toBeNull();
+  });
+
+  it("parses a valid frequencyBand value", () => {
+    const result = VocabularySchema.parse({ ...base, frequencyBand: "top1k" });
+    expect(result.frequencyBand).toBe("top1k");
+  });
+
+  it("rejects an invalid frequencyBand value", () => {
+    expect(() => VocabularySchema.parse({ ...base, frequencyBand: "top100" })).toThrow();
+  });
+
+  it("parses a wordFamily array with pos groups", () => {
+    const result = VocabularySchema.parse({
+      ...base,
+      wordFamily: [
+        { pos: "noun", words: ["runner", "running"] },
+        { pos: "adjective", words: ["runny"] },
+      ],
+    });
+    expect(result.wordFamily).toHaveLength(2);
+    expect(result.wordFamily![0].pos).toBe("noun");
+    expect(result.wordFamily![0].words).toContain("runner");
+  });
+
+  it("parses wordFamily as null", () => {
+    const result = VocabularySchema.parse({ ...base, wordFamily: null });
+    expect(result.wordFamily).toBeNull();
+  });
+});

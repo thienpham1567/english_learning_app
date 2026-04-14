@@ -45,6 +45,11 @@ export const VocabularySchema = z.object({
   register: z.string().nullable(),
   verbForms: z.array(VerbFormSchema).nullable().default(null),
   numberInfo: NumberInfoSchema.nullable().default(null),
+  frequencyBand: z.enum(["top1k", "top3k", "top5k", "top10k", "rare"]).nullable().default(null),
+  wordFamily: z
+    .array(z.object({ pos: z.string(), words: z.array(z.string()) }))
+    .nullable()
+    .default(null),
   overviewVi: z.string(),
   overviewEn: z.string(),
   senses: z.array(DictionarySenseSchema).min(1),
@@ -58,6 +63,8 @@ export type Vocabulary = z.infer<typeof VocabularySchema>;
 export type VocabularyWithNearby = z.infer<typeof VocabularyWithNearbySchema>;
 export type DictionarySense = z.infer<typeof DictionarySenseSchema>;
 export type VerbForm = z.infer<typeof VerbFormSchema>;
+export type FrequencyBand = "top1k" | "top3k" | "top5k" | "top10k" | "rare";
+export type WordFamilyGroup = { pos: string; words: string[] };
 
 export function normalizeVocabularyEntryType(
   entryType: string | null | undefined,

@@ -18,6 +18,8 @@ const singleSenseEntry = {
   overviewEn: "A common phrasal verb with multiple senses.",
   nearbyWords: [],
   numberInfo: null,
+  frequencyBand: null,
+  wordFamily: null,
   senses: [
     {
       id: "sense-1",
@@ -56,6 +58,8 @@ const multiSenseEntry = {
   overviewEn: "A very common word with many senses.",
   nearbyWords: [],
   numberInfo: null,
+  frequencyBand: null,
+  wordFamily: null,
   senses: [
     {
       id: "sense-1",
@@ -108,6 +112,8 @@ const bilingualEntry = {
   overviewEn: "A common phrasal verb.",
   nearbyWords: [],
   numberInfo: null,
+  frequencyBand: null,
+  wordFamily: null,
   senses: [
     {
       id: "sense-1",
@@ -149,6 +155,8 @@ const synonymEntry = {
   overviewEn: "To leave a place.",
   nearbyWords: [],
   numberInfo: null,
+  frequencyBand: null,
+  wordFamily: null,
   senses: [
     {
       id: "sense-1",
@@ -183,6 +191,8 @@ const ipaEntry = {
   overviewEn: "To move fast.",
   nearbyWords: [],
   numberInfo: null,
+  frequencyBand: null,
+  wordFamily: null,
   senses: [
     {
       id: "sense-1",
@@ -215,6 +225,8 @@ const verbEntry = {
   overviewVi: "Chạy.",
   overviewEn: "To move fast.",
   nearbyWords: ["rum", "rump", "rune", "rung"],
+  frequencyBand: null,
+  wordFamily: null,
   verbForms: [
     { label: "Base", form: "run", phoneticsUs: null, phoneticsUk: null, isIrregular: false },
     { label: "3rd person", form: "runs", phoneticsUs: null, phoneticsUk: null, isIrregular: false },
@@ -268,6 +280,8 @@ const nounEntry = {
   overviewEn: "A young person.",
   nearbyWords: [],
   verbForms: null,
+  frequencyBand: null,
+  wordFamily: null,
   numberInfo: {
     plural: "children",
     isUncountable: false,
@@ -308,6 +322,8 @@ const multiWordWordEntry = {
   overviewEn: "A common phrase.",
   nearbyWords: [],
   numberInfo: null,
+  frequencyBand: null,
+  wordFamily: null,
   senses: [
     {
       id: "sense-1",
