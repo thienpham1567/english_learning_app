@@ -154,6 +154,8 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const [pronEnabled, setPronEnabled] = useState(true);
   // Track which message IDs came from voice input
   const voiceMessageIds = useRef<Set<string>>(new Set());
+  // F2: Track last voice transcript for robust detection
+  const lastVoiceTextRef = useRef<string | null>(null);
 
   // Voice Conversation Mode (Story 7.3)
   const [voiceMode, setVoiceMode] = useState(false);
@@ -169,6 +171,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   useEffect(() => {
     if (voice.transcript && !voice.isTranscribing) {
       setInput(voice.transcript);
+      lastVoiceTextRef.current = voice.transcript; // F2: mark as voice-originated
       if (voiceModeRef.current) {
         setTimeout(() => sendRef.current(voice.transcript), 100);
       }
@@ -205,6 +208,9 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       setMessages([]);
       setError(null);
       setSelectedPersonaId(DEFAULT_PERSONA_ID);
+      // F1: Clear pronunciation feedback state on conversation switch
+      setPronFeedback(new Map());
+      voiceMessageIds.current.clear();
       return;
     }
 
@@ -335,7 +341,8 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       }
     }
 
-    const isVoiceMessage = voiceModeRef.current && voice.transcript === t;
+    const isVoiceMessage = lastVoiceTextRef.current === t;
+    if (isVoiceMessage) lastVoiceTextRef.current = null; // F2: consume after use
     const userMessage: AppChatMessage = {
       id: crypto.randomUUID(),
       role: "user",
