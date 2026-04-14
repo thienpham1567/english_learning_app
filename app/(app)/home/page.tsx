@@ -23,7 +23,7 @@ import {
 
 import { useDashboard, type DashboardData } from "@/hooks/useDashboard";
 import { useUser } from "@/components/app/shared/UserContext";
-import { StreakFire, XPCounter, EmptyStateCard, StreakCalendar } from "@/components/app/shared";
+import { StreakFire, XPCounter, EmptyStateCard, StreakCalendar, WordOfTheDay } from "@/components/app/shared";
 
 const { Title, Text } = Typography;
 
@@ -327,6 +327,9 @@ export default function HomePage() {
             ))}
           </Space>
         </Card>
+
+        {/* ── Word of the Day (Story 14.3) ── */}
+        {!isNewUser && <WordOfTheDay />}
 
         {/* ── RecentVocabulary ── */}
         {data.recentVocabulary.length > 0 && (

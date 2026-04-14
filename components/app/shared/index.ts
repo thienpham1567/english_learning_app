@@ -7,3 +7,4 @@ export { StreakFire } from "./StreakFire";
 export { XPCounter } from "./XPCounter";
 export { MiniDictionary } from "./MiniDictionary";
 export { StreakCalendar } from "./StreakCalendar";
+export { WordOfTheDay } from "./WordOfTheDay";
