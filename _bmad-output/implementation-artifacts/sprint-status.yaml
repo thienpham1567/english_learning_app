@@ -137,19 +137,19 @@ development_status:
   epic-13-retrospective: optional
 
   # ── Epic 14: Analytics Dashboard Upgrade (Sprint 10) ──
-  epic-14: in-progress
+  epic-14: done
   14-1-streak-calendar-heatmap: done
   14-2-predicted-toeic-score: done
   14-3-word-of-the-day: done
   14-4-enhanced-todays-plan: done
   epic-14-retrospective: optional
 
-  # ── Epic 15: CEFR Diagnostic, Scenarios & Social ──
-  epic-15: backlog
+  # ── Epic 15: CEFR Diagnostic, Scenarios & Social (Sprint 11) ──
+  epic-15: in-progress
   15-1-cefr-diagnostic-test: backlog
   15-2-scenario-engine-airport: backlog
   15-3-additional-scenarios: backlog
-  15-4-weekly-leaderboard: backlog
+  15-4-weekly-leaderboard: done
   epic-15-retrospective: optional
 
   # ── Epic 16: Offline Mode & AI Content Generation ──

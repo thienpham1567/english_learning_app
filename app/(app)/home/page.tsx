@@ -24,7 +24,7 @@ import {
 
 import { useDashboard, type DashboardData } from "@/hooks/useDashboard";
 import { useUser } from "@/components/app/shared/UserContext";
-import { StreakFire, XPCounter, EmptyStateCard, StreakCalendar, WordOfTheDay } from "@/components/app/shared";
+import { StreakFire, XPCounter, EmptyStateCard, StreakCalendar, WordOfTheDay, WeeklyLeaderboard } from "@/components/app/shared";
 
 const { Title, Text } = Typography;
 
@@ -443,6 +443,9 @@ export default function HomePage() {
             currentStreak={data.streak.currentStreak}
           />
         )}
+
+        {/* ── Weekly Leaderboard (Story 15.4) ── */}
+        {!isNewUser && <WeeklyLeaderboard />}
 
         {/* ── StreakBadges ── */}
         <Card

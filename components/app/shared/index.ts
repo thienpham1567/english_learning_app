@@ -9,3 +9,4 @@ export { MiniDictionary } from "./MiniDictionary";
 export { StreakCalendar } from "./StreakCalendar";
 export { WordOfTheDay } from "./WordOfTheDay";
 export { PredictedScore } from "./PredictedScore";
+export { WeeklyLeaderboard } from "./WeeklyLeaderboard";
