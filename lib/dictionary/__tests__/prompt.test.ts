@@ -37,4 +37,23 @@ describe("buildDictionaryInstructions", () => {
     const instructions = buildDictionaryInstructions("word");
     expect(instructions).toContain("partOfSpeech");
   });
+
+  it("instructs populating frequencyBand for single words", () => {
+    const instructions = buildDictionaryInstructions("word");
+    expect(instructions).toContain("frequencyBand");
+    expect(instructions).toContain("top1k");
+  });
+
+  it("instructs frequencyBand to be null for phrasal verbs and idioms", () => {
+    const instructionsPv = buildDictionaryInstructions("phrasal_verb");
+    const instructionsIdiom = buildDictionaryInstructions("idiom");
+    expect(instructionsPv).toContain("frequencyBand");
+    expect(instructionsIdiom).toContain("frequencyBand");
+  });
+
+  it("instructs populating wordFamily grouped by part of speech", () => {
+    const instructions = buildDictionaryInstructions("word");
+    expect(instructions).toContain("wordFamily");
+    expect(instructions).toContain("pos");
+  });
 });

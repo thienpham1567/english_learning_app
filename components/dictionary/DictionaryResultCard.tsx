@@ -4,17 +4,25 @@ import { useEffect, useState } from "react";
 import { Tag, Tooltip } from "antd";
 import {
   BookOutlined,
+  BulbOutlined,
+  CodeOutlined,
+  EditOutlined,
+  LinkOutlined,
   LoadingOutlined,
-  SoundOutlined,
-  StarOutlined,
-  StarFilled,
   ReadOutlined,
+  SoundOutlined,
+  StarFilled,
+  StarOutlined,
+  ThunderboltOutlined,
+  TranslationOutlined,
+  WarningOutlined,
 } from "@ant-design/icons";
 
-import type { DictionarySense, VocabularyWithNearby } from "@/lib/schemas/vocabulary";
+import type { DictionarySense, FrequencyBand, VocabularyWithNearby } from "@/lib/schemas/vocabulary";
 import { parseBold } from "@/lib/utils/parse-bold";
 import { NearbyWordsBar } from "@/components/dictionary/NearbyWordsBar";
 import { VerbFormsSection } from "@/components/dictionary/VerbFormsSection";
+import { WordFamilySection } from "@/components/dictionary/WordFamilySection";
 
 type DictionaryResultCardProps = {
   vocabulary: VocabularyWithNearby | null;
@@ -43,6 +51,54 @@ const LEVEL_COLORS: Record<string, string> = {
   C1: "orange",
   C2: "volcano",
 };
+
+const SENSE_HEADER_STYLE: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  gap: 6,
+  fontSize: 12,
+  fontWeight: 600,
+  textTransform: "uppercase" as const,
+  letterSpacing: "0.14em",
+  color: "var(--accent)",
+  margin: 0,
+};
+
+const FREQUENCY_CONFIG: Record<FrequencyBand, { filled: number; labelVi: string; tooltipEn: string }> = {
+  top1k:  { filled: 5, labelVi: "Rất phổ biến", tooltipEn: "Top 1,000 most common words" },
+  top3k:  { filled: 4, labelVi: "Phổ biến",     tooltipEn: "Top 3,000 most common words" },
+  top5k:  { filled: 3, labelVi: "Khá phổ biến", tooltipEn: "Top 5,000 most common words" },
+  top10k: { filled: 2, labelVi: "Ít phổ biến",  tooltipEn: "Top 10,000 most common words" },
+  rare:   { filled: 1, labelVi: "Hiếm gặp",     tooltipEn: "Uncommon word" },
+};
+
+function FrequencyBar({ band }: { band: FrequencyBand }) {
+  const { filled, labelVi, tooltipEn } = FREQUENCY_CONFIG[band];
+  return (
+    <Tooltip title={tooltipEn} placement="top">
+      <div
+        className="anim-fade-in"
+        style={{ display: "inline-flex", alignItems: "center", gap: 8, marginTop: 12 }}
+      >
+        <div style={{ display: "flex", gap: 3 }}>
+          {Array.from({ length: 5 }, (_, i) => (
+            <div
+              key={i}
+              data-frequency-segment={i < filled ? "filled" : "empty"}
+              style={{
+                width: 20,
+                height: 5,
+                borderRadius: 999,
+                background: i < filled ? "var(--accent)" : "var(--border)",
+              }}
+            />
+          ))}
+        </div>
+        <span style={{ fontSize: 12, color: "var(--text-muted)" }}>{labelVi}</span>
+      </div>
+    </Tooltip>
+  );
+}
 
 let activeUtterance: SpeechSynthesisUtterance | null = null;
 
@@ -109,18 +165,10 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
   };
 
   return (
-    <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+    <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: 28 }}>
       <section style={sectionStyle}>
-        <h3
-          style={{
-            fontSize: 12,
-            fontWeight: 600,
-            textTransform: "uppercase",
-            letterSpacing: "0.14em",
-            color: "var(--accent)",
-            margin: 0,
-          }}
-        >
+        <h3 style={SENSE_HEADER_STYLE}>
+          <TranslationOutlined style={{ fontSize: 12 }} />
           Nghĩa tiếng Việt
         </h3>
         <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
@@ -129,16 +177,8 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
       </section>
 
       <section style={sectionStyle}>
-        <h3
-          style={{
-            fontSize: 12,
-            fontWeight: 600,
-            textTransform: "uppercase",
-            letterSpacing: "0.14em",
-            color: "var(--accent)",
-            margin: 0,
-          }}
-        >
+        <h3 style={SENSE_HEADER_STYLE}>
+          <BookOutlined style={{ fontSize: 12 }} />
           Definition in English
         </h3>
         <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
@@ -148,16 +188,8 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
 
       {(examples.length > 0 || examplesVi.length > 0) && (
         <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <h3
-            style={{
-              fontSize: 12,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.14em",
-              color: "var(--accent)",
-              margin: 0,
-            }}
-          >
+          <h3 style={SENSE_HEADER_STYLE}>
+            <EditOutlined style={{ fontSize: 12 }} />
             Ví dụ
           </h3>
           <ul
@@ -173,15 +205,14 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
             {examples.length > 0
               ? examples.map((example, i) => (
                   <li key={`${example.en}-${example.vi ?? i}`} style={SENSE_ITEM_STYLE}>
-                    {example.vi ? (
-                      <Tooltip placement="top" title={example.vi}>
-                        <span style={{ cursor: "help" }}>
-                          <HighlightWord text={example.en} headword={headword} />
-                        </span>
-                      </Tooltip>
-                    ) : (
+                    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
                       <HighlightWord text={example.en} headword={headword} />
-                    )}
+                      {example.vi && (
+                        <span style={{ fontSize: 13, color: "var(--text-muted)", fontStyle: "normal" }}>
+                          {example.vi}
+                        </span>
+                      )}
+                    </div>
                   </li>
                 ))
               : examplesVi.map((example) => (
@@ -195,16 +226,8 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
 
       {sense.usageNoteVi && (
         <section style={{ ...sectionStyle, borderLeft: "none" }}>
-          <h3
-            style={{
-              fontSize: 12,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.14em",
-              color: "var(--accent)",
-              margin: 0,
-            }}
-          >
+          <h3 style={SENSE_HEADER_STYLE}>
+            <BulbOutlined style={{ fontSize: 12 }} />
             Ghi chú sử dụng
           </h3>
           <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
@@ -215,16 +238,8 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
 
       {sense.patterns.length > 0 && (
         <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <h3
-            style={{
-              fontSize: 12,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.14em",
-              color: "var(--accent)",
-              margin: 0,
-            }}
-          >
+          <h3 style={SENSE_HEADER_STYLE}>
+            <CodeOutlined style={{ fontSize: 12 }} />
             Mẫu câu thường gặp
           </h3>
           <ul
@@ -248,16 +263,8 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
 
       {sense.relatedExpressions.length > 0 && (
         <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <h3
-            style={{
-              fontSize: 12,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.14em",
-              color: "var(--accent)",
-              margin: 0,
-            }}
-          >
+          <h3 style={SENSE_HEADER_STYLE}>
+            <LinkOutlined style={{ fontSize: 12 }} />
             Biểu đạt liên quan
           </h3>
           <ul
@@ -281,16 +288,8 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
 
       {sense.commonMistakesVi.length > 0 && (
         <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <h3
-            style={{
-              fontSize: 12,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.14em",
-              color: "var(--accent)",
-              margin: 0,
-            }}
-          >
+          <h3 style={SENSE_HEADER_STYLE}>
+            <WarningOutlined style={{ fontSize: 12 }} />
             Lỗi thường gặp
           </h3>
           <ul
@@ -314,55 +313,54 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
 
       {collocations.length > 0 && (
         <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <button
-            type="button"
-            aria-expanded={isCollocationsOpen}
-            onClick={() => setIsCollocationsOpen((open) => !open)}
+          <h3 style={SENSE_HEADER_STYLE}>
+            <ThunderboltOutlined style={{ fontSize: 12 }} />
+            Collocations
+          </h3>
+          <ul
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              borderRadius: 999,
-              border: "1px solid rgba(154,177,122,0.18)",
-              background: "var(--surface)",
-              padding: "4px 12px",
-              fontSize: 12,
-              fontWeight: 500,
-              color: "var(--accent)",
-              cursor: "pointer",
-              width: "fit-content",
+              listStyle: "none",
+              padding: 0,
+              margin: 0,
+              display: "flex",
+              flexDirection: "column",
+              gap: 6,
             }}
           >
-            Collocations ({collocations.length})
-          </button>
-          {isCollocationsOpen && (
-            <div
-              className="anim-fade-in"
-              style={{ display: "flex", flexDirection: "column", gap: 6 }}
-            >
-              <ul
-                style={{
-                  listStyle: "none",
-                  padding: 0,
-                  margin: 0,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 6,
-                }}
+            {(isCollocationsOpen ? collocations : collocations.slice(0, 3)).map((collocation) => (
+              <li
+                key={`${collocation.en}-${collocation.vi}`}
+                style={{ fontSize: 14, lineHeight: 1.6 }}
               >
-                {collocations.map((collocation) => (
-                  <li
-                    key={`${collocation.en}-${collocation.vi}`}
-                    style={{ fontSize: 14, lineHeight: 1.6 }}
-                  >
-                    <span style={{ color: "var(--text-primary)" }}>
-                      <BoldText text={collocation.en} />
-                    </span>
-                    <span style={{ margin: "0 6px", color: "var(--text-muted)" }}>&mdash;</span>
-                    <span style={{ color: "var(--text-secondary)" }}>{collocation.vi}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+                <span style={{ color: "var(--text-primary)" }}>
+                  <BoldText text={collocation.en} />
+                </span>
+                <span style={{ margin: "0 6px", color: "var(--text-muted)" }}>&mdash;</span>
+                <span style={{ color: "var(--text-secondary)" }}>{collocation.vi}</span>
+              </li>
+            ))}
+          </ul>
+          {collocations.length > 3 && (
+            <button
+              type="button"
+              aria-expanded={isCollocationsOpen}
+              onClick={() => setIsCollocationsOpen((open) => !open)}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                borderRadius: 999,
+                border: "1px solid rgba(154,177,122,0.18)",
+                background: "var(--surface)",
+                padding: "4px 12px",
+                fontSize: 12,
+                fontWeight: 500,
+                color: "var(--accent)",
+                cursor: "pointer",
+                width: "fit-content",
+              }}
+            >
+              {isCollocationsOpen ? "Thu gọn" : `Xem thêm (${collocations.length - 3})`}
+            </button>
           )}
         </section>
       )}
@@ -411,12 +409,12 @@ function OverviewToggle({ overviewVi, overviewEn }: { overviewVi: string; overvi
 
   return (
     <div
-      className="anim-fade-up"
+      className="anim-fade-up dictionary-overview-block"
       style={{
         marginTop: 20,
         borderRadius: "var(--radius)",
         background: "var(--bg-deep)",
-        padding: "16px 20px",
+        padding: "24px 20px",
       }}
     >
       <div
@@ -459,7 +457,14 @@ function OverviewToggle({ overviewVi, overviewEn }: { overviewVi: string; overvi
       <p
         key={lang}
         className="anim-fade-in"
-        style={{ marginTop: 12, fontSize: 14, lineHeight: 1.6, color: "var(--text-secondary)" }}
+        style={{
+          marginTop: 12,
+          fontSize: 15,
+          lineHeight: 1.6,
+          color: "var(--text-secondary)",
+          fontFamily: lang === "vi" ? "var(--font-display)" : "inherit",
+          fontStyle: lang === "vi" ? "italic" : "normal",
+        }}
       >
         <BoldText text={lang === "vi" ? overviewVi : overviewEn} />
       </p>
@@ -755,8 +760,14 @@ export function DictionaryResultCard({
         </span>
       ) : null}
 
+      {vocabulary.frequencyBand && <FrequencyBar band={vocabulary.frequencyBand} />}
+
       {vocabulary.verbForms && vocabulary.verbForms.length > 0 && (
         <VerbFormsSection verbForms={vocabulary.verbForms} />
+      )}
+
+      {vocabulary.wordFamily && vocabulary.wordFamily.length > 0 && onSearch && (
+        <WordFamilySection wordFamily={vocabulary.wordFamily} onSearch={onSearch} />
       )}
 
       <OverviewToggle overviewVi={vocabulary.overviewVi} overviewEn={vocabulary.overviewEn} />

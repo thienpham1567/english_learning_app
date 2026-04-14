@@ -803,3 +803,22 @@ textarea.ant-input::placeholder {
   outline-offset: 1px;
   border-radius: 2px;
 }
+
+/* ── Dictionary: Overview hero block quote decoration ── */
+.dictionary-overview-block {
+  position: relative;
+  overflow: hidden;
+}
+.dictionary-overview-block::before {
+  content: "\201C";
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  font-family: var(--font-display);
+  font-size: 80px;
+  line-height: 1;
+  color: var(--accent);
+  opacity: 0.1;
+  pointer-events: none;
+  user-select: none;
+}

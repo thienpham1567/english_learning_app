@@ -18,6 +18,8 @@ const singleSenseEntry = {
   overviewEn: "A common phrasal verb with multiple senses.",
   nearbyWords: [],
   numberInfo: null,
+  frequencyBand: null,
+  wordFamily: null,
   senses: [
     {
       id: "sense-1",
@@ -56,6 +58,8 @@ const multiSenseEntry = {
   overviewEn: "A very common word with many senses.",
   nearbyWords: [],
   numberInfo: null,
+  frequencyBand: null,
+  wordFamily: null,
   senses: [
     {
       id: "sense-1",
@@ -108,6 +112,8 @@ const bilingualEntry = {
   overviewEn: "A common phrasal verb.",
   nearbyWords: [],
   numberInfo: null,
+  frequencyBand: null,
+  wordFamily: null,
   senses: [
     {
       id: "sense-1",
@@ -149,6 +155,8 @@ const synonymEntry = {
   overviewEn: "To leave a place.",
   nearbyWords: [],
   numberInfo: null,
+  frequencyBand: null,
+  wordFamily: null,
   senses: [
     {
       id: "sense-1",
@@ -183,6 +191,8 @@ const ipaEntry = {
   overviewEn: "To move fast.",
   nearbyWords: [],
   numberInfo: null,
+  frequencyBand: null,
+  wordFamily: null,
   senses: [
     {
       id: "sense-1",
@@ -215,6 +225,8 @@ const verbEntry = {
   overviewVi: "Chạy.",
   overviewEn: "To move fast.",
   nearbyWords: ["rum", "rump", "rune", "rung"],
+  frequencyBand: null,
+  wordFamily: null,
   verbForms: [
     { label: "Base", form: "run", phoneticsUs: null, phoneticsUk: null, isIrregular: false },
     { label: "3rd person", form: "runs", phoneticsUs: null, phoneticsUk: null, isIrregular: false },
@@ -268,6 +280,8 @@ const nounEntry = {
   overviewEn: "A young person.",
   nearbyWords: [],
   verbForms: null,
+  frequencyBand: null,
+  wordFamily: null,
   numberInfo: {
     plural: "children",
     isUncountable: false,
@@ -308,6 +322,8 @@ const multiWordWordEntry = {
   overviewEn: "A common phrase.",
   nearbyWords: [],
   numberInfo: null,
+  frequencyBand: null,
+  wordFamily: null,
   senses: [
     {
       id: "sense-1",
@@ -326,6 +342,80 @@ const multiWordWordEntry = {
     },
   ],
 };
+
+const frequencyEntry = {
+  ...ipaEntry,
+  frequencyBand: "top1k" as const,
+  wordFamily: null,
+};
+
+const wordFamilyEntry = {
+  ...verbEntry,
+  wordFamily: [
+    { pos: "noun", words: ["runner", "running"] },
+    { pos: "adjective", words: ["runny"] },
+  ],
+};
+
+const manyCollocationsEntry = {
+  ...multiSenseEntry,
+  senses: [
+    {
+      ...multiSenseEntry.senses[0],
+      collocations: [
+        { en: "run a company", vi: "điều hành một công ty" },
+        { en: "run out of time", vi: "hết thời gian" },
+        { en: "run a risk", vi: "chấp nhận rủi ro" },
+        { en: "run a marathon", vi: "chạy marathon" },
+      ],
+    },
+    multiSenseEntry.senses[1],
+  ],
+};
+
+describe("FrequencyBar", () => {
+  it("renders frequency segments when frequencyBand is set", () => {
+    const { container } = renderUi(
+      <DictionaryResultCard vocabulary={frequencyEntry} hasSearched isLoading={false} />,
+    );
+    const segments = container.querySelectorAll("[data-frequency-segment]");
+    expect(segments).toHaveLength(5);
+  });
+
+  it("marks correct number of segments as filled for top1k", () => {
+    const { container } = renderUi(
+      <DictionaryResultCard vocabulary={frequencyEntry} hasSearched isLoading={false} />,
+    );
+    const filled = container.querySelectorAll("[data-frequency-segment='filled']");
+    expect(filled).toHaveLength(5);
+  });
+
+  it("renders the Vietnamese frequency label", () => {
+    const { getByText } = renderUi(
+      <DictionaryResultCard vocabulary={frequencyEntry} hasSearched isLoading={false} />,
+    );
+    expect(getByText("Rất phổ biến")).toBeInTheDocument();
+  });
+
+  it("does not render FrequencyBar when frequencyBand is null", () => {
+    const { queryByText } = renderUi(
+      <DictionaryResultCard vocabulary={ipaEntry} hasSearched isLoading={false} />,
+    );
+    expect(queryByText("Rất phổ biến")).not.toBeInTheDocument();
+    expect(queryByText("Phổ biến")).not.toBeInTheDocument();
+  });
+
+  it("renders correct filled count for top3k (4 filled)", () => {
+    const entry = { ...ipaEntry, frequencyBand: "top3k" as const };
+    const { container } = renderUi(
+      <DictionaryResultCard vocabulary={entry} hasSearched isLoading={false} />,
+    );
+    const filled = container.querySelectorAll("[data-frequency-segment='filled']");
+    const empty = container.querySelectorAll("[data-frequency-segment='empty']");
+    expect(filled).toHaveLength(4);
+    expect(empty).toHaveLength(1);
+  });
+});
 
 describe("DictionaryResultCard", () => {
   it("shows result heading, custom tab buttons, and active sense content", () => {
@@ -351,42 +441,55 @@ describe("DictionaryResultCard", () => {
     expect(screen.queryByText("Từ đơn")).not.toBeInTheDocument();
   });
 
-  it("shows a collapsed collocations toggle for the active sense and expands bilingual rows on click", () => {
-    const { getByRole, getByText, queryByText } = renderUi(
+  it("shows collocations inline without a toggle when there are 3 or fewer", () => {
+    const { getByText, queryByRole } = renderUi(
       <DictionaryResultCard vocabulary={multiSenseEntry} hasSearched isLoading={false} />,
     );
-
-    const toggle = getByRole("button", { name: "Collocations (2)" });
-    expect(toggle).toHaveAttribute("aria-expanded", "false");
-    expect(queryByText("run a company")).not.toBeInTheDocument();
-    expect(queryByText("điều hành một công ty")).not.toBeInTheDocument();
-
-    fireEvent.click(toggle);
-
-    expect(toggle).toHaveAttribute("aria-expanded", "true");
+    // Both collocations visible immediately
     expect(getByText("run a company")).toBeInTheDocument();
     expect(getByText("điều hành một công ty")).toBeInTheDocument();
     expect(getByText("run out of time")).toBeInTheDocument();
-    expect(getByText("hết thời gian")).toBeInTheDocument();
+    // No expand button needed
+    expect(queryByRole("button", { name: /Xem thêm/i })).not.toBeInTheDocument();
+  });
+
+  it("shows first 3 collocations inline and hides rest behind Xem thêm when more than 3", () => {
+    const { getByText, queryByText, getByRole } = renderUi(
+      <DictionaryResultCard vocabulary={manyCollocationsEntry} hasSearched isLoading={false} />,
+    );
+    // First 3 visible
+    expect(getByText("run a company")).toBeInTheDocument();
+    expect(getByText("run out of time")).toBeInTheDocument();
+    expect(getByText("run a risk")).toBeInTheDocument();
+    // 4th hidden
+    expect(queryByText("run a marathon")).not.toBeInTheDocument();
+    // Expand button shows count
+    expect(getByRole("button", { name: /Xem thêm \(1\)/i })).toBeInTheDocument();
+  });
+
+  it("expands remaining collocations when Xem thêm is clicked", () => {
+    const { getByText, getByRole } = renderUi(
+      <DictionaryResultCard vocabulary={manyCollocationsEntry} hasSearched isLoading={false} />,
+    );
+    fireEvent.click(getByRole("button", { name: /Xem thêm \(1\)/i }));
+    expect(getByText("run a marathon")).toBeInTheDocument();
+    expect(getByText("chạy marathon")).toBeInTheDocument();
   });
 
   it("resets the collocations toggle when switching senses away and back", () => {
-    const { getByRole, getByText, queryByText } = renderUi(
-      <DictionaryResultCard vocabulary={multiSenseEntry} hasSearched isLoading={false} />,
+    const { getByText, queryByText, getByRole } = renderUi(
+      <DictionaryResultCard vocabulary={manyCollocationsEntry} hasSearched isLoading={false} />,
     );
-
-    fireEvent.click(getByRole("button", { name: "Collocations (2)" }));
-    expect(getByText("run a company")).toBeInTheDocument();
-
+    // Expand
+    fireEvent.click(getByRole("button", { name: /Xem thêm \(1\)/i }));
+    expect(getByText("run a marathon")).toBeInTheDocument();
+    // Switch to sense 2
     fireEvent.click(getByRole("button", { name: "Nghĩa 2" }));
-    expect(queryByText("run a company")).not.toBeInTheDocument();
-
+    // Switch back to sense 1
     fireEvent.click(getByRole("button", { name: "Nghĩa 1" }));
-    const toggle = getByRole("button", { name: "Collocations (2)" });
-
-    expect(toggle).toHaveAttribute("aria-expanded", "false");
-    expect(queryByText("run a company")).not.toBeInTheDocument();
-    expect(queryByText("điều hành một công ty")).not.toBeInTheDocument();
+    // 4th collocation should be hidden again
+    expect(queryByText("run a marathon")).not.toBeInTheDocument();
+    expect(getByRole("button", { name: /Xem thêm \(1\)/i })).toBeInTheDocument();
   });
 
   it("switches visible sense when a tab button is clicked", () => {
@@ -440,12 +543,22 @@ describe("DictionaryResultCard", () => {
     expect(getByText("The plane took off on time.")).toBeInTheDocument();
   });
 
-  it("wraps each bilingual example in a cursor-help tooltip span", () => {
+  it("shows Vietnamese translation inline below each English example", () => {
+    const { getByText } = renderUi(
+      <DictionaryResultCard vocabulary={bilingualEntry} hasSearched isLoading={false} />,
+    );
+    expect(getByText("The plane took off on time.")).toBeInTheDocument();
+    expect(getByText("Máy bay cất cánh đúng giờ.")).toBeInTheDocument();
+    expect(getByText("The rocket took off at dawn.")).toBeInTheDocument();
+    expect(getByText("Tên lửa cất cánh lúc bình minh.")).toBeInTheDocument();
+  });
+
+  it("does not render cursor-help tooltip spans for examples", () => {
     const { container } = renderUi(
       <DictionaryResultCard vocabulary={bilingualEntry} hasSearched isLoading={false} />,
     );
-    const tooltipSpans = container.querySelectorAll("span.cursor-help");
-    expect(tooltipSpans).toHaveLength(3);
+    const tooltipSpans = container.querySelectorAll("[style*='cursor: help']");
+    expect(tooltipSpans).toHaveLength(0);
   });
 
   it("falls back to examplesVi plain strings when examples is empty", () => {
@@ -613,17 +726,14 @@ describe("DictionaryResultCard", () => {
     expect(ranTag).toBeDefined();
   });
 
-  it("renders Oxford-style inline collocations", () => {
+  it("renders bold EN text and Vietnamese in inline collocations", () => {
     const { container, getByText } = renderUi(
       <DictionaryResultCard vocabulary={verbEntry} hasSearched isLoading={false} />,
     );
-    // Expand collocations first
-    fireEvent.click(getByText(/Collocations/));
-    // "**go** for a run" — bold "go", plain " for a run"
+    // "**go** for a run" — bold "go"
     const strongTags = container.querySelectorAll("strong");
     const goTag = [...strongTags].find((s) => s.textContent === "go");
     expect(goTag).toBeDefined();
-    // Vietnamese shown with em dash separator
     expect(getByText("đi chạy bộ")).toBeInTheDocument();
   });
 });
