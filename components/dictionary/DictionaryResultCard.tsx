@@ -409,12 +409,12 @@ function OverviewToggle({ overviewVi, overviewEn }: { overviewVi: string; overvi
 
   return (
     <div
-      className="anim-fade-up"
+      className="anim-fade-up dictionary-overview-block"
       style={{
         marginTop: 20,
         borderRadius: "var(--radius)",
         background: "var(--bg-deep)",
-        padding: "16px 20px",
+        padding: "24px 20px",
       }}
     >
       <div
@@ -457,9 +457,16 @@ function OverviewToggle({ overviewVi, overviewEn }: { overviewVi: string; overvi
       <p
         key={lang}
         className="anim-fade-in"
-        style={{ marginTop: 12, fontSize: 14, lineHeight: 1.6, color: "var(--text-secondary)" }}
+        style={{
+          marginTop: 12,
+          fontSize: 15,
+          lineHeight: 1.6,
+          color: "var(--text-secondary)",
+          fontFamily: lang === "vi" ? "var(--font-display)" : "inherit",
+          fontStyle: lang === "vi" ? "italic" : "normal",
+        }}
       >
-        {lang === "vi" ? overviewVi : overviewEn}
+        <BoldText text={lang === "vi" ? overviewVi : overviewEn} />
       </p>
     </div>
   );
