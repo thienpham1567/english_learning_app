@@ -4,10 +4,11 @@ import { auth } from "@/lib/auth";
 /**
  * POST /api/voice/transcribe
  *
- * Receives audio blob from the client and transcribes it using OpenAI Whisper API.
- * Returns the transcribed text.
+ * Receives audio blob from the client and transcribes it using Groq Whisper API (free tier).
+ * Falls back to OpenAI Whisper if GROQ_API_KEY is not configured.
  *
- * Requires OPENAI_DIRECT_API_KEY env var (direct OpenAI key, not OpenRouter).
+ * Priority: GROQ_API_KEY → OPENAI_DIRECT_API_KEY
+ * Groq free tier: 7,200 requests/day, Whisper Large V3 Turbo (~10x faster than OpenAI).
  */
 export async function POST(request: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -15,9 +16,18 @@ export async function POST(request: Request) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const apiKey = process.env.OPENAI_DIRECT_API_KEY;
-  if (!apiKey) {
-    return Response.json({ error: "OPENAI_DIRECT_API_KEY not configured" }, { status: 500 });
+  // Determine provider: Groq (free) → OpenAI (paid) fallback
+  const groqKey = process.env.GROQ_API_KEY;
+  const openaiKey = process.env.OPENAI_DIRECT_API_KEY;
+
+  const provider = groqKey
+    ? { key: groqKey, url: "https://api.groq.com/openai/v1/audio/transcriptions", model: "whisper-large-v3-turbo", name: "Groq" }
+    : openaiKey
+      ? { key: openaiKey, url: "https://api.openai.com/v1/audio/transcriptions", model: "whisper-1", name: "OpenAI" }
+      : null;
+
+  if (!provider) {
+    return Response.json({ error: "No transcription API key configured (GROQ_API_KEY or OPENAI_DIRECT_API_KEY)" }, { status: 500 });
   }
 
   try {
@@ -28,31 +38,31 @@ export async function POST(request: Request) {
       return Response.json({ error: "No audio file provided" }, { status: 400 });
     }
 
-    // Forward to OpenAI Whisper API
     const whisperForm = new FormData();
     whisperForm.append("file", audioFile, "audio.webm");
-    whisperForm.append("model", "whisper-1");
+    whisperForm.append("model", provider.model);
     whisperForm.append("language", "en");
     whisperForm.append("response_format", "json");
 
-    const response = await fetch("https://api.openai.com/v1/audio/transcriptions", {
+    const response = await fetch(provider.url, {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${apiKey}`,
+        Authorization: `Bearer ${provider.key}`,
       },
       body: whisperForm,
     });
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("[Whisper] Error:", response.status, errorText);
+      console.error(`[${provider.name} Whisper] Error:`, response.status, errorText);
       return Response.json({ error: "Transcription failed" }, { status: 502 });
     }
 
     const result = (await response.json()) as { text: string };
     return Response.json({ text: result.text });
   } catch (err) {
-    console.error("[Whisper] Unexpected error:", err);
+    console.error(`[${provider.name} Whisper] Unexpected error:`, err);
     return Response.json({ error: "Internal error" }, { status: 500 });
   }
 }
+
