@@ -441,42 +441,55 @@ describe("DictionaryResultCard", () => {
     expect(screen.queryByText("Từ đơn")).not.toBeInTheDocument();
   });
 
-  it("shows a collapsed collocations toggle for the active sense and expands bilingual rows on click", () => {
-    const { getByRole, getByText, queryByText } = renderUi(
+  it("shows collocations inline without a toggle when there are 3 or fewer", () => {
+    const { getByText, queryByRole } = renderUi(
       <DictionaryResultCard vocabulary={multiSenseEntry} hasSearched isLoading={false} />,
     );
-
-    const toggle = getByRole("button", { name: "Collocations (2)" });
-    expect(toggle).toHaveAttribute("aria-expanded", "false");
-    expect(queryByText("run a company")).not.toBeInTheDocument();
-    expect(queryByText("điều hành một công ty")).not.toBeInTheDocument();
-
-    fireEvent.click(toggle);
-
-    expect(toggle).toHaveAttribute("aria-expanded", "true");
+    // Both collocations visible immediately
     expect(getByText("run a company")).toBeInTheDocument();
     expect(getByText("điều hành một công ty")).toBeInTheDocument();
     expect(getByText("run out of time")).toBeInTheDocument();
-    expect(getByText("hết thời gian")).toBeInTheDocument();
+    // No expand button needed
+    expect(queryByRole("button", { name: /Xem thêm/i })).not.toBeInTheDocument();
+  });
+
+  it("shows first 3 collocations inline and hides rest behind Xem thêm when more than 3", () => {
+    const { getByText, queryByText, getByRole } = renderUi(
+      <DictionaryResultCard vocabulary={manyCollocationsEntry} hasSearched isLoading={false} />,
+    );
+    // First 3 visible
+    expect(getByText("run a company")).toBeInTheDocument();
+    expect(getByText("run out of time")).toBeInTheDocument();
+    expect(getByText("run a risk")).toBeInTheDocument();
+    // 4th hidden
+    expect(queryByText("run a marathon")).not.toBeInTheDocument();
+    // Expand button shows count
+    expect(getByRole("button", { name: /Xem thêm \(1\)/i })).toBeInTheDocument();
+  });
+
+  it("expands remaining collocations when Xem thêm is clicked", () => {
+    const { getByText, getByRole } = renderUi(
+      <DictionaryResultCard vocabulary={manyCollocationsEntry} hasSearched isLoading={false} />,
+    );
+    fireEvent.click(getByRole("button", { name: /Xem thêm \(1\)/i }));
+    expect(getByText("run a marathon")).toBeInTheDocument();
+    expect(getByText("chạy marathon")).toBeInTheDocument();
   });
 
   it("resets the collocations toggle when switching senses away and back", () => {
-    const { getByRole, getByText, queryByText } = renderUi(
-      <DictionaryResultCard vocabulary={multiSenseEntry} hasSearched isLoading={false} />,
+    const { getByText, queryByText, getByRole } = renderUi(
+      <DictionaryResultCard vocabulary={manyCollocationsEntry} hasSearched isLoading={false} />,
     );
-
-    fireEvent.click(getByRole("button", { name: "Collocations (2)" }));
-    expect(getByText("run a company")).toBeInTheDocument();
-
+    // Expand
+    fireEvent.click(getByRole("button", { name: /Xem thêm \(1\)/i }));
+    expect(getByText("run a marathon")).toBeInTheDocument();
+    // Switch to sense 2
     fireEvent.click(getByRole("button", { name: "Nghĩa 2" }));
-    expect(queryByText("run a company")).not.toBeInTheDocument();
-
+    // Switch back to sense 1
     fireEvent.click(getByRole("button", { name: "Nghĩa 1" }));
-    const toggle = getByRole("button", { name: "Collocations (2)" });
-
-    expect(toggle).toHaveAttribute("aria-expanded", "false");
-    expect(queryByText("run a company")).not.toBeInTheDocument();
-    expect(queryByText("điều hành một công ty")).not.toBeInTheDocument();
+    // 4th collocation should be hidden again
+    expect(queryByText("run a marathon")).not.toBeInTheDocument();
+    expect(getByRole("button", { name: /Xem thêm \(1\)/i })).toBeInTheDocument();
   });
 
   it("switches visible sense when a tab button is clicked", () => {
@@ -713,17 +726,14 @@ describe("DictionaryResultCard", () => {
     expect(ranTag).toBeDefined();
   });
 
-  it("renders Oxford-style inline collocations", () => {
+  it("renders bold EN text and Vietnamese in inline collocations", () => {
     const { container, getByText } = renderUi(
       <DictionaryResultCard vocabulary={verbEntry} hasSearched isLoading={false} />,
     );
-    // Expand collocations first
-    fireEvent.click(getByText(/Collocations/));
-    // "**go** for a run" — bold "go", plain " for a run"
+    // "**go** for a run" — bold "go"
     const strongTags = container.querySelectorAll("strong");
     const goTag = [...strongTags].find((s) => s.textContent === "go");
     expect(goTag).toBeDefined();
-    // Vietnamese shown with em dash separator
     expect(getByText("đi chạy bộ")).toBeInTheDocument();
   });
 });

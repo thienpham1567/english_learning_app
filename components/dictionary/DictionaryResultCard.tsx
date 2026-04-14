@@ -313,55 +313,54 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
 
       {collocations.length > 0 && (
         <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <button
-            type="button"
-            aria-expanded={isCollocationsOpen}
-            onClick={() => setIsCollocationsOpen((open) => !open)}
+          <h3 style={SENSE_HEADER_STYLE}>
+            <ThunderboltOutlined style={{ fontSize: 12 }} />
+            Collocations
+          </h3>
+          <ul
             style={{
-              display: "inline-flex",
-              alignItems: "center",
-              borderRadius: 999,
-              border: "1px solid rgba(154,177,122,0.18)",
-              background: "var(--surface)",
-              padding: "4px 12px",
-              fontSize: 12,
-              fontWeight: 500,
-              color: "var(--accent)",
-              cursor: "pointer",
-              width: "fit-content",
+              listStyle: "none",
+              padding: 0,
+              margin: 0,
+              display: "flex",
+              flexDirection: "column",
+              gap: 6,
             }}
           >
-            Collocations ({collocations.length})
-          </button>
-          {isCollocationsOpen && (
-            <div
-              className="anim-fade-in"
-              style={{ display: "flex", flexDirection: "column", gap: 6 }}
-            >
-              <ul
-                style={{
-                  listStyle: "none",
-                  padding: 0,
-                  margin: 0,
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 6,
-                }}
+            {(isCollocationsOpen ? collocations : collocations.slice(0, 3)).map((collocation) => (
+              <li
+                key={`${collocation.en}-${collocation.vi}`}
+                style={{ fontSize: 14, lineHeight: 1.6 }}
               >
-                {collocations.map((collocation) => (
-                  <li
-                    key={`${collocation.en}-${collocation.vi}`}
-                    style={{ fontSize: 14, lineHeight: 1.6 }}
-                  >
-                    <span style={{ color: "var(--text-primary)" }}>
-                      <BoldText text={collocation.en} />
-                    </span>
-                    <span style={{ margin: "0 6px", color: "var(--text-muted)" }}>&mdash;</span>
-                    <span style={{ color: "var(--text-secondary)" }}>{collocation.vi}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+                <span style={{ color: "var(--text-primary)" }}>
+                  <BoldText text={collocation.en} />
+                </span>
+                <span style={{ margin: "0 6px", color: "var(--text-muted)" }}>&mdash;</span>
+                <span style={{ color: "var(--text-secondary)" }}>{collocation.vi}</span>
+              </li>
+            ))}
+          </ul>
+          {collocations.length > 3 && (
+            <button
+              type="button"
+              aria-expanded={isCollocationsOpen}
+              onClick={() => setIsCollocationsOpen((open) => !open)}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                borderRadius: 999,
+                border: "1px solid rgba(154,177,122,0.18)",
+                background: "var(--surface)",
+                padding: "4px 12px",
+                fontSize: 12,
+                fontWeight: 500,
+                color: "var(--accent)",
+                cursor: "pointer",
+                width: "fit-content",
+              }}
+            >
+              {isCollocationsOpen ? "Thu gọn" : `Xem thêm (${collocations.length - 3})`}
+            </button>
           )}
         </section>
       )}
