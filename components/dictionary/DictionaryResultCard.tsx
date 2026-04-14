@@ -165,18 +165,10 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
   };
 
   return (
-    <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+    <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: 28 }}>
       <section style={sectionStyle}>
-        <h3
-          style={{
-            fontSize: 12,
-            fontWeight: 600,
-            textTransform: "uppercase",
-            letterSpacing: "0.14em",
-            color: "var(--accent)",
-            margin: 0,
-          }}
-        >
+        <h3 style={SENSE_HEADER_STYLE}>
+          <TranslationOutlined style={{ fontSize: 12 }} />
           Nghĩa tiếng Việt
         </h3>
         <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
@@ -185,16 +177,8 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
       </section>
 
       <section style={sectionStyle}>
-        <h3
-          style={{
-            fontSize: 12,
-            fontWeight: 600,
-            textTransform: "uppercase",
-            letterSpacing: "0.14em",
-            color: "var(--accent)",
-            margin: 0,
-          }}
-        >
+        <h3 style={SENSE_HEADER_STYLE}>
+          <BookOutlined style={{ fontSize: 12 }} />
           Definition in English
         </h3>
         <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
@@ -204,16 +188,8 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
 
       {(examples.length > 0 || examplesVi.length > 0) && (
         <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <h3
-            style={{
-              fontSize: 12,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.14em",
-              color: "var(--accent)",
-              margin: 0,
-            }}
-          >
+          <h3 style={SENSE_HEADER_STYLE}>
+            <EditOutlined style={{ fontSize: 12 }} />
             Ví dụ
           </h3>
           <ul
@@ -251,16 +227,8 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
 
       {sense.usageNoteVi && (
         <section style={{ ...sectionStyle, borderLeft: "none" }}>
-          <h3
-            style={{
-              fontSize: 12,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.14em",
-              color: "var(--accent)",
-              margin: 0,
-            }}
-          >
+          <h3 style={SENSE_HEADER_STYLE}>
+            <BulbOutlined style={{ fontSize: 12 }} />
             Ghi chú sử dụng
           </h3>
           <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
@@ -271,16 +239,8 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
 
       {sense.patterns.length > 0 && (
         <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <h3
-            style={{
-              fontSize: 12,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.14em",
-              color: "var(--accent)",
-              margin: 0,
-            }}
-          >
+          <h3 style={SENSE_HEADER_STYLE}>
+            <CodeOutlined style={{ fontSize: 12 }} />
             Mẫu câu thường gặp
           </h3>
           <ul
@@ -304,16 +264,8 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
 
       {sense.relatedExpressions.length > 0 && (
         <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <h3
-            style={{
-              fontSize: 12,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.14em",
-              color: "var(--accent)",
-              margin: 0,
-            }}
-          >
+          <h3 style={SENSE_HEADER_STYLE}>
+            <LinkOutlined style={{ fontSize: 12 }} />
             Biểu đạt liên quan
           </h3>
           <ul
@@ -337,16 +289,8 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
 
       {sense.commonMistakesVi.length > 0 && (
         <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <h3
-            style={{
-              fontSize: 12,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.14em",
-              color: "var(--accent)",
-              margin: 0,
-            }}
-          >
+          <h3 style={SENSE_HEADER_STYLE}>
+            <WarningOutlined style={{ fontSize: 12 }} />
             Lỗi thường gặp
           </h3>
           <ul
