@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Card, Flex, Typography, Button, Progress, Result, Spin, Tag } from "antd";
+import { Card, Flex, Typography, Button, Progress, Spin, Tag } from "antd";
 import {
   CheckCircleFilled,
   ClockCircleOutlined,

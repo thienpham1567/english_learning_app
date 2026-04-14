@@ -161,3 +161,15 @@ export function generateTestPlan(): DiagnosticSkill[] {
   for (let i = 0; i < 5; i++) plan.push("listening");
   return plan;
 }
+
+/**
+ * Look up a question by its ID across all skills.
+ * Used by the submit handler to match answers deterministically (F1 fix).
+ */
+export function getQuestionById(id: string): DiagnosticQuestion | undefined {
+  for (const questions of Object.values(ALL_QUESTIONS)) {
+    const found = questions.find((q) => q.id === id);
+    if (found) return found;
+  }
+  return undefined;
+}

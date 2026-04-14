@@ -5,9 +5,8 @@ import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { diagnosticResult, userSkillProfile, activityLog } from "@/lib/db/schema";
 import { createInitialState, processAnswer, calculateResults, type SkillState } from "@/lib/diagnostic/algorithm";
-import { getQuestionsForLevel, generateTestPlan } from "@/lib/diagnostic/questions";
+import { getQuestionsForLevel, generateTestPlan, getQuestionById } from "@/lib/diagnostic/questions";
 import { CEFR_LEVELS, type DiagnosticSkill, type DiagnosticAnswer, type CefrLevel } from "@/lib/diagnostic/types";
-import { levelToCefr } from "@/lib/adaptive/difficulty";
 
 /**
  * GET /api/diagnostic
@@ -150,23 +149,16 @@ export async function POST(request: Request) {
       return Response.json({ error: "No answers provided" }, { status: 400 });
     }
 
-    // Rebuild questions to verify answers
-    const plan = generateTestPlan();
+    // F1 fix: Match answers by questionId (deterministic) instead of regenerating
     const states = createInitialState();
-    const usedIds = new Set<string>();
     const processedAnswers: DiagnosticAnswer[] = [];
 
-    for (let i = 0; i < Math.min(answers.length, plan.length); i++) {
-      const skill = plan[i];
-      const levelIndex = states[skill].currentLevelIndex;
-      const targetLevel = CEFR_LEVELS[levelIndex];
+    for (const userAnswer of answers) {
+      const q = getQuestionById(userAnswer.questionId);
+      if (!q) continue; // skip unknown question IDs
 
-      const [q] = getQuestionsForLevel(skill, targetLevel, 1, usedIds);
-      if (!q) continue;
-      usedIds.add(q.id);
-
-      const userAnswer = answers[i];
       const correct = userAnswer.selectedIndex === q.correctIndex;
+      const skill = q.skill as DiagnosticSkill;
 
       const answer: DiagnosticAnswer = {
         questionId: q.id,
