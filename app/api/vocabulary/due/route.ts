@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { eq, and, sql, lte } from "drizzle-orm";
+import { eq, and, sql, lte, notInArray } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
@@ -44,7 +44,8 @@ export async function GET() {
     .orderBy(userVocabulary.nextReview)
     .limit(15);
 
-  // Also fetch some extra words as distractor candidates
+  // Fetch distractor candidates, excluding due words to avoid duplicate answers (F2 fix)
+  const dueQueries = dueWords.map((w) => w.query);
   const distractors = await db
     .select({
       query: userVocabulary.query,
@@ -58,6 +59,7 @@ export async function GET() {
       and(
         eq(userVocabulary.userId, session.user.id),
         eq(userVocabulary.saved, true),
+        dueQueries.length > 0 ? notInArray(userVocabulary.query, dueQueries) : undefined,
       ),
     )
     .orderBy(sql`RANDOM()`)

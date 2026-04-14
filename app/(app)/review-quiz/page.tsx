@@ -107,6 +107,12 @@ function generateQuizQuestions(words: VocabWord[], distractors: DistractorWord[]
       chosen.push(d);
     }
 
+    // F3 fix: Pad to always have 4 options even with few distractors
+    while (chosen.length < 3) {
+      const placeholder = `---`;
+      chosen.push({ query: `_pad_${chosen.length}`, headword: placeholder, overviewVi: placeholder, level: null });
+    }
+
     let options: string[];
     let correctIndex: number;
 
@@ -192,34 +198,30 @@ function VocabReviewTab() {
     return 3;
   }, []);
 
-  // Next or submit
+  // Next or submit — F4 fix: build final result inline, pass to submitReview
   const handleNext = useCallback(() => {
     const q = questions[currentIdx];
     const selected = answers[currentIdx];
+    let updatedResults = results;
     if (q && selected !== undefined) {
       const correct = selected === q.correctIndex;
       const elapsed = Date.now() - questionStartRef.current;
       const quality = getQuality(correct, elapsed);
-      setResults((prev) => [...prev, { query: q.word.query, quality }]);
+      updatedResults = [...results, { query: q.word.query, quality }];
+      setResults(updatedResults);
     }
 
     if (currentIdx < questions.length - 1) {
       setCurrentIdx((prev) => prev + 1);
     } else {
-      // Submit all
-      submitReview();
+      // Submit all — pass final results directly to avoid stale closure
+      submitReview(updatedResults);
     }
-  }, [currentIdx, questions, answers, getQuality]);
+  }, [currentIdx, questions, answers, results, getQuality]);
 
-  const submitReview = useCallback(async () => {
+  const submitReview = useCallback(async (finalResults: Array<{ query: string; quality: number }>) => {
     setSubmitting(true);
-    // Build results from all questions
-    const allResults = questions.map((q, i) => {
-      const selected = answers[i];
-      const correct = selected === q.correctIndex;
-      const quality = correct ? 4 : 2; // simplified for batch
-      return { query: q.word.query, quality };
-    });
+    const allResults = finalResults;
 
     try {
       const res = await fetch("/api/vocabulary/review", {

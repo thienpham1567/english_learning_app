@@ -35,7 +35,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
     if (recommendedLevel && !level) {
       setLevel(recommendedLevel);
     }
-  }, [recommendedLevel]);
+  }, [recommendedLevel, level]);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 28, padding: "24px 20px", maxWidth: 600, margin: "0 auto", width: "100%" }}>

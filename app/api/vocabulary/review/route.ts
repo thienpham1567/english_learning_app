@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { eq, and } from "drizzle-orm";
+import { eq, and, inArray } from "drizzle-orm";
 import { z } from "zod";
 
 import { auth } from "@/lib/auth";
@@ -50,19 +50,21 @@ export async function POST(request: Request) {
     interval: number;
   }> = [];
 
-  for (const { query, quality } of results) {
-    // Fetch current SRS state from user_vocabulary
-    const [existing] = await db
-      .select()
-      .from(userVocabulary)
-      .where(
-        and(
-          eq(userVocabulary.userId, userId),
-          eq(userVocabulary.query, query),
-        ),
-      )
-      .limit(1);
+  // Batch fetch all entries to avoid N+1 SELECTs (F1 fix)
+  const queries = results.map((r) => r.query);
+  const entries = await db
+    .select()
+    .from(userVocabulary)
+    .where(
+      and(
+        eq(userVocabulary.userId, userId),
+        inArray(userVocabulary.query, queries),
+      ),
+    );
+  const entryMap = new Map(entries.map((e) => [e.query, e]));
 
+  for (const { query, quality } of results) {
+    const existing = entryMap.get(query);
     if (!existing) continue;
 
     const prevState = {
