@@ -17,6 +17,7 @@ export const messageRoleEnum = pgEnum("message_role", ["user", "assistant"]);
 export const activityTypeEnum = pgEnum("activity_type", [
   "flashcard_review",
   "grammar_quiz",
+  "grammar_lesson",
   "writing_practice",
   "daily_challenge",
   "chatbot_session",

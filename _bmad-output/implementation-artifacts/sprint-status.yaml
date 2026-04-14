@@ -152,11 +152,9 @@ development_status:
   15-4-weekly-leaderboard: done
   epic-15-retrospective: optional
 
-  # ── Epic 16: Offline Mode & AI Content Generation ──
-  epic-16: backlog
-  16-1-offline-flashcard-vocabulary-sync: backlog
-  16-2-offline-reading-cache: backlog
-  16-3-ai-grammar-lessons: backlog
-  16-4-topic-based-content-sets: backlog
-  16-5-learning-style-detection: backlog
+  # ── Epic 16: AI Content Generation ──
+  epic-16: in-progress
+  16-1-ai-grammar-lessons: done
+  16-2-topic-based-content-sets: backlog
+  16-3-learning-style-detection: backlog
   epic-16-retrospective: optional
