@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { SoundOutlined } from "@ant-design/icons";
+import { SoundOutlined, AudioOutlined } from "@ant-design/icons";
+import { Segmented } from "antd";
 
 import { useListeningExercise } from "@/hooks/useListeningExercise";
 import { useMiniDictionary } from "@/hooks/useMiniDictionary";
@@ -11,6 +12,7 @@ import { AudioPlayer } from "@/components/app/listening/AudioPlayer";
 import { QuestionCards } from "@/components/app/listening/QuestionCards";
 import { Results } from "@/components/app/listening/Results";
 import { MiniDictionary } from "@/components/app/shared";
+import ShadowingMode from "@/components/app/listening/ShadowingMode";
 import type { CefrLevel } from "@/lib/listening/types";
 
 export default function ListeningPage() {
@@ -38,6 +40,7 @@ export default function ListeningPage() {
   const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
   const [recommendedLevel, setRecommendedLevel] = useState<CefrLevel | null>(null);
   const [skillLevelUp, setSkillLevelUp] = useState<{ cefr: string; levelUp: boolean } | null>(null);
+  const [mode, setMode] = useState<string>("listening");
 
   // Fetch listening skill profile for adaptive level recommendation
   useEffect(() => {
@@ -94,14 +97,28 @@ export default function ListeningPage() {
       >
         <SoundOutlined style={{ fontSize: 20, color: "var(--accent)" }} />
         <div>
-          <div style={{ fontSize: 16, fontWeight: 700, color: "var(--text)" }}>Luyện nghe</div>
+          <div style={{ fontSize: 16, fontWeight: 700, color: "var(--text)" }}>
+            {mode === "listening" ? "Luyện nghe" : "Shadowing"}
+          </div>
           <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
-            {state === "idle" && "Chọn cấp độ để bắt đầu"}
-            {state === "loading" && "Đang tạo bài nghe..."}
-            {(state === "active" || state === "submitting") && exercise && `${exercise.level} • ${exercise.questions.length} câu hỏi`}
-            {state === "submitted" && result && `Kết quả: ${result.correct}/${result.total}`}
+            {mode === "shadowing"
+              ? "Nghe → Lặp lại → So sánh phát âm"
+              : state === "idle" && "Chọn cấp độ để bắt đầu"}
+            {mode === "listening" && state === "loading" && "Đang tạo bài nghe..."}
+            {mode === "listening" && (state === "active" || state === "submitting") && exercise && `${exercise.level} • ${exercise.questions.length} câu hỏi`}
+            {mode === "listening" && state === "submitted" && result && `Kết quả: ${result.correct}/${result.total}`}
           </div>
         </div>
+        <Segmented
+          value={mode}
+          onChange={(val) => setMode(val as string)}
+          options={[
+            { value: "listening", icon: <SoundOutlined />, label: "Luyện nghe" },
+            { value: "shadowing", icon: <AudioOutlined />, label: "Shadowing" },
+          ]}
+          style={{ marginLeft: "auto" }}
+          size="small"
+        />
       </div>
 
       {/* Content */}
@@ -112,6 +129,14 @@ export default function ListeningPage() {
           padding: "20px",
         }}
       >
+        {/* Shadowing Mode */}
+        {mode === "shadowing" && (
+          <ShadowingMode examMode={examMode} />
+        )}
+
+        {/* Standard Listening Mode */}
+        {mode === "listening" && (
+          <>
         {/* Error */}
         {error && (
           <div
@@ -187,6 +212,8 @@ export default function ListeningPage() {
               </div>
             )}
           </div>
+        )}
+          </>
         )}
       </div>
 
