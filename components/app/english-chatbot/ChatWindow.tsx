@@ -14,6 +14,8 @@ import { MiniDictionary } from "@/components/app/shared";
 import { useMiniDictionary } from "@/hooks/useMiniDictionary";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import { PronunciationFeedback } from "@/components/app/english-chatbot/PronunciationFeedback";
+import type { PronFeedbackData } from "@/components/app/english-chatbot/PronunciationFeedback";
 import { deriveTitle } from "@/lib/chat/derive-title";
 import { DEFAULT_PERSONA_ID, PERSONAS } from "@/lib/chat/personas";
 import type { Persona } from "@/lib/chat/personas";
@@ -146,6 +148,12 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const voice = useVoiceInput();
   const tts = useTextToSpeech();
   const [speakingMsgId, setSpeakingMsgId] = useState<string | null>(null);
+
+  // Pronunciation inline feedback (Story 13.3)
+  const [pronFeedback, setPronFeedback] = useState<Map<string, PronFeedbackData>>(new Map());
+  const [pronEnabled, setPronEnabled] = useState(true);
+  // Track which message IDs came from voice input
+  const voiceMessageIds = useRef<Set<string>>(new Set());
 
   // Voice Conversation Mode (Story 7.3)
   const [voiceMode, setVoiceMode] = useState(false);
@@ -327,11 +335,15 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       }
     }
 
+    const isVoiceMessage = voiceModeRef.current && voice.transcript === t;
     const userMessage: AppChatMessage = {
       id: crypto.randomUUID(),
       role: "user",
       text: t,
     };
+    if (isVoiceMessage) {
+      voiceMessageIds.current.add(userMessage.id);
+    }
     const assistantMessageId = crypto.randomUUID();
 
     const requestMessages = [...messages, userMessage].filter(
@@ -413,6 +425,32 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       removeEmptyAssistantMessage(assistantMessageId);
     } finally {
       setIsLoading(false);
+
+      // Fire async pronunciation evaluation for voice messages (non-blocking)
+      if (isVoiceMessage && pronEnabled) {
+        const msgId = userMessage.id;
+        setPronFeedback((prev) => new Map(prev).set(msgId, { status: "loading" }));
+        fetch("/api/pronunciation/evaluate", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ targetText: t, spokenText: t }),
+        })
+          .then((r) => r.ok ? r.json() : Promise.reject())
+          .then((result) => {
+            setPronFeedback((prev) => new Map(prev).set(msgId, {
+              status: "done",
+              score: result.score,
+              accuracy: result.accuracy,
+              fluency: result.fluency,
+              wordAnalysis: result.wordAnalysis,
+              tips: result.tips,
+              feedback: result.feedback,
+            }));
+          })
+          .catch(() => {
+            setPronFeedback((prev) => new Map(prev).set(msgId, { status: "error" }));
+          });
+      }
 
       // Voice mode: auto-speak the last assistant message after streaming done
       if (voiceModeRef.current && tts.isSupported) {
@@ -675,6 +713,17 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                       setSpeakingMsgId(null);
                     } : undefined}
                   />
+                  {/* Inline pronunciation feedback for voice messages */}
+                  {m.role === "user" && voiceMessageIds.current.has(m.id) && pronFeedback.has(m.id) && (
+                    <div style={{ display: "flex", justifyContent: "flex-end", paddingRight: 4 }}>
+                      <PronunciationFeedback
+                        data={pronFeedback.get(m.id)!}
+                        onListenCorrect={tts.isSupported ? () => {
+                          tts.speak(m.text);
+                        } : undefined}
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
               {isLoading && !streamingHasStarted && (
@@ -914,6 +963,27 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                 }}
               >
                 🎙️ {voiceMode ? `Chế độ nói (${voiceExchanges})` : "Chế độ nói"}
+              </button>
+            )}
+            {voiceMode && (
+              <button
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 4,
+                  padding: "3px 10px",
+                  borderRadius: 999,
+                  border: pronEnabled ? "1.5px solid #52c41a" : "1px solid var(--border)",
+                  background: pronEnabled ? "#52c41a15" : "var(--surface)",
+                  color: pronEnabled ? "#52c41a" : "var(--text-muted)",
+                  fontSize: 12,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  transition: "all 0.2s",
+                }}
+                onClick={() => setPronEnabled((v) => !v)}
+              >
+                🎤 {pronEnabled ? "Phản hồi phát âm ✓" : "Phản hồi phát âm"}
               </button>
             )}
           </div>

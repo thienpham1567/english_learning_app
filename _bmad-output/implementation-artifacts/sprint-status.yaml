@@ -130,10 +130,10 @@ development_status:
   epic-12-retrospective: optional
 
   # ── Epic 13: Shadowing, Dictation & Voice AI Upgrade ──
-  epic-13: in-progress
+  epic-13: done
   13-1-shadowing-mode: done
   13-2-dictation-mode: done
-  13-3-voice-conversation-inline-feedback: backlog
+  13-3-voice-conversation-inline-feedback: done
   epic-13-retrospective: optional
 
   # ── Epic 14: Analytics Dashboard Upgrade (Sprint 10) ──
