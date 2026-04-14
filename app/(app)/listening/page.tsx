@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import { SoundOutlined, AudioOutlined } from "@ant-design/icons";
+import { SoundOutlined, AudioOutlined, EditOutlined } from "@ant-design/icons";
 import { Segmented } from "antd";
 
 import { useListeningExercise } from "@/hooks/useListeningExercise";
@@ -13,6 +13,7 @@ import { QuestionCards } from "@/components/app/listening/QuestionCards";
 import { Results } from "@/components/app/listening/Results";
 import { MiniDictionary } from "@/components/app/shared";
 import ShadowingMode from "@/components/app/listening/ShadowingMode";
+import DictationMode from "@/components/app/listening/DictationMode";
 import type { CefrLevel } from "@/lib/listening/types";
 
 export default function ListeningPage() {
@@ -98,12 +99,12 @@ export default function ListeningPage() {
         <SoundOutlined style={{ fontSize: 20, color: "var(--accent)" }} />
         <div>
           <div style={{ fontSize: 16, fontWeight: 700, color: "var(--text)" }}>
-            {mode === "listening" ? "Luyện nghe" : "Shadowing"}
+            {mode === "listening" ? "Luyện nghe" : mode === "shadowing" ? "Shadowing" : "Dictation"}
           </div>
           <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
-            {mode === "shadowing"
-              ? "Nghe → Lặp lại → So sánh phát âm"
-              : state === "idle" && "Chọn cấp độ để bắt đầu"}
+            {mode === "shadowing" && "Nghe → Lặp lại → So sánh phát âm"}
+            {mode === "dictation" && "Nghe → Gõ lại → Kiểm tra từng từ"}
+            {mode === "listening" && state === "idle" && "Chọn cấp độ để bắt đầu"}
             {mode === "listening" && state === "loading" && "Đang tạo bài nghe..."}
             {mode === "listening" && (state === "active" || state === "submitting") && exercise && `${exercise.level} • ${exercise.questions.length} câu hỏi`}
             {mode === "listening" && state === "submitted" && result && `Kết quả: ${result.correct}/${result.total}`}
@@ -113,8 +114,9 @@ export default function ListeningPage() {
           value={mode}
           onChange={(val) => setMode(val as string)}
           options={[
-            { value: "listening", icon: <SoundOutlined />, label: "Luyện nghe" },
-            { value: "shadowing", icon: <AudioOutlined />, label: "Shadowing" },
+            { value: "listening", icon: <SoundOutlined />, label: "Nghe" },
+            { value: "shadowing", icon: <AudioOutlined />, label: "Shadow" },
+            { value: "dictation", icon: <EditOutlined />, label: "Dictation" },
           ]}
           style={{ marginLeft: "auto" }}
           size="small"
@@ -132,6 +134,11 @@ export default function ListeningPage() {
         {/* Shadowing Mode */}
         {mode === "shadowing" && (
           <ShadowingMode examMode={examMode} />
+        )}
+
+        {/* Dictation Mode */}
+        {mode === "dictation" && (
+          <DictationMode examMode={examMode} />
         )}
 
         {/* Standard Listening Mode */}

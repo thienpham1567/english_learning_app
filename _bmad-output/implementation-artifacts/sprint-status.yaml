@@ -132,7 +132,7 @@ development_status:
   # ── Epic 13: Shadowing, Dictation & Voice AI Upgrade ──
   epic-13: in-progress
   13-1-shadowing-mode: done
-  13-2-dictation-mode: backlog
+  13-2-dictation-mode: done
   13-3-voice-conversation-inline-feedback: backlog
   epic-13-retrospective: optional
 
