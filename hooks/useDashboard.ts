@@ -4,6 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 
 export interface DashboardData {
   flashcardsDue: number;
+  vocabDue: number;
   dailyChallenge: { completed: boolean; score: number | null };
   streak: {
     currentStreak: number;

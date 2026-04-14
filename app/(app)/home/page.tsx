@@ -19,6 +19,7 @@ import {
   BookOutlined,
   BarChartOutlined,
   RightOutlined,
+  SoundOutlined,
 } from "@ant-design/icons";
 
 import { useDashboard, type DashboardData } from "@/hooks/useDashboard";
@@ -116,14 +117,63 @@ export default function HomePage() {
     data.streak.currentStreak === 0 &&
     !data.dailyChallenge.completed; // B5 fix: active user who just did the challenge isn't "new"
 
-  // ── Build today's plan items ──
-  const todayItems: Array<{ label: string; done: boolean; href: string; icon: React.ReactNode }> = [];
+  // ── Build today's plan items (Story 14.4: Enhanced) ──
+  const todayItems: Array<{ label: string; done: boolean; href: string; icon: React.ReactNode; priority: number }> = [];
 
-  if (data.flashcardsDue > 0) {
-    todayItems.push({ label: `Ôn ${data.flashcardsDue} thẻ flashcard`, done: false, href: "/flashcards", icon: <AppstoreOutlined /> });
+  // Highest priority: Vocabulary SRS review (if due)
+  if ((data.vocabDue ?? 0) > 0) {
+    todayItems.push({ label: `Ôn ${data.vocabDue} từ vựng SRS`, done: false, href: "/review-quiz", icon: <BookOutlined />, priority: 0 });
   }
-  todayItems.push({ label: "Thử thách mỗi ngày", done: data.dailyChallenge.completed, href: "/daily-challenge", icon: <FireOutlined /> });
-  todayItems.push({ label: "Luyện viết", done: false, href: "/writing-practice", icon: <EditOutlined /> });
+
+  // Second: Flashcard review
+  if (data.flashcardsDue > 0) {
+    todayItems.push({ label: `Ôn ${data.flashcardsDue} thẻ flashcard`, done: false, href: "/flashcards", icon: <AppstoreOutlined />, priority: 1 });
+  }
+
+  // Core daily tasks
+  todayItems.push({ label: "Thử thách mỗi ngày", done: data.dailyChallenge.completed, href: "/daily-challenge", icon: <FireOutlined />, priority: 2 });
+  todayItems.push({ label: "Luyện viết", done: false, href: "/writing-practice", icon: <EditOutlined />, priority: 4 });
+
+  // Weak skill recommendations (lazy-loaded)
+  const [weakSkill, setWeakSkill] = useState<{ module: string; cefr: string } | null>(null);
+  useEffect(() => {
+    if (isNewUser) return;
+    // Fetch all skill profiles and find the weakest
+    Promise.all(
+      ["grammar", "listening", "reading"].map((m) =>
+        fetch(`/api/skill-profile?module=${m}`)
+          .then((r) => r.ok ? r.json() : null)
+          .catch(() => null),
+      ),
+    ).then((profiles) => {
+      const valid = profiles.filter(Boolean) as Array<{ module: string; currentLevel: number; cefr: string }>;
+      if (valid.length === 0) return;
+      const weakest = valid.reduce((a, b) => a.currentLevel < b.currentLevel ? a : b);
+      setWeakSkill({ module: weakest.module, cefr: weakest.cefr });
+    });
+  }, [isNewUser]);
+
+  // Add weak skill recommendation
+  if (weakSkill) {
+    const SKILL_LABELS: Record<string, { label: string; href: string; icon: React.ReactNode }> = {
+      grammar: { label: "Luyện ngữ pháp", href: "/grammar-quiz", icon: <BulbOutlined /> },
+      listening: { label: "Luyện nghe", href: "/listening", icon: <SoundOutlined /> },
+      reading: { label: "Luyện đọc", href: "/reading", icon: <ReadOutlined /> },
+    };
+    const skill = SKILL_LABELS[weakSkill.module];
+    if (skill) {
+      todayItems.push({
+        label: `${skill.label} (${weakSkill.cefr} — kỹ năng yếu nhất)`,
+        done: false,
+        href: skill.href,
+        icon: skill.icon,
+        priority: 3,
+      });
+    }
+  }
+
+  // Sort by priority
+  todayItems.sort((a, b) => a.priority - b.priority);
 
   // ── Weekly chart max ──
   const maxActivity = Math.max(...data.weeklyActivity.map((d) => d.count), 1);
