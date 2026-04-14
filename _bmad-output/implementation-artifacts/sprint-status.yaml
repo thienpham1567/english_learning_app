@@ -146,7 +146,7 @@ development_status:
 
   # ── Epic 15: CEFR Diagnostic, Scenarios & Social (Sprint 11) ──
   epic-15: in-progress
-  15-1-cefr-diagnostic-test: backlog
+  15-1-cefr-diagnostic-test: done
   15-2-scenario-engine-airport: backlog
   15-3-additional-scenarios: backlog
   15-4-weekly-leaderboard: done

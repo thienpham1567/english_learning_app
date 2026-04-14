@@ -22,6 +22,7 @@ export const activityTypeEnum = pgEnum("activity_type", [
   "chatbot_session",
   "voice_practice",
   "listening_practice",
+  "diagnostic_test",
 ]);
 
 export const conversation = pgTable("conversation", {
@@ -226,3 +227,17 @@ export const errorLog = pgTable("error_log", {
 });
 
 export type ErrorLogRow = typeof errorLog.$inferSelect;
+
+/** Diagnostic Result — stores CEFR placement test results (Story 15.1) */
+export const diagnosticResult = pgTable("diagnostic_result", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  overallCefr: text("overall_cefr").notNull(),
+  confidence: real("confidence").notNull(),
+  skillBreakdown: jsonb("skill_breakdown").$type<Record<string, { level: number; cefr: string; correct: number; total: number }>>().notNull(),
+  answers: jsonb("answers").$type<Array<{ skill: string; level: string; correct: boolean; timeMs: number }>>(),
+  completedAt: timestamp("completed_at", { withTimezone: true }).defaultNow().notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export type DiagnosticResultRow = typeof diagnosticResult.$inferSelect;
