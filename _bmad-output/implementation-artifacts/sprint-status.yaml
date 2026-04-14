@@ -121,7 +121,7 @@ development_status:
   epic-11-retrospective: optional
 
   # ── Epic 12: SM-2 Vocabulary SRS & Adaptive Difficulty ──
-  epic-12: in-progress
+  epic-12: done
   12-1-vocabulary-srs-schema-extension: done
   12-2-sm2-algorithm-service: done
   12-3-vocabulary-srs-review-quiz: done
@@ -136,9 +136,9 @@ development_status:
   13-3-voice-conversation-inline-feedback: backlog
   epic-13-retrospective: optional
 
-  # ── Epic 14: Analytics Dashboard Upgrade ──
-  epic-14: backlog
-  14-1-streak-calendar-heatmap: backlog
+  # ── Epic 14: Analytics Dashboard Upgrade (Sprint 10) ──
+  epic-14: in-progress
+  14-1-streak-calendar-heatmap: done
   14-2-predicted-toeic-score: backlog
   14-3-word-of-the-day: backlog
   14-4-enhanced-todays-plan: backlog

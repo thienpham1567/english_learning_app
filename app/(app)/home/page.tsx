@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useState } from "react";
+
 import { useRouter } from "next/navigation";
 import { Card, Flex, Typography, Button, Space, Tag, Spin, Result } from "antd";
 import {
@@ -21,7 +23,7 @@ import {
 
 import { useDashboard, type DashboardData } from "@/hooks/useDashboard";
 import { useUser } from "@/components/app/shared/UserContext";
-import { StreakFire, XPCounter, EmptyStateCard } from "@/components/app/shared";
+import { StreakFire, XPCounter, EmptyStateCard, StreakCalendar } from "@/components/app/shared";
 
 const { Title, Text } = Typography;
 
@@ -125,6 +127,16 @@ export default function HomePage() {
 
   // ── Weekly chart max ──
   const maxActivity = Math.max(...data.weeklyActivity.map((d) => d.count), 1);
+
+  // ── Streak Calendar data (lazy fetch from analytics) ──
+  const [dailyActivity, setDailyActivity] = useState<Array<{ date: string; count: number }> | null>(null);
+  useEffect(() => {
+    if (isNewUser) return;
+    fetch("/api/analytics")
+      .then((r) => r.ok ? r.json() : null)
+      .then((d) => { if (d?.dailyActivity) setDailyActivity(d.dailyActivity); })
+      .catch(() => {});
+  }, [isNewUser]);
 
   return (
     <div style={{ height: "100%", overflowY: "auto", padding: "var(--space-6)" }} className="anim-fade-up">
@@ -364,6 +376,14 @@ export default function HomePage() {
             ))}
           </Flex>
         </Card>
+
+        {/* ── Streak Calendar Heatmap (Story 14.1) ── */}
+        {!isNewUser && dailyActivity && (
+          <StreakCalendar
+            dailyActivity={dailyActivity}
+            currentStreak={data.streak.currentStreak}
+          />
+        )}
 
         {/* ── StreakBadges ── */}
         <Card

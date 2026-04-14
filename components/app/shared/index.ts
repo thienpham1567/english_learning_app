@@ -6,3 +6,4 @@ export type { CelebrationTier } from "./CelebrationOverlay";
 export { StreakFire } from "./StreakFire";
 export { XPCounter } from "./XPCounter";
 export { MiniDictionary } from "./MiniDictionary";
+export { StreakCalendar } from "./StreakCalendar";
