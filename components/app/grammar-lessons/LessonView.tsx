@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import {
   ArrowLeftOutlined,
   CheckCircleOutlined,
@@ -68,8 +68,8 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
     }
   }, [topicId, topicTitle, examMode, level]);
 
-  // Auto-generate on first render
-  useState(() => { generateLesson(); });
+  // Auto-generate on mount
+  useEffect(() => { generateLesson(); }, [generateLesson]);
 
   const currentExercise = lesson?.exercises?.[exerciseIdx] ?? null;
 

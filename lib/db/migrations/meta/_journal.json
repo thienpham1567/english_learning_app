@@ -50,6 +50,13 @@
       "when": 1775990935501,
       "tag": "0006_giant_lila_cheney",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1776162463103,
+      "tag": "0007_open_karnak",
+      "breakpoints": true
     }
   ]
 }
