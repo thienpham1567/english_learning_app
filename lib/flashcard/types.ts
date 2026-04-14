@@ -1,9 +1,8 @@
-export type Sm2State = {
-  easeFactor: number;
-  interval: number; // days
-  repetitions: number;
-  nextReview: string; // ISO date string
-};
+/**
+ * Re-export from shared SRS module for backward compatibility.
+ * New code should import from "@/lib/srs" directly.
+ */
+export type { Sm2State } from "@/lib/srs/types";
 
 export type DueCard = {
   query: string;

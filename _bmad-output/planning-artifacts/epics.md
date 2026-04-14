@@ -833,3 +833,412 @@ So that I don't forget and break my streak.
 **And** users can disable notifications in settings
 **And** on first visit, a non-intrusive banner (not modal) prompts for notification permission
 
+---
+
+## Phase 3 Epics (Competitive Upgrade)
+
+The following epics were identified during a multi-agent party mode session (2026-04-14) to close remaining gaps vs. market leaders and establish unfair advantages in the Vietnamese English-learning app market.
+
+### FR Coverage Map (Phase 3)
+
+| FR | Epic | Description |
+|---|---|---|
+| FR50-FR53 | Epic 12 | SM-2 vocabulary SRS + Adaptive difficulty |
+| FR54-FR57 | Epic 13 | Shadowing + Dictation + Voice AI upgrade |
+| FR58-FR61 | Epic 14 | Streak Calendar + Predicted TOEIC + Word of Day |
+| FR62-FR67 | Epic 15 | CEFR Diagnostic + Scenarios + Leaderboard |
+| FR68-FR71 | Epic 16 | Offline mode + AI content generation |
+
+### Phase 3 Requirements
+
+FR50: The app SHALL apply SM-2 spaced repetition to ALL saved vocabulary (not just flashcards)
+FR51: A shared `calculateSM2()` function SHALL compute ease factor, interval, and next review date
+FR52: The app SHALL maintain a `user_skill_profile` table tracking per-module difficulty level
+FR53: Grammar Quiz and Listening SHALL auto-adjust difficulty based on user's accuracy history
+FR54: Listening module SHALL support Shadowing mode (listen → record → compare)
+FR55: Listening module SHALL support Dictation mode (listen → type → diff)
+FR56: English Chatbot SHALL support real-time voice conversation with inline grammar/pronunciation feedback
+FR57: Voice conversation feedback SHALL include pronunciation score and grammar error highlighting
+FR58: Home Dashboard SHALL show a GitHub-style streak calendar heatmap
+FR59: Progress page SHALL show Predicted TOEIC/IELTS Score with confidence interval
+FR60: Home Dashboard SHALL show a Word of the Day card with audio, definition, and quick-save
+FR61: Dashboard study plan SHALL incorporate SRS due counts and weak skill recommendations
+FR62: A CEFR Diagnostic Test SHALL assess user's level across grammar, vocabulary, reading, and listening
+FR63: Scenario-Based Lessons SHALL combine 4 skills (vocab, listening, speaking, reading, writing) in one flow
+FR64: At least 4 scenarios SHALL be available: Airport, Job Interview, Restaurant, Doctor Visit
+FR65: Weekly Leaderboard SHALL rank users by XP earned in the current week
+FR66: Flashcards and vocabulary review SHALL work offline via IndexedDB sync
+FR67: Reading articles SHALL support offline caching (save for later)
+FR68: Grammar Quiz SHALL offer AI-generated mini-lessons explaining grammar rules
+FR69: AI Content Generation Pipeline SHALL create topic-based content sets (vocabulary + reading + listening)
+FR70: The app SHALL detect user's preferred learning style and adjust study plan accordingly
+
+---
+
+## Epic 12: SM-2 Vocabulary SRS & Adaptive Difficulty
+
+Users experience intelligent spaced repetition for ALL saved vocabulary (not just flashcards) and exercises that dynamically adjust to their skill level, keeping them in the optimal learning zone.
+
+**FRs covered:** FR50, FR51, FR52, FR53
+**NFRs covered:** NFR1
+
+### Story 12.1: Vocabulary SRS Schema Extension
+
+As a developer,
+I want SRS fields on the user_vocabulary table,
+So that all saved words can be scheduled for review using SM-2.
+
+**Acceptance Criteria:**
+
+**Given** the existing `user_vocabulary` table
+**When** the migration runs
+**Then** new columns are added: `mastery_level` (text, default 'new'), `ease_factor` (real, default 2.5), `interval` (integer, default 0), `next_review` (timestamp, default now), `review_count` (integer, default 0)
+**And** existing rows get default values without data loss
+**And** `npm run build` passes
+
+### Story 12.2: SM-2 Algorithm Service
+
+As a developer,
+I want a pure, shared SM-2 function,
+So that both flashcard and vocabulary review use the same algorithm.
+
+**Acceptance Criteria:**
+
+**Given** the existing SM-2 logic in flashcard review API
+**When** refactored into `lib/srs/sm2.ts`
+**Then** `calculateSM2(quality: 0-5, state: SM2State) => SM2State` is exported
+**And** quality mapping: 0-1 = blackout, 2 = incorrect, 3 = hard, 4 = good, 5 = easy
+**And** both `/api/flashcards/review` and new vocabulary review API use this shared function
+**And** unit tests cover all quality levels and edge cases
+
+### Story 12.3: Vocabulary SRS Review Quiz
+
+As a learner,
+I want to review all my saved vocabulary via SRS scheduling,
+So that I retain words long-term through optimal spacing.
+
+**Acceptance Criteria:**
+
+**Given** a user with saved vocabulary where `next_review <= now`
+**When** navigating to `/review-quiz`
+**Then** due vocabulary words are presented as 4-choice quizzes (definition → pick word, and vice versa)
+**And** after answering, SM-2 updates the word's ease, interval, and next review
+**And** session summary shows words reviewed, accuracy, and next review dates
+**And** sidebar badge shows count of due reviews (reuse existing badge infrastructure)
+
+### Story 12.4: User Skill Profile & Adaptive Grammar
+
+As a grammar learner,
+I want quiz difficulty to adjust to my performance,
+So that questions are always at my optimal challenge level.
+
+**Acceptance Criteria:**
+
+**Given** a new `user_skill_profile` table: `userId`, `module` (text), `currentLevel` (real, default 5.0), `accuracy_last_10` (real), `updated_at`
+**When** a user completes a grammar quiz
+**Then** their Grammar skill level updates: `newLevel = oldLevel + 0.3 × (accuracy - 0.7)`
+**And** the Grammar Quiz generate API reads the user's level to select appropriate CEFR difficulty
+**And** the UI shows current level badge: "Level B1 📈" on the quiz page
+**And** level up/down triggers a subtle animation
+
+### Story 12.5: Adaptive Listening Integration
+
+As a listening learner,
+I want listening exercises to auto-match my level,
+So that I'm not bored by easy content or overwhelmed by hard content.
+
+**Acceptance Criteria:**
+
+**Given** a user with a Listening skill profile
+**When** starting a listening exercise
+**Then** the CEFR level auto-selects based on skill profile (user can still override)
+**And** after submitting results, the Listening skill level updates
+**And** the level selector shows recommended level highlighted
+
+---
+
+## Epic 13: Shadowing, Dictation & Voice AI Upgrade
+
+Users practice listening with proven scientific methods (shadowing and dictation) and engage in voice conversations with real-time grammar and pronunciation feedback.
+
+**FRs covered:** FR54, FR55, FR56, FR57
+
+### Story 13.1: Shadowing Mode
+
+As a learner,
+I want to practice shadowing (listen → repeat → compare),
+So that I improve my pronunciation and listening simultaneously.
+
+**Acceptance Criteria:**
+
+**Given** a user on the Listening page
+**When** selecting "Shadowing" mode
+**Then** a sentence plays → user records their voice → waveforms compared
+**And** sentence text + IPA displayed side-by-side
+**And** pronunciation accuracy scored (reuse `/api/pronunciation/evaluate`)
+**And** repeat button for re-attempts
+**And** 5-sentence session with summary (avg score, weakest sentences)
+**And** XP awarded: +25 XP per session
+
+### Story 13.2: Dictation Mode
+
+As a learner,
+I want to practice dictation (listen → type → check),
+So that I train my ears to catch every word.
+
+**Acceptance Criteria:**
+
+**Given** a user on the Listening page
+**When** selecting "Dictation" mode
+**Then** audio plays (text hidden) → user types what they hear
+**And** submit shows word-level diff: green=correct, red=wrong, yellow=missing
+**And** accuracy % shown per sentence
+**And** "Nghe lại" button (max 3 replays per sentence)
+**And** 5-sentence session with summary
+**And** XP awarded: +25 XP per session
+
+### Story 13.3: Voice Conversation with Inline Feedback
+
+As a learner,
+I want the AI chatbot to correct my grammar and pronunciation during voice conversation,
+So that I improve in real-time without breaking the flow.
+
+**Acceptance Criteria:**
+
+**Given** a user in voice conversation mode
+**When** their speech is transcribed and sent
+**Then** the AI response includes structured `corrections[]` for grammar errors
+**And** a pronunciation score badge shows per message (e.g., "Phát âm: 85% 🟢")
+**And** tapping an error word shows a popup with correction + Vietnamese explanation
+**And** corrections are non-blocking — conversation continues naturally
+**And** error patterns are logged to error_log for SRS review
+
+---
+
+## Epic 14: Analytics Dashboard Upgrade
+
+Users see rich engagement data on Home and Progress pages: streak heatmap, predicted test scores, and daily vocabulary discovery.
+
+**FRs covered:** FR58, FR59, FR60, FR61
+
+### Story 14.1: Streak Calendar Heatmap
+
+As a learner,
+I want to see my activity history as a visual calendar,
+So that I can see my consistency and be motivated to fill gaps.
+
+**Acceptance Criteria:**
+
+**Given** a user on the Home page
+**When** the streak calendar renders
+**Then** a GitHub-style heatmap shows 12 weeks (~84 days)
+**And** cell colors: gray=0, light-green=1-2, green=3-4, dark-green=5+ activities per day
+**And** hover/tap on date shows tooltip: "15/04: 5 hoạt động, +120 XP"
+**And** current streak highlighted (bold border on consecutive days)
+**And** label shows "🔥 42 ngày streak" below calendar
+**And** data from existing `/api/analytics` `dailyActivity` field
+
+### Story 14.2: Predicted TOEIC Score
+
+As a TOEIC learner,
+I want to see my predicted TOEIC score,
+So that I know where I stand and how far I need to go.
+
+**Acceptance Criteria:**
+
+**Given** a user on the Progress page
+**When** sufficient data exists (≥5 quizzes + ≥3 listening exercises)
+**Then** a predicted TOEIC score displays with confidence interval: "~620 ± 30"
+**And** breakdown shows: "Reading: ~340 | Listening: ~280"
+**And** historical chart shows predicted score over last 4 weeks
+**And** algorithm weights: grammar accuracy (40%), listening accuracy (30%), vocabulary size (20%), mock test scores (10%)
+**And** if insufficient data: "Hoàn thành thêm bài tập để xem dự đoán điểm 📊"
+
+### Story 14.3: Word of the Day
+
+As a learner,
+I want to discover a new word every day on my homepage,
+So that I passively grow my vocabulary.
+
+**Acceptance Criteria:**
+
+**Given** a user on the Home page
+**When** the Word of Day card renders
+**Then** a beautiful card shows: word, IPA, audio button, definition, example, CEFR level tag
+**And** "Lưu vào từ vựng" quick-save button
+**And** word selected from: user's unsaved TOEIC words → or random CEFR-appropriate word
+**And** word changes daily (seeded by date + userId for variation)
+**And** audio plays via existing voice synthesize API
+
+### Story 14.4: Enhanced Today's Plan
+
+As a learner,
+I want Today's Plan to include SRS due counts and skill recommendations,
+So that the plan is truly personalized.
+
+**Acceptance Criteria:**
+
+**Given** the existing `/api/study-plan/daily` API
+**When** generating today's tasks
+**Then** vocabulary SRS due count is included as highest priority (if > 0)
+**And** weak skill recommendations based on `user_skill_profile` are included
+**And** task order adapts based on user's detected weak areas
+**And** "Predicted TOEIC +X points this week!" motivational text shown
+
+---
+
+## Epic 15: CEFR Diagnostic, Scenarios & Social
+
+Users take a placement test, learn through immersive scenarios, and compete on a weekly leaderboard.
+
+**FRs covered:** FR62, FR63, FR64, FR65
+
+### Story 15.1: CEFR Diagnostic Test
+
+As a new learner,
+I want to take a placement test to determine my English level,
+So that all modules start at the right difficulty for me.
+
+**Acceptance Criteria:**
+
+**Given** a user navigating to `/diagnostic` (accessible from onboarding + settings)
+**When** the test starts
+**Then** 30 adaptive questions: 10 grammar + 10 vocabulary + 5 reading + 5 listening
+**And** adaptive logic: 3 correct in a row → increase level, 2 wrong → decrease level
+**And** result shows CEFR level (A1-C2) with confidence % + skill breakdown radar
+**And** auto-populates `user_skill_profile` for all modules
+**And** "Làm lại test" option (max 1/month)
+**And** stored in new `diagnostic_result` table
+
+### Story 15.2: Scenario Engine & Airport Scenario
+
+As a learner,
+I want to learn through realistic scenarios that combine all 4 skills,
+So that I can apply English in real-world situations.
+
+**Acceptance Criteria:**
+
+**Given** a user navigating to `/scenarios`
+**When** available scenarios display
+**Then** "At the Airport ✈️" scenario is available with 5 steps:
+  - Step 1: Vocabulary intro (10 airport-related flashcards)
+  - Step 2: Listening (airport announcement dialogue)
+  - Step 3: Speaking (role-play check-in conversation)
+  - Step 4: Reading (boarding pass / flight info text)
+  - Step 5: Writing (email changing flight)
+**And** progress is saved per scenario per step
+**And** XP awarded per step + bonus for full scenario completion
+**And** stored in new `scenario_progress` table
+
+### Story 15.3: Additional Scenarios
+
+As a learner,
+I want more scenario options,
+So that I can practice English in different contexts.
+
+**Acceptance Criteria:**
+
+**Given** the scenario engine from Story 15.2
+**When** additional scenarios are created
+**Then** 3 more scenarios are available:
+  - "Job Interview 💼" — business English, resume discussion
+  - "Restaurant 🍽️" — ordering food, complaints, small talk
+  - "Doctor Visit 🏥" — medical vocabulary, describing symptoms
+**And** each follows the same 5-step structure
+
+### Story 15.4: Weekly Leaderboard
+
+As a learner,
+I want to see how I rank among other users,
+So that I have social motivation to study more.
+
+**Acceptance Criteria:**
+
+**Given** a user on the Home page
+**When** the leaderboard widget renders
+**Then** top 10 users by weekly XP are shown (anonymized: "User_4821")
+**And** user's own rank is highlighted
+**And** resets every Monday 00:00 (VN timezone)
+**And** top 3 get special badges (🥇🥈🥉)
+
+---
+
+## Epic 16: Offline Mode & AI Content Generation
+
+The app works offline for core features and can generate personalized content on-demand based on user interests.
+
+**FRs covered:** FR66, FR67, FR68, FR69, FR70
+
+### Story 16.1: Offline Flashcard & Vocabulary Sync
+
+As a learner on the go,
+I want to review flashcards and vocabulary offline,
+So that I can study without internet.
+
+**Acceptance Criteria:**
+
+**Given** a user with saved vocabulary and flashcard data
+**When** the device goes offline
+**Then** vocabulary data and flashcard queue are cached in IndexedDB
+**And** answers are queued locally during offline mode
+**And** when online, answers sync to server (server wins for SRS state conflicts)
+**And** "📴 Offline mode" banner shown during offline state
+
+### Story 16.2: Offline Reading Cache
+
+As a reader,
+I want to save articles for offline reading,
+So that I can read on the commute without internet.
+
+**Acceptance Criteria:**
+
+**Given** a user viewing the reading article list
+**When** they tap "Save Offline" icon
+**Then** article text is cached in IndexedDB
+**And** offline reading view works without network
+**And** max 10 articles cached (LRU eviction)
+
+### Story 16.3: AI Grammar Lessons
+
+As a grammar learner,
+I want AI-generated lessons explaining grammar rules,
+So that I understand the "why" behind correct answers.
+
+**Acceptance Criteria:**
+
+**Given** a user completing a grammar quiz topic
+**When** they tap "📖 Xem bài giảng"
+**Then** AI generates a mini-lesson (300-500 words) in Vietnamese
+**And** includes: rule → examples → common mistakes → practice tip
+**And** cached per topic in `grammar_lesson_cache` table to avoid regeneration
+**And** can be bookmarked for later review
+
+### Story 16.4: Topic-Based Content Sets
+
+As a learner with specific interests,
+I want personalized content about topics I care about,
+So that learning feels relevant and engaging.
+
+**Acceptance Criteria:**
+
+**Given** a user selecting interest topics (Technology, Travel, Business, Health, etc.)
+**When** they request content generation
+**Then** AI generates coordinated set: vocabulary list + reading passage + listening exercise
+**And** stored as reusable "Content Pack" in DB
+**And** shown on home: "📦 Content Pack mới: Technology Trends"
+**And** background generation with status polling
+
+### Story 16.5: Learning Style Detection
+
+As a long-term learner,
+I want the app to adapt to how I learn best,
+So that study plans match my preferred style.
+
+**Acceptance Criteria:**
+
+**Given** a user with ≥2 weeks of activity data
+**When** the system analyzes activity_log distribution
+**Then** preferred style detected: Visual (flashcard-heavy), Auditory (listening-heavy), Kinesthetic (writing-heavy)
+**And** Today's Plan task weights adjust accordingly
+**And** user can override in settings
+

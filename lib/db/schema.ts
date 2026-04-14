@@ -60,6 +60,12 @@ export const userVocabulary = pgTable(
       .references(() => vocabularyCache.query, { onDelete: "cascade" }),
     saved: boolean("saved").default(false).notNull(),
     lookedUpAt: timestamp("looked_up_at", { withTimezone: true }).defaultNow().notNull(),
+    // SRS fields for vocabulary-level spaced repetition (Story 12.1)
+    masteryLevel: text("mastery_level").notNull().default("new"), // new | learning | reviewing | mastered
+    easeFactor: real("ease_factor").notNull().default(2.5),
+    interval: integer("interval").notNull().default(0),
+    reviewCount: integer("review_count").notNull().default(0),
+    nextReview: timestamp("next_review", { withTimezone: true }).defaultNow().notNull(),
   },
   (table) => [uniqueIndex("user_vocabulary_user_query_idx").on(table.userId, table.query)],
 );
@@ -80,6 +86,22 @@ export const flashcardProgress = pgTable(
   },
   (table) => [uniqueIndex("flashcard_progress_user_query_idx").on(table.userId, table.query)],
 );
+
+/** User Skill Profile — tracks per-module adaptive difficulty (Story 12.4) */
+export const userSkillProfile = pgTable(
+  "user_skill_profile",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: text("user_id").notNull(),
+    module: text("module").notNull(), // 'grammar' | 'listening' | 'reading' | 'writing' | 'speaking'
+    currentLevel: real("current_level").notNull().default(5.0), // 1.0–10.0 scale
+    accuracyLast10: real("accuracy_last_10").notNull().default(0.7),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [uniqueIndex("user_skill_profile_user_module_idx").on(table.userId, table.module)],
+);
+
+export type UserSkillProfileRow = typeof userSkillProfile.$inferSelect;
 
 export const writingSubmission = pgTable("writing_submission", {
   id: uuid("id").defaultRandom().primaryKey(),

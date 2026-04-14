@@ -35,7 +35,7 @@
 # - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
 
 generated: 2026-04-10T23:39:00+07:00
-last_updated: 2026-04-12T11:56:00+07:00
+last_updated: 2026-04-14T11:45:00+07:00
 project: english_learning_app
 project_key: NOKEY
 tracking_system: file-system
@@ -119,3 +119,44 @@ development_status:
   11-1-pwa-manifest-service-worker: done
   11-2-push-notification-reminders: done
   epic-11-retrospective: optional
+
+  # ── Epic 12: SM-2 Vocabulary SRS & Adaptive Difficulty ──
+  epic-12: backlog
+  12-1-vocabulary-srs-schema-extension: backlog
+  12-2-sm2-algorithm-service: backlog
+  12-3-vocabulary-srs-review-quiz: backlog
+  12-4-user-skill-profile-adaptive-grammar: backlog
+  12-5-adaptive-listening-integration: backlog
+  epic-12-retrospective: optional
+
+  # ── Epic 13: Shadowing, Dictation & Voice AI Upgrade ──
+  epic-13: backlog
+  13-1-shadowing-mode: backlog
+  13-2-dictation-mode: backlog
+  13-3-voice-conversation-inline-feedback: backlog
+  epic-13-retrospective: optional
+
+  # ── Epic 14: Analytics Dashboard Upgrade ──
+  epic-14: backlog
+  14-1-streak-calendar-heatmap: backlog
+  14-2-predicted-toeic-score: backlog
+  14-3-word-of-the-day: backlog
+  14-4-enhanced-todays-plan: backlog
+  epic-14-retrospective: optional
+
+  # ── Epic 15: CEFR Diagnostic, Scenarios & Social ──
+  epic-15: backlog
+  15-1-cefr-diagnostic-test: backlog
+  15-2-scenario-engine-airport: backlog
+  15-3-additional-scenarios: backlog
+  15-4-weekly-leaderboard: backlog
+  epic-15-retrospective: optional
+
+  # ── Epic 16: Offline Mode & AI Content Generation ──
+  epic-16: backlog
+  16-1-offline-flashcard-vocabulary-sync: backlog
+  16-2-offline-reading-cache: backlog
+  16-3-ai-grammar-lessons: backlog
+  16-4-topic-based-content-sets: backlog
+  16-5-learning-style-detection: backlog
+  epic-16-retrospective: optional
