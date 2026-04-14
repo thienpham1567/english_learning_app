@@ -121,11 +121,11 @@ development_status:
   epic-11-retrospective: optional
 
   # ── Epic 12: SM-2 Vocabulary SRS & Adaptive Difficulty ──
-  epic-12: backlog
-  12-1-vocabulary-srs-schema-extension: backlog
-  12-2-sm2-algorithm-service: backlog
-  12-3-vocabulary-srs-review-quiz: backlog
-  12-4-user-skill-profile-adaptive-grammar: backlog
+  epic-12: in-progress
+  12-1-vocabulary-srs-schema-extension: done
+  12-2-sm2-algorithm-service: done
+  12-3-vocabulary-srs-review-quiz: done
+  12-4-user-skill-profile-adaptive-grammar: done
   12-5-adaptive-listening-integration: backlog
   epic-12-retrospective: optional
 
