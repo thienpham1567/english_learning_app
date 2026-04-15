@@ -3,8 +3,8 @@ import { eq, and, inArray } from "drizzle-orm";
 import { z } from "zod";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { userVocabulary } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { userVocabulary } from "@repo/database";
 import { computeSm2, defaultSm2State, deriveMastery } from "@/lib/srs";
 import { awardXP, XP_VALUES } from "@/lib/xp";
 import { logActivity } from "@/lib/activity-log";

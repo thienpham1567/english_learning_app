@@ -2,8 +2,8 @@ import { headers } from "next/headers";
 import { desc, eq, sql, and } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { userVocabulary, vocabularyCache, flashcardProgress } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { userVocabulary, vocabularyCache, flashcardProgress } from "@repo/database";
 import { normalizeVocabularyEntryType } from "@/lib/schemas/vocabulary";
 
 export async function GET() {

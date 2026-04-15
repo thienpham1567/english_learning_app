@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
 
-import { pool } from "@/lib/db";
+import { pool } from "@repo/database";
 
 export const auth = betterAuth({
   database: pool,

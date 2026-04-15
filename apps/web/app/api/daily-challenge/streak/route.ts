@@ -2,8 +2,8 @@ import { headers } from "next/headers";
 import { eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { userStreak } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { userStreak } from "@repo/database";
 import { getBadges } from "@/lib/daily-challenge/badges";
 
 export async function GET() {

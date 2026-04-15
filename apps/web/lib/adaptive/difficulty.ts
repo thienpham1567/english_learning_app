@@ -1,6 +1,6 @@
 import { eq, and } from "drizzle-orm";
-import { db } from "@/lib/db";
-import { userSkillProfile } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { userSkillProfile } from "@repo/database";
 
 /** Supported skill modules for adaptive difficulty */
 export type SkillModule = "grammar" | "listening" | "reading" | "writing" | "speaking";

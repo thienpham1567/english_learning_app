@@ -2,8 +2,8 @@ import { headers } from "next/headers";
 import { eq, desc, sql } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { diagnosticResult, userSkillProfile, activityLog } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { diagnosticResult, userSkillProfile, activityLog } from "@repo/database";
 import { createInitialState, processAnswer, calculateResults, type SkillState } from "@/lib/diagnostic/algorithm";
 import { getQuestionsForLevel, generateTestPlan, getQuestionById } from "@/lib/diagnostic/questions";
 import { CEFR_LEVELS, type DiagnosticSkill, type DiagnosticAnswer, type CefrLevel } from "@/lib/diagnostic/types";

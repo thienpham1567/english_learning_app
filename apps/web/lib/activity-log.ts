@@ -1,5 +1,5 @@
-import { db } from "@/lib/db";
-import { activityLog } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { activityLog } from "@repo/database";
 
 export type ActivityType =
   | "flashcard_review"

@@ -2,8 +2,8 @@ import { headers } from "next/headers";
 import { eq, and } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { dailyChallenge, userStreak } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { dailyChallenge, userStreak } from "@repo/database";
 import { SubmitAnswerSchema } from "@/lib/daily-challenge/schema";
 import { getBadges, getNewlyUnlockedBadges } from "@/lib/daily-challenge/badges";
 import { awardXP, XP_VALUES } from "@/lib/xp";

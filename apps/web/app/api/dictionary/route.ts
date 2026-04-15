@@ -4,8 +4,8 @@ import { and, eq, gt } from "drizzle-orm";
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { vocabularyCache, userVocabulary } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { vocabularyCache, userVocabulary } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { VocabularySchema, normalizeVocabulary, type Vocabulary } from "@/lib/schemas/vocabulary";

@@ -2,8 +2,8 @@ import { headers } from "next/headers";
 import { eq, and, inArray } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { errorLog, activityLog } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { errorLog, activityLog } from "@repo/database";
 
 // SRS intervals (Leitner): 1d, 3d, 7d, 14d → resolved
 const SRS_INTERVALS_DAYS = [1, 3, 7, 14];

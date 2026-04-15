@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import { eq, and, sql, desc, lte } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
+import { db } from "@repo/database";
 import {
   userVocabulary,
   vocabularyCache,
@@ -10,7 +10,7 @@ import {
   dailyChallenge,
   userStreak,
   writingSubmission,
-} from "@/lib/db/schema";
+} from "@repo/database";
 import { getBadges } from "@/lib/daily-challenge/badges";
 
 /**

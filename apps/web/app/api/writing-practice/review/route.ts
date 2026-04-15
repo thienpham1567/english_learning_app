@@ -1,8 +1,8 @@
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { writingSubmission } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { writingSubmission } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { ReviewRequestSchema, WritingFeedbackSchema } from "@/lib/writing-practice/schema";

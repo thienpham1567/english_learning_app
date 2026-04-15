@@ -2,8 +2,8 @@ import { NextResponse } from "next/server";
 import { sql } from "drizzle-orm";
 import webpush from "web-push";
 
-import { db } from "@/lib/db";
-import { pushSubscription, userStreak, flashcardProgress } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { pushSubscription, userStreak, flashcardProgress } from "@repo/database";
 
 // VAPID keys — configured lazily to avoid build-time crash
 const VAPID_EMAIL = process.env.VAPID_EMAIL || "mailto:admin@thienglish.app";

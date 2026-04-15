@@ -2,8 +2,8 @@ import { headers } from "next/headers";
 import { eq, sql, and, gte } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { activityLog, errorLog, userPreferences } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { activityLog, errorLog, userPreferences } from "@repo/database";
 
 /**
  * GET /api/study-plan/daily

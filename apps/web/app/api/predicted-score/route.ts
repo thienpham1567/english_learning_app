@@ -2,13 +2,13 @@ import { headers } from "next/headers";
 import { eq, and, sql, gte, desc } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
+import { db } from "@repo/database";
 import {
   dailyChallenge,
   activityLog,
   userVocabulary,
   listeningExercise,
-} from "@/lib/db/schema";
+} from "@repo/database";
 
 /**
  * GET /api/predicted-score

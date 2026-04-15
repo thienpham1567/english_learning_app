@@ -2,8 +2,8 @@ import { headers } from "next/headers";
 import { eq, and, sql } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { userVocabulary, vocabularyCache } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { userVocabulary, vocabularyCache } from "@repo/database";
 
 /**
  * GET /api/word-of-the-day

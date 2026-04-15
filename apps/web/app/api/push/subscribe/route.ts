@@ -3,8 +3,8 @@ import { headers } from "next/headers";
 import { eq, and } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { pushSubscription } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { pushSubscription } from "@repo/database";
 
 /**
  * POST /api/push/subscribe

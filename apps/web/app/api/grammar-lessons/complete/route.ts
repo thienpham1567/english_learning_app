@@ -1,8 +1,8 @@
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { activityLog } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { activityLog } from "@repo/database";
 
 /**
  * POST /api/grammar-lessons/complete

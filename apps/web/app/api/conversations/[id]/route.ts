@@ -2,8 +2,8 @@ import { headers } from "next/headers";
 import { eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { conversation } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { conversation } from "@repo/database";
 
 type Params = Promise<{ id: string }>;
 

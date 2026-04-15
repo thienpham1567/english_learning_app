@@ -2,8 +2,8 @@ import { headers } from "next/headers";
 import { eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { userPreferences } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { userPreferences } from "@repo/database";
 
 /**
  * GET /api/preferences

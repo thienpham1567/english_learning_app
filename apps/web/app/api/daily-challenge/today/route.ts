@@ -2,8 +2,8 @@ import { headers } from "next/headers";
 import { eq, and } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { dailyChallenge, userStreak, userPreferences } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { dailyChallenge, userStreak, userPreferences } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { ChallengeGenerationSchema } from "@/lib/daily-challenge/schema";

@@ -2,8 +2,8 @@ import { headers } from "next/headers";
 import { eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { userPreferences } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { userPreferences } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { getExamContext, parseExamMode } from "@/lib/exam-mode/context";

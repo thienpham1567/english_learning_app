@@ -2,9 +2,9 @@ import { headers } from "next/headers";
 import { eq, and } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { listeningExercise } from "@/lib/db/schema";
-import type { ListeningQuestion } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { listeningExercise } from "@repo/database";
+import type { ListeningQuestion } from "@repo/database";
 import { awardXP, XP_VALUES } from "@/lib/xp";
 import { logActivity } from "@/lib/activity-log";
 import { SubmitInputSchema } from "@/lib/listening/types";

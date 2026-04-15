@@ -2,8 +2,8 @@ import { headers } from "next/headers";
 import { desc, eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { conversation } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { conversation } from "@repo/database";
 import { DEFAULT_PERSONA_ID, PERSONA_IDS } from "@/lib/chat/personas";
 
 export async function GET() {

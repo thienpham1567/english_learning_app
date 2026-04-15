@@ -1,6 +1,6 @@
 import { eq, sql } from "drizzle-orm";
-import { db } from "@/lib/db";
-import { userStreak } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { userStreak } from "@repo/database";
 
 /** XP point values per activity type */
 export const XP_VALUES = {

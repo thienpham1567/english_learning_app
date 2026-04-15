@@ -2,12 +2,12 @@ import { headers } from "next/headers";
 import { randomUUID } from "crypto";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { listeningExercise } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { listeningExercise } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { GenerateInputSchema } from "@/lib/listening/types";
-import type { ListeningQuestion } from "@/lib/db/schema";
+import type { ListeningQuestion } from "@repo/database";
 import { getExamContext, parseExamMode } from "@/lib/exam-mode/context";
 
 function buildListeningSystemPrompt(examMode: "toeic" | "ielts"): string {

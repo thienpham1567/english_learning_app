@@ -2,8 +2,8 @@ import { headers } from "next/headers";
 import { eq, and, sql } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { errorLog } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { errorLog } from "@repo/database";
 
 /**
  * GET /api/review-quiz/due

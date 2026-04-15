@@ -2,8 +2,8 @@ import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
-import { db } from "@/lib/db";
-import { conversation, message } from "@/lib/db/schema";
+import { db } from "@repo/database";
+import { conversation, message } from "@repo/database";
 import { buildChatRequest } from "@/lib/chat/build-chat-input";
 import { DEFAULT_PERSONA_ID, PERSONA_IDS } from "@/lib/chat/personas";
 import { createChatSse } from "@/lib/chat/create-chat-sse";
