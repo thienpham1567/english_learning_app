@@ -23,7 +23,7 @@ sprints:
     stories:
       17.4:
         title: "Create packages/shared"
-        status: review
+        status: done
         estimate: "3h"
       17.5:
         title: "Create packages/contracts"
