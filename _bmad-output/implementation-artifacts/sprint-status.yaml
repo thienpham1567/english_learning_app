@@ -27,7 +27,7 @@ sprints:
         estimate: "3h"
       17.5:
         title: "Create packages/contracts"
-        status: ready-for-dev
+        status: review
         estimate: "3h"
       17.6:
         title: "Create packages/database"
