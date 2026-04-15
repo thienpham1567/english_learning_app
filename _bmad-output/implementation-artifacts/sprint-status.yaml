@@ -31,7 +31,7 @@ sprints:
         estimate: "3h"
       17.6:
         title: "Create packages/database"
-        status: in-progress
+        status: review
         estimate: "5h"
         risk: medium
       17.7:
