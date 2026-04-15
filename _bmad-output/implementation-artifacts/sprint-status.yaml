@@ -10,7 +10,7 @@ sprints:
         estimate: "4h"
       17.2:
         title: "Move Current App to apps/web/"
-        status: in-progress
+        status: done
         estimate: "6h"
         risk: high
       17.3:
