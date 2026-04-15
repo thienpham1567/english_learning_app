@@ -8,6 +8,7 @@ import { AppShell } from "@/components/app/shared/AppShell";
 import { ThemeProvider } from "@/components/app/shared/ThemeProvider";
 import { PWAProvider } from "@/components/app/shared/PWAProvider";
 import { ExamModeProvider } from "@/components/app/shared/ExamModeProvider";
+import { DashboardProvider } from "@/hooks/useDashboard";
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const session = await auth.api.getSession({
@@ -28,7 +29,9 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
       <NuqsAdapter>
         <PWAProvider>
           <ExamModeProvider>
-            <AppShell user={user}>{children}</AppShell>
+            <DashboardProvider>
+              <AppShell user={user}>{children}</AppShell>
+            </DashboardProvider>
           </ExamModeProvider>
         </PWAProvider>
       </NuqsAdapter>

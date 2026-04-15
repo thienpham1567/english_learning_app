@@ -13,6 +13,7 @@ import {
 } from "@ant-design/icons";
 
 import { CelebrationOverlay, StreakFire } from "@/components/app/shared";
+import { useDashboard } from "@/hooks/useDashboard";
 
 const { Title, Text } = Typography;
 
@@ -34,26 +35,14 @@ const DISTRIBUTION_ITEMS = [
   { key: "again", label: "Quên", emoji: "😵", color: "#ef4444" },
 ] as const;
 
-// Lightweight fetch for streak + daily challenge status (B1/B2 fix)
+// Derive streak + daily challenge from shared dashboard context
 function useSummaryContext() {
-  const [streak, setStreak] = useState(0);
-  const [dailyChallengeCompleted, setDailyChallengeCompleted] = useState(false);
-
-  useEffect(() => {
-    fetch("/api/dashboard")
-      .then((r) => (r.ok ? r.json() : null))
-      .then((data) => {
-        if (data) {
-          setStreak(data.streak?.currentStreak ?? 0);
-          setDailyChallengeCompleted(data.dailyChallenge?.completed ?? false);
-        }
-      })
-      .catch(() => {
-        // Non-critical — defaults are fine
-      });
-  }, []);
-
-  return { streak, dailyChallengeCompleted };
+  const { state } = useDashboard();
+  if (state.status !== "ready") return { streak: 0, dailyChallengeCompleted: false };
+  return {
+    streak: state.data.streak?.currentStreak ?? 0,
+    dailyChallengeCompleted: state.data.dailyChallenge?.completed ?? false,
+  };
 }
 
 export function SessionSummary({
