@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Card, Flex, Typography, Spin, Tag, Button, Result, Collapse } from "antd";
 import {
@@ -67,11 +67,15 @@ export default function ArticleReaderPage() {
   // Mini dictionary
   const miniDict = useMiniDictionary();
 
+  // Grammar analysis guard ref
+  const analyzedSetRef = useRef<Set<number>>(new Set());
+
   // Fetch article
   useEffect(() => {
     if (!articleId) return;
     setLoading(true);
     setGrammarResults({});
+    analyzedSetRef.current.clear();
     fetch(`/api/reading/article/${articleId}`)
       .then((r) => {
         if (!r.ok) throw new Error("Not found");
@@ -84,7 +88,8 @@ export default function ArticleReaderPage() {
 
   // Grammar analysis — on-demand per paragraph (click to analyze)
   const analyzeGrammar = useCallback(async (index: number, text: string) => {
-    if (grammarResults[index] !== undefined || grammarLoading.has(index)) return;
+    if (analyzedSetRef.current.has(index)) return;
+    analyzedSetRef.current.add(index);
 
     setGrammarLoading((prev) => new Set(prev).add(index));
 
@@ -105,7 +110,7 @@ export default function ArticleReaderPage() {
         return next;
       });
     }
-  }, [grammarResults, grammarLoading]);
+  }, []);
 
 
 
