@@ -1,160 +1,56 @@
-# generated: 2026-04-10T23:39:00+07:00
-# last_updated: 2026-04-10T23:39:00+07:00
-# project: english_learning_app
-# project_key: NOKEY
-# tracking_system: file-system
-# story_location: _bmad-output/implementation-artifacts
-
-# STATUS DEFINITIONS:
-# ==================
-# Epic Status:
-#   - backlog: Epic not yet started
-#   - in-progress: Epic actively being worked on
-#   - done: All stories in epic completed
-#
-# Epic Status Transitions:
-#   - backlog → in-progress: Automatically when first story is created (via create-story)
-#   - in-progress → done: Manually when all stories reach 'done' status
-#
-# Story Status:
-#   - backlog: Story only exists in epic file
-#   - ready-for-dev: Story file created in stories folder
-#   - in-progress: Developer actively working on implementation
-#   - review: Ready for code review (via Dev's code-review workflow)
-#   - done: Story completed
-#
-# Retrospective Status:
-#   - optional: Can be completed but not required
-#   - done: Retrospective has been completed
-#
-# WORKFLOW NOTES:
-# ===============
-# - Epic transitions to 'in-progress' automatically when first story is created
-# - Stories can be worked in parallel if team capacity allows
-# - SM typically creates next story after previous one is 'done' to incorporate learnings
-# - Dev moves story to 'review', then runs code-review (fresh context, different LLM recommended)
-
-generated: 2026-04-10T23:39:00+07:00
-last_updated: 2026-04-14T11:45:00+07:00
-project: english_learning_app
-project_key: NOKEY
-tracking_system: file-system
-story_location: _bmad-output/implementation-artifacts
-
-development_status:
-  # ── Epic 1: Design System Foundation & Home Dashboard ──
-  epic-1: done
-  1-1-extend-design-tokens: done
-  1-2-shared-ui-components-moduleheader-progresssegments-emptystatecard: done
-  1-3-shared-ui-components-celebrationoverlay-streakfire-xpcounter: done
-  1-4-dashboard-api-endpoint: done
-  1-5-home-dashboard-page: done
-  epic-1-retrospective: optional
-
-  # ── Epic 2: Mobile Navigation & Responsive Layout ──
-  epic-2: done
-  2-1-bottom-tab-bar-component: done
-  2-2-responsive-appshell-sidebar-badges: done
-  epic-2-retrospective: optional
-
-  # ── Epic 3: Flashcards & Daily Challenge Upgrade ──
-  epic-3: done
-  3-1-flashcard-immersive-mode-card-redesign: done
-  3-2-flashcard-session-celebration-streak-integration: done
-  3-3-daily-challenge-game-aesthetics: done
-  3-4-daily-challenge-celebration-animations: done
-  epic-3-retrospective: optional
-
-  # ── Epic 4: Chatbot Intelligence & Sign-In Upgrade ──
-  epic-4: done
-  4-1-minidictionary-component: done
-  4-2-chatbot-word-highlighting: done
-  4-3-chatbot-persona-cards: done
-  4-4-sign-in-page-value-proposition: done
-  epic-4-retrospective: optional
-
-  # ── Epic 5: Grammar Quiz, Writing & Dictionary Polish ──
-  epic-5: done
-  5-1-grammar-quiz-cefr-path-combo-scoring: done
-  5-2-grammar-quiz-expandable-explanations-history: done
-  5-3-writing-practice-split-view-autosave: done
-  5-4-dictionary-enhancements: done
-  epic-5-retrospective: optional
-
-  # ── Epic 6: Cross-Module Integration & Gamification ──
-  epic-6: done
-  6-1-vocabulary-mastery-levels-tabs: done
-  6-2-xp-system-cross-module-vocabulary-flow: done
-  epic-6-retrospective: optional
-
-  # ── Epic 7: Voice Chatbot ──
-  epic-7: done
-  7-1-voice-input-hook-microphone-button: done
-  7-2-text-to-speech-ai-responses: done
-  7-3-voice-conversation-mode: done
-  epic-7-retrospective: optional
-
-  # ── Epic 8: Smart Dashboard CTA & Level System ──
-  epic-8: done
-  8-1-smart-cta: done
-  8-2-level-system-ui: done
-  epic-8-retrospective: optional
-
-  # ── Epic 9: Progress Analytics ──
-  epic-9: done
-  9-1-activity-logging-infrastructure: done
-  9-2-analytics-api-endpoint: done
-  9-3-progress-analytics-page: done
-  epic-9-retrospective: optional
-
-  # ── Epic 10: Listening Practice Module ──
-  epic-10: done
-  10-1-listening-exercise-schema-api: done
-  10-2-listening-practice-page: done
-  10-3-listening-vocabulary-integration: done
-  epic-10-retrospective: optional
-
-  # ── Epic 11: PWA & Push Notifications ──
-  epic-11: done
-  11-1-pwa-manifest-service-worker: done
-  11-2-push-notification-reminders: done
-  epic-11-retrospective: optional
-
-  # ── Epic 12: SM-2 Vocabulary SRS & Adaptive Difficulty ──
-  epic-12: done
-  12-1-vocabulary-srs-schema-extension: done
-  12-2-sm2-algorithm-service: done
-  12-3-vocabulary-srs-review-quiz: done
-  12-4-user-skill-profile-adaptive-grammar: done
-  12-5-adaptive-listening-integration: done
-  epic-12-retrospective: optional
-
-  # ── Epic 13: Shadowing, Dictation & Voice AI Upgrade ──
-  epic-13: done
-  13-1-shadowing-mode: done
-  13-2-dictation-mode: done
-  13-3-voice-conversation-inline-feedback: done
-  epic-13-retrospective: optional
-
-  # ── Epic 14: Analytics Dashboard Upgrade (Sprint 10) ──
-  epic-14: done
-  14-1-streak-calendar-heatmap: done
-  14-2-predicted-toeic-score: done
-  14-3-word-of-the-day: done
-  14-4-enhanced-todays-plan: done
-  epic-14-retrospective: optional
-
-  # ── Epic 15: CEFR Diagnostic, Scenarios & Social (Sprint 11) ──
-  epic-15: done
-  15-1-cefr-diagnostic-test: done
-  15-2-scenario-engine-airport: done
-  15-3-additional-scenarios: done
-  15-4-weekly-leaderboard: done
-  epic-15-retrospective: optional
-
-  # ── Epic 16: AI Content Generation ──
-  epic-16: done
-  16-1-ai-grammar-lessons: done
-  16-2-topic-based-content-sets: done
-  16-3-learning-style-detection: done
-  epic-16-retrospective: optional
+currentSprint: R1
+sprints:
+  R1:
+    name: "Monorepo Scaffolding"
+    status: not_started
+    stories:
+      17.1:
+        title: "Initialize pnpm Workspace + Turborepo"
+        status: not_started
+        estimate: "4h"
+      17.2:
+        title: "Move Current App to apps/web/"
+        status: not_started
+        estimate: "6h"
+        risk: high
+      17.3:
+        title: "Root Developer Experience Setup"
+        status: not_started
+        estimate: "2h"
+  R2:
+    name: "Shared Packages"
+    status: not_started
+    stories:
+      17.4:
+        title: "Create packages/shared"
+        status: not_started
+        estimate: "3h"
+      17.5:
+        title: "Create packages/contracts"
+        status: not_started
+        estimate: "3h"
+      17.6:
+        title: "Create packages/database"
+        status: not_started
+        estimate: "5h"
+        risk: medium
+      17.7:
+        title: "Create packages/auth"
+        status: not_started
+        estimate: "3h"
+  R3:
+    name: "Dashboard Module Extraction"
+    status: not_started
+    stories:
+      17.8:
+        title: "Dashboard Query Service"
+        status: not_started
+        estimate: "3h"
+      17.9:
+        title: "Dashboard Module (use case)"
+        status: not_started
+        estimate: "3h"
+      17.10:
+        title: "Refactor Dashboard Route to Thin Adapter"
+        status: not_started
+        estimate: "2h"
