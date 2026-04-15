@@ -27,7 +27,7 @@ sprints:
         estimate: "3h"
       17.5:
         title: "Create packages/contracts"
-        status: review
+        status: done
         estimate: "3h"
       17.6:
         title: "Create packages/database"
