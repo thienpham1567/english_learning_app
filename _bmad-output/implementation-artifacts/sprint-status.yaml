@@ -15,7 +15,7 @@ sprints:
         risk: high
       17.3:
         title: "Root Developer Experience Setup"
-        status: not_started
+        status: done
         estimate: "2h"
   R2:
     name: "Shared Packages"
