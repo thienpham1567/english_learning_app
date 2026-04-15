@@ -1,8 +1,8 @@
-currentSprint: R1
+currentSprint: R2
 sprints:
   R1:
     name: "Monorepo Scaffolding"
-    status: not_started
+    status: done
     stories:
       17.1:
         title: "Initialize pnpm Workspace + Turborepo"
@@ -19,11 +19,11 @@ sprints:
         estimate: "2h"
   R2:
     name: "Shared Packages"
-    status: not_started
+    status: in-progress
     stories:
       17.4:
         title: "Create packages/shared"
-        status: not_started
+        status: ready-for-dev
         estimate: "3h"
       17.5:
         title: "Create packages/contracts"
@@ -38,6 +38,11 @@ sprints:
         title: "Create packages/auth"
         status: not_started
         estimate: "3h"
+      17.11:
+        title: "Migrate axios → fetch API client"
+        status: not_started
+        estimate: "3h"
+        depends_on: "17.4"
   R3:
     name: "Dashboard Module Extraction"
     status: not_started
