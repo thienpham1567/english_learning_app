@@ -157,8 +157,8 @@ export const db = drizzle(pool, { schema });
 ### Debug Log
 ### Completion Notes
 ### Review Findings
-- [ ] [Review][Patch] Schema compatibility barrel now eagerly loads the DB client, so schema-only imports can fail when `DATABASE_URL` is unset [apps/web/lib/db/schema.ts:5]
-- [ ] [Review][Patch] App imports were not migrated from `@/lib/db*` to `@repo/database`, so AC2/AC3 for this story remain unimplemented [apps/web/app/api/dashboard/route.ts:5]
+- [x] [Review][Patch] Schema compatibility barrel now eagerly loads the DB client, so schema-only imports can fail when `DATABASE_URL` is unset [apps/web/lib/db/schema.ts:5]
+- [x] [Review][Patch] App imports were not migrated from `@/lib/db*` to `@repo/database`, so AC2/AC3 for this story remain unimplemented [apps/web/app/api/dashboard/route.ts:5]
 
 ## File List
 ## Change Log
