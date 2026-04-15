@@ -18,7 +18,11 @@ import {
   WarningOutlined,
 } from "@ant-design/icons";
 
-import type { DictionarySense, FrequencyBand, VocabularyWithNearby } from "@/lib/schemas/vocabulary";
+import type {
+  DictionarySense,
+  FrequencyBand,
+  VocabularyWithNearby,
+} from "@/lib/schemas/vocabulary";
 import { parseBold } from "@/lib/utils/parse-bold";
 import { NearbyWordsBar } from "@/components/dictionary/NearbyWordsBar";
 import { VerbFormsSection } from "@/components/dictionary/VerbFormsSection";
@@ -64,12 +68,31 @@ const SENSE_HEADER_STYLE: React.CSSProperties = {
   margin: 0,
 };
 
-const FREQUENCY_CONFIG: Record<FrequencyBand, { filled: number; labelVi: string; tooltipEn: string }> = {
-  top1k:  { filled: 5, labelVi: "Rất phổ biến", tooltipEn: "Top 1,000 most common words" },
-  top3k:  { filled: 4, labelVi: "Phổ biến",     tooltipEn: "Top 3,000 most common words" },
-  top5k:  { filled: 3, labelVi: "Khá phổ biến", tooltipEn: "Top 5,000 most common words" },
-  top10k: { filled: 2, labelVi: "Ít phổ biến",  tooltipEn: "Top 10,000 most common words" },
-  rare:   { filled: 1, labelVi: "Hiếm gặp",     tooltipEn: "Uncommon word" },
+const FREQUENCY_CONFIG: Record<
+  FrequencyBand,
+  { filled: number; labelVi: string; tooltipEn: string }
+> = {
+  top1k: {
+    filled: 5,
+    labelVi: "Rất phổ biến",
+    tooltipEn: "Top 1,000 most common words",
+  },
+  top3k: {
+    filled: 4,
+    labelVi: "Phổ biến",
+    tooltipEn: "Top 3,000 most common words",
+  },
+  top5k: {
+    filled: 3,
+    labelVi: "Khá phổ biến",
+    tooltipEn: "Top 5,000 most common words",
+  },
+  top10k: {
+    filled: 2,
+    labelVi: "Ít phổ biến",
+    tooltipEn: "Top 10,000 most common words",
+  },
+  rare: { filled: 1, labelVi: "Hiếm gặp", tooltipEn: "Uncommon word" },
 };
 
 function FrequencyBar({ band }: { band: FrequencyBand }) {
@@ -78,7 +101,12 @@ function FrequencyBar({ band }: { band: FrequencyBand }) {
     <Tooltip title={tooltipEn} placement="top">
       <div
         className="anim-fade-in"
-        style={{ display: "inline-flex", alignItems: "center", gap: 8, marginTop: 12 }}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 8,
+          marginTop: 12,
+        }}
       >
         <div style={{ display: "flex", gap: 3 }}>
           {Array.from({ length: 5 }, (_, i) => (
@@ -94,7 +122,9 @@ function FrequencyBar({ band }: { band: FrequencyBand }) {
             />
           ))}
         </div>
-        <span style={{ fontSize: 12, color: "var(--text-muted)" }}>{labelVi}</span>
+        <span style={{ fontSize: 12, color: "var(--text-muted)" }}>
+          {labelVi}
+        </span>
       </div>
     </Tooltip>
   );
@@ -102,7 +132,9 @@ function FrequencyBar({ band }: { band: FrequencyBand }) {
 
 let activeUtterance: SpeechSynthesisUtterance | null = null;
 
-function getNumberLabel(numberInfo: NonNullable<VocabularyWithNearby["numberInfo"]>): string {
+function getNumberLabel(
+  numberInfo: NonNullable<VocabularyWithNearby["numberInfo"]>,
+): string {
   if (numberInfo.isUncountable) return "uncountable";
   if (numberInfo.isPluralOnly) return "plural only";
   if (numberInfo.isSingularOnly) return "singular only";
@@ -130,25 +162,65 @@ function BoldText({ text }: { text: string }) {
 /** Highlight occurrences of `headword` within `text` using accent color (AC #3) */
 function HighlightWord({ text, headword }: { text: string; headword: string }) {
   if (!headword) return <BoldText text={text} />;
+
+  // Step 1: Parse **bold** markers first so we don't break them
+  const boldSegments = parseBold(text);
+
+  // Step 2: Within each segment, highlight the headword
   const escaped = headword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const parts = text.split(new RegExp(`(${escaped})`, "gi"));
-  if (parts.length <= 1) return <BoldText text={text} />;
+  const headwordRegex = new RegExp(`(${escaped})`, "gi");
+
   return (
     <>
-      {parts.map((part, i) =>
-        part.toLowerCase() === headword.toLowerCase() ? (
-          <span key={i} style={{ color: "var(--accent)", fontWeight: 600 }}>
-            {part}
-          </span>
-        ) : (
-          <BoldText key={i} text={part} />
-        ),
-      )}
+      {boldSegments.map((seg, si) => {
+        const subParts = seg.text.split(headwordRegex);
+        if (subParts.length <= 1) {
+          // No headword match in this segment — render as-is
+          return seg.bold ? (
+            <strong key={si} style={{ fontWeight: 600, fontStyle: "normal" }}>
+              {seg.text}
+            </strong>
+          ) : (
+            <span key={si}>{seg.text}</span>
+          );
+        }
+        // Headword found — render with accent highlight
+        return subParts.map((sub, pi) => {
+          const key = `${si}-${pi}`;
+          if (sub.toLowerCase() === headword.toLowerCase()) {
+            return (
+              <span
+                key={key}
+                style={{
+                  color: "var(--accent)",
+                  fontWeight: 600,
+                  fontStyle: "normal",
+                }}
+              >
+                {sub}
+              </span>
+            );
+          }
+          return seg.bold ? (
+            <strong key={key} style={{ fontWeight: 600, fontStyle: "normal" }}>
+              {sub}
+            </strong>
+          ) : (
+            <span key={key}>{sub}</span>
+          );
+        });
+      })}
     </>
   );
 }
 
-function SensePanel({ sense, headword }: { sense: DictionarySense; headword: string }) {
+function SensePanel({
+  sense,
+  headword,
+}: {
+  sense: DictionarySense;
+  headword: string;
+}) {
   const [isCollocationsOpen, setIsCollocationsOpen] = useState(false);
   const examples = sense.examples ?? [];
   const examplesVi = sense.examplesVi ?? [];
@@ -165,13 +237,23 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
   };
 
   return (
-    <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+    <div
+      className="anim-fade-up"
+      style={{ display: "flex", flexDirection: "column", gap: 28 }}
+    >
       <section style={sectionStyle}>
         <h3 style={SENSE_HEADER_STYLE}>
           <TranslationOutlined style={{ fontSize: 12 }} />
           Nghĩa tiếng Việt
         </h3>
-        <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
+        <p
+          style={{
+            fontSize: 14,
+            lineHeight: 1.6,
+            color: "var(--text-primary)",
+            margin: 0,
+          }}
+        >
           <BoldText text={sense.definitionVi} />
         </p>
       </section>
@@ -181,7 +263,14 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
           <BookOutlined style={{ fontSize: 12 }} />
           Definition in English
         </h3>
-        <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
+        <p
+          style={{
+            fontSize: 14,
+            lineHeight: 1.6,
+            color: "var(--text-primary)",
+            margin: 0,
+          }}
+        >
           <BoldText text={sense.definitionEn} />
         </p>
       </section>
@@ -204,12 +293,27 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
           >
             {examples.length > 0
               ? examples.map((example, i) => (
-                  <li key={`${example.en}-${example.vi ?? i}`} style={SENSE_ITEM_STYLE}>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  <li
+                    key={`${example.en}-${example.vi ?? i}`}
+                    style={SENSE_ITEM_STYLE}
+                  >
+                    <div
+                      style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 2,
+                      }}
+                    >
                       <HighlightWord text={example.en} headword={headword} />
                       {example.vi && (
-                        <span style={{ fontSize: 13, color: "var(--text-muted)", fontStyle: "normal" }}>
-                          {example.vi}
+                        <span
+                          style={{
+                            fontSize: 13,
+                            color: "var(--text-muted)",
+                            fontStyle: "normal",
+                          }}
+                        >
+                          <BoldText text={example.vi} />
                         </span>
                       )}
                     </div>
@@ -230,7 +334,14 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
             <BulbOutlined style={{ fontSize: 12 }} />
             Ghi chú sử dụng
           </h3>
-          <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
+          <p
+            style={{
+              fontSize: 14,
+              lineHeight: 1.6,
+              color: "var(--text-primary)",
+              margin: 0,
+            }}
+          >
             <BoldText text={sense.usageNoteVi} />
           </p>
         </section>
@@ -327,18 +438,24 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
               gap: 6,
             }}
           >
-            {(isCollocationsOpen ? collocations : collocations.slice(0, 3)).map((collocation) => (
-              <li
-                key={`${collocation.en}-${collocation.vi}`}
-                style={{ fontSize: 14, lineHeight: 1.6 }}
-              >
-                <span style={{ color: "var(--text-primary)" }}>
-                  <BoldText text={collocation.en} />
-                </span>
-                <span style={{ margin: "0 6px", color: "var(--text-muted)" }}>&mdash;</span>
-                <span style={{ color: "var(--text-secondary)" }}>{collocation.vi}</span>
-              </li>
-            ))}
+            {(isCollocationsOpen ? collocations : collocations.slice(0, 3)).map(
+              (collocation) => (
+                <li
+                  key={`${collocation.en}-${collocation.vi}`}
+                  style={{ fontSize: 14, lineHeight: 1.6 }}
+                >
+                  <span style={{ color: "var(--text-primary)" }}>
+                    <BoldText text={collocation.en} />
+                  </span>
+                  <span style={{ margin: "0 6px", color: "var(--text-muted)" }}>
+                    &mdash;
+                  </span>
+                  <span style={{ color: "var(--text-secondary)" }}>
+                    {collocation.vi}
+                  </span>
+                </li>
+              ),
+            )}
           </ul>
           {collocations.length > 3 && (
             <button
@@ -359,7 +476,9 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
                 width: "fit-content",
               }}
             >
-              {isCollocationsOpen ? "Thu gọn" : `Xem thêm (${collocations.length - 3})`}
+              {isCollocationsOpen
+                ? "Thu gọn"
+                : `Xem thêm (${collocations.length - 3})`}
             </button>
           )}
         </section>
@@ -380,7 +499,9 @@ function AudioButton({
   return (
     <button
       type="button"
-      aria-label={locale === "en-US" ? "Play US pronunciation" : "Play UK pronunciation"}
+      aria-label={
+        locale === "en-US" ? "Play US pronunciation" : "Play UK pronunciation"
+      }
       onClick={() => onSpeak(locale)}
       style={{
         display: "grid",
@@ -404,7 +525,13 @@ function AudioButton({
   );
 }
 
-function OverviewToggle({ overviewVi, overviewEn }: { overviewVi: string; overviewEn: string }) {
+function OverviewToggle({
+  overviewVi,
+  overviewEn,
+}: {
+  overviewVi: string;
+  overviewEn: string;
+}) {
   const [lang, setLang] = useState<"vi" | "en">("vi");
 
   return (
@@ -560,12 +687,19 @@ export function DictionaryResultCard({
     );
   }
 
-  const activeSense = vocabulary.senses.find((s) => s.id === activeKey) ?? vocabulary.senses[0];
+  const activeSense =
+    vocabulary.senses.find((s) => s.id === activeKey) ?? vocabulary.senses[0];
   const hasDualPhonetics = vocabulary.phoneticsUs || vocabulary.phoneticsUk;
-  const numberLabel = vocabulary.numberInfo ? getNumberLabel(vocabulary.numberInfo) : "";
+  const numberLabel = vocabulary.numberInfo
+    ? getNumberLabel(vocabulary.numberInfo)
+    : "";
 
   return (
-    <div key={vocabulary.headword} className="anim-fade-up dictionary-result-card" style={cardStyle}>
+    <div
+      key={vocabulary.headword}
+      className="anim-fade-up dictionary-result-card"
+      style={cardStyle}
+    >
       {/* Header */}
       <div
         style={{
@@ -603,7 +737,14 @@ export function DictionaryResultCard({
             {vocabulary.headword}
           </h2>
         </div>
-        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
           {vocabulary.level && (
             <Tag
               color={LEVEL_COLORS[vocabulary.level] ?? "default"}
@@ -613,7 +754,10 @@ export function DictionaryResultCard({
               {vocabulary.level}
             </Tag>
           )}
-          <Tag variant="solid" style={{ borderRadius: 999, padding: "2px 12px" }}>
+          <Tag
+            variant="solid"
+            style={{ borderRadius: 999, padding: "2px 12px" }}
+          >
             {vocabulary.entryType === "idiom"
               ? "idiom"
               : vocabulary.entryType === "phrasal_verb"
@@ -635,7 +779,10 @@ export function DictionaryResultCard({
             </Tag>
           )}
           {numberLabel && (
-            <Tag variant="outlined" style={{ borderRadius: 999, padding: "2px 12px" }}>
+            <Tag
+              variant="outlined"
+              style={{ borderRadius: 999, padding: "2px 12px" }}
+            >
               {numberLabel}
             </Tag>
           )}
@@ -717,7 +864,11 @@ export function DictionaryResultCard({
               >
                 {vocabulary.phoneticsUs}
               </span>
-              <AudioButton locale="en-US" speakingLocale={speakingLocale} onSpeak={speak} />
+              <AudioButton
+                locale="en-US"
+                speakingLocale={speakingLocale}
+                onSpeak={speak}
+              />
             </div>
           )}
           {vocabulary.phoneticsUs && vocabulary.phoneticsUk && (
@@ -738,7 +889,11 @@ export function DictionaryResultCard({
               >
                 {vocabulary.phoneticsUk}
               </span>
-              <AudioButton locale="en-GB" speakingLocale={speakingLocale} onSpeak={speak} />
+              <AudioButton
+                locale="en-GB"
+                speakingLocale={speakingLocale}
+                onSpeak={speak}
+              />
             </div>
           )}
         </div>
@@ -760,17 +915,27 @@ export function DictionaryResultCard({
         </span>
       ) : null}
 
-      {vocabulary.frequencyBand && <FrequencyBar band={vocabulary.frequencyBand} />}
+      {vocabulary.frequencyBand && (
+        <FrequencyBar band={vocabulary.frequencyBand} />
+      )}
 
       {vocabulary.verbForms && vocabulary.verbForms.length > 0 && (
         <VerbFormsSection verbForms={vocabulary.verbForms} />
       )}
 
-      {vocabulary.wordFamily && vocabulary.wordFamily.length > 0 && onSearch && (
-        <WordFamilySection wordFamily={vocabulary.wordFamily} onSearch={onSearch} />
-      )}
+      {vocabulary.wordFamily &&
+        vocabulary.wordFamily.length > 0 &&
+        onSearch && (
+          <WordFamilySection
+            wordFamily={vocabulary.wordFamily}
+            onSearch={onSearch}
+          />
+        )}
 
-      <OverviewToggle overviewVi={vocabulary.overviewVi} overviewEn={vocabulary.overviewEn} />
+      <OverviewToggle
+        overviewVi={vocabulary.overviewVi}
+        overviewEn={vocabulary.overviewEn}
+      />
 
       {/* Sense tabs */}
       <div style={{ marginTop: 24 }}>
@@ -800,20 +965,38 @@ export function DictionaryResultCard({
                 border: "none",
                 cursor: "pointer",
                 transition: "background 0.2s, color 0.2s",
-                background: activeKey === sense.id ? "rgba(154,177,122,0.12)" : "transparent",
-                color: activeKey === sense.id ? "var(--accent)" : "var(--text-secondary)",
+                background:
+                  activeKey === sense.id
+                    ? "rgba(154,177,122,0.12)"
+                    : "transparent",
+                color:
+                  activeKey === sense.id
+                    ? "var(--accent)"
+                    : "var(--text-secondary)",
               }}
             >
               {sense.label}
             </button>
           ))}
         </div>
-        {activeSense && <SensePanel key={activeSense.id} sense={activeSense} headword={vocabulary.headword} />}
+        {activeSense && (
+          <SensePanel
+            key={activeSense.id}
+            sense={activeSense}
+            headword={vocabulary.headword}
+          />
+        )}
       </div>
 
       {/* Nearby words bar */}
       {vocabulary.nearbyWords.length > 0 && onSearch && (
-        <div style={{ marginTop: 24, borderTop: "1px solid var(--border)", paddingTop: 20 }}>
+        <div
+          style={{
+            marginTop: 24,
+            borderTop: "1px solid var(--border)",
+            paddingTop: 20,
+          }}
+        >
           <NearbyWordsBar
             words={vocabulary.nearbyWords}
             headword={vocabulary.headword}
