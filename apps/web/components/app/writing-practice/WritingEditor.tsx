@@ -67,10 +67,16 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
 
   // Check for saved draft on mount
   useEffect(() => {
-    const saved = loadDraft();
-    if (saved && saved.prompt === prompt && saved.text.length > 0) {
-      setDraftOffer(saved);
-    }
+    const timeoutId = window.setTimeout(() => {
+      const saved = loadDraft();
+      setDraftOffer(
+        saved && saved.prompt === prompt && saved.text.length > 0 ? saved : null,
+      );
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
   }, [prompt]);
 
   // Autosave every 30s
@@ -253,4 +259,3 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
     </div>
   );
 }
-

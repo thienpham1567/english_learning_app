@@ -18,14 +18,14 @@ export async function GET(request: Request) {
   }
 
   const url = new URL(request.url);
-  const module = url.searchParams.get("module");
+  const sourceModule = url.searchParams.get("module");
   const topic = url.searchParams.get("topic");
   const resolved = url.searchParams.get("resolved");
   const limit = Math.min(parseInt(url.searchParams.get("limit") ?? "50"), 100);
   const offset = parseInt(url.searchParams.get("offset") ?? "0");
 
   const conditions = [eq(errorLog.userId, session.user.id)];
-  if (module) conditions.push(eq(errorLog.sourceModule, module));
+  if (sourceModule) conditions.push(eq(errorLog.sourceModule, sourceModule));
   if (topic) conditions.push(ilike(errorLog.grammarTopic, `%${topic}%`));
   if (resolved === "true") conditions.push(eq(errorLog.isResolved, true));
   if (resolved === "false") conditions.push(eq(errorLog.isResolved, false));

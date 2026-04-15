@@ -12,6 +12,7 @@ import {
 } from "@ant-design/icons";
 
 import { api } from "@/lib/api-client";
+import http from "@/lib/http";
 
 const { Text, Title } = Typography;
 

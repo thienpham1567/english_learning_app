@@ -199,14 +199,14 @@ export async function POST(request: Request) {
     };
 
     for (const [skill, result] of Object.entries(results.skills)) {
-      const module = SKILL_MODULE_MAP[skill];
-      if (!module || skill === "vocabulary") continue; // Skip vocab (maps to grammar)
+      const skillModule = SKILL_MODULE_MAP[skill];
+      if (!skillModule || skill === "vocabulary") continue; // Skip vocab (maps to grammar)
 
       await db
         .insert(userSkillProfile)
         .values({
           userId,
-          module,
+          module: skillModule,
           currentLevel: result.level,
           accuracyLast10: result.correct / Math.max(result.total, 1),
         })

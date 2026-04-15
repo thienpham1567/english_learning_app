@@ -1,8 +1,22 @@
 import OpenAI from "openai";
 
-import { openAiConfig } from "@/lib/openai/config";
+import { getOpenAiConfig } from "@/lib/openai/config";
 
-export const openAiClient = new OpenAI({
-  apiKey: openAiConfig.apiKey,
-  baseURL: openAiConfig.baseURL,
+function createOpenAiClient() {
+  const config = getOpenAiConfig();
+
+  return new OpenAI({
+    apiKey: config.apiKey,
+    baseURL: config.baseURL,
+  });
+}
+
+type OpenAiClient = ReturnType<typeof createOpenAiClient>;
+
+export const openAiClient = new Proxy({} as OpenAiClient, {
+  get(_target, prop) {
+    const client = createOpenAiClient();
+    const value = client[prop as keyof OpenAiClient];
+    return typeof value === "function" ? value.bind(client) : value;
+  },
 });

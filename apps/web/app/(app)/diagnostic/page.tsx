@@ -56,7 +56,7 @@ export default function DiagnosticPage() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [answers, setAnswers] = useState<Array<{ questionId: string; selectedIndex: number; timeMs: number }>>([]);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [questionStartTime, setQuestionStartTime] = useState(Date.now());
+  const [questionStartTime, setQuestionStartTime] = useState(0);
   const [result, setResult] = useState<TestResult | null>(null);
 
   // Load diagnostic status

@@ -148,7 +148,7 @@ function VocabReviewTab() {
     xpEarned: number;
     words: Array<{ query: string; correct: boolean; masteryLevel: string; nextReview: string; interval: number }>;
   } | null>(null);
-  const questionStartRef = useRef<number>(Date.now());
+  const questionStartRef = useRef<number>(0);
 
   const currentQ = questions[currentIdx] ?? null;
 
@@ -173,7 +173,39 @@ function VocabReviewTab() {
     }
   }, []);
 
-  useEffect(() => { fetchDue(); }, [fetchDue]);
+  useEffect(() => {
+    let cancelled = false;
+
+    void (async () => {
+      try {
+        const data = await api.get<{
+          dueCount: number;
+          words: VocabWord[];
+          distractors: DistractorWord[];
+        }>("/vocabulary/due");
+        if (cancelled) return;
+
+        if (data.dueCount === 0) {
+          setState("empty");
+          return;
+        }
+
+        const qs = generateQuizQuestions(data.words, data.distractors);
+        setQuestions(qs);
+        setCurrentIdx(0);
+        setAnswers({});
+        setResults([]);
+        setSubmitResult(null);
+        setState("quiz");
+      } catch {
+        if (!cancelled) setState("empty");
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Record answer timing
   useEffect(() => {
@@ -196,6 +228,21 @@ function VocabReviewTab() {
     return 3;
   }, []);
 
+  const submitReview = useCallback(async (finalResults: Array<{ query: string; quality: number }>) => {
+    setSubmitting(true);
+    try {
+      const data = await api.post<{
+        accuracy: number;
+        xpEarned: number;
+        words: Array<{ query: string; correct: boolean; masteryLevel: string; nextReview: string; interval: number }>;
+      }>("/vocabulary/review", { results: finalResults });
+      setSubmitResult(data);
+    } catch { /* ignore */ }
+
+    setSubmitting(false);
+    setState("results");
+  }, []);
+
   // Next or submit — F4 fix: build final result inline, pass to submitReview
   const handleNext = useCallback(() => {
     const q = questions[currentIdx];
@@ -212,27 +259,9 @@ function VocabReviewTab() {
     if (currentIdx < questions.length - 1) {
       setCurrentIdx((prev) => prev + 1);
     } else {
-      // Submit all — pass final results directly to avoid stale closure
       submitReview(updatedResults);
     }
-  }, [currentIdx, questions, answers, results, getQuality]);
-
-  const submitReview = useCallback(async (finalResults: Array<{ query: string; quality: number }>) => {
-    setSubmitting(true);
-    const allResults = finalResults;
-
-    try {
-      const data = await api.post<{
-        accuracy: number;
-        xpEarned: number;
-        words: Array<{ query: string; correct: boolean; masteryLevel: string; nextReview: string; interval: number }>;
-      }>("/vocabulary/review", { results: allResults });
-      setSubmitResult(data);
-    } catch { /* ignore */ }
-
-    setSubmitting(false);
-    setState("results");
-  }, [questions, answers]);
+  }, [answers, currentIdx, getQuality, questions, results, submitReview]);
 
   // Loading
   if (state === "loading") {
@@ -513,7 +542,34 @@ function ErrorReviewTab() {
     }
   }, []);
 
-  useEffect(() => { fetchDue(); }, [fetchDue]);
+  useEffect(() => {
+    let cancelled = false;
+
+    void (async () => {
+      try {
+        const data = await api.get<{ dueCount: number; errors: ErrorEntry[] }>("/review-quiz/due");
+        if (cancelled) return;
+
+        if (data.dueCount === 0) {
+          setState("empty");
+          return;
+        }
+
+        setErrors(data.errors);
+        setCurrentIdx(0);
+        setAnswers({});
+        setResults([]);
+        setSubmitResult(null);
+        setState("quiz");
+      } catch {
+        if (!cancelled) setState("empty");
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const selectAnswer = useCallback((optionIdx: number) => {
     setAnswers((prev) => ({ ...prev, [currentIdx]: optionIdx }));

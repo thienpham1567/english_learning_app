@@ -57,8 +57,26 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    fetchDashboard();
-  }, [fetchDashboard]);
+    let cancelled = false;
+
+    void (async () => {
+      try {
+        const data = await api.get<DashboardData>("/dashboard");
+        if (!cancelled) setState({ status: "ready", data });
+      } catch (err) {
+        if (!cancelled) {
+          setState({
+            status: "error",
+            error: err instanceof Error ? err.message : "Unknown error",
+          });
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   return (
     <DashboardContext.Provider value={{ state, refetch: fetchDashboard }}>

@@ -19,12 +19,7 @@ export function useTextToSpeech() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
-  const [isSupported, setIsSupported] = useState(false);
-
-  // Detect support after mount to avoid SSR hydration mismatch
-  useEffect(() => {
-    setIsSupported(typeof window !== "undefined");
-  }, []);
+  const [isSupported] = useState(() => typeof window !== "undefined");
 
   // Cleanup on unmount
   useEffect(() => {

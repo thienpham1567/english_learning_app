@@ -40,7 +40,7 @@ export default function ListeningPage() {
   const miniDict = useMiniDictionary();
   const { examMode } = useExamMode();
   const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
-  const [recommendedLevel, setRecommendedLevel] = useState<CefrLevel | null>(null);
+  const [profileRecommendedLevel, setProfileRecommendedLevel] = useState<CefrLevel | null>(null);
   const [mode, setMode] = useState<string>("listening");
 
   // Derive skill level-up from result (computed, not effect)
@@ -53,7 +53,7 @@ export default function ListeningPage() {
     api.get<{ cefr?: string }>("/skill-profile", { params: { module: "listening" } })
       .then((data) => {
         if (data?.cefr) {
-          setRecommendedLevel(data.cefr as CefrLevel);
+          setProfileRecommendedLevel(data.cefr as CefrLevel);
         }
       })
       .catch(() => {});
@@ -63,12 +63,8 @@ export default function ListeningPage() {
     setSavedWords((prev) => new Set(prev).add(word.toLowerCase()));
   }, []);
 
-  // Update recommended level when result arrives
-  useEffect(() => {
-    if (result?.skill) {
-      setRecommendedLevel(result.skill.cefr as CefrLevel);
-    }
-  }, [result]);
+  const recommendedLevel =
+    (result?.skill?.cefr as CefrLevel | undefined) ?? profileRecommendedLevel;
 
   return (
     <div

@@ -10,14 +10,12 @@ interface BeforeInstallPromptEvent extends Event {
 export function usePWAInstall() {
   const [canInstall, setCanInstall] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [dismissed, setDismissed] = useState(false);
+  const [dismissed, setDismissed] = useState(() =>
+    typeof window !== "undefined" &&
+    sessionStorage.getItem("pwa-dismissed") !== null,
+  );
 
   useEffect(() => {
-    // Check if already dismissed this session
-    if (typeof window !== "undefined" && sessionStorage.getItem("pwa-dismissed")) {
-      setDismissed(true);
-    }
-
     const handler = (e: Event) => {
       e.preventDefault();
       setDeferredPrompt(e as BeforeInstallPromptEvent);

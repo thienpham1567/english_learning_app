@@ -17,9 +17,18 @@ vi.mock("@/lib/auth", () => ({
 const mockReturning = vi
   .fn()
   .mockResolvedValue([{ id: "row-1", query: "take off", saved: true }]);
-const mockWhere = vi.fn(() => ({ returning: mockReturning }));
-const mockSet = vi.fn(() => ({ where: mockWhere }));
-const mockUpdate = vi.fn(() => ({ set: mockSet }));
+const mockWhere = vi.fn((whereClause: unknown) => {
+  void whereClause;
+  return { returning: mockReturning };
+});
+const mockSet = vi.fn((values: unknown) => {
+  void values;
+  return { where: mockWhere };
+});
+const mockUpdate = vi.fn((table: unknown) => {
+  void table;
+  return { set: mockSet };
+});
 
 vi.mock("@/lib/db", () => ({
   db: { update: mockUpdate },

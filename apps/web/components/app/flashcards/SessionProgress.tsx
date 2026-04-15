@@ -15,22 +15,21 @@ type Props = {
 
 export function SessionProgress({ current, total, startTime }: Props) {
   const pct = total > 0 ? Math.round((current / total) * 100) : 0;
-  const [now, setNow] = useState(() => Date.now());
+  const [now, setNow] = useState<number | null>(null);
 
   // Update "now" every 10s for time estimate (avoids impure Date.now during render)
   useEffect(() => {
     if (!startTime) return;
-    setNow(Date.now());
     const interval = setInterval(() => setNow(Date.now()), 10000);
     return () => clearInterval(interval);
-  }, [startTime, current]);
+  }, [startTime]);
 
   // Calculate estimated time remaining
   let timeLabel = "";
   if (total > 0) {
     const remaining = total - current;
     let avgMs: number;
-    if (startTime && current > 0) {
+    if (startTime && current > 0 && now !== null) {
       avgMs = (now - startTime) / current;
     } else {
       avgMs = DEFAULT_SECONDS_PER_CARD * 1000;
@@ -55,4 +54,3 @@ export function SessionProgress({ current, total, startTime }: Props) {
     </Flex>
   );
 }
-

@@ -1,6 +1,4 @@
 "use client";
-
-import { useEffect, useState } from "react";
 import { AppstoreOutlined, ReloadOutlined } from "@ant-design/icons";
 import { Spin, Progress, Flex, Typography, Button, Result } from "antd";
 
@@ -21,25 +19,10 @@ export function FlashcardSession() {
     stats,
     isSubmitting,
     nextReviewAt,
-    fetchDueCards,
+    sessionStartedAt,
     submitReview,
     restart,
   } = useFlashcardSession();
-
-  // Track session start time for estimated time remaining
-  const [sessionStart, setSessionStart] = useState<number | null>(null);
-  useEffect(() => {
-    if (state === "active" && sessionStart === null) {
-      setSessionStart(Date.now());
-    }
-    if (state !== "active") {
-      setSessionStart(null);
-    }
-  }, [state, sessionStart]);
-
-  useEffect(() => {
-    fetchDueCards();
-  }, [fetchDueCards]);
 
   const isImmersive = state === "active";
 
@@ -175,7 +158,7 @@ export function FlashcardSession() {
               <SessionProgress
                 current={currentIndex + 1}
                 total={totalDue}
-                startTime={sessionStart ?? undefined}
+                startTime={sessionStartedAt ?? undefined}
               />
               <FlashcardCard card={currentCard} onRate={submitReview} isSubmitting={isSubmitting} />
             </div>

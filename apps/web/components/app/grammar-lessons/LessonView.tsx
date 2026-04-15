@@ -48,24 +48,49 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
   const [correctCount, setCorrectCount] = useState(0);
   const [xpAwarded, setXpAwarded] = useState(0);
 
-  // Generate lesson on mount
+  const loadLesson = useCallback(async () => {
+    return api.post<LessonData>("/grammar-lessons/generate", {
+      topic: topicId, topicTitle, examMode, level,
+    });
+  }, [examMode, level, topicId, topicTitle]);
+
   const generateLesson = useCallback(async () => {
     setState("loading");
     setError(null);
     try {
-      const data = await api.post<LessonData>("/grammar-lessons/generate", {
-        topic: topicId, topicTitle, examMode, level,
-      });
+      const data = await loadLesson();
       setLesson(data);
       setState("lesson");
     } catch {
       setError("Không thể tạo bài học. Vui lòng thử lại.");
       setState("lesson");
     }
-  }, [topicId, topicTitle, examMode, level]);
+  }, [loadLesson]);
 
   // Auto-generate on mount
-  useEffect(() => { generateLesson(); }, [generateLesson]);
+  useEffect(() => {
+    let cancelled = false;
+
+    void (async () => {
+      try {
+        const data = await loadLesson();
+        if (!cancelled) {
+          setLesson(data);
+          setError(null);
+          setState("lesson");
+        }
+      } catch {
+        if (!cancelled) {
+          setError("Không thể tạo bài học. Vui lòng thử lại.");
+          setState("lesson");
+        }
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [loadLesson]);
 
   const currentExercise = lesson?.exercises?.[exerciseIdx] ?? null;
 
@@ -119,7 +144,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
       {state === "loading" && (
         <div style={{ textAlign: "center", padding: 60 }}>
           <LoadingOutlined style={{ fontSize: 36, color: "var(--accent)" }} />
-          <p style={{ color: "var(--text-secondary)", marginTop: 12 }}>Đang tạo bài học "{topicTitle}"...</p>
+          <p style={{ color: "var(--text-secondary)", marginTop: 12 }}>Đang tạo bài học {topicTitle}...</p>
         </div>
       )}
 

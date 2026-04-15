@@ -109,7 +109,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
     return (
       <div style={{ textAlign: "center", padding: 60 }}>
         <LoadingOutlined style={{ fontSize: 36, color: "var(--accent)" }} />
-        <p style={{ color: "var(--text-secondary)", marginTop: 12 }}>Đang tạo bộ học "{topicTitle}"...</p>
+        <p style={{ color: "var(--text-secondary)", marginTop: 12 }}>Đang tạo bộ học {topicTitle}...</p>
       </div>
     );
   }

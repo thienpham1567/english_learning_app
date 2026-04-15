@@ -57,16 +57,15 @@ const darkTokens = {
 };
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState<ThemeMode>("light");
+  const [mode, setMode] = useState<ThemeMode>(() => {
+    if (typeof window === "undefined") return "light";
+    const saved = localStorage.getItem(STORAGE_KEY);
+    return saved === "dark" || saved === "light" ? saved : "light";
+  });
 
-  // Read saved preference on mount
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY) as ThemeMode | null;
-    if (saved === "dark" || saved === "light") {
-      setMode(saved);
-      document.documentElement.setAttribute("data-theme", saved);
-    }
-  }, []);
+    document.documentElement.setAttribute("data-theme", mode);
+  }, [mode]);
 
   const toggleTheme = useCallback(() => {
     setMode((prev) => {

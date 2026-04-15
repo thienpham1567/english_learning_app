@@ -27,7 +27,8 @@ export function useDailyChallenge() {
     newBadges: Badge[];
   } | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const startTime = useRef(Date.now());
+  const [timeElapsedMs, setTimeElapsedMs] = useState(0);
+  const startTime = useRef(0);
 
   // Fetch today's challenge on mount
   useEffect(() => {
@@ -40,15 +41,16 @@ export function useDailyChallenge() {
         }>("/daily-challenge/today");
 
         setChallenge(data.challenge);
-        setStreak(data.streak);
-        setBadges(data.badges);
+          setStreak(data.streak);
+          setBadges(data.badges);
 
-        if (data.challenge.completedAt) {
-          setState("completed");
-        } else {
-          startTime.current = Date.now();
-          setState("active");
-        }
+          if (data.challenge.completedAt) {
+            setState("completed");
+          } else {
+            startTime.current = Date.now();
+            setTimeElapsedMs(0);
+            setState("active");
+          }
       } catch {
         setError("Không thể tải thử thách. Vui lòng thử lại.");
         setState("error");
@@ -56,26 +58,11 @@ export function useDailyChallenge() {
     })();
   }, []);
 
-  const answerExercise = useCallback(
-    (answer: string) => {
-      const newAnswers = [...userAnswers, { exerciseIndex: currentExercise, answer }];
-      setUserAnswers(newAnswers);
-
-      const totalExercises = challenge?.exercises.length ?? 5;
-      if (currentExercise + 1 >= totalExercises) {
-        // Submit all answers
-        submitAnswers(newAnswers);
-      } else {
-        setCurrentExercise((prev) => prev + 1);
-      }
-    },
-    [currentExercise, userAnswers, challenge],
-  );
-
   const submitAnswers = useCallback(
     async (answers: { exerciseIndex: number; answer: string }[]) => {
       setState("submitting");
       const elapsed = Date.now() - startTime.current;
+      setTimeElapsedMs(elapsed);
       try {
         const data = await api.post<{
           answers: ExerciseAnswer[];
@@ -124,10 +111,23 @@ export function useDailyChallenge() {
         setState("active");
       }
     },
-    [],
+    [challenge],
   );
 
-  const timeElapsedMs = Date.now() - startTime.current;
+  const answerExercise = useCallback(
+    (answer: string) => {
+      const newAnswers = [...userAnswers, { exerciseIndex: currentExercise, answer }];
+      setUserAnswers(newAnswers);
+
+      const totalExercises = challenge?.exercises.length ?? 5;
+      if (currentExercise + 1 >= totalExercises) {
+        submitAnswers(newAnswers);
+      } else {
+        setCurrentExercise((prev) => prev + 1);
+      }
+    },
+    [challenge, currentExercise, submitAnswers, userAnswers],
+  );
 
   return {
     state,

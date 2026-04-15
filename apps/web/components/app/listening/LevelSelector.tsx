@@ -29,13 +29,7 @@ type Props = {
 export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
   const [level, setLevel] = useState<CefrLevel | null>(null);
   const [exerciseType, setExerciseType] = useState<ExerciseType>("comprehension");
-
-  // Auto-select recommended level on mount
-  useEffect(() => {
-    if (recommendedLevel && !level) {
-      setLevel(recommendedLevel);
-    }
-  }, [recommendedLevel, level]);
+  const activeLevel = level ?? recommendedLevel ?? null;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 28, padding: "24px 20px", maxWidth: 600, margin: "0 auto", width: "100%" }}>
@@ -56,7 +50,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
           {CEFR_LEVELS.map((l) => {
             const meta = LEVEL_META[l];
-            const isSelected = level === l;
+            const isSelected = activeLevel === l;
             return (
               <button
                 key={l}
@@ -124,8 +118,8 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
 
       {/* Start Button */}
       <button
-        onClick={() => level && onStart(level, exerciseType)}
-        disabled={!level || isLoading}
+        onClick={() => activeLevel && onStart(activeLevel, exerciseType)}
+        disabled={!activeLevel || isLoading}
         style={{
           display: "flex",
           alignItems: "center",
@@ -134,11 +128,11 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
           padding: "14px 24px",
           borderRadius: "var(--radius-md)",
           border: "none",
-          background: level ? "linear-gradient(135deg, var(--accent), var(--accent-hover))" : "var(--border)",
-          color: level ? "#fff" : "var(--text-muted)",
+          background: activeLevel ? "linear-gradient(135deg, var(--accent), var(--accent-hover))" : "var(--border)",
+          color: activeLevel ? "#fff" : "var(--text-muted)",
           fontSize: 16,
           fontWeight: 700,
-          cursor: level ? "pointer" : "not-allowed",
+          cursor: activeLevel ? "pointer" : "not-allowed",
           transition: "all 0.2s ease",
           opacity: isLoading ? 0.7 : 1,
         }}

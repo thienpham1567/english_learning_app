@@ -41,17 +41,14 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
   const [status, setStatus] = useState<Status>("idle");
 
   useEffect(() => {
-    if (!query) {
-      setData(null);
-      setStatus("idle");
-      return;
-    }
+    if (!query) return;
 
     let cancelled = false;
-    setStatus("loading");
 
     (async () => {
       try {
+        setData(null);
+        setStatus("loading");
         const payload = await api.get<{ data: Vocabulary }>(
           `/vocabulary/${encodeURIComponent(query)}`,
         );
@@ -67,7 +64,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
     return () => {
       cancelled = true;
     };
-  }, [query, onClose]);
+  }, [query]);
 
   return (
     <Drawer

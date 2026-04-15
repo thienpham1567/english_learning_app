@@ -47,7 +47,24 @@ export default function ScenariosPage() {
     setLoading(false);
   }, []);
 
-  useEffect(() => { fetchScenarios(); }, [fetchScenarios]);
+  useEffect(() => {
+    let cancelled = false;
+
+    void (async () => {
+      try {
+        const data = await api.get<{ scenarios: ScenarioSummary[] }>("/scenarios");
+        if (!cancelled) setScenarios(data.scenarios);
+      } catch {
+        // ignore
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const openScenario = (id: string) => {
     const scenario = getScenarioById(id);

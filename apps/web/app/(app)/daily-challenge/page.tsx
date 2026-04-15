@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Button, Card, Flex, Result, Spin, Typography } from "antd";
 import { ClockCircleOutlined, FireOutlined, ReloadOutlined } from "@ant-design/icons";
 
@@ -23,17 +23,15 @@ const EXERCISE_TYPE_LABELS: Record<string, string> = {
 // Live elapsed timer hook (AC: #4)
 function useElapsedTimer(isRunning: boolean) {
   const [elapsed, setElapsed] = useState(0);
-  const startRef = useRef<number>(0);
 
   useEffect(() => {
-    if (isRunning) {
-      startRef.current = Date.now();
-      setElapsed(0);
-      const interval = setInterval(() => {
-        setElapsed(Date.now() - startRef.current);
-      }, 1000);
-      return () => clearInterval(interval);
-    }
+    if (!isRunning) return;
+
+    const startedAt = Date.now();
+    const interval = setInterval(() => {
+      setElapsed(Date.now() - startedAt);
+    }, 1000);
+    return () => clearInterval(interval);
   }, [isRunning]);
 
   const totalSec = Math.floor(elapsed / 1000);

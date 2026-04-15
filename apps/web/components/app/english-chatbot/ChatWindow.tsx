@@ -487,7 +487,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
             score: number;
             accuracy: number;
             fluency: number;
-            wordAnalysis: unknown;
+            wordAnalysis: PronFeedbackData["wordAnalysis"];
             tips: string[];
             feedback: string;
           }>("/pronunciation/evaluate", { targetText: t, spokenText: t })

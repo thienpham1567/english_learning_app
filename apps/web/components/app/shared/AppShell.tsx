@@ -14,10 +14,15 @@ export type AuthUser = {
 };
 
 function useIsMobile(breakpoint = 768): boolean | null {
-  const [isMobile, setIsMobile] = useState<boolean | null>(null); // null = SSR/pre-hydration
+  const [isMobile, setIsMobile] = useState<boolean | null>(() =>
+    typeof window === "undefined"
+      ? null
+      : window.matchMedia(`(max-width: ${breakpoint}px)`).matches,
+  );
+
   useEffect(() => {
+    if (typeof window === "undefined") return;
     const mq = window.matchMedia(`(max-width: ${breakpoint}px)`);
-    setIsMobile(mq.matches);
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
@@ -26,15 +31,11 @@ function useIsMobile(breakpoint = 768): boolean | null {
 }
 
 export function AppShell({ children, user }: { children: ReactNode; user: AuthUser }) {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return localStorage.getItem("sidebar-expanded") === "true";
+  });
   const isMobile = useIsMobile();
-
-  useEffect(() => {
-    const saved = localStorage.getItem("sidebar-expanded");
-    if (saved !== null) {
-      setIsExpanded(saved === "true");
-    }
-  }, []);
 
   const handleToggle = () => {
     const next = !isExpanded;

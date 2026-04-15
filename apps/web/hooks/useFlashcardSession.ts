@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { api } from "@/lib/api-client";
 import type { DueCard } from "@/lib/flashcard/types";
 
@@ -23,11 +23,50 @@ export function useFlashcardSession() {
   const [state, setState] = useState<SessionState>("loading");
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [nextReviewAt, setNextReviewAt] = useState<string | null>(null);
+  const [sessionStartedAt, setSessionStartedAt] = useState<number | null>(null);
   const [stats, setStats] = useState<SessionStats>({
     totalReviewed: 0, totalQuality: 0, forgottenCount: 0,
     againCount: 0, hardCount: 0, goodCount: 0, easyCount: 0,
   });
   const hasFetched = useRef(false);
+
+  useEffect(() => {
+    if (hasFetched.current) return;
+    hasFetched.current = true;
+
+    let cancelled = false;
+
+    void (async () => {
+      try {
+        const data = await api.get<{
+          cards: DueCard[];
+          nextReviewAt: string | null;
+        }>("/flashcards/due");
+        if (cancelled) return;
+
+        setCards(data.cards);
+        setNextReviewAt(data.nextReviewAt);
+        setCurrentIndex(0);
+        setStats({
+          totalReviewed: 0,
+          totalQuality: 0,
+          forgottenCount: 0,
+          againCount: 0,
+          hardCount: 0,
+          goodCount: 0,
+          easyCount: 0,
+        });
+        setSessionStartedAt(data.cards.length > 0 ? Date.now() : null);
+        setState(data.cards.length > 0 ? "active" : "empty");
+      } catch {
+        if (!cancelled) setState("error");
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const fetchDueCards = useCallback(async () => {
     if (hasFetched.current) return;
@@ -42,6 +81,7 @@ export function useFlashcardSession() {
       setNextReviewAt(data.nextReviewAt);
       setCurrentIndex(0);
       setStats({ totalReviewed: 0, totalQuality: 0, forgottenCount: 0, againCount: 0, hardCount: 0, goodCount: 0, easyCount: 0 });
+      setSessionStartedAt(data.cards.length > 0 ? Date.now() : null);
       setState(data.cards.length > 0 ? "active" : "empty");
     } catch {
       setState("error");
@@ -87,6 +127,7 @@ export function useFlashcardSession() {
     hasFetched.current = false;
     setCards([]);
     setCurrentIndex(0);
+    setSessionStartedAt(null);
     setStats({ totalReviewed: 0, totalQuality: 0, forgottenCount: 0, againCount: 0, hardCount: 0, goodCount: 0, easyCount: 0 });
     setState("loading");
     // Trigger re-fetch on next render cycle
@@ -107,6 +148,7 @@ export function useFlashcardSession() {
     stats,
     isSubmitting,
     nextReviewAt,
+    sessionStartedAt,
     fetchDueCards,
     submitReview,
     restart,
