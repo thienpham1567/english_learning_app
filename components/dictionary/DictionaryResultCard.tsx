@@ -130,20 +130,47 @@ function BoldText({ text }: { text: string }) {
 /** Highlight occurrences of `headword` within `text` using accent color (AC #3) */
 function HighlightWord({ text, headword }: { text: string; headword: string }) {
   if (!headword) return <BoldText text={text} />;
+
+  // Step 1: Parse **bold** markers first so we don't break them
+  const boldSegments = parseBold(text);
+
+  // Step 2: Within each segment, highlight the headword
   const escaped = headword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const parts = text.split(new RegExp(`(${escaped})`, "gi"));
-  if (parts.length <= 1) return <BoldText text={text} />;
+  const headwordRegex = new RegExp(`(${escaped})`, "gi");
+
   return (
     <>
-      {parts.map((part, i) =>
-        part.toLowerCase() === headword.toLowerCase() ? (
-          <span key={i} style={{ color: "var(--accent)", fontWeight: 600 }}>
-            {part}
-          </span>
-        ) : (
-          <BoldText key={i} text={part} />
-        ),
-      )}
+      {boldSegments.map((seg, si) => {
+        const subParts = seg.text.split(headwordRegex);
+        if (subParts.length <= 1) {
+          // No headword match in this segment — render as-is
+          return seg.bold ? (
+            <strong key={si} style={{ fontWeight: 600, fontStyle: "normal" }}>
+              {seg.text}
+            </strong>
+          ) : (
+            <span key={si}>{seg.text}</span>
+          );
+        }
+        // Headword found — render with accent highlight
+        return subParts.map((sub, pi) => {
+          const key = `${si}-${pi}`;
+          if (sub.toLowerCase() === headword.toLowerCase()) {
+            return (
+              <span key={key} style={{ color: "var(--accent)", fontWeight: 600, fontStyle: "normal" }}>
+                {sub}
+              </span>
+            );
+          }
+          return seg.bold ? (
+            <strong key={key} style={{ fontWeight: 600, fontStyle: "normal" }}>
+              {sub}
+            </strong>
+          ) : (
+            <span key={key}>{sub}</span>
+          );
+        });
+      })}
     </>
   );
 }
@@ -209,7 +236,7 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
                       <HighlightWord text={example.en} headword={headword} />
                       {example.vi && (
                         <span style={{ fontSize: 13, color: "var(--text-muted)", fontStyle: "normal" }}>
-                          {example.vi}
+                          <BoldText text={example.vi} />
                         </span>
                       )}
                     </div>
