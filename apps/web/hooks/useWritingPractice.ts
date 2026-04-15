@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { api } from "@/lib/api-client";
-import { clearWritingDraft } from "@/components/app/writing-practice/WritingEditor";
+import { clearWritingDraft } from "@/app/(app)/writing-practice/_components/WritingEditor";
 import type {
   WritingCategory,
   WritingFeedback,

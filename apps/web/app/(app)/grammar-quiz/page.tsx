@@ -4,11 +4,11 @@ import { useState } from "react";
 import { BulbOutlined, HistoryOutlined } from "@ant-design/icons";
 
 import { useGrammarQuiz } from "@/hooks/useGrammarQuiz";
-import { useExamMode } from "@/components/app/shared/ExamModeProvider";
-import { CEFRPath } from "@/components/app/grammar-quiz/CEFRPath";
-import { QuestionCard } from "@/components/app/grammar-quiz/QuestionCard";
-import { ScoreSummary } from "@/components/app/grammar-quiz/ScoreSummary";
-import { QuizHistory } from "@/components/app/grammar-quiz/QuizHistory";
+import { useExamMode } from "@/components/shared/ExamModeProvider";
+import { CEFRPath } from "@/app/(app)/grammar-quiz/_components/CEFRPath";
+import { QuestionCard } from "@/app/(app)/grammar-quiz/_components/QuestionCard";
+import { ScoreSummary } from "@/app/(app)/grammar-quiz/_components/ScoreSummary";
+import { QuizHistory } from "@/app/(app)/grammar-quiz/_components/QuizHistory";
 
 export default function GrammarQuizPage() {
   const {

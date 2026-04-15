@@ -4,9 +4,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useQueryState, useQueryStates, parseAsString, parseAsArrayOf } from "nuqs";
 import { BookOutlined, SearchOutlined, DeleteOutlined } from "@ant-design/icons";
-import { VocabularyStatsBar } from "@/components/app/my-vocabulary/VocabularyStatsBar";
-import { VocabularyDetailSheet } from "@/components/app/my-vocabulary/VocabularyDetailSheet";
-import { ToeicVocabularySection } from "@/components/app/my-vocabulary/ToeicVocabularySection";
+import { VocabularyStatsBar } from "@/app/(app)/my-vocabulary/_components/VocabularyStatsBar";
+import { VocabularyDetailSheet } from "@/app/(app)/my-vocabulary/_components/VocabularyDetailSheet";
+import { ToeicVocabularySection } from "@/app/(app)/my-vocabulary/_components/ToeicVocabularySection";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";
 import { api } from "@/lib/api-client";
 

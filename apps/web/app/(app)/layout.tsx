@@ -4,10 +4,10 @@ import { redirect } from "next/navigation";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 import { auth } from "@/lib/auth";
-import { AppShell } from "@/components/app/shared/AppShell";
-import { ThemeProvider } from "@/components/app/shared/ThemeProvider";
-import { PWAProvider } from "@/components/app/shared/PWAProvider";
-import { ExamModeProvider } from "@/components/app/shared/ExamModeProvider";
+import { AppShell } from "@/components/shared/AppShell";
+import { ThemeProvider } from "@/components/shared/ThemeProvider";
+import { PWAProvider } from "@/components/shared/PWAProvider";
+import { ExamModeProvider } from "@/components/shared/ExamModeProvider";
 import { DashboardProvider } from "@/hooks/useDashboard";
 
 export default async function AppLayout({ children }: { children: ReactNode }) {

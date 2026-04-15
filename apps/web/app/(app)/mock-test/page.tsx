@@ -18,7 +18,7 @@ import {
 } from "@ant-design/icons";
 import { Progress, Tag, Tooltip, Collapse } from "antd";
 
-import { useExamMode } from "@/components/app/shared/ExamModeProvider";
+import { useExamMode } from "@/components/shared/ExamModeProvider";
 
 type MockQuestion = {
   type: string;

@@ -10,8 +10,8 @@ const rootDir = path.resolve(testDir, "../..");
 const filesThatShouldUseHttpClient = [
   "app/(app)/dictionary/page.tsx",
   "app/(app)/my-vocabulary/page.tsx",
-  "components/app/VocabularyDetailSheet.tsx",
-  "components/dictionary/DictionarySearchPanel.tsx",
+  "app/(app)/my-vocabulary/_components/VocabularyDetailSheet.tsx",
+  "app/(app)/dictionary/_components/DictionarySearchPanel.tsx",
 ] as const;
 
 async function readSource(relativePath: string) {
@@ -29,7 +29,7 @@ describe("http client usage", () => {
   });
 
   it("keeps fetch only for the streaming chat request", async () => {
-    const source = await readSource("components/app/ChatWindow.tsx");
+    const source = await readSource("app/(app)/english-chatbot/_components/ChatWindow.tsx");
     const fetchCalls = [...source.matchAll(/\bfetch\s*\(/g)];
 
     expect(fetchCalls).toHaveLength(1);

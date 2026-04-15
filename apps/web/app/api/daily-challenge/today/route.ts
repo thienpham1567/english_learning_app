@@ -9,7 +9,7 @@ import { openAiConfig } from "@/lib/openai/config";
 import { ChallengeGenerationSchema } from "@/lib/daily-challenge/schema";
 import { getBadges } from "@/lib/daily-challenge/badges";
 import { getExamContext } from "@/lib/exam-mode/context";
-import type { ExamMode } from "@/components/app/shared/ExamModeProvider";
+import type { ExamMode } from "@/components/shared/ExamModeProvider";
 
 function getVnDate(): string {
   return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Ho_Chi_Minh" });

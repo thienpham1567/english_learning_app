@@ -4,9 +4,9 @@ import { useState, type ReactNode } from "react";
 import { useParams } from "next/navigation";
 import { MenuOutlined, CloseOutlined } from "@ant-design/icons";
 
-import { ChatConversationProvider } from "@/components/app/english-chatbot/ChatConversationProvider";
-import { ConversationList } from "@/components/app/english-chatbot/ConversationList";
-import { ChatWindow } from "@/components/app/english-chatbot/ChatWindow";
+import { ChatConversationProvider } from "@/app/(app)/english-chatbot/_components/ChatConversationProvider";
+import { ConversationList } from "@/app/(app)/english-chatbot/_components/ConversationList";
+import { ChatWindow } from "@/app/(app)/english-chatbot/_components/ChatWindow";
 
 export default function EnglishChatbotLayout({
   // children is intentionally not rendered: ChatWindow is mounted here directly

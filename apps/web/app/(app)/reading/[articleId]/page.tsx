@@ -13,7 +13,7 @@ import {
 } from "@ant-design/icons";
 
 import { useMiniDictionary } from "@/hooks/useMiniDictionary";
-import { MiniDictionary } from "@/components/app/shared";
+import { MiniDictionary } from "@/components/shared";
 
 const { Title, Text } = Typography;
 

@@ -3,7 +3,7 @@
 import { useState, useCallback } from "react";
 import { api } from "@/lib/api-client";
 import type { GrammarQuestion, QuizState } from "@/lib/grammar-quiz/types";
-import { saveQuizHistory } from "@/components/app/grammar-quiz/QuizHistory";
+import { saveQuizHistory } from "@/app/(app)/grammar-quiz/_components/QuizHistory";
 
 const STORAGE_KEY = "grammar-quiz-level";
 

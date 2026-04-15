@@ -7,7 +7,7 @@ import { userPreferences } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { getExamContext } from "@/lib/exam-mode/context";
-import type { ExamMode } from "@/components/app/shared/ExamModeProvider";
+import type { ExamMode } from "@/components/shared/ExamModeProvider";
 
 /**
  * POST /api/mock-test/generate

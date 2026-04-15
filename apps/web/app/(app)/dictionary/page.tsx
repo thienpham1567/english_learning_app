@@ -7,10 +7,10 @@ import { message } from "antd";
 import { AppError } from "@repo/shared";
 import { api } from "@/lib/api-client";
 import { normalizeDictionaryQuery } from "@/lib/dictionary/normalize-query";
-import { DictionaryResultCard } from "@/components/dictionary/DictionaryResultCard";
-import { DictionarySearchPanel } from "@/components/dictionary/DictionarySearchPanel";
-import { ThesaurusSheet } from "@/components/dictionary/ThesaurusSheet";
-import { RecentLookups, getRecentLookups, pushRecentLookup } from "@/components/dictionary/RecentLookups";
+import { DictionaryResultCard } from "@/app/(app)/dictionary/_components/DictionaryResultCard";
+import { DictionarySearchPanel } from "@/app/(app)/dictionary/_components/DictionarySearchPanel";
+import { ThesaurusSheet } from "@/app/(app)/dictionary/_components/ThesaurusSheet";
+import { RecentLookups, getRecentLookups, pushRecentLookup } from "@/app/(app)/dictionary/_components/RecentLookups";
 import type { VocabularyWithNearby } from "@/lib/schemas/vocabulary";
 
 const QUERY_PATTERN = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;

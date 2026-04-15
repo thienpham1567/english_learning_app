@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { VerbFormsSection } from "@/components/dictionary/VerbFormsSection";
+import { VerbFormsSection } from "@/app/(app)/dictionary/_components/VerbFormsSection";
 import type { VerbForm } from "@/lib/schemas/vocabulary";
 
 beforeEach(() => {

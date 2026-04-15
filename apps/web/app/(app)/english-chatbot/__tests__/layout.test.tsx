@@ -10,7 +10,7 @@ vi.mock("@/lib/http", () => ({
   },
 }));
 
-vi.mock("@/components/app/ChatConversationProvider", () => ({
+vi.mock("@/app/(app)/english-chatbot/_components/ChatConversationProvider", () => ({
   ChatConversationProvider: ({ children }: { children: React.ReactNode }) => <>{children}</>,
   useChatConversations: () => ({
     conversations: [],
@@ -26,13 +26,13 @@ vi.mock("next/navigation", () => ({
   usePathname: () => "/english-chatbot",
 }));
 
-vi.mock("@/components/app/ChatWindow", () => ({
+vi.mock("@/app/(app)/english-chatbot/_components/ChatWindow", () => ({
   ChatWindow: ({ conversationId }: { conversationId: string | null }) => (
     <div data-testid="chat-window" data-conversation-id={String(conversationId)} />
   ),
 }));
 
-vi.mock("@/components/app/ConversationList", () => ({
+vi.mock("@/app/(app)/english-chatbot/_components/ConversationList", () => ({
   ConversationList: () => <div data-testid="conversation-list" />,
 }));
 

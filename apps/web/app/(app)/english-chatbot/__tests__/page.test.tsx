@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { getMessageSpacingStyle } from "@/components/app/english-chatbot/ChatWindow";
-import type { PageMessage } from "@/components/ChatMessage";
+import { getMessageSpacingStyle } from "@/app/(app)/english-chatbot/_components/ChatWindow";
+import type { PageMessage } from "@/app/(app)/english-chatbot/_components/ChatMessage";
 
 describe("getMessageSpacingStyle", () => {
   it("returns empty object when there is no previous message", () => {

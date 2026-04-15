@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { PERSONAS } from "@/lib/chat/personas";
-import { sampleSuggestions } from "@/components/app/english-chatbot/ChatWindow";
+import { sampleSuggestions } from "@/app/(app)/english-chatbot/_components/ChatWindow";
 
 describe("sampleSuggestions", () => {
   it("returns exactly `count` items", () => {

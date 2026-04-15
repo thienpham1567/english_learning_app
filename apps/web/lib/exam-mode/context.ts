@@ -1,4 +1,4 @@
-import type { ExamMode } from "@/components/app/shared/ExamModeProvider";
+import type { ExamMode } from "@/components/shared/ExamModeProvider";
 
 /**
  * Exam-mode-specific prompt enhancements for AI-powered modules.

@@ -16,9 +16,9 @@ import {
   BarChartOutlined,
 } from "@ant-design/icons";
 
-import { SimonAvatar } from "@/components/app/english-chatbot/persona-avatars/SimonAvatar";
-import { ChristineAvatar } from "@/components/app/english-chatbot/persona-avatars/ChristineAvatar";
-import { EddieAvatar } from "@/components/app/english-chatbot/persona-avatars/EddieAvatar";
+import { SimonAvatar } from "@/app/(app)/english-chatbot/_components/persona-avatars/SimonAvatar";
+import { ChristineAvatar } from "@/app/(app)/english-chatbot/_components/persona-avatars/ChristineAvatar";
+import { EddieAvatar } from "@/app/(app)/english-chatbot/_components/persona-avatars/EddieAvatar";
 
 export type PersonaInstructionInput = {
   consecutiveVietnameseTurns: number;

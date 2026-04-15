@@ -4,10 +4,10 @@ import { Card, Flex, Spin, Typography } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
 import { useWritingPractice } from "@/hooks/useWritingPractice";
-import { PromptGallery } from "@/components/app/writing-practice/PromptGallery";
-import { WritingEditor } from "@/components/app/writing-practice/WritingEditor";
-import { FeedbackPanel } from "@/components/app/writing-practice/FeedbackPanel";
-import { SubmissionHistory } from "@/components/app/writing-practice/SubmissionHistory";
+import { PromptGallery } from "@/app/(app)/writing-practice/_components/PromptGallery";
+import { WritingEditor } from "@/app/(app)/writing-practice/_components/WritingEditor";
+import { FeedbackPanel } from "@/app/(app)/writing-practice/_components/FeedbackPanel";
+import { SubmissionHistory } from "@/app/(app)/writing-practice/_components/SubmissionHistory";
 
 const { Title, Text } = Typography;
 

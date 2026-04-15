@@ -3,9 +3,9 @@
 import { useState } from "react";
 import { BookOutlined } from "@ant-design/icons";
 
-import { useExamMode } from "@/components/app/shared/ExamModeProvider";
-import { TopicGrid } from "@/components/app/grammar-lessons/TopicGrid";
-import { LessonView } from "@/components/app/grammar-lessons/LessonView";
+import { useExamMode } from "@/components/shared/ExamModeProvider";
+import { TopicGrid } from "@/app/(app)/grammar-lessons/_components/TopicGrid";
+import { LessonView } from "@/app/(app)/grammar-lessons/_components/LessonView";
 
 export default function GrammarLessonsPage() {
   const { examMode } = useExamMode();

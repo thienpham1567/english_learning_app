@@ -5,10 +5,10 @@ import { Button, Card, Flex, Result, Spin, Typography } from "antd";
 import { ClockCircleOutlined, FireOutlined, ReloadOutlined } from "@ant-design/icons";
 
 import { useDailyChallenge } from "@/hooks/useDailyChallenge";
-import { ExerciseCard } from "@/components/app/daily-challenge/ExerciseCard";
-import { ChallengeResults } from "@/components/app/daily-challenge/ChallengeResults";
-import { CompletedState } from "@/components/app/daily-challenge/CompletedState";
-import { ProgressSegments, StreakFire } from "@/components/app/shared";
+import { ExerciseCard } from "@/app/(app)/daily-challenge/_components/ExerciseCard";
+import { ChallengeResults } from "@/app/(app)/daily-challenge/_components/ChallengeResults";
+import { CompletedState } from "@/app/(app)/daily-challenge/_components/CompletedState";
+import { ProgressSegments, StreakFire } from "@/components/shared";
 
 const { Title, Text } = Typography;
 

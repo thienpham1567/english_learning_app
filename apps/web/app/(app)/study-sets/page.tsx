@@ -3,10 +3,10 @@
 import { useState } from "react";
 import { AppstoreOutlined } from "@ant-design/icons";
 
-import { useExamMode } from "@/components/app/shared/ExamModeProvider";
-import { TopicSetGrid } from "@/components/app/study-sets/TopicSetGrid";
-import { StudySetView } from "@/components/app/study-sets/StudySetView";
-import type { StudyTopic } from "@/components/app/study-sets/TopicSetGrid";
+import { useExamMode } from "@/components/shared/ExamModeProvider";
+import { TopicSetGrid } from "@/app/(app)/study-sets/_components/TopicSetGrid";
+import { StudySetView } from "@/app/(app)/study-sets/_components/StudySetView";
+import type { StudyTopic } from "@/app/(app)/study-sets/_components/TopicSetGrid";
 
 export default function StudySetsPage() {
   const { examMode } = useExamMode();

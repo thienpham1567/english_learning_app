@@ -7,14 +7,14 @@ import { Segmented } from "antd";
 
 import { useListeningExercise } from "@/hooks/useListeningExercise";
 import { useMiniDictionary } from "@/hooks/useMiniDictionary";
-import { useExamMode } from "@/components/app/shared/ExamModeProvider";
-import { LevelSelector } from "@/components/app/listening/LevelSelector";
-import { AudioPlayer } from "@/components/app/listening/AudioPlayer";
-import { QuestionCards } from "@/components/app/listening/QuestionCards";
-import { Results } from "@/components/app/listening/Results";
-import { MiniDictionary } from "@/components/app/shared";
-import ShadowingMode from "@/components/app/listening/ShadowingMode";
-import DictationMode from "@/components/app/listening/DictationMode";
+import { useExamMode } from "@/components/shared/ExamModeProvider";
+import { LevelSelector } from "@/app/(app)/listening/_components/LevelSelector";
+import { AudioPlayer } from "@/app/(app)/listening/_components/AudioPlayer";
+import { QuestionCards } from "@/app/(app)/listening/_components/QuestionCards";
+import { Results } from "@/app/(app)/listening/_components/Results";
+import { MiniDictionary } from "@/components/shared";
+import ShadowingMode from "@/app/(app)/listening/_components/ShadowingMode";
+import DictationMode from "@/app/(app)/listening/_components/DictationMode";
 import type { CefrLevel } from "@/lib/listening/types";
 
 export default function ListeningPage() {

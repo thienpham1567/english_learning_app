@@ -24,9 +24,9 @@ import {
 } from "@ant-design/icons";
 
 import { useDashboard, type DashboardData } from "@/hooks/useDashboard";
-import { useUser } from "@/components/app/shared/UserContext";
-import { StreakFire, XPCounter, EmptyStateCard, StreakCalendar, WordOfTheDay, WeeklyLeaderboard } from "@/components/app/shared";
-import { LearningStyleCard } from "@/components/app/shared/LearningStyleCard";
+import { useUser } from "@/components/shared/UserContext";
+import { StreakFire, XPCounter, EmptyStateCard, StreakCalendar, WordOfTheDay, WeeklyLeaderboard } from "@/components/shared";
+import { LearningStyleCard } from "@/components/shared/LearningStyleCard";
 
 const { Title, Text } = Typography;
 

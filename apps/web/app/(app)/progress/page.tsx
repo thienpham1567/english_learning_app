@@ -11,7 +11,7 @@ import {
   ThunderboltOutlined,
   RadarChartOutlined,
 } from "@ant-design/icons";
-import { PredictedScore } from "@/components/app/shared";
+import { PredictedScore } from "@/components/shared";
 
 const { Title, Text } = Typography;
 
