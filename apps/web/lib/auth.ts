@@ -37,4 +37,13 @@ export const auth = new Proxy({} as AuthInstance, {
     const value = instance[prop as keyof AuthInstance];
     return typeof value === "function" ? value.bind(instance) : value;
   },
+  has(_target, prop) {
+    return prop in getAuthInstance();
+  },
+  ownKeys() {
+    return Reflect.ownKeys(getAuthInstance());
+  },
+  getOwnPropertyDescriptor(_target, prop) {
+    return Reflect.getOwnPropertyDescriptor(getAuthInstance(), prop);
+  },
 });
