@@ -59,7 +59,6 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
   const [exIdx, setExIdx] = useState(0);
   const [exSelected, setExSelected] = useState<string | null>(null);
   const [exRevealed, setExRevealed] = useState(false);
-  const [exCorrect, setExCorrect] = useState(0);
 
   const generate = useCallback(async () => {
     setLoading(true);
@@ -96,6 +95,10 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
         .then((d) => { if (d) setXpAwarded(d.xpAwarded); })
         .catch(() => {});
       onComplete(topicId);
+    } else {
+      // F2: Auto-advance to next incomplete section
+      const nextSection = SECTIONS.find((s) => !next.has(s.key));
+      if (nextSection) setActiveSection(nextSection.key);
     }
   };
 
@@ -302,7 +305,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                       else if (isSel) { bg = "#ff4d4f15"; border = "1px solid #ff4d4f"; color = "#ff4d4f"; }
                     }
                     return (
-                      <button key={o} onClick={() => { if (!exRevealed) { setExSelected(o); setExRevealed(true); if (o === ex.answer) setExCorrect((c) => c + 1); } }} disabled={exRevealed}
+                      <button key={o} onClick={() => { if (!exRevealed) { setExSelected(o); setExRevealed(true); } }} disabled={exRevealed}
                         style={{ padding: "12px 16px", borderRadius: 10, border, background: bg, color, fontSize: 14, cursor: exRevealed ? "default" : "pointer", textAlign: "left", fontWeight: isSel || (exRevealed && isCorrect) ? 600 : 400, transition: "all 0.2s" }}>
                         {exRevealed && isCorrect && <CheckCircleOutlined style={{ marginRight: 6 }} />}
                         {exRevealed && isSel && !isCorrect && <CloseCircleOutlined style={{ marginRight: 6 }} />}
