@@ -7,6 +7,12 @@ settings:
 importers:
 
   .:
+    devDependencies:
+      turbo:
+        specifier: ^2.5.4
+        version: 2.9.6
+
+  apps/web:
     dependencies:
       '@ant-design/icons':
         specifier: ^6.1.0
@@ -96,9 +102,6 @@ importers:
       jsdom:
         specifier: ^27.4.0
         version: 27.4.0(@noble/hashes@2.2.0)
-      turbo:
-        specifier: ^2.5.4
-        version: 2.9.6
       typescript:
         specifier: ^5
         version: 5.9.3

@@ -1,107 +1,64 @@
 # Story 17.2 — Move Current App to `apps/web/`
 
-## Info
+## Story
 
-- **Epic:** 17 - Monorepo Backend Architecture
-- **Sprint:** R1 - Monorepo Scaffolding
-- **Estimate:** 6h
-- **Dependencies:** 17.1
-- **Risk:** 🔴 HIGH — Every import path changes
+**As a** developer,
+**I want** the existing Next.js app moved into `apps/web/`,
+**so that** the monorepo has room for shared packages and future apps.
 
-## Description
+**Epic:** 17 - Monorepo Backend Architecture
+**Sprint:** R1 - Monorepo Scaffolding
+**Estimate:** 6h
+**Risk:** 🔴 HIGH
 
-Move the entire Next.js application into `apps/web/` so the monorepo root is free for shared packages. This is the highest-risk story in the epic — no other changes should be combined in the same PR.
+## Status
+
+in-progress
 
 ## Acceptance Criteria
 
-- [ ] AC1: Directory structure created:
-  ```
-  apps/web/
-    app/
-    components/
-    hooks/
-    lib/
-    data/
-    public/
-    styles/
-    next.config.ts
-    package.json
-    tsconfig.json
-  ```
-- [ ] AC2: `apps/web/package.json` created with all app dependencies moved from root
-- [ ] AC3: `apps/web/tsconfig.json` extends root tsconfig, `@/*` alias points to `apps/web/`
-- [ ] AC4: `next.config.ts` updated with `transpilePackages` for future workspace packages
-- [ ] AC5: All `@/*` import aliases resolve correctly
-- [ ] AC6: `pnpm dev --filter web` starts dev server successfully
-- [ ] AC7: `pnpm build --filter web` succeeds with zero errors
-- [ ] AC8: All existing tests pass (`pnpm test --filter web`)
-- [ ] AC9: Drizzle migrations work:
-  - `drizzle-kit generate` succeeds
-  - `drizzle-kit migrate` succeeds
-- [ ] AC10: Manual smoke test passes:
-  - Home page loads with dashboard data
-  - Dictionary lookup works
-  - Flashcard review works
-  - Chat conversation works
-  - Daily challenge loads
+- [ ] AC1: All source files moved to `apps/web/`
+- [ ] AC2: `apps/web/package.json` created with app's dependencies
+- [ ] AC3: `apps/web/tsconfig.json` with correct path aliases
+- [ ] AC4: `apps/web/next.config.ts` updated for monorepo
+- [ ] AC5: `pnpm dev --filter web` starts dev server
+- [ ] AC6: `pnpm build --filter web` succeeds
+- [ ] AC7: Drizzle commands work (generate, migrate)
+- [ ] AC8: No feature regression
 
-## Technical Notes
+## Tasks/Subtasks
 
-### File Move Checklist
-
-```
-Root → apps/web/
-├── app/          → apps/web/app/
-├── components/   → apps/web/components/
-├── hooks/        → apps/web/hooks/
-├── lib/          → apps/web/lib/
-├── data/         → apps/web/data/
-├── public/       → apps/web/public/
-├── styles/       → apps/web/styles/
-├── next.config.ts → apps/web/next.config.ts
-├── postcss.config.mjs → apps/web/postcss.config.mjs
-└── middleware.ts  → apps/web/middleware.ts
-```
-
-### Files that stay at root
-
-- `pnpm-workspace.yaml`
-- `turbo.json`
-- Root `package.json` (workspace scripts only)
-- Root `tsconfig.json` (base config)
-- `.env.local` (stays at root, Next.js resolves from cwd)
-- `drizzle.config.ts` (update schema path)
-- `_bmad-output/`, `docs/`, `_bmad/` (project-level, not app-level)
-
-### Critical Risk: `process.cwd()` usage
-
-The `nearby-words.ts` file uses `process.cwd()` to resolve `data/english-words.txt`. After the move, `process.cwd()` will be the monorepo root, not `apps/web/`. Fix:
-
-```ts
-// Option A: Use __dirname (preferred)
-const filePath = join(__dirname, "..", "..", "data", "english-words.txt");
-
-// Option B: Use an env or config
-const filePath = join(process.env.APP_ROOT ?? process.cwd(), "data", "english-words.txt");
-```
-
-### Import Alias Strategy
-
-Keep `@/*` resolving to `apps/web/` in tsconfig:
-
-```json
-{
-  "compilerOptions": {
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"]
-    }
-  }
-}
-```
+- [ ] Task 1: Create `apps/web/` directory and move source files
+  - [ ] 1.1: Move `app/`, `components/`, `hooks/`, `lib/`, `data/`, `public/`, `scripts/`, `test/`
+  - [ ] 1.2: Move `middleware.test.ts`, `proxy.ts`
+  - [ ] 1.3: Move config files: `next.config.ts`, `postcss.config.mjs`, `biome.json`, `eslint.config.mjs`, `vitest.config.ts`
+  - [ ] 1.4: Move `vercel.json`
+  - [ ] 1.5: Move `drizzle/` migrations and `drizzle.config.ts`
+- [ ] Task 2: Create `apps/web/package.json`
+  - [ ] 2.1: Split dependencies from root to web app package.json
+  - [ ] 2.2: Root package.json keeps only workspace tools (turbo)
+- [ ] Task 3: Configure TypeScript
+  - [ ] 3.1: Root `tsconfig.json` becomes base config
+  - [ ] 3.2: `apps/web/tsconfig.json` extends root with `@/*` alias
+- [ ] Task 4: Verify build and dev
+  - [ ] 4.1: `pnpm install` succeeds
+  - [ ] 4.2: `pnpm build --filter web` succeeds
+  - [ ] 4.3: `pnpm dev --filter web` starts
+  - [ ] 4.4: `pnpm test:run --filter web` — no new regressions
+  - [ ] 4.5: Drizzle commands work
 
 ## Dev Notes
 
-- Create this as a single atomic commit — do not mix with any feature work
-- Run full test suite before AND after the move
-- Verify `.env.local` is still picked up by Next.js
+- `.env.local` stays at root — Next.js resolves from cwd which will be `apps/web/`
+- `process.cwd()` in `nearby-words.ts` may need fixing
+- Do NOT mix feature work with this story
+- Commit atomically — one big move
+
+## Dev Agent Record
+
+### Implementation Plan
+### Debug Log
+### Completion Notes
+
+## File List
+## Change Log
