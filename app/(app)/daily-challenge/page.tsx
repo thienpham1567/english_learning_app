@@ -23,7 +23,7 @@ const EXERCISE_TYPE_LABELS: Record<string, string> = {
 // Live elapsed timer hook (AC: #4)
 function useElapsedTimer(isRunning: boolean) {
   const [elapsed, setElapsed] = useState(0);
-  const startRef = useRef(Date.now());
+  const startRef = useRef<number>(0);
 
   useEffect(() => {
     if (isRunning) {

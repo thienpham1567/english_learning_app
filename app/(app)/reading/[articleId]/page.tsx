@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Card, Flex, Typography, Spin, Tag, Button, Result, Collapse } from "antd";
 import {
@@ -64,12 +64,6 @@ export default function ArticleReaderPage() {
   const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
   const [wordsLookedUp, setWordsLookedUp] = useState(0);
 
-  // Refs to avoid stale closures in IntersectionObserver
-  const observerRef = useRef<IntersectionObserver | null>(null);
-  const paragraphRefs = useRef<(HTMLDivElement | null)[]>([]);
-  const analyzedRef = useRef<Set<number>>(new Set()); // tracks which paragraphs have been analyzed
-  const pendingRef = useRef<Set<number>>(new Set());  // tracks in-flight requests
-
   // Mini dictionary
   const miniDict = useMiniDictionary();
 
@@ -77,8 +71,7 @@ export default function ArticleReaderPage() {
   useEffect(() => {
     if (!articleId) return;
     setLoading(true);
-    analyzedRef.current.clear();
-    pendingRef.current.clear();
+    setGrammarResults({});
     fetch(`/api/reading/article/${articleId}`)
       .then((r) => {
         if (!r.ok) throw new Error("Not found");
@@ -89,11 +82,10 @@ export default function ArticleReaderPage() {
       .finally(() => setLoading(false));
   }, [articleId]);
 
-  // Grammar analysis — uses refs to prevent re-trigger
+  // Grammar analysis — on-demand per paragraph (click to analyze)
   const analyzeGrammar = useCallback(async (index: number, text: string) => {
-    if (analyzedRef.current.has(index) || pendingRef.current.has(index)) return;
+    if (grammarResults[index] !== undefined || grammarLoading.has(index)) return;
 
-    pendingRef.current.add(index);
     setGrammarLoading((prev) => new Set(prev).add(index));
 
     try {
@@ -103,45 +95,19 @@ export default function ArticleReaderPage() {
         body: JSON.stringify({ paragraph: text }),
       });
       const data = await res.json();
-      analyzedRef.current.add(index);
       setGrammarResults((prev) => ({ ...prev, [index]: data.patterns ?? [] }));
     } catch {
-      analyzedRef.current.add(index);
       setGrammarResults((prev) => ({ ...prev, [index]: [] }));
     } finally {
-      pendingRef.current.delete(index);
       setGrammarLoading((prev) => {
         const next = new Set(prev);
         next.delete(index);
         return next;
       });
     }
-  }, []); // No state dependencies — uses refs for guards
+  }, [grammarResults, grammarLoading]);
 
-  // IntersectionObserver — stable, no re-creation on state changes
-  useEffect(() => {
-    if (!article) return;
 
-    observerRef.current = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const idx = Number(entry.target.getAttribute("data-paragraph-index"));
-            if (!Number.isNaN(idx) && article.paragraphs[idx]) {
-              analyzeGrammar(idx, article.paragraphs[idx]);
-            }
-          }
-        });
-      },
-      { threshold: 0.3 },
-    );
-
-    paragraphRefs.current.forEach((ref) => {
-      if (ref) observerRef.current?.observe(ref);
-    });
-
-    return () => observerRef.current?.disconnect();
-  }, [article, analyzeGrammar]);
 
   // Word click handler
   const handleWordClick = useCallback(
@@ -272,8 +238,6 @@ export default function ArticleReaderPage() {
           {article.paragraphs.map((para, idx) => (
             <div
               key={idx}
-              ref={(el) => { paragraphRefs.current[idx] = el; }}
-              data-paragraph-index={idx}
               style={{ marginBottom: 24 }}
             >
               {/* Interactive paragraph text */}
@@ -362,6 +326,19 @@ export default function ArticleReaderPage() {
                   <Spin size="small" />
                   <Text style={{ fontSize: 12, color: "var(--text-muted)" }}>Đang phân tích ngữ pháp...</Text>
                 </Flex>
+              )}
+
+              {/* On-demand grammar button — only show if not yet analyzed */}
+              {grammarResults[idx] === undefined && !grammarLoading.has(idx) && (
+                <Button
+                  type="text"
+                  size="small"
+                  icon={<BulbOutlined />}
+                  onClick={() => analyzeGrammar(idx, para)}
+                  style={{ marginTop: 4, fontSize: 12, color: "var(--accent)" }}
+                >
+                  Phân tích ngữ pháp
+                </Button>
               )}
             </div>
           ))}

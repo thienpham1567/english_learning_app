@@ -40,8 +40,12 @@ export default function ListeningPage() {
   const { examMode } = useExamMode();
   const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
   const [recommendedLevel, setRecommendedLevel] = useState<CefrLevel | null>(null);
-  const [skillLevelUp, setSkillLevelUp] = useState<{ cefr: string; levelUp: boolean } | null>(null);
   const [mode, setMode] = useState<string>("listening");
+
+  // Derive skill level-up from result (computed, not effect)
+  const skillLevelUp = result?.skill
+    ? { cefr: result.skill.cefr, levelUp: result.skill.levelUp }
+    : null;
 
   // Fetch listening skill profile for adaptive level recommendation
   useEffect(() => {
@@ -59,11 +63,9 @@ export default function ListeningPage() {
     setSavedWords((prev) => new Set(prev).add(word.toLowerCase()));
   }, []);
 
-  // Update skill feedback when result arrives
+  // Update recommended level when result arrives
   useEffect(() => {
     if (result?.skill) {
-      setSkillLevelUp({ cefr: result.skill.cefr, levelUp: result.skill.levelUp });
-      // Also update recommended level for next exercise
       setRecommendedLevel(result.skill.cefr as CefrLevel);
     }
   }, [result]);

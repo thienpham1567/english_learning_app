@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useState } from "react";
 import { AppstoreOutlined, ReloadOutlined } from "@ant-design/icons";
 import { Spin, Progress, Flex, Typography, Button, Result } from "antd";
 
@@ -27,15 +27,15 @@ export function FlashcardSession() {
   } = useFlashcardSession();
 
   // Track session start time for estimated time remaining
-  const sessionStartRef = useRef<number | null>(null);
+  const [sessionStart, setSessionStart] = useState<number | null>(null);
   useEffect(() => {
-    if (state === "active" && sessionStartRef.current === null) {
-      sessionStartRef.current = Date.now();
+    if (state === "active" && sessionStart === null) {
+      setSessionStart(Date.now());
     }
     if (state !== "active") {
-      sessionStartRef.current = null;
+      setSessionStart(null);
     }
-  }, [state]);
+  }, [state, sessionStart]);
 
   useEffect(() => {
     fetchDueCards();
@@ -175,7 +175,7 @@ export function FlashcardSession() {
               <SessionProgress
                 current={currentIndex + 1}
                 total={totalDue}
-                startTime={sessionStartRef.current ?? undefined}
+                startTime={sessionStart ?? undefined}
               />
               <FlashcardCard card={currentCard} onRate={submitReview} isSubmitting={isSubmitting} />
             </div>
