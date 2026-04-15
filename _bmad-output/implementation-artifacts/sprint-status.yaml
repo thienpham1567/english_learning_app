@@ -155,6 +155,6 @@ development_status:
   # ── Epic 16: AI Content Generation ──
   epic-16: in-progress
   16-1-ai-grammar-lessons: done
-  16-2-topic-based-content-sets: backlog
+  16-2-topic-based-content-sets: done
   16-3-learning-style-detection: backlog
   epic-16-retrospective: optional

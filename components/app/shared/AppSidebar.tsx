@@ -50,11 +50,18 @@ const navGroups: (NavItem | NavGroup)[] = [
     items: [
       { href: "/english-chatbot", label: "Trò chuyện", icon: CommentOutlined },
       { href: "/grammar-quiz", label: "Ngữ pháp", icon: BulbOutlined },
-      { href: "/grammar-lessons", label: "Bài học ngữ pháp", icon: BookOutlined },
       { href: "/listening", label: "Luyện nghe", icon: SoundOutlined },
       { href: "/pronunciation", label: "Luyện nói", icon: AudioOutlined },
       { href: "/writing-practice", label: "Luyện viết", icon: EditOutlined },
       { href: "/reading", label: "Luyện đọc", icon: FileTextOutlined },
+    ],
+  },
+  {
+    key: "study",
+    label: "Học theo chủ đề",
+    items: [
+      { href: "/study-sets", label: "Chủ đề học tập", icon: AppstoreOutlined },
+      { href: "/grammar-lessons", label: "Bài học ngữ pháp", icon: BookOutlined },
     ],
   },
   {

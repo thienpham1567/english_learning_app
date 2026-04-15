@@ -18,6 +18,7 @@ export const activityTypeEnum = pgEnum("activity_type", [
   "flashcard_review",
   "grammar_quiz",
   "grammar_lesson",
+  "study_set",
   "writing_practice",
   "daily_challenge",
   "chatbot_session",
