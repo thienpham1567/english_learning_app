@@ -1,11 +1,11 @@
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
 
-import { pool } from "@repo/database";
+import { getRawPool } from "@repo/database";
 
 function createAuth() {
   return betterAuth({
-    database: pool,
+    database: getRawPool(),
     emailAndPassword: {
       enabled: true,
     },

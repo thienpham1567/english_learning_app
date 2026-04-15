@@ -38,6 +38,10 @@ function getDbInstance() {
 	return dbInstance;
 }
 
+/** Returns the real Pool instance (not proxied) — needed by libraries
+ *  like BetterAuth that rely on `instanceof Pool` checks. */
+export { getPoolInstance as getRawPool };
+
 export const pool = new Proxy({} as Pool, {
 	get(_target, prop) {
 		const instance = getPoolInstance();

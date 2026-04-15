@@ -2,4 +2,4 @@
 export * from "./schema";
 
 // Client — db instance and pool
-export { db, pool } from "./client";
+export { db, pool, getRawPool } from "./client";
