@@ -8,6 +8,7 @@ import {
   real,
   timestamp,
   uniqueIndex,
+  index,
 } from "drizzle-orm/pg-core";
 import { jsonb } from "drizzle-orm/pg-core";
 
@@ -34,7 +35,9 @@ export const conversation = pgTable("conversation", {
   personaId: text("persona_id").notNull().default("simon"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
-});
+}, (table) => [
+  index("conversation_user_updated_idx").on(table.userId, table.updatedAt),
+]);
 
 export const message = pgTable("message", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -44,7 +47,9 @@ export const message = pgTable("message", {
   role: messageRoleEnum("role").notNull(),
   content: text("content").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-});
+}, (table) => [
+  index("message_conversation_created_idx").on(table.conversationId, table.createdAt),
+]);
 
 export const vocabularyCache = pgTable("vocabulary_cache", {
   query: text("query").primaryKey(),
@@ -117,7 +122,9 @@ export const writingSubmission = pgTable("writing_submission", {
   scores: jsonb("scores").notNull(),
   feedback: jsonb("feedback").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-});
+}, (table) => [
+  index("writing_submission_user_created_idx").on(table.userId, table.createdAt),
+]);
 
 export const dailyChallenge = pgTable("daily_challenge", {
   id: uuid("id").defaultRandom().primaryKey(),
@@ -129,7 +136,9 @@ export const dailyChallenge = pgTable("daily_challenge", {
   completedAt: timestamp("completed_at", { withTimezone: true }),
   timeElapsedMs: integer("time_elapsed_ms"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-});
+}, (table) => [
+  index("daily_challenge_user_date_idx").on(table.userId, table.challengeDate),
+]);
 
 export const userStreak = pgTable("user_streak", {
   userId: text("user_id").primaryKey(),
@@ -147,7 +156,9 @@ export const activityLog = pgTable("activity_log", {
   xpEarned: integer("xp_earned").notNull().default(0),
   metadata: jsonb("metadata").$type<Record<string, unknown>>().default({}),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-});
+}, (table) => [
+  index("activity_log_user_created_idx").on(table.userId, table.createdAt),
+]);
 
 export type Conversation = typeof conversation.$inferSelect;
 export type Message = typeof message.$inferSelect;
@@ -226,7 +237,9 @@ export const errorLog = pgTable("error_log", {
   nextReviewAt: timestamp("next_review_at", { withTimezone: true }),
   lastReviewedAt: timestamp("last_reviewed_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-});
+}, (table) => [
+  index("error_log_user_review_idx").on(table.userId, table.isResolved, table.nextReviewAt),
+]);
 
 export type ErrorLogRow = typeof errorLog.$inferSelect;
 

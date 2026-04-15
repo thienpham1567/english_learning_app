@@ -62,7 +62,7 @@ export async function GET() {
         dueQueries.length > 0 ? notInArray(userVocabulary.query, dueQueries) : undefined,
       ),
     )
-    .orderBy(sql`RANDOM()`)
+    .orderBy(userVocabulary.interval)
     .limit(30);
 
   return Response.json({
