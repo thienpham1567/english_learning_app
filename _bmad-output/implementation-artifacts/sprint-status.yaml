@@ -6,7 +6,7 @@ sprints:
     stories:
       17.1:
         title: "Initialize pnpm Workspace + Turborepo"
-        status: not_started
+        status: review
         estimate: "4h"
       17.2:
         title: "Move Current App to apps/web/"
