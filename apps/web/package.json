@@ -16,6 +16,7 @@
     "db:migrate": "drizzle-kit migrate"
   },
   "dependencies": {
+    "@repo/shared": "workspace:*",
     "@ant-design/icons": "^6.1.0",
     "antd": "^6.3.4",
     "axios": "1.13.6",
