@@ -17,6 +17,9 @@ importers:
       '@ant-design/icons':
         specifier: ^6.1.0
         version: 6.1.1(react-dom@19.2.4(react@19.2.4))(react@19.2.4)
+      '@repo/contracts':
+        specifier: workspace:*
+        version: link:../../packages/contracts
       '@repo/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -105,6 +108,19 @@ importers:
       jsdom:
         specifier: ^27.4.0
         version: 27.4.0(@noble/hashes@2.2.0)
+      typescript:
+        specifier: ^5
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.4(@types/debug@4.1.13)(@types/node@20.19.39)(jsdom@27.4.0(@noble/hashes@2.2.0))(tsx@4.21.0)
+
+  packages/contracts:
+    dependencies:
+      zod:
+        specifier: ^4.3.6
+        version: 4.3.6
+    devDependencies:
       typescript:
         specifier: ^5
         version: 5.9.3
