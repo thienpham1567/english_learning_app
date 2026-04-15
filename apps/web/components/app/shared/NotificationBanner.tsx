@@ -1,5 +1,5 @@
 "use client";
-
+import { api } from "@/lib/api-client";
 import { useState, useEffect, useCallback } from "react";
 import { BellOutlined, CloseOutlined } from "@ant-design/icons";
 
@@ -48,13 +48,9 @@ export function NotificationBanner() {
       });
 
       const json = subscription.toJSON();
-      await fetch("/api/push/subscribe", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          endpoint: json.endpoint,
-          keys: json.keys,
-        }),
+      await api.post("/push/subscribe", {
+        endpoint: json.endpoint,
+        keys: json.keys,
       });
 
       setSubscribed(true);

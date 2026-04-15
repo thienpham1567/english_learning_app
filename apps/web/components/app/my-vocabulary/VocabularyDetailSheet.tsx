@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { Button, Drawer, Flex, Skeleton, Space, Tag, Typography } from "antd";
 import { BookOutlined, LinkOutlined, StarFilled, StarOutlined } from "@ant-design/icons";
 
-import http from "@/lib/http";
+import { api } from "@/lib/api-client";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";
 
 const { Title, Text, Paragraph } = Typography;
@@ -52,7 +52,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
 
     (async () => {
       try {
-        const { data: payload } = await http.get<{ data: Vocabulary }>(
+        const payload = await api.get<{ data: Vocabulary }>(
           `/vocabulary/${encodeURIComponent(query)}`,
         );
         if (!cancelled) {

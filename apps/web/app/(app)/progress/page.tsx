@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { api } from "@/lib/api-client";
 import { Card, Flex, Typography, Spin, Result, Button } from "antd";
 import {
   ReloadOutlined,
@@ -343,9 +344,7 @@ export default function ProgressPage() {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/analytics");
-      if (!res.ok) throw new Error(`Failed: ${res.status}`);
-      const json = await res.json() as AnalyticsData;
+      const json = await api.get<AnalyticsData>("/analytics");
       setData(json);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Unknown error");

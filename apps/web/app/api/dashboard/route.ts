@@ -1,7 +1,7 @@
-import { headers } from "next/headers";
 import { eq, and, sql, desc, lte } from "drizzle-orm";
 
-import { auth } from "@/lib/auth";
+import { resolveWebActor } from "@/lib/resolve-actor";
+import { AppError, UnauthorizedError } from "@repo/shared";
 import { db } from "@repo/database";
 import {
   userVocabulary,
@@ -20,12 +20,9 @@ import { getBadges } from "@/lib/daily-challenge/badges";
  * Target: < 500ms response time.
  */
 export async function GET() {
-  const session = await auth.api.getSession({ headers: await headers() });
-  if (!session) {
-    return Response.json({ error: "Unauthorized" }, { status: 401 });
-  }
-
-  const userId = session.user.id;
+  try {
+  const actor = await resolveWebActor();
+  const userId = actor.userId;
   const now = new Date();
   const todayVN = new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Ho_Chi_Minh" });
 
@@ -180,4 +177,13 @@ export async function GET() {
     weeklyActivity,
     totalXP,
   });
+  } catch (e) {
+    if (e instanceof UnauthorizedError) {
+      return Response.json({ error: "Unauthorized" }, { status: 401 });
+    }
+    if (e instanceof AppError) {
+      return Response.json({ error: e.message }, { status: e.statusCode });
+    }
+    throw e;
+  }
 }

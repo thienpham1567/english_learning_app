@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
+import { api } from "@/lib/api-client";
 
 /**
  * useVoiceInput — OpenAI Whisper-powered speech-to-text hook.
@@ -90,18 +91,8 @@ export function useVoiceInput() {
           const formData = new FormData();
           formData.append("audio", audioBlob, "recording.webm");
 
-          const res = await fetch("/api/voice/transcribe", {
-            method: "POST",
-            body: formData,
-          });
-
-          if (!res.ok) {
-            const err = await res.json().catch(() => ({ error: "Transcription failed" }));
-            throw new Error(err.error || "Transcription failed");
-          }
-
-          const result = (await res.json()) as { text: string };
-          setTranscript(result.text);
+          const res = await api.post<{ text: string }>("/voice/transcribe", formData);
+          setTranscript(res.text);
         } catch (err) {
           console.warn("[useVoiceInput] Transcription error:", err);
           setError(err instanceof Error ? err.message : "Transcription failed");

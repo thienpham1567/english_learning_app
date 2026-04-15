@@ -1,5 +1,5 @@
 "use client";
-
+import { api } from "@/lib/api-client";
 import { useState, useEffect, useCallback } from "react";
 import {
   BookOutlined,
@@ -58,9 +58,8 @@ export default function ErrorNotebookPage() {
     params.set("limit", "50");
 
     try {
-      const res = await fetch(`/api/errors?${params}`);
-      if (res.ok) {
-        const data = await res.json();
+      const data = await api.get<{ errors: ErrorEntry[]; total: number; topics: string[] }>(`/errors?${params}`);
+      if (data) {
         setErrors(data.errors);
         setTotal(data.total);
         setTopics(data.topics);
@@ -78,11 +77,7 @@ export default function ErrorNotebookPage() {
 
   const resolveError = useCallback(async (id: string) => {
     try {
-      await fetch("/api/errors", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ids: [id] }),
-      });
+      await api.patch("/errors", { ids: [id] });
       setErrors((prev) =>
         prev.map((e) => (e.id === id ? { ...e, isResolved: true, resolvedAt: new Date().toISOString() } : e)),
       );
@@ -96,11 +91,7 @@ export default function ErrorNotebookPage() {
     if (unresolvedIds.length === 0) return;
 
     try {
-      await fetch("/api/errors", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ids: unresolvedIds }),
-      });
+      await api.patch("/errors", { ids: unresolvedIds });
       setErrors((prev) => prev.map((e) => ({ ...e, isResolved: true })));
     } catch {
       // Ignore

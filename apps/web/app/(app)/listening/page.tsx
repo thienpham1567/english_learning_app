@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import { api } from "@/lib/api-client";
 import { SoundOutlined, AudioOutlined, EditOutlined } from "@ant-design/icons";
 import { Segmented } from "antd";
 
@@ -49,8 +50,7 @@ export default function ListeningPage() {
 
   // Fetch listening skill profile for adaptive level recommendation
   useEffect(() => {
-    fetch("/api/skill-profile?module=listening")
-      .then((r) => r.ok ? r.json() : null)
+    api.get<{ cefr?: string }>("/skill-profile", { params: { module: "listening" } })
       .then((data) => {
         if (data?.cefr) {
           setRecommendedLevel(data.cefr as CefrLevel);

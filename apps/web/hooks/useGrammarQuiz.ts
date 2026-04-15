@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import http from "@/lib/http";
+import { api } from "@/lib/api-client";
 import type { GrammarQuestion, QuizState } from "@/lib/grammar-quiz/types";
 import { saveQuizHistory } from "@/components/app/grammar-quiz/QuizHistory";
 
@@ -37,7 +37,7 @@ export function useGrammarQuiz() {
       setState("loading");
       setError(null);
       try {
-        const { data } = await http.post<{ questions: GrammarQuestion[] }>(
+        const data = await api.post<{ questions: GrammarQuestion[] }>(
           "/grammar-quiz/generate",
           { level: targetLevel, count: 10, examMode },
         );
@@ -90,7 +90,7 @@ export function useGrammarQuiz() {
       );
       saveQuizHistory({ level, score: finalScore, total: questions.length });
       // Award XP for quiz completion (fire-and-forget)
-      void http.post("/xp", { activity: "quiz_complete" }).catch(() => {});
+      void api.post("/xp", { activity: "quiz_complete" }).catch(() => {});
 
       // Log wrong answers to Error Notebook (fire-and-forget)
       const wrongAnswers = questions
@@ -110,11 +110,7 @@ export function useGrammarQuiz() {
         .filter(Boolean);
 
       if (wrongAnswers.length > 0) {
-        fetch("/api/errors", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ errors: wrongAnswers }),
-        }).catch(() => {/* fire-and-forget */});
+        void api.post("/errors", { errors: wrongAnswers }).catch(() => {});
       }
 
       setState("summary");

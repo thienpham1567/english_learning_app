@@ -1,0 +1,24 @@
+
+> web@0.1.0 build /Users/thienpham/Documents/english_learning_app/apps/web
+> next build
+
+▲ Next.js 16.2.1 (Turbopack)
+- Environments: .env.local
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 4.4s
+  Running TypeScript ...
+Failed to type check.
+
+./components/app/english-chatbot/ChatWindow.tsx:450:15
+Type error: Type 'unknown' is not assignable to type 'WordAnalysis[] | undefined'.
+
+  [90m448 |[0m               accuracy: result.accuracy,
+  [90m449 |[0m               fluency: result.fluency,
+[31m[1m>[0m [90m450 |[0m               wordAnalysis: result.wordAnalysis,
+  [90m    |[0m               [31m[1m^[0m
+  [90m451 |[0m               tips: result.tips,
+  [90m452 |[0m               feedback: result.feedback,
+  [90m453 |[0m             }));
+Next.js build worker exited with code: 1 and signal: null
+ ELIFECYCLE  Command failed with exit code 1.

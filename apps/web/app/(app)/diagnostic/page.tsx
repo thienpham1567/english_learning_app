@@ -1,5 +1,5 @@
 "use client";
-
+import { api } from "@/lib/api-client";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, Flex, Typography, Button, Progress, Spin, Tag } from "antd";
@@ -61,8 +61,7 @@ export default function DiagnosticPage() {
 
   // Load diagnostic status
   useEffect(() => {
-    fetch("/api/diagnostic")
-      .then((r) => r.ok ? r.json() : null)
+    api.get<DiagnosticStatus>("/diagnostic")
       .then((d) => {
         if (d) {
           setStatus(d);
@@ -76,17 +75,7 @@ export default function DiagnosticPage() {
   const startTest = useCallback(async () => {
     setPhase("loading");
     try {
-      const res = await fetch("/api/diagnostic", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "generate" }),
-      });
-      if (res.status === 429) {
-        setPhase("welcome");
-        return;
-      }
-      if (!res.ok) throw new Error("Failed");
-      const data = await res.json();
+      const data = await api.post<{ questions: Question[] }>("/diagnostic", { action: "generate" });
       setQuestions(data.questions);
       setCurrentIndex(0);
       setAnswers([]);
@@ -114,12 +103,7 @@ export default function DiagnosticPage() {
     } else {
       // Submit all answers
       setPhase("submitting");
-      fetch("/api/diagnostic", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "submit", answers: newAnswers }),
-      })
-        .then((r) => r.ok ? r.json() : null)
+      api.post<TestResult>("/diagnostic", { action: "submit", answers: newAnswers })
         .then((data) => {
           if (data) {
             setResult(data);

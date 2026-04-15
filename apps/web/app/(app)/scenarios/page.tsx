@@ -1,5 +1,5 @@
 "use client";
-
+import { api } from "@/lib/api-client";
 import { useCallback, useEffect, useState } from "react";
 import { Card, Flex, Typography, Button, Progress, Tag, Spin, Steps } from "antd";
 import {
@@ -41,11 +41,8 @@ export default function ScenariosPage() {
   const fetchScenarios = useCallback(async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/scenarios");
-      if (res.ok) {
-        const data = await res.json();
-        setScenarios(data.scenarios);
-      }
+      const data = await api.get<{ scenarios: ScenarioSummary[] }>("/scenarios");
+      if (data) setScenarios(data.scenarios);
     } catch { /* ignore */ }
     setLoading(false);
   }, []);
@@ -76,16 +73,10 @@ export default function ScenariosPage() {
     if (!activeScenario || submitting) return;
     setSubmitting(true);
     try {
-      const res = await fetch("/api/scenarios", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ scenarioId: activeScenario.id, stepIndex: activeStepIdx, score: stepAnswers.length }),
-      });
-      if (res.ok) {
-        setCompletedSteps((prev) => new Set([...prev, activeStepIdx]));
-        setShowResult(true);
-        await fetchScenarios();
-      }
+      await api.post("/scenarios", { scenarioId: activeScenario.id, stepIndex: activeStepIdx, score: stepAnswers.length });
+      setCompletedSteps((prev) => new Set([...prev, activeStepIdx]));
+      setShowResult(true);
+      await fetchScenarios();
     } catch { /* ignore */ }
     setSubmitting(false);
   };

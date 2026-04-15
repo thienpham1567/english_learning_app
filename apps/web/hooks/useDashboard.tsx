@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useCallback, useEffect, useState, type ReactNode } from "react";
+import { api } from "@/lib/api-client";
 
 export interface DashboardData {
   flashcardsDue: number;
@@ -45,9 +46,7 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
   const fetchDashboard = useCallback(async () => {
     setState({ status: "loading" });
     try {
-      const res = await fetch("/api/dashboard");
-      if (!res.ok) throw new Error(`Dashboard fetch failed: ${res.status}`);
-      const data: DashboardData = await res.json();
+      const data = await api.get<DashboardData>("/dashboard");
       setState({ status: "ready", data });
     } catch (err) {
       setState({

@@ -1,5 +1,5 @@
 "use client";
-
+import { api } from "@/lib/api-client";
 import { useState, useCallback, useRef } from "react";
 import {
   SoundOutlined,
@@ -95,13 +95,9 @@ export default function DictationMode({ examMode }: Props) {
     setXpAwarded(0);
 
     try {
-      const res = await fetch("/api/pronunciation/sentences", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ level: "intermediate", count: 5, examMode }),
+      const data = await api.post<{ sentences: Sentence[] }>("/pronunciation/sentences", {
+        level: "intermediate", count: 5, examMode,
       });
-      if (!res.ok) throw new Error("Failed");
-      const data = await res.json();
       if (!data.sentences?.length) throw new Error("No sentences");
       setSentences(data.sentences);
       setState("ready");
@@ -174,16 +170,11 @@ export default function DictationMode({ examMode }: Props) {
     const scores = [...finalScores];
     const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
     try {
-      const res = await fetch("/api/dictation/complete", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ scores, avgAccuracy: avg }),
+      const data = await api.post<{ xpAwarded: number; skillUpdate: { cefr: string; levelUp: boolean } }>("/dictation/complete", {
+        scores, avgAccuracy: avg,
       });
-      if (res.ok) {
-        const data = await res.json();
-        setXpAwarded(data.xpAwarded);
-        setSkillUpdate(data.skillUpdate);
-      }
+      setXpAwarded(data.xpAwarded);
+      setSkillUpdate(data.skillUpdate);
     } catch { /* continue to summary */ }
     setState("summary");
   }, []);

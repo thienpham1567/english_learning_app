@@ -1,5 +1,5 @@
 "use client";
-
+import { api } from "@/lib/api-client";
 import { useState, useCallback, useRef } from "react";
 import {
   AudioOutlined,
@@ -67,15 +67,9 @@ export default function PronunciationPage() {
     setEvalResult(null);
 
     try {
-      const res = await fetch("/api/pronunciation/sentences", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ level, count: 5, examMode }),
+      const data = await api.post<{ sentences: Sentence[] }>("/pronunciation/sentences", {
+        level, count: 5, examMode,
       });
-
-      if (!res.ok) throw new Error("Failed to generate");
-
-      const data = await res.json();
       if (!data.sentences?.length) throw new Error("No sentences returned");
 
       setSentences(data.sentences);
@@ -137,30 +131,15 @@ export default function PronunciationPage() {
           const formData = new FormData();
           formData.append("audio", audioBlob, "recording.webm");
 
-          const transcribeRes = await fetch("/api/voice/transcribe", {
-            method: "POST",
-            body: formData,
-          });
-
-          if (!transcribeRes.ok) throw new Error("Transcription failed");
-
-          const { text } = await transcribeRes.json();
+          const { text } = await api.post<{ text: string }>("/voice/transcribe", formData);
           setSpokenText(text);
 
           // Step 2: Evaluate
           setState("evaluating");
-          const evalRes = await fetch("/api/pronunciation/evaluate", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              targetText: currentSentence.text,
-              spokenText: text,
-            }),
+          const result = await api.post<EvalResult>("/pronunciation/evaluate", {
+            targetText: currentSentence.text,
+            spokenText: text,
           });
-
-          if (!evalRes.ok) throw new Error("Evaluation failed");
-
-          const result: EvalResult = await evalRes.json();
           setEvalResult(result);
           setSessionScores((prev) => [...prev, result.score]);
           setState("result");

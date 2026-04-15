@@ -1,5 +1,5 @@
 "use client";
-
+import { api } from "@/lib/api-client";
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
 
 export type ExamMode = "toeic" | "ielts";
@@ -31,8 +31,7 @@ export function ExamModeProvider({ children }: { children: ReactNode }) {
 
   // Fetch on mount
   useEffect(() => {
-    fetch("/api/preferences")
-      .then((r) => r.json())
+    api.get<{ examMode?: string }>("/preferences")
       .then((data) => {
         if (data.examMode === "toeic" || data.examMode === "ielts") {
           setExamModeState(data.examMode);
@@ -46,11 +45,7 @@ export function ExamModeProvider({ children }: { children: ReactNode }) {
     const previousMode = examMode;
     setExamModeState(mode); // Optimistic update
     try {
-      await fetch("/api/preferences", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ examMode: mode }),
-      });
+      await api.patch("/preferences", { examMode: mode });
     } catch {
       // Revert to previous value on failure
       setExamModeState(previousMode);

@@ -1,5 +1,5 @@
 "use client";
-
+import { api } from "@/lib/api-client";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, Flex, Typography, Spin, Tag, Segmented } from "antd";
@@ -56,9 +56,7 @@ export default function ReadingPage() {
     try {
       const params = new URLSearchParams({ pageSize: "12" });
       if (sec) params.set("section", sec);
-      const res = await fetch(`/api/reading/articles?${params}`);
-      if (!res.ok) throw new Error("Failed");
-      const data = await res.json();
+      const data = await api.get<{ articles: Article[] }>(`/reading/articles?${params}`);
       setArticles(data.articles ?? []);
     } catch {
       setArticles([]);

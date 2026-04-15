@@ -1,5 +1,5 @@
 "use client";
-
+import { api } from "@/lib/api-client";
 import { useState, useCallback, useEffect } from "react";
 import {
   ArrowLeftOutlined,
@@ -53,13 +53,9 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
     setState("loading");
     setError(null);
     try {
-      const res = await fetch("/api/grammar-lessons/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topic: topicId, topicTitle, examMode, level }),
+      const data = await api.post<LessonData>("/grammar-lessons/generate", {
+        topic: topicId, topicTitle, examMode, level,
       });
-      if (!res.ok) throw new Error("Failed");
-      const data = await res.json();
       setLesson(data);
       setState("lesson");
     } catch {
@@ -91,15 +87,10 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
     } else {
       // Complete
       try {
-        const res = await fetch("/api/grammar-lessons/complete", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ topic: topicId, correctCount, totalCount: lesson.exercises.length }),
+        const data = await api.post<{ xpAwarded: number }>("/grammar-lessons/complete", {
+          topic: topicId, correctCount, totalCount: lesson.exercises.length,
         });
-        if (res.ok) {
-          const data = await res.json();
-          setXpAwarded(data.xpAwarded);
-        }
+        setXpAwarded(data.xpAwarded);
       } catch { /* continue */ }
       onComplete(topicId);
       setState("complete");

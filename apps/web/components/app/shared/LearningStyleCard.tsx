@@ -1,5 +1,5 @@
 "use client";
-
+import { api } from "@/lib/api-client";
 import { useEffect, useState } from "react";
 import { Card, Typography, Flex, Progress } from "antd";
 import { RightOutlined, ExperimentOutlined } from "@ant-design/icons";
@@ -39,8 +39,7 @@ export function LearningStyleCard() {
   const [data, setData] = useState<LearningStyleData | null>(null);
 
   useEffect(() => {
-    fetch("/api/learning-style")
-      .then((r) => (r.ok ? r.json() : null))
+    api.get<LearningStyleData>("/learning-style")
       .then((d) => { if (d) setData(d); })
       .catch(() => {});
   }, []);

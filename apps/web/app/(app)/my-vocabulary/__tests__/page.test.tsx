@@ -1,5 +1,11 @@
 // app/(app)/my-vocabulary/__tests__/page.test.tsx
-import { render, screen, waitFor, fireEvent, act } from "@testing-library/react";
+import {
+  render,
+  screen,
+  waitFor,
+  fireEvent,
+  act,
+} from "@testing-library/react";
 import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import MyVocabularyPage from "../page";
 import http from "@/lib/http";
@@ -31,16 +37,20 @@ vi.mock("nuqs", async () => {
   return {
     useQueryState: (_key: string, _parser?: unknown) => {
       const [val, setVal] = useState<string | null>(null);
-      const setter = useCallback((v: string | null | ((prev: string | null) => string | null)) => {
-        setVal(v);
-        return Promise.resolve(null);
-      }, []);
+      const setter = useCallback(
+        (v: string | null | ((prev: string | null) => string | null)) => {
+          setVal(v);
+          return Promise.resolve(null);
+        },
+        [],
+      );
       return [val, setter];
     },
     useQueryStates: (schema: Record<string, unknown>) => {
       const defaults: Record<string, unknown> = {};
       for (const key of Object.keys(schema))
-        defaults[key] = (schema[key] as { _default?: unknown })._default ?? null;
+        defaults[key] =
+          (schema[key] as { _default?: unknown })._default ?? null;
       // Provide sensible defaults matching the app's withDefault calls
       const initial = queryState ?? {
         search: "",
@@ -209,7 +219,9 @@ describe("MyVocabularyPage", () => {
     });
     render(<MyVocabularyPage />);
     await waitFor(() => screen.getByText("take off"));
-    fireEvent.click(screen.getByText("take off").closest("div[class*='group']")!);
+    fireEvent.click(
+      screen.getByText("take off").closest("div[class*='group']")!,
+    );
     await waitFor(() => {
       expect(screen.getByRole("dialog")).toBeInTheDocument();
     });
@@ -239,7 +251,9 @@ describe("MyVocabularyPage", () => {
     await act(async () => {
       vi.advanceTimersByTime(5000);
     });
-    expect(http.delete).toHaveBeenCalledWith(expect.stringContaining("take%20off"));
+    expect(http.delete).toHaveBeenCalledWith(
+      expect.stringContaining("take%20off"),
+    );
   });
 
   it("sanitizes invalid type filter values and does not filter entries", async () => {

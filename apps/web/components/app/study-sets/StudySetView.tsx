@@ -1,5 +1,5 @@
 "use client";
-
+import { api } from "@/lib/api-client";
 import { useState, useEffect, useCallback } from "react";
 import {
   ArrowLeftOutlined,
@@ -64,13 +64,10 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch("/api/study-sets/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topicId, topicTitle, examMode, level }),
+      const data = await api.post<StudySetData>("/study-sets/generate", {
+        topicId, topicTitle, examMode, level,
       });
-      if (!res.ok) throw new Error("Failed");
-      setData(await res.json());
+      setData(data);
     } catch {
       setError("Không thể tạo bộ học. Vui lòng thử lại.");
     } finally {
@@ -86,12 +83,9 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
 
     if (next.size === 4 && !allDone) {
       setAllDone(true);
-      fetch("/api/study-sets/complete", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ topicId, sectionsCompleted: 4 }),
+      api.post<{ xpAwarded: number }>("/study-sets/complete", {
+        topicId, sectionsCompleted: 4,
       })
-        .then((r) => r.ok ? r.json() : null)
         .then((d) => { if (d) setXpAwarded(d.xpAwarded); })
         .catch(() => {});
       onComplete(topicId);

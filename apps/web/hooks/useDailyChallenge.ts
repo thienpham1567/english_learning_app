@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import http from "@/lib/http";
+import { api } from "@/lib/api-client";
 import type {
   DailyChallenge,
   ChallengeState,
@@ -33,7 +33,7 @@ export function useDailyChallenge() {
   useEffect(() => {
     (async () => {
       try {
-        const { data } = await http.get<{
+        const data = await api.get<{
           challenge: DailyChallenge;
           streak: StreakInfo;
           badges: Badge[];
@@ -77,7 +77,7 @@ export function useDailyChallenge() {
       setState("submitting");
       const elapsed = Date.now() - startTime.current;
       try {
-        const { data } = await http.post<{
+        const data = await api.post<{
           answers: ExerciseAnswer[];
           score: number;
           streak: StreakInfo;
@@ -115,11 +115,7 @@ export function useDailyChallenge() {
           .filter(Boolean);
 
         if (wrongAnswers.length > 0) {
-          fetch("/api/errors", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ errors: wrongAnswers }),
-          }).catch(() => {});
+          void api.post("/errors", { errors: wrongAnswers }).catch(() => {});
         }
 
         setState("results");

@@ -20,7 +20,7 @@ import { deriveTitle } from "@/lib/chat/derive-title";
 import { DEFAULT_PERSONA_ID, PERSONAS } from "@/lib/chat/personas";
 import type { Persona } from "@/lib/chat/personas";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
-import http from "@/lib/http";
+import { api } from "@/lib/api-client";
 
 export function sampleSuggestions(
   persona: Persona,
@@ -61,7 +61,14 @@ export function getMessageSpacingStyle(
 
 function ChatSkeleton() {
   return (
-    <div style={{ maxWidth: 900, width: "100%", margin: "0 auto", padding: "24px 0" }}>
+    <div
+      style={{
+        maxWidth: 900,
+        width: "100%",
+        margin: "0 auto",
+        padding: "24px 0",
+      }}
+    >
       <div style={{ display: "flex", gap: 12, marginBottom: 24 }}>
         <div
           style={{
@@ -73,7 +80,9 @@ function ChatSkeleton() {
             animation: "pulse 1.5s infinite",
           }}
         />
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
+        <div
+          style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}
+        >
           <div
             style={{
               height: 16,
@@ -94,8 +103,21 @@ function ChatSkeleton() {
           />
         </div>
       </div>
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 24 }}>
-        <div style={{ width: "66%", display: "flex", flexDirection: "column", gap: 8 }}>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "flex-end",
+          marginBottom: 24,
+        }}
+      >
+        <div
+          style={{
+            width: "66%",
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+          }}
+        >
           <div
             style={{
               height: 16,
@@ -126,13 +148,15 @@ interface ChatWindowProps {
 
 export function ChatWindow({ conversationId }: ChatWindowProps) {
   const router = useRouter();
-  const { conversations, setConversations, loadConversations } = useChatConversations();
+  const { conversations, setConversations, loadConversations } =
+    useChatConversations();
   const [messages, setMessages] = useState<PageMessage[]>([]);
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [selectedPersonaId, setSelectedPersonaId] = useState(DEFAULT_PERSONA_ID);
+  const [selectedPersonaId, setSelectedPersonaId] =
+    useState(DEFAULT_PERSONA_ID);
   const bottomRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
@@ -141,7 +165,8 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const justCreatedRef = useRef(false);
   const lastMsg = messages.at(-1);
   const streamingHasStarted = isLoading && lastMsg?.role === "assistant";
-  const activePersona = PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
+  const activePersona =
+    PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
   const ActiveAvatar = activePersona.avatar;
 
   // Voice hooks (Story 7.1 + 7.2)
@@ -150,7 +175,9 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const [speakingMsgId, setSpeakingMsgId] = useState<string | null>(null);
 
   // Pronunciation inline feedback (Story 13.3)
-  const [pronFeedback, setPronFeedback] = useState<Map<string, PronFeedbackData>>(new Map());
+  const [pronFeedback, setPronFeedback] = useState<
+    Map<string, PronFeedbackData>
+  >(new Map());
   const [pronEnabled, setPronEnabled] = useState(true);
   // Track which message IDs came from voice input
   const voiceMessageIds = useRef<Set<string>>(new Set());
@@ -179,7 +206,9 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [voice.transcript, voice.isTranscribing]);
 
-  const [suggestions, setSuggestions] = useState<(typeof activePersona.suggestions)[number][]>([]);
+  const [suggestions, setSuggestions] = useState<
+    (typeof activePersona.suggestions)[number][]
+  >([]);
   useEffect(() => {
     setSuggestions(sampleSuggestions(activePersona, 4));
   }, [activePersona]);
@@ -190,10 +219,12 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
 
   // Fetch saved vocabulary on mount (AC: #5)
   useEffect(() => {
-    http
+    api
       .get<Array<{ query: string; saved: boolean }>>("/vocabulary")
-      .then(({ data }) => {
-        const saved = new Set(data.filter((v) => v.saved).map((v) => v.query.toLowerCase()));
+      .then((data) => {
+        const saved = new Set(
+          data.filter((v) => v.saved).map((v) => v.query.toLowerCase()),
+        );
         setSavedWords(saved);
       })
       .catch(() => {}); // non-critical — highlighting still works without
@@ -228,7 +259,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     setIsLoadingMessages(true);
     (async () => {
       try {
-        const { data: rows } = await http.get<
+        const rows = await api.get<
           Array<{
             id: string;
             role: "user" | "assistant";
@@ -237,7 +268,9 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
         >(`/conversations/${conversationId}/messages`);
         if (cancelled) return;
         if (!cancelled) {
-          setMessages(rows.map((r) => ({ id: r.id, role: r.role, text: r.content })));
+          setMessages(
+            rows.map((r) => ({ id: r.id, role: r.role, text: r.content })),
+          );
           setError(null);
         }
       } catch {
@@ -258,7 +291,11 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
 
   useEffect(() => {
     const bottom = bottomRef.current;
-    if (isNearBottomRef.current && bottom && typeof bottom.scrollIntoView === "function") {
+    if (
+      isNearBottomRef.current &&
+      bottom &&
+      typeof bottom.scrollIntoView === "function"
+    ) {
       bottom.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages, isLoading, error]);
@@ -288,7 +325,11 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
 
   const removeEmptyAssistantMessage = (messageId: string) => {
     setMessages((curr) =>
-      curr.filter((m) => m.id !== messageId || (m.role !== "divider" && m.text.trim().length > 0)),
+      curr.filter(
+        (m) =>
+          m.id !== messageId ||
+          (m.role !== "divider" && m.text.trim().length > 0),
+      ),
     );
   };
 
@@ -316,7 +357,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     let convId = conversationId;
     if (!convId) {
       try {
-        const { data: created } = await http.post<{
+        const created = await api.post<{
           id: string;
           title: string;
           personaId: string;
@@ -368,17 +409,17 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     setIsLoading(true);
 
     try {
-      const response = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
+      const response = await api.post<Response>(
+        "/chat",
+        {
           messages: requestMessages,
           conversationId: convId,
           personaId: selectedPersonaId,
-        }),
-      });
+        },
+        { raw: true },
+      );
 
-      if (!response.ok || !response.body) {
+      if (!response.body) {
         throw new Error(CHAT_ERROR_MESSAGE);
       }
 
@@ -404,7 +445,9 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
             if (event.type === "assistant_delta" && event.delta) {
               setMessages((curr) =>
                 curr.map((m) =>
-                  m.id === assistantMessageId ? { ...m, text: m.text + event.delta } : m,
+                  m.id === assistantMessageId
+                    ? { ...m, text: m.text + event.delta }
+                    : m,
                 ),
               );
             }
@@ -436,26 +479,35 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       // Fire async pronunciation evaluation for voice messages (non-blocking)
       if (isVoiceMessage && pronEnabled) {
         const msgId = userMessage.id;
-        setPronFeedback((prev) => new Map(prev).set(msgId, { status: "loading" }));
-        fetch("/api/pronunciation/evaluate", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ targetText: t, spokenText: t }),
-        })
-          .then((r) => r.ok ? r.json() : Promise.reject())
+        setPronFeedback((prev) =>
+          new Map(prev).set(msgId, { status: "loading" }),
+        );
+        api
+          .post<{
+            score: number;
+            accuracy: number;
+            fluency: number;
+            wordAnalysis: unknown;
+            tips: string[];
+            feedback: string;
+          }>("/pronunciation/evaluate", { targetText: t, spokenText: t })
           .then((result) => {
-            setPronFeedback((prev) => new Map(prev).set(msgId, {
-              status: "done",
-              score: result.score,
-              accuracy: result.accuracy,
-              fluency: result.fluency,
-              wordAnalysis: result.wordAnalysis,
-              tips: result.tips,
-              feedback: result.feedback,
-            }));
+            setPronFeedback((prev) =>
+              new Map(prev).set(msgId, {
+                status: "done",
+                score: result.score,
+                accuracy: result.accuracy,
+                fluency: result.fluency,
+                wordAnalysis: result.wordAnalysis,
+                tips: result.tips,
+                feedback: result.feedback,
+              }),
+            );
           })
           .catch(() => {
-            setPronFeedback((prev) => new Map(prev).set(msgId, { status: "error" }));
+            setPronFeedback((prev) =>
+              new Map(prev).set(msgId, { status: "error" }),
+            );
           });
       }
 
@@ -464,7 +516,9 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
         // Use ref to get latest messages (closure would be stale)
         setTimeout(() => {
           const latest = messagesRef.current;
-          const lastAssistant = [...latest].reverse().find(m => m.role === "assistant");
+          const lastAssistant = [...latest]
+            .reverse()
+            .find((m) => m.role === "assistant");
           if (lastAssistant && "text" in lastAssistant && lastAssistant.text) {
             tts.speak(lastAssistant.text);
             setVoiceExchanges((c) => c + 1);
@@ -559,7 +613,8 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                   color: "var(--text-secondary)",
                 }}
               >
-                Mỗi gia sư có phong cách riêng — chọn người phù hợp nhất với bạn.
+                Mỗi gia sư có phong cách riêng — chọn người phù hợp nhất với
+                bạn.
               </p>
 
               {/* Persona cards grid (AC: #1) */}
@@ -586,12 +641,19 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                         alignItems: "center",
                         gap: 8,
                         borderRadius: "var(--radius-lg)",
-                        border: isSelected ? "2px solid var(--accent)" : "1px solid var(--border)",
-                        background: isSelected ? "var(--accent-light)" : "var(--surface)",
+                        border: isSelected
+                          ? "2px solid var(--accent)"
+                          : "1px solid var(--border)",
+                        background: isSelected
+                          ? "var(--accent-light)"
+                          : "var(--surface)",
                         padding: "20px 16px",
                         textAlign: "center",
-                        boxShadow: isSelected ? "0 0 0 1px var(--accent)" : "var(--shadow-sm)",
-                        transition: "border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.15s",
+                        boxShadow: isSelected
+                          ? "0 0 0 1px var(--accent)"
+                          : "var(--shadow-sm)",
+                        transition:
+                          "border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.15s",
                         cursor: "pointer",
                       }}
                     >
@@ -613,7 +675,9 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                           borderRadius: 999,
                           fontSize: 11,
                           fontWeight: 500,
-                          background: isSelected ? "var(--accent)" : "var(--bg-deep)",
+                          background: isSelected
+                            ? "var(--accent)"
+                            : "var(--bg-deep)",
                           color: isSelected ? "#fff" : "var(--text-secondary)",
                           transition: "background 0.2s, color 0.2s",
                         }}
@@ -661,7 +725,8 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                         padding: 16,
                         textAlign: "left",
                         boxShadow: "var(--shadow-sm)",
-                        transition: "transform 0.2s, border-color 0.2s, background 0.2s",
+                        transition:
+                          "transform 0.2s, border-color 0.2s, background 0.2s",
                         cursor: "pointer",
                       }}
                       onClick={() => send(s.text)}
@@ -700,42 +765,69 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
           {hasMessages && !isLoadingMessages && (
             <div style={{ display: "flex", flexDirection: "column" }}>
               {messages.map((m, index) => (
-                <div key={m.id} style={getMessageSpacingStyle(m, messages[index - 1])}>
+                <div
+                  key={m.id}
+                  style={getMessageSpacingStyle(m, messages[index - 1])}
+                >
                   <ChatMessage
                     message={m}
                     persona={activePersona}
                     isStreaming={
-                      isLoading && index === messages.length - 1 && m.role === "assistant"
+                      isLoading &&
+                      index === messages.length - 1 &&
+                      m.role === "assistant"
                     }
                     onWordClick={miniDict.openForWord}
                     savedWords={savedWords}
-                    onSpeak={tts.isSupported ? (text) => {
-                      setSpeakingMsgId(m.id);
-                      tts.speak(text);
-                    } : undefined}
+                    onSpeak={
+                      tts.isSupported
+                        ? (text) => {
+                            setSpeakingMsgId(m.id);
+                            tts.speak(text);
+                          }
+                        : undefined
+                    }
                     isSpeaking={tts.isSpeaking && speakingMsgId === m.id}
                     isTtsLoading={tts.isLoading && speakingMsgId === m.id}
-                    onStopSpeak={tts.isSupported ? () => {
-                      tts.stop();
-                      setSpeakingMsgId(null);
-                    } : undefined}
+                    onStopSpeak={
+                      tts.isSupported
+                        ? () => {
+                            tts.stop();
+                            setSpeakingMsgId(null);
+                          }
+                        : undefined
+                    }
                   />
                   {/* Inline pronunciation feedback for voice messages */}
-                  {m.role === "user" && voiceMessageIds.current.has(m.id) && pronFeedback.has(m.id) && (
-                    <div style={{ display: "flex", justifyContent: "flex-end", paddingRight: 4 }}>
-                      <PronunciationFeedback
-                        data={pronFeedback.get(m.id)!}
-                        onListenCorrect={tts.isSupported ? () => {
-                          tts.speak(m.text);
-                        } : undefined}
-                      />
-                    </div>
-                  )}
+                  {m.role === "user" &&
+                    voiceMessageIds.current.has(m.id) &&
+                    pronFeedback.has(m.id) && (
+                      <div
+                        style={{
+                          display: "flex",
+                          justifyContent: "flex-end",
+                          paddingRight: 4,
+                        }}
+                      >
+                        <PronunciationFeedback
+                          data={pronFeedback.get(m.id)!}
+                          onListenCorrect={
+                            tts.isSupported
+                              ? () => {
+                                  tts.speak(m.text);
+                                }
+                              : undefined
+                          }
+                        />
+                      </div>
+                    )}
                 </div>
               ))}
               {isLoading && !streamingHasStarted && (
                 <div className="anim-fade-in" style={{ marginTop: 28 }}>
-                  <TypingIndicator personaName={activePersona.label.split(" —")[0]} />
+                  <TypingIndicator
+                    personaName={activePersona.label.split(" —")[0]}
+                  />
                 </div>
               )}
             </div>
@@ -895,7 +987,10 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                     : voice.isTranscribing
                       ? "var(--accent-muted)"
                       : "transparent",
-                  cursor: isLoading || voice.isTranscribing ? "not-allowed" : "pointer",
+                  cursor:
+                    isLoading || voice.isTranscribing
+                      ? "not-allowed"
+                      : "pointer",
                   transition: "all 0.2s",
                   animation: voice.isListening
                     ? "pulse 1.5s infinite"
@@ -936,7 +1031,8 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                 color: "#fff",
                 boxShadow: "var(--shadow-sm)",
                 cursor: input.trim() && !isLoading ? "pointer" : "not-allowed",
-                background: input.trim() && !isLoading ? "var(--accent)" : "var(--ink)",
+                background:
+                  input.trim() && !isLoading ? "var(--accent)" : "var(--ink)",
                 transition: "background 0.2s, transform 0.15s",
                 opacity: !input.trim() || isLoading ? 0.6 : 1,
               }}
@@ -946,8 +1042,20 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
               <ArrowUpOutlined style={{ fontSize: 18 }} />
             </button>
           </div>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 12, fontSize: 14, color: "var(--text-muted)" }}>
-            <span>Enter để gửi · Shift+Enter xuống dòng{voice.isSupported ? " · 🎙️ nói" : ""}</span>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 12,
+              fontSize: 14,
+              color: "var(--text-muted)",
+            }}
+          >
+            <span>
+              Enter để gửi · Shift+Enter xuống dòng
+              {voice.isSupported ? " · 🎙️ nói" : ""}
+            </span>
             {voice.isSupported && tts.isSupported && (
               <button
                 style={{
@@ -956,8 +1064,12 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                   gap: 4,
                   padding: "3px 10px",
                   borderRadius: 999,
-                  border: voiceMode ? "1.5px solid var(--accent)" : "1px solid var(--border)",
-                  background: voiceMode ? "color-mix(in srgb, var(--accent) 10%, var(--surface))" : "var(--surface)",
+                  border: voiceMode
+                    ? "1.5px solid var(--accent)"
+                    : "1px solid var(--border)",
+                  background: voiceMode
+                    ? "color-mix(in srgb, var(--accent) 10%, var(--surface))"
+                    : "var(--surface)",
                   color: voiceMode ? "var(--accent)" : "var(--text-muted)",
                   fontSize: 12,
                   fontWeight: 600,
@@ -980,7 +1092,9 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                   gap: 4,
                   padding: "3px 10px",
                   borderRadius: 999,
-                  border: pronEnabled ? "1.5px solid #52c41a" : "1px solid var(--border)",
+                  border: pronEnabled
+                    ? "1.5px solid #52c41a"
+                    : "1px solid var(--border)",
                   background: pronEnabled ? "#52c41a15" : "var(--surface)",
                   color: pronEnabled ? "#52c41a" : "var(--text-muted)",
                   fontSize: 12,
@@ -1003,7 +1117,9 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
         anchorRect={miniDict.anchorRect}
         visible={miniDict.visible}
         onClose={miniDict.close}
-        onSave={(w) => setSavedWords((prev) => new Set(prev).add(w.toLowerCase()))}
+        onSave={(w) =>
+          setSavedWords((prev) => new Set(prev).add(w.toLowerCase()))
+        }
       />
     </div>
   );

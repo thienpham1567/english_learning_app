@@ -1,5 +1,5 @@
 "use client";
-
+import { api } from "@/lib/api-client";
 import { useState, useCallback, useEffect, useRef } from "react";
 import {
   CheckCircleOutlined,
@@ -156,9 +156,7 @@ function VocabReviewTab() {
   const fetchDue = useCallback(async () => {
     setState("loading");
     try {
-      const res = await fetch("/api/vocabulary/due");
-      if (!res.ok) throw new Error("Failed");
-      const data = await res.json();
+      const data = await api.get<{ dueCount: number; words: VocabWord[]; distractors: DistractorWord[] }>("/vocabulary/due");
       if (data.dueCount === 0) {
         setState("empty");
       } else {
@@ -224,15 +222,12 @@ function VocabReviewTab() {
     const allResults = finalResults;
 
     try {
-      const res = await fetch("/api/vocabulary/review", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ results: allResults }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setSubmitResult(data);
-      }
+      const data = await api.post<{
+        accuracy: number;
+        xpEarned: number;
+        words: Array<{ query: string; correct: boolean; masteryLevel: string; nextReview: string; interval: number }>;
+      }>("/vocabulary/review", { results: allResults });
+      setSubmitResult(data);
     } catch { /* ignore */ }
 
     setSubmitting(false);
@@ -502,9 +497,7 @@ function ErrorReviewTab() {
   const fetchDue = useCallback(async () => {
     setState("loading");
     try {
-      const res = await fetch("/api/review-quiz/due");
-      if (!res.ok) throw new Error("Failed");
-      const data = await res.json();
+      const data = await api.get<{ dueCount: number; errors: ErrorEntry[] }>("/review-quiz/due");
       if (data.dueCount === 0) {
         setState("empty");
       } else {
@@ -541,15 +534,8 @@ function ErrorReviewTab() {
     setResults(reviewResults);
 
     try {
-      const res = await fetch("/api/review-quiz/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ results: reviewResults }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        setSubmitResult(data);
-      }
+      const data = await api.post<{ resolved: number; rescheduled: number }>("/review-quiz/submit", { results: reviewResults });
+      setSubmitResult(data);
     } catch { /* ignore */ }
 
     setSubmitting(false);
@@ -769,8 +755,8 @@ export default function ReviewQuizPage() {
 
   // Fetch badge counts
   useEffect(() => {
-    fetch("/api/review-quiz/due").then((r) => r.json()).then((d) => setErrorDue(d.dueCount ?? 0)).catch(() => {});
-    fetch("/api/vocabulary/due").then((r) => r.json()).then((d) => setVocabDue(d.dueCount ?? 0)).catch(() => {});
+    api.get<{ dueCount?: number }>("/review-quiz/due").then((d) => { if(d) setErrorDue(d.dueCount ?? 0) }).catch(() => {});
+    api.get<{ dueCount?: number }>("/vocabulary/due").then((d) => { if(d) setVocabDue(d.dueCount ?? 0) }).catch(() => {});
   }, []);
 
   return (

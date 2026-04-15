@@ -7,6 +7,7 @@ import type {
   ListeningExerciseResponse,
   ListeningSubmitResponse,
 } from "@/lib/listening/types";
+import { api } from "@/lib/api-client";
 
 type State = "idle" | "loading" | "active" | "submitting" | "submitted";
 
@@ -27,18 +28,9 @@ export function useListeningExercise() {
     setResult(null);
 
     try {
-      const res = await fetch("/api/listening/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ level, exerciseType, examMode }),
+      const data = await api.post<ListeningExerciseResponse>("/listening/generate", {
+        level, exerciseType, examMode,
       });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || `HTTP ${res.status}`);
-      }
-
-      const data: ListeningExerciseResponse = await res.json();
       setExercise(data);
       setSelectedAnswers(new Array(data.questions.length).fill(null));
       setReplaysUsed(0);
@@ -68,21 +60,10 @@ export function useListeningExercise() {
     setError(null);
 
     try {
-      const res = await fetch("/api/listening/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          exerciseId: exercise.id,
-          answers: selectedAnswers as number[],
-        }),
+      const data = await api.post<ListeningSubmitResponse>("/listening/submit", {
+        exerciseId: exercise.id,
+        answers: selectedAnswers as number[],
       });
-
-      if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
-        throw new Error(data.error || `HTTP ${res.status}`);
-      }
-
-      const data: ListeningSubmitResponse = await res.json();
       setResult(data);
       setState("submitted");
     } catch (err) {

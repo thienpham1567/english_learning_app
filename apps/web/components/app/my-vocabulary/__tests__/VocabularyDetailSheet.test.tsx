@@ -173,7 +173,9 @@ describe("VocabularyDetailSheet", () => {
       />,
     );
     await waitFor(() => {
-      expect(screen.getByText("Định nghĩa không còn trong bộ nhớ đệm.")).toBeInTheDocument();
+      expect(
+        screen.getByText("Định nghĩa không còn trong bộ nhớ đệm."),
+      ).toBeInTheDocument();
     });
   });
 
@@ -258,7 +260,9 @@ describe("VocabularyDetailSheet", () => {
     await waitFor(() => {
       expect(screen.getByText("take off")).toBeInTheDocument();
     });
-    expect(screen.getByRole("button", { name: "Xem trong từ điển" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Xem trong từ điển" }),
+    ).toBeInTheDocument();
   });
 
   it("navigates to dictionary when 'Xem trong từ điển' button is clicked", async () => {

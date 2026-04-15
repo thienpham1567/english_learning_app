@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { api } from "@/lib/api-client";
 
 import { useRouter } from "next/navigation";
 import { Card, Flex, Typography, Button, Space, Tag, Spin, Result } from "antd";
@@ -104,8 +105,7 @@ export default function HomePage() {
     if (!isReady || isNewUser) return;
     Promise.all(
       ["grammar", "listening", "reading"].map((m) =>
-        fetch(`/api/skill-profile?module=${m}`)
-          .then((r) => r.ok ? r.json() : null)
+        api.get<{ module: string; currentLevel: number; cefr: string }>("/skill-profile", { params: { module: m } })
           .catch(() => null),
       ),
     ).then((profiles) => {
@@ -119,8 +119,7 @@ export default function HomePage() {
   // Streak Calendar data (lazy fetch from analytics)
   useEffect(() => {
     if (!isReady || isNewUser) return;
-    fetch("/api/analytics")
-      .then((r) => r.ok ? r.json() : null)
+    api.get<{ dailyActivity?: Array<{ date: string; count: number }> }>("/analytics")
       .then((d) => { if (d?.dailyActivity) setDailyActivity(d.dailyActivity); })
       .catch(() => {});
   }, [isReady, isNewUser]);

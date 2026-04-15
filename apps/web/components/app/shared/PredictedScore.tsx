@@ -1,5 +1,5 @@
 "use client";
-
+import { api } from "@/lib/api-client";
 import { useEffect, useState } from "react";
 import { Tag } from "antd";
 import {
@@ -45,8 +45,7 @@ export function PredictedScore() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/predicted-score")
-      .then((r) => r.ok ? r.json() : null)
+    api.get<ApiResponse>("/predicted-score")
       .then((d) => { if (d) setData(d); })
       .catch(() => {})
       .finally(() => setLoading(false));

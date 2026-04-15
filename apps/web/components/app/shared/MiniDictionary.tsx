@@ -11,7 +11,7 @@ import {
   CloseOutlined,
 } from "@ant-design/icons";
 
-import http from "@/lib/http";
+import { api } from "@/lib/api-client";
 
 const { Text, Title } = Typography;
 
@@ -62,7 +62,8 @@ function calculatePosition(anchorRect: DOMRect | null) {
 
   // Clamp to stay within viewport horizontally
   if (left < EDGE_MARGIN) left = EDGE_MARGIN;
-  if (left + CARD_WIDTH > vw - EDGE_MARGIN) left = vw - CARD_WIDTH - EDGE_MARGIN;
+  if (left + CARD_WIDTH > vw - EDGE_MARGIN)
+    left = vw - CARD_WIDTH - EDGE_MARGIN;
 
   // Ensure top is never negative
   if (top < EDGE_MARGIN) top = EDGE_MARGIN;
@@ -70,7 +71,13 @@ function calculatePosition(anchorRect: DOMRect | null) {
   return { top, left };
 }
 
-export function MiniDictionary({ word, anchorRect, visible, onClose, onSave }: Props) {
+export function MiniDictionary({
+  word,
+  anchorRect,
+  visible,
+  onClose,
+  onSave,
+}: Props) {
   const router = useRouter();
   const cardRef = useRef<HTMLDivElement>(null);
   const [messageApi, contextHolder] = message.useMessage();
@@ -93,13 +100,18 @@ export function MiniDictionary({ word, anchorRect, visible, onClose, onSave }: P
 
     // Use POST /dictionary which upserts userVocabulary row (B1 fix)
     http
-      .post<{ data: Record<string, unknown>; saved: boolean }>("/dictionary", { word })
+      .post<{ data: Record<string, unknown>; saved: boolean }>("/dictionary", {
+        word,
+      })
       .then(({ data: res }) => {
         if (!cancelled) {
           const payload = res.data;
           setData({
             headword: (payload.headword as string) ?? word,
-            phonetic: (payload.phonetic as string) ?? (payload.phoneticsUs as string) ?? null,
+            phonetic:
+              (payload.phonetic as string) ??
+              (payload.phoneticsUs as string) ??
+              null,
             partOfSpeech: (payload.partOfSpeech as string) ?? null,
             overviewVi: (payload.overviewVi as string) ?? "",
             level: (payload.level as string) ?? null,
@@ -145,7 +157,9 @@ export function MiniDictionary({ word, anchorRect, visible, onClose, onSave }: P
     if (saving || saved) return;
     setSaving(true);
     try {
-      await http.patch(`/vocabulary/${encodeURIComponent(word)}/saved`, { saved: true });
+      await api.patch(`/vocabulary/${encodeURIComponent(word)}/saved`, {
+        saved: true,
+      });
       setSaved(true);
       onSave?.(word);
       messageApi.success("Đã lưu từ!");
@@ -183,7 +197,8 @@ export function MiniDictionary({ word, anchorRect, visible, onClose, onSave }: P
         <Card
           style={{
             borderRadius: "var(--radius-xl)",
-            boxShadow: "0 8px 32px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.08)",
+            boxShadow:
+              "0 8px 32px rgba(0,0,0,0.15), 0 2px 8px rgba(0,0,0,0.08)",
             border: "1px solid var(--border)",
           }}
           styles={{ body: { padding: "16px 18px" } }}
@@ -210,8 +225,15 @@ export function MiniDictionary({ word, anchorRect, visible, onClose, onSave }: P
           )}
 
           {error && (
-            <Flex vertical align="center" gap={8} style={{ minHeight: 80, justifyContent: "center" }}>
-              <Text type="secondary" style={{ fontSize: 13 }}>Không tìm thấy từ này</Text>
+            <Flex
+              vertical
+              align="center"
+              gap={8}
+              style={{ minHeight: 80, justifyContent: "center" }}
+            >
+              <Text type="secondary" style={{ fontSize: 13 }}>
+                Không tìm thấy từ này
+              </Text>
               <Button size="small" type="link" onClick={handleLookup}>
                 Tra cứu đầy đủ →
               </Button>
@@ -238,7 +260,10 @@ export function MiniDictionary({ word, anchorRect, visible, onClose, onSave }: P
               {/* Phonetic + Part of Speech */}
               <Flex align="center" gap={8}>
                 {data.phonetic && (
-                  <Text type="secondary" style={{ fontSize: 12, fontFamily: "var(--font-mono)" }}>
+                  <Text
+                    type="secondary"
+                    style={{ fontSize: 12, fontFamily: "var(--font-mono)" }}
+                  >
                     <SoundOutlined style={{ marginRight: 4, fontSize: 11 }} />
                     {data.phonetic}
                   </Text>

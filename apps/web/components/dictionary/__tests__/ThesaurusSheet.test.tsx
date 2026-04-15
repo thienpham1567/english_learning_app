@@ -77,7 +77,12 @@ beforeEach(() => {
 describe("ThesaurusSheet", () => {
   it("renders synonym and antonym pills when sheet is open", () => {
     renderUi(
-      <ThesaurusSheet vocabulary={vocabulary} isOpen onClose={vi.fn()} onWordClick={vi.fn()} />,
+      <ThesaurusSheet
+        vocabulary={vocabulary}
+        isOpen
+        onClose={vi.fn()}
+        onWordClick={vi.fn()}
+      />,
     );
     expect(screen.getByRole("button", { name: "leave" })).toBeInTheDocument();
     expect(screen.getByRole("button", { name: "exit" })).toBeInTheDocument();
@@ -87,14 +92,24 @@ describe("ThesaurusSheet", () => {
 
   it("renders sense label for senses with data", () => {
     renderUi(
-      <ThesaurusSheet vocabulary={vocabulary} isOpen onClose={vi.fn()} onWordClick={vi.fn()} />,
+      <ThesaurusSheet
+        vocabulary={vocabulary}
+        isOpen
+        onClose={vi.fn()}
+        onWordClick={vi.fn()}
+      />,
     );
     expect(screen.getByText("Nghĩa 1")).toBeInTheDocument();
   });
 
   it("skips senses that have no synonyms and no antonyms", () => {
     renderUi(
-      <ThesaurusSheet vocabulary={vocabulary} isOpen onClose={vi.fn()} onWordClick={vi.fn()} />,
+      <ThesaurusSheet
+        vocabulary={vocabulary}
+        isOpen
+        onClose={vi.fn()}
+        onWordClick={vi.fn()}
+      />,
     );
     expect(screen.queryByText("Nghĩa 2")).not.toBeInTheDocument();
   });
@@ -108,14 +123,21 @@ describe("ThesaurusSheet", () => {
         onWordClick={vi.fn()}
       />,
     );
-    expect(screen.getByText("Chưa có dữ liệu đồng/trái nghĩa.")).toBeInTheDocument();
+    expect(
+      screen.getByText("Chưa có dữ liệu đồng/trái nghĩa."),
+    ).toBeInTheDocument();
   });
 
   it("calls onWordClick and onClose when a synonym pill is clicked", () => {
     const onWordClick = vi.fn();
     const onClose = vi.fn();
     renderUi(
-      <ThesaurusSheet vocabulary={vocabulary} isOpen onClose={onClose} onWordClick={onWordClick} />,
+      <ThesaurusSheet
+        vocabulary={vocabulary}
+        isOpen
+        onClose={onClose}
+        onWordClick={onWordClick}
+      />,
     );
     fireEvent.click(screen.getByRole("button", { name: "leave" }));
     expect(onWordClick).toHaveBeenCalledWith("leave");
@@ -126,7 +148,12 @@ describe("ThesaurusSheet", () => {
     const onWordClick = vi.fn();
     const onClose = vi.fn();
     renderUi(
-      <ThesaurusSheet vocabulary={vocabulary} isOpen onClose={onClose} onWordClick={onWordClick} />,
+      <ThesaurusSheet
+        vocabulary={vocabulary}
+        isOpen
+        onClose={onClose}
+        onWordClick={onWordClick}
+      />,
     );
     fireEvent.click(screen.getByRole("button", { name: "arrive" }));
     expect(onWordClick).toHaveBeenCalledWith("arrive");
@@ -136,7 +163,12 @@ describe("ThesaurusSheet", () => {
   it("calls onClose when the × close button is clicked", () => {
     const onClose = vi.fn();
     renderUi(
-      <ThesaurusSheet vocabulary={vocabulary} isOpen onClose={onClose} onWordClick={vi.fn()} />,
+      <ThesaurusSheet
+        vocabulary={vocabulary}
+        isOpen
+        onClose={onClose}
+        onWordClick={vi.fn()}
+      />,
     );
     fireEvent.click(screen.getByRole("button", { name: "Đóng" }));
     expect(onClose).toHaveBeenCalledOnce();
@@ -157,7 +189,12 @@ describe("ThesaurusSheet", () => {
   it("closes sheet when Escape key is pressed", () => {
     const onClose = vi.fn();
     renderUi(
-      <ThesaurusSheet vocabulary={vocabulary} isOpen onClose={onClose} onWordClick={vi.fn()} />,
+      <ThesaurusSheet
+        vocabulary={vocabulary}
+        isOpen
+        onClose={onClose}
+        onWordClick={vi.fn()}
+      />,
     );
     fireEvent.keyDown(document, { key: "Escape" });
     expect(onClose).toHaveBeenCalledOnce();

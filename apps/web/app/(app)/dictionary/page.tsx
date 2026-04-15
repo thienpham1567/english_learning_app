@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { useQueryState, parseAsString } from "nuqs";
 import { message } from "antd";
 
-import axios from "axios";
-import http from "@/lib/http";
+import { AppError } from "@repo/shared";
+import { api } from "@/lib/api-client";
 import { normalizeDictionaryQuery } from "@/lib/dictionary/normalize-query";
 import { DictionaryResultCard } from "@/components/dictionary/DictionaryResultCard";
 import { DictionarySearchPanel } from "@/components/dictionary/DictionarySearchPanel";
@@ -63,7 +63,7 @@ export default function DictionaryPage() {
     latestRequestIdRef.current = requestId;
 
     try {
-      const { data: payload } = await http.post<{
+      const payload = await api.post<{
         data: VocabularyWithNearby;
         saved: boolean;
       }>("/dictionary", { word: normalized });
@@ -79,8 +79,8 @@ export default function DictionaryPage() {
     } catch (error) {
       if (requestId !== latestRequestIdRef.current) return;
 
-      if (axios.isAxiosError(error) && error.response?.data?.error) {
-        messageApi.error(error.response.data.error);
+      if (error instanceof AppError && error.message) {
+        messageApi.error(error.message);
       } else {
         messageApi.error("Đã xảy ra lỗi mạng. Vui lòng thử lại sau.");
       }
@@ -106,7 +106,7 @@ export default function DictionaryPage() {
     const next = !saved;
     setSaved(next); // optimistic
     try {
-      await http.patch(`/vocabulary/${encodeURIComponent(currentQuery)}/saved`, { saved: next });
+      await api.patch(`/vocabulary/${encodeURIComponent(currentQuery)}/saved`, { saved: next });
     } catch {
       setSaved(!next); // rollback
     }

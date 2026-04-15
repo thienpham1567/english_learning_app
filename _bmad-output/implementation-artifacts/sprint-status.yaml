@@ -36,11 +36,11 @@ sprints:
         risk: medium
       17.7:
         title: "Create packages/auth"
-        status: not_started
+        status: done
         estimate: "3h"
       17.11:
         title: "Migrate axios → fetch API client"
-        status: not_started
+        status: done
         estimate: "3h"
         depends_on: "17.4"
   R3:

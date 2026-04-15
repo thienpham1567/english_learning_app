@@ -1,5 +1,5 @@
 "use client";
-
+import { api } from "@/lib/api-client";
 import { useState, useCallback, useRef, useEffect } from "react";
 import {
   ClockCircleOutlined,
@@ -79,15 +79,9 @@ export default function MockTestPage() {
     setError(null);
 
     try {
-      const res = await fetch("/api/mock-test/generate", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ examMode, questionCount }),
+      const data = await api.post<{ questions: MockQuestion[]; passage?: string; timeLimit: number }>("/mock-test/generate", {
+        examMode, questionCount,
       });
-
-      if (!res.ok) throw new Error("Failed to generate");
-
-      const data = await res.json();
       setQuestions(data.questions);
       setPassage(data.passage ?? null);
       setAnswers(new Array(data.questions.length).fill(null));
@@ -157,11 +151,7 @@ export default function MockTestPage() {
       .filter(Boolean);
 
     if (wrongAnswers.length > 0) {
-      fetch("/api/errors", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ errors: wrongAnswers }),
-      }).catch(() => {/* fire-and-forget */});
+      api.post("/errors", { errors: wrongAnswers }).catch(() => {/* fire-and-forget */});
     }
   }, [questions, answers, fillBlankInputs]);
 

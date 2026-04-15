@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
-import http from "@/lib/http";
+import { api } from "@/lib/api-client";
 import { clearWritingDraft } from "@/components/app/writing-practice/WritingEditor";
 import type {
   WritingCategory,
@@ -30,9 +30,9 @@ export function useWritingPractice() {
 
   // Fetch history on mount
   useEffect(() => {
-    http
+    api
       .get<{ submissions: WritingSubmission[] }>("/writing-practice/history")
-      .then(({ data }) => setHistory(data.submissions))
+      .then((data) => setHistory(data.submissions))
       .catch(() => {});
   }, []);
 
@@ -42,7 +42,7 @@ export function useWritingPractice() {
     setState("generating-prompt");
     setError(null);
     try {
-      const { data } = await http.post<{ prompt: string; hints: string[] }>(
+      const data = await api.post<{ prompt: string; hints: string[] }>(
         "/writing-practice/prompt",
         { category: cat },
       );
@@ -64,16 +64,16 @@ export function useWritingPractice() {
       setState("reviewing");
       setError(null);
       try {
-        const { data } = await http.post<{ feedback: WritingFeedback }>(
+        const data = await api.post<{ feedback: WritingFeedback }>(
           "/writing-practice/review",
           { prompt, category, text },
         );
         setFeedback(data.feedback);
         setState("feedback");
         // Refresh history
-        http
+        api
           .get<{ submissions: WritingSubmission[] }>("/writing-practice/history")
-          .then(({ data: h }) => setHistory(h.submissions))
+          .then((h) => setHistory(h.submissions))
           .catch(() => {});
       } catch {
         setError("Không thể chấm bài. Vui lòng thử lại.");

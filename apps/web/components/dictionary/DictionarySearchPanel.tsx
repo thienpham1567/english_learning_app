@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { ReadOutlined, StarOutlined, CloseOutlined } from "@ant-design/icons";
 
-import http from "@/lib/http";
+import { api } from "@/lib/api-client";
 
 type DictionarySearchPanelProps = {
   initialValue: string;
@@ -56,7 +56,7 @@ export function DictionarySearchPanel({
     }
     const timer = setTimeout(async () => {
       try {
-        const { data } = await http.get<{ suggestions: string[] }>("/dictionary/suggestions", {
+        const data = await api.get<{ suggestions: string[] }>("/dictionary/suggestions", {
           params: { q: draft },
         });
         setSuggestions(data.suggestions ?? []);

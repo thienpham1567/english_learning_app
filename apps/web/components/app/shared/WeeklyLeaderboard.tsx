@@ -1,5 +1,5 @@
 "use client";
-
+import { api } from "@/lib/api-client";
 import { useEffect, useState } from "react";
 import { LoadingOutlined, CrownOutlined } from "@ant-design/icons";
 
@@ -25,8 +25,7 @@ export function WeeklyLeaderboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    fetch("/api/leaderboard")
-      .then((r) => r.ok ? r.json() : null)
+    api.get<LeaderboardData>("/leaderboard")
       .then((d) => { if (d) setData(d); })
       .catch(() => {})
       .finally(() => setLoading(false));

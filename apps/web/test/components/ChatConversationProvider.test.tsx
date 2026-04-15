@@ -26,7 +26,8 @@ const mockHttp = http as unknown as {
 };
 
 function TestConsumer() {
-  const { conversations, loadConversations, deleteConversation } = useChatConversations();
+  const { conversations, loadConversations, deleteConversation } =
+    useChatConversations();
   return (
     <div>
       <span data-testid="count">{conversations.length}</span>
@@ -48,7 +49,14 @@ describe("ChatConversationProvider", () => {
 
   it("loads conversations on mount", async () => {
     mockHttp.get.mockResolvedValueOnce({
-      data: [{ id: "1", title: "Hello", updatedAt: "2026-01-01", personaId: "simon" }],
+      data: [
+        {
+          id: "1",
+          title: "Hello",
+          updatedAt: "2026-01-01",
+          personaId: "simon",
+        },
+      ],
     });
 
     render(
@@ -66,8 +74,18 @@ describe("ChatConversationProvider", () => {
   it("deleteConversation removes item from list and calls API", async () => {
     mockHttp.get.mockResolvedValueOnce({
       data: [
-        { id: "abc", title: "Chat 1", updatedAt: "2026-01-01", personaId: "simon" },
-        { id: "def", title: "Chat 2", updatedAt: "2026-01-01", personaId: "simon" },
+        {
+          id: "abc",
+          title: "Chat 1",
+          updatedAt: "2026-01-01",
+          personaId: "simon",
+        },
+        {
+          id: "def",
+          title: "Chat 2",
+          updatedAt: "2026-01-01",
+          personaId: "simon",
+        },
       ],
     });
     mockHttp.delete.mockResolvedValueOnce({});

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import http from "@/lib/http";
+import { api } from "@/lib/api-client";
 import type { DueCard } from "@/lib/flashcard/types";
 
 type SessionState = "loading" | "active" | "empty" | "summary" | "error";
@@ -34,7 +34,7 @@ export function useFlashcardSession() {
     hasFetched.current = true;
     setState("loading");
     try {
-      const { data } = await http.get<{
+      const data = await api.get<{
         cards: DueCard[];
         nextReviewAt: string | null;
       }>("/flashcards/due");
@@ -55,7 +55,7 @@ export function useFlashcardSession() {
 
       setIsSubmitting(true);
       try {
-        await http.post("/flashcards/review", {
+        await api.post("/flashcards/review", {
           query: card.query,
           quality,
         });

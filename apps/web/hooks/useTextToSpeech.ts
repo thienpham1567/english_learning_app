@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
+import { api } from "@/lib/api-client";
 
 /**
  * useTextToSpeech — OpenAI TTS-powered text-to-speech hook.
@@ -48,16 +49,10 @@ export function useTextToSpeech() {
       setSpeaking(false);
 
       try {
-        const response = await fetch("/api/voice/synthesize", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: text.slice(0, 4000), speed: rate }),
-          signal: abortController.signal,
-        });
-
-        if (!response.ok) {
-          throw new Error("TTS API error");
-        }
+        const response = await api.post<Response>("/voice/synthesize",
+          { text: text.slice(0, 4000), speed: rate },
+          { raw: true, signal: abortController.signal },
+        );
 
         const audioBlob = await response.blob();
         const audioUrl = URL.createObjectURL(audioBlob);

@@ -1,5 +1,5 @@
 "use client";
-
+import { api } from "@/lib/api-client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Card, Flex, Typography, Spin, Tag, Button, Result, Collapse } from "antd";
@@ -76,11 +76,7 @@ export default function ArticleReaderPage() {
     setLoading(true);
     setGrammarResults({});
     analyzedSetRef.current.clear();
-    fetch(`/api/reading/article/${articleId}`)
-      .then((r) => {
-        if (!r.ok) throw new Error("Not found");
-        return r.json();
-      })
+    api.get<Article>(`/reading/article/${articleId}`)
       .then((data) => setArticle(data))
       .catch((e) => setError(e.message))
       .finally(() => setLoading(false));
@@ -94,12 +90,7 @@ export default function ArticleReaderPage() {
     setGrammarLoading((prev) => new Set(prev).add(index));
 
     try {
-      const res = await fetch("/api/reading/grammar", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ paragraph: text }),
-      });
-      const data = await res.json();
+      const data = await api.post<{ patterns?: GrammarPattern[] }>("/reading/grammar", { paragraph: text });
       setGrammarResults((prev) => ({ ...prev, [index]: data.patterns ?? [] }));
     } catch {
       setGrammarResults((prev) => ({ ...prev, [index]: [] }));

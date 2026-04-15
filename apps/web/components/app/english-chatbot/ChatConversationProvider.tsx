@@ -3,7 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 
 import type { ConversationItem } from "@/components/app/english-chatbot/ConversationList";
-import http from "@/lib/http";
+import { api } from "@/lib/api-client";
 
 type ChatConversationContextValue = {
   conversations: ConversationItem[];
@@ -27,7 +27,7 @@ export function ChatConversationProvider({ children }: { children: ReactNode }) 
 
   const loadConversations = useCallback(async () => {
     try {
-      const { data } = await http.get<ConversationItem[]>("/conversations");
+      const data = await api.get<ConversationItem[]>("/conversations");
       setConversations(data);
     } catch {
       // non-fatal: thread list just won't show
@@ -36,7 +36,7 @@ export function ChatConversationProvider({ children }: { children: ReactNode }) 
 
   const deleteConversation = useCallback(async (id: string) => {
     try {
-      await http.delete(`/conversations/${id}`);
+      await api.delete(`/conversations/${id}`);
       setConversations((curr) => curr.filter((c) => c.id !== id));
     } catch {
       // Keep the current list if deletion fails.

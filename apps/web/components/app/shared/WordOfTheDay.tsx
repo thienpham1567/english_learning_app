@@ -1,5 +1,5 @@
 "use client";
-
+import { api } from "@/lib/api-client";
 import { useCallback, useEffect, useState } from "react";
 import { Tag, message } from "antd";
 import {
@@ -32,8 +32,7 @@ export function WordOfTheDay() {
   const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
-    fetch("/api/word-of-the-day")
-      .then((r) => r.ok ? r.json() : null)
+    api.get<{ word?: WordData }>("/word-of-the-day")
       .then((data) => {
         if (data?.word) {
           setWord(data.word);
@@ -56,16 +55,9 @@ export function WordOfTheDay() {
     if (!word || isSaved) return;
     setSaving(true);
     try {
-      // Save directly — word is already in vocabulary_cache (F1 fix)
-      const saveRes = await fetch("/api/vocabulary/save", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query: word.query }),
-      });
-      if (saveRes.ok) {
-        setIsSaved(true);
-        message.success("Đã lưu vào từ vựng!");
-      }
+      await api.post("/vocabulary/save", { query: word.query });
+      setIsSaved(true);
+      message.success("Đã lưu vào từ vựng!");
     } catch {
       message.error("Không thể lưu từ");
     }

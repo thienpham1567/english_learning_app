@@ -8,7 +8,7 @@ import { VocabularyStatsBar } from "@/components/app/my-vocabulary/VocabularySta
 import { VocabularyDetailSheet } from "@/components/app/my-vocabulary/VocabularyDetailSheet";
 import { ToeicVocabularySection } from "@/components/app/my-vocabulary/ToeicVocabularySection";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";
-import http from "@/lib/http";
+import { api } from "@/lib/api-client";
 
 export type VocabularyEntry = {
   id: string;
@@ -120,7 +120,7 @@ export default function MyVocabularyPage() {
 
     (async () => {
       try {
-        const { data } = await http.get<VocabularyEntry[]>("/vocabulary");
+        const data = await api.get<VocabularyEntry[]>("/vocabulary");
         if (!cancelled) {
           setEntries(Array.isArray(data) ? data : []);
         }
@@ -154,7 +154,7 @@ export default function MyVocabularyPage() {
       const pd = pendingDeleteRef.current;
       if (pd) {
         clearTimeout(pd.timerId);
-        void http.delete(`/vocabulary/${encodeURIComponent(pd.entry.query)}`).catch(() => {});
+        void api.delete(`/vocabulary/${encodeURIComponent(pd.entry.query)}`).catch(() => {});
       }
     };
   }, []);
@@ -163,7 +163,7 @@ export default function MyVocabularyPage() {
     const next = !entry.saved;
     setEntries((curr) => curr.map((e) => (e.id === entry.id ? { ...e, saved: next } : e)));
     try {
-      await http.patch(`/vocabulary/${encodeURIComponent(entry.query)}/saved`, { saved: next });
+      await api.patch(`/vocabulary/${encodeURIComponent(entry.query)}/saved`, { saved: next });
     } catch {
       setEntries((curr) => curr.map((e) => (e.id === entry.id ? { ...e, saved: !next } : e)));
     }
@@ -174,7 +174,7 @@ export default function MyVocabularyPage() {
 
     if (pendingDelete) {
       clearTimeout(pendingDelete.timerId);
-      void http
+      void api
         .delete(`/vocabulary/${encodeURIComponent(pendingDelete.entry.query)}`)
         .catch(() => {});
     }
@@ -183,7 +183,7 @@ export default function MyVocabularyPage() {
     setEntries((curr) => curr.filter((e) => e.id !== entry.id));
 
     const timerId = setTimeout(() => {
-      void http.delete(`/vocabulary/${encodeURIComponent(entry.query)}`).catch(() => {});
+      void api.delete(`/vocabulary/${encodeURIComponent(entry.query)}`).catch(() => {});
       setPendingDelete(null);
     }, 5000);
 
