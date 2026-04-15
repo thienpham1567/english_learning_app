@@ -14,8 +14,8 @@ import { activityLog } from "@/lib/db/schema";
 
 const STYLE_MAP: Record<string, string[]> = {
   visual: ["flashcard_review", "study_set"],
-  reading: ["grammar_lesson", "listening_practice"],
-  conversational: ["chatbot_session", "voice_practice"],
+  reading: ["grammar_lesson"],
+  conversational: ["chatbot_session", "voice_practice", "listening_practice"],
   practice: ["grammar_quiz", "daily_challenge", "writing_practice"],
 };
 
