@@ -11,7 +11,7 @@
     "test:run": "turbo run test:run",
     "db:generate": "pnpm --filter web db:generate",
     "db:migrate": "pnpm --filter web db:migrate",
-    "db:studio": "pnpm --filter web dlx drizzle-kit studio",
+    "db:studio": "pnpm --filter web exec drizzle-kit studio",
     "format": "pnpm --filter web format",
     "format:fix": "pnpm --filter web format:fix",
     "check": "pnpm --filter web check"
