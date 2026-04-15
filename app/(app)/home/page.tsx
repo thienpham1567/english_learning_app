@@ -25,6 +25,7 @@ import {
 import { useDashboard, type DashboardData } from "@/hooks/useDashboard";
 import { useUser } from "@/components/app/shared/UserContext";
 import { StreakFire, XPCounter, EmptyStateCard, StreakCalendar, WordOfTheDay, WeeklyLeaderboard } from "@/components/app/shared";
+import { LearningStyleCard } from "@/components/app/shared/LearningStyleCard";
 
 const { Title, Text } = Typography;
 
@@ -353,6 +354,9 @@ export default function HomePage() {
             </Flex>
           </Card>
         )}
+
+        {/* ── Learning Style (Story 16.3) ── */}
+        {!isNewUser && <LearningStyleCard />}
 
         {/* ── QuickActions ── */}
         <Card
