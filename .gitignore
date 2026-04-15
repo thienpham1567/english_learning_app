@@ -1,7 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules
 /.pnp
 .pnp.*
 .yarn/*
@@ -14,11 +14,12 @@
 /coverage
 
 # next.js
-/.next/
+.next/
 /out/
 
 # production
 /build
+dist/
 
 # misc
 .DS_Store
@@ -26,6 +27,9 @@
 # brainstorming artifacts
 .superpowers/
 .worktrees/
+
+# turbo
+.turbo/
 
 .claude
 
@@ -46,3 +50,5 @@ yarn-error.log*
 next-env.d.ts
 .env*.local
 docs
+package-lock.json
+yarn.lock

@@ -1,4 +1,9 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "framework": "nextjs",
+  "installCommand": "npx pnpm@10.28.1 install --frozen-lockfile",
+  "buildCommand": "npx pnpm@10.28.1 --filter web build",
+  "outputDirectory": "apps/web/.next",
   "crons": [
     {
       "path": "/api/cron/daily-push",
