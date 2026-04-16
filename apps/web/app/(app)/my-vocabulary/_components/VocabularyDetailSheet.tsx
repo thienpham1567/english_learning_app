@@ -148,9 +148,6 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                 >
                   {sense.label}
                 </Text>
-                <Text strong style={{ fontSize: 14 }}>
-                  {sense.definitionVi}
-                </Text>
                 <Text type="secondary" style={{ fontSize: 14 }}>
                   {sense.definitionEn}
                 </Text>
