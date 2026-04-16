@@ -5,6 +5,7 @@ import { detectLanguage } from "@/lib/chat/detect-language";
 import type { ChatMessage } from "@/lib/chat/types";
 
 const MAX_CONTEXT_MESSAGES = 20;
+const MAX_CONTEXT_CHARS = 40_000;
 
 export function countConsecutiveVietnameseTurns(messages: ChatMessage[]) {
   const recentUserMessages = messages.filter((message) => message.role === "user");
@@ -58,8 +59,18 @@ function buildOpenAiHistoryItem(message: ChatMessage): ResponseInputItem {
   };
 }
 
+function trimByCharBudget(messages: ChatMessage[]): ChatMessage[] {
+  let total = messages.reduce((sum, m) => sum + m.text.length, 0);
+  let start = 0;
+  while (total > MAX_CONTEXT_CHARS && start < messages.length - 1) {
+    total -= messages[start].text.length;
+    start += 1;
+  }
+  return start > 0 ? messages.slice(start) : messages;
+}
+
 export function buildChatRequest(messages: ChatMessage[], personaId: string) {
-  const recentMessages = messages.slice(-MAX_CONTEXT_MESSAGES);
+  const recentMessages = trimByCharBudget(messages.slice(-MAX_CONTEXT_MESSAGES));
   const consecutiveVietnameseTurns = countConsecutiveVietnameseTurns(recentMessages);
 
   return {

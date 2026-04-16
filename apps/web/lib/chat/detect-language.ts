@@ -143,6 +143,11 @@ export function detectLanguage(input: string): DetectedLanguage {
   const text = input.trim();
   if (!text) return "unknown";
 
+  // Fast path: Vietnamese diacritical marks or đ/Đ are unambiguous — detect before normalization
+  if (/[đĐàáâãèéêìíòóôõùúýăắặẳẵấầẩẫậếềệểễốồộổỗơớờợởỡưứừựửữ]/u.test(text)) {
+    return "vietnamese";
+  }
+
   const tokens = tokenize(text);
   const englishScore =
     countPhraseMatches(tokens, englishPhrases) + countTokenMatches(tokens, englishTokens);

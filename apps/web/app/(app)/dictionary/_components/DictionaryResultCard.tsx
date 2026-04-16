@@ -174,7 +174,15 @@ function HighlightWord({ text, headword }: { text: string; headword: string }) {
   );
 }
 
-function SensePanel({ sense, headword }: { sense: DictionarySense; headword: string }) {
+function SensePanel({
+  sense,
+  headword,
+  onSearch,
+}: {
+  sense: DictionarySense;
+  headword: string;
+  onSearch?: (word: string) => void;
+}) {
   const [isCollocationsOpen, setIsCollocationsOpen] = useState(false);
   const examples = sense.examples ?? [];
   const examplesVi = sense.examplesVi ?? [];
@@ -258,22 +266,25 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
             <CodeOutlined style={{ fontSize: 12 }} />
             Mẫu câu thường gặp
           </h3>
-          <ul
-            style={{
-              listStyle: "none",
-              padding: 0,
-              margin: 0,
-              display: "flex",
-              flexDirection: "column",
-              gap: 8,
-            }}
-          >
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
             {sense.patterns.map((pattern) => (
-              <li key={pattern} style={SENSE_ITEM_STYLE}>
-                <BoldText text={pattern} />
-              </li>
+              <span
+                key={pattern}
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 12,
+                  background: "var(--bg-deep)",
+                  border: "1px solid var(--border)",
+                  borderRadius: 4,
+                  padding: "3px 10px",
+                  color: "var(--text-secondary)",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {pattern}
+              </span>
             ))}
-          </ul>
+          </div>
         </section>
       )}
 
@@ -283,28 +294,45 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
             <LinkOutlined style={{ fontSize: 12 }} />
             Biểu đạt liên quan
           </h3>
-          <ul
-            style={{
-              listStyle: "none",
-              padding: 0,
-              margin: 0,
-              display: "flex",
-              flexDirection: "column",
-              gap: 8,
-            }}
-          >
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
             {sense.relatedExpressions.map((expr) => (
-              <li key={expr} style={SENSE_ITEM_STYLE}>
-                <BoldText text={expr} />
-              </li>
+              <button
+                key={expr}
+                type="button"
+                onClick={() => onSearch?.(expr)}
+                style={{
+                  borderRadius: 999,
+                  border: "1px solid rgba(154,177,122,0.4)",
+                  background: "var(--surface)",
+                  padding: "4px 14px",
+                  fontSize: 13,
+                  fontStyle: "italic",
+                  fontFamily: "var(--font-display)",
+                  color: "var(--accent)",
+                  cursor: onSearch ? "pointer" : "default",
+                  transition: "background 0.15s",
+                }}
+              >
+                {expr}
+              </button>
             ))}
-          </ul>
+          </div>
         </section>
       )}
 
       {sense.commonMistakesVi.length > 0 && (
-        <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <h3 style={SENSE_HEADER_STYLE}>
+        <section
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 10,
+            borderRadius: "var(--radius)",
+            background: "#fdf6f0",
+            border: "1px solid #f0c8a0",
+            padding: "14px 16px",
+          }}
+        >
+          <h3 style={{ ...SENSE_HEADER_STYLE, color: "#b84020" }}>
             <WarningOutlined style={{ fontSize: 12 }} />
             Lỗi thường gặp
           </h3>
@@ -319,7 +347,16 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
             }}
           >
             {sense.commonMistakesVi.map((mistake) => (
-              <li key={mistake} style={SENSE_ITEM_STYLE}>
+              <li
+                key={mistake}
+                style={{
+                  borderLeft: "2px solid #e8a878",
+                  paddingLeft: 12,
+                  fontSize: 13,
+                  lineHeight: 1.6,
+                  color: "#7a3f1a",
+                }}
+              >
                 <BoldText text={mistake} />
               </li>
             ))}
@@ -762,7 +799,7 @@ export function DictionaryResultCard({
             </button>
           ))}
         </div>
-        {activeSense && <SensePanel key={activeSense.id} sense={activeSense} headword={vocabulary.headword} />}
+        {activeSense && <SensePanel key={activeSense.id} sense={activeSense} headword={vocabulary.headword} onSearch={onSearch} />}
       </div>
 
       {/* Nearby words bar */}
