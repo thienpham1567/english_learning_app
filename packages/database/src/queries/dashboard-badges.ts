@@ -1,0 +1,22 @@
+import type { Badge } from "@repo/contracts";
+
+/**
+ * Badge definitions — identical thresholds, labels, and emoji
+ * to apps/web/lib/daily-challenge/badges.ts.
+ *
+ * Kept as a package-local helper so packages/database never imports
+ * from apps/web (wrong dependency direction).
+ */
+const BADGE_DEFINITIONS: Omit<Badge, "unlocked">[] = [
+  { id: "streak-3", emoji: "🔥", label: "Bắt đầu tốt", requiredStreak: 3 },
+  { id: "streak-7", emoji: "🔥", label: "Kiên trì", requiredStreak: 7 },
+  { id: "streak-30", emoji: "🔥", label: "Không thể cản", requiredStreak: 30 },
+  { id: "streak-100", emoji: "🏆", label: "Huyền thoại", requiredStreak: 100 },
+];
+
+export function getBadges(bestStreak: number): Badge[] {
+  return BADGE_DEFINITIONS.map((b) => ({
+    ...b,
+    unlocked: bestStreak >= b.requiredStreak,
+  }));
+}

@@ -149,6 +149,9 @@ importers:
 
   packages/database:
     dependencies:
+      '@repo/contracts':
+        specifier: workspace:*
+        version: link:../contracts
       drizzle-orm:
         specifier: ^0.45.1
         version: 0.45.2(@opentelemetry/api@1.9.1)(@types/pg@8.20.0)(kysely@0.28.16)(pg@8.20.0)
@@ -162,6 +165,9 @@ importers:
       typescript:
         specifier: ^5
         version: 5.9.3
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.4(@types/debug@4.1.13)(@types/node@20.19.39)(jsdom@27.4.0(@noble/hashes@2.2.0))(tsx@4.21.0)
 
   packages/shared:
     devDependencies:
