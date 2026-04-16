@@ -1,6 +1,6 @@
 # Story 17.9: Create Dashboard Module (use case)
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -260,15 +260,40 @@ gpt-5.4
 ### Debug Log References
 
 - The original Epic 17 planning artifact is no longer present in the working tree; source context for `17.9` was recovered from git history
-- `packages/modules` does not currently exist
+- `pnpm --filter @repo/modules build` failed in the red phase because `@repo/modules` did not exist yet
+- `pnpm install` was required after creating `packages/modules/package.json` so the new workspace package could resolve `@repo/auth`, `@repo/contracts`, and `@repo/database`
 - `17.8` is already done, so this story must build on the extracted query-service shape rather than restating pre-extraction assumptions
+- `pnpm build` passes when the root `.env.local` is sourced; a plain repo build fails in `apps/web` because `/diagnostic` prerender expects `DATABASE_URL`
+- `pnpm test:run` still fails in untouched `apps/web` suites (`http-usage`, dictionary UI, persona, sign-in, and some route tests), so full-repo regression validation is not clean yet
 
 ### Completion Notes List
 
-- `17.9` should be small and boring: one package, one use case, one unit test slice
-- The main mistake to avoid is letting `17.9` collapse into a repo-wide architecture cleanup
-- The only dependency this use case should care about is the `DashboardQueryService` contract plus `ActorContext`
+- Implemented `@repo/modules` with a pure `getDashboardOverview` use case that depends only on `ActorContext`, `DashboardResponse`, and the `DashboardQueryService` interface
+- Added package-local Vitest coverage with a fake query service that verifies delegation, returned payload equality, and dashboard contract conformance
+- Kept story scope narrow: no route refactor, no query-service rewrite, and no framework/runtime imports inside the application layer
+- Validation summary: `pnpm --filter @repo/modules build` passed, `pnpm --filter @repo/modules test:run` passed, root `pnpm build` passed with sourced root env, root `pnpm lint` passed with existing warnings, and root `pnpm test:run` remains blocked by unrelated `apps/web` failures
 
 ### File List
 
 - `_bmad-output/implementation-artifacts/17-9-dashboard-module.md`
+- `_bmad-output/implementation-artifacts/sprint-status.yaml`
+- `packages/modules/__tests__/dashboard/get-dashboard-overview.test.ts`
+- `packages/modules/package.json`
+- `packages/modules/src/dashboard/application/get-dashboard-overview.ts`
+- `packages/modules/src/dashboard/index.ts`
+- `packages/modules/src/index.ts`
+- `packages/modules/tsconfig.json`
+- `packages/modules/vitest.config.ts`
+- `pnpm-lock.yaml`
+
+### Review Findings
+
+- [x] [Review][Defer] Runtime response validation — deferred; establish as cross-cutting policy when multiple use cases exist, not ad-hoc in the first one [packages/modules/src/dashboard/application/get-dashboard-overview.ts:8] — deferred, pre-existing
+- [x] [Review][Patch] `vitest.config.ts` uses `globals: true` but test explicitly imports `describe`/`it`/`expect` from `"vitest"` — removed `globals: true`, explicit imports retained [packages/modules/vitest.config.ts:4]
+- [x] [Review][Defer] userId runtime guard — `resolveWebActor()` throws `UnauthorizedError` before reaching the use case; guard belongs to the auth layer per AC6 narrow scope [packages/modules/src/dashboard/application/get-dashboard-overview.ts:9] — deferred, pre-existing
+- [x] [Review][Defer] `DashboardQueryService` port owned by `@repo/database` instead of `@repo/modules` — explicitly acknowledged as a known tradeoff in spec dev notes [packages/modules/src/dashboard/application/get-dashboard-overview.ts:3] — deferred, pre-existing
+- [x] [Review][Defer] No lint/typecheck scripts in `package.json` — follows existing monorepo package pattern; out of story scope [packages/modules/package.json] — deferred, pre-existing
+
+## Change Log
+
+- 2026-04-16: Implemented the `@repo/modules` scaffold, added `getDashboardOverview`, wired the allowed workspace dependencies, and added package-local tests. Story remains `in-progress` because repo-wide `pnpm test:run` is failing in pre-existing `apps/web` suites outside this story's change set.
