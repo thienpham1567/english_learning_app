@@ -81,7 +81,7 @@ export async function POST(req: Request) {
 
       if (cachedData) {
         const isBadEntry =
-          cachedData.overviewVi.startsWith("[NOT_ENGLISH]") ||
+          cachedData.isNotEnglish ||
           !isHeadwordConsistentWithQuery(cachedData.headword, cacheKey);
 
         if (isBadEntry) {
@@ -113,7 +113,7 @@ export async function POST(req: Request) {
 
     const parsed = VocabularySchema.parse(JSON.parse(response.output_text));
 
-    if (parsed.overviewVi.startsWith("[NOT_ENGLISH]")) {
+    if (parsed.isNotEnglish) {
       return NextResponse.json(
         { error: "Vui lòng nhập từ hoặc cụm từ tiếng Anh hợp lệ." },
         { status: 400 },

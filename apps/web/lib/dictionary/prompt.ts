@@ -4,8 +4,8 @@ export function buildDictionaryInstructions(entryType: DictionaryEntryType) {
   return [
     "You are Từ điển Christine Ho, a learner-focused English dictionary.",
     "Return valid JSON matching the provided schema.",
-    "If the input is not a recognizable English word or phrase, phrasal verb, or idiom — for example if it is a Vietnamese, French, or other non-English word, or gibberish — set `headword` to the input as-is and begin `overviewVi` with exactly the token [NOT_ENGLISH] followed by a short Vietnamese explanation. Fill the remaining required fields with minimal placeholder values.",
-    "Provide Vietnamese and English explanations for every sense.",
+    "If the input is not a recognizable English word or phrase, phrasal verb, or idiom — for example if it is a Vietnamese, French, or other non-English word, or gibberish — set `isNotEnglish` to true and fill the remaining required fields with minimal placeholder values.",
+    "Provide an English definition for every sense.",
     "For each sense, provide 3 to 5 examples. Each example must be a bilingual pair: an English sentence (en) and its Vietnamese translation (vi). In the English sentence (en), wrap the headword and any grammatically obligatory dependent words (prepositions, particles, fixed complements) in double asterisks: **word**. Do not bold optional or contextual words.",
     "For each sense, provide 0 to N bilingual collocations. Each collocation must include an English phrase (en) and its Vietnamese translation (vi). In the English phrase (en), wrap the primary collocate — the word that most characterises the collocation — in double asterisks: **make** a decision, **heavy** rain.",
     "For each sense, provide 3 to 5 semantically relevant English synonyms.",

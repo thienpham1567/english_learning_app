@@ -14,7 +14,6 @@ import {
   StarFilled,
   StarOutlined,
   ThunderboltOutlined,
-  TranslationOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
 
@@ -43,13 +42,13 @@ const SENSE_ITEM_STYLE: React.CSSProperties = {
   color: "var(--text-secondary)",
 };
 
-const LEVEL_COLORS: Record<string, string> = {
-  A1: "green",
-  A2: "cyan",
-  B1: "blue",
-  B2: "gold",
-  C1: "orange",
-  C2: "volcano",
+const LEVEL_STYLES: Record<string, React.CSSProperties> = {
+  A1: { background: "#eef3e6", color: "#3d6a2a", borderColor: "rgba(154,177,122,0.5)" },
+  A2: { background: "#eef3e6", color: "#3d6a2a", borderColor: "rgba(154,177,122,0.6)" },
+  B1: { background: "#fdf8ee", color: "#8a6a20", borderColor: "#e8c870" },
+  B2: { background: "#fdf3e3", color: "#9a5a15", borderColor: "#e8a860" },
+  C1: { background: "#fef0e7", color: "#b84020", borderColor: "#e89070" },
+  C2: { background: "#feecea", color: "#c02030", borderColor: "#e87070" },
 };
 
 const SENSE_HEADER_STYLE: React.CSSProperties = {
@@ -193,16 +192,6 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
 
   return (
     <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: 28 }}>
-      <section style={sectionStyle}>
-        <h3 style={SENSE_HEADER_STYLE}>
-          <TranslationOutlined style={{ fontSize: 12 }} />
-          Nghĩa tiếng Việt
-        </h3>
-        <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
-          <BoldText text={sense.definitionVi} />
-        </p>
-      </section>
-
       <section style={sectionStyle}>
         <h3 style={SENSE_HEADER_STYLE}>
           <BookOutlined style={{ fontSize: 12 }} />
@@ -431,73 +420,6 @@ function AudioButton({
   );
 }
 
-function OverviewToggle({ overviewVi, overviewEn }: { overviewVi: string; overviewEn: string }) {
-  const [lang, setLang] = useState<"vi" | "en">("vi");
-
-  return (
-    <div
-      className="anim-fade-up dictionary-overview-block"
-      style={{
-        marginTop: 20,
-        borderRadius: "var(--radius)",
-        background: "var(--bg-deep)",
-        padding: "24px 20px",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 4,
-          borderRadius: 999,
-          background: "var(--border)",
-          padding: 2,
-          width: "fit-content",
-          opacity: 0.6,
-        }}
-      >
-        {(["vi", "en"] as const).map((l) => (
-          <button
-            key={l}
-            type="button"
-            onClick={() => setLang(l)}
-            style={{
-              position: "relative",
-              borderRadius: 999,
-              padding: "4px 12px",
-              fontSize: 10,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.06em",
-              border: "none",
-              cursor: "pointer",
-              transition: "color 0.2s, background 0.2s",
-              color: lang === l ? "var(--accent)" : "var(--text-muted)",
-              background: lang === l ? "var(--accent-light)" : "transparent",
-            }}
-          >
-            {l === "vi" ? "VN" : "EN"}
-          </button>
-        ))}
-      </div>
-
-      <p
-        key={lang}
-        className="anim-fade-in"
-        style={{
-          marginTop: 12,
-          fontSize: 15,
-          lineHeight: 1.6,
-          color: "var(--text-secondary)",
-          fontFamily: lang === "vi" ? "var(--font-display)" : "inherit",
-          fontStyle: lang === "vi" ? "italic" : "normal",
-        }}
-      >
-        <BoldText text={lang === "vi" ? overviewVi : overviewEn} />
-      </p>
-    </div>
-  );
-}
 
 export function DictionaryResultCard({
   vocabulary,
@@ -632,13 +554,20 @@ export function DictionaryResultCard({
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
           {vocabulary.level && (
-            <Tag
-              color={LEVEL_COLORS[vocabulary.level] ?? "default"}
-              variant="outlined"
-              style={{ borderRadius: 999, padding: "2px 12px" }}
+            <span
+              style={{
+                borderRadius: 999,
+                padding: "2px 12px",
+                fontSize: 12,
+                fontWeight: 700,
+                letterSpacing: "0.06em",
+                border: `1px solid ${LEVEL_STYLES[vocabulary.level]?.borderColor ?? "var(--border)"}`,
+                background: LEVEL_STYLES[vocabulary.level]?.background ?? "var(--bg-deep)",
+                color: LEVEL_STYLES[vocabulary.level]?.color ?? "var(--text-secondary)",
+              }}
             >
               {vocabulary.level}
-            </Tag>
+            </span>
           )}
           <Tag variant="solid" style={{ borderRadius: 999, padding: "2px 12px" }}>
             {vocabulary.entryType === "idiom"
@@ -796,8 +725,6 @@ export function DictionaryResultCard({
       {vocabulary.wordFamily && vocabulary.wordFamily.length > 0 && onSearch && (
         <WordFamilySection wordFamily={vocabulary.wordFamily} onSearch={onSearch} />
       )}
-
-      <OverviewToggle overviewVi={vocabulary.overviewVi} overviewEn={vocabulary.overviewEn} />
 
       {/* Sense tabs */}
       <div style={{ marginTop: 24 }}>
