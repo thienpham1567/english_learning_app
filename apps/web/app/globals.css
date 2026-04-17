@@ -822,3 +822,19 @@ textarea.ant-input::placeholder {
   pointer-events: none;
   user-select: none;
 }
+
+/* ── Dictionary: Verb Forms Grid ── */
+.verb-forms-grid {
+  grid-template-columns: repeat(5, 1fr);
+}
+@media (max-width: 900px) {
+  .verb-forms-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 560px) {
+  .verb-forms-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+

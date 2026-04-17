@@ -14,14 +14,15 @@ const CARD_BASE: React.CSSProperties = {
   flexDirection: "column",
   gap: 6,
   borderRadius: "var(--radius)",
-  padding: "12px 14px",
+  padding: "14px 16px",
   transition: "box-shadow 0.2s",
+  minHeight: 110,
 };
 
 const CARD_REGULAR: React.CSSProperties = {
   ...CARD_BASE,
   background: "var(--bg-deep)",
-  border: "1px solid transparent",
+  border: "1px solid var(--border)",
 };
 
 const CARD_INFINITIVE: React.CSSProperties = {
@@ -62,7 +63,8 @@ export function VerbFormsSection({ verbForms }: Props) {
   }
 
   return (
-    <div className="anim-fade-up" style={{ marginTop: 20 }}>
+    <div className="anim-fade-up" style={{ marginTop: 24 }}>
+      {/* ── Expand toggle — prominent section header ── */}
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
@@ -74,45 +76,66 @@ export function VerbFormsSection({ verbForms }: Props) {
           alignItems: "center",
           justifyContent: "space-between",
           gap: 8,
-          background: "none",
-          border: "none",
+          background: "var(--surface)",
+          border: "1px solid var(--border)",
+          borderLeft: "3px solid var(--accent)",
+          borderRadius: "var(--radius-sm)",
           cursor: "pointer",
-          padding: 0,
+          padding: "10px 16px",
+          transition: "background 0.2s, box-shadow 0.2s",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.background = "var(--surface-hover)";
+          e.currentTarget.style.boxShadow = "var(--shadow-sm)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.background = "var(--surface)";
+          e.currentTarget.style.boxShadow = "none";
         }}
       >
-        <span
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span
+            style={{
+              fontSize: 13,
+              fontWeight: 700,
+              textTransform: "uppercase",
+              letterSpacing: "0.12em",
+              color: "var(--accent)",
+            }}
+          >
+            Dạng động từ
+          </span>
+          <span
+            style={{
+              fontSize: 11,
+              fontWeight: 600,
+              padding: "2px 10px",
+              borderRadius: 999,
+              background: "var(--accent-muted)",
+              color: "var(--accent)",
+            }}
+          >
+            {verbForms.length} dạng
+          </span>
+        </div>
+        <DownOutlined
           style={{
             fontSize: 12,
-            fontWeight: 600,
-            textTransform: "uppercase",
-            letterSpacing: "0.14em",
             color: "var(--accent)",
+            transition: "transform 0.25s ease",
+            transform: open ? "rotate(180deg)" : "rotate(0)",
           }}
-        >
-          Dạng động từ
-        </span>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 12, color: "var(--text-muted)" }}>{verbForms.length} dạng</span>
-          <DownOutlined
-            style={{
-              fontSize: 12,
-              color: "var(--text-muted)",
-              transition: "transform 0.2s",
-              transform: open ? "rotate(180deg)" : "rotate(0)",
-            }}
-          />
-        </div>
+        />
       </button>
 
       {open && (
         <div
           id="verb-forms-grid"
-          className="anim-fade-in"
+          className="anim-fade-in verb-forms-grid"
           style={{
             display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(120px, 1fr))",
-            gap: 8,
-            paddingTop: 12,
+            gap: 10,
+            paddingTop: 14,
           }}
         >
           {verbForms.map((vf, idx) => {
@@ -129,10 +152,11 @@ export function VerbFormsSection({ verbForms }: Props) {
                 <span
                   style={{
                     fontSize: 10,
-                    fontWeight: 600,
+                    fontWeight: 700,
                     textTransform: "uppercase",
-                    letterSpacing: "0.08em",
+                    letterSpacing: "0.1em",
                     color: isInfinitive ? "var(--accent)" : "var(--text-muted)",
+                    lineHeight: 1,
                   }}
                 >
                   {vf.label}
@@ -146,6 +170,7 @@ export function VerbFormsSection({ verbForms }: Props) {
                     color: "var(--ink)",
                     fontFamily: isInfinitive ? "var(--font-display)" : "inherit",
                     fontStyle: isInfinitive ? "italic" : "normal",
+                    marginTop: 2,
                   }}
                 >
                   {vf.form}
@@ -153,39 +178,40 @@ export function VerbFormsSection({ verbForms }: Props) {
 
                 {/* Phonetics — compact single column, no repeated flag */}
                 {(vf.phoneticsUs || vf.phoneticsUk) && (
-                  <div style={{ display: "flex", flexDirection: "column", gap: 1 }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 2, marginTop: 2 }}>
                     {vf.phoneticsUs && (
                       <span style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--text-secondary)" }}>
-                        <span style={{ color: "var(--text-muted)", marginRight: 3 }}>US</span>
+                        <span style={{ color: "var(--text-muted)", marginRight: 4, fontSize: 10, fontWeight: 600 }}>US</span>
                         {vf.phoneticsUs}
                       </span>
                     )}
                     {vf.phoneticsUk && (
                       <span style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--text-secondary)" }}>
-                        <span style={{ color: "var(--text-muted)", marginRight: 3 }}>UK</span>
+                        <span style={{ color: "var(--text-muted)", marginRight: 4, fontSize: 10, fontWeight: 600 }}>UK</span>
                         {vf.phoneticsUk}
                       </span>
                     )}
                   </div>
                 )}
 
-                {/* Footer: audio + irregular badge */}
-                <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 2 }}>
+                {/* Footer: audio + irregular badge — pushed to bottom */}
+                <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: "auto", paddingTop: 4 }}>
                   <button
                     type="button"
                     aria-label={`Play pronunciation of ${vf.form}`}
                     onClick={() => speak(vf.form)}
                     style={{
                       display: "grid",
-                      width: 22,
-                      height: 22,
+                      width: 24,
+                      height: 24,
                       placeItems: "center",
-                      borderRadius: 4,
+                      borderRadius: 6,
                       color: "var(--text-muted)",
-                      background: "none",
-                      border: "none",
+                      background: "var(--bg-deep)",
+                      border: "1px solid var(--border)",
                       cursor: "pointer",
                       padding: 0,
+                      transition: "color 0.15s, border-color 0.15s",
                     }}
                   >
                     {speakingForm === vf.form ? (
@@ -199,8 +225,8 @@ export function VerbFormsSection({ verbForms }: Props) {
                       style={{
                         fontSize: 10,
                         fontWeight: 600,
-                        padding: "1px 6px",
-                        borderRadius: 4,
+                        padding: "2px 8px",
+                        borderRadius: 6,
                         background: "#fbe8ce",
                         color: "#9a4a1a",
                         border: "1px solid #e8b880",
