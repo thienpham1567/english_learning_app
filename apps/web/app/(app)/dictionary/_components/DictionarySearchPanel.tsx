@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { ReadOutlined, StarOutlined, CloseOutlined } from "@ant-design/icons";
+import { RecentLookups } from "@/app/(app)/dictionary/_components/RecentLookups";
 
 import { api } from "@/lib/api-client";
 
@@ -9,6 +10,8 @@ type DictionarySearchPanelProps = {
   initialValue: string;
   onSubmit: (word: string) => void;
   isLoading: boolean;
+  recentWords?: string[];
+  onSelectRecent?: (word: string) => void;
 };
 
 const HELPER_TIPS = [
@@ -37,6 +40,8 @@ export function DictionarySearchPanel({
   initialValue,
   onSubmit,
   isLoading,
+  recentWords = [],
+  onSelectRecent,
 }: DictionarySearchPanelProps) {
   const [draft, setDraft] = useState(initialValue);
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -337,6 +342,18 @@ export function DictionarySearchPanel({
         <p style={{ marginTop: 16, fontSize: 14, color: "var(--text-muted)" }}>
           Hỗ trợ tối đa 80 ký tự, bao gồm khoảng trắng và dấu nháy hợp lệ.
         </p>
+
+        {recentWords.length > 0 && onSelectRecent && (
+          <div
+            style={{
+              marginTop: 20,
+              paddingTop: 16,
+              borderTop: "1px solid var(--border)",
+            }}
+          >
+            <RecentLookups words={recentWords} onSelect={onSelectRecent} />
+          </div>
+        )}
       </div>
     </section>
   );

@@ -10,7 +10,7 @@ import { normalizeDictionaryQuery } from "@/lib/dictionary/normalize-query";
 import { DictionaryResultCard } from "@/app/(app)/dictionary/_components/DictionaryResultCard";
 import { DictionarySearchPanel } from "@/app/(app)/dictionary/_components/DictionarySearchPanel";
 import { ThesaurusSheet } from "@/app/(app)/dictionary/_components/ThesaurusSheet";
-import { RecentLookups, getRecentLookups, pushRecentLookup } from "@/app/(app)/dictionary/_components/RecentLookups";
+import { getRecentLookups, pushRecentLookup } from "@/app/(app)/dictionary/_components/RecentLookups";
 import type { VocabularyWithNearby } from "@/lib/schemas/vocabulary";
 
 const QUERY_PATTERN = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
@@ -118,8 +118,13 @@ export default function DictionaryPage() {
       <div style={{ height: "100%", minHeight: 0, overflowY: "auto" }}>
         <div className="dictionary-grid">
           <div>
-            <RecentLookups words={recentWords} onSelect={handleSubmit} />
-            <DictionarySearchPanel initialValue={q} onSubmit={handleSubmit} isLoading={isLoading} />
+            <DictionarySearchPanel
+              initialValue={q}
+              onSubmit={handleSubmit}
+              isLoading={isLoading}
+              recentWords={recentWords}
+              onSelectRecent={handleSubmit}
+            />
           </div>
           <div>
             <DictionaryResultCard

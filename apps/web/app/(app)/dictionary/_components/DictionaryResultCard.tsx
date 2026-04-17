@@ -577,19 +577,56 @@ export function DictionaryResultCard({
           >
             Kết quả tra cứu
           </p>
-          <h2
-            className="dictionary-result-heading"
-            style={{
-              marginTop: 8,
-              fontStyle: "italic",
-              lineHeight: 1.2,
-              fontFamily: "var(--font-display)",
-              color: "var(--ink)",
-              wordBreak: "break-word",
-            }}
-          >
-            {vocabulary.headword}
-          </h2>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 12, flexWrap: "wrap", marginTop: 8 }}>
+            <h2
+              className="dictionary-result-heading"
+              style={{
+                fontStyle: "italic",
+                lineHeight: 1.2,
+                fontFamily: "var(--font-display)",
+                color: "var(--ink)",
+                wordBreak: "break-word",
+                margin: 0,
+              }}
+            >
+              {vocabulary.headword}
+            </h2>
+            <span
+              style={{
+                borderRadius: 999,
+                padding: "3px 14px",
+                fontSize: 13,
+                fontWeight: 600,
+                fontStyle: "italic",
+                background: "var(--accent-muted)",
+                color: "var(--accent)",
+                border: "1px solid rgba(154,177,122,0.3)",
+                whiteSpace: "nowrap",
+                lineHeight: 1.4,
+              }}
+            >
+              {vocabulary.entryType === "idiom"
+                ? "idiom"
+                : vocabulary.entryType === "phrasal_verb"
+                  ? "phrasal verb"
+                  : (vocabulary.partOfSpeech ?? "word")}
+            </span>
+            {numberLabel && (
+              <span
+                style={{
+                  borderRadius: 999,
+                  padding: "2px 10px",
+                  fontSize: 12,
+                  fontWeight: 500,
+                  color: "var(--text-muted)",
+                  border: "1px solid var(--border)",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {numberLabel}
+              </span>
+            )}
+          </div>
         </div>
         <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
           {vocabulary.level && (
@@ -608,13 +645,6 @@ export function DictionaryResultCard({
               {vocabulary.level}
             </span>
           )}
-          <Tag variant="solid" style={{ borderRadius: 999, padding: "2px 12px" }}>
-            {vocabulary.entryType === "idiom"
-              ? "idiom"
-              : vocabulary.entryType === "phrasal_verb"
-                ? "phrasal verb"
-                : (vocabulary.partOfSpeech ?? "word")}
-          </Tag>
           {vocabulary.register && (
             <Tag
               variant="outlined"
@@ -627,11 +657,6 @@ export function DictionaryResultCard({
               }}
             >
               {vocabulary.register}
-            </Tag>
-          )}
-          {numberLabel && (
-            <Tag variant="outlined" style={{ borderRadius: 999, padding: "2px 12px" }}>
-              {numberLabel}
             </Tag>
           )}
           {onOpenThesaurus && (
