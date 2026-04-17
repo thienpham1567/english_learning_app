@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, Flex, Spin, Typography } from "antd";
+import { Flex, Spin, Typography } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
 import { useWritingPractice } from "@/hooks/useWritingPractice";
@@ -29,15 +29,15 @@ export default function WritingPracticePage() {
   } = useWritingPractice();
 
   return (
-    <Card
+    <div
       style={{
+        display: "flex",
+        flexDirection: "column",
         height: "100%",
         minHeight: 0,
         flex: 1,
         overflow: "hidden",
-        boxShadow: "var(--shadow-md)",
       }}
-      styles={{ body: { display: "flex", flexDirection: "column", height: "100%", padding: 0 } }}
     >
       {/* Header */}
       <Flex
@@ -82,20 +82,22 @@ export default function WritingPracticePage() {
       >
         <div style={{ width: "100%", maxWidth: 800 }}>
           {error && (
-            <Card
-              size="small"
+            <div
               style={{
                 marginBottom: 16,
                 maxWidth: 480,
                 margin: "0 auto 16px",
                 textAlign: "center",
-                borderColor: "#fecaca",
+                border: "1px solid #fecaca",
+                borderRadius: 10,
                 background: "#fef2f2",
                 color: "#b91c1c",
+                padding: "10px 16px",
+                fontSize: 13,
               }}
             >
               {error}
-            </Card>
+            </div>
           )}
 
           {state === "prompt-selection" && (
@@ -140,6 +142,6 @@ export default function WritingPracticePage() {
           )}
         </div>
       </Flex>
-    </Card>
+    </div>
   );
 }

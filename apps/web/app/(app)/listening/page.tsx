@@ -76,10 +76,6 @@ export default function ListeningPage() {
         flex: 1,
         flexDirection: "column",
         overflow: "hidden",
-        borderRadius: "var(--radius-lg)",
-        border: "1px solid var(--border)",
-        background: "linear-gradient(180deg, var(--surface), var(--bg))",
-        boxShadow: "var(--shadow-md)",
       }}
     >
       {/* Header */}

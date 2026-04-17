@@ -56,15 +56,15 @@ export default function DailyChallengePage() {
   const formattedTime = useElapsedTimer(state === "active");
 
   return (
-    <Card
+    <div
       style={{
+        display: "flex",
+        flexDirection: "column",
         height: "100%",
         minHeight: 0,
         flex: 1,
         overflow: "hidden",
-        boxShadow: "var(--shadow-md)",
       }}
-      styles={{ body: { display: "flex", flexDirection: "column", height: "100%", padding: 0 } }}
     >
       {/* Header */}
       <Flex
@@ -196,6 +196,6 @@ export default function DailyChallengePage() {
           )}
         </Flex>
       </Flex>
-    </Card>
+    </div>
   );
 }
