@@ -77,7 +77,7 @@ function FrequencyBar({ band }: { band: FrequencyBand }) {
     <Tooltip title={tooltipEn} placement="top">
       <div
         className="anim-fade-in"
-        style={{ display: "inline-flex", alignItems: "center", gap: 8, marginTop: 12 }}
+        style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
       >
         <div style={{ display: "flex", gap: 3 }}>
           {Array.from({ length: 5 }, (_, i) => (
@@ -755,14 +755,60 @@ export function DictionaryResultCard({
         </span>
       ) : null}
 
-      {vocabulary.frequencyBand && <FrequencyBar band={vocabulary.frequencyBand} />}
+      {/* ── Meta info strip: Frequency + Word Family ── */}
+      {(vocabulary.frequencyBand || (vocabulary.wordFamily && vocabulary.wordFamily.length > 0)) && (
+        <div
+          className="anim-fade-up"
+          style={{
+            marginTop: 20,
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "flex-start",
+            gap: 20,
+            background: "var(--bg-deep)",
+            border: "1px solid var(--border)",
+            borderLeft: "3px solid var(--accent)",
+            borderRadius: "var(--radius-sm)",
+            padding: "14px 18px",
+          }}
+        >
+          {vocabulary.frequencyBand && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+              <span
+                style={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.12em",
+                  color: "var(--text-muted)",
+                }}
+              >
+                Độ phổ biến
+              </span>
+              <FrequencyBar band={vocabulary.frequencyBand} />
+            </div>
+          )}
+
+          {vocabulary.frequencyBand && vocabulary.wordFamily && vocabulary.wordFamily.length > 0 && (
+            <div
+              style={{
+                width: 1,
+                alignSelf: "stretch",
+                background: "var(--border)",
+              }}
+            />
+          )}
+
+          {vocabulary.wordFamily && vocabulary.wordFamily.length > 0 && onSearch && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 4, flex: 1, minWidth: 0 }}>
+              <WordFamilySection wordFamily={vocabulary.wordFamily} onSearch={onSearch} />
+            </div>
+          )}
+        </div>
+      )}
 
       {vocabulary.verbForms && vocabulary.verbForms.length > 0 && (
         <VerbFormsSection verbForms={vocabulary.verbForms} />
-      )}
-
-      {vocabulary.wordFamily && vocabulary.wordFamily.length > 0 && onSearch && (
-        <WordFamilySection wordFamily={vocabulary.wordFamily} onSearch={onSearch} />
       )}
 
       {/* Sense tabs */}
