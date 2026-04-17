@@ -34,29 +34,50 @@ export function QuestionCard({
   return (
     <div style={{ margin: "0 auto", width: "100%", maxWidth: 580 }}>
       {/* Progress */}
-      <div
-        style={{
-          marginBottom: 16,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <span style={{ fontSize: 12, fontWeight: 500, color: "var(--text-muted)" }}>
-          Câu {questionNumber} / {total}
-        </span>
-        <span
+      <div style={{ marginBottom: 16 }}>
+        <div
           style={{
-            borderRadius: 999,
-            background: "var(--bg-deep)",
-            padding: "2px 10px",
-            fontSize: 11,
-            fontWeight: 500,
-            color: "var(--text-secondary)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginBottom: 8,
           }}
         >
-          {question.grammarTopic}
-        </span>
+          <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)" }}>
+            Câu {questionNumber} / {total}
+          </span>
+          <span
+            style={{
+              borderRadius: 999,
+              background: "var(--bg-deep)",
+              padding: "3px 10px",
+              fontSize: 11,
+              fontWeight: 600,
+              color: "var(--text-secondary)",
+            }}
+          >
+            {question.grammarTopic}
+          </span>
+        </div>
+        {/* Visual progress track */}
+        <div
+          style={{
+            height: 5,
+            borderRadius: 99,
+            background: "var(--border)",
+            overflow: "hidden",
+          }}
+        >
+          <div
+            style={{
+              height: "100%",
+              borderRadius: 99,
+              background: "linear-gradient(90deg, var(--accent), #7a9660)",
+              width: `${(questionNumber / total) * 100}%`,
+              transition: "width 0.4s ease",
+            }}
+          />
+        </div>
       </div>
 
       {/* Combo badge (AC: #2) */}
@@ -96,10 +117,11 @@ export function QuestionCard({
           border: "1px solid var(--border)",
           background: "var(--surface)",
           padding: 24,
-          boxShadow: "var(--shadow-sm)",
+          boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+          borderTop: "3px solid var(--accent)",
         }}
       >
-        <p style={{ fontSize: 16, lineHeight: 1.6, color: "var(--ink)" }}>
+        <p style={{ fontSize: 17, lineHeight: 1.65, color: "var(--ink)", fontWeight: 500, margin: 0 }}>
           {renderStem(question.stem)}
         </p>
 
@@ -157,22 +179,31 @@ export function QuestionCard({
                 <span
                   style={{
                     display: "flex",
-                    width: 28,
-                    height: 28,
+                    width: 30,
+                    height: 30,
                     flexShrink: 0,
                     alignItems: "center",
                     justifyContent: "center",
-                    borderRadius: "var(--radius-sm)",
-                    background: "var(--bg-deep)",
+                    borderRadius: 8,
+                    background: isRevealed && isCorrect
+                      ? "#059669"
+                      : isRevealed && isSelected && !isCorrect
+                      ? "#dc2626"
+                      : isSelected
+                      ? "var(--accent)"
+                      : "var(--bg-deep)",
                     fontSize: 12,
-                    fontWeight: 700,
-                    color: "var(--text-secondary)",
+                    fontWeight: 800,
+                    color: (isRevealed && (isCorrect || (isSelected && !isCorrect))) || isSelected
+                      ? "#fff"
+                      : "var(--text-secondary)",
+                    transition: "all 0.2s",
                   }}
                 >
                   {isRevealed && isCorrect ? (
-                    <CheckOutlined style={{ fontSize: 14, color: "#059669" }} />
+                    <CheckOutlined style={{ fontSize: 13 }} />
                   ) : isRevealed && isSelected && !isCorrect ? (
-                    <CloseOutlined style={{ fontSize: 14, color: "#dc2626" }} />
+                    <CloseOutlined style={{ fontSize: 13 }} />
                   ) : (
                     OPTION_LABELS[i]
                   )}

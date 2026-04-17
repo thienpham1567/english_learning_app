@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { BookOutlined, CheckCircleOutlined, RightOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, RightOutlined } from "@ant-design/icons";
 import { Tag } from "antd";
 
 export type GrammarTopic = {
@@ -102,69 +102,216 @@ interface Props {
 
 export function TopicGrid({ onSelectTopic, completedTopics }: Props) {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+  const [hoveredCat, setHoveredCat] = useState<string | null>(null);
+  const [hoveredTopic, setHoveredTopic] = useState<string | null>(null);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       {GRAMMAR_CATEGORIES.map((cat) => {
         const isExpanded = expandedCategory === cat.id;
+        const isHovered = hoveredCat === cat.id;
         const completedCount = cat.topics.filter((t) => completedTopics.has(t.id)).length;
+        const progressPct = (completedCount / cat.topics.length) * 100;
+        const allDone = completedCount === cat.topics.length;
 
         return (
-          <div key={cat.id} style={{ borderRadius: 12, border: "1px solid var(--border)", background: "var(--card-bg)", overflow: "hidden" }}>
-            {/* Category header */}
+          <div
+            key={cat.id}
+            style={{
+              borderRadius: 14,
+              border: "1px solid var(--border)",
+              background: "var(--card-bg)",
+              overflow: "hidden",
+              boxShadow: isExpanded
+                ? "0 4px 16px rgba(0,0,0,0.08)"
+                : isHovered
+                ? "0 2px 8px rgba(0,0,0,0.06)"
+                : "0 1px 3px rgba(0,0,0,0.04)",
+              transition: "box-shadow 0.2s",
+            }}
+            onMouseEnter={() => setHoveredCat(cat.id)}
+            onMouseLeave={() => setHoveredCat(null)}
+          >
+            {/* Top color accent bar */}
+            <div
+              style={{
+                height: 4,
+                background: allDone
+                  ? "linear-gradient(90deg, #52c41a, #86efac)"
+                  : `linear-gradient(90deg, ${cat.color}, ${cat.color}aa)`,
+              }}
+            />
+
+            {/* Category header button */}
             <button
               onClick={() => setExpandedCategory(isExpanded ? null : cat.id)}
               style={{
-                display: "flex", width: "100%", alignItems: "center", gap: 12,
-                padding: "16px 20px", border: "none", background: "transparent",
-                cursor: "pointer", textAlign: "left",
+                display: "flex",
+                width: "100%",
+                alignItems: "center",
+                gap: 14,
+                padding: "14px 20px",
+                border: "none",
+                background: "transparent",
+                cursor: "pointer",
+                textAlign: "left",
               }}
             >
-              <span style={{
-                display: "grid", width: 40, height: 40, placeItems: "center",
-                borderRadius: 10, background: `${cat.color}15`, fontSize: 20,
-              }}>
-                {cat.icon}
+              {/* Fully colored icon container */}
+              <span
+                style={{
+                  display: "grid",
+                  width: 46,
+                  height: 46,
+                  placeItems: "center",
+                  borderRadius: 12,
+                  background: allDone
+                    ? "linear-gradient(135deg, #52c41a, #22c55e)"
+                    : `linear-gradient(135deg, ${cat.color}, ${cat.color}cc)`,
+                  fontSize: 22,
+                  flexShrink: 0,
+                  boxShadow: `0 2px 8px ${cat.color}44`,
+                }}
+              >
+                {allDone ? "✅" : cat.icon}
               </span>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 15, fontWeight: 600, color: "var(--text)" }}>{cat.title}</div>
-                <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>
-                  {completedCount}/{cat.topics.length} bài học
+
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <div
+                  style={{
+                    fontSize: 15,
+                    fontWeight: 700,
+                    color: "var(--text)",
+                    marginBottom: 6,
+                    lineHeight: 1.2,
+                  }}
+                >
+                  {cat.title}
+                </div>
+                {/* Visual progress bar */}
+                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                  <div
+                    style={{
+                      flex: 1,
+                      height: 5,
+                      borderRadius: 99,
+                      background: "var(--border)",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div
+                      style={{
+                        height: "100%",
+                        borderRadius: 99,
+                        background: allDone
+                          ? "#52c41a"
+                          : `linear-gradient(90deg, ${cat.color}, ${cat.color}cc)`,
+                        width: `${progressPct}%`,
+                        transition: "width 0.5s ease",
+                      }}
+                    />
+                  </div>
+                  <span
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 600,
+                      color: completedCount > 0 ? cat.color : "var(--text-muted)",
+                      flexShrink: 0,
+                      minWidth: 32,
+                      textAlign: "right",
+                    }}
+                  >
+                    {completedCount}/{cat.topics.length}
+                  </span>
                 </div>
               </div>
-              <RightOutlined style={{
-                fontSize: 12, color: "var(--text-muted)",
-                transform: isExpanded ? "rotate(90deg)" : "none",
-                transition: "transform 0.2s",
-              }} />
+
+              <RightOutlined
+                style={{
+                  fontSize: 11,
+                  color: "var(--text-muted)",
+                  transform: isExpanded ? "rotate(90deg)" : "none",
+                  transition: "transform 0.25s ease",
+                  flexShrink: 0,
+                }}
+              />
             </button>
 
-            {/* Topics list */}
+            {/* Expanded topic list */}
             {isExpanded && (
-              <div style={{ borderTop: "1px solid var(--border)", padding: "8px 12px" }}>
-                {cat.topics.map((topic) => {
+              <div
+                style={{
+                  borderTop: "1px solid var(--border)",
+                  padding: "8px 14px 12px",
+                  background: `${cat.color}05`,
+                }}
+              >
+                {cat.topics.map((topic, idx) => {
                   const isDone = completedTopics.has(topic.id);
+                  const isTopicHovered = hoveredTopic === topic.id;
+
                   return (
                     <button
                       key={topic.id}
                       onClick={() => onSelectTopic(topic.id, topic.title, topic.level)}
+                      onMouseEnter={() => setHoveredTopic(topic.id)}
+                      onMouseLeave={() => setHoveredTopic(null)}
                       style={{
-                        display: "flex", width: "100%", alignItems: "center", gap: 10,
-                        padding: "10px 12px", borderRadius: 8, border: "none",
-                        background: isDone ? "#52c41a08" : "transparent",
-                        cursor: "pointer", textAlign: "left",
+                        display: "flex",
+                        width: "100%",
+                        alignItems: "center",
+                        gap: 12,
+                        padding: "9px 12px",
+                        borderRadius: 10,
+                        border: "none",
+                        background: isTopicHovered
+                          ? isDone
+                            ? `${cat.color}18`
+                            : "var(--bg-deep, rgba(0,0,0,0.04))"
+                          : isDone
+                          ? `${cat.color}10`
+                          : "transparent",
+                        cursor: "pointer",
+                        textAlign: "left",
                         transition: "background 0.15s",
+                        marginBottom: idx < cat.topics.length - 1 ? 2 : 0,
                       }}
                     >
-                      {isDone ? (
-                        <CheckCircleOutlined style={{ fontSize: 16, color: "#52c41a" }} />
-                      ) : (
-                        <BookOutlined style={{ fontSize: 16, color: "var(--text-muted)" }} />
-                      )}
-                      <span style={{ flex: 1, fontSize: 14, color: "var(--text)", fontWeight: isDone ? 500 : 400 }}>
+                      {/* Step indicator */}
+                      <span
+                        style={{
+                          width: 26,
+                          height: 26,
+                          borderRadius: 99,
+                          display: "grid",
+                          placeItems: "center",
+                          flexShrink: 0,
+                          background: isDone ? cat.color : "var(--border)",
+                          color: isDone ? "#fff" : "var(--text-muted)",
+                          fontSize: isDone ? 13 : 11,
+                          fontWeight: 700,
+                          transition: "background 0.2s",
+                        }}
+                      >
+                        {isDone ? "✓" : idx + 1}
+                      </span>
+
+                      <span
+                        style={{
+                          flex: 1,
+                          fontSize: 14,
+                          color: "var(--text)",
+                          fontWeight: isDone ? 600 : 400,
+                          lineHeight: 1.3,
+                        }}
+                      >
                         {topic.title}
                       </span>
-                      <Tag color={LEVEL_COLORS[topic.level] ?? "default"} style={{ margin: 0, fontSize: 11 }}>
+
+                      <Tag
+                        color={LEVEL_COLORS[topic.level] ?? "default"}
+                        style={{ margin: 0, fontSize: 11, borderRadius: 6 }}
+                      >
                         {topic.level}
                       </Tag>
                     </button>

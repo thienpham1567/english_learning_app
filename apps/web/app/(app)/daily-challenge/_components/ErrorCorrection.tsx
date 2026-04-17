@@ -12,38 +12,90 @@ type Props = {
 
 export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props) {
   const [text, setText] = useState("");
+  const [focused, setFocused] = useState(false);
 
   return (
     <div>
-      <p style={{ marginBottom: 8, fontSize: 12, fontWeight: 500, color: "var(--accent)" }}>
-        {instruction}
-      </p>
-      <div
+      {/* Instruction */}
+      <p
         style={{
           marginBottom: 12,
-          borderRadius: 10,
-          border: "1.5px solid #fecaca",
-          background: "rgba(254,226,226,0.3)",
-          padding: "10px 14px",
+          fontSize: 11,
+          fontWeight: 700,
+          color: "#ef4444",
+          textTransform: "uppercase",
+          letterSpacing: "0.1em",
         }}
       >
-        <p style={{ fontSize: 14, color: "#7f1d1d" }}>{data.sentence}</p>
+        {instruction}
+      </p>
+
+      {/* Error sentence — red quote block */}
+      <div
+        style={{
+          marginBottom: 16,
+          borderRadius: 12,
+          borderLeft: "4px solid #ef4444",
+          background: "rgba(254,226,226,0.45)",
+          padding: "12px 16px",
+        }}
+      >
+        <span
+          style={{
+            fontSize: 10,
+            fontWeight: 700,
+            textTransform: "uppercase",
+            letterSpacing: "0.12em",
+            color: "#ef4444",
+            display: "flex",
+            alignItems: "center",
+            gap: 4,
+            marginBottom: 6,
+          }}
+        >
+          ⚠️ Câu có lỗi
+        </span>
+        <p
+          style={{
+            margin: 0,
+            fontSize: 15,
+            color: "#7f1d1d",
+            fontWeight: 500,
+            lineHeight: 1.65,
+          }}
+        >
+          {data.sentence}
+        </p>
       </div>
-      <label style={{ fontSize: 12, color: "var(--text-muted)" }}>
-        Viết từ đúng thay thế từ sai:
+
+      {/* Correction input */}
+      <label
+        style={{
+          display: "block",
+          fontSize: 11,
+          fontWeight: 700,
+          textTransform: "uppercase",
+          letterSpacing: "0.1em",
+          color: "var(--text-muted)",
+          marginBottom: 6,
+        }}
+      >
+        ✏️ Viết từ đúng thay thế
       </label>
       <input
         style={{
-          marginTop: 6,
           width: "100%",
-          borderRadius: 10,
-          border: "1.5px solid var(--border)",
+          borderRadius: 12,
+          border: focused
+            ? "2px solid #ef4444"
+            : "1.5px solid var(--border)",
           background: "var(--surface)",
-          padding: "10px 14px",
+          padding: "11px 14px",
           fontSize: 14,
           color: "var(--ink)",
           outline: "none",
           transition: "border-color 0.15s ease",
+          boxSizing: "border-box",
         }}
         placeholder="Nhập từ đúng..."
         value={text}
@@ -52,26 +104,30 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
         onKeyDown={(e) => {
           if (e.key === "Enter" && text.trim()) onAnswer(text.trim());
         }}
-        onFocus={(e) => (e.currentTarget.style.borderColor = "var(--accent)")}
-        onBlur={(e) => (e.currentTarget.style.borderColor = "var(--border)")}
+        onFocus={() => setFocused(true)}
+        onBlur={() => setFocused(false)}
       />
+
+      {/* Full-width confirm */}
       {text.trim() && !disabled && (
         <button
+          onClick={() => onAnswer(text.trim())}
           style={{
-            marginTop: 10,
-            borderRadius: 10,
-            background: "var(--accent)",
-            padding: "8px 20px",
+            marginTop: 12,
+            width: "100%",
+            borderRadius: 12,
+            background: "linear-gradient(135deg, #ef4444, #f87171)",
+            padding: "13px 0",
             fontSize: 14,
-            fontWeight: 600,
+            fontWeight: 700,
             color: "#fff",
             border: "none",
             cursor: "pointer",
-            transition: "all 0.15s ease",
+            boxShadow: "0 3px 12px rgba(239,68,68,0.3)",
+            transition: "opacity 0.15s",
           }}
-          onClick={() => onAnswer(text.trim())}
         >
-          Xác nhận
+          Xác nhận sửa lỗi ✓
         </button>
       )}
     </div>

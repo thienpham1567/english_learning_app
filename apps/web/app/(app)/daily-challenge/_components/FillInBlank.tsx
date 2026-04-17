@@ -14,6 +14,7 @@ type Props = {
 
 export function FillInBlank({ data, instruction, onAnswer, disabled }: Props) {
   const [selected, setSelected] = useState<number | null>(null);
+  const [hoveredOption, setHoveredOption] = useState<number | null>(null);
 
   const handleSelect = (i: number) => {
     if (disabled) return;
@@ -23,57 +24,116 @@ export function FillInBlank({ data, instruction, onAnswer, disabled }: Props) {
 
   return (
     <div>
-      <p style={{ marginBottom: 8, fontSize: 12, fontWeight: 500, color: "var(--accent)" }}>
+      {/* Instruction label */}
+      <p
+        style={{
+          marginBottom: 12,
+          fontSize: 11,
+          fontWeight: 700,
+          color: "var(--accent)",
+          textTransform: "uppercase",
+          letterSpacing: "0.1em",
+        }}
+      >
         {instruction}
       </p>
-      <p style={{ marginBottom: 16, fontSize: 15, color: "var(--ink)", lineHeight: 1.7 }}>
-        {data.sentence.split("_____").map((part, i, arr) => (
-          <span key={i}>
-            {part}
-            {i < arr.length - 1 && (
+
+      {/* Sentence display */}
+      <div
+        style={{
+          marginBottom: 20,
+          padding: "14px 16px",
+          borderRadius: 12,
+          borderLeft: "4px solid var(--accent)",
+          background: "color-mix(in srgb, var(--accent) 6%, var(--surface))",
+        }}
+      >
+        <p style={{ margin: 0, fontSize: 15, color: "var(--ink)", lineHeight: 1.8, fontWeight: 500 }}>
+          {data.sentence.split("_____").map((part, i, arr) => (
+            <span key={i}>
+              {part}
+              {i < arr.length - 1 && (
+                <span
+                  style={{
+                    display: "inline-block",
+                    borderRadius: 6,
+                    background: "var(--accent)",
+                    padding: "1px 14px",
+                    fontWeight: 700,
+                    color: "#fff",
+                    fontSize: 13,
+                    letterSpacing: "0.05em",
+                    marginInline: 2,
+                    verticalAlign: "middle",
+                  }}
+                >
+                  ?
+                </span>
+              )}
+            </span>
+          ))}
+        </p>
+      </div>
+
+      {/* Options grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+        {data.options.map((opt, i) => {
+          const isSelected = selected === i;
+          const isHov = hoveredOption === i && !isSelected && !disabled;
+
+          return (
+            <button
+              key={i}
+              onClick={() => handleSelect(i)}
+              onMouseEnter={() => setHoveredOption(i)}
+              onMouseLeave={() => setHoveredOption(null)}
+              disabled={disabled}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 10,
+                borderRadius: 12,
+                border: isSelected
+                  ? "2px solid var(--accent)"
+                  : `1px solid ${isHov ? "var(--accent)" : "var(--border)"}`,
+                background: isSelected
+                  ? "color-mix(in srgb, var(--accent) 10%, var(--surface))"
+                  : isHov
+                  ? "color-mix(in srgb, var(--accent) 4%, var(--surface))"
+                  : "var(--surface)",
+                padding: "11px 14px",
+                textAlign: "left",
+                fontSize: 14,
+                fontWeight: isSelected ? 600 : 400,
+                color: "var(--ink)",
+                cursor: disabled ? "default" : "pointer",
+                transition: "all 0.15s ease",
+                transform: isHov ? "translateY(-1px)" : "none",
+                boxShadow: isHov ? "0 3px 10px rgba(0,0,0,0.08)" : "none",
+              }}
+            >
+              {/* Circle label */}
               <span
                 style={{
-                  display: "inline-block",
-                  borderRadius: 6,
-                  background: "color-mix(in srgb, var(--accent) 12%, transparent)",
-                  padding: "2px 10px",
-                  fontWeight: 600,
-                  color: "var(--accent)",
+                  width: 26,
+                  height: 26,
+                  borderRadius: 99,
+                  display: "grid",
+                  placeItems: "center",
+                  flexShrink: 0,
+                  background: isSelected ? "var(--accent)" : "var(--border)",
+                  color: isSelected ? "#fff" : "var(--text-muted)",
+                  fontSize: 11,
+                  fontWeight: 800,
+                  transition: "all 0.15s",
                 }}
               >
-                _____
+                {LABELS[i]}
               </span>
-            )}
-          </span>
-        ))}
-      </p>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-        {data.options.map((opt, i) => (
-          <button
-            key={i}
-            style={{
-              borderRadius: 10,
-              border: `1.5px solid ${selected === i ? "var(--accent)" : "var(--border)"}`,
-              background: selected === i
-                ? "color-mix(in srgb, var(--accent) 10%, transparent)"
-                : "var(--surface)",
-              padding: "10px 14px",
-              textAlign: "left",
-              fontSize: 14,
-              fontWeight: selected === i ? 600 : 400,
-              color: "var(--ink)",
-              cursor: disabled ? "default" : "pointer",
-              transition: "all 0.15s ease",
-            }}
-            onClick={() => handleSelect(i)}
-            disabled={disabled}
-          >
-            <span style={{ marginRight: 8, fontSize: 12, fontWeight: 700, color: "var(--text-muted)" }}>
-              {LABELS[i]}
-            </span>
-            {opt}
-          </button>
-        ))}
+              {opt}
+            </button>
+          );
+        })}
       </div>
     </div>
   );
