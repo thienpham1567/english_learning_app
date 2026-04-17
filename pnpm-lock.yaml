@@ -26,6 +26,9 @@ importers:
       '@repo/database':
         specifier: workspace:*
         version: link:../../packages/database
+      '@repo/modules':
+        specifier: workspace:*
+        version: link:../../packages/modules
       '@repo/shared':
         specifier: workspace:*
         version: link:../../packages/shared
@@ -168,6 +171,25 @@ importers:
       '@types/pg':
         specifier: ^8.20.0
         version: 8.20.0
+      typescript:
+        specifier: ^5
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.4(@types/debug@4.1.13)(@types/node@20.19.39)(jsdom@27.4.0(@noble/hashes@2.2.0))(tsx@4.21.0)
+
+  packages/modules:
+    dependencies:
+      '@repo/auth':
+        specifier: workspace:*
+        version: link:../auth
+      '@repo/contracts':
+        specifier: workspace:*
+        version: link:../contracts
+      '@repo/database':
+        specifier: workspace:*
+        version: link:../database
+    devDependencies:
       typescript:
         specifier: ^5
         version: 5.9.3

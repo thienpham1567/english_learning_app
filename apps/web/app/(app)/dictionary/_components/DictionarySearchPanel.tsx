@@ -14,7 +14,7 @@ type DictionarySearchPanelProps = {
 const HELPER_TIPS = [
   "Bạn có thể nhập từ đơn, phrasal verb hoặc idiom.",
   "Nhấn Enter để tra cứu nhanh mà không cần bấm nút.",
-  "Mỗi nghĩa sẽ có giải thích song ngữ và ví dụ chỉ bằng tiếng Việt.",
+  "Mỗi nghĩa sẽ có định nghĩa tiếng Anh, ví dụ song ngữ và collocation thực tế.",
 ];
 
 function HighlightMatch({ text, query }: { text: string; query: string }) {

@@ -9,7 +9,7 @@ import { BookOutlined, LinkOutlined, StarFilled, StarOutlined } from "@ant-desig
 import { api } from "@/lib/api-client";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text } = Typography;
 
 type Props = {
   query: string | null;
@@ -133,11 +133,6 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
             <Tag>{getTypeLabel(data)}</Tag>
           </Space>
 
-          <Paragraph style={{ fontSize: 14, lineHeight: 1.6 }}>{data.overviewVi}</Paragraph>
-          <Text type="secondary" style={{ fontSize: 14 }}>
-            {data.overviewEn}
-          </Text>
-
           <Flex vertical gap={20} style={{ borderTop: "1px solid var(--border)", paddingTop: 16 }}>
             {data.senses.map((sense) => (
               <Flex key={sense.id} vertical gap={8}>
@@ -152,9 +147,6 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                   }}
                 >
                   {sense.label}
-                </Text>
-                <Text strong style={{ fontSize: 14 }}>
-                  {sense.definitionVi}
                 </Text>
                 <Text type="secondary" style={{ fontSize: 14 }}>
                   {sense.definitionEn}

@@ -88,11 +88,11 @@ sprints:
         estimate: "3h"
       '17.9':
         title: "Dashboard Module (use case)"
-        status: ready-for-dev
+        status: done
         estimate: "3h"
       '17.10':
         title: "Refactor Dashboard Route to Thin Adapter"
-        status: ready-for-dev
+        status: in-progress
         estimate: "2h"
   R4:
     name: "Epic 18 - API Foundation"

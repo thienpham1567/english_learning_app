@@ -13,7 +13,6 @@ export const VerbFormSchema = z.object({
 export const DictionarySenseSchema = z.object({
   id: z.string(),
   label: z.string(),
-  definitionVi: z.string(),
   definitionEn: z.string(),
   usageNoteVi: z.string().nullable(),
   examplesVi: z.array(z.string()).default([]),
@@ -50,8 +49,7 @@ export const VocabularySchema = z.object({
     .array(z.object({ pos: z.string(), words: z.array(z.string()) }))
     .nullable()
     .default(null),
-  overviewVi: z.string(),
-  overviewEn: z.string(),
+  isNotEnglish: z.boolean().default(false),
   senses: z.array(DictionarySenseSchema).min(1),
 });
 

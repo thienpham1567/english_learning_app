@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { CloseOutlined } from "@ant-design/icons";
 import { Drawer } from "antd";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";
 
@@ -10,6 +8,38 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   onWordClick: (word: string) => void;
+};
+
+const SYNONYM_STYLE: React.CSSProperties = {
+  borderRadius: 999,
+  background: "var(--accent-light)",
+  padding: "4px 12px",
+  fontSize: 13,
+  fontWeight: 500,
+  color: "#3d6a2a",
+  border: "1px solid rgba(154,177,122,0.45)",
+  cursor: "pointer",
+  transition: "background 0.15s, border-color 0.15s",
+};
+
+const ANTONYM_STYLE: React.CSSProperties = {
+  borderRadius: 999,
+  background: "var(--warm)",
+  padding: "4px 12px",
+  fontSize: 13,
+  fontWeight: 500,
+  color: "#7a3f1a",
+  border: "1px dashed #deb896",
+  cursor: "pointer",
+  transition: "background 0.15s, border-color 0.15s",
+};
+
+const SECTION_LABEL: React.CSSProperties = {
+  fontSize: 10,
+  fontWeight: 600,
+  textTransform: "uppercase" as const,
+  letterSpacing: "0.16em",
+  margin: 0,
 };
 
 export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Props) {
@@ -36,10 +66,19 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
               margin: 0,
             }}
           >
-            Từ đồng & trái nghĩa
+            Từ đồng &amp; trái nghĩa
           </p>
           {vocabulary && (
-            <p style={{ fontSize: 14, fontWeight: 500, color: "var(--ink)", margin: 0 }}>
+            <p
+              style={{
+                fontSize: 15,
+                fontWeight: 600,
+                fontStyle: "italic",
+                fontFamily: "var(--font-display)",
+                color: "var(--ink)",
+                margin: 0,
+              }}
+            >
               {vocabulary.headword}
             </p>
           )}
@@ -56,50 +95,35 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
       )}
 
       {vocabulary && sensesWithData.length > 0 && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
           {sensesWithData.map((sense) => (
-            <div key={sense.id} style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <div key={sense.id} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+              {/* Sense label */}
               <p
                 style={{
-                  fontSize: 14,
+                  fontSize: 13,
                   fontStyle: "italic",
                   fontFamily: "var(--font-display)",
                   color: "var(--accent)",
                   margin: 0,
+                  paddingBottom: 10,
+                  borderBottom: "1px solid var(--border)",
                 }}
               >
                 {sense.label}
               </p>
 
+              {/* Synonyms */}
               {(sense.synonyms?.length ?? 0) > 0 && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  <p
-                    style={{
-                      fontSize: 10,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.18em",
-                      color: "var(--text-muted)",
-                      margin: 0,
-                    }}
-                  >
-                    Đồng nghĩa
-                  </p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  <p style={{ ...SECTION_LABEL, color: "#3d6a2a" }}>Đồng nghĩa</p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                     {sense.synonyms.map((word) => (
                       <button
                         key={word}
                         type="button"
                         onClick={() => handleWordClick(word)}
-                        style={{
-                          borderRadius: 999,
-                          background: "#ecfdf5",
-                          padding: "4px 12px",
-                          fontSize: 14,
-                          color: "#047857",
-                          border: "1px solid #a7f3d0",
-                          cursor: "pointer",
-                          transition: "background 0.2s",
-                        }}
+                        style={SYNONYM_STYLE}
                       >
                         {word}
                       </button>
@@ -108,35 +132,17 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                 </div>
               )}
 
+              {/* Antonyms */}
               {(sense.antonyms?.length ?? 0) > 0 && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  <p
-                    style={{
-                      fontSize: 10,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.18em",
-                      color: "var(--text-muted)",
-                      margin: 0,
-                    }}
-                  >
-                    Trái nghĩa
-                  </p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                  <p style={{ ...SECTION_LABEL, color: "#7a3f1a" }}>Trái nghĩa</p>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                     {sense.antonyms.map((word) => (
                       <button
                         key={word}
                         type="button"
                         onClick={() => handleWordClick(word)}
-                        style={{
-                          borderRadius: 999,
-                          background: "#fff1f2",
-                          padding: "4px 12px",
-                          fontSize: 14,
-                          color: "#be123c",
-                          border: "1px solid #fecdd3",
-                          cursor: "pointer",
-                          transition: "background 0.2s",
-                        }}
+                        style={ANTONYM_STYLE}
                       >
                         {word}
                       </button>
