@@ -233,7 +233,9 @@ function SensePanel({ sense, headword }: { sense: DictionarySense; headword: str
               ? examples.map((example, i) => (
                   <li key={`${example.en}-${example.vi ?? i}`} style={SENSE_ITEM_STYLE}>
                     <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                      <HighlightWord text={example.en} headword={headword} />
+                      <span>
+                        <HighlightWord text={example.en} headword={headword} />
+                      </span>
                       {example.vi && (
                         <span style={{ fontSize: 13, color: "var(--text-muted)", fontStyle: "normal" }}>
                           <BoldText text={example.vi} />

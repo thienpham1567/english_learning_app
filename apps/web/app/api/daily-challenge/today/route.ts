@@ -63,29 +63,28 @@ export async function GET() {
 
   const vnToday = getVnDate();
 
-  // Fetch user's exam mode preference
-  const prefRows = await db
-    .select()
-    .from(userPreferences)
-    .where(eq(userPreferences.userId, session.user.id))
-    .limit(1);
+  // Fire the three independent reads in parallel instead of sequentially.
+  const [prefRows, existing, streakRows] = await Promise.all([
+    db
+      .select({ examMode: userPreferences.examMode })
+      .from(userPreferences)
+      .where(eq(userPreferences.userId, session.user.id))
+      .limit(1),
+    db
+      .select()
+      .from(dailyChallenge)
+      .where(
+        and(eq(dailyChallenge.userId, session.user.id), eq(dailyChallenge.challengeDate, vnToday)),
+      )
+      .limit(1),
+    db
+      .select()
+      .from(userStreak)
+      .where(eq(userStreak.userId, session.user.id))
+      .limit(1),
+  ]);
+
   const examMode: ExamMode = (prefRows[0]?.examMode as ExamMode) ?? "toeic";
-
-  // Check if today's challenge already exists
-  const existing = await db
-    .select()
-    .from(dailyChallenge)
-    .where(
-      and(eq(dailyChallenge.userId, session.user.id), eq(dailyChallenge.challengeDate, vnToday)),
-    )
-    .limit(1);
-
-  // Get streak info
-  const streakRows = await db
-    .select()
-    .from(userStreak)
-    .where(eq(userStreak.userId, session.user.id))
-    .limit(1);
 
   const streak = streakRows[0] ?? {
     currentStreak: 0,

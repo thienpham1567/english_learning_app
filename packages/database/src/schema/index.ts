@@ -140,6 +140,7 @@ export const dailyChallenge = pgTable("daily_challenge", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 }, (table) => [
   index("daily_challenge_user_date_idx").on(table.userId, table.challengeDate),
+  index("daily_challenge_user_completed_idx").on(table.userId, table.completedAt),
 ]);
 
 export const userStreak = pgTable("user_streak", {
@@ -191,7 +192,9 @@ export const listeningExercise = pgTable("listening_exercise", {
   score: integer("score"),
   completedAt: timestamp("completed_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-});
+}, (table) => [
+  index("listening_exercise_user_created_idx").on(table.userId, table.createdAt),
+]);
 
 export type ListeningExerciseRow = typeof listeningExercise.$inferSelect;
 
@@ -204,7 +207,9 @@ export const pushSubscription = pgTable("push_subscription", {
   auth: text("auth").notNull(),
   enabled: boolean("enabled").notNull().default(true),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-});
+}, (table) => [
+  index("push_subscription_user_enabled_idx").on(table.userId, table.enabled),
+]);
 
 export type PushSubscriptionRow = typeof pushSubscription.$inferSelect;
 
@@ -255,7 +260,9 @@ export const diagnosticResult = pgTable("diagnostic_result", {
   answers: jsonb("answers").$type<Array<{ skill: string; level: string; correct: boolean; timeMs: number }>>(),
   completedAt: timestamp("completed_at", { withTimezone: true }).defaultNow().notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-});
+}, (table) => [
+  index("diagnostic_result_user_completed_idx").on(table.userId, table.completedAt),
+]);
 
 export type DiagnosticResultRow = typeof diagnosticResult.$inferSelect;
 
@@ -268,6 +275,8 @@ export const scenarioProgress = pgTable("scenario_progress", {
   score: integer("score"),
   completedAt: timestamp("completed_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-});
+}, (table) => [
+  index("scenario_progress_user_scenario_idx").on(table.userId, table.scenarioId),
+]);
 
 export type ScenarioProgressRow = typeof scenarioProgress.$inferSelect;

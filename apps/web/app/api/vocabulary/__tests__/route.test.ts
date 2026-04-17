@@ -36,7 +36,7 @@ describe("GET /api/vocabulary", () => {
     vi.mocked(auth.api.getSession).mockResolvedValueOnce(null);
 
     const { GET } = await import("@/app/api/vocabulary/route");
-    const response = await GET();
+    const response = await GET(new Request("http://localhost/api/vocabulary"));
 
     expect(response.status).toBe(401);
   }, 10000);
@@ -48,28 +48,35 @@ describe("GET /api/vocabulary", () => {
     } as never);
 
     const { db } = await import("@/lib/db");
+    const rows = [
+      {
+        id: "1",
+        query: "strong coffee",
+        saved: false,
+        lookedUpAt: "2026-03-30T10:00:00.000Z",
+        headword: "strong coffee",
+        level: "A2",
+        entryType: "collocation",
+      },
+    ];
     vi.mocked(db.select).mockReturnValueOnce({
       from: vi.fn(() => ({
         leftJoin: vi.fn(() => ({
-          where: vi.fn(() => ({
-            orderBy: vi.fn().mockResolvedValue([
-              {
-                id: "1",
-                query: "strong coffee",
-                saved: false,
-                lookedUpAt: "2026-03-30T10:00:00.000Z",
-                headword: "strong coffee",
-                level: "A2",
-                entryType: "collocation",
-              },
-            ]),
+          leftJoin: vi.fn(() => ({
+            where: vi.fn(() => ({
+              orderBy: vi.fn(() => ({
+                limit: vi.fn(() => ({
+                  offset: vi.fn().mockResolvedValue(rows),
+                })),
+              })),
+            })),
           })),
         })),
       })),
     } as unknown as ReturnType<typeof db.select>);
 
     const { GET } = await import("@/app/api/vocabulary/route");
-    const response = await GET();
+    const response = await GET(new Request("http://localhost/api/vocabulary"));
 
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual([

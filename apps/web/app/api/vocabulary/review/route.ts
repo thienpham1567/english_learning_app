@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { eq, and, inArray } from "drizzle-orm";
+import { eq, and, inArray, sql } from "drizzle-orm";
 import { z } from "zod";
 
 import { auth } from "@/lib/auth";
@@ -63,6 +63,18 @@ export async function POST(request: Request) {
     );
   const entryMap = new Map(entries.map((e) => [e.query, e]));
 
+  // Compute next SRS state for every reviewed word in memory first,
+  // then issue a single batch UPDATE instead of N sequential ones.
+  type PendingUpdate = {
+    query: string;
+    easeFactor: number;
+    interval: number;
+    reviewCount: number;
+    nextReview: Date;
+    masteryLevel: string;
+  };
+  const pending: PendingUpdate[] = [];
+
   for (const { query, quality } of results) {
     const existing = entryMap.get(query);
     if (!existing) continue;
@@ -84,22 +96,14 @@ export async function POST(request: Request) {
     const isCorrect = quality >= 3;
     if (isCorrect) correctCount++;
 
-    // Update user_vocabulary with new SRS state
-    await db
-      .update(userVocabulary)
-      .set({
-        easeFactor: nextState.easeFactor,
-        interval: nextState.interval,
-        reviewCount: nextState.repetitions,
-        nextReview: new Date(nextState.nextReview),
-        masteryLevel: newMastery,
-      })
-      .where(
-        and(
-          eq(userVocabulary.userId, userId),
-          eq(userVocabulary.query, query),
-        ),
-      );
+    pending.push({
+      query,
+      easeFactor: nextState.easeFactor,
+      interval: nextState.interval,
+      reviewCount: nextState.repetitions,
+      nextReview: new Date(nextState.nextReview),
+      masteryLevel: newMastery,
+    });
 
     wordResults.push({
       query,
@@ -108,6 +112,47 @@ export async function POST(request: Request) {
       nextReview: nextState.nextReview,
       interval: nextState.interval,
     });
+  }
+
+  // Single UPDATE with CASE expressions keyed by query.
+  if (pending.length > 0) {
+    const queries = pending.map((p) => p.query);
+    const easeCase = sql.join(
+      [sql`CASE`, ...pending.map((p) => sql`WHEN ${userVocabulary.query} = ${p.query} THEN ${p.easeFactor}::real`), sql`END`],
+      sql` `,
+    );
+    const intervalCase = sql.join(
+      [sql`CASE`, ...pending.map((p) => sql`WHEN ${userVocabulary.query} = ${p.query} THEN ${p.interval}::int`), sql`END`],
+      sql` `,
+    );
+    const reviewCountCase = sql.join(
+      [sql`CASE`, ...pending.map((p) => sql`WHEN ${userVocabulary.query} = ${p.query} THEN ${p.reviewCount}::int`), sql`END`],
+      sql` `,
+    );
+    const nextReviewCase = sql.join(
+      [sql`CASE`, ...pending.map((p) => sql`WHEN ${userVocabulary.query} = ${p.query} THEN ${p.nextReview.toISOString()}::timestamptz`), sql`END`],
+      sql` `,
+    );
+    const masteryCase = sql.join(
+      [sql`CASE`, ...pending.map((p) => sql`WHEN ${userVocabulary.query} = ${p.query} THEN ${p.masteryLevel}::text`), sql`END`],
+      sql` `,
+    );
+
+    await db
+      .update(userVocabulary)
+      .set({
+        easeFactor: easeCase,
+        interval: intervalCase,
+        reviewCount: reviewCountCase,
+        nextReview: nextReviewCase,
+        masteryLevel: masteryCase,
+      })
+      .where(
+        and(
+          eq(userVocabulary.userId, userId),
+          inArray(userVocabulary.query, queries),
+        ),
+      );
   }
 
   // Award XP: 5 per word reviewed

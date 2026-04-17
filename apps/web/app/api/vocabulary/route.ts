@@ -6,12 +6,24 @@ import { db } from "@repo/database";
 import { userVocabulary, vocabularyCache, flashcardProgress } from "@repo/database";
 import { normalizeVocabularyEntryType } from "@/lib/schemas/vocabulary";
 
-export async function GET() {
+const DEFAULT_LIMIT = 200;
+const MAX_LIMIT = 500;
+
+export async function GET(request: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
+  const url = new URL(request.url);
+  const limit = Math.min(
+    Math.max(parseInt(url.searchParams.get("limit") ?? `${DEFAULT_LIMIT}`, 10) || DEFAULT_LIMIT, 1),
+    MAX_LIMIT,
+  );
+  const offset = Math.max(parseInt(url.searchParams.get("offset") ?? "0", 10) || 0, 0);
+
+  // Project only the JSONB keys needed by the list view to avoid hydrating
+  // the full vocabularyCache.data blob per row.
   const rows = await db
     .select({
       id: userVocabulary.id,
@@ -22,7 +34,7 @@ export async function GET() {
       level: sql<string | null>`${vocabularyCache.data}->>'level'`,
       entryType: sql<string>`${vocabularyCache.data}->>'entryType'`,
       mastery: sql<string>`CASE
-        WHEN ${flashcardProgress.id} IS NULL THEN 'new'
+        WHEN ${flashcardProgress.userId} IS NULL THEN 'new'
         WHEN ${flashcardProgress.interval} < 21 THEN 'learning'
         ELSE 'mastered'
       END`,
@@ -37,7 +49,9 @@ export async function GET() {
       ),
     )
     .where(eq(userVocabulary.userId, session.user.id))
-    .orderBy(desc(userVocabulary.lookedUpAt));
+    .orderBy(desc(userVocabulary.lookedUpAt))
+    .limit(limit)
+    .offset(offset);
 
   return Response.json(
     rows.map((row) => ({

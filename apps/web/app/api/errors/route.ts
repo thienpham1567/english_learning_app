@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { eq, desc, and, sql, ilike, inArray } from "drizzle-orm";
+import { eq, desc, and, isNotNull, sql, ilike, inArray } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
@@ -30,9 +30,21 @@ export async function GET(request: Request) {
   if (resolved === "true") conditions.push(eq(errorLog.isResolved, true));
   if (resolved === "false") conditions.push(eq(errorLog.isResolved, false));
 
-  const [rows, countResult] = await Promise.all([
+  const [rows, countResult, topics] = await Promise.all([
     db
-      .select()
+      .select({
+        id: errorLog.id,
+        sourceModule: errorLog.sourceModule,
+        questionStem: errorLog.questionStem,
+        options: errorLog.options,
+        userAnswer: errorLog.userAnswer,
+        correctAnswer: errorLog.correctAnswer,
+        explanationEn: errorLog.explanationEn,
+        explanationVi: errorLog.explanationVi,
+        grammarTopic: errorLog.grammarTopic,
+        isResolved: errorLog.isResolved,
+        createdAt: errorLog.createdAt,
+      })
       .from(errorLog)
       .where(and(...conditions))
       .orderBy(desc(errorLog.createdAt))
@@ -42,13 +54,13 @@ export async function GET(request: Request) {
       .select({ count: sql<number>`count(*)::int` })
       .from(errorLog)
       .where(and(...conditions)),
+    // Unique topics for filter UI — skip NULLs at the DB level and cap the list.
+    db
+      .selectDistinct({ topic: errorLog.grammarTopic })
+      .from(errorLog)
+      .where(and(eq(errorLog.userId, session.user.id), isNotNull(errorLog.grammarTopic)))
+      .limit(50),
   ]);
-
-  // Get unique topics for filter UI
-  const topics = await db
-    .selectDistinct({ topic: errorLog.grammarTopic })
-    .from(errorLog)
-    .where(eq(errorLog.userId, session.user.id));
 
   return Response.json({
     errors: rows,
