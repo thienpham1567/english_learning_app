@@ -44,21 +44,8 @@ export function ChatConversationProvider({ children }: { children: ReactNode }) 
   }, []);
 
   useEffect(() => {
-    let cancelled = false;
-
-    void (async () => {
-      try {
-        const data = await api.get<ConversationItem[]>("/conversations");
-        if (!cancelled) setConversations(data);
-      } catch {
-        // non-fatal: thread list just won't show
-      }
-    })();
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+    void loadConversations();
+  }, [loadConversations]);
 
   return (
     <ChatConversationContext.Provider

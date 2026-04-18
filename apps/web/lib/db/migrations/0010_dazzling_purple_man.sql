@@ -1,0 +1,1 @@
+CREATE INDEX "error_log_user_topic_idx" ON "error_log" USING btree ("user_id","grammar_topic");

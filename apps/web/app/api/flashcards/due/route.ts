@@ -1,9 +1,21 @@
 import { headers } from "next/headers";
-import { eq, and, sql, asc } from "drizzle-orm";
+import { eq, and, sql } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { userVocabulary, vocabularyCache, flashcardProgress } from "@repo/database";
+
+type VocabDataShape = {
+  headword: string;
+  phonetic?: string | null;
+  phoneticsUs?: string | null;
+  phoneticsUk?: string | null;
+  partOfSpeech?: string | null;
+  level?: string | null;
+  overviewVi: string;
+  overviewEn: string;
+  senses?: unknown;
+};
 
 export async function GET() {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -19,15 +31,7 @@ export async function GET() {
   const rows = await db
     .select({
       query: userVocabulary.query,
-      headword: sql<string>`${vocabularyCache.data}->>'headword'`,
-      phonetic: sql<string | null>`${vocabularyCache.data}->>'phonetic'`,
-      phoneticsUs: sql<string | null>`${vocabularyCache.data}->>'phoneticsUs'`,
-      phoneticsUk: sql<string | null>`${vocabularyCache.data}->>'phoneticsUk'`,
-      partOfSpeech: sql<string | null>`${vocabularyCache.data}->>'partOfSpeech'`,
-      level: sql<string | null>`${vocabularyCache.data}->>'level'`,
-      overviewVi: sql<string>`${vocabularyCache.data}->>'overviewVi'`,
-      overviewEn: sql<string>`${vocabularyCache.data}->>'overviewEn'`,
-      senses: sql<string>`${vocabularyCache.data}->'senses'`,
+      data: vocabularyCache.data,
       nextReview: flashcardProgress.nextReview,
     })
     .from(userVocabulary)
@@ -46,18 +50,21 @@ export async function GET() {
     .orderBy(sql`${flashcardProgress.nextReview} ASC NULLS FIRST`)
     .limit(20);
 
-  const cards = rows.map((row) => ({
-    query: row.query,
-    headword: row.headword,
-    phonetic: row.phonetic,
-    phoneticsUs: row.phoneticsUs,
-    phoneticsUk: row.phoneticsUk,
-    partOfSpeech: row.partOfSpeech,
-    level: row.level,
-    overviewVi: row.overviewVi,
-    overviewEn: row.overviewEn,
-    senses: typeof row.senses === "string" ? JSON.parse(row.senses) : row.senses,
-  }));
+  const cards = rows.map((row) => {
+    const data = row.data as VocabDataShape;
+    return {
+      query: row.query,
+      headword: data.headword,
+      phonetic: data.phonetic ?? null,
+      phoneticsUs: data.phoneticsUs ?? null,
+      phoneticsUk: data.phoneticsUk ?? null,
+      partOfSpeech: data.partOfSpeech ?? null,
+      level: data.level ?? null,
+      overviewVi: data.overviewVi,
+      overviewEn: data.overviewEn,
+      senses: data.senses,
+    };
+  });
 
   // Also get next review time for "all done" countdown
   const nextReviewRow = await db

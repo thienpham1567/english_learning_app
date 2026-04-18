@@ -12,11 +12,27 @@ function getDatabaseUrl() {
 	return databaseUrl;
 }
 
+/**
+ * Per-instance pg pool size. Each Vercel serverless instance spins up its own
+ * pool, so we keep `max` tight in production to stay within the Postgres
+ * connection ceiling (Neon free tier ≈ 20, Supabase free ≈ 60). Override via
+ * DATABASE_POOL_MAX if you are behind pgbouncer / have a higher tier.
+ */
+function getPoolMax(): number {
+	const explicit = Number.parseInt(process.env.DATABASE_POOL_MAX ?? "", 10);
+	if (Number.isFinite(explicit) && explicit > 0) return explicit;
+	return process.env.NODE_ENV === "production" ? 5 : 10;
+}
+
 let poolInstance: Pool | null = null;
 
 function getPoolInstance() {
 	if (!poolInstance) {
-		poolInstance = new Pool({ connectionString: getDatabaseUrl() });
+		poolInstance = new Pool({
+			connectionString: getDatabaseUrl(),
+			max: getPoolMax(),
+			idleTimeoutMillis: 30_000,
+		});
 	}
 
 	return poolInstance;

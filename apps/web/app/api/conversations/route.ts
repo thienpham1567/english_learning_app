@@ -6,11 +6,25 @@ import { db } from "@repo/database";
 import { conversation } from "@repo/database";
 import { DEFAULT_PERSONA_ID, PERSONA_IDS } from "@/lib/chat/personas";
 
-export async function GET() {
+const DEFAULT_LIMIT = 20;
+const MAX_LIMIT = 50;
+
+function parseIntInRange(raw: string | null, def: number, min: number, max: number): number {
+  if (!raw) return def;
+  const n = Number.parseInt(raw, 10);
+  if (!Number.isFinite(n)) return def;
+  return Math.max(min, Math.min(max, n));
+}
+
+export async function GET(req: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  const url = new URL(req.url);
+  const limit = parseIntInRange(url.searchParams.get("limit"), DEFAULT_LIMIT, 1, MAX_LIMIT);
+  const offset = parseIntInRange(url.searchParams.get("offset"), 0, 0, 10_000);
 
   const rows = await db
     .select({
@@ -21,7 +35,9 @@ export async function GET() {
     })
     .from(conversation)
     .where(eq(conversation.userId, session.user.id))
-    .orderBy(desc(conversation.updatedAt));
+    .orderBy(desc(conversation.updatedAt))
+    .limit(limit)
+    .offset(offset);
 
   return Response.json(rows);
 }

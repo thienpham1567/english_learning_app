@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import { revalidateTag } from "next/cache";
 import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 
@@ -79,6 +80,9 @@ export async function POST(request: Request) {
   // Award XP for review (fire-and-forget)
   void awardXP(userId, XP_VALUES.FLASHCARD_REVIEW).catch(() => {});
   logActivity(userId, "flashcard_review", XP_VALUES.FLASHCARD_REVIEW, { query, quality });
+
+  // Due-card count on /api/dashboard changes on every review.
+  revalidateTag("dashboard", { expire: 0 });
 
   return Response.json({ success: true, state: nextState });
 }

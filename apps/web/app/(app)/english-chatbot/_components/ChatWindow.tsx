@@ -17,39 +17,13 @@ import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { PronunciationFeedback } from "@/app/(app)/english-chatbot/_components/PronunciationFeedback";
 import type { PronFeedbackData } from "@/app/(app)/english-chatbot/_components/PronunciationFeedback";
 import { deriveTitle } from "@/lib/chat/derive-title";
+import { parseAssistantStream } from "@/lib/chat/parse-assistant-stream";
 import { DEFAULT_PERSONA_ID, PERSONAS } from "@/lib/chat/personas";
 import type { Persona } from "@/lib/chat/personas";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 import { api } from "@/lib/api-client";
 
-export function sampleSuggestions(
-  persona: Persona,
-  count: number,
-): (typeof persona.suggestions)[number][] {
-  const pool = [...persona.suggestions];
-  const n = Math.min(count, pool.length);
-  for (let i = pool.length - 1; i > pool.length - n - 1 && i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
-  }
-  return pool.slice(pool.length - n);
-}
-
 const CHAT_ERROR_MESSAGE = "Gia sư đang gặp lỗi kỹ thuật. Bạn thử lại sau nhé.";
-
-type AssistantStreamEvent =
-  | { type: "assistant_start" }
-  | { type: "assistant_delta"; delta: string }
-  | { type: "assistant_done" }
-  | { type: "assistant_error"; message: string };
-
-function parseSsePayloads(chunk: string) {
-  return chunk
-    .split("\n")
-    .filter((line) => line.startsWith("data:"))
-    .map((line) => line.slice(5).trim())
-    .filter(Boolean);
-}
 
 export function getMessageSpacingStyle(
   currentMessage: PageMessage,
@@ -163,6 +137,8 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const isNearBottomRef = useRef(true);
   const [showScrollBtn, setShowScrollBtn] = useState(false);
   const justCreatedRef = useRef(false);
+  const abortCtrlRef = useRef<AbortController | null>(null);
+  const lastSendRef = useRef<string | null>(null);
   const lastMsg = messages.at(-1);
   const streamingHasStarted = isLoading && lastMsg?.role === "assistant";
   const activePersona =
@@ -205,13 +181,6 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [voice.transcript, voice.isTranscribing]);
-
-  const [suggestions, setSuggestions] = useState<
-    (typeof activePersona.suggestions)[number][]
-  >([]);
-  useEffect(() => {
-    setSuggestions(sampleSuggestions(activePersona, 4));
-  }, [activePersona]);
 
   // MiniDictionary integration (Story 4.2)
   const miniDict = useMiniDictionary();
@@ -296,7 +265,9 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       bottom &&
       typeof bottom.scrollIntoView === "function"
     ) {
-      bottom.scrollIntoView({ behavior: "smooth" });
+      // Use instant scroll while streaming to avoid jitter from smooth animations
+      // stacking on every delta; smooth only for discrete events.
+      bottom.scrollIntoView({ behavior: isLoading ? "instant" : "smooth" });
     }
   }, [messages, isLoading, error]);
 
@@ -397,6 +368,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     const requestMessages = [...messages, userMessage].filter(
       (m): m is AppChatMessage => m.role === "user" || m.role === "assistant",
     );
+    const isFirstExchange = messages.length === 0;
 
     setMessages((curr) => [
       ...curr,
@@ -407,6 +379,10 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     if (textareaRef.current) textareaRef.current.style.height = "auto";
     setError(null);
     setIsLoading(true);
+    lastSendRef.current = t;
+
+    const controller = new AbortController();
+    abortCtrlRef.current = controller;
 
     try {
       const response = await api.post<Response>(
@@ -416,64 +392,57 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
           conversationId: convId,
           personaId: selectedPersonaId,
         },
-        { raw: true },
+        { raw: true, signal: controller.signal },
       );
 
       if (!response.body) {
         throw new Error(CHAT_ERROR_MESSAGE);
       }
 
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
-      let finished = false;
-
-      while (!finished) {
-        const { value, done } = await reader.read();
-        if (done) break;
-
-        buffer += decoder.decode(value, { stream: true });
-        let eventBoundary = buffer.indexOf("\n\n");
-
-        while (eventBoundary !== -1) {
-          const rawEvent = buffer.slice(0, eventBoundary);
-          buffer = buffer.slice(eventBoundary + 2);
-
-          for (const payload of parseSsePayloads(rawEvent)) {
-            const event = JSON.parse(payload) as AssistantStreamEvent;
-
-            if (event.type === "assistant_delta" && event.delta) {
-              setMessages((curr) =>
-                curr.map((m) =>
-                  m.id === assistantMessageId
-                    ? { ...m, text: m.text + event.delta }
-                    : m,
-                ),
-              );
-            }
-
-            if (event.type === "assistant_error") {
-              setError(event.message);
-              removeEmptyAssistantMessage(assistantMessageId);
-              finished = true;
-            }
-
-            if (event.type === "assistant_done") {
-              if (convId) {
-                loadConversations();
+      await parseAssistantStream(
+        response,
+        {
+          onDelta: (delta) => {
+            setMessages((curr) =>
+              curr.map((m) =>
+                m.id === assistantMessageId
+                  ? { ...m, text: m.text + delta }
+                  : m,
+              ),
+            );
+          },
+          onDone: () => {
+            if (convId) {
+              loadConversations();
+              // First exchange just finished → ask server for an LLM-generated title.
+              if (isFirstExchange) {
+                api
+                  .post(`/conversations/${convId}/title`)
+                  .then(() => loadConversations())
+                  .catch(() => {});
               }
-              finished = true;
             }
-          }
-
-          eventBoundary = buffer.indexOf("\n\n");
-        }
-      }
+          },
+          onError: (msg) => {
+            setError(msg);
+            removeEmptyAssistantMessage(assistantMessageId);
+          },
+          onPersistError: (msg) => {
+            setError(msg);
+          },
+        },
+        controller.signal,
+      );
     } catch (streamError) {
-      console.error("Chat page stream error:", streamError);
-      setError(CHAT_ERROR_MESSAGE);
-      removeEmptyAssistantMessage(assistantMessageId);
+      if (controller.signal.aborted) {
+        // User cancelled — keep whatever was streamed so far.
+      } else {
+        console.error("Chat page stream error:", streamError);
+        setError(CHAT_ERROR_MESSAGE);
+        removeEmptyAssistantMessage(assistantMessageId);
+      }
     } finally {
+      abortCtrlRef.current = null;
       setIsLoading(false);
 
       // Fire async pronunciation evaluation for voice messages (non-blocking)
@@ -528,6 +497,32 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     }
   };
   sendRef.current = send;
+
+  const stopStreaming = useCallback(() => {
+    abortCtrlRef.current?.abort();
+  }, []);
+
+  const regenerate = useCallback(() => {
+    if (isLoading) return;
+    // Find last user message text, drop last assistant bubble, replay send().
+    const lastUserIdx = [...messages]
+      .map((m) => m.role)
+      .lastIndexOf("user");
+    if (lastUserIdx < 0) return;
+    const last = messages[lastUserIdx];
+    if (last.role !== "user") return;
+    setMessages((curr) => curr.slice(0, lastUserIdx));
+    void send(last.text);
+  }, [isLoading, messages]);
+
+  const retryLast = useCallback(() => {
+    const text = lastSendRef.current;
+    if (!text || isLoading) return;
+    setError(null);
+    void send(text);
+  }, [isLoading]);
+
+  const lastAssistantId = [...messages].reverse().find((m) => m.role === "assistant")?.id;
 
   const hasMessages = messages.length > 0;
 
@@ -699,66 +694,6 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                 })}
               </div>
 
-              {/* Suggestion cards for selected persona */}
-              <div
-                style={{
-                  marginTop: 24,
-                  display: "grid",
-                  width: "100%",
-                  gap: 12,
-                  gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-                }}
-              >
-                {suggestions.map((s, i) => {
-                  const Icon = s.icon;
-                  return (
-                    <button
-                      key={s.text}
-                      className={`anim-fade-up anim-delay-${Math.min(i + 4, 8)}`}
-                      style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: 12,
-                        borderRadius: "var(--radius)",
-                        border: "1px solid var(--border)",
-                        background: "var(--surface)",
-                        padding: 16,
-                        textAlign: "left",
-                        boxShadow: "var(--shadow-sm)",
-                        transition:
-                          "transform 0.2s, border-color 0.2s, background 0.2s",
-                        cursor: "pointer",
-                      }}
-                      onClick={() => send(s.text)}
-                    >
-                      <span
-                        style={{
-                          marginTop: 2,
-                          display: "grid",
-                          width: 32,
-                          height: 32,
-                          flexShrink: 0,
-                          placeItems: "center",
-                          borderRadius: "50%",
-                          background: "var(--accent-light)",
-                          color: "var(--accent)",
-                        }}
-                      >
-                        <Icon style={{ fontSize: 16 }} />
-                      </span>
-                      <span
-                        style={{
-                          fontSize: 14,
-                          lineHeight: 1.6,
-                          color: "var(--text-primary)",
-                        }}
-                      >
-                        {s.text}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
             </div>
           )}
 
@@ -797,6 +732,8 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                           }
                         : undefined
                     }
+                    isLastAssistant={m.id === lastAssistantId}
+                    onRegenerate={regenerate}
                   />
                   {/* Inline pronunciation feedback for voice messages */}
                   {m.role === "user" &&
@@ -847,20 +784,36 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
               }}
             >
               <p>{error}</p>
-              <button
-                style={{
-                  marginTop: 8,
-                  fontWeight: 500,
-                  textDecoration: "underline",
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  color: "inherit",
-                }}
-                onClick={() => setError(null)}
-              >
-                Đóng
-              </button>
+              <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
+                {lastSendRef.current && !isLoading && (
+                  <button
+                    style={{
+                      fontWeight: 500,
+                      textDecoration: "underline",
+                      background: "none",
+                      border: "none",
+                      cursor: "pointer",
+                      color: "inherit",
+                    }}
+                    onClick={retryLast}
+                  >
+                    Thử lại
+                  </button>
+                )}
+                <button
+                  style={{
+                    fontWeight: 500,
+                    textDecoration: "underline",
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    color: "inherit",
+                  }}
+                  onClick={() => setError(null)}
+                >
+                  Đóng
+                </button>
+              </div>
             </div>
           )}
 
@@ -1019,28 +972,51 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                 </span>
               </button>
             )}
-            <button
-              style={{
-                display: "grid",
-                width: 44,
-                height: 44,
-                flexShrink: 0,
-                placeItems: "center",
-                borderRadius: "50%",
-                border: "none",
-                color: "#fff",
-                boxShadow: "var(--shadow-sm)",
-                cursor: input.trim() && !isLoading ? "pointer" : "not-allowed",
-                background:
-                  input.trim() && !isLoading ? "var(--accent)" : "var(--ink)",
-                transition: "background 0.2s, transform 0.15s",
-                opacity: !input.trim() || isLoading ? 0.6 : 1,
-              }}
-              onClick={() => send()}
-              disabled={!input.trim() || isLoading}
-            >
-              <ArrowUpOutlined style={{ fontSize: 18 }} />
-            </button>
+            {isLoading ? (
+              <button
+                style={{
+                  display: "grid",
+                  width: 44,
+                  height: 44,
+                  flexShrink: 0,
+                  placeItems: "center",
+                  borderRadius: "50%",
+                  border: "none",
+                  color: "#fff",
+                  boxShadow: "var(--shadow-sm)",
+                  cursor: "pointer",
+                  background: "#ef4444",
+                  transition: "background 0.2s, transform 0.15s",
+                }}
+                onClick={stopStreaming}
+                aria-label="Dừng trả lời"
+                title="Dừng trả lời"
+              >
+                <span style={{ fontSize: 14, lineHeight: 1 }}>⏹</span>
+              </button>
+            ) : (
+              <button
+                style={{
+                  display: "grid",
+                  width: 44,
+                  height: 44,
+                  flexShrink: 0,
+                  placeItems: "center",
+                  borderRadius: "50%",
+                  border: "none",
+                  color: "#fff",
+                  boxShadow: "var(--shadow-sm)",
+                  cursor: input.trim() ? "pointer" : "not-allowed",
+                  background: input.trim() ? "var(--accent)" : "var(--ink)",
+                  transition: "background 0.2s, transform 0.15s",
+                  opacity: !input.trim() ? 0.6 : 1,
+                }}
+                onClick={() => send()}
+                disabled={!input.trim()}
+              >
+                <ArrowUpOutlined style={{ fontSize: 18 }} />
+              </button>
+            )}
           </div>
           <div
             style={{

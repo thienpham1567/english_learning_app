@@ -12,17 +12,26 @@ import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 
 const CHAT_ERROR_MESSAGE = "Gia sư đang gặp lỗi kỹ thuật. Bạn thử lại sau nhé.";
+const PERSIST_ERROR_MESSAGE =
+  "Không lưu được tin nhắn vào lịch sử. Bạn có thể tiếp tục trò chuyện, nhưng lượt này sẽ không xuất hiện khi tải lại.";
+
+type AssistantSseEvent =
+  | { type: "assistant_start" }
+  | { type: "assistant_delta"; delta: string }
+  | { type: "assistant_done" }
+  | { type: "assistant_error"; message: string }
+  | { type: "assistant_persist_error"; message: string };
 
 function writeSseEvent(
   controller: ReadableStreamDefaultController<Uint8Array>,
   encoder: TextEncoder,
-  payload:
-    | { type: "assistant_start" }
-    | { type: "assistant_delta"; delta: string }
-    | { type: "assistant_done" }
-    | { type: "assistant_error"; message: string },
+  payload: AssistantSseEvent,
 ) {
-  controller.enqueue(encoder.encode(`data: ${JSON.stringify(payload)}\n\n`));
+  try {
+    controller.enqueue(encoder.encode(`data: ${JSON.stringify(payload)}\n\n`));
+  } catch {
+    // Controller may already be closed if the client aborted — ignore.
+  }
 }
 
 function createErrorSseResponse() {
@@ -50,6 +59,77 @@ function isChatMessage(value: unknown): value is ChatMessage {
   );
 }
 
+async function persistExchange(args: {
+  conversationId: string;
+  userId: string;
+  userMessageText: string;
+  assistantText: string;
+  personaId: string;
+}): Promise<void> {
+  const [conv] = await db
+    .select({ userId: conversation.userId })
+    .from(conversation)
+    .where(eq(conversation.id, args.conversationId))
+    .limit(1);
+
+  if (!conv || conv.userId !== args.userId) return;
+
+  await db.insert(message).values([
+    { conversationId: args.conversationId, role: "user", content: args.userMessageText },
+    { conversationId: args.conversationId, role: "assistant", content: args.assistantText },
+  ]);
+  await db
+    .update(conversation)
+    .set({ updatedAt: new Date(), personaId: args.personaId })
+    .where(eq(conversation.id, args.conversationId));
+}
+
+async function streamOpenAiToSse(args: {
+  controller: ReadableStreamDefaultController<Uint8Array>;
+  encoder: TextEncoder;
+  instructions: string;
+  input: ReturnType<typeof buildChatRequest>["input"];
+  signal: AbortSignal;
+}): Promise<{ fullText: string; doneSent: boolean; streamStarted: boolean }> {
+  const { controller, encoder, instructions, input, signal } = args;
+  let fullText = "";
+  let doneSent = false;
+  let streamStarted = false;
+
+  const stream = openAiClient.responses.stream(
+    { model: openAiConfig.chatModel, instructions, input },
+    { signal },
+  );
+
+  writeSseEvent(controller, encoder, { type: "assistant_start" });
+  streamStarted = true;
+
+  for await (const event of stream) {
+    if (signal.aborted) break;
+
+    if (event.type === "response.output_text.delta" && event.delta) {
+      fullText += event.delta;
+      writeSseEvent(controller, encoder, { type: "assistant_delta", delta: event.delta });
+    }
+
+    if (event.type === "response.completed" && !doneSent) {
+      writeSseEvent(controller, encoder, { type: "assistant_done" });
+      doneSent = true;
+    }
+
+    if ((event.type === "response.failed" || event.type === "error") && !doneSent) {
+      throw new Error("OpenAI chat stream failed");
+    }
+  }
+
+  if (streamStarted && !doneSent && !signal.aborted) {
+    writeSseEvent(controller, encoder, { type: "assistant_done" });
+    doneSent = true;
+  }
+
+  return { fullText, doneSent, streamStarted };
+}
+
 export async function POST(req: Request) {
   try {
     const session = await auth.api.getSession({ headers: await headers() });
@@ -61,9 +141,7 @@ export async function POST(req: Request) {
     } | null;
 
     const messages = Array.isArray(body?.messages) ? body.messages.filter(isChatMessage) : [];
-
     const conversationId = typeof body?.conversationId === "string" ? body.conversationId : null;
-
     const personaId =
       typeof body?.personaId === "string" && PERSONA_IDS.includes(body.personaId)
         ? body.personaId
@@ -71,91 +149,62 @@ export async function POST(req: Request) {
 
     const { instructions, input } = buildChatRequest(messages, personaId);
     const encoder = new TextEncoder();
+    const signal = req.signal;
 
     return createChatSse(
       new ReadableStream<Uint8Array>({
         async start(controller) {
-          let streamStarted = false;
-          let doneSent = false;
-          let fullAssistantText = "";
-
+          let result: Awaited<ReturnType<typeof streamOpenAiToSse>> | null = null;
           try {
-            const stream = openAiClient.responses.stream({
-              model: openAiConfig.chatModel,
-              instructions,
-              input,
-            });
-
-            writeSseEvent(controller, encoder, { type: "assistant_start" });
-            streamStarted = true;
-
-            for await (const event of stream) {
-              if (event.type === "response.output_text.delta" && event.delta) {
-                fullAssistantText += event.delta;
-                writeSseEvent(controller, encoder, {
-                  type: "assistant_delta",
-                  delta: event.delta,
-                });
-              }
-
-              if (event.type === "response.completed" && !doneSent) {
-                writeSseEvent(controller, encoder, { type: "assistant_done" });
-                doneSent = true;
-              }
-
-              if ((event.type === "response.failed" || event.type === "error") && !doneSent) {
-                throw new Error("OpenAI chat stream failed");
-              }
-            }
-
-            if (streamStarted && !doneSent) {
-              writeSseEvent(controller, encoder, { type: "assistant_done" });
-            }
+            result = await streamOpenAiToSse({ controller, encoder, instructions, input, signal });
           } catch (error) {
-            console.error("Chat API error:", error);
-            writeSseEvent(controller, encoder, {
-              type: "assistant_error",
-              message: CHAT_ERROR_MESSAGE,
-            });
-          } finally {
-            controller.close();
+            if (!signal.aborted) {
+              console.error("Chat API error:", error);
+              writeSseEvent(controller, encoder, {
+                type: "assistant_error",
+                message: CHAT_ERROR_MESSAGE,
+              });
+            }
           }
 
-          // Persist conversation after stream is closed.
-          // Errors here are logged but never sent as SSE — the client already has the full exchange.
-          if (conversationId && session && fullAssistantText && doneSent) {
+          // Persist only on successful completion — don't save half-streamed replies.
+          if (
+            result?.doneSent &&
+            result.fullText &&
+            conversationId &&
+            session &&
+            !signal.aborted
+          ) {
             const lastUserMessage = messages[messages.length - 1];
             if (lastUserMessage) {
               try {
-                const [conv] = await db
-                  .select({ userId: conversation.userId })
-                  .from(conversation)
-                  .where(eq(conversation.id, conversationId))
-                  .limit(1);
-
-                if (conv && conv.userId === session.user.id) {
-                  await db.insert(message).values([
-                    {
-                      conversationId,
-                      role: "user",
-                      content: lastUserMessage.text,
-                    },
-                    {
-                      conversationId,
-                      role: "assistant",
-                      content: fullAssistantText,
-                    },
-                  ]);
-                  await db
-                    .update(conversation)
-                    .set({ updatedAt: new Date(), personaId })
-                    .where(eq(conversation.id, conversationId));
-                }
+                await persistExchange({
+                  conversationId,
+                  userId: session.user.id,
+                  userMessageText: lastUserMessage.text,
+                  assistantText: result.fullText,
+                  personaId,
+                });
               } catch (dbError) {
                 console.error("Failed to persist conversation:", dbError);
+                writeSseEvent(controller, encoder, {
+                  type: "assistant_persist_error",
+                  message: PERSIST_ERROR_MESSAGE,
+                });
               }
             }
           }
+
+          try {
+            controller.close();
+          } catch {
+            // Already closed.
+          }
+        },
+
+        cancel() {
+          // Client disconnected — AbortSignal on req already fires, and
+          // `for await` above exits on the next tick.
         },
       }),
     );

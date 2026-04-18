@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import { revalidateTag } from "next/cache";
 import { eq, and } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
@@ -128,63 +129,58 @@ export async function POST(request: Request) {
   });
 
   const score = scoredAnswers.filter((a) => a.isCorrect).length;
-
-  // Update challenge
-  await db
-    .update(dailyChallenge)
-    .set({
-      answers: scoredAnswers,
-      score,
-      completedAt: new Date(),
-      timeElapsedMs: parsed.data.timeElapsedMs,
-    })
-    .where(eq(dailyChallenge.id, challenge.id));
-
-  // Update streak
-  const streakRows = await db
-    .select()
-    .from(userStreak)
-    .where(eq(userStreak.userId, session.user.id))
-    .limit(1);
-
   const vnYesterday = getVnYesterday();
-  let currentStreak: number;
-  let previousBestStreak = 0;
 
-  if (streakRows[0]) {
-    const s = streakRows[0];
-    previousBestStreak = s.bestStreak;
+  // Atomically update challenge + streak so we can't leave partial state (e.g.
+  // challenge marked complete but streak row never updated).
+  const { currentStreak, previousBestStreak } = await db.transaction(async (tx) => {
+    await tx
+      .update(dailyChallenge)
+      .set({
+        answers: scoredAnswers,
+        score,
+        completedAt: new Date(),
+        timeElapsedMs: parsed.data.timeElapsedMs,
+      })
+      .where(eq(dailyChallenge.id, challenge.id));
 
-    if (s.lastCompletedDate === vnToday) {
-      // Already counted today
-      currentStreak = s.currentStreak;
-    } else if (s.lastCompletedDate === vnYesterday) {
-      // Consecutive
-      currentStreak = s.currentStreak + 1;
-    } else {
-      // Missed day(s)
-      currentStreak = 1;
+    const streakRows = await tx
+      .select()
+      .from(userStreak)
+      .where(eq(userStreak.userId, session.user.id))
+      .limit(1);
+
+    if (streakRows[0]) {
+      const s = streakRows[0];
+      let nextStreak: number;
+      if (s.lastCompletedDate === vnToday) {
+        nextStreak = s.currentStreak;
+      } else if (s.lastCompletedDate === vnYesterday) {
+        nextStreak = s.currentStreak + 1;
+      } else {
+        nextStreak = 1;
+      }
+      const newBest = Math.max(s.bestStreak, nextStreak);
+      await tx
+        .update(userStreak)
+        .set({
+          currentStreak: nextStreak,
+          bestStreak: newBest,
+          lastCompletedDate: vnToday,
+          updatedAt: new Date(),
+        })
+        .where(eq(userStreak.userId, session.user.id));
+      return { currentStreak: nextStreak, previousBestStreak: s.bestStreak };
     }
 
-    const newBest = Math.max(s.bestStreak, currentStreak);
-    await db
-      .update(userStreak)
-      .set({
-        currentStreak,
-        bestStreak: newBest,
-        lastCompletedDate: vnToday,
-        updatedAt: new Date(),
-      })
-      .where(eq(userStreak.userId, session.user.id));
-  } else {
-    currentStreak = 1;
-    await db.insert(userStreak).values({
+    await tx.insert(userStreak).values({
       userId: session.user.id,
       currentStreak: 1,
       bestStreak: 1,
       lastCompletedDate: vnToday,
     });
-  }
+    return { currentStreak: 1, previousBestStreak: 0 };
+  });
 
   const newBestStreak = Math.max(previousBestStreak, currentStreak);
   const allBadges = getBadges(newBestStreak);
@@ -193,6 +189,10 @@ export async function POST(request: Request) {
   // Award XP for daily challenge completion
   void awardXP(session.user.id, XP_VALUES.DAILY_CHALLENGE).catch(() => {});
   logActivity(session.user.id, "daily_challenge", XP_VALUES.DAILY_CHALLENGE, { score, streak: currentStreak });
+
+  // Drop the 60s dashboard cache so the next /home load reflects new streak/XP.
+  // Next 16: revalidateTag requires a CacheLifeConfig; { expire: 0 } purges now.
+  revalidateTag("dashboard", { expire: 0 });
 
   return Response.json({
     answers: scoredAnswers,

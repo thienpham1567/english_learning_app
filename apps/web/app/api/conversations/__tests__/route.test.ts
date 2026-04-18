@@ -49,20 +49,24 @@ describe("GET /api/conversations", () => {
     mockSelect.mockReturnValue({
       from: vi.fn().mockReturnValue({
         where: vi.fn().mockReturnValue({
-          orderBy: vi.fn().mockResolvedValue([
-            {
-              id: "conv-1",
-              title: "Test",
-              updatedAt: "2026-01-01T00:00:00Z",
-              personaId: "simon",
-            },
-          ]),
+          orderBy: vi.fn().mockReturnValue({
+            limit: vi.fn().mockReturnValue({
+              offset: vi.fn().mockResolvedValue([
+                {
+                  id: "conv-1",
+                  title: "Test",
+                  updatedAt: "2026-01-01T00:00:00Z",
+                  personaId: "simon",
+                },
+              ]),
+            }),
+          }),
         }),
       }),
     });
 
     const { GET } = await import("@/app/api/conversations/route");
-    const response = await GET();
+    const response = await GET(new Request("http://localhost/api/conversations"));
     const data = await response.json();
 
     expect(response.status).toBe(200);

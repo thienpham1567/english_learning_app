@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
-import { CheckOutlined, CopyOutlined, TrophyOutlined, SoundOutlined, PauseCircleOutlined } from "@ant-design/icons";
+import { CheckOutlined, CopyOutlined, TrophyOutlined, SoundOutlined, PauseCircleOutlined, ReloadOutlined } from "@ant-design/icons";
 import { useUser } from "@/components/shared/UserContext";
 import { HighlightedText } from "@/app/(app)/english-chatbot/_components/HighlightedText";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
@@ -152,6 +152,132 @@ function highlightChildren(
   return children;
 }
 
+function extractText(children: ReactNode): string {
+  if (typeof children === "string") return children;
+  if (typeof children === "number") return String(children);
+  if (Array.isArray(children)) return children.map(extractText).join("");
+  if (children && typeof children === "object" && "props" in children) {
+    // biome-ignore lint/suspicious/noExplicitAny: ReactNode shape
+    return extractText((children as any).props?.children);
+  }
+  return "";
+}
+
+function InlineCode({ children }: { children: ReactNode }) {
+  return (
+    <code
+      style={{
+        padding: "2px 6px",
+        borderRadius: 6,
+        background: "var(--bg-deep)",
+        fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+        fontSize: "0.9em",
+        color: "var(--ink)",
+      }}
+    >
+      {children}
+    </code>
+  );
+}
+
+function CodeBlock({ children, className }: { children: ReactNode; className?: string }) {
+  const [copied, setCopied] = useState(false);
+  const text = extractText(children);
+  const lang = className?.replace(/^language-/, "") || "";
+
+  const onCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1600);
+    } catch {
+      /* clipboard blocked — no-op */
+    }
+  };
+
+  return (
+    <div
+      style={{
+        position: "relative",
+        margin: "8px 0",
+        borderRadius: 12,
+        border: "1px solid var(--border)",
+        background: "var(--bg-deep)",
+        overflow: "hidden",
+      }}
+    >
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          padding: "6px 12px",
+          borderBottom: "1px solid var(--border)",
+          fontSize: 11,
+          color: "var(--text-muted)",
+          fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+          textTransform: "uppercase",
+          letterSpacing: 0.5,
+        }}
+      >
+        <span>{lang || "code"}</span>
+        <button
+          onClick={onCopy}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 4,
+            padding: "2px 6px",
+            border: "none",
+            background: "none",
+            color: "var(--text-muted)",
+            cursor: "pointer",
+            fontSize: 11,
+          }}
+          aria-label="Sao chép"
+        >
+          {copied ? <CheckOutlined /> : <CopyOutlined />}
+          {copied ? "Đã chép" : "Sao chép"}
+        </button>
+      </div>
+      <pre
+        style={{
+          margin: 0,
+          padding: "12px 14px",
+          overflowX: "auto",
+          fontSize: 13,
+          lineHeight: 1.55,
+          fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+          color: "var(--text-primary)",
+        }}
+      >
+        <code className={className}>{children}</code>
+      </pre>
+    </div>
+  );
+}
+
+function RegenerateButton({ onRegenerate }: { onRegenerate: () => void }) {
+  return (
+    <button
+      style={{
+        borderRadius: "50%",
+        padding: 4,
+        color: "var(--text-muted)",
+        background: "none",
+        border: "none",
+        cursor: "pointer",
+        transition: "color 0.2s",
+      }}
+      onClick={onRegenerate}
+      aria-label="Tạo lại"
+      title="Tạo lại phản hồi"
+    >
+      <ReloadOutlined style={{ fontSize: 13 }} />
+    </button>
+  );
+}
+
 export function ChatMessage({
   message,
   isStreaming = false,
@@ -162,6 +288,8 @@ export function ChatMessage({
   isSpeaking = false,
   isTtsLoading = false,
   onStopSpeak,
+  onRegenerate,
+  isLastAssistant = false,
 }: {
   message: PageMessage;
   className?: string;
@@ -169,14 +297,12 @@ export function ChatMessage({
   persona?: Persona;
   onWordClick?: (word: string, rect: DOMRect) => void;
   savedWords?: Set<string>;
-  /** Called to speak this message aloud */
   onSpeak?: (text: string) => void;
-  /** Whether this specific message is currently being spoken */
   isSpeaking?: boolean;
-  /** Whether TTS audio is loading from API */
   isTtsLoading?: boolean;
-  /** Called to stop speaking */
   onStopSpeak?: () => void;
+  onRegenerate?: () => void;
+  isLastAssistant?: boolean;
 }) {
   if (message.role === "divider") {
     return (
@@ -254,12 +380,23 @@ export function ChatMessage({
               style={{ fontSize: 15, lineHeight: 2, color: "var(--text-primary)" }}
             >
               <ReactMarkdown
-                components={onWordClick ? {
-                  p: ({ children }) => <p>{highlightChildren(children, onWordClick, savedWords)}</p>,
-                  li: ({ children }) => <li>{highlightChildren(children, onWordClick, savedWords)}</li>,
-                  strong: ({ children }) => <strong>{highlightChildren(children, onWordClick, savedWords)}</strong>,
-                  em: ({ children }) => <em>{highlightChildren(children, onWordClick, savedWords)}</em>,
-                } : undefined}
+                components={{
+                  ...(onWordClick
+                    ? {
+                        p: ({ children }) => <p>{highlightChildren(children, onWordClick, savedWords)}</p>,
+                        li: ({ children }) => <li>{highlightChildren(children, onWordClick, savedWords)}</li>,
+                        strong: ({ children }) => <strong>{highlightChildren(children, onWordClick, savedWords)}</strong>,
+                        em: ({ children }) => <em>{highlightChildren(children, onWordClick, savedWords)}</em>,
+                      }
+                    : {}),
+                  code: ({ className, children }) =>
+                    className ? (
+                      <CodeBlock className={className}>{children}</CodeBlock>
+                    ) : (
+                      <InlineCode>{children}</InlineCode>
+                    ),
+                  pre: ({ children }) => <>{children}</>,
+                }}
               >
                 {text}
               </ReactMarkdown>
@@ -297,6 +434,9 @@ export function ChatMessage({
           {time && <span>{time}</span>}
           {!isUser && onSpeak && onStopSpeak && (
             <SpeakButton text={text} onSpeak={onSpeak} isSpeaking={isSpeaking} isLoading={isTtsLoading} onStop={onStopSpeak} />
+          )}
+          {!isUser && isLastAssistant && onRegenerate && !isStreaming && (
+            <RegenerateButton onRegenerate={onRegenerate} />
           )}
           {!isUser && <CopyButton text={text} />}
         </div>

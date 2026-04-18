@@ -71,6 +71,13 @@
       "when": 1776392740760,
       "tag": "0009_past_paper_doll",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1776509520464,
+      "tag": "0010_dazzling_purple_man",
+      "breakpoints": true
     }
   ]
 }

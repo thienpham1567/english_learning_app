@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { sql } from "drizzle-orm";
+import { inArray, sql } from "drizzle-orm";
 import webpush from "web-push";
 
 import { db } from "@repo/database";
@@ -117,11 +117,9 @@ export async function GET(request: Request) {
     }
   }
 
-  // Clean up stale subscriptions
+  // Clean up stale subscriptions (single batched DELETE)
   if (staleEndpoints.length > 0) {
-    for (const endpoint of staleEndpoints) {
-      await db.delete(pushSubscription).where(sql`${pushSubscription.endpoint} = ${endpoint}`);
-    }
+    await db.delete(pushSubscription).where(inArray(pushSubscription.endpoint, staleEndpoints));
   }
 
   return NextResponse.json({

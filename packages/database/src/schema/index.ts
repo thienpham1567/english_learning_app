@@ -246,6 +246,7 @@ export const errorLog = pgTable("error_log", {
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 }, (table) => [
   index("error_log_user_review_idx").on(table.userId, table.isResolved, table.nextReviewAt),
+  index("error_log_user_topic_idx").on(table.userId, table.grammarTopic),
 ]);
 
 export type ErrorLogRow = typeof errorLog.$inferSelect;
