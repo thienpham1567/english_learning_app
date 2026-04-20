@@ -99,6 +99,27 @@
       "when": 1776792000000,
       "tag": "0013_minimal_pairs_session",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1776878400000,
+      "tag": "0014_writing_attempt",
+      "breakpoints": true
+    },
+    {
+      "idx": 15,
+      "version": "7",
+      "when": 1776964800000,
+      "tag": "0015_guided_writing",
+      "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1777051200000,
+      "tag": "0016_writing_error_pattern",
+      "breakpoints": true
     }
   ]
 }

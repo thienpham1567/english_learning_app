@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex, Spin, Typography } from "antd";
+import { Flex, Spin, Typography, Tabs } from "antd";
 import { EditOutlined } from "@ant-design/icons";
 
 import { useWritingPractice } from "@/hooks/useWritingPractice";
@@ -8,6 +8,8 @@ import { PromptGallery } from "@/app/(app)/writing-practice/_components/PromptGa
 import { WritingEditor } from "@/app/(app)/writing-practice/_components/WritingEditor";
 import { FeedbackPanel } from "@/app/(app)/writing-practice/_components/FeedbackPanel";
 import { SubmissionHistory } from "@/app/(app)/writing-practice/_components/SubmissionHistory";
+import { RewritePanel } from "@/app/(app)/writing-practice/_components/RewritePanel";
+import { GuidedWritingPanel } from "@/app/(app)/writing-practice/_components/GuidedWritingPanel";
 
 const { Title, Text } = Typography;
 
@@ -73,73 +75,86 @@ export default function WritingPracticePage() {
         </Flex>
       </Flex>
 
-      {/* Content */}
+      {/* Tabs */}
       <Flex
         vertical
         align="center"
-        justify="center"
-        style={{ flex: 1, minHeight: 0, overflow: "auto", padding: "24px 16px" }}
+        style={{ flex: 1, minHeight: 0, overflow: "auto", padding: "0 16px 24px" }}
       >
         <div style={{ width: "100%", maxWidth: 800 }}>
-          {error && (
-            <div
-              style={{
-                marginBottom: 16,
-                maxWidth: 480,
-                margin: "0 auto 16px",
-                textAlign: "center",
-                border: "1px solid #fecaca",
-                borderRadius: 10,
-                background: "#fef2f2",
-                color: "#b91c1c",
-                padding: "10px 16px",
-                fontSize: 13,
-              }}
-            >
-              {error}
-            </div>
-          )}
-
-          {state === "prompt-selection" && (
-            <div style={{ width: "100%" }}>
-              <PromptGallery onSelect={generatePrompt} isLoading={false} loadingCategory={null} />
-              <SubmissionHistory submissions={history} onView={viewSubmission} />
-            </div>
-          )}
-
-          {state === "generating-prompt" && (
-            <div style={{ width: "100%" }}>
-              <PromptGallery
-                onSelect={generatePrompt}
-                isLoading={true}
-                loadingCategory={loadingCategory}
-              />
-            </div>
-          )}
-
-          {state === "writing" && category && (
-            <div style={{ width: "100%" }}>
-              <WritingEditor
-                prompt={prompt}
-                category={category}
-                hints={hints}
-                onSubmit={submitWriting}
-                isSubmitting={false}
-              />
-            </div>
-          )}
-
-          {state === "reviewing" && (
-            <Flex vertical align="center" gap={16}>
-              <Spin size="large" tip="Christine Ho đang chấm bài..." />
-            </Flex>
-          )}
-
-          {state === "feedback" && feedback && (
-            <div style={{ width: "100%" }}>
-              <FeedbackPanel text={writtenText} feedback={feedback} onNewWriting={startNew} />
-            </div>
-          )}
+          <Tabs
+            defaultActiveKey="practice"
+            style={{ marginTop: 8 }}
+            items={[
+              {
+                key: "practice",
+                label: "📝 Luyện viết",
+                children: (
+                  <div>
+                    {error && (
+                      <div
+                        style={{
+                          marginBottom: 16,
+                          border: "1px solid #fecaca",
+                          borderRadius: 10,
+                          background: "#fef2f2",
+                          color: "#b91c1c",
+                          padding: "10px 16px",
+                          fontSize: 13,
+                        }}
+                      >
+                        {error}
+                      </div>
+                    )}
+                    {state === "prompt-selection" && (
+                      <div style={{ width: "100%" }}>
+                        <PromptGallery onSelect={generatePrompt} isLoading={false} loadingCategory={null} />
+                        <SubmissionHistory submissions={history} onView={viewSubmission} />
+                      </div>
+                    )}
+                    {state === "generating-prompt" && (
+                      <div style={{ width: "100%" }}>
+                        <PromptGallery onSelect={generatePrompt} isLoading={true} loadingCategory={loadingCategory} />
+                      </div>
+                    )}
+                    {state === "writing" && category && (
+                      <div style={{ width: "100%" }}>
+                        <WritingEditor prompt={prompt} category={category} hints={hints} onSubmit={submitWriting} isSubmitting={false} />
+                      </div>
+                    )}
+                    {state === "reviewing" && (
+                      <Flex vertical align="center" gap={16} style={{ paddingTop: 48 }}>
+                        <Spin size="large" tip="Christine Ho đang chấm bài..." />
+                      </Flex>
+                    )}
+                    {state === "feedback" && feedback && (
+                      <div style={{ width: "100%" }}>
+                        <FeedbackPanel text={writtenText} feedback={feedback} onNewWriting={startNew} />
+                      </div>
+                    )}
+                  </div>
+                ),
+              },
+              {
+                key: "rewrite",
+                label: "✨ Cải thiện câu",
+                children: (
+                  <div style={{ paddingTop: 8 }}>
+                    <RewritePanel />
+                  </div>
+                ),
+              },
+              {
+                key: "guided",
+                label: "🎯 Viết có hướng dẫn",
+                children: (
+                  <div style={{ paddingTop: 8 }}>
+                    <GuidedWritingPanel />
+                  </div>
+                ),
+              },
+            ]}
+          />
         </div>
       </Flex>
     </div>

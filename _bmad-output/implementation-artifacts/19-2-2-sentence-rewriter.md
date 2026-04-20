@@ -1,6 +1,6 @@
 # Story 19.2.2: Sentence Rewriter
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -22,10 +22,10 @@ As a self-learner, I want to paste a sentence and get 3 upgraded versions at dif
 
 ## Tasks
 
-- [ ] Task 1: Implement `/api/writing/rewrite` with the 3-variant prompt (AC1, AC2).
-- [ ] Task 2: Build `RewritePanel.tsx` component used in both entry points (AC3).
-- [ ] Task 3: Implement the word-level diff renderer (reuse `diff` npm package or hand-roll LCS — either is fine) (AC4).
-- [ ] Task 4: Rate-limit + input guards (AC5, AC6).
+- [x] Task 1: Implement `/api/writing/rewrite` with the 3-variant prompt (AC1, AC2).
+- [x] Task 2: Build `RewritePanel.tsx` component used in both entry points (AC3).
+- [x] Task 3: Implement the word-level diff renderer using `diff` npm package (AC4).
+- [x] Task 4: Rate-limit + input guards (AC5, AC6).
 
 ## Dev Notes
 
@@ -38,3 +38,35 @@ As a self-learner, I want to paste a sentence and get 3 upgraded versions at dif
 
 - [diff npm package](https://www.npmjs.com/package/diff)
 - OpenAI client: [apps/web/lib/openai.ts](apps/web/lib/openai.ts)
+
+## File List
+
+- `apps/web/app/api/writing/rewrite/route.ts` — Rewrite endpoint (AC1, AC2, AC5, AC6)
+- `apps/web/app/(app)/writing-practice/_components/RewritePanel.tsx` — Rewrite panel with word diff + copy (AC3, AC4)
+- `apps/web/app/(app)/writing-practice/page.tsx` — Added "✨ Cải thiện câu" tab (AC3a)
+- `apps/web/app/(app)/writing-practice/score/page.tsx` — Added `InlineIssueItem` + "✨ Viết lại" button (AC3b)
+
+## Change Log
+
+- 2026-04-20: Implemented all 4 tasks. API, RewritePanel, word-diff renderer, and both AC3 entry points complete.
+
+## Dev Agent Record
+
+### Completion Notes
+
+- `diff` package installed via `pnpm add diff --filter web` (monorepo)
+- AC1: endpoint supports single or all-three levels; validates `targetLevel` type; 400-char cap enforced
+- AC2: variants filtered — dropped if `changes.length === 0` OR `rewrite === original`
+- AC3a: writing-practice page wrapped in Tabs — "📝 Luyện viết" (existing) + "✨ Cải thiện câu" (RewritePanel)
+- AC3b: `InlineIssueItem` sub-component with "✨ Viết lại" toggle button; expands compact RewritePanel pre-filled with the quoted phrase
+- AC4: `diffWords()` renders additions in green/additions, removals in strikethrough red
+- AC4: copy button with 2s "Copied!" feedback
+- AC5: rate limit 20/min/user, same in-memory pattern as score endpoint
+- No persistence (ephemeral as per dev notes)
+
+### Review Findings
+
+- [x] [Review][Patch] `context` field length cap added (500 chars) — **fixed**
+- [x] [Review][Patch] `InlineIssueItem` `index` dead prop removed — **fixed**
+- [x] [Review][Defer] Type definitions duplicated between route.ts and RewritePanel.tsx — deferred, low risk
+- [x] [Review][Defer] `diffWords` may show whitespace noise for minor spacing differences — deferred, acceptable for v1

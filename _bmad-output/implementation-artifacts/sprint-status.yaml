@@ -246,17 +246,17 @@ sprints:
     stories:
       "19.2.1":
         title: "IELTS/TOEFL Essay Scoring by Rubric"
-        status: ready-for-dev
+        status: done
       "19.2.2":
         title: "Sentence Rewriter"
-        status: ready-for-dev
+        status: done
       "19.2.3":
         title: "Guided Writing (Prompt + Outline + Vocab Bank)"
-        status: ready-for-dev
+        status: done
         depends_on: "19.2.1"
       "19.2.4":
         title: "Error Pattern Auto-Quiz in Error Notebook"
-        status: ready-for-dev
+        status: done
         depends_on: "19.2.1"
   R11:
     name: "Epic 19 - Listening Advanced"

@@ -1,6 +1,6 @@
 # Story 19.2.4: Error Pattern → Auto-Quiz in Error Notebook
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -22,12 +22,12 @@ As a self-learner, I want my recurring writing mistakes (tracked from essay scor
 
 ## Tasks
 
-- [ ] Task 1: Define the tag taxonomy (12–20 tags) in `lib/writing/error-tags.ts`.
-- [ ] Task 2: Add a classifier step (LLM-based) invoked right after 19.2.1 persist (AC1).
-- [ ] Task 3: Add `writingErrorPattern` schema + migration.
-- [ ] Task 4: Add `/api/writing/pattern-quiz` (AC3).
-- [ ] Task 5: Extend error-notebook UI (AC2, AC4).
-- [ ] Task 6: Wire quiz completion into the review-quiz loop (AC5).
+- [x] Task 1: Define the tag taxonomy (18 tags) in `lib/writing/error-tags.ts`.
+- [x] Task 2: Add a classifier step (prompt-based, same LLM call) invoked right after 19.2.1 persist (AC1).
+- [x] Task 3: Add `writingErrorPattern` schema + migration 0016.
+- [x] Task 4: Add `/api/writing/pattern-quiz` (AC3).
+- [x] Task 5: Extend error-notebook UI — WritingPatternSection (AC2, AC4).
+- [x] Task 6: Wire quiz completion into error_log for SRS review loop (AC5).
 
 ## Dev Notes
 
@@ -39,3 +39,38 @@ As a self-learner, I want my recurring writing mistakes (tracked from essay scor
 
 - Existing error notebook: [apps/web/app/(app)/error-notebook/](apps/web/app/(app)/error-notebook/)
 - Existing review quiz: [apps/web/app/(app)/review-quiz/](apps/web/app/(app)/review-quiz/)
+
+## File List
+
+- `apps/web/lib/writing/error-tags.ts` — 18-tag taxonomy with labels + descriptions (Task 1)
+- `packages/database/src/schema/index.ts` — `writingErrorPattern` table (Task 3)
+- `apps/web/lib/db/migrations/0016_writing_error_pattern.sql` — DDL migration
+- `apps/web/lib/writing/rubric-prompts.ts` — `tag` field added to inlineIssues schema (Task 2)
+- `apps/web/app/api/writing/score/route.ts` — `classifyAndUpsertPatterns` fire-and-forget after persist (Task 2, AC1)
+- `apps/web/app/api/writing/pattern-quiz/route.ts` — POST (quiz gen + errorLog insert, AC3, AC5, AC6) + GET (active patterns, AC4)
+- `apps/web/app/(app)/error-notebook/_components/WritingPatternSection.tsx` — Inline quiz UI (Task 5, AC4)
+- `apps/web/app/(app)/error-notebook/page.tsx` — Integrated WritingPatternSection above error cards
+
+## Dev Agent Record
+
+### Completion Notes
+
+- Tag taxonomy: 18 tags with Vietnamese labels and English descriptions
+- Classifier: `tag` field added to inlineIssues in the scoring prompt — same LLM call, no extra API cost (per dev notes)
+- AC1: tags validated against VALID_ERROR_TAGS set before upsert; invalid LLM tags silently skipped
+- AC1: upsert pattern — check-then-insert/update with per-tag loop; fire-and-forget (non-fatal)
+- AC2: threshold check in pattern-quiz endpoint (≥3 hits in 14-day window)
+- AC3: POST /api/writing/pattern-quiz — rate limited 10/min/user; returns 5 MCQ items
+- AC5: quiz items persisted to `error_log` with `sourceModule: "writing-pattern"` and `grammarTopic: tag` — automatically picked up by existing SRS review loop
+- AC6: only up to 3 sentences of ≤200 chars each sent to quiz generator; no full essay content
+- Migration 0016 applied to Supabase ✅
+- 22 tests passing ✅
+
+### Review Findings
+
+- [x] [Review][Patch] `userAnswer` in error_log never updated after inline quiz — **fixed** (PATCH handler + InlineQuiz wiring)
+- [x] [Review][Patch] `hotTags` filter checks per-essay delta — **fixed** (removed misleading log)
+- [x] [Review][Patch] GET /pattern-quiz should filter `count >= 3` server-side — **fixed**
+- [x] [Review][Defer] No unique constraint on `(userId, tag)` — TOCTOU race possible but low probability
+- [x] [Review][Defer] Sequential upsert loop could be batched — fire-and-forget so low impact
+- [x] [Review][Dismiss] Tag "word-choice" overlaps with category "word-choice" — different semantic scopes

@@ -11,6 +11,7 @@ import {
   InfoCircleOutlined,
 } from "@ant-design/icons";
 import { Tag, Tooltip, Collapse, Select, Empty } from "antd";
+import { WritingPatternSection } from "./_components/WritingPatternSection";
 
 type ErrorEntry = {
   id: string;
@@ -214,6 +215,9 @@ export default function ErrorNotebookPage() {
             style={{ padding: 40 }}
           />
         )}
+
+        {/* Writing pattern section (AC4 — Story 19.2.4) */}
+        <WritingPatternSection />
 
         {/* Error cards */}
         {!loading && errors.length > 0 && (

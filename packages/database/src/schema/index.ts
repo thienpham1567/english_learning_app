@@ -332,3 +332,36 @@ export const minimalPairsSession = pgTable("minimal_pairs_session", {
 ]);
 
 export type MinimalPairsSessionRow = typeof minimalPairsSession.$inferSelect;
+
+/** Writing Attempt — rubric-scored essay submission (Story 19.2.1) */
+export const writingAttempt = pgTable("writing_attempt", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  exam: text("exam").notNull(), // ielts-task2 | ielts-task1 | toefl-independent
+  prompt: text("prompt"),
+  text: text("text").notNull(),
+  overall: real("overall").notNull(),
+  criteriaJson: jsonb("criteria_json").notNull(),
+  inlineIssuesJson: jsonb("inline_issues_json").notNull().default([]),
+  guidedPromptJson: jsonb("guided_prompt_json"), // nullable — set when using guided writing (19.2.3)
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  index("writing_attempt_user_created_idx").on(table.userId, table.createdAt),
+]);
+
+export type WritingAttemptRow = typeof writingAttempt.$inferSelect;
+
+/** Writing Error Pattern — tracks recurring error tag occurrences per user (Story 19.2.4, AC1) */
+export const writingErrorPattern = pgTable("writing_error_pattern", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  tag: text("tag").notNull(), // one of ERROR_TAGS from lib/writing/error-tags.ts
+  count: integer("count").notNull().default(1),
+  lastSeenAt: timestamp("last_seen_at", { withTimezone: true }).defaultNow().notNull(),
+  quizGeneratedAt: timestamp("quiz_generated_at", { withTimezone: true }), // when quiz was last auto-generated
+}, (table) => [
+  index("writing_error_pattern_user_tag_idx").on(table.userId, table.tag),
+  index("writing_error_pattern_user_count_idx").on(table.userId, table.count),
+]);
+
+export type WritingErrorPatternRow = typeof writingErrorPattern.$inferSelect;
