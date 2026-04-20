@@ -12,6 +12,8 @@ import { LevelSelector } from "@/app/(app)/listening/_components/LevelSelector";
 import { AudioPlayer } from "@/app/(app)/listening/_components/AudioPlayer";
 import { QuestionCards } from "@/app/(app)/listening/_components/QuestionCards";
 import { Results } from "@/app/(app)/listening/_components/Results";
+import { DialogueGenerator } from "@/app/(app)/listening/_components/DialogueGenerator";
+import { SpeakerLegend } from "@/app/(app)/listening/_components/SpeakerLegend";
 import { MiniDictionary } from "@/components/shared";
 import ShadowingMode from "@/app/(app)/listening/_components/ShadowingMode";
 import DictationMode from "@/app/(app)/listening/_components/DictationMode";
@@ -29,6 +31,7 @@ export default function ListeningPage() {
     selectedSpeed,
     allAnswered,
     generate,
+    generateDialogue,
     selectAnswer,
     submit,
     useReplay,
@@ -157,16 +160,27 @@ export default function ListeningPage() {
 
         {/* Idle: Level Selector */}
         {(state === "idle" || state === "loading") && (
-          <LevelSelector
-            onStart={(level, type) => generate(level, type, examMode)}
-            isLoading={state === "loading"}
-            recommendedLevel={recommendedLevel}
-          />
+          <>
+            <LevelSelector
+              onStart={(level, type) => generate(level, type, examMode)}
+              isLoading={state === "loading"}
+              recommendedLevel={recommendedLevel}
+            />
+            <DialogueGenerator
+              isLoading={state === "loading"}
+              onStart={({ topic, level, turns, speakers }) =>
+                generateDialogue({ topic, level, turns, speakers, examMode })
+              }
+            />
+          </>
         )}
 
         {/* Active: Audio + Questions */}
         {(state === "active" || state === "submitting") && exercise && (
           <div style={{ maxWidth: 600, margin: "0 auto", display: "flex", flexDirection: "column", gap: 20 }}>
+            {exercise.turns && exercise.turns.length > 0 && (
+              <SpeakerLegend turns={exercise.turns} />
+            )}
             <AudioPlayer
               audioUrl={exercise.audioUrl}
               speed={selectedSpeed}
@@ -194,6 +208,7 @@ export default function ListeningPage() {
               onNewExercise={reset}
               onWordClick={miniDict.openForWord}
               savedWords={savedWords}
+              dialogueTurns={exercise?.turns}
             />
             {skillLevelUp && (
               <div

@@ -1,21 +1,71 @@
 import { headers } from "next/headers";
+import { promises as fs } from "fs";
+import path from "path";
 import { eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { listeningExercise } from "@repo/database";
-import { parseAccent, synthesizeTts } from "@/lib/tts/groq";
+import type { DialogueTurn } from "@repo/database";
+import {
+  parseAccent,
+  synthesizeTts,
+  synthesizeTtsForVoice,
+  VOICE_SET_VERSION,
+} from "@/lib/tts/groq";
 
 /**
  * GET /api/listening/audio/[id]?accent=us|uk|au
  *
- * Streams Groq Orpheus TTS audio for a listening passage.
- * Long-lived Cache-Control — passage is immutable per (id, accent).
+ * Streams TTS audio for a listening passage.
+ * - Legacy single-voice path: Groq Orpheus WAV, accent from query string.
+ * - Dialogue path (Story 19.3.1): when `dialogue_turns_json` is present,
+ *   synthesize per-turn MP3 with each turn's assigned voice and concatenate
+ *   MP3 frames server-side. Cached per `(exerciseId, voiceSetVersion)` on
+ *   disk at `apps/web/.cache/listening/` (opt-in, dev-safe).
  */
 
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 60_000;
+
+const DIALOGUE_CACHE_DIR = path.join(process.cwd(), ".cache", "listening");
+const DIALOGUE_DISK_CACHE_ENABLED = process.env.LISTENING_DIALOGUE_DISK_CACHE === "1";
+
+async function readCachedDialogue(id: string): Promise<Buffer | null> {
+  if (!DIALOGUE_DISK_CACHE_ENABLED) return null;
+  try {
+    const file = path.join(DIALOGUE_CACHE_DIR, `${id}-${VOICE_SET_VERSION}.mp3`);
+    return await fs.readFile(file);
+  } catch {
+    return null;
+  }
+}
+
+async function writeCachedDialogue(id: string, buf: Buffer): Promise<void> {
+  if (!DIALOGUE_DISK_CACHE_ENABLED) return;
+  try {
+    await fs.mkdir(DIALOGUE_CACHE_DIR, { recursive: true });
+    const file = path.join(DIALOGUE_CACHE_DIR, `${id}-${VOICE_SET_VERSION}.mp3`);
+    await fs.writeFile(file, buf);
+  } catch (err) {
+    console.warn("[Listening Audio] Failed to write dialogue cache:", err);
+  }
+}
+
+async function buildDialogueAudio(turns: DialogueTurn[]): Promise<Buffer> {
+  const parts = await Promise.all(
+    turns.map((turn) =>
+      synthesizeTtsForVoice({
+        text: turn.text,
+        voice: turn.voiceName,
+        format: "mp3",
+        speed: 0.95,
+      }).then((ab) => Buffer.from(ab)),
+    ),
+  );
+  return Buffer.concat(parts);
+}
 
 export async function GET(
   request: Request,
@@ -43,7 +93,11 @@ export async function GET(
 
   try {
     const [exercise] = await db
-      .select({ passage: listeningExercise.passage, userId: listeningExercise.userId })
+      .select({
+        passage: listeningExercise.passage,
+        userId: listeningExercise.userId,
+        dialogueTurnsJson: listeningExercise.dialogueTurnsJson,
+      })
       .from(listeningExercise)
       .where(eq(listeningExercise.id, id))
       .limit(1);
@@ -53,6 +107,22 @@ export async function GET(
     }
     if (exercise.userId !== session.user.id) {
       return Response.json({ error: "Forbidden" }, { status: 403 });
+    }
+
+    const turns = exercise.dialogueTurnsJson;
+
+    if (Array.isArray(turns) && turns.length > 0) {
+      const cached = await readCachedDialogue(id);
+      const buf = cached ?? (await buildDialogueAudio(turns));
+      if (!cached) await writeCachedDialogue(id, buf);
+
+      return new Response(new Uint8Array(buf), {
+        headers: {
+          "Content-Type": "audio/mpeg",
+          "Cache-Control": "public, max-age=604800",
+          "X-Voice-Set-Version": VOICE_SET_VERSION,
+        },
+      });
     }
 
     const audio = await synthesizeTts({

@@ -42,6 +42,36 @@ export function useListeningExercise() {
     }
   }, []);
 
+  const generateDialogue = useCallback(async (args: {
+    topic: string;
+    level: CefrLevel;
+    turns?: 6 | 8 | 10;
+    speakers?: 2 | 3;
+    examMode?: string;
+  }) => {
+    setState("loading");
+    setError(null);
+    setResult(null);
+
+    try {
+      const data = await api.post<ListeningExerciseResponse>("/listening/generate-dialogue", {
+        topic: args.topic,
+        level: args.level,
+        turns: args.turns ?? 8,
+        speakers: args.speakers ?? 2,
+        examMode: args.examMode,
+      });
+      setExercise(data);
+      setSelectedAnswers(new Array(data.questions.length).fill(null));
+      setReplaysUsed(0);
+      setSelectedSpeed(1.0);
+      setState("active");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Failed to generate dialogue");
+      setState("idle");
+    }
+  }, []);
+
   const selectAnswer = useCallback((questionIndex: number, optionIndex: number) => {
     setSelectedAnswers((prev) => {
       const next = [...prev];
@@ -111,6 +141,7 @@ export function useListeningExercise() {
     selectedSpeed,
     allAnswered,
     generate,
+    generateDialogue,
     selectAnswer,
     submit,
     useReplay,

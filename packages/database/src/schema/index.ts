@@ -180,6 +180,16 @@ export interface ListeningQuestion {
   correctIndex: number;
 }
 
+/** Multi-speaker dialogue turn (Story 19.3.1). */
+export type DialogueSpeaker = "A" | "B" | "C";
+export type DialogueAccent = "us" | "uk" | "au";
+export interface DialogueTurn {
+  speaker: DialogueSpeaker;
+  accent: DialogueAccent;
+  voiceName: string;
+  text: string;
+}
+
 export const listeningExercise = pgTable("listening_exercise", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: text("user_id").notNull(),
@@ -191,6 +201,7 @@ export const listeningExercise = pgTable("listening_exercise", {
   answers: jsonb("answers").$type<number[]>(),
   score: integer("score"),
   completedAt: timestamp("completed_at", { withTimezone: true }),
+  dialogueTurnsJson: jsonb("dialogue_turns_json").$type<DialogueTurn[]>(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 }, (table) => [
   index("listening_exercise_user_created_idx").on(table.userId, table.createdAt),

@@ -7,16 +7,18 @@ import {
   ReloadOutlined,
 } from "@ant-design/icons";
 import { HighlightedText } from "@/app/(app)/english-chatbot/_components/HighlightedText";
-import type { ListeningSubmitResponse } from "@/lib/listening/types";
+import type { DialogueTurnPayload, ListeningSubmitResponse } from "@/lib/listening/types";
+import { DialogueTranscript } from "@/app/(app)/listening/_components/SpeakerLegend";
 
 type Props = {
   result: ListeningSubmitResponse;
   onNewExercise: () => void;
   onWordClick?: (word: string, rect: DOMRect) => void;
   savedWords?: Set<string>;
+  dialogueTurns?: DialogueTurnPayload[];
 };
 
-export function Results({ result, onNewExercise, onWordClick, savedWords }: Props) {
+export function Results({ result, onNewExercise, onWordClick, savedWords, dialogueTurns }: Props) {
   const percentage = result.total > 0 ? Math.round((result.correct / result.total) * 100) : 0;
   const isGood = percentage >= 75;
 
@@ -117,7 +119,9 @@ export function Results({ result, onNewExercise, onWordClick, savedWords }: Prop
             fontStyle: "italic",
           }}
         >
-          {onWordClick ? (
+          {dialogueTurns && dialogueTurns.length > 0 ? (
+            <DialogueTranscript turns={dialogueTurns} />
+          ) : onWordClick ? (
             <HighlightedText text={result.passage} onWordClick={onWordClick} savedWords={savedWords} />
           ) : (
             result.passage
