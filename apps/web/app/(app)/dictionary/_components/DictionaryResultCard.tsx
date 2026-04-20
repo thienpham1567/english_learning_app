@@ -19,6 +19,7 @@ import {
 
 import type { DictionarySense, FrequencyBand, VocabularyWithNearby } from "@/lib/schemas/vocabulary";
 import { parseBold } from "@/lib/utils/parse-bold";
+import { api } from "@/lib/api-client";
 import { NearbyWordsBar } from "@/app/(app)/dictionary/_components/NearbyWordsBar";
 import { VerbFormsSection } from "@/app/(app)/dictionary/_components/VerbFormsSection";
 import { WordFamilySection } from "@/app/(app)/dictionary/_components/WordFamilySection";
@@ -99,7 +100,9 @@ function FrequencyBar({ band }: { band: FrequencyBand }) {
   );
 }
 
-let activeUtterance: SpeechSynthesisUtterance | null = null;
+let activeAudio: HTMLAudioElement | null = null;
+let activeAudioUrl: string | null = null;
+let activeAbort: AbortController | null = null;
 
 function getNumberLabel(numberInfo: NonNullable<VocabularyWithNearby["numberInfo"]>): string {
   if (numberInfo.isUncountable) return "uncountable";
@@ -477,25 +480,49 @@ export function DictionaryResultCard({
     setActiveKey(firstSenseId);
   }, [firstSenseId]);
 
-  function speak(locale: "en-US" | "en-GB") {
+  async function speak(locale: "en-US" | "en-GB") {
     if (!vocabulary) return;
-    if (activeUtterance) {
-      window.speechSynthesis.cancel();
-      activeUtterance = null;
+
+    activeAudio?.pause();
+    activeAbort?.abort();
+    if (activeAudioUrl) {
+      URL.revokeObjectURL(activeAudioUrl);
+      activeAudioUrl = null;
     }
-    const utterance = new SpeechSynthesisUtterance(vocabulary.headword);
-    utterance.lang = locale;
-    utterance.onstart = () => setSpeakingLocale(locale);
-    utterance.onend = () => {
-      setSpeakingLocale(null);
-      activeUtterance = null;
-    };
-    utterance.onerror = () => {
-      setSpeakingLocale(null);
-      activeUtterance = null;
-    };
-    activeUtterance = utterance;
-    window.speechSynthesis.speak(utterance);
+
+    const controller = new AbortController();
+    activeAbort = controller;
+    const accent = locale === "en-GB" ? "uk" : "us";
+    setSpeakingLocale(locale);
+
+    try {
+      const response = await api.post<Response>(
+        "/voice/synthesize",
+        { text: vocabulary.headword, accent },
+        { raw: true, signal: controller.signal },
+      );
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      activeAudioUrl = url;
+      const audio = new Audio(url);
+      activeAudio = audio;
+      audio.onended = () => {
+        setSpeakingLocale((curr) => (curr === locale ? null : curr));
+        URL.revokeObjectURL(url);
+        if (activeAudioUrl === url) activeAudioUrl = null;
+      };
+      audio.onerror = () => {
+        setSpeakingLocale((curr) => (curr === locale ? null : curr));
+        URL.revokeObjectURL(url);
+        if (activeAudioUrl === url) activeAudioUrl = null;
+      };
+      await audio.play();
+    } catch (err) {
+      if ((err as Error).name !== "AbortError") {
+        console.warn("[dictionary] TTS failed:", err);
+      }
+      setSpeakingLocale((curr) => (curr === locale ? null : curr));
+    }
   }
 
   const cardStyle: React.CSSProperties = {

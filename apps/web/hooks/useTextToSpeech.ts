@@ -3,25 +3,27 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { api } from "@/lib/api-client";
 
+export type TtsAccent = "us" | "uk" | "au";
+
 /**
- * useTextToSpeech — OpenAI TTS-powered text-to-speech hook.
+ * useTextToSpeech — Azure Neural TTS-powered text-to-speech hook.
  *
- * Sends text to /api/voice/synthesize (OpenAI TTS API),
+ * Sends text to /api/voice/synthesize (Azure Neural TTS),
  * receives MP3 audio and plays it via HTMLAudioElement.
  *
- * Voice: "nova" (natural female English voice, good for teaching)
- * Speed: toggleable between 1.0 (normal) and 0.8 (slow)
+ * Accent: "us" | "uk" | "au" — native neural voices per locale.
+ * Speed: toggleable between 1.0 (normal) and 0.8 (slow).
  */
-export function useTextToSpeech() {
+export function useTextToSpeech(defaultAccent: TtsAccent = "us") {
   const [isSpeaking, setSpeaking] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [rate, setRate] = useState<1 | 0.8>(1);
+  const [accent, setAccent] = useState<TtsAccent>(defaultAccent);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
   const [isSupported] = useState(() => typeof window !== "undefined");
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       audioRef.current?.pause();
@@ -30,10 +32,9 @@ export function useTextToSpeech() {
   }, []);
 
   const speak = useCallback(
-    async (text: string) => {
+    async (text: string, opts?: { accent?: TtsAccent }) => {
       if (!isSupported || !text.trim()) return;
 
-      // Stop any current playback
       audioRef.current?.pause();
       abortRef.current?.abort();
 
@@ -45,7 +46,11 @@ export function useTextToSpeech() {
 
       try {
         const response = await api.post<Response>("/voice/synthesize",
-          { text: text.slice(0, 4000), speed: rate },
+          {
+            text: text.slice(0, 4000),
+            speed: rate,
+            accent: opts?.accent ?? accent,
+          },
           { raw: true, signal: abortController.signal },
         );
 
@@ -78,7 +83,7 @@ export function useTextToSpeech() {
         setSpeaking(false);
       }
     },
-    [isSupported, rate],
+    [isSupported, rate, accent],
   );
 
   const stop = useCallback(() => {
@@ -102,5 +107,7 @@ export function useTextToSpeech() {
     /** Current playback rate: 1 (normal) or 0.8 (slow) */
     rate,
     toggleRate,
+    accent,
+    setAccent,
   };
 }

@@ -3,29 +3,40 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { api } from "@/lib/api-client";
 
+export type VoiceWord = { word: string; startMs: number; endMs: number };
+
+export type UseVoiceInputOptions = {
+  /** When false, the hook records and exposes the blob but does not POST to /voice/transcribe.
+   *  Consumers (e.g. pronunciation scoring) can forward the blob to their own endpoint. */
+  autoTranscribe?: boolean;
+};
+
 /**
- * useVoiceInput — OpenAI Whisper-powered speech-to-text hook.
+ * useVoiceInput — Whisper-powered speech-to-text hook.
  *
- * Records audio via MediaRecorder, sends to /api/voice/transcribe (Whisper API),
- * returns high-quality transcription.
- *
- * Falls back gracefully if:
- * - MediaRecorder not available (isSupported = false, mic button hidden)
- * - Microphone permission denied (error state)
- * - API key not configured (server returns 500, shown as error)
+ * Records via MediaRecorder, optionally posts to /api/voice/transcribe.
+ * Exposes the raw blob, measured duration, and word-level timestamps so later
+ * surfaces (pronunciation scoring, fluency metrics) can consume them directly.
  */
-export function useVoiceInput() {
+export function useVoiceInput(options: UseVoiceInputOptions = {}) {
+  const { autoTranscribe = true } = options;
+
   const [isListening, setIsListening] = useState(false);
   const [transcript, setTranscript] = useState("");
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [blob, setBlob] = useState<Blob | null>(null);
+  const [durationMs, setDurationMs] = useState(0);
+  const [words, setWords] = useState<VoiceWord[]>([]);
+
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const streamRef = useRef<MediaStream | null>(null);
+  const startedAtRef = useRef<number>(0);
+  const mountedRef = useRef(true);
 
   const [isSupported, setIsSupported] = useState(false);
 
-  // Detect support after mount to avoid SSR hydration mismatch
   useEffect(() => {
     setIsSupported(
       !!navigator.mediaDevices?.getUserMedia &&
@@ -33,9 +44,9 @@ export function useVoiceInput() {
     );
   }, []);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
+      mountedRef.current = false;
       mediaRecorderRef.current?.stop();
       streamRef.current?.getTracks().forEach((t) => t.stop());
     };
@@ -45,6 +56,9 @@ export function useVoiceInput() {
     if (!isSupported) return;
     setError(null);
     setTranscript("");
+    setBlob(null);
+    setDurationMs(0);
+    setWords([]);
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
@@ -57,7 +71,6 @@ export function useVoiceInput() {
       });
       streamRef.current = stream;
 
-      // Prefer webm, fall back to mp4
       const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
         ? "audio/webm;codecs=opus"
         : MediaRecorder.isTypeSupported("audio/mp4")
@@ -72,9 +85,11 @@ export function useVoiceInput() {
       };
 
       recorder.onstop = async () => {
-        // Stop mic stream
+        const measuredMs = Math.max(0, performance.now() - startedAtRef.current);
         stream.getTracks().forEach((t) => t.stop());
         streamRef.current = null;
+
+        if (!mountedRef.current) return;
 
         if (chunksRef.current.length === 0) {
           setIsListening(false);
@@ -84,32 +99,47 @@ export function useVoiceInput() {
         const audioBlob = new Blob(chunksRef.current, {
           type: mimeType || "audio/webm",
         });
+        setBlob(audioBlob);
+        setDurationMs(measuredMs);
 
-        // Send to Whisper API
+        if (!autoTranscribe) {
+          setIsListening(false);
+          return;
+        }
+
         setIsTranscribing(true);
         try {
           const formData = new FormData();
           formData.append("audio", audioBlob, "recording.webm");
+          formData.append("durationMs", String(Math.round(measuredMs)));
 
-          const res = await api.post<{ text: string }>("/voice/transcribe", formData);
+          const res = await api.post<{
+            text: string;
+            durationSec: number;
+            words: VoiceWord[];
+          }>("/voice/transcribe", formData);
+          if (!mountedRef.current) return;
           setTranscript(res.text);
+          setWords(res.words ?? []);
         } catch (err) {
+          if (!mountedRef.current) return;
           console.warn("[useVoiceInput] Transcription error:", err);
           setError(err instanceof Error ? err.message : "Transcription failed");
         } finally {
-          setIsTranscribing(false);
+          if (mountedRef.current) setIsTranscribing(false);
         }
       };
 
       mediaRecorderRef.current = recorder;
-      recorder.start(200); // collect chunks every 200ms
+      startedAtRef.current = performance.now();
+      recorder.start(200);
       setIsListening(true);
     } catch (err) {
       console.warn("[useVoiceInput] Mic access error:", err);
       setError("Không thể truy cập microphone");
       setIsListening(false);
     }
-  }, [isSupported]);
+  }, [isSupported, autoTranscribe]);
 
   const stop = useCallback(() => {
     if (mediaRecorderRef.current?.state === "recording") {
@@ -126,6 +156,12 @@ export function useVoiceInput() {
     transcript,
     /** Combined display text (shows "Đang nhận dạng..." while transcribing) */
     fullTranscript: isTranscribing ? "" : transcript,
+    /** Raw audio blob from the last recording (null until stop completes) */
+    blob,
+    /** Measured recording duration in milliseconds */
+    durationMs,
+    /** Word-level timestamps from verbose_json Whisper response (empty if provider omitted) */
+    words,
     start,
     stop,
     isSupported,

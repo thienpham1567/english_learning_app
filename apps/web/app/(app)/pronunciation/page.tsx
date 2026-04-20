@@ -17,6 +17,7 @@ import {
 import { Progress, Tag, Tooltip } from "antd";
 
 import { useExamMode } from "@/components/shared/ExamModeProvider";
+import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 
 type Sentence = {
   text: string;
@@ -40,6 +41,21 @@ type EvalResult = {
   tips: string[];
 };
 
+type PhonemeWordScore = {
+  word: string;
+  spoken: string;
+  score: number;
+  status: "ok" | "slightly-off" | "wrong" | "missing";
+  expectedPhonemes: string[] | null;
+  actualPhonemes: string[] | null;
+};
+
+type PhonemeScoreResult = {
+  overall: number;
+  transcript: string;
+  wordScores: PhonemeWordScore[];
+};
+
 type PracticeState = "idle" | "loading" | "ready" | "recording" | "transcribing" | "evaluating" | "result";
 
 export default function PronunciationPage() {
@@ -49,13 +65,16 @@ export default function PronunciationPage() {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [level, setLevel] = useState<string>("intermediate");
   const [evalResult, setEvalResult] = useState<EvalResult | null>(null);
+  const [phonemeResult, setPhonemeResult] = useState<PhonemeScoreResult | null>(null);
   const [spokenText, setSpokenText] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [sessionScores, setSessionScores] = useState<number[]>([]);
 
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
+  const recordingStartRef = useRef<number>(0);
 
+  const tts = useTextToSpeech();
   const currentSentence = sentences[currentIdx] ?? null;
 
   // ─── Generate sentences ───
@@ -65,6 +84,7 @@ export default function PronunciationPage() {
     setSessionScores([]);
     setCurrentIdx(0);
     setEvalResult(null);
+    setPhonemeResult(null);
 
     try {
       const data = await api.post<{ sentences: Sentence[] }>("/pronunciation/sentences", {
@@ -83,11 +103,8 @@ export default function PronunciationPage() {
   // ─── TTS: Read sentence aloud ───
   const speakSentence = useCallback(() => {
     if (!currentSentence) return;
-    const utterance = new SpeechSynthesisUtterance(currentSentence.text);
-    utterance.lang = "en-US";
-    utterance.rate = 0.85;
-    speechSynthesis.speak(utterance);
-  }, [currentSentence]);
+    void tts.speak(currentSentence.text);
+  }, [currentSentence, tts]);
 
   // ─── Recording ───
   const startRecording = useCallback(async () => {
@@ -108,6 +125,7 @@ export default function PronunciationPage() {
       };
 
       mediaRecorder.start();
+      recordingStartRef.current = performance.now();
       setState("recording");
     } catch {
       setError("Không thể truy cập microphone. Vui lòng cho phép quyền truy cập.");
@@ -124,24 +142,38 @@ export default function PronunciationPage() {
         recorder.stream.getTracks().forEach((t) => t.stop());
 
         const audioBlob = new Blob(chunksRef.current, { type: "audio/webm" });
+        const durationMs = Math.max(0, performance.now() - recordingStartRef.current);
         setState("transcribing");
 
         try {
           // Step 1: Transcribe
           const formData = new FormData();
           formData.append("audio", audioBlob, "recording.webm");
+          formData.append("durationMs", String(Math.round(durationMs)));
 
           const { text } = await api.post<{ text: string }>("/voice/transcribe", formData);
           setSpokenText(text);
 
-          // Step 2: Evaluate
+          // Step 2: Score (deterministic phoneme) + Evaluate (LLM feedback) in parallel
           setState("evaluating");
-          const result = await api.post<EvalResult>("/pronunciation/evaluate", {
-            targetText: currentSentence.text,
-            spokenText: text,
-          });
-          setEvalResult(result);
-          setSessionScores((prev) => [...prev, result.score]);
+          const [phonemeRes, evalRes] = await Promise.allSettled([
+            api.post<PhonemeScoreResult>("/pronunciation/score", {
+              referenceText: currentSentence.text,
+              spokenText: text,
+            }),
+            api.post<EvalResult>("/pronunciation/evaluate", {
+              targetText: currentSentence.text,
+              spokenText: text,
+            }),
+          ]);
+
+          const phoneme = phonemeRes.status === "fulfilled" ? phonemeRes.value : null;
+          const evalResult = evalRes.status === "fulfilled" ? evalRes.value : null;
+          setPhonemeResult(phoneme);
+          setEvalResult(evalResult);
+
+          const sessionScore = phoneme?.overall ?? evalResult?.score ?? 0;
+          setSessionScores((prev) => [...prev, sessionScore]);
           setState("result");
         } catch {
           setError("Có lỗi khi xử lý. Vui lòng thử lại.");
@@ -160,6 +192,7 @@ export default function PronunciationPage() {
     if (currentIdx < sentences.length - 1) {
       setCurrentIdx((prev) => prev + 1);
       setEvalResult(null);
+      setPhonemeResult(null);
       setSpokenText("");
       setState("ready");
     } else {
@@ -170,6 +203,7 @@ export default function PronunciationPage() {
   // ─── Retry current sentence ───
   const retryCurrent = useCallback(() => {
     setEvalResult(null);
+    setPhonemeResult(null);
     setSpokenText("");
     setSessionScores((prev) => prev.slice(0, -1));
     setState("ready");
@@ -485,7 +519,7 @@ export default function PronunciationPage() {
         )}
 
         {/* Result */}
-        {state === "result" && evalResult && currentSentence && (
+        {state === "result" && (evalResult || phonemeResult) && currentSentence && (
           <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
             {/* Score */}
             <div
@@ -497,22 +531,37 @@ export default function PronunciationPage() {
                 textAlign: "center",
               }}
             >
-              <Progress
-                type="circle"
-                percent={evalResult.score}
-                size={100}
-                strokeColor={evalResult.score >= 80 ? "#52c41a" : evalResult.score >= 50 ? "#faad14" : "#ff4d4f"}
-                format={(pct) => <span style={{ fontSize: 24, fontWeight: 700 }}>{pct}</span>}
-              />
+              {(() => {
+                const mainScore = phonemeResult?.overall ?? evalResult?.score ?? 0;
+                return (
+                  <Progress
+                    type="circle"
+                    percent={mainScore}
+                    size={100}
+                    strokeColor={mainScore >= 80 ? "#52c41a" : mainScore >= 50 ? "#faad14" : "#ff4d4f"}
+                    format={(pct) => <span style={{ fontSize: 24, fontWeight: 700 }}>{pct}</span>}
+                  />
+                );
+              })()}
               <div style={{ display: "flex", justifyContent: "center", gap: 24, marginTop: 16 }}>
-                <div>
-                  <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0 }}>Chính xác</p>
-                  <p style={{ fontSize: 18, fontWeight: 600, margin: 0 }}>{evalResult.accuracy}%</p>
-                </div>
-                <div>
-                  <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0 }}>Trôi chảy</p>
-                  <p style={{ fontSize: 18, fontWeight: 600, margin: 0 }}>{evalResult.fluency}%</p>
-                </div>
+                {phonemeResult && (
+                  <div>
+                    <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0 }}>Phoneme</p>
+                    <p style={{ fontSize: 18, fontWeight: 600, margin: 0 }}>{phonemeResult.overall}%</p>
+                  </div>
+                )}
+                {evalResult && (
+                  <>
+                    <div>
+                      <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0 }}>Chính xác</p>
+                      <p style={{ fontSize: 18, fontWeight: 600, margin: 0 }}>{evalResult.accuracy}%</p>
+                    </div>
+                    <div>
+                      <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0 }}>Trôi chảy</p>
+                      <p style={{ fontSize: 18, fontWeight: 600, margin: 0 }}>{evalResult.fluency}%</p>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
 
@@ -531,50 +580,85 @@ export default function PronunciationPage() {
               <p style={{ fontSize: 15, margin: 0, fontStyle: "italic" }}>&ldquo;{spokenText}&rdquo;</p>
             </div>
 
-            {/* Word analysis */}
-            <div
-              style={{
-                padding: 16,
-                borderRadius: 12,
-                background: "var(--card-bg)",
-                border: "1px solid var(--border)",
-              }}
-            >
-              <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
-                Phân tích từng từ:
-              </p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                {evalResult.wordAnalysis.map((w, i) => (
-                  <Tooltip key={i} title={w.issue || "Chính xác!"}>
-                    <Tag
-                      color={w.correct ? "success" : "error"}
-                      style={{ fontSize: 13, padding: "3px 8px", cursor: "help" }}
-                    >
-                      {w.correct ? <CheckCircleOutlined /> : <CloseCircleOutlined />} {w.word}
-                    </Tag>
-                  </Tooltip>
-                ))}
+            {/* Phoneme-level chips (deterministic) */}
+            {phonemeResult && (
+              <div
+                style={{
+                  padding: 16,
+                  borderRadius: 12,
+                  background: "var(--card-bg)",
+                  border: "1px solid var(--border)",
+                }}
+              >
+                <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
+                  Phoneme (CMUdict):
+                </p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {phonemeResult.wordScores.map((w, i) => {
+                    const color =
+                      w.status === "ok" ? "success" : w.status === "slightly-off" ? "warning" : "error";
+                    const expected = w.expectedPhonemes?.join(" ") ?? "—";
+                    const actual = w.actualPhonemes?.join(" ") ?? (w.status === "missing" ? "(missing)" : "—");
+                    return (
+                      <Tooltip key={i} title={`Expected: ${expected}\nActual: ${actual}`}>
+                        <Tag color={color} style={{ fontSize: 13, padding: "3px 8px", cursor: "help" }}>
+                          {w.word}
+                        </Tag>
+                      </Tooltip>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* Word analysis (LLM) */}
+            {evalResult && (
+              <div
+                style={{
+                  padding: 16,
+                  borderRadius: 12,
+                  background: "var(--card-bg)",
+                  border: "1px solid var(--border)",
+                }}
+              >
+                <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
+                  Phân tích từng từ:
+                </p>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {evalResult.wordAnalysis.map((w, i) => (
+                    <Tooltip key={i} title={w.issue || "Chính xác!"}>
+                      <Tag
+                        color={w.correct ? "success" : "error"}
+                        style={{ fontSize: 13, padding: "3px 8px", cursor: "help" }}
+                      >
+                        {w.correct ? <CheckCircleOutlined /> : <CloseCircleOutlined />} {w.word}
+                      </Tag>
+                    </Tooltip>
+                  ))}
+                </div>
+              </div>
+            )}
 
             {/* Feedback */}
-            <div
-              style={{
-                padding: 16,
-                borderRadius: 12,
-                background: "var(--card-bg)",
-                border: "1px solid var(--border)",
-              }}
-            >
-              <p style={{ fontSize: 13, margin: "0 0 8px" }}>{evalResult.feedback}</p>
-              {evalResult.tips.length > 0 && (
-                <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: "var(--text-secondary)" }}>
-                  {evalResult.tips.map((tip, i) => (
-                    <li key={i}>{tip}</li>
-                  ))}
-                </ul>
-              )}
-            </div>
+            {evalResult && (
+              <div
+                style={{
+                  padding: 16,
+                  borderRadius: 12,
+                  background: "var(--card-bg)",
+                  border: "1px solid var(--border)",
+                }}
+              >
+                <p style={{ fontSize: 13, margin: "0 0 8px" }}>{evalResult.feedback}</p>
+                {evalResult.tips.length > 0 && (
+                  <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: "var(--text-secondary)" }}>
+                    {evalResult.tips.map((tip, i) => (
+                      <li key={i}>{tip}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )}
 
             {/* Actions */}
             <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>

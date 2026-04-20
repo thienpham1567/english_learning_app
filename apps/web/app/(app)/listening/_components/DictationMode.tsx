@@ -13,6 +13,8 @@ import {
 } from "@ant-design/icons";
 import { Progress, Tag } from "antd";
 
+import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+
 type Sentence = { text: string; ipa: string; tip: string };
 
 type DiffWord = {
@@ -107,24 +109,21 @@ export default function DictationMode({ examMode }: Props) {
     }
   }, [examMode]);
 
-  // ── TTS: Play sentence (first play free, subsequent count as replays) ──
+  const tts = useTextToSpeech();
   const [hasPlayedOnce, setHasPlayedOnce] = useState(false);
 
   const playSentence = useCallback(() => {
     if (!currentSentence) return;
     if (hasPlayedOnce && replaysUsed >= MAX_REPLAYS) return;
 
-    const utterance = new SpeechSynthesisUtterance(currentSentence.text);
-    utterance.lang = "en-US";
-    utterance.rate = 0.85;
-    speechSynthesis.speak(utterance);
+    void tts.speak(currentSentence.text);
 
     if (hasPlayedOnce) {
       setReplaysUsed((p) => p + 1);
     } else {
       setHasPlayedOnce(true);
     }
-  }, [currentSentence, hasPlayedOnce, replaysUsed]);
+  }, [currentSentence, hasPlayedOnce, replaysUsed, tts]);
 
   // ── Check answer ──
   const checkAnswer = useCallback(() => {

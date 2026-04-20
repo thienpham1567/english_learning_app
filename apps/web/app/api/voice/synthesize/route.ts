@@ -1,19 +1,17 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { parseAccent, synthesizeGoogleTts } from "@/lib/tts/google";
 
 /**
  * POST /api/voice/synthesize
  *
- * Converts text to speech using OpenAI TTS API.
- * Returns audio as an MP3 stream.
+ * Converts text to speech via Google Cloud TTS (Neural2 voices).
+ * Body: { text: string, speed?: number, accent?: "us" | "uk" | "au" }
+ * Requires GOOGLE_TTS_API_KEY.
  *
- * Body: { text: string, speed?: number }
- * Requires OPENAI_DIRECT_API_KEY env var (direct OpenAI key, not OpenRouter).
- *
- * Rate limited to 10 calls per user per minute (~$0.015/1K chars).
+ * Rate limited to 10 calls per user per minute.
  */
 
-// Simple in-memory rate limiter (resets on server restart)
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT_MAX = 10;
 const RATE_LIMIT_WINDOW_MS = 60_000;
@@ -24,7 +22,6 @@ export async function POST(request: Request) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  // Rate limit check
   const now = Date.now();
   const userId = session.user.id;
   const entry = rateLimitMap.get(userId);
@@ -37,56 +34,33 @@ export async function POST(request: Request) {
     rateLimitMap.set(userId, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
   }
 
-  const apiKey = process.env.OPENAI_DIRECT_API_KEY;
-  if (!apiKey) {
-    return Response.json({ error: "OPENAI_DIRECT_API_KEY not configured" }, { status: 500 });
+  const body = (await request.json().catch(() => null)) as {
+    text?: string;
+    speed?: number;
+    accent?: string;
+  } | null;
+
+  const text = body?.text?.trim();
+  if (!text) {
+    return Response.json({ error: "No text provided" }, { status: 400 });
+  }
+  if (text.length > 4000) {
+    return Response.json({ error: "Text too long (max 4000 chars)" }, { status: 400 });
   }
 
+  const accent = parseAccent(body?.accent);
+  const speed = typeof body?.speed === "number" ? body.speed : 1;
+
   try {
-    const body = (await request.json()) as { text?: string; speed?: number };
-    const text = body.text?.trim();
-
-    if (!text) {
-      return Response.json({ error: "No text provided" }, { status: 400 });
-    }
-
-    // Limit text length to avoid excessive costs
-    if (text.length > 4000) {
-      return Response.json({ error: "Text too long (max 4000 chars)" }, { status: 400 });
-    }
-
-    const speed = Math.max(0.5, Math.min(body.speed ?? 1.0, 2.0));
-
-    const response = await fetch("https://api.openai.com/v1/audio/speech", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${apiKey}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "tts-1",
-        voice: "nova",  // natural female English voice, good for teaching
-        input: text,
-        speed,
-        response_format: "mp3",
-      }),
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("[TTS] Error:", response.status, errorText);
-      return Response.json({ error: "Speech synthesis failed" }, { status: 502 });
-    }
-
-    // Stream the audio response back
-    return new Response(response.body, {
+    const audio = await synthesizeGoogleTts({ text, accent, speed });
+    return new Response(audio, {
       headers: {
         "Content-Type": "audio/mpeg",
-        "Cache-Control": "public, max-age=86400", // cache 24h
+        "Cache-Control": "public, max-age=86400",
       },
     });
   } catch (err) {
-    console.error("[TTS] Unexpected error:", err);
-    return Response.json({ error: "Internal error" }, { status: 500 });
+    console.error("[TTS] Google synthesis failed:", err);
+    return Response.json({ error: "Speech synthesis failed" }, { status: 502 });
   }
 }

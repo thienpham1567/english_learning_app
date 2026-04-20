@@ -281,3 +281,18 @@ export const scenarioProgress = pgTable("scenario_progress", {
 ]);
 
 export type ScenarioProgressRow = typeof scenarioProgress.$inferSelect;
+
+/** Pronunciation Attempt — deterministic phoneme-level score per attempt (Story 19.1.2) */
+export const pronunciationAttempt = pgTable("pronunciation_attempt", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  referenceText: text("reference_text").notNull(),
+  transcript: text("transcript").notNull(),
+  overall: integer("overall").notNull(),
+  accent: text("accent").notNull().default("us"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  index("pronunciation_attempt_user_created_idx").on(table.userId, table.createdAt),
+]);
+
+export type PronunciationAttemptRow = typeof pronunciationAttempt.$inferSelect;

@@ -14,6 +14,8 @@ import {
 } from "@ant-design/icons";
 import { Progress, Tag, Tooltip } from "antd";
 
+import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+
 type Sentence = { text: string; ipa: string; tip: string };
 type WordAnalysis = { word: string; spoken: string; correct: boolean; issue?: string };
 type EvalResult = {
@@ -66,14 +68,12 @@ export default function ShadowingMode({ examMode }: Props) {
     }
   }, [examMode]);
 
-  // ── TTS ──
+  const tts = useTextToSpeech();
+
   const speakSentence = useCallback(() => {
     if (!currentSentence) return;
-    const utterance = new SpeechSynthesisUtterance(currentSentence.text);
-    utterance.lang = "en-US";
-    utterance.rate = 0.85;
-    speechSynthesis.speak(utterance);
-  }, [currentSentence]);
+    void tts.speak(currentSentence.text);
+  }, [currentSentence, tts]);
 
   // ── Recording ──
   const startRecording = useCallback(async () => {
