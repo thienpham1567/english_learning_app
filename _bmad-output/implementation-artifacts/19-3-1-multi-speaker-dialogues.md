@@ -1,6 +1,6 @@
 # Story 19.3.1: Multi-Speaker Dialogues
 
-Status: in-progress
+Status: review
 
 ## Story
 
@@ -22,11 +22,39 @@ As a self-learner, I want listening exercises that feature conversations between
 
 ## Tasks
 
-- [ ] Task 1: Extend `VOICES` map with named roles: `us-f`, `us-m`, `uk-f`, `uk-m`, `au-f`, `au-m` (AC6).
-- [ ] Task 2: Migration: add nullable `dialogueTurnsJson` to `listeningExercise` (AC1).
-- [ ] Task 3: Implement `/api/listening/generate-dialogue` using structured output (AC2).
-- [ ] Task 4: Update `[id]/route.ts` to branch on dialogue path and concat buffers (AC3, AC4).
-- [ ] Task 5: Update Listening UI to render dialogue transcripts with speaker tags (AC5).
+- [x] Task 1: Extend `VOICES` map with named roles: `us-f`, `us-m`, `uk-f`, `uk-m`, `au-f`, `au-m` (AC6).
+- [x] Task 2: Migration: add nullable `dialogueTurnsJson` to `listeningExercise` (AC1).
+- [x] Task 3: Implement `/api/listening/generate-dialogue` using structured output (AC2).
+- [x] Task 4: Update `[id]/route.ts` to branch on dialogue path and concat buffers (AC3, AC4).
+- [x] Task 5: Update Listening UI to render dialogue transcripts with speaker tags (AC5).
+
+## Dev Agent Record
+
+### Completion Notes
+- Provider: stayed on Groq (`playai-tts`) per user direction — Google Cloud TTS was not introduced. The story's "Chirp 3 HD" / `lib/tts/google.ts` references were adapted to Groq voices in [apps/web/lib/tts/groq.ts](apps/web/lib/tts/groq.ts) without changing the file's name.
+- Dialogue turns are synthesized as MP3 (`response_format: "mp3"`) and concatenated via raw byte concat (per Dev Notes) — legacy single-voice path keeps returning WAV. Voice-name assumptions (`atlas`, `celeste`, `briggs`, `tara`, `calum`, `hannah`) may need tuning once the Groq voice catalog is verified in your account.
+- Disk cache is **opt-in** via `LISTENING_DIALOGUE_DISK_CACHE=1` to `apps/web/.cache/listening/<id>-<VOICE_SET_VERSION>.mp3`. `Cache-Control: public, max-age=604800` is always set. `VOICE_SET_VERSION` bumps invalidate cached audio.
+- Audio endpoint requires auth + ownership; rate limit (5/min/user) preserved.
+- UI additions: `DialogueGenerator` panel on idle state (topic/level/turns/speakers), `SpeakerLegend` above `AudioPlayer` when turns exist, and `DialogueTranscript` replaces the plain-passage transcript in `Results` when turns exist.
+- Type-checked the listening-related paths; only pre-existing, unrelated errors remain (dictionary tests, axios import, exam-mode literal mismatch).
+
+### File List
+- `apps/web/lib/tts/groq.ts` (modified) — role map + `synthesizeTtsForVoice` + `VOICE_SET_VERSION`.
+- `packages/database/src/schema/index.ts` (modified) — `dialogueTurnsJson` JSONB column + `DialogueTurn` type.
+- `apps/web/drizzle/0009_add_listening_dialogue_turns.sql` (new) — migration.
+- `apps/web/app/api/listening/generate-dialogue/route.ts` (new) — dialogue generation endpoint.
+- `apps/web/app/api/listening/audio/[id]/route.ts` (modified) — dialogue branch + disk cache.
+- `apps/web/lib/listening/types.ts` (modified) — dialogue request schema + response types.
+- `apps/web/hooks/useListeningExercise.ts` (modified) — `generateDialogue` action.
+- `apps/web/app/(app)/listening/_components/SpeakerLegend.tsx` (new) — legend + per-turn transcript.
+- `apps/web/app/(app)/listening/_components/DialogueGenerator.tsx` (new) — idle-state generator form.
+- `apps/web/app/(app)/listening/_components/Results.tsx` (modified) — renders `DialogueTranscript` when turns present.
+- `apps/web/app/(app)/listening/page.tsx` (modified) — integrates DialogueGenerator + SpeakerLegend + passes turns to Results.
+- `_bmad-output/implementation-artifacts/19-3-1-multi-speaker-dialogues.md` (modified).
+- `_bmad-output/implementation-artifacts/sprint-status.yaml` (modified).
+
+### Change Log
+- 2026-04-20: Implemented Story 19.3.1. Adapted TTS approach to Groq (per user) instead of Google Chirp 3 HD; stored dialogue JSON on `listening_exercise`; server-side MP3 concat; added UI affordance for dialogue generation + speaker legend + labeled transcript reveal.
 
 ## Dev Notes
 

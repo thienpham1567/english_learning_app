@@ -120,6 +120,13 @@
       "when": 1777051200000,
       "tag": "0016_writing_error_pattern",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1777137600000,
+      "tag": "0017_add_listening_dialogue_turns",
+      "breakpoints": true
     }
   ]
 }

@@ -264,7 +264,7 @@ sprints:
     stories:
       "19.3.1":
         title: "Multi-Speaker Dialogues"
-        status: in-progress
+        status: review
       "19.3.2":
         title: "A-B Loop + Variable Speed"
         status: ready-for-dev
