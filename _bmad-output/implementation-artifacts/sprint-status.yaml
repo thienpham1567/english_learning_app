@@ -1,5 +1,6 @@
 currentSprint: R4
 last_updated: "2026-04-20"
+
 storySequence:
   - "18.1.1"
   - "18.1.2"
@@ -55,16 +56,16 @@ sprints:
     name: "Monorepo Scaffolding"
     status: done
     stories:
-      '17.1':
+      "17.1":
         title: "Initialize pnpm Workspace + Turborepo"
         status: done
         estimate: "4h"
-      '17.2':
+      "17.2":
         title: "Move Current App to apps/web/"
         status: done
         estimate: "6h"
         risk: high
-      '17.3':
+      "17.3":
         title: "Root Developer Experience Setup"
         status: done
         estimate: "2h"
@@ -72,24 +73,24 @@ sprints:
     name: "Shared Packages"
     status: in-progress
     stories:
-      '17.4':
+      "17.4":
         title: "Create packages/shared"
         status: done
         estimate: "3h"
-      '17.5':
+      "17.5":
         title: "Create packages/contracts"
         status: done
         estimate: "3h"
-      '17.6':
+      "17.6":
         title: "Create packages/database"
         status: done
         estimate: "5h"
         risk: medium
-      '17.7':
+      "17.7":
         title: "Create packages/auth"
         status: done
         estimate: "3h"
-      '17.11':
+      "17.11":
         title: "Migrate axios → fetch API client"
         status: done
         estimate: "3h"
@@ -98,15 +99,15 @@ sprints:
     name: "Dashboard Module Extraction"
     status: not_started
     stories:
-      '17.8':
+      "17.8":
         title: "Dashboard Query Service"
         status: done
         estimate: "3h"
-      '17.9':
+      "17.9":
         title: "Dashboard Module (use case)"
         status: done
         estimate: "3h"
-      '17.10':
+      "17.10":
         title: "Refactor Dashboard Route to Thin Adapter"
         status: in-progress
         estimate: "2h"
@@ -114,146 +115,146 @@ sprints:
     name: "Epic 18 - API Foundation"
     status: in-progress
     stories:
-      '18.1.1':
+      "18.1.1":
         title: "Scaffold the apps/api Workspace"
         status: ready-for-dev
-      '18.1.2':
+      "18.1.2":
         title: "Register API Tasks and Minimal Bootstrap Modules"
         status: ready-for-dev
-      '18.2.1':
+      "18.2.1":
         title: "Define the Shared API Error Envelope"
         status: ready-for-dev
-      '18.2.2':
+      "18.2.2":
         title: "Add Zod Validation Adapters and a Sample Endpoint"
         status: ready-for-dev
-      '18.3.1':
+      "18.3.1":
         title: "Wire Configuration Loading for apps/api"
         status: ready-for-dev
-      '18.3.2':
+      "18.3.2":
         title: "Provide a Database Module Backed by @repo/database"
         status: ready-for-dev
-      '18.3.3':
+      "18.3.3":
         title: "Add Health, Readiness, Logging, and Runtime Docs"
         status: ready-for-dev
   R5:
     name: "Epic 18 - Auth and Client Integration Baseline"
     status: not_started
     stories:
-      '18.4.1':
+      "18.4.1":
         title: "Build Better Auth Session Resolution for Nest Requests"
         status: ready-for-dev
-      '18.4.2':
+      "18.4.2":
         title: "Add Auth Guard and Prove Session Resolution with /me"
         status: ready-for-dev
-      '18.5.1':
+      "18.5.1":
         title: "Create the Typed HTTP Client Foundation"
         status: ready-for-dev
-      '18.5.2':
+      "18.5.2":
         title: "Integrate the Typed Client into apps/web"
         status: ready-for-dev
-      '18.6.1':
+      "18.6.1":
         title: "Add Unit and E2E Test Harnesses for apps/api"
         status: ready-for-dev
-      '18.6.2':
+      "18.6.2":
         title: "Wire CI Jobs and Baseline Telemetry for the API"
         status: ready-for-dev
   R6:
     name: "Epic 18 - Learner Home Vertical Slice"
     status: not_started
     stories:
-      '18.7.1':
+      "18.7.1":
         title: "Define Dashboard Contracts and Tests"
         status: ready-for-dev
-      '18.7.2':
+      "18.7.2":
         title: "Define Preferences, Learning-Style, and XP Contracts"
         status: ready-for-dev
-      '18.8.1':
+      "18.8.1":
         title: "Implement the Dashboard Module in apps/api"
         status: ready-for-dev
-      '18.8.2':
+      "18.8.2":
         title: "Implement Preferences and Learning-Style Modules"
         status: ready-for-dev
-      '18.8.3':
+      "18.8.3":
         title: "Implement API-Owned XP Award Orchestration"
         status: ready-for-dev
-      '18.9.1':
+      "18.9.1":
         title: "Cut Dashboard Consumers Over to apps/api"
         status: ready-for-dev
-      '18.9.2':
+      "18.9.2":
         title: "Cut Preferences, Learning-Style, and XP Consumers Over and Retire Old Routes"
         status: ready-for-dev
   R7:
     name: "Epic 18 - Core Learning Migration"
     status: not_started
     stories:
-      '18.10.1':
+      "18.10.1":
         title: "Define Vocabulary and Flashcard Contracts"
         status: ready-for-dev
-      '18.10.2':
+      "18.10.2":
         title: "Implement the Vocabulary Module in NestJS"
         status: ready-for-dev
-      '18.10.3':
+      "18.10.3":
         title: "Implement the Flashcard Module and Cut Over Web Consumers"
         status: ready-for-dev
-      '18.11.1':
+      "18.11.1":
         title: "Implement Daily Challenge Read Flows in NestJS"
         status: ready-for-dev
-      '18.11.2':
+      "18.11.2":
         title: "Implement Daily Challenge Submission and Streak Updates"
         status: ready-for-dev
-      '18.11.3':
+      "18.11.3":
         title: "Centralize XP and Progress Orchestration and Cut Over Consumers"
         status: ready-for-dev
-      '18.12.1':
+      "18.12.1":
         title: "Add Rate Limiting and Security Middleware"
         status: ready-for-dev
-      '18.12.2':
+      "18.12.2":
         title: "Add Correlation IDs, API Docs, and Monitoring Coverage"
         status: ready-for-dev
   R8:
     name: "Epic 18 - Cutover and Governance"
     status: not_started
     stories:
-      '18.13.1':
+      "18.13.1":
         title: "Enforce Backend Ownership Rules and Inventory Remaining Route Groups"
         status: ready-for-dev
-      '18.14.1':
+      "18.14.1":
         title: "Produce the Cutover Scorecard and Next-Wave Plan"
         status: ready-for-dev
   R9:
     name: "Epic 19 - Speaking Core"
     status: not_started
     stories:
-      '19.1.1':
+      "19.1.1":
         title: "Harden the Existing Whisper Transcribe Endpoint"
         status: done
-      '19.1.2':
+      "19.1.2":
         title: "Pronunciation Scoring (Phoneme-Level)"
-        status: in-progress
+        status: done
         depends_on: "19.1.1"
-      '19.1.3':
+      "19.1.3":
         title: "Free-Talk Timer with AI Feedback"
-        status: ready-for-dev
+        status: done
         depends_on: "19.1.1"
-      '19.1.4':
+      "19.1.4":
         title: "Minimal Pairs Drill"
-        status: ready-for-dev
+        status: done
         depends_on: "19.1.2"
   R10:
     name: "Epic 19 - Writing Core"
     status: not_started
     stories:
-      '19.2.1':
+      "19.2.1":
         title: "IELTS/TOEFL Essay Scoring by Rubric"
         status: ready-for-dev
-      '19.2.2':
+      "19.2.2":
         title: "Sentence Rewriter"
         status: ready-for-dev
-      '19.2.3':
+      "19.2.3":
         title: "Guided Writing (Prompt + Outline + Vocab Bank)"
         status: ready-for-dev
         depends_on: "19.2.1"
-      '19.2.4':
+      "19.2.4":
         title: "Error Pattern Auto-Quiz in Error Notebook"
         status: ready-for-dev
         depends_on: "19.2.1"
@@ -261,17 +262,17 @@ sprints:
     name: "Epic 19 - Listening Advanced"
     status: not_started
     stories:
-      '19.3.1':
+      "19.3.1":
         title: "Multi-Speaker Dialogues"
         status: ready-for-dev
-      '19.3.2':
+      "19.3.2":
         title: "A-B Loop + Variable Speed"
         status: ready-for-dev
-      '19.3.3':
+      "19.3.3":
         title: "Listen-and-Summarize with AI Scoring"
         status: ready-for-dev
         depends_on: "19.2.1"
-      '19.3.4':
+      "19.3.4":
         title: "Podcast/YouTube Import (Whisper)"
         status: ready-for-dev
         depends_on: "19.1.1"
@@ -279,17 +280,17 @@ sprints:
     name: "Epic 19 - Reading Advanced"
     status: not_started
     stories:
-      '19.4.1':
+      "19.4.1":
         title: "CEFR-Graded Reader + Vocab Prioritization"
         status: ready-for-dev
-      '19.4.2':
+      "19.4.2":
         title: "Click-to-Define Inline + Save to Vocab"
         status: ready-for-dev
-      '19.4.3':
+      "19.4.3":
         title: "Extensive Reading Tracker"
         status: ready-for-dev
         depends_on: "19.4.2"
-      '19.4.4':
+      "19.4.4":
         title: "Auto Cloze Test from Read Passage"
         status: ready-for-dev
         depends_on: "19.4.1"

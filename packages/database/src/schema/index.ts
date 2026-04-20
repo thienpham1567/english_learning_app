@@ -296,3 +296,39 @@ export const pronunciationAttempt = pgTable("pronunciation_attempt", {
 ]);
 
 export type PronunciationAttemptRow = typeof pronunciationAttempt.$inferSelect;
+
+/** Speaking Attempt — free-talk session with AI feedback scores (Story 19.1.3) */
+export const speakingAttempt = pgTable("speaking_attempt", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  topic: text("topic").notNull(),
+  level: text("level").notNull(), // a2 | b1 | b2 | c1
+  durationMs: integer("duration_ms").notNull(),
+  transcript: text("transcript").notNull(),
+  overall: integer("overall").notNull(),
+  fluencyScore: integer("fluency_score").notNull(),
+  grammarScore: integer("grammar_score").notNull(),
+  vocabScore: integer("vocab_score").notNull(),
+  coherenceScore: integer("coherence_score").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  index("speaking_attempt_user_created_idx").on(table.userId, table.createdAt),
+]);
+
+export type SpeakingAttemptRow = typeof speakingAttempt.$inferSelect;
+
+/** Minimal Pairs Session — listen/speak drill results (Story 19.1.4) */
+export const minimalPairsSession = pgTable("minimal_pairs_session", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  mode: text("mode").notNull(), // listen | speak
+  total: integer("total").notNull(),
+  correct: integer("correct").notNull(),
+  focusTags: jsonb("focus_tags").$type<string[]>().notNull().default([]),
+  tagStats: jsonb("tag_stats").$type<Array<{ tag: string; total: number; correct: number }>>().notNull().default([]),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  index("minimal_pairs_session_user_created_idx").on(table.userId, table.createdAt),
+]);
+
+export type MinimalPairsSessionRow = typeof minimalPairsSession.$inferSelect;

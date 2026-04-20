@@ -148,6 +148,9 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
     setIsListening(false);
   }, []);
 
+  /** Returns the active MediaStream while recording, or null otherwise. */
+  const getStream = useCallback(() => streamRef.current, []);
+
   return {
     isListening,
     /** Whether audio is being sent to Whisper for transcription */
@@ -164,6 +167,7 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
     words,
     start,
     stop,
+    getStream,
     isSupported,
     error,
   };

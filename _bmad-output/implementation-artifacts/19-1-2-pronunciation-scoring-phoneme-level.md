@@ -1,6 +1,6 @@
 # Story 19.1.2: Pronunciation Scoring (Phoneme-Level)
 
-Status: ready-for-dev
+Status: done
 
 ## Story
 
@@ -41,3 +41,15 @@ As a self-learner, I want each word I read aloud to be scored against the refere
 - [CMU Pronouncing Dictionary (npm cmudict)](https://www.npmjs.com/package/cmudict)
 - ARPAbet phoneme set: [en.wikipedia.org/wiki/ARPABET](https://en.wikipedia.org/wiki/ARPABET)
 - Existing pronunciation page: [apps/web/app/(app)/pronunciation/page.tsx](apps/web/app/(app)/pronunciation/page.tsx)
+
+### Review Findings
+
+- [x] [Review][Patch] Rate limit map memory leak — eviction added [score/route.ts:30]
+- [x] [Review][Patch] Tokenize drops accented loanwords (café, naïve) [align.ts:27]
+- [x] [Review][Patch] transcriptOverlap can exceed 1.0 [align.ts:163]
+- [x] [Review][Patch] AC2 scoring hybrid threshold (dist<=2 || sim>=0.7) [align.ts:119]
+- [x] [Review][Patch] AC5 no-speech error not explicitly handled [score/route.ts:55]
+- [x] [Review][Patch] Empty recording blob guard missing [page.tsx:144]
+- [x] [Review][Patch] setState on unmounted component during recording [page.tsx:139]
+- [x] [Review][Defer] In-memory rate limiter doesn't work across instances — deferred, pre-existing
+- [x] [Review][Defer] AC1 input shape differs from spec (audioBlob → spokenText split) — deferred, architectural decision

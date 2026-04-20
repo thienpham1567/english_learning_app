@@ -85,6 +85,20 @@
       "when": 1776619168053,
       "tag": "0011_tricky_living_mummy",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1776659854765,
+      "tag": "0012_speaking_attempt",
+      "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1776792000000,
+      "tag": "0013_minimal_pairs_session",
+      "breakpoints": true
     }
   ]
 }

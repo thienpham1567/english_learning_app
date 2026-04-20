@@ -24,7 +24,7 @@ export function tokenize(text: string): string[] {
     .toLowerCase()
     .replace(PUNCT, " ")
     .split(/\s+/)
-    .filter((t) => /[a-z]/.test(t));
+    .filter((t) => /[a-z\u00e0-\u00ff]/.test(t));
 }
 
 /** Classic Levenshtein distance between two arrays. */
@@ -116,7 +116,7 @@ function scoreWord(refWord: string, spokenWord: string | null): WordScore {
       // Homophone (e.g. "to" vs "two") — treat as OK.
       return { word: refWord, spoken: spokenWord, score: 100, status: "ok", expectedPhonemes: expected, actualPhonemes: actual };
     }
-    if (phonemeSim >= 0.7 || dist <= 1) {
+    if (dist <= 2 || phonemeSim >= 0.7) {
       return { word: refWord, spoken: spokenWord, score: 60, status: "slightly-off", expectedPhonemes: expected, actualPhonemes: actual };
     }
     return { word: refWord, spoken: spokenWord, score: 0, status: "wrong", expectedPhonemes: expected, actualPhonemes: actual };
@@ -161,5 +161,5 @@ export function transcriptOverlap(referenceText: string, spokenText: string): nu
   const spoken = tokenize(spokenText);
   if (spoken.length === 0 || ref.size === 0) return 0;
   const matches = spoken.filter((t) => ref.has(t)).length;
-  return matches / ref.size;
+  return Math.min(1, matches / ref.size);
 }

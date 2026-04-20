@@ -1,6 +1,6 @@
 "use client";
 import { api } from "@/lib/api-client";
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import {
   AudioOutlined,
   SoundOutlined,
@@ -73,6 +73,11 @@ export default function PronunciationPage() {
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const chunksRef = useRef<Blob[]>([]);
   const recordingStartRef = useRef<number>(0);
+  const isMountedRef = useRef(true);
+
+  useEffect(() => {
+    return () => { isMountedRef.current = false; };
+  }, []);
 
   const tts = useTextToSpeech();
   const currentSentence = sentences[currentIdx] ?? null;
@@ -140,8 +145,18 @@ export default function PronunciationPage() {
       recorder.onstop = async () => {
         // Stop all audio tracks
         recorder.stream.getTracks().forEach((t) => t.stop());
+        if (!isMountedRef.current) { resolve(); return; }
 
         const audioBlob = new Blob(chunksRef.current, { type: "audio/webm" });
+
+        // Finding 7: Guard against empty/too-short recordings
+        if (audioBlob.size < 100) {
+          setError("Bản ghi quá ngắn. Vui lòng thử lại.");
+          setState("ready");
+          resolve();
+          return;
+        }
+
         const durationMs = Math.max(0, performance.now() - recordingStartRef.current);
         setState("transcribing");
 

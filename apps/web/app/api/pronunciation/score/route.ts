@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { pronunciationAttempt } from "@repo/database";
-import { alignAndScore, transcriptOverlap } from "@/lib/pronunciation/align";
+import { alignAndScore, tokenize, transcriptOverlap } from "@/lib/pronunciation/align";
 import { parseAccent } from "@/lib/tts/google";
 
 /**
@@ -28,6 +28,14 @@ export async function POST(request: Request) {
   }
 
   const now = Date.now();
+
+  // Evict expired entries to prevent memory leak (Finding 2)
+  if (rateLimitMap.size > 1000) {
+    for (const [key, val] of rateLimitMap) {
+      if (val.resetAt <= now) rateLimitMap.delete(key);
+    }
+  }
+
   const userId = session.user.id;
   const entry = rateLimitMap.get(userId);
   if (entry && entry.resetAt > now) {
@@ -52,6 +60,14 @@ export async function POST(request: Request) {
   }
   if (referenceText.length > 500 || spokenText.length > 500) {
     return Response.json({ error: "Text too long (max 500 chars)" }, { status: 400 });
+  }
+
+  // AC5: no-speech — tokenized input has no recognizable words
+  if (tokenize(referenceText).length === 0 || tokenize(spokenText).length === 0) {
+    return Response.json(
+      { error: "no-speech", message: "No recognizable words found in the input." },
+      { status: 422 },
+    );
   }
 
   const overlap = transcriptOverlap(referenceText, spokenText);
