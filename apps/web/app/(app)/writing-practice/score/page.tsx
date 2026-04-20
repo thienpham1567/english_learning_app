@@ -140,7 +140,9 @@ export default function EssayScorePage() {
   const { examMode } = useExamMode();
 
   const [state, setState] = useState<PageState>("input");
-  const [exam, setExam] = useState<ExamType>(examMode === "toefl" ? "toefl-independent" : "ielts-task2");
+  const [exam, setExam] = useState<ExamType>(
+    (examMode as string) === "toefl" ? "toefl-independent" : "ielts-task2",
+  );
   const [essayText, setEssayText] = useState("");
   const [prompt, setPrompt] = useState("");
   const [result, setResult] = useState<ScoreResult | null>(null);

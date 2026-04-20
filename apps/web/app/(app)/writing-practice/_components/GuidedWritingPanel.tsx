@@ -76,7 +76,9 @@ export function GuidedWritingPanel() {
   const { examMode } = useExamMode();
 
   const [state, setState] = useState<GuidedState>("setup");
-  const [exam, setExam] = useState<ExamType>(examMode === "toefl" ? "toefl-independent" : "ielts-task2");
+  const [exam, setExam] = useState<ExamType>(
+    (examMode as string) === "toefl" ? "toefl-independent" : "ielts-task2",
+  );
   const [category, setCategory] = useState<string | null>(null);
   const [guided, setGuided] = useState<GuidedPromptData | null>(null);
   const [essayText, setEssayText] = useState("");
