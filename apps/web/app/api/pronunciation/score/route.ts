@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { pronunciationAttempt } from "@repo/database";
 import { alignAndScore, tokenize, transcriptOverlap } from "@/lib/pronunciation/align";
-import { parseAccent } from "@/lib/tts/google";
+import { parseAccent } from "@/lib/tts/groq";
 
 /**
  * POST /api/pronunciation/score

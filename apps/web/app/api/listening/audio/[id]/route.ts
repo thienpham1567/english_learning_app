@@ -4,12 +4,12 @@ import { eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { listeningExercise } from "@repo/database";
-import { parseAccent, synthesizeGoogleTts } from "@/lib/tts/google";
+import { parseAccent, synthesizeTts } from "@/lib/tts/groq";
 
 /**
  * GET /api/listening/audio/[id]?accent=us|uk|au
  *
- * Streams Google Cloud Neural2 TTS audio for a listening passage.
+ * Streams Groq Orpheus TTS audio for a listening passage.
  * Long-lived Cache-Control — passage is immutable per (id, accent).
  */
 
@@ -55,7 +55,7 @@ export async function GET(
       return Response.json({ error: "Forbidden" }, { status: 403 });
     }
 
-    const audio = await synthesizeGoogleTts({
+    const audio = await synthesizeTts({
       text: exercise.passage,
       accent,
       speed: 0.9,
@@ -63,7 +63,7 @@ export async function GET(
 
     return new Response(audio, {
       headers: {
-        "Content-Type": "audio/mpeg",
+        "Content-Type": "audio/wav",
         "Cache-Control": "public, max-age=604800",
       },
     });

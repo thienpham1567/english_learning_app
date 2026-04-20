@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { parseAccent, synthesizeGoogleTts } from "@/lib/tts/google";
+import { parseAccent, synthesizeTts } from "@/lib/tts/groq";
 
 /**
  * POST /api/voice/synthesize
@@ -52,15 +52,15 @@ export async function POST(request: Request) {
   const speed = typeof body?.speed === "number" ? body.speed : 1;
 
   try {
-    const audio = await synthesizeGoogleTts({ text, accent, speed });
+    const audio = await synthesizeTts({ text, accent, speed });
     return new Response(audio, {
       headers: {
-        "Content-Type": "audio/mpeg",
+        "Content-Type": "audio/wav",
         "Cache-Control": "public, max-age=86400",
       },
     });
   } catch (err) {
-    console.error("[TTS] Google synthesis failed:", err);
+    console.error("[TTS] Groq synthesis failed:", err);
     return Response.json({ error: "Speech synthesis failed" }, { status: 502 });
   }
 }
