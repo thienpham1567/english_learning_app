@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import { api } from "@/lib/api-client";
 import { SoundOutlined, AudioOutlined, EditOutlined, FileTextOutlined } from "@ant-design/icons";
 import { Segmented } from "antd";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 import { useListeningExercise } from "@/hooks/useListeningExercise";
 import { useMiniDictionary } from "@/hooks/useMiniDictionary";
@@ -83,45 +84,39 @@ export default function ListeningPage() {
       }}
     >
       {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          flexShrink: 0,
-          alignItems: "center",
-          gap: 12,
-          borderBottom: "1px solid var(--border)",
-          padding: "14px 20px",
-          background: "var(--surface)",
-        }}
-      >
-        <SoundOutlined style={{ fontSize: 20, color: "var(--accent)" }} />
-        <div>
-          <div style={{ fontSize: 16, fontWeight: 700, color: "var(--text)" }}>
-            {mode === "listening" ? "Luyện nghe" : mode === "shadowing" ? "Shadowing" : mode === "dictation" ? "Dictation" : "Listen & Summarize"}
-          </div>
-          <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
-            {mode === "shadowing" && "Nghe → Lặp lại → So sánh phát âm"}
-            {mode === "dictation" && "Nghe → Gõ lại → Kiểm tra từng từ"}
-            {mode === "summarize" && "Nghe → Tóm tắt → AI chấm ý chính"}
-            {mode === "listening" && state === "idle" && "Chọn cấp độ để bắt đầu"}
-            {mode === "listening" && state === "loading" && "Đang tạo bài nghe..."}
-            {mode === "listening" && (state === "active" || state === "submitting") && exercise && `${exercise.level} • ${exercise.questions.length} câu hỏi`}
-            {mode === "listening" && state === "submitted" && result && `Kết quả: ${result.correct}/${result.total}`}
-          </div>
-        </div>
-        <Segmented
-          value={mode}
-          onChange={(val) => setMode(val as string)}
-          options={[
-            { value: "listening", icon: <SoundOutlined />, label: "Nghe" },
-            { value: "shadowing", icon: <AudioOutlined />, label: "Shadow" },
-            { value: "dictation", icon: <EditOutlined />, label: "Dictation" },
-            { value: "summarize", icon: <FileTextOutlined />, label: "Tóm tắt" },
-          ]}
-          style={{ marginLeft: "auto" }}
-          size="small"
-        />
-      </div>
+      <ModuleHeader
+        icon={<SoundOutlined />}
+        gradient="linear-gradient(135deg, #6366f1, #8b5cf6)"
+        title={
+          mode === "listening" ? "Luyện nghe 🎧" :
+          mode === "shadowing" ? "Shadowing 🎯" :
+          mode === "dictation" ? "Dictation ✍️" :
+          "Listen & Summarize 📝"
+        }
+        subtitle={
+          mode === "shadowing" ? "Nghe → Lặp lại → So sánh phát âm" :
+          mode === "dictation" ? "Nghe → Gõ lại → Kiểm tra từng từ" :
+          mode === "summarize" ? "Nghe → Tóm tắt → AI chấm ý chính" :
+          state === "idle" ? "Chọn cấp độ để bắt đầu" :
+          state === "loading" ? "Đang tạo bài nghe..." :
+          (state === "active" || state === "submitting") && exercise ? `${exercise.level} • ${exercise.questions.length} câu hỏi` :
+          state === "submitted" && result ? `Kết quả: ${result.correct}/${result.total}` :
+          "Luyện nghe tiếng Anh"
+        }
+        action={
+          <Segmented
+            value={mode}
+            onChange={(val) => setMode(val as string)}
+            options={[
+              { value: "listening", icon: <SoundOutlined />, label: "Nghe" },
+              { value: "shadowing", icon: <AudioOutlined />, label: "Shadow" },
+              { value: "dictation", icon: <EditOutlined />, label: "Dictation" },
+              { value: "summarize", icon: <FileTextOutlined />, label: "Tóm tắt" },
+            ]}
+            size="small"
+          />
+        }
+      />
 
       {/* Content */}
       <div

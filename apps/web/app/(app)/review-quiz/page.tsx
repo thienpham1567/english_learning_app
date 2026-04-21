@@ -12,6 +12,7 @@ import {
   BookOutlined,
 } from "@ant-design/icons";
 import { Tag, Progress, Collapse, Empty, Badge } from "antd";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 // ─── Error Review Types (existing) ────────────────────────────────
 type ErrorEntry = {
@@ -58,18 +59,8 @@ type QuizQuestion = {
 type ReviewState = "loading" | "quiz" | "results" | "empty";
 type TabKey = "errors" | "vocab";
 
-// ─── Shared Components ───────────────────────────────────────────
-function PageHeader({ title, subtitle }: { title: string; subtitle: string }) {
-  return (
-    <div style={{ padding: "24px 24px 16px", borderBottom: "1px solid var(--border)", display: "flex", alignItems: "center", gap: 10 }}>
-      <BulbOutlined style={{ fontSize: 22, color: "var(--accent)" }} />
-      <div>
-        <h1 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>{title}</h1>
-        <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)" }}>{subtitle}</p>
-      </div>
-    </div>
-  );
-}
+// (PageHeader removed — using shared ModuleHeader)
+
 
 function MasteryBadge({ level }: { level: string }) {
   const config: Record<string, { color: string; label: string }> = {
@@ -817,8 +808,10 @@ export default function ReviewQuizPage() {
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "hidden" }}>
-      <PageHeader
-        title="Ôn tập thông minh"
+      <ModuleHeader
+        icon={<BulbOutlined />}
+        gradient="linear-gradient(135deg, var(--accent), var(--secondary))"
+        title="Ôn tập thông minh 🧠"
         subtitle="SRS — Hệ thống ôn tập lặp lại cách quãng"
       />
 
