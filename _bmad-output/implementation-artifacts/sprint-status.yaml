@@ -282,15 +282,15 @@ sprints:
     stories:
       "19.4.1":
         title: "CEFR-Graded Reader + Vocab Prioritization"
-        status: ready-for-dev
+        status: done
       "19.4.2":
         title: "Click-to-Define Inline + Save to Vocab"
-        status: ready-for-dev
+        status: review
       "19.4.3":
         title: "Extensive Reading Tracker"
-        status: ready-for-dev
+        status: review
         depends_on: "19.4.2"
       "19.4.4":
         title: "Auto Cloze Test from Read Passage"
-        status: ready-for-dev
+        status: review
         depends_on: "19.4.1"

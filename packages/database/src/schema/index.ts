@@ -437,4 +437,52 @@ export const listeningImport = pgTable("listening_import", {
 
 export type ListeningImportRow = typeof listeningImport.$inferSelect;
 
+/** Reading Passage — CEFR-graded reading content with lexical analysis (Story 19.4.1, AC1) */
+export const readingPassage = pgTable("reading_passage", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  title: text("title").notNull(),
+  body: text("body").notNull(),
+  cefrLevel: text("cefr_level").notNull(), // A2 | B1 | B2 | C1 | C2
+  section: text("section").notNull().default("general"), // topic category
+  wordCount: integer("word_count").notNull().default(0),
+  lexicalTagsJson: jsonb("lexical_tags_json").$type<string[]>().notNull().default([]), // normalized lemmas
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  index("reading_passage_level_idx").on(table.cefrLevel),
+]);
 
+export type ReadingPassageRow = typeof readingPassage.$inferSelect;
+
+/** Reading Progress — tracks user read/unread state per passage (Story 19.4.1, AC3) */
+export const readingProgress = pgTable("reading_progress", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  passageId: uuid("passage_id")
+    .notNull()
+    .references(() => readingPassage.id, { onDelete: "cascade" }),
+  readAt: timestamp("read_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  index("reading_progress_user_passage_idx").on(table.userId, table.passageId),
+]);
+
+export type ReadingProgressRow = typeof readingProgress.$inferSelect;
+
+/** Reading Session — tracks engagement per passage visit (Story 19.4.3, AC1) */
+export const readingSession = pgTable("reading_session", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  passageId: uuid("passage_id")
+    .notNull()
+    .references(() => readingPassage.id, { onDelete: "cascade" }),
+  wordCount: integer("word_count").notNull().default(0),
+  startedAt: timestamp("started_at", { withTimezone: true }).defaultNow().notNull(),
+  endedAt: timestamp("ended_at", { withTimezone: true }),
+  completedAt: timestamp("completed_at", { withTimezone: true }),
+  scrollPct: integer("scroll_pct").notNull().default(0),
+  clickCount: integer("click_count").notNull().default(0),
+}, (table) => [
+  index("reading_session_user_completed_idx").on(table.userId, table.completedAt),
+  index("reading_session_user_started_idx").on(table.userId, table.startedAt),
+]);
+
+export type ReadingSessionRow = typeof readingSession.$inferSelect;

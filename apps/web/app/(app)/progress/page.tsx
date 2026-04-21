@@ -12,6 +12,7 @@ import {
   RadarChartOutlined,
 } from "@ant-design/icons";
 import { PredictedScore } from "@/components/shared";
+import { ReadingStatsBlock } from "@/app/(app)/progress/_components/ReadingStatsBlock";
 
 const { Title, Text } = Typography;
 
@@ -423,6 +424,9 @@ export default function ProgressPage() {
         >
           <ActivityHeatmap data={data.dailyActivity} />
         </Card>
+
+        {/* Section 3b: Reading Stats (Story 19.4.3) */}
+        <ReadingStatsBlock />
 
         {/* Section 4 + 5: Charts grid */}
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(320px, 1fr))", gap: 16 }}>
