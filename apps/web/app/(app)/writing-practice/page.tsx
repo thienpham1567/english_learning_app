@@ -2,6 +2,7 @@
 
 import { Flex, Spin, Typography, Tabs } from "antd";
 import { EditOutlined } from "@ant-design/icons";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 import { useWritingPractice } from "@/hooks/useWritingPractice";
 import { PromptGallery } from "@/app/(app)/writing-practice/_components/PromptGallery";
@@ -42,38 +43,12 @@ export default function WritingPracticePage() {
       }}
     >
       {/* Header */}
-      <Flex
-        align="center"
-        gap={12}
-        style={{
-          flexShrink: 0,
-          borderBottom: "1px solid var(--border)",
-          background: "var(--surface)",
-          padding: "16px 24px",
-        }}
-      >
-        <Flex
-          align="center"
-          justify="center"
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: "var(--radius)",
-            background: "linear-gradient(135deg, #9AB17A, #C3CC9B)",
-            color: "#fff",
-          }}
-        >
-          <EditOutlined style={{ fontSize: 20 }} />
-        </Flex>
-        <Flex vertical style={{ flex: 1 }}>
-          <Title level={5} style={{ margin: 0 }}>
-            Luyện viết ✍️
-          </Title>
-          <Text type="secondary" style={{ fontSize: 12 }}>
-            TOEIC Writing Practice · Chấm bài theo tiêu chí TOEIC
-          </Text>
-        </Flex>
-      </Flex>
+      <ModuleHeader
+        icon={<EditOutlined />}
+        gradient="linear-gradient(135deg, var(--accent), var(--secondary))"
+        title="Luyện viết ✍️"
+        subtitle="TOEIC Writing Practice · Chấm bài theo tiêu chí TOEIC"
+      />
 
       {/* Tabs */}
       <Flex

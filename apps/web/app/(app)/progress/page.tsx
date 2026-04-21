@@ -436,7 +436,7 @@ export default function ProgressPage() {
             style={{ borderRadius: "var(--radius-xl)" }}
             styles={{ header: { borderBottom: "1px solid var(--border)" } }}
           >
-            <LineChart data={data.accuracyTrends} labelKey="week" valueKey="accuracy" color="#9ab17a" suffix="%" />
+            <LineChart data={data.accuracyTrends} labelKey="week" valueKey="accuracy" color="#74c4c9" suffix="%" />
           </Card>
 
           {/* Vocabulary Growth */}
@@ -445,7 +445,7 @@ export default function ProgressPage() {
             style={{ borderRadius: "var(--radius-xl)" }}
             styles={{ header: { borderBottom: "1px solid var(--border)" } }}
           >
-            <LineChart data={data.vocabularyGrowth} labelKey="week" valueKey="total_words" color="#c3cc9b" />
+            <LineChart data={data.vocabularyGrowth} labelKey="week" valueKey="total_words" color="#90d0d4" />
           </Card>
         </div>
 

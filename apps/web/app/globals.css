@@ -1,38 +1,39 @@
 /* ── Design Tokens (Light) ──
-   Palette: #9AB17A · #C3CC9B · #E4DFB5 · #FBE8CE
+   Palette: #74C4C9 · #90D0D4 · #ACDCDF · #C7E7E9 · #E3F3F4
 */
 :root {
-  --bg: #faf8f3;
-  --bg-deep: #f3f0e8;
+  --bg: #f6fbfb;
+  --bg-deep: #edf5f6;
   --surface: #ffffff;
-  --surface-hover: #f5f2eb;
+  --surface-hover: #f0f7f8;
   --surface-raised: #ffffff;
 
-  --accent: #9ab17a;
-  --accent-light: #eef3e6;
-  --accent-muted: rgba(154, 177, 122, 0.14);
+  --accent: #74c4c9;
+  --accent-hover: #5bb8be;
+  --accent-light: #e3f3f4;
+  --accent-muted: rgba(116, 196, 201, 0.14);
 
-  --secondary: #c3cc9b;
-  --tertiary: #e4dfb5;
-  --warm: #fbe8ce;
+  --secondary: #90d0d4;
+  --tertiary: #acdcdf;
+  --warm: #c7e7e9;
 
-  --ink: #2d3a24;
-  --text-primary: #2d3a24;
-  --text-secondary: #5a6651;
-  --text-muted: #9ca393;
+  --ink: #1e3a3c;
+  --text-primary: #1e3a3c;
+  --text-secondary: #4a6b6d;
+  --text-muted: #8bacae;
 
-  --border: #e4dfb5;
-  --border-strong: #c3cc9b;
+  --border: #c7e7e9;
+  --border-strong: #90d0d4;
 
-  --bubble-user: #2d3a24;
+  --bubble-user: #1e3a3c;
   --bubble-ai: #ffffff;
 
-  --sage: #9ab17a;
+  --sage: #74c4c9;
 
-  --shadow-sm: 0 1px 2px rgba(45, 58, 36, 0.06);
-  --shadow: 0 1px 3px rgba(45, 58, 36, 0.08), 0 1px 2px rgba(45, 58, 36, 0.04);
-  --shadow-md: 0 4px 12px rgba(45, 58, 36, 0.08), 0 2px 4px rgba(45, 58, 36, 0.04);
-  --shadow-lg: 0 10px 32px rgba(45, 58, 36, 0.1), 0 4px 12px rgba(45, 58, 36, 0.05);
+  --shadow-sm: 0 1px 2px rgba(30, 58, 60, 0.06);
+  --shadow: 0 1px 3px rgba(30, 58, 60, 0.08), 0 1px 2px rgba(30, 58, 60, 0.04);
+  --shadow-md: 0 4px 12px rgba(30, 58, 60, 0.08), 0 2px 4px rgba(30, 58, 60, 0.04);
+  --shadow-lg: 0 10px 32px rgba(30, 58, 60, 0.1), 0 4px 12px rgba(30, 58, 60, 0.05);
 
   --radius-sm: 8px;
   --radius: 12px;
@@ -45,7 +46,7 @@
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
 
   /* Sidebar dark panel */
-  --sidebar-bg: #2d3a24;
+  --sidebar-bg: #1e3a3c;
   --sidebar-text: rgba(255, 255, 255, 0.7);
   --sidebar-text-active: rgba(255, 255, 255, 0.92);
   --sidebar-border: rgba(255, 255, 255, 0.1);
@@ -60,10 +61,10 @@
 
   /* ── Heatmap Colors (Story 14.1) ── */
   --heatmap-0: rgba(0, 0, 0, 0.06);
-  --heatmap-1: #9be9a8;
-  --heatmap-2: #40c463;
-  --heatmap-3: #30a14e;
-  --heatmap-4: #216e39;
+  --heatmap-1: #b2e5e8;
+  --heatmap-2: #74c4c9;
+  --heatmap-3: #4da8ae;
+  --heatmap-4: #2d8a90;
 
   /* ── Typography Scale ── */
   --text-xs: 11px;
@@ -92,44 +93,45 @@
   --duration-slow: 500ms;
 
   /* ── Extended Shadows ── */
-  --shadow-xl: 0 20px 48px rgba(45, 58, 36, 0.12), 0 8px 24px rgba(45, 58, 36, 0.06);
+  --shadow-xl: 0 20px 48px rgba(30, 58, 60, 0.12), 0 8px 24px rgba(30, 58, 60, 0.06);
 }
 
 /* ── Dark Theme Tokens ── */
 [data-theme="dark"] {
-  --bg: #141a10;
-  --bg-deep: #1c2318;
-  --surface: #1c2318;
-  --surface-hover: #273020;
-  --surface-raised: #222b1c;
+  --bg: #0f1d1e;
+  --bg-deep: #152526;
+  --surface: #152526;
+  --surface-hover: #1d3132;
+  --surface-raised: #1a2e2f;
 
-  --accent: #b1c892;
-  --accent-light: rgba(177, 200, 146, 0.12);
-  --accent-muted: rgba(177, 200, 146, 0.15);
+  --accent: #90d0d4;
+  --accent-hover: #74c4c9;
+  --accent-light: rgba(144, 208, 212, 0.12);
+  --accent-muted: rgba(144, 208, 212, 0.15);
 
-  --secondary: #8a9472;
-  --tertiary: #6b6d4e;
-  --warm: #3d3528;
+  --secondary: #6ab0b4;
+  --tertiary: #4a8e92;
+  --warm: #253839;
 
-  --ink: #e4eadc;
-  --text-primary: #e4eadc;
-  --text-secondary: #a5b096;
-  --text-muted: #5e6b52;
+  --ink: #dceef0;
+  --text-primary: #dceef0;
+  --text-secondary: #96c0c3;
+  --text-muted: #4e7d80;
 
-  --border: #2f3b26;
-  --border-strong: #3d4a32;
+  --border: #243536;
+  --border-strong: #2f4647;
 
-  --bubble-user: #2f3b26;
-  --bubble-ai: #1c2318;
+  --bubble-user: #243536;
+  --bubble-ai: #152526;
 
-  --sage: #b1c892;
+  --sage: #90d0d4;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2);
   --shadow-lg: 0 10px 32px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.25);
 
-  --sidebar-bg: #101510;
+  --sidebar-bg: #0b1718;
   --sidebar-text: rgba(255, 255, 255, 0.6);
   --sidebar-text-active: rgba(255, 255, 255, 0.9);
   --sidebar-border: rgba(255, 255, 255, 0.08);
@@ -144,10 +146,10 @@
 
   /* ── Heatmap Colors (Dark) ── */
   --heatmap-0: rgba(255, 255, 255, 0.08);
-  --heatmap-1: #0e4429;
-  --heatmap-2: #006d32;
-  --heatmap-3: #26a641;
-  --heatmap-4: #39d353;
+  --heatmap-1: #1a4a4d;
+  --heatmap-2: #2d7a7f;
+  --heatmap-3: #4da8ae;
+  --heatmap-4: #74c4c9;
 
   /* ── Extended Shadows (Dark) ── */
   --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.55), 0 8px 24px rgba(0, 0, 0, 0.3);
@@ -598,7 +600,7 @@ textarea.ant-input::placeholder {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(154, 177, 122, 0.18);
+  background: rgba(116, 196, 201, 0.18);
   transform: translateX(-100%);
   transition: transform 0.35s ease;
   pointer-events: none;

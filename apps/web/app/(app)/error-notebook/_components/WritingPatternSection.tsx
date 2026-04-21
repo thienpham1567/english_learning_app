@@ -213,7 +213,7 @@ export function WritingPatternSection() {
   return (
     <div style={{ marginBottom: 24 }}>
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-        <EditOutlined style={{ color: "#9AB17A", fontSize: 16 }} />
+        <EditOutlined style={{ color: "var(--accent)", fontSize: 16 }} />
         <h2 style={{ margin: 0, fontSize: 15, fontWeight: 700 }}>Lỗi viết lặp lại</h2>
         <Tag color="orange" style={{ borderRadius: 99, fontSize: 11 }}>
           {patterns.length} mẫu
@@ -261,7 +261,7 @@ export function WritingPatternSection() {
                     onClick={() => generateQuiz(p.tag)}
                     style={{
                       padding: "6px 14px", borderRadius: 8, border: "none",
-                      background: "#9AB17A22", color: "#5a7a45",
+                      background: "var(--accent-muted)", color: "var(--accent)",
                       fontSize: 12, fontWeight: 600, cursor: "pointer",
                       display: "flex", alignItems: "center", gap: 4, flexShrink: 0,
                     }}

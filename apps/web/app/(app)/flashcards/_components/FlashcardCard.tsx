@@ -170,7 +170,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
 const RATINGS = [
   { quality: 0, label: "Quên", emoji: "😵", bg: "linear-gradient(135deg, #ef4444, #e11d48)" },
   { quality: 2, label: "Khó", emoji: "😓", bg: "linear-gradient(135deg, #f59e0b, #ea580c)" },
-  { quality: 3, label: "Ổn", emoji: "🙂", bg: "linear-gradient(135deg, #9AB17A, #7a9660)" },
+  { quality: 3, label: "Ổn", emoji: "🙂", bg: "linear-gradient(135deg, var(--accent), var(--accent-hover, #5bb8be))" },
   { quality: 5, label: "Dễ", emoji: "🤩", bg: "linear-gradient(135deg, #10b981, #16a34a)" },
 ] as const;
 

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Button, Card, Flex, Result, Spin, Typography } from "antd";
 import { ClockCircleOutlined, FireOutlined, ReloadOutlined } from "@ant-design/icons";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 import { useDailyChallenge } from "@/hooks/useDailyChallenge";
 import { ExerciseCard } from "@/app/(app)/daily-challenge/_components/ExerciseCard";
@@ -67,51 +68,23 @@ export default function DailyChallengePage() {
       }}
     >
       {/* Header */}
-      <Flex
-        align="center"
-        gap={12}
-        style={{
-          flexShrink: 0,
-          borderBottom: "1px solid var(--border)",
-          background: "var(--surface)",
-          padding: "16px 24px",
-        }}
-      >
-        <Flex
-          align="center"
-          justify="center"
-          style={{
-            width: 40,
-            height: 40,
-            borderRadius: "var(--radius)",
-            background: "linear-gradient(135deg, #9AB17A, #7a9660)",
-            color: "#fff",
-          }}
-        >
-          <FireOutlined style={{ fontSize: 20 }} />
-        </Flex>
-        <Flex vertical style={{ flex: 1 }}>
-          <Title level={5} style={{ margin: 0 }}>
-            Thử thách mỗi ngày 🔥
-          </Title>
-          <Text type="secondary" style={{ fontSize: 12 }}>
-            Daily Challenge · 5 bài tập mỗi ngày
-          </Text>
-        </Flex>
-
-        {/* Live timer (AC: #4) */}
-        {state === "active" && (
-          <Text type="secondary" style={{ fontSize: 13, fontVariantNumeric: "tabular-nums" }}>
-            <ClockCircleOutlined style={{ marginRight: 4 }} />
-            {formattedTime}
-          </Text>
-        )}
-
-        {/* Streak fire (AC: #3) — replaces legacy StreakDisplay */}
-        {state !== "loading" && (
-          <StreakFire streak={streak.currentStreak} />
-        )}
-      </Flex>
+      <ModuleHeader
+        icon={<FireOutlined />}
+        gradient="linear-gradient(135deg, var(--accent), var(--secondary))"
+        title="Thử thách mỗi ngày 🔥"
+        subtitle="Daily Challenge · 5 bài tập mỗi ngày"
+        action={
+          <Flex align="center" gap={12}>
+            {state === "active" && (
+              <Text type="secondary" style={{ fontSize: 13, fontVariantNumeric: "tabular-nums" }}>
+                <ClockCircleOutlined style={{ marginRight: 4 }} />
+                {formattedTime}
+              </Text>
+            )}
+            {state !== "loading" && <StreakFire streak={streak.currentStreak} />}
+          </Flex>
+        }
+      />
 
       {/* Content */}
       <Flex

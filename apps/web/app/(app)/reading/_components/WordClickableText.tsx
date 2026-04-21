@@ -277,7 +277,7 @@ export function WordClickableText({ text, style }: WordClickableTextProps) {
                 }}
                 content={renderPopoverContent()}
                 trigger="click"
-                destroyOnClose
+                destroyOnHidden
               >
                 <span
                   onClick={(e) => {

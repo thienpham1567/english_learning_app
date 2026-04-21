@@ -14,9 +14,9 @@ export type QuizHistoryEntry = {
 };
 
 const LEVEL_LABELS: Record<string, { label: string; color: string }> = {
-  easy: { label: "A1–A2", color: "#9AB17A" },
-  medium: { label: "B1–B2", color: "#C3CC9B" },
-  hard: { label: "C1–C2", color: "#E4DFB5" },
+  easy: { label: "A1–A2", color: "var(--accent)" },
+  medium: { label: "B1–B2", color: "var(--secondary)" },
+  hard: { label: "C1–C2", color: "var(--tertiary)" },
 };
 
 export function saveQuizHistory(entry: Omit<QuizHistoryEntry, "date">) {

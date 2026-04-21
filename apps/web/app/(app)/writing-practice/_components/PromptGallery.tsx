@@ -73,7 +73,7 @@ export function PromptGallery({ onSelect, isLoading, loadingCategory }: Props) {
             width: 60,
             height: 60,
             borderRadius: 18,
-            background: "linear-gradient(135deg, var(--accent), #7a9660)",
+            background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
             fontSize: 28,
             marginBottom: 12,
             boxShadow: "0 4px 16px rgba(154,177,122,0.35)",

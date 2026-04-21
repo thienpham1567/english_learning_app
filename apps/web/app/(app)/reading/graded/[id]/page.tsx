@@ -4,14 +4,18 @@ import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   ArrowLeftOutlined,
-  CheckCircleOutlined,
+  CheckCircleFilled,
   LoadingOutlined,
   BookOutlined,
+  EditOutlined,
+  FieldTimeOutlined,
 } from "@ant-design/icons";
-import { Tag } from "antd";
+import { Card, Tag, Flex, Typography, Button, Spin } from "antd";
 import { api } from "@/lib/api-client";
 import { WordClickableText } from "@/app/(app)/reading/_components/WordClickableText";
 import { useReadingSession } from "@/hooks/useReadingSession";
+
+const { Text, Title } = Typography;
 
 type PassageDetail = {
   id: string;
@@ -50,127 +54,132 @@ export default function GradedPassagePage() {
     if (!id || marked) return;
     try {
       await api.post(`/reading/passages/${id}/read`, {});
-      await finishSession(); // Also complete the reading session
+      await finishSession();
       setMarked(true);
     } catch { /* ignore */ }
   }, [id, marked, finishSession]);
 
+  const readTime = passage ? Math.max(1, Math.round(passage.wordCount / 200)) : 0;
+
   if (loading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", padding: 60 }}>
-        <LoadingOutlined style={{ fontSize: 32, color: "var(--accent)" }} />
-      </div>
+      <Flex align="center" justify="center" style={{ height: "100%", padding: 60 }}>
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 32, color: "var(--accent)" }} />} />
+      </Flex>
     );
   }
 
   if (!passage) {
     return (
-      <div style={{ textAlign: "center", padding: 60, color: "var(--text-muted)" }}>
-        <BookOutlined style={{ fontSize: 40, marginBottom: 12 }} />
-        <p>Passage not found.</p>
-        <a href="/reading/graded" style={{ color: "var(--accent)" }}>← Quay lại</a>
-      </div>
+      <Flex vertical align="center" justify="center" gap={12} style={{ height: "100%", padding: 60 }}>
+        <BookOutlined style={{ fontSize: 48, color: "var(--text-muted)" }} />
+        <Text type="secondary">Không tìm thấy bài đọc</Text>
+        <Button type="link" icon={<ArrowLeftOutlined />} onClick={() => router.push("/reading/graded")}>
+          Quay lại danh sách
+        </Button>
+      </Flex>
     );
   }
 
   return (
-    <div style={{ height: "100%", overflowY: "auto", padding: "var(--space-6)" }}>
-      <div style={{ maxWidth: 700, margin: "0 auto", display: "flex", flexDirection: "column", gap: 20 }}>
+    <div style={{ height: "100%", overflowY: "auto", padding: "var(--space-6)" }} className="anim-fade-up">
+      <Flex vertical gap={20} style={{ maxWidth: 720, margin: "0 auto" }}>
 
-        {/* Back link */}
-        <a href="/reading/graded" style={{ color: "var(--text-muted)", fontSize: 13, display: "flex", alignItems: "center", gap: 6, textDecoration: "none" }}>
-          <ArrowLeftOutlined /> Quay lại danh sách
-        </a>
+        {/* Back button */}
+        <Button
+          type="text"
+          icon={<ArrowLeftOutlined />}
+          onClick={() => router.push("/reading/graded")}
+          style={{ alignSelf: "flex-start", color: "var(--text-muted)", fontSize: 13, borderRadius: 10 }}
+        >
+          Quay lại danh sách
+        </Button>
 
-        {/* Header */}
-        <div style={{ padding: 20, borderRadius: 16, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-          <div style={{ display: "flex", gap: 8, marginBottom: 10, alignItems: "center" }}>
-            <Tag style={{ margin: 0, background: LEVEL_COLORS[passage.cefrLevel], color: "#fff", border: "none", fontWeight: 700 }}>
-              {passage.cefrLevel}
-            </Tag>
-            <span style={{ fontSize: 12, color: "var(--text-muted)" }}>
-              {passage.wordCount} từ · {passage.section}
-            </span>
-            {marked && (
-              <span style={{ fontSize: 12, color: "#52c41a", display: "flex", alignItems: "center", gap: 4, marginLeft: "auto" }}>
-                <CheckCircleOutlined /> Đã đọc
-              </span>
-            )}
-          </div>
-          <h1 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: "var(--text)", lineHeight: 1.4 }}>
-            {passage.title}
-          </h1>
-        </div>
-
-        {/* Body — click any word to define (Story 19.4.2) */}
-        <div style={{
-          padding: 24,
-          borderRadius: 16,
-          background: "var(--card-bg)",
-          border: "1px solid var(--border)",
-        }}>
-          <WordClickableText
-            text={passage.body}
-            style={{
-              fontSize: 15,
-              lineHeight: 1.9,
-              color: "var(--text)",
-              fontFamily: "Georgia, 'Times New Roman', serif",
-            }}
-          />
-        </div>
-
-        {/* Mark as read */}
-        {!marked && (
-          <button
-            onClick={markRead}
-            style={{
-              padding: "12px 24px",
-              borderRadius: 10,
-              border: "none",
-              background: "var(--accent)",
-              color: "#fff",
-              fontSize: 14,
-              fontWeight: 600,
-              cursor: "pointer",
-              alignSelf: "center",
-            }}
-          >
-            <CheckCircleOutlined style={{ marginRight: 6 }} />
-            Đánh dấu đã đọc
-          </button>
-        )}
-
-        {/* Cloze Test CTA (Story 19.4.4, AC1) */}
-        {marked && (
+        {/* Article header card */}
+        <Card style={{ borderRadius: 20, overflow: "hidden" }} styles={{ body: { padding: 0 } }}>
+          {/* Gradient banner */}
           <div style={{
-            padding: 20,
-            borderRadius: 14,
-            background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-            textAlign: "center",
+            padding: "20px 24px 16px",
+            background: `linear-gradient(135deg, ${LEVEL_COLORS[passage.cefrLevel] || "var(--accent)"}20, ${LEVEL_COLORS[passage.cefrLevel] || "var(--accent)"}08)`,
           }}>
-            <p style={{ margin: "0 0 10px", color: "#fff", fontSize: 14, fontWeight: 500 }}>
-              ✨ Bạn đã đọc xong! Kiểm tra từ vựng ngay?
-            </p>
-            <button
-              onClick={() => router.push(`/reading/graded/${id}/cloze`)}
-              style={{
-                padding: "10px 24px",
-                borderRadius: 8,
-                border: "2px solid #fff",
-                background: "transparent",
-                color: "#fff",
-                fontSize: 14,
-                fontWeight: 700,
-                cursor: "pointer",
-                transition: "all 0.15s",
-              }}
-            >
-              📝 Làm bài cloze test
-            </button>
+            <Flex gap={10} align="center" style={{ marginBottom: 12 }}>
+              <Tag style={{
+                margin: 0, fontWeight: 700, fontSize: 11, borderRadius: 8,
+                background: LEVEL_COLORS[passage.cefrLevel], color: "#fff", border: "none",
+                padding: "2px 12px",
+              }}>
+                {passage.cefrLevel}
+              </Tag>
+              <Flex align="center" gap={4}>
+                <FieldTimeOutlined style={{ fontSize: 12, color: "var(--text-muted)" }} />
+                <Text style={{ fontSize: 12, color: "var(--text-muted)" }}>{readTime} phút · {passage.wordCount} từ</Text>
+              </Flex>
+              {marked && (
+                <Tag style={{ margin: 0, marginLeft: "auto", borderRadius: 8, border: "none", background: "#52c41a15", color: "#52c41a", fontWeight: 600 }}>
+                  <CheckCircleFilled style={{ marginRight: 4 }} /> Đã đọc
+                </Tag>
+              )}
+            </Flex>
+            <Title level={3} style={{ margin: 0, lineHeight: 1.4, fontFamily: "var(--font-display)" }}>
+              {passage.title}
+            </Title>
           </div>
-        )}
-      </div>
+
+          {/* Body — click any word to define */}
+          <div style={{ padding: "20px 24px 28px" }}>
+            <WordClickableText
+              text={passage.body}
+              style={{
+                fontSize: 16,
+                lineHeight: 2,
+                color: "var(--text)",
+                fontFamily: "Georgia, 'Times New Roman', serif",
+              }}
+            />
+          </div>
+        </Card>
+
+        {/* Actions */}
+        <Flex gap={12} justify="center" wrap>
+          {!marked ? (
+            <Button
+              type="primary"
+              size="large"
+              icon={<CheckCircleFilled />}
+              onClick={markRead}
+              style={{ borderRadius: 12, fontWeight: 600, padding: "0 28px", height: 44 }}
+            >
+              Đánh dấu đã đọc
+            </Button>
+          ) : (
+            <Card
+              style={{
+                borderRadius: 16, width: "100%",
+                background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+                border: "none",
+              }}
+              styles={{ body: { padding: "20px 24px" } }}
+            >
+              <Flex vertical align="center" gap={10}>
+                <Text style={{ color: "rgba(255,255,255,0.9)", fontSize: 14, fontWeight: 500 }}>
+                  ✨ Bạn đã đọc xong! Kiểm tra từ vựng ngay?
+                </Text>
+                <Button
+                  size="large"
+                  icon={<EditOutlined />}
+                  onClick={() => router.push(`/reading/graded/${id}/cloze`)}
+                  style={{
+                    borderRadius: 12, fontWeight: 700, border: "2px solid #fff",
+                    background: "rgba(255,255,255,0.15)", color: "#fff", height: 44,
+                  }}
+                >
+                  📝 Làm bài cloze test
+                </Button>
+              </Flex>
+            </Card>
+          )}
+        </Flex>
+      </Flex>
     </div>
   );
 }

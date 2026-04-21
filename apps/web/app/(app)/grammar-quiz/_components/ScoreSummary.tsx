@@ -58,7 +58,7 @@ export function ScoreSummary({
         style={{
           marginTop: 24,
           borderRadius: "var(--radius-lg)",
-          background: "linear-gradient(135deg, var(--accent), #C3CC9B)",
+          background: "linear-gradient(135deg, var(--accent), var(--secondary))",
           textAlign: "center",
         }}
         styles={{ body: { padding: "16px 32px" } }}

@@ -22,38 +22,38 @@ export function useTheme() {
 const STORAGE_KEY = "theme-mode";
 
 /**
- * Palette: #9AB17A · #C3CC9B · #E4DFB5 · #FBE8CE
+ * Palette: #74C4C9 · #90D0D4 · #ACDCDF · #C7E7E9 · #E3F3F4
  */
 const lightTokens = {
-  colorPrimary: "#9AB17A",
+  colorPrimary: "#74C4C9",
   colorBgContainer: "#ffffff",
-  colorBgLayout: "#faf8f3",
-  colorBgBase: "#faf8f3",
-  colorText: "#2d3a24",
-  colorTextSecondary: "#5a6651",
-  colorBorder: "#e4dfb5",
-  colorBorderSecondary: "#c3cc9b",
+  colorBgLayout: "#f6fbfb",
+  colorBgBase: "#f6fbfb",
+  colorText: "#1e3a3c",
+  colorTextSecondary: "#4a6b6d",
+  colorBorder: "#c7e7e9",
+  colorBorderSecondary: "#90d0d4",
   borderRadius: 12,
   fontFamily: "'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif",
-  colorSuccess: "#9AB17A",
-  colorInfo: "#C3CC9B",
-  colorWarning: "#E4DFB5",
+  colorSuccess: "#74C4C9",
+  colorInfo: "#90D0D4",
+  colorWarning: "#ACDCDF",
 };
 
 const darkTokens = {
-  colorPrimary: "#b1c892",
-  colorBgContainer: "#1c2318",
-  colorBgLayout: "#141a10",
-  colorBgBase: "#141a10",
-  colorText: "#e4eadc",
-  colorTextSecondary: "#a5b096",
-  colorBorder: "#2f3b26",
-  colorBorderSecondary: "#3d4a32",
+  colorPrimary: "#90d0d4",
+  colorBgContainer: "#152526",
+  colorBgLayout: "#0f1d1e",
+  colorBgBase: "#0f1d1e",
+  colorText: "#dceef0",
+  colorTextSecondary: "#96c0c3",
+  colorBorder: "#243536",
+  colorBorderSecondary: "#2f4647",
   borderRadius: 12,
   fontFamily: "'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif",
-  colorSuccess: "#b1c892",
-  colorInfo: "#8a9472",
-  colorWarning: "#6b6d4e",
+  colorSuccess: "#90d0d4",
+  colorInfo: "#6ab0b4",
+  colorWarning: "#4a8e92",
 };
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
@@ -89,13 +89,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
               darkItemBg: "transparent",
               darkItemColor: "rgba(255,255,255,0.7)",
               darkItemHoverBg: "rgba(255,255,255,0.06)",
-              darkItemSelectedBg: "rgba(154,177,122,0.14)",
-              darkItemSelectedColor: isDark ? "#b1c892" : "#9AB17A",
+              darkItemSelectedBg: "rgba(116,196,201,0.14)",
+              darkItemSelectedColor: isDark ? "#90d0d4" : "#74C4C9",
             },
             Layout: {
-              siderBg: isDark ? "#101510" : "#2d3a24",
-              headerBg: isDark ? "#1c2318" : "#ffffff",
-              bodyBg: isDark ? "#141a10" : "#faf8f3",
+              siderBg: isDark ? "#0b1718" : "#1e3a3c",
+              headerBg: isDark ? "#152526" : "#ffffff",
+              bodyBg: isDark ? "#0f1d1e" : "#f6fbfb",
             },
             Button: {
               borderRadius: 12,

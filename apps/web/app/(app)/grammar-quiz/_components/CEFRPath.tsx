@@ -12,9 +12,9 @@ const CEFR_LEVELS = [
 ] as const;
 
 const TIER_COLORS: Record<string, string> = {
-  easy: "#9AB17A",
-  medium: "#C3CC9B",
-  hard: "#E4DFB5",
+  easy: "var(--accent)",
+  medium: "var(--secondary)",
+  hard: "var(--tertiary)",
 };
 
 type Props = {

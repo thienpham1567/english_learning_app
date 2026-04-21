@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 import { BulbOutlined, HistoryOutlined } from "@ant-design/icons";
+import { Button } from "antd";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 import { useGrammarQuiz } from "@/hooks/useGrammarQuiz";
 import { useExamMode } from "@/components/shared/ExamModeProvider";
@@ -49,60 +51,26 @@ export default function GrammarQuizPage() {
       }}
     >
       {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          flexShrink: 0,
-          alignItems: "center",
-          gap: 12,
-          borderBottom: "1px solid var(--border)",
-          background: "var(--surface)",
-          padding: "16px 24px",
-        }}
-      >
-        <div
-          style={{
-            display: "grid",
-            width: 40,
-            height: 40,
-            placeItems: "center",
-            borderRadius: "var(--radius)",
-            background: "linear-gradient(135deg, #ec4899, #e11d48)",
-            color: "#fff",
-            boxShadow: "var(--shadow-sm)",
-          }}
-        >
-          <BulbOutlined style={{ fontSize: 20 }} />
-        </div>
-        <div style={{ flex: 1 }}>
-          <h2 style={{ fontSize: 15, fontWeight: 600, color: "var(--ink)", margin: 0 }}>
-            TOEIC Part 5 📝
-          </h2>
-          <p style={{ fontSize: 12, color: "var(--text-muted)", margin: 0 }}>
-            Incomplete Sentences · Luyện tập theo độ khó
-          </p>
-        </div>
-        {/* History icon (AC: #4) */}
-        <button
-          type="button"
-          onClick={() => setHistoryOpen(true)}
-          title="Lịch sử làm bài"
-          style={{
-            display: "grid",
-            width: 36,
-            height: 36,
-            placeItems: "center",
-            borderRadius: "var(--radius)",
-            border: "1px solid var(--border)",
-            background: "var(--surface)",
-            cursor: "pointer",
-            color: "var(--text-secondary)",
-            transition: "all 0.15s",
-          }}
-        >
-          <HistoryOutlined style={{ fontSize: 16 }} />
-        </button>
-      </div>
+      <ModuleHeader
+        icon={<BulbOutlined />}
+        gradient="linear-gradient(135deg, #ec4899, #e11d48)"
+        title="TOEIC Part 5 📝"
+        subtitle="Incomplete Sentences · Luyện tập theo độ khó"
+        action={
+          <Button
+            type="text"
+            icon={<HistoryOutlined style={{ fontSize: 16 }} />}
+            onClick={() => setHistoryOpen(true)}
+            title="Lịch sử làm bài"
+            style={{
+              width: 36, height: 36, borderRadius: 10,
+              border: "1px solid rgba(255,255,255,0.2)",
+              color: "rgba(255,255,255,0.8)",
+              display: "flex", alignItems: "center", justifyContent: "center",
+            }}
+          />
+        }
+      />
 
       {/* Content */}
       <div

@@ -4,15 +4,19 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   ArrowLeftOutlined,
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  TrophyOutlined,
+  CheckCircleFilled,
+  CloseCircleFilled,
+  TrophyFilled,
   ReloadOutlined,
   SaveOutlined,
   LoadingOutlined,
+  EditOutlined,
+  FireFilled,
 } from "@ant-design/icons";
-import { Button, message, Spin } from "antd";
+import { Card, Button, Flex, Typography, Spin, Tag, message } from "antd";
 import { api } from "@/lib/api-client";
+
+const { Text, Title } = Typography;
 
 type ClozeItem = {
   blankIndex: number;
@@ -34,7 +38,6 @@ export default function ClozeTestPage() {
   const [msgApi, contextHolder] = message.useMessage();
   const inputRefs = useRef<Record<number, HTMLInputElement | null>>({});
 
-  // Fetch cloze items
   useEffect(() => {
     if (!id) return;
     setLoading(true);
@@ -45,12 +48,10 @@ export default function ClozeTestPage() {
       .finally(() => setLoading(false));
   }, [id]);
 
-  // Handle answer input
   const handleChange = useCallback((idx: number, value: string) => {
     setAnswers((prev) => ({ ...prev, [idx]: value }));
   }, []);
 
-  // Submit and score (AC4)
   const handleSubmit = useCallback(() => {
     const res: Record<number, boolean> = {};
     for (const item of items) {
@@ -61,26 +62,18 @@ export default function ClozeTestPage() {
     setSubmitted(true);
   }, [items, answers]);
 
-  // Missed answers → flashcards (AC5)
   const saveMissedToFlashcards = useCallback(async () => {
     const missed = items.filter((item) => !results[item.blankIndex]);
     if (missed.length === 0) return;
-
     setSavingFlashcards(true);
     let saved = 0;
     for (const item of missed) {
-      try {
-        await api.post("/vocabulary/save", { query: item.answer });
-        saved++;
-      } catch {
-        // May already exist — that's fine (idempotent)
-      }
+      try { await api.post("/vocabulary/save", { query: item.answer }); saved++; } catch { /* ok */ }
     }
     setSavingFlashcards(false);
     msgApi.success(`Đã lưu ${saved} từ vào sổ tay!`);
   }, [items, results, msgApi]);
 
-  // Retry
   const handleRetry = useCallback(() => {
     setAnswers({});
     setResults({});
@@ -93,177 +86,227 @@ export default function ClozeTestPage() {
 
   if (loading) {
     return (
-      <div style={{ display: "flex", justifyContent: "center", alignItems: "center", height: "100%", padding: 60 }}>
-        <Spin size="large" />
-      </div>
+      <Flex align="center" justify="center" style={{ height: "100%", padding: 60 }}>
+        <Spin indicator={<LoadingOutlined style={{ fontSize: 32, color: "var(--accent)" }} />} />
+      </Flex>
     );
   }
 
   if (items.length === 0) {
     return (
-      <div style={{ textAlign: "center", padding: 60, color: "var(--text-muted)" }}>
-        <p>Không thể tạo bài kiểm tra cho bài đọc này.</p>
-        <a href={`/reading/graded/${id}`} style={{ color: "var(--accent)" }}>← Quay lại bài đọc</a>
-      </div>
+      <Flex vertical align="center" justify="center" gap={12} style={{ height: "100%", padding: 60 }}>
+        <EditOutlined style={{ fontSize: 48, color: "var(--text-muted)" }} />
+        <Text type="secondary">Không thể tạo bài kiểm tra cho bài đọc này</Text>
+        <Button type="link" icon={<ArrowLeftOutlined />} onClick={() => router.push(`/reading/graded/${id}`)}>
+          Quay lại bài đọc
+        </Button>
+      </Flex>
     );
   }
 
   return (
     <div style={{ height: "100%", overflowY: "auto", padding: "var(--space-6)" }}>
       {contextHolder}
-      <div style={{ maxWidth: 700, margin: "0 auto", display: "flex", flexDirection: "column", gap: 20 }}>
+      <Flex vertical gap={20} style={{ maxWidth: 720, margin: "0 auto" }}>
 
         {/* Back */}
-        <a
-          href={`/reading/graded/${id}`}
-          style={{ color: "var(--text-muted)", fontSize: 13, display: "flex", alignItems: "center", gap: 6, textDecoration: "none" }}
+        <Button
+          type="text"
+          icon={<ArrowLeftOutlined />}
+          onClick={() => router.push(`/reading/graded/${id}`)}
+          style={{ alignSelf: "flex-start", color: "var(--text-muted)", fontSize: 13, borderRadius: 10 }}
         >
-          <ArrowLeftOutlined /> Quay lại bài đọc
-        </a>
+          Quay lại bài đọc
+        </Button>
 
-        {/* Header */}
-        <div>
-          <div style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--text-muted)" }}>
-            CLOZE TEST
-          </div>
-          <h2 style={{ margin: "4px 0 0", fontFamily: "var(--font-display)", fontStyle: "italic", fontSize: 20, color: "var(--text-primary)" }}>
-            Điền từ vào chỗ trống
-          </h2>
-          <p style={{ margin: "4px 0 0", fontSize: 13, color: "var(--text-secondary)" }}>
-            {totalCount} câu hỏi · Gõ đáp án và nhấn Nộp bài
-          </p>
-        </div>
+        {/* Header card */}
+        <Card
+          style={{
+            borderRadius: 20,
+            background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+            border: "none",
+          }}
+          styles={{ body: { padding: "20px 24px" } }}
+        >
+          <Flex align="center" gap={14}>
+            <div style={{
+              width: 44, height: 44, borderRadius: 12,
+              background: "rgba(255,255,255,0.2)", display: "flex",
+              alignItems: "center", justifyContent: "center",
+            }}>
+              <EditOutlined style={{ fontSize: 22, color: "#fff" }} />
+            </div>
+            <div>
+              <Text style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(255,255,255,0.7)" }}>
+                CLOZE TEST
+              </Text>
+              <Title level={4} style={{ margin: 0, color: "#fff", fontFamily: "var(--font-display)", fontStyle: "italic" }}>
+                Điền từ vào chỗ trống
+              </Title>
+            </div>
+            <Tag style={{ marginLeft: "auto", borderRadius: 10, border: "none", background: "rgba(255,255,255,0.2)", color: "#fff", fontWeight: 700, fontSize: 13, padding: "4px 14px" }}>
+              {totalCount} câu
+            </Tag>
+          </Flex>
+        </Card>
 
         {/* Score card (after submit) */}
         {submitted && (
-          <div style={{
-            padding: 20,
-            borderRadius: 16,
-            background: score >= 80 ? "#52c41a15" : score >= 50 ? "#faad1415" : "#ff4d4f15",
-            border: `1px solid ${score >= 80 ? "#52c41a" : score >= 50 ? "#faad14" : "#ff4d4f"}`,
-            textAlign: "center",
-          }}>
-            <TrophyOutlined style={{ fontSize: 32, color: score >= 80 ? "#52c41a" : score >= 50 ? "#faad14" : "#ff4d4f" }} />
-            <h3 style={{ margin: "8px 0 4px", fontSize: 24, fontWeight: 700 }}>
+          <Card
+            style={{
+              borderRadius: 20, textAlign: "center",
+              border: `2px solid ${score >= 80 ? "#52c41a" : score >= 50 ? "#faad14" : "#ff4d4f"}`,
+              background: score >= 80 ? "#52c41a08" : score >= 50 ? "#faad1408" : "#ff4d4f08",
+            }}
+            styles={{ body: { padding: "24px" } }}
+          >
+            <div style={{
+              width: 56, height: 56, borderRadius: 16, margin: "0 auto 12px",
+              display: "flex", alignItems: "center", justifyContent: "center",
+              background: score >= 80 ? "#52c41a20" : score >= 50 ? "#faad1420" : "#ff4d4f20",
+            }}>
+              {score >= 80
+                ? <TrophyFilled style={{ fontSize: 28, color: "#52c41a" }} />
+                : score >= 50
+                  ? <FireFilled style={{ fontSize: 28, color: "#faad14" }} />
+                  : <EditOutlined style={{ fontSize: 28, color: "#ff4d4f" }} />
+              }
+            </div>
+            <Title level={2} style={{ margin: "0 0 4px", color: score >= 80 ? "#52c41a" : score >= 50 ? "#faad14" : "#ff4d4f" }}>
               {score}%
-            </h3>
-            <p style={{ margin: 0, fontSize: 14, color: "var(--text-secondary)" }}>
+            </Title>
+            <Text type="secondary">
               {correctCount}/{totalCount} đúng
-              {score >= 80 ? " — Tuyệt vời! 🎉" : score >= 50 ? " — Khá tốt!" : " — Cần ôn lại!"}
-            </p>
+              {score >= 80 ? " — Tuyệt vời! 🎉" : score >= 50 ? " — Khá tốt! 👍" : " — Cần ôn lại! 💪"}
+            </Text>
 
-            <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 12 }}>
-              <Button icon={<ReloadOutlined />} onClick={handleRetry}>Làm lại</Button>
+            <Flex gap={10} justify="center" style={{ marginTop: 16 }}>
+              <Button icon={<ReloadOutlined />} onClick={handleRetry} style={{ borderRadius: 10 }}>
+                Làm lại
+              </Button>
               {correctCount < totalCount && (
                 <Button
                   type="primary"
                   icon={savingFlashcards ? <LoadingOutlined /> : <SaveOutlined />}
                   onClick={saveMissedToFlashcards}
                   disabled={savingFlashcards}
+                  style={{ borderRadius: 10 }}
                 >
-                  Lưu {totalCount - correctCount} từ sai vào sổ tay
+                  Lưu {totalCount - correctCount} từ sai
                 </Button>
               )}
-            </div>
-          </div>
+            </Flex>
+          </Card>
         )}
 
         {/* Cloze items */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <Flex vertical gap={10}>
           {items.map((item, i) => {
             const isCorrect = results[item.blankIndex];
             const userAns = answers[item.blankIndex] || "";
             const showResult = submitted;
 
             return (
-              <div
+              <Card
                 key={item.blankIndex}
                 style={{
-                  padding: "14px 18px",
-                  borderRadius: 12,
+                  borderRadius: 16,
                   border: showResult
-                    ? `1px solid ${isCorrect ? "#52c41a" : "#ff4d4f"}`
+                    ? `1.5px solid ${isCorrect ? "#52c41a" : "#ff4d4f"}`
                     : "1px solid var(--border)",
                   background: showResult
-                    ? isCorrect ? "#52c41a08" : "#ff4d4f08"
-                    : "var(--card-bg)",
-                  transition: "all 0.2s",
+                    ? isCorrect ? "#52c41a06" : "#ff4d4f06"
+                    : undefined,
+                  transition: "all 0.2s ease",
                 }}
+                styles={{ body: { padding: "14px 20px" } }}
               >
-                <div style={{ fontSize: 11, color: "var(--text-muted)", marginBottom: 6 }}>
-                  #{i + 1}
-                </div>
+                <Flex gap={10} align="flex-start">
+                  {/* Number badge */}
+                  <div style={{
+                    width: 28, height: 28, borderRadius: 8,
+                    display: "flex", alignItems: "center", justifyContent: "center",
+                    background: showResult
+                      ? isCorrect ? "#52c41a15" : "#ff4d4f15"
+                      : "var(--surface)",
+                    fontSize: 12, fontWeight: 700, flexShrink: 0, marginTop: 2,
+                    color: showResult
+                      ? isCorrect ? "#52c41a" : "#ff4d4f"
+                      : "var(--text-muted)",
+                  }}>
+                    {showResult
+                      ? isCorrect ? <CheckCircleFilled /> : <CloseCircleFilled />
+                      : i + 1
+                    }
+                  </div>
 
-                <p style={{ margin: 0, fontSize: 14, lineHeight: 1.8, color: "var(--text)" }}>
-                  {item.before}{" "}
-                  <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
-                    <input
-                      ref={(el) => { inputRefs.current[item.blankIndex] = el; }}
-                      type="text"
-                      value={userAns}
-                      onChange={(e) => handleChange(item.blankIndex, e.target.value)}
-                      disabled={submitted}
-                      placeholder="______"
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          // Focus next input or submit
-                          const nextItem = items[i + 1];
-                          if (nextItem) {
-                            inputRefs.current[nextItem.blankIndex]?.focus();
-                          } else {
-                            handleSubmit();
+                  <div style={{ flex: 1 }}>
+                    <Text style={{ fontSize: 14, lineHeight: 1.8 }}>
+                      {item.before}{" "}
+                      <input
+                        ref={(el) => { inputRefs.current[item.blankIndex] = el; }}
+                        type="text"
+                        value={userAns}
+                        onChange={(e) => handleChange(item.blankIndex, e.target.value)}
+                        disabled={submitted}
+                        placeholder="______"
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            const nextItem = items[i + 1];
+                            if (nextItem) inputRefs.current[nextItem.blankIndex]?.focus();
+                            else handleSubmit();
                           }
-                        }
-                      }}
-                      style={{
-                        width: Math.max(80, item.answer.length * 12),
-                        padding: "4px 8px",
-                        borderRadius: 6,
-                        border: showResult
-                          ? `2px solid ${isCorrect ? "#52c41a" : "#ff4d4f"}`
-                          : "1px dashed var(--accent)",
-                        background: "var(--surface)",
-                        fontSize: 14,
-                        fontWeight: 600,
-                        textAlign: "center",
-                        outline: "none",
-                        color: showResult
-                          ? isCorrect ? "#52c41a" : "#ff4d4f"
-                          : "var(--text)",
-                      }}
-                    />
-                    {showResult && (
-                      isCorrect
-                        ? <CheckCircleOutlined style={{ color: "#52c41a", fontSize: 16 }} />
-                        : <CloseCircleOutlined style={{ color: "#ff4d4f", fontSize: 16 }} />
-                    )}
-                  </span>
-                  {" "}{item.after}
-                </p>
+                        }}
+                        style={{
+                          width: Math.max(90, item.answer.length * 12),
+                          padding: "3px 10px",
+                          borderRadius: 8,
+                          border: showResult
+                            ? `2px solid ${isCorrect ? "#52c41a" : "#ff4d4f"}`
+                            : "1.5px dashed var(--accent)",
+                          background: "var(--surface)",
+                          fontSize: 14,
+                          fontWeight: 600,
+                          textAlign: "center",
+                          outline: "none",
+                          color: showResult
+                            ? isCorrect ? "#52c41a" : "#ff4d4f"
+                            : "var(--text)",
+                          transition: "border-color 0.2s",
+                        }}
+                      />
+                      {" "}{item.after}
+                    </Text>
 
-                {/* Show correct answer on wrong */}
-                {showResult && !isCorrect && (
-                  <p style={{ margin: "6px 0 0", fontSize: 12, color: "#52c41a" }}>
-                    Đáp án: <strong>{item.answer}</strong>
-                  </p>
-                )}
-              </div>
+                    {showResult && !isCorrect && (
+                      <Text style={{ display: "block", marginTop: 6, fontSize: 12, color: "#52c41a" }}>
+                        <CheckCircleFilled style={{ marginRight: 4 }} />
+                        Đáp án: <strong>{item.answer}</strong>
+                      </Text>
+                    )}
+                  </div>
+                </Flex>
+              </Card>
             );
           })}
-        </div>
+        </Flex>
 
         {/* Submit button */}
         {!submitted && (
           <Button
             type="primary"
             size="large"
+            icon={<CheckCircleFilled />}
             onClick={handleSubmit}
-            style={{ alignSelf: "center", borderRadius: 10, fontWeight: 600 }}
+            style={{
+              alignSelf: "center", borderRadius: 12, fontWeight: 700,
+              height: 48, padding: "0 32px", fontSize: 15,
+            }}
           >
-            <CheckCircleOutlined /> Nộp bài ({totalCount} câu)
+            Nộp bài ({totalCount} câu)
           </Button>
         )}
-      </div>
+      </Flex>
     </div>
   );
 }

@@ -72,7 +72,7 @@ export function QuestionCard({
             style={{
               height: "100%",
               borderRadius: 99,
-              background: "linear-gradient(90deg, var(--accent), #7a9660)",
+              background: "linear-gradient(90deg, var(--accent), var(--accent-hover))",
               width: `${(questionNumber / total) * 100}%`,
               transition: "width 0.4s ease",
             }}
@@ -308,7 +308,7 @@ export function QuestionCard({
                           fontWeight: 600,
                           border: "none",
                           cursor: "pointer",
-                          background: lang === l ? "#7a9660" : "#fffbeb",
+                          background: lang === l ? "var(--accent-hover)" : "#fffbeb",
                           color: lang === l ? "#fff" : "#b45309",
                         }}
                       >
@@ -335,7 +335,7 @@ export function QuestionCard({
                       fontWeight: 600,
                       textTransform: "uppercase",
                       letterSpacing: "0.1em",
-                      color: "#7a9660",
+                      color: "var(--accent-hover)",
                       margin: 0,
                     }}
                   >
@@ -364,7 +364,7 @@ export function QuestionCard({
               marginTop: 16,
               width: "100%",
               borderRadius: "var(--radius)",
-              background: "linear-gradient(135deg, var(--accent), #7a9660)",
+              background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
               padding: "12px 0",
               fontSize: 14,
               fontWeight: 600,

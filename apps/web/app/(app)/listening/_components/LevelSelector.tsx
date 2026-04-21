@@ -54,7 +54,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
             width: 60,
             height: 60,
             borderRadius: 18,
-            background: "linear-gradient(135deg, var(--accent), #7a9660)",
+            background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
             fontSize: 28,
             marginBottom: 12,
             boxShadow: "0 4px 16px rgba(154,177,122,0.35)",
@@ -237,7 +237,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                     placeItems: "center",
                     borderRadius: 10,
                     background: isSelected
-                      ? "linear-gradient(135deg, var(--accent), #7a9660)"
+                      ? "linear-gradient(135deg, var(--accent), var(--accent-hover))"
                       : "var(--bg-deep, rgba(0,0,0,0.05))",
                     fontSize: 20,
                     flexShrink: 0,
@@ -295,7 +295,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
           borderRadius: 14,
           border: "none",
           background: activeLevel
-            ? "linear-gradient(135deg, var(--accent), #7a9660)"
+            ? "linear-gradient(135deg, var(--accent), var(--accent-hover))"
             : "var(--border)",
           color: activeLevel ? "#fff" : "var(--text-muted)",
           fontSize: 16,

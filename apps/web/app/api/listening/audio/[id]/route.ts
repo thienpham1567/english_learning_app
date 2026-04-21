@@ -12,6 +12,7 @@ import {
   synthesizeTts,
   synthesizeTtsForVoice,
   VOICE_SET_VERSION,
+  VOICES,
 } from "@/lib/tts/groq";
 
 /**
@@ -125,15 +126,35 @@ export async function GET(
       });
     }
 
-    const audio = await synthesizeTts({
-      text: exercise.passage,
-      accent,
-      speed: 0.9,
-    });
+    // Single-speaker path — use MP3 for smaller payload + cache
+    const cacheFile = DIALOGUE_DISK_CACHE_ENABLED
+      ? path.join(DIALOGUE_CACHE_DIR, `single-${id}-${accent}-${VOICE_SET_VERSION}.mp3`)
+      : null;
 
-    return new Response(audio, {
+    let buf: Buffer | null = null;
+    if (cacheFile) {
+      try { buf = await fs.readFile(cacheFile); } catch { /* miss */ }
+    }
+
+    if (!buf) {
+      const audio = await synthesizeTtsForVoice({
+        text: exercise.passage,
+        voice: VOICES[accent],
+        format: "mp3",
+        speed: 0.9,
+      });
+      buf = Buffer.from(audio);
+      if (cacheFile) {
+        try {
+          await fs.mkdir(DIALOGUE_CACHE_DIR, { recursive: true });
+          await fs.writeFile(cacheFile, buf);
+        } catch { /* ignore cache write fail */ }
+      }
+    }
+
+    return new Response(new Uint8Array(buf), {
       headers: {
-        "Content-Type": "audio/wav",
+        "Content-Type": "audio/mpeg",
         "Cache-Control": "public, max-age=604800",
       },
     });

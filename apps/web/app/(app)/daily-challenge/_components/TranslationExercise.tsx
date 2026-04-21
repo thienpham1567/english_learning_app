@@ -132,7 +132,7 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
           style={{
             width: "100%",
             borderRadius: 12,
-            background: "linear-gradient(135deg, var(--accent), #7a9660)",
+            background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
             padding: "13px 0",
             fontSize: 14,
             fontWeight: 700,

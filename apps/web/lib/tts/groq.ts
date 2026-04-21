@@ -51,7 +51,7 @@ export const ROLE_DISPLAY_NAME: Record<VoiceRole, string> = {
 };
 
 /** Legacy accent → default voice (single-speaker path). */
-const VOICES: Record<Accent, string> = {
+export const VOICES: Record<Accent, string> = {
   us: VOICE_BY_ROLE["us-m"],
   uk: VOICE_BY_ROLE["uk-f"],
   au: VOICE_BY_ROLE["au-f"],
