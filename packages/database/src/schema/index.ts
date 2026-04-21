@@ -376,3 +376,65 @@ export const writingErrorPattern = pgTable("writing_error_pattern", {
 ]);
 
 export type WritingErrorPatternRow = typeof writingErrorPattern.$inferSelect;
+
+/** Listening Summary Attempt — summarize-mode submission with AI scoring (Story 19.3.3, AC6) */
+export const listeningSummaryAttempt = pgTable("listening_summary_attempt", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  exerciseId: uuid("exercise_id")
+    .notNull()
+    .references(() => listeningExercise.id, { onDelete: "cascade" }),
+  summary: text("summary").notNull(),
+  overall: real("overall").notNull(),
+  accuracyScore: real("accuracy_score").notNull(),
+  coverageScore: real("coverage_score").notNull(),
+  concisenessScore: real("conciseness_score").notNull(),
+  keyIdeasJson: jsonb("key_ideas_json").$type<string[]>().notNull().default([]),
+  coverageJson: jsonb("coverage_json")
+    .$type<Array<{ idea: string; covered: boolean; whereInSummary?: string }>>()
+    .notNull()
+    .default([]),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  index("listening_summary_attempt_user_created_idx").on(table.userId, table.createdAt),
+  index("listening_summary_attempt_exercise_idx").on(table.exerciseId),
+]);
+
+export type ListeningSummaryAttemptRow = typeof listeningSummaryAttempt.$inferSelect;
+
+/** Key vocabulary item extracted from an imported audio */
+export type ImportKeyVocab = {
+  term: string;
+  partOfSpeech: string;
+  meaning: string;
+  example: string;
+};
+
+/** Listening Import — user-imported podcast/YouTube content with Whisper transcription (Story 19.3.4, AC4) */
+export const listeningImport = pgTable("listening_import", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  sourceUrl: text("source_url").notNull(),
+  title: text("title").notNull(),
+  durationSec: integer("duration_sec").notNull(),
+  transcriptJson: jsonb("transcript_json")
+    .$type<Array<{ start: number; end: number; text: string }>>()
+    .notNull()
+    .default([]),
+  keyVocabJson: jsonb("key_vocab_json")
+    .$type<ImportKeyVocab[]>()
+    .notNull()
+    .default([]),
+  quizJson: jsonb("quiz_json")
+    .$type<Array<{ question: string; options: string[]; correctIndex: number }>>()
+    .notNull()
+    .default([]),
+  audioKey: text("audio_key").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  index("listening_import_user_created_idx").on(table.userId, table.createdAt),
+]);
+
+export type ListeningImportRow = typeof listeningImport.$inferSelect;
+
+

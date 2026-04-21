@@ -56,6 +56,19 @@ As a self-learner, I want listening exercises that feature conversations between
 ### Change Log
 - 2026-04-20: Implemented Story 19.3.1. Adapted TTS approach to Groq (per user) instead of Google Chirp 3 HD; stored dialogue JSON on `listening_exercise`; server-side MP3 concat; added UI affordance for dialogue generation + speaker legend + labeled transcript reveal.
 
+### Review Findings
+
+- [ ] [Review][Decision] **Voice names unverified against Groq catalog** — AC6 maps to assumed voice names (`atlas`, `celeste`, `briggs`, `tara`, `calum`, `hannah`) that may not exist in the Groq playai-tts model. Need user to verify against their Groq account's available voices before shipping.
+- [ ] [Review][Decision] **Missing migration SQL file** — Spec lists `0009_add_listening_dialogue_turns.sql` but it does not exist on disk. Need to confirm whether migration was applied via Drizzle push or if the SQL file needs to be generated.
+- [ ] [Review][Patch] **Speaker legend shows raw voice names instead of friendly display names (AC5)** [SpeakerLegend.tsx:13] — `ROLE_DISPLAY_NAME` map exists in `groq.ts` but is unused; `describeVoice` should use it.
+- [ ] [Review][Patch] **Path traversal risk in dialogue cache via exercise ID** [audio/[id]/route.ts:38,49] — Validate `id` is a UUID before using in `path.join`.
+- [ ] [Review][Patch] **No runtime validation on AI-generated dialogue JSON** [generate-dialogue/route.ts:97-106] — Add Zod schema validation for `turns` and `questions` shapes before DB insert.
+- [ ] [Review][Patch] **Empty dialogue turn text produces failed TTS call** [generate-dialogue/route.ts:127] — Filter out turns with empty text after trim.
+- [ ] [Review][Patch] **Hardcoded Vietnamese strings without i18n** [DialogueGenerator.tsx, Results.tsx, page.tsx] — All user-facing strings should go through i18n.
+- [ ] [Review][Patch] **Topic input not sanitized against prompt injection** [generate-dialogue/route.ts:85] — Add basic sanitization or escaping for the topic field.
+- [x] [Review][Defer] **In-memory rate limiter never evicts stale entries** [audio/[id]/route.ts:28] — deferred, pre-existing pattern across all rate-limited routes
+- [x] [Review][Defer] **No concurrency limit on parallel TTS calls in `buildDialogueAudio`** [audio/[id]/route.ts:57] — deferred, acceptable for current scale (max 10 turns); add p-limit if Groq rate-limits appear
+
 ## Dev Notes
 
 - MP3 frame concatenation works for all common players. If playback glitches appear at boundaries, add a short silent frame (~200ms) between turns — do not move to a proper mux library yet.

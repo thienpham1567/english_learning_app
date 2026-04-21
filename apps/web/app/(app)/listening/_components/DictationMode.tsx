@@ -1,6 +1,6 @@
 "use client";
 import { api } from "@/lib/api-client";
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import {
   SoundOutlined,
   LoadingOutlined,
@@ -13,7 +13,8 @@ import {
 } from "@ant-design/icons";
 import { Progress, Tag } from "antd";
 
-import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import { useSentenceAudio } from "@/hooks/useSentenceAudio";
+import { AudioPlayer } from "@/app/(app)/listening/_components/AudioPlayer";
 
 type Sentence = { text: string; ipa: string; tip: string };
 
@@ -84,6 +85,17 @@ export default function DictationMode({ examMode }: Props) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const currentSentence = sentences[currentIdx] ?? null;
 
+  // AudioPlayer integration (Story 19.3.2 — AC4 migration)
+  const sentenceAudio = useSentenceAudio();
+
+  // Synthesize audio when sentence changes
+  useEffect(() => {
+    if (currentSentence && state === "ready") {
+      sentenceAudio.synthesize(currentSentence.text);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIdx, currentSentence?.text]);
+
   // ── Generate sentences ──
   const startSession = useCallback(async () => {
     setState("loading");
@@ -95,6 +107,7 @@ export default function DictationMode({ examMode }: Props) {
     setReplaysUsed(0);
     setSkillUpdate(null);
     setXpAwarded(0);
+    sentenceAudio.clear();
 
     try {
       const data = await api.post<{ sentences: Sentence[] }>("/pronunciation/sentences", {
@@ -107,23 +120,17 @@ export default function DictationMode({ examMode }: Props) {
       setError("Không thể tạo bài tập. Vui lòng thử lại.");
       setState("idle");
     }
-  }, [examMode]);
+  }, [examMode, sentenceAudio]);
 
-  const tts = useTextToSpeech();
-  const [hasPlayedOnce, setHasPlayedOnce] = useState(false);
+  // Replay handler for AudioPlayer — counts replays
+  const handleReplay = useCallback(() => {
+    if (replaysUsed >= MAX_REPLAYS) return false;
+    setReplaysUsed((p) => p + 1);
+    return true;
+  }, [replaysUsed]);
 
-  const playSentence = useCallback(() => {
-    if (!currentSentence) return;
-    if (hasPlayedOnce && replaysUsed >= MAX_REPLAYS) return;
-
-    void tts.speak(currentSentence.text);
-
-    if (hasPlayedOnce) {
-      setReplaysUsed((p) => p + 1);
-    } else {
-      setHasPlayedOnce(true);
-    }
-  }, [currentSentence, hasPlayedOnce, replaysUsed, tts]);
+  // Noop for speed — AudioPlayer manages speed internally
+  const handleCycleSpeed = useCallback(() => {}, []);
 
   // ── Check answer ──
   const checkAnswer = useCallback(() => {
@@ -144,13 +151,13 @@ export default function DictationMode({ examMode }: Props) {
       setTypedText("");
       setDiff([]);
       setReplaysUsed(0);
-      setHasPlayedOnce(false);
+      sentenceAudio.clear();
       setState("ready");
       setTimeout(() => inputRef.current?.focus(), 100);
     } else {
       completeSession(sessionScores);
     }
-  }, [currentIdx, sentences.length, sessionScores]);
+  }, [currentIdx, sentences.length, sessionScores, sentenceAudio]);
 
   // ── Retry current sentence ──
   const retryCurrent = useCallback(() => {
@@ -158,7 +165,6 @@ export default function DictationMode({ examMode }: Props) {
     setDiff([]);
     setSessionScores((prev) => prev.slice(0, -1));
     setReplaysUsed(0);
-    setHasPlayedOnce(false);
     setState("ready");
     setTimeout(() => inputRef.current?.focus(), 100);
   }, []);
@@ -224,31 +230,33 @@ export default function DictationMode({ examMode }: Props) {
             <Progress percent={((currentIdx + 1) / sentences.length) * 100} size="small" showInfo={false} style={{ flex: 1 }} />
           </div>
 
-          {/* Audio card — text hidden */}
+          {/* Instruction */}
           <div style={{
-            padding: 32, borderRadius: 16, textAlign: "center",
+            padding: 16, borderRadius: 12, textAlign: "center",
             border: "1px solid var(--border)", background: "var(--card-bg)",
           }}>
-            <p style={{ fontSize: 14, color: "var(--text-secondary)", margin: "0 0 16px" }}>
+            <p style={{ fontSize: 14, color: "var(--text-secondary)", margin: 0 }}>
               🎧 Nghe và gõ lại câu bạn nghe được
             </p>
-            <div style={{ display: "flex", gap: 12, justifyContent: "center", alignItems: "center", flexDirection: "column" }}>
-              <button onClick={playSentence} disabled={hasPlayedOnce && replaysUsed >= MAX_REPLAYS} style={{
-                width: 64, height: 64, borderRadius: "50%", border: "none",
-                background: (hasPlayedOnce && replaysUsed >= MAX_REPLAYS) ? "var(--border)" : "linear-gradient(135deg, var(--accent), #8b5cf6)",
-                color: "#fff", fontSize: 24,
-                cursor: (hasPlayedOnce && replaysUsed >= MAX_REPLAYS) ? "not-allowed" : "pointer",
-                boxShadow: (hasPlayedOnce && replaysUsed >= MAX_REPLAYS) ? "none" : "0 4px 16px rgba(99,102,241,0.3)",
-              }}>
-                <SoundOutlined />
-              </button>
-              {hasPlayedOnce && (
-                <span style={{ fontSize: 12, color: replaysUsed >= MAX_REPLAYS ? "var(--text-muted)" : "var(--text-secondary)" }}>
-                  Đã nghe lại: {replaysUsed}/{MAX_REPLAYS}
-                </span>
-              )}
-            </div>
           </div>
+
+          {/* AudioPlayer — sentence playback (AC4 migration) */}
+          {sentenceAudio.audioUrl ? (
+            <AudioPlayer
+              audioUrl={sentenceAudio.audioUrl}
+              speed={1}
+              replaysUsed={replaysUsed}
+              maxReplays={MAX_REPLAYS}
+              onReplay={handleReplay}
+              onCycleSpeed={handleCycleSpeed}
+              selfManagedSpeed
+            />
+          ) : sentenceAudio.isLoading ? (
+            <div style={{ textAlign: "center", padding: 20 }}>
+              <LoadingOutlined style={{ fontSize: 24, color: "var(--accent)" }} />
+              <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 8 }}>Đang tạo âm thanh...</p>
+            </div>
+          ) : null}
 
           {/* Text input */}
           <textarea

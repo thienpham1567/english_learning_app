@@ -112,9 +112,11 @@ export function useListeningExercise() {
 
   const cycleSpeed = useCallback(() => {
     setSelectedSpeed((prev) => {
+      if (prev === 0.5) return 0.75;
       if (prev === 0.75) return 1.0;
       if (prev === 1.0) return 1.25;
-      return 0.75;
+      if (prev === 1.25) return 1.5;
+      return 0.5;
     });
   }, []);
 

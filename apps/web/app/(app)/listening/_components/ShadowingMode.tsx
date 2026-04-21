@@ -1,6 +1,6 @@
 "use client";
 import { api } from "@/lib/api-client";
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import {
   AudioOutlined,
   SoundOutlined,
@@ -14,7 +14,8 @@ import {
 } from "@ant-design/icons";
 import { Progress, Tag, Tooltip } from "antd";
 
-import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import { useSentenceAudio } from "@/hooks/useSentenceAudio";
+import { AudioPlayer } from "@/app/(app)/listening/_components/AudioPlayer";
 
 type Sentence = { text: string; ipa: string; tip: string };
 type WordAnalysis = { word: string; spoken: string; correct: boolean; issue?: string };
@@ -45,6 +46,18 @@ export default function ShadowingMode({ examMode }: Props) {
 
   const currentSentence = sentences[currentIdx] ?? null;
 
+  // AudioPlayer integration (Story 19.3.2 — AC4 migration)
+  const sentenceAudio = useSentenceAudio();
+  const [replaysUsed] = useState(0); // Shadowing has unlimited replays
+
+  // Synthesize audio when sentence changes
+  useEffect(() => {
+    if (currentSentence && (state === "ready" || state === "recording")) {
+      sentenceAudio.synthesize(currentSentence.text);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentIdx, currentSentence?.text]);
+
   // ── Generate sentences ──
   const startSession = useCallback(async () => {
     setState("loading");
@@ -54,6 +67,7 @@ export default function ShadowingMode({ examMode }: Props) {
     setEvalResult(null);
     setSkillUpdate(null);
     setXpAwarded(0);
+    sentenceAudio.clear();
 
     try {
       const data = await api.post<{ sentences: Sentence[] }>("/pronunciation/sentences", {
@@ -66,14 +80,7 @@ export default function ShadowingMode({ examMode }: Props) {
       setError("Không thể tạo bài tập. Vui lòng thử lại.");
       setState("idle");
     }
-  }, [examMode]);
-
-  const tts = useTextToSpeech();
-
-  const speakSentence = useCallback(() => {
-    if (!currentSentence) return;
-    void tts.speak(currentSentence.text);
-  }, [currentSentence, tts]);
+  }, [examMode, sentenceAudio]);
 
   // ── Recording ──
   const startRecording = useCallback(async () => {
@@ -134,12 +141,13 @@ export default function ShadowingMode({ examMode }: Props) {
       setCurrentIdx((p) => p + 1);
       setEvalResult(null);
       setSpokenText("");
+      sentenceAudio.clear();
       setState("ready");
     } else {
       // Pass current scores to avoid stale closure (F1 fix)
       completeSession(sessionScores);
     }
-  }, [currentIdx, sentences.length, sessionScores]);
+  }, [currentIdx, sentences.length, sessionScores, sentenceAudio]);
 
   const retryCurrent = useCallback(() => {
     setEvalResult(null);
@@ -164,6 +172,10 @@ export default function ShadowingMode({ examMode }: Props) {
 
   const avgScore = sessionScores.length
     ? Math.round(sessionScores.reduce((a, b) => a + b, 0) / sessionScores.length) : 0;
+
+  // Noop handlers for AudioPlayer compat (unlimited replays in Shadowing)
+  const handleReplay = useCallback(() => true, []);
+  const handleCycleSpeed = useCallback(() => {}, []);
 
   // ── RENDER ──
   return (
@@ -217,15 +229,30 @@ export default function ShadowingMode({ examMode }: Props) {
           }}>
             <p style={{ fontSize: 20, fontWeight: 600, margin: "0 0 8px", lineHeight: 1.5 }}>{currentSentence.text}</p>
             <p style={{ fontSize: 14, color: "var(--text-secondary)", margin: "0 0 12px", fontFamily: "serif" }}>{currentSentence.ipa}</p>
-            <button onClick={speakSentence} style={{ padding: "6px 14px", borderRadius: 6, border: "1px solid var(--border)", background: "transparent", color: "var(--accent)", cursor: "pointer", fontSize: 13, marginBottom: 8 }}>
-              <SoundOutlined /> Nghe mẫu
-            </button>
             <Tooltip title={currentSentence.tip}>
               <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "8px 0 0", cursor: "help" }}>
                 <InfoCircleOutlined /> Gợi ý phát âm
               </p>
             </Tooltip>
           </div>
+
+          {/* AudioPlayer — model sentence playback (AC4 migration) */}
+          {sentenceAudio.audioUrl && (
+            <AudioPlayer
+              audioUrl={sentenceAudio.audioUrl}
+              speed={1}
+              replaysUsed={replaysUsed}
+              maxReplays={999}
+              onReplay={handleReplay}
+              onCycleSpeed={handleCycleSpeed}
+              selfManagedSpeed
+            />
+          )}
+          {sentenceAudio.isLoading && (
+            <div style={{ textAlign: "center", fontSize: 12, color: "var(--text-muted)" }}>
+              <LoadingOutlined /> Đang tạo âm thanh...
+            </div>
+          )}
 
           {/* Record button */}
           <div style={{ textAlign: "center" }}>

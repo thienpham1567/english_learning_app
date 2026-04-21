@@ -1,6 +1,6 @@
 # Story 19.3.4: Podcast / YouTube Import (Whisper)
 
-Status: ready-for-dev
+Status: review
 
 ## Story
 
@@ -22,12 +22,41 @@ As a self-learner, I want to paste a YouTube or podcast URL and have the app ext
 
 ## Tasks
 
-- [ ] Task 1: Choose the YouTube downloader strategy and wire host allowlist (AC1).
-- [ ] Task 2: Add Whisper call (AC2).
-- [ ] Task 3: Add analysis call for vocab + quiz (AC3).
-- [ ] Task 4: Add `listeningImport` schema + migration (AC4).
-- [ ] Task 5: Build the import page with progress UI (AC5).
-- [ ] Task 6: Add owner-only audio stream endpoint (AC6).
+- [x] Task 1: Choose the YouTube downloader strategy and wire host allowlist (AC1).
+- [x] Task 2: Add Whisper call (AC2).
+- [x] Task 3: Add analysis call for vocab + quiz (AC3).
+- [x] Task 4: Add `listeningImport` schema + migration (AC4).
+- [x] Task 5: Build the import page with progress UI (AC5).
+- [x] Task 6: Add owner-only audio stream endpoint (AC6).
+
+## Dev Agent Record
+
+### Completion Notes
+
+**Architecture decisions:**
+- **yt-dlp subprocess** chosen over `@distube/ytdl-core` (Task 1): yt-dlp is more robust against YouTube rate-limiting, captcha, and age-gated content. Requires host install (`brew install yt-dlp ffmpeg`), but avoids npm dependency churn. `execFile` with 2-minute timeout.
+- **Single import route** contains Tasks 1–3 (download → Whisper → analysis) as a sequential pipeline. The route is long-running (15–60s) but stays within Next.js API route limits. Future: move to a background job queue if needed.
+- **Progress simulation** on the client (Task 5): since the server does all work in a single POST, the UI simulates stage transitions (fetching → transcribing → analyzing) on timers. Not perfectly accurate but gives users visual feedback.
+
+**Key implementation details:**
+- Host allowlist includes YouTube variants, plus a catch-all for direct audio file URLs (.mp3/.m4a/.wav/.ogg/.webm from any host).
+- Whisper called via OpenAI SDK `openAiClient.audio.transcriptions.create()` with `verbose_json` + `segment` timestamps (consistent with existing `voice/transcribe` route pattern from 19.1.1).
+- Analysis prompt instructs GPT to extract B2+ vocab only, with temperature=0.3 for consistency.
+- Audio stream endpoint (`GET /api/listening/import/[id]/audio`) verifies ownership per request — never serves publicly (AC6).
+- Legal disclaimer rendered in the idle state of the import page (AC6).
+- Import page has 3-tab layout: transcript scrubber (with timestamps), vocabulary panel (term/POS/meaning/example), and quiz (MCQ with submit/results).
+- Rate limit: 3/min/user (more restrictive than other routes due to heavy server-side work).
+
+### File List
+- `apps/web/app/api/listening/import/route.ts` (new) — import pipeline: URL validation, download, Whisper, analysis, persistence.
+- `apps/web/app/api/listening/import/[id]/route.ts` (new) — GET detail endpoint for loading saved imports.
+- `apps/web/app/api/listening/import/[id]/audio/route.ts` (new) — owner-only audio stream.
+- `apps/web/app/(app)/listening/import/page.tsx` (new) — full import UI with progress + exercise view.
+- `packages/database/src/schema/index.ts` (modified) — added `listeningImport` table + `ImportKeyVocab` type.
+- `apps/web/drizzle/0010_add_listening_import.sql` (new) — migration SQL.
+
+### Change Log
+- 2026-04-21: Implemented Story 19.3.4. Full import pipeline, 3 API routes, UI page, schema + migration.
 
 ## Dev Notes
 

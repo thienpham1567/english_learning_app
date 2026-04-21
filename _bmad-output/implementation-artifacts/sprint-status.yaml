@@ -1,5 +1,5 @@
 currentSprint: R4
-last_updated: "2026-04-20"
+last_updated: "2026-04-21"
 
 storySequence:
   - "18.1.1"
@@ -267,14 +267,14 @@ sprints:
         status: review
       "19.3.2":
         title: "A-B Loop + Variable Speed"
-        status: ready-for-dev
+        status: review
       "19.3.3":
         title: "Listen-and-Summarize with AI Scoring"
-        status: ready-for-dev
+        status: done
         depends_on: "19.2.1"
       "19.3.4":
         title: "Podcast/YouTube Import (Whisper)"
-        status: ready-for-dev
+        status: done
         depends_on: "19.1.1"
   R12:
     name: "Epic 19 - Reading Advanced"
