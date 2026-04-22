@@ -6,6 +6,7 @@ import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { QuizGenerationResponseSchema } from "@/lib/grammar-quiz/schema";
 import { getExamContext, parseExamMode } from "@/lib/exam-mode/context";
+import { recordLearningEvent } from "@repo/modules";
 
 const RequestBodySchema = z.object({
   level: z.enum(["easy", "medium", "hard"]),
@@ -107,6 +108,20 @@ export async function POST(request: Request) {
       const validated = QuizGenerationResponseSchema.safeParse(json);
 
       if (validated.success) {
+        // Emit learning event (fire-and-forget, AC: 3)
+        void recordLearningEvent({
+          userId: session.user.id,
+          sessionId: `grammar-${session.user.id}-${Date.now()}`,
+          moduleType: "grammar_quiz",
+          contentId: `quiz-${level}-${count}`,
+          attemptId: `grammar-${Date.now()}`,
+          eventType: "ai_feedback_generated",
+          result: "neutral",
+          score: null,
+          durationMs: 0,
+          difficulty: level === "easy" ? "beginner" : level === "hard" ? "advanced" : "intermediate",
+        });
+
         return Response.json({ questions: validated.data.questions });
       }
 

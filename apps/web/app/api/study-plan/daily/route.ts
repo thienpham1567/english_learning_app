@@ -1,29 +1,48 @@
 import { headers } from "next/headers";
 import { eq, sql, and, gte } from "drizzle-orm";
+import { z } from "zod";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { activityLog, errorLog, userPreferences } from "@repo/database";
+import { getAllUserSkillStates } from "@repo/database";
+import {
+  generateDailyPlan,
+  candidatesFromDueReviews,
+  candidatesFromWeakSkills,
+  candidatesFromDefaultActions,
+} from "@repo/modules";
+import type { TimeBudgetValue } from "@repo/contracts";
+
+const QuerySchema = z.object({
+  budget: z.enum(["5", "10", "20"]).default("20"),
+});
 
 /**
- * GET /api/study-plan/daily
+ * GET /api/study-plan/daily?budget=20
  *
- * Generates daily study suggestions based on user data.
- * Returns: { tasks: Task[], stats: { totalXP, level, streak } }
+ * Generates an adaptive daily study plan using mastery-based scoring (Story 20.6).
+ * Returns: { plan: DailyStudyPlan, stats: { totalXP, level, streak, ... }, legacyTasks: Task[] }
+ *
+ * The `legacyTasks` field preserves backward compatibility for the Home page (AC: 5).
  */
-export async function GET() {
+export async function GET(request: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const userId = session.user.id;
+  const url = new URL(request.url);
+  const parsed = QuerySchema.safeParse({ budget: url.searchParams.get("budget") ?? "20" });
+  const timeBudget: TimeBudgetValue = parsed.success ? parsed.data.budget : "20";
+
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
   try {
     // Fetch user data in parallel
-    const [prefRows, unresolvedErrors, todayActivities, totalActivities] = await Promise.all([
+    const [prefRows, unresolvedErrors, todayActivities, totalActivities, skillStates] = await Promise.all([
       db.select().from(userPreferences).where(eq(userPreferences.userId, userId)).limit(1),
       db
         .select({ count: sql<number>`count(*)::int` })
@@ -40,6 +59,7 @@ export async function GET() {
         })
         .from(activityLog)
         .where(eq(activityLog.userId, userId)),
+      getAllUserSkillStates(userId),
     ]);
 
     const examMode = (prefRows[0]?.examMode as string) ?? "toeic";
@@ -47,13 +67,50 @@ export async function GET() {
     const todayModules = new Set(todayActivities.map((a) => a.activityType));
     const totalXP = totalActivities[0]?.totalScore ?? 0;
 
-    // Build tasks
-    type Task = { id: string; module: string; label: string; href: string; done: boolean; priority: "high" | "medium" | "low" };
-    const tasks: Task[] = [];
+    // ── Adaptive plan generation (Story 20.6) ──
+    const nowMs = Date.now();
+    const goalSkillIds = examMode === "ielts"
+      ? ["listening", "reading", "writing", "speaking"]
+      : ["grammar", "listening", "vocabulary", "reading"];
 
-    // Priority 1: Review errors if any
+    // Build candidates from mastery states
+    const existingSkillIds = new Set(skillStates.map((s) => s.skillId));
+    const masteryStates = skillStates.map((s) => ({
+      userId: s.userId,
+      skillId: s.skillId,
+      proficiency: s.proficiency,
+      confidence: s.confidence,
+      successStreak: s.successStreak,
+      failureStreak: s.failureStreak,
+      decayRate: s.decayRate,
+      signalCount: s.signalCount,
+      lastPracticedAt: s.lastPracticedAt.toISOString(),
+      lastUpdatedAt: s.lastUpdatedAt.toISOString(),
+      nextReviewAt: s.nextReviewAt.toISOString(),
+    }));
+
+    const candidates = [
+      ...candidatesFromDueReviews(masteryStates, nowMs),
+      ...candidatesFromWeakSkills(masteryStates, nowMs, goalSkillIds),
+      ...candidatesFromDefaultActions(existingSkillIds, goalSkillIds),
+    ];
+
+    const plan = generateDailyPlan(candidates, timeBudget, nowMs, todayModules);
+
+    // ── Legacy tasks (backward compat, AC: 5) ──
+    type Task = { id: string; module: string; label: string; href: string; done: boolean; priority: "high" | "medium" | "low" };
+    const legacyTasks: Task[] = plan.items.map((item) => ({
+      id: item.id,
+      module: item.skillIds[0] ?? "general",
+      label: item.title,
+      href: item.actionUrl,
+      done: item.completed,
+      priority: item.priority,
+    }));
+
+    // Add error review if any (always show in legacy)
     if (errorCount > 0) {
-      tasks.push({
+      legacyTasks.unshift({
         id: "review-errors",
         module: "error-notebook",
         label: `Ôn ${Math.min(errorCount, 10)} lỗi sai`,
@@ -63,74 +120,13 @@ export async function GET() {
       });
     }
 
-    // Priority 2: Grammar quiz (most impactful for TOEIC/IELTS)
-    tasks.push({
-      id: "grammar-quiz",
-      module: "grammar-quiz",
-      label: examMode === "toeic" ? "10 câu Grammar Part 5" : "10 câu Grammar IELTS",
-      href: "/grammar-quiz",
-      done: todayModules.has("grammar_quiz"),
-      priority: "high",
-    });
-
-    // Priority 3: Listening practice
-    tasks.push({
-      id: "listening",
-      module: "listening",
-      label: "1 bài luyện nghe",
-      href: "/listening",
-      done: todayModules.has("listening_practice"),
-      priority: "medium",
-    });
-
-    // Priority 4: Flashcard review
-    tasks.push({
-      id: "flashcards",
-      module: "flashcards",
-      label: "Ôn tập flashcard",
-      href: "/flashcards",
-      done: todayModules.has("flashcard_review"),
-      priority: "medium",
-    });
-
-    // Priority 5: Daily challenge
-    tasks.push({
-      id: "daily-challenge",
-      module: "daily-challenge",
-      label: "Thử thách hàng ngày",
-      href: "/daily-challenge",
-      done: todayModules.has("daily_challenge"),
-      priority: "medium",
-    });
-
-    // Priority 6: Writing or Pronunciation (rotate)
-    const dayOfWeek = today.getDay();
-    if (dayOfWeek % 2 === 0) {
-      tasks.push({
-        id: "writing",
-        module: "writing-practice",
-        label: "1 bài luyện viết",
-        href: "/writing-practice",
-        done: todayModules.has("writing_practice"),
-        priority: "low",
-      });
-    } else {
-      tasks.push({
-        id: "pronunciation",
-        module: "pronunciation",
-        label: "5 câu luyện nói",
-        href: "/pronunciation",
-        done: todayModules.has("voice_practice"),
-        priority: "low",
-      });
-    }
-
     // Calculate level from XP
     const level = getLevel(totalXP);
-    const completedToday = tasks.filter((t) => t.done).length;
+    const completedToday = legacyTasks.filter((t) => t.done).length;
 
     return Response.json({
-      tasks,
+      plan,
+      tasks: legacyTasks,
       stats: {
         totalXP,
         level: level.name,
@@ -138,7 +134,7 @@ export async function GET() {
         nextLevelXP: level.nextXP,
         currentLevelXP: level.currentXP,
         completedToday,
-        totalTasks: tasks.length,
+        totalTasks: legacyTasks.length,
         unresolvedErrors: errorCount,
       },
     });

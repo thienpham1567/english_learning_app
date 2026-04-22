@@ -337,15 +337,22 @@ export default function HomePage() {
                     <Text style={{ fontSize: 16, color: item.done ? "var(--success)" : "var(--accent)" }}>
                       {item.icon}
                     </Text>
-                    <Text
-                      style={{
-                        flex: 1,
-                        fontWeight: 500,
-                        textDecoration: item.done ? "line-through" : "none",
-                      }}
-                    >
-                      {item.label}
-                    </Text>
+                    <Flex vertical style={{ flex: 1, gap: 2 }}>
+                      <Text
+                        style={{
+                          fontWeight: 500,
+                          textDecoration: item.done ? "line-through" : "none",
+                        }}
+                      >
+                        {item.label}
+                      </Text>
+                      {"reason" in item && item.reason && (
+                        <Text type="secondary" style={{ fontSize: "var(--text-xs)" }}>
+                          {item.reason as string}{" "}
+                          {"estimatedMinutes" in item && <span>· ~{item.estimatedMinutes as number} phút</span>}
+                        </Text>
+                      )}
+                    </Flex>
                     {item.done && <CheckCircleFilled style={{ color: "var(--success)" }} />}
                   </Flex>
                 </Card>

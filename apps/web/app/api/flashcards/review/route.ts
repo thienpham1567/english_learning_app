@@ -9,6 +9,7 @@ import { flashcardProgress } from "@repo/database";
 import { computeSm2, defaultSm2State } from "@/lib/flashcard/sm2";
 import { awardXP, XP_VALUES } from "@/lib/xp";
 import { logActivity } from "@/lib/activity-log";
+import { recordLearningEvent } from "@repo/modules";
 
 const ReviewBodySchema = z.object({
   query: z.string().min(1),
@@ -80,6 +81,20 @@ export async function POST(request: Request) {
   // Award XP for review (fire-and-forget)
   void awardXP(userId, XP_VALUES.FLASHCARD_REVIEW).catch(() => {});
   logActivity(userId, "flashcard_review", XP_VALUES.FLASHCARD_REVIEW, { query, quality });
+
+  // Emit learning event (fire-and-forget, AC: 3)
+  void recordLearningEvent({
+    userId,
+    sessionId: `flash-${userId}-${Date.now()}`,
+    moduleType: "flashcard",
+    contentId: query,
+    attemptId: `${query}-${Date.now()}`,
+    eventType: "exercise_submitted",
+    result: quality >= 3 ? "correct" : quality >= 1 ? "partial" : "incorrect",
+    score: quality * 20, // 0-5 → 0-100
+    durationMs: 0,
+    difficulty: "intermediate",
+  });
 
   // Due-card count on /api/dashboard changes on every review.
   revalidateTag("dashboard", { expire: 0 });

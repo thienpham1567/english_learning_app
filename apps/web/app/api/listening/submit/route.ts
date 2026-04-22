@@ -9,6 +9,7 @@ import { awardXP, XP_VALUES } from "@/lib/xp";
 import { logActivity } from "@/lib/activity-log";
 import { SubmitInputSchema } from "@/lib/listening/types";
 import { updateSkillProfile } from "@/lib/adaptive/difficulty";
+import { recordLearningEvent } from "@repo/modules";
 
 /**
  * POST /api/listening/submit
@@ -86,6 +87,20 @@ export async function POST(request: Request) {
       score,
       correctCount,
       totalQuestions: questions.length,
+    });
+
+    // Emit learning event (fire-and-forget, AC: 3)
+    void recordLearningEvent({
+      userId,
+      sessionId: `listen-${userId}-${Date.now()}`,
+      moduleType: "listening",
+      contentId: exerciseId,
+      attemptId: `${exerciseId}-${Date.now()}`,
+      eventType: "exercise_submitted",
+      result: score >= 80 ? "correct" : score >= 50 ? "partial" : "incorrect",
+      score,
+      durationMs: 0,
+      difficulty: exercise.level === "easy" ? "beginner" : exercise.level === "hard" ? "advanced" : "intermediate",
     });
 
     // Update listening skill profile (adaptive difficulty)

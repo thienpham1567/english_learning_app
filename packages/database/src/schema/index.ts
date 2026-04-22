@@ -486,3 +486,118 @@ export const readingSession = pgTable("reading_session", {
 ]);
 
 export type ReadingSessionRow = typeof readingSession.$inferSelect;
+
+/** Learning Event — normalized telemetry for personalization (Story 20.3) */
+export const learningEvent = pgTable("learning_event", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  sessionId: text("session_id").notNull(),
+  moduleType: text("module_type").notNull(),
+  contentId: text("content_id").notNull(),
+  skillIds: jsonb("skill_ids").$type<string[]>().notNull().default([]),
+  attemptId: text("attempt_id").notNull(),
+  eventType: text("event_type").notNull(),
+  result: text("result").notNull(),
+  score: real("score"),
+  durationMs: integer("duration_ms").notNull().default(0),
+  difficulty: text("difficulty").notNull(),
+  errorTags: jsonb("error_tags").$type<string[]>().notNull().default([]),
+  aiVersion: text("ai_version"),
+  rubricVersion: text("rubric_version"),
+  taxonomyVersion: text("taxonomy_version").notNull().default("1.0.0"),
+  idempotencyKey: text("idempotency_key").notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  index("learning_event_user_created_idx").on(table.userId, table.createdAt),
+  index("learning_event_user_module_idx").on(table.userId, table.moduleType),
+  uniqueIndex("learning_event_idempotency_idx").on(table.idempotencyKey),
+]);
+
+export type LearningEventRow = typeof learningEvent.$inferSelect;
+
+/** User Skill State — fine-grained per-skill mastery (Story 20.4) */
+export const userSkillState = pgTable("user_skill_state", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  skillId: text("skill_id").notNull(),
+  proficiency: real("proficiency").notNull().default(0),
+  confidence: real("confidence").notNull().default(0.5),
+  successStreak: integer("success_streak").notNull().default(0),
+  failureStreak: integer("failure_streak").notNull().default(0),
+  decayRate: real("decay_rate").notNull().default(0.05),
+  signalCount: integer("signal_count").notNull().default(0),
+  lastPracticedAt: timestamp("last_practiced_at", { withTimezone: true }).defaultNow().notNull(),
+  lastUpdatedAt: timestamp("last_updated_at", { withTimezone: true }).defaultNow().notNull(),
+  nextReviewAt: timestamp("next_review_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  uniqueIndex("user_skill_state_user_skill_idx").on(table.userId, table.skillId),
+  index("user_skill_state_next_review_idx").on(table.userId, table.nextReviewAt),
+]);
+
+export type UserSkillStateRow = typeof userSkillState.$inferSelect;
+
+/** Unified Review Task — cross-module review queue (Story 20.7) */
+export const reviewTask = pgTable("review_task", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  sourceType: text("source_type").notNull(),
+  sourceId: text("source_id").notNull(),
+  skillIds: text("skill_ids").array().notNull(),
+  priority: integer("priority").notNull().default(50),
+  dueAt: timestamp("due_at", { withTimezone: true }).defaultNow().notNull(),
+  estimatedMinutes: real("estimated_minutes").notNull().default(5),
+  reviewMode: text("review_mode").notNull().default("recall"),
+  status: text("status").notNull().default("pending"),
+  lastOutcome: text("last_outcome"),
+  attemptCount: integer("attempt_count").notNull().default(0),
+  nextIntervalDays: real("next_interval_days").notNull().default(0),
+  easeFactor: real("ease_factor").notNull().default(2.5),
+  suppressionReason: text("suppression_reason"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  uniqueIndex("review_task_user_source_idx").on(table.userId, table.sourceType, table.sourceId),
+  index("review_task_due_idx").on(table.userId, table.status, table.dueAt),
+]);
+
+export type ReviewTaskRow = typeof reviewTask.$inferSelect;
+
+/** AI Feedback Run — versioned AI feedback metadata (Story 20.10) */
+export const aiFeedbackRun = pgTable("ai_feedback_run", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  templateId: text("template_id").notNull(),
+  templateVersion: text("template_version").notNull(),
+  rubricVersion: text("rubric_version").notNull(),
+  modelName: text("model_name").notNull(),
+  promptHash: text("prompt_hash").notNull(),
+  inputSnapshot: jsonb("input_snapshot").$type<Record<string, unknown>>().notNull(),
+  structuredOutput: jsonb("structured_output").$type<Record<string, unknown>>().notNull(),
+  latencyMs: integer("latency_ms").notNull(),
+  costEstimate: real("cost_estimate"),
+  safetyFlags: jsonb("safety_flags").$type<string[]>().notNull().default([]),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  index("ai_feedback_run_user_created_idx").on(table.userId, table.createdAt),
+  index("ai_feedback_run_template_version_idx").on(table.templateId, table.templateVersion),
+]);
+
+export type AiFeedbackRunRow = typeof aiFeedbackRun.$inferSelect;
+
+/** Onboarding Baseline — learner goal, time budget, placement results (Story 20.12) */
+export const onboardingBaseline = pgTable("onboarding_baseline", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  primaryGoal: text("primary_goal").notNull(),
+  dailyTimeBudgetMinutes: text("daily_time_budget_minutes").notNull().default("10"),
+  selfReportedWeakSkill: text("self_reported_weak_skill"),
+  preferredLearningStyle: text("preferred_learning_style").notNull().default("mixed"),
+  baselineScores: jsonb("baseline_scores").$type<Array<{ skillId: string; score: number; confidence: number }>>().notNull().default([]),
+  placementSkipped: boolean("placement_skipped").notNull().default(false),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  uniqueIndex("onboarding_baseline_user_idx").on(table.userId),
+]);
+
+export type OnboardingBaselineRow = typeof onboardingBaseline.$inferSelect;

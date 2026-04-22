@@ -1,5 +1,5 @@
 currentSprint: R4
-last_updated: "2026-04-21"
+last_updated: "2026-04-22"
 
 storySequence:
   - "18.1.1"
@@ -51,6 +51,18 @@ storySequence:
   - "19.4.2"
   - "19.4.3"
   - "19.4.4"
+  - "20.1"
+  - "20.2"
+  - "20.3"
+  - "20.4"
+  - "20.5"
+  - "20.6"
+  - "20.7"
+  - "20.8"
+  - "20.9"
+  - "20.10"
+  - "20.11"
+  - "20.12"
 sprints:
   R1:
     name: "Monorepo Scaffolding"
@@ -184,3 +196,76 @@ sprints:
         title: "Auto Cloze Test from Read Passage"
         status: review
         depends_on: "19.4.1"
+  R13:
+    name: "Epic 20 - Learning Signal Foundation"
+    status: not_started
+    stories:
+      "20.1":
+        title: "Define Learning Event Contract"
+        status: done
+        estimate: "4h"
+      "20.2":
+        title: "Establish Unified Skill Taxonomy"
+        status: done
+        estimate: "4h"
+      "20.3":
+        title: "Persist Learning Events from High-Value Flows"
+        status: done
+        estimate: "8h"
+        depends_on: "20.1, 20.2"
+  R14:
+    name: "Epic 20 - Mastery and Daily Decisioning"
+    status: not_started
+    stories:
+      "20.4":
+        title: "Build User Skill Mastery State"
+        status: done
+        estimate: "8h"
+        depends_on: "20.1, 20.2, 20.3"
+      "20.5":
+        title: "Implement Next-Best-Action Scoring"
+        status: done
+        estimate: "6h"
+        depends_on: "20.4"
+      "20.6":
+        title: "Generate Adaptive Daily Study Plan"
+        status: done
+        estimate: "6h"
+        depends_on: "20.5"
+  R15:
+    name: "Epic 20 - Unified Review Loop"
+    status: not_started
+    stories:
+      "20.7":
+        title: "Define Unified Review Task Model"
+        status: done
+        estimate: "6h"
+        depends_on: "20.2"
+      "20.8":
+        title: "Adapt Existing Producers into Review Queue"
+        status: done
+        estimate: "8h"
+        depends_on: "20.7"
+      "20.9":
+        title: "Close the Review Outcome Loop"
+        status: review
+        estimate: "8h"
+        depends_on: "20.4, 20.8"
+  R16:
+    name: "Epic 20 - Feedback Quality and Baseline Personalization"
+    status: not_started
+    stories:
+      "20.10":
+        title: "Version AI Feedback Templates and Rubrics"
+        status: done
+        estimate: "6h"
+      "20.11":
+        title: "Add Structured Feedback Quality Gates"
+        status: done
+        estimate: "8h"
+        depends_on: "20.10"
+      "20.12":
+        title: "Create Placement and Onboarding Baseline"
+        status: done
+        estimate: "8h"
+        depends_on: "20.4, 20.6"
