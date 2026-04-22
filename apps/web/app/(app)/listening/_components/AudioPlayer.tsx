@@ -61,6 +61,7 @@ export function AudioPlayer({
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
+  const [audioError, setAudioError] = useState<string | null>(null);
 
   // A-B loop state (AC2)
   const [markerA, setMarkerA] = useState<number | null>(null);
@@ -97,6 +98,20 @@ export function AudioPlayer({
     if (audioRef.current) {
       setDuration(audioRef.current.duration);
       setIsLoading(false);
+      setAudioError(null);
+    }
+  }, []);
+
+  const handleError = useCallback(() => {
+    setIsLoading(false);
+    setAudioError("Không thể tải audio. Nhấn Nghe lại để thử lại.");
+  }, []);
+
+  const handleStalled = useCallback(() => {
+    // If audio stalls and we still have no duration, treat as error
+    if (audioRef.current && !audioRef.current.duration) {
+      setIsLoading(false);
+      setAudioError("Tải audio bị gián đoạn. Nhấn Nghe lại để thử lại.");
     }
   }, []);
 
@@ -112,6 +127,7 @@ export function AudioPlayer({
 
   const handleCanPlay = useCallback(() => {
     setIsLoading(false);
+    setAudioError(null);
   }, []);
 
   const togglePlay = useCallback(() => {
@@ -135,6 +151,9 @@ export function AudioPlayer({
 
   const handleReplay = useCallback(() => {
     if (onReplay() && audioRef.current) {
+      setAudioError(null);
+      setIsLoading(true);
+      audioRef.current.load(); // re-fetch audio in case of previous error
       audioRef.current.currentTime = 0;
       audioRef.current.play().catch(() => {});
       setIsPlaying(true);
@@ -262,6 +281,18 @@ export function AudioPlayer({
     setIsLoading(true);
   }, [audioUrl, clearMarkers]);
 
+  // ── Timeout fallback: if audio doesn't load within 30s, show error ──
+  useEffect(() => {
+    if (!isLoading) return;
+    const timer = setTimeout(() => {
+      if (isLoading && !audioRef.current?.duration) {
+        setIsLoading(false);
+        setAudioError("Tải audio quá lâu. Nhấn Nghe lại để thử lại.");
+      }
+    }, 30_000);
+    return () => clearTimeout(timer);
+  }, [isLoading, audioUrl]);
+
   const progress = duration > 0 ? (currentTime / duration) * 100 : 0;
   const markerAPos = duration > 0 && markerA != null ? (markerA / duration) * 100 : null;
   const markerBPos = duration > 0 && markerB != null ? (markerB / duration) * 100 : null;
@@ -293,8 +324,27 @@ export function AudioPlayer({
         onLoadedMetadata={handleLoadedMetadata}
         onEnded={handleEnded}
         onCanPlay={handleCanPlay}
+        onError={handleError}
+        onStalled={handleStalled}
         preload="auto"
       />
+
+      {/* Audio error message */}
+      {audioError && (
+        <div
+          style={{
+            padding: "8px 14px",
+            borderRadius: "var(--radius-sm)",
+            background: "#ff4d4f12",
+            border: "1px solid #ff4d4f30",
+            color: "#ff4d4f",
+            fontSize: 12,
+            textAlign: "center",
+          }}
+        >
+          ⚠️ {audioError}
+        </div>
+      )}
 
       {/* Play button + seek bar */}
       <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
