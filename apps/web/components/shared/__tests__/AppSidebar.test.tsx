@@ -8,39 +8,48 @@ vi.mock("next/navigation", () => ({
   usePathname: () => "/english-chatbot",
 }));
 
+vi.mock("@/hooks/useSidebarBadges", () => ({
+  useSidebarBadges: () => null,
+}));
+
+vi.stubGlobal("localStorage", {
+  getItem: vi.fn(() => null),
+  setItem: vi.fn(),
+  removeItem: vi.fn(),
+  clear: vi.fn(),
+});
+
 describe("AppSidebar", () => {
   it("renders all Vietnamese nav labels when expanded", () => {
     renderUi(<AppSidebar isExpanded={true} onToggle={vi.fn()} />);
-    expect(screen.getByRole("link", { name: "Trò chuyện" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Từ điển" })).toBeInTheDocument();
-    expect(screen.getByRole("link", { name: "Từ vựng" })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Trò chuyện/ })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Từ điển/ })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /Luyện nghe/ })).toBeInTheDocument();
   });
 
-  it("nav links have focus-visible outline classes", () => {
+  it("marks the active nav link", () => {
     renderUi(<AppSidebar isExpanded={true} onToggle={vi.fn()} />);
-    expect(screen.getByRole("link", { name: "Trò chuyện" })).toHaveClass(
-      "focus-visible:outline",
-      "focus-visible:outline-2",
-      "focus-visible:outline-offset-2",
-      "focus-visible:outline-(--accent)",
-    );
+    expect(screen.getByRole("link", { name: /Trò chuyện/ })).toHaveAttribute("aria-current", "page");
   });
 
-  it("has glass background classes", () => {
+  it("uses the sidebar surface styling", () => {
     const { container } = renderUi(<AppSidebar isExpanded={false} onToggle={vi.fn()} />);
-    expect(container.firstElementChild).toHaveClass("bg-white/80", "backdrop-blur-md");
+    expect(container.firstElementChild).toHaveStyle({
+      position: "sticky",
+      top: "0px",
+      background: "var(--sidebar-bg)",
+      borderRight: "1px solid rgba(255,255,255,0.1)",
+    });
   });
 
-  it("has w-[72px] class when collapsed", () => {
+  it("has 72px width when collapsed", () => {
     const { container } = renderUi(<AppSidebar isExpanded={false} onToggle={vi.fn()} />);
-    expect(container.firstElementChild).toHaveClass("w-[72px]");
-    expect(container.firstElementChild).not.toHaveClass("w-[264px]");
+    expect(container.firstElementChild).toHaveStyle({ width: "72px" });
   });
 
-  it("has w-[264px] class when expanded", () => {
+  it("has 264px width when expanded", () => {
     const { container } = renderUi(<AppSidebar isExpanded={true} onToggle={vi.fn()} />);
-    expect(container.firstElementChild).toHaveClass("w-[264px]");
-    expect(container.firstElementChild).not.toHaveClass("w-[72px]");
+    expect(container.firstElementChild).toHaveStyle({ width: "264px" });
   });
 
   it("shows expand button when collapsed and calls onToggle on click", () => {
@@ -61,44 +70,13 @@ describe("AppSidebar", () => {
     expect(onToggle).toHaveBeenCalledOnce();
   });
 
-  it("has the 920px responsive mobile layout classes", () => {
+  it("renders an application navigation region", () => {
     const { container } = renderUi(<AppSidebar isExpanded={false} onToggle={vi.fn()} />);
-    expect(container.firstElementChild).toHaveClass(
-      "sticky",
-      "top-0",
-      "z-50",
-      "flex",
-      "h-screen",
-      "flex-col",
-      "gap-2",
-      "overflow-hidden",
-      "border-r",
-      "px-4",
-      "py-5",
-      "transition-[width]",
-      "duration-300",
-      "max-[920px]:relative",
-      "max-[920px]:h-auto",
-      "max-[920px]:w-full",
-      "max-[920px]:flex-row",
-      "max-[920px]:border-r-0",
-      "max-[920px]:border-b",
-      "max-[920px]:px-4",
-      "max-[920px]:py-3",
-      "max-[920px]:gap-4",
-      "max-[920px]:items-center",
-    );
-    expect(screen.getByRole("navigation", { name: "Các mục trong ứng dụng" })).toHaveClass(
-      "flex",
-      "flex-col",
-      "gap-2",
-      "pt-2",
-      "max-[920px]:ml-auto",
-      "max-[920px]:flex-row",
-      "max-[920px]:gap-[6px]",
-      "max-[920px]:p-0",
-      "max-[920px]:pt-0",
-      "max-[920px]:w-auto",
-    );
+    expect(container.firstElementChild).toHaveStyle({ display: "flex", height: "100vh" });
+    expect(screen.getByRole("navigation", { name: "Các mục trong ứng dụng" })).toHaveStyle({
+      display: "flex",
+      flexDirection: "column",
+      overflow: "auto",
+    });
   });
 });

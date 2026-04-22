@@ -5,7 +5,7 @@ import { BottomTabBar } from "@/components/shared/BottomTabBar";
 import { renderUi } from "@/test/render";
 
 const push = vi.fn();
-let pathname = "/home";
+const pathname = "/home";
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push }),
