@@ -1,5 +1,7 @@
 export { ModuleHeader } from "./ModuleHeader";
+export { ModuleHero } from "./ModuleHero";
 export { PageFrame } from "./PageFrame";
+export { PageHeader } from "./PageHeader";
 export { ProgressSegments } from "./ProgressSegments";
 export { EmptyStateCard } from "./EmptyStateCard";
 export { CelebrationOverlay } from "./CelebrationOverlay";
