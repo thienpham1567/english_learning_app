@@ -21,25 +21,4 @@ export type {
 } from "./dashboard";
 
 // Learning
-export {
-	LearningEventSchema,
-	LearningEventType,
-	LearningModuleType,
-	LearningResult,
-	LearningDifficulty,
-	SkillSchema,
-	SubskillSchema,
-	SkillTaxonomyVersionSchema,
-	ModuleSkillMappingSchema,
-} from "./learning";
-export type {
-	LearningEvent,
-	LearningEventTypeValue,
-	LearningModuleTypeValue,
-	LearningResultValue,
-	LearningDifficultyValue,
-	Skill,
-	Subskill,
-	SkillTaxonomyVersion,
-	ModuleSkillMapping,
-} from "./learning";
+export * from "./learning";

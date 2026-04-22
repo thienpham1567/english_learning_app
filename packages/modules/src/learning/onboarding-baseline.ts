@@ -4,7 +4,7 @@ import type {
 	LearningStyleValue,
 	BaselineSkillScore,
 	OnboardingBaseline,
-} from "@repo/contracts/src/learning/onboarding-baseline";
+} from "@repo/contracts";
 import type { UserSkillState } from "@repo/contracts";
 import { defaultSkillState } from "./mastery-engine";
 

@@ -5,7 +5,7 @@ import {
 	getFeedbackTemplate,
 	wrapFeedbackCall,
 } from "../../src/learning/ai-feedback-wrapper";
-import { FeedbackRunSchema, FeedbackRequestSchema } from "@repo/contracts/src/learning/ai-feedback";
+import { FeedbackRunSchema, FeedbackRequestSchema } from "@repo/contracts";
 
 // ── hashPrompt (AC: 4) ─────────────────────────────────────────────────────
 

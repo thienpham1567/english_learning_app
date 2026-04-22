@@ -195,8 +195,13 @@ export function completeReview(
 			: defaultSkillState(input.userId, skillId);
 
 		const { output } = computeMasteryUpdate(currentState, {
+			userId: input.userId,
+			skillId,
 			result: learningEvent.result,
+			score: null,
 			difficulty: learningEvent.difficulty,
+			durationMs: input.durationMs,
+			errorTags: learningEvent.errorTags,
 			hintCount: 0,
 		});
 

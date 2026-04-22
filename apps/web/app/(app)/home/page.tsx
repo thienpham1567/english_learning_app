@@ -346,12 +346,12 @@ export default function HomePage() {
                       >
                         {item.label}
                       </Text>
-                      {"reason" in item && item.reason && (
+                      {"reason" in item && item.reason ? (
                         <Text type="secondary" style={{ fontSize: "var(--text-xs)" }}>
-                          {item.reason as string}{" "}
-                          {"estimatedMinutes" in item && <span>· ~{item.estimatedMinutes as number} phút</span>}
+                          {String(item.reason)}{" "}
+                          {"estimatedMinutes" in item ? <span>· ~{String(item.estimatedMinutes)} phút</span> : null}
                         </Text>
-                      )}
+                      ) : null}
                     </Flex>
                     {item.done && <CheckCircleFilled style={{ color: "var(--success)" }} />}
                   </Flex>

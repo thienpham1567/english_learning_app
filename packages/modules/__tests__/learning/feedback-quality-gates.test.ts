@@ -5,7 +5,7 @@ import {
 	recordFeedbackAction,
 	isMeaningfulFeedbackAction,
 } from "../../src/learning/feedback-quality-gates";
-import type { StructuredFeedback, FeedbackIssue } from "@repo/contracts/src/learning/structured-feedback";
+import type { StructuredFeedback, FeedbackIssue } from "@repo/contracts";
 
 // ── Helper: valid structured feedback ───────────────────────────────────────
 

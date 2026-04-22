@@ -1,9 +1,9 @@
-import { StructuredFeedbackSchema } from "@repo/contracts/src/learning/structured-feedback";
+import { StructuredFeedbackSchema } from "@repo/contracts";
 import type {
 	StructuredFeedback,
 	FeedbackIssue,
 	FeedbackActionTypeValue,
-} from "@repo/contracts/src/learning/structured-feedback";
+} from "@repo/contracts";
 import type { ReviewTaskProducerOutput } from "./review-producers";
 import { produceReviewTask } from "./review-producers";
 
