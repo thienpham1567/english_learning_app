@@ -31,7 +31,7 @@ describe("ModuleHeader", () => {
 	});
 
 	it("renders without subtitle", () => {
-		const { container } = render(
+		render(
 			<ModuleHeader
 				icon={<span>📚</span>}
 				gradient="linear-gradient(135deg, #9AB17A, #7a9660)"
@@ -39,10 +39,8 @@ describe("ModuleHeader", () => {
 			/>,
 		);
 
-		expect(screen.getByText("Flashcards")).toBeDefined();
-		// Should only have 1 child in the text column (title, no subtitle)
-		const textColumn = container.querySelectorAll("[style*='flex: 1'] > div");
-		expect(textColumn.length).toBe(1);
+		expect(screen.getByRole("heading", { name: "Flashcards" })).toBeDefined();
+		expect(screen.queryByText("Improve your IELTS score")).toBeNull();
 	});
 
 	it("renders action slot when provided", () => {
@@ -60,7 +58,7 @@ describe("ModuleHeader", () => {
 	});
 
 	it("renders without action slot", () => {
-		const { container } = render(
+		render(
 			<ModuleHeader
 				icon={<span>📖</span>}
 				gradient="linear-gradient(135deg, #9AB17A, #7a9660)"

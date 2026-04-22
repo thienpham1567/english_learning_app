@@ -1,4 +1,4 @@
-import { fireEvent, screen } from "@testing-library/react";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { UserMenu } from "@/components/shared/UserMenu";
@@ -31,56 +31,37 @@ describe("UserMenu", () => {
 
     fireEvent.click(screen.getByRole("button", { name: /cô lành/i }));
 
-    expect(screen.getByRole("button", { name: "Đăng xuất" })).toBeInTheDocument();
-    expect(screen.getByRole("button", { name: "Đăng xuất" }).parentElement).toHaveClass("z-[200]");
+    expect(screen.getByRole("menuitem", { name: /Đăng xuất/ })).toBeInTheDocument();
   });
 
-  it("keeps the user name hidden through the 920px shell breakpoint", () => {
+  it("renders user identity in the compact trigger", () => {
     renderUi(<UserMenu user={{ name: "Cô Lành", image: null }} />);
 
-    expect(screen.getByText("Cô Lành")).toHaveClass(
-      "text-sm",
-      "font-medium",
-      "text-(--ink)",
-      "max-[920px]:hidden",
-    );
+    expect(screen.getByText("CL")).toBeInTheDocument();
+    expect(screen.getByText("Cô Lành")).toBeInTheDocument();
   });
 
   it("keeps the trigger compact inside the shell header", () => {
     renderUi(<UserMenu user={{ name: "Cô Lành", image: null }} />);
 
-    expect(screen.getByRole("button", { name: /cô lành/i })).toHaveClass(
-      "flex",
-      "items-center",
-      "gap-2",
-      "rounded-full",
-      "border",
-      "border-(--border)",
-      "bg-(--surface)",
-      "pl-[5px]",
-      "pr-[10px]",
-      "py-[5px]",
-      "text-left",
-      "shadow-(--shadow-sm)",
-      "focus-visible:outline",
-      "focus-visible:outline-2",
-      "focus-visible:outline-offset-2",
-      "focus-visible:outline-(--accent)",
-    );
-
-    expect(screen.getByText("CL")).toHaveClass("size-7", "rounded-full", "grid");
+    expect(screen.getByRole("button", { name: /cô lành/i })).toHaveStyle({
+      display: "flex",
+      alignItems: "center",
+      gap: "8px",
+      borderRadius: "999px",
+      height: "38px",
+      paddingLeft: "5px",
+      paddingRight: "12px",
+    });
   });
 
-  it("keeps a visible focus ring on menu actions", () => {
+  it("signs out and redirects to sign-in", async () => {
     renderUi(<UserMenu user={{ name: "Cô Lành", image: null }} />);
 
     fireEvent.click(screen.getByRole("button", { name: /cô lành/i }));
+    fireEvent.click(screen.getByRole("menuitem", { name: /Đăng xuất/ }));
 
-    expect(screen.getByRole("button", { name: "Đăng xuất" })).toHaveClass(
-      "focus-visible:outline",
-      "focus-visible:outline-2",
-      "focus-visible:outline-offset-2",
-      "focus-visible:outline-(--accent)",
-    );
+    await waitFor(() => expect(signOut).toHaveBeenCalledOnce());
+    expect(push).toHaveBeenCalledWith("/sign-in");
   });
 });

@@ -48,54 +48,33 @@ describe("AppShell", () => {
       </AppShell>,
     );
 
-    expect(container.firstElementChild).toHaveClass(
-      "grid",
-      "h-screen",
-      "max-h-screen",
-      "min-h-screen",
-      "overflow-y-auto",
-      "grid-cols-[72px_minmax(0,1fr)]",
-      "grid-rows-[minmax(0,1fr)]",
-      "max-[920px]:h-dvh",
-      "max-[920px]:max-h-dvh",
-      "max-[920px]:min-h-dvh",
-      "max-[920px]:grid-cols-1",
-      "max-[920px]:grid-rows-[auto_minmax(0,1fr)]",
-    );
+    expect(container.firstElementChild).toHaveStyle({
+      display: "flex",
+      minHeight: "100vh",
+      maxHeight: "100vh",
+      overflow: "hidden",
+    });
     expect(screen.getByTestId("sidebar")).toBeInTheDocument();
     expect(screen.getByTestId("user-menu")).toHaveTextContent("Cô Lành");
     expect(screen.getByTestId("breadcrumb")).toBeInTheDocument();
-    expect(container.firstElementChild?.firstElementChild?.nextElementSibling).toHaveClass(
-      "flex",
-      "min-w-0",
-      "min-h-0",
-      "flex-col",
-    );
-    expect(screen.getByRole("banner")).toHaveClass(
-      "relative",
-      "z-120",
-      "overflow-visible",
-      "flex",
-      "h-13",
-      "shrink-0",
-      "items-center",
-      "justify-between",
-      "border-b",
-      "border-white/30",
-      "bg-white/70",
-      "backdrop-blur-xl",
-      "px-5",
-      "max-[920px]:h-12",
-      "max-[920px]:px-4",
-    );
-    expect(screen.getByRole("main")).toHaveClass(
-      "flex",
-      "min-h-0",
-      "flex-1",
-      "flex-col",
-      "overflow-y-auto",
-    );
-    expect(screen.getByRole("main")).not.toHaveClass("px-4", "py-6", "md:px-8", "md:py-8");
+    expect(screen.getByRole("banner").parentElement).toHaveStyle({
+      display: "flex",
+      flex: "1 1 0%",
+    });
+    const headerStyle = screen.getByRole("banner").getAttribute("style") ?? "";
+    expect(headerStyle).toContain("display: flex");
+    expect(headerStyle).toContain("align-items: center");
+    expect(headerStyle).toContain("justify-content: space-between");
+    expect(headerStyle).toContain("height: 52px");
+    expect(headerStyle).toContain("border-bottom: 1px solid var(--border)");
+    expect(headerStyle).toContain("background: var(--surface)");
+
+    const mainStyle = screen.getByRole("main").getAttribute("style") ?? "";
+    expect(mainStyle).toContain("display: flex");
+    expect(mainStyle).toContain("flex-direction: column");
+    expect(mainStyle).toContain("overflow: hidden");
+    expect(mainStyle).toContain("padding: 24px");
+    expect(mainStyle).toContain("min-height: 0");
     expect(screen.getByRole("main")).toHaveTextContent("Trang nội dung");
   });
 });

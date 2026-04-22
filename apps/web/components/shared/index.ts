@@ -1,5 +1,13 @@
 export { ModuleHeader } from "./ModuleHeader";
+export { FilterBar } from "./FilterBar";
+export { ModuleHero } from "./ModuleHero";
+export { PageFrame } from "./PageFrame";
+export { PageHeader } from "./PageHeader";
 export { ProgressSegments } from "./ProgressSegments";
+export { QuizOption } from "./QuizOption";
+export { ResultSummary } from "./ResultSummary";
+export { SessionShell } from "./SessionShell";
+export { StateBlock } from "./StateBlock";
 export { EmptyStateCard } from "./EmptyStateCard";
 export { CelebrationOverlay } from "./CelebrationOverlay";
 export type { CelebrationTier } from "./CelebrationOverlay";
