@@ -1,4 +1,5 @@
 export { ModuleHeader } from "./ModuleHeader";
+export { FilterBar } from "./FilterBar";
 export { ModuleHero } from "./ModuleHero";
 export { PageFrame } from "./PageFrame";
 export { PageHeader } from "./PageHeader";
