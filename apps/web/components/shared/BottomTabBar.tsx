@@ -105,13 +105,17 @@ export function BottomTabBar() {
       {activeHub !== null && (
         <>
           {/* Backdrop */}
-          <div
+          <button
+            type="button"
+            aria-label="Đóng menu"
             onClick={() => setActiveHub(null)}
             style={{
               position: "fixed",
               inset: 0,
+              border: "none",
               background: "rgba(0,0,0,0.4)",
-              zIndex: 998,
+              padding: 0,
+              zIndex: 20,
               animation: "fadeIn var(--duration-fast) ease",
             }}
           />
@@ -123,7 +127,7 @@ export function BottomTabBar() {
               bottom: 64,
               left: "var(--space-4)",
               right: "var(--space-4)",
-              zIndex: 999,
+              zIndex: 21,
               display: "grid",
               gridTemplateColumns: "1fr 1fr",
               gap: "var(--space-3)",
@@ -163,9 +167,9 @@ export function BottomTabBar() {
           height: 56,
           background: "var(--surface)",
           borderTop: "1px solid var(--border)",
-          backdropFilter: "blur(16px)",
-          WebkitBackdropFilter: "blur(16px)",
-          zIndex: 1000,
+          backdropFilter: "blur(8px)",
+          WebkitBackdropFilter: "blur(8px)",
+          zIndex: 22,
           display: "flex",
           alignItems: "center",
           justifyContent: "space-around",
@@ -199,7 +203,7 @@ export function BottomTabBar() {
               </Flex>
               <Text
                 style={{
-                  fontSize: 10,
+                  fontSize: 12,
                   fontWeight: isActive ? 600 : 400,
                   color: isActive ? "var(--accent)" : "var(--text-muted)",
                   lineHeight: 1,
