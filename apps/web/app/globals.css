@@ -840,3 +840,16 @@ textarea.ant-input::placeholder {
   }
 }
 
+/* ── Accessibility: Focus-visible rings ── */
+/* Restore keyboard focus visibility even when inline styles set outline:none */
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 2px;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--accent) !important;
+  outline-offset: 2px;
+}

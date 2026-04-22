@@ -70,6 +70,7 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
 
       {/* English input */}
       <label
+        htmlFor="translation-input"
         style={{
           display: "block",
           fontSize: 11,
@@ -83,6 +84,7 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
         🇬🇧 Bản dịch tiếng Anh
       </label>
       <textarea
+        id="translation-input"
         rows={3}
         style={{
           width: "100%",

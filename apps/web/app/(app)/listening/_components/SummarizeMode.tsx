@@ -219,10 +219,11 @@ export default function SummarizeMode({ examMode }: Props) {
           {/* Summary textarea — shown after first play or via button */}
           {state === "writing" && (
             <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-              <label style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>
+              <label htmlFor="summarize-textarea" style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>
                 Tóm tắt đoạn văn bằng lời của bạn (3–5 câu):
               </label>
               <textarea
+                id="summarize-textarea"
                 ref={textareaRef}
                 value={summaryText}
                 onChange={(e) => setSummaryText(e.target.value)}

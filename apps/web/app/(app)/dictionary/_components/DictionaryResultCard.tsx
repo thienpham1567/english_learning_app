@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Tag, Tooltip } from "antd";
 import {
   BookOutlined,
@@ -475,10 +475,6 @@ export function DictionaryResultCard({
   const firstSenseId = vocabulary?.senses[0]?.id ?? "";
   const [activeKey, setActiveKey] = useState(firstSenseId);
   const [speakingLocale, setSpeakingLocale] = useState<string | null>(null);
-
-  useEffect(() => {
-    setActiveKey(firstSenseId);
-  }, [firstSenseId]);
 
   async function speak(locale: "en-US" | "en-GB") {
     if (!vocabulary) return;

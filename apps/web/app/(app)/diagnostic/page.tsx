@@ -97,7 +97,7 @@ export default function DiagnosticPage() {
     setAnswers(newAnswers);
 
     if (currentIndex < questions.length - 1) {
-      setCurrentIndex(currentIndex + 1);
+      setCurrentIndex(prev => prev + 1);
       setSelectedOption(null);
       setQuestionStartTime(Date.now());
     } else {

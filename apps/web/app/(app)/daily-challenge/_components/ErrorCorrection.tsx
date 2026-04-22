@@ -70,6 +70,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
 
       {/* Correction input */}
       <label
+        htmlFor="error-correction-input"
         style={{
           display: "block",
           fontSize: 11,
@@ -83,6 +84,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
         ✏️ Viết từ đúng thay thế
       </label>
       <input
+        id="error-correction-input"
         style={{
           width: "100%",
           borderRadius: 12,

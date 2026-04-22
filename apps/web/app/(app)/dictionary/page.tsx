@@ -119,6 +119,7 @@ export default function DictionaryPage() {
         <div className="dictionary-grid">
           <div>
             <DictionarySearchPanel
+              key={q}
               initialValue={q}
               onSubmit={handleSubmit}
               isLoading={isLoading}
@@ -128,6 +129,7 @@ export default function DictionaryPage() {
           </div>
           <div>
             <DictionaryResultCard
+              key={result?.headword ?? "empty"}
               vocabulary={result}
               hasSearched={hasSearched}
               isLoading={isLoading}

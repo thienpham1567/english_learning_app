@@ -14,6 +14,8 @@ type DictionarySearchPanelProps = {
   onSelectRecent?: (word: string) => void;
 };
 
+const EMPTY_WORDS: string[] = [];
+
 const HELPER_TIPS = [
   "Bạn có thể nhập từ đơn, phrasal verb hoặc idiom.",
   "Nhấn Enter để tra cứu nhanh mà không cần bấm nút.",
@@ -40,7 +42,7 @@ export function DictionarySearchPanel({
   initialValue,
   onSubmit,
   isLoading,
-  recentWords = [],
+  recentWords = EMPTY_WORDS,
   onSelectRecent,
 }: DictionarySearchPanelProps) {
   const [draft, setDraft] = useState(initialValue);
@@ -49,9 +51,6 @@ export function DictionarySearchPanel({
   const [showTips, setShowTips] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    setDraft(initialValue);
-  }, [initialValue]);
 
   useEffect(() => {
     if (draft.length < 2) {

@@ -41,7 +41,7 @@ export function CompletedState({ challenge, streak, badges }: {
   const answers = (challenge.answers ?? []) as ExerciseAnswer[];
   const emoji = (challenge.score ?? 0) >= 4 ? "🎉" : "👍";
 
-  const [countdown, setCountdown] = useState(msUntilVnMidnight());
+  const [countdown, setCountdown] = useState(() => msUntilVnMidnight());
 
   useEffect(() => {
     const id = setInterval(() => setCountdown(msUntilVnMidnight()), 1000);

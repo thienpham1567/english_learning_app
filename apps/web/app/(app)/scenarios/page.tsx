@@ -312,10 +312,10 @@ function VocabStep({ content, onComplete, submitting }: { content: VocabContent;
       </Card>
       <Flex gap={12}>
         {current > 0 && (
-          <Button onClick={() => { setCurrent(current - 1); setFlipped(false); }}>← Trước</Button>
+          <Button onClick={() => { setCurrent(prev => prev - 1); setFlipped(false); }}>← Trước</Button>
         )}
         {current < content.words.length - 1 ? (
-          <Button type="primary" onClick={() => { setCurrent(current + 1); setFlipped(false); }}>Tiếp →</Button>
+          <Button type="primary" onClick={() => { setCurrent(prev => prev + 1); setFlipped(false); }}>Tiếp →</Button>
         ) : (
           <Button type="primary" onClick={onComplete} loading={submitting}>Hoàn thành ✓</Button>
         )}
@@ -352,7 +352,7 @@ function QuizStep({ content, onComplete, submitting }: { content: ListeningConte
       </Flex>
       {answered && (
         qIdx < content.questions.length - 1 ? (
-          <Button type="primary" onClick={() => { setQIdx(qIdx + 1); setSelected(null); setAnswered(false); }}>Câu tiếp →</Button>
+          <Button type="primary" onClick={() => { setQIdx(prev => prev + 1); setSelected(null); setAnswered(false); }}>Câu tiếp →</Button>
         ) : (
           <Button type="primary" onClick={onComplete} loading={submitting}>Hoàn thành ✓</Button>
         )
@@ -389,7 +389,7 @@ function ReadingStep({ content, onComplete, submitting }: { content: ReadingCont
       </Flex>
       {answered && (
         qIdx < content.questions.length - 1 ? (
-          <Button type="primary" onClick={() => { setQIdx(qIdx + 1); setSelected(null); setAnswered(false); }}>Câu tiếp →</Button>
+          <Button type="primary" onClick={() => { setQIdx(prev => prev + 1); setSelected(null); setAnswered(false); }}>Câu tiếp →</Button>
         ) : (
           <Button type="primary" onClick={onComplete} loading={submitting}>Hoàn thành ✓</Button>
         )
