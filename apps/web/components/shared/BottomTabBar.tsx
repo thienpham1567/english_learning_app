@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { type ReactNode, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Flex, Typography, Card } from "antd";
 import {
@@ -15,6 +15,8 @@ import {
   BulbOutlined,
   EditOutlined,
   FireOutlined,
+  SoundOutlined,
+  AudioOutlined,
 } from "@ant-design/icons";
 
 const { Text } = Typography;
@@ -22,24 +24,34 @@ const { Text } = Typography;
 interface TabItem {
   key: string;
   label: string;
-  icon: React.ReactNode;
-  activeIcon: React.ReactNode;
+  icon: ReactNode;
+  activeIcon: ReactNode;
   href?: string;
-  action?: "learn-hub";
+  action?: "learn-hub" | "review-hub";
 }
 
 const TABS: TabItem[] = [
   { key: "home", label: "Trang chủ", icon: <HomeOutlined />, activeIcon: <HomeFilled />, href: "/home" },
   { key: "chat", label: "Chat", icon: <MessageOutlined />, activeIcon: <MessageFilled />, href: "/english-chatbot" },
   { key: "learn", label: "Học", icon: <ReadOutlined />, activeIcon: <BookFilled />, action: "learn-hub" },
+  { key: "review", label: "Ôn", icon: <BulbOutlined />, activeIcon: <BulbOutlined />, action: "review-hub" },
   { key: "profile", label: "Từ vựng", icon: <UserOutlined />, activeIcon: <UserOutlined />, href: "/my-vocabulary" },
 ];
 
 const LEARN_HUB_ITEMS = [
-  { label: "Ôn tập", icon: <AppstoreOutlined />, href: "/flashcards" },
-  { label: "Ngữ pháp", icon: <BulbOutlined />, href: "/grammar-quiz" },
+  { label: "Luyện nghe", icon: <SoundOutlined />, href: "/listening" },
+  { label: "Luyện đọc", icon: <ReadOutlined />, href: "/reading" },
+  { label: "Luyện nói", icon: <AudioOutlined />, href: "/pronunciation" },
   { label: "Luyện viết", icon: <EditOutlined />, href: "/writing-practice" },
-  { label: "Thử thách", icon: <FireOutlined />, href: "/daily-challenge" },
+  { label: "Ngữ pháp", icon: <BulbOutlined />, href: "/grammar-quiz" },
+  { label: "Chủ đề", icon: <AppstoreOutlined />, href: "/study-sets" },
+];
+
+const REVIEW_HUB_ITEMS = [
+  { label: "Ôn tập", icon: <AppstoreOutlined />, href: "/review-quiz" },
+  { label: "Sổ lỗi sai", icon: <BookFilled />, href: "/error-notebook" },
+  { label: "Tiến độ", icon: <BulbOutlined />, href: "/progress" },
+  { label: "Thi thử", icon: <FireOutlined />, href: "/mock-test" },
 ];
 
 function getActiveTab(pathname: string): string {
@@ -47,10 +59,23 @@ function getActiveTab(pathname: string): string {
   if (pathname.startsWith("/english-chatbot")) return "chat";
   if (pathname.startsWith("/my-vocabulary") || pathname.startsWith("/dictionary")) return "profile";
   if (
+    pathname.startsWith("/review-quiz") ||
+    pathname.startsWith("/error-notebook") ||
+    pathname.startsWith("/progress") ||
+    pathname.startsWith("/mock-test") ||
+    pathname.startsWith("/daily-challenge")
+  ) return "review";
+  if (
     pathname.startsWith("/flashcards") ||
     pathname.startsWith("/grammar-quiz") ||
+    pathname.startsWith("/grammar-lessons") ||
     pathname.startsWith("/writing-practice") ||
-    pathname.startsWith("/daily-challenge")
+    pathname.startsWith("/listening") ||
+    pathname.startsWith("/reading") ||
+    pathname.startsWith("/pronunciation") ||
+    pathname.startsWith("/speaking-practice") ||
+    pathname.startsWith("/study-sets") ||
+    pathname.startsWith("/scenarios")
   ) return "learn";
   return "home";
 }
@@ -59,25 +84,29 @@ export function BottomTabBar() {
   const router = useRouter();
   const pathname = usePathname();
   const activeTab = getActiveTab(pathname);
-  const [showLearnHub, setShowLearnHub] = useState(false);
+  const [activeHub, setActiveHub] = useState<"learn" | "review" | null>(null);
 
   const handleTabClick = (tab: TabItem) => {
     if (tab.action === "learn-hub") {
-      setShowLearnHub((prev) => !prev);
+      setActiveHub((prev) => (prev === "learn" ? null : "learn"));
+    } else if (tab.action === "review-hub") {
+      setActiveHub((prev) => (prev === "review" ? null : "review"));
     } else if (tab.href) {
-      setShowLearnHub(false); // Always close learn hub when navigating away (E2 fix)
+      setActiveHub(null);
       router.push(tab.href);
     }
   };
 
+  const hubItems = activeHub === "learn" ? LEARN_HUB_ITEMS : activeHub === "review" ? REVIEW_HUB_ITEMS : [];
+
   return (
     <>
       {/* Learn Hub Overlay */}
-      {showLearnHub && (
+      {activeHub !== null && (
         <>
           {/* Backdrop */}
           <div
-            onClick={() => setShowLearnHub(false)}
+            onClick={() => setActiveHub(null)}
             style={{
               position: "fixed",
               inset: 0,
@@ -101,12 +130,12 @@ export function BottomTabBar() {
               animation: "slideInUp var(--duration-normal) ease",
             }}
           >
-            {LEARN_HUB_ITEMS.map((item) => (
+            {hubItems.map((item) => (
               <Card
                 key={item.href}
                 hoverable
                 onClick={() => {
-                  setShowLearnHub(false);
+                  setActiveHub(null);
                   router.push(item.href);
                 }}
                 style={{
@@ -149,6 +178,7 @@ export function BottomTabBar() {
             <button
               key={tab.key}
               type="button"
+              aria-label={tab.label}
               onClick={() => handleTabClick(tab)}
               style={{
                 flex: 1,
