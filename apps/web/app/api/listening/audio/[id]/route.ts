@@ -13,6 +13,7 @@ import {
   synthesizeTtsForVoice,
   VOICE_SET_VERSION,
   VOICES,
+  VOICE_BY_ROLE,
 } from "@/lib/tts/groq";
 
 /**
@@ -116,7 +117,15 @@ export async function GET(
   }
 
   const { id } = await params;
-  const accent = parseAccent(new URL(request.url).searchParams.get("accent"));
+  const url = new URL(request.url);
+  const voiceParam = url.searchParams.get("voice");
+  const accent = parseAccent(url.searchParams.get("accent"));
+
+  // Resolve voice: explicit voice name > accent default
+  const allVoiceNames = Object.values(VOICE_BY_ROLE);
+  const voice = (voiceParam && allVoiceNames.includes(voiceParam))
+    ? voiceParam
+    : VOICES[accent];
 
   try {
     const [exercise] = await db
@@ -139,7 +148,7 @@ export async function GET(
     }
 
     const turns = exercise.dialogueTurnsJson;
-    console.log(`[Listening Audio] id=${id}, accent=${accent}, dialogue=${Array.isArray(turns) ? turns.length + " turns" : "no"}, passage=${exercise.passage.length} chars`);
+    console.log(`[Listening Audio] id=${id}, voice=${voice}, dialogue=${Array.isArray(turns) ? turns.length + " turns" : "no"}, passage=${exercise.passage.length} chars`);
 
     if (Array.isArray(turns) && turns.length > 0) {
       const cached = await readCachedDialogue(id);
@@ -157,9 +166,9 @@ export async function GET(
     }
 
     // Single-speaker path — WAV format (Groq Orpheus only supports WAV)
-    console.log(`[Listening Audio] Single-speaker path: accent=${accent}, voice=${VOICES[accent]}`);
+    console.log(`[Listening Audio] Single-speaker path: voice=${voice}`);
     const cacheFile = DIALOGUE_DISK_CACHE_ENABLED
-      ? path.join(DIALOGUE_CACHE_DIR, `single-${id}-${accent}-${VOICE_SET_VERSION}.wav`)
+      ? path.join(DIALOGUE_CACHE_DIR, `single-${id}-${voice}-${VOICE_SET_VERSION}.wav`)
       : null;
 
     let buf: Buffer | null = null;
@@ -172,7 +181,7 @@ export async function GET(
       const startMs = Date.now();
       const audio = await synthesizeTtsForVoice({
         text: exercise.passage,
-        voice: VOICES[accent],
+        voice,
         format: "wav",
         speed: 0.9,
       });

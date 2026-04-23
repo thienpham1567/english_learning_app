@@ -137,29 +137,47 @@ async function downloadDirectAudio(url: string, outPath: string): Promise<{ dura
   return { durationSec: 0 }; // duration will come from Whisper response
 }
 
-// ── Whisper transcription (AC2) ──
+// ── Whisper transcription via Groq (AC2) ──
 async function transcribeAudio(filePath: string): Promise<{
   text: string;
   segments: Array<{ start: number; end: number; text: string }>;
   duration: number;
 }> {
+  const groqKey = process.env.GROQ_API_KEY;
+  if (!groqKey) throw new Error("Missing GROQ_API_KEY for transcription");
+
   const fileBuffer = await fs.readFile(filePath);
   const file = new File([fileBuffer], path.basename(filePath), { type: "audio/mpeg" });
 
-  const response = await openAiClient.audio.transcriptions.create({
-    model: "whisper-1",
-    file,
-    language: "en",
-    response_format: "verbose_json",
-    timestamp_granularities: ["segment"],
+  console.log(`[ListeningImport] Transcribing via Groq Whisper: ${file.name}, ${fileBuffer.length} bytes`);
+  const startMs = Date.now();
+
+  const form = new FormData();
+  form.append("file", file, file.name);
+  form.append("model", "whisper-large-v3-turbo");
+  form.append("language", "en");
+  form.append("response_format", "verbose_json");
+  form.append("timestamp_granularities[]", "segment");
+
+  const response = await fetch("https://api.groq.com/openai/v1/audio/transcriptions", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${groqKey}` },
+    body: form,
   });
 
-  // The response with verbose_json includes segments
-  const result = response as unknown as {
+  if (!response.ok) {
+    const errText = await response.text().catch(() => "");
+    console.error(`[ListeningImport] Groq Whisper ERROR ${response.status} (${Date.now() - startMs}ms): ${errText}`);
+    throw new Error(`Groq Whisper ${response.status}: ${errText}`);
+  }
+
+  const result = await response.json() as {
     text: string;
     segments?: Array<{ start: number; end: number; text: string }>;
     duration?: number;
   };
+
+  console.log(`[ListeningImport] Groq Whisper OK (${Date.now() - startMs}ms): ${result.text?.length ?? 0} chars, ${result.segments?.length ?? 0} segments`);
 
   return {
     text: result.text ?? "",

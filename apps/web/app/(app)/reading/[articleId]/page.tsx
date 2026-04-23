@@ -2,7 +2,7 @@
 import { api } from "@/lib/api-client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { Card, Flex, Typography, Spin, Tag, Button, Result, Collapse } from "antd";
+import { Card, Flex, Typography, Spin, Tag, Button, Result, Modal, Select } from "antd";
 import {
   ArrowLeftOutlined,
   ReadOutlined,
@@ -10,6 +10,9 @@ import {
   BulbOutlined,
   BookOutlined,
   SaveOutlined,
+  SoundOutlined,
+  PauseCircleOutlined,
+  LoadingOutlined,
 } from "@ant-design/icons";
 
 import { useMiniDictionary } from "@/hooks/useMiniDictionary";
@@ -64,6 +67,13 @@ export default function ArticleReaderPage() {
   const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
   const [wordsLookedUp, setWordsLookedUp] = useState(0);
 
+  // Audio player state
+  const [audioState, setAudioState] = useState<"idle" | "loading" | "playing" | "paused">("idle");
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const audioUrlRef = useRef<string | null>(null);
+  const [selectedVoice, setSelectedVoice] = useState("austin");
+  const [grammarPopup, setGrammarPopup] = useState<number | null>(null);
+
   // Mini dictionary
   const miniDict = useMiniDictionary();
 
@@ -91,7 +101,9 @@ export default function ArticleReaderPage() {
 
     try {
       const data = await api.post<{ patterns?: GrammarPattern[] }>("/reading/grammar", { paragraph: text });
-      setGrammarResults((prev) => ({ ...prev, [index]: data.patterns ?? [] }));
+      const patterns = data.patterns ?? [];
+      setGrammarResults((prev) => ({ ...prev, [index]: patterns }));
+      if (patterns.length > 0) setGrammarPopup(index);
     } catch {
       setGrammarResults((prev) => ({ ...prev, [index]: [] }));
     } finally {
@@ -101,6 +113,62 @@ export default function ArticleReaderPage() {
         return next;
       });
     }
+  }, []);
+
+  // Audio player handlers
+  const handlePlayArticle = useCallback(async () => {
+    if (audioState === "playing" && audioRef.current) {
+      audioRef.current.pause();
+      setAudioState("paused");
+      return;
+    }
+
+    if (audioState === "paused" && audioRef.current) {
+      audioRef.current.play();
+      setAudioState("playing");
+      return;
+    }
+
+    // Load fresh audio
+    setAudioState("loading");
+    try {
+      const res = await fetch(`/api/reading/audio/${articleId}?voice=${selectedVoice}`);
+      if (!res.ok) throw new Error("Audio load failed");
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+
+      // Clean up previous
+      if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+      if (audioRef.current) audioRef.current.pause();
+
+      const audio = new Audio(url);
+      audioRef.current = audio;
+      audioUrlRef.current = url;
+
+      audio.onended = () => setAudioState("idle");
+      audio.onerror = () => setAudioState("idle");
+
+      await audio.play();
+      setAudioState("playing");
+    } catch {
+      setAudioState("idle");
+    }
+  }, [articleId, audioState, selectedVoice]);
+
+  const handleStopAudio = useCallback(() => {
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
+    setAudioState("idle");
+  }, []);
+
+  // Cleanup audio on unmount
+  useEffect(() => {
+    return () => {
+      if (audioRef.current) audioRef.current.pause();
+      if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+    };
   }, []);
 
 
@@ -214,6 +282,64 @@ export default function ArticleReaderPage() {
           </Flex>
         </div>
 
+        {/* Listen to article — voice selector + play button */}
+        <Flex align="center" gap={12} wrap="wrap">
+          <Select
+            value={selectedVoice}
+            onChange={(v) => {
+              setSelectedVoice(v);
+              // Reset audio when voice changes
+              if (audioState !== "idle") handleStopAudio();
+            }}
+            disabled={audioState === "loading"}
+            style={{ width: 160 }}
+            options={[
+              { value: "austin", label: "🇺🇸 US Male" },
+              { value: "autumn", label: "🇺🇸 US Female" },
+              { value: "daniel", label: "🇬🇧 UK Male" },
+              { value: "diana", label: "🇬🇧 UK Female" },
+              { value: "troy", label: "🇦🇺 AU Male" },
+              { value: "hannah", label: "🇦🇺 AU Female" },
+            ]}
+          />
+          <Button
+            type={audioState === "idle" ? "default" : "primary"}
+            icon={
+              audioState === "loading" ? <LoadingOutlined spin /> :
+              audioState === "playing" ? <PauseCircleOutlined /> :
+              <SoundOutlined />
+            }
+            onClick={handlePlayArticle}
+            disabled={audioState === "loading"}
+            style={{
+              borderRadius: "var(--radius-full, 999px)",
+              height: 40,
+              paddingInline: 20,
+              ...(audioState === "playing" ? {
+                background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+                borderColor: "transparent",
+                color: "#fff",
+              } : {}),
+            }}
+          >
+            {audioState === "loading" ? "Đang tải audio..." :
+             audioState === "playing" ? "Tạm dừng" :
+             audioState === "paused" ? "Tiếp tục nghe" :
+             "🎧 Nghe bài báo"}
+          </Button>
+
+          {audioState !== "idle" && audioState !== "loading" && (
+            <Button
+              type="text"
+              size="small"
+              onClick={handleStopAudio}
+              style={{ color: "var(--text-muted)", fontSize: 12 }}
+            >
+              Dừng hẳn
+            </Button>
+          )}
+        </Flex>
+
         {/* Thumbnail */}
         {article.thumbnail && (
           // eslint-disable-next-line @next/next/no-img-element
@@ -267,78 +393,140 @@ export default function ArticleReaderPage() {
                     </span>
                   );
                 })}
-              </p>
 
-              {/* Grammar panel */}
-              {(grammarResults[idx]?.length ?? 0) > 0 && (
-                <Collapse
-                  ghost
-                  style={{ marginTop: 8 }}
-                  items={[
-                    {
-                      key: `grammar-${idx}`,
-                      label: (
-                        <Flex align="center" gap={6}>
-                          <BulbOutlined style={{ color: "var(--accent)" }} />
-                          <Text style={{ fontSize: 13, color: "var(--accent)" }}>
-                            {grammarResults[idx].length} grammar patterns
-                          </Text>
-                        </Flex>
-                      ),
-                      children: (
-                        <Flex vertical gap={8}>
-                          {grammarResults[idx].map((pattern, pi) => (
-                            <Card
-                              key={pi}
-                              size="small"
-                              style={{
-                                borderLeft: `3px solid ${PATTERN_COLORS[pattern.color] ?? "var(--text-muted)"}`,
-                                borderRadius: "var(--radius)",
-                              }}
-                              styles={{ body: { padding: "8px 12px" } }}
-                            >
-                              <Text strong style={{ fontSize: 13, color: PATTERN_COLORS[pattern.color] ?? "var(--text-muted)" }}>
-                                {pattern.name}
-                              </Text>
-                              <br />
-                              <Text code style={{ fontSize: 12 }}>
-                                &quot;{pattern.phrase}&quot;
-                              </Text>
-                              <br />
-                              <Text type="secondary" style={{ fontSize: 12 }}>
-                                {pattern.explanation}
-                              </Text>
-                            </Card>
-                          ))}
-                        </Flex>
-                      ),
-                    },
-                  ]}
-                />
-              )}
-
-              {grammarLoading.has(idx) && (
-                <Flex align="center" gap={6} style={{ marginTop: 6 }}>
-                  <Spin size="small" />
-                  <Text style={{ fontSize: 12, color: "var(--text-muted)" }}>Đang phân tích ngữ pháp...</Text>
-                </Flex>
-              )}
-
-              {/* On-demand grammar button — only show if not yet analyzed */}
-              {grammarResults[idx] === undefined && !grammarLoading.has(idx) && (
-                <Button
-                  type="text"
-                  size="small"
-                  icon={<BulbOutlined />}
-                  onClick={() => analyzeGrammar(idx, para)}
-                  style={{ marginTop: 4, fontSize: 12, color: "var(--accent)" }}
+                {/* Grammar icon — inline at end of paragraph */}
+                <span
+                  onClick={() => {
+                    if (grammarLoading.has(idx)) return;
+                    if (grammarResults[idx] === undefined) {
+                      // First click: analyze (popup auto-opens on success)
+                      analyzeGrammar(idx, para);
+                    } else if (grammarResults[idx]?.length) {
+                      // Already analyzed: open popup
+                      setGrammarPopup(idx);
+                    }
+                  }}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: 22,
+                    height: 22,
+                    marginLeft: 6,
+                    borderRadius: "50%",
+                    cursor: grammarLoading.has(idx) ? "wait" : "pointer",
+                    verticalAlign: "middle",
+                    transition: "all 0.2s ease",
+                    background: grammarResults[idx]?.length
+                      ? "linear-gradient(135deg, var(--accent), var(--secondary))"
+                      : "var(--border)",
+                    color: grammarResults[idx]?.length ? "#fff" : "var(--text-muted)",
+                    fontSize: 11,
+                  }}
+                  title={grammarResults[idx]?.length ? `${grammarResults[idx].length} grammar patterns — click to view` : "Phân tích ngữ pháp"}
                 >
-                  Phân tích ngữ pháp
-                </Button>
-              )}
+                  {grammarLoading.has(idx) ? <LoadingOutlined spin style={{ fontSize: 10 }} /> : <BulbOutlined style={{ fontSize: 11 }} />}
+                </span>
+              </p>
             </div>
           ))}
         </div>
+
+        {/* Grammar Popup Modal */}
+        <Modal
+          open={grammarPopup !== null}
+          onCancel={() => setGrammarPopup(null)}
+          footer={null}
+          centered
+          width={520}
+          styles={{
+            body: {
+              borderRadius: 16,
+              padding: 0,
+              overflow: "hidden",
+            },
+            mask: {
+              backdropFilter: "blur(6px)",
+              background: "rgba(0,0,0,0.25)",
+            },
+          }}
+        >
+          {grammarPopup !== null && grammarResults[grammarPopup] && (
+            <div>
+              {/* Header */}
+              <div
+                style={{
+                  background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+                  padding: "20px 24px",
+                  color: "#fff",
+                }}
+              >
+                <Flex align="center" gap={8}>
+                  <BulbOutlined style={{ fontSize: 18 }} />
+                  <Text strong style={{ fontSize: 16, color: "#fff" }}>
+                    Grammar Patterns
+                  </Text>
+                  <Tag
+                    style={{
+                      background: "rgba(255,255,255,0.2)",
+                      border: "none",
+                      color: "#fff",
+                      fontSize: 11,
+                      borderRadius: 12,
+                    }}
+                  >
+                    {grammarResults[grammarPopup].length} found
+                  </Tag>
+                </Flex>
+              </div>
+
+              {/* Body */}
+              <div style={{ padding: "16px 24px 24px", display: "flex", flexDirection: "column", gap: 12, maxHeight: 420, overflowY: "auto" }}>
+                {grammarResults[grammarPopup].map((pattern, pi) => (
+                  <div
+                    key={pi}
+                    style={{
+                      borderLeft: `4px solid ${PATTERN_COLORS[pattern.color] ?? "var(--text-muted)"}`,
+                      borderRadius: "var(--radius)",
+                      background: "var(--surface)",
+                      padding: "14px 16px",
+                      transition: "box-shadow 0.2s ease",
+                    }}
+                    className="grammar-card-hover"
+                  >
+                    <Text
+                      strong
+                      style={{
+                        fontSize: 14,
+                        color: PATTERN_COLORS[pattern.color] ?? "var(--accent)",
+                        display: "block",
+                        marginBottom: 6,
+                      }}
+                    >
+                      {pattern.name}
+                    </Text>
+                    <div
+                      style={{
+                        background: "var(--bg)",
+                        borderRadius: 6,
+                        padding: "6px 10px",
+                        marginBottom: 8,
+                        fontFamily: "var(--font-mono, monospace)",
+                        fontSize: 13,
+                        color: "var(--text-primary)",
+                      }}
+                    >
+                      &quot;{pattern.phrase}&quot;
+                    </div>
+                    <Text style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.6 }}>
+                      {pattern.explanation}
+                    </Text>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </Modal>
 
         {/* Stats bar */}
         <Card

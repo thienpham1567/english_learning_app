@@ -832,6 +832,11 @@ textarea.ant-input::placeholder {
   border-radius: 2px;
 }
 
+/* ── Grammar popup card hover ── */
+.grammar-card-hover:hover {
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
 /* ── Dictionary: Overview hero block quote decoration ── */
 .dictionary-overview-block {
   position: relative;

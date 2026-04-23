@@ -3,7 +3,7 @@
 import { useState, useCallback, useEffect } from "react";
 import { api } from "@/lib/api-client";
 import { SoundOutlined, AudioOutlined, EditOutlined, FileTextOutlined, ImportOutlined } from "@ant-design/icons";
-import { Segmented, Button } from "antd";
+import { Segmented, Button, Select } from "antd";
 import { useRouter } from "next/navigation";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
@@ -49,6 +49,7 @@ export default function ListeningPage() {
   const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
   const [profileRecommendedLevel, setProfileRecommendedLevel] = useState<CefrLevel | null>(null);
   const [mode, setMode] = useState<string>("listening");
+  const [selectedVoice, setSelectedVoice] = useState("austin");
 
   // Derive skill level-up from result (computed, not effect)
   const skillLevelUp = result?.skill
@@ -200,8 +201,30 @@ export default function ListeningPage() {
             {exercise.turns && exercise.turns.length > 0 && (
               <SpeakerLegend turns={exercise.turns} />
             )}
+
+            {/* Voice selector — only for single-speaker (non-dialogue) exercises */}
+            {(!exercise.turns || exercise.turns.length === 0) && (
+              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <span style={{ fontSize: 12, color: "var(--text-muted)", whiteSpace: "nowrap" }}>Giọng đọc:</span>
+                <Select
+                  value={selectedVoice}
+                  onChange={setSelectedVoice}
+                  size="small"
+                  style={{ width: 150 }}
+                  options={[
+                    { value: "austin", label: "🇺🇸 US Male" },
+                    { value: "autumn", label: "🇺🇸 US Female" },
+                    { value: "daniel", label: "🇬🇧 UK Male" },
+                    { value: "diana", label: "🇬🇧 UK Female" },
+                    { value: "troy", label: "🇦🇺 AU Male" },
+                    { value: "hannah", label: "🇦🇺 AU Female" },
+                  ]}
+                />
+              </div>
+            )}
+
             <AudioPlayer
-              audioUrl={exercise.audioUrl}
+              audioUrl={`${exercise.audioUrl}?voice=${selectedVoice}`}
               speed={selectedSpeed}
               replaysUsed={replaysUsed}
               maxReplays={maxReplays}
