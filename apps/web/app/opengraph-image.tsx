@@ -25,7 +25,7 @@ export default function OpenGraphImage() {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <circle cx="32" cy="32" r="28" stroke="#9B8EC7" strokeWidth="1.5" fill="none" />
+        <circle cx="32" cy="32" r="28" stroke="#D9A299" strokeWidth="1.5" fill="none" />
         <line
           x1="17"
           y1="22"
@@ -44,7 +44,7 @@ export default function OpenGraphImage() {
           strokeWidth="2.5"
           strokeLinecap="round"
         />
-        <circle cx="32" cy="44" r="2.8" fill="#9B8EC7" />
+        <circle cx="32" cy="44" r="2.8" fill="#D9A299" />
       </svg>
 
       {/* Title */}
@@ -64,7 +64,7 @@ export default function OpenGraphImage() {
         style={{
           fontSize: 48,
           fontWeight: 700,
-          color: "#9B8EC7",
+          color: "#D9A299",
           letterSpacing: "0.04em",
           fontFamily: "Georgia, serif",
         }}

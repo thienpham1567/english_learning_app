@@ -1,43 +1,43 @@
 /* ── Design Tokens (Light)
-   Palette: #F2EAE0 · #B4D3D9 · #BDA6CE · #9B8EC7
+   Palette: #FAF7F3 · #F0E4D3 · #DCC5B2 · #D9A299
 */
 :root {
-  --bg: #faf8f5;
-  --bg-deep: #f2eae0;
+  --bg: #FAF7F3;
+  --bg-deep: #F0E4D3;
   --surface: #ffffff;
-  --surface-hover: #f7f2ed;
+  --surface-hover: #f5efe8;
   --surface-raised: #ffffff;
-  --surface-alt: #fcfaf8;
+  --surface-alt: #fdf9f5;
   --card-bg: var(--surface);
 
-  --accent: #9B8EC7;
-  --accent-hover: #8a7ab8;
-  --accent-light: #ede8f5;
-  --accent-muted: rgba(155, 142, 199, 0.14);
+  --accent: #D9A299;
+  --accent-hover: #c8867c;
+  --accent-light: #faf0ee;
+  --accent-muted: rgba(217, 162, 153, 0.14);
 
-  --secondary: #BDA6CE;
-  --tertiary: #B4D3D9;
-  --warm: #F2EAE0;
+  --secondary: #DCC5B2;
+  --tertiary: #C4A882;
+  --warm: #F0E4D3;
 
-  --ink: #2d2640;
-  --text-primary: #2d2640;
-  --text-secondary: #5e5475;
-  --text-muted: #9b93aa;
+  --ink: #3d2e2a;
+  --text-primary: #3d2e2a;
+  --text-secondary: #7a6560;
+  --text-muted: #a89892;
   --text: var(--text-primary);
-  --text-disabled: #c4bdd0;
+  --text-disabled: #cec3bd;
 
-  --border: #e4ddd4;
-  --border-strong: #BDA6CE;
+  --border: #e8ddd4;
+  --border-strong: #DCC5B2;
 
-  --bubble-user: #2d2640;
+  --bubble-user: #3d2e2a;
   --bubble-ai: #ffffff;
 
-  --sage: #9B8EC7;
+  --sage: #D9A299;
 
-  --shadow-sm: 0 1px 2px rgba(45, 38, 64, 0.06);
-  --shadow: 0 1px 3px rgba(45, 38, 64, 0.08), 0 1px 2px rgba(45, 38, 64, 0.04);
-  --shadow-md: 0 4px 12px rgba(45, 38, 64, 0.08), 0 2px 4px rgba(45, 38, 64, 0.04);
-  --shadow-lg: 0 10px 32px rgba(45, 38, 64, 0.1), 0 4px 12px rgba(45, 38, 64, 0.05);
+  --shadow-sm: 0 1px 2px rgba(61, 46, 42, 0.06);
+  --shadow: 0 1px 3px rgba(61, 46, 42, 0.08), 0 1px 2px rgba(61, 46, 42, 0.04);
+  --shadow-md: 0 4px 12px rgba(61, 46, 42, 0.08), 0 2px 4px rgba(61, 46, 42, 0.04);
+  --shadow-lg: 0 10px 32px rgba(61, 46, 42, 0.1), 0 4px 12px rgba(61, 46, 42, 0.05);
 
   --radius-sm: 8px;
   --radius: 12px;
@@ -51,7 +51,7 @@
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
 
   /* Sidebar dark panel */
-  --sidebar-bg: #2d2640;
+  --sidebar-bg: #3d2e2a;
   --sidebar-text: rgba(255, 255, 255, 0.7);
   --sidebar-text-active: rgba(255, 255, 255, 0.92);
   --sidebar-border: rgba(255, 255, 255, 0.1);
@@ -61,28 +61,28 @@
   --error: #ef4444;
   --warning: #f59e0b;
   --info: #3b82f6;
-  --xp: #9B8EC7;
+  --xp: #D9A299;
   --fire: #f97316;
   --success-bg: rgba(16, 185, 129, 0.12);
   --error-bg: rgba(239, 68, 68, 0.1);
   --warning-bg: rgba(245, 158, 11, 0.12);
   --info-bg: rgba(59, 130, 246, 0.1);
 
-  --module-grammar: #ec4899;
-  --module-listening: #6366f1;
+  --module-grammar: #D9A299;
+  --module-listening: #C4A882;
   --module-writing: #14b8a6;
   --module-reading: #0ea5e9;
-  --module-vocabulary: #9B8EC7;
+  --module-vocabulary: #DCC5B2;
   --module-speaking: #ef4444;
   --module-review: #f59e0b;
   --module-assessment: #3b82f6;
 
-  /* ── Heatmap Colors (Story 14.1) ── */
+  /* ── Heatmap Colors ── */
   --heatmap-0: rgba(0, 0, 0, 0.06);
-  --heatmap-1: #d9cbe6;
-  --heatmap-2: #BDA6CE;
-  --heatmap-3: #9B8EC7;
-  --heatmap-4: #7a6aab;
+  --heatmap-1: #f0e4d3;
+  --heatmap-2: #DCC5B2;
+  --heatmap-3: #D9A299;
+  --heatmap-4: #c07a70;
 
   /* ── Typography Scale ── */
   --text-xs: 11px;
@@ -111,49 +111,49 @@
   --duration-slow: 500ms;
 
   /* ── Extended Shadows ── */
-  --shadow-xl: 0 20px 48px rgba(45, 38, 64, 0.12), 0 8px 24px rgba(45, 38, 64, 0.06);
+  --shadow-xl: 0 20px 48px rgba(61, 46, 42, 0.12), 0 8px 24px rgba(61, 46, 42, 0.06);
 }
 
 /* ── Dark Theme Tokens ── */
 [data-theme="dark"] {
-  --bg: #1a1527;
-  --bg-deep: #211b30;
-  --surface: #211b30;
-  --surface-hover: #2b2440;
-  --surface-raised: #261f38;
-  --surface-alt: #1d1729;
+  --bg: #1e1614;
+  --bg-deep: #271d1a;
+  --surface: #271d1a;
+  --surface-hover: #352824;
+  --surface-raised: #2d211e;
+  --surface-alt: #211917;
   --card-bg: var(--surface);
 
-  --accent: #BDA6CE;
-  --accent-hover: #9B8EC7;
-  --accent-light: rgba(189, 166, 206, 0.12);
-  --accent-muted: rgba(189, 166, 206, 0.15);
+  --accent: #DCC5B2;
+  --accent-hover: #D9A299;
+  --accent-light: rgba(220, 197, 178, 0.12);
+  --accent-muted: rgba(220, 197, 178, 0.15);
 
-  --secondary: #9B8EC7;
-  --tertiary: #7a6aab;
-  --warm: #2b2440;
+  --secondary: #D9A299;
+  --tertiary: #c07a70;
+  --warm: #352824;
 
-  --ink: #e8e0f0;
-  --text-primary: #e8e0f0;
-  --text-secondary: #b3a6c8;
-  --text-muted: #6b5d82;
+  --ink: #f0e4d3;
+  --text-primary: #f0e4d3;
+  --text-secondary: #c8b5a5;
+  --text-muted: #7a6560;
   --text: var(--text-primary);
-  --text-disabled: #4a3e5f;
+  --text-disabled: #4d3d38;
 
-  --border: #322a45;
-  --border-strong: #3e3555;
+  --border: #3d2e2a;
+  --border-strong: #4d3d38;
 
-  --bubble-user: #322a45;
-  --bubble-ai: #211b30;
+  --bubble-user: #3d2e2a;
+  --bubble-ai: #271d1a;
 
-  --sage: #BDA6CE;
+  --sage: #DCC5B2;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2);
   --shadow-lg: 0 10px 32px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.25);
 
-  --sidebar-bg: #151020;
+  --sidebar-bg: #16100e;
   --sidebar-text: rgba(255, 255, 255, 0.6);
   --sidebar-text-active: rgba(255, 255, 255, 0.9);
   --sidebar-border: rgba(255, 255, 255, 0.08);
@@ -163,7 +163,7 @@
   --error: #f87171;
   --warning: #fbbf24;
   --info: #60a5fa;
-  --xp: #BDA6CE;
+  --xp: #DCC5B2;
   --fire: #fb923c;
   --success-bg: rgba(52, 211, 153, 0.14);
   --error-bg: rgba(248, 113, 113, 0.14);
@@ -172,10 +172,10 @@
 
   /* ── Heatmap Colors (Dark) ── */
   --heatmap-0: rgba(255, 255, 255, 0.08);
-  --heatmap-1: #2b2440;
-  --heatmap-2: #4a3e6a;
-  --heatmap-3: #7a6aab;
-  --heatmap-4: #9B8EC7;
+  --heatmap-1: #352824;
+  --heatmap-2: #5e4a42;
+  --heatmap-3: #c07a70;
+  --heatmap-4: #D9A299;
 
   /* ── Extended Shadows (Dark) ── */
   --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.55), 0 8px 24px rgba(0, 0, 0, 0.3);
@@ -626,7 +626,7 @@ textarea.ant-input::placeholder {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(155, 142, 199, 0.18);
+  background: rgba(217, 162, 153, 0.18);
   transform: translateX(-100%);
   transition: transform 0.35s ease;
   pointer-events: none;

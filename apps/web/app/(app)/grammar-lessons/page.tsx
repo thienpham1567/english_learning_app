@@ -106,7 +106,7 @@ export default function GrammarLessonsPage() {
         icon={<BookOutlined />}
         gradient={
           examTab === "ielts"
-            ? "linear-gradient(135deg, #6366f1, #8b5cf6)"
+            ? "linear-gradient(135deg, #c07a70, #D9A299)"
             : "linear-gradient(135deg, var(--accent), var(--secondary))"
         }
         title={activeTopic ? activeTopic.title : "Ngữ pháp trọng tâm"}
@@ -163,7 +163,7 @@ export default function GrammarLessonsPage() {
             position: "absolute",
             inset: 0,
             background: examTab === "ielts"
-              ? "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, #6366f1 6%, transparent) 0%, transparent 70%)"
+              ? "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, #c07a70 6%, transparent) 0%, transparent 70%)"
               : "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--accent) 6%, transparent) 0%, transparent 70%)",
           }}
         />

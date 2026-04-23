@@ -291,6 +291,14 @@ export const errorLog = pgTable("error_log", {
   grammarTopic: text("grammar_topic"),
   isResolved: boolean("is_resolved").notNull().default(false),
   resolvedAt: timestamp("resolved_at", { withTimezone: true }),
+  // AI-generated deep explanation (cached after first generation)
+  deepExplanation: jsonb("deep_explanation").$type<{
+    whyWrong: string;
+    whyCorrect: string;
+    grammarRule: string;
+    examples: string[];
+    tip: string;
+  }>(),
   // SRS Review Queue
   reviewCount: integer("review_count").notNull().default(0),
   nextReviewAt: timestamp("next_review_at", { withTimezone: true }),

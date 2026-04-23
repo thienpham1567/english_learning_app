@@ -1,0 +1,1 @@
+ALTER TABLE "error_log" ADD COLUMN "deep_explanation" jsonb;

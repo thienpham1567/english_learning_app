@@ -245,7 +245,7 @@ export default function PronunciationPage() {
       {/* Header */}
       <ModuleHeader
         icon={<AudioOutlined />}
-        gradient="linear-gradient(135deg, #8b5cf6, #6366f1)"
+        gradient="linear-gradient(135deg, #D9A299, #c07a70)"
         title="Luyện phát âm"
         subtitle="Luyện phát âm tiếng Anh với AI đánh giá chi tiết"
         action={

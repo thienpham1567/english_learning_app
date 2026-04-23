@@ -43,6 +43,7 @@ export async function GET(request: Request) {
         explanationVi: errorLog.explanationVi,
         grammarTopic: errorLog.grammarTopic,
         isResolved: errorLog.isResolved,
+        deepExplanation: errorLog.deepExplanation,
         createdAt: errorLog.createdAt,
       })
       .from(errorLog)

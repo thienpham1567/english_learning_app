@@ -8,14 +8,22 @@ import {
   FilterOutlined,
   LoadingOutlined,
   ReloadOutlined,
-  BulbOutlined,
   WarningOutlined,
   ExclamationCircleOutlined,
   InboxOutlined,
 } from "@ant-design/icons";
-import { Tag, Tooltip, Collapse, Select, Empty } from "antd";
+import { Tag, Tooltip, Select, Empty } from "antd";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { WritingPatternSection } from "./_components/WritingPatternSection";
+import { DeepExplanation } from "./_components/DeepExplanation";
+
+type DeepExplanationData = {
+  whyWrong: string;
+  whyCorrect: string;
+  grammarRule: string;
+  examples: string[];
+  tip: string;
+};
 
 type ErrorEntry = {
   id: string;
@@ -28,6 +36,7 @@ type ErrorEntry = {
   explanationVi: string | null;
   grammarTopic: string | null;
   isResolved: boolean;
+  deepExplanation: DeepExplanationData | null;
   createdAt: string;
 };
 
@@ -121,7 +130,7 @@ export default function ErrorNotebookPage() {
       {/* Header */}
       <ModuleHeader
         icon={<BookOutlined />}
-        gradient="linear-gradient(135deg, #ef4444, #f97316)"
+        gradient="linear-gradient(135deg, #D9A299, #c07a70)"
         title="Sổ lỗi sai"
         subtitle="Tổng hợp lỗi sai từ tất cả bài tập"
         action={
@@ -356,33 +365,13 @@ export default function ErrorNotebookPage() {
                     </div>
                   </div>
 
-                  {/* Explanation */}
-                  {(err.explanationEn || err.explanationVi) && (
-                    <Collapse
-                      size="small"
-                      style={{ borderRadius: 8 }}
-                      items={[
-                        {
-                          key: `exp-${err.id}`,
-                          label: (
-                            <span style={{ fontSize: 12, fontWeight: 600 }}>
-                              <BulbOutlined style={{ marginRight: 4, color: "var(--accent)" }} /> Giải thích
-                            </span>
-                          ),
-                          children: (
-                            <div style={{ fontSize: 13, lineHeight: 1.6 }}>
-                              {err.explanationEn && <p style={{ margin: "0 0 4px" }}>{err.explanationEn}</p>}
-                              {err.explanationVi && (
-                                <p style={{ margin: 0, color: "var(--text-secondary)", fontStyle: "italic" }}>
-                                  {err.explanationVi}
-                                </p>
-                              )}
-                            </div>
-                          ),
-                        },
-                      ]}
-                    />
-                  )}
+                  {/* Deep Explanation */}
+                  <DeepExplanation
+                    errorId={err.id}
+                    cached={err.deepExplanation}
+                    fallbackEn={err.explanationEn}
+                    fallbackVi={err.explanationVi}
+                  />
 
                   {/* Actions */}
                   {!err.isResolved && (
