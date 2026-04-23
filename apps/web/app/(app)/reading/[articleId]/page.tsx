@@ -13,6 +13,7 @@ import {
   SoundOutlined,
   PauseCircleOutlined,
   LoadingOutlined,
+  CustomerServiceOutlined,
 } from "@ant-design/icons";
 
 import { useMiniDictionary } from "@/hooks/useMiniDictionary";
@@ -292,7 +293,7 @@ export default function ArticleReaderPage() {
               if (audioState !== "idle") handleStopAudio();
             }}
             disabled={audioState === "loading"}
-            style={{ width: 160 }}
+            style={{ width: 160, height: 40 }}
             options={[
               { value: "austin", label: "🇺🇸 US Male" },
               { value: "autumn", label: "🇺🇸 US Female" },
@@ -307,7 +308,7 @@ export default function ArticleReaderPage() {
             icon={
               audioState === "loading" ? <LoadingOutlined spin /> :
               audioState === "playing" ? <PauseCircleOutlined /> :
-              <SoundOutlined />
+              <CustomerServiceOutlined />
             }
             onClick={handlePlayArticle}
             disabled={audioState === "loading"}
@@ -325,7 +326,7 @@ export default function ArticleReaderPage() {
             {audioState === "loading" ? "Đang tải audio..." :
              audioState === "playing" ? "Tạm dừng" :
              audioState === "paused" ? "Tiếp tục nghe" :
-             "🎧 Nghe bài báo"}
+             "Nghe bài báo"}
           </Button>
 
           {audioState !== "idle" && audioState !== "loading" && (
