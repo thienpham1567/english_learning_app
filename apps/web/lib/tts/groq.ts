@@ -68,7 +68,7 @@ export const VOICE_SET_VERSION = "v2";
 const GROQ_TTS_URL = "https://api.groq.com/openai/v1/audio/speech";
 const GROQ_TTS_MODEL = "canopylabs/orpheus-v1-english";
 
-export type TtsResponseFormat = "wav" | "mp3";
+export type TtsResponseFormat = "wav";
 
 export async function synthesizeTts(args: {
   text: string;

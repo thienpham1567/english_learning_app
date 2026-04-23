@@ -39,7 +39,7 @@ const DIALOGUE_DISK_CACHE_ENABLED = process.env.LISTENING_DIALOGUE_DISK_CACHE ==
 async function readCachedDialogue(id: string): Promise<Buffer | null> {
   if (!DIALOGUE_DISK_CACHE_ENABLED) return null;
   try {
-    const file = path.join(DIALOGUE_CACHE_DIR, `${id}-${VOICE_SET_VERSION}.mp3`);
+    const file = path.join(DIALOGUE_CACHE_DIR, `${id}-${VOICE_SET_VERSION}.wav`);
     return await fs.readFile(file);
   } catch {
     return null;
@@ -50,11 +50,29 @@ async function writeCachedDialogue(id: string, buf: Buffer): Promise<void> {
   if (!DIALOGUE_DISK_CACHE_ENABLED) return;
   try {
     await fs.mkdir(DIALOGUE_CACHE_DIR, { recursive: true });
-    const file = path.join(DIALOGUE_CACHE_DIR, `${id}-${VOICE_SET_VERSION}.mp3`);
+    const file = path.join(DIALOGUE_CACHE_DIR, `${id}-${VOICE_SET_VERSION}.wav`);
     await fs.writeFile(file, buf);
   } catch (err) {
     console.warn("[Listening Audio] Failed to write dialogue cache:", err);
   }
+}
+
+/** Concatenate multiple WAV buffers by stripping headers from all but the first. */
+function concatWavBuffers(parts: Buffer[]): Buffer {
+  if (parts.length === 0) return Buffer.alloc(0);
+  if (parts.length === 1) return parts[0];
+
+  const WAV_HEADER_SIZE = 44;
+  // First part keeps its header, subsequent parts strip the 44-byte header
+  const pcmParts = parts.map((p, i) => (i === 0 ? p : p.subarray(WAV_HEADER_SIZE)));
+  const result = Buffer.concat(pcmParts);
+
+  // Fix the RIFF chunk size (bytes 4-7) and data chunk size (bytes 40-43)
+  const totalSize = result.length;
+  result.writeUInt32LE(totalSize - 8, 4);           // RIFF chunk size
+  result.writeUInt32LE(totalSize - WAV_HEADER_SIZE, 40); // data chunk size
+
+  return result;
 }
 
 async function buildDialogueAudio(turns: DialogueTurn[]): Promise<Buffer> {
@@ -66,13 +84,14 @@ async function buildDialogueAudio(turns: DialogueTurn[]): Promise<Buffer> {
       return synthesizeTtsForVoice({
         text: turn.text,
         voice: turn.voiceName,
-        format: "mp3",
+        format: "wav",
         speed: 0.95,
       }).then((ab) => Buffer.from(ab));
     }),
   );
-  console.log(`[Listening Audio] Dialogue built in ${Date.now() - startMs}ms, total ${parts.reduce((s, p) => s + p.length, 0)} bytes`);
-  return Buffer.concat(parts);
+  const result = concatWavBuffers(parts);
+  console.log(`[Listening Audio] Dialogue built in ${Date.now() - startMs}ms, total ${result.length} bytes`);
+  return result;
 }
 
 export async function GET(
@@ -130,17 +149,17 @@ export async function GET(
 
       return new Response(new Uint8Array(buf), {
         headers: {
-          "Content-Type": "audio/mpeg",
+          "Content-Type": "audio/wav",
           "Cache-Control": "public, max-age=604800",
           "X-Voice-Set-Version": VOICE_SET_VERSION,
         },
       });
     }
 
-    // Single-speaker path — use MP3 for smaller payload + cache
+    // Single-speaker path — WAV format (Groq Orpheus only supports WAV)
     console.log(`[Listening Audio] Single-speaker path: accent=${accent}, voice=${VOICES[accent]}`);
     const cacheFile = DIALOGUE_DISK_CACHE_ENABLED
-      ? path.join(DIALOGUE_CACHE_DIR, `single-${id}-${accent}-${VOICE_SET_VERSION}.mp3`)
+      ? path.join(DIALOGUE_CACHE_DIR, `single-${id}-${accent}-${VOICE_SET_VERSION}.wav`)
       : null;
 
     let buf: Buffer | null = null;
@@ -154,7 +173,7 @@ export async function GET(
       const audio = await synthesizeTtsForVoice({
         text: exercise.passage,
         voice: VOICES[accent],
-        format: "mp3",
+        format: "wav",
         speed: 0.9,
       });
       buf = Buffer.from(audio);
@@ -169,7 +188,7 @@ export async function GET(
 
     return new Response(new Uint8Array(buf), {
       headers: {
-        "Content-Type": "audio/mpeg",
+        "Content-Type": "audio/wav",
         "Cache-Control": "public, max-age=604800",
       },
     });
