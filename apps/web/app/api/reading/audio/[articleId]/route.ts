@@ -8,6 +8,7 @@ import {
   VOICE_BY_ROLE,
   type VoiceRole,
 } from "@/lib/tts/groq";
+import { fetchGuardianArticle } from "@/lib/reading/utils";
 
 /**
  * GET /api/reading/audio/[articleId]?accent=us|uk|au
@@ -75,23 +76,9 @@ export async function GET(
     : VOICES[accent];
 
   try {
-    // Fetch article from internal API (server-side)
-    const baseUrl = request.url.split("/api/reading/audio")[0];
-    const articleRes = await fetch(`${baseUrl}/api/reading/article/${articleId}`, {
-      headers: {
-        cookie: request.headers.get("cookie") ?? "",
-      },
-    });
-
-    if (!articleRes.ok) {
-      console.error(`[Reading Audio] Article fetch failed: ${articleRes.status}`);
-      return Response.json({ error: "Article not found" }, { status: 404 });
-    }
-
-    const article = await articleRes.json() as {
-      title: string;
-      paragraphs: string[];
-    };
+    // Fetch article using shared util instead of internal fetch
+    // This avoids Vercel deployment issues with nested relative API calls
+    const article = await fetchGuardianArticle(decodeURIComponent(articleId));
 
     if (!article.paragraphs || article.paragraphs.length === 0) {
       return Response.json({ error: "Article has no content" }, { status: 400 });
@@ -111,7 +98,7 @@ export async function GET(
     for (let i = 0; i < article.paragraphs.length; i += BATCH_SIZE) {
       const batch = article.paragraphs.slice(i, i + BATCH_SIZE);
       const batchResults = await Promise.all(
-        batch.map((para, bi) => {
+        batch.map((para: string, bi: number) => {
           const idx = i + bi;
           console.log(`[Reading Audio]   Paragraph ${idx + 1}/${article.paragraphs.length}: ${para.length} chars`);
           return synthesizeTtsForVoice({

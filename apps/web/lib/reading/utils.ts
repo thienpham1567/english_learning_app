@@ -54,3 +54,57 @@ export class BoundedCache<T> {
     }
   }
 }
+
+const GUARDIAN_API_KEY = process.env.GUARDIAN_API_KEY ?? "test";
+const GUARDIAN_BASE = "https://content.guardianapis.com";
+
+const articleCache = new BoundedCache<any>(200, 60 * 60 * 1000); // 200 entries, 1-hour TTL
+
+export async function fetchGuardianArticle(articleId: string) {
+  const cached = articleCache.get(articleId);
+  if (cached) return cached;
+
+  const apiUrl = `${GUARDIAN_BASE}/${articleId}?api-key=${GUARDIAN_API_KEY}&show-fields=headline,trailText,thumbnail,body,bodyText,byline,wordcount`;
+  const res = await fetch(apiUrl, { next: { revalidate: 3600 } });
+
+  if (!res.ok) {
+    throw new Error(`Article not found: ${res.status}`);
+  }
+
+  const json = await res.json();
+  const content = json.response?.content;
+  if (!content) {
+    throw new Error("Article not found: no content");
+  }
+
+  const fields = content.fields ?? {};
+  const bodyText = fields.bodyText ?? "";
+  const wordCount = Number(fields.wordcount) || bodyText.split(/\s+/).length;
+
+  // Split body into paragraphs (from HTML)
+  const bodyHtml = fields.body ?? "";
+  const paragraphs = bodyHtml
+    .split(/<\/?p[^>]*>/i)
+    .map((p: string) => stripHtml(p))
+    .filter((p: string) => p.length > 20);
+
+  const data = {
+    id: encodeURIComponent(content.id),
+    rawId: content.id,
+    title: fields.headline ?? content.webTitle ?? "",
+    trailText: stripHtml(fields.trailText ?? ""),
+    author: fields.byline ?? "",
+    date: content.webPublicationDate,
+    thumbnail: fields.thumbnail ?? null,
+    section: content.sectionName ?? "",
+    sectionId: content.sectionId ?? "",
+    wordCount,
+    readTime: Math.max(1, Math.round(wordCount / 200)),
+    difficulty: estimateDifficulty(bodyText),
+    paragraphs,
+    bodyText,
+  };
+
+  articleCache.set(articleId, data);
+  return data;
+}

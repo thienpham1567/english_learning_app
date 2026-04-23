@@ -438,7 +438,26 @@ export default function ArticleReaderPage() {
           onCancel={() => setGrammarPopup(null)}
           footer={null}
           centered
-          width={520}
+          width={640}
+          closeIcon={
+            <div
+              style={{
+                width: 28,
+                height: 28,
+                borderRadius: "50%",
+                background: "rgba(255,255,255,0.2)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#fff",
+                marginTop: 4,
+                marginRight: 4,
+                transition: "background 0.2s",
+              }}
+            >
+              <span style={{ fontSize: 14 }}>✕</span>
+            </div>
+          }
           styles={{
             body: {
               borderRadius: 16,
