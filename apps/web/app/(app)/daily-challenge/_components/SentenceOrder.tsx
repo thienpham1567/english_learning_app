@@ -95,15 +95,15 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
                 borderRadius: 8,
                 background:
                   hoveredSel === i && !disabled
-                    ? "#ef444420"
+                    ? "color-mix(in srgb, var(--error) 12%, transparent)"
                     : "color-mix(in srgb, var(--accent) 14%, var(--surface))",
                 padding: "5px 12px",
                 fontSize: 14,
                 fontWeight: 600,
-                color: hoveredSel === i && !disabled ? "#ef4444" : "var(--accent)",
+                color: hoveredSel === i && !disabled ? "var(--error)" : "var(--accent)",
                 border:
                   hoveredSel === i && !disabled
-                    ? "1px solid #ef444440"
+                    ? "1px solid color-mix(in srgb, var(--error) 25%, transparent)"
                     : "1px solid color-mix(in srgb, var(--accent) 25%, transparent)",
                 cursor: disabled ? "default" : "pointer",
                 transition: "all 0.12s ease",
@@ -203,7 +203,7 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
             color: "#fff",
             border: "none",
             cursor: "pointer",
-            boxShadow: "0 3px 12px rgba(154,177,122,0.35)",
+            boxShadow: "0 3px 12px color-mix(in srgb, var(--accent) 35%, transparent)",
             transition: "opacity 0.15s",
           }}
         >

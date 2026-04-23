@@ -339,12 +339,11 @@ export function ChatMessage({
             height: 32,
             flexShrink: 0,
             borderRadius: "50%",
-            background: "var(--ink)",
-            color: "#fff",
+            overflow: "hidden",
             boxShadow: "var(--shadow-sm)",
           }}
         >
-          {persona ? <persona.avatar size={5} /> : <TrophyOutlined style={{ fontSize: 14 }} />}
+          {persona ? <persona.avatar size={32} /> : <TrophyOutlined style={{ fontSize: 14 }} />}
         </div>
       )}
 

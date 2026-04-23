@@ -9,17 +9,12 @@ import { useDailyChallenge } from "@/hooks/useDailyChallenge";
 import { ExerciseCard } from "@/app/(app)/daily-challenge/_components/ExerciseCard";
 import { ChallengeResults } from "@/app/(app)/daily-challenge/_components/ChallengeResults";
 import { CompletedState } from "@/app/(app)/daily-challenge/_components/CompletedState";
+import { EXERCISE_TYPE_LABELS } from "@/app/(app)/daily-challenge/_components/constants";
 import { ProgressSegments, StreakFire } from "@/components/shared";
 
 const { Title, Text } = Typography;
 
-// Exercise type labels with emoji (AC: #2)
-const EXERCISE_TYPE_LABELS: Record<string, string> = {
-  "fill-in-blank": "📝 Điền vào chỗ trống",
-  "sentence-order": "🔄 Sắp xếp câu",
-  "translation": "🌐 Dịch câu",
-  "error-correction": "🔍 Sửa lỗi",
-};
+
 
 // Live elapsed timer hook (AC: #4)
 function useElapsedTimer(isRunning: boolean) {
@@ -144,6 +139,34 @@ export default function DailyChallengePage() {
                   disabled={false}
                 />
               </Card>
+
+              {/* Skip button */}
+              <button
+                type="button"
+                onClick={() => answerExercise("")}
+                style={{
+                  alignSelf: "center",
+                  background: "none",
+                  border: "none",
+                  cursor: "pointer",
+                  fontSize: 13,
+                  fontWeight: 500,
+                  color: "var(--text-muted)",
+                  padding: "6px 16px",
+                  borderRadius: 999,
+                  transition: "color 0.15s, background 0.15s",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = "var(--error)";
+                  e.currentTarget.style.background = "var(--error-bg)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = "var(--text-muted)";
+                  e.currentTarget.style.background = "none";
+                }}
+              >
+                Bỏ qua câu này →
+              </button>
             </Flex>
           )}
 

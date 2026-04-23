@@ -10,6 +10,7 @@ import {
   FireOutlined,
   ThunderboltOutlined,
   RadarChartOutlined,
+  AimOutlined,
 } from "@ant-design/icons";
 import { PredictedScore } from "@/components/shared";
 import { ReadingStatsBlock } from "@/app/(app)/progress/_components/ReadingStatsBlock";
@@ -436,7 +437,7 @@ export default function ProgressPage() {
             style={{ borderRadius: "var(--radius-xl)" }}
             styles={{ header: { borderBottom: "1px solid var(--border)" } }}
           >
-            <LineChart data={data.accuracyTrends} labelKey="week" valueKey="accuracy" color="#74c4c9" suffix="%" />
+            <LineChart data={data.accuracyTrends} labelKey="week" valueKey="accuracy" color="var(--accent)" suffix="%" />
           </Card>
 
           {/* Vocabulary Growth */}
@@ -445,15 +446,15 @@ export default function ProgressPage() {
             style={{ borderRadius: "var(--radius-xl)" }}
             styles={{ header: { borderBottom: "1px solid var(--border)" } }}
           >
-            <LineChart data={data.vocabularyGrowth} labelKey="week" valueKey="total_words" color="#90d0d4" />
+            <LineChart data={data.vocabularyGrowth} labelKey="week" valueKey="total_words" color="var(--secondary)" />
           </Card>
         </div>
 
         {/* Summary footer */}
         <Card style={{ borderRadius: "var(--radius-xl)", background: "linear-gradient(135deg, var(--accent), var(--secondary))" }}>
-          <Flex align="center" justify="center" gap={16} style={{ color: "#fff", padding: "8px 0" }}>
-            <Text style={{ color: "#fff", fontSize: 14 }}>
-              🎯 Tổng <strong>{totalStats.totalActivities}</strong> hoạt động · 
+          <Flex align="center" justify="center" gap={16} style={{ color: "var(--text-on-accent, #fff)", padding: "8px 0" }}>
+            <Text style={{ color: "var(--text-on-accent, #fff)", fontSize: 14 }}>
+              <AimOutlined style={{ marginRight: 4 }} /> Tổng <strong>{totalStats.totalActivities}</strong> hoạt động · 
               Streak tốt nhất <strong>{totalStats.bestStreak}</strong> ngày · 
               <strong>{totalStats.totalQuizzes}</strong> thử thách hoàn thành
             </Text>

@@ -12,6 +12,7 @@ import {
   TrophyOutlined,
   BarChartOutlined,
   SwapOutlined,
+  AimOutlined,
 } from "@ant-design/icons";
 import { Progress, Tag } from "antd";
 
@@ -266,7 +267,7 @@ export default function MinimalPairsDrillPage() {
 
   const correctCount = answers.filter((a) => a.correct).length;
   const accuracy = answers.length > 0 ? Math.round((correctCount / answers.length) * 100) : 0;
-  const scoreColor = (s: number) => (s >= 80 ? "#52c41a" : s >= 50 ? "#faad14" : "#ff4d4f");
+  const scoreColor = (s: number) => (s >= 80 ? "var(--success)" : s >= 50 ? "var(--warning)" : "var(--error)");
 
   // Focus queue: tags the user got wrong in this session
   const wrongTags = useMemo(() => {
@@ -340,7 +341,7 @@ export default function MinimalPairsDrillPage() {
                     fontWeight: mode === m ? 600 : 400, cursor: "pointer", fontSize: 14,
                   }}
                 >
-                  {m === "listen" ? "🎧 Nghe" : "🎤 Nói"}
+                  {m === "listen" ? <><SoundOutlined /> Nghe</> : <><AudioOutlined /> Nói</>}
                 </button>
               ))}
             </div>
@@ -373,7 +374,7 @@ export default function MinimalPairsDrillPage() {
               onClick={() => startSession()}
               style={{
                 padding: "12px 32px", borderRadius: 10, border: "none",
-                background: "var(--accent)", color: "#fff", fontSize: 15,
+                background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 15,
                 fontWeight: 600, cursor: "pointer",
               }}
             >
@@ -381,7 +382,7 @@ export default function MinimalPairsDrillPage() {
             </button>
 
             {sessionError && (
-              <p style={{ color: "#ff4d4f", fontSize: 12, margin: "12px 0 0" }}>
+              <p style={{ color: "var(--error)", fontSize: 12, margin: "12px 0 0" }}>
                 {sessionError}
               </p>
             )}
@@ -412,9 +413,9 @@ export default function MinimalPairsDrillPage() {
                 disabled={isTtsLoading || isSpeaking}
                 style={{
                   width: 80, height: 80, borderRadius: "50%", border: "none",
-                  background: "linear-gradient(135deg, var(--accent), #4ecdc4)",
-                  color: "#fff", fontSize: 28, cursor: "pointer",
-                  boxShadow: "0 4px 16px rgba(0,0,0,0.15)",
+                  background: "linear-gradient(135deg, var(--accent), var(--tertiary))",
+                  color: "var(--text-on-accent, #fff)", fontSize: 28, cursor: "pointer",
+                  boxShadow: "0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent)",
                   opacity: isTtsLoading ? 0.5 : 1,
                 }}
                 aria-label="Phát lại"
@@ -436,8 +437,8 @@ export default function MinimalPairsDrillPage() {
                 let bg = "var(--card-bg)";
                 let border = "1px solid var(--border)";
                 if (feedback !== null) {
-                  if (isTarget) { bg = "#f6ffed"; border = "2px solid #52c41a"; }
-                  else if (isChosen && !isTarget) { bg = "#fff2f0"; border = "2px solid #ff4d4f"; }
+                  if (isTarget) { bg = "color-mix(in srgb, var(--success) 8%, var(--surface))"; border = "2px solid var(--success)"; }
+                  else if (isChosen && !isTarget) { bg = "color-mix(in srgb, var(--error) 8%, var(--surface))"; border = "2px solid var(--error)"; }
                 }
 
                 return (
@@ -452,8 +453,8 @@ export default function MinimalPairsDrillPage() {
                     }}
                   >
                     {word}
-                    {feedback !== null && isTarget && <CheckCircleOutlined style={{ marginLeft: 8, color: "#52c41a" }} />}
-                    {feedback !== null && isChosen && !isTarget && <CloseCircleOutlined style={{ marginLeft: 8, color: "#ff4d4f" }} />}
+                    {feedback !== null && isTarget && <CheckCircleOutlined style={{ marginLeft: 8, color: "var(--success)" }} />}
+                    {feedback !== null && isChosen && !isTarget && <CloseCircleOutlined style={{ marginLeft: 8, color: "var(--error)" }} />}
                   </button>
                 );
               })}
@@ -467,7 +468,7 @@ export default function MinimalPairsDrillPage() {
                   disabled={isSaving}
                   style={{
                     padding: "10px 24px", borderRadius: 8, border: "none",
-                    background: "var(--accent)", color: "#fff", fontSize: 14,
+                    background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14,
                     fontWeight: 600, cursor: isSaving ? "default" : "pointer",
                     opacity: isSaving ? 0.65 : 1,
                   }}
@@ -530,9 +531,9 @@ export default function MinimalPairsDrillPage() {
                   onClick={startSpeakAttempt}
                   style={{
                     width: 80, height: 80, borderRadius: "50%", border: "none",
-                    background: "linear-gradient(135deg, #ff4d4f, #ff7875)",
-                    color: "#fff", fontSize: 28, cursor: "pointer",
-                    boxShadow: "0 4px 16px rgba(255,77,79,0.3)",
+                    background: "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 70%, white))",
+                    color: "var(--text-on-accent, #fff)", fontSize: 28, cursor: "pointer",
+                    boxShadow: "0 4px 16px color-mix(in srgb, var(--error) 30%, transparent)",
                   }}
                   aria-label="Bắt đầu ghi âm"
                 >
@@ -545,8 +546,8 @@ export default function MinimalPairsDrillPage() {
                   onClick={stopSpeakAttempt}
                   style={{
                     width: 80, height: 80, borderRadius: "50%",
-                    border: "3px solid #ff4d4f", background: "var(--card-bg)",
-                    color: "#ff4d4f", fontSize: 20, cursor: "pointer",
+                    border: "3px solid var(--error)", background: "var(--card-bg)",
+                    color: "var(--error)", fontSize: 20, cursor: "pointer",
                     animation: "pulse 1s ease-in-out infinite",
                   }}
                   aria-label="Dừng ghi âm"
@@ -563,7 +564,7 @@ export default function MinimalPairsDrillPage() {
               )}
 
               {speakError && (
-                <p style={{ fontSize: 13, color: "#ff4d4f", margin: "12px 0 0" }}>
+                <p style={{ fontSize: 13, color: "var(--error)", margin: "12px 0 0" }}>
                   {speakError}
                 </p>
               )}
@@ -572,11 +573,11 @@ export default function MinimalPairsDrillPage() {
               {feedback !== null && (
                 <div style={{ marginTop: 16 }}>
                   {feedback === "correct" ? (
-                    <div style={{ color: "#52c41a", fontSize: 18, fontWeight: 600 }}>
+                    <div style={{ color: "var(--success)", fontSize: 18, fontWeight: 600 }}>
                       <CheckCircleOutlined /> Đúng rồi!
                     </div>
                   ) : (
-                    <div style={{ color: "#ff4d4f", fontSize: 18, fontWeight: 600 }}>
+                    <div style={{ color: "var(--error)", fontSize: 18, fontWeight: 600 }}>
                       <CloseCircleOutlined /> Chưa đúng — thử nghe lại mẫu
                     </div>
                   )}
@@ -592,7 +593,7 @@ export default function MinimalPairsDrillPage() {
                   disabled={isSaving}
                   style={{
                     padding: "10px 24px", borderRadius: 8, border: "none",
-                    background: "var(--accent)", color: "#fff", fontSize: 14,
+                    background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14,
                     fontWeight: 600, cursor: isSaving ? "default" : "pointer",
                     opacity: isSaving ? 0.65 : 1,
                   }}
@@ -621,7 +622,7 @@ export default function MinimalPairsDrillPage() {
                 format={(pct) => <span style={{ fontSize: 24, fontWeight: 700 }}>{pct}%</span>}
               />
               <p style={{ fontSize: 14, color: "var(--text-secondary)", marginTop: 12 }}>
-                {correctCount}/{answers.length} câu đúng — {mode === "listen" ? "🎧 Nghe" : "🎤 Nói"}
+                {correctCount}/{answers.length} câu đúng — {mode === "listen" ? <><SoundOutlined /> Nghe</> : <><AudioOutlined /> Nói</>}
               </p>
             </div>
 
@@ -637,12 +638,12 @@ export default function MinimalPairsDrillPage() {
                     style={{
                       display: "flex", alignItems: "center", gap: 10,
                       padding: "6px 10px", borderRadius: 6, fontSize: 13,
-                      background: a.correct ? "#f6ffed" : "#fff2f0",
+                      background: a.correct ? "color-mix(in srgb, var(--success) 8%, var(--surface))" : "color-mix(in srgb, var(--error) 8%, var(--surface))",
                     }}
                   >
                     {a.correct
-                      ? <CheckCircleOutlined style={{ color: "#52c41a" }} />
-                      : <CloseCircleOutlined style={{ color: "#ff4d4f" }} />}
+                      ? <CheckCircleOutlined style={{ color: "var(--success)" }} />
+                      : <CloseCircleOutlined style={{ color: "var(--error)" }} />}
                     <span style={{ fontWeight: 500 }}>{a.pair.a} / {a.pair.b}</span>
                     <Tag style={{ fontSize: 10, marginLeft: "auto" }}>{a.pair.contrast}</Tag>
                   </div>
@@ -654,7 +655,7 @@ export default function MinimalPairsDrillPage() {
             {wrongTags.length > 0 && (
               <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
                 <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
-                  🎯 Cần luyện thêm
+                  <AimOutlined /> Cần luyện thêm
                 </p>
                 <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
                   {wrongTags.map((tag) => (
@@ -673,8 +674,8 @@ export default function MinimalPairsDrillPage() {
                   onClick={() => startSession(wrongTags)}
                   style={{
                     padding: "10px 20px", borderRadius: 8,
-                    border: "1px solid #ff4d4f", background: "transparent",
-                    color: "#ff4d4f", cursor: "pointer", fontSize: 13, fontWeight: 500,
+                    border: "1px solid var(--error)", background: "transparent",
+                    color: "var(--error)", cursor: "pointer", fontSize: 13, fontWeight: 500,
                   }}
                 >
                   <TrophyOutlined /> Luyện cặp âm yếu
@@ -685,7 +686,7 @@ export default function MinimalPairsDrillPage() {
                 style={{
                   padding: "10px 20px", borderRadius: 8,
                   border: "none", background: "var(--accent)",
-                  color: "#fff", cursor: "pointer", fontSize: 13, fontWeight: 600,
+                  color: "var(--text-on-accent, #fff)", cursor: "pointer", fontSize: 13, fontWeight: 600,
                 }}
               >
                 <ReloadOutlined /> Phiên mới

@@ -9,7 +9,12 @@ import {
   SoundOutlined,
   BulbOutlined,
   RightOutlined,
+  BookOutlined,
+  ReadOutlined,
+  EditOutlined,
+  CalculatorOutlined,
 } from "@ant-design/icons";
+import type { ReactNode } from "react";
 import { Tag } from "antd";
 
 type VocabWord = { word: string; ipa: string; meaning: string; example: string; exampleVi: string };
@@ -26,11 +31,11 @@ type StudySetData = {
 };
 
 type Section = "vocabulary" | "grammar" | "reading" | "exercises";
-const SECTIONS: { key: Section; label: string; icon: string }[] = [
-  { key: "vocabulary", label: "Từ vựng", icon: "📚" },
-  { key: "grammar", label: "Ngữ pháp", icon: "📐" },
-  { key: "reading", label: "Đọc hiểu", icon: "📖" },
-  { key: "exercises", label: "Bài tập", icon: "✍️" },
+const SECTIONS: { key: Section; label: string; icon: ReactNode }[] = [
+  { key: "vocabulary", label: "Từ vựng", icon: <BookOutlined /> },
+  { key: "grammar", label: "Ngữ pháp", icon: <CalculatorOutlined /> },
+  { key: "reading", label: "Đọc hiểu", icon: <ReadOutlined /> },
+  { key: "exercises", label: "Bài tập", icon: <EditOutlined /> },
 ];
 
 interface Props {
@@ -116,9 +121,9 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
 
   if (error) {
     return (
-      <div style={{ padding: 20, borderRadius: 12, background: "#ff4d4f15", border: "1px solid #ff4d4f40", color: "#ff4d4f", textAlign: "center" }}>
+      <div style={{ padding: 20, borderRadius: 12, background: "color-mix(in srgb, var(--error) 8%, transparent)", border: "1px solid var(--error)40", color: "var(--error)", textAlign: "center" }}>
         <p>{error}</p>
-        <button onClick={generate} style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: "#ff4d4f", color: "#fff", cursor: "pointer" }}>Thử lại</button>
+        <button onClick={generate} style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: "var(--error)", color: "var(--text-on-accent, #fff)", cursor: "pointer" }}>Thử lại</button>
       </div>
     );
   }
@@ -128,10 +133,10 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
   if (allDone) {
     return (
       <div style={{ textAlign: "center", padding: 32, borderRadius: 16, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-        <CheckCircleOutlined style={{ fontSize: 48, color: "#52c41a", marginBottom: 16 }} />
+        <CheckCircleOutlined style={{ fontSize: 48, color: "var(--success)", marginBottom: 16 }} />
         <h2 style={{ margin: "0 0 8px" }}>Bộ học hoàn thành!</h2>
         <p style={{ color: "var(--text-secondary)", margin: "0 0 4px" }}>{topicTitle} — 4/4 phần</p>
-        {xpAwarded > 0 && <p style={{ color: "var(--accent)", fontSize: 16, fontWeight: 600, margin: "8px 0 20px" }}>+{xpAwarded} XP 🎉</p>}
+        {xpAwarded > 0 && <p style={{ color: "var(--accent)", fontSize: 16, fontWeight: 600, margin: "8px 0 20px" }}>+{xpAwarded} XP</p>}
         <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
           <button onClick={onBack} style={{ padding: "10px 20px", borderRadius: 8, border: "1px solid var(--border)", background: "transparent", color: "var(--text)", cursor: "pointer", fontWeight: 500 }}>
             <ArrowLeftOutlined /> Chủ đề khác
@@ -159,13 +164,13 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
               onClick={() => setActiveSection(s.key)}
               style={{
                 padding: "8px 14px", borderRadius: 99, fontSize: 13, fontWeight: active ? 600 : 400,
-                border: active ? "1.5px solid var(--accent)" : done ? "1.5px solid #52c41a" : "1px solid var(--border)",
-                background: active ? "var(--accent-muted, #6366f115)" : done ? "#52c41a08" : "transparent",
-                color: active ? "var(--accent)" : done ? "#52c41a" : "var(--text-secondary)",
+                border: active ? "1.5px solid var(--accent)" : done ? "1.5px solid var(--success)" : "1px solid var(--border)",
+                background: active ? "var(--accent-muted, #6366f115)" : done ? "color-mix(in srgb, var(--success) 3%, transparent)" : "transparent",
+                color: active ? "var(--accent)" : done ? "var(--success)" : "var(--text-secondary)",
                 cursor: "pointer", transition: "all 0.2s",
               }}
             >
-              {done ? "✅" : s.icon} {s.label}
+              {done ? <CheckCircleOutlined style={{ color: "var(--success)" }} /> : s.icon} {s.label}
             </button>
           );
         })}
@@ -194,7 +199,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
             </div>
           ))}
           {!completedSections.has("vocabulary") && (
-            <button onClick={() => markDone("vocabulary")} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+            <button onClick={() => markDone("vocabulary")} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
               Hoàn thành <CheckCircleOutlined />
             </button>
           )}
@@ -204,8 +209,8 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
       {/* ── GRAMMAR ── */}
       {activeSection === "grammar" && (
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          <div style={{ padding: 20, borderRadius: 12, textAlign: "center", background: "linear-gradient(135deg, var(--accent-muted, #6366f110), #8b5cf610)", border: "1px solid var(--border)" }}>
-            <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 6px", fontWeight: 600 }}>📐 {data.grammar.title}</p>
+          <div style={{ padding: 20, borderRadius: 12, textAlign: "center", background: "linear-gradient(135deg, var(--accent-muted, #6366f110), color-mix(in srgb, var(--accent) 6%, transparent))", border: "1px solid var(--border)" }}>
+            <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 6px", fontWeight: 600 }}><CalculatorOutlined /> {data.grammar.title}</p>
             <p style={{ fontSize: 18, fontWeight: 700, color: "var(--accent)", margin: 0, fontFamily: "monospace" }}>{data.grammar.formula}</p>
           </div>
           <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
@@ -219,7 +224,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
             <p style={{ margin: "4px 0 0", fontSize: 13, color: "var(--text-secondary)", fontStyle: "italic" }}>{data.grammar.topicExampleVi}</p>
           </div>
           {!completedSections.has("grammar") && (
-            <button onClick={() => markDone("grammar")} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+            <button onClick={() => markDone("grammar")} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
               Hoàn thành <CheckCircleOutlined />
             </button>
           )}
@@ -245,8 +250,8 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                     let border = "1px solid var(--border)";
                     let color = "var(--text)";
                     if (readingRevealed) {
-                      if (oi === q.answer) { bg = "#52c41a15"; border = "1px solid #52c41a"; color = "#52c41a"; }
-                      else if (readingAnswers[qi] === oi) { bg = "#ff4d4f15"; border = "1px solid #ff4d4f"; color = "#ff4d4f"; }
+                      if (oi === q.answer) { bg = "color-mix(in srgb, var(--success) 8%, transparent)"; border = "1px solid var(--success)"; color = "var(--success)"; }
+                      else if (readingAnswers[qi] === oi) { bg = "color-mix(in srgb, var(--error) 8%, transparent)"; border = "1px solid var(--error)"; color = "var(--error)"; }
                     }
                     return (
                       <button key={oi} onClick={() => { if (!readingRevealed) setReadingAnswers((p) => ({ ...p, [qi]: oi })); }} disabled={readingRevealed}
@@ -265,12 +270,12 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
             );
           })}
           {!readingRevealed && Object.keys(readingAnswers).length === data.reading.questions.length && (
-            <button onClick={() => setReadingRevealed(true)} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+            <button onClick={() => setReadingRevealed(true)} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
               Kiểm tra <RightOutlined />
             </button>
           )}
           {readingRevealed && !completedSections.has("reading") && (
-            <button onClick={() => markDone("reading")} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "#52c41a", color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+            <button onClick={() => markDone("reading")} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--success)", color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
               Hoàn thành <CheckCircleOutlined />
             </button>
           )}
@@ -295,8 +300,8 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                     let border = "1px solid var(--border)";
                     let color = "var(--text)";
                     if (exRevealed) {
-                      if (isCorrect) { bg = "#52c41a15"; border = "1px solid #52c41a"; color = "#52c41a"; }
-                      else if (isSel) { bg = "#ff4d4f15"; border = "1px solid #ff4d4f"; color = "#ff4d4f"; }
+                      if (isCorrect) { bg = "color-mix(in srgb, var(--success) 8%, transparent)"; border = "1px solid var(--success)"; color = "var(--success)"; }
+                      else if (isSel) { bg = "color-mix(in srgb, var(--error) 8%, transparent)"; border = "1px solid var(--error)"; color = "var(--error)"; }
                     }
                     return (
                       <button key={o} onClick={() => { if (!exRevealed) { setExSelected(o); setExRevealed(true); } }} disabled={exRevealed}
@@ -323,7 +328,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
               } else {
                 markDone("exercises");
               }
-            }} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+            }} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
               {exIdx < data.exercises.length - 1 ? <>Câu tiếp <RightOutlined /></> : <>Hoàn thành <CheckCircleOutlined /></>}
             </button>
           )}

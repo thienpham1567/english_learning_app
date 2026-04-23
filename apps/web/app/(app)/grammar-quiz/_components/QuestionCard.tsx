@@ -97,12 +97,12 @@ export function QuestionCard({
               alignItems: "center",
               gap: 6,
               borderRadius: 999,
-              background: "linear-gradient(135deg, #f97316, #ef4444)",
+              background: "linear-gradient(135deg, var(--xp), var(--error))",
               padding: "6px 16px",
               fontSize: 14,
               fontWeight: 700,
               color: "#fff",
-              boxShadow: "0 2px 12px rgba(249,115,22,0.35)",
+              boxShadow: "0 2px 12px color-mix(in srgb, var(--xp) 35%, transparent)",
             }}
           >
             🔥 x{combo} Combo!
@@ -117,7 +117,7 @@ export function QuestionCard({
           border: "1px solid var(--border)",
           background: "var(--surface)",
           padding: 24,
-          boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
+          boxShadow: "var(--shadow-md)",
           borderTop: "3px solid var(--accent)",
         }}
       >
@@ -138,13 +138,13 @@ export function QuestionCard({
 
             if (isRevealed) {
               if (isCorrect) {
-                bg = "#ecfdf5";
-                borderColor = "#34d399";
-                color = "#065f46";
+                bg = "color-mix(in srgb, var(--success) 8%, var(--surface))";
+                borderColor = "var(--success)";
+                color = "var(--success)";
               } else if (isSelected && !isCorrect) {
-                bg = "#fef2f2";
-                borderColor = "#f87171";
-                color = "#991b1b";
+                bg = "color-mix(in srgb, var(--error) 8%, var(--surface))";
+                borderColor = "var(--error)";
+                color = "var(--error)";
               } else {
                 opacity = 0.5;
                 bg = "var(--bg-deep)";
@@ -186,9 +186,9 @@ export function QuestionCard({
                     justifyContent: "center",
                     borderRadius: 8,
                     background: isRevealed && isCorrect
-                      ? "#059669"
+                      ? "var(--success)"
                       : isRevealed && isSelected && !isCorrect
-                      ? "#dc2626"
+                      ? "var(--error)"
                       : isSelected
                       ? "var(--accent)"
                       : "var(--bg-deep)",
@@ -223,8 +223,8 @@ export function QuestionCard({
                 alignItems: "center",
                 gap: 8,
                 borderRadius: "var(--radius)",
-                border: `1px solid ${selectedAnswer === question.correctIndex ? "#34d399" : "#f87171"}`,
-                background: selectedAnswer === question.correctIndex ? "#ecfdf5" : "#fef2f2",
+                border: `1px solid ${selectedAnswer === question.correctIndex ? "var(--success)" : "var(--error)"}`,
+                background: selectedAnswer === question.correctIndex ? "color-mix(in srgb, var(--success) 8%, var(--surface))" : "color-mix(in srgb, var(--error) 8%, var(--surface))",
                 padding: "10px 16px",
               }}
             >
@@ -235,7 +235,7 @@ export function QuestionCard({
                 style={{
                   fontSize: 14,
                   fontWeight: 600,
-                  color: selectedAnswer === question.correctIndex ? "#065f46" : "#991b1b",
+                  color: selectedAnswer === question.correctIndex ? "var(--success)" : "var(--error)",
                 }}
               >
                 {selectedAnswer === question.correctIndex ? "Đúng!" : "Sai!"} Đáp án:{" "}
@@ -258,7 +258,7 @@ export function QuestionCard({
                 cursor: "pointer",
                 fontSize: 13,
                 fontWeight: 500,
-                color: "#b45309",
+                color: "var(--warning)",
                 padding: "4px 0",
               }}
             >
@@ -272,8 +272,8 @@ export function QuestionCard({
                 style={{
                   marginTop: 4,
                   borderRadius: "var(--radius)",
-                  border: "1px solid #fcd34d",
-                  background: "rgba(254,243,199,0.6)",
+                  border: "1px solid color-mix(in srgb, var(--warning) 40%, transparent)",
+                  background: "color-mix(in srgb, var(--warning) 8%, var(--surface))",
                   padding: 16,
                 }}
               >
@@ -284,7 +284,7 @@ export function QuestionCard({
                       fontWeight: 600,
                       textTransform: "uppercase",
                       letterSpacing: "0.1em",
-                      color: "#b45309",
+                      color: "var(--warning)",
                       margin: 0,
                     }}
                   >
@@ -295,7 +295,7 @@ export function QuestionCard({
                       display: "flex",
                       overflow: "hidden",
                       borderRadius: 6,
-                      border: "1px solid #fcd34d",
+                      border: "1px solid color-mix(in srgb, var(--warning) 40%, transparent)",
                     }}
                   >
                     {(["vi", "en"] as const).map((l) => (
@@ -308,8 +308,8 @@ export function QuestionCard({
                           fontWeight: 600,
                           border: "none",
                           cursor: "pointer",
-                          background: lang === l ? "var(--accent-hover)" : "#fffbeb",
-                          color: lang === l ? "#fff" : "#b45309",
+                          background: lang === l ? "var(--accent-hover)" : "color-mix(in srgb, var(--warning) 6%, var(--surface))",
+                          color: lang === l ? "#fff" : "var(--warning)",
                         }}
                       >
                         {l === "vi" ? "VN" : "EN"}
@@ -323,7 +323,7 @@ export function QuestionCard({
                     whiteSpace: "pre-line",
                     fontSize: 14,
                     lineHeight: 1.6,
-                    color: "#78350f",
+                    color: "var(--text-secondary)",
                   }}
                 >
                   {lang === "en" ? question.explanationEn : question.explanationVi}
@@ -344,7 +344,7 @@ export function QuestionCard({
                   {question.examples.map((ex, i) => (
                     <p
                       key={i}
-                      style={{ fontSize: 14, fontStyle: "italic", color: "#92400e", margin: 0 }}
+                      style={{ fontSize: 14, fontStyle: "italic", color: "var(--text-secondary)", margin: 0 }}
                     >
                       {i + 1}. {ex}
                     </p>

@@ -181,7 +181,7 @@ export default function ShadowingMode({ examMode }: Props) {
   return (
     <div style={{ maxWidth: 600, margin: "0 auto", width: "100%" }}>
       {error && (
-        <div style={{ padding: "10px 16px", borderRadius: 8, background: "#ff4d4f15", border: "1px solid #ff4d4f40", color: "#ff4d4f", marginBottom: 16, fontSize: 13 }}>
+        <div style={{ padding: "10px 16px", borderRadius: 8, background: "var(--error-bg)", border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)", color: "var(--error)", marginBottom: 16, fontSize: 13 }}>
           ⚠️ {error}
         </div>
       )}
@@ -197,7 +197,7 @@ export default function ShadowingMode({ examMode }: Props) {
           <p style={{ color: "var(--text-secondary)", margin: "0 0 24px", fontSize: 12 }}>
             5 câu mỗi phiên · AI đánh giá chi tiết · +25 XP
           </p>
-          <button onClick={startSession} style={{ padding: "12px 32px", borderRadius: 10, border: "none", background: "var(--accent)", color: "#fff", fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
+          <button onClick={startSession} style={{ padding: "12px 32px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
             Bắt đầu Shadowing
           </button>
         </div>
@@ -223,7 +223,7 @@ export default function ShadowingMode({ examMode }: Props) {
           {/* Sentence card */}
           <div style={{
             padding: 24, borderRadius: 16, textAlign: "center",
-            border: state === "recording" ? "2px solid #ff4d4f" : "1px solid var(--border)",
+            border: state === "recording" ? "2px solid var(--error)" : "1px solid var(--border)",
             background: "var(--card-bg)",
             animation: state === "recording" ? "pulse 1.5s ease-in-out infinite" : undefined,
           }}>
@@ -258,7 +258,7 @@ export default function ShadowingMode({ examMode }: Props) {
           <div style={{ textAlign: "center" }}>
             {state === "ready" && (
               <>
-                <button onClick={startRecording} style={{ width: 80, height: 80, borderRadius: "50%", border: "none", background: "linear-gradient(135deg, #ff4d4f, #ff7875)", color: "#fff", fontSize: 28, cursor: "pointer", boxShadow: "0 4px 16px rgba(255,77,79,0.3)" }} aria-label="Ghi âm">
+                <button onClick={startRecording} style={{ width: 80, height: 80, borderRadius: "50%", border: "none", background: "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 70%, white))", color: "var(--text-on-accent, #fff)", fontSize: 28, cursor: "pointer", boxShadow: "0 4px 16px color-mix(in srgb, var(--error) 30%, transparent)" }} aria-label="Ghi âm">
                   <AudioOutlined />
                 </button>
                 <p style={{ fontSize: 12, color: "var(--text-secondary)", marginTop: 8 }}>Nhấn nút để ghi âm</p>
@@ -266,10 +266,10 @@ export default function ShadowingMode({ examMode }: Props) {
             )}
             {state === "recording" && (
               <>
-                <button onClick={stopRecording} style={{ width: 80, height: 80, borderRadius: "50%", border: "3px solid #ff4d4f", background: "var(--card-bg)", color: "#ff4d4f", fontSize: 20, cursor: "pointer", animation: "pulse 1s ease-in-out infinite" }} aria-label="Dừng ghi âm">
+                <button onClick={stopRecording} style={{ width: 80, height: 80, borderRadius: "50%", border: "3px solid var(--error)", background: "var(--card-bg)", color: "var(--error)", fontSize: 20, cursor: "pointer", animation: "pulse 1s ease-in-out infinite" }} aria-label="Dừng ghi âm">
                   <BorderOutlined />
                 </button>
-                <p style={{ fontSize: 12, color: "#ff4d4f", marginTop: 8, fontWeight: 600 }}>Đang ghi âm... Nhấn để dừng</p>
+                <p style={{ fontSize: 12, color: "var(--error)", marginTop: 8, fontWeight: 600 }}>Đang ghi âm... Nhấn để dừng</p>
               </>
             )}
             {(state === "transcribing" || state === "evaluating") && (
@@ -290,7 +290,7 @@ export default function ShadowingMode({ examMode }: Props) {
           {/* Score */}
           <div style={{ padding: 24, borderRadius: 16, background: "var(--card-bg)", border: "1px solid var(--border)", textAlign: "center" }}>
             <Progress type="circle" percent={evalResult.score} size={100}
-              strokeColor={evalResult.score >= 80 ? "#52c41a" : evalResult.score >= 50 ? "#faad14" : "#ff4d4f"}
+              strokeColor={evalResult.score >= 80 ? "var(--success)" : evalResult.score >= 50 ? "var(--warning)" : "var(--error)"}
               format={(pct) => <span style={{ fontSize: 24, fontWeight: 700 }}>{pct}</span>}
             />
             <div style={{ display: "flex", justifyContent: "center", gap: 24, marginTop: 16 }}>
@@ -334,7 +334,7 @@ export default function ShadowingMode({ examMode }: Props) {
             <button onClick={retryCurrent} style={{ padding: "10px 20px", borderRadius: 8, border: "1px solid var(--border)", background: "transparent", color: "var(--text)", cursor: "pointer", fontSize: 13, fontWeight: 500 }}>
               <ReloadOutlined /> Thử lại
             </button>
-            <button onClick={nextSentence} style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "var(--accent)", color: "#fff", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
+            <button onClick={nextSentence} style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
               {currentIdx < sentences.length - 1 ? <>Câu tiếp <RightOutlined /></> : <>Hoàn thành <CheckCircleOutlined /></>}
             </button>
           </div>
@@ -345,9 +345,9 @@ export default function ShadowingMode({ examMode }: Props) {
       {state === "summary" && (
         <div style={{ textAlign: "center", padding: 32, border: "1px solid var(--border)", borderRadius: 16, background: "var(--card-bg)" }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>
-            {avgScore >= 80 ? <CheckCircleOutlined style={{ color: "#52c41a" }} /> :
-             avgScore >= 50 ? <InfoCircleOutlined style={{ color: "#faad14" }} /> :
-             <CloseCircleOutlined style={{ color: "#ff4d4f" }} />}
+            {avgScore >= 80 ? <CheckCircleOutlined style={{ color: "var(--success)" }} /> :
+             avgScore >= 50 ? <InfoCircleOutlined style={{ color: "var(--warning)" }} /> :
+             <CloseCircleOutlined style={{ color: "var(--error)" }} />}
           </div>
           <h2 style={{ margin: "0 0 8px" }}>Shadowing hoàn thành!</h2>
           <p style={{ color: "var(--text-secondary)", margin: "0 0 8px" }}>
@@ -357,7 +357,7 @@ export default function ShadowingMode({ examMode }: Props) {
             <p style={{ color: "var(--accent)", fontSize: 13, fontWeight: 600, margin: "0 0 8px" }}>+{xpAwarded} XP</p>
           )}
           {skillUpdate && (
-            <p style={{ fontSize: 13, color: skillUpdate.levelUp ? "#52c41a" : "var(--text-secondary)", margin: "0 0 16px" }}>
+            <p style={{ fontSize: 13, color: skillUpdate.levelUp ? "var(--success)" : "var(--text-secondary)", margin: "0 0 16px" }}>
               {skillUpdate.levelUp ? `🎉 Trình độ nghe: ${skillUpdate.cefr}!` : `📊 Trình độ nghe: ${skillUpdate.cefr}`}
             </p>
           )}
@@ -368,7 +368,7 @@ export default function ShadowingMode({ examMode }: Props) {
               </Tag>
             ))}
           </div>
-          <button onClick={startSession} style={{ padding: "10px 24px", borderRadius: 8, border: "none", background: "var(--accent)", color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+          <button onClick={startSession} style={{ padding: "10px 24px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
             <ReloadOutlined /> Luyện tiếp
           </button>
         </div>

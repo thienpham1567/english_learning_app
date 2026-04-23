@@ -2,8 +2,9 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { api } from "@/lib/api-client";
-import { SoundOutlined, AudioOutlined, EditOutlined, FileTextOutlined } from "@ant-design/icons";
-import { Segmented } from "antd";
+import { SoundOutlined, AudioOutlined, EditOutlined, FileTextOutlined, ImportOutlined } from "@ant-design/icons";
+import { Segmented, Button } from "antd";
+import { useRouter } from "next/navigation";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 import { useListeningExercise } from "@/hooks/useListeningExercise";
@@ -44,6 +45,7 @@ export default function ListeningPage() {
   // MiniDictionary integration for transcript word lookup
   const miniDict = useMiniDictionary();
   const { examMode } = useExamMode();
+  const router = useRouter();
   const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
   const [profileRecommendedLevel, setProfileRecommendedLevel] = useState<CefrLevel | null>(null);
   const [mode, setMode] = useState<string>("listening");
@@ -86,7 +88,7 @@ export default function ListeningPage() {
       {/* Header */}
       <ModuleHeader
         icon={<SoundOutlined />}
-        gradient="linear-gradient(135deg, #6366f1, #8b5cf6)"
+        gradient="linear-gradient(135deg, var(--accent), var(--secondary))"
         title={
           mode === "listening" ? "Luyện nghe 🎧" :
           mode === "shadowing" ? "Shadowing 🎯" :
@@ -104,17 +106,31 @@ export default function ListeningPage() {
           "Luyện nghe tiếng Anh"
         }
         action={
-          <Segmented
-            value={mode}
-            onChange={(val) => setMode(val as string)}
-            options={[
-              { value: "listening", icon: <SoundOutlined />, label: "Nghe" },
-              { value: "shadowing", icon: <AudioOutlined />, label: "Shadow" },
-              { value: "dictation", icon: <EditOutlined />, label: "Dictation" },
-              { value: "summarize", icon: <FileTextOutlined />, label: "Tóm tắt" },
-            ]}
-            size="small"
-          />
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <Segmented
+              value={mode}
+              onChange={(val) => setMode(val as string)}
+              options={[
+                { value: "listening", icon: <SoundOutlined />, label: "Nghe" },
+                { value: "shadowing", icon: <AudioOutlined />, label: "Shadow" },
+                { value: "dictation", icon: <EditOutlined />, label: "Dictation" },
+                { value: "summarize", icon: <FileTextOutlined />, label: "Tóm tắt" },
+              ]}
+              size="small"
+            />
+            <Button
+              type="text"
+              icon={<ImportOutlined style={{ fontSize: 16 }} />}
+              onClick={() => router.push("/listening/import")}
+              title="Import Podcast / YouTube"
+              style={{
+                width: 36, height: 36, borderRadius: 10,
+                border: "1px solid rgba(255,255,255,0.2)",
+                color: "rgba(255,255,255,0.8)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}
+            />
+          </div>
         }
       />
 
@@ -148,11 +164,11 @@ export default function ListeningPage() {
         {error && (
           <div
             style={{
-              background: "#ff4d4f15",
-              border: "1px solid #ff4d4f40",
+              background: "var(--error-bg)",
+              border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)",
               borderRadius: "var(--radius-md)",
               padding: "12px 16px",
-              color: "#ff4d4f",
+              color: "var(--error)",
               fontSize: 13,
               marginBottom: 16,
             }}
@@ -219,8 +235,8 @@ export default function ListeningPage() {
                   marginTop: 12,
                   padding: "12px 16px",
                   borderRadius: "var(--radius-md)",
-                  background: skillLevelUp.levelUp ? "#52c41a15" : "#faad1415",
-                  border: `1px solid ${skillLevelUp.levelUp ? "#52c41a40" : "#faad1440"}`,
+                  background: skillLevelUp.levelUp ? "color-mix(in srgb, var(--success) 8%, var(--surface))" : "color-mix(in srgb, var(--warning) 8%, var(--surface))",
+                  border: `1px solid ${skillLevelUp.levelUp ? "color-mix(in srgb, var(--success) 25%, transparent)" : "color-mix(in srgb, var(--warning) 25%, transparent)"}`,
                   fontSize: 13,
                   textAlign: "center",
                 }}

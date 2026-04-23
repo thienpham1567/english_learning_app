@@ -43,10 +43,10 @@ function ReadingHeatmap({ data }: { data: Array<{ date: string; count: number }>
   function getIntensity(count: number) {
     if (count === 0) return "var(--border)";
     const ratio = count / max;
-    if (ratio > 0.75) return "#52c41a";
-    if (ratio > 0.5) return "#95de64";
-    if (ratio > 0.25) return "#b7eb8f";
-    return "#d9f7be";
+    if (ratio > 0.75) return "var(--success)";
+    if (ratio > 0.5) return "color-mix(in srgb, var(--success) 60%, var(--surface))";
+    if (ratio > 0.25) return "color-mix(in srgb, var(--success) 35%, var(--surface))";
+    return "color-mix(in srgb, var(--success) 15%, var(--surface))";
   }
 
   const weeks: typeof data[] = [];
@@ -79,7 +79,7 @@ function ReadingHeatmap({ data }: { data: Array<{ date: string; count: number }>
         <Text style={{ fontSize: 10, color: "var(--text-muted)" }}>90 ngày trước</Text>
         <Flex align="center" gap={4}>
           <Text style={{ fontSize: 10, color: "var(--text-muted)" }}>Ít</Text>
-          {["var(--border)", "#d9f7be", "#b7eb8f", "#95de64", "#52c41a"].map((c, i) => (
+          {["var(--border)", "color-mix(in srgb, var(--success) 15%, var(--surface))", "color-mix(in srgb, var(--success) 35%, var(--surface))", "color-mix(in srgb, var(--success) 60%, var(--surface))", "var(--success)"].map((c, i) => (
             <div key={i} style={{ width: 10, height: 10, borderRadius: 2, background: c }} />
           ))}
           <Text style={{ fontSize: 10, color: "var(--text-muted)" }}>Nhiều</Text>
@@ -138,10 +138,10 @@ export function ReadingStatsBlock() {
           {/* Word count stats row */}
           <Flex gap={12} wrap style={{ width: "100%" }}>
             {[
-              { label: "Hôm nay", value: stats.todayWords, icon: <CalendarOutlined />, color: "#52c41a" },
-              { label: "Tuần này", value: stats.weekWords, icon: <ReadOutlined />, color: "#1890ff" },
-              { label: "Tháng này", value: stats.monthWords, icon: <ReadOutlined />, color: "#722ed1" },
-              { label: "Streak", value: `${stats.streak} ngày`, icon: <FireOutlined />, color: "var(--fire, #ff4d4f)" },
+              { label: "Hôm nay", value: stats.todayWords, icon: <CalendarOutlined />, color: "var(--success)" },
+              { label: "Tuần này", value: stats.weekWords, icon: <ReadOutlined />, color: "var(--info)" },
+              { label: "Tháng này", value: stats.monthWords, icon: <ReadOutlined />, color: "var(--accent)" },
+              { label: "Streak", value: `${stats.streak} ngày`, icon: <FireOutlined />, color: "var(--fire)" },
             ].map((s, i) => (
               <div
                 key={i}
@@ -189,10 +189,10 @@ export function ReadingStatsBlock() {
                   style={{
                     padding: "4px 12px",
                     borderRadius: 20,
-                    border: `1px solid ${unlocked ? "#52c41a" : "var(--border)"}`,
-                    background: unlocked ? "#52c41a10" : "var(--surface)",
+                    border: `1px solid ${unlocked ? "var(--success)" : "var(--border)"}`,
+                    background: unlocked ? "color-mix(in srgb, var(--success) 6%, var(--surface))" : "var(--surface)",
                     fontSize: 12,
-                    color: unlocked ? "#52c41a" : "var(--text-muted)",
+                    color: unlocked ? "var(--success)" : "var(--text-muted)",
                     opacity: unlocked ? 1 : 0.5,
                   }}
                 >

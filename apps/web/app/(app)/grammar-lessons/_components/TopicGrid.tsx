@@ -23,7 +23,7 @@ export const GRAMMAR_CATEGORIES: GrammarCategory[] = [
     id: "tenses",
     title: "Thì (Tenses)",
     icon: "🕐",
-    color: "#52c41a",
+    color: "var(--success)",
     topics: [
       { id: "present-simple", title: "Present Simple", level: "A2" },
       { id: "present-continuous", title: "Present Continuous", level: "A2" },
@@ -36,7 +36,7 @@ export const GRAMMAR_CATEGORIES: GrammarCategory[] = [
     id: "modals",
     title: "Động từ khiếm khuyết (Modals)",
     icon: "💡",
-    color: "#6366f1",
+    color: "var(--accent)",
     topics: [
       { id: "can-could-may", title: "Can / Could / May", level: "A2" },
       { id: "must-have-to", title: "Must / Have to", level: "B1" },
@@ -47,7 +47,7 @@ export const GRAMMAR_CATEGORIES: GrammarCategory[] = [
     id: "conditionals",
     title: "Câu điều kiện (Conditionals)",
     icon: "🔀",
-    color: "#f59e0b",
+    color: "var(--warning)",
     topics: [
       { id: "zero-first", title: "Zero & First Conditional", level: "B1" },
       { id: "second-conditional", title: "Second Conditional", level: "B1" },
@@ -58,7 +58,7 @@ export const GRAMMAR_CATEGORIES: GrammarCategory[] = [
     id: "passive",
     title: "Bị động (Passive Voice)",
     icon: "🔄",
-    color: "#8b5cf6",
+    color: "var(--secondary)",
     topics: [
       { id: "passive-simple", title: "Simple Passive", level: "B1" },
       { id: "passive-perfect", title: "Perfect Passive", level: "B2" },
@@ -69,7 +69,7 @@ export const GRAMMAR_CATEGORIES: GrammarCategory[] = [
     id: "clauses",
     title: "Mệnh đề (Clauses)",
     icon: "🔗",
-    color: "#ec4899",
+    color: "var(--error)",
     topics: [
       { id: "relative-who-which", title: "Relative (who/which/that)", level: "B1" },
       { id: "relative-advanced", title: "Non-defining Relatives", level: "B2" },
@@ -80,7 +80,7 @@ export const GRAMMAR_CATEGORIES: GrammarCategory[] = [
     id: "determiners",
     title: "Mạo từ & Lượng từ",
     icon: "📌",
-    color: "#14b8a6",
+    color: "var(--xp)",
     topics: [
       { id: "articles", title: "A / An / The", level: "A2" },
       { id: "quantifiers", title: "Some / Any / Much / Many", level: "B1" },
@@ -123,10 +123,10 @@ export function TopicGrid({ onSelectTopic, completedTopics }: Props) {
               background: "var(--card-bg)",
               overflow: "hidden",
               boxShadow: isExpanded
-                ? "0 4px 16px rgba(0,0,0,0.08)"
+                ? "var(--shadow-lg)"
                 : isHovered
-                ? "0 2px 8px rgba(0,0,0,0.06)"
-                : "0 1px 3px rgba(0,0,0,0.04)",
+                ? "var(--shadow-md)"
+                : "var(--shadow-sm)",
               transition: "box-shadow 0.2s",
             }}
             onMouseEnter={() => setHoveredCat(cat.id)}
@@ -137,8 +137,8 @@ export function TopicGrid({ onSelectTopic, completedTopics }: Props) {
               style={{
                 height: 4,
                 background: allDone
-                  ? "linear-gradient(90deg, #52c41a, #86efac)"
-                  : `linear-gradient(90deg, ${cat.color}, ${cat.color}aa)`,
+                  ? "linear-gradient(90deg, var(--success), color-mix(in srgb, var(--success) 60%, white))"
+                  : `linear-gradient(90deg, ${cat.color}, color-mix(in srgb, ${cat.color} 67%, transparent))`,
               }}
             />
 
@@ -166,8 +166,8 @@ export function TopicGrid({ onSelectTopic, completedTopics }: Props) {
                   placeItems: "center",
                   borderRadius: 12,
                   background: allDone
-                    ? "linear-gradient(135deg, #52c41a, #22c55e)"
-                    : `linear-gradient(135deg, ${cat.color}, ${cat.color}cc)`,
+                    ? "linear-gradient(135deg, var(--success), color-mix(in srgb, var(--success) 80%, black))"
+                    : `linear-gradient(135deg, ${cat.color}, color-mix(in srgb, ${cat.color} 80%, transparent))`,
                   fontSize: 22,
                   flexShrink: 0,
                   boxShadow: `0 2px 8px ${cat.color}44`,
@@ -204,8 +204,8 @@ export function TopicGrid({ onSelectTopic, completedTopics }: Props) {
                         height: "100%",
                         borderRadius: 99,
                         background: allDone
-                          ? "#52c41a"
-                          : `linear-gradient(90deg, ${cat.color}, ${cat.color}cc)`,
+                          ? "var(--success)"
+                          : `linear-gradient(90deg, ${cat.color}, color-mix(in srgb, ${cat.color} 80%, transparent))`,
                         width: `${progressPct}%`,
                         transition: "width 0.5s ease",
                       }}

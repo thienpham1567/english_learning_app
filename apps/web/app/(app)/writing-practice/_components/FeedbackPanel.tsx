@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { EditOutlined } from "@ant-design/icons";
 import type { WritingFeedback } from "@/lib/writing-practice/types";
 import { BandScoreRadar } from "./BandScoreRadar";
 import { AnnotatedText } from "./AnnotatedText";
@@ -104,7 +105,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
                 fontSize: 12,
                 fontWeight: activeTab === tab.key ? 700 : 500,
                 background: activeTab === tab.key ? "var(--accent)" : "var(--surface)",
-                color: activeTab === tab.key ? "#fff" : "var(--text-secondary)",
+                color: activeTab === tab.key ? "var(--text-on-accent, #fff)" : "var(--text-secondary)",
                 border: "none",
                 cursor: "pointer",
                 transition: "all 0.15s",
@@ -163,7 +164,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
           onClick={onNewWriting}
           className="rounded-xl border border-(--border) bg-(--surface) px-6 py-2.5 text-sm font-medium text-(--text-secondary) shadow-(--shadow-sm) transition hover:border-(--accent)/40 hover:text-(--accent)"
         >
-          ✍️ Viết bài mới
+          <EditOutlined /> Viết bài mới
         </button>
       </div>
     </div>

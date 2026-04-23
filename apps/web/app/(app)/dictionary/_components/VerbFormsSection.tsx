@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { DownOutlined, LoadingOutlined, SoundOutlined } from "@ant-design/icons";
+import { api } from "@/lib/api-client";
 
 import type { VerbForm } from "@/lib/schemas/vocabulary";
 
@@ -28,38 +29,84 @@ const CARD_REGULAR: React.CSSProperties = {
 const CARD_INFINITIVE: React.CSSProperties = {
   ...CARD_BASE,
   background: "var(--accent-muted)",
-  border: "1px solid rgba(154,177,122,0.35)",
+  border: "1px solid var(--accent)",
+  borderLeftWidth: 3,
 };
 
 const CARD_IRREGULAR: React.CSSProperties = {
   ...CARD_BASE,
-  background: "#fdf3e3",
-  border: "1px solid #e8c0a0",
+  background: "var(--warning-bg)",
+  border: "1px solid var(--warning)",
 };
+
+let activeAudioEl: HTMLAudioElement | null = null;
+let activeAudioUrl: string | null = null;
 
 export function VerbFormsSection({ verbForms }: Props) {
   const [open, setOpen] = useState(false);
-  const [speakingForm, setSpeakingForm] = useState<string | null>(null);
+  const [speakingKey, setSpeakingKey] = useState<string | null>(null);
   const activeUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
 
-  function speak(form: string) {
+  async function speak(form: string, locale: "en-US" | "en-GB") {
+    const key = `${form}-${locale}`;
+
+    // Stop any active audio
+    activeAudioEl?.pause();
+    if (activeAudioUrl) {
+      URL.revokeObjectURL(activeAudioUrl);
+      activeAudioUrl = null;
+    }
     if (activeUtteranceRef.current) {
       window.speechSynthesis.cancel();
       activeUtteranceRef.current = null;
     }
-    const utterance = new SpeechSynthesisUtterance(form);
-    utterance.lang = "en-US";
-    utterance.onstart = () => setSpeakingForm(form);
-    utterance.onend = () => {
-      setSpeakingForm(null);
-      activeUtteranceRef.current = null;
-    };
-    utterance.onerror = () => {
-      setSpeakingForm(null);
-      activeUtteranceRef.current = null;
-    };
-    activeUtteranceRef.current = utterance;
-    window.speechSynthesis.speak(utterance);
+
+    setSpeakingKey(key);
+    const accent = locale === "en-GB" ? "uk" : "us";
+
+    try {
+      const response = await api.post<Response>(
+        "/voice/synthesize",
+        { text: form, accent },
+        { raw: true },
+      );
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      activeAudioUrl = url;
+      const audio = new Audio(url);
+      activeAudioEl = audio;
+      audio.onended = () => {
+        setSpeakingKey((curr) => (curr === key ? null : curr));
+        URL.revokeObjectURL(url);
+        if (activeAudioUrl === url) activeAudioUrl = null;
+      };
+      audio.onerror = () => {
+        setSpeakingKey((curr) => (curr === key ? null : curr));
+        URL.revokeObjectURL(url);
+        if (activeAudioUrl === url) activeAudioUrl = null;
+      };
+      await audio.play();
+    } catch {
+      // Fallback to browser speechSynthesis
+      if (typeof window !== "undefined" && window.speechSynthesis) {
+        const utterance = new SpeechSynthesisUtterance(form);
+        utterance.lang = locale;
+        utterance.rate = 0.9;
+        utterance.onend = () => {
+          setSpeakingKey((curr) => (curr === key ? null : curr));
+          activeUtteranceRef.current = null;
+        };
+        utterance.onerror = () => {
+          setSpeakingKey((curr) => (curr === key ? null : curr));
+          activeUtteranceRef.current = null;
+        };
+        activeUtteranceRef.current = utterance;
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+        return;
+      }
+      setSpeakingKey((curr) => (curr === key ? null : curr));
+    }
   }
 
   return (
@@ -176,72 +223,137 @@ export function VerbFormsSection({ verbForms }: Props) {
                   {vf.form}
                 </span>
 
-                {/* Phonetics — compact single column, no repeated flag */}
+                {/* Phonetics with inline audio buttons */}
                 {(vf.phoneticsUs || vf.phoneticsUk) && (
-                  <div style={{ display: "flex", flexDirection: "column", gap: 2, marginTop: 2 }}>
+                  <div style={{ display: "flex", flexDirection: "column", gap: 3, marginTop: 2 }}>
                     {vf.phoneticsUs && (
-                      <span style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--text-secondary)" }}>
-                        <span style={{ color: "var(--text-muted)", marginRight: 4, fontSize: 10, fontWeight: 600 }}>US</span>
-                        {vf.phoneticsUs}
-                      </span>
+                      <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                        <span
+                          style={{
+                            fontSize: 10,
+                            fontWeight: 700,
+                            color: "var(--text-muted)",
+                            minWidth: 16,
+                          }}
+                        >
+                          US
+                        </span>
+                        <span
+                          style={{
+                            fontSize: 11,
+                            fontFamily: "var(--font-mono)",
+                            color: "var(--text-secondary)",
+                          }}
+                        >
+                          {vf.phoneticsUs}
+                        </span>
+                        <MiniAudioBtn
+                          isPlaying={speakingKey === `${vf.form}-en-US`}
+                          onClick={() => speak(vf.form, "en-US")}
+                          label={`US pronunciation of ${vf.form}`}
+                        />
+                      </div>
                     )}
                     {vf.phoneticsUk && (
-                      <span style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--text-secondary)" }}>
-                        <span style={{ color: "var(--text-muted)", marginRight: 4, fontSize: 10, fontWeight: 600 }}>UK</span>
-                        {vf.phoneticsUk}
-                      </span>
+                      <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                        <span
+                          style={{
+                            fontSize: 10,
+                            fontWeight: 700,
+                            color: "var(--text-muted)",
+                            minWidth: 16,
+                          }}
+                        >
+                          UK
+                        </span>
+                        <span
+                          style={{
+                            fontSize: 11,
+                            fontFamily: "var(--font-mono)",
+                            color: "var(--text-secondary)",
+                          }}
+                        >
+                          {vf.phoneticsUk}
+                        </span>
+                        <MiniAudioBtn
+                          isPlaying={speakingKey === `${vf.form}-en-GB`}
+                          onClick={() => speak(vf.form, "en-GB")}
+                          label={`UK pronunciation of ${vf.form}`}
+                        />
+                      </div>
                     )}
                   </div>
                 )}
 
-                {/* Footer: audio + irregular badge — pushed to bottom */}
-                <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: "auto", paddingTop: 4 }}>
-                  <button
-                    type="button"
-                    aria-label={`Play pronunciation of ${vf.form}`}
-                    onClick={() => speak(vf.form)}
-                    style={{
-                      display: "grid",
-                      width: 24,
-                      height: 24,
-                      placeItems: "center",
-                      borderRadius: 6,
-                      color: "var(--text-muted)",
-                      background: "var(--bg-deep)",
-                      border: "1px solid var(--border)",
-                      cursor: "pointer",
-                      padding: 0,
-                      transition: "color 0.15s, border-color 0.15s",
-                    }}
-                  >
-                    {speakingForm === vf.form ? (
-                      <LoadingOutlined style={{ fontSize: 12 }} spin />
-                    ) : (
-                      <SoundOutlined style={{ fontSize: 12 }} />
-                    )}
-                  </button>
-                  {vf.isIrregular && (
+                {/* Footer: irregular badge — pushed to bottom */}
+                {vf.isIrregular && (
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: "auto", paddingTop: 4 }}>
                     <span
                       style={{
                         fontSize: 10,
                         fontWeight: 600,
                         padding: "2px 8px",
                         borderRadius: 6,
-                        background: "#fbe8ce",
-                        color: "#9a4a1a",
-                        border: "1px solid #e8b880",
+                        background: "var(--warning-bg)",
+                        color: "var(--warning)",
+                        border: "1px solid var(--warning)",
                         whiteSpace: "nowrap",
                       }}
                     >
                       Bất quy tắc
                     </span>
-                  )}
-                </div>
+                  </div>
+                )}
               </div>
             );
           })}
         </div>
       )}
     </div>
+  );
+}
+
+/** Tiny audio play button inline with phonetics */
+function MiniAudioBtn({
+  isPlaying,
+  onClick,
+  label,
+}: {
+  isPlaying: boolean;
+  onClick: () => void;
+  label: string;
+}) {
+  return (
+    <button
+      type="button"
+      aria-label={label}
+      onClick={onClick}
+      style={{
+        display: "inline-grid",
+        width: 18,
+        height: 18,
+        placeItems: "center",
+        borderRadius: 4,
+        color: isPlaying ? "var(--accent)" : "var(--text-muted)",
+        background: "none",
+        border: "none",
+        cursor: "pointer",
+        padding: 0,
+        transition: "color 0.15s",
+        flexShrink: 0,
+      }}
+      onMouseEnter={(e) => {
+        if (!isPlaying) e.currentTarget.style.color = "var(--accent)";
+      }}
+      onMouseLeave={(e) => {
+        if (!isPlaying) e.currentTarget.style.color = "var(--text-muted)";
+      }}
+    >
+      {isPlaying ? (
+        <LoadingOutlined style={{ fontSize: 11 }} spin />
+      ) : (
+        <SoundOutlined style={{ fontSize: 11 }} />
+      )}
+    </button>
   );
 }

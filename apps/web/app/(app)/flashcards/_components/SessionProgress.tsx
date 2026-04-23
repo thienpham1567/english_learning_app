@@ -44,7 +44,7 @@ export function SessionProgress({ current, total, startTime }: Props) {
         <Progress
           percent={pct}
           showInfo={false}
-          strokeColor={{ from: "var(--accent)", to: "#f59e0b" }}
+          strokeColor={{ from: "var(--accent)", to: "var(--xp)" }}
           size="small"
         />
       </Flex>

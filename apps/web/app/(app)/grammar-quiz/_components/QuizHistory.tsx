@@ -115,11 +115,11 @@ export function QuizHistory({ open, onClose }: Props) {
                     borderRadius: "50%",
                     display: "grid",
                     placeItems: "center",
-                    background: pct >= 70 ? "#ecfdf5" : pct >= 50 ? "#fffbeb" : "#fef2f2",
-                    border: `1px solid ${pct >= 70 ? "#34d399" : pct >= 50 ? "#fcd34d" : "#f87171"}`,
+                    background: pct >= 70 ? "color-mix(in srgb, var(--success) 8%, var(--surface))" : pct >= 50 ? "color-mix(in srgb, var(--warning) 8%, var(--surface))" : "var(--error-bg)",
+                    border: `1px solid ${pct >= 70 ? "var(--success)" : pct >= 50 ? "var(--warning)" : "var(--error)"}`,
                     fontSize: 12,
                     fontWeight: 700,
-                    color: pct >= 70 ? "#065f46" : pct >= 50 ? "#b45309" : "#991b1b",
+                    color: pct >= 70 ? "var(--success)" : pct >= 50 ? "var(--warning)" : "var(--error)",
                   }}
                 >
                   {pct}%

@@ -1,23 +1,23 @@
 "use client";
 
-import { useState } from "react";
-import { SoundOutlined, LoadingOutlined, CheckOutlined } from "@ant-design/icons";
+import React, { useState } from "react";
+import { SoundOutlined, LoadingOutlined, CheckOutlined, AimOutlined, FormOutlined, EditOutlined } from "@ant-design/icons";
 import { CEFR_LEVELS, EXERCISE_TYPES } from "@/lib/listening/types";
 import type { CefrLevel, ExerciseType } from "@/lib/listening/types";
 
 const LEVEL_META: Record<CefrLevel, { label: string; color: string; desc: string }> = {
-  A1: { label: "Beginner", color: "#52c41a", desc: "Câu ngắn, từ cơ bản" },
-  A2: { label: "Elementary", color: "#73d13d", desc: "Hội thoại đơn giản" },
-  B1: { label: "Intermediate", color: "#1890ff", desc: "Chủ đề quen thuộc" },
-  B2: { label: "Upper-Int", color: "#2f54eb", desc: "Thảo luận chi tiết" },
-  C1: { label: "Advanced", color: "#722ed1", desc: "Phân tích sâu" },
-  C2: { label: "Proficiency", color: "#eb2f96", desc: "Ngôn ngữ phức tạp" },
+  A1: { label: "Beginner", color: "var(--success)", desc: "Câu ngắn, từ cơ bản" },
+  A2: { label: "Elementary", color: "var(--success)", desc: "Hội thoại đơn giản" },
+  B1: { label: "Intermediate", color: "var(--accent)", desc: "Chủ đề quen thuộc" },
+  B2: { label: "Upper-Int", color: "var(--secondary)", desc: "Thảo luận chi tiết" },
+  C1: { label: "Advanced", color: "var(--tertiary, var(--secondary))", desc: "Phân tích sâu" },
+  C2: { label: "Proficiency", color: "var(--error)", desc: "Ngôn ngữ phức tạp" },
 };
 
-const TYPE_META: Record<ExerciseType, { label: string; icon: string; desc: string }> = {
-  comprehension: { label: "Nghe hiểu", icon: "🎯", desc: "Trả lời câu hỏi trắc nghiệm" },
-  dictation: { label: "Nghe chép", icon: "✍️", desc: "Viết lại nội dung nghe được" },
-  fill_blanks: { label: "Điền từ", icon: "📝", desc: "Điền từ còn thiếu vào chỗ trống" },
+const TYPE_META: Record<ExerciseType, { label: string; icon: React.ReactNode; desc: string }> = {
+  comprehension: { label: "Nghe hiểu", icon: <AimOutlined />, desc: "Trả lời câu hỏi trắc nghiệm" },
+  dictation: { label: "Nghe chép", icon: <FormOutlined />, desc: "Viết lại nội dung nghe được" },
+  fill_blanks: { label: "Điền từ", icon: <EditOutlined />, desc: "Điền từ còn thiếu vào chỗ trống" },
 };
 
 type Props = {
@@ -57,7 +57,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
             background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
             fontSize: 28,
             marginBottom: 12,
-            boxShadow: "0 4px 16px rgba(154,177,122,0.35)",
+            boxShadow: "var(--shadow-lg)",
           }}
         >
           🎧
@@ -121,7 +121,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                   boxShadow: isSelected
                     ? `0 4px 16px ${meta.color}45`
                     : isHov
-                    ? "0 2px 8px rgba(0,0,0,0.08)"
+                    ? "var(--shadow-md)"
                     : "none",
                 }}
               >
@@ -132,13 +132,13 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                       position: "absolute",
                       top: -8,
                       right: -8,
-                      background: "#f59e0b",
+                      background: "var(--xp)",
                       borderRadius: 99,
                       fontSize: 9,
                       fontWeight: 800,
-                      color: "#fff",
+                      color: "var(--text-on-accent, #fff)",
                       padding: "2px 7px",
-                      boxShadow: "0 1px 4px rgba(245,158,11,0.4)",
+                      boxShadow: "var(--shadow-sm)",
                     }}
                   >
                     ★ Đề xuất
@@ -148,7 +148,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                   style={{
                     fontSize: 20,
                     fontWeight: 900,
-                    color: isSelected ? "#fff" : meta.color,
+                    color: isSelected ? "var(--text-on-accent, #fff)" : meta.color,
                     fontFamily: "var(--font-mono)",
                     lineHeight: 1,
                   }}
@@ -242,7 +242,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                     fontSize: 20,
                     flexShrink: 0,
                     transition: "background 0.18s",
-                    boxShadow: isSelected ? "0 2px 8px rgba(154,177,122,0.35)" : "none",
+                    boxShadow: isSelected ? "var(--shadow-md)" : "none",
                   }}
                 >
                   {meta.icon}
@@ -273,7 +273,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                       flexShrink: 0,
                     }}
                   >
-                    <CheckOutlined style={{ fontSize: 11, color: "#fff" }} />
+                    <CheckOutlined style={{ fontSize: 11, color: "var(--text-on-accent, #fff)" }} />
                   </span>
                 )}
               </button>
@@ -297,13 +297,13 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
           background: activeLevel
             ? "linear-gradient(135deg, var(--accent), var(--accent-hover))"
             : "var(--border)",
-          color: activeLevel ? "#fff" : "var(--text-muted)",
+          color: activeLevel ? "var(--text-on-accent, #fff)" : "var(--text-muted)",
           fontSize: 16,
           fontWeight: 700,
           cursor: activeLevel && !isLoading ? "pointer" : "not-allowed",
           transition: "all 0.2s ease",
           opacity: isLoading ? 0.75 : 1,
-          boxShadow: activeLevel ? "0 4px 16px rgba(154,177,122,0.35)" : "none",
+          boxShadow: activeLevel ? "var(--shadow-lg)" : "none",
         }}
       >
         {isLoading ? <LoadingOutlined spin /> : <SoundOutlined />}

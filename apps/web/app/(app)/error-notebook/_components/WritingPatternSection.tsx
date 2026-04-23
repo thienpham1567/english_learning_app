@@ -72,7 +72,7 @@ function InlineQuiz({ items, errorLogIds, onDone }: { items: QuizItem[]; errorLo
           type="circle"
           percent={Math.round((score / items.length) * 100)}
           size={80}
-          strokeColor={score === items.length ? "#52c41a" : "#faad14"}
+          strokeColor={score === items.length ? "var(--success)" : "var(--warning)"}
           format={() => `${score}/${items.length}`}
         />
         <p style={{ marginTop: 12, fontSize: 14, fontWeight: 600 }}>
@@ -106,8 +106,8 @@ function InlineQuiz({ items, errorLogIds, onDone }: { items: QuizItem[]; errorLo
           let border = "1px solid var(--border)";
           let color = "var(--text)";
           if (isAnswered) {
-            if (opt === item.correctAnswer) { bg = "#f6ffed"; border = "1px solid #52c41a"; color = "#52c41a"; }
-            else if (opt === selected) { bg = "#fff2f0"; border = "1px solid #ff4d4f"; color = "#ff4d4f"; }
+            if (opt === item.correctAnswer) { bg = "color-mix(in srgb, var(--success) 8%, var(--surface))"; border = "1px solid var(--success)"; color = "var(--success)"; }
+            else if (opt === selected) { bg = "color-mix(in srgb, var(--error) 8%, var(--surface))"; border = "1px solid var(--error)"; color = "var(--error)"; }
           }
           return (
             <button
@@ -129,8 +129,8 @@ function InlineQuiz({ items, errorLogIds, onDone }: { items: QuizItem[]; errorLo
       {isAnswered && (
         <div style={{
           padding: "8px 12px", borderRadius: 8,
-          background: isCorrect ? "#f6ffed" : "#fff2f0",
-          border: `1px solid ${isCorrect ? "#52c41a" : "#ff4d4f"}44`,
+          background: isCorrect ? "color-mix(in srgb, var(--success) 8%, var(--surface))" : "color-mix(in srgb, var(--error) 8%, var(--surface))",
+          border: `1px solid color-mix(in srgb, ${isCorrect ? "var(--success)" : "var(--error)"} 27%, transparent)`,
           fontSize: 12, color: "var(--text)",
         }}>
           <p style={{ margin: "0 0 4px", fontWeight: 600 }}>{isCorrect ? "✓ Đúng!" : "✗ Sai"}</p>
@@ -249,7 +249,7 @@ export function WritingPatternSection() {
                     <span style={{ fontSize: 13, fontWeight: 600 }}>{label}</span>
                     {p.quizGeneratedAt && (
                       <Tooltip title={`Quiz đã tạo: ${new Date(p.quizGeneratedAt).toLocaleDateString("vi-VN")}`}>
-                        <CheckCircleOutlined style={{ fontSize: 12, color: "#52c41a" }} />
+                        <CheckCircleOutlined style={{ fontSize: 12, color: "var(--success)" }} />
                       </Tooltip>
                     )}
                   </div>
@@ -305,8 +305,8 @@ export function WritingPatternSection() {
                 <div style={{
                   padding: "8px 16px",
                   borderTop: "1px solid var(--border)",
-                  background: "#f6ffed",
-                  fontSize: 12, color: "#52c41a", fontWeight: 500,
+                  background: "color-mix(in srgb, var(--success) 8%, var(--surface))",
+                  fontSize: 12, color: "var(--success)", fontWeight: 500,
                 }}>
                   <CheckCircleOutlined /> Quiz đã hoàn thành — câu hỏi đã được lưu vào sổ lỗi sai để ôn tập sau.
                 </div>

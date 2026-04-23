@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import { ReadOutlined, StarOutlined, CloseOutlined } from "@ant-design/icons";
 import { RecentLookups } from "@/app/(app)/dictionary/_components/RecentLookups";
+import { ExamWordLists } from "@/app/(app)/dictionary/_components/ExamWordLists";
+import { WordOfTheDay } from "@/app/(app)/dictionary/_components/WordOfTheDay";
 
 import { api } from "@/lib/api-client";
 
@@ -115,6 +117,8 @@ export function DictionarySearchPanel({
 
   return (
     <section style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      {/* Word of the Day */}
+      <WordOfTheDay onSelect={onSubmit} />
       <div
         className="anim-fade-left dictionary-search-panel"
         style={{
@@ -207,7 +211,7 @@ export function DictionarySearchPanel({
                   key={tip}
                   className={`anim-fade-left anim-delay-${i + 1}`}
                   style={{
-                    borderLeft: "2px solid rgba(154,177,122,0.3)",
+                    borderLeft: "2px solid var(--accent-muted)",
                     paddingLeft: 12,
                     fontSize: 14,
                     lineHeight: 1.6,
@@ -353,6 +357,17 @@ export function DictionarySearchPanel({
             <RecentLookups words={recentWords} onSelect={onSelectRecent} />
           </div>
         )}
+
+        {/* TOEIC / IELTS word lists */}
+        <div
+          style={{
+            marginTop: 20,
+            paddingTop: 16,
+            borderTop: "1px solid var(--border)",
+          }}
+        >
+          <ExamWordLists onSelect={onSubmit} />
+        </div>
       </div>
     </section>
   );

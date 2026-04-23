@@ -271,8 +271,8 @@ export default function PronunciationPage() {
             style={{
               padding: "10px 16px",
               borderRadius: 8,
-              background: "var(--error-bg, #fff2f0)",
-              color: "var(--error, #ff4d4f)",
+              background: "var(--error-bg)",
+              color: "var(--error)",
               marginBottom: 16,
               fontSize: 13,
             }}
@@ -294,11 +294,11 @@ export default function PronunciationPage() {
           >
             <div style={{ fontSize: 48, marginBottom: 16 }}>
               {avgScore >= 80 ? (
-                <CheckCircleOutlined style={{ color: "#52c41a" }} />
+                <CheckCircleOutlined style={{ color: "var(--success)" }} />
               ) : avgScore >= 50 ? (
-                <InfoCircleOutlined style={{ color: "#faad14" }} />
+                <InfoCircleOutlined style={{ color: "var(--warning)" }} />
               ) : (
-                <CloseCircleOutlined style={{ color: "#ff4d4f" }} />
+                <CloseCircleOutlined style={{ color: "var(--error)" }} />
               )}
             </div>
             <h2 style={{ margin: "0 0 8px" }}>Phiên luyện tập hoàn thành!</h2>
@@ -323,7 +323,7 @@ export default function PronunciationPage() {
                 borderRadius: 8,
                 border: "none",
                 background: "var(--accent)",
-                color: "#fff",
+                color: "var(--text-on-accent, #fff)",
                 fontSize: 14,
                 fontWeight: 600,
                 cursor: "pointer",
@@ -391,7 +391,7 @@ export default function PronunciationPage() {
                 borderRadius: 10,
                 border: "none",
                 background: "var(--accent)",
-                color: "#fff",
+                color: "var(--text-on-accent, #fff)",
                 fontSize: 15,
                 fontWeight: 600,
                 cursor: "pointer",
@@ -429,7 +429,7 @@ export default function PronunciationPage() {
               style={{
                 padding: 24,
                 borderRadius: 16,
-                border: state === "recording" ? "2px solid #ff4d4f" : "1px solid var(--border)",
+                border: state === "recording" ? "2px solid var(--error)" : "1px solid var(--border)",
                 background: "var(--card-bg)",
                 textAlign: "center",
                 animation: state === "recording" ? "pulse 1.5s ease-in-out infinite" : undefined,
@@ -477,11 +477,11 @@ export default function PronunciationPage() {
                     height: 80,
                     borderRadius: "50%",
                     border: "none",
-                    background: "linear-gradient(135deg, #ff4d4f, #ff7875)",
-                    color: "#fff",
+                    background: "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 70%, white))",
+                    color: "var(--text-on-accent, #fff)",
                     fontSize: 28,
                     cursor: "pointer",
-                    boxShadow: "0 4px 16px rgba(255,77,79,0.3)",
+                    boxShadow: "0 4px 16px color-mix(in srgb, var(--error) 30%, transparent)",
                     transition: "transform 0.2s",
                   }}
                   aria-label="Bắt đầu ghi âm"
@@ -497,9 +497,9 @@ export default function PronunciationPage() {
                     width: 80,
                     height: 80,
                     borderRadius: "50%",
-                    border: "3px solid #ff4d4f",
+                    border: "3px solid var(--error)",
                     background: "var(--card-bg)",
-                    color: "#ff4d4f",
+                    color: "var(--error)",
                     fontSize: 20,
                     cursor: "pointer",
                     animation: "pulse 1s ease-in-out infinite",
@@ -525,7 +525,7 @@ export default function PronunciationPage() {
                 </p>
               )}
               {state === "recording" && (
-                <p style={{ fontSize: 12, color: "#ff4d4f", marginTop: 8, fontWeight: 600 }}>
+                <p style={{ fontSize: 12, color: "var(--error)", marginTop: 8, fontWeight: 600 }}>
                   Đang ghi âm... Nhấn để dừng
                 </p>
               )}
@@ -553,7 +553,7 @@ export default function PronunciationPage() {
                     type="circle"
                     percent={mainScore}
                     size={100}
-                    strokeColor={mainScore >= 80 ? "#52c41a" : mainScore >= 50 ? "#faad14" : "#ff4d4f"}
+                    strokeColor={mainScore >= 80 ? "var(--success)" : mainScore >= 50 ? "var(--warning)" : "var(--error)"}
                     format={(pct) => <span style={{ fontSize: 24, fontWeight: 700 }}>{pct}</span>}
                   />
                 );
@@ -699,7 +699,7 @@ export default function PronunciationPage() {
                   borderRadius: 8,
                   border: "none",
                   background: "var(--accent)",
-                  color: "#fff",
+                  color: "var(--text-on-accent, #fff)",
                   cursor: "pointer",
                   fontSize: 13,
                   fontWeight: 600,

@@ -43,7 +43,7 @@ export default function GrammarLessonsPage() {
             height: 40,
             placeItems: "center",
             borderRadius: "var(--radius)",
-            background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+            background: "linear-gradient(135deg, var(--accent), var(--secondary))",
             color: "#fff",
             boxShadow: "var(--shadow-sm)",
           }}
@@ -77,7 +77,7 @@ export default function GrammarLessonsPage() {
             pointerEvents: "none",
             position: "absolute",
             inset: 0,
-            background: "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(99,102,241,0.06) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--accent) 6%, transparent) 0%, transparent 70%)",
           }}
         />
 

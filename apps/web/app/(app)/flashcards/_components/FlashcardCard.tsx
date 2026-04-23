@@ -16,12 +16,12 @@ const LEVEL_COLORS: Record<string, string> = {
 };
 
 const CEFR_GRADIENTS: Record<string, string> = {
-  A1: "linear-gradient(135deg, #f0fdf4, #dcfce7)",
-  A2: "linear-gradient(135deg, #ecfdf5, #d1fae5)",
-  B1: "linear-gradient(135deg, #fffbeb, #fef3c7)",
-  B2: "linear-gradient(135deg, #fefce8, #fef9c3)",
-  C1: "linear-gradient(135deg, #fff1f2, #ffe4e6)",
-  C2: "linear-gradient(135deg, #fdf2f8, #fce7f3)",
+  A1: "linear-gradient(135deg, color-mix(in srgb, var(--success) 6%, var(--surface)), color-mix(in srgb, var(--success) 12%, var(--surface)))",
+  A2: "linear-gradient(135deg, color-mix(in srgb, var(--success) 8%, var(--surface)), color-mix(in srgb, var(--success) 14%, var(--surface)))",
+  B1: "linear-gradient(135deg, color-mix(in srgb, var(--xp) 6%, var(--surface)), color-mix(in srgb, var(--xp) 12%, var(--surface)))",
+  B2: "linear-gradient(135deg, color-mix(in srgb, var(--xp) 8%, var(--surface)), color-mix(in srgb, var(--xp) 14%, var(--surface)))",
+  C1: "linear-gradient(135deg, color-mix(in srgb, var(--error) 6%, var(--surface)), color-mix(in srgb, var(--error) 10%, var(--surface)))",
+  C2: "linear-gradient(135deg, color-mix(in srgb, var(--secondary) 6%, var(--surface)), color-mix(in srgb, var(--secondary) 10%, var(--surface)))",
 };
 const DEFAULT_GRADIENT = "linear-gradient(135deg, var(--accent-muted), var(--bg))";
 
@@ -168,10 +168,10 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
 }
 
 const RATINGS = [
-  { quality: 0, label: "Quên", emoji: "😵", bg: "linear-gradient(135deg, #ef4444, #e11d48)" },
-  { quality: 2, label: "Khó", emoji: "😓", bg: "linear-gradient(135deg, #f59e0b, #ea580c)" },
-  { quality: 3, label: "Ổn", emoji: "🙂", bg: "linear-gradient(135deg, var(--accent), var(--accent-hover, #5bb8be))" },
-  { quality: 5, label: "Dễ", emoji: "🤩", bg: "linear-gradient(135deg, #10b981, #16a34a)" },
+  { quality: 0, label: "Quên", emoji: "😵", bg: "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 80%, black))" },
+  { quality: 2, label: "Khó", emoji: "😓", bg: "linear-gradient(135deg, var(--warning), color-mix(in srgb, var(--warning) 80%, black))" },
+  { quality: 3, label: "Ổn", emoji: "🙂", bg: "linear-gradient(135deg, var(--accent), var(--accent-hover))" },
+  { quality: 5, label: "Dễ", emoji: "🤩", bg: "linear-gradient(135deg, var(--success), color-mix(in srgb, var(--success) 80%, black))" },
 ] as const;
 
 function RatingButtons({

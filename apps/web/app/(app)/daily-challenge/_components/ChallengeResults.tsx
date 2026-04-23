@@ -13,24 +13,19 @@ import {
 import type { ExerciseAnswer, StreakInfo, Badge } from "@/lib/daily-challenge/types";
 import { CelebrationOverlay, StreakFire } from "@/components/shared";
 import { BadgeGallery } from "./BadgeGallery";
+import { EXERCISE_TYPE_LABELS } from "./constants";
 
 const { Title, Text } = Typography;
 
 // Tiered celebration config (AC: #1–#4)
 const TIERS = [
-  { min: 5, tier: "big" as const, emoji: "🎉", label: "Hoàn hảo!", color: "#d4a017" },
+  { min: 5, tier: "big" as const, emoji: "🎉", label: "Hoàn hảo!", color: "var(--xp)" },
   { min: 4, tier: "medium" as const, emoji: "👏", label: "Xuất sắc!", color: "var(--accent)" },
   { min: 3, tier: "small" as const, emoji: "👍", label: "Tốt lắm!", color: "var(--success)" },
   { min: 0, tier: null, emoji: "💪", label: "Cố lên!", color: "var(--text-secondary)" },
 ];
 
-// Exercise type labels with emoji
-const EXERCISE_TYPE_LABELS: Record<string, string> = {
-  "fill-in-blank": "📝 Điền vào chỗ trống",
-  "sentence-order": "🔄 Sắp xếp câu",
-  "translation": "🌐 Dịch câu",
-  "error-correction": "🔍 Sửa lỗi",
-};
+
 
 type Props = {
   answers: ExerciseAnswer[];
@@ -45,10 +40,10 @@ type Props = {
 function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: number }) {
   const [isExpanded, setIsExpanded] = useState(!answer.isCorrect); // auto-expand wrong answers
 
-  const borderColor = answer.isCorrect ? "var(--success)" : "var(--error, #ef4444)";
+  const borderColor = answer.isCorrect ? "var(--success)" : "var(--error)";
   const bgColor = answer.isCorrect
     ? "color-mix(in srgb, var(--success) 6%, var(--surface))"
-    : "color-mix(in srgb, var(--error, #ef4444) 6%, var(--surface))";
+    : "color-mix(in srgb, var(--error) 6%, var(--surface))";
 
   return (
     <div
@@ -79,15 +74,15 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
       >
         <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
           {answer.isCorrect ? (
-            <CheckCircleFilled style={{ color: "#10b981", fontSize: 18, flexShrink: 0 }} />
+            <CheckCircleFilled style={{ color: "var(--success)", fontSize: 18, flexShrink: 0 }} />
           ) : (
-            <CloseCircleFilled style={{ color: "#ef4444", fontSize: 18, flexShrink: 0 }} />
+            <CloseCircleFilled style={{ color: "var(--error)", fontSize: 18, flexShrink: 0 }} />
           )}
           <span
             style={{
               fontSize: 14,
               fontWeight: 600,
-              color: answer.isCorrect ? "var(--success)" : "var(--error, #ef4444)",
+              color: answer.isCorrect ? "var(--success)" : "var(--error)",
             }}
           >
             Câu {index + 1}: {answer.isCorrect ? "Đúng ✓" : "Sai ✗"}
@@ -162,7 +157,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
             <div
               style={{
                 borderRadius: 8,
-                border: `1px solid ${answer.isCorrect ? "var(--success)" : "var(--error, #ef4444)"}`,
+                border: `1px solid ${answer.isCorrect ? "var(--success)" : "var(--error)"}`,
                 padding: "8px 12px",
                 background: answer.isCorrect
                   ? "color-mix(in srgb, var(--success) 5%, transparent)"
@@ -176,7 +171,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                   fontWeight: 700,
                   textTransform: "uppercase",
                   letterSpacing: "0.12em",
-                  color: answer.isCorrect ? "var(--success)" : "var(--error, #ef4444)",
+                  color: answer.isCorrect ? "var(--success)" : "var(--error)",
                   marginBottom: 4,
                 }}
               >
@@ -326,7 +321,7 @@ export function ChallengeResults({
           <Title
             level={3}
             style={{
-              color: matched.tier === "big" ? "#fbbf24" : "var(--ink)",
+              color: matched.tier === "big" ? "var(--xp)" : "var(--ink)",
               margin: 0,
               textShadow: "0 2px 8px rgba(0,0,0,0.15)",
             }}
@@ -364,9 +359,9 @@ export function ChallengeResults({
               style={{
                 borderRadius: 999,
                 padding: "2px 10px",
-                border: "1px solid var(--error, #ef4444)",
-                background: "color-mix(in srgb, var(--error, #ef4444) 10%, transparent)",
-                color: "var(--error, #ef4444)",
+                border: "1px solid var(--error)",
+                background: "color-mix(in srgb, var(--error) 10%, transparent)",
+                color: "var(--error)",
                 fontWeight: 600,
                 fontSize: 12,
               }}

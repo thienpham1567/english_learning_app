@@ -3,24 +3,18 @@
 import { useState } from "react";
 import { Tag, Tooltip } from "antd";
 import {
-  BookOutlined,
-  BulbOutlined,
-  CodeOutlined,
-  EditOutlined,
-  LinkOutlined,
   LoadingOutlined,
   ReadOutlined,
   SoundOutlined,
   StarFilled,
   StarOutlined,
-  ThunderboltOutlined,
-  WarningOutlined,
 } from "@ant-design/icons";
 
-import type { DictionarySense, FrequencyBand, VocabularyWithNearby } from "@/lib/schemas/vocabulary";
-import { parseBold } from "@/lib/utils/parse-bold";
-import { api } from "@/lib/api-client";
+import type { FrequencyBand, VocabularyWithNearby } from "@/lib/schemas/vocabulary";
+
+import { useAudioPlayer } from "@/hooks/useAudioPlayer";
 import { NearbyWordsBar } from "@/app/(app)/dictionary/_components/NearbyWordsBar";
+import { SensePanel } from "@/app/(app)/dictionary/_components/SensePanel";
 import { VerbFormsSection } from "@/app/(app)/dictionary/_components/VerbFormsSection";
 import { WordFamilySection } from "@/app/(app)/dictionary/_components/WordFamilySection";
 
@@ -34,35 +28,6 @@ type DictionaryResultCardProps = {
   onSearch?: (word: string) => void;
 };
 
-const SENSE_ITEM_STYLE: React.CSSProperties = {
-  borderLeft: "2px solid rgba(154,177,122,0.3)",
-  paddingLeft: 16,
-  fontSize: 14,
-  fontStyle: "italic",
-  lineHeight: 1.6,
-  color: "var(--text-secondary)",
-};
-
-const LEVEL_STYLES: Record<string, React.CSSProperties> = {
-  A1: { background: "#eef3e6", color: "#3d6a2a", borderColor: "rgba(154,177,122,0.5)" },
-  A2: { background: "#eef3e6", color: "#3d6a2a", borderColor: "rgba(154,177,122,0.6)" },
-  B1: { background: "#fdf8ee", color: "#8a6a20", borderColor: "#e8c870" },
-  B2: { background: "#fdf3e3", color: "#9a5a15", borderColor: "#e8a860" },
-  C1: { background: "#fef0e7", color: "#b84020", borderColor: "#e89070" },
-  C2: { background: "#feecea", color: "#c02030", borderColor: "#e87070" },
-};
-
-const SENSE_HEADER_STYLE: React.CSSProperties = {
-  display: "flex",
-  alignItems: "center",
-  gap: 6,
-  fontSize: 12,
-  fontWeight: 600,
-  textTransform: "uppercase" as const,
-  letterSpacing: "0.14em",
-  color: "var(--accent)",
-  margin: 0,
-};
 
 const FREQUENCY_CONFIG: Record<FrequencyBand, { filled: number; labelVi: string; tooltipEn: string }> = {
   top1k:  { filled: 5, labelVi: "Rất phổ biến", tooltipEn: "Top 1,000 most common words" },
@@ -100,331 +65,15 @@ function FrequencyBar({ band }: { band: FrequencyBand }) {
   );
 }
 
-let activeAudio: HTMLAudioElement | null = null;
-let activeAudioUrl: string | null = null;
-let activeAbort: AbortController | null = null;
+const LEVEL_STYLES: Record<string, React.CSSProperties> = {
+  A1: { background: "var(--success-bg)", color: "var(--success)", borderColor: "var(--success)" },
+  A2: { background: "var(--success-bg)", color: "var(--success)", borderColor: "var(--success)" },
+  B1: { background: "var(--warning-bg)", color: "var(--warning)", borderColor: "var(--warning)" },
+  B2: { background: "var(--warning-bg)", color: "var(--warning)", borderColor: "var(--warning)" },
+  C1: { background: "var(--error-bg)", color: "var(--error)", borderColor: "var(--error)" },
+  C2: { background: "var(--error-bg)", color: "var(--error)", borderColor: "var(--error)" },
+};
 
-function getNumberLabel(numberInfo: NonNullable<VocabularyWithNearby["numberInfo"]>): string {
-  if (numberInfo.isUncountable) return "uncountable";
-  if (numberInfo.isPluralOnly) return "plural only";
-  if (numberInfo.isSingularOnly) return "singular only";
-  if (numberInfo.plural) return `pl: ${numberInfo.plural}`;
-  return "";
-}
-
-function BoldText({ text }: { text: string }) {
-  const segments = parseBold(text);
-  return (
-    <>
-      {segments.map((seg, i) =>
-        seg.bold ? (
-          <strong key={i} style={{ fontWeight: 600, fontStyle: "normal" }}>
-            {seg.text}
-          </strong>
-        ) : (
-          <span key={i}>{seg.text}</span>
-        ),
-      )}
-    </>
-  );
-}
-
-/** Highlight occurrences of `headword` within `text` using accent color (AC #3) */
-function HighlightWord({ text, headword }: { text: string; headword: string }) {
-  if (!headword) return <BoldText text={text} />;
-
-  // Step 1: Parse **bold** markers first so we don't break them
-  const boldSegments = parseBold(text);
-
-  // Step 2: Within each segment, highlight the headword
-  const escaped = headword.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const headwordRegex = new RegExp(`(${escaped})`, "gi");
-
-  return (
-    <>
-      {boldSegments.map((seg, si) => {
-        const subParts = seg.text.split(headwordRegex);
-        if (subParts.length <= 1) {
-          // No headword match in this segment — render as-is
-          return seg.bold ? (
-            <strong key={si} style={{ fontWeight: 600, fontStyle: "normal" }}>
-              {seg.text}
-            </strong>
-          ) : (
-            <span key={si}>{seg.text}</span>
-          );
-        }
-        // Headword found — render with accent highlight
-        return subParts.map((sub, pi) => {
-          const key = `${si}-${pi}`;
-          if (sub.toLowerCase() === headword.toLowerCase()) {
-            return (
-              <span key={key} style={{ color: "var(--accent)", fontWeight: 600, fontStyle: "normal" }}>
-                {sub}
-              </span>
-            );
-          }
-          return seg.bold ? (
-            <strong key={key} style={{ fontWeight: 600, fontStyle: "normal" }}>
-              {sub}
-            </strong>
-          ) : (
-            <span key={key}>{sub}</span>
-          );
-        });
-      })}
-    </>
-  );
-}
-
-function SensePanel({
-  sense,
-  headword,
-  onSearch,
-}: {
-  sense: DictionarySense;
-  headword: string;
-  onSearch?: (word: string) => void;
-}) {
-  const [isCollocationsOpen, setIsCollocationsOpen] = useState(false);
-  const examples = sense.examples ?? [];
-  const examplesVi = sense.examplesVi ?? [];
-  const collocations = sense.collocations ?? [];
-
-  const sectionStyle: React.CSSProperties = {
-    display: "flex",
-    flexDirection: "column",
-    gap: 8,
-    borderRadius: "var(--radius)",
-    borderLeft: "3px solid var(--accent)",
-    background: "var(--bg-deep)",
-    padding: "16px 20px",
-  };
-
-  return (
-    <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: 28 }}>
-      <section style={sectionStyle}>
-        <h3 style={SENSE_HEADER_STYLE}>
-          <BookOutlined style={{ fontSize: 12 }} />
-          Definition in English
-        </h3>
-        <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
-          <BoldText text={sense.definitionEn} />
-        </p>
-      </section>
-
-      {(examples.length > 0 || examplesVi.length > 0) && (
-        <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <h3 style={SENSE_HEADER_STYLE}>
-            <EditOutlined style={{ fontSize: 12 }} />
-            Ví dụ
-          </h3>
-          <ul
-            style={{
-              listStyle: "none",
-              padding: 0,
-              margin: 0,
-              display: "flex",
-              flexDirection: "column",
-              gap: 8,
-            }}
-          >
-            {examples.length > 0
-              ? examples.map((example, i) => (
-                  <li key={`${example.en}-${example.vi ?? i}`} style={SENSE_ITEM_STYLE}>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
-                      <span>
-                        <HighlightWord text={example.en} headword={headword} />
-                      </span>
-                      {example.vi && (
-                        <span style={{ fontSize: 13, color: "var(--text-muted)", fontStyle: "normal" }}>
-                          <BoldText text={example.vi} />
-                        </span>
-                      )}
-                    </div>
-                  </li>
-                ))
-              : examplesVi.map((example) => (
-                  <li key={example} style={SENSE_ITEM_STYLE}>
-                    <BoldText text={example} />
-                  </li>
-                ))}
-          </ul>
-        </section>
-      )}
-
-      {sense.usageNoteVi && (
-        <section style={{ ...sectionStyle, borderLeft: "none" }}>
-          <h3 style={SENSE_HEADER_STYLE}>
-            <BulbOutlined style={{ fontSize: 12 }} />
-            Ghi chú sử dụng
-          </h3>
-          <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
-            <BoldText text={sense.usageNoteVi} />
-          </p>
-        </section>
-      )}
-
-      {sense.patterns.length > 0 && (
-        <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <h3 style={SENSE_HEADER_STYLE}>
-            <CodeOutlined style={{ fontSize: 12 }} />
-            Mẫu câu thường gặp
-          </h3>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {sense.patterns.map((pattern) => (
-              <span
-                key={pattern}
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 12,
-                  background: "var(--bg-deep)",
-                  border: "1px solid var(--border)",
-                  borderRadius: 4,
-                  padding: "3px 10px",
-                  color: "var(--text-secondary)",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                {pattern}
-              </span>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {sense.relatedExpressions.length > 0 && (
-        <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <h3 style={SENSE_HEADER_STYLE}>
-            <LinkOutlined style={{ fontSize: 12 }} />
-            Biểu đạt liên quan
-          </h3>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-            {sense.relatedExpressions.map((expr) => (
-              <button
-                key={expr}
-                type="button"
-                onClick={() => onSearch?.(expr)}
-                style={{
-                  borderRadius: 999,
-                  border: "1px solid rgba(154,177,122,0.4)",
-                  background: "var(--surface)",
-                  padding: "4px 14px",
-                  fontSize: 13,
-                  fontStyle: "italic",
-                  fontFamily: "var(--font-display)",
-                  color: "var(--accent)",
-                  cursor: onSearch ? "pointer" : "default",
-                  transition: "background 0.15s",
-                }}
-              >
-                {expr}
-              </button>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {sense.commonMistakesVi.length > 0 && (
-        <section
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 10,
-            borderRadius: "var(--radius)",
-            background: "#fdf6f0",
-            border: "1px solid #f0c8a0",
-            padding: "14px 16px",
-          }}
-        >
-          <h3 style={{ ...SENSE_HEADER_STYLE, color: "#b84020" }}>
-            <WarningOutlined style={{ fontSize: 12 }} />
-            Lỗi thường gặp
-          </h3>
-          <ul
-            style={{
-              listStyle: "none",
-              padding: 0,
-              margin: 0,
-              display: "flex",
-              flexDirection: "column",
-              gap: 8,
-            }}
-          >
-            {sense.commonMistakesVi.map((mistake) => (
-              <li
-                key={mistake}
-                style={{
-                  borderLeft: "2px solid #e8a878",
-                  paddingLeft: 12,
-                  fontSize: 13,
-                  lineHeight: 1.6,
-                  color: "#7a3f1a",
-                }}
-              >
-                <BoldText text={mistake} />
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {collocations.length > 0 && (
-        <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <h3 style={SENSE_HEADER_STYLE}>
-            <ThunderboltOutlined style={{ fontSize: 12 }} />
-            Collocations
-          </h3>
-          <ul
-            style={{
-              listStyle: "none",
-              padding: 0,
-              margin: 0,
-              display: "flex",
-              flexDirection: "column",
-              gap: 6,
-            }}
-          >
-            {(isCollocationsOpen ? collocations : collocations.slice(0, 3)).map((collocation) => (
-              <li
-                key={`${collocation.en}-${collocation.vi}`}
-                style={{ fontSize: 14, lineHeight: 1.6 }}
-              >
-                <span style={{ color: "var(--text-primary)" }}>
-                  <BoldText text={collocation.en} />
-                </span>
-                <span style={{ margin: "0 6px", color: "var(--text-muted)" }}>&mdash;</span>
-                <span style={{ color: "var(--text-secondary)" }}>{collocation.vi}</span>
-              </li>
-            ))}
-          </ul>
-          {collocations.length > 3 && (
-            <button
-              type="button"
-              aria-expanded={isCollocationsOpen}
-              onClick={() => setIsCollocationsOpen((open) => !open)}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                borderRadius: 999,
-                border: "1px solid rgba(154,177,122,0.18)",
-                background: "var(--surface)",
-                padding: "4px 12px",
-                fontSize: 12,
-                fontWeight: 500,
-                color: "var(--accent)",
-                cursor: "pointer",
-                width: "fit-content",
-              }}
-            >
-              {isCollocationsOpen ? "Thu gọn" : `Xem thêm (${collocations.length - 3})`}
-            </button>
-          )}
-        </section>
-      )}
-    </div>
-  );
-}
 
 function AudioButton({
   locale,
@@ -462,6 +111,13 @@ function AudioButton({
   );
 }
 
+function getNumberLabel(numberInfo: NonNullable<VocabularyWithNearby["numberInfo"]>): string {
+  if (numberInfo.isUncountable) return "uncountable";
+  if (numberInfo.isPluralOnly) return "plural only";
+  if (numberInfo.isSingularOnly) return "singular only";
+  if (numberInfo.plural) return `pl: ${numberInfo.plural}`;
+  return "";
+}
 
 export function DictionaryResultCard({
   vocabulary,
@@ -474,51 +130,11 @@ export function DictionaryResultCard({
 }: DictionaryResultCardProps) {
   const firstSenseId = vocabulary?.senses[0]?.id ?? "";
   const [activeKey, setActiveKey] = useState(firstSenseId);
-  const [speakingLocale, setSpeakingLocale] = useState<string | null>(null);
+  const { speakingLocale, speak: speakAudio } = useAudioPlayer();
 
-  async function speak(locale: "en-US" | "en-GB") {
+  function speak(locale: "en-US" | "en-GB") {
     if (!vocabulary) return;
-
-    activeAudio?.pause();
-    activeAbort?.abort();
-    if (activeAudioUrl) {
-      URL.revokeObjectURL(activeAudioUrl);
-      activeAudioUrl = null;
-    }
-
-    const controller = new AbortController();
-    activeAbort = controller;
-    const accent = locale === "en-GB" ? "uk" : "us";
-    setSpeakingLocale(locale);
-
-    try {
-      const response = await api.post<Response>(
-        "/voice/synthesize",
-        { text: vocabulary.headword, accent },
-        { raw: true, signal: controller.signal },
-      );
-      const blob = await response.blob();
-      const url = URL.createObjectURL(blob);
-      activeAudioUrl = url;
-      const audio = new Audio(url);
-      activeAudio = audio;
-      audio.onended = () => {
-        setSpeakingLocale((curr) => (curr === locale ? null : curr));
-        URL.revokeObjectURL(url);
-        if (activeAudioUrl === url) activeAudioUrl = null;
-      };
-      audio.onerror = () => {
-        setSpeakingLocale((curr) => (curr === locale ? null : curr));
-        URL.revokeObjectURL(url);
-        if (activeAudioUrl === url) activeAudioUrl = null;
-      };
-      await audio.play();
-    } catch (err) {
-      if ((err as Error).name !== "AbortError") {
-        console.warn("[dictionary] TTS failed:", err);
-      }
-      setSpeakingLocale((curr) => (curr === locale ? null : curr));
-    }
+    speakAudio(vocabulary.headword, locale);
   }
 
   const cardStyle: React.CSSProperties = {
@@ -623,7 +239,7 @@ export function DictionaryResultCard({
                 fontStyle: "italic",
                 background: "var(--accent-muted)",
                 color: "var(--accent)",
-                border: "1px solid rgba(154,177,122,0.3)",
+                border: "1px solid var(--border)",
                 whiteSpace: "nowrap",
                 lineHeight: 1.4,
               }}
@@ -674,9 +290,9 @@ export function DictionaryResultCard({
               style={{
                 borderRadius: 999,
                 padding: "2px 12px",
-                borderColor: "#fcd34d",
-                color: "#5a7a64",
-                background: "#fffbeb",
+                borderColor: "var(--border-strong)",
+                color: "var(--text-secondary)",
+                background: "var(--accent-light)",
               }}
             >
               {vocabulary.register}
@@ -692,12 +308,12 @@ export function DictionaryResultCard({
                 alignItems: "center",
                 gap: 6,
                 borderRadius: 999,
-                background: "linear-gradient(to right, #fffbeb, #fff7ed)",
+                background: "var(--accent-light)",
                 padding: "4px 12px",
                 fontSize: 12,
                 fontWeight: 600,
-                color: "#5a7a64",
-                border: "1px solid rgba(217,119,6,0.3)",
+                color: "var(--accent)",
+                border: "1px solid var(--border-strong)",
                 cursor: "pointer",
                 transition: "background 0.2s",
               }}
@@ -887,7 +503,7 @@ export function DictionaryResultCard({
                 border: "none",
                 cursor: "pointer",
                 transition: "background 0.2s, color 0.2s",
-                background: activeKey === sense.id ? "rgba(154,177,122,0.12)" : "transparent",
+                background: activeKey === sense.id ? "var(--accent-muted)" : "transparent",
                 color: activeKey === sense.id ? "var(--accent)" : "var(--text-secondary)",
               }}
             >

@@ -7,6 +7,8 @@ import {
   RightOutlined,
   TrophyOutlined,
   ArrowLeftOutlined,
+  BulbOutlined,
+  FormOutlined,
 } from "@ant-design/icons";
 import { SCENARIOS, getScenarioById } from "@/lib/scenarios/data";
 import type { Scenario, ScenarioStep, VocabContent, ListeningContent, SpeakingContent, ReadingContent, WritingContent } from "@/lib/scenarios/data";
@@ -22,7 +24,7 @@ type ScenarioSummary = {
 type Phase = "list" | "scenario" | "step";
 
 const LEVEL_COLORS: Record<string, string> = {
-  A1: "#ef4444", A2: "#f97316", B1: "#eab308", B2: "#22c55e", C1: "#3b82f6", C2: "#8b5cf6",
+  A1: "var(--error)", A2: "var(--fire)", B1: "var(--warning)", B2: "var(--success)", C1: "var(--info)", C2: "var(--accent)",
 };
 
 export default function ScenariosPage() {
@@ -124,7 +126,7 @@ export default function ScenariosPage() {
               style={{
                 borderRadius: "var(--radius-xl)",
                 cursor: "pointer",
-                border: s.isComplete ? "1px solid #22c55e44" : "1px solid var(--border)",
+                border: s.isComplete ? "1px solid var(--success)44" : "1px solid var(--border)",
               }}
               styles={{ body: { padding: "20px" } }}
             >
@@ -133,7 +135,7 @@ export default function ScenariosPage() {
                 <Flex vertical style={{ flex: 1 }} gap={6}>
                   <Flex align="center" gap={8}>
                     <Text strong style={{ fontSize: 15 }}>{s.title}</Text>
-                    {s.isComplete && <CheckCircleFilled style={{ color: "#22c55e", fontSize: 14 }} />}
+                    {s.isComplete && <CheckCircleFilled style={{ color: "var(--success)", fontSize: 14 }} />}
                   </Flex>
                   <Text type="secondary" style={{ fontSize: 12 }}>{s.description}</Text>
                   <Flex gap={8} align="center" style={{ marginTop: 4 }}>
@@ -146,7 +148,7 @@ export default function ScenariosPage() {
                     percent={Math.round((s.completedSteps / s.totalSteps) * 100)}
                     showInfo={false}
                     size="small"
-                    strokeColor={s.isComplete ? "#22c55e" : "var(--accent)"}
+                    strokeColor={s.isComplete ? "var(--success)" : "var(--accent)"}
                     style={{ marginTop: 4 }}
                   />
                 </Flex>
@@ -175,14 +177,14 @@ export default function ScenariosPage() {
 
           <Card
             style={{
-              background: "linear-gradient(135deg, #6366f1, #8b5cf6)",
+              background: "linear-gradient(135deg, var(--module-listening), var(--accent))",
               borderRadius: "var(--radius-xl)",
               border: "none",
             }}
             styles={{ body: { padding: "28px" } }}
           >
             <span style={{ fontSize: 40 }}>{activeScenario.emoji}</span>
-            <Title level={3} style={{ color: "#fff", margin: "8px 0 4px" }}>{activeScenario.title}</Title>
+            <Title level={3} style={{ color: "var(--text-on-accent, #fff)", margin: "8px 0 4px" }}>{activeScenario.title}</Title>
             <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 13 }}>{activeScenario.description}</Text>
           </Card>
 
@@ -200,7 +202,7 @@ export default function ScenariosPage() {
                 <Flex align="center" gap={8} style={{ marginTop: 4 }}>
                   <Text type="secondary" style={{ fontSize: 12 }}>{step.description}</Text>
                   {completedSteps.has(i) ? (
-                    <CheckCircleFilled style={{ color: "#22c55e", fontSize: 14 }} />
+                    <CheckCircleFilled style={{ color: "var(--success)", fontSize: 14 }} />
                   ) : (
                     <Button size="small" type="primary" onClick={() => startStep(i)}>
                       Bắt đầu
@@ -213,10 +215,10 @@ export default function ScenariosPage() {
           />
 
           {completedSteps.size === activeScenario.steps.length && (
-            <Card style={{ borderRadius: "var(--radius-xl)", textAlign: "center", background: "#22c55e0a", border: "1px solid #22c55e33" }}>
-              <TrophyOutlined style={{ fontSize: 28, color: "#22c55e" }} />
+            <Card style={{ borderRadius: "var(--radius-xl)", textAlign: "center", background: "color-mix(in srgb, var(--success) 4%, transparent)", border: "1px solid var(--success)33" }}>
+              <TrophyOutlined style={{ fontSize: 28, color: "var(--success)" }} />
               <br />
-              <Text strong style={{ color: "#22c55e" }}>Hoàn thành! +{activeScenario.bonusXp} XP bonus</Text>
+              <Text strong style={{ color: "var(--success)" }}>Hoàn thành! +{activeScenario.bonusXp} XP bonus</Text>
             </Card>
           )}
         </Flex>
@@ -233,7 +235,7 @@ export default function ScenariosPage() {
       return (
         <div style={{ height: "100%", overflowY: "auto", padding: "var(--space-6)" }} className="anim-fade-up">
           <Flex vertical gap="var(--space-5)" style={{ maxWidth: 600, margin: "0 auto", textAlign: "center" }}>
-            <CheckCircleFilled style={{ fontSize: 48, color: "#22c55e" }} />
+            <CheckCircleFilled style={{ fontSize: 48, color: "var(--success)" }} />
             <Title level={4} style={{ margin: 0 }}>Hoàn thành: {step.title}</Title>
             <Text type="secondary">+{step.xp} XP</Text>
             <Button type="primary" onClick={() => setPhase("scenario")} style={{ borderRadius: 12 }}>
@@ -332,7 +334,7 @@ function QuizStep({ content, onComplete, submitting }: { content: ListeningConte
 
   return (
     <Flex vertical gap={16}>
-      <Card style={{ borderRadius: "var(--radius-xl)", background: "var(--surface-alt, #f9f9fb)" }}>
+      <Card style={{ borderRadius: "var(--radius-xl)", background: "var(--surface-alt)" }}>
         <Text style={{ fontSize: 13, lineHeight: 1.8, whiteSpace: "pre-wrap" }}>🔊 {content.dialogue}</Text>
       </Card>
       <Text strong style={{ fontSize: 14 }}>Câu {qIdx + 1}/{content.questions.length}: {q.question}</Text>
@@ -341,8 +343,8 @@ function QuizStep({ content, onComplete, submitting }: { content: ListeningConte
           <button key={i} disabled={answered} onClick={() => { setSelected(i); setAnswered(true); }}
             style={{
               padding: "12px 16px", borderRadius: 10, textAlign: "left", fontSize: 13, cursor: answered ? "default" : "pointer",
-              border: answered ? (i === q.correctIndex ? "2px solid #22c55e" : selected === i ? "2px solid #ef4444" : "1px solid var(--border)") : (selected === i ? "2px solid var(--accent)" : "1px solid var(--border)"),
-              background: answered && i === q.correctIndex ? "#22c55e11" : "var(--card-bg, var(--surface))",
+              border: answered ? (i === q.correctIndex ? "2px solid var(--success)" : selected === i ? "2px solid var(--error)" : "1px solid var(--border)") : (selected === i ? "2px solid var(--accent)" : "1px solid var(--border)"),
+              background: answered && i === q.correctIndex ? "color-mix(in srgb, var(--success) 7%, transparent)" : "var(--card-bg, var(--surface))",
               color: "var(--text)",
             }}
           >
@@ -369,7 +371,7 @@ function ReadingStep({ content, onComplete, submitting }: { content: ReadingCont
 
   return (
     <Flex vertical gap={16}>
-      <Card style={{ borderRadius: "var(--radius-xl)", background: "var(--surface-alt, #f9f9fb)" }}>
+      <Card style={{ borderRadius: "var(--radius-xl)", background: "var(--surface-alt)" }}>
         <pre style={{ fontSize: 12, lineHeight: 1.8, whiteSpace: "pre-wrap", margin: 0, fontFamily: "monospace" }}>{content.passage}</pre>
       </Card>
       <Text strong style={{ fontSize: 14 }}>Câu {qIdx + 1}/{content.questions.length}: {q.question}</Text>
@@ -378,8 +380,8 @@ function ReadingStep({ content, onComplete, submitting }: { content: ReadingCont
           <button key={i} disabled={answered} onClick={() => { setSelected(i); setAnswered(true); }}
             style={{
               padding: "12px 16px", borderRadius: 10, textAlign: "left", fontSize: 13, cursor: answered ? "default" : "pointer",
-              border: answered ? (i === q.correctIndex ? "2px solid #22c55e" : selected === i ? "2px solid #ef4444" : "1px solid var(--border)") : "1px solid var(--border)",
-              background: answered && i === q.correctIndex ? "#22c55e11" : "var(--card-bg, var(--surface))",
+              border: answered ? (i === q.correctIndex ? "2px solid var(--success)" : selected === i ? "2px solid var(--error)" : "1px solid var(--border)") : "1px solid var(--border)",
+              background: answered && i === q.correctIndex ? "color-mix(in srgb, var(--success) 7%, transparent)" : "var(--card-bg, var(--surface))",
               color: "var(--text)",
             }}
           >
@@ -403,8 +405,8 @@ function SpeakingStep({ content, onComplete, submitting }: { content: SpeakingCo
 
   return (
     <Flex vertical gap={16}>
-      <Card style={{ borderRadius: "var(--radius-xl)", background: "var(--surface-alt, #f9f9fb)" }}>
-        <Text style={{ fontSize: 13 }}>💡 {content.situation}</Text>
+      <Card style={{ borderRadius: "var(--radius-xl)", background: "var(--surface-alt)" }}>
+        <Text style={{ fontSize: 13 }}><BulbOutlined /> {content.situation}</Text>
       </Card>
       {content.prompts.map((prompt, i) => (
         <Card key={i} size="small" style={{ borderRadius: 12 }}>
@@ -415,7 +417,7 @@ function SpeakingStep({ content, onComplete, submitting }: { content: SpeakingCo
               {showSample === i ? "Ẩn gợi ý" : "Xem gợi ý trả lời"}
             </Button>
             {showSample === i && (
-              <Text type="secondary" style={{ fontSize: 12, fontStyle: "italic", background: "var(--accent-muted, #f0f0ff)", padding: 8, borderRadius: 8 }}>
+              <Text type="secondary" style={{ fontSize: 12, fontStyle: "italic", background: "var(--accent-muted)", padding: 8, borderRadius: 8 }}>
                 {content.sampleResponses[i]}
               </Text>
             )}
@@ -435,7 +437,7 @@ function WritingStep({ content, onComplete, submitting }: { content: WritingCont
     <Flex vertical gap={16}>
       <Card style={{ borderRadius: "var(--radius-xl)" }}>
         <Flex vertical gap={8}>
-          <Text strong style={{ fontSize: 14 }}>📝 Đề bài:</Text>
+          <Text strong style={{ fontSize: 14 }}><FormOutlined /> Đề bài:</Text>
           <Text style={{ fontSize: 13, lineHeight: 1.6 }}>{content.prompt}</Text>
           <Flex vertical gap={4} style={{ marginTop: 8 }}>
             <Text type="secondary" style={{ fontSize: 11, fontWeight: 600 }}>Gợi ý:</Text>
@@ -460,7 +462,7 @@ function WritingStep({ content, onComplete, submitting }: { content: WritingCont
         {showSample ? "Ẩn bài mẫu" : "Xem bài mẫu"}
       </Button>
       {showSample && (
-        <Card size="small" style={{ borderRadius: 12, background: "var(--accent-muted, #f0f0ff)" }}>
+        <Card size="small" style={{ borderRadius: 12, background: "var(--accent-muted)" }}>
           <Paragraph style={{ fontSize: 12, whiteSpace: "pre-wrap", margin: 0 }}>{content.sampleAnswer}</Paragraph>
         </Card>
       )}

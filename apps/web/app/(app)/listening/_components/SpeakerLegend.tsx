@@ -3,9 +3,9 @@
 import type { DialogueTurnPayload } from "@/lib/listening/types";
 
 const SPEAKER_COLORS: Record<"A" | "B" | "C", string> = {
-  A: "#1677ff",
-  B: "#fa8c16",
-  C: "#52c41a",
+  A: "var(--accent)",
+  B: "var(--xp)",
+  C: "var(--success)",
 };
 
 function describeVoice(t: DialogueTurnPayload): string {
@@ -19,7 +19,7 @@ type Props = {
 
 /**
  * Shows the speaker legend for a multi-speaker dialogue.
- * Example: "A = US · celeste, B = UK · briggs".
+ * Example: "A = US · autumn, B = UK · daniel".
  */
 export function SpeakerLegend({ turns }: Props) {
   const seen = new Map<"A" | "B" | "C", DialogueTurnPayload>();

@@ -141,7 +141,7 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
             color: "#fff",
             border: "none",
             cursor: "pointer",
-            boxShadow: "0 3px 12px rgba(154,177,122,0.35)",
+            boxShadow: "0 3px 12px color-mix(in srgb, var(--accent) 35%, transparent)",
             transition: "opacity 0.15s",
           }}
         >

@@ -1,9 +1,12 @@
 // app/(app)/my-vocabulary/page.tsx
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useQueryState, useQueryStates, parseAsString, parseAsArrayOf } from "nuqs";
-import { BookOutlined, SearchOutlined, DeleteOutlined } from "@ant-design/icons";
+import {
+  BookOutlined, SearchOutlined, DeleteOutlined,
+  StarOutlined, SyncOutlined, CheckCircleOutlined,
+} from "@ant-design/icons";
 import { VocabularyStatsBar } from "@/app/(app)/my-vocabulary/_components/VocabularyStatsBar";
 import { VocabularyDetailSheet } from "@/app/(app)/my-vocabulary/_components/VocabularyDetailSheet";
 import { ToeicVocabularySection } from "@/app/(app)/my-vocabulary/_components/ToeicVocabularySection";
@@ -28,18 +31,18 @@ const ENTRY_TYPE_LABELS: Record<Vocabulary["entryType"], string> = {
 };
 
 const LEVEL_COLORS: Record<string, { bg: string; color: string; border: string }> = {
-  A1: { bg: "#ecfdf5", color: "#047857", border: "#a7f3d0" },
-  A2: { bg: "#f0fdfa", color: "#0f766e", border: "#99f6e4" },
-  B1: { bg: "#f0f9ff", color: "#0369a1", border: "#bae6fd" },
-  B2: { bg: "#fffbeb", color: "#b45309", border: "#fde68a" },
-  C1: { bg: "#fff7ed", color: "#c2410c", border: "#fed7aa" },
-  C2: { bg: "#fff1f2", color: "#be123c", border: "#fecdd3" },
+  A1: { bg: "color-mix(in srgb, var(--success) 8%, var(--surface))", color: "var(--success)", border: "color-mix(in srgb, var(--success) 25%, transparent)" },
+  A2: { bg: "color-mix(in srgb, var(--success) 6%, var(--surface))", color: "var(--success)", border: "color-mix(in srgb, var(--success) 20%, transparent)" },
+  B1: { bg: "color-mix(in srgb, var(--accent) 8%, var(--surface))", color: "var(--accent)", border: "color-mix(in srgb, var(--accent) 25%, transparent)" },
+  B2: { bg: "color-mix(in srgb, var(--warning) 8%, var(--surface))", color: "var(--warning)", border: "color-mix(in srgb, var(--warning) 25%, transparent)" },
+  C1: { bg: "color-mix(in srgb, var(--xp) 8%, var(--surface))", color: "var(--xp)", border: "color-mix(in srgb, var(--xp) 25%, transparent)" },
+  C2: { bg: "color-mix(in srgb, var(--error) 8%, var(--surface))", color: "var(--error)", border: "color-mix(in srgb, var(--error) 25%, transparent)" },
 };
 
-const MASTERY_CONFIG: Record<string, { emoji: string; label: string; color: string }> = {
-  new: { emoji: "🟡", label: "Mới", color: "#eab308" },
-  learning: { emoji: "🔵", label: "Đang học", color: "#3b82f6" },
-  mastered: { emoji: "🟢", label: "Thành thạo", color: "#22c55e" },
+const MASTERY_CONFIG: Record<string, { icon: React.ReactNode; label: string; color: string }> = {
+  new: { icon: <StarOutlined style={{ color: "var(--warning)" }} />, label: "Mới", color: "var(--warning)" },
+  learning: { icon: <SyncOutlined style={{ color: "var(--accent)" }} />, label: "Đang học", color: "var(--accent)" },
+  mastered: { icon: <CheckCircleOutlined style={{ color: "var(--success)" }} />, label: "Thành thạo", color: "var(--success)" },
 };
 
 const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
@@ -575,7 +578,7 @@ export default function MyVocabularyPage() {
                               title={masteryInfo.label}
                               style={{ fontSize: 12, lineHeight: 1, cursor: "default" }}
                             >
-                              {masteryInfo.emoji}
+                              {masteryInfo.icon}
                             </span>
                             <span
                               style={{
@@ -709,7 +712,7 @@ export default function MyVocabularyPage() {
             background: "var(--ink)",
             padding: "10px 20px",
             fontSize: 14,
-            color: "#fff",
+            color: "var(--text-on-accent, #fff)",
             boxShadow: "var(--shadow-lg)",
           }}
         >
@@ -722,7 +725,7 @@ export default function MyVocabularyPage() {
               textDecoration: "underline",
               background: "none",
               border: "none",
-              color: "#fff",
+              color: "var(--text-on-accent, #fff)",
               cursor: "pointer",
             }}
           >

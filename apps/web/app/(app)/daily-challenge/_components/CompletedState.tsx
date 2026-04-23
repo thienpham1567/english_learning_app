@@ -68,10 +68,10 @@ export function CompletedState({ challenge, streak, badges }: {
             key={i}
             size="small"
             style={{
-              borderColor: a.isCorrect ? "var(--success)" : "var(--error, #ef4444)",
+              borderColor: a.isCorrect ? "var(--success)" : "var(--error)",
               background: a.isCorrect
                 ? "color-mix(in srgb, var(--success) 8%, var(--surface))"
-                : "color-mix(in srgb, var(--error, #ef4444) 8%, var(--surface))",
+                : "color-mix(in srgb, var(--error) 8%, var(--surface))",
               borderRadius: "var(--radius)",
             }}
             styles={{ body: { padding: "6px 12px" } }}
@@ -79,11 +79,11 @@ export function CompletedState({ challenge, streak, badges }: {
             <Flex align="center" justify="space-between">
               <Flex align="center" gap={8}>
                 {a.isCorrect ? (
-                  <CheckCircleFilled style={{ color: "#10b981", fontSize: 14 }} />
+                  <CheckCircleFilled style={{ color: "var(--success)", fontSize: 14 }} />
                 ) : (
-                  <CloseCircleFilled style={{ color: "#ef4444", fontSize: 14 }} />
+                  <CloseCircleFilled style={{ color: "var(--error)", fontSize: 14 }} />
                 )}
-                <Text style={{ fontSize: 13, color: a.isCorrect ? "var(--success)" : "var(--error, #ef4444)" }}>
+                <Text style={{ fontSize: 13, color: a.isCorrect ? "var(--success)" : "var(--error)" }}>
                   Câu {i + 1}: {a.isCorrect ? "Đúng" : "Sai"}
                 </Text>
               </Flex>

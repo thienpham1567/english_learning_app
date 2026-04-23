@@ -10,6 +10,10 @@ import {
   FireOutlined,
   SmileOutlined,
   BarChartOutlined,
+  LikeOutlined,
+  MehOutlined,
+  FrownOutlined,
+  CloseCircleOutlined,
 } from "@ant-design/icons";
 
 import { CelebrationOverlay, StreakFire } from "@/components/shared";
@@ -29,11 +33,11 @@ type Props = {
 };
 
 const DISTRIBUTION_ITEMS = [
-  { key: "easy", label: "Dễ", emoji: "🤩", color: "#10b981" },
-  { key: "good", label: "Ổn", emoji: "🙂", color: "var(--accent)" },
-  { key: "hard", label: "Khó", emoji: "😓", color: "#f59e0b" },
-  { key: "again", label: "Quên", emoji: "😵", color: "#ef4444" },
-] as const;
+  { key: "easy", label: "Dễ", icon: <LikeOutlined />, color: "var(--success)" },
+  { key: "good", label: "Ổn", icon: <SmileOutlined />, color: "var(--accent)" },
+  { key: "hard", label: "Khó", icon: <MehOutlined />, color: "var(--warning)" },
+  { key: "again", label: "Quên", icon: <FrownOutlined />, color: "var(--error)" },
+];
 
 // Derive streak + daily challenge from shared dashboard context
 function useSummaryContext() {
@@ -134,7 +138,7 @@ export function SessionSummary({
                     >
                       <div style={{ width: `${pct}%`, height: "100%", borderRadius: 3, background: item.color, transition: "width 0.5s ease" }} />
                     </div>
-                    <Text style={{ fontSize: 11 }}>{item.emoji} {count}</Text>
+                    <Text style={{ fontSize: 11 }}><span style={{ color: item.color }}>{item.icon}</span> {count}</Text>
                     <Text type="secondary" style={{ fontSize: 10 }}>{item.label}</Text>
                   </Flex>
                 );

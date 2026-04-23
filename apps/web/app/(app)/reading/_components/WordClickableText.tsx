@@ -233,7 +233,7 @@ export function WordClickableText({ text, style }: WordClickableTextProps) {
         {/* Actions */}
         <div style={{ display: "flex", gap: 8 }}>
           {saved || alreadySaved ? (
-            <Button size="small" type="text" icon={<CheckOutlined />} style={{ color: "#52c41a" }}>
+            <Button size="small" type="text" icon={<CheckOutlined />} style={{ color: "var(--success)" }}>
               {alreadySaved ? "Đã lưu" : "Đã lưu!"}
             </Button>
           ) : (

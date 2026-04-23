@@ -22,7 +22,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
           marginBottom: 12,
           fontSize: 11,
           fontWeight: 700,
-          color: "#ef4444",
+          color: "var(--error)",
           textTransform: "uppercase",
           letterSpacing: "0.1em",
         }}
@@ -35,8 +35,8 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
         style={{
           marginBottom: 16,
           borderRadius: 12,
-          borderLeft: "4px solid #ef4444",
-          background: "rgba(254,226,226,0.45)",
+          borderLeft: "4px solid var(--error)",
+          background: "var(--error-bg)",
           padding: "12px 16px",
         }}
       >
@@ -46,7 +46,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
             fontWeight: 700,
             textTransform: "uppercase",
             letterSpacing: "0.12em",
-            color: "#ef4444",
+            color: "var(--error)",
             display: "flex",
             alignItems: "center",
             gap: 4,
@@ -59,7 +59,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
           style={{
             margin: 0,
             fontSize: 15,
-            color: "#7f1d1d",
+            color: "var(--error)",
             fontWeight: 500,
             lineHeight: 1.65,
           }}
@@ -89,7 +89,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
           width: "100%",
           borderRadius: 12,
           border: focused
-            ? "2px solid #ef4444"
+            ? "2px solid var(--error)"
             : "1.5px solid var(--border)",
           background: "var(--surface)",
           padding: "11px 14px",
@@ -118,14 +118,14 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
             marginTop: 12,
             width: "100%",
             borderRadius: 12,
-            background: "linear-gradient(135deg, #ef4444, #f87171)",
+            background: "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 80%, white))",
             padding: "13px 0",
             fontSize: 14,
             fontWeight: 700,
             color: "#fff",
             border: "none",
             cursor: "pointer",
-            boxShadow: "0 3px 12px rgba(239,68,68,0.3)",
+            boxShadow: "0 3px 12px color-mix(in srgb, var(--error) 30%, transparent)",
             transition: "opacity 0.15s",
           }}
         >

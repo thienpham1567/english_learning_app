@@ -1,43 +1,43 @@
-/* ── Design Tokens (Light) ──
-   Palette: #74C4C9 · #90D0D4 · #ACDCDF · #C7E7E9 · #E3F3F4
+/* ── Design Tokens (Light)
+   Palette: #F2EAE0 · #B4D3D9 · #BDA6CE · #9B8EC7
 */
 :root {
-  --bg: #f6fbfb;
-  --bg-deep: #edf5f6;
+  --bg: #faf8f5;
+  --bg-deep: #f2eae0;
   --surface: #ffffff;
-  --surface-hover: #f0f7f8;
+  --surface-hover: #f7f2ed;
   --surface-raised: #ffffff;
-  --surface-alt: #f9fcfc;
+  --surface-alt: #fcfaf8;
   --card-bg: var(--surface);
 
-  --accent: #74c4c9;
-  --accent-hover: #5bb8be;
-  --accent-light: #e3f3f4;
-  --accent-muted: rgba(116, 196, 201, 0.14);
+  --accent: #9B8EC7;
+  --accent-hover: #8a7ab8;
+  --accent-light: #ede8f5;
+  --accent-muted: rgba(155, 142, 199, 0.14);
 
-  --secondary: #90d0d4;
-  --tertiary: #acdcdf;
-  --warm: #c7e7e9;
+  --secondary: #BDA6CE;
+  --tertiary: #B4D3D9;
+  --warm: #F2EAE0;
 
-  --ink: #1e3a3c;
-  --text-primary: #1e3a3c;
-  --text-secondary: #4a6b6d;
-  --text-muted: #8bacae;
+  --ink: #2d2640;
+  --text-primary: #2d2640;
+  --text-secondary: #5e5475;
+  --text-muted: #9b93aa;
   --text: var(--text-primary);
-  --text-disabled: #b7c9cb;
+  --text-disabled: #c4bdd0;
 
-  --border: #c7e7e9;
-  --border-strong: #90d0d4;
+  --border: #e4ddd4;
+  --border-strong: #BDA6CE;
 
-  --bubble-user: #1e3a3c;
+  --bubble-user: #2d2640;
   --bubble-ai: #ffffff;
 
-  --sage: #74c4c9;
+  --sage: #9B8EC7;
 
-  --shadow-sm: 0 1px 2px rgba(30, 58, 60, 0.06);
-  --shadow: 0 1px 3px rgba(30, 58, 60, 0.08), 0 1px 2px rgba(30, 58, 60, 0.04);
-  --shadow-md: 0 4px 12px rgba(30, 58, 60, 0.08), 0 2px 4px rgba(30, 58, 60, 0.04);
-  --shadow-lg: 0 10px 32px rgba(30, 58, 60, 0.1), 0 4px 12px rgba(30, 58, 60, 0.05);
+  --shadow-sm: 0 1px 2px rgba(45, 38, 64, 0.06);
+  --shadow: 0 1px 3px rgba(45, 38, 64, 0.08), 0 1px 2px rgba(45, 38, 64, 0.04);
+  --shadow-md: 0 4px 12px rgba(45, 38, 64, 0.08), 0 2px 4px rgba(45, 38, 64, 0.04);
+  --shadow-lg: 0 10px 32px rgba(45, 38, 64, 0.1), 0 4px 12px rgba(45, 38, 64, 0.05);
 
   --radius-sm: 8px;
   --radius: 12px;
@@ -51,7 +51,7 @@
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
 
   /* Sidebar dark panel */
-  --sidebar-bg: #1e3a3c;
+  --sidebar-bg: #2d2640;
   --sidebar-text: rgba(255, 255, 255, 0.7);
   --sidebar-text-active: rgba(255, 255, 255, 0.92);
   --sidebar-border: rgba(255, 255, 255, 0.1);
@@ -61,7 +61,7 @@
   --error: #ef4444;
   --warning: #f59e0b;
   --info: #3b82f6;
-  --xp: #8b5cf6;
+  --xp: #9B8EC7;
   --fire: #f97316;
   --success-bg: rgba(16, 185, 129, 0.12);
   --error-bg: rgba(239, 68, 68, 0.1);
@@ -72,17 +72,17 @@
   --module-listening: #6366f1;
   --module-writing: #14b8a6;
   --module-reading: #0ea5e9;
-  --module-vocabulary: #8b5cf6;
+  --module-vocabulary: #9B8EC7;
   --module-speaking: #ef4444;
   --module-review: #f59e0b;
   --module-assessment: #3b82f6;
 
   /* ── Heatmap Colors (Story 14.1) ── */
   --heatmap-0: rgba(0, 0, 0, 0.06);
-  --heatmap-1: #b2e5e8;
-  --heatmap-2: #74c4c9;
-  --heatmap-3: #4da8ae;
-  --heatmap-4: #2d8a90;
+  --heatmap-1: #d9cbe6;
+  --heatmap-2: #BDA6CE;
+  --heatmap-3: #9B8EC7;
+  --heatmap-4: #7a6aab;
 
   /* ── Typography Scale ── */
   --text-xs: 11px;
@@ -111,49 +111,49 @@
   --duration-slow: 500ms;
 
   /* ── Extended Shadows ── */
-  --shadow-xl: 0 20px 48px rgba(30, 58, 60, 0.12), 0 8px 24px rgba(30, 58, 60, 0.06);
+  --shadow-xl: 0 20px 48px rgba(45, 38, 64, 0.12), 0 8px 24px rgba(45, 38, 64, 0.06);
 }
 
 /* ── Dark Theme Tokens ── */
 [data-theme="dark"] {
-  --bg: #0f1d1e;
-  --bg-deep: #152526;
-  --surface: #152526;
-  --surface-hover: #1d3132;
-  --surface-raised: #1a2e2f;
-  --surface-alt: #102021;
+  --bg: #1a1527;
+  --bg-deep: #211b30;
+  --surface: #211b30;
+  --surface-hover: #2b2440;
+  --surface-raised: #261f38;
+  --surface-alt: #1d1729;
   --card-bg: var(--surface);
 
-  --accent: #90d0d4;
-  --accent-hover: #74c4c9;
-  --accent-light: rgba(144, 208, 212, 0.12);
-  --accent-muted: rgba(144, 208, 212, 0.15);
+  --accent: #BDA6CE;
+  --accent-hover: #9B8EC7;
+  --accent-light: rgba(189, 166, 206, 0.12);
+  --accent-muted: rgba(189, 166, 206, 0.15);
 
-  --secondary: #6ab0b4;
-  --tertiary: #4a8e92;
-  --warm: #253839;
+  --secondary: #9B8EC7;
+  --tertiary: #7a6aab;
+  --warm: #2b2440;
 
-  --ink: #dceef0;
-  --text-primary: #dceef0;
-  --text-secondary: #96c0c3;
-  --text-muted: #4e7d80;
+  --ink: #e8e0f0;
+  --text-primary: #e8e0f0;
+  --text-secondary: #b3a6c8;
+  --text-muted: #6b5d82;
   --text: var(--text-primary);
-  --text-disabled: #355b5e;
+  --text-disabled: #4a3e5f;
 
-  --border: #243536;
-  --border-strong: #2f4647;
+  --border: #322a45;
+  --border-strong: #3e3555;
 
-  --bubble-user: #243536;
-  --bubble-ai: #152526;
+  --bubble-user: #322a45;
+  --bubble-ai: #211b30;
 
-  --sage: #90d0d4;
+  --sage: #BDA6CE;
 
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.25);
   --shadow: 0 1px 3px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.2);
   --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2);
   --shadow-lg: 0 10px 32px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.25);
 
-  --sidebar-bg: #0b1718;
+  --sidebar-bg: #151020;
   --sidebar-text: rgba(255, 255, 255, 0.6);
   --sidebar-text-active: rgba(255, 255, 255, 0.9);
   --sidebar-border: rgba(255, 255, 255, 0.08);
@@ -163,7 +163,7 @@
   --error: #f87171;
   --warning: #fbbf24;
   --info: #60a5fa;
-  --xp: #a78bfa;
+  --xp: #BDA6CE;
   --fire: #fb923c;
   --success-bg: rgba(52, 211, 153, 0.14);
   --error-bg: rgba(248, 113, 113, 0.14);
@@ -172,10 +172,10 @@
 
   /* ── Heatmap Colors (Dark) ── */
   --heatmap-0: rgba(255, 255, 255, 0.08);
-  --heatmap-1: #1a4a4d;
-  --heatmap-2: #2d7a7f;
-  --heatmap-3: #4da8ae;
-  --heatmap-4: #74c4c9;
+  --heatmap-1: #2b2440;
+  --heatmap-2: #4a3e6a;
+  --heatmap-3: #7a6aab;
+  --heatmap-4: #9B8EC7;
 
   /* ── Extended Shadows (Dark) ── */
   --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.55), 0 8px 24px rgba(0, 0, 0, 0.3);
@@ -626,7 +626,7 @@ textarea.ant-input::placeholder {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(116, 196, 201, 0.18);
+  background: rgba(155, 142, 199, 0.18);
   transform: translateX(-100%);
   transition: transform 0.35s ease;
   pointer-events: none;

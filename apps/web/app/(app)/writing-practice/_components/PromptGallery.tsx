@@ -17,29 +17,29 @@ const CATEGORIES: {
     id: "email-response",
     icon: MailOutlined,
     desc: "Trả lời email yêu cầu (TOEIC Q6-7)",
-    color: "#3b82f6",
-    bg: "linear-gradient(135deg, #3b82f6, #60a5fa)",
+    color: "var(--info)",
+    bg: "linear-gradient(135deg, var(--info), color-mix(in srgb, var(--info) 70%, white))",
   },
   {
     id: "opinion-essay",
     icon: EditOutlined,
     desc: "Viết luận trình bày quan điểm (TOEIC Q8)",
-    color: "#8b5cf6",
-    bg: "linear-gradient(135deg, #8b5cf6, #a78bfa)",
+    color: "var(--accent)",
+    bg: "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, white))",
   },
   {
     id: "describe-picture",
     icon: PictureOutlined,
     desc: "Mô tả hình ảnh bằng câu (TOEIC Q1-5)",
-    color: "#f59e0b",
-    bg: "linear-gradient(135deg, #f59e0b, #fbbf24)",
+    color: "var(--warning)",
+    bg: "linear-gradient(135deg, var(--warning), color-mix(in srgb, var(--warning) 70%, white))",
   },
   {
     id: "free",
     icon: StarOutlined,
     desc: "Tự do sáng tạo, chủ đề bất kỳ",
-    color: "#10b981",
-    bg: "linear-gradient(135deg, #10b981, #34d399)",
+    color: "var(--success)",
+    bg: "linear-gradient(135deg, var(--success), color-mix(in srgb, var(--success) 70%, white))",
   },
 ];
 
@@ -79,7 +79,7 @@ export function PromptGallery({ onSelect, isLoading, loadingCategory }: Props) {
             boxShadow: "0 4px 16px rgba(154,177,122,0.35)",
           }}
         >
-          ✍️
+          <EditOutlined />
         </div>
         <h2
           style={{
@@ -157,7 +157,7 @@ export function PromptGallery({ onSelect, isLoading, loadingCategory }: Props) {
                 {isBusy ? (
                   <Spin size="small" />
                 ) : (
-                  <Icon style={{ fontSize: 20, color: "#fff" }} />
+                  <Icon style={{ fontSize: 20, color: "var(--text-on-accent, #fff)" }} />
                 )}
               </span>
 

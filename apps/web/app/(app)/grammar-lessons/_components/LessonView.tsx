@@ -150,9 +150,9 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
       {/* Error */}
       {error && (
-        <div style={{ padding: 16, borderRadius: 12, background: "#ff4d4f15", border: "1px solid #ff4d4f40", color: "#ff4d4f", textAlign: "center" }}>
+        <div style={{ padding: 16, borderRadius: 12, background: "var(--error-bg)", border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)", color: "var(--error)", textAlign: "center" }}>
           <p>{error}</p>
-          <button onClick={generateLesson} style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: "#ff4d4f", color: "#fff", cursor: "pointer", marginTop: 8 }}>
+          <button onClick={generateLesson} style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: "var(--error)", color: "#fff", cursor: "pointer", marginTop: 8 }}>
             Thử lại
           </button>
         </div>
@@ -173,7 +173,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           {/* Formula */}
           <div style={{
             padding: 20, borderRadius: 12, textAlign: "center",
-            background: "linear-gradient(135deg, var(--accent-muted, #6366f110), #8b5cf610)",
+            background: "linear-gradient(135deg, var(--accent-muted), color-mix(in srgb, var(--secondary) 6%, var(--surface)))",
             border: "1px solid var(--border)",
           }}>
             <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>📐 Công thức</p>
@@ -217,14 +217,14 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
             <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", margin: "0 0 12px" }}>⚠️ Lỗi thường gặp</p>
             {lesson.commonMistakes.map((m, i) => (
-              <div key={i} style={{ padding: 10, borderRadius: 8, marginBottom: i < lesson.commonMistakes.length - 1 ? 8 : 0, background: "#ff4d4f08", border: "1px solid #ff4d4f20" }}>
+              <div key={i} style={{ padding: 10, borderRadius: 8, marginBottom: i < lesson.commonMistakes.length - 1 ? 8 : 0, background: "var(--error-bg)", border: "1px solid color-mix(in srgb, var(--error) 12%, transparent)" }}>
                 <p style={{ margin: 0, fontSize: 13 }}>
-                  <CloseCircleOutlined style={{ color: "#ff4d4f", marginRight: 4 }} />
-                  <span style={{ textDecoration: "line-through", color: "#ff4d4f" }}>{m.wrong}</span>
+                  <CloseCircleOutlined style={{ color: "var(--error)", marginRight: 4 }} />
+                  <span style={{ textDecoration: "line-through", color: "var(--error)" }}>{m.wrong}</span>
                 </p>
                 <p style={{ margin: "4px 0 0", fontSize: 13 }}>
-                  <CheckCircleOutlined style={{ color: "#52c41a", marginRight: 4 }} />
-                  <span style={{ color: "#52c41a" }}>{m.correct}</span>
+                  <CheckCircleOutlined style={{ color: "var(--success)", marginRight: 4 }} />
+                  <span style={{ color: "var(--success)" }}>{m.correct}</span>
                 </p>
                 <p style={{ margin: "4px 0 0", fontSize: 12, color: "var(--text-secondary)" }}>💡 {m.note}</p>
               </div>
@@ -264,8 +264,8 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 let color = "var(--text)";
 
                 if (revealed) {
-                  if (isCorrect) { bg = "#52c41a15"; border = "1px solid #52c41a"; color = "#52c41a"; }
-                  else if (isSelected) { bg = "#ff4d4f15"; border = "1px solid #ff4d4f"; color = "#ff4d4f"; }
+                  if (isCorrect) { bg = "color-mix(in srgb, var(--success) 8%, var(--surface))"; border = "1px solid var(--success)"; color = "var(--success)"; }
+                  else if (isSelected) { bg = "color-mix(in srgb, var(--error) 8%, var(--surface))"; border = "1px solid var(--error)"; color = "var(--error)"; }
                 }
 
                 return (
@@ -305,7 +305,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
       {/* Completion */}
       {state === "complete" && lesson && (
         <div style={{ textAlign: "center", padding: 32, borderRadius: 16, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-          <CheckCircleOutlined style={{ fontSize: 48, color: "#52c41a", marginBottom: 16 }} />
+          <CheckCircleOutlined style={{ fontSize: 48, color: "var(--success)", marginBottom: 16 }} />
           <h2 style={{ margin: "0 0 8px" }}>Bài học hoàn thành!</h2>
           <p style={{ color: "var(--text-secondary)", margin: "0 0 4px" }}>
             {lesson.title} — {correctCount}/{lesson.exercises.length} câu đúng

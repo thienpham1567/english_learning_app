@@ -53,7 +53,7 @@ export default function GrammarQuizPage() {
       {/* Header */}
       <ModuleHeader
         icon={<BulbOutlined />}
-        gradient="linear-gradient(135deg, #ec4899, #e11d48)"
+        gradient="linear-gradient(135deg, var(--accent), var(--secondary))"
         title="TOEIC Part 5 📝"
         subtitle="Incomplete Sentences · Luyện tập theo độ khó"
         action={
@@ -88,7 +88,7 @@ export default function GrammarQuizPage() {
             position: "absolute",
             inset: 0,
             background:
-              "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(236,72,153,0.06) 0%, transparent 70%)",
+              "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--accent) 6%, transparent) 0%, transparent 70%)",
           }}
         />
 
@@ -113,12 +113,12 @@ export default function GrammarQuizPage() {
                     margin: "0 auto 16px",
                     maxWidth: 480,
                     borderRadius: "var(--radius)",
-                    border: "1px solid #fecaca",
-                    background: "#fef2f2",
+                    border: "1px solid color-mix(in srgb, var(--error) 30%, transparent)",
+                    background: "var(--error-bg)",
                     padding: "10px 16px",
                     textAlign: "center",
                     fontSize: 14,
-                    color: "#b91c1c",
+                    color: "var(--error)",
                   }}
                 >
                   {error}

@@ -10,6 +10,15 @@ import {
   BookOutlined,
   FileTextOutlined,
   RightOutlined,
+  HomeOutlined,
+  EnvironmentOutlined,
+  CoffeeOutlined,
+  HeartOutlined,
+  LaptopOutlined,
+  CloudOutlined,
+  ContainerOutlined,
+  ExperimentOutlined,
+  ShopOutlined,
 } from "@ant-design/icons";
 import { Card, Tag, Spin, Flex, Typography, Empty } from "antd";
 import { api } from "@/lib/api-client";
@@ -30,11 +39,11 @@ type PassageItem = {
 const LEVELS = ["", "A2", "B1", "B2", "C1", "C2"] as const;
 
 const LEVEL_COLORS: Record<string, string> = {
-  A2: "#52c41a",
-  B1: "#1890ff",
-  B2: "#2f54eb",
-  C1: "#722ed1",
-  C2: "#eb2f96",
+  A2: "var(--success)",
+  B1: "var(--info)",
+  B2: "var(--info)",
+  C1: "var(--accent)",
+  C2: "var(--module-grammar)",
 };
 
 const LEVEL_LABELS: Record<string, string> = {
@@ -47,15 +56,15 @@ const LEVEL_LABELS: Record<string, string> = {
 };
 
 const SECTION_ICONS: Record<string, React.ReactNode> = {
-  lifestyle: "🏠",
-  travel: "✈️",
-  food: "🍳",
-  health: "💪",
-  technology: "💻",
-  environment: "🌿",
-  education: "📚",
-  science: "🔬",
-  business: "💼",
+  lifestyle: <HomeOutlined />,
+  travel: <EnvironmentOutlined />,
+  food: <CoffeeOutlined />,
+  health: <HeartOutlined />,
+  technology: <LaptopOutlined />,
+  environment: <CloudOutlined />,
+  education: <ContainerOutlined />,
+  science: <ExperimentOutlined />,
+  business: <ShopOutlined />,
 };
 
 export default function GradedReaderPage() {
@@ -103,19 +112,19 @@ export default function GradedReaderPage() {
               background: "rgba(255,255,255,0.2)", display: "flex",
               alignItems: "center", justifyContent: "center",
             }}>
-              <BookOutlined style={{ fontSize: 24, color: "#fff" }} />
+              <BookOutlined style={{ fontSize: 24, color: "var(--text-on-accent, #fff)" }} />
             </div>
             <div>
               <Text style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.7)" }}>
                 GRADED READER
               </Text>
-              <Title level={4} style={{ margin: 0, color: "#fff", fontFamily: "var(--font-display)", fontStyle: "italic" }}>
+              <Title level={4} style={{ margin: 0, color: "var(--text-on-accent, #fff)", fontFamily: "var(--font-display)", fontStyle: "italic" }}>
                 Đọc theo cấp độ CEFR
               </Title>
             </div>
             {passages.length > 0 && (
               <div style={{ marginLeft: "auto", textAlign: "center" }}>
-                <Text style={{ fontSize: 22, fontWeight: 700, color: "#fff" }}>{readCount}/{passages.length}</Text>
+                <Text style={{ fontSize: 22, fontWeight: 700, color: "var(--text-on-accent, #fff)" }}>{readCount}/{passages.length}</Text>
                 <br />
                 <Text style={{ fontSize: 11, color: "rgba(255,255,255,0.7)" }}>đã đọc</Text>
               </div>
@@ -139,7 +148,7 @@ export default function GradedReaderPage() {
                     borderRadius: 20,
                     border: active ? `2px solid ${color}` : "1px solid var(--border)",
                     background: active ? color : "transparent",
-                    color: active ? "#fff" : "var(--text-secondary)",
+                    color: active ? "var(--text-on-accent, #fff)" : "var(--text-secondary)",
                     fontSize: 12,
                     fontWeight: 600,
                     cursor: "pointer",
@@ -185,12 +194,12 @@ export default function GradedReaderPage() {
                     width: 40, height: 40, borderRadius: 12,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     background: p.isRead
-                      ? "linear-gradient(135deg, #52c41a20, #52c41a10)"
+                      ? "linear-gradient(135deg, var(--success)20, var(--success)10)"
                       : `linear-gradient(135deg, ${LEVEL_COLORS[p.cefrLevel] || "var(--accent)"}15, ${LEVEL_COLORS[p.cefrLevel] || "var(--accent)"}08)`,
                     flexShrink: 0,
                   }}>
                     {p.isRead
-                      ? <CheckCircleFilled style={{ fontSize: 20, color: "#52c41a" }} />
+                      ? <CheckCircleFilled style={{ fontSize: 20, color: "var(--success)" }} />
                       : <FileTextOutlined style={{ fontSize: 18, color: LEVEL_COLORS[p.cefrLevel] || "var(--accent)" }} />
                     }
                   </div>
@@ -205,14 +214,14 @@ export default function GradedReaderPage() {
                         style={{
                           margin: 0, fontSize: 10, fontWeight: 700, borderRadius: 6,
                           background: LEVEL_COLORS[p.cefrLevel] || undefined,
-                          color: LEVEL_COLORS[p.cefrLevel] ? "#fff" : undefined,
+                          color: LEVEL_COLORS[p.cefrLevel] ? "var(--text-on-accent, #fff)" : undefined,
                           border: "none",
                         }}
                       >
                         {p.cefrLevel}
                       </Tag>
                       <Text style={{ fontSize: 11, color: "var(--text-muted)" }}>
-                        {SECTION_ICONS[p.section] || "📄"} {p.wordCount} từ
+                        {SECTION_ICONS[p.section]} {p.wordCount} từ
                       </Text>
                     </Flex>
                   </div>

@@ -49,9 +49,9 @@ interface Props {
 }
 
 function scoreColor(n: number): string {
-  if (n >= 80) return "#52c41a";
-  if (n >= 60) return "#faad14";
-  return "#ff4d4f";
+  if (n >= 80) return "var(--success)";
+  if (n >= 60) return "var(--warning)";
+  return "var(--error)";
 }
 
 function wordCount(text: string): number {
@@ -76,7 +76,7 @@ export default function SummarizeMode({ examMode }: Props) {
 
   const wc = wordCount(summaryText);
   const wcOk = wc >= 30 && wc <= 400;
-  const wcColor = wc < 30 ? "var(--text-muted)" : wc > 400 ? "#ff4d4f" : "#52c41a";
+  const wcColor = wc < 30 ? "var(--text-muted)" : wc > 400 ? "var(--error)" : "var(--success)";
 
   // ── Generate exercise ──
   const startSession = useCallback(async () => {
@@ -133,7 +133,7 @@ export default function SummarizeMode({ examMode }: Props) {
 
       {/* Error banner */}
       {error && (
-        <div style={{ padding: "10px 16px", borderRadius: 8, background: "#ff4d4f15", border: "1px solid #ff4d4f40", color: "#ff4d4f", fontSize: 13 }}>
+        <div style={{ padding: "10px 16px", borderRadius: 8, background: "var(--error-bg)", border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)", color: "var(--error)", fontSize: 13 }}>
           ⚠️ {error}
         </div>
       )}
@@ -164,7 +164,7 @@ export default function SummarizeMode({ examMode }: Props) {
                     borderRadius: 8,
                     border: selectedLevel === l ? "2px solid var(--accent)" : "1px solid var(--border)",
                     background: selectedLevel === l ? "var(--accent)" : "var(--surface)",
-                    color: selectedLevel === l ? "#fff" : "var(--text)",
+                    color: selectedLevel === l ? "var(--text-on-accent, #fff)" : "var(--text)",
                     fontWeight: 700,
                     fontSize: 13,
                     cursor: "pointer",
@@ -182,7 +182,7 @@ export default function SummarizeMode({ examMode }: Props) {
 
           <button
             onClick={startSession}
-            style={{ width: "100%", padding: "12px 24px", borderRadius: 10, border: "none", background: "var(--accent)", color: "#fff", fontSize: 15, fontWeight: 600, cursor: "pointer" }}
+            style={{ width: "100%", padding: "12px 24px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 15, fontWeight: 600, cursor: "pointer" }}
           >
             Bắt đầu
           </button>
@@ -254,7 +254,7 @@ export default function SummarizeMode({ examMode }: Props) {
                     display: "flex", alignItems: "center", gap: 6,
                     padding: "10px 20px", borderRadius: 8, border: "none",
                     background: wcOk ? "var(--accent)" : "var(--border)",
-                    color: "#fff", fontSize: 13, fontWeight: 600,
+                    color: "var(--text-on-accent, #fff)", fontSize: 13, fontWeight: 600,
                     cursor: wcOk ? "pointer" : "not-allowed",
                     transition: "all 0.15s ease",
                   }}
@@ -342,14 +342,14 @@ export default function SummarizeMode({ examMode }: Props) {
                   style={{
                     display: "flex", alignItems: "flex-start", gap: 8,
                     padding: "8px 12px", borderRadius: 8,
-                    background: item.covered ? "#52c41a10" : "#ff4d4f10",
-                    border: `1px solid ${item.covered ? "#52c41a30" : "#ff4d4f30"}`,
+                    background: item.covered ? "color-mix(in srgb, var(--success) 6%, var(--surface))" : "color-mix(in srgb, var(--error) 6%, var(--surface))",
+                    border: `1px solid ${item.covered ? "color-mix(in srgb, var(--success) 20%, transparent)" : "color-mix(in srgb, var(--error) 20%, transparent)"}`,
                   }}
                 >
                   <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1 }}>
                     {item.covered
-                      ? <CheckCircleOutlined style={{ color: "#52c41a" }} />
-                      : <CloseCircleOutlined style={{ color: "#ff4d4f" }} />}
+                      ? <CheckCircleOutlined style={{ color: "var(--success)" }} />
+                      : <CloseCircleOutlined style={{ color: "var(--error)" }} />}
                   </span>
                   <div>
                     <p style={{ margin: 0, fontSize: 13, fontWeight: 500 }}>{item.idea}</p>
@@ -405,7 +405,7 @@ export default function SummarizeMode({ examMode }: Props) {
             </button>
             <button
               onClick={startSession}
-              style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "var(--accent)", color: "#fff", cursor: "pointer", fontSize: 13, fontWeight: 600 }}
+              style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", cursor: "pointer", fontSize: 13, fontWeight: 600 }}
             >
               Bài mới
             </button>

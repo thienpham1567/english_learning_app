@@ -23,7 +23,7 @@ export default function Icon() {
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <circle cx="32" cy="32" r="28" stroke="#74C4C9" strokeWidth="1.5" fill="none" />
+        <circle cx="32" cy="32" r="28" stroke="#9B8EC7" strokeWidth="1.5" fill="none" />
         <line
           x1="17"
           y1="22"
@@ -42,7 +42,7 @@ export default function Icon() {
           strokeWidth="2.5"
           strokeLinecap="round"
         />
-        <circle cx="32" cy="44" r="2.8" fill="#74C4C9" />
+        <circle cx="32" cy="44" r="2.8" fill="#9B8EC7" />
       </svg>
     </div>,
     { ...size },

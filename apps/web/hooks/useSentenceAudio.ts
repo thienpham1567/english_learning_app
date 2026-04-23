@@ -39,7 +39,7 @@ export function useSentenceAudio(accent: "us" | "uk" | "au" = "us") {
 
       try {
         const response = await api.post<Response>("/voice/synthesize",
-          { text: text.slice(0, 4000), speed: 1, accent },
+          { text: text.slice(0, 200), speed: 1, accent },
           { raw: true, signal: controller.signal },
         );
 

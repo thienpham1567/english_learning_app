@@ -9,6 +9,12 @@ import {
   ReloadOutlined,
   InfoCircleOutlined,
   WarningOutlined,
+  FormOutlined,
+  BookOutlined,
+  AimOutlined,
+  HighlightOutlined,
+  LinkOutlined,
+  CalculatorOutlined,
 } from "@ant-design/icons";
 import { Progress, Tag, Tooltip } from "antd";
 
@@ -52,10 +58,10 @@ const EXAM_OPTIONS: { value: ExamType; label: string }[] = [
 ];
 
 const CATEGORY_COLORS: Record<string, string> = {
-  grammar: "#ff4d4f",
-  "word-choice": "#faad14",
-  coherence: "#1890ff",
-  task: "#722ed1",
+  grammar: "var(--error)",
+  "word-choice": "var(--warning)",
+  coherence: "var(--info)",
+  task: "var(--accent)",
 };
 
 /* ── InlineIssueItem ─────────────────────────────────────── */
@@ -72,14 +78,14 @@ function InlineIssueItem({
   onMouseLeave: () => void;
 }) {
   const [showRewrite, setShowRewrite] = useState(false);
-  const color = CATEGORY_COLORS[issue.category] ?? "#888";
+  const color = CATEGORY_COLORS[issue.category] ?? "var(--text-muted)";
 
   return (
     <div
       style={{
         fontSize: 13,
         borderRadius: 8,
-        background: isHovered ? `${color}15` : "var(--surface, #fafafa)",
+        background: isHovered ? `${color}15` : "var(--surface)",
         borderLeft: `3px solid ${color}`,
         overflow: "hidden",
       }}
@@ -90,9 +96,9 @@ function InlineIssueItem({
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
           <div>
             <Tag color={color} style={{ fontSize: 10 }}>{issue.category}</Tag>
-            <span style={{ textDecoration: "line-through", color: "#999" }}>{issue.quote}</span>
+            <span style={{ textDecoration: "line-through", color: "var(--text-muted)" }}>{issue.quote}</span>
             {" → "}
-            <span style={{ color: "#52c41a", fontWeight: 500 }}>{issue.suggestion}</span>
+            <span style={{ color: "var(--success)", fontWeight: 500 }}>{issue.suggestion}</span>
           </div>
           <button
             onClick={() => setShowRewrite((p) => !p)}
@@ -111,7 +117,7 @@ function InlineIssueItem({
               marginLeft: 8,
             }}
           >
-            ✨ Viết lại
+            <HighlightOutlined /> Viết lại
           </button>
         </div>
         <p style={{ margin: "4px 0 0", fontSize: 11, color: "var(--text-secondary)" }}>
@@ -223,7 +229,7 @@ export default function EssayScorePage() {
                 <Tag color={CATEGORY_COLORS[issue.category]} style={{ fontSize: 10 }}>{issue.category}</Tag>
               </div>
               <div>→ {issue.suggestion}</div>
-              <div style={{ color: "#aaa", marginTop: 4 }}>{issue.explanation}</div>
+              <div style={{ color: "var(--text-muted)", marginTop: 4 }}>{issue.explanation}</div>
             </div>
           }
         >
@@ -261,7 +267,7 @@ export default function EssayScorePage() {
   const maxScore = isIelts ? 9 : 30;
   const scoreColor = (s: number) => {
     const pct = s / maxScore;
-    return pct >= 0.75 ? "#52c41a" : pct >= 0.5 ? "#faad14" : "#ff4d4f";
+    return pct >= 0.75 ? "var(--success)" : pct >= 0.5 ? "var(--warning)" : "var(--error)";
   };
 
   /* ── Render ──────────────────────────────── */
@@ -285,7 +291,7 @@ export default function EssayScorePage() {
         {error && (
           <div style={{
             padding: "10px 16px", borderRadius: 8,
-            background: "var(--error-bg, #fff2f0)", color: "var(--error, #ff4d4f)",
+            background: "var(--error-bg)", color: "var(--error)",
             marginBottom: 16, fontSize: 13,
           }}>
             {error}
@@ -341,7 +347,7 @@ export default function EssayScorePage() {
                 <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: 0, fontWeight: 600 }}>Bài viết</p>
                 <span style={{
                   fontSize: 11,
-                  color: wordCount < 150 ? "#ff4d4f" : wordCount > 2000 ? "#ff4d4f" : "var(--text-secondary)",
+                  color: wordCount < 150 ? "var(--error)" : wordCount > 2000 ? "var(--error)" : "var(--text-secondary)",
                   fontWeight: 500,
                 }}>
                   {wordCount} từ {wordCount < 150 && "(cần ≥ 150)"}
@@ -366,12 +372,12 @@ export default function EssayScorePage() {
               style={{
                 padding: "12px 32px", borderRadius: 10, border: "none",
                 background: wordCount < 150 ? "var(--border)" : "var(--accent)",
-                color: "#fff", fontSize: 15, fontWeight: 600,
+                color: "var(--text-on-accent, #fff)", fontSize: 15, fontWeight: 600,
                 cursor: wordCount < 150 ? "not-allowed" : "pointer",
                 alignSelf: "center",
               }}
             >
-              ✍️ Chấm bài
+              <EditOutlined /> Chấm bài
             </button>
           </div>
         )}
@@ -438,10 +444,10 @@ export default function EssayScorePage() {
 
             {/* Criteria feedback */}
             {([
-              { key: "taskResponse", label: "📝 Task Response", icon: null },
-              { key: "coherence", label: "🔗 Coherence & Cohesion", icon: null },
-              { key: "lexical", label: "📚 Lexical Resource", icon: null },
-              { key: "grammar", label: "📐 Grammar", icon: null },
+              { key: "taskResponse", label: <><FormOutlined /> Task Response</>, icon: null },
+              { key: "coherence", label: <><LinkOutlined /> Coherence &amp; Cohesion</>, icon: null },
+              { key: "lexical", label: <><BookOutlined /> Lexical Resource</>, icon: null },
+              { key: "grammar", label: <><CalculatorOutlined /> Grammar</>, icon: null },
             ] as const).map((c) => {
               const s = result.criteria[c.key];
               return (
@@ -496,7 +502,7 @@ export default function EssayScorePage() {
             <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
               <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
                 <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
-                  <CheckCircleOutlined style={{ color: "#52c41a" }} /> Điểm mạnh
+                  <CheckCircleOutlined style={{ color: "var(--success)" }} /> Điểm mạnh
                 </p>
                 <ul style={{ margin: 0, paddingLeft: 16, fontSize: 13, lineHeight: 1.8 }}>
                   {result.strengths.map((s, i) => <li key={i}>{s}</li>)}
@@ -504,7 +510,7 @@ export default function EssayScorePage() {
               </div>
               <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
                 <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
-                  🎯 Cần cải thiện
+                  <AimOutlined /> Cần cải thiện
                 </p>
                 <ul style={{ margin: 0, paddingLeft: 16, fontSize: 13, lineHeight: 1.8 }}>
                   {result.nextSteps.map((s, i) => <li key={i}>{s}</li>)}
@@ -518,7 +524,7 @@ export default function EssayScorePage() {
                 onClick={startNew}
                 style={{
                   padding: "10px 24px", borderRadius: 8, border: "none",
-                  background: "var(--accent)", color: "#fff", fontSize: 14,
+                  background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14,
                   fontWeight: 600, cursor: "pointer",
                 }}
               >

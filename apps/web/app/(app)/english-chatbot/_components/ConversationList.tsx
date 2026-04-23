@@ -145,12 +145,12 @@ export function ConversationList({ activeId }: Props) {
                     alignItems: "center",
                     gap: 4,
                     borderRadius: "var(--radius)",
-                    border: "1px solid #ef4444",
-                    background: "rgba(239,68,68,0.1)",
+                    border: "1px solid var(--error)",
+                    background: "color-mix(in srgb, var(--error) 10%, transparent)",
                     padding: "10px 12px",
                   }}
                 >
-                  <span style={{ flex: 1, fontSize: 14, fontWeight: 500, color: "#fca5a5" }}>
+                  <span style={{ flex: 1, fontSize: 14, fontWeight: 500, color: "color-mix(in srgb, var(--error) 65%, white)" }}>
                     Xoá?
                   </span>
                   <button
@@ -167,7 +167,7 @@ export function ConversationList({ activeId }: Props) {
                       height: 24,
                       placeItems: "center",
                       borderRadius: 4,
-                      color: "#f87171",
+                      color: "var(--error)",
                       background: "transparent",
                       border: "none",
                       cursor: "pointer",

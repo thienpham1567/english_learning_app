@@ -28,15 +28,15 @@ export function Results({ result, onNewExercise, onWordClick, savedWords, dialog
       <div
         style={{
           background: isGood
-            ? "linear-gradient(135deg, #52c41a15, #73d13d15)"
-            : "linear-gradient(135deg, #ff4d4f15, #ff7a4515)",
-          border: `2px solid ${isGood ? "#52c41a" : "#ff4d4f"}`,
+            ? "color-mix(in srgb, var(--success) 8%, var(--surface))"
+            : "color-mix(in srgb, var(--error) 8%, var(--surface))",
+          border: `2px solid ${isGood ? "var(--success)" : "var(--error)"}`,
           borderRadius: "var(--radius-lg)",
           padding: 24,
           textAlign: "center",
         }}
       >
-        <div style={{ fontSize: 48, fontWeight: 800, color: isGood ? "#52c41a" : "#ff4d4f" }}>
+        <div style={{ fontSize: 48, fontWeight: 800, color: isGood ? "var(--success)" : "var(--error)" }}>
           {percentage}%
         </div>
         <div style={{ fontSize: 16, fontWeight: 600, color: "var(--text)", marginTop: 4 }}>
@@ -71,16 +71,16 @@ export function Results({ result, onNewExercise, onWordClick, savedWords, dialog
               key={i}
               style={{
                 background: "var(--surface)",
-                border: `1px solid ${r.correct ? "#52c41a40" : "#ff4d4f40"}`,
+                border: `1px solid ${r.correct ? "color-mix(in srgb, var(--success) 25%, transparent)" : "color-mix(in srgb, var(--error) 25%, transparent)"}`,
                 borderRadius: "var(--radius-md)",
                 padding: 14,
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                 {r.correct ? (
-                  <CheckCircleFilled style={{ color: "#52c41a", fontSize: 16 }} />
+                  <CheckCircleFilled style={{ color: "var(--success)", fontSize: 16 }} />
                 ) : (
-                  <CloseCircleFilled style={{ color: "#ff4d4f", fontSize: 16 }} />
+                  <CloseCircleFilled style={{ color: "var(--error)", fontSize: 16 }} />
                 )}
                 <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>
                   {i + 1}. {r.question}
@@ -88,11 +88,11 @@ export function Results({ result, onNewExercise, onWordClick, savedWords, dialog
               </div>
               {!r.correct && (
                 <div style={{ fontSize: 12, color: "var(--text-muted)", marginLeft: 24 }}>
-                  <span style={{ color: "#ff4d4f", textDecoration: "line-through" }}>
+                  <span style={{ color: "var(--error)", textDecoration: "line-through" }}>
                     {r.options[r.userAnswer]}
                   </span>
                   {" → "}
-                  <span style={{ color: "#52c41a", fontWeight: 600 }}>
+                  <span style={{ color: "var(--success)", fontWeight: 600 }}>
                     {r.options[r.correctIndex]}
                   </span>
                 </div>

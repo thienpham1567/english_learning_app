@@ -34,15 +34,15 @@ interface Props {
 }
 
 function getScoreColor(score: number): string {
-  if (score >= 80) return "#52c41a";
-  if (score >= 50) return "#faad14";
-  return "#ff4d4f";
+  if (score >= 80) return "var(--success)";
+  if (score >= 50) return "var(--warning)";
+  return "var(--error)";
 }
 
 function getScoreBg(score: number): string {
-  if (score >= 80) return "#52c41a15";
-  if (score >= 50) return "#faad1415";
-  return "#ff4d4f15";
+  if (score >= 80) return "color-mix(in srgb, var(--success) 8%, transparent)";
+  if (score >= 50) return "color-mix(in srgb, var(--warning) 8%, transparent)";
+  return "color-mix(in srgb, var(--error) 8%, transparent)";
 }
 
 function getScoreLabel(score: number): string {
@@ -62,7 +62,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
       <div style={{
         display: "inline-flex", alignItems: "center", gap: 6,
         padding: "4px 12px", borderRadius: 99, fontSize: 12,
-        background: "var(--accent-muted, #6366f115)", color: "var(--accent)",
+        background: "var(--accent-muted)", color: "var(--accent)",
         marginTop: 4,
       }}>
         <LoadingOutlined style={{ fontSize: 11 }} />
@@ -77,7 +77,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
       <div style={{
         display: "inline-flex", alignItems: "center", gap: 6,
         padding: "4px 12px", borderRadius: 99, fontSize: 12,
-        background: "#ff4d4f15", color: "#ff4d4f",
+        background: "var(--error-bg)", color: "var(--error)",
         marginTop: 4,
       }}>
         <CloseCircleOutlined style={{ fontSize: 11 }} />

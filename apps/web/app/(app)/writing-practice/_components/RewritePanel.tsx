@@ -3,7 +3,7 @@
 import { useState, useCallback, useMemo } from "react";
 import { diffWords } from "diff";
 import { Tag, Tooltip, Spin } from "antd";
-import { CopyOutlined, CheckOutlined, EditOutlined, LoadingOutlined } from "@ant-design/icons";
+import { CopyOutlined, CheckOutlined, EditOutlined, LoadingOutlined, HighlightOutlined } from "@ant-design/icons";
 
 import { api } from "@/lib/api-client";
 
@@ -28,9 +28,9 @@ type RewriteResponse = {
 /* ── Constants ──────────────────────────────────────────── */
 
 const LEVEL_META: Record<string, { label: string; color: string; emoji: string }> = {
-  natural: { label: "Natural", color: "#52c41a", emoji: "💬" },
-  formal:  { label: "Formal",  color: "#1890ff", emoji: "💼" },
-  c1:      { label: "C1/Academic", color: "#722ed1", emoji: "🎓" },
+  natural: { label: "Natural", color: "var(--success)", emoji: "MessageOutlined" },
+  formal:  { label: "Formal",  color: "var(--info)", emoji: "ContainerOutlined" },
+  c1:      { label: "C1/Academic", color: "var(--accent)", emoji: "BookOutlined" },
 };
 
 const MAX_CHARS = 400;
@@ -48,8 +48,8 @@ function WordDiff({ original, rewritten }: { original: string; rewritten: string
             <span
               key={i}
               style={{
-                color: "#52c41a",
-                backgroundColor: "#f6ffed",
+                color: "var(--success)",
+                backgroundColor: "color-mix(in srgb, var(--success) 8%, var(--surface))",
                 borderRadius: 3,
                 padding: "1px 3px",
                 fontWeight: 500,
@@ -64,7 +64,7 @@ function WordDiff({ original, rewritten }: { original: string; rewritten: string
             <span
               key={i}
               style={{
-                color: "#ff4d4f",
+                color: "var(--error)",
                 textDecoration: "line-through",
                 opacity: 0.6,
                 padding: "1px 1px",
@@ -99,7 +99,7 @@ function CopyButton({ text }: { text: string }) {
         border: "none",
         background: "transparent",
         cursor: "pointer",
-        color: copied ? "#52c41a" : "var(--text-secondary)",
+        color: copied ? "var(--success)" : "var(--text-secondary)",
         fontSize: 14,
         padding: "2px 6px",
         borderRadius: 4,
@@ -121,7 +121,7 @@ function VariantCard({
   original: string;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const meta = LEVEL_META[variant.level] ?? { label: variant.level, color: "#666", emoji: "✏️" };
+  const meta = LEVEL_META[variant.level] ?? { label: variant.level, color: "var(--text-muted)", emoji: "EditOutlined" };
 
   return (
     <div
@@ -192,11 +192,11 @@ function VariantCard({
                 fontSize: 12,
                 padding: "6px 10px",
                 borderRadius: 8,
-                background: "var(--surface, #fafafa)",
+                background: "var(--surface)",
                 borderLeft: `3px solid ${meta.color}`,
               }}
             >
-              <span style={{ textDecoration: "line-through", color: "#999" }}>{change.original}</span>
+              <span style={{ textDecoration: "line-through", color: "var(--text-muted)" }}>{change.original}</span>
               {" → "}
               <span style={{ color: meta.color, fontWeight: 500 }}>{change.replacement}</span>
               <span style={{ color: "var(--text-secondary)", marginLeft: 6 }}>— {change.reason}</span>
@@ -272,7 +272,7 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
           <span
             style={{
               fontSize: 11,
-              color: overLimit ? "#ff4d4f" : "var(--text-secondary)",
+              color: overLimit ? "var(--error)" : "var(--text-secondary)",
               fontWeight: overLimit ? 600 : 400,
             }}
           >
@@ -288,7 +288,7 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
             minHeight: 80,
             padding: 12,
             borderRadius: 10,
-            border: overLimit ? "1px solid #ff4d4f" : "1px solid var(--border)",
+            border: overLimit ? "1px solid var(--error)" : "1px solid var(--border)",
             background: "var(--card-bg)",
             color: "var(--text)",
             fontSize: 14,
@@ -308,7 +308,7 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
           borderRadius: 8,
           border: "none",
           background: !sentence.trim() || overLimit || loading ? "var(--border)" : "var(--accent)",
-          color: "#fff",
+          color: "var(--text-on-accent, #fff)",
           fontSize: 14,
           fontWeight: 600,
           cursor: !sentence.trim() || overLimit || loading ? "not-allowed" : "pointer",
@@ -318,7 +318,7 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
           gap: 6,
         }}
       >
-        {loading ? <><LoadingOutlined /> Đang viết lại...</> : "✨ Viết lại"}
+        {loading ? <><LoadingOutlined /> Đang viết lại...</> : <><HighlightOutlined /> Viết lại</>}
       </button>
 
       {/* Error */}
@@ -326,8 +326,8 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
         <div style={{
           padding: "8px 14px",
           borderRadius: 8,
-          background: "var(--error-bg, #fff2f0)",
-          color: "var(--error, #ff4d4f)",
+          background: "var(--error-bg)",
+          color: "var(--error)",
           fontSize: 13,
         }}>
           {error}

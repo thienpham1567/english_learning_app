@@ -560,7 +560,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
             position: "absolute",
             inset: 0,
             background:
-              "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(154,177,122,0.07) 0%, transparent 70%)",
+              "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--accent) 7%, transparent) 0%, transparent 70%)",
           }}
         />
         <div
@@ -776,11 +776,11 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
               style={{
                 marginTop: 20,
                 borderRadius: "var(--radius)",
-                border: "1px solid rgba(239,68,68,0.16)",
-                background: "rgba(239,68,68,0.08)",
+                border: "1px solid color-mix(in srgb, var(--error) 16%, transparent)",
+                background: "var(--error-bg)",
                 padding: "12px 16px",
                 fontSize: 14,
-                color: "rgb(153,27,27)",
+                color: "var(--error)",
               }}
             >
               <p>{error}</p>
@@ -926,17 +926,17 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                   placeItems: "center",
                   borderRadius: "50%",
                   border: voice.isListening
-                    ? "2px solid #ef4444"
+                    ? "2px solid var(--error)"
                     : voice.isTranscribing
                       ? "2px solid var(--accent)"
                       : "1.5px solid var(--border)",
                   color: voice.isListening
-                    ? "#ef4444"
+                    ? "var(--error)"
                     : voice.isTranscribing
                       ? "var(--accent)"
                       : "var(--text-muted)",
                   background: voice.isListening
-                    ? "rgba(239,68,68,0.08)"
+                    ? "var(--error-bg)"
                     : voice.isTranscribing
                       ? "var(--accent-muted)"
                       : "transparent",
@@ -985,7 +985,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                   color: "#fff",
                   boxShadow: "var(--shadow-sm)",
                   cursor: "pointer",
-                  background: "#ef4444",
+                  background: "var(--error)",
                   transition: "background 0.2s, transform 0.15s",
                 }}
                 onClick={stopStreaming}
@@ -1069,10 +1069,10 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                   padding: "3px 10px",
                   borderRadius: 999,
                   border: pronEnabled
-                    ? "1.5px solid #52c41a"
+                    ? "1.5px solid var(--success)"
                     : "1px solid var(--border)",
-                  background: pronEnabled ? "#52c41a15" : "var(--surface)",
-                  color: pronEnabled ? "#52c41a" : "var(--text-muted)",
+                  background: pronEnabled ? "color-mix(in srgb, var(--success) 8%, transparent)" : "var(--surface)",
+                  color: pronEnabled ? "var(--success)" : "var(--text-muted)",
                   fontSize: 12,
                   fontWeight: 600,
                   cursor: "pointer",

@@ -9,6 +9,10 @@ import {
   SendOutlined,
   BookOutlined,
   CheckCircleOutlined,
+  FormOutlined,
+  AimOutlined,
+  LinkOutlined,
+  CalculatorOutlined,
 } from "@ant-design/icons";
 
 import { api } from "@/lib/api-client";
@@ -56,12 +60,12 @@ type ExamType = "ielts-task2" | "ielts-task1" | "toefl-independent";
 type GuidedState = "setup" | "loading-prompt" | "writing" | "scoring" | "result";
 
 const TOPIC_CATEGORIES = [
-  { key: "education", label: "🎓 Giáo dục", color: "#1890ff" },
-  { key: "technology", label: "💻 Công nghệ", color: "#722ed1" },
-  { key: "environment", label: "🌍 Môi trường", color: "#52c41a" },
-  { key: "health", label: "🏥 Sức khỏe", color: "#eb2f96" },
-  { key: "society", label: "🏛️ Xã hội", color: "#fa8c16" },
-  { key: "work", label: "💼 Công việc", color: "#13c2c2" },
+  { key: "education", label: "Giáo dục", color: "var(--info)" },
+  { key: "technology", label: "Công nghệ", color: "var(--accent)" },
+  { key: "environment", label: "Môi trường", color: "var(--success)" },
+  { key: "health", label: "Sức khỏe", color: "var(--module-grammar)" },
+  { key: "society", label: "Xã hội", color: "var(--fire)" },
+  { key: "work", label: "Công việc", color: "var(--module-writing)" },
 ];
 
 const EXAM_OPTIONS: { value: ExamType; label: string }[] = [
@@ -163,7 +167,7 @@ export function GuidedWritingPanel() {
 
   const scoreColor = (s: number) => {
     const pct = s / maxScore;
-    return pct >= 0.75 ? "#52c41a" : pct >= 0.5 ? "#faad14" : "#ff4d4f";
+    return pct >= 0.75 ? "var(--success)" : pct >= 0.5 ? "var(--warning)" : "var(--error)";
   };
 
   /* ── Render ─────────────────────────────── */
@@ -174,7 +178,7 @@ export function GuidedWritingPanel() {
       {error && (
         <div style={{
           padding: "8px 14px", borderRadius: 8,
-          background: "var(--error-bg, #fff2f0)", color: "var(--error, #ff4d4f)", fontSize: 13,
+          background: "var(--error-bg)", color: "var(--error)", fontSize: 13,
         }}>
           {error}
         </div>
@@ -242,11 +246,11 @@ export function GuidedWritingPanel() {
             onClick={() => generatePrompt()}
             style={{
               padding: "12px 32px", borderRadius: 10, border: "none",
-              background: "var(--accent)", color: "#fff", fontSize: 15,
+              background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 15,
               fontWeight: 600, cursor: "pointer", alignSelf: "center",
             }}
           >
-            🎯 Tạo đề bài
+            <AimOutlined /> Tạo đề bài
           </button>
         </div>
       )}
@@ -271,7 +275,7 @@ export function GuidedWritingPanel() {
           }}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
               <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: 0, fontWeight: 600 }}>
-                📝 Đề bài
+                <FormOutlined /> Đề bài
               </p>
               <div style={{ display: "flex", gap: 6 }}>
                 {/* Shuffle (AC4) */}
@@ -331,7 +335,7 @@ export function GuidedWritingPanel() {
                       title={
                         <div style={{ fontSize: 12 }}>
                           <div style={{ fontWeight: 600 }}>{v.meaning}</div>
-                          <div style={{ color: "#aaa", marginTop: 4, fontStyle: "italic" }}>{v.example}</div>
+                          <div style={{ color: "var(--text-muted)", marginTop: 4, fontStyle: "italic" }}>{v.example}</div>
                         </div>
                       }
                     >
@@ -340,9 +344,9 @@ export function GuidedWritingPanel() {
                         style={{
                           display: "flex", alignItems: "center", gap: 6,
                           padding: "4px 8px", borderRadius: 6, fontSize: 12,
-                          border: isUsed ? "1px solid #52c41a" : "1px solid var(--border)",
-                          background: isUsed ? "#f6ffed" : "transparent",
-                          color: isUsed ? "#52c41a" : "var(--text)",
+                          border: isUsed ? "1px solid var(--success)" : "1px solid var(--border)",
+                          background: isUsed ? "color-mix(in srgb, var(--success) 8%, var(--surface))" : "transparent",
+                          color: isUsed ? "var(--success)" : "var(--text)",
                           cursor: "pointer", textAlign: "left",
                           fontWeight: isUsed ? 600 : 400,
                         }}
@@ -363,7 +367,7 @@ export function GuidedWritingPanel() {
               <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: 0, fontWeight: 600 }}>Bài viết</p>
               <span style={{
                 fontSize: 11,
-                color: wordCount < 150 ? "#ff4d4f" : "var(--text-secondary)",
+                color: wordCount < 150 ? "var(--error)" : "var(--text-secondary)",
                 fontWeight: 500,
               }}>
                 {wordCount} từ {wordCount < 150 && "(cần ≥ 150)"}
@@ -392,7 +396,7 @@ export function GuidedWritingPanel() {
             style={{
               padding: "12px 32px", borderRadius: 10, border: "none",
               background: wordCount < 150 || state === "scoring" ? "var(--border)" : "var(--accent)",
-              color: "#fff", fontSize: 15, fontWeight: 600,
+              color: "var(--text-on-accent, #fff)", fontSize: 15, fontWeight: 600,
               cursor: wordCount < 150 || state === "scoring" ? "not-allowed" : "pointer",
               alignSelf: "center",
               display: "flex", alignItems: "center", gap: 8,
@@ -468,7 +472,7 @@ export function GuidedWritingPanel() {
                 return (
                   <Tag
                     key={i}
-                    color={isUsed ? "#52c41a" : "default"}
+                    color={isUsed ? "var(--success)" : "default"}
                     style={{ fontSize: 12 }}
                   >
                     {isUsed ? "✓" : "✗"} {v.term}
@@ -480,10 +484,10 @@ export function GuidedWritingPanel() {
 
           {/* Criteria feedback */}
           {([
-            { key: "taskResponse", label: "📝 Task Response" },
-            { key: "coherence", label: "🔗 Coherence & Cohesion" },
-            { key: "lexical", label: "📚 Lexical Resource" },
-            { key: "grammar", label: "📐 Grammar" },
+            { key: "taskResponse", label: <><FormOutlined /> Task Response</> },
+            { key: "coherence", label: <><LinkOutlined /> Coherence &amp; Cohesion</> },
+            { key: "lexical", label: <><BookOutlined /> Lexical Resource</> },
+            { key: "grammar", label: <><CalculatorOutlined /> Grammar</> },
           ] as const).map((c) => {
             const s = scoreResult.criteria[c.key];
             return (
@@ -501,7 +505,7 @@ export function GuidedWritingPanel() {
           <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
             <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
               <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
-                <CheckCircleOutlined style={{ color: "#52c41a" }} /> Điểm mạnh
+                <CheckCircleOutlined style={{ color: "var(--success)" }} /> Điểm mạnh
               </p>
               <ul style={{ margin: 0, paddingLeft: 16, fontSize: 13, lineHeight: 1.8 }}>
                 {scoreResult.strengths.map((s, i) => <li key={i}>{s}</li>)}
@@ -509,7 +513,7 @@ export function GuidedWritingPanel() {
             </div>
             <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
               <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
-                🎯 Cần cải thiện
+                <AimOutlined /> Cần cải thiện
               </p>
               <ul style={{ margin: 0, paddingLeft: 16, fontSize: 13, lineHeight: 1.8 }}>
                 {scoreResult.nextSteps.map((s, i) => <li key={i}>{s}</li>)}
@@ -523,7 +527,7 @@ export function GuidedWritingPanel() {
               onClick={() => { setState("setup"); setGuided(null); setEssayText(""); setScoreResult(null); }}
               style={{
                 padding: "10px 24px", borderRadius: 8, border: "none",
-                background: "var(--accent)", color: "#fff", fontSize: 14,
+                background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14,
                 fontWeight: 600, cursor: "pointer",
               }}
             >

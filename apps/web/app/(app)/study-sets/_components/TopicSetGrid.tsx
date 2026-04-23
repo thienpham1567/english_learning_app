@@ -1,7 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircleOutlined, RightOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined, RightOutlined, ClockCircleOutlined,
+  ShopOutlined, EnvironmentOutlined, MedicineBoxOutlined,
+  BookOutlined, GlobalOutlined, LaptopOutlined,
+} from "@ant-design/icons";
+import type { ReactNode } from "react";
 import { Tag } from "antd";
 
 export type StudyTopic = {
@@ -13,7 +18,7 @@ export type StudyTopic = {
 
 export type StudyCategory = {
   category: string;
-  icon: string;
+  icon: ReactNode;
   color: string;
   topics: StudyTopic[];
 };
@@ -21,8 +26,8 @@ export type StudyCategory = {
 export const STUDY_TOPICS: StudyCategory[] = [
   {
     category: "Business & Office",
-    icon: "🏢",
-    color: "#6366f1",
+    icon: <ShopOutlined />,
+    color: "var(--module-listening)",
     topics: [
       { id: "business-meetings", title: "Business Meetings", level: "B1", time: "15 min" },
       { id: "email-writing", title: "Email Writing", level: "B1", time: "15 min" },
@@ -31,8 +36,8 @@ export const STUDY_TOPICS: StudyCategory[] = [
   },
   {
     category: "Travel & Tourism",
-    icon: "✈️",
-    color: "#f59e0b",
+    icon: <EnvironmentOutlined />,
+    color: "var(--warning)",
     topics: [
       { id: "airport-travel", title: "Airport & Travel", level: "A2", time: "12 min" },
       { id: "hotel-booking", title: "Hotel Booking", level: "B1", time: "15 min" },
@@ -41,8 +46,8 @@ export const STUDY_TOPICS: StudyCategory[] = [
   },
   {
     category: "Health & Wellness",
-    icon: "🏥",
-    color: "#ef4444",
+    icon: <MedicineBoxOutlined />,
+    color: "var(--error)",
     topics: [
       { id: "doctor-visit", title: "Doctor's Visit", level: "B1", time: "15 min" },
       { id: "fitness-health", title: "Fitness & Health", level: "B1", time: "15 min" },
@@ -50,8 +55,8 @@ export const STUDY_TOPICS: StudyCategory[] = [
   },
   {
     category: "Education",
-    icon: "🎓",
-    color: "#8b5cf6",
+    icon: <BookOutlined />,
+    color: "var(--accent)",
     topics: [
       { id: "campus-life", title: "Campus Life", level: "B1", time: "15 min" },
       { id: "academic-writing", title: "Academic Writing", level: "B2", time: "20 min" },
@@ -59,8 +64,8 @@ export const STUDY_TOPICS: StudyCategory[] = [
   },
   {
     category: "Environment & Society",
-    icon: "🌍",
-    color: "#10b981",
+    icon: <GlobalOutlined />,
+    color: "var(--success)",
     topics: [
       { id: "climate-change", title: "Climate Change", level: "B2", time: "20 min" },
       { id: "urbanization", title: "Urbanization", level: "B2", time: "20 min" },
@@ -68,8 +73,8 @@ export const STUDY_TOPICS: StudyCategory[] = [
   },
   {
     category: "Technology",
-    icon: "💻",
-    color: "#0ea5e9",
+    icon: <LaptopOutlined />,
+    color: "var(--module-reading)",
     topics: [
       { id: "artificial-intelligence", title: "Artificial Intelligence", level: "B2", time: "20 min" },
       { id: "social-media", title: "Social Media Impact", level: "B1", time: "15 min" },
@@ -114,14 +119,14 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
                   placeItems: "center",
                   borderRadius: 10,
                   background: allDone
-                    ? "linear-gradient(135deg, #52c41a, #22c55e)"
+                    ? "linear-gradient(135deg, var(--success), var(--success))"
                     : `linear-gradient(135deg, ${cat.color}, ${cat.color}bb)`,
                   fontSize: 18,
                   flexShrink: 0,
                   boxShadow: `0 2px 6px ${cat.color}40`,
                 }}
               >
-                {allDone ? "✅" : cat.icon}
+                {allDone ? <CheckCircleOutlined style={{ color: "var(--text-on-accent, #fff)" }} /> : cat.icon}
               </span>
               <div>
                 <h3
@@ -167,7 +172,7 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
                       borderRadius: 12,
                       border: "1px solid var(--border)",
                       borderLeft: isDone
-                        ? "4px solid #52c41a"
+                        ? "4px solid var(--success)"
                         : `4px solid ${cat.color}`,
                       background: isDone
                         ? "rgba(82, 196, 26, 0.06)"
@@ -207,14 +212,14 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
                             width: 22,
                             height: 22,
                             borderRadius: 99,
-                            background: "#52c41a",
+                            background: "var(--success)",
                             display: "grid",
                             placeItems: "center",
                             flexShrink: 0,
                           }}
                         >
                           <CheckCircleOutlined
-                            style={{ fontSize: 13, color: "#fff" }}
+                            style={{ fontSize: 13, color: "var(--text-on-accent, #fff)" }}
                           />
                         </span>
                       ) : (

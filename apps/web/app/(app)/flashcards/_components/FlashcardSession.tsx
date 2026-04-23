@@ -47,7 +47,7 @@ export function FlashcardSession() {
         <Progress
           percent={totalDue > 0 ? Math.round(((currentIndex + 1) / totalDue) * 100) : 0}
           showInfo={false}
-          strokeColor={{ from: "var(--accent)", to: "#f59e0b" }}
+          strokeColor={{ from: "var(--accent)", to: "var(--xp)" }}
           size={["100%", 4]}
           style={{ lineHeight: 0 }}
         />
@@ -74,7 +74,7 @@ export function FlashcardSession() {
               height: 40,
               placeItems: "center",
               borderRadius: "var(--radius)",
-              background: "linear-gradient(135deg, #8b5cf6, #4f46e5)",
+              background: "linear-gradient(135deg, var(--accent), var(--secondary))",
               color: "#fff",
               boxShadow: "var(--shadow-sm)",
             }}
@@ -108,7 +108,7 @@ export function FlashcardSession() {
             position: "absolute",
             inset: 0,
             background:
-              "radial-gradient(ellipse 60% 40% at 50% 0%, rgba(139,92,246,0.06) 0%, transparent 70%)",
+              "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--accent) 6%, transparent) 0%, transparent 70%)",
           }}
         />
 

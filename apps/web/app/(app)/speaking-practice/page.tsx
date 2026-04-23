@@ -243,7 +243,7 @@ export default function SpeakingPracticePage() {
   /* ── Helpers ──────────────────────────────────── */
 
   const formatTime = (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`;
-  const scoreColor = (s: number) => (s >= 80 ? "#52c41a" : s >= 50 ? "#faad14" : "#ff4d4f");
+  const scoreColor = (s: number) => (s >= 80 ? "var(--success)" : s >= 50 ? "var(--warning)" : "var(--error)");
   const avgScore = sessionScores.length
     ? Math.round(sessionScores.reduce((a, b) => a + b, 0) / sessionScores.length)
     : 0;
@@ -277,7 +277,7 @@ export default function SpeakingPracticePage() {
         {error && (
           <div style={{
             padding: "10px 16px", borderRadius: 8,
-            background: "var(--error-bg, #fff2f0)", color: "var(--error, #ff4d4f)",
+            background: "var(--error-bg)", color: "var(--error)",
             marginBottom: 16, fontSize: 13,
           }}>
             {error}
@@ -288,9 +288,9 @@ export default function SpeakingPracticePage() {
         {isSessionComplete && (
           <div style={{ textAlign: "center", padding: 32, border: "1px solid var(--border)", borderRadius: 16, background: "var(--card-bg)" }}>
             <div style={{ fontSize: 48, marginBottom: 16 }}>
-              {avgScore >= 80 ? <CheckCircleOutlined style={{ color: "#52c41a" }} /> :
-               avgScore >= 50 ? <InfoCircleOutlined style={{ color: "#faad14" }} /> :
-               <CloseCircleOutlined style={{ color: "#ff4d4f" }} />}
+              {avgScore >= 80 ? <CheckCircleOutlined style={{ color: "var(--success)" }} /> :
+               avgScore >= 50 ? <InfoCircleOutlined style={{ color: "var(--warning)" }} /> :
+               <CloseCircleOutlined style={{ color: "var(--error)" }} />}
             </div>
             <h2 style={{ margin: "0 0 8px" }}>Phiên luyện tập hoàn thành!</h2>
             <p style={{ color: "var(--text-secondary)", margin: "0 0 20px" }}>
@@ -322,7 +322,7 @@ export default function SpeakingPracticePage() {
                 onClick={generateTopic}
                 style={{
                   padding: "10px 24px", borderRadius: 8, border: "none",
-                  background: "var(--accent)", color: "#fff", fontSize: 14,
+                  background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14,
                   fontWeight: 600, cursor: "pointer",
                 }}
               >
@@ -383,7 +383,7 @@ export default function SpeakingPracticePage() {
               </div>
             </div>
 
-            <button onClick={generateTopic} style={{ padding: "12px 32px", borderRadius: 10, border: "none", background: "var(--accent)", color: "#fff", fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
+            <button onClick={generateTopic} style={{ padding: "12px 32px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
               Bắt đầu luyện nói
             </button>
           </div>
@@ -402,7 +402,7 @@ export default function SpeakingPracticePage() {
           <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
             <div style={{
               padding: 24, borderRadius: 16,
-              border: state === "recording" ? "2px solid #ff4d4f" : "1px solid var(--border)",
+              border: state === "recording" ? "2px solid var(--error)" : "1px solid var(--border)",
               background: "var(--card-bg)", textAlign: "center",
               animation: state === "recording" ? "pulse 1.5s ease-in-out infinite" : undefined,
             }}>
@@ -420,7 +420,7 @@ export default function SpeakingPracticePage() {
                 <div style={{ textAlign: "center" }}>
                   <div style={{
                     fontSize: 36, fontWeight: 700, fontVariantNumeric: "tabular-nums",
-                    color: timeLeft <= 10 ? "#ff4d4f" : "var(--text)",
+                    color: timeLeft <= 10 ? "var(--error)" : "var(--text)",
                     transition: "color 0.3s",
                   }}>
                     {formatTime(timeLeft)}
@@ -445,9 +445,9 @@ export default function SpeakingPracticePage() {
                     onClick={startRecording}
                     style={{
                       width: 80, height: 80, borderRadius: "50%", border: "none",
-                      background: "linear-gradient(135deg, #ff4d4f, #ff7875)",
-                      color: "#fff", fontSize: 28, cursor: "pointer",
-                      boxShadow: "0 4px 16px rgba(255,77,79,0.3)", transition: "transform 0.2s",
+                      background: "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 70%, white))",
+                      color: "var(--text-on-accent, #fff)", fontSize: 28, cursor: "pointer",
+                      boxShadow: "0 4px 16px color-mix(in srgb, var(--error) 30%, transparent)", transition: "transform 0.2s",
                     }}
                     aria-label="Bắt đầu ghi âm"
                   >
@@ -465,15 +465,15 @@ export default function SpeakingPracticePage() {
                     onClick={stopRecording}
                     style={{
                       width: 80, height: 80, borderRadius: "50%",
-                      border: "3px solid #ff4d4f", background: "var(--card-bg)",
-                      color: "#ff4d4f", fontSize: 20, cursor: "pointer",
+                      border: "3px solid var(--error)", background: "var(--card-bg)",
+                      color: "var(--error)", fontSize: 20, cursor: "pointer",
                       animation: "pulse 1s ease-in-out infinite",
                     }}
                     aria-label="Dừng ghi âm"
                   >
                     <PauseCircleOutlined />
                   </button>
-                  <p style={{ fontSize: 12, color: "#ff4d4f", marginTop: 8, fontWeight: 600 }}>
+                  <p style={{ fontSize: 12, color: "var(--error)", marginTop: 8, fontWeight: 600 }}>
                     Đang ghi âm... Nhấn để dừng
                   </p>
                 </>
@@ -562,7 +562,7 @@ export default function SpeakingPracticePage() {
                 </div>
                 <div>
                   <span style={{ color: "var(--text-secondary)" }}>Từ đệm: </span>
-                  <strong style={{ color: feedback.fluency.fillerCount > 5 ? "#ff4d4f" : "inherit" }}>
+                  <strong style={{ color: feedback.fluency.fillerCount > 5 ? "var(--error)" : "inherit" }}>
                     {feedback.fluency.fillerCount}
                   </strong>
                 </div>
@@ -587,12 +587,12 @@ export default function SpeakingPracticePage() {
                   {feedback.grammar.errors.map((e, i) => (
                     <div
                       key={`${e.quote}-${i}`}
-                      style={{ fontSize: 13, padding: "8px 12px", borderRadius: 8, background: "var(--error-bg, #fff2f0)" }}
+                      style={{ fontSize: 13, padding: "8px 12px", borderRadius: 8, background: "var(--error-bg)" }}
                     >
                       <div>
-                        <span style={{ textDecoration: "line-through", color: "#ff4d4f" }}>{e.quote}</span>
+                        <span style={{ textDecoration: "line-through", color: "var(--error)" }}>{e.quote}</span>
                         {" → "}
-                        <span style={{ color: "#52c41a", fontWeight: 500 }}>{e.suggestion}</span>
+                        <span style={{ color: "var(--success)", fontWeight: 500 }}>{e.suggestion}</span>
                       </div>
                       <p style={{ margin: "4px 0 0", fontSize: 11, color: "var(--text-secondary)" }}>{e.explanation}</p>
                     </div>
@@ -653,7 +653,7 @@ export default function SpeakingPracticePage() {
                 style={{
                   padding: "10px 20px", borderRadius: 8,
                   border: "none", background: "var(--accent)",
-                  color: "#fff", cursor: "pointer", fontSize: 13, fontWeight: 600,
+                  color: "var(--text-on-accent, #fff)", cursor: "pointer", fontSize: 13, fontWeight: 600,
                 }}
               >
                 Chủ đề mới <CheckCircleOutlined />

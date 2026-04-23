@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircleOutlined, SendOutlined, LoadingOutlined } from "@ant-design/icons";
+import { CheckCircleOutlined, SendOutlined, LoadingOutlined, FormOutlined } from "@ant-design/icons";
 
 type Question = {
   question: string;
@@ -20,7 +20,7 @@ export function QuestionCards({ questions, selectedAnswers, onSelectAnswer, onSu
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: 1 }}>
-        📝 Câu hỏi ({questions.length})
+        <FormOutlined style={{ marginRight: 6 }} /> Câu hỏi ({questions.length})
       </div>
 
       {questions.map((q, qi) => (
@@ -70,7 +70,7 @@ export function QuestionCards({ questions, selectedAnswers, onSelectAnswer, onSu
                       alignItems: "center",
                       justifyContent: "center",
                       fontSize: 11,
-                      color: isSelected ? "#fff" : "var(--text-muted)",
+                      color: isSelected ? "var(--text-on-accent, #fff)" : "var(--text-muted)",
                       fontWeight: 700,
                       flexShrink: 0,
                     }}
@@ -98,7 +98,7 @@ export function QuestionCards({ questions, selectedAnswers, onSelectAnswer, onSu
           borderRadius: "var(--radius-md)",
           border: "none",
           background: allAnswered ? "linear-gradient(135deg, var(--accent), var(--accent-hover))" : "var(--border)",
-          color: allAnswered ? "#fff" : "var(--text-muted)",
+          color: allAnswered ? "var(--text-on-accent, #fff)" : "var(--text-muted)",
           fontSize: 15,
           fontWeight: 700,
           cursor: allAnswered && !isSubmitting ? "pointer" : "not-allowed",

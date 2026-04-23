@@ -33,15 +33,15 @@ interface Props {
 const MAX_REPLAYS = 3;
 
 const STATUS_COLORS: Record<string, string> = {
-  correct: "#52c41a",
-  wrong: "#ff4d4f",
-  missing: "#faad14",
+  correct: "var(--success)",
+  wrong: "var(--error)",
+  missing: "var(--warning)",
 };
 
 const STATUS_BG: Record<string, string> = {
-  correct: "#52c41a15",
-  wrong: "#ff4d4f15",
-  missing: "#faad1415",
+  correct: "color-mix(in srgb, var(--success) 8%, transparent)",
+  wrong: "color-mix(in srgb, var(--error) 8%, transparent)",
+  missing: "color-mix(in srgb, var(--warning) 8%, transparent)",
 };
 
 /** Normalize text for comparison: lowercase, strip punctuation */
@@ -191,7 +191,7 @@ export default function DictationMode({ examMode }: Props) {
   return (
     <div style={{ maxWidth: 600, margin: "0 auto", width: "100%" }}>
       {error && (
-        <div style={{ padding: "10px 16px", borderRadius: 8, background: "#ff4d4f15", border: "1px solid #ff4d4f40", color: "#ff4d4f", marginBottom: 16, fontSize: 13 }}>
+        <div style={{ padding: "10px 16px", borderRadius: 8, background: "var(--error-bg)", border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)", color: "var(--error)", marginBottom: 16, fontSize: 13 }}>
           ⚠️ {error}
         </div>
       )}
@@ -207,7 +207,7 @@ export default function DictationMode({ examMode }: Props) {
           <p style={{ color: "var(--text-secondary)", margin: "0 0 24px", fontSize: 12 }}>
             5 câu mỗi phiên · Tối đa 3 lần nghe lại · +25 XP
           </p>
-          <button onClick={startSession} style={{ padding: "12px 32px", borderRadius: 10, border: "none", background: "var(--accent)", color: "#fff", fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
+          <button onClick={startSession} style={{ padding: "12px 32px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
             Bắt đầu Dictation
           </button>
         </div>
@@ -278,7 +278,7 @@ export default function DictationMode({ examMode }: Props) {
           <button onClick={checkAnswer} disabled={!typedText.trim()} style={{
             padding: "12px 24px", borderRadius: 10, border: "none",
             background: typedText.trim() ? "var(--accent)" : "var(--border)",
-            color: "#fff", fontSize: 15, fontWeight: 600,
+            color: "var(--text-on-accent, #fff)", fontSize: 15, fontWeight: 600,
             cursor: typedText.trim() ? "pointer" : "not-allowed",
           }}>
             Kiểm tra ✓
@@ -292,7 +292,7 @@ export default function DictationMode({ examMode }: Props) {
           {/* Score */}
           <div style={{ padding: 24, borderRadius: 16, background: "var(--card-bg)", border: "1px solid var(--border)", textAlign: "center" }}>
             <Progress type="circle" percent={accuracy} size={100}
-              strokeColor={accuracy >= 80 ? "#52c41a" : accuracy >= 50 ? "#faad14" : "#ff4d4f"}
+              strokeColor={accuracy >= 80 ? "var(--success)" : accuracy >= 50 ? "var(--warning)" : "var(--error)"}
               format={(pct) => <span style={{ fontSize: 24, fontWeight: 700 }}>{pct}%</span>}
             />
             <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 8 }}>
@@ -350,7 +350,7 @@ export default function DictationMode({ examMode }: Props) {
             <button onClick={retryCurrent} style={{ padding: "10px 20px", borderRadius: 8, border: "1px solid var(--border)", background: "transparent", color: "var(--text)", cursor: "pointer", fontSize: 13, fontWeight: 500 }}>
               <ReloadOutlined /> Thử lại
             </button>
-            <button onClick={nextSentence} style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "var(--accent)", color: "#fff", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
+            <button onClick={nextSentence} style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
               {currentIdx < sentences.length - 1 ? <>Câu tiếp <RightOutlined /></> : <>Hoàn thành <CheckCircleOutlined /></>}
             </button>
           </div>
@@ -361,9 +361,9 @@ export default function DictationMode({ examMode }: Props) {
       {state === "summary" && (
         <div style={{ textAlign: "center", padding: 32, border: "1px solid var(--border)", borderRadius: 16, background: "var(--card-bg)" }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>
-            {avgScore >= 80 ? <CheckCircleOutlined style={{ color: "#52c41a" }} /> :
-             avgScore >= 50 ? <InfoCircleOutlined style={{ color: "#faad14" }} /> :
-             <CloseCircleOutlined style={{ color: "#ff4d4f" }} />}
+            {avgScore >= 80 ? <CheckCircleOutlined style={{ color: "var(--success)" }} /> :
+             avgScore >= 50 ? <InfoCircleOutlined style={{ color: "var(--warning)" }} /> :
+             <CloseCircleOutlined style={{ color: "var(--error)" }} />}
           </div>
           <h2 style={{ margin: "0 0 8px" }}>Dictation hoàn thành!</h2>
           <p style={{ color: "var(--text-secondary)", margin: "0 0 8px" }}>
@@ -373,7 +373,7 @@ export default function DictationMode({ examMode }: Props) {
             <p style={{ color: "var(--accent)", fontSize: 13, fontWeight: 600, margin: "0 0 8px" }}>+{xpAwarded} XP</p>
           )}
           {skillUpdate && (
-            <p style={{ fontSize: 13, color: skillUpdate.levelUp ? "#52c41a" : "var(--text-secondary)", margin: "0 0 16px" }}>
+            <p style={{ fontSize: 13, color: skillUpdate.levelUp ? "var(--success)" : "var(--text-secondary)", margin: "0 0 16px" }}>
               {skillUpdate.levelUp ? `🎉 Trình độ nghe: ${skillUpdate.cefr}!` : `📊 Trình độ nghe: ${skillUpdate.cefr}`}
             </p>
           )}
@@ -384,7 +384,7 @@ export default function DictationMode({ examMode }: Props) {
               </Tag>
             ))}
           </div>
-          <button onClick={startSession} style={{ padding: "10px 24px", borderRadius: 8, border: "none", background: "var(--accent)", color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+          <button onClick={startSession} style={{ padding: "10px 24px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
             <ReloadOutlined /> Luyện tiếp
           </button>
         </div>

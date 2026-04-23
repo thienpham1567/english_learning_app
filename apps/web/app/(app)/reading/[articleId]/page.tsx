@@ -39,10 +39,10 @@ type GrammarPattern = {
 };
 
 const PATTERN_COLORS: Record<string, string> = {
-  green: "#52c41a",
-  blue: "#1890ff",
-  yellow: "#faad14",
-  purple: "#722ed1",
+  green: "var(--success)",
+  blue: "var(--info)",
+  yellow: "var(--warning)",
+  purple: "var(--accent)",
 };
 
 const DIFFICULTY_COLORS: Record<string, string> = {
@@ -292,12 +292,12 @@ export default function ArticleReaderPage() {
                               key={pi}
                               size="small"
                               style={{
-                                borderLeft: `3px solid ${PATTERN_COLORS[pattern.color] ?? "#888"}`,
+                                borderLeft: `3px solid ${PATTERN_COLORS[pattern.color] ?? "var(--text-muted)"}`,
                                 borderRadius: "var(--radius)",
                               }}
                               styles={{ body: { padding: "8px 12px" } }}
                             >
-                              <Text strong style={{ fontSize: 13, color: PATTERN_COLORS[pattern.color] ?? "#888" }}>
+                              <Text strong style={{ fontSize: 13, color: PATTERN_COLORS[pattern.color] ?? "var(--text-muted)" }}>
                                 {pattern.name}
                               </Text>
                               <br />
@@ -347,16 +347,16 @@ export default function ArticleReaderPage() {
             background: "linear-gradient(135deg, var(--accent), var(--secondary))",
           }}
         >
-          <Flex align="center" justify="center" gap={24} style={{ color: "#fff" }}>
+          <Flex align="center" justify="center" gap={24} style={{ color: "var(--text-on-accent, #fff)" }}>
             <Flex align="center" gap={6}>
               <BookOutlined />
-              <Text style={{ color: "#fff", fontSize: 14 }}>
+              <Text style={{ color: "var(--text-on-accent, #fff)", fontSize: 14 }}>
                 {wordsLookedUp} từ đã tra
               </Text>
             </Flex>
             <Flex align="center" gap={6}>
               <SaveOutlined />
-              <Text style={{ color: "#fff", fontSize: 14 }}>
+              <Text style={{ color: "var(--text-on-accent, #fff)", fontSize: 14 }}>
                 {savedWords.size} từ đã lưu
               </Text>
             </Flex>

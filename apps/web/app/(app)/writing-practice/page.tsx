@@ -1,7 +1,7 @@
 "use client";
 
 import { Flex, Spin, Typography, Tabs } from "antd";
-import { EditOutlined } from "@ant-design/icons";
+import { EditOutlined, FormOutlined, HighlightOutlined, AimOutlined } from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 import { useWritingPractice } from "@/hooks/useWritingPractice";
@@ -46,7 +46,7 @@ export default function WritingPracticePage() {
       <ModuleHeader
         icon={<EditOutlined />}
         gradient="linear-gradient(135deg, var(--accent), var(--secondary))"
-        title="Luyện viết ✍️"
+        title="Luyện viết"
         subtitle="TOEIC Writing Practice · Chấm bài theo tiêu chí TOEIC"
       />
 
@@ -63,17 +63,17 @@ export default function WritingPracticePage() {
             items={[
               {
                 key: "practice",
-                label: "📝 Luyện viết",
+                label: <><FormOutlined /> Luyện viết</>,
                 children: (
                   <div>
                     {error && (
                       <div
                         style={{
                           marginBottom: 16,
-                          border: "1px solid #fecaca",
+                          border: "1px solid color-mix(in srgb, var(--error) 20%, transparent)",
                           borderRadius: 10,
-                          background: "#fef2f2",
-                          color: "#b91c1c",
+                          background: "var(--error-bg)",
+                          color: "var(--error)",
                           padding: "10px 16px",
                           fontSize: 13,
                         }}
@@ -112,7 +112,7 @@ export default function WritingPracticePage() {
               },
               {
                 key: "rewrite",
-                label: "✨ Cải thiện câu",
+                label: <><HighlightOutlined /> Cải thiện câu</>,
                 children: (
                   <div style={{ paddingTop: 8 }}>
                     <RewritePanel />
@@ -121,7 +121,7 @@ export default function WritingPracticePage() {
               },
               {
                 key: "guided",
-                label: "🎯 Viết có hướng dẫn",
+                label: <><AimOutlined /> Viết có hướng dẫn</>,
                 children: (
                   <div style={{ paddingTop: 8 }}>
                     <GuidedWritingPanel />

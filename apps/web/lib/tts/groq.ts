@@ -2,7 +2,7 @@
  * Text-to-Speech via Groq Orpheus API.
  *
  * Uses the OpenAI-compatible endpoint: https://api.groq.com/openai/v1/audio/speech
- * Model: playai-tts (Orpheus v1 English)
+ * Model: canopylabs/orpheus-v1-english (Orpheus v1 English)
  * Requires: GROQ_API_KEY env var.
  */
 
@@ -16,9 +16,11 @@ export function parseAccent(value: unknown): Accent {
 
 /**
  * Named voice roles used by multi-speaker dialogues (Story 19.3.1).
- * Each role is `${accent}-${gender}` and maps to a concrete Groq playai-tts voice.
+ * Each role is `${accent}-${gender}` and maps to a concrete Groq Orpheus voice.
  * Roles should remain stable — the voice-name mapping can be tuned without
  * breaking callers that only reference roles.
+ *
+ * Available English voices: autumn, diana, hannah, austin, daniel, troy
  */
 export type VoiceRole = "us-m" | "us-f" | "uk-m" | "uk-f" | "au-m" | "au-f";
 
@@ -32,11 +34,11 @@ export const VOICE_ROLES: readonly VoiceRole[] = [
 ];
 
 export const VOICE_BY_ROLE: Record<VoiceRole, string> = {
-  "us-m": "atlas",
-  "us-f": "celeste",
-  "uk-m": "briggs",
-  "uk-f": "tara",
-  "au-m": "calum",
+  "us-m": "austin",
+  "us-f": "autumn",
+  "uk-m": "daniel",
+  "uk-f": "diana",
+  "au-m": "troy",
   "au-f": "hannah",
 };
 
@@ -61,10 +63,10 @@ export const VOICES: Record<Accent, string> = {
  * Bump this whenever `VOICE_BY_ROLE` mappings change so cached audio is
  * invalidated (`apps/web/.cache/listening/<id>-<voiceSetVersion>.mp3`).
  */
-export const VOICE_SET_VERSION = "v1";
+export const VOICE_SET_VERSION = "v2";
 
 const GROQ_TTS_URL = "https://api.groq.com/openai/v1/audio/speech";
-const GROQ_TTS_MODEL = "playai-tts";
+const GROQ_TTS_MODEL = "canopylabs/orpheus-v1-english";
 
 export type TtsResponseFormat = "wav" | "mp3";
 
@@ -98,6 +100,18 @@ export async function synthesizeTtsForVoice(args: {
   const key = process.env.GROQ_API_KEY;
   if (!key) throw new Error("Missing GROQ_API_KEY");
 
+  // Orpheus API has a 200-char input limit — chunk longer texts
+  const MAX_CHARS = 200;
+  if (args.text.length > MAX_CHARS) {
+    const chunks = splitTextIntoChunks(args.text, MAX_CHARS);
+    const buffers = await Promise.all(
+      chunks.map((chunk) =>
+        synthesizeTtsForVoice({ ...args, text: chunk }),
+      ),
+    );
+    return concatArrayBuffers(buffers);
+  }
+
   const speed = Math.max(0.25, Math.min(args.speed ?? 1, 4.0));
 
   const res = await fetch(GROQ_TTS_URL, {
@@ -122,6 +136,46 @@ export async function synthesizeTtsForVoice(args: {
   }
 
   return res.arrayBuffer();
+}
+
+/** Split text at sentence boundaries to stay within maxLen. */
+function splitTextIntoChunks(text: string, maxLen: number): string[] {
+  const sentences = text.match(/[^.!?]+[.!?]+|[^.!?]+$/g) ?? [text];
+  const chunks: string[] = [];
+  let current = "";
+
+  for (const sentence of sentences) {
+    const trimmed = sentence.trim();
+    if (!trimmed) continue;
+
+    if (current.length + trimmed.length + 1 <= maxLen) {
+      current = current ? `${current} ${trimmed}` : trimmed;
+    } else {
+      if (current) chunks.push(current);
+      // If a single sentence exceeds maxLen, force-split it
+      if (trimmed.length > maxLen) {
+        for (let i = 0; i < trimmed.length; i += maxLen) {
+          chunks.push(trimmed.slice(i, i + maxLen));
+        }
+        current = "";
+      } else {
+        current = trimmed;
+      }
+    }
+  }
+  if (current) chunks.push(current);
+  return chunks.length > 0 ? chunks : [text.slice(0, maxLen)];
+}
+
+function concatArrayBuffers(buffers: ArrayBuffer[]): ArrayBuffer {
+  const total = buffers.reduce((sum, b) => sum + b.byteLength, 0);
+  const result = new Uint8Array(total);
+  let offset = 0;
+  for (const buf of buffers) {
+    result.set(new Uint8Array(buf), offset);
+    offset += buf.byteLength;
+  }
+  return result.buffer;
 }
 
 export function getVoiceForRole(role: VoiceRole): string {

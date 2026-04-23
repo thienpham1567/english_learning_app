@@ -155,7 +155,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                   <div
                     key={i}
                     style={{
-                      borderLeft: "2px solid rgba(154,177,122,0.3)",
+                      borderLeft: "2px solid color-mix(in srgb, var(--accent) 30%, transparent)",
                       paddingLeft: 12,
                       fontSize: 14,
                     }}

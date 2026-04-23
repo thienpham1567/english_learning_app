@@ -5,9 +5,9 @@ import { parseAccent, synthesizeTts } from "@/lib/tts/groq";
 /**
  * POST /api/voice/synthesize
  *
- * Converts text to speech via Google Cloud TTS (Neural2 voices).
+ * Converts text to speech via Groq Orpheus TTS (canopylabs/orpheus-v1-english).
  * Body: { text: string, speed?: number, accent?: "us" | "uk" | "au" }
- * Requires GOOGLE_TTS_API_KEY.
+ * Requires GROQ_API_KEY.
  *
  * Rate limited to 10 calls per user per minute.
  */
@@ -44,8 +44,8 @@ export async function POST(request: Request) {
   if (!text) {
     return Response.json({ error: "No text provided" }, { status: 400 });
   }
-  if (text.length > 4000) {
-    return Response.json({ error: "Text too long (max 4000 chars)" }, { status: 400 });
+  if (text.length > 200) {
+    return Response.json({ error: "Text too long (max 200 chars)" }, { status: 400 });
   }
 
   const accent = parseAccent(body?.accent);

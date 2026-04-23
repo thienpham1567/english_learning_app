@@ -6,10 +6,10 @@ import { api } from "@/lib/api-client";
 export type TtsAccent = "us" | "uk" | "au";
 
 /**
- * useTextToSpeech — Azure Neural TTS-powered text-to-speech hook.
+ * useTextToSpeech — Groq Orpheus TTS-powered text-to-speech hook.
  *
- * Sends text to /api/voice/synthesize (Azure Neural TTS),
- * receives MP3 audio and plays it via HTMLAudioElement.
+ * Sends text to /api/voice/synthesize (Groq Orpheus TTS),
+ * receives WAV audio and plays it via HTMLAudioElement.
  *
  * Accent: "us" | "uk" | "au" — native neural voices per locale.
  * Speed: toggleable between 1.0 (normal) and 0.8 (slow).
@@ -47,7 +47,7 @@ export function useTextToSpeech(defaultAccent: TtsAccent = "us") {
       try {
         const response = await api.post<Response>("/voice/synthesize",
           {
-            text: text.slice(0, 4000),
+            text: text.slice(0, 200),
             speed: rate,
             accent: opts?.accent ?? accent,
           },

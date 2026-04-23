@@ -167,7 +167,7 @@ export default function ListeningImportPage() {
 
           {/* ── Error banner ── */}
           {error && (
-            <div style={{ padding: "10px 16px", borderRadius: 8, background: "#ff4d4f15", border: "1px solid #ff4d4f40", color: "#ff4d4f", fontSize: 13 }}>
+            <div style={{ padding: "10px 16px", borderRadius: 8, background: "var(--error-bg)", border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)", color: "var(--error)", fontSize: 13 }}>
               <WarningOutlined style={{ marginRight: 6 }} /> {error}
             </div>
           )}
@@ -209,7 +209,7 @@ export default function ListeningImportPage() {
                     borderRadius: 10,
                     border: "none",
                     background: url.trim() ? "var(--accent)" : "var(--border)",
-                    color: "#fff",
+                    color: "var(--text-on-accent, #fff)",
                     fontSize: 14,
                     fontWeight: 600,
                     cursor: url.trim() ? "pointer" : "not-allowed",
@@ -261,7 +261,7 @@ export default function ListeningImportPage() {
               {/* Title + metadata */}
               <div style={{ padding: 20, borderRadius: 16, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
-                  <CheckCircleOutlined style={{ color: "#52c41a", fontSize: 20 }} />
+                  <CheckCircleOutlined style={{ color: "var(--success)", fontSize: 20 }} />
                   <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>{importData.title}</h2>
                 </div>
                 <div style={{ display: "flex", gap: 12, fontSize: 12, color: "var(--text-secondary)" }}>
@@ -300,7 +300,7 @@ export default function ListeningImportPage() {
                       borderRadius: 8,
                       border: "none",
                       background: selectedTab === key ? "var(--accent)" : "transparent",
-                      color: selectedTab === key ? "#fff" : "var(--text-secondary)",
+                      color: selectedTab === key ? "var(--text-on-accent, #fff)" : "var(--text-secondary)",
                       fontSize: 13,
                       fontWeight: 600,
                       cursor: "pointer",
@@ -367,7 +367,7 @@ export default function ListeningImportPage() {
                     const isWrong = quizSubmitted && userAnswer !== undefined && userAnswer !== q.correctIndex;
 
                     return (
-                      <div key={qi} style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: `1px solid ${quizSubmitted ? (isCorrect ? "#52c41a40" : isWrong ? "#ff4d4f40" : "var(--border)") : "var(--border)"}` }}>
+                      <div key={qi} style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: `1px solid ${quizSubmitted ? (isCorrect ? "color-mix(in srgb, var(--success) 25%, transparent)" : isWrong ? "color-mix(in srgb, var(--error) 25%, transparent)" : "var(--border)") : "var(--border)"}` }}>
                         <p style={{ fontSize: 14, fontWeight: 600, margin: "0 0 10px" }}>
                           {qi + 1}. {q.question}
                         </p>
@@ -385,8 +385,8 @@ export default function ListeningImportPage() {
                                 style={{
                                   padding: "8px 14px",
                                   borderRadius: 8,
-                                  border: `1px solid ${showCorrect ? "#52c41a" : showWrong ? "#ff4d4f" : isSelected ? "var(--accent)" : "var(--border)"}`,
-                                  background: showCorrect ? "#52c41a10" : showWrong ? "#ff4d4f10" : isSelected ? "color-mix(in srgb, var(--accent) 10%, transparent)" : "var(--surface)",
+                                  border: `1px solid ${showCorrect ? "var(--success)" : showWrong ? "var(--error)" : isSelected ? "var(--accent)" : "var(--border)"}`,
+                                  background: showCorrect ? "color-mix(in srgb, var(--success) 6%, var(--surface))" : showWrong ? "color-mix(in srgb, var(--error) 6%, var(--surface))" : isSelected ? "color-mix(in srgb, var(--accent) 10%, transparent)" : "var(--surface)",
                                   fontSize: 13,
                                   textAlign: "left",
                                   cursor: quizSubmitted ? "default" : "pointer",
@@ -396,8 +396,8 @@ export default function ListeningImportPage() {
                                   gap: 8,
                                 }}
                               >
-                                {showCorrect && <CheckCircleOutlined style={{ color: "#52c41a" }} />}
-                                {showWrong && <CloseCircleOutlined style={{ color: "#ff4d4f" }} />}
+                                {showCorrect && <CheckCircleOutlined style={{ color: "var(--success)" }} />}
+                                {showWrong && <CloseCircleOutlined style={{ color: "var(--error)" }} />}
                                 {opt}
                               </button>
                             );
@@ -417,7 +417,7 @@ export default function ListeningImportPage() {
                         borderRadius: 10,
                         border: "none",
                         background: Object.keys(quizAnswers).length >= importData.quiz.length ? "var(--accent)" : "var(--border)",
-                        color: "#fff",
+                        color: "var(--text-on-accent, #fff)",
                         fontSize: 14,
                         fontWeight: 600,
                         cursor: Object.keys(quizAnswers).length >= importData.quiz.length ? "pointer" : "not-allowed",
@@ -445,7 +445,7 @@ export default function ListeningImportPage() {
               <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
                 <button
                   onClick={handleReset}
-                  style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "var(--accent)", color: "#fff", cursor: "pointer", fontSize: 13, fontWeight: 600 }}
+                  style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", cursor: "pointer", fontSize: 13, fontWeight: 600 }}
                 >
                   Import bài khác
                 </button>

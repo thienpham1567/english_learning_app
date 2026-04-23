@@ -44,8 +44,8 @@ export default function StudySetsPage() {
             height: 40,
             placeItems: "center",
             borderRadius: "var(--radius)",
-            background: "linear-gradient(135deg, #f59e0b, #ef4444)",
-            color: "#fff",
+            background: "linear-gradient(135deg, var(--warning), var(--error))",
+            color: "var(--text-on-accent, #fff)",
             boxShadow: "var(--shadow-sm)",
           }}
         >

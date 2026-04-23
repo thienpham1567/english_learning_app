@@ -10,6 +10,7 @@ import {
   TrophyOutlined,
   InfoCircleOutlined,
   BookOutlined,
+  SmileOutlined,
 } from "@ant-design/icons";
 import { Tag, Progress, Collapse, Empty, Badge } from "antd";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
@@ -64,10 +65,10 @@ type TabKey = "errors" | "vocab";
 
 function MasteryBadge({ level }: { level: string }) {
   const config: Record<string, { color: string; label: string }> = {
-    new: { color: "#d9d9d9", label: "Mới" },
-    learning: { color: "#faad14", label: "Đang học" },
-    reviewing: { color: "#1890ff", label: "Ôn tập" },
-    mastered: { color: "#52c41a", label: "Thuần thục" },
+    new: { color: "var(--text-disabled)", label: "Mới" },
+    learning: { color: "var(--warning)", label: "Đang học" },
+    reviewing: { color: "var(--info)", label: "Ôn tập" },
+    mastered: { color: "var(--success)", label: "Thuần thục" },
   };
   const c = config[level] ?? config.new;
   return <Tag color={c.color} style={{ fontSize: 10, borderRadius: 99 }}>{c.label}</Tag>;
@@ -271,7 +272,7 @@ function VocabReviewTab() {
         <Empty
           description={
             <div>
-              <p style={{ fontSize: 16, fontWeight: 600, margin: "0 0 8px" }}>🎉 Không có từ nào cần ôn!</p>
+              <p style={{ fontSize: 16, fontWeight: 600, margin: "0 0 8px" }}><SmileOutlined /> Không có từ nào cần ôn!</p>
               <p style={{ color: "var(--text-secondary)", margin: 0, fontSize: 13 }}>
                 Tra từ điển và lưu từ vựng để hệ thống SRS tự động nhắc bạn ôn tập.
               </p>
@@ -295,7 +296,7 @@ function VocabReviewTab() {
             type="circle"
             percent={percentage}
             size={120}
-            strokeColor={percentage >= 80 ? "#52c41a" : percentage >= 50 ? "#faad14" : "#ff4d4f"}
+            strokeColor={percentage >= 80 ? "var(--success)" : percentage >= 50 ? "var(--warning)" : "var(--error)"}
             format={() => (
               <div>
                 <div style={{ fontSize: 28, fontWeight: 700 }}>{correctCount}/{submitResult.words.length}</div>
@@ -304,11 +305,11 @@ function VocabReviewTab() {
             )}
           />
           <h2 style={{ margin: "16px 0 4px" }}>
-            {percentage >= 80 ? "Xuất sắc! 🎉" : percentage >= 50 ? "Khá tốt!" : "Cần ôn thêm!"}
+            {percentage >= 80 ? "Xuất sắc!" : percentage >= 50 ? "Khá tốt!" : "Cần ôn thêm!"}
           </h2>
           {submitResult.xpEarned > 0 && (
             <p style={{ color: "var(--text-secondary)", fontSize: 13, margin: "4px 0 16px" }}>
-              <TrophyOutlined style={{ color: "#faad14", marginRight: 4 }} />
+              <TrophyOutlined style={{ color: "var(--warning)", marginRight: 4 }} />
               +{submitResult.xpEarned} XP
             </p>
           )}
@@ -319,7 +320,7 @@ function VocabReviewTab() {
               borderRadius: 8,
               border: "none",
               background: "var(--accent)",
-              color: "#fff",
+              color: "var(--text-on-accent, #fff)",
               fontSize: 14,
               fontWeight: 600,
               cursor: "pointer",
@@ -339,12 +340,12 @@ function VocabReviewTab() {
                 style={{
                   padding: 16,
                   borderRadius: 12,
-                  border: `1px solid ${w.correct ? "#52c41a44" : "#ff4d4f44"}`,
+                  border: `1px solid ${w.correct ? "color-mix(in srgb, var(--success) 27%, transparent)" : "color-mix(in srgb, var(--error) 27%, transparent)"}`,
                   background: "var(--card-bg)",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                  {w.correct ? <CheckCircleOutlined style={{ color: "#52c41a" }} /> : <CloseCircleOutlined style={{ color: "#ff4d4f" }} />}
+                  {w.correct ? <CheckCircleOutlined style={{ color: "var(--success)" }} /> : <CloseCircleOutlined style={{ color: "var(--error)" }} />}
                   <span style={{ fontWeight: 600, fontSize: 14 }}>{question?.word.headword ?? w.query}</span>
                   <MasteryBadge level={w.masteryLevel} />
                 </div>
@@ -414,14 +415,14 @@ function VocabReviewTab() {
 
             if (answered) {
               if (oi === currentQ.correctIndex) {
-                borderColor = "#52c41a";
-                bgColor = "#52c41a15";
-                textColor = "#52c41a";
+                borderColor = "var(--success)";
+                bgColor = "color-mix(in srgb, var(--success) 8%, transparent)";
+                textColor = "var(--success)";
                 fontWeight = 600;
               } else if (oi === answers[currentIdx] && oi !== currentQ.correctIndex) {
-                borderColor = "#ff4d4f";
-                bgColor = "#ff4d4f15";
-                textColor = "#ff4d4f";
+                borderColor = "var(--error)";
+                bgColor = "color-mix(in srgb, var(--error) 8%, transparent)";
+                textColor = "var(--error)";
                 fontWeight = 600;
               }
             } else if (answers[currentIdx] === oi) {
@@ -462,16 +463,16 @@ function VocabReviewTab() {
               marginTop: 12,
               padding: "10px 14px",
               borderRadius: 8,
-              background: isCorrect ? "#52c41a12" : "#ff4d4f12",
-              border: `1px solid ${isCorrect ? "#52c41a33" : "#ff4d4f33"}`,
+              background: isCorrect ? "color-mix(in srgb, var(--success) 7%, transparent)" : "color-mix(in srgb, var(--error) 7%, transparent)",
+              border: `1px solid ${isCorrect ? "color-mix(in srgb, var(--success) 20%, transparent)" : "color-mix(in srgb, var(--error) 20%, transparent)"}`,
               fontSize: 13,
             }}
           >
             {isCorrect ? (
-              <span style={{ color: "#52c41a" }}>✅ Chính xác!</span>
+              <span style={{ color: "var(--success)" }}><CheckCircleOutlined /> Chính xác!</span>
             ) : (
-              <span style={{ color: "#ff4d4f" }}>
-                ❌ Sai — Đáp án đúng: <strong>{currentQ.options[currentQ.correctIndex]}</strong>
+              <span style={{ color: "var(--error)" }}>
+                <CloseCircleOutlined /> Sai — Đáp án đúng: <strong>{currentQ.options[currentQ.correctIndex]}</strong>
               </span>
             )}
           </div>
@@ -488,7 +489,7 @@ function VocabReviewTab() {
               borderRadius: 10,
               border: "none",
               background: answered ? "var(--accent)" : "var(--border)",
-              color: answered ? "#fff" : "var(--text-secondary)",
+              color: answered ? "var(--text-on-accent, #fff)" : "var(--text-secondary)",
               fontSize: 15,
               fontWeight: 600,
               cursor: answered ? "pointer" : "not-allowed",
@@ -612,7 +613,7 @@ function ErrorReviewTab() {
         <Empty
           description={
             <div>
-              <p style={{ fontSize: 16, fontWeight: 600, margin: "0 0 8px" }}>🎉 Không có lỗi nào cần ôn!</p>
+              <p style={{ fontSize: 16, fontWeight: 600, margin: "0 0 8px" }}><SmileOutlined /> Không có lỗi nào cần ôn!</p>
               <p style={{ color: "var(--text-secondary)", margin: 0, fontSize: 13 }}>
                 Hãy luyện tập Grammar Quiz hoặc Mock Test để hệ thống ghi nhận lỗi sai.
               </p>
@@ -634,7 +635,7 @@ function ErrorReviewTab() {
             type="circle"
             percent={percentage}
             size={120}
-            strokeColor={percentage >= 80 ? "#52c41a" : percentage >= 50 ? "#faad14" : "#ff4d4f"}
+            strokeColor={percentage >= 80 ? "var(--success)" : percentage >= 50 ? "var(--warning)" : "var(--error)"}
             format={() => (
               <div>
                 <div style={{ fontSize: 28, fontWeight: 700 }}>{correctCount}/{results.length}</div>
@@ -647,7 +648,7 @@ function ErrorReviewTab() {
           </h2>
           {submitResult && (
             <div style={{ color: "var(--text-secondary)", fontSize: 13, margin: "8px 0 16px" }}>
-              <TrophyOutlined style={{ color: "#52c41a", marginRight: 4 }} />
+              <TrophyOutlined style={{ color: "var(--success)", marginRight: 4 }} />
               {submitResult.resolved > 0 && <span><strong>{submitResult.resolved}</strong> lỗi đã nắm vững! </span>}
               {submitResult.rescheduled > 0 && <span><strong>{submitResult.rescheduled}</strong> lỗi sẽ ôn lại sau.</span>}
             </div>
@@ -656,7 +657,7 @@ function ErrorReviewTab() {
             onClick={fetchDue}
             style={{
               padding: "10px 24px", borderRadius: 8, border: "none",
-              background: "var(--accent)", color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer",
+              background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 600, cursor: "pointer",
             }}
           >
             <ReloadOutlined /> Ôn tiếp
@@ -669,17 +670,17 @@ function ErrorReviewTab() {
             return (
               <div
                 key={err.id}
-                style={{ padding: 16, borderRadius: 12, border: `1px solid ${correct ? "#52c41a44" : "#ff4d4f44"}`, background: "var(--card-bg)" }}
+                style={{ padding: 16, borderRadius: 12, border: `1px solid ${correct ? "color-mix(in srgb, var(--success) 27%, transparent)" : "color-mix(in srgb, var(--error) 27%, transparent)"}`, background: "var(--card-bg)" }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                  {correct ? <CheckCircleOutlined style={{ color: "#52c41a" }} /> : <CloseCircleOutlined style={{ color: "#ff4d4f" }} />}
+                  {correct ? <CheckCircleOutlined style={{ color: "var(--success)" }} /> : <CloseCircleOutlined style={{ color: "var(--error)" }} />}
                   <span style={{ fontSize: 13, fontWeight: 600 }}>Câu {i + 1}</span>
                   {err.grammarTopic && <Tag color="blue" style={{ fontSize: 10 }}>{err.grammarTopic}</Tag>}
                   <Badge count={`Ôn lần ${err.reviewCount + 1}`} style={{ backgroundColor: "var(--accent)", fontSize: 10 }} />
                 </div>
                 <p style={{ fontSize: 13, margin: "0 0 8px" }}>{err.questionStem}</p>
                 <div style={{ fontSize: 12, color: "var(--text-secondary)", marginBottom: 8 }}>
-                  Đáp án đúng: <strong style={{ color: "#52c41a" }}>{err.correctAnswer}</strong>
+                  Đáp án đúng: <strong style={{ color: "var(--success)" }}>{err.correctAnswer}</strong>
                 </div>
                 {(err.explanationEn || err.explanationVi) && (
                   <Collapse
@@ -752,22 +753,22 @@ function ErrorReviewTab() {
               ))}
             </div>
           ) : (
-            <div style={{ padding: 12, background: "var(--bg-secondary, #f5f5f5)", borderRadius: 8, fontSize: 13 }}>
+            <div style={{ padding: 12, background: "var(--surface-alt)", borderRadius: 8, fontSize: 13 }}>
               Đáp án đúng là: <strong>{currentError.correctAnswer}</strong>
               <br />
               <span style={{ color: "var(--text-secondary)" }}>Bạn đã nhớ chưa?</span>
               <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
                 <button
                   onClick={() => { setAnswers((prev) => ({ ...prev, [currentIdx]: 0 })); }}
-                  style={{ padding: "6px 16px", borderRadius: 6, border: "1px solid #52c41a44", background: answers[currentIdx] === 0 ? "#52c41a22" : "transparent", cursor: "pointer", fontSize: 13, color: "#52c41a" }}
+                  style={{ padding: "6px 16px", borderRadius: 6, border: "1px solid var(--success)44", background: answers[currentIdx] === 0 ? "color-mix(in srgb, var(--success) 13%, transparent)" : "transparent", cursor: "pointer", fontSize: 13, color: "var(--success)" }}
                 >
-                  ✅ Đã nhớ
+                  <CheckCircleOutlined /> Đã nhớ
                 </button>
                 <button
                   onClick={() => { setAnswers((prev) => ({ ...prev, [currentIdx]: 1 })); }}
-                  style={{ padding: "6px 16px", borderRadius: 6, border: "1px solid #ff4d4f44", background: answers[currentIdx] === 1 ? "#ff4d4f22" : "transparent", cursor: "pointer", fontSize: 13, color: "#ff4d4f" }}
+                  style={{ padding: "6px 16px", borderRadius: 6, border: "1px solid var(--error)44", background: answers[currentIdx] === 1 ? "color-mix(in srgb, var(--error) 13%, transparent)" : "transparent", cursor: "pointer", fontSize: 13, color: "var(--error)" }}
                 >
-                  ❌ Chưa nhớ
+                  <CloseCircleOutlined /> Chưa nhớ
                 </button>
               </div>
             </div>
@@ -780,7 +781,7 @@ function ErrorReviewTab() {
               style={{
                 width: "100%", padding: "12px", borderRadius: 10, border: "none",
                 background: (answers[currentIdx] !== null && answers[currentIdx] !== undefined) ? "var(--accent)" : "var(--border)",
-                color: (answers[currentIdx] !== null && answers[currentIdx] !== undefined) ? "#fff" : "var(--text-secondary)",
+                color: (answers[currentIdx] !== null && answers[currentIdx] !== undefined) ? "var(--text-on-accent, #fff)" : "var(--text-secondary)",
                 fontSize: 15, fontWeight: 600,
                 cursor: (answers[currentIdx] !== null && answers[currentIdx] !== undefined) ? "pointer" : "not-allowed",
               }}
@@ -836,7 +837,7 @@ export default function ReviewQuizPage() {
           <BookOutlined />
           Từ vựng
           {vocabDue > 0 && (
-            <Badge count={vocabDue} size="small" style={{ backgroundColor: "#722ed1" }} />
+            <Badge count={vocabDue} size="small" style={{ backgroundColor: "var(--accent)" }} />
           )}
         </button>
         <button

@@ -16,8 +16,8 @@ const SYNONYM_STYLE: React.CSSProperties = {
   padding: "4px 12px",
   fontSize: 13,
   fontWeight: 500,
-  color: "#3d6a2a",
-  border: "1px solid rgba(154,177,122,0.45)",
+  color: "var(--success)",
+  border: "1px solid var(--success)",
   cursor: "pointer",
   transition: "background 0.15s, border-color 0.15s",
 };
@@ -28,8 +28,8 @@ const ANTONYM_STYLE: React.CSSProperties = {
   padding: "4px 12px",
   fontSize: 13,
   fontWeight: 500,
-  color: "#7a3f1a",
-  border: "1px dashed #deb896",
+  color: "var(--warning)",
+  border: "1px dashed var(--warning)",
   cursor: "pointer",
   transition: "background 0.15s, border-color 0.15s",
 };
@@ -116,7 +116,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
               {/* Synonyms */}
               {(sense.synonyms?.length ?? 0) > 0 && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  <p style={{ ...SECTION_LABEL, color: "#3d6a2a" }}>Đồng nghĩa</p>
+                  <p style={{ ...SECTION_LABEL, color: "var(--success)" }}>Đồng nghĩa</p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                     {sense.synonyms.map((word) => (
                       <button
@@ -135,7 +135,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
               {/* Antonyms */}
               {(sense.antonyms?.length ?? 0) > 0 && (
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  <p style={{ ...SECTION_LABEL, color: "#7a3f1a" }}>Trái nghĩa</p>
+                  <p style={{ ...SECTION_LABEL, color: "var(--warning)" }}>Trái nghĩa</p>
                   <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
                     {sense.antonyms.map((word) => (
                       <button

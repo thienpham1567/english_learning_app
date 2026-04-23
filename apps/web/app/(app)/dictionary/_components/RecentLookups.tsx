@@ -63,7 +63,7 @@ export function RecentLookups({ words, onSelect }: Props) {
           style={{
             flexShrink: 0,
             borderRadius: 999,
-            border: "1px solid rgba(154,177,122,0.3)",
+            border: "1px solid var(--border)",
             background: "var(--surface)",
             padding: "4px 12px",
             fontSize: 12,

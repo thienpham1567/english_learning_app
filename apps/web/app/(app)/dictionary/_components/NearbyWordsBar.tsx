@@ -46,7 +46,7 @@ export function NearbyWordsBar({ words, headword, onSearch }: NearbyWordsBarProp
       <span
         style={{
           borderRadius: 999,
-          background: "rgba(154,177,122,0.1)",
+          background: "var(--accent-muted)",
           padding: "2px 10px",
           fontSize: 12,
           fontWeight: 600,

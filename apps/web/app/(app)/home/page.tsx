@@ -208,7 +208,7 @@ export default function HomePage() {
           styles={{ body: { padding: "var(--space-6)" } }}
         >
           <Flex vertical>
-            <Title level={4} style={{ color: "#fff", fontFamily: "var(--font-display)", margin: 0 }}>
+            <Title level={4} style={{ color: "var(--text-on-accent, #fff)", fontFamily: "var(--font-display)", margin: 0 }}>
               {getGreeting()}, {firstName}! 👋
             </Title>
             <Space size="middle" style={{ marginTop: "var(--space-2)" }} wrap>
@@ -222,16 +222,16 @@ export default function HomePage() {
                     <Tag
                       style={{
                         margin: 0,
-                        background: "rgba(255,255,255,0.2)",
-                        border: "1px solid rgba(255,255,255,0.3)",
-                        color: "#fff",
+                        background: "rgba(255,255,255,0.15)",
+                        border: "1px solid rgba(255,255,255,0.25)",
+                        color: "var(--text-on-accent, #fff)",
                         fontWeight: 700,
                         fontSize: 12,
                         borderRadius: 999,
                         padding: "2px 10px",
                       }}
                     >
-                      📊 Lv.{lvl.level}
+                      <BarChartOutlined style={{ marginRight: 4 }} /> Lv.{lvl.level}
                     </Tag>
                     <div
                       style={{
@@ -247,7 +247,7 @@ export default function HomePage() {
                           width: `${lvl.progress * 100}%`,
                           height: "100%",
                           borderRadius: 3,
-                          background: "#fff",
+                          background: "var(--text-on-accent, #fff)",
                           transition: "width 0.5s ease",
                         }}
                       />
@@ -263,7 +263,7 @@ export default function HomePage() {
         {isNewUser && (
           <Card style={{ borderRadius: "var(--radius-xl)" }}>
             <EmptyStateCard
-              icon={<span>🎓</span>}
+              icon={<TrophyOutlined style={{ fontSize: 28, color: "var(--accent)" }} />}
               headline="Bắt đầu học ngay!"
               description="Làm thử thách đầu tiên để khởi động hành trình học tiếng Anh!"
               ctaLabel="Bắt đầu thử thách"
@@ -289,7 +289,7 @@ export default function HomePage() {
                 borderRadius: "var(--radius-xl)",
                 border: "none",
                 background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-                color: "#fff",
+                color: "var(--text-on-accent, #fff)",
                 fontSize: 16,
                 fontWeight: 700,
                 fontFamily: "var(--font-body)",

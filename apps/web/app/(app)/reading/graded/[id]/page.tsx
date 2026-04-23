@@ -9,6 +9,8 @@ import {
   BookOutlined,
   EditOutlined,
   FieldTimeOutlined,
+  StarOutlined,
+  FormOutlined,
 } from "@ant-design/icons";
 import { Card, Tag, Flex, Typography, Button, Spin } from "antd";
 import { api } from "@/lib/api-client";
@@ -28,7 +30,7 @@ type PassageDetail = {
 };
 
 const LEVEL_COLORS: Record<string, string> = {
-  A2: "#52c41a", B1: "#1890ff", B2: "#2f54eb", C1: "#722ed1", C2: "#eb2f96",
+  A2: "var(--success)", B1: "var(--info)", B2: "var(--info)", C1: "var(--accent)", C2: "var(--module-grammar)",
 };
 
 export default function GradedPassagePage() {
@@ -105,7 +107,7 @@ export default function GradedPassagePage() {
             <Flex gap={10} align="center" style={{ marginBottom: 12 }}>
               <Tag style={{
                 margin: 0, fontWeight: 700, fontSize: 11, borderRadius: 8,
-                background: LEVEL_COLORS[passage.cefrLevel], color: "#fff", border: "none",
+                background: LEVEL_COLORS[passage.cefrLevel], color: "var(--text-on-accent, #fff)", border: "none",
                 padding: "2px 12px",
               }}>
                 {passage.cefrLevel}
@@ -115,7 +117,7 @@ export default function GradedPassagePage() {
                 <Text style={{ fontSize: 12, color: "var(--text-muted)" }}>{readTime} phút · {passage.wordCount} từ</Text>
               </Flex>
               {marked && (
-                <Tag style={{ margin: 0, marginLeft: "auto", borderRadius: 8, border: "none", background: "#52c41a15", color: "#52c41a", fontWeight: 600 }}>
+                <Tag style={{ margin: 0, marginLeft: "auto", borderRadius: 8, border: "none", background: "color-mix(in srgb, var(--success) 8%, transparent)", color: "var(--success)", fontWeight: 600 }}>
                   <CheckCircleFilled style={{ marginRight: 4 }} /> Đã đọc
                 </Tag>
               )}
@@ -162,18 +164,18 @@ export default function GradedPassagePage() {
             >
               <Flex vertical align="center" gap={10}>
                 <Text style={{ color: "rgba(255,255,255,0.9)", fontSize: 14, fontWeight: 500 }}>
-                  ✨ Bạn đã đọc xong! Kiểm tra từ vựng ngay?
+                  <StarOutlined /> Bạn đã đọc xong! Kiểm tra từ vựng ngay?
                 </Text>
                 <Button
                   size="large"
                   icon={<EditOutlined />}
                   onClick={() => router.push(`/reading/graded/${id}/cloze`)}
                   style={{
-                    borderRadius: 12, fontWeight: 700, border: "2px solid #fff",
-                    background: "rgba(255,255,255,0.15)", color: "#fff", height: 44,
+                    borderRadius: 12, fontWeight: 700, border: "2px solid var(--surface)",
+                    background: "rgba(255,255,255,0.15)", color: "var(--text-on-accent, #fff)", height: 44,
                   }}
                 >
-                  📝 Làm bài cloze test
+                  <FormOutlined /> Làm bài cloze test
                 </Button>
               </Flex>
             </Card>

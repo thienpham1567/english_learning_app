@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { SendOutlined, BulbOutlined, DownOutlined } from "@ant-design/icons";
+import { SendOutlined, BulbOutlined, DownOutlined, FormOutlined } from "@ant-design/icons";
 import type { WritingCategory } from "@/lib/writing-practice/types";
 import { MIN_WORDS, CATEGORY_LABELS } from "@/lib/writing-practice/types";
 
@@ -62,8 +62,8 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
   const fillPct = Math.min(ratio * 100, 100);
 
   let barColor = "var(--text-muted)";
-  if (ratio >= 1.2) barColor = "#d97706"; // amber
-  else if (ratio >= 1) barColor = "#059669"; // green
+  if (ratio >= 1.2) barColor = "var(--warning)"; // amber
+  else if (ratio >= 1) barColor = "var(--success)"; // green
 
   // Check for saved draft on mount
   useEffect(() => {
@@ -120,7 +120,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
           className="anim-fade-up mb-4 flex items-center justify-between gap-3 rounded-lg border border-amber-200 bg-amber-50/60 px-4 py-3"
         >
           <span className="text-sm text-amber-800">
-            📝 Bạn có bản nháp chưa hoàn thành. Khôi phục?
+            <FormOutlined /> Bạn có bản nháp chưa hoàn thành. Khôi phục?
           </span>
           <div className="flex gap-2">
             <button

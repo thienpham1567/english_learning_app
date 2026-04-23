@@ -81,12 +81,12 @@ export function ScoreSummary({
             alignItems: "center",
             gap: 6,
             borderRadius: 999,
-            background: "linear-gradient(135deg, #f97316, #ef4444)",
+            background: "linear-gradient(135deg, var(--xp), var(--error))",
             padding: "5px 16px",
             fontSize: 13,
             fontWeight: 600,
             color: "#fff",
-            boxShadow: "0 2px 8px rgba(249,115,22,0.25)",
+            boxShadow: "0 2px 8px color-mix(in srgb, var(--xp) 25%, transparent)",
           }}
         >
           🔥 Combo cao nhất: x{maxCombo}
@@ -113,16 +113,16 @@ export function ScoreSummary({
               key={topic}
               size="small"
               style={{
-                borderColor: isWeak ? "#fecaca" : undefined,
-                background: isWeak ? "#fef2f2" : undefined,
+                borderColor: isWeak ? "color-mix(in srgb, var(--error) 30%, transparent)" : undefined,
+                background: isWeak ? "var(--error-bg)" : undefined,
               }}
             >
               <Flex justify="space-between" align="center">
                 <Space>
-                  {isWeak && <WarningOutlined style={{ color: "#ef4444" }} />}
+                  {isWeak && <WarningOutlined style={{ color: "var(--error)" }} />}
                   <Text
                     style={{
-                      color: isWeak ? "#b91c1c" : undefined,
+                      color: isWeak ? "var(--error)" : undefined,
                       fontWeight: isWeak ? 500 : 400,
                     }}
                   >

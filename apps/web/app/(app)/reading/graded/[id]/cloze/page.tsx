@@ -134,17 +134,17 @@ export default function ClozeTestPage() {
               background: "rgba(255,255,255,0.2)", display: "flex",
               alignItems: "center", justifyContent: "center",
             }}>
-              <EditOutlined style={{ fontSize: 22, color: "#fff" }} />
+              <EditOutlined style={{ fontSize: 22, color: "var(--text-on-accent, #fff)" }} />
             </div>
             <div>
               <Text style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(255,255,255,0.7)" }}>
                 CLOZE TEST
               </Text>
-              <Title level={4} style={{ margin: 0, color: "#fff", fontFamily: "var(--font-display)", fontStyle: "italic" }}>
+              <Title level={4} style={{ margin: 0, color: "var(--text-on-accent, #fff)", fontFamily: "var(--font-display)", fontStyle: "italic" }}>
                 Điền từ vào chỗ trống
               </Title>
             </div>
-            <Tag style={{ marginLeft: "auto", borderRadius: 10, border: "none", background: "rgba(255,255,255,0.2)", color: "#fff", fontWeight: 700, fontSize: 13, padding: "4px 14px" }}>
+            <Tag style={{ marginLeft: "auto", borderRadius: 10, border: "none", background: "rgba(255,255,255,0.2)", color: "var(--text-on-accent, #fff)", fontWeight: 700, fontSize: 13, padding: "4px 14px" }}>
               {totalCount} câu
             </Tag>
           </Flex>
@@ -155,29 +155,29 @@ export default function ClozeTestPage() {
           <Card
             style={{
               borderRadius: 20, textAlign: "center",
-              border: `2px solid ${score >= 80 ? "#52c41a" : score >= 50 ? "#faad14" : "#ff4d4f"}`,
-              background: score >= 80 ? "#52c41a08" : score >= 50 ? "#faad1408" : "#ff4d4f08",
+              border: `2px solid ${score >= 80 ? "var(--success)" : score >= 50 ? "var(--warning)" : "var(--error)"}`,
+              background: score >= 80 ? "color-mix(in srgb, var(--success) 3%, transparent)" : score >= 50 ? "#faad1408" : "var(--error)08",
             }}
             styles={{ body: { padding: "24px" } }}
           >
             <div style={{
               width: 56, height: 56, borderRadius: 16, margin: "0 auto 12px",
               display: "flex", alignItems: "center", justifyContent: "center",
-              background: score >= 80 ? "#52c41a20" : score >= 50 ? "#faad1420" : "#ff4d4f20",
+              background: score >= 80 ? "color-mix(in srgb, var(--success) 12%, transparent)" : score >= 50 ? "#faad1420" : "var(--error)20",
             }}>
               {score >= 80
-                ? <TrophyFilled style={{ fontSize: 28, color: "#52c41a" }} />
+                ? <TrophyFilled style={{ fontSize: 28, color: "var(--success)" }} />
                 : score >= 50
-                  ? <FireFilled style={{ fontSize: 28, color: "#faad14" }} />
-                  : <EditOutlined style={{ fontSize: 28, color: "#ff4d4f" }} />
+                  ? <FireFilled style={{ fontSize: 28, color: "var(--warning)" }} />
+                  : <EditOutlined style={{ fontSize: 28, color: "var(--error)" }} />
               }
             </div>
-            <Title level={2} style={{ margin: "0 0 4px", color: score >= 80 ? "#52c41a" : score >= 50 ? "#faad14" : "#ff4d4f" }}>
+            <Title level={2} style={{ margin: "0 0 4px", color: score >= 80 ? "var(--success)" : score >= 50 ? "var(--warning)" : "var(--error)" }}>
               {score}%
             </Title>
             <Text type="secondary">
               {correctCount}/{totalCount} đúng
-              {score >= 80 ? " — Tuyệt vời! 🎉" : score >= 50 ? " — Khá tốt! 👍" : " — Cần ôn lại! 💪"}
+              {score >= 80 ? "" : score >= 50 ? "" : ""}
             </Text>
 
             <Flex gap={10} justify="center" style={{ marginTop: 16 }}>
@@ -212,10 +212,10 @@ export default function ClozeTestPage() {
                 style={{
                   borderRadius: 16,
                   border: showResult
-                    ? `1.5px solid ${isCorrect ? "#52c41a" : "#ff4d4f"}`
+                    ? `1.5px solid ${isCorrect ? "var(--success)" : "var(--error)"}`
                     : "1px solid var(--border)",
                   background: showResult
-                    ? isCorrect ? "#52c41a06" : "#ff4d4f06"
+                    ? isCorrect ? "var(--success)06" : "var(--error)06"
                     : undefined,
                   transition: "all 0.2s ease",
                 }}
@@ -227,11 +227,11 @@ export default function ClozeTestPage() {
                     width: 28, height: 28, borderRadius: 8,
                     display: "flex", alignItems: "center", justifyContent: "center",
                     background: showResult
-                      ? isCorrect ? "#52c41a15" : "#ff4d4f15"
+                      ? isCorrect ? "color-mix(in srgb, var(--success) 8%, transparent)" : "color-mix(in srgb, var(--error) 8%, transparent)"
                       : "var(--surface)",
                     fontSize: 12, fontWeight: 700, flexShrink: 0, marginTop: 2,
                     color: showResult
-                      ? isCorrect ? "#52c41a" : "#ff4d4f"
+                      ? isCorrect ? "var(--success)" : "var(--error)"
                       : "var(--text-muted)",
                   }}>
                     {showResult
@@ -262,7 +262,7 @@ export default function ClozeTestPage() {
                           padding: "3px 10px",
                           borderRadius: 8,
                           border: showResult
-                            ? `2px solid ${isCorrect ? "#52c41a" : "#ff4d4f"}`
+                            ? `2px solid ${isCorrect ? "var(--success)" : "var(--error)"}`
                             : "1.5px dashed var(--accent)",
                           background: "var(--surface)",
                           fontSize: 14,
@@ -270,7 +270,7 @@ export default function ClozeTestPage() {
                           textAlign: "center",
                           outline: "none",
                           color: showResult
-                            ? isCorrect ? "#52c41a" : "#ff4d4f"
+                            ? isCorrect ? "var(--success)" : "var(--error)"
                             : "var(--text)",
                           transition: "border-color 0.2s",
                         }}
@@ -279,7 +279,7 @@ export default function ClozeTestPage() {
                     </Text>
 
                     {showResult && !isCorrect && (
-                      <Text style={{ display: "block", marginTop: 6, fontSize: 12, color: "#52c41a" }}>
+                      <Text style={{ display: "block", marginTop: 6, fontSize: 12, color: "var(--success)" }}>
                         <CheckCircleFilled style={{ marginRight: 4 }} />
                         Đáp án: <strong>{item.answer}</strong>
                       </Text>

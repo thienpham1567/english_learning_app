@@ -11,6 +11,7 @@ import {
   InfoCircleOutlined,
 } from "@ant-design/icons";
 import { Tag, Tooltip, Collapse, Select, Empty } from "antd";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { WritingPatternSection } from "./_components/WritingPatternSection";
 
 type ErrorEntry = {
@@ -113,18 +114,17 @@ export default function ErrorNotebookPage() {
       }}
     >
       {/* Header */}
-      <div style={{ padding: "24px 24px 16px", borderBottom: "1px solid var(--border)" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
-          <BookOutlined style={{ fontSize: 22, color: "var(--accent)" }} />
-          <h1 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>Sổ lỗi sai</h1>
-          <Tag color={unresolvedCount > 0 ? "error" : "success"} style={{ marginLeft: "auto", borderRadius: 99 }}>
+      <ModuleHeader
+        icon={<BookOutlined />}
+        gradient="linear-gradient(135deg, var(--accent), var(--secondary))"
+        title="Sổ lỗi sai 📋"
+        subtitle="Error Notebook · Tổng hợp lỗi sai từ tất cả bài tập"
+        action={
+          <Tag color={unresolvedCount > 0 ? "error" : "success"} style={{ borderRadius: 99 }}>
             {unresolvedCount} chưa nắm
           </Tag>
-        </div>
-        <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)" }}>
-          Tổng hợp lỗi sai từ tất cả bài tập — ôn lại để không lặp lại
-        </p>
-      </div>
+        }
+      />
 
       <div style={{ flex: 1, padding: 24, maxWidth: 720, margin: "0 auto", width: "100%" }}>
         {/* Filters */}
@@ -229,13 +229,13 @@ export default function ErrorNotebookPage() {
                   padding: 16,
                   borderRadius: 12,
                   background: "var(--card-bg)",
-                  border: `1px solid ${err.isResolved ? "var(--border)" : "#ff4d4f33"}`,
+                  border: `1px solid ${err.isResolved ? "var(--border)" : "color-mix(in srgb, var(--error) 20%, transparent)"}`,
                   opacity: err.isResolved ? 0.7 : 1,
                 }}
               >
                 {/* Header */}
                 <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-                  <CloseCircleOutlined style={{ color: err.isResolved ? "var(--text-secondary)" : "#ff4d4f" }} />
+                  <CloseCircleOutlined style={{ color: err.isResolved ? "var(--text-secondary)" : "var(--error)" }} />
                   <Tag color={MODULE_COLORS[err.sourceModule] ?? "default"} style={{ fontSize: 11 }}>
                     {MODULE_LABELS[err.sourceModule] ?? err.sourceModule}
                   </Tag>
@@ -255,10 +255,10 @@ export default function ErrorNotebookPage() {
                 {/* Answers */}
                 <div style={{ display: "flex", gap: 16, fontSize: 13, marginBottom: 8 }}>
                   <span>
-                    Bạn chọn: <strong style={{ color: "#ff4d4f" }}>{err.userAnswer}</strong>
+                    Bạn chọn: <strong style={{ color: "var(--error)" }}>{err.userAnswer}</strong>
                   </span>
                   <span>
-                    Đáp án: <strong style={{ color: "#52c41a" }}>{err.correctAnswer}</strong>
+                    Đáp án: <strong style={{ color: "var(--success)" }}>{err.correctAnswer}</strong>
                   </span>
                 </div>
 
@@ -296,9 +296,9 @@ export default function ErrorNotebookPage() {
                         style={{
                           padding: "4px 10px",
                           borderRadius: 6,
-                          border: "1px solid #52c41a44",
-                          background: "#52c41a11",
-                          color: "#52c41a",
+                          border: "1px solid color-mix(in srgb, var(--success) 27%, transparent)",
+                          background: "color-mix(in srgb, var(--success) 7%, transparent)",
+                          color: "var(--success)",
                           cursor: "pointer",
                           fontSize: 12,
                         }}
