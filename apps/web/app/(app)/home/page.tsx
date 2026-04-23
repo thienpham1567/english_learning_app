@@ -56,14 +56,14 @@ function getLevel(xp: number): { level: number; currentXP: number; nextXP: numbe
 
 // ── Smart CTA Logic (Story 8.1) ──
 
-function getSuggestedActivity(data: DashboardData): { label: string; href: string; emoji: string } {
+function getSuggestedActivity(data: DashboardData): { label: string; href: string; icon: React.ReactNode } {
   if (data.flashcardsDue > 0) {
-    return { label: `Ôn ${data.flashcardsDue} flashcard đang đến hạn`, href: "/flashcards", emoji: "📚" };
+    return { label: `Ôn ${data.flashcardsDue} flashcard đang đến hạn`, href: "/flashcards", icon: <BookOutlined /> };
   }
   if (!data.dailyChallenge.completed) {
-    return { label: "Thử thách hôm nay", href: "/daily-challenge", emoji: "🔥" };
+    return { label: "Thử thách hôm nay", href: "/daily-challenge", icon: <FireOutlined /> };
   }
-  return { label: "Chat với gia sư AI", href: "/english-chatbot", emoji: "💬" };
+  return { label: "Chat với gia sư AI", href: "/english-chatbot", icon: <CommentOutlined /> };
 }
 
 // ── Helpers ──
@@ -305,10 +305,10 @@ export default function HomePage() {
                 e.currentTarget.style.transform = "scale(1)";
                 e.currentTarget.style.boxShadow = "0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent)";
               }}
-              aria-label={`${suggested.emoji} ${suggested.label}`}
+              aria-label={suggested.label}
             >
-              <span style={{ fontSize: 22 }}>{suggested.emoji}</span>
-              <span>▶ {suggested.label}</span>
+              <span style={{ fontSize: 20, display: "flex", alignItems: "center" }}>{suggested.icon}</span>
+              <span>{suggested.label}</span>
               <RightOutlined style={{ marginLeft: "auto", opacity: 0.7, fontSize: 14 }} />
             </button>
           );

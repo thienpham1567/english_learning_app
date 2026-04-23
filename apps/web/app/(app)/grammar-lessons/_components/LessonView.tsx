@@ -20,6 +20,8 @@ import {
   BookOutlined,
   MessageOutlined,
   WarningOutlined,
+  TrophyOutlined,
+  StarFilled,
 } from "@ant-design/icons";
 import { Tag, Progress } from "antd";
 
@@ -193,18 +195,27 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
     <div style={{ maxWidth: 700, margin: "0 auto", width: "100%" }}>
       {/* Back button */}
       <button onClick={onBack} style={{
-        display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 0",
-        border: "none", background: "transparent", color: "var(--accent)",
-        cursor: "pointer", fontSize: 14, fontWeight: 500, marginBottom: 16,
+        display: "inline-flex", alignItems: "center", gap: 8, padding: "8px 14px",
+        border: "1px solid var(--border)", borderRadius: 10,
+        background: "var(--card-bg)", color: "var(--accent)",
+        cursor: "pointer", fontSize: 13, fontWeight: 600, marginBottom: 16,
+        boxShadow: "var(--shadow-sm)", transition: "box-shadow 0.15s",
       }}>
         <ArrowLeftOutlined /> Danh sách chủ đề
       </button>
 
       {/* Loading */}
       {state === "loading" && (
-        <div style={{ textAlign: "center", padding: 60 }}>
-          <LoadingOutlined style={{ fontSize: 36, color: "var(--accent)" }} />
-          <p style={{ color: "var(--text-secondary)", marginTop: 12 }}>Đang tạo bài học {topicTitle}...</p>
+        <div style={{
+          textAlign: "center", padding: "60px 20px",
+          borderRadius: 20, background: "var(--card-bg)",
+          border: "1px solid var(--border)", boxShadow: "var(--shadow-md)",
+        }}>
+          <LoadingOutlined style={{ fontSize: 40, color: "var(--accent)" }} />
+          <p style={{ color: "var(--text-secondary)", marginTop: 16, fontSize: 14 }}>
+            Đang tạo bài học <strong>{topicTitle}</strong>...
+          </p>
+          <p style={{ color: "var(--text-muted)", fontSize: 12, margin: 0 }}>Vui lòng chờ vài giây</p>
         </div>
       )}
 
@@ -220,39 +231,42 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
       {/* Lesson content */}
       {state === "lesson" && lesson && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          {/* Title */}
-          <div style={{ padding: 20, borderRadius: 16, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-              <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>{lesson.title}</h2>
-              <Tag color="blue" style={{ margin: 0 }}>{level}</Tag>
+        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+          {/* Title card */}
+          <div style={{
+            padding: "20px 22px", borderRadius: 18,
+            background: "linear-gradient(135deg, var(--card-bg) 0%, color-mix(in srgb, var(--accent) 4%, var(--surface)) 100%)",
+            border: "1px solid var(--border)", boxShadow: "var(--shadow-md)",
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
+              <h2 style={{ margin: 0, fontSize: 20, fontWeight: 800, color: "var(--ink)", flex: 1 }}>{lesson.title}</h2>
+              <Tag color="blue" style={{ margin: 0, fontWeight: 700, borderRadius: 8 }}>{level}</Tag>
               <button
                 onClick={() => generateLesson(true)}
                 style={{
-                  marginLeft: "auto",
-                  border: "1px solid var(--border)",
-                  borderRadius: 8,
-                  background: "transparent",
-                  color: "var(--text-secondary)",
-                  cursor: "pointer",
-                  fontSize: 12,
-                  padding: "5px 8px",
+                  border: "1px solid var(--border)", borderRadius: 8,
+                  background: "var(--surface)", color: "var(--text-secondary)",
+                  cursor: "pointer", fontSize: 12, padding: "5px 10px",
+                  fontWeight: 600, transition: "background 0.15s",
                 }}
               >
                 <ReloadOutlined /> Tạo lại
               </button>
             </div>
-            <p style={{ margin: 0, fontSize: 14, color: "var(--text-secondary)" }}>{lesson.titleVi}</p>
+            <p style={{ margin: 0, fontSize: 14, color: "var(--text-secondary)", lineHeight: 1.5 }}>{lesson.titleVi}</p>
           </div>
 
-          {/* Formula */}
+          {/* Formula card */}
           <div style={{
-            padding: 20, borderRadius: 12, textAlign: "center",
-            background: "linear-gradient(135deg, var(--accent-muted), color-mix(in srgb, var(--secondary) 6%, var(--surface)))",
-            border: "1px solid var(--border)",
+            padding: "22px 24px", borderRadius: 16, textAlign: "center",
+            background: "linear-gradient(135deg, var(--accent-muted), color-mix(in srgb, var(--secondary) 8%, var(--surface)))",
+            border: "1px solid color-mix(in srgb, var(--accent) 20%, var(--border))",
+            boxShadow: "0 4px 16px color-mix(in srgb, var(--accent) 8%, transparent)",
           }}>
-            <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}><CalculatorOutlined style={{ marginRight: 4 }} /> Công thức</p>
-            <p style={{ fontSize: 18, fontWeight: 700, color: "var(--accent)", margin: 0, fontFamily: "monospace" }}>
+            <p style={{ fontSize: 11, color: "var(--text-muted)", margin: "0 0 10px", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              <CalculatorOutlined style={{ marginRight: 5 }} /> Công thức
+            </p>
+            <p style={{ fontSize: 20, fontWeight: 800, color: "var(--accent)", margin: 0, fontFamily: "var(--font-mono)" }}>
               {lesson.formula}
             </p>
           </div>
@@ -442,14 +456,32 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
       {/* Completion */}
       {state === "complete" && lesson && (
-        <div style={{ textAlign: "center", padding: 32, borderRadius: 16, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-          <CheckCircleOutlined style={{ fontSize: 48, color: "var(--success)", marginBottom: 16 }} />
-          <h2 style={{ margin: "0 0 8px" }}>Bài học hoàn thành!</h2>
-          <p style={{ color: "var(--text-secondary)", margin: "0 0 4px" }}>
-            {lesson.title} — {correctCount}/{lesson.exercises.length} câu đúng
+        <div style={{
+          textAlign: "center", padding: "40px 28px", borderRadius: 20,
+          background: "linear-gradient(180deg, var(--card-bg) 0%, color-mix(in srgb, var(--success) 4%, var(--surface)) 100%)",
+          border: "1px solid var(--border)", boxShadow: "var(--shadow-lg)",
+        }}>
+          <div style={{ position: "relative", display: "inline-block", marginBottom: 20 }}>
+            <TrophyOutlined style={{ fontSize: 52, color: "var(--success)" }} />
+            <StarFilled style={{
+              position: "absolute", top: -6, right: -10,
+              fontSize: 18, color: "var(--xp)",
+              filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.15))",
+            }} />
+          </div>
+          <h2 style={{ margin: "0 0 6px", fontSize: 22, fontWeight: 800, color: "var(--ink)" }}>Hoàn thành xuất sắc!</h2>
+          <p style={{ color: "var(--text-secondary)", margin: "0 0 6px", fontSize: 14 }}>
+            {lesson.title} — <strong style={{ color: correctCount === lesson.exercises.length ? "var(--success)" : "var(--text)" }}>{correctCount}/{lesson.exercises.length}</strong> câu đúng
           </p>
           {xpAwarded > 0 && (
-            <p style={{ color: "var(--accent)", fontSize: 15, fontWeight: 600, margin: "8px 0 20px" }}>+{xpAwarded} XP</p>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 6,
+              padding: "8px 18px", borderRadius: 99,
+              background: "color-mix(in srgb, var(--accent) 12%, var(--surface))",
+              color: "var(--accent)", fontSize: 16, fontWeight: 800, margin: "12px 0 20px",
+            }}>
+              <StarFilled style={{ fontSize: 14 }} /> +{xpAwarded} XP
+            </div>
           )}
           {alreadyCompleted && (
             <p style={{ color: "var(--text-muted)", fontSize: 12, margin: "8px 0 0" }}>
@@ -457,20 +489,23 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             </p>
           )}
           {loggedErrors > 0 && (
-            <p style={{ color: "var(--warning)", fontSize: 13, fontWeight: 600, margin: "8px 0 20px" }}>
-              {loggedErrors} lỗi đã được thêm vào ôn tập.
+            <p style={{ color: "var(--warning)", fontSize: 13, fontWeight: 700, margin: "8px 0 20px" }}>
+              <WarningOutlined style={{ marginRight: 4 }} /> {loggedErrors} lỗi đã được thêm vào ôn tập.
             </p>
           )}
-          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
+          <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap", marginTop: 8 }}>
             <button onClick={onBack} style={{
-              padding: "10px 20px", borderRadius: 8, border: "1px solid var(--border)",
-              background: "transparent", color: "var(--text)", cursor: "pointer", fontSize: 13, fontWeight: 500,
+              padding: "11px 22px", borderRadius: 10, border: "1px solid var(--border)",
+              background: "var(--surface)", color: "var(--text)", cursor: "pointer", fontSize: 13, fontWeight: 600,
+              boxShadow: "var(--shadow-sm)",
             }}>
               <ArrowLeftOutlined /> Chủ đề khác
             </button>
             <button onClick={() => { window.location.href = "/grammar-quiz"; }} style={{
-              padding: "10px 20px", borderRadius: 8, border: "none",
-              background: "var(--accent)", color: "var(--text-on-accent, #fff)", cursor: "pointer", fontSize: 13, fontWeight: 600,
+              padding: "11px 22px", borderRadius: 10, border: "none",
+              background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+              color: "var(--text-on-accent, #fff)", cursor: "pointer", fontSize: 13, fontWeight: 700,
+              boxShadow: "0 4px 12px color-mix(in srgb, var(--accent) 25%, transparent)",
             }}>
               <ReloadOutlined /> Luyện quiz ngữ pháp
             </button>

@@ -12,6 +12,7 @@ import { VocabularyDetailSheet } from "@/app/(app)/my-vocabulary/_components/Voc
 import { ToeicVocabularySection } from "@/app/(app)/my-vocabulary/_components/ToeicVocabularySection";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";
 import { api } from "@/lib/api-client";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 export type VocabularyEntry = {
   id: string;
@@ -250,49 +251,21 @@ export default function MyVocabularyPage() {
     <div style={{ minHeight: "100%", overflowY: "auto" }}>
       <div>
         {/* ── Page Header ── */}
-        <header style={{ marginBottom: 4 }}>
-          <p
-            style={{
-              fontSize: 10,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.25em",
-              color: "var(--accent)",
-              margin: 0,
-            }}
-          >
-            Từ vựng của tôi
-          </p>
-          <div
-            style={{
-              marginTop: 8,
-              display: "flex",
-              alignItems: "flex-end",
-              justifyContent: "space-between",
-              gap: 16,
-            }}
-          >
-            <h1
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: 36,
-                fontStyle: "italic",
-                color: "var(--ink)",
-                margin: 0,
-              }}
-            >
-              Lịch sử tra cứu
-            </h1>
-            {!isLoading && entries.length > 0 && (
-              <span style={{ marginBottom: 4, fontSize: 14, color: "var(--text-muted)" }}>
+        <ModuleHeader
+          icon={<BookOutlined />}
+          gradient="linear-gradient(135deg, #3b82f6, #6366f1)"
+          title="Từ vựng của tôi"
+          subtitle="Lịch sử tra cứu và quản lý từ vựng"
+          action={
+            !isLoading && entries.length > 0 ? (
+              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.85)", fontWeight: 600 }}>
                 {visible.length !== entries.length
                   ? `${visible.length} / ${entries.length} từ`
                   : `${entries.length} từ`}
               </span>
-            )}
-          </div>
-          <div style={{ marginTop: 16, height: 1, background: "var(--border)" }} />
-        </header>
+            ) : undefined
+          }
+        />
 
         {/* ── Tab Navigation (AC #3) ── */}
         <div

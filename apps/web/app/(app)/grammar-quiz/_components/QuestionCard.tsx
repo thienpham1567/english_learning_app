@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseOutlined, FireOutlined, CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import type { GrammarQuestion } from "@/lib/grammar-quiz/types";
 
 const OPTION_LABELS = ["A", "B", "C", "D"] as const;
@@ -105,7 +105,7 @@ export function QuestionCard({
               boxShadow: "0 2px 12px color-mix(in srgb, var(--xp) 35%, transparent)",
             }}
           >
-            🔥 x{combo} Combo!
+            <FireOutlined /> x{combo} Combo!
           </span>
         </div>
       )}
@@ -229,7 +229,7 @@ export function QuestionCard({
               }}
             >
               <span style={{ fontSize: 16 }}>
-                {selectedAnswer === question.correctIndex ? "✓" : "✗"}
+                {selectedAnswer === question.correctIndex ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
               </span>
               <span
                 style={{

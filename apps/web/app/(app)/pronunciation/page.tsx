@@ -15,6 +15,7 @@ import {
   BorderOutlined,
 } from "@ant-design/icons";
 import { Progress, Tag, Tooltip } from "antd";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 import { useExamMode } from "@/components/shared/ExamModeProvider";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
@@ -242,26 +243,20 @@ export default function PronunciationPage() {
       }}
     >
       {/* Header */}
-      <div
-        style={{
-          padding: "24px 24px 16px",
-          borderBottom: "1px solid var(--border)",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
-          <AudioOutlined style={{ fontSize: 22, color: "var(--accent)" }} />
-          <h1 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>Luyện phát âm</h1>
+      <ModuleHeader
+        icon={<AudioOutlined />}
+        gradient="linear-gradient(135deg, #8b5cf6, #6366f1)"
+        title="Luyện phát âm"
+        subtitle="Luyện phát âm tiếng Anh với AI đánh giá chi tiết"
+        action={
           <Tag
             color={examMode === "toeic" ? "blue" : "purple"}
-            style={{ marginLeft: "auto", borderRadius: 99 }}
+            style={{ marginLeft: "auto", borderRadius: 99, margin: 0 }}
           >
             {examMode === "toeic" ? <BarChartOutlined /> : <TrophyOutlined />} {modeLabel}
           </Tag>
-        </div>
-        <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)" }}>
-          Luyện phát âm tiếng Anh với AI đánh giá chi tiết
-        </p>
-      </div>
+        }
+      />
 
       {/* Content */}
       <div style={{ flex: 1, padding: 24, maxWidth: 640, margin: "0 auto", width: "100%" }}>

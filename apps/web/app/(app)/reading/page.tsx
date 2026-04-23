@@ -3,6 +3,7 @@ import { api } from "@/lib/api-client";
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, Flex, Typography, Spin, Tag, Segmented } from "antd";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import {
   ReadOutlined,
   ClockCircleOutlined,
@@ -80,29 +81,12 @@ export default function ReadingPage() {
     >
       <Flex vertical gap="var(--space-5)">
         {/* Header */}
-        <div>
-          <Text
-            style={{
-              fontSize: 11,
-              textTransform: "uppercase",
-              letterSpacing: "0.12em",
-              color: "var(--text-muted)",
-            }}
-          >
-            ĐỌC HIỂU
-          </Text>
-          <Title
-            level={3}
-            style={{
-              margin: 0,
-              fontFamily: "var(--font-display)",
-              fontStyle: "italic",
-              color: "var(--text-primary)",
-            }}
-          >
-            Luyện đọc
-          </Title>
-        </div>
+        <ModuleHeader
+          icon={<ReadOutlined />}
+          gradient="linear-gradient(135deg, #10b981, #059669)"
+          title="Luyện đọc"
+          subtitle="Đọc hiểu bài báo tiếng Anh từ The Guardian"
+        />
 
         {/* Category Filter */}
         <div style={{ overflowX: "auto", paddingBottom: 4 }}>

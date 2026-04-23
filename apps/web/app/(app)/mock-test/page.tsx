@@ -17,6 +17,7 @@ import {
   ReadOutlined,
 } from "@ant-design/icons";
 import { Progress, Tag, Tooltip, Collapse } from "antd";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 import { useExamMode } from "@/components/shared/ExamModeProvider";
 
@@ -199,31 +200,20 @@ export default function MockTestPage() {
       }}
     >
       {/* Header */}
-      <div
-        style={{
-          padding: "24px 24px 16px",
-          borderBottom: "1px solid var(--border)",
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-        }}
-      >
-        <FileSearchOutlined style={{ fontSize: 22, color: "var(--accent)" }} />
-        <div style={{ flex: 1 }}>
-          <h1 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>
-            Mini Mock Test
-          </h1>
-          <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)" }}>
-            Thi thử {modeLabel} — luyện tập dưới áp lực thời gian
-          </p>
-        </div>
-        <Tag
-          color={examMode === "toeic" ? "blue" : "purple"}
-          style={{ borderRadius: 99 }}
-        >
-          {examMode === "toeic" ? <BarChartOutlined /> : <TrophyOutlined />} {modeLabel}
-        </Tag>
-      </div>
+      <ModuleHeader
+        icon={<FileSearchOutlined />}
+        gradient="linear-gradient(135deg, #ec4899, #f43f5e)"
+        title="Mini Mock Test"
+        subtitle={`Thi thử ${modeLabel} — luyện tập dưới áp lực thời gian`}
+        action={
+          <Tag
+            color={examMode === "toeic" ? "blue" : "purple"}
+            style={{ borderRadius: 99, margin: 0 }}
+          >
+            {examMode === "toeic" ? <BarChartOutlined /> : <TrophyOutlined />} {modeLabel}
+          </Tag>
+        }
+      />
 
       <div style={{ flex: 1, padding: 24, maxWidth: 720, margin: "0 auto", width: "100%" }}>
         {/* Error */}

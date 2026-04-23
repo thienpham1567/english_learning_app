@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { AppstoreOutlined } from "@ant-design/icons";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 import { useExamMode } from "@/components/shared/ExamModeProvider";
 import { TopicSetGrid } from "@/app/(app)/study-sets/_components/TopicSetGrid";
@@ -26,42 +27,16 @@ export default function StudySetsPage() {
       }}
     >
       {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          flexShrink: 0,
-          alignItems: "center",
-          gap: 12,
-          borderBottom: "1px solid var(--border)",
-          background: "var(--surface)",
-          padding: "16px 24px",
-        }}
-      >
-        <div
-          style={{
-            display: "grid",
-            width: 40,
-            height: 40,
-            placeItems: "center",
-            borderRadius: "var(--radius)",
-            background: "linear-gradient(135deg, var(--warning), var(--error))",
-            color: "var(--text-on-accent, #fff)",
-            boxShadow: "var(--shadow-sm)",
-          }}
-        >
-          <AppstoreOutlined style={{ fontSize: 20 }} />
-        </div>
-        <div style={{ flex: 1 }}>
-          <h2 style={{ fontSize: 15, fontWeight: 600, color: "var(--ink)", margin: 0 }}>
-            {activeTopic ? activeTopic.title : "Học theo chủ đề"}
-          </h2>
-          <p style={{ fontSize: 12, color: "var(--text-muted)", margin: 0 }}>
-            {activeTopic
-              ? `${activeTopic.level} · ${activeTopic.time} · 4 phần`
-              : `${completedTopics.size} chủ đề đã hoàn thành`}
-          </p>
-        </div>
-      </div>
+      <ModuleHeader
+        icon={<AppstoreOutlined />}
+        gradient="linear-gradient(135deg, #f59e0b, #ef4444)"
+        title={activeTopic ? activeTopic.title : "Học theo chủ đề"}
+        subtitle={
+          activeTopic
+            ? `${activeTopic.level} · ${activeTopic.time} · 4 phần`
+            : `${completedTopics.size} chủ đề đã hoàn thành`
+        }
+      />
 
       {/* Content */}
       <div style={{ position: "relative", minHeight: 0, flex: 1, overflowY: "auto", padding: "20px 16px" }}>

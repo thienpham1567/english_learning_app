@@ -287,72 +287,84 @@ function VocabReviewTab() {
   if (state === "results" && submitResult) {
     const correctCount = submitResult.words.filter((w) => w.correct).length;
     const percentage = submitResult.accuracy;
+    const scoreColor = percentage >= 80 ? "var(--success)" : percentage >= 50 ? "var(--warning)" : "var(--error)";
 
     return (
       <div style={{ flex: 1, padding: 24, maxWidth: 640, margin: "0 auto", width: "100%", overflow: "auto" }}>
-        {/* Score */}
-        <div style={{ textAlign: "center", padding: 32, borderRadius: 16, background: "var(--card-bg)", border: "1px solid var(--border)", marginBottom: 20 }}>
+        {/* Score hero card */}
+        <div style={{
+          textAlign: "center", padding: "36px 28px 32px", borderRadius: 20,
+          background: "linear-gradient(180deg, var(--card-bg) 0%, color-mix(in srgb, var(--accent) 4%, var(--surface)) 100%)",
+          border: "1px solid var(--border)", boxShadow: "var(--shadow-lg)", marginBottom: 20,
+        }}>
           <Progress
             type="circle"
             percent={percentage}
-            size={120}
-            strokeColor={percentage >= 80 ? "var(--success)" : percentage >= 50 ? "var(--warning)" : "var(--error)"}
+            size={140}
+            strokeWidth={8}
+            strokeColor={scoreColor}
+            trailColor="var(--border)"
             format={() => (
               <div>
-                <div style={{ fontSize: 28, fontWeight: 700 }}>{correctCount}/{submitResult.words.length}</div>
-                <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>{percentage}%</div>
+                <div style={{ fontSize: 32, fontWeight: 800, color: "var(--ink)" }}>{correctCount}/{submitResult.words.length}</div>
+                <div style={{ fontSize: 13, color: "var(--text-muted)", fontWeight: 600 }}>{percentage}%</div>
               </div>
             )}
           />
-          <h2 style={{ margin: "16px 0 4px" }}>
+          <h2 style={{ margin: "20px 0 6px", fontSize: 22, fontWeight: 800, color: "var(--ink)" }}>
             {percentage >= 80 ? "Xuất sắc!" : percentage >= 50 ? "Khá tốt!" : "Cần ôn thêm!"}
           </h2>
           {submitResult.xpEarned > 0 && (
-            <p style={{ color: "var(--text-secondary)", fontSize: 13, margin: "4px 0 16px" }}>
-              <TrophyOutlined style={{ color: "var(--warning)", marginRight: 4 }} />
-              +{submitResult.xpEarned} XP
-            </p>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 6,
+              padding: "8px 18px", borderRadius: 99,
+              background: "color-mix(in srgb, var(--accent) 12%, var(--surface))",
+              color: "var(--accent)", fontSize: 16, fontWeight: 800, margin: "12px 0 20px",
+            }}>
+              <TrophyOutlined style={{ fontSize: 14 }} /> +{submitResult.xpEarned} XP
+            </div>
           )}
-          <button
-            onClick={fetchDue}
-            style={{
-              padding: "10px 24px",
-              borderRadius: 8,
-              border: "none",
-              background: "var(--accent)",
-              color: "var(--text-on-accent, #fff)",
-              fontSize: 14,
-              fontWeight: 600,
-              cursor: "pointer",
-            }}
-          >
-            <ReloadOutlined /> Ôn tiếp
-          </button>
+          <div>
+            <button
+              onClick={fetchDue}
+              style={{
+                padding: "12px 28px", borderRadius: 12, border: "none",
+                background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+                color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 700, cursor: "pointer",
+                boxShadow: "0 4px 12px color-mix(in srgb, var(--accent) 25%, transparent)",
+              }}
+            >
+              <ReloadOutlined style={{ marginRight: 6 }} /> Ôn tiếp
+            </button>
+          </div>
         </div>
 
         {/* Per-word detail */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)", marginBottom: 10, paddingLeft: 4 }}>
+          Chi tiết từ vựng
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {submitResult.words.map((w) => {
             const question = questions.find((q) => q.word.query === w.query);
             return (
               <div
                 key={w.query}
                 style={{
-                  padding: 16,
-                  borderRadius: 12,
-                  border: `1px solid ${w.correct ? "color-mix(in srgb, var(--success) 27%, transparent)" : "color-mix(in srgb, var(--error) 27%, transparent)"}`,
-                  background: "var(--card-bg)",
+                  padding: "14px 16px", borderRadius: 14,
+                  border: "1px solid var(--border)",
+                  borderLeft: `4px solid ${w.correct ? "var(--success)" : "var(--error)"}`,
+                  background: "var(--card-bg)", boxShadow: "var(--shadow-sm)",
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                  {w.correct ? <CheckCircleOutlined style={{ color: "var(--success)" }} /> : <CloseCircleOutlined style={{ color: "var(--error)" }} />}
-                  <span style={{ fontWeight: 600, fontSize: 14 }}>{question?.word.headword ?? w.query}</span>
+                  {w.correct ? <CheckCircleOutlined style={{ color: "var(--success)", fontSize: 16 }} /> : <CloseCircleOutlined style={{ color: "var(--error)", fontSize: 16 }} />}
+                  <span style={{ fontWeight: 700, fontSize: 14, color: "var(--text)" }}>{question?.word.headword ?? w.query}</span>
                   <MasteryBadge level={w.masteryLevel} />
                 </div>
                 <p style={{ fontSize: 13, color: "var(--text-secondary)", margin: 0 }}>
                   {question?.word.overviewVi}
                 </p>
-                <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: "4px 0 0", opacity: 0.7 }}>
+                <p style={{ fontSize: 11, color: "var(--text-muted)", margin: "4px 0 0" }}>
                   Ôn lại sau {w.interval} ngày
                 </p>
               </div>
@@ -627,71 +639,113 @@ function ErrorReviewTab() {
   if (state === "results") {
     const correctCount = results.filter((r) => r.correct).length;
     const percentage = Math.round((correctCount / results.length) * 100);
+    const scoreColor = percentage >= 80 ? "var(--success)" : percentage >= 50 ? "var(--warning)" : "var(--error)";
 
     return (
       <div style={{ flex: 1, padding: 24, maxWidth: 640, margin: "0 auto", width: "100%", overflow: "auto" }}>
-        <div style={{ textAlign: "center", padding: 32, borderRadius: 16, background: "var(--card-bg)", border: "1px solid var(--border)", marginBottom: 20 }}>
+        {/* Score hero card */}
+        <div style={{
+          textAlign: "center", padding: "36px 28px 32px", borderRadius: 20,
+          background: "linear-gradient(180deg, var(--card-bg) 0%, color-mix(in srgb, var(--accent) 4%, var(--surface)) 100%)",
+          border: "1px solid var(--border)", boxShadow: "var(--shadow-lg)", marginBottom: 20,
+        }}>
           <Progress
             type="circle"
             percent={percentage}
-            size={120}
-            strokeColor={percentage >= 80 ? "var(--success)" : percentage >= 50 ? "var(--warning)" : "var(--error)"}
+            size={140}
+            strokeWidth={8}
+            strokeColor={scoreColor}
+            trailColor="var(--border)"
             format={() => (
               <div>
-                <div style={{ fontSize: 28, fontWeight: 700 }}>{correctCount}/{results.length}</div>
-                <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>{percentage}%</div>
+                <div style={{ fontSize: 32, fontWeight: 800, color: "var(--ink)" }}>{correctCount}/{results.length}</div>
+                <div style={{ fontSize: 13, color: "var(--text-muted)", fontWeight: 600 }}>{percentage}%</div>
               </div>
             )}
           />
-          <h2 style={{ margin: "16px 0 4px" }}>
+          <h2 style={{ margin: "20px 0 6px", fontSize: 22, fontWeight: 800, color: "var(--ink)" }}>
             {percentage >= 80 ? "Xuất sắc!" : percentage >= 50 ? "Khá tốt!" : "Cần ôn thêm!"}
           </h2>
           {submitResult && (
-            <div style={{ color: "var(--text-secondary)", fontSize: 13, margin: "8px 0 16px" }}>
-              <TrophyOutlined style={{ color: "var(--success)", marginRight: 4 }} />
-              {submitResult.resolved > 0 && <span><strong>{submitResult.resolved}</strong> lỗi đã nắm vững! </span>}
-              {submitResult.rescheduled > 0 && <span><strong>{submitResult.rescheduled}</strong> lỗi sẽ ôn lại sau.</span>}
+            <div style={{ display: "flex", justifyContent: "center", gap: 16, margin: "12px 0 20px", fontSize: 13 }}>
+              {submitResult.resolved > 0 && (
+                <div style={{
+                  display: "inline-flex", alignItems: "center", gap: 5, padding: "6px 14px",
+                  borderRadius: 99, background: "color-mix(in srgb, var(--success) 10%, var(--surface))",
+                  color: "var(--success)", fontWeight: 700,
+                }}>
+                  <CheckCircleOutlined /> {submitResult.resolved} đã nắm vững
+                </div>
+              )}
+              {submitResult.rescheduled > 0 && (
+                <div style={{
+                  display: "inline-flex", alignItems: "center", gap: 5, padding: "6px 14px",
+                  borderRadius: 99, background: "color-mix(in srgb, var(--warning) 10%, var(--surface))",
+                  color: "var(--warning)", fontWeight: 700,
+                }}>
+                  <ReloadOutlined /> {submitResult.rescheduled} sẽ ôn lại
+                </div>
+              )}
             </div>
           )}
           <button
             onClick={fetchDue}
             style={{
-              padding: "10px 24px", borderRadius: 8, border: "none",
-              background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 600, cursor: "pointer",
+              padding: "12px 28px", borderRadius: 12, border: "none",
+              background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+              color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 700, cursor: "pointer",
+              boxShadow: "0 4px 12px color-mix(in srgb, var(--accent) 25%, transparent)",
             }}
           >
-            <ReloadOutlined /> Ôn tiếp
+            <ReloadOutlined style={{ marginRight: 6 }} /> Ôn tiếp
           </button>
         </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {/* Section label */}
+        <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)", marginBottom: 10, paddingLeft: 4 }}>
+          <InfoCircleOutlined style={{ marginRight: 5 }} /> Chi tiết kết quả
+        </div>
+
+        {/* Result detail cards */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {errors.map((err, i) => {
             const correct = results[i]?.correct ?? false;
             return (
               <div
                 key={err.id}
-                style={{ padding: 16, borderRadius: 12, border: `1px solid ${correct ? "color-mix(in srgb, var(--success) 27%, transparent)" : "color-mix(in srgb, var(--error) 27%, transparent)"}`, background: "var(--card-bg)" }}
+                style={{
+                  padding: "14px 16px", borderRadius: 14,
+                  border: "1px solid var(--border)",
+                  borderLeft: `4px solid ${correct ? "var(--success)" : "var(--error)"}`,
+                  background: "var(--card-bg)", boxShadow: "var(--shadow-sm)",
+                  transition: "box-shadow 0.15s",
+                }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                  {correct ? <CheckCircleOutlined style={{ color: "var(--success)" }} /> : <CloseCircleOutlined style={{ color: "var(--error)" }} />}
-                  <span style={{ fontSize: 13, fontWeight: 600 }}>Câu {i + 1}</span>
-                  {err.grammarTopic && <Tag color="blue" style={{ fontSize: 10 }}>{err.grammarTopic}</Tag>}
-                  <Badge count={`Ôn lần ${err.reviewCount + 1}`} style={{ backgroundColor: "var(--accent)", fontSize: 10 }} />
+                  {correct
+                    ? <CheckCircleOutlined style={{ color: "var(--success)", fontSize: 16 }} />
+                    : <CloseCircleOutlined style={{ color: "var(--error)", fontSize: 16 }} />}
+                  <span style={{ fontSize: 13, fontWeight: 700, color: correct ? "var(--success)" : "var(--error)" }}>
+                    Câu {i + 1}: {correct ? "Đúng" : "Sai"}
+                  </span>
+                  {err.grammarTopic && <Tag color="blue" style={{ fontSize: 10, borderRadius: 6, margin: 0 }}>{err.grammarTopic}</Tag>}
+                  <Tag style={{ fontSize: 10, borderRadius: 6, margin: 0, marginLeft: "auto" }} color="default">Ôn lần {err.reviewCount + 1}</Tag>
                 </div>
-                <p style={{ fontSize: 13, margin: "0 0 8px" }}>{err.questionStem}</p>
-                <div style={{ fontSize: 12, color: "var(--text-secondary)", marginBottom: 8 }}>
+                <p style={{ fontSize: 13, margin: "0 0 8px", lineHeight: 1.5, color: "var(--text)" }}>{err.questionStem}</p>
+                <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>
                   Đáp án đúng: <strong style={{ color: "var(--success)" }}>{err.correctAnswer}</strong>
                 </div>
                 {(err.explanationEn || err.explanationVi) && (
                   <Collapse
                     size="small"
+                    style={{ marginTop: 8, borderRadius: 8 }}
                     items={[{
                       key: `exp-${i}`,
-                      label: <span style={{ fontSize: 12 }}><InfoCircleOutlined /> Giải thích</span>,
+                      label: <span style={{ fontSize: 12, fontWeight: 600 }}><BulbOutlined style={{ marginRight: 4 }} /> Giải thích</span>,
                       children: (
-                        <div style={{ fontSize: 13 }}>
+                        <div style={{ fontSize: 13, lineHeight: 1.6 }}>
                           {err.explanationEn && <p style={{ margin: "0 0 4px" }}>{err.explanationEn}</p>}
-                          {err.explanationVi && <p style={{ margin: 0, color: "var(--text-secondary)" }}>{err.explanationVi}</p>}
+                          {err.explanationVi && <p style={{ margin: 0, color: "var(--text-secondary)", fontStyle: "italic" }}>{err.explanationVi}</p>}
                         </div>
                       ),
                     }]}

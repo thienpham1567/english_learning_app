@@ -1,6 +1,7 @@
 "use client";
-import { AppstoreOutlined, ReloadOutlined } from "@ant-design/icons";
+import { AppstoreOutlined, ReloadOutlined, BookOutlined } from "@ant-design/icons";
 import { Spin, Progress, Flex, Typography, Button, Result } from "antd";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 import { useFlashcardSession } from "@/hooks/useFlashcardSession";
 import { FlashcardCard } from "@/app/(app)/flashcards/_components/FlashcardCard";
@@ -55,41 +56,12 @@ export function FlashcardSession() {
 
       {/* Module header — hidden during immersive (active) mode */}
       {!isImmersive && (
-        <div
-          style={{
-            display: "flex",
-            flexShrink: 0,
-            alignItems: "center",
-            gap: 12,
-            borderBottom: "1px solid var(--border)",
-            background: "var(--surface)",
-            padding: "16px 24px",
-            backdropFilter: "blur(8px)",
-          }}
-        >
-          <div
-            style={{
-              display: "grid",
-              width: 40,
-              height: 40,
-              placeItems: "center",
-              borderRadius: "var(--radius)",
-              background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-              color: "#fff",
-              boxShadow: "var(--shadow-sm)",
-            }}
-          >
-            <AppstoreOutlined style={{ fontSize: 20 }} />
-          </div>
-          <div style={{ flex: 1 }}>
-            <h2 style={{ fontSize: 15, fontWeight: 600, color: "var(--ink)", margin: 0 }}>
-              Ôn tập từ vựng 🧠
-            </h2>
-            <p style={{ fontSize: 12, color: "var(--text-muted)", margin: 0 }}>
-              Spaced Repetition · Ghi nhớ lâu dài
-            </p>
-          </div>
-        </div>
+        <ModuleHeader
+          icon={<BookOutlined />}
+          gradient="linear-gradient(135deg, var(--accent), var(--secondary))"
+          title="Ôn tập từ vựng"
+          subtitle="Spaced Repetition · Ghi nhớ lâu dài"
+        />
       )}
 
       {/* Content */}

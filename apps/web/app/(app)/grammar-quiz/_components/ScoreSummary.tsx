@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Card, Flex, Space, Statistic, Tag, Typography } from "antd";
-import { ReloadOutlined, StarOutlined, WarningOutlined } from "@ant-design/icons";
+import { ReloadOutlined, StarOutlined, WarningOutlined, TrophyOutlined, SmileOutlined, LikeOutlined, FireOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import type { GrammarQuestion } from "@/lib/grammar-quiz/types";
 
@@ -29,7 +29,7 @@ export function ScoreSummary({
   const router = useRouter();
   const total = questions.length;
   const pct = total > 0 ? Math.round((score / total) * 100) : 0;
-  const emoji = pct >= 90 ? "🎉" : pct >= 70 ? "👏" : pct >= 50 ? "👍" : "💪";
+  const icon = pct >= 90 ? <TrophyOutlined style={{ color: "var(--success)" }} /> : pct >= 70 ? <SmileOutlined style={{ color: "var(--accent)" }} /> : pct >= 50 ? <LikeOutlined style={{ color: "var(--warning)" }} /> : <ThunderboltOutlined style={{ color: "var(--error)" }} />;
   const weakTopics = Object.entries(topicBreakdown)
     .filter(([, v]) => v.correct / v.total < 0.5)
     .map(([topic]) => topic);
@@ -41,8 +41,8 @@ export function ScoreSummary({
       className="anim-scale-in"
       style={{ maxWidth: 520, margin: "0 auto" }}
     >
-      <span className="anim-bounce-emoji" style={{ fontSize: 60 }}>
-        {emoji}
+      <span className="anim-bounce-emoji" style={{ fontSize: 52 }}>
+        {icon}
       </span>
 
       <Title
@@ -89,7 +89,7 @@ export function ScoreSummary({
             boxShadow: "0 2px 8px color-mix(in srgb, var(--xp) 25%, transparent)",
           }}
         >
-          🔥 Combo cao nhất: x{maxCombo}
+          <FireOutlined /> Combo cao nhất: x{maxCombo}
         </div>
       )}
 
@@ -147,7 +147,7 @@ export function ScoreSummary({
           style={{ marginTop: 16, width: "100%", alignItems: "center" }}
         >
           <Text type="danger" style={{ fontSize: 12 }}>
-            ⚠️ Chủ đề cần ôn lại: {weakTopics.join(", ")}
+            <WarningOutlined style={{ marginRight: 4 }} /> Chủ đề cần ôn lại: {weakTopics.join(", ")}
           </Text>
           <Button
             type="link"

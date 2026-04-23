@@ -1,6 +1,7 @@
 "use client";
 
 import { Button } from "antd";
+import { CheckOutlined, RocketOutlined } from "@ant-design/icons";
 
 const CEFR_LEVELS = [
   { id: "A1", tier: "easy", label: "A1", desc: "Cơ bản" },
@@ -105,7 +106,7 @@ export function CEFRPath({ selected, onSelect, onStart, isLoading }: Props) {
                   }}
                 >
                   {isSelected && (
-                    <span style={{ fontSize: 14, color: "#fff", fontWeight: 700 }}>✓</span>
+                    <CheckOutlined style={{ fontSize: 14, color: "#fff", fontWeight: 700 }} />
                   )}
                 </div>
                 {/* Label */}
@@ -153,9 +154,9 @@ export function CEFRPath({ selected, onSelect, onStart, isLoading }: Props) {
           color: TIER_COLORS[selected] ?? "var(--text-secondary)",
         }}
       >
-        {selected === "easy" && "🟢 Ngữ pháp cơ bản (A1–A2)"}
-        {selected === "medium" && "🟡 Ngữ pháp trung cấp (B1–B2)"}
-        {selected === "hard" && "🔴 Ngữ pháp nâng cao (C1–C2)"}
+        {selected === "easy" && "Ngữ pháp cơ bản (A1–A2)"}
+        {selected === "medium" && "Ngữ pháp trung cấp (B1–B2)"}
+        {selected === "hard" && "Ngữ pháp nâng cao (C1–C2)"}
       </p>
 
       <Button
@@ -167,7 +168,7 @@ export function CEFRPath({ selected, onSelect, onStart, isLoading }: Props) {
         loading={isLoading}
         style={{ marginTop: 24, borderRadius: 999, paddingInline: 40 }}
       >
-        {isLoading ? "Đang tạo đề..." : "🚀 Bắt đầu"}
+        {isLoading ? "Đang tạo đề..." : <><RocketOutlined style={{ marginRight: 6 }} /> Bắt đầu</>}
       </Button>
     </div>
   );

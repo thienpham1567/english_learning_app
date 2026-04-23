@@ -54,7 +54,7 @@ export default function GrammarQuizPage() {
       <ModuleHeader
         icon={<BulbOutlined />}
         gradient="linear-gradient(135deg, var(--accent), var(--secondary))"
-        title="TOEIC Part 5 📝"
+        title="TOEIC Part 5"
         subtitle="Incomplete Sentences · Luyện tập theo độ khó"
         action={
           <Button
