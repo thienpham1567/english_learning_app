@@ -9,6 +9,8 @@ import {
   RetweetOutlined,
   ScissorOutlined,
   ClearOutlined,
+  WarningOutlined,
+  CustomerServiceOutlined,
 } from "@ant-design/icons";
 
 // ── Speed presets (AC1) ──
@@ -335,14 +337,14 @@ export function AudioPlayer({
           style={{
             padding: "8px 14px",
             borderRadius: "var(--radius-sm)",
-            background: "#ff4d4f12",
-            border: "1px solid #ff4d4f30",
-            color: "#ff4d4f",
+            background: "var(--error-bg)",
+            border: "1px solid color-mix(in srgb, var(--error) 20%, transparent)",
+            color: "var(--error)",
             fontSize: 12,
             textAlign: "center",
           }}
         >
-          ⚠️ {audioError}
+          <WarningOutlined style={{ marginRight: 6 }} /> {audioError}
         </div>
       )}
 
@@ -378,7 +380,7 @@ export function AudioPlayer({
                   width: `${markerBPos - markerAPos}%`,
                   top: 0,
                   height: "100%",
-                  background: looping ? "rgba(82, 196, 26, 0.3)" : "rgba(24, 144, 255, 0.2)",
+                  background: looping ? "color-mix(in srgb, var(--success) 30%, transparent)" : "color-mix(in srgb, var(--info) 20%, transparent)",
                   borderRadius: 3,
                   transition: "background 0.2s ease",
                 }}
@@ -406,7 +408,7 @@ export function AudioPlayer({
                   top: -3,
                   width: 3,
                   height: 12,
-                  background: "#52c41a",
+                  background: "var(--success)",
                   borderRadius: 1,
                   transform: "translateX(-50%)",
                   zIndex: 2,
@@ -423,7 +425,7 @@ export function AudioPlayer({
                   top: -3,
                   width: 3,
                   height: 12,
-                  background: "#ff4d4f",
+                  background: "var(--error)",
                   borderRadius: 1,
                   transform: "translateX(-50%)",
                   zIndex: 2,
@@ -530,9 +532,9 @@ export function AudioPlayer({
             gap: 4,
             padding: "6px 12px",
             borderRadius: "var(--radius-sm)",
-            border: markerA != null ? "1px solid #52c41a" : "1px solid var(--border)",
-            background: markerA != null ? "#52c41a15" : "var(--surface)",
-            color: markerA != null ? "#52c41a" : "var(--text-muted)",
+            border: markerA != null ? "1px solid var(--success)" : "1px solid var(--border)",
+            background: markerA != null ? "color-mix(in srgb, var(--success) 8%, transparent)" : "var(--surface)",
+            color: markerA != null ? "var(--success)" : "var(--text-muted)",
             cursor: "pointer",
             fontSize: 11,
             fontWeight: 600,
@@ -554,9 +556,9 @@ export function AudioPlayer({
             gap: 4,
             padding: "6px 12px",
             borderRadius: "var(--radius-sm)",
-            border: markerB != null ? "1px solid #ff4d4f" : "1px solid var(--border)",
-            background: markerB != null ? "#ff4d4f15" : "var(--surface)",
-            color: markerB != null ? "#ff4d4f" : canSetB ? "var(--text-muted)" : "var(--border)",
+            border: markerB != null ? "1px solid var(--error)" : "1px solid var(--border)",
+            background: markerB != null ? "color-mix(in srgb, var(--error) 8%, transparent)" : "var(--surface)",
+            color: markerB != null ? "var(--error)" : canSetB ? "var(--text-muted)" : "var(--border)",
             cursor: canSetB ? "pointer" : "not-allowed",
             fontSize: 11,
             fontWeight: 600,
@@ -578,9 +580,9 @@ export function AudioPlayer({
             gap: 4,
             padding: "6px 12px",
             borderRadius: "var(--radius-sm)",
-            border: looping ? "1px solid #52c41a" : "1px solid var(--border)",
-            background: looping ? "#52c41a20" : "var(--surface)",
-            color: looping ? "#52c41a" : canLoop ? "var(--text-muted)" : "var(--border)",
+            border: looping ? "1px solid var(--success)" : "1px solid var(--border)",
+            background: looping ? "color-mix(in srgb, var(--success) 12%, transparent)" : "var(--surface)",
+            color: looping ? "var(--success)" : canLoop ? "var(--text-muted)" : "var(--border)",
             cursor: canLoop ? "pointer" : "not-allowed",
             fontSize: 11,
             fontWeight: 600,
@@ -619,7 +621,7 @@ export function AudioPlayer({
 
       {/* preservesPitch note (AC3) */}
       <div style={{ fontSize: 10, color: "var(--text-muted)", textAlign: "center" }}>
-        {speed !== 1 && "🎵 Pitch preserved · "}
+        {speed !== 1 && <><CustomerServiceOutlined style={{ marginRight: 4 }} /> Pitch preserved · </>}
         Shortcuts: [ ] Set A/B · L Loop · ←/→ ±3s{selfManagedSpeed ? " · ,/. Speed" : ""} · Space Play/Pause
       </div>
     </div>

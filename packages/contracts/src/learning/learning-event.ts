@@ -20,6 +20,7 @@ export const LearningModuleType = z.enum([
 	"flashcard",
 	"daily_challenge",
 	"grammar_quiz",
+	"grammar_lesson",
 	"writing",
 	"listening",
 	"speaking",

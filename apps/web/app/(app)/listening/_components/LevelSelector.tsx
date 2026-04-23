@@ -60,7 +60,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
             boxShadow: "var(--shadow-lg)",
           }}
         >
-          🎧
+          <SoundOutlined style={{ color: "var(--text-on-accent, #fff)" }} />
         </div>
         <h2
           style={{
@@ -110,16 +110,16 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                   borderRadius: 14,
                   border: isSelected ? `2px solid ${meta.color}` : "1px solid var(--border)",
                   background: isSelected
-                    ? `linear-gradient(135deg, ${meta.color}, ${meta.color}cc)`
+                    ? `linear-gradient(135deg, ${meta.color}, color-mix(in srgb, ${meta.color} 80%, black))`
                     : isHov
-                    ? `${meta.color}0a`
+                    ? `color-mix(in srgb, ${meta.color} 6%, transparent)`
                     : "var(--surface)",
                   cursor: "pointer",
                   textAlign: "center",
                   transition: "all 0.2s ease",
                   transform: isSelected ? "scale(1.04)" : isHov ? "scale(1.02)" : "scale(1)",
                   boxShadow: isSelected
-                    ? `0 4px 16px ${meta.color}45`
+                    ? `0 4px 16px color-mix(in srgb, ${meta.color} 35%, transparent)`
                     : isHov
                     ? "var(--shadow-md)"
                     : "none",

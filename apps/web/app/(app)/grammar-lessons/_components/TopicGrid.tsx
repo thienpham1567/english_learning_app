@@ -1,93 +1,45 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircleOutlined, RightOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  RightOutlined,
+  ClockCircleOutlined,
+  BulbOutlined,
+  SwapOutlined,
+  SyncOutlined,
+  LinkOutlined,
+  PushpinOutlined,
+} from "@ant-design/icons";
+import type { ReactNode } from "react";
 import { Tag } from "antd";
 
-export type GrammarTopic = {
-  id: string;
-  title: string;
-  level: string;
+import type { GrammarLessonProgressItem } from "@/lib/grammar-lessons/schema";
+import {
+  GRAMMAR_TOPIC_CATEGORIES,
+  type GrammarTopic,
+  type GrammarTopicCategory,
+} from "@/lib/grammar-lessons/topics";
+
+export type { GrammarTopic };
+
+export type GrammarCategory = GrammarTopicCategory & {
+  icon: ReactNode;
 };
 
-export type GrammarCategory = {
-  id: string;
-  title: string;
-  icon: string;
-  color: string;
-  topics: GrammarTopic[];
+const CATEGORY_ICONS: Record<string, ReactNode> = {
+  tenses: <ClockCircleOutlined />,
+  modals: <BulbOutlined />,
+  conditionals: <SwapOutlined />,
+  passive: <SyncOutlined />,
+  clauses: <LinkOutlined />,
+  determiners: <PushpinOutlined />,
 };
 
-export const GRAMMAR_CATEGORIES: GrammarCategory[] = [
-  {
-    id: "tenses",
-    title: "Thì (Tenses)",
-    icon: "🕐",
-    color: "var(--success)",
-    topics: [
-      { id: "present-simple", title: "Present Simple", level: "A2" },
-      { id: "present-continuous", title: "Present Continuous", level: "A2" },
-      { id: "present-perfect", title: "Present Perfect", level: "B1" },
-      { id: "past-simple", title: "Past Simple", level: "A2" },
-      { id: "future-will-going", title: "Future (will / going to)", level: "B1" },
-    ],
-  },
-  {
-    id: "modals",
-    title: "Động từ khiếm khuyết (Modals)",
-    icon: "💡",
-    color: "var(--accent)",
-    topics: [
-      { id: "can-could-may", title: "Can / Could / May", level: "A2" },
-      { id: "must-have-to", title: "Must / Have to", level: "B1" },
-      { id: "should-ought", title: "Should / Ought to", level: "B1" },
-    ],
-  },
-  {
-    id: "conditionals",
-    title: "Câu điều kiện (Conditionals)",
-    icon: "🔀",
-    color: "var(--warning)",
-    topics: [
-      { id: "zero-first", title: "Zero & First Conditional", level: "B1" },
-      { id: "second-conditional", title: "Second Conditional", level: "B1" },
-      { id: "third-conditional", title: "Third Conditional", level: "B2" },
-    ],
-  },
-  {
-    id: "passive",
-    title: "Bị động (Passive Voice)",
-    icon: "🔄",
-    color: "var(--secondary)",
-    topics: [
-      { id: "passive-simple", title: "Simple Passive", level: "B1" },
-      { id: "passive-perfect", title: "Perfect Passive", level: "B2" },
-      { id: "causative", title: "Causative (have/get)", level: "B2" },
-    ],
-  },
-  {
-    id: "clauses",
-    title: "Mệnh đề (Clauses)",
-    icon: "🔗",
-    color: "var(--error)",
-    topics: [
-      { id: "relative-who-which", title: "Relative (who/which/that)", level: "B1" },
-      { id: "relative-advanced", title: "Non-defining Relatives", level: "B2" },
-      { id: "noun-clauses", title: "Noun Clauses", level: "B2" },
-    ],
-  },
-  {
-    id: "determiners",
-    title: "Mạo từ & Lượng từ",
-    icon: "📌",
-    color: "var(--xp)",
-    topics: [
-      { id: "articles", title: "A / An / The", level: "A2" },
-      { id: "quantifiers", title: "Some / Any / Much / Many", level: "B1" },
-      { id: "both-either-neither", title: "Both / Either / Neither", level: "B1" },
-    ],
-  },
-];
+export const GRAMMAR_CATEGORIES: GrammarCategory[] = GRAMMAR_TOPIC_CATEGORIES.map((category) => ({
+  ...category,
+  icon: CATEGORY_ICONS[category.id] ?? <BulbOutlined />,
+}));
 
 const LEVEL_COLORS: Record<string, string> = {
   A2: "green",
@@ -95,20 +47,33 @@ const LEVEL_COLORS: Record<string, string> = {
   B2: "purple",
 };
 
+const EMPTY_PROGRESS_BY_TOPIC: Record<string, GrammarLessonProgressItem> = {};
+
 interface Props {
   onSelectTopic: (topicId: string, topicTitle: string, level: string) => void;
   completedTopics: Set<string>;
+  progressByTopic?: Record<string, GrammarLessonProgressItem>;
+  recommendedTopicId?: string | null;
 }
 
-export function TopicGrid({ onSelectTopic, completedTopics }: Props) {
+export function TopicGrid({
+  onSelectTopic,
+  completedTopics,
+  progressByTopic = EMPTY_PROGRESS_BY_TOPIC,
+  recommendedTopicId,
+}: Props) {
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [hoveredCat, setHoveredCat] = useState<string | null>(null);
   const [hoveredTopic, setHoveredTopic] = useState<string | null>(null);
+  const recommendedCategoryId = GRAMMAR_CATEGORIES.find((cat) =>
+    cat.topics.some((topic) => topic.id === recommendedTopicId),
+  )?.id;
+  const activeExpandedCategory = expandedCategory ?? recommendedCategoryId;
 
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
       {GRAMMAR_CATEGORIES.map((cat) => {
-        const isExpanded = expandedCategory === cat.id;
+        const isExpanded = activeExpandedCategory === cat.id;
         const isHovered = hoveredCat === cat.id;
         const completedCount = cat.topics.filter((t) => completedTopics.has(t.id)).length;
         const progressPct = (completedCount / cat.topics.length) * 100;
@@ -144,7 +109,7 @@ export function TopicGrid({ onSelectTopic, completedTopics }: Props) {
 
             {/* Category header button */}
             <button
-              onClick={() => setExpandedCategory(isExpanded ? null : cat.id)}
+              onClick={() => setExpandedCategory(isExpanded ? "__none" : cat.id)}
               style={{
                 display: "flex",
                 width: "100%",
@@ -170,10 +135,10 @@ export function TopicGrid({ onSelectTopic, completedTopics }: Props) {
                     : `linear-gradient(135deg, ${cat.color}, color-mix(in srgb, ${cat.color} 80%, transparent))`,
                   fontSize: 22,
                   flexShrink: 0,
-                  boxShadow: `0 2px 8px ${cat.color}44`,
+                  boxShadow: `0 2px 8px color-mix(in srgb, ${cat.color} 27%, transparent)`,
                 }}
               >
-                {allDone ? "✅" : cat.icon}
+                {allDone ? <CheckCircleOutlined style={{ color: "var(--text-on-accent, #fff)" }} /> : cat.icon}
               </span>
 
               <div style={{ flex: 1, minWidth: 0 }}>
@@ -206,14 +171,16 @@ export function TopicGrid({ onSelectTopic, completedTopics }: Props) {
                         background: allDone
                           ? "var(--success)"
                           : `linear-gradient(90deg, ${cat.color}, color-mix(in srgb, ${cat.color} 80%, transparent))`,
-                        width: `${progressPct}%`,
-                        transition: "width 0.5s ease",
+                        transform: `scaleX(${progressPct / 100})`,
+                        transformOrigin: "left",
+                        width: "100%",
+                        transition: "transform 0.5s ease",
                       }}
                     />
                   </div>
                   <span
                     style={{
-                      fontSize: 11,
+                      fontSize: 12,
                       fontWeight: 600,
                       color: completedCount > 0 ? cat.color : "var(--text-muted)",
                       flexShrink: 0,
@@ -228,7 +195,7 @@ export function TopicGrid({ onSelectTopic, completedTopics }: Props) {
 
               <RightOutlined
                 style={{
-                  fontSize: 11,
+                  fontSize: 12,
                   color: "var(--text-muted)",
                   transform: isExpanded ? "rotate(90deg)" : "none",
                   transition: "transform 0.25s ease",
@@ -243,12 +210,14 @@ export function TopicGrid({ onSelectTopic, completedTopics }: Props) {
                 style={{
                   borderTop: "1px solid var(--border)",
                   padding: "8px 14px 12px",
-                  background: `${cat.color}05`,
+                  background: `color-mix(in srgb, ${cat.color} 3%, transparent)`,
                 }}
               >
                 {cat.topics.map((topic, idx) => {
                   const isDone = completedTopics.has(topic.id);
                   const isTopicHovered = hoveredTopic === topic.id;
+                  const progress = progressByTopic[topic.id];
+                  const isRecommended = recommendedTopicId === topic.id;
 
                   return (
                     <button
@@ -266,10 +235,10 @@ export function TopicGrid({ onSelectTopic, completedTopics }: Props) {
                         border: "none",
                         background: isTopicHovered
                           ? isDone
-                            ? `${cat.color}18`
+                            ? `color-mix(in srgb, ${cat.color} 10%, transparent)`
                             : "var(--bg-deep, rgba(0,0,0,0.04))"
                           : isDone
-                          ? `${cat.color}10`
+                          ? `color-mix(in srgb, ${cat.color} 6%, transparent)`
                           : "transparent",
                         cursor: "pointer",
                         textAlign: "left",
@@ -287,8 +256,8 @@ export function TopicGrid({ onSelectTopic, completedTopics }: Props) {
                           placeItems: "center",
                           flexShrink: 0,
                           background: isDone ? cat.color : "var(--border)",
-                          color: isDone ? "#fff" : "var(--text-muted)",
-                          fontSize: isDone ? 13 : 11,
+                          color: isDone ? "var(--text-on-accent, #fff)" : "var(--text-muted)",
+                          fontSize: isDone ? 13 : 12,
                           fontWeight: 700,
                           transition: "background 0.2s",
                         }}
@@ -308,9 +277,24 @@ export function TopicGrid({ onSelectTopic, completedTopics }: Props) {
                         {topic.title}
                       </span>
 
+                      {progress && progress.totalCount > 0 && (
+                        <Tag
+                          color={progress.scorePct >= 80 ? "success" : progress.scorePct >= 50 ? "warning" : "error"}
+                          style={{ margin: 0, fontSize: 12, borderRadius: 6 }}
+                        >
+                          {progress.scorePct}%
+                        </Tag>
+                      )}
+
+                      {isRecommended && (
+                        <Tag color="gold" style={{ margin: 0, fontSize: 12, borderRadius: 6 }}>
+                          Gợi ý
+                        </Tag>
+                      )}
+
                       <Tag
                         color={LEVEL_COLORS[topic.level] ?? "default"}
-                        style={{ margin: 0, fontSize: 11, borderRadius: 6 }}
+                        style={{ margin: 0, fontSize: 12, borderRadius: 6 }}
                       >
                         {topic.level}
                       </Tag>

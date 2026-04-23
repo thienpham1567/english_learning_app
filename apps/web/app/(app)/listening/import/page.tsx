@@ -13,8 +13,11 @@ import {
   InfoCircleOutlined,
   ArrowLeftOutlined,
   WarningOutlined,
+  ClockCircleOutlined,
+  UnorderedListOutlined,
 } from "@ant-design/icons";
-import { Progress, Tag } from "antd";
+import { Progress, Tag, Button } from "antd";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { api } from "@/lib/api-client";
 import { AudioPlayer } from "@/app/(app)/listening/_components/AudioPlayer";
 
@@ -136,29 +139,21 @@ export default function ListeningImportPage() {
       }}
     >
       {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          flexShrink: 0,
-          alignItems: "center",
-          gap: 12,
-          borderBottom: "1px solid var(--border)",
-          padding: "14px 20px",
-          background: "var(--surface)",
-        }}
-      >
-        <a href="/listening" style={{ color: "var(--text-muted)", fontSize: 16 }}>
-          <ArrowLeftOutlined />
-        </a>
-        <LinkOutlined style={{ fontSize: 20, color: "var(--accent)" }} />
-        <div>
-          <div style={{ fontSize: 16, fontWeight: 700, color: "var(--text)" }}>
-            Import Podcast / YouTube
-          </div>
-          <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
-            Dán URL → Whisper chuyển thành bài nghe + từ vựng + quiz
-          </div>
-        </div>
+      <div style={{ flexShrink: 0, padding: "16px 20px 0" }}>
+        <Button
+          type="text"
+          icon={<ArrowLeftOutlined />}
+          href="/listening"
+          style={{ marginBottom: 10, color: "var(--text-muted)", fontSize: 13, borderRadius: 10, padding: "4px 8px" }}
+        >
+          Quay lại
+        </Button>
+        <ModuleHeader
+          icon={<LinkOutlined />}
+          gradient="linear-gradient(135deg, var(--module-listening), var(--accent))"
+          title="Import Podcast / YouTube"
+          subtitle="Dán URL → Whisper chuyển thành bài nghe + từ vựng + quiz"
+        />
       </div>
 
       {/* Content */}
@@ -265,10 +260,10 @@ export default function ListeningImportPage() {
                   <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700 }}>{importData.title}</h2>
                 </div>
                 <div style={{ display: "flex", gap: 12, fontSize: 12, color: "var(--text-secondary)" }}>
-                  <span>⏱ {fmtTime(importData.durationSec)}</span>
-                  <span>📝 {importData.transcript.length} đoạn</span>
-                  <span>📚 {importData.keyVocab.length} từ vựng</span>
-                  <span>❓ {importData.quiz.length} câu hỏi</span>
+                  <span><ClockCircleOutlined style={{ marginRight: 4 }} />{fmtTime(importData.durationSec)}</span>
+                  <span><UnorderedListOutlined style={{ marginRight: 4 }} />{importData.transcript.length} đoạn</span>
+                  <span><BookOutlined style={{ marginRight: 4 }} />{importData.keyVocab.length} từ vựng</span>
+                  <span><QuestionCircleOutlined style={{ marginRight: 4 }} />{importData.quiz.length} câu hỏi</span>
                 </div>
               </div>
 

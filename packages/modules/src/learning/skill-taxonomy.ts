@@ -77,6 +77,7 @@ export const MODULE_SKILL_MAP: readonly ModuleSkillMapping[] = [
 	{ moduleType: "flashcard", skillIds: ["vocabulary"] },
 	{ moduleType: "daily_challenge", skillIds: ["grammar", "vocabulary", "reading", "writing"] },
 	{ moduleType: "grammar_quiz", skillIds: ["grammar"] },
+	{ moduleType: "grammar_lesson", skillIds: ["grammar"] },
 	{ moduleType: "writing", skillIds: ["writing", "grammar"] },
 	{ moduleType: "listening", skillIds: ["listening"] },
 	{ moduleType: "speaking", skillIds: ["speaking", "pronunciation"] },

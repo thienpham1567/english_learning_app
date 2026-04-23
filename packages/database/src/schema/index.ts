@@ -30,6 +30,9 @@ export const activityTypeEnum = pgEnum("activity_type", [
   "diagnostic_test",
 ]);
 
+/** Exam Mode — TOEIC or IELTS */
+export const examModeEnum = pgEnum("exam_mode", ["toeic", "ielts"]);
+
 export const conversation = pgTable("conversation", {
   id: uuid("id").defaultRandom().primaryKey(),
   userId: text("user_id").notNull(),
@@ -173,6 +176,47 @@ export type DailyChallengeRow = typeof dailyChallenge.$inferSelect;
 export type UserStreakRow = typeof userStreak.$inferSelect;
 export type ActivityLogRow = typeof activityLog.$inferSelect;
 
+export const grammarLessonCache = pgTable("grammar_lesson_cache", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  topicId: text("topic_id").notNull(),
+  topicTitle: text("topic_title").notNull(),
+  examMode: examModeEnum("exam_mode").notNull().default("toeic"),
+  level: text("level").notNull(),
+  lessonVersion: text("lesson_version").notNull().default("1"),
+  content: jsonb("content").$type<Record<string, unknown>>().notNull(),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  uniqueIndex("grammar_lesson_cache_topic_mode_level_version_idx").on(
+    table.topicId,
+    table.examMode,
+    table.level,
+    table.lessonVersion,
+  ),
+]);
+
+export const grammarLessonProgress = pgTable("grammar_lesson_progress", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  topicId: text("topic_id").notNull(),
+  examMode: examModeEnum("exam_mode").notNull().default("toeic"),
+  level: text("level").notNull(),
+  status: text("status").notNull().default("in_progress"),
+  correctCount: integer("correct_count").notNull().default(0),
+  totalCount: integer("total_count").notNull().default(0),
+  scorePct: integer("score_pct").notNull().default(0),
+  attemptCount: integer("attempt_count").notNull().default(0),
+  lastStudiedAt: timestamp("last_studied_at", { withTimezone: true }).defaultNow().notNull(),
+  completedAt: timestamp("completed_at", { withTimezone: true }),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  uniqueIndex("grammar_lesson_progress_user_topic_mode_idx").on(table.userId, table.topicId, table.examMode),
+  index("grammar_lesson_progress_user_mode_idx").on(table.userId, table.examMode),
+]);
+
+export type GrammarLessonCacheRow = typeof grammarLessonCache.$inferSelect;
+export type GrammarLessonProgressRow = typeof grammarLessonProgress.$inferSelect;
+
 /** Listening Exercise — generated audio passage with MCQ questions */
 export interface ListeningQuestion {
   question: string;
@@ -223,9 +267,6 @@ export const pushSubscription = pgTable("push_subscription", {
 ]);
 
 export type PushSubscriptionRow = typeof pushSubscription.$inferSelect;
-
-/** Exam Mode — TOEIC or IELTS */
-export const examModeEnum = pgEnum("exam_mode", ["toeic", "ielts"]);
 
 /** User Preferences — global settings per user */
 export const userPreferences = pgTable("user_preferences", {

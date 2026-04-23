@@ -2,6 +2,12 @@
 import { api } from "@/lib/api-client";
 import { useState, useCallback, useEffect } from "react";
 import {
+  isGrammarAnswerCorrect,
+  type GrammarLessonAnswer,
+  type GrammarLessonData,
+  type GrammarLessonProgressItem,
+} from "@/lib/grammar-lessons/schema";
+import {
   ArrowLeftOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
@@ -10,24 +16,21 @@ import {
   SoundOutlined,
   RightOutlined,
   ReloadOutlined,
+  CalculatorOutlined,
+  BookOutlined,
+  MessageOutlined,
+  WarningOutlined,
 } from "@ant-design/icons";
 import { Tag, Progress } from "antd";
 
-type Example = { en: string; vi: string; highlight: string };
-type Mistake = { wrong: string; correct: string; note: string };
-type Exercise = { id: string; sentence: string; answer: string; options: string[]; explanation: string };
-
-export type LessonData = {
-  title: string;
-  titleVi: string;
-  formula: string;
-  explanation: string;
-  examples: Example[];
-  commonMistakes: Mistake[];
-  exercises: Exercise[];
-};
-
 type LessonState = "loading" | "lesson" | "exercises" | "complete";
+
+type CompleteResponse = {
+  xpAwarded: number;
+  alreadyCompleted: boolean;
+  loggedErrors: number;
+  progress: GrammarLessonProgressItem;
+};
 
 interface Props {
   topicId: string;
@@ -35,30 +38,35 @@ interface Props {
   level: string;
   examMode: string;
   onBack: () => void;
-  onComplete: (topicId: string) => void;
+  onComplete: (topicId: string, progress: GrammarLessonProgressItem) => void;
 }
 
 export function LessonView({ topicId, topicTitle, level, examMode, onBack, onComplete }: Props) {
   const [state, setState] = useState<LessonState>("loading");
-  const [lesson, setLesson] = useState<LessonData | null>(null);
+  const [lesson, setLesson] = useState<GrammarLessonData | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [exerciseIdx, setExerciseIdx] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
+  const [typedAnswer, setTypedAnswer] = useState("");
   const [revealed, setRevealed] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
+  const [answers, setAnswers] = useState<GrammarLessonAnswer[]>([]);
   const [xpAwarded, setXpAwarded] = useState(0);
+  const [loggedErrors, setLoggedErrors] = useState(0);
+  const [alreadyCompleted, setAlreadyCompleted] = useState(false);
+  const [startedAt, setStartedAt] = useState<number | null>(null);
 
-  const loadLesson = useCallback(async () => {
-    return api.post<LessonData>("/grammar-lessons/generate", {
-      topic: topicId, topicTitle, examMode, level,
+  const loadLesson = useCallback(async (forceRefresh = false) => {
+    return api.post<GrammarLessonData>("/grammar-lessons/generate", {
+      topic: topicId, topicTitle, examMode, level, forceRefresh,
     });
   }, [examMode, level, topicId, topicTitle]);
 
-  const generateLesson = useCallback(async () => {
+  const generateLesson = useCallback(async (forceRefresh = true) => {
     setState("loading");
     setError(null);
     try {
-      const data = await loadLesson();
+      const data = await loadLesson(forceRefresh);
       setLesson(data);
       setState("lesson");
     } catch {
@@ -94,30 +102,82 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
   const currentExercise = lesson?.exercises?.[exerciseIdx] ?? null;
 
-  const handleAnswer = (option: string) => {
+  const resetExerciseInput = () => {
+    setSelected(null);
+    setTypedAnswer("");
+    setRevealed(false);
+  };
+
+  const recordAnswer = (userAnswer: string, correct: boolean) => {
     if (revealed || !currentExercise) return;
-    setSelected(option);
+
+    setAnswers((prev) => [
+      ...prev,
+      {
+        exerciseId: currentExercise.id,
+        type: currentExercise.type,
+        questionStem: currentExercise.sentence,
+        options: currentExercise.type === "multiple_choice" ? currentExercise.options : undefined,
+        userAnswer,
+        correctAnswer: currentExercise.answer,
+        explanationVi: currentExercise.explanation,
+        correct,
+      },
+    ]);
     setRevealed(true);
-    if (option === currentExercise.answer) {
+    if (correct) {
       setCorrectCount((c) => c + 1);
     }
+  };
+
+  const handleAnswer = (option: string) => {
+    if (revealed || !currentExercise || currentExercise.type !== "multiple_choice") return;
+    setSelected(option);
+    recordAnswer(option, option === currentExercise.answer);
+  };
+
+  const handleWrittenAnswer = () => {
+    if (!currentExercise || currentExercise.type === "multiple_choice") return;
+    const userAnswer = typedAnswer.trim();
+    if (!userAnswer) return;
+    recordAnswer(userAnswer, isGrammarAnswerCorrect(userAnswer, currentExercise.answer));
   };
 
   const nextExercise = async () => {
     if (!lesson) return;
     if (exerciseIdx < lesson.exercises.length - 1) {
       setExerciseIdx((i) => i + 1);
-      setSelected(null);
-      setRevealed(false);
+      resetExerciseInput();
     } else {
-      // Complete
+      const completedAt = new Date().toISOString();
+      const scorePct = Math.round((correctCount / lesson.exercises.length) * 100);
+      const fallbackProgress: GrammarLessonProgressItem = {
+        topicId,
+        status: "completed",
+        correctCount,
+        totalCount: lesson.exercises.length,
+        scorePct,
+        completedAt,
+        lastStudiedAt: completedAt,
+      };
       try {
-        const data = await api.post<{ xpAwarded: number }>("/grammar-lessons/complete", {
-          topic: topicId, correctCount, totalCount: lesson.exercises.length,
+        const data = await api.post<CompleteResponse>("/grammar-lessons/complete", {
+          topic: topicId,
+          topicTitle,
+          examMode,
+          level,
+          correctCount,
+          totalCount: lesson.exercises.length,
+          durationMs: startedAt ? Date.now() - startedAt : 0,
+          answers,
         });
         setXpAwarded(data.xpAwarded);
-      } catch { /* continue */ }
-      onComplete(topicId);
+        setLoggedErrors(data.loggedErrors);
+        setAlreadyCompleted(data.alreadyCompleted);
+        onComplete(topicId, data.progress);
+      } catch {
+        onComplete(topicId, fallbackProgress);
+      }
       setState("complete");
     }
   };
@@ -152,7 +212,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
       {error && (
         <div style={{ padding: 16, borderRadius: 12, background: "var(--error-bg)", border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)", color: "var(--error)", textAlign: "center" }}>
           <p>{error}</p>
-          <button onClick={generateLesson} style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: "var(--error)", color: "#fff", cursor: "pointer", marginTop: 8 }}>
+          <button onClick={() => generateLesson(false)} style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: "var(--error)", color: "#fff", cursor: "pointer", marginTop: 8 }}>
             Thử lại
           </button>
         </div>
@@ -166,6 +226,21 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
               <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>{lesson.title}</h2>
               <Tag color="blue" style={{ margin: 0 }}>{level}</Tag>
+              <button
+                onClick={() => generateLesson(true)}
+                style={{
+                  marginLeft: "auto",
+                  border: "1px solid var(--border)",
+                  borderRadius: 8,
+                  background: "transparent",
+                  color: "var(--text-secondary)",
+                  cursor: "pointer",
+                  fontSize: 12,
+                  padding: "5px 8px",
+                }}
+              >
+                <ReloadOutlined /> Tạo lại
+              </button>
             </div>
             <p style={{ margin: 0, fontSize: 14, color: "var(--text-secondary)" }}>{lesson.titleVi}</p>
           </div>
@@ -176,7 +251,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             background: "linear-gradient(135deg, var(--accent-muted), color-mix(in srgb, var(--secondary) 6%, var(--surface)))",
             border: "1px solid var(--border)",
           }}>
-            <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>📐 Công thức</p>
+            <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}><CalculatorOutlined style={{ marginRight: 4 }} /> Công thức</p>
             <p style={{ fontSize: 18, fontWeight: 700, color: "var(--accent)", margin: 0, fontFamily: "monospace" }}>
               {lesson.formula}
             </p>
@@ -184,16 +259,16 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
           {/* Explanation */}
           <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-            <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", margin: "0 0 8px" }}>📖 Giải thích</p>
+            <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", margin: "0 0 8px" }}><BookOutlined style={{ marginRight: 4 }} /> Giải thích</p>
             <p style={{ fontSize: 14, lineHeight: 1.7, color: "var(--text)", margin: 0 }}>{lesson.explanation}</p>
           </div>
 
           {/* Examples */}
           <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-            <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", margin: "0 0 12px" }}>💬 Ví dụ</p>
+            <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", margin: "0 0 12px" }}><MessageOutlined style={{ marginRight: 4 }} /> Ví dụ</p>
             <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-              {lesson.examples.map((ex, i) => (
-                <div key={i} style={{ padding: 12, borderRadius: 8, background: "var(--surface)", border: "1px solid var(--border)" }}>
+              {lesson.examples.map((ex) => (
+                <div key={ex.en} style={{ padding: 12, borderRadius: 8, background: "var(--surface)", border: "1px solid var(--border)" }}>
                   <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                     <p style={{ fontSize: 15, fontWeight: 500, margin: 0, flex: 1 }}>
                       {ex.en.split(ex.highlight).map((part, j, arr) => (
@@ -215,9 +290,9 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
           {/* Common Mistakes */}
           <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-            <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", margin: "0 0 12px" }}>⚠️ Lỗi thường gặp</p>
+            <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", margin: "0 0 12px" }}><WarningOutlined style={{ marginRight: 4, color: "var(--warning)" }} /> Lỗi thường gặp</p>
             {lesson.commonMistakes.map((m, i) => (
-              <div key={i} style={{ padding: 10, borderRadius: 8, marginBottom: i < lesson.commonMistakes.length - 1 ? 8 : 0, background: "var(--error-bg)", border: "1px solid color-mix(in srgb, var(--error) 12%, transparent)" }}>
+              <div key={m.wrong} style={{ padding: 10, borderRadius: 8, marginBottom: i < lesson.commonMistakes.length - 1 ? 8 : 0, background: "var(--error-bg)", border: "1px solid color-mix(in srgb, var(--error) 12%, transparent)" }}>
                 <p style={{ margin: 0, fontSize: 13 }}>
                   <CloseCircleOutlined style={{ color: "var(--error)", marginRight: 4 }} />
                   <span style={{ textDecoration: "line-through", color: "var(--error)" }}>{m.wrong}</span>
@@ -226,15 +301,15 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   <CheckCircleOutlined style={{ color: "var(--success)", marginRight: 4 }} />
                   <span style={{ color: "var(--success)" }}>{m.correct}</span>
                 </p>
-                <p style={{ margin: "4px 0 0", fontSize: 12, color: "var(--text-secondary)" }}>💡 {m.note}</p>
+                <p style={{ margin: "4px 0 0", fontSize: 12, color: "var(--text-secondary)" }}><BulbOutlined style={{ marginRight: 4, color: "var(--accent)" }} /> {m.note}</p>
               </div>
             ))}
           </div>
 
           {/* Start exercises button */}
-          <button onClick={() => { setState("exercises"); setExerciseIdx(0); setCorrectCount(0); setSelected(null); setRevealed(false); }} style={{
+          <button onClick={() => { setState("exercises"); setExerciseIdx(0); setCorrectCount(0); setAnswers([]); setStartedAt(Date.now()); resetExerciseInput(); }} style={{
             padding: "14px 24px", borderRadius: 12, border: "none",
-            background: "var(--accent)", color: "#fff", fontSize: 15, fontWeight: 600,
+            background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 15, fontWeight: 600,
             cursor: "pointer", textAlign: "center",
           }}>
             Làm bài tập <RightOutlined />
@@ -251,37 +326,100 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           </div>
 
           <div style={{ padding: 24, borderRadius: 16, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
+            <div style={{ marginBottom: 12 }}>
+              <Tag color={currentExercise.type === "multiple_choice" ? "blue" : "purple"} style={{ margin: 0 }}>
+                {currentExercise.type === "multiple_choice"
+                  ? "Trắc nghiệm"
+                  : currentExercise.type === "error_correction"
+                  ? "Sửa lỗi"
+                  : "Viết lại câu"}
+              </Tag>
+            </div>
             <p style={{ fontSize: 16, fontWeight: 500, lineHeight: 1.6, margin: "0 0 20px" }}>
               {currentExercise.sentence}
             </p>
 
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {currentExercise.options.map((opt) => {
-                const isCorrect = opt === currentExercise.answer;
-                const isSelected = opt === selected;
-                let bg = "var(--surface)";
-                let border = "1px solid var(--border)";
-                let color = "var(--text)";
+            {currentExercise.type === "multiple_choice" ? (
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {currentExercise.options.map((opt) => {
+                  const isCorrect = opt === currentExercise.answer;
+                  const isSelected = opt === selected;
+                  let bg = "var(--surface)";
+                  let border = "1px solid var(--border)";
+                  let color = "var(--text)";
 
-                if (revealed) {
-                  if (isCorrect) { bg = "color-mix(in srgb, var(--success) 8%, var(--surface))"; border = "1px solid var(--success)"; color = "var(--success)"; }
-                  else if (isSelected) { bg = "color-mix(in srgb, var(--error) 8%, var(--surface))"; border = "1px solid var(--error)"; color = "var(--error)"; }
-                }
+                  if (revealed) {
+                    if (isCorrect) { bg = "color-mix(in srgb, var(--success) 8%, var(--surface))"; border = "1px solid var(--success)"; color = "var(--success)"; }
+                    else if (isSelected) { bg = "color-mix(in srgb, var(--error) 8%, var(--surface))"; border = "1px solid var(--error)"; color = "var(--error)"; }
+                  }
 
-                return (
-                  <button key={opt} onClick={() => handleAnswer(opt)} disabled={revealed} style={{
-                    padding: "12px 16px", borderRadius: 10, border, background: bg,
-                    color, fontSize: 14, fontWeight: isSelected || (revealed && isCorrect) ? 600 : 400,
-                    cursor: revealed ? "default" : "pointer", textAlign: "left",
-                    transition: "all 0.2s",
-                  }}>
-                    {revealed && isCorrect && <CheckCircleOutlined style={{ marginRight: 8 }} />}
-                    {revealed && isSelected && !isCorrect && <CloseCircleOutlined style={{ marginRight: 8 }} />}
-                    {opt}
+                  return (
+                    <button key={opt} onClick={() => handleAnswer(opt)} disabled={revealed} style={{
+                      padding: "12px 16px", borderRadius: 10, border, background: bg,
+                      color, fontSize: 14, fontWeight: isSelected || (revealed && isCorrect) ? 600 : 400,
+                      cursor: revealed ? "default" : "pointer", textAlign: "left",
+                      transition: "background 0.2s, border-color 0.2s, color 0.2s",
+                    }}>
+                      {revealed && isCorrect && <CheckCircleOutlined style={{ marginRight: 8 }} />}
+                      {revealed && isSelected && !isCorrect && <CloseCircleOutlined style={{ marginRight: 8 }} />}
+                      {opt}
+                    </button>
+                  );
+                })}
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <textarea
+                  value={typedAnswer}
+                  onChange={(event) => setTypedAnswer(event.target.value)}
+                  disabled={revealed}
+                  rows={3}
+                  placeholder={currentExercise.instructionVi ?? "Nhập câu trả lời của bạn"}
+                  style={{
+                    width: "100%",
+                    resize: "vertical",
+                    border: "1px solid var(--border)",
+                    borderRadius: 10,
+                    background: "var(--surface)",
+                    color: "var(--text)",
+                    fontSize: 14,
+                    lineHeight: 1.5,
+                    padding: "12px 14px",
+                  }}
+                />
+                {!revealed && (
+                  <button
+                    onClick={handleWrittenAnswer}
+                    disabled={!typedAnswer.trim()}
+                    style={{
+                      alignSelf: "flex-start",
+                      border: "none",
+                      borderRadius: 9,
+                      background: typedAnswer.trim() ? "var(--accent)" : "var(--border)",
+                      color: typedAnswer.trim() ? "var(--text-on-accent, #fff)" : "var(--text-muted)",
+                      cursor: typedAnswer.trim() ? "pointer" : "default",
+                      fontSize: 13,
+                      fontWeight: 600,
+                      padding: "9px 14px",
+                    }}
+                  >
+                    Kiểm tra <CheckCircleOutlined />
                   </button>
-                );
-              })}
-            </div>
+                )}
+              </div>
+            )}
+
+            {revealed && currentExercise.type !== "multiple_choice" && (
+              <div style={{ marginTop: 14, display: "flex", flexDirection: "column", gap: 8 }}>
+                <div style={{ padding: 10, borderRadius: 8, background: selected === null && isGrammarAnswerCorrect(typedAnswer, currentExercise.answer) ? "color-mix(in srgb, var(--success) 8%, var(--surface))" : "var(--error-bg)", border: "1px solid var(--border)", fontSize: 13 }}>
+                  <strong>Đáp án của bạn:</strong> {typedAnswer}
+                </div>
+                <div style={{ padding: 10, borderRadius: 8, background: "color-mix(in srgb, var(--success) 8%, var(--surface))", border: "1px solid var(--success)", color: "var(--success)", fontSize: 13 }}>
+                  <CheckCircleOutlined style={{ marginRight: 4 }} />
+                  {currentExercise.answer}
+                </div>
+              </div>
+            )}
 
             {revealed && (
               <div style={{ marginTop: 16, padding: 12, borderRadius: 8, background: "var(--surface)", border: "1px solid var(--border)", fontSize: 13, color: "var(--text-secondary)" }}>
@@ -294,7 +432,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           {revealed && (
             <button onClick={nextExercise} style={{
               padding: "12px 24px", borderRadius: 10, border: "none",
-              background: "var(--accent)", color: "#fff", fontSize: 15, fontWeight: 600, cursor: "pointer",
+              background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 15, fontWeight: 600, cursor: "pointer",
             }}>
               {exerciseIdx < lesson.exercises.length - 1 ? <>Câu tiếp <RightOutlined /></> : <>Hoàn thành <CheckCircleOutlined /></>}
             </button>
@@ -313,6 +451,16 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           {xpAwarded > 0 && (
             <p style={{ color: "var(--accent)", fontSize: 15, fontWeight: 600, margin: "8px 0 20px" }}>+{xpAwarded} XP</p>
           )}
+          {alreadyCompleted && (
+            <p style={{ color: "var(--text-muted)", fontSize: 12, margin: "8px 0 0" }}>
+              Chủ đề này đã nhận XP trước đó. Điểm tốt nhất vẫn được cập nhật.
+            </p>
+          )}
+          {loggedErrors > 0 && (
+            <p style={{ color: "var(--warning)", fontSize: 13, fontWeight: 600, margin: "8px 0 20px" }}>
+              {loggedErrors} lỗi đã được thêm vào ôn tập.
+            </p>
+          )}
           <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
             <button onClick={onBack} style={{
               padding: "10px 20px", borderRadius: 8, border: "1px solid var(--border)",
@@ -322,7 +470,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             </button>
             <button onClick={() => { window.location.href = "/grammar-quiz"; }} style={{
               padding: "10px 20px", borderRadius: 8, border: "none",
-              background: "var(--accent)", color: "#fff", cursor: "pointer", fontSize: 13, fontWeight: 600,
+              background: "var(--accent)", color: "var(--text-on-accent, #fff)", cursor: "pointer", fontSize: 13, fontWeight: 600,
             }}>
               <ReloadOutlined /> Luyện quiz ngữ pháp
             </button>

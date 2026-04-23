@@ -192,6 +192,10 @@ describe("LearningModuleType enum", () => {
 	it("includes core module types", () => {
 		expect(LearningModuleType.options.length).toBeGreaterThanOrEqual(5);
 	});
+
+	it("includes grammar lessons as a first-class learning module", () => {
+		expect(LearningModuleType.options).toContain("grammar_lesson");
+	});
 });
 
 describe("LearningResult enum", () => {
