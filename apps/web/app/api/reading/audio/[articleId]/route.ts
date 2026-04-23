@@ -84,33 +84,40 @@ export async function GET(
       return Response.json({ error: "Article has no content" }, { status: 400 });
     }
 
-    // Synthesize each paragraph separately then concatenate WAV buffers
-    // This avoids hitting the 200-char limit too aggressively on very long text
-    const fullText = article.paragraphs.join("\n\n");
-    console.log(`[Reading Audio] articleId=${articleId}, voice=${voice}, text=${fullText.length} chars, paragraphs=${article.paragraphs.length}`);
+    // Cap text we send to TTS. Groq on_demand is 10 RPM — a 393-paragraph
+    // live-blog would take ~40 minutes and time out the request. Take the
+    // first N paragraphs up to a character budget suitable for a short listen.
+    const MAX_PARAGRAPHS = 30;
+    const MAX_CHARS = 6000;
+    const picked: string[] = [];
+    let charBudget = 0;
+    for (const p of article.paragraphs) {
+      if (picked.length >= MAX_PARAGRAPHS) break;
+      if (charBudget + p.length > MAX_CHARS) break;
+      picked.push(p);
+      charBudget += p.length;
+    }
+    const paragraphs = picked.length > 0 ? picked : [article.paragraphs[0].slice(0, MAX_CHARS)];
+    const truncated = paragraphs.length < article.paragraphs.length;
+    console.log(`[Reading Audio] articleId=${articleId}, voice=${voice}, text=${charBudget} chars, paragraphs=${paragraphs.length}/${article.paragraphs.length}${truncated ? " (truncated)" : ""}`);
 
     const startMs = Date.now();
 
-    // Process paragraphs in parallel (up to 5 at a time)
-    const BATCH_SIZE = 5;
+    // Synthesize all paragraphs — concurrency + 429 retry are handled inside
+    // synthesizeTtsForVoice's global TTS queue in lib/tts/groq.ts.
     const allParts: Buffer[] = [];
-
-    for (let i = 0; i < article.paragraphs.length; i += BATCH_SIZE) {
-      const batch = article.paragraphs.slice(i, i + BATCH_SIZE);
-      const batchResults = await Promise.all(
-        batch.map((para: string, bi: number) => {
-          const idx = i + bi;
-          console.log(`[Reading Audio]   Paragraph ${idx + 1}/${article.paragraphs.length}: ${para.length} chars`);
-          return synthesizeTtsForVoice({
-            text: para,
-            voice,
-            format: "wav",
-            speed: 0.9,
-          }).then((ab) => Buffer.from(ab));
-        }),
-      );
-      allParts.push(...batchResults);
-    }
+    const results = await Promise.all(
+      paragraphs.map((para: string, idx: number) => {
+        console.log(`[Reading Audio]   Paragraph ${idx + 1}/${paragraphs.length}: ${para.length} chars`);
+        return synthesizeTtsForVoice({
+          text: para,
+          voice,
+          format: "wav",
+          speed: 0.9,
+        }).then((ab) => Buffer.from(ab));
+      }),
+    );
+    allParts.push(...results);
 
     const buf = concatWavBuffers(allParts);
     console.log(`[Reading Audio] Done in ${Date.now() - startMs}ms, ${buf.length} bytes`);

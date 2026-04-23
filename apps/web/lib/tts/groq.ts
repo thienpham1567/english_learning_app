@@ -68,6 +68,43 @@ export const VOICE_SET_VERSION = "v2";
 const GROQ_TTS_URL = "https://api.groq.com/openai/v1/audio/speech";
 const GROQ_TTS_MODEL = "canopylabs/orpheus-v1-english";
 
+/**
+ * Groq on_demand tier caps Orpheus at 10 RPM. We serialize all TTS calls
+ * through a tiny FIFO with a max in-flight count and enforce a minimum
+ * gap between request starts so bursts of chunks don't all 429 at once.
+ * Retries honor the `retry-after` header on 429 responses.
+ */
+const TTS_MAX_IN_FLIGHT = 2;
+const TTS_MIN_GAP_MS = 6500; // ≈ 9 RPM, under Groq's 10 RPM on_demand cap
+const TTS_MAX_RETRIES = 5;
+
+let ttsInFlight = 0;
+let ttsLastStartMs = 0;
+const ttsQueue: Array<() => void> = [];
+
+function acquireTtsSlot(): Promise<void> {
+  return new Promise((resolve) => {
+    const tryRun = async () => {
+      if (ttsInFlight >= TTS_MAX_IN_FLIGHT) {
+        ttsQueue.push(tryRun);
+        return;
+      }
+      const waitGap = Math.max(0, TTS_MIN_GAP_MS - (Date.now() - ttsLastStartMs));
+      if (waitGap > 0) await new Promise((r) => setTimeout(r, waitGap));
+      ttsInFlight++;
+      ttsLastStartMs = Date.now();
+      resolve();
+    };
+    void tryRun();
+  });
+}
+
+function releaseTtsSlot(): void {
+  ttsInFlight = Math.max(0, ttsInFlight - 1);
+  const next = ttsQueue.shift();
+  if (next) void next();
+}
+
 export type TtsResponseFormat = "wav";
 
 export async function synthesizeTts(args: {
@@ -121,37 +158,53 @@ export async function synthesizeTtsForVoice(args: {
 
   const speed = Math.max(0.25, Math.min(args.speed ?? 1, 4.0));
 
-  console.log(`[Groq TTS] Request: voice=${args.voice}, format=${args.format ?? "wav"}, speed=${speed}, text="${args.text.slice(0, 60)}..."`);
-  const startMs = Date.now();
+  for (let attempt = 0; attempt <= TTS_MAX_RETRIES; attempt++) {
+    await acquireTtsSlot();
+    const startMs = Date.now();
+    console.log(`[Groq TTS] Request (attempt ${attempt + 1}): voice=${args.voice}, format=${args.format ?? "wav"}, speed=${speed}, text="${args.text.slice(0, 60)}..."`);
 
-  const res = await fetch(GROQ_TTS_URL, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${key}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      model: GROQ_TTS_MODEL,
-      input: args.text,
-      voice: args.voice,
-      response_format: args.format ?? "wav",
-      speed,
-    }),
-    signal: args.signal,
-  });
+    let res: Response;
+    try {
+      res = await fetch(GROQ_TTS_URL, {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${key}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: GROQ_TTS_MODEL,
+          input: args.text,
+          voice: args.voice,
+          response_format: args.format ?? "wav",
+          speed,
+        }),
+        signal: args.signal,
+      });
+    } finally {
+      releaseTtsSlot();
+    }
 
-  const elapsed = Date.now() - startMs;
+    const elapsed = Date.now() - startMs;
 
-  if (!res.ok) {
-    const errText = await res.text().catch(() => "");
-    console.error(`[Groq TTS] ERROR ${res.status} (${elapsed}ms): ${errText}`);
-    console.error(`[Groq TTS] Headers:`, Object.fromEntries(res.headers.entries()));
-    throw new Error(`Groq TTS ${res.status}: ${errText}`);
+    if (res.status === 429 && attempt < TTS_MAX_RETRIES) {
+      const retryAfter = Number(res.headers.get("retry-after")) || 7;
+      console.warn(`[Groq TTS] 429 rate-limited — retrying in ${retryAfter}s (attempt ${attempt + 1}/${TTS_MAX_RETRIES})`);
+      await new Promise((r) => setTimeout(r, retryAfter * 1000));
+      continue;
+    }
+
+    if (!res.ok) {
+      const errText = await res.text().catch(() => "");
+      console.error(`[Groq TTS] ERROR ${res.status} (${elapsed}ms): ${errText}`);
+      throw new Error(`Groq TTS ${res.status}: ${errText}`);
+    }
+
+    const audioBuffer = await res.arrayBuffer();
+    console.log(`[Groq TTS] OK (${elapsed}ms): ${audioBuffer.byteLength} bytes, voice=${args.voice}`);
+    return audioBuffer;
   }
 
-  const audioBuffer = await res.arrayBuffer();
-  console.log(`[Groq TTS] OK (${elapsed}ms): ${audioBuffer.byteLength} bytes, voice=${args.voice}`);
-  return audioBuffer;
+  throw new Error("Groq TTS: exhausted retries");
 }
 
 /** Split text at sentence boundaries to stay within maxLen. */
