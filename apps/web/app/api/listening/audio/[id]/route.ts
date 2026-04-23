@@ -30,7 +30,10 @@ const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 60_000;
 
-const DIALOGUE_CACHE_DIR = path.join(process.cwd(), ".cache", "listening");
+const DIALOGUE_CACHE_DIR = path.join(
+  process.env.VERCEL ? "/tmp" : path.join(process.cwd(), ".cache"),
+  "listening",
+);
 const DIALOGUE_DISK_CACHE_ENABLED = process.env.LISTENING_DIALOGUE_DISK_CACHE === "1";
 
 async function readCachedDialogue(id: string): Promise<Buffer | null> {
@@ -55,16 +58,20 @@ async function writeCachedDialogue(id: string, buf: Buffer): Promise<void> {
 }
 
 async function buildDialogueAudio(turns: DialogueTurn[]): Promise<Buffer> {
+  console.log(`[Listening Audio] Building dialogue: ${turns.length} turns`);
+  const startMs = Date.now();
   const parts = await Promise.all(
-    turns.map((turn) =>
-      synthesizeTtsForVoice({
+    turns.map((turn, i) => {
+      console.log(`[Listening Audio]   Turn ${i + 1}: voice=${turn.voiceName}, text="${turn.text.slice(0, 50)}..."`);
+      return synthesizeTtsForVoice({
         text: turn.text,
         voice: turn.voiceName,
         format: "mp3",
         speed: 0.95,
-      }).then((ab) => Buffer.from(ab)),
-    ),
+      }).then((ab) => Buffer.from(ab));
+    }),
   );
+  console.log(`[Listening Audio] Dialogue built in ${Date.now() - startMs}ms, total ${parts.reduce((s, p) => s + p.length, 0)} bytes`);
   return Buffer.concat(parts);
 }
 
@@ -104,16 +111,20 @@ export async function GET(
       .limit(1);
 
     if (!exercise) {
+      console.warn(`[Listening Audio] Exercise not found: ${id}`);
       return Response.json({ error: "Exercise not found" }, { status: 404 });
     }
     if (exercise.userId !== session.user.id) {
+      console.warn(`[Listening Audio] Forbidden: user=${session.user.id}, exercise.user=${exercise.userId}`);
       return Response.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const turns = exercise.dialogueTurnsJson;
+    console.log(`[Listening Audio] id=${id}, accent=${accent}, dialogue=${Array.isArray(turns) ? turns.length + " turns" : "no"}, passage=${exercise.passage.length} chars`);
 
     if (Array.isArray(turns) && turns.length > 0) {
       const cached = await readCachedDialogue(id);
+      console.log(`[Listening Audio] Dialogue cache: ${cached ? "HIT" : "MISS"}`);
       const buf = cached ?? (await buildDialogueAudio(turns));
       if (!cached) await writeCachedDialogue(id, buf);
 
@@ -127,16 +138,19 @@ export async function GET(
     }
 
     // Single-speaker path — use MP3 for smaller payload + cache
+    console.log(`[Listening Audio] Single-speaker path: accent=${accent}, voice=${VOICES[accent]}`);
     const cacheFile = DIALOGUE_DISK_CACHE_ENABLED
       ? path.join(DIALOGUE_CACHE_DIR, `single-${id}-${accent}-${VOICE_SET_VERSION}.mp3`)
       : null;
 
     let buf: Buffer | null = null;
     if (cacheFile) {
-      try { buf = await fs.readFile(cacheFile); } catch { /* miss */ }
+      try { buf = await fs.readFile(cacheFile); console.log(`[Listening Audio] Single cache HIT: ${buf.length} bytes`); } catch { /* miss */ }
     }
 
     if (!buf) {
+      console.log(`[Listening Audio] Calling Groq TTS for single-speaker...`);
+      const startMs = Date.now();
       const audio = await synthesizeTtsForVoice({
         text: exercise.passage,
         voice: VOICES[accent],
@@ -144,6 +158,7 @@ export async function GET(
         speed: 0.9,
       });
       buf = Buffer.from(audio);
+      console.log(`[Listening Audio] Single TTS done in ${Date.now() - startMs}ms, ${buf.length} bytes`);
       if (cacheFile) {
         try {
           await fs.mkdir(DIALOGUE_CACHE_DIR, { recursive: true });
@@ -159,7 +174,10 @@ export async function GET(
       },
     });
   } catch (err) {
-    console.error("[Listening Audio] Error:", err);
-    return Response.json({ error: "Audio generation failed" }, { status: 502 });
+    const message = err instanceof Error ? err.message : String(err);
+    const stack = err instanceof Error ? err.stack : undefined;
+    console.error("[Listening Audio] Error:", message);
+    if (stack) console.error("[Listening Audio] Stack:", stack);
+    return Response.json({ error: `Audio generation failed: ${message}` }, { status: 502 });
   }
 }

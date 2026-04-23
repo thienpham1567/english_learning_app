@@ -52,7 +52,10 @@ export async function POST(request: Request) {
   const speed = typeof body?.speed === "number" ? body.speed : 1;
 
   try {
+    console.log(`[Voice Synth] Request: accent=${accent}, speed=${speed}, text="${text.slice(0, 50)}..."`);
+    const startMs = Date.now();
     const audio = await synthesizeTts({ text, accent, speed });
+    console.log(`[Voice Synth] OK in ${Date.now() - startMs}ms, ${audio.byteLength} bytes`);
     return new Response(audio, {
       headers: {
         "Content-Type": "audio/wav",
@@ -60,7 +63,8 @@ export async function POST(request: Request) {
       },
     });
   } catch (err) {
-    console.error("[TTS] Groq synthesis failed:", err);
-    return Response.json({ error: "Speech synthesis failed" }, { status: 502 });
+    const message = err instanceof Error ? err.message : String(err);
+    console.error(`[Voice Synth] Groq synthesis failed: ${message}`);
+    return Response.json({ error: `Speech synthesis failed: ${message}` }, { status: 502 });
   }
 }

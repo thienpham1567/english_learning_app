@@ -103,6 +103,9 @@ export async function POST(request: Request) {
   }
 
   try {
+    console.log(`[${provider.name} Whisper] Request: model=${provider.model}, file=${audioFile.name || "audio"}, size=${audioFile.size} bytes, mime=${audioFile.type}, duration=${durationMs}ms`);
+    const startMs = Date.now();
+
     const whisperForm = new FormData();
     whisperForm.append("file", audioFile, audioFile.name || "audio.webm");
     whisperForm.append("model", provider.model);
@@ -116,10 +119,13 @@ export async function POST(request: Request) {
       body: whisperForm,
     });
 
+    const elapsed = Date.now() - startMs;
+
     if (!response.ok) {
       const errorText = await response.text().catch(() => "");
-      console.error(`[${provider.name} Whisper] Error:`, response.status, errorText);
-      return Response.json({ error: "Transcription failed" }, { status: 502 });
+      console.error(`[${provider.name} Whisper] ERROR ${response.status} (${elapsed}ms): ${errorText}`);
+      console.error(`[${provider.name} Whisper] Headers:`, Object.fromEntries(response.headers.entries()));
+      return Response.json({ error: `Transcription failed: ${errorText}` }, { status: 502 });
     }
 
     const result = (await response.json()) as WhisperVerbose;
@@ -131,13 +137,16 @@ export async function POST(request: Request) {
         }))
       : [];
 
+    console.log(`[${provider.name} Whisper] OK (${elapsed}ms): "${result.text?.slice(0, 60)}...", ${words.length} words`);
+
     return Response.json({
       text: result.text,
       durationSec: typeof result.duration === "number" ? result.duration : durationMs / 1000,
       words,
     });
   } catch (err) {
-    console.error(`[${provider.name} Whisper] Unexpected error:`, err);
-    return Response.json({ error: "Internal error" }, { status: 500 });
+    const message = err instanceof Error ? err.message : String(err);
+    console.error(`[${provider.name} Whisper] Unexpected error: ${message}`);
+    return Response.json({ error: `Internal error: ${message}` }, { status: 500 });
   }
 }

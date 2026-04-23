@@ -3,19 +3,19 @@ import { randomUUID } from "crypto";
 import { promises as fs } from "fs";
 import path from "path";
 import { z } from "zod";
-import { execFile } from "child_process";
-import { promisify } from "util";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { listeningImport } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-
-const execFileAsync = promisify(execFile);
+import ytdl from "@distube/ytdl-core";
 
 // ── Constants ──
-const IMPORT_CACHE_DIR = path.join(process.cwd(), ".cache", "listening-imports");
+const IMPORT_CACHE_DIR = path.join(
+  process.env.VERCEL ? "/tmp" : path.join(process.cwd(), ".cache"),
+  "listening-imports",
+);
 const MAX_FILE_SIZE = 25 * 1024 * 1024; // 25MB — Whisper limit
 const MAX_DURATION_SEC = 600; // 10 minutes default cap
 
@@ -77,46 +77,43 @@ function checkRateLimit(userId: string): boolean {
   return true;
 }
 
-// ── YouTube audio download via yt-dlp subprocess (AC1) ──
+// ── YouTube audio download via @distube/ytdl-core (pure JS, works on Vercel) ──
 async function downloadYouTubeAudio(url: string, outPath: string, maxDurationSec: number): Promise<{ durationSec: number }> {
-  // yt-dlp must be installed on the host machine
-  // Extracts audio-only stream, converts to mp3, limits duration
-  try {
-    await execFileAsync("yt-dlp", [
-      "--no-playlist",
-      "--extract-audio",
-      "--audio-format", "mp3",
-      "--audio-quality", "5", // lower quality = smaller file
-      "--max-filesize", `${MAX_FILE_SIZE}`,
-      "--match-filter", `duration <= ${maxDurationSec}`,
-      "--output", outPath,
-      "--no-warnings",
-      "--quiet",
-      url,
-    ], { timeout: 120_000 }); // 2 minute timeout
-  } catch (err) {
-    const msg = (err as Error).message || "";
-    if (msg.includes("duration")) {
-      throw new Error(`Video exceeds ${Math.floor(maxDurationSec / 60)} minute limit.`);
-    }
-    if (msg.includes("unavailable") || msg.includes("private")) {
-      throw new Error("Video is unavailable or private.");
-    }
-    throw new Error("Failed to download YouTube audio. Make sure yt-dlp is installed.");
+  // Get video info first to check duration
+  const info = await ytdl.getInfo(url);
+  const durationSec = parseInt(info.videoDetails.lengthSeconds, 10);
+
+  if (durationSec > maxDurationSec) {
+    throw new Error(`Video exceeds ${Math.floor(maxDurationSec / 60)} minute limit (${Math.round(durationSec / 60)} min).`);
   }
 
-  // Get duration from file
-  try {
-    const { stdout } = await execFileAsync("ffprobe", [
-      "-v", "quiet",
-      "-show_entries", "format=duration",
-      "-of", "default=noprint_wrappers=1:nokey=1",
-      outPath,
-    ], { timeout: 10_000 });
-    return { durationSec: Math.round(parseFloat(stdout.trim())) };
-  } catch {
-    return { durationSec: maxDurationSec }; // fallback
+  if (!info.videoDetails.isLiveContent === false && info.videoDetails.isLiveContent) {
+    throw new Error("Live streams are not supported.");
   }
+
+  // Download audio-only stream
+  await fs.mkdir(path.dirname(outPath), { recursive: true });
+
+  const stream = ytdl(url, {
+    filter: "audioonly",
+    quality: "lowestaudio", // smaller file = faster upload to Whisper
+  });
+
+  const chunks: Buffer[] = [];
+  let totalSize = 0;
+
+  for await (const chunk of stream) {
+    totalSize += chunk.length;
+    if (totalSize > MAX_FILE_SIZE) {
+      stream.destroy();
+      throw new Error("Audio file too large (exceeds 25MB).");
+    }
+    chunks.push(chunk);
+  }
+
+  await fs.writeFile(outPath, Buffer.concat(chunks));
+
+  return { durationSec };
 }
 
 // ── Direct audio download (AC1) ──
@@ -137,18 +134,7 @@ async function downloadDirectAudio(url: string, outPath: string): Promise<{ dura
   await fs.mkdir(path.dirname(outPath), { recursive: true });
   await fs.writeFile(outPath, buf);
 
-  // Get duration
-  try {
-    const { stdout } = await execFileAsync("ffprobe", [
-      "-v", "quiet",
-      "-show_entries", "format=duration",
-      "-of", "default=noprint_wrappers=1:nokey=1",
-      outPath,
-    ], { timeout: 10_000 });
-    return { durationSec: Math.round(parseFloat(stdout.trim())) };
-  } catch {
-    return { durationSec: 0 };
-  }
+  return { durationSec: 0 }; // duration will come from Whisper response
 }
 
 // ── Whisper transcription (AC2) ──

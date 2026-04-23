@@ -98,21 +98,31 @@ export async function synthesizeTtsForVoice(args: {
   signal?: AbortSignal;
 }): Promise<ArrayBuffer> {
   const key = process.env.GROQ_API_KEY;
-  if (!key) throw new Error("Missing GROQ_API_KEY");
+  if (!key) {
+    console.error("[Groq TTS] GROQ_API_KEY is not set!");
+    throw new Error("Missing GROQ_API_KEY");
+  }
 
   // Orpheus API has a 200-char input limit — chunk longer texts
   const MAX_CHARS = 200;
   if (args.text.length > MAX_CHARS) {
     const chunks = splitTextIntoChunks(args.text, MAX_CHARS);
+    console.log(`[Groq TTS] Chunking text: ${args.text.length} chars → ${chunks.length} chunks, voice=${args.voice}`);
     const buffers = await Promise.all(
-      chunks.map((chunk) =>
-        synthesizeTtsForVoice({ ...args, text: chunk }),
-      ),
+      chunks.map((chunk, i) => {
+        console.log(`[Groq TTS]   Chunk ${i + 1}/${chunks.length}: ${chunk.length} chars`);
+        return synthesizeTtsForVoice({ ...args, text: chunk });
+      }),
     );
-    return concatArrayBuffers(buffers);
+    const result = concatArrayBuffers(buffers);
+    console.log(`[Groq TTS] All ${chunks.length} chunks done, total ${result.byteLength} bytes`);
+    return result;
   }
 
   const speed = Math.max(0.25, Math.min(args.speed ?? 1, 4.0));
+
+  console.log(`[Groq TTS] Request: voice=${args.voice}, format=${args.format ?? "wav"}, speed=${speed}, text="${args.text.slice(0, 60)}..."`);
+  const startMs = Date.now();
 
   const res = await fetch(GROQ_TTS_URL, {
     method: "POST",
@@ -130,12 +140,18 @@ export async function synthesizeTtsForVoice(args: {
     signal: args.signal,
   });
 
+  const elapsed = Date.now() - startMs;
+
   if (!res.ok) {
     const errText = await res.text().catch(() => "");
+    console.error(`[Groq TTS] ERROR ${res.status} (${elapsed}ms): ${errText}`);
+    console.error(`[Groq TTS] Headers:`, Object.fromEntries(res.headers.entries()));
     throw new Error(`Groq TTS ${res.status}: ${errText}`);
   }
 
-  return res.arrayBuffer();
+  const audioBuffer = await res.arrayBuffer();
+  console.log(`[Groq TTS] OK (${elapsed}ms): ${audioBuffer.byteLength} bytes, voice=${args.voice}`);
+  return audioBuffer;
 }
 
 /** Split text at sentence boundaries to stay within maxLen. */
