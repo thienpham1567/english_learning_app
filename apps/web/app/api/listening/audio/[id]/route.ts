@@ -1,6 +1,4 @@
 import { headers } from "next/headers";
-import { promises as fs } from "fs";
-import path from "path";
 import { eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
@@ -9,12 +7,12 @@ import { listeningExercise } from "@repo/database";
 import type { DialogueTurn } from "@repo/database";
 import {
   parseAccent,
-  synthesizeTts,
   synthesizeTtsForVoice,
   VOICE_SET_VERSION,
   VOICES,
   VOICE_BY_ROLE,
 } from "@/lib/tts/groq";
+import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
 
 /**
  * GET /api/listening/audio/[id]?accent=us|uk|au
@@ -30,33 +28,6 @@ import {
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 60_000;
-
-const DIALOGUE_CACHE_DIR = path.join(
-  process.env.VERCEL ? "/tmp" : path.join(process.cwd(), ".cache"),
-  "listening",
-);
-const DIALOGUE_DISK_CACHE_ENABLED = process.env.LISTENING_DIALOGUE_DISK_CACHE === "1";
-
-async function readCachedDialogue(id: string): Promise<Buffer | null> {
-  if (!DIALOGUE_DISK_CACHE_ENABLED) return null;
-  try {
-    const file = path.join(DIALOGUE_CACHE_DIR, `${id}-${VOICE_SET_VERSION}.wav`);
-    return await fs.readFile(file);
-  } catch {
-    return null;
-  }
-}
-
-async function writeCachedDialogue(id: string, buf: Buffer): Promise<void> {
-  if (!DIALOGUE_DISK_CACHE_ENABLED) return;
-  try {
-    await fs.mkdir(DIALOGUE_CACHE_DIR, { recursive: true });
-    const file = path.join(DIALOGUE_CACHE_DIR, `${id}-${VOICE_SET_VERSION}.wav`);
-    await fs.writeFile(file, buf);
-  } catch (err) {
-    console.warn("[Listening Audio] Failed to write dialogue cache:", err);
-  }
-}
 
 /** Concatenate multiple WAV buffers by stripping headers from all but the first. */
 function concatWavBuffers(parts: Buffer[]): Buffer {
@@ -151,32 +122,30 @@ export async function GET(
     console.log(`[Listening Audio] id=${id}, voice=${voice}, dialogue=${Array.isArray(turns) ? turns.length + " turns" : "no"}, passage=${exercise.passage.length} chars`);
 
     if (Array.isArray(turns) && turns.length > 0) {
-      const cached = await readCachedDialogue(id);
+      const dialogueKey = `dialogue|${id}`;
+      const cached = await readTtsCache("listening", dialogueKey, "wav");
       console.log(`[Listening Audio] Dialogue cache: ${cached ? "HIT" : "MISS"}`);
       const buf = cached ?? (await buildDialogueAudio(turns));
-      if (!cached) await writeCachedDialogue(id, buf);
+      if (!cached) await writeTtsCache("listening", dialogueKey, buf, "wav");
 
       return new Response(new Uint8Array(buf), {
         headers: {
           "Content-Type": "audio/wav",
           "Cache-Control": "public, max-age=604800",
           "X-Voice-Set-Version": VOICE_SET_VERSION,
+          "X-Tts-Cache": cached ? "hit" : "miss",
         },
       });
     }
 
     // Single-speaker path — WAV format (Groq Orpheus only supports WAV)
     console.log(`[Listening Audio] Single-speaker path: voice=${voice}`);
-    const cacheFile = DIALOGUE_DISK_CACHE_ENABLED
-      ? path.join(DIALOGUE_CACHE_DIR, `single-${id}-${voice}-${VOICE_SET_VERSION}.wav`)
-      : null;
-
-    let buf: Buffer | null = null;
-    if (cacheFile) {
-      try { buf = await fs.readFile(cacheFile); console.log(`[Listening Audio] Single cache HIT: ${buf.length} bytes`); } catch { /* miss */ }
-    }
-
-    if (!buf) {
+    const singleKey = `single|${id}|${voice}`;
+    let buf = await readTtsCache("listening", singleKey, "wav");
+    const cacheHit = !!buf;
+    if (buf) {
+      console.log(`[Listening Audio] Single cache HIT: ${buf.length} bytes`);
+    } else {
       console.log(`[Listening Audio] Calling Groq TTS for single-speaker...`);
       const startMs = Date.now();
       const audio = await synthesizeTtsForVoice({
@@ -187,18 +156,14 @@ export async function GET(
       });
       buf = Buffer.from(audio);
       console.log(`[Listening Audio] Single TTS done in ${Date.now() - startMs}ms, ${buf.length} bytes`);
-      if (cacheFile) {
-        try {
-          await fs.mkdir(DIALOGUE_CACHE_DIR, { recursive: true });
-          await fs.writeFile(cacheFile, buf);
-        } catch { /* ignore cache write fail */ }
-      }
+      await writeTtsCache("listening", singleKey, buf, "wav");
     }
 
     return new Response(new Uint8Array(buf), {
       headers: {
         "Content-Type": "audio/wav",
         "Cache-Control": "public, max-age=604800",
+        "X-Tts-Cache": cacheHit ? "hit" : "miss",
       },
     });
   } catch (err) {

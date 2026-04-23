@@ -1,6 +1,7 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { parseAccent, synthesizeTts } from "@/lib/tts/groq";
+import { parseAccent, synthesizeTts, VOICES } from "@/lib/tts/groq";
+import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
 
 /**
  * POST /api/voice/synthesize
@@ -51,15 +52,36 @@ export async function POST(request: Request) {
   const accent = parseAccent(body?.accent);
   const speed = typeof body?.speed === "number" ? body.speed : 1;
 
+  // Key cache by the exact inputs that change audio output.
+  const voice = VOICES[accent];
+  const cacheKey = `${voice}|${speed}|${text}`;
+
   try {
+    const cached = await readTtsCache("voice-synth", cacheKey, "wav");
+    if (cached) {
+      console.log(`[Voice Synth] Cache HIT: accent=${accent}, ${cached.length} bytes`);
+      return new Response(new Uint8Array(cached), {
+        headers: {
+          "Content-Type": "audio/wav",
+          "Cache-Control": "public, max-age=86400",
+          "X-Tts-Cache": "hit",
+        },
+      });
+    }
+
     console.log(`[Voice Synth] Request: accent=${accent}, speed=${speed}, text="${text.slice(0, 50)}..."`);
     const startMs = Date.now();
     const audio = await synthesizeTts({ text, accent, speed });
     console.log(`[Voice Synth] OK in ${Date.now() - startMs}ms, ${audio.byteLength} bytes`);
-    return new Response(audio, {
+
+    const buf = Buffer.from(audio);
+    await writeTtsCache("voice-synth", cacheKey, buf, "wav");
+
+    return new Response(new Uint8Array(buf), {
       headers: {
         "Content-Type": "audio/wav",
         "Cache-Control": "public, max-age=86400",
+        "X-Tts-Cache": "miss",
       },
     });
   } catch (err) {

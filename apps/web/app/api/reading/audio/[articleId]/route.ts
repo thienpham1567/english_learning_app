@@ -9,6 +9,7 @@ import {
   type VoiceRole,
 } from "@/lib/tts/groq";
 import { fetchGuardianArticle } from "@/lib/reading/utils";
+import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
 
 /**
  * GET /api/reading/audio/[articleId]?accent=us|uk|au
@@ -75,7 +76,23 @@ export async function GET(
     ? voiceParam
     : VOICES[accent];
 
+  const cacheKey = `${articleId}|${voice}`;
+
   try {
+    // Short-circuit: if we already have cached audio for this (article, voice),
+    // return it without fetching the article or calling Groq.
+    const cachedBuf = await readTtsCache("reading", cacheKey, "wav");
+    if (cachedBuf) {
+      console.log(`[Reading Audio] Cache HIT: articleId=${articleId}, voice=${voice}, ${cachedBuf.length} bytes`);
+      return new Response(new Uint8Array(cachedBuf), {
+        headers: {
+          "Content-Type": "audio/wav",
+          "Cache-Control": "public, max-age=604800",
+          "X-Tts-Cache": "hit",
+        },
+      });
+    }
+
     // Fetch article using shared util instead of internal fetch
     // This avoids Vercel deployment issues with nested relative API calls
     const article = await fetchGuardianArticle(decodeURIComponent(articleId));
@@ -122,10 +139,13 @@ export async function GET(
     const buf = concatWavBuffers(allParts);
     console.log(`[Reading Audio] Done in ${Date.now() - startMs}ms, ${buf.length} bytes`);
 
+    await writeTtsCache("reading", cacheKey, buf, "wav");
+
     return new Response(new Uint8Array(buf), {
       headers: {
         "Content-Type": "audio/wav",
         "Cache-Control": "public, max-age=604800",
+        "X-Tts-Cache": "miss",
       },
     });
   } catch (err) {
