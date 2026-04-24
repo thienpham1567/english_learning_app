@@ -58,7 +58,7 @@ export function FlashcardSession() {
       {!isImmersive && (
         <ModuleHeader
           icon={<BookOutlined />}
-          gradient="linear-gradient(135deg, var(--accent), var(--secondary))"
+          gradient="var(--gradient-flashcards)"
           title="Ôn tập từ vựng"
           subtitle="Spaced Repetition · Ghi nhớ lâu dài"
         />

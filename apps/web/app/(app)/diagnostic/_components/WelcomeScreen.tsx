@@ -38,7 +38,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
     >
       <ModuleHeader
         icon={<TrophyOutlined />}
-        gradient="linear-gradient(135deg, var(--accent), var(--secondary))"
+        gradient="var(--gradient-diagnostic)"
         title="Bài test xếp loại CEFR 📊"
         subtitle="Adaptive Placement Test · 30 câu hỏi thích ứng"
       />

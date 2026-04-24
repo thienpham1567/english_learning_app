@@ -202,7 +202,7 @@ export default function MockTestPage() {
       {/* Header */}
       <ModuleHeader
         icon={<FileSearchOutlined />}
-        gradient="linear-gradient(135deg, #c07a70, #D9A299)"
+        gradient="var(--gradient-mock-test)"
         title="Mini Mock Test"
         subtitle={`Thi thử ${modeLabel} — luyện tập dưới áp lực thời gian`}
         action={

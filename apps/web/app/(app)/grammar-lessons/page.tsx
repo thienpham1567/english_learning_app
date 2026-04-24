@@ -106,8 +106,8 @@ export default function GrammarLessonsPage() {
         icon={<BookOutlined />}
         gradient={
           examTab === "ielts"
-            ? "linear-gradient(135deg, #c07a70, #D9A299)"
-            : "linear-gradient(135deg, var(--accent), var(--secondary))"
+            ? "var(--gradient-grammar-ielts)"
+            : "var(--gradient-grammar)"
         }
         title={activeTopic ? activeTopic.title : "Ngữ pháp trọng tâm"}
         subtitle={

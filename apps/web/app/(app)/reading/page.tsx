@@ -83,7 +83,7 @@ export default function ReadingPage() {
         {/* Header */}
         <ModuleHeader
           icon={<ReadOutlined />}
-          gradient="linear-gradient(135deg, #DCC5B2, #C4A882)"
+          gradient="var(--gradient-reading)"
           title="Luyện đọc"
           subtitle="Đọc hiểu bài báo tiếng Anh từ The Guardian"
         />

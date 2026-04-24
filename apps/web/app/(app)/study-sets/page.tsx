@@ -29,7 +29,7 @@ export default function StudySetsPage() {
       {/* Header */}
       <ModuleHeader
         icon={<AppstoreOutlined />}
-        gradient="linear-gradient(135deg, #D9A299, #DCC5B2)"
+        gradient="var(--gradient-study-sets)"
         title={activeTopic ? activeTopic.title : "Học theo chủ đề"}
         subtitle={
           activeTopic

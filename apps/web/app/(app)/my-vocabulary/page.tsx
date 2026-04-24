@@ -253,7 +253,7 @@ export default function MyVocabularyPage() {
         {/* ── Page Header ── */}
         <ModuleHeader
           icon={<BookOutlined />}
-          gradient="linear-gradient(135deg, #DCC5B2, #D9A299)"
+          gradient="var(--gradient-vocabulary)"
           title="Từ vựng của tôi"
           subtitle="Lịch sử tra cứu và quản lý từ vựng"
           action={

@@ -89,7 +89,7 @@ export default function ListeningPage() {
       {/* Header */}
       <ModuleHeader
         icon={<SoundOutlined />}
-        gradient="linear-gradient(135deg, var(--accent), var(--secondary))"
+        gradient="var(--gradient-listening)"
         title={
           mode === "listening" ? "Luyện nghe 🎧" :
           mode === "shadowing" ? "Shadowing 🎯" :

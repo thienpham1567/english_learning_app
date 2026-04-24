@@ -65,7 +65,7 @@ export default function DailyChallengePage() {
       {/* Header */}
       <ModuleHeader
         icon={<FireOutlined />}
-        gradient="linear-gradient(135deg, var(--accent), var(--secondary))"
+        gradient="var(--gradient-daily)"
         title="Thử thách mỗi ngày 🔥"
         subtitle="Daily Challenge · 5 bài tập mỗi ngày"
         action={

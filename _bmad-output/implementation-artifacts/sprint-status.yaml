@@ -1,271 +1,214 @@
-currentSprint: R4
-last_updated: "2026-04-22"
+currentSprint: R17
+last_updated: "2026-04-24"
 
 storySequence:
-  - "18.1.1"
-  - "18.1.2"
-  - "18.2.1"
-  - "18.2.2"
-  - "18.3.1"
-  - "18.3.2"
-  - "18.3.3"
-  - "18.4.1"
-  - "18.4.2"
-  - "18.5.1"
-  - "18.5.2"
-  - "18.6.1"
-  - "18.6.2"
-  - "18.7.1"
-  - "18.7.2"
-  - "18.8.1"
-  - "18.8.2"
-  - "18.8.3"
-  - "18.9.1"
-  - "18.9.2"
-  - "18.10.1"
-  - "18.10.2"
-  - "18.10.3"
-  - "18.11.1"
-  - "18.11.2"
-  - "18.11.3"
-  - "18.12.1"
-  - "18.12.2"
-  - "18.13.1"
-  - "18.14.1"
-  - "17.8"
-  - "17.9"
-  - "17.10"
-  - "19.1.1"
-  - "19.1.2"
-  - "19.1.3"
-  - "19.1.4"
-  - "19.2.1"
-  - "19.2.2"
-  - "19.2.3"
-  - "19.2.4"
-  - "19.3.1"
-  - "19.3.2"
-  - "19.3.3"
-  - "19.3.4"
-  - "19.4.1"
-  - "19.4.2"
-  - "19.4.3"
-  - "19.4.4"
-  - "20.1"
-  - "20.2"
-  - "20.3"
-  - "20.4"
-  - "20.5"
-  - "20.6"
-  - "20.7"
-  - "20.8"
-  - "20.9"
-  - "20.10"
-  - "20.11"
-  - "20.12"
+  - "21.1"
+  - "21.2"
+  - "21.3"
+  - "21.4"
+  - "21.5"
+  - "22.1"
+  - "22.2"
+  - "22.3"
+  - "22.4"
+  - "22.5"
+  - "23.1"
+  - "23.2"
+  - "23.3"
+  - "23.4"
+  - "23.5"
+  - "24.1"
+  - "24.2"
+  - "24.3"
+  - "24.4"
+  - "24.5"
+  - "25.1"
+  - "25.2"
+  - "25.3"
+  - "25.4"
+  - "25.5"
+  - "26.1"
+  - "26.2"
+  - "26.3"
+  - "26.4"
+  - "26.5"
 sprints:
-  R1:
-    name: "Monorepo Scaffolding"
-    status: done
-    stories:
-      "17.1":
-        title: "Initialize pnpm Workspace + Turborepo"
-        status: done
-        estimate: "4h"
-      "17.2":
-        title: "Move Current App to apps/web/"
-        status: done
-        estimate: "6h"
-        risk: high
-      "17.3":
-        title: "Root Developer Experience Setup"
-        status: done
-        estimate: "2h"
-  R2:
-    name: "Shared Packages"
+  R17:
+    name: "Epic 21 - Adaptive Home Activation"
     status: in-progress
     stories:
-      "17.4":
-        title: "Create packages/shared"
-        status: done
+      "21.1":
+        title: "Audit Recommendation Routes"
+        status: ready-for-dev
         estimate: "3h"
-      "17.5":
-        title: "Create packages/contracts"
-        status: done
-        estimate: "3h"
-      "17.6":
-        title: "Create packages/database"
-        status: done
-        estimate: "5h"
         risk: medium
-      "17.7":
-        title: "Create packages/auth"
-        status: done
-        estimate: "3h"
-      "17.11":
-        title: "Migrate axios → fetch API client"
-        status: done
-        estimate: "3h"
-        depends_on: "17.4"
-  R3:
-    name: "Dashboard Module Extraction"
-    status: not_started
-    stories:
-      "17.8":
-        title: "Dashboard Query Service"
-        status: done
-        estimate: "3h"
-      "17.9":
-        title: "Dashboard Module (use case)"
-        status: done
-        estimate: "3h"
-      "17.10":
-        title: "Refactor Dashboard Route to Thin Adapter"
-        status: in-progress
-        estimate: "2h"
-  R9:
-    name: "Epic 19 - Speaking Core"
-    status: not_started
-    stories:
-      "19.1.1":
-        title: "Harden the Existing Whisper Transcribe Endpoint"
-        status: done
-      "19.1.2":
-        title: "Pronunciation Scoring (Phoneme-Level)"
-        status: done
-        depends_on: "19.1.1"
-      "19.1.3":
-        title: "Free-Talk Timer with AI Feedback"
-        status: done
-        depends_on: "19.1.1"
-      "19.1.4":
-        title: "Minimal Pairs Drill"
-        status: done
-        depends_on: "19.1.2"
-  R10:
-    name: "Epic 19 - Writing Core"
-    status: not_started
-    stories:
-      "19.2.1":
-        title: "IELTS/TOEFL Essay Scoring by Rubric"
-        status: done
-      "19.2.2":
-        title: "Sentence Rewriter"
-        status: done
-      "19.2.3":
-        title: "Guided Writing (Prompt + Outline + Vocab Bank)"
-        status: done
-        depends_on: "19.2.1"
-      "19.2.4":
-        title: "Error Pattern Auto-Quiz in Error Notebook"
-        status: done
-        depends_on: "19.2.1"
-  R11:
-    name: "Epic 19 - Listening Advanced"
-    status: not_started
-    stories:
-      "19.3.1":
-        title: "Multi-Speaker Dialogues"
-        status: review
-      "19.3.2":
-        title: "A-B Loop + Variable Speed"
-        status: review
-      "19.3.3":
-        title: "Listen-and-Summarize with AI Scoring"
-        status: done
-        depends_on: "19.2.1"
-      "19.3.4":
-        title: "Podcast/YouTube Import (Whisper)"
-        status: done
-        depends_on: "19.1.1"
-  R12:
-    name: "Epic 19 - Reading Advanced"
-    status: not_started
-    stories:
-      "19.4.1":
-        title: "CEFR-Graded Reader + Vocab Prioritization"
-        status: done
-      "19.4.2":
-        title: "Click-to-Define Inline + Save to Vocab"
-        status: review
-      "19.4.3":
-        title: "Extensive Reading Tracker"
-        status: review
-        depends_on: "19.4.2"
-      "19.4.4":
-        title: "Auto Cloze Test from Read Passage"
-        status: review
-        depends_on: "19.4.1"
-  R13:
-    name: "Epic 20 - Learning Signal Foundation"
-    status: not_started
-    stories:
-      "20.1":
-        title: "Define Learning Event Contract"
-        status: done
+      "21.2":
+        title: "Add Daily Plan Client Hook"
+        status: ready-for-dev
         estimate: "4h"
-      "20.2":
-        title: "Establish Unified Skill Taxonomy"
-        status: done
+        depends_on: "21.1"
+      "21.3":
+        title: "Replace Manual Home Plan With Adaptive Plan"
+        status: ready-for-dev
+        estimate: "6h"
+        depends_on: "21.2"
+      "21.4":
+        title: "Add Daily Session Start CTA"
+        status: ready-for-dev
         estimate: "4h"
-      "20.3":
-        title: "Persist Learning Events from High-Value Flows"
-        status: done
-        estimate: "8h"
-        depends_on: "20.1, 20.2"
-  R14:
-    name: "Epic 20 - Mastery and Daily Decisioning"
+        depends_on: "21.3"
+      "21.5":
+        title: "Track Daily Plan Completion State"
+        status: ready-for-dev
+        estimate: "6h"
+        depends_on: "21.3"
+        risk: medium
+  R18:
+    name: "Epic 22 - Unified Review Foundation"
     status: not_started
     stories:
-      "20.4":
-        title: "Build User Skill Mastery State"
-        status: done
+      "22.1":
+        title: "Add Due Review Task API Adapter"
+        status: ready-for-dev
+        estimate: "5h"
+        depends_on: "20.7, 20.8"
+      "22.2":
+        title: "Build Today's Review Hub"
+        status: ready-for-dev
+        estimate: "6h"
+        depends_on: "22.1"
+      "22.3":
+        title: "Implement Mixed Review Session Shell"
+        status: ready-for-dev
         estimate: "8h"
-        depends_on: "20.1, 20.2, 20.3"
-      "20.5":
-        title: "Implement Next-Best-Action Scoring"
-        status: done
+        depends_on: "22.2"
+        risk: high
+      "22.4":
+        title: "Close Review Outcome Loop From Unified Session"
+        status: ready-for-dev
+        estimate: "6h"
+        depends_on: "20.9, 22.3"
+        risk: medium
+      "22.5":
+        title: "Add Review Entry Points To Home And Sidebar"
+        status: ready-for-dev
+        estimate: "4h"
+        depends_on: "22.1"
+  R19:
+    name: "Epic 23 - Personal Error Remediation"
+    status: not_started
+    stories:
+      "23.1":
+        title: "Normalize Error Categories"
+        status: ready-for-dev
+        estimate: "5h"
+      "23.2":
+        title: "Add Error Pattern Summary"
+        status: ready-for-dev
+        estimate: "5h"
+        depends_on: "23.1"
+      "23.3":
+        title: "Generate Targeted Error Drills"
+        status: ready-for-dev
+        estimate: "8h"
+        depends_on: "23.1, 23.2"
+        risk: high
+      "23.4":
+        title: "Show Error Improvement Trend"
+        status: ready-for-dev
+        estimate: "6h"
+        depends_on: "23.1, 23.2"
+      "23.5":
+        title: "Connect Error Notebook To Daily Plan"
+        status: ready-for-dev
+        estimate: "6h"
+        depends_on: "21.3, 23.2"
+        risk: medium
+  R20:
+    name: "Epic 24 - Goals, Onboarding, And Starter Pathways"
+    status: not_started
+    stories:
+      "24.1":
+        title: "Build Goal And Time Budget Onboarding"
+        status: ready-for-dev
+        estimate: "6h"
+        depends_on: "20.12"
+      "24.2":
+        title: "Connect Diagnostic To Baseline Skill State"
+        status: ready-for-dev
+        estimate: "6h"
+        depends_on: "20.4, 20.12"
+      "24.3":
+        title: "Generate 7-Day Starter Pathway"
+        status: ready-for-dev
+        estimate: "8h"
+        depends_on: "24.1, 24.2"
+      "24.4":
+        title: "Add Pathway View To Home"
+        status: ready-for-dev
+        estimate: "5h"
+        depends_on: "21.3, 24.3"
+      "24.5":
+        title: "Replan After Goal Or Time Budget Changes"
+        status: ready-for-dev
+        estimate: "5h"
+        depends_on: "24.3"
+  R21:
+    name: "Epic 25 - Cross-Module Feedback And AI Coach"
+    status: not_started
+    stories:
+      "25.1":
+        title: "Define End-Of-Lesson Summary Contract"
+        status: ready-for-dev
+        estimate: "5h"
+      "25.2":
+        title: "Apply Summary Pattern To High-Value Modules"
+        status: ready-for-dev
+        estimate: "8h"
+        depends_on: "25.1"
+        risk: medium
+      "25.3":
+        title: "Persist Versioned AI Feedback Runs"
+        status: ready-for-dev
+        estimate: "6h"
+        depends_on: "20.10, 20.11"
+      "25.4":
+        title: "Add Coach Summary To Chatbot"
+        status: ready-for-dev
+        estimate: "6h"
+        depends_on: "21.3, 25.1"
+      "25.5":
+        title: "Capture Chat Corrections As Learning Signals"
+        status: ready-for-dev
+        estimate: "8h"
+        depends_on: "20.1, 20.2, 25.1"
+        risk: high
+  R22:
+    name: "Epic 26 - Progress Insights And Outcome Motivation"
+    status: not_started
+    stories:
+      "26.1":
+        title: "Build Skill Mastery Progress Panel"
+        status: ready-for-dev
         estimate: "6h"
         depends_on: "20.4"
-      "20.6":
-        title: "Generate Adaptive Daily Study Plan"
-        status: done
+      "26.2":
+        title: "Add Learner-Friendly Improvement Statements"
+        status: ready-for-dev
         estimate: "6h"
-        depends_on: "20.5"
-  R15:
-    name: "Epic 20 - Unified Review Loop"
-    status: not_started
-    stories:
-      "20.7":
-        title: "Define Unified Review Task Model"
-        status: done
+        depends_on: "23.4, 26.1"
+      "26.3":
+        title: "Add Review Debt And Memory Risk Insight"
+        status: ready-for-dev
+        estimate: "5h"
+        depends_on: "22.1, 26.1"
+      "26.4":
+        title: "Add Weekly Learning Retrospective"
+        status: ready-for-dev
         estimate: "6h"
-        depends_on: "20.2"
-      "20.8":
-        title: "Adapt Existing Producers into Review Queue"
-        status: done
-        estimate: "8h"
-        depends_on: "20.7"
-      "20.9":
-        title: "Close the Review Outcome Loop"
-        status: review
-        estimate: "8h"
-        depends_on: "20.4, 20.8"
-  R16:
-    name: "Epic 20 - Feedback Quality and Baseline Personalization"
-    status: not_started
-    stories:
-      "20.10":
-        title: "Version AI Feedback Templates and Rubrics"
-        status: done
-        estimate: "6h"
-      "20.11":
-        title: "Add Structured Feedback Quality Gates"
-        status: done
-        estimate: "8h"
-        depends_on: "20.10"
-      "20.12":
-        title: "Create Placement and Onboarding Baseline"
-        status: done
-        estimate: "8h"
-        depends_on: "20.4, 20.6"
+        depends_on: "26.1, 26.2, 26.3"
+      "26.5":
+        title: "Rebalance Motivation Widgets Around Learning Outcomes"
+        status: ready-for-dev
+        estimate: "5h"
+        depends_on: "21.3, 26.1"

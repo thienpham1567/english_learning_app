@@ -865,7 +865,7 @@ export default function ReviewQuizPage() {
     <div style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "hidden" }}>
       <ModuleHeader
         icon={<BulbOutlined />}
-        gradient="linear-gradient(135deg, var(--accent), var(--secondary))"
+        gradient="var(--gradient-review)"
         title="Ôn tập thông minh 🧠"
         subtitle="SRS — Hệ thống ôn tập lặp lại cách quãng"
       />

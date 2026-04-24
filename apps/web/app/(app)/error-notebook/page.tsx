@@ -130,7 +130,7 @@ export default function ErrorNotebookPage() {
       {/* Header */}
       <ModuleHeader
         icon={<BookOutlined />}
-        gradient="linear-gradient(135deg, #D9A299, #c07a70)"
+        gradient="var(--gradient-error-notebook)"
         title="Sổ lỗi sai"
         subtitle="Tổng hợp lỗi sai từ tất cả bài tập"
         action={

@@ -45,7 +45,7 @@ export default function WritingPracticePage() {
       {/* Header */}
       <ModuleHeader
         icon={<EditOutlined />}
-        gradient="linear-gradient(135deg, var(--accent), var(--secondary))"
+        gradient="var(--gradient-writing)"
         title="Luyện viết"
         subtitle="TOEIC Writing Practice · Chấm bài theo tiêu chí TOEIC"
       />

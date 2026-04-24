@@ -77,6 +77,23 @@
   --module-review: #f59e0b;
   --module-assessment: #3b82f6;
 
+  /* ── Per-module Header Gradients ── */
+  --gradient-listening: linear-gradient(135deg, #C4A882, #D9A299);
+  --gradient-reading: linear-gradient(135deg, #DCC5B2, #C4A882);
+  --gradient-writing: linear-gradient(135deg, #c07a70, #D9A299);
+  --gradient-pronunciation: linear-gradient(135deg, #D9A299, #DCC5B2);
+  --gradient-grammar: linear-gradient(135deg, #B8967A, #DCC5B2);
+  --gradient-grammar-ielts: linear-gradient(135deg, #c07a70, #D9A299);
+  --gradient-grammar-quiz: linear-gradient(135deg, #D9A299, #B8967A);
+  --gradient-flashcards: linear-gradient(135deg, #DCC5B2, #E8D5C4);
+  --gradient-review: linear-gradient(135deg, #c07a70, #C4A882);
+  --gradient-daily: linear-gradient(135deg, #D9A299, #c07a70);
+  --gradient-vocabulary: linear-gradient(135deg, #C4A882, #DCC5B2);
+  --gradient-mock-test: linear-gradient(135deg, #8B6F5E, #c07a70);
+  --gradient-study-sets: linear-gradient(135deg, #E8D5C4, #DCC5B2);
+  --gradient-error-notebook: linear-gradient(135deg, #c07a70, #9B6B63);
+  --gradient-diagnostic: linear-gradient(135deg, #9B6B63, #D9A299);
+
   /* ── Heatmap Colors ── */
   --heatmap-0: rgba(0, 0, 0, 0.06);
   --heatmap-1: #f0e4d3;
@@ -176,6 +193,23 @@
   --heatmap-2: #5e4a42;
   --heatmap-3: #c07a70;
   --heatmap-4: #D9A299;
+
+  /* ── Per-module Header Gradients (Dark) ── */
+  --gradient-listening: linear-gradient(135deg, #B8967A, #c07a70);
+  --gradient-reading: linear-gradient(135deg, #C4A882, #B8967A);
+  --gradient-writing: linear-gradient(135deg, #9B6B63, #c07a70);
+  --gradient-pronunciation: linear-gradient(135deg, #c07a70, #C4A882);
+  --gradient-grammar: linear-gradient(135deg, #9B6B63, #C4A882);
+  --gradient-grammar-ielts: linear-gradient(135deg, #9B6B63, #c07a70);
+  --gradient-grammar-quiz: linear-gradient(135deg, #c07a70, #9B6B63);
+  --gradient-flashcards: linear-gradient(135deg, #C4A882, #DCC5B2);
+  --gradient-review: linear-gradient(135deg, #9B6B63, #B8967A);
+  --gradient-daily: linear-gradient(135deg, #c07a70, #9B6B63);
+  --gradient-vocabulary: linear-gradient(135deg, #B8967A, #C4A882);
+  --gradient-mock-test: linear-gradient(135deg, #6B5549, #9B6B63);
+  --gradient-study-sets: linear-gradient(135deg, #DCC5B2, #C4A882);
+  --gradient-error-notebook: linear-gradient(135deg, #9B6B63, #7A5550);
+  --gradient-diagnostic: linear-gradient(135deg, #7A5550, #c07a70);
 
   /* ── Extended Shadows (Dark) ── */
   --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.55), 0 8px 24px rgba(0, 0, 0, 0.3);

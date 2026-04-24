@@ -150,7 +150,7 @@ export default function ListeningImportPage() {
         </Button>
         <ModuleHeader
           icon={<LinkOutlined />}
-          gradient="linear-gradient(135deg, var(--module-listening), var(--accent))"
+          gradient="var(--gradient-listening)"
           title="Import Podcast / YouTube"
           subtitle="Dán URL → Whisper chuyển thành bài nghe + từ vựng + quiz"
         />
