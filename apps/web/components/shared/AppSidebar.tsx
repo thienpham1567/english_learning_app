@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Badge, Tooltip } from "antd";
+import { Logo } from "@/components/shared/Logo";
 import {
   HomeOutlined,
   CommentOutlined,
@@ -197,14 +198,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
         {isExpanded ? (
           <>
             <div style={{ flexShrink: 0 }}>
-              <Image
-                src="/english-logo-app.svg"
-                alt="Thien English"
-                width={250}
-                height={150}
-                style={{ height: 40, width: "auto", borderRadius: 8 }}
-                priority
-              />
+              <Logo collapsed={!isExpanded} />
             </div>
             <button
               onClick={onToggle}
