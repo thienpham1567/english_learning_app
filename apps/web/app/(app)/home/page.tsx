@@ -92,6 +92,11 @@ export default function HomePage() {
   // F3 fix: All hooks must be called before any early returns (Rules of Hooks)
   const [weakSkill, setWeakSkill] = useState<{ module: string; cefr: string } | null>(null);
   const [dailyActivity, setDailyActivity] = useState<Array<{ date: string; count: number }> | null>(null);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   const isReady = state.status === "ready";
   const data = isReady ? state.data : null;
@@ -127,7 +132,7 @@ export default function HomePage() {
   }, [isReady, isNewUser]);
 
   // ── Loading state ──
-  if (state.status === "loading") {
+  if (!mounted || state.status === "loading") {
     return (
       <Flex align="center" justify="center" style={{ height: "100%", flexDirection: "column", gap: "var(--space-4)" }}>
         <Spin size="large" />
