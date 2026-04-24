@@ -246,7 +246,7 @@ export function GuidedWritingPanel() {
             onClick={() => generatePrompt()}
             style={{
               padding: "12px 32px", borderRadius: 10, border: "none",
-              background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 15,
+              background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 15,
               fontWeight: 600, cursor: "pointer", alignSelf: "center",
             }}
           >
@@ -396,7 +396,7 @@ export function GuidedWritingPanel() {
             style={{
               padding: "12px 32px", borderRadius: 10, border: "none",
               background: wordCount < 150 || state === "scoring" ? "var(--border)" : "var(--accent)",
-              color: "var(--text-on-accent, #fff)", fontSize: 15, fontWeight: 600,
+              color: "var(--text-on-accent)", fontSize: 15, fontWeight: 600,
               cursor: wordCount < 150 || state === "scoring" ? "not-allowed" : "pointer",
               alignSelf: "center",
               display: "flex", alignItems: "center", gap: 8,
@@ -527,7 +527,7 @@ export function GuidedWritingPanel() {
               onClick={() => { setState("setup"); setGuided(null); setEssayText(""); setScoreResult(null); }}
               style={{
                 padding: "10px 24px", borderRadius: 8, border: "none",
-                background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14,
+                background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 14,
                 fontWeight: 600, cursor: "pointer",
               }}
             >

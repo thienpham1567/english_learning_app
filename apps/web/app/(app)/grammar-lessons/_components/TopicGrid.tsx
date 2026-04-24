@@ -156,9 +156,9 @@ export function TopicGrid({
                   placeItems: "center",
                   borderRadius: 14,
                   background: allDone
-                    ? "linear-gradient(135deg, var(--success), color-mix(in srgb, var(--success) 75%, #047857))"
+                    ? "linear-gradient(135deg, var(--success), color-mix(in srgb, var(--success) 75%, black))"
                     : `linear-gradient(135deg, ${cat.color}, color-mix(in srgb, ${cat.color} 75%, black))`,
-                  color: "var(--text-on-accent, #fff)",
+                  color: "var(--text-on-accent)",
                   fontSize: 22,
                   flexShrink: 0,
                   boxShadow: `0 4px 12px color-mix(in srgb, ${cat.color} 25%, transparent)`,
@@ -210,7 +210,7 @@ export function TopicGrid({
                         height: "100%",
                         borderRadius: 99,
                         background: allDone
-                          ? "linear-gradient(90deg, var(--success), color-mix(in srgb, var(--success) 65%, #34d399))"
+                          ? "linear-gradient(90deg, var(--success), color-mix(in srgb, var(--success) 65%, white))"
                           : `linear-gradient(90deg, ${cat.color}, color-mix(in srgb, ${cat.color} 65%, white))`,
                         transform: `scaleX(${progressPct / 100})`,
                         transformOrigin: "left",
@@ -302,7 +302,7 @@ export function TopicGrid({
                           placeItems: "center",
                           flexShrink: 0,
                           background: isDone ? cat.color : "var(--border)",
-                          color: isDone ? "var(--text-on-accent, #fff)" : "var(--text-muted)",
+                          color: isDone ? "var(--text-on-accent)" : "var(--text-muted)",
                           fontSize: isDone ? 14 : 12,
                           fontWeight: 700,
                           transition: "background 0.2s, transform 0.2s",

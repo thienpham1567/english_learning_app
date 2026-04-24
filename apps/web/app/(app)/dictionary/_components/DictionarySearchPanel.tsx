@@ -157,7 +157,7 @@ export function DictionarySearchPanel({
               cursor: "pointer",
               transition: "background 0.2s, color 0.2s",
               background: showTips ? "var(--accent)" : "transparent",
-              color: showTips ? "#fff" : "var(--text-muted)",
+              color: showTips ? "var(--text-on-accent)" : "var(--text-muted)",
             }}
             aria-label="Mẹo sử dụng"
           >
@@ -332,7 +332,7 @@ export function DictionarySearchPanel({
             padding: "10px 0",
             fontSize: 14,
             fontWeight: 600,
-            color: "#fff",
+            color: "var(--text-on-accent)",
             border: "none",
             cursor: isLoading ? "not-allowed" : "pointer",
             opacity: isLoading ? 0.5 : 1,

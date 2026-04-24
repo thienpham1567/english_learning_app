@@ -82,7 +82,7 @@ function InlineQuiz({ items, errorLogIds, onDone }: { items: QuizItem[]; errorLo
           onClick={() => onDone(answers)}
           style={{
             marginTop: 8, padding: "8px 20px", borderRadius: 8, border: "none",
-            background: "var(--accent)", color: "#fff", fontSize: 13, fontWeight: 600, cursor: "pointer",
+            background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 13, fontWeight: 600, cursor: "pointer",
           }}
         >
           Xong
@@ -144,7 +144,7 @@ function InlineQuiz({ items, errorLogIds, onDone }: { items: QuizItem[]; errorLo
           onClick={handleNext}
           style={{
             padding: "8px 20px", borderRadius: 8, border: "none", alignSelf: "flex-end",
-            background: "var(--accent)", color: "#fff", fontSize: 13, fontWeight: 600, cursor: "pointer",
+            background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 13, fontWeight: 600, cursor: "pointer",
           }}
         >
           {current + 1 < items.length ? "Câu tiếp →" : "Xem kết quả"}

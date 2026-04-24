@@ -222,8 +222,8 @@ export default function MockTestPage() {
             style={{
               padding: "10px 16px",
               borderRadius: 8,
-              background: "var(--error-bg, #fff2f0)",
-              color: "var(--error, #ff4d4f)",
+              background: "var(--error-bg)",
+              color: "var(--error)",
               marginBottom: 16,
               fontSize: 13,
             }}
@@ -284,7 +284,7 @@ export default function MockTestPage() {
                 borderRadius: 10,
                 border: "none",
                 background: "var(--accent)",
-                color: "#fff",
+                color: "var(--text-on-accent)",
                 fontSize: 15,
                 fontWeight: 600,
                 cursor: "pointer",
@@ -323,7 +323,7 @@ export default function MockTestPage() {
               <ClockCircleOutlined
                 style={{
                   fontSize: 16,
-                  color: timeLeft < 60 ? "#ff4d4f" : "var(--text-secondary)",
+                  color: timeLeft < 60 ? "var(--error)" : "var(--text-secondary)",
                 }}
               />
               <span
@@ -331,7 +331,7 @@ export default function MockTestPage() {
                   fontSize: 16,
                   fontWeight: 600,
                   fontVariantNumeric: "tabular-nums",
-                  color: timeLeft < 60 ? "#ff4d4f" : "var(--text)",
+                  color: timeLeft < 60 ? "var(--error)" : "var(--text)",
                 }}
               >
                 {formatTime(timeLeft)}
@@ -370,7 +370,7 @@ export default function MockTestPage() {
                 padding: 20,
                 borderRadius: 14,
                 background: "var(--card-bg)",
-                border: flagged.has(currentIdx) ? "2px solid #faad14" : "1px solid var(--border)",
+                border: flagged.has(currentIdx) ? "2px solid var(--warning)" : "1px solid var(--border)",
               }}
             >
               {/* Question header */}
@@ -392,7 +392,7 @@ export default function MockTestPage() {
                       border: "none",
                       background: "none",
                       cursor: "pointer",
-                      color: flagged.has(currentIdx) ? "#faad14" : "var(--text-secondary)",
+                      color: flagged.has(currentIdx) ? "var(--warning)" : "var(--text-secondary)",
                       fontSize: 16,
                     }}
                     aria-label="Đánh dấu câu hỏi"
@@ -408,7 +408,7 @@ export default function MockTestPage() {
                   style={{
                     padding: 12,
                     borderRadius: 8,
-                    background: "var(--bg-secondary, #f5f5f5)",
+                    background: "var(--bg-secondary)",
                     marginBottom: 12,
                     fontSize: 13,
                     lineHeight: 1.6,
@@ -484,7 +484,7 @@ export default function MockTestPage() {
                   borderRadius: 8,
                   border: "1px solid var(--border)",
                   background: "transparent",
-                  color: currentIdx === 0 ? "var(--text-disabled, #ccc)" : "var(--text)",
+                  color: currentIdx === 0 ? "var(--text-disabled)" : "var(--text)",
                   cursor: currentIdx === 0 ? "not-allowed" : "pointer",
                   fontSize: 13,
                 }}
@@ -504,7 +504,7 @@ export default function MockTestPage() {
                       borderRadius: 4,
                       border: i === currentIdx ? "2px solid var(--accent)" : "1px solid var(--border)",
                       background:
-                        flagged.has(i) ? "#faad1433" :
+                        flagged.has(i) ? "var(--warning-bg)" :
                         answers[i] !== null || (fillBlankInputs[i]?.trim()) ? "var(--accent-muted)" :
                         "transparent",
                       color: i === currentIdx ? "var(--accent)" : "var(--text-secondary)",
@@ -542,7 +542,7 @@ export default function MockTestPage() {
                     borderRadius: 8,
                     border: "none",
                     background: "var(--accent)",
-                    color: "#fff",
+                    color: "var(--text-on-accent)",
                     cursor: "pointer",
                     fontSize: 13,
                     fontWeight: 600,
@@ -572,7 +572,7 @@ export default function MockTestPage() {
                 type="circle"
                 percent={percentage}
                 size={120}
-                strokeColor={percentage >= 80 ? "#52c41a" : percentage >= 50 ? "#faad14" : "#ff4d4f"}
+                strokeColor={percentage >= 80 ? "var(--success)" : percentage >= 50 ? "var(--warning)" : "var(--error)"}
                 format={() => (
                   <div>
                     <div style={{ fontSize: 28, fontWeight: 700 }}>{score}/{questions.length}</div>
@@ -599,7 +599,7 @@ export default function MockTestPage() {
                   borderRadius: 8,
                   border: "none",
                   background: "var(--accent)",
-                  color: "#fff",
+                  color: "var(--text-on-accent)",
                   fontSize: 14,
                   fontWeight: 600,
                   cursor: "pointer",
@@ -636,19 +636,19 @@ export default function MockTestPage() {
                     style={{
                       padding: 16,
                       borderRadius: 12,
-                      border: `1px solid ${correct ? "#52c41a44" : "#ff4d4f44"}`,
+                      border: `1px solid ${correct ? "color-mix(in srgb, var(--success) 27%, transparent)" : "color-mix(in srgb, var(--error) 27%, transparent)"}`,
                       background: "var(--card-bg)",
                     }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                       {correct ? (
-                        <CheckCircleOutlined style={{ color: "#52c41a" }} />
+                        <CheckCircleOutlined style={{ color: "var(--success)" }} />
                       ) : (
-                        <CloseCircleOutlined style={{ color: "#ff4d4f" }} />
+                        <CloseCircleOutlined style={{ color: "var(--error)" }} />
                       )}
                       <span style={{ fontSize: 13, fontWeight: 600 }}>Câu {i + 1}</span>
                       <Tag color="blue" style={{ fontSize: 10 }}>{q.topic}</Tag>
-                      {flagged.has(i) && <FlagOutlined style={{ color: "#faad14" }} />}
+                      {flagged.has(i) && <FlagOutlined style={{ color: "var(--warning)" }} />}
                     </div>
 
                     <p style={{ fontSize: 13, margin: "0 0 8px" }}>{q.stem}</p>
@@ -665,13 +665,13 @@ export default function MockTestPage() {
                                 padding: "6px 10px",
                                 borderRadius: 6,
                                 fontSize: 13,
-                                background: isCorrectOpt ? "#52c41a11" : isUserAnswer && !isCorrectOpt ? "#ff4d4f11" : "transparent",
-                                border: isCorrectOpt ? "1px solid #52c41a44" : isUserAnswer ? "1px solid #ff4d4f44" : "1px solid transparent",
+                                background: isCorrectOpt ? "color-mix(in srgb, var(--success) 7%, transparent)" : isUserAnswer && !isCorrectOpt ? "color-mix(in srgb, var(--error) 7%, transparent)" : "transparent",
+                                border: isCorrectOpt ? "1px solid color-mix(in srgb, var(--success) 27%, transparent)" : isUserAnswer ? "1px solid color-mix(in srgb, var(--error) 27%, transparent)" : "1px solid transparent",
                                 color: "var(--text)",
                               }}
                             >
-                              {isCorrectOpt && <CheckCircleOutlined style={{ color: "#52c41a", marginRight: 4 }} />}
-                              {isUserAnswer && !isCorrectOpt && <CloseCircleOutlined style={{ color: "#ff4d4f", marginRight: 4 }} />}
+                              {isCorrectOpt && <CheckCircleOutlined style={{ color: "var(--success)", marginRight: 4 }} />}
+                              {isUserAnswer && !isCorrectOpt && <CloseCircleOutlined style={{ color: "var(--error)", marginRight: 4 }} />}
                               {String.fromCharCode(65 + oi)}. {opt}
                             </div>
                           );
@@ -683,11 +683,11 @@ export default function MockTestPage() {
                     {(q.type === "fill-blank" || q.type === "fill_blank") && !q.options && (
                       <div style={{ fontSize: 13, marginBottom: 8 }}>
                         <span>Bạn trả lời: </span>
-                        <strong style={{ color: correct ? "#52c41a" : "#ff4d4f" }}>
+                        <strong style={{ color: correct ? "var(--success)" : "var(--error)" }}>
                           {fillBlankInputs[i]?.trim() || "(không trả lời)"}
                         </strong>
                         {!correct && (
-                          <span> → Đáp án: <strong style={{ color: "#52c41a" }}>{q.correctAnswer}</strong></span>
+                          <span> → Đáp án: <strong style={{ color: "var(--success)" }}>{q.correctAnswer}</strong></span>
                         )}
                       </div>
                     )}

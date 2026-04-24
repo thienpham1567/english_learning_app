@@ -112,19 +112,19 @@ export default function GradedReaderPage() {
               background: "rgba(255,255,255,0.2)", display: "flex",
               alignItems: "center", justifyContent: "center",
             }}>
-              <BookOutlined style={{ fontSize: 24, color: "var(--text-on-accent, #fff)" }} />
+              <BookOutlined style={{ fontSize: 24, color: "var(--text-on-accent)" }} />
             </div>
             <div>
               <Text style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.7)" }}>
                 GRADED READER
               </Text>
-              <Title level={4} style={{ margin: 0, color: "var(--text-on-accent, #fff)", fontFamily: "var(--font-display)", fontStyle: "italic" }}>
+              <Title level={4} style={{ margin: 0, color: "var(--text-on-accent)", fontFamily: "var(--font-display)", fontStyle: "italic" }}>
                 Đọc theo cấp độ CEFR
               </Title>
             </div>
             {passages.length > 0 && (
               <div style={{ marginLeft: "auto", textAlign: "center" }}>
-                <Text style={{ fontSize: 22, fontWeight: 700, color: "var(--text-on-accent, #fff)" }}>{readCount}/{passages.length}</Text>
+                <Text style={{ fontSize: 22, fontWeight: 700, color: "var(--text-on-accent)" }}>{readCount}/{passages.length}</Text>
                 <br />
                 <Text style={{ fontSize: 11, color: "rgba(255,255,255,0.7)" }}>đã đọc</Text>
               </div>
@@ -148,7 +148,7 @@ export default function GradedReaderPage() {
                     borderRadius: 20,
                     border: active ? `2px solid ${color}` : "1px solid var(--border)",
                     background: active ? color : "transparent",
-                    color: active ? "var(--text-on-accent, #fff)" : "var(--text-secondary)",
+                    color: active ? "var(--text-on-accent)" : "var(--text-secondary)",
                     fontSize: 12,
                     fontWeight: 600,
                     cursor: "pointer",
@@ -214,7 +214,7 @@ export default function GradedReaderPage() {
                         style={{
                           margin: 0, fontSize: 10, fontWeight: 700, borderRadius: 6,
                           background: LEVEL_COLORS[p.cefrLevel] || undefined,
-                          color: LEVEL_COLORS[p.cefrLevel] ? "var(--text-on-accent, #fff)" : undefined,
+                          color: LEVEL_COLORS[p.cefrLevel] ? "var(--text-on-accent)" : undefined,
                           border: "none",
                         }}
                       >

@@ -319,7 +319,7 @@ export default function ArticleReaderPage() {
               ...(audioState === "playing" ? {
                 background: "linear-gradient(135deg, var(--accent), var(--secondary))",
                 borderColor: "transparent",
-                color: "#fff",
+                color: "var(--text-on-accent)",
               } : {}),
             }}
           >
@@ -421,7 +421,7 @@ export default function ArticleReaderPage() {
                     background: grammarResults[idx]?.length
                       ? "linear-gradient(135deg, var(--accent), var(--secondary))"
                       : "var(--border)",
-                    color: grammarResults[idx]?.length ? "#fff" : "var(--text-muted)",
+                    color: grammarResults[idx]?.length ? "var(--text-on-accent)" : "var(--text-muted)",
                     fontSize: 11,
                   }}
                   title={grammarResults[idx]?.length ? `${grammarResults[idx].length} grammar patterns — click to view` : "Phân tích ngữ pháp"}
@@ -450,7 +450,7 @@ export default function ArticleReaderPage() {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                color: "#fff",
+                color: "var(--text-on-accent)",
                 marginTop: 4,
                 marginRight: 4,
                 transition: "background 0.2s",
@@ -478,19 +478,19 @@ export default function ArticleReaderPage() {
                 style={{
                   background: "linear-gradient(135deg, var(--accent), var(--secondary))",
                   padding: "20px 24px",
-                  color: "#fff",
+                  color: "var(--text-on-accent)",
                 }}
               >
                 <Flex align="center" gap={8}>
                   <BulbOutlined style={{ fontSize: 18 }} />
-                  <Text strong style={{ fontSize: 16, color: "#fff" }}>
+                  <Text strong style={{ fontSize: 16, color: "var(--text-on-accent)" }}>
                     Grammar Patterns
                   </Text>
                   <Tag
                     style={{
                       background: "rgba(255,255,255,0.2)",
                       border: "none",
-                      color: "#fff",
+                      color: "var(--text-on-accent)",
                       fontSize: 11,
                       borderRadius: 12,
                     }}
@@ -555,16 +555,16 @@ export default function ArticleReaderPage() {
             background: "linear-gradient(135deg, var(--accent), var(--secondary))",
           }}
         >
-          <Flex align="center" justify="center" gap={24} style={{ color: "var(--text-on-accent, #fff)" }}>
+          <Flex align="center" justify="center" gap={24} style={{ color: "var(--text-on-accent)" }}>
             <Flex align="center" gap={6}>
               <BookOutlined />
-              <Text style={{ color: "var(--text-on-accent, #fff)", fontSize: 14 }}>
+              <Text style={{ color: "var(--text-on-accent)", fontSize: 14 }}>
                 {wordsLookedUp} từ đã tra
               </Text>
             </Flex>
             <Flex align="center" gap={6}>
               <SaveOutlined />
-              <Text style={{ color: "var(--text-on-accent, #fff)", fontSize: 14 }}>
+              <Text style={{ color: "var(--text-on-accent)", fontSize: 14 }}>
                 {savedWords.size} từ đã lưu
               </Text>
             </Flex>

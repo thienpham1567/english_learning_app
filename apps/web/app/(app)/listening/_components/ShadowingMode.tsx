@@ -197,7 +197,7 @@ export default function ShadowingMode({ examMode }: Props) {
           <p style={{ color: "var(--text-secondary)", margin: "0 0 24px", fontSize: 12 }}>
             5 câu mỗi phiên · AI đánh giá chi tiết · +25 XP
           </p>
-          <button onClick={startSession} style={{ padding: "12px 32px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
+          <button onClick={startSession} style={{ padding: "12px 32px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
             Bắt đầu Shadowing
           </button>
         </div>
@@ -258,7 +258,7 @@ export default function ShadowingMode({ examMode }: Props) {
           <div style={{ textAlign: "center" }}>
             {state === "ready" && (
               <>
-                <button onClick={startRecording} style={{ width: 80, height: 80, borderRadius: "50%", border: "none", background: "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 70%, white))", color: "var(--text-on-accent, #fff)", fontSize: 28, cursor: "pointer", boxShadow: "0 4px 16px color-mix(in srgb, var(--error) 30%, transparent)" }} aria-label="Ghi âm">
+                <button onClick={startRecording} style={{ width: 80, height: 80, borderRadius: "50%", border: "none", background: "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 70%, white))", color: "var(--text-on-accent)", fontSize: 28, cursor: "pointer", boxShadow: "0 4px 16px color-mix(in srgb, var(--error) 30%, transparent)" }} aria-label="Ghi âm">
                   <AudioOutlined />
                 </button>
                 <p style={{ fontSize: 12, color: "var(--text-secondary)", marginTop: 8 }}>Nhấn nút để ghi âm</p>
@@ -334,7 +334,7 @@ export default function ShadowingMode({ examMode }: Props) {
             <button onClick={retryCurrent} style={{ padding: "10px 20px", borderRadius: 8, border: "1px solid var(--border)", background: "transparent", color: "var(--text)", cursor: "pointer", fontSize: 13, fontWeight: 500 }}>
               <ReloadOutlined /> Thử lại
             </button>
-            <button onClick={nextSentence} style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
+            <button onClick={nextSentence} style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
               {currentIdx < sentences.length - 1 ? <>Câu tiếp <RightOutlined /></> : <>Hoàn thành <CheckCircleOutlined /></>}
             </button>
           </div>
@@ -368,7 +368,7 @@ export default function ShadowingMode({ examMode }: Props) {
               </Tag>
             ))}
           </div>
-          <button onClick={startSession} style={{ padding: "10px 24px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+          <button onClick={startSession} style={{ padding: "10px 24px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
             <ReloadOutlined /> Luyện tiếp
           </button>
         </div>

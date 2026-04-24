@@ -73,7 +73,7 @@ export function QuizHistory({ open, onClose }: Props) {
         <Flex vertical gap={8}>
           {history.map((entry, i) => {
             const pct = entry.total > 0 ? Math.round((entry.score / entry.total) * 100) : 0;
-            const levelInfo = LEVEL_LABELS[entry.level] ?? { label: entry.level, color: "#999" };
+            const levelInfo = LEVEL_LABELS[entry.level] ?? { label: entry.level, color: "var(--text-muted)" };
             return (
               <div
                 key={`${entry.date}-${i}`}

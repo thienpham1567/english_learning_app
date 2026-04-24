@@ -48,7 +48,7 @@ export function ModuleHero({
             height: 48,
             borderRadius: "var(--radius-lg)",
             background: tone,
-            color: "#fff",
+            color: "var(--text-on-accent)",
             flexShrink: 0,
             fontSize: 22,
           }}

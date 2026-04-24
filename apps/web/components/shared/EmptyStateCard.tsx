@@ -77,7 +77,7 @@ export function EmptyStateCard({
           onClick={onCtaClick}
           style={{
             background: "var(--accent)",
-            color: "#fff",
+            color: "var(--text-on-accent)",
             border: "none",
             borderRadius: "var(--radius)",
             padding: "var(--space-2) var(--space-6)",

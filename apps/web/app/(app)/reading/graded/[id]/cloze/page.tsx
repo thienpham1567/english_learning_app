@@ -134,17 +134,17 @@ export default function ClozeTestPage() {
               background: "rgba(255,255,255,0.2)", display: "flex",
               alignItems: "center", justifyContent: "center",
             }}>
-              <EditOutlined style={{ fontSize: 22, color: "var(--text-on-accent, #fff)" }} />
+              <EditOutlined style={{ fontSize: 22, color: "var(--text-on-accent)" }} />
             </div>
             <div>
               <Text style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(255,255,255,0.7)" }}>
                 CLOZE TEST
               </Text>
-              <Title level={4} style={{ margin: 0, color: "var(--text-on-accent, #fff)", fontFamily: "var(--font-display)", fontStyle: "italic" }}>
+              <Title level={4} style={{ margin: 0, color: "var(--text-on-accent)", fontFamily: "var(--font-display)", fontStyle: "italic" }}>
                 Điền từ vào chỗ trống
               </Title>
             </div>
-            <Tag style={{ marginLeft: "auto", borderRadius: 10, border: "none", background: "rgba(255,255,255,0.2)", color: "var(--text-on-accent, #fff)", fontWeight: 700, fontSize: 13, padding: "4px 14px" }}>
+            <Tag style={{ marginLeft: "auto", borderRadius: 10, border: "none", background: "rgba(255,255,255,0.2)", color: "var(--text-on-accent)", fontWeight: 700, fontSize: 13, padding: "4px 14px" }}>
               {totalCount} câu
             </Tag>
           </Flex>
@@ -156,14 +156,14 @@ export default function ClozeTestPage() {
             style={{
               borderRadius: 20, textAlign: "center",
               border: `2px solid ${score >= 80 ? "var(--success)" : score >= 50 ? "var(--warning)" : "var(--error)"}`,
-              background: score >= 80 ? "color-mix(in srgb, var(--success) 3%, transparent)" : score >= 50 ? "#faad1408" : "var(--error)08",
+              background: score >= 80 ? "color-mix(in srgb, var(--success) 3%, transparent)" : score >= 50 ? "color-mix(in srgb, var(--warning) 3%, transparent)" : "color-mix(in srgb, var(--error) 3%, transparent)",
             }}
             styles={{ body: { padding: "24px" } }}
           >
             <div style={{
               width: 56, height: 56, borderRadius: 16, margin: "0 auto 12px",
               display: "flex", alignItems: "center", justifyContent: "center",
-              background: score >= 80 ? "color-mix(in srgb, var(--success) 12%, transparent)" : score >= 50 ? "#faad1420" : "var(--error)20",
+              background: score >= 80 ? "color-mix(in srgb, var(--success) 12%, transparent)" : score >= 50 ? "color-mix(in srgb, var(--warning) 12%, transparent)" : "color-mix(in srgb, var(--error) 12%, transparent)",
             }}>
               {score >= 80
                 ? <TrophyFilled style={{ fontSize: 28, color: "var(--success)" }} />

@@ -101,7 +101,7 @@ export function QuestionCard({
               padding: "6px 16px",
               fontSize: 14,
               fontWeight: 700,
-              color: "#fff",
+              color: "var(--text-on-accent)",
               boxShadow: "0 2px 12px color-mix(in srgb, var(--xp) 35%, transparent)",
             }}
           >
@@ -309,7 +309,7 @@ export function QuestionCard({
                           border: "none",
                           cursor: "pointer",
                           background: lang === l ? "var(--accent-hover)" : "color-mix(in srgb, var(--warning) 6%, var(--surface))",
-                          color: lang === l ? "#fff" : "var(--warning)",
+                          color: lang === l ? "var(--text-on-accent)" : "var(--warning)",
                         }}
                       >
                         {l === "vi" ? "VN" : "EN"}
@@ -368,7 +368,7 @@ export function QuestionCard({
               padding: "12px 0",
               fontSize: 14,
               fontWeight: 600,
-              color: "#fff",
+              color: "var(--text-on-accent)",
               border: "none",
               boxShadow: "var(--shadow-sm)",
               cursor: "pointer",

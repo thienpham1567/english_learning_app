@@ -199,7 +199,7 @@ export function ExamWordLists({ onSelect }: Props) {
               cursor: "pointer",
               transition: "all 0.2s",
               background: activeTab === tab ? "var(--accent)" : "transparent",
-              color: activeTab === tab ? "#fff" : "var(--text-muted)",
+              color: activeTab === tab ? "var(--text-on-accent)" : "var(--text-muted)",
             }}
           >
             {tab}
@@ -253,7 +253,7 @@ export function ExamWordLists({ onSelect }: Props) {
                       padding: "1px 8px",
                       borderRadius: 999,
                       background: isExpanded ? "var(--accent)" : "var(--bg-deep)",
-                      color: isExpanded ? "#fff" : "var(--text-muted)",
+                      color: isExpanded ? "var(--text-on-accent)" : "var(--text-muted)",
                     }}
                   >
                     {cat.words.length}

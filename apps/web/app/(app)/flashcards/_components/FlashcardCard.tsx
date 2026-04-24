@@ -198,7 +198,7 @@ function RatingButtons({
             borderRadius: "var(--radius)",
             background: r.bg,
             padding: "12px 16px",
-            color: "#fff",
+            color: "var(--text-on-accent)",
             boxShadow: "var(--shadow-sm)",
             border: "none",
           }}

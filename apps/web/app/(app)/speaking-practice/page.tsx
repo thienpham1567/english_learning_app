@@ -322,7 +322,7 @@ export default function SpeakingPracticePage() {
                 onClick={generateTopic}
                 style={{
                   padding: "10px 24px", borderRadius: 8, border: "none",
-                  background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14,
+                  background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 14,
                   fontWeight: 600, cursor: "pointer",
                 }}
               >
@@ -383,7 +383,7 @@ export default function SpeakingPracticePage() {
               </div>
             </div>
 
-            <button onClick={generateTopic} style={{ padding: "12px 32px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
+            <button onClick={generateTopic} style={{ padding: "12px 32px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
               Bắt đầu luyện nói
             </button>
           </div>
@@ -446,7 +446,7 @@ export default function SpeakingPracticePage() {
                     style={{
                       width: 80, height: 80, borderRadius: "50%", border: "none",
                       background: "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 70%, white))",
-                      color: "var(--text-on-accent, #fff)", fontSize: 28, cursor: "pointer",
+                      color: "var(--text-on-accent)", fontSize: 28, cursor: "pointer",
                       boxShadow: "0 4px 16px color-mix(in srgb, var(--error) 30%, transparent)", transition: "transform 0.2s",
                     }}
                     aria-label="Bắt đầu ghi âm"
@@ -653,7 +653,7 @@ export default function SpeakingPracticePage() {
                 style={{
                   padding: "10px 20px", borderRadius: 8,
                   border: "none", background: "var(--accent)",
-                  color: "var(--text-on-accent, #fff)", cursor: "pointer", fontSize: 13, fontWeight: 600,
+                  color: "var(--text-on-accent)", cursor: "pointer", fontSize: 13, fontWeight: 600,
                 }}
               >
                 Chủ đề mới <CheckCircleOutlined />

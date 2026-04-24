@@ -323,7 +323,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           {/* Start exercises button */}
           <button onClick={() => { setState("exercises"); setExerciseIdx(0); setCorrectCount(0); setAnswers([]); setStartedAt(Date.now()); resetExerciseInput(); }} style={{
             padding: "14px 24px", borderRadius: 12, border: "none",
-            background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 15, fontWeight: 600,
+            background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 15, fontWeight: 600,
             cursor: "pointer", textAlign: "center",
           }}>
             Làm bài tập <RightOutlined />
@@ -410,7 +410,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                       border: "none",
                       borderRadius: 9,
                       background: typedAnswer.trim() ? "var(--accent)" : "var(--border)",
-                      color: typedAnswer.trim() ? "var(--text-on-accent, #fff)" : "var(--text-muted)",
+                      color: typedAnswer.trim() ? "var(--text-on-accent)" : "var(--text-muted)",
                       cursor: typedAnswer.trim() ? "pointer" : "default",
                       fontSize: 13,
                       fontWeight: 600,
@@ -446,7 +446,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           {revealed && (
             <button onClick={nextExercise} style={{
               padding: "12px 24px", borderRadius: 10, border: "none",
-              background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 15, fontWeight: 600, cursor: "pointer",
+              background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 15, fontWeight: 600, cursor: "pointer",
             }}>
               {exerciseIdx < lesson.exercises.length - 1 ? <>Câu tiếp <RightOutlined /></> : <>Hoàn thành <CheckCircleOutlined /></>}
             </button>
@@ -504,7 +504,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             <button onClick={() => { window.location.href = "/grammar-quiz"; }} style={{
               padding: "11px 22px", borderRadius: 10, border: "none",
               background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-              color: "var(--text-on-accent, #fff)", cursor: "pointer", fontSize: 13, fontWeight: 700,
+              color: "var(--text-on-accent)", cursor: "pointer", fontSize: 13, fontWeight: 700,
               boxShadow: "0 4px 12px color-mix(in srgb, var(--accent) 25%, transparent)",
             }}>
               <ReloadOutlined /> Luyện quiz ngữ pháp

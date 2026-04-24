@@ -102,7 +102,7 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
         icon={<TeamOutlined />}
         style={{
           background: canSubmit ? "var(--accent)" : "var(--border)",
-          color: canSubmit ? "#fff" : "var(--text-muted)",
+          color: canSubmit ? "var(--text-on-accent)" : "var(--text-muted)",
           fontWeight: 600,
           border: "none",
         }}

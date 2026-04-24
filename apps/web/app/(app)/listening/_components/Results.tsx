@@ -144,7 +144,7 @@ export function Results({ result, onNewExercise, onWordClick, savedWords, dialog
           borderRadius: "var(--radius-md)",
           border: "none",
           background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-          color: "#fff",
+          color: "var(--text-on-accent)",
           fontSize: 15,
           fontWeight: 700,
           cursor: "pointer",

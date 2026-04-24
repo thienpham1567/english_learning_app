@@ -9,11 +9,13 @@
   --surface-raised: #ffffff;
   --surface-alt: #fdf9f5;
   --card-bg: var(--surface);
+  --bg-secondary: #f5efe8;
 
   --accent: #D9A299;
   --accent-hover: #c8867c;
   --accent-light: #faf0ee;
   --accent-muted: rgba(217, 162, 153, 0.14);
+  --text-on-accent: #fff;
 
   --secondary: #DCC5B2;
   --tertiary: #C4A882;
@@ -52,6 +54,8 @@
 
   /* Sidebar dark panel */
   --sidebar-bg: #3d2e2a;
+  --sidebar-gradient: linear-gradient(180deg, #3d2e2a 0%, #4a3530 35%, #523d38 65%, #4a3530 85%, #3d2e2a 100%);
+  --sidebar-glow: radial-gradient(ellipse 120% 30% at 50% 95%, rgba(217, 162, 153, 0.10) 0%, transparent 70%);
   --sidebar-text: rgba(255, 255, 255, 0.7);
   --sidebar-text-active: rgba(255, 255, 255, 0.92);
   --sidebar-border: rgba(255, 255, 255, 0.1);
@@ -140,11 +144,13 @@
   --surface-raised: #2d211e;
   --surface-alt: #211917;
   --card-bg: var(--surface);
+  --bg-secondary: #352824;
 
   --accent: #DCC5B2;
   --accent-hover: #D9A299;
   --accent-light: rgba(220, 197, 178, 0.12);
   --accent-muted: rgba(220, 197, 178, 0.15);
+  --text-on-accent: #1e1614;
 
   --secondary: #D9A299;
   --tertiary: #c07a70;
@@ -171,6 +177,8 @@
   --shadow-lg: 0 10px 32px rgba(0, 0, 0, 0.45), 0 4px 12px rgba(0, 0, 0, 0.25);
 
   --sidebar-bg: #16100e;
+  --sidebar-gradient: linear-gradient(180deg, #16100e 0%, #1e1614 30%, #271d1a 55%, #1e1614 80%, #16100e 100%);
+  --sidebar-glow: radial-gradient(ellipse 120% 30% at 50% 95%, rgba(192, 122, 112, 0.08) 0%, transparent 70%);
   --sidebar-text: rgba(255, 255, 255, 0.6);
   --sidebar-text-active: rgba(255, 255, 255, 0.9);
   --sidebar-border: rgba(255, 255, 255, 0.08);

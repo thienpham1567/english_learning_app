@@ -107,7 +107,7 @@ export default function GradedPassagePage() {
             <Flex gap={10} align="center" style={{ marginBottom: 12 }}>
               <Tag style={{
                 margin: 0, fontWeight: 700, fontSize: 11, borderRadius: 8,
-                background: LEVEL_COLORS[passage.cefrLevel], color: "var(--text-on-accent, #fff)", border: "none",
+                background: LEVEL_COLORS[passage.cefrLevel], color: "var(--text-on-accent)", border: "none",
                 padding: "2px 12px",
               }}>
                 {passage.cefrLevel}
@@ -172,7 +172,7 @@ export default function GradedPassagePage() {
                   onClick={() => router.push(`/reading/graded/${id}/cloze`)}
                   style={{
                     borderRadius: 12, fontWeight: 700, border: "2px solid var(--surface)",
-                    background: "rgba(255,255,255,0.15)", color: "var(--text-on-accent, #fff)", height: 44,
+                    background: "rgba(255,255,255,0.15)", color: "var(--text-on-accent)", height: 44,
                   }}
                 >
                   <FormOutlined /> Làm bài cloze test

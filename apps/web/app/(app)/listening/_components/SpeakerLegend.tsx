@@ -54,7 +54,7 @@ export function SpeakerLegend({ turns }: Props) {
               height: 20,
               borderRadius: "50%",
               background: SPEAKER_COLORS[id],
-              color: "#fff",
+              color: "var(--text-on-accent)",
               fontSize: 11,
               fontWeight: 700,
             }}
@@ -89,7 +89,7 @@ export function DialogueTranscript({ turns }: TranscriptProps) {
               height: 26,
               borderRadius: "50%",
               background: SPEAKER_COLORS[t.speaker],
-              color: "#fff",
+              color: "var(--text-on-accent)",
               fontSize: 12,
               fontWeight: 700,
               flexShrink: 0,

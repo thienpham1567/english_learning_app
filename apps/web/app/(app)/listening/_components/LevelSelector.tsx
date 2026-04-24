@@ -105,7 +105,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                       borderRadius: 99,
                       fontSize: 9,
                       fontWeight: 800,
-                      color: "var(--text-on-accent, #fff)",
+                      color: "var(--text-on-accent)",
                       padding: "2px 7px",
                       boxShadow: "var(--shadow-sm)",
                     }}
@@ -117,7 +117,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                   style={{
                     fontSize: 20,
                     fontWeight: 900,
-                    color: isSelected ? "var(--text-on-accent, #fff)" : meta.color,
+                    color: isSelected ? "var(--text-on-accent)" : meta.color,
                     fontFamily: "var(--font-mono)",
                     lineHeight: 1,
                   }}
@@ -242,7 +242,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                       flexShrink: 0,
                     }}
                   >
-                    <CheckOutlined style={{ fontSize: 11, color: "var(--text-on-accent, #fff)" }} />
+                    <CheckOutlined style={{ fontSize: 11, color: "var(--text-on-accent)" }} />
                   </span>
                 )}
               </button>
@@ -266,7 +266,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
           background: activeLevel
             ? "linear-gradient(135deg, var(--accent), var(--accent-hover))"
             : "var(--border)",
-          color: activeLevel ? "var(--text-on-accent, #fff)" : "var(--text-muted)",
+          color: activeLevel ? "var(--text-on-accent)" : "var(--text-muted)",
           fontSize: 16,
           fontWeight: 700,
           cursor: activeLevel && !isLoading ? "pointer" : "not-allowed",

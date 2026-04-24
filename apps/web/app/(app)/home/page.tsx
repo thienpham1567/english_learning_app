@@ -208,7 +208,7 @@ export default function HomePage() {
           styles={{ body: { padding: "var(--space-6)" } }}
         >
           <Flex vertical>
-            <Title level={4} style={{ color: "var(--text-on-accent, #fff)", fontFamily: "var(--font-display)", margin: 0 }}>
+            <Title level={4} style={{ color: "var(--text-on-accent)", fontFamily: "var(--font-display)", margin: 0 }}>
               {getGreeting()}, {firstName}! 👋
             </Title>
             <Space size="middle" style={{ marginTop: "var(--space-2)" }} wrap>
@@ -224,7 +224,7 @@ export default function HomePage() {
                         margin: 0,
                         background: "rgba(255,255,255,0.15)",
                         border: "1px solid rgba(255,255,255,0.25)",
-                        color: "var(--text-on-accent, #fff)",
+                        color: "var(--text-on-accent)",
                         fontWeight: 700,
                         fontSize: 12,
                         borderRadius: 999,
@@ -247,7 +247,7 @@ export default function HomePage() {
                           width: `${lvl.progress * 100}%`,
                           height: "100%",
                           borderRadius: 3,
-                          background: "var(--text-on-accent, #fff)",
+                          background: "var(--text-on-accent)",
                           transition: "width 0.5s ease",
                         }}
                       />
@@ -289,7 +289,7 @@ export default function HomePage() {
                 borderRadius: "var(--radius-xl)",
                 border: "none",
                 background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-                color: "var(--text-on-accent, #fff)",
+                color: "var(--text-on-accent)",
                 fontSize: 16,
                 fontWeight: 700,
                 fontFamily: "var(--font-body)",

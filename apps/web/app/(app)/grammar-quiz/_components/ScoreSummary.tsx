@@ -66,7 +66,7 @@ export function ScoreSummary({
         <Statistic
           value={score}
           suffix={`/ ${total}`}
-          styles={{ content: { fontSize: 28, fontWeight: 700, color: "#fff" } }}
+          styles={{ content: { fontSize: 28, fontWeight: 700, color: "var(--text-on-accent)" } }}
         />
         <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 12 }}>{pct}%</Text>
       </Card>
@@ -85,7 +85,7 @@ export function ScoreSummary({
             padding: "5px 16px",
             fontSize: 13,
             fontWeight: 600,
-            color: "#fff",
+            color: "var(--text-on-accent)",
             boxShadow: "0 2px 8px color-mix(in srgb, var(--xp) 25%, transparent)",
           }}
         >

@@ -184,7 +184,7 @@ export default function ScenariosPage() {
             styles={{ body: { padding: "28px" } }}
           >
             <span style={{ fontSize: 40 }}>{activeScenario.emoji}</span>
-            <Title level={3} style={{ color: "var(--text-on-accent, #fff)", margin: "8px 0 4px" }}>{activeScenario.title}</Title>
+            <Title level={3} style={{ color: "var(--text-on-accent)", margin: "8px 0 4px" }}>{activeScenario.title}</Title>
             <Text style={{ color: "rgba(255,255,255,0.8)", fontSize: 13 }}>{activeScenario.description}</Text>
           </Card>
 

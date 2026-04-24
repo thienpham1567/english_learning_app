@@ -106,7 +106,7 @@ export function CEFRPath({ selected, onSelect, onStart, isLoading }: Props) {
                   }}
                 >
                   {isSelected && (
-                    <CheckOutlined style={{ fontSize: 14, color: "#fff", fontWeight: 700 }} />
+                    <CheckOutlined style={{ fontSize: 14, color: "var(--text-on-accent)", fontWeight: 700 }} />
                   )}
                 </div>
                 {/* Label */}

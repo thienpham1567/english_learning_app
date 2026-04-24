@@ -157,7 +157,7 @@ export function TestScreen({
                     placeItems: "center",
                     flexShrink: 0,
                     background: isSelected ? "var(--accent)" : "var(--border)",
-                    color: isSelected ? "#fff" : "var(--text-muted)",
+                    color: isSelected ? "var(--text-on-accent)" : "var(--text-muted)",
                     fontSize: 12,
                     fontWeight: 700,
                     transition: "all 0.15s",

@@ -330,7 +330,7 @@ function VocabReviewTab() {
               style={{
                 padding: "12px 28px", borderRadius: 12, border: "none",
                 background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-                color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 700, cursor: "pointer",
+                color: "var(--text-on-accent)", fontSize: 14, fontWeight: 700, cursor: "pointer",
                 boxShadow: "0 4px 12px color-mix(in srgb, var(--accent) 25%, transparent)",
               }}
             >
@@ -501,7 +501,7 @@ function VocabReviewTab() {
               borderRadius: 10,
               border: "none",
               background: answered ? "var(--accent)" : "var(--border)",
-              color: answered ? "var(--text-on-accent, #fff)" : "var(--text-secondary)",
+              color: answered ? "var(--text-on-accent)" : "var(--text-secondary)",
               fontSize: 15,
               fontWeight: 600,
               cursor: answered ? "pointer" : "not-allowed",
@@ -693,7 +693,7 @@ function ErrorReviewTab() {
             style={{
               padding: "12px 28px", borderRadius: 12, border: "none",
               background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-              color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 700, cursor: "pointer",
+              color: "var(--text-on-accent)", fontSize: 14, fontWeight: 700, cursor: "pointer",
               boxShadow: "0 4px 12px color-mix(in srgb, var(--accent) 25%, transparent)",
             }}
           >
@@ -835,7 +835,7 @@ function ErrorReviewTab() {
               style={{
                 width: "100%", padding: "12px", borderRadius: 10, border: "none",
                 background: (answers[currentIdx] !== null && answers[currentIdx] !== undefined) ? "var(--accent)" : "var(--border)",
-                color: (answers[currentIdx] !== null && answers[currentIdx] !== undefined) ? "var(--text-on-accent, #fff)" : "var(--text-secondary)",
+                color: (answers[currentIdx] !== null && answers[currentIdx] !== undefined) ? "var(--text-on-accent)" : "var(--text-secondary)",
                 fontSize: 15, fontWeight: 600,
                 cursor: (answers[currentIdx] !== null && answers[currentIdx] !== undefined) ? "pointer" : "not-allowed",
               }}

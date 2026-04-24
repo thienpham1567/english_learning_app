@@ -157,7 +157,7 @@ export function PromptGallery({ onSelect, isLoading, loadingCategory }: Props) {
                 {isBusy ? (
                   <Spin size="small" />
                 ) : (
-                  <Icon style={{ fontSize: 20, color: "var(--text-on-accent, #fff)" }} />
+                  <Icon style={{ fontSize: 20, color: "var(--text-on-accent)" }} />
                 )}
               </span>
 

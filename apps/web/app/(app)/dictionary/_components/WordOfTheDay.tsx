@@ -108,7 +108,7 @@ export function WordOfTheDay({ onSelect }: Props) {
             padding: "2px 8px",
             borderRadius: 999,
             background: "var(--accent)",
-            color: "#fff",
+            color: "var(--text-on-accent)",
           }}
         >
           {daily.pos}

@@ -204,7 +204,7 @@ export default function ListeningImportPage() {
                     borderRadius: 10,
                     border: "none",
                     background: url.trim() ? "var(--accent)" : "var(--border)",
-                    color: "var(--text-on-accent, #fff)",
+                    color: "var(--text-on-accent)",
                     fontSize: 14,
                     fontWeight: 600,
                     cursor: url.trim() ? "pointer" : "not-allowed",
@@ -295,7 +295,7 @@ export default function ListeningImportPage() {
                       borderRadius: 8,
                       border: "none",
                       background: selectedTab === key ? "var(--accent)" : "transparent",
-                      color: selectedTab === key ? "var(--text-on-accent, #fff)" : "var(--text-secondary)",
+                      color: selectedTab === key ? "var(--text-on-accent)" : "var(--text-secondary)",
                       fontSize: 13,
                       fontWeight: 600,
                       cursor: "pointer",
@@ -412,7 +412,7 @@ export default function ListeningImportPage() {
                         borderRadius: 10,
                         border: "none",
                         background: Object.keys(quizAnswers).length >= importData.quiz.length ? "var(--accent)" : "var(--border)",
-                        color: "var(--text-on-accent, #fff)",
+                        color: "var(--text-on-accent)",
                         fontSize: 14,
                         fontWeight: 600,
                         cursor: Object.keys(quizAnswers).length >= importData.quiz.length ? "pointer" : "not-allowed",
@@ -440,7 +440,7 @@ export default function ListeningImportPage() {
               <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
                 <button
                   onClick={handleReset}
-                  style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", cursor: "pointer", fontSize: 13, fontWeight: 600 }}
+                  style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", cursor: "pointer", fontSize: 13, fontWeight: 600 }}
                 >
                   Import bài khác
                 </button>

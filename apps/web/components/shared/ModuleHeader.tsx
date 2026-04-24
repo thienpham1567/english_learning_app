@@ -48,7 +48,7 @@ export function ModuleHeader({
             justifyContent: "center",
             flexShrink: 0,
             fontSize: 22,
-            color: "#fff",
+            color: "var(--text-on-accent)",
           }}
         >
           {icon}
@@ -74,7 +74,7 @@ export function ModuleHeader({
             level={4}
             style={{
               margin: 0,
-              color: "#fff",
+              color: "var(--text-on-accent)",
               fontFamily: "var(--font-display)",
               fontStyle: "italic",
               fontSize: 18,

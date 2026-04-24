@@ -58,12 +58,12 @@ export function StreakCalendar({ dailyActivity, currentStreak }: Props) {
 
   // Color mapping based on intensity
   function getCellColor(count: number): string {
-    if (count === 0) return "var(--heatmap-0, rgba(128,128,128,0.15))";
+    if (count === 0) return "var(--heatmap-0)";
     const ratio = count / maxCount;
-    if (ratio <= 0.25) return "var(--heatmap-1, #9be9a8)";
-    if (ratio <= 0.5) return "var(--heatmap-2, #40c463)";
-    if (ratio <= 0.75) return "var(--heatmap-3, #30a14e)";
-    return "var(--heatmap-4, #216e39)";
+    if (ratio <= 0.25) return "var(--heatmap-1)";
+    if (ratio <= 0.5) return "var(--heatmap-2)";
+    if (ratio <= 0.75) return "var(--heatmap-3)";
+    return "var(--heatmap-4)";
   }
 
   // Format date for tooltip
@@ -93,7 +93,7 @@ export function StreakCalendar({ dailyActivity, currentStreak }: Props) {
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
           <span style={{ fontSize: 18 }}>🔥</span>
-          <span style={{ fontSize: 16, fontWeight: 700, color: "var(--fire, #ff6b35)" }}>{currentStreak}</span>
+          <span style={{ fontSize: 16, fontWeight: 700, color: "var(--fire)" }}>{currentStreak}</span>
           <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>ngày streak</span>
         </div>
       </div>
@@ -168,14 +168,14 @@ export function StreakCalendar({ dailyActivity, currentStreak }: Props) {
               height: 10,
               borderRadius: 2,
               background: level === 0
-                ? "var(--heatmap-0, rgba(128,128,128,0.15))"
+                ? "var(--heatmap-0)"
                 : level === 1
-                  ? "var(--heatmap-1, #9be9a8)"
+                  ? "var(--heatmap-1)"
                   : level === 2
-                    ? "var(--heatmap-2, #40c463)"
+                    ? "var(--heatmap-2)"
                     : level === 3
-                      ? "var(--heatmap-3, #30a14e)"
-                      : "var(--heatmap-4, #216e39)",
+                      ? "var(--heatmap-3)"
+                      : "var(--heatmap-4)",
             }}
           />
         ))}

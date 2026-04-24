@@ -126,7 +126,7 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
                   boxShadow: `0 2px 6px ${cat.color}40`,
                 }}
               >
-                {allDone ? <CheckCircleOutlined style={{ color: "var(--text-on-accent, #fff)" }} /> : cat.icon}
+                {allDone ? <CheckCircleOutlined style={{ color: "var(--text-on-accent)" }} /> : cat.icon}
               </span>
               <div>
                 <h3
@@ -219,7 +219,7 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
                           }}
                         >
                           <CheckCircleOutlined
-                            style={{ fontSize: 13, color: "var(--text-on-accent, #fff)" }}
+                            style={{ fontSize: 13, color: "var(--text-on-accent)" }}
                           />
                         </span>
                       ) : (

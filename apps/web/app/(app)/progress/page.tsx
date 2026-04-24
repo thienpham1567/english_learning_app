@@ -452,8 +452,8 @@ export default function ProgressPage() {
 
         {/* Summary footer */}
         <Card style={{ borderRadius: "var(--radius-xl)", background: "linear-gradient(135deg, var(--accent), var(--secondary))" }}>
-          <Flex align="center" justify="center" gap={16} style={{ color: "var(--text-on-accent, #fff)", padding: "8px 0" }}>
-            <Text style={{ color: "var(--text-on-accent, #fff)", fontSize: 14 }}>
+          <Flex align="center" justify="center" gap={16} style={{ color: "var(--text-on-accent)", padding: "8px 0" }}>
+            <Text style={{ color: "var(--text-on-accent)", fontSize: 14 }}>
               <AimOutlined style={{ marginRight: 4 }} /> Tổng <strong>{totalStats.totalActivities}</strong> hoạt động · 
               Streak tốt nhất <strong>{totalStats.bestStreak}</strong> ngày · 
               <strong>{totalStats.totalQuizzes}</strong> thử thách hoàn thành

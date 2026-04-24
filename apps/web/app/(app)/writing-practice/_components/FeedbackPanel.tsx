@@ -105,7 +105,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
                 fontSize: 12,
                 fontWeight: activeTab === tab.key ? 700 : 500,
                 background: activeTab === tab.key ? "var(--accent)" : "var(--surface)",
-                color: activeTab === tab.key ? "var(--text-on-accent, #fff)" : "var(--text-secondary)",
+                color: activeTab === tab.key ? "var(--text-on-accent)" : "var(--text-secondary)",
                 border: "none",
                 cursor: "pointer",
                 transition: "all 0.15s",

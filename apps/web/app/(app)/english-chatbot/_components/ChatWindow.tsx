@@ -673,7 +673,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                           background: isSelected
                             ? "var(--accent)"
                             : "var(--bg-deep)",
-                          color: isSelected ? "#fff" : "var(--text-secondary)",
+                          color: isSelected ? "var(--text-on-accent)" : "var(--text-secondary)",
                           transition: "background 0.2s, color 0.2s",
                         }}
                       >

@@ -122,7 +122,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
             padding: "13px 0",
             fontSize: 14,
             fontWeight: 700,
-            color: "#fff",
+            color: "var(--text-on-accent)",
             border: "none",
             cursor: "pointer",
             boxShadow: "0 3px 12px color-mix(in srgb, var(--error) 30%, transparent)",

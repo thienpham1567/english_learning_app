@@ -139,14 +139,14 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
         <Badge
           count={badges.vocabDue}
           size="small"
-          style={{ backgroundColor: "#722ed1" }}
+          style={{ backgroundColor: "var(--info)" }}
         />
       );
     }
     if (href === "/daily-challenge") {
       return (
         <span style={{ fontSize: 12, lineHeight: 1 }}>
-          {badges.dailyChallengeCompleted ? <CheckCircleOutlined style={{ color: "#52c41a" }} /> : <FireOutlined style={{ color: "#ff4d4f" }} />}
+          {badges.dailyChallengeCompleted ? <CheckCircleOutlined style={{ color: "var(--success)" }} /> : <FireOutlined style={{ color: "var(--error)" }} />}
         </span>
       );
     }
@@ -164,16 +164,29 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
         gap: 8,
         overflow: "hidden",
         borderRight: "1px solid rgba(255,255,255,0.1)",
-        background: "var(--sidebar-bg)",
+        background: "var(--sidebar-gradient)",
         padding: "20px 16px",
         width: isExpanded ? 264 : 72,
         height: "100vh",
         transition: "width 0.3s ease",
       }}
     >
+      {/* Accent glow overlay at bottom */}
+      <div
+        aria-hidden
+        style={{
+          position: "absolute",
+          inset: 0,
+          pointerEvents: "none",
+          background: "var(--sidebar-glow)",
+          zIndex: 0,
+        }}
+      />
       {/* Logo / toggle header */}
       <div
         style={{
+          position: "relative",
+          zIndex: 1,
           display: "flex",
           minHeight: 56,
           alignItems: "center",
@@ -238,11 +251,11 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
         )}
       </div>
 
-      <div style={{ height: 1, background: "var(--sidebar-border)" }} />
+      <div style={{ height: 1, background: "var(--sidebar-border)", position: "relative", zIndex: 1 }} />
 
       <nav
         aria-label="Các mục trong ứng dụng"
-        style={{ display: "flex", flexDirection: "column", gap: 2, paddingTop: 8, flex: 1, overflow: "auto" }}
+        style={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", gap: 2, paddingTop: 8, flex: 1, overflow: "auto" }}
       >
         {navGroups.map((entry, groupIndex) => {
           // Standalone item (Home)
@@ -408,7 +421,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
       </nav>
 
       {/* Exam Mode + Theme toggle at bottom */}
-      <div style={{ marginTop: "auto", paddingTop: 8 }}>
+      <div style={{ marginTop: "auto", paddingTop: 8, position: "relative", zIndex: 1 }}>
         <div style={{ height: 1, background: "var(--sidebar-border)", marginBottom: 12 }} />
 
         {/* Exam Mode Switcher */}
@@ -436,8 +449,8 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
                       fontSize: 10,
                       padding: "1px 6px",
                       borderRadius: 99,
-                      background: examMode === "toeic" ? "#1890ff22" : "#722ed122",
-                      color: examMode === "toeic" ? "#1890ff" : "#722ed1",
+                      background: examMode === "toeic" ? "rgba(59, 130, 246, 0.13)" : "rgba(217, 162, 153, 0.15)",
+                      color: examMode === "toeic" ? "var(--info)" : "var(--accent)",
                       fontWeight: 600,
                       marginLeft: "auto",
                     }}

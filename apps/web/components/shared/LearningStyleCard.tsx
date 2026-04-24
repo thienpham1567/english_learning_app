@@ -23,15 +23,15 @@ type LearningStyleData = {
 };
 
 const MODULE_DISPLAY: Record<string, { label: string; color: string }> = {
-  grammar_quiz: { label: "Quiz", color: "#ec4899" },
-  chatbot_session: { label: "Chat", color: "#6366f1" },
-  flashcard_review: { label: "Flash", color: "#f59e0b" },
-  writing_practice: { label: "Viết", color: "#10b981" },
-  grammar_lesson: { label: "Học", color: "#8b5cf6" },
-  study_set: { label: "Chủ đề", color: "#0ea5e9" },
-  voice_practice: { label: "Nói", color: "#ef4444" },
-  listening_practice: { label: "Nghe", color: "#14b8a6" },
-  daily_challenge: { label: "Thách", color: "#f97316" },
+  grammar_quiz: { label: "Quiz", color: "var(--module-grammar)" },
+  chatbot_session: { label: "Chat", color: "var(--module-speaking)" },
+  flashcard_review: { label: "Flash", color: "var(--module-review)" },
+  writing_practice: { label: "Viết", color: "var(--module-writing)" },
+  grammar_lesson: { label: "Học", color: "var(--module-grammar)" },
+  study_set: { label: "Chủ đề", color: "var(--module-vocabulary)" },
+  voice_practice: { label: "Nói", color: "var(--module-speaking)" },
+  listening_practice: { label: "Nghe", color: "var(--module-listening)" },
+  daily_challenge: { label: "Thách", color: "var(--fire)" },
 };
 
 export function LearningStyleCard() {
@@ -57,7 +57,7 @@ export function LearningStyleCard() {
         <Flex align="center" gap={12}>
           <div style={{
             width: 40, height: 40, borderRadius: 10,
-            background: "linear-gradient(135deg, #6366f115, #8b5cf615)",
+            background: "var(--accent-muted)",
             display: "grid", placeItems: "center",
           }}>
             <ExperimentOutlined style={{ fontSize: 18, color: "var(--accent)" }} />
@@ -98,7 +98,7 @@ export function LearningStyleCard() {
       {/* Header with style */}
       <div style={{
         padding: "20px 24px 16px",
-        background: "linear-gradient(135deg, var(--accent-muted, #6366f108), #8b5cf608)",
+        background: "var(--accent-muted)",
       }}>
         <Flex align="center" gap={12}>
           <span style={{ fontSize: 28 }}>{style.icon}</span>
@@ -110,7 +110,7 @@ export function LearningStyleCard() {
           </div>
           <div style={{
             padding: "4px 10px", borderRadius: 99,
-            background: "var(--accent)", color: "#fff",
+            background: "var(--accent)", color: "var(--text-on-accent)",
             fontSize: 11, fontWeight: 600,
           }}>
             {Math.round(style.confidence * 100)}%

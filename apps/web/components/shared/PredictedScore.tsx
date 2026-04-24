@@ -94,7 +94,7 @@ export function PredictedScore() {
     );
   }
 
-  const scoreColor = data.predicted >= 700 ? "#52c41a" : data.predicted >= 500 ? "#faad14" : "#ff4d4f";
+  const scoreColor = data.predicted >= 700 ? "var(--success)" : data.predicted >= 500 ? "var(--warning)" : "var(--error)";
 
   return (
     <div
@@ -140,35 +140,35 @@ export function PredictedScore() {
           flex: 1,
           padding: "14px 16px",
           borderRadius: 10,
-          background: "rgba(59, 130, 246, 0.08)",
-          border: "1px solid rgba(59, 130, 246, 0.15)",
+          background: "color-mix(in srgb, var(--info) 8%, transparent)",
+          border: "1px solid color-mix(in srgb, var(--info) 15%, transparent)",
           textAlign: "center",
         }}>
-          <ReadOutlined style={{ fontSize: 16, color: "#3b82f6", marginBottom: 6 }} />
+          <ReadOutlined style={{ fontSize: 16, color: "var(--info)", marginBottom: 6 }} />
           <div style={{ fontSize: 11, color: "var(--text-secondary)" }}>Reading</div>
-          <div style={{ fontSize: 20, fontWeight: 700, color: "#3b82f6" }}>~{data.reading}</div>
+          <div style={{ fontSize: 20, fontWeight: 700, color: "var(--info)" }}>~{data.reading}</div>
         </div>
         <div style={{
           flex: 1,
           padding: "14px 16px",
           borderRadius: 10,
-          background: "rgba(16, 185, 129, 0.08)",
-          border: "1px solid rgba(16, 185, 129, 0.15)",
+          background: "color-mix(in srgb, var(--success) 8%, transparent)",
+          border: "1px solid color-mix(in srgb, var(--success) 15%, transparent)",
           textAlign: "center",
         }}>
-          <SoundOutlined style={{ fontSize: 16, color: "#10b981", marginBottom: 6 }} />
+          <SoundOutlined style={{ fontSize: 16, color: "var(--success)", marginBottom: 6 }} />
           <div style={{ fontSize: 11, color: "var(--text-secondary)" }}>Listening</div>
-          <div style={{ fontSize: 20, fontWeight: 700, color: "#10b981" }}>~{data.listening}</div>
+          <div style={{ fontSize: 20, fontWeight: 700, color: "var(--success)" }}>~{data.listening}</div>
         </div>
       </div>
 
       {/* Component breakdown */}
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         {[
-          { label: "Ngữ pháp", value: data.components.grammar, color: "#8b5cf6", weight: "40%" },
-          { label: "Nghe hiểu", value: data.components.listeningAccuracy, color: "#10b981", weight: "30%" },
-          { label: "Từ vựng", value: data.components.vocabulary, color: "#f59e0b", weight: "20%" },
-          { label: "Điểm cao nhất", value: data.components.topScores, color: "#ef4444", weight: "10%" },
+          { label: "Ngữ pháp", value: data.components.grammar, color: "var(--accent)", weight: "40%" },
+          { label: "Nghe hiểu", value: data.components.listeningAccuracy, color: "var(--success)", weight: "30%" },
+          { label: "Từ vựng", value: data.components.vocabulary, color: "var(--warning)", weight: "20%" },
+          { label: "Điểm cao nhất", value: data.components.topScores, color: "var(--error)", weight: "10%" },
         ].map((comp) => (
           <div key={comp.label} style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{ fontSize: 11, color: "var(--text-secondary)", width: 90, flexShrink: 0 }}>

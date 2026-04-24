@@ -123,7 +123,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
     return (
       <div style={{ padding: 20, borderRadius: 12, background: "color-mix(in srgb, var(--error) 8%, transparent)", border: "1px solid var(--error)40", color: "var(--error)", textAlign: "center" }}>
         <p>{error}</p>
-        <button onClick={generate} style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: "var(--error)", color: "var(--text-on-accent, #fff)", cursor: "pointer" }}>Thử lại</button>
+        <button onClick={generate} style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: "var(--error)", color: "var(--text-on-accent)", cursor: "pointer" }}>Thử lại</button>
       </div>
     );
   }
@@ -165,7 +165,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
               style={{
                 padding: "8px 14px", borderRadius: 99, fontSize: 13, fontWeight: active ? 600 : 400,
                 border: active ? "1.5px solid var(--accent)" : done ? "1.5px solid var(--success)" : "1px solid var(--border)",
-                background: active ? "var(--accent-muted, #6366f115)" : done ? "color-mix(in srgb, var(--success) 3%, transparent)" : "transparent",
+                background: active ? "var(--accent-muted)" : done ? "color-mix(in srgb, var(--success) 3%, transparent)" : "transparent",
                 color: active ? "var(--accent)" : done ? "var(--success)" : "var(--text-secondary)",
                 cursor: "pointer", transition: "all 0.2s",
               }}
@@ -199,7 +199,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
             </div>
           ))}
           {!completedSections.has("vocabulary") && (
-            <button onClick={() => markDone("vocabulary")} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+            <button onClick={() => markDone("vocabulary")} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
               Hoàn thành <CheckCircleOutlined />
             </button>
           )}
@@ -209,7 +209,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
       {/* ── GRAMMAR ── */}
       {activeSection === "grammar" && (
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          <div style={{ padding: 20, borderRadius: 12, textAlign: "center", background: "linear-gradient(135deg, var(--accent-muted, #6366f110), color-mix(in srgb, var(--accent) 6%, transparent))", border: "1px solid var(--border)" }}>
+          <div style={{ padding: 20, borderRadius: 12, textAlign: "center", background: "linear-gradient(135deg, var(--accent-muted), color-mix(in srgb, var(--accent) 6%, transparent))", border: "1px solid var(--border)" }}>
             <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 6px", fontWeight: 600 }}><CalculatorOutlined /> {data.grammar.title}</p>
             <p style={{ fontSize: 18, fontWeight: 700, color: "var(--accent)", margin: 0, fontFamily: "monospace" }}>{data.grammar.formula}</p>
           </div>
@@ -224,7 +224,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
             <p style={{ margin: "4px 0 0", fontSize: 13, color: "var(--text-secondary)", fontStyle: "italic" }}>{data.grammar.topicExampleVi}</p>
           </div>
           {!completedSections.has("grammar") && (
-            <button onClick={() => markDone("grammar")} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+            <button onClick={() => markDone("grammar")} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
               Hoàn thành <CheckCircleOutlined />
             </button>
           )}
@@ -270,12 +270,12 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
             );
           })}
           {!readingRevealed && Object.keys(readingAnswers).length === data.reading.questions.length && (
-            <button onClick={() => setReadingRevealed(true)} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+            <button onClick={() => setReadingRevealed(true)} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
               Kiểm tra <RightOutlined />
             </button>
           )}
           {readingRevealed && !completedSections.has("reading") && (
-            <button onClick={() => markDone("reading")} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--success)", color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+            <button onClick={() => markDone("reading")} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--success)", color: "var(--text-on-accent)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
               Hoàn thành <CheckCircleOutlined />
             </button>
           )}
@@ -328,7 +328,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
               } else {
                 markDone("exercises");
               }
-            }} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+            }} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
               {exIdx < data.exercises.length - 1 ? <>Câu tiếp <RightOutlined /></> : <>Hoàn thành <CheckCircleOutlined /></>}
             </button>
           )}

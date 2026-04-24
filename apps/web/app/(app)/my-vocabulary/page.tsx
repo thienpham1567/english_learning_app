@@ -685,7 +685,7 @@ export default function MyVocabularyPage() {
             background: "var(--ink)",
             padding: "10px 20px",
             fontSize: 14,
-            color: "var(--text-on-accent, #fff)",
+            color: "var(--text-on-accent)",
             boxShadow: "var(--shadow-lg)",
           }}
         >
@@ -698,7 +698,7 @@ export default function MyVocabularyPage() {
               textDecoration: "underline",
               background: "none",
               border: "none",
-              color: "var(--text-on-accent, #fff)",
+              color: "var(--text-on-accent)",
               cursor: "pointer",
             }}
           >

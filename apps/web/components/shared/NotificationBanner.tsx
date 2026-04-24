@@ -91,19 +91,19 @@ export function NotificationBanner() {
           width: 40,
           height: 40,
           borderRadius: 12,
-          background: "linear-gradient(135deg, #6366f1, #7c3aed)",
+          background: "linear-gradient(135deg, var(--accent), var(--accent-hover, var(--accent)))",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           flexShrink: 0,
         }}
       >
-        <BellOutlined style={{ fontSize: 18, color: "#fff" }} />
+        <BellOutlined style={{ fontSize: 18, color: "var(--text-on-accent)" }} />
       </div>
 
       <div style={{ flex: 1, minWidth: 0 }}>
         {subscribed ? (
-          <div style={{ fontSize: 14, fontWeight: 600, color: "#52c41a" }}>
+          <div style={{ fontSize: 14, fontWeight: 600, color: "var(--success)" }}>
             ✅ Đã bật thông báo!
           </div>
         ) : (
@@ -125,8 +125,8 @@ export function NotificationBanner() {
             padding: "8px 14px",
             borderRadius: 10,
             border: "none",
-            background: "linear-gradient(135deg, #6366f1, #7c3aed)",
-            color: "#fff",
+            background: "linear-gradient(135deg, var(--accent), var(--accent-hover, var(--accent)))",
+            color: "var(--text-on-accent)",
             fontSize: 13,
             fontWeight: 700,
             cursor: "pointer",

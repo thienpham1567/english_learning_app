@@ -308,7 +308,7 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
           borderRadius: 8,
           border: "none",
           background: !sentence.trim() || overLimit || loading ? "var(--border)" : "var(--accent)",
-          color: "var(--text-on-accent, #fff)",
+          color: "var(--text-on-accent)",
           fontSize: 14,
           fontWeight: 600,
           cursor: !sentence.trim() || overLimit || loading ? "not-allowed" : "pointer",

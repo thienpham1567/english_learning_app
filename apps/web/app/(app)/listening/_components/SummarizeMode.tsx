@@ -164,7 +164,7 @@ export default function SummarizeMode({ examMode }: Props) {
                     borderRadius: 8,
                     border: selectedLevel === l ? "2px solid var(--accent)" : "1px solid var(--border)",
                     background: selectedLevel === l ? "var(--accent)" : "var(--surface)",
-                    color: selectedLevel === l ? "var(--text-on-accent, #fff)" : "var(--text)",
+                    color: selectedLevel === l ? "var(--text-on-accent)" : "var(--text)",
                     fontWeight: 700,
                     fontSize: 13,
                     cursor: "pointer",
@@ -182,7 +182,7 @@ export default function SummarizeMode({ examMode }: Props) {
 
           <button
             onClick={startSession}
-            style={{ width: "100%", padding: "12px 24px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 15, fontWeight: 600, cursor: "pointer" }}
+            style={{ width: "100%", padding: "12px 24px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 15, fontWeight: 600, cursor: "pointer" }}
           >
             Bắt đầu
           </button>
@@ -254,7 +254,7 @@ export default function SummarizeMode({ examMode }: Props) {
                     display: "flex", alignItems: "center", gap: 6,
                     padding: "10px 20px", borderRadius: 8, border: "none",
                     background: wcOk ? "var(--accent)" : "var(--border)",
-                    color: "var(--text-on-accent, #fff)", fontSize: 13, fontWeight: 600,
+                    color: "var(--text-on-accent)", fontSize: 13, fontWeight: 600,
                     cursor: wcOk ? "pointer" : "not-allowed",
                     transition: "all 0.15s ease",
                   }}
@@ -405,7 +405,7 @@ export default function SummarizeMode({ examMode }: Props) {
             </button>
             <button
               onClick={startSession}
-              style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent, #fff)", cursor: "pointer", fontSize: 13, fontWeight: 600 }}
+              style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", cursor: "pointer", fontSize: 13, fontWeight: 600 }}
             >
               Bài mới
             </button>

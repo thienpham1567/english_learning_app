@@ -372,7 +372,7 @@ export default function EssayScorePage() {
               style={{
                 padding: "12px 32px", borderRadius: 10, border: "none",
                 background: wordCount < 150 ? "var(--border)" : "var(--accent)",
-                color: "var(--text-on-accent, #fff)", fontSize: 15, fontWeight: 600,
+                color: "var(--text-on-accent)", fontSize: 15, fontWeight: 600,
                 cursor: wordCount < 150 ? "not-allowed" : "pointer",
                 alignSelf: "center",
               }}
@@ -524,7 +524,7 @@ export default function EssayScorePage() {
                 onClick={startNew}
                 style={{
                   padding: "10px 24px", borderRadius: 8, border: "none",
-                  background: "var(--accent)", color: "var(--text-on-accent, #fff)", fontSize: 14,
+                  background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 14,
                   fontWeight: 600, cursor: "pointer",
                 }}
               >

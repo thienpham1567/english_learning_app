@@ -18,7 +18,7 @@ const CONFETTI_COLORS = [
   "var(--xp)",
   "var(--fire)",
   "var(--warning)",
-  "#fff",
+  "var(--text-on-accent)",
 ];
 
 const PARTICLE_COUNT = 40;
