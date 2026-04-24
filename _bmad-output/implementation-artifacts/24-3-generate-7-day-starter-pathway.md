@@ -1,6 +1,6 @@
 # Story 24.3: Generate 7-Day Starter Pathway
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -19,10 +19,10 @@ so that I know how to begin without choosing every module myself.
 
 ## Tasks / Subtasks
 
-- [ ] Define starter pathway data structures for seven days of goal-based actions. (AC: 1-4)
-- [ ] Generate pathways for TOEIC, IELTS, daily conversation, workplace English, and foundation rebuilding. (AC: 1-4)
-- [ ] Adapt pathway item count and duration to 5, 10, 15, 20, and 30 minute budgets. (AC: 1-4)
-- [ ] Test deterministic pathway generation and conversion into daily-plan candidates. (AC: 1-4)
+- [x] Define starter pathway data structures for seven days of goal-based actions. (AC: 1-4)
+- [x] Generate pathways for TOEIC, IELTS, daily conversation, workplace English, and foundation rebuilding. (AC: 1-4)
+- [x] Adapt pathway item count and duration to 5, 10, 15, 20, and 30 minute budgets. (AC: 1-4)
+- [x] Test deterministic pathway generation and conversion into daily-plan candidates. (AC: 1-4)
 
 ## Dev Notes
 
@@ -90,10 +90,21 @@ so that I know how to begin without choosing every module myself.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues encountered.
+
 ### Completion Notes List
 
+- **Task 1 (Data structures):** Defined `PathwayAction`, `PathwayDay`, `StarterPathway` types. Each day has theme, actions with emoji/label/moduleType/actionUrl/skillIds/estimatedMinutes, and totalMinutes.
+- **Task 2 (Goal pathways):** 6 complete 7-day templates: exam_prep (TOEIC/IELTS), career (workplace), travel, daily_conversation, academic, general_improvement. Each has curated daily themes and skill-targeted actions.
+- **Task 3 (Budget adaptation):** `fitToBudget()` trims actions to fit 5/10/15/20/30 min budgets, always keeping at least 1 action. Larger budgets get more actions per day.
+- **Task 4 (Tests):** 20 tests: 7-day structure (5), candidate conversion (2), goal coverage for all 6 goals (6), time budget adaptation for all 5 budgets + comparison + minimum guarantee (7).
+
 ### File List
+
+- `packages/modules/src/learning/starter-pathway.ts` — New
+- `packages/modules/src/learning/index.ts` — Modified (exports)
+- `packages/modules/__tests__/learning/starter-pathway.test.ts` — New (20 tests)

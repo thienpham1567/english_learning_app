@@ -1,6 +1,6 @@
 # Story 24.2: Connect Diagnostic To Baseline Skill State
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -19,10 +19,10 @@ so that my first recommendations are not generic.
 
 ## Tasks / Subtasks
 
-- [ ] Map diagnostic skill breakdown to baseline skill scores and confidence. (AC: 1-4)
-- [ ] Create or update user skill state from diagnostic results without overwriting stronger existing data blindly. (AC: 1-4)
-- [ ] Handle diagnostic save failures without blocking app access. (AC: 1-4)
-- [ ] Test grammar, vocabulary, listening, and reading baseline creation. (AC: 1-4)
+- [x] Map diagnostic skill breakdown to baseline skill scores and confidence. (AC: 1-4)
+- [x] Create or update user skill state from diagnostic results without overwriting stronger existing data blindly. (AC: 1-4)
+- [x] Handle diagnostic save failures without blocking app access. (AC: 1-4)
+- [x] Test grammar, vocabulary, listening, and reading baseline creation. (AC: 1-4)
 
 ## Dev Notes
 
@@ -90,10 +90,21 @@ so that my first recommendations are not generic.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues encountered.
+
 ### Completion Notes List
 
+- **Task 1 (Score mapping):** `diagnosticToBaselineScore()` maps correct/total to 0-100 score. Confidence scales with question count (≥ 3 for confident). Conservative 30-score default for zero questions.
+- **Task 2 (Merge logic):** `mergeSkillStates()` keeps max(existing, diagnostic) for both proficiency and confidence. New diagnostic skills added, existing undiagnosed skills preserved.
+- **Task 3 (Safe processing):** `processDiagnosticSafely()` never throws. Returns `success: false` with preserved existing states on failure. Empty skills array handled gracefully.
+- **Task 4 (Tests):** 18 tests: score mapping (5), skill state creation (1), merge logic (4), safe processing (4), per-skill coverage for grammar/vocab/listening/reading (4).
+
 ### File List
+
+- `packages/modules/src/learning/diagnostic-bridge.ts` — New
+- `packages/modules/src/learning/index.ts` — Modified (exports)
+- `packages/modules/__tests__/learning/diagnostic-bridge.test.ts` — New (18 tests)

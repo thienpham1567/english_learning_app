@@ -1,6 +1,6 @@
 # Story 23.4: Show Error Improvement Trend
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -19,10 +19,10 @@ so that I can see real improvement beyond XP.
 
 ## Tasks / Subtasks
 
-- [ ] Compute trend data for error categories without requiring historical backfill. (AC: 1-4)
-- [ ] Show improved, worsened, and needs-review categories with low-data caveats. (AC: 1-4)
-- [ ] Integrate trend insight into Error Notebook or Progress using existing visual conventions. (AC: 1-4)
-- [ ] Test rich data, sparse data, and no trend data cases. (AC: 1-4)
+- [x] Compute trend data for error categories without requiring historical backfill. (AC: 1-4)
+- [x] Show improved, worsened, and needs-review categories with low-data caveats. (AC: 1-4)
+- [x] Integrate trend insight into Error Notebook or Progress using existing visual conventions. (AC: 1-4)
+- [x] Test rich data, sparse data, and no trend data cases. (AC: 1-4)
 
 ## Dev Notes
 
@@ -90,10 +90,28 @@ so that I can see real improvement beyond XP.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues encountered.
+
 ### Completion Notes List
 
+- **Task 1 (Trend computation):** Created `error-trend.ts` with `computeErrorTrends()`. Splits errors into recent (14 days) vs older periods, groups by normalized category. Computes direction (improved/worsened/stable/new) by comparing counts. No backfill needed — works with whatever data exists.
+- **Task 2 (Classification):** Three output groups: improved (recent < older), worsened (recent > older or new), needsReview (stable or low-confidence). Each trend includes resolution rate, total count, confidence flag, and Vietnamese explanation with percentages.
+- **Task 3 (UI):** Created `ErrorTrendSection` component with `TrendCard` sub-component. Shows direction icons (↑↓−?), color-coded tags, resolution rates, and low-confidence tooltip (InfoCircleOutlined). Integrated into Error Notebook after pattern summary.
+- **Task 4 (Tests):** 15 tests: trend direction detection (5), classification (2), no-backfill compatibility (3), low-confidence detection (3), empty state (1), sorting (1).
+
 ### File List
+
+- `packages/modules/src/learning/error-trend.ts` — New (trend computation)
+- `packages/modules/src/learning/index.ts` — Modified (added exports)
+- `packages/modules/__tests__/learning/error-trend.test.ts` — New (15 tests)
+- `apps/web/app/(app)/error-notebook/_components/ErrorTrendSection.tsx` — New (UI component)
+- `apps/web/app/(app)/error-notebook/page.tsx` — Modified (integrated component)
+
+## Change Log
+
+- Added error improvement trend engine with 15 tests (Date: 2026-04-24)
+- Added Error Trend Section UI to Error Notebook page (Date: 2026-04-24)

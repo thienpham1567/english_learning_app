@@ -1,6 +1,6 @@
 # Story 25.3: Persist Versioned AI Feedback Runs
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 

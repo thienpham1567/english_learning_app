@@ -16,6 +16,8 @@ import { Tag, Tooltip, Select, Empty } from "antd";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { WritingPatternSection } from "./_components/WritingPatternSection";
 import { DeepExplanation } from "./_components/DeepExplanation";
+import { ErrorPatternSummary } from "./_components/ErrorPatternSummary";
+import { ErrorTrendSection } from "./_components/ErrorTrendSection";
 
 type DeepExplanationData = {
   whyWrong: string;
@@ -198,6 +200,16 @@ export default function ErrorNotebookPage() {
               </div>
             ))}
           </div>
+
+          {/* Error Pattern Summary (Story 23.2, AC: 1-4) */}
+          {!loading && errors.length > 0 && (
+            <ErrorPatternSummary errors={errors} />
+          )}
+
+          {/* Error Improvement Trend (Story 23.4, AC: 1-4) */}
+          {!loading && errors.length > 0 && (
+            <ErrorTrendSection errors={errors} />
+          )}
 
           {/* Filters */}
           <div

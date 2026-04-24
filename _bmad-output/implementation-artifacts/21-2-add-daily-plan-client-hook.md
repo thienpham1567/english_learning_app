@@ -1,6 +1,6 @@
 # Story 21.2: Add Daily Plan Client Hook
 
-Status: ready-for-dev
+Status: done
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -19,10 +19,10 @@ so that the plan is based on my actual mastery state and goals.
 
 ## Tasks / Subtasks
 
-- [ ] Define the daily-plan client response types from `/api/study-plan/daily` without duplicating contract logic unnecessarily. (AC: 1-4)
-- [ ] Implement a `useDailyStudyPlan`-style hook or colocated Home data loader with loading, ready, empty, retry, and error states. (AC: 1-4)
-- [ ] Preserve current dashboard loading behavior and avoid duplicate dashboard fetches where practical. (AC: 1-4)
-- [ ] Add hook/component tests for success, empty plan, API failure, and retry behavior. (AC: 1-4)
+- [x] Define the daily-plan client response types from `/api/study-plan/daily` without duplicating contract logic unnecessarily. (AC: 1-4)
+- [x] Implement a `useDailyStudyPlan`-style hook or colocated Home data loader with loading, ready, empty, retry, and error states. (AC: 1-4)
+- [x] Preserve current dashboard loading behavior and avoid duplicate dashboard fetches where practical. (AC: 1-4)
+- [x] Add hook/component tests for success, empty plan, API failure, and retry behavior. (AC: 1-4)
 
 ## Dev Notes
 
@@ -90,10 +90,25 @@ so that the plan is based on my actual mastery state and goals.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues encountered.
+
 ### Completion Notes List
 
+- **Task 1 (Types):** Defined client-side types (`DailyPlanItem`, `DailyPlan`, `DailyPlanStats`, `LegacyTask`, `DailyPlanResponse`) mirroring the server response shape without importing zod schemas. Keeps the client bundle lean while maintaining type safety.
+- **Task 2 (Hook):** Implemented `useDailyStudyPlan` hook with a full state machine (loading → ready/empty/error), abort-safe fetching via `AbortController`, configurable `budget` parameter, `enabled` flag, and `retry`/`refetch` methods.
+- **Task 3 (Backward compat):** The hook is purely additive — `useDashboard` and `DashboardProvider` are completely untouched. The new hook fetches `/api/study-plan/daily` independently, which is a different endpoint from `/api/dashboard`. No duplicate fetching of dashboard data.
+- **Task 4 (Tests):** Created 10 tests covering: loading→ready transition, all 7 plan item field preservation, empty plan state, error state with Error objects, error state with non-Error throws, retry after failure, budget parameter forwarding, default budget, legacy task field preservation, and `enabled=false` opt-out.
+
 ### File List
+
+- `apps/web/hooks/useDailyStudyPlan.ts` — New (client hook with types)
+- `apps/web/hooks/__tests__/useDailyStudyPlan.test.ts` — New (10 tests)
+
+## Change Log
+
+- Added `useDailyStudyPlan` hook for adaptive daily plan loading with full state machine (Date: 2026-04-24)
+- Added 10 tests covering all acceptance criteria for the hook (Date: 2026-04-24)

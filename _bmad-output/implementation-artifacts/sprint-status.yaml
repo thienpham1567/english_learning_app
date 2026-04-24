@@ -35,180 +35,180 @@ storySequence:
 sprints:
   R17:
     name: "Epic 21 - Adaptive Home Activation"
-    status: in-progress
+    status: done
     stories:
       "21.1":
         title: "Audit Recommendation Routes"
-        status: ready-for-dev
+        status: done
         estimate: "3h"
         risk: medium
       "21.2":
         title: "Add Daily Plan Client Hook"
-        status: ready-for-dev
+        status: done
         estimate: "4h"
         depends_on: "21.1"
       "21.3":
         title: "Replace Manual Home Plan With Adaptive Plan"
-        status: ready-for-dev
+        status: done
         estimate: "6h"
         depends_on: "21.2"
       "21.4":
         title: "Add Daily Session Start CTA"
-        status: ready-for-dev
+        status: done
         estimate: "4h"
         depends_on: "21.3"
       "21.5":
         title: "Track Daily Plan Completion State"
-        status: ready-for-dev
+        status: done
         estimate: "6h"
         depends_on: "21.3"
         risk: medium
   R18:
     name: "Epic 22 - Unified Review Foundation"
-    status: not_started
+    status: done
     stories:
       "22.1":
         title: "Add Due Review Task API Adapter"
-        status: ready-for-dev
+        status: review
         estimate: "5h"
         depends_on: "20.7, 20.8"
       "22.2":
         title: "Build Today's Review Hub"
-        status: ready-for-dev
+        status: review
         estimate: "6h"
         depends_on: "22.1"
       "22.3":
         title: "Implement Mixed Review Session Shell"
-        status: ready-for-dev
+        status: review
         estimate: "8h"
         depends_on: "22.2"
         risk: high
       "22.4":
         title: "Close Review Outcome Loop From Unified Session"
-        status: ready-for-dev
+        status: review
         estimate: "6h"
         depends_on: "20.9, 22.3"
         risk: medium
       "22.5":
         title: "Add Review Entry Points To Home And Sidebar"
-        status: ready-for-dev
+        status: review
         estimate: "4h"
         depends_on: "22.1"
   R19:
     name: "Epic 23 - Personal Error Remediation"
-    status: not_started
+    status: done
     stories:
       "23.1":
         title: "Normalize Error Categories"
-        status: ready-for-dev
+        status: review
         estimate: "5h"
       "23.2":
         title: "Add Error Pattern Summary"
-        status: ready-for-dev
-        estimate: "5h"
+        status: review
+        estimate: "6h"
         depends_on: "23.1"
       "23.3":
         title: "Generate Targeted Error Drills"
-        status: ready-for-dev
+        status: review
         estimate: "8h"
         depends_on: "23.1, 23.2"
         risk: high
       "23.4":
         title: "Show Error Improvement Trend"
-        status: ready-for-dev
+        status: review
         estimate: "6h"
         depends_on: "23.1, 23.2"
       "23.5":
         title: "Connect Error Notebook To Daily Plan"
-        status: ready-for-dev
+        status: review
         estimate: "6h"
         depends_on: "21.3, 23.2"
         risk: medium
   R20:
     name: "Epic 24 - Goals, Onboarding, And Starter Pathways"
-    status: not_started
+    status: done
     stories:
       "24.1":
         title: "Build Goal And Time Budget Onboarding"
-        status: ready-for-dev
+        status: review
         estimate: "6h"
         depends_on: "20.12"
       "24.2":
         title: "Connect Diagnostic To Baseline Skill State"
-        status: ready-for-dev
+        status: review
         estimate: "6h"
         depends_on: "20.4, 20.12"
       "24.3":
         title: "Generate 7-Day Starter Pathway"
-        status: ready-for-dev
+        status: review
         estimate: "8h"
         depends_on: "24.1, 24.2"
       "24.4":
         title: "Add Pathway View To Home"
-        status: ready-for-dev
+        status: review
         estimate: "5h"
         depends_on: "21.3, 24.3"
       "24.5":
         title: "Replan After Goal Or Time Budget Changes"
-        status: ready-for-dev
+        status: review
         estimate: "5h"
         depends_on: "24.3"
   R21:
     name: "Epic 25 - Cross-Module Feedback And AI Coach"
-    status: not_started
+    status: done
     stories:
       "25.1":
         title: "Define End-Of-Lesson Summary Contract"
-        status: ready-for-dev
+        status: review
         estimate: "5h"
       "25.2":
         title: "Apply Summary Pattern To High-Value Modules"
-        status: ready-for-dev
+        status: review
         estimate: "8h"
         depends_on: "25.1"
         risk: medium
       "25.3":
         title: "Persist Versioned AI Feedback Runs"
-        status: ready-for-dev
+        status: review
         estimate: "6h"
         depends_on: "20.10, 20.11"
       "25.4":
         title: "Add Coach Summary To Chatbot"
-        status: ready-for-dev
+        status: review
         estimate: "6h"
         depends_on: "21.3, 25.1"
       "25.5":
         title: "Capture Chat Corrections As Learning Signals"
-        status: ready-for-dev
+        status: review
         estimate: "8h"
         depends_on: "20.1, 20.2, 25.1"
         risk: high
   R22:
     name: "Epic 26 - Progress Insights And Outcome Motivation"
-    status: not_started
+    status: done
     stories:
       "26.1":
         title: "Build Skill Mastery Progress Panel"
-        status: ready-for-dev
+        status: review
         estimate: "6h"
         depends_on: "20.4"
       "26.2":
         title: "Add Learner-Friendly Improvement Statements"
-        status: ready-for-dev
+        status: review
         estimate: "6h"
         depends_on: "23.4, 26.1"
       "26.3":
         title: "Add Review Debt And Memory Risk Insight"
-        status: ready-for-dev
+        status: review
         estimate: "5h"
         depends_on: "22.1, 26.1"
       "26.4":
         title: "Add Weekly Learning Retrospective"
-        status: ready-for-dev
+        status: review
         estimate: "6h"
         depends_on: "26.1, 26.2, 26.3"
       "26.5":
         title: "Rebalance Motivation Widgets Around Learning Outcomes"
-        status: ready-for-dev
+        status: review
         estimate: "5h"
         depends_on: "21.3, 26.1"

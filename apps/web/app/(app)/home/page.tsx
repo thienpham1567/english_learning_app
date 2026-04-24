@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api-client";
+import { useDailyStudyPlan, type DailyPlanItem } from "@/hooks/useDailyStudyPlan";
 
 import { useRouter } from "next/navigation";
 import { Card, Flex, Typography, Button, Space, Tag, Spin, Result } from "antd";
@@ -21,6 +22,7 @@ import {
   BarChartOutlined,
   RightOutlined,
   SoundOutlined,
+  HistoryOutlined,
 } from "@ant-design/icons";
 
 import { useDashboard, type DashboardData } from "@/hooks/useDashboard";
@@ -152,39 +154,83 @@ export default function HomePage() {
 
   const firstName = user?.name?.split(" ").pop() ?? "bạn";
 
-  // ── Build today's plan items (Story 14.4: Enhanced) ──
-  const todayItems: Array<{ label: string; done: boolean; href: string; icon: React.ReactNode; priority: number }> = [];
+  // ── Adaptive daily plan (Story 21.3) ──
+  const adaptivePlan = useDailyStudyPlan({ enabled: isReady && !isNewUser });
+  const hasAdaptivePlan = adaptivePlan.state.status === "ready";
 
-  // Highest priority: Vocabulary SRS review (if due)
-  if ((data.vocabDue ?? 0) > 0) {
-    todayItems.push({ label: `Ôn ${data.vocabDue} từ vựng SRS`, done: false, href: "/review-quiz", icon: <BookOutlined />, priority: 0 });
+  // Map adaptive plan items → todayItems format (AC: 1, 2, 3)
+  const PRIORITY_MAP: Record<string, number> = { high: 0, medium: 1, low: 2 };
+  const SKILL_ICON_MAP: Record<string, React.ReactNode> = {
+    vocabulary: <BookOutlined />,
+    grammar: <BulbOutlined />,
+    listening: <SoundOutlined />,
+    reading: <ReadOutlined />,
+    writing: <EditOutlined />,
+    speaking: <CommentOutlined />,
+    pronunciation: <SoundOutlined />,
+    exam_strategy: <TrophyOutlined />,
+  };
+
+  function adaptiveItemIcon(item: DailyPlanItem): React.ReactNode {
+    for (const sid of item.skillIds) {
+      if (SKILL_ICON_MAP[sid]) return SKILL_ICON_MAP[sid];
+    }
+    return <ScheduleOutlined />;
   }
 
-  // Second: Flashcard review
-  if (data.flashcardsDue > 0) {
-    todayItems.push({ label: `Ôn ${data.flashcardsDue} thẻ flashcard`, done: false, href: "/flashcards", icon: <AppstoreOutlined />, priority: 1 });
-  }
+  // ── Build today's plan items (Story 21.3: Adaptive plan with fallback) ──
+  let todayItems: Array<{ label: string; done: boolean; href: string; icon: React.ReactNode; priority: number; reason?: string; estimatedMinutes?: number }> = [];
 
-  // Core daily tasks
-  todayItems.push({ label: "Thử thách mỗi ngày", done: data.dailyChallenge.completed, href: "/daily-challenge", icon: <FireOutlined />, priority: 2 });
-  todayItems.push({ label: "Luyện viết", done: false, href: "/writing-practice", icon: <EditOutlined />, priority: 4 });
+  if (hasAdaptivePlan) {
+    // AC: 1 — adaptive plan items first
+    const adaptiveState = adaptivePlan.state as Extract<typeof adaptivePlan.state, { status: "ready" }>;
+    todayItems = adaptiveState.plan.items.map((item, i) => ({
+      label: item.title,
+      done: item.completed,
+      href: item.actionUrl,
+      icon: adaptiveItemIcon(item),
+      priority: PRIORITY_MAP[item.priority] ?? i,
+      reason: item.reason,
+      estimatedMinutes: item.estimatedMinutes,
+    }));
+  } else {
+    // AC: 4 — fallback to manual plan when adaptive plan is unavailable
 
-  // Add weak skill recommendation
-  if (weakSkill) {
-    const SKILL_LABELS: Record<string, { label: string; href: string; icon: React.ReactNode }> = {
-      grammar: { label: "Luyện ngữ pháp", href: "/grammar-quiz", icon: <BulbOutlined /> },
-      listening: { label: "Luyện nghe", href: "/listening", icon: <SoundOutlined /> },
-      reading: { label: "Luyện đọc", href: "/reading", icon: <ReadOutlined /> },
-    };
-    const skill = SKILL_LABELS[weakSkill.module];
-    if (skill) {
-      todayItems.push({
-        label: `${skill.label} (${weakSkill.cefr} — kỹ năng yếu nhất)`,
-        done: false,
-        href: skill.href,
-        icon: skill.icon,
-        priority: 3,
-      });
+    // Story 22.5 — Unified review hub entry point (AC: 1)
+    // Priority -1 so it appears before legacy items. Uses separate count from /api/review/due.
+    todayItems.push({ label: "Ôn tập hôm nay", done: false, href: "/review", icon: <HistoryOutlined />, priority: -1 });
+
+    // Highest priority: Vocabulary SRS review (if due)
+    if ((data.vocabDue ?? 0) > 0) {
+      todayItems.push({ label: `Ôn ${data.vocabDue} từ vựng SRS`, done: false, href: "/review-quiz", icon: <BookOutlined />, priority: 0 });
+    }
+
+    // Second: Flashcard review
+    if (data.flashcardsDue > 0) {
+      todayItems.push({ label: `Ôn ${data.flashcardsDue} thẻ flashcard`, done: false, href: "/flashcards", icon: <AppstoreOutlined />, priority: 1 });
+    }
+
+    // Core daily tasks
+    todayItems.push({ label: "Thử thách mỗi ngày", done: data.dailyChallenge.completed, href: "/daily-challenge", icon: <FireOutlined />, priority: 2 });
+    todayItems.push({ label: "Luyện viết", done: false, href: "/writing-practice", icon: <EditOutlined />, priority: 4 });
+
+    // Add weak skill recommendation
+    if (weakSkill) {
+      const SKILL_LABELS: Record<string, { label: string; href: string; icon: React.ReactNode }> = {
+        grammar: { label: "Luyện ngữ pháp", href: "/grammar-quiz", icon: <BulbOutlined /> },
+        listening: { label: "Luyện nghe", href: "/listening", icon: <SoundOutlined /> },
+        reading: { label: "Luyện đọc", href: "/reading", icon: <ReadOutlined /> },
+      };
+      const skill = SKILL_LABELS[weakSkill.module];
+      if (skill) {
+        todayItems.push({
+          label: `${skill.label} (${weakSkill.cefr} — kỹ năng yếu nhất)`,
+          done: false,
+          href: skill.href,
+          icon: skill.icon,
+          priority: 3,
+        });
+      }
     }
   }
 
@@ -272,13 +318,63 @@ export default function HomePage() {
           </Card>
         )}
 
-        {/* ── Smart CTA (Story 8.1) ── */}
+        {/* ── Session Start CTA (Story 21.4) ── */}
         {!isNewUser && (() => {
-          const suggested = getSuggestedActivity(data);
+          // AC: 1, 2 — select highest-priority incomplete item
+          const nextItem = todayItems.find((item) => !item.done);
+          const allDone = todayItems.length > 0 && !nextItem;
+
+          // AC: 3 — celebration state when all items are complete
+          if (allDone) {
+            return (
+              <button
+                className="cta-shimmer"
+                onClick={() => router.push("/progress")}
+                style={{
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 12,
+                  padding: "18px 24px",
+                  borderRadius: "var(--radius-xl)",
+                  border: "none",
+                  background: "linear-gradient(135deg, var(--success), var(--accent))",
+                  color: "var(--text-on-accent)",
+                  fontSize: 16,
+                  fontWeight: 700,
+                  fontFamily: "var(--font-body)",
+                  cursor: "pointer",
+                  boxShadow: "0 4px 16px color-mix(in srgb, var(--success) 30%, transparent)",
+                  transition: "transform 0.15s ease, box-shadow 0.15s ease",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "scale(1.01)";
+                  e.currentTarget.style.boxShadow = "0 6px 24px color-mix(in srgb, var(--success) 40%, transparent)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
+                  e.currentTarget.style.boxShadow = "0 4px 16px color-mix(in srgb, var(--success) 30%, transparent)";
+                }}
+                aria-label="Hoàn thành tất cả — Xem tiến trình"
+              >
+                <span style={{ fontSize: 20 }}>🎉</span>
+                <span>Tuyệt vời! Bạn đã hoàn thành hôm nay</span>
+                <RightOutlined style={{ marginLeft: "auto", opacity: 0.7, fontSize: 14 }} />
+              </button>
+            );
+          }
+
+          // AC: 1 — primary CTA navigates to highest-priority incomplete item
+          const target = nextItem ?? getSuggestedActivity(data);
+          const ctaLabel = nextItem ? `Bắt đầu: ${nextItem.label}` : target.label;
+          const ctaHref = nextItem ? nextItem.href : target.href;
+          const ctaIcon = nextItem ? nextItem.icon : target.icon;
+
           return (
             <button
               className="cta-shimmer"
-              onClick={() => router.push(suggested.href)}
+              onClick={() => router.push(ctaHref)}
               style={{
                 width: "100%",
                 display: "flex",
@@ -305,10 +401,10 @@ export default function HomePage() {
                 e.currentTarget.style.transform = "scale(1)";
                 e.currentTarget.style.boxShadow = "0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent)";
               }}
-              aria-label={suggested.label}
+              aria-label={ctaLabel}
             >
-              <span style={{ fontSize: 20, display: "flex", alignItems: "center" }}>{suggested.icon}</span>
-              <span>{suggested.label}</span>
+              <span style={{ fontSize: 20, display: "flex", alignItems: "center" }}>{ctaIcon}</span>
+              <span>{ctaLabel}</span>
               <RightOutlined style={{ marginLeft: "auto", opacity: 0.7, fontSize: 14 }} />
             </button>
           );

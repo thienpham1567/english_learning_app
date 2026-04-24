@@ -1,6 +1,6 @@
 # Story 25.5: Capture Chat Corrections As Learning Signals
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 

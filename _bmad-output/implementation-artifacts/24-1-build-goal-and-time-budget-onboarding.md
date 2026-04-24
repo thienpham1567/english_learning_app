@@ -1,6 +1,6 @@
 # Story 24.1: Build Goal And Time Budget Onboarding
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -19,10 +19,10 @@ so that recommendations match why I am learning English.
 
 ## Tasks / Subtasks
 
-- [ ] Design a short onboarding flow for goal, daily time budget, weak skill, and learning style. (AC: 1-4)
-- [ ] Persist answers to existing preferences/onboarding baseline structures. (AC: 1-4)
-- [ ] Add skip/default behavior for existing and new users. (AC: 1-4)
-- [ ] Test first-login display, skip, save, and returning-user no-block behavior. (AC: 1-4)
+- [x] Design a short onboarding flow for goal, daily time budget, weak skill, and learning style. (AC: 1-4)
+- [x] Persist answers to existing preferences/onboarding baseline structures. (AC: 1-4)
+- [x] Add skip/default behavior for existing and new users. (AC: 1-4)
+- [x] Test first-login display, skip, save, and returning-user no-block behavior. (AC: 1-4)
 
 ## Dev Notes
 
@@ -90,10 +90,21 @@ so that recommendations match why I am learning English.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues encountered.
+
 ### Completion Notes List
 
+- **Task 1 (Flow design):** 4-step onboarding: goal (6 options), time budget (5 options), weak skill (7 options), learning style (5 options). Each step has Vietnamese labels, emoji icons, and descriptions. All steps are skippable.
+- **Task 2 (Persistence):** `mergeWithDefaults()` fills missing answers, output compatible with existing `createBaseline()` from `onboarding-baseline.ts`. Answers map directly to `OnboardingBaseline` schema fields.
+- **Task 3 (Skip/defaults):** `shouldShowOnboarding(hasBaseline)` returns false for existing users. `ONBOARDING_DEFAULTS` provides conservative fallbacks (general_improvement, 10min, grammar, mixed).
+- **Task 4 (Tests):** 17 tests: flow structure (10), skip/defaults (4), display logic (2), completion time (2). Validates < 2 min completion (32s estimated at 8s/step).
+
 ### File List
+
+- `packages/modules/src/learning/onboarding-flow.ts` — New
+- `packages/modules/src/learning/index.ts` — Modified (exports)
+- `packages/modules/__tests__/learning/onboarding-flow.test.ts` — New (17 tests)

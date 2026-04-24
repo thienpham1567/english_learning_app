@@ -1,6 +1,6 @@
 # Story 22.2: Build Today's Review Hub
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -19,10 +19,10 @@ so that I can review what matters without choosing separate review modules.
 
 ## Tasks / Subtasks
 
-- [ ] Create the review hub page or component using existing app shell/navigation patterns. (AC: 1-4)
-- [ ] Group due tasks by learner need instead of raw source type names. (AC: 1-4)
-- [ ] Show count, priority, estimated minutes, and start action for each group. (AC: 1-4)
-- [ ] Keep legacy flashcards/review quiz/error notebook links discoverable during migration. (AC: 1-4)
+- [x] Create the review hub page or component using existing app shell/navigation patterns. (AC: 1-4)
+- [x] Group due tasks by learner need instead of raw source type names. (AC: 1-4)
+- [x] Show count, priority, estimated minutes, and start action for each group. (AC: 1-4)
+- [x] Keep legacy flashcards/review quiz/error notebook links discoverable during migration. (AC: 1-4)
 
 ## Dev Notes
 
@@ -91,10 +91,27 @@ so that I can review what matters without choosing separate review modules.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues encountered.
+
 ### Completion Notes List
 
+- **Task 1 (Review hub page):** Created `apps/web/app/(app)/review/page.tsx` using `ModuleHeader`, Ant Design `Card`/`Flex`/`Tag`, and the existing `cta-shimmer` button pattern. Fetches from `/api/review/due` (Story 22.1).
+- **Task 2 (Grouping):** Created `packages/modules/src/learning/review-group-mapper.ts` with `groupReviewTasks()` that maps sourceType → learner-friendly groups (words, mistakes, grammar, listening, reading, writing, pronunciation, other). Added 12 tests.
+- **Task 3 (Count/priority/time):** Each group card shows count, estimated minutes, and a "high priority" tag when priority ≤ 30. Summary strip shows total items and total minutes.
+- **Task 4 (Legacy links):** "Truy cập nhanh" section with clickable links to Flashcards, Ôn lỗi sai, and Sổ lỗi sai. Shows badge counts for flashcards due and unresolved errors.
+
 ### File List
+
+- `apps/web/app/(app)/review/page.tsx` — New (review hub page)
+- `packages/modules/src/learning/review-group-mapper.ts` — New (grouping logic)
+- `packages/modules/src/learning/index.ts` — Modified (added export)
+- `packages/modules/__tests__/learning/review-group-mapper.test.ts` — New (12 tests)
+
+## Change Log
+
+- Added Today's Review Hub page at `/review` (Date: 2026-04-24)
+- Added review group mapper with 12 unit tests (Date: 2026-04-24)

@@ -1,6 +1,6 @@
 # Story 24.5: Replan After Goal Or Time Budget Changes
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -19,10 +19,10 @@ so that the plan remains realistic.
 
 ## Tasks / Subtasks
 
-- [ ] Implement goal/time budget update handling and future-plan refresh rules. (AC: 1-4)
-- [ ] Preserve completed historical activities and learning events. (AC: 1-4)
-- [ ] Refresh current-day tasks safely after settings change. (AC: 1-4)
-- [ ] Test TOEIC-to-IELTS and time-budget changes against daily-plan output. (AC: 1-4)
+- [x] Implement goal/time budget update handling and future-plan refresh rules. (AC: 1-4)
+- [x] Preserve completed historical activities and learning events. (AC: 1-4)
+- [x] Refresh current-day tasks safely after settings change. (AC: 1-4)
+- [x] Test TOEIC-to-IELTS and time-budget changes against daily-plan output. (AC: 1-4)
 
 ## Dev Notes
 
@@ -90,10 +90,21 @@ so that the plan remains realistic.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues encountered.
+
 ### Completion Notes List
 
+- **Task 1 (Replan logic):** `replanPathway()` regenerates pathway when goal or budget changes. Detects changed=false when settings are identical. Generates Vietnamese change summary ("Đã cập nhật: Mục tiêu · Thời gian").
+- **Task 2 (Preserve history):** Completed days kept from old pathway in merged output. `preservedDays` array tracks which days were carried over.
+- **Task 3 (Current-day refresh):** Uncompleted days (including current) use new pathway templates. Only explicitly completed days preserved.
+- **Task 4 (Tests):** 13 tests: future plan generation (4), preserve completed (2), refresh current day (1), goal switching exam→academic & budget change (2), `isReplanNeeded` utility (4).
+
 ### File List
+
+- `packages/modules/src/learning/pathway-replanner.ts` — New
+- `packages/modules/src/learning/index.ts` — Modified (exports)
+- `packages/modules/__tests__/learning/pathway-replanner.test.ts` — New (13 tests)

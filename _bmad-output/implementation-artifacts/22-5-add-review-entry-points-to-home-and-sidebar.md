@@ -1,6 +1,6 @@
 # Story 22.5: Add Review Entry Points To Home And Sidebar
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -19,10 +19,10 @@ so that I do not miss important review work.
 
 ## Tasks / Subtasks
 
-- [ ] Add review hub entry points to Home and sidebar using existing badge patterns. (AC: 1-4)
-- [ ] Prevent double-counting between unified review tasks and legacy flashcard/error badges. (AC: 1-4)
-- [ ] Ensure mobile and desktop navigation remain usable. (AC: 1-4)
-- [ ] Test badge visibility, counts, and links for no-due and due-review states. (AC: 1-4)
+- [x] Add review hub entry points to Home and sidebar using existing badge patterns. (AC: 1-4)
+- [x] Prevent double-counting between unified review tasks and legacy flashcard/error badges. (AC: 1-4)
+- [x] Ensure mobile and desktop navigation remain usable. (AC: 1-4)
+- [x] Test badge visibility, counts, and links for no-due and due-review states. (AC: 1-4)
 
 ## Dev Notes
 
@@ -91,10 +91,28 @@ so that I do not miss important review work.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues encountered.
+
 ### Completion Notes List
 
+- **Task 1 (Entry points):** Added `/review` "Ôn tập hôm nay" item to sidebar's assess group with `HistoryOutlined` icon. Added review hub task to Home page fallback plan at priority -1 (appears first). Sidebar badge uses `var(--warning)` color to visually distinguish from legacy badges.
+- **Task 2 (No double-counting):** `useSidebarBadges` now fetches `reviewDue` from `/api/review/due` as a separate count. Legacy `flashcardsDue` and `vocabDue` remain from the dashboard provider. Each badge source is independent — no shared state that could cause double-counting.
+- **Task 3 (Mobile/desktop):** Sidebar entry works in both expanded and collapsed states via existing Tooltip pattern. Home page entry inherits responsive layout from the existing task list. No new breakpoints or layout changes needed.
+- **Task 4 (Tests):** 13 tests: badge visibility for due/no-due states, legacy badge preservation when unified badge is present, no double-counting via unique task IDs, link target correctness, and no-badge state.
+
 ### File List
+
+- `apps/web/components/shared/AppSidebar.tsx` — Modified (added /review entry + badge)
+- `apps/web/hooks/useSidebarBadges.ts` — Modified (added reviewDue field)
+- `apps/web/app/(app)/home/page.tsx` — Modified (added review hub task to fallback plan)
+- `apps/web/app/(app)/home/__tests__/review-entry-points.test.ts` — New (13 tests)
+
+## Change Log
+
+- Added review hub to sidebar navigation and Home page task list (Date: 2026-04-24)
+- Extended useSidebarBadges with unified review due count (Date: 2026-04-24)
+- Added 13 tests for badge visibility, double-counting, and link targets (Date: 2026-04-24)

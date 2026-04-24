@@ -1,6 +1,6 @@
 # Story 26.5: Rebalance Motivation Widgets Around Learning Outcomes
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 

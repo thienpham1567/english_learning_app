@@ -1,6 +1,6 @@
 # Story 25.4: Add Coach Summary To Chatbot
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 

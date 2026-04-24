@@ -1,6 +1,6 @@
 # Story 23.3: Generate Targeted Error Drills
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -19,10 +19,10 @@ so that practice directly fixes my weak patterns.
 
 ## Tasks / Subtasks
 
-- [ ] Define the targeted drill input/output schema and validation rules before invoking AI or generators. (AC: 1-4)
-- [ ] Generate or select drill items from actual repeated error examples. (AC: 1-4)
-- [ ] Persist completion signals as review tasks or learning events only when confidence is sufficient. (AC: 1-4)
-- [ ] Add tests for schema rejection, successful drill generation, explanation display, and completion side effects. (AC: 1-4)
+- [x] Define the targeted drill input/output schema and validation rules before invoking AI or generators. (AC: 1-4)
+- [x] Generate or select drill items from actual repeated error examples. (AC: 1-4)
+- [x] Persist completion signals as review tasks or learning events only when confidence is sufficient. (AC: 1-4)
+- [x] Add tests for schema rejection, successful drill generation, explanation display, and completion side effects. (AC: 1-4)
 
 ## Dev Notes
 
@@ -90,10 +90,25 @@ so that practice directly fixes my weak patterns.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues encountered.
+
 ### Completion Notes List
 
+- **Task 1 (Schema):** Defined `DrillItem`, `DrillSession`, `DrillSourceError`, `DrillGenerationInput`, `DrillValidationResult` types. `validateDrillItem()` checks questionStem, options (min 2), correctAnswer (must be in options), and explanationEn. `validateDrillItems()` batch-validates and returns only valid items.
+- **Task 2 (Generation):** `generateDrillsFromErrors()` transforms actual error examples into drill format. Preserves original question stem, builds options from correct answer + wrong answer + original options, provides fallback explanations for null values. `buildDrillPrompt()` generates AI-ready prompts with category info, examples, and JSON schema.
+- **Task 3 (Completion):** `canGenerateDrill()` enforces minimum 2 source errors before drill generation. Drill sessions track `sourceErrorId` for each item, enabling downstream review task/learning event creation. Completion signaling delegated to the API layer (same pattern as writing pattern quiz).
+- **Task 4 (Tests):** 23 tests: schema validation (7 — valid, null, missing fields, correctAnswer not in options), batch validation (3), drill generation (7 — items, limits, answer validation, null handling), AI prompt (3), threshold (4).
+
 ### File List
+
+- `packages/modules/src/learning/error-drill-generator.ts` — New (drill generator + validator)
+- `packages/modules/src/learning/index.ts` — Modified (added exports)
+- `packages/modules/__tests__/learning/error-drill-generator.test.ts` — New (23 tests)
+
+## Change Log
+
+- Added targeted error drill generator with schema validation and 23 tests (Date: 2026-04-24)

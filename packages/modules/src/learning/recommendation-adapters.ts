@@ -96,11 +96,12 @@ const SKILL_TO_MODULE: Record<string, string> = {
 	exam_strategy: "grammar_quiz",
 };
 
-const SKILL_TO_URL: Record<string, string> = {
+/** Exported for route-coverage testing (AC: 3). */
+export const SKILL_TO_URL: Record<string, string> = {
 	vocabulary: "/flashcards",
 	grammar: "/grammar-quiz",
 	listening: "/listening",
-	speaking: "/chatbot",
+	speaking: "/english-chatbot",
 	pronunciation: "/pronunciation",
 	reading: "/reading",
 	writing: "/writing-practice",
@@ -124,7 +125,7 @@ const DEFAULT_STUDY_ACTIONS = [
 	{ skillId: "listening", moduleType: "listening", actionUrl: "/listening", label: "Train your ear", estimatedMinutes: 15 },
 	{ skillId: "reading", moduleType: "reading", actionUrl: "/reading", label: "Read and comprehend", estimatedMinutes: 20 },
 	{ skillId: "writing", moduleType: "writing", actionUrl: "/writing-practice", label: "Improve your writing", estimatedMinutes: 20 },
-	{ skillId: "speaking", moduleType: "chatbot", actionUrl: "/chatbot", label: "Practice speaking", estimatedMinutes: 10 },
+	{ skillId: "speaking", moduleType: "chatbot", actionUrl: "/english-chatbot", label: "Practice speaking", estimatedMinutes: 10 },
 ];
 
 function proficiencyToDifficulty(proficiency: number): RecommendationCandidate["difficulty"] {

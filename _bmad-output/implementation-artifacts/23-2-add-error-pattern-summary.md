@@ -1,6 +1,6 @@
 # Story 23.2: Add Error Pattern Summary
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -19,10 +19,10 @@ so that I can focus on the highest-impact fixes.
 
 ## Tasks / Subtasks
 
-- [ ] Aggregate error patterns by category, frequency, recency, and unresolved/resolved state. (AC: 1-4)
-- [ ] Add Error Notebook summary UI with top patterns, examples, affected skill, and next action. (AC: 1-4)
-- [ ] Keep filters and existing error list behavior intact. (AC: 1-4)
-- [ ] Test repeated-pattern display, no-error empty state, and sparse/incomplete data. (AC: 1-4)
+- [x] Aggregate error patterns by category, frequency, recency, and unresolved/resolved state. (AC: 1-4)
+- [x] Add Error Notebook summary UI with top patterns, examples, affected skill, and next action. (AC: 1-4)
+- [x] Keep filters and existing error list behavior intact. (AC: 1-4)
+- [x] Test repeated-pattern display, no-error empty state, and sparse/incomplete data. (AC: 1-4)
 
 ## Dev Notes
 
@@ -90,10 +90,28 @@ so that I can focus on the highest-impact fixes.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues encountered.
+
 ### Completion Notes List
 
+- **Task 1 (Aggregation):** Created `error-pattern-summary.ts` with `summarizeErrorPatterns()` that groups errors by normalized category (from 23.1), counts total/unresolved/recent, sorts by unresolved → total → recency. 7-day recency window.
+- **Task 2 (UI):** Created `ErrorPatternSummary` component showing top 5 patterns with category emoji, labelVi, frequency stats, up to 2 example snippets (question + wrong/correct answer), affected skill IDs, and clickable next action links.
+- **Task 3 (Filters intact):** Component is additive — inserted between stats strip and existing filters. All existing error list behavior, resolve actions, and filter controls remain unchanged.
+- **Task 4 (Tests):** 17 tests: frequency/recency sorting (4), examples/actions (6), resolved inclusion (2), empty state (1), sparse data (3), multi-source aggregation (1).
+
 ### File List
+
+- `packages/modules/src/learning/error-pattern-summary.ts` — New (pattern aggregation)
+- `packages/modules/src/learning/index.ts` — Modified (added exports)
+- `packages/modules/__tests__/learning/error-pattern-summary.test.ts` — New (17 tests)
+- `apps/web/app/(app)/error-notebook/_components/ErrorPatternSummary.tsx` — New (UI component)
+- `apps/web/app/(app)/error-notebook/page.tsx` — Modified (integrated component)
+
+## Change Log
+
+- Added error pattern summary aggregation with 17 tests (Date: 2026-04-24)
+- Added Error Pattern Summary UI to Error Notebook page (Date: 2026-04-24)

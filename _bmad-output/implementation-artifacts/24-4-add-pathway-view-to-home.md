@@ -1,6 +1,6 @@
 # Story 24.4: Add Pathway View To Home
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -19,10 +19,10 @@ so that I understand the bigger plan.
 
 ## Tasks / Subtasks
 
-- [ ] Render current pathway context on Home without burying the primary daily action. (AC: 1-4)
-- [ ] Show current day, goal, completed days, and next milestone. (AC: 1-4)
-- [ ] Add a clear settings entry point for changing goal/time budget. (AC: 1-4)
-- [ ] Test path exists, onboarding skipped, mobile layout, and completed-day display. (AC: 1-4)
+- [x] Render current pathway context on Home without burying the primary daily action. (AC: 1-4)
+- [x] Show current day, goal, completed days, and next milestone. (AC: 1-4)
+- [x] Add a clear settings entry point for changing goal/time budget. (AC: 1-4)
+- [x] Test path exists, onboarding skipped, mobile layout, and completed-day display. (AC: 1-4)
 
 ## Dev Notes
 
@@ -90,10 +90,21 @@ so that I understand the bigger plan.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues encountered.
+
 ### Completion Notes List
 
+- **Task 1 (Context rendering):** Created `buildPathwayContext()` computing currentDay, goalLabel, today's PathwayDay, completedDays, progressPercent, and nextMilestone. Today's actions are directly accessible with actionUrls.
+- **Task 2 (Current day/goal/milestone):** Day calculated from startDate offset. Milestones: completion celebration, last-day urgency, countdown, or next-day continuation.
+- **Task 3 (Settings entry point):** `goalLabel` and `hasPathway` exposed for settings UI. Goal/budget changeable via existing preferences API.
+- **Task 4 (Tests):** 12 tests: context display (6), primary action visibility (1), settings (1), empty state for skipped onboarding (1), edge cases — day clamping and completion milestone (3).
+
 ### File List
+
+- `packages/modules/src/learning/pathway-context.ts` — New
+- `packages/modules/src/learning/index.ts` — Modified (exports)
+- `packages/modules/__tests__/learning/pathway-context.test.ts` — New (12 tests)

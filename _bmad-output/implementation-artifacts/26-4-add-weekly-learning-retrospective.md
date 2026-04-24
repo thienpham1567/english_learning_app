@@ -1,6 +1,6 @@
 # Story 26.4: Add Weekly Learning Retrospective
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 

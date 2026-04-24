@@ -1,6 +1,6 @@
 # Story 22.4: Close Review Outcome Loop From Unified Session
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -20,10 +20,10 @@ so that the app stops showing tasks I have already mastered.
 
 ## Tasks / Subtasks
 
-- [ ] Wire review outcomes to existing review completion/scheduler domain functions. (AC: 1-5)
-- [ ] Persist task status or next due date according to again/hard/good/easy outcomes. (AC: 1-5)
-- [ ] Create `review_completed` learning events and mastery updates where existing services support it. (AC: 1-5)
-- [ ] Ensure telemetry failures do not discard visible learner answers or task state. (AC: 1-5)
+- [x] Wire review outcomes to existing review completion/scheduler domain functions. (AC: 1-5)
+- [x] Persist task status or next due date according to again/hard/good/easy outcomes. (AC: 1-5)
+- [x] Create `review_completed` learning events and mastery updates where existing services support it. (AC: 1-5)
+- [x] Ensure telemetry failures do not discard visible learner answers or task state. (AC: 1-5)
 
 ## Dev Notes
 
@@ -92,10 +92,28 @@ so that the app stops showing tasks I have already mastered.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues encountered.
+
 ### Completion Notes List
 
+- **Task 1 (Wire outcomes):** Created `POST /api/review/outcome` route that accepts a batch of `{taskId, outcome, durationMs}` items. Delegates to `completeReview()` from `@repo/modules/learning` for SM-2 scheduling and mastery computation.
+- **Task 2 (Persist status):** Task status updated via `db.update(reviewTask)` with new ease factor, interval, due date, attempt count, and status (pending/completed). This is the critical path — runs first.
+- **Task 3 (Learning events + mastery):** `review_completed` learning event inserted into `learningEvent` table. Mastery updates applied to `userSkillState`. Both are fire-and-forget wrapped in try/catch (AC: 4).
+- **Task 4 (Telemetry isolation):** Telemetry and mastery writes are in separate try/catch blocks after task persistence. Failures log warnings but never roll back the task status update. Session page submission is also fire-and-forget via `void api.post().catch()`.
+- **Session page integration:** Added `useEffect` that submits outcomes when session completes/exits. Maps UI outcomes (correct→good, incorrect→again, skipped→filtered out).
+
 ### File List
+
+- `apps/web/app/api/review/outcome/route.ts` — New (outcome processing route)
+- `apps/web/app/api/review/outcome/__tests__/route.test.ts` — New (10 tests)
+- `apps/web/app/(app)/review/session/page.tsx` — Modified (added outcome submission)
+
+## Change Log
+
+- Added `POST /api/review/outcome` endpoint for unified session outcome processing (Date: 2026-04-24)
+- Added outcome submission to mixed review session page (Date: 2026-04-24)
+- Added 10 tests for outcome mapping and telemetry isolation (Date: 2026-04-24)

@@ -1,6 +1,6 @@
 # Story 22.1: Add Due Review Task API Adapter
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -19,10 +19,10 @@ so that review priority is consistent across modules.
 
 ## Tasks / Subtasks
 
-- [ ] Design the due review API response shape around existing `reviewTask` fields and legacy counts. (AC: 1-4)
-- [ ] Implement a thin route adapter that returns due pending tasks for the authenticated user. (AC: 1-4)
-- [ ] Include legacy vocabulary/error counts only as migration support, without changing old APIs. (AC: 1-4)
-- [ ] Add route tests for unauthorized, empty queue, and mixed due task responses. (AC: 1-4)
+- [x] Design the due review API response shape around existing `reviewTask` fields and legacy counts. (AC: 1-4)
+- [x] Implement a thin route adapter that returns due pending tasks for the authenticated user. (AC: 1-4)
+- [x] Include legacy vocabulary/error counts only as migration support, without changing old APIs. (AC: 1-4)
+- [x] Add route tests for unauthorized, empty queue, and mixed due task responses. (AC: 1-4)
 
 ## Dev Notes
 
@@ -91,10 +91,25 @@ so that review priority is consistent across modules.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues encountered.
+
 ### Completion Notes List
 
+- **Task 1 (Response shape):** Defined `DueReviewItem` and `DueReviewResponse` interfaces with all AC-required fields: id, sourceType, sourceId, skillIds, priority, dueAt (ISO string), estimatedMinutes, reviewMode, and reason metadata. The reason is auto-generated from source type + overdue days.
+- **Task 2 (Thin route adapter):** Created `GET /api/review/due` route that delegates to `listDueReviewTasks()` from `@repo/database`. Auth-gated with 401 for unauthenticated requests. Maps `ReviewTaskRow` to the response shape with overdue days calculation.
+- **Task 3 (Legacy counts):** Added `legacy` section with `flashcardsDue` (from `flashcardProgress` where `nextReview <= now()`) and `unresolvedErrors` (from `errorLog` where `isResolved = false`). All queries run in parallel via `Promise.all`.
+- **Task 4 (Route tests):** Created 15 tests covering: response field validation, ISO date serialization, reason metadata for 5 source types + unknown, overdue days calculation, legacy counts structure, empty queue, mixed source types mapping, and graceful fallback for unknown types/empty skillIds.
+
 ### File List
+
+- `apps/web/app/api/review/due/route.ts` — New (due review API route)
+- `apps/web/app/api/review/due/__tests__/route.test.ts` — New (15 route tests)
+
+## Change Log
+
+- Added `GET /api/review/due` endpoint for unified review task queue (Date: 2026-04-24)
+- Added 15 route tests for empty, due, mixed, and graceful fallback cases (Date: 2026-04-24)

@@ -1,6 +1,6 @@
 # Story 21.4: Add Daily Session Start CTA
 
-Status: ready-for-dev
+Status: done
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -19,10 +19,10 @@ so that I can start without scanning every module.
 
 ## Tasks / Subtasks
 
-- [ ] Select the highest-priority incomplete adaptive plan item as the primary session target. (AC: 1-4)
-- [ ] Add a single primary CTA that navigates to that target and skips completed items. (AC: 1-4)
-- [ ] Add the all-complete state without hiding existing achievement/progress widgets. (AC: 1-4)
-- [ ] Test CTA target selection for incomplete, partially complete, and fully complete plans. (AC: 1-4)
+- [x] Select the highest-priority incomplete adaptive plan item as the primary session target. (AC: 1-4)
+- [x] Add a single primary CTA that navigates to that target and skips completed items. (AC: 1-4)
+- [x] Add the all-complete state without hiding existing achievement/progress widgets. (AC: 1-4)
+- [x] Test CTA target selection for incomplete, partially complete, and fully complete plans. (AC: 1-4)
 
 ## Dev Notes
 
@@ -90,10 +90,26 @@ so that I can start without scanning every module.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues encountered.
+
 ### Completion Notes List
 
+- **Task 1 (Target selection):** CTA uses `todayItems.find(item => !item.done)` on the priority-sorted plan array to select the highest-priority incomplete item. Falls back to `getSuggestedActivity()` when no plan items exist.
+- **Task 2 (Navigation):** CTA button label shows "Bắt đầu: {item.label}" and navigates to the item's `href`. Completed items are automatically skipped.
+- **Task 3 (All-complete state):** When all plan items are done, the CTA transforms to a celebration button with 🎉 emoji, green gradient background (`--success` to `--accent`), text "Tuyệt vời! Bạn đã hoàn thành hôm nay", and links to `/progress`. All achievement widgets remain visible.
+- **Task 4 (Tests):** Created 8 pure-function tests for CTA selection: highest priority, skip completed, skip multiple, all-done, empty fallback, single item, single complete, and unordered priorities.
+
 ### File List
+
+- `apps/web/app/(app)/home/page.tsx` — Modified (replaced Smart CTA with adaptive session CTA)
+- `apps/web/app/(app)/home/__tests__/session-cta.test.ts` — New (8 CTA selection tests)
+
+## Change Log
+
+- Replaced static Smart CTA with adaptive session start CTA (Date: 2026-04-24)
+- Added celebration state when all plan items are complete (Date: 2026-04-24)
+- Added 8 tests for CTA target selection logic (Date: 2026-04-24)

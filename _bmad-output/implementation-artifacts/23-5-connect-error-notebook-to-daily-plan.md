@@ -1,6 +1,6 @@
 # Story 23.5: Connect Error Notebook To Daily Plan
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -19,10 +19,10 @@ so that the app helps me fix what I keep missing.
 
 ## Tasks / Subtasks
 
-- [ ] Convert high-priority repeated error patterns into recommendation candidates. (AC: 1-4)
-- [ ] Add daily-plan reason text that names the learner-friendly error pattern. (AC: 1-4)
-- [ ] Connect drill completion to reducing, resolving, or rescheduling related review work. (AC: 1-4)
-- [ ] Extend recommendation tests for repeated-error priority and completion effects. (AC: 1-4)
+- [x] Convert high-priority repeated error patterns into recommendation candidates. (AC: 1-4)
+- [x] Add daily-plan reason text that names the learner-friendly error pattern. (AC: 1-4)
+- [x] Connect drill completion to reducing, resolving, or rescheduling related review work. (AC: 1-4)
+- [x] Extend recommendation tests for repeated-error priority and completion effects. (AC: 1-4)
 
 ## Dev Notes
 
@@ -90,10 +90,25 @@ so that the app helps me fix what I keep missing.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues encountered.
+
 ### Completion Notes List
 
+- **Task 1 (Pattern → Candidate):** `errorPatternsToRecommendations()` converts error patterns with ≥ 2 unresolved errors into `RecommendationCandidate` objects. Sets `isDueReview=true` for ≥ 3 unresolved. Proficiency computed inversely to error frequency. Limited to top 3 recommendations.
+- **Task 2 (Reason text):** `generateErrorDrillReason()` produces Vietnamese text naming the pattern (e.g. `Lỗi "Thì" lặp lại 3 lần · 2 lần gần đây`). Candidate labels include `Luyện sửa lỗi: {pattern.labelVi}`.
+- **Task 3 (Completion effects):** `computeDrillCompletionEffects()` resolves source errors when score ≥ 0.7, leaves them unresolved below threshold, and always creates a learning event. Downstream API can use `resolveErrorIds` to update error_log and reschedule review tasks.
+- **Task 4 (Tests):** 21 tests: candidate conversion (8), reason text (4), drill completion effects (6), scorer compatibility (3 — validates all required RecommendationCandidate fields, proficiency range, confidence range).
+
 ### File List
+
+- `packages/modules/src/learning/error-remediation-recommender.ts` — New (recommender + completion effects)
+- `packages/modules/src/learning/index.ts` — Modified (added exports)
+- `packages/modules/__tests__/learning/error-remediation-recommender.test.ts` — New (21 tests)
+
+## Change Log
+
+- Added error remediation recommender with daily plan integration and 21 tests (Date: 2026-04-24)

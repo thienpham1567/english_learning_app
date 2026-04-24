@@ -130,3 +130,20 @@ export type {
 	BaselineSkillScore,
 	OnboardingBaseline,
 } from "./onboarding-baseline";
+
+export {
+	LessonModuleType,
+	SummaryOutcome,
+	NextActionSchema,
+	ReviewCandidateSchema,
+	TopIssueSchema,
+	LessonSummarySchema,
+} from "./lesson-summary";
+export type {
+	LessonModuleTypeValue,
+	SummaryOutcomeValue,
+	NextAction,
+	ReviewCandidate,
+	TopIssue,
+	LessonSummary,
+} from "./lesson-summary";

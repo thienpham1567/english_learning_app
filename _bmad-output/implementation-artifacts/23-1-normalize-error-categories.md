@@ -1,6 +1,6 @@
 # Story 23.1: Normalize Error Categories
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -19,10 +19,10 @@ so that I know which patterns to fix first.
 
 ## Tasks / Subtasks
 
-- [ ] Define a normalized error category list and source-to-category mapping rules. (AC: 1-4)
-- [ ] Apply category derivation to new errors without requiring destructive migration of old rows. (AC: 1-4)
-- [ ] Map categories to skill ids where reliable and leave safe unknown fallbacks otherwise. (AC: 1-4)
-- [ ] Add tests for grammar, writing, listening, daily challenge, mock test, and sparse legacy rows. (AC: 1-4)
+- [x] Define a normalized error category list and source-to-category mapping rules. (AC: 1-4)
+- [x] Apply category derivation to new errors without requiring destructive migration of old rows. (AC: 1-4)
+- [x] Map categories to skill ids where reliable and leave safe unknown fallbacks otherwise. (AC: 1-4)
+- [x] Add tests for grammar, writing, listening, daily challenge, mock test, and sparse legacy rows. (AC: 1-4)
 
 ## Dev Notes
 
@@ -90,10 +90,25 @@ so that I know which patterns to fix first.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues encountered.
+
 ### Completion Notes List
 
+- **Task 1 (Category list):** Defined 16 normalized error categories: tense, article, preposition, word-form, subject-verb, clause, vocabulary, coherence, task-response, spelling, pronunciation, listening-detail, listening-comprehension, reading-comprehension, exam-strategy, other. Each has key, label, labelVi, emoji, skillId, and optional subskillId.
+- **Task 2 (Category derivation):** `classifyError()` uses a two-level strategy: first tries regex pattern matching against `grammarTopic` (15 patterns), then falls back to `sourceModule` mapping. Legacy rows with null/undefined grammarTopic still classify correctly via module fallback. No DB migration needed.
+- **Task 3 (Skill ID mapping):** `categoryToSkillIds()` returns [skillId, subskillId?] for each category. Maps to existing skill taxonomy IDs (grammar, vocabulary, listening, writing, pronunciation, reading + their subskills).
+- **Task 4 (Tests):** 41 tests covering: 14 grammar topic patterns, 7 source module fallbacks, 5 legacy row edge cases (null/undefined/empty/unknown), 5 skill ID mappings, 2 fallback behaviors, 4 registry checks, 4 module name variants (underscore/hyphen).
+
 ### File List
+
+- `packages/modules/src/learning/error-category.ts` — New (error category normalization)
+- `packages/modules/src/learning/index.ts` — Modified (added exports)
+- `packages/modules/__tests__/learning/error-category.test.ts` — New (41 tests)
+
+## Change Log
+
+- Added normalized error category system with 16 categories and 41 tests (Date: 2026-04-24)

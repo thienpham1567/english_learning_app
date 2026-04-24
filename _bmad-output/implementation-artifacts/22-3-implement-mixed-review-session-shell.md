@@ -1,6 +1,6 @@
 # Story 22.3: Implement Mixed Review Session Shell
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -20,10 +20,10 @@ so that review feels like a coherent daily habit.
 
 ## Tasks / Subtasks
 
-- [ ] Build the mixed review session shell with stable header, progress, answer area, and outcome controls. (AC: 1-5)
-- [ ] Delegate supported vocabulary and error task rendering to existing review behavior where feasible. (AC: 1-5)
-- [ ] Provide safe fallback links for unsupported source types instead of blocking the session. (AC: 1-5)
-- [ ] Test progress, exit, unsupported task fallback, and mixed source ordering. (AC: 1-5)
+- [x] Build the mixed review session shell with stable header, progress, answer area, and outcome controls. (AC: 1-5)
+- [x] Delegate supported vocabulary and error task rendering to existing review behavior where feasible. (AC: 1-5)
+- [x] Provide safe fallback links for unsupported source types instead of blocking the session. (AC: 1-5)
+- [x] Test progress, exit, unsupported task fallback, and mixed source ordering. (AC: 1-5)
 
 ## Dev Notes
 
@@ -92,10 +92,30 @@ so that review feels like a coherent daily habit.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues encountered.
+
 ### Completion Notes List
 
+- **Task 1 (Session shell):** Created `review-session.ts` pure-function state machine with `createSession/advance/exitSession/progressPercent/currentTask/sessionSummary`. UI page at `/review/session` with stable header (emoji + source label + reason), `Progress` bar, task counter tag, and exit button.
+- **Task 2 (Delegation):** Vocabulary/flashcard and error_log tasks show self-report outcome buttons (Correct/Incorrect/Skip). Grammar quiz also supported. `isSupported()` checks source type against the supported set.
+- **Task 3 (Unsupported fallback):** Unsupported types (listening, reading, writing, pronunciation, unknown) show a safe fallback card with "Mở {module}" button that opens the delegate route in a new tab and auto-advances with "skipped" outcome (AC: 4).
+- **Task 4 (Tests):** 29 pure-function tests for the session state machine: creation, advance (correct/incorrect/skip), completion after last task, no-op on completed, exit with partial results, progressPercent, currentTask, sessionSummary, isSupported for 6 types, getDelegateRoute for 8 types, and mixed-source ordering preservation.
+- Also updated Review Hub CTA to navigate to `/review/session`.
+
 ### File List
+
+- `packages/modules/src/learning/review-session.ts` — New (session state machine)
+- `packages/modules/src/learning/index.ts` — Modified (added exports)
+- `packages/modules/__tests__/learning/review-session.test.ts` — New (29 tests)
+- `apps/web/app/(app)/review/session/page.tsx` — New (mixed review session UI)
+- `apps/web/app/(app)/review/page.tsx` — Modified (CTA links to /review/session)
+
+## Change Log
+
+- Added mixed review session state machine with 29 tests (Date: 2026-04-24)
+- Added mixed review session page at `/review/session` (Date: 2026-04-24)
+- Updated Review Hub CTA to link to mixed session (Date: 2026-04-24)

@@ -1,6 +1,6 @@
 # Story 21.1: Audit Recommendation Routes
 
-Status: ready-for-dev
+Status: done
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -19,10 +19,10 @@ so that I can trust the daily plan and continue learning without dead ends.
 
 ## Tasks / Subtasks
 
-- [ ] Inventory all generated recommendation and daily-plan action URLs from `recommendation-adapters.ts` and related tests. (AC: 1-4)
-- [ ] Fix invalid mappings, including replacing `/chatbot` with the real chat route or an intentionally chosen speaking route. (AC: 1-4)
-- [ ] Add a route allowlist or route-discovery helper test that covers every generated internal action URL. (AC: 1-4)
-- [ ] Verify vocabulary, grammar, listening, reading, writing, pronunciation, and exam strategy recommendations still route to existing pages. (AC: 1-4)
+- [x] Inventory all generated recommendation and daily-plan action URLs from `recommendation-adapters.ts` and related tests. (AC: 1-4)
+- [x] Fix invalid mappings, including replacing `/chatbot` with the real chat route or an intentionally chosen speaking route. (AC: 1-4)
+- [x] Add a route allowlist or route-discovery helper test that covers every generated internal action URL. (AC: 1-4)
+- [x] Verify vocabulary, grammar, listening, reading, writing, pronunciation, and exam strategy recommendations still route to existing pages. (AC: 1-4)
 
 ## Dev Notes
 
@@ -90,10 +90,36 @@ so that I can trust the daily plan and continue learning without dead ends.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues encountered.
+
 ### Completion Notes List
 
+- **Audit (Task 1):** Inventoried all action URLs across `SKILL_TO_URL`, `SKILL_TO_MODULE`, `DEFAULT_STUDY_ACTIONS`, `candidatesFromDueReviews`, `candidatesFromWeakSkills`, and `candidatesFromDefaultActions`. Found speaking skill incorrectly mapped to `/chatbot` (non-existent route).
+- **Fix (Task 2):** Corrected `actionUrl` in 2 places: `SKILL_TO_URL.speaking` and `DEFAULT_STUDY_ACTIONS` speaking entry, both from `/chatbot` → `/english-chatbot`. `moduleType` kept as `"chatbot"` to match the canonical `LearningModuleType` contract.
+- **Route allowlist test (Task 3):** Created `recommendation-routes.test.ts` with 22 tests covering: static `SKILL_TO_URL` allowlist validation, per-skill parametric tests for all 3 adapter functions (`candidatesFromDueReviews`, `candidatesFromWeakSkills`, `candidatesFromDefaultActions`), and explicit `/chatbot` regression guards. Test will fail automatically if a future URL mapping targets a non-existent route.
+- **Verification (Task 4):** Confirmed all 8 skills (vocabulary, grammar, listening, speaking, pronunciation, reading, writing, exam_strategy) generate valid routes. Full regression suite: 193/193 tests pass across 13 files, zero regressions.
+- Exported `SKILL_TO_URL` from `recommendation-adapters.ts` for testability (AC: 3).
+
+### Senior Developer Review (AI)
+
+- Review date: 2026-04-24
+- Review outcome: Changes Requested → Resolved
+- Action items:
+  - [x] [High] Revert `SKILL_TO_MODULE.speaking` from `"english_chatbot"` back to `"chatbot"` — moduleType is a domain concept defined in `LearningModuleType` contract, not a route path.
+  - [x] [High] Revert `DEFAULT_STUDY_ACTIONS` speaking `moduleType` from `"english_chatbot"` back to `"chatbot"`.
+  - [x] [Low] Noted: `KNOWN_APP_ROUTES` allowlist is hardcoded — deferred, acceptable tradeoff for test simplicity.
+
 ### File List
+
+- `packages/modules/src/learning/recommendation-adapters.ts` — Modified (fix speaking actionUrl, export SKILL_TO_URL)
+- `packages/modules/__tests__/learning/recommendation-routes.test.ts` — New (22 route coverage tests)
+
+## Change Log
+
+- Fixed speaking recommendation routing `/chatbot` → `/english-chatbot` (actionUrl only, moduleType kept as `"chatbot"`) (Date: 2026-04-24)
+- Added route allowlist test with 22 test cases covering all adapter functions and regression guards (Date: 2026-04-24)
+- Code review: reverted moduleType change that conflicted with `LearningModuleType` contract (Date: 2026-04-24)

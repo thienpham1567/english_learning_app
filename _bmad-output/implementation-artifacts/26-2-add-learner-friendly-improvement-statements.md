@@ -1,6 +1,6 @@
 # Story 26.2: Add Learner-Friendly Improvement Statements
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 

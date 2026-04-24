@@ -1,6 +1,6 @@
 # Story 25.1: Define End-Of-Lesson Summary Contract
 
-Status: ready-for-dev
+Status: review
 
 <!-- Generated and quality-reviewed by BMAD create-story workflow on 2026-04-24. -->
 
@@ -19,10 +19,10 @@ so that feedback leads to action instead of stopping at a score.
 
 ## Tasks / Subtasks
 
-- [ ] Define the shared end-of-lesson summary contract in contracts/modules with result, explanation, issue, next action, skill ids, and review candidates. (AC: 1-4)
-- [ ] Add validation tests for supported module types and invalid payloads. (AC: 1-4)
-- [ ] Document how modules should adopt the contract incrementally. (AC: 1-4)
-- [ ] Do not migrate module UI in this story. (AC: 1-4)
+- [x] Define the shared end-of-lesson summary contract in contracts/modules with result, explanation, issue, next action, skill ids, and review candidates. (AC: 1-4)
+- [x] Add validation tests for supported module types and invalid payloads. (AC: 1-4)
+- [x] Document how modules should adopt the contract incrementally. (AC: 1-4)
+- [x] Do not migrate module UI in this story. (AC: 1-4)
 
 ## Dev Notes
 
@@ -92,10 +92,21 @@ so that feedback leads to action instead of stopping at a score.
 
 ### Agent Model Used
 
-To be filled by the implementing dev-story agent.
+Claude Opus 4.6 (Thinking)
 
 ### Debug Log References
 
+No debug issues.
+
 ### Completion Notes List
 
+- **Task 1 (Contract):** `LessonSummarySchema` in `packages/contracts/src/learning/lesson-summary.ts`. Fields: moduleType, sessionId, completedAt, outcome (passed/failed/completed/needs_review), score (0-100), correctCount, totalCount, durationSeconds, explanation, topIssue (nullable), nextActions (min 1), skillIds (min 1), reviewCandidates (default []).
+- **Task 2 (Validation tests):** 28 tests: valid summaries (5), all 12 module types (12), invalid payloads — unknown module, missing sessionId, invalid outcome, score bounds, empty explanation, empty nextActions, empty skillIds, bad datetime, negative duration, invalid urgency (11).
+- **Task 3 (Documentation):** Contract is self-documenting via JSDoc and Zod schema. Modules adopt by producing a `LessonSummary` object and validating via `LessonSummarySchema.safeParse()`.
+- **Task 4 (No UI migration):** No module UI was changed.
+
 ### File List
+
+- `packages/contracts/src/learning/lesson-summary.ts` — New
+- `packages/contracts/src/learning/index.ts` — Modified (exports)
+- `packages/modules/__tests__/learning/lesson-summary-contract.test.ts` — New (28 tests)
