@@ -163,7 +163,7 @@ export default function MixedReviewSessionPage() {
   if (loading) {
     return (
       <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 16px 40px" }}>
-        <ModuleHeader title="Ôn tập hỗn hợp" subtitle="Đang tải bài ôn..." icon={<HistoryOutlined />} />
+        <ModuleHeader title="Ôn tập hỗn hợp" subtitle="Đang tải bài ôn..." icon={<HistoryOutlined />} gradient="var(--gradient-daily)" />
         <Flex justify="center" align="center" style={{ padding: 60 }}>
           <LoadingOutlined style={{ fontSize: 32, color: "var(--accent)" }} />
         </Flex>
@@ -187,6 +187,7 @@ export default function MixedReviewSessionPage() {
           title={status === "exited" ? "Phiên ôn tập đã dừng" : "Hoàn thành ôn tập!"}
           subtitle={total === 0 ? "Không có gì cần ôn hôm nay" : `Bạn đã ôn ${total} bài`}
           icon={<HistoryOutlined />}
+          gradient="var(--gradient-daily)"
         />
 
         {total > 0 && (
@@ -287,7 +288,7 @@ export default function MixedReviewSessionPage() {
 
   return (
     <div style={{ maxWidth: 720, margin: "0 auto", padding: "0 16px 40px" }}>
-      <ModuleHeader title="Ôn tập hỗn hợp" subtitle={`${current.reason}`} icon={<HistoryOutlined />} />
+      <ModuleHeader title="Ôn tập hỗn hợp" subtitle={`${current.reason}`} icon={<HistoryOutlined />} gradient="var(--gradient-daily)" />
 
       {/* Progress bar (AC: 1) */}
       <Flex align="center" gap={12} style={{ marginTop: 16, marginBottom: 20 }}>
