@@ -134,6 +134,7 @@ export default function ReviewHubPage() {
         title="Ôn tập hôm nay"
         subtitle="Ôn tập thông minh — tập trung vào những gì cần nhớ nhất"
         icon={<HistoryOutlined />}
+        gradient="var(--gradient-daily)"
       />
 
       {/* Loading */}
