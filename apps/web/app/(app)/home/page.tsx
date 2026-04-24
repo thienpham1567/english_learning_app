@@ -241,359 +241,398 @@ export default function HomePage() {
   const maxActivity = Math.max(...data.weeklyActivity.map((d) => d.count), 1);
 
   return (
-    <div style={{ height: "100%", overflowY: "auto", padding: "var(--space-6)" }} className="anim-fade-up">
-      <Flex vertical gap="var(--space-6)">
+    <div style={{ height: "100%", overflowY: "auto", position: "relative" }}>
+      <div className="grain-overlay" style={{ opacity: 0.03, zIndex: 0 }} />
+      <div style={{ padding: "var(--space-6) var(--space-8)", position: "relative", zIndex: 1, maxWidth: 840, margin: "0 auto" }}>
+        <Flex vertical gap="var(--space-8)" className="anim-fade-up">
 
-        {/* ── GreetingCard ── */}
-        <Card
-          style={{
-            background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-            borderRadius: "var(--radius-xl)",
-            border: "none",
-          }}
-          styles={{ body: { padding: "var(--space-6)" } }}
-        >
-          <Flex vertical>
-            <Title level={4} style={{ color: "var(--text-on-accent)", fontFamily: "var(--font-display)", margin: 0 }}>
-              {getGreeting()}, {firstName}! 👋
-            </Title>
-            <Space size="middle" style={{ marginTop: "var(--space-2)" }} wrap>
-              <StreakFire streak={data.streak.currentStreak} />
-              <XPCounter value={data.totalXP} label="XP" />
-              {/* Level Badge (Story 8.2) */}
-              {(() => {
-                const lvl = getLevel(data.totalXP);
-                return (
-                  <Flex align="center" gap={6}>
-                    <Tag
-                      style={{
-                        margin: 0,
-                        background: "rgba(255,255,255,0.15)",
-                        border: "1px solid rgba(255,255,255,0.25)",
-                        color: "var(--text-on-accent)",
-                        fontWeight: 700,
-                        fontSize: 12,
-                        borderRadius: 999,
-                        padding: "2px 10px",
-                      }}
-                    >
-                      <BarChartOutlined style={{ marginRight: 4 }} /> Lv.{lvl.level}
-                    </Tag>
-                    <div
-                      style={{
-                        width: 60,
-                        height: 6,
-                        borderRadius: 3,
-                        background: "rgba(255,255,255,0.2)",
-                        overflow: "hidden",
-                      }}
-                    >
+          {/* ── GreetingCard ── */}
+          <Card
+            style={{
+              background: "var(--gradient-daily)",
+              borderRadius: "var(--radius-2xl)",
+              border: "none",
+              boxShadow: "var(--shadow-lg)",
+              position: "relative",
+              overflow: "hidden"
+            }}
+            styles={{ body: { padding: "var(--space-8) var(--space-8)" } }}
+          >
+            <div style={{
+              position: "absolute", top: 0, right: 0, bottom: 0, width: "60%",
+              background: "radial-gradient(circle at 90% 50%, rgba(255,255,255,0.15) 0%, transparent 60%)",
+              pointerEvents: "none"
+            }} />
+            <Flex vertical style={{ position: "relative", zIndex: 1 }}>
+              <Title level={2} style={{ color: "#fff", fontFamily: "var(--font-display)", margin: 0, letterSpacing: "-0.5px" }}>
+                {getGreeting()}, {firstName}! <span style={{ display: "inline-block", animation: "bounceEmoji 1s ease infinite" }}>👋</span>
+              </Title>
+              <Space size="large" style={{ marginTop: "var(--space-5)" }} wrap>
+                <div style={{ background: "rgba(0,0,0,0.15)", borderRadius: 999, padding: "6px 16px", backdropFilter: "blur(8px)" }}>
+                  <StreakFire streak={data.streak.currentStreak} />
+                </div>
+                <div style={{ background: "rgba(0,0,0,0.15)", borderRadius: 999, padding: "6px 16px", backdropFilter: "blur(8px)" }}>
+                  <XPCounter value={data.totalXP} label="XP" />
+                </div>
+                {/* Level Badge (Story 8.2) */}
+                {(() => {
+                  const lvl = getLevel(data.totalXP);
+                  return (
+                    <Flex align="center" gap={12} style={{ background: "rgba(0,0,0,0.15)", borderRadius: 999, padding: "6px 16px", backdropFilter: "blur(8px)" }}>
+                      <Text style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>
+                        <BarChartOutlined style={{ marginRight: 6 }} /> Lv.{lvl.level}
+                      </Text>
                       <div
                         style={{
-                          width: `${lvl.progress * 100}%`,
-                          height: "100%",
+                          width: 80,
+                          height: 6,
                           borderRadius: 3,
-                          background: "var(--text-on-accent)",
-                          transition: "width 0.5s ease",
+                          background: "rgba(255,255,255,0.2)",
+                          overflow: "hidden",
                         }}
-                      />
-                    </div>
-                  </Flex>
-                );
-              })()}
-            </Space>
-          </Flex>
-        </Card>
-
-        {/* ── New User Empty State ── */}
-        {isNewUser && (
-          <Card style={{ borderRadius: "var(--radius-xl)" }}>
-            <EmptyStateCard
-              icon={<TrophyOutlined style={{ fontSize: 28, color: "var(--accent)" }} />}
-              headline="Bắt đầu học ngay!"
-              description="Làm thử thách đầu tiên để khởi động hành trình học tiếng Anh!"
-              ctaLabel="Bắt đầu thử thách"
-              onCtaClick={() => router.push("/daily-challenge")}
-            />
+                      >
+                        <div
+                          style={{
+                            width: `${lvl.progress * 100}%`,
+                            height: "100%",
+                            borderRadius: 3,
+                            background: "#fff",
+                            transition: "width 0.5s ease",
+                          }}
+                        />
+                      </div>
+                    </Flex>
+                  );
+                })()}
+              </Space>
+            </Flex>
           </Card>
-        )}
 
-        {/* ── Session Start CTA (Story 21.4) ── */}
-        {!isNewUser && (() => {
-          // AC: 1, 2 — select highest-priority incomplete item
-          const nextItem = todayItems.find((item) => !item.done);
-          const allDone = todayItems.length > 0 && !nextItem;
+          {/* ── New User Empty State ── */}
+          {isNewUser && (
+            <Card style={{ borderRadius: "var(--radius-2xl)", border: "1px solid var(--border)", boxShadow: "var(--shadow-sm)" }}>
+              <EmptyStateCard
+                icon={<TrophyOutlined style={{ fontSize: 32, color: "var(--accent)" }} />}
+                headline="Bắt đầu học ngay!"
+                description="Làm thử thách đầu tiên để khởi động hành trình học tiếng Anh!"
+                ctaLabel="Bắt đầu thử thách"
+                onCtaClick={() => router.push("/daily-challenge")}
+              />
+            </Card>
+          )}
 
-          // AC: 3 — celebration state when all items are complete
-          if (allDone) {
+          {/* ── Session Start CTA (Story 21.4) ── */}
+          {!isNewUser && (() => {
+            const nextItem = todayItems.find((item) => !item.done);
+            const allDone = todayItems.length > 0 && !nextItem;
+
+            if (allDone) {
+              return (
+                <button
+                  className="btn-shimmer"
+                  onClick={() => router.push("/progress")}
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 12,
+                    padding: "20px 28px",
+                    borderRadius: "var(--radius-2xl)",
+                    border: "none",
+                    background: "linear-gradient(135deg, var(--success), #059669)",
+                    color: "#fff",
+                    fontSize: 18,
+                    fontWeight: 700,
+                    fontFamily: "var(--font-body)",
+                    cursor: "pointer",
+                    boxShadow: "0 8px 24px rgba(16, 185, 129, 0.25)",
+                    transition: "all var(--duration-fast) ease",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.boxShadow = "0 12px 32px rgba(16, 185, 129, 0.35)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = "0 8px 24px rgba(16, 185, 129, 0.25)";
+                  }}
+                >
+                  <span style={{ fontSize: 24 }}>🎉</span>
+                  <span>Tuyệt vời! Bạn đã hoàn thành hôm nay</span>
+                  <RightOutlined style={{ marginLeft: "auto", opacity: 0.8, fontSize: 16 }} />
+                </button>
+              );
+            }
+
+            const target = nextItem ?? getSuggestedActivity(data);
+            const ctaLabel = nextItem ? `Tiếp tục: ${nextItem.label}` : target.label;
+            const ctaHref = nextItem ? nextItem.href : target.href;
+            const ctaIcon = nextItem ? nextItem.icon : target.icon;
+
             return (
               <button
-                className="cta-shimmer"
-                onClick={() => router.push("/progress")}
+                className="btn-shimmer"
+                onClick={() => router.push(ctaHref)}
                 style={{
                   width: "100%",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
-                  gap: 12,
-                  padding: "18px 24px",
-                  borderRadius: "var(--radius-xl)",
+                  gap: 16,
+                  padding: "20px 28px",
+                  borderRadius: "var(--radius-2xl)",
                   border: "none",
-                  background: "linear-gradient(135deg, var(--success), var(--accent))",
-                  color: "var(--text-on-accent)",
-                  fontSize: 16,
+                  background: "var(--gradient-listening)",
+                  color: "#fff",
+                  fontSize: 18,
                   fontWeight: 700,
                   fontFamily: "var(--font-body)",
                   cursor: "pointer",
-                  boxShadow: "0 4px 16px color-mix(in srgb, var(--success) 30%, transparent)",
-                  transition: "transform 0.15s ease, box-shadow 0.15s ease",
+                  boxShadow: "0 8px 24px rgba(196, 168, 130, 0.3)",
+                  transition: "all var(--duration-fast) ease",
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "scale(1.01)";
-                  e.currentTarget.style.boxShadow = "0 6px 24px color-mix(in srgb, var(--success) 40%, transparent)";
+                  e.currentTarget.style.transform = "translateY(-2px)";
+                  e.currentTarget.style.boxShadow = "0 12px 32px rgba(196, 168, 130, 0.4)";
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "scale(1)";
-                  e.currentTarget.style.boxShadow = "0 4px 16px color-mix(in srgb, var(--success) 30%, transparent)";
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 8px 24px rgba(196, 168, 130, 0.3)";
                 }}
-                aria-label="Hoàn thành tất cả — Xem tiến trình"
               >
-                <span style={{ fontSize: 20 }}>🎉</span>
-                <span>Tuyệt vời! Bạn đã hoàn thành hôm nay</span>
-                <RightOutlined style={{ marginLeft: "auto", opacity: 0.7, fontSize: 14 }} />
+                <span style={{ fontSize: 24, display: "flex", alignItems: "center" }}>{ctaIcon}</span>
+                <span>{ctaLabel}</span>
+                <RightOutlined style={{ marginLeft: "auto", opacity: 0.8, fontSize: 16 }} />
               </button>
             );
-          }
+          })()}
 
-          // AC: 1 — primary CTA navigates to highest-priority incomplete item
-          const target = nextItem ?? getSuggestedActivity(data);
-          const ctaLabel = nextItem ? `Bắt đầu: ${nextItem.label}` : target.label;
-          const ctaHref = nextItem ? nextItem.href : target.href;
-          const ctaIcon = nextItem ? nextItem.icon : target.icon;
-
-          return (
-            <button
-              className="cta-shimmer"
-              onClick={() => router.push(ctaHref)}
-              style={{
-                width: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 12,
-                padding: "18px 24px",
-                borderRadius: "var(--radius-xl)",
-                border: "none",
-                background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-                color: "var(--text-on-accent)",
-                fontSize: 16,
-                fontWeight: 700,
-                fontFamily: "var(--font-body)",
-                cursor: "pointer",
-                boxShadow: "0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent)",
-                transition: "transform 0.15s ease, box-shadow 0.15s ease",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = "scale(1.01)";
-                e.currentTarget.style.boxShadow = "0 6px 24px color-mix(in srgb, var(--accent) 40%, transparent)";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = "scale(1)";
-                e.currentTarget.style.boxShadow = "0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent)";
-              }}
-              aria-label={ctaLabel}
+          {/* ── TodaysPlan ── */}
+          {!isNewUser && (
+            <Card
+              title={<span style={{ fontSize: 20, fontWeight: 700, display: "flex", alignItems: "center", fontFamily: "var(--font-display)" }}><ScheduleOutlined style={{ marginRight: 10, color: "var(--accent)" }} /> Kế hoạch hôm nay</span>}
+              style={{ borderRadius: "var(--radius-2xl)", border: "1px solid var(--border)", boxShadow: "var(--shadow-sm)" }}
+              styles={{ header: { borderBottom: "1px solid var(--border)", padding: "20px 28px" }, body: { padding: "12px 16px" } }}
             >
-              <span style={{ fontSize: 20, display: "flex", alignItems: "center" }}>{ctaIcon}</span>
-              <span>{ctaLabel}</span>
-              <RightOutlined style={{ marginLeft: "auto", opacity: 0.7, fontSize: 14 }} />
-            </button>
-          );
-        })()}
-
-        {/* ── TodaysPlan ── */}
-        {!isNewUser && (
-          <Card
-            title={<span><ScheduleOutlined style={{ marginRight: 6 }} /> Kế hoạch hôm nay</span>}
-            style={{ borderRadius: "var(--radius-xl)" }}
-            styles={{ header: { borderBottom: "1px solid var(--border)" } }}
-          >
-            <Flex vertical gap={8}>
-              {todayItems.map((item) => (
-                <Card
-                  key={item.href}
-                  hoverable
-                  onClick={() => router.push(item.href)}
-                  style={{
-                    borderRadius: "var(--radius)",
-                    opacity: item.done ? 0.6 : 1,
-                  }}
-                  styles={{ body: { padding: "12px 16px" } }}
-                >
-                  <Flex align="center" gap={12}>
-                    <Text style={{ fontSize: 16, color: item.done ? "var(--success)" : "var(--accent)" }}>
+              <Flex vertical gap={4}>
+                {todayItems.map((item) => (
+                  <div
+                    key={item.href}
+                    onClick={() => router.push(item.href)}
+                    style={{
+                      padding: "16px",
+                      borderRadius: "var(--radius-xl)",
+                      cursor: "pointer",
+                      transition: "all var(--duration-fast) ease",
+                      background: "transparent",
+                      opacity: item.done ? 0.6 : 1,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 16
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.background = "var(--surface-hover)"; e.currentTarget.style.transform = "translateX(4px)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.transform = "translateX(0)"; }}
+                  >
+                    <div style={{ 
+                      width: 52, height: 52, borderRadius: "50%", background: item.done ? "var(--success-bg)" : "var(--bg-deep)", 
+                      display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22,
+                      color: item.done ? "var(--success)" : "var(--text-secondary)",
+                      boxShadow: "inset 0 2px 4px rgba(0,0,0,0.02)"
+                    }}>
                       {item.icon}
-                    </Text>
-                    <Flex vertical style={{ flex: 1, gap: 2 }}>
-                      <Text
-                        style={{
-                          fontWeight: 500,
-                          textDecoration: item.done ? "line-through" : "none",
-                        }}
-                      >
+                    </div>
+                    <Flex vertical style={{ flex: 1, gap: 4 }}>
+                      <Text style={{ fontSize: 16, fontWeight: 600, color: "var(--text-primary)", textDecoration: item.done ? "line-through" : "none" }}>
                         {item.label}
                       </Text>
                       {"reason" in item && item.reason ? (
-                        <Text type="secondary" style={{ fontSize: "var(--text-xs)" }}>
-                          {String(item.reason)}{" "}
-                          {"estimatedMinutes" in item ? <span>· ~{String(item.estimatedMinutes)} phút</span> : null}
+                        <Text type="secondary" style={{ fontSize: 14 }}>
+                          {String(item.reason)}
+                          {"estimatedMinutes" in item ? <span style={{ opacity: 0.7 }}> • ~{String(item.estimatedMinutes)} phút</span> : null}
                         </Text>
                       ) : null}
                     </Flex>
-                    {item.done && <CheckCircleFilled style={{ color: "var(--success)" }} />}
-                  </Flex>
-                </Card>
-              ))}
-            </Flex>
-          </Card>
-        )}
-
-        {/* ── Learning Style (Story 16.3) ── */}
-        {!isNewUser && <LearningStyleCard />}
-
-        {/* ── QuickActions ── */}
-        <Card
-          title={<span><ThunderboltOutlined style={{ marginRight: 6 }} /> Truy cập nhanh</span>}
-          style={{ borderRadius: "var(--radius-xl)" }}
-          styles={{ header: { borderBottom: "1px solid var(--border)" } }}
-        >
-          <Space wrap>
-            {[
-              { label: "Chat", href: "/english-chatbot", icon: <CommentOutlined /> },
-              { label: "Từ điển", href: "/dictionary", icon: <ReadOutlined /> },
-              { label: "Quiz", href: "/grammar-quiz", icon: <BulbOutlined /> },
-            ].map((action) => (
-              <Button
-                key={action.href}
-                icon={action.icon}
-                shape="round"
-                onClick={() => router.push(action.href)}
-                style={{
-                  background: "var(--accent-muted)",
-                  color: "var(--accent)",
-                  border: "none",
-                  fontWeight: 600,
-                }}
-              >
-                {action.label}
-              </Button>
-            ))}
-          </Space>
-        </Card>
-
-        {/* ── Word of the Day (Story 14.3) ── */}
-        {!isNewUser && <WordOfTheDay />}
-
-        {/* ── RecentVocabulary ── */}
-        {data.recentVocabulary.length > 0 && (
-          <Card
-            title={<span><BookOutlined style={{ marginRight: 6 }} /> Từ vựng gần đây</span>}
-            style={{ borderRadius: "var(--radius-xl)" }}
-            styles={{ header: { borderBottom: "1px solid var(--border)" } }}
-          >
-            <Flex gap={8} style={{ overflowX: "auto", paddingBottom: "var(--space-2)" }}>
-              {data.recentVocabulary.map((word) => (
-                <Card
-                  key={word.query}
-                  hoverable
-                  onClick={() => router.push(`/dictionary?q=${encodeURIComponent(word.query)}`)}
-                  style={{ flexShrink: 0, minWidth: 100, borderRadius: "var(--radius)" }}
-                  styles={{ body: { padding: "12px 16px" } }}
-                >
-                  <Text strong>{word.headword}</Text>
-                  <br />
-                  <Tag color="default" style={{ marginTop: 4 }}>{word.level}</Tag>
-                </Card>
-              ))}
-            </Flex>
-          </Card>
-        )}
-
-        {/* ── WeeklyProgress ── */}
-        <Card
-          title={<span><BarChartOutlined style={{ marginRight: 6 }} /> Hoạt động trong tuần</span>}
-          style={{ borderRadius: "var(--radius-xl)" }}
-          styles={{ header: { borderBottom: "1px solid var(--border)" } }}
-        >
-          <Flex align="flex-end" gap={8} style={{ height: 80 }}>
-            {data.weeklyActivity.map((day) => (
-              <Flex key={day.day} vertical align="center" gap={4} style={{ flex: 1 }}>
-                <div
-                  style={{
-                    width: "100%",
-                    borderRadius: 4,
-                    background: day.count > 0 ? "var(--accent)" : "var(--border)",
-                    height: `${Math.max((day.count / maxActivity) * 60, 4)}px`,
-                    transition: `height var(--duration-normal) ease`,
-                  }}
-                />
-                <Text type="secondary" style={{ fontSize: 10 }}>{getDayLabel(day.day)}</Text>
+                    {item.done ? <CheckCircleFilled style={{ color: "var(--success)", fontSize: 24 }} /> : <RightOutlined style={{ color: "var(--text-muted)", fontSize: 16 }} />}
+                  </div>
+                ))}
               </Flex>
-            ))}
-          </Flex>
-        </Card>
+            </Card>
+          )}
 
-        {/* ── Streak Calendar Heatmap (Story 14.1) ── */}
-        {!isNewUser && dailyActivity && (
-          <StreakCalendar
-            dailyActivity={dailyActivity}
-            currentStreak={data.streak.currentStreak}
-          />
-        )}
+          {/* ── Learning Style & Quick Actions Grid ── */}
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "var(--space-8)" }}>
+            {/* ── Learning Style (Story 16.3) ── */}
+            {!isNewUser && (
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                <LearningStyleCard />
+              </div>
+            )}
 
-        {/* ── Weekly Leaderboard (Story 15.4) ── */}
-        {!isNewUser && <WeeklyLeaderboard />}
+            {/* ── QuickActions ── */}
+            <Card
+              title={<span style={{ fontSize: 20, fontWeight: 700, display: "flex", alignItems: "center", fontFamily: "var(--font-display)" }}><ThunderboltOutlined style={{ marginRight: 10, color: "var(--warning)" }} /> Luyện tập thêm</span>}
+              style={{ borderRadius: "var(--radius-2xl)", border: "1px solid var(--border)", boxShadow: "var(--shadow-sm)", height: "100%" }}
+              styles={{ header: { borderBottom: "none", padding: "20px 28px 0" }, body: { padding: "24px 28px" } }}
+            >
+              <Flex gap={12} wrap>
+                {[
+                  { label: "Chat AI", href: "/english-chatbot", icon: <CommentOutlined />, color: "var(--info)", bg: "var(--info-bg)" },
+                  { label: "Từ điển", href: "/dictionary", icon: <ReadOutlined />, color: "var(--warning)", bg: "var(--warning-bg)" },
+                  { label: "Ngữ pháp", href: "/grammar-quiz", icon: <BulbOutlined />, color: "var(--success)", bg: "var(--success-bg)" },
+                ].map((action) => (
+                  <Button
+                    key={action.href}
+                    size="large"
+                    icon={<span style={{ color: action.color }}>{action.icon}</span>}
+                    onClick={() => router.push(action.href)}
+                    style={{
+                      background: action.bg,
+                      color: "var(--text-primary)",
+                      border: "none",
+                      fontWeight: 600,
+                      borderRadius: "var(--radius-xl)",
+                      padding: "0 20px",
+                      height: 48,
+                      boxShadow: "none"
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
+                  >
+                    {action.label}
+                  </Button>
+                ))}
+              </Flex>
+            </Card>
+          </div>
 
-        {/* ── StreakBadges ── */}
-        <Card
-          title={<span><TrophyOutlined style={{ marginRight: 6 }} /> Thành tích</span>}
-          style={{ borderRadius: "var(--radius-xl)" }}
-          styles={{ header: { borderBottom: "1px solid var(--border)" } }}
-        >
-          <Flex gap="var(--space-6)" style={{ marginBottom: "var(--space-3)" }}>
-            <Flex vertical align="center">
-              <Title level={3} style={{ margin: 0, color: "var(--fire)" }}>{data.streak.currentStreak}</Title>
-              <Text type="secondary" style={{ fontSize: "var(--text-xs)" }}>Streak hiện tại</Text>
-            </Flex>
-            <Flex vertical align="center">
-              <Title level={3} style={{ margin: 0, color: "var(--xp)" }}>{data.streak.bestStreak}</Title>
-              <Text type="secondary" style={{ fontSize: "var(--text-xs)" }}>Streak tốt nhất</Text>
-            </Flex>
-          </Flex>
-          {data.badges.length > 0 && (
-            <Flex gap={8} wrap>
-              {data.badges.map((badge) => (
-                <Card
-                  key={badge.id}
-                  size="small"
-                  style={{
-                    borderRadius: "var(--radius)",
-                    background: badge.unlocked ? "var(--accent-muted)" : "var(--bg-deep)",
-                    opacity: badge.unlocked ? 1 : 0.4,
-                    minWidth: 56,
-                    textAlign: "center",
-                    border: "none",
-                  }}
-                  styles={{ body: { padding: "8px 12px" } }}
-                >
-                  <div style={{ fontSize: 20 }}>{badge.emoji}</div>
-                  <Text type="secondary" style={{ fontSize: "var(--text-xs)" }}>{badge.label}</Text>
-                </Card>
+          {/* ── Word of the Day (Story 14.3) ── */}
+          {!isNewUser && <WordOfTheDay />}
+
+          {/* ── RecentVocabulary ── */}
+          {data.recentVocabulary.length > 0 && (
+            <Card
+              title={<span style={{ fontSize: 20, fontWeight: 700, display: "flex", alignItems: "center", fontFamily: "var(--font-display)" }}><BookOutlined style={{ marginRight: 10, color: "var(--tertiary)" }} /> Từ vựng gần đây</span>}
+              style={{ borderRadius: "var(--radius-2xl)", border: "1px solid var(--border)", boxShadow: "var(--shadow-sm)" }}
+              styles={{ header: { borderBottom: "none", padding: "20px 28px 0" }, body: { padding: "20px 28px 28px" } }}
+            >
+              <Flex gap={16} style={{ overflowX: "auto", paddingBottom: 12, margin: "0 -8px", padding: "0 8px" }} className="scrollbar-none">
+                {data.recentVocabulary.map((word) => (
+                  <div
+                    key={word.query}
+                    onClick={() => router.push(`/dictionary?q=${encodeURIComponent(word.query)}`)}
+                    style={{ 
+                      flexShrink: 0, 
+                      minWidth: 140, 
+                      borderRadius: "var(--radius-xl)", 
+                      padding: "20px",
+                      background: "var(--surface)",
+                      border: "1px solid var(--border)",
+                      cursor: "pointer",
+                      boxShadow: "var(--shadow)",
+                      transition: "all var(--duration-fast) ease"
+                    }}
+                    onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "var(--shadow-md)"; e.currentTarget.style.borderColor = "var(--accent)"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "var(--shadow)"; e.currentTarget.style.borderColor = "var(--border)"; }}
+                  >
+                    <Text style={{ fontSize: 18, fontWeight: 700, color: "var(--text-primary)", display: "block", marginBottom: 8 }}>{word.headword}</Text>
+                    <Tag color="processing" style={{ margin: 0, borderRadius: "var(--radius)", border: "none", background: "var(--info-bg)", color: "var(--info)", fontWeight: 600, padding: "2px 10px" }}>{word.level}</Tag>
+                  </div>
+                ))}
+              </Flex>
+            </Card>
+          )}
+
+          {/* ── WeeklyProgress ── */}
+          <Card
+            title={<span style={{ fontSize: 20, fontWeight: 700, display: "flex", alignItems: "center", fontFamily: "var(--font-display)" }}><BarChartOutlined style={{ marginRight: 10, color: "var(--success)" }} /> Hoạt động trong tuần</span>}
+            style={{ borderRadius: "var(--radius-2xl)", border: "1px solid var(--border)", boxShadow: "var(--shadow-sm)" }}
+            styles={{ header: { borderBottom: "none", padding: "20px 28px 0" }, body: { padding: "24px 28px" } }}
+          >
+            <Flex align="flex-end" justify="space-between" gap={8} style={{ height: 140, padding: "0 12px" }}>
+              {data.weeklyActivity.map((day) => (
+                <Flex key={day.day} vertical align="center" gap={12} style={{ flex: 1 }}>
+                  <div
+                    style={{
+                      width: "100%",
+                      maxWidth: 40,
+                      borderRadius: "8px",
+                      background: day.count > 0 ? "var(--gradient-vocabulary)" : "var(--bg-deep)",
+                      height: `${Math.max((day.count / maxActivity) * 100, 8)}px`,
+                      transition: `height var(--duration-normal) ease`,
+                      boxShadow: day.count > 0 ? "0 4px 16px rgba(196, 168, 130, 0.4)" : "none"
+                    }}
+                  />
+                  <Text type="secondary" style={{ fontSize: 13, fontWeight: 600 }}>{getDayLabel(day.day)}</Text>
+                </Flex>
               ))}
             </Flex>
-          )}
-        </Card>
+          </Card>
 
-      </Flex>
+          {/* ── Streak Calendar Heatmap (Story 14.1) ── */}
+          {!isNewUser && dailyActivity && (
+            <StreakCalendar
+              dailyActivity={dailyActivity}
+              currentStreak={data.streak.currentStreak}
+            />
+          )}
+
+          {/* ── Weekly Leaderboard (Story 15.4) ── */}
+          {!isNewUser && <WeeklyLeaderboard />}
+
+          {/* ── StreakBadges ── */}
+          <Card
+            title={<span style={{ fontSize: 20, fontWeight: 700, display: "flex", alignItems: "center", fontFamily: "var(--font-display)" }}><TrophyOutlined style={{ marginRight: 10, color: "var(--fire)" }} /> Thành tích</span>}
+            style={{ borderRadius: "var(--radius-2xl)", border: "1px solid var(--border)", boxShadow: "var(--shadow-sm)" }}
+            styles={{ header: { borderBottom: "none", padding: "20px 28px 0" }, body: { padding: "24px 28px" } }}
+          >
+            <Flex gap="var(--space-8)" style={{ marginBottom: "var(--space-8)", padding: "24px", background: "var(--surface-alt)", borderRadius: "var(--radius-xl)", border: "1px solid var(--border)", boxShadow: "inset 0 2px 8px rgba(0,0,0,0.02)" }}>
+              <Flex vertical align="center" style={{ flex: 1 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 4 }}>
+                  <FireOutlined style={{ color: "var(--fire)", fontSize: 28 }} />
+                  <Title level={1} style={{ margin: 0, color: "var(--fire)", fontFamily: "var(--font-display)", fontWeight: 700 }}>{data.streak.currentStreak}</Title>
+                </div>
+                <Text type="secondary" style={{ fontSize: 14, fontWeight: 600 }}>Streak hiện tại</Text>
+              </Flex>
+              <div style={{ width: 1, background: "var(--border)" }} />
+              <Flex vertical align="center" style={{ flex: 1 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 4 }}>
+                  <TrophyOutlined style={{ color: "var(--xp)", fontSize: 28 }} />
+                  <Title level={1} style={{ margin: 0, color: "var(--xp)", fontFamily: "var(--font-display)", fontWeight: 700 }}>{data.streak.bestStreak}</Title>
+                </div>
+                <Text type="secondary" style={{ fontSize: 14, fontWeight: 600 }}>Streak tốt nhất</Text>
+              </Flex>
+            </Flex>
+            {data.badges.length > 0 && (
+              <Flex gap={16} wrap>
+                {data.badges.map((badge) => (
+                  <div
+                    key={badge.id}
+                    style={{
+                      borderRadius: "var(--radius-xl)",
+                      background: badge.unlocked ? "var(--surface)" : "var(--bg-deep)",
+                      opacity: badge.unlocked ? 1 : 0.6,
+                      padding: "16px 20px",
+                      textAlign: "center",
+                      border: badge.unlocked ? "1px solid var(--accent)" : "1px solid var(--border)",
+                      boxShadow: badge.unlocked ? "0 4px 16px var(--accent-muted)" : "none",
+                      flex: "1 1 calc(33.333% - 16px)",
+                      minWidth: 100,
+                      transition: "all var(--duration-fast) ease"
+                    }}
+                    onMouseEnter={badge.unlocked ? (e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 24px var(--accent-muted)"; } : undefined}
+                    onMouseLeave={badge.unlocked ? (e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 16px var(--accent-muted)"; } : undefined}
+                  >
+                    <div style={{ fontSize: 36, filter: badge.unlocked ? "drop-shadow(0 4px 12px rgba(0,0,0,0.15))" : "grayscale(100%)", marginBottom: 8 }}>{badge.emoji}</div>
+                    <Text style={{ fontSize: 14, fontWeight: 600, color: badge.unlocked ? "var(--text-primary)" : "var(--text-secondary)" }}>{badge.label}</Text>
+                  </div>
+                ))}
+              </Flex>
+            )}
+          </Card>
+
+        </Flex>
+      </div>
     </div>
   );
 }
