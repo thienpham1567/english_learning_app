@@ -17,7 +17,7 @@ describe("buildSkillProgressPanel — Full Data (AC: 1, 2)", () => {
 	});
 
 	it("includes proficiency, confidence, level, and last practiced", () => {
-		const states = [{ ...defaultSkillState(USER, "grammar"), proficiency: 75, confidence: 0.7, updatedAt: "2026-04-23T12:00:00Z" }];
+		const states = [{ ...defaultSkillState(USER, "grammar"), proficiency: 75, confidence: 0.7, lastUpdatedAt: "2026-04-23T12:00:00Z" }];
 		const panel = buildSkillProgressPanel(states, NOW);
 		const grammar = panel.skills.find((s) => s.skillId === "grammar")!;
 		expect(grammar.proficiency).toBe(75);

@@ -8,14 +8,21 @@ function makeTask(overrides?: Partial<ReviewTask>): ReviewTask {
 	return {
 		id: "rt-1",
 		userId: "u-1",
-		skillId: "vocabulary",
-		sourceType: "learning_event",
+		skillIds: ["vocabulary"],
+		sourceType: "flashcard_review",
 		sourceId: "evt-1",
-		topic: "Test topic",
-		mode: "flashcard",
+		priority: 50,
+		dueAt: "2026-04-22T12:00:00Z", // 2 days ago
+		estimatedMinutes: 2,
+		reviewMode: "flashcard",
 		status: "pending",
-		scheduledAt: "2026-04-22T12:00:00Z", // 2 days ago
+		lastOutcome: null,
+		attemptCount: 0,
+		nextIntervalDays: 1,
+		easeFactor: 2.5,
+		suppressionReason: null,
 		createdAt: "2026-04-20T12:00:00Z",
+		updatedAt: "2026-04-20T12:00:00Z",
 		...overrides,
 	} as ReviewTask;
 }
@@ -23,8 +30,8 @@ function makeTask(overrides?: Partial<ReviewTask>): ReviewTask {
 describe("computeReviewDebt — Overdue (AC: 1, 4)", () => {
 	it("computes debt for overdue tasks", () => {
 		const tasks = [
-			makeTask({ id: "rt-1", skillId: "vocabulary" }),
-			makeTask({ id: "rt-2", skillId: "grammar" }),
+			makeTask({ id: "rt-1", skillIds: ["vocabulary"] }),
+			makeTask({ id: "rt-2", skillIds: ["grammar"] }),
 		];
 		const debt = computeReviewDebt(tasks, NOW);
 		expect(debt.hasDebt).toBe(true);
@@ -34,9 +41,9 @@ describe("computeReviewDebt — Overdue (AC: 1, 4)", () => {
 
 	it("categorizes by skill", () => {
 		const tasks = [
-			makeTask({ id: "rt-1", skillId: "vocabulary" }),
-			makeTask({ id: "rt-2", skillId: "vocabulary" }),
-			makeTask({ id: "rt-3", skillId: "grammar" }),
+			makeTask({ id: "rt-1", skillIds: ["vocabulary"] }),
+			makeTask({ id: "rt-2", skillIds: ["vocabulary"] }),
+			makeTask({ id: "rt-3", skillIds: ["grammar"] }),
 		];
 		const debt = computeReviewDebt(tasks, NOW);
 		expect(debt.categories).toHaveLength(2);
@@ -46,8 +53,8 @@ describe("computeReviewDebt — Overdue (AC: 1, 4)", () => {
 
 	it("identifies high-risk items (>48h overdue)", () => {
 		const tasks = [
-			makeTask({ id: "rt-old", scheduledAt: "2026-04-20T12:00:00Z" }), // 4 days overdue
-			makeTask({ id: "rt-recent", scheduledAt: "2026-04-24T10:00:00Z" }), // 2 hours overdue
+			makeTask({ id: "rt-old", dueAt: "2026-04-20T12:00:00Z" }), // 4 days overdue
+			makeTask({ id: "rt-recent", dueAt: "2026-04-24T10:00:00Z" }), // 2 hours overdue
 		];
 		const debt = computeReviewDebt(tasks, NOW);
 		expect(debt.highRiskItemIds).toContain("rt-old");

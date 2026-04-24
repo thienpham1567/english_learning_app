@@ -144,8 +144,8 @@ export function buildSkillProgressPanel(
 			confidence: state.confidence,
 			hasReliableData: state.confidence >= 0.3,
 			level: proficiencyToLevel(state.proficiency),
-			lastPracticedAt: state.updatedAt ?? null,
-			lastPracticedLabel: formatLastPracticed(state.updatedAt, now),
+			lastPracticedAt: state.lastUpdatedAt ?? null,
+			lastPracticedLabel: formatLastPracticed(state.lastUpdatedAt, now),
 			nextReviewAt: null, // Populated by caller from review tasks
 		};
 	});

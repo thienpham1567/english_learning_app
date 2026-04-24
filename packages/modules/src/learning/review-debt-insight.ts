@@ -70,7 +70,7 @@ export function computeReviewDebt(
 
 	// Filter to pending tasks that are due or overdue
 	const relevantTasks = tasks.filter(
-		(t) => t.status === "pending" && t.scheduledAt && new Date(t.scheduledAt).getTime() <= now,
+		(t) => t.status === "pending" && t.dueAt && new Date(t.dueAt).getTime() <= now,
 	);
 
 	if (relevantTasks.length === 0) {
@@ -91,13 +91,13 @@ export function computeReviewDebt(
 	const highRiskIds: string[] = [];
 
 	for (const task of relevantTasks) {
-		const cat = task.skillId ?? "grammar";
+		const cat = task.skillIds?.[0] ?? "grammar";
 		if (!categoryMap.has(cat)) {
 			categoryMap.set(cat, { overdue: 0, due: 0, ids: [] });
 		}
 		const entry = categoryMap.get(cat)!;
 
-		const scheduledMs = new Date(task.scheduledAt!).getTime();
+		const scheduledMs = new Date(task.dueAt).getTime();
 		const hoursOverdue = (now - scheduledMs) / (1000 * 60 * 60);
 
 		if (hoursOverdue > HIGH_RISK_HOURS) {

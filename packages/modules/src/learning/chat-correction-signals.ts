@@ -80,13 +80,13 @@ export function extractChatCorrections(
 		userId,
 		moduleType: "chatbot",
 		sessionId,
-		eventType: "practice",
+		eventType: "skill_practice_completed",
 		result: "partial",
 		difficulty: "intermediate",
-		correctCount: 0,
-		totalCount: validCorrections.length,
+		score: 0,
+		durationMs: 0,
 		skillIds: [...new Set(validCorrections.map((c) => categoryToSkill(c.category)))],
-		durationSeconds: 0,
+		errorTags: validCorrections.map((c) => c.category),
 	};
 
 	// Build error entries (AC: 1)

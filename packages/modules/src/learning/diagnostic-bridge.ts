@@ -105,7 +105,7 @@ export function mergeSkillStates(
 				...ex,
 				proficiency: Math.max(ex.proficiency, diag.proficiency),
 				confidence: Math.max(ex.confidence, diag.confidence),
-				updatedAt: new Date().toISOString(),
+				lastUpdatedAt: new Date().toISOString(),
 			});
 		}
 		existingMap.delete(diag.skillId);
