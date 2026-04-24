@@ -69,40 +69,36 @@ const GROQ_TTS_URL = "https://api.groq.com/openai/v1/audio/speech";
 const GROQ_TTS_MODEL = "canopylabs/orpheus-v1-english";
 
 /**
- * Groq on_demand tier caps Orpheus at 10 RPM. We serialize all TTS calls
- * through a tiny FIFO with a max in-flight count and enforce a minimum
- * gap between request starts so bursts of chunks don't all 429 at once.
+ * Groq on_demand tier caps Orpheus at 10 RPM. We keep a sliding-window list
+ * of recent request starts; callers wait only if the window already holds
+ * RPM_CAP entries (then just long enough for the oldest to fall out). Bursts
+ * of a few chunks go out in parallel — only sustained high-throughput waits.
  * Retries honor the `retry-after` header on 429 responses.
  */
-const TTS_MAX_IN_FLIGHT = 2;
-const TTS_MIN_GAP_MS = 6500; // ≈ 9 RPM, under Groq's 10 RPM on_demand cap
+const TTS_RPM_CAP = 9; // safety margin below Groq's 10 RPM on_demand limit
+const TTS_WINDOW_MS = 60_000;
 const TTS_MAX_RETRIES = 5;
 
-let ttsInFlight = 0;
-let ttsLastStartMs = 0;
-const ttsQueue: Array<() => void> = [];
+const ttsRecentStarts: number[] = [];
 
-function acquireTtsSlot(): Promise<void> {
-  return new Promise((resolve) => {
-    const tryRun = async () => {
-      if (ttsInFlight >= TTS_MAX_IN_FLIGHT) {
-        ttsQueue.push(tryRun);
-        return;
-      }
-      const waitGap = Math.max(0, TTS_MIN_GAP_MS - (Date.now() - ttsLastStartMs));
-      if (waitGap > 0) await new Promise((r) => setTimeout(r, waitGap));
-      ttsInFlight++;
-      ttsLastStartMs = Date.now();
-      resolve();
-    };
-    void tryRun();
-  });
+async function acquireTtsSlot(): Promise<void> {
+  while (true) {
+    const now = Date.now();
+    // Drop entries outside the window
+    while (ttsRecentStarts.length > 0 && now - ttsRecentStarts[0] > TTS_WINDOW_MS) {
+      ttsRecentStarts.shift();
+    }
+    if (ttsRecentStarts.length < TTS_RPM_CAP) {
+      ttsRecentStarts.push(now);
+      return;
+    }
+    const waitMs = TTS_WINDOW_MS - (now - ttsRecentStarts[0]) + 50;
+    await new Promise((r) => setTimeout(r, waitMs));
+  }
 }
 
 function releaseTtsSlot(): void {
-  ttsInFlight = Math.max(0, ttsInFlight - 1);
-  const next = ttsQueue.shift();
-  if (next) void next();
+  // No-op: the sliding window only tracks request starts, not completions.
 }
 
 export type TtsResponseFormat = "wav";
