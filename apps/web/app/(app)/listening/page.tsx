@@ -2,7 +2,16 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { api } from "@/lib/api-client";
-import { SoundOutlined, AudioOutlined, EditOutlined, FileTextOutlined, ImportOutlined } from "@ant-design/icons";
+import {
+  SoundOutlined,
+  AudioOutlined,
+  EditOutlined,
+  FileTextOutlined,
+  ImportOutlined,
+  WarningOutlined,
+  TrophyOutlined,
+  BarChartOutlined,
+} from "@ant-design/icons";
 import { Segmented, Button, Select } from "antd";
 import { useRouter } from "next/navigation";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
@@ -91,10 +100,10 @@ export default function ListeningPage() {
         icon={<SoundOutlined />}
         gradient="var(--gradient-listening)"
         title={
-          mode === "listening" ? "Luyện nghe 🎧" :
-          mode === "shadowing" ? "Shadowing 🎯" :
-          mode === "dictation" ? "Dictation ✍️" :
-          "Listen & Summarize 📝"
+          mode === "listening" ? "Luyện nghe" :
+          mode === "shadowing" ? "Shadowing" :
+          mode === "dictation" ? "Dictation" :
+          "Listen & Summarize"
         }
         subtitle={
           mode === "shadowing" ? "Nghe → Lặp lại → So sánh phát âm" :
@@ -174,7 +183,7 @@ export default function ListeningPage() {
               marginBottom: 16,
             }}
           >
-            ⚠️ {error}
+            <WarningOutlined style={{ marginRight: 6 }} /> {error}
           </div>
         )}
 
@@ -264,9 +273,15 @@ export default function ListeningPage() {
                   textAlign: "center",
                 }}
               >
-                {skillLevelUp.levelUp
-                  ? `🎉 Trình độ nghe nâng lên: ${skillLevelUp.cefr}!`
-                  : `📊 Trình độ hiện tại: ${skillLevelUp.cefr}`}
+                {skillLevelUp.levelUp ? (
+                  <>
+                    <TrophyOutlined style={{ marginRight: 6 }} /> Trình độ nghe nâng lên: {skillLevelUp.cefr}!
+                  </>
+                ) : (
+                  <>
+                    <BarChartOutlined style={{ marginRight: 6 }} /> Trình độ hiện tại: {skillLevelUp.cefr}
+                  </>
+                )}
               </div>
             )}
           </div>

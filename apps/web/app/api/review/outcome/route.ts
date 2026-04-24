@@ -136,7 +136,7 @@ export async function POST(request: Request) {
 					attemptCount: completion.schedule.newAttemptCount,
 					nextIntervalDays: completion.schedule.nextIntervalDays,
 					easeFactor: completion.schedule.newEaseFactor,
-					dueAt: new Date(completion.schedule.nextDueMs),
+					dueAt: new Date(completion.schedule.nextDueAt),
 					priority: completion.schedule.newPriority,
 					status: completion.taskStatus,
 					updatedAt: new Date(),

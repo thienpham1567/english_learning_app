@@ -10,7 +10,15 @@ import {
   ArrowRightOutlined,
   SmileOutlined,
   RightOutlined,
+  ReadOutlined,
+  SoundOutlined,
+  FileTextOutlined,
+  EditOutlined,
+  AudioOutlined,
+  SyncOutlined,
+  ToolOutlined,
 } from "@ant-design/icons";
+import type { ReactNode } from "react";
 import { Card, Empty, Flex, Typography, Tag } from "antd";
 import { api } from "@/lib/api-client";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
@@ -44,25 +52,25 @@ interface DueReviewResponse {
 interface ReviewGroup {
   key: string;
   label: string;
-  emoji: string;
+  icon: ReactNode;
   actionUrl: string;
   estimatedMinutes: number;
   count: number;
   priority: number;
 }
 
-const SOURCE_TO_GROUP: Record<string, { key: string; label: string; emoji: string; actionUrl: string }> = {
-  vocabulary: { key: "words", label: "Từ vựng cần nhớ", emoji: "📚", actionUrl: "/flashcards" },
-  flashcard: { key: "words", label: "Từ vựng cần nhớ", emoji: "📚", actionUrl: "/flashcards" },
-  error_log: { key: "mistakes", label: "Lỗi sai cần sửa", emoji: "🔧", actionUrl: "/review-quiz" },
-  grammar_quiz: { key: "grammar", label: "Ngữ pháp cần ôn", emoji: "📖", actionUrl: "/grammar-quiz" },
-  listening: { key: "listening", label: "Nghe cần luyện", emoji: "🎧", actionUrl: "/listening" },
-  reading: { key: "reading", label: "Bài đọc cần ôn", emoji: "📄", actionUrl: "/reading" },
-  writing: { key: "writing", label: "Bài viết cần sửa", emoji: "✍️", actionUrl: "/writing-practice" },
-  pronunciation: { key: "pronunciation", label: "Phát âm cần luyện", emoji: "🗣️", actionUrl: "/pronunciation" },
+const SOURCE_TO_GROUP: Record<string, { key: string; label: string; icon: ReactNode; actionUrl: string }> = {
+  vocabulary: { key: "words", label: "Từ vựng cần nhớ", icon: <BookOutlined />, actionUrl: "/flashcards" },
+  flashcard: { key: "words", label: "Từ vựng cần nhớ", icon: <BookOutlined />, actionUrl: "/flashcards" },
+  error_log: { key: "mistakes", label: "Lỗi sai cần sửa", icon: <ToolOutlined />, actionUrl: "/review-quiz" },
+  grammar_quiz: { key: "grammar", label: "Ngữ pháp cần ôn", icon: <ReadOutlined />, actionUrl: "/grammar-quiz" },
+  listening: { key: "listening", label: "Nghe cần luyện", icon: <SoundOutlined />, actionUrl: "/listening" },
+  reading: { key: "reading", label: "Bài đọc cần ôn", icon: <FileTextOutlined />, actionUrl: "/reading" },
+  writing: { key: "writing", label: "Bài viết cần sửa", icon: <EditOutlined />, actionUrl: "/writing-practice" },
+  pronunciation: { key: "pronunciation", label: "Phát âm cần luyện", icon: <AudioOutlined />, actionUrl: "/pronunciation" },
 };
 
-const FALLBACK_GROUP = { key: "other", label: "Ôn tập khác", emoji: "🔄", actionUrl: "/review-quiz" };
+const FALLBACK_GROUP = { key: "other", label: "Ôn tập khác", icon: <SyncOutlined />, actionUrl: "/review-quiz" };
 
 function groupItems(items: DueReviewItem[]): ReviewGroup[] {
   const groupMap = new Map<string, ReviewGroup>();
@@ -77,7 +85,7 @@ function groupItems(items: DueReviewItem[]): ReviewGroup[] {
       groupMap.set(config.key, {
         key: config.key,
         label: config.label,
-        emoji: config.emoji,
+        icon: config.icon,
         actionUrl: config.actionUrl,
         estimatedMinutes: item.estimatedMinutes,
         count: 1,
@@ -197,7 +205,7 @@ export default function ReviewHubPage() {
                 styles={{ body: { padding: "16px 20px" } }}
               >
                 <Flex align="center" gap={16}>
-                  <span style={{ fontSize: 28 }}>{group.emoji}</span>
+                  <span style={{ fontSize: 28, color: "var(--accent)", display: "inline-flex" }}>{group.icon}</span>
                   <Flex vertical style={{ flex: 1, minWidth: 0 }}>
                     <Text style={{ fontWeight: 700, fontSize: 15, color: "var(--ink)" }}>
                       {group.label}

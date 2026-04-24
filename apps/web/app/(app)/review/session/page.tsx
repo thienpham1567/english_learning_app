@@ -12,7 +12,16 @@ import {
   ExportOutlined,
   RightOutlined,
   LeftOutlined,
+  BookOutlined,
+  ToolOutlined,
+  ReadOutlined,
+  SoundOutlined,
+  FileTextOutlined,
+  EditOutlined,
+  AudioOutlined,
+  SyncOutlined,
 } from "@ant-design/icons";
+import type { ReactNode } from "react";
 import { Card, Empty, Flex, Typography, Tag, Progress } from "antd";
 import { api } from "@/lib/api-client";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
@@ -71,16 +80,16 @@ function sourceLabel(sourceType: string): string {
   }
 }
 
-function sourceEmoji(sourceType: string): string {
+function sourceIcon(sourceType: string): ReactNode {
   switch (sourceType) {
-    case "vocabulary": case "flashcard": return "📚";
-    case "error_log": return "🔧";
-    case "grammar_quiz": return "📖";
-    case "listening": return "🎧";
-    case "reading": return "📄";
-    case "writing": return "✍️";
-    case "pronunciation": return "🗣️";
-    default: return "🔄";
+    case "vocabulary": case "flashcard": return <BookOutlined />;
+    case "error_log": return <ToolOutlined />;
+    case "grammar_quiz": return <ReadOutlined />;
+    case "listening": return <SoundOutlined />;
+    case "reading": return <FileTextOutlined />;
+    case "writing": return <EditOutlined />;
+    case "pronunciation": return <AudioOutlined />;
+    default: return <SyncOutlined />;
   }
 }
 
@@ -323,7 +332,7 @@ export default function MixedReviewSessionPage() {
         styles={{ body: { padding: "20px 24px" } }}
       >
         <Flex align="center" gap={12}>
-          <span style={{ fontSize: 32 }}>{sourceEmoji(current.sourceType)}</span>
+          <span style={{ fontSize: 32, color: "var(--accent)", display: "inline-flex" }}>{sourceIcon(current.sourceType)}</span>
           <Flex vertical style={{ flex: 1 }}>
             <Text style={{ fontWeight: 700, fontSize: 16, color: "var(--ink)" }}>
               {sourceLabel(current.sourceType)}

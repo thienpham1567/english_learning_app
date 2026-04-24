@@ -5,6 +5,8 @@ import {
   CloseCircleFilled,
   TrophyOutlined,
   ReloadOutlined,
+  FileTextOutlined,
+  BulbOutlined,
 } from "@ant-design/icons";
 import { HighlightedText } from "@/app/(app)/english-chatbot/_components/HighlightedText";
 import type { DialogueTurnPayload, ListeningSubmitResponse } from "@/lib/listening/types";
@@ -105,7 +107,7 @@ export function Results({ result, onNewExercise, onWordClick, savedWords, dialog
       {/* Transcript */}
       <div>
         <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-muted)", marginBottom: 10, textTransform: "uppercase", letterSpacing: 1 }}>
-          📄 Nguyên văn
+          <FileTextOutlined style={{ marginRight: 6 }} /> Nguyên văn
         </div>
         <div
           style={{
@@ -127,7 +129,7 @@ export function Results({ result, onNewExercise, onWordClick, savedWords, dialog
             result.passage
           )}
           <div style={{ marginTop: 8, fontSize: 11, color: "var(--text-muted)", fontStyle: "normal" }}>
-            💡 Nhấn vào từ để tra từ điển và lưu từ vựng
+            <BulbOutlined style={{ marginRight: 6 }} /> Nhấn vào từ để tra từ điển và lưu từ vựng
           </div>
         </div>
       </div>
