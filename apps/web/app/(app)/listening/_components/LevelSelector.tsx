@@ -45,38 +45,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
         width: "100%",
       }}
     >
-      {/* Header */}
-      <div style={{ textAlign: "center" }}>
-        <div
-          style={{
-            display: "inline-grid",
-            placeItems: "center",
-            width: 60,
-            height: 60,
-            borderRadius: 18,
-            background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-            fontSize: 28,
-            marginBottom: 12,
-            boxShadow: "var(--shadow-lg)",
-          }}
-        >
-          <SoundOutlined style={{ color: "var(--text-on-accent, #fff)" }} />
-        </div>
-        <h2
-          style={{
-            margin: 0,
-            fontSize: 22,
-            fontWeight: 700,
-            color: "var(--text)",
-            fontFamily: "var(--font-display)",
-          }}
-        >
-          Luyện nghe tiếng Anh
-        </h2>
-        <p style={{ margin: "6px 0 0", color: "var(--text-muted)", fontSize: 14 }}>
-          Chọn cấp độ và loại bài tập để bắt đầu
-        </p>
-      </div>
+      {/* Header removed as it is now handled by ModuleHeader in page.tsx */}
 
       {/* CEFR Level Grid */}
       <div>
