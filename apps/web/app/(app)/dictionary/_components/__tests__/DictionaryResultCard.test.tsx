@@ -20,6 +20,7 @@ const singleSenseEntry = {
   numberInfo: null,
   frequencyBand: null,
   wordFamily: null,
+  isNotEnglish: false,
   senses: [
     {
       id: "sense-1",
@@ -60,6 +61,7 @@ const multiSenseEntry = {
   numberInfo: null,
   frequencyBand: null,
   wordFamily: null,
+  isNotEnglish: false,
   senses: [
     {
       id: "sense-1",
@@ -114,6 +116,7 @@ const bilingualEntry = {
   numberInfo: null,
   frequencyBand: null,
   wordFamily: null,
+  isNotEnglish: false,
   senses: [
     {
       id: "sense-1",
@@ -140,7 +143,7 @@ const bilingualEntry = {
   ],
 };
 
-const synonymEntry = {
+const _synonymEntry = {
   query: "depart",
   headword: "depart",
   entryType: "word" as const,
@@ -157,6 +160,7 @@ const synonymEntry = {
   numberInfo: null,
   frequencyBand: null,
   wordFamily: null,
+  isNotEnglish: false,
   senses: [
     {
       id: "sense-1",
@@ -193,6 +197,7 @@ const ipaEntry = {
   numberInfo: null,
   frequencyBand: null,
   wordFamily: null,
+  isNotEnglish: false,
   senses: [
     {
       id: "sense-1",
@@ -227,6 +232,7 @@ const verbEntry = {
   nearbyWords: ["rum", "rump", "rune", "rung"],
   frequencyBand: null,
   wordFamily: null,
+  isNotEnglish: false,
   verbForms: [
     { label: "Base", form: "run", phoneticsUs: null, phoneticsUk: null, isIrregular: false },
     { label: "3rd person", form: "runs", phoneticsUs: null, phoneticsUk: null, isIrregular: false },
@@ -282,6 +288,7 @@ const nounEntry = {
   verbForms: null,
   frequencyBand: null,
   wordFamily: null,
+  isNotEnglish: false,
   numberInfo: {
     plural: "children",
     isUncountable: false,
@@ -324,6 +331,7 @@ const multiWordWordEntry = {
   numberInfo: null,
   frequencyBand: null,
   wordFamily: null,
+  isNotEnglish: false,
   senses: [
     {
       id: "sense-1",
@@ -349,7 +357,7 @@ const frequencyEntry = {
   wordFamily: null,
 };
 
-const wordFamilyEntry = {
+const _wordFamilyEntry = {
   ...verbEntry,
   wordFamily: [
     { pos: "noun", words: ["runner", "running"] },

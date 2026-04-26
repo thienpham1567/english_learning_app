@@ -1,6 +1,6 @@
 "use client";
-import { AppstoreOutlined, ReloadOutlined, BookOutlined } from "@ant-design/icons";
 import { Spin, Progress, Flex, Typography, Button, Result } from "antd";
+import { BookOutlined, ReloadOutlined } from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 import { useFlashcardSession } from "@/hooks/useFlashcardSession";

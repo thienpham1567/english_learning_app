@@ -1,12 +1,11 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { api } from "@/lib/api-client";
 import {
   synthesizeTtsForVoice,
   parseAccent,
   VOICES,
   VOICE_BY_ROLE,
-  type VoiceRole,
+
 } from "@/lib/tts/groq";
 import { fetchGuardianArticle } from "@/lib/reading/utils";
 import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";

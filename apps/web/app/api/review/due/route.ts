@@ -2,7 +2,7 @@ import { headers } from "next/headers";
 import { sql, eq, and } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
-import { db, reviewTask, errorLog, flashcardProgress } from "@repo/database";
+import { db, errorLog, flashcardProgress } from "@repo/database";
 import { listDueReviewTasks } from "@repo/database";
 
 // ── Response Shape (Task 1, AC: 1) ──────────────────────────────────────────

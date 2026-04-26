@@ -1,11 +1,10 @@
 import { NextRequest } from "next/server";
 import { headers } from "next/headers";
-import { eq, sql } from "drizzle-orm";
+import { eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { readingPassage, readingProgress, userVocabulary } from "@repo/database";
-import { extractLemmas } from "@/lib/reading/lemmatize";
 
 // CEFR level numeric ordering for "tooHard" calculation
 const CEFR_ORDER: Record<string, number> = { A1: 1, A2: 2, B1: 3, B2: 4, C1: 5, C2: 6 };

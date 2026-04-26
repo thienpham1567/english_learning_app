@@ -3,7 +3,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { writingErrorPattern, errorLog } from "@repo/database";
-import { eq, and, gte, desc, inArray } from "drizzle-orm";
+import { eq, and, gte, desc } from "drizzle-orm";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { VALID_ERROR_TAGS, ERROR_TAG_DESCRIPTIONS, type ErrorTag } from "@/lib/writing/error-tags";

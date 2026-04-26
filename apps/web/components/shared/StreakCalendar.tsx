@@ -16,7 +16,7 @@ type Props = {
  */
 export function StreakCalendar({ dailyActivity, currentStreak }: Props) {
   // Build the 12-week grid (Sunday-start columns)
-  const { weeks, activityMap, maxCount } = useMemo(() => {
+  const { weeks, activityMap: _activityMap, maxCount } = useMemo(() => {
     const map = new Map<string, number>();
     for (const d of dailyActivity) {
       map.set(d.date, d.count);

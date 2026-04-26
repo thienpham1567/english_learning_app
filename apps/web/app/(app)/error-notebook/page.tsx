@@ -12,7 +12,7 @@ import {
   ExclamationCircleOutlined,
   InboxOutlined,
 } from "@ant-design/icons";
-import { Tag, Tooltip, Select, Empty } from "antd";
+import { Tag, Tooltip, Select } from "antd";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { WritingPatternSection } from "./_components/WritingPatternSection";
 import { DeepExplanation } from "./_components/DeepExplanation";

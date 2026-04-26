@@ -10,7 +10,6 @@ import {
   BulbOutlined,
   BookOutlined,
   SaveOutlined,
-  SoundOutlined,
   PauseCircleOutlined,
   LoadingOutlined,
   CustomerServiceOutlined,

@@ -2,7 +2,6 @@
 import { api } from "@/lib/api-client";
 import { useState, useCallback, useRef, useEffect } from "react";
 import {
-  SoundOutlined,
   LoadingOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,

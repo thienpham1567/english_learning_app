@@ -39,22 +39,20 @@ const CARD_IRREGULAR: React.CSSProperties = {
   border: "1px solid var(--warning)",
 };
 
-let activeAudioEl: HTMLAudioElement | null = null;
-let activeAudioUrl: string | null = null;
-
 export function VerbFormsSection({ verbForms }: Props) {
   const [open, setOpen] = useState(false);
   const [speakingKey, setSpeakingKey] = useState<string | null>(null);
   const activeUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const activeAudioRef = useRef<{ el: HTMLAudioElement | null; url: string | null }>({ el: null, url: null });
 
   async function speak(form: string, locale: "en-US" | "en-GB") {
     const key = `${form}-${locale}`;
 
     // Stop any active audio
-    activeAudioEl?.pause();
-    if (activeAudioUrl) {
-      URL.revokeObjectURL(activeAudioUrl);
-      activeAudioUrl = null;
+    activeAudioRef.current.el?.pause();
+    if (activeAudioRef.current.url) {
+      URL.revokeObjectURL(activeAudioRef.current.url);
+      activeAudioRef.current.url = null;
     }
     if (activeUtteranceRef.current) {
       window.speechSynthesis.cancel();
@@ -72,18 +70,18 @@ export function VerbFormsSection({ verbForms }: Props) {
       );
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
-      activeAudioUrl = url;
+      activeAudioRef.current.url = url;
       const audio = new Audio(url);
-      activeAudioEl = audio;
+      activeAudioRef.current.el = audio;
       audio.onended = () => {
         setSpeakingKey((curr) => (curr === key ? null : curr));
         URL.revokeObjectURL(url);
-        if (activeAudioUrl === url) activeAudioUrl = null;
+        if (activeAudioRef.current.url === url) activeAudioRef.current.url = null;
       };
       audio.onerror = () => {
         setSpeakingKey((curr) => (curr === key ? null : curr));
         URL.revokeObjectURL(url);
-        if (activeAudioUrl === url) activeAudioUrl = null;
+        if (activeAudioRef.current.url === url) activeAudioRef.current.url = null;
       };
       await audio.play();
     } catch {

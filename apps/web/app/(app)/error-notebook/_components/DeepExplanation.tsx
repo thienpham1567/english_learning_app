@@ -8,6 +8,8 @@ import {
   BookOutlined,
   LoadingOutlined,
   ExperimentOutlined,
+  UpOutlined,
+  DownOutlined,
 } from "@ant-design/icons";
 import { api } from "@/lib/api-client";
 
@@ -104,7 +106,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
         </span>
         {data && (
           <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 400 }}>
-            {expanded ? "▲" : "▼"}
+            {expanded ? <UpOutlined /> : <DownOutlined />}
           </span>
         )}
       </button>

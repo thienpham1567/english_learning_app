@@ -12,7 +12,7 @@ import { CompletedState } from "@/app/(app)/daily-challenge/_components/Complete
 import { EXERCISE_TYPE_LABELS } from "@/app/(app)/daily-challenge/_components/constants";
 import { ProgressSegments, StreakFire } from "@/components/shared";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 
 

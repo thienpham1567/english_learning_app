@@ -158,7 +158,7 @@ function extractText(children: ReactNode): string {
   if (Array.isArray(children)) return children.map(extractText).join("");
   if (children && typeof children === "object" && "props" in children) {
     // biome-ignore lint/suspicious/noExplicitAny: ReactNode shape
-    return extractText((children as any).props?.children);
+    return extractText((children as unknown as { props?: { children?: ReactNode } }).props?.children);
   }
   return "";
 }

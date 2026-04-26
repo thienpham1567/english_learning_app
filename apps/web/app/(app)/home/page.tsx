@@ -93,11 +93,15 @@ export default function HomePage() {
   const [weakSkill, setWeakSkill] = useState<{ module: string; cefr: string } | null>(null);
   const [dailyActivity, setDailyActivity] = useState<Array<{ date: string; count: number }> | null>(null);
   const [mounted, setMounted] = useState(false);
+  // Greeting must be state-driven to avoid hydration mismatch (server vs client time)
+  const [greeting, setGreeting] = useState("Xin chào");
 
   useEffect(() => {
     setMounted(true);
+    setGreeting(getGreeting());
   }, []);
 
+  // ── Adaptive daily plan (Story 21.3) — must be called before early returns ──
   const isReady = state.status === "ready";
   const data = isReady ? state.data : null;
   const isNewUser = data
@@ -106,6 +110,9 @@ export default function HomePage() {
       data.streak.currentStreak === 0 &&
       !data.dailyChallenge.completed
     : true;
+  const adaptivePlan = useDailyStudyPlan({ enabled: isReady && !isNewUser });
+
+  // (isReady, data, isNewUser moved above to satisfy hook ordering)
 
   // Weak skill recommendations (lazy-loaded)
   useEffect(() => {
@@ -159,8 +166,6 @@ export default function HomePage() {
 
   const firstName = user?.name?.split(" ").pop() ?? "bạn";
 
-  // ── Adaptive daily plan (Story 21.3) ──
-  const adaptivePlan = useDailyStudyPlan({ enabled: isReady && !isNewUser });
   const hasAdaptivePlan = adaptivePlan.state.status === "ready";
 
   // Map adaptive plan items → todayItems format (AC: 1, 2, 3)
@@ -270,7 +275,7 @@ export default function HomePage() {
             }} />
             <Flex vertical style={{ position: "relative", zIndex: 1 }}>
               <Title level={2} style={{ color: "#fff", fontFamily: "var(--font-display)", margin: 0, letterSpacing: "-0.5px" }}>
-                {getGreeting()}, {firstName}! <span style={{ display: "inline-block", animation: "bounceEmoji 1s ease infinite" }}>👋</span>
+                {greeting}, {firstName}! <span style={{ display: "inline-block", animation: "bounceEmoji 1s ease infinite" }}>👋</span>
               </Title>
               <Space size="large" style={{ marginTop: "var(--space-5)" }} wrap>
                 <div style={{ background: "rgba(0,0,0,0.15)", borderRadius: 999, padding: "6px 16px", backdropFilter: "blur(8px)" }}>

@@ -8,6 +8,10 @@ import {
   MinusOutlined,
   QuestionCircleOutlined,
   InfoCircleOutlined,
+  RiseOutlined,
+  FallOutlined,
+  BarChartOutlined,
+  LineChartOutlined,
 } from "@ant-design/icons";
 import { computeErrorTrends } from "@repo/modules/learning";
 import type { TrendInput, CategoryTrend } from "@repo/modules/learning";
@@ -111,10 +115,10 @@ export function ErrorTrendSection({ errors }: Props) {
 
   if (!trends.hasData) return null;
 
-  const sections = [
-    { key: "improved", label: "📉 Cải thiện", items: trends.improved, color: "var(--success)" },
-    { key: "worsened", label: "📈 Cần chú ý", items: trends.worsened, color: "var(--error)" },
-    { key: "needsReview", label: "📊 Cần ôn tập", items: trends.needsReview, color: "var(--text-muted)" },
+  const sections: Array<{ key: string; label: React.ReactNode; items: CategoryTrend[]; color: string }> = [
+    { key: "improved", label: <><FallOutlined /> Cải thiện</>, items: trends.improved, color: "var(--success)" },
+    { key: "worsened", label: <><RiseOutlined /> Cần chú ý</>, items: trends.worsened, color: "var(--error)" },
+    { key: "needsReview", label: <><BarChartOutlined /> Cần ôn tập</>, items: trends.needsReview, color: "var(--text-muted)" },
   ].filter((s) => s.items.length > 0);
 
   if (sections.length === 0) return null;
@@ -123,7 +127,7 @@ export function ErrorTrendSection({ errors }: Props) {
     <div style={{ marginBottom: 16 }}>
       <Flex align="center" gap={8} style={{ marginBottom: 10 }}>
         <Text style={{ fontSize: 13, fontWeight: 700, color: "var(--ink)" }}>
-          📊 Xu hướng lỗi sai
+          <LineChartOutlined style={{ marginRight: 6 }} />Xu hướng lỗi sai
         </Text>
       </Flex>
 

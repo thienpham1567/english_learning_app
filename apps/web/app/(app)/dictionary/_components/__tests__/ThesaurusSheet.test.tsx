@@ -17,6 +17,7 @@ const vocabulary = {
   numberInfo: null,
   frequencyBand: null,
   wordFamily: [],
+  isNotEnglish: false,
   overviewVi: "Rời đi.",
   overviewEn: "To leave a place.",
   senses: [

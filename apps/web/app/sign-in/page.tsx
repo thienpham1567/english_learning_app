@@ -5,7 +5,6 @@ import { useSearchParams } from "next/navigation";
 import Image from "next/image";
 import { Alert, Button, Card, Divider, Flex, Typography } from "antd";
 import {
-  GoogleOutlined,
   MessageOutlined,
   BookOutlined,
   ThunderboltOutlined,

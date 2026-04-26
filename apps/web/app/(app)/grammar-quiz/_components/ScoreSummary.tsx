@@ -19,7 +19,7 @@ type Props = {
 
 export function ScoreSummary({
   questions,
-  answers,
+  answers: _answers,
   score,
   maxCombo,
   topicBreakdown,

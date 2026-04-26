@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex, Spin, Typography, Tabs } from "antd";
+import { Flex, Spin, Tabs } from "antd";
 import { EditOutlined, FormOutlined, HighlightOutlined, AimOutlined } from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
@@ -11,8 +11,6 @@ import { FeedbackPanel } from "@/app/(app)/writing-practice/_components/Feedback
 import { SubmissionHistory } from "@/app/(app)/writing-practice/_components/SubmissionHistory";
 import { RewritePanel } from "@/app/(app)/writing-practice/_components/RewritePanel";
 import { GuidedWritingPanel } from "@/app/(app)/writing-practice/_components/GuidedWritingPanel";
-
-const { Title, Text } = Typography;
 
 export default function WritingPracticePage() {
   const {

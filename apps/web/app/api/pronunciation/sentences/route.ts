@@ -6,7 +6,7 @@ import { db } from "@repo/database";
 import { userPreferences } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { getExamContext, parseExamMode } from "@/lib/exam-mode/context";
+import { getExamContext } from "@/lib/exam-mode/context";
 import type { ExamMode } from "@/components/shared/ExamModeProvider";
 
 /**

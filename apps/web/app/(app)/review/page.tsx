@@ -23,7 +23,7 @@ import { Card, Empty, Flex, Typography, Tag } from "antd";
 import { api } from "@/lib/api-client";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 // ── Types ───────────────────────────────────────────────────────────────────
 

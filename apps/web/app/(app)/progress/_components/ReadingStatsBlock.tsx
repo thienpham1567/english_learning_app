@@ -7,7 +7,13 @@ import {
   FireOutlined,
   TrophyOutlined,
   CalendarOutlined,
+  BookOutlined,
+  BookFilled,
+  CrownOutlined,
+  CrownFilled,
+  TrophyFilled,
 } from "@ant-design/icons";
+import type { ReactNode } from "react";
 import { api } from "@/lib/api-client";
 
 const { Text } = Typography;
@@ -22,12 +28,12 @@ type ReadingStats = {
 };
 
 // ── Milestones (AC4) ──
-const MILESTONES = [
-  { threshold: 10_000, label: "10K từ", emoji: "📗" },
-  { threshold: 50_000, label: "50K từ", emoji: "📘" },
-  { threshold: 100_000, label: "100K từ", emoji: "📙" },
-  { threshold: 500_000, label: "500K từ", emoji: "📕" },
-  { threshold: 1_000_000, label: "1M từ", emoji: "🏆" },
+const MILESTONES: Array<{ threshold: number; label: string; icon: ReactNode }> = [
+  { threshold: 10_000, label: "10K từ", icon: <BookOutlined /> },
+  { threshold: 50_000, label: "50K từ", icon: <BookFilled /> },
+  { threshold: 100_000, label: "100K từ", icon: <CrownOutlined /> },
+  { threshold: 500_000, label: "500K từ", icon: <CrownFilled /> },
+  { threshold: 1_000_000, label: "1M từ", icon: <TrophyFilled /> },
 ];
 
 function formatNum(n: number): string {
@@ -110,7 +116,7 @@ export function ReadingStatsBlock() {
         for (const m of MILESTONES) {
           if (data.totalWords >= m.threshold && !shownMilestonesRef.current.has(m.threshold)) {
             shownMilestonesRef.current.add(m.threshold);
-            msgApi.success(`${m.emoji} Milestone: Bạn đã đọc ${m.label}!`, 5);
+            msgApi.success(`Milestone: Bạn đã đọc ${m.label}!`, 5);
           }
         }
       })
@@ -173,7 +179,7 @@ export function ReadingStatsBlock() {
             {nextMilestone && (
               <Text style={{ fontSize: 12, color: "var(--text-muted)" }}>
                 <TrophyOutlined style={{ marginRight: 4 }} />
-                Tiếp theo: {nextMilestone.emoji} {nextMilestone.label}
+                Tiếp theo: <span style={{ marginRight: 4 }}>{nextMilestone.icon}</span>{nextMilestone.label}
                 {" "}({Math.round((stats.totalWords / nextMilestone.threshold) * 100)}%)
               </Text>
             )}
@@ -196,7 +202,7 @@ export function ReadingStatsBlock() {
                     opacity: unlocked ? 1 : 0.5,
                   }}
                 >
-                  {m.emoji} {m.label}
+                  <span style={{ marginRight: 4 }}>{m.icon}</span>{m.label}
                 </div>
               );
             })}

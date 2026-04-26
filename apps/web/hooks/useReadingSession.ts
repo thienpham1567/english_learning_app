@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 import { api } from "@/lib/api-client";
 
 const HEARTBEAT_INTERVAL = 30_000; // 30s
@@ -16,6 +16,12 @@ export function useReadingSession(passageId: string | undefined) {
   const clickCountRef = useRef(0);
   const sessionIdRef = useRef<string | null>(null);
   const finishedRef = useRef(false);
+  const [isFinished, setIsFinished] = useState(false);
+
+  const markFinished = useCallback(() => {
+    finishedRef.current = true;
+    setIsFinished(true);
+  }, []);
 
   // ── Heartbeat ──
   const sendHeartbeat = useCallback(async () => {
@@ -30,7 +36,7 @@ export function useReadingSession(passageId: string | undefined) {
 
       // Auto-complete if scrolled ≥ 90% (AC2)
       if (scrollPctRef.current >= 90 && !finishedRef.current) {
-        finishedRef.current = true;
+        markFinished();
         await api.post("/reading/session/finish", {
           passageId,
           scrollPct: scrollPctRef.current,
@@ -40,12 +46,12 @@ export function useReadingSession(passageId: string | undefined) {
     } catch {
       // Silently ignore heartbeat failures
     }
-  }, [passageId]);
+  }, [passageId, markFinished]);
 
   // ── Manual finish ──
   const finish = useCallback(async () => {
     if (!passageId || finishedRef.current) return;
-    finishedRef.current = true;
+    markFinished();
     try {
       await api.post("/reading/session/finish", {
         passageId,
@@ -55,7 +61,7 @@ export function useReadingSession(passageId: string | undefined) {
     } catch {
       // ignore
     }
-  }, [passageId]);
+  }, [passageId, markFinished]);
 
   // ── Track scroll position ──
   useEffect(() => {
@@ -103,5 +109,6 @@ export function useReadingSession(passageId: string | undefined) {
     };
   }, [passageId, sendHeartbeat]);
 
-  return { finish, trackClick, isFinished: finishedRef.current };
+  return { finish, trackClick, isFinished };
 }
+

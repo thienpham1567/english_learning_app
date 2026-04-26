@@ -347,7 +347,7 @@ export default function ListeningImportPage() {
                         <Tag color="blue" style={{ fontSize: 10 }}>{v.partOfSpeech}</Tag>
                       </div>
                       <p style={{ margin: "0 0 4px", fontSize: 13, color: "var(--text-secondary)" }}>{v.meaning}</p>
-                      <p style={{ margin: 0, fontSize: 12, color: "var(--text-muted)", fontStyle: "italic" }}>"{v.example}"</p>
+                      <p style={{ margin: 0, fontSize: 12, color: "var(--text-muted)", fontStyle: "italic" }}>&quot;{v.example}&quot;</p>
                     </div>
                   ))}
                 </div>

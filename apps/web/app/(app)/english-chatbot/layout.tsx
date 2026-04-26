@@ -12,7 +12,7 @@ export default function EnglishChatbotLayout({
   // children is intentionally not rendered: ChatWindow is mounted here directly
   // so its state persists across router.replace() calls during conversation
   // creation. Both child page components return null.
-  children: _,
+  children: _children,
 }: {
   children: ReactNode;
 }) {

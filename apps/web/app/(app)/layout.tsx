@@ -3,6 +3,8 @@ import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 
+export const dynamic = "force-dynamic";
+
 import { auth } from "@/lib/auth";
 import { AppShell } from "@/components/shared/AppShell";
 import { ThemeProvider } from "@/components/shared/ThemeProvider";

@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Breadcrumb, Flex, Typography } from "antd";
+import { Flex, Typography } from "antd";
 
 const { Text, Title } = Typography;
 

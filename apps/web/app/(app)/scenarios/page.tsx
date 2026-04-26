@@ -10,8 +10,8 @@ import {
   BulbOutlined,
   FormOutlined,
 } from "@ant-design/icons";
-import { SCENARIOS, getScenarioById } from "@/lib/scenarios/data";
-import type { Scenario, ScenarioStep, VocabContent, ListeningContent, SpeakingContent, ReadingContent, WritingContent } from "@/lib/scenarios/data";
+import { getScenarioById } from "@/lib/scenarios/data";
+import type { Scenario, VocabContent, ListeningContent, SpeakingContent, ReadingContent, WritingContent } from "@/lib/scenarios/data";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -35,8 +35,8 @@ export default function ScenariosPage() {
   const [activeStepIdx, setActiveStepIdx] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<Set<number>>(new Set());
   const [stepAnswers, setStepAnswers] = useState<number[]>([]);
-  const [selectedOption, setSelectedOption] = useState<number | null>(null);
-  const [writingText, setWritingText] = useState("");
+  const [_selectedOption, setSelectedOption] = useState<number | null>(null);
+  const [_writingText, setWritingText] = useState("");
   const [showResult, setShowResult] = useState(false);
   const [submitting, setSubmitting] = useState(false);
 

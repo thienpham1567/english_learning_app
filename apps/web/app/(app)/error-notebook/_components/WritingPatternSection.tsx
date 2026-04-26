@@ -7,6 +7,11 @@ import {
   LoadingOutlined,
   CheckCircleOutlined,
   ThunderboltOutlined,
+  TrophyOutlined,
+  LikeOutlined,
+  FireOutlined,
+  CheckOutlined,
+  CloseOutlined,
 } from "@ant-design/icons";
 
 import { api } from "@/lib/api-client";
@@ -76,7 +81,13 @@ function InlineQuiz({ items, errorLogIds, onDone }: { items: QuizItem[]; errorLo
           format={() => `${score}/${items.length}`}
         />
         <p style={{ marginTop: 12, fontSize: 14, fontWeight: 600 }}>
-          {score === items.length ? "🎉 Hoàn hảo!" : score >= items.length / 2 ? "👍 Tốt!" : "💪 Cần ôn thêm!"}
+          {score === items.length ? (
+            <><TrophyOutlined style={{ marginRight: 6, color: "var(--success)" }} />Hoàn hảo!</>
+          ) : score >= items.length / 2 ? (
+            <><LikeOutlined style={{ marginRight: 6, color: "var(--accent)" }} />Tốt!</>
+          ) : (
+            <><FireOutlined style={{ marginRight: 6, color: "var(--warning)" }} />Cần ôn thêm!</>
+          )}
         </p>
         <button
           onClick={() => onDone(answers)}
@@ -133,7 +144,9 @@ function InlineQuiz({ items, errorLogIds, onDone }: { items: QuizItem[]; errorLo
           border: `1px solid color-mix(in srgb, ${isCorrect ? "var(--success)" : "var(--error)"} 27%, transparent)`,
           fontSize: 12, color: "var(--text)",
         }}>
-          <p style={{ margin: "0 0 4px", fontWeight: 600 }}>{isCorrect ? "✓ Đúng!" : "✗ Sai"}</p>
+          <p style={{ margin: "0 0 4px", fontWeight: 600 }}>
+            {isCorrect ? <><CheckOutlined /> Đúng!</> : <><CloseOutlined /> Sai</>}
+          </p>
           <p style={{ margin: "0 0 2px" }}>{item.explanationEn}</p>
           <p style={{ margin: 0, color: "var(--text-secondary)" }}>{item.explanationVi}</p>
         </div>

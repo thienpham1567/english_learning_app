@@ -15,7 +15,7 @@ import {
   TeamOutlined,
 } from "@ant-design/icons";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 type Article = {
   id: string;

@@ -4,7 +4,7 @@ import { eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { readingPassage, userVocabulary } from "@repo/database";
-import { generateCloze, type ClozeItem } from "@/lib/reading/cloze";
+import { generateCloze } from "@/lib/reading/cloze";
 
 /**
  * POST /api/reading/cloze

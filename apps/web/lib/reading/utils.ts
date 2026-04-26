@@ -58,7 +58,7 @@ export class BoundedCache<T> {
 const GUARDIAN_API_KEY = process.env.GUARDIAN_API_KEY ?? "test";
 const GUARDIAN_BASE = "https://content.guardianapis.com";
 
-const articleCache = new BoundedCache<any>(200, 60 * 60 * 1000); // 200 entries, 1-hour TTL
+const articleCache = new BoundedCache<Record<string, unknown>>(200, 60 * 60 * 1000); // 200 entries, 1-hour TTL
 
 export async function fetchGuardianArticle(articleId: string) {
   const cached = articleCache.get(articleId);

@@ -4,7 +4,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Drawer, Flex, Skeleton, Space, Tag, Typography } from "antd";
-import { BookOutlined, LinkOutlined, StarFilled, StarOutlined } from "@ant-design/icons";
+import { LinkOutlined, StarFilled, StarOutlined } from "@ant-design/icons";
 
 import { api } from "@/lib/api-client";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";

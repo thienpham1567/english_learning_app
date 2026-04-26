@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { diffWords } from "diff";
-import { Tag, Tooltip, Spin } from "antd";
+import { Tag } from "antd";
 import { CopyOutlined, CheckOutlined, EditOutlined, LoadingOutlined, HighlightOutlined } from "@ant-design/icons";
 
 import { api } from "@/lib/api-client";

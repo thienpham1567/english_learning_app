@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, Flex, Space, Statistic, Typography, Button } from "antd";
 import {
@@ -13,7 +13,6 @@ import {
   LikeOutlined,
   MehOutlined,
   FrownOutlined,
-  CloseCircleOutlined,
 } from "@ant-design/icons";
 
 import { CelebrationOverlay, StreakFire } from "@/components/shared";

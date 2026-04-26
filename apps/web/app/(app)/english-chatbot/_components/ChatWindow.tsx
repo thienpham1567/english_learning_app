@@ -19,7 +19,6 @@ import type { PronFeedbackData } from "@/app/(app)/english-chatbot/_components/P
 import { deriveTitle } from "@/lib/chat/derive-title";
 import { parseAssistantStream } from "@/lib/chat/parse-assistant-stream";
 import { DEFAULT_PERSONA_ID, PERSONAS } from "@/lib/chat/personas";
-import type { Persona } from "@/lib/chat/personas";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 import { api } from "@/lib/api-client";
 
@@ -143,7 +142,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const streamingHasStarted = isLoading && lastMsg?.role === "assistant";
   const activePersona =
     PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
-  const ActiveAvatar = activePersona.avatar;
+  const _ActiveAvatar = activePersona.avatar;
 
   // Voice hooks (Story 7.1 + 7.2)
   const voice = useVoiceInput();
@@ -179,7 +178,6 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
         setTimeout(() => sendRef.current(voice.transcript), 100);
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [voice.transcript, voice.isTranscribing]);
 
   // MiniDictionary integration (Story 4.2)

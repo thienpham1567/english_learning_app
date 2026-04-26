@@ -15,7 +15,7 @@ import {
 import { PredictedScore } from "@/components/shared";
 import { ReadingStatsBlock } from "@/app/(app)/progress/_components/ReadingStatsBlock";
 
-const { Title, Text } = Typography;
+const { Text } = Typography;
 
 // ── Types ──
 
@@ -293,7 +293,7 @@ function ActivityHeatmap({ data }: { data: Array<{ date: string; count: number }
 
 // ── SVG Line Chart ──
 
-function LineChart({ data, labelKey, valueKey, color, suffix = "" }: {
+function LineChart({ data, labelKey: _labelKey, valueKey, color, suffix = "" }: {
   data: Array<Record<string, unknown>>;
   labelKey: string;
   valueKey: string;

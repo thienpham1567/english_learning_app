@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button, Card, Flex, Result, Space, Typography } from "antd";
+import { Card, Flex, Result, Space, Typography } from "antd";
 import { SmileOutlined, ClockCircleOutlined } from "@ant-design/icons";
 
 const { Text, Title } = Typography;

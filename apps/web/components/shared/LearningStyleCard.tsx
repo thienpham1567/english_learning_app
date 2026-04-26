@@ -5,7 +5,7 @@ import { Card, Typography, Flex, Progress } from "antd";
 import { RightOutlined, ExperimentOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 
-const { Text, Title } = Typography;
+const { Text } = Typography;
 
 type LearningStyleData = {
   hasEnoughData: boolean;

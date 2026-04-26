@@ -64,7 +64,6 @@ export function XPCounter({
         cancelAnimationFrame(animFrameRef.current);
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value, duration]);
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import { LogoutOutlined, DownOutlined } from "@ant-design/icons";
-import { Avatar, Button, Dropdown, Flex, Typography } from "antd";
+import { Avatar, Button, Dropdown, Typography } from "antd";
 import type { MenuProps } from "antd";
 import { useRouter } from "next/navigation";
 

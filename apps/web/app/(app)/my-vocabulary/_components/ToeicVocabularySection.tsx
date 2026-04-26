@@ -212,7 +212,7 @@ export function ToeicVocabularySection({ className }: Props) {
       </div>
 
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-        {TOEIC_CATEGORIES.map((cat, i) => {
+        {TOEIC_CATEGORIES.map((cat, _i) => {
           const isExpanded = expandedId === cat.id;
           return (
             <div

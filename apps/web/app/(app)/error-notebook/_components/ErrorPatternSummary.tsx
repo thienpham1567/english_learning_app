@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import Link from "next/link";
-import { RightOutlined, WarningOutlined } from "@ant-design/icons";
+import { RightOutlined, WarningOutlined, CheckOutlined, CloseOutlined } from "@ant-design/icons";
 import { Tag, Flex, Typography } from "antd";
 import { summarizeErrorPatterns } from "@repo/modules/learning";
 import type { ErrorPatternInput } from "@repo/modules/learning";
@@ -91,10 +91,10 @@ export function ErrorPatternSummary({ errors }: Props) {
                   >
                     <span style={{ color: "var(--text-secondary)" }}>{ex.questionStem.slice(0, 80)}</span>
                     <span style={{ color: "var(--error)", fontWeight: 600, marginLeft: 6 }}>
-                      ✗ {ex.userAnswer}
+                      <CloseOutlined /> {ex.userAnswer}
                     </span>
                     <span style={{ color: "var(--success)", fontWeight: 600, marginLeft: 4 }}>
-                      ✓ {ex.correctAnswer}
+                      <CheckOutlined /> {ex.correctAnswer}
                     </span>
                   </div>
                 ))}

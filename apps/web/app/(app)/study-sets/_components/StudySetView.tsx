@@ -15,7 +15,7 @@ import {
   CalculatorOutlined,
 } from "@ant-design/icons";
 import type { ReactNode } from "react";
-import { Tag } from "antd";
+
 
 type VocabWord = { word: string; ipa: string; meaning: string; example: string; exampleVi: string };
 type GrammarData = { title: string; formula: string; explanation: string; topicExample: string; topicExampleVi: string };
@@ -239,8 +239,8 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
             <p style={{ fontSize: 14, lineHeight: 1.8, margin: 0, whiteSpace: "pre-wrap" }}>{data.reading.passage}</p>
           </div>
           {data.reading.questions.map((q, qi) => {
-            const answered = readingAnswers[qi] !== undefined;
-            const isCorrect = readingAnswers[qi] === q.answer;
+            const _answered = readingAnswers[qi] !== undefined;
+            const _isCorrect = readingAnswers[qi] === q.answer;
             return (
               <div key={qi} style={{ padding: 16, borderRadius: 10, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
                 <p style={{ margin: "0 0 10px", fontWeight: 500, fontSize: 14 }}>{qi + 1}. {q.question}</p>

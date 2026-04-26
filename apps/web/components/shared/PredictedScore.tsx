@@ -7,6 +7,7 @@ import {
   LoadingOutlined,
   ReadOutlined,
   SoundOutlined,
+  BarChartOutlined,
 } from "@ant-design/icons";
 
 type ScoreData = {
@@ -80,7 +81,7 @@ export function PredictedScore() {
         background: "var(--card-bg, var(--surface))",
         textAlign: "center",
       }}>
-        <div style={{ fontSize: 32, marginBottom: 12 }}>📊</div>
+        <BarChartOutlined style={{ fontSize: 32, marginBottom: 12, color: "var(--text-secondary)" }} />
         <p style={{ fontSize: 14, fontWeight: 600, color: "var(--text)", margin: "0 0 8px" }}>
           Chưa đủ dữ liệu dự đoán
         </p>
@@ -88,7 +89,7 @@ export function PredictedScore() {
           {data.quizzesNeeded > 0 && `Hoàn thành thêm ${data.quizzesNeeded} bài quiz`}
           {data.quizzesNeeded > 0 && data.listeningNeeded > 0 && " và "}
           {data.listeningNeeded > 0 && `${data.listeningNeeded} bài nghe`}
-          {" để xem dự đoán điểm TOEIC 📊"}
+          {" để xem dự đoán điểm TOEIC"}
         </p>
       </div>
     );
