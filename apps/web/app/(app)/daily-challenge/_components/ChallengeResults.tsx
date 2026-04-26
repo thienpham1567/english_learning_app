@@ -8,6 +8,12 @@ import {
   DownOutlined,
   UpOutlined,
   BookOutlined,
+  TrophyOutlined,
+  LikeOutlined,
+  FireOutlined,
+  ClockCircleOutlined,
+  StarOutlined,
+  SmileOutlined,
 } from "@ant-design/icons";
 
 import type { ExerciseAnswer, StreakInfo, Badge } from "@/lib/daily-challenge/types";
@@ -19,10 +25,10 @@ const { Title, Text } = Typography;
 
 // Tiered celebration config (AC: #1–#4)
 const TIERS = [
-  { min: 5, tier: "big" as const, emoji: "🎉", label: "Hoàn hảo!", color: "var(--xp)" },
-  { min: 4, tier: "medium" as const, emoji: "👏", label: "Xuất sắc!", color: "var(--accent)" },
-  { min: 3, tier: "small" as const, emoji: "👍", label: "Tốt lắm!", color: "var(--success)" },
-  { min: 0, tier: null, emoji: "💪", label: "Cố lên!", color: "var(--text-secondary)" },
+  { min: 5, tier: "big" as const, icon: <TrophyOutlined />, label: "Hoàn hảo!", color: "var(--xp)" },
+  { min: 4, tier: "medium" as const, icon: <LikeOutlined />, label: "Xuất sắc!", color: "var(--accent)" },
+  { min: 3, tier: "small" as const, icon: <SmileOutlined />, label: "Tốt lắm!", color: "var(--success)" },
+  { min: 0, tier: null, icon: <FireOutlined />, label: "Cố lên!", color: "var(--text-secondary)" },
 ];
 
 
@@ -326,14 +332,14 @@ export function ChallengeResults({
               textShadow: "0 2px 8px rgba(0,0,0,0.15)",
             }}
           >
-            {matched.emoji} {matched.label}
+            {matched.icon} {matched.label}
           </Title>
         </CelebrationOverlay>
       )}
 
       <Flex vertical align="center" className="anim-scale-in" style={{ maxWidth: 520, margin: "0 auto" }}>
         {/* Score header */}
-        <span className="anim-bounce-emoji" style={{ fontSize: 60 }}>{matched.emoji}</span>
+        <span className="anim-bounce-emoji" style={{ fontSize: 60 }}>{matched.icon}</span>
 
         <Title level={2} style={{ marginTop: 12, fontFamily: "var(--font-display)", fontStyle: "italic" }}>
           {score} / {answers.length}
@@ -372,7 +378,7 @@ export function ChallengeResults({
         </Flex>
 
         <Text type="secondary" style={{ fontSize: 13, marginTop: 8 }}>
-          ⏱️ {minutes}:{seconds.toString().padStart(2, "0")}
+          <ClockCircleOutlined style={{ marginRight: 4 }} /> {minutes}:{seconds.toString().padStart(2, "0")}
         </Text>
 
         {/* Streak (AC: #3 — uses StreakFire instead of legacy StreakDisplay) */}
@@ -394,7 +400,7 @@ export function ChallengeResults({
             styles={{ body: { padding: "12px 16px" } }}
           >
             <Text strong style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 1.5, color: "var(--xp)" }}>
-              🎊 Huy hiệu mới!
+              <StarOutlined style={{ marginRight: 4 }} /> Huy hiệu mới!
             </Text>
             <Flex gap={8} wrap style={{ marginTop: 8 }}>
               {newBadges.map((b, i) => (
@@ -409,7 +415,7 @@ export function ChallengeResults({
                     background: "color-mix(in srgb, var(--xp) 10%, var(--surface))",
                   }}
                 >
-                  {b.emoji} {b.label}
+                  {b.icon === "TrophyOutlined" ? <TrophyOutlined /> : <FireOutlined />} {b.label}
                 </Tag>
               ))}
             </Flex>
@@ -453,7 +459,7 @@ export function ChallengeResults({
           <BadgeGallery badges={badges} />
         </div>
 
-        <Text type="secondary" style={{ marginTop: 20, fontSize: 13 }}>Quay lại mai nhé! 🌙</Text>
+        <Text type="secondary" style={{ marginTop: 20, fontSize: 13 }}>Quay lại mai nhé!</Text>
       </Flex>
     </>
   );

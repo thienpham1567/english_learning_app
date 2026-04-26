@@ -12,7 +12,7 @@ export interface DashboardData {
     bestStreak: number;
     lastCompletedDate: string | null;
   };
-  badges: Array<{ id: string; label: string; emoji: string; unlocked: boolean }>;
+  badges: Array<{ id: string; label: string; icon: string; unlocked: boolean }>;
   recentVocabulary: Array<{
     query: string;
     headword: string;

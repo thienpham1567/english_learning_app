@@ -23,6 +23,7 @@ import {
   RightOutlined,
   SoundOutlined,
   HistoryOutlined,
+  SmileOutlined,
 } from "@ant-design/icons";
 
 import { useDashboard, type DashboardData } from "@/hooks/useDashboard";
@@ -275,7 +276,7 @@ export default function HomePage() {
             }} />
             <Flex vertical style={{ position: "relative", zIndex: 1 }}>
               <Title level={2} style={{ color: "#fff", fontFamily: "var(--font-display)", margin: 0, letterSpacing: "-0.5px" }}>
-                {greeting}, {firstName}! <span style={{ display: "inline-block", animation: "bounceEmoji 1s ease infinite" }}>👋</span>
+                {greeting}, {firstName}! <SmileOutlined style={{ marginLeft: 8, fontSize: 28, animation: "bounceEmoji 1s ease infinite" }} />
               </Title>
               <Space size="large" style={{ marginTop: "var(--space-5)" }} wrap>
                 <div style={{ background: "rgba(0,0,0,0.15)", borderRadius: 999, padding: "6px 16px", backdropFilter: "blur(8px)" }}>
@@ -368,7 +369,7 @@ export default function HomePage() {
                     e.currentTarget.style.boxShadow = "0 8px 24px rgba(16, 185, 129, 0.25)";
                   }}
                 >
-                  <span style={{ fontSize: 24 }}>🎉</span>
+                  <CheckCircleFilled style={{ fontSize: 24 }} />
                   <span>Tuyệt vời! Bạn đã hoàn thành hôm nay</span>
                   <RightOutlined style={{ marginLeft: "auto", opacity: 0.8, fontSize: 16 }} />
                 </button>
@@ -633,7 +634,9 @@ export default function HomePage() {
                     onMouseEnter={badge.unlocked ? (e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 24px var(--accent-muted)"; } : undefined}
                     onMouseLeave={badge.unlocked ? (e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 16px var(--accent-muted)"; } : undefined}
                   >
-                    <div style={{ fontSize: 36, filter: badge.unlocked ? "drop-shadow(0 4px 12px rgba(0,0,0,0.15))" : "grayscale(100%)", marginBottom: 8 }}>{badge.emoji}</div>
+                    <div style={{ fontSize: 36, filter: badge.unlocked ? "drop-shadow(0 4px 12px rgba(0,0,0,0.15))" : "grayscale(100%)", marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      {badge.icon === "TrophyOutlined" ? <TrophyOutlined /> : <FireOutlined />}
+                    </div>
                     <Text style={{ fontSize: 14, fontWeight: 600, color: badge.unlocked ? "var(--text-primary)" : "var(--text-secondary)" }}>{badge.label}</Text>
                   </div>
                 ))}

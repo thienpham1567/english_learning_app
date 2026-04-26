@@ -57,7 +57,7 @@ export type StreakInfo = {
 
 export type Badge = {
   id: string;
-  emoji: string;
+  icon: string;
   label: string;
   requiredStreak: number;
   unlocked: boolean;
