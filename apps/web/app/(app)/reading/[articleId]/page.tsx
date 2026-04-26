@@ -10,9 +10,7 @@ import {
   BulbOutlined,
   BookOutlined,
   SaveOutlined,
-  PauseCircleOutlined,
   LoadingOutlined,
-  CustomerServiceOutlined,
   SoundOutlined,
 } from "@ant-design/icons";
 
@@ -68,11 +66,8 @@ export default function ArticleReaderPage() {
   const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
   const [wordsLookedUp, setWordsLookedUp] = useState(0);
 
-  // Audio player state
-  const [audioState, setAudioState] = useState<"idle" | "loading" | "playing" | "paused">("idle");
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-  const audioUrlRef = useRef<string | null>(null);
-  const [selectedVoice, setSelectedVoice] = useState("austin");
+  // Voice accent for per-paragraph TTS
+  const [ttsAccent, setTtsAccent] = useState("en-US");
   const [grammarPopup, setGrammarPopup] = useState<number | null>(null);
 
   // Per-paragraph TTS state
@@ -119,59 +114,9 @@ export default function ArticleReaderPage() {
     }
   }, []);
 
-  // Audio player handlers
-  const handlePlayArticle = useCallback(async () => {
-    if (audioState === "playing" && audioRef.current) {
-      audioRef.current.pause();
-      setAudioState("paused");
-      return;
-    }
-
-    if (audioState === "paused" && audioRef.current) {
-      audioRef.current.play();
-      setAudioState("playing");
-      return;
-    }
-
-    // Load fresh audio
-    setAudioState("loading");
-    try {
-      const res = await fetch(`/api/reading/audio/${articleId}?voice=${selectedVoice}`);
-      if (!res.ok) throw new Error("Audio load failed");
-      const blob = await res.blob();
-      const url = URL.createObjectURL(blob);
-
-      // Clean up previous
-      if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
-      if (audioRef.current) audioRef.current.pause();
-
-      const audio = new Audio(url);
-      audioRef.current = audio;
-      audioUrlRef.current = url;
-
-      audio.onended = () => setAudioState("idle");
-      audio.onerror = () => setAudioState("idle");
-
-      await audio.play();
-      setAudioState("playing");
-    } catch {
-      setAudioState("idle");
-    }
-  }, [articleId, audioState, selectedVoice]);
-
-  const handleStopAudio = useCallback(() => {
-    if (audioRef.current) {
-      audioRef.current.pause();
-      audioRef.current.currentTime = 0;
-    }
-    setAudioState("idle");
-  }, []);
-
-  // Cleanup audio on unmount
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
-      if (audioRef.current) audioRef.current.pause();
-      if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
       speechSynthesis.cancel();
     };
   }, []);
@@ -189,14 +134,14 @@ export default function ArticleReaderPage() {
     speechSynthesis.cancel();
 
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "en-US";
+    utterance.lang = ttsAccent;
     utterance.rate = 0.9;
     utterance.onend = () => setSpeakingIdx(null);
     utterance.onerror = () => setSpeakingIdx(null);
 
     setSpeakingIdx(idx);
     speechSynthesis.speak(utterance);
-  }, [speakingIdx]);
+  }, [speakingIdx, ttsAccent]);
 
 
 
@@ -295,7 +240,7 @@ export default function ArticleReaderPage() {
             </Text>
           )}
 
-          <Flex align="center" gap={16} style={{ marginTop: 12 }}>
+          <Flex align="center" gap={16} style={{ marginTop: 12 }} wrap>
             {article.author && (
               <Text style={{ fontSize: 13, color: "var(--text-muted)" }}>By {article.author}</Text>
             )}
@@ -306,66 +251,26 @@ export default function ArticleReaderPage() {
             <Tag color={DIFFICULTY_COLORS[article.difficulty]} style={{ fontSize: 11, margin: 0 }}>
               {article.difficulty}
             </Tag>
+            <Select
+              value={ttsAccent}
+              onChange={(v) => {
+                setTtsAccent(v);
+                // Stop current speech when accent changes
+                if (speakingIdx !== null) {
+                  speechSynthesis.cancel();
+                  setSpeakingIdx(null);
+                }
+              }}
+              size="small"
+              style={{ width: 120 }}
+              options={[
+                { value: "en-US", label: "US English" },
+                { value: "en-GB", label: "UK English" },
+                { value: "en-AU", label: "AU English" },
+              ]}
+            />
           </Flex>
         </div>
-
-        {/* Listen to article — voice selector + play button */}
-        <Flex align="center" gap={12} wrap="wrap">
-          <Select
-            value={selectedVoice}
-            onChange={(v) => {
-              setSelectedVoice(v);
-              // Reset audio when voice changes
-              if (audioState !== "idle") handleStopAudio();
-            }}
-            disabled={audioState === "loading"}
-            style={{ width: 160, height: 40 }}
-            options={[
-              { value: "austin", label: "🇺🇸 US Male" },
-              { value: "autumn", label: "🇺🇸 US Female" },
-              { value: "daniel", label: "🇬🇧 UK Male" },
-              { value: "diana", label: "🇬🇧 UK Female" },
-              { value: "troy", label: "🇦🇺 AU Male" },
-              { value: "hannah", label: "🇦🇺 AU Female" },
-            ]}
-          />
-          <Button
-            type={audioState === "idle" ? "default" : "primary"}
-            icon={
-              audioState === "loading" ? <LoadingOutlined spin /> :
-              audioState === "playing" ? <PauseCircleOutlined /> :
-              <CustomerServiceOutlined />
-            }
-            onClick={handlePlayArticle}
-            disabled={audioState === "loading"}
-            style={{
-              borderRadius: "var(--radius-full, 999px)",
-              height: 40,
-              paddingInline: 20,
-              ...(audioState === "playing" ? {
-                background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-                borderColor: "transparent",
-                color: "var(--text-on-accent)",
-              } : {}),
-            }}
-          >
-            {audioState === "loading" ? "Đang tải audio..." :
-             audioState === "playing" ? "Tạm dừng" :
-             audioState === "paused" ? "Tiếp tục nghe" :
-             "Nghe bài báo"}
-          </Button>
-
-          {audioState !== "idle" && audioState !== "loading" && (
-            <Button
-              type="text"
-              size="small"
-              onClick={handleStopAudio}
-              style={{ color: "var(--text-muted)", fontSize: 12 }}
-            >
-              Dừng hẳn
-            </Button>
-          )}
-        </Flex>
 
         {/* Thumbnail */}
         {article.thumbnail && (
