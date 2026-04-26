@@ -141,12 +141,13 @@ export async function synthesizeTtsForVoice(args: {
   if (args.text.length > MAX_CHARS) {
     const chunks = splitTextIntoChunks(args.text, MAX_CHARS);
     console.log(`[Groq TTS] Chunking text: ${args.text.length} chars → ${chunks.length} chunks, voice=${args.voice}`);
-    const buffers = await Promise.all(
-      chunks.map((chunk, i) => {
-        console.log(`[Groq TTS]   Chunk ${i + 1}/${chunks.length}: ${chunk.length} chars`);
-        return synthesizeTtsForVoice({ ...args, text: chunk });
-      }),
-    );
+    // Serial dispatch: parallel chunks burst past Groq's per-second cap and
+    // trigger 429s even when our sliding-window RPM count is well under the limit.
+    const buffers: ArrayBuffer[] = [];
+    for (let i = 0; i < chunks.length; i++) {
+      console.log(`[Groq TTS]   Chunk ${i + 1}/${chunks.length}: ${chunks[i].length} chars`);
+      buffers.push(await synthesizeTtsForVoice({ ...args, text: chunks[i] }));
+    }
     const result = concatArrayBuffers(buffers);
     console.log(`[Groq TTS] All ${chunks.length} chunks done, total ${result.byteLength} bytes`);
     return result;
