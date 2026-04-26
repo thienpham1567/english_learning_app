@@ -117,8 +117,41 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
     padding: "16px 20px",
   };
 
+  const shortMeanings = sense.shortMeaningsVi ?? [];
+
   return (
     <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+      {shortMeanings.length > 0 && (
+        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12, rowGap: 8 }}>
+          {shortMeanings.map((meaning, i) => (
+            <span
+              key={meaning}
+              style={
+                i === 0
+                  ? {
+                      borderRadius: 999,
+                      border: "1px solid var(--accent-muted)",
+                      background: "var(--accent-light)",
+                      padding: "4px 14px",
+                      fontSize: 14,
+                      fontStyle: "italic",
+                      fontFamily: "var(--font-display)",
+                      color: "var(--accent)",
+                      whiteSpace: "nowrap",
+                    }
+                  : {
+                      fontSize: 14,
+                      color: "var(--text-secondary)",
+                      lineHeight: 1.5,
+                    }
+              }
+            >
+              {meaning}
+            </span>
+          ))}
+        </div>
+      )}
+
       <section style={sectionStyle}>
         <h3 style={SENSE_HEADER_STYLE}>
           <BookOutlined style={{ fontSize: 12 }} />

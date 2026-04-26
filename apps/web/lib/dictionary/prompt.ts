@@ -50,6 +50,9 @@ export function buildDictionaryInstructions(entryType: DictionaryEntryType) {
     // ── Sense: definition ─────────────────────────────────────────────────
     "For each sense, write `definitionEn` as a single clear English sentence targeted at learners. Match the vocabulary and complexity to the word's CEFR level.",
 
+    // ── Sense: short Vietnamese gloss ─────────────────────────────────────
+    "For each sense, populate `shortMeaningsVi` with 1 to 3 very short Vietnamese gloss phrases (each 2–8 words) that summarise the core meaning at a glance. The first item should be the most common/literal Vietnamese equivalent (e.g. 'thỏa thuận/chấp nhận chung'), additional items can capture context-specific shades (e.g. 'quan điểm khoa học/chính trị chung'). Do not write full sentences here — these are quick reference labels shown above the English definition. Use [] only if no useful short gloss exists.",
+
     // ── Sense: examples ───────────────────────────────────────────────────
     "For each sense, provide 3 to 5 examples. Each example must be a bilingual object with `en` (English sentence) and `vi` (Vietnamese translation). In the English sentence, wrap the headword and any grammatically obligatory dependent words (prepositions, particles, fixed complements) in double asterisks: **leave** the room, **take** something **off**. Do not bold optional or contextual words.",
 

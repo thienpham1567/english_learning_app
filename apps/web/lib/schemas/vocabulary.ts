@@ -14,6 +14,7 @@ export const DictionarySenseSchema = z.object({
   id: z.string(),
   label: z.string(),
   definitionEn: z.string(),
+  shortMeaningsVi: z.array(z.string()).default([]),
   usageNoteVi: z.string().nullable(),
   examplesVi: z.array(z.string()).default([]),
   examples: z.array(z.object({ en: z.string(), vi: z.string() })).default([]),

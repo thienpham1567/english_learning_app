@@ -183,8 +183,9 @@ export async function synthesizeTtsForVoice(args: {
     const elapsed = Date.now() - startMs;
 
     if (res.status === 429 && attempt < TTS_MAX_RETRIES) {
-      const retryAfter = Number(res.headers.get("retry-after")) || 7;
-      console.warn(`[Groq TTS] 429 rate-limited — retrying in ${retryAfter}s (attempt ${attempt + 1}/${TTS_MAX_RETRIES})`);
+      const rawRetryAfter = Number(res.headers.get("retry-after")) || 7;
+      const retryAfter = Math.min(rawRetryAfter, 15); // cap to avoid extreme waits (Groq sometimes returns 100s+)
+      console.warn(`[Groq TTS] 429 rate-limited — retrying in ${retryAfter}s (attempt ${attempt + 1}/${TTS_MAX_RETRIES})${rawRetryAfter > 15 ? ` (server wanted ${rawRetryAfter}s)` : ""}`);
       await new Promise((r) => setTimeout(r, retryAfter * 1000));
       continue;
     }

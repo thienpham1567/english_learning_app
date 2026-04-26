@@ -80,14 +80,21 @@ export async function POST(req: Request) {
       }
 
       if (cachedData) {
+        const missingShortMeanings = cachedData.senses.every(
+          (s) => !s.shortMeaningsVi || s.shortMeaningsVi.length === 0,
+        );
         const isBadEntry =
           cachedData.isNotEnglish ||
           !isHeadwordConsistentWithQuery(cachedData.headword, cacheKey);
 
         if (isBadEntry) {
-          // Purge the stale entry so the LLM gets a chance to re-evaluate
+          // Purge: LLM may also return isNotEnglish and short-circuit before the upsert.
           await db.delete(vocabularyCache).where(eq(vocabularyCache.query, cacheKey));
           // Fall through to LLM call below
+        } else if (missingShortMeanings) {
+          // Legacy entry without short Vietnamese glosses — fall through to LLM.
+          // The upsert at the end of this handler will overwrite the row in place,
+          // so the regenerated entry stays cached for subsequent lookups.
         } else {
           const saved = session ? await upsertUserVocabulary(session.user.id, cacheKey) : false;
           const nearbyWords = getNearbyWords(cacheKey);
