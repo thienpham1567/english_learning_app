@@ -28,6 +28,7 @@ const singleSenseEntry = {
       definitionVi: "Cất cánh",
       definitionEn: "To leave the ground and begin flying.",
       usageNoteVi: null,
+      shortMeaningsVi: [],
       examples: [],
       synonyms: [],
       examplesVi: [
@@ -69,6 +70,7 @@ const multiSenseEntry = {
       definitionVi: "Chạy bộ",
       definitionEn: "To move fast on foot.",
       usageNoteVi: null,
+      shortMeaningsVi: [],
       examples: [],
       synonyms: [],
       antonyms: [],
@@ -87,6 +89,7 @@ const multiSenseEntry = {
       definitionVi: "Vận hành",
       definitionEn: "To operate or manage.",
       usageNoteVi: null,
+      shortMeaningsVi: [],
       examples: [],
       synonyms: [],
       antonyms: [],
@@ -124,6 +127,7 @@ const bilingualEntry = {
       definitionVi: "Cất cánh",
       definitionEn: "To leave the ground and begin flying.",
       usageNoteVi: null,
+      shortMeaningsVi: [],
       examples: [
         { en: "The plane took off on time.", vi: "Máy bay cất cánh đúng giờ." },
         { en: "The rocket took off at dawn.", vi: "Tên lửa cất cánh lúc bình minh." },
@@ -168,6 +172,7 @@ const _synonymEntry = {
       definitionVi: "Rời đi",
       definitionEn: "To leave.",
       usageNoteVi: null,
+      shortMeaningsVi: [],
       examples: [],
       examplesVi: ["Tàu rời đi lúc 9 giờ."],
       synonyms: ["leave", "exit", "go"],
@@ -205,6 +210,7 @@ const ipaEntry = {
       definitionVi: "Chạy",
       definitionEn: "Move fast on foot.",
       usageNoteVi: null,
+      shortMeaningsVi: [],
       examples: [],
       synonyms: [],
       antonyms: [],
@@ -260,6 +266,7 @@ const verbEntry = {
       definitionVi: "Chạy",
       definitionEn: "Move fast on foot.",
       usageNoteVi: null,
+      shortMeaningsVi: [],
       examples: [{ en: "She **ran** every day.", vi: "Cô ấy chạy mỗi ngày." }],
       synonyms: [],
       antonyms: [],
@@ -302,6 +309,7 @@ const nounEntry = {
       definitionVi: "Đứa trẻ",
       definitionEn: "A young person.",
       usageNoteVi: null,
+      shortMeaningsVi: [],
       examples: [],
       synonyms: [],
       antonyms: [],
@@ -339,6 +347,7 @@ const multiWordWordEntry = {
       definitionVi: "Cà phê đậm",
       definitionEn: "Coffee with a strong taste.",
       usageNoteVi: null,
+      shortMeaningsVi: [],
       examples: [],
       synonyms: [],
       antonyms: [],
@@ -604,7 +613,7 @@ describe("DictionaryResultCard", () => {
     const { getByText } = renderUi(
       <DictionaryResultCard vocabulary={ipaEntry} hasSearched isLoading={false} />,
     );
-    expect(getByText("verb")).toBeInTheDocument();
+    expect(getByText("động từ")).toBeInTheDocument();
   });
 
   it("falls back to single phonetic when phoneticsUs and phoneticsUk are null", () => {
@@ -681,14 +690,14 @@ describe("DictionaryResultCard", () => {
     const { getByText } = renderUi(
       <DictionaryResultCard vocabulary={nounEntry} hasSearched isLoading={false} />,
     );
-    expect(getByText("formal")).toBeInTheDocument();
+    expect(getByText("trang trọng")).toBeInTheDocument();
   });
 
   it("renders number pill with plural form when numberInfo has plural", () => {
     const { getByText } = renderUi(
       <DictionaryResultCard vocabulary={nounEntry} hasSearched isLoading={false} />,
     );
-    expect(getByText("pl: children")).toBeInTheDocument();
+    expect(getByText("số nhiều: children")).toBeInTheDocument();
   });
 
   it("renders Thesaurus button in the sense tab row (not in the header tags)", () => {

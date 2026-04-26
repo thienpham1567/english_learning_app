@@ -926,3 +926,220 @@ button:focus-visible {
   outline: 2px solid var(--accent) !important;
   outline-offset: 2px;
 }
+
+/* ══════════════════════════════════════════════
+   PREMIUM DASHBOARD UTILITIES
+   ══════════════════════════════════════════════ */
+
+/* ── Glass Card ── */
+.glass-card {
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  backdrop-filter: blur(24px) saturate(1.4);
+  -webkit-backdrop-filter: blur(24px) saturate(1.4);
+  border: 1px solid color-mix(in srgb, var(--border) 60%, transparent);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-md), 0 0 0 0.5px rgba(255,255,255,0.06) inset;
+  transition: transform var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
+}
+.glass-card:hover {
+  box-shadow: var(--shadow-lg), 0 0 0 0.5px rgba(255,255,255,0.1) inset;
+}
+
+/* ── Glass Card with accent glow ── */
+.glass-card-glow {
+  composes: glass-card;
+  position: relative;
+}
+.glass-card-glow::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--accent-muted), transparent 50%, var(--accent-muted));
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity var(--duration-normal) ease;
+  pointer-events: none;
+}
+.glass-card-glow:hover::before {
+  opacity: 1;
+}
+
+/* ── Hero Gradient Mesh ── */
+.hero-gradient-mesh {
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 85%, rgba(217, 162, 153, 0.5) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 80% at 85% 20%, rgba(196, 168, 130, 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(192, 122, 112, 0.3) 0%, transparent 60%),
+    linear-gradient(135deg, #c07a70, #D9A299 40%, #C4A882 70%, #B8967A);
+}
+
+[data-theme="dark"] .hero-gradient-mesh {
+  background:
+    radial-gradient(ellipse 80% 60% at 15% 85%, rgba(192, 122, 112, 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse 60% 80% at 85% 20%, rgba(155, 107, 99, 0.35) 0%, transparent 50%),
+    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(120, 80, 70, 0.3) 0%, transparent 60%),
+    linear-gradient(135deg, #7A5550, #9B6B63 40%, #B8967A 70%, #8B6F5E);
+}
+
+/* ── Premium Section Label ── */
+.section-label {
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--text-muted);
+}
+
+/* ── Premium Stat Pill ── */
+.stat-pill {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(12px);
+  border-radius: var(--radius-lg);
+  padding: 10px 20px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  min-width: 80px;
+  transition: background var(--duration-fast) ease;
+}
+.stat-pill:hover {
+  background: rgba(0, 0, 0, 0.25);
+}
+
+/* ── Premium Chart Bar ── */
+.premium-bar {
+  border-radius: 8px;
+  background: var(--gradient-vocabulary);
+  position: relative;
+  overflow: hidden;
+}
+.premium-bar::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 50%;
+  bottom: 0;
+  background: linear-gradient(90deg, rgba(255,255,255,0.18), transparent);
+  border-radius: inherit;
+}
+
+/* ── Plan Item Left Accent ── */
+.plan-item {
+  position: relative;
+  padding: 16px 16px 16px 20px;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  transition: all var(--duration-fast) ease;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.plan-item::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--accent);
+  opacity: 0.5;
+  transition: opacity var(--duration-fast) ease, height var(--duration-fast) ease;
+}
+.plan-item:hover {
+  background: var(--surface-hover);
+  transform: translateX(4px);
+}
+.plan-item:hover::before {
+  opacity: 1;
+}
+.plan-item[data-done="true"]::before {
+  background: var(--success);
+  opacity: 0.4;
+}
+
+/* ── Quick Action Card ── */
+.quick-action-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 24px 16px;
+  border-radius: var(--radius-xl);
+  cursor: pointer;
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+  transition: all var(--duration-fast) ease;
+  flex: 1;
+  min-width: 0;
+}
+.quick-action-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent);
+}
+
+/* ── Badge Glass Circle ── */
+.badge-glass {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 20px 16px;
+  border-radius: var(--radius-xl);
+  background: color-mix(in srgb, var(--surface) 70%, transparent);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  text-align: center;
+  transition: all var(--duration-fast) ease;
+  flex: 1 1 calc(25% - 12px);
+  min-width: 100px;
+}
+.badge-glass[data-unlocked="true"] {
+  border-color: var(--accent);
+  box-shadow: 0 4px 20px var(--accent-muted);
+}
+.badge-glass[data-unlocked="true"]:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px var(--accent-muted);
+}
+.badge-glass[data-unlocked="false"] {
+  opacity: 0.5;
+  filter: grayscale(0.6);
+}
+
+/* ── Glow Pulse ── */
+@keyframes glowPulse {
+  0%, 100% { box-shadow: 0 0 20px var(--accent-muted); }
+  50% { box-shadow: 0 0 40px var(--accent-muted), 0 0 60px rgba(217, 162, 153, 0.1); }
+}
+
+/* ── Vocab card horizontal scroll ── */
+.vocab-scroll-card {
+  flex-shrink: 0;
+  min-width: 150px;
+  border-radius: var(--radius-xl);
+  padding: 20px;
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  border-top: 3px solid var(--accent);
+  cursor: pointer;
+  box-shadow: var(--shadow);
+  transition: all var(--duration-fast) ease;
+}
+.vocab-scroll-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--accent);
+}
+

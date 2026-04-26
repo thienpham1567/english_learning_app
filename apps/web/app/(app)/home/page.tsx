@@ -5,7 +5,7 @@ import { api } from "@/lib/api-client";
 import { useDailyStudyPlan, type DailyPlanItem } from "@/hooks/useDailyStudyPlan";
 
 import { useRouter } from "next/navigation";
-import { Card, Flex, Typography, Button, Space, Tag, Spin, Result } from "antd";
+import { Card, Flex, Typography, Button, Tag, Spin, Result } from "antd";
 import {
   CommentOutlined,
   ReadOutlined,
@@ -28,7 +28,7 @@ import {
 
 import { useDashboard, type DashboardData } from "@/hooks/useDashboard";
 import { useUser } from "@/components/shared/UserContext";
-import { StreakFire, XPCounter, EmptyStateCard, StreakCalendar, WordOfTheDay, WeeklyLeaderboard } from "@/components/shared";
+import { EmptyStateCard, StreakCalendar, WordOfTheDay, WeeklyLeaderboard } from "@/components/shared";
 import { LearningStyleCard } from "@/components/shared/LearningStyleCard";
 
 const { Title, Text } = Typography;
@@ -257,67 +257,58 @@ export default function HomePage() {
       <div style={{ padding: "var(--space-6) var(--space-8)", position: "relative", zIndex: 1, maxWidth: 840, margin: "0 auto" }}>
         <Flex vertical gap="var(--space-8)" className="anim-fade-up">
 
-          {/* ── GreetingCard ── */}
-          <Card
+          {/* ── Hero Greeting ── */}
+          <div
+            className="hero-gradient-mesh anim-fade-up"
             style={{
-              background: "var(--gradient-daily)",
               borderRadius: "var(--radius-2xl)",
-              border: "none",
-              boxShadow: "var(--shadow-lg)",
+              padding: "var(--space-10) var(--space-8)",
               position: "relative",
-              overflow: "hidden"
+              overflow: "hidden",
+              boxShadow: "var(--shadow-xl)",
             }}
-            styles={{ body: { padding: "var(--space-8) var(--space-8)" } }}
           >
+            <div className="grain-overlay" style={{ opacity: 0.04, borderRadius: "inherit" }} />
             <div style={{
-              position: "absolute", top: 0, right: 0, bottom: 0, width: "60%",
-              background: "radial-gradient(circle at 90% 50%, rgba(255,255,255,0.15) 0%, transparent 60%)",
+              position: "absolute", top: 0, right: 0, bottom: 0, width: "50%",
+              background: "radial-gradient(circle at 80% 40%, rgba(255,255,255,0.12) 0%, transparent 60%)",
               pointerEvents: "none"
             }} />
             <Flex vertical style={{ position: "relative", zIndex: 1 }}>
-              <Title level={2} style={{ color: "#fff", fontFamily: "var(--font-display)", margin: 0, letterSpacing: "-0.5px" }}>
+              <Text className="section-label" style={{ color: "rgba(255,255,255,0.6)", marginBottom: 8 }}>Dashboard</Text>
+              <Title level={2} style={{ color: "#fff", fontFamily: "var(--font-display)", margin: 0, letterSpacing: "-0.5px", fontSize: 32 }}>
                 {greeting}, {firstName}! <SmileOutlined style={{ marginLeft: 8, fontSize: 28, animation: "bounceEmoji 1s ease infinite" }} />
               </Title>
-              <Space size="large" style={{ marginTop: "var(--space-5)" }} wrap>
-                <div style={{ background: "rgba(0,0,0,0.15)", borderRadius: 999, padding: "6px 16px", backdropFilter: "blur(8px)" }}>
-                  <StreakFire streak={data.streak.currentStreak} />
+
+              <Flex gap={12} style={{ marginTop: "var(--space-6)" }} wrap>
+                <div className="stat-pill">
+                  <FireOutlined style={{ color: "#fff", fontSize: 18 }} />
+                  <Text style={{ color: "#fff", fontWeight: 800, fontSize: 20, lineHeight: 1 }}>{data.streak.currentStreak}</Text>
+                  <Text style={{ color: "rgba(255,255,255,0.6)", fontSize: 11, fontWeight: 600 }}>Streak</Text>
                 </div>
-                <div style={{ background: "rgba(0,0,0,0.15)", borderRadius: 999, padding: "6px 16px", backdropFilter: "blur(8px)" }}>
-                  <XPCounter value={data.totalXP} label="XP" />
+                <div className="stat-pill">
+                  <TrophyOutlined style={{ color: "#fff", fontSize: 18 }} />
+                  <Text style={{ color: "#fff", fontWeight: 800, fontSize: 20, lineHeight: 1 }}>{data.totalXP}</Text>
+                  <Text style={{ color: "rgba(255,255,255,0.6)", fontSize: 11, fontWeight: 600 }}>XP</Text>
                 </div>
-                {/* Level Badge (Story 8.2) */}
                 {(() => {
                   const lvl = getLevel(data.totalXP);
                   return (
-                    <Flex align="center" gap={12} style={{ background: "rgba(0,0,0,0.15)", borderRadius: 999, padding: "6px 16px", backdropFilter: "blur(8px)" }}>
-                      <Text style={{ color: "#fff", fontWeight: 700, fontSize: 14 }}>
-                        <BarChartOutlined style={{ marginRight: 6 }} /> Lv.{lvl.level}
-                      </Text>
-                      <div
-                        style={{
-                          width: 80,
-                          height: 6,
-                          borderRadius: 3,
-                          background: "rgba(255,255,255,0.2)",
-                          overflow: "hidden",
-                        }}
-                      >
-                        <div
-                          style={{
-                            width: `${lvl.progress * 100}%`,
-                            height: "100%",
-                            borderRadius: 3,
-                            background: "#fff",
-                            transition: "width 0.5s ease",
-                          }}
-                        />
-                      </div>
-                    </Flex>
+                    <div className="stat-pill" style={{ minWidth: 120 }}>
+                      <BarChartOutlined style={{ color: "#fff", fontSize: 18 }} />
+                      <Flex align="center" gap={8} style={{ width: "100%" }}>
+                        <Text style={{ color: "#fff", fontWeight: 800, fontSize: 20, lineHeight: 1 }}>Lv.{lvl.level}</Text>
+                        <div style={{ flex: 1, height: 4, borderRadius: 2, background: "rgba(255,255,255,0.2)", overflow: "hidden" }}>
+                          <div style={{ width: `${lvl.progress * 100}%`, height: "100%", borderRadius: 2, background: "#fff", transition: "width 0.5s ease" }} />
+                        </div>
+                      </Flex>
+                      <Text style={{ color: "rgba(255,255,255,0.6)", fontSize: 11, fontWeight: 600 }}>{lvl.currentXP}/{lvl.nextXP}</Text>
+                    </div>
                   );
                 })()}
-              </Space>
+              </Flex>
             </Flex>
-          </Card>
+          </div>
 
           {/* ── New User Empty State ── */}
           {isNewUser && (
@@ -421,54 +412,49 @@ export default function HomePage() {
 
           {/* ── TodaysPlan ── */}
           {!isNewUser && (
-            <Card
-              title={<span style={{ fontSize: 20, fontWeight: 700, display: "flex", alignItems: "center", fontFamily: "var(--font-display)" }}><ScheduleOutlined style={{ marginRight: 10, color: "var(--accent)" }} /> Kế hoạch hôm nay</span>}
-              style={{ borderRadius: "var(--radius-2xl)", border: "1px solid var(--border)", boxShadow: "var(--shadow-sm)" }}
-              styles={{ header: { borderBottom: "1px solid var(--border)", padding: "20px 28px" }, body: { padding: "12px 16px" } }}
-            >
-              <Flex vertical gap={4}>
+            <div className="glass-card" style={{ overflow: "hidden" }}>
+              <div style={{ padding: "20px 28px", borderBottom: "1px solid var(--border)" }}>
+                <Flex align="center" gap={10}>
+                  <ScheduleOutlined style={{ color: "var(--accent)", fontSize: 18 }} />
+                  <Text style={{ fontSize: 20, fontWeight: 700, fontFamily: "var(--font-display)" }}>Kế hoạch hôm nay</Text>
+                  <Tag style={{ marginLeft: "auto", borderRadius: 999, background: "var(--accent-muted)", border: "none", color: "var(--accent)", fontWeight: 700, fontSize: 11 }}>
+                    {todayItems.filter(i => i.done).length}/{todayItems.length}
+                  </Tag>
+                </Flex>
+              </div>
+              <div style={{ padding: "8px 12px" }}>
                 {todayItems.map((item) => (
                   <div
                     key={item.href}
+                    className="plan-item"
+                    data-done={item.done}
                     onClick={() => router.push(item.href)}
-                    style={{
-                      padding: "16px",
-                      borderRadius: "var(--radius-xl)",
-                      cursor: "pointer",
-                      transition: "all var(--duration-fast) ease",
-                      background: "transparent",
-                      opacity: item.done ? 0.6 : 1,
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 16
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = "var(--surface-hover)"; e.currentTarget.style.transform = "translateX(4px)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = "transparent"; e.currentTarget.style.transform = "translateX(0)"; }}
+                    style={{ opacity: item.done ? 0.6 : 1 }}
                   >
-                    <div style={{ 
-                      width: 52, height: 52, borderRadius: "50%", background: item.done ? "var(--success-bg)" : "var(--bg-deep)", 
-                      display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22,
-                      color: item.done ? "var(--success)" : "var(--text-secondary)",
-                      boxShadow: "inset 0 2px 4px rgba(0,0,0,0.02)"
+                    <div style={{
+                      width: 44, height: 44, borderRadius: "var(--radius)",
+                      background: item.done ? "var(--success-bg)" : "var(--bg-deep)",
+                      display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20,
+                      color: item.done ? "var(--success)" : "var(--accent)",
                     }}>
                       {item.icon}
                     </div>
-                    <Flex vertical style={{ flex: 1, gap: 4 }}>
-                      <Text style={{ fontSize: 16, fontWeight: 600, color: "var(--text-primary)", textDecoration: item.done ? "line-through" : "none" }}>
+                    <Flex vertical style={{ flex: 1, gap: 2 }}>
+                      <Text style={{ fontSize: 15, fontWeight: 600, color: "var(--text-primary)", textDecoration: item.done ? "line-through" : "none" }}>
                         {item.label}
                       </Text>
                       {"reason" in item && item.reason ? (
-                        <Text type="secondary" style={{ fontSize: 14 }}>
+                        <Text type="secondary" style={{ fontSize: 13 }}>
                           {String(item.reason)}
                           {"estimatedMinutes" in item ? <span style={{ opacity: 0.7 }}> • ~{String(item.estimatedMinutes)} phút</span> : null}
                         </Text>
                       ) : null}
                     </Flex>
-                    {item.done ? <CheckCircleFilled style={{ color: "var(--success)", fontSize: 24 }} /> : <RightOutlined style={{ color: "var(--text-muted)", fontSize: 16 }} />}
+                    {item.done ? <CheckCircleFilled style={{ color: "var(--success)", fontSize: 20 }} /> : <RightOutlined style={{ color: "var(--text-muted)", fontSize: 14 }} />}
                   </div>
                 ))}
-              </Flex>
-            </Card>
+              </div>
+            </div>
           )}
 
           {/* ── Learning Style & Quick Actions Grid ── */}
@@ -481,40 +467,34 @@ export default function HomePage() {
             )}
 
             {/* ── QuickActions ── */}
-            <Card
-              title={<span style={{ fontSize: 20, fontWeight: 700, display: "flex", alignItems: "center", fontFamily: "var(--font-display)" }}><ThunderboltOutlined style={{ marginRight: 10, color: "var(--warning)" }} /> Luyện tập thêm</span>}
-              style={{ borderRadius: "var(--radius-2xl)", border: "1px solid var(--border)", boxShadow: "var(--shadow-sm)", height: "100%" }}
-              styles={{ header: { borderBottom: "none", padding: "20px 28px 0" }, body: { padding: "24px 28px" } }}
-            >
-              <Flex gap={12} wrap>
+            <div className="glass-card" style={{ padding: "24px 28px", height: "100%" }}>
+              <Flex align="center" gap={10} style={{ marginBottom: 20 }}>
+                <ThunderboltOutlined style={{ color: "var(--warning)", fontSize: 18 }} />
+                <Text style={{ fontSize: 20, fontWeight: 700, fontFamily: "var(--font-display)" }}>Luyện tập thêm</Text>
+              </Flex>
+              <Flex gap={12}>
                 {[
                   { label: "Chat AI", href: "/english-chatbot", icon: <CommentOutlined />, color: "var(--info)", bg: "var(--info-bg)" },
                   { label: "Từ điển", href: "/dictionary", icon: <ReadOutlined />, color: "var(--warning)", bg: "var(--warning-bg)" },
                   { label: "Ngữ pháp", href: "/grammar-quiz", icon: <BulbOutlined />, color: "var(--success)", bg: "var(--success-bg)" },
                 ].map((action) => (
-                  <Button
+                  <div
                     key={action.href}
-                    size="large"
-                    icon={<span style={{ color: action.color }}>{action.icon}</span>}
+                    className="quick-action-card"
                     onClick={() => router.push(action.href)}
-                    style={{
-                      background: action.bg,
-                      color: "var(--text-primary)",
-                      border: "none",
-                      fontWeight: 600,
-                      borderRadius: "var(--radius-xl)",
-                      padding: "0 20px",
-                      height: 48,
-                      boxShadow: "none"
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
                   >
-                    {action.label}
-                  </Button>
+                    <div style={{
+                      width: 44, height: 44, borderRadius: "var(--radius)",
+                      background: action.bg, display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: 20, color: action.color,
+                    }}>
+                      {action.icon}
+                    </div>
+                    <Text style={{ fontSize: 13, fontWeight: 700, color: "var(--text-primary)" }}>{action.label}</Text>
+                  </div>
                 ))}
               </Flex>
-            </Card>
+            </div>
           </div>
 
           {/* ── Word of the Day (Story 14.3) ── */}
@@ -522,63 +502,59 @@ export default function HomePage() {
 
           {/* ── RecentVocabulary ── */}
           {data.recentVocabulary.length > 0 && (
-            <Card
-              title={<span style={{ fontSize: 20, fontWeight: 700, display: "flex", alignItems: "center", fontFamily: "var(--font-display)" }}><BookOutlined style={{ marginRight: 10, color: "var(--tertiary)" }} /> Từ vựng gần đây</span>}
-              style={{ borderRadius: "var(--radius-2xl)", border: "1px solid var(--border)", boxShadow: "var(--shadow-sm)" }}
-              styles={{ header: { borderBottom: "none", padding: "20px 28px 0" }, body: { padding: "20px 28px 28px" } }}
-            >
-              <Flex gap={16} style={{ overflowX: "auto", paddingBottom: 12, margin: "0 -8px", padding: "0 8px" }} className="scrollbar-none">
+            <div className="glass-card" style={{ padding: "24px 28px" }}>
+              <Flex align="center" gap={10} style={{ marginBottom: 20 }}>
+                <BookOutlined style={{ color: "var(--tertiary)", fontSize: 18 }} />
+                <Text style={{ fontSize: 20, fontWeight: 700, fontFamily: "var(--font-display)" }}>Từ vựng gần đây</Text>
+              </Flex>
+              <Flex gap={14} style={{ overflowX: "auto", paddingBottom: 8 }} className="scrollbar-none">
                 {data.recentVocabulary.map((word) => (
                   <div
                     key={word.query}
+                    className="vocab-scroll-card"
                     onClick={() => router.push(`/dictionary?q=${encodeURIComponent(word.query)}`)}
-                    style={{ 
-                      flexShrink: 0, 
-                      minWidth: 140, 
-                      borderRadius: "var(--radius-xl)", 
-                      padding: "20px",
-                      background: "var(--surface)",
-                      border: "1px solid var(--border)",
-                      cursor: "pointer",
-                      boxShadow: "var(--shadow)",
-                      transition: "all var(--duration-fast) ease"
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "var(--shadow-md)"; e.currentTarget.style.borderColor = "var(--accent)"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "var(--shadow)"; e.currentTarget.style.borderColor = "var(--border)"; }}
                   >
                     <Text style={{ fontSize: 18, fontWeight: 700, color: "var(--text-primary)", display: "block", marginBottom: 8 }}>{word.headword}</Text>
-                    <Tag color="processing" style={{ margin: 0, borderRadius: "var(--radius)", border: "none", background: "var(--info-bg)", color: "var(--info)", fontWeight: 600, padding: "2px 10px" }}>{word.level}</Tag>
+                    <Tag style={{ margin: 0, borderRadius: 999, border: "none", background: "var(--info-bg)", color: "var(--info)", fontWeight: 700, fontSize: 11, padding: "2px 10px" }}>{word.level}</Tag>
                   </div>
                 ))}
               </Flex>
-            </Card>
+            </div>
           )}
 
           {/* ── WeeklyProgress ── */}
-          <Card
-            title={<span style={{ fontSize: 20, fontWeight: 700, display: "flex", alignItems: "center", fontFamily: "var(--font-display)" }}><BarChartOutlined style={{ marginRight: 10, color: "var(--success)" }} /> Hoạt động trong tuần</span>}
-            style={{ borderRadius: "var(--radius-2xl)", border: "1px solid var(--border)", boxShadow: "var(--shadow-sm)" }}
-            styles={{ header: { borderBottom: "none", padding: "20px 28px 0" }, body: { padding: "24px 28px" } }}
-          >
-            <Flex align="flex-end" justify="space-between" gap={8} style={{ height: 140, padding: "0 12px" }}>
-              {data.weeklyActivity.map((day) => (
-                <Flex key={day.day} vertical align="center" gap={12} style={{ flex: 1 }}>
-                  <div
-                    style={{
-                      width: "100%",
-                      maxWidth: 40,
-                      borderRadius: "8px",
-                      background: day.count > 0 ? "var(--gradient-vocabulary)" : "var(--bg-deep)",
-                      height: `${Math.max((day.count / maxActivity) * 100, 8)}px`,
-                      transition: `height var(--duration-normal) ease`,
-                      boxShadow: day.count > 0 ? "0 4px 16px rgba(196, 168, 130, 0.4)" : "none"
-                    }}
-                  />
-                  <Text type="secondary" style={{ fontSize: 13, fontWeight: 600 }}>{getDayLabel(day.day)}</Text>
-                </Flex>
-              ))}
+          <div className="glass-card" style={{ padding: "24px 28px" }}>
+            <Flex align="center" gap={10} style={{ marginBottom: 20 }}>
+              <BarChartOutlined style={{ color: "var(--success)", fontSize: 18 }} />
+              <Text style={{ fontSize: 20, fontWeight: 700, fontFamily: "var(--font-display)" }}>Hoạt động trong tuần</Text>
             </Flex>
-          </Card>
+            <div style={{ position: "relative", height: 140, padding: "0 8px" }}>
+              {/* Subtle grid lines */}
+              {[0.25, 0.5, 0.75].map((pct) => (
+                <div key={pct} style={{ position: "absolute", left: 0, right: 0, bottom: `${pct * 100 + 28}px`, height: 1, background: "var(--border)", opacity: 0.4 }} />
+              ))}
+              <Flex align="flex-end" justify="space-between" gap={8} style={{ height: "100%" }}>
+                {data.weeklyActivity.map((day) => (
+                  <Flex key={day.day} vertical align="center" gap={10} style={{ flex: 1 }}>
+                    {day.count > 0 && <Text style={{ fontSize: 11, fontWeight: 700, color: "var(--accent)" }}>{day.count}</Text>}
+                    <div
+                      className={day.count > 0 ? "premium-bar" : ""}
+                      style={{
+                        width: "100%",
+                        maxWidth: 36,
+                        background: day.count > 0 ? undefined : "var(--bg-deep)",
+                        height: `${Math.max((day.count / maxActivity) * 100, 6)}px`,
+                        borderRadius: 8,
+                        transition: "height var(--duration-normal) ease",
+                        boxShadow: day.count > 0 ? "0 4px 16px rgba(196, 168, 130, 0.3)" : "none"
+                      }}
+                    />
+                    <Text type="secondary" style={{ fontSize: 12, fontWeight: 700 }}>{getDayLabel(day.day)}</Text>
+                  </Flex>
+                ))}
+              </Flex>
+            </div>
+          </div>
 
           {/* ── Streak Calendar Heatmap (Story 14.1) ── */}
           {!isNewUser && dailyActivity && (
@@ -592,57 +568,40 @@ export default function HomePage() {
           {!isNewUser && <WeeklyLeaderboard />}
 
           {/* ── StreakBadges ── */}
-          <Card
-            title={<span style={{ fontSize: 20, fontWeight: 700, display: "flex", alignItems: "center", fontFamily: "var(--font-display)" }}><TrophyOutlined style={{ marginRight: 10, color: "var(--fire)" }} /> Thành tích</span>}
-            style={{ borderRadius: "var(--radius-2xl)", border: "1px solid var(--border)", boxShadow: "var(--shadow-sm)" }}
-            styles={{ header: { borderBottom: "none", padding: "20px 28px 0" }, body: { padding: "24px 28px" } }}
-          >
-            <Flex gap="var(--space-8)" style={{ marginBottom: "var(--space-8)", padding: "24px", background: "var(--surface-alt)", borderRadius: "var(--radius-xl)", border: "1px solid var(--border)", boxShadow: "inset 0 2px 8px rgba(0,0,0,0.02)" }}>
-              <Flex vertical align="center" style={{ flex: 1 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 4 }}>
-                  <FireOutlined style={{ color: "var(--fire)", fontSize: 28 }} />
-                  <Title level={1} style={{ margin: 0, color: "var(--fire)", fontFamily: "var(--font-display)", fontWeight: 700 }}>{data.streak.currentStreak}</Title>
-                </div>
-                <Text type="secondary" style={{ fontSize: 14, fontWeight: 600 }}>Streak hiện tại</Text>
-              </Flex>
-              <div style={{ width: 1, background: "var(--border)" }} />
-              <Flex vertical align="center" style={{ flex: 1 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 4 }}>
-                  <TrophyOutlined style={{ color: "var(--xp)", fontSize: 28 }} />
-                  <Title level={1} style={{ margin: 0, color: "var(--xp)", fontFamily: "var(--font-display)", fontWeight: 700 }}>{data.streak.bestStreak}</Title>
-                </div>
-                <Text type="secondary" style={{ fontSize: 14, fontWeight: 600 }}>Streak tốt nhất</Text>
-              </Flex>
+          <div className="glass-card" style={{ padding: "24px 28px" }}>
+            <Flex align="center" gap={10} style={{ marginBottom: 20 }}>
+              <TrophyOutlined style={{ color: "var(--fire)", fontSize: 18 }} />
+              <Text style={{ fontSize: 20, fontWeight: 700, fontFamily: "var(--font-display)" }}>Thành tích</Text>
             </Flex>
+
+            {/* Streak Stats */}
+            <Flex gap={16} style={{ marginBottom: 24 }}>
+              <div style={{ flex: 1, padding: 20, borderRadius: "var(--radius-lg)", background: "var(--bg-deep)", textAlign: "center" }}>
+                <FireOutlined style={{ color: "var(--fire)", fontSize: 24, marginBottom: 8, display: "block" }} />
+                <Title level={2} style={{ margin: 0, color: "var(--fire)", fontFamily: "var(--font-display)" }}>{data.streak.currentStreak}</Title>
+                <Text className="section-label" style={{ marginTop: 4, display: "block" }}>Hiện tại</Text>
+              </div>
+              <div style={{ flex: 1, padding: 20, borderRadius: "var(--radius-lg)", background: "var(--bg-deep)", textAlign: "center" }}>
+                <TrophyOutlined style={{ color: "var(--xp)", fontSize: 24, marginBottom: 8, display: "block" }} />
+                <Title level={2} style={{ margin: 0, color: "var(--xp)", fontFamily: "var(--font-display)" }}>{data.streak.bestStreak}</Title>
+                <Text className="section-label" style={{ marginTop: 4, display: "block" }}>Tốt nhất</Text>
+              </div>
+            </Flex>
+
+            {/* Badges */}
             {data.badges.length > 0 && (
-              <Flex gap={16} wrap>
+              <Flex gap={12} wrap>
                 {data.badges.map((badge) => (
-                  <div
-                    key={badge.id}
-                    style={{
-                      borderRadius: "var(--radius-xl)",
-                      background: badge.unlocked ? "var(--surface)" : "var(--bg-deep)",
-                      opacity: badge.unlocked ? 1 : 0.6,
-                      padding: "16px 20px",
-                      textAlign: "center",
-                      border: badge.unlocked ? "1px solid var(--accent)" : "1px solid var(--border)",
-                      boxShadow: badge.unlocked ? "0 4px 16px var(--accent-muted)" : "none",
-                      flex: "1 1 calc(33.333% - 16px)",
-                      minWidth: 100,
-                      transition: "all var(--duration-fast) ease"
-                    }}
-                    onMouseEnter={badge.unlocked ? (e) => { e.currentTarget.style.transform = "translateY(-4px)"; e.currentTarget.style.boxShadow = "0 8px 24px var(--accent-muted)"; } : undefined}
-                    onMouseLeave={badge.unlocked ? (e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "0 4px 16px var(--accent-muted)"; } : undefined}
-                  >
-                    <div style={{ fontSize: 36, filter: badge.unlocked ? "drop-shadow(0 4px 12px rgba(0,0,0,0.15))" : "grayscale(100%)", marginBottom: 8, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <div key={badge.id} className="badge-glass" data-unlocked={badge.unlocked}>
+                    <div style={{ fontSize: 32, display: "flex", alignItems: "center", justifyContent: "center" }}>
                       {badge.icon === "TrophyOutlined" ? <TrophyOutlined /> : <FireOutlined />}
                     </div>
-                    <Text style={{ fontSize: 14, fontWeight: 600, color: badge.unlocked ? "var(--text-primary)" : "var(--text-secondary)" }}>{badge.label}</Text>
+                    <Text style={{ fontSize: 13, fontWeight: 700, color: badge.unlocked ? "var(--text-primary)" : "var(--text-secondary)" }}>{badge.label}</Text>
                   </div>
                 ))}
               </Flex>
             )}
-          </Card>
+          </div>
 
         </Flex>
       </div>

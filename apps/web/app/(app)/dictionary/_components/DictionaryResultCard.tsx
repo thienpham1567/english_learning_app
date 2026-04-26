@@ -74,6 +74,37 @@ const LEVEL_STYLES: Record<string, React.CSSProperties> = {
   C2: { background: "var(--error-bg)", color: "var(--error)", borderColor: "var(--error)" },
 };
 
+// Maps the prompt's allowed partOfSpeech values to learner-friendly Vietnamese.
+const POS_LABELS_VI: Record<string, string> = {
+  noun: "danh từ",
+  verb: "động từ",
+  adjective: "tính từ",
+  adverb: "trạng từ",
+  "phrasal verb": "cụm động từ",
+  idiom: "thành ngữ",
+  preposition: "giới từ",
+  conjunction: "liên từ",
+  determiner: "từ hạn định",
+  pronoun: "đại từ",
+  interjection: "thán từ",
+  "auxiliary verb": "trợ động từ",
+  "modal verb": "động từ khiếm khuyết",
+  article: "mạo từ",
+};
+
+// Maps the prompt's allowed register values to Vietnamese with tooltip context.
+const REGISTER_INFO: Record<string, { vi: string; tooltipVi: string }> = {
+  formal:      { vi: "trang trọng",  tooltipVi: "Dùng trong văn viết học thuật, pháp lý hoặc chuyên môn." },
+  informal:    { vi: "thân mật",     tooltipVi: "Dùng trong giao tiếp hàng ngày." },
+  slang:       { vi: "tiếng lóng",   tooltipVi: "Cách nói rất thân mật trong nhóm/cộng đồng nhất định." },
+  technical:   { vi: "chuyên ngành", tooltipVi: "Thuật ngữ trong một lĩnh vực cụ thể." },
+  literary:    { vi: "văn chương",   tooltipVi: "Hay gặp trong tác phẩm văn học." },
+  archaic:     { vi: "cổ",           tooltipVi: "Không còn được dùng phổ biến hiện nay." },
+  colloquial:  { vi: "khẩu ngữ",     tooltipVi: "Phong cách hội thoại, thoải mái." },
+  vulgar:      { vi: "thô tục",      tooltipVi: "Từ kiêng kỵ, nên tránh dùng." },
+  offensive:   { vi: "xúc phạm",     tooltipVi: "Có thể gây xúc phạm hoặc tổn thương người nghe." },
+};
+
 
 function AudioButton({
   locale,
@@ -112,10 +143,10 @@ function AudioButton({
 }
 
 function getNumberLabel(numberInfo: NonNullable<VocabularyWithNearby["numberInfo"]>): string {
-  if (numberInfo.isUncountable) return "uncountable";
-  if (numberInfo.isPluralOnly) return "plural only";
-  if (numberInfo.isSingularOnly) return "singular only";
-  if (numberInfo.plural) return `pl: ${numberInfo.plural}`;
+  if (numberInfo.isUncountable) return "không đếm được";
+  if (numberInfo.isPluralOnly) return "chỉ số nhiều";
+  if (numberInfo.isSingularOnly) return "chỉ số ít";
+  if (numberInfo.plural) return `số nhiều: ${numberInfo.plural}`;
   return "";
 }
 
@@ -230,26 +261,36 @@ export function DictionaryResultCard({
             >
               {vocabulary.headword}
             </h2>
-            <span
-              style={{
-                borderRadius: 999,
-                padding: "3px 14px",
-                fontSize: 13,
-                fontWeight: 600,
-                fontStyle: "italic",
-                background: "var(--accent-muted)",
-                color: "var(--accent)",
-                border: "1px solid var(--border)",
-                whiteSpace: "nowrap",
-                lineHeight: 1.4,
-              }}
-            >
-              {vocabulary.entryType === "idiom"
-                ? "idiom"
-                : vocabulary.entryType === "phrasal_verb"
-                  ? "phrasal verb"
-                  : (vocabulary.partOfSpeech ?? "word")}
-            </span>
+            {(() => {
+              const posKey =
+                vocabulary.entryType === "idiom"
+                  ? "idiom"
+                  : vocabulary.entryType === "phrasal_verb"
+                    ? "phrasal verb"
+                    : (vocabulary.partOfSpeech ?? null);
+              const posVi = posKey ? POS_LABELS_VI[posKey] : null;
+              const display = posVi ?? posKey ?? "từ";
+              const tooltip = posKey && posVi ? posKey : null;
+              const chip = (
+                <span
+                  style={{
+                    borderRadius: 999,
+                    padding: "3px 14px",
+                    fontSize: 13,
+                    fontWeight: 600,
+                    fontStyle: "italic",
+                    background: "var(--accent-muted)",
+                    color: "var(--accent)",
+                    border: "1px solid var(--border)",
+                    whiteSpace: "nowrap",
+                    lineHeight: 1.4,
+                  }}
+                >
+                  {display}
+                </span>
+              );
+              return tooltip ? <Tooltip title={tooltip}>{chip}</Tooltip> : chip;
+            })()}
             {numberLabel && (
               <span
                 style={{
@@ -284,20 +325,27 @@ export function DictionaryResultCard({
               {vocabulary.level}
             </span>
           )}
-          {vocabulary.register && (
-            <Tag
-              variant="outlined"
-              style={{
-                borderRadius: 999,
-                padding: "2px 12px",
-                borderColor: "var(--border-strong)",
-                color: "var(--text-secondary)",
-                background: "var(--accent-light)",
-              }}
-            >
-              {vocabulary.register}
-            </Tag>
-          )}
+          {vocabulary.register && (() => {
+            const info = REGISTER_INFO[vocabulary.register];
+            const display = info?.vi ?? vocabulary.register;
+            const tooltip = info ? `${vocabulary.register} — ${info.tooltipVi}` : vocabulary.register;
+            return (
+              <Tooltip title={tooltip} placement="top">
+                <Tag
+                  variant="outlined"
+                  style={{
+                    borderRadius: 999,
+                    padding: "2px 12px",
+                    borderColor: "var(--border-strong)",
+                    color: "var(--text-secondary)",
+                    background: "var(--accent-light)",
+                  }}
+                >
+                  {display}
+                </Tag>
+              </Tooltip>
+            );
+          })()}
           {onOpenThesaurus && (
             <button
               type="button"
