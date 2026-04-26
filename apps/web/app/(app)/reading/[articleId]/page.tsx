@@ -66,12 +66,15 @@ export default function ArticleReaderPage() {
   const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
   const [wordsLookedUp, setWordsLookedUp] = useState(0);
 
-  // Voice accent for per-paragraph TTS
-  const [ttsAccent, setTtsAccent] = useState("en-US");
+  // Voice accent for per-paragraph TTS (Groq Orpheus)
+  const [ttsAccent, setTtsAccent] = useState("us");
   const [grammarPopup, setGrammarPopup] = useState<number | null>(null);
 
   // Per-paragraph TTS state
   const [speakingIdx, setSpeakingIdx] = useState<number | null>(null);
+  const [loadingAudioIdx, setLoadingAudioIdx] = useState<number | null>(null);
+  const paragraphAudioRef = useRef<HTMLAudioElement | null>(null);
+  const paragraphAudioUrlRef = useRef<string | null>(null);
 
   // Mini dictionary
   const miniDict = useMiniDictionary();
@@ -117,30 +120,67 @@ export default function ArticleReaderPage() {
   // Cleanup on unmount
   useEffect(() => {
     return () => {
-      speechSynthesis.cancel();
+      if (paragraphAudioRef.current) paragraphAudioRef.current.pause();
+      if (paragraphAudioUrlRef.current) URL.revokeObjectURL(paragraphAudioUrlRef.current);
     };
   }, []);
 
-  // Per-paragraph TTS handler
-  const handleSpeakParagraph = useCallback((idx: number, text: string) => {
+  // Per-paragraph TTS handler (Groq Orpheus)
+  const handleSpeakParagraph = useCallback(async (idx: number, text: string) => {
     // If already speaking this paragraph, stop
     if (speakingIdx === idx) {
-      speechSynthesis.cancel();
+      if (paragraphAudioRef.current) paragraphAudioRef.current.pause();
+      if (paragraphAudioUrlRef.current) URL.revokeObjectURL(paragraphAudioUrlRef.current);
+      paragraphAudioRef.current = null;
+      paragraphAudioUrlRef.current = null;
       setSpeakingIdx(null);
       return;
     }
 
-    // Stop any current speech
-    speechSynthesis.cancel();
+    // Stop any current audio
+    if (paragraphAudioRef.current) paragraphAudioRef.current.pause();
+    if (paragraphAudioUrlRef.current) URL.revokeObjectURL(paragraphAudioUrlRef.current);
+    paragraphAudioRef.current = null;
+    paragraphAudioUrlRef.current = null;
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = ttsAccent;
-    utterance.rate = 0.9;
-    utterance.onend = () => setSpeakingIdx(null);
-    utterance.onerror = () => setSpeakingIdx(null);
+    setLoadingAudioIdx(idx);
+    setSpeakingIdx(null);
 
-    setSpeakingIdx(idx);
-    speechSynthesis.speak(utterance);
+    try {
+      const res = await fetch("/api/reading/audio/paragraph", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text, accent: ttsAccent }),
+      });
+      if (!res.ok) throw new Error("TTS failed");
+
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const audio = new Audio(url);
+
+      paragraphAudioRef.current = audio;
+      paragraphAudioUrlRef.current = url;
+
+      audio.onended = () => {
+        setSpeakingIdx(null);
+        URL.revokeObjectURL(url);
+        paragraphAudioRef.current = null;
+        paragraphAudioUrlRef.current = null;
+      };
+      audio.onerror = () => {
+        setSpeakingIdx(null);
+        URL.revokeObjectURL(url);
+        paragraphAudioRef.current = null;
+        paragraphAudioUrlRef.current = null;
+      };
+
+      await audio.play();
+      setSpeakingIdx(idx);
+    } catch {
+      setSpeakingIdx(null);
+    } finally {
+      setLoadingAudioIdx(null);
+    }
   }, [speakingIdx, ttsAccent]);
 
 
@@ -255,18 +295,21 @@ export default function ArticleReaderPage() {
               value={ttsAccent}
               onChange={(v) => {
                 setTtsAccent(v);
-                // Stop current speech when accent changes
-                if (speakingIdx !== null) {
-                  speechSynthesis.cancel();
+                // Stop current audio when accent changes
+                if (speakingIdx !== null || paragraphAudioRef.current) {
+                  if (paragraphAudioRef.current) paragraphAudioRef.current.pause();
+                  if (paragraphAudioUrlRef.current) URL.revokeObjectURL(paragraphAudioUrlRef.current);
+                  paragraphAudioRef.current = null;
+                  paragraphAudioUrlRef.current = null;
                   setSpeakingIdx(null);
                 }
               }}
               size="small"
-              style={{ width: 120 }}
+              style={{ width: 130 }}
               options={[
-                { value: "en-US", label: "US English" },
-                { value: "en-GB", label: "UK English" },
-                { value: "en-AU", label: "AU English" },
+                { value: "us", label: "🇺🇸 US English" },
+                { value: "uk", label: "🇬🇧 UK English" },
+                { value: "au", label: "🇦🇺 AU English" },
               ]}
             />
           </Flex>
@@ -371,19 +414,21 @@ export default function ArticleReaderPage() {
                     height: 22,
                     marginLeft: 4,
                     borderRadius: "50%",
-                    cursor: "pointer",
+                    cursor: loadingAudioIdx === idx ? "wait" : "pointer",
                     verticalAlign: "middle",
                     transition: "all 0.2s ease",
                     background: speakingIdx === idx
                       ? "linear-gradient(135deg, var(--info), var(--accent))"
-                      : "var(--border)",
+                      : loadingAudioIdx === idx
+                        ? "var(--accent-muted)"
+                        : "var(--border)",
                     color: speakingIdx === idx ? "var(--text-on-accent)" : "var(--text-muted)",
                     fontSize: 11,
                     animation: speakingIdx === idx ? "pulse 1.5s ease-in-out infinite" : "none",
                   }}
-                  title={speakingIdx === idx ? "Đang phát — click để dừng" : "Nghe đoạn này"}
+                  title={speakingIdx === idx ? "Đang phát — click để dừng" : loadingAudioIdx === idx ? "Đang tải..." : "Nghe đoạn này"}
                 >
-                  <SoundOutlined style={{ fontSize: 11 }} />
+                  {loadingAudioIdx === idx ? <LoadingOutlined spin style={{ fontSize: 10 }} /> : <SoundOutlined style={{ fontSize: 11 }} />}
                 </span>
               </p>
             </div>
