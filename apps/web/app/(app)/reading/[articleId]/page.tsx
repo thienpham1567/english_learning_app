@@ -13,6 +13,7 @@ import {
   PauseCircleOutlined,
   LoadingOutlined,
   CustomerServiceOutlined,
+  SoundOutlined,
 } from "@ant-design/icons";
 
 import { useMiniDictionary } from "@/hooks/useMiniDictionary";
@@ -73,6 +74,9 @@ export default function ArticleReaderPage() {
   const audioUrlRef = useRef<string | null>(null);
   const [selectedVoice, setSelectedVoice] = useState("austin");
   const [grammarPopup, setGrammarPopup] = useState<number | null>(null);
+
+  // Per-paragraph TTS state
+  const [speakingIdx, setSpeakingIdx] = useState<number | null>(null);
 
   // Mini dictionary
   const miniDict = useMiniDictionary();
@@ -168,8 +172,31 @@ export default function ArticleReaderPage() {
     return () => {
       if (audioRef.current) audioRef.current.pause();
       if (audioUrlRef.current) URL.revokeObjectURL(audioUrlRef.current);
+      speechSynthesis.cancel();
     };
   }, []);
+
+  // Per-paragraph TTS handler
+  const handleSpeakParagraph = useCallback((idx: number, text: string) => {
+    // If already speaking this paragraph, stop
+    if (speakingIdx === idx) {
+      speechSynthesis.cancel();
+      setSpeakingIdx(null);
+      return;
+    }
+
+    // Stop any current speech
+    speechSynthesis.cancel();
+
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = "en-US";
+    utterance.rate = 0.9;
+    utterance.onend = () => setSpeakingIdx(null);
+    utterance.onerror = () => setSpeakingIdx(null);
+
+    setSpeakingIdx(idx);
+    speechSynthesis.speak(utterance);
+  }, [speakingIdx]);
 
 
 
@@ -426,6 +453,32 @@ export default function ArticleReaderPage() {
                   title={grammarResults[idx]?.length ? `${grammarResults[idx].length} grammar patterns — click to view` : "Phân tích ngữ pháp"}
                 >
                   {grammarLoading.has(idx) ? <LoadingOutlined spin style={{ fontSize: 10 }} /> : <BulbOutlined style={{ fontSize: 11 }} />}
+                </span>
+
+                {/* TTS icon — inline at end of paragraph */}
+                <span
+                  onClick={() => handleSpeakParagraph(idx, para)}
+                  style={{
+                    display: "inline-flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    width: 22,
+                    height: 22,
+                    marginLeft: 4,
+                    borderRadius: "50%",
+                    cursor: "pointer",
+                    verticalAlign: "middle",
+                    transition: "all 0.2s ease",
+                    background: speakingIdx === idx
+                      ? "linear-gradient(135deg, var(--info), var(--accent))"
+                      : "var(--border)",
+                    color: speakingIdx === idx ? "var(--text-on-accent)" : "var(--text-muted)",
+                    fontSize: 11,
+                    animation: speakingIdx === idx ? "pulse 1.5s ease-in-out infinite" : "none",
+                  }}
+                  title={speakingIdx === idx ? "Đang phát — click để dừng" : "Nghe đoạn này"}
+                >
+                  <SoundOutlined style={{ fontSize: 11 }} />
                 </span>
               </p>
             </div>
