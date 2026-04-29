@@ -649,7 +649,6 @@ export default function MyVocabularyPage() {
               )}
             </div>
           </>
-        </>
       </div>
 
       <VocabularyDetailSheet
