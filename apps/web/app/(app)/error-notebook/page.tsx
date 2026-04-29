@@ -16,6 +16,7 @@ import { Tag, Tooltip, Select } from "antd";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { WritingPatternSection } from "./_components/WritingPatternSection";
 import { DeepExplanation } from "./_components/DeepExplanation";
+import { InlinePractice } from "./_components/InlinePractice";
 import { ErrorPatternSummary } from "./_components/ErrorPatternSummary";
 import { ErrorTrendSection } from "./_components/ErrorTrendSection";
 
@@ -166,7 +167,7 @@ export default function ErrorNotebookPage() {
       <div style={{ flex: 1, overflow: "auto", padding: "var(--space-8) var(--space-6)", position: "relative", zIndex: 1 }}>
         <div style={{ maxWidth: 800, margin: "0 auto", width: "100%" }}>
           {/* Stats strip */}
-          <div style={{ display: "flex", gap: "var(--space-4)", marginBottom: "var(--space-6)" }} className="anim-fade-up">
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "var(--space-4)", marginBottom: "var(--space-6)" }} className="anim-fade-up">
             {[
               {
                 icon: <CloseCircleOutlined style={{ color: "var(--error)" }} />,
@@ -435,9 +436,17 @@ export default function ErrorNotebookPage() {
                     />
                   </div>
 
+                  {/* Inline Practice */}
+                  <div style={{ paddingLeft: 8 }}>
+                    <InlinePractice
+                      errorId={err.id}
+                      onResolved={() => resolveError(err.id)}
+                    />
+                  </div>
+
                   {/* Actions */}
                   {!err.isResolved && (
-                    <div style={{ marginTop: 16, textAlign: "right" }}>
+                    <div style={{ marginTop: 16, display: "flex", justifyContent: "flex-end" }}>
                       <Tooltip title="Đánh dấu đã hiểu">
                         <button
                           onClick={() => resolveError(err.id)}
