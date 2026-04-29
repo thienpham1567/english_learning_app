@@ -30,9 +30,14 @@ type WordData = {
   headword: string;
   phonetic: string | null;
   partOfSpeech: string | null;
-  overviewVi: string;
+  meaningVi: string;
   level: string | null;
+  isSimple: boolean;
 };
+
+/** Words at A1 level or top1k frequency are considered "simple" and skipped. */
+const SIMPLE_LEVELS = new Set(["A1"]);
+const SIMPLE_FREQ = new Set(["top1k"]);
 
 type Props = {
   word: string;
@@ -107,6 +112,19 @@ export function MiniDictionary({
       .then(({ data: res }) => {
         if (!cancelled) {
           const payload = res.data;
+          // Extract short Vietnamese meanings from senses
+          const senses = Array.isArray(payload.senses) ? payload.senses : [];
+          const meanings: string[] = [];
+          for (const sense of senses) {
+            const sm = Array.isArray(sense.shortMeaningsVi) ? sense.shortMeaningsVi : [];
+            meanings.push(...sm);
+          }
+          const meaningVi = meanings.slice(0, 3).join("; ") || "";
+
+          const level = (payload.level as string) ?? null;
+          const freq = (payload.frequencyBand as string) ?? null;
+          const isSimple = SIMPLE_LEVELS.has(level ?? "") || SIMPLE_FREQ.has(freq ?? "");
+
           setData({
             headword: (payload.headword as string) ?? word,
             phonetic:
@@ -114,8 +132,9 @@ export function MiniDictionary({
               (payload.phoneticsUs as string) ??
               null,
             partOfSpeech: (payload.partOfSpeech as string) ?? null,
-            overviewVi: (payload.overviewVi as string) ?? "",
-            level: (payload.level as string) ?? null,
+            meaningVi,
+            level,
+            isSimple,
           });
           setSaved(res.saved);
         }
@@ -241,7 +260,15 @@ export function MiniDictionary({
             </Flex>
           )}
 
-          {data && (
+          {data && data.isSimple && (
+            <Flex vertical align="center" gap={4} style={{ minHeight: 50, justifyContent: "center" }}>
+              <Text style={{ fontSize: 13, color: "var(--text-muted)" }}>
+                Từ cơ bản — không cần tra cứu
+              </Text>
+            </Flex>
+          )}
+
+          {data && !data.isSimple && (
             <Flex vertical gap={8}>
               {/* Headword + Level */}
               <Flex align="baseline" gap={8}>
@@ -276,10 +303,12 @@ export function MiniDictionary({
                 )}
               </Flex>
 
-              {/* Vietnamese translation */}
-              <Text style={{ fontSize: 13, lineHeight: 1.5 }}>
-                {data.overviewVi}
-              </Text>
+              {/* Vietnamese meaning */}
+              {data.meaningVi && (
+                <Text style={{ fontSize: 13, lineHeight: 1.5, color: "var(--ink)" }}>
+                  {data.meaningVi}
+                </Text>
+              )}
 
               {/* Action buttons */}
               <Flex gap={8} style={{ marginTop: 4 }}>
