@@ -33,7 +33,7 @@ export function getOpenAiConfig(): OpenAiConfig {
   return {
     apiKey,
     baseURL: process.env.OPENAI_BASE_URL ?? "https://openrouter.ai/api/v1",
-    chatModel: process.env.OPENAI_CHAT_MODEL ?? "openai/gpt-5.4-nano",
+    chatModel: process.env.OPENAI_CHAT_MODEL ?? "google/gemini-3.1-flash-lite-preview",
     dictionaryModel:
       process.env.OPENAI_DICTIONARY_MODEL ?? "google/gemini-3.1-flash-lite-preview",
     listeningModel:
