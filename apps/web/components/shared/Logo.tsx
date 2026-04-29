@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { TranslationOutlined } from "@ant-design/icons";
 
 interface LogoProps {
   collapsed?: boolean;
@@ -31,20 +32,7 @@ export function Logo({ collapsed = false }: LogoProps) {
           flexShrink: 0,
         }}
       >
-        <svg
-          width="22"
-          height="22"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="var(--text-on-accent)"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M5 6h14" />
-          <path d="M12 6v11" />
-          <circle cx="12" cy="20" r="1.5" fill="var(--text-on-accent)" stroke="none" />
-        </svg>
+        <TranslationOutlined style={{ fontSize: 20, color: "var(--text-on-accent)" }} />
       </div>
 
       {/* Text */}

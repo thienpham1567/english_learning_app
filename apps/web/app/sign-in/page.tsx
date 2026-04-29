@@ -13,6 +13,7 @@ import {
   StarFilled,
   CheckCircleFilled,
   SoundOutlined,
+  TranslationOutlined,
 } from "@ant-design/icons";
 import { authClient } from "@/lib/auth-client";
 import { Logo } from "@/components/shared/Logo";
@@ -91,20 +92,7 @@ function SignInLogo() {
           flexShrink: 0,
         }}
       >
-        <svg
-          width="26"
-          height="26"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="var(--text-on-accent)"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <path d="M5 6h14" />
-          <path d="M12 6v11" />
-          <circle cx="12" cy="20" r="1.5" fill="var(--text-on-accent)" stroke="none" />
-        </svg>
+        <TranslationOutlined style={{ fontSize: 24, color: "var(--text-on-accent)" }} />
       </div>
       <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
         <span
