@@ -55,7 +55,7 @@ export async function GET(request: Request) {
       db
         .select({
           count: sql<number>`count(*)::int`,
-          totalScore: sql<number>`coalesce(sum(score), 0)::int`,
+          totalScore: sql<number>`coalesce(sum(xp_earned), 0)::int`,
         })
         .from(activityLog)
         .where(eq(activityLog.userId, userId)),
