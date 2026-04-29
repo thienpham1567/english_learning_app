@@ -93,14 +93,15 @@ export function DictionarySearchPanel({
       e.preventDefault();
       setHighlightedIndex((i) => Math.max(i - 1, -1));
     } else if (e.key === "Enter") {
+      e.preventDefault();
+      setSuggestions([]);
+      setHighlightedIndex(-1);
       if (highlightedIndex >= 0 && suggestions[highlightedIndex]) {
         const word = suggestions[highlightedIndex];
         setDraft(word);
-        setSuggestions([]);
-        setHighlightedIndex(-1);
         onSubmit(word);
-      } else if (!isLoading) {
-        onSubmit(draft);
+      } else if (!isLoading && draft.trim()) {
+        onSubmit(draft.trim());
       }
     } else if (e.key === "Escape") {
       setSuggestions([]);
@@ -272,6 +273,11 @@ export function DictionarySearchPanel({
             onBlur={(e) => {
               e.currentTarget.style.borderBottomColor = "var(--border)";
               e.currentTarget.style.borderBottomWidth = "1px";
+              // Dismiss suggestions on blur (delay to allow suggestion click)
+              setTimeout(() => {
+                setSuggestions([]);
+                setHighlightedIndex(-1);
+              }, 200);
             }}
           />
 
@@ -322,7 +328,11 @@ export function DictionarySearchPanel({
 
         <button
           type="button"
-          onClick={() => onSubmit(draft)}
+          onClick={() => {
+            setSuggestions([]);
+            setHighlightedIndex(-1);
+            onSubmit(draft.trim());
+          }}
           disabled={isLoading}
           style={{
             marginTop: 20,
