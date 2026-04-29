@@ -122,11 +122,22 @@ export function AudioPlayer({
   }, []);
 
   const handleStalled = useCallback(() => {
-    // If audio stalls and we still have no duration, treat as error
-    if (audioRef.current && !audioRef.current.duration) {
-      setIsLoading(false);
-      setAudioError("Tải audio bị gián đoạn. Nhấn Nghe lại để thử lại.");
-    }
+    // For streamed audio, stalling is normal during initial buffering.
+    // Only show error if we've been stalling with zero buffered data for a while.
+    const audio = audioRef.current;
+    if (!audio) return;
+    // If there's any buffered data, stalling is just buffering — not an error
+    if (audio.buffered.length > 0) return;
+    // If duration is already known, the audio loaded fine — just a network hiccup
+    if (Number.isFinite(audio.duration) && audio.duration > 0) return;
+    // Set a delayed error only for truly stuck cases
+    const timer = setTimeout(() => {
+      if (audioRef.current && audioRef.current.buffered.length === 0 && !Number.isFinite(audioRef.current.duration)) {
+        setIsLoading(false);
+        setAudioError("Tải audio bị gián đoạn. Nhấn Nghe lại để thử lại.");
+      }
+    }, 5000);
+    return () => clearTimeout(timer);
   }, []);
 
   const handleEnded = useCallback(() => {
@@ -142,6 +153,22 @@ export function AudioPlayer({
   const handleCanPlay = useCallback(() => {
     setIsLoading(false);
     setAudioError(null);
+    // For streamed audio, duration may become available at canplay
+    if (audioRef.current) {
+      const d = audioRef.current.duration;
+      if (Number.isFinite(d) && d > 0) setDuration(d);
+    }
+  }, []);
+
+  // 'playing' event fires when audio actually starts playing — most reliable signal
+  const handlePlaying = useCallback(() => {
+    setIsLoading(false);
+    setAudioError(null);
+    setIsPlaying(true);
+    if (audioRef.current) {
+      const d = audioRef.current.duration;
+      if (Number.isFinite(d) && d > 0) setDuration(d);
+    }
   }, []);
 
   const togglePlay = useCallback(() => {
@@ -339,6 +366,7 @@ export function AudioPlayer({
         onDurationChange={handleDurationChange}
         onEnded={handleEnded}
         onCanPlay={handleCanPlay}
+        onPlaying={handlePlaying}
         onError={handleError}
         onStalled={handleStalled}
         preload="auto"
