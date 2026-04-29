@@ -115,7 +115,7 @@ export default function DictionaryPage() {
   return (
     <>
       {contextHolder}
-      <div style={{ height: "100%", minHeight: 0, overflowY: "auto" }}>
+      <div style={{ height: "100%", minHeight: 0, overflowY: "auto", overflowX: "hidden" }}>
         <div className="dictionary-grid">
           <div>
             <DictionarySearchPanel

@@ -127,6 +127,8 @@ export function DictionarySearchPanel({
           borderRadius: "var(--radius-lg)",
           background: "linear-gradient(135deg, var(--surface), var(--bg))",
           boxShadow: "var(--shadow-lg)",
+          overflow: "hidden",
+          minWidth: 0,
         }}
       >
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
@@ -237,7 +239,7 @@ export function DictionarySearchPanel({
         >
           Nhập mục từ cần tra cứu
         </h2>
-        <p style={{ marginTop: 12, fontSize: 14, lineHeight: 1.6, color: "var(--text-secondary)" }}>
+        <p style={{ marginTop: 12, fontSize: 13, lineHeight: 1.6, color: "var(--text-secondary)", wordBreak: "break-word" }}>
           Công cụ này hỗ trợ từ đơn, phrasal verb và idiom để bạn học theo ngữ cảnh rõ ràng hơn.
         </p>
 
@@ -352,7 +354,7 @@ export function DictionarySearchPanel({
           {isLoading ? "Đang tra cứu..." : "Tra cứu"}
         </button>
 
-        <p style={{ marginTop: 16, fontSize: 14, color: "var(--text-muted)" }}>
+        <p style={{ marginTop: 16, fontSize: 12, color: "var(--text-muted)", wordBreak: "break-word" }}>
           Hỗ trợ tối đa 80 ký tự, bao gồm khoảng trắng và dấu nháy hợp lệ.
         </p>
 

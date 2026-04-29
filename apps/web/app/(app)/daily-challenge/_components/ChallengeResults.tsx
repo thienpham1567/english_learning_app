@@ -210,7 +210,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
 
           {/* User answer vs Correct answer */}
           <div
-            style={{ display: "grid", gridTemplateColumns: ok ? "1fr" : "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}
+            style={{ display: "flex", flexDirection: "column", gap: 8 }}
             className="answer-compare-grid"
           >
             <div
