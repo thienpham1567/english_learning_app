@@ -47,18 +47,38 @@ function concatWavBuffers(parts: Buffer[]): Buffer {
   return result;
 }
 
+/** Retry an async fn up to `maxRetries` times with exponential backoff. */
+async function withRetry<T>(fn: () => Promise<T>, maxRetries = 2, baseDelayMs = 1000): Promise<T> {
+  let lastErr: unknown;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await fn();
+    } catch (err) {
+      lastErr = err;
+      if (attempt < maxRetries) {
+        const delay = baseDelayMs * Math.pow(2, attempt);
+        console.warn(`[Listening Audio] Attempt ${attempt + 1} failed, retrying in ${delay}ms...`);
+        await new Promise((r) => setTimeout(r, delay));
+      }
+    }
+  }
+  throw lastErr;
+}
+
 async function buildDialogueAudio(turns: DialogueTurn[]): Promise<Buffer> {
   console.log(`[Listening Audio] Building dialogue: ${turns.length} turns`);
   const startMs = Date.now();
   const parts = await Promise.all(
     turns.map((turn, i) => {
       console.log(`[Listening Audio]   Turn ${i + 1}: voice=${turn.voiceName}, text="${turn.text.slice(0, 50)}..."`);
-      return synthesizeTtsForVoice({
-        text: turn.text,
-        voice: turn.voiceName,
-        format: "wav",
-        speed: 0.95,
-      }).then((ab) => Buffer.from(ab));
+      return withRetry(() =>
+        synthesizeTtsForVoice({
+          text: turn.text,
+          voice: turn.voiceName,
+          format: "wav",
+          speed: 0.95,
+        }).then((ab) => Buffer.from(ab))
+      );
     }),
   );
   const result = concatWavBuffers(parts);
@@ -148,12 +168,14 @@ export async function GET(
     } else {
       console.log(`[Listening Audio] Calling Groq TTS for single-speaker...`);
       const startMs = Date.now();
-      const audio = await synthesizeTtsForVoice({
-        text: exercise.passage,
-        voice,
-        format: "wav",
-        speed: 0.9,
-      });
+      const audio = await withRetry(() =>
+        synthesizeTtsForVoice({
+          text: exercise.passage,
+          voice,
+          format: "wav",
+          speed: 0.9,
+        })
+      );
       buf = Buffer.from(audio);
       console.log(`[Listening Audio] Single TTS done in ${Date.now() - startMs}ms, ${buf.length} bytes`);
       await writeTtsCache("listening", singleKey, buf, "wav");
