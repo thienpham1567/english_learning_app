@@ -300,7 +300,7 @@ export default function ErrorNotebookPage() {
                   e.currentTarget.style.background = "var(--success)";
                   e.currentTarget.style.color = "var(--text-on-accent)";
                   e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = "0 4px 12px rgba(16, 185, 129, 0.2)";
+                  e.currentTarget.style.boxShadow = "0 4px 12px color-mix(in srgb, var(--success) 20%, transparent)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.background = "var(--success-bg)";
@@ -354,6 +354,15 @@ export default function ErrorNotebookPage() {
           <div style={{ marginBottom: "var(--space-6)" }}>
             <WritingPatternSection />
           </div>
+
+          {/* Section header */}
+          {!loading && errors.length > 0 && (
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: "var(--space-2)" }}>
+              <WarningOutlined style={{ fontSize: 12, color: "var(--accent)" }} />
+              <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--accent)" }}>Danh sách lỗi sai</span>
+              <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+            </div>
+          )}
 
           {/* Error cards */}
           {!loading && errors.length > 0 && (
@@ -410,7 +419,7 @@ export default function ErrorNotebookPage() {
                       display: "flex", alignItems: "center", gap: 8,
                       padding: "8px 16px", borderRadius: "var(--radius-xl)",
                       background: "var(--error-bg)",
-                      border: "1px solid rgba(239, 68, 68, 0.2)",
+                      border: "1px solid color-mix(in srgb, var(--error) 20%, transparent)",
                     }}>
                       <CloseCircleOutlined style={{ color: "var(--error)", fontSize: 14 }} />
                       <span style={{ color: "var(--error)", fontWeight: 600 }}>{err.userAnswer}</span>
@@ -419,7 +428,7 @@ export default function ErrorNotebookPage() {
                       display: "flex", alignItems: "center", gap: 8,
                       padding: "8px 16px", borderRadius: "var(--radius-xl)",
                       background: "var(--success-bg)",
-                      border: "1px solid rgba(16, 185, 129, 0.2)",
+                      border: "1px solid color-mix(in srgb, var(--success) 20%, transparent)",
                     }}>
                       <CheckCircleOutlined style={{ color: "var(--success)", fontSize: 14 }} />
                       <span style={{ color: "var(--success)", fontWeight: 600 }}>{err.correctAnswer}</span>
@@ -461,7 +470,7 @@ export default function ErrorNotebookPage() {
                             e.currentTarget.style.background = "var(--success)";
                             e.currentTarget.style.color = "var(--text-on-accent)";
                             e.currentTarget.style.transform = "translateY(-2px)";
-                            e.currentTarget.style.boxShadow = "0 4px 12px rgba(16, 185, 129, 0.2)";
+                            e.currentTarget.style.boxShadow = "0 4px 12px color-mix(in srgb, var(--success) 20%, transparent)";
                           }}
                           onMouseLeave={(e) => {
                             e.currentTarget.style.background = "var(--success-bg)";
