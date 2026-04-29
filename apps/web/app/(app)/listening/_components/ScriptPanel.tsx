@@ -187,7 +187,7 @@ export function ScriptPanel({
                 borderRadius: "var(--radius-sm)",
                 border: "none",
                 background: "var(--warning)",
-                color: "#fff",
+                color: "var(--text-on-accent)",
                 fontSize: 12,
                 fontWeight: 600,
                 cursor: "pointer",

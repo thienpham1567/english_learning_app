@@ -50,7 +50,7 @@ export function WeeklyLeaderboard() {
 
   if (!data || data.entries.length === 0) return null;
 
-  const RANK_COLORS = ["#FFD700", "#C0C0C0", "#CD7F32"]; // gold, silver, bronze
+  const RANK_COLORS = ["var(--xp)", "var(--text-muted)", "var(--tertiary)"]; // gold, silver, bronze
 
   return (
     <div
@@ -64,7 +64,7 @@ export function WeeklyLeaderboard() {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <CrownOutlined style={{ fontSize: 18, color: "#FFD700" }} />
+          <CrownOutlined style={{ fontSize: 18, color: "var(--xp)" }} />
           <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>Bảng xếp hạng tuần</span>
         </div>
         <span style={{ fontSize: 11, color: "var(--text-secondary)" }}>

@@ -7,6 +7,7 @@ import {
   BookOutlined,
   CheckCircleFilled,
   LoadingOutlined,
+  StarFilled,
 } from "@ant-design/icons";
 
 type WordData = {
@@ -108,7 +109,7 @@ export function WordOfTheDay() {
       {/* Header */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 20 }}>✨</span>
+          <StarFilled style={{ fontSize: 18, color: "var(--xp)" }} />
           <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>Từ vựng hôm nay</span>
         </div>
         {word.level && (

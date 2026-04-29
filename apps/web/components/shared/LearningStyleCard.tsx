@@ -2,7 +2,7 @@
 import { api } from "@/lib/api-client";
 import { useEffect, useState } from "react";
 import { Card, Typography, Flex, Progress } from "antd";
-import { RightOutlined, ExperimentOutlined } from "@ant-design/icons";
+import { RightOutlined, ExperimentOutlined, BulbOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 
 const { Text } = Typography;
@@ -147,7 +147,7 @@ export function LearningStyleCard() {
       {/* Suggestions */}
       <div style={{ padding: "12px 16px" }}>
         <Text type="secondary" style={{ fontSize: 11, fontWeight: 600, padding: "0 8px", display: "block", marginBottom: 6 }}>
-          💡 Gợi ý cho bạn
+          <BulbOutlined style={{ marginRight: 4, color: "var(--accent)" }} /> Gợi ý cho bạn
         </Text>
         {suggestions.map((s) => (
           <button

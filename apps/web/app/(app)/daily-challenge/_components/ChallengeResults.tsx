@@ -447,13 +447,13 @@ export function ChallengeResults({ answers, score, streak, badges, newBadges, ti
               icon={<CheckCircleFilled />}
               label="Đúng"
               value={String(correctCount)}
-              color="color-mix(in srgb, #4ade80 80%, white)"
+              color="color-mix(in srgb, var(--success) 80%, white)"
             />
             <StatPill
               icon={<CloseCircleFilled />}
               label="Sai"
               value={String(wrongCount)}
-              color={wrongCount > 0 ? "color-mix(in srgb, #f87171 80%, white)" : "rgba(255,255,255,0.3)"}
+              color={wrongCount > 0 ? "color-mix(in srgb, var(--error) 80%, white)" : "rgba(255,255,255,0.3)"}
             />
             <StatPill
               icon={<ClockCircleOutlined />}
@@ -464,7 +464,7 @@ export function ChallengeResults({ answers, score, streak, badges, newBadges, ti
               icon={<FireOutlined />}
               label="Streak"
               value={String(streak.currentStreak)}
-              color="color-mix(in srgb, #fbbf24 80%, white)"
+              color="color-mix(in srgb, var(--warning) 80%, white)"
             />
           </div>
         </div>

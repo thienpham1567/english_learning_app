@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Card, Flex, Typography } from "antd";
-import { CheckCircleFilled, CloseCircleFilled } from "@ant-design/icons";
+import { CheckCircleFilled, CloseCircleFilled, TrophyOutlined, LikeOutlined, ClockCircleOutlined } from "@ant-design/icons";
 
 import type {
   DailyChallenge,
@@ -39,7 +39,7 @@ export function CompletedState({ challenge, streak, badges }: {
   badges: Badge[];
 }) {
   const answers = (challenge.answers ?? []) as ExerciseAnswer[];
-  const emoji = (challenge.score ?? 0) >= 4 ? "🎉" : "👍";
+  const heroIcon = (challenge.score ?? 0) >= 4 ? <TrophyOutlined /> : <LikeOutlined />;
 
   const [countdown, setCountdown] = useState(() => msUntilVnMidnight());
 
@@ -50,7 +50,7 @@ export function CompletedState({ challenge, streak, badges }: {
 
   return (
     <Flex vertical align="center" className="anim-fade-in" style={{ maxWidth: 480, margin: "0 auto", textAlign: "center" }}>
-      <span style={{ fontSize: 48 }}>{emoji}</span>
+      <span style={{ fontSize: 48, color: "var(--accent)" }}>{heroIcon}</span>
       <Title level={3} style={{ marginTop: 8, fontFamily: "var(--font-display)", fontStyle: "italic" }}>
         Đã hoàn thành hôm nay!
       </Title>
@@ -127,7 +127,7 @@ export function CompletedState({ challenge, streak, badges }: {
         </Title>
       </Card>
 
-      <Text type="secondary" style={{ marginTop: 16, fontSize: 13 }}>Quay lại mai nhé! 🌙</Text>
+      <Text type="secondary" style={{ marginTop: 16, fontSize: 13 }}>Quay lại mai nhé!</Text>
     </Flex>
   );
 }

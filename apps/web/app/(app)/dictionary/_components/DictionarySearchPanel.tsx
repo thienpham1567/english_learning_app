@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ReadOutlined, StarOutlined, CloseOutlined } from "@ant-design/icons";
+import { ReadOutlined, StarOutlined, CloseOutlined, BulbOutlined } from "@ant-design/icons";
 import { RecentLookups } from "@/app/(app)/dictionary/_components/RecentLookups";
 import { ExamWordLists } from "@/app/(app)/dictionary/_components/ExamWordLists";
 import { WordOfTheDay } from "@/app/(app)/dictionary/_components/WordOfTheDay";
@@ -197,7 +197,7 @@ export function DictionarySearchPanel({
                 margin: "0 0 12px",
               }}
             >
-              💡 Mẹo sử dụng
+              <BulbOutlined style={{ marginRight: 4, color: "var(--accent)" }} /> Mẹo sử dụng
             </p>
             <ul
               style={{

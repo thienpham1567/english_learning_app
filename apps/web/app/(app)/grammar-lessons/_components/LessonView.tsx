@@ -225,7 +225,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
       {error && (
         <div style={{ padding: 16, borderRadius: 12, background: "var(--error-bg)", border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)", color: "var(--error)", textAlign: "center" }}>
           <p>{error}</p>
-          <button onClick={() => generateLesson(false)} style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: "var(--error)", color: "#fff", cursor: "pointer", marginTop: 8 }}>
+          <button onClick={() => generateLesson(false)} style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: "var(--error)", color: "var(--text-on-accent)", cursor: "pointer", marginTop: 8 }}>
             Thử lại
           </button>
         </div>

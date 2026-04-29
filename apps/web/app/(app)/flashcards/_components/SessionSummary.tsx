@@ -13,6 +13,7 @@ import {
   LikeOutlined,
   MehOutlined,
   FrownOutlined,
+  TrophyOutlined,
 } from "@ant-design/icons";
 
 import { CelebrationOverlay, StreakFire } from "@/components/shared";
@@ -72,8 +73,8 @@ export function SessionSummary({
         visible={showCelebration}
         onComplete={() => setShowCelebration(false)}
       >
-        <Title level={3} style={{ color: "#fff", margin: 0, textShadow: "0 2px 8px rgba(0,0,0,0.3)" }}>
-          🎉 Bạn đã ôn xong!
+        <Title level={3} style={{ color: "var(--text-on-accent)", margin: 0, textShadow: "0 2px 8px rgba(0,0,0,0.3)" }}>
+          <TrophyOutlined /> Bạn đã ôn xong!
         </Title>
       </CelebrationOverlay>
 

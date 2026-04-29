@@ -195,7 +195,7 @@ export function QuestionCard({
                     fontSize: 12,
                     fontWeight: 800,
                     color: (isRevealed && (isCorrect || (isSelected && !isCorrect))) || isSelected
-                      ? "#fff"
+                      ? "var(--text-on-accent)"
                       : "var(--text-secondary)",
                     transition: "all 0.2s",
                   }}

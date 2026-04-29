@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowDownOutlined, ArrowUpOutlined } from "@ant-design/icons";
+import { ArrowDownOutlined, ArrowUpOutlined, AudioOutlined, PauseOutlined, LoadingOutlined, SoundOutlined, CheckOutlined } from "@ant-design/icons";
 
 import { TypingIndicator } from "@/app/(app)/english-chatbot/_components/TypingIndicator";
 import { ChatMessage } from "@/app/(app)/english-chatbot/_components/ChatMessage";
@@ -966,7 +966,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                 }
               >
                 <span style={{ fontSize: 18 }}>
-                  {voice.isListening ? "⏹" : voice.isTranscribing ? "⏳" : "🎙️"}
+                  {voice.isListening ? <PauseOutlined /> : voice.isTranscribing ? <LoadingOutlined spin /> : <AudioOutlined />}
                 </span>
               </button>
             )}
@@ -980,7 +980,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                   placeItems: "center",
                   borderRadius: "50%",
                   border: "none",
-                  color: "#fff",
+                  color: "var(--text-on-accent)",
                   boxShadow: "var(--shadow-sm)",
                   cursor: "pointer",
                   background: "var(--error)",
@@ -990,7 +990,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                 aria-label="Dừng trả lời"
                 title="Dừng trả lời"
               >
-                <span style={{ fontSize: 14, lineHeight: 1 }}>⏹</span>
+                <PauseOutlined style={{ fontSize: 14 }} />
               </button>
             ) : (
               <button
@@ -1002,7 +1002,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                   placeItems: "center",
                   borderRadius: "50%",
                   border: "none",
-                  color: "#fff",
+                  color: "var(--text-on-accent)",
                   boxShadow: "var(--shadow-sm)",
                   cursor: input.trim() ? "pointer" : "not-allowed",
                   background: input.trim() ? "var(--accent)" : "var(--ink)",
@@ -1029,7 +1029,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
           >
             <span>
               Enter để gửi · Shift+Enter xuống dòng
-              {voice.isSupported ? " · 🎙️ nói" : ""}
+              {voice.isSupported ? " · nói" : ""}
             </span>
             {voice.isSupported && tts.isSupported && (
               <button
@@ -1056,7 +1056,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                   if (!voiceMode) setVoiceExchanges(0);
                 }}
               >
-                🎙️ {voiceMode ? `Chế độ nói (${voiceExchanges})` : "Chế độ nói"}
+                <AudioOutlined /> {voiceMode ? `Chế độ nói (${voiceExchanges})` : "Chế độ nói"}
               </button>
             )}
             {voiceMode && (
@@ -1079,7 +1079,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                 }}
                 onClick={() => setPronEnabled((v) => !v)}
               >
-                🎤 {pronEnabled ? "Phản hồi phát âm ✓" : "Phản hồi phát âm"}
+                <SoundOutlined /> {pronEnabled ? <>Phản hồi phát âm <CheckOutlined /></> : "Phản hồi phát âm"}
               </button>
             )}
           </div>

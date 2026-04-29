@@ -298,7 +298,7 @@ export default function ErrorNotebookPage() {
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.background = "var(--success)";
-                  e.currentTarget.style.color = "#fff";
+                  e.currentTarget.style.color = "var(--text-on-accent)";
                   e.currentTarget.style.transform = "translateY(-2px)";
                   e.currentTarget.style.boxShadow = "0 4px 12px rgba(16, 185, 129, 0.2)";
                 }}
@@ -459,7 +459,7 @@ export default function ErrorNotebookPage() {
                           }}
                           onMouseEnter={(e) => {
                             e.currentTarget.style.background = "var(--success)";
-                            e.currentTarget.style.color = "#fff";
+                            e.currentTarget.style.color = "var(--text-on-accent)";
                             e.currentTarget.style.transform = "translateY(-2px)";
                             e.currentTarget.style.boxShadow = "0 4px 12px rgba(16, 185, 129, 0.2)";
                           }}

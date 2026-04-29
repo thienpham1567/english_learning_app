@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
-import { CheckOutlined, CopyOutlined, TrophyOutlined, SoundOutlined, PauseCircleOutlined, ReloadOutlined } from "@ant-design/icons";
+import { CheckOutlined, CopyOutlined, TrophyOutlined, SoundOutlined, PauseCircleOutlined, ReloadOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useUser } from "@/components/shared/UserContext";
 import { HighlightedText } from "@/app/(app)/english-chatbot/_components/HighlightedText";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
@@ -81,7 +81,7 @@ function SpeakButton({ text, onSpeak, isSpeaking, isLoading, onStop }: {
       aria-label={isSpeaking ? "Dừng phát" : isLoading ? "Đang tải..." : "Nghe phát âm"}
     >
       {isLoading ? (
-        <span style={{ fontSize: 12 }}>⏳</span>
+        <LoadingOutlined spin style={{ fontSize: 12 }} />
       ) : isSpeaking ? (
         <PauseCircleOutlined style={{ fontSize: 13 }} />
       ) : (
@@ -123,7 +123,7 @@ function UserAvatar() {
         background: "var(--ink)",
         fontSize: 12,
         fontWeight: 600,
-        color: "#fff",
+        color: "var(--text-on-accent)",
       }}
     >
       {initials}
@@ -362,7 +362,7 @@ export function ChatMessage({
             padding: "12px 16px",
             boxShadow: "var(--shadow-sm)",
             ...(isUser
-              ? { borderBottomRightRadius: 6, background: "var(--bubble-user)", color: "#fff" }
+              ? { borderBottomRightRadius: 6, background: "var(--bubble-user)", color: "var(--text-on-accent)" }
               : {
                   borderBottomLeftRadius: 6,
                   border: "1px solid var(--border)",
@@ -454,7 +454,7 @@ export function ChatMessage({
             background: "var(--ink)",
             fontSize: 12,
             fontWeight: 600,
-            color: "#fff",
+            color: "var(--text-on-accent)",
             boxShadow: "var(--shadow-sm)",
           }}
         >

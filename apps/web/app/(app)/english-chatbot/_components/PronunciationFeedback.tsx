@@ -8,6 +8,7 @@ import {
   SoundOutlined,
   DownOutlined,
   UpOutlined,
+  BulbOutlined,
 } from "@ant-design/icons";
 import { Tag, Tooltip } from "antd";
 
@@ -103,7 +104,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
           cursor: "pointer", transition: "all 0.2s",
         }}
       >
-        🎤 {score}/100 · {getScoreLabel(score)}
+        <SoundOutlined /> {score}/100 · {getScoreLabel(score)}
         {expanded ? <UpOutlined style={{ fontSize: 10 }} /> : <DownOutlined style={{ fontSize: 10 }} />}
       </button>
 
@@ -146,7 +147,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
             <div style={{ marginBottom: 8 }}>
               {data.tips.map((tip, i) => (
                 <p key={i} style={{ margin: "0 0 2px", fontSize: 12, color: "var(--text-secondary)" }}>
-                  💡 {tip}
+                  <BulbOutlined style={{ fontSize: 11, color: "var(--accent)" }} /> {tip}
                 </p>
               ))}
             </div>

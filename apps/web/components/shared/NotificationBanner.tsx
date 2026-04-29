@@ -1,7 +1,7 @@
 "use client";
 import { api } from "@/lib/api-client";
 import { useState, useEffect, useCallback } from "react";
-import { BellOutlined, CloseOutlined } from "@ant-design/icons";
+import { BellOutlined, CloseOutlined, CheckCircleFilled } from "@ant-design/icons";
 
 export function NotificationBanner() {
   const [visible, setVisible] = useState(false);
@@ -104,7 +104,7 @@ export function NotificationBanner() {
       <div style={{ flex: 1, minWidth: 0 }}>
         {subscribed ? (
           <div style={{ fontSize: 14, fontWeight: 600, color: "var(--success)" }}>
-            ✅ Đã bật thông báo!
+            <CheckCircleFilled style={{ marginRight: 4 }} /> Đã bật thông báo!
           </div>
         ) : (
           <>
