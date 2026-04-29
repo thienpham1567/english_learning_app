@@ -108,6 +108,7 @@ export async function POST(request: Request) {
       level,
       exerciseType,
       audioUrl,
+      passage: generated.passage, // included for script reveal toggle
       questions: generated.questions.map((q) => ({
         question: q.question,
         options: q.options,

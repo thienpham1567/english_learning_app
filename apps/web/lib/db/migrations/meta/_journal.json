@@ -141,6 +141,13 @@
       "when": 1777310400000,
       "tag": "0019_add-deep-explanation",
       "breakpoints": true
+    },
+    {
+      "idx": 20,
+      "version": "7",
+      "when": 1777431798716,
+      "tag": "0020_bored_jigsaw",
+      "breakpoints": true
     }
   ]
 }

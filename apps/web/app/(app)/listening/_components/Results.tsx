@@ -18,9 +18,10 @@ type Props = {
   onWordClick?: (word: string, rect: DOMRect) => void;
   savedWords?: Set<string>;
   dialogueTurns?: DialogueTurnPayload[];
+  scriptRevealed?: boolean;
 };
 
-export function Results({ result, onNewExercise, onWordClick, savedWords, dialogueTurns }: Props) {
+export function Results({ result, onNewExercise, onWordClick, savedWords, dialogueTurns, scriptRevealed }: Props) {
   const percentage = result.total > 0 ? Math.round((result.correct / result.total) * 100) : 0;
   const isGood = percentage >= 75;
 
@@ -60,6 +61,24 @@ export function Results({ result, onNewExercise, onWordClick, savedWords, dialog
         >
           <TrophyOutlined /> +{result.xpEarned} XP
         </div>
+        {scriptRevealed && (
+          <div
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 4,
+              marginTop: 6,
+              padding: "3px 10px",
+              borderRadius: "var(--radius-sm)",
+              background: "color-mix(in srgb, var(--warning) 10%, transparent)",
+              color: "var(--warning)",
+              fontSize: 11,
+              fontWeight: 600,
+            }}
+          >
+            📖 Đã xem script (-30% XP)
+          </div>
+        )}
       </div>
 
       {/* Detailed Results */}

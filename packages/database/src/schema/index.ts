@@ -246,9 +246,18 @@ export const listeningExercise = pgTable("listening_exercise", {
   score: integer("score"),
   completedAt: timestamp("completed_at", { withTimezone: true }),
   dialogueTurnsJson: jsonb("dialogue_turns_json").$type<DialogueTurn[]>(),
+  /** Exercise mode: listening | shadowing | dictation | summarize */
+  mode: text("mode").notNull().default("listening"),
+  /** User bookmarked this exercise for later replay */
+  bookmarked: boolean("bookmarked").notNull().default(false),
+  /** Whether the user revealed the script during the exercise (affects XP) */
+  scriptRevealed: boolean("script_revealed").notNull().default(false),
+  /** AI-extracted key phrases for progressive script reveal */
+  keyPhrases: jsonb("key_phrases").$type<string[]>().default([]),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 }, (table) => [
   index("listening_exercise_user_created_idx").on(table.userId, table.createdAt),
+  index("listening_exercise_user_bookmarked_idx").on(table.userId, table.bookmarked),
 ]);
 
 export type ListeningExerciseRow = typeof listeningExercise.$inferSelect;

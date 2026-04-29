@@ -54,6 +54,8 @@ export interface GenerateDialogueResponse {
 export const SubmitInputSchema = z.object({
   exerciseId: z.string().uuid(),
   answers: z.array(z.number().int().min(0).max(3)),
+  /** Whether the user revealed the script during the exercise */
+  scriptRevealed: z.boolean().optional().default(false),
 });
 
 // ── Response Types ──
@@ -70,8 +72,10 @@ export interface ListeningExerciseResponse {
   createdAt: string;
   /** Present when exercise was generated as a multi-speaker dialogue (Story 19.3.1). */
   turns?: DialogueTurnPayload[];
-  /** Concatenated passage text; included for dialogue exercises for backward compat. */
+  /** Passage text for script reveal during exercise. */
   passage?: string;
+  /** AI-extracted key phrases for progressive script reveal. */
+  keyPhrases?: string[];
 }
 
 export interface ListeningSubmitResponse {
@@ -94,4 +98,37 @@ export interface ListeningSubmitResponse {
     previousLevel: number;
     newLevel: number;
   };
+}
+
+// ── History Types ──
+
+export interface ListeningHistoryItem {
+  id: string;
+  level: string;
+  exerciseType: string;
+  mode: string;
+  score: number | null;
+  bookmarked: boolean;
+  scriptRevealed: boolean;
+  completedAt: string | null;
+  createdAt: string;
+}
+
+export interface ListeningHistoryDetail extends ListeningHistoryItem {
+  passage: string;
+  audioUrl: string;
+  questions: { question: string; options: string[]; correctIndex: number }[];
+  answers: number[] | null;
+  dialogueTurns?: DialogueTurnPayload[];
+}
+
+export interface ListeningStats {
+  totalSessions: number;
+  sessionsThisWeek: number;
+  avgScore: number;
+  avgScoreThisWeek: number;
+  weeklyTrend: { week: string; avg: number; count: number }[];
+  byLevel: { level: string; count: number; avgScore: number }[];
+  byMode: { mode: string; count: number; avgScore: number }[];
+  currentStreak: number;
 }

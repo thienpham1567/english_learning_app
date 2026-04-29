@@ -11,6 +11,7 @@ import {
   WarningOutlined,
   TrophyOutlined,
   BarChartOutlined,
+  HistoryOutlined,
 } from "@ant-design/icons";
 import { Segmented, Button, Select } from "antd";
 import { useRouter } from "next/navigation";
@@ -25,10 +26,13 @@ import { QuestionCards } from "@/app/(app)/listening/_components/QuestionCards";
 import { Results } from "@/app/(app)/listening/_components/Results";
 import { DialogueGenerator } from "@/app/(app)/listening/_components/DialogueGenerator";
 import { SpeakerLegend } from "@/app/(app)/listening/_components/SpeakerLegend";
+import { ScriptPanel } from "@/app/(app)/listening/_components/ScriptPanel";
 import { MiniDictionary } from "@/components/shared";
 import ShadowingMode from "@/app/(app)/listening/_components/ShadowingMode";
 import DictationMode from "@/app/(app)/listening/_components/DictationMode";
 import SummarizeMode from "@/app/(app)/listening/_components/SummarizeMode";
+import { HistoryDrawer } from "@/app/(app)/listening/_components/HistoryDrawer";
+import { ListeningDashboard } from "@/app/(app)/listening/_components/ListeningDashboard";
 import type { CefrLevel } from "@/lib/listening/types";
 
 export default function ListeningPage() {
@@ -42,6 +46,8 @@ export default function ListeningPage() {
     maxReplays,
     selectedSpeed,
     allAnswered,
+    scriptRevealed,
+    revealScript,
     generate,
     generateDialogue,
     selectAnswer,
@@ -59,6 +65,8 @@ export default function ListeningPage() {
   const [profileRecommendedLevel, setProfileRecommendedLevel] = useState<CefrLevel | null>(null);
   const [mode, setMode] = useState<string>("listening");
   const [selectedVoice, setSelectedVoice] = useState("austin");
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [showLevelSelector, setShowLevelSelector] = useState(false);
 
   // Derive skill level-up from result (computed, not effect)
   const skillLevelUp = result?.skill
@@ -140,6 +148,18 @@ export default function ListeningPage() {
                 display: "flex", alignItems: "center", justifyContent: "center",
               }}
             />
+            <Button
+              type="text"
+              icon={<HistoryOutlined style={{ fontSize: 16 }} />}
+              onClick={() => setHistoryOpen(true)}
+              title="Lịch sử luyện nghe"
+              style={{
+                width: 36, height: 36, borderRadius: 10,
+                border: "1px solid rgba(255,255,255,0.2)",
+                color: "rgba(255,255,255,0.8)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}
+            />
           </div>
         }
       />
@@ -187,20 +207,31 @@ export default function ListeningPage() {
           </div>
         )}
 
-        {/* Idle: Level Selector */}
+        {/* Idle: Dashboard or Level Selector */}
         {(state === "idle" || state === "loading") && (
           <>
-            <LevelSelector
-              onStart={(level, type) => generate(level, type, examMode)}
-              isLoading={state === "loading"}
-              recommendedLevel={recommendedLevel}
-            />
-            <DialogueGenerator
-              isLoading={state === "loading"}
-              onStart={({ topic, level, turns, speakers }) =>
-                generateDialogue({ topic, level, turns, speakers, examMode })
-              }
-            />
+            {!showLevelSelector && state === "idle" && (
+              <ListeningDashboard
+                onStartExercise={() => setShowLevelSelector(true)}
+                onOpenHistory={() => setHistoryOpen(true)}
+                recommendedLevel={recommendedLevel}
+              />
+            )}
+            {(showLevelSelector || state === "loading") && (
+              <>
+                <LevelSelector
+                  onStart={(level, type) => generate(level, type, examMode)}
+                  isLoading={state === "loading"}
+                  recommendedLevel={recommendedLevel}
+                />
+                <DialogueGenerator
+                  isLoading={state === "loading"}
+                  onStart={({ topic, level, turns, speakers }) =>
+                    generateDialogue({ topic, level, turns, speakers, examMode })
+                  }
+                />
+              </>
+            )}
           </>
         )}
 
@@ -240,6 +271,17 @@ export default function ListeningPage() {
               onReplay={useReplay}
               onCycleSpeed={cycleSpeed}
             />
+            {/* Script Reveal Panel */}
+            {exercise.passage && (
+              <ScriptPanel
+                passage={exercise.passage}
+                keyPhrases={exercise.keyPhrases}
+                isRevealed={scriptRevealed}
+                onReveal={revealScript}
+                onWordClick={miniDict.openForWord}
+                savedWords={savedWords}
+              />
+            )}
             <QuestionCards
               questions={exercise.questions}
               selectedAnswers={selectedAnswers}
@@ -260,6 +302,7 @@ export default function ListeningPage() {
               onWordClick={miniDict.openForWord}
               savedWords={savedWords}
               dialogueTurns={exercise?.turns}
+              scriptRevealed={scriptRevealed}
             />
             {skillLevelUp && (
               <div
@@ -289,6 +332,12 @@ export default function ListeningPage() {
           </>
         )}
       </div>
+
+      {/* History Drawer */}
+      <HistoryDrawer
+        open={historyOpen}
+        onClose={() => setHistoryOpen(false)}
+      />
 
       {/* MiniDictionary floating popup */}
       <MiniDictionary

@@ -19,6 +19,7 @@ export function useListeningExercise() {
   const [selectedAnswers, setSelectedAnswers] = useState<(number | null)[]>([]);
   const [replaysUsed, setReplaysUsed] = useState(0);
   const [selectedSpeed, setSelectedSpeed] = useState(1.0);
+  const [scriptRevealed, setScriptRevealed] = useState(false);
 
   const MAX_REPLAYS = 3;
 
@@ -35,6 +36,7 @@ export function useListeningExercise() {
       setSelectedAnswers(new Array(data.questions.length).fill(null));
       setReplaysUsed(0);
       setSelectedSpeed(1.0);
+      setScriptRevealed(false);
       setState("active");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to generate exercise");
@@ -65,6 +67,7 @@ export function useListeningExercise() {
       setSelectedAnswers(new Array(data.questions.length).fill(null));
       setReplaysUsed(0);
       setSelectedSpeed(1.0);
+      setScriptRevealed(false);
       setState("active");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to generate dialogue");
@@ -93,6 +96,7 @@ export function useListeningExercise() {
       const data = await api.post<ListeningSubmitResponse>("/listening/submit", {
         exerciseId: exercise.id,
         answers: selectedAnswers as number[],
+        scriptRevealed,
       });
       setResult(data);
       setState("submitted");
@@ -128,6 +132,7 @@ export function useListeningExercise() {
     setSelectedAnswers([]);
     setReplaysUsed(0);
     setSelectedSpeed(1.0);
+    setScriptRevealed(false);
   }, []);
 
   const allAnswered = selectedAnswers.length > 0 && selectedAnswers.every((a) => a !== null);
@@ -142,6 +147,8 @@ export function useListeningExercise() {
     maxReplays: MAX_REPLAYS,
     selectedSpeed,
     allAnswered,
+    scriptRevealed,
+    revealScript: useCallback(() => setScriptRevealed(true), []),
     generate,
     generateDialogue,
     selectAnswer,

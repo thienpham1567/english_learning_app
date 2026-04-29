@@ -3,7 +3,7 @@ import { eq, and } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
-import { listeningExercise } from "@repo/database";
+import { listeningExercise, errorLog } from "@repo/database";
 import type { ListeningQuestion } from "@repo/database";
 import { awardXP, XP_VALUES } from "@/lib/xp";
 import { logActivity } from "@/lib/activity-log";
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
       return Response.json({ error: "Invalid input", details: parsed.error.flatten() }, { status: 400 });
     }
 
-    const { exerciseId, answers } = parsed.data;
+    const { exerciseId, answers, scriptRevealed } = parsed.data;
     const userId = session.user.id;
 
     // Fetch the exercise
@@ -68,26 +68,49 @@ export async function POST(request: Request) {
     const correctCount = results.filter((r) => r.correct).length;
     const score = Math.round((correctCount / questions.length) * 100);
 
-    // Save results
+    // Save results + scriptRevealed flag
     await db
       .update(listeningExercise)
       .set({
         answers,
         score,
         completedAt: new Date(),
+        scriptRevealed: scriptRevealed ?? false,
       })
       .where(eq(listeningExercise.id, exerciseId));
 
-    // Award XP + log activity (fire-and-forget)
-    void awardXP(userId, XP_VALUES.LISTENING_PRACTICE).catch(() => {});
-    logActivity(userId, "listening_practice", XP_VALUES.LISTENING_PRACTICE, {
+    // Award XP (reduced by 30% if script was revealed) + log activity (fire-and-forget)
+    const xpBase = XP_VALUES.LISTENING_PRACTICE;
+    const xpEarned = scriptRevealed ? Math.round(xpBase * 0.7) : xpBase;
+    void awardXP(userId, xpEarned).catch(() => {});
+    logActivity(userId, "listening_practice", xpEarned, {
       exerciseId,
       level: exercise.level,
       exerciseType: exercise.exerciseType,
       score,
       correctCount,
       totalQuestions: questions.length,
+      scriptRevealed,
     });
+
+    // Log wrong answers to errorLog for SRS review (fire-and-forget)
+    const wrongResults = results.filter((r) => !r.correct);
+    if (wrongResults.length > 0) {
+      void db
+        .insert(errorLog)
+        .values(
+          wrongResults.map((r) => ({
+            userId,
+            sourceModule: "listening" as const,
+            questionStem: r.question,
+            options: r.options,
+            userAnswer: r.options[r.userAnswer] ?? "",
+            correctAnswer: r.options[r.correctIndex] ?? "",
+            grammarTopic: exercise.level,
+          })),
+        )
+        .catch((e) => console.error("[Listening] ErrorLog insert error:", e));
+    }
 
     // Emit learning event (fire-and-forget, AC: 3)
     void recordLearningEvent({
@@ -111,9 +134,10 @@ export async function POST(request: Request) {
       score,
       total: questions.length,
       correct: correctCount,
-      xpEarned: XP_VALUES.LISTENING_PRACTICE,
+      xpEarned,
       results,
       passage: exercise.passage, // reveal full passage after submission
+      scriptRevealed,
       skill: {
         cefr: skillUpdate.cefr,
         levelUp: skillUpdate.levelUp,
