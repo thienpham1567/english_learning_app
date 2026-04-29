@@ -61,8 +61,8 @@ export function ConversationList({ activeId }: Props) {
         flexShrink: 0,
         flexDirection: "column",
         overflow: "hidden",
-        borderRight: "1px solid rgba(255,255,255,0.1)",
-        background: "var(--ink)",
+        borderRight: "1px solid var(--sidebar-border, rgba(255,255,255,0.1))",
+        background: "var(--sidebar-bg, var(--bg-deep))",
       }}
     >
       {/* Grain overlay */}

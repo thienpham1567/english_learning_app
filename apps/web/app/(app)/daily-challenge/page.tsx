@@ -1,8 +1,17 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button, Card, Flex, Result, Spin, Typography } from "antd";
-import { ClockCircleOutlined, FireOutlined, ReloadOutlined } from "@ant-design/icons";
+import { Flex, Typography } from "antd";
+import {
+  ClockCircleOutlined,
+  FireOutlined,
+  ReloadOutlined,
+  LoadingOutlined,
+  ExclamationCircleOutlined,
+  ThunderboltOutlined,
+  ForwardOutlined,
+  CheckOutlined,
+} from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 import { useDailyChallenge } from "@/hooks/useDailyChallenge";
@@ -10,11 +19,9 @@ import { ExerciseCard } from "@/app/(app)/daily-challenge/_components/ExerciseCa
 import { ChallengeResults } from "@/app/(app)/daily-challenge/_components/ChallengeResults";
 import { CompletedState } from "@/app/(app)/daily-challenge/_components/CompletedState";
 import { EXERCISE_TYPE_LABELS } from "@/app/(app)/daily-challenge/_components/constants";
-import { ProgressSegments, StreakFire } from "@/components/shared";
+import { StreakFire } from "@/components/shared";
 
 const { Text } = Typography;
-
-
 
 // Live elapsed timer hook (AC: #4)
 function useElapsedTimer(isRunning: boolean) {
@@ -34,6 +41,48 @@ function useElapsedTimer(isRunning: boolean) {
   const min = Math.floor(totalSec / 60);
   const sec = totalSec % 60;
   return `${min}:${sec.toString().padStart(2, "0")}`;
+}
+
+/* ── Step Indicator ── */
+function StepIndicator({ current, total }: { current: number; total: number }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 6, width: "100%" }}>
+      {Array.from({ length: total }, (_, i) => {
+        const isDone = i < current;
+        const isActive = i === current;
+        return (
+          <div
+            key={i}
+            style={{
+              flex: 1,
+              height: isActive ? 8 : 5,
+              borderRadius: 99,
+              background: isDone
+                ? "var(--success)"
+                : isActive
+                ? "linear-gradient(90deg, var(--accent), var(--accent-hover))"
+                : "var(--border)",
+              transition: "all 0.35s cubic-bezier(0.4,0,0.2,1)",
+              boxShadow: isActive ? "0 0 12px color-mix(in srgb, var(--accent) 40%, transparent)" : "none",
+              position: "relative",
+              overflow: "hidden",
+            }}
+          >
+            {isActive && (
+              <div
+                style={{
+                  position: "absolute",
+                  inset: 0,
+                  background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent)",
+                  animation: "ctaShimmer 2s ease-in-out infinite",
+                }}
+              />
+            )}
+          </div>
+        );
+      })}
+    </div>
+  );
 }
 
 export default function DailyChallengePage() {
@@ -66,15 +115,29 @@ export default function DailyChallengePage() {
       <ModuleHeader
         icon={<FireOutlined />}
         gradient="var(--gradient-daily)"
-        title="Thử thách mỗi ngày 🔥"
+        title="Thử thách hàng ngày"
         subtitle="Daily Challenge · 5 bài tập mỗi ngày"
         action={
           <Flex align="center" gap={12}>
             {state === "active" && (
-              <Text type="secondary" style={{ fontSize: 13, fontVariantNumeric: "tabular-nums" }}>
-                <ClockCircleOutlined style={{ marginRight: 4 }} />
+              <div
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "4px 14px",
+                  borderRadius: 999,
+                  background: "rgba(255,255,255,0.12)",
+                  backdropFilter: "blur(8px)",
+                  fontSize: 13,
+                  fontWeight: 600,
+                  fontVariantNumeric: "tabular-nums",
+                  color: "var(--text-on-accent)",
+                }}
+              >
+                <ClockCircleOutlined style={{ fontSize: 12, opacity: 0.7 }} />
                 {formattedTime}
-              </Text>
+              </div>
             )}
             {state !== "loading" && <StreakFire streak={streak.currentStreak} />}
           </Flex>
@@ -82,63 +145,168 @@ export default function DailyChallengePage() {
       />
 
       {/* Content */}
-      <Flex
-        vertical
-        align="center"
-        justify="center"
-        style={{ flex: 1, minHeight: 0, overflow: "auto", padding: "24px 16px" }}
+      <div
+        style={{
+          flex: 1,
+          minHeight: 0,
+          overflow: "auto",
+          padding: "24px 16px 40px",
+        }}
       >
-        <Flex
-          vertical
-          align="center"
-          justify="center"
-          style={{ width: "100%", maxWidth: 580, minHeight: "100%" }}
-        >
+        <div style={{ width: "100%", maxWidth: 580, margin: "0 auto" }}>
+          {/* Error banner */}
           {error && (
-            <Result
-              status="error"
-              subTitle={error}
-              style={{ marginBottom: 16, padding: "16px 0" }}
-            />
+            <div
+              className="anim-fade-in"
+              style={{
+                borderRadius: 16,
+                border: "1px solid color-mix(in srgb, var(--error) 30%, transparent)",
+                background: "color-mix(in srgb, var(--error) 6%, var(--surface))",
+                padding: "16px 20px",
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                marginBottom: 16,
+              }}
+            >
+              <ExclamationCircleOutlined style={{ fontSize: 18, color: "var(--error)", flexShrink: 0 }} />
+              <span style={{ fontSize: 13, color: "var(--error)", fontWeight: 500, flex: 1 }}>{error}</span>
+            </div>
           )}
 
-          {state === "loading" && <Spin size="large" />}
+          {/* Loading state */}
+          {state === "loading" && (
+            <div
+              className="anim-fade-in"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: 300,
+                gap: 16,
+              }}
+            >
+              <div
+                style={{
+                  width: 64,
+                  height: 64,
+                  borderRadius: 20,
+                  background: "var(--accent-muted)",
+                  display: "grid",
+                  placeItems: "center",
+                }}
+              >
+                <LoadingOutlined spin style={{ fontSize: 28, color: "var(--accent)" }} />
+              </div>
+              <Text type="secondary" style={{ fontSize: 13 }}>Đang tải thử thách...</Text>
+            </div>
+          )}
 
+          {/* Error retry state */}
           {state === "error" && (
-            <Flex vertical align="center" gap={16}>
-              <Button
-                type="primary"
-                icon={<ReloadOutlined />}
-                onClick={() => window.location.reload()}
+            <div
+              className="anim-fade-in"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: 300,
+                gap: 16,
+              }}
+            >
+              <div
+                style={{
+                  width: 64,
+                  height: 64,
+                  borderRadius: 20,
+                  background: "color-mix(in srgb, var(--error) 8%, transparent)",
+                  display: "grid",
+                  placeItems: "center",
+                }}
               >
-                Thử lại
-              </Button>
-            </Flex>
+                <ExclamationCircleOutlined style={{ fontSize: 28, color: "var(--error)" }} />
+              </div>
+              <Text type="secondary" style={{ fontSize: 13 }}>Không thể tải thử thách</Text>
+              <button
+                onClick={() => window.location.reload()}
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  padding: "10px 24px",
+                  borderRadius: 12,
+                  border: "none",
+                  background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+                  color: "var(--text-on-accent)",
+                  fontSize: 14,
+                  fontWeight: 600,
+                  cursor: "pointer",
+                  boxShadow: "0 3px 12px color-mix(in srgb, var(--accent) 30%, transparent)",
+                }}
+              >
+                <ReloadOutlined /> Thử lại
+              </button>
+            </div>
           )}
 
+          {/* Active exercise state */}
           {state === "active" && challenge && (
-            <Flex vertical gap={16} style={{ width: "100%" }}>
-              {/* Segmented progress bar (AC: #1) — replaces dots */}
-              <ProgressSegments
-                current={currentExercise}
-                total={challenge.exercises.length}
-              />
+            <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+              {/* Step indicator + question counter */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                  <span style={{ fontSize: 12, fontWeight: 700, color: "var(--accent)" }}>
+                    Câu {currentExercise + 1} / {challenge.exercises.length}
+                  </span>
+                  <span
+                    style={{
+                      fontSize: 11,
+                      fontWeight: 600,
+                      padding: "3px 12px",
+                      borderRadius: 999,
+                      background: "var(--accent-muted)",
+                      color: "var(--accent)",
+                    }}
+                  >
+                    {EXERCISE_TYPE_LABELS[challenge.exercises[currentExercise].type] ?? ""}
+                  </span>
+                </div>
+                <StepIndicator current={currentExercise} total={challenge.exercises.length} />
+              </div>
 
-              {/* Exercise type label with emoji (AC: #2) */}
-              <Text
-                type="secondary"
-                style={{ fontSize: 13, fontWeight: 500, textAlign: "center" }}
+              {/* Exercise Card — glassmorphism wrapper */}
+              <div
+                key={currentExercise}
+                className="anim-fade-up"
+                style={{
+                  borderRadius: 20,
+                  border: "1px solid var(--border)",
+                  background: "var(--surface)",
+                  padding: "24px 20px",
+                  boxShadow: "var(--shadow-md)",
+                  position: "relative",
+                  overflow: "hidden",
+                }}
               >
-                {EXERCISE_TYPE_LABELS[challenge.exercises[currentExercise].type] ?? ""}
-              </Text>
-
-              <Card>
+                {/* Decorative top accent */}
+                <div
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: 3,
+                    background: "linear-gradient(90deg, var(--accent), var(--accent-hover), var(--secondary))",
+                  }}
+                />
                 <ExerciseCard
                   exercise={challenge.exercises[currentExercise]}
                   onAnswer={answerExercise}
                   disabled={false}
                 />
-              </Card>
+              </div>
 
               {/* Skip button */}
               <button
@@ -146,32 +314,74 @@ export default function DailyChallengePage() {
                 onClick={() => answerExercise("")}
                 style={{
                   alignSelf: "center",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
                   background: "none",
                   border: "none",
                   cursor: "pointer",
                   fontSize: 13,
                   fontWeight: 500,
                   color: "var(--text-muted)",
-                  padding: "6px 16px",
+                  padding: "8px 20px",
                   borderRadius: 999,
-                  transition: "color 0.15s, background 0.15s",
+                  transition: "all 0.2s ease",
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.color = "var(--error)";
-                  e.currentTarget.style.background = "var(--error-bg)";
+                  e.currentTarget.style.background = "color-mix(in srgb, var(--error) 6%, transparent)";
                 }}
                 onMouseLeave={(e) => {
                   e.currentTarget.style.color = "var(--text-muted)";
                   e.currentTarget.style.background = "none";
                 }}
               >
-                Bỏ qua câu này →
+                <ForwardOutlined style={{ fontSize: 11 }} /> Bỏ qua câu này
               </button>
-            </Flex>
+            </div>
           )}
 
-          {state === "submitting" && <Spin size="large" />}
+          {/* Submitting */}
+          {state === "submitting" && (
+            <div
+              className="anim-fade-in"
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                justifyContent: "center",
+                minHeight: 300,
+                gap: 16,
+              }}
+            >
+              <div
+                style={{
+                  width: 64,
+                  height: 64,
+                  borderRadius: 20,
+                  background: "color-mix(in srgb, var(--success) 8%, transparent)",
+                  display: "grid",
+                  placeItems: "center",
+                }}
+              >
+                <CheckOutlined style={{ fontSize: 28, color: "var(--success)" }} />
+              </div>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
+                  color: "var(--text-secondary)",
+                  fontSize: 13,
+                }}
+              >
+                <LoadingOutlined spin style={{ fontSize: 14 }} />
+                Đang chấm điểm...
+              </div>
+            </div>
+          )}
 
+          {/* Results */}
           {state === "results" && results && (
             <div style={{ width: "100%" }}>
               <ChallengeResults
@@ -185,13 +395,14 @@ export default function DailyChallengePage() {
             </div>
           )}
 
+          {/* Completed (already done today) */}
           {state === "completed" && challenge && (
             <div style={{ width: "100%" }}>
               <CompletedState challenge={challenge} streak={streak} badges={badges} />
             </div>
           )}
-        </Flex>
-      </Flex>
+        </div>
+      </div>
     </div>
   );
 }

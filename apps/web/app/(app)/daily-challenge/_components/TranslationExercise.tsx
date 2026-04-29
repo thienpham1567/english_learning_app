@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { TranslationData } from "@/lib/daily-challenge/types";
+import { TranslationOutlined, CheckOutlined } from "@ant-design/icons";
 
 type Props = {
   data: TranslationData;
@@ -53,7 +54,7 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
             marginBottom: 6,
           }}
         >
-          🇻🇳 Tiếng Việt
+          <TranslationOutlined style={{ fontSize: 10 }} /> Tiếng Việt
         </span>
         <p
           style={{
@@ -81,7 +82,7 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
           marginBottom: 6,
         }}
       >
-        🇬🇧 Bản dịch tiếng Anh
+        <TranslationOutlined style={{ fontSize: 10 }} /> Bản dịch tiếng Anh
       </label>
       <textarea
         id="translation-input"
@@ -145,7 +146,7 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
             transition: "opacity 0.15s",
           }}
         >
-          Xác nhận ✓
+          <CheckOutlined style={{ fontSize: 11 }} /> Xác nhận
         </button>
       )}
     </div>

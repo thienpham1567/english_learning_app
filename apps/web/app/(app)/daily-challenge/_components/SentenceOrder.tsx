@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { SentenceOrderData } from "@/lib/daily-challenge/types";
+import { CloseOutlined, CheckOutlined } from "@ant-design/icons";
 
 type Props = {
   data: SentenceOrderData;
@@ -119,7 +120,7 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
                     transition: "opacity 0.12s",
                   }}
                 >
-                  ✕
+                  ×
                 </span>
               )}
             </button>
@@ -207,7 +208,7 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
             transition: "opacity 0.15s",
           }}
         >
-          Xác nhận ✓
+          <CheckOutlined style={{ fontSize: 11 }} /> Xác nhận
         </button>
       )}
     </div>

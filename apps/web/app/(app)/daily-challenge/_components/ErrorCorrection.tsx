@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { ErrorCorrectionData } from "@/lib/daily-challenge/types";
+import { WarningOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
 
 type Props = {
   data: ErrorCorrectionData;
@@ -53,7 +54,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
             marginBottom: 6,
           }}
         >
-          ⚠️ Câu có lỗi
+          <WarningOutlined style={{ fontSize: 11 }} /> Câu có lỗi
         </span>
         <p
           style={{
@@ -81,7 +82,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
           marginBottom: 6,
         }}
       >
-        ✏️ Viết từ đúng thay thế
+        <EditOutlined style={{ fontSize: 11 }} /> Viết từ đúng thay thế
       </label>
       <input
         id="error-correction-input"
@@ -129,7 +130,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
             transition: "opacity 0.15s",
           }}
         >
-          Xác nhận sửa lỗi ✓
+          <CheckOutlined style={{ fontSize: 11 }} /> Xác nhận sửa lỗi
         </button>
       )}
     </div>
