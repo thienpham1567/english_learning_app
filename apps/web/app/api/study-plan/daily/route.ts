@@ -84,9 +84,9 @@ export async function GET(request: Request) {
       failureStreak: s.failureStreak,
       decayRate: s.decayRate,
       signalCount: s.signalCount,
-      lastPracticedAt: s.lastPracticedAt.toISOString(),
-      lastUpdatedAt: s.lastUpdatedAt.toISOString(),
-      nextReviewAt: s.nextReviewAt.toISOString(),
+      lastPracticedAt: s.lastPracticedAt?.toISOString?.() ?? new Date().toISOString(),
+      lastUpdatedAt: s.lastUpdatedAt?.toISOString?.() ?? new Date().toISOString(),
+      nextReviewAt: s.nextReviewAt?.toISOString?.() ?? new Date().toISOString(),
     }));
 
     const candidates = [
@@ -139,8 +139,14 @@ export async function GET(request: Request) {
       },
     });
   } catch (err) {
-    console.error("[study-plan/daily] Error:", err);
-    return Response.json({ error: "Failed to generate plan" }, { status: 500 });
+    const message = err instanceof Error ? err.message : String(err);
+    const stack = err instanceof Error ? err.stack : undefined;
+    console.error("[study-plan/daily] Error:", message);
+    if (stack) console.error("[study-plan/daily] Stack:", stack);
+    return Response.json(
+      { error: "Failed to generate plan", detail: message },
+      { status: 500 },
+    );
   }
 }
 
