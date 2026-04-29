@@ -35,8 +35,8 @@ type WordData = {
   isSimple: boolean;
 };
 
-/** Words at A1 level or top1k frequency are considered "simple" and skipped. */
-const SIMPLE_LEVELS = new Set(["A1"]);
+/** Words at A1/A2 level or top1k frequency are considered "simple" and skipped. */
+const SIMPLE_LEVELS = new Set(["A1", "A2"]);
 const SIMPLE_FREQ = new Set(["top1k"]);
 
 type Props = {
