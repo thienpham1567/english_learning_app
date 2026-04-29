@@ -271,6 +271,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
             const linkContent = (
               <Link
                 href={href}
+                prefetch={false}
                 aria-current={active ? "page" : undefined}
                 style={{
                   display: "flex",
@@ -319,6 +320,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
                   const linkEl = (
                     <Link
                       href={item.href}
+                      prefetch={false}
                       aria-current={active ? "page" : undefined}
                       style={{
                         display: "flex",
@@ -395,6 +397,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
                       <Link
                         key={item.href}
                         href={item.href}
+                        prefetch={false}
                         aria-current={active ? "page" : undefined}
                         style={{
                           display: "flex",
