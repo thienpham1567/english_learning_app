@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useEffect } from "react";
+import dynamic from "next/dynamic";
 import { api } from "@/lib/api-client";
 import {
   SoundOutlined,
@@ -31,9 +32,14 @@ import { MiniDictionary } from "@/components/shared";
 import ShadowingMode from "@/app/(app)/listening/_components/ShadowingMode";
 import DictationMode from "@/app/(app)/listening/_components/DictationMode";
 import SummarizeMode from "@/app/(app)/listening/_components/SummarizeMode";
-import { HistoryDrawer } from "@/app/(app)/listening/_components/HistoryDrawer";
 import { ListeningDashboard } from "@/app/(app)/listening/_components/ListeningDashboard";
 import type { CefrLevel } from "@/lib/listening/types";
+
+// Lazy-load HistoryDrawer to avoid Ant Design Drawer portal hydration mismatch
+const LazyHistoryDrawer = dynamic(
+  () => import("@/app/(app)/listening/_components/HistoryDrawer").then((m) => m.HistoryDrawer),
+  { ssr: false },
+);
 
 export default function ListeningPage() {
   const {
@@ -215,6 +221,7 @@ export default function ListeningPage() {
                 onStartExercise={() => setShowLevelSelector(true)}
                 onOpenHistory={() => setHistoryOpen(true)}
                 recommendedLevel={recommendedLevel}
+                onNoData={() => setShowLevelSelector(true)}
               />
             )}
             {(showLevelSelector || state === "loading") && (
@@ -333,11 +340,13 @@ export default function ListeningPage() {
         )}
       </div>
 
-      {/* History Drawer */}
-      <HistoryDrawer
-        open={historyOpen}
-        onClose={() => setHistoryOpen(false)}
-      />
+      {/* History Drawer (client-only to avoid portal hydration mismatch) */}
+      {historyOpen && (
+        <LazyHistoryDrawer
+          open={historyOpen}
+          onClose={() => setHistoryOpen(false)}
+        />
+      )}
 
       {/* MiniDictionary floating popup */}
       <MiniDictionary

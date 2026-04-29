@@ -18,16 +18,19 @@ type Props = {
   onStartExercise: () => void;
   onOpenHistory: () => void;
   recommendedLevel?: string | null;
+  /** Called when dashboard has no data — parent should show LevelSelector instead */
+  onNoData?: () => void;
 };
 
 /**
  * ListeningDashboard — smart landing for returning users.
  * Shows streak, avg score, sessions this week, weekly trend mini-chart, and recent history.
  */
-export function ListeningDashboard({ onStartExercise, onOpenHistory, recommendedLevel }: Props) {
+export function ListeningDashboard({ onStartExercise, onOpenHistory, recommendedLevel, onNoData }: Props) {
   const [stats, setStats] = useState<ListeningStats | null>(null);
   const [recentHistory, setRecentHistory] = useState<ListeningHistoryItem[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [hasData, setHasData] = useState(true);
 
   useEffect(() => {
     setIsLoading(true);
@@ -41,7 +44,12 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
       setStats(statsData);
       setRecentHistory(historyData);
       setIsLoading(false);
+      if (!statsData || statsData.totalSessions === 0) {
+        setHasData(false);
+        onNoData?.();
+      }
     });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const scoreColor = useCallback((score: number) => {
@@ -58,8 +66,8 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
     );
   }
 
-  if (!stats || stats.totalSessions === 0) {
-    return null; // Fall through to LevelSelector
+  if (!hasData) {
+    return null; // Parent will show LevelSelector via onNoData callback
   }
 
   const maxTrendCount = Math.max(...(stats.weeklyTrend.map((w) => w.count) || [1]), 1);
