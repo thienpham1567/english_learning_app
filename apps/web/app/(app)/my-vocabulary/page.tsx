@@ -9,7 +9,6 @@ import {
 } from "@ant-design/icons";
 import { VocabularyStatsBar } from "@/app/(app)/my-vocabulary/_components/VocabularyStatsBar";
 import { VocabularyDetailSheet } from "@/app/(app)/my-vocabulary/_components/VocabularyDetailSheet";
-import { ToeicVocabularySection } from "@/app/(app)/my-vocabulary/_components/ToeicVocabularySection";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";
 import { api } from "@/lib/api-client";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
@@ -50,11 +49,10 @@ const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
 const ENTRY_TYPES: Vocabulary["entryType"][] = ["word", "phrasal_verb", "idiom"];
 const ENTRY_TYPE_SET = new Set<Vocabulary["entryType"]>(ENTRY_TYPES);
 
-type TabKey = "all" | "saved" | "toeic";
+type TabKey = "all" | "saved";
 const TABS: { key: TabKey; label: string }[] = [
   { key: "all", label: "Tất cả" },
   { key: "saved", label: "Đã lưu ⭐" },
-  { key: "toeic", label: "TOEIC 📋" },
 ];
 
 function formatRelativeTime(dateStr: string): string {
@@ -299,16 +297,8 @@ export default function MyVocabularyPage() {
           ))}
         </div>
 
-        {/* ── TOEIC Tab Content ── */}
-        {activeTab === "toeic" && (
-          <div style={{ marginTop: 16 }}>
-            <ToeicVocabularySection />
-          </div>
-        )}
-
-        {/* ── Vocabulary List Tabs (all / saved) ── */}
-        {activeTab !== "toeic" && (
-          <>
+        {/* ── Vocabulary List ── */}
+        <>
             {/* Stats bar */}
             {!isLoading && entries.length > 0 && (
               <>
@@ -659,7 +649,7 @@ export default function MyVocabularyPage() {
               )}
             </div>
           </>
-        )}
+        </>
       </div>
 
       <VocabularyDetailSheet
