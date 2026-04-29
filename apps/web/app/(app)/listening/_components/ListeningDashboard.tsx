@@ -66,7 +66,7 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
     );
   }
 
-  if (!hasData) {
+  if (!hasData || !stats) {
     return null; // Parent will show LevelSelector via onNoData callback
   }
 
