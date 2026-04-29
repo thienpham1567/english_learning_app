@@ -24,12 +24,16 @@ import {
   SoundOutlined,
   HistoryOutlined,
   SmileOutlined,
+  RadarChartOutlined,
+  AimOutlined,
 } from "@ant-design/icons";
 
 import { useDashboard, type DashboardData } from "@/hooks/useDashboard";
 import { useUser } from "@/components/shared/UserContext";
 import { EmptyStateCard, StreakCalendar, WordOfTheDay, WeeklyLeaderboard } from "@/components/shared";
 import { LearningStyleCard } from "@/components/shared/LearningStyleCard";
+import { PredictedScore } from "@/components/shared";
+import { ReadingStatsBlock } from "@/components/shared/ReadingStatsBlock";
 
 const { Title, Text } = Typography;
 
@@ -55,6 +59,24 @@ function getLevel(xp: number): { level: number; currentXP: number; nextXP: numbe
   const nextThreshold = LEVEL_THRESHOLDS[level] ?? currentThreshold + 1000;
   const progress = Math.min((xp - currentThreshold) / (nextThreshold - currentThreshold), 1);
   return { level, currentXP: xp - currentThreshold, nextXP: nextThreshold - currentThreshold, progress };
+}
+
+// ── Analytics data (merged from Progress page) ──
+
+interface AnalyticsData {
+  weeklyXP: Array<{ week: string; xp: number }>;
+  dailyActivity: Array<{ date: string; count: number }>;
+  vocabularyGrowth: Array<{ week: string; total_words: number }>;
+  accuracyTrends: Array<{ week: string; accuracy: number }>;
+  skillRadar: Array<{ axis: string; icon: string; score: number; sessions: number; avgXp: number }>;
+  totalStats: {
+    totalXP: number;
+    totalWords: number;
+    totalQuizzes: number;
+    totalActivities: number;
+    currentStreak: number;
+    bestStreak: number;
+  };
 }
 
 // ── Smart CTA Logic (Story 8.1) ──
@@ -83,6 +105,105 @@ function getDayLabel(dateStr: string): string {
   return d.toLocaleDateString("vi-VN", { weekday: "short" });
 }
 
+// ── Skill Radar (SVG) ──
+
+function SkillRadar({ data }: { data: AnalyticsData["skillRadar"] }) {
+  const cx = 130, cy = 130, maxR = 95;
+  const n = data.length;
+  const angleStep = 360 / n;
+
+  function polarToXY(angle: number, r: number) {
+    const rad = ((angle - 90) * Math.PI) / 180;
+    return { x: cx + r * Math.cos(rad), y: cy + r * Math.sin(rad) };
+  }
+
+  const gridPaths = [20, 40, 60, 80, 100].map((lv) => {
+    const r = (lv / 100) * maxR;
+    return Array.from({ length: n }, (_, i) => {
+      const { x, y } = polarToXY(i * angleStep, r);
+      return `${x},${y}`;
+    }).join(" ");
+  });
+
+  const dataPoints = data.map((d, i) => {
+    const r = (d.score / 100) * maxR;
+    return polarToXY(i * angleStep, r);
+  });
+  const dataPath = dataPoints.map((p) => `${p.x},${p.y}`).join(" ");
+  const axes = data.map((_, i) => polarToXY(i * angleStep, maxR));
+  const labels = data.map((d, i) => ({ ...d, ...polarToXY(i * angleStep, maxR + 18) }));
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+      <svg viewBox="0 0 260 260" width="100%" style={{ maxWidth: 280 }}>
+        {gridPaths.map((points, i) => <polygon key={i} points={points} fill="none" stroke="var(--border)" strokeWidth={0.5} opacity={0.6} />)}
+        {axes.map((p, i) => <line key={i} x1={cx} y1={cy} x2={p.x} y2={p.y} stroke="var(--border)" strokeWidth={0.5} />)}
+        <polygon points={dataPath} fill="var(--accent)" fillOpacity={0.2} stroke="var(--accent)" strokeWidth={2} />
+        {dataPoints.map((p, i) => <circle key={i} cx={p.x} cy={p.y} r={3.5} fill="var(--accent)" />)}
+        {labels.map((l, i) => <text key={i} x={l.x} y={l.y} textAnchor="middle" dominantBaseline="middle" fontSize={10} fontWeight={600} fill="var(--text-secondary)">{l.axis}</text>)}
+      </svg>
+      <Flex gap={6} wrap style={{ justifyContent: "center" }}>
+        {data.map((d) => (
+          <div key={d.axis} style={{ padding: "3px 8px", borderRadius: 6, background: "var(--bg-deep)", border: "1px solid var(--border)", fontSize: 11 }}>
+            <strong style={{ color: "var(--accent)" }}>{d.score}</strong>
+            <span style={{ color: "var(--text-secondary)", marginLeft: 3 }}>{d.axis}</span>
+            <span style={{ color: "var(--text-muted)", marginLeft: 3, fontSize: 9 }}>({d.sessions}x)</span>
+          </div>
+        ))}
+      </Flex>
+    </div>
+  );
+}
+
+// ── MiniBarChart ──
+
+function MiniBarChart({ data, valueKey, color }: { data: Array<Record<string, unknown>>; valueKey: string; color: string }) {
+  const values = data.map((d) => Number(d[valueKey]) || 0);
+  const max = Math.max(...values, 1);
+  return (
+    <Flex align="flex-end" gap={3} style={{ height: 80 }}>
+      {data.map((d, i) => {
+        const val = values[i];
+        const h = Math.max((val / max) * 100, 3);
+        const label = String(d["week"] ?? "").slice(5, 10);
+        return (
+          <Flex key={i} vertical align="center" gap={3} style={{ flex: 1 }}>
+            {val > 0 && <Text style={{ fontSize: 9, color: "var(--text-muted)" }}>{val}</Text>}
+            <div style={{ width: "100%", maxWidth: 22, height: `${h}%`, borderRadius: 3, background: val > 0 ? color : "var(--border)", transition: "height 0.3s ease" }} />
+            <Text style={{ fontSize: 8, color: "var(--text-muted)" }}>{label}</Text>
+          </Flex>
+        );
+      })}
+    </Flex>
+  );
+}
+
+// ── MiniLineChart ──
+
+function MiniLineChart({ data, valueKey, color, suffix = "" }: { data: Array<Record<string, unknown>>; valueKey: string; color: string; suffix?: string }) {
+  const values = data.map((d) => Number(d[valueKey]) || 0);
+  const max = Math.max(...values, 1);
+  const w = 360, h = 80, pad = 16;
+  const points = values.map((v, i) => ({
+    x: pad + (i / Math.max(values.length - 1, 1)) * (w - 2 * pad),
+    y: h - pad - (v / max) * (h - 2 * pad),
+  }));
+  const pathD = points.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
+  const areaD = `${pathD} L ${points[points.length - 1]?.x ?? w} ${h - pad} L ${pad} ${h - pad} Z`;
+  return (
+    <svg viewBox={`0 0 ${w} ${h}`} style={{ width: "100%", height: 80 }}>
+      <path d={areaD} fill={color} opacity={0.08} />
+      <path d={pathD} fill="none" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+      {points.map((p, i) => (
+        <g key={i}>
+          <circle cx={p.x} cy={p.y} r={2.5} fill={color} />
+          {values[i] > 0 && <text x={p.x} y={p.y - 7} textAnchor="middle" fontSize={8} fill="var(--text-muted)">{values[i]}{suffix}</text>}
+        </g>
+      ))}
+    </svg>
+  );
+}
+
 // ── Dashboard Page ──
 
 export default function HomePage() {
@@ -93,6 +214,7 @@ export default function HomePage() {
   // F3 fix: All hooks must be called before any early returns (Rules of Hooks)
   const [weakSkill, setWeakSkill] = useState<{ module: string; cefr: string } | null>(null);
   const [dailyActivity, setDailyActivity] = useState<Array<{ date: string; count: number }> | null>(null);
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [mounted, setMounted] = useState(false);
   // Greeting must be state-driven to avoid hydration mismatch (server vs client time)
   const [greeting, setGreeting] = useState("Xin chào");
@@ -131,11 +253,14 @@ export default function HomePage() {
     });
   }, [isReady, isNewUser]);
 
-  // Streak Calendar data (lazy fetch from analytics)
+  // Analytics data (merged from Progress page - lazy fetch)
   useEffect(() => {
     if (!isReady || isNewUser) return;
-    api.get<{ dailyActivity?: Array<{ date: string; count: number }> }>("/analytics")
-      .then((d) => { if (d?.dailyActivity) setDailyActivity(d.dailyActivity); })
+    api.get<AnalyticsData>("/analytics")
+      .then((d) => {
+        setAnalyticsData(d);
+        if (d?.dailyActivity) setDailyActivity(d.dailyActivity);
+      })
       .catch(() => {});
   }, [isReady, isNewUser]);
 
@@ -332,7 +457,7 @@ export default function HomePage() {
               return (
                 <button
                   className="btn-shimmer"
-                  onClick={() => router.push("/progress")}
+                  onClick={() => router.push("/daily-challenge")}
                   style={{
                     width: "100%",
                     display: "flex",
@@ -602,6 +727,80 @@ export default function HomePage() {
               </Flex>
             )}
           </div>
+
+          {/* ── Analytics Section (merged from Progress) ── */}
+          {!isNewUser && analyticsData && (
+            <>
+              {/* Predicted TOEIC Score */}
+              <PredictedScore />
+
+              {/* Skill Radar */}
+              {analyticsData.skillRadar?.length > 0 && (
+                <div className="glass-card" style={{ padding: "24px 28px" }}>
+                  <Flex align="center" gap={10} style={{ marginBottom: 20 }}>
+                    <RadarChartOutlined style={{ color: "var(--accent)", fontSize: 18 }} />
+                    <Text style={{ fontSize: 20, fontWeight: 700, fontFamily: "var(--font-display)" }}>Biểu đồ kỹ năng</Text>
+                  </Flex>
+                  <SkillRadar data={analyticsData.skillRadar} />
+                </div>
+              )}
+
+              {/* Charts Grid */}
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "var(--space-6)" }}>
+                {/* Weekly XP */}
+                <div className="glass-card" style={{ padding: "20px 24px" }}>
+                  <Flex align="center" gap={8} style={{ marginBottom: 16 }}>
+                    <ThunderboltOutlined style={{ color: "var(--xp)", fontSize: 16 }} />
+                    <Text style={{ fontSize: 16, fontWeight: 700, fontFamily: "var(--font-display)" }}>XP theo tuần</Text>
+                  </Flex>
+                  <MiniBarChart data={analyticsData.weeklyXP} valueKey="xp" color="var(--accent)" />
+                </div>
+
+                {/* Accuracy Trends */}
+                {analyticsData.accuracyTrends?.length > 0 && (
+                  <div className="glass-card" style={{ padding: "20px 24px" }}>
+                    <Flex align="center" gap={8} style={{ marginBottom: 16 }}>
+                      <TrophyOutlined style={{ color: "var(--success)", fontSize: 16 }} />
+                      <Text style={{ fontSize: 16, fontWeight: 700, fontFamily: "var(--font-display)" }}>Điểm thử thách</Text>
+                    </Flex>
+                    <MiniLineChart data={analyticsData.accuracyTrends} valueKey="accuracy" color="var(--success)" suffix="%" />
+                  </div>
+                )}
+
+                {/* Vocabulary Growth */}
+                {analyticsData.vocabularyGrowth?.length > 0 && (
+                  <div className="glass-card" style={{ padding: "20px 24px" }}>
+                    <Flex align="center" gap={8} style={{ marginBottom: 16 }}>
+                      <BookOutlined style={{ color: "var(--info)", fontSize: 16 }} />
+                      <Text style={{ fontSize: 16, fontWeight: 700, fontFamily: "var(--font-display)" }}>Tăng trưởng từ vựng</Text>
+                    </Flex>
+                    <MiniLineChart data={analyticsData.vocabularyGrowth} valueKey="total_words" color="var(--info)" />
+                  </div>
+                )}
+              </div>
+
+              {/* Reading Stats */}
+              <ReadingStatsBlock />
+
+              {/* Summary footer */}
+              {analyticsData.totalStats && (
+                <div className="glass-card" style={{
+                  padding: "16px 24px",
+                  background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+                  borderRadius: "var(--radius-2xl)",
+                }}>
+                  <Flex align="center" justify="center" gap={16} style={{ color: "#fff" }}>
+                    <Text style={{ color: "#fff", fontSize: 13 }}>
+                      <AimOutlined style={{ marginRight: 4 }} />
+                      Tổng <strong>{analyticsData.totalStats.totalActivities}</strong> hoạt động ·
+                      Streak tốt nhất <strong>{analyticsData.totalStats.bestStreak}</strong> ngày ·
+                      <strong> {analyticsData.totalStats.totalQuizzes}</strong> thử thách
+                    </Text>
+                  </Flex>
+                </div>
+              )}
+            </>
+          )}
 
         </Flex>
       </div>

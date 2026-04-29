@@ -50,7 +50,6 @@ const LEARN_HUB_ITEMS = [
 const REVIEW_HUB_ITEMS = [
   { label: "Ôn tập", icon: <AppstoreOutlined />, href: "/review-quiz" },
   { label: "Sổ lỗi sai", icon: <BookFilled />, href: "/error-notebook" },
-  { label: "Tiến độ", icon: <BulbOutlined />, href: "/progress" },
   { label: "Thi thử", icon: <FireOutlined />, href: "/mock-test" },
 ];
 
@@ -61,7 +60,6 @@ function getActiveTab(pathname: string): string {
   if (
     pathname.startsWith("/review-quiz") ||
     pathname.startsWith("/error-notebook") ||
-    pathname.startsWith("/progress") ||
     pathname.startsWith("/mock-test") ||
     pathname.startsWith("/daily-challenge")
   ) return "review";

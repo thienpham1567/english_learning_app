@@ -83,7 +83,6 @@ const navGroups: (NavItem | NavGroup)[] = [
       { href: "/review", label: "Ôn tập hôm nay", icon: HistoryOutlined },
       { href: "/review-quiz", label: "Ôn lỗi sai", icon: RedoOutlined },
       { href: "/error-notebook", label: "Sổ lỗi sai", icon: BookOutlined },
-      { href: "/progress", label: "Tiến độ", icon: BarChartOutlined },
     ],
   },
 ];
