@@ -2,8 +2,7 @@
 
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import Image from "next/image";
-import { Alert, Button, Card, Divider, Flex, Typography } from "antd";
+import { Alert, Button, Divider, Flex, Typography } from "antd";
 import {
   MessageOutlined,
   BookOutlined,
@@ -13,8 +12,10 @@ import {
   RocketOutlined,
   StarFilled,
   CheckCircleFilled,
+  SoundOutlined,
 } from "@ant-design/icons";
 import { authClient } from "@/lib/auth-client";
+import { Logo } from "@/components/shared/Logo";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -41,36 +42,99 @@ const GoogleIcon = () => (
 
 const FEATURES = [
   {
-    icon: <MessageOutlined style={{ fontSize: 20, color: "#52c41a" }} />,
+    icon: <MessageOutlined style={{ fontSize: 18 }} />,
     title: "Gia sư AI thông minh",
     desc: "Trò chuyện tự nhiên, sửa lỗi ngay, 3 phong cách dạy.",
-    color: "#52c41a",
+    gradient: "linear-gradient(135deg, var(--accent), var(--secondary))",
   },
   {
-    icon: <BookOutlined style={{ fontSize: 20, color: "#1890ff" }} />,
+    icon: <BookOutlined style={{ fontSize: 18 }} />,
     title: "Tra cứu từ điển",
     desc: "Tra từ, nghe phát âm, lưu vào bộ flashcard để ôn.",
-    color: "#1890ff",
+    gradient: "linear-gradient(135deg, var(--tertiary), var(--accent))",
   },
   {
-    icon: <ThunderboltOutlined style={{ fontSize: 20, color: "#faad14" }} />,
+    icon: <ThunderboltOutlined style={{ fontSize: 18 }} />,
     title: "Thử thách hàng ngày",
     desc: "5 câu hỏi mỗi ngày, tích điểm XP và giữ streak.",
-    color: "#faad14",
+    gradient: "linear-gradient(135deg, var(--fire, var(--warning)), var(--error))",
   },
   {
-    icon: <EditOutlined style={{ fontSize: 20, color: "#722ed1" }} />,
+    icon: <EditOutlined style={{ fontSize: 18 }} />,
     title: "Luyện viết & ngữ pháp",
     desc: "Viết bài, AI chấm điểm chi tiết theo từng tiêu chí.",
-    color: "#722ed1",
+    gradient: "linear-gradient(135deg, var(--secondary), var(--tertiary))",
   },
 ];
 
 const STATS = [
   { value: "10K+", label: "người dùng" },
   { value: "50K+", label: "bài luyện tập" },
-  { value: "4.9", label: "⭐ đánh giá" },
+  { value: "4.9", label: "đánh giá", icon: <StarFilled style={{ fontSize: 10 }} /> },
 ];
+
+/* ── Sign-in Logo (for right panel, adapts to page bg) ── */
+function SignInLogo() {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 14, userSelect: "none" }}>
+      <div
+        style={{
+          position: "relative",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          width: 48,
+          height: 48,
+          borderRadius: 14,
+          background: "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 50%, black))",
+          boxShadow: "0 6px 20px color-mix(in srgb, var(--accent) 35%, transparent)",
+          flexShrink: 0,
+        }}
+      >
+        <svg
+          width="26"
+          height="26"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="var(--text-on-accent)"
+          strokeWidth="2.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        >
+          <path d="M5 6h14" />
+          <path d="M12 6v11" />
+          <circle cx="12" cy="20" r="1.5" fill="var(--text-on-accent)" stroke="none" />
+        </svg>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
+        <span
+          style={{
+            fontFamily: '"Plus Jakarta Sans", "Inter", sans-serif',
+            fontSize: 22,
+            fontWeight: 800,
+            lineHeight: 1.1,
+            letterSpacing: "-0.02em",
+            color: "var(--ink)",
+          }}
+        >
+          THIEN<span style={{ color: "var(--accent)" }}>GLISH</span>
+        </span>
+        <span
+          style={{
+            fontSize: 10,
+            fontWeight: 600,
+            textTransform: "uppercase",
+            letterSpacing: "0.15em",
+            color: "var(--text-muted)",
+            marginTop: 2,
+          }}
+        >
+          English Learning
+        </span>
+      </div>
+    </div>
+  );
+}
 
 function SignInContent() {
   const searchParams = useSearchParams();
@@ -96,55 +160,47 @@ function SignInContent() {
   return (
     <Flex vertical align="center" className="anim-fade-up" style={{ width: "100%", maxWidth: 420 }}>
 
-      {/* Logo + greeting */}
-      <div style={{ textAlign: "center", marginBottom: 8 }}>
-        <Image
-          src="/english-logo-app.svg"
-          alt="English logo app"
-          width={250}
-          height={150}
-          style={{ height: 60, width: "auto", borderRadius: 14 }}
-          priority
-          unoptimized
-        />
+      {/* Logo */}
+      <div className="anim-fade-up" style={{ marginBottom: 24 }}>
+        <SignInLogo />
       </div>
 
       <Title
         level={2}
         className="anim-fade-up anim-delay-1"
         style={{
-          marginTop: 20, marginBottom: 4,
+          marginTop: 8, marginBottom: 4,
           fontStyle: "italic",
           fontFamily: "var(--font-display)",
           fontSize: 28,
         }}
       >
-        Chào mừng bạn 👋
+        Chào mừng bạn
       </Title>
       <Text type="secondary" className="anim-fade-up anim-delay-1" style={{ fontSize: 14 }}>
         Đăng nhập để bắt đầu hành trình học tiếng Anh
       </Text>
 
       {/* Value props */}
-      <Card
+      <div
         className="anim-fade-up anim-delay-2"
         style={{
-          width: "100%", marginTop: 24, borderRadius: 16,
+          width: "100%", marginTop: 24, borderRadius: 18,
           background: "var(--surface)", border: "1px solid var(--border)",
+          padding: "16px 20px",
         }}
-        styles={{ body: { padding: "14px 18px" } }}
       >
-        <Flex vertical gap={10}>
+        <Flex vertical gap={12}>
           {[
             { icon: <RocketOutlined style={{ color: "var(--accent)" }} />, text: "Luyện IELTS & TOEIC với gia sư AI" },
-            { icon: <BookOutlined style={{ color: "var(--accent)" }} />, text: "Tra từ, lưu từ, ôn tập tự động" },
+            { icon: <SoundOutlined style={{ color: "var(--accent)" }} />, text: "Luyện phát âm, nghe, đọc, viết toàn diện" },
             { icon: <StarFilled style={{ color: "var(--accent)" }} />, text: "Thử thách mỗi ngày, giữ vững streak" },
           ].map((item) => (
-            <Flex key={item.text} align="center" gap={10}>
+            <Flex key={item.text} align="center" gap={12}>
               <div style={{
-                width: 30, height: 30, borderRadius: 8,
-                background: "color-mix(in srgb, var(--accent) 12%, transparent)",
-                display: "flex", alignItems: "center", justifyContent: "center",
+                width: 32, height: 32, borderRadius: 10,
+                background: "color-mix(in srgb, var(--accent) 10%, transparent)",
+                display: "grid", placeItems: "center",
                 flexShrink: 0,
               }}>
                 {item.icon}
@@ -153,23 +209,45 @@ function SignInContent() {
             </Flex>
           ))}
         </Flex>
-      </Card>
+      </div>
 
       {/* Sign in button */}
       <div className="anim-fade-up anim-delay-3" style={{ width: "100%", marginTop: 24 }}>
-        <Button
-          block
-          size="large"
-          icon={<GoogleIcon />}
+        <button
           onClick={handleGoogleSignIn}
-          loading={isLoading}
+          disabled={isLoading}
           style={{
-            borderRadius: 14, height: 52, fontSize: 15, fontWeight: 600,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 10,
+            width: "100%",
+            borderRadius: 14,
+            height: 52,
+            fontSize: 15,
+            fontWeight: 600,
+            border: "1px solid var(--border)",
+            background: "var(--surface)",
+            color: "var(--ink)",
+            cursor: isLoading ? "wait" : "pointer",
             boxShadow: "0 2px 12px rgba(0,0,0,0.06)",
+            transition: "all 0.2s ease",
+            opacity: isLoading ? 0.7 : 1,
+          }}
+          onMouseEnter={(e) => {
+            if (!isLoading) {
+              e.currentTarget.style.borderColor = "var(--accent)";
+              e.currentTarget.style.boxShadow = "0 4px 20px color-mix(in srgb, var(--accent) 15%, transparent)";
+            }
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = "var(--border)";
+            e.currentTarget.style.boxShadow = "0 2px 12px rgba(0,0,0,0.06)";
           }}
         >
-          Đăng nhập bằng Google
-        </Button>
+          <GoogleIcon />
+          {isLoading ? "Đang đăng nhập..." : "Đăng nhập bằng Google"}
+        </button>
 
         <Flex align="center" justify="center" gap={6} style={{ marginTop: 12 }}>
           <SafetyCertificateOutlined style={{ fontSize: 12, color: "var(--text-muted)" }} />
@@ -190,8 +268,8 @@ function SignInContent() {
       )}
 
       {/* Feature cards */}
-      <Divider className="anim-fade-up anim-delay-3" style={{ margin: "24px 0 16px" }}>
-        <Text type="secondary" style={{ fontSize: 12, letterSpacing: "0.06em", fontWeight: 600 }}>
+      <Divider className="anim-fade-up anim-delay-3" style={{ margin: "28px 0 16px" }}>
+        <Text type="secondary" style={{ fontSize: 11, letterSpacing: "0.08em", fontWeight: 600 }}>
           TÍNH NĂNG NỔI BẬT
         </Text>
       </Divider>
@@ -206,20 +284,33 @@ function SignInContent() {
         }}
       >
         {FEATURES.map((card) => (
-          <Card
+          <div
             key={card.title}
-            hoverable
             style={{
-              borderRadius: 14,
+              borderRadius: 16,
+              border: "1px solid var(--border)",
+              background: "var(--surface)",
+              padding: "16px 16px",
               transition: "all 0.2s ease",
+              cursor: "default",
             }}
-            styles={{ body: { padding: "14px 16px" } }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.borderColor = "color-mix(in srgb, var(--accent) 40%, transparent)";
+              e.currentTarget.style.transform = "translateY(-2px)";
+              e.currentTarget.style.boxShadow = "var(--shadow-md)";
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.borderColor = "var(--border)";
+              e.currentTarget.style.transform = "translateY(0)";
+              e.currentTarget.style.boxShadow = "none";
+            }}
           >
             <div style={{
               width: 36, height: 36, borderRadius: 10,
-              background: `${card.color}12`,
-              display: "flex", alignItems: "center", justifyContent: "center",
+              background: card.gradient,
+              display: "grid", placeItems: "center",
               marginBottom: 10,
+              color: "var(--text-on-accent)",
             }}>
               {card.icon}
             </div>
@@ -229,7 +320,7 @@ function SignInContent() {
             <Text type="secondary" style={{ fontSize: 11, lineHeight: 1.5 }}>
               {card.desc}
             </Text>
-          </Card>
+          </div>
         ))}
       </div>
     </Flex>
@@ -249,7 +340,7 @@ export default function SignInPage() {
           position: "relative",
           width: "45%",
           overflow: "hidden",
-          background: "var(--ink)",
+          background: "var(--sidebar-bg, var(--bg-deep))",
         }}
       >
         {/* Grain overlay */}
@@ -262,7 +353,7 @@ export default function SignInPage() {
             position: "absolute",
             inset: 0,
             background:
-              "radial-gradient(ellipse 70% 60% at 75% 15%, rgba(116,196,201,0.22) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 20% 85%, rgba(144,208,212,0.12) 0%, transparent 60%)",
+              "radial-gradient(ellipse 70% 60% at 75% 15%, color-mix(in srgb, var(--accent) 18%, transparent) 0%, transparent 70%), radial-gradient(ellipse 50% 40% at 20% 85%, color-mix(in srgb, var(--secondary) 12%, transparent) 0%, transparent 60%)",
           }}
         />
 
@@ -272,15 +363,20 @@ export default function SignInPage() {
           gap={32}
           style={{ position: "relative", zIndex: 10, maxWidth: 380, padding: "0 40px" }}
         >
+          {/* Logo on left panel */}
+          <div className="anim-fade-up">
+            <Logo collapsed={false} />
+          </div>
+
           {/* Quote */}
           <div className="anim-fade-up anim-delay-1" style={{ textAlign: "center" }}>
             <Paragraph
               style={{
-                fontSize: 32,
+                fontSize: 28,
                 fontWeight: 300,
                 fontStyle: "italic",
                 lineHeight: 1.4,
-                color: "rgba(255,255,255,0.9)",
+                color: "var(--sidebar-text-active, rgba(255,255,255,0.9))",
                 fontFamily: "var(--font-display)",
                 margin: 0,
               }}
@@ -291,7 +387,7 @@ export default function SignInPage() {
 
           <Divider
             className="anim-fade-up anim-delay-2"
-            style={{ width: 48, minWidth: 48, borderColor: "rgba(116,196,201,0.4)", margin: 0 }}
+            style={{ width: 48, minWidth: 48, borderColor: "color-mix(in srgb, var(--accent) 40%, transparent)", margin: 0 }}
           />
 
           <Text
@@ -300,7 +396,7 @@ export default function SignInPage() {
               fontSize: 11,
               textTransform: "uppercase",
               letterSpacing: "0.22em",
-              color: "rgba(255,255,255,0.4)",
+              color: "var(--sidebar-text, rgba(255,255,255,0.4))",
             }}
           >
             Trợ lý học tập tiếng Anh
@@ -314,53 +410,54 @@ export default function SignInPage() {
           >
             {STATS.map((s) => (
               <div key={s.label} style={{ textAlign: "center" }}>
-                <Text style={{ fontSize: 22, fontWeight: 700, color: "rgba(255,255,255,0.9)", display: "block", fontFamily: "var(--font-display)" }}>
+                <Text style={{ fontSize: 22, fontWeight: 700, color: "var(--sidebar-text-active, rgba(255,255,255,0.9))", display: "block", fontFamily: "var(--font-display)" }}>
                   {s.value}
                 </Text>
-                <Text style={{ fontSize: 11, color: "rgba(255,255,255,0.4)" }}>
-                  {s.label}
+                <Text style={{ fontSize: 11, color: "var(--sidebar-text, rgba(255,255,255,0.4))", display: "inline-flex", alignItems: "center", gap: 3 }}>
+                  {s.icon} {s.label}
                 </Text>
               </div>
             ))}
           </Flex>
 
           {/* Floating testimonial card */}
-          <Card
+          <div
             className="anim-fade-up anim-delay-5"
             style={{
-              borderRadius: 16, border: "1px solid rgba(255,255,255,0.1)",
-              background: "rgba(255,255,255,0.06)",
+              borderRadius: 18,
+              border: "1px solid var(--sidebar-border, rgba(255,255,255,0.1))",
+              background: "rgba(255,255,255,0.05)",
               backdropFilter: "blur(12px)",
+              padding: "18px 22px",
             }}
-            styles={{ body: { padding: "16px 20px" } }}
           >
-            <Flex vertical gap={8}>
-              <Flex gap={4}>
+            <Flex vertical gap={10}>
+              <Flex gap={3}>
                 {[1, 2, 3, 4, 5].map((i) => (
-                  <StarFilled key={i} style={{ fontSize: 12, color: "#faad14" }} />
+                  <StarFilled key={i} style={{ fontSize: 12, color: "var(--xp)" }} />
                 ))}
               </Flex>
-              <Text style={{ fontSize: 13, color: "rgba(255,255,255,0.8)", fontStyle: "italic", lineHeight: 1.6 }}>
+              <Text style={{ fontSize: 13, color: "var(--sidebar-text-active, rgba(255,255,255,0.8))", fontStyle: "italic", lineHeight: 1.6 }}>
                 &quot;App rất tiện, AI sửa lỗi phát âm giúp mình tự tin hơn khi nói tiếng Anh.&quot;
               </Text>
-              <Flex align="center" gap={8}>
+              <Flex align="center" gap={10}>
                 <div style={{
-                  width: 28, height: 28, borderRadius: 8,
+                  width: 30, height: 30, borderRadius: 10,
                   background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-                  display: "flex", alignItems: "center", justifyContent: "center",
+                  display: "grid", placeItems: "center",
                 }}>
-                  <Text style={{ fontSize: 12, color: "#fff", fontWeight: 700 }}>M</Text>
+                  <Text style={{ fontSize: 13, color: "var(--text-on-accent)", fontWeight: 700 }}>M</Text>
                 </div>
                 <div>
-                  <Text style={{ fontSize: 12, color: "rgba(255,255,255,0.7)", fontWeight: 600 }}>Minh Anh</Text>
+                  <Text style={{ fontSize: 12, color: "var(--sidebar-text-active, rgba(255,255,255,0.7))", fontWeight: 600 }}>Minh Anh</Text>
                   <br />
-                  <Text style={{ fontSize: 10, color: "rgba(255,255,255,0.35)" }}>
+                  <Text style={{ fontSize: 10, color: "var(--sidebar-text, rgba(255,255,255,0.35))" }}>
                     <CheckCircleFilled style={{ marginRight: 3 }} /> Đã dùng 6 tháng
                   </Text>
                 </div>
               </Flex>
             </Flex>
-          </Card>
+          </div>
         </Flex>
       </Flex>
 
