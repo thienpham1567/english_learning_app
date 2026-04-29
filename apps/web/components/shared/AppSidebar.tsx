@@ -49,7 +49,6 @@ const navGroups: (NavItem | NavGroup)[] = [
     label: "Luyện tập",
     items: [
       { href: "/english-chatbot", label: "Trò chuyện", icon: CommentOutlined },
-      { href: "/grammar-quiz", label: "Ngữ pháp", icon: BulbOutlined },
       { href: "/listening", label: "Luyện nghe", icon: SoundOutlined },
       { href: "/pronunciation", label: "Luyện nói", icon: AudioOutlined },
       { href: "/writing-practice", label: "Luyện viết", icon: EditOutlined },
@@ -57,11 +56,11 @@ const navGroups: (NavItem | NavGroup)[] = [
     ],
   },
   {
-    key: "study",
-    label: "Học theo chủ đề",
+    key: "grammar",
+    label: "Ngữ pháp",
     items: [
-      { href: "/study-sets", label: "Chủ đề học tập", icon: AppstoreOutlined },
-      { href: "/grammar-lessons", label: "Bài học ngữ pháp", icon: BookOutlined },
+      { href: "/grammar-lessons", label: "Bài học", icon: BookOutlined },
+      { href: "/grammar-quiz", label: "Luyện đề", icon: BulbOutlined },
     ],
   },
   {
@@ -75,12 +74,19 @@ const navGroups: (NavItem | NavGroup)[] = [
   },
   {
     key: "assess",
-    label: "Đánh giá",
+    label: "Kiểm tra & Ôn tập",
     items: [
-      { href: "/daily-challenge", label: "Thử thách", icon: FireOutlined },
+      { href: "/daily-challenge", label: "Thử thách hàng ngày", icon: FireOutlined },
       { href: "/mock-test", label: "Thi thử", icon: FileSearchOutlined },
       { href: "/review", label: "Ôn tập hôm nay", icon: HistoryOutlined },
       { href: "/error-notebook", label: "Sổ lỗi sai", icon: BookOutlined },
+    ],
+  },
+  {
+    key: "explore",
+    label: "Khám phá",
+    items: [
+      { href: "/study-sets", label: "Chủ đề học tập", icon: AppstoreOutlined },
     ],
   },
 ];

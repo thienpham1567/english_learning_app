@@ -43,14 +43,15 @@ const LEARN_HUB_ITEMS = [
   { label: "Luyện đọc", icon: <ReadOutlined />, href: "/reading" },
   { label: "Luyện nói", icon: <AudioOutlined />, href: "/pronunciation" },
   { label: "Luyện viết", icon: <EditOutlined />, href: "/writing-practice" },
-  { label: "Ngữ pháp", icon: <BulbOutlined />, href: "/grammar-quiz" },
-  { label: "Chủ đề", icon: <AppstoreOutlined />, href: "/study-sets" },
+  { label: "Bài học ngữ pháp", icon: <BookFilled />, href: "/grammar-lessons" },
+  { label: "Luyện đề ngữ pháp", icon: <BulbOutlined />, href: "/grammar-quiz" },
 ];
 
 const REVIEW_HUB_ITEMS = [
-  { label: "Ôn tập", icon: <AppstoreOutlined />, href: "/review-quiz" },
+  { label: "Ôn tập hôm nay", icon: <AppstoreOutlined />, href: "/review" },
   { label: "Sổ lỗi sai", icon: <BookFilled />, href: "/error-notebook" },
   { label: "Thi thử", icon: <FireOutlined />, href: "/mock-test" },
+  { label: "Thử thách", icon: <BulbOutlined />, href: "/daily-challenge" },
 ];
 
 function getActiveTab(pathname: string): string {
@@ -58,7 +59,7 @@ function getActiveTab(pathname: string): string {
   if (pathname.startsWith("/english-chatbot")) return "chat";
   if (pathname.startsWith("/my-vocabulary") || pathname.startsWith("/dictionary")) return "profile";
   if (
-    pathname.startsWith("/review-quiz") ||
+    pathname.startsWith("/review") ||
     pathname.startsWith("/error-notebook") ||
     pathname.startsWith("/mock-test") ||
     pathname.startsWith("/daily-challenge")

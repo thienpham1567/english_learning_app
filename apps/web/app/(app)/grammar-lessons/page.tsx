@@ -186,7 +186,8 @@ export default function GrammarLessonsPage() {
               {/* Stats strip */}
               <div
                 style={{
-                  display: "flex",
+                  display: "grid",
+                  gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
                   gap: 10,
                   marginBottom: 16,
                 }}

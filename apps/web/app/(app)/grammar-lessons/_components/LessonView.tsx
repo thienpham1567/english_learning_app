@@ -1,5 +1,6 @@
 "use client";
 import { api } from "@/lib/api-client";
+import { useRouter } from "next/navigation";
 import { useState, useCallback, useEffect } from "react";
 import {
   isGrammarAnswerCorrect,
@@ -44,6 +45,7 @@ interface Props {
 }
 
 export function LessonView({ topicId, topicTitle, level, examMode, onBack, onComplete }: Props) {
+  const router = useRouter();
   const [state, setState] = useState<LessonState>("loading");
   const [lesson, setLesson] = useState<GrammarLessonData | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -501,7 +503,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             }}>
               <ArrowLeftOutlined /> Chủ đề khác
             </button>
-            <button onClick={() => { window.location.href = "/grammar-quiz"; }} style={{
+            <button onClick={() => { router.push("/grammar-quiz"); }} style={{
               padding: "11px 22px", borderRadius: 10, border: "none",
               background: "linear-gradient(135deg, var(--accent), var(--secondary))",
               color: "var(--text-on-accent)", cursor: "pointer", fontSize: 13, fontWeight: 700,

@@ -1,7 +1,7 @@
 "use client";
 
 import { Button, Card, Flex, Space, Statistic, Tag, Typography } from "antd";
-import { ReloadOutlined, StarOutlined, WarningOutlined, TrophyOutlined, SmileOutlined, LikeOutlined, FireOutlined, ThunderboltOutlined } from "@ant-design/icons";
+import { ReloadOutlined, StarOutlined, WarningOutlined, TrophyOutlined, SmileOutlined, LikeOutlined, FireOutlined, ThunderboltOutlined, BookOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import type { GrammarQuestion } from "@/lib/grammar-quiz/types";
 
@@ -152,10 +152,11 @@ export function ScoreSummary({
           <Button
             type="link"
             size="small"
+            icon={<BookOutlined />}
             style={{ fontSize: 12, padding: 0 }}
-            onClick={() => router.push("/english-chatbot?persona=christine")}
+            onClick={() => router.push("/grammar-lessons")}
           >
-            Luyện thêm với Christine (IELTS) →
+            Xem bài học ngữ pháp →
           </Button>
         </Flex>
       )}
