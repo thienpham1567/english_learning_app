@@ -42,6 +42,7 @@ export type AudioPlayerProps = {
 };
 
 function formatTime(seconds: number): string {
+  if (!Number.isFinite(seconds) || seconds < 0) return "0:00";
   const m = Math.floor(seconds / 60);
   const s = Math.floor(seconds % 60);
   return `${m}:${s.toString().padStart(2, "0")}`;
@@ -98,9 +99,20 @@ export function AudioPlayer({
 
   const handleLoadedMetadata = useCallback(() => {
     if (audioRef.current) {
-      setDuration(audioRef.current.duration);
+      const d = audioRef.current.duration;
+      if (Number.isFinite(d)) setDuration(d);
       setIsLoading(false);
       setAudioError(null);
+    }
+  }, []);
+
+  // For streamed audio that initially reports Infinity, the browser fires
+  // `durationchange` once the full file has been buffered and the real
+  // duration is known.
+  const handleDurationChange = useCallback(() => {
+    if (audioRef.current) {
+      const d = audioRef.current.duration;
+      if (Number.isFinite(d) && d > 0) setDuration(d);
     }
   }, []);
 
@@ -324,6 +336,7 @@ export function AudioPlayer({
         src={audioUrl}
         onTimeUpdate={handleTimeUpdate}
         onLoadedMetadata={handleLoadedMetadata}
+        onDurationChange={handleDurationChange}
         onEnded={handleEnded}
         onCanPlay={handleCanPlay}
         onError={handleError}
