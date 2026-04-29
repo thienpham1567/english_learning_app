@@ -210,7 +210,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
 
           {/* User answer vs Correct answer */}
           <div
-            style={{ display: "grid", gridTemplateColumns: ok ? "1fr" : "1fr 1fr", gap: 8 }}
+            style={{ display: "grid", gridTemplateColumns: ok ? "1fr" : "repeat(auto-fit, minmax(140px, 1fr))", gap: 8 }}
             className="answer-compare-grid"
           >
             <div
@@ -397,7 +397,7 @@ export function ChallengeResults({ answers, score, streak, badges, newBadges, ti
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1fr 1fr 1fr 1fr",
+              gridTemplateColumns: "repeat(auto-fit, minmax(100px, 1fr))",
               gap: 8,
               width: "100%",
               marginTop: 20,

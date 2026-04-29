@@ -76,7 +76,7 @@ export function AppShell({ children, user }: { children: ReactNode; user: AuthUs
               flexDirection: "column",
               flex: 1,
               overflow: "hidden",
-              padding: 24,
+              padding: isMobile ? 12 : 24,
               minHeight: 0,
               // Add bottom padding on mobile to account for bottom tab bar
               paddingBottom: isMobile ? 80 : 24,

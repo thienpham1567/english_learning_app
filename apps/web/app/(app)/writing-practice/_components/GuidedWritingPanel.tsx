@@ -222,7 +222,7 @@ export function GuidedWritingPanel() {
             <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
               Chủ đề <span style={{ fontWeight: 400 }}>(bỏ trống = ngẫu nhiên)</span>
             </p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(90px, 1fr))", gap: 8 }}>
               {TOPIC_CATEGORIES.map((cat) => (
                 <button
                   key={cat.key}
@@ -302,7 +302,7 @@ export function GuidedWritingPanel() {
           </div>
 
           {/* Outline + Vocab — side by side */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
             {/* Outline */}
             <div style={{
               padding: 14, borderRadius: 12,
@@ -502,7 +502,7 @@ export function GuidedWritingPanel() {
           })}
 
           {/* Strengths & Next Steps */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>
             <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
               <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
                 <CheckCircleOutlined style={{ color: "var(--success)" }} /> Điểm mạnh

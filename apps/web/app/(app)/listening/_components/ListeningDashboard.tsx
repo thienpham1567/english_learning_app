@@ -86,7 +86,7 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
+          gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
           gap: 10,
         }}
       >

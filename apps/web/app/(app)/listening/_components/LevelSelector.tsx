@@ -61,7 +61,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
         >
           Cấp độ CEFR
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(90px, 1fr))", gap: 10 }}>
           {CEFR_LEVELS.map((l) => {
             const meta = LEVEL_META[l];
             const isSelected = activeLevel === l;

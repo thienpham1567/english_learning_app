@@ -499,7 +499,7 @@ export default function EssayScorePage() {
             )}
 
             {/* Strengths & Next Steps */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>
               <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
                 <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
                   <CheckCircleOutlined style={{ color: "var(--success)" }} /> Điểm mạnh

@@ -583,7 +583,7 @@ export default function HomePage() {
           )}
 
           {/* ── Learning Style & Quick Actions Grid ── */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", gap: "var(--space-8)" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))", gap: "var(--space-8)" }}>
             {/* ── Learning Style (Story 16.3) ── */}
             {!isNewUser && (
               <div style={{ display: "flex", flexDirection: "column" }}>
@@ -746,7 +746,7 @@ export default function HomePage() {
               )}
 
               {/* Charts Grid */}
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "var(--space-6)" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "var(--space-6)" }}>
                 {/* Weekly XP */}
                 <div className="glass-card" style={{ padding: "20px 24px" }}>
                   <Flex align="center" gap={8} style={{ marginBottom: 16 }}>
