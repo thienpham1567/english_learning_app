@@ -27,7 +27,7 @@ interface TabItem {
   icon: ReactNode;
   activeIcon: ReactNode;
   href?: string;
-  action?: "learn-hub" | "review-hub";
+  action?: "learn-hub" | "review-hub" | "vocab-hub";
 }
 
 const TABS: TabItem[] = [
@@ -35,7 +35,7 @@ const TABS: TabItem[] = [
   { key: "chat", label: "Chat", icon: <MessageOutlined />, activeIcon: <MessageFilled />, href: "/english-chatbot" },
   { key: "learn", label: "Học", icon: <ReadOutlined />, activeIcon: <BookFilled />, action: "learn-hub" },
   { key: "review", label: "Ôn", icon: <BulbOutlined />, activeIcon: <BulbOutlined />, action: "review-hub" },
-  { key: "profile", label: "Từ vựng", icon: <UserOutlined />, activeIcon: <UserOutlined />, href: "/my-vocabulary" },
+  { key: "vocab", label: "Từ vựng", icon: <ReadOutlined />, activeIcon: <BookFilled />, action: "vocab-hub" },
 ];
 
 const LEARN_HUB_ITEMS = [
@@ -54,10 +54,16 @@ const REVIEW_HUB_ITEMS = [
   { label: "Thử thách", icon: <BulbOutlined />, href: "/daily-challenge" },
 ];
 
+const VOCAB_HUB_ITEMS = [
+  { label: "Từ điển", icon: <ReadOutlined />, href: "/dictionary" },
+  { label: "Từ vựng của tôi", icon: <UserOutlined />, href: "/my-vocabulary" },
+  { label: "Ôn tập flashcard", icon: <AppstoreOutlined />, href: "/flashcards" },
+];
+
 function getActiveTab(pathname: string): string {
   if (pathname.startsWith("/home")) return "home";
   if (pathname.startsWith("/english-chatbot")) return "chat";
-  if (pathname.startsWith("/my-vocabulary") || pathname.startsWith("/dictionary")) return "profile";
+  if (pathname.startsWith("/my-vocabulary") || pathname.startsWith("/dictionary") || pathname.startsWith("/flashcards")) return "vocab";
   if (
     pathname.startsWith("/review") ||
     pathname.startsWith("/error-notebook") ||
@@ -65,7 +71,6 @@ function getActiveTab(pathname: string): string {
     pathname.startsWith("/daily-challenge")
   ) return "review";
   if (
-    pathname.startsWith("/flashcards") ||
     pathname.startsWith("/grammar-quiz") ||
     pathname.startsWith("/grammar-lessons") ||
     pathname.startsWith("/writing-practice") ||
@@ -83,20 +88,22 @@ export function BottomTabBar() {
   const router = useRouter();
   const pathname = usePathname();
   const activeTab = getActiveTab(pathname);
-  const [activeHub, setActiveHub] = useState<"learn" | "review" | null>(null);
+  const [activeHub, setActiveHub] = useState<"learn" | "review" | "vocab" | null>(null);
 
   const handleTabClick = (tab: TabItem) => {
     if (tab.action === "learn-hub") {
       setActiveHub((prev) => (prev === "learn" ? null : "learn"));
     } else if (tab.action === "review-hub") {
       setActiveHub((prev) => (prev === "review" ? null : "review"));
+    } else if (tab.action === "vocab-hub") {
+      setActiveHub((prev) => (prev === "vocab" ? null : "vocab"));
     } else if (tab.href) {
       setActiveHub(null);
       router.push(tab.href);
     }
   };
 
-  const hubItems = activeHub === "learn" ? LEARN_HUB_ITEMS : activeHub === "review" ? REVIEW_HUB_ITEMS : [];
+  const hubItems = activeHub === "learn" ? LEARN_HUB_ITEMS : activeHub === "review" ? REVIEW_HUB_ITEMS : activeHub === "vocab" ? VOCAB_HUB_ITEMS : [];
 
   return (
     <>
