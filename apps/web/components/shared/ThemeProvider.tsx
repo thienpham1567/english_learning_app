@@ -57,11 +57,17 @@ const darkTokens = {
 };
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState<ThemeMode>(() => {
-    if (typeof window === "undefined") return "light";
+  // Always start with "light" to match server render and avoid hydration mismatch.
+  // Real preference is synced from localStorage in the effect below.
+  const [mode, setMode] = useState<ThemeMode>("light");
+
+  // Sync theme from localStorage on mount (client-only)
+  useEffect(() => {
     const saved = localStorage.getItem(STORAGE_KEY);
-    return saved === "dark" || saved === "light" ? saved : "light";
-  });
+    const resolved = saved === "dark" || saved === "light" ? saved : "light";
+    setMode(resolved);
+    document.documentElement.setAttribute("data-theme", resolved);
+  }, []);
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", mode);
