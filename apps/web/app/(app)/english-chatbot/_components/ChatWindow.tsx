@@ -1021,8 +1021,9 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: 12,
-              fontSize: 14,
+              gap: 8,
+              flexWrap: "wrap",
+              fontSize: 12,
               color: "var(--text-muted)",
             }}
           >
