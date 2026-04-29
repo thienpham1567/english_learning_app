@@ -10,6 +10,7 @@ import { openAiConfig } from "@/lib/openai/config";
 import { GenerateDialogueInputSchema } from "@/lib/listening/types";
 import { getExamContext, parseExamMode } from "@/lib/exam-mode/context";
 import { VOICE_BY_ROLE, type VoiceRole } from "@/lib/tts/groq";
+import { routeLogger } from "@/lib/logger";
 
 /**
  * POST /api/listening/generate-dialogue
@@ -57,6 +58,7 @@ Return ONLY valid JSON (no markdown fences) with this shape:
 }
 
 export async function POST(request: Request) {
+  const log = routeLogger("listening/generate-dialogue");
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
@@ -66,6 +68,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const parsed = GenerateDialogueInputSchema.safeParse(body);
     if (!parsed.success) {
+      log.warn({ details: parsed.error.flatten() }, "input.invalid");
       return Response.json(
         { error: "Invalid input", details: parsed.error.flatten() },
         { status: 400 },
@@ -75,9 +78,14 @@ export async function POST(request: Request) {
     const { topic, level, turns, speakers, examMode: rawMode } = parsed.data;
     const userId = session.user.id;
     const examMode = parseExamMode(rawMode);
+    const reqLog = log.child({ userId, topic, level, speakers, turns, examMode });
+
+    const model = openAiConfig.listeningModel;
+    reqLog.info({ model }, "llm.request");
+    const t0 = Date.now();
 
     const completion = await openAiClient.chat.completions.create({
-      model: openAiConfig.chatModel,
+      model,
       messages: [
         { role: "system", content: buildDialogueSystemPrompt({ examMode, speakers, turns }) },
         {
@@ -88,11 +96,23 @@ export async function POST(request: Request) {
       temperature: 0.8,
       response_format: { type: "json_object" },
     });
+    const llmMs = Date.now() - t0;
 
     const rawContent = completion.choices[0]?.message?.content;
     if (!rawContent) {
+      reqLog.error({ llmMs, model }, "llm.empty_response");
       return Response.json({ error: "AI did not return content" }, { status: 502 });
     }
+
+    reqLog.info(
+      {
+        llmMs,
+        model,
+        promptTokens: completion.usage?.prompt_tokens,
+        completionTokens: completion.usage?.completion_tokens,
+      },
+      "llm.response",
+    );
 
     let generated: {
       turns: { speaker: SpeakerId; text: string }[];
@@ -101,7 +121,7 @@ export async function POST(request: Request) {
     try {
       generated = JSON.parse(rawContent);
     } catch {
-      console.error("[Listening Dialogue] Failed to parse AI response:", rawContent);
+      reqLog.error({ rawContent, llmMs, model }, "llm.invalid_json");
       return Response.json({ error: "AI returned invalid JSON" }, { status: 502 });
     }
 
@@ -111,6 +131,7 @@ export async function POST(request: Request) {
       !Array.isArray(generated.questions) ||
       generated.questions.length === 0
     ) {
+      reqLog.error({ generated, model }, "llm.missing_fields");
       return Response.json({ error: "AI response missing required fields" }, { status: 502 });
     }
 
@@ -147,6 +168,11 @@ export async function POST(request: Request) {
       })
       .returning();
 
+    log.info(
+      { exerciseId: exercise.id, turns: dialogueTurns.length, questions: generated.questions.length },
+      "dialogue.created",
+    );
+
     return Response.json({
       id: exercise.id,
       level,
@@ -161,7 +187,7 @@ export async function POST(request: Request) {
       createdAt: exercise.createdAt,
     });
   } catch (err) {
-    console.error("[Listening Dialogue] Generate error:", err);
+    log.error({ err }, "dialogue.failed");
     return Response.json({ error: "Failed to generate dialogue" }, { status: 500 });
   }
 }

@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
 
 /**
  * POST /api/voice/transcribe
@@ -102,8 +103,18 @@ export async function POST(request: Request) {
     );
   }
 
+  const log = routeLogger("voice/transcribe", {
+    userId,
+    provider: provider.name,
+    model: provider.model,
+    file: audioFile.name || "audio",
+    size: audioFile.size,
+    mime: audioFile.type,
+    durationMs,
+  });
+
   try {
-    console.log(`[${provider.name} Whisper] Request: model=${provider.model}, file=${audioFile.name || "audio"}, size=${audioFile.size} bytes, mime=${audioFile.type}, duration=${durationMs}ms`);
+    log.info("whisper.request");
     const startMs = Date.now();
 
     const whisperForm = new FormData();
@@ -123,8 +134,10 @@ export async function POST(request: Request) {
 
     if (!response.ok) {
       const errorText = await response.text().catch(() => "");
-      console.error(`[${provider.name} Whisper] ERROR ${response.status} (${elapsed}ms): ${errorText}`);
-      console.error(`[${provider.name} Whisper] Headers:`, Object.fromEntries(response.headers.entries()));
+      log.error(
+        { status: response.status, elapsed, errorText, headers: Object.fromEntries(response.headers.entries()) },
+        "whisper.failed",
+      );
       return Response.json({ error: `Transcription failed: ${errorText}` }, { status: 502 });
     }
 
@@ -137,7 +150,7 @@ export async function POST(request: Request) {
         }))
       : [];
 
-    console.log(`[${provider.name} Whisper] OK (${elapsed}ms): "${result.text?.slice(0, 60)}...", ${words.length} words`);
+    log.info({ elapsed, chars: result.text?.length ?? 0, words: words.length }, "whisper.done");
 
     return Response.json({
       text: result.text,
@@ -146,7 +159,7 @@ export async function POST(request: Request) {
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    console.error(`[${provider.name} Whisper] Unexpected error: ${message}`);
+    log.error({ err: message }, "whisper.error");
     return Response.json({ error: `Internal error: ${message}` }, { status: 500 });
   }
 }

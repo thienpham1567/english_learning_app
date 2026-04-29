@@ -1,6 +1,8 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { synthesizeTtsForVoice, VOICES, parseAccent } from "@/lib/tts/groq";
+import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
+import { routeLogger } from "@/lib/logger";
 
 /**
  * POST /api/reading/audio/paragraph
@@ -46,25 +48,40 @@ export async function POST(request: Request) {
 
     const accent = parseAccent(body.accent);
     const voice = body.voice || VOICES[accent];
+    const speed = 0.9;
+    const cacheKey = `${voice}|${speed}|${text}`;
+    const log = routeLogger("reading/audio/paragraph", { userId, voice, accent, chars: text.length });
 
-    console.log(`[Paragraph TTS] voice=${voice}, text=${text.length} chars`);
+    const cached = await readTtsCache("reading-paragraph", cacheKey, "wav");
+    if (cached) {
+      log.info({ bytes: cached.length, cache: "hit" }, "audio.served");
+      return new Response(new Uint8Array(cached), {
+        headers: {
+          "Content-Type": "audio/wav",
+          "Cache-Control": "private, max-age=3600",
+          "X-Tts-Cache": "hit",
+        },
+      });
+    }
 
-    const audioBuffer = await synthesizeTtsForVoice({
-      text,
-      voice,
-      format: "wav",
-      speed: 0.9,
-    });
+    log.info("tts.request");
+    const t0 = Date.now();
+    const audioBuffer = await synthesizeTtsForVoice({ text, voice, format: "wav", speed });
+    const buf = Buffer.from(audioBuffer);
+    log.info({ ttsMs: Date.now() - t0, bytes: buf.length }, "tts.done");
 
-    return new Response(new Uint8Array(audioBuffer), {
+    await writeTtsCache("reading-paragraph", cacheKey, buf, "wav");
+
+    return new Response(new Uint8Array(buf), {
       headers: {
         "Content-Type": "audio/wav",
         "Cache-Control": "private, max-age=3600",
+        "X-Tts-Cache": "miss",
       },
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    console.error(`[Paragraph TTS] Error: ${message}`);
+    routeLogger("reading/audio/paragraph", { userId }).error({ err: message }, "audio.failed");
     return Response.json({ error: `TTS failed: ${message}` }, { status: 502 });
   }
 }

@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
+import { routeLogger } from "@/lib/logger";
 
 /**
  * POST /api/pronunciation/evaluate
@@ -17,6 +18,8 @@ export async function POST(request: Request) {
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
   }
+
+  const log = routeLogger("pronunciation/evaluate", { userId: session.user.id });
 
   try {
     const body = await request.json();
@@ -61,8 +64,12 @@ Return ONLY valid JSON:
   "tips": ["Luyện âm /θ/ bằng cách đặt lưỡi giữa hai hàm răng"]
 }`;
 
+    const model = openAiConfig.chatModel;
+    log.info({ model, targetChars: targetText.length, spokenChars: spokenText.length }, "llm.request");
+    const t0 = Date.now();
+
     const completion = await openAiClient.chat.completions.create({
-      model: openAiConfig.chatModel,
+      model,
       temperature: 0.3,
       response_format: { type: "json_object" },
       messages: [
@@ -73,16 +80,27 @@ Return ONLY valid JSON:
         },
       ],
     });
+    const llmMs = Date.now() - t0;
 
     const content = completion.choices[0]?.message?.content;
     if (!content) {
+      log.error({ llmMs }, "llm.empty");
       return Response.json({ error: "AI returned no content" }, { status: 502 });
     }
 
     const result = JSON.parse(content);
+    log.info(
+      {
+        llmMs,
+        promptTokens: completion.usage?.prompt_tokens,
+        completionTokens: completion.usage?.completion_tokens,
+        score: result?.score,
+      },
+      "llm.response",
+    );
     return Response.json(result);
   } catch (err) {
-    console.error("[pronunciation/evaluate] Error:", err);
+    log.error({ err }, "evaluate.failed");
     return Response.json({ error: "Evaluation failed" }, { status: 502 });
   }
 }

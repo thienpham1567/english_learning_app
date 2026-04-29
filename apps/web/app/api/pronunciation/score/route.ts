@@ -5,6 +5,7 @@ import { db } from "@repo/database";
 import { pronunciationAttempt } from "@repo/database";
 import { alignAndScore, tokenize, transcriptOverlap } from "@/lib/pronunciation/align";
 import { parseAccent } from "@/lib/tts/groq";
+import { routeLogger } from "@/lib/logger";
 
 /**
  * POST /api/pronunciation/score
@@ -84,6 +85,15 @@ export async function POST(request: Request) {
 
   const result = alignAndScore(referenceText, spokenText);
   const accent = parseAccent(body?.accent);
+  const log = routeLogger("pronunciation/score", {
+    userId,
+    accent,
+    refChars: referenceText.length,
+    spokenChars: spokenText.length,
+    overlap,
+    overall: result.overall,
+  });
+  log.info("score.computed");
 
   try {
     await db.insert(pronunciationAttempt).values({
@@ -94,8 +104,7 @@ export async function POST(request: Request) {
       accent,
     });
   } catch (err) {
-    console.error("[pronunciation/score] Persist failed:", err);
-    // Non-fatal — return the score even if persistence failed.
+    log.error({ err }, "persist.failed");
   }
 
   return Response.json({

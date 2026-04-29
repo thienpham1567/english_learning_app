@@ -2,6 +2,7 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { parseAccent, synthesizeTts, VOICES } from "@/lib/tts/groq";
 import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
+import { routeLogger } from "@/lib/logger";
 
 /**
  * POST /api/voice/synthesize
@@ -56,10 +57,12 @@ export async function POST(request: Request) {
   const voice = VOICES[accent];
   const cacheKey = `${voice}|${speed}|${text}`;
 
+  const log = routeLogger("voice/synthesize", { userId, accent, speed, chars: text.length });
+
   try {
     const cached = await readTtsCache("voice-synth", cacheKey, "wav");
     if (cached) {
-      console.log(`[Voice Synth] Cache HIT: accent=${accent}, ${cached.length} bytes`);
+      log.info({ bytes: cached.length, cache: "hit" }, "audio.served");
       return new Response(new Uint8Array(cached), {
         headers: {
           "Content-Type": "audio/wav",
@@ -69,10 +72,10 @@ export async function POST(request: Request) {
       });
     }
 
-    console.log(`[Voice Synth] Request: accent=${accent}, speed=${speed}, text="${text.slice(0, 50)}..."`);
-    const startMs = Date.now();
+    log.info("tts.request");
+    const t0 = Date.now();
     const audio = await synthesizeTts({ text, accent, speed });
-    console.log(`[Voice Synth] OK in ${Date.now() - startMs}ms, ${audio.byteLength} bytes`);
+    log.info({ ttsMs: Date.now() - t0, bytes: audio.byteLength }, "tts.done");
 
     const buf = Buffer.from(audio);
     await writeTtsCache("voice-synth", cacheKey, buf, "wav");
@@ -86,7 +89,7 @@ export async function POST(request: Request) {
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    console.error(`[Voice Synth] Groq synthesis failed: ${message}`);
+    log.error({ err: message }, "tts.failed");
     return Response.json({ error: `Speech synthesis failed: ${message}` }, { status: 502 });
   }
 }

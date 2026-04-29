@@ -10,6 +10,7 @@ import { listeningImport } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import ytdl from "@distube/ytdl-core";
+import { logger, routeLogger } from "@/lib/logger";
 
 // ── Constants ──
 const IMPORT_CACHE_DIR = path.join(
@@ -149,7 +150,8 @@ async function transcribeAudio(filePath: string): Promise<{
   const fileBuffer = await fs.readFile(filePath);
   const file = new File([fileBuffer], path.basename(filePath), { type: "audio/mpeg" });
 
-  console.log(`[ListeningImport] Transcribing via Groq Whisper: ${file.name}, ${fileBuffer.length} bytes`);
+  const log = logger.child({ route: "listening/import", op: "transcribe", file: file.name, bytes: fileBuffer.length });
+  log.info("whisper.request");
   const startMs = Date.now();
 
   const form = new FormData();
@@ -167,7 +169,7 @@ async function transcribeAudio(filePath: string): Promise<{
 
   if (!response.ok) {
     const errText = await response.text().catch(() => "");
-    console.error(`[ListeningImport] Groq Whisper ERROR ${response.status} (${Date.now() - startMs}ms): ${errText}`);
+    log.error({ status: response.status, ms: Date.now() - startMs, errText }, "whisper.failed");
     throw new Error(`Groq Whisper ${response.status}: ${errText}`);
   }
 
@@ -177,7 +179,10 @@ async function transcribeAudio(filePath: string): Promise<{
     duration?: number;
   };
 
-  console.log(`[ListeningImport] Groq Whisper OK (${Date.now() - startMs}ms): ${result.text?.length ?? 0} chars, ${result.segments?.length ?? 0} segments`);
+  log.info(
+    { ms: Date.now() - startMs, chars: result.text?.length ?? 0, segments: result.segments?.length ?? 0 },
+    "whisper.done",
+  );
 
   return {
     text: result.text ?? "",
@@ -253,6 +258,7 @@ export async function POST(request: Request) {
   }
 
   const userId = session.user.id;
+  const log = routeLogger("listening/import", { userId });
 
   try {
     const body = await request.json();
@@ -330,6 +336,17 @@ export async function POST(request: Request) {
       })
       .returning();
 
+    log.info(
+      {
+        importId: importRow.id,
+        durationSec,
+        segments: transcription.segments.length,
+        vocab: (analysis.keyVocab ?? []).length,
+        questions: (analysis.comprehensionQuestions ?? []).length,
+      },
+      "import.created",
+    );
+
     return Response.json({
       id: importRow.id,
       title: importRow.title,
@@ -340,7 +357,7 @@ export async function POST(request: Request) {
       questionCount: (analysis.comprehensionQuestions ?? []).length,
     });
   } catch (err) {
-    console.error("[ListeningImport] Error:", err);
+    log.error({ err }, "import.failed");
     const msg = (err as Error)?.message ?? "Failed to import audio";
     return Response.json({ error: msg }, { status: 500 });
   }

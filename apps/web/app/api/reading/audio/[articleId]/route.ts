@@ -9,6 +9,7 @@ import {
 } from "@/lib/tts/groq";
 import { fetchGuardianArticle } from "@/lib/reading/utils";
 import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
+import { routeLogger } from "@/lib/logger";
 
 /**
  * GET /api/reading/audio/[articleId]?accent=us|uk|au
@@ -76,13 +77,12 @@ export async function GET(
     : VOICES[accent];
 
   const cacheKey = `${articleId}|${voice}`;
+  const log = routeLogger("reading/audio", { userId, articleId, voice, accent });
 
   try {
-    // Short-circuit: if we already have cached audio for this (article, voice),
-    // return it without fetching the article or calling Groq.
     const cachedBuf = await readTtsCache("reading", cacheKey, "wav");
     if (cachedBuf) {
-      console.log(`[Reading Audio] Cache HIT: articleId=${articleId}, voice=${voice}, ${cachedBuf.length} bytes`);
+      log.info({ bytes: cachedBuf.length, cache: "hit" }, "audio.served");
       return new Response(new Uint8Array(cachedBuf), {
         headers: {
           "Content-Type": "audio/wav",
@@ -92,17 +92,13 @@ export async function GET(
       });
     }
 
-    // Fetch article using shared util instead of internal fetch
-    // This avoids Vercel deployment issues with nested relative API calls
     const article = await fetchGuardianArticle(decodeURIComponent(articleId));
 
     if (!article.paragraphs || article.paragraphs.length === 0) {
+      log.warn("article.empty");
       return Response.json({ error: "Article has no content" }, { status: 400 });
     }
 
-    // Cap text we send to TTS. Groq on_demand is 10 RPM — a 393-paragraph
-    // live-blog would take ~40 minutes and time out the request. Take the
-    // first N paragraphs up to a character budget suitable for a short listen.
     const MAX_PARAGRAPHS = 30;
     const MAX_CHARS = 6000;
     const picked: string[] = [];
@@ -115,28 +111,27 @@ export async function GET(
     }
     const paragraphs = picked.length > 0 ? picked : [article.paragraphs[0].slice(0, MAX_CHARS)];
     const truncated = paragraphs.length < article.paragraphs.length;
-    console.log(`[Reading Audio] articleId=${articleId}, voice=${voice}, text=${charBudget} chars, paragraphs=${paragraphs.length}/${article.paragraphs.length}${truncated ? " (truncated)" : ""}`);
+    log.info(
+      {
+        chars: charBudget,
+        paragraphs: paragraphs.length,
+        totalParagraphs: article.paragraphs.length,
+        truncated,
+      },
+      "tts.request",
+    );
 
     const startMs = Date.now();
-
-    // Synthesize all paragraphs — concurrency + 429 retry are handled inside
-    // synthesizeTtsForVoice's global TTS queue in lib/tts/groq.ts.
-    const allParts: Buffer[] = [];
     const results = await Promise.all(
-      paragraphs.map((para: string, idx: number) => {
-        console.log(`[Reading Audio]   Paragraph ${idx + 1}/${paragraphs.length}: ${para.length} chars`);
-        return synthesizeTtsForVoice({
-          text: para,
-          voice,
-          format: "wav",
-          speed: 0.9,
-        }).then((ab) => Buffer.from(ab));
-      }),
+      paragraphs.map((para: string) =>
+        synthesizeTtsForVoice({ text: para, voice, format: "wav", speed: 0.9 }).then((ab) =>
+          Buffer.from(ab),
+        ),
+      ),
     );
-    allParts.push(...results);
-
-    const buf = concatWavBuffers(allParts);
-    console.log(`[Reading Audio] Done in ${Date.now() - startMs}ms, ${buf.length} bytes`);
+    const buf = concatWavBuffers(results);
+    const ttsMs = Date.now() - startMs;
+    log.info({ ttsMs, bytes: buf.length, paragraphs: paragraphs.length }, "tts.done");
 
     await writeTtsCache("reading", cacheKey, buf, "wav");
 
@@ -149,7 +144,7 @@ export async function GET(
     });
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
-    console.error(`[Reading Audio] Error: ${message}`);
+    log.error({ err: message }, "audio.failed");
     return Response.json({ error: `Audio generation failed: ${message}` }, { status: 502 });
   }
 }

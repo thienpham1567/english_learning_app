@@ -13,6 +13,7 @@ import {
   VOICE_BY_ROLE,
 } from "@/lib/tts/groq";
 import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
+import { logger, routeLogger } from "@/lib/logger";
 
 /**
  * GET /api/listening/audio/[id]?accent=us|uk|au
@@ -57,7 +58,7 @@ async function withRetry<T>(fn: () => Promise<T>, maxRetries = 2, baseDelayMs = 
       lastErr = err;
       if (attempt < maxRetries) {
         const delay = baseDelayMs * Math.pow(2, attempt);
-        console.warn(`[Listening Audio] Attempt ${attempt + 1} failed, retrying in ${delay}ms...`);
+        logger.warn({ attempt: attempt + 1, delay, route: "listening/audio" }, "tts.retry");
         await new Promise((r) => setTimeout(r, delay));
       }
     }
@@ -66,15 +67,13 @@ async function withRetry<T>(fn: () => Promise<T>, maxRetries = 2, baseDelayMs = 
 }
 
 async function buildDialogueAudio(turns: DialogueTurn[]): Promise<Buffer> {
-  console.log(`[Listening Audio] Building dialogue: ${turns.length} turns (sequential)`);
+  const log = logger.child({ route: "listening/audio", op: "buildDialogue", turns: turns.length });
+  log.info("dialogue.build.start");
   const startMs = Date.now();
   const parts: Buffer[] = [];
 
-  // Serialize TTS calls to avoid hitting Groq rate limits (20 req/min).
-  // Each call takes ~1-3s, and the result is cached so this only happens once per exercise.
   for (let i = 0; i < turns.length; i++) {
     const turn = turns[i];
-    console.log(`[Listening Audio]   Turn ${i + 1}/${turns.length}: voice=${turn.voiceName}, text="${turn.text.slice(0, 50)}..."`);
     const buf = await withRetry(() =>
       synthesizeTtsForVoice({
         text: turn.text,
@@ -87,7 +86,7 @@ async function buildDialogueAudio(turns: DialogueTurn[]): Promise<Buffer> {
   }
 
   const result = concatWavBuffers(parts);
-  console.log(`[Listening Audio] Dialogue built in ${Date.now() - startMs}ms, total ${result.length} bytes`);
+  log.info({ buildMs: Date.now() - startMs, bytes: result.length }, "dialogue.build.done");
   return result;
 }
 
@@ -123,6 +122,8 @@ export async function GET(
     ? voiceParam
     : VOICES[accent];
 
+  const log = routeLogger("listening/audio", { userId, exerciseId: id, voice, accent });
+
   try {
     const [exercise] = await db
       .select({
@@ -135,23 +136,30 @@ export async function GET(
       .limit(1);
 
     if (!exercise) {
-      console.warn(`[Listening Audio] Exercise not found: ${id}`);
+      log.warn("exercise.not_found");
       return Response.json({ error: "Exercise not found" }, { status: 404 });
     }
     if (exercise.userId !== session.user.id) {
-      console.warn(`[Listening Audio] Forbidden: user=${session.user.id}, exercise.user=${exercise.userId}`);
+      log.warn({ ownerId: exercise.userId }, "exercise.forbidden");
       return Response.json({ error: "Forbidden" }, { status: 403 });
     }
 
     const turns = exercise.dialogueTurnsJson;
-    console.log(`[Listening Audio] id=${id}, voice=${voice}, dialogue=${Array.isArray(turns) ? turns.length + " turns" : "no"}, passage=${exercise.passage.length} chars`);
+    log.info(
+      {
+        mode: Array.isArray(turns) && turns.length > 0 ? "dialogue" : "single",
+        turns: Array.isArray(turns) ? turns.length : 0,
+        passageChars: exercise.passage.length,
+      },
+      "audio.request",
+    );
 
     if (Array.isArray(turns) && turns.length > 0) {
       const dialogueKey = `dialogue|${id}`;
       const cached = await readTtsCache("listening", dialogueKey, "wav");
-      console.log(`[Listening Audio] Dialogue cache: ${cached ? "HIT" : "MISS"}`);
       const buf = cached ?? (await buildDialogueAudio(turns));
       if (!cached) await writeTtsCache("listening", dialogueKey, buf, "wav");
+      log.info({ bytes: buf.length, cache: cached ? "hit" : "miss", mode: "dialogue" }, "audio.served");
 
       return new Response(new Uint8Array(buf), {
         headers: {
@@ -163,28 +171,19 @@ export async function GET(
       });
     }
 
-    // Single-speaker path — WAV format (Groq Orpheus only supports WAV)
-    console.log(`[Listening Audio] Single-speaker path: voice=${voice}`);
     const singleKey = `single|${id}|${voice}`;
     let buf = await readTtsCache("listening", singleKey, "wav");
     const cacheHit = !!buf;
-    if (buf) {
-      console.log(`[Listening Audio] Single cache HIT: ${buf.length} bytes`);
-    } else {
-      console.log(`[Listening Audio] Calling Groq TTS for single-speaker...`);
-      const startMs = Date.now();
+    if (!buf) {
+      const t0 = Date.now();
       const audio = await withRetry(() =>
-        synthesizeTtsForVoice({
-          text: exercise.passage,
-          voice,
-          format: "wav",
-          speed: 0.9,
-        })
+        synthesizeTtsForVoice({ text: exercise.passage, voice, format: "wav", speed: 0.9 }),
       );
       buf = Buffer.from(audio);
-      console.log(`[Listening Audio] Single TTS done in ${Date.now() - startMs}ms, ${buf.length} bytes`);
+      log.info({ ttsMs: Date.now() - t0, bytes: buf.length, mode: "single" }, "tts.done");
       await writeTtsCache("listening", singleKey, buf, "wav");
     }
+    log.info({ bytes: buf.length, cache: cacheHit ? "hit" : "miss", mode: "single" }, "audio.served");
 
     return new Response(new Uint8Array(buf), {
       headers: {
@@ -194,10 +193,8 @@ export async function GET(
       },
     });
   } catch (err) {
+    log.error({ err }, "audio.failed");
     const message = err instanceof Error ? err.message : String(err);
-    const stack = err instanceof Error ? err.stack : undefined;
-    console.error("[Listening Audio] Error:", message);
-    if (stack) console.error("[Listening Audio] Stack:", stack);
     return Response.json({ error: `Audio generation failed: ${message}` }, { status: 502 });
   }
 }
