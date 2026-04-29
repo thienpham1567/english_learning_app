@@ -66,21 +66,26 @@ async function withRetry<T>(fn: () => Promise<T>, maxRetries = 2, baseDelayMs = 
 }
 
 async function buildDialogueAudio(turns: DialogueTurn[]): Promise<Buffer> {
-  console.log(`[Listening Audio] Building dialogue: ${turns.length} turns`);
+  console.log(`[Listening Audio] Building dialogue: ${turns.length} turns (sequential)`);
   const startMs = Date.now();
-  const parts = await Promise.all(
-    turns.map((turn, i) => {
-      console.log(`[Listening Audio]   Turn ${i + 1}: voice=${turn.voiceName}, text="${turn.text.slice(0, 50)}..."`);
-      return withRetry(() =>
-        synthesizeTtsForVoice({
-          text: turn.text,
-          voice: turn.voiceName,
-          format: "wav",
-          speed: 0.95,
-        }).then((ab) => Buffer.from(ab))
-      );
-    }),
-  );
+  const parts: Buffer[] = [];
+
+  // Serialize TTS calls to avoid hitting Groq rate limits (20 req/min).
+  // Each call takes ~1-3s, and the result is cached so this only happens once per exercise.
+  for (let i = 0; i < turns.length; i++) {
+    const turn = turns[i];
+    console.log(`[Listening Audio]   Turn ${i + 1}/${turns.length}: voice=${turn.voiceName}, text="${turn.text.slice(0, 50)}..."`);
+    const buf = await withRetry(() =>
+      synthesizeTtsForVoice({
+        text: turn.text,
+        voice: turn.voiceName,
+        format: "wav",
+        speed: 0.95,
+      }).then((ab) => Buffer.from(ab))
+    );
+    parts.push(buf);
+  }
+
   const result = concatWavBuffers(parts);
   console.log(`[Listening Audio] Dialogue built in ${Date.now() - startMs}ms, total ${result.length} bytes`);
   return result;
