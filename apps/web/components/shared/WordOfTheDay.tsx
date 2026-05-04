@@ -2,6 +2,7 @@
 import { api } from "@/lib/api-client";
 import { useCallback, useEffect, useState } from "react";
 import { Tag, message } from "antd";
+import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import {
   SoundOutlined,
   BookOutlined,
@@ -44,13 +45,12 @@ export function WordOfTheDay() {
       .finally(() => setLoading(false));
   }, []);
 
+  const { speak: speakTts, isLoading: isTtsLoading } = useTextToSpeech();
+
   const playAudio = useCallback(() => {
     if (!word) return;
-    const utterance = new SpeechSynthesisUtterance(word.headword);
-    utterance.lang = "en-US";
-    utterance.rate = 0.85;
-    speechSynthesis.speak(utterance);
-  }, [word]);
+    speakTts(word.headword);
+  }, [word, speakTts]);
 
   const saveWord = useCallback(async () => {
     if (!word || isSaved) return;
@@ -134,7 +134,7 @@ export function WordOfTheDay() {
           }}
           aria-label="Phát âm"
         >
-          <SoundOutlined />
+          {isTtsLoading ? <LoadingOutlined spin style={{ fontSize: 18 }} /> : <SoundOutlined />}
         </button>
       </div>
 

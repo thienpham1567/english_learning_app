@@ -15,6 +15,7 @@ import {
   CalculatorOutlined,
 } from "@ant-design/icons";
 import type { ReactNode } from "react";
+import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 
 
 type VocabWord = { word: string; ipa: string; meaning: string; example: string; exampleVi: string };
@@ -55,6 +56,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
   const [completedSections, setCompletedSections] = useState<Set<Section>>(new Set());
   const [allDone, setAllDone] = useState(false);
   const [xpAwarded, setXpAwarded] = useState(0);
+  const { speak: speakTts, isSpeaking, isLoading: isTtsLoading } = useTextToSpeech();
 
   // Reading answers
   const [readingAnswers, setReadingAnswers] = useState<Record<number, number>>({});
@@ -102,10 +104,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
   };
 
   const speak = (text: string) => {
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "en-US";
-    u.rate = 0.85;
-    speechSynthesis.speak(u);
+    speakTts(text);
   };
 
   // ── Render ──

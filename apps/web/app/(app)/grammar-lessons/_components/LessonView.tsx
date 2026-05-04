@@ -25,6 +25,7 @@ import {
   StarFilled,
 } from "@ant-design/icons";
 import { Tag, Progress } from "antd";
+import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 
 type LessonState = "loading" | "lesson" | "exercises" | "complete";
 
@@ -59,6 +60,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
   const [loggedErrors, setLoggedErrors] = useState(0);
   const [alreadyCompleted, setAlreadyCompleted] = useState(false);
   const [startedAt, setStartedAt] = useState<number | null>(null);
+  const { speak: speakTts, isSpeaking, isLoading: isTtsLoading } = useTextToSpeech();
 
   const loadLesson = useCallback(async (forceRefresh = false) => {
     return api.post<GrammarLessonData>("/grammar-lessons/generate", {
@@ -187,10 +189,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
   };
 
   const speakText = (text: string) => {
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = "en-US";
-    u.rate = 0.85;
-    speechSynthesis.speak(u);
+    speakTts(text);
   };
 
   return (
@@ -294,8 +293,8 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                         </span>
                       ))}
                     </p>
-                    <button onClick={() => speakText(ex.en)} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--accent)", padding: 4 }}>
-                      <SoundOutlined />
+                    <button onClick={() => speakText(ex.en)} disabled={isSpeaking || isTtsLoading} style={{ border: "none", background: "transparent", cursor: isSpeaking || isTtsLoading ? "not-allowed" : "pointer", color: "var(--accent)", padding: 4, opacity: isSpeaking || isTtsLoading ? 0.5 : 1 }}>
+                      {isTtsLoading ? <LoadingOutlined spin /> : <SoundOutlined />}
                     </button>
                   </div>
                   <p style={{ fontSize: 13, color: "var(--text-secondary)", margin: "4px 0 0", fontStyle: "italic" }}>{ex.vi}</p>

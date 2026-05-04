@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, type ReactNode } from "react";
+import { useState, useCallback, type ReactNode } from "react";
 import { Popover, Spin, Button, message } from "antd";
 import {
   SoundOutlined,
@@ -9,6 +9,7 @@ import {
   BookOutlined,
 } from "@ant-design/icons";
 import { api } from "@/lib/api-client";
+import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 
 // ── Types ──
 type DictEntry = {
@@ -65,7 +66,7 @@ export function WordClickableText({ text, style }: WordClickableTextProps) {
   const [activeWord, setActiveWord] = useState<string | null>(null);
   const [popoverData, setPopoverData] = useState<WordPopoverData | null>(null);
   const [msgApi, contextHolder] = message.useMessage();
-  const synthRef = useRef<SpeechSynthesisUtterance | null>(null);
+  const { speak: speakTts, isLoading: isTtsLoading } = useTextToSpeech();
 
   // ── Lookup word via dictionary API (AC3) ──
   const lookupWord = useCallback(async (word: string) => {
@@ -130,14 +131,8 @@ export function WordClickableText({ text, style }: WordClickableTextProps) {
 
   // ── TTS (AC2) ──
   const playTts = useCallback((word: string) => {
-    if (typeof window === "undefined" || !window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const utt = new SpeechSynthesisUtterance(word);
-    utt.lang = "en-US";
-    utt.rate = 0.85;
-    synthRef.current = utt;
-    window.speechSynthesis.speak(utt);
-  }, []);
+    speakTts(word);
+  }, [speakTts]);
 
   // ── Save to vocab (AC4) ──
   const saveWord = useCallback(async () => {
