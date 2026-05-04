@@ -14,7 +14,7 @@ import {
   BarChartOutlined,
   BorderOutlined,
 } from "@ant-design/icons";
-import { Progress, Tag, Tooltip } from "antd";
+import { Progress, Tag, Tooltip, Segmented } from "antd";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 import { useExamMode } from "@/components/shared/ExamModeProvider";
@@ -350,33 +350,19 @@ export default function PronunciationPage() {
             <div
               style={{
                 display: "flex",
-                gap: 8,
                 justifyContent: "center",
                 marginBottom: 24,
               }}
             >
-              {[
-                { value: "beginner", label: "Cơ bản" },
-                { value: "intermediate", label: "Trung cấp" },
-                { value: "advanced", label: "Nâng cao" },
-              ].map((l) => (
-                <button
-                  key={l.value}
-                  onClick={() => setLevel(l.value)}
-                  style={{
-                    padding: "8px 16px",
-                    borderRadius: 8,
-                    border: level === l.value ? "2px solid var(--accent)" : "1px solid var(--border)",
-                    background: level === l.value ? "var(--accent-muted)" : "transparent",
-                    color: level === l.value ? "var(--accent)" : "var(--text-secondary)",
-                    fontWeight: level === l.value ? 600 : 400,
-                    cursor: "pointer",
-                    fontSize: 13,
-                  }}
-                >
-                  {l.label}
-                </button>
-              ))}
+              <Segmented
+                value={level}
+                onChange={(val) => setLevel(val as string)}
+                options={[
+                  { value: "beginner", label: "Cơ bản" },
+                  { value: "intermediate", label: "Trung cấp" },
+                  { value: "advanced", label: "Nâng cao" },
+                ]}
+              />
             </div>
 
             <button

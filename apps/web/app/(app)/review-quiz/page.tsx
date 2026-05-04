@@ -12,7 +12,7 @@ import {
   BookOutlined,
   SmileOutlined,
 } from "@ant-design/icons";
-import { Tag, Progress, Collapse, Empty, Badge } from "antd";
+import { Tag, Progress, Collapse, Empty, Badge, Tabs } from "antd";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 // ─── Error Review Types (existing) ────────────────────────────────
@@ -871,52 +871,37 @@ export default function ReviewQuizPage() {
       />
 
       {/* Tab bar */}
-      <div style={{ display: "flex", borderBottom: "1px solid var(--border)", padding: "0 24px" }}>
-        <button
-          onClick={() => setActiveTab("vocab")}
-          style={{
-            padding: "12px 20px",
-            border: "none",
-            background: "none",
-            borderBottom: activeTab === "vocab" ? "2px solid var(--accent)" : "2px solid transparent",
-            color: activeTab === "vocab" ? "var(--accent)" : "var(--text-secondary)",
-            fontWeight: activeTab === "vocab" ? 600 : 400,
-            fontSize: 14,
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-          }}
-        >
-          <BookOutlined />
-          Từ vựng
-          {vocabDue > 0 && (
-            <Badge count={vocabDue} size="small" style={{ backgroundColor: "var(--accent)" }} />
-          )}
-        </button>
-        <button
-          onClick={() => setActiveTab("errors")}
-          style={{
-            padding: "12px 20px",
-            border: "none",
-            background: "none",
-            borderBottom: activeTab === "errors" ? "2px solid var(--accent)" : "2px solid transparent",
-            color: activeTab === "errors" ? "var(--accent)" : "var(--text-secondary)",
-            fontWeight: activeTab === "errors" ? 600 : 400,
-            fontSize: 14,
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-          }}
-        >
-          <BulbOutlined />
-          Lỗi sai
-          {errorDue > 0 && (
-            <Badge count={errorDue} size="small" style={{ backgroundColor: "var(--accent)" }} />
-          )}
-        </button>
-      </div>
+      <Tabs
+        activeKey={activeTab}
+        onChange={(key) => setActiveTab(key as TabKey)}
+        style={{ padding: "0 24px" }}
+        items={[
+          {
+            key: "vocab",
+            label: (
+              <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <BookOutlined />
+                Từ vựng
+                {vocabDue > 0 && (
+                  <Badge count={vocabDue} size="small" style={{ backgroundColor: "var(--accent)" }} />
+                )}
+              </span>
+            ),
+          },
+          {
+            key: "errors",
+            label: (
+              <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                <BulbOutlined />
+                Lỗi sai
+                {errorDue > 0 && (
+                  <Badge count={errorDue} size="small" style={{ backgroundColor: "var(--accent)" }} />
+                )}
+              </span>
+            ),
+          },
+        ]}
+      />
 
       {/* Tab content */}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "auto" }}>

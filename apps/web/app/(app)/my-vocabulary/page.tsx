@@ -3,6 +3,7 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useQueryState, useQueryStates, parseAsString, parseAsArrayOf } from "nuqs";
+import { Tabs, Empty, Skeleton } from "antd";
 import {
   BookOutlined, SearchOutlined, DeleteOutlined,
   StarOutlined, SyncOutlined, CheckCircleOutlined,
@@ -266,36 +267,15 @@ export default function MyVocabularyPage() {
         />
 
         {/* ── Tab Navigation (AC #3) ── */}
-        <div
-          style={{
-            display: "flex",
-            gap: 0,
-            borderBottom: "1px solid var(--border)",
-            marginTop: 8,
-          }}
-        >
-          {TABS.map((tab) => (
-            <button
-              key={tab.key}
-              type="button"
-              onClick={() => setActiveTab(tab.key)}
-              style={{
-                padding: "10px 20px",
-                fontSize: 13,
-                fontWeight: activeTab === tab.key ? 600 : 400,
-                color: activeTab === tab.key ? "var(--accent)" : "var(--text-muted)",
-                background: "none",
-                border: "none",
-                borderBottom: activeTab === tab.key ? "2px solid var(--accent)" : "2px solid transparent",
-                cursor: "pointer",
-                transition: "all 0.15s",
-                marginBottom: -1,
-              }}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </div>
+        <Tabs
+          activeKey={activeTab}
+          onChange={(key) => setActiveTab(key as TabKey)}
+          style={{ marginTop: 8 }}
+          items={TABS.map((tab) => ({
+            key: tab.key,
+            label: tab.label,
+          }))}
+        />
 
         {/* ── Vocabulary List ── */}
         <>
@@ -410,74 +390,45 @@ export default function MyVocabularyPage() {
                         padding: "16px 0",
                       }}
                     >
-                      <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                        <div
-                          style={{
-                            height: 20,
-                            width: 100 + i * 30,
-                            borderRadius: 8,
-                            background: "var(--border)",
-                            animation: "pulse 1.5s infinite",
-                          }}
-                        />
-                        <div
-                          style={{
-                            height: 16,
-                            width: 32,
-                            borderRadius: 8,
-                            background: "var(--border)",
-                            animation: "pulse 1.5s infinite",
-                          }}
-                        />
-                      </div>
-                      <div
-                        style={{
-                          marginTop: 6,
-                          height: 12,
-                          width: 80,
-                          borderRadius: 8,
-                          background: "var(--border)",
-                          animation: "pulse 1.5s infinite",
-                        }}
+                      <Skeleton
+                        active
+                        title={{ width: 100 + i * 30 }}
+                        paragraph={{ rows: 1, width: 80 }}
                       />
                     </div>
                   ))}
                 </div>
               ) : visible.length === 0 ? (
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 12,
-                    padding: "80px 0",
-                    textAlign: "center",
-                  }}
-                >
-                  <BookOutlined style={{ fontSize: 28, color: "var(--border-strong)" }} />
-                  <p
-                    style={{
-                      fontFamily: "var(--font-display)",
-                      fontSize: 20,
-                      fontStyle: "italic",
-                      color: "var(--text-muted)",
-                      margin: 0,
-                    }}
-                  >
-                    {hasActiveFilter
-                      ? "Không có từ nào khớp."
-                      : entries.length === 0
-                        ? "Chưa tra từ nào."
-                        : activeTab === "saved"
-                          ? "Chưa lưu từ nào."
-                          : "Không có từ nào."}
-                  </p>
-                  {!hasActiveFilter && (
-                    <p style={{ fontSize: 12, color: "var(--text-muted)", margin: 0 }}>
-                      {entries.length === 0 ? "Hãy thử từ điển nhé!" : "Nhấn dấu ★ khi tra từ nhé!"}
-                    </p>
-                  )}
-                </div>
+                <Empty
+                  image={<BookOutlined style={{ fontSize: 28, color: "var(--border-strong)" }} />}
+                  description={
+                    <>
+                      <p
+                        style={{
+                          fontFamily: "var(--font-display)",
+                          fontSize: 20,
+                          fontStyle: "italic",
+                          color: "var(--text-muted)",
+                          margin: 0,
+                        }}
+                      >
+                        {hasActiveFilter
+                          ? "Không có từ nào khớp."
+                          : entries.length === 0
+                            ? "Chưa tra từ nào."
+                            : activeTab === "saved"
+                              ? "Chưa lưu từ nào."
+                              : "Không có từ nào."}
+                      </p>
+                      {!hasActiveFilter && (
+                        <p style={{ fontSize: 12, color: "var(--text-muted)", margin: 0 }}>
+                          {entries.length === 0 ? "Hãy thử từ điển nhé!" : "Nhấn dấu ★ khi tra từ nhé!"}
+                        </p>
+                      )}
+                    </>
+                  }
+                  style={{ padding: "80px 0" }}
+                />
               ) : (
                 <div>
                   {visible.map((entry, idx) => {

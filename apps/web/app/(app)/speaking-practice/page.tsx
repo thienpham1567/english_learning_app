@@ -16,7 +16,7 @@ import {
   PlayCircleOutlined,
   WarningOutlined,
 } from "@ant-design/icons";
-import { Progress, Tag } from "antd";
+import { Progress, Tag, Segmented } from "antd";
 
 import { useExamMode } from "@/components/shared/ExamModeProvider";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
@@ -343,43 +343,23 @@ export default function SpeakingPracticePage() {
 
             <div style={{ marginBottom: 16 }}>
               <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>Trình độ CEFR</p>
-              <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
-                {LEVELS.map((l) => (
-                  <button
-                    key={l.value}
-                    onClick={() => setLevel(l.value)}
-                    style={{
-                      padding: "8px 16px", borderRadius: 8,
-                      border: level === l.value ? "2px solid var(--accent)" : "1px solid var(--border)",
-                      background: level === l.value ? "var(--accent-muted)" : "transparent",
-                      color: level === l.value ? "var(--accent)" : "var(--text-secondary)",
-                      fontWeight: level === l.value ? 600 : 400, cursor: "pointer", fontSize: 13,
-                    }}
-                  >
-                    {l.label}
-                  </button>
-                ))}
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <Segmented
+                  value={level}
+                  onChange={(val) => setLevel(val as string)}
+                  options={LEVELS.map((l) => ({ label: l.label, value: l.value }))}
+                />
               </div>
             </div>
 
             <div style={{ marginBottom: 24 }}>
               <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>Thời gian nói</p>
-              <div style={{ display: "flex", gap: 8, justifyContent: "center" }}>
-                {DURATIONS.map((d) => (
-                  <button
-                    key={d.value}
-                    onClick={() => setDuration(d.value)}
-                    style={{
-                      padding: "8px 16px", borderRadius: 8,
-                      border: duration === d.value ? "2px solid var(--accent)" : "1px solid var(--border)",
-                      background: duration === d.value ? "var(--accent-muted)" : "transparent",
-                      color: duration === d.value ? "var(--accent)" : "var(--text-secondary)",
-                      fontWeight: duration === d.value ? 600 : 400, cursor: "pointer", fontSize: 13,
-                    }}
-                  >
-                    {d.label}
-                  </button>
-                ))}
+              <div style={{ display: "flex", justifyContent: "center" }}>
+                <Segmented
+                  value={duration}
+                  onChange={(val) => setDuration(val as number)}
+                  options={DURATIONS.map((d) => ({ label: d.label, value: d.value }))}
+                />
               </div>
             </div>
 
