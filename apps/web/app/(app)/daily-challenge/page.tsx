@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Flex, Typography } from "antd";
+import { Flex, Typography, Alert, Skeleton, Button, Result } from "antd";
 import {
   ClockCircleOutlined,
   FireOutlined,
@@ -156,22 +156,16 @@ export default function DailyChallengePage() {
         <div style={{ width: "100%", maxWidth: 580, margin: "0 auto" }}>
           {/* Error banner */}
           {error && (
-            <div
+            <Alert
               className="anim-fade-in"
+              type="error"
+              showIcon
+              message={error}
               style={{
                 borderRadius: 16,
-                border: "1px solid color-mix(in srgb, var(--error) 30%, transparent)",
-                background: "color-mix(in srgb, var(--error) 6%, var(--surface))",
-                padding: "16px 20px",
-                display: "flex",
-                alignItems: "center",
-                gap: 12,
                 marginBottom: 16,
               }}
-            >
-              <ExclamationCircleOutlined style={{ fontSize: 18, color: "var(--error)", flexShrink: 0 }} />
-              <span style={{ fontSize: 13, color: "var(--error)", fontWeight: 500, flex: 1 }}>{error}</span>
-            </div>
+            />
           )}
 
           {/* Loading state */}
@@ -179,75 +173,39 @@ export default function DailyChallengePage() {
             <div
               className="anim-fade-in"
               style={{
+                minHeight: 300,
                 display: "flex",
                 flexDirection: "column",
-                alignItems: "center",
                 justifyContent: "center",
-                minHeight: 300,
-                gap: 16,
+                padding: 24,
               }}
             >
-              <div
-                style={{
-                  width: 64,
-                  height: 64,
-                  borderRadius: 20,
-                  background: "var(--accent-muted)",
-                  display: "grid",
-                  placeItems: "center",
-                }}
-              >
-                <LoadingOutlined spin style={{ fontSize: 28, color: "var(--accent)" }} />
-              </div>
-              <Text type="secondary" style={{ fontSize: 13 }}>Đang tải thử thách...</Text>
+              <Skeleton active paragraph={{ rows: 4 }} />
             </div>
           )}
 
           {/* Error retry state */}
           {state === "error" && (
-            <div
-              className="anim-fade-in"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: 300,
-                gap: 16,
-              }}
-            >
-              <div
-                style={{
-                  width: 64,
-                  height: 64,
-                  borderRadius: 20,
-                  background: "color-mix(in srgb, var(--error) 8%, transparent)",
-                  display: "grid",
-                  placeItems: "center",
-                }}
-              >
-                <ExclamationCircleOutlined style={{ fontSize: 28, color: "var(--error)" }} />
-              </div>
-              <Text type="secondary" style={{ fontSize: 13 }}>Không thể tải thử thách</Text>
-              <button
-                onClick={() => window.location.reload()}
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  padding: "10px 24px",
-                  borderRadius: 12,
-                  border: "none",
-                  background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-                  color: "var(--text-on-accent)",
-                  fontSize: 14,
-                  fontWeight: 600,
-                  cursor: "pointer",
-                  boxShadow: "0 3px 12px color-mix(in srgb, var(--accent) 30%, transparent)",
-                }}
-              >
-                <ReloadOutlined /> Thử lại
-              </button>
+            <div className="anim-fade-in" style={{ minHeight: 300, display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <Result
+                status="error"
+                title="Không thể tải thử thách"
+                extra={
+                  <Button
+                    type="primary"
+                    icon={<ReloadOutlined />}
+                    onClick={() => window.location.reload()}
+                    style={{
+                      borderRadius: 12,
+                      background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+                      border: "none",
+                      fontWeight: 600,
+                    }}
+                  >
+                    Thử lại
+                  </Button>
+                }
+              />
             </div>
           )}
 

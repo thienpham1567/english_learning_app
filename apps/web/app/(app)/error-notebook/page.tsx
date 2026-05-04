@@ -12,7 +12,7 @@ import {
   ExclamationCircleOutlined,
   InboxOutlined,
 } from "@ant-design/icons";
-import { Tag, Tooltip, Select } from "antd";
+import { Tag, Tooltip, Select, Statistic, Skeleton, Empty, Button } from "antd";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { WritingPatternSection } from "./_components/WritingPatternSection";
 import { DeepExplanation } from "./_components/DeepExplanation";
@@ -172,22 +172,22 @@ export default function ErrorNotebookPage() {
               {
                 icon: <CloseCircleOutlined style={{ color: "var(--error)" }} />,
                 label: "Chưa nắm",
-                value: String(unresolvedCount),
-                accent: unresolvedCount > 0 ? "var(--error)" : "var(--text-muted)",
+                value: unresolvedCount,
+                color: unresolvedCount > 0 ? "var(--error)" : "var(--text-muted)",
                 bg: "var(--error-bg)"
               },
               {
                 icon: <CheckCircleOutlined style={{ color: "var(--success)" }} />,
                 label: "Đã hiểu",
-                value: String(errors.filter((e) => e.isResolved).length),
-                accent: "var(--success)",
+                value: errors.filter((e) => e.isResolved).length,
+                color: "var(--success)",
                 bg: "var(--success-bg)"
               },
               {
                 icon: <BookOutlined style={{ color: "var(--accent)" }} />,
                 label: "Tổng cộng",
-                value: String(total),
-                accent: "var(--accent)",
+                value: total,
+                color: "var(--accent)",
                 bg: "var(--accent-muted)"
               },
             ].map((stat, i) => (
@@ -210,10 +210,11 @@ export default function ErrorNotebookPage() {
                 }}>
                   {stat.icon}
                 </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                  <div style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.5px" }}>{stat.label}</div>
-                  <div style={{ fontSize: 24, fontWeight: 800, color: stat.accent, fontFamily: "var(--font-display)", lineHeight: 1 }}>{stat.value}</div>
-                </div>
+                <Statistic
+                  title={stat.label}
+                  value={stat.value}
+                  valueStyle={{ fontSize: 24, fontWeight: 800, color: stat.color, fontFamily: "var(--font-display)", lineHeight: 1 }}
+                />
               </div>
             ))}
           </div>
@@ -286,67 +287,54 @@ export default function ErrorNotebookPage() {
           {/* Resolve all button */}
           {unresolvedCount > 1 && (
             <div className="anim-fade-up anim-delay-5" style={{ marginBottom: "var(--space-4)", textAlign: "right" }}>
-              <button
+              <Button
                 onClick={resolveAll}
-                className="btn-shimmer"
+                icon={<CheckCircleOutlined />}
                 style={{
-                  padding: "10px 20px", borderRadius: "var(--radius-xl)",
-                  border: "none",
+                  borderRadius: "var(--radius-xl)",
                   background: "var(--success-bg)",
-                  color: "var(--success)", cursor: "pointer", fontSize: 14, fontWeight: 600,
-                  transition: "all var(--duration-fast) ease",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.background = "var(--success)";
-                  e.currentTarget.style.color = "var(--text-on-accent)";
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = "0 4px 12px color-mix(in srgb, var(--success) 20%, transparent)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.background = "var(--success-bg)";
-                  e.currentTarget.style.color = "var(--success)";
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "none";
+                  color: "var(--success)", fontWeight: 600,
+                  border: "none",
                 }}
               >
-                <CheckCircleOutlined style={{ marginRight: 8 }} /> Đánh dấu tất cả đã hiểu
-              </button>
+                Đánh dấu tất cả đã hiểu
+              </Button>
             </div>
           )}
 
           {/* Loading */}
           {loading && (
             <div style={{
-              textAlign: "center", padding: "80px 20px", borderRadius: "var(--radius-2xl)",
+              padding: "24px", borderRadius: "var(--radius-2xl)",
               background: "var(--surface)", border: "1px solid var(--border)",
               boxShadow: "var(--shadow-sm)"
             }}>
-              <LoadingOutlined style={{ fontSize: 48, color: "var(--accent)" }} />
-              <p style={{ color: "var(--text-muted)", marginTop: 16, fontSize: 15, fontWeight: 500 }}>Đang tải dữ liệu...</p>
+              <Skeleton active paragraph={{ rows: 4 }} />
             </div>
           )}
 
           {/* Empty */}
           {!loading && errors.length === 0 && (
             <div className="anim-scale-in" style={{
-              textAlign: "center", padding: "80px 24px", borderRadius: "var(--radius-2xl)",
+              padding: "80px 24px", borderRadius: "var(--radius-2xl)",
               background: "var(--surface)", border: "1px solid var(--border)",
               boxShadow: "var(--shadow-sm)",
             }}>
-              <div style={{
-                width: 80, height: 80, borderRadius: "50%", background: "var(--bg-deep)",
-                display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 24px"
-              }}>
-                <InboxOutlined style={{ fontSize: 40, color: "var(--text-muted)" }} />
-              </div>
-              <h3 style={{ margin: "0 0 8px", fontSize: 20, fontWeight: 700, color: "var(--ink)", fontFamily: "var(--font-display)" }}>
-                {filterResolved === "false" ? "Tuyệt vời, không có lỗi chưa nắm!" : "Không tìm thấy kết quả"}
-              </h3>
-              <p style={{ margin: 0, fontSize: 15, color: "var(--text-secondary)" }}>
-                {filterResolved === "false"
-                  ? "Hãy tiếp tục làm bài tập để mở rộng kiến thức nhé!"
-                  : "Thử thay đổi bộ lọc để xem thêm."}
-              </p>
+              <Empty
+                image={<InboxOutlined style={{ fontSize: 40, color: "var(--text-muted)" }} />}
+                description={
+                  <>
+                    <h3 style={{ margin: "0 0 8px", fontSize: 20, fontWeight: 700, color: "var(--ink)", fontFamily: "var(--font-display)" }}>
+                      {filterResolved === "false" ? "Tuyệt vời, không có lỗi chưa nắm!" : "Không tìm thấy kết quả"}
+                    </h3>
+                    <p style={{ margin: 0, fontSize: 15, color: "var(--text-secondary)" }}>
+                      {filterResolved === "false"
+                        ? "Hãy tiếp tục làm bài tập để mở rộng kiến thức nhé!"
+                        : "Thử thay đổi bộ lọc để xem thêm."}
+                    </p>
+                  </>
+                }
+              />
             </div>
           )}
 
@@ -492,31 +480,16 @@ export default function ErrorNotebookPage() {
           {/* Refresh */}
           {!loading && (
             <div style={{ textAlign: "center", marginTop: 32, marginBottom: 32 }}>
-              <button
+              <Button
                 onClick={fetchErrors}
+                icon={<ReloadOutlined />}
                 style={{
-                  padding: "12px 24px", borderRadius: "var(--radius-xl)",
-                  border: "1px solid var(--border)",
-                  background: "var(--surface)", color: "var(--text-secondary)",
-                  cursor: "pointer", fontSize: 14, fontWeight: 600,
-                  boxShadow: "var(--shadow-sm)",
-                  transition: "all var(--duration-fast) ease"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = "var(--shadow-md)";
-                  e.currentTarget.style.borderColor = "var(--accent)";
-                  e.currentTarget.style.color = "var(--accent)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "var(--shadow-sm)";
-                  e.currentTarget.style.borderColor = "var(--border)";
-                  e.currentTarget.style.color = "var(--text-secondary)";
+                  borderRadius: "var(--radius-xl)",
+                  fontWeight: 600,
                 }}
               >
-                <ReloadOutlined style={{ marginRight: 8 }} /> Tải lại dữ liệu
-              </button>
+                Tải lại dữ liệu
+              </Button>
             </div>
           )}
         </div>

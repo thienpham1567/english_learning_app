@@ -9,7 +9,7 @@ import {
   FireOutlined,
   StarOutlined,
 } from "@ant-design/icons";
-import { Segmented } from "antd";
+import { Segmented, Statistic, Alert } from "antd";
 
 import { useExamMode } from "@/components/shared/ExamModeProvider";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
@@ -227,30 +227,27 @@ export default function GrammarLessonsPage() {
                       boxShadow: "var(--shadow-sm)",
                     }}
                   >
-                    <span style={{ fontSize: 18, lineHeight: 1 }}>{stat.icon}</span>
-                    <div>
-                      <div style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 500 }}>{stat.label}</div>
-                      <div style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>{stat.value}</div>
-                    </div>
+                  <span style={{ fontSize: 18, lineHeight: 1 }}>{stat.icon}</span>
+                    <Statistic
+                      title={stat.label}
+                      value={stat.value}
+                      valueStyle={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}
+                    />
                   </div>
                 ))}
               </div>
 
               {/* Progress error */}
               {progressError && (
-                <div
+                <Alert
+                  type="warning"
+                  message={progressError}
                   style={{
                     marginBottom: 12,
-                    border: "1px solid color-mix(in srgb, var(--warning) 28%, transparent)",
                     borderRadius: 10,
-                    background: "color-mix(in srgb, var(--warning) 7%, var(--surface))",
-                    color: "var(--text-secondary)",
                     fontSize: 12,
-                    padding: "9px 12px",
                   }}
-                >
-                  {progressError}
-                </div>
+                />
               )}
 
               {/* Topic grid */}

@@ -23,6 +23,7 @@ import {
   InboxOutlined,
 } from "@ant-design/icons";
 import type { ReactNode } from "react";
+import { Statistic, Skeleton, Empty, Button, Badge } from "antd";
 import { api } from "@/lib/api-client";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
@@ -143,7 +144,10 @@ function StatCard({ icon, value, label, color }: { icon: ReactNode; value: strin
       >
         {icon}
       </div>
-      <span style={{ fontSize: 24, fontWeight: 800, color: "var(--ink)", fontVariantNumeric: "tabular-nums", lineHeight: 1 }}>{value}</span>
+      <Statistic
+        value={value}
+        valueStyle={{ fontSize: 24, fontWeight: 800, color: "var(--ink)", fontVariantNumeric: "tabular-nums", lineHeight: 1 }}
+      />
       <span style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)" }}>{label}</span>
     </div>
   );
@@ -300,15 +304,13 @@ export default function ReviewHubPage() {
             <div
               className="anim-scale-in"
               style={{
-                textAlign: "center",
-                padding: "80px 20px",
+                padding: "24px",
                 borderRadius: 20,
                 background: "var(--surface)",
                 border: "1px solid var(--border)",
               }}
             >
-              <LoadingOutlined style={{ fontSize: 40, color: "var(--accent)" }} />
-              <p style={{ color: "var(--text-muted)", marginTop: 16, fontSize: 14, fontWeight: 500 }}>Đang tải lịch ôn tập...</p>
+              <Skeleton active paragraph={{ rows: 4 }} />
             </div>
           )}
 
@@ -317,32 +319,25 @@ export default function ReviewHubPage() {
             <div
               className="anim-scale-in"
               style={{
-                textAlign: "center",
                 padding: "60px 24px",
                 borderRadius: 20,
                 background: "var(--surface)",
                 border: "1px solid var(--border)",
               }}
             >
-              <div
-                style={{
-                  width: 72,
-                  height: 72,
-                  borderRadius: "50%",
-                  background: "color-mix(in srgb, var(--success) 10%, transparent)",
-                  display: "grid",
-                  placeItems: "center",
-                  margin: "0 auto 20px",
-                }}
-              >
-                <SmileOutlined style={{ fontSize: 34, color: "var(--success)" }} />
-              </div>
-              <h3 style={{ margin: "0 0 8px", fontSize: 20, fontWeight: 700, color: "var(--ink)" }}>
-                Không có gì cần ôn hôm nay!
-              </h3>
-              <p style={{ margin: 0, fontSize: 14, color: "var(--text-secondary)", maxWidth: 340, marginInline: "auto" }}>
-                Hãy tiếp tục học bài mới — hệ thống sẽ tự nhắc bạn ôn tập khi cần.
-              </p>
+              <Empty
+                image={<SmileOutlined style={{ fontSize: 34, color: "var(--success)" }} />}
+                description={
+                  <>
+                    <h3 style={{ margin: "0 0 8px", fontSize: 20, fontWeight: 700, color: "var(--ink)" }}>
+                      Không có gì cần ôn hôm nay!
+                    </h3>
+                    <p style={{ margin: 0, fontSize: 14, color: "var(--text-secondary)", maxWidth: 340, marginInline: "auto" }}>
+                      Hãy tiếp tục học bài mới — hệ thống sẽ tự nhắc bạn ôn tập khi cần.
+                    </p>
+                  </>
+                }
+              />
             </div>
           )}
 
@@ -396,40 +391,26 @@ export default function ReviewHubPage() {
               </div>
 
               {/* Start CTA */}
-              <button
-                type="button"
+              <Button
+                type="primary"
+                size="large"
+                block
                 className="anim-fade-up anim-delay-5"
                 onClick={() => router.push("/review/session")}
+                icon={<ThunderboltOutlined />}
                 style={{
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 10,
-                  padding: "14px 24px",
                   borderRadius: 14,
-                  border: "none",
+                  height: "auto",
+                  padding: "14px 24px",
                   background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-                  color: "var(--text-on-accent)",
+                  border: "none",
                   fontSize: 15,
                   fontWeight: 700,
-                  cursor: "pointer",
                   boxShadow: "0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent)",
-                  transition: "transform 0.15s, box-shadow 0.15s",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                  e.currentTarget.style.boxShadow = "0 6px 24px color-mix(in srgb, var(--accent) 40%, transparent)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent)";
                 }}
               >
-                <ThunderboltOutlined style={{ fontSize: 16 }} />
-                Bắt đầu ôn tập ngay
-                <RightOutlined style={{ fontSize: 12, opacity: 0.7 }} />
-              </button>
+                Bắt đầu ôn tập ngay <RightOutlined style={{ fontSize: 12, opacity: 0.7 }} />
+              </Button>
             </>
           )}
 
@@ -447,10 +428,10 @@ export default function ReviewHubPage() {
                 {QUICK_LINKS.map((link) => {
                   const badgeValue = legacy[link.badgeKey];
                   return (
-                    <button
+                    <Button
                       key={link.href}
-                      type="button"
                       onClick={() => router.push(link.href)}
+                      icon={link.icon}
                       style={{
                         flex: 1,
                         display: "flex",
@@ -458,44 +439,22 @@ export default function ReviewHubPage() {
                         gap: 10,
                         padding: "12px 16px",
                         borderRadius: 12,
-                        border: "1px solid var(--border)",
-                        background: "var(--surface)",
-                        cursor: "pointer",
-                        fontSize: 13,
+                        height: "auto",
                         fontWeight: 600,
-                        color: "var(--ink)",
-                        textAlign: "left",
-                        transition: "all 0.15s",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "translateY(-1px)";
-                        e.currentTarget.style.boxShadow = "var(--shadow-sm)";
-                        e.currentTarget.style.borderColor = "var(--accent)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "translateY(0)";
-                        e.currentTarget.style.boxShadow = "none";
-                        e.currentTarget.style.borderColor = "var(--border)";
                       }}
                     >
-                      <span style={{ color: "var(--accent)", fontSize: 16 }}>{link.icon}</span>
-                      <span>{link.label}</span>
+                      {link.label}
                       {badgeValue > 0 && (
-                        <span
+                        <Badge
+                          count={badgeValue}
+                          size="small"
                           style={{
                             marginLeft: "auto",
-                            padding: "2px 10px",
-                            borderRadius: 99,
-                            background: "color-mix(in srgb, var(--warning) 12%, transparent)",
-                            color: "var(--warning)",
-                            fontSize: 11,
-                            fontWeight: 700,
+                            backgroundColor: "var(--warning)",
                           }}
-                        >
-                          {badgeValue}
-                        </span>
+                        />
                       )}
-                    </button>
+                    </Button>
                   );
                 })}
               </div>
