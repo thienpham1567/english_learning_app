@@ -3,9 +3,9 @@
 import {
   ClockCircleOutlined,
   FileSearchOutlined,
-  LoadingOutlined,
   ThunderboltOutlined,
 } from "@ant-design/icons";
+import { Skeleton } from "antd";
 
 type Props = {
   examMode: string;
@@ -100,16 +100,11 @@ export function MockTestIdle({ examMode, questionCount, setQuestionCount, onStar
 export function MockTestLoading({ modeLabel }: { modeLabel: string }) {
   return (
     <div className="anim-fade-in" style={{
-      display: "flex", flexDirection: "column", alignItems: "center",
-      justifyContent: "center", minHeight: 300, gap: 16,
+      minHeight: 300, display: "flex", flexDirection: "column",
+      justifyContent: "center", padding: 24, maxWidth: 500, margin: "0 auto",
     }}>
-      <div style={{
-        width: 64, height: 64, borderRadius: 20,
-        background: "var(--accent-muted)", display: "grid", placeItems: "center",
-      }}>
-        <LoadingOutlined spin style={{ fontSize: 28, color: "var(--accent)" }} />
-      </div>
-      <p style={{ color: "var(--text-secondary)", marginTop: 0, fontSize: 13 }}>
+      <Skeleton active paragraph={{ rows: 5 }} />
+      <p style={{ color: "var(--text-secondary)", textAlign: "center", marginTop: 16, fontSize: 13 }}>
         Đang tạo đề thi {modeLabel}...
       </p>
     </div>

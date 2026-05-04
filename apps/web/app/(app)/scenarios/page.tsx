@@ -1,7 +1,7 @@
 "use client";
 import { api } from "@/lib/api-client";
 import { useCallback, useEffect, useState } from "react";
-import { Card, Flex, Typography, Button, Progress, Tag, Spin, Steps } from "antd";
+import { Card, Flex, Typography, Button, Progress, Tag, Skeleton, Steps } from "antd";
 import {
   CheckCircleFilled,
   RightOutlined,
@@ -104,9 +104,9 @@ export default function ScenariosPage() {
   if (phase === "list") {
     if (loading) {
       return (
-        <Flex align="center" justify="center" style={{ height: "100%", flexDirection: "column", gap: 16 }}>
-          <Spin size="large" />
-        </Flex>
+        <div style={{ padding: "40px 24px", maxWidth: 600, margin: "0 auto" }}>
+          <Skeleton active paragraph={{ rows: 6 }} />
+        </div>
       );
     }
 

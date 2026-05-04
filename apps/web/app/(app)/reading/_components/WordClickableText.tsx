@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, type ReactNode } from "react";
+import { useState, useCallback, useRef, type ReactNode } from "react";
 import { Popover, Spin, Button, message } from "antd";
 import {
   SoundOutlined,
@@ -68,12 +68,30 @@ export function WordClickableText({ text, style }: WordClickableTextProps) {
   const [msgApi, contextHolder] = message.useMessage();
   const { speak: speakTts, isLoading: isTtsLoading } = useTextToSpeech();
 
+  // Client-side dictionary cache to avoid N+1 API calls per word click
+  const dictCacheRef = useRef<Map<string, { entry: DictEntry | null; isSaved: boolean }>>(new Map());
+
   // ── Lookup word via dictionary API (AC3) ──
   const lookupWord = useCallback(async (word: string) => {
     const normalized = word.toLowerCase().replace(/[^a-z'-]/g, "");
     if (!normalized || normalized.length < 2) return;
 
     setActiveWord(normalized);
+
+    // Serve from cache if available
+    const cached = dictCacheRef.current.get(normalized);
+    if (cached) {
+      setPopoverData({
+        word: normalized,
+        loading: false,
+        entry: cached.entry,
+        error: cached.entry ? null : "Không tìm thấy từ này.",
+        saved: false,
+        alreadySaved: cached.isSaved,
+      });
+      return;
+    }
+
     setPopoverData({
       word: normalized,
       loading: true,
@@ -122,6 +140,18 @@ export function WordClickableText({ text, style }: WordClickableTextProps) {
             }
           : null,
       );
+
+      // Write to cache
+      dictCacheRef.current.set(normalized, {
+        entry: {
+          headword: vocab.headword ?? normalized,
+          ipa: vocab.pronunciation?.ipa,
+          definition: firstDef?.definition ?? vocab.core_meaning ?? "",
+          example: firstDef?.example,
+          partOfSpeech: firstMeaning?.part_of_speech,
+        },
+        isSaved: !!data.isSaved,
+      });
     } catch {
       setPopoverData((prev) =>
         prev ? { ...prev, loading: false, error: "Lỗi khi tra từ." } : null,

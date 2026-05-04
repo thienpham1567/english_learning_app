@@ -35,6 +35,9 @@ export function useTextToSpeech(defaultAccent: TtsAccent = "us") {
     async (text: string, opts?: { accent?: TtsAccent }) => {
       if (!isSupported || !text.trim()) return;
 
+      // Debounce: ignore if already loading
+      if (isLoading) return;
+
       audioRef.current?.pause();
       abortRef.current?.abort();
 
@@ -44,8 +47,8 @@ export function useTextToSpeech(defaultAccent: TtsAccent = "us") {
       setIsLoading(true);
       setSpeaking(false);
 
-      try {
-        const response = await api.post<Response>("/voice/synthesize",
+      const makeRequest = () =>
+        api.post<Response>("/voice/synthesize",
           {
             text: text.slice(0, 200),
             speed: rate,
@@ -53,6 +56,16 @@ export function useTextToSpeech(defaultAccent: TtsAccent = "us") {
           },
           { raw: true, signal: abortController.signal },
         );
+
+      try {
+        let response: Response;
+        try {
+          response = await makeRequest();
+        } catch (firstErr) {
+          // Retry once on non-abort errors
+          if ((firstErr as Error).name === "AbortError") throw firstErr;
+          response = await makeRequest();
+        }
 
         const audioBlob = await response.blob();
         const audioUrl = URL.createObjectURL(audioBlob);
@@ -78,12 +91,17 @@ export function useTextToSpeech(defaultAccent: TtsAccent = "us") {
       } catch (err) {
         if ((err as Error).name !== "AbortError") {
           console.warn("[useTextToSpeech] Error:", err);
+          // Show user-facing error toast
+          if (typeof window !== "undefined") {
+            const { message: antMessage } = await import("antd");
+            antMessage.error("Không thể phát âm. Vui lòng thử lại.");
+          }
         }
         setIsLoading(false);
         setSpeaking(false);
       }
     },
-    [isSupported, rate, accent],
+    [isSupported, rate, accent, isLoading],
   );
 
   const stop = useCallback(() => {

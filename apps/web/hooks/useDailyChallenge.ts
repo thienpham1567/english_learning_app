@@ -10,6 +10,48 @@ import type {
   ExerciseAnswer,
 } from "@/lib/daily-challenge/types";
 
+const PROGRESS_KEY = "daily-challenge-progress";
+
+type SavedProgress = {
+  date: string;
+  currentExercise: number;
+  userAnswers: { exerciseIndex: number; answer: string }[];
+};
+
+function getTodayKey() {
+  return new Date().toISOString().slice(0, 10);
+}
+
+function loadSavedProgress(): SavedProgress | null {
+  try {
+    const raw = localStorage.getItem(PROGRESS_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as SavedProgress;
+    // Only restore if it's today's progress
+    if (parsed.date !== getTodayKey()) {
+      localStorage.removeItem(PROGRESS_KEY);
+      return null;
+    }
+    return parsed;
+  } catch {
+    return null;
+  }
+}
+
+function saveProgress(currentExercise: number, userAnswers: { exerciseIndex: number; answer: string }[]) {
+  try {
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify({
+      date: getTodayKey(),
+      currentExercise,
+      userAnswers,
+    }));
+  } catch { /* localStorage full — non-fatal */ }
+}
+
+function clearProgress() {
+  try { localStorage.removeItem(PROGRESS_KEY); } catch { /* ignore */ }
+}
+
 export function useDailyChallenge() {
   const [state, setState] = useState<ChallengeState>("loading");
   const [challenge, setChallenge] = useState<DailyChallenge | null>(null);
@@ -45,8 +87,15 @@ export function useDailyChallenge() {
           setBadges(data.badges);
 
           if (data.challenge.completedAt) {
+            clearProgress();
             setState("completed");
           } else {
+            // Restore partial progress if available
+            const saved = loadSavedProgress();
+            if (saved && saved.userAnswers.length > 0 && saved.currentExercise < (data.challenge.exercises?.length ?? 5)) {
+              setCurrentExercise(saved.currentExercise);
+              setUserAnswers(saved.userAnswers);
+            }
             startTime.current = Date.now();
             setTimeElapsedMs(0);
             setState("active");
@@ -105,6 +154,8 @@ export function useDailyChallenge() {
           void api.post("/errors", { errors: wrongAnswers }).catch(() => {});
         }
 
+        // Clear saved progress on successful submission
+        clearProgress();
         setState("results");
       } catch {
         setError("Không thể nộp bài. Vui lòng thử lại.");
@@ -121,9 +172,13 @@ export function useDailyChallenge() {
 
       const totalExercises = challenge?.exercises.length ?? 5;
       if (currentExercise + 1 >= totalExercises) {
+        clearProgress();
         submitAnswers(newAnswers);
       } else {
-        setCurrentExercise((prev) => prev + 1);
+        const nextIdx = currentExercise + 1;
+        setCurrentExercise(nextIdx);
+        // Persist partial progress to localStorage
+        saveProgress(nextIdx, newAnswers);
       }
     },
     [challenge, currentExercise, submitAnswers, userAnswers],

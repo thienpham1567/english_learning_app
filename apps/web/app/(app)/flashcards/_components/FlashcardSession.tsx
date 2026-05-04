@@ -1,5 +1,5 @@
 "use client";
-import { Spin, Progress, Flex, Typography, Button, Result } from "antd";
+import { Skeleton, Progress, Flex, Typography, Button, Result } from "antd";
 import { BookOutlined, ReloadOutlined } from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
@@ -94,10 +94,9 @@ export function FlashcardSession() {
           }}
         >
           {state === "loading" && (
-            <Flex vertical align="center" gap={16} className="anim-fade-in">
-              <Spin size="large" />
-              <Text type="secondary">Đang tải thẻ ôn tập...</Text>
-            </Flex>
+            <div className="anim-fade-in" style={{ width: "100%", maxWidth: 500, padding: 24 }}>
+              <Skeleton active paragraph={{ rows: 4 }} />
+            </div>
           )}
 
           {state === "error" && (
