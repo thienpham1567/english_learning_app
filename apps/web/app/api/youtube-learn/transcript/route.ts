@@ -1,30 +1,24 @@
 import { NextResponse } from "next/server";
 import { headers } from "next/headers";
-import { YoutubeTranscript } from "youtube-transcript";
+import { Innertube } from "youtubei.js";
 
 import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 import { extractYouTubeVideoId } from "@/lib/youtube/extract-id";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 const log = routeLogger("youtube-learn/transcript");
 
-type OEmbedResponse = {
-  title?: string;
-  author_name?: string;
-  thumbnail_url?: string;
-};
+type Segment = { start: number; duration: number; text: string };
 
-async function fetchVideoMeta(videoId: string): Promise<OEmbedResponse> {
-  try {
-    const res = await fetch(
-      `https://www.youtube.com/oembed?url=https://www.youtube.com/watch?v=${videoId}&format=json`,
-      { cache: "no-store" },
-    );
-    if (!res.ok) return {};
-    return (await res.json()) as OEmbedResponse;
-  } catch {
-    return {};
+let innertubePromise: Promise<Innertube> | null = null;
+function getInnertube(): Promise<Innertube> {
+  if (!innertubePromise) {
+    innertubePromise = Innertube.create({ retrieve_player: false });
   }
+  return innertubePromise;
 }
 
 export async function POST(req: Request) {
@@ -45,14 +39,39 @@ export async function POST(req: Request) {
       );
     }
 
-    let segments: Array<{ start: number; duration: number; text: string }> = [];
+    const yt = await getInnertube();
+
+    let info;
     try {
-      const raw = await YoutubeTranscript.fetchTranscript(videoId, { lang: "en" });
-      segments = raw.map((s) => ({
-        start: s.offset / 1000,
-        duration: s.duration / 1000,
-        text: decodeHtmlEntities(s.text),
-      }));
+      info = await yt.getInfo(videoId);
+    } catch (err) {
+      log.warn({ err, videoId }, "getInfo failed");
+      return NextResponse.json(
+        { error: "Không tải được video. Kiểm tra link hoặc video có thể bị chặn." },
+        { status: 404 },
+      );
+    }
+
+    let segments: Segment[] = [];
+    try {
+      const transcriptData = await info.getTranscript();
+      const initial =
+        transcriptData?.transcript?.content?.body?.initial_segments ?? [];
+      segments = initial
+        .map((seg): Segment | null => {
+          const startMs = Number(seg.start_ms);
+          const endMs = Number(seg.end_ms);
+          const text = seg.snippet?.text?.trim() ?? "";
+          if (!Number.isFinite(startMs) || !Number.isFinite(endMs) || !text) {
+            return null;
+          }
+          return {
+            start: startMs / 1000,
+            duration: Math.max(0, (endMs - startMs) / 1000),
+            text,
+          };
+        })
+        .filter((s): s is Segment => s !== null);
     } catch (err) {
       log.warn({ err, videoId }, "transcript fetch failed");
       return NextResponse.json(
@@ -68,28 +87,19 @@ export async function POST(req: Request) {
       );
     }
 
-    const meta = await fetchVideoMeta(videoId);
+    const basic = info.basic_info;
+    const thumbnails = basic.thumbnail ?? [];
+    const bestThumb = thumbnails[thumbnails.length - 1]?.url;
 
     return NextResponse.json({
       videoId,
-      title: meta.title ?? "Untitled video",
-      channelTitle: meta.author_name ?? null,
-      thumbnailUrl: meta.thumbnail_url ?? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+      title: basic.title ?? "Untitled video",
+      channelTitle: basic.author ?? null,
+      thumbnailUrl: bestThumb ?? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
       transcript: segments,
     });
   } catch (err) {
     log.error({ err }, "transcript route error");
     return NextResponse.json({ error: "Đã có lỗi xảy ra." }, { status: 500 });
   }
-}
-
-function decodeHtmlEntities(text: string): string {
-  return text
-    .replace(/&amp;/g, "&")
-    .replace(/&lt;/g, "<")
-    .replace(/&gt;/g, ">")
-    .replace(/&quot;/g, '"')
-    .replace(/&#39;/g, "'")
-    .replace(/&nbsp;/g, " ")
-    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(parseInt(n, 10)));
 }
