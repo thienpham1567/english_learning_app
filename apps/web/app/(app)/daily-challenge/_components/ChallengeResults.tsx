@@ -1,14 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Typography } from "antd";
 import {
   CheckCircleFilled,
   CloseCircleFilled,
   DownOutlined,
   BookOutlined,
   TrophyOutlined,
-  LikeOutlined,
   FireOutlined,
   ClockCircleOutlined,
   StarOutlined,
@@ -21,32 +19,30 @@ import {
   SearchOutlined,
   QuestionCircleOutlined,
   BulbOutlined,
+  LikeOutlined,
   RightOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
 
 import type { ExerciseAnswer, StreakInfo, Badge } from "@/lib/daily-challenge/types";
-import { CelebrationOverlay, StreakFire } from "@/components/shared";
+import { CelebrationOverlay } from "@/components/shared";
 import { BadgeGallery } from "./BadgeGallery";
-
-const { Title, Text } = Typography;
 
 /* ── Tier config ── */
 const TIERS = [
-  { min: 5, tier: "big" as const, icon: <TrophyOutlined />, label: "Hoàn hảo!", color: "var(--xp)" },
-  { min: 4, tier: "medium" as const, icon: <LikeOutlined />, label: "Xuất sắc!", color: "var(--accent)" },
-  { min: 3, tier: "small" as const, icon: <SmileOutlined />, label: "Tốt lắm!", color: "var(--success)" },
-  { min: 0, tier: null, icon: <FireOutlined />, label: "Cố lên!", color: "var(--text-secondary)" },
+  { min: 5, tier: "big" as const, label: "Hoàn hảo!", sub: "Tất cả đều đúng" },
+  { min: 4, tier: "medium" as const, label: "Xuất sắc!", sub: "Gần như hoàn hảo" },
+  { min: 3, tier: "small" as const, label: "Tốt lắm!", sub: "Đang tiến bộ" },
+  { min: 0, tier: null, label: "Cố lên!", sub: "Lần sau sẽ tốt hơn" },
 ];
 
-/* ── Exercise type icon map ── */
+/* ── Exercise type maps ── */
 const EXERCISE_ICONS: Record<string, React.ReactNode> = {
   "fill-in-blank": <EditOutlined />,
   "sentence-order": <SwapOutlined />,
   "translation": <TranslationOutlined />,
   "error-correction": <SearchOutlined />,
 };
-
 const EXERCISE_LABELS: Record<string, string> = {
   "fill-in-blank": "Điền từ",
   "sentence-order": "Sắp xếp câu",
@@ -54,71 +50,9 @@ const EXERCISE_LABELS: Record<string, string> = {
   "error-correction": "Sửa lỗi",
 };
 
-/* ── Score Ring SVG ── */
-function ScoreRing({ score, total, color }: { score: number; total: number; color: string }) {
-  const radius = 54;
-  const stroke = 7;
-  const circumference = 2 * Math.PI * radius;
-  const pct = total > 0 ? score / total : 0;
-  const offset = circumference * (1 - pct);
-
-  return (
-    <svg width={130} height={130} viewBox="0 0 130 130" style={{ display: "block" }}>
-      {/* Track */}
-      <circle
-        cx="65" cy="65" r={radius}
-        fill="none"
-        stroke="rgba(255,255,255,0.15)"
-        strokeWidth={stroke}
-      />
-      {/* Progress */}
-      <circle
-        cx="65" cy="65" r={radius}
-        fill="none"
-        stroke={color}
-        strokeWidth={stroke}
-        strokeLinecap="round"
-        strokeDasharray={circumference}
-        strokeDashoffset={offset}
-        style={{
-          transform: "rotate(-90deg)",
-          transformOrigin: "50% 50%",
-          transition: "stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1)",
-        }}
-      />
-    </svg>
-  );
-}
-
-/* ── Stat Pill ── */
-function StatPill({ icon, label, value, color }: { icon: React.ReactNode; label: string; value: string; color?: string }) {
-  return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 3,
-        padding: "12px 8px",
-        borderRadius: 14,
-        background: "rgba(255,255,255,0.08)",
-        backdropFilter: "blur(4px)",
-        border: "1px solid rgba(255,255,255,0.08)",
-        flex: 1,
-        minWidth: 0,
-      }}
-    >
-      <span style={{ fontSize: 16, color: color ?? "rgba(255,255,255,0.5)" }}>{icon}</span>
-      <span style={{ fontSize: 18, fontWeight: 700, color: "#fff", fontVariantNumeric: "tabular-nums", lineHeight: 1 }}>{value}</span>
-      <span style={{ fontSize: 9, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(255,255,255,0.45)" }}>{label}</span>
-    </div>
-  );
-}
-
 /* ── Answer Detail Card ── */
 function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: number }) {
   const [isExpanded, setIsExpanded] = useState(!answer.isCorrect);
-
   const ok = answer.isCorrect;
   const exerciseIcon = answer.exerciseType ? EXERCISE_ICONS[answer.exerciseType] : <QuestionCircleOutlined />;
   const exerciseLabel = answer.exerciseType ? EXERCISE_LABELS[answer.exerciseType] : "";
@@ -127,15 +61,13 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
     <div
       className={`anim-fade-up anim-delay-${Math.min(index + 1, 8)}`}
       style={{
-        borderRadius: 16,
-        border: `1px solid ${ok ? "color-mix(in srgb, var(--success) 25%, transparent)" : "color-mix(in srgb, var(--error) 20%, transparent)"}`,
+        borderRadius: 14,
+        border: `1px solid ${ok ? "rgba(74,124,111,.22)" : "rgba(239,68,68,.16)"}`,
         background: "var(--surface)",
         overflow: "hidden",
-        boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
-        transition: "box-shadow 0.2s",
       }}
     >
-      {/* Header row */}
+      {/* Header */}
       <button
         type="button"
         onClick={() => setIsExpanded((v) => !v)}
@@ -144,65 +76,74 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
           alignItems: "center",
           justifyContent: "space-between",
           width: "100%",
-          padding: "14px 16px",
+          padding: "13px 16px",
           background: "transparent",
           border: "none",
           cursor: "pointer",
           gap: 10,
         }}
       >
-        {/* Left: status + label */}
         <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 0 }}>
           <div
             style={{
-              width: 30,
-              height: 30,
-              borderRadius: 10,
-              display: "grid",
-              placeItems: "center",
-              background: ok
-                ? "color-mix(in srgb, var(--success) 12%, transparent)"
-                : "color-mix(in srgb, var(--error) 12%, transparent)",
+              width: 7,
+              height: 7,
+              borderRadius: "50%",
+              background: ok ? "var(--sage, var(--success))" : "var(--error)",
               flexShrink: 0,
-              fontSize: 14,
-              color: ok ? "var(--success)" : "var(--error)",
             }}
-          >
-            {ok ? <CheckCircleFilled /> : <CloseCircleFilled />}
-          </div>
+          />
           <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 1, minWidth: 0 }}>
-            <span style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)", whiteSpace: "nowrap" }}>
+            <span
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: 14,
+                fontWeight: 600,
+                color: "var(--text-primary)",
+              }}
+            >
               Câu {index + 1}
             </span>
             {exerciseLabel && (
-              <span style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 11, color: "var(--text-muted)", fontWeight: 400, whiteSpace: "nowrap" }}>
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 4,
+                  fontSize: 10,
+                  color: "var(--text-muted)",
+                  fontWeight: 400,
+                  letterSpacing: ".06em",
+                  fontFamily: "var(--font-body)",
+                }}
+              >
                 {exerciseIcon} {exerciseLabel}
               </span>
             )}
           </div>
         </div>
 
-        {/* Right: result badge + chevron */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10, flexShrink: 0 }}>
           <span
             style={{
-              fontSize: 11,
-              fontWeight: 600,
-              padding: "3px 12px",
-              borderRadius: 999,
-              background: ok
-                ? "color-mix(in srgb, var(--success) 12%, transparent)"
-                : "color-mix(in srgb, var(--error) 12%, transparent)",
-              color: ok ? "var(--success)" : "var(--error)",
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: ".1em",
+              textTransform: "uppercase",
+              padding: "3px 10px",
+              borderRadius: 99,
+              background: ok ? "rgba(74,124,111,.1)" : "rgba(239,68,68,.09)",
+              color: ok ? "var(--sage, var(--success))" : "var(--error)",
+              fontFamily: "var(--font-body)",
             }}
           >
             {ok ? "Đúng" : "Sai"}
           </span>
           <DownOutlined
             style={{
-              fontSize: 10,
+              fontSize: 9,
               color: "var(--text-muted)",
-              transition: "transform 0.25s",
+              transition: "transform .25s",
               transform: isExpanded ? "rotate(180deg)" : "rotate(0)",
             }}
           />
@@ -214,26 +155,49 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
         style={{
           maxHeight: isExpanded ? 800 : 0,
           overflow: "hidden",
-          transition: "max-height 0.35s cubic-bezier(0.4,0,0.2,1)",
+          transition: "max-height .35s cubic-bezier(.4,0,.2,1)",
         }}
       >
-        <div style={{ padding: "0 16px 16px", display: "flex", flexDirection: "column", gap: 10 }}>
+        <div
+          style={{
+            padding: "0 16px 16px",
+            display: "flex",
+            flexDirection: "column",
+            gap: 8,
+          }}
+        >
           {/* Question stem */}
           {answer.questionStem && (
             <div
               style={{
-                borderRadius: 12,
+                borderRadius: 10,
                 background: "var(--bg-deep)",
-                padding: "12px 14px",
+                padding: "11px 14px",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
-                <QuestionCircleOutlined style={{ fontSize: 11, color: "var(--text-muted)" }} />
-                <span style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--text-muted)" }}>
-                  Câu hỏi
-                </span>
-              </div>
-              <span style={{ fontSize: 13, color: "var(--ink)", lineHeight: 1.7, wordBreak: "break-word" }}>
+              <span
+                style={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: ".12em",
+                  color: "var(--text-muted)",
+                  display: "block",
+                  marginBottom: 5,
+                  fontFamily: "var(--font-body)",
+                }}
+              >
+                Câu hỏi
+              </span>
+              <span
+                style={{
+                  fontSize: 13,
+                  color: "var(--text-primary)",
+                  lineHeight: 1.65,
+                  fontFamily: "var(--font-body)",
+                  wordBreak: "break-word",
+                }}
+              >
                 {answer.questionStem}
               </span>
             </div>
@@ -242,80 +206,111 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
           {/* User answer */}
           <div
             style={{
-              borderRadius: 12,
-              border: `1px solid ${ok ? "color-mix(in srgb, var(--success) 25%, transparent)" : "color-mix(in srgb, var(--error) 25%, transparent)"}`,
-              padding: "12px 14px",
+              borderRadius: 10,
+              borderLeft: `3px solid ${ok ? "var(--sage, var(--success))" : "var(--error)"}`,
+              padding: "10px 14px",
               background: ok
-                ? "color-mix(in srgb, var(--success) 4%, var(--surface))"
-                : "color-mix(in srgb, var(--error) 4%, var(--surface))",
+                ? "rgba(74,124,111,.05)"
+                : "rgba(239,68,68,.04)",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
-              {ok ? (
-                <CheckCircleFilled style={{ fontSize: 11, color: "var(--success)" }} />
-              ) : (
-                <CloseCircleFilled style={{ fontSize: 11, color: "var(--error)" }} />
-              )}
-              <span style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: ok ? "var(--success)" : "var(--error)" }}>
-                Câu trả lời của bạn
-              </span>
-            </div>
-            <span style={{ fontSize: 13, fontWeight: 500, color: "var(--ink)", wordBreak: "break-word", lineHeight: 1.6 }}>
+            <span
+              style={{
+                fontSize: 10,
+                fontWeight: 700,
+                textTransform: "uppercase",
+                letterSpacing: ".12em",
+                color: ok ? "var(--sage, var(--success))" : "var(--error)",
+                display: "block",
+                marginBottom: 4,
+                fontFamily: "var(--font-body)",
+              }}
+            >
+              {ok ? "Câu trả lời của bạn" : "Bạn đã chọn"}
+            </span>
+            <span
+              style={{
+                fontSize: 13,
+                fontWeight: 500,
+                color: "var(--text-primary)",
+                wordBreak: "break-word",
+                lineHeight: 1.6,
+                fontFamily: "var(--font-body)",
+              }}
+            >
               {answer.answer || "(bỏ trống)"}
             </span>
           </div>
 
-          {/* Correct answer (only for wrong) */}
+          {/* Correct answer (wrong only) */}
           {!ok && answer.correctAnswer && (
             <div
               style={{
-                borderRadius: 12,
-                border: "1px solid color-mix(in srgb, var(--success) 25%, transparent)",
-                padding: "12px 14px",
-                background: "color-mix(in srgb, var(--success) 4%, var(--surface))",
+                borderRadius: 10,
+                borderLeft: "3px solid var(--sage, var(--success))",
+                padding: "10px 14px",
+                background: "rgba(74,124,111,.05)",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
-                <CheckCircleFilled style={{ fontSize: 11, color: "var(--success)" }} />
-                <span style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--success)" }}>
-                  Đáp án đúng
-                </span>
-              </div>
-              <span style={{ fontSize: 13, fontWeight: 600, color: "var(--success)", wordBreak: "break-word", lineHeight: 1.6 }}>
+              <span
+                style={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: ".12em",
+                  color: "var(--sage, var(--success))",
+                  display: "block",
+                  marginBottom: 4,
+                  fontFamily: "var(--font-body)",
+                }}
+              >
+                Đáp án đúng
+              </span>
+              <span
+                style={{
+                  fontSize: 13,
+                  fontWeight: 600,
+                  color: "var(--sage, var(--success))",
+                  wordBreak: "break-word",
+                  lineHeight: 1.6,
+                  fontFamily: "var(--font-body)",
+                }}
+              >
                 {answer.correctAnswer}
               </span>
             </div>
           )}
 
-          {/* Explanation for wrong answers */}
-          {!ok && answer.explanation && (
+          {/* Explanation */}
+          {answer.explanation && (
             <div
               style={{
-                borderRadius: 12,
-                borderLeft: "3px solid var(--accent)",
-                background: "color-mix(in srgb, var(--accent) 5%, var(--surface))",
-                padding: "12px 14px",
+                display: "flex",
+                gap: 8,
+                padding: "4px 2px",
+                alignItems: "flex-start",
               }}
             >
-              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
-                <BulbOutlined style={{ fontSize: 12, color: "var(--accent)" }} />
-                <span style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--accent)" }}>
-                  Giải thích
-                </span>
-              </div>
-              <p style={{ fontSize: 13, lineHeight: 1.7, color: "var(--text-primary)", margin: 0, wordBreak: "break-word" }}>
+              <BulbOutlined
+                style={{
+                  color: "var(--accent)",
+                  fontSize: 12,
+                  marginTop: 3,
+                  flexShrink: 0,
+                }}
+              />
+              <p
+                style={{
+                  fontSize: 12,
+                  lineHeight: 1.7,
+                  color: "var(--text-secondary)",
+                  margin: 0,
+                  wordBreak: "break-word",
+                  fontFamily: "var(--font-body)",
+                }}
+              >
                 {answer.explanation}
               </p>
-            </div>
-          )}
-
-          {/* Correct answer confirmation */}
-          {ok && answer.explanation && (
-            <div style={{ display: "flex", alignItems: "flex-start", gap: 8, padding: "4px 2px" }}>
-              <BulbOutlined style={{ color: "var(--success)", fontSize: 13, marginTop: 2, flexShrink: 0 }} />
-              <span style={{ fontSize: 12, color: "var(--success)", fontWeight: 500, lineHeight: 1.6 }}>
-                {answer.explanation}
-              </span>
             </div>
           )}
         </div>
@@ -334,7 +329,14 @@ type Props = {
   timeElapsedMs: number;
 };
 
-export function ChallengeResults({ answers, score, streak, badges, newBadges, timeElapsedMs }: Props) {
+export function ChallengeResults({
+  answers,
+  score,
+  streak,
+  badges,
+  newBadges,
+  timeElapsedMs,
+}: Props) {
   const matched = TIERS.find((t) => score >= t.min)!;
   const [showCelebration, setShowCelebration] = useState(matched.tier !== null);
 
@@ -346,126 +348,189 @@ export function ChallengeResults({ answers, score, streak, badges, newBadges, ti
 
   return (
     <>
-      {/* Celebration overlay */}
       {matched.tier && (
         <CelebrationOverlay
           tier={matched.tier}
           visible={showCelebration}
           onComplete={() => setShowCelebration(false)}
         >
-          <Title
-            level={3}
-            style={{
-              color: matched.tier === "big" ? "var(--xp)" : "var(--ink)",
-              margin: 0,
-              textShadow: "0 2px 8px rgba(0,0,0,0.15)",
-            }}
-          >
-            {matched.icon} {matched.label}
-          </Title>
-        </CelebrationOverlay>
-      )}
-
-      <div className="anim-scale-in" style={{ maxWidth: 520, margin: "0 auto", width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
-        {/* ── Hero Score Card ── */}
-        <div
-          style={{
-            width: "100%",
-            borderRadius: 24,
-            padding: "32px 20px 24px",
-            background: "linear-gradient(145deg, color-mix(in srgb, var(--accent) 85%, #000) 0%, var(--accent) 50%, color-mix(in srgb, var(--secondary) 90%, var(--accent)) 100%)",
-            boxShadow: "0 8px 32px color-mix(in srgb, var(--accent) 25%, transparent), 0 2px 8px rgba(0,0,0,0.1)",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 4,
-            position: "relative",
-            overflow: "hidden",
-            color: "#fff",
-          }}
-        >
-          {/* Decorative elements */}
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              background: "radial-gradient(ellipse 80% 60% at 80% 0%, rgba(255,255,255,0.12) 0%, transparent 70%)",
-              pointerEvents: "none",
-            }}
-          />
-          <div className="grain-overlay" style={{ opacity: 0.03 }} />
-
-          {/* Score ring + number */}
-          <div style={{ position: "relative", width: 130, height: 130 }}>
-            <ScoreRing score={correctCount} total={answers.length} color="#fff" />
-            <div
-              style={{
-                position: "absolute",
-                inset: 0,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <span style={{ fontSize: 38, fontWeight: 800, lineHeight: 1, fontVariantNumeric: "tabular-nums" }}>
-                {correctCount}
-              </span>
-              <span style={{ fontSize: 13, fontWeight: 500, opacity: 0.6, marginTop: 2 }}>
-                / {answers.length}
-              </span>
-            </div>
-          </div>
-
-          {/* Tier label */}
-          <span style={{ fontSize: 28, marginTop: 4, filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.2))" }}>{matched.icon}</span>
           <span
             style={{
-              fontSize: 20,
-              fontWeight: 700,
               fontFamily: "var(--font-display)",
-              textShadow: "0 1px 4px rgba(0,0,0,0.15)",
+              fontSize: 22,
+              fontWeight: 700,
+              fontStyle: "italic",
+              color: matched.tier === "big" ? "var(--xp)" : "var(--ink)",
             }}
           >
             {matched.label}
           </span>
-          <span style={{ fontSize: 13, fontWeight: 500, opacity: 0.7 }}>
-            Chính xác {pct}%
-          </span>
+        </CelebrationOverlay>
+      )}
 
-          {/* Stat pills row */}
+      <div
+        className="anim-scale-in"
+        style={{
+          maxWidth: 520,
+          margin: "0 auto",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          gap: 0,
+        }}
+      >
+        {/* ── Score Hero — editorial typographic style ── */}
+        <div
+          style={{
+            borderRadius: 20,
+            border: "1px solid var(--border)",
+            background: "var(--surface)",
+            padding: "36px 28px 28px",
+            textAlign: "center",
+            position: "relative",
+            overflow: "hidden",
+          }}
+        >
+          {/* Top accent line */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: 56,
+              height: 2,
+              background: "var(--accent)",
+              borderRadius: "0 0 2px 2px",
+            }}
+          />
+
+          {/* Big score number */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "baseline",
+              justifyContent: "center",
+              gap: 6,
+              marginBottom: 10,
+            }}
+          >
+            <span
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: 96,
+                fontWeight: 900,
+                lineHeight: 1,
+                color: correctCount === answers.length
+                  ? "var(--sage, var(--success))"
+                  : correctCount >= answers.length * 0.6
+                  ? "var(--ink, var(--text-primary))"
+                  : "var(--accent)",
+                letterSpacing: "-.04em",
+              }}
+            >
+              {correctCount}
+            </span>
+            <span
+              style={{
+                fontFamily: "var(--font-display)",
+                fontSize: 32,
+                fontWeight: 300,
+                color: "var(--text-muted)",
+                letterSpacing: "-.02em",
+                marginBottom: 8,
+              }}
+            >
+              /{answers.length}
+            </span>
+          </div>
+
+          {/* Title */}
+          <p
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: 22,
+              fontWeight: 700,
+              fontStyle: "italic",
+              color: "var(--text-primary)",
+              margin: "0 0 4px",
+              letterSpacing: "-.02em",
+            }}
+          >
+            {matched.label}
+          </p>
+          <p
+            style={{
+              fontFamily: "var(--font-body)",
+              fontSize: 13,
+              color: "var(--text-muted)",
+              margin: 0,
+            }}
+          >
+            {matched.sub} · Chính xác {pct}%
+          </p>
+
+          {/* Thin divider */}
+          <div
+            style={{
+              margin: "20px auto",
+              width: 40,
+              height: 1,
+              background: "var(--border)",
+            }}
+          />
+
+          {/* Stats row */}
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(70px, 1fr))",
-              gap: 8,
-              width: "100%",
-              marginTop: 20,
+              gridTemplateColumns: "repeat(4, 1fr)",
+              gap: 0,
             }}
           >
-            <StatPill
-              icon={<CheckCircleFilled />}
-              label="Đúng"
-              value={String(correctCount)}
-              color="color-mix(in srgb, var(--success) 80%, white)"
-            />
-            <StatPill
-              icon={<CloseCircleFilled />}
-              label="Sai"
-              value={String(wrongCount)}
-              color={wrongCount > 0 ? "color-mix(in srgb, var(--error) 80%, white)" : "rgba(255,255,255,0.3)"}
-            />
-            <StatPill
-              icon={<ClockCircleOutlined />}
-              label="Thời gian"
-              value={`${minutes}:${seconds.toString().padStart(2, "0")}`}
-            />
-            <StatPill
-              icon={<FireOutlined />}
-              label="Streak"
-              value={String(streak.currentStreak)}
-              color="color-mix(in srgb, var(--warning) 80%, white)"
-            />
+            {[
+              { icon: <CheckCircleFilled style={{ color: "var(--sage, var(--success))" }} />, label: "Đúng", value: correctCount },
+              { icon: <CloseCircleFilled style={{ color: "var(--error)" }} />, label: "Sai", value: wrongCount },
+              { icon: <ClockCircleOutlined />, label: "Thời gian", value: `${minutes}:${seconds.toString().padStart(2, "0")}` },
+              { icon: <FireOutlined style={{ color: "var(--fire, var(--warning))" }} />, label: "Streak", value: streak.currentStreak },
+            ].map((s, i, arr) => (
+              <div
+                key={s.label}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  gap: 4,
+                  padding: "12px 8px",
+                  borderRight: i < arr.length - 1 ? "1px solid var(--border)" : "none",
+                }}
+              >
+                <span style={{ fontSize: 14, color: "var(--text-muted)" }}>{s.icon}</span>
+                <span
+                  style={{
+                    fontFamily: "var(--font-display)",
+                    fontSize: 20,
+                    fontWeight: 700,
+                    color: "var(--text-primary)",
+                    lineHeight: 1,
+                  }}
+                >
+                  {s.value}
+                </span>
+                <span
+                  style={{
+                    fontFamily: "var(--font-body)",
+                    fontSize: 9,
+                    fontWeight: 600,
+                    textTransform: "uppercase",
+                    letterSpacing: ".1em",
+                    color: "var(--text-muted)",
+                  }}
+                >
+                  {s.label}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
 
@@ -474,19 +539,27 @@ export function ChallengeResults({ answers, score, streak, badges, newBadges, ti
           <div
             className="anim-fade-up anim-delay-2"
             style={{
-              marginTop: 16,
-              width: "100%",
-              borderRadius: 16,
-              border: "1.5px solid color-mix(in srgb, var(--xp) 40%, transparent)",
-              background: "color-mix(in srgb, var(--xp) 6%, var(--surface))",
+              marginTop: 12,
+              borderRadius: 14,
+              border: "1.5px solid rgba(196,163,90,.35)",
+              background: "rgba(196,163,90,.05)",
               padding: "14px 18px",
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}>
-              <StarOutlined style={{ fontSize: 13, color: "var(--xp)" }} />
-              <Text strong style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: 1.5, color: "var(--xp)" }}>
+              <StarOutlined style={{ fontSize: 11, color: "var(--xp, var(--warning))" }} />
+              <span
+                style={{
+                  fontSize: 10,
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: ".14em",
+                  color: "var(--xp, var(--warning))",
+                  fontFamily: "var(--font-body)",
+                }}
+              >
                 Huy hiệu mới!
-              </Text>
+              </span>
             </div>
             <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
               {newBadges.map((b, i) => (
@@ -497,40 +570,48 @@ export function ChallengeResults({ answers, score, streak, badges, newBadges, ti
                     display: "inline-flex",
                     alignItems: "center",
                     gap: 6,
-                    fontSize: 13,
+                    fontSize: 12,
                     padding: "5px 14px",
-                    borderRadius: 999,
-                    border: "1px solid var(--xp)",
-                    background: "color-mix(in srgb, var(--xp) 10%, var(--surface))",
+                    borderRadius: 99,
+                    border: "1px solid rgba(196,163,90,.4)",
+                    background: "rgba(196,163,90,.08)",
                     fontWeight: 600,
-                    color: "var(--ink)",
+                    color: "var(--ink, var(--text-primary))",
+                    fontFamily: "var(--font-body)",
                   }}
                 >
-                  {b.icon === "TrophyOutlined" ? <TrophyOutlined style={{ color: "var(--xp)" }} /> : <FireOutlined style={{ color: "var(--xp)" }} />} {b.label}
+                  {b.icon === "TrophyOutlined" ? (
+                    <TrophyOutlined style={{ color: "var(--xp, var(--warning))" }} />
+                  ) : (
+                    <FireOutlined style={{ color: "var(--xp, var(--warning))" }} />
+                  )}
+                  {b.label}
                 </span>
               ))}
             </div>
           </div>
         )}
 
-        {/* ── Section Header: Detail breakdown ── */}
+        {/* ── Answer Breakdown header ── */}
         <div
           style={{
             marginTop: 28,
-            width: "100%",
             display: "flex",
             alignItems: "center",
-            gap: 10,
+            gap: 12,
+            marginBottom: 12,
           }}
         >
-          <BookOutlined style={{ fontSize: 13, color: "var(--accent)" }} />
+          <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
           <span
             style={{
-              fontSize: 11,
+              fontSize: 10,
               fontWeight: 700,
               textTransform: "uppercase",
-              letterSpacing: "0.14em",
-              color: "var(--accent)",
+              letterSpacing: ".16em",
+              color: "var(--text-muted)",
+              whiteSpace: "nowrap",
+              fontFamily: "var(--font-body)",
             }}
           >
             Chi tiết kết quả
@@ -538,28 +619,27 @@ export function ChallengeResults({ answers, score, streak, badges, newBadges, ti
           <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
         </div>
 
-        {/* ── Answer Breakdown ── */}
-        <div style={{ marginTop: 12, width: "100%", display: "flex", flexDirection: "column", gap: 10 }}>
+        {/* Answer Cards */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {answers.map((a, i) => (
             <AnswerDetailCard key={i} answer={a} index={i} />
           ))}
         </div>
 
-        {/* ── All Badges ── */}
-        <div style={{ marginTop: 24, width: "100%" }}>
+        {/* Badges */}
+        <div style={{ marginTop: 24 }}>
           <BadgeGallery badges={badges} />
         </div>
 
-        {/* ── CTA Footer ── */}
+        {/* CTA */}
         <div
           style={{
             marginTop: 28,
-            marginBottom: 12,
+            marginBottom: 8,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            gap: 12,
-            width: "100%",
+            gap: 10,
           }}
         >
           <Link
@@ -568,32 +648,39 @@ export function ChallengeResults({ answers, score, streak, badges, newBadges, ti
             style={{
               display: "inline-flex",
               alignItems: "center",
-              gap: 8,
-              padding: "13px 32px",
-              borderRadius: 999,
-              background: "var(--accent)",
+              gap: 10,
+              padding: "14px 32px",
+              borderRadius: 12,
+              background: "var(--ink, var(--text-primary))",
               color: "#fff",
               fontWeight: 600,
               fontSize: 14,
               textDecoration: "none",
-              transition: "transform 0.15s, box-shadow 0.15s",
-              boxShadow: "0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent)",
+              fontFamily: "var(--font-body)",
+              transition: "opacity .2s, transform .2s",
+              letterSpacing: "-.01em",
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.transform = "translateY(-2px)";
-              e.currentTarget.style.boxShadow = "0 6px 24px color-mix(in srgb, var(--accent) 40%, transparent)";
+              e.currentTarget.style.opacity = ".85";
+              e.currentTarget.style.transform = "translateY(-1px)";
             }}
             onMouseLeave={(e) => {
+              e.currentTarget.style.opacity = "1";
               e.currentTarget.style.transform = "translateY(0)";
-              e.currentTarget.style.boxShadow = "0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent)";
             }}
           >
-            <ThunderboltOutlined /> Tiếp tục học
+            Tiếp tục học
             <RightOutlined style={{ fontSize: 11 }} />
           </Link>
-          <Text type="secondary" style={{ fontSize: 12 }}>
+          <span
+            style={{
+              fontSize: 11,
+              color: "var(--text-muted)",
+              fontFamily: "var(--font-body)",
+            }}
+          >
             Quay lại mai nhé!
-          </Text>
+          </span>
         </div>
       </div>
     </>
