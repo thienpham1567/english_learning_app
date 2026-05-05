@@ -7,6 +7,7 @@ import { BottomTabBar } from "@/components/shared/BottomTabBar";
 import { UserMenu } from "@/components/shared/UserMenu";
 import { UserProvider } from "@/components/shared/UserContext";
 import { ToolbarBreadcrumb } from "@/components/shared/ToolbarBreadcrumb";
+import { FloatingChatWidget } from "@/components/shared/FloatingChatWidget";
 
 export type AuthUser = {
   name: string;
@@ -87,6 +88,9 @@ export function AppShell({ children, user }: { children: ReactNode; user: AuthUs
 
           {/* Mobile bottom tab bar — only after hydration */}
           {isMobile === true && <BottomTabBar />}
+
+          {/* Floating chat widget — visible on all pages */}
+          <FloatingChatWidget />
         </UserProvider>
       </div>
     </div>
