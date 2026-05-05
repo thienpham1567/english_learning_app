@@ -79,8 +79,6 @@ const navGroups: (NavItem | NavGroup)[] = [
     items: [
       { href: "/daily-challenge", label: "Thử thách hàng ngày", icon: FireOutlined },
       { href: "/toeic-practice", label: "Luyện đề TOEIC", icon: BookOutlined },
-      { href: "/mock-test", label: "Thi thử", icon: FileSearchOutlined },
-      { href: "/review", label: "Ôn tập hôm nay", icon: HistoryOutlined },
       { href: "/error-notebook", label: "Sổ lỗi sai", icon: BookOutlined },
     ],
   },
@@ -148,17 +146,6 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
           count={badges.vocabDue}
           size="small"
           style={{ backgroundColor: "var(--info)" }}
-        />
-      );
-    }
-    // Unified review hub badge (Story 22.5, AC: 1)
-    // Uses reviewDue from the badges hook — distinct from legacy flashcard/vocab counts
-    if (href === "/review" && (badges.reviewDue ?? 0) > 0) {
-      return (
-        <Badge
-          count={badges.reviewDue}
-          size="small"
-          style={{ backgroundColor: "var(--warning)" }}
         />
       );
     }

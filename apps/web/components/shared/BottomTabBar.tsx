@@ -49,9 +49,8 @@ const LEARN_HUB_ITEMS = [
 ];
 
 const REVIEW_HUB_ITEMS = [
-  { label: "Ôn tập hôm nay", icon: <AppstoreOutlined />, href: "/review" },
   { label: "Sổ lỗi sai", icon: <BookFilled />, href: "/error-notebook" },
-  { label: "Thi thử", icon: <FireOutlined />, href: "/mock-test" },
+  { label: "Luyện đề TOEIC", icon: <FireOutlined />, href: "/toeic-practice" },
   { label: "Thử thách", icon: <BulbOutlined />, href: "/daily-challenge" },
 ];
 
@@ -66,9 +65,8 @@ function getActiveTab(pathname: string): string {
   if (pathname.startsWith("/english-chatbot")) return "chat";
   if (pathname.startsWith("/my-vocabulary") || pathname.startsWith("/dictionary") || pathname.startsWith("/flashcards")) return "vocab";
   if (
-    pathname.startsWith("/review") ||
     pathname.startsWith("/error-notebook") ||
-    pathname.startsWith("/mock-test") ||
+    pathname.startsWith("/toeic-practice") ||
     pathname.startsWith("/daily-challenge")
   ) return "review";
   if (
