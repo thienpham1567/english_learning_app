@@ -152,10 +152,10 @@ export function FloatingDictionaryWidget() {
               alignItems: "center",
               gap: 6,
               background: "var(--surface)",
-              border: "1.5px solid var(--accent)",
+              border: "1.5px solid var(--border)",
               borderRadius: 28,
               padding: "5px 6px 5px 14px",
-              boxShadow: "0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent), 0 6px 24px rgba(0,0,0,0.12)",
+              boxShadow: "0 6px 24px rgba(0,0,0,0.12)",
               transformOrigin: "bottom right",
             }}
           >
