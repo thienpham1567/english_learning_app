@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { BulbOutlined, HistoryOutlined } from "@ant-design/icons";
-import { Button } from "antd";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { BulbOutlined, HistoryOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import { Button, Tag } from "antd";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 import { useGrammarQuiz } from "@/hooks/useGrammarQuiz";
@@ -36,6 +36,37 @@ export default function GrammarQuizPage() {
   } = useGrammarQuiz();
   const { examMode } = useExamMode();
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [timedMode, setTimedMode] = useState(false);
+  const [timeLeft, setTimeLeft] = useState(0);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Start timer when quiz becomes active
+  useEffect(() => {
+    if (state === "active" && timedMode && questions.length > 0) {
+      const total = questions.length * 30; // 30s per question
+      setTimeLeft(total);
+      timerRef.current = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            if (timerRef.current) clearInterval(timerRef.current);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, [state, timedMode, questions.length]);
+
+  // Auto-submit when time runs out
+  useEffect(() => {
+    if (timedMode && state === "active" && timeLeft === 0 && questions.length > 0) {
+      // Force navigation to end
+      nextQuestion();
+    }
+  }, [timeLeft, timedMode, state, questions.length, nextQuestion]);
+
+  const formatTime = useCallback((s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`, []);
 
   return (
     <>
@@ -57,18 +88,35 @@ export default function GrammarQuizPage() {
         title="TOEIC Part 5"
         subtitle="Incomplete Sentences · Luyện tập theo độ khó"
         action={
-          <Button
-            type="text"
-            icon={<HistoryOutlined style={{ fontSize: 16 }} />}
-            onClick={() => setHistoryOpen(true)}
-            title="Lịch sử làm bài"
-            style={{
-              width: 36, height: 36, borderRadius: 10,
-              border: "1px solid rgba(255,255,255,0.2)",
-              color: "rgba(255,255,255,0.8)",
-              display: "flex", alignItems: "center", justifyContent: "center",
-            }}
-          />
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            {state === "active" && timedMode && (
+              <Tag
+                color={timeLeft <= 30 ? "error" : "default"}
+                style={{
+                  borderRadius: 99, margin: 0, fontSize: 12, fontWeight: 600,
+                  fontVariantNumeric: "tabular-nums",
+                  background: "rgba(255,255,255,0.12)",
+                  border: "1px solid rgba(255,255,255,0.2)",
+                  color: timeLeft <= 30 ? "#ff4d4f" : "rgba(255,255,255,0.8)",
+                }}
+              >
+                <ClockCircleOutlined style={{ marginRight: 4 }} />
+                {formatTime(timeLeft)}
+              </Tag>
+            )}
+            <Button
+              type="text"
+              icon={<HistoryOutlined style={{ fontSize: 16 }} />}
+              onClick={() => setHistoryOpen(true)}
+              title="Lịch sử làm bài"
+              style={{
+                width: 36, height: 36, borderRadius: 10,
+                border: "1px solid rgba(255,255,255,0.2)",
+                color: "rgba(255,255,255,0.8)",
+                display: "flex", alignItems: "center", justifyContent: "center",
+              }}
+            />
+          </div>
         }
       />
 
@@ -129,6 +177,8 @@ export default function GrammarQuizPage() {
                 onSelect={selectLevel}
                 onStart={() => generateQuiz(undefined, examMode)}
                 isLoading={state === "loading"}
+                timedMode={timedMode}
+                onTimedModeChange={setTimedMode}
               />
             </div>
           )}

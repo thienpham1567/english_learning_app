@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { Flex, Typography, Alert, Skeleton, Button, Result } from "antd";
 import {
   ClockCircleOutlined,
@@ -97,6 +97,47 @@ export default function DailyChallengePage() {
     timeElapsedMs,
     answerExercise,
   } = useDailyChallenge();
+
+  // Answer flash animation
+  const exerciseWrapperRef = useRef<HTMLDivElement>(null);
+  const handleAnswer = useCallback(
+    (answer: string) => {
+      // Flash the exercise wrapper
+      if (exerciseWrapperRef.current) {
+        exerciseWrapperRef.current.classList.remove("answer-flash");
+        // Force reflow to restart animation
+        void exerciseWrapperRef.current.offsetWidth;
+        exerciseWrapperRef.current.classList.add("answer-flash");
+      }
+      answerExercise(answer);
+    },
+    [answerExercise],
+  );
+
+  // Personal best tracking via localStorage
+  const BEST_KEY = "daily-challenge-best";
+  const [personalBest, setPersonalBest] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(BEST_KEY);
+      if (stored) setPersonalBest(stored);
+    } catch { /* ignore */ }
+  }, []);
+
+  // Update personal best when results are in
+  useEffect(() => {
+    if (state !== "results" || !results || timeElapsedMs <= 0) return;
+    const correctCount = results.answers.filter((a) => a.isCorrect).length;
+    const total = results.answers.length;
+    if (correctCount < total) return; // Only track perfect scores
+    const timeStr = `${Math.floor(timeElapsedMs / 60000)}:${String(Math.floor((timeElapsedMs % 60000) / 1000)).padStart(2, "0")}`;
+    const prevMs = personalBest ? parseInt(personalBest, 10) : Infinity;
+    if (timeElapsedMs < prevMs) {
+      localStorage.setItem(BEST_KEY, String(timeElapsedMs));
+      setPersonalBest(String(timeElapsedMs));
+    }
+  }, [state, results, timeElapsedMs, personalBest]);
 
   const formattedTime = useElapsedTimer(state === "active");
 
@@ -237,6 +278,7 @@ export default function DailyChallengePage() {
               {/* Exercise Card — glassmorphism wrapper */}
               <div
                 key={currentExercise}
+                ref={exerciseWrapperRef}
                 className="anim-fade-up"
                 style={{
                   borderRadius: 20,
@@ -261,7 +303,7 @@ export default function DailyChallengePage() {
                 />
                 <ExerciseCard
                   exercise={challenge.exercises[currentExercise]}
-                  onAnswer={answerExercise}
+                  onAnswer={handleAnswer}
                   disabled={false}
                 />
               </div>
@@ -361,6 +403,18 @@ export default function DailyChallengePage() {
           )}
         </div>
       </div>
+
+      {/* Answer flash animation */}
+      <style>{`
+        @keyframes answerFlash {
+          0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--success) 40%, transparent); }
+          50% { box-shadow: 0 0 0 12px color-mix(in srgb, var(--success) 0%, transparent); border-color: var(--success); }
+          100% { box-shadow: var(--shadow-md); border-color: var(--border); }
+        }
+        .answer-flash {
+          animation: answerFlash 0.5s ease-out;
+        }
+      `}</style>
     </div>
   );
 }

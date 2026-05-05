@@ -120,6 +120,117 @@ export function MockTestReview({
         />
       )}
 
+      {/* Topic breakdown */}
+      {(() => {
+        const topicMap = new Map<string, { correct: number; total: number }>();
+        questions.forEach((q, i) => {
+          const topic = q.topic || "Other";
+          const entry = topicMap.get(topic) ?? { correct: 0, total: 0 };
+          entry.total++;
+          if (isCorrect(i)) entry.correct++;
+          topicMap.set(topic, entry);
+        });
+        return (
+          <div style={{
+            padding: "16px 18px", borderRadius: 16,
+            border: "1px solid var(--border)", background: "var(--surface)",
+          }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+              <InfoCircleOutlined style={{ fontSize: 12, color: "var(--accent)" }} />
+              <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--accent)" }}>
+                Phân tích theo chủ đề
+              </span>
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {[...topicMap.entries()].map(([topic, { correct, total }]) => {
+                const pct = Math.round((correct / total) * 100);
+                return (
+                  <div key={topic} style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                    <span style={{ fontSize: 13, fontWeight: 500, minWidth: 100, color: "var(--ink)" }}>{topic}</span>
+                    <div style={{ flex: 1, height: 6, borderRadius: 3, background: "var(--border)", overflow: "hidden" }}>
+                      <div style={{
+                        height: "100%", borderRadius: 3,
+                        background: pct >= 80 ? "var(--success)" : pct >= 50 ? "var(--warning)" : "var(--error)",
+                        width: `${pct}%`, transition: "width 0.5s ease",
+                      }} />
+                    </div>
+                    <Tag
+                      color={pct >= 80 ? "success" : pct >= 50 ? "warning" : "error"}
+                      style={{ margin: 0, fontSize: 11, fontWeight: 700, borderRadius: 6 }}
+                    >
+                      {correct}/{total}
+                    </Tag>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        );
+      })()}
+
+      {/* Score history trend */}
+      {(() => {
+        const HISTORY_KEY = "mock-test-scores";
+        // Save current score
+        try {
+          const raw = localStorage.getItem(HISTORY_KEY);
+          const history: { score: number; total: number; date: string }[] = raw ? JSON.parse(raw) : [];
+          const today = new Date().toISOString().slice(0, 10);
+          // Only add if this session hasn't been added yet (check last entry)
+          const last = history[history.length - 1];
+          if (!last || last.score !== score || last.total !== questions.length || last.date !== today) {
+            history.push({ score, total: questions.length, date: today });
+            if (history.length > 10) history.shift();
+            localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+          }
+          if (history.length >= 2) {
+            return (
+              <div style={{
+                padding: "16px 18px", borderRadius: 16,
+                border: "1px solid var(--border)", background: "var(--surface)",
+              }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
+                  <ClockCircleOutlined style={{ fontSize: 12, color: "var(--accent)" }} />
+                  <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--accent)" }}>
+                    Lịch sử điểm (gần nhất)
+                  </span>
+                </div>
+                <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                  {history.map((h, i) => {
+                    const pct = Math.round((h.score / h.total) * 100);
+                    return (
+                      <Tag
+                        key={`${h.date}-${i}`}
+                        color={pct >= 80 ? "success" : pct >= 50 ? "warning" : "error"}
+                        style={{ fontSize: 12, padding: "3px 10px", fontWeight: 600, borderRadius: 6 }}
+                      >
+                        {pct}%
+                      </Tag>
+                    );
+                  })}
+                </div>
+                {(() => {
+                  const lastPct = Math.round((history[history.length - 1].score / history[history.length - 1].total) * 100);
+                  const prevPct = Math.round((history[history.length - 2].score / history[history.length - 2].total) * 100);
+                  const diff = lastPct - prevPct;
+                  if (diff === 0) return null;
+                  return (
+                    <p style={{
+                      margin: "8px 0 0", fontSize: 12,
+                      color: diff > 0 ? "var(--success)" : "var(--error)",
+                      fontWeight: 600,
+                    }}>
+                      {diff > 0 ? `↑ +${diff}%` : `↓ ${diff}%`} so với lần trước
+                    </p>
+                  );
+                })()}
+              </div>
+            );
+          }
+        } catch { /* ignore */ }
+        return null;
+      })()}
+
       {/* Question review */}
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
         <InfoCircleOutlined style={{ fontSize: 12, color: "var(--accent)" }} />

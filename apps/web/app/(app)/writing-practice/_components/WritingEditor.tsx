@@ -223,6 +223,15 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
               }}
             >
               {wordCount}/{minWords} từ
+              {wordCount < minWords && (
+                <span style={{ fontSize: 10, color: "var(--text-muted)", fontWeight: 400 }}> (tối thiểu)</span>
+              )}
+              {wordCount >= minWords && wordCount < minWords * 1.5 && (
+                <span style={{ fontSize: 10, color: "var(--success)", fontWeight: 400 }}> ✓ đủ</span>
+              )}
+              {wordCount >= minWords * 1.5 && (
+                <span style={{ fontSize: 10, color: "var(--warning)", fontWeight: 400 }}> (dài)</span>
+              )}
             </span>
           </div>
         </div>

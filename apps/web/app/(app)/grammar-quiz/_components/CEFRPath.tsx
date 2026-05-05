@@ -1,7 +1,7 @@
 "use client";
 
-import { Button } from "antd";
-import { CheckOutlined, RocketOutlined } from "@ant-design/icons";
+import { Button, Switch } from "antd";
+import { CheckOutlined, RocketOutlined, ClockCircleOutlined } from "@ant-design/icons";
 
 const CEFR_LEVELS = [
   { id: "A1", tier: "easy", label: "A1", desc: "Cơ bản" },
@@ -23,9 +23,11 @@ type Props = {
   onSelect: (level: string) => void;
   onStart: () => void;
   isLoading: boolean;
+  timedMode?: boolean;
+  onTimedModeChange?: (val: boolean) => void;
 };
 
-export function CEFRPath({ selected, onSelect, onStart, isLoading }: Props) {
+export function CEFRPath({ selected, onSelect, onStart, isLoading, timedMode, onTimedModeChange }: Props) {
   return (
     <div
       className="anim-fade-up"
@@ -159,6 +161,32 @@ export function CEFRPath({ selected, onSelect, onStart, isLoading }: Props) {
         {selected === "hard" && "Ngữ pháp nâng cao (C1–C2)"}
       </p>
 
+      {/* Timer toggle */}
+      {onTimedModeChange && (
+        <div
+          style={{
+            marginTop: 20,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 10,
+          }}
+        >
+          <ClockCircleOutlined style={{ fontSize: 14, color: timedMode ? "var(--accent)" : "var(--text-muted)" }} />
+          <span style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 500 }}>
+            Chế độ bấm giờ
+          </span>
+          <Switch
+            size="small"
+            checked={timedMode}
+            onChange={onTimedModeChange}
+          />
+          {timedMode && (
+            <span style={{ fontSize: 11, color: "var(--text-muted)" }}>(30s/câu)</span>
+          )}
+        </div>
+      )}
+
       <Button
         type="primary"
         size="large"
@@ -166,7 +194,7 @@ export function CEFRPath({ selected, onSelect, onStart, isLoading }: Props) {
         onClick={onStart}
         disabled={isLoading}
         loading={isLoading}
-        style={{ marginTop: 24, borderRadius: 999, paddingInline: 40 }}
+        style={{ marginTop: 16, borderRadius: 999, paddingInline: 40 }}
       >
         {isLoading ? "Đang tạo đề..." : <><RocketOutlined style={{ marginRight: 6 }} /> Bắt đầu</>}
       </Button>
