@@ -8,6 +8,7 @@ import { UserMenu } from "@/components/shared/UserMenu";
 import { UserProvider } from "@/components/shared/UserContext";
 import { ToolbarBreadcrumb } from "@/components/shared/ToolbarBreadcrumb";
 import { FloatingChatWidget } from "@/components/shared/FloatingChatWidget";
+import { FloatingDictionaryWidget } from "@/components/shared/FloatingDictionaryWidget";
 
 export type AuthUser = {
   name: string;
@@ -89,7 +90,9 @@ export function AppShell({ children, user }: { children: ReactNode; user: AuthUs
           {/* Mobile bottom tab bar — only after hydration */}
           {isMobile === true && <BottomTabBar />}
 
-          {/* Floating chat widget — visible on all pages */}
+          {/* Floating dictionary widget — hidden on /dictionary */}
+          <FloatingDictionaryWidget />
+          {/* Floating chat widget — hidden on /english-chatbot */}
           <FloatingChatWidget />
         </UserProvider>
       </div>
