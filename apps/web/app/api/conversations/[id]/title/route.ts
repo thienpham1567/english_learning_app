@@ -3,6 +3,9 @@ import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("conversations/[id]/title");
 import { conversation, message } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
@@ -58,7 +61,7 @@ export async function POST(_req: Request, { params }: { params: Params }) {
     const raw = (response.output_text ?? "").trim().replace(/^["']|["']$/g, "");
     title = raw ? deriveTitle(raw) : deriveTitle(rows[0].content);
   } catch (error) {
-    console.error("Title generation failed:", error);
+    log.error({ err: error }, "conversations.title.generate.error");
     title = deriveTitle(rows[0].content);
   }
 

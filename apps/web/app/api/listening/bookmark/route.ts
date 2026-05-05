@@ -3,6 +3,9 @@ import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("listening/bookmark");
 import { listeningExercise } from "@repo/database";
 
 const BookmarkSchema = z.object({
@@ -43,7 +46,7 @@ export async function POST(request: Request) {
 
     return Response.json({ id: updated.id, bookmarked: updated.bookmarked });
   } catch (err) {
-    console.error("[Listening] Bookmark error:", err);
+    log.error({ err }, "listening.bookmark.error");
     return Response.json({ error: "Failed to update bookmark" }, { status: 500 });
   }
 }

@@ -2,6 +2,9 @@ import { headers } from "next/headers";
 import { eq, and, isNotNull, gte, sql } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("listening/stats");
 import { listeningExercise, userStreak } from "@repo/database";
 
 /**
@@ -106,7 +109,7 @@ export async function GET() {
       currentStreak: streak?.currentStreak ?? 0,
     });
   } catch (err) {
-    console.error("[Listening] Stats error:", err);
+    log.error({ err }, "listening.stats.error");
     return Response.json({ error: "Failed to fetch stats" }, { status: 500 });
   }
 }

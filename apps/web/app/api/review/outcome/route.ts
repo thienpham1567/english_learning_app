@@ -3,6 +3,9 @@ import { eq } from "drizzle-orm";
 import { z } from "zod";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("review/outcome");
 import { db, reviewTask, learningEvent, userSkillState } from "@repo/database";
 import { completeReview } from "@repo/modules/learning";
 
@@ -164,7 +167,7 @@ export async function POST(request: Request) {
 				});
 			} catch {
 				// AC: 4 — telemetry failure does not discard visible answer
-				console.warn(`[review/outcome] Telemetry failed for task ${item.taskId} — answer preserved`);
+				log.warn({ taskId: item.taskId }, "review.outcome.telemetry.failed");
 			}
 
 			// 6. Mastery updates — fire-and-forget (AC: 3, 4)
@@ -180,7 +183,7 @@ export async function POST(request: Request) {
 				}
 			} catch {
 				// AC: 4 — mastery failure does not discard visible answer
-				console.warn(`[review/outcome] Mastery update failed for task ${item.taskId} — answer preserved`);
+				log.warn({ taskId: item.taskId }, "review.outcome.mastery.update.failed");
 			}
 
 			results.push({
@@ -189,7 +192,7 @@ export async function POST(request: Request) {
 				nextActionMessage: completion.nextActionMessage,
 			});
 		} catch (err) {
-			console.error(`[review/outcome] Error processing task ${item.taskId}:`, err);
+			log.error({ err, taskId: item.taskId }, "review.outcome.task.error");
 			results.push({ taskId: item.taskId, success: false, error: "Processing failed" });
 		}
 	}

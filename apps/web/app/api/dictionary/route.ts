@@ -5,6 +5,9 @@ import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("dictionary");
 import { vocabularyCache, userVocabulary } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
@@ -142,7 +145,7 @@ export async function POST(req: Request) {
 
     return NextResponse.json({ data: { ...parsed, nearbyWords }, cached: false, saved });
   } catch (error) {
-    console.error("Dictionary API error:", error);
+    log.error({ err: error }, "dictionary.error");
     return NextResponse.json(
       { error: "Không thể tra cứu mục này lúc này. Vui lòng thử lại sau." },
       { status: 500 },

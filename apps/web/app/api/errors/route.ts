@@ -3,6 +3,9 @@ import { eq, desc, and, isNotNull, sql, ilike, inArray } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("errors");
 import { errorLog } from "@repo/database";
 
 /**
@@ -110,7 +113,7 @@ export async function POST(request: Request) {
 
     return Response.json({ logged: rows.length });
   } catch (err) {
-    console.error("[errors] POST Error:", err);
+    log.error({ err }, "errors.post.error");
     return Response.json({ error: "Failed to log errors" }, { status: 500 });
   }
 }
@@ -142,7 +145,7 @@ export async function PATCH(request: Request) {
 
     return Response.json({ resolved: ids.length });
   } catch (err) {
-    console.error("[errors] PATCH Error:", err);
+    log.error({ err }, "errors.patch.error");
     return Response.json({ error: "Failed to resolve" }, { status: 500 });
   }
 }

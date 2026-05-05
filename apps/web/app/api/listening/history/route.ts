@@ -2,6 +2,9 @@ import { headers } from "next/headers";
 import { eq, and, desc, isNotNull, sql } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("listening/history");
 import { listeningExercise } from "@repo/database";
 
 /**
@@ -66,7 +69,7 @@ export async function GET(request: Request) {
       pageSize,
     });
   } catch (err) {
-    console.error("[Listening] History error:", err);
+    log.error({ err }, "listening.history.error");
     return Response.json({ error: "Failed to fetch history" }, { status: 500 });
   }
 }

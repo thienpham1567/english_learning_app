@@ -2,6 +2,9 @@ import { headers } from "next/headers";
 import { eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("mock-test/generate");
 import { db } from "@repo/database";
 import { userPreferences } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
@@ -79,7 +82,7 @@ export async function POST(request: Request) {
 
     // Validate IELTS passage exists
     if (examMode === "ielts" && !parsed.passage) {
-      console.warn("[mock-test/generate] IELTS response missing passage field");
+      log.warn({}, "mock-test.generate.ielts.missing.passage");
     }
 
     return Response.json({
@@ -89,7 +92,7 @@ export async function POST(request: Request) {
       passage: parsed.passage ?? null,
     });
   } catch (err) {
-    console.error("[mock-test/generate] Error:", err);
+    log.error({ err }, "mock-test.generate.error");
     return Response.json({ error: "Failed to generate test" }, { status: 502 });
   }
 }

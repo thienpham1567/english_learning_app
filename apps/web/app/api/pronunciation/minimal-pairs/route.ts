@@ -3,6 +3,9 @@ import { eq, desc } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("pronunciation/minimal-pairs");
 import { minimalPairsSession } from "@repo/database";
 import {
   CONTRAST_TAGS,
@@ -165,7 +168,7 @@ export async function POST(request: Request) {
     });
     return Response.json({ ok: true });
   } catch (err) {
-    console.error("[minimal-pairs] Save failed:", err);
+    log.error({ err }, "pronunciation.minimal-pairs.save.failed");
     return Response.json({ error: "Failed to save session" }, { status: 500 });
   }
 }
@@ -188,7 +191,7 @@ export async function GET() {
       weakest: aggregateWeakestContrasts(sessions),
     });
   } catch (err) {
-    console.error("[minimal-pairs] Aggregate failed:", err);
+    log.error({ err }, "pronunciation.minimal-pairs.aggregate.failed");
     return Response.json({ error: "Failed to load data" }, { status: 500 });
   }
 }

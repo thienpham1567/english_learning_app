@@ -2,6 +2,9 @@ import { headers } from "next/headers";
 import { eq, and, inArray } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("review-quiz/submit");
 import { db } from "@repo/database";
 import { errorLog, activityLog } from "@repo/database";
 
@@ -110,7 +113,7 @@ export async function POST(request: Request) {
       xpEarned: xp,
     });
   } catch (err) {
-    console.error("[review-quiz/submit] Error:", err);
+    log.error({ err }, "review-quiz.submit.error");
     return Response.json({ error: "Failed to submit review" }, { status: 500 });
   }
 }

@@ -3,6 +3,9 @@ import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("chat");
 import { conversation, message } from "@repo/database";
 import { buildChatRequest } from "@/lib/chat/build-chat-input";
 import { DEFAULT_PERSONA_ID, PERSONA_IDS } from "@/lib/chat/personas";
@@ -159,7 +162,7 @@ export async function POST(req: Request) {
             result = await streamOpenAiToSse({ controller, encoder, instructions, input, signal });
           } catch (error) {
             if (!signal.aborted) {
-              console.error("Chat API error:", error);
+              log.error({ err: error }, "chat.stream.error");
               writeSseEvent(controller, encoder, {
                 type: "assistant_error",
                 message: CHAT_ERROR_MESSAGE,
@@ -186,7 +189,7 @@ export async function POST(req: Request) {
                   personaId,
                 });
               } catch (dbError) {
-                console.error("Failed to persist conversation:", dbError);
+                log.error({ err: dbError }, "chat.persist.error");
                 writeSseEvent(controller, encoder, {
                   type: "assistant_persist_error",
                   message: PERSIST_ERROR_MESSAGE,
@@ -209,7 +212,7 @@ export async function POST(req: Request) {
       }),
     );
   } catch (error) {
-    console.error("Chat API error:", error);
+    log.error({ err: error }, "chat.error");
     return createErrorSseResponse();
   }
 }

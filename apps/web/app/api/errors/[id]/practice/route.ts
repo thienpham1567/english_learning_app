@@ -4,6 +4,9 @@ import { z } from "zod";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("errors/[id]/practice");
 import { errorLog } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
@@ -91,7 +94,7 @@ Return ONLY valid JSON:
 
     return Response.json({ practice: parsed.data });
   } catch (err) {
-    console.error("[errors/practice] LLM call failed:", err);
+    log.error({ err }, "errors.practice.llm.failed");
     return Response.json({ error: "Failed to generate practice" }, { status: 502 });
   }
 }

@@ -1,6 +1,9 @@
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("writing/pattern-quiz");
 import { db } from "@repo/database";
 import { writingErrorPattern, errorLog } from "@repo/database";
 import { eq, and, gte, desc } from "drizzle-orm";
@@ -148,7 +151,7 @@ export async function POST(request: Request) {
     try {
       parsed = JSON.parse(cleaned);
     } catch {
-      console.error("[writing/pattern-quiz] JSON parse failed:", cleaned.slice(0, 200));
+      log.error({ preview: cleaned.slice(0, 200) }, "writing.pattern-quiz.json.parse.failed");
       return Response.json({ error: "AI response was not valid JSON" }, { status: 502 });
     }
 
@@ -176,7 +179,7 @@ export async function POST(request: Request) {
         }).returning({ id: errorLog.id });
         if (row) insertedIds.push(row.id);
       } catch (err) {
-        console.error("[writing/pattern-quiz] Insert errorLog failed:", err);
+        log.error({ err }, "writing.pattern-quiz.insert.error-log.failed");
       }
     }
 
@@ -188,7 +191,7 @@ export async function POST(request: Request) {
 
     return Response.json({ items, insertedIds });
   } catch (err) {
-    console.error("[writing/pattern-quiz] Error:", err);
+    log.error({ err }, "writing.pattern-quiz.error");
     return Response.json({ error: "Failed to generate quiz" }, { status: 502 });
   }
 }
@@ -254,7 +257,7 @@ export async function PATCH(request: Request) {
         );
       updated++;
     } catch (err) {
-      console.error("[writing/pattern-quiz] PATCH update failed:", err);
+      log.error({ err }, "writing.pattern-quiz.patch.update.failed");
     }
   }
 

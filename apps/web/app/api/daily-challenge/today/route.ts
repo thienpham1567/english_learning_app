@@ -3,6 +3,9 @@ import { eq, and } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("daily-challenge/today");
 import { dailyChallenge, userStreak, userPreferences } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
@@ -166,12 +169,9 @@ export async function GET() {
         });
       }
 
-      console.warn(
-        `[daily-challenge] AI validation failed (attempt ${attempt + 1}):`,
-        validated.error.flatten(),
-      );
+      log.warn({ attempt: attempt + 1, errors: validated.error.flatten() }, "daily-challenge.generate.validation.failed");
     } catch (err) {
-      console.error(`[daily-challenge] Generation failed (attempt ${attempt + 1}):`, err);
+      log.error({ err, attempt: attempt + 1 }, "daily-challenge.generate.failed");
     }
   }
 

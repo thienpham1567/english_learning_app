@@ -3,6 +3,9 @@ import { eq, sql, and, gte } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("analytics");
 import {
   activityLog,
   userStreak,
@@ -206,7 +209,7 @@ export async function GET() {
       },
     });
   } catch (err) {
-    console.error("[Analytics] Query error:", err);
+    log.error({ err }, "analytics.query.error");
     return Response.json(
       { error: "Failed to load analytics", detail: err instanceof Error ? err.message : String(err) },
       { status: 500 },

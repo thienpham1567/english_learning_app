@@ -1,6 +1,9 @@
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("speaking/feedback");
 import { db } from "@repo/database";
 import { speakingAttempt } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
@@ -214,7 +217,7 @@ Grammar errors array: max ${MAX_GRAMMAR_ERRORS} most important. Vocabulary upgra
     try {
       parsedUnknown = JSON.parse(cleaned);
     } catch {
-      console.error("[speaking/feedback] JSON parse failed (first 120 chars):", cleaned.slice(0, 120));
+      log.error({ preview: cleaned.slice(0, 120) }, "speaking.feedback.json.parse.failed");
       return Response.json({ error: "AI response was not valid JSON" }, { status: 502 });
     }
 
@@ -281,7 +284,7 @@ Grammar errors array: max ${MAX_GRAMMAR_ERRORS} most important. Vocabulary upgra
         coherenceScore: coherence.score,
       });
     } catch (err) {
-      console.error("[speaking/feedback] Persist failed:", err);
+      log.error({ err }, "speaking.feedback.persist.failed");
       return Response.json(
         { error: "Failed to save attempt" },
         { status: 500 },
@@ -291,7 +294,7 @@ Grammar errors array: max ${MAX_GRAMMAR_ERRORS} most important. Vocabulary upgra
     return Response.json(result);
   } catch (err) {
     const aborted = err instanceof Error && err.name === "AbortError";
-    console.error("[speaking/feedback]", aborted ? "OpenAI timeout" : "Error");
+    log.error({ err, aborted }, aborted ? "speaking.feedback.timeout" : "speaking.feedback.error");
     return Response.json(
       { error: aborted ? "Evaluation timed out" : "Failed to evaluate speaking" },
       { status: aborted ? 504 : 502 },

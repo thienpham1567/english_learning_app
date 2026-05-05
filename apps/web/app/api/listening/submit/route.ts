@@ -2,6 +2,9 @@ import { headers } from "next/headers";
 import { eq, and } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("listening/submit");
 import { db } from "@repo/database";
 import { listeningExercise, errorLog } from "@repo/database";
 import type { ListeningQuestion } from "@repo/database";
@@ -109,7 +112,7 @@ export async function POST(request: Request) {
             grammarTopic: exercise.level,
           })),
         )
-        .catch((e) => console.error("[Listening] ErrorLog insert error:", e));
+        .catch((e) => log.error({ err: e }, "listening.submit.error-log.insert.failed"));
     }
 
     // Emit learning event (fire-and-forget, AC: 3)
@@ -147,7 +150,7 @@ export async function POST(request: Request) {
       },
     });
   } catch (err) {
-    console.error("[Listening] Submit error:", err);
+    log.error({ err }, "listening.submit.error");
     return Response.json({ error: "Failed to submit answers" }, { status: 500 });
   }
 }

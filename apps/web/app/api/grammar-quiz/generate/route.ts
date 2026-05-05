@@ -2,6 +2,9 @@ import { headers } from "next/headers";
 import { z } from "zod";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("grammar-quiz/generate");
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { QuizGenerationResponseSchema } from "@/lib/grammar-quiz/schema";
@@ -126,12 +129,9 @@ export async function POST(request: Request) {
       }
 
       // Invalid format — retry
-      console.warn(
-        `[grammar-quiz] AI output validation failed (attempt ${attempt + 1}):`,
-        validated.error.flatten(),
-      );
+      log.warn({ attempt: attempt + 1, errors: validated.error.flatten() }, "grammar-quiz.generate.validation.failed");
     } catch (err) {
-      console.error(`[grammar-quiz] AI call failed (attempt ${attempt + 1}):`, err);
+      log.error({ err, attempt: attempt + 1 }, "grammar-quiz.generate.failed");
     }
   }
 

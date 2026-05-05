@@ -3,6 +3,9 @@ import { eq, sql, and, gte } from "drizzle-orm";
 import { z } from "zod";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("study-plan/daily");
 import { db } from "@repo/database";
 import { activityLog, errorLog, userPreferences } from "@repo/database";
 import { getAllUserSkillStates } from "@repo/database";
@@ -141,8 +144,7 @@ export async function GET(request: Request) {
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     const stack = err instanceof Error ? err.stack : undefined;
-    console.error("[study-plan/daily] Error:", message);
-    if (stack) console.error("[study-plan/daily] Stack:", stack);
+    log.error({ err, message, stack }, "study-plan.daily.error");
     return Response.json(
       { error: "Failed to generate plan", detail: message },
       { status: 500 },

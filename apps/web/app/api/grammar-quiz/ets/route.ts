@@ -4,6 +4,9 @@ import fs from "fs";
 import path from "path";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("grammar-quiz/ets");
 
 const RequestBodySchema = z.object({
   count: z.number().int().min(1).max(30).default(10),
@@ -42,7 +45,7 @@ function loadQuestions(): EnrichedQuestion[] {
     );
     return cachedQuestions!;
   } catch {
-    console.error("[grammar-quiz/ets] Failed to load enriched data");
+    log.error({}, "grammar-quiz.ets.load.failed");
     return [];
   }
 }

@@ -1,6 +1,9 @@
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("speaking/topic");
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 
@@ -136,7 +139,7 @@ Return ONLY valid JSON:
     return Response.json({ topic: topicValue, description: descriptionValue });
   } catch (err) {
     const aborted = err instanceof Error && err.name === "AbortError";
-    console.error("[speaking/topic]", aborted ? "timeout" : "error");
+    log.error({ err, aborted }, aborted ? "speaking.topic.timeout" : "speaking.topic.error");
     return Response.json(
       { error: aborted ? "Topic generation timed out" : "Failed to generate topic" },
       { status: aborted ? 504 : 502 },

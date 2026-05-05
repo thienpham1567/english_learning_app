@@ -2,6 +2,9 @@ import { headers } from "next/headers";
 import { and, eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("grammar-lessons/generate");
 import { GrammarLessonGenerateRequestSchema, GrammarLessonSchema } from "@/lib/grammar-lessons/schema";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
@@ -136,7 +139,7 @@ Rules:
       const lessonJson = JSON.parse(content);
       const lesson = GrammarLessonSchema.safeParse(lessonJson);
       if (!lesson.success) {
-        console.warn("[grammar-lessons/generate] Invalid AI lesson:", lesson.error.flatten());
+        log.warn({ errors: lesson.error.flatten() }, "grammar-lessons.generate.validation.failed");
         continue;
       }
 
@@ -167,7 +170,7 @@ Rules:
 
       return Response.json(lesson.data);
     } catch (err) {
-      console.error(`[grammar-lessons/generate] Error attempt ${attempt + 1}:`, err);
+      log.error({ err, attempt: attempt + 1 }, "grammar-lessons.generate.failed");
     }
   }
 

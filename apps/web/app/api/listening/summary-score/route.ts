@@ -3,6 +3,9 @@ import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("listening/summary-score");
 import { db } from "@repo/database";
 import { listeningExercise, listeningSummaryAttempt } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
@@ -168,7 +171,7 @@ export async function POST(request: Request) {
     try {
       scored = JSON.parse(rawContent) as SummaryScoreResult;
     } catch {
-      console.error("[SummaryScore] Failed to parse AI response:", rawContent);
+      log.error({ rawContent }, "listening.summary-score.parse.failed");
       return Response.json({ error: "AI returned invalid JSON" }, { status: 502 });
     }
 
@@ -181,7 +184,7 @@ export async function POST(request: Request) {
       typeof scored.concisenessScore !== "number" ||
       typeof scored.overall !== "number"
     ) {
-      console.error("[SummaryScore] AI response missing required fields:", scored);
+      log.error({ scored }, "listening.summary-score.malformed.response");
       return Response.json({ error: "AI response malformed" }, { status: 502 });
     }
 
@@ -220,7 +223,7 @@ export async function POST(request: Request) {
       passage: exercise.passage, // Revealed after submission (AC3)
     });
   } catch (err) {
-    console.error("[SummaryScore] Error:", err);
+    log.error({ err }, "listening.summary-score.error");
     return Response.json({ error: "Failed to score summary" }, { status: 500 });
   }
 }

@@ -1,6 +1,9 @@
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("reading/grammar");
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { BoundedCache } from "@/lib/reading/utils";
@@ -70,7 +73,7 @@ If no notable patterns found, return { "patterns": [] }`;
 
     return Response.json(data);
   } catch (err) {
-    console.error("[Grammar] Analysis error:", err);
+    log.error({ err }, "reading.grammar.analysis.error");
     return Response.json({ patterns: [] });
   }
 }

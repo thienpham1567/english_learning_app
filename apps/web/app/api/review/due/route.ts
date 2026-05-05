@@ -2,6 +2,9 @@ import { headers } from "next/headers";
 import { sql, eq, and } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("review/due");
 import { db, errorLog, flashcardProgress } from "@repo/database";
 import { listDueReviewTasks } from "@repo/database";
 
@@ -114,7 +117,7 @@ export async function GET() {
 
 		return Response.json(response);
 	} catch (err) {
-		console.error("[review/due] Error:", err);
+		log.error({ err }, "review.due.error");
 		return Response.json({ error: "Failed to load due reviews" }, { status: 500 });
 	}
 }

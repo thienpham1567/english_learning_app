@@ -3,6 +3,9 @@ import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("study-sets/generate");
 
 /**
  * POST /api/study-sets/generate
@@ -78,10 +81,18 @@ Rules:
       return Response.json({ error: "AI returned no content" }, { status: 502 });
     }
 
-    const studySet = JSON.parse(content);
+    // Strip markdown code fences if present, then extract the outermost JSON object
+    const stripped = content.replace(/^```(?:json)?\s*/i, "").replace(/\s*```\s*$/, "");
+    const start = stripped.indexOf("{");
+    const end = stripped.lastIndexOf("}");
+    if (start === -1 || end === -1 || end <= start) {
+      log.error({ topicTitle, level }, "study-sets.generate.malformed");
+      return Response.json({ error: "AI returned malformed content" }, { status: 502 });
+    }
+    const studySet = JSON.parse(stripped.slice(start, end + 1));
     return Response.json(studySet);
   } catch (err) {
-    console.error("[study-sets/generate] Error:", err);
+    log.error({ err, topicTitle, level }, "study-sets.generate.failed");
     return Response.json({ error: "Study set generation failed" }, { status: 502 });
   }
 }

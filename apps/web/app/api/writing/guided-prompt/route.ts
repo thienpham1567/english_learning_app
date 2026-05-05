@@ -1,6 +1,9 @@
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("writing/guided-prompt");
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 
@@ -135,7 +138,7 @@ export async function POST(request: Request) {
     try {
       parsed = JSON.parse(cleaned);
     } catch {
-      console.error("[writing/guided-prompt] JSON parse failed:", cleaned.slice(0, 200));
+      log.error({ preview: cleaned.slice(0, 200) }, "writing.guided-prompt.json.parse.failed");
       return Response.json({ error: "AI response was not valid JSON" }, { status: 502 });
     }
 
@@ -146,10 +149,7 @@ export async function POST(request: Request) {
 
     // Enforce minimum lengths (AC2)
     if (parsed.outline.length < 3 || parsed.vocabBank.length < 6) {
-      console.error("[writing/guided-prompt] AI returned too few items:", {
-        outlineLen: parsed.outline.length,
-        vocabLen: parsed.vocabBank.length,
-      });
+      log.error({ outlineLen: parsed.outline.length, vocabLen: parsed.vocabBank.length }, "writing.guided-prompt.incomplete.response");
       return Response.json({ error: "AI response incomplete — please try again" }, { status: 502 });
     }
 
@@ -162,7 +162,7 @@ export async function POST(request: Request) {
 
     return Response.json(result);
   } catch (err) {
-    console.error("[writing/guided-prompt] Error:", err);
+    log.error({ err }, "writing.guided-prompt.error");
     return Response.json({ error: "Failed to generate prompt" }, { status: 502 });
   }
 }

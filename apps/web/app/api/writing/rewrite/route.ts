@@ -1,6 +1,9 @@
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("writing/rewrite");
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 
@@ -164,7 +167,7 @@ export async function POST(request: Request) {
     try {
       parsed = JSON.parse(cleaned);
     } catch {
-      console.error("[writing/rewrite] JSON parse failed:", cleaned.slice(0, 200));
+      log.error({ preview: cleaned.slice(0, 200) }, "writing.rewrite.json.parse.failed");
       return Response.json({ error: "AI response was not valid JSON" }, { status: 502 });
     }
 
@@ -175,7 +178,7 @@ export async function POST(request: Request) {
 
     return Response.json({ variants } satisfies RewriteResponse);
   } catch (err) {
-    console.error("[writing/rewrite] Error:", err);
+    log.error({ err }, "writing.rewrite.error");
     return Response.json({ error: "Failed to rewrite sentence" }, { status: 502 });
   }
 }

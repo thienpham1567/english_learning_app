@@ -1,6 +1,9 @@
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("writing-practice/review");
 import { db } from "@repo/database";
 import { writingSubmission } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
@@ -119,12 +122,9 @@ export async function POST(request: Request) {
         return Response.json({ feedback });
       }
 
-      console.warn(
-        `[writing-practice] AI feedback validation failed (attempt ${attempt + 1}):`,
-        validated.error.flatten(),
-      );
+      log.warn({ attempt: attempt + 1, errors: validated.error.flatten() }, "writing-practice.review.validation.failed");
     } catch (err) {
-      console.error(`[writing-practice] Review failed (attempt ${attempt + 1}):`, err);
+      log.error({ err, attempt: attempt + 1 }, "writing-practice.review.failed");
     }
   }
 

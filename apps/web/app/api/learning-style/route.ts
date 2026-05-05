@@ -3,6 +3,9 @@ import { eq, sql } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("learning-style");
 import { activityLog } from "@repo/database";
 
 /**
@@ -136,7 +139,7 @@ export async function GET() {
       suggestions: suggestions.slice(0, 3),
     });
   } catch (err) {
-    console.error("[learning-style] Error:", err);
+    log.error({ err }, "learning-style.error");
     return Response.json({ error: "Analysis failed" }, { status: 500 });
   }
 }

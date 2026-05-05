@@ -1,6 +1,9 @@
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("writing/score");
 import { db } from "@repo/database";
 import { writingAttempt, writingErrorPattern } from "@repo/database";
 import { eq, and } from "drizzle-orm";
@@ -144,7 +147,7 @@ export async function POST(request: Request) {
     try {
       parsed = JSON.parse(cleaned);
     } catch {
-      console.error("[writing/score] JSON parse failed:", cleaned.slice(0, 200));
+      log.error({ preview: cleaned.slice(0, 200) }, "writing.score.json.parse.failed");
       return Response.json({ error: "AI response was not valid JSON" }, { status: 502 });
     }
 
@@ -183,18 +186,18 @@ export async function POST(request: Request) {
         guidedPromptJson: body?.guidedPromptJson ?? null,
       });
     } catch (err) {
-      console.error("[writing/score] Persist failed:", err);
+      log.error({ err }, "writing.score.persist.failed");
       // Non-fatal
     }
 
     // AC1: Classify error tags and upsert writingErrorPattern (non-fatal, fire-and-forget)
     void classifyAndUpsertPatterns(userId, inlineIssues).catch((err) =>
-      console.error("[writing/score] Pattern classification failed:", err)
+      log.error({ err }, "writing.score.pattern.classification.failed")
     );
 
     return Response.json(result);
   } catch (err) {
-    console.error("[writing/score] Error:", err);
+    log.error({ err }, "writing.score.error");
     return Response.json({ error: "Failed to score essay" }, { status: 502 });
   }
 }
@@ -246,7 +249,7 @@ async function classifyAndUpsertPatterns(
         });
       }
     } catch (err) {
-      console.error("[writing/score] Upsert pattern failed for tag:", tag, err);
+      log.error({ err, tag }, "writing.score.upsert.pattern.failed");
     }
   }
 }

@@ -2,6 +2,9 @@ import { headers } from "next/headers";
 import { eq, and } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("listening/history/[id]");
 import { listeningExercise } from "@repo/database";
 import type { ListeningQuestion, DialogueTurn } from "@repo/database";
 
@@ -50,7 +53,7 @@ export async function GET(
       dialogueTurns: exercise.dialogueTurnsJson as DialogueTurn[] | null,
     });
   } catch (err) {
-    console.error("[Listening] History detail error:", err);
+    log.error({ err }, "listening.history.detail.error");
     return Response.json({ error: "Failed to fetch exercise" }, { status: 500 });
   }
 }

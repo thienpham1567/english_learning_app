@@ -2,6 +2,9 @@ import { NextRequest } from "next/server";
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("reading/articles");
 import { stripHtml, estimateDifficulty, BoundedCache } from "@/lib/reading/utils";
 
 const GUARDIAN_API_KEY = process.env.GUARDIAN_API_KEY ?? "test";
@@ -45,7 +48,7 @@ export async function GET(req: NextRequest) {
     const res = await fetch(url, { next: { revalidate: 300 } });
 
     if (!res.ok) {
-      console.error("[Reading] Guardian API error:", res.status, await res.text());
+      log.error({ status: res.status }, "reading.articles.guardian.api.error");
       return Response.json({ error: "Failed to fetch articles" }, { status: 502 });
     }
 
@@ -83,7 +86,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json(data);
   } catch (err) {
-    console.error("[Reading] Error:", err);
+    log.error({ err }, "reading.articles.error");
     return Response.json({ error: "Internal error" }, { status: 500 });
   }
 }

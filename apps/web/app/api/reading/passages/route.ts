@@ -3,6 +3,9 @@ import { headers } from "next/headers";
 import { eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("reading/passages");
 import { db } from "@repo/database";
 import { readingPassage, readingProgress, userVocabulary } from "@repo/database";
 
@@ -101,7 +104,7 @@ export async function GET(req: NextRequest) {
 
     return Response.json({ passages: scored });
   } catch (err) {
-    console.error("[Reading] Error:", err);
+    log.error({ err }, "reading.passages.error");
     return Response.json({ error: "Internal error" }, { status: 500 });
   }
 }

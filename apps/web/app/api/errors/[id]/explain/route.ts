@@ -4,6 +4,9 @@ import { z } from "zod";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("errors/[id]/explain");
 import { errorLog } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
@@ -112,7 +115,7 @@ export async function POST(
     const validated = DeepExplanationSchema.safeParse(json);
 
     if (!validated.success) {
-      console.warn("[errors/explain] AI output validation failed:", validated.error.flatten());
+      log.warn({ errors: validated.error.flatten() }, "errors.explain.validation.failed");
       return Response.json({ error: "Invalid AI response format" }, { status: 502 });
     }
 
@@ -123,11 +126,11 @@ export async function POST(
       .update(errorLog)
       .set({ deepExplanation: explanation })
       .where(eq(errorLog.id, id))
-      .catch((err) => console.error("[errors/explain] Cache write failed:", err));
+      .catch((err) => log.error({ err }, "errors.explain.cache.write.failed"));
 
     return Response.json({ explanation, cached: false });
   } catch (err) {
-    console.error("[errors/explain] LLM call failed:", err);
+    log.error({ err }, "errors.explain.llm.failed");
     return Response.json({ error: "Failed to generate explanation" }, { status: 502 });
   }
 }

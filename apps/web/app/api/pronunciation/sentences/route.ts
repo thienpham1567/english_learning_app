@@ -2,6 +2,9 @@ import { headers } from "next/headers";
 import { eq } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("pronunciation/sentences");
 import { db } from "@repo/database";
 import { userPreferences } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
@@ -102,7 +105,7 @@ Return ONLY valid JSON:
     }
     return Response.json(parsed);
   } catch (err) {
-    console.error("[pronunciation/sentences] Error:", err);
+    log.error({ err }, "pronunciation.sentences.error");
     return Response.json({ error: "Failed to generate sentences" }, { status: 502 });
   }
 }

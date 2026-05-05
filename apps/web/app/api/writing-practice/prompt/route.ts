@@ -1,6 +1,9 @@
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("writing-practice/prompt");
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { PromptRequestSchema } from "@/lib/writing-practice/schema";
@@ -55,7 +58,7 @@ export async function POST(request: Request) {
 
     return Response.json({ prompt });
   } catch (err) {
-    console.error("[writing-practice] Prompt generation failed:", err);
+    log.error({ err }, "writing-practice.prompt.generate.failed");
     return Response.json({ error: "Failed to generate prompt" }, { status: 502 });
   }
 }

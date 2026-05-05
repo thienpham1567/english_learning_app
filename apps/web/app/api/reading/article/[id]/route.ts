@@ -2,6 +2,9 @@ import { NextRequest } from "next/server";
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("reading/article/[id]");
 import { fetchGuardianArticle } from "@/lib/reading/utils";
 
 /**
@@ -24,7 +27,7 @@ export async function GET(
     const data = await fetchGuardianArticle(articleId);
     return Response.json(data);
   } catch (err) {
-    console.error("[Reading] Article error:", err);
+    log.error({ err }, "reading.article.error");
     return Response.json({ error: "Internal error" }, { status: 500 });
   }
 }

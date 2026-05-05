@@ -2,6 +2,9 @@ import { headers } from "next/headers";
 import { randomUUID } from "crypto";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
+
+const log = routeLogger("listening/generate");
 import { db } from "@repo/database";
 import { listeningExercise } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
@@ -78,7 +81,7 @@ export async function POST(request: Request) {
     try {
       generated = JSON.parse(rawContent);
     } catch {
-      console.error("[Listening] Failed to parse AI response:", rawContent);
+      log.error({ rawContent }, "listening.generate.parse.failed");
       return Response.json({ error: "AI returned invalid JSON" }, { status: 502 });
     }
 
@@ -117,7 +120,7 @@ export async function POST(request: Request) {
       createdAt: exercise.createdAt,
     });
   } catch (err) {
-    console.error("[Listening] Generate error:", err);
+    log.error({ err }, "listening.generate.error");
     return Response.json({ error: "Failed to generate exercise" }, { status: 500 });
   }
 }
