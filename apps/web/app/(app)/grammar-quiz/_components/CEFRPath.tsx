@@ -1,7 +1,7 @@
 "use client";
 
-import { Button, Switch } from "antd";
-import { CheckOutlined, RocketOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import { Button, Switch, Segmented } from "antd";
+import { CheckOutlined, RocketOutlined, ClockCircleOutlined, BookOutlined, ThunderboltOutlined } from "@ant-design/icons";
 
 const CEFR_LEVELS = [
   { id: "A1", tier: "easy", label: "A1", desc: "Cơ bản" },
@@ -25,9 +25,12 @@ type Props = {
   isLoading: boolean;
   timedMode?: boolean;
   onTimedModeChange?: (val: boolean) => void;
+  sourceMode?: "ai" | "ets";
+  onSourceModeChange?: (val: "ai" | "ets") => void;
 };
 
-export function CEFRPath({ selected, onSelect, onStart, isLoading, timedMode, onTimedModeChange }: Props) {
+export function CEFRPath({ selected, onSelect, onStart, isLoading, timedMode, onTimedModeChange, sourceMode = "ai", onSourceModeChange }: Props) {
+  const isEts = sourceMode === "ets";
   return (
     <div
       className="anim-fade-up"
@@ -52,8 +55,47 @@ export function CEFRPath({ selected, onSelect, onStart, isLoading, timedMode, on
           color: "var(--text-secondary)",
         }}
       >
-        Incomplete Sentences — Chọn trình độ CEFR
+        Incomplete Sentences — Chọn nguồn đề
       </p>
+
+      {/* Source mode toggle */}
+      {onSourceModeChange && (
+        <div style={{ marginTop: 16, marginBottom: 4 }}>
+          <Segmented
+            value={sourceMode}
+            onChange={(val) => onSourceModeChange(val as "ai" | "ets")}
+            options={[
+              {
+                value: "ai",
+                label: (
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "2px 4px" }}>
+                    <ThunderboltOutlined style={{ fontSize: 13 }} />
+                    <span>AI tạo đề</span>
+                  </div>
+                ),
+              },
+              {
+                value: "ets",
+                label: (
+                  <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "2px 4px" }}>
+                    <BookOutlined style={{ fontSize: 13 }} />
+                    <span>Đề ETS thật</span>
+                  </div>
+                ),
+              },
+            ]}
+            style={{ borderRadius: 10 }}
+          />
+          {isEts && (
+            <p style={{ marginTop: 8, fontSize: 11, color: "var(--text-muted)", fontStyle: "italic" }}>
+              240 câu từ ETS 2020–2021 · Không cần chọn trình độ
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* CEFR Path — dim when ETS mode */}
+      <div style={{ opacity: isEts ? 0.35 : 1, pointerEvents: isEts ? "none" : "auto", transition: "opacity 0.2s" }}>
 
       {/* CEFR Path */}
       <div
@@ -160,6 +202,7 @@ export function CEFRPath({ selected, onSelect, onStart, isLoading, timedMode, on
         {selected === "medium" && "Ngữ pháp trung cấp (B1–B2)"}
         {selected === "hard" && "Ngữ pháp nâng cao (C1–C2)"}
       </p>
+      </div>
 
       {/* Timer toggle */}
       {onTimedModeChange && (

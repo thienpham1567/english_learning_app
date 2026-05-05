@@ -52,3 +52,5 @@ next-env.d.ts
 docs
 package-lock.json
 yarn.lock
+data/toeic-exams/enrich-part5.mjs
+data/toeic-exams/scrape.py

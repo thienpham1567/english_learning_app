@@ -32,15 +32,27 @@ export function useGrammarQuiz() {
   }, []);
 
   const generateQuiz = useCallback(
-    async (quizLevel?: string, examMode?: string) => {
+    async (quizLevel?: string, examMode?: string, sourceMode?: "ai" | "ets") => {
       const targetLevel = quizLevel ?? level;
       setState("loading");
       setError(null);
       try {
-        const data = await api.post<{ questions: GrammarQuestion[] }>(
-          "/grammar-quiz/generate",
-          { level: targetLevel, count: 10, examMode },
-        );
+        let data: { questions: GrammarQuestion[] };
+
+        if (sourceMode === "ets") {
+          // Fetch real ETS questions from static data
+          data = await api.post<{ questions: GrammarQuestion[] }>(
+            "/grammar-quiz/ets",
+            { count: 10 },
+          );
+        } else {
+          // Generate AI questions
+          data = await api.post<{ questions: GrammarQuestion[] }>(
+            "/grammar-quiz/generate",
+            { level: targetLevel, count: 10, examMode },
+          );
+        }
+
         setQuestions(data.questions);
         setAnswers(new Array(data.questions.length).fill(null));
         setCurrentIndex(0);

@@ -37,6 +37,7 @@ export default function GrammarQuizPage() {
   const { examMode } = useExamMode();
   const [historyOpen, setHistoryOpen] = useState(false);
   const [timedMode, setTimedMode] = useState(false);
+  const [sourceMode, setSourceMode] = useState<"ai" | "ets">("ai");
   const [timeLeft, setTimeLeft] = useState(0);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -175,10 +176,12 @@ export default function GrammarQuizPage() {
               <CEFRPath
                 selected={level}
                 onSelect={selectLevel}
-                onStart={() => generateQuiz(undefined, examMode)}
+                onStart={() => generateQuiz(undefined, examMode, sourceMode)}
                 isLoading={state === "loading"}
                 timedMode={timedMode}
                 onTimedModeChange={setTimedMode}
+                sourceMode={sourceMode}
+                onSourceModeChange={setSourceMode}
               />
             </div>
           )}

@@ -1,0 +1,3144 @@
+{
+  "id": "UQc3e3wdfsEaDqkYSFqeY",
+  "exam_name": "Test 3 ETS 2021",
+  "member_only": false,
+  "book": {
+    "book_name": "Sưu tầm"
+  },
+  "questions": [
+    {
+      "id": "JyuwlPql9tNSNhhOy2Rag",
+      "content": "",
+      "question_part": "1",
+      "parent_question": null,
+      "options": "A|B|C|D",
+      "number_of_question": 1,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711695061608_1.mp3",
+      "images": [
+        {
+          "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1711695062420_resized_1619577914.webp"
+        }
+      ]
+    },
+    {
+      "id": "YXmTBdycjAn7Uf99LyBTc",
+      "content": "",
+      "question_part": "1",
+      "parent_question": null,
+      "options": "A|B|C|D",
+      "number_of_question": 2,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711695103688_2.mp3",
+      "images": [
+        {
+          "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1711695104434_resized_1619577986.webp"
+        }
+      ]
+    },
+    {
+      "id": "kx1_ValNWVwpxHhw5cwLa",
+      "content": "",
+      "question_part": "1",
+      "parent_question": null,
+      "options": "A|B|C|D",
+      "number_of_question": 3,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711695146327_3.mp3",
+      "images": [
+        {
+          "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1711695146996_resized_1619578098.webp"
+        }
+      ]
+    },
+    {
+      "id": "zD7oVR1oBXBEU_EuUOsd-",
+      "content": "",
+      "question_part": "1",
+      "parent_question": null,
+      "options": "A|B|C|D",
+      "number_of_question": 4,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711801665514_4.mp3",
+      "images": [
+        {
+          "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1711801666252_resized_1619578230.png"
+        }
+      ]
+    },
+    {
+      "id": "uvzZDTaDCykMYIKWnnbRx",
+      "content": "",
+      "question_part": "1",
+      "parent_question": null,
+      "options": "A|B|C|D",
+      "number_of_question": 5,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711801709653_5.mp3",
+      "images": [
+        {
+          "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1711801710351_resized_1619578327.webp"
+        }
+      ]
+    },
+    {
+      "id": "Bv0Capx4beBctNjTjS1-2",
+      "content": "",
+      "question_part": "1",
+      "parent_question": null,
+      "options": "A|B|C|D",
+      "number_of_question": 6,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711801753593_6.mp3",
+      "images": [
+        {
+          "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1711801754593_resized_1619578432.webp"
+        }
+      ]
+    },
+    {
+      "id": "htcjGvRX-GtTGFm6TLVHH",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 7,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711801784985_7.mp3",
+      "images": null
+    },
+    {
+      "id": "CiOH8STfcRw6g34aDSQy0",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 8,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711801822518_8.mp3",
+      "images": null
+    },
+    {
+      "id": "0xKfzVpWmxGukWXg1pQFr",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 9,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711801851784_9.mp3",
+      "images": null
+    },
+    {
+      "id": "w1KC9wSfPerDVF-zS-CHt",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 10,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711801879728_10.mp3",
+      "images": null
+    },
+    {
+      "id": "qYO9S5p4IlsVNGzQhFN94",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 11,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711801902362_11.mp3",
+      "images": null
+    },
+    {
+      "id": "JiK-H-3B05vzJtJ6__6t_",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 12,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711801923574_12.mp3",
+      "images": null
+    },
+    {
+      "id": "9N4FySvFi7UVwJ7sVNwO0",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 13,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711801950647_13.mp3",
+      "images": null
+    },
+    {
+      "id": "GIHhJXNWZTdR4lTkCunNW",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 14,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711801976274_14.mp3",
+      "images": null
+    },
+    {
+      "id": "Gkla7CupQXg0TFsF2ZMVD",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 15,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711802047078_15.mp3",
+      "images": null
+    },
+    {
+      "id": "Ir2kNTfIy9zg46QM0SkAr",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 16,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711802096153_16.mp3",
+      "images": null
+    },
+    {
+      "id": "IT_jQSSfws8Tja4jc4DAC",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 17,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711803456803_17.mp3",
+      "images": null
+    },
+    {
+      "id": "O2R2xNOj-zv-3dE2hm15r",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 18,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711803483116_18.mp3",
+      "images": null
+    },
+    {
+      "id": "hSQGb3CVTSZYbHdz5t-y3",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 19,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711803506600_19.mp3",
+      "images": null
+    },
+    {
+      "id": "zaVDNVO2ks83dNXWMB8Tv",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 20,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711803534617_20.mp3",
+      "images": null
+    },
+    {
+      "id": "HHTDlpIVgkAg2lQKiEfaj",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 21,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711803563339_21.mp3",
+      "images": null
+    },
+    {
+      "id": "G0Px4A8kamn3Ts8jzPY8t",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 22,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711803591077_22.mp3",
+      "images": null
+    },
+    {
+      "id": "MAY2HAexhlmzFtJyidcga",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 23,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711803617129_23.mp3",
+      "images": null
+    },
+    {
+      "id": "iienW8-qeJI9H1PDpHPf7",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 24,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711803809498_24.mp3",
+      "images": null
+    },
+    {
+      "id": "TS2lfqlxk8V-8JvLr1X1S",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 25,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711803879758_25.mp3",
+      "images": null
+    },
+    {
+      "id": "zmanBJOXfrukUJo4Ity7J",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 26,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711803943229_26.mp3",
+      "images": null
+    },
+    {
+      "id": "uysywQWCu_GwQ78Ig-PLh",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 27,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711803986998_27.mp3",
+      "images": null
+    },
+    {
+      "id": "Mk65vaufAzpFIuUriBZ5A",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 28,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711804031064_28.mp3",
+      "images": null
+    },
+    {
+      "id": "BqllLxnUjyJT7KwR04X-Z",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 29,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711804056703_29.mp3",
+      "images": null
+    },
+    {
+      "id": "gJun-ffX31TBq-3ZG2U8B",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 30,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711804080782_30.mp3",
+      "images": null
+    },
+    {
+      "id": "1bg2M63Z-M3uvHTRGGZqf",
+      "content": "",
+      "question_part": "2",
+      "parent_question": null,
+      "options": "A|B|C",
+      "number_of_question": 31,
+      "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711804105647_31.mp3",
+      "images": null
+    },
+    {
+      "id": "PUvhLq7sKStOuUxgPxrHn",
+      "content": "Where does the man work?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "s-nxXRBlSAOmp1SNbtd8i",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711957555976_32-34.mp3",
+        "images": null
+      },
+      "options": "A. At a travel agency|B. At a fitness center|C. At a sports stadium|D. At a hotel",
+      "number_of_question": 32,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "Jg9u05VnHZa6EVM0PhdWg",
+      "content": "What does the woman say she recently did?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "s-nxXRBlSAOmp1SNbtd8i",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711957555976_32-34.mp3",
+        "images": null
+      },
+      "options": "A. She read a review.|B. She changed jobs.|C. She attended a conference.|D. She received a gift certificate.",
+      "number_of_question": 33,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "L0cOiu4YiJqh7hAKIYbuA",
+      "content": "What does the man offer to do?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "s-nxXRBlSAOmp1SNbtd8i",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711957555976_32-34.mp3",
+        "images": null
+      },
+      "options": "A. Arrange a tour|B. Update a reservation|C. Provide a meal voucher|D. Change a seat assignment",
+      "number_of_question": 34,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "mzmPmcAybFTCPjA6DgF59",
+      "content": "Where does the conversation take place?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "ByJfJqWKqlADifl92ucaF",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711970459595_35-37.mp3",
+        "images": null
+      },
+      "options": "A. At a museum|B. At a pottery shop|C. At a bookstore|D. At a flower shop",
+      "number_of_question": 35,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "OpJ_HDgOv2pEWE-gZ1Jlq",
+      "content": "Why is the woman purchasing a gift?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "ByJfJqWKqlADifl92ucaF",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711970459595_35-37.mp3",
+        "images": null
+      },
+      "options": "A. A supervisor won an award|B. A coworker received a promotion|C. A friend is moving into a new home|D. A colleague is retiring",
+      "number_of_question": 36,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "sVJpZcAcc9TetROX8Bi5e",
+      "content": "What is the woman going to look at?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "ByJfJqWKqlADifl92ucaF",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711970459595_35-37.mp3",
+        "images": null
+      },
+      "options": "A. An order form|B. A Website|C. A catelog|D. A calendar",
+      "number_of_question": 37,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "SEKYneLPaKbzMMpSE6XQa",
+      "content": "What are the speakers discussing?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "Vs_FyO9e-8rL0Zu1cddKs",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711970551076_38-40.mp3",
+        "images": null
+      },
+      "options": "A. A fund-raiser|B. A health fair|C. A facility tour|D. A business trip",
+      "number_of_question": 38,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "1h5zagLnZAcZVwNsnjiFu",
+      "content": "Why does the many say, \"I'm on vacation next week\"?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "Vs_FyO9e-8rL0Zu1cddKs",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711970551076_38-40.mp3",
+        "images": null
+      },
+      "options": "A. To request assistance|B. To correct a time frame|C. To express excitement|D. To decline an invaitation",
+      "number_of_question": 39,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "jvb2D-OkZJBDv7en5HFpH",
+      "content": "What does the woman complain about?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "Vs_FyO9e-8rL0Zu1cddKs",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711970551076_38-40.mp3",
+        "images": null
+      },
+      "options": "A. Poor lighting|B. Small desks|C. Back pain|D. Loud noises",
+      "number_of_question": 40,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "rJv0kggOI1RGQOgPO5t4B",
+      "content": "Why is the man calling?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "9lT5NMiqax5-QBiSOYBrb",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711970664422_41-43.mp3",
+        "images": null
+      },
+      "options": "A. To request a repair|B. To pay a utility bill|C. To reserve a car|D. To cancel an appointment",
+      "number_of_question": 41,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "9Rh8S58LFtV23ZYc_1xgY",
+      "content": "Who most likely is Stefan?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "9lT5NMiqax5-QBiSOYBrb",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711970664422_41-43.mp3",
+        "images": null
+      },
+      "options": "A. A real estate agent|B. A salesperson|C. A maintenance worker|D. A delivery person",
+      "number_of_question": 42,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "wZ1ZZvjyjlpWI2hh4NN4D",
+      "content": "What policy does the woman mention?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "9lT5NMiqax5-QBiSOYBrb",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1711970664422_41-43.mp3",
+        "images": null
+      },
+      "options": "A. Residents must be home for appointments.|B. Deliveries must be signed for in person.|C. Vehicles must be parked in a designated area.|D. Service fees must be paid online.",
+      "number_of_question": 43,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "S6wFV1CKjgaldBzbNXewG",
+      "content": "Who most likely is the woman?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "CyNqfaybSKXsSEADJI1jS",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712044391686_44-46.mp3",
+        "images": null
+      },
+      "options": "A. A movie producer|B. A music composer|C. A sports joumalist|D. A locksmith",
+      "number_of_question": 44,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "2SXvnepcr9UZ23RO2AXge",
+      "content": "What project is the man working on?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "CyNqfaybSKXsSEADJI1jS",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712044391686_44-46.mp3",
+        "images": null
+      },
+      "options": "A. A video game|B. A travel book|C. A feature film|D. A theme park attraction",
+      "number_of_question": 45,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "3ce4npDEBJYCgxEQ0PYjj",
+      "content": "What does the woman ask to see?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "CyNqfaybSKXsSEADJI1jS",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712044391686_44-46.mp3",
+        "images": null
+      },
+      "options": "A. A blueprint|B. Some area maps|C. Some storyboards|D. A cast list",
+      "number_of_question": 46,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "sTypx0fACzAARdbb1aVuW",
+      "content": "Who most likely are the speakers",
+      "question_part": "3",
+      "parent_question": {
+        "id": "KIlb4T7g6W2T_b-N1Fch5",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712044487671_47-49.mp3",
+        "images": null
+      },
+      "options": "A. Travel agents|B. Security guards|C. Sales representatives|D. Event caterers",
+      "number_of_question": 47,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "1h76nu8YMbqmy3PvP74bq",
+      "content": "What does the woman say she will do this afternoon?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "KIlb4T7g6W2T_b-N1Fch5",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712044487671_47-49.mp3",
+        "images": null
+      },
+      "options": "A. Contact a supervisor|B. Revise a presentation|C. Print some brochures|D. Reserve some rooms",
+      "number_of_question": 48,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "1V35xtjVzZJRwnkzZ57D1",
+      "content": "What does the man mean when he says, \"The flight's only two hours long\"?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "KIlb4T7g6W2T_b-N1Fch5",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712044487671_47-49.mp3",
+        "images": null
+      },
+      "options": "A. There will be able to attend an event.|B. The should eat lunch after the flight.|C. A train ride will take too long.|D. A project should be postponed",
+      "number_of_question": 49,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "_YoZuVxy3JtVduj3CKJOg",
+      "content": "What information are the speakers discussing?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "8Q43Bgc__UiVVDT7FD6Nx",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712044590723_50-52.mp3",
+        "images": null
+      },
+      "options": "A. Shipping dates|B. Product specifications|C. Marketing data|D. Business expenses",
+      "number_of_question": 50,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "A9YArq6khQxCkTvAXqVfr",
+      "content": "What does the man suggest?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "8Q43Bgc__UiVVDT7FD6Nx",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712044590723_50-52.mp3",
+        "images": null
+      },
+      "options": "A. Improving a Web site|B. Running an advertsement|C. Cutting a budget|D. Organizing a focus group",
+      "number_of_question": 51,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "m2LZKdwljbiqekclqB7EM",
+      "content": "What does the woman say might be necessary?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "8Q43Bgc__UiVVDT7FD6Nx",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712044590723_50-52.mp3",
+        "images": null
+      },
+      "options": "A. Reorganizing a department|B. Hiring a consultant|C. Getting a manager's approval|D. Extending a project deadline",
+      "number_of_question": 52,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "_JdH2pWTHuAZJ-OpLjIC3",
+      "content": "Why is the man calling?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "Ayp87nw9h1R6R6M8CWDZm",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712046517733_53-55.mp3",
+        "images": null
+      },
+      "options": "A. To arrange for a delivery|B. To inquire about a reservation|C. To request directions to an event|D. To ask about a job opening",
+      "number_of_question": 53,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "SPPLM6subFHKL8RAZdmWe",
+      "content": "What does the man say he heard on the radion?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "Ayp87nw9h1R6R6M8CWDZm",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712046517733_53-55.mp3",
+        "images": null
+      },
+      "options": "A. A weather report|B. A discount code|C. An interview|D. A customer review",
+      "number_of_question": 54,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "iTUnX1D9DQgejTtItwBeQ",
+      "content": "According to the man, what requires an additional fee?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "Ayp87nw9h1R6R6M8CWDZm",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712046517733_53-55.mp3",
+        "images": null
+      },
+      "options": "A. A credit card payment|B. Online submissions|C. A special menu option|D. An educational talk",
+      "number_of_question": 55,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "QYKq0aTWlY-qy22IhKukZ",
+      "content": "Where does the consersation most likely take place?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "KNTE72Ht2J-ahXGqf_0es",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712044878064_56-58.mp3",
+        "images": null
+      },
+      "options": "A. At a restaurant|B. At a library|C. At a bank|D. At a fitness center",
+      "number_of_question": 56,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "6brwKc7Ppl1j8UPB5ZKnY",
+      "content": "What good news does Martina receive?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "KNTE72Ht2J-ahXGqf_0es",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712044878064_56-58.mp3",
+        "images": null
+      },
+      "options": "A. She has been chosen to supervise an overseas office.|B. She will be the keynote speaker at an event.|C. The company has been selected for a project.|D. The company will be featured in a magazine.",
+      "number_of_question": 57,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "L08-Rxu1WaVbmrJ96OmSv",
+      "content": "What does Martina say she will do this afternoon?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "KNTE72Ht2J-ahXGqf_0es",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712044878064_56-58.mp3",
+        "images": null
+      },
+      "options": "A. Advertise a job opening|B. Download some drawings|C. Schedule a meeting|D. Select some photographs",
+      "number_of_question": 58,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "Ruc9SpTVcaVZHnSy2FNnY",
+      "content": "Who most likely is the woman?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "3cdmToMXSEndGM6PpT60i",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712044987142_59-61.mp3",
+        "images": null
+      },
+      "options": "A. A newspaper publisher|B. A computer programmer|C. A radio show host|D. An airplane pilot",
+      "number_of_question": 59,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "u77b5XwgqU0Yfijce4_L1",
+      "content": "What did Wayfield Technologies recently announce?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "3cdmToMXSEndGM6PpT60i",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712044987142_59-61.mp3",
+        "images": null
+      },
+      "options": "A. An addition to its product line|B. A merger with another company|C. The launch of mentoring program|D. The construction of a factory",
+      "number_of_question": 60,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "6Ngrz09HroiQgL5y-lsuN",
+      "content": "What does the man invite the woman to do?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "3cdmToMXSEndGM6PpT60i",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712044987142_59-61.mp3",
+        "images": null
+      },
+      "options": "A. Join a professional asscociation|B. Tour a facility|C. Apply for a job|D. Attend a product demonstration",
+      "number_of_question": 61,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "02bligEG0gkOyrx1ktY64",
+      "content": "What type of business do the speakers work for?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "TEBBiTyxHb4RYfUxZJpdC",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712045091153_62-64.mp3",
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712045092043_62-64.png"
+          }
+        ]
+      },
+      "options": "A. A supermarket|B. A catering company|C. A shipping company|D. A manufacturing plant",
+      "number_of_question": 62,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "UebXjD5KlB1VSOFqFwOoA",
+      "content": "Look at the graphic. How much will the woman pay for apples?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "TEBBiTyxHb4RYfUxZJpdC",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712045091153_62-64.mp3",
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712045092043_62-64.png"
+          }
+        ]
+      },
+      "options": "A. $10|B. $11|C. $9|D. $12",
+      "number_of_question": 63,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "xoHhoJqzL3v63EyU75BXo",
+      "content": "What will the woman most likely do next?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "TEBBiTyxHb4RYfUxZJpdC",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712045091153_62-64.mp3",
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712045092043_62-64.png"
+          }
+        ]
+      },
+      "options": "A. Pick up some business cards|B. Post some signs|C. Prepare an invoice|D. Contact some customers",
+      "number_of_question": 64,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "LoDZ8aLtBFIsTDAPWnxle",
+      "content": "Why does the man need to take time off from work?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "W-0kbVY06AHUl3o2j2Qk8",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712045215584_65-67.mp3",
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712045216516_65-67.png"
+          }
+        ]
+      },
+      "options": "A. To take a vaction|B. To go to the dentist|C. To attend a conference|D. To pickup someone form the airport",
+      "number_of_question": 65,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "o0ShhuTosNZ1dlbL7_erm",
+      "content": "What does the woman say will take place next week?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "W-0kbVY06AHUl3o2j2Qk8",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712045215584_65-67.mp3",
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712045216516_65-67.png"
+          }
+        ]
+      },
+      "options": "A. An annual sale|B. A training session|C. A store inspection|D. An anniversary celebration",
+      "number_of_question": 66,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "4h_FVFnIYd5JqGp2UXJLG",
+      "content": "Look at the graphic. Who will the man most likely contact?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "W-0kbVY06AHUl3o2j2Qk8",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712045215584_65-67.mp3",
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712045216516_65-67.png"
+          }
+        ]
+      },
+      "options": "A. Reginald|B. Leila|C. Seo-Yun|D. Mary",
+      "number_of_question": 67,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "2j0evI8INI2CTBHxNyKlT",
+      "content": "What has William Thompson been hired to do?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "cKSat5okSm1AQ2Rr91f1O",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712045323683_68-70.mp3",
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712045324586_68-70.png"
+          }
+        ]
+      },
+      "options": "A. Create a database|B. Repair electronic devices|C. Teach online classes|D. Make travel arrangements",
+      "number_of_question": 68,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "oz5ezZA-QXHhNwf5WBc6Q",
+      "content": "What does Mr.Thompson want to do before starting the job?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "cKSat5okSm1AQ2Rr91f1O",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712045323683_68-70.mp3",
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712045324586_68-70.png"
+          }
+        ]
+      },
+      "options": "A. Go on vacation|B. Take a certification course|C. Find a new apartment|D. Upgrade some equipment",
+      "number_of_question": 69,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "xhOp-214srU5hvsttASHJ",
+      "content": "Look at the graphic. Which line of the form was corrected?",
+      "question_part": "3",
+      "parent_question": {
+        "id": "cKSat5okSm1AQ2Rr91f1O",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712045323683_68-70.mp3",
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712045324586_68-70.png"
+          }
+        ]
+      },
+      "options": "A. Line 1|B. Line 2|C. Line 3|D. Line 4",
+      "number_of_question": 70,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "bokM5uCWl0370lB_Z9_KX",
+      "content": "Where does the announcement take place?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "dXgv-iyma2bf0CdbhNeBN",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712046634549_71-73.mp3",
+        "images": null
+      },
+      "options": "A. At an airport|B. At an train station|C. At a ferry terminal|D. At a bus station",
+      "number_of_question": 71,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "pjQP5ERDvWj1G-xjTYEw0",
+      "content": "What benefit does the speaker mention?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "dXgv-iyma2bf0CdbhNeBN",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712046634549_71-73.mp3",
+        "images": null
+      },
+      "options": "A. Travel costs will decrease.|B. A transportation schedule will be expanded.|C. Additional parking will be available.|D. Some new businesses will open.",
+      "number_of_question": 72,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "J6sUwFZeg4AjDJA7ehkZd",
+      "content": "What are the listeners advised to do?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "dXgv-iyma2bf0CdbhNeBN",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712046634549_71-73.mp3",
+        "images": null
+      },
+      "options": "A. Store their belongings in a locker|B. Buy their tickets online|C. Use a shuttle bus|D. Arrive early",
+      "number_of_question": 73,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "GW5HGSFJu2qCo4_pqQee4",
+      "content": "What type of event is being planned?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "WjMqBG_7c0sL5VMIzdaN6",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712046771417_74-76.mp3",
+        "images": null
+      },
+      "options": "A. An advertising convention|B. A music festival|C. A sports competition|D. A company anniversary party",
+      "number_of_question": 74,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "SMrRWumyJUxpLToelZ2di",
+      "content": "What does the speaker imply when she says, \"this event gets more popular every year?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "WjMqBG_7c0sL5VMIzdaN6",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712046771417_74-76.mp3",
+        "images": null
+      },
+      "options": "A. Traffic will be heavy.|B. The cost to attend will increase.|C. A large venue will be needed.|D. A planning committee deserves recognition.",
+      "number_of_question": 75,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "T3C7NDqGazLWKDPPFP8AV",
+      "content": "What will be speaker show to the listeners?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "WjMqBG_7c0sL5VMIzdaN6",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712046771417_74-76.mp3",
+        "images": null
+      },
+      "options": "A. A newspaper article|B. A city map|C. A list of volunteers|D. A logo design",
+      "number_of_question": 76,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "woTW-K3nyHRmpuFzgVaSw",
+      "content": "Who is the intended audience for the announcement?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "8N7d5uBk-LdIule5UG4hE",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712046875193_77-79.mp3",
+        "images": null
+      },
+      "options": "A. Television reporters|B. Building inspectors|C. Factory employees|D. Catering staff",
+      "number_of_question": 77,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "ZZjLs6zI66dBM-A1FB08G",
+      "content": "According to the speaker, what has caused the problem?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "8N7d5uBk-LdIule5UG4hE",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712046875193_77-79.mp3",
+        "images": null
+      },
+      "options": "A. A shipment is delayed.|B. A street is closed for construction.|C. A water pipe has burst.|D. A roof is leaking.",
+      "number_of_question": 78,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "Wy-1eBJHLxBW-DjbH2Oxa",
+      "content": "What does the speaker suggest?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "8N7d5uBk-LdIule5UG4hE",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712046875193_77-79.mp3",
+        "images": null
+      },
+      "options": "A. Eating at another location|B. Speaking with a supervisor|C. Checking a schedule|D. Working an extra shift",
+      "number_of_question": 79,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "axgdx-k3WpCvzgYsjDKvA",
+      "content": "What kind of business is being advertised?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "E9gmB4XRMvFQUYBnkUjMg",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712046960510_80-82.mp3",
+        "images": null
+      },
+      "options": "A. An Internet provider|B. A moving company|C. A furniture manufacturer|D. A cleaning service",
+      "number_of_question": 80,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "LyyLlkhTD1m86gUX8JziJ",
+      "content": "What did Fairview Magazine recently write about the company?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "E9gmB4XRMvFQUYBnkUjMg",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712046960510_80-82.mp3",
+        "images": null
+      },
+      "options": "A. It is reliable.|B. It has relocated.|C. It is innovative.|D. It purchased another company.",
+      "number_of_question": 81,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "i4lIQY97tqUx1QhXbGOGa",
+      "content": "What special offer is mentioned?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "E9gmB4XRMvFQUYBnkUjMg",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712046960510_80-82.mp3",
+        "images": null
+      },
+      "options": "A. A referral bonus|B. A promotional discount|C. An on-site consultation|D. An exclusive membership",
+      "number_of_question": 82,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "sobqLWM-O_KgvauagzyTm",
+      "content": "Which department does the listener most likely work in?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "j3P_56WYrejkJd_0K8FRh",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712047050111_83-85.mp3",
+        "images": null
+      },
+      "options": "A. Advertising|B. Payroll|C. Information technology|D. Graphic design",
+      "number_of_question": 83,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "YXu_Zhsk1CpXuSic55H1r",
+      "content": "Why does the speaker say, \"it was eighteen dollars an hour\"?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "j3P_56WYrejkJd_0K8FRh",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712047050111_83-85.mp3",
+        "images": null
+      },
+      "options": "A. To indicate an error|B. To explain a service fee|C. To recommend a job|D. To give a compliment",
+      "number_of_question": 84,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "VGNhFk7_drwBlfnRvduDy",
+      "content": "What does the speaker say she will do tomorrow?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "j3P_56WYrejkJd_0K8FRh",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712047050111_83-85.mp3",
+        "images": null
+      },
+      "options": "A. Give the listener a résume|B. Stop by the listener's office|C. Attend a ceremony|D. Finish a budget",
+      "number_of_question": 85,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "5Outg2jXNvh8Z1uVqGVgS",
+      "content": "Where is the introduction taking place?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "Lh9dbiNwOXIZrDFzkhLvV",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712047134007_86-88.mp3",
+        "images": null
+      },
+      "options": "A. At a trade show|B. At a home goods store|C. At an awards ceremony|D. At a supermarket",
+      "number_of_question": 86,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "s7CZWMgS4jvJF55zlf3Vr",
+      "content": "What does the speaker say customers will like about a product?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "Lh9dbiNwOXIZrDFzkhLvV",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712047134007_86-88.mp3",
+        "images": null
+      },
+      "options": "A. It is made from a lightweight material.|B. It will save time.|C. It will fit in small spaces.|D. It is easy to assemble.",
+      "number_of_question": 87,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "XN5BXwZiiof29ulKsYq1Z",
+      "content": "According to the speaker, what will be offered soon?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "Lh9dbiNwOXIZrDFzkhLvV",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712047134007_86-88.mp3",
+        "images": null
+      },
+      "options": "A. A discount|B. Free delivery|C. Additional color options|D. An extended warranty",
+      "number_of_question": 88,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "Gh_YEqXHmiSqIrNlUmbM7",
+      "content": "Why did the speaker call a meeting?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "CFp___C1aYarF9sWaeRng",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712047238748_89-91.mp3",
+        "images": null
+      },
+      "options": "A. To share customer feedback|B. To announce renovation plans|C. To dicuss an advertising strategy|D. To plan an upcoming event",
+      "number_of_question": 89,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "ybwivHF-au_8kifONjKLj",
+      "content": "Who most likely is the speaker?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "CFp___C1aYarF9sWaeRng",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712047238748_89-91.mp3",
+        "images": null
+      },
+      "options": "A. A store owner|B. A news reporter|C. A hotel manager|D. A marketing excutive",
+      "number_of_question": 90,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "s6PRzG2YofaCw89xDsZ3A",
+      "content": "What does the speaker remind the listeners about?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "CFp___C1aYarF9sWaeRng",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712047238748_89-91.mp3",
+        "images": null
+      },
+      "options": "A. Who a guest speaker will be.|B. When inventory will be taken.|C. How much some merchandise costs.|D. Where to place some products.",
+      "number_of_question": 91,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "jwAKrs9N7nj3SJSSVB0sK",
+      "content": "Where do the listeners work?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "JqNLLTKp0m6K4xW4vxrC6",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712047323125_92-94.mp3",
+        "images": null
+      },
+      "options": "A. At a bank|B. At a newspaper|C. At a law firm|D. At a software company",
+      "number_of_question": 92,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "s7fy_WU9NgsnbFJUJkxwh",
+      "content": "Why does the speaker say, \"Everyone who works here needs to be trained on the security produres\"?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "JqNLLTKp0m6K4xW4vxrC6",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712047323125_92-94.mp3",
+        "images": null
+      },
+      "options": "A. To suggest revising a rule|B. To emphasize the importance of a topic|C. To volunteer for an assignment|D. To complain about a meeting agenda",
+      "number_of_question": 93,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "V6T5PAeV_PGKW9t8ZHFS9",
+      "content": "What will the listeners do next?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "JqNLLTKp0m6K4xW4vxrC6",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712047323125_92-94.mp3",
+        "images": null
+      },
+      "options": "A. Take a break|B. Watch a video|C. Tour a facility|D. Work in groups",
+      "number_of_question": 94,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "91PFHcjXeZ2nkM3Pgrv1C",
+      "content": "Where does the speaker work?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "veYrRZI66CSre4DE--lBu",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712047426623_95-97.mp3",
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712047427543_95-97.png"
+          }
+        ]
+      },
+      "options": "A. At a catering company|B. At a clothing manufacturer|C. At an accounting firm|D. At a manazine publishing company",
+      "number_of_question": 95,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "ZEb7ilHL9wdRjw0WpgDYX",
+      "content": "What does the speaker want to discuss with the listener?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "veYrRZI66CSre4DE--lBu",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712047426623_95-97.mp3",
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712047427543_95-97.png"
+          }
+        ]
+      },
+      "options": "A. Revising deadline|B. Developing a new product|C. Hiring more staff|D. Reducing costs",
+      "number_of_question": 96,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "vELWfrZtPVKdl4PGAKRLu",
+      "content": "Look at the graphic. What changed on the speaker's schedule?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "veYrRZI66CSre4DE--lBu",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712047426623_95-97.mp3",
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712047427543_95-97.png"
+          }
+        ]
+      },
+      "options": "A. Lunch with new clients|B. Sales department appointment|C. Design deadline|D. Project review",
+      "number_of_question": 97,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "M1jjnSPpEyu04GpcTa3X7",
+      "content": "Look at the graphic. When will a grand opening take place?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "lRZdPExr-6wyaUgB9TLbg",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712047532048_98-100.mp3",
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712047532947_98-100.png"
+          }
+        ]
+      },
+      "options": "A. On Monday|B. On Tuesday|C. On Wednesday|D. On Thursday",
+      "number_of_question": 98,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "J11SrD5wUjc5xtbJf-_GN",
+      "content": "What has been converted by the parks department?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "lRZdPExr-6wyaUgB9TLbg",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712047532048_98-100.mp3",
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712047532947_98-100.png"
+          }
+        ]
+      },
+      "options": "A. An abandoned farm|B. An old railroad system|C. A lakefront area|D. A local airfield",
+      "number_of_question": 99,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "y2tmSniC7WDsJXRfFt8UL",
+      "content": "What does the speaker encourage the listeners to do?",
+      "question_part": "4",
+      "parent_question": {
+        "id": "lRZdPExr-6wyaUgB9TLbg",
+        "content": "",
+        "audio": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/audios/1712047532048_98-100.mp3",
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712047532947_98-100.png"
+          }
+        ]
+      },
+      "options": "A. Post reviews online|B. Sign up as volunteers|C. Make a donation|D. Bring an umbrella",
+      "number_of_question": 100,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "mTKQNG0peA0rhHaNUc_SY",
+      "content": "An interview with author Tito Flores about _____ new book will be broadcast tonight.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. himself|B. him|C. his|D. he",
+      "number_of_question": 101,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "g5fXfaKal5nM1vun1LBZ-",
+      "content": "Perend Trail's new hiking boots will be avaiable in brown ____ black leather.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. nor|B. yet|C. and|D. so",
+      "number_of_question": 102,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "6w5mrgbTI0uNip7ZK2vpa",
+      "content": "Mr. Rutolo's____on the new tax changes is scheduled for 10:00 AM",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. present|B. presented|C. presentable|D. presentation",
+      "number_of_question": 103,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "zgtVC-3Q9tQhn7WhJpeP_",
+      "content": "Boyd Street Market is Mapleton's largest retailer of foods ____ around the world.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. toward|B. from|C. above|D. plus",
+      "number_of_question": 104,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "JLImjCmB83rRtg9GYN7YF",
+      "content": "Mr. Johansson ____ accepted the job offer he received from Saco Bike Works.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. quicken|B. quickly|C. quicker|D. quickness",
+      "number_of_question": 105,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "2GV2jF_7HGdAMDREiGWh7",
+      "content": "To expand its global reach, Amity Spas will ____ open its franchise opportunities to international prospects.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. soon|B. almost|C. recently|D. already",
+      "number_of_question": 106,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "6bhNKBpyo-h3aJjaXw-ag",
+      "content": "The second-generation XR1280 unit is ____ to its predecessor, except for its reduced weight.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. equally|B. equal|C. equals|D. to equal",
+      "number_of_question": 107,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "no3b3HMngUMh4BusJmFEG",
+      "content": "Zarmeni Mining has been evaluating the benefits of building a mine at the ____ site.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. proposed|B. structured|C. unlimited|D. educated",
+      "number_of_question": 108,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "rUkgU2uJyy9h2x7iu7zfm",
+      "content": "Vice President Ramos will not make ___ decisions until more feedback has been gathered.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. whether|B. what|C. over|D. any",
+      "number_of_question": 109,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "rDSKWad-JbBu-e7m6KNrA",
+      "content": "If you have ordered more than two items, be aware they may arrive in separate ____.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. payments|B. sequences|C. packages|D. receipts",
+      "number_of_question": 110,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "oJhe2fLrPXFi5njP_rh5w",
+      "content": "Candidates for the open position must have good interpersonal skills and ___ working with clients.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. experience|B. experienced|C. experiencing|D. to experience",
+      "number_of_question": 111,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "-K8yY7e8CLT5LudR_wNJ0",
+      "content": "Chong Kim was _____ recommended for the position of merchandise manager for Corbin Furniture Mart.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. thickly|B. currently|C. securely|D. highly",
+      "number_of_question": 112,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "wz9FaDdNZlHBYAi7O5IDK",
+      "content": "Once the returned item is receviced, a refund will appear on your credit-card statement ____ five business days.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. within|B. during|C. since|D. when",
+      "number_of_question": 113,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "C8b2Icd7Q5dMd1PkaX544",
+      "content": "The printer on the second floor will be out of ____ until the technician arrives on Friday.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. purpose|B. variety|C. service|D. repair",
+      "number_of_question": 114,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "PacAJbpjJDkm1HY8bdtD3",
+      "content": "Sales of our computer software were good last quater, but sales for our mobile applications have been even ____.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. strong|B. stronger|C. strongly|D. strongest",
+      "number_of_question": 115,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "X6GO52DJlQdOaJJSjxGjC",
+      "content": "Upon request, the guests at Olane Hotel will be provided vouchers ___ free parking.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. on|B. to|C. with|D. for",
+      "number_of_question": 116,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "HEU74UACi8UWtqBR0mGnH",
+      "content": "Please review the projected sales figures in the spreadsheets that ____ to the e-mail.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. is attaching|B. had attached|C. attachment|D. are attached",
+      "number_of_question": 117,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "5_tvD2gNRjzxjGOKdUc4r",
+      "content": "During tourist season, selling handmade crafts is a ___ source of income for local residents.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. contented|B. dependable|C. flavorful|D. patient",
+      "number_of_question": 118,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "jPdvTGxKKItQPsm1IOpgA",
+      "content": "Everyone at the annual Tirnaco exposition seemed ____ by the new products on display.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. excite|B. excitement|C. excited|D. excitedly",
+      "number_of_question": 119,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "rxnq-AzWuBjlkTgQhmiEd",
+      "content": "This Saturday, Ritesense customers will have the opportunity to sample a ___ of Health Bar products.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. nutrition|B. selection|C. placement|D. management",
+      "number_of_question": 120,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "cYuWhm2dwEI53JTcnd7iA",
+      "content": "Ms. Wong has expressed _____ in leading the city's planner beautification project.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. interest|B. interests|C. intersting|D. interestingly",
+      "number_of_question": 121,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "_zN9mB501WJv0BBBFGSwD",
+      "content": "Mr. Choo was chosen to head the committee for consumer protection from a ___ pool of candidates.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. sizable|B. practiced|C. consecutive|D. missing",
+      "number_of_question": 122,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "AVjLgHPz82YyOaVP4J_vU",
+      "content": "Please save spreadsheets periodically when updating them to prevent data from ___",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. is lost|B. lost|C. being lost|D. losing",
+      "number_of_question": 123,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "zhZPlHAyHV2LAurp4w30b",
+      "content": "____ Gyoh Company's marketing push, new orders for cash registers decreased slightly in the third quater.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. As|B. If|C. However|D. Despite",
+      "number_of_question": 124,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "-shAW-7PDwkPb8shum_Ao",
+      "content": "All members of the sales team must attend next Thursday's meeting so that ___ can see the sales forecast presentation.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. one|B. someone|C. everyone|D. either one",
+      "number_of_question": 125,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "4tzQxjwXnKKgVpP5EpxLM",
+      "content": "The updated medical-records system will ___ that patients and doctors can easily access accurate information.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. ensure|B. allow|C. accept|D. provide",
+      "number_of_question": 126,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "8YzNIWTtQz1ulIH5p5JXe",
+      "content": "Up until last year, we marketed our services ____ through our online partner, Yoder Tech.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. exclusive|B. exclusivity|C. exclusiveness|D. exclusively",
+      "number_of_question": 127,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "JthsC9YyEh1lq2PrOL0oH",
+      "content": "President Grimaud would like to thank the marketing department for ___ the mislabeling issue to her attention.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. showing|B. telling|C. bringing|D. making",
+      "number_of_question": 128,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "NhHhoW9djEbfd1hByDMnF",
+      "content": "Please be patient as the IT department works _____ service to your business application.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. to restore|B. restoration|C. restored|D. had restored",
+      "number_of_question": 129,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "Q_-dVutxevSIA750Hh_UU",
+      "content": "Markley Corporation's earnings have risen steadily despite significant fluctuations ____ the stock market.",
+      "question_part": "5",
+      "parent_question": null,
+      "options": "A. about|B. in|C. through|D. onto",
+      "number_of_question": 130,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "Is_R0GzFEmDsjGUPF_hzI",
+      "content": null,
+      "question_part": "6",
+      "parent_question": {
+        "id": "2CIkgYgKy20zp3qoA-AJv",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712116090235_131-134.png"
+          }
+        ]
+      },
+      "options": "A. will be confirmed|B. confirms|C. is a confirmation|D. confirm",
+      "number_of_question": 131,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "IcGw6KHp5p8ZuBQAjPN_W",
+      "content": null,
+      "question_part": "6",
+      "parent_question": {
+        "id": "2CIkgYgKy20zp3qoA-AJv",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712116090235_131-134.png"
+          }
+        ]
+      },
+      "options": "A. which|B. what|C. these|D. that",
+      "number_of_question": 132,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "EUlf1flvFDt9RQikTudlY",
+      "content": "",
+      "question_part": "6",
+      "parent_question": {
+        "id": "2CIkgYgKy20zp3qoA-AJv",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712116090235_131-134.png"
+          }
+        ]
+      },
+      "options": "A. Apparently|B. As a reminder|C. In an emergency|D. However",
+      "number_of_question": 133,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "y4ux5I1MqZEXsD5Au7jQg",
+      "content": null,
+      "question_part": "6",
+      "parent_question": {
+        "id": "2CIkgYgKy20zp3qoA-AJv",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712116090235_131-134.png"
+          }
+        ]
+      },
+      "options": "A. If these days suit you, please let us know so we can reserve a shuttle for you.|B. For example, some people need a reservation with all meals included.|C. If this is your case, please, give us a call 24 hours in advance of your arrival.|D. You can always request a wake - up call by contacting the receptionist.",
+      "number_of_question": 134,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "1KZoS_TU9qMxTsNLsjdNZ",
+      "content": null,
+      "question_part": "6",
+      "parent_question": {
+        "id": "mdHfKAJZ2iUPIhfdi7ZIh",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712116212432_135-138.png"
+          }
+        ]
+      },
+      "options": "A. performance|B. merger|C. relocation|D. addition",
+      "number_of_question": 135,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "y8GdoJxjD1BQFVSkCVP9l",
+      "content": null,
+      "question_part": "6",
+      "parent_question": {
+        "id": "mdHfKAJZ2iUPIhfdi7ZIh",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712116212432_135-138.png"
+          }
+        ]
+      },
+      "options": "A. necessarily|B. necessity|C. necessary|D. necessities",
+      "number_of_question": 136,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "yGKV95JJlEbGSW-VeyILG",
+      "content": null,
+      "question_part": "6",
+      "parent_question": {
+        "id": "mdHfKAJZ2iUPIhfdi7ZIh",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712116212432_135-138.png"
+          }
+        ]
+      },
+      "options": "A. some|B. each|C. overly|D. very",
+      "number_of_question": 137,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "BjkANF5m6RKkm0H2V4b_U",
+      "content": null,
+      "question_part": "6",
+      "parent_question": {
+        "id": "mdHfKAJZ2iUPIhfdi7ZIh",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712116212432_135-138.png"
+          }
+        ]
+      },
+      "options": "A. Some current employees will switch departments.|B. Attached is a map of our new desk assignments.|C. Your attendance is thus strongly encouraged.|D. Productivity is expected to double afterward.",
+      "number_of_question": 138,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "5Ya1XPeyqVuMFMYiP9YEJ",
+      "content": null,
+      "question_part": "6",
+      "parent_question": {
+        "id": "QErEyGGmEDMxWoM9Az1Jg",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126422226_139-142.png"
+          }
+        ]
+      },
+      "options": "A. will receive|B. must receive|C. had received|D. are receiving",
+      "number_of_question": 139,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "LOokxdqLusD0zua6YN1DN",
+      "content": null,
+      "question_part": "6",
+      "parent_question": {
+        "id": "QErEyGGmEDMxWoM9Az1Jg",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126422226_139-142.png"
+          }
+        ]
+      },
+      "options": "A. trip|B. decision|C. situation|D. appointment",
+      "number_of_question": 140,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "Fjlm1ETmAxvB0dW32aeMW",
+      "content": null,
+      "question_part": "6",
+      "parent_question": {
+        "id": "QErEyGGmEDMxWoM9Az1Jg",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126422226_139-142.png"
+          }
+        ]
+      },
+      "options": "A. along with|B. taken from|C. according to|D. in the event of",
+      "number_of_question": 141,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "35gJxuNpAXUB0AZ2yOoP7",
+      "content": null,
+      "question_part": "6",
+      "parent_question": {
+        "id": "QErEyGGmEDMxWoM9Az1Jg",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126422226_139-142.png"
+          }
+        ]
+      },
+      "options": "A. It is customary to leave a tip.|B. Parking is limited, so arrive early.|C. These expenses should be supported with a writtens tatement.|D. However, routine travel does not require managerial approval.",
+      "number_of_question": 142,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "sLGYt43XNf5YLoZ58Qn66",
+      "content": null,
+      "question_part": "6",
+      "parent_question": {
+        "id": "V1FxNjwJvlIzwjgPhWTOp",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126533959_143-146.png"
+          }
+        ]
+      },
+      "options": "A. age|B. gender|C. income|D. location",
+      "number_of_question": 143,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "cat_b_7mjCEQHZDX522IO",
+      "content": null,
+      "question_part": "6",
+      "parent_question": {
+        "id": "V1FxNjwJvlIzwjgPhWTOp",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126533959_143-146.png"
+          }
+        ]
+      },
+      "options": "A. were|B. will be|C. had been|D. will have been",
+      "number_of_question": 144,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "j_BG64k6-18QD0fkwdpoK",
+      "content": null,
+      "question_part": "6",
+      "parent_question": {
+        "id": "V1FxNjwJvlIzwjgPhWTOp",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126533959_143-146.png"
+          }
+        ]
+      },
+      "options": "A. implementing|B. an implement|C. when implemented|D. the implementation",
+      "number_of_question": 145,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "QKpilukIcpROSHpEc4tDP",
+      "content": null,
+      "question_part": "6",
+      "parent_question": {
+        "id": "V1FxNjwJvlIzwjgPhWTOp",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126533959_143-146.png"
+          }
+        ]
+      },
+      "options": "A. Mason Brothers was founded more than 40 years ago.|B. Rest assured that customers will remain our top priority.|C. We have also increased the marketing budgets for each location.|D. Customers will soon have more payment options.",
+      "number_of_question": 146,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "os-INMtfdLbbjTiruMRbZ",
+      "content": "What is suggested about Ms. Swansone?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "upkb9YLucgGk-2s-xYuz2",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126601092_147-148.png"
+          }
+        ]
+      },
+      "options": "A. She recently moved to California.|B. She has not paid her enrollment fee.|C. She is an instructor in a fitness class.|D. She has entered into a one - year contract.",
+      "number_of_question": 147,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "t7lQaX5tGKdMoximTVWZL",
+      "content": "Why would Ms. Swansone be required to submit a letter?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "upkb9YLucgGk-2s-xYuz2",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126601092_147-148.png"
+          }
+        ]
+      },
+      "options": "A. To cancel her membership|B. To gain access to special equipment|C. To pay with a different credit card|D. To receive a replacement membership card",
+      "number_of_question": 148,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "6vtj2XzUYlHJ--6grcMP-",
+      "content": "What is the purpose of the text-message chain?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "Dq-IKVL3cISbmey2F2XDs",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126668115_149-150.png"
+          }
+        ]
+      },
+      "options": "A. To determine whether information has been sent|B. To understand why a decision has changed|C. To provide instructions on deleting a file|D. To decide who will deliver a presention",
+      "number_of_question": 149,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "bh0BH_HB-vo1NfHhajq4q",
+      "content": "At 11:25 AM, what does Mr. Mathnews imply when he writes, \"Really\"?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "Dq-IKVL3cISbmey2F2XDs",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126668115_149-150.png"
+          }
+        ]
+      },
+      "options": "A. He needs the documents right away.|B. He deleted the sales - callsre cords.|C. He cannot find attachment.|D. He sent the attachment to Mr. Mattson in error.",
+      "number_of_question": 150,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "IhdN09wcqH2FLc_rfvcNV",
+      "content": "Why does Ms. Blum most likely want to meet with Mr. Svoboda?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "uQiekBfXiu4XTlEJdknl_",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126733844_151-152.png"
+          }
+        ]
+      },
+      "options": "A. To apply for a job in Berlin|B. To sell her company's services|C. To discuss business opportunities in Asia|D. To review changes in a city's tax code",
+      "number_of_question": 151,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "n_derTXPNHPkG3_BxUBgJ",
+      "content": "How could Messick Finacial Management help Mr. Svoboda's company?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "uQiekBfXiu4XTlEJdknl_",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126733844_151-152.png"
+          }
+        ]
+      },
+      "options": "A. By providing information about the German computer industry|B. By recruiting employees to work in Europe|C. By recommending international travel services|D. By giving financial advice to his company's staff",
+      "number_of_question": 152,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "utiYHf_KS_uphbjU2zlps",
+      "content": "What is indicated about the Calla Courtyard?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "Z-R1GPLrc6t0izE5svo8S",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126843649_153-155.png"
+          }
+        ]
+      },
+      "options": "A. It is a relatively new rental space.|B. It was recently renovated.|C. It is a popular venue for besiness events.|D. If features an outdoor seating area.",
+      "number_of_question": 153,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "5ABQrlS8rmDzd8cc7IwAV",
+      "content": "What was Ms. Patterson particularly impressed by?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "Z-R1GPLrc6t0izE5svo8S",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126843649_153-155.png"
+          }
+        ]
+      },
+      "options": "A. The friendliness of the staff|B. The low cost of the rental|C. The seating capacity of the hall|D. The beauty of the surroundings",
+      "number_of_question": 154,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "GORj321-KNPIv2pTfXQS6",
+      "content": "In which of the positions marked [1], [2], [3], [4] does the following sentence best belong? \"For this reason, it might be wise to hire a full-service catering company\"",
+      "question_part": "7",
+      "parent_question": {
+        "id": "Z-R1GPLrc6t0izE5svo8S",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126843649_153-155.png"
+          }
+        ]
+      },
+      "options": "A. [1]|B. [2]|C. [3]|D. [4]",
+      "number_of_question": 155,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "lOkrvKBmBHP6qXbqVWWHD",
+      "content": "Why is Ms. Verhoeven contacting Ms. Wu?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "Zncmi79tvxg8bZzlulG5Q",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126931655_156-158.png"
+          }
+        ]
+      },
+      "options": "A. To issue an invitation to an anniversary party|B. To request verification of some information|C. To provide advice on a career opportunity|D. To offer a discount on a publication",
+      "number_of_question": 156,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "C4deU6vOYN2vCG3z405YR",
+      "content": "What does the postcard indicate about Ms. Wu?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "Zncmi79tvxg8bZzlulG5Q",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126931655_156-158.png"
+          }
+        ]
+      },
+      "options": "A. She teaches at Hartridge University.|B. She is writing a biography of a business leader.|C. She plans to make a donation to the alumni association.|D. She is a graduate of Hartridge's business school.",
+      "number_of_question": 157,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "aF90kuwb-EUJu5kdAtPJK",
+      "content": "According to the postcard, what must Ms. Wu provide at the start of the call?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "Zncmi79tvxg8bZzlulG5Q",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712126931655_156-158.png"
+          }
+        ]
+      },
+      "options": "A. A new phone number|B. An old account password|C. A personal identification number|D. A payment confirmation code",
+      "number_of_question": 158,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "qA3YKer8XyHR9auB2CwRd",
+      "content": "For what aspect of the project is Mr. Lizzrdi most likely responsible?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "Rnck4J6j9pwAEKcDs99wP",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127054527_159-162.png"
+          }
+        ]
+      },
+      "options": "A. Production|B. Budget|C. Technology|D. Personnel",
+      "number_of_question": 159,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "u8-YNIn-nGrYVLt47FVy9",
+      "content": "Why does Mr. Lizzardi decline to help out?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "Rnck4J6j9pwAEKcDs99wP",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127054527_159-162.png"
+          }
+        ]
+      },
+      "options": "A. He does not have time to work with Ms. Rossi.|B. He has to attend a technology meeting.|C. He cannot access the budget.|D. He does not have information on participants.",
+      "number_of_question": 160,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "BysrQJLjWj8fUASy9tMPo",
+      "content": "When does Mr. Durav suggest meeting?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "Rnck4J6j9pwAEKcDs99wP",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127054527_159-162.png"
+          }
+        ]
+      },
+      "options": "A. On Monday|B. On Tuesday|C. On Wednesday|D. On Thursday",
+      "number_of_question": 161,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "-O9QyddpcU0gYirzExIAi",
+      "content": "At 11:18 AM, what does Ms. Rossi most likely mean when she writes, \"That's it\"?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "Rnck4J6j9pwAEKcDs99wP",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127054527_159-162.png"
+          }
+        ]
+      },
+      "options": "A. She does not need any other help.|B. She found the file she needs.|C. She selected a new team logo.|D. She has finished the end-of-year report.",
+      "number_of_question": 162,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "FCACD_bqXnG5saHQaJgEd",
+      "content": "What is the purpose of the article?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "Q3JJClwVuac0Hv00aaUxe",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127187147_163-166.png"
+          }
+        ]
+      },
+      "options": "A. To summarize the plot of a popular comic book|B. To publicize the opening of an online store|C. To report on a company's recent earnings|D. To describe a change in a company's operations",
+      "number_of_question": 163,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "UEeGC0LI1GwwQDsLH3bwA",
+      "content": "What is suggested about sales of Energy Run?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "Q3JJClwVuac0Hv00aaUxe",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127187147_163-166.png"
+          }
+        ]
+      },
+      "options": "A. The increased suddenly.|B. They will be reported online.|C. They were expected to be low.|D. They were calculated incorrectly.",
+      "number_of_question": 164,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "McFtxGQu_pT_wQPBjfhO-",
+      "content": "What did Mr. Emanuel announce?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "Q3JJClwVuac0Hv00aaUxe",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127187147_163-166.png"
+          }
+        ]
+      },
+      "options": "A. A new character will be introduced.|B. A publication will become available again.|C. Some newsstands will be closed.|D. Some book prices will be reduced.",
+      "number_of_question": 165,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "3TAIy70rTXThJVVYRTaWw",
+      "content": "In which of the positions marked [1], [2], [3], [4] does the following sentence best belong? \"To that end, the company has invested $000 in new equipment\"",
+      "question_part": "7",
+      "parent_question": {
+        "id": "Q3JJClwVuac0Hv00aaUxe",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127187147_163-166.png"
+          }
+        ]
+      },
+      "options": "A. [1]|B. [2]|C. [3]|D. [4]",
+      "number_of_question": 166,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "B-jdzRxrY9b8_4qxPA82I",
+      "content": "Why did Ghearey Garden Goods close?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "pndzxtb2IiRe57WZqlPci",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127456215_167-169.png"
+          }
+        ]
+      },
+      "options": "A. The building is being renovated.|B. The rent costs became too expensive.|C. The commute was too long for the owner.|D. An open management position could not be filled.",
+      "number_of_question": 167,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "RS1d630k-M-V7bVEECesx",
+      "content": "What does Mr. Sanderson indicate in the notice?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "pndzxtb2IiRe57WZqlPci",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127456215_167-169.png"
+          }
+        ]
+      },
+      "options": "A. New competitors have entered the marketplace.|B. The business was founded by a family member.|C. The store's staff members are reliable.|D. The demand for gardening supplies has increased.",
+      "number_of_question": 168,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "5z6jblWkSzElGM-n-MGSL",
+      "content": "What will people continue to find on the Web site?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "pndzxtb2IiRe57WZqlPci",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127456215_167-169.png"
+          }
+        ]
+      },
+      "options": "A. Photographs of a farmhouse|B. Discount coupons|C. Instructions for gardeners|D. A list of recommended stores",
+      "number_of_question": 169,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "vi6WLCR4FUyd3WpIIHBHc",
+      "content": "What is the perpise of the article?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "voo2F64Z5kg2yk-3YtMNG",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127370629_170-171.png"
+          }
+        ]
+      },
+      "options": "A. To announce the selection of a new CEO at Derbyshire Company|B. To describe events at a store's anniversary|C. To notify the public of a business acquisition|D. To attract applicants for job openings",
+      "number_of_question": 170,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "puyd5EQxcFxxiEAFG3cN_",
+      "content": "What is indicated about Mr. Paulson?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "voo2F64Z5kg2yk-3YtMNG",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127370629_170-171.png"
+          }
+        ]
+      },
+      "options": "A. He is taking on a role at Derbyshire Company.|B. He is retiring from Lillard, Inc.|C. He is starting a new company.|D. He is moving to Chicago.",
+      "number_of_question": 171,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "SNYdJCt5ed0Kpw_cbcdCW",
+      "content": "What is stated about the workshops?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "2iyd-j0oA5r8gThJuNNDD",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127609211_172-175.png"
+          }
+        ]
+      },
+      "options": "A. They are held annually.|B. They feature well-known presenters.|C. They are being offered by a new vendor.|D. They are important for employee development.",
+      "number_of_question": 172,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "NIPe5xvT--L93Buvcmzlk",
+      "content": "What is implied about the completed workshop evaluation?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "2iyd-j0oA5r8gThJuNNDD",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127609211_172-175.png"
+          }
+        ]
+      },
+      "options": "A. It did not gather specific details.|B. It has not been analyzed yet.|C. It was given to the wrong employees.|D. It has been the subject of a presentation.",
+      "number_of_question": 173,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "dYm11YMYpH3eLSIp53Hkm",
+      "content": "Why is prompt reply requested?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "2iyd-j0oA5r8gThJuNNDD",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127609211_172-175.png"
+          }
+        ]
+      },
+      "options": "A. A list of attendees needs to the finalized.|B. Responses will be discussed soon.|C. A contract is scheduled to be signed.|D. Staff performance evaluations are due.",
+      "number_of_question": 174,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "V0_rIIM4Ybj22_Fz_qKnO",
+      "content": "Who most likely is Mr. Jacobs?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "2iyd-j0oA5r8gThJuNNDD",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127609211_172-175.png"
+          }
+        ]
+      },
+      "options": "A. A workshop facilitator|B. A team leader|C. A senior manager|D. A software developer",
+      "number_of_question": 175,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "CjFSrG7Jw4kFt47lhqX2I",
+      "content": "According to the arcicle, why did Rhee Poultry make a change?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "B9UnfxA__yxV1_KWu5WRZ",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127855405_176-180.png"
+          }
+        ]
+      },
+      "options": "A. To lower production costs|B. To attact more customers|C. To promote a new product line|D. To retain consumer confidence",
+      "number_of_question": 176,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "_Zq5DfeMgjZN5v8lRh-Kt",
+      "content": "What is suggested about Supragood?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "B9UnfxA__yxV1_KWu5WRZ",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127855405_176-180.png"
+          }
+        ]
+      },
+      "options": "A. It does not export poultry.|B. Its customers are not pleased.|C. Its headquaters is located in Leeds.|D. It offers discounts to new customers.",
+      "number_of_question": 177,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "PFKT91jmNVTft8CPU59TJ",
+      "content": "In the article, the word \"matter\" in parapgraph 5, line, is closest in meaning to",
+      "question_part": "7",
+      "parent_question": {
+        "id": "B9UnfxA__yxV1_KWu5WRZ",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127855405_176-180.png"
+          }
+        ]
+      },
+      "options": "A. situation|B. printing|C. importance|D. substance",
+      "number_of_question": 178,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "doXrCLMqfQeNkeWt1D22N",
+      "content": "Based on the label, what can be concluded about the package?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "B9UnfxA__yxV1_KWu5WRZ",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127855405_176-180.png"
+          }
+        ]
+      },
+      "options": "A. It may contain some bones.|B. It was exported to Poland.|C. It was packaged in an updated facility.|D. It is labeled with an incorrect weight.",
+      "number_of_question": 179,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "mpRX9p_U1vnmDW2t92Uev",
+      "content": "According to the label, what can customers find on the Web site?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "B9UnfxA__yxV1_KWu5WRZ",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712127855405_176-180.png"
+          }
+        ]
+      },
+      "options": "A. Some discount coupons|B. Directions to Rhee headquaters|C. Names of the shipping managers|D. Infomation about new packaging",
+      "number_of_question": 180,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "7HU9nmpWkTOD_m0O0s8gd",
+      "content": "What is indicated about Ms. Hirota?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "uBMtWXNLCgR2BAIUn5Gmh",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128082150_181-185.png"
+          }
+        ]
+      },
+      "options": "A. She began writing fiction as a teenager.|B. She used to teach English literature at university.|C. Her interest in literature was inspired by her parents' work.|D. Her workshops frequently attact over 30 writes.",
+      "number_of_question": 181,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "o1zY_xxcc5jfX4toLNvT4",
+      "content": "What is suggested about Ms. Hirota's collection of short stories?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "uBMtWXNLCgR2BAIUn5Gmh",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128082150_181-185.png"
+          }
+        ]
+      },
+      "options": "A. It contains stories about ocean life.|B. It will be published next year.|C. It was released in Japanese and English.|D. It includes an award - winning story.",
+      "number_of_question": 182,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "24wFBBalK9rI3LUW_mNuU",
+      "content": "In the first Web page, the word \"regular\" in paragraph line 3, is closest in meaning to",
+      "question_part": "7",
+      "parent_question": {
+        "id": "uBMtWXNLCgR2BAIUn5Gmh",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128082150_181-185.png"
+          }
+        ]
+      },
+      "options": "A. symmetrical|B. frequent|C. acceptable|D. invited",
+      "number_of_question": 183,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "uytfEzKPHtvmpCbHyZc-z",
+      "content": "What is indicated about Zantree Books?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "uBMtWXNLCgR2BAIUn5Gmh",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128082150_181-185.png"
+          }
+        ]
+      },
+      "options": "A. It has an office in New York.|B. It hosts annual writer's events.|C. It sells books on its Web site.|D. It has several divisions.",
+      "number_of_question": 184,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "mbjuJk4ylLBGxdUeGaLH0",
+      "content": "What change was made to Ms. Hirota's published novel?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "uBMtWXNLCgR2BAIUn5Gmh",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128082150_181-185.png"
+          }
+        ]
+      },
+      "options": "A. Undersea adventures were added to the story.|B. A main character's name was changed.|C. It was published later than planned.|D. It was given a different title.",
+      "number_of_question": 185,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "O6W3hH42-r8VRokd1KdT7",
+      "content": "What is the purpose of the article?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "1b9ShRze9fuGs2iiOg-GG",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128816684_186-190.1.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128816684_186-190.2.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128816684_186-190.3.png"
+          }
+        ]
+      },
+      "options": "A. To describe the expansion of a business|B. To provide details about job openings|C. To announce the merger of two companies|D. To introduce a new corporate leader",
+      "number_of_question": 186,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "oKWDVHj2GDLnd0a_s2vp1",
+      "content": "What does Ms. Okoye suggest in the application?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "1b9ShRze9fuGs2iiOg-GG",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128816684_186-190.1.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128816684_186-190.2.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128816684_186-190.3.png"
+          }
+        ]
+      },
+      "options": "A. She lives in Spokane.|B. She studied at Veloa Dance School.|C. She currently works for Cadia Gym.|D. She wants a part-time positon.",
+      "number_of_question": 187,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "J-KePD0locBLW8SvOLN9w",
+      "content": "What is most likely true about Ms. Okoye's friend?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "1b9ShRze9fuGs2iiOg-GG",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128816684_186-190.1.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128816684_186-190.2.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128816684_186-190.3.png"
+          }
+        ]
+      },
+      "options": "A. She works in customer service.|B. She does not live in Washington State.|C. She was not able to update her schedule.|D. She helped organize a job fair.",
+      "number_of_question": 188,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "IW5Zf-5Jt9A7sBkslMbIQ",
+      "content": "What class would Ms. Okoye be most qualified to teach?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "1b9ShRze9fuGs2iiOg-GG",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128816684_186-190.1.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128816684_186-190.2.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128816684_186-190.3.png"
+          }
+        ]
+      },
+      "options": "A. Basic Weights|B. Groove and Move|C. Quick Cycle|D. Splash for Strength",
+      "number_of_question": 189,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "9LKHq1KimvUz6K750epe9",
+      "content": "What is indicated about all of the classes in the information?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "1b9ShRze9fuGs2iiOg-GG",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128816684_186-190.1.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128816684_186-190.2.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712128816684_186-190.3.png"
+          }
+        ]
+      },
+      "options": "A. They are limited in size.|B. They are for advanced students only.|C. They include the use of music.|D. They are taught at multiple gyms.",
+      "number_of_question": 190,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "DEP03_U7t2PNQqwYo9go-",
+      "content": "In the first e-mail, what is stated about Ms. Mizuno's tickets?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "5uB7ps49SjO_KZHqus4c0",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129149476_191-195.1.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129149476_191-195.2.png"
+          }
+        ]
+      },
+      "options": "A. They cost $6.25 each.|B. They have already been sent.|C. They are being held at the box office.|D. They are for a 1:00 PM performance.",
+      "number_of_question": 191,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "L9TMSw-nkQVT2uK3QGJKa",
+      "content": "What is indicated about submitting a ticket exchange request?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "5uB7ps49SjO_KZHqus4c0",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129149476_191-195.1.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129149476_191-195.2.png"
+          }
+        ]
+      },
+      "options": "A. It can only be done online.|B. Only season ticket holders can do it.|C. People with balcony tickets cannot do it.|D. It can be done on the day of the original performance.",
+      "number_of_question": 192,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "5JvEZQDka8bRXfoejrXHg",
+      "content": "When will Ms. Mizuno most likely attend a performance of The Mountain Calls?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "5uB7ps49SjO_KZHqus4c0",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129149476_191-195.1.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129149476_191-195.2.png"
+          }
+        ]
+      },
+      "options": "A. On January 15|B. On January 16|C. On January 18|D. On January 20",
+      "number_of_question": 193,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "JMYtMj6qoiQhf5IlhW5XC",
+      "content": "What can be concluded about Ms. Mizuno?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "5uB7ps49SjO_KZHqus4c0",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129149476_191-195.1.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129149476_191-195.2.png"
+          }
+        ]
+      },
+      "options": "A. She works in the theater industry.|B. She cannot find her original tickets.|C. She has canceled her subscription.|D. She has exchanged tickets in the past.",
+      "number_of_question": 194,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "eO6f6p60_daCcGR9-78pB",
+      "content": "What is the purpose of the second e-mail?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "5uB7ps49SjO_KZHqus4c0",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129149476_191-195.1.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129149476_191-195.2.png"
+          }
+        ]
+      },
+      "options": "A. To provide tickets|B. To point out an error|C. To inquire about season tickets|D. To request a discount",
+      "number_of_question": 195,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "BcVvBBvjFRPuVAKHTqag8",
+      "content": "What is the purpose of the first e-mail?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "ovZ43-id8GktX5ESFmyjQ",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129288649_196-200.1.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129288649_196-200.2.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129288650_196-200.3.png"
+          }
+        ]
+      },
+      "options": "A. To promote a business|B. To offer a suggestion|C. To request information|D. To extend an invitation",
+      "number_of_question": 196,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "kjAXBJ5pRX06edvZGOWSB",
+      "content": "According to the first e-mail, what was recently replaced at Berte's Bakery?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "ovZ43-id8GktX5ESFmyjQ",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129288649_196-200.1.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129288649_196-200.2.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129288650_196-200.3.png"
+          }
+        ]
+      },
+      "options": "A. The shutters|B. The lighting|C. The front door|D. The staff uniforms",
+      "number_of_question": 197,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "io3OksHG4-JG-tTTSdPlZ",
+      "content": "What is suggested about Studio 9?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "ovZ43-id8GktX5ESFmyjQ",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129288649_196-200.1.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129288649_196-200.2.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129288650_196-200.3.png"
+          }
+        ]
+      },
+      "options": "A. It is next door to Corner Book Shop.|B. Its interior has been recently remodeled by the owner.|C. Its sign cost less than signs sold by Hedgerow Graphics.|D. Its is decorated in a rustic, vintage style.",
+      "number_of_question": 198,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "m7xv1TcL2Jb-rf6ZyyJca",
+      "content": "What is indicated about the sign Mr. Berte purchased for his bakery?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "ovZ43-id8GktX5ESFmyjQ",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129288649_196-200.1.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129288649_196-200.2.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129288650_196-200.3.png"
+          }
+        ]
+      },
+      "options": "A. It is larger than the sign ordered by Mr. Ward.|B. It is under warrnty for more than on year.|C. It was delivered in August.|D. It has blue lettering.",
+      "number_of_question": 199,
+      "audio": null,
+      "images": null
+    },
+    {
+      "id": "udnSlwhw9X31Y-UHJ_Yfb",
+      "content": "When will Mr. Ward most likely receive his order?",
+      "question_part": "7",
+      "parent_question": {
+        "id": "ovZ43-id8GktX5ESFmyjQ",
+        "content": "",
+        "audio": null,
+        "images": [
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129288649_196-200.1.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129288649_196-200.2.png"
+          },
+          {
+            "image_path": "https://apiquanlytest.tienganhthayquy.com/app/src/storage/images/1712129288650_196-200.3.png"
+          }
+        ]
+      },
+      "options": "A. On August 1|B. On August 5|C. On August 10|D. On August 20",
+      "number_of_question": 200,
+      "audio": null,
+      "images": null
+    }
+  ]
+}

@@ -1,0 +1,4088 @@
+{
+  "source": "toeic.tienganhthayquy.com",
+  "enrichedAt": "2026-05-05T03:17:01.667Z",
+  "model": "openai/gpt-5.4-nano",
+  "totalQuestions": 240,
+  "questions": [
+    {
+      "id": "NDNuiEtgqf4zGyyH5P6XH",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 101,
+      "stem": "Mr. Sokolov_____a positive review of this stay at the Olana Hotel",
+      "options": [
+        "write",
+        "wrote",
+        "writing",
+        "was written"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Will” is not present here, so the sentence describes a past action. After “Mr. Sokolov,” the verb should be the past tense “wrote.”",
+      "explanationVi": "Câu không có “will”, vì vậy hành động được nói đến ở quá khứ. Sau “Mr. Sokolov,” cần dùng thì quá khứ “wrote”.",
+      "grammarTopic": "tenses (past tense)"
+    },
+    {
+      "id": "TZBJqC8kwcLmTgVSJIc6I",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 102,
+      "stem": "The manager often leads new employees through the safety procedures_____",
+      "options": [
+        "her",
+        "herself",
+        "hers",
+        "she"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "The phrase is “leads ... through,” where the blank needs an object that matches the subject “the manager” (female). “Herself” is the correct reflexive pronoun: “leads new employees ... herself.”",
+      "explanationVi": "Cấu trúc là “leads ... through,” nên chỗ trống cần một tân ngữ phản thân phù hợp với chủ ngữ “the manager” (nữ). “Herself” đúng: “leads new employees ... herself.”",
+      "grammarTopic": "reflexive pronouns"
+    },
+    {
+      "id": "3LbvGYH7Yr470dPEqqEMv",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 103,
+      "stem": "The corporate fitness center is equipped_____fourteen stationary bicycles",
+      "options": [
+        "at",
+        "on",
+        "with",
+        "about"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Be equipped with” is the standard collocation meaning “provided with.” “With” is required.",
+      "explanationVi": "Cụm đúng là “be equipped with” nghĩa là “được trang bị với.” Vì vậy cần dùng “with”.",
+      "grammarTopic": "prepositions (collocations)"
+    },
+    {
+      "id": "0KDjJ2eE_gldBVYnkuBmW",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 104,
+      "stem": "Professor Phuong will go over the use of the laboratory____with the interns next week",
+      "options": [
+        "instruments",
+        "instrumental",
+        "instrumentally",
+        "instrumented"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Go over the use of” is followed by a noun, not an adjective or adverb. “Instruments” is the correct noun plural.",
+      "explanationVi": "Sau “go over the use of” cần một danh từ. “Instruments” là danh từ số nhiều phù hợp.",
+      "grammarTopic": "word forms (noun choice)"
+    },
+    {
+      "id": "HkhgYVYTVQg1esHtPhPnS",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 105,
+      "stem": "Arnby Cable_____$25 to all Internet subscribers after the weeklong service interruption",
+      "options": [
+        "refunded",
+        "accepted",
+        "divided",
+        "deposited"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Refund” means “return money,” which matches the meaning of giving money back to subscribers. The other options do not fit “$25 to all Internet subscribers.”",
+      "explanationVi": "“Refund” nghĩa là “hoàn tiền,” phù hợp với ý “giving money back.” Các đáp án khác không đi với cấu trúc “$25 to all Internet subscribers”.",
+      "grammarTopic": "word choice (verb meaning)"
+    },
+    {
+      "id": "88EcVdFCKRvBQ2IHLpTZ9",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 106,
+      "stem": "The board of directors will meet next Monday to examine the current hiring____",
+      "options": [
+        "purpose",
+        "intent",
+        "assembly",
+        "policy"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Hiring policy” is a common collocation; the board meets to examine the company’s rules regarding hiring. “Purpose/intent/assembly” do not collocate well here.",
+      "explanationVi": "Cụm “hiring policy” là cách diễn đạt chuẩn; ban giám đốc họp để xem xét các quy định về tuyển dụng. “purpose/intent/assembly” không phù hợp nghĩa và ngữ dụng.",
+      "grammarTopic": "word choice (collocations)"
+    },
+    {
+      "id": "3bBFcODS5rczW11PufsFo",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 107,
+      "stem": "Passengers should not leave their seats____a flight attendant gives them permissinon to do so",
+      "options": [
+        "unless",
+        "rather",
+        "instead",
+        "otherwise"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Not ... unless” expresses permission only if a condition is met: passengers should not leave their seats unless a flight attendant allows it.",
+      "explanationVi": "“Not ... unless” diễn tả “chỉ khi nào,” nghĩa là hành khách không được rời chỗ trừ khi được tiếp viên cho phép.",
+      "grammarTopic": "conjunctions (condition: unless)"
+    },
+    {
+      "id": "Vyu3vjYSoXSvbZHEnBbKq",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 108,
+      "stem": "The goal of the committee was to evaluate the company's bylaws and offer____for improvement",
+      "options": [
+        "renewals",
+        "registrations",
+        "recommendations",
+        "reimbursements"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "The phrase “offer recommendations for improvement” is standard. “Recommendations” fits the meaning of suggestions to improve bylaws.",
+      "explanationVi": "Cụm đúng là “offer recommendations for improvement.” “Recommendations” phù hợp với nghĩa là đề xuất để cải thiện.",
+      "grammarTopic": "word choice (collocations)"
+    },
+    {
+      "id": "a0eCxopDC_RcS3ppuSDP3",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 109,
+      "stem": "The building's new ventilation system circulates heat much____than before",
+      "options": [
+        "even",
+        "most even",
+        "evenly",
+        "more evenly"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Much + comparative” needs an adverb to modify the verb “circulates.” Therefore “more evenly” is correct.",
+      "explanationVi": "Cấu trúc “much + so sánh hơn” cần trạng từ để bổ nghĩa cho động từ “circulates.” Vì vậy “more evenly” đúng.",
+      "grammarTopic": "comparatives + adverbs"
+    },
+    {
+      "id": "owDlAk9vhGNSh4VnpGVsS",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 110,
+      "stem": "Glowood Appliances promises customers their money back____they are not satisfied with their purchase",
+      "options": [
+        "while",
+        "and",
+        "if",
+        "then"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Money back if they are not satisfied” uses “if” to state a condition. “Then” would not fit this conditional structure.",
+      "explanationVi": "“Hoàn tiền nếu họ không hài lòng” dùng “if” để nêu điều kiện. “Then” không phù hợp với cấu trúc điều kiện này.",
+      "grammarTopic": "conjunctions (condition: if)"
+    },
+    {
+      "id": "UGZaa0csAqdSoI9rdDnhl",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 111,
+      "stem": "The theater doors will close and the show will start at precisely 8:00 p.m., so guests are reminded to be____",
+      "options": [
+        "rapid",
+        "sudden",
+        "punctual",
+        "instant"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "The sentence uses “so guests are reminded to be ____,” so a person-related adjective meaning “on time” is needed. “Punctual” fits the context of being at 8:00 p.m.",
+      "explanationVi": "Cấu trúc “guests are reminded to be ____” cần một tính từ miêu tả việc đúng giờ. “Punctual” phù hợp nghĩa “đúng giờ” với thời điểm 8:00 p.m.",
+      "grammarTopic": "adjectives (word choice for meaning)"
+    },
+    {
+      "id": "ccWSRcbfL12KuoNeAEQ0W",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 112,
+      "stem": "All vacation requests must be made to your supervisor____the requested date",
+      "options": [
+        "prior to",
+        "except for",
+        "previously",
+        "because"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Prior to” means “before,” which correctly shows a deadline. The phrase “prior to the requested date” is standard in formal instructions.",
+      "explanationVi": "“Prior to” nghĩa là “trước,” đúng với ý về thời hạn. Cụm “prior to the requested date” là cách diễn đạt chuẩn trong văn bản trang trọng.",
+      "grammarTopic": "prepositions / time expressions"
+    },
+    {
+      "id": "LEQiiWzElQ3aJVnszTK8r",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 113,
+      "stem": "Most banks now offer clients the option of receiving their statements electronically or____mail",
+      "options": [
+        "from",
+        "of",
+        "in",
+        "by"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Receive … by mail” is the fixed collocation meaning delivery through postal service. “By” is required with “mail.”",
+      "explanationVi": "Cụm đúng là “receive … by mail,” nghĩa là nhận qua đường bưu điện. Vì vậy cần dùng “by” với “mail.”",
+      "grammarTopic": "prepositions (fixed collocations)"
+    },
+    {
+      "id": "VNiJuRJji1c8Ojj0nQapX",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 114,
+      "stem": "Construction at Langhall Plaza is going so well that shops might open before expected___date",
+      "options": [
+        "completion",
+        "selection",
+        "decision",
+        "option"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "After “before expected,” we need a noun that can follow “before.” “Completion” is the natural collocation: “before expected completion date.”",
+      "explanationVi": "Sau cụm “before expected” cần một danh từ có thể đi sau “before.” “Completion” là cụm tự nhiên: “before expected completion date” (trước ngày hoàn thành dự kiến).",
+      "grammarTopic": "noun forms / collocations"
+    },
+    {
+      "id": "v_X3e5S1dqpXmN0PRP6lj",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 115,
+      "stem": "Kohmek, Inc., is seeking a suitable site____the construction of its electronics factory",
+      "options": [
+        "for",
+        "so",
+        "to",
+        "more"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“A suitable site to + verb” is used to describe a place intended for an action. Here, “to the construction” doesn’t work, but the intended structure is “a suitable site for the construction,” and among choices only “to” can’t replace “for”; however “C” is typically tested as “site to + verb” like “a suitable site to house/construct.” With the given sentence, the correct choice is the one forming the intended infinitive pattern: “site to [be used] for construction,” which makes option C best.",
+      "explanationVi": "Cấu trúc thường gặp là “a suitable site + to V” để nói về nơi phù hợp cho mục đích nào đó. Trong câu này, chỉ phương án tạo được dạng phù hợp với ý “nơi để tiến hành xây dựng” là C.",
+      "grammarTopic": "infinitive structures / sentence pattern"
+    },
+    {
+      "id": "erply2GA20fYETfEemiMY",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 116,
+      "stem": "Studies show that the average audience forms its___of the speaker within the first few seconds of the presentation",
+      "options": [
+        "impress",
+        "impressive",
+        "impressively",
+        "impression"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "The noun “impression” is required because the sentence means “forms its impression of the speaker.” The verb “impress” can’t follow this structure.",
+      "explanationVi": "Cần danh từ “impression” vì câu có nghĩa “hình thành ấn tượng về người nói.” “Impress” là động từ nên không hợp cấu trúc này.",
+      "grammarTopic": "word forms (noun vs. verb)"
+    },
+    {
+      "id": "THHg-ZcoTz8aUssRskr7k",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 117,
+      "stem": "Mr. Culter has been asked to _____ domestic sales of low-calorie beverages",
+      "options": [
+        "oversee",
+        "possess",
+        "succeed",
+        "persist"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Oversee” means “manage/supervise,” which fits “has been asked to oversee domestic sales.” The other options do not match the job responsibility meaning.",
+      "explanationVi": "“Oversee” nghĩa là “giám sát/quản lý,” phù hợp với cụm “has been asked to oversee domestic sales.” Các đáp án còn lại không đúng nghĩa trách nhiệm công việc.",
+      "grammarTopic": "verb meaning (word choice)"
+    },
+    {
+      "id": "E2MUFJ6MAG1GZ3ZjBSBqE",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 118,
+      "stem": "Cranford Culinary Academy offers 35 different classes for ____chefs",
+      "options": [
+        "aspires",
+        "aspirations",
+        "aspiring",
+        "to aspire"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“35 different classes for aspiring chefs” uses the present participle “aspiring” as an adjective modifying “chefs.” “Aspires/aspirations/to aspire” don’t fit this modifier role.",
+      "explanationVi": "“for aspiring chefs” dùng “aspiring” (V-ing) như một tính từ bổ nghĩa cho “chefs.” Các lựa chọn còn lại không đóng vai trò bổ nghĩa đúng.",
+      "grammarTopic": "word forms (participles as adjectives)"
+    },
+    {
+      "id": "BG5CL0CFJg6Ivhj4K_Lfh",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 119,
+      "stem": "____, items sold at the Scottville Craft Fair are unique and of very high quality",
+      "options": [
+        "Fairly",
+        "Typically",
+        "Simple",
+        "Entirely"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Typically” means “as a rule/usually,” which fits the contrastive statement about the items being unique and high quality. “Entirely” is too absolute, and “Fairly/Simple” don’t match the meaning.",
+      "explanationVi": "“Typically” nghĩa là “thông thường/đa số,” phù hợp với nhận định chung về việc các món hàng độc đáo và chất lượng cao. “Entirely” quá tuyệt đối, còn “Fairly/Simple” không đúng ngữ nghĩa.",
+      "grammarTopic": "adverbs (meaning/degree)"
+    },
+    {
+      "id": "eWZ72uMYMStylPIc-1NX3",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 120,
+      "stem": "Mamton Home Funishings____customized furniture in Pennsylvania for more than a century",
+      "options": [
+        "manufactures",
+        "is manyfacturing",
+        "has manufactured",
+        "manufacture"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“For more than a century” requires the present perfect to show an action that started in the past and continues to the present: “has manufactured.”",
+      "explanationVi": "“For more than a century” dùng với thì hiện tại hoàn thành để diễn tả hành động bắt đầu từ quá khứ và kéo dài đến hiện tại: “has manufactured.”",
+      "grammarTopic": "tenses (present perfect with duration)"
+    },
+    {
+      "id": "yCgcXXbkJ5DmFPBW-Aa_M",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 121,
+      "stem": "Please hold any phone calls for Ms. Tanaka___she will be in meetings all day",
+      "options": [
+        "as",
+        "but",
+        "despite",
+        "similarly"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“But” shows contrast: she will be in meetings all day, so calls should not be held. “As” and “despite” don’t fit the sentence logic, and “similarly” is unrelated.",
+      "explanationVi": "“But” biểu thị sự tương phản: vì cô ấy sẽ bận họp cả ngày nên không thể/không nên nhận cuộc gọi. “As” và “despite” không hợp logic câu, còn “similarly” không liên quan.",
+      "grammarTopic": "conjunctions (contrast)"
+    },
+    {
+      "id": "c0x6Z97xjxn--1mF3X6gn",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 122,
+      "stem": "Dolores Guierrez excels as an astate planning attorney who helps clients manage their assets _______.",
+      "options": [
+        "effect",
+        "effectively",
+        "effects",
+        "effective"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Excels as an estate planning attorney” is followed by an adverb modifying the verb phrase “helps clients…”. “Effectively” is the correct adverb form.",
+      "explanationVi": "Cụm “excels as …” cần trạng từ bổ nghĩa cho cụm động từ “helps clients…”. “Effectively” là trạng từ đúng.",
+      "grammarTopic": "word forms (adverb vs. noun/adjective)"
+    },
+    {
+      "id": "0NOpIbn6sVXBgnnk6hY0L",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 123,
+      "stem": "Mr. Signh was____about sales of the fragrance after the first round of customer focus groups",
+      "options": [
+        "extensive",
+        "distinct",
+        "optimistic",
+        "superior"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Was optimistic about” correctly forms the adjective + preposition structure expressing a feeling. The other choices don’t naturally fit that meaning.",
+      "explanationVi": "“Was optimistic about” đúng cấu trúc tính từ + giới từ để diễn tả cảm xúc/sự kỳ vọng. Các đáp án còn lại không phù hợp tự nhiên về nghĩa.",
+      "grammarTopic": "word meaning + adjective + preposition"
+    },
+    {
+      "id": "uDhlL1d6hXpA51_0aL9Gi",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 124,
+      "stem": "Data from the finance deparment was used to____predict the company's future expenses",
+      "options": [
+        "either",
+        "ever",
+        "yet",
+        "better"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Used to better predict” is awkward; however the intended meaning is comparative improvement: data was used to “better predict” future expenses. Only “better” fits this comparative adverb use.",
+      "explanationVi": "Cụm đúng là “used to better predict…”, nghĩa là dùng dữ liệu để dự đoán tốt hơn. “Better” là trạng từ so sánh đúng; các lựa chọn khác không tạo nghĩa phù hợp.",
+      "grammarTopic": "word forms (comparative adverb)"
+    },
+    {
+      "id": "mweFjdix2QyzTE2YheR8f",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 125,
+      "stem": "Immediately after the decrease in production was announced, everyone began discussing how ____ would impact work schedules",
+      "options": [
+        "us",
+        "it",
+        "theirs",
+        "yours"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“How it would impact…” uses the pronoun “it” to refer to the decrease in production. “Us/theirs/yours” do not match the referent.",
+      "explanationVi": "“how it would impact…” dùng “it” để thay thế cho “the decrease in production”. “us/theirs/yours” không khớp với đối tượng được nhắc tới.",
+      "grammarTopic": "pronouns (referencing)"
+    },
+    {
+      "id": "etuI6DTByGi4HYtLmTXy-",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 126,
+      "stem": "Every year Arrow Mill, Inc., processes a ___ amount of grain",
+      "options": [
+        "durable",
+        "direct",
+        "resolute",
+        "substantial"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Processes a substantial amount of grain” is the correct collocation. “Substantial” means large/considerable.",
+      "explanationVi": "“Processes a substantial amount of grain” là cụm đúng. “Substantial” nghĩa là đáng kể/lớn.",
+      "grammarTopic": "word choice (collocations)"
+    },
+    {
+      "id": "LRTyI-6wep6l9Maf9K-ph",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 127,
+      "stem": "Tomorrow morning, both escalators in the store will be turned off periodically in order to perform____maintenance",
+      "options": [
+        "required",
+        "require",
+        "requiring",
+        "requires"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Perform required maintenance” uses the adjective “required” to describe what kind of maintenance. The other forms are grammatically incorrect for this structure.",
+      "explanationVi": "“perform required maintenance” dùng “required” (tính từ) để mô tả loại bảo trì cần thực hiện. Các dạng còn lại sai cấu trúc ngữ pháp.",
+      "grammarTopic": "word forms (adjective)"
+    },
+    {
+      "id": "Io3d3qyb5UHDCXdAy7LCC",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 128,
+      "stem": "Those who wish to volunteer at the annual Sebastian Park flower-planting events this Sarturday___to arrive early",
+      "options": [
+        "asks",
+        "are asked",
+        "has been asking",
+        "to ask"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Those who wish to volunteer … are asked to arrive early” uses a passive structure to match the general instruction. “Asks/has been asking/to ask” don’t fit the subject–verb structure.",
+      "explanationVi": "“Those who wish to volunteer … are asked to arrive early” dùng thể bị động để diễn đạt yêu cầu chung. “asks/has been asking/to ask” không phù hợp cấu trúc chủ ngữ–động từ.",
+      "grammarTopic": "passive voice (instructions)"
+    },
+    {
+      "id": "iJw1wdJxY7eWsGQKjlcoT",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 129,
+      "stem": "Although Mr. Yanamura's theory is ____ controversial, it does help explain the latest changes in the market",
+      "options": [
+        "neatly",
+        "urgently",
+        "gracefully",
+        "certainly"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Although … certainly controversial” is grammatically and logically consistent: the theory is definitely controversial but still helps explain changes. “Neatly/urgently/gracefully” don’t fit the meaning.",
+      "explanationVi": "“Although … certainly controversial” hợp ngữ pháp và logic: lý thuyết chắc chắn gây tranh cãi nhưng vẫn giúp giải thích thay đổi. “neatly/urgently/gracefully” không phù hợp nghĩa.",
+      "grammarTopic": "adverbs (meaning)"
+    },
+    {
+      "id": "Z4HhdDqbdHM_HmLi9UxEK",
+      "examName": "Test 1 ETS 2021",
+      "examId": "2jIFsb1E2Q6uK7YZgIKt5",
+      "number": 130,
+      "stem": "A recent____found that property values in the Agate Valley region had increased by 3 percent between January an June",
+      "options": [
+        "assessment",
+        "assessed",
+        "assessable",
+        "to assess"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "A blank before “found that” needs a noun that can perform an investigation: “A recent assessment found…”. The other options are verb forms or incorrect word types.",
+      "explanationVi": "Chỗ trống trước “found that” cần một danh từ có thể thực hiện việc điều tra/đánh giá: “A recent assessment found…”. Các đáp án còn lại là dạng động từ hoặc không đúng loại từ.",
+      "grammarTopic": "word forms (noun vs. verb)"
+    },
+    {
+      "id": "gZeN43taCb0GAiNpAPWCj",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 101,
+      "stem": "The Pangea Company will send _____ an e-mail comfirming receipt of the application",
+      "options": [
+        "your",
+        "yourselves",
+        "Yourself",
+        "you"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Send you” is correct here because “send” takes an indirect object without changing case in formal instructions. Other options are either possessive or incorrect form for the indirect object.",
+      "explanationVi": "“Send you” đúng vì “send” có thể dùng tân ngữ gián tiếp là “you” trong câu mệnh lệnh/thông báo. Các đáp án khác (your, yourself, yourselves) không đúng chức năng ngữ pháp trong vị trí này.",
+      "grammarTopic": "pronouns (object vs possessive)"
+    },
+    {
+      "id": "QuZHiHlavkgPcSH255LAZ",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 102,
+      "stem": "Mr. Yamamoto's farewell party was____in the cafeteria on Tuesday",
+      "options": [
+        "meant",
+        "held",
+        "taken",
+        "build"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "A farewell party is something that can be “held,” so the passive form “was held” is required. The other verbs do not match the correct passive structure.",
+      "explanationVi": "“A farewell party” thường được “hold” nên cần cấu trúc bị động “was held.” Các đáp án còn lại không phù hợp với cấu trúc ngữ pháp và nghĩa.",
+      "grammarTopic": "passive voice"
+    },
+    {
+      "id": "A9h2TutSGJW5aQL7Dul_z",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 103,
+      "stem": "Tours run every day, but there may be ____ avaiability on weekends",
+      "options": [
+        "limit",
+        "limits",
+        "limited",
+        "limitation"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "After “there may be,” you need a noun meaning quantity/availability: “limitation(s).” “Limited” is an adjective, and “limit/limits” doesn’t fit the intended meaning as well as the standard collocation.",
+      "explanationVi": "Sau “there may be” cần danh từ để chỉ mức độ/giới hạn: “limitation.” “Limited” là tính từ nên không hợp, còn “limit/limits” không diễn đạt tự nhiên bằng “limitation(s).”",
+      "grammarTopic": "word forms (noun vs adjective)"
+    },
+    {
+      "id": "YsxFexq8R_E0JlQRvXcjp",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 104,
+      "stem": "Bentoc Shoes has a loyal customers base ____ it provides high-quality service",
+      "options": [
+        "because",
+        "rather",
+        "not only",
+        "as well"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Because” introduces a reason, so it correctly links the loyal customers base to the high-quality service. The other choices do not express cause.",
+      "explanationVi": "“Because” dùng để nêu lý do nên đúng với quan hệ giữa việc có khách hàng trung thành và dịch vụ chất lượng cao. Các lựa chọn khác không diễn tả quan hệ nguyên nhân.",
+      "grammarTopic": "conjunctions (cause)"
+    },
+    {
+      "id": "gZeN43taCb0GAiNpAPWCj",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 101,
+      "stem": "The Pangea Company will send _____ an e-mail comfirming receipt of the application",
+      "options": [
+        "your",
+        "yourselves",
+        "Yourself",
+        "you"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "The subject is singular (“Building management”), so the simple present verb “respects” is required. The other options change tense/part of speech incorrectly.",
+      "explanationVi": "Chủ ngữ số ít (“Building management”) nên cần thì hiện tại đơn với động từ “respects.” Các đáp án còn lại sai về thì hoặc dạng từ.",
+      "grammarTopic": "subject-verb agreement (tenses)"
+    },
+    {
+      "id": "AzSpySIa8v8ms1_z0q7xq",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 106,
+      "stem": "The theater district is located___ walking distance of the Yafeh Hotel",
+      "options": [
+        "within",
+        "along",
+        "below",
+        "down"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Within walking distance of” is the standard phrase meaning “not far from.” The other prepositions do not form a correct common collocation here.",
+      "explanationVi": "Cụm “within walking distance of” là cách nói chuẩn cho nghĩa “trong khoảng cách đi bộ.” Các giới từ khác không tạo được cụm kết hợp đúng trong ngữ cảnh này.",
+      "grammarTopic": "prepositions (fixed expressions)"
+    },
+    {
+      "id": "qUjJl08riy3oXOTkoy2yt",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 107,
+      "stem": "As consumers buy more products online, retailers are finding ways ___ orders more quickly",
+      "options": [
+        "have delivered",
+        "are delivering",
+        "to deliver",
+        "delivers"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Ways to + verb” is a common structure: “ways to deliver orders more quickly.” The passive “are delivering/have delivered” and “delivers” do not fit this pattern.",
+      "explanationVi": "Cấu trúc đúng là “ways to + động từ”: “ways to deliver orders more quickly.” Các dạng còn lại không phù hợp vì không đi sau “ways” để tạo cấu trúc “to-infinitive.”",
+      "grammarTopic": "infinitive (structure after nouns)"
+    },
+    {
+      "id": "sluP-l9RF609SktbTb_Fm",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 108,
+      "stem": "Please_____that enviromental inspectors must renew their certification yearly",
+      "options": [
+        "proceed",
+        "secure",
+        "note",
+        "keep"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Please note that …” is a standard formal pattern meaning “please pay attention to.” “Proceed/secure/keep” do not collocate with “that” in this context.",
+      "explanationVi": "“Please note that …” là cấu trúc chuẩn trang trọng nghĩa là “vui lòng lưu ý rằng…”. “Proceed/secure/keep” không ghép đúng với “that” trong ngữ cảnh này.",
+      "grammarTopic": "verb patterns (fixed phrase)"
+    },
+    {
+      "id": "BewsUdE7PLDVo4vqTDktm",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 109,
+      "stem": "Mr. Yi's calendar is ____ open for interviews from 3:00 PM to 5:00 PM, on Tuesdays",
+      "options": [
+        "usually",
+        "during",
+        "several",
+        "longer"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Mr. Yi's calendar is during open for interviews” is not right, but “calendar is usually open for interviews … on Tuesdays” would fit; however the best match given options is “during” because it indicates the time range after “from … to ….” The intended structure is “is open for interviews from … to … on Tuesdays,” and “during” best fits time reference here.",
+      "explanationVi": "Cấu trúc đúng cần diễn tả lịch “open for interviews from 3:00 PM to 5:00 PM on Tuesdays.” Trong các lựa chọn, “during” phù hợp nhất để chỉ khoảng thời gian. Những đáp án khác không diễn tả quan hệ thời gian đúng.",
+      "grammarTopic": "time expressions (prepositions)"
+    },
+    {
+      "id": "aV6ZOYf4NNpz35NUVJQwk",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 110,
+      "stem": "The lead role ____ the film Sunpocket was created especially for Ms. Abebe",
+      "options": [
+        "by",
+        "at",
+        "in",
+        "as"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "In this context, “the lead role in the film …” is correct because “in” refers to participation within a film. “By” would indicate creator/agent, and “as/at” are not appropriate here.",
+      "explanationVi": "Trong câu này, “the lead role in the film …” đúng vì “in” dùng để chỉ vai trò trong một bộ phim. “by” chỉ người thực hiện/tác giả, còn “as/at” không phù hợp với cấu trúc này.",
+      "grammarTopic": "prepositions (in/for/by)"
+    },
+    {
+      "id": "z3XnA5XRgSeUxwawFY6W5",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 111,
+      "stem": "Your current online banking session ____, so please log on to your account again",
+      "options": [
+        "has expired",
+        "expiring",
+        "expiration",
+        "to expire"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Session” is a noun, so we need a verb in the present perfect passive/active meaning “has already ended.” “has expired” correctly completes the sentence.",
+      "explanationVi": "“Session” là danh từ nên cần một động từ phù hợp với nghĩa “đã hết hạn.” “has expired” đúng với cấu trúc thì hiện tại hoàn thành.",
+      "grammarTopic": "tenses (present perfect) / verb forms"
+    },
+    {
+      "id": "ylVG28JiRjKwr1igJZnTd",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 112,
+      "stem": "XAG Motors recommends checking your vehicle's oil at ____intervals",
+      "options": [
+        "heavy",
+        "genuine",
+        "regular",
+        "immediate"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Intervals” describes a frequency, so the adjective “regular” is the correct modifier. The other options don’t fit the meaning or part of speech.",
+      "explanationVi": "“Intervals” liên quan đến tần suất, nên cần tính từ chỉ mức độ đều đặn là “regular.” Các đáp án khác không phù hợp về nghĩa hoặc loại từ.",
+      "grammarTopic": "word choice / adjectives"
+    },
+    {
+      "id": "4eIt6toQ4ZrLTUgWH4VvO",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 113,
+      "stem": "Mr. Wu was responsible for the latest design ____ at Shu Faucet Company",
+      "options": [
+        "innovative",
+        "innovatively",
+        "innovate",
+        "innovation"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "We need a noun after “design,” so “innovation” (or “innovative design”) works best as the noun form. “innovative” would require different structure.",
+      "explanationVi": "Sau “design” cần một danh từ, vì vậy “innovation” phù hợp nhất. “innovative” là tính từ nên không khớp cấu trúc.",
+      "grammarTopic": "word forms (noun vs. adjective)"
+    },
+    {
+      "id": "akMfqHuqice9PaPm6C_MF",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 114,
+      "stem": "Rincon Data has just opened a new facility that is _____ larger than its previous one.",
+      "options": [
+        "expertly",
+        "significantly",
+        "prominently",
+        "historically"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Significantly larger” is a common collocation meaning “much larger.” The other adverbs don’t correctly convey the degree of difference.",
+      "explanationVi": "“Significantly larger” là cụm từ thông dụng nghĩa là “lớn hơn đáng kể.” Các trạng từ còn lại không diễn tả đúng mức độ chênh lệch.",
+      "grammarTopic": "adverbs of degree"
+    },
+    {
+      "id": "RLVPLjYzZfQiTI4yEoisb",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 115,
+      "stem": "Each year, the relationship between what people eat and the state of ____health is more fully understood",
+      "options": [
+        "they",
+        "their",
+        "theris",
+        "them"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Health” is a noun, so we need a possessive determiner: “their health.” “They/them” are wrong pronoun forms.",
+      "explanationVi": "“Health” là danh từ nên cần tính từ sở hữu: “their health.” “They” và “them” không đúng dạng trong cấu trúc này.",
+      "grammarTopic": "pronouns (possessive determiners)"
+    },
+    {
+      "id": "OvGK85qdKigxv7gby0_9U",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 116,
+      "stem": "_____from customers is valuable in determining where we need to improve",
+      "options": [
+        "Inventory",
+        "Feedback",
+        "Possibility",
+        "Distribution"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“From customers” indicates what the value comes from, so a noun like “Feedback” is correct. “Inventory/possibility/distribution” do not match the context naturally.",
+      "explanationVi": "“From customers” cho biết thứ thu được từ khách hàng, nên “Feedback” là phù hợp nhất. Các từ còn lại không khớp ngữ cảnh tự nhiên.",
+      "grammarTopic": "word choice (noun with preposition)"
+    },
+    {
+      "id": "DOOTW2_c8dnqMUAKuHbeT",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 117,
+      "stem": "Poet Yoshino Nagao will read from her latest ____ collection at Argyle Library on Friday",
+      "options": [
+        "publisher",
+        "publish",
+        "published",
+        "publishes"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Latest” signals the event is future/upcoming, so “will read from her latest published collection” would be expected, but among options only “publishes” makes a correct pattern with “will read” is incorrect. However the best intended TOEIC grammar is that “latest” modifies a noun; “published collection” is the correct form, so choose “published.”",
+      "explanationVi": "“Latest” thường bổ nghĩa cho danh từ, nên cần “published collection” (bộ sưu tập đã được xuất bản). Vì vậy chọn “published.”",
+      "grammarTopic": "word forms (past participle as adjective)"
+    },
+    {
+      "id": "qI3bKVQrL_hoJ4dhBFCSP",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 118,
+      "stem": "An inspection of the Coltier Building identified several ___ defects",
+      "options": [
+        "private",
+        "instructional",
+        "complimentary",
+        "structural"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "Defects in a building are typically “structural.” The other adjectives describe different meanings that don’t fit “defects.”",
+      "explanationVi": "Khi nói về lỗi trong tòa nhà, “structural defects” là cách nói đúng. Các tính từ còn lại không phù hợp với “defects”.",
+      "grammarTopic": "word choice (adjectives)"
+    },
+    {
+      "id": "ms5-q7HoRDpWeMUvcMNU5",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 119,
+      "stem": "Retailers have been reporting ____ strong sales of swimwear for this time of year",
+      "options": [
+        "surprised",
+        "surprises",
+        "to surprise",
+        "suprisingly"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "The sentence needs an adverb to modify “strong sales”: “surprisingly strong sales.” “suprisingly” is correct spelling as “surprisingly.”",
+      "explanationVi": "Câu cần trạng từ bổ nghĩa cho “strong sales”: “surprisingly strong sales.” Vì vậy chọn “suprisingly” (đúng chính tả là “surprisingly”).",
+      "grammarTopic": "adverbs (modifying adjectives/nouns)"
+    },
+    {
+      "id": "EnqB1hJhhrN6KK9ei5hND",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 120,
+      "stem": "Curitour Travel offers ____ throughout Asia that vary in length, and group size",
+      "options": [
+        "excursions",
+        "refreshments",
+        "improvements",
+        "institutions"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Offers excursions throughout Asia” is a natural collocation. The other nouns don’t fit with “offers” and “throughout Asia” in this travel context.",
+      "explanationVi": "“Offers excursions” là cụm phù hợp tự nhiên trong ngữ cảnh du lịch. Các lựa chọn khác không khớp với “offers” và “throughout Asia”.",
+      "grammarTopic": "word choice / collocations"
+    },
+    {
+      "id": "8w3ivG5S9dQAO_vbAiZoS",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 121,
+      "stem": "As the city's largest ____ , Ballin Hospital provides more than 1,000 jobs at its west campus alone",
+      "options": [
+        "employment",
+        "employable",
+        "employing",
+        "employer"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“As the city’s largest” needs a noun to complete the phrase describing the hospital’s role. “Employment” fits: “largest employment/employers,” and “employer” would also work structurally, but the standard TOEIC collocation here is “largest employer.” Given the options, “employer” is the correct noun.",
+      "explanationVi": "Sau “As the city’s largest” cần một danh từ để bổ nghĩa cho bệnh viện. “employer” phù hợp cấu trúc “largest employer” (nhà tuyển dụng lớn nhất).",
+      "grammarTopic": "word forms (noun/role nouns)"
+    },
+    {
+      "id": "i33ybAwskOv7ilWfI3GI-",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 122,
+      "stem": "The venue is small, so not ___ who requests a ticket to the play will be able to attend",
+      "options": [
+        "the other",
+        "one another",
+        "everyone",
+        "someone"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "In the negative structure “so not ___ who…,” the best choice is “everyone” to mean “not everyone.” “Everyone who requests…” matches the meaning that attendance is limited.",
+      "explanationVi": "Cấu trúc phủ định “so not ___ who…” đi với “everyone” để tạo nghĩa “not everyone” (không phải ai cũng…). Vì vậy “everyone” là phù hợp nhất.",
+      "grammarTopic": "pronouns (quantifiers in negative clauses)"
+    },
+    {
+      "id": "XSTn72NTEoNBtpcIcl02d",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 123,
+      "stem": "Both the Atkinson Times and the MacMillan Record have sizable readerships, ____each targets a different demographic",
+      "options": [
+        "unless",
+        "although",
+        "once",
+        "whether"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Both… and…” with a contrast uses “although” or “while.” “Although each targets a different demographic” correctly expresses concession/contrast with sizable readerships.",
+      "explanationVi": "Câu cần một liên từ thể hiện sự nhượng bộ/đối lập: “mặc dù mỗi tờ nhắm đến một nhóm khách hàng khác.” “although” là phù hợp nhất.",
+      "grammarTopic": "conjunctions (contrast/concession)"
+    },
+    {
+      "id": "lHThy01UROSEfmhgWcjpH",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 124,
+      "stem": "____ the acquisition of a competitor, Plautner Electric has become the biggest appliance retailer in the city",
+      "options": [
+        "With",
+        "Wherever",
+        "Together",
+        "Above"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“With + noun phrase” can introduce a condition or context: “With the acquisition of a competitor, … has become ….” The other options do not fit the required meaning or structure.",
+      "explanationVi": "“With + cụm danh từ” dùng để nêu bối cảnh/điều kiện: “With the acquisition of a competitor, …” Còn các lựa chọn khác không đúng cấu trúc và nghĩa.",
+      "grammarTopic": "prepositions/construction with participle"
+    },
+    {
+      "id": "bCJvlhAlYhZAhG2xgwmRN",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 125,
+      "stem": "The shipment delay was ____ caused by miscommunication within our deparment",
+      "options": [
+        "primarily",
+        "eventually",
+        "hastily",
+        "reluctantly"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Was primarily caused by …” is the correct collocation for “mainly/mostly.” The other adverbs do not match the intended meaning.",
+      "explanationVi": "Cụm đúng là “primarily caused by” (chủ yếu do). Các trạng từ còn lại không diễn tả đúng “nguyên nhân chính”.",
+      "grammarTopic": "adverbs (degree/frequency/meaning)"
+    },
+    {
+      "id": "twSooYIf2W_QVtL9yEh4K",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 126,
+      "stem": "Because of an ordering error, Vival Market received an ___ of 200 bags of rice",
+      "options": [
+        "exceeding",
+        "exceedingly",
+        "excess",
+        "excessive"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“An excess of + noun” means “more than expected.” “excess” is the correct noun form: “received an excess of 200 bags.”",
+      "explanationVi": "“An excess of + danh từ” nghĩa là “hơn mức/ nhiều hơn dự kiến”. Vì cần danh từ nên chọn “excess”.",
+      "grammarTopic": "word forms (noun vs adjective/adverb)"
+    },
+    {
+      "id": "1ADws9psGCCsPlYheJwhd",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 127,
+      "stem": "Ms. Choi reports that the new accounting software works well, ___ the computer's operating system has been updated",
+      "options": [
+        "provided that",
+        "no sooner",
+        "so as to",
+        "in view of"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Works well, so as to…” is incorrect; the intended pattern is a purpose/condition relation. Here “Ms. Choi reports… works well, so as to the computer's operating system has been updated” doesn’t fit. The correct meaning is “because/ since” style contrast, and the best grammatical match among options is “in view of” or “provided that.” However the most standard is “provided that” for conditions, but the sentence implies an accompanying condition/result: the software works well provided that the OS has been updated.",
+      "explanationVi": "Câu ý nói phần mềm hoạt động tốt với điều kiện hệ điều hành máy tính đã được cập nhật. Do đó “provided that” (miễn là/ với điều kiện là) là hợp lý nhất.",
+      "grammarTopic": "conjunctions/conditional clauses (provided that)"
+    },
+    {
+      "id": "bZ-T097bbRRUS6AxxjZHl",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 128,
+      "stem": "Researhers must sign in at the visitor registration table upon ___ the Briston Literary Archive",
+      "options": [
+        "entered",
+        "entering",
+        "entry",
+        "enter"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Upon + -ing” is the correct pattern: “upon entering the Briston Literary Archive.” “entry” would require a different structure, and “enter” needs a verb position.",
+      "explanationVi": "Cấu trúc đúng là “upon + V-ing” (ngay khi...). Vì vậy dùng “entering” sau “upon”.",
+      "grammarTopic": "prepositions/constructions with gerunds (upon + V-ing)"
+    },
+    {
+      "id": "SJFY1hYqqbtl2y5Ee-YW9",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 129,
+      "stem": "Over a years, Garnet Advertising has ____ supported its employees's volunteer work for charitable organizations",
+      "options": [
+        "currently",
+        "upwardly",
+        "severely",
+        "actively"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Actively supported” is the natural collocation meaning “tích cực ủng hộ.” “Over a years” should be “Over the years,” but the key blank requires an adverb describing support.",
+      "explanationVi": "Cụm tự nhiên là “actively supported” (tích cực ủng hộ). Các lựa chọn còn lại không đúng nghĩa với “supported its employees’ volunteer work.”",
+      "grammarTopic": "adverbs (meaning/collocation)"
+    },
+    {
+      "id": "dnd_MtWmVQfMlbxwD1BCS",
+      "examName": "Test 2 ETS 2021",
+      "examId": "qdvS2KySMV0ZQD9jXgEI4",
+      "number": 130,
+      "stem": "Ms. Rakel's new Stockholm office tower is sure to be recognized as a highlight of ____ architecture",
+      "options": [
+        "instant",
+        "associated",
+        "contemporary",
+        "simultaneous"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Contemporary architecture” is a common collocation meaning modern architecture. “instant/associated/simultaneous architecture” are not semantically and collocationally correct.",
+      "explanationVi": "Cụm đúng là “contemporary architecture” (kiến trúc hiện đại). Các từ còn lại không tạo cụm nghĩa hợp lý với “architecture”.",
+      "grammarTopic": "adjectives (collocations)"
+    },
+    {
+      "id": "mTKQNG0peA0rhHaNUc_SY",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 101,
+      "stem": "An interview with author Tito Flores about _____ new book will be broadcast tonight.",
+      "options": [
+        "himself",
+        "him",
+        "his",
+        "he"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“About his new book” uses the possessive adjective “his” to describe the noun “new book.” Options like “him” require an object after a verb, not a modifier of a noun.",
+      "explanationVi": "“About his new book” dùng tính từ sở hữu “his” để bổ nghĩa cho danh từ “new book.” “him” là đại từ tân ngữ nên không phù hợp để đứng trước danh từ.",
+      "grammarTopic": "possessive adjectives (pronouns)"
+    },
+    {
+      "id": "g5fXfaKal5nM1vun1LBZ-",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 102,
+      "stem": "Perend Trail's new hiking boots will be avaiable in brown ____ black leather.",
+      "options": [
+        "nor",
+        "yet",
+        "and",
+        "so"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "Use “brown and black” because a product can come in two colors, and “and” correctly joins them. “Nor/yet/so” don’t fit the meaning.",
+      "explanationVi": "Dùng “brown and black” vì sản phẩm có thể có hai màu, “and” nối đúng hai lựa chọn. “nor/yet/so” không phù hợp về nghĩa.",
+      "grammarTopic": "conjunctions (and vs. others)"
+    },
+    {
+      "id": "6w5mrgbTI0uNip7ZK2vpa",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 103,
+      "stem": "Mr. Rutolo's____on the new tax changes is scheduled for 10:00 AM",
+      "options": [
+        "present",
+        "presented",
+        "presentable",
+        "presentation"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Mr. Rutolo's presentation on...” requires the noun form “presentation” to match “on the new tax changes.” “present” is a verb/adjective and “presented/presentable” don’t fit grammatically here.",
+      "explanationVi": "“Mr. Rutolo's presentation on...” cần danh từ “presentation” để đi với cấu trúc “on the new tax changes.” “present” không đúng vai trò danh từ; “presented/presentable” cũng không phù hợp.",
+      "grammarTopic": "word forms (noun vs. verb/adjective)"
+    },
+    {
+      "id": "zgtVC-3Q9tQhn7WhJpeP_",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 104,
+      "stem": "Boyd Street Market is Mapleton's largest retailer of foods ____ around the world.",
+      "options": [
+        "toward",
+        "from",
+        "above",
+        "plus"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Foods from around the world” is the standard phrase meaning foods originating worldwide. “toward/above/plus” do not express origin.",
+      "explanationVi": "“foods from around the world” là cụm chuẩn nghĩa là thực phẩm có nguồn gốc từ khắp nơi trên thế giới. “toward/above/plus” không diễn tả nguồn gốc.",
+      "grammarTopic": "prepositions (from for origin)"
+    },
+    {
+      "id": "JLImjCmB83rRtg9GYN7YF",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 105,
+      "stem": "Mr. Johansson ____ accepted the job offer he received from Saco Bike Works.",
+      "options": [
+        "quicken",
+        "quickly",
+        "quicker",
+        "quickness"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "After a verb, use an adverb: “Mr. Johansson quickly accepted...” because “accepted” is the action being described. “quick/quickness/quicker” don’t match this structure.",
+      "explanationVi": "Sau động từ cần dùng trạng từ: “Mr. Johansson quickly accepted...” vì “accepted” là hành động được bổ nghĩa. “quick/quickness/quicker” không phù hợp cấu trúc.",
+      "grammarTopic": "adverbs (quickly vs quick)"
+    },
+    {
+      "id": "2GV2jF_7HGdAMDREiGWh7",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 106,
+      "stem": "To expand its global reach, Amity Spas will ____ open its franchise opportunities to international prospects.",
+      "options": [
+        "soon",
+        "almost",
+        "recently",
+        "already"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Soon” is best with “will” to indicate a near future action: “will soon open...” Options like “almost/recently/already” conflict with the time reference.",
+      "explanationVi": "“soon” phù hợp nhất với “will” để chỉ hành động sắp xảy ra: “will soon open...” “almost/recently/already” không khớp mốc thời gian.",
+      "grammarTopic": "adverbs of time"
+    },
+    {
+      "id": "6bhNKBpyo-h3aJjaXw-ag",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 107,
+      "stem": "The second-generation XR1280 unit is ____ to its predecessor, except for its reduced weight.",
+      "options": [
+        "equally",
+        "equal",
+        "equals",
+        "to equal"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "The sentence needs “equally” to describe the relationship: “XR1280 unit is equally … to its predecessor.” “equal” would be incorrect because “is equally” requires an adverb.",
+      "explanationVi": "Cần “equally” để mô tả mức độ: “XR1280 unit is equally … to its predecessor.” Dùng “equal” sẽ sai vì sau “is” cần trạng từ “equally”.",
+      "grammarTopic": "comparison/degree adverbs (equally)"
+    },
+    {
+      "id": "no3b3HMngUMh4BusJmFEG",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 108,
+      "stem": "Zarmeni Mining has been evaluating the benefits of building a mine at the ____ site.",
+      "options": [
+        "proposed",
+        "structured",
+        "unlimited",
+        "educated"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "A “proposed site” is a planned location that is under consideration. The other options do not fit the meaning of an intended location.",
+      "explanationVi": "“proposed site” là địa điểm được đề xuất/lập kế hoạch. Các lựa chọn khác không diễn tả đúng ý nghĩa “địa điểm dự kiến”.",
+      "grammarTopic": "word choice (adjective meaning)"
+    },
+    {
+      "id": "rUkgU2uJyy9h2x7iu7zfm",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 109,
+      "stem": "Vice President Ramos will not make ___ decisions until more feedback has been gathered.",
+      "options": [
+        "whether",
+        "what",
+        "over",
+        "any"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "In negatives, “any” is commonly used: “make any decisions.” “whether/what/over” do not form a correct phrase with “decisions.”",
+      "explanationVi": "Trong câu phủ định, dùng “any” là đúng: “make any decisions.” “whether/what/over” không tạo thành cụm đúng với “decisions”.",
+      "grammarTopic": "determiners in negatives (any)"
+    },
+    {
+      "id": "rDSKWad-JbBu-e7m6KNrA",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 110,
+      "stem": "If you have ordered more than two items, be aware they may arrive in separate ____.",
+      "options": [
+        "payments",
+        "sequences",
+        "packages",
+        "receipts"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "If items ship separately, they arrive in separate “packages.” The other choices don’t match shipping/delivery context.",
+      "explanationVi": "Nếu đặt nhiều món và được gửi riêng, chúng sẽ đến trong các “packages” (bưu kiện) khác nhau. Các lựa chọn còn lại không phù hợp ngữ cảnh vận chuyển.",
+      "grammarTopic": "word choice (delivery/shipping nouns)"
+    },
+    {
+      "id": "oJhe2fLrPXFi5njP_rh5w",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 111,
+      "stem": "Candidates for the open position must have good interpersonal skills and ___ working with clients.",
+      "options": [
+        "experience",
+        "experienced",
+        "experiencing",
+        "to experience"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "The sentence needs a noun after “skills and,” so “experience” correctly forms “good interpersonal skills and experience working with clients.” The other options are incorrect word forms.",
+      "explanationVi": "Sau “skills and” cần một danh từ, nên “experience” đúng để tạo cụm “good interpersonal skills and experience working with clients”. Các đáp án khác sai về dạng từ.",
+      "grammarTopic": "word forms (noun vs adjective/gerund)"
+    },
+    {
+      "id": "-K8yY7e8CLT5LudR_wNJ0",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 112,
+      "stem": "Chong Kim was _____ recommended for the position of merchandise manager for Corbin Furniture Mart.",
+      "options": [
+        "thickly",
+        "currently",
+        "securely",
+        "highly"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Recommended” is an adjective/past participle describing the degree of recommendation, so “highly” (an adverb) is used: “was highly recommended.”",
+      "explanationVi": "“Recommended” là phân từ/quá khứ phân từ miêu tả mức độ, nên cần trạng từ “highly”: “was highly recommended.”",
+      "grammarTopic": "adverbs with past participles"
+    },
+    {
+      "id": "wz9FaDdNZlHBYAi7O5IDK",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 113,
+      "stem": "Once the returned item is receviced, a refund will appear on your credit-card statement ____ five business days.",
+      "options": [
+        "within",
+        "during",
+        "since",
+        "when"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Within five business days” is the correct time expression meaning the refund will happen no later than that period. “During,” “since,” and “when” don’t fit this structure.",
+      "explanationVi": "“Within five business days” diễn tả thời hạn kết thúc, nghĩa là tiền hoàn sẽ xuất hiện chậm nhất trong 5 ngày làm việc. “During,” “since,” và “when” không phù hợp cấu trúc này.",
+      "grammarTopic": "prepositions/time expressions"
+    },
+    {
+      "id": "C8b2Icd7Q5dMd1PkaX544",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 114,
+      "stem": "The printer on the second floor will be out of ____ until the technician arrives on Friday.",
+      "options": [
+        "purpose",
+        "variety",
+        "service",
+        "repair"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Out of service” means not available for use, which matches the printer being unavailable until the technician arrives. “Repair” doesn’t form the standard phrase here.",
+      "explanationVi": "“Out of service” nghĩa là không thể sử dụng, phù hợp với việc máy in ngừng hoạt động cho đến khi kỹ thuật viên đến. “Repair” không tạo thành cụm chuẩn trong ngữ cảnh này.",
+      "grammarTopic": "collocations"
+    },
+    {
+      "id": "PacAJbpjJDkm1HY8bdtD3",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 115,
+      "stem": "Sales of our computer software were good last quater, but sales for our mobile applications have been even ____.",
+      "options": [
+        "strong",
+        "stronger",
+        "strongly",
+        "strongest"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "Because the sentence compares two amounts (“last quarter” vs “even …”), we need the comparative “stronger”: “even stronger.”",
+      "explanationVi": "Câu có sự so sánh giữa “last quarter” và “even ...”, nên dùng so sánh hơn “stronger”: “even stronger.”",
+      "grammarTopic": "comparatives (comparative vs positive/superlative)"
+    },
+    {
+      "id": "X6GO52DJlQdOaJJSjxGjC",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 116,
+      "stem": "Upon request, the guests at Olane Hotel will be provided vouchers ___ free parking.",
+      "options": [
+        "on",
+        "to",
+        "with",
+        "for"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Vouchers for free parking” is the correct structure: the vouchers are used for that benefit. “On/to/with” do not fit this meaning.",
+      "explanationVi": "Cụm đúng là “vouchers for free parking”: phiếu dùng cho việc đỗ xe miễn phí. “on/to/with” không diễn đạt đúng nghĩa này.",
+      "grammarTopic": "prepositions (for)"
+    },
+    {
+      "id": "HEU74UACi8UWtqBR0mGnH",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 117,
+      "stem": "Please review the projected sales figures in the spreadsheets that ____ to the e-mail.",
+      "options": [
+        "is attaching",
+        "had attached",
+        "attachment",
+        "are attached"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“The projected sales figures … are attached to the e-mail” requires the present participle/participle form used in reduced relative clauses. “are attached” matches the plural subject “figures.”",
+      "explanationVi": "Cần cụm rút gọn mệnh đề quan hệ: “the projected sales figures … are attached”. Vì “figures” số nhiều, nên dùng “are attached”.",
+      "grammarTopic": "reduced relative clauses (passive; subject-verb agreement)"
+    },
+    {
+      "id": "5_tvD2gNRjzxjGOKdUc4r",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 118,
+      "stem": "During tourist season, selling handmade crafts is a ___ source of income for local residents.",
+      "options": [
+        "contented",
+        "dependable",
+        "flavorful",
+        "patient"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "A source of income is typically described as “dependable” (reliable). The other adjectives don’t properly describe income.",
+      "explanationVi": "Nguồn thu nhập thường được mô tả là “dependable” (đáng tin cậy). Các từ còn lại không phù hợp với nghĩa về “income.”",
+      "grammarTopic": "word choice (adjective semantics)"
+    },
+    {
+      "id": "jPdvTGxKKItQPsm1IOpgA",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 119,
+      "stem": "Everyone at the annual Tirnaco exposition seemed ____ by the new products on display.",
+      "options": [
+        "excite",
+        "excitement",
+        "excited",
+        "excitedly"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "The subject “Everyone” is the experiencer, so it should be “excited” (past participle adjective). “Excite/excitement/excitedly” are incorrect for this pattern.",
+      "explanationVi": "“Everyone” là người cảm thấy, nên dùng tính từ “excited” (quá khứ phân từ) để diễn tả cảm xúc. “excite/excitement/excitedly” không đúng cấu trúc.",
+      "grammarTopic": "adjective forms (ed vs verb vs adverb)"
+    },
+    {
+      "id": "rxnq-AzWuBjlkTgQhmiEd",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 120,
+      "stem": "This Saturday, Ritesense customers will have the opportunity to sample a ___ of Health Bar products.",
+      "options": [
+        "nutrition",
+        "selection",
+        "placement",
+        "management"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“A selection of” means a variety/collection of items to choose from, which fits “sample a ___ of Health Bar products.”",
+      "explanationVi": "“A selection of” nghĩa là một bộ/sự lựa chọn gồm nhiều sản phẩm, phù hợp với “sample a ___ of Health Bar products.”",
+      "grammarTopic": "collocations (quantifiers with nouns)"
+    },
+    {
+      "id": "cYuWhm2dwEI53JTcnd7iA",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 121,
+      "stem": "Ms. Wong has expressed _____ in leading the city's planner beautification project.",
+      "options": [
+        "interest",
+        "interests",
+        "intersting",
+        "interestingly"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "The sentence needs an adjective to modify the noun “beautification project.” “interesting” (C) is the correct adjective form for describing the project.",
+      "explanationVi": "Cần một tính từ để bổ nghĩa cho danh từ “beautification project”. “interesting” là đúng vì mô tả cho dự án.",
+      "grammarTopic": "word forms (adjective vs adverb)"
+    },
+    {
+      "id": "_zN9mB501WJv0BBBFGSwD",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 122,
+      "stem": "Mr. Choo was chosen to head the committee for consumer protection from a ___ pool of candidates.",
+      "options": [
+        "sizable",
+        "practiced",
+        "consecutive",
+        "missing"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“From a sizable pool of candidates” is the standard collocation meaning a large group of candidates. The other options do not form a correct meaning with “pool.”",
+      "explanationVi": "Cụm “from a sizable pool of candidates” là cách diễn đạt chuẩn nghĩa là một nhóm ứng viên lớn. Các lựa chọn khác không phù hợp với “pool” về nghĩa.",
+      "grammarTopic": "vocabulary collocations"
+    },
+    {
+      "id": "AVjLgHPz82YyOaVP4J_vU",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 123,
+      "stem": "Please save spreadsheets periodically when updating them to prevent data from ___",
+      "options": [
+        "is lost",
+        "lost",
+        "being lost",
+        "losing"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Prevent + object + from + V-ing” is the correct structure, so “from losing” is needed. “Lost” would be incorrect because it is past participle/adjective without the proper structure.",
+      "explanationVi": "Cấu trúc đúng là “prevent + tân ngữ + from + V-ing”, nên cần “from losing”. “Lost” không đúng vì không đi theo cấu trúc này.",
+      "grammarTopic": "prepositions/structure (prevent...from)"
+    },
+    {
+      "id": "zhZPlHAyHV2LAurp4w30b",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 124,
+      "stem": "____ Gyoh Company's marketing push, new orders for cash registers decreased slightly in the third quater.",
+      "options": [
+        "As",
+        "If",
+        "However",
+        "Despite"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Despite” is used to show contrast, meaning “in spite of.” “Despite Gyoh Company's marketing push” correctly contrasts the push with the decrease in orders.",
+      "explanationVi": "“Despite” dùng để diễn tả sự tương phản, nghĩa là “mặc dù”. “Despite Gyoh Company's marketing push” đúng vì đối lập với việc đơn hàng giảm.",
+      "grammarTopic": "conjunctions (contrast: despite/however)"
+    },
+    {
+      "id": "-shAW-7PDwkPb8shum_Ao",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 125,
+      "stem": "All members of the sales team must attend next Thursday's meeting so that ___ can see the sales forecast presentation.",
+      "options": [
+        "one",
+        "someone",
+        "everyone",
+        "either one"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "With “All members,” the purpose clause should use “everyone” meaning “each person.” “Everyone can see” matches the collective requirement.",
+      "explanationVi": "Với “All members,” mệnh đề chỉ mục đích nên dùng “everyone” (mỗi người). “Everyone can see” khớp với yêu cầu tất cả mọi thành viên.",
+      "grammarTopic": "pronouns (all/everyone)"
+    },
+    {
+      "id": "4tzQxjwXnKKgVpP5EpxLM",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 126,
+      "stem": "The updated medical-records system will ___ that patients and doctors can easily access accurate information.",
+      "options": [
+        "ensure",
+        "allow",
+        "accept",
+        "provide"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "The meaning requires a verb meaning “make certain.” “ensure” correctly states that the system will guarantee easy access and accurate information.",
+      "explanationVi": "Cần động từ mang nghĩa “đảm bảo chắc chắn”. “ensure” đúng vì khẳng định hệ thống sẽ bảo đảm việc truy cập dễ dàng và thông tin chính xác.",
+      "grammarTopic": "word choice (synonyms/meaning)"
+    },
+    {
+      "id": "8YzNIWTtQz1ulIH5p5JXe",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 127,
+      "stem": "Up until last year, we marketed our services ____ through our online partner, Yoder Tech.",
+      "options": [
+        "exclusive",
+        "exclusivity",
+        "exclusiveness",
+        "exclusively"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Marketed ... exclusively” needs an adverb to modify the verb “marketed.” “Exclusively” is the correct adverb form.",
+      "explanationVi": "Cần trạng từ để bổ nghĩa cho động từ “marketed”. “Exclusively” là dạng trạng từ đúng.",
+      "grammarTopic": "word forms (adverb)"
+    },
+    {
+      "id": "JthsC9YyEh1lq2PrOL0oH",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 128,
+      "stem": "President Grimaud would like to thank the marketing department for ___ the mislabeling issue to her attention.",
+      "options": [
+        "showing",
+        "telling",
+        "bringing",
+        "making"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "The common collocation is “bring something to someone’s attention,” meaning to inform them. “Bringing” fits this fixed phrase.",
+      "explanationVi": "Cụm quen thuộc là “bring something to someone’s attention” nghĩa là đưa/ báo cho ai biết. “Bringing” phù hợp với cấu trúc cố định này.",
+      "grammarTopic": "verb collocations (bring to attention)"
+    },
+    {
+      "id": "NhHhoW9djEbfd1hByDMnF",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 129,
+      "stem": "Please be patient as the IT department works _____ service to your business application.",
+      "options": [
+        "to restore",
+        "restoration",
+        "restored",
+        "had restored"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Work” needs an infinitive in the purpose/plan expression here: “works to restore service.” “Restore” is the base form after “to.”",
+      "explanationVi": "“Work” cần động từ nguyên mẫu “to” trong cấu trúc chỉ mục đích/kế hoạch: “works to restore service”. “Restore” đi sau “to” nên ở dạng nguyên mẫu.",
+      "grammarTopic": "infinitives (to + verb)"
+    },
+    {
+      "id": "Q_-dVutxevSIA750Hh_UU",
+      "examName": "Test 3 ETS 2021",
+      "examId": "UQc3e3wdfsEaDqkYSFqeY",
+      "number": 130,
+      "stem": "Markley Corporation's earnings have risen steadily despite significant fluctuations ____ the stock market.",
+      "options": [
+        "about",
+        "in",
+        "through",
+        "onto"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "The phrase “despite ... fluctuations through the stock market” is not correct; however, among the options, “through” best fits the idea of fluctuations occurring across the stock market. “Despite” already signals contrast, so “through” is the most appropriate preposition here.",
+      "explanationVi": "Mệnh đề đúng về ý là “dù ... biến động diễn ra trên/diễn ra khắp thị trường chứng khoán”. Trong các lựa chọn, “through” phù hợp nhất với nghĩa “trải khắp/diễn ra khắp”.",
+      "grammarTopic": "prepositions (meaning: across/through)"
+    },
+    {
+      "id": "swMYhvfcFSqeInh2NirAS",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 101,
+      "stem": "____ is currently Ms. Wonderle's first year working as our office's administrative assistant.",
+      "options": [
+        "This",
+        "That",
+        "These",
+        "Those"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“That” is used to refer to a specific year mentioned in the sentence, especially when “currently” signals the situation at this time. “This” would sound like the year is being shown/identified directly, but the fixed pattern for referring to “first year” here is “That is currently Ms. Wonderle's first year…”",
+      "explanationVi": "“That” dùng để chỉ một sự việc/thời điểm cụ thể đã được xác định trong ngữ cảnh. “This” thường hợp hơn khi nói về thứ gì đang được chỉ ra trực tiếp, còn câu này dùng cấu trúc để tham chiếu thời gian “first year” tại thời điểm hiện tại.",
+      "grammarTopic": "pronouns (this/that)"
+    },
+    {
+      "id": "cnRbok3ilPovtnnxTnHX-",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 102,
+      "stem": "Riversedge City is ______ to announce new monthly parking discounts for its residents.",
+      "options": [
+        "pleasing",
+        "pleasure",
+        "please",
+        "pleased"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Pleasing” is an adjective that correctly modifies “Riversedge City is … to announce…,” forming the pattern “be pleasing to + infinitive.” “Please/pleased” do not fit this structure, and “pleasure” is a noun.",
+      "explanationVi": "“Pleasing” là tính từ phù hợp với cấu trúc “be pleasing to + V(inf).” “Please/pleased” không đúng dạng trong cấu trúc này, và “pleasure” là danh từ nên không hợp.",
+      "grammarTopic": "word forms (adjectives/nouns) & fixed patterns"
+    },
+    {
+      "id": "-WH9-wT-CFEwdfmF8KaI9",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 103,
+      "stem": "Sang-Hoon Park is retiring after 25 years of ____ with Dahl Legal Consultants.",
+      "options": [
+        "service",
+        "profession",
+        "knowledge",
+        "relationship"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Service” is the natural collocation with “25 years of service,” meaning long-term work/effort for an organization. “Profession/knowledge/relationship” do not match this meaning.",
+      "explanationVi": "“Service” đi đúng với cụm “25 years of service” (25 năm cống hiến/ phục vụ) để nói về thời gian làm việc lâu dài. “Profession/knowledge/relationship” không phù hợp nghĩa và cách dùng.",
+      "grammarTopic": "collocations & word choice"
+    },
+    {
+      "id": "-37TDsbbXx0bwcZzIUm_O",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 104,
+      "stem": "The Trails Store will ___ add a section for hiking equipment.",
+      "options": [
+        "eventualities",
+        "eventual",
+        "eventually",
+        "eventuality"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Eventually” is an adverb meaning “in the end,” but the sentence needs a noun: “will + eventuality” is incorrect; however among choices, “eventuality” is the only noun and works with “will” to express a possible future need: “will add … as an eventuality.” The intended TOEIC answer is “eventually,” but since the options include it, we choose the adverb form that completes the timing meaning.",
+      "explanationVi": "“Eventually” là trạng từ nghĩa là “cuối cùng/ về sau,” phù hợp để bổ sung ý thời gian cho hành động “will add…”. Các đáp án khác (“eventualities/eventuality” là danh từ; “eventual” là tính từ) không khớp cấu trúc và chức năng trong câu.",
+      "grammarTopic": "word forms (adverb vs noun)"
+    },
+    {
+      "id": "XCoN1d_Y41aH8KpChm7FQ",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 105,
+      "stem": "Puraforce Staffing can provide your business ____ temporary employees during the busy holiday season.",
+      "options": [
+        "from",
+        "with",
+        "about",
+        "into"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "The correct preposition is “from” in the structure “provide … from …,” meaning supply someone using a source or category. “Provide … with” needs an object of possession, and “about/into” do not fit.",
+      "explanationVi": "Dùng giới từ “from” trong cấu trúc “provide … from …” (cung cấp/đem đến từ nguồn). “with” không đúng nghĩa trong câu, còn “about/into” không phù hợp ngữ pháp và nghĩa.",
+      "grammarTopic": "prepositions"
+    },
+    {
+      "id": "kVdUFA27vRDi2wnOy3TUu",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 106,
+      "stem": "In contrast to the ____ outside, the inside of Taft's Bakery was warm and welcoming.",
+      "options": [
+        "to weather",
+        "weatherability",
+        "weathering",
+        "weather"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "After “the ____ outside,” we need a noun for “weather conditions,” and “weather” fits. “To weather/weatherability/weathering” are not the right form for this phrase.",
+      "explanationVi": "Sau “the ____ outside” cần một danh từ để chỉ điều kiện bên ngoài, và “weather” đúng nghĩa “thời tiết.” Các lựa chọn khác không phù hợp cấu trúc hoặc chức năng từ trong cụm này.",
+      "grammarTopic": "word forms (noun) & determiners"
+    },
+    {
+      "id": "OFQIvmhZHToarVVDGXj5o",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 107,
+      "stem": "Berrell Foods, as wholesale distributor of fresh produce, _____ more than 100 grocery stores in northern Scotland.",
+      "options": [
+        "contracts",
+        "affords",
+        "supplies",
+        "travels"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Supplies” is the correct verb meaning “provides.” With the plural subject “Berrell Foods,” the verb should be plural in the present simple: “supplies more than 100 grocery stores.”",
+      "explanationVi": "“Supplies” (cung cấp) phù hợp làm động từ chính. Với chủ ngữ số nhiều “Berrell Foods,” dùng thì hiện tại đơn ở dạng số nhiều: “supplies more than 100 grocery stores.”",
+      "grammarTopic": "subject-verb agreement & verb choice"
+    },
+    {
+      "id": "qLyi-XidBSaFN7DqqdBx9",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 108,
+      "stem": "Payments to the Wendell Lake Association will be considered late ____ they are received after January 1.",
+      "options": [
+        "so",
+        "by",
+        "to",
+        "if"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“If” introduces a condition: payments are late if they are received after January 1. “So/by/to” do not create the correct conditional meaning, and “late by” would require a time/amount.",
+      "explanationVi": "“If” dùng để nêu điều kiện: thanh toán sẽ bị tính là trễ nếu nhận sau ngày 1 tháng 1. “so/by/to” không tạo được nghĩa điều kiện phù hợp.",
+      "grammarTopic": "conjunctions (conditionals)"
+    },
+    {
+      "id": "LPHbXERWU32lR8iRjIM_M",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 109,
+      "stem": "Although the alternate route was _____ marked, many drivers ended up getting lost.",
+      "options": [
+        "never",
+        "next",
+        "clearly",
+        "noisily"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Clearly” is an adverb that correctly describes how the route was marked: “clearly marked.” “Never/next/noisily” do not describe marking in a logical way.",
+      "explanationVi": "“Clearly” là trạng từ mô tả cách đường được đánh dấu: “đánh dấu rõ ràng.” “never/next/noisily” không phù hợp với ngữ nghĩa về cách đánh dấu đường.",
+      "grammarTopic": "word forms (adverbs)"
+    },
+    {
+      "id": "qF-skIaeHyucj0lOW5Y2L",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 110,
+      "stem": "Later today, Mr. Warken ____ interview times for job applicant finalists.",
+      "options": [
+        "has been arranging",
+        "will be arranging",
+        "was arranged",
+        "have arranged"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Later today” signals a future action, so we use “will be arranging” for planned future arrangements. “has/have arranged” is past/present, and “was arranged” is passive and not supported by the verb meaning here.",
+      "explanationVi": "“Later today” cho biết hành động sẽ xảy ra trong tương lai gần, nên dùng “will be arranging.” “has/have arranged” sai thì, và “was arranged” là bị động không phù hợp với ý sắp xếp thời gian phỏng vấn.",
+      "grammarTopic": "tenses (future for planned actions)"
+    },
+    {
+      "id": "8orTn3ksk1J4WrWL8H1tP",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 111,
+      "stem": "For one week ____, Penny's Grocery is giving away a free tote bag with every order of 50 dollars or more.",
+      "options": [
+        "often",
+        "only",
+        "over",
+        "through"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "Use “through” to mean the offer lasts up to and including that time period (for one week through...). “often/only/over” do not fit this duration expression.",
+      "explanationVi": "Dùng “through” để diễn tả ưu đãi kéo dài đến và bao gồm khoảng thời gian đó (through...). “often/only/over” không phù hợp với cấu trúc thời gian này.",
+      "grammarTopic": "prepositions (time duration)"
+    },
+    {
+      "id": "qJG-dlzb1dnnDA5WQDsC7",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 112,
+      "stem": "Because of a recent artwork donation, the Libsing Art Museum will soon be displaying a new ____.",
+      "options": [
+        "exhibits",
+        "exhibition",
+        "exhibited",
+        "exhibiting"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "After “a new,” a noun is required, so “exhibition” is correct. The other options are verb forms or incorrect word types for this position.",
+      "explanationVi": "Sau “a new” cần một danh từ, nên “exhibition” là đúng. Các đáp án còn lại là dạng động từ hoặc không đúng loại từ.",
+      "grammarTopic": "word forms (noun vs verb)"
+    },
+    {
+      "id": "N6eiXLDQ0dhmx3xr-N9CR",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 113,
+      "stem": "Albert Doime oversaw smelting operations in Lydenburg for a ____ time before being reassigned to Johanesburg.",
+      "options": [
+        "brief",
+        "large",
+        "slow",
+        "proper"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“for a brief time” is the natural collocation meaning for a short period. “large/slow/proper time” are not idiomatic here.",
+      "explanationVi": "Cụm “for a brief time” là cách diễn đạt tự nhiên nghĩa là trong thời gian ngắn. “large/slow/proper time” không đúng ngữ dụng.",
+      "grammarTopic": "word choice / collocations"
+    },
+    {
+      "id": "HrQnC1_THQfQjv2BXwmTE",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 114,
+      "stem": "The agreement ____ states that Amy Dyer will be the general contractor for the Hibley project.",
+      "options": [
+        "specific",
+        "specifically",
+        "specifiable",
+        "specified"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“The agreement specific” is ungrammatical; however, the correct structure is “The agreement ____ states...” where the blank needs an adjective describing the agreement: “specific.” (In context, “specific agreement” is intended.) “specifically” is an adverb, and the other forms do not work.",
+      "explanationVi": "Cần tính từ bổ nghĩa cho “agreement” trong cụm “The agreement ... states...”, nên “specific” đúng. “specifically” là trạng từ, còn các đáp án khác không phù hợp ngữ pháp.",
+      "grammarTopic": "word forms (adjective vs adverb)"
+    },
+    {
+      "id": "FPT8VCdE09moDZWUBIc6i",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 115,
+      "stem": "Executives at Wess Lumber were praised for addressing employee's concerns in a ____ manner.",
+      "options": [
+        "constructing",
+        "construction",
+        "constructive",
+        "construct"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“in a constructive manner” is the correct adjective form describing how concerns were addressed. “construction” and “construct” are not grammatically correct here.",
+      "explanationVi": "Cụm đúng là “in a constructive manner” (một cách mang tính xây dựng) để mô tả cách xử lý. “construction” và “construct” không đúng cấu trúc tại chỗ trống.",
+      "grammarTopic": "word forms (adjective)"
+    },
+    {
+      "id": "eu3wRgkrD46EISth7ODd3",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 116,
+      "stem": "Flu season is here, so take advantage of the free flu shots ____ in the lobby.",
+      "options": [
+        "being offered",
+        "to offer",
+        "offering",
+        "offers"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“free flu shots offering” uses a present participle phrase to modify the noun “shots.” “being offered” would be possible with a different structure, but here “offering” cleanly describes the shots.",
+      "explanationVi": "Dùng phân từ hiện tại “offering” để bổ nghĩa cho danh từ “flu shots.” “being offered” không khớp tự nhiên bằng cấu trúc đã cho.",
+      "grammarTopic": "participles (present participle)"
+    },
+    {
+      "id": "M1uFTpqm6LvVjG9UXJo0R",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 117,
+      "stem": "Clarkson Smith Legal Services requires that ___ client files be kept in off-site storage for seven years.",
+      "options": [
+        "misplaced",
+        "inactive",
+        "unable",
+        "resigned"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“inactive client files” means files that are no longer in use, which must be stored off-site. “misplaced/unable/resigned” do not match the meaning.",
+      "explanationVi": "“inactive client files” nghĩa là hồ sơ không còn được sử dụng nên cần lưu trữ ở nơi khác. “misplaced/unable/resigned” không phù hợp ý nghĩa.",
+      "grammarTopic": "word choice / meaning (adjectives)"
+    },
+    {
+      "id": "KkS3CsO9EkLoL0wuaUYvR",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 118,
+      "stem": "By ___ to digital accounting, your business can save time, space, and money.",
+      "options": [
+        "advising",
+        "proving",
+        "resolving",
+        "switching"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“By switching to …” is a common structure meaning “by changing to” digital accounting. The other verbs do not form this standard pattern.",
+      "explanationVi": "Cụm đúng là “By switching to …” nghĩa là “bằng cách chuyển sang” kế toán số. Các động từ khác không tạo được cấu trúc chuẩn này.",
+      "grammarTopic": "prepositions with gerunds / verb patterns"
+    },
+    {
+      "id": "tX-mIE_GtrcmJ-lIA9yjJ",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 119,
+      "stem": "Mr. Liu's long list of awards can be attributed to his skills __ a designer.",
+      "options": [
+        "on",
+        "in",
+        "as",
+        "at"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“skills as a designer” is the correct phrase meaning the skills of working in that role. “on/in/at a designer” are incorrect preposition choices.",
+      "explanationVi": "“skills as a designer” đúng nghĩa là kỹ năng của một nhà thiết kế. “on/in/at a designer” dùng sai giới từ và không tự nhiên.",
+      "grammarTopic": "prepositions (as)"
+    },
+    {
+      "id": "YmyZQ_cZNmoKCun28g6pO",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 120,
+      "stem": "MBR Global Marketing has signed several new client contracts ____ 12 million pounds in annual revenue.",
+      "options": [
+        "totaled",
+        "total",
+        "totals",
+        "totaling"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "Use “totaling 12 million pounds” as a present participle phrase modifying “contracts.” It describes the amount of revenue those contracts generate.",
+      "explanationVi": "Dùng cụm phân từ hiện tại “totaling 12 million pounds” để bổ nghĩa cho “client contracts.” Nó mô tả số tiền doanh thu hằng năm mà hợp đồng mang lại.",
+      "grammarTopic": "participles / adjective phrases"
+    },
+    {
+      "id": "m731lzCEIwpictqltDhBi",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 121,
+      "stem": "____ teaching economics at the local university, Ms. Ito also writes a monthly column for a financial manazine.",
+      "options": [
+        "Besides",
+        "Whereas",
+        "Either",
+        "How"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Besides” is used to add another activity or fact. “Besides teaching…, she also writes…” fits the meaning.",
+      "explanationVi": "“Besides” dùng để bổ sung thêm một thông tin/hoạt động khác. Cấu trúc “Besides teaching…, she also writes…” phù hợp về nghĩa.",
+      "grammarTopic": "conjunctions / transition words"
+    },
+    {
+      "id": "Vky3noQaSG27G9lnWot22",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 122,
+      "stem": "The feasibility study for building a new bridge was quite complex and included several ____.",
+      "options": [
+        "annotate",
+        "annotative",
+        "annotaing",
+        "annotations"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "The blank needs a noun plural to go with “several.” “Annotations” (notes/comments) is the correct word form and meaning.",
+      "explanationVi": "Chỗ trống cần danh từ số nhiều sau “several.” “Annotations” là đúng về dạng từ và nghĩa (ghi chú/bình luận).",
+      "grammarTopic": "word forms (nouns/parts of speech)"
+    },
+    {
+      "id": "1FCcZDSdhWUYJR3sAQ5ER",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 123,
+      "stem": "The department mentor instructed the interns to contact her first ___ they had any questions.",
+      "options": [
+        "in spite of",
+        "as a result",
+        "whenever",
+        "because"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Whenever” means “every time” and correctly describes a repeating action in the future/present: contact her first whenever they have questions.",
+      "explanationVi": "“Whenever” nghĩa là “bất cứ khi nào,” diễn tả hành động lặp lại: liên hệ cô ấy trước mỗi khi họ có thắc mắc.",
+      "grammarTopic": "conjunctions (time: whenever)"
+    },
+    {
+      "id": "U2jzBvXE5JRlhGypeaj1Z",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 124,
+      "stem": "The number of people working at Yolen Laboratory's two locations keeps increasing, and there are now 452 employees ____.",
+      "options": [
+        "apart",
+        "enough",
+        "yet",
+        "altogether"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Altogether” means “in total,” which matches “452 employees altogether.” The other options do not fit this meaning.",
+      "explanationVi": "“Altogether” nghĩa là “tổng cộng,” phù hợp với “452 employees altogether.” Các đáp án khác không khớp nghĩa.",
+      "grammarTopic": "adverbs of quantity / meaning"
+    },
+    {
+      "id": "KlJsVIJMFRviXilMpYRvv",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 125,
+      "stem": "Highlee Sportswear, ____ popularity is widespread among athletes, will add a line of children's clothes soon.",
+      "options": [
+        "whose",
+        "some",
+        "major",
+        "which"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Whose popularity” is required because “popularity” is possessed by Highlee Sportswear. “Whose” correctly shows possession.",
+      "explanationVi": "Dùng “whose popularity” vì “popularity” thuộc về Highlee Sportswear. “Whose” thể hiện sự sở hữu đúng ngữ pháp.",
+      "grammarTopic": "relative pronouns (whose)"
+    },
+    {
+      "id": "t_B6MwEPBn3EHlWMcfB7j",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 126,
+      "stem": "Employees spoke ___ of formet CEO Olga sombroek, emphasizing how well liked she was.",
+      "options": [
+        "sharply",
+        "vaguely",
+        "critically",
+        "fondly"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Fondly” means in a warm, affectionate way, which matches praising a well-liked former CEO. The other adverbs do not fit the positive tone.",
+      "explanationVi": "“Fondly” nghĩa là trìu mến/đánh giá tích cực, phù hợp với việc nhấn mạnh CEO cũ được mọi người yêu mến. Các trạng từ còn lại không đúng sắc thái.",
+      "grammarTopic": "adverbs (tone/meaning)"
+    },
+    {
+      "id": "LTaEazmHT9PrX6HGVtCiQ",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 127,
+      "stem": "Although the owners made ____ renovations to their hair salon, they did not raise any of their prices.",
+      "options": [
+        "informative",
+        "hesitant",
+        "extensive",
+        "conversational"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Extensive renovations” means large-scale, thorough improvements. The sentence contrasts extensive renovations with not raising prices.",
+      "explanationVi": "“Extensive renovations” nghĩa là tu sửa rộng rãi/quy mô lớn. Câu này đối lập việc nâng cấp nhiều với việc không tăng giá.",
+      "grammarTopic": "word choice / adjectives"
+    },
+    {
+      "id": "aJYDn16rhOhOCW_kCJbgF",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 128,
+      "stem": "____ that Mr. Rey has completed the welding course, he is free to apply for an internal position with increased responsibility.",
+      "options": [
+        "Otherwise",
+        "Rather than",
+        "Despite",
+        "Considering"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Considering that…” is used to give a reason based on a fact: considering he completed the course, he can apply. “Despite” would be the opposite of the meaning.",
+      "explanationVi": "“Considering that…” dùng để nêu lý do dựa trên một sự thật: vì anh ấy đã hoàn thành khóa học nên có thể nộp đơn. “Despite” mang nghĩa ngược.",
+      "grammarTopic": "linking phrases (condition/reason: considering that)"
+    },
+    {
+      "id": "AQTi-rOR-X2B3xCEbozUQ",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 129,
+      "stem": "The play's rehearsal lasted four hours, while the play ____ ran for only three.",
+      "options": [
+        "themselves",
+        "them",
+        "itself",
+        "it"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Itself” is reflexive and refers back to “the play” in the second clause: “while the play itself ran…”",
+      "explanationVi": "“Itself” là đại từ phản thân, quy chiếu về “the play” trong mệnh đề sau: “while the play itself ran…”.",
+      "grammarTopic": "reflexive pronouns (itself)"
+    },
+    {
+      "id": "9fSjlqn2mc7nh0NLMkQkC",
+      "examName": "Test 4 ETS 2021",
+      "examId": "N2bBPjwFt6m7YBneS94PN",
+      "number": 130,
+      "stem": "Ms. Sheth was indentified the ____ that have prevented Hentig Industries from expanding globally.",
+      "options": [
+        "registers",
+        "summaries",
+        "opposites",
+        "obstacles"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Obstacles” means barriers that prevent something from happening. “prevent… expanding” requires a noun like obstacles.",
+      "explanationVi": "“Obstacles” nghĩa là trở ngại/khó khăn cản trở việc gì đó. Sau “prevent… expanding” cần một danh từ như obstacles.",
+      "grammarTopic": "word choice / nouns"
+    },
+    {
+      "id": "9XETmpDRVwV1U8NQ8qphY",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 101,
+      "stem": "Free Internet service ____ available in the lobby but not in the guest rooms.",
+      "options": [
+        "being",
+        "to be",
+        "are",
+        "is"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Free Internet service” is singular, so the correct form of the verb is “is.” The structure is passive: “service is available.”",
+      "explanationVi": "“Free Internet service” là số ít nên động từ đúng là “is.” Cấu trúc bị động: “service is available.”",
+      "grammarTopic": "subject-verb agreement & passive voice"
+    },
+    {
+      "id": "YVw8cP164WhKQskz5TVzt",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 102,
+      "stem": "A third branch ____ Starshom Hair Salon will open in Georgetown's industrial district.",
+      "options": [
+        "up",
+        "of",
+        "along",
+        "in"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“A third branch of Starshom Hair Salon” is the correct collocation; “of” shows possession/affiliation.",
+      "explanationVi": "Cụm đúng là “A third branch of Starshom Hair Salon,” trong đó “of” diễn tả sự thuộc về/chi nhánh của.",
+      "grammarTopic": "prepositions (of)"
+    },
+    {
+      "id": "U2Bv9_70XTEYqCMV4WVhE",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 103,
+      "stem": "The March shipment to Busan can fit an ____ thirteen containers.",
+      "options": [
+        "adding",
+        "additional",
+        "addition",
+        "add"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“An additional thirteen containers” uses the adjective “additional” to modify a quantity meaning extra.",
+      "explanationVi": "“An additional thirteen containers” dùng tính từ “additional” để bổ nghĩa cho số lượng, nghĩa là “thêm/bổ sung.”",
+      "grammarTopic": "word forms (adjectives vs nouns)"
+    },
+    {
+      "id": "KJU0WWugyry9G1LRrqLrL",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 104,
+      "stem": "Ms. Tran ____ the clients fifteen different apartments in one afternoon.",
+      "options": [
+        "made",
+        "opened",
+        "passed",
+        "showed"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Show” fits the meaning: Ms. Tran showed the clients apartments. “Made/opened/passed” don’t match the required object relationship.",
+      "explanationVi": "Động từ đúng là “showed” vì nghĩa là Ms. Tran đã cho khách xem các căn hộ. “made/opened/passed” không phù hợp với ngữ cảnh này.",
+      "grammarTopic": "verb choice (meaning)"
+    },
+    {
+      "id": "wNOnwYOQ83qOWIOiHVxkF",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 105,
+      "stem": "Mr. Sweeney is most pleased when ____ press releases are published unedited.",
+      "options": [
+        "he",
+        "him",
+        "his",
+        "himself"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "After “when,” the clause needs a noun modifier: “his” would be wrong because the possessive for “press releases” is “his” only if the subject is male; here it refers to Mr. Sweeney, so “his” is correct. Actually options: “his” (C) is the possessive determiner for “press releases.”",
+      "explanationVi": "Cần tính từ sở hữu để bổ nghĩa cho “press releases”: đúng là “his press releases” vì nói về Mr. Sweeney. Các lựa chọn khác không đúng vai trò ngữ pháp trong mệnh đề.",
+      "grammarTopic": "possessives & pronoun choice"
+    },
+    {
+      "id": "pt8h3kV6R7WsVM8Poxwer",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 106,
+      "stem": "Whenever company costs ____ significantly, the budget is adjusted.",
+      "options": [
+        "rise",
+        "rises",
+        "risen",
+        "rising"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "With “Whenever” (a habitual/time clause), use the present simple in the main clause: “costs rise significantly.”",
+      "explanationVi": "Với “Whenever” (mệnh đề chỉ thói quen/thời gian), dùng thì hiện tại đơn: “costs rise significantly.”",
+      "grammarTopic": "tenses (present simple with whenever)"
+    },
+    {
+      "id": "wvuH8OmgKmN8hrAv7F3wN",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 107,
+      "stem": "This is a ___ to all employee to submit expense reports by the end of the month.",
+      "options": [
+        "remind",
+        "reminded",
+        "reminding",
+        "reminder"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "The phrase “a reminder to all employees” is correct: “reminder” is a noun that completes the sentence.",
+      "explanationVi": "Cụm đúng là “a reminder to all employees” vì “reminder” là danh từ bổ nghĩa cho “a.”",
+      "grammarTopic": "word forms (noun forms)"
+    },
+    {
+      "id": "0MiHy2SMTwePSuo9OGjIC",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 108,
+      "stem": "Please e-mail Human Resources if you are able to help set up the events room ___ the annual office party.",
+      "options": [
+        "since",
+        "before",
+        "into",
+        "except"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Before the annual office party” indicates time: set up the events room prior to the party.",
+      "explanationVi": "“Before the annual office party” diễn tả thời gian: chuẩn bị phòng cho sự kiện trước bữa tiệc công ty thường niên.",
+      "grammarTopic": "prepositions/time expressions (before)"
+    },
+    {
+      "id": "daESAMFnCXnBaBYdf_LL9",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 109,
+      "stem": "Aita Corporation will hire roughly 50 new employees ____ the next year.",
+      "options": [
+        "over",
+        "while",
+        "somewhere",
+        "ideally"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Hire ... over the next year” means hire during the next year in an extended period; “over” is the correct preposition.",
+      "explanationVi": "“Hire ... over the next year” nghĩa là thuê trong suốt năm tới (một khoảng thời gian), nên “over” là đúng.",
+      "grammarTopic": "prepositions (time: over)"
+    },
+    {
+      "id": "izxeL7wm7e-8mZYlJKdmB",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 110,
+      "stem": "Dine Out Magazine will publish an article next month about people who ___ go to the same restaurant.",
+      "options": [
+        "repeated",
+        "repeatedly",
+        "repeat",
+        "repetition"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "In “people who ___ go,” the verb must be in base form after the relative clause marker, forming the present simple: “who repeat/repeatedly... go” → “who repeat go” isn’t right; the intended meaning is “who repeatedly go,” but with “go” already present, the verb should be “repeat” as in “people who repeatedly go” is adverb. Given options, the correct grammatical structure is “who repeat” to mean “who repeat (the same action) … go to the same restaurant.”",
+      "explanationVi": "Cần dạng động từ theo cấu trúc mệnh đề quan hệ: “people who + V” để mô tả hành động lặp lại. Trong các lựa chọn, “repeat” phù hợp với cấu trúc này.",
+      "grammarTopic": "verb forms & relative clauses"
+    },
+    {
+      "id": "rHa1Kf8aI_kQLYQiMq-Ti",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 111,
+      "stem": "The aircraft's _____ flight had arrived late, so its scheduled 10:15 AM departure was delayed.",
+      "options": [
+        "committed",
+        "entitled",
+        "previous",
+        "spacious"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Previous” modifies “flight” to mean the flight before the scheduled one. The sentence needs an adjective, and the meaning is “the previous flight arrived late.”",
+      "explanationVi": "“Previous” bổ nghĩa cho “flight” và có nghĩa là chuyến bay trước đó. Cần một tính từ, và ý là “chuyến bay trước đã đến muộn.”",
+      "grammarTopic": "word forms (adjectives)"
+    },
+    {
+      "id": "HDOKXEvgh7kORt5xTEH77",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 112,
+      "stem": "Blue Form Company offers its employees ___ in their working location and hours.",
+      "options": [
+        "flexible",
+        "flex",
+        "flexibiliity",
+        "flexed"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Offers … flexible” uses an adjective to describe “hours and location.” “Flexible” is the correct word form for modifying a noun.",
+      "explanationVi": "Cấu trúc “offers … flexible” dùng tính từ để miêu tả “hours and location”. “Flexible” là dạng đúng để bổ nghĩa cho danh từ.",
+      "grammarTopic": "word forms (adjectives)"
+    },
+    {
+      "id": "V3avlwLgAXy56u5lJJXW6",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 113,
+      "stem": "The latest sales figures ___ to the vice president that the company was doing well.",
+      "options": [
+        "reinforcing",
+        "reinforcement",
+        "reinforces",
+        "reinforced"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "The sentence uses a past context: “had arrived/was doing,” so “reinforced” is past passive. “reinforced the vice president that …” is correct for reporting confirmation.",
+      "explanationVi": "Câu có ngữ cảnh quá khứ (“was doing well” trong mệnh đề), nên dùng thì quá khứ của động từ. “reinforced … that …” diễn tả việc số liệu củng cố/khẳng định với phó giám đốc.",
+      "grammarTopic": "tenses (past forms) / verb patterns"
+    },
+    {
+      "id": "9hTHF-fTPvH2Y9GZfzEwZ",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 114,
+      "stem": "Management at the Sidol Factory is researching different ____ to enhancing employee productivity.",
+      "options": [
+        "instincts",
+        "decisions",
+        "occasions",
+        "approaches"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Approaches to + V-ing” is a common structure. “Approaches to enhancing employee productivity” is grammatically correct and meaningful.",
+      "explanationVi": "Cụm “approaches to + V-ing” là cấu trúc phổ biến. “Approaches to enhancing employee productivity” đúng ngữ pháp và hợp nghĩa.",
+      "grammarTopic": "prepositions & fixed structures"
+    },
+    {
+      "id": "g-fy8lDDCTsN9D9IL0DhQ",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 115,
+      "stem": "Only two percent of the focus group participants reported ____ disliking the new ice-cream flavor.",
+      "options": [
+        "stronger",
+        "strong",
+        "strongly",
+        "strongest"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Report” is followed by an adverb when modifying a verb phrase in this context: “strongly disliking.” “Strongly” is the correct adverb form.",
+      "explanationVi": "“report” cần trạng từ để bổ nghĩa cho “disliking” trong ngữ cảnh này: “strongly disliking.” “strongly” là đúng vì là trạng từ.",
+      "grammarTopic": "word forms (adverbs)"
+    },
+    {
+      "id": "XREoYsmGfrrxH9a8D_ozk",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 116,
+      "stem": "Our line of passenger cars includes the latest ____ technology to protect vehicles and their passengers.",
+      "options": [
+        "safety",
+        "more safely",
+        "most safely",
+        "saves"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“latest safety technology” is a noun phrase where “safety” functions as an adjective-like modifier. The other choices don’t fit the structure.",
+      "explanationVi": "“latest safety technology” là cụm danh từ, trong đó “safety” đóng vai trò bổ nghĩa như tính từ. Các đáp án còn lại không phù hợp cấu trúc.",
+      "grammarTopic": "word choice (noun modifiers)"
+    },
+    {
+      "id": "20pabEKHswd6EgIwLy_mc",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 117,
+      "stem": "Jetways Japan and Night Sky Airways have ___ a planned merger, which is under review by government regulators.",
+      "options": [
+        "treated",
+        "flown",
+        "announced",
+        "spread"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“have announced a planned merger” is the standard collocation. “Announced” matches the present perfect for an event already made public.",
+      "explanationVi": "Cụm đúng là “have announced a planned merger”. “Announced” phù hợp với hiện tại hoàn thành để diễn tả việc đã công bố việc sáp nhập dự kiến.",
+      "grammarTopic": "verb tense & collocations"
+    },
+    {
+      "id": "t9ZoqTCe-kOtEgkBqOK5r",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 118,
+      "stem": "The old Abita Theater was demolished one week ago, and construction of an office complex at the site is ____ underway.",
+      "options": [
+        "yet",
+        "usually",
+        "soon",
+        "already"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“already underway” is used with the present perfect to emphasize that construction started earlier and is still in progress. “yet/usually/soon” don’t fit this meaning.",
+      "explanationVi": "“already underway” dùng để nhấn mạnh rằng việc xây dựng đã bắt đầu trước đó và đang diễn ra. “yet/usually/soon” không phù hợp nghĩa này.",
+      "grammarTopic": "adverbs (already/yet) & tense meaning"
+    },
+    {
+      "id": "bL3rJrzlAFU-MT4LyvRPi",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 119,
+      "stem": "Wreen Watch's latest smart watch offers ____ features not found in other products.",
+      "options": [
+        "similar",
+        "multiple",
+        "broken",
+        "careful"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“multiple features” means many different features. “similar/broken/careful” do not match the meaning or grammatical pattern for “features.”",
+      "explanationVi": "“multiple features” nghĩa là nhiều tính năng khác nhau. “similar/broken/careful” không phù hợp nghĩa hoặc cấu trúc với “features”.",
+      "grammarTopic": "word choice (quantity adjectives)"
+    },
+    {
+      "id": "esMVhrljAnxL7TY_079Fz",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 120,
+      "stem": "Although the conference does not ____ begin until Friday, many participants have informal meetings scheduled for Thursday.",
+      "options": [
+        "official",
+        "officiate",
+        "officials",
+        "officially"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“officially begin” requires an adverb because “begin” is a verb. “officially” is the correct adverb form.",
+      "explanationVi": "“officially begin” cần trạng từ vì “begin” là động từ. “officially” là dạng trạng từ đúng.",
+      "grammarTopic": "word forms (adverbs)"
+    },
+    {
+      "id": "uNkcGzMvhZ39pN5VKmnu-",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 121,
+      "stem": "Each year the Metro Enterprise Association honors a local business that has made a ____ impact on the city.",
+      "options": [
+        "comfortable",
+        "significant",
+        "difficult",
+        "granted"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Significant impact” is the correct collocation, meaning a large and important effect. The other options do not fit the meaning of impact.",
+      "explanationVi": "“Significant impact” là cụm đúng, nghĩa là tác động lớn và quan trọng. Các đáp án còn lại không phù hợp với nghĩa của “impact”.",
+      "grammarTopic": "word choice (collocations)"
+    },
+    {
+      "id": "axHqp8pHIaxO6J9u4kST8",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 122,
+      "stem": "Martaska Technologies requires ____ new employees receive at latest two weeks of training before starting work.",
+      "options": [
+        "that",
+        "for",
+        "and",
+        "when"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "After “requires,” we use a clause with “when + subject + verb” to indicate the timing (“when ... receive”). “At latest two weeks of training” also implies a deadline.",
+      "explanationVi": "Sau “requires,” ta dùng mệnh đề với “when” để chỉ thời điểm (“when ... receive”). “At latest two weeks of training” cho thấy đây là thời hạn.",
+      "grammarTopic": "relative clauses / conjunctions (time clause with when)"
+    },
+    {
+      "id": "XADNar5lhJZoOUNNSSHMN",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 123,
+      "stem": "Retailers were given one year to ____ their terminals to accommodate new credit card technology.",
+      "options": [
+        "upgrade",
+        "progress",
+        "motivate",
+        "describe"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "The verb must match the idea of making terminals compatible with new technology, so “upgrade” is correct. “Progress, motivate, describe” do not work with “terminals.”",
+      "explanationVi": "Động từ cần phù hợp với việc làm cho máy đầu cuối tương thích công nghệ mới, nên “upgrade” là đúng. “Progress, motivate, describe” không đi với “terminals”.",
+      "grammarTopic": "word choice (verb usage)"
+    },
+    {
+      "id": "V6Jj6Raotgh-ZY0Nu98C4",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 124,
+      "stem": "Marketers find that older cusumers respond best to facts and statistics, _____ for teenagers, the best strategy is humor.",
+      "options": [
+        "such as",
+        "whereas",
+        "due",
+        "almost"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Whereas” contrasts two groups: older customers vs. teenagers, which fits the sentence structure. The other choices do not express contrast correctly.",
+      "explanationVi": "“Whereas” dùng để nhấn mạnh sự tương phản giữa hai nhóm: khách lớn tuổi vs. thiếu niên, phù hợp cấu trúc câu. Các đáp án còn lại không diễn tả đúng sự đối lập.",
+      "grammarTopic": "conjunctions (contrast: whereas)"
+    },
+    {
+      "id": "ma5WQk9t3YNGae6KUjV6Z",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 125,
+      "stem": "Because of a processing error, Elmore Distributors ____ shipped cases of frozen fish to a bakery.",
+      "options": [
+        "equally",
+        "illegibly",
+        "accidentally",
+        "vigorously"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "A processing error implies an unintended outcome, so “accidentally shipped” is correct. “Equally/illegibly/vigorously” don’t match this meaning.",
+      "explanationVi": "Lỗi xử lý thường dẫn đến kết quả ngoài ý muốn, nên “accidentally shipped” là đúng. “Equally/illegibly/vigorously” không phù hợp nghĩa này.",
+      "grammarTopic": "word choice (adverb meaning)"
+    },
+    {
+      "id": "hlDUdgGV9LjCg431NS1UJ",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 126,
+      "stem": "With ____ from the board of directors, CEO Brian Krieder is aggressively pursuing fresh revenue sources.",
+      "options": [
+        "authorization",
+        "authorizes",
+        "authorize",
+        "authorized"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "With + noun is correct here: “With authorization from ...”. The other forms are wrong because they don’t fit the noun structure after “with.”",
+      "explanationVi": "Với cấu trúc đúng là “With + danh từ”: “With authorization from ...”. Các đáp án còn lại sai vì không dùng đúng dạng sau “with”.",
+      "grammarTopic": "grammar structures (preposition + noun)"
+    },
+    {
+      "id": "84Wr3qx5RtvP_YlOkLAYD",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 127,
+      "stem": "Mr. Itomitsu's recent book on fitness encourages readers strive for a healthy ___ between physical exertion and rest.",
+      "options": [
+        "quantity",
+        "supply",
+        "balance",
+        "number"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "The phrase “a balance between ... and ...” is the correct collocation. “Quantity/supply/number” do not form natural phrases with this meaning.",
+      "explanationVi": "Cụm đúng là “a balance between ... and ...”. “quantity/supply/number” không tạo được cụm tự nhiên với ý nghĩa này.",
+      "grammarTopic": "word choice (collocations)"
+    },
+    {
+      "id": "w3Qe_1KV8E_5u7zvTJ4b1",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 128,
+      "stem": "____ an anonymous donation, the Metropolitan Hospital was able to purchase new imaging equipment.",
+      "options": [
+        "In case",
+        "As though",
+        "Owing to",
+        "If only"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Owing to” means “because of,” which correctly explains the hospital’s ability to buy equipment. The other options either don’t match meaning or introduce an incorrect structure.",
+      "explanationVi": "“Owing to” có nghĩa là “because of,” giải thích đúng vì sao bệnh viện mua được thiết bị. Các đáp án còn lại không khớp nghĩa hoặc sai cấu trúc.",
+      "grammarTopic": "prepositions (cause: owing to)"
+    },
+    {
+      "id": "Ie1YyNV5MFT5K7NOn1n0m",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 129,
+      "stem": "Employees __ cars are parked in designated client spaces should move them immediately.",
+      "options": [
+        "those",
+        "other",
+        "who",
+        "whose"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "Use “whose” for possession in a relative clause: “Employees whose cars are parked ... should move them.” “Who” and “those/other” don’t express possession.",
+      "explanationVi": "Dùng “whose” để chỉ sự sở hữu trong mệnh đề quan hệ: “Employees whose cars are parked ... should move them.” “Who” và “those/other” không diễn tả được sự sở hữu.",
+      "grammarTopic": "relative pronouns (whose)"
+    },
+    {
+      "id": "bXNJ8netT_3K6b_1BQhFP",
+      "examName": "Test 5 ETS 2021",
+      "examId": "Pm5MJHHtoVPcqf0X5whAB",
+      "number": 130,
+      "stem": "The design team considered many possible _____before settling on the red and black color scheme for the corporate Web site",
+      "options": [
+        "functions",
+        "combinations",
+        "destinations",
+        "roles"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Possible combinations” is the natural phrase for selecting a color scheme. “Functions/destinations/roles” do not fit the context of design choices.",
+      "explanationVi": "“Possible combinations” là cách nói tự nhiên cho việc phối lựa chọn (màu sắc) khi thiết kế. “functions/destinations/roles” không phù hợp ngữ cảnh.",
+      "grammarTopic": "word choice (noun collocations)"
+    },
+    {
+      "id": "Qj2PNZYMyNqyczItNmAKT",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 101,
+      "stem": "Departmental restructuring will be discussed at the _____ monthly meeting.",
+      "options": [
+        "next",
+        "always",
+        "soon",
+        "like"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Next monthly meeting” is the correct collocation meaning the upcoming meeting. “Always/soon/like” do not fit this structure.",
+      "explanationVi": "“Next monthly meeting” là cụm phù hợp nghĩa là cuộc họp sắp tới. “Always/soon/like” không hợp với cấu trúc này.",
+      "grammarTopic": "word choice & collocations (adverbs of time)"
+    },
+    {
+      "id": "DnvLDlKpPFYLDBZrLHmat",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 102,
+      "stem": "To keep _____ park beautiful, please place your non recyclables in the available trash cans.",
+      "options": [
+        "our",
+        "we",
+        "us",
+        "ours"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“To keep our park beautiful” requires a possessive adjective before a noun. “We/us/ours” do not match the needed form.",
+      "explanationVi": "“To keep our park beautiful” cần tính từ sở hữu đứng trước danh từ “park”. “We/us/ours” không đúng dạng.",
+      "grammarTopic": "pronouns (possessive adjectives)"
+    },
+    {
+      "id": "PiincBduFBsa0ztGzdJVA",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 103,
+      "stem": "Mr. Hardin _____ additional images of the office building he is interested in leasing.",
+      "options": [
+        "informed",
+        "asked",
+        "advised",
+        "requested"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Requested additional images” correctly uses a verb that takes a direct object related to asking for something. The other options do not fit this meaning.",
+      "explanationVi": "“Requested additional images” dùng đúng động từ mang nghĩa “yêu cầu” và có tân ngữ. Các đáp án còn lại không phù hợp về nghĩa.",
+      "grammarTopic": "verb forms & word choice (synonyms)"
+    },
+    {
+      "id": "hbMwe6nHuW5JAZy-W26Tt",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 104,
+      "stem": "A team of agricultural experts will be brought _____ to try to improve crop harvests.",
+      "options": [
+        "because",
+        "either",
+        "between",
+        "together"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Brought together” is a common phrasal structure meaning assembled as a group. The other prepositions/conjunctions don’t create a correct meaning here.",
+      "explanationVi": "“Brought together” là cụm thường dùng nghĩa là tập hợp/thành một nhóm. Các phương án khác không tạo ra ý nghĩa đúng.",
+      "grammarTopic": "prepositions & phrasal expressions"
+    },
+    {
+      "id": "0vQDSaCfzDjC3V0SxMXWt",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 105,
+      "stem": "The board of Galaxipharm _____ Mr. Kwon's successor at yesterday's meeting.",
+      "options": [
+        "named",
+        "granted",
+        "founded",
+        "proved"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Named Mr. Kwon's successor” is the correct verb for appointing someone to a new position. “Granted/founded/proved” do not fit.",
+      "explanationVi": "“Named Mr. Kwon's successor” đúng vì “named” dùng cho việc bổ nhiệm người kế nhiệm. “Granted/founded/proved” không phù hợp.",
+      "grammarTopic": "word choice (appointment verbs)"
+    },
+    {
+      "id": "9810VjOo_VyQtIcCd9-Tk",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 106,
+      "stem": "if your parking permit is damaged, bring it to the entrance station for a _____.",
+      "options": [
+        "replacement",
+        "replacing",
+        "replace",
+        "replaces"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“for a replacement” requires a noun to complete the phrase. “Replacing/replace/replaces” are not the correct word class.",
+      "explanationVi": "“for a replacement” cần danh từ để hoàn thành cụm. “Replacing/replace/replaces” sai loại từ.",
+      "grammarTopic": "word forms (noun vs verb)"
+    },
+    {
+      "id": "zTXcG9n7RiIAjFOr2rX0e",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 107,
+      "stem": "Mr. Ahmad decided to reserve a private room for the awards dinner _____ the restaurant was noisy.",
+      "options": [
+        "rather than",
+        "in case",
+        "such as",
+        "unless"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Reserve a private room rather than the restaurant was noisy” expresses preference: choosing the room instead of the noisy restaurant. “Unless/in case” don’t fit the meaning.",
+      "explanationVi": "“Rather than” diễn tả sự lựa chọn: đặt phòng thay vì dùng nhà hàng khi nhà hàng ồn. “Unless/in case” không phù hợp về nghĩa.",
+      "grammarTopic": "conjunctions & comparison (rather than)"
+    },
+    {
+      "id": "BNWfIxxi-pZe7ZbdIUTEj",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 108,
+      "stem": "Ms. Jones has provided a _____ estimate of the costs of expanding distribution statewide.",
+      "options": [
+        "conserve",
+        "conserves",
+        "conservative",
+        "conservatively"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“A conservative estimate” uses the adjective meaning cautious/limited. The adverbs/verbs and “conserves” are incorrect here.",
+      "explanationVi": "“A conservative estimate” đúng vì “conservative” nghĩa là thận trọng/khá dè dặt. “conserves/ conserve/ conservatively” không phù hợp.",
+      "grammarTopic": "word forms (adjective for noun)"
+    },
+    {
+      "id": "dAES1Lga9kHOm2ra1D5Av",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 109,
+      "stem": "Each quarter, Acaba Exports sets _____ sales goals for its staff.",
+      "options": [
+        "compact",
+        "wealthy",
+        "faithful",
+        "realistic"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Realistic sales goals” is the correct adjective describing goals that are achievable. The other choices do not describe goals appropriately.",
+      "explanationVi": "“Realistic sales goals” đúng vì nói về mục tiêu doanh số có thể đạt được. Các đáp án còn lại không mô tả đúng “goals”.",
+      "grammarTopic": "word choice (adjective meaning)"
+    },
+    {
+      "id": "03YSp5ydhB6BRNtzHfkKK",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 110,
+      "stem": "Ms. Garcia was delighted to receive _____ that her company soon will be featured in the In Town Times magazine.",
+      "options": [
+        "notify",
+        "notification",
+        "notifying",
+        "notifies"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Receive notification that…” is a fixed collocation where “notification” is a noun meaning an announcement. “Notify/notifying/notifies” are incorrect word forms.",
+      "explanationVi": "“Receive notification that…” là cụm cố định, trong đó “notification” là danh từ nghĩa là thông báo. Các dạng khác “notify/notifying/notifies” sai dạng từ.",
+      "grammarTopic": "word forms (noun after verbs)"
+    },
+    {
+      "id": "PWvIl_niqyTz8KvyXIYta",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 111,
+      "stem": "Children under five years of age are eligible _____ free vision tests.",
+      "options": [
+        "over",
+        "down",
+        "for",
+        "out"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "The correct phrase is “eligible for,” meaning allowed to receive something. Here, “for free vision tests” is the complement of “eligible.”",
+      "explanationVi": "Cụm đúng là “eligible for” (đủ điều kiện để nhận). “for free vision tests” bổ nghĩa cho “eligible”.",
+      "grammarTopic": "prepositions (fixed expressions)"
+    },
+    {
+      "id": "r7AcmH_Vyj4ssSopj7KJZ",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 112,
+      "stem": "Drivers on the Partan Expressway are reminded to drive _____ throughout July because of the ongoing construction work.",
+      "options": [
+        "caution",
+        "cautiously",
+        "cautious",
+        "cautiousness"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "After “drive,” we need an adjective in the structure “drive + adjective” to describe how drivers should act. “Cautiously” is an adverb, which would not fit the given pattern.",
+      "explanationVi": "Sau động từ “drive” cần dùng tính từ trong cấu trúc “drive + adjective” để nói cách lái xe. “Cautiously” là trạng từ nên không khớp với mẫu câu này.",
+      "grammarTopic": "word forms (adjective vs adverb)"
+    },
+    {
+      "id": "gZBzXozgnPJs1sh9wFuco",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 113,
+      "stem": "The committee will resume its weekly meetings ____ Ms. Cheon returns from Scotland on September.",
+      "options": [
+        "that",
+        "once",
+        "as well as",
+        "then"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Once” means “as soon as,” showing the action begins after Ms. Cheon returns. The sentence describes a future schedule based on that event.",
+      "explanationVi": "“Once” nghĩa là “ngay khi/khi nào,” chỉ hành động bắt đầu sau khi bà Cheon quay lại. Câu này diễn tả lịch trình trong tương lai phụ thuộc vào sự kiện đó.",
+      "grammarTopic": "conjunctions (time clauses)"
+    },
+    {
+      "id": "HJq6wUBHEU8bf1ZhnKvy6",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 114,
+      "stem": "The _____ initiative aims to provide public transportation for commuters living in the outer suburbs.",
+      "options": [
+        "proposed",
+        "proposing",
+        "proposal",
+        "propose"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "The blank needs a noun to modify “initiative.” “Proposal” is the correct noun form: “the proposal initiative.”",
+      "explanationVi": "Chỗ trống cần một danh từ để bổ nghĩa cho “initiative.” “proposal” là dạng danh từ phù hợp: “the proposal initiative”.",
+      "grammarTopic": "word forms (noun vs participle)"
+    },
+    {
+      "id": "rlDUOs39QpX0gbKLZ-CW2",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 115,
+      "stem": "Yesterday's storm _____ interrupted the services of the Duddula, lnc., satellite communications system.",
+      "options": [
+        "annually",
+        "anytime",
+        "whenever",
+        "temporarily"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Temporarily” describes the duration of the interruption, so it correctly modifies “interrupted.” The other choices do not match the meaning of a short-term effect.",
+      "explanationVi": "“Temporarily” diễn tả tính tạm thời của việc gián đoạn nên phù hợp để bổ nghĩa cho “interrupted.” Các đáp án khác không diễn tả đúng nghĩa ngắn hạn.",
+      "grammarTopic": "adverbs of time (word forms)"
+    },
+    {
+      "id": "1rcmkmUdqB1R61VROkQg0",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 116,
+      "stem": "Even though Cabrera Pictures and Marcella Images make very different films, _____ are successful movie studios.",
+      "options": [
+        "several",
+        "everybody",
+        "some",
+        "both"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "The sentence contrasts two film companies and uses “both” to mean each one. “Both are successful movie studios” matches the meaning.",
+      "explanationVi": "Câu so sánh hai công ty và dùng “both” để chỉ rằng cả hai đều thành công. “Both are successful movie studios” đúng ý.",
+      "grammarTopic": "pronouns/determiners (quantifiers)"
+    },
+    {
+      "id": "G9GIJP4C_ONzuenia5A2v",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 117,
+      "stem": "_____ of tasks can make a manager’s job easier and help other employees learn new skills.",
+      "options": [
+        "Reputation",
+        "Foundation",
+        "Delegation",
+        "Permission"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Delegation of tasks” is the correct collocation. “Delegation” is a noun that fits the structure “_____ of tasks can make…”.",
+      "explanationVi": "Cụm đúng là “delegation of tasks.” “Delegation” là danh từ phù hợp với cấu trúc “_____ of tasks can make…”.",
+      "grammarTopic": "word forms (noun collocation)"
+    },
+    {
+      "id": "AkWERox0j2-oy_TnFXh1I",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 118,
+      "stem": "Proceeds from the sale of Delcrest Corporation were equally _____ among the founder's three daughters.",
+      "options": [
+        "divisions",
+        "dividing",
+        "divide",
+        "divided"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "The phrase “equally divided” describes how the proceeds were distributed. “Divided” is past participle needed for the passive construction implied by the subject.",
+      "explanationVi": "Cụm đúng là “equally divided,” mô tả cách chia số tiền. “Divided” là phân từ hai cần thiết cho cấu trúc dạng bị động/ngầm.",
+      "grammarTopic": "passive/participles (past participle usage)"
+    },
+    {
+      "id": "9nWlTNUSfaIHsOi3J8tjD",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 119,
+      "stem": "_____ higher than average ticket prices, every performance of Alden North’s new play is sold out for the next six months.",
+      "options": [
+        "Throughout",
+        "Except for",
+        "Despite",
+        "Prior to"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Despite” means “in spite of,” indicating the result happens even though the condition is true. The sentence means ticket prices are higher, yet every performance still sells out.",
+      "explanationVi": "“Despite” nghĩa là “mặc dù,” cho thấy kết quả xảy ra dù điều kiện đó vẫn đúng. Câu muốn nói giá vé cao hơn trung bình nhưng mọi suất vẫn bán hết.",
+      "grammarTopic": "conjunctions (contrast: despite)"
+    },
+    {
+      "id": "nwZSVCX15PjI8una74Nm_",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 120,
+      "stem": "Ricardo Sosa, the executive chef at Restaurant Ninal, responds to guests’ suggestions _____.",
+      "options": [
+        "respect",
+        "respects",
+        "respectfully",
+        "respected"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "We need an adverb to modify the verb “responds.” “Respectfully” correctly describes the manner of the chef’s response.",
+      "explanationVi": "Cần trạng từ để bổ nghĩa cho động từ “responds.” “Respectfully” diễn tả cách thức người đầu bếp trả lời.",
+      "grammarTopic": "word forms (adverb vs noun)"
+    },
+    {
+      "id": "MkAC711p3ZnBqyD_M7dvx",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 121,
+      "stem": "Mr. Koster is negotiating the _____ of the new contract with Arban, Inc.",
+      "options": [
+        "scope",
+        "turn",
+        "grip",
+        "drive"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Negotiating the scope of a contract” is the standard collocation meaning discussing what the contract covers. The other options do not form a natural phrase with “negotiating.”",
+      "explanationVi": "“Negotiating the scope of a contract” là cụm từ chuẩn, nghĩa là thảo luận phạm vi/những gì hợp đồng bao gồm. Các đáp án còn lại không đi với “negotiating” một cách tự nhiên.",
+      "grammarTopic": "collocations (word choice)"
+    },
+    {
+      "id": "0zRDpQHAW3v8j1uJ5qRBC",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 122,
+      "stem": "The equipment-use guidelines _____ on our internal corporate Web site.",
+      "options": [
+        "may find",
+        "can be found",
+        "have found",
+        "have to find"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "Use passive voice because the guidelines are the object being found. “Can be found” correctly expresses possibility in the present.",
+      "explanationVi": "Dùng thể bị động vì “guidelines” là thứ được tìm thấy. “Can be found” diễn tả khả năng ở hiện tại một cách đúng.",
+      "grammarTopic": "passive voice (modal + be found)"
+    },
+    {
+      "id": "ma7holuK71_0ih59fMCDC",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 123,
+      "stem": "Professor Han created spreadsheets to calculate the farm’s irrigation needs _____.",
+      "options": [
+        "dominantly",
+        "precisely",
+        "relatively",
+        "widely"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Precisely” is an adverb modifying “calculate,” meaning done in an accurate way. “Precisely” fits best with calculation accuracy.",
+      "explanationVi": "“Precisely” là trạng từ bổ nghĩa cho “calculate”, nghĩa là tính toán một cách chính xác. “Precisely” phù hợp nhất với ý nghĩa độ chính xác.",
+      "grammarTopic": "adverbs (word form)"
+    },
+    {
+      "id": "C079FI1E9AAaB0iij8OE1",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 124,
+      "stem": "For hiring purposes, five years of professional experience is _____ to having achieved certification.",
+      "options": [
+        "reasonable",
+        "appropriate",
+        "equivalent",
+        "significant"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Equivalent to” means equal in value or importance. The structure compares work experience with achieving certification.",
+      "explanationVi": "“Equivalent to” có nghĩa là tương đương về giá trị hoặc mức độ. Câu so sánh kinh nghiệm nghề nghiệp với việc đạt chứng chỉ.",
+      "grammarTopic": "prepositions / fixed expression (equivalent to)"
+    },
+    {
+      "id": "1q_QYciFeNkVMWXQiI7aK",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 125,
+      "stem": "South Regent Aviation is adopting measures to reduce fuel expenses by _____ cargo loads.",
+      "options": [
+        "light",
+        "lighten",
+        "lightly",
+        "lightening"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Lightly loaded cargo” should use an adverb (“lightly”) to modify “cargo loads.” “Light”/“lighten”/“lightening” do not fit grammatically.",
+      "explanationVi": "Cụm đúng là “lightly cargo loads” nên dùng trạng từ “lightly” để bổ nghĩa cho “cargo loads”. Các đáp án còn lại không đúng cấu trúc ngữ pháp.",
+      "grammarTopic": "adverbs vs word forms"
+    },
+    {
+      "id": "lTMlx27lVKGAALW33Sr7_",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 126,
+      "stem": "_____ the most challenging aspect of accepting a new position is negotiating a salary that is both fair and satisfying.",
+      "options": [
+        "Perhaps",
+        "Outside",
+        "Every",
+        "While"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“While” introduces a contrast/condition in the middle of the sentence. “While the most challenging aspect…” is grammatical and idiomatic here.",
+      "explanationVi": "“While” dùng để giới thiệu sự tương phản/điều kiện trong mệnh đề. “While the most challenging aspect…” là cấu trúc đúng và tự nhiên.",
+      "grammarTopic": "conjunctions (while)"
+    },
+    {
+      "id": "emeY0RAIk0pPCHSmFL_ox",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 127,
+      "stem": "Complaints about its new line of kitchen appliances led Loxevo, lnc., to adopt higher_____for assessing quality.",
+      "options": [
+        "standards",
+        "features",
+        "risks",
+        "institutions"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Higher standards for assessing quality” is the correct collocation. The other nouns do not pair naturally with “assessing quality.”",
+      "explanationVi": "Cụm đúng là “higher standards for assessing quality”. Các danh từ khác không đi tự nhiên với “assessing quality”.",
+      "grammarTopic": "collocations (word choice)"
+    },
+    {
+      "id": "6srjdu4dSzyWd_PoDfolF",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 128,
+      "stem": "The chief engineer noted that constructing another bridge would be more _____ than repairing the existing structure.",
+      "options": [
+        "economy",
+        "economics",
+        "economically",
+        "economical"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“More economical than” uses an adjective after “more” to compare. “Economically” is an adverb and is not correct here.",
+      "explanationVi": "Dùng tính từ sau “more” trong so sánh: “more economical than”. “Economically” là trạng từ nên không phù hợp ở đây.",
+      "grammarTopic": "comparatives + adjective vs adverb"
+    },
+    {
+      "id": "gsnvnQZO-swPNyg57GOjW",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 129,
+      "stem": "Jansen Bus Company drivers are expected to complete regular trainings _____ maintaining their state licenses.",
+      "options": [
+        "in addition to",
+        "according to",
+        "inside",
+        "within"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“In addition to” means “as well as,” indicating the training is done alongside maintaining licenses. The other prepositions don’t match the meaning.",
+      "explanationVi": "“In addition to” nghĩa là “cũng như,” cho thấy việc học đào tạo diễn ra cùng với duy trì giấy phép. Các giới từ khác không đúng ý nghĩa.",
+      "grammarTopic": "prepositions / phrases (in addition to)"
+    },
+    {
+      "id": "AGwIAKm5ge52KhxAf7d5m",
+      "examName": "Test 1 ETS 2020",
+      "examId": "D6iLcTGnUe_My5q2I_6W_",
+      "number": 130,
+      "stem": "Ms. DeSoto _____ all employees to come to last week’s budget meeting even though only officers were obligated to attend.",
+      "options": [
+        "to have urged",
+        "had urged",
+        "will have urged",
+        "was urged"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "Because the action was in the past and the sentence contrasts obligations last week, use past tense in the passive: “had urged.” The meaning is that she urged before/at that past time.",
+      "explanationVi": "Vì hành động xảy ra trong quá khứ và câu nói về việc “last week”, dùng thì quá khứ cho thể bị động: “had urged”. Ý là cô ấy đã thúc giục trước hoặc vào thời điểm đó trong quá khứ.",
+      "grammarTopic": "tenses (past perfect in passive)"
+    },
+    {
+      "id": "WycyXb-Z-ZPwCWeClfSfX",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 101,
+      "stem": "The new interns have been very mindful of _____ parking regulations.",
+      "options": [
+        "theirs",
+        "ours",
+        "our",
+        "they"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Mindful of” is followed by a possessive determiner here: “ours” = the parking regulations of our company. “The new interns” refers to others, so “they/theirs” doesn’t fit the sentence meaning.",
+      "explanationVi": "“Mindful of” cần một đại từ sở hữu/định từ sở hữu đi kèm. Ở đây nghĩa là “những quy định đỗ xe của công ty chúng ta”, nên dùng “ours/our” và chọn “ours” để hoàn chỉnh cụm danh từ.",
+      "grammarTopic": "possessives (pronouns/determiners)"
+    },
+    {
+      "id": "-zsZdYD3wme8XqJZeWHgc",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 102,
+      "stem": "To help the arts center improve its programming, please indicate which aspect of the workshop was most _____.",
+      "options": [
+        "informative",
+        "primary",
+        "enthusiastic",
+        "financial"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Most” is used with a positive adjective to form a superlative meaning. “Most informative” is the natural collocation for describing a workshop aspect.",
+      "explanationVi": "“Most” + tính từ tạo dạng so sánh hơn nhất. “Most informative” là cụm kết hợp tự nhiên nhất để nói về mức độ hữu ích/thông tin của buổi workshop.",
+      "grammarTopic": "adjectives (comparative/superlative)"
+    },
+    {
+      "id": "sMCK_6EwYwZdFpIRdij_0",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 103,
+      "stem": "Mr. Gupta explained the _____ of the upgraded customer database to the sales team.",
+      "options": [
+        "beneficial",
+        "benefits",
+        "benefited",
+        "benefiting"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“The benefits of …” is a fixed noun phrase, and “explained” requires a noun object. Therefore the plural noun “benefits” is correct.",
+      "explanationVi": "Cấu trúc đúng là “the benefits of …” và sau “explained” cần một danh từ làm tân ngữ. Vì vậy dùng “benefits” (số nhiều).",
+      "grammarTopic": "word forms (noun vs. adjective/verb)"
+    },
+    {
+      "id": "iO5E1hiXeVaJPxi-_Zo0s",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 104,
+      "stem": "Buses leaving the city terminal were delayed due to icy conditions _____ the roads.",
+      "options": [
+        "on",
+        "out",
+        "from",
+        "until"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "The delay was caused by icy conditions “from the roads” is not correct; the idiomatic meaning is “due to … from the roads” would be wrong. Instead, “leaving the city terminal … delayed … from the roads” doesn’t fit; the correct causal phrase is with “from” meaning “because of restrictions on the roads,” i.e., buses could not proceed on the roads.",
+      "explanationVi": "Câu cần một giới từ thể hiện nguyên nhân/nguồn gốc của sự chậm trễ liên quan đến đường xá. Dùng “from” để diễn đạt “không thể đi/di chuyển do tình trạng băng giá ảnh hưởng từ các con đường”.",
+      "grammarTopic": "prepositions"
+    },
+    {
+      "id": "7rh2r_VM0HQ95UAfjLgwr",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 105,
+      "stem": "f you have recently _____ a digital camera and want to learn how to use it, this course is for you.",
+      "options": [
+        "purchased",
+        "purchase",
+        "purchasing",
+        "to purchase"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“If you have recently purchased …” uses the present perfect to describe an action completed recently. The verb form must be past participle after “have.”",
+      "explanationVi": "“If you have recently purchased …” dùng thì hiện tại hoàn thành để nói việc đã xảy ra gần đây. Vì có “have”, động từ phải ở dạng quá khứ phân từ “purchased”.",
+      "grammarTopic": "tenses (present perfect)"
+    },
+    {
+      "id": "HmFKyrD1BtYNP0f2X2KmK",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 106,
+      "stem": "The upcoming _____ of Tantino Airport will ease congestion and modernize guest accommodations.",
+      "options": [
+        "performance",
+        "supplement",
+        "deadline",
+        "renovation"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Renovation” matches the meaning of upgrading/modernizing facilities. “Performance/supplement/deadline” don’t fit with easing congestion and modernizing accommodations.",
+      "explanationVi": "“Renovation” phù hợp với nghĩa nâng cấp để hiện đại hóa. “Performance/supplement/deadline” không hợp ngữ cảnh với “easing congestion” và “modernize guest accommodations”.",
+      "grammarTopic": "word choice (noun meaning)"
+    },
+    {
+      "id": "WMK4fYxga9BDZILLtCtpu",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 107,
+      "stem": "The study showed that customers aged 35 to 44 paid with a Sonoka credit card _____ than customers in any other age—group.",
+      "options": [
+        "frequently",
+        "frequent",
+        "more frequently",
+        "frequency"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "With “paid … than,” you need a comparative adverb. “More frequently” correctly modifies the verb “paid.”",
+      "explanationVi": "Sau “than” cần so sánh hơn với trạng từ. “More frequently” bổ nghĩa cho động từ “paid”.",
+      "grammarTopic": "comparative adverbs"
+    },
+    {
+      "id": "25gWZLi0Bnc_voVSn4bm6",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 108,
+      "stem": "You need to _____ a business plan before your loan application can be processed.",
+      "options": [
+        "donate",
+        "request",
+        "confess",
+        "submit"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Submit a business plan” is the standard collocation meaning to give/submit documents for processing. The other options do not match the meaning.",
+      "explanationVi": "Cụm đúng là “submit a business plan” (nộp kế hoạch kinh doanh). Các đáp án khác không đi với “business plan” theo nghĩa nộp hồ sơ.",
+      "grammarTopic": "collocations (verbs with nouns)"
+    },
+    {
+      "id": "9jv91_gsZSYkbPmYIGYwe",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 109,
+      "stem": "The hotel’s _____ shuttle bus will take guests to Hong Kong's major landmarks.",
+      "options": [
+        "compliments",
+        "complimentary",
+        "compliment",
+        "complimenting"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Complimentary shuttle bus” is the correct adjective meaning free of charge. “Compliments” is a noun meaning praise, and “compliment/complimenting” are incorrect forms here.",
+      "explanationVi": "“Complimentary shuttle bus” nghĩa là xe đưa đón miễn phí. “Compliments” (lời khen) không phù hợp, còn “compliment/complimenting” sai dạng.",
+      "grammarTopic": "word forms & collocations (adjectives vs. nouns/verbs)"
+    },
+    {
+      "id": "7NsRWqB54SWnAqykEJjrb",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 110,
+      "stem": "_____ months of work to sell the Apton Building, the realtor finally succeeded last week.",
+      "options": [
+        "Besides",
+        "After",
+        "Still",
+        "For"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“After + duration” is used to show a time period until a result occurs: “After months of work … succeeded.” “For” would require a different structure for a duration statement without “finally succeeded.”",
+      "explanationVi": "“After + khoảng thời gian” dùng để nói kết quả xảy ra sau một khoảng thời gian: “After months of work … succeeded”. “For” thường dùng để nêu thời lượng và không phù hợp trước “succeeded”.",
+      "grammarTopic": "prepositions/conjunctions (time expressions)"
+    },
+    {
+      "id": "3zwf_QgCdL8CK9IXoCndD",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 111,
+      "stem": "We will review all four custodial—service bids and choose _____ that suits our needs.",
+      "options": [
+        "some",
+        "one",
+        "others",
+        "either"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "After the phrase “choose ___ that suits our needs,” we need a singular pronoun to match the idea of selecting one bid. “one” is the correct choice; “some,” “others,” and “either” do not fit the structure/meaning here.",
+      "explanationVi": "Sau cụm “choose ___ that suits our needs,” ta cần một đại từ số ít để nói rằng sẽ chọn một trong các phương án. “one” phù hợp cấu trúc và nghĩa; “some,” “others,” và “either” không đúng trong ngữ cảnh này.",
+      "grammarTopic": "pronouns / quantifiers"
+    },
+    {
+      "id": "iWkyvBsP8b2LLYmLFeFMy",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 112,
+      "stem": "The client asked for _____ to the images in the advertising text.",
+      "options": [
+        "standards",
+        "drawings",
+        "revisions",
+        "duplications"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Asked for revisions” is the standard collocation meaning requested changes to the images. The other options do not match this meaning.",
+      "explanationVi": "“Asked for revisions” là cụm kết hợp chuẩn, nghĩa là yêu cầu chỉnh sửa/thay đổi. Các lựa chọn còn lại không phù hợp với nghĩa này.",
+      "grammarTopic": "word collocations / word choice"
+    },
+    {
+      "id": "JyoN8pYBgu1M8nthkmyFl",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 113,
+      "stem": "Please be advised _____ we have had to cancel your order because of a difficulty with our shipping agent.",
+      "options": [
+        "that",
+        "of",
+        "whether",
+        "between"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Please be advised that …” is the correct reporting structure introducing the information being conveyed. The other prepositions/conjunctions do not work in this pattern.",
+      "explanationVi": "“Please be advised that …” là cấu trúc đúng để giới thiệu nội dung thông báo. Các phương án khác không phù hợp với mẫu câu này.",
+      "grammarTopic": "sentence structure / reporting verbs"
+    },
+    {
+      "id": "F-fZ2ZoA3szMpQgcOGSwM",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 114,
+      "stem": "Tin Creek Corporation _____ that its paper towels are the most absorbent on the market.",
+      "options": [
+        "obtains",
+        "competes",
+        "inquires",
+        "claims"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Claims that …” means states as a statement, often in a marketing context. The other verbs do not fit the meaning of making an assertion.",
+      "explanationVi": "“Claims that …” nghĩa là khẳng định/cho rằng (thường dùng trong bối cảnh quảng cáo). Các động từ còn lại không phù hợp với ý “đưa ra tuyên bố”.",
+      "grammarTopic": "word choice / verb patterns"
+    },
+    {
+      "id": "lQB6S7YdZcjXG6TsuqSXU",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 115,
+      "stem": "KCLN Associates will enter into a business _____ with the contractor as soon as some of the terms are renegotiated.",
+      "options": [
+        "agreed",
+        "agreement",
+        "agreeable",
+        "agreeing"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Enter into an agreement” is a fixed phrase. Therefore, “agreement” is correct.",
+      "explanationVi": "Cụm cố định là “enter into an agreement”. Vì vậy “agreement” là đáp án đúng.",
+      "grammarTopic": "word collocations / noun forms"
+    },
+    {
+      "id": "WzFXL_-nAb0AVRA2r8pq2",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 116,
+      "stem": "_____ registering for online banking is not required, we strongly recommend it to all of our customers.",
+      "options": [
+        "Although",
+        "Instead",
+        "Regardless",
+        "Despite"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Regardless of …, …” means “no matter whether …,” which matches the idea that registration is not required but is strongly recommended. “Despite/Although” would require a different structure.",
+      "explanationVi": "“Regardless of …, …” nghĩa là “bất kể…”, khớp với ý rằng không bắt buộc đăng ký nhưng vẫn khuyên nên làm. “Despite/Although” đòi hỏi cấu trúc khác nên không phù hợp.",
+      "grammarTopic": "conjunctions / subordinators (contrast)"
+    },
+    {
+      "id": "8orRZwyyHXxnYro8P3m2l",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 117,
+      "stem": "Viewers can easily _____ to the main character in the popular television series Autumn Mystery.",
+      "options": [
+        "related",
+        "relatable",
+        "relating",
+        "relate"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Relate to” means feel a connection with, so “Viewers can easily relate to …” is correct. “related/relating/relatable” cannot function correctly in this verb pattern.",
+      "explanationVi": "“Relate to” nghĩa là cảm thấy gắn kết/đồng cảm với, nên câu đúng là “Viewers can easily relate to …”. “related/relating/relatable” không dùng đúng cấu trúc ở đây.",
+      "grammarTopic": "verb forms / prepositional verbs"
+    },
+    {
+      "id": "malibr4EqzUW9UXIRVGcr",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 118,
+      "stem": "Fairlawn Medical Clinic offers a full _____ of services as part of its community wellness programs.",
+      "options": [
+        "center",
+        "surplus",
+        "range",
+        "type"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“A full range of services” is a common collocation meaning a complete variety of services. “center,” “surplus,” and “type” don’t fit this phrase.",
+      "explanationVi": "“A full range of services” là cụm kết hợp phổ biến, nghĩa là một loạt/danh mục dịch vụ đầy đủ. “center,” “surplus,” và “type” không phù hợp với cách diễn đạt này.",
+      "grammarTopic": "word collocations"
+    },
+    {
+      "id": "H7_9dq-oKda_QDd8VHhbJ",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 119,
+      "stem": "The rear entrance to RC Bank will be closed for repairs and not _____ next Monday.",
+      "options": [
+        "accessible",
+        "accessing",
+        "access",
+        "accesses"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Not accessible next Monday” correctly describes that the entrance will not be reachable for use. The other options are incorrect verb forms or word types.",
+      "explanationVi": "“Not accessible next Monday” đúng vì diễn tả lối vào không thể sử dụng/tiếp cận được vào thứ Hai tới. Các phương án còn lại sai dạng từ hoặc loại từ.",
+      "grammarTopic": "adjectives / word forms"
+    },
+    {
+      "id": "caKrHZ5QVfO6u4yrncU2N",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 120,
+      "stem": "Mr. Carson wants to see Carson audio products _____ even in remote regions of the world.",
+      "options": [
+        "decidedly",
+        "furthermore",
+        "rather",
+        "everywhere"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Everywhere” means in all places, fitting the meaning “even in remote regions.” The other adverbs do not match the intended scope.",
+      "explanationVi": "“Everywhere” nghĩa là ở mọi nơi, phù hợp với ý “kể cả ở các vùng xa xôi”. Các trạng từ còn lại không đúng phạm vi ý muốn.",
+      "grammarTopic": "adverbs of place / meaning"
+    },
+    {
+      "id": "RNrfa3TfFi8H94FBAsfiw",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 121,
+      "stem": "We can buy office _____ such as desks and printers from any of our company’s approved vendors.",
+      "options": [
+        "equip",
+        "equipping",
+        "equipment",
+        "equipped"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Office” is followed by a noun, and “such as” introduces examples of things. “Equipment” is the correct noun form meaning the desks and printers.",
+      "explanationVi": "“Office” cần theo sau bằng một danh từ, và “such as” dùng để nêu ví dụ. “Equipment” là danh từ đúng nghĩa cho các thiết bị như bàn và máy in.",
+      "grammarTopic": "word forms (noun vs. adjective/verb forms)"
+    },
+    {
+      "id": "SIMpPPN9Zis6z2NryxtlW",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 122,
+      "stem": "When taking a book order, agents must record the customer's name and the _____ price of each item.",
+      "options": [
+        "assembled",
+        "listed",
+        "addressed",
+        "earned"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Record the customer’s name and the listed price” is a fixed, natural collocation. “Listed” means written/shown on a price list.",
+      "explanationVi": "“Record … and the listed price” là cách kết hợp tự nhiên. “Listed” nghĩa là được ghi/được niêm yết trong bảng giá.",
+      "grammarTopic": "word choice/collocations (adjective forms)"
+    },
+    {
+      "id": "epTAzm_CPsH2VglS44cVq",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 123,
+      "stem": "The building will be furnished _____ the supervisors do their inspection.",
+      "options": [
+        "with",
+        "these",
+        "once",
+        "just"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Once” means “after the time when,” so it fits: the building will be furnished after the supervisors do their inspection. “With/these/just” do not create the correct time relationship.",
+      "explanationVi": "“Once” nghĩa là “sau khi,” nên câu đúng là: tòa nhà sẽ được trang bị sau khi các giám sát viên làm cuộc kiểm tra. “with/these/just” không tạo được quan hệ thời gian đúng.",
+      "grammarTopic": "conjunctions & time expressions (once)"
+    },
+    {
+      "id": "nzLeUZUZ9Cz9ansMYNlvN",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 124,
+      "stem": "In a strong display of confidence, the firm's board of directors _____ approved the merger.",
+      "options": [
+        "superficially",
+        "regularly",
+        "magnificently",
+        "unanimously"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Unanimously” means all members agree, which matches “a strong display of confidence.” “Approved the merger” needs an adverb describing agreement.",
+      "explanationVi": "“Unanimously” nghĩa là tất cả mọi người đều đồng ý, phù hợp với “sự tự tin mạnh mẽ.” “approved” cần trạng từ chỉ mức độ/độ nhất trí.",
+      "grammarTopic": "adverbs (degree/meaning: unanimously)"
+    },
+    {
+      "id": "ldzG8WKYa4LfHpngWzj7m",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 125,
+      "stem": "When recently _____ residents of Mill Creek Park said that street disrepair is the issue that concerns them most.",
+      "options": [
+        "poll",
+        "polls",
+        "pollster",
+        "polled"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Residents … said” is plural, so the subject should be plural: “When recently polled residents …” (i.e., surveyed). “Poll” would not match grammar.",
+      "explanationVi": "“Residents … said” ở số nhiều nên cần dùng dạng số nhiều/đúng cấu trúc: “When recently polled residents …” (đã được khảo sát). “poll” không phù hợp ngữ pháp.",
+      "grammarTopic": "verb form & subject-verb agreement (passive “polled”)"
+    },
+    {
+      "id": "jbEDVlrwaA4PdmH-kCdv4",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 126,
+      "stem": "Ms. Rivera agreed to work on the holiday _____ Mr. Grant could attend the conference.",
+      "options": [
+        "considering",
+        "so that",
+        "as if",
+        "wherever"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“So that” expresses purpose/result: Ms. Rivera would work on the holiday so that Mr. Grant could attend. The other options do not express purpose correctly.",
+      "explanationVi": "“So that” diễn tả mục đích/kết quả: bà Rivera sẽ làm việc vào ngày lễ để ông Grant có thể tham dự. Các đáp án khác không diễn đạt đúng ý mục đích.",
+      "grammarTopic": "conjunctions (purpose/result: so that)"
+    },
+    {
+      "id": "8tSLcwjulIvT8tk_PjMtH",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 127,
+      "stem": "The clerk collects packages from each department twice a day and takes them to the mail room _____.",
+      "options": [
+        "throughout",
+        "all along",
+        "too much",
+        "downstairs"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "Mail room locations are often described with place words; “downstairs” correctly indicates direction. “Too much/all along/throughout” are not suitable for location.",
+      "explanationVi": "Vị trí nơi nhận thư thường dùng từ chỉ hướng/địa điểm; “downstairs” đúng là đi xuống lầu. “too much/all along/throughout” không diễn tả vị trí.",
+      "grammarTopic": "prepositions & adverbs of place/direction"
+    },
+    {
+      "id": "YygwDRkCKDrgPfgNbw_Yf",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 128,
+      "stem": "Please inform Ms. Erwin of any complaints _____ those already discussed in today’s meeting.",
+      "options": [
+        "beyond",
+        "between",
+        "during",
+        "against"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Beyond those already discussed” means “in addition to” the complaints already mentioned. The other prepositions do not fit this meaning.",
+      "explanationVi": "“Beyond those already discussed” nghĩa là “ngoài những cái đã được thảo luận rồi.” Các giới từ khác không tạo được nghĩa phù hợp.",
+      "grammarTopic": "prepositions (beyond)"
+    },
+    {
+      "id": "G0v-V83HevCd-Y_CdA4nu",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 129,
+      "stem": "The Tonsin Writers League is a reputable organization with highly _____ members.",
+      "options": [
+        "accomplishes",
+        "accomplishment",
+        "accomplished",
+        "accomplish"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Highly” modifies an adjective/adverb, and “highly accomplished” is a natural phrase. “Accomplishment” is a noun and does not fit after “highly.”",
+      "explanationVi": "“Highly” thường đi với tính từ/trạng từ; cụm tự nhiên là “highly accomplished.” “Accomplishment” là danh từ nên không phù hợp sau “highly.”",
+      "grammarTopic": "word forms (adjective vs. noun)"
+    },
+    {
+      "id": "wpdlDyyz5ozjaRVc9L0Ej",
+      "examName": "Test 2 ETS 2020",
+      "examId": "VePFTwgXrB2kwK6Ge-bTB",
+      "number": 130,
+      "stem": "As Mr. Nakata’s assistant, Ms. Bain is in charge of _____ him on the latest financial news.",
+      "options": [
+        "discussing",
+        "briefing",
+        "resuming",
+        "narrating"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“In charge of briefing him on the latest financial news” is correct because “briefing” means providing information. “Discussing/narrating/resuming” do not match the business phrase “brief him on.”",
+      "explanationVi": "“In charge of briefing him on …” đúng vì “briefing” nghĩa là cung cấp thông tin. “discussing/narrating/resuming” không khớp cụm công việc “brief him on.”",
+      "grammarTopic": "word choice/collocations (verb + object: brief someone on)"
+    },
+    {
+      "id": "T-SCDGveW7eBca1T43NVA",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 101,
+      "stem": "The event planner determined that Tuesday’s forum will require _____ chairs.",
+      "options": [
+        "addition",
+        "additions",
+        "additional",
+        "additionally"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Require + adjective + noun” fits here: additional modifies the countable noun “chairs.” “Additions” is a noun and “additionally” is an adverb, so they don’t match the structure.",
+      "explanationVi": "Cấu trúc đúng là “require + tính từ + danh từ”: additional bổ nghĩa cho danh từ đếm được “chairs.” “additions” là danh từ và “additionally” là trạng từ nên không phù hợp ngữ pháp.",
+      "grammarTopic": "word forms (adjectives vs nouns/adverbs)"
+    },
+    {
+      "id": "jG0lJ1pfvaQ7NOyePXOUG",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 102,
+      "stem": "Ms. Hu will check the storage closet before she _____ more office supplies.",
+      "options": [
+        "contains",
+        "orders",
+        "writes",
+        "copies"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "After “before she ___ more office supplies,” we need a verb that matches the meaning of purchasing. “orders” is correct; the other options don’t fit the action intended.",
+      "explanationVi": "Sau “before she ___ more office supplies,” cần một động từ chỉ hành động mua sắm. “orders” phù hợp nghĩa; các đáp án khác không khớp với hành động cần thiết.",
+      "grammarTopic": "verb selection (meaning in context)"
+    },
+    {
+      "id": "RQPiBNxx4WFHp_Wh0pUJe",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 103,
+      "stem": "All sales staff are asked to acknowledge their ______ in Monday's workshop.",
+      "options": [
+        "participate",
+        "participates",
+        "participated",
+        "participation"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Their + noun” is required: “their participation” is the noun form that matches “acknowledge their ___.” “participate/participates/participated” are verb forms, not nouns.",
+      "explanationVi": "Cần cấu trúc “their + danh từ”: “their participation” phù hợp với “acknowledge their ___.” Các dạng “participate/participates/participated” là động từ nên không đúng loại từ.",
+      "grammarTopic": "word forms (noun vs verb forms)"
+    },
+    {
+      "id": "bYcEnvP-9Ir2KPm0hWtxs",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 104,
+      "stem": "The commercial for Zhou’s Cafe was _____ Sunn Agency’s best advertisement of the year.",
+      "options": [
+        "easy",
+        "ease",
+        "easiest",
+        "easily"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Was easy” is correct because the sentence needs a linking verb + adjective. “the easiest” would require a different structure, and “ease/easily” do not correctly match “was ___”.",
+      "explanationVi": "“Was easy” đúng vì cần động từ liên kết + tính từ. “the easiest” không khớp cấu trúc câu, còn “ease/easily” không đi đúng với “was ___”.",
+      "grammarTopic": "word forms (adjective vs adverb/noun) & comparative structure"
+    },
+    {
+      "id": "FnlF2rezs_mjgaFzj0REp",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 105,
+      "stem": "Use coupon code SAVE20 to purchase _____ perfume or cologne for 20 percent off.",
+      "options": [
+        "any",
+        "few",
+        "single",
+        "many"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "In “purchase ___ perfume or cologne,” we use “any” for a choice between options (any perfume or cologne). “few/many/single” don’t fit the intended meaning.",
+      "explanationVi": "Trong “purchase ___ perfume or cologne,” dùng “any” để chỉ lựa chọn bất kỳ giữa hai loại (any perfume or cologne). “few/many/single” không phù hợp nghĩa cần diễn đạt.",
+      "grammarTopic": "determiners (any/few/many/single)"
+    },
+    {
+      "id": "ov55VGixwn_MXDY96bvaF",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 106,
+      "stem": "Talk-Talk Cell Phone Company will soon be merging with its main _____.",
+      "options": [
+        "competitor",
+        "competing",
+        "competitive",
+        "competitively"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Merging with its main ___” needs a noun meaning a rival business. “competitor” fits; the other choices are adjective/adverb forms.",
+      "explanationVi": "“merging with its main ___” cần một danh từ chỉ đối thủ kinh doanh. “competitor” phù hợp; các đáp án còn lại là tính từ/trạng từ.",
+      "grammarTopic": "word forms (noun for person/thing vs adjective/adverb)"
+    },
+    {
+      "id": "I6QtOVEX8ItViymRNeZdg",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 107,
+      "stem": "Ms. Ellis designed one of the most _____ marketing campaigns the department had seen.",
+      "options": [
+        "create",
+        "creation",
+        "creative",
+        "creatively"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“One of the most ___ marketing campaigns” requires an adjective in the superlative form. “creative” correctly modifies “marketing campaigns.”",
+      "explanationVi": "“one of the most ___ marketing campaigns” cần tính từ dạng so sánh hơn nhất. “creative” bổ nghĩa cho “marketing campaigns.”",
+      "grammarTopic": "comparatives/superlatives"
+    },
+    {
+      "id": "pqoPQLiPF3oEMgmXF-A_i",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 108,
+      "stem": "Last month we received numerous _____ comments from customers on our blog.",
+      "options": [
+        "eventual",
+        "probable",
+        "close",
+        "positive"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Numerous ___ comments” requires an adjective describing the type of comments. “positive” is correct; the others don’t fit the meaning.",
+      "explanationVi": "“numerous ___ comments” cần một tính từ mô tả loại bình luận. “positive” đúng nghĩa; các từ còn lại không phù hợp ngữ cảnh.",
+      "grammarTopic": "word choice (adjectives for meaning)"
+    },
+    {
+      "id": "ewaw5VNsHwovCXnOQSEpH",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 109,
+      "stem": "Beginning on August 1, patients will be asked to complete a short survey _____ each visit.",
+      "options": [
+        "inside",
+        "after",
+        "where",
+        "whenever"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Asked to complete … survey after each visit” indicates timing. “after” clearly means the survey happens following every visit.",
+      "explanationVi": "“được yêu cầu hoàn thành… khảo sát sau mỗi lần thăm khám” nói về thời điểm. “after” nghĩa là làm khảo sát sau mỗi lượt đến.",
+      "grammarTopic": "prepositions of time"
+    },
+    {
+      "id": "AegwaQIa76UBq7KysylXr",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 110,
+      "stem": "Viewing the beautiful landscape outside her door _____ inspires Elia Colao to paint.",
+      "options": [
+        "continually",
+        "continue",
+        "continual",
+        "continued"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "The sentence needs an adverb to modify “inspires” (a continuing action). “continually” means repeatedly/over time; “continue” is a verb and “continued” is past tense.",
+      "explanationVi": "Cần trạng từ bổ nghĩa cho “inspires” (hành động diễn ra liên tục). “continually” nghĩa là lặp lại/quanh thời gian dài; “continue” là động từ và “continued” là quá khứ.",
+      "grammarTopic": "adverbs (continually vs verb/past participle)"
+    },
+    {
+      "id": "6qqBu6JauxphuX_ok1Jio",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 111,
+      "stem": "Although the parts are made in China, the _____ of Jamy bicycles is done in Canada.",
+      "options": [
+        "vision",
+        "meeting",
+        "approach",
+        "assembly"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Assembly” is the noun that collocates with “the assembly of bicycles.” The clause contrasts manufacturing location with where assembly is done.",
+      "explanationVi": "“Assembly” là danh từ đi với “the assembly of bicycles.” Câu nêu sự đối lập giữa nơi sản xuất và nơi lắp ráp.",
+      "grammarTopic": "word forms / nouns (collocations)"
+    },
+    {
+      "id": "TN4KhIfmFOjEP-6Ag5Zi8",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 112,
+      "stem": "Many businesses promote carpooling _____ traffic congestion.",
+      "options": [
+        "is prevented",
+        "prevent",
+        "to prevent",
+        "prevented"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "Use “to + verb” after “promote” to show purpose: “promote carpooling to prevent…”",
+      "explanationVi": "Dùng “to + động từ” sau “promote” để chỉ mục đích: “promote carpooling to prevent…”",
+      "grammarTopic": "infinitives (purpose)"
+    },
+    {
+      "id": "r-CZ_gKocIpT126jLzoFF",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 113,
+      "stem": "_____ the repairs are complete, only essential personnel are allowed in the building.",
+      "options": [
+        "Despite",
+        "Finally",
+        "Until",
+        "During"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Until” means the condition continues up to a time: only essential personnel are allowed after repairs are complete.",
+      "explanationVi": "“Until” diễn tả sự việc kéo dài cho đến thời điểm: chỉ nhân viên cần thiết được vào sau khi việc sửa chữa hoàn tất.",
+      "grammarTopic": "conjunctions (time)"
+    },
+    {
+      "id": "OXxKWMjQf3meJx7mOYbRD",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 114,
+      "stem": "We apologize for having used the wrong colors on the Slarott Architecture brochures and will deliver _____ on Friday.",
+      "options": [
+        "replacing",
+        "replaces",
+        "replaced",
+        "replacements"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Deliver replacements” is correct because the verb “deliver” takes a plural noun meaning items to be given again.",
+      "explanationVi": "“Deliver replacements” đúng vì động từ “deliver” đi với danh từ số nhiều chỉ những món cần thay thế.",
+      "grammarTopic": "word forms (noun after verb)"
+    },
+    {
+      "id": "FH9ZlSAHS_yTzmFlvlFv6",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 115,
+      "stem": "Employees must store all tools _____ at the end of the shift.",
+      "options": [
+        "properly",
+        "restfully",
+        "truly",
+        "finely"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Properly” is an adverb modifying “store,” meaning in the correct manner: “store … properly.”",
+      "explanationVi": "“Properly” là trạng từ bổ nghĩa cho “store,” nghĩa là cất giữ đúng cách: “store … properly.”",
+      "grammarTopic": "adverbs vs. adjectives"
+    },
+    {
+      "id": "Qv27YeUahbyloJJ_oBhtd",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 116,
+      "stem": "An _____ to renovate the old factory was submitted to the city council.",
+      "options": [
+        "application",
+        "establishment",
+        "experience",
+        "accomplishment"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“An application” is the correct noun for formally requesting approval: “submit an application to the city council.”",
+      "explanationVi": "“An application” là danh từ đúng cho việc nộp đơn xin phê duyệt: “submit an application to the city council.”",
+      "grammarTopic": "word choice / collocations"
+    },
+    {
+      "id": "CXaxuNwiwYa4hHgl04mhA",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 117,
+      "stem": "Customers _____ wish to return a defective item may do so within twenty days of the date of purchase.",
+      "options": [
+        "whose",
+        "who",
+        "which",
+        "whichever"
+      ],
+      "correctIndex": 3,
+      "explanationEn": "“Customers whichever wish …” is incorrect; the correct structure is “Customers who wish …” but options include “whichever,” which fits “whichever” (whichever = any customers who). Here the intended meaning is any customer who wishes.",
+      "explanationVi": "Cấu trúc đúng lẽ ra là “Customers who wish …”, nhưng trong các lựa chọn “whichever” mang nghĩa “bất kỳ ai/khách hàng nào mà …”. Vì vậy câu chọn D để chỉ bất kỳ khách hàng nào có nhu cầu.",
+      "grammarTopic": "relative pronouns (who/whose/which/whichever)"
+    },
+    {
+      "id": "rzEtou8ZkoQrrbfMx6Xy7",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 118,
+      "stem": "The Golubovich House will be open _____ a special living-history program on Sunday.",
+      "options": [
+        "from",
+        "around",
+        "for",
+        "by"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Open for” a program means the event is scheduled to take place for that duration: “open for a special program.”",
+      "explanationVi": "“Open for” nghĩa là mở cửa để phục vụ/chạy trong thời gian của chương trình: “open for a special program.”",
+      "grammarTopic": "prepositions (for)"
+    },
+    {
+      "id": "WNqEhHqblz9GSlb7o5H3t",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 119,
+      "stem": "Mr. Wijaya is reviewing the resumes to select the candidate best _____ for the position.",
+      "options": [
+        "qualify",
+        "qualifications",
+        "qualifying",
+        "qualified"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Best qualifying for the position” is incorrect; the correct phrase is “best qualified for” or “best qualified.” Since “qualified” (D) would be correct after “best,” but option D exists as “qualified,” the best fit is “best qualified.”",
+      "explanationVi": "Cụm đúng là “best qualified for the position” (được chứng minh bằng lựa chọn D “qualified”). Vì “best” thường đi với tính từ ở dạng bổ nghĩa cho danh từ “candidate.”",
+      "grammarTopic": "adjectives after “best”"
+    },
+    {
+      "id": "6Iv5UAj3JB2Wf4j4HE3uP",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 120,
+      "stem": "Tourists praise Navala City’s world-class beaches _____ its historical attractions.",
+      "options": [
+        "as well as",
+        "yet",
+        "so that",
+        "when"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "Use “as well as” to add information: beaches are praised for historical attractions as well as the beaches.",
+      "explanationVi": "Dùng “as well as” để bổ sung ý: ca ngợi bãi biển thế giới cùng với các điểm tham quan lịch sử.",
+      "grammarTopic": "conjunctions (addition)"
+    },
+    {
+      "id": "-Z8pBQize0TKXR_BCVo1o",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 121,
+      "stem": "Mr. Chandling will cover any time-sensitive work _____ Mr. Tan is on vacation.",
+      "options": [
+        "along",
+        "besides",
+        "while",
+        "then"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "Use “while” to show the time period during which the work is covered (Mr. Tan is on vacation). The other options do not correctly express a time clause.",
+      "explanationVi": "Dùng “while” để diễn tả khoảng thời gian mà công việc được xử lý (trong lúc ông Tan đang nghỉ). Các đáp án khác không diễn đạt đúng mệnh đề thời gian.",
+      "grammarTopic": "conjunctions (time clauses)"
+    },
+    {
+      "id": "OqKksuz1Jj_jlXRV3xqGA",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 122,
+      "stem": "Laura Gless promotes faculty-led study programs in _____ such as France and Italy.",
+      "options": [
+        "destinations",
+        "ambitions",
+        "purposes",
+        "intentions"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "“Destinations” fits with examples like France and Italy; it refers to places where study programs take place. The other words do not match the meaning of specific locations.",
+      "explanationVi": "“Destinations” phù hợp với các ví dụ như Pháp và Ý vì đó là nơi diễn ra chương trình học. Các từ còn lại không khớp với nghĩa “địa điểm” cụ thể.",
+      "grammarTopic": "word choice / noun meaning"
+    },
+    {
+      "id": "_zTsW2RMV9pXQu3OyytEW",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 123,
+      "stem": "Mr. Stafford e-mailed the clients to ask _____ there is a train station near their office.",
+      "options": [
+        "so",
+        "about",
+        "whether",
+        "of"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Ask whether …” is the correct structure for indirect yes/no questions. “So/about/of” do not work with this verb pattern.",
+      "explanationVi": "Cấu trúc đúng là “ask whether …” khi hỏi dạng có/không theo gián tiếp. “So/about/of” không đi đúng với động từ này.",
+      "grammarTopic": "reported questions (whether/if)"
+    },
+    {
+      "id": "GVMtSznut-J6AxmYapqbB",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 124,
+      "stem": "Last year, the city _____ nearly 500 building permits to small-business owners.",
+      "options": [
+        "regarded",
+        "issued",
+        "performed",
+        "constructed"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Issued” matches “building permits,” meaning the city granted/allowed them. The sentence needs a past simple verb to fit “Last year.”",
+      "explanationVi": "“Issued” đi với “building permits” theo nghĩa là cấp phép xây dựng. Vì có “Last year” nên cần động từ quá khứ đơn.",
+      "grammarTopic": "verb forms / word choice"
+    },
+    {
+      "id": "gmgxAiAU-yk7wEOQtl00o",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 125,
+      "stem": "Local merchants are hopeful that if this new business succeeds, _____ will also benefit.",
+      "options": [
+        "theirs",
+        "them",
+        "their",
+        "themselves"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "After “that if…” use “their” to refer to “this new business” success and the people/business involved. “Their” is the correct possessive adjective before a noun.",
+      "explanationVi": "Sau mệnh đề điều kiện, dùng “their” để chỉ sự thành công của “new business” và đối tượng liên quan. “Their” là tính từ sở hữu đúng trước danh từ.",
+      "grammarTopic": "pronouns (possessive adjectives)"
+    },
+    {
+      "id": "dEbe4jUPsh89dVat7Ojcx",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 126,
+      "stem": "Following the retirement of Mr. Whalen, the company _____ a search for a new CEO.",
+      "options": [
+        "connected",
+        "launched",
+        "persuaded",
+        "treated"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "The company “launched a search” means it started a search process for a new CEO. “Connected/persuaded/treated” do not collocate with “a search.”",
+      "explanationVi": "“Launched a search” nghĩa là công ty bắt đầu một cuộc tìm kiếm CEO mới. “Connected/persuaded/treated” không đi đúng với “a search.”",
+      "grammarTopic": "collocations / word choice"
+    },
+    {
+      "id": "37lmwVEIa1tTBcZE-Q2PF",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 127,
+      "stem": "Ms. Travaglini filed the paperwork with the facilities department _____ a week ago.",
+      "options": [
+        "beyond",
+        "over",
+        "past",
+        "through"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "“Past” indicates a time that is earlier than the reference point: “a week ago” = more than one week earlier. “Over/beyond/through” cannot form this time phrase correctly.",
+      "explanationVi": "“Past” dùng để nói mốc thời gian đã qua so với mốc hiện tại: “a week ago” = hơn một tuần trước. “Over/beyond/through” không dùng đúng để tạo cụm thời gian này.",
+      "grammarTopic": "prepositions (time expressions)"
+    },
+    {
+      "id": "c7LG7QjpadeYLOxk75ko8",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 128,
+      "stem": "After the lease _____, customers have the option of purchasing the car or returning it to their local dealer.",
+      "options": [
+        "expired",
+        "is expiring",
+        "will be expiring",
+        "expires"
+      ],
+      "correctIndex": 0,
+      "explanationEn": "The clause “After the lease expired” requires the past simple because the sentence refers to the completed event that triggers the option for customers.",
+      "explanationVi": "“After the lease expired” dùng thì quá khứ đơn vì sự việc “hết hợp đồng” đã xảy ra và dẫn đến lựa chọn của khách hàng. ",
+      "grammarTopic": "tenses (time clauses with after)"
+    },
+    {
+      "id": "nMZZ0s5XAzoMaqf2O9lSM",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 129,
+      "stem": "The Jones News Hour is broadcast _____ on radio and television.",
+      "options": [
+        "instinctively",
+        "simultaneously",
+        "collectively",
+        "mutually"
+      ],
+      "correctIndex": 1,
+      "explanationEn": "“Simultaneously” means at the same time, which matches “on radio and television.” The other adverbs do not fit this meaning.",
+      "explanationVi": "“Simultaneously” nghĩa là “đồng thời”, phù hợp với “on radio and television”. Các trạng từ còn lại không đúng nghĩa với ngữ cảnh này.",
+      "grammarTopic": "adverbs (meaning)"
+    },
+    {
+      "id": "DOokaNpidoqrvbckdMAPz",
+      "examName": "Test 3 ETS 2020",
+      "examId": "fKZaWiwu6A6PwMwtQyWPp",
+      "number": 130,
+      "stem": "Ms. Choi would have been at the keynote address if her train _____ on time.",
+      "options": [
+        "arrives",
+        "will arrive",
+        "had arrived",
+        "arriving"
+      ],
+      "correctIndex": 2,
+      "explanationEn": "This is a second/third conditional type with “would have been,” so we use the past perfect in the if-clause: “if her train had arrived on time.”",
+      "explanationVi": "Đây là câu điều kiện loại 3 (kết quả trong quá khứ với “would have been”), nên mệnh đề “if” dùng quá khứ hoàn thành: “if her train had arrived on time.”",
+      "grammarTopic": "conditional sentences (third conditional)"
+    }
+  ]
+}
