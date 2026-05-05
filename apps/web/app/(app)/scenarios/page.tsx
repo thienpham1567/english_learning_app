@@ -9,7 +9,9 @@ import {
   ArrowLeftOutlined,
   BulbOutlined,
   FormOutlined,
+  EnvironmentOutlined,
 } from "@ant-design/icons";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { getScenarioById } from "@/lib/scenarios/data";
 import type { Scenario, VocabContent, ListeningContent, SpeakingContent, ReadingContent, WritingContent } from "@/lib/scenarios/data";
 
@@ -113,10 +115,12 @@ export default function ScenariosPage() {
     return (
       <div style={{ height: "100%", overflowY: "auto", padding: "var(--space-6)" }} className="anim-fade-up">
         <Flex vertical gap="var(--space-5)" style={{ maxWidth: 600, margin: "0 auto" }}>
-          <div>
-            <Title level={4} style={{ margin: "0 0 4px" }}>Tình huống thực tế</Title>
-            <Text type="secondary" style={{ fontSize: 13 }}>Học tiếng Anh qua các tình huống đời thực</Text>
-          </div>
+          <ModuleHeader
+            icon={<EnvironmentOutlined />}
+            gradient="var(--gradient-listening)"
+            title="Tình huống thực tế"
+            subtitle="Học tiếng Anh qua các tình huống đời thực"
+          />
 
           {scenarios.map((s) => (
             <Card

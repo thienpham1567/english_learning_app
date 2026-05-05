@@ -7,6 +7,7 @@ import {
   LoadingOutlined,
   CheckOutlined,
   ForwardOutlined,
+  FireOutlined,
 } from "@ant-design/icons";
 
 import { useDailyChallenge } from "@/hooks/useDailyChallenge";
@@ -14,6 +15,7 @@ import { ExerciseCard } from "@/app/(app)/daily-challenge/_components/ExerciseCa
 import { ChallengeResults } from "@/app/(app)/daily-challenge/_components/ChallengeResults";
 import { CompletedState } from "@/app/(app)/daily-challenge/_components/CompletedState";
 import { EXERCISE_TYPE_LABELS } from "@/app/(app)/daily-challenge/_components/constants";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 // Live elapsed timer hook
 function useElapsedTimer(isRunning: boolean) {
@@ -202,81 +204,49 @@ export default function DailyChallengePage() {
         background: "var(--bg)",
       }}
     >
-      {/* ── Editorial Page Header ── */}
-      <div
-        style={{
-          borderBottom: "1px solid var(--border)",
-          padding: "20px 24px 18px",
-          background: "var(--surface)",
-          flexShrink: 0,
-        }}
-      >
+      {/* ── Module Header ── */}
+      <div style={{ padding: "16px 16px 0", flexShrink: 0 }}>
         <div style={{ maxWidth: 580, margin: "0 auto" }}>
-          {/* Meta row */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: 8,
-            }}
-          >
-            <span
-              style={{
-                fontSize: 10,
-                fontWeight: 600,
-                letterSpacing: ".16em",
-                textTransform: "uppercase",
-                color: "var(--text-muted)",
-                fontFamily: "var(--font-body)",
-              }}
-            >
-              {todayLabel}
-            </span>
-            <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-              {streak.currentStreak > 0 && (
-                <span
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 600,
-                    color: "var(--fire, var(--warning))",
-                    fontFamily: "var(--font-body)",
-                  }}
-                >
-                  🔥 {streak.currentStreak} ngày
-                </span>
-              )}
-              {state === "active" && (
-                <span
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: 13,
-                    fontWeight: 500,
-                    color: "var(--text-secondary)",
-                    letterSpacing: ".04em",
-                  }}
-                >
-                  {formattedTime}
-                </span>
-              )}
-            </div>
-          </div>
-
-          {/* Title */}
-          <h1
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: 28,
-              fontWeight: 700,
-              fontStyle: "italic",
-              color: "var(--ink, var(--text-primary))",
-              margin: 0,
-              lineHeight: 1.15,
-              letterSpacing: "-.03em",
-            }}
-          >
-            Thử Thách Hôm Nay
-          </h1>
+          <ModuleHeader
+            icon={<FireOutlined />}
+            gradient="var(--gradient-daily)"
+            title="Thử Thách Hôm Nay"
+            badge={todayLabel}
+            subtitle="Luyện tiếng Anh mỗi ngày · Xây dựng thói quen"
+            action={
+              (streak.currentStreak > 0 || state === "active") ? (
+                <>
+                  {streak.currentStreak > 0 && (
+                    <span style={{
+                      display: "inline-flex", alignItems: "center", gap: 5,
+                      padding: "4px 12px", borderRadius: 999,
+                      background: "rgba(255,255,255,0.15)",
+                      border: "1px solid rgba(255,255,255,0.22)",
+                      fontSize: 12, fontWeight: 700,
+                      color: "rgba(255,255,255,0.9)",
+                      fontFamily: "var(--font-body)",
+                    }}>
+                      🔥 {streak.currentStreak} ngày
+                    </span>
+                  )}
+                  {state === "active" && (
+                    <span style={{
+                      display: "inline-flex", alignItems: "center",
+                      padding: "4px 12px", borderRadius: 999,
+                      background: "rgba(255,255,255,0.12)",
+                      border: "1px solid rgba(255,255,255,0.18)",
+                      fontSize: 12, fontWeight: 500,
+                      color: "rgba(255,255,255,0.75)",
+                      fontFamily: "var(--font-mono)",
+                      letterSpacing: "0.04em",
+                    }}>
+                      ⏱ {formattedTime}
+                    </span>
+                  )}
+                </>
+              ) : undefined
+            }
+          />
         </div>
       </div>
 
