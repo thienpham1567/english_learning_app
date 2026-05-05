@@ -467,8 +467,8 @@ export function DictionaryResultCard({
         </span>
       ) : null}
 
-      {/* ── Meta info strip: Frequency + Word Family ── */}
-      {(vocabulary.frequencyBand || (vocabulary.wordFamily && vocabulary.wordFamily.length > 0)) && (
+      {/* ── Meta info strip: Word Family ── */}
+      {vocabulary.wordFamily && vocabulary.wordFamily.length > 0 && onSearch && (
         <div
           className="anim-fade-up"
           style={{
@@ -484,38 +484,9 @@ export function DictionaryResultCard({
             padding: "14px 18px",
           }}
         >
-          {vocabulary.frequencyBand && (
-            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-              <span
-                style={{
-                  fontSize: 10,
-                  fontWeight: 700,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.12em",
-                  color: "var(--text-muted)",
-                }}
-              >
-                Độ phổ biến
-              </span>
-              <FrequencyBar band={vocabulary.frequencyBand} />
-            </div>
-          )}
-
-          {vocabulary.frequencyBand && vocabulary.wordFamily && vocabulary.wordFamily.length > 0 && (
-            <div
-              style={{
-                width: 1,
-                alignSelf: "stretch",
-                background: "var(--border)",
-              }}
-            />
-          )}
-
-          {vocabulary.wordFamily && vocabulary.wordFamily.length > 0 && onSearch && (
-            <div style={{ display: "flex", flexDirection: "column", gap: 4, flex: 1, minWidth: 0 }}>
-              <WordFamilySection wordFamily={vocabulary.wordFamily} onSearch={onSearch} />
-            </div>
-          )}
+          <div style={{ display: "flex", flexDirection: "column", gap: 4, flex: 1, minWidth: 0 }}>
+            <WordFamilySection wordFamily={vocabulary.wordFamily} onSearch={onSearch} />
+          </div>
         </div>
       )}
 

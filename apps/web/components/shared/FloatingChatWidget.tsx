@@ -4,6 +4,8 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { usePathname } from "next/navigation";
 import { CloseOutlined, SendOutlined, LoadingOutlined } from "@ant-design/icons";
 import { SimonAvatar } from "@/app/(app)/english-chatbot/_components/persona-avatars/SimonAvatar";
+import { api } from "@/lib/api-client";
+import { parseAssistantStream } from "@/lib/chat/parse-assistant-stream";
 
 type Msg = { id: string; role: "user" | "assistant"; text: string };
 
@@ -72,49 +74,41 @@ export function FloatingChatWidget() {
     abortRef.current = ctrl;
 
     try {
-      const res = await fetch("/api/chat", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: apiMessages, personaId: "simon" }),
-        signal: ctrl.signal,
-      });
+      const res = await api.post<Response>(
+        "/chat",
+        { messages: apiMessages, personaId: "simon" },
+        { raw: true, signal: ctrl.signal },
+      );
 
-      if (!res.ok || !res.body) throw new Error("Stream failed");
-
-      const reader = res.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = "";
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-
-        const lines = buffer.split("\n");
-        buffer = lines.pop() ?? "";
-
-        for (const line of lines) {
-          if (!line.startsWith("data: ")) continue;
-          try {
-            const event = JSON.parse(line.slice(6));
-            if (event.type === "assistant_delta" && event.delta) {
-              setMsgs((prev) =>
-                prev.map((m) =>
-                  m.id === assistantId ? { ...m, text: m.text + event.delta } : m,
-                ),
-              );
-            }
-          } catch {
-            // ignore malformed SSE lines
-          }
-        }
-      }
+      await parseAssistantStream(
+        res,
+        {
+          onDelta: (delta) => {
+            setMsgs((prev) =>
+              prev.map((m) =>
+                m.id === assistantId ? { ...m, text: m.text + delta } : m,
+              ),
+            );
+          },
+          onDone: () => {},
+          onError: () => {
+            setMsgs((prev) =>
+              prev.map((m) =>
+                m.id === assistantId
+                  ? { ...m, text: "Gia sư đang gặp lỗi. Bạn thử lại nhé." }
+                  : m,
+              ),
+            );
+          },
+        },
+        ctrl.signal,
+      );
     } catch (err) {
       if ((err as Error).name !== "AbortError") {
         setMsgs((prev) =>
           prev.map((m) =>
             m.id === assistantId
-              ? { ...m, text: "Sorry, something went wrong. Please try again." }
+              ? { ...m, text: "Gia sư đang gặp lỗi. Bạn thử lại nhé." }
               : m,
           ),
         );
@@ -285,68 +279,98 @@ export function FloatingChatWidget() {
             style={{
               padding: "10px 12px",
               borderTop: "1px solid var(--border)",
-              display: "flex",
-              gap: 8,
-              alignItems: "flex-end",
               background: "var(--surface)",
               flexShrink: 0,
             }}
           >
-            <textarea
-              ref={inputRef}
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              onKeyDown={handleKeyDown}
-              placeholder="Nhập tin nhắn..."
-              rows={1}
+            <div
+              className="fcw-input-wrap"
               style={{
-                flex: 1,
-                resize: "none",
-                border: "1px solid var(--border)",
-                borderRadius: 12,
-                padding: "8px 12px",
-                fontSize: 13,
-                fontFamily: "var(--font-body)",
-                background: "var(--bg)",
-                color: "var(--text-primary)",
-                outline: "none",
-                lineHeight: 1.5,
-                maxHeight: 80,
-                overflowY: "auto",
-              }}
-              onInput={(e) => {
-                const t = e.currentTarget;
-                t.style.height = "auto";
-                t.style.height = `${Math.min(t.scrollHeight, 80)}px`;
-              }}
-            />
-            <button
-              onClick={send}
-              disabled={!input.trim() || streaming}
-              aria-label="Gửi"
-              style={{
-                width: 36,
-                height: 36,
-                borderRadius: "50%",
-                border: "none",
-                cursor: input.trim() && !streaming ? "pointer" : "not-allowed",
-                background: input.trim() && !streaming
-                  ? "var(--accent, #C84B31)"
-                  : "var(--border)",
-                color: input.trim() && !streaming ? "#fff" : "var(--text-muted)",
                 display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexShrink: 0,
-                transition: "background 0.2s",
+                gap: 6,
+                alignItems: "flex-end",
+                border: "1.5px solid var(--border)",
+                borderRadius: 14,
+                padding: "6px 6px 6px 12px",
+                background: "var(--bg)",
+                transition: "border-color 0.18s, box-shadow 0.18s",
+              }}
+              onFocusCapture={(e) => {
+                const el = e.currentTarget as HTMLDivElement;
+                el.style.borderColor = "var(--accent)";
+                el.style.boxShadow = "0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent)";
+              }}
+              onBlurCapture={(e) => {
+                const el = e.currentTarget as HTMLDivElement;
+                // delay so click on send button doesn't flicker
+                setTimeout(() => {
+                  if (!el.contains(document.activeElement)) {
+                    el.style.borderColor = "var(--border)";
+                    el.style.boxShadow = "none";
+                  }
+                }, 100);
               }}
             >
-              {streaming ? (
-                <LoadingOutlined spin style={{ fontSize: 13 }} />
-              ) : (
-                <SendOutlined style={{ fontSize: 13 }} />
-              )}
-            </button>
+              <textarea
+                ref={inputRef}
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder="Nhập tin nhắn..."
+                rows={1}
+                style={{
+                  flex: 1,
+                  resize: "none",
+                  border: "none",
+                  background: "transparent",
+                  padding: "5px 0",
+                  fontSize: 13,
+                  fontFamily: "var(--font-body)",
+                  color: "var(--text-primary)",
+                  outline: "none",
+                  lineHeight: 1.55,
+                  maxHeight: 80,
+                  overflowY: "auto",
+                }}
+                onInput={(e) => {
+                  const t = e.currentTarget;
+                  t.style.height = "auto";
+                  t.style.height = `${Math.min(t.scrollHeight, 80)}px`;
+                }}
+              />
+              <button
+                onClick={send}
+                disabled={!input.trim() || streaming}
+                aria-label="Gửi"
+                style={{
+                  width: 30,
+                  height: 30,
+                  borderRadius: "50%",
+                  border: "none",
+                  cursor: input.trim() && !streaming ? "pointer" : "default",
+                  background: input.trim() && !streaming
+                    ? "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 75%, black))"
+                    : "var(--bg-deep)",
+                  color: input.trim() && !streaming ? "#fff" : "var(--text-muted)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  flexShrink: 0,
+                  transition: "background 0.18s, transform 0.15s",
+                  boxShadow: input.trim() && !streaming
+                    ? "0 2px 8px color-mix(in srgb, var(--accent) 35%, transparent)"
+                    : "none",
+                }}
+                onMouseEnter={(e) => { if (input.trim() && !streaming) (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.1)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)"; }}
+              >
+                {streaming ? (
+                  <LoadingOutlined spin style={{ fontSize: 12 }} />
+                ) : (
+                  <SendOutlined style={{ fontSize: 12 }} />
+                )}
+              </button>
+            </div>
           </div>
         </div>
       )}

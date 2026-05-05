@@ -153,13 +153,13 @@ export function FloatingDictionaryWidget() {
               gap: 6,
               background: "var(--surface)",
               border: "1.5px solid var(--accent)",
-              borderRadius: 26,
-              padding: "6px 8px 6px 14px",
-              boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+              borderRadius: 28,
+              padding: "5px 6px 5px 14px",
+              boxShadow: "0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent), 0 6px 24px rgba(0,0,0,0.12)",
               transformOrigin: "bottom right",
             }}
           >
-            <SearchOutlined style={{ fontSize: 14, color: "var(--accent)", flexShrink: 0 }} />
+            <SearchOutlined style={{ fontSize: 13, color: "var(--accent)", flexShrink: 0 }} />
             <input
               ref={inputRef}
               value={query}
@@ -169,28 +169,34 @@ export function FloatingDictionaryWidget() {
                 border: "none",
                 outline: "none",
                 background: "transparent",
-                fontSize: 13,
+                fontSize: 14,
                 fontFamily: "var(--font-body)",
                 color: "var(--text-primary)",
-                width: 140,
+                width: 148,
+                letterSpacing: "0.01em",
               }}
             />
             {isSearching ? (
-              <div style={{ width: 28, height: 28, display: "grid", placeItems: "center" }}>
-                <LoadingOutlined spin style={{ fontSize: 13, color: "var(--accent)" }} />
+              <div style={{ width: 30, height: 30, display: "grid", placeItems: "center", flexShrink: 0 }}>
+                <LoadingOutlined spin style={{ fontSize: 14, color: "var(--accent)" }} />
               </div>
             ) : (
               <button
                 type="submit"
                 disabled={!query.trim()}
                 style={{
-                  width: 28, height: 28, borderRadius: "50%", border: "none",
-                  background: query.trim() ? "var(--accent)" : "var(--border)",
+                  width: 30, height: 30, borderRadius: "50%", border: "none",
+                  background: query.trim()
+                    ? "linear-gradient(135deg, var(--accent), var(--accent-hover, color-mix(in srgb, var(--accent) 80%, black)))"
+                    : "var(--bg-deep)",
                   color: query.trim() ? "#fff" : "var(--text-muted)",
-                  display: "grid", placeItems: "center", cursor: "pointer",
-                  transition: "background 0.15s",
+                  display: "grid", placeItems: "center", cursor: query.trim() ? "pointer" : "default",
+                  transition: "background 0.18s, transform 0.15s",
                   flexShrink: 0,
+                  boxShadow: query.trim() ? "0 2px 8px color-mix(in srgb, var(--accent) 35%, transparent)" : "none",
                 }}
+                onMouseEnter={(e) => { if (query.trim()) (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.1)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)"; }}
               >
                 <ArrowRightOutlined style={{ fontSize: 11 }} />
               </button>
@@ -199,13 +205,16 @@ export function FloatingDictionaryWidget() {
               type="button"
               onClick={handleCollapse}
               style={{
-                width: 24, height: 24, borderRadius: "50%", border: "none",
-                background: "none", color: "var(--text-muted)",
+                width: 26, height: 26, borderRadius: "50%", border: "none",
+                background: "var(--bg-deep)", color: "var(--text-muted)",
                 display: "grid", placeItems: "center", cursor: "pointer",
                 flexShrink: 0,
+                transition: "background 0.15s, color 0.15s",
               }}
+              onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--border)"; }}
+              onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--bg-deep)"; }}
             >
-              <CloseOutlined style={{ fontSize: 10 }} />
+              <CloseOutlined style={{ fontSize: 9 }} />
             </button>
           </form>
         ) : (
@@ -272,10 +281,10 @@ export function FloatingDictionaryWidget() {
         open={modalOpen}
         onCancel={() => setModalOpen(false)}
         footer={null}
-        width={isMobile ? "100%" : 720}
+        width={isMobile ? "100%" : 860}
         style={{ top: isMobile ? 0 : 40 }}
         styles={{
-          body: { padding: 0, maxHeight: isMobile ? "100dvh" : "80vh", overflowY: "auto", borderRadius: isMobile ? 0 : 20, overflow: "hidden" },
+          body: { padding: 0, maxHeight: isMobile ? "100dvh" : "82vh", overflowY: "auto" },
           mask: { backdropFilter: "blur(4px)", background: "rgba(0,0,0,0.3)" },
         }}
         closeIcon={
