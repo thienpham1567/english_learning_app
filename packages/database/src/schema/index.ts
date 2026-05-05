@@ -659,3 +659,34 @@ export const onboardingBaseline = pgTable("onboarding_baseline", {
 ]);
 
 export type OnboardingBaselineRow = typeof onboardingBaseline.$inferSelect;
+
+/** Transcript segment — one caption line with start/end timestamps in seconds */
+export type TranscriptSegment = {
+  start: number;
+  duration: number;
+  text: string;
+};
+
+/** YouTube Video History — saved videos a user has watched on /youtube-learn */
+export const youtubeVideoHistory = pgTable(
+  "youtube_video_history",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: text("user_id").notNull(),
+    videoId: text("video_id").notNull(),
+    title: text("title").notNull(),
+    thumbnailUrl: text("thumbnail_url"),
+    channelTitle: text("channel_title"),
+    durationSec: integer("duration_sec"),
+    transcript: jsonb("transcript").$type<TranscriptSegment[]>().notNull().default([]),
+    lastPosition: integer("last_position").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("youtube_video_history_user_video_idx").on(table.userId, table.videoId),
+    index("youtube_video_history_user_updated_idx").on(table.userId, table.updatedAt),
+  ],
+);
+
+export type YoutubeVideoHistoryRow = typeof youtubeVideoHistory.$inferSelect;

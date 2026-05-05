@@ -103,6 +103,7 @@
   --gradient-study-sets: linear-gradient(135deg, #D4B896, #C4A882);
   --gradient-error-notebook: linear-gradient(135deg, #9B6B63, #7A5040);
   --gradient-diagnostic: linear-gradient(135deg, #7A5040, #9B6B63);
+  --gradient-youtube-learn: linear-gradient(135deg, #C84B31, #8B3A26);
 
   /* ── Heatmap Colors ── */
   --heatmap-0: rgba(0, 0, 0, 0.05);
