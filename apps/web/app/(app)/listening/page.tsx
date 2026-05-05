@@ -19,7 +19,6 @@ import { useRouter } from "next/navigation";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 import { useListeningExercise } from "@/hooks/useListeningExercise";
-import { useMiniDictionary } from "@/hooks/useMiniDictionary";
 import { useExamMode } from "@/components/shared/ExamModeProvider";
 import { LevelSelector } from "@/app/(app)/listening/_components/LevelSelector";
 import { AudioPlayer } from "@/app/(app)/listening/_components/AudioPlayer";
@@ -28,7 +27,6 @@ import { Results } from "@/app/(app)/listening/_components/Results";
 import { DialogueGenerator } from "@/app/(app)/listening/_components/DialogueGenerator";
 import { SpeakerLegend } from "@/app/(app)/listening/_components/SpeakerLegend";
 import { ScriptPanel } from "@/app/(app)/listening/_components/ScriptPanel";
-import { MiniDictionary } from "@/components/shared";
 import ShadowingMode from "@/app/(app)/listening/_components/ShadowingMode";
 import DictationMode from "@/app/(app)/listening/_components/DictationMode";
 import SummarizeMode from "@/app/(app)/listening/_components/SummarizeMode";
@@ -63,11 +61,8 @@ export default function ListeningPage() {
     reset,
   } = useListeningExercise();
 
-  // MiniDictionary integration for transcript word lookup
-  const miniDict = useMiniDictionary();
   const { examMode } = useExamMode();
   const router = useRouter();
-  const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
   const [profileRecommendedLevel, setProfileRecommendedLevel] = useState<CefrLevel | null>(null);
   const [mode, setMode] = useState<string>("listening");
   const [selectedVoice, setSelectedVoice] = useState("austin");
@@ -88,10 +83,6 @@ export default function ListeningPage() {
         }
       })
       .catch(() => {});
-  }, []);
-
-  const handleWordSaved = useCallback((word: string) => {
-    setSavedWords((prev) => new Set(prev).add(word.toLowerCase()));
   }, []);
 
   const recommendedLevel =
@@ -285,8 +276,6 @@ export default function ListeningPage() {
                 keyPhrases={exercise.keyPhrases}
                 isRevealed={scriptRevealed}
                 onReveal={revealScript}
-                onWordClick={miniDict.openForWord}
-                savedWords={savedWords}
               />
             )}
             <QuestionCards
@@ -306,8 +295,6 @@ export default function ListeningPage() {
             <Results
               result={result}
               onNewExercise={reset}
-              onWordClick={miniDict.openForWord}
-              savedWords={savedWords}
               dialogueTurns={exercise?.turns}
               scriptRevealed={scriptRevealed}
             />
@@ -348,14 +335,6 @@ export default function ListeningPage() {
         />
       )}
 
-      {/* MiniDictionary floating popup */}
-      <MiniDictionary
-        word={miniDict.word}
-        anchorRect={miniDict.anchorRect}
-        visible={miniDict.visible}
-        onClose={miniDict.close}
-        onSave={handleWordSaved}
-      />
     </div>
   );
 }

@@ -8,14 +8,9 @@ import {
   ReadOutlined,
   ClockCircleOutlined,
   BulbOutlined,
-  BookOutlined,
-  SaveOutlined,
   LoadingOutlined,
   SoundOutlined,
 } from "@ant-design/icons";
-
-import { useMiniDictionary } from "@/hooks/useMiniDictionary";
-import { MiniDictionary } from "@/components/shared";
 
 const { Title, Text } = Typography;
 
@@ -63,9 +58,6 @@ export default function ArticleReaderPage() {
   const [error, setError] = useState<string | null>(null);
   const [grammarResults, setGrammarResults] = useState<Record<number, GrammarPattern[]>>({});
   const [grammarLoading, setGrammarLoading] = useState<Set<number>>(new Set());
-  const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
-  const [wordsLookedUp, setWordsLookedUp] = useState(0);
-
   // Voice accent for per-paragraph TTS (Groq Orpheus)
   const [ttsAccent, setTtsAccent] = useState("us");
   const [grammarPopup, setGrammarPopup] = useState<number | null>(null);
@@ -75,9 +67,6 @@ export default function ArticleReaderPage() {
   const [loadingAudioIdx, setLoadingAudioIdx] = useState<number | null>(null);
   const paragraphAudioRef = useRef<HTMLAudioElement | null>(null);
   const paragraphAudioUrlRef = useRef<string | null>(null);
-
-  // Mini dictionary
-  const miniDict = useMiniDictionary();
 
   // Grammar analysis guard ref
   const analyzedSetRef = useRef<Set<number>>(new Set());
@@ -184,37 +173,6 @@ export default function ArticleReaderPage() {
   }, [speakingIdx, ttsAccent]);
 
 
-
-  // Word click handler
-  const handleWordClick = useCallback(
-    (word: string, e: React.MouseEvent<HTMLSpanElement>) => {
-      const cleaned = word.replace(/[^a-zA-Z'-]/g, "").toLowerCase();
-      if (cleaned.length < 2) return;
-      const rect = (e.target as HTMLElement).getBoundingClientRect();
-      miniDict.openForWord(cleaned, rect);
-      setWordsLookedUp((prev) => prev + 1);
-    },
-    [miniDict],
-  );
-
-  // Keyboard handler for accessibility
-  const handleWordKeyDown = useCallback(
-    (word: string, e: React.KeyboardEvent<HTMLSpanElement>) => {
-      if (e.key === "Enter" || e.key === " ") {
-        e.preventDefault();
-        const cleaned = word.replace(/[^a-zA-Z'-]/g, "").toLowerCase();
-        if (cleaned.length < 2) return;
-        const rect = (e.target as HTMLElement).getBoundingClientRect();
-        miniDict.openForWord(cleaned, rect);
-        setWordsLookedUp((prev) => prev + 1);
-      }
-    },
-    [miniDict],
-  );
-
-  const handleWordSaved = useCallback((word: string) => {
-    setSavedWords((prev) => new Set(prev).add(word.toLowerCase()));
-  }, []);
 
   if (loading) {
     return (
@@ -337,37 +295,8 @@ export default function ArticleReaderPage() {
               key={idx}
               style={{ marginBottom: 24 }}
             >
-              {/* Interactive paragraph text */}
               <p style={{ margin: 0 }}>
-                {para.split(/(\s+)/).map((token, ti) => {
-                  const isWord = /[a-zA-Z]/.test(token);
-                  if (!isWord) return <span key={ti}>{token}</span>;
-
-                  const cleanWord = token.replace(/[^a-zA-Z'-]/g, "").toLowerCase();
-                  const isSaved = savedWords.has(cleanWord);
-
-                  return (
-                    <span
-                      key={ti}
-                      onClick={(e) => handleWordClick(token, e)}
-                      onKeyDown={(e) => handleWordKeyDown(token, e)}
-                      className="reading-word"
-                      style={{
-                        cursor: "pointer",
-                        borderBottom: isSaved
-                          ? "2px dotted var(--accent)"
-                          : "1px solid transparent",
-                        transition: "border-color 0.2s, background 0.2s",
-                        borderRadius: 2,
-                        paddingBottom: 1,
-                      }}
-                      role="button"
-                      tabIndex={0}
-                    >
-                      {token}
-                    </span>
-                  );
-                })}
+                {para}
 
                 {/* Grammar icon — inline at end of paragraph */}
                 <span
@@ -550,29 +479,6 @@ export default function ArticleReaderPage() {
           )}
         </Modal>
 
-        {/* Stats bar */}
-        <Card
-          style={{
-            borderRadius: "var(--radius-xl)",
-            background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-          }}
-        >
-          <Flex align="center" justify="center" gap={24} style={{ color: "var(--text-on-accent)" }}>
-            <Flex align="center" gap={6}>
-              <BookOutlined />
-              <Text style={{ color: "var(--text-on-accent)", fontSize: 14 }}>
-                {wordsLookedUp} từ đã tra
-              </Text>
-            </Flex>
-            <Flex align="center" gap={6}>
-              <SaveOutlined />
-              <Text style={{ color: "var(--text-on-accent)", fontSize: 14 }}>
-                {savedWords.size} từ đã lưu
-              </Text>
-            </Flex>
-          </Flex>
-        </Card>
-
         {/* Attribution */}
         <Flex justify="center" style={{ paddingBottom: 16 }}>
           <Text style={{ fontSize: 11, color: "var(--text-muted)" }}>
@@ -581,14 +487,6 @@ export default function ArticleReaderPage() {
         </Flex>
       </Flex>
 
-      {/* Mini Dictionary popup */}
-      <MiniDictionary
-        word={miniDict.word}
-        anchorRect={miniDict.anchorRect}
-        visible={miniDict.visible}
-        onClose={miniDict.close}
-        onSave={handleWordSaved}
-      />
     </div>
   );
 }

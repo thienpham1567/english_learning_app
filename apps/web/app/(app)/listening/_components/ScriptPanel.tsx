@@ -8,8 +8,6 @@ import {
   FileTextOutlined,
   BulbOutlined,
 } from "@ant-design/icons";
-import { HighlightedText } from "@/app/(app)/english-chatbot/_components/HighlightedText";
-
 type ScriptRevealLevel = "hidden" | "keywords" | "full";
 
 type Props = {
@@ -19,9 +17,6 @@ type Props = {
   isRevealed: boolean;
   /** Callback when the user first reveals the script */
   onReveal: () => void;
-  /** Optional word click handler for MiniDictionary */
-  onWordClick?: (word: string, rect: DOMRect) => void;
-  savedWords?: Set<string>;
 };
 
 /**
@@ -34,8 +29,6 @@ export function ScriptPanel({
   keyPhrases = [],
   isRevealed,
   onReveal,
-  onWordClick,
-  savedWords,
 }: Props) {
   const [revealLevel, setRevealLevel] = useState<ScriptRevealLevel>("hidden");
   const [showConfirm, setShowConfirm] = useState(false);
@@ -265,18 +258,12 @@ export function ScriptPanel({
           <div style={{ fontStyle: revealLevel === "full" ? "italic" : "normal" }}>
             {revealLevel === "keywords" ? (
               <div>{renderKeywordsOnly()}</div>
-            ) : onWordClick ? (
-              <HighlightedText
-                text={passage}
-                onWordClick={onWordClick}
-                savedWords={savedWords}
-              />
             ) : (
               passage
             )}
           </div>
 
-          {revealLevel === "full" && onWordClick && (
+          {revealLevel === "full" && (
             <div
               style={{
                 marginTop: 8,
@@ -286,7 +273,7 @@ export function ScriptPanel({
               }}
             >
               <BulbOutlined style={{ marginRight: 6 }} />
-              Nhấn vào từ để tra từ điển và lưu từ vựng
+              Vào trang Từ điển để tra nghĩa chi tiết
             </div>
           )}
         </div>

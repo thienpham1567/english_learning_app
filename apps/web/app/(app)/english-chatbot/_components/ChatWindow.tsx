@@ -10,8 +10,6 @@ import type { PageMessage } from "@/app/(app)/english-chatbot/_components/ChatMe
 import { useChatConversations } from "@/app/(app)/english-chatbot/_components/ChatConversationProvider";
 import { PersonaSwitcher } from "@/app/(app)/english-chatbot/_components/PersonaSwitcher";
 import { ChatHeader } from "@/app/(app)/english-chatbot/_components/ChatHeader";
-import { MiniDictionary } from "@/components/shared";
-import { useMiniDictionary } from "@/hooks/useMiniDictionary";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { PronunciationFeedback } from "@/app/(app)/english-chatbot/_components/PronunciationFeedback";
@@ -180,22 +178,6 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
     }
   }, [voice.transcript, voice.isTranscribing]);
 
-  // MiniDictionary integration (Story 4.2)
-  const miniDict = useMiniDictionary();
-  const [savedWords, setSavedWords] = useState<Set<string>>(new Set());
-
-  // Fetch saved vocabulary on mount (AC: #5)
-  useEffect(() => {
-    api
-      .get<Array<{ query: string; saved: boolean }>>("/vocabulary")
-      .then((data) => {
-        const saved = new Set(
-          data.filter((v) => v.saved).map((v) => v.query.toLowerCase()),
-        );
-        setSavedWords(saved);
-      })
-      .catch(() => {}); // non-critical — highlighting still works without
-  }, []);
 
   const conversationsRef = useRef(conversations);
   conversationsRef.current = conversations;
@@ -710,8 +692,6 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                       index === messages.length - 1 &&
                       m.role === "assistant"
                     }
-                    onWordClick={miniDict.openForWord}
-                    savedWords={savedWords}
                     onSpeak={
                       tts.isSupported
                         ? (text) => {
@@ -1086,16 +1066,6 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
         </div>
       </div>
 
-      {/* MiniDictionary floating popup */}
-      <MiniDictionary
-        word={miniDict.word}
-        anchorRect={miniDict.anchorRect}
-        visible={miniDict.visible}
-        onClose={miniDict.close}
-        onSave={(w) =>
-          setSavedWords((prev) => new Set(prev).add(w.toLowerCase()))
-        }
-      />
     </div>
   );
 }

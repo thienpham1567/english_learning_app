@@ -4,7 +4,6 @@ import { useState, type ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
 import { CheckOutlined, CopyOutlined, TrophyOutlined, SoundOutlined, PauseCircleOutlined, ReloadOutlined, LoadingOutlined } from "@ant-design/icons";
 import { useUser } from "@/components/shared/UserContext";
-import { HighlightedText } from "@/app/(app)/english-chatbot/_components/HighlightedText";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 import type { Persona } from "@/lib/chat/personas";
 
@@ -129,27 +128,6 @@ function UserAvatar() {
       {initials}
     </div>
   );
-}
-
-// Recursively process ReactMarkdown children to inject word highlighting
-function highlightChildren(
-  children: ReactNode,
-  onWordClick: (word: string, rect: DOMRect) => void,
-  savedWords?: Set<string>,
-): ReactNode {
-  if (typeof children === "string") {
-    return <HighlightedText text={children} onWordClick={onWordClick} savedWords={savedWords} />;
-  }
-  if (Array.isArray(children)) {
-    return children.map((child, i) =>
-      typeof child === "string" ? (
-        <HighlightedText key={i} text={child} onWordClick={onWordClick} savedWords={savedWords} />
-      ) : (
-        child
-      ),
-    );
-  }
-  return children;
 }
 
 function extractText(children: ReactNode): string {
@@ -282,8 +260,6 @@ export function ChatMessage({
   message,
   isStreaming = false,
   persona,
-  onWordClick,
-  savedWords,
   onSpeak,
   isSpeaking = false,
   isTtsLoading = false,
@@ -295,8 +271,6 @@ export function ChatMessage({
   className?: string;
   isStreaming?: boolean;
   persona?: Persona;
-  onWordClick?: (word: string, rect: DOMRect) => void;
-  savedWords?: Set<string>;
   onSpeak?: (text: string) => void;
   isSpeaking?: boolean;
   isTtsLoading?: boolean;
@@ -380,14 +354,6 @@ export function ChatMessage({
             >
               <ReactMarkdown
                 components={{
-                  ...(onWordClick
-                    ? {
-                        p: ({ children }) => <p>{highlightChildren(children, onWordClick, savedWords)}</p>,
-                        li: ({ children }) => <li>{highlightChildren(children, onWordClick, savedWords)}</li>,
-                        strong: ({ children }) => <strong>{highlightChildren(children, onWordClick, savedWords)}</strong>,
-                        em: ({ children }) => <em>{highlightChildren(children, onWordClick, savedWords)}</em>,
-                      }
-                    : {}),
                   code: ({ className, children }) =>
                     className ? (
                       <CodeBlock className={className}>{children}</CodeBlock>

@@ -8,20 +8,17 @@ import {
   FileTextOutlined,
   BulbOutlined,
 } from "@ant-design/icons";
-import { HighlightedText } from "@/app/(app)/english-chatbot/_components/HighlightedText";
 import type { DialogueTurnPayload, ListeningSubmitResponse } from "@/lib/listening/types";
 import { DialogueTranscript } from "@/app/(app)/listening/_components/SpeakerLegend";
 
 type Props = {
   result: ListeningSubmitResponse;
   onNewExercise: () => void;
-  onWordClick?: (word: string, rect: DOMRect) => void;
-  savedWords?: Set<string>;
   dialogueTurns?: DialogueTurnPayload[];
   scriptRevealed?: boolean;
 };
 
-export function Results({ result, onNewExercise, onWordClick, savedWords, dialogueTurns, scriptRevealed }: Props) {
+export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }: Props) {
   const percentage = result.total > 0 ? Math.round((result.correct / result.total) * 100) : 0;
   const isGood = percentage >= 75;
 
@@ -142,14 +139,9 @@ export function Results({ result, onNewExercise, onWordClick, savedWords, dialog
         >
           {dialogueTurns && dialogueTurns.length > 0 ? (
             <DialogueTranscript turns={dialogueTurns} />
-          ) : onWordClick ? (
-            <HighlightedText text={result.passage} onWordClick={onWordClick} savedWords={savedWords} />
           ) : (
             result.passage
           )}
-          <div style={{ marginTop: 8, fontSize: 11, color: "var(--text-muted)", fontStyle: "normal" }}>
-            <BulbOutlined style={{ marginRight: 6 }} /> Nhấn vào từ để tra từ điển và lưu từ vựng
-          </div>
         </div>
       </div>
 

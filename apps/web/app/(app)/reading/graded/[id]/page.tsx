@@ -14,7 +14,6 @@ import {
 } from "@ant-design/icons";
 import { Card, Tag, Flex, Typography, Button, Spin } from "antd";
 import { api } from "@/lib/api-client";
-import { WordClickableText } from "@/app/(app)/reading/_components/WordClickableText";
 import { useReadingSession } from "@/hooks/useReadingSession";
 
 const { Text, Title } = Typography;
@@ -127,17 +126,12 @@ export default function GradedPassagePage() {
             </Title>
           </div>
 
-          {/* Body — click any word to define */}
           <div style={{ padding: "20px 24px 28px" }}>
-            <WordClickableText
-              text={passage.body}
-              style={{
-                fontSize: 16,
-                lineHeight: 2,
-                color: "var(--text)",
-                fontFamily: "Georgia, 'Times New Roman', serif",
-              }}
-            />
+            <div style={{ fontSize: 16, lineHeight: 2, color: "var(--text)", fontFamily: "Georgia, 'Times New Roman', serif" }}>
+              {passage.body.split("\n").map((para, i) => (
+                <p key={i} style={{ margin: i === 0 ? 0 : "16px 0 0" }}>{para}</p>
+              ))}
+            </div>
           </div>
         </Card>
 
