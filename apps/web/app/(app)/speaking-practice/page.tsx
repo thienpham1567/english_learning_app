@@ -17,6 +17,7 @@ import {
   WarningOutlined,
 } from "@ant-design/icons";
 import { Progress, Tag, Segmented } from "antd";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 import { useExamMode } from "@/components/shared/ExamModeProvider";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
@@ -79,6 +80,9 @@ export default function SpeakingPracticePage() {
   const [error, setError] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState(0);
   const [sessionScores, setSessionScores] = useState<number[]>([]);
+  const [recordingUrl, setRecordingUrl] = useState<string | null>(null);
+  const [isPlayingBack, setIsPlayingBack] = useState(false);
+  const playbackRef = useRef<HTMLAudioElement | null>(null);
 
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isMountedRef = useRef(true);
@@ -157,6 +161,11 @@ export default function SpeakingPracticePage() {
         const result = await api.post<FeedbackResult>("/speaking/feedback", formData);
         if (!isMountedRef.current) return;
         setFeedback(result);
+        // Create playback URL from the blob
+        if (blob) {
+          const url = URL.createObjectURL(blob);
+          setRecordingUrl((prev) => { if (prev) URL.revokeObjectURL(prev); return url; });
+        }
         setSessionScores((prev) => [...prev, result.overall]);
         lastScorePushedRef.current = true;
         setState("result");
@@ -215,6 +224,9 @@ export default function SpeakingPracticePage() {
 
   const retryTopic = useCallback(() => {
     setFeedback(null);
+    if (recordingUrl) { URL.revokeObjectURL(recordingUrl); setRecordingUrl(null); }
+    playbackRef.current?.pause();
+    setIsPlayingBack(false);
     if (lastScorePushedRef.current) {
       setSessionScores((prev) => prev.slice(0, -1));
       lastScorePushedRef.current = false;
@@ -237,8 +249,11 @@ export default function SpeakingPracticePage() {
     setSessionScores([]);
     setFeedback(null);
     setTopic(null);
+    if (recordingUrl) { URL.revokeObjectURL(recordingUrl); setRecordingUrl(null); }
+    playbackRef.current?.pause();
+    setIsPlayingBack(false);
     setState("idle");
-  }, []);
+  }, [recordingUrl]);
 
   /* ── Helpers ──────────────────────────────────── */
 
@@ -255,21 +270,20 @@ export default function SpeakingPracticePage() {
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%", minHeight: 0, flex: 1, overflow: "auto" }}>
       {/* Header */}
-      <div style={{ padding: "24px 24px 16px", borderBottom: "1px solid var(--border)" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
-          <SoundOutlined style={{ fontSize: 22, color: "var(--accent)" }} />
-          <h1 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>Luyện nói tự do</h1>
+      <ModuleHeader
+        icon={<SoundOutlined />}
+        gradient="linear-gradient(135deg, var(--accent), var(--error))"
+        title="Luyện nói tự do"
+        subtitle={`Speaking Practice · AI đánh giá chi tiết`}
+        action={
           <Tag
             color={examMode === "toeic" ? "blue" : "purple"}
-            style={{ marginLeft: "auto", borderRadius: 99 }}
+            style={{ borderRadius: 99, margin: 0 }}
           >
             {examMode === "toeic" ? <BarChartOutlined /> : <TrophyOutlined />} {modeLabel}
           </Tag>
-        </div>
-        <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)" }}>
-          Nói về chủ đề được giao, AI sẽ đánh giá chi tiết về ngữ pháp, từ vựng và mạch lạc
-        </p>
-      </div>
+        }
+      />
 
       {/* Content */}
       <div style={{ flex: 1, padding: 24, maxWidth: 680, margin: "0 auto", width: "100%" }}>
@@ -421,6 +435,24 @@ export default function SpeakingPracticePage() {
             <div style={{ textAlign: "center" }}>
               {state === "ready" && (
                 <>
+                  {/* Speaking Tips */}
+                  <div style={{
+                    marginBottom: 12, padding: "12px 16px", borderRadius: 12,
+                    background: "color-mix(in srgb, var(--info) 6%, var(--surface))",
+                    border: "1px solid color-mix(in srgb, var(--info) 20%, transparent)",
+                    fontSize: 12, color: "var(--text-secondary)", textAlign: "left",
+                  }}>
+                    <p style={{ margin: "0 0 6px", fontWeight: 600, color: "var(--info)" }}>
+                      <InfoCircleOutlined /> Mẹo trước khi nói:
+                    </p>
+                    <ul style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 3 }}>
+                      <li>Hít thở sâu và suy nghĩ 5-10 giây trước khi nói</li>
+                      <li>Dùng cấu trúc: Mở bài → Ý chính → Kết luận</li>
+                      <li>Tránh nói &ldquo;um&rdquo;, &ldquo;uh&rdquo;, &ldquo;like&rdquo; quá nhiều</li>
+                      <li>Nói rõ ràng, tốc độ vừa phải (~120-150 WPM)</li>
+                    </ul>
+                  </div>
+
                   <button
                     onClick={startRecording}
                     style={{
@@ -609,9 +641,36 @@ export default function SpeakingPracticePage() {
             )}
 
             <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-              <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 4px", fontWeight: 600 }}>
-                Bạn đã nói:
-              </p>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
+                <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: 0, fontWeight: 600 }}>
+                  Bạn đã nói:
+                </p>
+                {recordingUrl && (
+                  <button
+                    onClick={() => {
+                      if (isPlayingBack) {
+                        playbackRef.current?.pause();
+                        setIsPlayingBack(false);
+                      } else {
+                        const audio = new Audio(recordingUrl);
+                        playbackRef.current = audio;
+                        audio.onended = () => setIsPlayingBack(false);
+                        audio.play();
+                        setIsPlayingBack(true);
+                      }
+                    }}
+                    style={{
+                      display: "inline-flex", alignItems: "center", gap: 4,
+                      padding: "4px 10px", borderRadius: 6, fontSize: 11, fontWeight: 500,
+                      border: "1px solid var(--border)", background: isPlayingBack ? "var(--accent-muted)" : "transparent",
+                      color: isPlayingBack ? "var(--accent)" : "var(--text-secondary)", cursor: "pointer",
+                      transition: "all 0.15s ease",
+                    }}
+                  >
+                    {isPlayingBack ? <><PauseCircleOutlined /> Đang phát</> : <><PlayCircleOutlined /> Nghe lại</>}
+                  </button>
+                )}
+              </div>
               <p style={{ fontSize: 13, margin: 0, fontStyle: "italic", lineHeight: 1.6 }}>
                 &ldquo;{feedback.transcript}&rdquo;
               </p>

@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex, Spin, Tabs } from "antd";
+import { Flex, Skeleton, Tabs } from "antd";
 import { EditOutlined, FormOutlined, HighlightOutlined, AimOutlined } from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
@@ -97,7 +97,8 @@ export default function WritingPracticePage() {
                     )}
                     {state === "reviewing" && (
                       <Flex vertical align="center" gap={16} style={{ paddingTop: 48 }}>
-                        <Spin size="large" tip="Christine Ho đang chấm bài..." />
+                        <Skeleton active paragraph={{ rows: 5 }} style={{ maxWidth: 500 }} />
+                        <p style={{ color: "var(--text-secondary)", fontSize: 13 }}>Christine Ho đang chấm bài...</p>
                       </Flex>
                     )}
                     {state === "feedback" && feedback && (
