@@ -12,8 +12,6 @@ import { DictionarySearchPanel } from "@/app/(app)/dictionary/_components/Dictio
 import { ThesaurusSheet } from "@/app/(app)/dictionary/_components/ThesaurusSheet";
 import { getRecentLookups, pushRecentLookup } from "@/app/(app)/dictionary/_components/RecentLookups";
 import type { VocabularyWithNearby } from "@/lib/schemas/vocabulary";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
-import { ReadOutlined } from "@ant-design/icons";
 
 const QUERY_PATTERN = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
 
@@ -118,14 +116,6 @@ export default function DictionaryPage() {
     <>
       {contextHolder}
       <div style={{ height: "100%", minHeight: 0, overflowY: "auto", overflowX: "hidden" }}>
-        <div style={{ padding: "16px 16px 0" }}>
-          <ModuleHeader
-            icon={<ReadOutlined />}
-            gradient="var(--gradient-vocabulary)"
-            title="Từ điển"
-            subtitle="Tra nghĩa · Lưu từ vựng · Xem từ đồng nghĩa"
-          />
-        </div>
         <div className="dictionary-grid">
           <div>
             <DictionarySearchPanel
