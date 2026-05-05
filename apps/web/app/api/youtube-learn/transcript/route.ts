@@ -41,22 +41,59 @@ export async function POST(req: Request) {
 
     const yt = await getInnertube();
 
+    log.info({ videoId }, "fetching video info");
+
     let info;
     try {
       info = await yt.getInfo(videoId);
     } catch (err) {
-      log.warn({ err, videoId }, "getInfo failed");
+      log.error(
+        {
+          err,
+          errMessage: err instanceof Error ? err.message : String(err),
+          errStack: err instanceof Error ? err.stack : undefined,
+          videoId,
+        },
+        "getInfo failed",
+      );
       return NextResponse.json(
         { error: "Không tải được video. Kiểm tra link hoặc video có thể bị chặn." },
         { status: 404 },
       );
     }
 
+    const captionTracks =
+      info.captions?.caption_tracks?.map((t) => ({
+        languageCode: t.language_code,
+        kind: t.kind,
+        name: t.name?.text,
+        vssId: t.vss_id,
+      })) ?? [];
+    log.info(
+      {
+        videoId,
+        title: info.basic_info?.title,
+        captionTracksCount: captionTracks.length,
+        captionTracks,
+      },
+      "video info loaded",
+    );
+
     let segments: Segment[] = [];
     try {
       const transcriptData = await info.getTranscript();
       const initial =
         transcriptData?.transcript?.content?.body?.initial_segments ?? [];
+
+      log.info(
+        {
+          videoId,
+          rawSegmentCount: initial.length,
+          firstSegment: initial[0],
+        },
+        "transcript fetched",
+      );
+
       segments = initial
         .map((seg): Segment | null => {
           const startMs = Number(seg.start_ms);
@@ -73,7 +110,16 @@ export async function POST(req: Request) {
         })
         .filter((s): s is Segment => s !== null);
     } catch (err) {
-      log.warn({ err, videoId }, "transcript fetch failed");
+      log.error(
+        {
+          err,
+          errMessage: err instanceof Error ? err.message : String(err),
+          errStack: err instanceof Error ? err.stack : undefined,
+          videoId,
+          captionTracks,
+        },
+        "transcript fetch failed",
+      );
       return NextResponse.json(
         { error: "Video này không có phụ đề tiếng Anh. Hãy thử video khác." },
         { status: 404 },
@@ -81,11 +127,17 @@ export async function POST(req: Request) {
     }
 
     if (segments.length === 0) {
+      log.warn(
+        { videoId, captionTracks },
+        "transcript returned zero usable segments",
+      );
       return NextResponse.json(
         { error: "Video này không có phụ đề tiếng Anh." },
         { status: 404 },
       );
     }
+
+    log.info({ videoId, segmentCount: segments.length }, "transcript ready");
 
     const basic = info.basic_info;
     const thumbnails = basic.thumbnail ?? [];
