@@ -165,6 +165,7 @@ export function FloatingDictionaryWidget() {
               value={query}
               onChange={(e) => { setQuery(e.target.value); setErrorMsg(null); }}
               placeholder="Tra từ..."
+              className="fdw-input"
               style={{
                 border: "none",
                 outline: "none",
