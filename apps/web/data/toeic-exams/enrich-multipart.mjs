@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * Enrich Part 5 questions with correct answers and explanations via AI.
- * Reads from scraped JSON files, calls OpenRouter API in batches, and saves enriched data.
- *
- * Usage: node enrich-part5.mjs
+ * Enrich Parts 3, 4, 6, 7 with AI-generated answers.
+ * Part 1-2 are audio-only (no text to analyze), so skip.
+ * Parts 3-4: Have text questions + options → AI can determine answers.
+ * Parts 6-7: Have text options → AI can determine answers.
  */
 
 import fs from "fs";
@@ -12,15 +12,13 @@ import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// --- Config ---
 const API_KEY = process.env.OPENAI_API_KEY || "YOUR_API_KEY_HERE";
 const BASE_URL = process.env.OPENAI_BASE_URL || "https://openrouter.ai/api/v1";
 const MODEL =
   process.env.OPENAI_CHAT_MODEL || "google/gemini-3.1-flash-lite-preview";
-const BATCH_SIZE = 10; // 10 questions per API call
-const DELAY_MS = 1500; // Delay between batches
+const BATCH_SIZE = 10;
+const DELAY_MS = 1500;
 
-// --- Helpers ---
 async function callAI(messages) {
   const res = await fetch(`${BASE_URL}/chat/completions`, {
     method: "POST",
@@ -30,7 +28,7 @@ async function callAI(messages) {
     },
     body: JSON.stringify({
       model: MODEL,
-      temperature: 0.1, // Low temp for accuracy
+      temperature: 0.1,
       response_format: { type: "json_object" },
       messages,
     }),
@@ -48,59 +46,75 @@ function sleep(ms) {
 }
 
 function parseOptions(optStr) {
-  // "A. write|B. wrote|C. writing|D. was written" -> ["write", "wrote", "writing", "was written"]
   return optStr.split("|").map((o) => o.replace(/^[A-D]\.\s*/, "").trim());
 }
 
-// --- Main ---
 async function main() {
-  // 1. Read all exam JSON files
   const indexFile = path.join(__dirname, "index.json");
   const index = JSON.parse(fs.readFileSync(indexFile, "utf-8"));
 
+  // Collect all questions for parts 3, 4, 6, 7
   const allQuestions = [];
+
   for (const exam of index.exams) {
     const filePath = path.join(__dirname, exam.file);
     const examData = JSON.parse(fs.readFileSync(filePath, "utf-8"));
-    const part5 = examData.questions.filter((q) => q.question_part === "5");
-    for (const q of part5) {
+
+    for (const q of examData.questions) {
+      const part = q.question_part;
+      if (!["3", "4", "6", "7"].includes(part)) continue;
+
+      const opts = parseOptions(q.options);
+      // Skip if options are just A|B|C|D (no text)
+      if (opts.every((o) => o.length <= 2)) continue;
+
       allQuestions.push({
         examName: exam.name,
         examId: exam.id,
         id: q.id,
-        stem: q.content,
+        part,
+        content: q.content || "",
+        options: opts,
         optionsRaw: q.options,
-        options: parseOptions(q.options),
         number: q.number_of_question,
+        audio: q.audio || q.parent_question?.audio || null,
+        images: q.images || q.parent_question?.images || null,
+        parentId: q.parent_question?.id || null,
       });
     }
   }
 
-  console.log(`Total Part 5 questions: ${allQuestions.length}`);
+  console.log(`Total enrichable questions: ${allQuestions.length}`);
+  const partCounts = {};
+  allQuestions.forEach((q) => {
+    partCounts[q.part] = (partCounts[q.part] || 0) + 1;
+  });
+  console.log("Per part:", partCounts);
 
-  // 2. Process in batches
+  // Process in batches
   const enriched = [];
   const totalBatches = Math.ceil(allQuestions.length / BATCH_SIZE);
 
   for (let i = 0; i < allQuestions.length; i += BATCH_SIZE) {
     const batch = allQuestions.slice(i, i + BATCH_SIZE);
     const batchNum = Math.floor(i / BATCH_SIZE) + 1;
+    const parts = [...new Set(batch.map((q) => q.part))].join(",");
 
     console.log(
-      `\nBatch ${batchNum}/${totalBatches} (Q${batch[0].number}-Q${batch[batch.length - 1].number} from ${batch[0].examName})`,
+      `\nBatch ${batchNum}/${totalBatches} (Part ${parts}, ${batch[0].examName})`,
     );
 
     const questionsForAI = batch.map((q, idx) => ({
       idx,
-      stem: q.stem,
+      part: q.part,
+      content: q.content,
       options: q.options,
     }));
 
-    const systemPrompt = `You are a TOEIC expert. For each question, determine:
-1. The correct answer index (0-3)
-2. A grammar explanation in English (1-2 sentences)
-3. A grammar explanation in Vietnamese (1-2 sentences)
-4. The grammar topic (e.g., "tenses", "prepositions", "word forms", "conjunctions", etc.)
+    const systemPrompt = `You are a TOEIC expert. For each question, determine the correct answer.
+For Part 3-4 (Listening comprehension), use the question text and options to determine the most likely correct answer.
+For Part 6 (Text Completion), determine which word/phrase best completes the sentence based on grammar and context.
+For Part 7 (Reading Comprehension), use the question and options to determine the correct answer.
 
 Return JSON:
 {
@@ -108,69 +122,73 @@ Return JSON:
     {
       "idx": 0,
       "correctIndex": 2,
-      "explanationEn": "...",
-      "explanationVi": "...",
-      "grammarTopic": "..."
+      "explanationEn": "Brief explanation in English",
+      "explanationVi": "Brief explanation in Vietnamese",
+      "topic": "grammar topic or skill tested"
     }
   ]
 }`;
 
-    const userPrompt = `Determine the correct answers for these TOEIC Part 5 questions:\n\n${questionsForAI
+    const userPrompt = questionsForAI
       .map(
         (q) =>
-          `[${q.idx}] ${q.stem}\n  A. ${q.options[0]}\n  B. ${q.options[1]}\n  C. ${q.options[2]}\n  D. ${q.options[3]}`,
+          `[${q.idx}] Part ${q.part}${q.content ? `: ${q.content}` : ""}\n  A. ${q.options[0]}\n  B. ${q.options[1]}\n  C. ${q.options[2]}${q.options[3] ? `\n  D. ${q.options[3]}` : ""}`,
       )
-      .join("\n\n")}`;
+      .join("\n\n");
 
     try {
       const response = await callAI([
         { role: "system", content: systemPrompt },
-        { role: "user", content: userPrompt },
+        {
+          role: "user",
+          content: `Determine correct answers:\n\n${userPrompt}`,
+        },
       ]);
 
       const parsed = JSON.parse(response);
       const answers = parsed.answers;
 
-      if (!Array.isArray(answers) || answers.length !== batch.length) {
-        console.error(
-          `  ⚠ Expected ${batch.length} answers, got ${answers?.length ?? 0}`,
-        );
-        // Try to use what we got
-      }
-
-      for (const ans of answers) {
+      for (const ans of answers || []) {
         const q = batch[ans.idx];
         if (!q) continue;
         enriched.push({
           id: q.id,
           examName: q.examName,
           examId: q.examId,
+          part: q.part,
           number: q.number,
-          stem: q.stem,
+          content: q.content,
           options: q.options,
           correctIndex: ans.correctIndex,
-          explanationEn: ans.explanationEn,
-          explanationVi: ans.explanationVi,
-          grammarTopic: ans.grammarTopic,
+          explanationEn: ans.explanationEn || "",
+          explanationVi: ans.explanationVi || "",
+          topic: ans.topic || "",
+          audio: q.audio,
+          images: q.images,
+          parentId: q.parentId,
         });
       }
 
-      console.log(`  ✓ ${answers.length} answers processed`);
+      console.log(`  ✓ ${(answers || []).length} answers`);
     } catch (err) {
       console.error(`  ✗ Error:`, err.message);
-      // Push without answers as fallback
+      // Fallback
       for (const q of batch) {
         enriched.push({
           id: q.id,
           examName: q.examName,
           examId: q.examId,
+          part: q.part,
           number: q.number,
-          stem: q.stem,
+          content: q.content,
           options: q.options,
-          correctIndex: null, // Will need manual review
+          correctIndex: null,
           explanationEn: "",
           explanationVi: "",
-          grammarTopic: "unknown",
+          topic: "",
+          audio: q.audio,
+          images: q.images,
+          parentId: q.parentId,
         });
       }
     }
@@ -180,8 +198,8 @@ Return JSON:
     }
   }
 
-  // 3. Save enriched data
-  const outputFile = path.join(__dirname, "part5-enriched.json");
+  // Save
+  const outputFile = path.join(__dirname, "multipart-enriched.json");
   const output = {
     source: "toeic.tienganhthayquy.com",
     enrichedAt: new Date().toISOString(),
@@ -193,13 +211,12 @@ Return JSON:
 
   const hasAnswers = enriched.filter((q) => q.correctIndex !== null).length;
   console.log(`\n=== Done ===`);
-  console.log(`Total: ${enriched.length} questions`);
+  console.log(`Total: ${enriched.length}`);
   console.log(`With answers: ${hasAnswers}`);
-  console.log(`Missing answers: ${enriched.length - hasAnswers}`);
-  console.log(`Saved to: part5-enriched.json`);
+  console.log(`Saved to: multipart-enriched.json`);
 }
 
 main().catch((err) => {
-  console.error("Fatal error:", err);
+  console.error("Fatal:", err);
   process.exit(1);
 });

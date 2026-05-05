@@ -3,25 +3,22 @@
 import { useState, useCallback, useEffect } from "react";
 import { api } from "@/lib/api-client";
 
-export type ToeicPart = "5" | "6" | "7" | "all";
+export type ToeicPartFilter = "3" | "4" | "5" | "6" | "7" | "listening" | "reading" | "all";
 
 export type ToeicQuestion = {
   id: string;
-  stem: string;
-  options: [string, string, string, string];
+  part: string;
+  content: string;
+  options: string[];
   correctIndex: number;
   explanationEn: string;
   explanationVi: string;
-  grammarTopic: string;
-  _examName?: string;
-  _questionNumber?: number;
-};
-
-export type ToeicExamInfo = {
-  id: string;
-  name: string;
-  book: string;
-  file: string;
+  topic: string;
+  audio: string | null;
+  images: { image_path: string }[] | null;
+  parentId: string | null;
+  examName: string;
+  number: number;
 };
 
 export type ToeicState = "idle" | "loading" | "active" | "review";
@@ -31,6 +28,7 @@ const HISTORY_KEY = "toeic-practice-history";
 export type ToeicHistoryEntry = {
   date: string;
   examName: string;
+  part: string;
   score: number;
   total: number;
   timeMs: number;
@@ -47,8 +45,7 @@ function loadHistory(): ToeicHistoryEntry[] {
 function saveHistory(entry: ToeicHistoryEntry) {
   const history = loadHistory();
   history.unshift(entry);
-  // Keep last 20
-  localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, 20)));
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, 30)));
 }
 
 export function useToeicPractice() {
@@ -60,6 +57,7 @@ export function useToeicPractice() {
   const [isRevealed, setIsRevealed] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedExam, setSelectedExam] = useState<string>("random");
+  const [selectedPart, setSelectedPart] = useState<ToeicPartFilter>("all");
   const [questionCount, setQuestionCount] = useState(10);
   const [startTime, setStartTime] = useState(0);
   const [endTime, setEndTime] = useState(0);
@@ -73,12 +71,15 @@ export function useToeicPractice() {
     setState("loading");
     setError(null);
     try {
-      const body: Record<string, unknown> = { count: questionCount };
+      const body: Record<string, unknown> = {
+        count: questionCount,
+        part: selectedPart,
+      };
       if (selectedExam !== "random") {
         body.examName = selectedExam;
       }
       const data = await api.post<{ questions: ToeicQuestion[] }>(
-        "/grammar-quiz/ets",
+        "/toeic-practice",
         body,
       );
       setQuestions(data.questions);
@@ -92,7 +93,7 @@ export function useToeicPractice() {
       setError("Không thể tải đề. Vui lòng thử lại.");
       setState("idle");
     }
-  }, [selectedExam, questionCount]);
+  }, [selectedExam, selectedPart, questionCount]);
 
   const answerQuestion = useCallback(
     (optionIndex: number) => {
@@ -113,7 +114,6 @@ export function useToeicPractice() {
     if (nextIdx >= questions.length) {
       const now = Date.now();
       setEndTime(now);
-      // Save history
       const score = answers.reduce<number>(
         (acc, ans, i) =>
           ans !== null && ans === questions[i]?.correctIndex ? acc + 1 : acc,
@@ -122,6 +122,7 @@ export function useToeicPractice() {
       const entry: ToeicHistoryEntry = {
         date: new Date().toISOString(),
         examName: selectedExam === "random" ? "Ngẫu nhiên" : selectedExam,
+        part: selectedPart,
         score,
         total: questions.length,
         timeMs: now - startTime,
@@ -134,7 +135,7 @@ export function useToeicPractice() {
       setSelectedAnswer(null);
       setIsRevealed(false);
     }
-  }, [currentIndex, questions, answers, startTime, selectedExam]);
+  }, [currentIndex, questions, answers, startTime, selectedExam, selectedPart]);
 
   const resetPractice = useCallback(() => {
     setState("idle");
@@ -177,6 +178,8 @@ export function useToeicPractice() {
     error,
     selectedExam,
     setSelectedExam,
+    selectedPart,
+    setSelectedPart,
     questionCount,
     setQuestionCount,
     history,

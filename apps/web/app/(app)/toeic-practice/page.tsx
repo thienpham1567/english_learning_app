@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import {
   BookOutlined,
   TrophyOutlined,
@@ -12,11 +12,23 @@ import {
   ArrowLeftOutlined,
   ClockCircleOutlined,
   StarFilled,
-  ThunderboltOutlined,
+  SoundOutlined,
+  FileImageOutlined,
 } from "@ant-design/icons";
-import { Button, Tag, Drawer } from "antd";
+import { Button, Tag, Drawer, Segmented } from "antd";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
-import { useToeicPractice } from "@/hooks/useToeicPractice";
+import { useToeicPractice, type ToeicPartFilter } from "@/hooks/useToeicPractice";
+
+const PARTS: { value: ToeicPartFilter; label: string }[] = [
+  { value: "all", label: "Tất cả" },
+  { value: "listening", label: "🎧 Listening" },
+  { value: "reading", label: "📖 Reading" },
+  { value: "3", label: "Part 3" },
+  { value: "4", label: "Part 4" },
+  { value: "5", label: "Part 5" },
+  { value: "6", label: "Part 6" },
+  { value: "7", label: "Part 7" },
+];
 
 const EXAMS = [
   { value: "random", label: "🎲 Ngẫu nhiên" },
@@ -33,29 +45,12 @@ const EXAMS = [
 const COUNTS = [10, 15, 20, 30];
 
 export default function ToeicPracticePage() {
-  const {
-    state,
-    questions,
-    currentIndex,
-    currentQuestion,
-    answers,
-    selectedAnswer,
-    isRevealed,
-    score,
-    error,
-    selectedExam,
-    setSelectedExam,
-    questionCount,
-    setQuestionCount,
-    history,
-    startTime,
-    endTime,
-    startPractice,
-    answerQuestion,
-    nextQuestion,
-    resetPractice,
-    retryWrong,
-  } = useToeicPractice();
+  const tp = useToeicPractice();
+  const { state, questions, currentIndex, currentQuestion, answers, selectedAnswer,
+    isRevealed, score, error, selectedExam, setSelectedExam, selectedPart, setSelectedPart,
+    questionCount, setQuestionCount, history, startTime, endTime,
+    startPractice, answerQuestion, nextQuestion, resetPractice, retryWrong } = tp;
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const [historyOpen, setHistoryOpen] = useState(false);
 
@@ -70,7 +65,7 @@ export default function ToeicPracticePage() {
         icon={<BookOutlined />}
         gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
         title="TOEIC Practice"
-        subtitle="Luyện đề ETS thật · Part 5 Incomplete Sentences"
+        subtitle="Luyện đề ETS thật · Part 3–7 · 1,320 câu"
         action={
           <Button
             type="text"
@@ -119,8 +114,33 @@ export default function ToeicPracticePage() {
                   Luyện đề TOEIC thật
                 </h2>
                 <p style={{ color: "var(--text-secondary)", margin: "0 0 24px", fontSize: 13 }}>
-                  240 câu Part 5 từ bộ đề ETS 2020–2021 chính hãng
+                  1,320 câu Part 3–7 từ bộ đề ETS 2020–2021 chính hãng
                 </p>
+              </div>
+
+              {/* Part filter */}
+              <div style={{ marginBottom: 20 }}>
+                <label style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-muted)", display: "block", marginBottom: 8 }}>
+                  Chọn phần thi
+                </label>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6, justifyContent: "center" }}>
+                  {PARTS.map((p) => (
+                    <button
+                      key={p.value}
+                      onClick={() => setSelectedPart(p.value)}
+                      style={{
+                        padding: "7px 14px", borderRadius: 10,
+                        border: `1.5px solid ${selectedPart === p.value ? "var(--accent)" : "var(--border)"}`,
+                        background: selectedPart === p.value ? "var(--accent)" : "var(--surface)",
+                        color: selectedPart === p.value ? "var(--text-on-accent)" : "var(--text-secondary)",
+                        fontSize: 12, fontWeight: selectedPart === p.value ? 700 : 500,
+                        cursor: "pointer", transition: "all 0.15s",
+                      }}
+                    >
+                      {p.label}
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Exam select */}
@@ -254,19 +274,48 @@ export default function ToeicPracticePage() {
               padding: "28px 24px",
             }}>
               {/* Source badge */}
-              {currentQuestion._examName && (
-                <Tag color="default" style={{ marginBottom: 12, borderRadius: 6, fontSize: 10, fontWeight: 600 }}>
-                  {currentQuestion._examName} · Q{currentQuestion._questionNumber}
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12, flexWrap: "wrap" }}>
+                <Tag color="blue" style={{ margin: 0, borderRadius: 6, fontSize: 10, fontWeight: 700 }}>
+                  Part {currentQuestion.part}
                 </Tag>
+                {currentQuestion.examName && (
+                  <Tag color="default" style={{ margin: 0, borderRadius: 6, fontSize: 10, fontWeight: 600 }}>
+                    {currentQuestion.examName} · Q{currentQuestion.number}
+                  </Tag>
+                )}
+              </div>
+
+              {/* Audio player for listening parts */}
+              {currentQuestion.audio && (
+                <div style={{
+                  marginBottom: 16, padding: "12px 16px", borderRadius: 12,
+                  background: "var(--bg-deep)", border: "1px solid var(--border)",
+                  display: "flex", alignItems: "center", gap: 12,
+                }}>
+                  <SoundOutlined style={{ fontSize: 18, color: "var(--accent)" }} />
+                  <audio ref={audioRef} controls src={currentQuestion.audio} style={{ flex: 1, height: 36 }} />
+                </div>
+              )}
+
+              {/* Passage image for reading parts */}
+              {currentQuestion.images && currentQuestion.images.length > 0 && (
+                <div style={{ marginBottom: 16, borderRadius: 12, overflow: "hidden", border: "1px solid var(--border)" }}>
+                  {currentQuestion.images.map((img, idx) => (
+                    <img key={idx} src={img.image_path} alt={`Passage ${idx + 1}`}
+                      style={{ width: "100%", display: "block" }} />
+                  ))}
+                </div>
               )}
 
               {/* Stem */}
+              {currentQuestion.content && (
               <p style={{
                 fontSize: 16, lineHeight: 1.7, color: "var(--ink)",
                 fontWeight: 500, margin: "0 0 24px",
               }}>
-                {currentQuestion.stem.replace(/_+/g, " _______ ")}
+                {currentQuestion.content.replace(/_+/g, " _______ ")}
               </p>
+              )}
 
               {/* Options */}
               <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
@@ -323,7 +372,7 @@ export default function ToeicPracticePage() {
                   <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
                     <StarFilled style={{ fontSize: 11, color: "var(--accent)" }} />
                     <span style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--accent)" }}>
-                      {currentQuestion.grammarTopic}
+                      {currentQuestion.topic}
                     </span>
                   </div>
                   <p style={{ fontSize: 13, lineHeight: 1.6, color: "var(--ink)", margin: "0 0 6px" }}>
@@ -458,12 +507,13 @@ export default function ToeicPracticePage() {
                           <Tag color={correct ? "success" : "error"} style={{ margin: 0, borderRadius: 6, fontSize: 10 }}>
                             {correct ? "Đúng" : "Sai"}
                           </Tag>
-                          {q._examName && (
-                            <span style={{ fontSize: 10, color: "var(--text-muted)" }}>{q._examName}</span>
+                          <Tag color="blue" style={{ margin: 0, borderRadius: 4, fontSize: 9 }}>P{q.part}</Tag>
+                          {q.examName && (
+                            <span style={{ fontSize: 10, color: "var(--text-muted)" }}>{q.examName}</span>
                           )}
                         </div>
                         <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 4px", lineHeight: 1.5 }}>
-                          {q.stem.replace(/_+/g, " ___ ")}
+                          {(q.content || "").replace(/_+/g, " ___ ")}
                         </p>
                         {!correct && (
                           <div style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.4 }}>
