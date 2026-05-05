@@ -78,6 +78,7 @@ const navGroups: (NavItem | NavGroup)[] = [
     label: "Kiểm tra & Ôn tập",
     items: [
       { href: "/daily-challenge", label: "Thử thách hàng ngày", icon: FireOutlined },
+      { href: "/toeic-practice", label: "Luyện đề TOEIC", icon: BookOutlined },
       { href: "/mock-test", label: "Thi thử", icon: FileSearchOutlined },
       { href: "/review", label: "Ôn tập hôm nay", icon: HistoryOutlined },
       { href: "/error-notebook", label: "Sổ lỗi sai", icon: BookOutlined },

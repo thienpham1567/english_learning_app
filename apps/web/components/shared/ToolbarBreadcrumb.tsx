@@ -20,6 +20,7 @@ const BREADCRUMBS: Record<string, { eyebrow: string; title: string }> = {
   "/ipa-chart": { eyebrow: "Bảng phiên âm", title: "IPA Chart" },
   "/reading": { eyebrow: "Đọc hiểu", title: "Luyện đọc" },
   "/mock-test": { eyebrow: "Thi thử", title: "Mock Test" },
+  "/toeic-practice": { eyebrow: "Luyện đề ETS", title: "TOEIC Practice" },
   "/review-quiz": { eyebrow: "Ôn tập", title: "Review Quiz" },
   "/error-notebook": { eyebrow: "Sổ tay lỗi", title: "Error Notebook" },
   "/diagnostic": { eyebrow: "Đánh giá năng lực", title: "Diagnostic Test" },
