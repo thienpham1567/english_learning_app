@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AppstoreOutlined } from "@ant-design/icons";
+import { CompassOutlined } from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 import { useExamMode } from "@/components/shared/ExamModeProvider";
@@ -28,7 +28,7 @@ export default function StudySetsPage() {
     >
       {/* Header */}
       <ModuleHeader
-        icon={<AppstoreOutlined />}
+        icon={<CompassOutlined />}
         gradient="var(--gradient-study-sets)"
         title={activeTopic ? activeTopic.title : "Học theo chủ đề"}
         subtitle={

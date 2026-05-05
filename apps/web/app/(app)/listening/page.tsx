@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { api } from "@/lib/api-client";
 import {
   SoundOutlined,
+  CustomerServiceOutlined,
   AudioOutlined,
   EditOutlined,
   FileTextOutlined,
@@ -102,7 +103,7 @@ export default function ListeningPage() {
     >
       {/* Header */}
       <ModuleHeader
-        icon={<SoundOutlined />}
+        icon={<CustomerServiceOutlined />}
         gradient="var(--gradient-listening)"
         title={
           mode === "listening" ? "Luyện nghe" :

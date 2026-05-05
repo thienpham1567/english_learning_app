@@ -62,7 +62,7 @@ export default function ToeicPracticePage() {
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%", minHeight: 0, flex: 1, overflow: "auto" }}>
       <ModuleHeader
-        icon={<BookOutlined />}
+        icon={<TrophyOutlined />}
         gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
         title="TOEIC Practice"
         subtitle="Luyện đề ETS thật · Part 3–7 · 1,320 câu"

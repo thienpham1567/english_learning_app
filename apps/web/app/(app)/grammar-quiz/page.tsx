@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { BulbOutlined, HistoryOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import { BulbOutlined, QuestionCircleOutlined, HistoryOutlined, ClockCircleOutlined } from "@ant-design/icons";
 import { Button, Tag } from "antd";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
@@ -84,7 +84,7 @@ export default function GrammarQuizPage() {
     >
       {/* Header */}
       <ModuleHeader
-        icon={<BulbOutlined />}
+        icon={<QuestionCircleOutlined />}
         gradient="var(--gradient-grammar-quiz)"
         title="TOEIC Part 5"
         subtitle="Incomplete Sentences · Luyện tập theo độ khó"

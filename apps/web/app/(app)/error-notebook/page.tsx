@@ -2,7 +2,7 @@
 import { api } from "@/lib/api-client";
 import { useState, useEffect, useCallback } from "react";
 import {
-  BookOutlined,
+  ExceptionOutlined,
   CheckCircleOutlined,
   CloseCircleOutlined,
   FilterOutlined,
@@ -133,7 +133,7 @@ export default function ErrorNotebookPage() {
       {/* Header */}
       <div style={{ position: "relative", zIndex: 1 }}>
         <ModuleHeader
-          icon={<BookOutlined />}
+          icon={<ExceptionOutlined />}
           gradient="var(--gradient-error-notebook)"
           title="Sổ lỗi sai"
           subtitle="Tổng hợp lỗi sai từ tất cả bài tập"
