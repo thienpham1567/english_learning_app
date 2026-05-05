@@ -293,6 +293,21 @@ export function FloatingChatWidget() {
                 borderRadius: 14,
                 padding: "6px 6px 6px 12px",
                 background: "var(--bg)",
+                transition: "border-color 0.18s, box-shadow 0.18s",
+              }}
+              onFocusCapture={(e) => {
+                const el = e.currentTarget as HTMLDivElement;
+                el.style.borderColor = "var(--accent)";
+                el.style.boxShadow = "0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent)";
+              }}
+              onBlurCapture={(e) => {
+                const el = e.currentTarget as HTMLDivElement;
+                setTimeout(() => {
+                  if (!el.contains(document.activeElement)) {
+                    el.style.borderColor = "var(--border)";
+                    el.style.boxShadow = "none";
+                  }
+                }, 100);
               }}
             >
               <textarea
@@ -312,6 +327,7 @@ export function FloatingChatWidget() {
                   fontFamily: "var(--font-body)",
                   color: "var(--text-primary)",
                   outline: "none",
+                  boxShadow: "none",
                   lineHeight: 1.55,
                   maxHeight: 80,
                   overflowY: "auto",

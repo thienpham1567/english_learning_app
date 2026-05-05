@@ -12,7 +12,7 @@ import {
   ExclamationCircleOutlined,
   InboxOutlined,
 } from "@ant-design/icons";
-import { Tag, Tooltip, Select, Statistic, Skeleton, Empty, Button } from "antd";
+import { Tooltip, Skeleton, Empty } from "antd";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { WritingPatternSection } from "./_components/WritingPatternSection";
 import { DeepExplanation } from "./_components/DeepExplanation";
@@ -51,21 +51,28 @@ const MODULE_LABELS: Record<string, string> = {
   listening: "Nghe",
 };
 
-const MODULE_COLORS: Record<string, string> = {
-  "grammar-quiz": "blue",
-  "grammar-lessons": "purple",
-  "mock-test": "magenta",
-  "daily-challenge": "orange",
-  listening: "green",
-};
+const FILTER_RESOLVED_OPTIONS = [
+  { value: "false", label: "Chưa nắm" },
+  { value: "true", label: "Đã hiểu" },
+  { value: "", label: "Tất cả" },
+];
+
+const MODULE_OPTIONS = [
+  { value: "", label: "Tất cả" },
+  { value: "grammar-quiz", label: "Ngữ pháp" },
+  { value: "grammar-lessons", label: "Bài học" },
+  { value: "mock-test", label: "Thi thử" },
+  { value: "daily-challenge", label: "Thử thách" },
+  { value: "listening", label: "Nghe" },
+];
 
 export default function ErrorNotebookPage() {
   const [errors, setErrors] = useState<ErrorEntry[]>([]);
   const [total, setTotal] = useState(0);
   const [topics, setTopics] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filterModule, setFilterModule] = useState<string | null>(null);
-  const [filterTopic, setFilterTopic] = useState<string | null>(null);
+  const [filterModule, setFilterModule] = useState<string>("");
+  const [filterTopic, setFilterTopic] = useState<string>("");
   const [filterResolved, setFilterResolved] = useState<string>("false");
 
   const fetchErrors = useCallback(async () => {
@@ -108,7 +115,6 @@ export default function ErrorNotebookPage() {
   const resolveAll = useCallback(async () => {
     const unresolvedIds = errors.filter((e) => !e.isResolved).map((e) => e.id);
     if (unresolvedIds.length === 0) return;
-
     try {
       await api.patch("/errors", { ids: unresolvedIds });
       setErrors((prev) => prev.map((e) => ({ ...e, isResolved: true })));
@@ -118,20 +124,12 @@ export default function ErrorNotebookPage() {
   }, [errors]);
 
   const unresolvedCount = errors.filter((e) => !e.isResolved).length;
+  const resolvedCount = errors.filter((e) => e.isResolved).length;
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        minHeight: 0,
-        flex: 1,
-        overflow: "hidden",
-        position: "relative",
-      }}
-    >
+    <div style={{ display: "flex", flexDirection: "column", height: "100%", minHeight: 0, flex: 1, overflow: "hidden", position: "relative" }}>
       <div className="grain-overlay" style={{ opacity: 0.03, zIndex: 0 }} />
+
       {/* Header */}
       <div style={{ position: "relative", zIndex: 1 }}>
         <ModuleHeader
@@ -140,359 +138,392 @@ export default function ErrorNotebookPage() {
           title="Sổ lỗi sai"
           subtitle="Tổng hợp lỗi sai từ tất cả bài tập"
           action={
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              {unresolvedCount > 0 ? (
-                <Tag
-                  color="error"
-                  style={{ borderRadius: 99, fontWeight: 700, fontSize: 13, margin: 0, padding: "4px 16px", border: "none", background: "var(--error-bg)", color: "var(--error)" }}
-                >
-                  <ExclamationCircleOutlined style={{ marginRight: 6 }} />
-                  {unresolvedCount} chưa nắm
-                </Tag>
-              ) : (
-                <Tag
-                  color="success"
-                  style={{ borderRadius: 99, fontWeight: 700, fontSize: 13, margin: 0, padding: "4px 16px", border: "none", background: "var(--success-bg)", color: "var(--success)" }}
-                >
-                  <CheckCircleOutlined style={{ marginRight: 6 }} />
-                  Đã nắm hết
-                </Tag>
-              )}
-            </div>
+            unresolvedCount > 0 ? (
+              <span style={{
+                display: "inline-flex", alignItems: "center", gap: 6,
+                background: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)",
+                borderRadius: 99, padding: "5px 14px",
+                fontSize: 13, fontWeight: 700, color: "#fff",
+                border: "1px solid rgba(255,255,255,0.2)",
+              }}>
+                <ExclamationCircleOutlined style={{ fontSize: 12 }} />
+                {unresolvedCount} chưa nắm
+              </span>
+            ) : (
+              <span style={{
+                display: "inline-flex", alignItems: "center", gap: 6,
+                background: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)",
+                borderRadius: 99, padding: "5px 14px",
+                fontSize: 13, fontWeight: 700, color: "#fff",
+                border: "1px solid rgba(255,255,255,0.2)",
+              }}>
+                <CheckCircleOutlined style={{ fontSize: 12 }} />
+                Đã nắm hết
+              </span>
+            )
           }
         />
       </div>
 
       {/* Content */}
-      <div style={{ flex: 1, overflow: "auto", padding: "var(--space-8) var(--space-6)", position: "relative", zIndex: 1 }}>
-        <div style={{ maxWidth: 800, margin: "0 auto", width: "100%" }}>
-          {/* Stats strip */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))", gap: "var(--space-4)", marginBottom: "var(--space-6)" }} className="anim-fade-up">
+      <div style={{ flex: 1, overflow: "auto", padding: "24px 20px", position: "relative", zIndex: 1 }}>
+        <div style={{ maxWidth: 820, margin: "0 auto", width: "100%" }}>
+
+          {/* ── Stats row ── */}
+          <div
+            className="anim-fade-up"
+            style={{
+              display: "flex", gap: 1, marginBottom: 24,
+              background: "var(--border)", borderRadius: 16,
+              overflow: "hidden", border: "1px solid var(--border)",
+              boxShadow: "var(--shadow-sm)",
+            }}
+          >
             {[
-              {
-                icon: <CloseCircleOutlined style={{ color: "var(--error)" }} />,
-                label: "Chưa nắm",
-                value: unresolvedCount,
-                color: unresolvedCount > 0 ? "var(--error)" : "var(--text-muted)",
-                bg: "var(--error-bg)"
-              },
-              {
-                icon: <CheckCircleOutlined style={{ color: "var(--success)" }} />,
-                label: "Đã hiểu",
-                value: errors.filter((e) => e.isResolved).length,
-                color: "var(--success)",
-                bg: "var(--success-bg)"
-              },
-              {
-                icon: <BookOutlined style={{ color: "var(--accent)" }} />,
-                label: "Tổng cộng",
-                value: total,
-                color: "var(--accent)",
-                bg: "var(--accent-muted)"
-              },
-            ].map((stat, i) => (
-              <div
-                key={stat.label}
-                className={`anim-delay-${i + 1}`}
-                style={{
-                  flex: 1, display: "flex", alignItems: "center", gap: 16,
-                  padding: "20px 24px", borderRadius: "var(--radius-2xl)",
-                  background: "var(--surface)", border: "1px solid var(--border)",
-                  boxShadow: "var(--shadow-sm)", transition: "transform var(--duration-fast) ease, box-shadow var(--duration-fast) ease"
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "var(--shadow-md)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "var(--shadow-sm)"; }}
-              >
-                <div style={{
-                  width: 48, height: 48, borderRadius: "50%", background: stat.bg,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  fontSize: 24
-                }}>
-                  {stat.icon}
+              { label: "Chưa nắm", value: unresolvedCount, color: unresolvedCount > 0 ? "var(--error)" : "var(--text-muted)", icon: "✗" },
+              { label: "Đã hiểu", value: resolvedCount, color: "var(--success)", icon: "✓" },
+              { label: "Tổng cộng", value: total, color: "var(--accent)", icon: "#" },
+            ].map((s, i) => (
+              <div key={s.label} style={{
+                flex: 1, display: "flex", alignItems: "center", gap: 14,
+                padding: "18px 22px",
+                background: "var(--surface)",
+                transition: "background 0.15s",
+              }}>
+                <span style={{
+                  fontSize: 11, fontWeight: 900, color: s.color,
+                  opacity: 0.6, fontFamily: "monospace",
+                  lineHeight: 1,
+                }}>{s.icon}</span>
+                <div>
+                  <div style={{ fontSize: 26, fontWeight: 800, color: s.color, lineHeight: 1, fontFamily: "var(--font-display)" }}>
+                    {s.value}
+                  </div>
+                  <div style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 500, marginTop: 2 }}>
+                    {s.label}
+                  </div>
                 </div>
-                <Statistic
-                  title={stat.label}
-                  value={stat.value}
-                  valueStyle={{ fontSize: 24, fontWeight: 800, color: stat.color, fontFamily: "var(--font-display)", lineHeight: 1 }}
-                />
               </div>
             ))}
           </div>
 
-          {/* Error Pattern Summary (Story 23.2, AC: 1-4) */}
+          {/* ── Error Pattern Summary ── */}
           {!loading && errors.length > 0 && (
-            <div className="anim-fade-up anim-delay-2" style={{ marginBottom: "var(--space-6)" }}>
+            <div className="anim-fade-up anim-delay-1" style={{ marginBottom: 20 }}>
               <ErrorPatternSummary errors={errors} />
             </div>
           )}
 
-          {/* Error Improvement Trend (Story 23.4, AC: 1-4) */}
+          {/* ── Error Trend ── */}
           {!loading && errors.length > 0 && (
-            <div className="anim-fade-up anim-delay-3" style={{ marginBottom: "var(--space-6)" }}>
+            <div className="anim-fade-up anim-delay-2" style={{ marginBottom: 20 }}>
               <ErrorTrendSection errors={errors} />
             </div>
           )}
 
-          {/* Filters */}
+          {/* ── Writing pattern ── */}
+          <div style={{ marginBottom: 20 }}>
+            <WritingPatternSection />
+          </div>
+
+          {/* ── Filters ── */}
           <div
-            className="anim-fade-up anim-delay-4"
+            className="anim-fade-up anim-delay-3"
             style={{
-              display: "flex", gap: 12, flexWrap: "wrap", marginBottom: "var(--space-6)",
-              alignItems: "center", padding: "16px 20px", borderRadius: "var(--radius-xl)",
-              background: "var(--surface)", border: "1px solid var(--border)",
-              boxShadow: "var(--shadow-sm)",
+              display: "flex", gap: 8, flexWrap: "wrap",
+              alignItems: "center", marginBottom: 16,
             }}
           >
-            <FilterOutlined style={{ color: "var(--text-muted)", fontSize: 16 }} />
-            <Select
-              placeholder="Module"
-              allowClear
-              value={filterModule}
-              onChange={(v) => setFilterModule(v ?? null)}
-              style={{ width: 140 }}
-              options={[
-                { value: "grammar-quiz", label: "Ngữ pháp" },
-                { value: "grammar-lessons", label: "Bài học" },
-                { value: "mock-test", label: "Thi thử" },
-                { value: "daily-challenge", label: "Thử thách" },
-                { value: "listening", label: "Nghe" },
-              ]}
-              size="large"
-            />
-            <Select
-              placeholder="Chủ đề"
-              allowClear
-              value={filterTopic}
-              onChange={(v) => setFilterTopic(v ?? null)}
-              style={{ width: 180 }}
-              options={topics.map((t) => ({ value: t, label: t }))}
-              size="large"
-            />
-            <Select
-              value={filterResolved}
-              onChange={(v) => setFilterResolved(v)}
-              style={{ width: 140 }}
-              options={[
-                { value: "false", label: "Chưa nắm" },
-                { value: "true", label: "Đã hiểu" },
-                { value: "", label: "Tất cả" },
-              ]}
-              size="large"
-            />
-            <span style={{ fontSize: 14, color: "var(--text-muted)", marginLeft: "auto", fontWeight: 600 }}>
+            <FilterOutlined style={{ color: "var(--text-muted)", fontSize: 13, flexShrink: 0 }} />
+
+            {/* Status pills */}
+            <div style={{ display: "flex", gap: 4 }}>
+              {FILTER_RESOLVED_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => setFilterResolved(opt.value)}
+                  style={{
+                    padding: "5px 13px", borderRadius: 99, fontSize: 12, fontWeight: 600,
+                    border: "1.5px solid",
+                    cursor: "pointer", transition: "all 0.15s",
+                    borderColor: filterResolved === opt.value ? "var(--accent)" : "var(--border)",
+                    background: filterResolved === opt.value ? "var(--accent)" : "var(--surface)",
+                    color: filterResolved === opt.value ? "#fff" : "var(--text-secondary)",
+                  }}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Module pills */}
+            <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
+              {MODULE_OPTIONS.map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => setFilterModule(opt.value)}
+                  style={{
+                    padding: "5px 13px", borderRadius: 99, fontSize: 12, fontWeight: 600,
+                    border: "1.5px solid",
+                    cursor: "pointer", transition: "all 0.15s",
+                    borderColor: filterModule === opt.value ? "var(--accent)" : "var(--border)",
+                    background: filterModule === opt.value ? "color-mix(in srgb, var(--accent) 12%, var(--surface))" : "var(--surface)",
+                    color: filterModule === opt.value ? "var(--accent)" : "var(--text-secondary)",
+                  }}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Topic select (only if topics exist) */}
+            {topics.length > 0 && (
+              <select
+                value={filterTopic}
+                onChange={(e) => setFilterTopic(e.target.value)}
+                style={{
+                  padding: "5px 12px", borderRadius: 99, fontSize: 12, fontWeight: 600,
+                  border: "1.5px solid var(--border)",
+                  background: filterTopic ? "color-mix(in srgb, var(--accent) 12%, var(--surface))" : "var(--surface)",
+                  color: filterTopic ? "var(--accent)" : "var(--text-secondary)",
+                  cursor: "pointer", outline: "none",
+                }}
+              >
+                <option value="">Chủ đề</option>
+                {topics.map((t) => <option key={t} value={t}>{t}</option>)}
+              </select>
+            )}
+
+            <span style={{
+              marginLeft: "auto", fontSize: 12, fontWeight: 700,
+              color: "var(--text-muted)", fontVariantNumeric: "tabular-nums",
+            }}>
               {total} kết quả
             </span>
           </div>
 
-          {/* Resolve all button */}
+          {/* ── Resolve all ── */}
           {unresolvedCount > 1 && (
-            <div className="anim-fade-up anim-delay-5" style={{ marginBottom: "var(--space-4)", textAlign: "right" }}>
-              <Button
+            <div className="anim-fade-up" style={{ marginBottom: 16, display: "flex", justifyContent: "flex-end" }}>
+              <button
                 onClick={resolveAll}
-                icon={<CheckCircleOutlined />}
                 style={{
-                  borderRadius: "var(--radius-xl)",
+                  display: "inline-flex", alignItems: "center", gap: 7,
+                  padding: "8px 18px", borderRadius: 99,
+                  border: "1.5px solid color-mix(in srgb, var(--success) 35%, transparent)",
                   background: "var(--success-bg)",
-                  color: "var(--success)", fontWeight: 600,
-                  border: "none",
+                  color: "var(--success)", cursor: "pointer",
+                  fontSize: 13, fontWeight: 600, transition: "all 0.15s",
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.background = "var(--success)"; e.currentTarget.style.color = "#fff"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.background = "var(--success-bg)"; e.currentTarget.style.color = "var(--success)"; }}
               >
+                <CheckCircleOutlined style={{ fontSize: 13 }} />
                 Đánh dấu tất cả đã hiểu
-              </Button>
+              </button>
             </div>
           )}
 
-          {/* Loading */}
+          {/* ── Loading ── */}
           {loading && (
-            <div style={{
-              padding: "24px", borderRadius: "var(--radius-2xl)",
-              background: "var(--surface)", border: "1px solid var(--border)",
-              boxShadow: "var(--shadow-sm)"
-            }}>
+            <div style={{ padding: 24, borderRadius: 16, background: "var(--surface)", border: "1px solid var(--border)" }}>
               <Skeleton active paragraph={{ rows: 4 }} />
             </div>
           )}
 
-          {/* Empty */}
+          {/* ── Empty ── */}
           {!loading && errors.length === 0 && (
             <div className="anim-scale-in" style={{
-              padding: "80px 24px", borderRadius: "var(--radius-2xl)",
+              padding: "72px 24px", borderRadius: 20,
               background: "var(--surface)", border: "1px solid var(--border)",
-              boxShadow: "var(--shadow-sm)",
+              textAlign: "center",
             }}>
-              <Empty
-                image={<InboxOutlined style={{ fontSize: 40, color: "var(--text-muted)" }} />}
-                description={
-                  <>
-                    <h3 style={{ margin: "0 0 8px", fontSize: 20, fontWeight: 700, color: "var(--ink)", fontFamily: "var(--font-display)" }}>
-                      {filterResolved === "false" ? "Tuyệt vời, không có lỗi chưa nắm!" : "Không tìm thấy kết quả"}
-                    </h3>
-                    <p style={{ margin: 0, fontSize: 15, color: "var(--text-secondary)" }}>
-                      {filterResolved === "false"
-                        ? "Hãy tiếp tục làm bài tập để mở rộng kiến thức nhé!"
-                        : "Thử thay đổi bộ lọc để xem thêm."}
-                    </p>
-                  </>
-                }
-              />
+              <div style={{ fontSize: 36, marginBottom: 12, opacity: 0.3 }}>
+                {filterResolved === "false" ? "🎉" : "📭"}
+              </div>
+              <div style={{ fontSize: 18, fontWeight: 700, color: "var(--ink)", fontFamily: "var(--font-display)", marginBottom: 6 }}>
+                {filterResolved === "false" ? "Tuyệt vời, không có lỗi chưa nắm!" : "Không tìm thấy kết quả"}
+              </div>
+              <div style={{ fontSize: 14, color: "var(--text-muted)" }}>
+                {filterResolved === "false"
+                  ? "Hãy tiếp tục làm bài tập để mở rộng kiến thức nhé!"
+                  : "Thử thay đổi bộ lọc để xem thêm."}
+              </div>
             </div>
           )}
 
-          {/* Writing pattern section */}
-          <div style={{ marginBottom: "var(--space-6)" }}>
-            <WritingPatternSection />
-          </div>
-
-          {/* Section header */}
+          {/* ── Section label ── */}
           {!loading && errors.length > 0 && (
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: "var(--space-2)" }}>
-              <WarningOutlined style={{ fontSize: 12, color: "var(--accent)" }} />
-              <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--accent)" }}>Danh sách lỗi sai</span>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 14 }}>
+              <div style={{ width: 3, height: 14, borderRadius: 2, background: "var(--accent)", flexShrink: 0 }} />
+              <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.14em", color: "var(--accent)" }}>
+                Danh sách lỗi sai
+              </span>
               <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
             </div>
           )}
 
-          {/* Error cards */}
+          {/* ── Error cards ── */}
           {!loading && errors.length > 0 && (
-            <div style={{ display: "flex", flexDirection: "column", gap: "var(--space-4)" }} className="anim-fade-up anim-delay-5">
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }} className="anim-fade-up anim-delay-4">
               {errors.map((err) => (
-                <div
+                <ErrorCard
                   key={err.id}
-                  style={{
-                    padding: "24px", borderRadius: "var(--radius-2xl)",
-                    background: "var(--surface)",
-                    border: "1px solid var(--border)",
-                    position: "relative",
-                    overflow: "hidden",
-                    opacity: err.isResolved ? 0.75 : 1,
-                    boxShadow: "var(--shadow-sm)",
-                    transition: "all var(--duration-fast) ease",
-                  }}
-                  onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "var(--shadow-md)"; e.currentTarget.style.borderColor = err.isResolved ? "var(--success)" : "var(--accent)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "var(--shadow-sm)"; e.currentTarget.style.borderColor = "var(--border)"; }}
-                >
-                  <div style={{
-                    position: "absolute", left: 0, top: 0, bottom: 0, width: 4,
-                    background: err.isResolved ? "var(--success)" : "var(--error)",
-                  }} />
-                  {/* Header */}
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16, flexWrap: "wrap", paddingLeft: 8 }}>
-                    {err.isResolved
-                      ? <CheckCircleOutlined style={{ color: "var(--success)", fontSize: 18 }} />
-                      : <WarningOutlined style={{ color: "var(--error)", fontSize: 18 }} />}
-                    <Tag
-                      color={MODULE_COLORS[err.sourceModule] ?? "default"}
-                      style={{ fontSize: 12, borderRadius: "var(--radius)", margin: 0, fontWeight: 700, padding: "2px 10px", border: "none" }}
-                    >
-                      {MODULE_LABELS[err.sourceModule] ?? err.sourceModule}
-                    </Tag>
-                    {err.grammarTopic && (
-                      <Tag color="default" style={{ fontSize: 12, borderRadius: "var(--radius)", margin: 0, fontWeight: 600, padding: "2px 10px", background: "var(--bg-secondary)", border: "none" }}>
-                        {err.grammarTopic}
-                      </Tag>
-                    )}
-                    <span style={{ marginLeft: "auto", fontSize: 13, color: "var(--text-muted)", fontWeight: 600 }}>
-                      {new Date(err.createdAt).toLocaleDateString("vi-VN", { day: 'numeric', month: 'long', year: 'numeric' })}
-                    </span>
-                  </div>
-
-                  {/* Question */}
-                  <p style={{ fontSize: 16, margin: "0 0 16px", paddingLeft: 8, lineHeight: 1.6, color: "var(--text-primary)", fontWeight: 500 }}>
-                    {err.questionStem}
-                  </p>
-
-                  {/* Answers */}
-                  <div style={{ display: "flex", gap: 16, fontSize: 14, marginBottom: 16, paddingLeft: 8, flexWrap: "wrap" }}>
-                    <div style={{
-                      display: "flex", alignItems: "center", gap: 8,
-                      padding: "8px 16px", borderRadius: "var(--radius-xl)",
-                      background: "var(--error-bg)",
-                      border: "1px solid color-mix(in srgb, var(--error) 20%, transparent)",
-                    }}>
-                      <CloseCircleOutlined style={{ color: "var(--error)", fontSize: 14 }} />
-                      <span style={{ color: "var(--error)", fontWeight: 600 }}>{err.userAnswer}</span>
-                    </div>
-                    <div style={{
-                      display: "flex", alignItems: "center", gap: 8,
-                      padding: "8px 16px", borderRadius: "var(--radius-xl)",
-                      background: "var(--success-bg)",
-                      border: "1px solid color-mix(in srgb, var(--success) 20%, transparent)",
-                    }}>
-                      <CheckCircleOutlined style={{ color: "var(--success)", fontSize: 14 }} />
-                      <span style={{ color: "var(--success)", fontWeight: 600 }}>{err.correctAnswer}</span>
-                    </div>
-                  </div>
-
-                  {/* Deep Explanation */}
-                  <div style={{ paddingLeft: 8 }}>
-                    <DeepExplanation
-                      errorId={err.id}
-                      cached={err.deepExplanation}
-                      fallbackEn={err.explanationEn}
-                      fallbackVi={err.explanationVi}
-                    />
-                  </div>
-
-                  {/* Inline Practice */}
-                  <div style={{ paddingLeft: 8 }}>
-                    <InlinePractice
-                      errorId={err.id}
-                      onResolved={() => resolveError(err.id)}
-                    />
-                  </div>
-
-                  {/* Actions */}
-                  {!err.isResolved && (
-                    <div style={{ marginTop: 16, display: "flex", justifyContent: "flex-end" }}>
-                      <Tooltip title="Đánh dấu đã hiểu">
-                        <button
-                          onClick={() => resolveError(err.id)}
-                          style={{
-                            padding: "8px 16px", borderRadius: "var(--radius-xl)",
-                            border: "none",
-                            background: "var(--success-bg)",
-                            color: "var(--success)", cursor: "pointer", fontSize: 14, fontWeight: 600,
-                            transition: "all var(--duration-fast) ease",
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.background = "var(--success)";
-                            e.currentTarget.style.color = "var(--text-on-accent)";
-                            e.currentTarget.style.transform = "translateY(-2px)";
-                            e.currentTarget.style.boxShadow = "0 4px 12px color-mix(in srgb, var(--success) 20%, transparent)";
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.background = "var(--success-bg)";
-                            e.currentTarget.style.color = "var(--success)";
-                            e.currentTarget.style.transform = "translateY(0)";
-                            e.currentTarget.style.boxShadow = "none";
-                          }}
-                        >
-                          <CheckCircleOutlined style={{ marginRight: 6 }} /> Đã hiểu
-                        </button>
-                      </Tooltip>
-                    </div>
-                  )}
-                </div>
+                  err={err}
+                  onResolve={() => resolveError(err.id)}
+                />
               ))}
             </div>
           )}
 
-          {/* Refresh */}
+          {/* ── Refresh ── */}
           {!loading && (
             <div style={{ textAlign: "center", marginTop: 32, marginBottom: 32 }}>
-              <Button
+              <button
                 onClick={fetchErrors}
-                icon={<ReloadOutlined />}
                 style={{
-                  borderRadius: "var(--radius-xl)",
-                  fontWeight: 600,
+                  display: "inline-flex", alignItems: "center", gap: 7,
+                  padding: "8px 20px", borderRadius: 99,
+                  border: "1.5px solid var(--border)",
+                  background: "var(--surface)", color: "var(--text-secondary)",
+                  cursor: "pointer", fontSize: 13, fontWeight: 600,
+                  transition: "all 0.15s",
                 }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.color = "var(--accent)"; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.color = "var(--text-secondary)"; }}
               >
-                Tải lại dữ liệu
-              </Button>
+                <ReloadOutlined style={{ fontSize: 12 }} />
+                Tải lại
+              </button>
             </div>
           )}
         </div>
+      </div>
+    </div>
+  );
+}
+
+function ErrorCard({ err, onResolve }: { err: any; onResolve: () => void }) {
+  const date = new Date(err.createdAt).toLocaleDateString("vi-VN", { day: "numeric", month: "short" });
+
+  return (
+    <div
+      style={{
+        borderRadius: 16,
+        background: "var(--surface)",
+        border: "1px solid var(--border)",
+        overflow: "hidden",
+        opacity: err.isResolved ? 0.72 : 1,
+        boxShadow: "var(--shadow-sm)",
+        transition: "box-shadow 0.18s, border-color 0.18s, transform 0.18s",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.boxShadow = "var(--shadow-md)";
+        e.currentTarget.style.borderColor = err.isResolved ? "color-mix(in srgb, var(--success) 40%, var(--border))" : "color-mix(in srgb, var(--accent) 40%, var(--border))";
+        e.currentTarget.style.transform = "translateY(-1px)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.boxShadow = "var(--shadow-sm)";
+        e.currentTarget.style.borderColor = "var(--border)";
+        e.currentTarget.style.transform = "translateY(0)";
+      }}
+    >
+      {/* Top accent stripe + header */}
+      <div style={{
+        display: "flex", alignItems: "center", gap: 10,
+        padding: "12px 16px",
+        background: err.isResolved
+          ? "color-mix(in srgb, var(--success) 6%, var(--bg))"
+          : "color-mix(in srgb, var(--error) 5%, var(--bg))",
+        borderBottom: "1px solid var(--border)",
+      }}>
+        {err.isResolved
+          ? <CheckCircleOutlined style={{ color: "var(--success)", fontSize: 14, flexShrink: 0 }} />
+          : <WarningOutlined style={{ color: "var(--error)", fontSize: 14, flexShrink: 0 }} />}
+
+        <div style={{ display: "flex", gap: 6, flex: 1, flexWrap: "wrap", alignItems: "center" }}>
+          <span style={{
+            fontSize: 11, fontWeight: 700, padding: "2px 9px", borderRadius: 99,
+            background: err.isResolved ? "var(--success-bg)" : "var(--error-bg)",
+            color: err.isResolved ? "var(--success)" : "var(--error)",
+          }}>
+            {MODULE_LABELS[err.sourceModule] ?? err.sourceModule}
+          </span>
+          {err.grammarTopic && (
+            <span style={{
+              fontSize: 11, fontWeight: 600, padding: "2px 9px", borderRadius: 99,
+              background: "var(--bg-deep)", color: "var(--text-muted)",
+              border: "1px solid var(--border)",
+            }}>
+              {err.grammarTopic}
+            </span>
+          )}
+        </div>
+
+        <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 500, flexShrink: 0 }}>
+          {date}
+        </span>
+      </div>
+
+      {/* Body */}
+      <div style={{ padding: "16px 18px" }}>
+        {/* Question */}
+        <p style={{ fontSize: 15, margin: "0 0 14px", lineHeight: 1.65, color: "var(--text-primary)", fontWeight: 500 }}>
+          {err.questionStem}
+        </p>
+
+        {/* Answer comparison */}
+        <div style={{ display: "flex", gap: 10, marginBottom: 14, flexWrap: "wrap" }}>
+          <div style={{
+            display: "flex", alignItems: "center", gap: 7,
+            padding: "7px 14px", borderRadius: 10, flex: "0 0 auto",
+            background: "var(--error-bg)",
+            border: "1px solid color-mix(in srgb, var(--error) 18%, transparent)",
+          }}>
+            <CloseCircleOutlined style={{ color: "var(--error)", fontSize: 12 }} />
+            <span style={{ color: "var(--error)", fontWeight: 700, fontSize: 13 }}>{err.userAnswer}</span>
+          </div>
+          <div style={{
+            display: "flex", alignItems: "center", gap: 7,
+            padding: "7px 14px", borderRadius: 10, flex: "0 0 auto",
+            background: "var(--success-bg)",
+            border: "1px solid color-mix(in srgb, var(--success) 18%, transparent)",
+          }}>
+            <CheckCircleOutlined style={{ color: "var(--success)", fontSize: 12 }} />
+            <span style={{ color: "var(--success)", fontWeight: 700, fontSize: 13 }}>{err.correctAnswer}</span>
+          </div>
+        </div>
+
+        {/* Deep explanation */}
+        <DeepExplanation
+          errorId={err.id}
+          cached={err.deepExplanation}
+          fallbackEn={err.explanationEn}
+          fallbackVi={err.explanationVi}
+        />
+
+        {/* Inline practice */}
+        <InlinePractice errorId={err.id} onResolved={onResolve} />
+
+        {/* Resolve button */}
+        {!err.isResolved && (
+          <div style={{ marginTop: 14, display: "flex", justifyContent: "flex-end" }}>
+            <button
+              onClick={onResolve}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 6,
+                padding: "6px 16px", borderRadius: 99,
+                border: "1.5px solid color-mix(in srgb, var(--success) 35%, transparent)",
+                background: "var(--success-bg)", color: "var(--success)",
+                cursor: "pointer", fontSize: 12, fontWeight: 700, transition: "all 0.15s",
+              }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = "var(--success)"; e.currentTarget.style.color = "#fff"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = "var(--success-bg)"; e.currentTarget.style.color = "var(--success)"; }}
+            >
+              <CheckCircleOutlined style={{ fontSize: 11 }} /> Đã hiểu
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

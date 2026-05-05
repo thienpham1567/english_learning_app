@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { Flex, Typography, Tag, Tooltip } from "antd";
+import { Tooltip } from "antd";
 import {
   ArrowUpOutlined,
   ArrowDownOutlined,
@@ -16,138 +16,125 @@ import {
 import { computeErrorTrends } from "@repo/modules/learning";
 import type { TrendInput, CategoryTrend } from "@repo/modules/learning";
 
-const { Text } = Typography;
-
 type Props = {
   errors: TrendInput[];
 };
 
-const DIRECTION_CONFIG: Record<string, {
-  icon: React.ReactNode;
-  color: string;
-  labelVi: string;
-}> = {
+const DIRECTION_CONFIG: Record<string, { icon: React.ReactNode; color: string; label: string; bg: string }> = {
   improved: {
-    icon: <ArrowDownOutlined />,
+    icon: <ArrowDownOutlined style={{ fontSize: 10 }} />,
     color: "var(--success)",
-    labelVi: "Cải thiện",
+    bg: "var(--success-bg)",
+    label: "Cải thiện",
   },
   worsened: {
-    icon: <ArrowUpOutlined />,
+    icon: <ArrowUpOutlined style={{ fontSize: 10 }} />,
     color: "var(--error)",
-    labelVi: "Tăng lên",
+    bg: "var(--error-bg)",
+    label: "Tăng lên",
   },
   stable: {
-    icon: <MinusOutlined />,
+    icon: <MinusOutlined style={{ fontSize: 10 }} />,
     color: "var(--text-muted)",
-    labelVi: "Ổn định",
+    bg: "var(--bg-deep)",
+    label: "Ổn định",
   },
   new: {
-    icon: <QuestionCircleOutlined />,
+    icon: <QuestionCircleOutlined style={{ fontSize: 10 }} />,
     color: "var(--warning)",
-    labelVi: "Mới",
+    bg: "color-mix(in srgb, var(--warning) 10%, var(--surface))",
+    label: "Mới",
   },
 };
 
-function TrendCard({ trend }: { trend: CategoryTrend }) {
+function TrendRow({ trend }: { trend: CategoryTrend }) {
   const config = DIRECTION_CONFIG[trend.direction]!;
   const pctResolved = Math.round(trend.resolutionRate * 100);
 
   return (
     <div
       style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 10,
-        padding: "10px 14px",
-        borderRadius: 10,
-        background: "var(--card-bg)",
-        border: "1px solid var(--border)",
-        boxShadow: "var(--shadow-sm)",
+        display: "flex", alignItems: "center", gap: 12,
+        padding: "10px 14px", borderRadius: 10,
+        background: "var(--surface)", border: "1px solid var(--border)",
+        transition: "border-color 0.15s",
       }}
+      onMouseEnter={(e) => { e.currentTarget.style.borderColor = `color-mix(in srgb, ${config.color} 30%, var(--border))`; }}
+      onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border)"; }}
     >
-      <span style={{ fontSize: 18 }}>{trend.category.emoji}</span>
-      <Flex vertical style={{ flex: 1, minWidth: 0 }}>
-        <Flex align="center" gap={6}>
-          <Text style={{ fontWeight: 600, fontSize: 13, color: "var(--ink)" }}>
+      <span style={{ fontSize: 16, flexShrink: 0 }}>{trend.category.emoji}</span>
+
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--ink)" }}>
             {trend.category.labelVi}
-          </Text>
+          </span>
           {!trend.confident && (
             <Tooltip title="Cần thêm dữ liệu để đánh giá chính xác">
               <InfoCircleOutlined style={{ fontSize: 11, color: "var(--text-muted)" }} />
             </Tooltip>
           )}
-        </Flex>
-        <Text type="secondary" style={{ fontSize: 11, lineHeight: 1.3 }}>
+        </div>
+        <div style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.4, marginTop: 1 }}>
           {trend.explanation}
-        </Text>
-      </Flex>
-      <Flex vertical align="flex-end" gap={2}>
-        <Tag
-          style={{
-            borderRadius: 6,
-            fontSize: 11,
-            fontWeight: 600,
-            margin: 0,
-            color: config.color,
-            borderColor: config.color,
-            background: `color-mix(in srgb, ${config.color} 8%, var(--surface))`,
-          }}
-        >
-          {config.icon} {config.labelVi}
-        </Tag>
-        <Text type="secondary" style={{ fontSize: 10 }}>
-          {pctResolved}% đã hiểu
-        </Text>
-      </Flex>
+        </div>
+      </div>
+
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4, flexShrink: 0 }}>
+        <span style={{
+          display: "inline-flex", alignItems: "center", gap: 4,
+          fontSize: 11, fontWeight: 700, padding: "2px 9px", borderRadius: 99,
+          color: config.color, background: config.bg,
+        }}>
+          {config.icon} {config.label}
+        </span>
+        <span style={{ fontSize: 10, color: "var(--text-muted)" }}>{pctResolved}% đã hiểu</span>
+      </div>
     </div>
   );
 }
 
-/**
- * Error Improvement Trend Section (Story 23.4, AC: 1-4)
- *
- * Shows improved, worsened, and needs-review error categories with
- * trend direction, resolution rate, and low-confidence indicators.
- */
 export function ErrorTrendSection({ errors }: Props) {
   const trends = useMemo(() => computeErrorTrends(errors), [errors]);
-
   if (!trends.hasData) return null;
 
-  const sections: Array<{ key: string; label: React.ReactNode; items: CategoryTrend[]; color: string }> = [
-    { key: "improved", label: <><FallOutlined /> Cải thiện</>, items: trends.improved, color: "var(--success)" },
-    { key: "worsened", label: <><RiseOutlined /> Cần chú ý</>, items: trends.worsened, color: "var(--error)" },
-    { key: "needsReview", label: <><BarChartOutlined /> Cần ôn tập</>, items: trends.needsReview, color: "var(--text-muted)" },
+  const sections: Array<{ key: string; icon: React.ReactNode; label: string; items: CategoryTrend[]; color: string }> = [
+    { key: "worsened", icon: <RiseOutlined />, label: "Cần chú ý", items: trends.worsened, color: "var(--error)" },
+    { key: "improved", icon: <FallOutlined />, label: "Cải thiện", items: trends.improved, color: "var(--success)" },
+    { key: "needsReview", icon: <BarChartOutlined />, label: "Cần ôn tập", items: trends.needsReview, color: "var(--text-muted)" },
   ].filter((s) => s.items.length > 0);
 
   if (sections.length === 0) return null;
 
   return (
-    <div style={{ marginBottom: 16 }}>
-      <Flex align="center" gap={8} style={{ marginBottom: 10 }}>
-        <Text style={{ fontSize: 13, fontWeight: 700, color: "var(--ink)" }}>
-          <LineChartOutlined style={{ marginRight: 6 }} />Xu hướng lỗi sai
-        </Text>
-      </Flex>
+    <div>
+      {/* Section label */}
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+        <div style={{ width: 3, height: 14, borderRadius: 2, background: "var(--text-muted)", flexShrink: 0 }} />
+        <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.14em", color: "var(--text-secondary)", display: "flex", alignItems: "center", gap: 6 }}>
+          <LineChartOutlined style={{ fontSize: 12 }} /> Xu hướng lỗi sai
+        </span>
+        <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+      </div>
 
-      <Flex vertical gap={6}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
         {sections.map((section) => (
           <div key={section.key}>
-            <Text
-              type="secondary"
-              style={{ fontSize: 11, fontWeight: 600, display: "block", marginBottom: 4 }}
-            >
-              {section.label}
-            </Text>
-            <Flex vertical gap={4}>
+            <div style={{
+              display: "inline-flex", alignItems: "center", gap: 6,
+              fontSize: 11, fontWeight: 700, color: section.color,
+              marginBottom: 6,
+            }}>
+              {section.icon} {section.label}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
               {section.items.slice(0, 3).map((trend) => (
-                <TrendCard key={trend.category.key} trend={trend} />
+                <TrendRow key={trend.category.key} trend={trend} />
               ))}
-            </Flex>
+            </div>
           </div>
         ))}
-      </Flex>
+      </div>
     </div>
   );
 }
