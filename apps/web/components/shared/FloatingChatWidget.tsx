@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { usePathname } from "next/navigation";
 import { CloseOutlined, SendOutlined, LoadingOutlined } from "@ant-design/icons";
 import { SimonAvatar } from "@/app/(app)/english-chatbot/_components/persona-avatars/SimonAvatar";
 
@@ -30,7 +31,10 @@ function useIsMobile(bp = 768) {
 }
 
 export function FloatingChatWidget() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
+
+  if (pathname?.startsWith("/english-chatbot")) return null;
   const [msgs, setMsgs] = useState<Msg[]>([WELCOME]);
   const [input, setInput] = useState("");
   const [streaming, setStreaming] = useState(false);

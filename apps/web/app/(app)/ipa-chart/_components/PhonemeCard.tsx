@@ -1,6 +1,7 @@
 "use client";
 
-import { SoundOutlined, LoadingOutlined } from "@ant-design/icons";
+import { useState } from "react";
+import { LoadingOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import type { IpaPhoneme } from "../_data/phonemes";
 import type { TtsAccent } from "@/hooks/useTextToSpeech";
@@ -14,8 +15,8 @@ type Props = {
 
 export function PhonemeCard({ phoneme, accent, onSpeak, isBusy }: Props) {
   const { symbol, exampleWord, exampleHighlight, tip, voiced, subtype } = phoneme;
+  const [pulsing, setPulsing] = useState(false);
 
-  // Highlight the example word
   const idx = exampleWord.toLowerCase().indexOf(exampleHighlight.toLowerCase());
   const before = idx > 0 ? exampleWord.slice(0, idx) : "";
   const match = idx >= 0 ? exampleWord.slice(idx, idx + exampleHighlight.length) : exampleWord;
@@ -25,76 +26,100 @@ export function PhonemeCard({ phoneme, accent, onSpeak, isBusy }: Props) {
   const isDiphthong = subtype === "diphthong";
   const isLong = subtype === "monophthong-long";
 
-  // Color coding
   const accentColor = isVowel
-    ? isDiphthong
-      ? "var(--tertiary)"
-      : isLong
-        ? "var(--info)"
-        : "var(--accent)"
-    : voiced
-      ? "var(--success)"
-      : "var(--warning)";
+    ? isDiphthong ? "var(--tertiary, #8B5CF6)" : isLong ? "var(--info)" : "var(--accent)"
+    : voiced ? "var(--success)" : "var(--warning)";
 
-  const accentBg = isVowel
-    ? isDiphthong
-      ? "color-mix(in srgb, var(--tertiary) 8%, var(--surface))"
-      : isLong
-        ? "color-mix(in srgb, var(--info) 8%, var(--surface))"
-        : "color-mix(in srgb, var(--accent) 8%, var(--surface))"
-    : voiced
-      ? "color-mix(in srgb, var(--success) 8%, var(--surface))"
-      : "color-mix(in srgb, var(--warning) 8%, var(--surface))";
+  const typeLabel = isVowel
+    ? isDiphthong ? "diphthong" : isLong ? "long" : "short"
+    : voiced ? "voiced" : "voiceless";
+
+  const handleClick = (selectedAccent: TtsAccent, e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (isBusy) return;
+    onSpeak(exampleWord, selectedAccent);
+    setPulsing(true);
+    setTimeout(() => setPulsing(false), 600);
+  };
 
   return (
     <div
+      className="ipa-card"
+      onClick={() => handleClick(accent)}
       style={{
         position: "relative",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        gap: 6,
-        padding: "20px 12px 16px",
-        borderRadius: 16,
-        border: `1px solid var(--border)`,
-        background: "var(--card-bg)",
-        cursor: "pointer",
-        transition: "all 0.2s ease",
+        borderRadius: 14,
+        border: "1px solid var(--border)",
+        background: "var(--surface)",
+        cursor: isBusy ? "wait" : "pointer",
+        transition: "transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease",
         overflow: "hidden",
+        userSelect: "none",
       }}
-      className="ipa-card"
-      onClick={() => onSpeak(exampleWord, accent)}
     >
-      {/* Top accent strip */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 3,
-          background: accentColor,
-          opacity: 0.6,
-        }}
-      />
+      {/* Subtle colored top bar */}
+      <div style={{
+        position: "absolute",
+        top: 0, left: 0, right: 0,
+        height: 2,
+        background: accentColor,
+        opacity: 0.5,
+      }} />
 
-      {/* IPA Symbol */}
-      <div
-        style={{
-          fontSize: 32,
-          fontWeight: 700,
-          fontFamily: "'Noto Sans', 'Segoe UI', system-ui, sans-serif",
-          color: accentColor,
-          lineHeight: 1,
-        }}
-      >
+      {/* Type badge — top right */}
+      <div style={{
+        position: "absolute",
+        top: 8,
+        right: 8,
+        fontSize: 9,
+        fontWeight: 700,
+        textTransform: "uppercase",
+        letterSpacing: "0.06em",
+        padding: "2px 6px",
+        borderRadius: 99,
+        background: `color-mix(in srgb, ${accentColor} 12%, transparent)`,
+        color: accentColor,
+        lineHeight: 1.4,
+      }}>
+        {typeLabel}
+      </div>
+
+      {/* IPA Symbol — hero */}
+      <div style={{
+        paddingTop: 22,
+        paddingBottom: 6,
+        fontSize: 38,
+        fontWeight: 700,
+        fontFamily: "'Noto Serif', 'Noto Sans', Georgia, 'Times New Roman', serif",
+        color: accentColor,
+        lineHeight: 1,
+        letterSpacing: "-0.01em",
+        textAlign: "center",
+        animation: pulsing ? "ipaCardPulse 0.5s ease-out" : "none",
+        transition: "color 0.15s",
+      }}>
         /{symbol}/
       </div>
 
       {/* Example word */}
-      <div style={{ fontSize: 14, fontWeight: 500, lineHeight: 1.3 }}>
+      <div style={{
+        fontSize: 13,
+        fontWeight: 500,
+        lineHeight: 1,
+        marginBottom: 6,
+        color: "var(--text-primary)",
+        letterSpacing: "0.01em",
+      }}>
         {before}
-        <span style={{ color: accentColor, fontWeight: 700, textDecoration: "underline", textUnderlineOffset: 3 }}>
+        <span style={{
+          color: accentColor,
+          fontWeight: 700,
+          borderBottom: `1.5px solid ${accentColor}`,
+          paddingBottom: 1,
+        }}>
           {match}
         </span>
         {after}
@@ -102,78 +127,63 @@ export function PhonemeCard({ phoneme, accent, onSpeak, isBusy }: Props) {
 
       {/* Tip */}
       <Tooltip title={tip} placement="bottom">
-        <div
-          style={{
-            fontSize: 11,
-            color: "var(--text-secondary)",
-            textAlign: "center",
-            lineHeight: 1.3,
-            maxHeight: 28,
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            display: "-webkit-box",
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: "vertical",
-          }}
-        >
+        <div style={{
+          fontSize: 10.5,
+          color: "var(--text-muted)",
+          textAlign: "center",
+          lineHeight: 1.35,
+          padding: "0 10px",
+          minHeight: 28,
+          display: "-webkit-box",
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: "vertical",
+          overflow: "hidden",
+        }}>
           {tip}
         </div>
       </Tooltip>
 
-      {/* Accent play buttons */}
-      <div style={{ display: "flex", gap: 6, marginTop: 4 }}>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onSpeak(exampleWord, "us");
-          }}
-          disabled={isBusy}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 4,
-            padding: "4px 10px",
-            borderRadius: 6,
-            border: `1px solid ${accent === "us" ? accentColor : "var(--border)"}`,
-            background: accent === "us" ? accentBg : "transparent",
-            color: accent === "us" ? accentColor : "var(--text-secondary)",
-            cursor: isBusy ? "not-allowed" : "pointer",
-            fontSize: 11,
-            fontWeight: 500,
-            opacity: isBusy ? 0.5 : 1,
-            transition: "all 0.15s ease",
-          }}
-          aria-label={`Play ${exampleWord} US accent`}
-        >
-          {isBusy ? <LoadingOutlined spin style={{ fontSize: 10 }} /> : <SoundOutlined style={{ fontSize: 10 }} />}
-          US
-        </button>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onSpeak(exampleWord, "uk");
-          }}
-          disabled={isBusy}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 4,
-            padding: "4px 10px",
-            borderRadius: 6,
-            border: `1px solid ${accent === "uk" ? accentColor : "var(--border)"}`,
-            background: accent === "uk" ? accentBg : "transparent",
-            color: accent === "uk" ? accentColor : "var(--text-secondary)",
-            cursor: isBusy ? "not-allowed" : "pointer",
-            fontSize: 11,
-            fontWeight: 500,
-            opacity: isBusy ? 0.5 : 1,
-            transition: "all 0.15s ease",
-          }}
-          aria-label={`Play ${exampleWord} UK accent`}
-        >
-          {isBusy ? <LoadingOutlined spin style={{ fontSize: 10 }} /> : <SoundOutlined style={{ fontSize: 10 }} />}
-          UK
-        </button>
+      {/* Play buttons */}
+      <div style={{
+        display: "flex",
+        gap: 5,
+        padding: "10px 10px 12px",
+        width: "100%",
+        justifyContent: "center",
+      }}>
+        {(["us", "uk"] as TtsAccent[]).map((a) => (
+          <button
+            key={a}
+            onClick={(e) => handleClick(a, e)}
+            disabled={isBusy}
+            aria-label={`Play ${exampleWord} ${a.toUpperCase()}`}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 3,
+              padding: "4px 10px",
+              borderRadius: 7,
+              border: `1px solid ${accent === a ? accentColor : "var(--border)"}`,
+              background: accent === a
+                ? `color-mix(in srgb, ${accentColor} 10%, var(--surface))`
+                : "transparent",
+              color: accent === a ? accentColor : "var(--text-muted)",
+              cursor: isBusy ? "wait" : "pointer",
+              fontSize: 11,
+              fontWeight: 600,
+              opacity: isBusy ? 0.45 : 1,
+              transition: "all 0.15s ease",
+              letterSpacing: "0.02em",
+            }}
+          >
+            {isBusy
+              ? <LoadingOutlined spin style={{ fontSize: 9 }} />
+              : <span style={{ fontSize: 9 }}>▶</span>
+            }
+            {a.toUpperCase()}
+          </button>
+        ))}
       </div>
     </div>
   );

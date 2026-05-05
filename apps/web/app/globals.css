@@ -55,13 +55,15 @@
   --font-body: "Source Sans 3", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
 
-  /* Sidebar dark panel */
-  --sidebar-bg: #1C1410;
-  --sidebar-gradient: linear-gradient(180deg, #1C1410 0%, #261A16 35%, #2E201C 65%, #261A16 85%, #1C1410 100%);
-  --sidebar-glow: radial-gradient(ellipse 120% 30% at 50% 95%, rgba(200, 75, 49, 0.12) 0%, transparent 70%);
-  --sidebar-text: rgba(255, 255, 255, 0.6);
-  --sidebar-text-active: rgba(255, 255, 255, 0.92);
-  --sidebar-border: rgba(255, 255, 255, 0.1);
+  /* Sidebar — light theme: warm cream */
+  --sidebar-bg: #F5EDE3;
+  --sidebar-gradient: linear-gradient(180deg, #FAF7F2 0%, #F5EDE3 50%, #FAF7F2 100%);
+  --sidebar-glow: radial-gradient(ellipse 120% 30% at 50% 95%, rgba(200, 75, 49, 0.07) 0%, transparent 70%);
+  --sidebar-text: #8A6F5E;
+  --sidebar-text-active: #1C1410;
+  --sidebar-border: rgba(180, 145, 115, 0.22);
+  --sidebar-item-hover: rgba(200, 75, 49, 0.07);
+  --sidebar-active-bg: rgba(200, 75, 49, 0.1);
 
   /* ── Semantic Colors ── */
   --success: #10b981;
@@ -185,9 +187,11 @@
   --sidebar-bg: #100E0C;
   --sidebar-gradient: linear-gradient(180deg, #100E0C 0%, #161210 30%, #1E1916 55%, #161210 80%, #100E0C 100%);
   --sidebar-glow: radial-gradient(ellipse 120% 30% at 50% 95%, rgba(232, 122, 94, 0.1) 0%, transparent 70%);
-  --sidebar-text: rgba(255, 255, 255, 0.55);
-  --sidebar-text-active: rgba(255, 255, 255, 0.9);
+  --sidebar-text: rgba(255, 255, 255, 0.52);
+  --sidebar-text-active: rgba(255, 255, 255, 0.92);
   --sidebar-border: rgba(255, 255, 255, 0.08);
+  --sidebar-item-hover: rgba(255, 255, 255, 0.06);
+  --sidebar-active-bg: rgba(232, 122, 94, 0.14);
 
   /* ── Semantic Colors (Dark) ── */
   --success: #34d399;
@@ -743,6 +747,15 @@ textarea.ant-input::placeholder {
   background-size: 128px 128px;
 }
 
+/* ── Sidebar nav link hover ── */
+.sidebar-nav-link:hover {
+  background: var(--sidebar-item-hover) !important;
+  color: var(--sidebar-text-active) !important;
+}
+.sidebar-nav-link:hover span {
+  opacity: 1 !important;
+}
+
 /* ── Theme toggle button ── */
 .theme-toggle-btn {
   cursor: pointer;
@@ -761,7 +774,7 @@ textarea.ant-input::placeholder {
     color 0.2s;
 }
 .theme-toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.06);
+  background: var(--sidebar-item-hover);
   color: var(--sidebar-text-active);
 }
 
