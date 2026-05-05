@@ -51,6 +51,7 @@ const navGroups: (NavItem | NavGroup)[] = [
       { href: "/english-chatbot", label: "Trò chuyện", icon: CommentOutlined },
       { href: "/listening", label: "Luyện nghe", icon: SoundOutlined },
       { href: "/pronunciation", label: "Luyện nói", icon: AudioOutlined },
+      { href: "/ipa-chart", label: "Bảng IPA", icon: SoundOutlined },
       { href: "/writing-practice", label: "Luyện viết", icon: EditOutlined },
       { href: "/reading", label: "Luyện đọc", icon: FileTextOutlined },
     ],

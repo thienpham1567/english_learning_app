@@ -42,6 +42,7 @@ const LEARN_HUB_ITEMS = [
   { label: "Luyện nghe", icon: <SoundOutlined />, href: "/listening" },
   { label: "Luyện đọc", icon: <ReadOutlined />, href: "/reading" },
   { label: "Luyện nói", icon: <AudioOutlined />, href: "/pronunciation" },
+  { label: "Bảng IPA", icon: <SoundOutlined />, href: "/ipa-chart" },
   { label: "Luyện viết", icon: <EditOutlined />, href: "/writing-practice" },
   { label: "Bài học ngữ pháp", icon: <BookFilled />, href: "/grammar-lessons" },
   { label: "Luyện đề ngữ pháp", icon: <BulbOutlined />, href: "/grammar-quiz" },
@@ -77,6 +78,7 @@ function getActiveTab(pathname: string): string {
     pathname.startsWith("/listening") ||
     pathname.startsWith("/reading") ||
     pathname.startsWith("/pronunciation") ||
+    pathname.startsWith("/ipa-chart") ||
     pathname.startsWith("/speaking-practice") ||
     pathname.startsWith("/study-sets") ||
     pathname.startsWith("/scenarios")
