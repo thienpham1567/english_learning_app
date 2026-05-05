@@ -24,11 +24,12 @@ type Props = {
   timeLimit: number;
   timeLeft: number;
   onRetry: () => void;
+  onRetryWrong?: () => void;
 };
 
 export function MockTestReview({
   questions, passage, answers, fillBlankInputs, flagged,
-  score, percentage, timeLimit, timeLeft, onRetry,
+  score, percentage, timeLimit, timeLeft, onRetry, onRetryWrong,
 }: Props) {
   const isCorrect = (idx: number): boolean => {
     const q = questions[idx];
@@ -91,7 +92,7 @@ export function MockTestReview({
           <ClockCircleOutlined style={{ fontSize: 11 }} />
           {formatTime(timeLimit - timeLeft)} / {formatTime(timeLimit)}
         </div>
-        <div>
+        <div style={{ display: "flex", gap: 10, justifyContent: "center", flexWrap: "wrap" }}>
           <button
             onClick={onRetry}
             style={{
@@ -105,6 +106,22 @@ export function MockTestReview({
           >
             <ReloadOutlined /> Thi lại
           </button>
+          {onRetryWrong && score < questions.length && (
+            <button
+              onClick={onRetryWrong}
+              style={{
+                display: "inline-flex", alignItems: "center", gap: 8,
+                padding: "12px 28px", borderRadius: 12,
+                border: isGood ? "1px solid rgba(255,255,255,0.2)" : "1px solid var(--border)",
+                background: isGood ? "rgba(255,255,255,0.08)" : "transparent",
+                color: isGood ? "rgba(255,255,255,0.8)" : "var(--text-secondary)",
+                fontSize: 13, fontWeight: 500, cursor: "pointer",
+                transition: "all 0.15s ease",
+              }}
+            >
+              Làm lại câu sai ({questions.length - score})
+            </button>
+          )}
         </div>
       </div>
 

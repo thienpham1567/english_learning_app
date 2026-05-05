@@ -131,6 +131,25 @@ export default function MockTestPage() {
     setFillBlankInputs({});
   }, []);
 
+  const handleRetryWrong = useCallback(() => {
+    const wrongQuestions = questions.filter((q, i) => {
+      if (isFillBlank(q.type)) {
+        return (fillBlankInputs[i] ?? "").trim().toLowerCase() !== (q.correctAnswer ?? "").trim().toLowerCase();
+      }
+      return answers[i] !== q.correctIndex;
+    });
+    if (wrongQuestions.length === 0) return;
+    setQuestions(wrongQuestions);
+    setPassage(null); // Remove passage context for retry
+    setAnswers(new Array(wrongQuestions.length).fill(null));
+    setFillBlankInputs({});
+    setFlagged(new Set());
+    setCurrentIdx(0);
+    setTimeLimit(wrongQuestions.length * 60);
+    setTimeLeft(wrongQuestions.length * 60);
+    setState("active");
+  }, [questions, answers, fillBlankInputs]);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%", minHeight: 0, flex: 1, overflow: "auto" }}>
       {/* Header */}
@@ -200,6 +219,7 @@ export default function MockTestPage() {
             timeLimit={timeLimit}
             timeLeft={timeLeft}
             onRetry={handleRetry}
+            onRetryWrong={handleRetryWrong}
           />
         )}
       </div>

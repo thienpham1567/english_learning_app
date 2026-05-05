@@ -294,6 +294,57 @@ export function CompletedState({ challenge, streak, badges }: {
         </Title>
       </div>
 
+      {/* ── Personal Stats ── */}
+      <div
+        style={{
+          marginTop: 14,
+          borderRadius: 16,
+          border: "1px solid var(--border)",
+          background: "var(--surface)",
+          padding: "14px 18px",
+        }}
+      >
+        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}>
+          <TrophyOutlined style={{ fontSize: 12, color: "var(--accent)" }} />
+          <span style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--accent)" }}>
+            Thành tích cá nhân
+          </span>
+        </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, textAlign: "center" }}>
+          <div style={{ padding: "8px 4px", borderRadius: 10, background: "var(--bg-deep)" }}>
+            <div style={{ fontSize: 20, fontWeight: 800, color: "var(--accent)", fontVariantNumeric: "tabular-nums" }}>
+              {streak.currentStreak}
+            </div>
+            <div style={{ fontSize: 9, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-muted)", marginTop: 2 }}>
+              Streak
+            </div>
+          </div>
+          <div style={{ padding: "8px 4px", borderRadius: 10, background: "var(--bg-deep)" }}>
+            <div style={{ fontSize: 20, fontWeight: 800, color: "var(--success)", fontVariantNumeric: "tabular-nums" }}>
+              {score}/5
+            </div>
+            <div style={{ fontSize: 9, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-muted)", marginTop: 2 }}>
+              Hôm nay
+            </div>
+          </div>
+          <div style={{ padding: "8px 4px", borderRadius: 10, background: "var(--bg-deep)" }}>
+            <div style={{ fontSize: 20, fontWeight: 800, color: "var(--xp)", fontVariantNumeric: "tabular-nums" }}>
+              {(() => {
+                try {
+                  const best = localStorage.getItem("daily-challenge-best");
+                  if (!best) return "—";
+                  const ms = parseInt(best, 10);
+                  return `${Math.floor(ms / 60000)}:${String(Math.floor((ms % 60000) / 1000)).padStart(2, "0")}`;
+                } catch { return "—"; }
+              })()}
+            </div>
+            <div style={{ fontSize: 9, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-muted)", marginTop: 2 }}>
+              Best time
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* ── CTA ── */}
       <div style={{ marginTop: 24, display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
         <Link

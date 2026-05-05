@@ -325,11 +325,12 @@ export function TopicGrid({
                       </span>
 
                       {progress && progress.totalCount > 0 && (
-                        <Tooltip title={`Điểm: ${progress.correctCount}/${progress.totalCount}`}>
+                        <Tooltip title={`Điểm: ${progress.correctCount}/${progress.totalCount}${progress.scorePct >= 90 ? ' · 🥇 Vàng' : progress.scorePct >= 70 ? ' · 🥈 Bạc' : progress.scorePct >= 50 ? ' · 🥉 Đồng' : ''}`}>
                           <Tag
                             color={progress.scorePct >= 80 ? "success" : progress.scorePct >= 50 ? "warning" : "error"}
                             style={{ margin: 0, fontSize: 11, borderRadius: 6, fontWeight: 700 }}
                           >
+                            {progress.scorePct >= 90 ? "🥇 " : progress.scorePct >= 70 ? "🥈 " : progress.scorePct >= 50 ? "🥉 " : ""}
                             {progress.scorePct}%
                           </Tag>
                         </Tooltip>
