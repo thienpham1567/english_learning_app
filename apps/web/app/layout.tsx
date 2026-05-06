@@ -24,6 +24,8 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-mono",
 });
 
+import { AntdRegistry } from "@ant-design/nextjs-registry";
+
 export const metadata: Metadata = {
   metadataBase,
   title: "Trợ lý học tập tiếng Anh | Luyện tiếng Anh mỗi ngày",
@@ -58,7 +60,9 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
-      <body>{children}</body>
+      <body>
+        <AntdRegistry>{children}</AntdRegistry>
+      </body>
     </html>
   );
 }

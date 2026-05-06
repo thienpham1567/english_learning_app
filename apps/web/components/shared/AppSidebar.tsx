@@ -166,14 +166,15 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
   const { examMode, setExamMode } = useExamMode();
   const badges = useSidebarBadges();
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(() => {
-    if (typeof window === "undefined") return new Set();
     const collapsed = new Set<string>();
-    navGroups.forEach((entry) => {
-      if ("key" in entry) {
-        const stored = localStorage.getItem(`sidebar-group-${entry.key}`);
-        if (stored === "closed") collapsed.add(entry.key);
-      }
-    });
+    if (typeof window !== "undefined") {
+      navGroups.forEach((entry) => {
+        if ("key" in entry) {
+          const stored = localStorage.getItem(`sidebar-group-${entry.key}`);
+          if (stored === "closed") collapsed.add(entry.key);
+        }
+      });
+    }
     return collapsed;
   });
 

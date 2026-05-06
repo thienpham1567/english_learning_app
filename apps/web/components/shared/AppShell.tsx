@@ -16,15 +16,13 @@ export type AuthUser = {
 };
 
 function useIsMobile(breakpoint = 768): boolean | null {
-  const [isMobile, setIsMobile] = useState<boolean | null>(() =>
-    typeof window === "undefined"
-      ? null
-      : window.matchMedia(`(max-width: ${breakpoint}px)`).matches,
-  );
+  // Always start as null on both server AND first client render to match SSR HTML.
+  // Real value is synced in the effect below, after hydration is complete.
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   useEffect(() => {
-    if (typeof window === "undefined") return;
     const mq = window.matchMedia(`(max-width: ${breakpoint}px)`);
+    setIsMobile(mq.matches);
     const handler = (e: MediaQueryListEvent) => setIsMobile(e.matches);
     mq.addEventListener("change", handler);
     return () => mq.removeEventListener("change", handler);
@@ -33,11 +31,15 @@ function useIsMobile(breakpoint = 768): boolean | null {
 }
 
 export function AppShell({ children, user }: { children: ReactNode; user: AuthUser }) {
-  const [isExpanded, setIsExpanded] = useState(() => {
-    if (typeof window === "undefined") return false;
-    return localStorage.getItem("sidebar-expanded") === "true";
-  });
+  // Always start as false to match SSR. Synced from localStorage in effect.
+  const [isExpanded, setIsExpanded] = useState(false);
   const isMobile = useIsMobile();
+
+  // Sync sidebar state from localStorage after hydration
+  useEffect(() => {
+    const saved = localStorage.getItem("sidebar-expanded");
+    if (saved === "true") setIsExpanded(true);
+  }, []);
 
   const handleToggle = () => {
     const next = !isExpanded;
