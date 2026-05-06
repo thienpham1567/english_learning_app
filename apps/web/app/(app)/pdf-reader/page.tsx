@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import { ReadOutlined } from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { getAllBooks, type PdfBookMeta } from "@/lib/pdf-reader/pdf-storage";
 import { PdfUploader } from "./_components/PdfUploader";
 import { BookLibrary } from "./_components/BookLibrary";
+import { PresetBookShelf } from "./_components/PresetBookShelf";
 
 export default function PdfReaderPage() {
   const [books, setBooks] = useState<PdfBookMeta[]>([]);
@@ -25,6 +26,15 @@ export default function PdfReaderPage() {
   useEffect(() => {
     loadBooks();
   }, [loadBooks]);
+
+  // Track which preset books are already downloaded
+  const savedBookIds = useMemo(() => new Set(books.map((b) => b.id)), [books]);
+
+  // Separate user-uploaded books from preset books
+  const userBooks = useMemo(
+    () => books.filter((b) => !b.id.startsWith("preset_")),
+    [books],
+  );
 
   return (
     <div
@@ -55,13 +65,24 @@ export default function PdfReaderPage() {
           alignItems: "center",
         }}
       >
-        <div style={{ width: "100%", maxWidth: 900 }}>
-          {/* Upload area */}
-          <div style={{ marginTop: 16, marginBottom: 24 }}>
-            <PdfUploader onUploaded={loadBooks} />
+        <div
+          style={{
+            width: "100%",
+            maxWidth: 900,
+            display: "flex",
+            flexDirection: "column",
+            gap: 24,
+          }}
+        >
+          {/* Preset grammar books — always visible */}
+          <div style={{ marginTop: 8 }}>
+            <PresetBookShelf savedBookIds={savedBookIds} onBookSaved={loadBooks} />
           </div>
 
-          {/* Book library */}
+          {/* Upload area */}
+          <PdfUploader onUploaded={loadBooks} />
+
+          {/* User's uploaded books */}
           {loading ? (
             <div
               style={{
@@ -73,9 +94,9 @@ export default function PdfReaderPage() {
             >
               Đang tải thư viện...
             </div>
-          ) : (
-            <BookLibrary books={books} onRefresh={loadBooks} />
-          )}
+          ) : userBooks.length > 0 ? (
+            <BookLibrary books={userBooks} onRefresh={loadBooks} />
+          ) : null}
         </div>
       </div>
     </div>
