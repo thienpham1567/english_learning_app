@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import "@/lib/pdf-reader/pdf-config"; // must be before getDocument
-import { getDocument } from "pdfjs-dist";
 import type { PDFDocumentProxy } from "pdfjs-dist";
+import { loadPdfDocument } from "@/lib/pdf-reader/pdf-config";
+import { pdfLogger } from "@/lib/pdf-reader/pdf-logger";
 import { getBook, updateBookmark } from "@/lib/pdf-reader/pdf-storage";
 
 export type PdfReaderState = {
@@ -48,6 +48,7 @@ export function usePdfReader(bookId: string): PdfReaderState & PdfReaderActions 
       setPdfDoc(null);
 
       try {
+        pdfLogger.info("Loading book", { bookId });
         const book = await getBook(bookId);
         if (!book) {
           setError("Không tìm thấy sách. Có thể đã bị xóa.");
@@ -58,20 +59,23 @@ export function usePdfReader(bookId: string): PdfReaderState & PdfReaderActions 
         if (cancelled) return;
 
         setBookName(book.name);
+        pdfLogger.info("Book found", { name: book.name, pages: book.totalPages });
 
         const data = new Uint8Array(book.data);
-        const doc = await getDocument({ data }).promise;
+        const doc = await loadPdfDocument(data);
 
         if (cancelled) {
           doc.destroy();
           return;
         }
 
+        pdfLogger.info("PDF loaded", { resumePage: book.lastPage || 1 });
         setPdfDoc(doc);
         setTotalPages(doc.numPages);
         setCurrentPage(book.lastPage || 1);
       } catch (err) {
         if (!cancelled) {
+          pdfLogger.error("Load error", { err });
           setError(err instanceof Error ? err.message : "Không thể mở file PDF");
         }
       } finally {

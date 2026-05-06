@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback, useState } from "react";
 import type { PDFDocumentProxy } from "pdfjs-dist";
-import { TextLayer } from "pdfjs-dist";
+import { getTextLayerClass } from "@/lib/pdf-reader/pdf-config";
+import { pdfLogger } from "@/lib/pdf-reader/pdf-logger";
 
 interface PdfViewerProps {
   pdfDoc: PDFDocumentProxy;
@@ -15,13 +16,14 @@ export function PdfViewer({ pdfDoc, currentPage, zoom, onTextSelect }: PdfViewer
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const textLayerRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
-  const renderTaskRef = useRef<ReturnType<ReturnType<PDFDocumentProxy["getPage"]>["then"]> | null>(null);
+  const [rendering, setRendering] = useState(false);
 
   // Render page
   useEffect(() => {
     if (!pdfDoc || !canvasRef.current || !textLayerRef.current) return;
 
     let cancelled = false;
+    setRendering(true);
 
     async function renderPage() {
       try {
@@ -50,6 +52,8 @@ export function PdfViewer({ pdfDoc, currentPage, zoom, onTextSelect }: PdfViewer
         const textContent = await page.getTextContent();
         if (cancelled) return;
 
+        // Dynamic import to avoid SSR DOMMatrix error
+        const TextLayer = await getTextLayerClass();
         const textLayer = new TextLayer({
           textContentSource: textContent,
           container: textLayerDiv,
@@ -57,10 +61,13 @@ export function PdfViewer({ pdfDoc, currentPage, zoom, onTextSelect }: PdfViewer
         });
 
         await textLayer.render();
+        pdfLogger.info("Rendered page", { page: currentPage, zoom: Math.round(zoom * 100) });
       } catch (err) {
         if (!cancelled) {
-          console.error("PDF render error:", err);
+          pdfLogger.error("Render error", { err });
         }
+      } finally {
+        if (!cancelled) setRendering(false);
       }
     }
 
@@ -82,6 +89,7 @@ export function PdfViewer({ pdfDoc, currentPage, zoom, onTextSelect }: PdfViewer
     const range = selection.getRangeAt(0);
     const rect = range.getBoundingClientRect();
 
+    pdfLogger.info("Text selected", { text: text.slice(0, 50) });
     onTextSelect(text, rect);
   }, [onTextSelect]);
 

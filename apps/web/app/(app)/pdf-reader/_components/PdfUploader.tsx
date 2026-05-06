@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import "@/lib/pdf-reader/pdf-config"; // must be before getDocument
-import { getDocument } from "pdfjs-dist";
+import { getPdfPageCount } from "@/lib/pdf-reader/pdf-config";
+import { pdfLogger } from "@/lib/pdf-reader/pdf-logger";
 import {
   CloudUploadOutlined,
   FileTextOutlined,
@@ -48,11 +48,10 @@ export function PdfUploader({ onUploaded }: PdfUploaderProps) {
         const arrayBuffer = await file.arrayBuffer();
         setProgress("Đang phân tích PDF...");
 
-        // Get page count
+        // Get page count (lazy-loads pdf.js in browser only)
         const data = new Uint8Array(arrayBuffer);
-        const doc = await getDocument({ data }).promise;
-        const totalPages = doc.numPages;
-        doc.destroy();
+        const totalPages = await getPdfPageCount(data);
+        pdfLogger.info("Upload", { name: file.name, pages: totalPages, size: formatFileSize(file.size) });
 
         setProgress("Đang lưu vào thư viện...");
 
