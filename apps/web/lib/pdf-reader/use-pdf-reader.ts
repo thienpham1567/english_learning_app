@@ -1,14 +1,10 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { getDocument, GlobalWorkerOptions } from "pdfjs-dist";
+import "@/lib/pdf-reader/pdf-config"; // must be before getDocument
+import { getDocument } from "pdfjs-dist";
 import type { PDFDocumentProxy } from "pdfjs-dist";
 import { getBook, updateBookmark } from "@/lib/pdf-reader/pdf-storage";
-
-// Configure pdf.js worker
-if (typeof window !== "undefined") {
-  GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
-}
 
 export type PdfReaderState = {
   pdfDoc: PDFDocumentProxy | null;

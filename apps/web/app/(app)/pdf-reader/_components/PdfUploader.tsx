@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
+import "@/lib/pdf-reader/pdf-config"; // must be before getDocument
 import { getDocument } from "pdfjs-dist";
 import {
   CloudUploadOutlined,
