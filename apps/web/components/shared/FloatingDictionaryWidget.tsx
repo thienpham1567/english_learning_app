@@ -43,9 +43,6 @@ export function FloatingDictionaryWidget() {
   const inputRef = useRef<HTMLInputElement>(null);
   const reqIdRef = useRef(0);
 
-  // Don't render on the dictionary page
-  if (pathname?.startsWith("/dictionary")) return null;
-
   const handleExpand = () => {
     setExpanded(true);
     setTimeout(() => inputRef.current?.focus(), 80);
@@ -124,6 +121,8 @@ export function FloatingDictionaryWidget() {
       router.push(`/dictionary?q=${encodeURIComponent(result.headword)}`);
     }
   };
+
+  if (pathname?.startsWith("/dictionary")) return null;
 
   const bottomOffset = isMobile ? 90 : 24;
   // Position above the chat widget (52px button + 10px gap)

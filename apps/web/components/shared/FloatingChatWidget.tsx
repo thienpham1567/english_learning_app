@@ -43,8 +43,6 @@ export function FloatingChatWidget() {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const isMobile = useIsMobile();
 
-  if (pathname?.startsWith("/english-chatbot")) return null;
-
   // Scroll to bottom whenever messages change
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -118,6 +116,8 @@ export function FloatingChatWidget() {
       abortRef.current = null;
     }
   }, [input, msgs, streaming]);
+
+  if (pathname?.startsWith("/english-chatbot")) return null;
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {

@@ -31,6 +31,7 @@ import {
   RightOutlined,
   CheckCircleOutlined,
   YoutubeOutlined,
+  ToolOutlined,
 } from "@ant-design/icons";
 import { useTheme } from "@/components/shared/ThemeProvider";
 import { useExamMode } from "@/components/shared/ExamModeProvider";
@@ -54,6 +55,7 @@ const navGroups: (NavItem | NavGroup)[] = [
       { href: "/pronunciation", label: "Luyện nói", icon: AudioOutlined },
       { href: "/ipa-chart", label: "Bảng IPA", icon: FontSizeOutlined },
       { href: "/writing-practice", label: "Luyện viết", icon: FormOutlined },
+      { href: "/writing-tools", label: "Công cụ viết", icon: ToolOutlined },
       { href: "/reading", label: "Luyện đọc", icon: ReadOutlined },
       { href: "/youtube-learn", label: "Học cùng YouTube", icon: YoutubeOutlined },
     ],
