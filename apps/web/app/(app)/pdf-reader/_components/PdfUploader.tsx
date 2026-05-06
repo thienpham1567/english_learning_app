@@ -48,9 +48,9 @@ export function PdfUploader({ onUploaded }: PdfUploaderProps) {
         const arrayBuffer = await file.arrayBuffer();
         setProgress("Đang phân tích PDF...");
 
-        // Get page count (lazy-loads pdf.js in browser only)
-        const data = new Uint8Array(arrayBuffer);
-        const totalPages = await getPdfPageCount(data);
+        // Clone buffer — pdf.js detaches the original, which would break IndexedDB put()
+        const analyzeBuffer = arrayBuffer.slice(0);
+        const totalPages = await getPdfPageCount(new Uint8Array(analyzeBuffer));
         pdfLogger.info("Upload", { name: file.name, pages: totalPages, size: formatFileSize(file.size) });
 
         setProgress("Đang lưu vào thư viện...");
