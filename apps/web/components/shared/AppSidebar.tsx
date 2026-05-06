@@ -32,6 +32,7 @@ import {
   CheckCircleOutlined,
   YoutubeOutlined,
   ToolOutlined,
+  FileTextOutlined,
 } from "@ant-design/icons";
 import { useTheme } from "@/components/shared/ThemeProvider";
 import { useExamMode } from "@/components/shared/ExamModeProvider";
@@ -57,6 +58,7 @@ const navGroups: (NavItem | NavGroup)[] = [
       { href: "/writing-practice", label: "Luyện viết", icon: FormOutlined },
       { href: "/writing-tools", label: "Công cụ viết", icon: ToolOutlined },
       { href: "/reading", label: "Luyện đọc", icon: ReadOutlined },
+      { href: "/pdf-reader", label: "Đọc sách PDF", icon: FileTextOutlined },
       { href: "/youtube-learn", label: "Học cùng YouTube", icon: YoutubeOutlined },
     ],
   },
