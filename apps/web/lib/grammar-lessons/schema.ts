@@ -12,6 +12,7 @@ const MistakeSchema = z.object({
   wrong: z.string().min(3),
   correct: z.string().min(3),
   note: z.string().min(5),
+  noteEn: z.string().min(5),
 });
 
 const BaseExerciseSchema = z.object({
@@ -19,7 +20,11 @@ const BaseExerciseSchema = z.object({
   sentence: z.string().min(5),
   answer: z.string().min(1),
   explanation: z.string().min(5),
+  explanationEn: z.string().min(5),
   instructionVi: z.string().optional(),
+  hint: z.string().optional(),
+  acceptedAnswers: z.array(z.string()).optional(),
+  tier: z.enum(["recognition", "application", "production", "context"]).optional(),
 });
 
 export const MultipleChoiceExerciseSchema = BaseExerciseSchema.extend({
@@ -42,9 +47,10 @@ export const GrammarLessonSchema = z.object({
   titleVi: z.string().min(2),
   formula: z.string().min(3),
   explanation: z.string().min(10),
-  examples: z.array(ExampleSchema).min(3).max(5),
+  explanationEn: z.string().min(10),
+  examples: z.array(ExampleSchema).min(3).max(6),
   commonMistakes: z.array(MistakeSchema).min(2).max(4),
-  exercises: z.array(GrammarLessonExerciseSchema).min(3).max(8),
+  exercises: z.array(GrammarLessonExerciseSchema).min(5).max(14),
 });
 
 export const GrammarLessonGenerateRequestSchema = z.object({
@@ -63,6 +69,7 @@ export const GrammarLessonAnswerSchema = z.object({
   userAnswer: z.string(),
   correctAnswer: z.string(),
   explanationVi: z.string().optional(),
+  explanationEn: z.string().optional(),
   correct: z.boolean(),
 });
 
@@ -109,8 +116,14 @@ export function normalizeGrammarAnswer(answer: string): string {
     .trim();
 }
 
-export function isGrammarAnswerCorrect(userAnswer: string, correctAnswer: string): boolean {
-  return normalizeGrammarAnswer(userAnswer) === normalizeGrammarAnswer(correctAnswer);
+export function isGrammarAnswerCorrect(
+  userAnswer: string,
+  correctAnswer: string,
+  acceptedAnswers?: string[],
+): boolean {
+  const normalized = normalizeGrammarAnswer(userAnswer);
+  const allAccepted = [correctAnswer, ...(acceptedAnswers ?? [])];
+  return allAccepted.some((a) => normalizeGrammarAnswer(a) === normalized);
 }
 
 export function getGrammarLessonDifficulty(level: string): "elementary" | "intermediate" | "upper_intermediate" {

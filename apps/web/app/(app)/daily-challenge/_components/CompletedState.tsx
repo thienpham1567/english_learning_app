@@ -348,7 +348,7 @@ export function CompletedState({ challenge, streak, badges }: {
       {/* ── CTA ── */}
       <div style={{ marginTop: 24, display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
         <Link
-          href="/home"
+          href="/daily-challenge"
           prefetch={false}
           style={{
             display: "inline-flex",

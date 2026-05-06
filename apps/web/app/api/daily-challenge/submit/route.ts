@@ -190,7 +190,7 @@ export async function POST(request: Request) {
   void awardXP(session.user.id, XP_VALUES.DAILY_CHALLENGE).catch(() => {});
   logActivity(session.user.id, "daily_challenge", XP_VALUES.DAILY_CHALLENGE, { score, streak: currentStreak });
 
-  // Drop the 60s dashboard cache so the next /home load reflects new streak/XP.
+  // Drop the 60s dashboard cache so the next page load reflects new streak/XP.
   // Next 16: revalidateTag requires a CacheLifeConfig; { expire: 0 } purges now.
   revalidateTag("dashboard", { expire: 0 });
 

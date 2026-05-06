@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import {
   PlayCircleOutlined,
   HistoryOutlined,
@@ -42,6 +42,12 @@ export default function YoutubeLearnPage() {
   const [playbackRate, setPlaybackRate] = useState(1);
   const [autoScroll, setAutoScroll] = useState(true);
   const [showScript, setShowScript] = useState(true);
+
+  // Resizable video panel
+  const DEFAULT_VIDEO_PCT = 58;
+  const [videoWidthPct, setVideoWidthPct] = useState(DEFAULT_VIDEO_PCT);
+  const isDragging = useRef(false);
+  const gridRef = useRef<HTMLDivElement | null>(null);
 
   const [history, setHistory] = useState<HistoryItem[]>([]);
   const [historyOpen, setHistoryOpen] = useState(false);
@@ -154,6 +160,32 @@ export default function YoutubeLearnPage() {
     } catch {
       // ignore
     }
+  }, []);
+
+  // Drag handlers for resize
+  const handleResizeStart = useCallback((e: ReactMouseEvent) => {
+    e.preventDefault();
+    isDragging.current = true;
+    document.body.style.cursor = "col-resize";
+    document.body.style.userSelect = "none";
+
+    const onMove = (ev: globalThis.MouseEvent) => {
+      if (!isDragging.current || !gridRef.current) return;
+      const rect = gridRef.current.getBoundingClientRect();
+      const pct = ((ev.clientX - rect.left) / rect.width) * 100;
+      setVideoWidthPct(Math.min(85, Math.max(30, pct)));
+    };
+
+    const onUp = () => {
+      isDragging.current = false;
+      document.body.style.cursor = "";
+      document.body.style.userSelect = "";
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+    };
+
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
   }, []);
 
   // Save position every 10s while playing
@@ -294,14 +326,13 @@ export default function YoutubeLearnPage() {
                 )}
               </div>
 
-              {/* Two-column grid */}
-              <div className="ytl-grid" style={{
-                display: "grid",
-                gridTemplateColumns: showScript ? "minmax(0, 1.4fr) minmax(0, 1fr)" : "1fr",
-                gap: 16,
-                alignItems: "start",
+              {/* Two-column resizable layout */}
+              <div ref={gridRef} className="ytl-grid" style={{
+                display: "flex",
+                gap: 0,
+                alignItems: "stretch",
               }}>
-                <div>
+                <div style={{ width: showScript ? `${videoWidthPct}%` : "100%", flexShrink: 0, minWidth: 0 }}>
                   <VideoPlayer
                     videoId={video.videoId}
                     onReady={handlePlayerReady}
@@ -371,6 +402,34 @@ export default function YoutubeLearnPage() {
                   </div>
                 </div>
 
+                {/* Resize handle */}
+                {showScript && (
+                  <div
+                    className="ytl-resize-handle"
+                    onMouseDown={handleResizeStart}
+                    onDoubleClick={() => setVideoWidthPct(DEFAULT_VIDEO_PCT)}
+                    title="Kéo để thay đổi kích thước · Nhấn đúp để reset"
+                    style={{
+                      width: 16,
+                      cursor: "col-resize",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      flexShrink: 0,
+                      position: "relative",
+                      zIndex: 5,
+                    }}
+                  >
+                    <div className="ytl-resize-grip" style={{
+                      width: 4,
+                      height: 40,
+                      borderRadius: 4,
+                      background: "var(--border)",
+                      transition: "background 0.2s, height 0.2s",
+                    }} />
+                  </div>
+                )}
+
                 {showScript && (
                   <div style={{
                     display: "flex", flexDirection: "column",
@@ -381,6 +440,8 @@ export default function YoutubeLearnPage() {
                     border: "1px solid var(--border)",
                     overflow: "hidden",
                     boxShadow: "var(--shadow-sm)",
+                    flex: 1,
+                    minWidth: 0,
                   }}>
                     <div style={{
                       display: "flex", alignItems: "center", gap: 8,
@@ -426,8 +487,19 @@ export default function YoutubeLearnPage() {
       <style jsx global>{`
         @media (max-width: 900px) {
           .ytl-grid {
-            grid-template-columns: 1fr !important;
+            flex-direction: column !important;
           }
+          .ytl-grid > div:first-child {
+            width: 100% !important;
+          }
+          .ytl-resize-handle {
+            display: none !important;
+          }
+        }
+        .ytl-resize-handle:hover .ytl-resize-grip,
+        .ytl-resize-handle:active .ytl-resize-grip {
+          background: var(--accent) !important;
+          height: 60px !important;
         }
       `}</style>
     </div>

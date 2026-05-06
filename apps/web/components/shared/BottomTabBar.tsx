@@ -4,8 +4,6 @@ import { type ReactNode, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Flex, Typography, Card } from "antd";
 import {
-  HomeOutlined,
-  HomeFilled,
   MessageOutlined,
   MessageFilled,
   ReadOutlined,
@@ -31,9 +29,9 @@ interface TabItem {
 }
 
 const TABS: TabItem[] = [
-  { key: "home", label: "Trang chủ", icon: <HomeOutlined />, activeIcon: <HomeFilled />, href: "/home" },
   { key: "chat", label: "Chat", icon: <MessageOutlined />, activeIcon: <MessageFilled />, href: "/english-chatbot" },
   { key: "learn", label: "Học", icon: <ReadOutlined />, activeIcon: <BookFilled />, action: "learn-hub" },
+  { key: "challenge", label: "Thử thách", icon: <FireOutlined />, activeIcon: <FireOutlined />, href: "/daily-challenge" },
   { key: "review", label: "Ôn", icon: <BulbOutlined />, activeIcon: <BulbOutlined />, action: "review-hub" },
   { key: "vocab", label: "Từ vựng", icon: <ReadOutlined />, activeIcon: <BookFilled />, action: "vocab-hub" },
 ];
@@ -61,8 +59,8 @@ const VOCAB_HUB_ITEMS = [
 ];
 
 function getActiveTab(pathname: string): string {
-  if (pathname.startsWith("/home")) return "home";
   if (pathname.startsWith("/english-chatbot")) return "chat";
+  if (pathname.startsWith("/daily-challenge")) return "challenge";
   if (pathname.startsWith("/my-vocabulary") || pathname.startsWith("/dictionary") || pathname.startsWith("/flashcards")) return "vocab";
   if (
     pathname.startsWith("/error-notebook") ||
@@ -81,7 +79,7 @@ function getActiveTab(pathname: string): string {
     pathname.startsWith("/study-sets") ||
     pathname.startsWith("/scenarios")
   ) return "learn";
-  return "home";
+  return "challenge";
 }
 
 export function BottomTabBar() {

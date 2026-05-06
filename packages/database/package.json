@@ -12,9 +12,7 @@
   },
   "scripts": {
     "build": "tsc",
-    "dev": "tsc --watch",
-    "test": "vitest",
-    "test:run": "vitest run"
+    "dev": "tsc --watch"
   },
   "dependencies": {
     "@repo/contracts": "workspace:*",
@@ -23,7 +21,6 @@
   },
   "devDependencies": {
     "@types/pg": "^8.20.0",
-    "typescript": "^5",
-    "vitest": "^3.2.4"
+    "typescript": "^5"
   }
 }

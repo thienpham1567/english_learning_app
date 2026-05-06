@@ -7,8 +7,6 @@
     "dev": "turbo run dev",
     "build": "turbo run build",
     "lint": "turbo run lint",
-    "test": "turbo run test",
-    "test:run": "turbo run test:run",
     "db:generate": "pnpm --filter web db:generate",
     "db:migrate": "pnpm --filter web db:migrate",
     "db:studio": "pnpm --filter web exec drizzle-kit studio",

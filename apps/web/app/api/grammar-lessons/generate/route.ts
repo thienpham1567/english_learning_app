@@ -33,7 +33,7 @@ export async function POST(request: Request) {
   }
 
   const { topic, topicTitle, examMode, level, forceRefresh } = parsed.data;
-  const lessonVersion = "2";
+  const lessonVersion = "3";
   const now = new Date();
 
   const [existingProgress] = await db
@@ -85,41 +85,55 @@ export async function POST(request: Request) {
     ? "IELTS Academic writing and speaking contexts"
     : "TOEIC business and workplace contexts";
 
-  const systemPrompt = `You are an English grammar teacher for Vietnamese learners preparing for ${examContext}.
-Generate a complete grammar lesson for the topic: "${topicTitle}" at ${level || "B1"} level.
+  const systemPrompt = `You are an expert English grammar teacher for Vietnamese learners preparing for ${examContext}.
+Generate a comprehensive, bilingual grammar lesson for: "${topicTitle}" at ${level || "B1"} level.
 
 Return ONLY valid JSON with this structure:
 {
   "title": "${topicTitle}",
   "titleVi": "Vietnamese translation of the topic name",
   "formula": "Grammar formula/structure (e.g., S + have/has + V3/ed)",
-  "explanation": "Clear Vietnamese explanation of the grammar rule (3-4 sentences). Use simple language.",
+  "explanationEn": "Clear English explanation of the grammar rule (3-5 sentences). Use standard grammar terminology. Explain when and why this structure is used.",
+  "explanation": "Clear Vietnamese explanation of the same grammar rule (3-5 sentences). Use simple, accessible Vietnamese.",
   "examples": [
-    { "en": "English sentence", "vi": "Vietnamese translation", "highlight": "key grammar part" },
+    { "en": "English example sentence", "vi": "Vietnamese translation", "highlight": "key grammar part highlighted" },
+    { "en": "...", "vi": "...", "highlight": "..." },
     { "en": "...", "vi": "...", "highlight": "..." },
     { "en": "...", "vi": "...", "highlight": "..." }
   ],
   "commonMistakes": [
-    { "wrong": "Incorrect sentence", "correct": "Correct sentence", "note": "Vietnamese explanation of why it's wrong" },
-    { "wrong": "...", "correct": "...", "note": "..." }
+    { "wrong": "Incorrect sentence", "correct": "Correct sentence", "note": "Vietnamese explanation of why it's wrong", "noteEn": "English explanation of the grammar rule violated" },
+    { "wrong": "...", "correct": "...", "note": "...", "noteEn": "..." },
+    { "wrong": "...", "correct": "...", "note": "...", "noteEn": "..." }
   ],
   "exercises": [
-    { "id": "1", "type": "multiple_choice", "sentence": "Fill-in sentence with ___ blank", "answer": "correct answer", "options": ["option1", "option2", "option3", "option4"], "explanation": "Vietnamese explanation of why this is correct", "instructionVi": "Chọn đáp án đúng." },
-    { "id": "2", "type": "multiple_choice", "sentence": "...", "answer": "...", "options": ["...", "...", "...", "..."], "explanation": "...", "instructionVi": "Chọn đáp án đúng." },
-    { "id": "3", "type": "multiple_choice", "sentence": "...", "answer": "...", "options": ["...", "...", "...", "..."], "explanation": "...", "instructionVi": "Chọn đáp án đúng." },
-    { "id": "4", "type": "error_correction", "sentence": "Incorrect sentence to fix", "answer": "Correct full sentence", "explanation": "Vietnamese explanation of the correction", "instructionVi": "Sửa lỗi sai trong câu." },
-    { "id": "5", "type": "transformation", "sentence": "Sentence to transform with target cue", "answer": "Correct transformed full sentence", "explanation": "Vietnamese explanation of the transformation", "instructionVi": "Viết lại câu dùng cấu trúc vừa học." }
+    // TIER 1 - Recognition (4 multiple_choice): identify correct usage
+    { "id": "1", "type": "multiple_choice", "tier": "recognition", "sentence": "Sentence with _____ blank", "answer": "correct", "options": ["opt1", "opt2", "opt3", "opt4"], "explanation": "Vietnamese explanation", "explanationEn": "English explanation", "hint": "Short rule reminder", "instructionVi": "Chọn đáp án đúng." },
+    { "id": "2", "type": "multiple_choice", "tier": "recognition", "sentence": "...", "answer": "...", "options": ["...","...","...","..."], "explanation": "...", "explanationEn": "...", "hint": "...", "instructionVi": "Chọn đáp án đúng." },
+    { "id": "3", "type": "multiple_choice", "tier": "recognition", "sentence": "...", "answer": "...", "options": ["...","...","...","..."], "explanation": "...", "explanationEn": "...", "hint": "...", "instructionVi": "Chọn đáp án đúng." },
+    { "id": "4", "type": "multiple_choice", "tier": "recognition", "sentence": "...", "answer": "...", "options": ["...","...","...","..."], "explanation": "...", "explanationEn": "...", "hint": "...", "instructionVi": "Chọn đáp án đúng." },
+    // TIER 2 - Application (2 multiple_choice with harder context)
+    { "id": "5", "type": "multiple_choice", "tier": "application", "sentence": "More complex contextual sentence with _____", "answer": "...", "options": ["...","...","...","..."], "explanation": "...", "explanationEn": "...", "hint": "...", "instructionVi": "Chọn đáp án đúng." },
+    { "id": "6", "type": "multiple_choice", "tier": "application", "sentence": "...", "answer": "...", "options": ["...","...","...","..."], "explanation": "...", "explanationEn": "...", "hint": "...", "instructionVi": "Chọn đáp án đúng." },
+    // TIER 3 - Production (2 written: 1 error_correction + 1 transformation)
+    { "id": "7", "type": "error_correction", "tier": "production", "sentence": "Sentence with grammar error to fix", "answer": "Corrected full sentence", "explanation": "Vietnamese explanation", "explanationEn": "English explanation", "hint": "Look at the verb form...", "acceptedAnswers": ["alternative correct version"], "instructionVi": "Tìm và sửa lỗi sai trong câu." },
+    { "id": "8", "type": "transformation", "tier": "production", "sentence": "Sentence to transform using the target structure", "answer": "Expected transformed sentence", "explanation": "Vietnamese explanation", "explanationEn": "English explanation", "hint": "Use the structure: ...", "acceptedAnswers": ["alternative valid answer"], "instructionVi": "Viết lại câu dùng cấu trúc vừa học." },
+    // TIER 4 - Context (2 multiple_choice: paragraph/passage-level)
+    { "id": "9", "type": "multiple_choice", "tier": "context", "sentence": "A longer passage (2-3 sentences) with _____ blank in exam-style context", "answer": "...", "options": ["...","...","...","..."], "explanation": "...", "explanationEn": "...", "hint": "...", "instructionVi": "Đọc đoạn văn và chọn đáp án đúng." },
+    { "id": "10", "type": "multiple_choice", "tier": "context", "sentence": "Another passage-level question in ${examContext} setting", "answer": "...", "options": ["...","...","...","..."], "explanation": "...", "explanationEn": "...", "hint": "...", "instructionVi": "Đọc đoạn văn và chọn đáp án đúng." }
   ]
 }
 
 Rules:
-- All explanations in Vietnamese
-- Examples should use ${examContext}
-- Exercises: exactly 5. Include exactly 3 multiple_choice, 1 error_correction, and 1 transformation
-- Only multiple_choice exercises may include options, and they must include exactly 4 options
-- For written exercises, answer must be one clear full-sentence expected answer
-- Common mistakes: exactly 2, focusing on Vietnamese speaker errors
-- Keep it practical and relevant to exam preparation`;
+- "explanation" fields are ALWAYS in Vietnamese, "explanationEn" fields are ALWAYS in English
+- Examples use ${examContext} vocabulary and situations
+- Total exercises: exactly 10 across 4 tiers as shown above
+- Only multiple_choice has "options" with exactly 4 choices
+- For written exercises (error_correction, transformation), provide 1-2 acceptedAnswers for alternative valid phrasings
+- Tier "context" exercises must use longer, passage-like sentences (2-3 sentences)
+- Each exercise must have a "hint" that reminds the student of the relevant rule without giving away the answer
+- Common mistakes: exactly 3, with both Vietnamese (note) and English (noteEn) explanations
+- Keep everything practical, exam-relevant, and accessible to Vietnamese learners`;
 
   for (let attempt = 0; attempt < 2; attempt++) {
     try {

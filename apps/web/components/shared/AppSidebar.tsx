@@ -6,7 +6,6 @@ import { usePathname } from "next/navigation";
 import { Badge, Tooltip } from "antd";
 import { Logo } from "@/components/shared/Logo";
 import {
-  HomeOutlined,
   MessageOutlined,
   CustomerServiceOutlined,
   AudioOutlined,
@@ -46,7 +45,6 @@ type NavGroup = {
 };
 
 const navGroups: (NavItem | NavGroup)[] = [
-  { href: "/home", label: "Trang chủ", icon: HomeOutlined },
   {
     key: "practice",
     label: "Luyện tập",

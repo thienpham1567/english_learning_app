@@ -107,7 +107,7 @@ export async function POST(request: Request) {
       options: answer.options ?? null,
       userAnswer: answer.userAnswer,
       correctAnswer: answer.correctAnswer,
-      explanationEn: null,
+      explanationEn: answer.explanationEn ?? null,
       explanationVi: answer.explanationVi ?? null,
       grammarTopic: topicTitle ?? topic,
     })));

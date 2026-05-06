@@ -643,7 +643,7 @@ export function ChallengeResults({
           }}
         >
           <Link
-            href="/home"
+            href="/daily-challenge"
             prefetch={false}
             style={{
               display: "inline-flex",

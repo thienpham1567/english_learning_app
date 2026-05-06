@@ -152,7 +152,7 @@ export default function DiagnosticPage() {
     return (
       <ResultsScreen
         result={result}
-        onGoHome={() => router.push("/home")}
+        onGoHome={() => router.push("/daily-challenge")}
         onViewProgress={() => router.push("/progress")}
       />
     );
