@@ -13,6 +13,7 @@ export interface PdfBook {
   size: number;
   totalPages: number;
   lastPage: number;
+  lastReadAt?: number;
   addedAt: number;
   data: ArrayBuffer;
 }
@@ -94,6 +95,7 @@ export async function updateBookmark(
   const book = (await reqToPromise(store.get(id))) as PdfBook | undefined;
   if (book) {
     book.lastPage = lastPage;
+    book.lastReadAt = Date.now();
     await reqToPromise(store.put(book));
   }
   db.close();
@@ -109,4 +111,14 @@ export function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+}
+
+/** Get the most recently read book (for Continue Reading hero) */
+export async function getMostRecentBook(): Promise<PdfBookMeta | null> {
+  const all = await getAllBooks();
+  if (all.length === 0) return null;
+  // Sort by lastReadAt (fallback to addedAt), return the most recent
+  return all.sort(
+    (a, b) => (b.lastReadAt ?? b.addedAt) - (a.lastReadAt ?? a.addedAt),
+  )[0];
 }

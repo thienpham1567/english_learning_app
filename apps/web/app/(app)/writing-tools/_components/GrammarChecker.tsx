@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useMemo } from "react";
 import {
   CheckCircleOutlined,
   LoadingOutlined,
@@ -11,6 +11,7 @@ import {
   BulbOutlined,
   DownOutlined,
   RightOutlined,
+  ThunderboltOutlined,
 } from "@ant-design/icons";
 import { api } from "@/lib/api-client";
 import type { GrammarCheckResponse, GrammarError } from "@/lib/writing-tools/schema";
@@ -22,6 +23,74 @@ const TYPE_META: Record<string, { label: string; labelVi: string; color: string;
   spelling: { label: "Spelling", labelVi: "Chính tả", color: "var(--warning, #e8a838)", icon: <WarningOutlined /> },
   style: { label: "Style", labelVi: "Phong cách", color: "var(--info, #5b8def)", icon: <BulbOutlined /> },
 };
+
+/* ── Example prompts for instant demo ──────────────────── */
+
+const EXAMPLE_PROMPTS = [
+  { label: "Subject-verb agreement", text: "She don't know the answer because she didn't studied for the exam.", color: "var(--error)" },
+  { label: "Uncountable nouns", text: "The informations is very important for us. We need more evidences.", color: "var(--warning, #e8a838)" },
+  { label: "Tense errors", text: "I have been to Japan since 3 years. Yesterday I go to the store and buyed some milk.", color: "var(--error)" },
+  { label: "Article & preposition", text: "She is interested on learning the English. He arrived to the office in Monday morning.", color: "var(--info, #5b8def)" },
+];
+
+/* ── Score gauge component ─────────────────────────────── */
+
+function ScoreGauge({ score, label }: { score: number; label: string }) {
+  const radius = 40;
+  const circumference = 2 * Math.PI * radius;
+  const dashoffset = circumference - (score / 100) * circumference;
+
+  const color =
+    score >= 90 ? "var(--success)" :
+    score >= 70 ? "var(--accent)" :
+    score >= 50 ? "var(--warning, #e8a838)" :
+    "var(--error)";
+
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+      <svg width={96} height={96} viewBox="0 0 96 96">
+        {/* Background ring */}
+        <circle
+          cx="48" cy="48" r={radius}
+          fill="none" stroke="var(--surface)" strokeWidth="6"
+        />
+        {/* Score arc */}
+        <circle
+          cx="48" cy="48" r={radius}
+          fill="none" stroke={color} strokeWidth="6"
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={dashoffset}
+          transform="rotate(-90 48 48)"
+          style={{ transition: "stroke-dashoffset 0.6s ease, stroke 0.3s" }}
+        />
+        {/* Score number */}
+        <text
+          x="48" y="44"
+          textAnchor="middle" dominantBaseline="central"
+          style={{
+            fontFamily: "var(--font-display)",
+            fontSize: 26,
+            fontWeight: 700,
+            fill: color,
+          }}
+        >
+          {score}
+        </text>
+        <text
+          x="48" y="62"
+          textAnchor="middle" dominantBaseline="central"
+          style={{ fontSize: 9, fill: "var(--text-muted)", fontWeight: 500 }}
+        >
+          / 100
+        </text>
+      </svg>
+      <span style={{ fontSize: 12, fontWeight: 600, color }}>{label}</span>
+    </div>
+  );
+}
+
+/* ── Copy button ───────────────────────────────────────── */
 
 function CopyButton({ text }: { text: string }) {
   const [copied, setCopied] = useState(false);
@@ -47,6 +116,8 @@ function CopyButton({ text }: { text: string }) {
     </button>
   );
 }
+
+/* ── Error card ────────────────────────────────────────── */
 
 function ErrorCard({
   error,
@@ -195,6 +266,8 @@ function ErrorCard({
   );
 }
 
+/* ── Main GrammarChecker component ─────────────────────── */
+
 export function GrammarChecker() {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
@@ -263,6 +336,32 @@ export function GrammarChecker() {
 
   const totalErrors = result ? result.errors.length : 0;
 
+  // Writing score — computed from error density
+  const writingScore = useMemo(() => {
+    if (!result || wordCount === 0) return null;
+    const raw = Math.max(0, 100 - (totalErrors / wordCount) * 200);
+    return Math.round(Math.min(100, raw));
+  }, [result, totalErrors, wordCount]);
+
+  const scoreLabel = useMemo(() => {
+    if (writingScore === null) return "";
+    if (writingScore >= 90) return "Tuyệt vời!";
+    if (writingScore >= 70) return "Khá tốt";
+    if (writingScore >= 50) return "Cần cải thiện";
+    return "Nhiều lỗi";
+  }, [writingScore]);
+
+  // Keyboard handler — Ctrl/Cmd + Enter
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        e.preventDefault();
+        check();
+      }
+    },
+    [check],
+  );
+
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       {/* Input area */}
@@ -296,6 +395,7 @@ export function GrammarChecker() {
             setResult(null);
             setError(null);
           }}
+          onKeyDown={handleKeyDown}
           placeholder="Type or paste your English text here..."
           style={{
             width: "100%",
@@ -313,6 +413,85 @@ export function GrammarChecker() {
           }}
         />
       </div>
+
+      {/* Example prompts — only show when textarea is empty */}
+      {!text.trim() && !result && (
+        <div>
+          <span
+            style={{
+              fontSize: 11,
+              fontWeight: 700,
+              textTransform: "uppercase",
+              letterSpacing: "0.12em",
+              color: "var(--text-muted)",
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              marginBottom: 8,
+            }}
+          >
+            <ThunderboltOutlined style={{ fontSize: 10 }} />
+            Thử ngay
+          </span>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
+              gap: 8,
+            }}
+          >
+            {EXAMPLE_PROMPTS.map((ex, i) => (
+              <button
+                key={i}
+                onClick={() => setText(ex.text)}
+                style={{
+                  textAlign: "left",
+                  padding: "10px 14px",
+                  borderRadius: 10,
+                  border: "1px solid var(--border)",
+                  borderLeft: `3px solid ${ex.color}`,
+                  background: "var(--card-bg)",
+                  cursor: "pointer",
+                  transition: "all 0.15s",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 4,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "var(--accent)";
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.boxShadow = "0 3px 12px rgba(0,0,0,0.06)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "var(--border)";
+                  e.currentTarget.style.borderLeftColor = ex.color;
+                  e.currentTarget.style.transform = "none";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                <span style={{ fontSize: 11, fontWeight: 600, color: ex.color }}>
+                  {ex.label}
+                </span>
+                <span
+                  style={{
+                    fontSize: 13,
+                    color: "var(--text-secondary)",
+                    lineHeight: 1.5,
+                    fontStyle: "italic",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                  }}
+                >
+                  {ex.text}
+                </span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Action bar */}
       <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
@@ -366,6 +545,13 @@ export function GrammarChecker() {
             <CheckCircleOutlined /> Sửa tất cả ({totalErrors})
           </button>
         )}
+
+        {/* Keyboard shortcut hint */}
+        {text.trim() && !result && (
+          <span style={{ fontSize: 11, color: "var(--text-muted)", fontStyle: "italic" }}>
+            ⌘/Ctrl + Enter
+          </span>
+        )}
       </div>
 
       {/* Error message */}
@@ -386,48 +572,123 @@ export function GrammarChecker() {
       {/* Results */}
       {result && (
         <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {/* Stats bar */}
+          {/* Score + Stats dashboard */}
           <div
+            className="anim-fade-up"
             style={{
               display: "flex",
-              alignItems: "center",
-              gap: 16,
-              padding: "12px 16px",
-              borderRadius: 12,
-              background:
-                totalErrors === 0
-                  ? "color-mix(in srgb, var(--success) 8%, var(--card-bg))"
-                  : "var(--card-bg)",
+              gap: 1,
+              background: "var(--border)",
+              borderRadius: 16,
+              overflow: "hidden",
               border: totalErrors === 0 ? "1px solid var(--success)" : "1px solid var(--border)",
+              boxShadow: "var(--shadow-sm)",
             }}
           >
+            {/* Writing score gauge */}
+            {writingScore !== null && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  padding: "16px 20px",
+                  background: totalErrors === 0
+                    ? "color-mix(in srgb, var(--success) 6%, var(--surface))"
+                    : "var(--surface)",
+                  minWidth: 130,
+                }}
+              >
+                <ScoreGauge score={writingScore} label={scoreLabel} />
+              </div>
+            )}
+
+            {/* Stats cells */}
             {totalErrors === 0 ? (
-              <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <CheckCircleOutlined style={{ color: "var(--success)", fontSize: 18 }} />
-                <span style={{ fontSize: 14, fontWeight: 600, color: "var(--success)" }}>
-                  Tuyệt vời! Không phát hiện lỗi nào.
-                </span>
+              <div
+                style={{
+                  flex: 1,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 10,
+                  padding: "18px 22px",
+                  background: "color-mix(in srgb, var(--success) 6%, var(--surface))",
+                }}
+              >
+                <CheckCircleOutlined style={{ color: "var(--success)", fontSize: 20 }} />
+                <div>
+                  <div
+                    style={{
+                      fontSize: 16,
+                      fontWeight: 700,
+                      color: "var(--success)",
+                      fontFamily: "var(--font-display)",
+                    }}
+                  >
+                    Tuyệt vời!
+                  </div>
+                  <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 2 }}>
+                    Không phát hiện lỗi nào
+                  </div>
+                </div>
               </div>
             ) : (
               <>
-                <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)" }}>
-                  Phát hiện {totalErrors} lỗi:
-                </span>
-                {result.stats.grammar > 0 && (
-                  <span style={{ fontSize: 12, color: "var(--error)", fontWeight: 500 }}>
-                    {result.stats.grammar} ngữ pháp
-                  </span>
-                )}
-                {result.stats.spelling > 0 && (
-                  <span style={{ fontSize: 12, color: "var(--warning, #e8a838)", fontWeight: 500 }}>
-                    {result.stats.spelling} chính tả
-                  </span>
-                )}
-                {result.stats.style > 0 && (
-                  <span style={{ fontSize: 12, color: "var(--info, #5b8def)", fontWeight: 500 }}>
-                    {result.stats.style} phong cách
-                  </span>
-                )}
+                {[
+                  { label: "Ngữ pháp", value: result.stats.grammar, color: "var(--error)", icon: "✗" },
+                  { label: "Chính tả", value: result.stats.spelling, color: "var(--warning, #e8a838)", icon: "!" },
+                  { label: "Phong cách", value: result.stats.style, color: "var(--info, #5b8def)", icon: "~" },
+                ].map((s) => (
+                  <div
+                    key={s.label}
+                    style={{
+                      flex: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 12,
+                      padding: "18px 18px",
+                      background: "var(--surface)",
+                    }}
+                  >
+                    <span
+                      style={{
+                        fontSize: 11,
+                        fontWeight: 900,
+                        color: s.value > 0 ? s.color : "var(--text-muted)",
+                        opacity: 0.6,
+                        fontFamily: "monospace",
+                        lineHeight: 1,
+                      }}
+                    >
+                      {s.icon}
+                    </span>
+                    <div>
+                      <div
+                        style={{
+                          fontSize: 24,
+                          fontWeight: 800,
+                          color: s.value > 0 ? s.color : "var(--text-muted)",
+                          lineHeight: 1,
+                          fontFamily: "var(--font-display)",
+                        }}
+                      >
+                        {s.value}
+                      </div>
+                      <div
+                        style={{
+                          fontSize: 10,
+                          color: "var(--text-muted)",
+                          fontWeight: 500,
+                          marginTop: 2,
+                          textTransform: "uppercase",
+                          letterSpacing: "0.1em",
+                        }}
+                      >
+                        {s.label}
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </>
             )}
           </div>

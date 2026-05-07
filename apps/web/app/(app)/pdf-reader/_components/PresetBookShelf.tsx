@@ -75,7 +75,7 @@ export function PresetBookShelf({ savedBookIds, onBookSaved }: PresetBookShelfPr
   );
 
   return (
-    <div>
+    <div className="anim-fade-up anim-delay-1">
       <h3
         style={{
           fontSize: 14,
@@ -120,6 +120,7 @@ export function PresetBookShelf({ savedBookIds, onBookSaved }: PresetBookShelfPr
               style={{
                 borderRadius: 12,
                 border: `1px solid ${isSaved ? "color-mix(in srgb, var(--success) 30%, var(--border))" : "var(--border)"}`,
+                borderLeft: `3px solid ${isSaved ? "var(--success)" : book.accentColor}`,
                 background: isSaved
                   ? "color-mix(in srgb, var(--success) 3%, var(--card-bg))"
                   : "var(--card-bg)",
@@ -132,15 +133,16 @@ export function PresetBookShelf({ savedBookIds, onBookSaved }: PresetBookShelfPr
               }}
               onMouseEnter={(e) => {
                 if (!isLoading) {
-                  e.currentTarget.style.borderColor = "var(--accent)";
+                  e.currentTarget.style.borderColor = book.accentColor;
                   e.currentTarget.style.transform = "translateY(-1px)";
-                  e.currentTarget.style.boxShadow = "0 3px 12px rgba(0,0,0,0.06)";
+                  e.currentTarget.style.boxShadow = `0 3px 12px ${book.accentColor}18`;
                 }
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.borderColor = isSaved
                   ? "color-mix(in srgb, var(--success) 30%, var(--border))"
                   : "var(--border)";
+                e.currentTarget.style.borderLeftColor = isSaved ? "var(--success)" : book.accentColor;
                 e.currentTarget.style.transform = "none";
                 e.currentTarget.style.boxShadow = "none";
               }}
@@ -153,7 +155,7 @@ export function PresetBookShelf({ savedBookIds, onBookSaved }: PresetBookShelfPr
                   borderRadius: 10,
                   background: isSaved
                     ? "color-mix(in srgb, var(--success) 10%, var(--surface))"
-                    : "color-mix(in srgb, var(--accent) 10%, var(--surface))",
+                    : `color-mix(in srgb, ${book.accentColor} 10%, var(--surface))`,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
@@ -161,11 +163,11 @@ export function PresetBookShelf({ savedBookIds, onBookSaved }: PresetBookShelfPr
                 }}
               >
                 {isLoading ? (
-                  <LoadingOutlined style={{ fontSize: 16, color: "var(--accent)" }} />
+                  <LoadingOutlined style={{ fontSize: 16, color: book.accentColor }} />
                 ) : isSaved ? (
                   <CheckCircleOutlined style={{ fontSize: 16, color: "var(--success)" }} />
                 ) : (
-                  <BookOutlined style={{ fontSize: 16, color: "var(--accent)" }} />
+                  <BookOutlined style={{ fontSize: 16, color: book.accentColor }} />
                 )}
               </div>
 

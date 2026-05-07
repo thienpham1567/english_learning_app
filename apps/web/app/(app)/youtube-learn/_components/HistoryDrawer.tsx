@@ -105,6 +105,22 @@ export function HistoryDrawer({ open, onClose, history, onSelect, onDelete }: Pr
                     {formatDur(item.durationSec)}
                   </span>
                 )}
+                {/* Watch progress bar */}
+                {item.durationSec !== null && item.durationSec > 0 && item.lastPosition > 0 && (
+                  <div style={{
+                    position: "absolute", bottom: 0, left: 0, right: 0,
+                    height: 3, background: "rgba(0,0,0,0.3)",
+                  }}>
+                    <div style={{
+                      height: "100%",
+                      width: `${Math.min(100, (item.lastPosition / item.durationSec) * 100)}%`,
+                      background: (item.lastPosition / item.durationSec) >= 0.9
+                        ? "var(--success)"
+                        : "var(--accent)",
+                      transition: "width 0.3s ease",
+                    }} />
+                  </div>
+                )}
               </div>
 
               <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", justifyContent: "space-between" }}>

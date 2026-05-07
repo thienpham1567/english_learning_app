@@ -4,13 +4,16 @@ import { useState, useEffect, useCallback, useMemo } from "react";
 import { ReadOutlined } from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { getAllBooks, type PdfBookMeta } from "@/lib/pdf-reader/pdf-storage";
+import { ContinueReadingHero } from "./_components/ContinueReadingHero";
+import { ReadingStatsBar } from "./_components/ReadingStatsBar";
+import { PresetBookShelf } from "./_components/PresetBookShelf";
 import { PdfUploader } from "./_components/PdfUploader";
 import { BookLibrary } from "./_components/BookLibrary";
-import { PresetBookShelf } from "./_components/PresetBookShelf";
 
 export default function PdfReaderPage() {
   const [books, setBooks] = useState<PdfBookMeta[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const loadBooks = useCallback(async () => {
     try {
@@ -27,6 +30,11 @@ export default function PdfReaderPage() {
     loadBooks();
   }, [loadBooks]);
 
+  const handleRefresh = useCallback(() => {
+    loadBooks();
+    setRefreshKey((k) => k + 1);
+  }, [loadBooks]);
+
   // Track which preset books are already downloaded
   const savedBookIds = useMemo(() => new Set(books.map((b) => b.id)), [books]);
 
@@ -35,6 +43,8 @@ export default function PdfReaderPage() {
     () => books.filter((b) => !b.id.startsWith("preset_")),
     [books],
   );
+
+  const hasAnyBooks = books.length > 0;
 
   return (
     <div
@@ -49,7 +59,7 @@ export default function PdfReaderPage() {
     >
       <ModuleHeader
         icon={<ReadOutlined />}
-        gradient="linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)"
+        gradient="var(--gradient-reading)"
         title="Đọc sách PDF"
         subtitle="Import sách tiếng Anh · Tra từ và học từ vựng trong lúc đọc"
       />
@@ -71,20 +81,30 @@ export default function PdfReaderPage() {
             maxWidth: 900,
             display: "flex",
             flexDirection: "column",
-            gap: 24,
+            gap: 20,
           }}
         >
-          {/* Preset grammar books — always visible */}
-          <div style={{ marginTop: 8 }}>
-            <PresetBookShelf savedBookIds={savedBookIds} onBookSaved={loadBooks} />
-          </div>
+          {/* ── Continue Reading Hero ── */}
+          <ContinueReadingHero refreshKey={refreshKey} />
 
-          {/* Upload area */}
-          <PdfUploader onUploaded={loadBooks} />
+          {/* ── Reading Stats ── */}
+          {!loading && hasAnyBooks && (
+            <>
+              <ReadingStatsBar books={books} />
+              <div style={{ height: 1, background: "var(--border)", margin: "-8px 0" }} />
+            </>
+          )}
 
-          {/* User's uploaded books */}
+          {/* ── Preset grammar books ── */}
+          <PresetBookShelf savedBookIds={savedBookIds} onBookSaved={handleRefresh} />
+
+          {/* ── Upload area ── */}
+          <PdfUploader onUploaded={handleRefresh} compact={hasAnyBooks} />
+
+          {/* ── User's uploaded books ── */}
           {loading ? (
             <div
+              className="anim-fade-up anim-delay-4"
               style={{
                 textAlign: "center",
                 padding: "48px 0",
@@ -95,7 +115,9 @@ export default function PdfReaderPage() {
               Đang tải thư viện...
             </div>
           ) : userBooks.length > 0 ? (
-            <BookLibrary books={userBooks} onRefresh={loadBooks} />
+            <div className="anim-fade-up anim-delay-4">
+              <BookLibrary books={userBooks} onRefresh={handleRefresh} />
+            </div>
           ) : null}
         </div>
       </div>

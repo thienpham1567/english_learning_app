@@ -47,6 +47,9 @@ export function BookLibrary({ books, onRefresh }: BookLibraryProps) {
           fontWeight: 600,
           color: "var(--text-secondary)",
           margin: "0 0 12px",
+          display: "flex",
+          alignItems: "center",
+          gap: 8,
         }}
       >
         📚 Thư viện ({books.length} cuốn)

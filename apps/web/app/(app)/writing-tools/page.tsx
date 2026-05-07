@@ -1,7 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { CheckCircleOutlined, SwapOutlined, ToolOutlined } from "@ant-design/icons";
+import {
+  CheckCircleOutlined,
+  SwapOutlined,
+  EditOutlined,
+} from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { GrammarChecker } from "@/app/(app)/writing-tools/_components/GrammarChecker";
 import { Paraphraser } from "@/app/(app)/writing-tools/_components/Paraphraser";
@@ -35,15 +39,40 @@ export default function WritingToolsPage() {
         minHeight: 0,
         flex: 1,
         overflow: "hidden",
+        position: "relative",
       }}
     >
+      {/* Grain texture */}
+      <div className="grain-overlay" style={{ opacity: 0.03, zIndex: 0 }} />
+
       {/* Header */}
-      <ModuleHeader
-        icon={<ToolOutlined />}
-        gradient="linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
-        title="Công cụ viết"
-        subtitle="Grammar Check & Paraphraser · Kiểm tra và cải thiện văn bản"
-      />
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <ModuleHeader
+          icon={<EditOutlined />}
+          gradient="var(--gradient-writing)"
+          title="Công cụ viết"
+          subtitle="Grammar Check & Paraphraser · Kiểm tra và cải thiện văn bản"
+          action={
+            <span
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                background: "rgba(255,255,255,0.12)",
+                backdropFilter: "blur(8px)",
+                borderRadius: 99,
+                padding: "5px 14px",
+                fontSize: 12,
+                fontWeight: 600,
+                color: "rgba(255,255,255,0.8)",
+                border: "1px solid rgba(255,255,255,0.2)",
+              }}
+            >
+              ⌘ Enter để gửi
+            </span>
+          }
+        />
+      </div>
 
       {/* Content */}
       <div
@@ -55,11 +84,14 @@ export default function WritingToolsPage() {
           display: "flex",
           flexDirection: "column",
           alignItems: "center",
+          position: "relative",
+          zIndex: 1,
         }}
       >
         <div style={{ width: "100%", maxWidth: 900 }}>
           {/* Tab switcher */}
           <div
+            className="anim-fade-up"
             style={{
               display: "flex",
               gap: 0,
@@ -115,9 +147,11 @@ export default function WritingToolsPage() {
             })}
           </div>
 
-          {/* Active tab content */}
-          {activeTab === "grammar" && <GrammarChecker />}
-          {activeTab === "paraphrase" && <Paraphraser />}
+          {/* Active tab content — key triggers re-animation */}
+          <div key={activeTab} className="anim-fade-up">
+            {activeTab === "grammar" && <GrammarChecker />}
+            {activeTab === "paraphrase" && <Paraphraser />}
+          </div>
         </div>
       </div>
     </div>

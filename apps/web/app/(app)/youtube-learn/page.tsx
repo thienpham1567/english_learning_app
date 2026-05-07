@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type MouseEvent as ReactMouseEvent } from "react";
 import {
   PlayCircleOutlined,
   HistoryOutlined,
@@ -31,6 +31,37 @@ type CurrentVideo = {
 };
 
 const PLAYBACK_RATES = [0.5, 0.75, 1, 1.25];
+
+const SUGGESTED_VIDEOS = [
+  {
+    emoji: "🎓",
+    title: "How to learn any language easily",
+    channel: "TED-Ed",
+    url: "https://www.youtube.com/watch?v=J7sDpSzX0Qg",
+    color: "#C84B31",
+  },
+  {
+    emoji: "📺",
+    title: "6 Minute English — Is it good to be stressed?",
+    channel: "BBC Learning English",
+    url: "https://www.youtube.com/watch?v=iAiWRMJIxLU",
+    color: "#B8967A",
+  },
+  {
+    emoji: "🗣️",
+    title: "English Pronunciation Training",
+    channel: "Rachel's English",
+    url: "https://www.youtube.com/watch?v=n4NVPg2kHv4",
+    color: "#9B6B63",
+  },
+  {
+    emoji: "📖",
+    title: "Daily English Conversation",
+    channel: "English Easily",
+    url: "https://www.youtube.com/watch?v=WAnfGnxOOvU",
+    color: "#8B3A26",
+  },
+];
 
 export default function YoutubeLearnPage() {
   const [urlInput, setUrlInput] = useState("");
@@ -110,6 +141,33 @@ export default function YoutubeLearnPage() {
       setLoading(false);
     }
   }, [urlInput, saveToHistory]);
+
+  const loadDirectUrl = useCallback(async (directUrl: string) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await api.post<CurrentVideo & { transcript: Segment[] }>(
+        "/youtube-learn/transcript",
+        { url: directUrl },
+      );
+      const fresh: CurrentVideo = {
+        videoId: res.videoId,
+        title: res.title,
+        channelTitle: res.channelTitle ?? null,
+        thumbnailUrl: res.thumbnailUrl ?? null,
+        durationSec: null,
+        segments: res.transcript,
+      };
+      setVideo(fresh);
+      setCurrentSec(0);
+      setUrlInput("");
+      saveToHistory(fresh, 0);
+    } catch (err) {
+      setError(err instanceof AppError && err.message ? err.message : "Không thể tải video.");
+    } finally {
+      setLoading(false);
+    }
+  }, [saveToHistory]);
 
   const loadFromHistory = useCallback(async (item: HistoryItem) => {
     setLoading(true);
@@ -208,8 +266,58 @@ export default function YoutubeLearnPage() {
     return () => clearInterval(id);
   }, [video]);
 
+  // Keyboard shortcuts for player
+  useEffect(() => {
+    if (!video) return;
+    const handler = (e: KeyboardEvent) => {
+      // Don't intercept when typing in inputs
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement ||
+        (e.target as HTMLElement)?.tagName === "IFRAME"
+      ) {
+        return;
+      }
+
+      switch (e.key) {
+        case "ArrowLeft":
+          e.preventDefault();
+          playerRef.current?.seekTo(
+            Math.max(0, (playerRef.current?.getCurrentTime() ?? 0) - 5),
+            true,
+          );
+          break;
+        case "ArrowRight":
+          e.preventDefault();
+          playerRef.current?.seekTo(
+            (playerRef.current?.getCurrentTime() ?? 0) + 5,
+            true,
+          );
+          break;
+        case "[": {
+          e.preventDefault();
+          const currentIdx = PLAYBACK_RATES.indexOf(playbackRate);
+          if (currentIdx > 0) handleRateChange(PLAYBACK_RATES[currentIdx - 1]!);
+          break;
+        }
+        case "]": {
+          e.preventDefault();
+          const currentIdx = PLAYBACK_RATES.indexOf(playbackRate);
+          if (currentIdx < PLAYBACK_RATES.length - 1) handleRateChange(PLAYBACK_RATES[currentIdx + 1]!);
+          break;
+        }
+      }
+    };
+
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [video, playbackRate, handleRateChange]);
+
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%", minHeight: 0, flex: 1, overflow: "hidden", position: "relative" }}>
+      {/* Grain texture */}
+      <div className="grain-overlay" style={{ opacity: 0.03, zIndex: 0 }} />
+
       <ModuleHeader
         icon={<YoutubeOutlined />}
         gradient="var(--gradient-youtube-learn)"
@@ -239,6 +347,7 @@ export default function YoutubeLearnPage() {
 
       <div style={{ flex: 1, overflow: "auto", padding: "20px 20px 32px", position: "relative", zIndex: 1 }}>
         <div style={{ maxWidth: 1280, margin: "0 auto", width: "100%" }}>
+
 
           {/* URL input */}
           <div
@@ -303,7 +412,7 @@ export default function YoutubeLearnPage() {
 
           {/* No video — empty state */}
           {!video && !loading && (
-            <EmptyState recent={history.slice(0, 6)} onSelect={loadFromHistory} />
+            <EmptyState recent={history.slice(0, 6)} onSelect={loadFromHistory} onLoadUrl={loadDirectUrl} />
           )}
 
           {/* Video + Script */}
@@ -506,7 +615,7 @@ export default function YoutubeLearnPage() {
   );
 }
 
-function EmptyState({ recent, onSelect }: { recent: HistoryItem[]; onSelect: (item: HistoryItem) => void }) {
+function EmptyState({ recent, onSelect, onLoadUrl }: { recent: HistoryItem[]; onSelect: (item: HistoryItem) => void; onLoadUrl: (url: string) => void }) {
   return (
     <div className="anim-fade-up" style={{
       padding: "48px 28px",
@@ -539,6 +648,70 @@ function EmptyState({ recent, onSelect }: { recent: HistoryItem[]; onSelect: (it
         click vào từ để tra nghĩa, và đổi tốc độ phát.
       </p>
 
+      {/* ── Suggested channels ── */}
+      {recent.length === 0 && (
+        <div style={{ marginTop: 8, marginBottom: 24, textAlign: "left" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+            <div style={{ width: 3, height: 14, borderRadius: 2, background: "var(--accent)" }} />
+            <span style={{
+              fontSize: 11, fontWeight: 800,
+              textTransform: "uppercase", letterSpacing: "0.14em",
+              color: "var(--accent)",
+            }}>
+              Gợi ý video
+            </span>
+            <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+          </div>
+          <div style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))",
+            gap: 10,
+          }}>
+            {SUGGESTED_VIDEOS.map((sv) => (
+              <button
+                key={sv.url}
+                onClick={() => onLoadUrl(sv.url)}
+                style={{
+                  textAlign: "left",
+                  padding: "12px 14px",
+                  borderRadius: 12,
+                  border: "1px solid var(--border)",
+                  borderLeft: `3px solid ${sv.color}`,
+                  background: "var(--card-bg)",
+                  cursor: "pointer",
+                  transition: "all 0.15s",
+                  display: "flex",
+                  alignItems: "flex-start",
+                  gap: 10,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = "var(--accent)";
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.boxShadow = "0 3px 12px rgba(0,0,0,0.06)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = "var(--border)";
+                  e.currentTarget.style.borderLeftColor = sv.color;
+                  e.currentTarget.style.transform = "none";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
+              >
+                <span style={{ fontSize: 22, lineHeight: 1, flexShrink: 0 }}>{sv.emoji}</span>
+                <div>
+                  <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-primary)", lineHeight: 1.35 }}>
+                    {sv.title}
+                  </div>
+                  <div style={{ marginTop: 3, fontSize: 11, color: "var(--text-muted)" }}>
+                    {sv.channel}
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* ── Continue watching ── */}
       {recent.length > 0 && (
         <div style={{ marginTop: 32, textAlign: "left" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
@@ -579,10 +752,25 @@ function EmptyState({ recent, onSelect }: { recent: HistoryItem[]; onSelect: (it
                   e.currentTarget.style.transform = "translateY(0)";
                 }}
               >
-                <div style={{ aspectRatio: "16 / 9", background: "var(--bg-deep)" }}>
+                <div style={{ position: "relative", aspectRatio: "16 / 9", background: "var(--bg-deep)" }}>
                   {item.thumbnailUrl && (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={item.thumbnailUrl} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  )}
+                  {/* Watch progress bar */}
+                  {item.durationSec !== null && item.durationSec > 0 && item.lastPosition > 0 && (
+                    <div style={{
+                      position: "absolute", bottom: 0, left: 0, right: 0,
+                      height: 3, background: "rgba(0,0,0,0.3)",
+                    }}>
+                      <div style={{
+                        height: "100%",
+                        width: `${Math.min(100, (item.lastPosition / item.durationSec) * 100)}%`,
+                        background: (item.lastPosition / item.durationSec) >= 0.9
+                          ? "var(--success)"
+                          : "var(--accent)",
+                      }} />
+                    </div>
                   )}
                 </div>
                 <div style={{ padding: "10px 12px" }}>

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { SearchOutlined, LoadingOutlined } from "@ant-design/icons";
+import { useEffect, useRef, useState, useMemo, useCallback } from "react";
+import { SearchOutlined, LoadingOutlined, CloseOutlined } from "@ant-design/icons";
 import { Modal } from "antd";
 import { api } from "@/lib/api-client";
 import { AppError } from "@repo/shared";
@@ -29,6 +29,48 @@ export function ScriptPanel({ segments, currentSec, onSeek, autoScroll }: Props)
   const containerRef = useRef<HTMLDivElement>(null);
   const activeIdx = findActiveIndex(segments, currentSec);
 
+  // ── Transcript search ──
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  const filteredSegments = useMemo(() => {
+    if (!searchQuery.trim()) return null; // null = show all
+    const q = searchQuery.toLowerCase();
+    return segments
+      .map((seg, i) => ({ seg, idx: i }))
+      .filter(({ seg }) => seg.text.toLowerCase().includes(q));
+  }, [segments, searchQuery]);
+
+  const toggleSearch = useCallback(() => {
+    setSearchOpen((v) => {
+      if (!v) setTimeout(() => searchInputRef.current?.focus(), 50);
+      else setSearchQuery("");
+      return !v;
+    });
+  }, []);
+
+  // Ctrl+F intercept for transcript search
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "f") {
+        // Only intercept if the script panel is visible
+        if (containerRef.current) {
+          e.preventDefault();
+          setSearchOpen(true);
+          setTimeout(() => searchInputRef.current?.focus(), 50);
+        }
+      }
+      if (e.key === "Escape" && searchOpen) {
+        setSearchOpen(false);
+        setSearchQuery("");
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [searchOpen]);
+
+  // ── Dictionary lookup ──
   const [lookupOpen, setLookupOpen] = useState(false);
   const [lookupWord, setLookupWord] = useState<string | null>(null);
   const [lookupLoading, setLookupLoading] = useState(false);
@@ -38,10 +80,10 @@ export function ScriptPanel({ segments, currentSec, onSeek, autoScroll }: Props)
   const reqIdRef = useRef(0);
 
   useEffect(() => {
-    if (!autoScroll || activeIdx < 0) return;
+    if (!autoScroll || activeIdx < 0 || searchQuery.trim()) return;
     const el = containerRef.current?.querySelector<HTMLElement>(`[data-seg="${activeIdx}"]`);
     el?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, [activeIdx, autoScroll]);
+  }, [activeIdx, autoScroll, searchQuery]);
 
   const handleWordClick = async (word: string) => {
     const cleaned = word.toLowerCase().replace(/[^a-z'-]/g, "");
@@ -78,8 +120,66 @@ export function ScriptPanel({ segments, currentSec, onSeek, autoScroll }: Props)
     }
   };
 
+  // Determine what to render
+  const displaySegments = filteredSegments
+    ? filteredSegments.map(({ seg, idx }) => ({ seg, idx }))
+    : segments.map((seg, idx) => ({ seg, idx }));
+
   return (
     <>
+      {/* ── Search header ── */}
+      {searchOpen && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            padding: "8px 14px",
+            borderBottom: "1px solid var(--border)",
+            background: "color-mix(in srgb, var(--accent) 4%, var(--bg))",
+          }}
+        >
+          <SearchOutlined style={{ fontSize: 12, color: "var(--accent)", flexShrink: 0 }} />
+          <input
+            ref={searchInputRef}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            placeholder="Tìm trong transcript..."
+            style={{
+              flex: 1,
+              border: "none",
+              outline: "none",
+              background: "transparent",
+              fontSize: 13,
+              color: "var(--text-primary)",
+              fontFamily: "inherit",
+            }}
+          />
+          {searchQuery && (
+            <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 600, flexShrink: 0 }}>
+              {filteredSegments ? filteredSegments.length : segments.length} kết quả
+            </span>
+          )}
+          <button
+            onClick={() => { setSearchOpen(false); setSearchQuery(""); }}
+            style={{
+              border: "none",
+              background: "transparent",
+              cursor: "pointer",
+              color: "var(--text-muted)",
+              fontSize: 11,
+              padding: 4,
+              borderRadius: 4,
+              display: "grid",
+              placeItems: "center",
+            }}
+          >
+            <CloseOutlined />
+          </button>
+        </div>
+      )}
+
+      {/* ── Segments list ── */}
       <div
         ref={containerRef}
         style={{
@@ -88,12 +188,12 @@ export function ScriptPanel({ segments, currentSec, onSeek, autoScroll }: Props)
           display: "flex", flexDirection: "column", gap: 4,
         }}
       >
-        {segments.map((seg, i) => {
-          const isActive = i === activeIdx;
+        {displaySegments.map(({ seg, idx }) => {
+          const isActive = idx === activeIdx;
           return (
             <div
-              key={i}
-              data-seg={i}
+              key={idx}
+              data-seg={idx}
               style={{
                 padding: "10px 14px",
                 borderRadius: 10,
@@ -123,11 +223,18 @@ export function ScriptPanel({ segments, currentSec, onSeek, autoScroll }: Props)
                 fontWeight: isActive ? 500 : 400,
                 flex: 1,
               }}>
-                {renderClickableText(seg.text, (w, e) => { e.stopPropagation(); handleWordClick(w); })}
+                {searchQuery.trim()
+                  ? highlightMatch(seg.text, searchQuery, (w, e) => { e.stopPropagation(); handleWordClick(w); })
+                  : renderClickableText(seg.text, (w, e) => { e.stopPropagation(); handleWordClick(w); })}
               </p>
             </div>
           );
         })}
+        {displaySegments.length === 0 && searchQuery.trim() && (
+          <div style={{ padding: 32, textAlign: "center", color: "var(--text-muted)", fontSize: 13 }}>
+            Không tìm thấy &quot;{searchQuery}&quot; trong transcript.
+          </div>
+        )}
         {segments.length === 0 && (
           <div style={{ padding: 32, textAlign: "center", color: "var(--text-muted)", fontSize: 13 }}>
             Chưa có script.
@@ -166,6 +273,33 @@ export function ScriptPanel({ segments, currentSec, onSeek, autoScroll }: Props)
   );
 }
 
+/* ── Search icon button — exported for parent to use in header ── */
+export function TranscriptSearchButton({ onClick }: { onClick: () => void }) {
+  return (
+    <button
+      onClick={onClick}
+      style={{
+        border: "none",
+        background: "transparent",
+        cursor: "pointer",
+        color: "var(--text-muted)",
+        fontSize: 12,
+        padding: "4px 8px",
+        borderRadius: 6,
+        display: "flex",
+        alignItems: "center",
+        gap: 4,
+        transition: "color 0.15s",
+      }}
+      onMouseEnter={(e) => { e.currentTarget.style.color = "var(--accent)"; }}
+      onMouseLeave={(e) => { e.currentTarget.style.color = "var(--text-muted)"; }}
+      title="Tìm trong transcript (⌘F)"
+    >
+      <SearchOutlined style={{ fontSize: 12 }} />
+    </button>
+  );
+}
+
 function findActiveIndex(segments: Segment[], t: number): number {
   if (segments.length === 0) return -1;
   let lo = 0, hi = segments.length - 1, ans = -1;
@@ -186,6 +320,88 @@ function renderClickableText(
   const parts: React.ReactNode[] = [];
   let lastIdx = 0;
   let key = 0;
+
+  text.replace(WORD_PATTERN, (match, offset: number) => {
+    if (offset > lastIdx) parts.push(text.slice(lastIdx, offset));
+    parts.push(
+      <span
+        key={key++}
+        onClick={(e) => onWord(match, e)}
+        style={{ cursor: "pointer", borderRadius: 3, transition: "background 0.12s" }}
+        onMouseEnter={(e) => { (e.currentTarget as HTMLSpanElement).style.background = "color-mix(in srgb, var(--accent) 18%, transparent)"; }}
+        onMouseLeave={(e) => { (e.currentTarget as HTMLSpanElement).style.background = "transparent"; }}
+      >
+        {match}
+      </span>,
+    );
+    lastIdx = offset + match.length;
+    return match;
+  });
+  if (lastIdx < text.length) parts.push(text.slice(lastIdx));
+  return parts;
+}
+
+function highlightMatch(
+  text: string,
+  query: string,
+  onWord: (word: string, e: React.MouseEvent) => void,
+): React.ReactNode {
+  const lowerText = text.toLowerCase();
+  const lowerQuery = query.toLowerCase();
+  const parts: React.ReactNode[] = [];
+  let lastIdx = 0;
+  let key = 0;
+  let searchIdx = lowerText.indexOf(lowerQuery);
+
+  while (searchIdx !== -1) {
+    // Add text before match
+    if (searchIdx > lastIdx) {
+      parts.push(
+        ...renderClickableTextAsArray(text.slice(lastIdx, searchIdx), onWord, key),
+      );
+      key += 100;
+    }
+    // Add highlighted match
+    const matchText = text.slice(searchIdx, searchIdx + query.length);
+    parts.push(
+      <span
+        key={`hl-${key++}`}
+        style={{
+          background: "color-mix(in srgb, var(--accent) 25%, transparent)",
+          borderRadius: 3,
+          padding: "1px 2px",
+          fontWeight: 600,
+          cursor: "pointer",
+        }}
+        onClick={(e) => {
+          e.stopPropagation();
+          const word = matchText.replace(/[^a-zA-Z'-]/g, "");
+          if (word) onWord(word, e);
+        }}
+      >
+        {matchText}
+      </span>,
+    );
+    lastIdx = searchIdx + query.length;
+    searchIdx = lowerText.indexOf(lowerQuery, lastIdx);
+  }
+
+  // Add remaining text
+  if (lastIdx < text.length) {
+    parts.push(...renderClickableTextAsArray(text.slice(lastIdx), onWord, key));
+  }
+
+  return parts;
+}
+
+function renderClickableTextAsArray(
+  text: string,
+  onWord: (word: string, e: React.MouseEvent) => void,
+  startKey: number,
+): React.ReactNode[] {
+  const parts: React.ReactNode[] = [];
+  let lastIdx = 0;
+  let key = startKey;
 
   text.replace(WORD_PATTERN, (match, offset: number) => {
     if (offset > lastIdx) parts.push(text.slice(lastIdx, offset));

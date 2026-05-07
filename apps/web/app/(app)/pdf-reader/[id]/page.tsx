@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import {
   ArrowLeftOutlined,
@@ -72,6 +72,47 @@ export default function PdfReaderDetailPage() {
     },
     [pageInput, goToPage],
   );
+
+  // Keyboard navigation
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => {
+      // Don't intercept when typing in the page input
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement
+      ) {
+        return;
+      }
+
+      switch (e.key) {
+        case "ArrowRight":
+        case " ":
+          e.preventDefault();
+          nextPage();
+          break;
+        case "ArrowLeft":
+          e.preventDefault();
+          prevPage();
+          break;
+        case "+":
+        case "=":
+          e.preventDefault();
+          setZoom(zoom + 0.15);
+          break;
+        case "-":
+          e.preventDefault();
+          setZoom(zoom - 0.15);
+          break;
+        case "0":
+          e.preventDefault();
+          setZoom(1.0);
+          break;
+      }
+    };
+
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [nextPage, prevPage, setZoom, zoom]);
 
   if (isLoading) {
     return (
@@ -317,6 +358,26 @@ export default function PdfReaderDetailPage() {
             <FullscreenOutlined />
           </button>
         </div>
+      </div>
+
+      {/* Book progress bar */}
+      <div
+        style={{
+          height: 2,
+          background: "var(--surface)",
+          flexShrink: 0,
+        }}
+      >
+        <div
+          style={{
+            height: "100%",
+            width: `${totalPages > 0 ? (currentPage / totalPages) * 100 : 0}%`,
+            background: currentPage >= totalPages
+              ? "var(--success)"
+              : "var(--accent)",
+            transition: "width 0.3s ease",
+          }}
+        />
       </div>
 
       {/* PDF Viewer area */}

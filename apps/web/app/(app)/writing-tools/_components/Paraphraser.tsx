@@ -9,6 +9,7 @@ import {
   SwapOutlined,
   DownOutlined,
   RightOutlined,
+  ThunderboltOutlined,
 } from "@ant-design/icons";
 import { api } from "@/lib/api-client";
 import type { ParaphraseResponse, ParaphraseMode } from "@/lib/writing-tools/schema";
@@ -33,6 +34,33 @@ const MODES: ModeInfo[] = [
   { key: "expand", label: "Mở rộng", description: "Thêm chi tiết", emoji: "📖" },
   { key: "shorten", label: "Rút gọn", description: "Ngắn gọn, súc tích", emoji: "✂️" },
 ];
+
+/* ── Mode-specific example prompts ────────────────────── */
+
+const MODE_EXAMPLES: Record<string, { text: string; hint: string }[]> = {
+  standard: [
+    { text: "The students were very happy because they passed the difficult exam.", hint: "Câu đơn giản → paraphrase" },
+    { text: "Technology has changed the way people communicate with each other.", hint: "Chủ đề phổ biến" },
+  ],
+  fluency: [
+    { text: "The reason why I like this city is because it has many interesting places to visit.", hint: "Câu dài dòng → tự nhiên hơn" },
+  ],
+  formal: [
+    { text: "Hey, I just wanted to let you know that the meeting is gonna be moved to next week.", hint: "Casual → professional" },
+  ],
+  simple: [
+    { text: "The proliferation of digital technologies has fundamentally transformed contemporary pedagogical methodologies.", hint: "Phức tạp → dễ hiểu" },
+  ],
+  creative: [
+    { text: "The sunset was beautiful. The sky had many colors.", hint: "Nhạt → sinh động" },
+  ],
+  expand: [
+    { text: "Climate change is a serious problem.", hint: "Ngắn → chi tiết hơn" },
+  ],
+  shorten: [
+    { text: "In my personal opinion, I believe that it is absolutely essential and critically important for students to develop strong reading habits.", hint: "Dài dòng → súc tích" },
+  ],
+};
 
 /* ── Word diff renderer ───────────────────────────────── */
 
@@ -245,6 +273,19 @@ export function Paraphraser() {
     }
   }, [text, mode, synonymLevel, overLimit]);
 
+  // Keyboard handler — Ctrl/Cmd + Enter
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && e.key === "Enter") {
+        e.preventDefault();
+        paraphrase();
+      }
+    },
+    [paraphrase],
+  );
+
+  const currentExamples = MODE_EXAMPLES[mode] ?? MODE_EXAMPLES.standard;
+
   const sliderLabel = synonymLevel <= 30 ? "Ít thay đổi" : synonymLevel <= 70 ? "Vừa phải" : "Nhiều thay đổi";
 
   return (
@@ -393,6 +434,7 @@ export function Paraphraser() {
               setResult(null);
               setError(null);
             }}
+            onKeyDown={handleKeyDown}
             placeholder="Type or paste your English text here..."
             style={{
               width: "100%",
@@ -409,6 +451,76 @@ export function Paraphraser() {
               transition: "border-color 0.2s",
             }}
           />
+
+          {/* Example prompts — show when empty */}
+          {!text.trim() && !result && (
+            <div style={{ marginTop: 8 }}>
+              <span
+                style={{
+                  fontSize: 11,
+                  fontWeight: 700,
+                  textTransform: "uppercase",
+                  letterSpacing: "0.12em",
+                  color: "var(--text-muted)",
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 6,
+                  marginBottom: 6,
+                }}
+              >
+                <ThunderboltOutlined style={{ fontSize: 10 }} />
+                Thử ngay
+              </span>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                {currentExamples.map((ex, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setText(ex.text)}
+                    style={{
+                      textAlign: "left",
+                      padding: "8px 12px",
+                      borderRadius: 8,
+                      border: "1px solid var(--border)",
+                      borderLeft: "3px solid var(--accent)",
+                      background: "var(--card-bg)",
+                      cursor: "pointer",
+                      transition: "all 0.15s",
+                      flex: "1 1 200px",
+                      maxWidth: 360,
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.borderColor = "var(--accent)";
+                      e.currentTarget.style.transform = "translateY(-1px)";
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.borderColor = "var(--border)";
+                      e.currentTarget.style.borderLeftColor = "var(--accent)";
+                      e.currentTarget.style.transform = "none";
+                    }}
+                  >
+                    <span style={{ fontSize: 11, fontWeight: 600, color: "var(--accent)" }}>
+                      {ex.hint}
+                    </span>
+                    <span
+                      style={{
+                        display: "block",
+                        marginTop: 3,
+                        fontSize: 12,
+                        color: "var(--text-secondary)",
+                        lineHeight: 1.45,
+                        fontStyle: "italic",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
+                      {ex.text}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Right: Output */}
@@ -512,6 +624,13 @@ export function Paraphraser() {
           <span style={{ fontSize: 12, color: "var(--text-muted)" }}>
             {MODES.find((m) => m.key === mode)?.emoji}{" "}
             {MODES.find((m) => m.key === mode)?.label} · Mức thay đổi: {synonymLevel}%
+          </span>
+        )}
+
+        {/* Keyboard shortcut hint */}
+        {text.trim() && !result && (
+          <span style={{ fontSize: 11, color: "var(--text-muted)", fontStyle: "italic" }}>
+            ⌘/Ctrl + Enter
           </span>
         )}
       </div>

@@ -19,9 +19,11 @@ const MAX_SIZE = 100 * 1024 * 1024; // 100MB
 
 interface PdfUploaderProps {
   onUploaded: () => void;
+  /** When true, renders a compact inline button instead of the full drop zone */
+  compact?: boolean;
 }
 
-export function PdfUploader({ onUploaded }: PdfUploaderProps) {
+export function PdfUploader({ onUploaded, compact }: PdfUploaderProps) {
   const [dragOver, setDragOver] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [progress, setProgress] = useState("");
@@ -101,8 +103,73 @@ export function PdfUploader({ onUploaded }: PdfUploaderProps) {
     [processFile],
   );
 
+  // ── Compact mode: slim pill button ──
+  if (compact) {
+    return (
+      <div className="anim-fade-up anim-delay-3">
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept=".pdf"
+          onChange={handleFileInput}
+          style={{ display: "none" }}
+        />
+        <button
+          onClick={() => !uploading && fileInputRef.current?.click()}
+          disabled={uploading}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 8,
+            padding: "10px 20px",
+            borderRadius: 99,
+            border: "1.5px dashed var(--border)",
+            background: "var(--card-bg)",
+            color: "var(--text-secondary)",
+            cursor: uploading ? "wait" : "pointer",
+            fontSize: 13,
+            fontWeight: 600,
+            transition: "all 0.2s",
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.borderColor = "var(--accent)";
+            e.currentTarget.style.color = "var(--accent)";
+            e.currentTarget.style.background = "color-mix(in srgb, var(--accent) 5%, var(--card-bg))";
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.borderColor = "var(--border)";
+            e.currentTarget.style.color = "var(--text-secondary)";
+            e.currentTarget.style.background = "var(--card-bg)";
+          }}
+        >
+          {uploading ? (
+            <><LoadingOutlined style={{ fontSize: 14 }} /> {progress}</>
+          ) : (
+            <><CloudUploadOutlined style={{ fontSize: 14 }} /> Import PDF · Tối đa {formatFileSize(MAX_SIZE)}</>
+          )}
+        </button>
+
+        {error && (
+          <div
+            style={{
+              marginTop: 8,
+              padding: "8px 14px",
+              borderRadius: 10,
+              background: "var(--error-bg)",
+              color: "var(--error)",
+              fontSize: 13,
+            }}
+          >
+            {error}
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // ── Full drop zone mode ──
   return (
-    <div>
+    <div className="anim-fade-up anim-delay-2">
       <div
         onDragOver={(e) => {
           e.preventDefault();
