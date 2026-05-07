@@ -25,17 +25,15 @@ import {
   MenuUnfoldOutlined,
   SunOutlined,
   MoonOutlined,
-  BarChartOutlined,
-  SwapOutlined,
   DownOutlined,
   RightOutlined,
   CheckCircleOutlined,
   YoutubeOutlined,
   ToolOutlined,
   FileTextOutlined,
+  AimOutlined,
 } from "@ant-design/icons";
 import { useTheme } from "@/components/shared/ThemeProvider";
-import { useExamMode } from "@/components/shared/ExamModeProvider";
 import { useSidebarBadges } from "@/hooks/useSidebarBadges";
 
 type NavItem = { href: string; label: string; icon: React.ComponentType<{ style?: React.CSSProperties }> };
@@ -84,6 +82,7 @@ const navGroups: (NavItem | NavGroup)[] = [
     label: "Kiểm tra & Ôn tập",
     items: [
       { href: "/daily-challenge", label: "Thử thách hàng ngày", icon: FireOutlined },
+      { href: "/toeic-skills", label: "TOEIC 4 kỹ năng", icon: AimOutlined },
       { href: "/toeic-practice", label: "Luyện đề TOEIC", icon: TrophyOutlined },
       { href: "/error-notebook", label: "Sổ lỗi sai", icon: ExceptionOutlined },
     ],
@@ -167,7 +166,6 @@ function NavLink({
 export function AppSidebar({ isExpanded, onToggle }: Props) {
   const pathname = usePathname();
   const { mode, toggleTheme } = useTheme();
-  const { examMode, setExamMode } = useExamMode();
   const badges = useSidebarBadges();
   const [collapsedGroups, setCollapsedGroups] = useState<Set<string>>(() => {
     const collapsed = new Set<string>();
@@ -456,50 +454,9 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
         })}
       </nav>
 
-      {/* Bottom: Exam mode + Theme */}
+      {/* Bottom: Theme */}
       <div style={{ paddingTop: 8, position: "relative", zIndex: 1, marginTop: 4 }}>
         <div style={{ height: 1, background: "var(--sidebar-border)", marginBottom: 8 }} />
-
-        {/* Exam Mode */}
-        {(() => {
-          const examBtn = (
-            <button
-              onClick={() => setExamMode(examMode === "toeic" ? "ielts" : "toeic")}
-              className="theme-toggle-btn"
-              aria-label={`Switch to ${examMode === "toeic" ? "IELTS" : "TOEIC"} mode`}
-              style={{ marginBottom: 4 }}
-            >
-              <span style={{ fontSize: 15, display: "grid", placeItems: "center" }}>
-                {examMode === "toeic" ? <BarChartOutlined /> : <TrophyOutlined />}
-              </span>
-              {isExpanded && (
-                <span style={{ display: "flex", alignItems: "center", gap: 6, flex: 1 }}>
-                  <span>{examMode === "toeic" ? "TOEIC" : "IELTS"}</span>
-                  <span
-                    style={{
-                      fontSize: 10,
-                      padding: "1px 6px",
-                      borderRadius: 99,
-                      background: examMode === "toeic"
-                        ? "rgba(59, 130, 246, 0.13)"
-                        : "rgba(200, 75, 49, 0.12)",
-                      color: examMode === "toeic" ? "var(--info)" : "var(--accent)",
-                      fontWeight: 700,
-                      marginLeft: "auto",
-                    }}
-                  >
-                    <SwapOutlined style={{ fontSize: 10 }} />
-                  </span>
-                </span>
-              )}
-            </button>
-          );
-          return !isExpanded ? (
-            <Tooltip placement="right" title={`${examMode === "toeic" ? "TOEIC" : "IELTS"} — Nhấn để đổi`}>
-              {examBtn}
-            </Tooltip>
-          ) : examBtn;
-        })()}
 
         {/* Theme toggle */}
         {(() => {

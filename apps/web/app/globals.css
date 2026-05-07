@@ -104,6 +104,8 @@
   --gradient-error-notebook: linear-gradient(135deg, #9B6B63, #7A5040);
   --gradient-diagnostic: linear-gradient(135deg, #7A5040, #9B6B63);
   --gradient-youtube-learn: linear-gradient(135deg, #C84B31, #8B3A26);
+  --gradient-toeic-skills: linear-gradient(135deg, #1a2332, #2d3748 50%, #4a5568);
+  --gradient-toeic-speaking: linear-gradient(135deg, #C84B31, #9B6B63);
 
   /* ── Heatmap Colors ── */
   --heatmap-0: rgba(0, 0, 0, 0.05);
@@ -230,6 +232,8 @@
   --gradient-study-sets: linear-gradient(135deg, #A88070, #8B6F5E);
   --gradient-error-notebook: linear-gradient(135deg, #7A5040, #5A3830);
   --gradient-diagnostic: linear-gradient(135deg, #5A3830, #7A5040);
+  --gradient-toeic-skills: linear-gradient(135deg, #0f1720, #1a2332 50%, #2d3748);
+  --gradient-toeic-speaking: linear-gradient(135deg, #9B6B63, #7A5040);
 
   /* ── Extended Shadows (Dark) ── */
   --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.6), 0 8px 24px rgba(0, 0, 0, 0.35);

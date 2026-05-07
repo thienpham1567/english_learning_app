@@ -65,6 +65,7 @@ function getActiveTab(pathname: string): string {
   if (
     pathname.startsWith("/error-notebook") ||
     pathname.startsWith("/toeic-practice") ||
+    pathname.startsWith("/toeic-skills") ||
     pathname.startsWith("/daily-challenge")
   ) return "review";
   if (
