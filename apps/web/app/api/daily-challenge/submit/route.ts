@@ -81,6 +81,72 @@ function scoreExercise(
           : `${d.explanation}. Từ sai là "${d.errorWord}", cần sửa thành "${d.correction}". Bạn đã trả lời "${answer}".`,
       };
     }
+    case "word-formation": {
+      const d = exercise.data;
+      const correct = d.options[d.correctIndex];
+      const isCorrect = correct?.toLowerCase() === answer.toLowerCase();
+      return {
+        isCorrect,
+        correctAnswer: correct,
+        questionStem: `${d.sentence} (từ gốc: ${d.rootWord})`,
+        explanation: isCorrect
+          ? "Chính xác!"
+          : `Đáp án đúng là "${correct}". Từ gốc "${d.rootWord}" cần biến đổi thành "${correct}" để phù hợp với vị trí ${d.sentence.includes("_____") ? "trong câu" : "ngữ pháp"}. Bạn đã chọn "${answer}".`,
+      };
+    }
+    case "dialogue-completion": {
+      const d = exercise.data;
+      const correct = d.options[d.correctIndex];
+      const isCorrect = correct?.toLowerCase() === answer.toLowerCase();
+      return {
+        isCorrect,
+        correctAnswer: correct,
+        questionStem: `Hội thoại: ${d.context}`,
+        explanation: isCorrect
+          ? "Chính xác!"
+          : `Đáp án đúng là "${correct}". Trong ngữ cảnh "${d.context}", câu trả lời "${correct}" phù hợp nhất với mạch hội thoại. Bạn đã chọn "${answer}".`,
+      };
+    }
+    case "synonym-antonym": {
+      const d = exercise.data;
+      const correct = d.options[d.correctIndex];
+      const isCorrect = correct?.toLowerCase() === answer.toLowerCase();
+      const modeLabel = d.mode === "synonym" ? "đồng nghĩa" : "trái nghĩa";
+      return {
+        isCorrect,
+        correctAnswer: correct,
+        questionStem: `${d.mode === "synonym" ? "Đồng nghĩa" : "Trái nghĩa"} của "${d.word}"`,
+        explanation: isCorrect
+          ? "Chính xác!"
+          : `Từ ${modeLabel} của "${d.word}" là "${correct}". Bạn đã chọn "${answer}" — hãy xem lại nghĩa gốc của từ để phân biệt rõ hơn.`,
+      };
+    }
+    case "reading-comprehension": {
+      const d = exercise.data;
+      const correct = d.options[d.correctIndex];
+      const isCorrect = correct?.toLowerCase() === answer.toLowerCase();
+      return {
+        isCorrect,
+        correctAnswer: correct,
+        questionStem: d.question,
+        explanation: isCorrect
+          ? "Chính xác!"
+          : `Đáp án đúng là "${correct}". Dựa trên đoạn văn, "${correct}" là câu trả lời chính xác cho câu hỏi "${d.question}". Bạn đã chọn "${answer}" — hãy đọc lại đoạn văn để tìm chi tiết hỗ trợ.`,
+      };
+    }
+    case "collocation": {
+      const d = exercise.data;
+      const correct = d.options[d.correctIndex];
+      const isCorrect = correct?.toLowerCase() === answer.toLowerCase();
+      return {
+        isCorrect,
+        correctAnswer: correct,
+        questionStem: d.phrase,
+        explanation: isCorrect
+          ? "Chính xác!"
+          : `${d.explanation}. Đáp án đúng là "${correct}". Bạn đã chọn "${answer}".`,
+      };
+    }
   }
 }
 

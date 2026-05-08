@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { eq, and } from "drizzle-orm";
+import { eq, and, isNotNull, desc } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
@@ -18,18 +18,39 @@ function getVnDate(): string {
   return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Ho_Chi_Minh" });
 }
 
-function buildChallengeSystemPrompt(examMode: ExamMode): string {
+type Difficulty = "easy" | "medium" | "hard";
+
+function getDifficultyInstructions(difficulty: Difficulty): string {
+  switch (difficulty) {
+    case "easy":
+      return `Difficulty: elementary to pre-intermediate (A2-B1). Use simple vocabulary and common sentence structures. Avoid idioms and complex grammar.`;
+    case "medium":
+      return `Difficulty: intermediate (B1-B2). Use a mix of common and slightly challenging vocabulary. Include some complex sentence structures.`;
+    case "hard":
+      return `Difficulty: upper-intermediate to advanced (B2-C1). Use sophisticated vocabulary, idioms, and complex grammar structures. Include nuanced distinctions.`;
+  }
+}
+
+function buildChallengeSystemPrompt(examMode: ExamMode, difficulty: Difficulty): string {
   const ctx = getExamContext(examMode);
   return `You are a daily English challenge generator for ${ctx.label} preparation.
-Generate exactly 5 mini-exercises mixing 2-3 of these types:
+Generate exactly 5 mini-exercises. Pick 3-5 DIFFERENT types from these 9 types for variety:
 
 1. "fill-in-blank": A sentence with _____ and 4 options (correctIndex 0-3)
 2. "sentence-order": Scrambled words to arrange into a correct sentence
 3. "translation": Vietnamese sentence → provide 1-3 acceptable English translations
 4. "error-correction": Sentence with a grammar error, identify the wrong word and its correction
+5. "word-formation": A sentence with _____ where the learner must derive the correct form from a root word. Provide rootWord, correctAnswer, and 4 options (correctIndex 0-3)
+6. "dialogue-completion": A short 3-4 line conversation with one line missing. Provide context, dialogue array with {speaker, text}, missingIndex, and 4 options (correctIndex 0-3)
+7. "synonym-antonym": A word and whether to find its synonym or antonym. Provide word, mode ("synonym" or "antonym"), 4 options (correctIndex 0-3)
+8. "reading-comprehension": A 2-3 sentence passage followed by a comprehension question. Provide passage, question, 4 options (correctIndex 0-3)
+9. "collocation": A phrase with _____ where the learner picks the word that naturally collocates. Provide phrase, 4 options (correctIndex 0-3), and explanation
 
 Each exercise needs an "instruction" field in Vietnamese telling the learner what to do.
-Difficulty: intermediate (B1-B2). ${ctx.dailyChallengeTopics}
+${getDifficultyInstructions(difficulty)}
+${ctx.dailyChallengeTopics}
+
+IMPORTANT: Use a variety of types. Do NOT use the same type more than twice. Mix at least 3 different types.
 
 Return ONLY valid JSON:
 {
@@ -40,19 +61,24 @@ Return ONLY valid JSON:
       "data": { "sentence": "She _____ to school every day.", "options": ["go", "goes", "going", "gone"], "correctIndex": 1 }
     },
     {
-      "type": "sentence-order",
-      "instruction": "Sắp xếp các từ thành câu đúng",
-      "data": { "scrambled": ["the", "cat", "on", "sat", "mat", "the"], "correctOrder": ["the", "cat", "sat", "on", "the", "mat"] }
+      "type": "word-formation",
+      "instruction": "Chọn dạng đúng của từ gốc để điền vào câu",
+      "data": { "sentence": "The _____ of the project was impressive.", "rootWord": "execute", "correctAnswer": "execution", "options": ["executive", "execution", "executing", "executed"], "correctIndex": 1 }
     },
     {
-      "type": "translation",
-      "instruction": "Dịch câu sau sang tiếng Anh",
-      "data": { "vietnamese": "Tôi thích đọc sách.", "acceptableAnswers": ["I like reading books.", "I enjoy reading books."] }
+      "type": "dialogue-completion",
+      "instruction": "Chọn câu phù hợp để hoàn thành đoạn hội thoại",
+      "data": { "context": "At a restaurant", "dialogue": [{"speaker": "Waiter", "text": "Good evening. How many in your party?"}, {"speaker": "Customer", "text": ""}, {"speaker": "Waiter", "text": "Right this way, please."}], "missingIndex": 1, "options": ["Table for two, please.", "I'll have the steak.", "The food was great.", "Where is the exit?"], "correctIndex": 0 }
     },
     {
-      "type": "error-correction",
-      "instruction": "Tìm và sửa lỗi sai trong câu",
-      "data": { "sentence": "She don't like coffee.", "errorWord": "don't", "correction": "doesn't", "explanation": "Third person singular requires 'doesn't'." }
+      "type": "synonym-antonym",
+      "instruction": "Chọn từ đồng nghĩa với từ được cho",
+      "data": { "word": "abundant", "mode": "synonym", "options": ["scarce", "plentiful", "tiny", "rare"], "correctIndex": 1 }
+    },
+    {
+      "type": "collocation",
+      "instruction": "Chọn từ kết hợp tự nhiên nhất",
+      "data": { "phrase": "make a _____", "options": ["decision", "opinion", "thought", "idea"], "correctIndex": 0, "explanation": "'Make a decision' is a common English collocation. We say 'form an opinion', 'have a thought', and 'have an idea'." }
     }
   ]
 }`;
@@ -118,6 +144,31 @@ export async function GET() {
     });
   }
 
+  // ── Adaptive difficulty: query last 7 completed challenges ──
+  let difficulty: Difficulty = "medium";
+  try {
+    const recentScores = await db
+      .select({ score: dailyChallenge.score })
+      .from(dailyChallenge)
+      .where(
+        and(
+          eq(dailyChallenge.userId, session.user.id),
+          isNotNull(dailyChallenge.completedAt),
+        ),
+      )
+      .orderBy(desc(dailyChallenge.challengeDate))
+      .limit(7);
+
+    if (recentScores.length >= 3) {
+      const avgScore =
+        recentScores.reduce((s, r) => s + (r.score ?? 0), 0) / recentScores.length;
+      difficulty = avgScore >= 4.0 ? "hard" : avgScore >= 2.5 ? "medium" : "easy";
+    }
+  } catch (err) {
+    log.warn({ err }, "daily-challenge.difficulty.query.failed");
+    // Non-fatal — use default medium
+  }
+
   // Generate new challenge via AI
   for (let attempt = 0; attempt < 2; attempt++) {
     try {
@@ -126,10 +177,10 @@ export async function GET() {
         temperature: 0.8,
         response_format: { type: "json_object" },
         messages: [
-          { role: "system", content: buildChallengeSystemPrompt(examMode) },
+          { role: "system", content: buildChallengeSystemPrompt(examMode, difficulty) },
           {
             role: "user",
-            content: `Generate today's daily English challenge. Date: ${vnToday}. Return JSON only.`,
+            content: `Generate today's daily English challenge. Date: ${vnToday}. Difficulty: ${difficulty}. Return JSON only.`,
           },
         ],
       });

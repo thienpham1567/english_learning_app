@@ -21,6 +21,11 @@ import {
   BulbOutlined,
   LikeOutlined,
   RightOutlined,
+  ReadOutlined,
+  MessageOutlined,
+  LinkOutlined,
+  FontSizeOutlined,
+  BlockOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
 
@@ -42,12 +47,22 @@ const EXERCISE_ICONS: Record<string, React.ReactNode> = {
   "sentence-order": <SwapOutlined />,
   "translation": <TranslationOutlined />,
   "error-correction": <SearchOutlined />,
+  "word-formation": <FontSizeOutlined />,
+  "dialogue-completion": <MessageOutlined />,
+  "synonym-antonym": <LinkOutlined />,
+  "reading-comprehension": <ReadOutlined />,
+  "collocation": <BlockOutlined />,
 };
 const EXERCISE_LABELS: Record<string, string> = {
   "fill-in-blank": "Điền từ",
   "sentence-order": "Sắp xếp câu",
   "translation": "Dịch câu",
   "error-correction": "Sửa lỗi",
+  "word-formation": "Cấu tạo từ",
+  "dialogue-completion": "Hoàn thành hội thoại",
+  "synonym-antonym": "Đồng / Trái nghĩa",
+  "reading-comprehension": "Đọc hiểu",
+  "collocation": "Kết hợp từ",
 };
 
 /* ── Answer Detail Card ── */

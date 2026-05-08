@@ -8,9 +8,11 @@ import {
   CheckOutlined,
   ForwardOutlined,
   FireOutlined,
+  ThunderboltOutlined,
 } from "@ant-design/icons";
 
 import { useDailyChallenge } from "@/hooks/useDailyChallenge";
+import { useBonusChallenge } from "@/hooks/useBonusChallenge";
 import { ExerciseCard } from "@/app/(app)/daily-challenge/_components/ExerciseCard";
 import { ChallengeResults } from "@/app/(app)/daily-challenge/_components/ChallengeResults";
 import { CompletedState } from "@/app/(app)/daily-challenge/_components/CompletedState";
@@ -135,6 +137,192 @@ function StepIndicator({ current, total }: { current: number; total: number }) {
   );
 }
 
+/* ── Shared Exercise Flow — used by both daily & bonus ── */
+function ExerciseFlow({
+  challenge,
+  currentExercise,
+  onAnswer,
+  onSkip,
+  formattedTime,
+  isBonus,
+}: {
+  challenge: { exercises: { type: string; data: unknown; instruction: string }[] };
+  currentExercise: number;
+  onAnswer: (answer: string) => void;
+  onSkip: () => void;
+  formattedTime: string;
+  isBonus?: boolean;
+}) {
+  const exerciseWrapperRef = useRef<HTMLDivElement>(null);
+
+  const handleAnswer = useCallback(
+    (answer: string) => {
+      if (exerciseWrapperRef.current) {
+        exerciseWrapperRef.current.classList.remove("answer-flash");
+        void exerciseWrapperRef.current.offsetWidth;
+        exerciseWrapperRef.current.classList.add("answer-flash");
+      }
+      onAnswer(answer);
+    },
+    [onAnswer],
+  );
+
+  const exerciseTypeLabel =
+    EXERCISE_TYPE_LABELS[challenge.exercises[currentExercise]?.type] ?? "";
+
+  return (
+    <div
+      className="anim-fade-up"
+      style={{ display: "flex", flexDirection: "column", gap: 24 }}
+    >
+      {/* Bonus label */}
+      {isBonus && (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 6,
+            padding: "5px 14px",
+            borderRadius: 99,
+            background: "color-mix(in srgb, var(--xp) 12%, transparent)",
+            border: "1px solid color-mix(in srgb, var(--xp) 25%, transparent)",
+            alignSelf: "flex-start",
+          }}
+        >
+          <ThunderboltOutlined style={{ fontSize: 11, color: "var(--xp)" }} />
+          <span
+            style={{
+              fontSize: 11,
+              fontWeight: 700,
+              color: "var(--xp)",
+              letterSpacing: ".06em",
+            }}
+          >
+            BONUS ROUND
+          </span>
+        </div>
+      )}
+
+      {/* Step indicator row */}
+      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <StepIndicator
+          current={currentExercise}
+          total={challenge.exercises.length}
+        />
+
+        {/* Exercise type label */}
+        {exerciseTypeLabel && (
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div
+              style={{
+                width: 4,
+                height: 4,
+                borderRadius: "50%",
+                background: isBonus ? "var(--xp)" : "var(--accent)",
+                flexShrink: 0,
+              }}
+            />
+            <span
+              style={{
+                fontSize: 10,
+                fontWeight: 700,
+                letterSpacing: ".14em",
+                textTransform: "uppercase",
+                color: isBonus ? "var(--xp)" : "var(--accent)",
+                fontFamily: "var(--font-body)",
+              }}
+            >
+              {exerciseTypeLabel}
+            </span>
+            <div
+              style={{
+                flex: 1,
+                height: 1,
+                background: "var(--border)",
+              }}
+            />
+            <span
+              style={{
+                fontSize: 11,
+                color: "var(--text-muted)",
+                fontFamily: "var(--font-mono)",
+              }}
+            >
+              {currentExercise + 1}/{challenge.exercises.length}
+            </span>
+          </div>
+        )}
+      </div>
+
+      {/* Exercise card */}
+      <div
+        key={currentExercise}
+        ref={exerciseWrapperRef}
+        className="anim-fade-up"
+        style={{
+          borderRadius: 20,
+          border: "1px solid var(--border)",
+          background: "var(--surface)",
+          padding: "28px 24px",
+          boxShadow: "var(--shadow-md)",
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        {/* Thin editorial accent line */}
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 28,
+            width: 40,
+            height: 2,
+            background: isBonus ? "var(--xp)" : "var(--accent)",
+            borderRadius: "0 0 2px 2px",
+          }}
+        />
+        <ExerciseCard
+          exercise={challenge.exercises[currentExercise] as any}
+          onAnswer={handleAnswer}
+          disabled={false}
+        />
+      </div>
+
+      {/* Skip */}
+      <button
+        type="button"
+        onClick={onSkip}
+        style={{
+          alignSelf: "center",
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          background: "none",
+          border: "none",
+          cursor: "pointer",
+          fontSize: 12,
+          fontWeight: 500,
+          color: "var(--text-muted)",
+          padding: "6px 16px",
+          borderRadius: 999,
+          transition: "color .2s",
+          fontFamily: "var(--font-body)",
+          letterSpacing: ".02em",
+        }}
+        onMouseEnter={(e) => {
+          e.currentTarget.style.color = "var(--error)";
+        }}
+        onMouseLeave={(e) => {
+          e.currentTarget.style.color = "var(--text-muted)";
+        }}
+      >
+        <ForwardOutlined style={{ fontSize: 10 }} />
+        Bỏ qua câu này
+      </button>
+    </div>
+  );
+}
+
 export default function DailyChallengePage() {
   const {
     state,
@@ -148,18 +336,7 @@ export default function DailyChallengePage() {
     answerExercise,
   } = useDailyChallenge();
 
-  const exerciseWrapperRef = useRef<HTMLDivElement>(null);
-  const handleAnswer = useCallback(
-    (answer: string) => {
-      if (exerciseWrapperRef.current) {
-        exerciseWrapperRef.current.classList.remove("answer-flash");
-        void exerciseWrapperRef.current.offsetWidth;
-        exerciseWrapperRef.current.classList.add("answer-flash");
-      }
-      answerExercise(answer);
-    },
-    [answerExercise],
-  );
+  const bonus = useBonusChallenge();
 
   const BEST_KEY = "daily-challenge-best";
   const [personalBest, setPersonalBest] = useState<string | null>(null);
@@ -185,12 +362,8 @@ export default function DailyChallengePage() {
     }
   }, [state, results, timeElapsedMs, personalBest]);
 
-  const formattedTime = useElapsedTimer(state === "active");
-
-  const exerciseTypeLabel =
-    state === "active" && challenge
-      ? (EXERCISE_TYPE_LABELS[challenge.exercises[currentExercise]?.type] ?? "")
-      : "";
+  const isInBonusFlow = bonus.state === "active" || bonus.state === "submitting" || bonus.state === "results";
+  const formattedTime = useElapsedTimer(state === "active" || bonus.state === "active");
 
   return (
     <div
@@ -209,12 +382,12 @@ export default function DailyChallengePage() {
         <div style={{ maxWidth: 580, margin: "0 auto" }}>
           <ModuleHeader
             icon={<FireOutlined />}
-            gradient="var(--gradient-daily)"
-            title="Thử Thách Hôm Nay"
-            badge={todayLabel}
-            subtitle="Luyện tiếng Anh mỗi ngày · Xây dựng thói quen"
+            gradient={isInBonusFlow ? "linear-gradient(135deg, var(--xp), color-mix(in srgb, var(--xp) 70%, var(--accent)))" : "var(--gradient-daily)"}
+            title={isInBonusFlow ? "Bonus Round" : "Thử Thách Hôm Nay"}
+            badge={isInBonusFlow ? "⚡ Bonus" : todayLabel}
+            subtitle={isInBonusFlow ? "Luyện thêm · Không ảnh hưởng streak" : "Luyện tiếng Anh mỗi ngày · Xây dựng thói quen"}
             action={
-              (streak.currentStreak > 0 || state === "active") ? (
+              (streak.currentStreak > 0 || state === "active" || bonus.state === "active") ? (
                 <>
                   {streak.currentStreak > 0 && (
                     <span style={{
@@ -229,7 +402,7 @@ export default function DailyChallengePage() {
                       🔥 {streak.currentStreak} ngày
                     </span>
                   )}
-                  {state === "active" && (
+                  {(state === "active" || bonus.state === "active") && (
                     <span style={{
                       display: "inline-flex", alignItems: "center",
                       padding: "4px 12px", borderRadius: 999,
@@ -262,192 +435,29 @@ export default function DailyChallengePage() {
         <div style={{ width: "100%", maxWidth: 580, margin: "0 auto" }}>
 
           {/* Error banner */}
-          {error && (
+          {(error || bonus.error) && (
             <Alert
               className="anim-fade-in"
               type="error"
               showIcon
-              message={error}
+              message={error || bonus.error}
               style={{ borderRadius: 14, marginBottom: 20 }}
             />
           )}
 
-          {/* Loading */}
-          {state === "loading" && (
-            <div
-              className="anim-fade-in"
-              style={{
-                minHeight: 320,
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                padding: "24px 0",
-              }}
-            >
-              <Skeleton active paragraph={{ rows: 5 }} />
-            </div>
+          {/* ── BONUS FLOW ── */}
+          {bonus.state === "active" && bonus.challenge && (
+            <ExerciseFlow
+              challenge={bonus.challenge}
+              currentExercise={bonus.currentExercise}
+              onAnswer={bonus.answerExercise}
+              onSkip={() => bonus.answerExercise("")}
+              formattedTime={formattedTime}
+              isBonus
+            />
           )}
 
-          {/* Error retry */}
-          {state === "error" && (
-            <div
-              className="anim-fade-in"
-              style={{
-                minHeight: 300,
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-              }}
-            >
-              <Result
-                status="error"
-                title="Không thể tải thử thách"
-                extra={
-                  <Button
-                    type="primary"
-                    icon={<ReloadOutlined />}
-                    onClick={() => window.location.reload()}
-                    style={{
-                      borderRadius: 12,
-                      background: "var(--accent)",
-                      border: "none",
-                      fontWeight: 600,
-                    }}
-                  >
-                    Thử lại
-                  </Button>
-                }
-              />
-            </div>
-          )}
-
-          {/* Active exercise */}
-          {state === "active" && challenge && (
-            <div
-              className="anim-fade-up"
-              style={{ display: "flex", flexDirection: "column", gap: 24 }}
-            >
-              {/* Step indicator row */}
-              <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-                <StepIndicator
-                  current={currentExercise}
-                  total={challenge.exercises.length}
-                />
-
-                {/* Exercise type label */}
-                {exerciseTypeLabel && (
-                  <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                    <div
-                      style={{
-                        width: 4,
-                        height: 4,
-                        borderRadius: "50%",
-                        background: "var(--accent)",
-                        flexShrink: 0,
-                      }}
-                    />
-                    <span
-                      style={{
-                        fontSize: 10,
-                        fontWeight: 700,
-                        letterSpacing: ".14em",
-                        textTransform: "uppercase",
-                        color: "var(--accent)",
-                        fontFamily: "var(--font-body)",
-                      }}
-                    >
-                      {exerciseTypeLabel}
-                    </span>
-                    <div
-                      style={{
-                        flex: 1,
-                        height: 1,
-                        background: "var(--border)",
-                      }}
-                    />
-                    <span
-                      style={{
-                        fontSize: 11,
-                        color: "var(--text-muted)",
-                        fontFamily: "var(--font-mono)",
-                      }}
-                    >
-                      {currentExercise + 1}/{challenge.exercises.length}
-                    </span>
-                  </div>
-                )}
-              </div>
-
-              {/* Exercise card */}
-              <div
-                key={currentExercise}
-                ref={exerciseWrapperRef}
-                className="anim-fade-up"
-                style={{
-                  borderRadius: 20,
-                  border: "1px solid var(--border)",
-                  background: "var(--surface)",
-                  padding: "28px 24px",
-                  boxShadow: "var(--shadow-md)",
-                  position: "relative",
-                  overflow: "hidden",
-                }}
-              >
-                {/* Thin editorial accent line */}
-                <div
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 28,
-                    width: 40,
-                    height: 2,
-                    background: "var(--accent)",
-                    borderRadius: "0 0 2px 2px",
-                  }}
-                />
-                <ExerciseCard
-                  exercise={challenge.exercises[currentExercise]}
-                  onAnswer={handleAnswer}
-                  disabled={false}
-                />
-              </div>
-
-              {/* Skip */}
-              <button
-                type="button"
-                onClick={() => answerExercise("")}
-                style={{
-                  alignSelf: "center",
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  fontSize: 12,
-                  fontWeight: 500,
-                  color: "var(--text-muted)",
-                  padding: "6px 16px",
-                  borderRadius: 999,
-                  transition: "color .2s",
-                  fontFamily: "var(--font-body)",
-                  letterSpacing: ".02em",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = "var(--error)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = "var(--text-muted)";
-                }}
-              >
-                <ForwardOutlined style={{ fontSize: 10 }} />
-                Bỏ qua câu này
-              </button>
-            </div>
-          )}
-
-          {/* Submitting */}
-          {state === "submitting" && (
+          {bonus.state === "submitting" && (
             <div
               className="anim-fade-in"
               style={{
@@ -459,55 +469,156 @@ export default function DailyChallengePage() {
                 gap: 14,
               }}
             >
-              <div
-                style={{
-                  width: 56,
-                  height: 56,
-                  borderRadius: "50%",
-                  border: "1.5px solid var(--border)",
-                  display: "grid",
-                  placeItems: "center",
-                }}
-              >
-                <CheckOutlined
-                  style={{ fontSize: 22, color: "var(--sage, var(--success))" }}
-                />
+              <div style={{ width: 56, height: 56, borderRadius: "50%", border: "1.5px solid var(--border)", display: "grid", placeItems: "center" }}>
+                <CheckOutlined style={{ fontSize: 22, color: "var(--xp)" }} />
               </div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 8,
-                  color: "var(--text-secondary)",
-                  fontSize: 13,
-                  fontFamily: "var(--font-body)",
-                }}
-              >
+              <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--text-secondary)", fontSize: 13 }}>
                 <LoadingOutlined spin style={{ fontSize: 13 }} />
-                Đang chấm điểm...
+                Đang chấm điểm bonus...
               </div>
             </div>
           )}
 
-          {/* Results */}
-          {state === "results" && results && (
+          {bonus.state === "results" && bonus.results && (
             <ChallengeResults
-              answers={results.answers}
-              score={results.score}
+              answers={bonus.results.answers}
+              score={bonus.results.score}
               streak={streak}
               badges={badges}
-              newBadges={results.newBadges}
-              timeElapsedMs={timeElapsedMs}
+              newBadges={[]}
+              timeElapsedMs={bonus.timeElapsedMs}
             />
           )}
 
-          {/* Completed (already done today) */}
-          {state === "completed" && challenge && (
-            <CompletedState
-              challenge={challenge}
-              streak={streak}
-              badges={badges}
-            />
+          {/* ── DAILY FLOW (only show when not in bonus) ── */}
+          {!isInBonusFlow && (
+            <>
+              {/* Loading */}
+              {state === "loading" && (
+                <div
+                  className="anim-fade-in"
+                  style={{
+                    minHeight: 320,
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    padding: "24px 0",
+                  }}
+                >
+                  <Skeleton active paragraph={{ rows: 5 }} />
+                </div>
+              )}
+
+              {/* Error retry */}
+              {state === "error" && (
+                <div
+                  className="anim-fade-in"
+                  style={{
+                    minHeight: 300,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  <Result
+                    status="error"
+                    title="Không thể tải thử thách"
+                    extra={
+                      <Button
+                        type="primary"
+                        icon={<ReloadOutlined />}
+                        onClick={() => window.location.reload()}
+                        style={{
+                          borderRadius: 12,
+                          background: "var(--accent)",
+                          border: "none",
+                          fontWeight: 600,
+                        }}
+                      >
+                        Thử lại
+                      </Button>
+                    }
+                  />
+                </div>
+              )}
+
+              {/* Active exercise */}
+              {state === "active" && challenge && (
+                <ExerciseFlow
+                  challenge={challenge}
+                  currentExercise={currentExercise}
+                  onAnswer={answerExercise}
+                  onSkip={() => answerExercise("")}
+                  formattedTime={formattedTime}
+                />
+              )}
+
+              {/* Submitting */}
+              {state === "submitting" && (
+                <div
+                  className="anim-fade-in"
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minHeight: 300,
+                    gap: 14,
+                  }}
+                >
+                  <div
+                    style={{
+                      width: 56,
+                      height: 56,
+                      borderRadius: "50%",
+                      border: "1.5px solid var(--border)",
+                      display: "grid",
+                      placeItems: "center",
+                    }}
+                  >
+                    <CheckOutlined
+                      style={{ fontSize: 22, color: "var(--sage, var(--success))" }}
+                    />
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 8,
+                      color: "var(--text-secondary)",
+                      fontSize: 13,
+                      fontFamily: "var(--font-body)",
+                    }}
+                  >
+                    <LoadingOutlined spin style={{ fontSize: 13 }} />
+                    Đang chấm điểm...
+                  </div>
+                </div>
+              )}
+
+              {/* Results */}
+              {state === "results" && results && (
+                <ChallengeResults
+                  answers={results.answers}
+                  score={results.score}
+                  streak={streak}
+                  badges={badges}
+                  newBadges={results.newBadges}
+                  timeElapsedMs={timeElapsedMs}
+                />
+              )}
+
+              {/* Completed (already done today) */}
+              {state === "completed" && challenge && (
+                <CompletedState
+                  challenge={challenge}
+                  streak={streak}
+                  badges={badges}
+                  onStartBonus={bonus.startBonus}
+                  bonusState={bonus.state}
+                />
+              )}
+            </>
           )}
         </div>
       </div>

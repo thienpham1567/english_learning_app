@@ -5,4 +5,9 @@ export const EXERCISE_TYPE_LABELS: Record<string, string> = {
   "sentence-order": "Sắp xếp câu",
   "translation": "Dịch câu",
   "error-correction": "Sửa lỗi",
+  "word-formation": "Cấu tạo từ",
+  "dialogue-completion": "Hoàn thành hội thoại",
+  "synonym-antonym": "Đồng nghĩa / Trái nghĩa",
+  "reading-comprehension": "Đọc hiểu",
+  "collocation": "Kết hợp từ",
 };
