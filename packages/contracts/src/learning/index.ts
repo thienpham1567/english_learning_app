@@ -147,3 +147,6 @@ export type {
 	TopIssue,
 	LessonSummary,
 } from "./lesson-summary";
+
+export * from "./toeic-skill-taxonomy";
+export * from "./module-skill-mapping";
