@@ -35,6 +35,7 @@ export const LearningModuleType = z.enum([
 	"toeic_writing",
 	"toeic_grammar_drill",
 	"toeic_vocab",
+	"toeic_dictation",
 ]);
 
 // ── Result ──────────────────────────────────────────────────────────────────

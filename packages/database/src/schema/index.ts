@@ -725,6 +725,8 @@ export const toeicQuestion = pgTable(
     options: jsonb("options").$type<string[]>().notNull(),
     correctIndex: integer("correct_index").notNull(),
     audioUrl: text("audio_url"),
+    /** For Part 2: { question, options[3] } URLs of segmented audio. */
+    audioSegments: jsonb("audio_segments").$type<{ question: string; options: string[] } | null>(),
     imageUrls: jsonb("image_urls").$type<string[]>(),
     topic: text("topic"),
     skillIds: jsonb("skill_ids").$type<string[]>().notNull().default([]),
@@ -821,3 +823,24 @@ export const toeicVocab = pgTable(
 );
 
 export type ToeicVocabRow = typeof toeicVocab.$inferSelect;
+
+/** TOEIC Dictation Item — sentence-level dictation library (shared content) */
+export const toeicDictationItem = pgTable(
+  "toeic_dictation_item",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    text: text("text").notNull(),
+    audioUrl: text("audio_url").notNull(),
+    level: text("level").notNull().default("intermediate"),
+    topic: text("topic").notNull().default("general"),
+    vocabHints: jsonb("vocab_hints").$type<Array<{ word: string; vi: string }>>().notNull().default([]),
+    voice: text("voice").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    index("toeic_dictation_item_level_idx").on(table.level),
+    index("toeic_dictation_item_topic_idx").on(table.topic),
+  ],
+);
+
+export type ToeicDictationItemRow = typeof toeicDictationItem.$inferSelect;

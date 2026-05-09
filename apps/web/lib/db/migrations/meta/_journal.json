@@ -162,6 +162,13 @@
       "when": 1778300122838,
       "tag": "0022_hard_kingpin",
       "breakpoints": true
+    },
+    {
+      "idx": 23,
+      "version": "7",
+      "when": 1778314231049,
+      "tag": "0023_volatile_the_professor",
+      "breakpoints": true
     }
   ]
 }

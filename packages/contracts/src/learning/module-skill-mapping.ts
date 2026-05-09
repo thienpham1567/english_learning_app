@@ -23,4 +23,13 @@ export const MODULE_SKILL_MAPPING: ModuleSkillMapping[] = [
 		moduleType: "toeic_vocab",
 		skillIds: ["toeic.part5.vocab", "toeic.part7.vocab_in_context"],
 	},
+	{
+		moduleType: "toeic_dictation",
+		skillIds: [
+			"toeic.part3.gist",
+			"toeic.part3.detail",
+			"toeic.part4.gist",
+			"toeic.part4.detail",
+		],
+	},
 ];
