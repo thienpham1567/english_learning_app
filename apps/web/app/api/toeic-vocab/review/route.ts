@@ -70,14 +70,14 @@ export async function POST(req: Request) {
 			sourceType: "flashcard_review",
 			sourceId: wordId,
 			skillIds: ["toeic.part5.vocab", "toeic.part7.vocab_in_context"],
-			priority: init.priority,
+			priority: 50,
 			dueAt: new Date(init.dueAt),
 			estimatedMinutes: init.estimatedMinutes,
 			reviewMode: init.reviewMode,
 			status: "pending",
 			lastOutcome: outcome,
 			attemptCount: 1,
-			nextIntervalDays: init.dueAt && now.getTime() ? 1 : 0,
+			nextIntervalDays: init.intervalDays,
 			easeFactor: 2.5,
 		});
 	}

@@ -9,8 +9,8 @@ const ACTIONS: Array<{ href: string; label: string; emoji: string; available: bo
 	{ href: "/toeic/mock-test", label: "Mock test 200 câu", emoji: "⏱️", available: false },
 	{ href: "/toeic/listening", label: "Part 1 & 2", emoji: "🎧", available: false },
 	{ href: "/toeic/dictation", label: "Dictation", emoji: "✍️", available: false },
-	{ href: "/toeic/grammar", label: "Grammar drill", emoji: "📚", available: false },
-	{ href: "/toeic/vocab", label: "Vocab", emoji: "🔤", available: false },
+	{ href: "/toeic/grammar", label: "Grammar drill", emoji: "📚", available: true },
+	{ href: "/toeic/vocab", label: "Vocab", emoji: "🔤", available: true },
 	{ href: "/toeic/speaking", label: "Speaking 11", emoji: "🗣️", available: false },
 	{ href: "/toeic/writing", label: "Writing 8", emoji: "✏️", available: false },
 ];
