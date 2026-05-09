@@ -690,3 +690,107 @@ export const youtubeVideoHistory = pgTable(
 );
 
 export type YoutubeVideoHistoryRow = typeof youtubeVideoHistory.$inferSelect;
+
+/** TOEIC Exam — bộ đề (ETS 2021 Test 1, diagnostic_v1, ...) */
+export const toeicExam = pgTable("toeic_exam", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  code: text("code").notNull().unique(),
+  title: text("title").notNull(),
+  source: text("source").notNull(),
+  year: integer("year"),
+  totalQuestions: integer("total_questions").notNull(),
+  hasListening: boolean("has_listening").notNull().default(true),
+  hasReading: boolean("has_reading").notNull().default(true),
+  partCounts: jsonb("part_counts").$type<Record<string, number>>().notNull().default({}),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+});
+
+export type ToeicExamRow = typeof toeicExam.$inferSelect;
+
+/** TOEIC Question — 1 câu hỏi (Part 1-7) */
+export const toeicQuestion = pgTable(
+  "toeic_question",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    examId: uuid("exam_id")
+      .notNull()
+      .references(() => toeicExam.id, { onDelete: "cascade" }),
+    number: integer("number").notNull(),
+    part: integer("part").notNull(),
+    parentId: uuid("parent_id"),
+    groupOrder: integer("group_order"),
+    questionText: text("question_text"),
+    passageText: text("passage_text"),
+    options: jsonb("options").$type<string[]>().notNull(),
+    correctIndex: integer("correct_index").notNull(),
+    audioUrl: text("audio_url"),
+    imageUrls: jsonb("image_urls").$type<string[]>(),
+    topic: text("topic"),
+    skillIds: jsonb("skill_ids").$type<string[]>().notNull().default([]),
+    difficulty: text("difficulty").notNull().default("intermediate"),
+    explanationEn: text("explanation_en"),
+    explanationVi: text("explanation_vi"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("toeic_question_exam_number_idx").on(table.examId, table.number),
+    index("toeic_question_part_idx").on(table.part),
+  ],
+);
+
+export type ToeicQuestionRow = typeof toeicQuestion.$inferSelect;
+
+/** TOEIC Attempt — 1 phiên làm bài (practice/mock_test/diagnostic/drill) */
+export const toeicAttempt = pgTable(
+  "toeic_attempt",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: text("user_id").notNull(),
+    mode: text("mode").notNull(),
+    examId: uuid("exam_id").references(() => toeicExam.id, { onDelete: "set null" }),
+    partFilter: integer("part_filter"),
+    questionCount: integer("question_count").notNull(),
+    startedAt: timestamp("started_at", { withTimezone: true }).defaultNow().notNull(),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+    durationMs: integer("duration_ms"),
+    rawListening: integer("raw_listening"),
+    rawReading: integer("raw_reading"),
+    scaledListening: integer("scaled_listening"),
+    scaledReading: integer("scaled_reading"),
+    totalScaled: integer("total_scaled"),
+    baselineSnapshot: jsonb("baseline_snapshot").$type<Record<string, number>>(),
+  },
+  (table) => [
+    index("toeic_attempt_user_mode_completed_idx").on(table.userId, table.mode, table.completedAt),
+  ],
+);
+
+export type ToeicAttemptRow = typeof toeicAttempt.$inferSelect;
+
+/** TOEIC Answer — 1 câu trả lời trong attempt */
+export const toeicAnswer = pgTable(
+  "toeic_answer",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    attemptId: uuid("attempt_id")
+      .notNull()
+      .references(() => toeicAttempt.id, { onDelete: "cascade" }),
+    questionId: uuid("question_id")
+      .notNull()
+      .references(() => toeicQuestion.id, { onDelete: "cascade" }),
+    selectedIndex: integer("selected_index"),
+    isCorrect: boolean("is_correct"),
+    durationMs: integer("duration_ms").notNull().default(0),
+    flagged: boolean("flagged").notNull().default(false),
+    changedCount: integer("changed_count").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("toeic_answer_attempt_question_idx").on(table.attemptId, table.questionId),
+    index("toeic_answer_attempt_idx").on(table.attemptId),
+  ],
+);
+
+export type ToeicAnswerRow = typeof toeicAnswer.$inferSelect;
