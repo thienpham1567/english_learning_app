@@ -51,6 +51,10 @@ export type SessionStartParams = {
 	count?: number;
 	/** Time limit in ms; null/undefined = no limit. */
 	timeLimit?: number;
+	/** Filter by a single TOEIC subskill, e.g. "toeic.part5.verb_form". */
+	skill?: string;
+	/** For mode=drill: "skill" filter by skill OR "mistake" pull from due reviewTask. */
+	drillSource?: "skill" | "mistake";
 };
 
 export type SessionAnswer = {

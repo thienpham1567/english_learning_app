@@ -2,8 +2,8 @@ import { headers } from "next/headers";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
-import { toeicAttempt, toeicExam, toeicQuestion } from "@repo/database";
-import { and, eq, inArray, sql } from "drizzle-orm";
+import { toeicAttempt, toeicExam, toeicQuestion, reviewTask } from "@repo/database";
+import { and, eq, inArray, lte, sql } from "drizzle-orm";
 
 const BodySchema = z.object({
 	mode: z.enum(["practice", "mock_test", "diagnostic", "drill"]),
@@ -12,6 +12,10 @@ const BodySchema = z.object({
 		.union([z.number().int().min(1).max(7), z.enum(["listening", "reading", "all"])])
 		.optional(),
 	count: z.number().int().min(1).max(200).default(10),
+	/** Filter by a single TOEIC subskill, e.g. "toeic.part5.verb_form". */
+	skill: z.string().optional(),
+	/** Drill source: "skill" filters by skill, "mistake" pulls from due reviewTask. */
+	drillSource: z.enum(["skill", "mistake"]).optional(),
 });
 
 export async function POST(req: Request) {
@@ -65,14 +69,45 @@ export async function POST(req: Request) {
 	const conditions = [];
 	if (examIdFilter) conditions.push(eq(toeicQuestion.examId, examIdFilter));
 	if (partInClause) conditions.push(inArray(toeicQuestion.part, partInClause));
+	if (body.skill) {
+		conditions.push(sql`${toeicQuestion.skillIds} @> ${JSON.stringify([body.skill])}::jsonb`);
+	}
 
 	const isOrderedTest = body.mode === "mock_test" || body.mode === "diagnostic";
-	const rows = await db
-		.select()
-		.from(toeicQuestion)
-		.where(conditions.length ? and(...conditions) : undefined)
-		.orderBy(isOrderedTest ? toeicQuestion.number : sql`random()`)
-		.limit(targetCount);
+	let rows: typeof toeicQuestion.$inferSelect[];
+
+	if (body.mode === "drill" && body.drillSource === "mistake") {
+		// Pull due reviewTasks of sourceType=error_retry, intersect with toeicQuestion
+		const due = await db
+			.select({ qid: reviewTask.sourceId })
+			.from(reviewTask)
+			.where(
+				and(
+					eq(reviewTask.userId, userId),
+					eq(reviewTask.sourceType, "error_retry"),
+					eq(reviewTask.status, "pending"),
+					lte(reviewTask.dueAt, new Date()),
+				),
+			)
+			.orderBy(reviewTask.dueAt)
+			.limit(targetCount * 2);
+
+		if (due.length === 0) {
+			return Response.json({ error: "No mistakes due for review" }, { status: 404 });
+		}
+		rows = await db
+			.select()
+			.from(toeicQuestion)
+			.where(inArray(toeicQuestion.id, due.map((d) => d.qid)))
+			.limit(targetCount);
+	} else {
+		rows = await db
+			.select()
+			.from(toeicQuestion)
+			.where(conditions.length ? and(...conditions) : undefined)
+			.orderBy(isOrderedTest ? toeicQuestion.number : sql`random()`)
+			.limit(targetCount);
+	}
 
 	if (rows.length === 0) {
 		return Response.json({ error: "No questions match the filter" }, { status: 404 });
