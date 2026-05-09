@@ -14,7 +14,8 @@
     "db:migrate": "drizzle-kit migrate",
     "seed:toeic": "tsx scripts/seed-toeic.ts",
     "label:toeic": "tsx scripts/label-toeic-skills.ts",
-    "build:diagnostic": "tsx scripts/build-diagnostic-set.ts"
+    "build:diagnostic": "tsx scripts/build-diagnostic-set.ts",
+    "seed:toeic-vocab": "tsx scripts/seed-toeic-vocab.ts"
   },
   "dependencies": {
     "@ant-design/icons": "^6.1.0",
