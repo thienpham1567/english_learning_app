@@ -1,0 +1,113 @@
+import { headers } from "next/headers";
+import { z } from "zod";
+import { auth } from "@/lib/auth";
+import { db } from "@repo/database";
+import { toeicAttempt, toeicExam, toeicQuestion } from "@repo/database";
+import { and, eq, inArray, sql } from "drizzle-orm";
+
+const BodySchema = z.object({
+	mode: z.enum(["practice", "mock_test", "diagnostic", "drill"]),
+	examCode: z.string().optional(),
+	part: z
+		.union([z.number().int().min(1).max(7), z.enum(["listening", "reading", "all"])])
+		.optional(),
+	count: z.number().int().min(1).max(200).default(10),
+});
+
+export async function POST(req: Request) {
+	const session = await auth.api.getSession({ headers: await headers() });
+	if (!session?.user?.id) {
+		return Response.json({ error: "Unauthorized" }, { status: 401 });
+	}
+
+	const parsed = BodySchema.safeParse(await req.json());
+	if (!parsed.success) {
+		return Response.json({ error: "Invalid body", details: parsed.error.flatten() }, { status: 400 });
+	}
+	const body = parsed.data;
+	const userId = session.user.id;
+
+	let examIdFilter: string | undefined;
+
+	if (body.mode === "diagnostic") {
+		const [diag] = await db
+			.select()
+			.from(toeicExam)
+			.where(eq(toeicExam.code, "diagnostic_v1"))
+			.limit(1);
+		if (!diag) {
+			return Response.json(
+				{ error: "Diagnostic exam not seeded. Run pnpm build:diagnostic first." },
+				{ status: 500 },
+			);
+		}
+		examIdFilter = diag.id;
+	} else if (body.examCode && body.mode !== "drill") {
+		const [exam] = await db
+			.select()
+			.from(toeicExam)
+			.where(eq(toeicExam.code, body.examCode))
+			.limit(1);
+		if (!exam) {
+			return Response.json({ error: "Exam not found" }, { status: 404 });
+		}
+		examIdFilter = exam.id;
+	}
+
+	let partInClause: number[] | null = null;
+	if (typeof body.part === "number") partInClause = [body.part];
+	else if (body.part === "listening") partInClause = [1, 2, 3, 4];
+	else if (body.part === "reading") partInClause = [5, 6, 7];
+
+	const targetCount =
+		body.mode === "mock_test" ? 200 : body.mode === "diagnostic" ? 30 : body.count;
+
+	const conditions = [];
+	if (examIdFilter) conditions.push(eq(toeicQuestion.examId, examIdFilter));
+	if (partInClause) conditions.push(inArray(toeicQuestion.part, partInClause));
+
+	const isOrderedTest = body.mode === "mock_test" || body.mode === "diagnostic";
+	const rows = await db
+		.select()
+		.from(toeicQuestion)
+		.where(conditions.length ? and(...conditions) : undefined)
+		.orderBy(isOrderedTest ? toeicQuestion.number : sql`random()`)
+		.limit(targetCount);
+
+	if (rows.length === 0) {
+		return Response.json({ error: "No questions match the filter" }, { status: 404 });
+	}
+
+	const [attempt] = await db
+		.insert(toeicAttempt)
+		.values({
+			userId,
+			mode: body.mode,
+			examId: examIdFilter ?? null,
+			partFilter: typeof body.part === "number" ? body.part : null,
+			questionCount: rows.length,
+		})
+		.returning();
+
+	const reveal = body.mode === "practice" || body.mode === "drill";
+	const questions = rows.map((q) => ({
+		id: q.id,
+		part: q.part,
+		questionText: q.questionText,
+		passageText: q.passageText,
+		options: q.options,
+		correctIndex: reveal ? q.correctIndex : -1,
+		explanationEn: reveal ? q.explanationEn : null,
+		explanationVi: reveal ? q.explanationVi : null,
+		audioUrl: q.audioUrl,
+		imageUrls: q.imageUrls,
+		skillIds: q.skillIds,
+		topic: q.topic,
+		parentId: q.parentId,
+		groupOrder: q.groupOrder,
+		number: q.number,
+		examCode: body.examCode ?? null,
+	}));
+
+	return Response.json({ attemptId: attempt.id, questions });
+}
