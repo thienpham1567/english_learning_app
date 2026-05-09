@@ -1,0 +1,351 @@
+[
+  {
+    "pictures": [
+      {
+        "pexelsId": "3184291",
+        "mandatoryWords": [
+          "laptop",
+          "typing"
+        ],
+        "topicVi": "Mô tả bức ảnh sử dụng hai từ 'laptop' và 'typing'."
+      },
+      {
+        "pexelsId": "3184339",
+        "mandatoryWords": [
+          "professional",
+          "meeting"
+        ],
+        "topicVi": "Mô tả bức ảnh sử dụng hai từ 'professional' và 'meeting'."
+      },
+      {
+        "pexelsId": "3184360",
+        "mandatoryWords": [
+          "colleagues",
+          "discussing"
+        ],
+        "topicVi": "Mô tả bức ảnh sử dụng hai từ 'colleagues' và 'discussing'."
+      },
+      {
+        "pexelsId": "1181675",
+        "mandatoryWords": [
+          "busy",
+          "office"
+        ],
+        "topicVi": "Mô tả bức ảnh sử dụng hai từ 'busy' và 'office'."
+      },
+      {
+        "pexelsId": "5379707",
+        "mandatoryWords": [
+          "presentation",
+          "projecting"
+        ],
+        "topicVi": "Mô tả bức ảnh sử dụng hai từ 'presentation' và 'projecting'."
+      }
+    ],
+    "emails": [
+      {
+        "subject": "Meeting Rescheduling",
+        "body": "Dear team, I am afraid I cannot attend our scheduled meeting on Tuesday due to an urgent client visit. Could we please move it to later in the week?",
+        "requirements": [
+          "Apologize for the inconvenience",
+          "Propose two alternative time slots"
+        ],
+        "topicVi": "Viết email phản hồi yêu cầu dời lịch họp, bao gồm lời xin lỗi và đề xuất hai khung giờ thay thế."
+      },
+      {
+        "subject": "Office Supply Order",
+        "body": "Hello, I noticed that our department is running low on printer paper and ink cartridges. Could you please place an order for these items as soon as possible?",
+        "requirements": [
+          "Confirm that the request is received",
+          "Ask for the specific quantity needed",
+          "Mention the expected delivery date"
+        ],
+        "topicVi": "Viết email phản hồi yêu cầu đặt mua văn phòng phẩm, xác nhận đã nhận yêu cầu, hỏi về số lượng cụ thể và thông báo ngày giao dự kiến."
+      }
+    ],
+    "opinion": {
+      "topic": "Some people prefer to work in a large office with many colleagues, while others prefer to work in a small office or from home. Which do you prefer and why?",
+      "topicVi": "Một số người thích làm việc trong văn phòng lớn với nhiều đồng nghiệp, trong khi những người khác lại thích làm việc trong văn phòng nhỏ hoặc làm việc tại nhà. Bạn thích cách nào hơn và tại sao?"
+    }
+  },
+  {
+    "pictures": [
+      {
+        "pexelsId": "70497",
+        "mandatoryWords": [
+          "busy",
+          "office"
+        ],
+        "topicVi": "Mô tả bức ảnh về văn phòng bận rộn này."
+      },
+      {
+        "pexelsId": "2760241",
+        "mandatoryWords": [
+          "people",
+          "collaborate"
+        ],
+        "topicVi": "Mô tả bức ảnh về những người đang hợp tác làm việc này."
+      },
+      {
+        "pexelsId": "627956",
+        "mandatoryWords": [
+          "modern",
+          "building"
+        ],
+        "topicVi": "Mô tả bức ảnh về tòa nhà hiện đại này."
+      },
+      {
+        "pexelsId": "1656663",
+        "mandatoryWords": [
+          "laptop",
+          "typing"
+        ],
+        "topicVi": "Mô tả bức ảnh về người đang gõ máy tính xách tay này."
+      },
+      {
+        "pexelsId": "1290141",
+        "mandatoryWords": [
+          "professional",
+          "meeting"
+        ],
+        "topicVi": "Mô tả bức ảnh về cuộc họp chuyên nghiệp này."
+      }
+    ],
+    "emails": [
+      {
+        "subject": "Delay in Project Delivery",
+        "body": "Dear team, I am writing to inform you that the final report will be delayed by three days due to unforeseen technical issues. Please let me know if this timeline is acceptable for the upcoming presentation.",
+        "requirements": [
+          "Acknowledge the delay",
+          "Confirm if the new timeline works",
+          "Ask one question about the technical issue"
+        ],
+        "topicVi": "Viết email phản hồi về sự chậm trễ của dự án."
+      },
+      {
+        "subject": "Invitation to Quarterly Conference",
+        "body": "We would like to invite you to our upcoming quarterly conference on October 15th. Could you please confirm your attendance and let us know if you have any specific dietary requirements?",
+        "requirements": [
+          "Accept the invitation",
+          "Confirm attendance",
+          "Mention your dietary requirements"
+        ],
+        "topicVi": "Viết email xác nhận tham dự hội nghị hàng quý."
+      }
+    ],
+    "opinion": {
+      "topic": "Some people prefer to work in a large office with many colleagues, while others prefer to work from home alone. Which do you prefer and why? Use specific reasons and examples to support your answer.",
+      "topicVi": "Một số người thích làm việc trong văn phòng lớn với nhiều đồng nghiệp, trong khi những người khác thích làm việc tại nhà một mình. Bạn thích cách nào hơn và tại sao? Hãy sử dụng lý do và ví dụ cụ thể để hỗ trợ câu trả lời của bạn."
+    }
+  },
+  {
+    "pictures": [
+      {
+        "pexelsId": "261102",
+        "mandatoryWords": [
+          "busy",
+          "office"
+        ],
+        "topicVi": "Hãy viết một câu mô tả bức ảnh sử dụng hai từ 'busy' và 'office'."
+      },
+      {
+        "pexelsId": "4173251",
+        "mandatoryWords": [
+          "examine",
+          "document"
+        ],
+        "topicVi": "Hãy viết một câu mô tả bức ảnh sử dụng hai từ 'examine' và 'document'."
+      },
+      {
+        "pexelsId": "887827",
+        "mandatoryWords": [
+          "professional",
+          "meeting"
+        ],
+        "topicVi": "Hãy viết một câu mô tả bức ảnh sử dụng hai từ 'professional' và 'meeting'."
+      },
+      {
+        "pexelsId": "1181686",
+        "mandatoryWords": [
+          "typing",
+          "keyboard"
+        ],
+        "topicVi": "Hãy viết một câu mô tả bức ảnh sử dụng hai từ 'typing' và 'keyboard'."
+      },
+      {
+        "pexelsId": "7681091",
+        "mandatoryWords": [
+          "discuss",
+          "strategy"
+        ],
+        "topicVi": "Hãy viết một câu mô tả bức ảnh sử dụng hai từ 'discuss' và 'strategy'."
+      }
+    ],
+    "emails": [
+      {
+        "subject": "Rescheduling our project review",
+        "body": "Dear team, I am writing to inform you that I have a conflict with our scheduled project review on Thursday. Could we move the meeting to next week instead?",
+        "requirements": [
+          "Apologize for the inconvenience",
+          "Propose two alternative dates",
+          "Ask for confirmation"
+        ],
+        "topicVi": "Hãy viết email phản hồi yêu cầu dời lịch họp, bao gồm lời xin lỗi, đề xuất hai ngày thay thế và yêu cầu xác nhận."
+      },
+      {
+        "subject": "Inquiry regarding office supply order",
+        "body": "Hello, our recent order for printer paper and ink cartridges has not arrived yet. Could you please check the status of this shipment?",
+        "requirements": [
+          "Acknowledge the delay",
+          "Provide a reason for the delay",
+          "State when the items will be delivered"
+        ],
+        "topicVi": "Hãy viết email phản hồi về đơn hàng văn phòng phẩm bị chậm trễ, bao gồm xác nhận sự chậm trễ, giải thích lý do và thông báo thời gian giao hàng."
+      }
+    ],
+    "opinion": {
+      "topic": "Some people prefer to work for a large international corporation, while others prefer to work for a small local business. Which do you prefer and why? Include specific reasons and examples to support your answer.",
+      "topicVi": "Một số người thích làm việc cho các tập đoàn đa quốc gia lớn, trong khi những người khác thích làm việc cho các doanh nghiệp địa phương nhỏ. Bạn thích lựa chọn nào hơn và tại sao? Hãy đưa ra lý do và ví dụ cụ thể để hỗ trợ câu trả lời của bạn."
+    }
+  },
+  {
+    "pictures": [
+      {
+        "pexelsId": "2467506",
+        "mandatoryWords": [
+          "laptop",
+          "typing"
+        ],
+        "topicVi": "Mô tả bức ảnh sử dụng các từ khóa trên."
+      },
+      {
+        "pexelsId": "1462630",
+        "mandatoryWords": [
+          "busy",
+          "office"
+        ],
+        "topicVi": "Mô tả bức ảnh sử dụng các từ khóa trên."
+      },
+      {
+        "pexelsId": "380769",
+        "mandatoryWords": [
+          "customers",
+          "waiting"
+        ],
+        "topicVi": "Mô tả bức ảnh sử dụng các từ khóa trên."
+      },
+      {
+        "pexelsId": "416405",
+        "mandatoryWords": [
+          "professional",
+          "meeting"
+        ],
+        "topicVi": "Mô tả bức ảnh sử dụng các từ khóa trên."
+      },
+      {
+        "pexelsId": "1647962",
+        "mandatoryWords": [
+          "delivery",
+          "package"
+        ],
+        "topicVi": "Mô tả bức ảnh sử dụng các từ khóa trên."
+      }
+    ],
+    "emails": [
+      {
+        "subject": "Inquiry regarding project deadline",
+        "body": "Dear team, I am writing to ask if the deadline for the Q3 report can be extended by three days. We have encountered an unexpected issue with the data collection process.",
+        "requirements": [
+          "Acknowledge the request",
+          "State whether the extension is granted",
+          "Ask for a status update"
+        ],
+        "topicVi": "Phản hồi email về việc gia hạn thời hạn dự án."
+      },
+      {
+        "subject": "Feedback on recent conference",
+        "body": "Thank you for attending our annual industry conference last week. We would appreciate it if you could share your thoughts on the keynote speaker and the venue facilities.",
+        "requirements": [
+          "Thank the sender for the invitation",
+          "Provide feedback on the speaker",
+          "Provide feedback on the venue"
+        ],
+        "topicVi": "Phản hồi email góp ý về hội nghị gần đây."
+      }
+    ],
+    "opinion": {
+      "topic": "Some people prefer to work in a large company, while others prefer to work in a small startup. Which do you prefer and why? Include specific reasons and examples to support your answer.",
+      "topicVi": "Một số người thích làm việc tại các công ty lớn, trong khi những người khác lại thích làm việc tại các công ty khởi nghiệp nhỏ. Bạn thích môi trường nào hơn và tại sao? Hãy đưa ra lý do và ví dụ cụ thể để hỗ trợ cho câu trả lời của bạn."
+    }
+  },
+  {
+    "pictures": [
+      {
+        "pexelsId": "1311518",
+        "mandatoryWords": [
+          "busy",
+          "office"
+        ],
+        "topicVi": "Mô tả bức ảnh về một văn phòng bận rộn."
+      },
+      {
+        "pexelsId": "845451",
+        "mandatoryWords": [
+          "examine",
+          "document"
+        ],
+        "topicVi": "Mô tả bức ảnh về việc kiểm tra tài liệu."
+      },
+      {
+        "pexelsId": "1311518",
+        "mandatoryWords": [
+          "professional",
+          "meeting"
+        ],
+        "topicVi": "Mô tả bức ảnh về một cuộc họp chuyên nghiệp."
+      },
+      {
+        "pexelsId": "845451",
+        "mandatoryWords": [
+          "carefully",
+          "review"
+        ],
+        "topicVi": "Mô tả bức ảnh về việc xem xét cẩn thận."
+      },
+      {
+        "pexelsId": "1311518",
+        "mandatoryWords": [
+          "collaborate",
+          "colleagues"
+        ],
+        "topicVi": "Mô tả bức ảnh về việc cộng tác với đồng nghiệp."
+      }
+    ],
+    "emails": [
+      {
+        "subject": "Rescheduling our project meeting",
+        "body": "Dear Mr. Smith, I am writing to inform you that I have an urgent conflict on Thursday. Could we possibly move our project meeting to next Monday instead?",
+        "requirements": [
+          "Acknowledge the request",
+          "Confirm your availability for next Monday",
+          "Ask for the updated agenda"
+        ],
+        "topicVi": "Viết email phản hồi về việc thay đổi lịch họp dự án."
+      },
+      {
+        "subject": "Feedback on the quarterly report",
+        "body": "Hi Sarah, I have reviewed the quarterly report you submitted yesterday. There are a few sections that require further clarification before we can present it to the board.",
+        "requirements": [
+          "Thank the sender for the feedback",
+          "Propose a time for a brief call to discuss the sections",
+          "Ask for a list of the specific sections needing changes"
+        ],
+        "topicVi": "Viết email phản hồi về phản hồi đối với báo cáo quý."
+      }
+    ],
+    "opinion": {
+      "topic": "Some people prefer to work in a large company, while others prefer to work in a small startup. Which do you prefer and why? Include specific reasons and examples to support your answer.",
+      "topicVi": "Một số người thích làm việc trong một công ty lớn, trong khi những người khác thích làm việc trong một công ty khởi nghiệp nhỏ. Bạn thích môi trường nào hơn và tại sao? Hãy đưa ra lý do và ví dụ cụ thể để hỗ trợ câu trả lời của bạn."
+    }
+  }
+]

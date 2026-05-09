@@ -844,3 +844,80 @@ export const toeicDictationItem = pgTable(
 );
 
 export type ToeicDictationItemRow = typeof toeicDictationItem.$inferSelect;
+
+/**
+ * TOEIC Writing Prompt — content library for the 8-question Writing test.
+ * Q1-5: write a sentence based on a picture (mandatory words required).
+ * Q6-7: respond to an email with specific requirements.
+ * Q8:   opinion essay on a topic.
+ */
+export const toeicWritingPrompt = pgTable(
+  "toeic_writing_prompt",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    setCode: text("set_code").notNull(),
+    questionNumber: integer("question_number").notNull(),
+    type: text("type").notNull(), // "q1_5_picture" | "q6_7_email" | "q8_opinion"
+    imageUrl: text("image_url"),
+    mandatoryWords: jsonb("mandatory_words").$type<string[]>(),
+    emailSubject: text("email_subject"),
+    emailBody: text("email_body"),
+    emailRequirements: jsonb("email_requirements").$type<string[]>(),
+    topic: text("topic"),
+    topicVi: text("topic_vi"),
+    prepSeconds: integer("prep_seconds").notNull().default(0),
+    writeSeconds: integer("write_seconds").notNull(),
+    maxScore: integer("max_score").notNull(), // 3 (Q1-5), 4 (Q6-7), 5 (Q8)
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("toeic_writing_prompt_set_q_idx").on(table.setCode, table.questionNumber),
+  ],
+);
+
+export type ToeicWritingPromptRow = typeof toeicWritingPrompt.$inferSelect;
+
+/** TOEIC Writing Session — one user's attempt at a 8-question Writing test. */
+export const toeicWritingSession = pgTable(
+  "toeic_writing_session",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: text("user_id").notNull(),
+    setCode: text("set_code").notNull(),
+    startedAt: timestamp("started_at", { withTimezone: true }).defaultNow().notNull(),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+    durationMs: integer("duration_ms"),
+    rawScore: integer("raw_score"),       // sum of per-question raw scores
+    scaledScore: integer("scaled_score"), // 0-200 official TOEIC scale
+  },
+  (table) => [
+    index("toeic_writing_session_user_completed_idx").on(table.userId, table.completedAt),
+  ],
+);
+
+export type ToeicWritingSessionRow = typeof toeicWritingSession.$inferSelect;
+
+/** TOEIC Writing Response — per-question submission + AI grading. */
+export const toeicWritingResponse = pgTable(
+  "toeic_writing_response",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    sessionId: uuid("session_id")
+      .notNull()
+      .references(() => toeicWritingSession.id, { onDelete: "cascade" }),
+    promptId: uuid("prompt_id")
+      .notNull()
+      .references(() => toeicWritingPrompt.id, { onDelete: "cascade" }),
+    text: text("text").notNull(),
+    durationMs: integer("duration_ms").notNull().default(0),
+    rubricScores: jsonb("rubric_scores").$type<Record<string, number>>(),
+    rawScore: integer("raw_score"),
+    feedbackVi: text("feedback_vi"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("toeic_writing_response_session_prompt_idx").on(table.sessionId, table.promptId),
+  ],
+);
+
+export type ToeicWritingResponseRow = typeof toeicWritingResponse.$inferSelect;

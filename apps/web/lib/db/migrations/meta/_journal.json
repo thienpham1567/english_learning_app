@@ -169,6 +169,13 @@
       "when": 1778314231049,
       "tag": "0023_volatile_the_professor",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1778345762548,
+      "tag": "0024_closed_logan",
+      "breakpoints": true
     }
   ]
 }

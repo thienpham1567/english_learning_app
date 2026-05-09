@@ -18,6 +18,7 @@
     "seed:toeic-vocab": "tsx scripts/seed-toeic-vocab.ts",
     "seed:toeic-part2": "tsx scripts/seed-toeic-part2.ts",
     "seed:toeic-part1": "tsx scripts/seed-toeic-part1.ts",
+    "seed:toeic-writing": "tsx scripts/seed-toeic-writing.ts",
     "seed:toeic-dictation": "tsx scripts/seed-toeic-dictation.ts"
   },
   "dependencies": {
