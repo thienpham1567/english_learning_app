@@ -13,7 +13,7 @@ const ACTIONS: Array<{ href: string; label: string; emoji: string; available: bo
 	{ href: "/toeic/dictation", label: "Dictation", emoji: "✍️", available: true },
 	{ href: "/toeic/grammar", label: "Grammar drill", emoji: "📚", available: true },
 	{ href: "/toeic/vocab", label: "Vocab", emoji: "🔤", available: true },
-	{ href: "/toeic/speaking", label: "Speaking 11", emoji: "🗣️", available: false },
+	{ href: "/toeic/speaking", label: "Speaking 11", emoji: "🗣️", available: true },
 	{ href: "/toeic/writing", label: "Writing 8", emoji: "✏️", available: true },
 ];
 

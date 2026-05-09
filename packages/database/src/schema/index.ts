@@ -921,3 +921,92 @@ export const toeicWritingResponse = pgTable(
 );
 
 export type ToeicWritingResponseRow = typeof toeicWritingResponse.$inferSelect;
+
+/**
+ * TOEIC Speaking Prompt — content library for the 11-question Speaking test.
+ * Q1-2: read aloud (text shown).
+ * Q3-4: describe picture (image shown).
+ * Q5-7: respond to questions (text question, no audio prompt in V1).
+ * Q8-10: respond using info (text context + question).
+ * Q11: express opinion (topic).
+ */
+export const toeicSpeakingPrompt = pgTable(
+  "toeic_speaking_prompt",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    setCode: text("set_code").notNull(),
+    questionNumber: integer("question_number").notNull(),
+    type: text("type").notNull(), // "q1_2_read_aloud" | "q3_4_describe_picture" | "q5_7_respond_question" | "q8_10_respond_info" | "q11_opinion"
+    /** For Q1-2: the text the user must read aloud. */
+    textToRead: text("text_to_read"),
+    /** For Q3-4: image URL. */
+    imageUrl: text("image_url"),
+    /** For Q5-7: the question text the user must answer. */
+    questionText: text("question_text"),
+    /** For Q8-10: the context (e.g. agenda/email/itinerary) shown to user. */
+    contextText: text("context_text"),
+    /** For Q11: the opinion topic. */
+    topic: text("topic"),
+    topicVi: text("topic_vi"),
+    prepSeconds: integer("prep_seconds").notNull().default(0),
+    speakSeconds: integer("speak_seconds").notNull(),
+    maxScore: integer("max_score").notNull(), // 3 (Q1-9), 5 (Q10-11) following TOEIC scale
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("toeic_speaking_prompt_set_q_idx").on(table.setCode, table.questionNumber),
+  ],
+);
+
+export type ToeicSpeakingPromptRow = typeof toeicSpeakingPrompt.$inferSelect;
+
+/** TOEIC Speaking Session — one user's attempt at an 11-question Speaking test. */
+export const toeicSpeakingSession = pgTable(
+  "toeic_speaking_session",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    userId: text("user_id").notNull(),
+    setCode: text("set_code").notNull(),
+    startedAt: timestamp("started_at", { withTimezone: true }).defaultNow().notNull(),
+    completedAt: timestamp("completed_at", { withTimezone: true }),
+    durationMs: integer("duration_ms"),
+    rawScore: integer("raw_score"),
+    scaledScore: integer("scaled_score"), // 0-200 official TOEIC scale
+  },
+  (table) => [
+    index("toeic_speaking_session_user_completed_idx").on(table.userId, table.completedAt),
+  ],
+);
+
+export type ToeicSpeakingSessionRow = typeof toeicSpeakingSession.$inferSelect;
+
+/** TOEIC Speaking Response — per-question audio + transcript + AI grading. */
+export const toeicSpeakingResponse = pgTable(
+  "toeic_speaking_response",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    sessionId: uuid("session_id")
+      .notNull()
+      .references(() => toeicSpeakingSession.id, { onDelete: "cascade" }),
+    promptId: uuid("prompt_id")
+      .notNull()
+      .references(() => toeicSpeakingPrompt.id, { onDelete: "cascade" }),
+    /** Server-side path to user's recording (or null if not stored). */
+    audioPath: text("audio_path"),
+    /** Whisper STT result. */
+    transcript: text("transcript"),
+    durationMs: integer("duration_ms").notNull().default(0),
+    rubricScores: jsonb("rubric_scores").$type<Record<string, number>>(),
+    rawScore: integer("raw_score"),
+    feedbackVi: text("feedback_vi"),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    uniqueIndex("toeic_speaking_response_session_prompt_idx").on(
+      table.sessionId,
+      table.promptId,
+    ),
+  ],
+);
+
+export type ToeicSpeakingResponseRow = typeof toeicSpeakingResponse.$inferSelect;

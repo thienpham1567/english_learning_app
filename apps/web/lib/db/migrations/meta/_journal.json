@@ -176,6 +176,13 @@
       "when": 1778345762548,
       "tag": "0024_closed_logan",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1778346535354,
+      "tag": "0025_tearful_gamma_corps",
+      "breakpoints": true
     }
   ]
 }

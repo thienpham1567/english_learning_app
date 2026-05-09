@@ -1,0 +1,147 @@
+[
+  {
+    "readAloud": [
+      "Attention all staff members. Due to scheduled maintenance on the building's electrical system, the office will be closed this Saturday. Please ensure that all computers and electronic devices are turned off before you leave on Friday evening. We apologize for any inconvenience this may cause and appreciate your cooperation.",
+      "Thank you for calling the customer service department of TechSolutions. Our office hours are Monday through Friday, from nine in the morning until five in the evening. If you are calling outside of these hours, please leave your name, phone number, and a brief message, and a representative will return your call."
+    ],
+    "describePicturePexelsIds": [
+      "3184291",
+      "3184339"
+    ],
+    "respondQuestion": [
+      "How often do you use a computer for your daily work tasks?",
+      "What is your favorite way to spend your lunch break at the office?",
+      "Do you prefer working in a quiet environment or one with background music?"
+    ],
+    "respondInfo": [
+      {
+        "context": "Annual Team Building Retreat Schedule: Friday, October 20th. 9:00 AM: Welcome breakfast in the main lobby. 10:30 AM: Strategic planning workshop in Conference Room B. 12:30 PM: Catered lunch at the Garden Terrace. 2:00 PM: Group outdoor activity at the park. 4:30 PM: Closing remarks and departure.",
+        "questions": [
+          "What time does the strategic planning workshop begin?",
+          "Where will the team be having lunch?",
+          "Could you tell me what happens after the group outdoor activity concludes?"
+        ]
+      }
+    ],
+    "opinion": {
+      "topic": "Do you agree or disagree that working from home is more productive than working in an office?",
+      "topicVi": "Bạn đồng ý hay không đồng ý rằng làm việc tại nhà hiệu quả hơn làm việc tại văn phòng?"
+    }
+  },
+  {
+    "readAloud": [
+      "Attention all employees. Our office will be undergoing scheduled maintenance this Saturday from 8:00 AM to 2:00 PM. During this time, the elevator in the main lobby will be out of service. Please use the freight elevator located near the loading dock if you need to access the upper floors.",
+      "Thank you for calling the regional branch of Global Logistics. Our office hours are Monday through Friday, from 9:00 AM to 5:00 PM. If you are calling regarding a shipment status, please have your tracking number ready. Otherwise, please leave your name and number after the tone, and we will return your call."
+    ],
+    "describePicturePexelsIds": [
+      "3184360",
+      "1181675"
+    ],
+    "respondQuestion": [
+      "How often do you usually check your work emails during the weekend?",
+      "What is the most important quality you look for in a new colleague?",
+      "Do you prefer to work in a quiet office or a busy, collaborative environment?"
+    ],
+    "respondInfo": [
+      {
+        "context": "Annual Team Building Retreat Schedule: Friday, October 20th. 9:00 AM: Arrival and coffee at the Riverside Hotel. 10:30 AM: Strategic planning workshop in the Grand Ballroom. 12:30 PM: Buffet lunch at the Terrace Restaurant. 2:00 PM: Outdoor team-building activities. 4:30 PM: Closing remarks and departure.",
+        "questions": [
+          "What time does the strategic planning workshop begin?",
+          "Where is the buffet lunch being held?",
+          "If it rains on the day of the retreat, will the outdoor activities still take place?"
+        ]
+      }
+    ],
+    "opinion": {
+      "topic": "Some people believe that working from home is more productive than working in an office. Do you agree or disagree with this statement?",
+      "topicVi": "Một số người tin rằng làm việc tại nhà hiệu quả hơn làm việc tại văn phòng. Bạn đồng ý hay không đồng ý với ý kiến này?"
+    }
+  },
+  {
+    "readAloud": [
+      "Attention all staff members. Due to scheduled maintenance on the building's electrical system, the office will be closed this coming Saturday. Please ensure that all computers and sensitive electronic equipment are fully powered down and unplugged before leaving on Friday evening. We apologize for any inconvenience this may cause.",
+      "Thank you for calling the regional distribution center. Our office hours are Monday through Friday, from 8:00 AM to 5:00 PM. If you are calling regarding a pending shipment, please have your order number ready when you speak with a representative. For all other inquiries, please leave a message after the tone."
+    ],
+    "describePicturePexelsIds": [
+      "5379707",
+      "70497"
+    ],
+    "respondQuestion": [
+      "How often do you usually check your work email during the weekend?",
+      "What is the most important quality you look for in a new colleague?",
+      "Do you prefer to work in a quiet office or a busy, collaborative environment?"
+    ],
+    "respondInfo": [
+      {
+        "context": "Annual Corporate Workshop Schedule: 9:00 AM - Registration and Coffee; 10:00 AM - Keynote Speech by CEO; 11:30 AM - Breakout Sessions on Digital Marketing; 1:00 PM - Catered Lunch in the Main Hall; 2:30 PM - Team Building Exercise in the Garden.",
+        "questions": [
+          "What time does the keynote speech begin?",
+          "Where will the lunch be held?",
+          "I heard the team building exercise is happening in the conference room, is that correct?"
+        ]
+      }
+    ],
+    "opinion": {
+      "topic": "Do you agree or disagree that working from home is more productive than working in an office?",
+      "topicVi": "Bạn đồng ý hay không đồng ý rằng làm việc tại nhà hiệu quả hơn làm việc tại văn phòng?"
+    }
+  },
+  {
+    "readAloud": [
+      "Attention all staff. Please be advised that the main elevator in the lobby will be undergoing scheduled maintenance this Thursday from 9:00 AM to 12:00 PM. During this time, please use the service elevators located at the back of the building. We apologize for any inconvenience this may cause.",
+      "Thank you for calling the technical support department. Our office hours are Monday through Friday, from 8:00 AM to 5:00 PM. If you are calling after hours, please leave your name, phone number, and a brief description of your issue after the tone. A representative will return your call the next business day."
+    ],
+    "describePicturePexelsIds": [
+      "2760241",
+      "627956"
+    ],
+    "respondQuestion": [
+      "How often do you usually check your work emails during the weekend?",
+      "What is the most important quality you look for in a new colleague?",
+      "Do you prefer working in a quiet office or a busy, collaborative environment?"
+    ],
+    "respondInfo": [
+      {
+        "context": "Annual Team Building Retreat Schedule: Friday, October 20th. 9:00 AM: Arrival and coffee at the Lakeside Resort. 10:30 AM: Communication workshop in the main hall. 12:30 PM: Buffet lunch at the Garden Terrace. 2:00 PM: Group hiking activity. 4:30 PM: Closing remarks and departure.",
+        "questions": [
+          "What time does the communication workshop begin?",
+          "Where will the group be having lunch?",
+          "I heard we are going swimming in the afternoon, is that correct?"
+        ]
+      }
+    ],
+    "opinion": {
+      "topic": "Do you think that working from home is more productive than working in a traditional office environment?",
+      "topicVi": "Bạn có nghĩ rằng làm việc tại nhà hiệu quả hơn làm việc trong môi trường văn phòng truyền thống không?"
+    }
+  },
+  {
+    "readAloud": [
+      "Attention all staff members. Due to scheduled maintenance on the building's electrical system, the office will be closed this coming Saturday. Please ensure that all computers and sensitive equipment are powered down before you leave on Friday evening. We apologize for any inconvenience this may cause and appreciate your cooperation.",
+      "Thank you for calling the regional distribution center. Our office hours are Monday through Friday, from 9:00 AM to 5:00 PM. If you are calling regarding an existing order, please have your invoice number ready when you speak to a representative. For all other inquiries, please leave your name and number after the tone."
+    ],
+    "describePicturePexelsIds": [
+      "1656663",
+      "1290141"
+    ],
+    "respondQuestion": [
+      "How often do you use your company's internal messaging system during the workday?",
+      "What is the most important quality you look for in a new colleague?",
+      "Do you prefer working in a quiet office or an environment with background music?"
+    ],
+    "respondInfo": [
+      {
+        "context": "Annual Team Building Workshop Schedule: 9:00 AM - Welcome Breakfast in the main lobby. 10:30 AM - Communication Skills Seminar in Conference Room B. 12:30 PM - Catered Lunch at the rooftop garden. 2:00 PM - Afternoon breakout sessions. 4:00 PM - Closing remarks and certificate distribution.",
+        "questions": [
+          "What time does the communication skills seminar begin?",
+          "Where will the lunch be served for the team?",
+          "Could you clarify if there are any activities scheduled after the closing remarks?"
+        ]
+      }
+    ],
+    "opinion": {
+      "topic": "Do you agree or disagree that employees should be allowed to work from home permanently?",
+      "topicVi": "Bạn đồng ý hay không đồng ý với việc nhân viên nên được phép làm việc tại nhà vĩnh viễn?"
+    }
+  }
+]
