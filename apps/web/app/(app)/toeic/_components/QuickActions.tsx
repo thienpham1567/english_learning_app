@@ -6,7 +6,9 @@ import { Card } from "antd";
 const ACTIONS: Array<{ href: string; label: string; emoji: string; available: boolean }> = [
 	{ href: "/toeic/practice", label: "Luyện đề", emoji: "📝", available: true },
 	{ href: "/toeic/skills", label: "4 kỹ năng", emoji: "🎯", available: true },
-	{ href: "/toeic/mock-test", label: "Mock test 200 câu", emoji: "⏱️", available: false },
+	{ href: "/toeic/mock-test", label: "Mock test", emoji: "⏱️", available: true },
+	{ href: "/toeic/review", label: "Ôn câu sai", emoji: "🔁", available: true },
+	{ href: "/toeic/progress", label: "Tiến độ", emoji: "📈", available: true },
 	{ href: "/toeic/listening", label: "Listening hub", emoji: "🎧", available: true },
 	{ href: "/toeic/dictation", label: "Dictation", emoji: "✍️", available: true },
 	{ href: "/toeic/grammar", label: "Grammar drill", emoji: "📚", available: true },

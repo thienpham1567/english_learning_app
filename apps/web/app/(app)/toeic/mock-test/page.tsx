@@ -1,0 +1,133 @@
+import Link from "next/link";
+import { headers } from "next/headers";
+import { Card, Tag } from "antd";
+import { TrophyOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
+import { auth } from "@/lib/auth";
+import { db } from "@repo/database";
+import { toeicAttempt } from "@repo/database";
+import { and, desc, eq, isNotNull } from "drizzle-orm";
+import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
+
+export default async function MockTestHubPage() {
+	await requireToeicBaseline();
+	const session = await auth.api.getSession({ headers: await headers() });
+	const userId = session!.user!.id;
+
+	const history = await db
+		.select()
+		.from(toeicAttempt)
+		.where(
+			and(
+				eq(toeicAttempt.userId, userId),
+				eq(toeicAttempt.mode, "mock_test"),
+				isNotNull(toeicAttempt.completedAt),
+			),
+		)
+		.orderBy(desc(toeicAttempt.completedAt))
+		.limit(10);
+
+	return (
+		<div
+			style={{
+				display: "flex",
+				flexDirection: "column",
+				height: "100%",
+				minHeight: 0,
+				flex: 1,
+				overflow: "auto",
+			}}
+		>
+			<ModuleHeader
+				icon={<TrophyOutlined />}
+				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				title="TOEIC Mock Test"
+				subtitle="Đề thi giả lập · 5–495 mỗi section"
+			/>
+			<div style={{ padding: 16, display: "grid", gap: 16 }}>
+				<div
+					style={{
+						display: "grid",
+						gap: 12,
+						gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
+					}}
+				>
+					<Link
+						href="/toeic/mock-test/runner?mode=full"
+						style={{ textDecoration: "none" }}
+					>
+						<Card hoverable>
+							<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+								<TrophyOutlined style={{ fontSize: 22, color: "#3b82f6" }} />
+								<strong style={{ fontSize: 18 }}>Full Mock</strong>
+							</div>
+							<div style={{ marginTop: 8, color: "var(--text-muted, #94a3b8)" }}>
+								194 câu · ~1h54 · Strict timer
+							</div>
+							<div style={{ marginTop: 8 }}>
+								<Tag color="orange">Part 1: chưa có content</Tag>
+							</div>
+							<div style={{ marginTop: 6, fontSize: 13, color: "var(--text-muted)" }}>
+								25 P2 + 39 P3 + 30 P4 + 30 P5 + 16 P6 + 54 P7
+							</div>
+						</Card>
+					</Link>
+					<Link
+						href="/toeic/mock-test/runner?mode=mini"
+						style={{ textDecoration: "none" }}
+					>
+						<Card hoverable>
+							<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+								<ClockCircleOutlined style={{ fontSize: 22, color: "#10b981" }} />
+								<strong style={{ fontSize: 18 }}>Mini Mock</strong>
+							</div>
+							<div style={{ marginTop: 8, color: "var(--text-muted, #94a3b8)" }}>
+								100 câu · ~1h · Luyện hằng ngày
+							</div>
+							<div style={{ marginTop: 8 }}>
+								<Tag color="green">Khuyến nghị</Tag>
+							</div>
+							<div style={{ marginTop: 6, fontSize: 13, color: "var(--text-muted)" }}>
+								13 P2 + 20 P3 + 15 P4 + 15 P5 + 8 P6 + 29 P7
+							</div>
+						</Card>
+					</Link>
+				</div>
+
+				<Card title="Lịch sử mock test" size="small">
+					{history.length === 0 ? (
+						<div style={{ color: "var(--text-muted, #94a3b8)" }}>
+							Chưa có mock test nào. Bắt đầu mini mock để có dữ liệu cho điểm dự đoán.
+						</div>
+					) : (
+						<div style={{ display: "grid", gap: 8 }}>
+							{history.map((h) => (
+								<Link
+									key={h.id}
+									href={`/toeic/mock-test/${h.id}/result`}
+									style={{
+										textDecoration: "none",
+										color: "var(--text-primary, #fff)",
+										padding: 10,
+										borderRadius: 8,
+										background: "var(--surface-hover, #1f2937)",
+										display: "flex",
+										justifyContent: "space-between",
+										alignItems: "center",
+									}}
+								>
+									<span>
+										{new Date(h.completedAt!).toLocaleString("vi-VN")} · {h.questionCount} câu
+									</span>
+									<span style={{ fontSize: 18, fontWeight: 700 }}>
+										{h.totalScaled ?? "—"} / 990
+									</span>
+								</Link>
+							))}
+						</div>
+					)}
+				</Card>
+			</div>
+		</div>
+	);
+}
