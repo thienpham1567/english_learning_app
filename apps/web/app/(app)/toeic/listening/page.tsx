@@ -23,12 +23,12 @@ export default async function ToeicListeningPage() {
 
 	const cards = [
 		{
-			href: null,
+			href: "/toeic/practice?part=1",
 			title: "Part 1 — Photos",
 			count: byPart.get(1) ?? 0,
-			subtitle: "Mô tả ảnh · 6 câu/test",
-			disabled: true,
-			note: "Sắp ra mắt (cần content ETS thật)",
+			subtitle: "Mô tả ảnh · 4 caption audio",
+			disabled: (byPart.get(1) ?? 0) === 0,
+			note: (byPart.get(1) ?? 0) === 0 ? "Chạy seed:toeic-part1 để có content" : undefined,
 		},
 		{
 			href: "/toeic/practice?part=2",

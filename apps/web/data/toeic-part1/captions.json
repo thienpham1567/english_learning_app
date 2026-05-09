@@ -1,0 +1,332 @@
+{
+  "70497": {
+    "photoId": "70497",
+    "options": [
+      "A hamburger is being prepared by a chef.",
+      "A plate with a burger and fries is on the table.",
+      "The person is eating a meal at a restaurant.",
+      "There are several empty plates on the table."
+    ],
+    "correctIndex": 1,
+    "explanationVi": "Đáp án (B) mô tả chính xác trạng thái của các vật thể trong ảnh: một đĩa thức ăn gồm bánh burger và khoai tây chiên được đặt trên bàn. Các phương án khác sai vì: (A) không có đầu bếp nào trong ảnh; (C) không có người nào đang ăn; (D) các đĩa không trống mà có thức ăn trên đó.",
+    "difficulty": "beginner",
+    "skillIds": [
+      "toeic.part1.object_state"
+    ]
+  },
+  "261102": {
+    "photoId": "261102",
+    "options": [
+      "Several lounge chairs are arranged beside a swimming pool.",
+      "People are swimming in the pool at sunset.",
+      "The hotel lobby is crowded with many guests.",
+      "A fountain is spraying water into the pool."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Đáp án đúng là (A) vì mô tả chính xác các ghế nằm (lounge chairs) được xếp cạnh hồ bơi. (B) sai vì không có người nào trong ảnh. (C) sai vì đây là khu vực hồ bơi ngoài trời, không phải sảnh khách sạn (lobby). (D) sai vì không có đài phun nước nào trong ảnh.",
+    "difficulty": "beginner",
+    "skillIds": [
+      "toeic.part1.scene"
+    ]
+  },
+  "380769": {
+    "photoId": "380769",
+    "options": [
+      "A man is working at his desk in an office.",
+      "The man is standing up to present a report.",
+      "There are many people walking around the office space.",
+      "A person is cleaning the surface of the wooden desk."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Đáp án A mô tả chính xác hành động của người đàn ông đang ngồi làm việc tại bàn trong văn phòng. Các đáp án còn lại sai vì: B (người đàn ông đang ngồi, không phải đứng), C (chỉ có một người trong ảnh, không phải nhiều người), và D (không có ai đang lau dọn bàn).",
+    "difficulty": "beginner",
+    "skillIds": [
+      "toeic.part1.people_action"
+    ]
+  },
+  "416405": {
+    "photoId": "416405",
+    "options": [
+      "They are packing their bags for a vacation.",
+      "People are reviewing documents at a desk.",
+      "A group is standing around a conference table.",
+      "They are cleaning the office floor."
+    ],
+    "correctIndex": 1,
+    "explanationVi": "Đáp án đúng là (B) vì bức ảnh mô tả ba người đang ngồi quanh bàn, cùng nhau xem xét các bản vẽ kỹ thuật. Đáp án (A) sai vì không có hành động chuẩn bị cho kỳ nghỉ. Đáp án (C) sai vì họ đang ngồi, không phải đứng. Đáp án (D) sai vì không có ai đang dọn dẹp sàn nhà.",
+    "difficulty": "beginner",
+    "skillIds": [
+      "toeic.part1.people_action"
+    ]
+  },
+  "627956": {
+    "photoId": "627956",
+    "options": [
+      "A train is traveling along the tracks near the water.",
+      "A street lamp stands on a balcony overlooking the sea.",
+      "Some people are boarding a train at the station.",
+      "A train is parked at the edge of the ocean."
+    ],
+    "correctIndex": 1,
+    "explanationVi": "Đáp án B mô tả chính xác cảnh vật trong ảnh: một cột đèn đường nằm trên ban công nhìn ra biển. Các đáp án còn lại (A, C, D) đều nhắc đến 'tàu hỏa' (train), nhưng trong ảnh hoàn toàn không có tàu hỏa nào, vì vậy chúng là các phương án gây nhiễu sai.",
+    "difficulty": "beginner",
+    "skillIds": [
+      "toeic.part1.scene"
+    ]
+  },
+  "845451": {
+    "photoId": "845451",
+    "options": [
+      "A man is working at his desk in an office.",
+      "The man is standing and talking to a colleague.",
+      "Several people are attending a meeting in the room.",
+      "The office is empty and the lights are turned off."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Đáp án A mô tả chính xác hành động của người đàn ông đang ngồi làm việc tại bàn trong văn phòng. Các đáp án còn lại sai vì: B (người đàn ông đang ngồi, không phải đứng và không có đồng nghiệp), C (chỉ có một người trong ảnh), D (văn phòng có người và đang có ánh sáng).",
+    "difficulty": "beginner",
+    "skillIds": [
+      "toeic.part1.people_action"
+    ]
+  },
+  "887827": {
+    "photoId": "887827",
+    "options": [
+      "The man is cleaning the coffee machine.",
+      "The man is holding a cup in his hand.",
+      "The man is preparing a meal in the kitchen.",
+      "The man is washing dishes in the sink."
+    ],
+    "correctIndex": 1,
+    "explanationVi": "Đáp án (B) là chính xác vì người đàn ông đang cầm một chiếc tách trên tay. Các đáp án còn lại sai vì: (A) anh ấy không lau chùi máy, (C) anh ấy không nấu ăn, và (D) không có cảnh rửa bát đĩa nào diễn ra.",
+    "difficulty": "beginner",
+    "skillIds": [
+      "toeic.part1.people_action"
+    ]
+  },
+  "1181675": {
+    "photoId": "1181675",
+    "options": [
+      "A person is typing on a laptop computer.",
+      "A woman is attending a business meeting.",
+      "Some documents are being filed in a cabinet.",
+      "A person is cleaning the computer screens."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Đáp án (A) mô tả chính xác hành động của người trong ảnh là đang gõ phím trên máy tính xách tay. Các đáp án còn lại đều sai vì: (B) không có cuộc họp nào diễn ra, (C) không có tài liệu hay tủ hồ sơ nào trong ảnh, và (D) người trong ảnh đang làm việc chứ không phải đang lau chùi màn hình.",
+    "difficulty": "beginner",
+    "skillIds": [
+      "toeic.part1.people_action"
+    ]
+  },
+  "1181686": {
+    "photoId": "1181686",
+    "options": [
+      "She is typing a document on her computer.",
+      "She is smiling at the camera.",
+      "She is holding a stack of files.",
+      "She is walking down a hallway."
+    ],
+    "correctIndex": 1,
+    "explanationVi": "Đáp án (B) mô tả chính xác hành động của người phụ nữ trong ảnh là đang mỉm cười nhìn vào máy ảnh. Các đáp án còn lại đều sai vì: (A) không có máy tính, (C) cô ấy không cầm tài liệu, và (D) cô ấy đang đứng yên chứ không phải đang đi bộ.",
+    "difficulty": "beginner",
+    "skillIds": [
+      "toeic.part1.people_action"
+    ]
+  },
+  "1290141": {
+    "photoId": "1290141",
+    "options": [
+      "Books are neatly arranged on the shelves.",
+      "People are browsing for books in the library.",
+      "A ladder is being used to reach the top shelf.",
+      "The library is currently closed for renovations."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Đáp án (A) mô tả chính xác trạng thái của các cuốn sách trên kệ. Các đáp án còn lại đều sai vì: (B) không có người nào trong ảnh; (C) không có chiếc thang nào được sử dụng; (D) không có bằng chứng nào cho thấy thư viện đang đóng cửa để sửa chữa.",
+    "difficulty": "beginner",
+    "skillIds": [
+      "toeic.part1.object_state"
+    ]
+  },
+  "1311518": {
+    "photoId": "1311518",
+    "options": [
+      "Two women are sitting at a table having a discussion.",
+      "They are preparing to sign a legal contract together.",
+      "One woman is typing on a laptop computer.",
+      "The women are standing in a crowded office hallway."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Đáp án A mô tả chính xác hành động của hai người phụ nữ đang ngồi đối diện nhau và thảo luận. Đáp án B sai vì không có bằng chứng về việc ký hợp đồng. Đáp án C sai vì không có máy tính xách tay trong ảnh. Đáp án D sai vì họ đang ngồi, không phải đứng, và không gian không phải là hành lang đông đúc.",
+    "difficulty": "beginner",
+    "skillIds": [
+      "toeic.part1.people_action"
+    ]
+  },
+  "1462630": {
+    "photoId": "1462630",
+    "options": [
+      "She is typing on a computer at her desk.",
+      "She is holding a red folder in her arms.",
+      "She is sitting on a chair in the office.",
+      "She is placing a backpack on the floor."
+    ],
+    "correctIndex": 1,
+    "explanationVi": "Đáp án (B) mô tả chính xác hành động của người phụ nữ trong ảnh là đang ôm một chiếc bìa hồ sơ màu đỏ. Các đáp án còn lại đều sai vì: (A) cô ấy không sử dụng máy tính, (C) cô ấy đang đứng chứ không ngồi, và (D) không có hành động đặt ba lô xuống sàn.",
+    "difficulty": "beginner",
+    "skillIds": [
+      "toeic.part1.people_action"
+    ]
+  },
+  "1647962": {
+    "photoId": "1647962",
+    "options": [
+      "Two people are standing on the edge of a cliff.",
+      "A group of hikers is climbing up the mountain.",
+      "People are sitting on a bench overlooking the water.",
+      "The individuals are walking through a dense forest."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Đáp án A mô tả chính xác hành động và vị trí của hai người trong ảnh. Các đáp án còn lại sai vì: B (họ không đang leo núi), C (không có ghế ngồi), và D (họ đang ở trên vách đá, không phải trong rừng).",
+    "difficulty": "intermediate",
+    "skillIds": [
+      "toeic.part1.people_action"
+    ]
+  },
+  "1656663": {
+    "photoId": "1656663",
+    "options": [
+      "A park bench is situated in the middle of the garden.",
+      "Fresh vegetables are displayed for sale on a stand.",
+      "A person is arranging carrots on a wooden table.",
+      "Some gardening tools are resting on a park bench."
+    ],
+    "correctIndex": 1,
+    "explanationVi": "Đáp án B là chính xác vì bức ảnh mô tả các loại rau củ tươi (cà rốt, củ cải) được bày bán trên kệ. Các phương án còn lại đều sai: A và D nhắc đến 'ghế công viên' (park bench) không có trong ảnh, và C sai vì không có người nào đang sắp xếp rau củ trong hình.",
+    "difficulty": "beginner",
+    "skillIds": [
+      "toeic.part1.object_state"
+    ]
+  },
+  "2467506": {
+    "photoId": "2467506",
+    "options": [
+      "A large group of people is posing for a photograph.",
+      "People are working at individual desks in an office.",
+      "The participants are standing in a line outdoors.",
+      "Some people are setting up equipment on a stage."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Đáp án A đúng vì bức ảnh mô tả một nhóm đông người đang tụ tập và tạo dáng để chụp ảnh. Đáp án B sai vì họ không ngồi tại các bàn làm việc cá nhân. Đáp án C sai vì đây là không gian trong nhà (indoor), không phải ngoài trời. Đáp án D sai vì họ đang tạo dáng chụp ảnh chứ không phải đang thiết lập thiết bị.",
+    "difficulty": "beginner",
+    "skillIds": [
+      "toeic.part1.people_action"
+    ]
+  },
+  "2760241": {
+    "photoId": "2760241",
+    "options": [
+      "A worker is inspecting a large piece of industrial machinery.",
+      "A man is operating a forklift in the warehouse.",
+      "The worker is wearing protective goggles and a face mask.",
+      "Some metal parts are being packed into wooden crates."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Đáp án A đúng vì mô tả chính xác hành động của người công nhân đang quan sát/kiểm tra thiết bị công nghiệp lớn. Các đáp án còn lại sai vì: B (không có xe nâng), C (không thấy kính bảo hộ hay khẩu trang), D (không có thùng gỗ nào được đề cập).",
+    "difficulty": "intermediate",
+    "skillIds": [
+      "toeic.part1.people_action"
+    ]
+  },
+  "3184291": {
+    "photoId": "3184291",
+    "options": [
+      "The people are sitting around a table having a meeting.",
+      "Two of the people are shaking hands across the table.",
+      "A woman is standing up to give a presentation to the group.",
+      "All the participants are looking at a computer screen together."
+    ],
+    "correctIndex": 1,
+    "explanationVi": "Đáp án đúng là B vì trong ảnh, một người phụ nữ đang đứng và bắt tay với một người đàn ông ngồi đối diện. Đáp án A quá chung chung. Đáp án C sai vì người phụ nữ đang bắt tay chứ không phải đang thuyết trình. Đáp án D sai vì mọi người đang tập trung vào việc bắt tay chứ không phải cùng nhìn vào màn hình máy tính.",
+    "difficulty": "intermediate",
+    "skillIds": [
+      "toeic.part1.people_action"
+    ]
+  },
+  "3184339": {
+    "photoId": "3184339",
+    "options": [
+      "A woman is typing on a laptop computer.",
+      "The colleagues are standing around a large table.",
+      "One of the men is writing on a whiteboard.",
+      "A person is putting a laptop into a bag."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Đáp án A đúng vì trong ảnh có một người phụ nữ đang gõ phím trên máy tính xách tay. Các đáp án còn lại sai vì: B (họ đang ngồi, không phải đứng), C (không ai đang viết lên bảng trắng), D (không có hành động cất máy tính vào túi).",
+    "difficulty": "beginner",
+    "skillIds": [
+      "toeic.part1.people_action"
+    ]
+  },
+  "3184360": {
+    "photoId": "3184360",
+    "options": [
+      "The colleagues are having a meeting around a table.",
+      "They are standing up to give a formal presentation.",
+      "The people are cleaning their workspace after the meeting.",
+      "A man is writing notes on a large wall board."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Đáp án A mô tả chính xác hành động của nhóm người đang ngồi làm việc cùng nhau quanh bàn. Đáp án B sai vì họ đang ngồi, không phải đứng thuyết trình. Đáp án C sai vì không có hành động dọn dẹp. Đáp án D sai vì không ai đang viết lên bảng trên tường.",
+    "difficulty": "beginner",
+    "skillIds": [
+      "toeic.part1.people_action"
+    ]
+  },
+  "4173251": {
+    "photoId": "4173251",
+    "options": [
+      "A doctor is examining a patient in the office.",
+      "A medical professional is standing with her arms crossed.",
+      "The woman is writing notes on a clipboard.",
+      "A nurse is adjusting her stethoscope around her neck."
+    ],
+    "correctIndex": 1,
+    "explanationVi": "Đáp án B là mô tả chính xác nhất vì bức ảnh cho thấy một nữ bác sĩ đang đứng với tư thế khoanh tay. Đáp án A sai vì không có bệnh nhân nào trong ảnh. Đáp án C sai vì cô ấy không cầm bút hay bảng kẹp ghi chú. Đáp án D sai vì cô ấy chỉ đang đeo ống nghe chứ không phải đang điều chỉnh nó.",
+    "difficulty": "beginner",
+    "skillIds": [
+      "toeic.part1.people_action"
+    ]
+  },
+  "5379707": {
+    "photoId": "5379707",
+    "options": [
+      "A waiter is serving drinks to customers at the tables.",
+      "The restaurant is currently closed for business.",
+      "A staff member is working behind the service counter.",
+      "Patrons are waiting in line to be seated."
+    ],
+    "correctIndex": 2,
+    "explanationVi": "Đáp án đúng là (C) vì trong ảnh có một nhân viên đang đứng làm việc tại quầy phục vụ (service counter). Đáp án (A) sai vì không có cảnh phục vụ đồ uống cho khách. Đáp án (B) sai vì không có bằng chứng cho thấy nhà hàng đóng cửa. Đáp án (D) sai vì không có khách hàng nào đang xếp hàng chờ được phục vụ.",
+    "difficulty": "intermediate",
+    "skillIds": [
+      "toeic.part1.people_action"
+    ]
+  },
+  "7681091": {
+    "photoId": "7681091",
+    "options": [
+      "A person is pointing at a document on a desk.",
+      "A person is typing on a laptop computer.",
+      "A person is pouring coffee into a mug.",
+      "A person is shopping for office supplies online."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Đáp án A mô tả chính xác hành động của người trong ảnh (đang chỉ tay vào tài liệu). Các đáp án còn lại sai vì: B không có máy tính xách tay, C không có hành động rót cà phê, và D không có hoạt động mua sắm nào diễn ra.",
+    "difficulty": "beginner",
+    "skillIds": [
+      "toeic.part1.people_action"
+    ]
+  }
+}

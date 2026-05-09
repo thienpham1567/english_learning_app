@@ -1,0 +1,27 @@
+{
+  "source": "Pexels (CC0 license, free for commercial use)",
+  "photos": [
+    { "id": "3184291", "topic": "office", "hint": "people in a meeting" },
+    { "id": "3184339", "topic": "office", "hint": "person at laptop" },
+    { "id": "3184360", "topic": "office", "hint": "team collaboration" },
+    { "id": "1181675", "topic": "office", "hint": "woman at computer" },
+    { "id": "5379707", "topic": "restaurants", "hint": "waiter serving" },
+    { "id": "70497", "topic": "restaurants", "hint": "table setting" },
+    { "id": "2760241", "topic": "manufacturing", "hint": "warehouse" },
+    { "id": "627956", "topic": "travel", "hint": "train" },
+    { "id": "1656663", "topic": "general", "hint": "park bench" },
+    { "id": "1290141", "topic": "office", "hint": "books on shelf" },
+    { "id": "261102", "topic": "travel", "hint": "hotel lobby" },
+    { "id": "4173251", "topic": "health", "hint": "doctor with patient" },
+    { "id": "887827", "topic": "restaurants", "hint": "kitchen cooking" },
+    { "id": "1181686", "topic": "office", "hint": "people working" },
+    { "id": "7681091", "topic": "general", "hint": "shopping" },
+    { "id": "2467506", "topic": "general", "hint": "outdoor scene" },
+    { "id": "1462630", "topic": "office", "hint": "office desk" },
+    { "id": "380769", "topic": "general", "hint": "outdoor lifestyle" },
+    { "id": "416405", "topic": "travel", "hint": "vacation" },
+    { "id": "1647962", "topic": "general", "hint": "people interacting" },
+    { "id": "1311518", "topic": "general", "hint": "scene" },
+    { "id": "845451", "topic": "general", "hint": "scene" }
+  ]
+}

@@ -42,13 +42,13 @@ export function QuestionRunner({
 		setPart2PlayingIdx(-1);
 	}, [question?.id]);
 
-	// Part 2: auto-play Q → A → B → C in sequence on mount
+	// Part 1/2: auto-play [Q] → A → B → C [→ D] in sequence on mount.
+	// Part 1: no question prompt (empty string), 4 options.
+	// Part 2: 1 question prompt + 3 options.
 	const playPart2Sequence = useCallback(async () => {
 		if (!question?.audioSegments) return;
-		const urls = [
-			question.audioSegments.question,
-			...question.audioSegments.options,
-		];
+		const segments = question.audioSegments;
+		const urls = [segments.question, ...segments.options].filter((u) => u && u.length > 0);
 		const audio = audioRef.current;
 		if (!audio) return;
 		for (let i = 0; i < urls.length; i++) {
@@ -186,12 +186,15 @@ export function QuestionRunner({
 				>
 					<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 						<span style={{ fontSize: 14, color: "var(--text-muted, #94a3b8)" }}>
-							{part2PlayingIdx === -1 && "Đang chuẩn bị audio…"}
-							{part2PlayingIdx === 0 && "🔊 Câu hỏi"}
-							{part2PlayingIdx === 1 && "🔊 (A)"}
-							{part2PlayingIdx === 2 && "🔊 (B)"}
-							{part2PlayingIdx === 3 && "🔊 (C)"}
-							{part2PlayingIdx >= 4 && "Audio đã phát xong — chọn đáp án"}
+							{(() => {
+								const hasQ = (question.audioSegments?.question ?? "").length > 0;
+								const total = (hasQ ? 1 : 0) + (question.audioSegments?.options.length ?? 0);
+								if (part2PlayingIdx === -1) return "Đang chuẩn bị audio…";
+								if (part2PlayingIdx >= total) return "Audio đã phát xong — chọn đáp án";
+								if (hasQ && part2PlayingIdx === 0) return "🔊 Câu hỏi";
+								const optIdx = hasQ ? part2PlayingIdx - 1 : part2PlayingIdx;
+								return `🔊 (${String.fromCharCode(65 + optIdx)})`;
+							})()}
 						</span>
 						<Button
 							size="small"
