@@ -65,7 +65,7 @@ CREATE TABLE "toeic_question" (
 	"updated_at" timestamp with time zone DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
-CREATE TABLE "youtube_video_history" (
+CREATE TABLE IF NOT EXISTS "youtube_video_history" (
 	"id" uuid PRIMARY KEY DEFAULT gen_random_uuid() NOT NULL,
 	"user_id" text NOT NULL,
 	"video_id" text NOT NULL,
@@ -89,5 +89,5 @@ CREATE INDEX "toeic_attempt_user_mode_completed_idx" ON "toeic_attempt" USING bt
 CREATE UNIQUE INDEX "toeic_question_exam_number_idx" ON "toeic_question" USING btree ("exam_id","number");--> statement-breakpoint
 CREATE INDEX "toeic_question_part_idx" ON "toeic_question" USING btree ("part");--> statement-breakpoint
 CREATE INDEX "toeic_question_skill_ids_gin_idx" ON "toeic_question" USING gin ("skill_ids");--> statement-breakpoint
-CREATE UNIQUE INDEX "youtube_video_history_user_video_idx" ON "youtube_video_history" USING btree ("user_id","video_id");--> statement-breakpoint
-CREATE INDEX "youtube_video_history_user_updated_idx" ON "youtube_video_history" USING btree ("user_id","updated_at");
+CREATE UNIQUE INDEX IF NOT EXISTS "youtube_video_history_user_video_idx" ON "youtube_video_history" USING btree ("user_id","video_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "youtube_video_history_user_updated_idx" ON "youtube_video_history" USING btree ("user_id","updated_at");

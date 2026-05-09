@@ -151,7 +151,12 @@ async function seed() {
 
 	// 3. Upsert Part 5 questions
 	let p5Count = 0;
+	let p5Skipped = 0;
 	for (const q of part5.questions) {
+		if (q.correctIndex === null || q.correctIndex === undefined) {
+			p5Skipped++;
+			continue;
+		}
 		const code = examNameToCode.get(q.examName);
 		if (!code) {
 			console.warn(`Skipping Part 5 question with unknown exam: ${q.examName}`);
@@ -182,11 +187,16 @@ async function seed() {
 			.onConflictDoNothing();
 		p5Count++;
 	}
-	console.log(`Seeded ${p5Count} Part 5 questions`);
+	console.log(`Seeded ${p5Count} Part 5 questions (${p5Skipped} skipped — null correctIndex)`);
 
 	// 4. Upsert multipart (Part 3/4/6/7) questions
 	let mpCount = 0;
+	let mpSkipped = 0;
 	for (const q of multipart.questions) {
+		if (q.correctIndex === null || q.correctIndex === undefined) {
+			mpSkipped++;
+			continue;
+		}
 		const code = examNameToCode.get(q.examName);
 		if (!code) {
 			console.warn(`Skipping multipart question with unknown exam: ${q.examName}`);
@@ -218,7 +228,7 @@ async function seed() {
 			.onConflictDoNothing();
 		mpCount++;
 	}
-	console.log(`Seeded ${mpCount} multipart questions`);
+	console.log(`Seeded ${mpCount} multipart questions (${mpSkipped} skipped — null correctIndex)`);
 
 	// 5. Summary
 	const totalRows = await db.select({ c: sql<number>`count(*)::int` }).from(toeicQuestion);
