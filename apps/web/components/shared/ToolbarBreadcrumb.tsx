@@ -19,11 +19,13 @@ const BREADCRUMBS: Record<string, { eyebrow: string; title: string }> = {
   "/pronunciation": { eyebrow: "Luyện phát âm", title: "Phát âm" },
   "/ipa-chart": { eyebrow: "Bảng phiên âm", title: "IPA Chart" },
   "/reading": { eyebrow: "Đọc hiểu", title: "Luyện đọc" },
-  "/toeic-practice": { eyebrow: "Luyện đề ETS", title: "TOEIC Practice" },
+  "/toeic": { eyebrow: "TOEIC", title: "TOEIC Hub" },
+  "/toeic/practice": { eyebrow: "Luyện đề ETS", title: "TOEIC Practice" },
+  "/toeic/diagnostic": { eyebrow: "TOEIC", title: "Diagnostic Test" },
+  "/toeic/skills": { eyebrow: "TOEIC", title: "4 Skills Practice" },
   "/review-quiz": { eyebrow: "Ôn tập", title: "Review Quiz" },
   "/error-notebook": { eyebrow: "Sổ tay lỗi", title: "Error Notebook" },
   "/diagnostic": { eyebrow: "Đánh giá năng lực", title: "Diagnostic Test" },
-  "/toeic-skills": { eyebrow: "TOEIC", title: "4 Skills Practice" },
 };
 
 export function ToolbarBreadcrumb() {

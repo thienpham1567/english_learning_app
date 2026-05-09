@@ -48,7 +48,7 @@ const LEARN_HUB_ITEMS = [
 
 const REVIEW_HUB_ITEMS = [
   { label: "Sổ lỗi sai", icon: <BookFilled />, href: "/error-notebook" },
-  { label: "Luyện đề TOEIC", icon: <FireOutlined />, href: "/toeic-practice" },
+  { label: "TOEIC", icon: <FireOutlined />, href: "/toeic" },
   { label: "Thử thách", icon: <BulbOutlined />, href: "/daily-challenge" },
 ];
 
@@ -64,8 +64,7 @@ function getActiveTab(pathname: string): string {
   if (pathname.startsWith("/my-vocabulary") || pathname.startsWith("/dictionary") || pathname.startsWith("/flashcards")) return "vocab";
   if (
     pathname.startsWith("/error-notebook") ||
-    pathname.startsWith("/toeic-practice") ||
-    pathname.startsWith("/toeic-skills") ||
+    pathname.startsWith("/toeic") ||
     pathname.startsWith("/daily-challenge")
   ) return "review";
   if (

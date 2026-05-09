@@ -82,7 +82,7 @@ const navGroups: (NavItem | NavGroup)[] = [
     label: "Kiểm tra & Ôn tập",
     items: [
       { href: "/daily-challenge", label: "Thử thách hàng ngày", icon: FireOutlined },
-      { href: "/toeic-skills", label: "TOEIC 4 Skills", icon: AimOutlined },
+      { href: "/toeic", label: "TOEIC", icon: AimOutlined },
       { href: "/error-notebook", label: "Sổ lỗi sai", icon: ExceptionOutlined },
     ],
   },
