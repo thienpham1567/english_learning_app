@@ -1,0 +1,411 @@
+[
+  {
+    "text": "Please submit your weekly report to the manager by the end of the day.",
+    "level": "beginner",
+    "topic": "office",
+    "vocabHints": [
+      {
+        "word": "submit",
+        "vi": "nộp"
+      },
+      {
+        "word": "manager",
+        "vi": "quản lý"
+      }
+    ]
+  },
+  {
+    "text": "The flight to London has been delayed due to heavy rain at the airport.",
+    "level": "beginner",
+    "topic": "travel",
+    "vocabHints": [
+      {
+        "word": "delayed",
+        "vi": "bị hoãn"
+      },
+      {
+        "word": "airport",
+        "vi": "sân bay"
+      }
+    ]
+  },
+  {
+    "text": "We need to discuss the new marketing strategy in our meeting tomorrow morning.",
+    "level": "beginner",
+    "topic": "marketing",
+    "vocabHints": [
+      {
+        "word": "strategy",
+        "vi": "chiến lược"
+      }
+    ]
+  },
+  {
+    "text": "Could you please print these documents for the upcoming board meeting?",
+    "level": "beginner",
+    "topic": "office",
+    "vocabHints": [
+      {
+        "word": "documents",
+        "vi": "tài liệu"
+      },
+      {
+        "word": "upcoming",
+        "vi": "sắp tới"
+      }
+    ]
+  },
+  {
+    "text": "The company will provide lunch for all employees during the training session.",
+    "level": "beginner",
+    "topic": "general",
+    "vocabHints": [
+      {
+        "word": "employees",
+        "vi": "nhân viên"
+      }
+    ]
+  },
+  {
+    "text": "Please make sure to lock the office door before you leave this evening.",
+    "level": "beginner",
+    "topic": "office",
+    "vocabHints": []
+  },
+  {
+    "text": "I would like to book a hotel room near the convention center for next week.",
+    "level": "beginner",
+    "topic": "travel",
+    "vocabHints": [
+      {
+        "word": "convention",
+        "vi": "hội nghị"
+      }
+    ]
+  },
+  {
+    "text": "Our sales team exceeded the quarterly targets by over ten percent this year.",
+    "level": "beginner",
+    "topic": "business",
+    "vocabHints": [
+      {
+        "word": "exceeded",
+        "vi": "vượt quá"
+      },
+      {
+        "word": "quarterly",
+        "vi": "theo quý"
+      }
+    ]
+  },
+  {
+    "text": "The factory produces high quality electronic components for international markets.",
+    "level": "beginner",
+    "topic": "manufacturing",
+    "vocabHints": [
+      {
+        "word": "components",
+        "vi": "linh kiện"
+      }
+    ]
+  },
+  {
+    "text": "You can find the updated budget figures in the shared folder on the server.",
+    "level": "beginner",
+    "topic": "finance",
+    "vocabHints": [
+      {
+        "word": "budget",
+        "vi": "ngân sách"
+      }
+    ]
+  },
+  {
+    "text": "The human resources department is currently reviewing applications for the open position.",
+    "level": "intermediate",
+    "topic": "office",
+    "vocabHints": [
+      {
+        "word": "resources",
+        "vi": "nhân lực"
+      },
+      {
+        "word": "applications",
+        "vi": "đơn ứng tuyển"
+      }
+    ]
+  },
+  {
+    "text": "Please ensure that all invoices are processed before the accounting department closes for the weekend.",
+    "level": "intermediate",
+    "topic": "finance",
+    "vocabHints": [
+      {
+        "word": "invoices",
+        "vi": "hóa đơn"
+      },
+      {
+        "word": "processed",
+        "vi": "xử lý"
+      }
+    ]
+  },
+  {
+    "text": "We are planning to launch a new advertising campaign to reach a younger audience.",
+    "level": "intermediate",
+    "topic": "marketing",
+    "vocabHints": [
+      {
+        "word": "launch",
+        "vi": "ra mắt"
+      },
+      {
+        "word": "campaign",
+        "vi": "chiến dịch"
+      }
+    ]
+  },
+  {
+    "text": "The maintenance crew will be repairing the elevator in the lobby throughout the afternoon.",
+    "level": "intermediate",
+    "topic": "office",
+    "vocabHints": [
+      {
+        "word": "maintenance",
+        "vi": "bảo trì"
+      },
+      {
+        "word": "elevator",
+        "vi": "thang máy"
+      }
+    ]
+  },
+  {
+    "text": "All passengers must present their boarding passes at the gate before entering the aircraft.",
+    "level": "intermediate",
+    "topic": "travel",
+    "vocabHints": [
+      {
+        "word": "passengers",
+        "vi": "hành khách"
+      },
+      {
+        "word": "boarding passes",
+        "vi": "thẻ lên máy bay"
+      }
+    ]
+  },
+  {
+    "text": "Our manufacturing plant has implemented new safety protocols to reduce workplace accidents.",
+    "level": "intermediate",
+    "topic": "manufacturing",
+    "vocabHints": [
+      {
+        "word": "implemented",
+        "vi": "triển khai"
+      },
+      {
+        "word": "protocols",
+        "vi": "quy trình"
+      }
+    ]
+  },
+  {
+    "text": "The keynote speaker will discuss the future of global trade at the annual conference.",
+    "level": "intermediate",
+    "topic": "business",
+    "vocabHints": [
+      {
+        "word": "keynote",
+        "vi": "diễn giả chính"
+      }
+    ]
+  },
+  {
+    "text": "If you need to change your travel itinerary, please contact the travel agency immediately.",
+    "level": "intermediate",
+    "topic": "travel",
+    "vocabHints": [
+      {
+        "word": "itinerary",
+        "vi": "lịch trình"
+      }
+    ]
+  },
+  {
+    "text": "Management has decided to postpone the merger until the financial audit is completed.",
+    "level": "intermediate",
+    "topic": "business",
+    "vocabHints": [
+      {
+        "word": "postpone",
+        "vi": "hoãn lại"
+      },
+      {
+        "word": "merger",
+        "vi": "sáp nhập"
+      }
+    ]
+  },
+  {
+    "text": "The auditor requested additional documentation to verify the company's recent tax filings.",
+    "level": "intermediate",
+    "topic": "finance",
+    "vocabHints": [
+      {
+        "word": "auditor",
+        "vi": "kiểm toán viên"
+      },
+      {
+        "word": "verify",
+        "vi": "xác minh"
+      }
+    ]
+  },
+  {
+    "text": "Our new product line has generated significant interest among potential investors.",
+    "level": "intermediate",
+    "topic": "marketing",
+    "vocabHints": [
+      {
+        "word": "significant",
+        "vi": "đáng kể"
+      },
+      {
+        "word": "investors",
+        "vi": "nhà đầu tư"
+      }
+    ]
+  },
+  {
+    "text": "Please coordinate with the logistics team to ensure the shipment arrives on schedule.",
+    "level": "intermediate",
+    "topic": "manufacturing",
+    "vocabHints": [
+      {
+        "word": "coordinate",
+        "vi": "phối hợp"
+      },
+      {
+        "word": "logistics",
+        "vi": "hậu cần"
+      }
+    ]
+  },
+  {
+    "text": "The office renovation project is scheduled to begin early next month and last four weeks.",
+    "level": "intermediate",
+    "topic": "office",
+    "vocabHints": [
+      {
+        "word": "renovation",
+        "vi": "cải tạo"
+      }
+    ]
+  },
+  {
+    "text": "We are seeking a candidate who possesses strong analytical skills and previous management experience.",
+    "level": "intermediate",
+    "topic": "business",
+    "vocabHints": [
+      {
+        "word": "possesses",
+        "vi": "sở hữu"
+      },
+      {
+        "word": "analytical",
+        "vi": "phân tích"
+      }
+    ]
+  },
+  {
+    "text": "The board of directors is meeting to review the quarterly earnings report this afternoon.",
+    "level": "intermediate",
+    "topic": "finance",
+    "vocabHints": [
+      {
+        "word": "directors",
+        "vi": "giám đốc"
+      },
+      {
+        "word": "earnings",
+        "vi": "thu nhập"
+      }
+    ]
+  },
+  {
+    "text": "The firm is contemplating an expansion into emerging markets to diversify its revenue streams.",
+    "level": "advanced",
+    "topic": "business",
+    "vocabHints": [
+      {
+        "word": "contemplating",
+        "vi": "cân nhắc"
+      },
+      {
+        "word": "diversify",
+        "vi": "đa dạng hóa"
+      }
+    ]
+  },
+  {
+    "text": "Stringent quality control measures have been integrated into every stage of the production cycle.",
+    "level": "advanced",
+    "topic": "manufacturing",
+    "vocabHints": [
+      {
+        "word": "stringent",
+        "vi": "nghiêm ngặt"
+      },
+      {
+        "word": "integrated",
+        "vi": "tích hợp"
+      }
+    ]
+  },
+  {
+    "text": "The marketing department is analyzing consumer behavior patterns to optimize our upcoming digital campaign.",
+    "level": "advanced",
+    "topic": "marketing",
+    "vocabHints": [
+      {
+        "word": "analyzing",
+        "vi": "phân tích"
+      },
+      {
+        "word": "optimize",
+        "vi": "tối ưu hóa"
+      }
+    ]
+  },
+  {
+    "text": "We must mitigate potential risks associated with the supply chain disruption before finalizing the contract.",
+    "level": "advanced",
+    "topic": "business",
+    "vocabHints": [
+      {
+        "word": "mitigate",
+        "vi": "giảm thiểu"
+      },
+      {
+        "word": "disruption",
+        "vi": "gián đoạn"
+      }
+    ]
+  },
+  {
+    "text": "The corporation is restructuring its internal operations to enhance efficiency and reduce overhead costs.",
+    "level": "advanced",
+    "topic": "office",
+    "vocabHints": [
+      {
+        "word": "restructuring",
+        "vi": "tái cơ cấu"
+      },
+      {
+        "word": "overhead",
+        "vi": "chi phí chung"
+      }
+    ]
+  }
+]
