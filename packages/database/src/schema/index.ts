@@ -794,3 +794,30 @@ export const toeicAnswer = pgTable(
 );
 
 export type ToeicAnswerRow = typeof toeicAnswer.$inferSelect;
+
+/** TOEIC Vocab — 600 essential words organized by topic */
+export const toeicVocab = pgTable(
+  "toeic_vocab",
+  {
+    id: uuid("id").defaultRandom().primaryKey(),
+    word: text("word").notNull().unique(),
+    pos: text("pos").notNull(),
+    ipa: text("ipa"),
+    meaningVi: text("meaning_vi").notNull(),
+    meaningEn: text("meaning_en").notNull(),
+    exampleEn: text("example_en"),
+    exampleVi: text("example_vi"),
+    topic: text("topic").notNull(),
+    level: text("level").notNull().default("intermediate"),
+    audioUrl: text("audio_url"),
+    frequency: integer("frequency").notNull().default(0),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (table) => [
+    index("toeic_vocab_topic_idx").on(table.topic),
+    index("toeic_vocab_level_idx").on(table.level),
+  ],
+);
+
+export type ToeicVocabRow = typeof toeicVocab.$inferSelect;
