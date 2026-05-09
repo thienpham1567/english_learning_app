@@ -28,6 +28,8 @@ export type ToeicSessionQuestion = {
 	explanationEn: string | null;
 	explanationVi: string | null;
 	audioUrl: string | null;
+	/** For Part 2: { question, options[3] } URLs of segmented audio. */
+	audioSegments: { question: string; options: string[] } | null;
 	imageUrls: string[] | null;
 	skillIds: string[];
 	topic: string | null;

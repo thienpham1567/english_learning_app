@@ -135,6 +135,7 @@ export async function POST(req: Request) {
 		explanationEn: reveal ? q.explanationEn : null,
 		explanationVi: reveal ? q.explanationVi : null,
 		audioUrl: q.audioUrl,
+		audioSegments: q.audioSegments,
 		imageUrls: q.imageUrls,
 		skillIds: q.skillIds,
 		topic: q.topic,

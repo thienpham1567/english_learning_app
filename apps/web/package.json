@@ -15,7 +15,9 @@
     "seed:toeic": "tsx scripts/seed-toeic.ts",
     "label:toeic": "tsx scripts/label-toeic-skills.ts",
     "build:diagnostic": "tsx scripts/build-diagnostic-set.ts",
-    "seed:toeic-vocab": "tsx scripts/seed-toeic-vocab.ts"
+    "seed:toeic-vocab": "tsx scripts/seed-toeic-vocab.ts",
+    "seed:toeic-part2": "tsx scripts/seed-toeic-part2.ts",
+    "seed:toeic-dictation": "tsx scripts/seed-toeic-dictation.ts"
   },
   "dependencies": {
     "@ant-design/icons": "^6.1.0",
@@ -31,6 +33,7 @@
     "cmu-pronouncing-dictionary": "^3.0.0",
     "diff": "^9.0.0",
     "drizzle-orm": "^0.45.1",
+    "groq-sdk": "^1.1.2",
     "next": "16.2.1",
     "nuqs": "^2.8.9",
     "openai": "^6.2.0",

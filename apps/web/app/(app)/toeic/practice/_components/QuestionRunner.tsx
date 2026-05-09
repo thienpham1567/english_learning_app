@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Tag } from "antd";
-import { CheckCircleFilled, CloseCircleFilled, SoundOutlined } from "@ant-design/icons";
+import { CheckCircleFilled, CloseCircleFilled, SoundOutlined, PlayCircleOutlined } from "@ant-design/icons";
 import type { ToeicSessionQuestion } from "@/hooks/useToeicSession";
 
 export type QuestionRunnerProps = {
@@ -33,11 +33,51 @@ export function QuestionRunner({
 	const [selected, setSelected] = useState<number | null>(null);
 	const [revealed, setRevealed] = useState(false);
 	const [elapsed, setElapsed] = useState(0);
+	const [part2PlayingIdx, setPart2PlayingIdx] = useState(-1); // -1 idle, 0=Q, 1=A, 2=B, 3=C, 4=done
 	const audioRef = useRef<HTMLAudioElement>(null);
 
 	useEffect(() => {
 		setSelected(null);
 		setRevealed(false);
+		setPart2PlayingIdx(-1);
+	}, [question?.id]);
+
+	// Part 2: auto-play Q → A → B → C in sequence on mount
+	const playPart2Sequence = useCallback(async () => {
+		if (!question?.audioSegments) return;
+		const urls = [
+			question.audioSegments.question,
+			...question.audioSegments.options,
+		];
+		const audio = audioRef.current;
+		if (!audio) return;
+		for (let i = 0; i < urls.length; i++) {
+			setPart2PlayingIdx(i);
+			audio.src = urls[i];
+			audio.currentTime = 0;
+			try {
+				await audio.play();
+				await new Promise<void>((resolve) => {
+					const onEnd = () => {
+						audio.removeEventListener("ended", onEnd);
+						resolve();
+					};
+					audio.addEventListener("ended", onEnd);
+				});
+				// Brief pause between clips
+				if (i < urls.length - 1) await new Promise((r) => setTimeout(r, 800));
+			} catch {
+				break;
+			}
+		}
+		setPart2PlayingIdx(4);
+	}, [question?.audioSegments]);
+
+	useEffect(() => {
+		if (question?.audioSegments && part2PlayingIdx === -1) {
+			void playPart2Sequence();
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [question?.id]);
 
 	useEffect(() => {
@@ -124,7 +164,7 @@ export function QuestionRunner({
 				</div>
 			)}
 
-			{question.audioUrl && (
+			{question.audioUrl && !question.audioSegments && (
 				<div>
 					<Button
 						icon={<SoundOutlined />}
@@ -133,6 +173,39 @@ export function QuestionRunner({
 						Nghe audio
 					</Button>
 					<audio ref={audioRef} src={question.audioUrl} />
+				</div>
+			)}
+
+			{question.audioSegments && (
+				<div
+					style={{
+						background: "var(--surface, #0f172a)",
+						padding: 12,
+						borderRadius: 8,
+					}}
+				>
+					<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+						<span style={{ fontSize: 14, color: "var(--text-muted, #94a3b8)" }}>
+							{part2PlayingIdx === -1 && "Đang chuẩn bị audio…"}
+							{part2PlayingIdx === 0 && "🔊 Câu hỏi"}
+							{part2PlayingIdx === 1 && "🔊 (A)"}
+							{part2PlayingIdx === 2 && "🔊 (B)"}
+							{part2PlayingIdx === 3 && "🔊 (C)"}
+							{part2PlayingIdx >= 4 && "Audio đã phát xong — chọn đáp án"}
+						</span>
+						<Button
+							size="small"
+							icon={<PlayCircleOutlined />}
+							disabled={part2PlayingIdx >= 0 && part2PlayingIdx < 4}
+							onClick={() => {
+								setPart2PlayingIdx(-1);
+								void playPart2Sequence();
+							}}
+						>
+							Nghe lại
+						</Button>
+					</div>
+					<audio ref={audioRef} />
 				</div>
 			)}
 
@@ -159,6 +232,8 @@ export function QuestionRunner({
 					const isPicked = selected === idx;
 					const isCorrect = showExplanationNow && question.correctIndex === idx;
 					const isWrongPick = showExplanationNow && isPicked && question.correctIndex !== idx;
+					// Part 2: options are just "A"/"B"/"C" labels; no text content to display
+					const isLabelOnly = opt.length <= 2 && /^[A-D]$/i.test(opt.trim());
 					return (
 						<button
 							type="button"
@@ -195,7 +270,7 @@ export function QuestionRunner({
 							<span style={{ fontWeight: 600, minWidth: 20 }}>
 								{String.fromCharCode(65 + idx)}.
 							</span>
-							<span style={{ flex: 1 }}>{opt}</span>
+							<span style={{ flex: 1 }}>{isLabelOnly ? "" : opt}</span>
 							{isCorrect && <CheckCircleFilled style={{ color: "#10b981" }} />}
 							{isWrongPick && <CloseCircleFilled style={{ color: "#ef4444" }} />}
 						</button>
