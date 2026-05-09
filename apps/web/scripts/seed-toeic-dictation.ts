@@ -79,10 +79,26 @@ Return ONLY strict JSON: {"items": [...]}`;
 	return items;
 }
 
-async function ttsSafe(text: string, voice: ReturnType<typeof pickVoice>, outputPath: string) {
-	if (fs.existsSync(outputPath)) return;
-	await synthesizeToFile({ text, voice, outputPath });
-	await new Promise((r) => setTimeout(r, 2200));
+async function ttsSafe(text: string, voice: ReturnType<typeof pickVoice>, outputPath: string): Promise<boolean> {
+	if (fs.existsSync(outputPath)) return true;
+	for (let attempt = 0; attempt < 3; attempt++) {
+		try {
+			await synthesizeToFile({ text, voice, outputPath });
+			await new Promise((r) => setTimeout(r, 4000));
+			return true;
+		} catch (err) {
+			const msg = err instanceof Error ? err.message : String(err);
+			if (msg.includes("rate_limit") || msg.includes("429")) {
+				const wait = 60000 * (attempt + 1); // 60s, 120s, 180s
+				console.warn(`  rate-limited; sleeping ${wait / 1000}s before retry ${attempt + 1}/3...`);
+				await new Promise((r) => setTimeout(r, wait));
+				continue;
+			}
+			console.error(`  TTS error (non-rate-limit):`, msg);
+			return false;
+		}
+	}
+	return false;
 }
 
 async function seed() {
@@ -99,7 +115,11 @@ async function seed() {
 
 		console.log(`  [${i + 1}/${items.length}] (${voice}) ${item.text.slice(0, 70)}...`);
 
-		await ttsSafe(item.text, voice, audioPath);
+		const ok = await ttsSafe(item.text, voice, audioPath);
+		if (!ok) {
+			console.warn(`  skipped item ${i + 1} (TTS failed after retries)`);
+			continue;
+		}
 
 		await db
 			.insert(toeicDictationItem)

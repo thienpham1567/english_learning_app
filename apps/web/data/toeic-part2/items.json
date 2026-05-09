@@ -1,0 +1,377 @@
+[
+  {
+    "promptType": "wh_question",
+    "promptText": "When will the board meeting begin?",
+    "options": [
+      "In about ten minutes.",
+      "It was very productive.",
+      "The boardroom is upstairs."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Câu hỏi bắt đầu bằng 'When' (Khi nào) cần câu trả lời về thời gian. Đáp án A chỉ thời gian.",
+    "skillIds": [
+      "toeic.part2.wh_question"
+    ],
+    "difficulty": "beginner"
+  },
+  {
+    "promptType": "wh_question",
+    "promptText": "Where did you put the client files?",
+    "options": [
+      "I sent them yesterday.",
+      "In the cabinet by my desk.",
+      "Yes, I have them."
+    ],
+    "correctIndex": 1,
+    "explanationVi": "Câu hỏi 'Where' (Ở đâu) cần câu trả lời về địa điểm. Đáp án B chỉ vị trí.",
+    "skillIds": [
+      "toeic.part2.wh_question"
+    ],
+    "difficulty": "beginner"
+  },
+  {
+    "promptType": "wh_question",
+    "promptText": "Who is in charge of the new project?",
+    "options": [
+      "Mr. Tanaka is.",
+      "It starts next Monday.",
+      "I think it's too expensive."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Câu hỏi 'Who' (Ai) cần câu trả lời là một người. Đáp án A nêu tên người.",
+    "skillIds": [
+      "toeic.part2.wh_question"
+    ],
+    "difficulty": "beginner"
+  },
+  {
+    "promptType": "wh_question",
+    "promptText": "Why is the printer not working?",
+    "options": [
+      "It ran out of paper.",
+      "The office is closed.",
+      "I bought it last year."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Câu hỏi 'Why' (Tại sao) cần lý do. Đáp án A giải thích nguyên nhân máy in không hoạt động.",
+    "skillIds": [
+      "toeic.part2.wh_question"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "promptType": "wh_question",
+    "promptText": "How can I access the company server?",
+    "options": [
+      "With your employee ID.",
+      "It is a large company.",
+      "No, I don't have it."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Câu hỏi 'How' (Làm thế nào) cần phương pháp. Đáp án A chỉ cách thức truy cập.",
+    "skillIds": [
+      "toeic.part2.wh_question"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "promptType": "wh_question",
+    "promptText": "Which office supplies should we order?",
+    "options": [
+      "The blue pens are fine.",
+      "We need more paper and ink.",
+      "I ordered them online."
+    ],
+    "correctIndex": 1,
+    "explanationVi": "Câu hỏi 'Which' yêu cầu lựa chọn. Đáp án B liệt kê các vật dụng cần đặt hàng.",
+    "skillIds": [
+      "toeic.part2.wh_question"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "promptType": "wh_question",
+    "promptText": "How long will the renovation take?",
+    "options": [
+      "It will take two weeks.",
+      "It is on the third floor.",
+      "I like the new design."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Câu hỏi 'How long' (Bao lâu) cần khoảng thời gian. Đáp án A trả lời đúng về thời lượng.",
+    "skillIds": [
+      "toeic.part2.wh_question"
+    ],
+    "difficulty": "beginner"
+  },
+  {
+    "promptType": "wh_question",
+    "promptText": "Who should I contact for technical support?",
+    "options": [
+      "The IT department.",
+      "I will call him later.",
+      "It is not very technical."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Câu hỏi 'Who' cần tên người hoặc bộ phận. Đáp án A chỉ bộ phận hỗ trợ.",
+    "skillIds": [
+      "toeic.part2.wh_question"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "promptType": "wh_question",
+    "promptText": "Where is the nearest post office?",
+    "options": [
+      "It is just around the corner.",
+      "I went there yesterday.",
+      "Yes, it is open now."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Câu hỏi 'Where' cần địa điểm. Đáp án A chỉ vị trí cụ thể.",
+    "skillIds": [
+      "toeic.part2.wh_question"
+    ],
+    "difficulty": "beginner"
+  },
+  {
+    "promptType": "wh_question",
+    "promptText": "Why did the manager leave early?",
+    "options": [
+      "She had a dental appointment.",
+      "She left at five.",
+      "Because the office is big."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Câu hỏi 'Why' cần lý do. Đáp án A đưa ra lý do hợp lý cho việc về sớm.",
+    "skillIds": [
+      "toeic.part2.wh_question"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "promptType": "wh_question",
+    "promptText": "How much does the annual membership cost?",
+    "options": [
+      "It is fifty dollars.",
+      "Once a year.",
+      "I am not a member."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Câu hỏi 'How much' hỏi về giá cả. Đáp án A trả lời về số tiền.",
+    "skillIds": [
+      "toeic.part2.wh_question"
+    ],
+    "difficulty": "beginner"
+  },
+  {
+    "promptType": "wh_question",
+    "promptText": "Which flight are you taking to Tokyo?",
+    "options": [
+      "The evening flight at six.",
+      "I have never been there.",
+      "It is a long trip."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Câu hỏi 'Which' yêu cầu xác định chuyến bay. Đáp án A chỉ rõ chuyến bay.",
+    "skillIds": [
+      "toeic.part2.wh_question"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "promptType": "yn_question",
+    "promptText": "Did you receive the updated budget report?",
+    "options": [
+      "Yes, it arrived this morning.",
+      "I will report it later.",
+      "The budget is very low."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Câu hỏi Yes/No cần câu trả lời xác nhận. Đáp án A trả lời trực tiếp cho câu hỏi.",
+    "skillIds": [
+      "toeic.part2.yn_question"
+    ],
+    "difficulty": "beginner"
+  },
+  {
+    "promptType": "yn_question",
+    "promptText": "Are you planning to attend the conference?",
+    "options": [
+      "No, I have a conflict.",
+      "It is in Chicago.",
+      "I am very busy today."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Câu hỏi 'Are you' cần xác nhận tham dự. Đáp án A trả lời phủ định kèm lý do.",
+    "skillIds": [
+      "toeic.part2.yn_question"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "promptType": "yn_question",
+    "promptText": "Is the cafeteria open during the weekend?",
+    "options": [
+      "No, it closes on Fridays.",
+      "I like the food there.",
+      "It is quite expensive."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Câu hỏi 'Is' cần xác nhận thời gian mở cửa. Đáp án A trả lời phủ định và nêu thời gian đóng cửa.",
+    "skillIds": [
+      "toeic.part2.yn_question"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "promptType": "yn_question",
+    "promptText": "Can you help me move this desk?",
+    "options": [
+      "Sure, let me finish this.",
+      "It is very heavy.",
+      "I bought it yesterday."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Câu hỏi 'Can you' là lời nhờ vả. Đáp án A là lời đồng ý giúp đỡ.",
+    "skillIds": [
+      "toeic.part2.yn_question"
+    ],
+    "difficulty": "beginner"
+  },
+  {
+    "promptType": "yn_question",
+    "promptText": "Have you finished the marketing presentation?",
+    "options": [
+      "Almost, just a few slides left.",
+      "The marketing team is great.",
+      "It was presented yesterday."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Câu hỏi 'Have you' hỏi về tiến độ. Đáp án A trả lời về tình trạng công việc.",
+    "skillIds": [
+      "toeic.part2.yn_question"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "promptType": "yn_question",
+    "promptText": "Would you like me to book a taxi?",
+    "options": [
+      "Yes, please, that would be helpful.",
+      "The taxi is outside.",
+      "I prefer to walk."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Câu hỏi 'Would you like' là lời đề nghị. Đáp án A là lời chấp nhận lịch sự.",
+    "skillIds": [
+      "toeic.part2.yn_question"
+    ],
+    "difficulty": "beginner"
+  },
+  {
+    "promptType": "yn_question",
+    "promptText": "Do you need a ride to the station?",
+    "options": [
+      "No thanks, I have my car.",
+      "It is a long way.",
+      "The train leaves at noon."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Câu hỏi 'Do you need' là lời đề nghị giúp đỡ. Đáp án A từ chối lịch sự.",
+    "skillIds": [
+      "toeic.part2.yn_question"
+    ],
+    "difficulty": "beginner"
+  },
+  {
+    "promptType": "statement",
+    "promptText": "The office air conditioning is broken.",
+    "options": [
+      "I will call the repairman.",
+      "It is very cold outside.",
+      "Yes, I like the office."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Đây là câu thông báo. Đáp án A là phản hồi hợp lý để giải quyết vấn đề.",
+    "skillIds": [
+      "toeic.part2.statement"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "promptType": "statement",
+    "promptText": "I think we should hire more staff.",
+    "options": [
+      "I agree, we are understaffed.",
+      "The staff meeting is at ten.",
+      "He was hired last month."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Đây là câu nêu ý kiến. Đáp án A thể hiện sự đồng tình.",
+    "skillIds": [
+      "toeic.part2.statement"
+    ],
+    "difficulty": "intermediate"
+  },
+  {
+    "promptType": "statement",
+    "promptText": "Mr. Smith is waiting in the lobby.",
+    "options": [
+      "I will go greet him now.",
+      "He is a nice man.",
+      "The lobby is very clean."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Đây là câu thông báo. Đáp án A là phản hồi hành động phù hợp.",
+    "skillIds": [
+      "toeic.part2.statement"
+    ],
+    "difficulty": "beginner"
+  },
+  {
+    "promptType": "statement",
+    "promptText": "The deadline for the proposal has been extended.",
+    "options": [
+      "That is good news.",
+      "I will write it tomorrow.",
+      "The proposal is too long."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Đây là câu thông báo. Đáp án A là phản hồi cảm xúc phù hợp.",
+    "skillIds": [
+      "toeic.part2.statement"
+    ],
+    "difficulty": "advanced"
+  },
+  {
+    "promptType": "statement",
+    "promptText": "Please leave your badge on the desk.",
+    "options": [
+      "Okay, I will do that.",
+      "It is a nice desk.",
+      "I lost my badge."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Đây là câu yêu cầu. Đáp án A xác nhận sẽ thực hiện yêu cầu.",
+    "skillIds": [
+      "toeic.part2.statement"
+    ],
+    "difficulty": "beginner"
+  },
+  {
+    "promptType": "statement",
+    "promptText": "I am not sure how to use this software.",
+    "options": [
+      "Let me show you how.",
+      "It is very expensive.",
+      "I use it every day."
+    ],
+    "correctIndex": 0,
+    "explanationVi": "Đây là câu nêu khó khăn. Đáp án A là lời đề nghị giúp đỡ.",
+    "skillIds": [
+      "toeic.part2.statement"
+    ],
+    "difficulty": "advanced"
+  }
+]
