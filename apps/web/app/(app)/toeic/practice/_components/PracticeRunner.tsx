@@ -45,6 +45,7 @@ export function PracticeRunner() {
 			currentIndex={session.currentIndex}
 			total={session.questions.length}
 			startedAt={session.startedAt}
+			attemptId={session.attemptId ?? undefined}
 			onAnswer={session.answer}
 			onNext={session.next}
 			onComplete={session.complete}

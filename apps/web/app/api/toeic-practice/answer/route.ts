@@ -20,6 +20,12 @@ const BodySchema = z.object({
 	questionId: z.string().uuid(),
 	selectedIndex: z.number().int().min(0).max(3).nullable(),
 	durationMs: z.number().int().min(0),
+	/** Optional: persist flagged state on toeic_answer (no answer change required). */
+	flagged: z.boolean().optional(),
+	/** Optional: report soft-cheat event during mock test (short-circuit return). */
+	cheatEvent: z.enum(["tabSwitch", "paste"]).optional(),
+	/** Time spent off-tab in ms (only meaningful for cheatEvent="tabSwitch"). */
+	durationMsOff: z.number().int().min(0).optional(),
 });
 
 const MODE_TO_MODULE: Record<string, "toeic_practice" | "toeic_mock_test" | "toeic_diagnostic"> = {
@@ -54,6 +60,27 @@ export async function POST(req: Request) {
 		return Response.json({ error: "Attempt already completed" }, { status: 409 });
 	}
 
+	// Cheat event short-circuit — increment counters and return without recording an answer.
+	if (body.cheatEvent) {
+		const prev = attempt.cheatViolations ?? {
+			tabSwitches: 0,
+			pasteAttempts: 0,
+			longBlurMs: 0,
+		};
+		const next = {
+			tabSwitches: prev.tabSwitches + (body.cheatEvent === "tabSwitch" ? 1 : 0),
+			pasteAttempts: prev.pasteAttempts + (body.cheatEvent === "paste" ? 1 : 0),
+			longBlurMs:
+				prev.longBlurMs +
+				(body.cheatEvent === "tabSwitch" ? body.durationMsOff ?? 0 : 0),
+		};
+		await db
+			.update(toeicAttempt)
+			.set({ cheatViolations: next })
+			.where(eq(toeicAttempt.id, body.attemptId));
+		return Response.json({ ok: true, cheatViolations: next });
+	}
+
 	const [question] = await db
 		.select()
 		.from(toeicQuestion)
@@ -73,6 +100,7 @@ export async function POST(req: Request) {
 			selectedIndex: body.selectedIndex,
 			isCorrect,
 			durationMs: body.durationMs,
+			flagged: body.flagged ?? false,
 		})
 		.onConflictDoUpdate({
 			target: [toeicAnswer.attemptId, toeicAnswer.questionId],
@@ -81,6 +109,7 @@ export async function POST(req: Request) {
 				isCorrect,
 				durationMs: body.durationMs,
 				changedCount: sql`${toeicAnswer.changedCount} + 1`,
+				...(body.flagged !== undefined ? { flagged: body.flagged } : {}),
 			},
 		});
 

@@ -42,6 +42,7 @@ const SOURCE_TO_MODULE: Record<ReviewSourceTypeValue, string> = {
 	pronunciation_drill: "speaking",
 	listening_replay: "listening",
 	cloze_retry: "reading",
+	bookmark_review: "toeic_practice",
 };
 
 // ── Next-action messages (AC: 4) ────────────────────────────────────────────

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, Card, Tag, Input, Modal, Progress } from "antd";
+import { Button, Card, Tag, Input, Modal, Progress, message } from "antd";
 import { FormOutlined } from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { api } from "@/lib/api-client";
@@ -224,6 +224,10 @@ export default function WritingRunnerPage() {
 				<Input.TextArea
 					value={text}
 					onChange={(e) => setText(e.target.value)}
+					onPaste={(e) => {
+						e.preventDefault();
+						void message.warning("Paste bị chặn — hãy gõ lại bằng tay để luyện viết.");
+					}}
 					rows={current.type === "q8_opinion" ? 14 : current.type === "q6_7_email" ? 8 : 3}
 					placeholder="Type your answer here..."
 					autoFocus

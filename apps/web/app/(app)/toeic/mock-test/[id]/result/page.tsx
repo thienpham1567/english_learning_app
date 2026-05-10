@@ -1,14 +1,15 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
-import { Card, Tag } from "antd";
-import { TrophyOutlined } from "@ant-design/icons";
+import { Alert, Card, Tag } from "antd";
+import { TrophyOutlined, WarningOutlined } from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { toeicAttempt, toeicAnswer, toeicQuestion } from "@repo/database";
 import { and, eq, inArray } from "drizzle-orm";
 import { bandLabel } from "@/lib/toeic/predict";
+import { ReviewTabs } from "./ReviewTabs";
 
 export default async function MockResultPage({
 	params,
@@ -43,6 +44,26 @@ export default async function MockResultPage({
 
 	const total = attempt.totalScaled ?? 0;
 
+	const cheat = attempt.cheatViolations;
+	const cheatTriggered =
+		cheat && (cheat.tabSwitches > 0 || cheat.pasteAttempts > 0 || cheat.longBlurMs > 5000);
+
+	const reviewQuestions = questions.map((q) => ({
+		id: q.id,
+		part: q.part,
+		number: q.number,
+		questionText: q.questionText,
+		options: q.options,
+		correctIndex: q.correctIndex,
+		explanationVi: q.explanationVi,
+	}));
+	const reviewAnswers = answers.map((a) => ({
+		questionId: a.questionId,
+		selectedIndex: a.selectedIndex,
+		isCorrect: a.isCorrect,
+		flagged: a.flagged ?? false,
+	}));
+
 	return (
 		<div
 			style={{
@@ -61,6 +82,25 @@ export default async function MockResultPage({
 				subtitle={new Date(attempt.completedAt ?? attempt.startedAt).toLocaleString("vi-VN")}
 			/>
 			<div style={{ padding: 16, display: "grid", gap: 16, maxWidth: 720 }}>
+				{cheatTriggered && (
+					<Alert
+						type="warning"
+						showIcon
+						icon={<WarningOutlined />}
+						message="Phát hiện hành vi bất thường trong quá trình làm bài"
+						description={
+							<div style={{ fontSize: 13 }}>
+								{cheat!.tabSwitches > 0 && (
+									<div>• Rời tab: {cheat!.tabSwitches} lần (tổng {Math.round(cheat!.longBlurMs / 1000)}s)</div>
+								)}
+								{cheat!.pasteAttempts > 0 && <div>• Paste: {cheat!.pasteAttempts} lần</div>}
+								<div style={{ marginTop: 4, color: "var(--text-muted, #94a3b8)" }}>
+									Điểm vẫn được ghi nhận, nhưng nên hạn chế để mô phỏng môi trường thi thật.
+								</div>
+							</div>
+						}
+					/>
+				)}
 				<Card>
 					<div style={{ textAlign: "center" }}>
 						<div style={{ fontSize: 56, fontWeight: 800, color: "#3b82f6" }}>{total}</div>
@@ -139,6 +179,8 @@ export default async function MockResultPage({
 						})}
 					</div>
 				</Card>
+
+				<ReviewTabs questions={reviewQuestions} answers={reviewAnswers} />
 
 				<div style={{ display: "flex", gap: 8 }}>
 					<Link

@@ -83,6 +83,43 @@ function MockRunner() {
 		})();
 	}, [mode, resumeId]);
 
+	// Soft anti-cheat: track tab switches + paste events while a mock is in progress.
+	useEffect(() => {
+		if (!attemptId) return;
+		let blurredAt: number | null = null;
+		const onVisibility = () => {
+			if (document.visibilityState === "hidden") {
+				blurredAt = Date.now();
+			} else if (document.visibilityState === "visible" && blurredAt !== null) {
+				const durationMsOff = Date.now() - blurredAt;
+				blurredAt = null;
+				void api.post("/toeic-practice/answer", {
+					attemptId,
+					questionId: questions[idx]?.id ?? questions[0]?.id,
+					selectedIndex: null,
+					durationMs: 0,
+					cheatEvent: "tabSwitch",
+					durationMsOff,
+				}).catch(() => {});
+			}
+		};
+		const onPaste = () => {
+			void api.post("/toeic-practice/answer", {
+				attemptId,
+				questionId: questions[idx]?.id ?? questions[0]?.id,
+				selectedIndex: null,
+				durationMs: 0,
+				cheatEvent: "paste",
+			}).catch(() => {});
+		};
+		document.addEventListener("visibilitychange", onVisibility);
+		document.addEventListener("paste", onPaste);
+		return () => {
+			document.removeEventListener("visibilitychange", onVisibility);
+			document.removeEventListener("paste", onPaste);
+		};
+	}, [attemptId, idx, questions]);
+
 	const sectionTimeLimit = section === "listening" ? listeningMs : readingMs;
 	const current = questions[idx] ?? null;
 
@@ -188,6 +225,7 @@ function MockRunner() {
 				hideExplanation
 				timeLimit={sectionTimeLimit}
 				startedAt={sectionStartedAt}
+				attemptId={attemptId ?? undefined}
 				onAnswer={handleAnswer}
 				onNext={handleNext}
 				onComplete={submitFinal}

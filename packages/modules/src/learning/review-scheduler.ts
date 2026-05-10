@@ -23,6 +23,7 @@ const DEFAULT_INTERVAL: Record<ReviewSourceTypeValue, number> = {
 	pronunciation_drill: 1,
 	listening_replay: 1,
 	cloze_retry: 1,
+	bookmark_review: 3,
 };
 
 // ── Estimated minutes by source type ────────────────────────────────────────
@@ -35,6 +36,7 @@ export const DEFAULT_ESTIMATED_MINUTES: Record<ReviewSourceTypeValue, number> = 
 	pronunciation_drill: 5,
 	listening_replay: 10,
 	cloze_retry: 8,
+	bookmark_review: 5,
 };
 
 // ── Default review mode by source type ──────────────────────────────────────
@@ -47,6 +49,7 @@ export const DEFAULT_REVIEW_MODE: Record<ReviewSourceTypeValue, string> = {
 	pronunciation_drill: "production",
 	listening_replay: "recognition",
 	cloze_retry: "production",
+	bookmark_review: "recognition",
 };
 
 // ── Heavy task types — burnout protection (AC: 4) ───────────────────────────

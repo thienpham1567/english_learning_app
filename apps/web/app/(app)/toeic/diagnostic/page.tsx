@@ -44,6 +44,7 @@ export default function DiagnosticPage() {
 						hideExplanation
 						timeLimit={TIME_LIMIT_MS}
 						startedAt={session.startedAt}
+						attemptId={session.attemptId ?? undefined}
 						onAnswer={session.answer}
 						onNext={session.next}
 						onComplete={session.complete}

@@ -10,6 +10,7 @@ export const ReviewSourceType = z.enum([
 	"pronunciation_drill",
 	"listening_replay",
 	"cloze_retry",
+	"bookmark_review",
 ]);
 
 // ── Review Mode ─────────────────────────────────────────────────────────────

@@ -14,6 +14,10 @@ export type QuestionRunnerProps = {
 	/** Optional countdown timer in ms; shows time-up warning when reached. */
 	timeLimit?: number;
 	startedAt?: number | null;
+	/** Pass attempt ID to enable flag persistence + bookmark feature. */
+	attemptId?: string;
+	/** Initial flag state (when resuming). */
+	initialFlagged?: boolean;
 	onAnswer: (selectedIndex: number | null) => void | Promise<void>;
 	onNext: () => void;
 	onComplete: () => void | Promise<unknown>;
@@ -26,6 +30,8 @@ export function QuestionRunner({
 	hideExplanation = false,
 	timeLimit,
 	startedAt,
+	attemptId,
+	initialFlagged,
 	onAnswer,
 	onNext,
 	onComplete,
@@ -34,13 +40,32 @@ export function QuestionRunner({
 	const [revealed, setRevealed] = useState(false);
 	const [elapsed, setElapsed] = useState(0);
 	const [part2PlayingIdx, setPart2PlayingIdx] = useState(-1); // -1 idle, 0=Q, 1=A, 2=B, 3=C, 4=done
+	const [isFlagged, setIsFlagged] = useState<boolean>(initialFlagged ?? false);
 	const audioRef = useRef<HTMLAudioElement>(null);
 
 	useEffect(() => {
 		setSelected(null);
 		setRevealed(false);
 		setPart2PlayingIdx(-1);
+		setIsFlagged(false);
 	}, [question?.id]);
+
+	const toggleFlag = useCallback(async () => {
+		if (!question || !attemptId) return;
+		const next = !isFlagged;
+		setIsFlagged(next);
+		void fetch("/api/toeic-practice/answer", {
+			method: "POST",
+			headers: { "Content-Type": "application/json" },
+			body: JSON.stringify({
+				attemptId,
+				questionId: question.id,
+				selectedIndex: null,
+				durationMs: 0,
+				flagged: next,
+			}),
+		});
+	}, [attemptId, isFlagged, question]);
 
 	// Part 1/2: auto-play [Q] → A → B → C [→ D] in sequence on mount.
 	// Part 1: no question prompt (empty string), 4 options.
@@ -93,6 +118,59 @@ export function QuestionRunner({
 			void onComplete();
 		}
 	}, [elapsed, timeLimit, startedAt, onComplete]);
+
+	// Keyboard shortcuts: 1-4/A-D pick, Space audio, F flag, Enter next
+	useEffect(() => {
+		if (!question) return;
+		const onKey = (e: KeyboardEvent) => {
+			const target = e.target as HTMLElement | null;
+			if (target && (target.tagName === "INPUT" || target.tagName === "TEXTAREA")) return;
+			const k = e.key.toLowerCase();
+			let optIdx = -1;
+			if (k === "1" || k === "a") optIdx = 0;
+			else if (k === "2" || k === "b") optIdx = 1;
+			else if (k === "3" || k === "c") optIdx = 2;
+			else if (k === "4" || k === "d") optIdx = 3;
+
+			if (optIdx >= 0 && optIdx < question.options.length && !(revealed && !hideExplanation)) {
+				e.preventDefault();
+				setSelected(optIdx);
+				if (!hideExplanation) setRevealed(true);
+				void onAnswer(optIdx);
+				return;
+			}
+			if (e.key === " ") {
+				if (audioRef.current?.src) {
+					if (audioRef.current.paused) void audioRef.current.play();
+					else audioRef.current.pause();
+					e.preventDefault();
+				}
+				return;
+			}
+			if (k === "f") {
+				e.preventDefault();
+				void toggleFlag();
+				return;
+			}
+			if (e.key === "Enter") {
+				const canMoveOn =
+					(hideExplanation && selected !== null) ||
+					(!hideExplanation && revealed);
+				if (canMoveOn) {
+					e.preventDefault();
+					if (currentIndex === total - 1) void onComplete();
+					else {
+						setSelected(null);
+						setRevealed(false);
+						onNext();
+					}
+				}
+			}
+		};
+		window.addEventListener("keydown", onKey);
+		return () => window.removeEventListener("keydown", onKey);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [question?.id, revealed, selected, hideExplanation, isFlagged, currentIndex, total]);
 
 	if (!question) {
 		return <div style={{ padding: 24 }}>Đang tải câu hỏi…</div>;
@@ -297,13 +375,42 @@ export function QuestionRunner({
 				</div>
 			)}
 
-			<div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
-				{hideExplanation && selected === null && (
-					<Button onClick={() => void onAnswer(null)}>Bỏ qua</Button>
-				)}
-				<Button type="primary" onClick={handleNext} disabled={!canSubmit && !hideExplanation}>
-					{isLast ? "Nộp bài" : "Câu tiếp"}
+			<div
+				style={{
+					display: "flex",
+					justifyContent: "space-between",
+					alignItems: "center",
+					gap: 8,
+				}}
+			>
+				<Button
+					type={isFlagged ? "primary" : "default"}
+					danger={isFlagged}
+					size="small"
+					onClick={() => void toggleFlag()}
+					disabled={!attemptId}
+					title="Phím tắt: F"
+				>
+					{isFlagged ? "🚩 Đã flag" : "🚩 Flag"}
 				</Button>
+				<div style={{ display: "flex", gap: 8 }}>
+					{hideExplanation && selected === null && (
+						<Button onClick={() => void onAnswer(null)}>Bỏ qua</Button>
+					)}
+					<Button type="primary" onClick={handleNext} disabled={!canSubmit && !hideExplanation}>
+						{isLast ? "Nộp bài" : "Câu tiếp"}
+					</Button>
+				</div>
+			</div>
+			<div
+				style={{
+					marginTop: 8,
+					fontSize: 11,
+					color: "var(--text-muted, #94a3b8)",
+					textAlign: "center",
+				}}
+			>
+				⌨️ Phím tắt: 1-4 hoặc A-D · Space play/pause audio · F flag · Enter tiếp
 			</div>
 		</div>
 	);

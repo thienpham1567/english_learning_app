@@ -1,0 +1,1 @@
+ALTER TABLE "toeic_attempt" ADD COLUMN "cheat_violations" jsonb;

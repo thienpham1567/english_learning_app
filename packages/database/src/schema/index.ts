@@ -767,6 +767,12 @@ export const toeicAttempt = pgTable(
     questionIds: jsonb("question_ids").$type<string[]>(),
     /** When user transitioned into Reading section (mock test). Null if still in Listening. */
     readingStartedAt: timestamp("reading_started_at", { withTimezone: true }),
+    /** Soft anti-cheat counters. Null when never tracked. */
+    cheatViolations: jsonb("cheat_violations").$type<{
+      tabSwitches: number;
+      pasteAttempts: number;
+      longBlurMs: number;
+    }>(),
   },
   (table) => [
     index("toeic_attempt_user_mode_completed_idx").on(table.userId, table.mode, table.completedAt),

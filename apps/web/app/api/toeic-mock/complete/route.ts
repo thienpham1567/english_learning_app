@@ -2,11 +2,12 @@ import { headers } from "next/headers";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
-import { toeicAttempt, toeicAnswer, toeicQuestion } from "@repo/database";
+import { toeicAttempt, toeicAnswer, toeicQuestion, reviewTask } from "@repo/database";
 import { and, eq, inArray } from "drizzle-orm";
 import { computeMockScore } from "@/lib/toeic/scoring";
 import { awardXP, XP_VALUES } from "@/lib/xp";
 import { recordActivityStreak } from "@/lib/streak";
+import { computeInitialSchedule } from "@repo/modules";
 
 const BodySchema = z.object({ attemptId: z.string().uuid() });
 
@@ -35,6 +36,7 @@ export async function POST(req: Request) {
 		? await db.select().from(toeicQuestion).where(inArray(toeicQuestion.id, questionIds))
 		: [];
 	const partById = new Map(questions.map((q) => [q.id, q.part]));
+	const byId = new Map(questions.map((q) => [q.id, q]));
 
 	const enriched = answers.map((a) => ({
 		part: partById.get(a.questionId) ?? 0,
@@ -65,6 +67,38 @@ export async function POST(req: Request) {
 		byPart[p] = byPart[p] ?? { correct: 0, total: 0 };
 		byPart[p].total++;
 		if (a.isCorrect === true) byPart[p].correct++;
+	}
+
+	// Enqueue bookmark_review SRS for flagged questions answered CORRECTLY.
+	// (Wrong answers already enqueue error_retry via the answer event-emitter upstream.)
+	const flaggedAnswers = answers.filter((a) => a.flagged && a.isCorrect === true);
+	if (flaggedAnswers.length > 0) {
+		const now = new Date();
+		const init = computeInitialSchedule("bookmark_review", now.getTime());
+		await Promise.all(
+			flaggedAnswers.map(async (a) => {
+				const q = byId.get(a.questionId);
+				if (!q) return;
+				await db
+					.insert(reviewTask)
+					.values({
+						userId,
+						sourceType: "bookmark_review",
+						sourceId: a.questionId,
+						skillIds: q.skillIds.length > 0 ? q.skillIds : ["toeic.general"],
+						priority: 30,
+						dueAt: new Date(init.dueAt),
+						estimatedMinutes: init.estimatedMinutes,
+						reviewMode: init.reviewMode,
+						status: "pending",
+						lastOutcome: null,
+						attemptCount: 0,
+						nextIntervalDays: init.intervalDays,
+						easeFactor: 2.5,
+					})
+					.onConflictDoNothing();
+			}),
+		);
 	}
 
 	void awardXP(userId, XP_VALUES.TOEIC_MOCK_COMPLETE);
