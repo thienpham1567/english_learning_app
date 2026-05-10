@@ -1,15 +1,16 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { Card, Tag, Empty, Progress } from "antd";
-import { LineChartOutlined } from "@ant-design/icons";
+import { LineChartOutlined, AlertOutlined } from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
-import { userSkillState, toeicAttempt, learningEvent } from "@repo/database";
-import { and, desc, eq, gte, isNotNull, sql } from "drizzle-orm";
+import { userSkillState, toeicAttempt, learningEvent, errorLog } from "@repo/database";
+import { and, desc, eq, gte, isNotNull, like, or, sql } from "drizzle-orm";
 import { TOEIC_SKILLS, getSkillLabel, type ToeicSkill } from "@repo/contracts";
 import { computePredictedScore, bandLabel } from "@/lib/toeic/predict";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
+import { summarizeErrorPatterns } from "@repo/modules";
 
 export default async function ToeicProgressPage() {
 	await requireToeicBaseline();
@@ -56,6 +57,36 @@ export default async function ToeicProgressPage() {
 		.orderBy(sql`DATE(${learningEvent.createdAt})`);
 
 	const maxCount = trend.reduce((m, r) => Math.max(m, r.c), 1);
+
+	// Error patterns from TOEIC errors (last 30 days)
+	const errorRows = await db
+		.select()
+		.from(errorLog)
+		.where(
+			and(
+				eq(errorLog.userId, userId),
+				or(
+					like(errorLog.sourceModule, "toeic-%"),
+					eq(errorLog.sourceModule, "mock-test"),
+				),
+				gte(errorLog.createdAt, since),
+			),
+		)
+		.orderBy(desc(errorLog.createdAt))
+		.limit(200);
+
+	const patterns = summarizeErrorPatterns(
+		errorRows.map((e) => ({
+			id: e.id,
+			sourceModule: e.sourceModule,
+			grammarTopic: e.grammarTopic,
+			questionStem: e.questionStem,
+			userAnswer: e.userAnswer,
+			correctAnswer: e.correctAnswer,
+			isResolved: e.isResolved,
+			createdAt: e.createdAt.toISOString(),
+		})),
+	).slice(0, 5);
 
 	return (
 		<div
@@ -172,6 +203,70 @@ export default async function ToeicProgressPage() {
 										borderRadius: 2,
 									}}
 								/>
+							))}
+						</div>
+					)}
+				</Card>
+
+				{/* Error patterns */}
+				<Card
+					title={
+						<span>
+							<AlertOutlined style={{ color: "#ef4444" }} /> Pattern lỗi gần đây
+						</span>
+					}
+					size="small"
+				>
+					{patterns.length === 0 ? (
+						<Empty description="Chưa có pattern lỗi nào" />
+					) : (
+						<div style={{ display: "grid", gap: 8 }}>
+							{patterns.map((p) => (
+								<div
+									key={p.category.key}
+									style={{
+										display: "grid",
+										gridTemplateColumns: "1fr auto",
+										gap: 12,
+										alignItems: "center",
+										padding: 10,
+										borderRadius: 8,
+										background: "var(--surface, #0f172a)",
+									}}
+								>
+									<div>
+										<div style={{ fontWeight: 500 }}>{p.category.label}</div>
+										<div style={{ fontSize: 12, color: "var(--text-muted, #94a3b8)" }}>
+											{p.unresolvedCount}/{p.totalCount} chưa nắm · {p.recentCount} câu trong 7 ngày
+										</div>
+										{p.examples[0] && (
+											<div
+												style={{
+													fontSize: 12,
+													color: "var(--text-muted)",
+													marginTop: 4,
+													fontStyle: "italic",
+												}}
+											>
+												Ví dụ: "{p.examples[0].questionStem.slice(0, 80)}..."
+											</div>
+										)}
+									</div>
+									<Link
+										href={p.nextAction.href}
+										style={{
+											padding: "6px 12px",
+											borderRadius: 6,
+											background: "#ef4444",
+											color: "#fff",
+											textDecoration: "none",
+											fontSize: 13,
+											whiteSpace: "nowrap",
+										}}
+									>
+										{p.nextAction.label}
+									</Link>
+								</div>
 							))}
 						</div>
 					)}
