@@ -2,9 +2,11 @@ import { headers } from "next/headers";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
-import { toeicVocab, reviewTask } from "@repo/database";
+import { toeicVocab, reviewTask, vocabularyCache, userVocabulary } from "@repo/database";
 import { and, eq, sql } from "drizzle-orm";
 import { computeReschedule, computeInitialSchedule, recordLearningEvent } from "@repo/modules";
+import { awardXP, XP_VALUES } from "@/lib/xp";
+import { recordActivityStreak } from "@/lib/streak";
 
 const BodySchema = z.object({
 	wordId: z.string().uuid(),
@@ -82,6 +84,48 @@ export async function POST(req: Request) {
 		});
 	}
 
+	// Bridge to /my-vocabulary: ensure word exists in vocabularyCache + userVocabulary
+	// so general vocab page sees TOEIC essentials alongside dictionary lookups.
+	void (async () => {
+		try {
+			const cacheData = {
+				headword: word.word,
+				ipa: word.ipa,
+				pos: word.pos,
+				definition: word.meaningEn,
+				vietnamese: word.meaningVi,
+				example: word.exampleEn,
+				exampleVietnamese: word.exampleVi,
+				topic: word.topic,
+				source: "toeic_essential",
+			};
+			await db
+				.insert(vocabularyCache)
+				.values({
+					query: word.word,
+					data: cacheData,
+					expiresAt: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000),
+				})
+				.onConflictDoNothing({ target: vocabularyCache.query });
+			await db
+				.insert(userVocabulary)
+				.values({
+					userId,
+					query: word.word,
+					saved: false,
+					masteryLevel: outcome === "easy" ? "mastered" : "learning",
+				})
+				.onConflictDoUpdate({
+					target: [userVocabulary.userId, userVocabulary.query],
+					set: {
+						masteryLevel: outcome === "easy" ? "mastered" : "learning",
+					},
+				});
+		} catch (err) {
+			console.warn("vocabulary bridge failed:", err instanceof Error ? err.message : err);
+		}
+	})();
+
 	// Emit learning event for dashboard / mastery tracking
 	const result = outcome === "again" ? "incorrect" : outcome === "hard" ? "partial" : "correct";
 	const score = outcome === "again" ? 0 : outcome === "hard" ? 0.5 : outcome === "good" ? 0.85 : 1;
@@ -99,6 +143,11 @@ export async function POST(req: Request) {
 		difficulty: word.level === "beginner" ? "elementary" : word.level === "advanced" ? "advanced" : "intermediate",
 		errorTags: [],
 	});
+
+	if (outcome !== "again") {
+		void awardXP(userId, XP_VALUES.TOEIC_VOCAB_REVIEW);
+		void recordActivityStreak(userId);
+	}
 
 	return Response.json({ ok: true });
 }

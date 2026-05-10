@@ -5,6 +5,8 @@ import { db } from "@repo/database";
 import { toeicAttempt, toeicAnswer, toeicQuestion } from "@repo/database";
 import { and, eq, inArray } from "drizzle-orm";
 import { computeMockScore } from "@/lib/toeic/scoring";
+import { awardXP, XP_VALUES } from "@/lib/xp";
+import { recordActivityStreak } from "@/lib/streak";
 
 const BodySchema = z.object({ attemptId: z.string().uuid() });
 
@@ -64,6 +66,9 @@ export async function POST(req: Request) {
 		byPart[p].total++;
 		if (a.isCorrect === true) byPart[p].correct++;
 	}
+
+	void awardXP(userId, XP_VALUES.TOEIC_MOCK_COMPLETE);
+	void recordActivityStreak(userId);
 
 	return Response.json({ ...score, byPart });
 }

@@ -5,6 +5,8 @@ import { db } from "@repo/database";
 import { toeicDictationItem } from "@repo/database";
 import { eq } from "drizzle-orm";
 import { recordLearningEvent } from "@repo/modules";
+import { awardXP, XP_VALUES } from "@/lib/xp";
+import { recordActivityStreak } from "@/lib/streak";
 
 const BodySchema = z.object({
 	exerciseId: z.string().uuid(),
@@ -107,6 +109,11 @@ export async function POST(req: Request) {
 		difficulty: row.level === "beginner" ? "elementary" : row.level === "advanced" ? "advanced" : "intermediate",
 		errorTags: [],
 	});
+
+	if (result.score >= 50) {
+		void awardXP(userId, XP_VALUES.TOEIC_DICTATION_COMPLETE);
+		void recordActivityStreak(userId);
+	}
 
 	return Response.json({
 		score: result.score,

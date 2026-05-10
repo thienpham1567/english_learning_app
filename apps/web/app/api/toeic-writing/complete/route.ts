@@ -5,6 +5,8 @@ import { db } from "@repo/database";
 import { toeicWritingResponse, toeicWritingSession } from "@repo/database";
 import { and, eq, sql } from "drizzle-orm";
 import { rawToScaledWriting } from "@/lib/toeic/writing-grader";
+import { awardXP, XP_VALUES } from "@/lib/xp";
+import { recordActivityStreak } from "@/lib/streak";
 
 const BodySchema = z.object({ sessionId: z.string().uuid() });
 
@@ -42,6 +44,9 @@ export async function POST(req: Request) {
 			scaledScore: scaled,
 		})
 		.where(eq(toeicWritingSession.id, sessionId));
+
+	void awardXP(userId, XP_VALUES.TOEIC_WRITING_COMPLETE);
+	void recordActivityStreak(userId);
 
 	return Response.json({ rawScore: rawSum, scaledScore: scaled });
 }

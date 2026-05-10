@@ -2,9 +2,18 @@ import { headers } from "next/headers";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
-import { toeicAnswer, toeicAttempt, toeicQuestion } from "@repo/database";
+import { toeicAnswer, toeicAttempt, toeicQuestion, errorLog } from "@repo/database";
 import { and, eq, sql } from "drizzle-orm";
 import { emitToeicLearningEvent } from "@/lib/toeic/event-emitter";
+import { awardXP, XP_VALUES } from "@/lib/xp";
+import { recordActivityStreak } from "@/lib/streak";
+
+const MODE_TO_SOURCE_MODULE: Record<string, string> = {
+	practice: "toeic-practice",
+	mock_test: "toeic-mock-test",
+	diagnostic: "toeic-diagnostic",
+	drill: "toeic-drill",
+};
 
 const BodySchema = z.object({
 	attemptId: z.string().uuid(),
@@ -85,6 +94,34 @@ export async function POST(req: Request) {
 		durationMs: body.durationMs,
 		difficulty: question.difficulty,
 	});
+
+	// Award XP + bump streak for correct answers (small per-answer reward)
+	if (isCorrect === true) {
+		void awardXP(userId, XP_VALUES.TOEIC_ANSWER_CORRECT);
+		void recordActivityStreak(userId);
+	}
+
+	// Bridge to error-notebook: persist incorrect answers to errorLog so users
+	// see TOEIC mistakes alongside grammar-quiz/daily-challenge errors.
+	if (isCorrect === false && body.selectedIndex !== null) {
+		void db
+			.insert(errorLog)
+			.values({
+				userId,
+				sourceModule: MODE_TO_SOURCE_MODULE[attempt.mode] ?? "toeic-practice",
+				questionStem: question.questionText ?? `TOEIC Part ${question.part} câu ${question.number}`,
+				options: question.options,
+				userAnswer: question.options[body.selectedIndex] ?? `Option ${body.selectedIndex}`,
+				correctAnswer: question.options[question.correctIndex] ?? "Unknown",
+				explanationEn: question.explanationEn,
+				explanationVi: question.explanationVi,
+				grammarTopic: question.skillIds[0] ?? question.topic ?? null,
+			})
+			.catch((err) => {
+				// Non-blocking; event pipeline already captured the mistake via reviewTask
+				console.warn("errorLog insert failed:", err instanceof Error ? err.message : err);
+			});
+	}
 
 	return Response.json({ ok: true, isCorrect });
 }

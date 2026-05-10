@@ -49,6 +49,10 @@ const MODULE_LABELS: Record<string, string> = {
   "mock-test": "Thi thử",
   "daily-challenge": "Thử thách",
   listening: "Nghe",
+  "toeic-practice": "🎯 TOEIC luyện",
+  "toeic-mock-test": "🎯 TOEIC mock",
+  "toeic-diagnostic": "🎯 TOEIC diag",
+  "toeic-drill": "🎯 TOEIC drill",
 };
 
 const FILTER_RESOLVED_OPTIONS = [
@@ -64,6 +68,9 @@ const MODULE_OPTIONS = [
   { value: "mock-test", label: "Thi thử" },
   { value: "daily-challenge", label: "Thử thách" },
   { value: "listening", label: "Nghe" },
+  { value: "toeic-practice", label: "🎯 TOEIC luyện" },
+  { value: "toeic-mock-test", label: "🎯 TOEIC mock" },
+  { value: "toeic-diagnostic", label: "🎯 TOEIC diag" },
 ];
 
 export default function ErrorNotebookPage() {

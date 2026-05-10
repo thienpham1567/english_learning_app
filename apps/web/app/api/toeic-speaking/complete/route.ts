@@ -5,6 +5,8 @@ import { db } from "@repo/database";
 import { toeicSpeakingResponse, toeicSpeakingSession } from "@repo/database";
 import { and, eq, sql } from "drizzle-orm";
 import { rawToScaledSpeaking } from "@/lib/toeic/speaking-grader";
+import { awardXP, XP_VALUES } from "@/lib/xp";
+import { recordActivityStreak } from "@/lib/streak";
 
 const BodySchema = z.object({ sessionId: z.string().uuid() });
 
@@ -44,6 +46,9 @@ export async function POST(req: Request) {
 			scaledScore: scaled,
 		})
 		.where(eq(toeicSpeakingSession.id, sessionId));
+
+	void awardXP(userId, XP_VALUES.TOEIC_SPEAKING_COMPLETE);
+	void recordActivityStreak(userId);
 
 	return Response.json({ rawScore: rawSum, scaledScore: scaled });
 }
