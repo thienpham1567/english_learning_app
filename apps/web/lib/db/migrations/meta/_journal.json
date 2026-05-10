@@ -183,6 +183,13 @@
       "when": 1778346535354,
       "tag": "0025_tearful_gamma_corps",
       "breakpoints": true
+    },
+    {
+      "idx": 26,
+      "version": "7",
+      "when": 1778347695191,
+      "tag": "0026_friendly_lady_vermin",
+      "breakpoints": true
     }
   ]
 }

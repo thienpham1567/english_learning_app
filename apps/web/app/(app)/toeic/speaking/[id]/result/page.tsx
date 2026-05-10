@@ -108,7 +108,10 @@ export default async function SpeakingResultPage({
 									<>
 										{r.audioPath && (
 											<audio controls style={{ width: "100%", marginBottom: 8 }}>
-												<source src={r.audioPath} type="audio/webm" />
+												<source
+													src={`/api/toeic-speaking/audio/${r.id}`}
+													type="audio/webm"
+												/>
 											</audio>
 										)}
 										<div

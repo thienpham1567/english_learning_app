@@ -763,9 +763,14 @@ export const toeicAttempt = pgTable(
     scaledReading: integer("scaled_reading"),
     totalScaled: integer("total_scaled"),
     baselineSnapshot: jsonb("baseline_snapshot").$type<Record<string, number>>(),
+    /** Stable list of question IDs for this attempt (preserves order across resume). */
+    questionIds: jsonb("question_ids").$type<string[]>(),
+    /** When user transitioned into Reading section (mock test). Null if still in Listening. */
+    readingStartedAt: timestamp("reading_started_at", { withTimezone: true }),
   },
   (table) => [
     index("toeic_attempt_user_mode_completed_idx").on(table.userId, table.mode, table.completedAt),
+    index("toeic_attempt_user_mode_inprogress_idx").on(table.userId, table.mode, table.startedAt),
   ],
 );
 
@@ -917,6 +922,7 @@ export const toeicWritingResponse = pgTable(
   },
   (table) => [
     uniqueIndex("toeic_writing_response_session_prompt_idx").on(table.sessionId, table.promptId),
+    index("toeic_writing_response_session_idx").on(table.sessionId),
   ],
 );
 
@@ -1006,6 +1012,7 @@ export const toeicSpeakingResponse = pgTable(
       table.sessionId,
       table.promptId,
     ),
+    index("toeic_speaking_response_session_idx").on(table.sessionId),
   ],
 );
 

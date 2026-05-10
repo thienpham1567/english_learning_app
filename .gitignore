@@ -54,3 +54,6 @@ package-lock.json
 yarn.lock
 data/toeic-exams/enrich-part5.mjs
 data/toeic-exams/scrape.py
+
+# User audio uploads (TOEIC speaking) — never commit
+apps/web/uploads/

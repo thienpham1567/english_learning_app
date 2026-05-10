@@ -1,18 +1,32 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { Card, Tag } from "antd";
-import { TrophyOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import { TrophyOutlined, ClockCircleOutlined, RedoOutlined } from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { toeicAttempt } from "@repo/database";
-import { and, desc, eq, isNotNull } from "drizzle-orm";
+import { and, desc, eq, isNotNull, isNull } from "drizzle-orm";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
 
 export default async function MockTestHubPage() {
 	await requireToeicBaseline();
 	const session = await auth.api.getSession({ headers: await headers() });
 	const userId = session!.user!.id;
+
+	// Detect in-progress mock for resume card
+	const [inProgress] = await db
+		.select()
+		.from(toeicAttempt)
+		.where(
+			and(
+				eq(toeicAttempt.userId, userId),
+				eq(toeicAttempt.mode, "mock_test"),
+				isNull(toeicAttempt.completedAt),
+			),
+		)
+		.orderBy(desc(toeicAttempt.startedAt))
+		.limit(1);
 
 	const history = await db
 		.select()
@@ -45,6 +59,23 @@ export default async function MockTestHubPage() {
 				subtitle="Đề thi giả lập · 5–495 mỗi section"
 			/>
 			<div style={{ padding: 16, display: "grid", gap: 16 }}>
+				{inProgress && (
+					<Link
+						href={`/toeic/mock-test/runner?resume=${inProgress.id}`}
+						style={{ textDecoration: "none" }}
+					>
+						<Card hoverable style={{ borderColor: "#f59e0b", borderWidth: 2 }}>
+							<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+								<RedoOutlined style={{ fontSize: 22, color: "#f59e0b" }} />
+								<strong style={{ fontSize: 18 }}>Tiếp tục mock test đang dở</strong>
+							</div>
+							<div style={{ marginTop: 8, color: "var(--text-muted, #94a3b8)" }}>
+								Bắt đầu lúc {new Date(inProgress.startedAt).toLocaleString("vi-VN")} ·{" "}
+								{inProgress.questionCount} câu
+							</div>
+						</Card>
+					</Link>
+				)}
 				<div
 					style={{
 						display: "grid",

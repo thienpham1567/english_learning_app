@@ -30,6 +30,12 @@ export async function POST(req: Request) {
 		return Response.json({ error: "Missing required fields" }, { status: 400 });
 	}
 
+	// Audio size limit: 10MB max (real recordings are <2MB; cap blocks DoS)
+	const MAX_AUDIO_BYTES = 10 * 1024 * 1024;
+	if (audioBlob.size > MAX_AUDIO_BYTES) {
+		return Response.json({ error: "Audio file too large (max 10MB)" }, { status: 413 });
+	}
+
 	const [s] = await db
 		.select()
 		.from(toeicSpeakingSession)
@@ -44,9 +50,9 @@ export async function POST(req: Request) {
 		.limit(1);
 	if (!prompt) return Response.json({ error: "Prompt not found" }, { status: 404 });
 
-	// Persist audio to disk so we can transcribe (and optionally retain for review)
+	// Persist audio outside public/ — served via authenticated /api/toeic-speaking/audio/[id]
 	const audioId = crypto.randomBytes(8).toString("hex");
-	const audioDir = join(process.cwd(), "public/toeic/audio/speaking-uploads");
+	const audioDir = join(process.cwd(), "uploads/speaking");
 	await mkdir(audioDir, { recursive: true });
 	const audioPath = join(audioDir, `${userId.slice(0, 8)}_${audioId}.webm`);
 	const arrayBuffer = await audioBlob.arrayBuffer();
@@ -78,12 +84,13 @@ export async function POST(req: Request) {
 		};
 	}
 
-	await db
+	const [inserted] = await db
 		.insert(toeicSpeakingResponse)
 		.values({
 			sessionId,
 			promptId,
-			audioPath: audioPath.replace(join(process.cwd(), "public"), ""),
+			// Store filesystem path; result page fetches via /api/toeic-speaking/audio/[id]
+			audioPath: audioPath.replace(join(process.cwd(), ""), "").replace(/^\//, ""),
 			transcript,
 			durationMs,
 			rubricScores: grade.rubricScores,
@@ -99,7 +106,8 @@ export async function POST(req: Request) {
 				rawScore: grade.rawScore,
 				feedbackVi: grade.feedbackVi,
 			},
-		});
+		})
+		.returning();
 
 	void recordLearningEvent({
 		userId,

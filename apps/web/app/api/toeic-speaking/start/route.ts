@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { toeicSpeakingPrompt, toeicSpeakingSession } from "@repo/database";
 import { asc, eq, sql } from "drizzle-orm";
+import { assertRateLimit } from "@/lib/toeic/rate-limit";
 
 const BodySchema = z.object({ setCode: z.string().optional() });
 
@@ -15,6 +16,14 @@ export async function POST(req: Request) {
 	const parsed = BodySchema.safeParse(await req.json());
 	if (!parsed.success) return Response.json({ error: "Invalid body" }, { status: 400 });
 	const userId = session.user.id;
+
+	const rl = await assertRateLimit(userId, "speaking_session");
+	if (!rl.allowed) {
+		return Response.json(
+			{ error: `Rate limit exceeded (${rl.usedToday}/${rl.limit} speaking tests today)`, ...rl },
+			{ status: 429 },
+		);
+	}
 
 	let setCode = parsed.data.setCode;
 	if (!setCode) {

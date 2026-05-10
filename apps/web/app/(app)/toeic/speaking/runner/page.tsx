@@ -99,6 +99,22 @@ export default function SpeakingRunnerPage() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [elapsed]);
 
+	function pickMimeType(): string {
+		const candidates = [
+			"audio/webm;codecs=opus",
+			"audio/webm",
+			"audio/mp4",
+			"audio/mpeg",
+			"audio/ogg;codecs=opus",
+		];
+		for (const m of candidates) {
+			if (typeof MediaRecorder !== "undefined" && MediaRecorder.isTypeSupported(m)) {
+				return m;
+			}
+		}
+		return "";
+	}
+
 	async function startRecording() {
 		try {
 			if (!streamRef.current) {
@@ -106,7 +122,10 @@ export default function SpeakingRunnerPage() {
 				streamRef.current = stream;
 			}
 			recordedChunks.current = [];
-			const mr = new MediaRecorder(streamRef.current, { mimeType: "audio/webm" });
+			const mimeType = pickMimeType();
+			const mr = mimeType
+				? new MediaRecorder(streamRef.current, { mimeType })
+				: new MediaRecorder(streamRef.current);
 			mr.ondataavailable = (e) => {
 				if (e.data.size > 0) recordedChunks.current.push(e.data);
 			};
@@ -130,7 +149,8 @@ export default function SpeakingRunnerPage() {
 			mr.stop();
 		});
 
-		const blob = new Blob(recordedChunks.current, { type: "audio/webm" });
+		const blobType = mediaRecorderRef.current?.mimeType || "audio/webm";
+		const blob = new Blob(recordedChunks.current, { type: blobType });
 		const fd = new FormData();
 		fd.append("sessionId", sessionId ?? "");
 		fd.append("promptId", current.id);

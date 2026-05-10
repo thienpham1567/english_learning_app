@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { toeicAttempt, toeicQuestion, toeicExam } from "@repo/database";
 import { and, eq, ne, inArray, sql } from "drizzle-orm";
+import { assertRateLimit } from "@/lib/toeic/rate-limit";
 
 const BodySchema = z.object({ mode: z.enum(["full", "mini"]) });
 
@@ -19,6 +20,14 @@ export async function POST(req: Request) {
 	if (!parsed.success) return Response.json({ error: "Invalid body" }, { status: 400 });
 	const userId = session.user.id;
 	const { mode } = parsed.data;
+
+	const rl = await assertRateLimit(userId, "mock_test");
+	if (!rl.allowed) {
+		return Response.json(
+			{ error: `Rate limit exceeded (${rl.usedToday}/${rl.limit} mock tests today)`, ...rl },
+			{ status: 429 },
+		);
+	}
 
 	const quotas = mode === "full" ? FULL_QUOTAS : MINI_QUOTAS;
 
@@ -55,6 +64,7 @@ export async function POST(req: Request) {
 			examId: null,
 			partFilter: null,
 			questionCount: allQuestions.length,
+			questionIds: allQuestions.map((q) => q.id),
 		})
 		.returning();
 

@@ -22,6 +22,7 @@ function MockRunner() {
 	const router = useRouter();
 	const params = useSearchParams();
 	const mode = (params.get("mode") ?? "full") as "full" | "mini";
+	const resumeId = params.get("resume");
 
 	const [attemptId, setAttemptId] = useState<string | null>(null);
 	const [questions, setQuestions] = useState<ToeicSessionQuestion[]>([]);
@@ -39,19 +40,48 @@ function MockRunner() {
 	useEffect(() => {
 		(async () => {
 			try {
-				const r = await api.post<{
-					attemptId: string;
-					questions: ToeicSessionQuestion[];
-				}>("/toeic-mock/start", { mode });
-				setAttemptId(r.attemptId);
-				setQuestions(r.questions);
-				setSectionStartedAt(Date.now());
-				questionShownAt.current = Date.now();
+				if (resumeId) {
+					// Resume in-progress attempt
+					const r = await api.get<{
+						inProgress: {
+							attemptId: string;
+							questions: ToeicSessionQuestion[];
+							answeredIds: string[];
+							readingStartedAt: string | null;
+						} | null;
+					}>("/toeic-mock/in-progress");
+					if (!r.inProgress || r.inProgress.attemptId !== resumeId) {
+						setError("Không tìm thấy mock test đang dở");
+						return;
+					}
+					setAttemptId(r.inProgress.attemptId);
+					setQuestions(r.inProgress.questions);
+					// Skip to first unanswered question
+					const answeredSet = new Set(r.inProgress.answeredIds);
+					const firstUnanswered = r.inProgress.questions.findIndex((q) => !answeredSet.has(q.id));
+					const startIdx = firstUnanswered === -1 ? r.inProgress.questions.length - 1 : firstUnanswered;
+					setIdx(startIdx);
+					// Determine section from current question's part
+					const currentPart = r.inProgress.questions[startIdx]?.part ?? 1;
+					setSection(currentPart >= 5 ? "reading" : "listening");
+					// Reset section timer (give user fresh time after resume)
+					setSectionStartedAt(Date.now());
+					questionShownAt.current = Date.now();
+				} else {
+					const r = await api.post<{
+						attemptId: string;
+						questions: ToeicSessionQuestion[];
+					}>("/toeic-mock/start", { mode });
+					setAttemptId(r.attemptId);
+					setQuestions(r.questions);
+					setSectionStartedAt(Date.now());
+					questionShownAt.current = Date.now();
+				}
 			} catch (e) {
 				setError(e instanceof Error ? e.message : "Không thể bắt đầu");
 			}
 		})();
-	}, [mode]);
+	}, [mode, resumeId]);
 
 	const sectionTimeLimit = section === "listening" ? listeningMs : readingMs;
 	const current = questions[idx] ?? null;
