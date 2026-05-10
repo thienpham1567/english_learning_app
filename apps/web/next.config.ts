@@ -8,6 +8,14 @@ const nextConfig: NextConfig = {
     "@repo/auth",
     "@repo/modules",
   ],
+  images: {
+    remotePatterns: [
+      // Pexels — Part 1 photos + Writing/Speaking pictures
+      { protocol: "https", hostname: "images.pexels.com" },
+      // ETS scrape — Part 6/7 image passages
+      { protocol: "https", hostname: "apiquanlytest.tienganhthayquy.com" },
+    ],
+  },
   async redirects() {
     return [
       {

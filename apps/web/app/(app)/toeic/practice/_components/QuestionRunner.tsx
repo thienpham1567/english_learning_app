@@ -158,6 +158,8 @@ export function QuestionRunner({
 							key={src}
 							src={src}
 							alt=""
+							loading="lazy"
+							decoding="async"
 							style={{ maxWidth: "100%", maxHeight: 320, borderRadius: 8 }}
 						/>
 					))}

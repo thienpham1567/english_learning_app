@@ -97,7 +97,7 @@ export default async function WritingResultPage({
 								}
 							>
 								{p.type === "q1_5_picture" && p.imageUrl && (
-									<img
+									<img loading="lazy" decoding="async"
 										src={p.imageUrl}
 										alt=""
 										style={{ maxWidth: 200, borderRadius: 4, marginBottom: 8 }}

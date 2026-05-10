@@ -153,6 +153,19 @@ function MockRunner() {
 	const totalAnswered = idx + 1;
 	const sectionLabel = section === "listening" ? "Listening" : "Reading";
 
+	// Preload next 5 questions' audio + images for smooth transitions
+	const preloadUrls = (() => {
+		const urls: string[] = [];
+		for (let i = idx + 1; i <= idx + 5 && i < questions.length; i++) {
+			const q = questions[i];
+			if (q.audioUrl) urls.push(q.audioUrl);
+			if (q.audioSegments?.question) urls.push(q.audioSegments.question);
+			q.audioSegments?.options?.forEach((u) => urls.push(u));
+			q.imageUrls?.forEach((u) => urls.push(u));
+		}
+		return urls;
+	})();
+
 	return (
 		<div style={{ padding: 16, flex: 1 }}>
 			<div
@@ -179,6 +192,16 @@ function MockRunner() {
 				onNext={handleNext}
 				onComplete={submitFinal}
 			/>
+			{/* Hidden preload — browser fetches next 5 questions' media in background */}
+			<div style={{ display: "none" }} aria-hidden>
+				{preloadUrls.map((u) => (
+					u.match(/\.(wav|mp3|webm|ogg)$/i) ? (
+						<audio key={u} preload="auto" src={u} />
+					) : (
+						<img key={u} src={u} alt="" loading="eager" decoding="async" />
+					)
+				))}
+			</div>
 		</div>
 	);
 }

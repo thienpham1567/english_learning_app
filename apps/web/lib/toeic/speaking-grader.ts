@@ -57,13 +57,21 @@ export async function transcribeAudio(
 ): Promise<string> {
 	const groq = getGroq();
 	const file = await fs.promises.readFile(audioPath);
+	const t0 = Date.now();
 	const result = await groq.audio.transcriptions.create({
 		file: new File([new Uint8Array(file)], "audio.webm", { type: mimeType }),
 		model: "whisper-large-v3-turbo",
 		language: "en",
 		response_format: "json",
 	});
-	return result.text ?? "";
+	const text = result.text ?? "";
+	// Cost log: Whisper ~$0.04/hour audio (turbo); approximate by file size ÷ ~30KB/sec
+	const sizeKB = file.byteLength / 1024;
+	const approxSec = sizeKB / 30;
+	console.log(
+		`[cost] toeic.whisper duration=${Date.now() - t0}ms approxSec=${approxSec.toFixed(1)} bytes=${file.byteLength}`,
+	);
+	return text;
 }
 
 function buildPrompt(input: GradeSpeakingInput): string {
@@ -192,12 +200,16 @@ Output strict JSON: {
 }
 
 export async function gradeSpeaking(input: GradeSpeakingInput): Promise<GradeSpeakingResult> {
+	const t0 = Date.now();
 	const res = await openAiClient.chat.completions.create({
 		model: MODEL,
 		messages: [{ role: "user", content: buildPrompt(input) }],
 		response_format: { type: "json_object" },
 		temperature: 0.1,
 	});
+	console.log(
+		`[cost] toeic.grade_speaking type=${input.type} duration=${Date.now() - t0}ms tokens=${res.usage?.total_tokens ?? "?"}`,
+	);
 	const raw = res.choices[0]?.message.content ?? "{}";
 	const parsed = JSON.parse(raw);
 	const rawScore = Math.min(input.maxScore, Math.max(0, Number(parsed.rawScore) || 0));

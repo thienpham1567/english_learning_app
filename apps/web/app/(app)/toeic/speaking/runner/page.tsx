@@ -272,7 +272,7 @@ export default function SpeakingRunnerPage() {
 
 				{current.type === "q3_4_describe_picture" && current.imageUrl && (
 					<Card>
-						<img
+						<img loading="lazy" decoding="async"
 							src={current.imageUrl}
 							alt=""
 							style={{ maxWidth: "100%", maxHeight: 320, borderRadius: 8 }}

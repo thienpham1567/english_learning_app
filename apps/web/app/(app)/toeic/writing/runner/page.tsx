@@ -167,7 +167,7 @@ export default function WritingRunnerPage() {
 				{current.type === "q1_5_picture" && (
 					<>
 						{current.imageUrl && (
-							<img
+							<img loading="lazy" decoding="async"
 								src={current.imageUrl}
 								alt=""
 								style={{ maxWidth: "100%", maxHeight: 300, borderRadius: 8 }}

@@ -112,12 +112,16 @@ Output strict JSON: {
 }
 
 export async function gradeResponse(input: GradePromptInput): Promise<GradeResult> {
+	const t0 = Date.now();
 	const res = await openAiClient.chat.completions.create({
 		model: MODEL,
 		messages: [{ role: "user", content: buildPrompt(input) }],
 		response_format: { type: "json_object" },
 		temperature: 0.1,
 	});
+	console.log(
+		`[cost] toeic.grade_writing type=${input.type} duration=${Date.now() - t0}ms tokens=${res.usage?.total_tokens ?? "?"}`,
+	);
 	const raw = res.choices[0]?.message.content ?? "{}";
 	const parsed = JSON.parse(raw);
 	const rawScore = Math.min(input.maxScore, Math.max(0, Number(parsed.rawScore) || 0));

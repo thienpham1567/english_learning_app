@@ -98,7 +98,7 @@ export default async function SpeakingResultPage({
 								}
 							>
 								{p.imageUrl && (
-									<img
+									<img loading="lazy" decoding="async"
 										src={p.imageUrl}
 										alt=""
 										style={{ maxWidth: 200, borderRadius: 4, marginBottom: 8 }}
