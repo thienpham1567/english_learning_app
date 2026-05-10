@@ -42,6 +42,8 @@ export type GradeSpeakingInput = {
 		contextText?: string;
 		topic?: string;
 	};
+	/** Optional pronunciation metrics — when present, included in the LLM prompt. */
+	metrics?: import("./pronunciation-analysis").PronunciationMetrics;
 };
 
 export type GradeSpeakingResult = {
@@ -50,11 +52,11 @@ export type GradeSpeakingResult = {
 	feedbackVi: string;
 };
 
-/** Transcribe audio buffer using Groq Whisper. */
+/** Transcribe audio with Groq Whisper, returning text + word-level data. */
 export async function transcribeAudio(
 	audioPath: string,
 	mimeType = "audio/webm",
-): Promise<string> {
+): Promise<{ text: string; words: import("./pronunciation-analysis").WhisperWord[] }> {
 	const groq = getGroq();
 	const file = await fs.promises.readFile(audioPath);
 	const t0 = Date.now();
@@ -62,22 +64,87 @@ export async function transcribeAudio(
 		file: new File([new Uint8Array(file)], "audio.webm", { type: mimeType }),
 		model: "whisper-large-v3-turbo",
 		language: "en",
-		response_format: "json",
-	});
-	const text = result.text ?? "";
-	// Cost log: Whisper ~$0.04/hour audio (turbo); approximate by file size ÷ ~30KB/sec
+		response_format: "verbose_json",
+		timestamp_granularities: ["word"],
+	} as never);
+	const text = (result as { text?: string }).text ?? "";
+	const words: import("./pronunciation-analysis").WhisperWord[] = [];
+	const segments = (result as {
+		segments?: Array<{ words?: Array<{ word: string; start: number; end: number; probability?: number }> }>;
+	}).segments;
+	if (segments) {
+		for (const seg of segments) {
+			for (const w of seg.words ?? []) {
+				words.push({
+					word: w.word,
+					start: w.start,
+					end: w.end,
+					probability: w.probability ?? 1,
+				});
+			}
+		}
+	}
+	const topWords = (result as {
+		words?: Array<{ word: string; start: number; end: number; probability?: number }>;
+	}).words;
+	if (words.length === 0 && topWords) {
+		for (const w of topWords) {
+			words.push({
+				word: w.word,
+				start: w.start,
+				end: w.end,
+				probability: w.probability ?? 1,
+			});
+		}
+	}
 	const sizeKB = file.byteLength / 1024;
 	const approxSec = sizeKB / 30;
 	console.log(
-		`[cost] toeic.whisper duration=${Date.now() - t0}ms approxSec=${approxSec.toFixed(1)} bytes=${file.byteLength}`,
+		`[cost] toeic.whisper duration=${Date.now() - t0}ms approxSec=${approxSec.toFixed(1)} bytes=${file.byteLength} words=${words.length}`,
 	);
-	return text;
+	return { text, words };
+}
+
+function formatMetricsBlock(
+	metrics: import("./pronunciation-analysis").PronunciationMetrics | undefined,
+): string {
+	if (!metrics) return "";
+	const lines = [
+		`Pronunciation metrics (computed from Whisper word timing):`,
+		`- Pace: ${metrics.wpm} WPM (target for native-like fluency: 130–160)`,
+		`- Filler words: ${metrics.fillerCount}${metrics.fillerCount > 0 ? ` (≈${metrics.fillerRate}/min)` : ""}`,
+		`- Long pauses: ${metrics.longPauseCount} (gaps over 2 seconds between words)`,
+		`- Avg confidence: ${metrics.avgConfidence.toFixed(2)}`,
+	];
+	if (metrics.lowConfidenceWords.length > 0) {
+		lines.push(
+			`- Unclear words (low Whisper confidence): ${metrics.lowConfidenceWords.map((w) => `"${w}"`).join(", ")}`,
+		);
+	}
+	if (metrics.alignment) {
+		lines.push("");
+		lines.push(
+			`Read accuracy: ${metrics.alignment.matchedWords}/${metrics.alignment.expectedWords} words matched (${Math.round(metrics.alignment.accuracy * 100)}%).`,
+		);
+		if (metrics.alignment.missingWords.length > 0) {
+			lines.push(
+				`Words skipped (not spoken): ${metrics.alignment.missingWords.slice(0, 8).map((w) => `"${w}"`).join(", ")}`,
+			);
+		}
+		if (metrics.alignment.addedWords.length > 0) {
+			lines.push(
+				`Words added (likely fillers/substitutions): ${metrics.alignment.addedWords.slice(0, 8).map((w) => `"${w}"`).join(", ")}`,
+			);
+		}
+	}
+	return lines.join("\n");
 }
 
 function buildPrompt(input: GradeSpeakingInput): string {
 	const { type, transcript, durationMs, maxScore, context } = input;
 	const wordCount = transcript.trim().split(/\s+/).filter(Boolean).length;
 	const seconds = Math.round(durationMs / 1000);
+	const metricsBlock = formatMetricsBlock(input.metrics);
 
 	if (type === "q1_2_read_aloud") {
 		return `Grading TOEIC Speaking Q1-2 (read aloud).
@@ -92,11 +159,13 @@ ${transcript}
 """
 Duration: ${seconds}s · ${wordCount} words.
 
-Rubric (0-${maxScore}):
+${metricsBlock ? metricsBlock + "\n\n" : ""}Rubric (0-${maxScore}):
 - 3 = highly intelligible, accurate pronunciation, appropriate pace
 - 2 = generally intelligible with minor issues
 - 1 = limited intelligibility OR many missing words
 - 0 = blank or unintelligible
+
+If pronunciation metrics are present above, the feedbackVi MUST cite at least one concrete number (WPM, filler count, accuracy %, or a specific unclear/missing word).
 
 Output strict JSON: {
   "rawScore": <0-${maxScore}>,
@@ -114,11 +183,13 @@ ${transcript}
 """
 Duration: ${seconds}s · ${wordCount} words.
 
-Rubric (0-${maxScore}):
+${metricsBlock ? metricsBlock + "\n\n" : ""}Rubric (0-${maxScore}):
 - 3 = relevant, organized, accurate language, sufficient detail
 - 2 = mostly relevant with minor issues
 - 1 = limited content OR many errors
 - 0 = blank or off-topic
+
+If pronunciation metrics are present above, the feedbackVi MUST cite at least one concrete number (WPM, filler count, accuracy %, or a specific unclear/missing word).
 
 Output strict JSON: {
   "rawScore": <0-${maxScore}>,
@@ -136,11 +207,13 @@ ${transcript}
 """
 Duration: ${seconds}s · ${wordCount} words.
 
-Rubric (0-${maxScore}):
+${metricsBlock ? metricsBlock + "\n\n" : ""}Rubric (0-${maxScore}):
 - 3 = directly answers, appropriate vocab/grammar
 - 2 = answers partially or with some errors
 - 1 = barely addresses or hard to follow
 - 0 = blank or off-topic
+
+If pronunciation metrics are present above, the feedbackVi MUST cite at least one concrete number (WPM, filler count, accuracy %, or a specific unclear/missing word).
 
 Output strict JSON: {
   "rawScore": <0-${maxScore}>,
@@ -162,11 +235,13 @@ ${transcript}
 """
 Duration: ${seconds}s · ${wordCount} words.
 
-Rubric (0-${maxScore}):
+${metricsBlock ? metricsBlock + "\n\n" : ""}Rubric (0-${maxScore}):
 - 3 = answers based on context, accurate info, organized
 - 2 = mostly correct with minor issues
 - 1 = misuses context or many errors
 - 0 = blank or fabricated
+
+If pronunciation metrics are present above, the feedbackVi MUST cite at least one concrete number (WPM, filler count, accuracy %, or a specific unclear/missing word).
 
 Output strict JSON: {
   "rawScore": <0-${maxScore}>,
@@ -184,13 +259,15 @@ ${transcript}
 """
 Duration: ${seconds}s · ${wordCount} words (target ≥80 words for 60s spoken).
 
-Rubric (0-${maxScore}):
+${metricsBlock ? metricsBlock + "\n\n" : ""}Rubric (0-${maxScore}):
 - 5 = clear opinion + 2-3 supports + sentence variety + accurate language
 - 4 = good response with minor weaknesses
 - 3 = reasonable, noticeable issues
 - 2 = limited
 - 1 = barely on topic
 - 0 = blank
+
+If pronunciation metrics are present above, the feedbackVi MUST cite at least one concrete number (WPM, filler count, accuracy %, or a specific unclear/missing word).
 
 Output strict JSON: {
   "rawScore": <0-${maxScore}>,

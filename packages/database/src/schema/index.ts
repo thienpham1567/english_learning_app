@@ -915,7 +915,7 @@ export const toeicWritingResponse = pgTable(
       .references(() => toeicWritingPrompt.id, { onDelete: "cascade" }),
     text: text("text").notNull(),
     durationMs: integer("duration_ms").notNull().default(0),
-    rubricScores: jsonb("rubric_scores").$type<Record<string, number>>(),
+    rubricScores: jsonb("rubric_scores").$type<Record<string, unknown>>(),
     rawScore: integer("raw_score"),
     feedbackVi: text("feedback_vi"),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
@@ -1002,7 +1002,7 @@ export const toeicSpeakingResponse = pgTable(
     /** Whisper STT result. */
     transcript: text("transcript"),
     durationMs: integer("duration_ms").notNull().default(0),
-    rubricScores: jsonb("rubric_scores").$type<Record<string, number>>(),
+    rubricScores: jsonb("rubric_scores").$type<Record<string, unknown>>(),
     rawScore: integer("raw_score"),
     feedbackVi: text("feedback_vi"),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),

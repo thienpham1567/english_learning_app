@@ -8,6 +8,11 @@ import {
 } from "@repo/database";
 import { and, eq } from "drizzle-orm";
 import { transcribeAudio, gradeSpeaking, type SpeakingType } from "@/lib/toeic/speaking-grader";
+import {
+	computeFluency,
+	computeAlignment,
+	type PronunciationMetrics,
+} from "@/lib/toeic/pronunciation-analysis";
 import { recordLearningEvent } from "@repo/modules";
 import { writeFile, mkdir } from "node:fs/promises";
 import { join } from "node:path";
@@ -58,11 +63,22 @@ export async function POST(req: Request) {
 	const arrayBuffer = await audioBlob.arrayBuffer();
 	await writeFile(audioPath, Buffer.from(arrayBuffer));
 
-	// Transcribe + grade
+	// Transcribe + analyze + grade
 	let transcript = "";
+	let metrics: PronunciationMetrics | undefined;
 	let grade: { rawScore: number; rubricScores: Record<string, number>; feedbackVi: string };
 	try {
-		transcript = await transcribeAudio(audioPath, "audio/webm");
+		const transcribed = await transcribeAudio(audioPath, "audio/webm");
+		transcript = transcribed.text;
+
+		// Always compute fluency metrics
+		metrics = computeFluency(transcribed.words, durationMs);
+
+		// Q1-2: also compute forced alignment vs the read-aloud text
+		if (prompt.type === "q1_2_read_aloud" && prompt.textToRead) {
+			metrics.alignment = computeAlignment(prompt.textToRead, transcribed.words);
+		}
+
 		grade = await gradeSpeaking({
 			type: prompt.type as SpeakingType,
 			maxScore: prompt.maxScore,
@@ -75,6 +91,7 @@ export async function POST(req: Request) {
 				contextText: prompt.contextText ?? undefined,
 				topic: prompt.topic ?? undefined,
 			},
+			metrics,
 		});
 	} catch (err) {
 		grade = {
@@ -93,7 +110,7 @@ export async function POST(req: Request) {
 			audioPath: audioPath.replace(join(process.cwd(), ""), "").replace(/^\//, ""),
 			transcript,
 			durationMs,
-			rubricScores: grade.rubricScores,
+			rubricScores: { ...grade.rubricScores, ...(metrics ? { pronunciation: metrics } : {}) },
 			rawScore: grade.rawScore,
 			feedbackVi: grade.feedbackVi,
 		})
@@ -102,7 +119,7 @@ export async function POST(req: Request) {
 			set: {
 				transcript,
 				durationMs,
-				rubricScores: grade.rubricScores,
+				rubricScores: { ...grade.rubricScores, ...(metrics ? { pronunciation: metrics } : {}) },
 				rawScore: grade.rawScore,
 				feedbackVi: grade.feedbackVi,
 			},
@@ -135,5 +152,6 @@ export async function POST(req: Request) {
 		rubricScores: grade.rubricScores,
 		feedbackVi: grade.feedbackVi,
 		transcript,
+		pronunciation: metrics ?? null,
 	});
 }
