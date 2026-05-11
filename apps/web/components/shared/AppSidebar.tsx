@@ -23,6 +23,7 @@ import {
   YoutubeOutlined,
   FileTextOutlined,
   AimOutlined,
+  DashboardOutlined,
 } from "@ant-design/icons";
 import { useTheme } from "@/components/shared/ThemeProvider";
 import { useSidebarBadges } from "@/hooks/useSidebarBadges";
@@ -36,6 +37,7 @@ type NavGroup = {
 };
 
 const navGroups: (NavItem | NavGroup)[] = [
+  { href: "/dashboard", label: "Tổng quan", icon: DashboardOutlined },
   {
     key: "toeic",
     label: "Luyện thi TOEIC",

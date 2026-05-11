@@ -48,7 +48,7 @@ export function Logo({ collapsed = false }: LogoProps) {
               color: "var(--sidebar-text)",
             }}
           >
-            THIEN<span style={{ color: "var(--accent)" }}>GLISH</span>
+            TOEIC<span style={{ color: "var(--accent)" }}> Master</span>
           </span>
           <span
             style={{

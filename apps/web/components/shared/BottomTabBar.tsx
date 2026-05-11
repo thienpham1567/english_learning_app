@@ -16,6 +16,7 @@ import {
   ExceptionOutlined,
   QuestionCircleOutlined,
   AimOutlined,
+  DashboardOutlined,
 } from "@ant-design/icons";
 
 const { Text } = Typography;
@@ -30,9 +31,9 @@ interface TabItem {
 }
 
 const TABS: TabItem[] = [
+  { key: "home", label: "Tổng quan", icon: <DashboardOutlined />, activeIcon: <DashboardOutlined />, href: "/dashboard" },
   { key: "toeic", label: "TOEIC", icon: <AimOutlined />, activeIcon: <AimOutlined />, href: "/toeic-skills" },
   { key: "exam", label: "Đề thi", icon: <TrophyOutlined />, activeIcon: <TrophyOutlined />, action: "exam-hub" },
-  { key: "challenge", label: "Thử thách", icon: <FireOutlined />, activeIcon: <FireOutlined />, href: "/daily-challenge" },
   { key: "review", label: "Ôn tập", icon: <SyncOutlined />, activeIcon: <SyncOutlined />, action: "review-hub" },
   { key: "more", label: "Thêm", icon: <AppstoreOutlined />, activeIcon: <AppstoreOutlined />, action: "more-hub" },
 ];
@@ -49,6 +50,7 @@ const REVIEW_HUB_ITEMS = [
 ];
 
 const MORE_HUB_ITEMS = [
+  { label: "Thử thách hàng ngày", icon: <FireOutlined />, href: "/daily-challenge" },
   { label: "Đọc sách TOEIC", icon: <FileTextOutlined />, href: "/pdf-reader" },
   { label: "YouTube TOEIC", icon: <YoutubeOutlined />, href: "/youtube-learn" },
   { label: "Ngữ pháp TOEIC", icon: <BulbOutlined />, href: "/grammar-lessons" },
@@ -56,30 +58,26 @@ const MORE_HUB_ITEMS = [
 ];
 
 function getActiveTab(pathname: string): string {
+  if (pathname.startsWith("/dashboard")) return "home";
   if (pathname.startsWith("/toeic-skills")) return "toeic";
   if (pathname.startsWith("/toeic-practice") || pathname.startsWith("/grammar-quiz")) return "exam";
-  if (pathname.startsWith("/daily-challenge")) return "challenge";
+  if (pathname.startsWith("/daily-challenge")) return "more";
   if (
     pathname.startsWith("/review-quiz") ||
     pathname.startsWith("/error-notebook") ||
     pathname.startsWith("/flashcards")
   ) return "review";
-  // Everything else falls into "more"
   if (
     pathname.startsWith("/grammar-lessons") ||
     pathname.startsWith("/my-vocabulary") ||
     pathname.startsWith("/pdf-reader") ||
     pathname.startsWith("/youtube-learn") ||
-    pathname.startsWith("/listening") ||
     pathname.startsWith("/reading") ||
-    pathname.startsWith("/writing-practice") ||
-    pathname.startsWith("/writing-tools") ||
-    pathname.startsWith("/pronunciation") ||
-    pathname.startsWith("/speaking-practice") ||
-    pathname.startsWith("/dictionary") ||
-    pathname.startsWith("/ipa-chart")
+    pathname.startsWith("/ipa-chart") ||
+    pathname.startsWith("/diagnostic") ||
+    pathname.startsWith("/study-sets")
   ) return "more";
-  return "toeic";
+  return "home";
 }
 
 export function BottomTabBar() {

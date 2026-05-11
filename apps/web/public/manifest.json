@@ -1,12 +1,12 @@
 {
-  "name": "ThienGlish — Luyện tiếng Anh mỗi ngày",
-  "short_name": "ThienGlish",
-  "description": "Trợ lý học tập tiếng Anh với AI — từ vựng, ngữ pháp, luyện nghe, luyện viết",
-  "start_url": "/home",
+  "name": "TOEIC Master — Luyện thi TOEIC 4 Skills với AI",
+  "short_name": "TOEIC Master",
+  "description": "Luyện thi TOEIC Listening, Reading, Speaking, Writing — AI chấm điểm, lộ trình cá nhân hóa",
+  "start_url": "/dashboard",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#0a0a0f",
-  "theme_color": "#6366f1",
+  "background_color": "#F8F4EE",
+  "theme_color": "#C84B31",
   "icons": [
     {
       "src": "/icon-192.png",

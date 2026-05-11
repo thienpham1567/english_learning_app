@@ -28,13 +28,13 @@ import { AntdRegistry } from "@ant-design/nextjs-registry";
 
 export const metadata: Metadata = {
   metadataBase,
-  title: "Trợ lý học tập tiếng Anh | Luyện tiếng Anh mỗi ngày",
+  title: "TOEIC Master – Luyện thi TOEIC 4 Skills với AI",
   description:
-    "Trợ lý học tập tiếng Anh với phản hồi trực tiếp, sửa lỗi rõ ràng và hội thoại tự nhiên mỗi ngày.",
+    "Ứng dụng luyện thi TOEIC 4 Skills: Listening, Reading, Speaking, Writing. Luyện đề ETS chính hãng, AI chấm điểm, theo dõi tiến độ.",
   openGraph: {
-    title: "Trợ lý học tập tiếng Anh | Luyện tiếng Anh mỗi ngày",
+    title: "TOEIC Master – Luyện thi TOEIC 4 Skills với AI",
     description:
-      "Trợ lý học tập tiếng Anh với phản hồi trực tiếp, sửa lỗi rõ ràng và hội thoại tự nhiên mỗi ngày.",
+      "Ứng dụng luyện thi TOEIC 4 Skills: Listening, Reading, Speaking, Writing. Luyện đề ETS chính hãng, AI chấm điểm, theo dõi tiến độ.",
     type: "website",
   },
   twitter: {

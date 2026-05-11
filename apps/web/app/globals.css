@@ -93,7 +93,7 @@
   --gradient-writing: linear-gradient(135deg, #9B6B63, #B8967A);
   --gradient-pronunciation: linear-gradient(135deg, #B8967A, #C4A882);
   --gradient-grammar: linear-gradient(135deg, #8B6F5E, #B8967A);
-  --gradient-grammar-ielts: linear-gradient(135deg, #9B6B63, #B8967A);
+  --gradient-dashboard: linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%);
   --gradient-grammar-quiz: linear-gradient(135deg, #B8967A, #8B6F5E);
   --gradient-flashcards: linear-gradient(135deg, #C4A882, #D4B896);
   --gradient-review: linear-gradient(135deg, #9B6B63, #B8967A);
@@ -222,7 +222,7 @@
   --gradient-writing: linear-gradient(135deg, #7A5040, #9B6B63);
   --gradient-pronunciation: linear-gradient(135deg, #9B6B63, #8B6F5E);
   --gradient-grammar: linear-gradient(135deg, #6B4A3A, #8B6F5E);
-  --gradient-grammar-ielts: linear-gradient(135deg, #7A5040, #9B6B63);
+  --gradient-dashboard: linear-gradient(135deg, #0f1720 0%, #1a2332 40%, #2d3748 100%);
   --gradient-grammar-quiz: linear-gradient(135deg, #9B6B63, #6B4A3A);
   --gradient-flashcards: linear-gradient(135deg, #8B6F5E, #A88070);
   --gradient-review: linear-gradient(135deg, #7A5040, #8B6F5E);

@@ -2,16 +2,25 @@
 
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
+import * as m from "motion/react-client";
 import {
   SafetyCertificateOutlined,
-  StarFilled,
   CheckCircleFilled,
-  MessageOutlined,
-  FireOutlined,
+  CustomerServiceOutlined,
   ReadOutlined,
   AudioOutlined,
+  FormOutlined,
+  ThunderboltOutlined,
+  FireOutlined,
+  AimOutlined,
+  TranslationOutlined,
 } from "@ant-design/icons";
 import { authClient } from "@/lib/auth-client";
+
+/* ── Shared animation variants ── */
+const fadeUp = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } };
+const fadeIn = { hidden: { opacity: 0 }, show: { opacity: 1 } };
+const stagger = { show: { transition: { staggerChildren: 0.1 } } };
 
 /* ── Google icon ── */
 const GoogleIcon = () => (
@@ -23,58 +32,32 @@ const GoogleIcon = () => (
   </svg>
 );
 
-/* ── Logo (right panel) ── */
-function SignInLogo() {
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: 12, userSelect: "none" }}>
-      <div style={{
-        display: "grid",
-        placeItems: "center",
-        width: 40,
-        height: 40,
-        borderRadius: 12,
-        background: "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, black))",
-        boxShadow: "0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent)",
-        flexShrink: 0,
-      }}>
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-        </svg>
-      </div>
-      <div>
-        <div style={{
-          fontSize: 18,
-          fontWeight: 800,
-          lineHeight: 1.1,
-          letterSpacing: "-0.025em",
-          color: "var(--text-primary)",
-          fontFamily: "var(--font-display)",
-        }}>
-          THIEN<span style={{ color: "var(--accent)" }}>GLISH</span>
-        </div>
-        <div style={{ fontSize: 9, fontWeight: 600, letterSpacing: "0.18em", textTransform: "uppercase", color: "var(--text-muted)", marginTop: 1 }}>
-          English Learning
-        </div>
-      </div>
-    </div>
-  );
-}
+/* ── Floating skill badge ── */
+const BADGES = [
+  { icon: <CustomerServiceOutlined />, label: "Listening", top: "18%", right: "10%", delay: 0.3 },
+  { icon: <ReadOutlined />, label: "Reading", top: "34%", right: "22%", delay: 0.5 },
+  { icon: <AudioOutlined />, label: "Speaking", bottom: "38%", left: "8%", delay: 0.7 },
+  { icon: <FormOutlined />, label: "Writing", bottom: "28%", right: "14%", delay: 0.4 },
+];
 
-/* ── Value prop row ── */
-function ValueRow({ icon, text }: { icon: React.ReactNode; text: string }) {
+/* ── Feature row ── */
+function Feature({ icon, title, desc }: { icon: React.ReactNode; title: string; desc: string }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+    <m.div variants={fadeUp} style={{ display: "flex", gap: 14, alignItems: "flex-start" }}>
       <div style={{
-        width: 28, height: 28, borderRadius: 8, flexShrink: 0,
-        background: "var(--accent-muted)",
-        color: "var(--accent)",
+        width: 40, height: 40, borderRadius: 12, flexShrink: 0,
+        background: "color-mix(in srgb, var(--accent) 10%, var(--surface))",
+        border: "1px solid color-mix(in srgb, var(--accent) 15%, transparent)",
         display: "grid", placeItems: "center",
-        fontSize: 13,
+        color: "var(--accent)", fontSize: 17,
       }}>
         {icon}
       </div>
-      <span style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 500, lineHeight: 1.4 }}>{text}</span>
-    </div>
+      <div>
+        <div style={{ fontSize: 15, fontWeight: 700, color: "var(--ink)", lineHeight: 1.3 }}>{title}</div>
+        <div style={{ fontSize: 13, color: "var(--text-muted)", lineHeight: 1.5, marginTop: 2 }}>{desc}</div>
+      </div>
+    </m.div>
   );
 }
 
@@ -90,7 +73,7 @@ function SignInContent() {
     setIsLoading(true);
     setError(null);
     try {
-      await authClient.signIn.social({ provider: "google", callbackURL: "/english-chatbot" });
+      await authClient.signIn.social({ provider: "google", callbackURL: "/dashboard" });
     } catch {
       setError("Không thể kết nối đến Google. Vui lòng thử lại.");
       setIsLoading(false);
@@ -98,82 +81,74 @@ function SignInContent() {
   };
 
   return (
-    <div
-      className="anim-fade-up"
-      style={{ width: "100%", maxWidth: 400, display: "flex", flexDirection: "column", gap: 0 }}
+    <m.div
+      initial="hidden" animate="show"
+      variants={{ show: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } } }}
+      style={{ width: "100%", maxWidth: 420, display: "flex", flexDirection: "column" }}
     >
       {/* Logo */}
-      <div style={{ marginBottom: 32 }}>
-        <SignInLogo />
-      </div>
+      <m.div variants={fadeUp} style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 40 }}>
+        <m.div
+          whileHover={{ scale: 1.05, rotate: -3 }}
+          transition={{ type: "spring", stiffness: 400 }}
+          style={{
+            width: 42, height: 42, borderRadius: 12, flexShrink: 0,
+            background: "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 50%, black))",
+            boxShadow: "0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent)",
+            display: "grid", placeItems: "center",
+          }}
+        >
+          <TranslationOutlined style={{ fontSize: 21, color: "#fff" }} />
+        </m.div>
+        <div>
+          <div style={{
+            fontSize: 20, fontWeight: 800, lineHeight: 1.1, letterSpacing: "-0.025em",
+            color: "var(--ink)", fontFamily: "var(--font-display)",
+          }}>
+            TOEIC<span style={{ color: "var(--accent)" }}> Master</span>
+          </div>
+          <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--text-muted)", marginTop: 2 }}>
+            Luyện thi TOEIC 4 Skills
+          </div>
+        </div>
+      </m.div>
 
       {/* Heading */}
-      <h1 style={{
-        margin: "0 0 6px",
-        fontSize: 30,
-        fontWeight: 700,
-        fontStyle: "italic",
-        fontFamily: "var(--font-display)",
-        color: "var(--text-primary)",
-        lineHeight: 1.2,
-        letterSpacing: "-0.02em",
+      <m.h1 variants={fadeUp} style={{
+        margin: "0 0 6px", fontSize: 32, fontWeight: 700,
+        fontStyle: "italic", fontFamily: "var(--font-display)",
+        color: "var(--ink)", lineHeight: 1.15, letterSpacing: "-0.02em",
       }}>
         Chào mừng bạn
-      </h1>
-      <p style={{ margin: "0 0 28px", fontSize: 14, color: "var(--text-muted)", lineHeight: 1.5 }}>
-        Đăng nhập để bắt đầu hành trình học tiếng Anh
-      </p>
+      </m.h1>
+      <m.p variants={fadeUp} style={{ margin: "0 0 32px", fontSize: 15, color: "var(--text-muted)", lineHeight: 1.5 }}>
+        Đăng nhập để bắt đầu chinh phục TOEIC
+      </m.p>
 
-      {/* Value props */}
-      <div style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 10,
-        marginBottom: 28,
-        padding: "16px 18px",
-        borderRadius: 14,
-        border: "1px solid var(--border)",
-        background: "var(--surface)",
-      }}>
-        <ValueRow icon={<MessageOutlined />} text="Luyện IELTS & TOEIC với gia sư AI" />
-        <ValueRow icon={<AudioOutlined />} text="Luyện phát âm, nghe, đọc, viết toàn diện" />
-        <ValueRow icon={<FireOutlined />} text="Thử thách mỗi ngày, giữ vững streak" />
-      </div>
+      {/* Features */}
+      <m.div variants={stagger} style={{ display: "flex", flexDirection: "column", gap: 18, marginBottom: 36 }}>
+        <Feature icon={<ThunderboltOutlined />} title="AI chấm điểm thông minh" desc="Đánh giá chính xác Speaking, Writing và dự đoán điểm TOEIC" />
+        <Feature icon={<AimOutlined />} title="Luyện đủ 4 kỹ năng" desc="Listening · Reading · Speaking · Writing — đúng format TOEIC" />
+        <Feature icon={<FireOutlined />} title="Streak & thử thách mỗi ngày" desc="Duy trì động lực học với thử thách hàng ngày và XP tích lũy" />
+      </m.div>
 
       {/* Google button */}
-      <button
+      <m.button
+        variants={fadeUp}
+        whileHover={{ y: -2, boxShadow: "0 8px 28px color-mix(in srgb, var(--accent) 22%, transparent)" }}
+        whileTap={{ scale: 0.98 }}
+        transition={{ type: "spring", stiffness: 400, damping: 20 }}
         onClick={handleGoogleSignIn}
         disabled={isLoading}
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 10,
-          width: "100%",
-          height: 52,
-          borderRadius: 14,
-          fontSize: 15,
-          fontWeight: 600,
+          display: "flex", alignItems: "center", justifyContent: "center", gap: 12,
+          width: "100%", height: 56, borderRadius: 16,
+          fontSize: 16, fontWeight: 600,
           border: "1.5px solid var(--border)",
-          background: "var(--surface)",
-          color: "var(--text-primary)",
+          background: "var(--surface)", color: "var(--ink)",
           cursor: isLoading ? "wait" : "pointer",
-          boxShadow: "0 2px 8px rgba(0,0,0,0.06)",
-          transition: "all 0.2s ease",
+          boxShadow: "var(--shadow-md)",
           opacity: isLoading ? 0.7 : 1,
-          marginBottom: 10,
-        }}
-        onMouseEnter={(e) => {
-          if (!isLoading) {
-            (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--accent)";
-            (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 4px 20px color-mix(in srgb, var(--accent) 18%, transparent)";
-            (e.currentTarget as HTMLButtonElement).style.transform = "translateY(-1px)";
-          }
-        }}
-        onMouseLeave={(e) => {
-          (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border)";
-          (e.currentTarget as HTMLButtonElement).style.boxShadow = "0 2px 8px rgba(0,0,0,0.06)";
-          (e.currentTarget as HTMLButtonElement).style.transform = "translateY(0)";
         }}
       >
         {isLoading ? (
@@ -185,44 +160,63 @@ function SignInContent() {
             Đang đăng nhập...
           </span>
         ) : (
-          <>
-            <GoogleIcon />
-            Đăng nhập bằng Google
-          </>
+          <><GoogleIcon /> Đăng nhập bằng Google</>
         )}
-      </button>
+      </m.button>
 
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
-        <SafetyCertificateOutlined style={{ fontSize: 11, color: "var(--text-muted)" }} />
-        <span style={{ fontSize: 11, color: "var(--text-muted)" }}>Bảo mật bởi Google OAuth 2.0</span>
-      </div>
+      {/* Security */}
+      <m.div variants={fadeIn} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginTop: 14 }}>
+        <SafetyCertificateOutlined style={{ fontSize: 12, color: "var(--text-muted)" }} />
+        <span style={{ fontSize: 12, color: "var(--text-muted)" }}>Bảo mật bởi Google OAuth 2.0</span>
+      </m.div>
 
       {error && (
-        <div style={{
-          marginTop: 16,
-          padding: "12px 16px",
-          borderRadius: 12,
+        <m.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} style={{
+          marginTop: 16, padding: "12px 16px", borderRadius: 12,
           border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)",
           background: "color-mix(in srgb, var(--error) 8%, transparent)",
-          color: "var(--error)",
-          fontSize: 13,
+          color: "var(--error)", fontSize: 13,
         }}>
           {error}
-        </div>
+        </m.div>
       )}
-    </div>
+    </m.div>
   );
 }
 
-/* ── IPA watermark decorations ── */
-const IPA_MARKS = [
-  { symbol: "/iː/", top: "8%", left: "10%", size: 88, rotation: -12, delay: 0.1 },
-  { symbol: "/æ/", top: "22%", right: "8%", size: 72, rotation: 8, delay: 0.2 },
-  { symbol: "/θ/", top: "52%", left: "5%", size: 96, rotation: -6, delay: 0.3 },
-  { symbol: "/ʃ/", bottom: "28%", right: "12%", size: 80, rotation: 14, delay: 0.15 },
-  { symbol: "/aʊ/", bottom: "10%", left: "18%", size: 70, rotation: -10, delay: 0.25 },
-  { symbol: "/ŋ/", top: "38%", left: "52%", size: 64, rotation: 5, delay: 0.35 },
-];
+/* ── Score ring decoration ── */
+function ScoreRing() {
+  return (
+    <m.div
+      initial={{ opacity: 0, scale: 0.8 }}
+      animate={{ opacity: 0.25, scale: 1 }}
+      transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
+      style={{
+        position: "absolute", bottom: "6%", left: "50%", transform: "translateX(-50%)",
+        width: 220, height: 130,
+      }}
+    >
+      <svg viewBox="0 0 220 130" fill="none" style={{ width: "100%", height: "100%" }}>
+        <m.path
+          d="M20 120 A90 90 0 0 1 200 120"
+          stroke="rgba(200,75,49,0.5)" strokeWidth="3" fill="none" strokeLinecap="round"
+          initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
+          transition={{ delay: 1.2, duration: 1.5, ease: "easeInOut" }}
+        />
+        <m.path
+          d="M20 120 A90 90 0 0 1 170 40"
+          stroke="rgba(200,75,49,0.8)" strokeWidth="4" fill="none" strokeLinecap="round"
+          initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
+          transition={{ delay: 1.4, duration: 1.2, ease: "easeInOut" }}
+        />
+      </svg>
+      <div style={{ position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%)", textAlign: "center" }}>
+        <div style={{ fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", textTransform: "uppercase" }}>Score</div>
+        <div style={{ fontSize: 52, fontWeight: 800, fontFamily: "var(--font-display)", fontStyle: "italic", color: "rgba(255,255,255,0.15)", lineHeight: 1, letterSpacing: "-0.03em" }}>990</div>
+      </div>
+    </m.div>
+  );
+}
 
 /* ── Main page ── */
 export default function SignInPage() {
@@ -233,240 +227,142 @@ export default function SignInPage() {
       <div
         className="desktop-only"
         style={{
-          position: "relative",
-          width: "46%",
-          flexShrink: 0,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          overflow: "hidden",
-          background: "var(--sidebar-gradient)",
+          position: "relative", width: "44%", flexShrink: 0,
+          display: "flex", flexDirection: "column",
+          alignItems: "flex-start", justifyContent: "center",
+          overflow: "hidden", background: "#1a1410",
         }}
       >
         {/* Ambient glows */}
         <div style={{
-          pointerEvents: "none",
-          position: "absolute",
-          inset: 0,
-          background: "radial-gradient(ellipse 80% 50% at 60% 10%, color-mix(in srgb, var(--accent) 20%, transparent) 0%, transparent 65%), radial-gradient(ellipse 60% 40% at 20% 90%, color-mix(in srgb, var(--secondary, #4A7C6F) 14%, transparent) 0%, transparent 60%)",
+          pointerEvents: "none", position: "absolute", inset: 0,
+          background: "radial-gradient(ellipse 80% 50% at 30% 20%, rgba(200,75,49,0.12) 0%, transparent 65%), radial-gradient(ellipse 70% 40% at 70% 85%, rgba(200,75,49,0.15) 0%, transparent 55%)",
         }} />
+        <div className="grain-overlay" style={{ opacity: 0.06 }} />
 
-        {/* Grain */}
-        <div className="grain-overlay" style={{ opacity: 0.04 }} />
-
-        {/* Floating IPA watermarks */}
-        {IPA_MARKS.map((m) => (
-          <div
-            key={m.symbol}
+        {/* Floating skill badges with Motion */}
+        {BADGES.map((b) => (
+          <m.div
+            key={b.label}
+            initial={{ opacity: 0, scale: 0.8, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: [0, -6, 0] }}
+            transition={{
+              opacity: { delay: b.delay, duration: 0.5 },
+              scale: { delay: b.delay, duration: 0.5 },
+              y: { delay: b.delay + 0.5, duration: 4, repeat: Infinity, ease: "easeInOut" },
+            }}
             style={{
               position: "absolute",
-              top: m.top,
-              bottom: (m as { bottom?: string }).bottom,
-              left: (m as { left?: string }).left,
-              right: (m as { right?: string }).right,
-              fontSize: m.size,
-              fontFamily: "var(--font-display)",
-              fontWeight: 700,
-              fontStyle: "italic",
-              color: "var(--sidebar-text-active)",
-              opacity: 0.04,
-              transform: `rotate(${m.rotation}deg)`,
-              lineHeight: 1,
-              userSelect: "none",
-              pointerEvents: "none",
-              animation: `anim-fade-in 1s ease-out ${m.delay}s both`,
+              display: "inline-flex", alignItems: "center", gap: 8,
+              padding: "10px 18px", borderRadius: 14,
+              background: "rgba(255,255,255,0.07)",
+              backdropFilter: "blur(12px)",
+              border: "1px solid rgba(255,255,255,0.1)",
+              color: "rgba(255,255,255,0.85)", fontSize: 14, fontWeight: 600,
+              boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+              top: (b as any).top, right: (b as any).right,
+              bottom: (b as any).bottom, left: (b as any).left,
             }}
           >
-            {m.symbol}
-          </div>
+            <span style={{ fontSize: 16, opacity: 0.8 }}>{b.icon}</span>
+            {b.label}
+          </m.div>
         ))}
 
+        <ScoreRing />
+
         {/* Content */}
-        <div style={{
-          position: "relative",
-          zIndex: 1,
-          maxWidth: 380,
-          padding: "0 44px",
-          display: "flex",
-          flexDirection: "column",
-          gap: 32,
-        }}>
-          {/* Logo */}
-          <div className="anim-fade-up" style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div style={{
-              width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-              background: "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 60%, black))",
-              display: "grid", placeItems: "center",
-              boxShadow: "0 4px 16px color-mix(in srgb, var(--accent) 40%, transparent)",
-            }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-              </svg>
-            </div>
-            <span style={{
-              fontFamily: "var(--font-display)",
-              fontSize: 17,
-              fontWeight: 800,
-              letterSpacing: "-0.02em",
-              color: "var(--sidebar-text-active)",
-            }}>
-              THIEN<span style={{ color: "var(--accent)" }}>GLISH</span>
-            </span>
-          </div>
-
-          {/* Hero quote */}
-          <div className="anim-fade-up anim-delay-1">
-            <blockquote style={{
-              margin: 0,
-              fontSize: 26,
-              fontStyle: "italic",
-              fontFamily: "var(--font-display)",
-              fontWeight: 300,
-              lineHeight: 1.45,
-              color: "var(--sidebar-text-active)",
-              letterSpacing: "-0.01em",
-            }}>
-              "Học tiếng Anh mỗi ngày, một câu chuyện mới mỗi ngày."
-            </blockquote>
-            <div style={{
-              marginTop: 18,
-              width: 40,
-              height: 2,
-              borderRadius: 99,
-              background: "var(--accent)",
-              opacity: 0.7,
-            }} />
-          </div>
-
-          {/* Tagline */}
-          <p className="anim-fade-up anim-delay-2" style={{
-            margin: 0,
-            fontSize: 11,
-            textTransform: "uppercase",
-            letterSpacing: "0.2em",
-            color: "var(--sidebar-text)",
-            opacity: 0.6,
+        <m.div
+          initial="hidden" animate="show"
+          variants={{ show: { transition: { staggerChildren: 0.12, delayChildren: 0.2 } } }}
+          style={{ position: "relative", zIndex: 1, padding: "0 48px", maxWidth: 420 }}
+        >
+          <m.h2 variants={fadeUp} style={{
+            margin: 0, fontSize: 52, fontWeight: 700,
+            fontStyle: "italic", fontFamily: "var(--font-display)",
+            lineHeight: 1.1, letterSpacing: "-0.02em", color: "#F0E8DC",
           }}>
-            Trợ lý học tập tiếng Anh
-          </p>
+            Master<br />Your<br />
+            <span style={{ color: "#C84B31" }}>TOEIC</span><br />Score
+          </m.h2>
+
+          <m.div variants={fadeUp} style={{
+            width: 48, height: 3, borderRadius: 99,
+            background: "linear-gradient(90deg, #C84B31, rgba(200,75,49,0.3))",
+            margin: "24px 0",
+          }} />
+
+          <m.p variants={fadeUp} style={{
+            margin: "0 0 32px", fontSize: 15, lineHeight: 1.7,
+            color: "rgba(240,232,220,0.5)", maxWidth: 300,
+          }}>
+            Luyện thi TOEIC 4 Skills với AI — Listening, Reading, Speaking, Writing
+          </m.p>
 
           {/* Stats */}
-          <div className="anim-fade-up anim-delay-3" style={{ display: "flex", gap: 28 }}>
+          <m.div variants={fadeUp} style={{ display: "flex", gap: 32 }}>
             {[
               { value: "10K+", label: "người dùng" },
-              { value: "50K+", label: "bài luyện tập" },
-              { value: "4.9 ★", label: "đánh giá" },
+              { value: "50K+", label: "bài tập" },
+              { value: "4.9★", label: "đánh giá" },
             ].map((s) => (
               <div key={s.label}>
-                <div style={{
-                  fontSize: 20,
-                  fontWeight: 700,
-                  fontFamily: "var(--font-display)",
-                  color: "var(--sidebar-text-active)",
-                  lineHeight: 1.1,
-                }}>
-                  {s.value}
-                </div>
-                <div style={{ fontSize: 10, color: "var(--sidebar-text)", opacity: 0.55, marginTop: 2, letterSpacing: "0.03em" }}>
-                  {s.label}
-                </div>
+                <div style={{ fontSize: 22, fontWeight: 700, fontFamily: "var(--font-display)", color: "#F0E8DC", lineHeight: 1.1 }}>{s.value}</div>
+                <div style={{ fontSize: 11, color: "rgba(240,232,220,0.35)", marginTop: 3 }}>{s.label}</div>
               </div>
             ))}
-          </div>
+          </m.div>
 
-          {/* Testimonial card */}
-          <div
-            className="anim-fade-up anim-delay-4"
-            style={{
-              borderRadius: 16,
-              border: "1px solid var(--sidebar-border)",
-              background: "rgba(255,255,255,0.04)",
-              backdropFilter: "blur(16px)",
-              padding: "18px 20px",
-            }}
-          >
-            <div style={{ display: "flex", gap: 2, marginBottom: 10 }}>
-              {[1,2,3,4,5].map((i) => (
-                <StarFilled key={i} style={{ fontSize: 11, color: "#F59E0B" }} />
-              ))}
+          {/* Testimonial */}
+          <m.div variants={fadeUp} style={{
+            marginTop: 36, borderRadius: 16,
+            border: "1px solid rgba(255,255,255,0.08)",
+            background: "rgba(255,255,255,0.03)",
+            backdropFilter: "blur(16px)", padding: "18px 20px",
+          }}>
+            <div style={{ display: "flex", gap: 3, marginBottom: 8 }}>
+              {[1,2,3,4,5].map((i) => <span key={i} style={{ fontSize: 11, color: "#F59E0B" }}>★</span>)}
             </div>
             <p style={{
-              margin: "0 0 14px",
-              fontSize: 13,
-              fontStyle: "italic",
-              lineHeight: 1.65,
-              color: "var(--sidebar-text-active)",
-              opacity: 0.85,
+              margin: "0 0 12px", fontSize: 13, fontStyle: "italic",
+              lineHeight: 1.65, color: "rgba(240,232,220,0.7)",
             }}>
-              "App rất tiện, AI sửa lỗi phát âm giúp mình tự tin hơn khi nói tiếng Anh."
+              "Nhờ app mà mình tăng 200 điểm TOEIC chỉ trong 3 tháng. AI chấm điểm rất chính xác!"
             </p>
             <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
               <div style={{
-                width: 32, height: 32, borderRadius: 10, flexShrink: 0,
-                background: "linear-gradient(135deg, var(--accent), var(--secondary, #4A7C6F))",
+                width: 30, height: 30, borderRadius: 10,
+                background: "linear-gradient(135deg, #C84B31, #D4B896)",
                 display: "grid", placeItems: "center",
-                fontSize: 13, fontWeight: 700, color: "white",
-              }}>
-                M
-              </div>
+                fontSize: 12, fontWeight: 700, color: "white",
+              }}>T</div>
               <div>
-                <div style={{ fontSize: 12, fontWeight: 600, color: "var(--sidebar-text-active)" }}>Minh Anh</div>
-                <div style={{ fontSize: 10, color: "var(--sidebar-text)", opacity: 0.5, marginTop: 1 }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: "rgba(240,232,220,0.8)" }}>Thanh Trúc</div>
+                <div style={{ fontSize: 10, color: "rgba(240,232,220,0.35)", marginTop: 1 }}>
                   <CheckCircleFilled style={{ marginRight: 3, color: "#10b981" }} />
-                  Đã dùng 6 tháng
+                  TOEIC 850 · Đã dùng 4 tháng
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* Feature pills at bottom */}
-          <div className="anim-fade-up anim-delay-5" style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
-            {[
-              { icon: <MessageOutlined />, label: "AI Chat" },
-              { icon: <ReadOutlined />, label: "Từ điển" },
-              { icon: <AudioOutlined />, label: "Phát âm" },
-              { icon: <FireOutlined />, label: "Daily" },
-            ].map((p) => (
-              <div key={p.label} style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 5,
-                padding: "5px 11px",
-                borderRadius: 99,
-                border: "1px solid var(--sidebar-border)",
-                background: "rgba(255,255,255,0.05)",
-                color: "var(--sidebar-text)",
-                fontSize: 11,
-                fontWeight: 500,
-              }}>
-                {p.icon} {p.label}
-              </div>
-            ))}
-          </div>
-        </div>
+          </m.div>
+        </m.div>
       </div>
 
       {/* ── Right form panel ── */}
       <div style={{
-        flex: 1,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "var(--bg)",
-        padding: "48px 28px",
-        overflowY: "auto",
-        position: "relative",
+        flex: 1, display: "flex", alignItems: "center", justifyContent: "center",
+        background: "var(--bg)", padding: "48px 32px",
+        overflowY: "auto", position: "relative",
       }}>
-        {/* Subtle top-right glow */}
         <div style={{
-          pointerEvents: "none",
-          position: "absolute",
-          top: 0,
-          right: 0,
-          width: "60%",
-          height: "45%",
-          background: "radial-gradient(ellipse at top right, color-mix(in srgb, var(--accent) 6%, transparent) 0%, transparent 70%)",
+          pointerEvents: "none", position: "absolute",
+          top: 0, right: 0, width: "50%", height: "40%",
+          background: "radial-gradient(ellipse at top right, color-mix(in srgb, var(--accent) 5%, transparent) 0%, transparent 70%)",
+        }} />
+        <div style={{
+          pointerEvents: "none", position: "absolute",
+          bottom: 0, left: 0, width: "40%", height: "30%",
+          background: "radial-gradient(ellipse at bottom left, color-mix(in srgb, var(--secondary) 4%, transparent) 0%, transparent 70%)",
         }} />
 
         <Suspense fallback={null}>
@@ -474,11 +370,7 @@ export default function SignInPage() {
         </Suspense>
       </div>
 
-      <style>{`
-        @keyframes spin {
-          to { transform: rotate(360deg); }
-        }
-      `}</style>
+      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 }

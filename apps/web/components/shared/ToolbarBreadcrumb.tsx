@@ -6,6 +6,7 @@ import { Flex, Typography } from "antd";
 const { Text, Title } = Typography;
 
 const BREADCRUMBS: Record<string, { eyebrow: string; title: string }> = {
+  "/dashboard": { eyebrow: "Tổng quan", title: "Dashboard" },
   "/toeic-skills": { eyebrow: "TOEIC 4 Skills", title: "Luyện thi TOEIC" },
   "/toeic-practice": { eyebrow: "Luyện đề ETS", title: "TOEIC Practice" },
   "/toeic": { eyebrow: "TOEIC", title: "TOEIC Hub" },
@@ -21,15 +22,10 @@ const BREADCRUMBS: Record<string, { eyebrow: string; title: string }> = {
   "/error-notebook": { eyebrow: "Sổ lỗi sai", title: "Error Notebook" },
   "/pdf-reader": { eyebrow: "Công cụ", title: "Đọc sách TOEIC" },
   "/youtube-learn": { eyebrow: "Công cụ", title: "YouTube TOEIC" },
-  "/listening": { eyebrow: "TOEIC Listening", title: "Luyện nghe" },
-  "/pronunciation": { eyebrow: "TOEIC Speaking", title: "Luyện phát âm" },
-  "/speaking-practice": { eyebrow: "TOEIC Speaking", title: "Luyện nói tự do" },
-  "/writing-practice": { eyebrow: "TOEIC Writing", title: "Luyện viết" },
-  "/writing-tools": { eyebrow: "Công cụ viết", title: "Grammar Check & Paraphrase" },
   "/reading": { eyebrow: "TOEIC Reading", title: "Luyện đọc" },
-  "/dictionary": { eyebrow: "Từ điển", title: "Tra từ" },
-  "/english-chatbot": { eyebrow: "Trợ lý AI", title: "Trò chuyện" },
   "/ipa-chart": { eyebrow: "Phát âm", title: "Bảng IPA" },
+  "/diagnostic": { eyebrow: "TOEIC", title: "Diagnostic Test" },
+  "/study-sets": { eyebrow: "Từ vựng", title: "Study Sets" },
 };
 
 export function ToolbarBreadcrumb() {

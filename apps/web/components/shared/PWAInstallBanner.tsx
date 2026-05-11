@@ -31,7 +31,7 @@ export function PWAInstallBanner() {
     >
       <DownloadOutlined style={{ fontSize: 20, flexShrink: 0 }} />
       <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 14, fontWeight: 700 }}>Cài đặt ThienGlish</div>
+        <div style={{ fontSize: 14, fontWeight: 700 }}>Cài đặt TOEIC Master</div>
         <div style={{ fontSize: 12, opacity: 0.85 }}>Truy cập nhanh hơn</div>
       </div>
       <button

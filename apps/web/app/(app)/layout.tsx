@@ -11,6 +11,7 @@ import { ThemeProvider } from "@/components/shared/ThemeProvider";
 import { PWAProvider } from "@/components/shared/PWAProvider";
 import { ExamModeProvider } from "@/components/shared/ExamModeProvider";
 import { DashboardProvider } from "@/hooks/useDashboard";
+import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const session = await auth.api.getSession({
@@ -32,7 +33,9 @@ export default async function AppLayout({ children }: { children: ReactNode }) {
         <PWAProvider>
           <ExamModeProvider>
             <DashboardProvider>
-              <AppShell user={user}>{children}</AppShell>
+              <AppShell user={user}>
+                <ErrorBoundary>{children}</ErrorBoundary>
+              </AppShell>
             </DashboardProvider>
           </ExamModeProvider>
         </PWAProvider>

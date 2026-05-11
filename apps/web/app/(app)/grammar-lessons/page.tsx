@@ -3,13 +3,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   BookOutlined,
-  BankOutlined,
-  TrophyOutlined,
   CheckCircleOutlined,
   FireOutlined,
   StarOutlined,
 } from "@ant-design/icons";
-import { Segmented, Statistic, Alert } from "antd";
+import { Statistic, Alert } from "antd";
 
 import { useExamMode } from "@/components/shared/ExamModeProvider";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
@@ -34,7 +32,7 @@ type ProgressResponse = {
 export default function GrammarLessonsPage() {
   const { examMode } = useExamMode();
   const [activeTopic, setActiveTopic] = useState<{ id: string; title: string; level: string } | null>(null);
-  const [examTab, setExamTab] = useState<ExamType>("toeic");
+  const examTab: ExamType = "toeic";
   const [progressByTopic, setProgressByTopic] = useState<Record<string, GrammarLessonProgressItem>>({});
   const [recommendedTopic, setRecommendedTopic] = useState<GrammarTopic | null>(null);
   const [progressError, setProgressError] = useState<string | null>(null);
@@ -104,46 +102,16 @@ export default function GrammarLessonsPage() {
       {/* Premium gradient header */}
       <ModuleHeader
         icon={<BookOutlined />}
-        gradient={
-          examTab === "ielts"
-            ? "var(--gradient-grammar-ielts)"
-            : "var(--gradient-grammar)"
-        }
-        title={activeTopic ? activeTopic.title : "Ngữ pháp trọng tâm"}
+        gradient="var(--gradient-grammar)"
+        title={activeTopic ? activeTopic.title : "Ngữ pháp trọng tâm TOEIC"}
         subtitle={
           activeTopic
-            ? `${activeTopic.level} · ${examTab === "ielts" ? "IELTS" : "TOEIC"} · Bài học chi tiết`
+            ? `${activeTopic.level} · TOEIC · Bài học chi tiết`
             : recommendedTopic
             ? `Gợi ý tiếp: ${recommendedTopic.title}`
-            : "Chinh phục ngữ pháp theo từng kỳ thi"
+            : "Chinh phục ngữ pháp trọng tâm cho TOEIC"
         }
-        action={
-          !activeTopic ? (
-            <Segmented
-              value={examTab}
-              onChange={(val) => setExamTab(val as ExamType)}
-              options={[
-                {
-                  label: (
-                    <span style={{ display: "flex", alignItems: "center", gap: 5, padding: "1px 6px", fontSize: 13, fontWeight: 600 }}>
-                      <BankOutlined /> TOEIC
-                    </span>
-                  ),
-                  value: "toeic",
-                },
-                {
-                  label: (
-                    <span style={{ display: "flex", alignItems: "center", gap: 5, padding: "1px 6px", fontSize: 13, fontWeight: 600 }}>
-                      <TrophyOutlined /> IELTS
-                    </span>
-                  ),
-                  value: "ielts",
-                },
-              ]}
-              size="small"
-            />
-          ) : undefined
-        }
+        action={undefined}
       />
 
       {/* Content area */}
@@ -162,9 +130,7 @@ export default function GrammarLessonsPage() {
             pointerEvents: "none",
             position: "absolute",
             inset: 0,
-            background: examTab === "ielts"
-              ? "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--module-grammar) 6%, transparent) 0%, transparent 70%)"
-              : "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--accent) 6%, transparent) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--accent) 6%, transparent) 0%, transparent 70%)",
           }}
         />
 
