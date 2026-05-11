@@ -84,98 +84,103 @@ function SignInContent() {
     <m.div
       initial="hidden" animate="show"
       variants={{ show: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } } }}
-      style={{ width: "100%", maxWidth: 420, display: "flex", flexDirection: "column" }}
+      style={{ width: "100%", maxWidth: 400, display: "flex", flexDirection: "column" }}
     >
       {/* Logo */}
-      <m.div variants={fadeUp} style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 40 }}>
+      <m.div variants={fadeUp} style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 48 }}>
         <m.div
           whileHover={{ scale: 1.05, rotate: -3 }}
           transition={{ type: "spring", stiffness: 400 }}
           style={{
-            width: 42, height: 42, borderRadius: 12, flexShrink: 0,
+            width: 44, height: 44, borderRadius: 14, flexShrink: 0,
             background: "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 50%, black))",
-            boxShadow: "0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent)",
+            boxShadow: "0 8px 24px color-mix(in srgb, var(--accent) 25%, transparent)",
             display: "grid", placeItems: "center",
           }}
         >
-          <TranslationOutlined style={{ fontSize: 21, color: "#fff" }} />
+          <TranslationOutlined style={{ fontSize: 22, color: "#fff" }} />
         </m.div>
         <div>
           <div style={{
-            fontSize: 20, fontWeight: 800, lineHeight: 1.1, letterSpacing: "-0.025em",
+            fontSize: 22, fontWeight: 800, lineHeight: 1.1, letterSpacing: "-0.02em",
             color: "var(--ink)", fontFamily: "var(--font-display)",
           }}>
             TOEIC<span style={{ color: "var(--accent)" }}> Master</span>
           </div>
-          <div style={{ fontSize: 10, fontWeight: 600, letterSpacing: "0.14em", textTransform: "uppercase", color: "var(--text-muted)", marginTop: 2 }}>
-            Luyện thi TOEIC 4 Skills
+          <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.16em", textTransform: "uppercase", color: "var(--text-muted)", marginTop: 4 }}>
+            Ultimate 4-Skills Hub
           </div>
         </div>
       </m.div>
 
       {/* Heading */}
       <m.h1 variants={fadeUp} style={{
-        margin: "0 0 6px", fontSize: 32, fontWeight: 700,
+        margin: "0 0 10px", fontSize: 36, fontWeight: 800,
         fontStyle: "italic", fontFamily: "var(--font-display)",
-        color: "var(--ink)", lineHeight: 1.15, letterSpacing: "-0.02em",
+        color: "var(--ink)", lineHeight: 1.1, letterSpacing: "-0.03em",
       }}>
-        Chào mừng bạn
+        Bắt đầu thôi
       </m.h1>
-      <m.p variants={fadeUp} style={{ margin: "0 0 32px", fontSize: 15, color: "var(--text-muted)", lineHeight: 1.5 }}>
-        Đăng nhập để bắt đầu chinh phục TOEIC
+      <m.p variants={fadeUp} style={{ margin: "0 0 40px", fontSize: 16, color: "var(--text-muted)", lineHeight: 1.6, fontWeight: 500 }}>
+        Gia nhập cộng đồng 10,000+ học viên đang chinh phục TOEIC mỗi ngày.
       </m.p>
 
-      {/* Features */}
-      <m.div variants={stagger} style={{ display: "flex", flexDirection: "column", gap: 18, marginBottom: 36 }}>
-        <Feature icon={<ThunderboltOutlined />} title="AI chấm điểm thông minh" desc="Đánh giá chính xác Speaking, Writing và dự đoán điểm TOEIC" />
-        <Feature icon={<AimOutlined />} title="Luyện đủ 4 kỹ năng" desc="Listening · Reading · Speaking · Writing — đúng format TOEIC" />
-        <Feature icon={<FireOutlined />} title="Streak & thử thách mỗi ngày" desc="Duy trì động lực học với thử thách hàng ngày và XP tích lũy" />
+      {/* Google button */}
+      <m.div variants={fadeUp}>
+        <m.button
+          whileHover={{ y: -3, boxShadow: "0 12px 32px color-mix(in srgb, var(--accent) 18%, transparent)" }}
+          whileTap={{ scale: 0.98 }}
+          transition={{ type: "spring", stiffness: 400, damping: 22 }}
+          onClick={handleGoogleSignIn}
+          disabled={isLoading}
+          style={{
+            display: "flex", alignItems: "center", justifyContent: "center", gap: 14,
+            width: "100%", height: 64, borderRadius: 20,
+            fontSize: 17, fontWeight: 700,
+            border: "1px solid var(--border)",
+            background: "var(--surface)", color: "var(--ink)",
+            cursor: isLoading ? "wait" : "pointer",
+            boxShadow: "var(--shadow-lg)",
+            opacity: isLoading ? 0.7 : 1,
+            transition: "background 0.2s, border-color 0.2s",
+          }}
+        >
+          {isLoading ? (
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" style={{ animation: "spin 0.8s linear infinite" }}>
+                <circle cx="12" cy="12" r="10" stroke="var(--border)" strokeWidth="3" />
+                <path d="M12 2a10 10 0 0 1 10 10" stroke="var(--accent)" strokeWidth="3" strokeLinecap="round" />
+              </svg>
+              Đang kết nối...
+            </span>
+          ) : (
+            <><GoogleIcon /> Tiếp tục với Google</>
+          )}
+        </m.button>
       </m.div>
 
-      {/* Google button */}
-      <m.button
-        variants={fadeUp}
-        whileHover={{ y: -2, boxShadow: "0 8px 28px color-mix(in srgb, var(--accent) 22%, transparent)" }}
-        whileTap={{ scale: 0.98 }}
-        transition={{ type: "spring", stiffness: 400, damping: 20 }}
-        onClick={handleGoogleSignIn}
-        disabled={isLoading}
-        style={{
-          display: "flex", alignItems: "center", justifyContent: "center", gap: 12,
-          width: "100%", height: 56, borderRadius: 16,
-          fontSize: 16, fontWeight: 600,
-          border: "1.5px solid var(--border)",
-          background: "var(--surface)", color: "var(--ink)",
-          cursor: isLoading ? "wait" : "pointer",
-          boxShadow: "var(--shadow-md)",
-          opacity: isLoading ? 0.7 : 1,
-        }}
-      >
-        {isLoading ? (
-          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" style={{ animation: "spin 0.8s linear infinite" }}>
-              <circle cx="12" cy="12" r="10" stroke="var(--border)" strokeWidth="3" />
-              <path d="M12 2a10 10 0 0 1 10 10" stroke="var(--accent)" strokeWidth="3" strokeLinecap="round" />
-            </svg>
-            Đang đăng nhập...
-          </span>
-        ) : (
-          <><GoogleIcon /> Đăng nhập bằng Google</>
-        )}
-      </m.button>
-
-      {/* Security */}
-      <m.div variants={fadeIn} style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginTop: 14 }}>
-        <SafetyCertificateOutlined style={{ fontSize: 12, color: "var(--text-muted)" }} />
-        <span style={{ fontSize: 12, color: "var(--text-muted)" }}>Bảo mật bởi Google OAuth 2.0</span>
+      {/* Security & Trust Footer */}
+      <m.div variants={fadeIn} style={{ marginTop: 32, padding: "20px", borderRadius: 20, background: "var(--bg-deep)", border: "1px solid var(--border)", display: "flex", flexDirection: "column", gap: 12 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <CheckCircleFilled style={{ color: "var(--success)", fontSize: 14 }} />
+          <span style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 500 }}>Truy cập đầy đủ kho đề ETS 2024</span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <ThunderboltOutlined style={{ color: "var(--accent)", fontSize: 14 }} />
+          <span style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 500 }}>AI chấm điểm Speaking & Writing tức thì</span>
+        </div>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 4, paddingTop: 12, borderTop: "1px solid var(--border)" }}>
+          <SafetyCertificateOutlined style={{ fontSize: 14, color: "var(--text-muted)" }} />
+          <span style={{ fontSize: 12, color: "var(--text-muted)" }}>Bảo mật dữ liệu bởi Google Cloud Platform</span>
+        </div>
       </m.div>
 
       {error && (
-        <m.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} style={{
-          marginTop: 16, padding: "12px 16px", borderRadius: 12,
-          border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)",
-          background: "color-mix(in srgb, var(--error) 8%, transparent)",
-          color: "var(--error)", fontSize: 13,
+        <m.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} style={{
+          marginTop: 20, padding: "14px 18px", borderRadius: 16,
+          border: "1px solid color-mix(in srgb, var(--error) 20%, transparent)",
+          background: "color-mix(in srgb, var(--error) 6%, transparent)",
+          color: "var(--error)", fontSize: 14, fontWeight: 500, textAlign: "center",
         }}>
           {error}
         </m.div>
@@ -189,30 +194,30 @@ function ScoreRing() {
   return (
     <m.div
       initial={{ opacity: 0, scale: 0.8 }}
-      animate={{ opacity: 0.25, scale: 1 }}
-      transition={{ delay: 1, duration: 0.8, ease: "easeOut" }}
+      animate={{ opacity: 0.35, scale: 1 }}
+      transition={{ delay: 1, duration: 1, ease: "easeOut" }}
       style={{
-        position: "absolute", bottom: "6%", left: "50%", transform: "translateX(-50%)",
-        width: 220, height: 130,
+        position: "absolute", bottom: "8%", left: "50%", transform: "translateX(-50%)",
+        width: 240, height: 140,
       }}
     >
       <svg viewBox="0 0 220 130" fill="none" style={{ width: "100%", height: "100%" }}>
         <m.path
           d="M20 120 A90 90 0 0 1 200 120"
-          stroke="rgba(200,75,49,0.5)" strokeWidth="3" fill="none" strokeLinecap="round"
+          stroke="rgba(200,75,49,0.4)" strokeWidth="2" fill="none" strokeLinecap="round"
           initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-          transition={{ delay: 1.2, duration: 1.5, ease: "easeInOut" }}
+          transition={{ delay: 1.2, duration: 2, ease: "easeInOut" }}
         />
         <m.path
-          d="M20 120 A90 90 0 0 1 170 40"
-          stroke="rgba(200,75,49,0.8)" strokeWidth="4" fill="none" strokeLinecap="round"
+          d="M20 120 A90 90 0 0 1 180 35"
+          stroke="rgba(200,75,49,0.9)" strokeWidth="5" fill="none" strokeLinecap="round"
           initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
-          transition={{ delay: 1.4, duration: 1.2, ease: "easeInOut" }}
+          transition={{ delay: 1.5, duration: 1.5, ease: "easeInOut" }}
         />
       </svg>
       <div style={{ position: "absolute", bottom: 0, left: "50%", transform: "translateX(-50%)", textAlign: "center" }}>
-        <div style={{ fontSize: 10, fontWeight: 600, color: "rgba(255,255,255,0.4)", letterSpacing: "0.1em", textTransform: "uppercase" }}>Score</div>
-        <div style={{ fontSize: 52, fontWeight: 800, fontFamily: "var(--font-display)", fontStyle: "italic", color: "rgba(255,255,255,0.15)", lineHeight: 1, letterSpacing: "-0.03em" }}>990</div>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(255,255,255,0.3)", letterSpacing: "0.2em", textTransform: "uppercase" }}>Predicted</div>
+        <div style={{ fontSize: 64, fontWeight: 900, fontFamily: "var(--font-display)", fontStyle: "italic", color: "rgba(255,255,255,0.2)", lineHeight: 0.9, letterSpacing: "-0.04em" }}>990</div>
       </div>
     </m.div>
   );
@@ -221,50 +226,50 @@ function ScoreRing() {
 /* ── Main page ── */
 export default function SignInPage() {
   return (
-    <div style={{ display: "flex", minHeight: "100vh" }}>
+    <div style={{ display: "flex", minHeight: "100vh", background: "var(--bg)" }}>
 
       {/* ── Left editorial panel ── */}
       <div
         className="desktop-only"
         style={{
-          position: "relative", width: "44%", flexShrink: 0,
+          position: "relative", width: "42%", flexShrink: 0,
           display: "flex", flexDirection: "column",
           alignItems: "flex-start", justifyContent: "center",
-          overflow: "hidden", background: "#1a1410",
+          overflow: "hidden", background: "#0f0d0c",
         }}
       >
         {/* Ambient glows */}
         <div style={{
           pointerEvents: "none", position: "absolute", inset: 0,
-          background: "radial-gradient(ellipse 80% 50% at 30% 20%, rgba(200,75,49,0.12) 0%, transparent 65%), radial-gradient(ellipse 70% 40% at 70% 85%, rgba(200,75,49,0.15) 0%, transparent 55%)",
+          background: "radial-gradient(circle at 20% 20%, rgba(200,75,49,0.15) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(200,75,49,0.1) 0%, transparent 50%)",
         }} />
-        <div className="grain-overlay" style={{ opacity: 0.06 }} />
+        <div className="grain-overlay" style={{ opacity: 0.04 }} />
 
         {/* Floating skill badges with Motion */}
         {BADGES.map((b) => (
           <m.div
             key={b.label}
-            initial={{ opacity: 0, scale: 0.8, y: 10 }}
-            animate={{ opacity: 1, scale: 1, y: [0, -6, 0] }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1, y: [0, -10, 0] }}
             transition={{
-              opacity: { delay: b.delay, duration: 0.5 },
-              scale: { delay: b.delay, duration: 0.5 },
-              y: { delay: b.delay + 0.5, duration: 4, repeat: Infinity, ease: "easeInOut" },
+              opacity: { delay: b.delay, duration: 0.8 },
+              scale: { delay: b.delay, duration: 0.8 },
+              y: { delay: b.delay, duration: 5 + Math.random() * 2, repeat: Infinity, ease: "easeInOut" },
             }}
             style={{
               position: "absolute",
-              display: "inline-flex", alignItems: "center", gap: 8,
-              padding: "10px 18px", borderRadius: 14,
-              background: "rgba(255,255,255,0.07)",
-              backdropFilter: "blur(12px)",
-              border: "1px solid rgba(255,255,255,0.1)",
-              color: "rgba(255,255,255,0.85)", fontSize: 14, fontWeight: 600,
-              boxShadow: "0 4px 20px rgba(0,0,0,0.2)",
+              display: "inline-flex", alignItems: "center", gap: 10,
+              padding: "12px 22px", borderRadius: 18,
+              background: "rgba(255,255,255,0.05)",
+              backdropFilter: "blur(16px)",
+              border: "1px solid rgba(255,255,255,0.08)",
+              color: "rgba(240,232,220,0.9)", fontSize: 15, fontWeight: 600,
+              boxShadow: "0 10px 30px rgba(0,0,0,0.3)",
               top: (b as any).top, right: (b as any).right,
               bottom: (b as any).bottom, left: (b as any).left,
             }}
           >
-            <span style={{ fontSize: 16, opacity: 0.8 }}>{b.icon}</span>
+            <span style={{ fontSize: 18, color: "#C84B31" }}>{b.icon}</span>
             {b.label}
           </m.div>
         ))}
@@ -274,76 +279,47 @@ export default function SignInPage() {
         {/* Content */}
         <m.div
           initial="hidden" animate="show"
-          variants={{ show: { transition: { staggerChildren: 0.12, delayChildren: 0.2 } } }}
-          style={{ position: "relative", zIndex: 1, padding: "0 48px", maxWidth: 420 }}
+          variants={{ show: { transition: { staggerChildren: 0.15, delayChildren: 0.3 } } }}
+          style={{ position: "relative", zIndex: 1, padding: "0 64px", maxWidth: 480 }}
         >
+          <m.div variants={fadeUp} style={{ display: "flex", gap: 4, marginBottom: 20 }}>
+            {[1,2,3,4,5].map(i => <CheckCircleFilled key={i} style={{ color: "#C84B31", fontSize: 14, opacity: 0.6 }} />)}
+          </m.div>
+          
           <m.h2 variants={fadeUp} style={{
-            margin: 0, fontSize: 52, fontWeight: 700,
+            margin: 0, fontSize: 64, fontWeight: 800,
             fontStyle: "italic", fontFamily: "var(--font-display)",
-            lineHeight: 1.1, letterSpacing: "-0.02em", color: "#F0E8DC",
+            lineHeight: 1, letterSpacing: "-0.03em", color: "#F0E8DC",
           }}>
             Master<br />Your<br />
-            <span style={{ color: "#C84B31" }}>TOEIC</span><br />Score
+            <span style={{ color: "#C84B31" }}>TOEIC</span>
           </m.h2>
 
           <m.div variants={fadeUp} style={{
-            width: 48, height: 3, borderRadius: 99,
-            background: "linear-gradient(90deg, #C84B31, rgba(200,75,49,0.3))",
-            margin: "24px 0",
+            width: 60, height: 4, borderRadius: 99,
+            background: "linear-gradient(90deg, #C84B31, transparent)",
+            margin: "32px 0",
           }} />
 
           <m.p variants={fadeUp} style={{
-            margin: "0 0 32px", fontSize: 15, lineHeight: 1.7,
-            color: "rgba(240,232,220,0.5)", maxWidth: 300,
+            margin: "0 0 40px", fontSize: 17, lineHeight: 1.8,
+            color: "rgba(240,232,220,0.45)", maxWidth: 320, fontWeight: 400,
           }}>
-            Luyện thi TOEIC 4 Skills với AI — Listening, Reading, Speaking, Writing
+            Hệ thống luyện thi thông minh tích hợp AI dành riêng cho người Việt.
           </m.p>
 
           {/* Stats */}
-          <m.div variants={fadeUp} style={{ display: "flex", gap: 32 }}>
+          <m.div variants={fadeUp} style={{ display: "flex", gap: 40 }}>
             {[
-              { value: "10K+", label: "người dùng" },
-              { value: "50K+", label: "bài tập" },
-              { value: "4.9★", label: "đánh giá" },
+              { value: "10K+", label: "Học viên" },
+              { value: "990", label: "Target" },
+              { value: "4.9★", label: "Rating" },
             ].map((s) => (
               <div key={s.label}>
-                <div style={{ fontSize: 22, fontWeight: 700, fontFamily: "var(--font-display)", color: "#F0E8DC", lineHeight: 1.1 }}>{s.value}</div>
-                <div style={{ fontSize: 11, color: "rgba(240,232,220,0.35)", marginTop: 3 }}>{s.label}</div>
+                <div style={{ fontSize: 26, fontWeight: 800, fontFamily: "var(--font-display)", color: "#F0E8DC", lineHeight: 1 }}>{s.value}</div>
+                <div style={{ fontSize: 11, fontWeight: 700, color: "rgba(240,232,220,0.3)", marginTop: 6, textTransform: "uppercase", letterSpacing: "0.1em" }}>{s.label}</div>
               </div>
             ))}
-          </m.div>
-
-          {/* Testimonial */}
-          <m.div variants={fadeUp} style={{
-            marginTop: 36, borderRadius: 16,
-            border: "1px solid rgba(255,255,255,0.08)",
-            background: "rgba(255,255,255,0.03)",
-            backdropFilter: "blur(16px)", padding: "18px 20px",
-          }}>
-            <div style={{ display: "flex", gap: 3, marginBottom: 8 }}>
-              {[1,2,3,4,5].map((i) => <span key={i} style={{ fontSize: 11, color: "#F59E0B" }}>★</span>)}
-            </div>
-            <p style={{
-              margin: "0 0 12px", fontSize: 13, fontStyle: "italic",
-              lineHeight: 1.65, color: "rgba(240,232,220,0.7)",
-            }}>
-              "Nhờ app mà mình tăng 200 điểm TOEIC chỉ trong 3 tháng. AI chấm điểm rất chính xác!"
-            </p>
-            <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-              <div style={{
-                width: 30, height: 30, borderRadius: 10,
-                background: "linear-gradient(135deg, #C84B31, #D4B896)",
-                display: "grid", placeItems: "center",
-                fontSize: 12, fontWeight: 700, color: "white",
-              }}>T</div>
-              <div>
-                <div style={{ fontSize: 12, fontWeight: 600, color: "rgba(240,232,220,0.8)" }}>Thanh Trúc</div>
-                <div style={{ fontSize: 10, color: "rgba(240,232,220,0.35)", marginTop: 1 }}>
-                  <CheckCircleFilled style={{ marginRight: 3, color: "#10b981" }} />
-                  TOEIC 850 · Đã dùng 4 tháng
-                </div>
-              </div>
-            </div>
           </m.div>
         </m.div>
       </div>
@@ -351,26 +327,28 @@ export default function SignInPage() {
       {/* ── Right form panel ── */}
       <div style={{
         flex: 1, display: "flex", alignItems: "center", justifyContent: "center",
-        background: "var(--bg)", padding: "48px 32px",
+        background: "var(--bg)", padding: "48px 40px",
         overflowY: "auto", position: "relative",
       }}>
+        {/* Decorative elements */}
         <div style={{
           pointerEvents: "none", position: "absolute",
-          top: 0, right: 0, width: "50%", height: "40%",
-          background: "radial-gradient(ellipse at top right, color-mix(in srgb, var(--accent) 5%, transparent) 0%, transparent 70%)",
+          top: "10%", right: "10%", width: 300, height: 300,
+          background: "radial-gradient(circle, color-mix(in srgb, var(--accent) 4%, transparent) 0%, transparent 70%)",
         }} />
-        <div style={{
-          pointerEvents: "none", position: "absolute",
-          bottom: 0, left: 0, width: "40%", height: "30%",
-          background: "radial-gradient(ellipse at bottom left, color-mix(in srgb, var(--secondary) 4%, transparent) 0%, transparent 70%)",
-        }} />
-
+        
         <Suspense fallback={null}>
           <SignInContent />
         </Suspense>
       </div>
 
-      <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      <style>{`
+        @keyframes spin { to { transform: rotate(360deg); } }
+        .desktop-only { display: flex; }
+        @media (max-width: 1024px) {
+          .desktop-only { display: none; }
+        }
+      `}</style>
     </div>
   );
 }
