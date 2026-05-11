@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useMemo } from "react";
+import Link from "next/link";
 import * as m from "motion/react-client";
 import {
   BookOutlined,
@@ -80,6 +81,17 @@ const CONNECTIONS: Connection[] = [
 // ── Components ───────────────────────────────────────────────────
 
 function RoadmapNode({ node, delay }: { node: Node; delay: number }) {
+  const roadmapToLibrary: Record<string, string> = {
+    "pos": "/grammar-library?cat=pos",
+    "sv": "/grammar-library?q=subject verb agreement",
+    "relative": "/grammar-library?q=relative pronouns",
+    "conj": "/grammar-library?q=conjunctions",
+    "tenses": "/grammar-library?cat=structure",
+    "passive": "/grammar-library?q=verbs",
+  };
+
+  const href = roadmapToLibrary[node.id] || "/grammar-library";
+
   return (
     <m.div
       initial={{ opacity: 0, scale: 0.8, y: 20 }}
@@ -94,51 +106,54 @@ function RoadmapNode({ node, delay }: { node: Node; delay: number }) {
         zIndex: 10,
       }}
     >
-      <Tooltip
-        title={
-          <div style={{ padding: "4px 2px" }}>
-            <div style={{ fontWeight: 700, marginBottom: 4 }}>{node.desc}</div>
-            {node.details.map((d) => (
-              <div key={d} style={{ fontSize: 12, opacity: 0.85, display: "flex", alignItems: "center", gap: 6 }}>
-                <CheckCircleOutlined style={{ fontSize: 10, color: "var(--success)" }} /> {d}
-              </div>
-            ))}
-          </div>
-        }
-        color="rgba(0,0,0,0.85)"
-        overlayStyle={{ backdropFilter: "blur(8px)" }}
-      >
-        <m.div
-          whileHover={{ scale: 1.1, y: -5 }}
-          whileTap={{ scale: 0.95 }}
-          style={{
-            width: 72,
-            height: 72,
-            borderRadius: 20,
-            background: "var(--surface)",
-            border: `2px solid var(--phase-${node.phase}-color)`,
-            boxShadow: `0 8px 32px color-mix(in srgb, var(--phase-${node.phase}-color) 20%, transparent)`,
-            display: "grid",
-            placeItems: "center",
-            cursor: "pointer",
-            position: "relative",
-          }}
+      <Link href={href} style={{ textDecoration: "none" }}>
+        <Tooltip
+          title={
+            <div style={{ padding: "4px 2px" }}>
+              <div style={{ fontWeight: 700, marginBottom: 4 }}>{node.desc}</div>
+              {node.details.map((d) => (
+                <div key={d} style={{ fontSize: 12, opacity: 0.85, display: "flex", alignItems: "center", gap: 6 }}>
+                  <CheckCircleOutlined style={{ fontSize: 10, color: "var(--success)" }} /> {d}
+                </div>
+              ))}
+              <div style={{ marginTop: 8, fontSize: 10, color: "var(--accent)", fontWeight: 700 }}>BẤM ĐỂ HỌC CHI TIẾT →</div>
+            </div>
+          }
+          color="rgba(0,0,0,0.85)"
+          overlayStyle={{ backdropFilter: "blur(8px)" }}
         >
-          <div style={{ fontSize: 28, color: "var(--ink)" }}>{node.icon}</div>
-          
-          <div style={{
-            position: "absolute",
-            top: "105%",
-            left: "50%",
-            transform: "translateX(-50%)",
-            whiteSpace: "nowrap",
-            textAlign: "center",
-          }}>
-            <div style={{ fontSize: 13, fontWeight: 800, color: "var(--ink)", fontFamily: "var(--font-display)" }}>{node.label}</div>
-            <div style={{ fontSize: 10, color: "var(--text-muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>Phase {node.phase}</div>
-          </div>
-        </m.div>
-      </Tooltip>
+          <m.div
+            whileHover={{ scale: 1.1, y: -5, boxShadow: `0 12px 40px color-mix(in srgb, var(--phase-${node.phase}-color) 30%, transparent)` }}
+            whileTap={{ scale: 0.95 }}
+            style={{
+              width: 72,
+              height: 72,
+              borderRadius: 20,
+              background: "var(--surface)",
+              border: `2px solid var(--phase-${node.phase}-color)`,
+              boxShadow: `0 8px 32px color-mix(in srgb, var(--phase-${node.phase}-color) 20%, transparent)`,
+              display: "grid",
+              placeItems: "center",
+              cursor: "pointer",
+              position: "relative",
+            }}
+          >
+            <div style={{ fontSize: 28, color: "var(--ink)" }}>{node.icon}</div>
+            
+            <div style={{
+              position: "absolute",
+              top: "105%",
+              left: "50%",
+              transform: "translateX(-50%)",
+              whiteSpace: "nowrap",
+              textAlign: "center",
+            }}>
+              <div style={{ fontSize: 13, fontWeight: 800, color: "var(--ink)", fontFamily: "var(--font-display)" }}>{node.label}</div>
+              <div style={{ fontSize: 10, color: "var(--text-muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.05em" }}>Phase {node.phase}</div>
+            </div>
+          </m.div>
+        </Tooltip>
+      </Link>
     </m.div>
   );
 }
