@@ -25,6 +25,7 @@ import {
   AimOutlined,
   DashboardOutlined,
   NodeIndexOutlined,
+  SolutionOutlined,
 } from "@ant-design/icons";
 import { useTheme } from "@/components/shared/ThemeProvider";
 import { useSidebarBadges } from "@/hooks/useSidebarBadges";
