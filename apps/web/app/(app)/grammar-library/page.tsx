@@ -68,11 +68,17 @@ function LibraryContent() {
 
   const filteredData = useMemo(() => {
     return grammarData.filter((item) => {
-      const matchesSearch = item.title.toLowerCase().includes(search.toLowerCase()) || 
-                          item.content.toLowerCase().includes(search.toLowerCase());
       const category = CATEGORY_MAP[item.title] || "mechanics";
       const matchesCat = activeCat === "all" || category === activeCat;
-      return matchesSearch && matchesCat;
+      
+      const searchLower = search.toLowerCase();
+      const titleMatch = item.title.toLowerCase().includes(searchLower);
+      const contentMatch = item.sections.some(s => 
+        s.title.toLowerCase().includes(searchLower) || 
+        s.items.some(it => it.text.toLowerCase().includes(searchLower))
+      );
+      
+      return matchesCat && (titleMatch || contentMatch);
     });
   }, [search, activeCat]);
 
@@ -216,7 +222,7 @@ function LibraryContent() {
                       WebkitBoxOrient: "vertical",
                       overflow: "hidden"
                     }}>
-                      {item.content.substring(0, 150)}...
+                      {item.sections[0]?.items.find((it: any) => it.type === "text")?.text.substring(0, 120)}...
                     </p>
 
                     <div style={{ 

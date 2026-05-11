@@ -83,44 +83,61 @@ export default function GrammarDetailPage() {
               color: "var(--ink)",
               fontFamily: "var(--font-body)"
             }}>
-              {item.content.split('\n').map((line, idx) => {
-                const trimmed = line.trim();
-                if (!trimmed) return <div key={idx} style={{ height: 16 }} />;
-                
-                // Header-like lines (all caps)
-                if (trimmed === trimmed.toUpperCase() && trimmed.length > 5 && !trimmed.includes('HTTP')) {
-                  return <h2 key={idx} style={{ fontSize: 24, fontWeight: 800, marginTop: 40, marginBottom: 20, color: "var(--accent)" }}>{trimmed}</h2>;
-                }
-
-                // List items
-                if (trimmed.startsWith('- ')) {
-                  return (
-                    <div key={idx} style={{ display: "flex", gap: 12, marginBottom: 8, paddingLeft: 8 }}>
-                      <CheckCircleOutlined style={{ color: "var(--success)", marginTop: 6 }} />
-                      <span>{trimmed.substring(2)}</span>
-                    </div>
-                  );
-                }
-
-                // Examples (lines with quotes or italic-like patterns)
-                if (trimmed.includes('"') || trimmed.includes("'")) {
-                  return (
-                    <div key={idx} style={{ 
-                      background: "var(--bg-deep)", 
-                      padding: "16px 20px", 
-                      borderRadius: 12, 
-                      borderLeft: "4px solid var(--secondary)",
-                      margin: "16px 0",
-                      fontStyle: "italic",
-                      color: "var(--text-secondary)"
+              {item.sections.map((section: any, sIdx: number) => (
+                <m.div 
+                  key={sIdx}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: sIdx * 0.1 }}
+                  style={{ marginBottom: 40 }}
+                >
+                  {section.title && section.title !== "Introduction" && (
+                    <h2 style={{ 
+                      fontSize: 22, 
+                      fontWeight: 800, 
+                      marginBottom: 16, 
+                      color: "var(--accent)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 12
                     }}>
-                      {trimmed}
-                    </div>
-                  );
-                }
-
-                return <p key={idx} style={{ marginBottom: 16 }}>{trimmed}</p>;
-              })}
+                      <span style={{ width: 8, height: 24, background: "var(--accent)", borderRadius: 4 }} />
+                      {section.title}
+                    </h2>
+                  )}
+                  
+                  <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                    {section.items.map((it: any, iIdx: number) => {
+                      if (it.type === "list") {
+                        return (
+                          <div key={iIdx} style={{ display: "flex", gap: 12, paddingLeft: 8 }}>
+                            <CheckCircleOutlined style={{ color: "var(--success)", marginTop: 6 }} />
+                            <span>{it.text}</span>
+                          </div>
+                        );
+                      }
+                      if (it.type === "example") {
+                        return (
+                          <div key={iIdx} style={{ 
+                            background: "var(--bg-deep)", 
+                            padding: "16px 20px", 
+                            borderRadius: 12, 
+                            borderLeft: "4px solid var(--secondary)",
+                            margin: "8px 0",
+                            fontStyle: "italic",
+                            color: "var(--text-secondary)",
+                            fontSize: 15
+                          }}>
+                            {it.text}
+                          </div>
+                        );
+                      }
+                      return <p key={iIdx} style={{ margin: 0 }}>{it.text}</p>;
+                    })}
+                  </div>
+                </m.div>
+              ))}
             </div>
 
             <Divider />
