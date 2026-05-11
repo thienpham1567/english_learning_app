@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, type ReactNode } from "react";
-
+import * as m from "motion/react-client";
+import { AnimatePresence } from "motion/react";
 import { AppSidebar } from "@/components/shared/AppSidebar";
 import { BottomTabBar } from "@/components/shared/BottomTabBar";
 import { UserMenu } from "@/components/shared/UserMenu";
@@ -9,6 +9,8 @@ import { UserProvider } from "@/components/shared/UserContext";
 import { ToolbarBreadcrumb } from "@/components/shared/ToolbarBreadcrumb";
 import { FloatingChatWidget } from "@/components/shared/FloatingChatWidget";
 import { FloatingDictionaryWidget } from "@/components/shared/FloatingDictionaryWidget";
+import { usePathname } from "next/navigation";
+import { useState, useEffect, ReactNode } from "react";
 
 export type AuthUser = {
   name: string;
@@ -16,8 +18,6 @@ export type AuthUser = {
 };
 
 function useIsMobile(breakpoint = 768): boolean | null {
-  // Always start as null on both server AND first client render to match SSR HTML.
-  // Real value is synced in the effect below, after hydration is complete.
   const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   useEffect(() => {
@@ -30,12 +30,17 @@ function useIsMobile(breakpoint = 768): boolean | null {
   return isMobile;
 }
 
-export function AppShell({ children, user }: { children: ReactNode; user: AuthUser }) {
-  // Always start as false to match SSR. Synced from localStorage in effect.
+export function AppShell({
+  children,
+  user,
+}: {
+  children: ReactNode;
+  user: AuthUser;
+}) {
   const [isExpanded, setIsExpanded] = useState(false);
   const isMobile = useIsMobile();
+  const pathname = usePathname();
 
-  // Sync sidebar state from localStorage after hydration
   useEffect(() => {
     const saved = localStorage.getItem("sidebar-expanded");
     if (saved === "true") setIsExpanded(true);
@@ -48,13 +53,32 @@ export function AppShell({ children, user }: { children: ReactNode; user: AuthUs
   };
 
   return (
-    <div style={{ display: "flex", minHeight: "100vh", maxHeight: "100vh", overflow: "hidden" }}>
-      {/* Desktop sidebar — hidden on mobile, not rendered during SSR to prevent hydration mismatch */}
-      {isMobile === false && <AppSidebar isExpanded={isExpanded} onToggle={handleToggle} />}
+    <div
+      style={{
+        display: "flex",
+        minHeight: "100vh",
+        maxHeight: "100vh",
+        overflow: "hidden",
+        background: "var(--bg)",
+      }}
+    >
+      {/* Desktop sidebar */}
+      {isMobile === false && (
+        <AppSidebar isExpanded={isExpanded} onToggle={handleToggle} />
+      )}
 
-      <div style={{ display: "flex", flexDirection: "column", flex: 1, minWidth: 0 }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          flex: 1,
+          minWidth: 0,
+        }}
+      >
         <UserProvider user={user}>
-          <header
+          <m.header
+            initial={{ y: -20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
             style={{
               display: "flex",
               alignItems: "center",
@@ -73,28 +97,33 @@ export function AppShell({ children, user }: { children: ReactNode; user: AuthUs
             <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
               <UserMenu user={user} />
             </div>
-          </header>
-          <main
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              flex: 1,
-              overflow: "hidden",
-              padding: isMobile ? 12 : 24,
-              minHeight: 0,
-              // Add bottom padding on mobile to account for bottom tab bar
-              paddingBottom: isMobile ? 80 : 24,
-            }}
-          >
-            {children}
-          </main>
+          </m.header>
 
-          {/* Mobile bottom tab bar — only after hydration */}
+          <AnimatePresence mode="wait">
+            <m.main
+              key={pathname}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.2, ease: "easeOut" }}
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                flex: 1,
+                overflow: "hidden",
+                padding: isMobile ? 12 : 24,
+                minHeight: 0,
+                paddingBottom: isMobile ? 80 : 24,
+              }}
+            >
+              {children}
+            </m.main>
+          </AnimatePresence>
+
+          {/* Mobile bottom tab bar */}
           {isMobile === true && <BottomTabBar />}
 
-          {/* Floating dictionary widget — hidden on /dictionary */}
           <FloatingDictionaryWidget />
-          {/* Floating chat widget — hidden on /english-chatbot */}
           <FloatingChatWidget />
         </UserProvider>
       </div>

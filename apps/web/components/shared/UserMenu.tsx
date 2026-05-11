@@ -1,12 +1,12 @@
 "use client";
 
 import { LogoutOutlined, DownOutlined } from "@ant-design/icons";
-import { Avatar, Button, Dropdown, Typography } from "antd";
+import { Avatar, Dropdown, Typography } from "antd";
 import type { MenuProps } from "antd";
 import { useRouter } from "next/navigation";
-
 import { authClient } from "@/lib/auth-client";
 import type { AuthUser } from "@/components/shared/AppShell";
+import * as m from "motion/react-client";
 
 const { Text } = Typography;
 
@@ -35,33 +35,44 @@ export function UserMenu({ user }: { user: AuthUser }) {
     .toUpperCase();
 
   return (
-    <Dropdown menu={{ items }} trigger={["click"]} placement="bottomRight">
-      <Button
-        type="default"
+    <Dropdown menu={{ items }} trigger={["click"]} placement="bottomRight" overlayClassName="user-menu-dropdown">
+      <m.button
+        whileHover={{ background: "var(--bg-deep)" }}
+        whileTap={{ scale: 0.95 }}
         style={{
           display: "flex",
           alignItems: "center",
-          gap: 8,
+          gap: 10,
           borderRadius: 999,
-          height: 38,
-          paddingLeft: 5,
-          paddingRight: 12,
+          height: 40,
+          paddingLeft: 6,
+          paddingRight: 14,
+          background: "var(--surface)",
+          border: "1px solid var(--border)",
+          cursor: "pointer",
+          transition: "background 0.2s, border-color 0.2s",
         }}
       >
-        <Avatar
-          src={user.image || undefined}
-          size={28}
-          style={
-            !user.image ? { background: "var(--accent)", fontSize: 10, fontWeight: 600 } : undefined
-          }
+        <m.div
+          initial={{ scale: 0.8, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 400, damping: 25 }}
         >
-          {initials}
-        </Avatar>
-        <Text strong style={{ fontSize: 14 }}>
+          <Avatar
+            src={user.image || undefined}
+            size={28}
+            style={
+              !user.image ? { background: "var(--accent)", fontSize: 10, fontWeight: 700, border: "2px solid rgba(255,255,255,0.1)" } : undefined
+            }
+          >
+            {initials}
+          </Avatar>
+        </m.div>
+        <Text strong style={{ fontSize: 13, color: "var(--ink)" }}>
           {user.name}
         </Text>
-        <DownOutlined style={{ fontSize: 10, color: "var(--text-muted)" }} />
-      </Button>
+        <DownOutlined style={{ fontSize: 10, color: "var(--text-muted)", marginLeft: 2 }} />
+      </m.button>
     </Dropdown>
   );
 }

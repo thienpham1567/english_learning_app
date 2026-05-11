@@ -6,6 +6,8 @@ import { CloseOutlined, SendOutlined, LoadingOutlined } from "@ant-design/icons"
 import { SimonAvatar } from "@/app/(app)/english-chatbot/_components/persona-avatars/SimonAvatar";
 import { api } from "@/lib/api-client";
 import { parseAssistantStream } from "@/lib/chat/parse-assistant-stream";
+import * as m from "motion/react-client";
+import { AnimatePresence } from "motion/react";
 
 type Msg = { id: string; role: "user" | "assistant"; text: string };
 
@@ -131,234 +133,274 @@ export function FloatingChatWidget() {
   return (
     <>
       {/* Floating button */}
-      <button
+      <m.button
         onClick={() => setOpen((v) => !v)}
         aria-label={open ? "Đóng chat" : "Mở chat"}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
         style={{
           position: "fixed",
           bottom: bottomOffset,
           right: 20,
           zIndex: 900,
-          width: 52,
-          height: 52,
+          width: 56,
+          height: 56,
           borderRadius: "50%",
           border: "none",
           cursor: "pointer",
-          background: "linear-gradient(135deg, var(--accent, #C84B31), var(--secondary, #4A7C6F))",
+          background: "linear-gradient(135deg, var(--accent), #4A7C6F)",
           color: "#fff",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
           boxShadow: "0 4px 20px rgba(0,0,0,0.25)",
-          transition: "transform 0.2s, box-shadow 0.2s",
         }}
-        onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.08)"; }}
-        onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)"; }}
       >
-        {open ? (
-          <CloseOutlined style={{ fontSize: 18 }} />
-        ) : (
-          <svg viewBox="0 0 24 24" width={22} height={22} fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
-          </svg>
-        )}
-      </button>
+        <AnimatePresence mode="wait" initial={false}>
+          {open ? (
+            <m.div
+              key="close"
+              initial={{ rotate: -90, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              exit={{ rotate: 90, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <CloseOutlined style={{ fontSize: 20 }} />
+            </m.div>
+          ) : (
+            <m.div
+              key="chat"
+              initial={{ rotate: 90, opacity: 0 }}
+              animate={{ rotate: 0, opacity: 1 }}
+              exit={{ rotate: -90, opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              <svg viewBox="0 0 24 24" width={24} height={24} fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+              </svg>
+            </m.div>
+          )}
+        </AnimatePresence>
+      </m.button>
 
       {/* Chat panel */}
-      {open && (
-        <div
-          className="anim-scale-in"
-          style={{
-            position: "fixed",
-            bottom: bottomOffset + 64,
-            right: 20,
-            zIndex: 901,
-            width: isMobile ? "calc(100vw - 40px)" : 360,
-            maxWidth: 360,
-            height: 480,
-            borderRadius: 20,
-            display: "flex",
-            flexDirection: "column",
-            overflow: "hidden",
-            boxShadow: "0 8px 40px rgba(0,0,0,0.22)",
-            border: "1px solid var(--border)",
-            background: "var(--surface)",
-            transformOrigin: "bottom right",
-          }}
-        >
-          {/* Header */}
-          <div
+      <AnimatePresence>
+        {open && (
+          <m.div
+            initial={{ opacity: 0, scale: 0.8, y: 20, transformOrigin: "bottom right" }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: 20 }}
+            transition={{ type: "spring", stiffness: 350, damping: 25 }}
             style={{
-              padding: "14px 16px",
-              background: "linear-gradient(135deg, var(--accent, #C84B31), var(--secondary, #4A7C6F))",
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              flexShrink: 0,
-            }}
-          >
-            <div style={{ borderRadius: "50%", overflow: "hidden", flexShrink: 0 }}>
-              <SimonAvatar size={36} />
-            </div>
-            <div style={{ flex: 1, minWidth: 0 }}>
-              <div style={{ fontSize: 14, fontWeight: 700, color: "#fff", fontFamily: "var(--font-display)" }}>
-                Simon
-              </div>
-              <div style={{ fontSize: 11, color: "rgba(255,255,255,0.8)" }}>
-                English conversation coach
-              </div>
-            </div>
-            <button
-              onClick={() => setOpen(false)}
-              style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.8)", padding: 4, borderRadius: 6 }}
-              aria-label="Đóng"
-            >
-              <CloseOutlined style={{ fontSize: 14 }} />
-            </button>
-          </div>
-
-          {/* Messages */}
-          <div
-            style={{
-              flex: 1,
-              overflowY: "auto",
-              padding: "12px 14px",
+              position: "fixed",
+              bottom: bottomOffset + 68,
+              right: 20,
+              zIndex: 901,
+              width: isMobile ? "calc(100vw - 40px)" : 380,
+              maxWidth: 380,
+              height: 520,
+              borderRadius: 24,
               display: "flex",
               flexDirection: "column",
-              gap: 10,
+              overflow: "hidden",
+              boxShadow: "0 12px 48px rgba(0,0,0,0.25)",
+              border: "1px solid var(--border)",
+              background: "var(--surface)",
             }}
           >
-            {msgs.map((msg) => (
+            {/* Header */}
+            <div
+              style={{
+                padding: "16px 20px",
+                background: "linear-gradient(135deg, var(--accent), #4A7C6F)",
+                display: "flex",
+                alignItems: "center",
+                gap: 12,
+                flexShrink: 0,
+              }}
+            >
+              <m.div
+                initial={{ scale: 0.8, rotate: -10 }}
+                animate={{ scale: 1, rotate: 0 }}
+                transition={{ delay: 0.2 }}
+                style={{ borderRadius: "50%", overflow: "hidden", flexShrink: 0, border: "2px solid rgba(255,255,255,0.2)" }}
+              >
+                <SimonAvatar size={40} />
+              </m.div>
+              <div style={{ flex: 1, minWidth: 0 }}>
+                <m.div
+                  initial={{ opacity: 0, x: -10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.25 }}
+                  style={{ fontSize: 16, fontWeight: 700, color: "#fff", fontFamily: "var(--font-display)" }}
+                >
+                  Simon
+                </m.div>
+                <m.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                  style={{ fontSize: 12, color: "rgba(255,255,255,0.85)", letterSpacing: "0.01em" }}
+                >
+                  English conversation coach
+                </m.div>
+              </div>
+              <m.button
+                whileHover={{ background: "rgba(255,255,255,0.1)" }}
+                onClick={() => setOpen(false)}
+                style={{ background: "none", border: "none", cursor: "pointer", color: "rgba(255,255,255,0.9)", padding: 6, borderRadius: 8, transition: "background 0.2s" }}
+                aria-label="Đóng"
+              >
+                <CloseOutlined style={{ fontSize: 16 }} />
+              </m.button>
+            </div>
+
+            {/* Messages */}
+            <div
+              style={{
+                flex: 1,
+                overflowY: "auto",
+                padding: "20px",
+                display: "flex",
+                flexDirection: "column",
+                gap: 12,
+                background: "var(--bg-deep)",
+              }}
+            >
+              {msgs.map((msg, idx) => (
+                <m.div
+                  key={msg.id}
+                  initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.3, delay: idx === msgs.length - 1 ? 0 : 0.05 }}
+                  style={{
+                    display: "flex",
+                    gap: 10,
+                    justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
+                    alignItems: "flex-end",
+                  }}
+                >
+                  {msg.role === "assistant" && (
+                    <div style={{ borderRadius: "50%", overflow: "hidden", flexShrink: 0, boxShadow: "0 2px 8px rgba(0,0,0,0.1)" }}>
+                      <SimonAvatar size={28} />
+                    </div>
+                  )}
+                  <div
+                    style={{
+                      maxWidth: "85%",
+                      padding: "10px 14px",
+                      borderRadius: msg.role === "user" ? "18px 18px 4px 18px" : "18px 18px 18px 4px",
+                      fontSize: 14,
+                      lineHeight: 1.6,
+                      boxShadow: "0 2px 10px rgba(0,0,0,0.05)",
+                      ...(msg.role === "user"
+                        ? {
+                            background: "var(--accent)",
+                            color: "#fff",
+                          }
+                        : {
+                            background: "var(--surface)",
+                            color: "var(--ink)",
+                            border: "1px solid var(--border)",
+                          }),
+                    }}
+                  >
+                    {msg.text
+                      ? msg.text
+                      : streaming && msg.role === "assistant" && msgs[msgs.length - 1].id === msg.id
+                        ? <LoadingOutlined spin style={{ fontSize: 14, opacity: 0.5 }} />
+                        : null
+                    }
+                  </div>
+                </m.div>
+              ))}
+              <div ref={bottomRef} />
+            </div>
+
+            {/* Input */}
+            <div
+              style={{
+                padding: "14px 16px",
+                borderTop: "1px solid var(--border)",
+                background: "var(--surface)",
+                flexShrink: 0,
+              }}
+            >
               <div
-                key={msg.id}
                 style={{
                   display: "flex",
                   gap: 8,
-                  justifyContent: msg.role === "user" ? "flex-end" : "flex-start",
                   alignItems: "flex-end",
+                  border: "2px solid var(--border)",
+                  borderRadius: 16,
+                  padding: "6px 6px 6px 14px",
+                  background: "var(--bg-deep)",
+                  transition: "border-color 0.2s",
                 }}
               >
-                {msg.role === "assistant" && (
-                  <div style={{ borderRadius: "50%", overflow: "hidden", flexShrink: 0 }}>
-                    <SimonAvatar size={26} />
-                  </div>
-                )}
-                <div
+                <textarea
+                  ref={inputRef}
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={handleKeyDown}
+                  placeholder="Nhập tin nhắn..."
+                  rows={1}
                   style={{
-                    maxWidth: "78%",
-                    padding: "9px 12px",
-                    borderRadius: msg.role === "user" ? "16px 16px 4px 16px" : "16px 16px 16px 4px",
-                    fontSize: 13,
-                    lineHeight: 1.55,
-                    ...(msg.role === "user"
-                      ? {
-                          background: "var(--accent, #C84B31)",
-                          color: "#fff",
-                        }
-                      : {
-                          background: "var(--bg-deep, var(--bg))",
-                          color: "var(--text-primary)",
-                          border: "1px solid var(--border)",
-                        }),
+                    flex: 1,
+                    resize: "none",
+                    border: "none",
+                    background: "transparent",
+                    padding: "6px 0",
+                    fontSize: 14,
+                    fontFamily: "var(--font-body)",
+                    color: "var(--ink)",
+                    outline: "none",
+                    boxShadow: "none",
+                    lineHeight: 1.5,
+                    maxHeight: 100,
+                    overflowY: "auto",
+                  }}
+                  onInput={(e) => {
+                    const t = e.currentTarget;
+                    t.style.height = "auto";
+                    t.style.height = `${Math.min(t.scrollHeight, 100)}px`;
+                  }}
+                />
+                <m.button
+                  whileHover={input.trim() && !streaming ? { scale: 1.1 } : {}}
+                  whileTap={input.trim() && !streaming ? { scale: 0.9 } : {}}
+                  onClick={send}
+                  disabled={!input.trim() || streaming}
+                  aria-label="Gửi"
+                  style={{
+                    width: 36,
+                    height: 36,
+                    borderRadius: "50%",
+                    border: "none",
+                    cursor: input.trim() && !streaming ? "pointer" : "default",
+                    background: input.trim() && !streaming
+                      ? "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, black))"
+                      : "var(--border)",
+                    color: input.trim() && !streaming ? "#fff" : "var(--text-muted)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    flexShrink: 0,
+                    transition: "background 0.2s",
+                    boxShadow: input.trim() && !streaming ? "0 4px 12px rgba(0,0,0,0.15)" : "none",
                   }}
                 >
-                  {msg.text
-                  ? msg.text
-                  : streaming && msg.role === "assistant" && msgs[msgs.length - 1].id === msg.id
-                    ? <LoadingOutlined spin style={{ fontSize: 12, opacity: 0.5 }} />
-                    : null
-                }
-                </div>
+                  {streaming ? (
+                    <LoadingOutlined spin style={{ fontSize: 14 }} />
+                  ) : (
+                    <SendOutlined style={{ fontSize: 14 }} />
+                  )}
+                </m.button>
               </div>
-            ))}
-            <div ref={bottomRef} />
-          </div>
-
-          {/* Input */}
-          <div
-            style={{
-              padding: "10px 12px",
-              borderTop: "1px solid var(--border)",
-              background: "var(--surface)",
-              flexShrink: 0,
-            }}
-          >
-            <div
-              className="fcw-input-wrap"
-              style={{
-                display: "flex",
-                gap: 6,
-                alignItems: "flex-end",
-                border: "1.5px solid var(--border)",
-                borderRadius: 14,
-                padding: "6px 6px 6px 12px",
-                background: "var(--bg)",
-              }}
-            >
-              <textarea
-                ref={inputRef}
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Nhập tin nhắn..."
-                rows={1}
-                style={{
-                  flex: 1,
-                  resize: "none",
-                  border: "none",
-                  background: "transparent",
-                  padding: "5px 0",
-                  fontSize: 13,
-                  fontFamily: "var(--font-body)",
-                  color: "var(--text-primary)",
-                  outline: "none",
-                  boxShadow: "none",
-                  lineHeight: 1.55,
-                  maxHeight: 80,
-                  overflowY: "auto",
-                }}
-                onInput={(e) => {
-                  const t = e.currentTarget;
-                  t.style.height = "auto";
-                  t.style.height = `${Math.min(t.scrollHeight, 80)}px`;
-                }}
-              />
-              <button
-                onClick={send}
-                disabled={!input.trim() || streaming}
-                aria-label="Gửi"
-                style={{
-                  width: 30,
-                  height: 30,
-                  borderRadius: "50%",
-                  border: "none",
-                  cursor: input.trim() && !streaming ? "pointer" : "default",
-                  background: input.trim() && !streaming
-                    ? "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 75%, black))"
-                    : "var(--bg-deep)",
-                  color: input.trim() && !streaming ? "#fff" : "var(--text-muted)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  flexShrink: 0,
-                  transition: "background 0.18s, transform 0.15s",
-                  boxShadow: input.trim() && !streaming
-                    ? "0 2px 8px color-mix(in srgb, var(--accent) 35%, transparent)"
-                    : "none",
-                }}
-                onMouseEnter={(e) => { if (input.trim() && !streaming) (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.1)"; }}
-                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)"; }}
-              >
-                {streaming ? (
-                  <LoadingOutlined spin style={{ fontSize: 12 }} />
-                ) : (
-                  <SendOutlined style={{ fontSize: 12 }} />
-                )}
-              </button>
             </div>
-          </div>
-        </div>
-      )}
+          </m.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }

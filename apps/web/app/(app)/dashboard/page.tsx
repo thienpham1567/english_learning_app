@@ -22,6 +22,7 @@ import { Progress, Skeleton } from "antd";
 import { useDashboard, type DashboardData } from "@/hooks/useDashboard";
 import { useDailyStudyPlan, type DailyPlanItem, type DailyPlanStats } from "@/hooks/useDailyStudyPlan";
 import { api } from "@/lib/api-client";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 // ── Types ────────────────────────────────────────────────────────
 type PredictedScore = {
@@ -77,21 +78,14 @@ export default function DashboardPage() {
   const planReady = planState.status === "ready" ? planState : null;
 
   return (
-    <div style={{ minHeight: "100%", overflowY: "auto", padding: "0 0 40px" }}>
+    <div style={{ minHeight: "100%", overflowY: "auto", padding: "12px 12px 40px" }}>
       {/* ── Hero Header ── */}
-      <div style={{
-        padding: "36px 24px 28px", textAlign: "center",
-        background: "linear-gradient(145deg, #1a2332 0%, #2d3748 35%, #4a5568 70%, #718096 100%)",
-        color: "#fff", position: "relative", overflow: "hidden",
-      }}>
-        <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 80% 0%, rgba(255,255,255,0.08) 0%, transparent 70%)", pointerEvents: "none" }} />
-        <div style={{ position: "relative" }}>
-          <h1 style={{ margin: "0 0 4px", fontSize: 26, fontWeight: 800, fontFamily: "var(--font-display)", fontStyle: "italic" }}>
-            TOEIC Master
-          </h1>
-          <p style={{ margin: 0, fontSize: 14, opacity: 0.7 }}>Tổng quan luyện thi của bạn</p>
-        </div>
-      </div>
+      <ModuleHeader
+        icon={<RocketOutlined />}
+        gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+        title="TOEIC Master"
+        subtitle="Tổng quan luyện thi của bạn"
+      />
 
       <div style={{ maxWidth: 780, margin: "0 auto", padding: "20px 16px", display: "flex", flexDirection: "column", gap: 20 }}>
 

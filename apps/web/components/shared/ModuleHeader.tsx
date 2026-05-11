@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import * as m from "motion/react-client";
 
 interface ModuleHeaderProps {
   icon: ReactNode;
@@ -21,8 +22,10 @@ export function ModuleHeader({
   badge,
 }: ModuleHeaderProps) {
   return (
-    <div
-      className="anim-fade-up"
+    <m.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: "easeOut" }}
       style={{
         borderRadius: 20,
         background: gradient,
@@ -48,8 +51,8 @@ export function ModuleHeader({
         viewBox="0 0 160 80"
         preserveAspectRatio="xMaxYMid slice"
       >
-        {[30, 55, 80, 108, 138].map((r) => (
-          <circle
+        {[30, 55, 80, 108, 138].map((r, i) => (
+          <m.circle
             key={r}
             cx={160}
             cy={0}
@@ -57,13 +60,16 @@ export function ModuleHeader({
             fill="none"
             stroke="white"
             strokeWidth={0.8}
+            initial={{ pathLength: 0 }}
+            animate={{ pathLength: 1 }}
+            transition={{ delay: 0.2 + i * 0.1, duration: 1.5, ease: "easeInOut" }}
           />
         ))}
         {/* Radial spokes */}
         {[0, 30, 60, 90].map((deg) => {
           const rad = (deg * Math.PI) / 180;
           return (
-            <line
+            <m.line
               key={deg}
               x1={160}
               y1={0}
@@ -71,6 +77,9 @@ export function ModuleHeader({
               y2={0 + 138 * Math.sin(Math.PI + rad)}
               stroke="white"
               strokeWidth={0.5}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.8, duration: 1 }}
             />
           );
         })}
@@ -83,7 +92,9 @@ export function ModuleHeader({
       />
 
       {/* Radial light bloom — top right */}
-      <div
+      <m.div
+        animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.25, 0.15] }}
+        transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }}
         style={{
           position: "absolute",
           top: "-30%",
@@ -93,36 +104,6 @@ export function ModuleHeader({
           borderRadius: "50%",
           background:
             "radial-gradient(circle, rgba(255,255,255,0.22) 0%, transparent 65%)",
-          pointerEvents: "none",
-        }}
-      />
-
-      {/* Corner bracket — top left */}
-      <div
-        style={{
-          position: "absolute",
-          top: 12,
-          left: 14,
-          width: 14,
-          height: 14,
-          borderTop: "1.5px solid rgba(255,255,255,0.3)",
-          borderLeft: "1.5px solid rgba(255,255,255,0.3)",
-          borderRadius: "4px 0 0 0",
-          pointerEvents: "none",
-        }}
-      />
-
-      {/* Corner bracket — bottom right */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: 12,
-          right: 14,
-          width: 14,
-          height: 14,
-          borderBottom: "1.5px solid rgba(255,255,255,0.3)",
-          borderRight: "1.5px solid rgba(255,255,255,0.3)",
-          borderRadius: "0 0 4px 0",
           pointerEvents: "none",
         }}
       />
@@ -138,7 +119,10 @@ export function ModuleHeader({
         }}
       >
         {/* Icon seal */}
-        <div
+        <m.div
+          initial={{ scale: 0.8, rotate: -10, opacity: 0 }}
+          animate={{ scale: 1, rotate: 0, opacity: 1 }}
+          transition={{ type: "spring", stiffness: 400, damping: 20, delay: 0.1 }}
           style={{
             width: 54,
             height: 54,
@@ -158,12 +142,15 @@ export function ModuleHeader({
           }}
         >
           {icon}
-        </div>
+        </m.div>
 
         {/* Text */}
         <div style={{ flex: 1, minWidth: 0 }}>
           {badge && (
-            <span
+            <m.span
+              initial={{ opacity: 0, x: -5 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -171,7 +158,9 @@ export function ModuleHeader({
                 marginBottom: 5,
               }}
             >
-              <span
+              <m.span
+                animate={{ scale: [1, 1.5, 1], opacity: [0.5, 1, 0.5] }}
+                transition={{ repeat: Infinity, duration: 2 }}
                 style={{
                   width: 5,
                   height: 5,
@@ -193,10 +182,13 @@ export function ModuleHeader({
               >
                 {badge}
               </span>
-            </span>
+            </m.span>
           )}
 
-          <h2
+          <m.h2
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.2 }}
             style={{
               margin: 0,
               fontFamily: "var(--font-display)",
@@ -210,10 +202,13 @@ export function ModuleHeader({
             }}
           >
             {title}
-          </h2>
+          </m.h2>
 
           {subtitle && (
-            <p
+            <m.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.35 }}
               style={{
                 margin: "4px 0 0",
                 fontSize: 12.5,
@@ -225,14 +220,18 @@ export function ModuleHeader({
               }}
             >
               {subtitle}
-            </p>
+            </m.p>
           )}
         </div>
       </div>
 
       {/* ── Action slot ── */}
       {action && (
-        <>
+        <m.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.45 }}
+        >
           {/* Thin hairline divider */}
           <div
             style={{
@@ -256,8 +255,8 @@ export function ModuleHeader({
           >
             {action}
           </div>
-        </>
+        </m.div>
       )}
-    </div>
+    </m.div>
   );
 }
