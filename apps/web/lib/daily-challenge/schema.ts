@@ -109,18 +109,18 @@ export const ExerciseSchema = z.discriminatedUnion("type", [
 ]);
 
 export const ChallengeGenerationSchema = z.object({
-  exercises: z.array(ExerciseSchema).min(3).max(8),
+  exercises: z.array(ExerciseSchema).min(3).max(12),
 });
 
 export const SubmitAnswerSchema = z.object({
   answers: z
     .array(
       z.object({
-        exerciseIndex: z.number().int().min(0).max(7),
+        exerciseIndex: z.number().int().min(0).max(11),
         answer: z.string(),
       }),
     )
     .min(1)
-    .max(8),
+    .max(12),
   timeElapsedMs: z.number().int().min(0),
 });

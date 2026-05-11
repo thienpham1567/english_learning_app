@@ -60,7 +60,7 @@ function buildChallengeSystemPrompt(examMode: ExamModeValue, difficulty: Difficu
     : "";
 
   return `You are a daily English challenge generator for ${ctx.label} preparation.
-Generate exactly 5 mini-exercises. Pick 3-5 DIFFERENT types from these 9 types for variety:
+Generate exactly 10 mini-exercises. Pick 5-9 DIFFERENT types from these 9 types for variety:
 
 1. "fill-in-blank": A sentence with _____ and 4 options (correctIndex 0-3)
 2. "sentence-order": Scrambled words to arrange into a correct sentence
@@ -76,7 +76,7 @@ Each exercise needs an "instruction" field in Vietnamese telling the learner wha
 ${getDifficultyInstructions(difficulty)}
 ${ctx.dailyChallengeTopics}
 
-IMPORTANT: Use a variety of types. Do NOT use the same type more than twice. Mix at least 3 different types.
+IMPORTANT: Use a variety of types. Do NOT use the same type more than 3 times. Mix at least 5 different types across the 10 exercises.
 ${antiRepetitionBlock}
 
 Return ONLY valid JSON:
@@ -224,7 +224,7 @@ export async function GET() {
           { role: "system", content: buildChallengeSystemPrompt(examMode, difficulty, recentStems) },
           {
             role: "user",
-            content: `Generate today's daily English challenge. Date: ${vnToday}. Difficulty: ${difficulty}. Create UNIQUE questions that are completely different from any previous challenges. Surprise the learner with fresh content. Return JSON only.`,
+            content: `Generate today's daily English challenge with exactly 10 exercises. Date: ${vnToday}. Difficulty: ${difficulty}. Create UNIQUE questions that are completely different from any previous challenges. Surprise the learner with fresh content. Return JSON only.`,
           },
         ],
       });
