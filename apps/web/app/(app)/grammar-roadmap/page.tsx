@@ -82,15 +82,15 @@ const CONNECTIONS: Connection[] = [
 
 function RoadmapNode({ node, delay }: { node: Node; delay: number }) {
   const roadmapToLibrary: Record<string, string> = {
-    "pos": "/grammar-library?cat=pos",
-    "sv": "/grammar-library?q=subject verb agreement",
-    "relative": "/grammar-library?q=relative pronouns",
-    "conj": "/grammar-library?q=conjunctions",
-    "tenses": "/grammar-library?cat=structure",
-    "passive": "/grammar-library?q=verbs",
+    "pos": "/grammar-lessons",
+    "sv": "/grammar-lessons",
+    "relative": "/grammar-lessons",
+    "conj": "/grammar-lessons",
+    "tenses": "/grammar-lessons",
+    "passive": "/grammar-lessons",
   };
 
-  const href = roadmapToLibrary[node.id] || "/grammar-library";
+  const href = roadmapToLibrary[node.id] || "/grammar-lessons";
 
   return (
     <m.div

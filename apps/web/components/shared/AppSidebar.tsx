@@ -69,7 +69,6 @@ const navGroups: (NavItem | NavGroup)[] = [
         icon: NodeIndexOutlined,
       },
       { href: "/grammar-lessons", label: "Bài học ngữ pháp", icon: SolutionOutlined },
-      { href: "/grammar-library", label: "Thư viện ngữ pháp", icon: BookOutlined },
       { href: "/my-vocabulary", label: "Từ vựng", icon: StarOutlined },
       { href: "/flashcards", label: "Ôn tập Flashcard", icon: SyncOutlined },
     ],
