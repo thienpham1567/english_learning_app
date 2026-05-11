@@ -1,8 +1,7 @@
 "use client";
-import { api } from "@/lib/api-client";
-import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react";
+import { createContext, useContext, type ReactNode } from "react";
 
-export type ExamMode = "toeic" | "ielts";
+export type ExamMode = "toeic";
 
 type ExamModeContextType = {
   examMode: ExamMode;
@@ -12,58 +11,24 @@ type ExamModeContextType = {
   icon: string;
 };
 
-const ExamModeContext = createContext<ExamModeContextType>({
+const TOEIC_CONTEXT: ExamModeContextType = {
   examMode: "toeic",
   setExamMode: async () => {},
-  isLoading: true,
+  isLoading: false,
   label: "TOEIC",
-  icon: "📊",
-});
-
-const MODE_META: Record<ExamMode, { label: string; icon: string }> = {
-  toeic: { label: "TOEIC", icon: "bar-chart" },
-  ielts: { label: "IELTS", icon: "trophy" },
+  icon: "bar-chart",
 };
 
+const ExamModeContext = createContext<ExamModeContextType>(TOEIC_CONTEXT);
+
+/**
+ * ExamModeProvider — locked to TOEIC-only.
+ * The app is now a dedicated TOEIC self-study platform.
+ * Provider interface is kept stable so no downstream changes are needed.
+ */
 export function ExamModeProvider({ children }: { children: ReactNode }) {
-  const [examMode, setExamModeState] = useState<ExamMode>("toeic");
-  const [isLoading, setIsLoading] = useState(true);
-
-  // Fetch on mount
-  useEffect(() => {
-    api.get<{ examMode?: string }>("/preferences")
-      .then((data) => {
-        if (data.examMode === "toeic" || data.examMode === "ielts") {
-          setExamModeState(data.examMode);
-        }
-      })
-      .catch(() => {})
-      .finally(() => setIsLoading(false));
-  }, []);
-
-  const setExamMode = useCallback(async (mode: ExamMode) => {
-    const previousMode = examMode;
-    setExamModeState(mode); // Optimistic update
-    try {
-      await api.patch("/preferences", { examMode: mode });
-    } catch {
-      // Revert to previous value on failure
-      setExamModeState(previousMode);
-    }
-  }, [examMode]);
-
-  const meta = MODE_META[examMode];
-
   return (
-    <ExamModeContext.Provider
-      value={{
-        examMode,
-        setExamMode,
-        isLoading,
-        label: meta.label,
-        icon: meta.icon,
-      }}
-    >
+    <ExamModeContext.Provider value={TOEIC_CONTEXT}>
       {children}
     </ExamModeContext.Provider>
   );

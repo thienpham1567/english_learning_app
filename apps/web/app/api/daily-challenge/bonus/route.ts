@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { eq, and } from "drizzle-orm";
+import { eq, and, isNotNull, desc, ne } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
@@ -10,15 +10,39 @@ import { dailyChallenge, userPreferences } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { ChallengeGenerationSchema } from "@/lib/daily-challenge/schema";
-import { getExamContext } from "@/lib/exam-mode/context";
-import type { ExamMode } from "@/components/shared/ExamModeProvider";
+import { getExamContext, type ExamModeValue } from "@/lib/exam-mode/context";
 
 function getVnDate(): string {
   return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Ho_Chi_Minh" });
 }
 
-function buildBonusPrompt(examMode: ExamMode): string {
+/**
+ * Extract key content stems from past exercises to prevent repetition.
+ */
+function extractRecentStems(exercises: Record<string, unknown>[]): string[] {
+  const stems: string[] = [];
+  for (const ex of exercises) {
+    const data = ex.data as Record<string, unknown> | undefined;
+    if (!data) continue;
+    if (typeof data.sentence === "string") stems.push(data.sentence);
+    if (typeof data.vietnamese === "string") stems.push(data.vietnamese);
+    if (typeof data.word === "string") stems.push(data.word as string);
+    if (typeof data.phrase === "string") stems.push(data.phrase);
+    if (typeof data.passage === "string") stems.push((data.passage as string).slice(0, 80));
+    if (typeof data.rootWord === "string") stems.push(data.rootWord);
+    if (typeof data.context === "string") stems.push(data.context);
+    if (Array.isArray(data.correctOrder)) stems.push((data.correctOrder as string[]).join(" "));
+  }
+  return stems;
+}
+
+function buildBonusPrompt(examMode: ExamModeValue, recentStems: string[]): string {
   const ctx = getExamContext(examMode);
+
+  const antiRepetitionBlock = recentStems.length > 0
+    ? `\n\nCRITICAL — ANTI-REPETITION RULE:\nThe following sentences, words, and phrases were ALREADY used recently (including today's daily challenge). You MUST NOT reuse them. Generate completely NEW content:\n---\n${recentStems.join("\n")}\n---`
+    : "";
+
   return `You are a bonus English challenge generator for ${ctx.label} preparation.
 Generate exactly 3 bonus exercises. Pick 3 DIFFERENT types from these 9 types:
 
@@ -35,6 +59,7 @@ Generate exactly 3 bonus exercises. Pick 3 DIFFERENT types from these 9 types:
 Each exercise needs an "instruction" field in Vietnamese.
 Difficulty: intermediate (B1-B2). ${ctx.dailyChallengeTopics}
 IMPORTANT: Use 3 DIFFERENT types for variety.
+${antiRepetitionBlock}
 
 Return ONLY valid JSON:
 {
@@ -103,7 +128,35 @@ export async function GET() {
     });
   }
 
-  const examMode: ExamMode = (prefRows[0]?.examMode as ExamMode) ?? "toeic";
+  const examMode: ExamModeValue = (prefRows[0]?.examMode as ExamModeValue) ?? "toeic";
+
+  // Extract stems from today's daily challenge + recent history to prevent repetition
+  let recentStems: string[] = [];
+  try {
+    const recentChallenges = await db
+      .select({ exercises: dailyChallenge.exercises })
+      .from(dailyChallenge)
+      .where(
+        and(
+          eq(dailyChallenge.userId, session.user.id),
+          isNotNull(dailyChallenge.completedAt),
+        ),
+      )
+      .orderBy(desc(dailyChallenge.challengeDate))
+      .limit(7);
+
+    for (const row of recentChallenges) {
+      const exercises = row.exercises as Record<string, unknown>[];
+      if (Array.isArray(exercises)) {
+        recentStems.push(...extractRecentStems(exercises));
+      }
+    }
+    if (recentStems.length > 60) {
+      recentStems = recentStems.slice(0, 60);
+    }
+  } catch (err) {
+    log.warn({ err }, "bonus.dedup.query.failed");
+  }
 
   // Generate bonus via AI
   for (let attempt = 0; attempt < 2; attempt++) {
@@ -113,7 +166,7 @@ export async function GET() {
         temperature: 0.9,
         response_format: { type: "json_object" },
         messages: [
-          { role: "system", content: buildBonusPrompt(examMode) },
+          { role: "system", content: buildBonusPrompt(examMode, recentStems) },
           {
             role: "user",
             content: `Generate a bonus round. Date: ${vnToday}. Return JSON only.`,

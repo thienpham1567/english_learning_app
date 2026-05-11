@@ -9,8 +9,7 @@ import { db } from "@repo/database";
 import { userPreferences } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { getExamContext } from "@/lib/exam-mode/context";
-import type { ExamMode } from "@/components/shared/ExamModeProvider";
+import { getExamContext, type ExamModeValue } from "@/lib/exam-mode/context";
 
 /**
  * POST /api/pronunciation/sentences
@@ -41,7 +40,7 @@ export async function POST(request: Request) {
   }
 
   // Use client-provided mode, otherwise fetch from DB
-  let examMode: ExamMode;
+  let examMode: ExamModeValue;
   if (examModeFromBody === "toeic" || examModeFromBody === "ielts") {
     examMode = examModeFromBody;
   } else {
@@ -50,7 +49,7 @@ export async function POST(request: Request) {
       .from(userPreferences)
       .where(eq(userPreferences.userId, session.user.id))
       .limit(1);
-    examMode = (prefRows[0]?.examMode as ExamMode) ?? "toeic";
+    examMode = (prefRows[0]?.examMode as ExamModeValue) ?? "toeic";
   }
 
   const ctx = getExamContext(examMode);

@@ -6,21 +6,13 @@ import { usePathname } from "next/navigation";
 import { Badge, Tooltip } from "antd";
 import { Logo } from "@/components/shared/Logo";
 import {
-  MessageOutlined,
-  CustomerServiceOutlined,
-  AudioOutlined,
-  FontSizeOutlined,
-  FormOutlined,
-  ReadOutlined,
   BookOutlined,
   QuestionCircleOutlined,
-  SearchOutlined,
   StarOutlined,
   SyncOutlined,
   FireOutlined,
   TrophyOutlined,
   ExceptionOutlined,
-  CompassOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   SunOutlined,
@@ -29,7 +21,6 @@ import {
   RightOutlined,
   CheckCircleOutlined,
   YoutubeOutlined,
-  ToolOutlined,
   FileTextOutlined,
   AimOutlined,
 } from "@ant-design/icons";
@@ -46,51 +37,38 @@ type NavGroup = {
 
 const navGroups: (NavItem | NavGroup)[] = [
   {
-    key: "practice",
-    label: "Luyện tập",
+    key: "toeic",
+    label: "Luyện thi TOEIC",
     items: [
-      { href: "/english-chatbot", label: "Trò chuyện", icon: MessageOutlined },
-      { href: "/listening", label: "Luyện nghe", icon: CustomerServiceOutlined },
-      { href: "/pronunciation", label: "Luyện nói", icon: AudioOutlined },
-      { href: "/ipa-chart", label: "Bảng IPA", icon: FontSizeOutlined },
-      { href: "/writing-practice", label: "Luyện viết", icon: FormOutlined },
-      { href: "/writing-tools", label: "Công cụ viết", icon: ToolOutlined },
-      { href: "/reading", label: "Luyện đọc", icon: ReadOutlined },
-      { href: "/pdf-reader", label: "Đọc sách PDF", icon: FileTextOutlined },
-      { href: "/youtube-learn", label: "Học cùng YouTube", icon: YoutubeOutlined },
+      { href: "/toeic-skills", label: "TOEIC 4 Skills", icon: AimOutlined },
+      { href: "/toeic-practice", label: "Luyện đề ETS", icon: TrophyOutlined },
+      { href: "/grammar-quiz", label: "TOEIC Part 5", icon: QuestionCircleOutlined },
     ],
   },
   {
-    key: "grammar",
-    label: "Ngữ pháp",
+    key: "foundation",
+    label: "Nền tảng",
     items: [
-      { href: "/grammar-lessons", label: "Bài học", icon: BookOutlined },
-      { href: "/grammar-quiz", label: "Luyện đề", icon: QuestionCircleOutlined },
+      { href: "/grammar-lessons", label: "Ngữ pháp TOEIC", icon: BookOutlined },
+      { href: "/my-vocabulary", label: "Từ vựng", icon: StarOutlined },
+      { href: "/flashcards", label: "Ôn tập Flashcard", icon: SyncOutlined },
     ],
   },
   {
-    key: "vocabulary",
-    label: "Từ vựng",
-    items: [
-      { href: "/dictionary", label: "Từ điển", icon: SearchOutlined },
-      { href: "/my-vocabulary", label: "Từ vựng của tôi", icon: StarOutlined },
-      { href: "/flashcards", label: "Ôn tập", icon: SyncOutlined },
-    ],
-  },
-  {
-    key: "assess",
-    label: "Kiểm tra & Ôn tập",
+    key: "daily",
+    label: "Hàng ngày",
     items: [
       { href: "/daily-challenge", label: "Thử thách hàng ngày", icon: FireOutlined },
-      { href: "/toeic", label: "TOEIC", icon: AimOutlined },
+      { href: "/review-quiz", label: "Ôn tập SRS", icon: SyncOutlined },
       { href: "/error-notebook", label: "Sổ lỗi sai", icon: ExceptionOutlined },
     ],
   },
   {
-    key: "explore",
-    label: "Khám phá",
+    key: "tools",
+    label: "Công cụ",
     items: [
-      { href: "/study-sets", label: "Chủ đề học tập", icon: CompassOutlined },
+      { href: "/pdf-reader", label: "Đọc sách TOEIC", icon: FileTextOutlined },
+      { href: "/youtube-learn", label: "YouTube TOEIC", icon: YoutubeOutlined },
     ],
   },
 ];

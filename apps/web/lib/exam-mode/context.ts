@@ -1,9 +1,14 @@
-import type { ExamMode } from "@/components/shared/ExamModeProvider";
-
 /**
  * Exam-mode-specific prompt enhancements for AI-powered modules.
  * Each module can call getExamContext() to get mode-appropriate instructions.
+ *
+ * Note: The client-side ExamMode type is locked to "toeic" only.
+ * This module keeps "ielts" entries for API-level backward compatibility
+ * (request bodies may still contain "ielts" from legacy data).
  */
+
+/** Internal exam mode type — broader than the client-side ExamMode */
+export type ExamModeValue = "toeic" | "ielts";
 
 type ExamContext = {
   label: string;
@@ -14,7 +19,7 @@ type ExamContext = {
   readingSections: string[];
 };
 
-const EXAM_CONTEXTS: Record<ExamMode, ExamContext> = {
+const EXAM_CONTEXTS: Record<ExamModeValue, ExamContext> = {
   toeic: {
     label: "TOEIC",
     grammarPromptSuffix: `Follow the TOEIC Reading Part 5 (Incomplete Sentences) format.
@@ -24,7 +29,7 @@ Context: business English, workplace communication, office scenarios, corporate 
     listeningPromptSuffix: `Context for passages: business meetings, office announcements, phone conversations, travel arrangements, customer service, product launches.
 Use professional/workplace English appropriate for TOEIC listening sections (Parts 1-4).`,
 
-    dailyChallengeTopics: `Topics: workplace, business meetings, office email, corporate communication, presentations, customer service interactions. Use professional English.`,
+    dailyChallengeTopics: `Topics (rotate through different ones each day, never repeat the same sub-topic two days in a row): workplace communication, business meetings, office email, corporate presentations, customer service, job interviews, salary negotiations, project management, supply chain logistics, marketing campaigns, product launches, trade shows, human resources, company policies, financial reports, international trade, travel arrangements, hotel reservations, airport announcements, restaurant dining, health and safety at work, technology upgrades, team building, performance reviews, contract negotiations. Use professional English with varied vocabulary.`,
 
     writingPromptSuffix: `Focus on TOEIC writing tasks: business emails, memos, short reports, meeting summaries, professional correspondence.`,
 
@@ -46,7 +51,7 @@ Context: academic writing, research, science, social issues, environment, cultur
     listeningPromptSuffix: `Context for passages: university lectures, academic seminars, student conversations about coursework, public talks on science/environment/society, radio interviews on current topics.
 Use academic/semi-formal English appropriate for IELTS listening sections (Sections 1-4).`,
 
-    dailyChallengeTopics: `Topics: academic life, science, environment, social issues, culture, globalization, health, technology in education. Use academic English with formal register.`,
+    dailyChallengeTopics: `Topics (rotate through different ones each day, never repeat the same sub-topic two days in a row): academic life, university lectures, scientific research, environmental conservation, climate change debates, social inequality, cultural diversity, globalization effects, public health policy, education reform, technology ethics, space exploration, marine biology, urban planning, migration patterns, art history, linguistic theory, economic development, renewable energy, psychology experiments, archaeological discoveries, literary criticism, philosophy of mind, artificial intelligence ethics, sustainable agriculture. Use academic English with formal register.`,
 
     writingPromptSuffix: `Focus on IELTS writing tasks: Task 1 (describe a graph/chart/diagram) and Task 2 (argumentative/discussion essay). Use academic register.`,
 
@@ -62,12 +67,12 @@ Use academic/semi-formal English appropriate for IELTS listening sections (Secti
 };
 
 /** Get exam-specific context for AI prompt building */
-export function getExamContext(mode: ExamMode): ExamContext {
+export function getExamContext(mode: ExamModeValue): ExamContext {
   return EXAM_CONTEXTS[mode];
 }
 
 /** Validate and normalize exam mode from request body */
-export function parseExamMode(value: unknown): ExamMode {
+export function parseExamMode(value: unknown): ExamModeValue {
   if (value === "ielts") return "ielts";
   return "toeic"; // default
 }

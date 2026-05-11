@@ -34,7 +34,7 @@ type ProgressResponse = {
 export default function GrammarLessonsPage() {
   const { examMode } = useExamMode();
   const [activeTopic, setActiveTopic] = useState<{ id: string; title: string; level: string } | null>(null);
-  const [examTab, setExamTab] = useState<ExamType>(examMode === "ielts" ? "ielts" : "toeic");
+  const [examTab, setExamTab] = useState<ExamType>("toeic");
   const [progressByTopic, setProgressByTopic] = useState<Record<string, GrammarLessonProgressItem>>({});
   const [recommendedTopic, setRecommendedTopic] = useState<GrammarTopic | null>(null);
   const [progressError, setProgressError] = useState<string | null>(null);

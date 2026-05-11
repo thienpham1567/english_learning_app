@@ -142,7 +142,7 @@ export const dailyChallenge = pgTable("daily_challenge", {
   timeElapsedMs: integer("time_elapsed_ms"),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
 }, (table) => [
-  index("daily_challenge_user_date_idx").on(table.userId, table.challengeDate),
+  uniqueIndex("daily_challenge_user_date_idx").on(table.userId, table.challengeDate),
   index("daily_challenge_user_completed_idx").on(table.userId, table.completedAt),
 ]);
 

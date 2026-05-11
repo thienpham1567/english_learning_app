@@ -4,17 +4,18 @@ import { type ReactNode, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { Flex, Typography, Card } from "antd";
 import {
-  MessageOutlined,
-  MessageFilled,
-  ReadOutlined,
   BookFilled,
-  UserOutlined,
   AppstoreOutlined,
   BulbOutlined,
-  EditOutlined,
   FireOutlined,
-  SoundOutlined,
-  AudioOutlined,
+  SyncOutlined,
+  TrophyOutlined,
+  FileTextOutlined,
+  YoutubeOutlined,
+  StarOutlined,
+  ExceptionOutlined,
+  QuestionCircleOutlined,
+  AimOutlined,
 } from "@ant-design/icons";
 
 const { Text } = Typography;
@@ -25,83 +26,82 @@ interface TabItem {
   icon: ReactNode;
   activeIcon: ReactNode;
   href?: string;
-  action?: "learn-hub" | "review-hub" | "vocab-hub";
+  action?: "exam-hub" | "review-hub" | "more-hub";
 }
 
 const TABS: TabItem[] = [
-  { key: "chat", label: "Chat", icon: <MessageOutlined />, activeIcon: <MessageFilled />, href: "/english-chatbot" },
-  { key: "learn", label: "Học", icon: <ReadOutlined />, activeIcon: <BookFilled />, action: "learn-hub" },
+  { key: "toeic", label: "TOEIC", icon: <AimOutlined />, activeIcon: <AimOutlined />, href: "/toeic-skills" },
+  { key: "exam", label: "Đề thi", icon: <TrophyOutlined />, activeIcon: <TrophyOutlined />, action: "exam-hub" },
   { key: "challenge", label: "Thử thách", icon: <FireOutlined />, activeIcon: <FireOutlined />, href: "/daily-challenge" },
-  { key: "review", label: "Ôn", icon: <BulbOutlined />, activeIcon: <BulbOutlined />, action: "review-hub" },
-  { key: "vocab", label: "Từ vựng", icon: <ReadOutlined />, activeIcon: <BookFilled />, action: "vocab-hub" },
+  { key: "review", label: "Ôn tập", icon: <SyncOutlined />, activeIcon: <SyncOutlined />, action: "review-hub" },
+  { key: "more", label: "Thêm", icon: <AppstoreOutlined />, activeIcon: <AppstoreOutlined />, action: "more-hub" },
 ];
 
-const LEARN_HUB_ITEMS = [
-  { label: "Luyện nghe", icon: <SoundOutlined />, href: "/listening" },
-  { label: "Luyện đọc", icon: <ReadOutlined />, href: "/reading" },
-  { label: "Luyện nói", icon: <AudioOutlined />, href: "/pronunciation" },
-  { label: "Bảng IPA", icon: <SoundOutlined />, href: "/ipa-chart" },
-  { label: "Luyện viết", icon: <EditOutlined />, href: "/writing-practice" },
-  { label: "Bài học ngữ pháp", icon: <BookFilled />, href: "/grammar-lessons" },
-  { label: "Luyện đề ngữ pháp", icon: <BulbOutlined />, href: "/grammar-quiz" },
+const EXAM_HUB_ITEMS = [
+  { label: "Luyện đề ETS", icon: <TrophyOutlined />, href: "/toeic-practice" },
+  { label: "TOEIC Part 5", icon: <QuestionCircleOutlined />, href: "/grammar-quiz" },
 ];
 
 const REVIEW_HUB_ITEMS = [
-  { label: "Sổ lỗi sai", icon: <BookFilled />, href: "/error-notebook" },
-  { label: "TOEIC", icon: <FireOutlined />, href: "/toeic" },
-  { label: "Thử thách", icon: <BulbOutlined />, href: "/daily-challenge" },
+  { label: "Ôn tập SRS", icon: <SyncOutlined />, href: "/review-quiz" },
+  { label: "Sổ lỗi sai", icon: <ExceptionOutlined />, href: "/error-notebook" },
+  { label: "Ôn tập Flashcard", icon: <BookFilled />, href: "/flashcards" },
 ];
 
-const VOCAB_HUB_ITEMS = [
-  { label: "Từ điển", icon: <ReadOutlined />, href: "/dictionary" },
-  { label: "Từ vựng của tôi", icon: <UserOutlined />, href: "/my-vocabulary" },
-  { label: "Ôn tập flashcard", icon: <AppstoreOutlined />, href: "/flashcards" },
+const MORE_HUB_ITEMS = [
+  { label: "Đọc sách TOEIC", icon: <FileTextOutlined />, href: "/pdf-reader" },
+  { label: "YouTube TOEIC", icon: <YoutubeOutlined />, href: "/youtube-learn" },
+  { label: "Ngữ pháp TOEIC", icon: <BulbOutlined />, href: "/grammar-lessons" },
+  { label: "Từ vựng", icon: <StarOutlined />, href: "/my-vocabulary" },
 ];
 
 function getActiveTab(pathname: string): string {
-  if (pathname.startsWith("/english-chatbot")) return "chat";
+  if (pathname.startsWith("/toeic-skills")) return "toeic";
+  if (pathname.startsWith("/toeic-practice") || pathname.startsWith("/grammar-quiz")) return "exam";
   if (pathname.startsWith("/daily-challenge")) return "challenge";
-  if (pathname.startsWith("/my-vocabulary") || pathname.startsWith("/dictionary") || pathname.startsWith("/flashcards")) return "vocab";
   if (
+    pathname.startsWith("/review-quiz") ||
     pathname.startsWith("/error-notebook") ||
-    pathname.startsWith("/toeic") ||
-    pathname.startsWith("/daily-challenge")
+    pathname.startsWith("/flashcards")
   ) return "review";
+  // Everything else falls into "more"
   if (
-    pathname.startsWith("/grammar-quiz") ||
     pathname.startsWith("/grammar-lessons") ||
-    pathname.startsWith("/writing-practice") ||
+    pathname.startsWith("/my-vocabulary") ||
+    pathname.startsWith("/pdf-reader") ||
+    pathname.startsWith("/youtube-learn") ||
     pathname.startsWith("/listening") ||
     pathname.startsWith("/reading") ||
+    pathname.startsWith("/writing-practice") ||
+    pathname.startsWith("/writing-tools") ||
     pathname.startsWith("/pronunciation") ||
-    pathname.startsWith("/ipa-chart") ||
     pathname.startsWith("/speaking-practice") ||
-    pathname.startsWith("/study-sets") ||
-    pathname.startsWith("/scenarios")
-  ) return "learn";
-  return "challenge";
+    pathname.startsWith("/dictionary") ||
+    pathname.startsWith("/ipa-chart")
+  ) return "more";
+  return "toeic";
 }
 
 export function BottomTabBar() {
   const router = useRouter();
   const pathname = usePathname();
   const activeTab = getActiveTab(pathname);
-  const [activeHub, setActiveHub] = useState<"learn" | "review" | "vocab" | null>(null);
+  const [activeHub, setActiveHub] = useState<"exam" | "review" | "more" | null>(null);
 
   const handleTabClick = (tab: TabItem) => {
-    if (tab.action === "learn-hub") {
-      setActiveHub((prev) => (prev === "learn" ? null : "learn"));
+    if (tab.action === "exam-hub") {
+      setActiveHub((prev) => (prev === "exam" ? null : "exam"));
     } else if (tab.action === "review-hub") {
       setActiveHub((prev) => (prev === "review" ? null : "review"));
-    } else if (tab.action === "vocab-hub") {
-      setActiveHub((prev) => (prev === "vocab" ? null : "vocab"));
+    } else if (tab.action === "more-hub") {
+      setActiveHub((prev) => (prev === "more" ? null : "more"));
     } else if (tab.href) {
       setActiveHub(null);
       router.push(tab.href);
     }
   };
 
-  const hubItems = activeHub === "learn" ? LEARN_HUB_ITEMS : activeHub === "review" ? REVIEW_HUB_ITEMS : activeHub === "vocab" ? VOCAB_HUB_ITEMS : [];
+  const hubItems = activeHub === "exam" ? EXAM_HUB_ITEMS : activeHub === "review" ? REVIEW_HUB_ITEMS : activeHub === "more" ? MORE_HUB_ITEMS : [];
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { headers } from "next/headers";
-import { eq, and, isNotNull, desc } from "drizzle-orm";
+import { eq, and, isNotNull, desc, ne } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
@@ -11,8 +11,7 @@ import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { ChallengeGenerationSchema } from "@/lib/daily-challenge/schema";
 import { getBadges } from "@/lib/daily-challenge/badges";
-import { getExamContext } from "@/lib/exam-mode/context";
-import type { ExamMode } from "@/components/shared/ExamModeProvider";
+import { getExamContext, type ExamModeValue } from "@/lib/exam-mode/context";
 
 function getVnDate(): string {
   return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Ho_Chi_Minh" });
@@ -31,8 +30,35 @@ function getDifficultyInstructions(difficulty: Difficulty): string {
   }
 }
 
-function buildChallengeSystemPrompt(examMode: ExamMode, difficulty: Difficulty): string {
+/**
+ * Extract key content stems from past exercises to prevent repetition.
+ * Returns a compact list of sentences/words/passages from recent challenges.
+ */
+function extractRecentStems(exercises: Record<string, unknown>[]): string[] {
+  const stems: string[] = [];
+  for (const ex of exercises) {
+    const data = ex.data as Record<string, unknown> | undefined;
+    if (!data) continue;
+    // Pull the most identifying field from each exercise type
+    if (typeof data.sentence === "string") stems.push(data.sentence);
+    if (typeof data.vietnamese === "string") stems.push(data.vietnamese);
+    if (typeof data.word === "string") stems.push(data.word as string);
+    if (typeof data.phrase === "string") stems.push(data.phrase);
+    if (typeof data.passage === "string") stems.push((data.passage as string).slice(0, 80));
+    if (typeof data.rootWord === "string") stems.push(data.rootWord);
+    if (typeof data.context === "string") stems.push(data.context);
+    if (Array.isArray(data.correctOrder)) stems.push((data.correctOrder as string[]).join(" "));
+  }
+  return stems;
+}
+
+function buildChallengeSystemPrompt(examMode: ExamModeValue, difficulty: Difficulty, recentStems: string[]): string {
   const ctx = getExamContext(examMode);
+
+  const antiRepetitionBlock = recentStems.length > 0
+    ? `\n\nCRITICAL — ANTI-REPETITION RULE:\nThe following sentences, words, and phrases were ALREADY used in recent challenges. You MUST NOT reuse them or create minor variations of them. Generate completely NEW and DIFFERENT content:\n---\n${recentStems.join("\n")}\n---\nCreate fresh sentences with different vocabulary, different grammar points, and different scenarios. Be creative and surprising.`
+    : "";
+
   return `You are a daily English challenge generator for ${ctx.label} preparation.
 Generate exactly 5 mini-exercises. Pick 3-5 DIFFERENT types from these 9 types for variety:
 
@@ -51,6 +77,7 @@ ${getDifficultyInstructions(difficulty)}
 ${ctx.dailyChallengeTopics}
 
 IMPORTANT: Use a variety of types. Do NOT use the same type more than twice. Mix at least 3 different types.
+${antiRepetitionBlock}
 
 Return ONLY valid JSON:
 {
@@ -113,7 +140,7 @@ export async function GET() {
       .limit(1),
   ]);
 
-  const examMode: ExamMode = (prefRows[0]?.examMode as ExamMode) ?? "toeic";
+  const examMode: ExamModeValue = (prefRows[0]?.examMode as ExamModeValue) ?? "toeic";
 
   const streak = streakRows[0] ?? {
     currentStreak: 0,
@@ -144,29 +171,46 @@ export async function GET() {
     });
   }
 
-  // ── Adaptive difficulty: query last 7 completed challenges ──
+  // ── Adaptive difficulty + deduplication: query last 14 completed challenges ──
   let difficulty: Difficulty = "medium";
+  let recentStems: string[] = [];
   try {
-    const recentScores = await db
-      .select({ score: dailyChallenge.score })
+    const recentChallenges = await db
+      .select({ score: dailyChallenge.score, exercises: dailyChallenge.exercises })
       .from(dailyChallenge)
       .where(
         and(
           eq(dailyChallenge.userId, session.user.id),
           isNotNull(dailyChallenge.completedAt),
+          // Exclude bonus rows from stem extraction
+          ne(dailyChallenge.challengeDate, `${vnToday}-bonus`),
         ),
       )
       .orderBy(desc(dailyChallenge.challengeDate))
-      .limit(7);
+      .limit(14);
 
+    // Adaptive difficulty from the 7 most recent scores
+    const recentScores = recentChallenges.slice(0, 7);
     if (recentScores.length >= 3) {
       const avgScore =
         recentScores.reduce((s, r) => s + (r.score ?? 0), 0) / recentScores.length;
       difficulty = avgScore >= 4.0 ? "hard" : avgScore >= 2.5 ? "medium" : "easy";
     }
+
+    // Extract stems from all 14 recent challenges for deduplication
+    for (const row of recentChallenges) {
+      const exercises = row.exercises as Record<string, unknown>[];
+      if (Array.isArray(exercises)) {
+        recentStems.push(...extractRecentStems(exercises));
+      }
+    }
+    // Cap at 100 stems to keep prompt size manageable
+    if (recentStems.length > 100) {
+      recentStems = recentStems.slice(0, 100);
+    }
   } catch (err) {
     log.warn({ err }, "daily-challenge.difficulty.query.failed");
-    // Non-fatal — use default medium
+    // Non-fatal — use default medium and no dedup
   }
 
   // Generate new challenge via AI
@@ -177,10 +221,10 @@ export async function GET() {
         temperature: 0.8,
         response_format: { type: "json_object" },
         messages: [
-          { role: "system", content: buildChallengeSystemPrompt(examMode, difficulty) },
+          { role: "system", content: buildChallengeSystemPrompt(examMode, difficulty, recentStems) },
           {
             role: "user",
-            content: `Generate today's daily English challenge. Date: ${vnToday}. Difficulty: ${difficulty}. Return JSON only.`,
+            content: `Generate today's daily English challenge. Date: ${vnToday}. Difficulty: ${difficulty}. Create UNIQUE questions that are completely different from any previous challenges. Surprise the learner with fresh content. Return JSON only.`,
           },
         ],
       });
