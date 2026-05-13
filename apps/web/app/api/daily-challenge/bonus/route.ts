@@ -12,6 +12,7 @@ import { openAiConfig } from "@/lib/openai/config";
 import { ChallengeGenerationSchema } from "@/lib/daily-challenge/schema";
 import { getExamContext, type ExamModeValue } from "@/lib/exam-mode/context";
 import { extractJson } from "@/lib/openai/extract-json";
+import { normalizeChallenge } from "@/lib/daily-challenge/normalize";
 
 function getVnDate(): string {
   return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Ho_Chi_Minh" });
@@ -178,7 +179,17 @@ export async function GET() {
       const content = completion.choices[0]?.message?.content;
       if (!content) continue;
 
-      const json = extractJson(content);
+      const raw = extractJson(content) as Record<string, unknown>;
+      const json = normalizeChallenge(raw);
+
+      if (!json) {
+        log.warn(
+          { attempt: attempt + 1, keys: Object.keys(raw) },
+          "bonus.generate.normalize.failed",
+        );
+        continue;
+      }
+
       const validated = ChallengeGenerationSchema.safeParse(json);
 
       if (validated.success) {

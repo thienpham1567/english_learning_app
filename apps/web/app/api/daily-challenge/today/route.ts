@@ -12,8 +12,8 @@ import { openAiConfig } from "@/lib/openai/config";
 import { ChallengeGenerationSchema } from "@/lib/daily-challenge/schema";
 import { getBadges } from "@/lib/daily-challenge/badges";
 import { getExamContext, type ExamModeValue } from "@/lib/exam-mode/context";
-
 import { extractJson } from "@/lib/openai/extract-json";
+import { normalizeChallenge } from "@/lib/daily-challenge/normalize";
 
 function getVnDate(): string {
   return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Ho_Chi_Minh" });
@@ -81,7 +81,7 @@ ${ctx.dailyChallengeTopics}
 IMPORTANT: Use a variety of types. Do NOT use the same type more than 3 times. Mix at least 5 different types across the 10 exercises.
 ${antiRepetitionBlock}
 
-Return ONLY valid JSON:
+Return ONLY valid JSON with the key "exercises":
 {
   "exercises": [
     {
@@ -226,7 +226,7 @@ export async function GET() {
           { role: "system", content: buildChallengeSystemPrompt(examMode, difficulty, recentStems) },
           {
             role: "user",
-            content: `Generate today's daily English challenge with exactly 10 exercises. Date: ${vnToday}. Difficulty: ${difficulty}. Create UNIQUE questions that are completely different from any previous challenges. Surprise the learner with fresh content. Return JSON only.`,
+            content: `Generate today's daily English challenge with exactly 10 exercises. Date: ${vnToday}. Difficulty: ${difficulty}. Create UNIQUE questions that are completely different from any previous challenges. Surprise the learner with fresh content. Return JSON only, with a top-level "exercises" array.`,
           },
         ],
       });
@@ -234,7 +234,17 @@ export async function GET() {
       const content = completion.choices[0]?.message?.content;
       if (!content) continue;
 
-      const json = extractJson(content);
+      const raw = extractJson(content) as Record<string, unknown>;
+      const json = normalizeChallenge(raw);
+
+      if (!json) {
+        log.warn(
+          { attempt: attempt + 1, keys: Object.keys(raw) },
+          "daily-challenge.generate.normalize.failed",
+        );
+        continue;
+      }
+
       const validated = ChallengeGenerationSchema.safeParse(json);
 
       if (validated.success) {
