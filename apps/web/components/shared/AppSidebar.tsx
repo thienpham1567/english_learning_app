@@ -90,6 +90,7 @@ const navGroups: (NavItem | NavGroup)[] = [
     key: "tools",
     label: "Công cụ",
     items: [
+      { href: "/dictionary", label: "Từ điển", icon: BookOutlined },
       { href: "/pdf-reader", label: "Đọc sách TOEIC", icon: FileTextOutlined },
       { href: "/youtube-learn", label: "YouTube TOEIC", icon: YoutubeOutlined },
     ],
