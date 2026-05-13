@@ -3,7 +3,7 @@ import { inArray, sql } from "drizzle-orm";
 import webpush from "web-push";
 
 import { db } from "@repo/database";
-import { pushSubscription, userStreak, flashcardProgress } from "@repo/database";
+import { pushSubscription, userStreak, flashcardProgress, errorLog } from "@repo/database";
 
 // VAPID keys — configured lazily to avoid build-time crash
 const VAPID_EMAIL = process.env.VAPID_EMAIL || "mailto:admin@thienglish.app";
@@ -20,10 +20,31 @@ function initWebPush() {
   vapidInitialized = true;
 }
 
+// Streak-tier motivational messages for variety
+const STREAK_MESSAGES = {
+  fire: [
+    { title: "🔥 Streak {n} ngày — phi thường!", body: "Tiếp tục đà chiến thắng! Bạn đang top 5% người dùng." },
+    { title: "⚡ {n} ngày liên tục!", body: "Mỗi ngày luyện tập là một bước gần hơn mục tiêu TOEIC." },
+  ],
+  warm: [
+    { title: "🔥 Streak {n} ngày!", body: "Đừng để mất streak! Hoàn thành 1 bài tập ngay." },
+    { title: "💪 {n} ngày kiên trì!", body: "Chỉ cần 5 phút để giữ streak. Bạn làm được!" },
+  ],
+  start: [
+    { title: "✨ Thử thách mỗi ngày đang chờ!", body: "Bắt đầu học tiếng Anh ngay hôm nay." },
+    { title: "🚀 Sẵn sàng chưa?", body: "1 bài tập nhỏ, tiến bộ lớn. Bắt đầu thôi!" },
+  ],
+};
+
+function pickRandom<T>(arr: T[]): T {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
 /**
  * GET /api/cron/daily-push
  * Called by Vercel Cron at 20:00 Vietnam time daily.
  * Sends personalized push notifications to users who haven't completed activity today.
+ * Enhanced with SRS-aware review reminders, error count nudges, and streak-tier variety.
  */
 export async function GET(request: Request) {
   // Verify cron secret to prevent unauthorized calls
@@ -72,24 +93,52 @@ export async function GET(request: Request) {
     .groupBy(flashcardProgress.userId);
   const dueMap = new Map(dueCounts.map((r) => [r.userId, Number(r.count)]));
 
+  // Pre-fetch unresolved error counts per user (N+1 avoidance)
+  const errorCounts = await db
+    .select({
+      userId: errorLog.userId,
+      count: sql<number>`count(*)::int`,
+    })
+    .from(errorLog)
+    .where(sql`${errorLog.isResolved} = false`)
+    .groupBy(errorLog.userId);
+  const errorMap = new Map(errorCounts.map((r) => [r.userId, Number(r.count)]));
+
   for (const sub of subscriptions) {
     // Skip users who already completed activity today
     if (sub.lastCompletedDate === today) continue;
 
-    // Build personalized message
+    // Build personalized message with priority:
+    // 1. Due flashcards (SRS urgency)
+    // 2. Unresolved errors (weakness awareness)
+    // 3. Streak-based motivational message (tiered variety)
     let title: string;
     let body: string;
 
     const dueCount = dueMap.get(sub.userId) ?? 0;
+    const unresolvedErrors = errorMap.get(sub.userId) ?? 0;
+    const streak = sub.currentStreak ?? 0;
+
     if (dueCount > 0) {
       title = `📚 ${dueCount} flashcard đang chờ bạn ôn`;
-      body = "Ôn tập ngay để không quên từ vựng!";
-    } else if (sub.currentStreak && sub.currentStreak > 0) {
-      title = `🔥 Streak ${sub.currentStreak} ngày!`;
-      body = "Đừng để mất streak! Hoàn thành 1 bài tập ngay.";
+      body = unresolvedErrors > 0
+        ? `Ôn tập ngay + ${unresolvedErrors} lỗi sai cần xem lại!`
+        : "Ôn tập ngay để không quên từ vựng!";
+    } else if (unresolvedErrors >= 5) {
+      title = `📝 ${unresolvedErrors} lỗi sai chưa nắm`;
+      body = "Mở Sổ lỗi sai để ôn lại những điểm yếu nhé!";
+    } else if (streak >= 14) {
+      const msg = pickRandom(STREAK_MESSAGES.fire);
+      title = msg.title.replace("{n}", String(streak));
+      body = msg.body;
+    } else if (streak > 0) {
+      const msg = pickRandom(STREAK_MESSAGES.warm);
+      title = msg.title.replace("{n}", String(streak));
+      body = msg.body;
     } else {
-      title = "✨ Thử thách mỗi ngày đang chờ!";
-      body = "Bắt đầu học tiếng Anh ngay hôm nay.";
+      const msg = pickRandom(STREAK_MESSAGES.start);
+      title = msg.title;
+      body = msg.body;
     }
 
     // Send push notification

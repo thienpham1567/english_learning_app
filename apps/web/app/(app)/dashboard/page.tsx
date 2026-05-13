@@ -23,6 +23,8 @@ import { useDashboard, type DashboardData } from "@/hooks/useDashboard";
 import { useDailyStudyPlan, type DailyPlanItem, type DailyPlanStats } from "@/hooks/useDailyStudyPlan";
 import { api } from "@/lib/api-client";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
+import { HeatmapCalendar } from "@/app/(app)/dashboard/_components/HeatmapCalendar";
+import { WeeklyReport } from "@/app/(app)/dashboard/_components/WeeklyReport";
 
 // ── Types ────────────────────────────────────────────────────────
 type PredictedScore = {
@@ -158,6 +160,33 @@ export default function DashboardPage() {
             <WeeklyChart data={dash.weeklyActivity} />
           </div>
         )}
+
+        {/* ── Heatmap Calendar ── */}
+        <m.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }} style={card}>
+          <div style={sectionLabel}>
+            <div style={accentBar} />
+            <span>Lịch hoạt động 90 ngày</span>
+            <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+          </div>
+          <HeatmapCalendar />
+        </m.div>
+
+        {/* ── Score Timeline ── */}
+        {score?.weeklyXP && score.weeklyXP.length > 1 && (
+          <m.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} style={card}>
+            <div style={sectionLabel}>
+              <div style={accentBar} />
+              <span>Xu hướng XP theo tuần</span>
+              <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+            </div>
+            <ScoreTimeline data={score.weeklyXP} />
+          </m.div>
+        )}
+
+        {/* ── AI Weekly Report ── */}
+        <m.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }}>
+          <WeeklyReport />
+        </m.div>
 
         {/* ── Recent Badges ── */}
         {dash && dash.badges.filter(b => b.unlocked).length > 0 && (
@@ -434,6 +463,68 @@ function WeeklyChart({ data }: { data: Array<{ day: string; count: number }> }) 
           </div>
         );
       })}
+    </div>
+  );
+}
+
+function ScoreTimeline({ data }: { data: Array<{ week: string; xp: number }> }) {
+  const maxXP = Math.max(...data.map(d => d.xp), 1);
+  const chartH = 100;
+
+  // Build SVG polyline points
+  const points = data.map((d, i) => {
+    const x = data.length > 1 ? (i / (data.length - 1)) * 100 : 50;
+    const y = chartH - (d.xp / maxXP) * (chartH - 10) - 5;
+    return `${x},${y}`;
+  }).join(" ");
+
+  // Gradient area
+  const areaPoints = `0,${chartH} ${points} 100,${chartH}`;
+
+  return (
+    <div>
+      <svg viewBox={`0 0 100 ${chartH}`} style={{ width: "100%", height: 120 }} preserveAspectRatio="none">
+        <defs>
+          <linearGradient id="xpGradient" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="var(--accent)" stopOpacity="0.02" />
+          </linearGradient>
+        </defs>
+        <polygon points={areaPoints} fill="url(#xpGradient)" />
+        <polyline
+          points={points}
+          fill="none"
+          stroke="var(--accent)"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          vectorEffect="non-scaling-stroke"
+        />
+        {data.map((d, i) => {
+          const x = data.length > 1 ? (i / (data.length - 1)) * 100 : 50;
+          const y = chartH - (d.xp / maxXP) * (chartH - 10) - 5;
+          return (
+            <circle
+              key={d.week}
+              cx={x}
+              cy={y}
+              r="2"
+              fill="var(--surface)"
+              stroke="var(--accent)"
+              strokeWidth="1.2"
+              vectorEffect="non-scaling-stroke"
+            />
+          );
+        })}
+      </svg>
+      <div style={{ display: "flex", justifyContent: "space-between", marginTop: 4 }}>
+        {data.map((d) => (
+          <div key={d.week} style={{ fontSize: 10, color: "var(--text-muted)", textAlign: "center", flex: 1 }}>
+            <div style={{ fontWeight: 700, color: "var(--accent)", fontVariantNumeric: "tabular-nums" }}>{d.xp}</div>
+            <div>T{new Date(d.week).getDate()}/{new Date(d.week).getMonth() + 1}</div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

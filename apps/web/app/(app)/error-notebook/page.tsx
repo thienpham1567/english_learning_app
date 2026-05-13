@@ -19,6 +19,7 @@ import { DeepExplanation } from "./_components/DeepExplanation";
 import { InlinePractice } from "./_components/InlinePractice";
 import { ErrorPatternSummary } from "./_components/ErrorPatternSummary";
 import { ErrorTrendSection } from "./_components/ErrorTrendSection";
+import { PersonalizedDrill } from "./_components/PersonalizedDrill";
 
 type DeepExplanationData = {
   whyWrong: string;
@@ -225,6 +226,13 @@ export default function ErrorNotebookPage() {
           {!loading && errors.length > 0 && (
             <div className="anim-fade-up anim-delay-2" style={{ marginBottom: 20 }}>
               <ErrorTrendSection errors={errors} />
+            </div>
+          )}
+
+          {/* ── AI Personalized Drill ── */}
+          {!loading && errors.length >= 2 && (
+            <div className="anim-fade-up anim-delay-3" style={{ marginBottom: 20 }}>
+              <PersonalizedDrill />
             </div>
           )}
 

@@ -2,7 +2,11 @@
 
 import { useState } from "react";
 import { Button, Card, Flex, Space, Tag, Typography } from "antd";
+import { SoundOutlined, LoadingOutlined, BulbOutlined } from "@ant-design/icons";
 import type { DueCard } from "@/lib/flashcard/types";
+import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import { api } from "@/lib/api-client";
+import { WordFamilyExplorer } from "@/app/(app)/flashcards/_components/WordFamilyExplorer";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -33,6 +37,9 @@ type Props = {
 
 export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
   const [isFlipped, setIsFlipped] = useState(false);
+  const tts = useTextToSpeech("us");
+  const [contextSentences, setContextSentences] = useState<Array<{ en: string; vi: string; context: string }>>([]);
+  const [contextLoading, setContextLoading] = useState(false);
 
   const handleFlip = () => {
     if (!isFlipped) setIsFlipped(true);
@@ -99,7 +106,39 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                 {card.phonetic}
               </Text>
             )}
-            <Text type="secondary" style={{ marginTop: 32, fontSize: 12 }}>
+            {/* 🎵 Audio TTS Button */}
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); tts.speak(card.headword); }}
+              disabled={tts.isLoading || tts.isSpeaking}
+              aria-label={`Phát âm ${card.headword}`}
+              style={{
+                marginTop: 16,
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 6,
+                padding: "8px 20px",
+                borderRadius: 99,
+                border: "1.5px solid color-mix(in srgb, var(--accent) 30%, var(--border))",
+                background: tts.isSpeaking
+                  ? "color-mix(in srgb, var(--accent) 12%, var(--surface))"
+                  : "color-mix(in srgb, var(--accent) 5%, var(--surface))",
+                color: "var(--accent)",
+                cursor: tts.isLoading ? "wait" : "pointer",
+                fontSize: 13,
+                fontWeight: 600,
+                transition: "all 0.2s",
+              }}
+            >
+              {tts.isLoading ? (
+                <LoadingOutlined spin style={{ fontSize: 14 }} />
+              ) : (
+                <SoundOutlined style={{ fontSize: 14 }} />
+              )}
+              {tts.isSpeaking ? "Đang phát..." : "Phát âm"}
+            </button>
+            <Text type="secondary" style={{ marginTop: 16, fontSize: 12 }}>
               Nhấn để xem nghĩa
             </Text>
           </Card>
@@ -157,6 +196,80 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                 )}
               </Flex>
             )}
+
+            {/* AI Context Sentences */}
+            {contextSentences.length === 0 && (
+              <button
+                type="button"
+                onClick={async (e) => {
+                  e.stopPropagation();
+                  if (contextLoading) return;
+                  setContextLoading(true);
+                  try {
+                    const data = await api.post<{ sentences: Array<{ en: string; vi: string; context: string }> }>(
+                      "/vocabulary/context-sentences",
+                      { word: card.headword, partOfSpeech: card.partOfSpeech, level: card.level },
+                    );
+                    setContextSentences(data.sentences ?? []);
+                  } catch { /* ignore */ }
+                  setContextLoading(false);
+                }}
+                disabled={contextLoading}
+                style={{
+                  marginTop: 12,
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 6,
+                  padding: "9px 16px",
+                  borderRadius: 10,
+                  border: "1.5px solid color-mix(in srgb, var(--accent) 20%, var(--border))",
+                  background: "color-mix(in srgb, var(--accent) 4%, var(--surface))",
+                  color: "var(--accent)",
+                  cursor: contextLoading ? "wait" : "pointer",
+                  fontSize: 12,
+                  fontWeight: 700,
+                  transition: "all 0.2s",
+                }}
+              >
+                {contextLoading ? (
+                  <><LoadingOutlined spin style={{ fontSize: 12 }} /> Đang tạo ví dụ...</>
+                ) : (
+                  <><BulbOutlined style={{ fontSize: 12 }} /> Xem thêm ví dụ TOEIC</>
+                )}
+              </button>
+            )}
+
+            {contextSentences.length > 0 && (
+              <Flex vertical gap={6} style={{ marginTop: 12 }}>
+                <Text style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".1em", color: "var(--accent)" }}>
+                  💡 Ví dụ TOEIC
+                </Text>
+                {contextSentences.slice(0, 5).map((s, i) => (
+                  <Card
+                    key={i}
+                    size="small"
+                    style={{
+                      background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 4%, var(--surface)), var(--bg-deep))",
+                      border: "1px solid color-mix(in srgb, var(--accent) 10%, var(--border))",
+                    }}
+                  >
+                    <Text style={{ fontSize: 13, lineHeight: 1.6 }} dangerouslySetInnerHTML={{ __html: s.en.replace(/\*([^*]+)\*/g, '<strong style="color: var(--accent)">$1</strong>') }} />
+                    <br />
+                    <Text type="secondary" style={{ fontSize: 11 }}>
+                      {s.vi}
+                    </Text>
+                    {s.context && (
+                      <Tag color="blue" style={{ fontSize: 9, borderRadius: 99, marginLeft: 6 }}>{s.context}</Tag>
+                    )}
+                  </Card>
+                ))}
+              </Flex>
+            )}
+
+            {/* Word Family Explorer */}
+            <WordFamilyExplorer word={card.headword} />
           </Card>
         </div>
       </div>

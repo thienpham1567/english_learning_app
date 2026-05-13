@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
+import { api } from "@/lib/api-client";
 import {
   CheckCircleFilled,
   CloseCircleFilled,
@@ -26,6 +27,7 @@ import {
   LinkOutlined,
   FontSizeOutlined,
   BlockOutlined,
+  LoadingOutlined,
 } from "@ant-design/icons";
 import Link from "next/link";
 
@@ -68,9 +70,28 @@ const EXERCISE_LABELS: Record<string, string> = {
 /* ── Answer Detail Card ── */
 function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: number }) {
   const [isExpanded, setIsExpanded] = useState(!answer.isCorrect);
+  const [aiExplanation, setAiExplanation] = useState<string | null>(null);
+  const [aiLoading, setAiLoading] = useState(false);
   const ok = answer.isCorrect;
   const exerciseIcon = answer.exerciseType ? EXERCISE_ICONS[answer.exerciseType] : <QuestionCircleOutlined />;
   const exerciseLabel = answer.exerciseType ? EXERCISE_LABELS[answer.exerciseType] : "";
+
+  const fetchAIExplanation = useCallback(async () => {
+    if (aiExplanation || aiLoading) return;
+    setAiLoading(true);
+    try {
+      const data = await api.post<{ explanation: string }>("/daily-challenge/explain", {
+        exercise: { type: answer.exerciseType, instruction: "", data: answer.questionStem },
+        userAnswer: answer.answer,
+        isCorrect: answer.isCorrect,
+      });
+      setAiExplanation(data.explanation);
+    } catch {
+      setAiExplanation("Không thể tải giải thích. Vui lòng thử lại.");
+    } finally {
+      setAiLoading(false);
+    }
+  }, [answer, aiExplanation, aiLoading]);
 
   return (
     <div
@@ -325,6 +346,69 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                 }}
               >
                 {answer.explanation}
+              </p>
+            </div>
+          )}
+
+          {/* AI Explanation Button */}
+          {!aiExplanation && (
+            <button
+              type="button"
+              onClick={(e) => { e.stopPropagation(); fetchAIExplanation(); }}
+              disabled={aiLoading}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 6,
+                padding: "7px 14px",
+                borderRadius: 99,
+                border: "1.5px solid color-mix(in srgb, var(--accent) 25%, var(--border))",
+                background: "color-mix(in srgb, var(--accent) 5%, var(--surface))",
+                color: "var(--accent)",
+                cursor: aiLoading ? "wait" : "pointer",
+                fontSize: 11,
+                fontWeight: 700,
+                transition: "all 0.2s",
+                letterSpacing: ".04em",
+                marginTop: 4,
+              }}
+            >
+              {aiLoading ? (
+                <><LoadingOutlined spin style={{ fontSize: 11 }} /> Đang phân tích...</>
+              ) : (
+                <><BulbOutlined style={{ fontSize: 11 }} /> AI Giải thích chi tiết</>
+              )}
+            </button>
+          )}
+
+          {/* AI Explanation Content */}
+          {aiExplanation && (
+            <div
+              style={{
+                marginTop: 6,
+                padding: "12px 14px",
+                borderRadius: 10,
+                background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 6%, var(--surface)), color-mix(in srgb, var(--secondary) 4%, var(--surface)))",
+                border: "1px solid color-mix(in srgb, var(--accent) 15%, var(--border))",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+                <BulbOutlined style={{ fontSize: 11, color: "var(--accent)" }} />
+                <span style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".1em", color: "var(--accent)" }}>
+                  AI Analysis
+                </span>
+              </div>
+              <p
+                style={{
+                  fontSize: 13,
+                  lineHeight: 1.7,
+                  color: "var(--text-primary)",
+                  margin: 0,
+                  wordBreak: "break-word",
+                  fontFamily: "var(--font-body)",
+                }}
+              >
+                {aiExplanation}
               </p>
             </div>
           )}
