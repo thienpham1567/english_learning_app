@@ -7,6 +7,8 @@ import {
   LoadingOutlined,
   SoundOutlined,
   StarFilled,
+  BulbOutlined,
+  AimOutlined,
 } from "@ant-design/icons";
 import * as m from "motion/react-client";
 import { api } from "@/lib/api-client";
@@ -223,12 +225,12 @@ export function WordFamilyExplorer({ word }: { word: string }) {
             >
               {data.tip && (
                 <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: "0 0 4px", lineHeight: 1.5 }}>
-                  💡 {data.tip}
+                  <BulbOutlined style={{ marginRight: 4 }} />{data.tip}
                 </p>
               )}
               {data.toeicNote && (
                 <p style={{ fontSize: 11, color: "var(--text-muted)", margin: 0, lineHeight: 1.5 }}>
-                  🎯 {data.toeicNote}
+                  <AimOutlined style={{ marginRight: 4 }} />{data.toeicNote}
                 </p>
               )}
             </div>

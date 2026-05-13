@@ -244,7 +244,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
             {contextSentences.length > 0 && (
               <Flex vertical gap={6} style={{ marginTop: 12 }}>
                 <Text style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".1em", color: "var(--accent)" }}>
-                  💡 Ví dụ TOEIC
+                  <BulbOutlined style={{ marginRight: 4 }} /> Ví dụ TOEIC
                 </Text>
                 {contextSentences.slice(0, 5).map((s, i) => (
                   <Card

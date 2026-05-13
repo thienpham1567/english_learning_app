@@ -90,7 +90,7 @@ export function WeeklyReport() {
         </div>
         <div>
           <div style={{ fontSize: 14, fontWeight: 700, color: "var(--ink)", fontFamily: "var(--font-display)" }}>
-            📊 Báo cáo tuần
+            <BarChartOutlined style={{ marginRight: 4 }} /> Báo cáo tuần
           </div>
           <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 2 }}>
             AI phân tích tiến độ học tập 7 ngày qua
@@ -207,7 +207,7 @@ export function WeeklyReport() {
 
       {insufficient && (
         <div style={{ padding: "16px 18px", textAlign: "center" }}>
-          <div style={{ fontSize: 28, opacity: 0.3, marginBottom: 8 }}>📊</div>
+          <div style={{ fontSize: 28, opacity: 0.3, marginBottom: 8 }}><BarChartOutlined /></div>
           <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)" }}>
             Chưa đủ dữ liệu tuần này
           </div>
