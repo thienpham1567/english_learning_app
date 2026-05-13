@@ -216,7 +216,11 @@ export async function GET() {
         });
       }
 
-      log.warn({ attempt: attempt + 1, errors: validated.error.flatten() }, "bonus.generate.validation.failed");
+      log.warn({
+        attempt: attempt + 1,
+        errors: validated.error.flatten(),
+        sampleExercise: json.exercises[0] ? JSON.stringify(json.exercises[0]).slice(0, 500) : null,
+      }, "bonus.generate.validation.failed");
     } catch (err) {
       log.error({ err, attempt: attempt + 1 }, "bonus.generate.failed");
     }

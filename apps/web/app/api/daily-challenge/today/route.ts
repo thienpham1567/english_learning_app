@@ -276,7 +276,11 @@ export async function GET() {
         });
       }
 
-      log.warn({ attempt: attempt + 1, errors: validated.error.flatten() }, "daily-challenge.generate.validation.failed");
+      log.warn({
+        attempt: attempt + 1,
+        errors: validated.error.flatten(),
+        sampleExercise: json.exercises[0] ? JSON.stringify(json.exercises[0]).slice(0, 500) : null,
+      }, "daily-challenge.generate.validation.failed");
     } catch (err) {
       log.error({ err, attempt: attempt + 1 }, "daily-challenge.generate.failed");
     }
