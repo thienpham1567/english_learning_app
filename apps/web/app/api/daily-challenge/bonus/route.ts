@@ -11,6 +11,7 @@ import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { ChallengeGenerationSchema } from "@/lib/daily-challenge/schema";
 import { getExamContext, type ExamModeValue } from "@/lib/exam-mode/context";
+import { extractJson } from "@/lib/openai/extract-json";
 
 function getVnDate(): string {
   return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Ho_Chi_Minh" });
@@ -159,7 +160,7 @@ export async function GET() {
   }
 
   // Generate bonus via AI
-  for (let attempt = 0; attempt < 2; attempt++) {
+  for (let attempt = 0; attempt < 3; attempt++) {
     try {
       const completion = await openAiClient.chat.completions.create({
         model: openAiConfig.chatModel,
@@ -177,7 +178,7 @@ export async function GET() {
       const content = completion.choices[0]?.message?.content;
       if (!content) continue;
 
-      const json = JSON.parse(content);
+      const json = extractJson(content);
       const validated = ChallengeGenerationSchema.safeParse(json);
 
       if (validated.success) {
