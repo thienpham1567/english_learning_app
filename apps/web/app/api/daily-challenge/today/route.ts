@@ -9,7 +9,7 @@ const log = routeLogger("daily-challenge/today");
 import { dailyChallenge, userStreak, userPreferences } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { ChallengeGenerationSchema } from "@/lib/daily-challenge/schema";
+
 import { getBadges } from "@/lib/daily-challenge/badges";
 import { getExamContext, type ExamModeValue } from "@/lib/exam-mode/context";
 import { extractJson } from "@/lib/openai/extract-json";
@@ -235,9 +235,9 @@ export async function GET() {
       if (!content) continue;
 
       const raw = extractJson(content) as Record<string, unknown>;
-      const json = normalizeChallenge(raw);
+      const result = normalizeChallenge(raw);
 
-      if (!json) {
+      if (!result) {
         log.warn(
           { attempt: attempt + 1, keys: Object.keys(raw) },
           "daily-challenge.generate.normalize.failed",
@@ -245,42 +245,39 @@ export async function GET() {
         continue;
       }
 
-      const validated = ChallengeGenerationSchema.safeParse(json);
-
-      if (validated.success) {
-        const [row] = await db
-          .insert(dailyChallenge)
-          .values({
-            userId: session.user.id,
-            challengeDate: vnToday,
-            exercises: validated.data.exercises,
-          })
-          .returning();
-
-        return Response.json({
-          challenge: {
-            id: row.id,
-            challengeDate: row.challengeDate,
-            exercises: row.exercises,
-            answers: null,
-            score: null,
-            completedAt: null,
-            timeElapsedMs: null,
-          },
-          streak: {
-            currentStreak: streak.currentStreak,
-            bestStreak: streak.bestStreak,
-            lastCompletedDate: streak.lastCompletedDate,
-          },
-          badges,
-        });
+      if (result.dropped > 0) {
+        log.info(
+          { attempt: attempt + 1, kept: result.exercises.length, dropped: result.dropped },
+          "daily-challenge.generate.partial",
+        );
       }
 
-      log.warn({
-        attempt: attempt + 1,
-        errors: validated.error.flatten(),
-        sampleExercise: json.exercises[0] ? JSON.stringify(json.exercises[0]).slice(0, 500) : null,
-      }, "daily-challenge.generate.validation.failed");
+      const [row] = await db
+        .insert(dailyChallenge)
+        .values({
+          userId: session.user.id,
+          challengeDate: vnToday,
+          exercises: result.exercises,
+        })
+        .returning();
+
+      return Response.json({
+        challenge: {
+          id: row.id,
+          challengeDate: row.challengeDate,
+          exercises: row.exercises,
+          answers: null,
+          score: null,
+          completedAt: null,
+          timeElapsedMs: null,
+        },
+        streak: {
+          currentStreak: streak.currentStreak,
+          bestStreak: streak.bestStreak,
+          lastCompletedDate: streak.lastCompletedDate,
+        },
+        badges,
+      });
     } catch (err) {
       log.error({ err, attempt: attempt + 1 }, "daily-challenge.generate.failed");
     }

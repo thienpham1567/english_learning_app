@@ -9,7 +9,7 @@ const log = routeLogger("daily-challenge/bonus");
 import { dailyChallenge, userPreferences } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { ChallengeGenerationSchema } from "@/lib/daily-challenge/schema";
+
 import { getExamContext, type ExamModeValue } from "@/lib/exam-mode/context";
 import { extractJson } from "@/lib/openai/extract-json";
 import { normalizeChallenge } from "@/lib/daily-challenge/normalize";
@@ -180,9 +180,9 @@ export async function GET() {
       if (!content) continue;
 
       const raw = extractJson(content) as Record<string, unknown>;
-      const json = normalizeChallenge(raw);
+      const result = normalizeChallenge(raw);
 
-      if (!json) {
+      if (!result) {
         log.warn(
           { attempt: attempt + 1, keys: Object.keys(raw) },
           "bonus.generate.normalize.failed",
@@ -190,37 +190,34 @@ export async function GET() {
         continue;
       }
 
-      const validated = ChallengeGenerationSchema.safeParse(json);
-
-      if (validated.success) {
-        // Store with "-bonus" suffix on date to differentiate
-        const [row] = await db
-          .insert(dailyChallenge)
-          .values({
-            userId: session.user.id,
-            challengeDate: `${vnToday}-bonus`,
-            exercises: validated.data.exercises,
-          })
-          .returning();
-
-        return Response.json({
-          challenge: {
-            id: row.id,
-            challengeDate: row.challengeDate,
-            exercises: row.exercises,
-            answers: null,
-            score: null,
-            completedAt: null,
-            timeElapsedMs: null,
-          },
-        });
+      if (result.dropped > 0) {
+        log.info(
+          { attempt: attempt + 1, kept: result.exercises.length, dropped: result.dropped },
+          "bonus.generate.partial",
+        );
       }
 
-      log.warn({
-        attempt: attempt + 1,
-        errors: validated.error.flatten(),
-        sampleExercise: json.exercises[0] ? JSON.stringify(json.exercises[0]).slice(0, 500) : null,
-      }, "bonus.generate.validation.failed");
+      // Store with "-bonus" suffix on date to differentiate
+      const [row] = await db
+        .insert(dailyChallenge)
+        .values({
+          userId: session.user.id,
+          challengeDate: `${vnToday}-bonus`,
+          exercises: result.exercises,
+        })
+        .returning();
+
+      return Response.json({
+        challenge: {
+          id: row.id,
+          challengeDate: row.challengeDate,
+          exercises: row.exercises,
+          answers: null,
+          score: null,
+          completedAt: null,
+          timeElapsedMs: null,
+        },
+      });
     } catch (err) {
       log.error({ err, attempt: attempt + 1 }, "bonus.generate.failed");
     }
