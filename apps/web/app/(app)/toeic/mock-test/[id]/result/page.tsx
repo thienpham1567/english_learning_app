@@ -77,7 +77,7 @@ export default async function MockResultPage({
 		>
 			<ModuleHeader
 				icon={<TrophyOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-mock-test)"
 				title="Mock Test Result"
 				subtitle={new Date(attempt.completedAt ?? attempt.startedAt).toLocaleString("vi-VN")}
 			/>
@@ -103,10 +103,10 @@ export default async function MockResultPage({
 				)}
 				<Card>
 					<div style={{ textAlign: "center" }}>
-						<div style={{ fontSize: 56, fontWeight: 800, color: "#3b82f6" }}>{total}</div>
-						<div style={{ color: "var(--text-muted, #94a3b8)" }}>/ 990</div>
+						<div style={{ fontSize: 56, fontWeight: 800, color: "var(--accent)" }}>{total}</div>
+						<div style={{ color: "var(--text-muted)" }}>/ 990</div>
 						<div style={{ marginTop: 8 }}>
-							<Tag color="blue">{bandLabel(total)}</Tag>
+							<Tag color="orange">{bandLabel(total)}</Tag>
 						</div>
 					</div>
 					<div
@@ -166,7 +166,7 @@ export default async function MockResultPage({
 										<div
 											style={{
 												width: `${pct}%`,
-												background: pct >= 80 ? "#10b981" : pct >= 60 ? "#f59e0b" : "#ef4444",
+												background: pct >= 80 ? "var(--success)" : pct >= 60 ? "var(--warning)" : "var(--error)",
 												height: "100%",
 											}}
 										/>
@@ -188,8 +188,9 @@ export default async function MockResultPage({
 						style={{
 							padding: "8px 16px",
 							borderRadius: 8,
-							background: "var(--surface-hover, #1f2937)",
-							color: "#fff",
+							background: "var(--surface-hover)",
+							color: "var(--ink)",
+							border: "1px solid var(--border)",
 							textDecoration: "none",
 						}}
 					>
@@ -200,8 +201,8 @@ export default async function MockResultPage({
 						style={{
 							padding: "8px 16px",
 							borderRadius: 8,
-							background: "#3b82f6",
-							color: "#fff",
+							background: "var(--accent)",
+							color: "var(--text-on-accent)",
 							textDecoration: "none",
 						}}
 					>

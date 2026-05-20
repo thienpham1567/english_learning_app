@@ -221,9 +221,10 @@ export async function HubWidgets() {
 									alignItems: "center",
 									padding: 10,
 									borderRadius: 8,
-									background: "var(--surface-hover, #1f2937)",
+									background: "var(--surface-hover)",
+									border: "1px solid var(--border)",
 									textDecoration: "none",
-									color: "var(--text-primary, #fff)",
+									color: "var(--ink)",
 								}}
 							>
 								<Tag color={priorityColor(item.priority)} style={{ margin: 0 }}>
@@ -231,11 +232,11 @@ export async function HubWidgets() {
 								</Tag>
 								<div>
 									<div style={{ fontWeight: 500 }}>{item.title}</div>
-									<div style={{ fontSize: 12, color: "var(--text-muted, #94a3b8)" }}>
+									<div style={{ fontSize: 12, color: "var(--text-muted)" }}>
 										{item.reason}
 									</div>
 								</div>
-								<span style={{ color: "#3b82f6", fontSize: 13 }}>→</span>
+								<span style={{ color: "var(--accent)", fontSize: 13 }}>→</span>
 							</Link>
 						))}
 					</div>
@@ -254,10 +255,10 @@ export async function HubWidgets() {
 					{predicted ? (
 						<>
 							<div style={{ fontSize: 28, fontWeight: 700 }}>{predicted.total}</div>
-							<div style={{ color: "var(--text-muted, #94a3b8)", fontSize: 13 }}>
+							<div style={{ color: "var(--text-muted)" }}>
 								{bandLabel(predicted.total)}
 							</div>
-							<Link href="/toeic/progress" style={{ color: "#3b82f6", fontSize: 12 }}>
+							<Link href="/toeic/progress" style={{ color: "var(--accent)", fontSize: 12 }}>
 								Chi tiết →
 							</Link>
 						</>
@@ -274,13 +275,13 @@ export async function HubWidgets() {
 							<div style={{ fontSize: 28, fontWeight: 700 }}>{lastMock.totalScaled} / 990</div>
 							<Link
 								href={`/toeic/mock-test/${lastMock.id}/result`}
-								style={{ color: "#3b82f6", fontSize: 12 }}
+								style={{ color: "var(--accent)", fontSize: 12 }}
 							>
 								Xem →
 							</Link>
 						</>
 					) : (
-						<Link href="/toeic/mock-test" style={{ color: "#3b82f6", fontSize: 13 }}>
+						<Link href="/toeic/mock-test" style={{ color: "var(--accent)", fontSize: 13 }}>
 							Làm mock đầu tiên →
 						</Link>
 					)}
@@ -295,9 +296,9 @@ export async function HubWidgets() {
 
 				<Card title="📚 Cần ôn lại" size="small">
 					<div style={{ fontSize: 28, fontWeight: 700 }}>{dueCount}</div>
-					<div style={{ color: "var(--text-muted, #94a3b8)", fontSize: 13 }}>
+					<div style={{ color: "var(--text-muted)" }}>
 						{dueCount > 0 ? (
-							<Link href="/toeic/review" style={{ color: "#3b82f6" }}>
+							<Link href="/toeic/review" style={{ color: "var(--accent)" }}>
 								Ôn ngay →
 							</Link>
 						) : (

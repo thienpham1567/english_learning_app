@@ -19,7 +19,7 @@ export default async function PracticePage() {
 		>
 			<ModuleHeader
 				icon={<TrophyOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-mock-test)"
 				title="TOEIC Practice"
 				subtitle="Luyện đề ETS · Part 3-7"
 			/>

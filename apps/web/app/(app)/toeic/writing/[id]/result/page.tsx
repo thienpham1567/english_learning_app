@@ -58,17 +58,17 @@ export default async function WritingResultPage({
 		>
 			<ModuleHeader
 				icon={<FormOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-writing)"
 				title="Writing Result"
 				subtitle={new Date(s.completedAt ?? s.startedAt).toLocaleString("vi-VN")}
 			/>
 			<div style={{ padding: 16, display: "grid", gap: 16, maxWidth: 800 }}>
 				<Card>
 					<div style={{ textAlign: "center" }}>
-						<div style={{ fontSize: 56, fontWeight: 800, color: "#3b82f6" }}>
+						<div style={{ fontSize: 56, fontWeight: 800, color: "var(--accent)" }}>
 							{s.scaledScore ?? "—"}
 						</div>
-						<div style={{ color: "var(--text-muted, #94a3b8)" }}>/ 200 (TOEIC Writing)</div>
+						<div style={{ color: "var(--text-muted)" }}>/ 200 (TOEIC Writing)</div>
 						<div style={{ marginTop: 6, color: "var(--text-muted)" }}>
 							Raw: {s.rawScore ?? "—"} / 28
 						</div>
@@ -120,8 +120,8 @@ export default async function WritingResultPage({
 											<div
 												style={{
 													fontSize: 13,
-													color: "var(--text-muted, #cbd5e1)",
-													borderLeft: "3px solid #3b82f6",
+													color: "var(--text-muted)",
+													borderLeft: "3px solid var(--accent)",
 													paddingLeft: 10,
 												}}
 											>
@@ -142,8 +142,9 @@ export default async function WritingResultPage({
 						style={{
 							padding: "8px 16px",
 							borderRadius: 8,
-							background: "var(--surface-hover, #1f2937)",
-							color: "#fff",
+							background: "var(--surface-hover)",
+							color: "var(--ink)",
+							border: "1px solid var(--border)",
 							textDecoration: "none",
 						}}
 					>

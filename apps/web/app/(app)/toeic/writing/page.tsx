@@ -48,7 +48,7 @@ export default async function ToeicWritingPage() {
 		>
 			<ModuleHeader
 				icon={<FormOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-writing)"
 				title="TOEIC Writing"
 				subtitle={`8 câu · 60 phút · ${setCount[0]?.c ?? 0} sets`}
 			/>
@@ -57,14 +57,14 @@ export default async function ToeicWritingPage() {
 					<Link href="/toeic/writing/runner" style={{ textDecoration: "none" }}>
 						<Card hoverable>
 							<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-								<FormOutlined style={{ fontSize: 24, color: "#3b82f6" }} />
-								<strong style={{ fontSize: 18 }}>Bắt đầu Writing test</strong>
+								<FormOutlined style={{ fontSize: 24, color: "var(--accent)" }} />
+								<strong style={{ fontSize: 18, color: "var(--ink)" }}>Bắt đầu Writing test</strong>
 							</div>
-							<div style={{ color: "var(--text-muted, #94a3b8)", marginTop: 6 }}>
+							<div style={{ color: "var(--text-muted)", marginTop: 6 }}>
 								Q1-5 picture (8 phút) · Q6-7 email (20 phút) · Q8 opinion (30 phút)
 							</div>
 							<div style={{ marginTop: 8 }}>
-								<Tag color="blue">AI grading sau khi nộp</Tag>
+								<Tag color="orange">AI grading sau khi nộp</Tag>
 							</div>
 						</Card>
 					</Link>
@@ -85,12 +85,13 @@ export default async function ToeicWritingPage() {
 									href={`/toeic/writing/${h.id}/result`}
 									style={{
 										textDecoration: "none",
-										color: "var(--text-primary, #fff)",
+										color: "var(--ink)",
 										padding: 10,
 										borderRadius: 8,
-										background: "var(--surface-hover, #1f2937)",
+										background: "var(--surface-hover)",
 										display: "flex",
 										justifyContent: "space-between",
+										border: "1px solid var(--border)",
 									}}
 								>
 									<span>

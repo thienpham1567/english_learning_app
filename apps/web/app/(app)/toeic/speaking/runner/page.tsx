@@ -227,7 +227,7 @@ export default function SpeakingRunnerPage() {
 		>
 			<ModuleHeader
 				icon={<AudioOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-toeic-speaking)"
 				title={`Question ${current.questionNumber} / 11`}
 				subtitle={TYPE_LABEL[current.type]}
 			/>
@@ -258,7 +258,7 @@ export default function SpeakingRunnerPage() {
 					percent={Math.round((elapsed / Math.max(1, phaseLimit)) * 100)}
 					showInfo={false}
 					size="small"
-					strokeColor={phase === "recording" ? "#ef4444" : "#3b82f6"}
+					strokeColor={phase === "recording" ? "var(--error)" : "var(--accent)"}
 				/>
 
 				{current.type === "q1_2_read_aloud" && (

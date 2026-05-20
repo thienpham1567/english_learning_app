@@ -33,7 +33,7 @@ function DrillRunner() {
 	if (session.error) {
 		return (
 			<div style={{ padding: 24 }}>
-				<div style={{ color: "#ef4444", marginBottom: 12 }}>{session.error}</div>
+				<div style={{ color: "var(--error)", marginBottom: 12 }}>{session.error}</div>
 				<Button onClick={() => router.push("/toeic/grammar")}>Về Grammar Hub</Button>
 			</div>
 		);
@@ -76,7 +76,7 @@ export default function GrammarDrillPage() {
 		>
 			<ModuleHeader
 				icon={<BookOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-grammar)"
 				title="Grammar Drill"
 				subtitle="Part 5 & 6"
 			/>

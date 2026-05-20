@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import * as m from "motion/react-client";
 import {
@@ -62,7 +62,7 @@ const statBox: React.CSSProperties = {
 
 // ── Component ────────────────────────────────────────────────────
 export default function DashboardPage() {
-  const { state: dashState, refetch: refetchDash } = useDashboard();
+  const { state: dashState } = useDashboard();
   const { state: planState } = useDailyStudyPlan({ budget: "20" });
   const [score, setScore] = useState<PredictedScore | null>(null);
   const [scoreLoading, setScoreLoading] = useState(true);
@@ -84,133 +84,138 @@ export default function DashboardPage() {
       {/* ── Hero Header ── */}
       <ModuleHeader
         icon={<RocketOutlined />}
-        gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+        gradient="var(--gradient-dashboard)"
         title="TOEIC Master"
         subtitle="Tổng quan luyện thi của bạn"
       />
 
-      <div style={{ maxWidth: 780, margin: "0 auto", padding: "20px 16px", display: "flex", flexDirection: "column", gap: 20 }}>
-
-        {/* ── Streak + XP Row ── */}
-        <m.div
-          initial="hidden" animate="show"
-          variants={{ show: { transition: { staggerChildren: 0.08 } } }}
-          style={{ display: "flex", gap: 10, flexWrap: "wrap" }}
-        >
-          <StatCard icon={<FireOutlined style={{ color: "var(--fire, #f97316)" }} />} label="Streak" value={dash ? `${dash.streak.currentStreak} ngày` : "—"} sub={dash ? `Kỷ lục: ${dash.streak.bestStreak}` : ""} loading={!dash} />
-          <StatCard icon={<ThunderboltOutlined style={{ color: "var(--xp, #eab308)" }} />} label="Tổng XP" value={dash ? `${dash.totalXP.toLocaleString()}` : "—"} sub="Kinh nghiệm tích lũy" loading={!dash} />
-          <StatCard icon={<SyncOutlined style={{ color: "var(--accent)" }} />} label="Cần ôn" value={dash ? `${dash.flashcardsDue + dash.vocabDue}` : "—"} sub={dash ? `${dash.flashcardsDue} flashcard · ${dash.vocabDue} từ vựng` : ""} loading={!dash} />
-        </m.div>
-
-        {/* ── Predicted TOEIC Score ── */}
-        <m.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} style={card}>
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "linear-gradient(90deg, var(--accent), var(--secondary))" }} />
-          <div style={sectionLabel}>
-            <div style={accentBar} />
-            <span>Điểm TOEIC dự đoán</span>
-            <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
-          </div>
-
-          {scoreLoading ? (
-            <Skeleton active paragraph={{ rows: 2 }} />
-          ) : score?.insufficient ? (
-            <InsufficientDataCard score={score} />
-          ) : score?.predicted ? (
-            <ScoreDisplay score={score} />
-          ) : (
-            <p style={{ color: "var(--text-muted)", textAlign: "center", padding: 20 }}>Chưa có đủ dữ liệu</p>
-          )}
-        </m.div>
-
-        {/* ── Daily Study Plan ── */}
-        <m.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} style={card}>
-          <div style={sectionLabel}>
-            <div style={accentBar} />
-            <span>Kế hoạch hôm nay</span>
-            <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
-          </div>
-
-          {planState.status === "loading" ? (
-            <Skeleton active paragraph={{ rows: 3 }} />
-          ) : planReady ? (
-            <StudyPlanSection items={planReady.plan.items} stats={planReady.stats} />
-          ) : (
-            <p style={{ color: "var(--text-muted)", textAlign: "center", fontSize: 14 }}>Hãy làm thêm bài tập để hệ thống gợi ý kế hoạch học!</p>
-          )}
-        </m.div>
-
-        {/* ── Quick Actions ── */}
-        <m.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} style={card}>
-          <div style={sectionLabel}>
-            <div style={accentBar} />
-            <span>Truy cập nhanh</span>
-            <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
-          </div>
-          <QuickActions dash={dash} />
-        </m.div>
-
-        {/* ── Weekly Activity ── */}
-        {dash && dash.weeklyActivity.length > 0 && (
-          <div className="anim-fade-up anim-delay-4" style={card}>
+      <div className="dashboard-grid" style={{ maxWidth: 1120, margin: "0 auto", padding: "20px 16px" }}>
+        {/* Left Column: Focus & Core Actions */}
+        <div className="dashboard-main-col">
+          {/* ── Predicted TOEIC Score ── */}
+          <m.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} style={card}>
+            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "linear-gradient(90deg, var(--accent), var(--secondary))" }} />
             <div style={sectionLabel}>
               <div style={accentBar} />
-              <span>Hoạt động tuần này</span>
+              <span>Điểm TOEIC dự đoán</span>
               <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
             </div>
-            <WeeklyChart data={dash.weeklyActivity} />
-          </div>
-        )}
 
-        {/* ── Heatmap Calendar ── */}
-        <m.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }} style={card}>
-          <div style={sectionLabel}>
-            <div style={accentBar} />
-            <span>Lịch hoạt động 90 ngày</span>
-            <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
-          </div>
-          <HeatmapCalendar />
-        </m.div>
-
-        {/* ── Score Timeline ── */}
-        {score?.weeklyXP && score.weeklyXP.length > 1 && (
-          <m.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} style={card}>
-            <div style={sectionLabel}>
-              <div style={accentBar} />
-              <span>Xu hướng XP theo tuần</span>
-              <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
-            </div>
-            <ScoreTimeline data={score.weeklyXP} />
+            {scoreLoading ? (
+              <Skeleton active paragraph={{ rows: 2 }} />
+            ) : score?.insufficient ? (
+              <InsufficientDataCard score={score} />
+            ) : score?.predicted ? (
+              <ScoreDisplay score={score} />
+            ) : (
+              <p style={{ color: "var(--text-muted)", textAlign: "center", padding: 20 }}>Chưa có đủ dữ liệu</p>
+            )}
           </m.div>
-        )}
 
-        {/* ── AI Weekly Report ── */}
-        <m.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }}>
-          <WeeklyReport />
-        </m.div>
-
-        {/* ── Recent Badges ── */}
-        {dash && dash.badges.filter(b => b.unlocked).length > 0 && (
-          <div className="anim-fade-up anim-delay-5" style={card}>
+          {/* ── Daily Study Plan ── */}
+          <m.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} style={card}>
             <div style={sectionLabel}>
               <div style={accentBar} />
-              <span>Huy hiệu đã đạt</span>
+              <span>Kế hoạch hôm nay</span>
               <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
             </div>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-              {dash.badges.filter(b => b.unlocked).map(b => (
-                <div key={b.id} style={{
-                  padding: "10px 16px", borderRadius: 12,
-                  background: "color-mix(in srgb, var(--xp) 8%, var(--surface))",
-                  border: "1px solid color-mix(in srgb, var(--xp) 20%, transparent)",
-                  display: "flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 600,
-                }}>
-                  <span style={{ fontSize: 18 }}>{b.icon}</span>
-                  <span style={{ color: "var(--ink)" }}>{b.label}</span>
-                </div>
-              ))}
+
+            {planState.status === "loading" ? (
+              <Skeleton active paragraph={{ rows: 3 }} />
+            ) : planReady ? (
+              <StudyPlanSection items={planReady.plan.items} stats={planReady.stats} />
+            ) : (
+              <p style={{ color: "var(--text-muted)", textAlign: "center", fontSize: 14 }}>Hãy làm thêm bài tập để hệ thống gợi ý kế hoạch học!</p>
+            )}
+          </m.div>
+
+          {/* ── Quick Actions ── */}
+          <m.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.35 }} style={card}>
+            <div style={sectionLabel}>
+              <div style={accentBar} />
+              <span>Truy cập nhanh</span>
+              <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
             </div>
-          </div>
-        )}
+            <QuickActions dash={dash} />
+          </m.div>
+
+          {/* ── AI Weekly Report ── */}
+          <m.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55 }}>
+            <WeeklyReport />
+          </m.div>
+        </div>
+
+        {/* Right Column: Analytics & Motivation */}
+        <div className="dashboard-side-col">
+          {/* ── Streak + XP Row ── */}
+          <m.div
+            initial="hidden" animate="show"
+            variants={{ show: { transition: { staggerChildren: 0.08 } } }}
+            style={{ display: "flex", gap: 10, flexWrap: "wrap", width: "100%" }}
+          >
+            <StatCard icon={<FireOutlined style={{ color: "var(--fire, #f97316)" }} />} label="Streak" value={dash ? `${dash.streak.currentStreak} ngày` : "—"} sub={dash ? `Kỷ lục: ${dash.streak.bestStreak}` : ""} loading={!dash} />
+            <StatCard icon={<ThunderboltOutlined style={{ color: "var(--xp, #eab308)" }} />} label="Tổng XP" value={dash ? `${dash.totalXP.toLocaleString()}` : "—"} sub="Kinh nghiệm tích lũy" loading={!dash} />
+            <StatCard icon={<SyncOutlined style={{ color: "var(--accent)" }} />} label="Cần ôn" value={dash ? `${dash.flashcardsDue + dash.vocabDue}` : "—"} sub={dash ? `${dash.flashcardsDue} flashcard · ${dash.vocabDue} từ vựng` : ""} loading={!dash} />
+          </m.div>
+
+          {/* ── Weekly Activity ── */}
+          {dash && dash.weeklyActivity.length > 0 && (
+            <div className="anim-fade-up anim-delay-4" style={{ ...card, width: "100%" }}>
+              <div style={sectionLabel}>
+                <div style={accentBar} />
+                <span>Hoạt động tuần này</span>
+                <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+              </div>
+              <WeeklyChart data={dash.weeklyActivity} />
+            </div>
+          )}
+
+          {/* ── Heatmap Calendar ── */}
+          <m.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.45 }} style={{ ...card, width: "100%" }}>
+            <div style={sectionLabel}>
+              <div style={accentBar} />
+              <span>Lịch hoạt động 90 ngày</span>
+              <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+            </div>
+            <HeatmapCalendar />
+          </m.div>
+
+          {/* ── Score Timeline ── */}
+          {score?.weeklyXP && score.weeklyXP.length > 1 && (
+            <m.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }} style={{ ...card, width: "100%" }}>
+              <div style={sectionLabel}>
+                <div style={accentBar} />
+                <span>Xu hướng XP theo tuần</span>
+                <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+              </div>
+              <ScoreTimeline data={score.weeklyXP} />
+            </m.div>
+          )}
+
+          {/* ── Recent Badges ── */}
+          {dash && dash.badges.filter(b => b.unlocked).length > 0 && (
+            <div className="anim-fade-up anim-delay-5" style={{ ...card, width: "100%" }}>
+              <div style={sectionLabel}>
+                <div style={accentBar} />
+                <span>Huy hiệu đã đạt</span>
+                <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+              </div>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
+                {dash.badges.filter(b => b.unlocked).map(b => (
+                  <div key={b.id} style={{
+                    padding: "10px 16px", borderRadius: 12,
+                    background: "color-mix(in srgb, var(--xp) 8%, var(--surface))",
+                    border: "1px solid color-mix(in srgb, var(--xp) 20%, transparent)",
+                    display: "flex", alignItems: "center", gap: 8, fontSize: 13, fontWeight: 600,
+                  }}>
+                    <span style={{ fontSize: 18 }}>{b.icon}</span>
+                    <span style={{ color: "var(--ink)" }}>{b.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </div>
     </div>
   );

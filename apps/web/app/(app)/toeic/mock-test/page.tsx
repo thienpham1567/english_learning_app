@@ -54,7 +54,7 @@ export default async function MockTestHubPage() {
 		>
 			<ModuleHeader
 				icon={<TrophyOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-mock-test)"
 				title="TOEIC Mock Test"
 				subtitle="Đề thi giả lập · 5–495 mỗi section"
 			/>
@@ -89,8 +89,8 @@ export default async function MockTestHubPage() {
 					>
 						<Card hoverable>
 							<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-								<TrophyOutlined style={{ fontSize: 22, color: "#3b82f6" }} />
-								<strong style={{ fontSize: 18 }}>Full Mock</strong>
+								<TrophyOutlined style={{ fontSize: 22, color: "var(--accent)" }} />
+								<strong style={{ fontSize: 18, color: "var(--ink)" }}>Full Mock</strong>
 							</div>
 							<div style={{ marginTop: 8, color: "var(--text-muted, #94a3b8)" }}>
 								194 câu · ~1h54 · Strict timer
@@ -109,8 +109,8 @@ export default async function MockTestHubPage() {
 					>
 						<Card hoverable>
 							<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-								<ClockCircleOutlined style={{ fontSize: 22, color: "#10b981" }} />
-								<strong style={{ fontSize: 18 }}>Mini Mock</strong>
+								<ClockCircleOutlined style={{ fontSize: 22, color: "var(--success)" }} />
+								<strong style={{ fontSize: 18, color: "var(--ink)" }}>Mini Mock</strong>
 							</div>
 							<div style={{ marginTop: 8, color: "var(--text-muted, #94a3b8)" }}>
 								100 câu · ~1h · Luyện hằng ngày
@@ -138,10 +138,11 @@ export default async function MockTestHubPage() {
 									href={`/toeic/mock-test/${h.id}/result`}
 									style={{
 										textDecoration: "none",
-										color: "var(--text-primary, #fff)",
+										color: "var(--ink)",
 										padding: 10,
 										borderRadius: 8,
-										background: "var(--surface-hover, #1f2937)",
+										background: "var(--surface-hover)",
+										border: "1px solid var(--border)",
 										display: "flex",
 										justifyContent: "space-between",
 										alignItems: "center",

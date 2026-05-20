@@ -114,7 +114,7 @@ export default function WritingRunnerPage() {
 	if (error) {
 		return (
 			<div style={{ padding: 24 }}>
-				<div style={{ color: "#ef4444", marginBottom: 12 }}>{error}</div>
+				<div style={{ color: "var(--error)", marginBottom: 12 }}>{error}</div>
 				<Button onClick={() => router.push("/toeic/writing")}>Về Hub</Button>
 			</div>
 		);
@@ -139,7 +139,7 @@ export default function WritingRunnerPage() {
 		>
 			<ModuleHeader
 				icon={<FormOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-writing)"
 				title={`Question ${current.questionNumber} / 8`}
 				subtitle={TYPE_LABEL[current.type]}
 			/>
@@ -151,10 +151,10 @@ export default function WritingRunnerPage() {
 						alignItems: "center",
 					}}
 				>
-					<Tag color={remaining < 60000 ? "red" : "blue"}>
+					<Tag color={remaining < 60000 ? "red" : "orange"}>
 						⏱ {minRemaining}:{String(secRemaining).padStart(2, "0")}
 					</Tag>
-					<span style={{ color: "var(--text-muted, #94a3b8)" }}>
+					<span style={{ color: "var(--text-muted)" }}>
 						Max {current.maxScore} điểm
 					</span>
 				</div>
@@ -162,6 +162,7 @@ export default function WritingRunnerPage() {
 					percent={Math.round((elapsed / (current.writeSeconds * 1000)) * 100)}
 					showInfo={false}
 					size="small"
+					strokeColor={remaining < 60000 ? "var(--error)" : "var(--accent)"}
 				/>
 
 				{current.type === "q1_5_picture" && (
@@ -173,13 +174,13 @@ export default function WritingRunnerPage() {
 								style={{ maxWidth: "100%", maxHeight: 300, borderRadius: 8 }}
 							/>
 						)}
-						<Card size="small" style={{ background: "rgba(59,130,246,.08)" }}>
+						<Card size="small" style={{ background: "color-mix(in srgb, var(--accent) 8%, var(--surface))", border: "1px solid var(--border)" }}>
 							<div style={{ fontSize: 13, color: "var(--text-muted)" }}>
 								Viết MỘT câu mô tả ảnh, bắt buộc dùng cả 2 từ:
 							</div>
 							<div style={{ marginTop: 6 }}>
 								{(current.mandatoryWords ?? []).map((w) => (
-									<Tag key={w} color="blue" style={{ fontSize: 14 }}>
+									<Tag key={w} color="orange" style={{ fontSize: 14 }}>
 										{w}
 									</Tag>
 								))}

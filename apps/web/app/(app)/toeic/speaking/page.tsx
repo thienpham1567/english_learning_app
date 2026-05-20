@@ -48,7 +48,7 @@ export default async function ToeicSpeakingPage() {
 		>
 			<ModuleHeader
 				icon={<AudioOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-toeic-speaking)"
 				title="TOEIC Speaking"
 				subtitle={`11 câu · ~20 phút · ${setCount[0]?.c ?? 0} sets · AI grading`}
 			/>
@@ -57,14 +57,14 @@ export default async function ToeicSpeakingPage() {
 					<Link href="/toeic/speaking/runner" style={{ textDecoration: "none" }}>
 						<Card hoverable>
 							<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-								<AudioOutlined style={{ fontSize: 24, color: "#3b82f6" }} />
-								<strong style={{ fontSize: 18 }}>Bắt đầu Speaking test</strong>
+								<AudioOutlined style={{ fontSize: 24, color: "var(--accent)" }} />
+								<strong style={{ fontSize: 18, color: "var(--ink)" }}>Bắt đầu Speaking test</strong>
 							</div>
-							<div style={{ color: "var(--text-muted, #94a3b8)", marginTop: 6, fontSize: 13 }}>
+							<div style={{ color: "var(--text-muted)", marginTop: 6, fontSize: 13 }}>
 								Q1-2 đọc to · Q3-4 mô tả ảnh · Q5-7 trả lời câu hỏi · Q8-10 đọc context + trả lời · Q11 opinion
 							</div>
 							<div style={{ marginTop: 8 }}>
-								<Tag color="blue">Cần microphone permission</Tag>
+								<Tag color="orange">Cần microphone permission</Tag>
 								<Tag color="green">Whisper STT + Gemini grading</Tag>
 							</div>
 						</Card>
@@ -86,12 +86,13 @@ export default async function ToeicSpeakingPage() {
 									href={`/toeic/speaking/${h.id}/result`}
 									style={{
 										textDecoration: "none",
-										color: "var(--text-primary, #fff)",
+										color: "var(--ink)",
 										padding: 10,
 										borderRadius: 8,
-										background: "var(--surface-hover, #1f2937)",
+										background: "var(--surface-hover)",
 										display: "flex",
 										justifyContent: "space-between",
+										border: "1px solid var(--border)",
 									}}
 								>
 									<span>

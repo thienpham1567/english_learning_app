@@ -71,7 +71,7 @@ export default async function ToeicListeningPage() {
 		>
 			<ModuleHeader
 				icon={<CustomerServiceOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-listening)"
 				title="TOEIC Listening"
 				subtitle="Part 1-4 + Dictation"
 			/>
@@ -90,11 +90,11 @@ export default async function ToeicListeningPage() {
 								<strong>{c.title}</strong>
 								<Tag>{c.count} câu</Tag>
 							</div>
-							<div style={{ color: "var(--text-muted, #94a3b8)", fontSize: 13, marginTop: 6 }}>
+							<div style={{ color: "var(--text-muted)", fontSize: 13, marginTop: 6 }}>
 								{c.subtitle}
 							</div>
 							{c.note && (
-								<div style={{ color: "#f59e0b", fontSize: 12, marginTop: 8 }}>{c.note}</div>
+								<div style={{ color: "var(--warning)", fontSize: 12, marginTop: 8 }}>{c.note}</div>
 							)}
 						</Card>
 					);

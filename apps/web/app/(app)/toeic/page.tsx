@@ -20,7 +20,7 @@ export default async function ToeicHubPage() {
 		>
 			<ModuleHeader
 				icon={<TrophyOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-toeic-skills)"
 				title="TOEIC"
 				subtitle="Target 800–900 · Lộ trình 16 tuần"
 			/>

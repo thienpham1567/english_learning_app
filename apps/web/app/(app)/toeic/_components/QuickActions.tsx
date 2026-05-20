@@ -35,8 +35,9 @@ export function QuickActions() {
 							style={{
 								padding: 14,
 								borderRadius: 10,
-								background: "var(--surface-hover, #1f2937)",
-								color: "var(--text-primary, #fff)",
+								background: "var(--surface-hover)",
+								border: "1px solid var(--border)",
+								color: "var(--ink)",
 								textDecoration: "none",
 								textAlign: "center",
 							}}
@@ -50,8 +51,9 @@ export function QuickActions() {
 							style={{
 								padding: 14,
 								borderRadius: 10,
-								background: "var(--surface, #0f172a)",
-								color: "var(--text-disabled, #475569)",
+								background: "var(--surface)",
+								border: "1px solid var(--border)",
+								color: "var(--text-muted)",
 								textAlign: "center",
 								cursor: "not-allowed",
 							}}

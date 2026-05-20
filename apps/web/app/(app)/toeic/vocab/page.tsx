@@ -86,7 +86,7 @@ export default async function ToeicVocabPage() {
 		>
 			<ModuleHeader
 				icon={<ReadOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-vocab)"
 				title="TOEIC Vocab"
 				subtitle="600 từ thiết yếu · 10 chủ đề · SRS"
 			/>

@@ -101,7 +101,7 @@ export default async function ToeicProgressPage() {
 		>
 			<ModuleHeader
 				icon={<LineChartOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-progress)"
 				title="TOEIC Progress"
 				subtitle="Điểm dự đoán + xu hướng 30 ngày"
 			/>
@@ -111,11 +111,11 @@ export default async function ToeicProgressPage() {
 					{predicted ? (
 						<>
 							<div style={{ textAlign: "center" }}>
-								<div style={{ fontSize: 56, fontWeight: 800, color: "#3b82f6" }}>
+								<div style={{ fontSize: 56, fontWeight: 800, color: "var(--accent)" }}>
 									{predicted.total}
 								</div>
-								<div style={{ color: "var(--text-muted, #94a3b8)" }}>/ 990</div>
-								<Tag color="blue" style={{ marginTop: 8 }}>
+								<div style={{ color: "var(--text-muted)" }}>/ 990</div>
+								<Tag color="orange" style={{ marginTop: 8 }}>
 									{bandLabel(predicted.total)}
 								</Tag>
 							</div>
@@ -178,7 +178,7 @@ export default async function ToeicProgressPage() {
 					) : (
 						<Link
 							href="/toeic/mock-test"
-							style={{ color: "#3b82f6", textDecoration: "underline" }}
+							style={{ color: "var(--accent)", textDecoration: "underline" }}
 						>
 							Làm mock test đầu tiên
 						</Link>
@@ -199,7 +199,7 @@ export default async function ToeicProgressPage() {
 										flex: 1,
 										height: `${Math.round((d.c / maxCount) * 100)}%`,
 										minHeight: 4,
-										background: "#3b82f6",
+										background: "var(--accent)",
 										borderRadius: 2,
 									}}
 								/>
@@ -212,7 +212,7 @@ export default async function ToeicProgressPage() {
 				<Card
 					title={
 						<span>
-							<AlertOutlined style={{ color: "#ef4444" }} /> Pattern lỗi gần đây
+							<AlertOutlined style={{ color: "var(--error)" }} /> Pattern lỗi gần đây
 						</span>
 					}
 					size="small"
@@ -257,7 +257,7 @@ export default async function ToeicProgressPage() {
 										style={{
 											padding: "6px 12px",
 											borderRadius: 6,
-											background: "#ef4444",
+											background: "var(--error)",
 											color: "#fff",
 											textDecoration: "none",
 											fontSize: 13,
@@ -297,7 +297,7 @@ export default async function ToeicProgressPage() {
 											percent={Math.round(s.proficiency * 100)}
 											showInfo={false}
 											size="small"
-											strokeColor="#ef4444"
+											strokeColor="var(--error)"
 										/>
 									</div>
 								))}
@@ -321,7 +321,7 @@ export default async function ToeicProgressPage() {
 											percent={Math.round(s.proficiency * 100)}
 											showInfo={false}
 											size="small"
-											strokeColor="#10b981"
+											strokeColor="var(--success)"
 										/>
 									</div>
 								))}

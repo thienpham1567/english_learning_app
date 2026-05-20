@@ -90,7 +90,7 @@ export default function DictationDetailPage() {
 		>
 			<ModuleHeader
 				icon={<CustomerServiceOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-dictation)"
 				title="Dictation"
 				subtitle={`${item.level} · ${item.topic}`}
 			/>
@@ -155,12 +155,12 @@ export default function DictationDetailPage() {
 											borderRadius: 4,
 											background:
 												e.type === "match"
-													? "rgba(16,185,129,.15)"
+													? "color-mix(in srgb, var(--success) 15%, var(--surface))"
 													: e.type === "missing"
-														? "rgba(239,68,68,.15)"
-														: "rgba(245,158,11,.15)",
+														? "color-mix(in srgb, var(--error) 15%, var(--surface))"
+														: "color-mix(in srgb, var(--warning) 15%, var(--surface))",
 											color:
-												e.type === "match" ? "#10b981" : e.type === "missing" ? "#ef4444" : "#f59e0b",
+												e.type === "match" ? "var(--success)" : e.type === "missing" ? "var(--error)" : "var(--warning)",
 											textDecoration: e.type === "extra" ? "line-through" : undefined,
 										}}
 									>
@@ -168,10 +168,10 @@ export default function DictationDetailPage() {
 									</span>
 								))}
 							</div>
-							<div style={{ marginTop: 12, fontSize: 12, color: "var(--text-muted, #94a3b8)" }}>
-								<span style={{ color: "#10b981" }}>● đúng</span> ·{" "}
-								<span style={{ color: "#ef4444" }}>● thiếu</span> ·{" "}
-								<span style={{ color: "#f59e0b" }}>● thừa</span>
+							<div style={{ marginTop: 12, fontSize: 12, color: "var(--text-muted)" }}>
+								<span style={{ color: "var(--success)" }}>● đúng</span> ·{" "}
+								<span style={{ color: "var(--error)" }}>● thiếu</span> ·{" "}
+								<span style={{ color: "var(--warning)" }}>● thừa</span>
 							</div>
 						</Card>
 						<Card title="Bản gốc" size="small">

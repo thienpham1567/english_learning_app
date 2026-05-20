@@ -178,7 +178,7 @@ function MockRunner() {
 	if (error) {
 		return (
 			<div style={{ padding: 24 }}>
-				<div style={{ color: "#ef4444", marginBottom: 12 }}>{error}</div>
+				<div style={{ color: "var(--error)", marginBottom: 12 }}>{error}</div>
 				<Button onClick={() => router.push("/toeic/mock-test")}>Về Hub</Button>
 			</div>
 		);
@@ -213,8 +213,8 @@ function MockRunner() {
 					marginBottom: 12,
 				}}
 			>
-				<Tag color={section === "listening" ? "blue" : "green"}>{sectionLabel}</Tag>
-				<span style={{ color: "var(--text-muted, #94a3b8)" }}>
+				<Tag color={section === "listening" ? "orange" : "green"}>{sectionLabel}</Tag>
+				<span style={{ color: "var(--text-muted)" }}>
 					{totalAnswered} / {questions.length}
 				</span>
 			</div>
@@ -258,7 +258,7 @@ export default function MockRunnerPage() {
 		>
 			<ModuleHeader
 				icon={<TrophyOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-mock-test)"
 				title="Mock Test (đang thi)"
 				subtitle="Strict timing — không tua audio, không quay lại"
 			/>

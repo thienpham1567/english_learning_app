@@ -90,7 +90,7 @@ export default async function ToeicGrammarPage() {
 		>
 			<ModuleHeader
 				icon={<BookOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-grammar)"
 				title="TOEIC Grammar Drill"
 				subtitle="Part 5 & 6 · Phân loại theo kỹ năng nhỏ"
 			/>

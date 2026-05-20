@@ -77,6 +77,20 @@ const SUBTITLES: Record<Skill, string> = {
 	writing: "TOEIC Writing · 8 câu · Viết",
 };
 
+const GRADIENTS: Record<Skill, string> = {
+	listening: "var(--gradient-listening)",
+	reading: "var(--gradient-reading)",
+	speaking: "var(--gradient-toeic-speaking)",
+	writing: "var(--gradient-writing)",
+};
+
+const TAB_COLORS: Record<Skill, { border: string; bg: string }> = {
+	listening: { border: "var(--secondary)", bg: "color-mix(in srgb, var(--secondary) 10%, var(--surface))" },
+	reading: { border: "var(--xp)", bg: "color-mix(in srgb, var(--xp) 10%, var(--surface))" },
+	speaking: { border: "var(--accent)", bg: "color-mix(in srgb, var(--accent) 10%, var(--surface))" },
+	writing: { border: "var(--accent)", bg: "color-mix(in srgb, var(--accent) 10%, var(--surface))" },
+};
+
 export default function ToeicSkillsPage() {
 	const [active, setActive] = useState<Skill>("listening");
 
@@ -93,33 +107,38 @@ export default function ToeicSkillsPage() {
 		>
 			<ModuleHeader
 				icon={SKILL_TABS.find((t) => t.value === active)?.icon}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient={GRADIENTS[active]}
 				title="TOEIC Skills"
 				subtitle={SUBTITLES[active]}
 			/>
 			<div style={{ padding: 12, display: "flex", gap: 8, flexWrap: "wrap" }}>
-				{SKILL_TABS.map((t) => (
-					<button
-						type="button"
-						key={t.value}
-						onClick={() => setActive(t.value)}
-						style={{
-							padding: "8px 14px",
-							borderRadius: 10,
-							border: `1px solid ${active === t.value ? "#3b82f6" : "var(--border-color, #1f2937)"}`,
-							background: active === t.value ? "rgba(59,130,246,.1)" : "transparent",
-							color: "var(--text-primary, #fff)",
-							cursor: "pointer",
-							display: "flex",
-							alignItems: "center",
-							gap: 6,
-						}}
-					>
-						{t.icon}
-						<span>{t.label}</span>
-						<span style={{ color: "var(--text-muted)", fontSize: 12 }}>· {t.parts}</span>
-					</button>
-				))}
+				{SKILL_TABS.map((t) => {
+					const isActive = active === t.value;
+					const colors = TAB_COLORS[t.value];
+					return (
+						<button
+							type="button"
+							key={t.value}
+							onClick={() => setActive(t.value)}
+							style={{
+								padding: "8px 14px",
+								borderRadius: 10,
+								border: `1px solid ${isActive ? colors.border : "var(--border)"}`,
+								background: isActive ? colors.bg : "var(--surface)",
+								color: isActive ? "var(--ink)" : "var(--text-secondary)",
+								cursor: "pointer",
+								display: "flex",
+								alignItems: "center",
+								gap: 6,
+								transition: "all var(--duration-fast) ease",
+							}}
+						>
+							{t.icon}
+							<span>{t.label}</span>
+							<span style={{ color: "var(--text-muted)", fontSize: 12 }}>· {t.parts}</span>
+						</button>
+					);
+				})}
 			</div>
 			<div style={{ flex: 1, minHeight: 0, overflow: "auto" }}>
 				{active === "listening" && <ListeningTab />}

@@ -73,7 +73,7 @@ export default async function ToeicReviewPage() {
 		>
 			<ModuleHeader
 				icon={<ReloadOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-review)"
 				title="TOEIC Review"
 				subtitle={`${allDue.length} task cần ôn hôm nay`}
 			/>
@@ -90,13 +90,13 @@ export default async function ToeicReviewPage() {
 						style={toeicErrorIds.length === 0 ? { opacity: 0.6 } : undefined}
 					>
 						<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-							<AlertOutlined style={{ fontSize: 22, color: "#ef4444" }} />
+							<AlertOutlined style={{ fontSize: 22, color: "var(--error)" }} />
 							<strong>Câu sai TOEIC</strong>
 						</div>
-						<div style={{ fontSize: 32, fontWeight: 700, marginTop: 8 }}>
+						<div style={{ fontSize: 32, fontWeight: 700, marginTop: 8, color: "var(--ink)" }}>
 							{toeicErrorIds.length}
 						</div>
-						<div style={{ color: "var(--text-muted, #94a3b8)", fontSize: 13 }}>
+						<div style={{ color: "var(--text-muted)", fontSize: 13 }}>
 							Câu Part 5/6/7 bạn từng sai
 						</div>
 						{toeicErrorIds.length > 0 && (
@@ -107,7 +107,7 @@ export default async function ToeicReviewPage() {
 									marginTop: 12,
 									padding: "6px 12px",
 									borderRadius: 6,
-									background: "#ef4444",
+									background: "var(--error)",
 									color: "#fff",
 									textDecoration: "none",
 									fontSize: 13,
@@ -123,13 +123,13 @@ export default async function ToeicReviewPage() {
 						style={flashcardDue.length === 0 ? { opacity: 0.6 } : undefined}
 					>
 						<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-							<ReadOutlined style={{ fontSize: 22, color: "#3b82f6" }} />
+							<ReadOutlined style={{ fontSize: 22, color: "var(--accent)" }} />
 							<strong>Từ vựng cần ôn</strong>
 						</div>
-						<div style={{ fontSize: 32, fontWeight: 700, marginTop: 8 }}>
+						<div style={{ fontSize: 32, fontWeight: 700, marginTop: 8, color: "var(--ink)" }}>
 							{flashcardDue.length}
 						</div>
-						<div style={{ color: "var(--text-muted, #94a3b8)", fontSize: 13 }}>
+						<div style={{ color: "var(--text-muted)", fontSize: 13 }}>
 							Từ TOEIC tới hạn SRS
 						</div>
 						{flashcardDue.length > 0 && (
@@ -140,8 +140,8 @@ export default async function ToeicReviewPage() {
 									marginTop: 12,
 									padding: "6px 12px",
 									borderRadius: 6,
-									background: "#3b82f6",
-									color: "#fff",
+									background: "var(--accent)",
+									color: "var(--text-on-accent)",
 									textDecoration: "none",
 									fontSize: 13,
 								}}
@@ -171,11 +171,11 @@ export default async function ToeicReviewPage() {
 											fontSize: 13,
 										}}
 									>
-										<Tag color={isVocab ? "blue" : "red"}>
+										<Tag color={isVocab ? "orange" : "red"}>
 											{isVocab ? "Vocab" : "Câu sai"}
 										</Tag>
-										<span>{v ? v.word : `Câu hỏi #${r.sourceId.slice(0, 8)}`}</span>
-										<span style={{ color: "var(--text-muted, #94a3b8)" }}>
+										<span style={{ color: "var(--ink)" }}>{v ? v.word : `Câu hỏi #${r.sourceId.slice(0, 8)}`}</span>
+										<span style={{ color: "var(--text-muted)" }}>
 											{r.lastOutcome ?? "—"}
 										</span>
 									</div>

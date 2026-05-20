@@ -328,34 +328,35 @@ export function QuestionRunner({
 								borderRadius: 8,
 								border: `1px solid ${
 									isCorrect
-										? "#10b981"
+										? "var(--success)"
 										: isWrongPick
-											? "#ef4444"
+											? "var(--error)"
 											: isPicked
-												? "#3b82f6"
-												: "var(--border-color, #1f2937)"
+												? "var(--accent)"
+												: "var(--border)"
 								}`,
 								background: isCorrect
-									? "rgba(16,185,129,.1)"
+									? "color-mix(in srgb, var(--success) 10%, var(--surface))"
 									: isWrongPick
-										? "rgba(239,68,68,.1)"
+										? "color-mix(in srgb, var(--error) 10%, var(--surface))"
 										: isPicked
-											? "rgba(59,130,246,.1)"
-											: "transparent",
-								color: "var(--text-primary, #fff)",
+											? "color-mix(in srgb, var(--accent) 10%, var(--surface))"
+											: "var(--surface)",
+								color: "var(--ink)",
 								textAlign: "left",
 								cursor: revealed && !hideExplanation ? "default" : "pointer",
 								display: "flex",
 								gap: 8,
 								alignItems: "flex-start",
+								transition: "all var(--duration-fast) ease",
 							}}
 						>
 							<span style={{ fontWeight: 600, minWidth: 20 }}>
 								{String.fromCharCode(65 + idx)}.
 							</span>
 							<span style={{ flex: 1 }}>{isLabelOnly ? "" : opt}</span>
-							{isCorrect && <CheckCircleFilled style={{ color: "#10b981" }} />}
-							{isWrongPick && <CloseCircleFilled style={{ color: "#ef4444" }} />}
+							{isCorrect && <CheckCircleFilled style={{ color: "var(--success)" }} />}
+							{isWrongPick && <CloseCircleFilled style={{ color: "var(--error)" }} />}
 						</button>
 					);
 				})}

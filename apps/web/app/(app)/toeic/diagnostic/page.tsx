@@ -29,7 +29,7 @@ export default function DiagnosticPage() {
 		>
 			<ModuleHeader
 				icon={<TrophyOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-diagnostic)"
 				title="Diagnostic Test"
 				subtitle="30 câu · 20 phút · Phủ Part 3–7"
 			/>
@@ -54,7 +54,7 @@ export default function DiagnosticPage() {
 					<DiagnosticResult snapshot={session.baselineSnapshot} score={session.score} />
 				)}
 				{session.error && (
-					<div style={{ color: "#ef4444", marginTop: 8 }}>{session.error}</div>
+					<div style={{ color: "var(--error)", marginTop: 8 }}>{session.error}</div>
 				)}
 			</div>
 		</div>

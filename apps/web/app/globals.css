@@ -1188,3 +1188,27 @@ button:focus-visible {
   outline: none !important;
   box-shadow: none !important;
 }
+
+/* ── Responsive Dashboard Layout ── */
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+@media (min-width: 1024px) {
+  .dashboard-grid {
+    grid-template-columns: 1.62fr 1fr;
+    align-items: start;
+  }
+}
+.dashboard-main-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.dashboard-side-col {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+

@@ -49,7 +49,7 @@ export default async function ToeicDictationPage() {
 		>
 			<ModuleHeader
 				icon={<CustomerServiceOutlined />}
-				gradient="linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%)"
+				gradient="var(--gradient-dictation)"
 				title="TOEIC Dictation"
 				subtitle={`${items.length} câu · Nghe-chép theo cấp độ`}
 			/>
@@ -73,8 +73,9 @@ export default async function ToeicDictationPage() {
 										style={{
 											padding: 10,
 											borderRadius: 8,
-											background: "var(--surface-hover, #1f2937)",
-											color: "var(--text-primary, #fff)",
+											background: "var(--surface-hover)",
+											color: "var(--ink)",
+											border: "1px solid var(--border)",
 											textDecoration: "none",
 											display: "flex",
 											justifyContent: "space-between",
