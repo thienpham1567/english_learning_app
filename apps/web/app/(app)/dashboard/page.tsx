@@ -5,7 +5,6 @@ import Link from "next/link";
 import * as m from "motion/react-client";
 import {
   FireOutlined,
-  TrophyOutlined,
   ThunderboltOutlined,
   BookOutlined,
   SyncOutlined,
@@ -316,13 +315,13 @@ function InsufficientDataCard({ score }: { score: PredictedScore }) {
         {score.listeningNeeded ? `${score.listeningNeeded} bài nghe` : ""}
       </p>
       <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap" }}>
-        <Link href="/grammar-quiz" style={{
+        <Link href="/toeic/skills?tab=part5" style={{
           padding: "8px 18px", borderRadius: 99, fontSize: 13, fontWeight: 600,
           background: "var(--accent)", color: "var(--text-on-accent)", textDecoration: "none",
         }}>
           <QuestionCircleOutlined style={{ marginRight: 6 }} />Làm Grammar Quiz
         </Link>
-        <Link href="/toeic-skills" style={{
+        <Link href="/toeic/skills" style={{
           padding: "8px 18px", borderRadius: 99, fontSize: 13, fontWeight: 600,
           border: "1.5px solid var(--border)", color: "var(--text-secondary)", textDecoration: "none",
         }}>
@@ -400,17 +399,16 @@ function StudyPlanSection({ items, stats }: { items: DailyPlanItem[]; stats: Dai
 
 const QUICK_ACTIONS = [
   { href: "/daily-challenge", icon: <FireOutlined />, label: "Thử thách", color: "var(--fire, #f97316)" },
-  { href: "/toeic-skills", icon: <AimOutlined />, label: "4 Skills", color: "var(--accent)" },
-  { href: "/toeic-practice", icon: <TrophyOutlined />, label: "Luyện đề", color: "var(--secondary)" },
-  { href: "/grammar-quiz", icon: <QuestionCircleOutlined />, label: "Part 5", color: "var(--info)" },
+  { href: "/toeic/skills", icon: <AimOutlined />, label: "Luyện TOEIC", color: "var(--accent)" },
   { href: "/flashcards", icon: <BookOutlined />, label: "Flashcard", color: "var(--success)" },
   { href: "/error-notebook", icon: <ExceptionOutlined />, label: "Sổ lỗi", color: "var(--error)" },
   { href: "/my-vocabulary", icon: <StarFilled />, label: "Từ vựng", color: "var(--xp)" },
+  { href: "/grammar-lessons", icon: <BookOutlined />, label: "Ngữ pháp", color: "var(--secondary)" },
 ];
 
 function QuickActions({ dash }: { dash: DashboardData | null }) {
   return (
-    <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8 }}>
       {QUICK_ACTIONS.map((a, i) => (
         <Link key={a.href} href={a.href} style={{ textDecoration: "none" }}>
           <m.div
