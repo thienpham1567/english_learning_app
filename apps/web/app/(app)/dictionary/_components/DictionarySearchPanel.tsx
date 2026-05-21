@@ -370,16 +370,6 @@ export function DictionarySearchPanel({
           </div>
         )}
 
-        {/* TOEIC / IELTS word lists */}
-        <div
-          style={{
-            marginTop: 20,
-            paddingTop: 16,
-            borderTop: "1px solid var(--border)",
-          }}
-        >
-          <ExamWordLists onSelect={onSubmit} />
-        </div>
       </div>
     </section>
   );
