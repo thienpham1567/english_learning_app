@@ -12,6 +12,9 @@ import {
   FormOutlined,
   ThunderboltOutlined,
   StarFilled,
+  TrophyOutlined,
+  RiseOutlined,
+  RobotOutlined,
 } from "@ant-design/icons";
 import { authClient } from "@/lib/auth-client";
 
@@ -29,113 +32,155 @@ const GoogleIcon = () => (
   </svg>
 );
 
-/* ── Floating skill badges with contextual details ── */
-const BADGES = [
-  { 
-    icon: <CustomerServiceOutlined />, 
-    label: "Listening", 
-    info: "Part 1–4 · Lvl 92", 
-    top: "16%", 
-    right: "6%", 
-    delay: 0.2, 
-    glow: "rgba(200, 75, 49, 0.15)" 
-  },
-  { 
-    icon: <ReadOutlined />, 
-    label: "Reading", 
-    info: "Part 5–7 · Lvl 88", 
-    top: "32%", 
-    right: "18%", 
-    delay: 0.4, 
-    glow: "rgba(251, 188, 5, 0.12)" 
-  },
-  { 
-    icon: <AudioOutlined />, 
-    label: "Speaking", 
-    info: "AI Pronunciation 4.9★", 
-    bottom: "38%", 
-    left: "6%", 
-    delay: 0.6, 
-    glow: "rgba(200, 75, 49, 0.15)" 
-  },
-  { 
-    icon: <FormOutlined />, 
-    label: "Writing", 
-    info: "ETS Standard Essay", 
-    bottom: "24%", 
-    right: "10%", 
-    delay: 0.3, 
-    glow: "rgba(251, 188, 5, 0.12)" 
-  },
-];
+/* ── Interactive Dashboard Mock Component for Left Panel ── */
+function DashboardMockup() {
+  // Activity Heatmap Mock
+  const days = Array.from({ length: 28 }, (_, i) => ({
+    level: i % 7 === 0 ? 0 : i % 5 === 0 ? 3 : i % 3 === 0 ? 4 : i % 2 === 0 ? 2 : 1,
+  }));
 
-/* ── Interactive Score Gauge Widget ── */
-function ScoreGauge() {
   return (
     <m.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.6, duration: 0.8, ease: "easeOut" }}
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
       style={{
         position: "absolute",
-        bottom: "8%",
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: 280,
-        padding: "20px 24px",
-        borderRadius: 24,
-        background: "rgba(255, 255, 255, 0.02)",
-        backdropFilter: "blur(12px)",
-        border: "1px solid rgba(255, 255, 255, 0.05)",
-        boxShadow: "0 20px 50px rgba(0, 0, 0, 0.4)",
+        right: "-10%",
+        top: "12%",
+        width: 420,
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
-        gap: 12,
+        gap: 16,
+        pointerEvents: "none",
+        zIndex: 2,
       }}
     >
-      <div style={{ position: "relative", width: 140, height: 80, display: "flex", justifyContent: "center" }}>
-        <svg viewBox="0 0 100 60" style={{ width: "100%", height: "100%" }}>
-          <path
-            d="M 10 50 A 40 40 0 0 1 90 50"
-            stroke="rgba(255, 255, 255, 0.06)"
-            strokeWidth="6"
-            fill="none"
-            strokeLinecap="round"
-          />
-          <m.path
-            d="M 10 50 A 40 40 0 0 1 90 50"
-            stroke="url(#accent-gradient)"
-            strokeWidth="7"
-            fill="none"
-            strokeLinecap="round"
-            strokeDasharray="125.6"
-            initial={{ strokeDashoffset: 125.6 }}
-            animate={{ strokeDashoffset: 125.6 * 0.15 }}
-            transition={{ delay: 1.1, duration: 1.8, ease: "easeOut" }}
-          />
-          <defs>
-            <linearGradient id="accent-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#92400E" />
-              <stop offset="100%" stopColor="#D4963A" />
-            </linearGradient>
-          </defs>
-        </svg>
-        <div style={{ position: "absolute", bottom: -2, textAlign: "center" }}>
-          <div style={{ fontSize: 36, fontWeight: 900, fontFamily: "var(--font-display)", color: "#F0E8DC", lineHeight: 1 }}>945</div>
-          <div style={{ fontSize: 9, fontWeight: 700, color: "var(--accent)", letterSpacing: "0.15em", textTransform: "uppercase", marginTop: 2 }}>ESTIMATED</div>
+      {/* Target Progress Card */}
+      <m.div
+        animate={{ y: [0, -6, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+        style={{
+          background: "rgba(30, 41, 59, 0.55)",
+          backdropFilter: "blur(20px)",
+          border: "1px solid rgba(255, 255, 255, 0.08)",
+          borderRadius: 24,
+          padding: 24,
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.5)",
+          display: "flex",
+          alignItems: "center",
+          gap: 20,
+        }}
+      >
+        <div style={{ position: "relative", width: 70, height: 70, flexShrink: 0 }}>
+          {/* Progress circle */}
+          <svg viewBox="0 0 36 36" style={{ width: "100%", height: "100%" }}>
+            <path
+              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              fill="none"
+              stroke="rgba(255, 255, 255, 0.06)"
+              strokeWidth="3.5"
+            />
+            <m.path
+              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              fill="none"
+              stroke="#D4963A"
+              strokeDasharray="85, 100"
+              strokeWidth="3.5"
+              strokeLinecap="round"
+              initial={{ strokeDasharray: "0, 100" }}
+              animate={{ strokeDasharray: "85, 100" }}
+              transition={{ delay: 1.2, duration: 2, ease: "easeOut" }}
+            />
+          </svg>
+          <div style={{
+            position: "absolute", inset: 0, display: "grid", placeItems: "center",
+            fontSize: 15, fontWeight: 800, color: "#F8FAFC", fontFamily: "var(--font-display)"
+          }}>
+            85%
+          </div>
         </div>
-      </div>
-      <div style={{ display: "flex", gap: 16, width: "100%", borderTop: "1px solid rgba(255, 255, 255, 0.06)", paddingTop: 10, justifyContent: "space-between", fontSize: 11 }}>
-        <div style={{ textAlign: "left" }}>
-          <div style={{ color: "rgba(255, 255, 255, 0.3)", fontWeight: 500 }}>LISTENING</div>
-          <div style={{ color: "#F0E8DC", fontWeight: 700, marginTop: 2 }}>485 / 495</div>
+        <div>
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
+            <TrophyOutlined style={{ color: "#D4963A", fontSize: 14 }} />
+            <span style={{ fontSize: 11, color: "#94A3B8", fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase" }}>Mục tiêu thi</span>
+          </div>
+          <div style={{ fontSize: 18, fontWeight: 800, color: "#F8FAFC", fontFamily: "var(--font-display)" }}>TOEIC Target 850+</div>
+          <div style={{ fontSize: 12, color: "#64748B", marginTop: 4, display: "flex", alignItems: "center", gap: 4 }}>
+            <RiseOutlined style={{ color: "#10B981" }} />
+            <span style={{ color: "#10B981", fontWeight: 600 }}>+125 Điểm</span> so với tuần trước
+          </div>
         </div>
-        <div style={{ textAlign: "right" }}>
-          <div style={{ color: "rgba(255, 255, 255, 0.3)", fontWeight: 500 }}>READING</div>
-          <div style={{ color: "#F0E8DC", fontWeight: 700, marginTop: 2 }}>460 / 495</div>
+      </m.div>
+
+      {/* Dynamic Activity Heatmap */}
+      <m.div
+        animate={{ y: [0, 6, 0] }}
+        transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.5 }}
+        style={{
+          background: "rgba(30, 41, 59, 0.45)",
+          backdropFilter: "blur(20px)",
+          border: "1px solid rgba(255, 255, 255, 0.06)",
+          borderRadius: 24,
+          padding: "20px 24px",
+          boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.4)",
+        }}
+      >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
+          <span style={{ fontSize: 12, color: "#94A3B8", fontWeight: 700, letterSpacing: "0.05em" }}>TẦN SUẤT HỌC TẬP</span>
+          <span style={{ fontSize: 11, color: "#D4963A", fontWeight: 700 }}>24 NGÀY LIÊN TỤC 🔥</span>
         </div>
-      </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", gap: 8 }}>
+          {days.map((day, idx) => (
+            <div
+              key={idx}
+              style={{
+                aspectRatio: "1",
+                borderRadius: 6,
+                background:
+                  day.level === 0 ? "rgba(255, 255, 255, 0.04)" :
+                  day.level === 1 ? "rgba(192, 125, 43, 0.15)" :
+                  day.level === 2 ? "rgba(192, 125, 43, 0.35)" :
+                  day.level === 3 ? "rgba(212, 150, 58, 0.6)" :
+                  "rgba(212, 150, 58, 0.85)",
+                border: "1px solid rgba(255, 255, 255, 0.02)",
+              }}
+            />
+          ))}
+        </div>
+      </m.div>
+
+      {/* Floating AI Feedback Notification */}
+      <m.div
+        animate={{ y: [0, -5, 0] }}
+        transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+        style={{
+          background: "rgba(15, 23, 42, 0.75)",
+          backdropFilter: "blur(20px)",
+          border: "1px solid rgba(192, 125, 43, 0.25)",
+          borderRadius: 20,
+          padding: 16,
+          boxShadow: "0 20px 40px rgba(0, 0, 0, 0.4)",
+          display: "flex",
+          gap: 12,
+          alignItems: "center",
+          maxWidth: 320,
+          alignSelf: "flex-end",
+          marginRight: 40,
+        }}
+      >
+        <div style={{
+          width: 36, height: 36, borderRadius: 10,
+          background: "rgba(192, 125, 43, 0.15)",
+          display: "grid", placeItems: "center", color: "#D4963A", fontSize: 18
+        }}>
+          <RobotOutlined />
+        </div>
+        <div>
+          <div style={{ fontSize: 12, fontWeight: 700, color: "#F8FAFC" }}>AI Phản Hồi Phát Âm</div>
+          <div style={{ fontSize: 11, color: "#94A3B8", marginTop: 2 }}>Phát âm từ &quot;negotiation&quot; đã cải thiện vượt bậc! Đạt 94% chuẩn Mỹ.</div>
+        </div>
+      </m.div>
     </m.div>
   );
 }
@@ -216,9 +261,9 @@ function SignInContent() {
         <m.button
           whileHover={{ 
             y: -2, 
-            boxShadow: "0 12px 32px rgba(0, 0, 0, 0.3)",
-            borderColor: "rgba(255, 255, 255, 0.15)",
-            background: "color-mix(in srgb, var(--surface) 90%, var(--ink))"
+            boxShadow: "var(--shadow-md)",
+            borderColor: "var(--accent)",
+            background: "var(--surface-hover)"
           }}
           whileTap={{ scale: 0.98 }}
           transition={{ type: "spring", stiffness: 400, damping: 22 }}
@@ -231,9 +276,10 @@ function SignInContent() {
             border: "1px solid var(--border)",
             background: "var(--surface)", color: "var(--ink)",
             cursor: isLoading ? "wait" : "pointer",
-            boxShadow: "0 4px 20px rgba(0,0,0,0.15)",
+            boxShadow: "var(--shadow-sm)",
             opacity: isLoading ? 0.7 : 1,
-            transition: "background 0.25s, border-color 0.25s",
+            transition: "all 0.25s",
+            fontFamily: "var(--font-body)",
           }}
         >
           {isLoading ? (
@@ -258,7 +304,7 @@ function SignInContent() {
         marginTop: 28, 
         padding: "18px 20px", 
         borderRadius: 20, 
-        background: "rgba(255, 255, 255, 0.015)", 
+        background: "var(--surface-alt)", 
         border: "1px solid var(--border)", 
         display: "flex", 
         flexDirection: "column", 
@@ -266,11 +312,11 @@ function SignInContent() {
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <CheckCircleFilled style={{ color: "var(--success)", fontSize: 13 }} />
-          <span style={{ fontSize: 13, color: "var(--ink)", opacity: 0.85, fontWeight: 600 }}>ETS 2024 & Kho đề cập nhật liên tục</span>
+          <span style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 600 }}>ETS 2024 & Kho đề cập nhật liên tục</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <ThunderboltOutlined style={{ color: "var(--accent)", fontSize: 13 }} />
-          <span style={{ fontSize: 13, color: "var(--ink)", opacity: 0.85, fontWeight: 600 }}>Phân tích sửa lỗi & gợi ý bằng AI</span>
+          <span style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 600 }}>Phân tích sửa lỗi & gợi ý bằng AI</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 4, paddingTop: 12, borderTop: "1px solid var(--border)" }}>
           <SafetyCertificateOutlined style={{ fontSize: 13, color: "var(--text-muted)" }} />
@@ -282,7 +328,7 @@ function SignInContent() {
         <m.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} style={{
           marginTop: 20, padding: "14px 18px", borderRadius: 16,
           border: "1px solid color-mix(in srgb, var(--error) 20%, transparent)",
-          background: "color-mix(in srgb, var(--error) 6%, transparent)",
+          background: "var(--error-bg)",
           color: "var(--error)", fontSize: 14, fontWeight: 500, textAlign: "center",
         }}>
           {error}
@@ -301,12 +347,12 @@ export default function SignInPage() {
       <div
         className="desktop-only"
         style={{
-          position: "relative", width: "42%", flexShrink: 0,
+          position: "relative", width: "50%", flexShrink: 0,
           display: "flex", flexDirection: "column",
           alignItems: "flex-start", justifyContent: "center",
           overflow: "hidden", 
-          background: "linear-gradient(145deg, #0d0c0b 0%, #171412 100%)",
-          borderRight: "1px solid rgba(255, 255, 255, 0.05)",
+          background: "linear-gradient(145deg, #0F172A 0%, #0F1419 100%)",
+          borderRight: "1px solid var(--border)",
         }}
       >
         {/* Grain Overlay */}
@@ -315,75 +361,26 @@ export default function SignInPage() {
         {/* Dynamic ambient glows */}
         <div style={{
           pointerEvents: "none", position: "absolute", inset: 0,
-          background: "radial-gradient(circle at 20% 20%, rgba(200,75,49,0.14) 0%, transparent 60%), radial-gradient(circle at 80% 80%, rgba(251,188,5,0.06) 0%, transparent 60%)",
+          background: "radial-gradient(circle at 10% 20%, rgba(192, 125, 43, 0.15) 0%, transparent 60%), radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.1) 0%, transparent 60%)",
         }} />
-
-        {/* Floating skill badges with interactive animations */}
-        {BADGES.map((b) => (
-          <m.div
-            key={b.label}
-            initial={{ opacity: 0, scale: 0.9, y: 15 }}
-            animate={{ opacity: 1, scale: 1, y: [0, -10, 0] }}
-            transition={{
-              opacity: { delay: b.delay, duration: 0.8 },
-              scale: { delay: b.delay, duration: 0.8 },
-              y: { delay: b.delay, duration: 5 + Math.random() * 2, repeat: Infinity, ease: "easeInOut" },
-            }}
-            whileHover={{ 
-              scale: 1.05, 
-              boxShadow: `0 15px 35px ${b.glow}`,
-              borderColor: "rgba(255, 255, 255, 0.15)",
-              background: "rgba(255, 255, 255, 0.08)"
-            }}
-            style={{
-              position: "absolute",
-              display: "flex", alignItems: "center", gap: 12,
-              padding: "14px 20px", borderRadius: 20,
-              background: "rgba(255, 255, 255, 0.03)",
-              backdropFilter: "blur(20px)",
-              border: "1px solid rgba(255, 255, 255, 0.06)",
-              color: "#F0E8DC", 
-              boxShadow: "0 10px 40px rgba(0,0,0,0.4)",
-              top: (b as any).top, right: (b as any).right,
-              bottom: (b as any).bottom, left: (b as any).left,
-              cursor: "pointer",
-              transition: "background 0.3s, border-color 0.3s, box-shadow 0.3s",
-            }}
-          >
-            <div style={{
-              width: 32, height: 32, borderRadius: 10,
-              background: "rgba(200, 75, 49, 0.15)",
-              display: "grid", placeItems: "center",
-              color: "var(--accent)", fontSize: 16,
-            }}>
-              {b.icon}
-            </div>
-            <div>
-              <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.2 }}>{b.label}</div>
-              <div style={{ fontSize: 10, color: "rgba(240, 232, 220, 0.4)", marginTop: 2, fontWeight: 500 }}>{b.info}</div>
-            </div>
-          </m.div>
-        ))}
-
-        <ScoreGauge />
 
         {/* Hero Content */}
         <m.div
           initial="hidden" animate="show"
           variants={{ show: { transition: { staggerChildren: 0.15, delayChildren: 0.3 } } }}
-          style={{ position: "relative", zIndex: 1, padding: "0 64px", maxWidth: 480 }}
+          style={{ position: "relative", zIndex: 3, padding: "0 64px", maxWidth: 520 }}
         >
           {/* Star review bar */}
           <m.div variants={fadeUp} style={{ display: "flex", gap: 6, marginBottom: 24 }}>
             {[1, 2, 3, 4, 5].map(i => (
-              <StarFilled key={i} style={{ color: "#C84B31", fontSize: 14, opacity: 0.85 }} />
+              <StarFilled key={i} style={{ color: "#D4963A", fontSize: 14, opacity: 0.85 }} />
             ))}
           </m.div>
           
           <m.h2 variants={fadeUp} style={{
             margin: 0, fontSize: 52, fontWeight: 900,
             fontFamily: "var(--font-display)",
-            lineHeight: 1.1, letterSpacing: "-0.04em", color: "#F0E8DC",
+            lineHeight: 1.15, letterSpacing: "-0.04em", color: "#F8FAFC",
           }}>
             Chinh Phục<br />
             Điểm Số<br />
@@ -399,15 +396,15 @@ export default function SignInPage() {
 
           <m.div variants={fadeUp} style={{
             width: 80, height: 4, borderRadius: 99,
-            background: "linear-gradient(90deg, #C84B31, transparent)",
+            background: "linear-gradient(90deg, #D4963A, transparent)",
             margin: "32px 0",
           }} />
 
           <m.p variants={fadeUp} style={{
             margin: "0 0 48px", fontSize: 16, lineHeight: 1.8,
-            color: "rgba(240, 232, 220, 0.45)", maxWidth: 340, fontWeight: 400,
+            color: "#94A3B8", maxWidth: 365, fontWeight: 400,
           }}>
-            Hệ thống luyện thi thông minh tích hợp trợ lý AI thông dịch và chấm điểm chuẩn chỉnh cho học viên Việt Nam.
+            Hệ thống học tập thông minh tích hợp trợ lý AI để thông dịch, chỉnh phát âm và chấm bài viết chuẩn đề thi ETS mới nhất.
           </m.p>
 
           {/* Stats Metrics */}
@@ -418,12 +415,15 @@ export default function SignInPage() {
               { value: "4.9★", label: "Đánh Giá" },
             ].map((s) => (
               <div key={s.label}>
-                <div style={{ fontSize: 28, fontWeight: 800, fontFamily: "var(--font-display)", color: "#F0E8DC", lineHeight: 1 }}>{s.value}</div>
-                <div style={{ fontSize: 10, fontWeight: 700, color: "rgba(240,232,220,0.3)", marginTop: 6, textTransform: "uppercase", letterSpacing: "0.1em" }}>{s.label}</div>
+                <div style={{ fontSize: 28, fontWeight: 800, fontFamily: "var(--font-display)", color: "#F8FAFC", lineHeight: 1 }}>{s.value}</div>
+                <div style={{ fontSize: 10, fontWeight: 700, color: "#64748B", marginTop: 6, textTransform: "uppercase", letterSpacing: "0.1em" }}>{s.label}</div>
               </div>
             ))}
           </m.div>
         </m.div>
+
+        {/* Dashboard Showcase Mockup elements */}
+        <DashboardMockup />
       </div>
 
       {/* ── Right form panel ── */}
@@ -442,13 +442,13 @@ export default function SignInPage() {
         <div style={{
           pointerEvents: "none", position: "absolute",
           top: "15%", right: "10%", width: 350, height: 350,
-          background: "radial-gradient(circle, color-mix(in srgb, var(--accent) 6%, transparent) 0%, transparent 70%)",
+          background: "radial-gradient(circle, color-mix(in srgb, var(--accent) 8%, transparent) 0%, transparent 70%)",
           filter: "blur(40px)",
         }} />
         <div style={{
           pointerEvents: "none", position: "absolute",
           bottom: "10%", left: "10%", width: 250, height: 250,
-          background: "radial-gradient(circle, rgba(251, 188, 5, 0.03) 0%, transparent 75%)",
+          background: "radial-gradient(circle, color-mix(in srgb, var(--info) 4%, transparent) 0%, transparent 75%)",
           filter: "blur(30px)",
         }} />
 
@@ -456,12 +456,12 @@ export default function SignInPage() {
         <div style={{
           width: "100%",
           maxWidth: 440,
-          background: "color-mix(in srgb, var(--surface) 60%, transparent)",
+          background: "color-mix(in srgb, var(--surface) 75%, transparent)",
           backdropFilter: "blur(24px)",
           border: "1px solid var(--border)",
           borderRadius: 28,
           padding: "48px 40px",
-          boxShadow: "0 30px 70px rgba(0, 0, 0, 0.25)",
+          boxShadow: "var(--shadow-xl)",
           position: "relative",
           zIndex: 2,
         }}>
@@ -475,7 +475,7 @@ export default function SignInPage() {
         @keyframes spin { to { transform: rotate(360deg); } }
         .desktop-only { display: flex; }
         .grid-bg {
-          background-image: radial-gradient(rgba(240, 232, 220, 0.02) 1px, transparent 1px);
+          background-image: radial-gradient(color-mix(in srgb, var(--border) 15%, transparent) 1px, transparent 1px);
           background-size: 20px 20px;
         }
         .grain-overlay {
@@ -484,10 +484,10 @@ export default function SignInPage() {
           width: 100%;
           height: 100%;
           background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
-          opacity: 0.012;
+          opacity: 0.015;
           pointer-events: none;
         }
-        @media (max-width: 1024px) {
+        @media (max-width: 1180px) {
           .desktop-only { display: none; }
         }
       `}</style>
