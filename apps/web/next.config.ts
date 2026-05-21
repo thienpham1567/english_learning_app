@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/toeic-practice",
-        destination: "/toeic/practice",
+        destination: "/toeic/skills?tab=practice",
         permanent: true,
       },
       {
@@ -36,6 +36,11 @@ const nextConfig: NextConfig = {
       {
         source: "/toeic-skills/:path*",
         destination: "/toeic/skills/:path*",
+        permanent: true,
+      },
+      {
+        source: "/grammar-quiz",
+        destination: "/toeic/skills?tab=part5",
         permanent: true,
       },
     ];

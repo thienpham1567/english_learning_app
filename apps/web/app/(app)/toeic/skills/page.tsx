@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
+import { useSearchParams } from "next/navigation";
 import {
 	CustomerServiceOutlined,
 	ReadOutlined,
 	AudioOutlined,
 	FormOutlined,
 	LoadingOutlined,
+	QuestionCircleOutlined,
+	TrophyOutlined,
 } from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import * as m from "motion/react-client";
@@ -40,6 +43,20 @@ const WritingTab = dynamic(
 		),
 	{ ssr: false, loading: () => <TabLoader /> },
 );
+const Part5Tab = dynamic(
+	() =>
+		import("@/app/(app)/toeic/skills/_components/Part5Tab").then(
+			(m) => m.Part5Tab,
+		),
+	{ ssr: false, loading: () => <TabLoader /> },
+);
+const PracticeTab = dynamic(
+	() =>
+		import("@/app/(app)/toeic/skills/_components/PracticeTab").then(
+			(m) => m.PracticeTab,
+		),
+	{ ssr: false, loading: () => <TabLoader /> },
+);
 
 function TabLoader() {
 	return (
@@ -61,7 +78,7 @@ function TabLoader() {
 	);
 }
 
-type Skill = "listening" | "reading" | "speaking" | "writing";
+type Skill = "listening" | "reading" | "speaking" | "writing" | "part5" | "practice";
 
 const SKILL_TABS: {
 	value: Skill;
@@ -73,6 +90,8 @@ const SKILL_TABS: {
 	{ value: "reading", label: "Reading", parts: "Part 5–7", icon: <ReadOutlined /> },
 	{ value: "speaking", label: "Speaking", parts: "Part 1–6", icon: <AudioOutlined /> },
 	{ value: "writing", label: "Writing", parts: "Part 1–3", icon: <FormOutlined /> },
+	{ value: "part5", label: "Part 5", parts: "Grammar", icon: <QuestionCircleOutlined /> },
+	{ value: "practice", label: "Luyện đề", parts: "ETS", icon: <TrophyOutlined /> },
 ];
 
 const SUBTITLES: Record<Skill, string> = {
@@ -80,6 +99,8 @@ const SUBTITLES: Record<Skill, string> = {
 	reading: "TOEIC Reading · Part 5–7 · Đọc hiểu",
 	speaking: "TOEIC Speaking · 11 câu · Nói",
 	writing: "TOEIC Writing · 8 câu · Viết",
+	part5: "TOEIC Part 5 · Incomplete Sentences · Ngữ pháp",
+	practice: "TOEIC Practice · Luyện đề ETS · Part 3–7",
 };
 
 const GRADIENTS: Record<Skill, string> = {
@@ -87,17 +108,25 @@ const GRADIENTS: Record<Skill, string> = {
 	reading: "var(--gradient-reading)",
 	speaking: "var(--gradient-toeic-speaking)",
 	writing: "var(--gradient-writing)",
+	part5: "var(--gradient-grammar-quiz)",
+	practice: "var(--gradient-mock-test)",
 };
 
-const TAB_COLORS: Record<Skill, { border: string; bg: string; activeColor: string }> = {
-	listening: { border: "var(--border)", bg: "var(--surface)", activeColor: "var(--module-listening)" },
-	reading: { border: "var(--border)", bg: "var(--surface)", activeColor: "var(--module-reading)" },
-	speaking: { border: "var(--border)", bg: "var(--surface)", activeColor: "var(--accent)" },
-	writing: { border: "var(--border)", bg: "var(--surface)", activeColor: "var(--xp)" },
+const TAB_COLORS: Record<Skill, { activeColor: string }> = {
+	listening: { activeColor: "var(--module-listening)" },
+	reading: { activeColor: "var(--module-reading)" },
+	speaking: { activeColor: "var(--accent)" },
+	writing: { activeColor: "var(--xp)" },
+	part5: { activeColor: "var(--accent)" },
+	practice: { activeColor: "var(--accent)" },
 };
 
 export default function ToeicSkillsPage() {
-	const [active, setActive] = useState<Skill>("listening");
+	const searchParams = useSearchParams();
+	const initialTab = (searchParams.get("tab") as Skill) || "listening";
+	const [active, setActive] = useState<Skill>(
+		SKILL_TABS.some((t) => t.value === initialTab) ? initialTab : "listening"
+	);
 
 	return (
 		<div
@@ -107,33 +136,31 @@ export default function ToeicSkillsPage() {
 				height: "100%",
 				minHeight: 0,
 				flex: 1,
-				overflow: "auto",
+				overflow: "hidden",
 			}}
 		>
 			<ModuleHeader
 				icon={SKILL_TABS.find((t) => t.value === active)?.icon}
 				gradient={GRADIENTS[active]}
-				title="TOEIC Skills"
+				title="Luyện thi TOEIC"
 				subtitle={SUBTITLES[active]}
 			/>
 			
-			{/* High-end Pill Tabs Row */}
+			{/* Pill Tabs Row */}
 			<div style={{
-				padding: "16px 20px 8px",
-				display: "flex",
-				gap: 8,
-				overflowX: "auto",
+				padding: "12px 16px 6px",
 				flexShrink: 0,
-				scrollbarWidth: "none"
+				overflowX: "auto",
+				scrollbarWidth: "none",
 			}}>
 				<div style={{
 					display: "flex",
-					gap: 6,
+					gap: 4,
 					background: "var(--surface-alt)",
 					border: "1.5px solid var(--border)",
 					borderRadius: "var(--radius-xl)",
-					padding: 6,
-					width: "100%"
+					padding: 4,
+					minWidth: "fit-content",
 				}}>
 					{SKILL_TABS.map((t) => {
 						const isActive = active === t.value;
@@ -145,8 +172,8 @@ export default function ToeicSkillsPage() {
 								onClick={() => setActive(t.value)}
 								whileTap={{ scale: 0.98 }}
 								style={{
-									flex: 1,
-									padding: "8px 12px",
+									flex: "0 0 auto",
+									padding: "8px 14px",
 									borderRadius: "var(--radius-lg)",
 									border: "none",
 									background: isActive ? colors.activeColor : "transparent",
@@ -156,17 +183,18 @@ export default function ToeicSkillsPage() {
 									flexDirection: "column",
 									alignItems: "center",
 									justifyContent: "center",
-									gap: 3,
+									gap: 2,
 									transition: "color 0.2s, background 0.2s",
+									minWidth: 80,
 								}}
 							>
-								<div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13.5, fontWeight: 900 }}>
+								<div style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 12.5, fontWeight: 900 }}>
 									{t.icon}
 									<span>{t.label}</span>
 								</div>
 								<span style={{
 									opacity: isActive ? 0.9 : 0.65,
-									fontSize: 10.5,
+									fontSize: 10,
 									fontWeight: 700
 								}}>
 									{t.parts}
@@ -182,6 +210,8 @@ export default function ToeicSkillsPage() {
 				{active === "reading" && <ReadingTab />}
 				{active === "speaking" && <SpeakingTab />}
 				{active === "writing" && <WritingTab />}
+				{active === "part5" && <Part5Tab />}
+				{active === "practice" && <PracticeTab />}
 			</div>
 		</div>
 	);

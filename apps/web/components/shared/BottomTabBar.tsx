@@ -72,11 +72,11 @@ const TABS: TabItem[] = [
 ];
 
 const EXAM_HUB_ITEMS = [
-  { label: "Luyện đề ETS", icon: <TrophyOutlined />, href: "/toeic-practice" },
+  { label: "Luyện đề ETS", icon: <TrophyOutlined />, href: "/toeic/skills?tab=practice" },
   {
     label: "TOEIC Part 5",
     icon: <QuestionCircleOutlined />,
-    href: "/grammar-quiz",
+    href: "/toeic/skills?tab=part5",
   },
 ];
 

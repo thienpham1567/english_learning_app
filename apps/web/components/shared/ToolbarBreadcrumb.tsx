@@ -9,13 +9,10 @@ const { Text, Title } = Typography;
 
 const BREADCRUMBS: Record<string, { eyebrow: string; title: string }> = {
   "/dashboard": { eyebrow: "Tổng quan", title: "Dashboard" },
-  "/toeic-skills": { eyebrow: "TOEIC 4 Skills", title: "Luyện thi TOEIC" },
-  "/toeic-practice": { eyebrow: "Luyện đề ETS", title: "TOEIC Practice" },
   "/toeic": { eyebrow: "TOEIC", title: "TOEIC Hub" },
   "/toeic/practice": { eyebrow: "Luyện đề ETS", title: "TOEIC Practice" },
   "/toeic/diagnostic": { eyebrow: "TOEIC", title: "Diagnostic Test" },
-  "/toeic/skills": { eyebrow: "TOEIC", title: "4 Skills Practice" },
-  "/grammar-quiz": { eyebrow: "TOEIC Part 5", title: "Incomplete Sentences" },
+  "/toeic/skills": { eyebrow: "Luyện thi TOEIC", title: "TOEIC Skills" },
   "/grammar-lessons": { eyebrow: "Ngữ pháp TOEIC", title: "Bài học ngữ pháp" },
   "/grammar-roadmap": { eyebrow: "Ngữ pháp TOEIC", title: "Lộ trình ngữ pháp" },
   "/my-vocabulary": { eyebrow: "Từ vựng TOEIC", title: "Từ vựng của tôi" },

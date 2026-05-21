@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 
 /**
- * Redirect stub: sidebar links to /toeic-practice but the actual
- * practice engine lives at /toeic/practice (with PracticeRunner + baseline guard).
+ * Redirect stub: toeic-practice now lives inside the unified TOEIC Skills page
+ * at /toeic/skills?tab=practice. This page exists for backward compatibility.
  */
 export default function ToeicPracticeRedirect() {
-	redirect("/toeic/practice");
+	redirect("/toeic/skills?tab=practice");
 }

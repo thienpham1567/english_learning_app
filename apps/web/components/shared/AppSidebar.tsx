@@ -7,11 +7,9 @@ import { Badge, Tooltip } from "antd";
 import { Logo } from "@/components/shared/Logo";
 import {
   BookOutlined,
-  QuestionCircleOutlined,
   StarOutlined,
   SyncOutlined,
   FireOutlined,
-  TrophyOutlined,
   ExceptionOutlined,
   MenuFoldOutlined,
   MenuUnfoldOutlined,
@@ -47,19 +45,7 @@ type NavGroup = {
 
 const navGroups: (NavItem | NavGroup)[] = [
   { href: "/dashboard", label: "Tổng quan", icon: DashboardOutlined },
-  {
-    key: "toeic",
-    label: "Luyện thi TOEIC",
-    items: [
-      { href: "/toeic-skills", label: "TOEIC 4 Skills", icon: AimOutlined },
-      { href: "/toeic-practice", label: "Luyện đề ETS", icon: TrophyOutlined },
-      {
-        href: "/grammar-quiz",
-        label: "TOEIC Part 5",
-        icon: QuestionCircleOutlined,
-      },
-    ],
-  },
+  { href: "/toeic/skills", label: "Luyện thi TOEIC", icon: AimOutlined },
   {
     key: "foundation",
     label: "Nền tảng",
