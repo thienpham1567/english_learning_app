@@ -1,17 +1,26 @@
 "use client";
-import { Skeleton, Progress, Flex, Typography, Button, Result } from "antd";
-import { BookOutlined, ReloadOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
+import { useState } from "react";
+import { Skeleton, Progress, Flex, Button, Result } from "antd";
+import {
+  BookOutlined,
+  ReloadOutlined,
+  ThunderboltOutlined,
+  ClockCircleOutlined,
+} from "@ant-design/icons";
+import * as m from "motion/react-client";
 
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { useFlashcardSession } from "@/hooks/useFlashcardSession";
 import { FlashcardCard } from "@/app/(app)/flashcards/_components/FlashcardCard";
 import { SessionProgress } from "@/app/(app)/flashcards/_components/SessionProgress";
 import { SessionSummary } from "@/app/(app)/flashcards/_components/SessionSummary";
 import { EmptyState } from "@/app/(app)/flashcards/_components/EmptyState";
+import { AIFlashcardMode } from "@/app/(app)/flashcards/_components/AIFlashcardMode";
 
-const { Text } = Typography;
+type TabKey = "srs" | "ai";
 
 export function FlashcardSession() {
+  const [activeTab, setActiveTab] = useState<TabKey>("ai");
   const {
     state,
     currentCard,
@@ -25,7 +34,7 @@ export function FlashcardSession() {
     restart,
   } = useFlashcardSession();
 
-  const isImmersive = state === "active";
+  const isImmersive = activeTab === "srs" && state === "active";
 
   return (
     <div
@@ -39,6 +48,8 @@ export function FlashcardSession() {
         overflow: "hidden",
       }}
     >
+      <div className="grain-overlay" style={{ opacity: 0.03, zIndex: 0 }} />
+
       {/* Immersive mode: thin progress bar at the very top */}
       {isImmersive && (
         <Progress
@@ -52,12 +63,14 @@ export function FlashcardSession() {
 
       {/* Module header — hidden during immersive (active) mode */}
       {!isImmersive && (
-        <ModuleHeader
-          icon={<BookOutlined />}
-          gradient="var(--gradient-flashcards)"
-          title="Ôn tập từ vựng"
-          subtitle="Spaced Repetition · Ghi nhớ lâu dài"
-        />
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <ModuleHeader
+            icon={<BookOutlined />}
+            gradient="var(--gradient-flashcards)"
+            title="Flashcard TOEIC"
+            subtitle="AI-Powered · Spaced Repetition · Ghi nhớ lâu dài"
+          />
+        </div>
       )}
 
       {/* Content */}
@@ -67,16 +80,17 @@ export function FlashcardSession() {
           minHeight: 0,
           flex: 1,
           overflowY: "auto",
-          padding: "24px 16px",
+          padding: "20px 16px",
+          zIndex: 1,
         }}
       >
+        {/* Ambient glow */}
         <div
           style={{
             pointerEvents: "none",
             position: "absolute",
             inset: 0,
-            background:
-              "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--accent) 6%, transparent) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--accent) 5%, transparent) 0%, transparent 70%)",
           }}
         />
 
@@ -85,66 +99,127 @@ export function FlashcardSession() {
             position: "relative",
             margin: "0 auto",
             display: "flex",
-            minHeight: "100%",
             width: "100%",
-            maxWidth: 700,
+            maxWidth: 720,
             flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
+            minHeight: "100%",
           }}
         >
-          {state === "loading" && (
-            <div className="anim-fade-in" style={{ width: "100%", maxWidth: 500, padding: 24 }}>
-              <Skeleton active paragraph={{ rows: 4 }} />
-            </div>
+          {/* ── Tab Switcher ── */}
+          {!isImmersive && (
+            <m.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              style={{
+                display: "flex",
+                gap: 4,
+                padding: 4,
+                borderRadius: 14,
+                background: "var(--surface-alt)",
+                border: "1px solid var(--border)",
+                marginBottom: 20,
+                alignSelf: "center",
+                boxShadow: "var(--shadow-sm)",
+              }}
+            >
+              {([
+                { key: "ai" as TabKey, label: "AI Tạo mới", icon: <ThunderboltOutlined /> },
+                { key: "srs" as TabKey, label: "Ôn tập SRS", icon: <ClockCircleOutlined /> },
+              ]).map((tab) => (
+                <m.button
+                  key={tab.key}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => setActiveTab(tab.key)}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                    padding: "10px 22px",
+                    borderRadius: 10,
+                    border: "none",
+                    background: activeTab === tab.key
+                      ? "var(--surface)"
+                      : "transparent",
+                    color: activeTab === tab.key
+                      ? "var(--accent)"
+                      : "var(--text-muted)",
+                    cursor: "pointer",
+                    fontSize: 13,
+                    fontWeight: activeTab === tab.key ? 800 : 600,
+                    boxShadow: activeTab === tab.key ? "var(--shadow-sm)" : "none",
+                    transition: "all 0.15s",
+                  }}
+                >
+                  {tab.icon} {tab.label}
+                </m.button>
+              ))}
+            </m.div>
           )}
 
-          {state === "error" && (
-            <Flex vertical align="center" gap={16} className="anim-fade-in" style={{ textAlign: "center" }}>
-              <Result
-                status="error"
-                title="Không thể tải thẻ ôn tập"
-                subTitle="Kiểm tra kết nối mạng và thử lại."
-                extra={
-                  <Button type="primary" icon={<ReloadOutlined />} onClick={restart}>
-                    Thử lại
-                  </Button>
-                }
-              />
-            </Flex>
-          )}
-
-          {state === "empty" && (
+          {/* ── AI Tab ── */}
+          {activeTab === "ai" && (
             <div className="anim-fade-in">
-              <EmptyState nextReviewAt={nextReviewAt} />
+              <AIFlashcardMode />
             </div>
           )}
 
-          {state === "active" && currentCard && (
-            <div key={`card-${currentIndex}`} className="anim-fade-in" style={{ width: "100%" }}>
-              <SessionProgress
-                current={currentIndex + 1}
-                total={totalDue}
-                startTime={sessionStartedAt ?? undefined}
-              />
-              <FlashcardCard card={currentCard} onRate={submitReview} isSubmitting={isSubmitting} />
-            </div>
-          )}
+          {/* ── SRS Tab ── */}
+          {activeTab === "srs" && (
+            <div style={{ display: "flex", flex: 1, flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+              {state === "loading" && (
+                <div className="anim-fade-in" style={{ width: "100%", maxWidth: 500, padding: 24 }}>
+                  <Skeleton active paragraph={{ rows: 4 }} />
+                </div>
+              )}
 
-          {state === "summary" && (
-            <div className="anim-fade-in" style={{ width: "100%" }}>
-              <SessionSummary
-                totalReviewed={stats.totalReviewed}
-                averageQuality={
-                  stats.totalReviewed > 0 ? stats.totalQuality / stats.totalReviewed : 0
-                }
-                forgottenCount={stats.forgottenCount}
-                againCount={stats.againCount}
-                hardCount={stats.hardCount}
-                goodCount={stats.goodCount}
-                easyCount={stats.easyCount}
-                onRestart={restart}
-              />
+              {state === "error" && (
+                <Flex vertical align="center" gap={16} className="anim-fade-in" style={{ textAlign: "center" }}>
+                  <Result
+                    status="error"
+                    title="Không thể tải thẻ ôn tập"
+                    subTitle="Kiểm tra kết nối mạng và thử lại."
+                    extra={
+                      <Button type="primary" icon={<ReloadOutlined />} onClick={restart}>
+                        Thử lại
+                      </Button>
+                    }
+                  />
+                </Flex>
+              )}
+
+              {state === "empty" && (
+                <div className="anim-fade-in">
+                  <EmptyState nextReviewAt={nextReviewAt} />
+                </div>
+              )}
+
+              {state === "active" && currentCard && (
+                <div key={`card-${currentIndex}`} className="anim-fade-in" style={{ width: "100%" }}>
+                  <SessionProgress
+                    current={currentIndex + 1}
+                    total={totalDue}
+                    startTime={sessionStartedAt ?? undefined}
+                  />
+                  <FlashcardCard card={currentCard} onRate={submitReview} isSubmitting={isSubmitting} />
+                </div>
+              )}
+
+              {state === "summary" && (
+                <div className="anim-fade-in" style={{ width: "100%" }}>
+                  <SessionSummary
+                    totalReviewed={stats.totalReviewed}
+                    averageQuality={
+                      stats.totalReviewed > 0 ? stats.totalQuality / stats.totalReviewed : 0
+                    }
+                    forgottenCount={stats.forgottenCount}
+                    againCount={stats.againCount}
+                    hardCount={stats.hardCount}
+                    goodCount={stats.goodCount}
+                    easyCount={stats.easyCount}
+                    onRestart={restart}
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>
