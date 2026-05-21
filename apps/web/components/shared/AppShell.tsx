@@ -7,7 +7,6 @@ import { BottomTabBar } from "@/components/shared/BottomTabBar";
 import { UserMenu } from "@/components/shared/UserMenu";
 import { UserProvider } from "@/components/shared/UserContext";
 import { ToolbarBreadcrumb } from "@/components/shared/ToolbarBreadcrumb";
-import { FloatingChatWidget } from "@/components/shared/FloatingChatWidget";
 import { FloatingDictionaryWidget } from "@/components/shared/FloatingDictionaryWidget";
 import { usePathname } from "next/navigation";
 import { useState, useEffect, ReactNode } from "react";
@@ -124,7 +123,6 @@ export function AppShell({
           {isMobile === true && <BottomTabBar />}
 
           <FloatingDictionaryWidget />
-          <FloatingChatWidget />
         </UserProvider>
       </div>
     </div>
