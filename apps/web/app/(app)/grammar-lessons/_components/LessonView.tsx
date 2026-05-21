@@ -301,31 +301,58 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
       {state === "lesson" && lesson && (
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           
-          {/* Title Card */}
-          <div
+          {/* Title Card — Premium Hero */}
+          <m.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.05 }}
             style={{
-              padding: "24px",
+              padding: "28px 24px 24px",
               borderRadius: "var(--radius-xl)",
-              background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 5%, var(--surface)), var(--surface))",
+              background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 6%, var(--surface)), var(--surface))",
               border: "1px solid var(--border)",
-              boxShadow: "var(--shadow-sm)",
+              boxShadow: "var(--shadow-md)",
               position: "relative",
               overflow: "hidden",
             }}
           >
-            <div style={{ position: "absolute", left: "0%", top: "0%", width: "100%", height: 3, background: "linear-gradient(90deg, var(--accent), var(--secondary))" }} />
+            {/* Top accent gradient bar */}
+            <div style={{ position: "absolute", left: 0, top: 0, width: "100%", height: 3, background: "linear-gradient(90deg, var(--accent), var(--secondary), var(--success))" }} />
+            {/* Decorative glow */}
+            <div style={{ position: "absolute", top: "-30%", right: "-10%", width: 180, height: 180, borderRadius: "50%", background: "color-mix(in srgb, var(--accent) 4%, transparent)", pointerEvents: "none" }} />
             
-            <div style={{ display: "flex", alignItems: "flex-start", gap: 12, marginBottom: 12 }}>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 14, position: "relative" }}>
+              {/* Icon badge */}
+              <div style={{
+                width: 46,
+                height: 46,
+                borderRadius: 14,
+                background: "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 75%, var(--secondary)))",
+                display: "grid",
+                placeItems: "center",
+                flexShrink: 0,
+                boxShadow: "0 4px 14px var(--accent-muted)",
+              }}>
+                <BookOutlined style={{ fontSize: 20, color: "#fff" }} />
+              </div>
               <div style={{ flex: 1 }}>
-                <h2 style={{ margin: 0, fontSize: 20, fontWeight: 900, color: "var(--text-primary)", fontFamily: "var(--font-display)" }}>
+                <h2 style={{ margin: 0, fontSize: 20, fontWeight: 900, color: "var(--text-primary)", fontFamily: "var(--font-display)", lineHeight: 1.3 }}>
                   {lesson.title}
                 </h2>
-                <p style={{ margin: "4px 0 0", fontSize: 13.5, color: "var(--text-secondary)", fontWeight: 500, lineHeight: 1.5 }}>
+                <p style={{ margin: "4px 0 0", fontSize: 14, color: "var(--text-secondary)", fontWeight: 500, lineHeight: 1.5 }}>
                   {lesson.titleVi}
                 </p>
               </div>
               <div style={{ display: "flex", gap: 6, flexShrink: 0, alignItems: "center" }}>
-                <span style={{ fontSize: 11, fontWeight: 800, color: "var(--accent)", border: "1px solid var(--accent)", background: "var(--surface)", padding: "2px 8px", borderRadius: 99 }}>
+                <span style={{
+                  fontSize: 11,
+                  fontWeight: 800,
+                  color: "var(--accent)",
+                  background: "var(--accent-light)",
+                  border: "1px solid color-mix(in srgb, var(--accent) 20%, transparent)",
+                  padding: "4px 12px",
+                  borderRadius: 99,
+                }}>
                   {level}
                 </span>
                 <m.button
@@ -339,7 +366,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                     color: "var(--text-secondary)",
                     cursor: "pointer",
                     fontSize: 12,
-                    padding: "6px 12px",
+                    padding: "6px 14px",
                     fontWeight: 700,
                     boxShadow: "var(--shadow-sm)",
                   }}
@@ -348,27 +375,38 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 </m.button>
               </div>
             </div>
-          </div>
+          </m.div>
 
-          {/* Formula Card */}
+          {/* Formula Card — Glassmorphism */}
           {lesson.formula && (
-            <div
+            <m.div
+              initial={{ opacity: 0, scale: 0.97 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.1 }}
               style={{
-                padding: "20px 24px",
+                padding: "22px 24px",
                 borderRadius: "var(--radius-xl)",
                 textAlign: "center",
-                background: "linear-gradient(135deg, var(--accent-light), color-mix(in srgb, var(--secondary) 8%, var(--surface)))",
-                border: "1px solid color-mix(in srgb, var(--accent) 15%, var(--border))",
-                boxShadow: "var(--shadow-sm)",
+                background: "linear-gradient(135deg, var(--accent-light), color-mix(in srgb, var(--secondary) 6%, var(--surface)))",
+                border: "1.5px solid color-mix(in srgb, var(--accent) 20%, var(--border))",
+                boxShadow: "0 8px 24px color-mix(in srgb, var(--accent) 8%, transparent)",
+                position: "relative",
+                overflow: "hidden",
               }}
             >
-              <span style={{ fontSize: 11, color: "var(--accent)", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 8 }}>
+              {/* Decorative dots */}
+              <div style={{ position: "absolute", top: 8, right: 12, display: "flex", gap: 3, opacity: 0.3 }}>
+                <div style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--accent)" }} />
+                <div style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--secondary)" }} />
+                <div style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--success)" }} />
+              </div>
+              <span style={{ fontSize: 11, color: "var(--accent)", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 10 }}>
                 <CalculatorOutlined /> Cấu trúc cốt lõi
               </span>
-              <p style={{ fontSize: 18, fontWeight: 900, color: "var(--accent)", margin: 0, fontFamily: "var(--font-mono)", wordBreak: "break-all" }}>
+              <p style={{ fontSize: 19, fontWeight: 900, color: "var(--accent)", margin: 0, fontFamily: "var(--font-mono)", wordBreak: "break-all", letterSpacing: "0.02em" }}>
                 {lesson.formula}
               </p>
-            </div>
+            </m.div>
           )}
 
           {/* Explanation Card */}
@@ -703,9 +741,9 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             </div>
           )}
 
-          {/* Start Exercises Button */}
+          {/* Start Exercises Button — Premium CTA */}
           <m.button
-            whileHover={{ scale: 1.01, y: -1 }}
+            whileHover={{ scale: 1.01, y: -2 }}
             whileTap={{ scale: 0.99 }}
             onClick={() => {
               setState("exercises");
@@ -717,24 +755,31 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               resetExerciseInput();
             }}
             style={{
-              padding: "14px 24px",
+              padding: "18px 24px",
               borderRadius: "var(--radius-xl)",
               border: "none",
-              background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+              background: "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 80%, var(--secondary)))",
               color: "var(--text-on-accent)",
-              fontSize: 15,
-              fontWeight: 800,
+              fontSize: 16,
+              fontWeight: 900,
               cursor: "pointer",
               textAlign: "center",
               width: "100%",
-              boxShadow: "0 4px 14px var(--accent-muted)",
+              boxShadow: "0 8px 28px var(--accent-muted)",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              gap: 8,
+              gap: 10,
+              position: "relative",
+              overflow: "hidden",
+              fontFamily: "var(--font-display)",
             }}
           >
-            Luyện tập ngay ({lesson.exercises.length} câu) <RightOutlined />
+            {/* Decorative glow */}
+            <div style={{ position: "absolute", top: "-50%", right: "-10%", width: 120, height: 120, borderRadius: "50%", background: "rgba(255,255,255,0.06)", pointerEvents: "none" }} />
+            <div style={{ position: "absolute", bottom: "-40%", left: "5%", width: 80, height: 80, borderRadius: "50%", background: "rgba(255,255,255,0.04)", pointerEvents: "none" }} />
+            <span style={{ position: "relative" }}>🚀 Luyện tập ngay — {lesson.exercises.length} câu hỏi</span>
+            <RightOutlined style={{ position: "relative", fontSize: 14 }} />
           </m.button>
         </div>
       )}
