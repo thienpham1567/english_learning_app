@@ -1,315 +1,690 @@
 "use client";
 
-import React, { useMemo } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import * as m from "motion/react-client";
+import { AnimatePresence } from "motion/react";
 import {
   BookOutlined,
-  ThunderboltOutlined,
-  CheckCircleOutlined,
-  SolutionOutlined,
-  SafetyCertificateOutlined,
-  StarOutlined,
+  CheckCircleFilled,
+  LockOutlined,
   RocketOutlined,
-  FieldTimeOutlined,
-  PartitionOutlined,
+  StarFilled,
+  ThunderboltOutlined,
+  ArrowRightOutlined,
+  TrophyOutlined,
   NodeIndexOutlined,
-  GlobalOutlined,
   FireOutlined,
+  BulbOutlined,
+  AimOutlined,
+  GlobalOutlined,
   ToolOutlined,
+  SafetyCertificateOutlined,
+  QuestionCircleOutlined,
 } from "@ant-design/icons";
-import { Tooltip } from "antd";
+import { Progress, Tooltip } from "antd";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
+import { api } from "@/lib/api-client";
+import {
+  getCategoriesForExam,
+  type GrammarTopicCategory,
+  type GrammarTopic,
+} from "@/lib/grammar-lessons/topics";
+import type { GrammarLessonProgressItem } from "@/lib/grammar-lessons/schema";
 
-// ── Types ────────────────────────────────────────────────────────
-interface Node {
-  id: string;
-  label: string;
-  phase: 1 | 2 | 3;
-  icon: React.ReactNode;
-  desc: string;
-  details: string[];
-  x: number; // Percent of width
-  y: number; // Pixel vertical spacing
-}
-
-interface Connection {
-  from: string;
-  to: string;
-}
-
-// ── Data ─────────────────────────────────────────────────────────
-const PHASES = [
-  { id: 1, title: "Nền Tảng Vững Chắc", sub: "Xây dựng gốc rễ ngữ pháp cơ bản", color: "var(--accent)" },
-  { id: 2, title: "Chuyên Sâu TOEIC", sub: "Nắm vững các cấu trúc Part 5 & 6", color: "var(--secondary)" },
-  { id: 3, title: "Chiến Thuật & Tốc Độ", sub: "Tối ưu hóa điểm số và thời gian", color: "var(--error)" },
-];
-
-const NODES: Node[] = [
-  // Phase 1
-  { id: "diag", label: "Diagnostic Test", phase: 1, icon: <SolutionOutlined />, desc: "Đánh giá năng lực đầu vào", details: ["Xác định lỗ hổng kiến thức", "Lập kế hoạch cá nhân hóa"], x: 50, y: 80 },
-  { id: "pos", label: "Parts of Speech", phase: 1, icon: <PartitionOutlined />, desc: "Từ loại chính (N/V/Adj/Adv)", details: ["Vị trí từ loại trong câu", "Dấu hiệu nhận biết đuôi từ (Suffix)"], x: 50, y: 220 },
-  { id: "tenses", label: "Basic Tenses", phase: 1, icon: <FieldTimeOutlined />, desc: "Các thì cơ bản", details: ["Hiện tại, Quá khứ, Tương lai", "Dấu hiệu trạng từ thời gian"], x: 30, y: 360 },
-  { id: "sv", label: "Subject-Verb", phase: 1, icon: <SafetyCertificateOutlined />, desc: "Hòa hợp S-V", details: ["Quy tắc chia động từ chủ ngữ số ít/nhiều", "Các trường hợp đặc biệt cần lưu ý"], x: 70, y: 360 },
-
-  // Phase 2
-  { id: "passive", label: "Passive Voice", phase: 2, icon: <NodeIndexOutlined />, desc: "Thể bị động chuyên sâu", details: ["Cấu trúc bị động be + V3/ed", "Nhận biết câu bị động Part 5"], x: 50, y: 520 },
-  { id: "gerund", label: "Gerund & Inf", phase: 2, icon: <StarOutlined />, desc: "Danh động từ & To-V", details: ["Động từ đi kèm To-V / V-ing", "Cụm từ đặc biệt ăn điểm"], x: 25, y: 660 },
-  { id: "relative", label: "Relative Clauses", phase: 2, icon: <GlobalOutlined />, desc: "Mệnh đề quan hệ", details: ["Đại từ quan hệ Who, Whom, Which", "Mệnh đề quan hệ rút gọn đặc trưng"], x: 75, y: 660 },
-  { id: "conj", label: "Conj & Prep", phase: 2, icon: <ToolOutlined />, desc: "Liên từ & Giới từ", details: ["Sự khác biệt Because vs Because of", "Sự khác biệt Although vs Despite"], x: 50, y: 800 },
-  
-  // Phase 3
-  { id: "p56", label: "Part 5 & 6 Strategy", phase: 3, icon: <ThunderboltOutlined />, desc: "Chiến thuật phòng thi", details: ["Phương pháp làm bài nhanh 20s/câu", "Loại trừ bẫy từ vựng thường gặp"], x: 50, y: 960 },
-  { id: "traps", label: "Common Traps", phase: 3, icon: <FireOutlined />, desc: "Các bẫy đề thi TOEIC", details: ["Danh từ ghép & từ loại giả", "Từ đa nghĩa phổ biến"], x: 30, y: 1100 },
-  { id: "mock", label: "Final Mock Test", phase: 3, icon: <RocketOutlined />, desc: "Luyện đề tổng hợp cuối", details: ["Kiểm tra áp lực thời gian", "Phân tích và khắc phục lỗi sai cuối"], x: 70, y: 1100 },
-];
-
-const CONNECTIONS: Connection[] = [
-  { from: "diag", to: "pos" },
-  { from: "pos", to: "tenses" },
-  { from: "pos", to: "sv" },
-  { from: "tenses", to: "passive" },
-  { from: "sv", to: "passive" },
-  { from: "passive", to: "gerund" },
-  { from: "passive", to: "relative" },
-  { from: "gerund", to: "conj" },
-  { from: "relative", to: "conj" },
-  { from: "conj", to: "p56" },
-  { from: "p56", to: "traps" },
-  { from: "p56", to: "mock" },
-];
-
-// ── Components ───────────────────────────────────────────────────
-
-function RoadmapNode({ node, delay }: { node: Node; delay: number }) {
-  const roadmapToLibrary: Record<string, string> = {
-    "pos": "/grammar-lessons",
-    "sv": "/grammar-lessons",
-    "relative": "/grammar-lessons",
-    "conj": "/grammar-lessons",
-    "tenses": "/grammar-lessons",
-    "passive": "/grammar-lessons",
+// ── Progress response from API ──
+type ProgressResponse = {
+  progress: GrammarLessonProgressItem[];
+  summary: {
+    totalTopics: number;
+    totalCompleted: number;
+    completedTopicIds: string[];
+    progressByTopic: Record<string, GrammarLessonProgressItem>;
   };
+  recommendedTopic: GrammarTopic | null;
+};
 
-  const href = roadmapToLibrary[node.id] || "/grammar-lessons";
-  const colorVar = `--phase-${node.phase}-color`;
+// ── Phase mapping — TOEIC expert roadmap ──
+// As someone who scored 900 L&R, this is the strategic learning order
+const PHASE_CONFIG = [
+  {
+    id: 1,
+    title: "Nền Tảng Vững Chắc",
+    sub: "Xây dựng gốc rễ ngữ pháp — nền tảng bắt buộc trước khi chạm Part 5/6",
+    color: "var(--success)",
+    gradient: "linear-gradient(135deg, #059669, #10b981)",
+    emoji: "🌱",
+    categoryIds: ["tenses", "subject-verb-agreement", "parts-of-speech", "determiners", "pronouns"],
+    tip: "Giai đoạn này quyết định 70% số điểm Part 5. Đừng bỏ qua!",
+  },
+  {
+    id: 2,
+    title: "Cấu Trúc Chuyên Sâu",
+    sub: "Nắm vững cấu trúc nâng cao — chìa khóa để vượt 700+ điểm",
+    color: "var(--accent)",
+    gradient: "linear-gradient(135deg, #6d28d9, #7c3aed)",
+    emoji: "⚡",
+    categoryIds: ["modals", "prepositions", "conjunctions", "conditionals", "comparatives"],
+    tip: "Từ đây bắt đầu phân biệt được người 600 vs 800 điểm.",
+  },
+  {
+    id: 3,
+    title: "Chinh Phục 800–900",
+    sub: "Cấu trúc phức tạp & chiến thuật phòng thi thực tế",
+    color: "var(--error)",
+    gradient: "linear-gradient(135deg, #dc2626, #f97316)",
+    emoji: "🔥",
+    categoryIds: ["gerunds-infinitives", "passive", "clauses"],
+    tip: "Đây là lúc bạn cần luyện đề thật để kiểm tra kiến thức.",
+  },
+];
 
-  return (
-    <m.div
-      initial={{ opacity: 0, scale: 0.8, y: 20 }}
-      whileInView={{ opacity: 1, scale: 1, y: 0 }}
-      viewport={{ once: true, margin: "-80px" }}
-      transition={{ delay, type: "spring", stiffness: 220, damping: 18 }}
-      style={{
-        position: "absolute",
-        left: `${node.x}%`,
-        top: node.y,
-        transform: "translateX(-50%)",
-        zIndex: 10,
-      }}
-    >
-      <Link href={href} style={{ textDecoration: "none" }}>
-        <Tooltip
-          title={
-            <div style={{ padding: "6px 4px" }}>
-              <div style={{ fontWeight: 800, fontSize: 13, marginBottom: 6, color: "#fff" }}>{node.desc}</div>
-              {node.details.map((d, idx) => (
-                <div key={idx} style={{ fontSize: 11.5, opacity: 0.9, display: "flex", alignItems: "flex-start", gap: 6, marginBottom: 4, lineHeight: 1.4 }}>
-                  <CheckCircleOutlined style={{ fontSize: 11, color: "var(--success)", marginTop: 2 }} />
-                  <span>{d}</span>
-                </div>
-              ))}
-              <div style={{ marginTop: 10, fontSize: 10.5, color: "var(--accent)", fontWeight: 800, borderTop: "1px solid rgba(255,255,255,0.15)", paddingTop: 6 }}>
-                BẤM ĐỂ HỌC CHI TIẾT →
-              </div>
-            </div>
-          }
-          color="rgba(24, 24, 27, 0.95)"
-          overlayStyle={{ backdropFilter: "blur(8px)" }}
-        >
-          <m.div
-            whileHover={{
-              scale: 1.1,
-              y: -4,
-              boxShadow: `0 12px 30px color-mix(in srgb, var(${colorVar}) 30%, transparent)`,
-            }}
-            whileTap={{ scale: 0.96 }}
-            style={{
-              width: 68,
-              height: 68,
-              borderRadius: "var(--radius-xl)",
-              background: "var(--surface)",
-              border: `2px solid var(${colorVar})`,
-              boxShadow: `0 6px 20px color-mix(in srgb, var(${colorVar}) 15%, transparent)`,
-              display: "grid",
-              placeItems: "center",
-              cursor: "pointer",
-              position: "relative",
-              transition: "border-color 0.2s",
-            }}
-          >
-            <div style={{ fontSize: 24, color: `var(${colorVar})` }}>{node.icon}</div>
-            
-            <div style={{
-              position: "absolute",
-              top: "105%",
-              left: "50%",
-              transform: "translateX(-50%)",
-              whiteSpace: "nowrap",
-              textAlign: "center",
-            }}>
-              <div style={{ fontSize: 12.5, fontWeight: 800, color: "var(--text-primary)", fontFamily: "var(--font-display)" }}>{node.label}</div>
-              <div style={{ fontSize: 9.5, color: "var(--text-muted)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em" }}>Giai đoạn {node.phase}</div>
-            </div>
-          </m.div>
-        </Tooltip>
-      </Link>
-    </m.div>
-  );
-}
+// Category icon mapping
+const CATEGORY_ICONS: Record<string, React.ReactNode> = {
+  tenses: <NodeIndexOutlined />,
+  "subject-verb-agreement": <SafetyCertificateOutlined />,
+  "parts-of-speech": <ToolOutlined />,
+  determiners: <GlobalOutlined />,
+  pronouns: <QuestionCircleOutlined />,
+  modals: <ThunderboltOutlined />,
+  prepositions: <AimOutlined />,
+  conjunctions: <BulbOutlined />,
+  conditionals: <FireOutlined />,
+  comparatives: <StarFilled />,
+  "gerunds-infinitives": <RocketOutlined />,
+  passive: <BookOutlined />,
+  clauses: <TrophyOutlined />,
+};
 
-function PhaseHeader({ phase, y }: { phase: typeof PHASES[0]; y: number }) {
-  return (
-    <m.div
-      initial={{ opacity: 0, x: -20 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true }}
-      style={{
-        position: "absolute",
-        top: y,
-        left: 20,
-        zIndex: 5,
-      }}
-    >
-      <div style={{ fontSize: 10.5, fontWeight: 900, color: phase.color, textTransform: "uppercase", letterSpacing: "0.15em", marginBottom: 2 }}>
-        Giai đoạn 0{phase.id}
-      </div>
-      <h2 style={{ margin: 0, fontSize: 20, fontWeight: 900, color: "var(--text-primary)", fontFamily: "var(--font-display)" }}>
-        {phase.title}
-      </h2>
-      <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)", fontWeight: 500 }}>
-        {phase.sub}
-      </p>
-    </m.div>
-  );
-}
-
+// ── Main Page ────────────────────────────────────────────
 export default function GrammarRoadmapPage() {
-  const connectionPaths = useMemo(() => {
-    return CONNECTIONS.map((conn) => {
-      const from = NODES.find((n) => n.id === conn.from)!;
-      const to = NODES.find((n) => n.id === conn.to)!;
-      const startX = `${from.x}%`;
-      const startY = from.y + 34;
-      const endX = `${to.x}%`;
-      const endY = to.y + 34;
-      
-      return { from, to, startX, startY, endX, endY };
-    });
+  const [progressByTopic, setProgressByTopic] = useState<Record<string, GrammarLessonProgressItem>>({});
+  const [loading, setLoading] = useState(true);
+  const [recommendedTopic, setRecommendedTopic] = useState<GrammarTopic | null>(null);
+  const [expandedPhase, setExpandedPhase] = useState<number | null>(1);
+
+  // Load progress
+  useEffect(() => {
+    let cancelled = false;
+    api
+      .get<ProgressResponse>("/grammar-lessons/progress", { params: { examMode: "toeic" } })
+      .then((data) => {
+        if (cancelled) return;
+        setProgressByTopic(data.summary.progressByTopic);
+        setRecommendedTopic(data.recommendedTopic);
+      })
+      .catch(() => {})
+      .finally(() => { if (!cancelled) setLoading(false); });
+    return () => { cancelled = true; };
   }, []);
 
-  return (
-    <div
-      style={{
-        position: "relative",
-        display: "flex",
-        height: "100%",
-        minHeight: 0,
-        flex: 1,
-        flexDirection: "column",
-        overflow: "hidden",
-      }}
-    >
-      <div className="grain-overlay" style={{ opacity: 0.03, zIndex: 0 }} />
+  // All TOEIC categories
+  const allCategories = useMemo(() => getCategoriesForExam("toeic"), []);
 
-      {/* Styled Gradient Header */}
-      <div style={{ position: "relative", zIndex: 1 }}>
+  // Computed stats
+  const completedSet = useMemo(
+    () => new Set(
+      Object.values(progressByTopic)
+        .filter((p) => p.status === "completed")
+        .map((p) => p.topicId),
+    ),
+    [progressByTopic],
+  );
+
+  const inProgressSet = useMemo(
+    () => new Set(
+      Object.values(progressByTopic)
+        .filter((p) => p.status === "in_progress")
+        .map((p) => p.topicId),
+    ),
+    [progressByTopic],
+  );
+
+  const totalTopics = allCategories.reduce((s, c) => s + c.topics.length, 0);
+  const totalCompleted = completedSet.size;
+  const totalInProgress = inProgressSet.size;
+  const overallPct = totalTopics > 0 ? Math.round((totalCompleted / totalTopics) * 100) : 0;
+
+  // Phase stats
+  const getPhaseStats = useCallback(
+    (categoryIds: string[]) => {
+      const cats = allCategories.filter((c) => categoryIds.includes(c.id));
+      const topics = cats.flatMap((c) => c.topics);
+      const completed = topics.filter((t) => completedSet.has(t.id)).length;
+      const inProg = topics.filter((t) => inProgressSet.has(t.id)).length;
+      return { total: topics.length, completed, inProgress: inProg, pct: topics.length > 0 ? Math.round((completed / topics.length) * 100) : 0 };
+    },
+    [allCategories, completedSet, inProgressSet],
+  );
+
+  // Determine current phase for the user
+  const currentPhase = useMemo(() => {
+    for (let i = 0; i < PHASE_CONFIG.length; i++) {
+      const stats = getPhaseStats(PHASE_CONFIG[i].categoryIds);
+      if (stats.pct < 100) return i + 1;
+    }
+    return 3; // All done
+  }, [getPhaseStats]);
+
+  return (
+    <div style={{ height: "100%", overflowY: "auto", padding: "var(--space-6)" }} className="anim-fade-up">
+      <div style={{ maxWidth: 900, margin: "0 auto" }}>
+        {/* Header */}
         <ModuleHeader
           icon={<BookOutlined />}
           gradient="var(--gradient-grammar)"
-          title="Lộ trình Ngữ pháp"
-          subtitle="Bản đồ học tập cá nhân hóa hướng đến mục tiêu điểm TOEIC tối đa"
+          title="Lộ trình Ngữ pháp TOEIC"
+          subtitle="Bản đồ chinh phục 900 điểm — từ nền tảng đến chiến thuật phòng thi"
         />
-      </div>
 
-      {/* Main Roadmap Container */}
-      <div
-        style={{
-          position: "relative",
-          minHeight: 0,
-          flex: 1,
-          overflowY: "auto",
-          padding: "24px 20px 80px",
-          zIndex: 1,
-        }}
-      >
-        {/* Soft back glowing spots */}
-        <div
+        {/* ── Overall Progress Card ── */}
+        <m.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.1 }}
           style={{
-            pointerEvents: "none",
-            position: "absolute",
-            inset: 0,
-            background: "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--accent) 5%, transparent) 0%, transparent 70%)",
+            background: "var(--surface)",
+            borderRadius: "var(--radius-xl)",
+            border: "1px solid var(--border)",
+            padding: "24px",
+            boxShadow: "var(--shadow-md)",
+            marginTop: 20,
+            marginBottom: 24,
+            position: "relative",
+            overflow: "hidden",
           }}
-        />
+        >
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "linear-gradient(90deg, var(--success), var(--accent), var(--error))" }} />
 
-        <div style={{ position: "relative", width: "100%", maxWidth: 640, margin: "0 auto", height: 1240 }}>
-          {/* SVG Connector Layer */}
-          <svg style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", pointerEvents: "none", overflow: "visible" }}>
-            <defs>
-              <linearGradient id="roadmapGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.8" />
-                <stop offset="50%" stopColor="var(--secondary)" stopOpacity="0.8" />
-                <stop offset="100%" stopColor="var(--error)" stopOpacity="0.8" />
-              </linearGradient>
-            </defs>
-            
-            {connectionPaths.map((path, idx) => (
-              <m.line
-                key={`${path.from.id}-${path.to.id}`}
-                x1={path.startX}
-                y1={path.startY}
-                x2={path.endX}
-                y2={path.endY}
-                stroke="url(#roadmapGradient)"
-                strokeWidth="2.5"
-                className="roadmap-flow-line"
-                initial={{ pathLength: 0, opacity: 0 }}
-                whileInView={{ pathLength: 1, opacity: 0.45 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 + idx * 0.04, duration: 0.8 }}
-              />
+          <div style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
+            {/* Circle progress */}
+            <Progress
+              type="circle"
+              percent={overallPct}
+              size={90}
+              strokeWidth={8}
+              strokeColor={{ "0%": "var(--success)", "50%": "var(--accent)", "100%": "var(--error)" }}
+              trailColor="var(--border)"
+              format={() => (
+                <div style={{ textAlign: "center" }}>
+                  <div style={{ fontSize: 22, fontWeight: 900, color: "var(--ink)", fontFamily: "var(--font-display)" }}>{overallPct}%</div>
+                  <div style={{ fontSize: 9.5, color: "var(--text-muted)", fontWeight: 700 }}>Hoàn thành</div>
+                </div>
+              )}
+            />
+
+            {/* Stats */}
+            <div style={{ flex: 1, minWidth: 200 }}>
+              <div style={{ fontSize: 18, fontWeight: 900, color: "var(--ink)", fontFamily: "var(--font-display)", marginBottom: 4 }}>
+                Tiến độ tổng quan
+              </div>
+              <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 12 }}>
+                <StatPill icon={<CheckCircleFilled style={{ color: "var(--success)" }} />} label="Đã hoàn thành" value={`${totalCompleted}/${totalTopics}`} />
+                <StatPill icon={<ThunderboltOutlined style={{ color: "var(--accent)" }} />} label="Đang học" value={String(totalInProgress)} />
+                <StatPill icon={<FireOutlined style={{ color: "var(--error)" }} />} label="Giai đoạn" value={`${currentPhase}/3`} />
+              </div>
+
+              {/* Phase progress mini-bars */}
+              <div style={{ display: "flex", gap: 4 }}>
+                {PHASE_CONFIG.map((phase) => {
+                  const stats = getPhaseStats(phase.categoryIds);
+                  return (
+                    <Tooltip key={phase.id} title={`${phase.title}: ${stats.completed}/${stats.total} (${stats.pct}%)`}>
+                      <div style={{ flex: 1, height: 6, borderRadius: 3, background: "var(--border)", overflow: "hidden" }}>
+                        <div style={{
+                          width: `${stats.pct}%`,
+                          height: "100%",
+                          borderRadius: 3,
+                          background: phase.gradient,
+                          transition: "width 0.5s ease",
+                        }} />
+                      </div>
+                    </Tooltip>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Recommended action */}
+            {recommendedTopic && (
+              <Link
+                href={`/grammar-lessons?topic=${recommendedTopic.id}`}
+                style={{ textDecoration: "none" }}
+              >
+                <m.div
+                  whileHover={{ scale: 1.03, y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  style={{
+                    padding: "14px 20px",
+                    borderRadius: "var(--radius-xl)",
+                    background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+                    color: "var(--text-on-accent)",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 10,
+                    boxShadow: "0 6px 20px var(--accent-muted)",
+                    cursor: "pointer",
+                    minWidth: 200,
+                  }}
+                >
+                  <RocketOutlined style={{ fontSize: 18 }} />
+                  <div>
+                    <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", opacity: 0.8 }}>
+                      Gợi ý tiếp theo
+                    </div>
+                    <div style={{ fontSize: 14, fontWeight: 800 }}>
+                      {recommendedTopic.title}
+                    </div>
+                  </div>
+                  <ArrowRightOutlined style={{ marginLeft: "auto", fontSize: 14 }} />
+                </m.div>
+              </Link>
+            )}
+          </div>
+        </m.div>
+
+        {/* ── Phase Accordion ── */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          {PHASE_CONFIG.map((phase, phaseIdx) => {
+            const stats = getPhaseStats(phase.categoryIds);
+            const isExpanded = expandedPhase === phase.id;
+            const phaseCats = allCategories.filter((c) => phase.categoryIds.includes(c.id));
+            const isCurrentPhase = currentPhase === phase.id;
+            const isPastPhase = currentPhase > phase.id;
+
+            return (
+              <m.div
+                key={phase.id}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.15 + phaseIdx * 0.1 }}
+                style={{
+                  background: "var(--surface)",
+                  borderRadius: "var(--radius-xl)",
+                  border: isCurrentPhase ? `2px solid ${phase.color}` : "1px solid var(--border)",
+                  boxShadow: isCurrentPhase ? `0 6px 24px color-mix(in srgb, ${phase.color} 12%, transparent)` : "var(--shadow-sm)",
+                  overflow: "hidden",
+                }}
+              >
+                {/* Phase Header (clickable) */}
+                <m.button
+                  onClick={() => setExpandedPhase(isExpanded ? null : phase.id)}
+                  whileHover={{ backgroundColor: "var(--surface-hover)" }}
+                  style={{
+                    width: "100%",
+                    padding: "20px 24px",
+                    border: "none",
+                    background: "transparent",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 16,
+                    textAlign: "left",
+                  }}
+                >
+                  {/* Phase number badge */}
+                  <div style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: 14,
+                    background: phase.gradient,
+                    display: "grid",
+                    placeItems: "center",
+                    flexShrink: 0,
+                    fontSize: 22,
+                  }}>
+                    {isPastPhase ? <CheckCircleFilled style={{ color: "#fff" }} /> : phase.emoji}
+                  </div>
+
+                  {/* Phase info */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
+                      <span style={{ fontSize: 10, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.12em", color: phase.color }}>
+                        Giai đoạn {String(phase.id).padStart(2, "0")}
+                      </span>
+                      {isCurrentPhase && (
+                        <span style={{
+                          fontSize: 9,
+                          fontWeight: 800,
+                          padding: "2px 8px",
+                          borderRadius: 6,
+                          background: `color-mix(in srgb, ${phase.color} 12%, var(--surface))`,
+                          color: phase.color,
+                          border: `1px solid color-mix(in srgb, ${phase.color} 25%, transparent)`,
+                        }}>
+                          ĐAng HỌC
+                        </span>
+                      )}
+                    </div>
+                    <div style={{ fontSize: 16, fontWeight: 900, color: "var(--ink)", fontFamily: "var(--font-display)" }}>
+                      {phase.title}
+                    </div>
+                    <div style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 600, marginTop: 2 }}>
+                      {phase.sub}
+                    </div>
+                  </div>
+
+                  {/* Phase progress */}
+                  <div style={{ textAlign: "right", flexShrink: 0 }}>
+                    <div style={{ fontSize: 22, fontWeight: 900, color: phase.color, fontFamily: "var(--font-display)" }}>
+                      {stats.pct}%
+                    </div>
+                    <div style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 700 }}>
+                      {stats.completed}/{stats.total} chủ đề
+                    </div>
+                  </div>
+
+                  {/* Chevron */}
+                  <m.div
+                    animate={{ rotate: isExpanded ? 90 : 0 }}
+                    style={{ fontSize: 14, color: "var(--text-muted)", flexShrink: 0 }}
+                  >
+                    <ArrowRightOutlined />
+                  </m.div>
+                </m.button>
+
+                {/* Expanded content */}
+                <AnimatePresence initial={false}>
+                  {isExpanded && (
+                    <m.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                      style={{ overflow: "hidden" }}
+                    >
+                      <div style={{ padding: "0 24px 24px", display: "flex", flexDirection: "column", gap: 16 }}>
+                        {/* Expert tip */}
+                        <div style={{
+                          padding: "12px 16px",
+                          borderRadius: "var(--radius-lg)",
+                          background: `color-mix(in srgb, ${phase.color} 5%, var(--surface-alt))`,
+                          border: `1px solid color-mix(in srgb, ${phase.color} 15%, transparent)`,
+                          display: "flex",
+                          alignItems: "flex-start",
+                          gap: 10,
+                        }}>
+                          <BulbOutlined style={{ color: phase.color, fontSize: 16, marginTop: 2 }} />
+                          <div>
+                            <div style={{ fontSize: 11, fontWeight: 800, color: phase.color, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                              Kinh nghiệm 900 điểm
+                            </div>
+                            <div style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 600, lineHeight: 1.5, marginTop: 2 }}>
+                              {phase.tip}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Categories */}
+                        {phaseCats.map((cat, catIdx) => (
+                          <CategoryCard
+                            key={cat.id}
+                            category={cat}
+                            completedSet={completedSet}
+                            inProgressSet={inProgressSet}
+                            delay={catIdx * 0.05}
+                            phaseColor={phase.color}
+                          />
+                        ))}
+                      </div>
+                    </m.div>
+                  )}
+                </AnimatePresence>
+              </m.div>
+            );
+          })}
+        </div>
+
+        {/* ── Expert Tips Section ── */}
+        <m.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5 }}
+          style={{
+            background: "var(--surface)",
+            borderRadius: "var(--radius-xl)",
+            border: "1px solid var(--border)",
+            padding: "24px",
+            boxShadow: "var(--shadow-sm)",
+            marginTop: 24,
+          }}
+        >
+          <div style={{ fontSize: 16, fontWeight: 900, color: "var(--ink)", fontFamily: "var(--font-display)", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
+            <TrophyOutlined style={{ color: "var(--xp)" }} />
+            Chiến lược từ người đạt 900 L&R
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 12 }}>
+            {[
+              {
+                emoji: "🎯",
+                title: "Part 5: 20 giây/câu",
+                desc: "Nhận diện từ loại trước, loại trừ 2 đáp án ngay lập tức. 80% câu Part 5 test từ loại + thì + hòa hợp chủ vị.",
+              },
+              {
+                emoji: "📚",
+                title: "Học theo cặp đối lập",
+                desc: "Luôn học Because vs Because of, Although vs Despite cùng lúc. TOEIC thích test sự khác biệt giữa liên từ và giới từ.",
+              },
+              {
+                emoji: "🔁",
+                title: "Luyện lặp lại cách quãng",
+                desc: "Sau mỗi bài học, hệ thống AI sẽ tạo bài tập 4 tầng: nhận diện → áp dụng → tự viết → ngữ cảnh đề thi.",
+              },
+              {
+                emoji: "⚡",
+                title: "Đừng bỏ qua Passive Voice",
+                desc: "10–15% câu Part 5/6 test thể bị động. Nắm vững be + V3 và causative (have something done) là ăn điểm chắc.",
+              },
+            ].map((tip, i) => (
+              <div
+                key={i}
+                style={{
+                  padding: "14px 16px",
+                  borderRadius: "var(--radius-lg)",
+                  background: "var(--surface-alt)",
+                  border: "1px solid var(--border)",
+                }}
+              >
+                <div style={{ fontSize: 20, marginBottom: 6 }}>{tip.emoji}</div>
+                <div style={{ fontSize: 13.5, fontWeight: 800, color: "var(--ink)", marginBottom: 4 }}>{tip.title}</div>
+                <div style={{ fontSize: 12, color: "var(--text-secondary)", lineHeight: 1.5, fontWeight: 500 }}>{tip.desc}</div>
+              </div>
             ))}
-          </svg>
+          </div>
+        </m.div>
 
-          {/* Phase Indicators */}
-          <PhaseHeader phase={PHASES[0]} y={10} />
-          <PhaseHeader phase={PHASES[1]} y={450} />
-          <PhaseHeader phase={PHASES[2]} y={890} />
+        {/* Quick links */}
+        <m.div
+          initial={{ opacity: 0, y: 16 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6 }}
+          style={{
+            display: "flex",
+            gap: 10,
+            marginTop: 20,
+            marginBottom: 40,
+            flexWrap: "wrap",
+          }}
+        >
+          <QuickLinkCard href="/grammar-lessons" emoji="📖" label="Thư viện bài học" desc="50+ chủ đề AI-generated" />
+          <QuickLinkCard href="/grammar-quiz" emoji="📝" label="Part 5 Quiz" desc="Luyện đề thực chiến" />
+          <QuickLinkCard href="/toeic/grammar/drill" emoji="🎯" label="Grammar Drill" desc="Luyện theo kỹ năng yếu" />
+          <QuickLinkCard href="/toeic/practice" emoji="🏆" label="Luyện đề TOEIC" desc="Full test Part 3-7" />
+        </m.div>
+      </div>
+    </div>
+  );
+}
 
-          {/* Roadmap Steps */}
-          {NODES.map((node, idx) => (
-            <RoadmapNode key={node.id} node={node} delay={0.06 * idx} />
-          ))}
+// ── Sub-components ──────────────────────────────────────
+
+function CategoryCard({
+  category,
+  completedSet,
+  inProgressSet,
+  delay,
+  phaseColor,
+}: {
+  category: GrammarTopicCategory;
+  completedSet: Set<string>;
+  inProgressSet: Set<string>;
+  delay: number;
+  phaseColor: string;
+}) {
+  const completed = category.topics.filter((t) => completedSet.has(t.id)).length;
+  const pct = category.topics.length > 0 ? Math.round((completed / category.topics.length) * 100) : 0;
+  const icon = CATEGORY_ICONS[category.id] ?? <BookOutlined />;
+
+  return (
+    <m.div
+      initial={{ opacity: 0, x: -10 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay }}
+      style={{
+        background: "var(--surface-alt)",
+        borderRadius: "var(--radius-lg)",
+        border: "1px solid var(--border)",
+        padding: "16px 18px",
+      }}
+    >
+      {/* Category header */}
+      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
+        <div style={{
+          width: 32,
+          height: 32,
+          borderRadius: 10,
+          background: `color-mix(in srgb, ${category.color} 10%, var(--surface))`,
+          color: category.color,
+          display: "grid",
+          placeItems: "center",
+          fontSize: 15,
+          flexShrink: 0,
+        }}>
+          {icon}
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 14, fontWeight: 800, color: "var(--ink)" }}>
+            {category.title}
+          </div>
+          <div style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 600 }}>
+            {completed}/{category.topics.length} · {pct}%
+          </div>
+        </div>
+        <div style={{ width: 60 }}>
+          <div style={{ height: 5, borderRadius: 3, background: "var(--border)" }}>
+            <div style={{
+              width: `${pct}%`,
+              height: "100%",
+              borderRadius: 3,
+              background: category.color,
+              transition: "width 0.4s ease",
+            }} />
+          </div>
         </div>
       </div>
 
-      <style>{`
-        :root {
-          --phase-1-color: var(--success);
-          --phase-2-color: var(--accent);
-          --phase-3-color: var(--error);
-        }
-        @keyframes roadmapDash {
-          to {
-            stroke-dashoffset: -20;
-          }
-        }
-        .roadmap-flow-line {
-          stroke-dasharray: 6, 6;
-          animation: roadmapDash 1.2s linear infinite;
-        }
-      `}</style>
+      {/* Topic chips */}
+      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+        {category.topics.map((topic) => {
+          const isDone = completedSet.has(topic.id);
+          const isInProg = inProgressSet.has(topic.id);
+
+          return (
+            <Link
+              key={topic.id}
+              href={`/grammar-lessons?topic=${topic.id}`}
+              style={{ textDecoration: "none" }}
+            >
+              <m.div
+                whileHover={{ scale: 1.04, y: -1 }}
+                whileTap={{ scale: 0.97 }}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 5,
+                  padding: "6px 12px",
+                  borderRadius: 10,
+                  fontSize: 12,
+                  fontWeight: 700,
+                  cursor: "pointer",
+                  transition: "all 0.15s",
+                  border: isDone
+                    ? "1px solid rgba(16, 185, 129, 0.3)"
+                    : isInProg
+                    ? "1px solid color-mix(in srgb, var(--accent) 30%, transparent)"
+                    : "1px solid var(--border)",
+                  background: isDone
+                    ? "rgba(16, 185, 129, 0.06)"
+                    : isInProg
+                    ? "color-mix(in srgb, var(--accent) 5%, var(--surface))"
+                    : "var(--surface)",
+                  color: isDone
+                    ? "var(--success)"
+                    : isInProg
+                    ? "var(--accent)"
+                    : "var(--text-secondary)",
+                }}
+              >
+                {isDone ? (
+                  <CheckCircleFilled style={{ fontSize: 11, color: "var(--success)" }} />
+                ) : isInProg ? (
+                  <ThunderboltOutlined style={{ fontSize: 11, color: "var(--accent)" }} />
+                ) : (
+                  <span style={{
+                    fontSize: 8.5,
+                    fontWeight: 800,
+                    padding: "1px 4px",
+                    borderRadius: 4,
+                    background: topic.level === "A2" ? "rgba(16, 185, 129, 0.1)" : topic.level === "B1" ? "rgba(59, 130, 246, 0.1)" : "rgba(245, 158, 11, 0.1)",
+                    color: topic.level === "A2" ? "var(--success)" : topic.level === "B1" ? "var(--info)" : "var(--warning)",
+                  }}>
+                    {topic.level}
+                  </span>
+                )}
+                <span>{topic.title}</span>
+              </m.div>
+            </Link>
+          );
+        })}
+      </div>
+    </m.div>
+  );
+}
+
+function StatPill({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+      {icon}
+      <span style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 600 }}>{label}:</span>
+      <span style={{ fontSize: 13, fontWeight: 800, color: "var(--ink)" }}>{value}</span>
     </div>
+  );
+}
+
+function QuickLinkCard({ href, emoji, label, desc }: { href: string; emoji: string; label: string; desc: string }) {
+  return (
+    <Link href={href} style={{ textDecoration: "none", flex: "1 1 200px" }}>
+      <m.div
+        whileHover={{ y: -3, boxShadow: "var(--shadow-md)" }}
+        whileTap={{ scale: 0.98 }}
+        style={{
+          padding: "16px 18px",
+          borderRadius: "var(--radius-xl)",
+          background: "var(--surface)",
+          border: "1px solid var(--border)",
+          cursor: "pointer",
+          transition: "all 0.15s",
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+        }}
+      >
+        <span style={{ fontSize: 22 }}>{emoji}</span>
+        <div>
+          <div style={{ fontSize: 13.5, fontWeight: 800, color: "var(--ink)" }}>{label}</div>
+          <div style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 600 }}>{desc}</div>
+        </div>
+      </m.div>
+    </Link>
   );
 }

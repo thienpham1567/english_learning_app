@@ -19,7 +19,7 @@ export function PracticeRunner() {
 
 	if (session.state === "idle" || session.state === "loading") {
 		return (
-			<div>
+			<div key="setup">
 				<PracticeSetup onStart={handleStart} />
 				{session.error && (
 					<div style={{ color: "#ef4444", marginTop: 8 }}>{session.error}</div>
@@ -31,6 +31,7 @@ export function PracticeRunner() {
 	if (session.state === "completed") {
 		return (
 			<ResultSummary
+				key="result"
 				score={session.score}
 				answers={session.answers}
 				questions={session.questions}
@@ -41,6 +42,7 @@ export function PracticeRunner() {
 
 	return (
 		<QuestionRunner
+			key="runner"
 			question={session.currentQuestion}
 			currentIndex={session.currentIndex}
 			total={session.questions.length}
@@ -52,3 +54,4 @@ export function PracticeRunner() {
 		/>
 	);
 }
+
