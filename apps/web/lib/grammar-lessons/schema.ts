@@ -42,15 +42,28 @@ export const GrammarLessonExerciseSchema = z.discriminatedUnion("type", [
   WrittenExerciseSchema,
 ]);
 
+const ConfusionPairSchema = z.object({
+  structureA: z.string().min(2),
+  structureB: z.string().min(2),
+  difference: z.string().min(10),
+  exampleA: z.string().min(5),
+  exampleB: z.string().min(5),
+});
+
 export const GrammarLessonSchema = z.object({
   title: z.string().min(2),
   titleVi: z.string().min(2),
   formula: z.string().min(3),
   explanation: z.string().min(10),
   explanationEn: z.string().min(10),
-  examples: z.array(ExampleSchema).min(3).max(6),
-  commonMistakes: z.array(MistakeSchema).min(2).max(4),
+  examples: z.array(ExampleSchema).min(3).max(8),
+  commonMistakes: z.array(MistakeSchema).min(2).max(5),
   exercises: z.array(GrammarLessonExerciseSchema).min(5).max(14),
+  // v4 enrichment — all optional for backward compatibility
+  usageNotes: z.array(z.string()).optional(),
+  toeicTips: z.array(z.string()).optional(),
+  timeSignals: z.array(z.string()).optional(),
+  confusionPairs: z.array(ConfusionPairSchema).optional(),
 });
 
 export const GrammarLessonGenerateRequestSchema = z.object({

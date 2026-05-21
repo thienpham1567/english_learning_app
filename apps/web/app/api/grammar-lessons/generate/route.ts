@@ -33,7 +33,7 @@ export async function POST(request: Request) {
   }
 
   const { topic, topicTitle, examMode, level, forceRefresh } = parsed.data;
-  const lessonVersion = "3";
+  const lessonVersion = "4";
   const now = new Date();
 
   const [existingProgress] = await db
@@ -85,24 +85,52 @@ export async function POST(request: Request) {
     ? "IELTS Academic writing and speaking contexts"
     : "TOEIC business and workplace contexts";
 
-  const systemPrompt = `You are an expert English grammar teacher for Vietnamese learners preparing for ${examContext}.
-Generate a comprehensive, bilingual grammar lesson for: "${topicTitle}" at ${level || "B1"} level.
+  const systemPrompt = `You are a world-class English grammar teacher who has helped thousands of Vietnamese learners achieve TOEIC 900+ scores.
+Generate an extremely comprehensive, detailed, bilingual grammar lesson for: "${topicTitle}" at ${level || "B1"} level, specifically for ${examContext}.
 
 Return ONLY valid JSON with this structure:
 {
   "title": "${topicTitle}",
   "titleVi": "Vietnamese translation of the topic name",
   "formula": "Grammar formula/structure (e.g., S + have/has + V3/ed)",
-  "explanationEn": "Clear English explanation of the grammar rule (3-5 sentences). Use standard grammar terminology. Explain when and why this structure is used.",
-  "explanation": "Clear Vietnamese explanation of the same grammar rule (3-5 sentences). Use simple, accessible Vietnamese.",
+  "explanationEn": "Detailed English explanation of the grammar rule (5-8 sentences). Cover: WHAT the structure is, WHEN to use it, WHY it matters, HOW it differs from similar structures. Use standard grammar terminology.",
+  "explanation": "Detailed Vietnamese explanation (5-8 sentences). Use simple, accessible Vietnamese. Explain the rule clearly with context about when and why Vietnamese learners struggle with this topic.",
+  "usageNotes": [
+    "Detailed usage note 1 in Vietnamese — explain a specific scenario or context where this structure is commonly used in ${examContext}",
+    "Usage note 2 — cover formal vs informal register, or written vs spoken differences",
+    "Usage note 3 — mention common collocations or fixed expressions that use this structure",
+    "Usage note 4 (optional) — any time-related signals or keywords that indicate this structure should be used"
+  ],
+  "toeicTips": [
+    "TOEIC test strategy tip 1 in Vietnamese — specific to Part 5/6, e.g., 'Khi thấy trạng từ _____, hãy chọn thì _____'",
+    "TOEIC tip 2 — how to eliminate wrong answers quickly for this grammar point",
+    "TOEIC tip 3 — common traps that test-makers set for this grammar topic"
+  ],
+  "timeSignals": [
+    "keyword/signal 1 (e.g., 'since', 'for', 'already')",
+    "keyword/signal 2",
+    "keyword/signal 3"
+  ],
+  "confusionPairs": [
+    {
+      "structureA": "Structure A name (e.g., 'Because + clause')",
+      "structureB": "Structure B name (e.g., 'Because of + noun phrase')",
+      "difference": "Vietnamese explanation of the key difference (2-3 sentences)",
+      "exampleA": "Example sentence using structure A",
+      "exampleB": "Example sentence using structure B"
+    }
+  ],
   "examples": [
-    { "en": "English example sentence", "vi": "Vietnamese translation", "highlight": "key grammar part highlighted" },
-    { "en": "...", "vi": "...", "highlight": "..." },
-    { "en": "...", "vi": "...", "highlight": "..." },
-    { "en": "...", "vi": "...", "highlight": "..." }
+    { "en": "Business/workplace example sentence 1", "vi": "Vietnamese translation", "highlight": "key grammar part" },
+    { "en": "Email/memo context example 2", "vi": "...", "highlight": "..." },
+    { "en": "Meeting/presentation context example 3", "vi": "...", "highlight": "..." },
+    { "en": "Report/announcement context example 4", "vi": "...", "highlight": "..." },
+    { "en": "Contract/policy context example 5", "vi": "...", "highlight": "..." },
+    { "en": "Daily workplace communication example 6", "vi": "...", "highlight": "..." }
   ],
   "commonMistakes": [
-    { "wrong": "Incorrect sentence", "correct": "Correct sentence", "note": "Vietnamese explanation of why it's wrong", "noteEn": "English explanation of the grammar rule violated" },
+    { "wrong": "Incorrect sentence", "correct": "Correct sentence", "note": "Vietnamese explanation (2-3 sentences)", "noteEn": "English explanation (2-3 sentences)" },
+    { "wrong": "...", "correct": "...", "note": "...", "noteEn": "..." },
     { "wrong": "...", "correct": "...", "note": "...", "noteEn": "..." },
     { "wrong": "...", "correct": "...", "note": "...", "noteEn": "..." }
   ],
@@ -124,16 +152,22 @@ Return ONLY valid JSON with this structure:
   ]
 }
 
-Rules:
+CRITICAL Rules:
 - "explanation" fields are ALWAYS in Vietnamese, "explanationEn" fields are ALWAYS in English
-- Examples use ${examContext} vocabulary and situations
+- ALL examples MUST use ${examContext} vocabulary: business emails, memos, meeting minutes, company announcements, HR policies, financial reports
 - Total exercises: exactly 10 across 4 tiers as shown above
 - Only multiple_choice has "options" with exactly 4 choices
 - For written exercises (error_correction, transformation), provide 1-2 acceptedAnswers for alternative valid phrasings
 - Tier "context" exercises must use longer, passage-like sentences (2-3 sentences)
 - Each exercise must have a "hint" that reminds the student of the relevant rule without giving away the answer
-- Common mistakes: exactly 3, with both Vietnamese (note) and English (noteEn) explanations
+- "usageNotes": 3-4 items in Vietnamese, each 1-2 sentences explaining practical usage, register, or collocations
+- "toeicTips": 2-3 items in Vietnamese, each specific to TOEIC Part 5/6 test-taking strategy
+- "timeSignals": 3-6 keywords/adverbs that signal this grammar structure (e.g., "since", "already" for present perfect). If not applicable to this topic, return empty array []
+- "confusionPairs": 1-2 pairs of structures that Vietnamese learners commonly confuse with this topic. If not applicable, return empty array []
+- "commonMistakes": exactly 4, with detailed Vietnamese (note) and English (noteEn) explanations (2-3 sentences each)
+- "examples": exactly 6, all in ${examContext} settings
 - Keep everything practical, exam-relevant, and accessible to Vietnamese learners`;
+
 
   for (let attempt = 0; attempt < 2; attempt++) {
     try {

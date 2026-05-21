@@ -56,6 +56,7 @@ export const GRAMMAR_TOPIC_CATEGORIES: GrammarTopicCategory[] = [
       { id: "pos-noun-adj-adv", title: "Noun / Adjective / Adverb Forms", level: "A2", exams: ["toeic", "ielts"] },
       { id: "pos-suffixes", title: "Derivation Suffixes (-tion, -ment, -ly)", level: "B1", exams: ["toeic", "ielts"] },
       { id: "pos-word-form-selection", title: "Word Form Selection in Context", level: "B1", exams: ["toeic"] },
+      { id: "pos-compound-nouns", title: "Compound Nouns (sales report, budget plan)", level: "B1", exams: ["toeic"] },
     ],
   },
   {
@@ -79,6 +80,7 @@ export const GRAMMAR_TOPIC_CATEGORIES: GrammarTopicCategory[] = [
       { id: "prep-place-direction", title: "Place & Direction", level: "A2", exams: ["toeic", "ielts"] },
       { id: "prep-collocations", title: "Verb + Preposition Collocations", level: "B1", exams: ["toeic", "ielts"] },
       { id: "prep-phrasal-verbs", title: "Phrasal Verbs", level: "B1", exams: ["toeic", "ielts"] },
+      { id: "prep-adj-collocations", title: "Adjective + Preposition (responsible for, interested in)", level: "B1", exams: ["toeic"] },
     ],
   },
   {
@@ -90,6 +92,7 @@ export const GRAMMAR_TOPIC_CATEGORIES: GrammarTopicCategory[] = [
       { id: "conj-coordinating", title: "And / But / Or / So", level: "A2", exams: ["toeic", "ielts"] },
       { id: "conj-subordinating", title: "Although / Because / While / If", level: "B1", exams: ["toeic", "ielts"] },
       { id: "conj-transitions", title: "However / Therefore / Moreover", level: "B1", exams: ["toeic", "ielts"] },
+      { id: "conj-paired", title: "Paired Conjunctions (not only...but also, either...or)", level: "B2", exams: ["toeic", "ielts"] },
     ],
   },
   {
@@ -135,6 +138,7 @@ export const GRAMMAR_TOPIC_CATEGORIES: GrammarTopicCategory[] = [
       { id: "passive-simple", title: "Simple Passive", level: "B1", exams: ["toeic", "ielts"] },
       { id: "passive-perfect", title: "Perfect Passive", level: "B2", exams: ["toeic", "ielts"] },
       { id: "causative", title: "Causative (have/get something done)", level: "B2", exams: ["toeic", "ielts"] },
+      { id: "passive-modals", title: "Modal Passive (should be done, must be completed)", level: "B2", exams: ["toeic"] },
     ],
   },
   {
@@ -157,6 +161,7 @@ export const GRAMMAR_TOPIC_CATEGORIES: GrammarTopicCategory[] = [
       { id: "relative-who-which", title: "Relative (who / which / that)", level: "B1", exams: ["toeic", "ielts"] },
       { id: "relative-advanced", title: "Non-defining Relatives", level: "B2", exams: ["toeic", "ielts"] },
       { id: "noun-clauses", title: "Noun Clauses", level: "B2", exams: ["toeic", "ielts"] },
+      { id: "relative-reduced", title: "Reduced Relatives (V-ing / V-ed Participle Phrases)", level: "B2", exams: ["toeic"] },
     ],
   },
   {

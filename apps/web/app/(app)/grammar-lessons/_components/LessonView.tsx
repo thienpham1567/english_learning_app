@@ -405,6 +405,189 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             </div>
           </div>
 
+          {/* Usage Notes Card */}
+          {lesson.usageNotes && lesson.usageNotes.length > 0 && (
+            <div
+              style={{
+                padding: 20,
+                borderRadius: "var(--radius-xl)",
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                boxShadow: "var(--shadow-sm)",
+              }}
+            >
+              <span style={{ fontSize: 11.5, fontWeight: 800, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em", display: "flex", alignItems: "center", gap: 6, marginBottom: 14 }}>
+                📌 Cách dùng chi tiết
+              </span>
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {lesson.usageNotes.map((note, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      display: "flex",
+                      gap: 12,
+                      padding: "12px 14px",
+                      borderRadius: "var(--radius-lg)",
+                      background: "var(--surface-alt)",
+                      border: "1px solid var(--border)",
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <div style={{
+                      width: 26,
+                      height: 26,
+                      borderRadius: 8,
+                      background: "var(--accent-light)",
+                      color: "var(--accent)",
+                      display: "grid",
+                      placeItems: "center",
+                      fontSize: 12,
+                      fontWeight: 900,
+                      flexShrink: 0,
+                    }}>
+                      {idx + 1}
+                    </div>
+                    <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.6, color: "var(--text-primary)", fontWeight: 500 }}>
+                      {note}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* TOEIC Tips Card */}
+          {lesson.toeicTips && lesson.toeicTips.length > 0 && (
+            <div
+              style={{
+                padding: 20,
+                borderRadius: "var(--radius-xl)",
+                background: "linear-gradient(135deg, rgba(245, 158, 11, 0.04), rgba(239, 68, 68, 0.02))",
+                border: "1px solid rgba(245, 158, 11, 0.15)",
+                boxShadow: "var(--shadow-sm)",
+              }}
+            >
+              <span style={{ fontSize: 11.5, fontWeight: 800, color: "var(--warning)", textTransform: "uppercase", letterSpacing: "0.08em", display: "flex", alignItems: "center", gap: 6, marginBottom: 14 }}>
+                🎯 Mẹo thi TOEIC — Kinh nghiệm 900 điểm
+              </span>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {lesson.toeicTips.map((tip, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      display: "flex",
+                      gap: 10,
+                      padding: "12px 14px",
+                      borderRadius: "var(--radius-lg)",
+                      background: "var(--surface)",
+                      border: "1px solid var(--border)",
+                      alignItems: "flex-start",
+                    }}
+                  >
+                    <span style={{ fontSize: 16, flexShrink: 0, marginTop: 1 }}>💡</span>
+                    <p style={{ margin: 0, fontSize: 13.5, lineHeight: 1.6, color: "var(--text-primary)", fontWeight: 600 }}>
+                      {tip}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Time Signals Card */}
+          {lesson.timeSignals && lesson.timeSignals.length > 0 && (
+            <div
+              style={{
+                padding: 20,
+                borderRadius: "var(--radius-xl)",
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                boxShadow: "var(--shadow-sm)",
+              }}
+            >
+              <span style={{ fontSize: 11.5, fontWeight: 800, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em", display: "flex", alignItems: "center", gap: 6, marginBottom: 14 }}>
+                ⏰ Dấu hiệu nhận biết (Time Signals / Keywords)
+              </span>
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+                {lesson.timeSignals.map((signal, idx) => (
+                  <Tag
+                    key={idx}
+                    color="blue"
+                    style={{
+                      padding: "4px 14px",
+                      fontSize: 13,
+                      fontWeight: 700,
+                      borderRadius: 8,
+                      margin: 0,
+                    }}
+                  >
+                    {signal}
+                  </Tag>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Confusion Pairs Card */}
+          {lesson.confusionPairs && lesson.confusionPairs.length > 0 && (
+            <div
+              style={{
+                padding: 20,
+                borderRadius: "var(--radius-xl)",
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                boxShadow: "var(--shadow-sm)",
+              }}
+            >
+              <span style={{ fontSize: 11.5, fontWeight: 800, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em", display: "flex", alignItems: "center", gap: 6, marginBottom: 14 }}>
+                ⚡ Phân biệt cấu trúc dễ nhầm
+              </span>
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {lesson.confusionPairs.map((pair, idx) => (
+                  <div
+                    key={idx}
+                    style={{
+                      borderRadius: "var(--radius-lg)",
+                      border: "1px solid var(--border)",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {/* Pair header */}
+                    <div style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr",
+                      gap: 0,
+                    }}>
+                      <div style={{ padding: "10px 14px", background: "rgba(59, 130, 246, 0.06)", borderRight: "1px solid var(--border)" }}>
+                        <div style={{ fontSize: 12, fontWeight: 800, color: "var(--info)", marginBottom: 4 }}>
+                          {pair.structureA}
+                        </div>
+                        <p style={{ margin: 0, fontSize: 12.5, color: "var(--text-primary)", fontWeight: 500, lineHeight: 1.5, fontStyle: "italic" }}>
+                          {pair.exampleA}
+                        </p>
+                      </div>
+                      <div style={{ padding: "10px 14px", background: "rgba(139, 92, 246, 0.06)" }}>
+                        <div style={{ fontSize: 12, fontWeight: 800, color: "var(--accent)", marginBottom: 4 }}>
+                          {pair.structureB}
+                        </div>
+                        <p style={{ margin: 0, fontSize: 12.5, color: "var(--text-primary)", fontWeight: 500, lineHeight: 1.5, fontStyle: "italic" }}>
+                          {pair.exampleB}
+                        </p>
+                      </div>
+                    </div>
+                    {/* Difference explanation */}
+                    <div style={{ padding: "10px 14px", background: "var(--surface-alt)", borderTop: "1px solid var(--border)" }}>
+                      <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: "var(--text-secondary)", fontWeight: 500 }}>
+                        <BulbOutlined style={{ color: "var(--warning)", marginRight: 6 }} />
+                        {pair.difference}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Examples Card */}
           {lesson.examples && lesson.examples.length > 0 && (
             <div
