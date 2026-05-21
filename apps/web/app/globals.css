@@ -1,120 +1,123 @@
-/* ── Design Tokens (Light)
-   Palette: Cream #F8F4EE · Terracotta #C84B31 · Sage #4A7C6F · Amber #C4A35A
-   Three semantic roles: accent (terracotta) · sage (correct/success) · xp (gold)
-*/
 :root {
-  --bg: #F8F4EE;
-  --bg-deep: #EDE5D8;
+  /* Warm Premium Cream & Sand Palette */
+  --bg: #FAF8F5;
+  --bg-deep: #F3ECE0;
   --surface: #ffffff;
-  --surface-hover: #F4EDE3;
+  --surface-hover: #F7F2E9;
   --surface-raised: #ffffff;
-  --surface-alt: #FBF8F3;
+  --surface-alt: #FCFAF7;
   --card-bg: var(--surface);
-  --bg-secondary: #F4EDE3;
+  --bg-secondary: #F5EDE0;
 
-  /* Terracotta — primary accent: interactive elements, active states, links */
-  --accent: #C84B31;
-  --accent-hover: #A83A22;
-  --accent-light: #FAF0ED;
-  --accent-muted: rgba(200, 75, 49, 0.11);
-  --text-on-accent: #fff;
+  /* Terracotta & Ochre Accents (Premium Warmth) */
+  --accent: #C34A36;
+  --accent-hover: #A73825;
+  --accent-light: #FDF4F1;
+  --accent-muted: rgba(195, 74, 54, 0.08);
+  --text-on-accent: #ffffff;
 
-  --secondary: #D4B896;
-  --tertiary: #B8987A;
-  --warm: #EDE5D8;
+  --secondary: #CCA880;
+  --tertiary: #B2916F;
+  --warm: #F3ECE0;
 
-  --ink: #1C1410;
-  --text-primary: #1C1410;
-  --text-secondary: #6A5545;
-  --text-muted: #A09080;
+  /* Ink & Sepia Typography (Subtle, avoiding pure black) */
+  --ink: #221815;
+  --text-primary: #221815;
+  --text-secondary: #65544C;
+  --text-muted: #9E8E85;
   --text: var(--text-primary);
-  --text-disabled: #C8BDB5;
+  --text-disabled: #CBBFB6;
 
-  --border: #E4D8CC;
-  --border-strong: #D4B896;
+  /* Elegant Borders */
+  --border: #E8DFD5;
+  --border-strong: #D5C4B4;
 
-  --bubble-user: #1C1410;
+  --bubble-user: #221815;
   --bubble-ai: #ffffff;
 
-  /* Sage green — correct answers, success states, done indicators */
-  --sage: #4A7C6F;
+  /* Sage Green for Correct/Success states */
+  --sage: #427A6B;
 
-  --shadow-sm: 0 1px 2px rgba(28, 20, 16, 0.06);
-  --shadow: 0 1px 3px rgba(28, 20, 16, 0.08), 0 1px 2px rgba(28, 20, 16, 0.04);
-  --shadow-md: 0 4px 12px rgba(28, 20, 16, 0.08), 0 2px 4px rgba(28, 20, 16, 0.04);
-  --shadow-lg: 0 10px 32px rgba(28, 20, 16, 0.1), 0 4px 12px rgba(28, 20, 16, 0.05);
+  /* Premium Shadows (Softer, organic drop shadows) */
+  --shadow-sm: 0 2px 4px rgba(34, 24, 21, 0.03);
+  --shadow: 0 4px 12px rgba(34, 24, 21, 0.05), 0 1px 3px rgba(34, 24, 21, 0.02);
+  --shadow-md: 0 10px 24px rgba(34, 24, 21, 0.06), 0 3px 8px rgba(34, 24, 21, 0.03);
+  --shadow-lg: 0 20px 40px rgba(34, 24, 21, 0.08), 0 8px 16px rgba(34, 24, 21, 0.04);
+  --shadow-xl: 0 30px 60px rgba(34, 24, 21, 0.12), 0 12px 28px rgba(34, 24, 21, 0.06);
 
   --radius-sm: 8px;
-  --radius: 12px;
-  --radius-lg: 16px;
-  --radius-xl: 20px;
-  --radius-2xl: 24px;
+  --radius: 14px;
+  --radius-lg: 18px;
+  --radius-xl: 22px;
+  --radius-2xl: 26px;
   --radius-md: var(--radius);
 
   --font-display: "Fraunces", "Georgia", serif;
   --font-body: "Source Sans 3", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
 
-  /* Sidebar — light theme: warm cream */
-  --sidebar-bg: #F5EDE3;
-  --sidebar-gradient: linear-gradient(180deg, #FAF7F2 0%, #F5EDE3 50%, #FAF7F2 100%);
-  --sidebar-glow: radial-gradient(ellipse 120% 30% at 50% 95%, rgba(200, 75, 49, 0.07) 0%, transparent 70%);
-  --sidebar-text: #8A6F5E;
-  --sidebar-text-active: #1C1410;
-  --sidebar-border: rgba(180, 145, 115, 0.22);
-  --sidebar-item-hover: rgba(200, 75, 49, 0.07);
-  --sidebar-active-bg: rgba(200, 75, 49, 0.1);
+  /* Premium Warm Sidebar */
+  --sidebar-bg: #F5ECE0;
+  --sidebar-gradient: linear-gradient(180deg, #FDFCFB 0%, #F5ECE0 60%, #FCFAF7 100%);
+  --sidebar-glow: radial-gradient(ellipse 120% 30% at 50% 95%, rgba(195, 74, 54, 0.06) 0%, transparent 70%);
+  --sidebar-text: #7C685C;
+  --sidebar-text-active: #221815;
+  --sidebar-border: rgba(178, 145, 122, 0.2);
+  --sidebar-item-hover: rgba(195, 74, 54, 0.05);
+  --sidebar-active-bg: rgba(195, 74, 54, 0.08);
 
   /* ── Semantic Colors ── */
-  --success: #10b981;
-  --error: #ef4444;
-  --warning: #f59e0b;
-  --info: #3b82f6;
-  /* Amber gold — XP points, achievements, leaderboard */
-  --xp: #C4A35A;
-  --fire: #E05A1A;
-  --success-bg: rgba(16, 185, 129, 0.11);
-  --error-bg: rgba(239, 68, 68, 0.09);
-  --warning-bg: rgba(245, 158, 11, 0.11);
-  --info-bg: rgba(59, 130, 246, 0.09);
+  --success: #1E9E78;
+  --error: #D9463E;
+  --warning: #DE8F1E;
+  --info: #3273DC;
 
-  --module-grammar: #C84B31;
-  --module-listening: #B8987A;
-  --module-writing: #14b8a6;
-  --module-reading: #0ea5e9;
-  --module-vocabulary: #C4A882;
-  --module-speaking: #ef4444;
-  --module-review: #C4A35A;
-  --module-assessment: #3b82f6;
+  /* Amber gold — XP & Leaderboard */
+  --xp: #B5934C;
+  --fire: #D65A22;
+  --success-bg: rgba(30, 158, 120, 0.08);
+  --error-bg: rgba(217, 70, 62, 0.08);
+  --warning-bg: rgba(222, 143, 30, 0.08);
+  --info-bg: rgba(50, 115, 220, 0.08);
+
+  /* Harmonized Module Colors */
+  --module-grammar: #C34A36;
+  --module-listening: #B2916F;
+  --module-writing: #2D9F92;
+  --module-reading: #2E8BC0;
+  --module-vocabulary: #B29A78;
+  --module-speaking: #D9463E;
+  --module-review: #B5934C;
+  --module-assessment: #3273DC;
 
   /* ── Per-module Header Gradients ── */
-  --gradient-listening: linear-gradient(135deg, #B8987A, #C4A882);
-  --gradient-reading: linear-gradient(135deg, #C4A882, #B8987A);
-  --gradient-writing: linear-gradient(135deg, #9B6B63, #B8967A);
-  --gradient-pronunciation: linear-gradient(135deg, #B8967A, #C4A882);
-  --gradient-grammar: linear-gradient(135deg, #8B6F5E, #B8967A);
-  --gradient-dashboard: linear-gradient(135deg, #1a2332 0%, #2d3748 40%, #4a5568 100%);
-  --gradient-grammar-quiz: linear-gradient(135deg, #B8967A, #8B6F5E);
-  --gradient-flashcards: linear-gradient(135deg, #C4A882, #D4B896);
-  --gradient-review: linear-gradient(135deg, #9B6B63, #B8967A);
-  --gradient-daily: linear-gradient(135deg, #C84B31, #A83A22);
-  --gradient-vocabulary: linear-gradient(135deg, #B8987A, #C4A882);
-  --gradient-mock-test: linear-gradient(135deg, #6B4A3A, #9B6B63);
-  --gradient-study-sets: linear-gradient(135deg, #D4B896, #C4A882);
-  --gradient-error-notebook: linear-gradient(135deg, #9B6B63, #7A5040);
-  --gradient-diagnostic: linear-gradient(135deg, #7A5040, #9B6B63);
-  --gradient-youtube-learn: linear-gradient(135deg, #C84B31, #8B3A26);
-  --gradient-toeic-skills: linear-gradient(135deg, #1a2332, #2d3748 50%, #4a5568);
-  --gradient-toeic-speaking: linear-gradient(135deg, #C84B31, #9B6B63);
+  --gradient-listening: linear-gradient(135deg, #B2916F, #CCA880);
+  --gradient-reading: linear-gradient(135deg, #CCA880, #B2916F);
+  --gradient-writing: linear-gradient(135deg, #956259, #B2916F);
+  --gradient-pronunciation: linear-gradient(135deg, #B2916F, #CCA880);
+  --gradient-grammar: linear-gradient(135deg, #856455, #B2916F);
+  --gradient-dashboard: linear-gradient(135deg, #182230 0%, #283548 50%, #404E60 100%);
+  --gradient-grammar-quiz: linear-gradient(135deg, #B2916F, #856455);
+  --gradient-flashcards: linear-gradient(135deg, #CCA880, #E5CBB2);
+  --gradient-review: linear-gradient(135deg, #956259, #B2916F);
+  --gradient-daily: linear-gradient(135deg, #C34A36, #A73825);
+  --gradient-vocabulary: linear-gradient(135deg, #B2916F, #CCA880);
+  --gradient-mock-test: linear-gradient(135deg, #604235, #956259);
+  --gradient-study-sets: linear-gradient(135deg, #E5CBB2, #CCA880);
+  --gradient-error-notebook: linear-gradient(135deg, #956259, #724233);
+  --gradient-diagnostic: linear-gradient(135deg, #724233, #956259);
+  --gradient-youtube-learn: linear-gradient(135deg, #C34A36, #803022);
+  --gradient-toeic-skills: linear-gradient(135deg, #182230, #283548 50%, #404E60);
+  --gradient-toeic-speaking: linear-gradient(135deg, #C34A36, #956259);
 
   /* ── Heatmap Colors ── */
-  --heatmap-0: rgba(0, 0, 0, 0.05);
-  --heatmap-1: #EDE5D8;
-  --heatmap-2: #D4B896;
-  --heatmap-3: #C84B31;
-  --heatmap-4: #A83A22;
+  --heatmap-0: rgba(0, 0, 0, 0.04);
+  --heatmap-1: #F3ECE0;
+  --heatmap-2: #CCA880;
+  --heatmap-3: #C34A36;
+  --heatmap-4: #A73825;
 
-  /* ── Typography Scale ── */
+  /* Typography Scale */
   --text-xs: 11px;
   --text-sm: 13px;
   --text-base: 15px;
@@ -123,8 +126,7 @@
   --text-2xl: 30px;
   --text-3xl: 36px;
 
-  /* ── Spacing Scale ── */
-  /* Intentional gaps: matches Tailwind spacing convention (1-6, 8, 10, 12) */
+  /* Spacing Scale */
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -135,109 +137,14 @@
   --space-10: 40px;
   --space-12: 48px;
 
-  /* ── Animation Durations ── */
-  --duration-fast: 200ms;
-  --duration-normal: 300ms;
-  --duration-slow: 500ms;
-
-  /* ── Extended Shadows ── */
-  --shadow-xl: 0 20px 48px rgba(61, 46, 42, 0.12), 0 8px 24px rgba(61, 46, 42, 0.06);
+  /* Animation Durations */
+  --duration-fast: 180ms;
+  --duration-normal: 280ms;
+  --duration-slow: 450ms;
 }
 
 /* ── Dark Theme Tokens ── */
 [data-theme="dark"] {
-  --bg: #161210;
-  --bg-deep: #1E1916;
-  --surface: #211D19;
-  --surface-hover: #2C2420;
-  --surface-raised: #261E1A;
-  --surface-alt: #1A1612;
-  --card-bg: var(--surface);
-  --bg-secondary: #2C2420;
-
-  /* Coral-terracotta — readable on dark, same family as light accent */
-  --accent: #E87A5E;
-  --accent-hover: #F09070;
-  --accent-light: rgba(232, 122, 94, 0.13);
-  --accent-muted: rgba(232, 122, 94, 0.15);
-  --text-on-accent: #1C1008;
-
-  --secondary: #C4A882;
-  --tertiary: #D4B896;
-  --warm: #2C2420;
-
-  --ink: #F0E8DC;
-  --text-primary: #F0E8DC;
-  --text-secondary: #BCA898;
-  --text-muted: #6A5848;
-  --text: var(--text-primary);
-  --text-disabled: #3D3028;
-
-  --border: #302420;
-  --border-strong: #3D3028;
-
-  --bubble-user: #302420;
-  --bubble-ai: #211D19;
-
-  /* Lighter sage — correct answers on dark backgrounds */
-  --sage: #5FA88C;
-
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-  --shadow: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.25);
-  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4), 0 2px 4px rgba(0, 0, 0, 0.25);
-  --shadow-lg: 0 10px 32px rgba(0, 0, 0, 0.5), 0 4px 12px rgba(0, 0, 0, 0.3);
-
-  --sidebar-bg: #100E0C;
-  --sidebar-gradient: linear-gradient(180deg, #100E0C 0%, #161210 30%, #1E1916 55%, #161210 80%, #100E0C 100%);
-  --sidebar-glow: radial-gradient(ellipse 120% 30% at 50% 95%, rgba(232, 122, 94, 0.1) 0%, transparent 70%);
-  --sidebar-text: rgba(255, 255, 255, 0.52);
-  --sidebar-text-active: rgba(255, 255, 255, 0.92);
-  --sidebar-border: rgba(255, 255, 255, 0.08);
-  --sidebar-item-hover: rgba(255, 255, 255, 0.06);
-  --sidebar-active-bg: rgba(232, 122, 94, 0.14);
-
-  /* ── Semantic Colors (Dark) ── */
-  --success: #34d399;
-  --error: #f87171;
-  --warning: #fbbf24;
-  --info: #60a5fa;
-  /* Lighter amber gold — legible on dark */
-  --xp: #D4AA6A;
-  --fire: #F09038;
-  --success-bg: rgba(52, 211, 153, 0.13);
-  --error-bg: rgba(248, 113, 113, 0.13);
-  --warning-bg: rgba(251, 191, 36, 0.13);
-  --info-bg: rgba(96, 165, 250, 0.13);
-
-  /* ── Heatmap Colors (Dark) ── */
-  --heatmap-0: rgba(255, 255, 255, 0.07);
-  --heatmap-1: #2C2420;
-  --heatmap-2: #5A3A2E;
-  --heatmap-3: #C84B31;
-  --heatmap-4: #E87A5E;
-
-  /* ── Per-module Header Gradients (Dark) ── */
-  --gradient-listening: linear-gradient(135deg, #8B6F5E, #9B6B63);
-  --gradient-reading: linear-gradient(135deg, #9B6B63, #8B6F5E);
-  --gradient-writing: linear-gradient(135deg, #7A5040, #9B6B63);
-  --gradient-pronunciation: linear-gradient(135deg, #9B6B63, #8B6F5E);
-  --gradient-grammar: linear-gradient(135deg, #6B4A3A, #8B6F5E);
-  --gradient-dashboard: linear-gradient(135deg, #0f1720 0%, #1a2332 40%, #2d3748 100%);
-  --gradient-grammar-quiz: linear-gradient(135deg, #9B6B63, #6B4A3A);
-  --gradient-flashcards: linear-gradient(135deg, #8B6F5E, #A88070);
-  --gradient-review: linear-gradient(135deg, #7A5040, #8B6F5E);
-  --gradient-daily: linear-gradient(135deg, #E87A5E, #C84B31);
-  --gradient-vocabulary: linear-gradient(135deg, #8B6F5E, #9B6B63);
-  --gradient-mock-test: linear-gradient(135deg, #4A3028, #7A5040);
-  --gradient-study-sets: linear-gradient(135deg, #A88070, #8B6F5E);
-  --gradient-error-notebook: linear-gradient(135deg, #7A5040, #5A3830);
-  --gradient-diagnostic: linear-gradient(135deg, #5A3830, #7A5040);
-  --gradient-toeic-skills: linear-gradient(135deg, #0f1720, #1a2332 50%, #2d3748);
-  --gradient-toeic-speaking: linear-gradient(135deg, #9B6B63, #7A5040);
-
-  /* ── Extended Shadows (Dark) ── */
-  --shadow-xl: 0 20px 48px rgba(0, 0, 0, 0.6), 0 8px 24px rgba(0, 0, 0, 0.35);
-
   /* Note: typography, spacing, and duration tokens are theme-agnostic — defined once in :root only */
 }
 
