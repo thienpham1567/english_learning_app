@@ -1,0 +1,298 @@
+"use client";
+
+import { useState, useCallback, useEffect, useRef } from "react";
+import {
+  SearchOutlined,
+  StarFilled,
+  StarOutlined,
+  DeleteOutlined,
+  ClockCircleOutlined,
+  LoadingOutlined,
+  UndoOutlined,
+  CheckCircleOutlined,
+  SyncOutlined,
+} from "@ant-design/icons";
+import { api } from "@/lib/api-client";
+import { DictionarySearchPanel } from "@/app/(app)/dictionary/_components/DictionarySearchPanel";
+import { DictionaryResultCard } from "@/app/(app)/dictionary/_components/DictionaryResultCard";
+import { ThesaurusSheet } from "@/app/(app)/dictionary/_components/ThesaurusSheet";
+import type { VocabularyWithNearby } from "@/lib/schemas/vocabulary";
+
+const STORAGE_KEY = "dict_recent_searches";
+const MAX_RECENT = 15;
+
+type SavedWord = {
+  id: string;
+  query: string;
+  saved: boolean;
+  lookedUpAt: string;
+  headword: string | null;
+  level: string | null;
+  mastery: "new" | "learning" | "mastered";
+};
+
+const MASTERY_CONFIG: Record<string, { icon: React.ReactNode; label: string; color: string }> = {
+  new: { icon: <StarOutlined style={{ color: "var(--warning)" }} />, label: "Mới", color: "var(--warning)" },
+  learning: { icon: <SyncOutlined style={{ color: "var(--accent)" }} />, label: "Đang học", color: "var(--accent)" },
+  mastered: { icon: <CheckCircleOutlined style={{ color: "var(--success)" }} />, label: "Thành thạo", color: "var(--success)" },
+};
+
+function getRecentSearches(): string[] {
+  try {
+    return JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]");
+  } catch { return []; }
+}
+
+function addRecentSearch(word: string) {
+  const recent = getRecentSearches().filter(w => w !== word);
+  recent.unshift(word);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(recent.slice(0, MAX_RECENT)));
+}
+
+export function DictionaryTab() {
+  const [query, setQuery] = useState("");
+  const [result, setResult] = useState<VocabularyWithNearby | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
+  const [saved, setSaved] = useState<boolean | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [recentWords, setRecentWords] = useState<string[]>([]);
+  const [thesaurusOpen, setThesaurusOpen] = useState(false);
+
+  // Saved words list
+  const [savedWords, setSavedWords] = useState<SavedWord[]>([]);
+  const [savedLoading, setSavedLoading] = useState(true);
+
+  // Load recent from localStorage
+  useEffect(() => {
+    setRecentWords(getRecentSearches());
+  }, []);
+
+  // Load saved words from API
+  useEffect(() => {
+    let cancelled = false;
+    api.get<SavedWord[]>("/vocabulary")
+      .then(data => {
+        if (!cancelled) {
+          setSavedWords(
+            (Array.isArray(data) ? data : []).filter(w => w.saved)
+          );
+        }
+      })
+      .catch(() => {})
+      .finally(() => { if (!cancelled) setSavedLoading(false); });
+    return () => { cancelled = true; };
+  }, []);
+
+  const doSearch = useCallback(async (word: string) => {
+    if (!word.trim()) return;
+    const trimmed = word.trim();
+    setQuery(trimmed);
+    setIsLoading(true);
+    setHasSearched(true);
+    setError(null);
+    setResult(null);
+    setSaved(null);
+
+    addRecentSearch(trimmed);
+    setRecentWords(getRecentSearches());
+
+    try {
+      const res = await api.post<{ data: VocabularyWithNearby; saved: boolean }>("/dictionary", {
+        word: trimmed,
+      });
+      setResult(res.data);
+      setSaved(res.saved);
+    } catch (err: unknown) {
+      const msg = (err as { message?: string })?.message ?? "Không thể tra cứu";
+      setError(msg);
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  const toggleSaved = async () => {
+    if (saved === null || !query) return;
+    const next = !saved;
+    setSaved(next);
+    try {
+      await api.patch(`/vocabulary/${encodeURIComponent(query)}/saved`, { saved: next });
+      // Refresh saved list
+      if (next) {
+        // Add to saved
+        setSavedWords(prev => {
+          if (prev.some(w => w.query === query)) return prev;
+          return [{ id: query, query, saved: true, lookedUpAt: new Date().toISOString(), headword: result?.headword ?? query, level: result?.level ?? null, mastery: "new" as const }, ...prev];
+        });
+      } else {
+        setSavedWords(prev => prev.filter(w => w.query !== query));
+      }
+    } catch {
+      setSaved(!next);
+    }
+  };
+
+  const removeSavedWord = async (word: SavedWord) => {
+    setSavedWords(prev => prev.filter(w => w.id !== word.id));
+    try {
+      await api.patch(`/vocabulary/${encodeURIComponent(word.query)}/saved`, { saved: false });
+    } catch {
+      setSavedWords(prev => [...prev, word]);
+    }
+  };
+
+  return (
+    <div style={{ maxWidth: 800, margin: "0 auto", width: "100%" }}>
+      {/* Two-column layout on desktop */}
+      <div style={{
+        display: "grid",
+        gridTemplateColumns: "minmax(280px, 380px) 1fr",
+        gap: 24,
+        alignItems: "start",
+      }} className="dictionary-grid">
+        {/* Left: Search + Recent */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <DictionarySearchPanel
+            initialValue={query}
+            onSubmit={doSearch}
+            isLoading={isLoading}
+            recentWords={recentWords}
+            onSelectRecent={doSearch}
+          />
+        </div>
+
+        {/* Right: Result */}
+        <div>
+          {error && (
+            <div style={{
+              padding: "12px 16px", borderRadius: 12,
+              border: "1px solid color-mix(in srgb, var(--error) 30%, transparent)",
+              background: "var(--error-bg)", color: "var(--error)",
+              fontSize: 14, marginBottom: 16,
+            }}>
+              {error}
+            </div>
+          )}
+          <DictionaryResultCard
+            vocabulary={result}
+            hasSearched={hasSearched}
+            isLoading={isLoading}
+            saved={saved}
+            onToggleSaved={toggleSaved}
+            onOpenThesaurus={() => setThesaurusOpen(true)}
+            onSearch={doSearch}
+          />
+        </div>
+      </div>
+
+      {/* Saved words section */}
+      <div style={{
+        marginTop: 32, paddingTop: 24,
+        borderTop: "1px solid var(--border)",
+      }}>
+        <div style={{
+          display: "flex", alignItems: "center", gap: 10,
+          marginBottom: 16,
+        }}>
+          <StarFilled style={{ color: "var(--accent)", fontSize: 16 }} />
+          <span style={{
+            fontSize: 13, fontWeight: 800, textTransform: "uppercase",
+            letterSpacing: "0.12em", color: "var(--accent)",
+          }}>
+            Từ đã lưu ({savedWords.length})
+          </span>
+        </div>
+
+        {savedLoading ? (
+          <div style={{ display: "flex", justifyContent: "center", padding: 24 }}>
+            <LoadingOutlined style={{ fontSize: 20, color: "var(--accent)" }} spin />
+          </div>
+        ) : savedWords.length === 0 ? (
+          <div style={{
+            padding: "24px 16px", textAlign: "center",
+            borderRadius: 14, border: "1px dashed var(--border)",
+            color: "var(--text-muted)", fontSize: 14,
+          }}>
+            Chưa có từ nào được lưu. Tra từ và nhấn ⭐ để lưu!
+          </div>
+        ) : (
+          <div style={{
+            display: "grid", gap: 6,
+            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
+          }}>
+            {savedWords.map(w => {
+              const mastery = MASTERY_CONFIG[w.mastery] ?? MASTERY_CONFIG.new;
+              return (
+                <div
+                  key={w.id}
+                  style={{
+                    padding: "12px 14px", borderRadius: 12,
+                    border: "1px solid var(--border)", background: "var(--surface)",
+                    display: "flex", alignItems: "center", gap: 10,
+                    cursor: "pointer", transition: "border-color 0.2s",
+                  }}
+                  onClick={() => doSearch(w.query)}
+                  onKeyDown={() => {}}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <div style={{
+                    width: 24, height: 24, borderRadius: 6, display: "grid",
+                    placeItems: "center", flexShrink: 0, fontSize: 11,
+                    background: `color-mix(in srgb, ${mastery.color} 10%, var(--surface))`,
+                    color: mastery.color,
+                  }}>
+                    {mastery.icon}
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{
+                      fontSize: 14, fontWeight: 600, color: "var(--ink)",
+                      overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                    }}>
+                      {w.headword ?? w.query}
+                    </div>
+                    {w.level && (
+                      <span style={{ fontSize: 10, color: "var(--text-muted)", fontWeight: 600 }}>
+                        {w.level}
+                      </span>
+                    )}
+                  </div>
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); removeSavedWord(w); }}
+                    style={{
+                      width: 24, height: 24, borderRadius: 6, border: "none",
+                      background: "transparent", cursor: "pointer",
+                      color: "var(--text-muted)", fontSize: 12,
+                      display: "grid", placeItems: "center",
+                    }}
+                  >
+                    <DeleteOutlined />
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Thesaurus sheet */}
+      {thesaurusOpen && result && (
+        <ThesaurusSheet
+          vocabulary={result}
+          isOpen={thesaurusOpen}
+          onClose={() => setThesaurusOpen(false)}
+          onWordClick={doSearch}
+        />
+      )}
+
+      <style>{`
+        @media (max-width: 768px) {
+          .dictionary-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
+    </div>
+  );
+}
