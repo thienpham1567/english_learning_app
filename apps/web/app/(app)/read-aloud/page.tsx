@@ -51,18 +51,260 @@ const VOICES: VoiceOption[] = [
 
 const SPEED_PRESETS = [0.8, 1.0, 1.2, 1.5];
 
-const SAMPLE_TEXTS = [
+/* ── TOEIC Sample Passages — organised by topic & length ── */
+type SampleLength = "short" | "medium" | "long";
+type SampleTopic = string;
+
+interface SampleText {
+  title: string;
+  topic: SampleTopic;
+  length: SampleLength;
+  icon: string;
+  text: string;
+}
+
+const TOEIC_TOPICS = [
+  { key: "office", label: "Văn phòng", icon: "🏢" },
+  { key: "hr", label: "Nhân sự", icon: "👥" },
+  { key: "finance", label: "Tài chính", icon: "💰" },
+  { key: "marketing", label: "Marketing", icon: "📣" },
+  { key: "travel", label: "Du lịch", icon: "✈️" },
+  { key: "dining", label: "Ẩm thực", icon: "🍽️" },
+  { key: "health", label: "Sức khỏe", icon: "🏥" },
+  { key: "technology", label: "Công nghệ", icon: "💻" },
+  { key: "manufacturing", label: "Sản xuất", icon: "🏭" },
+  { key: "realestate", label: "Bất động sản", icon: "🏠" },
+] as const;
+
+const SAMPLE_TEXTS: SampleText[] = [
+  // ── Office & Workplace ──
   {
-    title: "Khoa học & Vũ trụ",
-    text: "The Hubble Space Telescope has captured a stunning new image of a distant galaxy, revealing millions of newborn stars and intricate gas clouds. This discovery helps astronomers better understand how galaxies evolved in the early universe.",
+    title: "Họp ngắn buổi sáng",
+    topic: "office",
+    length: "short",
+    icon: "🏢",
+    text: "Good morning, everyone. Before we start today's meeting, I'd like to remind all staff members that the monthly report is due by Friday afternoon.",
   },
   {
-    title: "Công nghệ & AI",
-    text: "Artificial intelligence is changing the way we learn languages. By analyzing individual learning patterns, AI-driven applications can customize vocabulary exercises and speaking practices to suit each student's needs.",
+    title: "Thông báo bảo trì văn phòng",
+    topic: "office",
+    length: "medium",
+    icon: "🏢",
+    text: "Please be advised that the building management team will be conducting routine maintenance on the air conditioning system this Saturday. All employees are requested to ensure that their windows are closed and personal belongings are secured before leaving on Friday evening. We apologize for any inconvenience this may cause.",
   },
   {
-    title: "Lời khuyên học tập",
-    text: "Learning a language requires consistency rather than intensity. Spending fifteen minutes every day practicing listening and speaking will yield much better results than cramming for five hours once a week.",
+    title: "Chính sách làm việc từ xa",
+    topic: "office",
+    length: "long",
+    icon: "🏢",
+    text: "Following the recent survey results, the management team has decided to implement a hybrid work policy starting next quarter. Employees will be required to work in the office at least three days per week, while the remaining two days can be spent working remotely from home. All team leaders are expected to coordinate schedules within their departments to ensure adequate office coverage. Please note that this policy will be reviewed after a six-month trial period, and adjustments may be made based on productivity metrics and employee feedback.",
+  },
+
+  // ── Human Resources ──
+  {
+    title: "Thông báo tuyển dụng",
+    topic: "hr",
+    length: "short",
+    icon: "👥",
+    text: "We are currently seeking a qualified marketing coordinator to join our expanding team. Interested candidates should submit their résumés by the end of next week.",
+  },
+  {
+    title: "Chương trình đào tạo nhân viên",
+    topic: "hr",
+    length: "medium",
+    icon: "👥",
+    text: "The Human Resources department is pleased to announce a new professional development program for all full-time employees. The program includes workshops on leadership skills, time management, and effective communication. Registration will open on Monday, and spaces are limited to thirty participants per session. Early registration is strongly encouraged.",
+  },
+  {
+    title: "Đánh giá hiệu suất hàng năm",
+    topic: "hr",
+    length: "long",
+    icon: "👥",
+    text: "As we approach the end of the fiscal year, all department managers are reminded to complete performance evaluations for their team members by December fifteenth. The evaluation process has been updated this year to include a self-assessment component, which employees should complete before meeting with their supervisors. Managers are encouraged to provide specific, constructive feedback and to discuss career development goals with each team member. The completed evaluation forms must be submitted to the Human Resources department no later than December twenty-second. A training session on the new evaluation criteria will be held next Tuesday at two o'clock in Conference Room B.",
+  },
+
+  // ── Finance & Banking ──
+  {
+    title: "Báo cáo quý",
+    topic: "finance",
+    length: "short",
+    icon: "💰",
+    text: "Our third-quarter revenue exceeded projections by twelve percent, driven primarily by strong sales in the Asia-Pacific region and increased demand for our premium product line.",
+  },
+  {
+    title: "Thay đổi chính sách hoàn tiền",
+    topic: "finance",
+    length: "medium",
+    icon: "💰",
+    text: "Effective January first, our refund policy will be updated to allow customers a thirty-day return window for all purchases made online. Refunds will be processed within five to seven business days after the returned item has been received and inspected at our warehouse. Customers are responsible for return shipping costs unless the item is defective or was shipped incorrectly.",
+  },
+  {
+    title: "Kế hoạch ngân sách năm mới",
+    topic: "finance",
+    length: "long",
+    icon: "💰",
+    text: "The finance committee has completed its review of the proposed budget for the upcoming fiscal year. After careful analysis of current market conditions and projected growth rates, the committee recommends a fifteen percent increase in the research and development allocation. This investment is expected to support the launch of three new product lines by the third quarter. Additionally, the committee suggests reallocating funds from the travel budget to support the expansion of our digital marketing initiatives. Department heads are invited to submit any objections or alternative proposals by the end of this month. A final budget presentation will be delivered to the board of directors on February tenth.",
+  },
+
+  // ── Marketing & Advertising ──
+  {
+    title: "Ra mắt chiến dịch mới",
+    topic: "marketing",
+    length: "short",
+    icon: "📣",
+    text: "Our new social media campaign launches next Monday. The marketing team has prepared engaging content across all major platforms to maximize brand awareness and customer engagement.",
+  },
+  {
+    title: "Phân tích thị trường mục tiêu",
+    topic: "marketing",
+    length: "medium",
+    icon: "📣",
+    text: "Recent market research indicates that our target demographic has shifted significantly over the past two years. Consumers between the ages of twenty-five and thirty-four now represent our fastest-growing customer segment. The marketing team recommends adjusting our advertising strategy to focus more heavily on digital channels, particularly short-form video content and influencer partnerships, to better reach this audience.",
+  },
+  {
+    title: "Kế hoạch tái định vị thương hiệu",
+    topic: "marketing",
+    length: "long",
+    icon: "📣",
+    text: "Following extensive consumer research and competitive analysis, our brand strategy team has developed a comprehensive rebranding proposal. The new brand identity will feature a modernized logo, updated color palette, and refreshed messaging that emphasizes sustainability and innovation. The rollout will begin with our digital properties in March, followed by updated packaging and in-store materials in May. All customer-facing communications should transition to the new brand guidelines by the end of June. Regional managers are responsible for ensuring that their local marketing materials comply with the updated standards. A detailed brand toolkit will be distributed to all departments next week.",
+  },
+
+  // ── Travel & Transportation ──
+  {
+    title: "Thông báo chuyến bay",
+    topic: "travel",
+    length: "short",
+    icon: "✈️",
+    text: "Attention all passengers. Flight seven-two-three to Singapore has been delayed by approximately forty-five minutes due to severe weather conditions. We apologize for the inconvenience.",
+  },
+  {
+    title: "Hướng dẫn đặt phòng khách sạn",
+    topic: "travel",
+    length: "medium",
+    icon: "✈️",
+    text: "For employees traveling on company business, please remember to book accommodations through our approved travel management system. The company will reimburse hotel expenses up to one hundred fifty dollars per night for domestic travel and two hundred dollars for international trips. All receipts must be submitted within ten business days of your return. Late submissions may result in delayed reimbursement.",
+  },
+  {
+    title: "Chính sách công tác nước ngoài",
+    topic: "travel",
+    length: "long",
+    icon: "✈️",
+    text: "The company has recently updated its international business travel policy to reflect current global conditions. All employees planning overseas trips must submit their travel requests at least three weeks in advance for approval by their department head and the travel coordinator. Business class airfare is approved for flights exceeding eight hours in duration. Travelers are required to purchase comprehensive travel insurance through our corporate provider. Upon arrival at their destination, employees should register with the local embassy or consulate. A per diem allowance will be provided based on the cost-of-living index of the destination country. Detailed guidelines and the updated expense reporting form are available on the company intranet.",
+  },
+
+  // ── Dining & Restaurants ──
+  {
+    title: "Đặt bàn nhà hàng",
+    topic: "dining",
+    length: "short",
+    icon: "🍽️",
+    text: "Good evening. I'd like to make a reservation for six people this Saturday at seven o'clock. Could you please seat us near the window if possible?",
+  },
+  {
+    title: "Thực đơn mới theo mùa",
+    topic: "dining",
+    length: "medium",
+    icon: "🍽️",
+    text: "We are delighted to introduce our new seasonal menu, featuring locally sourced ingredients and contemporary interpretations of classic dishes. Highlights include a roasted butternut squash soup, pan-seared salmon with citrus glaze, and a rich dark chocolate torte for dessert. Our sommelier has also curated a selection of wines to complement each course. Reservations for the tasting event can be made online.",
+  },
+  {
+    title: "Dịch vụ catering công ty",
+    topic: "dining",
+    length: "long",
+    icon: "🍽️",
+    text: "Thank you for choosing our catering service for your upcoming corporate event. Based on our discussion, we have prepared a customized menu that accommodates various dietary requirements, including vegetarian, vegan, and gluten-free options. The package includes a welcome reception with canapés and beverages, a three-course seated dinner, and a dessert station. Our team will arrive two hours before the event to set up, and all equipment will be cleared within one hour after the event concludes. Please confirm the final guest count at least five business days in advance. We look forward to making your event a memorable occasion. Should you have any additional requests or modifications, please do not hesitate to contact our events coordinator.",
+  },
+
+  // ── Health & Wellness ──
+  {
+    title: "Thông báo kiểm tra sức khỏe",
+    topic: "health",
+    length: "short",
+    icon: "🏥",
+    text: "All employees are reminded that the annual health screening will take place next Thursday in the first-floor conference room. Please fast for eight hours before your appointment.",
+  },
+  {
+    title: "Chương trình sức khỏe nhân viên",
+    topic: "health",
+    length: "medium",
+    icon: "🏥",
+    text: "Our company wellness program has been expanded to include complimentary gym memberships, weekly yoga classes, and monthly nutrition workshops. Employees who participate in at least three wellness activities per quarter will be eligible for a premium discount on their health insurance. Sign-up sheets are available at the front desk, and more information can be found on the employee benefits portal.",
+  },
+  {
+    title: "Hướng dẫn an toàn lao động",
+    topic: "health",
+    length: "long",
+    icon: "🏥",
+    text: "In accordance with updated workplace safety regulations, all employees working in the warehouse and manufacturing areas are required to complete a refresher training course on proper equipment handling and emergency procedures. The training sessions will be held during the first two weeks of January, and attendance is mandatory. Topics covered will include the correct use of personal protective equipment, fire evacuation routes, first aid basics, and the reporting process for workplace injuries. Employees who have not completed the training by the deadline will not be permitted to access restricted work areas. Please check the schedule posted on the bulletin board and register for a session that fits your shift. Supervisors are responsible for ensuring full participation from their teams.",
+  },
+
+  // ── Technology & IT ──
+  {
+    title: "Cập nhật hệ thống",
+    topic: "technology",
+    length: "short",
+    icon: "💻",
+    text: "The IT department will perform a scheduled system upgrade this weekend. All internal applications will be unavailable from Saturday evening until Sunday morning.",
+  },
+  {
+    title: "Chính sách bảo mật dữ liệu",
+    topic: "technology",
+    length: "medium",
+    icon: "💻",
+    text: "In response to recent cybersecurity threats, the IT security team has implemented new data protection protocols. All employees must now use two-factor authentication when accessing company systems remotely. Passwords must be changed every sixty days and must include a combination of uppercase letters, lowercase letters, numbers, and special characters. Please contact the IT help desk if you experience any difficulties with the new security measures.",
+  },
+  {
+    title: "Triển khai phần mềm quản lý mới",
+    topic: "technology",
+    length: "long",
+    icon: "💻",
+    text: "We are pleased to announce the rollout of our new enterprise resource planning software, which will replace the current legacy system by the end of the second quarter. The new platform offers improved functionality for inventory management, customer relationship tracking, and financial reporting. A series of training workshops will be conducted throughout March and April to ensure a smooth transition. Each department will receive customized training tailored to their specific workflow requirements. During the transition period, both systems will run simultaneously to prevent any disruption to daily operations. All employees are expected to complete the online orientation module before attending their assigned workshop. Technical support staff will be available around the clock during the first week of full deployment to address any issues promptly.",
+  },
+
+  // ── Manufacturing & Production ──
+  {
+    title: "Báo cáo sản xuất",
+    topic: "manufacturing",
+    length: "short",
+    icon: "🏭",
+    text: "Production output for the month of October increased by eight percent compared to the previous quarter, largely due to the installation of new automated assembly equipment.",
+  },
+  {
+    title: "Quy trình kiểm soát chất lượng",
+    topic: "manufacturing",
+    length: "medium",
+    icon: "🏭",
+    text: "The quality assurance department has introduced a new inspection protocol for all products leaving our manufacturing facility. Each batch will now undergo a three-stage testing process before being approved for shipment. Products that do not meet our strict quality standards will be flagged for review and may be returned to the production line for rework. This measure is expected to reduce customer complaints by approximately twenty percent.",
+  },
+  {
+    title: "Mở rộng nhà máy sản xuất",
+    topic: "manufacturing",
+    length: "long",
+    icon: "🏭",
+    text: "Following the board's approval last month, construction of our new manufacturing facility in the southern industrial zone will commence in early February. The forty-thousand-square-foot plant will house state-of-the-art production lines capable of manufacturing up to ten thousand units per day. The project is expected to be completed within eighteen months and will create approximately three hundred new jobs in the region. During the construction phase, our current facility will continue to operate at full capacity to meet existing customer demand. A dedicated project management team has been assembled to oversee the construction timeline and budget. Regular progress updates will be provided to all stakeholders through monthly briefings and quarterly reports.",
+  },
+
+  // ── Real Estate & Housing ──
+  {
+    title: "Thông báo cho thuê",
+    topic: "realestate",
+    length: "short",
+    icon: "🏠",
+    text: "A newly renovated two-bedroom apartment is available for lease starting next month. The unit features modern appliances, hardwood floors, and a private balcony with city views.",
+  },
+  {
+    title: "Hướng dẫn mua nhà",
+    topic: "realestate",
+    length: "medium",
+    icon: "🏠",
+    text: "For first-time homebuyers, navigating the mortgage process can seem overwhelming. It is advisable to obtain pre-approval from your bank before beginning your property search. This will give you a clear understanding of your budget and demonstrate to sellers that you are a serious buyer. Additionally, working with a licensed real estate agent can help you identify suitable properties and negotiate favorable terms on your behalf.",
+  },
+  {
+    title: "Dự án phát triển khu đô thị mới",
+    topic: "realestate",
+    length: "long",
+    icon: "🏠",
+    text: "The city planning commission has approved a major mixed-use development project in the downtown waterfront district. The development will include two hundred residential units ranging from studio apartments to three-bedroom family homes, along with fifteen thousand square feet of retail space on the ground floor. The design incorporates sustainable building practices, including solar panels, rainwater harvesting systems, and energy-efficient insulation. A public park and pedestrian promenade will connect the development to the existing waterfront trail. Construction is scheduled to begin in the spring, with the first phase of residential units expected to be available for occupancy within two years. Interested buyers can register for priority viewing at the developer's sales office, which opens next Monday.",
   },
 ];
 
@@ -163,10 +405,50 @@ export default function ReadAloudPage() {
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [showHistory, setShowHistory] = useState(false);
 
+  // AI passage generation state
+  const [selectedTopic, setSelectedTopic] = useState<string>("all");
+  const [selectedLength, setSelectedLength] = useState<SampleLength | "all">("all");
+  const [aiPassages, setAiPassages] = useState<SampleText[]>([]);
+  const [aiLoading, setAiLoading] = useState(false);
+
   // Load history on mount
   useEffect(() => {
     setHistory(loadHistory());
   }, []);
+
+  // Generate AI passages
+  const generateAiPassages = useCallback(async (topic?: string, length?: string) => {
+    setAiLoading(true);
+    try {
+      const res = await fetch("/api/read-aloud/passages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          topic: topic && topic !== "all" ? topic : undefined,
+          length: length && length !== "all" ? length : "medium",
+          count: 3,
+        }),
+      });
+      if (!res.ok) throw new Error("Failed");
+      const data = await res.json();
+      if (data.passages?.length) {
+        setAiPassages((prev) => [...data.passages, ...prev].slice(0, 30));
+        message.success(`✨ Đã tạo ${data.passages.length} đoạn văn mới bằng AI!`);
+      }
+    } catch {
+      message.error("Không thể tạo đoạn văn. Vui lòng thử lại.");
+    } finally {
+      setAiLoading(false);
+    }
+  }, []);
+
+  // Combined passages: AI-generated first, then hardcoded fallbacks
+  const allPassages = [...aiPassages, ...SAMPLE_TEXTS];
+  const filteredPassages = allPassages.filter((p) => {
+    if (selectedTopic !== "all" && p.topic !== selectedTopic) return false;
+    if (selectedLength !== "all" && p.length !== selectedLength) return false;
+    return true;
+  });
 
   const selectedVoice = VOICES.find((v) => v.role === selectedRole)!;
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
@@ -672,7 +954,7 @@ export default function ReadAloudPage() {
               )}
             </AnimatePresence>
 
-            {/* Quick Sample Texts */}
+            {/* ── TOEIC Passage Browser with AI Generation ── */}
             <m.div
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
@@ -681,41 +963,154 @@ export default function ReadAloudPage() {
                 background: "var(--surface)",
                 borderRadius: "var(--radius-xl)",
                 border: "1px solid var(--border)",
-                padding: "var(--space-4) var(--space-5)",
-                boxShadow: "var(--shadow-sm)",
+                padding: "var(--space-5)",
+                boxShadow: "var(--shadow-md)",
+                display: "flex",
+                flexDirection: "column",
+                gap: 16,
               }}
             >
-              <Text style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", display: "block", marginBottom: 12 }}>
-                💡 Sử dụng văn bản mẫu
-              </Text>
-              <Flex gap={8} wrap="wrap">
-                {SAMPLE_TEXTS.map((sample, idx) => (
-                  <m.button
-                    key={idx}
-                    whileHover={{ scale: 1.02, y: -1 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={() => {
-                      setText(sample.text);
-                      message.success(`Đã tải văn bản mẫu: ${sample.title}`);
-                    }}
-                    style={{
-                      border: "1px dashed var(--border-strong)",
-                      borderRadius: "var(--radius)",
-                      background: "var(--surface-alt)",
-                      padding: "8px 14px",
-                      fontSize: 13,
-                      fontWeight: 600,
-                      color: "var(--text-secondary)",
-                      cursor: "pointer",
-                      transition: "all 0.2s",
-                      fontFamily: "var(--font-body)",
-                    }}
-                    className="btn-shimmer"
-                  >
-                    🚀 {sample.title}
-                  </m.button>
+              {/* Header + AI Generate Button */}
+              <Flex align="center" justify="space-between" wrap="wrap" gap={8}>
+                <Flex align="center" gap={8}>
+                  <Text style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                    📚 Văn bản mẫu TOEIC ({filteredPassages.length})
+                  </Text>
+                </Flex>
+                <m.button
+                  whileHover={{ scale: 1.03, y: -1 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={() => generateAiPassages(selectedTopic, selectedLength)}
+                  disabled={aiLoading}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
+                    padding: "7px 16px",
+                    borderRadius: 12,
+                    border: "1px solid var(--accent)",
+                    background: "var(--accent-light)",
+                    color: "var(--accent)",
+                    fontSize: 12.5,
+                    fontWeight: 700,
+                    cursor: aiLoading ? "wait" : "pointer",
+                    opacity: aiLoading ? 0.6 : 1,
+                    fontFamily: "var(--font-body)",
+                    transition: "all 0.2s",
+                  }}
+                >
+                  {aiLoading ? (
+                    <><LoadingOutlined spin style={{ fontSize: 12 }} /> Đang tạo...</>
+                  ) : (
+                    <>✨ Tạo bằng AI</>
+                  )}
+                </m.button>
+              </Flex>
+
+              {/* Topic filter chips */}
+              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                <FilterChip
+                  label="Tất cả"
+                  active={selectedTopic === "all"}
+                  onClick={() => setSelectedTopic("all")}
+                />
+                {TOEIC_TOPICS.map((t) => (
+                  <FilterChip
+                    key={t.key}
+                    label={`${t.icon} ${t.label}`}
+                    active={selectedTopic === t.key}
+                    onClick={() => setSelectedTopic(t.key)}
+                  />
+                ))}
+              </div>
+
+              {/* Length filter */}
+              <Flex gap={6} align="center">
+                <Text style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 600 }}>Độ dài:</Text>
+                {(["all", "short", "medium", "long"] as const).map((len) => (
+                  <FilterChip
+                    key={len}
+                    label={len === "all" ? "Tất cả" : len === "short" ? "Ngắn (~30 từ)" : len === "medium" ? "Trung bình (~60 từ)" : "Dài (~120 từ)"}
+                    active={selectedLength === len}
+                    onClick={() => setSelectedLength(len)}
+                  />
                 ))}
               </Flex>
+
+              {/* Passage cards */}
+              <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 400, overflowY: "auto" }}>
+                {filteredPassages.length === 0 ? (
+                  <div style={{
+                    padding: "24px 16px", textAlign: "center",
+                    borderRadius: 14, border: "1px dashed var(--border)",
+                    color: "var(--text-muted)", fontSize: 13,
+                  }}>
+                    Không có đoạn văn nào. Nhấn &quot;✨ Tạo bằng AI&quot; để tạo mới!
+                  </div>
+                ) : (
+                  filteredPassages.map((sample, idx) => (
+                    <m.div
+                      key={`${sample.topic}-${idx}`}
+                      initial={{ opacity: 0, x: -5 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: idx * 0.02 }}
+                      whileHover={{ x: 3, background: "var(--accent-light)" }}
+                      onClick={() => {
+                        setText(sample.text);
+                        message.success(`Đã tải: ${sample.title}`);
+                      }}
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: 12,
+                        padding: "12px 14px",
+                        borderRadius: "var(--radius-lg)",
+                        border: "1px solid var(--border)",
+                        background: "var(--surface-alt)",
+                        cursor: "pointer",
+                        transition: "all 0.15s",
+                      }}
+                    >
+                      <div style={{
+                        width: 36, height: 36, borderRadius: 10,
+                        background: "var(--accent-light)", border: "1px solid var(--border)",
+                        display: "grid", placeItems: "center", fontSize: 18, flexShrink: 0,
+                      }}>
+                        {sample.icon}
+                      </div>
+                      <div style={{ flex: 1, minWidth: 0 }}>
+                        <div style={{
+                          fontSize: 13.5, fontWeight: 700, color: "var(--text-primary)",
+                          lineHeight: 1.3,
+                        }}>
+                          {sample.title}
+                        </div>
+                        <div style={{
+                          fontSize: 12, color: "var(--text-muted)", marginTop: 3,
+                          overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                        }}>
+                          {sample.text.slice(0, 80)}...
+                        </div>
+                        <Flex gap={6} style={{ marginTop: 6 }}>
+                          <span style={{
+                            fontSize: 10, fontWeight: 700, padding: "1px 8px", borderRadius: 8,
+                            background: sample.length === "short" ? "rgba(16,185,129,0.1)" : sample.length === "long" ? "rgba(239,68,68,0.08)" : "rgba(59,130,246,0.1)",
+                            color: sample.length === "short" ? "var(--success)" : sample.length === "long" ? "var(--error)" : "#2563eb",
+                            border: `1px solid ${sample.length === "short" ? "rgba(16,185,129,0.2)" : sample.length === "long" ? "rgba(239,68,68,0.15)" : "rgba(59,130,246,0.2)"}`,
+                          }}>
+                            {sample.length === "short" ? "Ngắn" : sample.length === "long" ? "Dài" : "TB"}
+                          </span>
+                          <span style={{
+                            fontSize: 10, fontWeight: 600, color: "var(--text-muted)",
+                          }}>
+                            ~{sample.text.split(/\s+/).length} từ
+                          </span>
+                        </Flex>
+                      </div>
+                    </m.div>
+                  ))
+                )}
+              </div>
             </m.div>
           </Flex>
 
@@ -1209,5 +1604,37 @@ function Stat({ label, value }: { label: string; value: string }) {
       <Text style={{ fontSize: 12.5, color: "var(--text-muted)" }}>{label}:</Text>
       <Text style={{ fontSize: 12.5, fontWeight: 700, color: "var(--text-secondary)" }}>{value}</Text>
     </Flex>
+  );
+}
+
+function FilterChip({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      style={{
+        padding: "4px 12px",
+        borderRadius: 999,
+        border: active ? "1px solid var(--accent)" : "1px solid var(--border)",
+        background: active ? "var(--accent-muted)" : "transparent",
+        color: active ? "var(--accent)" : "var(--text-muted)",
+        fontSize: 11.5,
+        fontWeight: active ? 700 : 500,
+        cursor: "pointer",
+        transition: "all 0.2s",
+        fontFamily: "var(--font-body)",
+        whiteSpace: "nowrap",
+      }}
+    >
+      {label}
+    </button>
   );
 }
