@@ -403,7 +403,6 @@ const QUICK_ACTIONS = [
   { href: "/toeic-skills", icon: <AimOutlined />, label: "4 Skills", color: "var(--accent)" },
   { href: "/toeic-practice", icon: <TrophyOutlined />, label: "Luyện đề", color: "var(--secondary)" },
   { href: "/grammar-quiz", icon: <QuestionCircleOutlined />, label: "Part 5", color: "var(--info)" },
-  { href: "/review-quiz", icon: <SyncOutlined />, label: "Ôn tập SRS", color: "var(--warning)" },
   { href: "/flashcards", icon: <BookOutlined />, label: "Flashcard", color: "var(--success)" },
   { href: "/error-notebook", icon: <ExceptionOutlined />, label: "Sổ lỗi", color: "var(--error)" },
   { href: "/my-vocabulary", icon: <StarFilled />, label: "Từ vựng", color: "var(--xp)" },

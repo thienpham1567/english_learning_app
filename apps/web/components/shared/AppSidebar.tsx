@@ -20,7 +20,6 @@ import {
   DownOutlined,
   RightOutlined,
   CheckCircleOutlined,
-  YoutubeOutlined,
   FileTextOutlined,
   AimOutlined,
   DashboardOutlined,
@@ -84,7 +83,7 @@ const navGroups: (NavItem | NavGroup)[] = [
         label: "Thử thách hàng ngày",
         icon: FireOutlined,
       },
-      { href: "/review-quiz", label: "Ôn tập SRS", icon: SyncOutlined },
+
       { href: "/error-notebook", label: "Sổ lỗi sai", icon: ExceptionOutlined },
     ],
   },
@@ -96,7 +95,7 @@ const navGroups: (NavItem | NavGroup)[] = [
       { href: "/english-chatbot", label: "AI Chatbot", icon: MessageOutlined },
       { href: "/read-aloud", label: "Đọc to", icon: SoundOutlined },
       { href: "/pdf-reader", label: "Đọc sách TOEIC", icon: FileTextOutlined },
-      { href: "/youtube-learn", label: "YouTube TOEIC", icon: YoutubeOutlined },
+
     ],
   },
 ];
@@ -227,15 +226,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
         />
       );
     }
-    if (href === "/review-quiz" && badges.vocabDue > 0) {
-      return (
-        <Badge
-          count={badges.vocabDue}
-          size="small"
-          style={{ backgroundColor: "var(--info)" }}
-        />
-      );
-    }
+
     if (href === "/daily-challenge") {
       return (
         <m.span

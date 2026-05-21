@@ -13,7 +13,6 @@ import {
   SyncOutlined,
   TrophyOutlined,
   FileTextOutlined,
-  YoutubeOutlined,
   StarOutlined,
   ExceptionOutlined,
   QuestionCircleOutlined,
@@ -82,7 +81,6 @@ const EXAM_HUB_ITEMS = [
 ];
 
 const REVIEW_HUB_ITEMS = [
-  { label: "Ôn tập SRS", icon: <SyncOutlined />, href: "/review-quiz" },
   { label: "Sổ lỗi sai", icon: <ExceptionOutlined />, href: "/error-notebook" },
   { label: "Ôn tập Flashcard", icon: <BookFilled />, href: "/flashcards" },
 ];
@@ -95,7 +93,7 @@ const MORE_HUB_ITEMS = [
   },
   { label: "AI Chatbot", icon: <MessageOutlined />, href: "/english-chatbot" },
   { label: "Đọc sách TOEIC", icon: <FileTextOutlined />, href: "/pdf-reader" },
-  { label: "YouTube TOEIC", icon: <YoutubeOutlined />, href: "/youtube-learn" },
+
   {
     label: "Lộ trình ngữ pháp",
     icon: <NodeIndexOutlined />,
@@ -115,7 +113,6 @@ function getActiveTab(pathname: string): string {
     return "exam";
   if (pathname.startsWith("/daily-challenge")) return "more";
   if (
-    pathname.startsWith("/review-quiz") ||
     pathname.startsWith("/error-notebook") ||
     pathname.startsWith("/flashcards")
   )
@@ -126,7 +123,6 @@ function getActiveTab(pathname: string): string {
     pathname.startsWith("/grammar-lessons") ||
     pathname.startsWith("/my-vocabulary") ||
     pathname.startsWith("/pdf-reader") ||
-    pathname.startsWith("/youtube-learn") ||
     pathname.startsWith("/reading") ||
     pathname.startsWith("/ipa-chart") ||
     pathname.startsWith("/diagnostic") ||
