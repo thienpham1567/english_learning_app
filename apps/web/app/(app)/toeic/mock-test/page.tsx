@@ -64,9 +64,9 @@ export default async function MockTestHubPage() {
 						href={`/toeic/mock-test/runner?resume=${inProgress.id}`}
 						style={{ textDecoration: "none" }}
 					>
-						<Card hoverable style={{ borderColor: "#f59e0b", borderWidth: 2 }}>
+						<Card hoverable style={{ borderColor: "var(--warning)", borderWidth: 2 }}>
 							<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-								<RedoOutlined style={{ fontSize: 22, color: "#f59e0b" }} />
+								<RedoOutlined style={{ fontSize: 22, color: "var(--warning)" }} />
 								<strong style={{ fontSize: 18 }}>Tiếp tục mock test đang dở</strong>
 							</div>
 							<div style={{ marginTop: 8, color: "var(--text-muted, #94a3b8)" }}>

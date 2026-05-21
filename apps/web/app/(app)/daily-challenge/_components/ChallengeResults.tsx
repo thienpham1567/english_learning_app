@@ -127,8 +127,8 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
               width: 8,
               height: 8,
               borderRadius: "50%",
-              background: ok ? "#10b981" : "#ef4444",
-              boxShadow: ok ? "0 0 8px #10b981" : "0 0 8px #ef4444",
+              background: ok ? "var(--success)" : "var(--error)",
+              boxShadow: ok ? "0 0 8px var(--success)" : "0 0 8px var(--error)",
               flexShrink: 0,
             }}
           />
@@ -168,7 +168,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
               padding: "4px 10px",
               borderRadius: 20,
               background: ok ? "rgba(16, 185, 129, 0.12)" : "rgba(239, 68, 68, 0.1)",
-              color: ok ? "#10b981" : "#ef4444",
+              color: ok ? "var(--success)" : "var(--error)",
             }}
           >
             {ok ? "Chính xác" : "Chưa đúng"}
@@ -243,7 +243,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
               <div
                 style={{
                   borderRadius: "var(--radius)",
-                  borderLeft: `3px solid ${ok ? "#10b981" : "#ef4444"}`,
+                  borderLeft: `3px solid ${ok ? "var(--success)" : "var(--error)"}`,
                   padding: "11px 14px",
                   background: ok
                     ? "rgba(16, 185, 129, 0.06)"
@@ -256,7 +256,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                     fontWeight: 800,
                     textTransform: "uppercase",
                     letterSpacing: ".08em",
-                    color: ok ? "#10b981" : "#ef4444",
+                    color: ok ? "var(--success)" : "var(--error)",
                     display: "block",
                     marginBottom: 4,
                   }}
@@ -281,7 +281,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                 <div
                   style={{
                     borderRadius: "var(--radius)",
-                    borderLeft: "3px solid #10b981",
+                    borderLeft: "3px solid var(--success)",
                     padding: "11px 14px",
                     background: "rgba(16, 185, 129, 0.06)",
                   }}
@@ -292,7 +292,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                       fontWeight: 800,
                       textTransform: "uppercase",
                       letterSpacing: ".08em",
-                      color: "#10b981",
+                      color: "var(--success)",
                       display: "block",
                       marginBottom: 4,
                     }}
@@ -303,7 +303,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                     style={{
                       fontSize: 13.5,
                       fontWeight: 700,
-                      color: "#10b981",
+                      color: "var(--success)",
                       wordBreak: "break-word",
                       fontFamily: "var(--font-body)",
                     }}
@@ -522,7 +522,7 @@ export function ChallengeResults({
                 fontWeight: 900,
                 lineHeight: 1,
                 color: correctCount === answers.length
-                  ? "#10b981"
+                  ? "var(--success)"
                   : correctCount >= answers.length * 0.6
                   ? "var(--text-primary)"
                   : "var(--accent)",
@@ -588,10 +588,10 @@ export function ChallengeResults({
             }}
           >
             {[
-              { icon: <CheckCircleFilled style={{ color: "#10b981" }} />, label: "Đúng", value: correctCount },
-              { icon: <CloseCircleFilled style={{ color: "#ef4444" }} />, label: "Sai", value: wrongCount },
+              { icon: <CheckCircleFilled style={{ color: "var(--success)" }} />, label: "Đúng", value: correctCount },
+              { icon: <CloseCircleFilled style={{ color: "var(--error)" }} />, label: "Sai", value: wrongCount },
               { icon: <ClockCircleOutlined style={{ color: "var(--accent)" }} />, label: "Thời gian", value: `${minutes}:${seconds.toString().padStart(2, "0")}` },
-              { icon: <FireOutlined style={{ color: "#f97316" }} />, label: "Chuỗi ngày", value: streak.currentStreak },
+              { icon: <FireOutlined style={{ color: "var(--fire)" }} />, label: "Chuỗi ngày", value: streak.currentStreak },
             ].map((s, i) => (
               <div
                 key={s.label}

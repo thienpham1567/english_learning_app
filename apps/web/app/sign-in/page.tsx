@@ -116,8 +116,8 @@ function ScoreGauge() {
           />
           <defs>
             <linearGradient id="accent-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor="#C84B31" />
-              <stop offset="100%" stopColor="#FF7A5C" />
+              <stop offset="0%" stopColor="#92400E" />
+              <stop offset="100%" stopColor="#D4963A" />
             </linearGradient>
           </defs>
         </svg>
@@ -172,7 +172,7 @@ function SignInContent() {
           transition={{ type: "spring", stiffness: 400 }}
           style={{
             width: 46, height: 46, borderRadius: 14, flexShrink: 0,
-            background: "linear-gradient(145deg, var(--accent), #FF7A5C)",
+            background: "linear-gradient(145deg, var(--accent), #D4963A)",
             boxShadow: "0 8px 24px color-mix(in srgb, var(--accent) 30%, transparent), inset 0 1px 1px rgba(255,255,255,0.15)",
             display: "grid", placeItems: "center",
             color: "#fff",
@@ -388,10 +388,10 @@ export default function SignInPage() {
             Chinh Phục<br />
             Điểm Số<br />
             <span style={{ 
-              background: "linear-gradient(135deg, var(--accent) 0%, #FF7A5C 100%)",
+              background: "linear-gradient(135deg, var(--accent) 0%, #D4963A 100%)",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
-              filter: "drop-shadow(0 4px 12px rgba(200,75,49,0.25))"
+              filter: "drop-shadow(0 4px 12px rgba(192,125,43,0.25))"
             }}>
               TOEIC 4 Kỹ Năng
             </span>

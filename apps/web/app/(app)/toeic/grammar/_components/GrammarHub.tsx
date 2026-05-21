@@ -31,7 +31,7 @@ export function GrammarHub({
 	};
 
 	const profColor = (p: number) =>
-		p < 0.3 ? "#ef4444" : p < 0.7 ? "#f59e0b" : "#10b981";
+		p < 0.3 ? "var(--error)" : p < 0.7 ? "var(--warning)" : "var(--success)";
 
 	return (
 		<div style={{ display: "grid", gap: 16 }}>
@@ -39,7 +39,7 @@ export function GrammarHub({
 			<div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
 				<Card size="small" hoverable onClick={startDaily}>
 					<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-						<CalendarOutlined style={{ fontSize: 20, color: "#3b82f6" }} />
+						<CalendarOutlined style={{ fontSize: 20, color: "var(--info)" }} />
 						<strong>Daily 15 câu</strong>
 					</div>
 					<div style={{ color: "var(--text-muted, #94a3b8)", fontSize: 13, marginTop: 6 }}>
@@ -56,7 +56,7 @@ export function GrammarHub({
 					style={mistakeCount === 0 ? { opacity: 0.6, cursor: "not-allowed" } : undefined}
 				>
 					<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-						<AlertOutlined style={{ fontSize: 20, color: "#ef4444" }} />
+						<AlertOutlined style={{ fontSize: 20, color: "var(--error)" }} />
 						<strong>Câu sai cần ôn</strong>
 					</div>
 					<div style={{ fontSize: 28, fontWeight: 700, marginTop: 6 }}>{mistakeCount}</div>
@@ -66,7 +66,7 @@ export function GrammarHub({
 				</Card>
 				<Card size="small">
 					<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-						<ThunderboltOutlined style={{ fontSize: 20, color: "#f59e0b" }} />
+						<ThunderboltOutlined style={{ fontSize: 20, color: "var(--warning)" }} />
 						<strong>Top 3 yếu nhất</strong>
 					</div>
 					<div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>

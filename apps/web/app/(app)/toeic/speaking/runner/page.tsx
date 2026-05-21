@@ -186,7 +186,7 @@ export default function SpeakingRunnerPage() {
 	if (error) {
 		return (
 			<div style={{ padding: 24 }}>
-				<div style={{ color: "#ef4444", marginBottom: 12 }}>{error}</div>
+				<div style={{ color: "var(--error)", marginBottom: 12 }}>{error}</div>
 				<Button onClick={() => router.push("/toeic/speaking")}>Về Hub</Button>
 			</div>
 		);
@@ -194,7 +194,7 @@ export default function SpeakingRunnerPage() {
 	if (permissionDenied) {
 		return (
 			<div style={{ padding: 24 }}>
-				<div style={{ color: "#ef4444", marginBottom: 12 }}>
+				<div style={{ color: "var(--error)", marginBottom: 12 }}>
 					Cần quyền microphone để làm Speaking test. Cho phép trong cài đặt browser rồi reload.
 				</div>
 				<Button onClick={() => router.push("/toeic/speaking")}>Về Hub</Button>

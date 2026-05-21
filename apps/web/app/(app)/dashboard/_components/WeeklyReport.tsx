@@ -187,10 +187,10 @@ export function WeeklyReport() {
         {[
           { icon: <CalendarOutlined style={{ color: "var(--accent)" }} />, value: `${stats.daysActive}/7`, label: "Ngày học", bg: "var(--accent-light)" },
           { icon: <ThunderboltOutlined style={{ color: "var(--xp)" }} />, value: stats.totalXP.toLocaleString(), label: "XP nhận được", bg: "rgba(245, 158, 11, 0.08)" },
-          { icon: <FireOutlined style={{ color: "#f97316" }} />, value: stats.currentStreak, label: "Chuỗi ngày", bg: "rgba(249, 115, 22, 0.08)" },
-          { icon: <BookOutlined style={{ color: "#10b981" }} />, value: stats.newVocabulary, label: "Từ vựng mới", bg: "rgba(16, 185, 129, 0.08)" },
+          { icon: <FireOutlined style={{ color: "var(--fire)" }} />, value: stats.currentStreak, label: "Chuỗi ngày", bg: "rgba(249, 115, 22, 0.08)" },
+          { icon: <BookOutlined style={{ color: "var(--success)" }} />, value: stats.newVocabulary, label: "Từ vựng mới", bg: "rgba(16, 185, 129, 0.08)" },
           { icon: <TrophyOutlined style={{ color: "var(--xp)" }} />, value: stats.avgChallengeScore, label: "Điểm trung bình", bg: "rgba(245, 158, 11, 0.08)" },
-          { icon: <WarningOutlined style={{ color: "#ef4444" }} />, value: stats.unresolvedErrors, label: "Lỗi cần sửa", bg: "rgba(239, 68, 68, 0.06)" },
+          { icon: <WarningOutlined style={{ color: "var(--error)" }} />, value: stats.unresolvedErrors, label: "Lỗi cần sửa", bg: "rgba(239, 68, 68, 0.06)" },
         ].map((s) => (
           <div
             key={s.label}

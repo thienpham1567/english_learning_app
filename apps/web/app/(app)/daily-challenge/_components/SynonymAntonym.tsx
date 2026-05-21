@@ -74,7 +74,7 @@ export function SynonymAntonym({ data, instruction, onAnswer, disabled }: Props)
             fontWeight: 800,
             textTransform: "uppercase",
             letterSpacing: "0.05em",
-            color: isSynonym ? "#10b981" : "#ef4444",
+            color: isSynonym ? "var(--success)" : "var(--error)",
           }}
         >
           {isSynonym ? "🔗 Từ đồng nghĩa" : "↔️ Từ trái nghĩa"}

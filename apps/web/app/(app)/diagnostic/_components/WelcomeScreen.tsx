@@ -45,7 +45,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
         <div style={{ maxWidth: 600, margin: "0 auto" }}>
           <ModuleHeader
             icon={<TrophyOutlined style={{ color: "#fff" }} />}
-            gradient="linear-gradient(135deg, #6366f1, #3b82f6)"
+            gradient="linear-gradient(135deg, var(--module-assessment), #3b82f6)"
             title="Đánh giá trình độ CEFR"
             badge="Placement Test"
             subtitle="Bài kiểm tra thích ứng thông minh (Adaptive) tự động điều chỉnh độ khó để xác định chính xác trình độ tiếng Anh của bạn."

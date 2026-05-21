@@ -104,7 +104,7 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
                 padding: "6px 14px",
                 fontSize: 14,
                 fontWeight: 600,
-                color: hoveredSel === i && !disabled ? "#ef4444" : "var(--accent)",
+                color: hoveredSel === i && !disabled ? "var(--error)" : "var(--accent)",
                 border:
                   hoveredSel === i && !disabled
                     ? "1px solid rgba(239, 68, 68, 0.3)"
@@ -122,7 +122,7 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
                 <CloseOutlined
                   style={{
                     fontSize: 8,
-                    color: hoveredSel === i ? "#ef4444" : "var(--text-muted)",
+                    color: hoveredSel === i ? "var(--error)" : "var(--text-muted)",
                     marginLeft: 2,
                   }}
                 />

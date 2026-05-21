@@ -117,7 +117,7 @@ function WeeklyChart({ scores }: { scores: { day: string; score: number }[] }) {
           const pct = s.score / maxScore;
           const fill =
             pct >= 0.8
-              ? "#10b981" // emerald green
+              ? "var(--success)" // emerald green
               : pct >= 0.5
               ? "var(--accent)"
               : "var(--error)";
@@ -359,7 +359,7 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
               width: 46,
               height: 46,
               borderRadius: "var(--radius-lg)",
-              background: "linear-gradient(135deg, var(--xp), #d97706)",
+              background: "linear-gradient(135deg, var(--xp), var(--xp))",
               display: "grid",
               placeItems: "center",
               flexShrink: 0,
@@ -461,7 +461,7 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
             </div>
           </div>
           <div style={{ padding: "10px 4px", borderRadius: "var(--radius-lg)", background: "var(--surface-alt)", border: "1px solid var(--border)" }}>
-            <div style={{ fontSize: 22, fontWeight: 900, color: "#10b981", fontVariantNumeric: "tabular-nums" }}>
+            <div style={{ fontSize: 22, fontWeight: 900, color: "var(--success)", fontVariantNumeric: "tabular-nums" }}>
               {score}/5
             </div>
             <div style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-muted)", marginTop: 2 }}>
@@ -535,7 +535,7 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
                     Bạn ghi: {a.answer || "(trống)"}
                   </span>
                   {a.correctAnswer && (
-                    <span style={{ fontSize: 11, background: "rgba(16, 185, 129, 0.12)", color: "#10b981", padding: "2px 8px", borderRadius: 6, fontWeight: 700 }}>
+                    <span style={{ fontSize: 11, background: "rgba(16, 185, 129, 0.12)", color: "var(--success)", padding: "2px 8px", borderRadius: 6, fontWeight: 700 }}>
                       Đáp án đúng: {a.correctAnswer}
                     </span>
                   )}

@@ -1,49 +1,51 @@
 :root {
-  /* Warm Premium Cream & Sand Palette */
-  --bg: #FAF8F5;
-  --bg-deep: #F3ECE0;
-  --surface: #ffffff;
-  --surface-hover: #F7F2E9;
-  --surface-raised: #ffffff;
-  --surface-alt: #FCFAF7;
-  --card-bg: var(--surface);
-  --bg-secondary: #F5EDE0;
+  /* ── Deep Navy & Warm Gold — Educational Premium ── */
 
-  /* Terracotta & Ochre Accents (Premium Warmth) */
-  --accent: #C34A36;
-  --accent-hover: #A73825;
-  --accent-light: #FDF4F1;
-  --accent-muted: rgba(195, 74, 54, 0.08);
+  /* Backgrounds — cool-tinted paper whites */
+  --bg: #F7F8FC;
+  --bg-deep: #ECEEF5;
+  --surface: #ffffff;
+  --surface-hover: #F2F3FA;
+  --surface-raised: #ffffff;
+  --surface-alt: #FAFAFD;
+  --card-bg: var(--surface);
+  --bg-secondary: #ECEEF5;
+
+  /* Primary Accent — Warm Amber Gold (Achievement & Mastery) */
+  --accent: #C07D2B;
+  --accent-hover: #A66A1E;
+  --accent-light: #FDF7EF;
+  --accent-muted: rgba(192, 125, 43, 0.08);
   --text-on-accent: #ffffff;
 
-  --secondary: #CCA880;
-  --tertiary: #B2916F;
-  --warm: #F3ECE0;
+  --secondary: #3D5A80;
+  --tertiary: #5B7EA8;
+  --warm: #F5F0E6;
 
-  /* Ink & Sepia Typography (Subtle, avoiding pure black) */
-  --ink: #221815;
-  --text-primary: #221815;
-  --text-secondary: #65544C;
-  --text-muted: #9E8E85;
+  /* Ink & Typography — deep navy tones, never pure black */
+  --ink: #1A2332;
+  --text-primary: #1A2332;
+  --text-secondary: #4A5568;
+  --text-muted: #8896A6;
   --text: var(--text-primary);
-  --text-disabled: #CBBFB6;
+  --text-disabled: #BCC5D0;
 
-  /* Elegant Borders */
-  --border: #E8DFD5;
-  --border-strong: #D5C4B4;
+  /* Borders — subtle cool-grey */
+  --border: #DFE3EC;
+  --border-strong: #C5CBD8;
 
-  --bubble-user: #221815;
+  --bubble-user: #1A2332;
   --bubble-ai: #ffffff;
 
-  /* Sage Green for Correct/Success states */
-  --sage: #427A6B;
+  /* Sage/Teal for success */
+  --sage: #2D9F7F;
 
-  /* Premium Shadows (Softer, organic drop shadows) */
-  --shadow-sm: 0 2px 4px rgba(34, 24, 21, 0.03);
-  --shadow: 0 4px 12px rgba(34, 24, 21, 0.05), 0 1px 3px rgba(34, 24, 21, 0.02);
-  --shadow-md: 0 10px 24px rgba(34, 24, 21, 0.06), 0 3px 8px rgba(34, 24, 21, 0.03);
-  --shadow-lg: 0 20px 40px rgba(34, 24, 21, 0.08), 0 8px 16px rgba(34, 24, 21, 0.04);
-  --shadow-xl: 0 30px 60px rgba(34, 24, 21, 0.12), 0 12px 28px rgba(34, 24, 21, 0.06);
+  /* Shadows — cool-navy tinted for depth */
+  --shadow-sm: 0 2px 4px rgba(26, 35, 50, 0.04);
+  --shadow: 0 4px 12px rgba(26, 35, 50, 0.06), 0 1px 3px rgba(26, 35, 50, 0.03);
+  --shadow-md: 0 10px 24px rgba(26, 35, 50, 0.07), 0 3px 8px rgba(26, 35, 50, 0.04);
+  --shadow-lg: 0 20px 40px rgba(26, 35, 50, 0.09), 0 8px 16px rgba(26, 35, 50, 0.05);
+  --shadow-xl: 0 30px 60px rgba(26, 35, 50, 0.13), 0 12px 28px rgba(26, 35, 50, 0.07);
 
   --radius-sm: 8px;
   --radius: 14px;
@@ -56,66 +58,67 @@
   --font-body: "Source Sans 3", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
 
-  /* Premium Warm Sidebar */
-  --sidebar-bg: #F5ECE0;
-  --sidebar-gradient: linear-gradient(180deg, #FDFCFB 0%, #F5ECE0 60%, #FCFAF7 100%);
-  --sidebar-glow: radial-gradient(ellipse 120% 30% at 50% 95%, rgba(195, 74, 54, 0.06) 0%, transparent 70%);
-  --sidebar-text: #7C685C;
-  --sidebar-text-active: #221815;
-  --sidebar-border: rgba(178, 145, 122, 0.2);
-  --sidebar-item-hover: rgba(195, 74, 54, 0.05);
-  --sidebar-active-bg: rgba(195, 74, 54, 0.08);
+  /* Sidebar — deep navy editorial */
+  --sidebar-bg: #1E293B;
+  --sidebar-gradient: linear-gradient(180deg, #1E293B 0%, #172033 60%, #1A2332 100%);
+  --sidebar-glow: radial-gradient(ellipse 120% 30% at 50% 95%, rgba(192, 125, 43, 0.08) 0%, transparent 70%);
+  --sidebar-text: #94A3B8;
+  --sidebar-text-active: #F1F5F9;
+  --sidebar-text-muted: #64748B;
+  --sidebar-border: rgba(148, 163, 184, 0.12);
+  --sidebar-item-hover: rgba(255, 255, 255, 0.05);
+  --sidebar-active-bg: rgba(192, 125, 43, 0.12);
 
   /* ── Semantic Colors ── */
-  --success: #1E9E78;
-  --error: #D9463E;
-  --warning: #DE8F1E;
-  --info: #3273DC;
+  --success: #10B981;
+  --error: #EF4444;
+  --warning: #F59E0B;
+  --info: #3B82F6;
 
-  /* Amber gold — XP & Leaderboard */
-  --xp: #B5934C;
-  --fire: #D65A22;
-  --success-bg: rgba(30, 158, 120, 0.08);
-  --error-bg: rgba(217, 70, 62, 0.08);
-  --warning-bg: rgba(222, 143, 30, 0.08);
-  --info-bg: rgba(50, 115, 220, 0.08);
+  /* XP & Gamification */
+  --xp: #C07D2B;
+  --fire: #F97316;
+  --success-bg: rgba(16, 185, 129, 0.08);
+  --error-bg: rgba(239, 68, 68, 0.08);
+  --warning-bg: rgba(245, 158, 11, 0.08);
+  --info-bg: rgba(59, 130, 246, 0.08);
 
-  /* Harmonized Module Colors */
-  --module-grammar: #C34A36;
-  --module-listening: #B2916F;
-  --module-writing: #2D9F92;
-  --module-reading: #2E8BC0;
-  --module-vocabulary: #B29A78;
-  --module-speaking: #D9463E;
-  --module-review: #B5934C;
-  --module-assessment: #3273DC;
+  /* Module Colors — Distinct, vibrant, no overlap */
+  --module-grammar: #8B5CF6;
+  --module-listening: #3B82F6;
+  --module-writing: #10B981;
+  --module-reading: #0EA5E9;
+  --module-vocabulary: #C07D2B;
+  --module-speaking: #F97316;
+  --module-review: #EC4899;
+  --module-assessment: #6366F1;
 
-  /* ── Per-module Header Gradients ── */
-  --gradient-listening: linear-gradient(135deg, #B2916F, #CCA880);
-  --gradient-reading: linear-gradient(135deg, #CCA880, #B2916F);
-  --gradient-writing: linear-gradient(135deg, #956259, #B2916F);
-  --gradient-pronunciation: linear-gradient(135deg, #B2916F, #CCA880);
-  --gradient-grammar: linear-gradient(135deg, #856455, #B2916F);
-  --gradient-dashboard: linear-gradient(135deg, #182230 0%, #283548 50%, #404E60 100%);
-  --gradient-grammar-quiz: linear-gradient(135deg, #B2916F, #856455);
-  --gradient-flashcards: linear-gradient(135deg, #CCA880, #E5CBB2);
-  --gradient-review: linear-gradient(135deg, #956259, #B2916F);
-  --gradient-daily: linear-gradient(135deg, #C34A36, #A73825);
-  --gradient-vocabulary: linear-gradient(135deg, #B2916F, #CCA880);
-  --gradient-mock-test: linear-gradient(135deg, #604235, #956259);
-  --gradient-study-sets: linear-gradient(135deg, #E5CBB2, #CCA880);
-  --gradient-error-notebook: linear-gradient(135deg, #956259, #724233);
-  --gradient-diagnostic: linear-gradient(135deg, #724233, #956259);
-  --gradient-youtube-learn: linear-gradient(135deg, #C34A36, #803022);
-  --gradient-toeic-skills: linear-gradient(135deg, #182230, #283548 50%, #404E60);
-  --gradient-toeic-speaking: linear-gradient(135deg, #C34A36, #956259);
+  /* ── Per-module Header Gradients — Rich, distinctive ── */
+  --gradient-listening: linear-gradient(135deg, #1E40AF, #3B82F6);
+  --gradient-reading: linear-gradient(135deg, #0369A1, #0EA5E9);
+  --gradient-writing: linear-gradient(135deg, #047857, #10B981);
+  --gradient-pronunciation: linear-gradient(135deg, #C2410C, #F97316);
+  --gradient-grammar: linear-gradient(135deg, #6D28D9, #8B5CF6);
+  --gradient-dashboard: linear-gradient(135deg, #1E293B 0%, #334155 50%, #475569 100%);
+  --gradient-grammar-quiz: linear-gradient(135deg, #7C3AED, #A78BFA);
+  --gradient-flashcards: linear-gradient(135deg, #B45309, #D97706);
+  --gradient-review: linear-gradient(135deg, #BE185D, #EC4899);
+  --gradient-daily: linear-gradient(135deg, #C07D2B, #D4963A);
+  --gradient-vocabulary: linear-gradient(135deg, #92400E, #C07D2B);
+  --gradient-mock-test: linear-gradient(135deg, #1E293B, #334155);
+  --gradient-study-sets: linear-gradient(135deg, #0E7490, #06B6D4);
+  --gradient-error-notebook: linear-gradient(135deg, #991B1B, #DC2626);
+  --gradient-diagnostic: linear-gradient(135deg, #312E81, #4F46E5);
+  --gradient-youtube-learn: linear-gradient(135deg, #DC2626, #991B1B);
+  --gradient-toeic-skills: linear-gradient(135deg, #1E293B, #334155 50%, #475569);
+  --gradient-toeic-speaking: linear-gradient(135deg, #C2410C, #EA580C);
 
   /* ── Heatmap Colors ── */
   --heatmap-0: rgba(0, 0, 0, 0.04);
-  --heatmap-1: #F3ECE0;
-  --heatmap-2: #CCA880;
-  --heatmap-3: #C34A36;
-  --heatmap-4: #A73825;
+  --heatmap-1: #DBEAFE;
+  --heatmap-2: #60A5FA;
+  --heatmap-3: #C07D2B;
+  --heatmap-4: #92400E;
 
   /* Typography Scale */
   --text-xs: 11px;
@@ -145,7 +148,91 @@
 
 /* ── Dark Theme Tokens ── */
 [data-theme="dark"] {
-  /* Note: typography, spacing, and duration tokens are theme-agnostic — defined once in :root only */
+  /* Backgrounds — layered charcoal with subtle blue undertone */
+  --bg: #0F1419;
+  --bg-deep: #0A0E13;
+  --surface: #1A2332;
+  --surface-hover: #1F2A3A;
+  --surface-raised: #222F40;
+  --surface-alt: #151D28;
+  --card-bg: var(--surface);
+  --bg-secondary: #131A24;
+
+  /* Accent — same amber gold, slightly brighter for dark contrast */
+  --accent: #D4963A;
+  --accent-hover: #E0A84E;
+  --accent-light: rgba(212, 150, 58, 0.1);
+  --accent-muted: rgba(212, 150, 58, 0.06);
+  --text-on-accent: #0F1419;
+
+  --secondary: #5B7EA8;
+  --tertiary: #7A9CC4;
+  --warm: #1F2830;
+
+  /* Typography — soft whites, no pure #fff to reduce glare */
+  --ink: #F1F5F9;
+  --text-primary: #E2E8F0;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  --text: var(--text-primary);
+  --text-disabled: #475569;
+
+  /* Borders — subtle slate */
+  --border: #2A3545;
+  --border-strong: #384860;
+
+  --bubble-user: #D4963A;
+  --bubble-ai: #1A2332;
+
+  --sage: #34D399;
+
+  /* Shadows — deeper, more pronounced */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.15);
+  --shadow-md: 0 10px 24px rgba(0, 0, 0, 0.35), 0 3px 8px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 20px 40px rgba(0, 0, 0, 0.4), 0 8px 16px rgba(0, 0, 0, 0.25);
+  --shadow-xl: 0 30px 60px rgba(0, 0, 0, 0.5), 0 12px 28px rgba(0, 0, 0, 0.3);
+
+  /* Sidebar — even darker navy */
+  --sidebar-bg: #0A0E13;
+  --sidebar-gradient: linear-gradient(180deg, #0F1419 0%, #0A0E13 60%, #0C1017 100%);
+  --sidebar-glow: radial-gradient(ellipse 120% 30% at 50% 95%, rgba(212, 150, 58, 0.06) 0%, transparent 70%);
+  --sidebar-text: #64748B;
+  --sidebar-text-active: #F1F5F9;
+  --sidebar-text-muted: #475569;
+  --sidebar-border: rgba(100, 116, 139, 0.1);
+  --sidebar-item-hover: rgba(255, 255, 255, 0.04);
+  --sidebar-active-bg: rgba(212, 150, 58, 0.1);
+
+  /* Semantic colors — brighter for dark bg readability */
+  --success: #34D399;
+  --error: #F87171;
+  --warning: #FBBF24;
+  --info: #60A5FA;
+
+  --xp: #D4963A;
+  --fire: #FB923C;
+  --success-bg: rgba(52, 211, 153, 0.1);
+  --error-bg: rgba(248, 113, 113, 0.1);
+  --warning-bg: rgba(251, 191, 36, 0.1);
+  --info-bg: rgba(96, 165, 250, 0.1);
+
+  /* Module Colors — brighter for dark mode */
+  --module-grammar: #A78BFA;
+  --module-listening: #60A5FA;
+  --module-writing: #34D399;
+  --module-reading: #38BDF8;
+  --module-vocabulary: #D4963A;
+  --module-speaking: #FB923C;
+  --module-review: #F472B6;
+  --module-assessment: #818CF8;
+
+  /* Heatmap — adjusted for dark backgrounds */
+  --heatmap-0: rgba(255, 255, 255, 0.04);
+  --heatmap-1: rgba(96, 165, 250, 0.15);
+  --heatmap-2: rgba(96, 165, 250, 0.35);
+  --heatmap-3: rgba(212, 150, 58, 0.6);
+  --heatmap-4: rgba(212, 150, 58, 0.85);
 }
 
 /* ── Global Reset ── */

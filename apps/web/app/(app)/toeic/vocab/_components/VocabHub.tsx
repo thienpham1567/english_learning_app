@@ -24,7 +24,7 @@ export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number 
 							style={{
 								padding: "8px 16px",
 								borderRadius: 8,
-								background: "#ef4444",
+								background: "var(--error)",
 								color: "#fff",
 								textDecoration: "none",
 							}}
@@ -65,7 +65,7 @@ export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number 
 									percent={pct}
 									size="small"
 									showInfo={false}
-									strokeColor={pct < 30 ? "#ef4444" : pct < 70 ? "#f59e0b" : "#10b981"}
+									strokeColor={pct < 30 ? "var(--error)" : pct < 70 ? "var(--warning)" : "var(--success)"}
 								/>
 							</Card>
 						</Link>

@@ -14,7 +14,7 @@ export default function OpenGraphImage() {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        background: "linear-gradient(145deg, #FAF8F5 0%, #F3ECE0 100%)",
+        background: "linear-gradient(145deg, #F7F8FC 0%, #ECEEF5 100%)",
         position: "relative",
       }}
     >
@@ -27,7 +27,7 @@ export default function OpenGraphImage() {
           width: 400,
           height: 400,
           borderRadius: "50%",
-          background: "radial-gradient(circle, rgba(195, 74, 54, 0.08) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(192, 125, 43, 0.08) 0%, transparent 70%)",
           display: "flex",
         }}
       />
@@ -38,8 +38,8 @@ export default function OpenGraphImage() {
           width: 100,
           height: 100,
           borderRadius: 24,
-          background: "linear-gradient(145deg, #C34A36, #E07157)",
-          boxShadow: "0 12px 40px rgba(195, 74, 54, 0.3)",
+          background: "linear-gradient(145deg, #92400E, #C07D2B)",
+          boxShadow: "0 12px 40px rgba(192, 125, 43, 0.3)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -85,7 +85,7 @@ export default function OpenGraphImage() {
           marginTop: 36,
           fontSize: 64,
           fontWeight: 900,
-          color: "#221815",
+          color: "#1A2332",
           letterSpacing: "-0.03em",
           fontFamily: "Georgia, serif",
           display: "flex",
@@ -94,7 +94,7 @@ export default function OpenGraphImage() {
         }}
       >
         TOEIC
-        <span style={{ color: "#C34A36" }}>Master</span>
+        <span style={{ color: "#C07D2B" }}>Master</span>
       </div>
 
       {/* Subtitle */}
@@ -102,7 +102,7 @@ export default function OpenGraphImage() {
         style={{
           marginTop: 12,
           fontSize: 24,
-          color: "#9E8E85",
+          color: "#8896A6",
           fontFamily: "Georgia, serif",
           letterSpacing: "0.18em",
           textTransform: "uppercase",

@@ -41,13 +41,13 @@ type WordProgress = {
 };
 
 const TOPIC_META: Record<string, { emoji: string; label: string; color: string }> = {
-  office: { emoji: "🏢", label: "Văn phòng", color: "#6366f1" },
+  office: { emoji: "🏢", label: "Văn phòng", color: "var(--module-assessment)" },
   business: { emoji: "📊", label: "Kinh doanh", color: "#0ea5e9" },
-  finance: { emoji: "💰", label: "Tài chính", color: "#f59e0b" },
+  finance: { emoji: "💰", label: "Tài chính", color: "var(--warning)" },
   marketing: { emoji: "📣", label: "Marketing", color: "#ec4899" },
   manufacturing: { emoji: "🏭", label: "Sản xuất", color: "#78716c" },
   travel: { emoji: "✈️", label: "Du lịch", color: "#14b8a6" },
-  restaurants: { emoji: "🍽️", label: "Nhà hàng", color: "#f97316" },
+  restaurants: { emoji: "🍽️", label: "Nhà hàng", color: "var(--fire)" },
   health: { emoji: "🏥", label: "Sức khỏe", color: "#22c55e" },
   technology: { emoji: "💻", label: "Công nghệ", color: "#8b5cf6" },
   general: { emoji: "📚", label: "Chung", color: "#64748b" },
@@ -442,7 +442,7 @@ export function ToeicVocabTab() {
                 percent={pct}
                 size="small"
                 showInfo={false}
-                strokeColor={pct < 30 ? "#ef4444" : pct < 70 ? "#f59e0b" : "#10b981"}
+                strokeColor={pct < 30 ? "var(--error)" : pct < 70 ? "var(--warning)" : "var(--success)"}
                 style={{ margin: 0 }}
               />
             </m.button>

@@ -22,7 +22,7 @@ export function PracticeRunner() {
 			<div key="setup">
 				<PracticeSetup onStart={handleStart} />
 				{session.error && (
-					<div style={{ color: "#ef4444", marginTop: 8 }}>{session.error}</div>
+					<div style={{ color: "var(--error)", marginTop: 8 }}>{session.error}</div>
 				)}
 			</div>
 		);

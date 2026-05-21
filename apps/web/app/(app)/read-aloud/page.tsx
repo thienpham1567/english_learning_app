@@ -1095,7 +1095,7 @@ export default function ReadAloudPage() {
                           <span style={{
                             fontSize: 10, fontWeight: 700, padding: "1px 8px", borderRadius: 8,
                             background: sample.length === "short" ? "rgba(16,185,129,0.1)" : sample.length === "long" ? "rgba(239,68,68,0.08)" : "rgba(59,130,246,0.1)",
-                            color: sample.length === "short" ? "var(--success)" : sample.length === "long" ? "var(--error)" : "#2563eb",
+                            color: sample.length === "short" ? "var(--success)" : sample.length === "long" ? "var(--error)" : "var(--info)",
                             border: `1px solid ${sample.length === "short" ? "rgba(16,185,129,0.2)" : sample.length === "long" ? "rgba(239,68,68,0.15)" : "rgba(59,130,246,0.2)"}`,
                           }}>
                             {sample.length === "short" ? "Ngắn" : sample.length === "long" ? "Dài" : "TB"}
@@ -1172,7 +1172,7 @@ export default function ReadAloudPage() {
                             style={{
                               fontSize: 10,
                               background: v.gender === "m" ? "rgba(59, 130, 246, 0.15)" : "rgba(236, 72, 153, 0.15)",
-                              color: v.gender === "m" ? "#2563eb" : "#db2777",
+                              color: v.gender === "m" ? "var(--info)" : "#db2777",
                               padding: "1px 6px",
                               borderRadius: 8,
                               fontWeight: 700,

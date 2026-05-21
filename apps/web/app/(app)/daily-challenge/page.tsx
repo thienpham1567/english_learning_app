@@ -147,7 +147,7 @@ function ExerciseFlow({
             gap: 6,
             padding: "6px 14px",
             borderRadius: 99,
-            background: "linear-gradient(135deg, var(--xp), #d97706)",
+            background: "linear-gradient(135deg, var(--xp), var(--xp))",
             border: "1px solid rgba(255,255,255,0.2)",
             alignSelf: "flex-start",
             boxShadow: "0 4px 10px rgba(217, 119, 6, 0.3)",
@@ -332,7 +332,7 @@ export default function DailyChallengePage() {
         <div style={{ maxWidth: 640, margin: "0 auto" }}>
           <ModuleHeader
             icon={<FireOutlined style={{ color: "#fff" }} />}
-            gradient={isInBonusFlow ? "linear-gradient(135deg, var(--xp), #d97706)" : "linear-gradient(135deg, #ea580c, #f97316)"}
+            gradient={isInBonusFlow ? "linear-gradient(135deg, var(--xp), var(--xp))" : "linear-gradient(135deg, var(--fire), #f97316)"}
             title={isInBonusFlow ? "Bonus Round" : "Thử Thách Mỗi Ngày"}
             badge={isInBonusFlow ? "⚡ Bonus" : todayLabel}
             subtitle={isInBonusFlow ? "Nhận thêm XP · Rèn luyện phản xạ ngôn ngữ" : "Rèn luyện tiếng Anh hàng ngày để tạo thói quen học tập bền vững"}

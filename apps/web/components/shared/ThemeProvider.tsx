@@ -22,38 +22,40 @@ export function useTheme() {
 const STORAGE_KEY = "theme-mode";
 
 /**
- * Palette: #FAF7F3 · #F0E4D3 · #DCC5B2 · #D9A299
+ * Deep Navy & Warm Gold palette tokens for Ant Design.
  */
 const lightTokens = {
-  colorPrimary: "#D9A299",
+  colorPrimary: "#C07D2B",
   colorBgContainer: "#ffffff",
-  colorBgLayout: "#FAF7F3",
-  colorBgBase: "#FAF7F3",
-  colorText: "#3d2e2a",
-  colorTextSecondary: "#7a6560",
-  colorBorder: "#e8ddd4",
-  colorBorderSecondary: "#DCC5B2",
-  borderRadius: 12,
+  colorBgLayout: "#F7F8FC",
+  colorBgBase: "#F7F8FC",
+  colorText: "#1A2332",
+  colorTextSecondary: "#4A5568",
+  colorBorder: "#DFE3EC",
+  colorBorderSecondary: "#C5CBD8",
+  borderRadius: 14,
   fontFamily: "'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif",
-  colorSuccess: "#D9A299",
-  colorInfo: "#DCC5B2",
-  colorWarning: "#F0E4D3",
+  colorSuccess: "#10B981",
+  colorInfo: "#3B82F6",
+  colorWarning: "#F59E0B",
+  colorError: "#EF4444",
 };
 
 const darkTokens = {
-  colorPrimary: "#DCC5B2",
-  colorBgContainer: "#271d1a",
-  colorBgLayout: "#1e1614",
-  colorBgBase: "#1e1614",
-  colorText: "#f0e4d3",
-  colorTextSecondary: "#c8b5a5",
-  colorBorder: "#3d2e2a",
-  colorBorderSecondary: "#4d3d38",
-  borderRadius: 12,
+  colorPrimary: "#D4963A",
+  colorBgContainer: "#1A2332",
+  colorBgLayout: "#0F1419",
+  colorBgBase: "#0F1419",
+  colorText: "#E2E8F0",
+  colorTextSecondary: "#94A3B8",
+  colorBorder: "#2A3545",
+  colorBorderSecondary: "#384860",
+  borderRadius: 14,
   fontFamily: "'Source Sans 3', -apple-system, BlinkMacSystemFont, sans-serif",
-  colorSuccess: "#DCC5B2",
-  colorInfo: "#D9A299",
-  colorWarning: "#c07a70",
+  colorSuccess: "#34D399",
+  colorInfo: "#60A5FA",
+  colorWarning: "#FBBF24",
+  colorError: "#F87171",
 };
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
@@ -93,25 +95,25 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
           components: {
             Menu: {
               darkItemBg: "transparent",
-              darkItemColor: "rgba(255,255,255,0.7)",
-              darkItemHoverBg: "rgba(255,255,255,0.06)",
-              darkItemSelectedBg: "rgba(217,162,153,0.14)",
-              darkItemSelectedColor: isDark ? "#DCC5B2" : "#D9A299",
+              darkItemColor: "#94A3B8",
+              darkItemHoverBg: "rgba(255,255,255,0.05)",
+              darkItemSelectedBg: "rgba(212,150,58,0.12)",
+              darkItemSelectedColor: "#D4963A",
             },
             Layout: {
-              siderBg: isDark ? "#16100e" : "#3d2e2a",
-              headerBg: isDark ? "#271d1a" : "#ffffff",
-              bodyBg: isDark ? "#1e1614" : "#FAF7F3",
+              siderBg: isDark ? "#0A0E13" : "#1E293B",
+              headerBg: isDark ? "#1A2332" : "#ffffff",
+              bodyBg: isDark ? "#0F1419" : "#F7F8FC",
             },
             Button: {
-              borderRadius: 12,
+              borderRadius: 14,
               controlHeight: 40,
             },
             Card: {
               borderRadius: 16,
             },
             Input: {
-              borderRadius: 12,
+              borderRadius: 14,
             },
           },
         }}
@@ -121,3 +123,4 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     </ThemeContext.Provider>
   );
 }
+
