@@ -11,7 +11,6 @@ import {
   AudioOutlined,
   FormOutlined,
   ThunderboltOutlined,
-  TranslationOutlined,
   StarFilled,
 } from "@ant-design/icons";
 import { authClient } from "@/lib/auth-client";
@@ -173,12 +172,19 @@ function SignInContent() {
           transition={{ type: "spring", stiffness: 400 }}
           style={{
             width: 46, height: 46, borderRadius: 14, flexShrink: 0,
-            background: "linear-gradient(135deg, var(--accent), #FF7A5C)",
-            boxShadow: "0 8px 24px color-mix(in srgb, var(--accent) 30%, transparent)",
+            background: "linear-gradient(145deg, var(--accent), #FF7A5C)",
+            boxShadow: "0 8px 24px color-mix(in srgb, var(--accent) 30%, transparent), inset 0 1px 1px rgba(255,255,255,0.15)",
             display: "grid", placeItems: "center",
+            color: "#fff",
           }}
         >
-          <TranslationOutlined style={{ fontSize: 22, color: "#fff" }} />
+          <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M16 8C12.5 6.5 8.5 6 4 7v17c4.5-1 8.5-0.5 12 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+            <path d="M16 8c3.5-1.5 7.5-2 12-1v17c-4.5-1-8.5-0.5-12 1" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+            <path d="M16 8v17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" opacity="0.4"/>
+            <circle cx="16" cy="4" r="1.8" fill="currentColor" opacity="0.9"/>
+            <path d="M16 7V5.5" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.5"/>
+          </svg>
         </m.div>
         <div>
           <div style={{
@@ -188,7 +194,7 @@ function SignInContent() {
             TOEIC<span style={{ color: "var(--accent)" }}> Master</span>
           </div>
           <div style={{ fontSize: 10, fontWeight: 700, letterSpacing: "0.15em", textTransform: "uppercase", color: "var(--text-muted)", marginTop: 2 }}>
-            AI-Powered Study Hub
+            AI Study Hub
           </div>
         </div>
       </m.div>

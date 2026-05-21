@@ -142,12 +142,12 @@ export function DictionaryTab() {
   };
 
   return (
-    <div style={{ maxWidth: 800, margin: "0 auto", width: "100%" }}>
+    <div style={{ maxWidth: 1100, margin: "0 auto", width: "100%" }}>
       {/* Two-column layout on desktop */}
       <div style={{
         display: "grid",
-        gridTemplateColumns: "minmax(280px, 380px) 1fr",
-        gap: 24,
+        gridTemplateColumns: "minmax(280px, 340px) minmax(0, 1fr)",
+        gap: 28,
         alignItems: "start",
       }} className="dictionary-grid">
         {/* Left: Search + Recent */}
