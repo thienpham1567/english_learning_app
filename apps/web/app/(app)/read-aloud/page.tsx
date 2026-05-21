@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Flex, Typography, Slider, message, Tooltip } from "antd";
 import {
   SoundOutlined,
@@ -15,6 +15,9 @@ import {
   InfoCircleOutlined,
   UndoOutlined,
   FileTextOutlined,
+  HistoryOutlined,
+  ClockCircleOutlined,
+  CloseOutlined,
 } from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import * as m from "motion/react-client";
@@ -29,7 +32,7 @@ type Gender = "m" | "f";
 interface VoiceOption {
   accent: Accent;
   gender: Gender;
-  role: string; // VoiceRole key sent to API
+  role: string;
   label: string;
   name: string;
   flag: string;
@@ -64,6 +67,87 @@ const SAMPLE_TEXTS = [
 ];
 
 const MAX_CHARS = 10_000;
+const HISTORY_KEY = "read-aloud-history";
+const MAX_HISTORY = 50;
+
+/* ── History types ── */
+interface HistoryEntry {
+  id: string;
+  text: string;
+  voice: string;
+  speed: number;
+  createdAt: string; // ISO string
+  wordCount: number;
+  preview: string; // first ~80 chars
+}
+
+/* ── Client-side audio blob cache ── */
+const audioBlobCache = new Map<string, string>(); // cacheKey -> objectURL
+
+function makeCacheKey(text: string, voice: string, speed: number): string {
+  return `${voice}|${speed}|${text.trim()}`;
+}
+
+/* ── localStorage helpers ── */
+function loadHistory(): HistoryEntry[] {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    return raw ? (JSON.parse(raw) as HistoryEntry[]) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveHistory(entries: HistoryEntry[]) {
+  try {
+    localStorage.setItem(HISTORY_KEY, JSON.stringify(entries.slice(0, MAX_HISTORY)));
+  } catch { /* quota exceeded — ignore */ }
+}
+
+function addHistoryEntry(text: string, voice: string, speed: number): HistoryEntry[] {
+  const trimmed = text.trim();
+  const entries = loadHistory();
+
+  // De-dup: if identical text+voice+speed exists, move to top
+  const existing = entries.findIndex(
+    (e) => e.text === trimmed && e.voice === voice && e.speed === speed,
+  );
+  if (existing >= 0) {
+    const [item] = entries.splice(existing, 1);
+    item.createdAt = new Date().toISOString();
+    entries.unshift(item);
+  } else {
+    const preview = trimmed.length > 80 ? trimmed.slice(0, 77) + "..." : trimmed;
+    entries.unshift({
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      text: trimmed,
+      voice,
+      speed,
+      createdAt: new Date().toISOString(),
+      wordCount: trimmed.split(/\s+/).length,
+      preview,
+    });
+  }
+
+  const sliced = entries.slice(0, MAX_HISTORY);
+  saveHistory(sliced);
+  return sliced;
+}
+
+/* ── Format time ago ── */
+function timeAgo(dateStr: string): string {
+  const now = Date.now();
+  const then = new Date(dateStr).getTime();
+  const diffS = Math.floor((now - then) / 1000);
+  if (diffS < 60) return "vừa xong";
+  if (diffS < 3600) return `${Math.floor(diffS / 60)} phút trước`;
+  if (diffS < 86400) return `${Math.floor(diffS / 3600)} giờ trước`;
+  return `${Math.floor(diffS / 86400)} ngày trước`;
+}
+
+/* ══════════════════════════════════════════════════════════
+   Main Component
+   ══════════════════════════════════════════════════════════ */
 
 export default function ReadAloudPage() {
   const [text, setText] = useState("");
@@ -75,13 +159,21 @@ export default function ReadAloudPage() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const abortRef = useRef<AbortController | null>(null);
 
-  const selectedVoice = VOICES.find((v) => v.role === selectedRole)!;
+  // History state
+  const [history, setHistory] = useState<HistoryEntry[]>([]);
+  const [showHistory, setShowHistory] = useState(false);
 
+  // Load history on mount
+  useEffect(() => {
+    setHistory(loadHistory());
+  }, []);
+
+  const selectedVoice = VOICES.find((v) => v.role === selectedRole)!;
   const wordCount = text.trim() ? text.trim().split(/\s+/).length : 0;
   const charCount = text.length;
   const estimatedMinutes = Math.ceil(wordCount / (150 * speed));
 
-  /* ── Generate audio ── */
+  /* ── Generate audio (with client blob cache) ── */
   const handleGenerate = useCallback(async () => {
     if (!text.trim()) {
       message.warning("Hãy nhập văn bản trước!");
@@ -98,12 +190,36 @@ export default function ReadAloudPage() {
       audioRef.current = null;
     }
     if (audioUrl) {
-      URL.revokeObjectURL(audioUrl);
+      // Don't revoke — keep in blob cache
       setAudioUrl(null);
     }
 
     setLoading(true);
     setPlaying(false);
+
+    const cacheKey = makeCacheKey(text, selectedVoice.role, speed);
+
+    // Check client blob cache first
+    const cachedUrl = audioBlobCache.get(cacheKey);
+    if (cachedUrl) {
+      setAudioUrl(cachedUrl);
+      const audio = new Audio(cachedUrl);
+      audioRef.current = audio;
+      audio.onended = () => setPlaying(false);
+      audio.onerror = () => {
+        setPlaying(false);
+        message.error("Lỗi phát audio");
+      };
+      await audio.play();
+      setPlaying(true);
+      setLoading(false);
+
+      // Still add to history
+      setHistory(addHistoryEntry(text, selectedVoice.role, speed));
+      message.success("⚡ Phát từ bộ nhớ đệm — không tốn token!");
+      return;
+    }
+
     abortRef.current = new AbortController();
 
     try {
@@ -127,6 +243,9 @@ export default function ReadAloudPage() {
       const url = URL.createObjectURL(blob);
       setAudioUrl(url);
 
+      // Store in client blob cache
+      audioBlobCache.set(cacheKey, url);
+
       const audio = new Audio(url);
       audioRef.current = audio;
       audio.onended = () => setPlaying(false);
@@ -136,6 +255,9 @@ export default function ReadAloudPage() {
       };
       await audio.play();
       setPlaying(true);
+
+      // Add to history
+      setHistory(addHistoryEntry(text, selectedVoice.role, speed));
     } catch (err: unknown) {
       if (err instanceof Error && err.name === "AbortError") return;
       message.error(err instanceof Error ? err.message : "Lỗi tổng hợp giọng nói");
@@ -163,13 +285,11 @@ export default function ReadAloudPage() {
       audioRef.current.currentTime = 0;
       audioRef.current = null;
     }
-    if (audioUrl) {
-      URL.revokeObjectURL(audioUrl);
-      setAudioUrl(null);
-    }
+    // Don't revoke blob URLs — keep them cached
+    setAudioUrl(null);
     setPlaying(false);
     setLoading(false);
-  }, [audioUrl]);
+  }, []);
 
   const handleClear = useCallback(() => {
     handleStop();
@@ -186,13 +306,38 @@ export default function ReadAloudPage() {
     }
   }, []);
 
+  /* ── History actions ── */
+  const handleReplayHistory = useCallback((entry: HistoryEntry) => {
+    setText(entry.text);
+    setSelectedRole(entry.voice);
+    setSpeed(entry.speed);
+    setShowHistory(false);
+    message.info("Đã tải lại đoạn văn — nhấn \"Bắt đầu nghe đọc\" để phát");
+  }, []);
+
+  const handleDeleteHistory = useCallback((id: string) => {
+    setHistory((prev) => {
+      const next = prev.filter((e) => e.id !== id);
+      saveHistory(next);
+      return next;
+    });
+    message.success("Đã xóa mục lịch sử");
+  }, []);
+
+  const handleClearAllHistory = useCallback(() => {
+    setHistory([]);
+    saveHistory([]);
+    // Also clear blob cache
+    for (const [, url] of audioBlobCache) {
+      URL.revokeObjectURL(url);
+    }
+    audioBlobCache.clear();
+    message.success("Đã xóa toàn bộ lịch sử");
+  }, []);
+
   return (
     <div
-      style={{
-        height: "100%",
-        overflowY: "auto",
-        padding: "var(--space-6)",
-      }}
+      style={{ height: "100%", overflowY: "auto", padding: "var(--space-6)" }}
       className="anim-fade-up"
     >
       <Flex vertical gap="var(--space-5)" style={{ maxWidth: 1080, margin: "0 auto" }}>
@@ -239,6 +384,12 @@ export default function ReadAloudPage() {
                 </Text>
                 <Flex gap={8}>
                   <ToolButton
+                    icon={<HistoryOutlined />}
+                    label={`Lịch sử (${history.length})`}
+                    onClick={() => setShowHistory(!showHistory)}
+                    active={showHistory}
+                  />
+                  <ToolButton
                     icon={<CopyOutlined />}
                     label="Dán văn bản"
                     onClick={handlePaste}
@@ -257,7 +408,7 @@ export default function ReadAloudPage() {
                 <textarea
                   value={text}
                   onChange={(e) => setText(e.target.value)}
-                  placeholder="Dán hoặc nhập một đoạn văn tiếng Anh vào đây để nghe đọc thử...&#10;&#10;Nhấp vào các văn bản mẫu bên dưới để thử nhanh."
+                  placeholder={"Dán hoặc nhập một đoạn văn tiếng Anh vào đây để nghe đọc thử...\n\nNhấp vào các văn bản mẫu bên dưới để thử nhanh."}
                   maxLength={MAX_CHARS}
                   style={{
                     width: "100%",
@@ -303,6 +454,223 @@ export default function ReadAloudPage() {
                 )}
               </Flex>
             </m.div>
+
+            {/* ── History Panel (collapsible) ── */}
+            <AnimatePresence>
+              {showHistory && (
+                <m.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  style={{ overflow: "hidden" }}
+                >
+                  <div
+                    style={{
+                      background: "var(--surface)",
+                      borderRadius: "var(--radius-xl)",
+                      border: "1px solid var(--border)",
+                      padding: "var(--space-5)",
+                      boxShadow: "var(--shadow-md)",
+                    }}
+                  >
+                    {/* History header */}
+                    <Flex align="center" justify="space-between" style={{ marginBottom: 16 }}>
+                      <Flex align="center" gap={8}>
+                        <HistoryOutlined style={{ color: "var(--accent)", fontSize: 16 }} />
+                        <Text style={{ fontSize: 14, fontWeight: 800, color: "var(--text-primary)" }}>
+                          Lịch sử đã nghe ({history.length})
+                        </Text>
+                      </Flex>
+                      <Flex gap={8}>
+                        {history.length > 0 && (
+                          <m.button
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            onClick={handleClearAllHistory}
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 4,
+                              padding: "5px 12px",
+                              borderRadius: 8,
+                              border: "1px solid rgba(239, 68, 68, 0.2)",
+                              background: "rgba(239, 68, 68, 0.06)",
+                              color: "var(--error)",
+                              fontSize: 11.5,
+                              fontWeight: 700,
+                              cursor: "pointer",
+                              fontFamily: "var(--font-body)",
+                            }}
+                          >
+                            <DeleteOutlined style={{ fontSize: 11 }} />
+                            Xóa tất cả
+                          </m.button>
+                        )}
+                        <m.button
+                          whileTap={{ scale: 0.95 }}
+                          onClick={() => setShowHistory(false)}
+                          style={{
+                            display: "grid",
+                            placeItems: "center",
+                            width: 28,
+                            height: 28,
+                            borderRadius: 8,
+                            border: "1px solid var(--border)",
+                            background: "var(--surface-alt)",
+                            color: "var(--text-muted)",
+                            fontSize: 12,
+                            cursor: "pointer",
+                          }}
+                        >
+                          <CloseOutlined />
+                        </m.button>
+                      </Flex>
+                    </Flex>
+
+                    {/* History list */}
+                    {history.length === 0 ? (
+                      <div
+                        style={{
+                          textAlign: "center",
+                          padding: "32px 16px",
+                          color: "var(--text-muted)",
+                        }}
+                      >
+                        <HistoryOutlined style={{ fontSize: 28, marginBottom: 8, opacity: 0.4 }} />
+                        <div style={{ fontSize: 13, fontWeight: 600 }}>
+                          Chưa có lịch sử nào
+                        </div>
+                        <div style={{ fontSize: 11.5, marginTop: 4 }}>
+                          Khi bạn nghe đọc, các đoạn văn sẽ được lưu tại đây
+                        </div>
+                      </div>
+                    ) : (
+                      <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 380, overflowY: "auto" }}>
+                        {history.map((entry, idx) => {
+                          const voice = VOICES.find((v) => v.role === entry.voice);
+                          const isCached = audioBlobCache.has(makeCacheKey(entry.text, entry.voice, entry.speed));
+                          return (
+                            <m.div
+                              key={entry.id}
+                              initial={{ opacity: 0, x: -8 }}
+                              animate={{ opacity: 1, x: 0 }}
+                              transition={{ delay: idx * 0.03 }}
+                              style={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 12,
+                                padding: "12px 14px",
+                                borderRadius: "var(--radius-lg)",
+                                border: "1px solid var(--border)",
+                                background: "var(--surface-alt)",
+                                cursor: "pointer",
+                                transition: "all 0.15s",
+                              }}
+                              whileHover={{ x: 3, background: "var(--accent-light)" }}
+                              onClick={() => handleReplayHistory(entry)}
+                            >
+                              {/* Voice flag */}
+                              <div
+                                style={{
+                                  width: 36,
+                                  height: 36,
+                                  borderRadius: 10,
+                                  background: "var(--surface)",
+                                  border: "1px solid var(--border)",
+                                  display: "grid",
+                                  placeItems: "center",
+                                  fontSize: 18,
+                                  flexShrink: 0,
+                                }}
+                              >
+                                {voice?.flag ?? "🗣️"}
+                              </div>
+
+                              {/* Content */}
+                              <div style={{ flex: 1, minWidth: 0 }}>
+                                <div
+                                  style={{
+                                    fontSize: 13.5,
+                                    fontWeight: 700,
+                                    color: "var(--text-primary)",
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    lineHeight: 1.3,
+                                  }}
+                                >
+                                  {entry.preview}
+                                </div>
+                                <Flex align="center" gap={8} style={{ marginTop: 3 }}>
+                                  <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 600 }}>
+                                    {voice?.name ?? entry.voice} · {entry.speed}x · {entry.wordCount} từ
+                                  </span>
+                                  <span style={{ fontSize: 10.5, color: "var(--text-muted)" }}>
+                                    <ClockCircleOutlined style={{ fontSize: 9, marginRight: 3 }} />
+                                    {timeAgo(entry.createdAt)}
+                                  </span>
+                                  {isCached && (
+                                    <span
+                                      style={{
+                                        fontSize: 9.5,
+                                        fontWeight: 800,
+                                        padding: "1px 6px",
+                                        borderRadius: 6,
+                                        background: "rgba(16, 185, 129, 0.1)",
+                                        color: "var(--success)",
+                                        border: "1px solid rgba(16, 185, 129, 0.2)",
+                                      }}
+                                    >
+                                      ⚡ Cached
+                                    </span>
+                                  )}
+                                </Flex>
+                              </div>
+
+                              {/* Delete button */}
+                              <m.button
+                                whileHover={{ scale: 1.1 }}
+                                whileTap={{ scale: 0.9 }}
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleDeleteHistory(entry.id);
+                                }}
+                                style={{
+                                  display: "grid",
+                                  placeItems: "center",
+                                  width: 28,
+                                  height: 28,
+                                  borderRadius: 8,
+                                  border: "1px solid rgba(239, 68, 68, 0.15)",
+                                  background: "transparent",
+                                  color: "var(--error)",
+                                  fontSize: 12,
+                                  cursor: "pointer",
+                                  flexShrink: 0,
+                                  opacity: 0.5,
+                                  transition: "opacity 0.15s",
+                                }}
+                                onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => {
+                                  e.currentTarget.style.opacity = "1";
+                                  e.currentTarget.style.background = "rgba(239, 68, 68, 0.08)";
+                                }}
+                                onMouseLeave={(e: React.MouseEvent<HTMLButtonElement>) => {
+                                  e.currentTarget.style.opacity = "0.5";
+                                  e.currentTarget.style.background = "transparent";
+                                }}
+                              >
+                                <DeleteOutlined />
+                              </m.button>
+                            </m.div>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                </m.div>
+              )}
+            </AnimatePresence>
 
             {/* Quick Sample Texts */}
             <m.div
@@ -437,7 +805,6 @@ export default function ReadAloudPage() {
                         </Text>
                       </div>
 
-                      {/* Small Info Tooltip for details */}
                       <Tooltip title={v.description} placement="left">
                         <InfoCircleOutlined
                           style={{
@@ -745,19 +1112,19 @@ export default function ReadAloudPage() {
                 emoji: "🌏",
               },
               {
-                title: "Học ngắt nghỉ tự nhiên",
-                desc: "Giao diện đọc hỗ trợ ngắt câu ở dấu chấm, phẩy tự động giúp câu nói liền mạch và tự nhiên.",
-                emoji: "⏳",
+                title: "Bộ nhớ đệm thông minh",
+                desc: "Đoạn văn đã nghe sẽ được cache cả trên server và trình duyệt. Nghe lại không tốn thêm token AI!",
+                emoji: "⚡",
               },
               {
                 title: "Điều chỉnh tốc độ",
                 desc: "Giảm tốc độ đọc xuống 0.8x để nghe chi tiết nối âm, tăng tốc lên 1.2x - 1.5x để thử thách phản xạ.",
-                emoji: "⚡",
+                emoji: "🎚️",
               },
               {
-                title: "Thực hành Shadowing",
-                desc: "Nhấp phát, nghe một câu ngắn và đọc nhại lại theo đúng ngữ điệu của người bản xứ.",
-                emoji: "🗣️",
+                title: "Lịch sử & tái sử dụng",
+                desc: "Mọi đoạn văn bạn đã nghe đều được lưu lại. Mở lại bất kỳ lúc nào mà không cần nhập lại từ đầu.",
+                emoji: "📋",
               },
             ].map((card, i) => (
               <div
@@ -801,11 +1168,13 @@ function ToolButton({
   label,
   onClick,
   danger = false,
+  active = false,
 }: {
   icon: React.ReactNode;
   label: string;
   onClick: () => void;
   danger?: boolean;
+  active?: boolean;
 }) {
   return (
     <m.button
@@ -818,9 +1187,9 @@ function ToolButton({
         gap: 6,
         padding: "6px 12px",
         borderRadius: "var(--radius-md)",
-        border: "1px solid var(--border)",
-        background: "var(--surface-alt)",
-        color: danger ? "var(--error)" : "var(--text-secondary)",
+        border: active ? "1px solid var(--accent)" : "1px solid var(--border)",
+        background: active ? "var(--accent-light)" : "var(--surface-alt)",
+        color: danger ? "var(--error)" : active ? "var(--accent)" : "var(--text-secondary)",
         fontSize: 12.5,
         fontWeight: 600,
         cursor: "pointer",
