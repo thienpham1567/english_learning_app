@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { TranslationData } from "@/lib/daily-challenge/types";
 import { TranslationOutlined, CheckOutlined } from "@ant-design/icons";
+import * as m from "motion/react-client";
 
 type Props = {
   data: TranslationData;
@@ -20,49 +21,50 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
       {/* Instruction */}
       <p
         style={{
-          marginBottom: 12,
+          marginBottom: 14,
           fontSize: 11,
-          fontWeight: 700,
+          fontWeight: 800,
           color: "var(--accent)",
           textTransform: "uppercase",
-          letterSpacing: "0.1em",
+          letterSpacing: "0.08em",
         }}
       >
-        {instruction}
+        ✍️ {instruction}
       </p>
 
       {/* Vietnamese source — quote block style */}
       <div
         style={{
-          marginBottom: 16,
-          borderRadius: 12,
+          marginBottom: 20,
+          borderRadius: "var(--radius-xl)",
           borderLeft: "4px solid var(--accent)",
-          background: "color-mix(in srgb, var(--accent) 6%, var(--surface))",
-          padding: "12px 16px",
+          background: "var(--surface-alt)",
+          padding: "16px 20px",
+          boxShadow: "var(--shadow-sm)",
         }}
       >
         <span
           style={{
             fontSize: 10,
-            fontWeight: 700,
+            fontWeight: 800,
             textTransform: "uppercase",
-            letterSpacing: "0.12em",
+            letterSpacing: "0.08em",
             color: "var(--accent)",
             display: "flex",
             alignItems: "center",
-            gap: 4,
-            marginBottom: 6,
+            gap: 6,
+            marginBottom: 8,
           }}
         >
-          <TranslationOutlined style={{ fontSize: 10 }} /> Tiếng Việt
+          <TranslationOutlined style={{ fontSize: 11 }} /> Bản gốc tiếng Việt
         </span>
         <p
           style={{
             margin: 0,
-            fontSize: 15,
-            color: "var(--ink)",
-            fontWeight: 500,
-            lineHeight: 1.65,
+            fontSize: 16,
+            color: "var(--text-primary)",
+            fontWeight: 600,
+            lineHeight: 1.7,
           }}
         >
           {data.vietnamese}
@@ -75,36 +77,38 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
         style={{
           display: "block",
           fontSize: 11,
-          fontWeight: 700,
+          fontWeight: 800,
           textTransform: "uppercase",
-          letterSpacing: "0.1em",
+          letterSpacing: "0.08em",
           color: "var(--text-muted)",
-          marginBottom: 6,
+          marginBottom: 8,
         }}
       >
-        <TranslationOutlined style={{ fontSize: 10 }} /> Bản dịch tiếng Anh
+        <TranslationOutlined style={{ fontSize: 11 }} /> Bản dịch tiếng Anh của bạn
       </label>
       <textarea
         id="translation-input"
         rows={3}
         style={{
           width: "100%",
-          borderRadius: 12,
+          borderRadius: "var(--radius-lg)",
           border: focused
             ? "2px solid var(--accent)"
             : "1.5px solid var(--border)",
           background: "var(--surface)",
-          padding: "11px 14px",
-          fontSize: 14,
-          color: "var(--ink)",
+          padding: "12px 16px",
+          fontSize: 14.5,
+          color: "var(--text-primary)",
+          fontWeight: 500,
           outline: "none",
           resize: "none",
-          transition: "border-color 0.15s ease",
-          lineHeight: 1.6,
+          transition: "all 0.2s ease",
+          lineHeight: 1.7,
           fontFamily: "var(--font-body, inherit)",
           boxSizing: "border-box",
+          boxShadow: focused ? "0 4px 12px var(--accent-muted)" : "none",
         }}
-        placeholder="Type your English translation..."
+        placeholder="Nhập bản dịch tiếng Anh của bạn tại đây..."
         value={text}
         onChange={(e) => setText(e.target.value)}
         disabled={disabled}
@@ -120,34 +124,37 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
             fontSize: 11,
             color: "var(--text-muted)",
             textAlign: "right",
-            marginTop: 4,
-            marginBottom: 10,
+            marginTop: 6,
+            marginBottom: 12,
+            fontWeight: 500,
           }}
         >
-          Ctrl+Enter để xác nhận
+          Nhấn <kbd style={{ background: "var(--border)", padding: "2px 6px", borderRadius: 4, fontFamily: "var(--font-mono)", fontSize: 10 }}>Ctrl + Enter</kbd> để xác nhận nhanh
         </div>
       )}
 
       {/* Full-width confirm */}
       {text.trim() && !disabled && (
-        <button
+        <m.button
+          whileHover={{ scale: 1.02, y: -1 }}
+          whileTap={{ scale: 0.98 }}
           onClick={() => onAnswer(text.trim())}
           style={{
             width: "100%",
-            borderRadius: 12,
+            borderRadius: "var(--radius-lg)",
             background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-            padding: "13px 0",
-            fontSize: 14,
-            fontWeight: 700,
+            padding: "14px 0",
+            fontSize: 15,
+            fontWeight: 800,
             color: "var(--text-on-accent)",
             border: "none",
             cursor: "pointer",
-            boxShadow: "0 3px 12px color-mix(in srgb, var(--accent) 35%, transparent)",
-            transition: "opacity 0.15s",
+            boxShadow: "0 6px 18px var(--accent-muted)",
+            marginTop: 10,
           }}
         >
-          <CheckOutlined style={{ fontSize: 11 }} /> Xác nhận
-        </button>
+          <CheckOutlined style={{ fontSize: 12 }} /> Xác nhận đáp án
+        </m.button>
       )}
     </div>
   );

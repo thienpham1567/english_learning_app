@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import type { SentenceOrderData } from "@/lib/daily-challenge/types";
-import { CloseOutlined, CheckOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+import * as m from "motion/react-client";
 
 type Props = {
   data: SentenceOrderData;
@@ -14,7 +15,6 @@ type Props = {
 export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) {
   const [available, setAvailable] = useState([...data.scrambled]);
   const [selected, setSelected] = useState<string[]>([]);
-  const [hoveredAvail, setHoveredAvail] = useState<number | null>(null);
   const [hoveredSel, setHoveredSel] = useState<number | null>(null);
 
   const addWord = (word: string, idx: number) => {
@@ -41,53 +41,56 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
       {/* Instruction */}
       <p
         style={{
-          marginBottom: 12,
+          marginBottom: 14,
           fontSize: 11,
-          fontWeight: 700,
+          fontWeight: 800,
           color: "var(--accent)",
           textTransform: "uppercase",
-          letterSpacing: "0.1em",
+          letterSpacing: "0.08em",
         }}
       >
-        {instruction}
+        🔀 {instruction}
       </p>
 
       {/* Drop zone — sentence being built */}
       <div
         style={{
-          marginBottom: 16,
+          marginBottom: 20,
           display: "flex",
           flexWrap: "wrap",
-          minHeight: 56,
-          gap: 6,
-          borderRadius: 12,
+          minHeight: 64,
+          gap: 8,
+          borderRadius: "var(--radius-lg)",
           border: allSelected
             ? "2px solid var(--accent)"
             : "2px dashed var(--border)",
           background: allSelected
-            ? "color-mix(in srgb, var(--accent) 6%, var(--surface))"
-            : "var(--bg-deep, rgba(0,0,0,0.03))",
-          padding: "10px 12px",
+            ? "var(--accent-light)"
+            : "var(--surface-alt)",
+          padding: "12px 14px",
           alignItems: "flex-start",
           alignContent: "flex-start",
           transition: "all 0.2s ease",
+          boxShadow: allSelected ? "0 4px 12px var(--accent-muted)" : "inset 0 1px 3px rgba(0,0,0,0.03)",
         }}
       >
         {selected.length === 0 ? (
           <span
             style={{
-              fontSize: 12,
+              fontSize: 13,
               color: "var(--text-muted)",
-              padding: "4px 2px",
+              padding: "6px 2px",
               fontStyle: "italic",
             }}
           >
-            Nhấn vào các từ bên dưới để sắp xếp câu...
+            Nhấn vào các từ bên dưới để ghép thành câu hoàn chỉnh...
           </span>
         ) : (
           selected.map((w, i) => (
-            <button
+            <m.button
               key={`s-${i}`}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               onClick={() => removeWord(i)}
               onMouseEnter={() => setHoveredSel(i)}
               onMouseLeave={() => setHoveredSel(null)}
@@ -96,34 +99,35 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
                 borderRadius: 8,
                 background:
                   hoveredSel === i && !disabled
-                    ? "color-mix(in srgb, var(--error) 12%, transparent)"
-                    : "color-mix(in srgb, var(--accent) 14%, var(--surface))",
-                padding: "5px 12px",
+                    ? "rgba(239, 68, 68, 0.1)"
+                    : "var(--surface)",
+                padding: "6px 14px",
                 fontSize: 14,
                 fontWeight: 600,
-                color: hoveredSel === i && !disabled ? "var(--error)" : "var(--accent)",
+                color: hoveredSel === i && !disabled ? "#ef4444" : "var(--accent)",
                 border:
                   hoveredSel === i && !disabled
-                    ? "1px solid color-mix(in srgb, var(--error) 25%, transparent)"
-                    : "1px solid color-mix(in srgb, var(--accent) 25%, transparent)",
+                    ? "1px solid rgba(239, 68, 68, 0.3)"
+                    : "1px solid var(--border)",
                 cursor: disabled ? "default" : "pointer",
-                transition: "all 0.12s ease",
+                transition: "all 0.15s ease",
+                boxShadow: "var(--shadow-sm)",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 5,
               }}
             >
               {w}
               {!disabled && (
-                <span
+                <CloseOutlined
                   style={{
-                    marginLeft: 5,
-                    fontSize: 10,
-                    opacity: hoveredSel === i ? 1 : 0,
-                    transition: "opacity 0.12s",
+                    fontSize: 8,
+                    color: hoveredSel === i ? "#ef4444" : "var(--text-muted)",
+                    marginLeft: 2,
                   }}
-                >
-                  ×
-                </span>
+                />
               )}
-            </button>
+            </m.button>
           ))
         )}
       </div>
@@ -131,60 +135,54 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
       {/* Available word bank */}
       <div
         style={{
-          padding: "10px 12px",
-          borderRadius: 12,
+          padding: "16px 18px",
+          borderRadius: "var(--radius-lg)",
           border: "1px solid var(--border)",
           background: "var(--surface)",
-          marginBottom: 14,
+          boxShadow: "var(--shadow-sm)",
+          marginBottom: 20,
         }}
       >
         <div
           style={{
             fontSize: 10,
-            fontWeight: 700,
+            fontWeight: 800,
             textTransform: "uppercase",
-            letterSpacing: "0.1em",
+            letterSpacing: "0.08em",
             color: "var(--text-muted)",
-            marginBottom: 8,
+            marginBottom: 12,
           }}
         >
-          Ngân hàng từ
+          Ngân hàng từ vựng
         </div>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 7 }}>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
           {available.length === 0 ? (
-            <span style={{ fontSize: 12, color: "var(--text-muted)", fontStyle: "italic" }}>
-              Đã dùng hết tất cả các từ
+            <span style={{ fontSize: 13, color: "var(--text-muted)", fontStyle: "italic" }}>
+              Đã sử dụng hết tất cả từ trong ngân hàng từ!
             </span>
           ) : (
             available.map((w, i) => (
-              <button
+              <m.button
                 key={`a-${i}`}
+                whileHover={!disabled ? { scale: 1.04, y: -1 } : {}}
+                whileTap={!disabled ? { scale: 0.96 } : {}}
                 onClick={() => addWord(w, i)}
-                onMouseEnter={() => setHoveredAvail(i)}
-                onMouseLeave={() => setHoveredAvail(null)}
                 disabled={disabled}
                 style={{
                   borderRadius: 8,
-                  border:
-                    hoveredAvail === i && !disabled
-                      ? "1.5px solid var(--accent)"
-                      : "1.5px solid var(--border)",
-                  background:
-                    hoveredAvail === i && !disabled
-                      ? "color-mix(in srgb, var(--accent) 8%, var(--surface))"
-                      : "var(--surface)",
-                  padding: "5px 13px",
+                  border: "1.5px solid var(--border)",
+                  background: "var(--surface-alt)",
+                  padding: "6px 14px",
                   fontSize: 14,
-                  fontWeight: 500,
-                  color: hoveredAvail === i && !disabled ? "var(--accent)" : "var(--ink)",
+                  fontWeight: 600,
+                  color: "var(--text-primary)",
                   cursor: disabled ? "default" : "pointer",
-                  transition: "all 0.12s ease",
-                  transform: hoveredAvail === i && !disabled ? "translateY(-1px)" : "none",
-                  boxShadow: hoveredAvail === i && !disabled ? "0 2px 8px rgba(0,0,0,0.08)" : "none",
+                  transition: "all 0.15s ease",
+                  boxShadow: "var(--shadow-sm)",
                 }}
               >
                 {w}
-              </button>
+              </m.button>
             ))
           )}
         </div>
@@ -192,24 +190,25 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
 
       {/* Confirm button */}
       {allSelected && !disabled && (
-        <button
+        <m.button
+          whileHover={{ scale: 1.02, y: -1 }}
+          whileTap={{ scale: 0.98 }}
           onClick={handleSubmit}
           style={{
             width: "100%",
-            borderRadius: 12,
+            borderRadius: "var(--radius-lg)",
             background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-            padding: "13px 0",
-            fontSize: 14,
-            fontWeight: 700,
+            padding: "14px 0",
+            fontSize: 15,
+            fontWeight: 800,
             color: "var(--text-on-accent)",
             border: "none",
             cursor: "pointer",
-            boxShadow: "0 3px 12px color-mix(in srgb, var(--accent) 35%, transparent)",
-            transition: "opacity 0.15s",
+            boxShadow: "0 6px 18px var(--accent-muted)",
           }}
         >
-          <CheckOutlined style={{ fontSize: 11 }} /> Xác nhận
-        </button>
+          <CheckOutlined style={{ fontSize: 12 }} /> Xác nhận đáp án
+        </m.button>
       )}
     </div>
   );

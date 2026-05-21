@@ -1,18 +1,26 @@
-// app/(app)/my-vocabulary/page.tsx
 "use client";
 
-import React, { useCallback, useEffect, useRef, useState } from "react";
-import { useQueryState, useQueryStates, parseAsString, parseAsArrayOf } from "nuqs";
-import { Tabs, Empty, Skeleton } from "antd";
 import {
-  BookOutlined, SearchOutlined, DeleteOutlined,
-  StarOutlined, SyncOutlined, CheckCircleOutlined,
+  BookOutlined,
+  CheckCircleOutlined,
+  CloseOutlined,
+  DeleteOutlined,
+  InfoCircleOutlined,
+  SearchOutlined,
+  StarFilled,
+  StarOutlined,
+  SyncOutlined,
+  UndoOutlined,
 } from "@ant-design/icons";
-import { VocabularyStatsBar } from "@/app/(app)/my-vocabulary/_components/VocabularyStatsBar";
+import { Skeleton } from "antd";
+import * as m from "motion/react-client";
+import { parseAsArrayOf, parseAsString, useQueryState, useQueryStates } from "nuqs";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { VocabularyDetailSheet } from "@/app/(app)/my-vocabulary/_components/VocabularyDetailSheet";
-import type { Vocabulary } from "@/lib/schemas/vocabulary";
-import { api } from "@/lib/api-client";
+import { VocabularyStatsBar } from "@/app/(app)/my-vocabulary/_components/VocabularyStatsBar";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
+import { api } from "@/lib/api-client";
+import type { Vocabulary } from "@/lib/schemas/vocabulary";
 
 export type VocabularyEntry = {
   id: string;
@@ -26,24 +34,48 @@ export type VocabularyEntry = {
 };
 
 const ENTRY_TYPE_LABELS: Record<Vocabulary["entryType"], string> = {
-  word: "Từ / cụm từ",
+  word: "Từ / Cụm từ",
   phrasal_verb: "Cụm ĐT",
   idiom: "Thành ngữ",
 };
 
 const LEVEL_COLORS: Record<string, { bg: string; color: string; border: string }> = {
-  A1: { bg: "color-mix(in srgb, var(--success) 8%, var(--surface))", color: "var(--success)", border: "color-mix(in srgb, var(--success) 25%, transparent)" },
-  A2: { bg: "color-mix(in srgb, var(--success) 6%, var(--surface))", color: "var(--success)", border: "color-mix(in srgb, var(--success) 20%, transparent)" },
-  B1: { bg: "color-mix(in srgb, var(--accent) 8%, var(--surface))", color: "var(--accent)", border: "color-mix(in srgb, var(--accent) 25%, transparent)" },
-  B2: { bg: "color-mix(in srgb, var(--warning) 8%, var(--surface))", color: "var(--warning)", border: "color-mix(in srgb, var(--warning) 25%, transparent)" },
-  C1: { bg: "color-mix(in srgb, var(--xp) 8%, var(--surface))", color: "var(--xp)", border: "color-mix(in srgb, var(--xp) 25%, transparent)" },
-  C2: { bg: "color-mix(in srgb, var(--error) 8%, var(--surface))", color: "var(--error)", border: "color-mix(in srgb, var(--error) 25%, transparent)" },
+  A1: {
+    bg: "rgba(16, 185, 129, 0.08)",
+    color: "var(--success)",
+    border: "rgba(16, 185, 129, 0.2)",
+  },
+  A2: {
+    bg: "rgba(16, 185, 129, 0.06)",
+    color: "var(--success)",
+    border: "rgba(16, 185, 129, 0.15)",
+  },
+  B1: { bg: "var(--accent-light)", color: "var(--accent)", border: "var(--accent-muted)" },
+  B2: {
+    bg: "rgba(245, 158, 11, 0.08)",
+    color: "var(--warning)",
+    border: "rgba(245, 158, 11, 0.2)",
+  },
+  C1: { bg: "rgba(139, 92, 246, 0.08)", color: "var(--xp)", border: "rgba(139, 92, 246, 0.2)" },
+  C2: { bg: "rgba(239, 68, 68, 0.08)", color: "var(--error)", border: "rgba(239, 68, 68, 0.2)" },
 };
 
 const MASTERY_CONFIG: Record<string, { icon: React.ReactNode; label: string; color: string }> = {
-  new: { icon: <StarOutlined style={{ color: "var(--warning)" }} />, label: "Mới", color: "var(--warning)" },
-  learning: { icon: <SyncOutlined style={{ color: "var(--accent)" }} />, label: "Đang học", color: "var(--accent)" },
-  mastered: { icon: <CheckCircleOutlined style={{ color: "var(--success)" }} />, label: "Thành thạo", color: "var(--success)" },
+  new: {
+    icon: <StarOutlined style={{ color: "var(--warning)" }} />,
+    label: "Mới",
+    color: "var(--warning)",
+  },
+  learning: {
+    icon: <SyncOutlined style={{ color: "var(--accent)" }} />,
+    label: "Đang học",
+    color: "var(--accent)",
+  },
+  mastered: {
+    icon: <CheckCircleOutlined style={{ color: "var(--success)" }} />,
+    label: "Thành thạo",
+    color: "var(--success)",
+  },
 };
 
 const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
@@ -52,8 +84,8 @@ const ENTRY_TYPE_SET = new Set<Vocabulary["entryType"]>(ENTRY_TYPES);
 
 type TabKey = "all" | "saved";
 const TABS: { key: TabKey; label: string }[] = [
-  { key: "all", label: "Tất cả" },
-  { key: "saved", label: "Đã lưu ⭐" },
+  { key: "all", label: "Tất cả từ đã tra" },
+  { key: "saved", label: "Từ vựng đã lưu ⭐" },
 ];
 
 function formatRelativeTime(dateStr: string): string {
@@ -70,34 +102,6 @@ type PendingDelete = {
   entry: VocabularyEntry;
   index: number;
   timerId: ReturnType<typeof setTimeout>;
-};
-
-// ── Styles ──
-const filterBtnBase: React.CSSProperties = {
-  position: "relative",
-  paddingBottom: 4,
-  fontSize: 12,
-  fontWeight: 500,
-  background: "none",
-  border: "none",
-  cursor: "pointer",
-  transition: "color 0.15s",
-};
-const filterBtnActive: React.CSSProperties = {
-  ...filterBtnBase,
-  color: "var(--ink)",
-};
-const filterBtnInactive: React.CSSProperties = {
-  ...filterBtnBase,
-  color: "var(--text-muted)",
-};
-const filterUnderline: React.CSSProperties = {
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  right: 0,
-  height: 1,
-  background: "var(--accent)",
 };
 
 export default function MyVocabularyPage() {
@@ -218,8 +222,7 @@ export default function MyVocabularyPage() {
     void setFilters({ type: next.length > 0 ? next : null });
   };
 
-  const hasActiveFilter =
-    !!search || levelFilter.length > 0 || sanitizedTypeFilter.length > 0;
+  const hasActiveFilter = !!search || levelFilter.length > 0 || sanitizedTypeFilter.length > 0;
 
   const clearFilters = () => {
     void setFilters({ search: null, level: null, type: null });
@@ -247,53 +250,155 @@ export default function MyVocabularyPage() {
   }, [setSelected]);
 
   return (
-    <div style={{ minHeight: "100%", overflowY: "auto" }}>
-      <div>
-        {/* ── Page Header ── */}
+    <div
+      style={{
+        position: "relative",
+        display: "flex",
+        height: "100%",
+        minHeight: 0,
+        flex: 1,
+        flexDirection: "column",
+        overflow: "hidden",
+      }}
+    >
+      <div className="grain-overlay" style={{ opacity: 0.03, zIndex: 0 }} />
+
+      {/* Page Header */}
+      <div style={{ position: "relative", zIndex: 1 }}>
         <ModuleHeader
           icon={<StarOutlined />}
           gradient="var(--gradient-vocabulary)"
           title="Từ vựng của tôi"
-          subtitle="Lịch sử tra cứu và quản lý từ vựng"
+          subtitle="Sổ tay lưu trữ và tra cứu từ vựng cá nhân tích hợp SRS"
           action={
             !isLoading && entries.length > 0 ? (
-              <span style={{ fontSize: 13, color: "rgba(255,255,255,0.85)", fontWeight: 600 }}>
+              <span
+                style={{
+                  fontSize: 13,
+                  color: "var(--text-on-accent)",
+                  fontWeight: 800,
+                  background: "rgba(255,255,255,0.15)",
+                  padding: "4px 10px",
+                  borderRadius: 8,
+                }}
+              >
                 {visible.length !== entries.length
-                  ? `${visible.length} / ${entries.length} từ`
+                  ? `Đang hiện ${visible.length} / ${entries.length} từ`
                   : `${entries.length} từ`}
               </span>
             ) : undefined
           }
         />
+      </div>
 
-        {/* ── Tab Navigation (AC #3) ── */}
-        <Tabs
-          activeKey={activeTab}
-          onChange={(key) => setActiveTab(key as TabKey)}
-          style={{ marginTop: 8 }}
-          items={TABS.map((tab) => ({
-            key: tab.key,
-            label: tab.label,
-          }))}
+      {/* Main content scroll container */}
+      <div
+        style={{
+          position: "relative",
+          minHeight: 0,
+          flex: 1,
+          overflowY: "auto",
+          padding: "24px 20px 80px",
+          zIndex: 1,
+        }}
+      >
+        {/* Soft background glow */}
+        <div
+          style={{
+            pointerEvents: "none",
+            position: "absolute",
+            inset: 0,
+            background:
+              "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--accent) 4%, transparent) 0%, transparent 70%)",
+          }}
         />
 
-        {/* ── Vocabulary List ── */}
-        <>
-            {/* Stats bar */}
-            {!isLoading && entries.length > 0 && (
-              <>
-                <VocabularyStatsBar entries={entries} />
-                <div style={{ height: 1, background: "var(--border)" }} />
-              </>
-            )}
+        <div
+          style={{
+            maxWidth: 800,
+            margin: "0 auto",
+            display: "flex",
+            flexDirection: "column",
+            gap: 20,
+          }}
+        >
+          {/* Custom Tabs Pills */}
+          <div
+            style={{
+              display: "flex",
+              gap: 6,
+              background: "var(--surface)",
+              border: "1px solid var(--border)",
+              borderRadius: "var(--radius-xl)",
+              padding: "4px",
+              boxShadow: "var(--shadow-sm)",
+            }}
+          >
+            {TABS.map((tabItem) => {
+              const isTabActive = activeTab === tabItem.key;
+              return (
+                <m.button
+                  key={tabItem.key}
+                  onClick={() => setActiveTab(tabItem.key)}
+                  whileTap={{ scale: 0.98 }}
+                  style={{
+                    flex: 1,
+                    padding: "10px 0",
+                    borderRadius: "var(--radius-lg)",
+                    border: "none",
+                    background: isTabActive ? "var(--accent)" : "transparent",
+                    color: isTabActive ? "var(--text-on-accent)" : "var(--text-secondary)",
+                    fontSize: 13.5,
+                    fontWeight: 800,
+                    cursor: "pointer",
+                    transition: "color 0.2s, background 0.2s",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 6,
+                  }}
+                >
+                  {tabItem.label}
+                </m.button>
+              );
+            })}
+          </div>
 
-            {/* Search */}
-            <div style={{ position: "relative", marginTop: 24 }}>
+          {/* Stats section */}
+          {!isLoading && entries.length > 0 && (
+            <div
+              style={{
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                borderRadius: "var(--radius-xl)",
+                padding: "0 20px",
+                boxShadow: "var(--shadow-sm)",
+              }}
+            >
+              <VocabularyStatsBar entries={entries} />
+            </div>
+          )}
+
+          {/* Filters section */}
+          <div
+            style={{
+              background: "var(--surface)",
+              border: "1px solid var(--border)",
+              borderRadius: "var(--radius-xl)",
+              padding: 20,
+              boxShadow: "var(--shadow-sm)",
+              display: "flex",
+              flexDirection: "column",
+              gap: 16,
+            }}
+          >
+            {/* Search Input */}
+            <div style={{ position: "relative" }}>
               <SearchOutlined
                 style={{
-                  fontSize: 15,
+                  fontSize: 16,
                   position: "absolute",
-                  left: 4,
+                  left: 14,
                   top: "50%",
                   transform: "translateY(-50%)",
                   color: "var(--text-muted)",
@@ -303,303 +408,361 @@ export default function MyVocabularyPage() {
                 type="text"
                 value={search}
                 onChange={(e) => void setFilters({ search: e.target.value || null })}
-                placeholder="Tìm từ..."
+                placeholder="Nhập từ cần tìm..."
                 aria-label="Tìm kiếm từ vựng"
                 style={{
                   width: "100%",
-                  borderBottom: "1px solid var(--border)",
-                  background: "transparent",
-                  padding: "12px 16px 10px 28px",
+                  borderRadius: "var(--radius-lg)",
+                  background: "var(--surface-alt)",
+                  border: "1.5px solid var(--border)",
+                  padding: "10px 16px 10px 42px",
                   fontSize: 14,
+                  fontWeight: 600,
                   color: "var(--text-primary)",
                   outline: "none",
-                  border: "none",
-                  borderBottomWidth: 1,
-                  borderBottomStyle: "solid",
-                  borderBottomColor: "var(--border)",
-                  transition: "border-color 0.2s",
+                  transition: "all 0.2s",
                 }}
-                onFocus={(e) => { e.currentTarget.style.borderBottomColor = "var(--accent)"; }}
-                onBlur={(e) => { e.currentTarget.style.borderBottomColor = "var(--border)"; }}
+                onFocus={(e) => {
+                  e.currentTarget.style.borderColor = "var(--accent)";
+                  e.currentTarget.style.boxShadow = "0 0 0 3px var(--accent-muted)";
+                }}
+                onBlur={(e) => {
+                  e.currentTarget.style.borderColor = "var(--border)";
+                  e.currentTarget.style.boxShadow = "none";
+                }}
               />
             </div>
 
-            {/* Filters */}
-            <div style={{ marginTop: 20, display: "flex", flexDirection: "column", gap: 12 }}>
-              {/* CEFR levels */}
-              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 20 }}>
-                {CEFR_LEVELS.map((level) => {
-                  const active = levelFilter.includes(level);
-                  return (
-                    <button
-                      key={level}
-                      onClick={() => toggleLevel(level)}
-                      style={active ? filterBtnActive : filterBtnInactive}
-                    >
-                      {level}
-                      {active && <span style={filterUnderline} />}
-                    </button>
-                  );
-                })}
+            {/* Filter buttons grid */}
+            <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              {/* CEFR Level filter */}
+              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 14 }}>
+                <span
+                  style={{
+                    fontSize: 11.5,
+                    fontWeight: 800,
+                    color: "var(--text-muted)",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                    minWidth: 80,
+                  }}
+                >
+                  Trình độ:
+                </span>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {CEFR_LEVELS.map((level) => {
+                    const active = levelFilter.includes(level);
+                    return (
+                      <m.button
+                        key={level}
+                        onClick={() => toggleLevel(level)}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        style={{
+                          fontSize: 11.5,
+                          fontWeight: 800,
+                          padding: "4px 10px",
+                          borderRadius: 8,
+                          border: `1.5px solid ${active ? "var(--accent)" : "var(--border)"}`,
+                          background: active ? "var(--accent-light)" : "var(--surface-alt)",
+                          color: active ? "var(--accent)" : "var(--text-secondary)",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {level}
+                      </m.button>
+                    );
+                  })}
+                </div>
               </div>
 
-              {/* Entry types */}
-              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 20 }}>
-                {ENTRY_TYPES.map((type) => {
-                  const active = typeFilter.includes(type);
-                  return (
-                    <button
-                      key={type}
-                      onClick={() => toggleType(type)}
-                      style={active ? filterBtnActive : filterBtnInactive}
-                    >
-                      {ENTRY_TYPE_LABELS[type]}
-                      {active && <span style={filterUnderline} />}
-                    </button>
-                  );
-                })}
+              {/* Types filter */}
+              <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 14 }}>
+                <span
+                  style={{
+                    fontSize: 11.5,
+                    fontWeight: 800,
+                    color: "var(--text-muted)",
+                    textTransform: "uppercase",
+                    letterSpacing: "0.05em",
+                    minWidth: 80,
+                  }}
+                >
+                  Loại từ:
+                </span>
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+                  {ENTRY_TYPES.map((type) => {
+                    const active = typeFilter.includes(type);
+                    return (
+                      <m.button
+                        key={type}
+                        onClick={() => toggleType(type)}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        style={{
+                          fontSize: 11.5,
+                          fontWeight: 800,
+                          padding: "4px 10px",
+                          borderRadius: 8,
+                          border: `1.5px solid ${active ? "var(--accent)" : "var(--border)"}`,
+                          background: active ? "var(--accent-light)" : "var(--surface-alt)",
+                          color: active ? "var(--accent)" : "var(--text-secondary)",
+                          cursor: "pointer",
+                        }}
+                      >
+                        {ENTRY_TYPE_LABELS[type]}
+                      </m.button>
+                    );
+                  })}
+                </div>
+
                 {hasActiveFilter && (
                   <button
                     onClick={clearFilters}
                     style={{
-                      fontSize: 11,
-                      fontStyle: "italic",
-                      color: "var(--text-muted)",
+                      fontSize: 11.5,
+                      fontWeight: 800,
+                      color: "var(--error)",
                       background: "none",
                       border: "none",
                       cursor: "pointer",
-                      transition: "color 0.15s",
+                      marginLeft: "auto",
+                      textDecoration: "underline",
                     }}
                   >
-                    Xoá bộ lọc
+                    Xoá tất cả bộ lọc
                   </button>
                 )}
               </div>
             </div>
+          </div>
 
-            {/* ── Entry list ── */}
-            <div style={{ marginTop: 24 }}>
-              {isLoading ? (
-                // Skeleton rows
-                <div>
-                  {[1, 2, 3, 4].map((i) => (
-                    <div
-                      key={i}
+          {/* List entries */}
+          <div style={{ marginTop: 8 }}>
+            {isLoading ? (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {[1, 2, 3, 4].map((i) => (
+                  <div
+                    key={i}
+                    style={{
+                      background: "var(--surface)",
+                      border: "1px solid var(--border)",
+                      borderRadius: "var(--radius-xl)",
+                      padding: 20,
+                    }}
+                  >
+                    <Skeleton active title={{ width: 140 }} paragraph={{ rows: 1, width: 80 }} />
+                  </div>
+                ))}
+              </div>
+            ) : visible.length === 0 ? (
+              <div
+                style={{
+                  background: "var(--surface)",
+                  border: "1px solid var(--border)",
+                  borderRadius: "var(--radius-xl)",
+                  padding: "48px 20px",
+                  textAlign: "center",
+                  boxShadow: "var(--shadow-sm)",
+                }}
+              >
+                <BookOutlined
+                  style={{ fontSize: 32, color: "var(--text-muted)", marginBottom: 12 }}
+                />
+                <p
+                  style={{
+                    fontSize: 16,
+                    fontWeight: 800,
+                    color: "var(--text-secondary)",
+                    margin: "0 0 4px",
+                  }}
+                >
+                  {hasActiveFilter
+                    ? "Không tìm thấy từ vựng phù hợp."
+                    : entries.length === 0
+                      ? "Sổ từ vựng của bạn đang trống."
+                      : activeTab === "saved"
+                        ? "Bạn chưa lưu từ vựng nào."
+                        : "Không có từ vựng."}
+                </p>
+                <p
+                  style={{ fontSize: 12.5, color: "var(--text-muted)", margin: 0, fontWeight: 500 }}
+                >
+                  {entries.length === 0
+                    ? "Hãy thử tra cứu từ mới trong mục Từ điển!"
+                    : "Nhấn nút lưu ⭐ để lưu trữ từ vựng cần ôn tập."}
+                </p>
+              </div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+                {visible.map((entry, idx) => {
+                  const masteryInfo = MASTERY_CONFIG[entry.mastery] ?? MASTERY_CONFIG.new;
+                  const levelStyle = entry.level ? LEVEL_COLORS[entry.level] : null;
+                  return (
+                    <m.div
+                      key={entry.id}
+                      onClick={() => void setSelected(entry.query)}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: Math.min(idx * 0.03, 0.3) }}
+                      whileHover={{ y: -2, borderColor: "var(--accent)" }}
                       style={{
-                        borderBottom: "1px solid var(--border)",
-                        padding: "16px 0",
+                        position: "relative",
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 16,
+                        background: "var(--surface)",
+                        border: "1.5px solid var(--border)",
+                        borderRadius: "var(--radius-xl)",
+                        padding: "16px 20px",
+                        cursor: "pointer",
+                        boxShadow: "var(--shadow-sm)",
+                        transition: "border-color 0.2s, box-shadow 0.2s",
                       }}
                     >
-                      <Skeleton
-                        active
-                        title={{ width: 100 + i * 30 }}
-                        paragraph={{ rows: 1, width: 80 }}
-                      />
-                    </div>
-                  ))}
-                </div>
-              ) : visible.length === 0 ? (
-                <Empty
-                  image={<BookOutlined style={{ fontSize: 28, color: "var(--border-strong)" }} />}
-                  description={
-                    <>
-                      <p
-                        style={{
-                          fontFamily: "var(--font-display)",
-                          fontSize: 20,
-                          fontStyle: "italic",
-                          color: "var(--text-muted)",
-                          margin: 0,
-                        }}
-                      >
-                        {hasActiveFilter
-                          ? "Không có từ nào khớp."
-                          : entries.length === 0
-                            ? "Chưa tra từ nào."
-                            : activeTab === "saved"
-                              ? "Chưa lưu từ nào."
-                              : "Không có từ nào."}
-                      </p>
-                      {!hasActiveFilter && (
-                        <p style={{ fontSize: 12, color: "var(--text-muted)", margin: 0 }}>
-                          {entries.length === 0 ? "Hãy thử từ điển nhé!" : "Nhấn dấu ★ khi tra từ nhé!"}
-                        </p>
-                      )}
-                    </>
-                  }
-                  style={{ padding: "80px 0" }}
-                />
-              ) : (
-                <div>
-                  {visible.map((entry, idx) => {
-                    const masteryInfo = MASTERY_CONFIG[entry.mastery] ?? MASTERY_CONFIG.new;
-                    const levelStyle = entry.level ? LEVEL_COLORS[entry.level] : null;
-                    return (
-                      <div
-                        key={entry.id}
-                        onClick={() => void setSelected(entry.query)}
-                        style={{
-                          position: "relative",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 16,
-                          borderBottom: "1px solid var(--border)",
-                          padding: "16px 0",
-                          cursor: "pointer",
-                          transition: "background 0.15s",
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = "var(--surface-hover)";
-                          const bar = e.currentTarget.querySelector<HTMLElement>("[data-accent-bar]");
-                          if (bar) bar.style.opacity = "1";
-                          const del = e.currentTarget.querySelector<HTMLElement>("[data-delete-btn]");
-                          if (del) del.style.opacity = "1";
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = "transparent";
-                          const bar = e.currentTarget.querySelector<HTMLElement>("[data-accent-bar]");
-                          if (bar) bar.style.opacity = "0";
-                          const del = e.currentTarget.querySelector<HTMLElement>("[data-delete-btn]");
-                          if (del) del.style.opacity = "0";
-                        }}
-                      >
-                        {/* Left accent bar */}
+                      {/* Left vertical tag stripe */}
+                      {levelStyle && (
                         <div
-                          data-accent-bar
                           style={{
                             position: "absolute",
                             top: 0,
                             bottom: 0,
                             left: 0,
-                            width: 2,
-                            background: "var(--accent)",
-                            opacity: 0,
-                            transition: "opacity 0.15s",
+                            width: 4,
+                            background: levelStyle.color,
+                            borderTopLeftRadius: "var(--radius-xl)",
+                            borderBottomLeftRadius: "var(--radius-xl)",
                           }}
                         />
+                      )}
 
-                        <div style={{ minWidth: 0, flex: 1, paddingLeft: 12 }}>
-                          <div
-                            style={{
-                              display: "flex",
-                              flexWrap: "wrap",
-                              alignItems: "baseline",
-                              gap: 8,
-                            }}
-                          >
-                            {/* Mastery indicator (AC #1) */}
-                            <span
-                              title={masteryInfo.label}
-                              style={{ fontSize: 12, lineHeight: 1, cursor: "default" }}
-                            >
-                              {masteryInfo.icon}
-                            </span>
-                            <span
-                              style={{
-                                fontFamily: "var(--font-display)",
-                                fontSize: 18,
-                                fontStyle: "italic",
-                                color: "var(--ink)",
-                              }}
-                            >
-                              {entry.headword ?? entry.query}
-                            </span>
-                            {levelStyle && (
-                              <span
-                                style={{
-                                  borderRadius: 4,
-                                  padding: "1px 6px",
-                                  fontSize: 10,
-                                  fontWeight: 600,
-                                  background: levelStyle.bg,
-                                  color: levelStyle.color,
-                                  border: `1px solid ${levelStyle.border}`,
-                                }}
-                              >
-                                {entry.level}
-                              </span>
-                            )}
-                            {entry.entryType && (
-                              <span style={{ fontSize: 11, color: "var(--text-muted)" }}>
-                                {ENTRY_TYPE_LABELS[entry.entryType] ?? entry.entryType}
-                              </span>
-                            )}
-                          </div>
-                          <p
-                            style={{
-                              marginTop: 2,
-                              fontSize: 11,
-                              letterSpacing: "0.03em",
-                              color: "var(--text-muted)",
-                              margin: "2px 0 0",
-                            }}
-                          >
-                            {formatRelativeTime(entry.lookedUpAt)}
-                          </p>
-                        </div>
-
+                      <div style={{ minWidth: 0, flex: 1, paddingLeft: levelStyle ? 4 : 0 }}>
                         <div
                           style={{
                             display: "flex",
-                            flexShrink: 0,
+                            flexWrap: "wrap",
                             alignItems: "center",
-                            gap: 2,
-                            paddingRight: 4,
+                            gap: 8,
                           }}
                         >
-                          <button
-                            data-delete-btn
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleDelete(entry);
-                            }}
+                          {/* Mastery dot */}
+                          <span title={masteryInfo.label} style={{ fontSize: 13, display: "flex" }}>
+                            {masteryInfo.icon}
+                          </span>
+
+                          <span
                             style={{
-                              display: "grid",
-                              width: 32,
-                              height: 32,
-                              placeItems: "center",
-                              borderRadius: 4,
-                              color: "var(--text-muted)",
-                              background: "none",
-                              border: "none",
-                              cursor: "pointer",
-                              opacity: 0,
-                              transition: "opacity 0.15s, color 0.15s",
+                              fontSize: 17,
+                              fontWeight: 850,
+                              fontFamily: "var(--font-display)",
+                              color: "var(--text-primary)",
                             }}
-                            aria-label={idx === 0 ? "Xoá từ này" : `Xoá ${entry.headword ?? entry.query}`}
                           >
-                            <DeleteOutlined style={{ fontSize: 14 }} />
-                          </button>
-                          <button
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handleToggleSaved(entry);
-                            }}
-                            style={{
-                              display: "grid",
-                              width: 32,
-                              height: 32,
-                              flexShrink: 0,
-                              placeItems: "center",
-                              borderRadius: 4,
-                              color: entry.saved ? "var(--accent)" : "var(--text-muted)",
-                              background: "none",
-                              border: "none",
-                              cursor: "pointer",
-                              transition: "color 0.15s",
-                            }}
-                            aria-label={entry.saved ? "Bỏ lưu" : "Lưu từ này"}
-                          >
-                            <BookOutlined style={{ fontSize: 15 }} />
-                          </button>
+                            {entry.headword ?? entry.query}
+                          </span>
+
+                          {levelStyle && (
+                            <span
+                              style={{
+                                borderRadius: 6,
+                                padding: "2px 8px",
+                                fontSize: 10.5,
+                                fontWeight: 800,
+                                background: levelStyle.bg,
+                                color: levelStyle.color,
+                                border: `1.5px solid ${levelStyle.border}`,
+                              }}
+                            >
+                              {entry.level}
+                            </span>
+                          )}
+
+                          {entry.entryType && (
+                            <span
+                              style={{
+                                fontSize: 10.5,
+                                fontWeight: 800,
+                                color: "var(--text-muted)",
+                                background: "var(--surface-alt)",
+                                padding: "2px 8px",
+                                borderRadius: 6,
+                                border: "1px solid var(--border)",
+                              }}
+                            >
+                              {ENTRY_TYPE_LABELS[entry.entryType] ?? entry.entryType}
+                            </span>
+                          )}
                         </div>
+                        <p
+                          style={{
+                            marginTop: 6,
+                            fontSize: 11.5,
+                            color: "var(--text-muted)",
+                            fontWeight: 500,
+                            margin: "6px 0 0",
+                          }}
+                        >
+                          Tra cứu: {formatRelativeTime(entry.lookedUpAt)}
+                        </p>
                       </div>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          </>
+
+                      {/* Action buttons */}
+                      <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                        <m.button
+                          whileHover={{ scale: 1.1, color: "var(--error)" }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleDelete(entry);
+                          }}
+                          style={{
+                            display: "grid",
+                            width: 34,
+                            height: 34,
+                            placeItems: "center",
+                            borderRadius: 8,
+                            color: "var(--text-muted)",
+                            background: "var(--surface-alt)",
+                            border: "1px solid var(--border)",
+                            cursor: "pointer",
+                            transition: "all 0.15s",
+                          }}
+                          aria-label={`Xoá ${entry.headword ?? entry.query}`}
+                        >
+                          <DeleteOutlined style={{ fontSize: 13 }} />
+                        </m.button>
+
+                        <m.button
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handleToggleSaved(entry);
+                          }}
+                          style={{
+                            display: "grid",
+                            width: 34,
+                            height: 34,
+                            placeItems: "center",
+                            borderRadius: 8,
+                            color: entry.saved ? "var(--accent)" : "var(--text-muted)",
+                            background: entry.saved ? "var(--accent-light)" : "var(--surface-alt)",
+                            border: `1.5px solid ${entry.saved ? "var(--accent-muted)" : "var(--border)"}`,
+                            cursor: "pointer",
+                            transition: "all 0.15s",
+                          }}
+                          aria-label={entry.saved ? "Bỏ lưu" : "Lưu từ này"}
+                        >
+                          {entry.saved ? <StarFilled /> : <StarOutlined />}
+                        </m.button>
+                      </div>
+                    </m.div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       <VocabularyDetailSheet
@@ -609,41 +772,58 @@ export default function MyVocabularyPage() {
         onToggleSaved={() => selectedEntry && handleToggleSaved(selectedEntry)}
       />
 
+      {/* Premium Undo toast banner */}
       {pendingDelete && (
         <div
-          key="undo-toast"
           style={{
             position: "fixed",
             bottom: 24,
             left: "50%",
             transform: "translateX(-50%)",
             zIndex: 50,
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-            borderRadius: 999,
-            background: "var(--ink)",
-            padding: "10px 20px",
-            fontSize: 14,
-            color: "var(--text-on-accent)",
-            boxShadow: "var(--shadow-lg)",
+            pointerEvents: "none",
           }}
         >
-          <span>Đã xoá</span>
-          <span aria-hidden="true">·</span>
-          <button
-            onClick={handleUndoDelete}
+          <m.div
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
             style={{
-              fontWeight: 600,
-              textDecoration: "underline",
-              background: "none",
-              border: "none",
-              color: "var(--text-on-accent)",
-              cursor: "pointer",
+              pointerEvents: "auto",
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              borderRadius: "var(--radius-xl)",
+              background: "var(--ink)",
+              border: "1px solid rgba(255, 255, 255, 0.1)",
+              padding: "12px 20px",
+              boxShadow: "var(--shadow-lg)",
             }}
           >
-            Hoàn tác
-          </button>
+            <InfoCircleOutlined style={{ color: "var(--text-on-accent)" }} />
+            <span style={{ fontSize: 13.5, color: "var(--text-on-accent)", fontWeight: 700 }}>
+              Đã xóa thành công từ "{pendingDelete.entry.headword ?? pendingDelete.entry.query}"
+            </span>
+            <span style={{ color: "rgba(255,255,255,0.3)", fontWeight: 300 }}>|</span>
+            <m.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleUndoDelete}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 4,
+                fontWeight: 900,
+                background: "none",
+                border: "none",
+                color: "var(--accent)",
+                cursor: "pointer",
+                fontSize: 13,
+              }}
+            >
+              <UndoOutlined /> Hoàn tác
+            </m.button>
+          </m.div>
         </div>
       )}
     </div>

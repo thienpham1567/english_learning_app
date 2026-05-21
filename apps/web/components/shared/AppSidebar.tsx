@@ -26,6 +26,8 @@ import {
   DashboardOutlined,
   NodeIndexOutlined,
   SolutionOutlined,
+  SoundOutlined,
+  MessageOutlined,
 } from "@ant-design/icons";
 import { useTheme } from "@/components/shared/ThemeProvider";
 import { useSidebarBadges } from "@/hooks/useSidebarBadges";
@@ -91,6 +93,8 @@ const navGroups: (NavItem | NavGroup)[] = [
     label: "Công cụ",
     items: [
       { href: "/dictionary", label: "Từ điển", icon: BookOutlined },
+      { href: "/english-chatbot", label: "AI Chatbot", icon: MessageOutlined },
+      { href: "/read-aloud", label: "Đọc to", icon: SoundOutlined },
       { href: "/pdf-reader", label: "Đọc sách TOEIC", icon: FileTextOutlined },
       { href: "/youtube-learn", label: "YouTube TOEIC", icon: YoutubeOutlined },
     ],

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Card, Flex, Space, Statistic, Typography, Button } from "antd";
+import { Card, Flex, Space, Typography, Button } from "antd";
 import {
   CheckCircleFilled,
   WarningOutlined,
@@ -14,7 +14,9 @@ import {
   MehOutlined,
   FrownOutlined,
   TrophyOutlined,
+  RightOutlined,
 } from "@ant-design/icons";
+import * as m from "motion/react-client";
 
 import { CelebrationOverlay, StreakFire } from "@/components/shared";
 import { useDashboard } from "@/hooks/useDashboard";
@@ -39,7 +41,6 @@ const DISTRIBUTION_ITEMS = [
   { key: "again", label: "Quên", icon: <FrownOutlined />, color: "var(--error)" },
 ];
 
-// Derive streak + daily challenge from shared dashboard context
 function useSummaryContext() {
   const { state } = useDashboard();
   if (state.status !== "ready") return { streak: 0, dailyChallengeCompleted: false };
@@ -67,7 +68,6 @@ export function SessionSummary({
 
   return (
     <>
-      {/* Celebration Overlay */}
       <CelebrationOverlay
         tier="medium"
         visible={showCelebration}
@@ -78,112 +78,194 @@ export function SessionSummary({
         </Title>
       </CelebrationOverlay>
 
-      <Flex vertical align="center" className="anim-scale-in" style={{ maxWidth: 480, margin: "0 auto" }}>
-        {/* Streak display — shows actual current streak (B1 fix) */}
-        <StreakFire streak={streak} />
+      <Flex vertical align="stretch" gap={20} className="anim-scale-in" style={{ maxWidth: 500, margin: "0 auto", width: "100%" }}>
+        
+        {/* Streak & Hero banner */}
+        <div
+          style={{
+            background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--surface))",
+            borderRadius: "var(--radius-xl)",
+            border: "1px solid var(--border)",
+            padding: "32px 24px",
+            textAlign: "center",
+            boxShadow: "var(--shadow-sm)",
+            position: "relative",
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            gap: 12,
+          }}
+        >
+          {/* Ambient glow behind streak */}
+          <div style={{ position: "absolute", left: "50%", top: "40%", transform: "translate(-50%, -50%)", width: 220, height: 220, borderRadius: "50%", background: "radial-gradient(circle, var(--accent) 12%, transparent 70%)", pointerEvents: "none" }} />
 
-        <Title level={2} style={{ marginTop: 16, fontFamily: "var(--font-display)", fontStyle: "italic" }}>
-          Hoàn thành!
-        </Title>
-        <Text type="secondary">Bạn đã ôn xong {totalReviewed} thẻ trong phiên này.</Text>
+          <div style={{ position: "relative", zIndex: 1 }}>
+            <StreakFire streak={streak} />
+          </div>
 
-        {/* Summary stats */}
-        <Space size={16} style={{ marginTop: 24, width: "100%" }}>
+          <Title level={3} style={{ margin: "12px 0 4px", fontWeight: 900, color: "var(--text-primary)" }}>
+            Hoàn thành phiên ôn tập!
+          </Title>
+          <Text style={{ fontSize: 14, color: "var(--text-secondary)", fontWeight: 500 }}>
+            Bạn đã xuất sắc ghi nhớ <span style={{ color: "var(--accent)", fontWeight: 700 }}>{totalReviewed}</span> từ vựng hôm nay.
+          </Text>
+        </div>
+
+        {/* Stats Grid cards */}
+        <Flex gap={12} style={{ width: "100%" }}>
           {[
-            { icon: <CheckCircleFilled />, label: "Đã ôn", value: totalReviewed, delay: 1 },
-            { icon: <SmileOutlined />, label: "Điểm TB", value: averageQuality.toFixed(1), delay: 2 },
-            { icon: <WarningOutlined />, label: "Quên", value: forgottenCount, delay: 3 },
-          ].map((stat) => (
-            <Card
+            { label: "Đã ôn tập", value: totalReviewed, color: "var(--accent)" },
+            { label: "Chất lượng TB", value: `${averageQuality.toFixed(1)}/5`, color: "var(--xp)" },
+            { label: "Số từ quên", value: forgottenCount, color: forgottenCount > 0 ? "var(--error)" : "var(--success)" },
+          ].map((stat, idx) => (
+            <m.div
               key={stat.label}
-              size="small"
-              className={`anim-fade-up anim-delay-${stat.delay}`}
-              style={{ flex: 1, textAlign: "center" }}
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 + idx * 0.08 }}
+              style={{
+                flex: 1,
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                borderRadius: "var(--radius-lg)",
+                padding: "16px 12px",
+                textAlign: "center",
+                boxShadow: "var(--shadow-sm)",
+              }}
             >
-              <Statistic
-                title={stat.label}
-                value={stat.value}
-                prefix={stat.icon}
-                valueStyle={{ color: "var(--accent)", fontSize: 20 }}
-              />
-            </Card>
+              <div style={{ fontSize: 22, fontWeight: 900, color: stat.color, fontFamily: "var(--font-display)", lineHeight: 1.1 }}>
+                {stat.value}
+              </div>
+              <div style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 700, marginTop: 4 }}>
+                {stat.label}
+              </div>
+            </m.div>
           ))}
-        </Space>
+        </Flex>
 
-        {/* Difficulty distribution (B3 fix: BarChartOutlined instead of FrownOutlined) */}
+        {/* Distribution card */}
         {totalReviewed > 0 && (
-          <Card
-            className="anim-fade-up anim-delay-4"
-            style={{ marginTop: 16, width: "100%", borderRadius: "var(--radius-xl)" }}
-            styles={{ body: { padding: "16px 20px" } }}
+          <m.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.4 }}
+            style={{
+              background: "var(--surface)",
+              borderRadius: "var(--radius-xl)",
+              border: "1px solid var(--border)",
+              padding: "18px 20px",
+              boxShadow: "var(--shadow-sm)",
+            }}
           >
-            <Text strong style={{ fontSize: 13, marginBottom: 12, display: "block" }}>
-              <BarChartOutlined style={{ marginRight: 6 }} />
-              Phân bố độ khó
-            </Text>
-            <Flex gap={8}>
+            <span style={{ fontSize: 13, fontWeight: 800, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: 6, marginBottom: 16 }}>
+              <BarChartOutlined style={{ color: "var(--accent)" }} />
+              Phân bố mức độ ghi nhớ
+            </span>
+            <Flex gap={12}>
               {DISTRIBUTION_ITEMS.map((item) => {
                 const count = counts[item.key] ?? 0;
                 const pct = totalReviewed > 0 ? Math.round((count / totalReviewed) * 100) : 0;
                 return (
-                  <Flex key={item.key} vertical align="center" gap={4} style={{ flex: 1 }}>
+                  <Flex key={item.key} vertical align="center" gap={6} style={{ flex: 1 }}>
+                    {/* Custom vertical bar graph */}
                     <div
                       style={{
-                        width: "100%",
-                        height: 6,
-                        borderRadius: 3,
+                        width: 8,
+                        height: 52,
+                        borderRadius: 99,
                         background: "var(--border)",
+                        position: "relative",
                         overflow: "hidden",
+                        display: "flex",
+                        flexDirection: "column",
+                        justifyContent: "flex-end",
                       }}
                     >
-                      <div style={{ width: `${pct}%`, height: "100%", borderRadius: 3, background: item.color, transition: "width 0.5s ease" }} />
+                      <m.div
+                        initial={{ height: 0 }}
+                        animate={{ height: `${pct}%` }}
+                        transition={{ duration: 0.6, ease: "easeOut" }}
+                        style={{
+                          width: "100%",
+                          borderRadius: 99,
+                          background: item.color,
+                        }}
+                      />
                     </div>
-                    <Text style={{ fontSize: 11 }}><span style={{ color: item.color }}>{item.icon}</span> {count}</Text>
-                    <Text type="secondary" style={{ fontSize: 10 }}>{item.label}</Text>
+                    <span style={{ fontSize: 11, fontWeight: 700, color: "var(--text-primary)" }}>
+                      {count}
+                    </span>
+                    <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 600 }}>
+                      {item.label}
+                    </span>
                   </Flex>
                 );
               })}
             </Flex>
-          </Card>
+          </m.div>
         )}
 
-        {/* Daily challenge prompt — only if not yet completed (B2 fix) */}
+        {/* Daily challenge prompt */}
         {!dailyChallengeCompleted && (
-          <Card
-            hoverable
-            className="anim-fade-up anim-delay-5"
+          <m.button
+            whileHover={{ scale: 1.01, y: -1 }}
+            whileTap={{ scale: 0.99 }}
             onClick={() => router.push("/daily-challenge")}
             style={{
-              marginTop: 16,
-              width: "100%",
+              textAlign: "left",
+              background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 6%, var(--surface)), var(--surface))",
+              border: "1px solid color-mix(in srgb, var(--accent) 15%, var(--border))",
               borderRadius: "var(--radius-xl)",
-              background: "linear-gradient(135deg, var(--accent-muted), var(--bg))",
+              padding: "16px 20px",
               cursor: "pointer",
+              boxShadow: "var(--shadow-sm)",
+              display: "flex",
+              alignItems: "center",
+              gap: 14,
             }}
-            styles={{ body: { padding: "16px 20px" } }}
           >
-            <Flex align="center" gap={12}>
-              <FireOutlined style={{ fontSize: 24, color: "var(--fire)" }} />
-              <Flex vertical style={{ flex: 1 }}>
-                <Text strong>Thử thách mỗi ngày?</Text>
-                <Text type="secondary" style={{ fontSize: 12 }}>Tiếp tục chuỗi streak của bạn!</Text>
-              </Flex>
-              <Text style={{ color: "var(--accent)", fontWeight: 600 }}>Bắt đầu →</Text>
-            </Flex>
-          </Card>
+            <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(245, 158, 11, 0.08)", display: "grid", placeItems: "center", flexShrink: 0 }}>
+              <FireOutlined style={{ fontSize: 22, color: "var(--xp)" }} />
+            </div>
+            <div style={{ flex: 1 }}>
+              <h4 style={{ margin: 0, fontSize: 14, fontWeight: 800, color: "var(--text-primary)" }}>
+                Thử thách hàng ngày
+              </h4>
+              <p style={{ margin: 0, fontSize: 12, color: "var(--text-muted)", fontWeight: 500 }}>
+                Luyện tập ngay để duy trì chuỗi Streak!
+              </p>
+            </div>
+            <RightOutlined style={{ fontSize: 12, color: "var(--accent)" }} />
+          </m.button>
         )}
 
-        {/* Restart button */}
+        {/* Actions button */}
         {onRestart && (
-          <Button
-            className="anim-fade-up anim-delay-5"
-            icon={<ReloadOutlined />}
+          <m.button
+            whileHover={{ scale: 1.02, y: -1 }}
+            whileTap={{ scale: 0.98 }}
             onClick={onRestart}
-            size="large"
-            style={{ marginTop: 24 }}
+            style={{
+              height: 48,
+              borderRadius: "var(--radius-lg)",
+              background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+              color: "var(--text-on-accent)",
+              border: "none",
+              fontSize: 15,
+              fontWeight: 800,
+              cursor: "pointer",
+              boxShadow: "0 4px 14px var(--accent-muted)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+              marginTop: 10,
+            }}
           >
-            Ôn lại
-          </Button>
+            <ReloadOutlined style={{ fontSize: 13 }} />
+            Bắt đầu lượt ôn tập mới
+          </m.button>
         )}
       </Flex>
     </>

@@ -10,6 +10,7 @@ import {
 	LoadingOutlined,
 } from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
+import * as m from "motion/react-client";
 
 const ListeningTab = dynamic(
 	() =>
@@ -49,9 +50,13 @@ function TabLoader() {
 				alignItems: "center",
 				padding: 64,
 				color: "var(--text-muted)",
+				gap: 10,
+				fontWeight: 700,
+				fontSize: 14
 			}}
 		>
-			<LoadingOutlined style={{ fontSize: 24, marginRight: 8 }} /> Đang tải...
+			<LoadingOutlined style={{ fontSize: 20, color: "var(--accent)" }} />
+			<span>Đang tải nội dung học...</span>
 		</div>
 	);
 }
@@ -84,11 +89,11 @@ const GRADIENTS: Record<Skill, string> = {
 	writing: "var(--gradient-writing)",
 };
 
-const TAB_COLORS: Record<Skill, { border: string; bg: string }> = {
-	listening: { border: "var(--secondary)", bg: "color-mix(in srgb, var(--secondary) 10%, var(--surface))" },
-	reading: { border: "var(--xp)", bg: "color-mix(in srgb, var(--xp) 10%, var(--surface))" },
-	speaking: { border: "var(--accent)", bg: "color-mix(in srgb, var(--accent) 10%, var(--surface))" },
-	writing: { border: "var(--accent)", bg: "color-mix(in srgb, var(--accent) 10%, var(--surface))" },
+const TAB_COLORS: Record<Skill, { border: string; bg: string; activeColor: string }> = {
+	listening: { border: "var(--border)", bg: "var(--surface)", activeColor: "var(--module-listening)" },
+	reading: { border: "var(--border)", bg: "var(--surface)", activeColor: "var(--module-reading)" },
+	speaking: { border: "var(--border)", bg: "var(--surface)", activeColor: "var(--accent)" },
+	writing: { border: "var(--border)", bg: "var(--surface)", activeColor: "var(--xp)" },
 };
 
 export default function ToeicSkillsPage() {
@@ -111,36 +116,68 @@ export default function ToeicSkillsPage() {
 				title="TOEIC Skills"
 				subtitle={SUBTITLES[active]}
 			/>
-			<div style={{ padding: 12, display: "flex", gap: 8, flexWrap: "wrap" }}>
-				{SKILL_TABS.map((t) => {
-					const isActive = active === t.value;
-					const colors = TAB_COLORS[t.value];
-					return (
-						<button
-							type="button"
-							key={t.value}
-							onClick={() => setActive(t.value)}
-							style={{
-								padding: "8px 14px",
-								borderRadius: 10,
-								border: `1px solid ${isActive ? colors.border : "var(--border)"}`,
-								background: isActive ? colors.bg : "var(--surface)",
-								color: isActive ? "var(--ink)" : "var(--text-secondary)",
-								cursor: "pointer",
-								display: "flex",
-								alignItems: "center",
-								gap: 6,
-								transition: "all var(--duration-fast) ease",
-							}}
-						>
-							{t.icon}
-							<span>{t.label}</span>
-							<span style={{ color: "var(--text-muted)", fontSize: 12 }}>· {t.parts}</span>
-						</button>
-					);
-				})}
+			
+			{/* High-end Pill Tabs Row */}
+			<div style={{
+				padding: "16px 20px 8px",
+				display: "flex",
+				gap: 8,
+				overflowX: "auto",
+				flexShrink: 0,
+				scrollbarWidth: "none"
+			}}>
+				<div style={{
+					display: "flex",
+					gap: 6,
+					background: "var(--surface-alt)",
+					border: "1.5px solid var(--border)",
+					borderRadius: "var(--radius-xl)",
+					padding: 6,
+					width: "100%"
+				}}>
+					{SKILL_TABS.map((t) => {
+						const isActive = active === t.value;
+						const colors = TAB_COLORS[t.value];
+						return (
+							<m.button
+								type="button"
+								key={t.value}
+								onClick={() => setActive(t.value)}
+								whileTap={{ scale: 0.98 }}
+								style={{
+									flex: 1,
+									padding: "8px 12px",
+									borderRadius: "var(--radius-lg)",
+									border: "none",
+									background: isActive ? colors.activeColor : "transparent",
+									color: isActive ? "var(--text-on-accent)" : "var(--text-secondary)",
+									cursor: "pointer",
+									display: "flex",
+									flexDirection: "column",
+									alignItems: "center",
+									justifyContent: "center",
+									gap: 3,
+									transition: "color 0.2s, background 0.2s",
+								}}
+							>
+								<div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13.5, fontWeight: 900 }}>
+									{t.icon}
+									<span>{t.label}</span>
+								</div>
+								<span style={{
+									opacity: isActive ? 0.9 : 0.65,
+									fontSize: 10.5,
+									fontWeight: 700
+								}}>
+									{t.parts}
+								</span>
+							</m.button>
+						);
+					})}
+				</div>
 			</div>
-			<div style={{ flex: 1, minHeight: 0, overflow: "auto" }}>
+
+			<div style={{ flex: 1, minHeight: 0, overflow: "auto", padding: "12px 20px 40px" }} className="anim-fade-up">
 				{active === "listening" && <ListeningTab />}
 				{active === "reading" && <ReadingTab />}
 				{active === "speaking" && <SpeakingTab />}

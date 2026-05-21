@@ -1,33 +1,34 @@
 "use client";
 
 import { useState } from "react";
-import { Button, Card, Flex, Space, Tag, Typography } from "antd";
-import { SoundOutlined, LoadingOutlined, BulbOutlined } from "@ant-design/icons";
+import { Card, Flex, Space, Tag, Typography } from "antd";
+import { SoundOutlined, LoadingOutlined, BulbOutlined, ApartmentOutlined } from "@ant-design/icons";
 import type { DueCard } from "@/lib/flashcard/types";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { api } from "@/lib/api-client";
 import { WordFamilyExplorer } from "@/app/(app)/flashcards/_components/WordFamilyExplorer";
+import * as m from "motion/react-client";
 
 const { Title, Text, Paragraph } = Typography;
 
 const LEVEL_COLORS: Record<string, string> = {
-  A1: "green",
-  A2: "cyan",
-  B1: "blue",
-  B2: "gold",
-  C1: "orange",
-  C2: "volcano",
+  A1: "var(--success)",
+  A2: "var(--success)",
+  B1: "var(--accent)",
+  B2: "var(--accent)",
+  C1: "var(--error)",
+  C2: "var(--error)",
 };
 
 const CEFR_GRADIENTS: Record<string, string> = {
-  A1: "linear-gradient(135deg, color-mix(in srgb, var(--success) 6%, var(--surface)), color-mix(in srgb, var(--success) 12%, var(--surface)))",
-  A2: "linear-gradient(135deg, color-mix(in srgb, var(--success) 8%, var(--surface)), color-mix(in srgb, var(--success) 14%, var(--surface)))",
-  B1: "linear-gradient(135deg, color-mix(in srgb, var(--xp) 6%, var(--surface)), color-mix(in srgb, var(--xp) 12%, var(--surface)))",
-  B2: "linear-gradient(135deg, color-mix(in srgb, var(--xp) 8%, var(--surface)), color-mix(in srgb, var(--xp) 14%, var(--surface)))",
-  C1: "linear-gradient(135deg, color-mix(in srgb, var(--error) 6%, var(--surface)), color-mix(in srgb, var(--error) 10%, var(--surface)))",
-  C2: "linear-gradient(135deg, color-mix(in srgb, var(--secondary) 6%, var(--surface)), color-mix(in srgb, var(--secondary) 10%, var(--surface)))",
+  A1: "linear-gradient(135deg, color-mix(in srgb, var(--success) 6%, var(--surface)), var(--surface))",
+  A2: "linear-gradient(135deg, color-mix(in srgb, var(--success) 8%, var(--surface)), var(--surface))",
+  B1: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 6%, var(--surface)), var(--surface))",
+  B2: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--surface))",
+  C1: "linear-gradient(135deg, color-mix(in srgb, var(--error) 6%, var(--surface)), var(--surface))",
+  C2: "linear-gradient(135deg, color-mix(in srgb, var(--error) 8%, var(--surface)), var(--surface))",
 };
-const DEFAULT_GRADIENT = "linear-gradient(135deg, var(--accent-muted), var(--bg))";
+const DEFAULT_GRADIENT = "linear-gradient(135deg, var(--surface-alt), var(--surface))";
 
 type Props = {
   card: DueCard;
@@ -46,160 +47,262 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
   };
 
   const firstSense = card.senses[0];
+  const levelColor = LEVEL_COLORS[card.level ?? ""] ?? "var(--text-muted)";
 
   return (
-    <Flex vertical align="center" style={{ width: "100%", maxWidth: 520, margin: "0 auto" }}>
-      {/* Card container */}
-      <div style={{ cursor: "pointer", perspective: 1200, width: "100%" }} onClick={handleFlip}>
-        <div
+    <Flex vertical align="stretch" style={{ width: "100%", maxWidth: 520, margin: "0 auto" }}>
+      {/* 3D card layout container */}
+      <div
+        style={{
+          cursor: "pointer",
+          perspective: 1200,
+          width: "100%",
+        }}
+        onClick={handleFlip}
+      >
+        <m.div
           style={{
             position: "relative",
-            height: 360,
+            height: 380,
             width: "100%",
             transformStyle: "preserve-3d",
-            transition: "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+            transition: "transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
             transform: isFlipped ? "rotateY(180deg)" : "rotateY(0)",
           }}
         >
-          {/* Front */}
-          <Card
+          {/* Front Side Card */}
+          <div
             style={{
               position: "absolute",
               inset: 0,
               backfaceVisibility: "hidden",
-              boxShadow: "var(--shadow-lg)",
+              borderRadius: "var(--radius-xl)",
+              border: `1.5px solid ${isFlipped ? "var(--border)" : "color-mix(in srgb, var(--accent) 15%, var(--border))"}`,
               background: CEFR_GRADIENTS[card.level ?? ""] ?? DEFAULT_GRADIENT,
-            }}
-            styles={{
-              body: {
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                height: "100%",
-                padding: "40px 32px",
-              },
+              padding: "40px 32px",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              justifyContent: "center",
+              boxShadow: "var(--shadow-md)",
             }}
           >
-            <Space size={8}>
-              {card.level && <Tag color={LEVEL_COLORS[card.level] ?? "default"}>{card.level}</Tag>}
-              {card.partOfSpeech && (
-                <Text type="secondary" italic style={{ fontSize: 12 }}>
-                  {card.partOfSpeech}
-                </Text>
+            {/* Ambient overlay light */}
+            <div style={{ position: "absolute", left: "50%", top: "45%", transform: "translate(-50%, -50%)", width: 200, height: 200, borderRadius: "50%", background: `radial-gradient(circle, ${levelColor}10 0%, transparent 70%)`, pointerEvents: "none" }} />
+
+            <div style={{ display: "flex", alignItems: "center", gap: 8, position: "relative", zIndex: 2 }}>
+              {card.level && (
+                <span
+                  style={{
+                    fontSize: 11,
+                    fontWeight: 800,
+                    color: levelColor,
+                    border: `1px solid ${levelColor}`,
+                    background: "var(--surface)",
+                    padding: "2px 10px",
+                    borderRadius: 99,
+                  }}
+                >
+                  {card.level}
+                </span>
               )}
-            </Space>
-            <Title
-              level={2}
+              {card.partOfSpeech && (
+                <span
+                  style={{
+                    fontSize: 11.5,
+                    fontWeight: 700,
+                    color: "var(--text-muted)",
+                    background: "var(--surface-alt)",
+                    padding: "2px 8px",
+                    borderRadius: 6,
+                  }}
+                >
+                  {card.partOfSpeech}
+                </span>
+              )}
+            </div>
+
+            <h2
               style={{
-                marginTop: 16,
+                marginTop: 20,
+                marginBottom: 8,
+                fontSize: 38,
+                fontWeight: 900,
                 textAlign: "center",
                 fontFamily: "var(--font-display)",
+                color: "var(--text-primary)",
+                letterSpacing: "-0.02em",
                 fontStyle: "italic",
-                fontSize: 36,
+                position: "relative",
+                zIndex: 2,
               }}
             >
               {card.headword}
-            </Title>
+            </h2>
+
             {card.phonetic && (
-              <Text type="secondary" style={{ marginTop: 8, fontFamily: "var(--font-mono)" }}>
+              <span
+                style={{
+                  fontSize: 14,
+                  fontWeight: 600,
+                  fontFamily: "var(--font-mono)",
+                  color: "var(--text-secondary)",
+                  background: "var(--surface-alt)",
+                  padding: "4px 12px",
+                  borderRadius: 8,
+                  border: "1px solid var(--border)",
+                  position: "relative",
+                  zIndex: 2,
+                }}
+              >
                 {card.phonetic}
-              </Text>
+              </span>
             )}
-            {/* 🎵 Audio TTS Button */}
-            <button
+
+            {/* Speaking audio control */}
+            <m.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
               type="button"
-              onClick={(e) => { e.stopPropagation(); tts.speak(card.headword); }}
+              onClick={(e) => {
+                e.stopPropagation();
+                tts.speak(card.headword);
+              }}
               disabled={tts.isLoading || tts.isSpeaking}
-              aria-label={`Phát âm ${card.headword}`}
               style={{
-                marginTop: 16,
+                marginTop: 24,
                 display: "inline-flex",
                 alignItems: "center",
-                justifyContent: "center",
-                gap: 6,
+                gap: 8,
                 padding: "8px 20px",
                 borderRadius: 99,
                 border: "1.5px solid color-mix(in srgb, var(--accent) 30%, var(--border))",
-                background: tts.isSpeaking
-                  ? "color-mix(in srgb, var(--accent) 12%, var(--surface))"
-                  : "color-mix(in srgb, var(--accent) 5%, var(--surface))",
+                background: tts.isSpeaking ? "var(--accent-light)" : "var(--surface)",
                 color: "var(--accent)",
                 cursor: tts.isLoading ? "wait" : "pointer",
                 fontSize: 13,
-                fontWeight: 600,
+                fontWeight: 700,
+                boxShadow: "var(--shadow-sm)",
                 transition: "all 0.2s",
+                position: "relative",
+                zIndex: 2,
               }}
             >
               {tts.isLoading ? (
-                <LoadingOutlined spin style={{ fontSize: 14 }} />
+                <LoadingOutlined spin />
               ) : (
-                <SoundOutlined style={{ fontSize: 14 }} />
+                <SoundOutlined />
               )}
-              {tts.isSpeaking ? "Đang phát..." : "Phát âm"}
-            </button>
-            <Text type="secondary" style={{ marginTop: 16, fontSize: 12 }}>
-              Nhấn để xem nghĩa
-            </Text>
-          </Card>
+              {tts.isSpeaking ? "Đang phát..." : "Nghe phát âm"}
+            </m.button>
 
-          {/* Back */}
-          <Card
+            <span
+              style={{
+                position: "absolute",
+                bottom: 24,
+                fontSize: 12,
+                fontWeight: 600,
+                color: "var(--text-muted)",
+              }}
+            >
+              Nhấn thẻ để lật xem nghĩa
+            </span>
+          </div>
+
+          {/* Back Side Card */}
+          <div
             style={{
               position: "absolute",
               inset: 0,
               backfaceVisibility: "hidden",
               transform: "rotateY(180deg)",
-              boxShadow: "var(--shadow-lg)",
-              overflow: "auto",
+              borderRadius: "var(--radius-xl)",
+              border: "1px solid var(--border)",
+              background: "var(--surface)",
+              padding: "24px",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              boxShadow: "var(--shadow-md)",
+              overflowY: "auto",
             }}
-            styles={{ body: { padding: 32 } }}
           >
-            <Paragraph strong style={{ textAlign: "center", fontSize: 18 }}>
+            {/* Vietnamese overview meaning */}
+            <div
+              style={{
+                textAlign: "center",
+                fontSize: 20,
+                fontWeight: 800,
+                color: "var(--accent)",
+                fontFamily: "var(--font-display)",
+                marginBottom: 16,
+                borderBottom: "1.5px dashed var(--border)",
+                paddingBottom: 12,
+              }}
+            >
               {card.overviewVi}
-            </Paragraph>
+            </div>
 
             {firstSense && (
-              <Flex vertical gap={12} style={{ marginTop: 20 }}>
-                <Paragraph style={{ fontSize: 14, lineHeight: 1.6 }}>
-                  <Text strong>{firstSense.label}:</Text> {firstSense.definitionVi}
-                </Paragraph>
+              <Flex vertical gap={12}>
+                <p style={{ fontSize: 14.5, lineHeight: 1.6, margin: 0, color: "var(--text-primary)" }}>
+                  <span style={{ fontWeight: 800, color: "var(--text-secondary)" }}>
+                    {firstSense.label}:
+                  </span>{" "}
+                  {firstSense.definitionVi}
+                </p>
 
                 {firstSense.examples.length > 0 && (
-                  <Flex vertical gap={6}>
+                  <Flex vertical gap={8}>
                     {firstSense.examples.slice(0, 2).map((ex, i) => (
-                      <Card
+                      <div
                         key={i}
-                        size="small"
-                        style={{ background: "var(--bg-deep)", border: "none" }}
+                        style={{
+                          background: "var(--surface-alt)",
+                          borderLeft: "3.5px solid var(--accent)",
+                          borderRadius: "var(--radius-md)",
+                          padding: "10px 14px",
+                        }}
                       >
-                        <Text strong style={{ fontSize: 14 }}>
+                        <div style={{ fontSize: 13.5, fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.5 }}>
                           {ex.en}
-                        </Text>
-                        <br />
-                        <Text type="secondary" style={{ fontSize: 12 }}>
+                        </div>
+                        <div style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 600, marginTop: 3 }}>
                           {ex.vi}
-                        </Text>
-                      </Card>
+                        </div>
+                      </div>
                     ))}
                   </Flex>
                 )}
 
                 {firstSense.collocations.length > 0 && (
-                  <Space wrap size={6}>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginTop: 4 }}>
                     {firstSense.collocations.slice(0, 4).map((c, i) => (
-                      <Tag key={i} color="green" variant="outlined" style={{ borderRadius: 999 }}>
+                      <span
+                        key={i}
+                        style={{
+                          fontSize: 11.5,
+                          fontWeight: 700,
+                          color: "var(--success)",
+                          background: "var(--success-bg)",
+                          border: "1px solid color-mix(in srgb, var(--success) 20%, transparent)",
+                          padding: "3px 10px",
+                          borderRadius: 99,
+                        }}
+                      >
                         {c.en}
-                      </Tag>
+                      </span>
                     ))}
-                  </Space>
+                  </div>
                 )}
               </Flex>
             )}
 
-            {/* AI Context Sentences */}
+            {/* AI TOEIC Examples section */}
             {contextSentences.length === 0 && (
-              <button
+              <m.button
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.99 }}
                 type="button"
                 onClick={async (e) => {
                   e.stopPropagation();
@@ -216,75 +319,88 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                 }}
                 disabled={contextLoading}
                 style={{
-                  marginTop: 12,
+                  marginTop: 16,
                   width: "100%",
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   gap: 6,
-                  padding: "9px 16px",
-                  borderRadius: 10,
+                  padding: "10px 16px",
+                  borderRadius: "var(--radius-lg)",
                   border: "1.5px solid color-mix(in srgb, var(--accent) 20%, var(--border))",
-                  background: "color-mix(in srgb, var(--accent) 4%, var(--surface))",
+                  background: "var(--accent-light)",
                   color: "var(--accent)",
                   cursor: contextLoading ? "wait" : "pointer",
                   fontSize: 12,
-                  fontWeight: 700,
+                  fontWeight: 800,
                   transition: "all 0.2s",
                 }}
               >
                 {contextLoading ? (
-                  <><LoadingOutlined spin style={{ fontSize: 12 }} /> Đang tạo ví dụ...</>
+                  <>
+                    <LoadingOutlined spin /> Đang tạo ví dụ...
+                  </>
                 ) : (
-                  <><BulbOutlined style={{ fontSize: 12 }} /> Xem thêm ví dụ TOEIC</>
+                  <>
+                    <BulbOutlined /> Xem thêm ví dụ TOEIC
+                  </>
                 )}
-              </button>
+              </m.button>
             )}
 
             {contextSentences.length > 0 && (
-              <Flex vertical gap={6} style={{ marginTop: 12 }}>
-                <Text style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: ".1em", color: "var(--accent)" }}>
-                  <BulbOutlined style={{ marginRight: 4 }} /> Ví dụ TOEIC
-                </Text>
-                {contextSentences.slice(0, 5).map((s, i) => (
-                  <Card
+              <Flex vertical gap={8} style={{ marginTop: 16 }}>
+                <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".1em", color: "var(--accent)", display: "flex", alignItems: "center", gap: 4 }}>
+                  <BulbOutlined /> Ví dụ thực tế TOEIC
+                </span>
+                {contextSentences.slice(0, 3).map((s, i) => (
+                  <div
                     key={i}
-                    size="small"
                     style={{
-                      background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 4%, var(--surface)), var(--bg-deep))",
-                      border: "1px solid color-mix(in srgb, var(--accent) 10%, var(--border))",
+                      padding: "10px 14px",
+                      borderRadius: "var(--radius-lg)",
+                      background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 4%, var(--surface)), var(--surface-alt))",
+                      border: "1px solid color-mix(in srgb, var(--accent) 12%, var(--border))",
                     }}
                   >
-                    <Text style={{ fontSize: 13, lineHeight: 1.6 }} dangerouslySetInnerHTML={{ __html: s.en.replace(/\*([^*]+)\*/g, '<strong style="color: var(--accent)">$1</strong>') }} />
-                    <br />
-                    <Text type="secondary" style={{ fontSize: 11 }}>
+                    <div
+                      style={{ fontSize: 13, lineHeight: 1.6, color: "var(--text-primary)" }}
+                      dangerouslySetInnerHTML={{
+                        __html: s.en.replace(
+                          /\*([^*]+)\*/g,
+                          '<strong style="color: var(--accent); font-weight: 800;">$1</strong>',
+                        ),
+                      }}
+                    />
+                    <div style={{ fontSize: 11.5, color: "var(--text-muted)", fontWeight: 600, marginTop: 4 }}>
                       {s.vi}
-                    </Text>
-                    {s.context && (
-                      <Tag color="blue" style={{ fontSize: 9, borderRadius: 99, marginLeft: 6 }}>{s.context}</Tag>
-                    )}
-                  </Card>
+                    </div>
+                  </div>
                 ))}
               </Flex>
             )}
 
-            {/* Word Family Explorer */}
-            <WordFamilyExplorer word={card.headword} />
-          </Card>
-        </div>
+            {/* Word Family Tree Explorer */}
+            <div style={{ marginTop: 12 }}>
+              <WordFamilyExplorer word={card.headword} />
+            </div>
+          </div>
+        </m.div>
       </div>
 
-      {/* Rating buttons — only visible when flipped */}
-      {isFlipped && <RatingButtons onRate={onRate} isSubmitting={isSubmitting} />}
+      {/* Spaced Repetition score buttons below the card deck */}
+      {isFlipped && (
+        <RatingButtons onRate={onRate} isSubmitting={isSubmitting} />
+      )}
     </Flex>
   );
 }
 
 const RATINGS = [
-  { quality: 0, label: "Quên", emoji: "😵", bg: "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 80%, black))" },
-  { quality: 2, label: "Khó", emoji: "😓", bg: "linear-gradient(135deg, var(--warning), color-mix(in srgb, var(--warning) 80%, black))" },
-  { quality: 3, label: "Ổn", emoji: "🙂", bg: "linear-gradient(135deg, var(--accent), var(--accent-hover))" },
-  { quality: 5, label: "Dễ", emoji: "🤩", bg: "linear-gradient(135deg, var(--success), color-mix(in srgb, var(--success) 80%, black))" },
+  { quality: 0, label: "Quên", emoji: "😵", color: "var(--error)", bg: "rgba(239, 68, 68, 0.08)", border: "rgba(239, 68, 68, 0.2)" },
+  { quality: 2, label: "Khó", emoji: "😓", color: "var(--warning)", bg: "rgba(245, 158, 11, 0.08)", border: "rgba(245, 158, 11, 0.2)" },
+  { quality: 3, label: "Ổn", emoji: "🙂", color: "var(--accent)", bg: "var(--accent-light)", border: "color-mix(in srgb, var(--accent) 15%, transparent)" },
+  { quality: 5, label: "Dễ", emoji: "🤩", color: "var(--success)", bg: "rgba(16, 185, 129, 0.08)", border: "rgba(16, 185, 129, 0.2)" },
 ] as const;
 
 function RatingButtons({
@@ -295,11 +411,20 @@ function RatingButtons({
   isSubmitting: boolean;
 }) {
   return (
-    <Space size={12} className="anim-fade-up" style={{ marginTop: 24 }}>
-      {RATINGS.map((r) => (
-        <Button
+    <div
+      style={{
+        display: "flex",
+        gap: 12,
+        marginTop: 24,
+        alignSelf: "center",
+      }}
+      className="anim-fade-up"
+    >
+      {RATINGS.map((r, idx) => (
+        <m.button
           key={r.quality}
-          type="text"
+          whileHover={{ scale: 1.06, y: -2 }}
+          whileTap={{ scale: 0.94 }}
           disabled={isSubmitting}
           onClick={() => onRate(r.quality)}
           style={{
@@ -307,19 +432,21 @@ function RatingButtons({
             flexDirection: "column",
             alignItems: "center",
             gap: 4,
-            height: "auto",
-            borderRadius: "var(--radius)",
+            width: 72,
+            padding: "10px 0",
+            borderRadius: "var(--radius-lg)",
             background: r.bg,
-            padding: "12px 16px",
-            color: "var(--text-on-accent)",
+            border: `1.5px solid ${r.border}`,
+            color: r.color,
             boxShadow: "var(--shadow-sm)",
-            border: "none",
+            cursor: "pointer",
+            transition: "all 0.2s",
           }}
         >
-          <span style={{ fontSize: 20 }}>{r.emoji}</span>
-          <span style={{ fontSize: 11, fontWeight: 600 }}>{r.label}</span>
-        </Button>
+          <span style={{ fontSize: 22 }}>{r.emoji}</span>
+          <span style={{ fontSize: 12, fontWeight: 800 }}>{r.label}</span>
+        </m.button>
       ))}
-    </Space>
+    </div>
   );
 }

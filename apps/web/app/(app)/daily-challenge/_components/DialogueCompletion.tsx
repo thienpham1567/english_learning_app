@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { DialogueCompletionData } from "@/lib/daily-challenge/types";
 import { MessageOutlined } from "@ant-design/icons";
+import * as m from "motion/react-client";
 
 const LABELS = ["A", "B", "C", "D"] as const;
 
@@ -15,7 +16,6 @@ type Props = {
 
 export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Props) {
   const [selected, setSelected] = useState<number | null>(null);
-  const [hoveredOption, setHoveredOption] = useState<number | null>(null);
 
   const handleSelect = (i: number) => {
     if (disabled) return;
@@ -28,15 +28,15 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
       {/* Instruction */}
       <p
         style={{
-          marginBottom: 12,
+          marginBottom: 14,
           fontSize: 11,
-          fontWeight: 700,
+          fontWeight: 800,
           color: "var(--accent)",
           textTransform: "uppercase",
-          letterSpacing: "0.1em",
+          letterSpacing: "0.08em",
         }}
       >
-        {instruction}
+        💬 {instruction}
       </p>
 
       {/* Context badge */}
@@ -44,32 +44,32 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
         style={{
           display: "inline-flex",
           alignItems: "center",
-          gap: 5,
-          padding: "4px 12px",
+          gap: 6,
+          padding: "5px 14px",
           borderRadius: 99,
-          background: "var(--bg-deep)",
+          background: "var(--surface-alt)",
           border: "1px solid var(--border)",
-          marginBottom: 14,
+          marginBottom: 16,
           fontSize: 11,
-          fontWeight: 500,
+          fontWeight: 600,
           color: "var(--text-secondary)",
         }}
       >
-        <MessageOutlined style={{ fontSize: 10 }} />
-        {data.context}
+        <MessageOutlined style={{ fontSize: 11, color: "var(--accent)" }} />
+        Bối cảnh: {data.context}
       </div>
 
       {/* Dialogue display */}
       <div
         style={{
-          marginBottom: 20,
-          padding: "16px",
-          borderRadius: 14,
-          background: "var(--bg-deep)",
+          marginBottom: 24,
+          padding: "20px 16px",
+          borderRadius: "var(--radius-xl)",
+          background: "var(--surface-alt)",
           border: "1px solid var(--border)",
           display: "flex",
           flexDirection: "column",
-          gap: 8,
+          gap: 12,
         }}
       >
         {data.dialogue.map((line, i) => {
@@ -88,13 +88,13 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
               {/* Speaker label */}
               <span
                 style={{
-                  fontSize: 9,
-                  fontWeight: 700,
+                  fontSize: 10,
+                  fontWeight: 800,
                   textTransform: "uppercase",
-                  letterSpacing: "0.1em",
+                  letterSpacing: "0.08em",
                   color: "var(--text-muted)",
-                  marginBottom: 3,
-                  paddingInline: 4,
+                  marginBottom: 4,
+                  paddingInline: 6,
                 }}
               >
                 {line.speaker}
@@ -104,29 +104,30 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
               <div
                 style={{
                   maxWidth: "85%",
-                  padding: "9px 14px",
+                  padding: "10px 16px",
                   borderRadius: isMissing
-                    ? 12
+                    ? "var(--radius)"
                     : isEven
-                    ? "2px 12px 12px 12px"
-                    : "12px 2px 12px 12px",
+                    ? "2px 14px 14px 14px"
+                    : "14px 2px 14px 14px",
                   background: isMissing
                     ? "transparent"
                     : isEven
                     ? "var(--surface)"
-                    : "color-mix(in srgb, var(--accent) 10%, var(--surface))",
+                    : "linear-gradient(135deg, var(--accent-light), var(--surface))",
                   border: isMissing
                     ? "2px dashed var(--accent)"
                     : isEven
                     ? "1px solid var(--border)"
-                    : "1px solid color-mix(in srgb, var(--accent) 22%, transparent)",
-                  fontSize: 14,
+                    : "1px solid color-mix(in srgb, var(--accent) 15%, var(--border))",
+                  fontSize: 14.5,
                   lineHeight: 1.6,
-                  fontWeight: isMissing ? 600 : 400,
-                  color: isMissing ? "var(--accent)" : "var(--ink)",
+                  fontWeight: isMissing ? 700 : 500,
+                  color: isMissing ? "var(--accent)" : "var(--text-primary)",
+                  boxShadow: isMissing ? "none" : "var(--shadow-sm)",
                 }}
               >
-                {isMissing ? "❓ Chọn câu trả lời phù hợp" : line.text}
+                {isMissing ? "❓ Hãy chọn phản hồi phù hợp..." : line.text}
               </div>
             </div>
           );
@@ -134,40 +135,36 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
       </div>
 
       {/* Options */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {data.options.map((opt, i) => {
           const isSelected = selected === i;
-          const isHov = hoveredOption === i && !isSelected && !disabled;
 
           return (
-            <button
+            <m.button
               key={i}
+              whileHover={!disabled ? { scale: 1.01, x: 2 } : {}}
+              whileTap={!disabled ? { scale: 0.99 } : {}}
               onClick={() => handleSelect(i)}
-              onMouseEnter={() => setHoveredOption(i)}
-              onMouseLeave={() => setHoveredOption(null)}
               disabled={disabled}
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 10,
-                borderRadius: 12,
+                gap: 12,
+                borderRadius: "var(--radius-lg)",
                 border: isSelected
                   ? "2px solid var(--accent)"
-                  : `1px solid ${isHov ? "var(--accent)" : "var(--border)"}`,
+                  : "1px solid var(--border)",
                 background: isSelected
-                  ? "color-mix(in srgb, var(--accent) 10%, var(--surface))"
-                  : isHov
-                  ? "color-mix(in srgb, var(--accent) 4%, var(--surface))"
+                  ? "var(--accent-light)"
                   : "var(--surface)",
-                padding: "11px 14px",
+                padding: "12px 16px",
                 textAlign: "left",
-                fontSize: 13,
-                fontWeight: isSelected ? 600 : 400,
-                color: "var(--ink)",
+                fontSize: 14,
+                fontWeight: isSelected ? 700 : 600,
+                color: isSelected ? "var(--accent)" : "var(--text-primary)",
                 cursor: disabled ? "default" : "pointer",
-                transition: "all 0.15s ease",
-                transform: isHov ? "translateY(-1px)" : "none",
-                boxShadow: isHov ? "0 3px 10px rgba(0,0,0,0.08)" : "none",
+                transition: "border-color 0.2s, background-color 0.2s",
+                boxShadow: isSelected ? "0 4px 12px var(--accent-muted)" : "var(--shadow-sm)",
                 lineHeight: 1.5,
               }}
             >
@@ -175,12 +172,12 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
                 style={{
                   width: 26,
                   height: 26,
-                  borderRadius: 99,
+                  borderRadius: "50%",
                   display: "grid",
                   placeItems: "center",
                   flexShrink: 0,
                   background: isSelected ? "var(--accent)" : "var(--border)",
-                  color: isSelected ? "var(--text-on-accent)" : "var(--text-muted)",
+                  color: isSelected ? "var(--text-on-accent)" : "var(--text-secondary)",
                   fontSize: 11,
                   fontWeight: 800,
                   transition: "all 0.15s",
@@ -188,8 +185,8 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
               >
                 {LABELS[i]}
               </span>
-              {opt}
-            </button>
+              <span style={{ flex: 1 }}>{opt}</span>
+            </m.button>
           );
         })}
       </div>

@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { parseAccent, synthesizeTts, VOICES } from "@/lib/tts/groq";
+import { parseAccent, synthesizeTtsForVoice, VOICE_BY_ROLE, VOICES, type VoiceRole } from "@/lib/tts/groq";
 import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
 import { routeLogger } from "@/lib/logger";
 
@@ -8,7 +8,7 @@ import { routeLogger } from "@/lib/logger";
  * POST /api/voice/synthesize
  *
  * Converts text to speech via Groq Orpheus TTS (canopylabs/orpheus-v1-english).
- * Body: { text: string, speed?: number, accent?: "us" | "uk" | "au" }
+ * Body: { text: string, speed?: number, accent?: "us" | "uk" | "au", gender?: "male" | "female" }
  * Requires GROQ_API_KEY.
  *
  * Rate limited to 10 calls per user per minute.
@@ -40,6 +40,7 @@ export async function POST(request: Request) {
     text?: string;
     speed?: number;
     accent?: string;
+    gender?: string;
   } | null;
 
   const text = body?.text?.trim();
@@ -52,12 +53,14 @@ export async function POST(request: Request) {
 
   const accent = parseAccent(body?.accent);
   const speed = typeof body?.speed === "number" ? body.speed : 1;
+  const gender = body?.gender === "male" || body?.gender === "m" ? "m" : "f";
 
-  // Key cache by the exact inputs that change audio output.
-  const voice = VOICES[accent];
+  // Match role to voice
+  const role = `${accent}-${gender}` as VoiceRole;
+  const voice = VOICE_BY_ROLE[role] || VOICES[accent] || "autumn";
   const cacheKey = `${voice}|${speed}|${text}`;
 
-  const log = routeLogger("voice/synthesize", { userId, accent, speed, chars: text.length });
+  const log = routeLogger("voice/synthesize", { userId, accent, gender, speed, chars: text.length });
 
   try {
     const cached = await readTtsCache("voice-synth", cacheKey, "wav");
@@ -74,7 +77,7 @@ export async function POST(request: Request) {
 
     log.info("tts.request");
     const t0 = Date.now();
-    const audio = await synthesizeTts({ text, accent, speed });
+    const audio = await synthesizeTtsForVoice({ text, voice, format: "wav", speed });
     log.info({ ttsMs: Date.now() - t0, bytes: audio.byteLength }, "tts.done");
 
     const buf = Buffer.from(audio);

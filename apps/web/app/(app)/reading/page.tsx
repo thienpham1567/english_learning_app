@@ -1,21 +1,22 @@
 "use client";
-import { api } from "@/lib/api-client";
-import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Card, Flex, Typography, Spin, Tag, Segmented } from "antd";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
+
 import {
-  ReadOutlined,
-  ClockCircleOutlined,
-  GlobalOutlined,
-  ExperimentOutlined,
-  LaptopOutlined,
-  EnvironmentOutlined,
   AppstoreOutlined,
+  ArrowRightOutlined,
+  ClockCircleOutlined,
+  EnvironmentOutlined,
+  ExperimentOutlined,
+  GlobalOutlined,
+  LaptopOutlined,
+  LoadingOutlined,
+  ReadOutlined,
   TeamOutlined,
 } from "@ant-design/icons";
-
-const { Text } = Typography;
+import * as m from "motion/react-client";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { ModuleHeader } from "@/components/shared/ModuleHeader";
+import { api } from "@/lib/api-client";
 
 type Article = {
   id: string;
@@ -31,10 +32,18 @@ type Article = {
   difficulty: "B1" | "B2" | "C1";
 };
 
-const DIFFICULTY_COLORS: Record<string, string> = {
-  B1: "green",
-  B2: "gold",
-  C1: "orange",
+const DIFFICULTY_COLORS: Record<string, { bg: string; color: string; border: string }> = {
+  B1: {
+    bg: "rgba(16, 185, 129, 0.08)",
+    color: "var(--success)",
+    border: "rgba(16, 185, 129, 0.2)",
+  },
+  B2: {
+    bg: "rgba(245, 158, 11, 0.08)",
+    color: "var(--warning)",
+    border: "rgba(245, 158, 11, 0.2)",
+  },
+  C1: { bg: "rgba(239, 68, 68, 0.08)", color: "var(--error)", border: "rgba(239, 68, 68, 0.2)" },
 };
 
 const SECTIONS = [
@@ -73,152 +82,375 @@ export default function ReadingPage() {
   return (
     <div
       style={{
+        position: "relative",
+        display: "flex",
         height: "100%",
-        overflowY: "auto",
-        padding: "var(--space-6)",
+        minHeight: 0,
+        flex: 1,
+        flexDirection: "column",
+        overflow: "hidden",
       }}
-      className="anim-fade-up"
     >
-      <Flex vertical gap="var(--space-5)">
-        {/* Header */}
+      <div className="grain-overlay" style={{ opacity: 0.03, zIndex: 0 }} />
+
+      {/* Styled Gradient Header */}
+      <div style={{ position: "relative", zIndex: 1 }}>
         <ModuleHeader
           icon={<ReadOutlined />}
           gradient="var(--gradient-reading)"
-          title="Luyện đọc"
-          subtitle="Đọc hiểu bài báo tiếng Anh từ The Guardian"
+          title="Luyện đọc hiểu"
+          subtitle="Rèn luyện kỹ năng đọc hiểu qua các bài viết thực tế từ The Guardian"
         />
+      </div>
 
-        {/* Category Filter */}
-        <div style={{ overflowX: "auto", paddingBottom: 4 }}>
-          <Segmented
-            value={section}
-            onChange={(val) => setSection(val as string)}
-            options={SECTIONS.map((s) => ({
-              label: (
-                <Flex align="center" gap={6}>
-                  {s.icon}
-                  <span>{s.label}</span>
-                </Flex>
-              ),
-              value: s.value,
-            }))}
-            style={{ minWidth: "max-content" }}
-          />
-        </div>
-
-        {/* Articles Grid */}
-        {loading ? (
-          <Flex align="center" justify="center" style={{ height: 300 }}>
-            <Spin size="large" />
-          </Flex>
-        ) : articles.length === 0 ? (
-          <Flex align="center" justify="center" style={{ height: 300 }}>
-            <Text type="secondary">Không có bài viết nào. Hãy thêm GUARDIAN_API_KEY.</Text>
-          </Flex>
-        ) : (
+      {/* Scrollable Container */}
+      <div
+        style={{
+          position: "relative",
+          minHeight: 0,
+          flex: 1,
+          overflowY: "auto",
+          padding: "24px 20px 80px",
+          zIndex: 1,
+        }}
+      >
+        <div
+          style={{
+            maxWidth: 900,
+            margin: "0 auto",
+            display: "flex",
+            flexDirection: "column",
+            gap: 20,
+          }}
+        >
+          {/* Custom Category Segmented Switch */}
           <div
             style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))",
-              gap: 16,
+              display: "flex",
+              gap: 6,
+              background: "var(--surface)",
+              border: "1px solid var(--border)",
+              borderRadius: "var(--radius-xl)",
+              padding: "4px",
+              boxShadow: "var(--shadow-sm)",
+              overflowX: "auto",
+              whiteSpace: "nowrap",
             }}
           >
-            {articles.map((article) => (
-              <Card
-                key={article.id}
-                hoverable
-                onClick={() => router.push(`/reading/${article.id}`)}
-                style={{
-                  borderRadius: "var(--radius-xl)",
-                  overflow: "hidden",
-                  cursor: "pointer",
-                  transition: "transform 0.2s, box-shadow 0.2s",
-                }}
-                styles={{ body: { padding: 0 } }}
-              >
-                {/* Thumbnail */}
-                {article.thumbnail && (
+            {SECTIONS.map((secItem) => {
+              const isTabActive = section === secItem.value;
+              return (
+                <m.button
+                  key={secItem.label}
+                  onClick={() => setSection(secItem.value)}
+                  whileTap={{ scale: 0.97 }}
+                  style={{
+                    flex: "1 0 auto",
+                    padding: "10px 16px",
+                    borderRadius: "var(--radius-lg)",
+                    border: "none",
+                    background: isTabActive ? "var(--accent)" : "transparent",
+                    color: isTabActive ? "var(--text-on-accent)" : "var(--text-secondary)",
+                    fontSize: 13,
+                    fontWeight: 800,
+                    cursor: "pointer",
+                    transition: "color 0.2s, background 0.2s",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 8,
+                  }}
+                >
+                  {secItem.icon}
+                  <span>{secItem.label}</span>
+                </m.button>
+              );
+            })}
+          </div>
+
+          {/* Articles Listing Grid */}
+          {loading ? (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+                gap: 20,
+              }}
+            >
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <div
+                  key={i}
+                  style={{
+                    background: "var(--surface)",
+                    border: "1px solid var(--border)",
+                    borderRadius: "var(--radius-xl)",
+                    height: 320,
+                    padding: 16,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 12,
+                  }}
+                >
                   <div
                     style={{
-                      width: "100%",
-                      height: 160,
-                      backgroundImage: `url(${article.thumbnail})`,
-                      backgroundSize: "cover",
-                      backgroundPosition: "center",
+                      height: 140,
+                      borderRadius: "var(--radius-lg)",
+                      background: "var(--surface-alt)",
+                      animation: "pulse 1.5s infinite",
                     }}
                   />
-                )}
-
-                {/* Content */}
-                <div style={{ padding: "16px 20px" }}>
-                  {/* Tags row */}
-                  <Flex gap={6} style={{ marginBottom: 8 }}>
-                    <Tag color="default" style={{ margin: 0, fontSize: 11 }}>
-                      {article.section}
-                    </Tag>
-                    <Tag color={DIFFICULTY_COLORS[article.difficulty]} style={{ margin: 0, fontSize: 11 }}>
-                      {article.difficulty}
-                    </Tag>
-                  </Flex>
-
-                  {/* Title */}
-                  <Text
-                    strong
+                  <div
                     style={{
-                      fontSize: 15,
-                      lineHeight: 1.4,
-                      display: "-webkit-box",
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: "vertical",
+                      height: 20,
+                      width: "60%",
+                      borderRadius: 4,
+                      background: "var(--surface-alt)",
+                      animation: "pulse 1.5s infinite",
+                    }}
+                  />
+                  <div
+                    style={{
+                      height: 32,
+                      borderRadius: 4,
+                      background: "var(--surface-alt)",
+                      animation: "pulse 1.5s infinite",
+                    }}
+                  />
+                  <div
+                    style={{
+                      height: 16,
+                      width: "40%",
+                      borderRadius: 4,
+                      background: "var(--surface-alt)",
+                      animation: "pulse 1.5s infinite",
+                    }}
+                  />
+                </div>
+              ))}
+            </div>
+          ) : articles.length === 0 ? (
+            <div
+              style={{
+                background: "var(--surface)",
+                border: "1px solid var(--border)",
+                borderRadius: "var(--radius-xl)",
+                padding: "80px 24px",
+                textAlign: "center",
+                boxShadow: "var(--shadow-sm)",
+              }}
+            >
+              <ReadOutlined
+                style={{ fontSize: 36, color: "var(--text-muted)", marginBottom: 12 }}
+              />
+              <p
+                style={{
+                  fontSize: 16,
+                  fontWeight: 800,
+                  color: "var(--text-secondary)",
+                  margin: "0 0 6px",
+                }}
+              >
+                Không tìm thấy bài viết nào
+              </p>
+              <p style={{ fontSize: 12.5, color: "var(--text-muted)", margin: 0, fontWeight: 500 }}>
+                Hãy kiểm tra cấu hình khóa GUARDIAN_API_KEY trong hệ thống.
+              </p>
+            </div>
+          ) : (
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
+                gap: 20,
+              }}
+            >
+              {articles.map((article, idx) => {
+                const diffStyle = DIFFICULTY_COLORS[article.difficulty] ?? DIFFICULTY_COLORS.B1;
+                return (
+                  <m.div
+                    key={article.id}
+                    onClick={() => router.push(`/reading/${article.id}`)}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: Math.min(idx * 0.04, 0.4) }}
+                    whileHover={{ y: -4, borderColor: "var(--accent)" }}
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      background: "var(--surface)",
+                      border: "1.5px solid var(--border)",
+                      borderRadius: "var(--radius-xl)",
                       overflow: "hidden",
-                      color: "var(--text-primary)",
+                      cursor: "pointer",
+                      boxShadow: "var(--shadow-sm)",
+                      transition: "border-color 0.2s, box-shadow 0.2s",
                     }}
                   >
-                    {article.title}
-                  </Text>
+                    {/* Thumbnail Card */}
+                    {article.thumbnail ? (
+                      <div
+                        style={{
+                          width: "100%",
+                          height: 150,
+                          backgroundImage: `url(${article.thumbnail})`,
+                          backgroundSize: "cover",
+                          backgroundPosition: "center",
+                          position: "relative",
+                        }}
+                      >
+                        <div
+                          style={{
+                            position: "absolute",
+                            inset: 0,
+                            background: "linear-gradient(to top, rgba(0,0,0,0.4), transparent)",
+                          }}
+                        />
+                      </div>
+                    ) : (
+                      <div
+                        style={{
+                          width: "100%",
+                          height: 150,
+                          background: "var(--surface-alt)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          color: "var(--text-muted)",
+                          borderBottom: "1px solid var(--border)",
+                        }}
+                      >
+                        <ReadOutlined style={{ fontSize: 32 }} />
+                      </div>
+                    )}
 
-                  {/* Trail text */}
-                  {article.trailText && (
-                    <Text
-                      type="secondary"
+                    {/* Article Details */}
+                    <div
                       style={{
-                        fontSize: 13,
-                        lineHeight: 1.5,
-                        display: "-webkit-box",
-                        WebkitLineClamp: 2,
-                        WebkitBoxOrient: "vertical",
-                        overflow: "hidden",
-                        marginTop: 4,
+                        padding: "16px 18px",
+                        flex: 1,
+                        display: "flex",
+                        flexDirection: "column",
                       }}
                     >
-                      {article.trailText}
-                    </Text>
-                  )}
+                      {/* Topic Tags */}
+                      <div style={{ display: "flex", gap: 6, marginBottom: 10, flexWrap: "wrap" }}>
+                        <span
+                          style={{
+                            fontSize: 10.5,
+                            fontWeight: 800,
+                            padding: "2px 8px",
+                            borderRadius: 6,
+                            background: "var(--surface-alt)",
+                            border: "1px solid var(--border)",
+                            color: "var(--text-secondary)",
+                          }}
+                        >
+                          {article.section}
+                        </span>
 
-                  {/* Meta row */}
-                  <Flex align="center" gap={12} style={{ marginTop: 12 }}>
-                    <Flex align="center" gap={4}>
-                      <ReadOutlined style={{ fontSize: 12, color: "var(--text-muted)" }} />
-                      <Text style={{ fontSize: 12, color: "var(--text-muted)" }}>The Guardian</Text>
-                    </Flex>
-                    <Flex align="center" gap={4}>
-                      <ClockCircleOutlined style={{ fontSize: 12, color: "var(--text-muted)" }} />
-                      <Text style={{ fontSize: 12, color: "var(--text-muted)" }}>{article.readTime} phút</Text>
-                    </Flex>
-                  </Flex>
-                </div>
-              </Card>
-            ))}
+                        <span
+                          style={{
+                            fontSize: 10.5,
+                            fontWeight: 800,
+                            padding: "2px 8px",
+                            borderRadius: 6,
+                            background: diffStyle.bg,
+                            color: diffStyle.color,
+                            border: `1.5px solid ${diffStyle.border}`,
+                          }}
+                        >
+                          {article.difficulty}
+                        </span>
+                      </div>
+
+                      {/* Header title */}
+                      <h4
+                        style={{
+                          fontSize: 15.5,
+                          fontWeight: 900,
+                          lineHeight: 1.4,
+                          color: "var(--text-primary)",
+                          margin: "0 0 6px",
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                        }}
+                      >
+                        {article.title}
+                      </h4>
+
+                      {/* Snippet text */}
+                      {article.trailText && (
+                        <p
+                          style={{
+                            fontSize: 12.5,
+                            color: "var(--text-muted)",
+                            lineHeight: 1.5,
+                            margin: "0 0 16px",
+                            fontWeight: 500,
+                            display: "-webkit-box",
+                            WebkitLineClamp: 2,
+                            WebkitBoxOrient: "vertical",
+                            overflow: "hidden",
+                          }}
+                        >
+                          {article.trailText.replace(/<[^>]*>/g, "")}
+                        </p>
+                      )}
+
+                      {/* Stats meta */}
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          marginTop: "auto",
+                          borderTop: "1px dashed var(--border)",
+                          paddingTop: 12,
+                        }}
+                      >
+                        <span
+                          style={{ fontSize: 11.5, color: "var(--text-muted)", fontWeight: 700 }}
+                        >
+                          The Guardian
+                        </span>
+                        <div
+                          style={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 4,
+                            fontSize: 11.5,
+                            color: "var(--text-muted)",
+                            fontWeight: 700,
+                          }}
+                        >
+                          <ClockCircleOutlined />
+                          <span>{article.readTime} phút đọc</span>
+                        </div>
+                      </div>
+                    </div>
+                  </m.div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Guardian Attribution footer */}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              padding: "16px 0",
+              borderTop: "1px solid var(--border)",
+              marginTop: 24,
+            }}
+          >
+            <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 600 }}>
+              Powered by The Guardian Open Platform API
+            </span>
           </div>
-        )}
-
-        {/* Attribution */}
-        <Flex justify="center" style={{ paddingBottom: 16 }}>
-          <Text style={{ fontSize: 11, color: "var(--text-muted)" }}>
-            Powered by The Guardian Open Platform
-          </Text>
-        </Flex>
-      </Flex>
+        </div>
+      </div>
     </div>
   );
 }

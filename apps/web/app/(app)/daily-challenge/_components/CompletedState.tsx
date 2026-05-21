@@ -3,10 +3,8 @@
 import { useState, useEffect } from "react";
 import { Typography } from "antd";
 import {
-  CheckCircleFilled,
   CloseCircleFilled,
   TrophyOutlined,
-  LikeOutlined,
   ClockCircleOutlined,
   StarFilled,
   RightOutlined,
@@ -24,8 +22,9 @@ import type {
 } from "@/lib/daily-challenge/types";
 import { StreakFire } from "@/components/shared";
 import { BadgeGallery } from "./BadgeGallery";
+import * as m from "motion/react-client";
 
-const { Title, Text } = Typography;
+const { Title, Text, Paragraph } = Typography;
 
 /** Milliseconds until midnight VN time (UTC+7). */
 function msUntilVnMidnight(): number {
@@ -46,9 +45,9 @@ function formatCountdown(ms: number): string {
 }
 
 /* ── Score Ring ── */
-function MiniScoreRing({ score, total }: { score: number; total: number }) {
-  const radius = 44;
-  const stroke = 5;
+function MiniScoreRing({ score, total, isGood }: { score: number; total: number; isGood: boolean }) {
+  const radius = 42;
+  const stroke = 6;
   const circumference = 2 * Math.PI * radius;
   const pct = total > 0 ? score / total : 0;
   const offset = circumference * (1 - pct);
@@ -57,15 +56,17 @@ function MiniScoreRing({ score, total }: { score: number; total: number }) {
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ display: "block" }}>
       <circle cx={size/2} cy={size/2} r={radius} fill="none" stroke="rgba(255,255,255,0.12)" strokeWidth={stroke} />
-      <circle
+      <m.circle
         cx={size/2} cy={size/2} r={radius}
         fill="none"
-        stroke="var(--text-on-accent)"
+        stroke={isGood ? "var(--text-on-accent)" : "var(--accent)"}
         strokeWidth={stroke}
         strokeLinecap="round"
         strokeDasharray={circumference}
-        strokeDashoffset={offset}
-        style={{ transform: "rotate(-90deg)", transformOrigin: "50% 50%", transition: "stroke-dashoffset 0.8s ease" }}
+        initial={{ strokeDashoffset: circumference }}
+        animate={{ strokeDashoffset: offset }}
+        transition={{ duration: 1.0, ease: "easeOut", delay: 0.2 }}
+        style={{ transform: "rotate(-90deg)", transformOrigin: "50% 50%" }}
       />
     </svg>
   );
@@ -75,37 +76,38 @@ function MiniScoreRing({ score, total }: { score: number; total: number }) {
 function WeeklyChart({ scores }: { scores: { day: string; score: number }[] }) {
   const maxScore = 5;
   const barWidth = 28;
-  const barGap = 8;
-  const chartHeight = 60;
+  const barGap = 10;
+  const chartHeight = 70;
   const chartWidth = scores.length * (barWidth + barGap) - barGap;
 
   return (
     <div
       style={{
-        borderRadius: 14,
+        borderRadius: "var(--radius-xl)",
         border: "1px solid var(--border)",
         background: "var(--surface)",
-        padding: "14px 18px",
+        padding: "16px 20px",
+        boxShadow: "var(--shadow-sm)",
       }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
-        <BarChartOutlined style={{ fontSize: 12, color: "var(--accent)" }} />
+      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 16 }}>
+        <BarChartOutlined style={{ fontSize: 13, color: "var(--accent)" }} />
         <span
           style={{
-            fontSize: 10,
-            fontWeight: 700,
+            fontSize: 11,
+            fontWeight: 800,
             textTransform: "uppercase",
-            letterSpacing: "0.12em",
+            letterSpacing: "0.08em",
             color: "var(--accent)",
           }}
         >
-          7 ngày gần nhất
+          Lịch sử 7 ngày gần nhất
         </span>
       </div>
 
       <svg
         width="100%"
-        viewBox={`0 0 ${chartWidth} ${chartHeight + 18}`}
+        viewBox={`0 0 ${chartWidth} ${chartHeight + 22}`}
         style={{ display: "block" }}
       >
         {scores.map((s, i) => {
@@ -115,7 +117,7 @@ function WeeklyChart({ scores }: { scores: { day: string; score: number }[] }) {
           const pct = s.score / maxScore;
           const fill =
             pct >= 0.8
-              ? "var(--sage, var(--success))"
+              ? "#10b981" // emerald green
               : pct >= 0.5
               ? "var(--accent)"
               : "var(--error)";
@@ -129,47 +131,44 @@ function WeeklyChart({ scores }: { scores: { day: string; score: number }[] }) {
                 width={barWidth}
                 height={chartHeight}
                 rx={6}
-                fill="var(--bg-deep)"
+                fill="var(--surface-alt)"
               />
               {/* Score bar */}
               {s.score > 0 && (
-                <rect
+                <m.rect
                   x={x}
-                  y={y}
                   width={barWidth}
-                  height={barHeight}
                   rx={6}
                   fill={fill}
-                  style={{
-                    transition: "height 0.5s ease, y 0.5s ease",
-                  }}
+                  initial={{ y: chartHeight, height: 0 }}
+                  animate={{ y, height: barHeight }}
+                  transition={{ type: "spring", stiffness: 60, damping: 10, delay: i * 0.08 }}
                 />
               )}
               {/* Score label */}
               <text
                 x={x + barWidth / 2}
-                y={y - 4}
+                y={s.score > 0 ? y - 6 : chartHeight - 6}
+                textAnchor="middle"
+                style={{
+                  fontSize: 10,
+                  fontWeight: 800,
+                  fill: s.score > 0 ? "var(--text-primary)" : "var(--text-muted)",
+                  fontFamily: "var(--font-mono)",
+                }}
+              >
+                {s.score > 0 ? s.score : "0"}
+              </text>
+              {/* Day label */}
+              <text
+                x={x + barWidth / 2}
+                y={chartHeight + 16}
                 textAnchor="middle"
                 style={{
                   fontSize: 9,
                   fontWeight: 700,
                   fill: "var(--text-muted)",
-                  fontFamily: "var(--font-mono)",
-                }}
-              >
-                {s.score > 0 ? s.score : ""}
-              </text>
-              {/* Day label */}
-              <text
-                x={x + barWidth / 2}
-                y={chartHeight + 14}
-                textAnchor="middle"
-                style={{
-                  fontSize: 8,
-                  fontWeight: 500,
-                  fill: "var(--text-muted)",
                   fontFamily: "var(--font-body)",
-                  textTransform: "uppercase",
                 }}
               >
                 {s.day}
@@ -248,18 +247,20 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
   const bonusLoading = bonusState === "loading";
 
   return (
-    <div className="anim-fade-in" style={{ maxWidth: 520, margin: "0 auto" }}>
+    <div style={{ maxWidth: 540, margin: "0 auto", display: "flex", flexDirection: "column", gap: 16 }}>
       {/* ── Hero Card ── */}
-      <div
+      <m.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
         style={{
           width: "100%",
-          borderRadius: 24,
-          padding: "32px 24px 28px",
+          borderRadius: "var(--radius-xl)",
+          padding: "36px 24px 32px",
           background: isGood
-            ? "linear-gradient(145deg, color-mix(in srgb, var(--accent) 85%, #000) 0%, var(--accent) 50%, color-mix(in srgb, var(--secondary) 90%, var(--accent)) 100%)"
-            : "linear-gradient(145deg, var(--surface) 0%, color-mix(in srgb, var(--accent) 12%, var(--surface)) 100%)",
+            ? "linear-gradient(135deg, #4c1d95, #6d28d9 60%, #7c3aed)"
+            : "linear-gradient(135deg, var(--surface) 0%, var(--surface-alt) 100%)",
           boxShadow: isGood
-            ? "0 8px 32px color-mix(in srgb, var(--accent) 25%, transparent)"
+            ? "0 12px 30px rgba(109, 40, 217, 0.35)"
             : "var(--shadow-md)",
           border: isGood ? "none" : "1px solid var(--border)",
           position: "relative",
@@ -270,17 +271,16 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
           textAlign: "center",
         }}
       >
-        {/* Decorative */}
         {isGood && (
           <>
-            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 80% 0%, rgba(255,255,255,0.12) 0%, transparent 70%)", pointerEvents: "none" }} />
-            <div className="grain-overlay" style={{ opacity: 0.03 }} />
+            <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse 80% 60% at 80% 0%, rgba(255,255,255,0.15) 0%, transparent 70%)", pointerEvents: "none" }} />
+            <div className="grain-overlay" style={{ opacity: 0.04 }} />
           </>
         )}
 
         {/* Score ring */}
-        <div style={{ position: "relative", width: 100, height: 100 }}>
-          <MiniScoreRing score={correctCount} total={answers.length} />
+        <div style={{ position: "relative", width: 100, height: 100, marginBottom: 12 }}>
+          <MiniScoreRing score={correctCount} total={answers.length} isGood={isGood} />
           <div
             style={{
               position: "absolute",
@@ -293,8 +293,8 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
           >
             <span
               style={{
-                fontSize: 30,
-                fontWeight: 800,
+                fontSize: 32,
+                fontWeight: 900,
                 lineHeight: 1,
                 fontVariantNumeric: "tabular-nums",
                 color: isGood ? "var(--text-on-accent)" : "var(--accent)",
@@ -302,233 +302,174 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
             >
               {score}
             </span>
-            <span style={{ fontSize: 11, fontWeight: 500, opacity: 0.5, color: isGood ? "var(--text-on-accent)" : "var(--text-secondary)" }}>
-              / 5
+            <span style={{ fontSize: 11, fontWeight: 700, opacity: 0.6, color: isGood ? "var(--text-on-accent)" : "var(--text-secondary)", marginTop: 2 }}>
+              / {answers.length} đúng
             </span>
           </div>
         </div>
 
-        {/* Icon + label */}
-        <span style={{ fontSize: 28, marginTop: 8, color: isGood ? "var(--text-on-accent)" : "var(--accent)" }}>
-          {isGood ? <TrophyOutlined /> : <LikeOutlined />}
-        </span>
+        {/* Title */}
         <Title
-          level={4}
+          level={3}
           style={{
-            margin: "4px 0 0",
+            margin: "8px 0 4px",
             fontFamily: "var(--font-display)",
-            color: isGood ? "var(--text-on-accent)" : "var(--ink)",
+            color: isGood ? "var(--text-on-accent)" : "var(--text-primary)",
+            fontWeight: 800,
           }}
         >
-          Đã hoàn thành hôm nay!
+          {isGood ? "Độc cô cầu bại! 🏆" : "Hoàn thành xuất sắc! 🎉"}
         </Title>
+        <Text style={{ fontSize: 13, color: isGood ? "rgba(255,255,255,0.8)" : "var(--text-secondary)", maxWidth: 360, display: "block", marginBottom: 16 }}>
+          {isGood
+            ? "Bạn đã xuất sắc vượt qua các câu hỏi khó của hôm nay. Hãy duy trì phong độ nhé!"
+            : "Chúc mừng bạn đã hoàn thành bài học hôm nay. Kiên trì là chìa khóa thành công."}
+        </Text>
 
         {/* Streak */}
-        <div style={{ marginTop: 12 }}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
           <StreakFire streak={streak.currentStreak} />
         </div>
-      </div>
+      </m.div>
 
       {/* ── Bonus Round CTA ── */}
       {onStartBonus && bonusAvailable && (
-        <button
+        <m.button
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          whileHover={{ scale: 1.02, y: -2 }}
+          whileTap={{ scale: 0.98 }}
           onClick={onStartBonus}
-          className="anim-fade-up anim-delay-1"
           style={{
-            marginTop: 16,
             width: "100%",
-            borderRadius: 16,
-            padding: "18px 20px",
-            background: "linear-gradient(135deg, color-mix(in srgb, var(--xp) 15%, var(--surface)), color-mix(in srgb, var(--xp) 8%, var(--surface)))",
-            border: "1.5px solid color-mix(in srgb, var(--xp) 30%, transparent)",
+            borderRadius: "var(--radius-xl)",
+            padding: "16px 20px",
+            background: "linear-gradient(135deg, var(--surface), var(--surface-alt))",
+            border: "2px dashed var(--xp)",
             cursor: "pointer",
             display: "flex",
             alignItems: "center",
             gap: 14,
-            transition: "all 0.2s ease",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "translateY(-2px)";
-            e.currentTarget.style.boxShadow = "0 6px 24px color-mix(in srgb, var(--xp) 20%, transparent)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "translateY(0)";
-            e.currentTarget.style.boxShadow = "none";
+            boxShadow: "0 6px 15px rgba(245, 158, 11, 0.08)",
+            transition: "border-color 0.2s",
           }}
         >
           <div
             style={{
-              width: 44,
-              height: 44,
-              borderRadius: 12,
-              background: "linear-gradient(135deg, var(--xp), color-mix(in srgb, var(--xp) 70%, var(--accent)))",
+              width: 46,
+              height: 46,
+              borderRadius: "var(--radius-lg)",
+              background: "linear-gradient(135deg, var(--xp), #d97706)",
               display: "grid",
               placeItems: "center",
               flexShrink: 0,
+              boxShadow: "0 4px 10px rgba(245, 158, 11, 0.25)",
             }}
           >
             <ThunderboltOutlined style={{ fontSize: 20, color: "#fff" }} />
           </div>
           <div style={{ flex: 1, textAlign: "left" }}>
-            <div style={{ fontSize: 15, fontWeight: 700, color: "var(--ink)", fontFamily: "var(--font-display)" }}>
-              Bonus Round
+            <div style={{ fontSize: 15, fontWeight: 800, color: "var(--text-primary)", fontFamily: "var(--font-display)" }}>
+              ⚡ Thử thách Bonus Round
             </div>
             <div style={{ fontSize: 12, color: "var(--text-secondary)", marginTop: 2 }}>
-              3 câu thêm · Không ảnh hưởng streak · Nhận thêm XP
+              Thêm 3 câu hỏi nhanh · Nhận thêm XP · Không phạt khi trả lời sai
             </div>
           </div>
-          <RightOutlined style={{ fontSize: 12, color: "var(--text-muted)" }} />
-        </button>
+          <RightOutlined style={{ fontSize: 13, color: "var(--text-muted)" }} />
+        </m.button>
       )}
 
       {bonusLoading && (
         <div
-          className="anim-fade-in"
           style={{
-            marginTop: 16,
             width: "100%",
-            borderRadius: 16,
-            padding: "18px 20px",
+            borderRadius: "var(--radius-xl)",
+            padding: "16px 20px",
             background: "var(--surface)",
             border: "1px solid var(--border)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            gap: 8,
+            gap: 10,
             color: "var(--text-secondary)",
             fontSize: 13,
+            fontWeight: 600,
           }}
         >
-          <LoadingOutlined spin style={{ fontSize: 13 }} />
-          Đang tải bonus round...
+          <LoadingOutlined spin style={{ color: "var(--xp)" }} />
+          Đang khởi tạo thử thách Bonus...
         </div>
       )}
 
       {bonusCompleted && (
-        <div
-          className="anim-fade-in"
+        <m.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
           style={{
-            marginTop: 16,
             width: "100%",
-            borderRadius: 16,
-            padding: "14px 20px",
-            background: "color-mix(in srgb, var(--xp) 8%, var(--surface))",
-            border: "1px solid color-mix(in srgb, var(--xp) 20%, transparent)",
+            borderRadius: "var(--radius-xl)",
+            padding: "16px 20px",
+            background: "rgba(245, 158, 11, 0.08)",
+            border: "1px solid rgba(245, 158, 11, 0.25)",
             display: "flex",
             alignItems: "center",
-            gap: 8,
+            gap: 10,
             fontSize: 13,
-            fontWeight: 600,
+            fontWeight: 700,
             color: "var(--xp)",
           }}
         >
-          <ThunderboltOutlined style={{ fontSize: 13 }} />
-          Bonus đã hoàn thành hôm nay! ✨
-        </div>
+          <ThunderboltOutlined style={{ fontSize: 15 }} />
+          Bạn đã hoàn thành xuất sắc tất cả câu hỏi phụ hôm nay! ✨
+        </m.div>
       )}
 
       {/* ── Weekly Performance Chart ── */}
       {weeklyScores.length > 0 && (
-        <div className="anim-fade-up anim-delay-2" style={{ marginTop: 16 }}>
+        <m.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
           <WeeklyChart scores={weeklyScores} />
-        </div>
+        </m.div>
       )}
-
-      {/* ── Wrong Answer Review ── */}
-      {wrongAnswers.length > 0 && (
-        <div className="anim-fade-up anim-delay-3" style={{ marginTop: 16 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-            <StarFilled style={{ fontSize: 12, color: "var(--error)" }} />
-            <span
-              style={{
-                fontSize: 11,
-                fontWeight: 700,
-                textTransform: "uppercase",
-                letterSpacing: "0.12em",
-                color: "var(--error)",
-              }}
-            >
-              Câu cần ôn lại ({wrongAnswers.length})
-            </span>
-            <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
-          </div>
-          {wrongAnswers.map((a, i) => (
-            <div
-              key={i}
-              style={{
-                marginBottom: 6,
-                display: "flex",
-                alignItems: "flex-start",
-                gap: 10,
-                padding: "10px 14px",
-                borderRadius: 12,
-                border: "1px solid color-mix(in srgb, var(--error) 18%, transparent)",
-                background: "color-mix(in srgb, var(--error) 4%, var(--surface))",
-              }}
-            >
-              <CloseCircleFilled style={{ color: "var(--error)", fontSize: 13, marginTop: 2, flexShrink: 0 }} />
-              <div style={{ flex: 1, minWidth: 0 }}>
-                {a.questionStem && (
-                  <p style={{ margin: "0 0 4px", fontSize: 12, fontWeight: 500, color: "var(--ink)", lineHeight: 1.5, wordBreak: "break-word" }}>
-                    {a.questionStem}
-                  </p>
-                )}
-                {a.correctAnswer && (
-                  <p style={{ margin: 0, fontSize: 11, color: "var(--success)", fontWeight: 600 }}>
-                    ✓ {a.correctAnswer}
-                  </p>
-                )}
-                {a.explanation && a.explanation !== "Chính xác!" && (
-                  <p style={{ margin: "4px 0 0", fontSize: 11, color: "var(--text-secondary)", lineHeight: 1.5, wordBreak: "break-word" }}>
-                    {a.explanation}
-                  </p>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* ── Badges ── */}
-      <div style={{ marginTop: 16 }}>
-        <BadgeGallery badges={badges} />
-      </div>
 
       {/* ── Personal Stats ── */}
-      <div
+      <m.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.15 }}
         style={{
-          marginTop: 14,
-          borderRadius: 16,
+          borderRadius: "var(--radius-xl)",
           border: "1px solid var(--border)",
           background: "var(--surface)",
-          padding: "14px 18px",
+          padding: "16px 20px",
+          boxShadow: "var(--shadow-sm)",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}>
-          <TrophyOutlined style={{ fontSize: 12, color: "var(--accent)" }} />
-          <span style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.12em", color: "var(--accent)" }}>
-            Thành tích cá nhân
+        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
+          <TrophyOutlined style={{ fontSize: 13, color: "var(--accent)" }} />
+          <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--accent)" }}>
+            Bảng thành tích cá nhân
           </span>
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, textAlign: "center" }}>
-          <div style={{ padding: "8px 4px", borderRadius: 10, background: "var(--bg-deep)" }}>
-            <div style={{ fontSize: 20, fontWeight: 800, color: "var(--accent)", fontVariantNumeric: "tabular-nums" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 10, textAlign: "center" }}>
+          <div style={{ padding: "10px 4px", borderRadius: "var(--radius-lg)", background: "var(--surface-alt)", border: "1px solid var(--border)" }}>
+            <div style={{ fontSize: 22, fontWeight: 900, color: "var(--accent)", fontVariantNumeric: "tabular-nums" }}>
               {streak.currentStreak}
             </div>
-            <div style={{ fontSize: 9, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-muted)", marginTop: 2 }}>
-              Streak
+            <div style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-muted)", marginTop: 2 }}>
+              Chuỗi ngày
             </div>
           </div>
-          <div style={{ padding: "8px 4px", borderRadius: 10, background: "var(--bg-deep)" }}>
-            <div style={{ fontSize: 20, fontWeight: 800, color: "var(--success)", fontVariantNumeric: "tabular-nums" }}>
+          <div style={{ padding: "10px 4px", borderRadius: "var(--radius-lg)", background: "var(--surface-alt)", border: "1px solid var(--border)" }}>
+            <div style={{ fontSize: 22, fontWeight: 900, color: "#10b981", fontVariantNumeric: "tabular-nums" }}>
               {score}/5
             </div>
-            <div style={{ fontSize: 9, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-muted)", marginTop: 2 }}>
-              Hôm nay
+            <div style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-muted)", marginTop: 2 }}>
+              Điểm hôm nay
             </div>
           </div>
-          <div style={{ padding: "8px 4px", borderRadius: 10, background: "var(--bg-deep)" }}>
-            <div style={{ fontSize: 20, fontWeight: 800, color: "var(--xp)", fontVariantNumeric: "tabular-nums" }}>
+          <div style={{ padding: "10px 4px", borderRadius: "var(--radius-lg)", background: "var(--surface-alt)", border: "1px solid var(--border)" }}>
+            <div style={{ fontSize: 22, fontWeight: 900, color: "var(--xp)", fontVariantNumeric: "tabular-nums" }}>
               {(() => {
                 try {
                   const best = localStorage.getItem("daily-challenge-best");
@@ -538,84 +479,148 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
                 } catch { return "—"; }
               })()}
             </div>
-            <div style={{ fontSize: 9, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--text-muted)", marginTop: 2 }}>
-              Best time
+            <div style={{ fontSize: 9, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-muted)", marginTop: 2 }}>
+              Kỷ lục thời gian
             </div>
           </div>
         </div>
-      </div>
+      </m.div>
 
-      {/* ── Countdown (de-emphasized) ── */}
-      <div
-        style={{
-          marginTop: 14,
-          borderRadius: 14,
-          background: "var(--bg-deep)",
-          border: "1px solid var(--border)",
-          padding: "12px 16px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 8,
-        }}
+      {/* ── Wrong Answer Review ── */}
+      {wrongAnswers.length > 0 && (
+        <m.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2 }}
+          style={{ display: "flex", flexDirection: "column", gap: 8 }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "8px 0 4px" }}>
+            <StarFilled style={{ fontSize: 12, color: "var(--error)" }} />
+            <span
+              style={{
+                fontSize: 11,
+                fontWeight: 800,
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                color: "var(--error)",
+              }}
+            >
+              Xem lại các câu trả lời sai ({wrongAnswers.length})
+            </span>
+            <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+          </div>
+          {wrongAnswers.map((a, i) => (
+            <div
+              key={i}
+              style={{
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 10,
+                padding: "12px 16px",
+                borderRadius: "var(--radius-lg)",
+                border: "1px solid rgba(239, 68, 68, 0.15)",
+                background: "var(--surface)",
+                boxShadow: "var(--shadow-sm)",
+              }}
+            >
+              <CloseCircleFilled style={{ color: "var(--error)", fontSize: 14, marginTop: 2, flexShrink: 0 }} />
+              <div style={{ flex: 1, minWidth: 0 }}>
+                {a.questionStem && (
+                  <p style={{ margin: "0 0 6px", fontSize: 13, fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.5 }}>
+                    {a.questionStem}
+                  </p>
+                )}
+                <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 6 }}>
+                  <span style={{ fontSize: 11, background: "var(--error-bg)", color: "var(--error)", padding: "2px 8px", borderRadius: 6, fontWeight: 700 }}>
+                    Bạn ghi: {a.answer || "(trống)"}
+                  </span>
+                  {a.correctAnswer && (
+                    <span style={{ fontSize: 11, background: "rgba(16, 185, 129, 0.12)", color: "#10b981", padding: "2px 8px", borderRadius: 6, fontWeight: 700 }}>
+                      Đáp án đúng: {a.correctAnswer}
+                    </span>
+                  )}
+                </div>
+                {a.explanation && a.explanation !== "Chính xác!" && (
+                  <p style={{ margin: 0, fontSize: 12, color: "var(--text-muted)", lineHeight: 1.6 }}>
+                    💡 {a.explanation}
+                  </p>
+                )}
+              </div>
+            </div>
+          ))}
+        </m.div>
+      )}
+
+      {/* ── Badges Gallery ── */}
+      <m.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }}>
+        <BadgeGallery badges={badges} />
+      </m.div>
+
+      {/* ── Countdown & Keep Learning ── */}
+      <m.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3 }}
+        style={{ display: "flex", flexDirection: "column", gap: 14, marginTop: 10 }}
       >
-        <ClockCircleOutlined style={{ fontSize: 11, color: "var(--text-muted)" }} />
-        <Text
+        {/* Next challenge countdown */}
+        <div
           style={{
-            fontSize: 11,
-            color: "var(--text-muted)",
-          }}
-        >
-          Thử thách tiếp theo sau
-        </Text>
-        <span
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 13,
-            fontWeight: 600,
-            color: "var(--accent)",
-            fontVariantNumeric: "tabular-nums",
-          }}
-        >
-          {formatCountdown(countdown)}
-        </span>
-      </div>
-
-      {/* ── CTA ── */}
-      <div style={{ marginTop: 20, display: "flex", flexDirection: "column", alignItems: "center", gap: 10 }}>
-        <Link
-          href="/daily-challenge"
-          prefetch={false}
-          style={{
-            display: "inline-flex",
+            borderRadius: "var(--radius-xl)",
+            background: "var(--surface-alt)",
+            border: "1px solid var(--border)",
+            padding: "12px 16px",
+            display: "flex",
             alignItems: "center",
+            justifyContent: "center",
             gap: 8,
-            padding: "12px 28px",
-            borderRadius: 999,
-            background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-            color: "var(--text-on-accent)",
-            fontWeight: 600,
-            fontSize: 14,
-            textDecoration: "none",
-            transition: "transform 0.15s, box-shadow 0.15s",
-            boxShadow: "0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent)",
-          }}
-          onMouseEnter={(e) => {
-            e.currentTarget.style.transform = "translateY(-2px)";
-            e.currentTarget.style.boxShadow = "0 6px 24px color-mix(in srgb, var(--accent) 40%, transparent)";
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = "translateY(0)";
-            e.currentTarget.style.boxShadow = "0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent)";
           }}
         >
-          <ThunderboltOutlined /> Tiếp tục học
-          <RightOutlined style={{ fontSize: 11 }} />
-        </Link>
-        <Text type="secondary" style={{ fontSize: 12 }}>
-          Quay lại mai nhé!
-        </Text>
-      </div>
+          <ClockCircleOutlined style={{ fontSize: 12, color: "var(--text-muted)" }} />
+          <Text style={{ fontSize: 12, color: "var(--text-secondary)", fontWeight: 500 }}>
+            Thử thách tiếp theo sẽ mở sau
+          </Text>
+          <span
+            style={{
+              fontFamily: "var(--font-mono)",
+              fontSize: 14,
+              fontWeight: 800,
+              color: "var(--accent)",
+              fontVariantNumeric: "tabular-nums",
+            }}
+          >
+            {formatCountdown(countdown)}
+          </span>
+        </div>
+
+        {/* Keep learning CTA link */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 8 }}>
+          <Link
+            href="/dictionary"
+            prefetch={false}
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
+              width: "100%",
+              padding: "14px 28px",
+              borderRadius: "var(--radius-lg)",
+              background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+              color: "var(--text-on-accent)",
+              fontWeight: 800,
+              fontSize: 15,
+              textDecoration: "none",
+              boxShadow: "0 6px 18px var(--accent-muted)",
+              transition: "all 0.2s",
+            }}
+            className="btn-shimmer"
+          >
+            <ThunderboltOutlined /> Tra cứu từ điển & Luyện từ vựng
+            <RightOutlined style={{ fontSize: 12 }} />
+          </Link>
+        </div>
+      </m.div>
     </div>
   );
 }

@@ -1,7 +1,15 @@
 "use client";
 
-import { Button, Switch, Segmented } from "antd";
-import { CheckOutlined, RocketOutlined, ClockCircleOutlined, BookOutlined, ThunderboltOutlined } from "@ant-design/icons";
+import {
+  BookOutlined,
+  CheckOutlined,
+  ClockCircleOutlined,
+  LoadingOutlined,
+  RocketOutlined,
+  ThunderboltOutlined,
+} from "@ant-design/icons";
+import { Button, Segmented, Switch } from "antd";
+import * as m from "motion/react-client";
 
 const CEFR_LEVELS = [
   { id: "A1", tier: "easy", label: "A1", desc: "Cơ bản" },
@@ -13,9 +21,15 @@ const CEFR_LEVELS = [
 ] as const;
 
 const TIER_COLORS: Record<string, string> = {
-  easy: "var(--accent)",
-  medium: "var(--secondary)",
-  hard: "var(--tertiary)",
+  easy: "var(--success)",
+  medium: "var(--accent)",
+  hard: "var(--error)",
+};
+
+const TIER_GLOWS: Record<string, string> = {
+  easy: "rgba(16, 185, 129, 0.2)",
+  medium: "color-mix(in srgb, var(--accent) 20%, transparent)",
+  hard: "rgba(239, 68, 68, 0.2)",
 };
 
 type Props = {
@@ -29,38 +43,72 @@ type Props = {
   onSourceModeChange?: (val: "ai" | "ets") => void;
 };
 
-export function CEFRPath({ selected, onSelect, onStart, isLoading, timedMode, onTimedModeChange, sourceMode = "ai", onSourceModeChange }: Props) {
+export function CEFRPath({
+  selected,
+  onSelect,
+  onStart,
+  isLoading,
+  timedMode,
+  onTimedModeChange,
+  sourceMode = "ai",
+  onSourceModeChange,
+}: Props) {
   const isEts = sourceMode === "ets";
   return (
     <div
       className="anim-fade-up"
-      style={{ maxWidth: 540, margin: "0 auto", textAlign: "center" }}
+      style={{
+        maxWidth: 480,
+        margin: "0 auto",
+        textAlign: "center",
+        background: "var(--surface)",
+        padding: "32px 24px",
+        borderRadius: "var(--radius-xl)",
+        border: "1px solid var(--border)",
+        boxShadow: "var(--shadow-sm)",
+        position: "relative",
+        overflow: "hidden",
+      }}
     >
+      <div
+        style={{
+          position: "absolute",
+          left: "50%",
+          top: "0%",
+          transform: "translateX(-50%)",
+          width: 180,
+          height: 180,
+          borderRadius: "50%",
+          background: "radial-gradient(circle, var(--accent) 5%, transparent 70%)",
+          pointerEvents: "none",
+        }}
+      />
+
       <h3
         style={{
-          fontSize: 22,
-          fontWeight: 600,
+          fontSize: 20,
+          fontWeight: 900,
           fontFamily: "var(--font-display)",
-          fontStyle: "italic",
-          color: "var(--ink)",
+          color: "var(--text-primary)",
           margin: 0,
         }}
       >
-        TOEIC Part 5
+        TOEIC Part 5 Quiz
       </h3>
       <p
         style={{
-          marginTop: 6,
-          fontSize: 14,
+          marginTop: 4,
+          fontSize: 13,
           color: "var(--text-secondary)",
+          fontWeight: 500,
         }}
       >
-        Incomplete Sentences — Chọn nguồn đề
+        Luyện tập trắc nghiệm Part 5 với câu hỏi biên soạn chuẩn đề thi
       </p>
 
       {/* Source mode toggle */}
       {onSourceModeChange && (
-        <div style={{ marginTop: 16, marginBottom: 4 }}>
+        <div style={{ marginTop: 20, marginBottom: 4, position: "relative", zIndex: 1 }}>
           <Segmented
             value={sourceMode}
             onChange={(val) => onSourceModeChange(val as "ai" | "ets")}
@@ -68,7 +116,16 @@ export function CEFRPath({ selected, onSelect, onStart, isLoading, timedMode, on
               {
                 value: "ai",
                 label: (
-                  <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "2px 4px" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 6,
+                      padding: "4px 12px",
+                      fontWeight: 700,
+                    }}
+                  >
                     <ThunderboltOutlined style={{ fontSize: 13 }} />
                     <span>AI tạo đề</span>
                   </div>
@@ -77,134 +134,151 @@ export function CEFRPath({ selected, onSelect, onStart, isLoading, timedMode, on
               {
                 value: "ets",
                 label: (
-                  <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "2px 4px" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      gap: 6,
+                      padding: "4px 12px",
+                      fontWeight: 700,
+                    }}
+                  >
                     <BookOutlined style={{ fontSize: 13 }} />
                     <span>Đề ETS thật</span>
                   </div>
                 ),
               },
             ]}
-            style={{ borderRadius: 10 }}
+            style={{
+              borderRadius: "var(--radius-lg)",
+              border: "1px solid var(--border)",
+              background: "var(--surface-alt)",
+            }}
           />
           {isEts && (
-            <p style={{ marginTop: 8, fontSize: 11, color: "var(--text-muted)", fontStyle: "italic" }}>
-              240 câu từ ETS 2020–2021 · Không cần chọn trình độ
+            <p
+              style={{ marginTop: 8, fontSize: 11.5, color: "var(--text-muted)", fontWeight: 600 }}
+            >
+              240 câu hỏi trích xuất từ đề thi ETS thật · Tự động trộn ngẫu nhiên
             </p>
           )}
         </div>
       )}
 
-      {/* CEFR Path — dim when ETS mode */}
-      <div style={{ opacity: isEts ? 0.35 : 1, pointerEvents: isEts ? "none" : "auto", transition: "opacity 0.2s" }}>
-
       {/* CEFR Path */}
       <div
         style={{
-          marginTop: 28,
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "center",
-          gap: 0,
-          overflowX: "auto",
-          padding: "4px 0 16px",
+          opacity: isEts ? 0.35 : 1,
+          pointerEvents: isEts ? "none" : "auto",
+          transition: "opacity 0.2s",
+          marginTop: 24,
         }}
       >
-        {CEFR_LEVELS.map((level, i) => {
-          const isSelected = selected === level.tier;
-          const tierColor = TIER_COLORS[level.tier];
-          const isLast = i === CEFR_LEVELS.length - 1;
+        <div
+          style={{
+            display: "flex",
+            alignItems: "flex-start",
+            justifyContent: "center",
+            gap: 0,
+            padding: "4px 0 12px",
+          }}
+        >
+          {CEFR_LEVELS.map((level, i) => {
+            const isSelected = selected === level.tier;
+            const tierColor = TIER_COLORS[level.tier];
+            const isLast = i === CEFR_LEVELS.length - 1;
 
-          return (
-            <div key={level.id} style={{ display: "flex", alignItems: "flex-start" }}>
-              {/* Node */}
-              <button
-                type="button"
-                onClick={() => onSelect(level.tier)}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: 6,
-                  background: "none",
-                  border: "none",
-                  cursor: "pointer",
-                  padding: "0 4px",
-                  transition: "transform 0.15s",
-                }}
-              >
-                {/* Circle */}
-                <div
-                  className={isSelected ? "anim-pop-in" : ""}
+            return (
+              <div key={level.id} style={{ display: "flex", alignItems: "center" }}>
+                {/* Node wrapper */}
+                <m.button
+                  whileHover={{ scale: 1.08 }}
+                  whileTap={{ scale: 0.92 }}
+                  type="button"
+                  onClick={() => onSelect(level.tier)}
                   style={{
-                    width: 36,
-                    height: 36,
-                    borderRadius: "50%",
-                    border: `2.5px solid ${isSelected ? tierColor : "var(--border)"}`,
-                    background: isSelected ? tierColor : "var(--surface)",
-                    display: "grid",
-                    placeItems: "center",
-                    boxShadow: isSelected
-                      ? `0 0 0 3px ${tierColor}33, 0 2px 8px ${tierColor}44`
-                      : "none",
-                    transition: "all 0.25s ease",
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    gap: 6,
+                    background: "none",
+                    border: "none",
+                    cursor: "pointer",
+                    padding: "0",
                   }}
                 >
-                  {isSelected && (
-                    <CheckOutlined style={{ fontSize: 14, color: "var(--text-on-accent)", fontWeight: 700 }} />
-                  )}
-                </div>
-                {/* Label */}
-                <span
-                  style={{
-                    fontSize: 12,
-                    fontWeight: isSelected ? 700 : 500,
-                    color: isSelected ? tierColor : "var(--text-muted)",
-                    transition: "color 0.2s",
-                  }}
-                >
-                  {level.label}
-                </span>
-              </button>
+                  <div
+                    style={{
+                      width: 32,
+                      height: 32,
+                      borderRadius: "50%",
+                      border: `2px solid ${isSelected ? tierColor : "var(--border)"}`,
+                      background: isSelected ? tierColor : "var(--surface-alt)",
+                      display: "grid",
+                      placeItems: "center",
+                      boxShadow: isSelected ? `0 0 10px ${TIER_GLOWS[level.tier]}` : "none",
+                      transition: "all 0.2s ease",
+                    }}
+                  >
+                    {isSelected ? (
+                      <CheckOutlined
+                        style={{ fontSize: 12, color: "var(--text-on-accent)", fontWeight: 900 }}
+                      />
+                    ) : (
+                      <span style={{ fontSize: 10, fontWeight: 800, color: "var(--text-muted)" }}>
+                        {level.label}
+                      </span>
+                    )}
+                  </div>
+                  <span
+                    style={{
+                      fontSize: 10.5,
+                      fontWeight: 800,
+                      color: isSelected ? tierColor : "var(--text-muted)",
+                      transition: "color 0.2s",
+                    }}
+                  >
+                    {level.desc}
+                  </span>
+                </m.button>
 
-              {/* Connector line */}
-              {!isLast && (
-                <div
-                  style={{
-                    width: 32,
-                    height: 2,
-                    marginTop: 17, // center with 36px circle
-                    background:
-                      isSelected && CEFR_LEVELS[i + 1]?.tier === level.tier
-                        ? tierColor
-                        : "var(--border)",
-                    borderRadius: 1,
-                    transition: "background 0.2s",
-                  }}
-                />
-              )}
-            </div>
-          );
-        })}
+                {/* Line */}
+                {!isLast && (
+                  <div
+                    style={{
+                      width: 24,
+                      height: 2,
+                      alignSelf: "flex-start",
+                      marginTop: 15,
+                      background:
+                        isSelected && CEFR_LEVELS[i + 1]?.tier === level.tier
+                          ? tierColor
+                          : "var(--border)",
+                      borderRadius: 99,
+                    }}
+                  />
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <p
+          style={{
+            marginTop: 8,
+            fontSize: 12.5,
+            fontWeight: 800,
+            color: TIER_COLORS[selected] ?? "var(--text-secondary)",
+          }}
+        >
+          {selected === "easy" && "Độ khó: Ngữ pháp cơ bản (A1–A2)"}
+          {selected === "medium" && "Độ khó: Ngữ pháp trung cấp (B1–B2)"}
+          {selected === "hard" && "Độ khó: Ngữ pháp nâng cao (C1–C2)"}
+        </p>
       </div>
 
-      {/* Selected tier label */}
-      <p
-        className="anim-fade-in"
-        key={selected}
-        style={{
-          marginTop: 4,
-          fontSize: 13,
-          fontWeight: 500,
-          color: TIER_COLORS[selected] ?? "var(--text-secondary)",
-        }}
-      >
-        {selected === "easy" && "Ngữ pháp cơ bản (A1–A2)"}
-        {selected === "medium" && "Ngữ pháp trung cấp (B1–B2)"}
-        {selected === "hard" && "Ngữ pháp nâng cao (C1–C2)"}
-      </p>
-      </div>
-
-      {/* Timer toggle */}
+      {/* Timer switches */}
       {onTimedModeChange && (
         <div
           style={{
@@ -213,34 +287,59 @@ export function CEFRPath({ selected, onSelect, onStart, isLoading, timedMode, on
             alignItems: "center",
             justifyContent: "center",
             gap: 10,
+            borderTop: "1.5px dashed var(--border)",
+            paddingTop: 16,
           }}
         >
-          <ClockCircleOutlined style={{ fontSize: 14, color: timedMode ? "var(--accent)" : "var(--text-muted)" }} />
-          <span style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 500 }}>
-            Chế độ bấm giờ
-          </span>
-          <Switch
-            size="small"
-            checked={timedMode}
-            onChange={onTimedModeChange}
+          <ClockCircleOutlined
+            style={{ fontSize: 14, color: timedMode ? "var(--accent)" : "var(--text-muted)" }}
           />
+          <span style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 700 }}>
+            Tính giờ làm bài
+          </span>
+          <Switch size="small" checked={timedMode} onChange={onTimedModeChange} />
           {timedMode && (
-            <span style={{ fontSize: 11, color: "var(--text-muted)" }}>(30s/câu)</span>
+            <span style={{ fontSize: 11.5, color: "var(--text-muted)", fontWeight: 600 }}>
+              (30s / câu hỏi)
+            </span>
           )}
         </div>
       )}
 
-      <Button
-        type="primary"
-        size="large"
-        className="anim-fade-up anim-delay-4"
+      {/* Start Button */}
+      <m.button
+        whileHover={{ scale: 1.02 }}
+        whileTap={{ scale: 0.98 }}
         onClick={onStart}
         disabled={isLoading}
-        loading={isLoading}
-        style={{ marginTop: 16, borderRadius: 999, paddingInline: 40 }}
+        style={{
+          marginTop: 24,
+          height: 44,
+          width: "100%",
+          borderRadius: "var(--radius-lg)",
+          background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+          color: "var(--text-on-accent)",
+          border: "none",
+          fontWeight: 800,
+          fontSize: 14.5,
+          cursor: "pointer",
+          boxShadow: "0 4px 12px var(--accent-muted)",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 6,
+        }}
       >
-        {isLoading ? "Đang tạo đề..." : <><RocketOutlined style={{ marginRight: 6 }} /> Bắt đầu</>}
-      </Button>
+        {isLoading ? (
+          <>
+            <LoadingOutlined spin /> Đang lập đề...
+          </>
+        ) : (
+          <>
+            <RocketOutlined /> Bắt đầu luyện đề
+          </>
+        )}
+      </m.button>
     </div>
   );
 }

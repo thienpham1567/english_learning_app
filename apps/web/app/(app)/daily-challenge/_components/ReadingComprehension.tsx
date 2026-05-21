@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { ReadingComprehensionData } from "@/lib/daily-challenge/types";
 import { ReadOutlined } from "@ant-design/icons";
+import * as m from "motion/react-client";
 
 const LABELS = ["A", "B", "C", "D"] as const;
 
@@ -15,7 +16,6 @@ type Props = {
 
 export function ReadingComprehension({ data, instruction, onAnswer, disabled }: Props) {
   const [selected, setSelected] = useState<number | null>(null);
-  const [hoveredOption, setHoveredOption] = useState<number | null>(null);
 
   const handleSelect = (i: number) => {
     if (disabled) return;
@@ -28,49 +28,50 @@ export function ReadingComprehension({ data, instruction, onAnswer, disabled }: 
       {/* Instruction */}
       <p
         style={{
-          marginBottom: 12,
+          marginBottom: 14,
           fontSize: 11,
-          fontWeight: 700,
+          fontWeight: 800,
           color: "var(--accent)",
           textTransform: "uppercase",
-          letterSpacing: "0.1em",
+          letterSpacing: "0.08em",
         }}
       >
-        {instruction}
+        📖 {instruction}
       </p>
 
       {/* Passage */}
       <div
         style={{
-          marginBottom: 16,
-          borderRadius: 14,
+          marginBottom: 20,
+          borderRadius: "var(--radius-xl)",
           borderLeft: "4px solid var(--accent)",
-          background: "color-mix(in srgb, var(--accent) 5%, var(--surface))",
-          padding: "16px 18px",
+          background: "var(--surface-alt)",
+          padding: "18px 20px",
+          boxShadow: "var(--shadow-sm)",
         }}
       >
         <span
           style={{
             fontSize: 10,
-            fontWeight: 700,
+            fontWeight: 800,
             textTransform: "uppercase",
-            letterSpacing: "0.12em",
+            letterSpacing: "0.08em",
             color: "var(--accent)",
             display: "flex",
             alignItems: "center",
-            gap: 4,
-            marginBottom: 8,
+            gap: 6,
+            marginBottom: 10,
           }}
         >
-          <ReadOutlined style={{ fontSize: 10 }} /> Đoạn văn
+          <ReadOutlined style={{ fontSize: 11 }} /> Văn bản đọc hiểu
         </span>
         <p
           style={{
             margin: 0,
-            fontSize: 14,
-            color: "var(--ink)",
-            fontWeight: 400,
-            lineHeight: 1.75,
+            fontSize: 14.5,
+            color: "var(--text-primary)",
+            fontWeight: 500,
+            lineHeight: 1.8,
             fontFamily: "var(--font-body)",
           }}
         >
@@ -81,19 +82,19 @@ export function ReadingComprehension({ data, instruction, onAnswer, disabled }: 
       {/* Question */}
       <div
         style={{
-          marginBottom: 14,
-          padding: "10px 14px",
-          borderRadius: 10,
-          background: "var(--bg-deep)",
+          marginBottom: 16,
+          padding: "12px 16px",
+          borderRadius: "var(--radius-lg)",
+          background: "var(--surface-alt)",
           border: "1px solid var(--border)",
         }}
       >
         <p
           style={{
             margin: 0,
-            fontSize: 14,
-            fontWeight: 600,
-            color: "var(--ink)",
+            fontSize: 15,
+            fontWeight: 700,
+            color: "var(--text-primary)",
             lineHeight: 1.6,
           }}
         >
@@ -102,40 +103,36 @@ export function ReadingComprehension({ data, instruction, onAnswer, disabled }: 
       </div>
 
       {/* Options */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {data.options.map((opt, i) => {
           const isSelected = selected === i;
-          const isHov = hoveredOption === i && !isSelected && !disabled;
 
           return (
-            <button
+            <m.button
               key={i}
+              whileHover={!disabled ? { scale: 1.01, x: 2 } : {}}
+              whileTap={!disabled ? { scale: 0.99 } : {}}
               onClick={() => handleSelect(i)}
-              onMouseEnter={() => setHoveredOption(i)}
-              onMouseLeave={() => setHoveredOption(null)}
               disabled={disabled}
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 10,
-                borderRadius: 12,
+                gap: 12,
+                borderRadius: "var(--radius-lg)",
                 border: isSelected
                   ? "2px solid var(--accent)"
-                  : `1px solid ${isHov ? "var(--accent)" : "var(--border)"}`,
+                  : "1px solid var(--border)",
                 background: isSelected
-                  ? "color-mix(in srgb, var(--accent) 10%, var(--surface))"
-                  : isHov
-                  ? "color-mix(in srgb, var(--accent) 4%, var(--surface))"
+                  ? "var(--accent-light)"
                   : "var(--surface)",
-                padding: "11px 14px",
+                padding: "12px 16px",
                 textAlign: "left",
-                fontSize: 13,
-                fontWeight: isSelected ? 600 : 400,
-                color: "var(--ink)",
+                fontSize: 14,
+                fontWeight: isSelected ? 700 : 600,
+                color: isSelected ? "var(--accent)" : "var(--text-primary)",
                 cursor: disabled ? "default" : "pointer",
-                transition: "all 0.15s ease",
-                transform: isHov ? "translateY(-1px)" : "none",
-                boxShadow: isHov ? "0 3px 10px rgba(0,0,0,0.08)" : "none",
+                transition: "border-color 0.2s, background-color 0.2s",
+                boxShadow: isSelected ? "0 4px 12px var(--accent-muted)" : "var(--shadow-sm)",
                 lineHeight: 1.5,
               }}
             >
@@ -143,12 +140,12 @@ export function ReadingComprehension({ data, instruction, onAnswer, disabled }: 
                 style={{
                   width: 26,
                   height: 26,
-                  borderRadius: 99,
+                  borderRadius: "50%",
                   display: "grid",
                   placeItems: "center",
                   flexShrink: 0,
                   background: isSelected ? "var(--accent)" : "var(--border)",
-                  color: isSelected ? "var(--text-on-accent)" : "var(--text-muted)",
+                  color: isSelected ? "var(--text-on-accent)" : "var(--text-secondary)",
                   fontSize: 11,
                   fontWeight: 800,
                   transition: "all 0.15s",
@@ -156,8 +153,8 @@ export function ReadingComprehension({ data, instruction, onAnswer, disabled }: 
               >
                 {LABELS[i]}
               </span>
-              {opt}
-            </button>
+              <span style={{ flex: 1 }}>{opt}</span>
+            </m.button>
           );
         })}
       </div>

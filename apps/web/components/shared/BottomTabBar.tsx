@@ -20,6 +20,7 @@ import {
   AimOutlined,
   DashboardOutlined,
   NodeIndexOutlined,
+  MessageOutlined,
 } from "@ant-design/icons";
 
 const { Text } = Typography;
@@ -92,6 +93,7 @@ const MORE_HUB_ITEMS = [
     icon: <FireOutlined />,
     href: "/daily-challenge",
   },
+  { label: "AI Chatbot", icon: <MessageOutlined />, href: "/english-chatbot" },
   { label: "Đọc sách TOEIC", icon: <FileTextOutlined />, href: "/pdf-reader" },
   { label: "YouTube TOEIC", icon: <YoutubeOutlined />, href: "/youtube-learn" },
   {
@@ -119,6 +121,7 @@ function getActiveTab(pathname: string): string {
   )
     return "review";
   if (
+    pathname.startsWith("/english-chatbot") ||
     pathname.startsWith("/grammar-roadmap") ||
     pathname.startsWith("/grammar-lessons") ||
     pathname.startsWith("/my-vocabulary") ||

@@ -5,9 +5,14 @@ import {
   ClockCircleOutlined,
   RightOutlined,
   TrophyOutlined,
+  PlayCircleOutlined,
+  CalendarOutlined,
+  InfoCircleOutlined,
+  ThunderboltOutlined,
 } from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { CEFR_COLORS } from "@/lib/constants/cefr";
+import * as m from "motion/react-client";
 
 import type { DiagnosticStatus } from "./types";
 
@@ -33,168 +38,243 @@ export function WelcomeScreen({ status, onStart }: Props) {
         display: "flex",
         flexDirection: "column",
         overflow: "hidden",
+        background: "var(--bg-deep)",
       }}
-      className="anim-fade-up"
     >
-      <ModuleHeader
-        icon={<TrophyOutlined />}
-        gradient="var(--gradient-diagnostic)"
-        title="Bài test xếp loại CEFR 📊"
-        subtitle="Adaptive Placement Test · 30 câu hỏi thích ứng"
-      />
+      <div style={{ padding: "20px 20px 0", flexShrink: 0 }}>
+        <div style={{ maxWidth: 600, margin: "0 auto" }}>
+          <ModuleHeader
+            icon={<TrophyOutlined style={{ color: "#fff" }} />}
+            gradient="linear-gradient(135deg, #6366f1, #3b82f6)"
+            title="Đánh giá trình độ CEFR"
+            badge="Placement Test"
+            subtitle="Bài kiểm tra thích ứng thông minh (Adaptive) tự động điều chỉnh độ khó để xác định chính xác trình độ tiếng Anh của bạn."
+          />
+        </div>
+      </div>
 
-      <div style={{ flex: 1, overflow: "auto", padding: "24px 16px" }}>
+      <div style={{ flex: 1, overflowY: "auto", padding: "24px 20px 48px" }}>
         <Flex vertical gap={20} style={{ maxWidth: 600, margin: "0 auto" }}>
-          {/* Test info */}
-          <Card style={{ borderRadius: "var(--radius-xl)" }}>
-            <Flex vertical gap={16}>
-              <Text strong style={{ fontSize: 15 }}>
-                Thông tin bài test:
-              </Text>
+          
+          {/* Test Info Cards Grid */}
+          <m.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            style={{
+              borderRadius: "var(--radius-xl)",
+              border: "1px solid var(--border)",
+              background: "var(--surface)",
+              padding: "20px",
+              boxShadow: "var(--shadow-sm)",
+            }}
+          >
+            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+              <InfoCircleOutlined style={{ fontSize: 13, color: "var(--accent)" }} />
+              <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--accent)" }}>
+                Cấu trúc bài đánh giá
+              </span>
+            </div>
+
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
               {[
                 {
                   icon: "📝",
                   label: "30 câu hỏi",
-                  desc: "10 ngữ pháp + 10 từ vựng + 5 đọc + 5 nghe",
+                  desc: "10 Ngữ pháp + 10 Từ vựng + 5 Đọc + 5 Nghe",
                 },
                 {
                   icon: "🎯",
-                  label: "Thích ứng",
-                  desc: "Độ khó tự động điều chỉnh theo câu trả lời",
+                  label: "Thích ứng thông minh",
+                  desc: "Độ khó tự động tăng/giảm dựa vào câu trước",
                 },
                 {
                   icon: "⏱️",
-                  label: "~15 phút",
-                  desc: "Không giới hạn thời gian cho mỗi câu",
+                  label: "Khoảng 15 phút",
+                  desc: "Không giới hạn thời gian mỗi câu hỏi",
                 },
                 {
                   icon: "📈",
-                  label: "Kết quả",
-                  desc: "Xếp loại CEFR (A1–C2) + biểu đồ kỹ năng",
+                  label: "Xếp loại CEFR",
+                  desc: "Đánh giá chi tiết trình độ A1 đến C2 kèm biểu đồ",
                 },
-              ].map((item) => (
-                <Flex key={item.label} align="flex-start" gap={12}>
-                  <span style={{ fontSize: 20, lineHeight: 1 }}>
-                    {item.icon}
-                  </span>
-                  <div>
-                    <Text strong style={{ fontSize: 13 }}>
-                      {item.label}
-                    </Text>
-                    <br />
-                    <Text type="secondary" style={{ fontSize: 12 }}>
-                      {item.desc}
-                    </Text>
-                  </div>
-                </Flex>
+              ].map((item, idx) => (
+                <div
+                  key={idx}
+                  style={{
+                    padding: "12px 14px",
+                    background: "var(--surface-alt)",
+                    borderRadius: "var(--radius-lg)",
+                    border: "1px solid var(--border)",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 4,
+                  }}
+                >
+                  <span style={{ fontSize: 20, marginBottom: 2 }}>{item.icon}</span>
+                  <span style={{ fontSize: 13, fontWeight: 800, color: "var(--text-primary)" }}>{item.label}</span>
+                  <span style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.4, fontWeight: 500 }}>{item.desc}</span>
+                </div>
               ))}
-            </Flex>
-          </Card>
+            </div>
+          </m.div>
 
           {/* Previous result */}
           {status?.hasResult && status.lastResult && (
-            <Card style={{ borderRadius: "var(--radius-xl)" }}>
-              <Flex vertical gap={12}>
-                <Flex align="center" gap={8}>
-                  <TrophyOutlined
+            <m.div
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              style={{
+                borderRadius: "var(--radius-xl)",
+                border: "1px solid var(--border)",
+                background: "var(--surface)",
+                padding: "20px",
+                boxShadow: "var(--shadow-sm)",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
+                <TrophyOutlined style={{ fontSize: 13, color: "var(--accent)" }} />
+                <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--accent)" }}>
+                  Kết quả đánh giá gần nhất
+                </span>
+              </div>
+
+              <Flex vertical gap={14}>
+                <Flex align="center" gap={14}>
+                  <div
                     style={{
-                      color: CEFR_COLORS[status.lastResult.overallCefr],
-                    }}
-                  />
-                  <Text strong>Kết quả lần trước</Text>
-                </Flex>
-                <Flex align="center" gap={12}>
-                  <Tag
-                    color={CEFR_COLORS[status.lastResult.overallCefr]}
-                    style={{
-                      fontSize: 18,
-                      fontWeight: 700,
-                      padding: "4px 16px",
-                      borderRadius: 99,
+                      fontSize: 32,
+                      fontWeight: 900,
+                      color: CEFR_COLORS[status.lastResult.overallCefr] ?? "var(--accent)",
+                      background: "var(--surface-alt)",
+                      border: `2px solid ${CEFR_COLORS[status.lastResult.overallCefr] ?? "var(--accent)"}`,
+                      width: 58,
+                      height: 58,
+                      borderRadius: "50%",
+                      display: "grid",
+                      placeItems: "center",
+                      fontFamily: "var(--font-display)",
+                      boxShadow: `0 4px 12px ${CEFR_COLORS[status.lastResult.overallCefr]}33`,
                     }}
                   >
                     {status.lastResult.overallCefr}
-                  </Tag>
-                  <Text type="secondary" style={{ fontSize: 12 }}>
-                    Độ tin cậy: {Math.round(status.lastResult.confidence * 100)}
-                    %
-                  </Text>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: 14, fontWeight: 800, color: "var(--text-primary)" }}>
+                      Trình độ {status.lastResult.overallCefr}
+                    </div>
+                    <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2, fontWeight: 500 }}>
+                      Độ tin cậy: {Math.round(status.lastResult.confidence * 100)}% · Ngày kiểm tra: {new Date(status.lastResult.completedAt).toLocaleDateString("vi-VN")}
+                    </div>
+                  </div>
                 </Flex>
 
                 {/* Previous skill breakdown */}
                 {status.lastResult.skillBreakdown && (
-                  <Flex vertical gap={8} style={{ marginTop: 4 }}>
+                  <div
+                    style={{
+                      display: "grid",
+                      gridTemplateColumns: "1fr 1fr",
+                      gap: 8,
+                      marginTop: 4,
+                      padding: 12,
+                      borderRadius: "var(--radius-lg)",
+                      background: "var(--surface-alt)",
+                      border: "1px solid var(--border)",
+                    }}
+                  >
                     {Object.entries(status.lastResult.skillBreakdown).map(
-                      ([skill, sr]) => (
-                        <Flex
-                          key={skill}
-                          justify="space-between"
-                          align="center"
-                        >
-                          <Text style={{ fontSize: 12 }}>
-                            {SKILL_LABELS[skill] ?? skill}
-                          </Text>
-                          <Tag
+                      ([skill, sr]) => {
+                        const skillColor = CEFR_COLORS[sr.cefr] ?? "var(--accent)";
+                        return (
+                          <div
+                            key={skill}
                             style={{
-                              fontSize: 10,
-                              fontWeight: 600,
-                              borderRadius: 99,
-                              margin: 0,
-                              border: `1px solid ${CEFR_COLORS[sr.cefr]}`,
-                              color: CEFR_COLORS[sr.cefr],
-                              background: "transparent",
+                              display: "flex",
+                              alignItems: "center",
+                              justifyContent: "space-between",
                             }}
                           >
-                            {sr.cefr} — {sr.correct}/{sr.total}
-                          </Tag>
-                        </Flex>
-                      ),
+                            <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)" }}>
+                              {SKILL_LABELS[skill] ?? skill}
+                            </span>
+                            <span
+                              style={{
+                                fontSize: 11,
+                                fontWeight: 800,
+                                color: skillColor,
+                                background: "var(--surface)",
+                                border: `1px solid ${skillColor}`,
+                                padding: "2px 8px",
+                                borderRadius: 99,
+                              }}
+                            >
+                              {sr.cefr} ({sr.correct}/{sr.total})
+                            </span>
+                          </div>
+                        );
+                      },
                     )}
-                  </Flex>
+                  </div>
                 )}
-
-                <Text type="secondary" style={{ fontSize: 11 }}>
-                  {new Date(status.lastResult.completedAt).toLocaleDateString(
-                    "vi-VN",
-                  )}
-                </Text>
               </Flex>
-            </Card>
+            </m.div>
           )}
 
-          {/* Start button */}
+          {/* Start button / CD */}
           {status?.canRetake !== false ? (
-            <Button
-              type="primary"
-              size="large"
-              icon={<RightOutlined />}
+            <m.button
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.15 }}
+              whileHover={{ scale: 1.02, y: -2 }}
+              whileTap={{ scale: 0.98 }}
               onClick={onStart}
               style={{
+                width: "100%",
                 height: 52,
+                borderRadius: "var(--radius-xl)",
+                background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+                color: "var(--text-on-accent)",
+                border: "none",
                 fontSize: 16,
-                fontWeight: 600,
-                borderRadius: 14,
+                fontWeight: 800,
+                cursor: "pointer",
+                boxShadow: "0 6px 20px var(--accent-muted)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
               }}
             >
-              {status?.hasResult ? "Làm lại test" : "Bắt đầu test"}
-            </Button>
+              <PlayCircleOutlined />
+              {status?.hasResult ? "Bắt đầu làm lại bài đánh giá" : "Bắt đầu bài đánh giá"}
+              <RightOutlined style={{ fontSize: 12 }} />
+            </m.button>
           ) : (
-            <Card
-              style={{ borderRadius: "var(--radius-xl)", textAlign: "center" }}
+            <m.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              style={{
+                borderRadius: "var(--radius-xl)",
+                background: "var(--surface-alt)",
+                border: "1px solid var(--border)",
+                padding: "20px",
+                textAlign: "center",
+              }}
             >
               <ClockCircleOutlined
                 style={{
                   fontSize: 24,
-                  color: "var(--text-secondary)",
+                  color: "var(--text-muted)",
                   marginBottom: 8,
                 }}
               />
-              <br />
-              <Text type="secondary">
-                Bạn có thể làm lại test sau{" "}
-                <strong>{status?.daysUntilRetake}</strong> ngày
-              </Text>
-            </Card>
+              <div style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 600 }}>
+                Bạn đã hoàn thành bài test gần đây. Hãy ôn tập thêm và thử lại sau{" "}
+                <span style={{ color: "var(--accent)", fontWeight: 800 }}>{status?.daysUntilRetake}</span> ngày nữa!
+              </div>
+            </m.div>
           )}
         </Flex>
       </div>

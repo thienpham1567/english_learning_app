@@ -3,6 +3,7 @@
 import { useState } from "react";
 import type { ErrorCorrectionData } from "@/lib/daily-challenge/types";
 import { WarningOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
+import * as m from "motion/react-client";
 
 type Props = {
   data: ErrorCorrectionData;
@@ -20,49 +21,50 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
       {/* Instruction */}
       <p
         style={{
-          marginBottom: 12,
+          marginBottom: 14,
           fontSize: 11,
-          fontWeight: 700,
+          fontWeight: 800,
           color: "var(--error)",
           textTransform: "uppercase",
-          letterSpacing: "0.1em",
+          letterSpacing: "0.08em",
         }}
       >
-        {instruction}
+        ⚠️ {instruction}
       </p>
 
       {/* Error sentence — red quote block */}
       <div
         style={{
-          marginBottom: 16,
-          borderRadius: 12,
+          marginBottom: 20,
+          borderRadius: "var(--radius-xl)",
           borderLeft: "4px solid var(--error)",
           background: "var(--error-bg)",
-          padding: "12px 16px",
+          padding: "16px 20px",
+          boxShadow: "var(--shadow-sm)",
         }}
       >
         <span
           style={{
             fontSize: 10,
-            fontWeight: 700,
+            fontWeight: 800,
             textTransform: "uppercase",
-            letterSpacing: "0.12em",
+            letterSpacing: "0.08em",
             color: "var(--error)",
             display: "flex",
             alignItems: "center",
-            gap: 4,
-            marginBottom: 6,
+            gap: 6,
+            marginBottom: 8,
           }}
         >
-          <WarningOutlined style={{ fontSize: 11 }} /> Câu có lỗi
+          <WarningOutlined style={{ fontSize: 12 }} /> Câu chứa lỗi sai ngữ pháp
         </span>
         <p
           style={{
             margin: 0,
-            fontSize: 15,
+            fontSize: 16,
             color: "var(--error)",
-            fontWeight: 500,
-            lineHeight: 1.65,
+            fontWeight: 600,
+            lineHeight: 1.7,
           }}
         >
           {data.sentence}
@@ -75,32 +77,34 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
         style={{
           display: "block",
           fontSize: 11,
-          fontWeight: 700,
+          fontWeight: 800,
           textTransform: "uppercase",
-          letterSpacing: "0.1em",
+          letterSpacing: "0.08em",
           color: "var(--text-muted)",
-          marginBottom: 6,
+          marginBottom: 8,
         }}
       >
-        <EditOutlined style={{ fontSize: 11 }} /> Viết từ đúng thay thế
+        <EditOutlined style={{ fontSize: 12 }} /> Từ thay thế chính xác
       </label>
       <input
         id="error-correction-input"
         style={{
           width: "100%",
-          borderRadius: 12,
+          borderRadius: "var(--radius-lg)",
           border: focused
             ? "2px solid var(--error)"
             : "1.5px solid var(--border)",
           background: "var(--surface)",
-          padding: "11px 14px",
-          fontSize: 14,
-          color: "var(--ink)",
+          padding: "12px 16px",
+          fontSize: 14.5,
+          color: "var(--text-primary)",
+          fontWeight: 500,
           outline: "none",
-          transition: "border-color 0.15s ease",
+          transition: "all 0.2s ease",
           boxSizing: "border-box",
+          boxShadow: focused ? "0 4px 12px rgba(239, 68, 68, 0.15)" : "none",
         }}
-        placeholder="Nhập từ đúng..."
+        placeholder="Nhập từ đúng để sửa lỗi..."
         value={text}
         onChange={(e) => setText(e.target.value)}
         disabled={disabled}
@@ -113,25 +117,26 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
 
       {/* Full-width confirm */}
       {text.trim() && !disabled && (
-        <button
+        <m.button
+          whileHover={{ scale: 1.02, y: -1 }}
+          whileTap={{ scale: 0.98 }}
           onClick={() => onAnswer(text.trim())}
           style={{
-            marginTop: 12,
+            marginTop: 16,
             width: "100%",
-            borderRadius: 12,
+            borderRadius: "var(--radius-lg)",
             background: "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 80%, white))",
-            padding: "13px 0",
-            fontSize: 14,
-            fontWeight: 700,
+            padding: "14px 0",
+            fontSize: 15,
+            fontWeight: 800,
             color: "var(--text-on-accent)",
             border: "none",
             cursor: "pointer",
-            boxShadow: "0 3px 12px color-mix(in srgb, var(--error) 30%, transparent)",
-            transition: "opacity 0.15s",
+            boxShadow: "0 6px 18px rgba(239, 68, 68, 0.25)",
           }}
         >
-          <CheckOutlined style={{ fontSize: 11 }} /> Xác nhận sửa lỗi
-        </button>
+          <CheckOutlined style={{ fontSize: 12 }} /> Xác nhận sửa lỗi
+        </m.button>
       )}
     </div>
   );

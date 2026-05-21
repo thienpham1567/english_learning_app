@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { CollocationData } from "@/lib/daily-challenge/types";
+import * as m from "motion/react-client";
 
 const LABELS = ["A", "B", "C", "D"] as const;
 
@@ -14,7 +15,6 @@ type Props = {
 
 export function Collocation({ data, instruction, onAnswer, disabled }: Props) {
   const [selected, setSelected] = useState<number | null>(null);
-  const [hoveredOption, setHoveredOption] = useState<number | null>(null);
 
   const handleSelect = (i: number) => {
     if (disabled) return;
@@ -27,25 +27,26 @@ export function Collocation({ data, instruction, onAnswer, disabled }: Props) {
       {/* Instruction */}
       <p
         style={{
-          marginBottom: 12,
+          marginBottom: 14,
           fontSize: 11,
-          fontWeight: 700,
+          fontWeight: 800,
           color: "var(--accent)",
           textTransform: "uppercase",
-          letterSpacing: "0.1em",
+          letterSpacing: "0.08em",
         }}
       >
-        {instruction}
+        📚 {instruction}
       </p>
 
       {/* Phrase with blank — prominent display */}
       <div
         style={{
-          marginBottom: 20,
+          marginBottom: 24,
           padding: "24px 20px",
-          borderRadius: 16,
-          background: "var(--bg-deep)",
+          borderRadius: "var(--radius-xl)",
+          background: "var(--surface-alt)",
           border: "1px solid var(--border)",
+          boxShadow: "var(--shadow-sm)",
           textAlign: "center",
         }}
       >
@@ -54,10 +55,10 @@ export function Collocation({ data, instruction, onAnswer, disabled }: Props) {
             margin: 0,
             fontFamily: "var(--font-display)",
             fontSize: 22,
-            fontWeight: 700,
-            color: "var(--ink)",
+            fontWeight: 800,
+            color: "var(--text-primary)",
             letterSpacing: "-.01em",
-            lineHeight: 1.5,
+            lineHeight: 1.6,
           }}
         >
           {data.phrase.split("_____").map((part, i, arr) => (
@@ -70,11 +71,12 @@ export function Collocation({ data, instruction, onAnswer, disabled }: Props) {
                     borderRadius: 8,
                     background: "var(--accent)",
                     padding: "2px 18px",
-                    fontWeight: 700,
+                    fontWeight: 800,
                     color: "var(--text-on-accent)",
                     fontSize: 18,
-                    marginInline: 4,
+                    marginInline: 6,
                     verticalAlign: "middle",
+                    boxShadow: "0 2px 6px var(--accent-muted)",
                   }}
                 >
                   ?
@@ -85,55 +87,50 @@ export function Collocation({ data, instruction, onAnswer, disabled }: Props) {
         </p>
       </div>
 
-      {/* Options 2x2 grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
+      {/* Options grid */}
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
         {data.options.map((opt, i) => {
           const isSelected = selected === i;
-          const isHov = hoveredOption === i && !isSelected && !disabled;
 
           return (
-            <button
+            <m.button
               key={i}
+              whileHover={!disabled ? { scale: 1.02, y: -1 } : {}}
+              whileTap={!disabled ? { scale: 0.98 } : {}}
               onClick={() => handleSelect(i)}
-              onMouseEnter={() => setHoveredOption(i)}
-              onMouseLeave={() => setHoveredOption(null)}
               disabled={disabled}
               style={{
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                gap: 8,
-                borderRadius: 12,
+                gap: 10,
+                borderRadius: "var(--radius-lg)",
                 border: isSelected
                   ? "2px solid var(--accent)"
-                  : `1px solid ${isHov ? "var(--accent)" : "var(--border)"}`,
+                  : "1px solid var(--border)",
                 background: isSelected
-                  ? "color-mix(in srgb, var(--accent) 10%, var(--surface))"
-                  : isHov
-                  ? "color-mix(in srgb, var(--accent) 4%, var(--surface))"
+                  ? "var(--accent-light)"
                   : "var(--surface)",
                 padding: "14px 12px",
-                textAlign: "center",
                 fontSize: 15,
-                fontWeight: isSelected ? 700 : 500,
-                color: "var(--ink)",
+                fontWeight: isSelected ? 700 : 600,
+                color: isSelected ? "var(--accent)" : "var(--text-primary)",
                 cursor: disabled ? "default" : "pointer",
-                transition: "all 0.15s ease",
-                transform: isHov ? "translateY(-1px)" : "none",
-                boxShadow: isHov ? "0 3px 10px rgba(0,0,0,0.08)" : "none",
+                transition: "border-color 0.2s, background-color 0.2s",
+                boxShadow: isSelected ? "0 4px 12px var(--accent-muted)" : "var(--shadow-sm)",
               }}
             >
               <span
                 style={{
-                  width: 22,
-                  height: 22,
-                  borderRadius: 99,
+                  width: 24,
+                  height: 24,
+                  borderRadius: "50%",
                   display: "grid",
                   placeItems: "center",
                   flexShrink: 0,
                   background: isSelected ? "var(--accent)" : "var(--border)",
-                  color: isSelected ? "var(--text-on-accent)" : "var(--text-muted)",
-                  fontSize: 10,
+                  color: isSelected ? "var(--text-on-accent)" : "var(--text-secondary)",
+                  fontSize: 11,
                   fontWeight: 800,
                   transition: "all 0.15s",
                 }}
@@ -141,7 +138,7 @@ export function Collocation({ data, instruction, onAnswer, disabled }: Props) {
                 {LABELS[i]}
               </span>
               {opt}
-            </button>
+            </m.button>
           );
         })}
       </div>

@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { CheckOutlined, CloseOutlined, FireOutlined, CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { CheckOutlined, CloseOutlined, FireOutlined, CheckCircleOutlined, CloseCircleOutlined, BulbOutlined, TranslationOutlined } from "@ant-design/icons";
 import type { GrammarQuestion } from "@/lib/grammar-quiz/types";
+import * as m from "motion/react-client";
 
 const OPTION_LABELS = ["A", "B", "C", "D"] as const;
 
@@ -33,7 +34,7 @@ export function QuestionCard({
 
   return (
     <div style={{ margin: "0 auto", width: "100%", maxWidth: 580 }}>
-      {/* Progress */}
+      {/* Progress track */}
       <div style={{ marginBottom: 16 }}>
         <div
           style={{
@@ -43,17 +44,18 @@ export function QuestionCard({
             marginBottom: 8,
           }}
         >
-          <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-muted)" }}>
-            Câu {questionNumber} / {total}
+          <span style={{ fontSize: 12.5, fontWeight: 700, color: "var(--text-secondary)" }}>
+            Câu hỏi {questionNumber} / {total}
           </span>
           <span
             style={{
-              borderRadius: 999,
-              background: "var(--bg-deep)",
-              padding: "3px 10px",
-              fontSize: 11,
-              fontWeight: 600,
-              color: "var(--text-secondary)",
+              borderRadius: 6,
+              background: "var(--surface-alt)",
+              border: "1px solid var(--border)",
+              padding: "3px 8px",
+              fontSize: 11.5,
+              fontWeight: 700,
+              color: "var(--accent)",
             }}
           >
             {question.grammarTopic}
@@ -62,31 +64,37 @@ export function QuestionCard({
         {/* Visual progress track */}
         <div
           style={{
-            height: 5,
+            height: 6,
             borderRadius: 99,
             background: "var(--border)",
+            position: "relative",
             overflow: "hidden",
           }}
         >
-          <div
+          <m.div
+            initial={{ width: 0 }}
+            animate={{ width: `${(questionNumber / total) * 100}%` }}
+            transition={{ type: "spring", stiffness: 80, damping: 15 }}
             style={{
-              height: "100%",
+              position: "absolute",
+              left: 0,
+              top: 0,
+              bottom: 0,
+              background: "linear-gradient(90deg, var(--accent), var(--secondary))",
               borderRadius: 99,
-              background: "linear-gradient(90deg, var(--accent), var(--accent-hover))",
-              width: `${(questionNumber / total) * 100}%`,
-              transition: "width 0.4s ease",
             }}
           />
         </div>
       </div>
 
-      {/* Combo badge (AC: #2) */}
+      {/* Combo badge */}
       {combo >= 2 && (
-        <div
+        <m.div
           key={`combo-${combo}`}
-          className="anim-pop-in"
+          initial={{ scale: 0.5, y: -10 }}
+          animate={{ scale: [1, 1.1, 1], y: 0 }}
           style={{
-            marginBottom: 12,
+            marginBottom: 14,
             display: "flex",
             justifyContent: "center",
           }}
@@ -97,81 +105,89 @@ export function QuestionCard({
               alignItems: "center",
               gap: 6,
               borderRadius: 999,
-              background: "linear-gradient(135deg, var(--xp), var(--error))",
-              padding: "6px 16px",
-              fontSize: 14,
-              fontWeight: 700,
+              background: "linear-gradient(135deg, var(--fire), var(--xp))",
+              padding: "6px 18px",
+              fontSize: 13.5,
+              fontWeight: 900,
               color: "var(--text-on-accent)",
-              boxShadow: "0 2px 12px color-mix(in srgb, var(--xp) 35%, transparent)",
+              boxShadow: "0 4px 14px rgba(245, 158, 11, 0.35)",
             }}
           >
-            <FireOutlined /> x{combo} Combo!
+            <FireOutlined /> {combo} COMBO! 🔥
           </span>
-        </div>
+        </m.div>
       )}
 
-      {/* Stem */}
+      {/* Stem Card */}
       <div
         style={{
-          borderRadius: "var(--radius-lg)",
+          borderRadius: "var(--radius-xl)",
           border: "1px solid var(--border)",
           background: "var(--surface)",
           padding: 24,
-          boxShadow: "var(--shadow-md)",
-          borderTop: "3px solid var(--accent)",
+          boxShadow: "var(--shadow-sm)",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        <p style={{ fontSize: 17, lineHeight: 1.65, color: "var(--ink)", fontWeight: 500, margin: 0 }}>
+        <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: 4, background: "var(--accent)" }} />
+
+        <p style={{ fontSize: 16.5, lineHeight: 1.65, color: "var(--text-primary)", fontWeight: 700, margin: 0 }}>
           {renderStem(question.stem)}
         </p>
 
-        {/* Options */}
-        <div style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: 10 }}>
+        {/* MCQ Options */}
+        <div style={{ marginTop: 24, display: "flex", flexDirection: "column", gap: 8 }}>
           {question.options.map((option, i) => {
             const isSelected = selectedAnswer === i;
             const isCorrect = i === question.correctIndex;
 
             let bg = "var(--surface)";
             let borderColor = "var(--border)";
-            let color = "inherit";
+            let color = "var(--text-primary)";
             let opacity = 1;
 
             if (isRevealed) {
               if (isCorrect) {
-                bg = "color-mix(in srgb, var(--success) 8%, var(--surface))";
+                bg = "rgba(16, 185, 129, 0.08)";
                 borderColor = "var(--success)";
                 color = "var(--success)";
               } else if (isSelected && !isCorrect) {
-                bg = "color-mix(in srgb, var(--error) 8%, var(--surface))";
+                bg = "rgba(239, 68, 68, 0.08)";
                 borderColor = "var(--error)";
                 color = "var(--error)";
               } else {
-                opacity = 0.5;
-                bg = "var(--bg-deep)";
+                opacity = 0.4;
+                bg = "var(--surface-alt)";
               }
             } else if (isSelected) {
-              bg = "var(--accent-muted)";
+              bg = "var(--accent-light)";
               borderColor = "var(--accent)";
+              color = "var(--accent)";
             }
 
             return (
-              <button
+              <m.button
                 key={i}
+                whileHover={isRevealed ? {} : { scale: 1.005, x: 2 }}
+                whileTap={isRevealed ? {} : { scale: 0.995 }}
                 style={{
                   display: "flex",
                   width: "100%",
                   alignItems: "center",
                   gap: 12,
-                  borderRadius: "var(--radius)",
-                  border: `1px solid ${borderColor}`,
+                  borderRadius: "var(--radius-lg)",
+                  border: `1.5px solid ${borderColor}`,
                   padding: "12px 16px",
                   textAlign: "left",
                   fontSize: 14,
+                  fontWeight: isSelected || (isRevealed && isCorrect) ? 800 : 500,
                   background: bg,
                   color,
                   opacity,
                   cursor: isRevealed ? "default" : "pointer",
-                  transition: "all 0.2s",
+                  boxShadow: "var(--shadow-sm)",
+                  transition: "all 0.15s",
                 }}
                 onClick={() => onAnswer(i)}
                 disabled={isRevealed}
@@ -179,8 +195,8 @@ export function QuestionCard({
                 <span
                   style={{
                     display: "flex",
-                    width: 30,
-                    height: 30,
+                    width: 28,
+                    height: 28,
                     flexShrink: 0,
                     alignItems: "center",
                     justifyContent: "center",
@@ -191,8 +207,8 @@ export function QuestionCard({
                       ? "var(--error)"
                       : isSelected
                       ? "var(--accent)"
-                      : "var(--bg-deep)",
-                    fontSize: 12,
+                      : "var(--surface-alt)",
+                    fontSize: 11.5,
                     fontWeight: 800,
                     color: (isRevealed && (isCorrect || (isSelected && !isCorrect))) || isSelected
                       ? "var(--text-on-accent)"
@@ -201,46 +217,48 @@ export function QuestionCard({
                   }}
                 >
                   {isRevealed && isCorrect ? (
-                    <CheckOutlined style={{ fontSize: 13 }} />
+                    <CheckOutlined style={{ fontSize: 12 }} />
                   ) : isRevealed && isSelected && !isCorrect ? (
-                    <CloseOutlined style={{ fontSize: 13 }} />
+                    <CloseOutlined style={{ fontSize: 12 }} />
                   ) : (
                     OPTION_LABELS[i]
                   )}
                 </span>
                 <span style={{ flex: 1 }}>{option}</span>
-              </button>
+              </m.button>
             );
           })}
         </div>
-        {/* Compact result badge + collapsible explanation (AC: #1, #2) */}
+
+        {/* Collapsible explanations */}
         {isRevealed && (
           <div className="anim-fade-up" style={{ marginTop: 20 }}>
-            {/* Compact result badge */}
+            {/* Result Header Tag */}
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
                 gap: 8,
-                borderRadius: "var(--radius)",
+                borderRadius: "var(--radius-lg)",
                 border: `1px solid ${selectedAnswer === question.correctIndex ? "var(--success)" : "var(--error)"}`,
-                background: selectedAnswer === question.correctIndex ? "color-mix(in srgb, var(--success) 8%, var(--surface))" : "color-mix(in srgb, var(--error) 8%, var(--surface))",
+                background: selectedAnswer === question.correctIndex ? "rgba(16, 185, 129, 0.08)" : "rgba(239, 68, 68, 0.08)",
                 padding: "10px 16px",
               }}
             >
-              <span style={{ fontSize: 16 }}>
-                {selectedAnswer === question.correctIndex ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+              <span style={{ fontSize: 16, display: "flex" }}>
+                {selectedAnswer === question.correctIndex ? <CheckCircleOutlined style={{ color: "var(--success)" }} /> : <CloseCircleOutlined style={{ color: "var(--error)" }} />}
               </span>
               <span
                 style={{
                   fontSize: 14,
-                  fontWeight: 600,
+                  fontWeight: 800,
                   color: selectedAnswer === question.correctIndex ? "var(--success)" : "var(--error)",
                 }}
               >
-                {selectedAnswer === question.correctIndex ? "Đúng!" : "Sai!"} Đáp án:{" "}
-                {OPTION_LABELS[question.correctIndex]} —{" "}
-                {question.options[question.correctIndex]}
+                {selectedAnswer === question.correctIndex ? "Đúng chính xác!" : "Chưa chính xác!"} Đáp án đúng:{" "}
+                <span style={{ textDecoration: "underline" }}>
+                  {OPTION_LABELS[question.correctIndex]} — {question.options[question.correctIndex]}
+                </span>
               </span>
             </div>
 
@@ -249,53 +267,56 @@ export function QuestionCard({
               type="button"
               onClick={() => setShowExplanation((v) => !v)}
               style={{
-                marginTop: 8,
-                display: "flex",
+                marginTop: 10,
+                display: "inline-flex",
                 alignItems: "center",
                 gap: 6,
                 background: "none",
                 border: "none",
                 cursor: "pointer",
                 fontSize: 13,
-                fontWeight: 500,
-                color: "var(--warning)",
+                fontWeight: 700,
+                color: "var(--accent)",
                 padding: "4px 0",
               }}
             >
-              {showExplanation ? "▾" : "▸"} Xem giải thích
+              {showExplanation ? "▾ Ẩn lời giải thích" : "▸ Xem lời giải thích chi tiết"}
             </button>
 
-            {/* Expandable explanation */}
+            {/* Explanations block */}
             {showExplanation && (
-              <div
-                className="anim-fade-up"
+              <m.div
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
                 style={{
-                  marginTop: 4,
-                  borderRadius: "var(--radius)",
-                  border: "1px solid color-mix(in srgb, var(--warning) 40%, transparent)",
-                  background: "color-mix(in srgb, var(--warning) 8%, var(--surface))",
+                  marginTop: 6,
+                  borderRadius: "var(--radius-lg)",
+                  border: "1px solid color-mix(in srgb, var(--accent) 15%, var(--border))",
+                  background: "var(--surface-alt)",
                   padding: 16,
                 }}
               >
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <p
+                  <span
                     style={{
-                      fontSize: 12,
-                      fontWeight: 600,
+                      fontSize: 11,
+                      fontWeight: 800,
                       textTransform: "uppercase",
                       letterSpacing: "0.1em",
-                      color: "var(--warning)",
-                      margin: 0,
+                      color: "var(--accent)",
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 4,
                     }}
                   >
-                    Giải thích
-                  </p>
+                    <BulbOutlined /> Lý do đáp án
+                  </span>
                   <div
                     style={{
                       display: "flex",
                       overflow: "hidden",
                       borderRadius: 6,
-                      border: "1px solid color-mix(in srgb, var(--warning) 40%, transparent)",
+                      border: "1px solid var(--border)",
                     }}
                   >
                     {(["vi", "en"] as const).map((l) => (
@@ -304,80 +325,91 @@ export function QuestionCard({
                         onClick={() => setLang(l)}
                         style={{
                           padding: "2px 10px",
-                          fontSize: 11,
-                          fontWeight: 600,
+                          fontSize: 10.5,
+                          fontWeight: 800,
                           border: "none",
                           cursor: "pointer",
-                          background: lang === l ? "var(--accent-hover)" : "color-mix(in srgb, var(--warning) 6%, var(--surface))",
-                          color: lang === l ? "var(--text-on-accent)" : "var(--warning)",
+                          background: lang === l ? "var(--accent)" : "var(--surface)",
+                          color: lang === l ? "var(--text-on-accent)" : "var(--accent)",
                         }}
                       >
-                        {l === "vi" ? "VN" : "EN"}
+                        {l === "vi" ? "VIE" : "ENG"}
                       </button>
                     ))}
                   </div>
                 </div>
+                
                 <p
                   style={{
-                    marginTop: 8,
-                    whiteSpace: "pre-line",
-                    fontSize: 14,
-                    lineHeight: 1.6,
+                    marginTop: 10,
+                    marginBottom: 0,
+                    fontSize: 13.5,
+                    lineHeight: 1.65,
                     color: "var(--text-secondary)",
+                    fontWeight: 500,
                   }}
                 >
                   {lang === "en" ? question.explanationEn : question.explanationVi}
                 </p>
-                <div style={{ marginTop: 12, display: "flex", flexDirection: "column", gap: 4 }}>
-                  <p
-                    style={{
-                      fontSize: 11,
-                      fontWeight: 600,
-                      textTransform: "uppercase",
-                      letterSpacing: "0.1em",
-                      color: "var(--accent-hover)",
-                      margin: 0,
-                    }}
-                  >
-                    Ví dụ
-                  </p>
-                  {question.examples.map((ex, i) => (
-                    <p
-                      key={i}
-                      style={{ fontSize: 14, fontStyle: "italic", color: "var(--text-secondary)", margin: 0 }}
+
+                {question.examples && question.examples.length > 0 && (
+                  <div style={{ marginTop: 14, borderTop: "1.5px dashed var(--border)", paddingTop: 12 }}>
+                    <span
+                      style={{
+                        fontSize: 11,
+                        fontWeight: 800,
+                        textTransform: "uppercase",
+                        letterSpacing: "0.1em",
+                        color: "var(--text-muted)",
+                        display: "block",
+                        marginBottom: 6,
+                      }}
                     >
-                      {i + 1}. {ex}
-                    </p>
-                  ))}
-                </div>
-              </div>
+                      Ví dụ thực tế
+                    </span>
+                    {question.examples.map((ex, idx) => (
+                      <p
+                        key={idx}
+                        style={{ fontSize: 13, fontStyle: "italic", color: "var(--text-secondary)", margin: "4px 0 0", fontWeight: 500 }}
+                      >
+                        • {ex}
+                      </p>
+                    ))}
+                  </div>
+                )}
+              </m.div>
             )}
           </div>
         )}
-
-        {/* Next button */}
-        {isRevealed && (
-          <button
-            className="anim-fade-in"
-            onClick={onNext}
-            style={{
-              marginTop: 16,
-              width: "100%",
-              borderRadius: "var(--radius)",
-              background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-              padding: "12px 0",
-              fontSize: 14,
-              fontWeight: 600,
-              color: "var(--text-on-accent)",
-              border: "none",
-              boxShadow: "var(--shadow-sm)",
-              cursor: "pointer",
-            }}
-          >
-            {isLastQuestion ? "Xem kết quả" : "Tiếp theo →"}
-          </button>
-        )}
       </div>
+
+      {/* Next button */}
+      {isRevealed && (
+        <m.button
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          onClick={onNext}
+          style={{
+            marginTop: 16,
+            width: "100%",
+            borderRadius: "var(--radius-xl)",
+            background: "linear-gradient(135deg, var(--accent), var(--accent-hover, var(--accent)))",
+            padding: "12px 0",
+            fontSize: 14.5,
+            fontWeight: 800,
+            color: "var(--text-on-accent)",
+            border: "none",
+            boxShadow: "0 4px 12px var(--accent-muted)",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: 6,
+          }}
+        >
+          {isLastQuestion ? "Hoàn thành và xem kết quả" : "Câu tiếp theo →"}
+        </m.button>
+      )}
     </div>
   );
 }
@@ -391,10 +423,10 @@ function renderStem(stem: string) {
       <span
         style={{
           display: "inline-block",
-          borderRadius: 4,
-          background: "var(--accent-muted)",
-          padding: "2px 8px",
-          fontWeight: 600,
+          borderRadius: 6,
+          background: "var(--accent-light)",
+          padding: "2px 10px",
+          fontWeight: 800,
           color: "var(--accent)",
         }}
       >

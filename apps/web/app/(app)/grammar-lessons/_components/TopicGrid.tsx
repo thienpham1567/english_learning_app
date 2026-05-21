@@ -25,6 +25,7 @@ import {
 } from "@ant-design/icons";
 import type { ReactNode } from "react";
 import { Tag, Tooltip } from "antd";
+import * as m from "motion/react-client";
 
 import type { GrammarLessonProgressItem } from "@/lib/grammar-lessons/schema";
 import {
@@ -76,6 +77,13 @@ const LEVEL_COLORS: Record<string, string> = {
   C1: "magenta",
 };
 
+const LEVEL_GLOWS: Record<string, string> = {
+  A2: "rgba(16, 185, 129, 0.15)",
+  B1: "rgba(59, 130, 246, 0.15)",
+  B2: "rgba(139, 92, 246, 0.15)",
+  C1: "rgba(236, 72, 153, 0.15)",
+};
+
 const EMPTY_PROGRESS_BY_TOPIC: Record<string, GrammarLessonProgressItem> = {};
 
 interface Props {
@@ -97,14 +105,15 @@ export function TopicGrid({
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
   const [hoveredCat, setHoveredCat] = useState<string | null>(null);
   const [hoveredTopic, setHoveredTopic] = useState<string | null>(null);
+  
   const recommendedCategoryId = categories.find((cat) =>
     cat.topics.some((topic) => topic.id === recommendedTopicId),
   )?.id;
   const activeExpandedCategory = expandedCategory ?? recommendedCategoryId;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-      {categories.map((cat) => {
+    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+      {categories.map((cat, idx) => {
         const isExpanded = activeExpandedCategory === cat.id;
         const isHovered = hoveredCat === cat.id;
         const completedCount = cat.topics.filter((t) => completedTopics.has(t.id)).length;
@@ -112,17 +121,20 @@ export function TopicGrid({
         const allDone = completedCount === cat.topics.length && completedCount > 0;
 
         return (
-          <div
+          <m.div
             key={cat.id}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.05 }}
             style={{
-              borderRadius: 16,
+              borderRadius: "var(--radius-xl)",
               border: isExpanded
                 ? `1px solid color-mix(in srgb, ${cat.color} 35%, var(--border))`
                 : "1px solid var(--border)",
-              background: "var(--card-bg)",
+              background: "var(--surface)",
               overflow: "hidden",
               boxShadow: isExpanded
-                ? `0 8px 24px color-mix(in srgb, ${cat.color} 10%, transparent)`
+                ? `0 10px 30px color-mix(in srgb, ${cat.color} 8%, transparent)`
                 : isHovered
                 ? "var(--shadow-md)"
                 : "var(--shadow-sm)",
@@ -151,18 +163,18 @@ export function TopicGrid({
                 style={{
                   position: "relative",
                   display: "grid",
-                  width: 48,
-                  height: 48,
+                  width: 46,
+                  height: 46,
                   placeItems: "center",
-                  borderRadius: 14,
+                  borderRadius: "var(--radius-lg)",
                   background: allDone
                     ? "linear-gradient(135deg, var(--success), color-mix(in srgb, var(--success) 75%, black))"
                     : `linear-gradient(135deg, ${cat.color}, color-mix(in srgb, ${cat.color} 75%, black))`,
                   color: "var(--text-on-accent)",
-                  fontSize: 22,
+                  fontSize: 20,
                   flexShrink: 0,
-                  boxShadow: `0 4px 12px color-mix(in srgb, ${cat.color} 25%, transparent)`,
-                  transition: "transform 0.2s ease, box-shadow 0.2s ease",
+                  boxShadow: `0 4px 12px color-mix(in srgb, ${cat.color} 20%, transparent)`,
+                  transition: "transform 0.2s ease",
                   transform: isHovered ? "scale(1.05)" : "scale(1)",
                 }}
               >
@@ -172,9 +184,9 @@ export function TopicGrid({
                   <StarFilled
                     style={{
                       position: "absolute",
-                      top: -4,
-                      right: -4,
-                      fontSize: 14,
+                      top: -3,
+                      right: -3,
+                      fontSize: 12,
                       color: "var(--xp)",
                       filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.2))",
                     }}
@@ -185,10 +197,10 @@ export function TopicGrid({
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div
                   style={{
-                    fontSize: 15,
-                    fontWeight: 700,
-                    color: "var(--text)",
-                    marginBottom: 8,
+                    fontSize: 14.5,
+                    fontWeight: 800,
+                    color: "var(--text-primary)",
+                    marginBottom: 6,
                     lineHeight: 1.2,
                   }}
                 >
@@ -199,30 +211,34 @@ export function TopicGrid({
                   <div
                     style={{
                       flex: 1,
-                      height: 6,
+                      height: 5,
                       borderRadius: 99,
                       background: "var(--border)",
+                      position: "relative",
                       overflow: "hidden",
                     }}
                   >
-                    <div
+                    <m.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${progressPct}%` }}
+                      transition={{ type: "spring", stiffness: 80, damping: 15 }}
                       style={{
                         height: "100%",
                         borderRadius: 99,
                         background: allDone
                           ? "linear-gradient(90deg, var(--success), color-mix(in srgb, var(--success) 65%, white))"
                           : `linear-gradient(90deg, ${cat.color}, color-mix(in srgb, ${cat.color} 65%, white))`,
-                        transform: `scaleX(${progressPct / 100})`,
-                        transformOrigin: "left",
-                        width: "100%",
-                        transition: "transform 0.5s ease",
+                        position: "absolute",
+                        left: 0,
+                        top: 0,
+                        bottom: 0,
                       }}
                     />
                   </div>
                   <span
                     style={{
                       fontSize: 12,
-                      fontWeight: 700,
+                      fontWeight: 800,
                       color: allDone ? "var(--success)" : completedCount > 0 ? cat.color : "var(--text-muted)",
                       flexShrink: 0,
                       minWidth: 36,
@@ -236,7 +252,7 @@ export function TopicGrid({
 
               <RightOutlined
                 style={{
-                  fontSize: 12,
+                  fontSize: 11,
                   color: "var(--text-muted)",
                   transform: isExpanded ? "rotate(90deg)" : "none",
                   transition: "transform 0.25s ease",
@@ -245,79 +261,86 @@ export function TopicGrid({
               />
             </button>
 
-            {/* Expanded topic list */}
-            {isExpanded && (
+            {/* Expanded topic list using framer-motion for smooth height transition */}
+            <m.div
+              initial={false}
+              animate={{ height: isExpanded ? "auto" : 0 }}
+              style={{ overflow: "hidden" }}
+            >
               <div
                 style={{
                   borderTop: "1px solid var(--border)",
-                  padding: "10px 16px 14px",
-                  background: `color-mix(in srgb, ${cat.color} 3%, var(--surface))`,
+                  padding: "12px 16px 16px",
+                  background: `color-mix(in srgb, ${cat.color} 4%, var(--surface))`,
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 6,
                 }}
               >
-                {cat.topics.map((topic, idx) => {
+                {cat.topics.map((topic, topicIdx) => {
                   const isDone = completedTopics.has(topic.id);
                   const isTopicHovered = hoveredTopic === topic.id;
                   const progress = progressByTopic[topic.id];
                   const isRecommended = recommendedTopicId === topic.id;
 
                   return (
-                    <button
+                    <m.button
                       key={topic.id}
                       onClick={() => onSelectTopic(topic.id, topic.title, topic.level)}
                       onMouseEnter={() => setHoveredTopic(topic.id)}
                       onMouseLeave={() => setHoveredTopic(null)}
+                      whileHover={{ scale: 1.005, x: 2 }}
+                      whileTap={{ scale: 0.995 }}
                       style={{
                         display: "flex",
                         width: "100%",
                         alignItems: "center",
                         gap: 12,
                         padding: "10px 14px",
-                        borderRadius: 12,
+                        borderRadius: "var(--radius-lg)",
                         border: isRecommended
-                          ? "1px solid color-mix(in srgb, var(--xp) 40%, transparent)"
-                          : "1px solid transparent",
+                          ? "1.5px solid color-mix(in srgb, var(--accent) 30%, transparent)"
+                          : "1.5px solid transparent",
                         background: isRecommended
-                          ? "color-mix(in srgb, var(--xp) 6%, var(--surface))"
+                          ? "var(--accent-light)"
                           : isTopicHovered
                           ? isDone
                             ? `color-mix(in srgb, ${cat.color} 10%, var(--surface))`
-                            : "var(--surface-hover)"
+                            : "var(--surface-alt)"
                           : isDone
                           ? `color-mix(in srgb, ${cat.color} 5%, transparent)`
-                          : "transparent",
+                          : "var(--surface)",
                         cursor: "pointer",
                         textAlign: "left",
-                        transition: "background 0.15s, border-color 0.15s, transform 0.1s",
-                        marginBottom: idx < cat.topics.length - 1 ? 3 : 0,
-                        transform: isTopicHovered ? "translateX(2px)" : "none",
+                        boxShadow: "var(--shadow-sm)",
+                        transition: "background 0.15s, border-color 0.15s",
                       }}
                     >
-                      {/* Step indicator */}
+                      {/* Step index circle */}
                       <span
                         style={{
-                          width: 28,
-                          height: 28,
+                          width: 26,
+                          height: 26,
                           borderRadius: 99,
                           display: "grid",
                           placeItems: "center",
                           flexShrink: 0,
-                          background: isDone ? cat.color : "var(--border)",
-                          color: isDone ? "var(--text-on-accent)" : "var(--text-muted)",
-                          fontSize: isDone ? 14 : 12,
-                          fontWeight: 700,
-                          transition: "background 0.2s, transform 0.2s",
-                          transform: isDone ? "scale(1)" : "scale(0.95)",
+                          background: isDone ? cat.color : "var(--surface-alt)",
+                          border: isDone ? "none" : "1px solid var(--border)",
+                          color: isDone ? "var(--text-on-accent)" : "var(--text-secondary)",
+                          fontSize: isDone ? 11 : 11.5,
+                          fontWeight: 800,
                         }}
                       >
-                        {isDone ? <CheckCircleOutlined /> : idx + 1}
+                        {isDone ? <CheckCircleOutlined /> : topicIdx + 1}
                       </span>
 
                       <span
                         style={{
                           flex: 1,
-                          fontSize: 14,
-                          color: "var(--text)",
-                          fontWeight: isDone ? 600 : 400,
+                          fontSize: 13.5,
+                          color: isDone ? "var(--text-primary)" : "var(--text-secondary)",
+                          fontWeight: isDone || isRecommended ? 800 : 500,
                           lineHeight: 1.3,
                         }}
                       >
@@ -325,10 +348,10 @@ export function TopicGrid({
                       </span>
 
                       {progress && progress.totalCount > 0 && (
-                        <Tooltip title={`Điểm: ${progress.correctCount}/${progress.totalCount}${progress.scorePct >= 90 ? ' · 🥇 Vàng' : progress.scorePct >= 70 ? ' · 🥈 Bạc' : progress.scorePct >= 50 ? ' · 🥉 Đồng' : ''}`}>
+                        <Tooltip title={`Đáp án đúng: ${progress.correctCount}/${progress.totalCount}`}>
                           <Tag
                             color={progress.scorePct >= 80 ? "success" : progress.scorePct >= 50 ? "warning" : "error"}
-                            style={{ margin: 0, fontSize: 11, borderRadius: 6, fontWeight: 700 }}
+                            style={{ margin: 0, fontSize: 10.5, borderRadius: 6, fontWeight: 700, border: "none" }}
                           >
                             {progress.scorePct >= 90 ? "🥇 " : progress.scorePct >= 70 ? "🥈 " : progress.scorePct >= 50 ? "🥉 " : ""}
                             {progress.scorePct}%
@@ -341,38 +364,47 @@ export function TopicGrid({
                           color="gold"
                           style={{
                             margin: 0,
-                            fontSize: 11,
+                            fontSize: 10,
                             borderRadius: 6,
-                            fontWeight: 700,
-                            animation: "pulse 2s infinite",
+                            fontWeight: 800,
+                            border: "none",
+                            boxShadow: "0 0 6px rgba(245, 158, 11, 0.3)",
                           }}
                         >
-                          <StarFilled style={{ marginRight: 3, fontSize: 10 }} />
-                          Gợi ý
+                          <StarFilled style={{ marginRight: 3, fontSize: 9 }} />
+                          GỢI Ý
                         </Tag>
                       )}
 
                       <Tag
                         color={LEVEL_COLORS[topic.level] ?? "default"}
-                        style={{ margin: 0, fontSize: 11, borderRadius: 6, fontWeight: 600 }}
+                        style={{
+                          margin: 0,
+                          fontSize: 10.5,
+                          borderRadius: 6,
+                          fontWeight: 800,
+                          border: "none",
+                          background: LEVEL_GLOWS[topic.level] ?? "var(--surface-alt)",
+                          color: `var(--${LEVEL_COLORS[topic.level]})`,
+                        }}
                       >
                         {topic.level}
                       </Tag>
 
                       <RightOutlined
                         style={{
-                          fontSize: 10,
+                          fontSize: 9,
                           color: "var(--text-muted)",
                           opacity: isTopicHovered ? 1 : 0,
                           transition: "opacity 0.15s",
                         }}
                       />
-                    </button>
+                    </m.button>
                   );
                 })}
               </div>
-            )}
-          </div>
+            </m.div>
+          </m.div>
         );
       })}
     </div>

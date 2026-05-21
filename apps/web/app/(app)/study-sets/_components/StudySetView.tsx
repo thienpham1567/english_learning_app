@@ -1,10 +1,11 @@
 "use client";
+
 import { api } from "@/lib/api-client";
 import { useState, useEffect, useCallback } from "react";
 import {
   ArrowLeftOutlined,
-  CheckCircleOutlined,
-  CloseCircleOutlined,
+  CheckCircleFilled,
+  CloseCircleFilled,
   LoadingOutlined,
   SoundOutlined,
   BulbOutlined,
@@ -13,10 +14,16 @@ import {
   ReadOutlined,
   EditOutlined,
   CalculatorOutlined,
+  TrophyOutlined,
+  CheckOutlined,
+  CloseOutlined,
+  ArrowRightOutlined,
 } from "@ant-design/icons";
 import type { ReactNode } from "react";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
-
+import * as m from "motion/react-client";
+import { AnimatePresence } from "motion/react";
+import { Progress } from "antd";
 
 type VocabWord = { word: string; ipa: string; meaning: string; example: string; exampleVi: string };
 type GrammarData = { title: string; formula: string; explanation: string; topicExample: string; topicExampleVi: string };
@@ -56,7 +63,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
   const [completedSections, setCompletedSections] = useState<Set<Section>>(new Set());
   const [allDone, setAllDone] = useState(false);
   const [xpAwarded, setXpAwarded] = useState(0);
-  const { speak: speakTts, isSpeaking, isLoading: isTtsLoading } = useTextToSpeech();
+  const { speak: speakTts } = useTextToSpeech();
 
   // Reading answers
   const [readingAnswers, setReadingAnswers] = useState<Record<number, number>>({});
@@ -71,12 +78,12 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
     setLoading(true);
     setError(null);
     try {
-      const data = await api.post<StudySetData>("/study-sets/generate", {
+      const payload = await api.post<StudySetData>("/study-sets/generate", {
         topicId, topicTitle, examMode, level,
       });
-      setData(data);
+      setData(payload);
     } catch {
-      setError("Không thể tạo bộ học. Vui lòng thử lại.");
+      setError("Không thể tạo nội dung học thử nghiệm. Vui lòng thử lại.");
     } finally {
       setLoading(false);
     }
@@ -97,32 +104,32 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
         .catch(() => {});
       onComplete(topicId);
     } else {
-      // F2: Auto-advance to next incomplete section
       const nextSection = SECTIONS.find((s) => !next.has(s.key));
       if (nextSection) setActiveSection(nextSection.key);
     }
   };
 
-  const speak = (text: string) => {
-    speakTts(text);
-  };
-
-  // ── Render ──
-
   if (loading) {
     return (
-      <div style={{ textAlign: "center", padding: 60 }}>
-        <LoadingOutlined style={{ fontSize: 36, color: "var(--accent)" }} />
-        <p style={{ color: "var(--text-secondary)", marginTop: 12 }}>Đang tạo bộ học {topicTitle}...</p>
+      <div style={{ textAlign: "center", padding: "60px 20px" }}>
+        <LoadingOutlined style={{ fontSize: 32, color: "var(--accent)", marginBottom: 12 }} />
+        <p style={{ color: "var(--text-secondary)", fontSize: 13, fontWeight: 700 }}>Đang khởi tạo bài học chủ đề {topicTitle}...</p>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div style={{ padding: 20, borderRadius: 12, background: "color-mix(in srgb, var(--error) 8%, transparent)", border: "1px solid var(--error)40", color: "var(--error)", textAlign: "center" }}>
-        <p>{error}</p>
-        <button onClick={generate} style={{ padding: "8px 16px", borderRadius: 8, border: "none", background: "var(--error)", color: "var(--text-on-accent)", cursor: "pointer" }}>Thử lại</button>
+      <div style={{ padding: 24, borderRadius: "var(--radius-xl)", background: "rgba(239, 68, 68, 0.08)", border: "1px solid rgba(239, 68, 68, 0.2)", color: "var(--error)", textAlign: "center" }} className="anim-fade-up">
+        <p style={{ fontSize: 14, fontWeight: 650, margin: "0 0 16px" }}>{error}</p>
+        <m.button
+          onClick={generate}
+          whileHover={{ scale: 1.03 }}
+          whileTap={{ scale: 0.97 }}
+          style={{ padding: "10px 24px", borderRadius: 10, border: "none", background: "var(--error)", color: "var(--text-on-accent)", fontWeight: 800, cursor: "pointer" }}
+        >
+          Thử lại
+        </m.button>
       </div>
     );
   }
@@ -131,205 +138,632 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
 
   if (allDone) {
     return (
-      <div style={{ textAlign: "center", padding: 32, borderRadius: 16, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-        <CheckCircleOutlined style={{ fontSize: 48, color: "var(--success)", marginBottom: 16 }} />
-        <h2 style={{ margin: "0 0 8px" }}>Bộ học hoàn thành!</h2>
-        <p style={{ color: "var(--text-secondary)", margin: "0 0 4px" }}>{topicTitle} — 4/4 phần</p>
-        {xpAwarded > 0 && <p style={{ color: "var(--accent)", fontSize: 16, fontWeight: 600, margin: "8px 0 20px" }}>+{xpAwarded} XP</p>}
-        <div style={{ display: "flex", gap: 12, justifyContent: "center", flexWrap: "wrap" }}>
-          <button onClick={onBack} style={{ padding: "10px 20px", borderRadius: 8, border: "1px solid var(--border)", background: "transparent", color: "var(--text)", cursor: "pointer", fontWeight: 500 }}>
-            <ArrowLeftOutlined /> Chủ đề khác
-          </button>
+      <div style={{ textAlign: "center", padding: "40px 24px", borderRadius: "var(--radius-xl)", background: "var(--surface)", border: "1.5px solid var(--border)", boxShadow: "var(--shadow-md)" }} className="anim-fade-up">
+        <CheckCircleFilled style={{ fontSize: 48, color: "var(--success)", marginBottom: 16 }} />
+        <h2 style={{ fontSize: 20, fontWeight: 950, color: "var(--text-primary)", margin: "0 0 6px", fontFamily: "var(--font-display)" }}>
+          Chủ đề đã hoàn thành!
+        </h2>
+        <p style={{ color: "var(--text-secondary)", fontSize: 13, fontWeight: 600, margin: "0 0 4px" }}>
+          {topicTitle} · 4/4 phần
+        </p>
+        
+        {xpAwarded > 0 && (
+          <div style={{
+            display: "inline-flex", alignItems: "center", gap: 6,
+            padding: "6px 16px", borderRadius: 20,
+            background: "var(--accent-light)",
+            color: "var(--accent)", fontSize: 14.5, fontWeight: 800, margin: "12px 0 24px",
+            border: "1px solid var(--accent-muted)"
+          }}>
+            <TrophyOutlined style={{ fontSize: 13 }} />
+            <span>+{xpAwarded} XP</span>
+          </div>
+        )}
+
+        <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
+          <m.button
+            onClick={onBack}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            style={{
+              display: "flex", alignItems: "center", gap: 8,
+              padding: "10px 20px", borderRadius: 10, border: "1px solid var(--border)",
+              background: "var(--surface)", color: "var(--text-primary)", cursor: "pointer",
+              fontSize: 13.5, fontWeight: 800
+            }}
+          >
+            <ArrowLeftOutlined /> Quay lại danh sách
+          </m.button>
         </div>
       </div>
     );
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      {/* Back */}
-      <button onClick={onBack} style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 0", border: "none", background: "transparent", color: "var(--accent)", cursor: "pointer", fontSize: 14, fontWeight: 500 }}>
-        <ArrowLeftOutlined /> Danh sách chủ đề
+    <div style={{ display: "flex", flexDirection: "column", gap: 18 }} className="anim-fade-up">
+      {/* Back Link Breadcrumb */}
+      <button
+        onClick={onBack}
+        style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: 6,
+          padding: "6px 0",
+          border: "none",
+          background: "transparent",
+          color: "var(--accent)",
+          cursor: "pointer",
+          fontSize: 13.5,
+          fontWeight: 800,
+          width: "fit-content"
+        }}
+      >
+        <ArrowLeftOutlined style={{ fontSize: 12 }} />
+        <span>Quay về danh sách</span>
       </button>
 
-      {/* Section tabs */}
-      <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+      {/* Styled Section pill selector */}
+      <div style={{
+        display: "flex",
+        gap: 6,
+        background: "var(--surface-alt)",
+        border: "1.5px solid var(--border)",
+        borderRadius: "var(--radius-xl)",
+        padding: 5,
+        flexWrap: "wrap"
+      }}>
         {SECTIONS.map((s) => {
           const done = completedSections.has(s.key);
           const active = activeSection === s.key;
           return (
-            <button
+            <m.button
               key={s.key}
               onClick={() => setActiveSection(s.key)}
+              whileTap={{ scale: 0.97 }}
               style={{
-                padding: "8px 14px", borderRadius: 99, fontSize: 13, fontWeight: active ? 600 : 400,
-                border: active ? "1.5px solid var(--accent)" : done ? "1.5px solid var(--success)" : "1px solid var(--border)",
-                background: active ? "var(--accent-muted)" : done ? "color-mix(in srgb, var(--success) 3%, transparent)" : "transparent",
-                color: active ? "var(--accent)" : done ? "var(--success)" : "var(--text-secondary)",
-                cursor: "pointer", transition: "all 0.2s",
+                flex: "1 1 auto",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 6,
+                padding: "8px 16px",
+                borderRadius: "var(--radius-lg)",
+                fontSize: 13,
+                fontWeight: 800,
+                border: "none",
+                background: active
+                  ? "var(--accent)"
+                  : done
+                  ? "rgba(16, 185, 129, 0.08)"
+                  : "transparent",
+                color: active
+                  ? "var(--text-on-accent)"
+                  : done
+                  ? "var(--success)"
+                  : "var(--text-secondary)",
+                cursor: "pointer",
+                transition: "color 0.2s, background 0.2s",
               }}
             >
-              {done ? <CheckCircleOutlined style={{ color: "var(--success)" }} /> : s.icon} {s.label}
-            </button>
+              {done ? <CheckCircleFilled style={{ fontSize: 13 }} /> : s.icon}
+              <span>{s.label}</span>
+            </m.button>
           );
         })}
       </div>
 
-      {/* Progress */}
-      <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
-        {completedSections.size}/4 phần hoàn thành
+      {/* Progress banner indicator */}
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderBottom: "1px dashed var(--border)", paddingBottom: 10 }}>
+        <span style={{ fontSize: 12.5, color: "var(--text-secondary)", fontWeight: 700 }}>
+          Tiến trình chủ đề này:
+        </span>
+        <span style={{
+          fontSize: 11,
+          fontWeight: 800,
+          padding: "2px 8px",
+          borderRadius: 8,
+          background: "var(--surface)",
+          border: "1px solid var(--border)",
+          color: "var(--text-secondary)",
+        }}>
+          {completedSections.size} / 4 phần học xong
+        </span>
       </div>
 
-      {/* ── VOCABULARY ── */}
+      {/* ── VOCABULARY SECTION ── */}
       {activeSection === "vocabulary" && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {data.vocabulary.map((w, i) => (
-            <div key={i} style={{ padding: 14, borderRadius: 10, background: "var(--card-bg)", border: "1px solid var(--border)", display: "flex", alignItems: "flex-start", gap: 12 }}>
+            <div
+              key={i}
+              style={{
+                padding: "16px 18px",
+                borderRadius: "var(--radius-xl)",
+                background: "var(--surface)",
+                border: "1.5px solid var(--border)",
+                boxShadow: "var(--shadow-sm)",
+                display: "flex",
+                alignItems: "flex-start",
+                gap: 14,
+                position: "relative"
+              }}
+            >
               <div style={{ flex: 1 }}>
-                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                  <strong style={{ fontSize: 15 }}>{w.word}</strong>
-                  <span style={{ fontSize: 12, color: "var(--text-muted)" }}>{w.ipa}</span>
-                  <button onClick={() => speak(w.word)} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--accent)", padding: 2 }}><SoundOutlined /></button>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+                  <strong style={{ fontSize: 16, fontWeight: 900, color: "var(--text-primary)", fontFamily: "var(--font-display)" }}>{w.word}</strong>
+                  <span style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 700, fontFamily: "var(--font-mono)" }}>{w.ipa}</span>
+                  <m.button
+                    onClick={() => speakTts(w.word)}
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.9 }}
+                    style={{
+                      border: "none",
+                      background: "var(--accent-light)",
+                      borderRadius: "50%",
+                      width: 24,
+                      height: 24,
+                      display: "grid",
+                      placeItems: "center",
+                      cursor: "pointer",
+                      color: "var(--accent)",
+                      padding: 0
+                    }}
+                  >
+                    <SoundOutlined style={{ fontSize: 12 }} />
+                  </m.button>
                 </div>
-                <p style={{ margin: "4px 0 2px", fontSize: 13, color: "var(--accent)", fontWeight: 500 }}>{w.meaning}</p>
-                <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)", fontStyle: "italic" }}>{w.example}</p>
-                <p style={{ margin: 0, fontSize: 12, color: "var(--text-muted)" }}>{w.exampleVi}</p>
+                <p style={{ margin: "2px 0 6px", fontSize: 13.5, color: "var(--accent)", fontWeight: 800 }}>
+                  {w.meaning}
+                </p>
+                <div style={{ borderLeft: "2.5px solid var(--border)", paddingLeft: 12, marginTop: 8 }}>
+                  <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)", fontStyle: "italic", fontWeight: 500 }}>
+                    {w.example}
+                  </p>
+                  <p style={{ margin: "2px 0 0", fontSize: 12, color: "var(--text-muted)", fontWeight: 500 }}>
+                    {w.exampleVi}
+                  </p>
+                </div>
               </div>
             </div>
           ))}
+
           {!completedSections.has("vocabulary") && (
-            <button onClick={() => markDone("vocabulary")} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
-              Hoàn thành <CheckCircleOutlined />
-            </button>
+            <m.button
+              onClick={() => markDone("vocabulary")}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              style={{
+                marginTop: 12,
+                padding: "14px",
+                borderRadius: "var(--radius-lg)",
+                border: "none",
+                background: "var(--accent)",
+                color: "var(--text-on-accent)",
+                fontSize: 14,
+                fontWeight: 800,
+                cursor: "pointer",
+                boxShadow: "0 4px 12px var(--accent-muted)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8
+              }}
+            >
+              <span>Hoàn thành mục này</span>
+              <CheckCircleFilled />
+            </m.button>
           )}
         </div>
       )}
 
-      {/* ── GRAMMAR ── */}
+      {/* ── GRAMMAR SECTION ── */}
       {activeSection === "grammar" && (
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          <div style={{ padding: 20, borderRadius: 12, textAlign: "center", background: "linear-gradient(135deg, var(--accent-muted), color-mix(in srgb, var(--accent) 6%, transparent))", border: "1px solid var(--border)" }}>
-            <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 6px", fontWeight: 600 }}><CalculatorOutlined /> {data.grammar.title}</p>
-            <p style={{ fontSize: 18, fontWeight: 700, color: "var(--accent)", margin: 0, fontFamily: "monospace" }}>{data.grammar.formula}</p>
+          {/* Formula Card */}
+          <div style={{
+            padding: "24px 20px",
+            borderRadius: "var(--radius-xl)",
+            textAlign: "center",
+            background: "linear-gradient(135deg, var(--accent-light) 0%, var(--surface) 100%)",
+            border: "1.5px solid var(--accent-muted)",
+            position: "relative",
+            overflow: "hidden"
+          }}>
+            <p style={{ fontSize: 12, color: "var(--accent)", margin: "0 0 8px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+              <CalculatorOutlined style={{ marginRight: 4 }} /> {data.grammar.title}
+            </p>
+            <p style={{ fontSize: 20, fontWeight: 950, color: "var(--text-primary)", margin: 0, fontFamily: "var(--font-mono)", letterSpacing: "0.02em" }}>
+              {data.grammar.formula}
+            </p>
           </div>
-          <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-            <p style={{ fontSize: 14, lineHeight: 1.7, margin: 0 }}>{data.grammar.explanation}</p>
+
+          {/* Explanation panel */}
+          <div style={{ padding: 18, borderRadius: "var(--radius-xl)", background: "var(--surface)", border: "1.5px solid var(--border)", boxShadow: "var(--shadow-sm)" }}>
+            <span style={{ fontSize: 11.5, fontWeight: 850, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-muted)", display: "block", marginBottom: 8 }}>
+              Giải thích cấu trúc:
+            </span>
+            <p style={{ fontSize: 14, lineHeight: 1.7, margin: 0, color: "var(--text-primary)", fontWeight: 500 }}>
+              {data.grammar.explanation}
+            </p>
           </div>
-          <div style={{ padding: 14, borderRadius: 10, background: "var(--surface)", border: "1px solid var(--border)" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-              <p style={{ margin: 0, fontSize: 15, fontWeight: 500, flex: 1 }}>{data.grammar.topicExample}</p>
-              <button onClick={() => speak(data.grammar.topicExample)} style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--accent)" }}><SoundOutlined /></button>
+
+          {/* Example card */}
+          <div style={{ padding: 16, borderRadius: "var(--radius-xl)", background: "var(--surface-alt)", border: "1.5px solid var(--border)" }}>
+            <span style={{ fontSize: 11.5, fontWeight: 850, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-muted)", display: "block", marginBottom: 8 }}>
+              Ví dụ minh họa:
+            </span>
+            <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
+              <p style={{ margin: 0, fontSize: 14.5, fontWeight: 700, flex: 1, color: "var(--text-primary)" }}>
+                {data.grammar.topicExample}
+              </p>
+              <m.button
+                onClick={() => speakTts(data.grammar.topicExample)}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
+                style={{
+                  border: "none",
+                  background: "var(--surface)",
+                  borderRadius: "50%",
+                  width: 24,
+                  height: 24,
+                  display: "grid",
+                  placeItems: "center",
+                  cursor: "pointer",
+                  color: "var(--accent)",
+                  boxShadow: "var(--shadow-sm)",
+                  padding: 0
+                }}
+              >
+                <SoundOutlined style={{ fontSize: 12 }} />
+              </m.button>
             </div>
-            <p style={{ margin: "4px 0 0", fontSize: 13, color: "var(--text-secondary)", fontStyle: "italic" }}>{data.grammar.topicExampleVi}</p>
+            <p style={{ margin: "4px 0 0", fontSize: 13, color: "var(--text-secondary)", fontStyle: "italic", fontWeight: 500 }}>
+              {data.grammar.topicExampleVi}
+            </p>
           </div>
+
           {!completedSections.has("grammar") && (
-            <button onClick={() => markDone("grammar")} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
-              Hoàn thành <CheckCircleOutlined />
-            </button>
+            <m.button
+              onClick={() => markDone("grammar")}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              style={{
+                marginTop: 12,
+                padding: "14px",
+                borderRadius: "var(--radius-lg)",
+                border: "none",
+                background: "var(--accent)",
+                color: "var(--text-on-accent)",
+                fontSize: 14,
+                fontWeight: 800,
+                cursor: "pointer",
+                boxShadow: "0 4px 12px var(--accent-muted)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8
+              }}
+            >
+              <span>Hoàn thành mục này</span>
+              <CheckCircleFilled />
+            </m.button>
           )}
         </div>
       )}
 
-      {/* ── READING ── */}
+      {/* ── READING SECTION ── */}
       {activeSection === "reading" && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          <div style={{ padding: 20, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-            <h3 style={{ margin: "0 0 10px", fontSize: 15, fontWeight: 600 }}>{data.reading.title}</h3>
-            <p style={{ fontSize: 14, lineHeight: 1.8, margin: 0, whiteSpace: "pre-wrap" }}>{data.reading.passage}</p>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          {/* Reading passage card */}
+          <div style={{ padding: 20, borderRadius: "var(--radius-xl)", background: "var(--surface)", border: "1.5px solid var(--border)", boxShadow: "var(--shadow-sm)" }}>
+            <h3 style={{ margin: "0 0 12px", fontSize: 16, fontWeight: 900, color: "var(--text-primary)", fontFamily: "var(--font-display)" }}>
+              {data.reading.title}
+            </h3>
+            <p style={{ fontSize: 14.5, lineHeight: 1.8, color: "var(--text-primary)", margin: 0, whiteSpace: "pre-wrap", fontWeight: 500 }}>
+              {data.reading.passage}
+            </p>
           </div>
+
+          {/* Reading questions list */}
           {data.reading.questions.map((q, qi) => {
-            const _answered = readingAnswers[qi] !== undefined;
-            const _isCorrect = readingAnswers[qi] === q.answer;
+            const isQAnswered = readingAnswers[qi] !== undefined;
             return (
-              <div key={qi} style={{ padding: 16, borderRadius: 10, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-                <p style={{ margin: "0 0 10px", fontWeight: 500, fontSize: 14 }}>{qi + 1}. {q.question}</p>
-                <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <div
+                key={qi}
+                style={{
+                  padding: 18,
+                  borderRadius: "var(--radius-xl)",
+                  background: "var(--surface)",
+                  border: "1.5px solid var(--border)",
+                  boxShadow: "var(--shadow-sm)"
+                }}
+              >
+                <p style={{ margin: "0 0 12px", fontWeight: 800, fontSize: 14.5, color: "var(--text-primary)" }}>
+                  {qi + 1}. {q.question}
+                </p>
+                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   {q.options.map((o, oi) => {
                     let bg = "var(--surface)";
                     let border = "1px solid var(--border)";
-                    let color = "var(--text)";
+                    let color = "var(--text-primary)";
+                    let fontWeight = 600;
+                    let iconElement = null;
+
                     if (readingRevealed) {
-                      if (oi === q.answer) { bg = "color-mix(in srgb, var(--success) 8%, transparent)"; border = "1px solid var(--success)"; color = "var(--success)"; }
-                      else if (readingAnswers[qi] === oi) { bg = "color-mix(in srgb, var(--error) 8%, transparent)"; border = "1px solid var(--error)"; color = "var(--error)"; }
+                      if (oi === q.answer) {
+                        bg = "rgba(16, 185, 129, 0.08)";
+                        border = "1.5px solid var(--success)";
+                        color = "var(--success)";
+                        iconElement = <CheckOutlined style={{ marginLeft: "auto", color: "var(--success)" }} />;
+                      } else if (readingAnswers[qi] === oi) {
+                        bg = "rgba(239, 68, 68, 0.08)";
+                        border = "1.5px solid var(--error)";
+                        color = "var(--error)";
+                        iconElement = <CloseOutlined style={{ marginLeft: "auto", color: "var(--error)" }} />;
+                      } else {
+                        bg = "var(--surface-alt)";
+                        color = "var(--text-muted)";
+                        border = "1px solid var(--border)";
+                      }
+                    } else if (readingAnswers[qi] === oi) {
+                      border = "1.5px solid var(--accent)";
+                      bg = "var(--accent-light)";
+                      color = "var(--accent)";
                     }
+
                     return (
-                      <button key={oi} onClick={() => { if (!readingRevealed) setReadingAnswers((p) => ({ ...p, [qi]: oi })); }} disabled={readingRevealed}
-                        style={{ padding: "10px 14px", borderRadius: 8, border, background: bg, color, fontSize: 13, cursor: readingRevealed ? "default" : "pointer", textAlign: "left", fontWeight: readingAnswers[qi] === oi || (readingRevealed && oi === q.answer) ? 600 : 400 }}>
-                        {o}
-                      </button>
+                      <m.button
+                        key={oi}
+                        onClick={() => { if (!readingRevealed) setReadingAnswers((p) => ({ ...p, [qi]: oi })); }}
+                        disabled={readingRevealed}
+                        whileHover={readingRevealed ? {} : { x: 3, borderColor: "var(--accent)" }}
+                        whileTap={readingRevealed ? {} : { scale: 0.98 }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          padding: "12px 14px",
+                          borderRadius: "var(--radius-lg)",
+                          border,
+                          background: bg,
+                          color,
+                          fontSize: 13.5,
+                          cursor: readingRevealed ? "default" : "pointer",
+                          textAlign: "left",
+                          fontWeight,
+                          transition: "all 0.2s"
+                        }}
+                      >
+                        <span style={{ marginRight: 8, opacity: 0.7 }}>{String.fromCharCode(65 + oi)}.</span>
+                        <span>{o}</span>
+                        {iconElement}
+                      </m.button>
                     );
                   })}
                 </div>
+
                 {readingRevealed && (
-                  <p style={{ margin: "8px 0 0", fontSize: 12, color: "var(--text-secondary)" }}>
-                    <BulbOutlined style={{ marginRight: 4, color: "var(--accent)" }} />{q.explanation}
-                  </p>
+                  <div style={{
+                    marginTop: 12,
+                    padding: "10px 14px",
+                    borderRadius: "var(--radius-md)",
+                    background: "var(--surface-alt)",
+                    border: "1.5px solid var(--border)",
+                    fontSize: 12.5,
+                    color: "var(--text-secondary)",
+                    fontWeight: 500,
+                    lineHeight: 1.55
+                  }}>
+                    <p style={{ margin: 0, fontWeight: 700, display: "flex", alignItems: "center", gap: 4, marginBottom: 4 }}>
+                      <BulbOutlined style={{ color: "var(--warning)", fontSize: 13 }} />
+                      <span>Giải thích đáp án:</span>
+                    </p>
+                    <p style={{ margin: 0 }}>{q.explanation}</p>
+                  </div>
                 )}
               </div>
             );
           })}
+
           {!readingRevealed && Object.keys(readingAnswers).length === data.reading.questions.length && (
-            <button onClick={() => setReadingRevealed(true)} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
-              Kiểm tra <RightOutlined />
-            </button>
+            <m.button
+              onClick={() => setReadingRevealed(true)}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              style={{
+                padding: "14px",
+                borderRadius: "var(--radius-lg)",
+                border: "none",
+                background: "var(--accent)",
+                color: "var(--text-on-accent)",
+                fontSize: 14,
+                fontWeight: 800,
+                cursor: "pointer",
+                boxShadow: "0 4px 12px var(--accent-muted)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8
+              }}
+            >
+              <span>Kiểm tra kết quả</span>
+              <RightOutlined />
+            </m.button>
           )}
+
           {readingRevealed && !completedSections.has("reading") && (
-            <button onClick={() => markDone("reading")} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--success)", color: "var(--text-on-accent)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
-              Hoàn thành <CheckCircleOutlined />
-            </button>
+            <m.button
+              onClick={() => markDone("reading")}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              style={{
+                padding: "14px",
+                borderRadius: "var(--radius-lg)",
+                border: "none",
+                background: "var(--success)",
+                color: "var(--text-on-accent)",
+                fontSize: 14,
+                fontWeight: 800,
+                cursor: "pointer",
+                boxShadow: "0 4px 12px rgba(16, 185, 129, 0.25)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8
+              }}
+            >
+              <span>Hoàn thành mục này</span>
+              <CheckCircleFilled />
+            </m.button>
           )}
         </div>
       )}
 
-      {/* ── EXERCISES ── */}
+      {/* ── EXERCISES SECTION ── */}
       {activeSection === "exercises" && (
         <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          <div style={{ fontSize: 13, color: "var(--text-secondary)" }}>Bài tập {exIdx + 1}/{data.exercises.length}</div>
+          {/* Question card wrapper */}
           {(() => {
             const ex = data.exercises[exIdx];
             if (!ex) return null;
             return (
-              <div style={{ padding: 20, borderRadius: 14, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-                <p style={{ fontSize: 16, fontWeight: 500, lineHeight: 1.6, margin: "0 0 16px" }}>{ex.sentence}</p>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              <div style={{
+                padding: 24,
+                borderRadius: "var(--radius-xl)",
+                background: "var(--surface)",
+                border: "1.5px solid var(--border)",
+                boxShadow: "var(--shadow-sm)",
+                position: "relative"
+              }}>
+                <div style={{ fontSize: 12, fontWeight: 800, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: 12 }}>
+                  Câu hỏi luyện tập {exIdx + 1} / {data.exercises.length}
+                </div>
+
+                <p style={{ fontSize: 16, fontWeight: 700, lineHeight: 1.6, color: "var(--text-primary)", margin: "0 0 20px" }}>
+                  {ex.sentence}
+                </p>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                   {ex.options.map((o) => {
                     const isCorrect = o === ex.answer;
                     const isSel = o === exSelected;
                     let bg = "var(--surface)";
                     let border = "1px solid var(--border)";
-                    let color = "var(--text)";
+                    let color = "var(--text-primary)";
+                    let fontWeight = 600;
+                    let iconElement = null;
+
                     if (exRevealed) {
-                      if (isCorrect) { bg = "color-mix(in srgb, var(--success) 8%, transparent)"; border = "1px solid var(--success)"; color = "var(--success)"; }
-                      else if (isSel) { bg = "color-mix(in srgb, var(--error) 8%, transparent)"; border = "1px solid var(--error)"; color = "var(--error)"; }
+                      if (isCorrect) {
+                        bg = "rgba(16, 185, 129, 0.08)";
+                        border = "1.5px solid var(--success)";
+                        color = "var(--success)";
+                        iconElement = <CheckCircleFilled style={{ marginLeft: "auto", color: "var(--success)" }} />;
+                      } else if (isSel) {
+                        bg = "rgba(239, 68, 68, 0.08)";
+                        border = "1.5px solid var(--error)";
+                        color = "var(--error)";
+                        iconElement = <CloseCircleFilled style={{ marginLeft: "auto", color: "var(--error)" }} />;
+                      } else {
+                        bg = "var(--surface-alt)";
+                        color = "var(--text-muted)";
+                        border = "1px solid var(--border)";
+                      }
+                    } else if (exSelected === o) {
+                      border = "1.5px solid var(--accent)";
+                      bg = "var(--accent-light)";
+                      color = "var(--accent)";
                     }
+
                     return (
-                      <button key={o} onClick={() => { if (!exRevealed) { setExSelected(o); setExRevealed(true); } }} disabled={exRevealed}
-                        style={{ padding: "12px 16px", borderRadius: 10, border, background: bg, color, fontSize: 14, cursor: exRevealed ? "default" : "pointer", textAlign: "left", fontWeight: isSel || (exRevealed && isCorrect) ? 600 : 400, transition: "all 0.2s" }}>
-                        {exRevealed && isCorrect && <CheckCircleOutlined style={{ marginRight: 6 }} />}
-                        {exRevealed && isSel && !isCorrect && <CloseCircleOutlined style={{ marginRight: 6 }} />}
-                        {o}
-                      </button>
+                      <m.button
+                        key={o}
+                        onClick={() => { if (!exRevealed) { setExSelected(o); setExRevealed(true); } }}
+                        disabled={exRevealed}
+                        whileHover={exRevealed ? {} : { x: 3, borderColor: "var(--accent)" }}
+                        whileTap={exRevealed ? {} : { scale: 0.98 }}
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          padding: "12px 14px",
+                          borderRadius: "var(--radius-lg)",
+                          border,
+                          background: bg,
+                          color,
+                          fontSize: 13.5,
+                          cursor: exRevealed ? "default" : "pointer",
+                          textAlign: "left",
+                          fontWeight,
+                          transition: "all 0.2s"
+                        }}
+                      >
+                        <span>{o}</span>
+                        {iconElement}
+                      </m.button>
                     );
                   })}
                 </div>
-                {exRevealed && (
-                  <p style={{ margin: "12px 0 0", fontSize: 12, color: "var(--text-secondary)", padding: 10, borderRadius: 8, background: "var(--surface)", border: "1px solid var(--border)" }}>
-                    <BulbOutlined style={{ marginRight: 4, color: "var(--accent)" }} />{ex.explanation}
-                  </p>
-                )}
+
+                <AnimatePresence>
+                  {exRevealed && (
+                    <m.div
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      style={{
+                        marginTop: 16,
+                        padding: "12px 16px",
+                        borderRadius: "var(--radius-md)",
+                        background: "var(--surface-alt)",
+                        border: "1.5px solid var(--border)",
+                        fontSize: 12.5,
+                        color: "var(--text-secondary)",
+                        fontWeight: 500,
+                        lineHeight: 1.55
+                      }}
+                    >
+                      <p style={{ margin: 0, fontWeight: 700, display: "flex", alignItems: "center", gap: 4, marginBottom: 4 }}>
+                        <BulbOutlined style={{ color: "var(--warning)", fontSize: 13 }} />
+                        <span>Giải thích đáp án:</span>
+                      </p>
+                      <p style={{ margin: 0 }}>{ex.explanation}</p>
+                    </m.div>
+                  )}
+                </AnimatePresence>
               </div>
             );
           })()}
+
           {exRevealed && (
-            <button onClick={() => {
-              if (exIdx < data.exercises.length - 1) {
-                setExIdx((i) => i + 1); setExSelected(null); setExRevealed(false);
-              } else {
-                markDone("exercises");
-              }
-            }} style={{ padding: "12px 20px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
-              {exIdx < data.exercises.length - 1 ? <>Câu tiếp <RightOutlined /></> : <>Hoàn thành <CheckCircleOutlined /></>}
-            </button>
+            <m.button
+              onClick={() => {
+                if (exIdx < data.exercises.length - 1) {
+                  setExIdx((i) => i + 1);
+                  setExSelected(null);
+                  setExRevealed(false);
+                } else {
+                  markDone("exercises");
+                }
+              }}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              style={{
+                padding: "14px",
+                borderRadius: "var(--radius-lg)",
+                border: "none",
+                background: "var(--accent)",
+                color: "var(--text-on-accent)",
+                fontSize: 14,
+                fontWeight: 800,
+                cursor: "pointer",
+                boxShadow: "0 4px 12px var(--accent-muted)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8
+              }}
+            >
+              <span>{exIdx < data.exercises.length - 1 ? "Câu hỏi tiếp theo" : "Hoàn thành và tính điểm"}</span>
+              {exIdx < data.exercises.length - 1 ? <ArrowRightOutlined /> : <CheckCircleFilled />}
+            </m.button>
           )}
         </div>
       )}

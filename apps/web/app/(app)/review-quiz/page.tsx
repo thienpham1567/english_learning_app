@@ -1,9 +1,10 @@
 "use client";
+
 import { api } from "@/lib/api-client";
 import { useState, useCallback, useEffect, useRef } from "react";
 import {
-  CheckCircleOutlined,
-  CloseCircleOutlined,
+  CheckCircleFilled,
+  CloseCircleFilled,
   LoadingOutlined,
   ReloadOutlined,
   BulbOutlined,
@@ -11,11 +12,16 @@ import {
   InfoCircleOutlined,
   BookOutlined,
   SmileOutlined,
+  CheckOutlined,
+  CloseOutlined,
+  ArrowRightOutlined,
 } from "@ant-design/icons";
-import { Tag, Progress, Collapse, Empty, Badge, Tabs } from "antd";
+import { Progress, Tag } from "antd";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
+import * as m from "motion/react-client";
+import { AnimatePresence } from "motion/react";
 
-// ─── Error Review Types (existing) ────────────────────────────────
+// ─── Error Review Types
 type ErrorEntry = {
   id: string;
   sourceModule: string;
@@ -29,7 +35,7 @@ type ErrorEntry = {
   reviewCount: number;
 };
 
-// ─── Vocabulary Review Types (new) ────────────────────────────────
+// ─── Vocabulary Review Types
 type VocabWord = {
   query: string;
   headword: string;
@@ -60,27 +66,83 @@ type QuizQuestion = {
 type ReviewState = "loading" | "quiz" | "results" | "empty";
 type TabKey = "errors" | "vocab";
 
-// (PageHeader removed — using shared ModuleHeader)
-
-
 function MasteryBadge({ level }: { level: string }) {
-  const config: Record<string, { color: string; label: string }> = {
-    new: { color: "var(--text-disabled)", label: "Mới" },
-    learning: { color: "var(--warning)", label: "Đang học" },
-    reviewing: { color: "var(--info)", label: "Ôn tập" },
-    mastered: { color: "var(--success)", label: "Thuần thục" },
+  const config: Record<string, { bg: string; color: string; label: string }> = {
+    new: { bg: "var(--surface-alt)", color: "var(--text-secondary)", label: "Mới" },
+    learning: { bg: "rgba(245, 158, 11, 0.08)", color: "var(--warning)", label: "Đang học" },
+    reviewing: { bg: "var(--accent-light)", color: "var(--accent)", label: "Ôn tập" },
+    mastered: { bg: "rgba(16, 185, 129, 0.08)", color: "var(--success)", label: "Thành thạo" },
   };
   const c = config[level] ?? config.new;
-  return <Tag color={c.color} style={{ fontSize: 10, borderRadius: 99 }}>{c.label}</Tag>;
+  return (
+    <span
+      style={{
+        fontSize: 10.5,
+        fontWeight: 800,
+        padding: "2px 8px",
+        borderRadius: 12,
+        background: c.bg,
+        color: c.color,
+        border: `1px solid ${c.bg === "var(--surface-alt)" ? "var(--border)" : c.color}22`,
+      }}
+    >
+      {c.label}
+    </span>
+  );
 }
 
-// ─── Quiz Question Generator ─────────────────────────────────────
+// ─── Accordion Component (Custom Explanation Collapse)
+function ExplanationAccordion({ title, children }: { title: React.ReactNode; children: React.ReactNode }) {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <div style={{ marginTop: 10, borderRadius: "var(--radius-lg)", border: "1px solid var(--border)", overflow: "hidden", background: "var(--surface-alt)" }}>
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        style={{
+          width: "100%",
+          padding: "10px 14px",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+          background: "transparent",
+          border: "none",
+          textAlign: "left",
+          cursor: "pointer",
+          fontSize: 12.5,
+          fontWeight: 700,
+          color: "var(--text-secondary)",
+        }}
+      >
+        <span>{title}</span>
+        <m.span animate={{ rotate: isOpen ? 180 : 0 }} style={{ fontSize: 10 }}>
+          ▼
+        </m.span>
+      </button>
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <m.div
+            initial={{ height: 0 }}
+            animate={{ height: "auto" }}
+            exit={{ height: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            style={{ overflow: "hidden" }}
+          >
+            <div style={{ padding: "12px 14px", borderTop: "1px solid var(--border)", background: "var(--surface)", fontSize: 13, lineHeight: 1.6 }}>
+              {children}
+            </div>
+          </m.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+// ─── Quiz Question Generator
 function generateQuizQuestions(words: VocabWord[], distractors: DistractorWord[]): QuizQuestion[] {
   return words.map((word, idx) => {
-    // Alternate between vi→en and en→vi
     const mode: "vi-to-en" | "en-to-vi" = idx % 2 === 0 ? "vi-to-en" : "en-to-vi";
 
-    // Build options
     const sameLevelDistractors = distractors.filter(
       (d) => d.query !== word.query && d.level === word.level,
     );
@@ -89,7 +151,6 @@ function generateQuizQuestions(words: VocabWord[], distractors: DistractorWord[]
     );
     const pool = [...sameLevelDistractors, ...otherDistractors];
 
-    // Pick 3 unique distractors
     const chosen: DistractorWord[] = [];
     const used = new Set<string>([word.query]);
     for (const d of pool) {
@@ -99,7 +160,6 @@ function generateQuizQuestions(words: VocabWord[], distractors: DistractorWord[]
       chosen.push(d);
     }
 
-    // F3 fix: Pad to always have 4 options even with few distractors
     while (chosen.length < 3) {
       const placeholder = `---`;
       chosen.push({ query: `_pad_${chosen.length}`, headword: placeholder, overviewVi: placeholder, level: null });
@@ -109,14 +169,11 @@ function generateQuizQuestions(words: VocabWord[], distractors: DistractorWord[]
     let correctIndex: number;
 
     if (mode === "vi-to-en") {
-      // Show Vietnamese definition → pick English word
       const allOptions = [word.headword, ...chosen.map((d) => d.headword)];
-      // Shuffle
       const shuffled = allOptions.sort(() => Math.random() - 0.5);
       correctIndex = shuffled.indexOf(word.headword);
       options = shuffled;
     } else {
-      // Show English word → pick Vietnamese definition
       const allOptions = [word.overviewVi, ...chosen.map((d) => d.overviewVi)];
       const shuffled = allOptions.sort(() => Math.random() - 0.5);
       correctIndex = shuffled.indexOf(word.overviewVi);
@@ -127,7 +184,7 @@ function generateQuizQuestions(words: VocabWord[], distractors: DistractorWord[]
   });
 }
 
-// ─── Vocab Review Tab ────────────────────────────────────────────
+// ─── Vocab Review Tab
 function VocabReviewTab() {
   const [state, setState] = useState<ReviewState>("loading");
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
@@ -144,7 +201,6 @@ function VocabReviewTab() {
 
   const currentQ = questions[currentIdx] ?? null;
 
-  // Fetch due vocabulary
   const fetchDue = useCallback(async () => {
     setState("loading");
     try {
@@ -199,20 +255,17 @@ function VocabReviewTab() {
     };
   }, []);
 
-  // Record answer timing
   useEffect(() => {
     questionStartRef.current = Date.now();
   }, [currentIdx]);
 
-  // Select answer
   const selectAnswer = useCallback((optionIdx: number) => {
     setAnswers((prev) => {
-      if (prev[currentIdx] !== undefined) return prev; // Already answered
+      if (prev[currentIdx] !== undefined) return prev;
       return { ...prev, [currentIdx]: optionIdx };
     });
   }, [currentIdx]);
 
-  // Derive quality from correctness + timing
   const getQuality = useCallback((correct: boolean, elapsedMs: number): number => {
     if (!correct) return 2;
     if (elapsedMs < 3000) return 5;
@@ -235,7 +288,6 @@ function VocabReviewTab() {
     setState("results");
   }, []);
 
-  // Next or submit — F4 fix: build final result inline, pass to submitReview
   const handleNext = useCallback(() => {
     const q = questions[currentIdx];
     const selected = answers[currentIdx];
@@ -255,118 +307,142 @@ function VocabReviewTab() {
     }
   }, [answers, currentIdx, getQuality, questions, results, submitReview]);
 
-  // Loading
   if (state === "loading") {
     return (
-      <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", gap: 12 }}>
-        <LoadingOutlined style={{ fontSize: 32, color: "var(--accent)" }} />
-        <p style={{ color: "var(--text-secondary)" }}>Đang tải từ vựng cần ôn...</p>
+      <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", gap: 14 }}>
+        <LoadingOutlined style={{ fontSize: 28, color: "var(--accent)" }} />
+        <span style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 700 }}>Đang chuẩn bị thẻ ôn tập từ vựng...</span>
       </div>
     );
   }
 
-  // Empty
   if (state === "empty") {
     return (
-      <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center", padding: 32 }}>
-        <Empty
-          description={
-            <div>
-              <p style={{ fontSize: 16, fontWeight: 600, margin: "0 0 8px" }}><SmileOutlined /> Không có từ nào cần ôn!</p>
-              <p style={{ color: "var(--text-secondary)", margin: 0, fontSize: 13 }}>
-                Tra từ điển và lưu từ vựng để hệ thống SRS tự động nhắc bạn ôn tập.
-              </p>
-            </div>
-          }
-        />
+      <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center", padding: "60px 20px" }}>
+        <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-xl)", padding: "48px 32px", textAlign: "center", maxWidth: 460, boxShadow: "var(--shadow-sm)" }}>
+          <SmileOutlined style={{ fontSize: 36, color: "var(--success)", marginBottom: 12 }} />
+          <h4 style={{ fontSize: 16, fontWeight: 900, color: "var(--text-primary)", margin: "0 0 6px" }}>Tuyệt vời! Không còn từ vựng đến hạn</h4>
+          <p style={{ fontSize: 12.5, color: "var(--text-secondary)", lineHeight: 1.5, margin: 0, fontWeight: 500 }}>
+            Bạn đã hoàn thành tất cả các mục từ vựng ôn tập trong hôm nay. Hãy tiếp tục tra từ điển hoặc học flashcard mới để phát triển kho từ vựng.
+          </p>
+        </div>
       </div>
     );
   }
 
-  // Results
   if (state === "results" && submitResult) {
     const correctCount = submitResult.words.filter((w) => w.correct).length;
     const percentage = submitResult.accuracy;
     const scoreColor = percentage >= 80 ? "var(--success)" : percentage >= 50 ? "var(--warning)" : "var(--error)";
 
     return (
-      <div style={{ flex: 1, padding: 24, maxWidth: 640, margin: "0 auto", width: "100%", overflow: "auto" }}>
-        {/* Score hero card */}
+      <div style={{ flex: 1, padding: "20px 16px 80px", maxWidth: 560, margin: "0 auto", width: "100%", overflowY: "auto" }} className="anim-fade-up">
+        {/* Score Summary Banner */}
         <div style={{
-          textAlign: "center", padding: "36px 28px 32px", borderRadius: 20,
-          background: "linear-gradient(180deg, var(--card-bg) 0%, color-mix(in srgb, var(--accent) 4%, var(--surface)) 100%)",
-          border: "1px solid var(--border)", boxShadow: "var(--shadow-lg)", marginBottom: 20,
+          textAlign: "center", padding: "32px 20px", borderRadius: "var(--radius-xl)",
+          background: "linear-gradient(135deg, var(--surface) 0%, var(--surface-alt) 100%)",
+          border: "1.5px solid var(--border)", boxShadow: "var(--shadow-sm)", marginBottom: 24,
+          position: "relative", overflow: "hidden"
         }}>
+          <div style={{ position: "absolute", left: "50%", top: "0%", transform: "translateX(-50%)", width: 140, height: 140, borderRadius: "50%", background: "radial-gradient(circle, var(--accent) 5%, transparent 70%)", opacity: 0.15, pointerEvents: "none" }} />
+          
           <Progress
             type="circle"
             percent={percentage}
-            size={140}
+            size={120}
             strokeWidth={8}
             strokeColor={scoreColor}
             trailColor="var(--border)"
             format={() => (
               <div>
-                <div style={{ fontSize: 32, fontWeight: 800, color: "var(--ink)" }}>{correctCount}/{submitResult.words.length}</div>
-                <div style={{ fontSize: 13, color: "var(--text-muted)", fontWeight: 600 }}>{percentage}%</div>
+                <div style={{ fontSize: 24, fontWeight: 950, color: "var(--text-primary)" }}>{correctCount}/{submitResult.words.length}</div>
+                <div style={{ fontSize: 11.5, color: "var(--text-muted)", fontWeight: 800 }}>Chính xác</div>
               </div>
             )}
           />
-          <h2 style={{ margin: "20px 0 6px", fontSize: 22, fontWeight: 800, color: "var(--ink)" }}>
-            {percentage >= 80 ? "Xuất sắc!" : percentage >= 50 ? "Khá tốt!" : "Cần ôn thêm!"}
-          </h2>
+          
+          <h3 style={{ margin: "16px 0 6px", fontSize: 18, fontWeight: 900, color: "var(--text-primary)" }}>
+            {percentage >= 80 ? "Thật xuất sắc!" : percentage >= 50 ? "Làm khá tốt!" : "Hãy nỗ lực hơn nhé!"}
+          </h3>
+
           {submitResult.xpEarned > 0 && (
             <div style={{
               display: "inline-flex", alignItems: "center", gap: 6,
-              padding: "8px 18px", borderRadius: 99,
-              background: "color-mix(in srgb, var(--accent) 12%, var(--surface))",
-              color: "var(--accent)", fontSize: 16, fontWeight: 800, margin: "12px 0 20px",
+              padding: "6px 16px", borderRadius: 20,
+              background: "var(--accent-light)",
+              color: "var(--accent)", fontSize: 14, fontWeight: 800, margin: "6px 0 16px",
+              border: "1px solid var(--accent-muted)"
             }}>
-              <TrophyOutlined style={{ fontSize: 14 }} /> +{submitResult.xpEarned} XP
+              <TrophyOutlined style={{ fontSize: 13 }} />
+              <span>+{submitResult.xpEarned} XP</span>
             </div>
           )}
-          <div>
-            <button
+
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <m.button
               onClick={fetchDue}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
               style={{
-                padding: "12px 28px", borderRadius: 12, border: "none",
-                background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-                color: "var(--text-on-accent)", fontSize: 14, fontWeight: 700, cursor: "pointer",
-                boxShadow: "0 4px 12px color-mix(in srgb, var(--accent) 25%, transparent)",
+                display: "flex", alignItems: "center", gap: 8,
+                padding: "10px 24px", borderRadius: 10, border: "none",
+                background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+                color: "var(--text-on-accent)", fontSize: 13.5, fontWeight: 800, cursor: "pointer",
+                boxShadow: "0 4px 12px var(--accent-muted)"
               }}
             >
-              <ReloadOutlined style={{ marginRight: 6 }} /> Ôn tiếp
-            </button>
+              <ReloadOutlined /> Ôn tập thêm
+            </m.button>
           </div>
         </div>
 
-        {/* Per-word detail */}
-        <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)", marginBottom: 10, paddingLeft: 4 }}>
-          Chi tiết từ vựng
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {/* Word Detail Section */}
+        <h4 style={{ fontSize: 12, fontWeight: 850, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)", marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
+          <InfoCircleOutlined />
+          <span>Danh sách từ đã ôn tập ({submitResult.words.length})</span>
+        </h4>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {submitResult.words.map((w) => {
             const question = questions.find((q) => q.word.query === w.query);
             return (
               <div
                 key={w.query}
                 style={{
-                  padding: "14px 16px", borderRadius: 14,
-                  border: "1px solid var(--border)",
+                  padding: "14px 16px", borderRadius: "var(--radius-lg)",
+                  border: "1.5px solid var(--border)",
                   borderLeft: `4px solid ${w.correct ? "var(--success)" : "var(--error)"}`,
-                  background: "var(--card-bg)", boxShadow: "var(--shadow-sm)",
+                  background: "var(--surface)",
+                  boxShadow: "var(--shadow-sm)",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
-                  {w.correct ? <CheckCircleOutlined style={{ color: "var(--success)", fontSize: 16 }} /> : <CloseCircleOutlined style={{ color: "var(--error)", fontSize: 16 }} />}
-                  <span style={{ fontWeight: 700, fontSize: 14, color: "var(--text)" }}>{question?.word.headword ?? w.query}</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6, flexWrap: "wrap" }}>
+                  {w.correct ? (
+                    <CheckCircleFilled style={{ color: "var(--success)", fontSize: 15 }} />
+                  ) : (
+                    <CloseCircleFilled style={{ color: "var(--error)", fontSize: 15 }} />
+                  )}
+                  <span style={{ fontWeight: 800, fontSize: 14.5, color: "var(--text-primary)" }}>
+                    {question?.word.headword ?? w.query}
+                  </span>
+                  {question?.word.partOfSpeech && (
+                    <span style={{ fontSize: 11, fontStyle: "italic", color: "var(--text-muted)" }}>
+                      ({question.word.partOfSpeech})
+                    </span>
+                  )}
                   <MasteryBadge level={w.masteryLevel} />
                 </div>
-                <p style={{ fontSize: 13, color: "var(--text-secondary)", margin: 0 }}>
+                <p style={{ fontSize: 13, color: "var(--text-secondary)", margin: "0 0 6px", fontWeight: 500 }}>
                   {question?.word.overviewVi}
                 </p>
-                <p style={{ fontSize: 11, color: "var(--text-muted)", margin: "4px 0 0" }}>
-                  Ôn lại sau {w.interval} ngày
-                </p>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", borderTop: "1px dashed var(--border)", paddingTop: 8, marginTop: 4 }}>
+                  <span style={{ fontSize: 11.5, color: "var(--text-muted)", fontWeight: 600 }}>
+                    Chu kỳ ôn tiếp theo
+                  </span>
+                  <span style={{ fontSize: 11.5, color: "var(--text-secondary)", fontWeight: 800 }}>
+                    Sau {w.interval} ngày
+                  </span>
+                </div>
               </div>
             );
           })}
@@ -375,147 +451,252 @@ function VocabReviewTab() {
     );
   }
 
-  // Quiz mode
   if (!currentQ) return null;
   const answered = answers[currentIdx] !== undefined;
   const isCorrect = answered && answers[currentIdx] === currentQ.correctIndex;
 
   return (
-    <div style={{ flex: 1, padding: 24, maxWidth: 640, margin: "0 auto", width: "100%" }}>
-      {/* Progress bar */}
-      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-        <Progress
-          percent={((currentIdx + 1) / questions.length) * 100}
-          size="small"
-          showInfo={false}
-          style={{ flex: 1 }}
-        />
-        <Tag color="orange" style={{ borderRadius: 99 }}>
-          {currentIdx + 1}/{questions.length}
-        </Tag>
+    <div style={{ flex: 1, padding: "20px 16px 80px", maxWidth: 520, margin: "0 auto", width: "100%" }} className="anim-fade-up">
+      {/* Dynamic Progress indicator */}
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
+        <div style={{ flex: 1, height: 6, background: "var(--border)", borderRadius: 3, position: "relative", overflow: "hidden" }}>
+          <m.div
+            initial={{ width: 0 }}
+            animate={{ width: `${((currentIdx + 1) / questions.length) * 100}%` }}
+            style={{ height: "100%", background: "linear-gradient(to right, var(--accent), var(--secondary))", borderRadius: 3 }}
+          />
+        </div>
+        <span
+          style={{
+            fontSize: 11,
+            fontWeight: 800,
+            padding: "2px 8px",
+            borderRadius: 8,
+            background: "var(--surface-alt)",
+            border: "1px solid var(--border)",
+            color: "var(--text-secondary)",
+          }}
+        >
+          {currentIdx + 1} / {questions.length}
+        </span>
       </div>
 
-      {/* Quiz card */}
-      <div style={{ padding: 24, borderRadius: 16, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-        {/* Word info tags */}
-        <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
-          {currentQ.word.level && <Tag color="blue" style={{ fontSize: 11 }}>{currentQ.word.level}</Tag>}
-          {currentQ.word.partOfSpeech && <Tag color="default" style={{ fontSize: 11 }}>{currentQ.word.partOfSpeech}</Tag>}
+      {/* Main Quiz Sheet */}
+      <div
+        style={{
+          padding: 24,
+          borderRadius: "var(--radius-xl)",
+          background: "var(--surface)",
+          border: "1.5px solid var(--border)",
+          boxShadow: "var(--shadow-md)",
+          position: "relative",
+          overflow: "hidden"
+        }}
+      >
+        {/* Decorative dynamic card glow */}
+        <div style={{ position: "absolute", right: "-10%", top: "-10%", width: 140, height: 140, borderRadius: "50%", background: "radial-gradient(circle, var(--accent) 5%, transparent 70%)", opacity: 0.05, pointerEvents: "none" }} />
+
+        {/* Word Info Tags */}
+        <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 16, flexWrap: "wrap" }}>
+          {currentQ.word.level && (
+            <span
+              style={{
+                fontSize: 10,
+                fontWeight: 900,
+                background: "rgba(59, 130, 246, 0.08)",
+                color: "#2563eb",
+                padding: "2px 6px",
+                borderRadius: 6,
+                border: "1px solid rgba(59, 130, 246, 0.15)",
+              }}
+            >
+              {currentQ.word.level}
+            </span>
+          )}
+          {currentQ.word.partOfSpeech && (
+            <span
+              style={{
+                fontSize: 10,
+                fontWeight: 800,
+                background: "var(--surface-alt)",
+                color: "var(--text-muted)",
+                padding: "2px 6px",
+                borderRadius: 6,
+                border: "1px solid var(--border)",
+              }}
+            >
+              {currentQ.word.partOfSpeech}
+            </span>
+          )}
           <MasteryBadge level={currentQ.word.masteryLevel} />
-          <Tag color={currentQ.mode === "vi-to-en" ? "purple" : "cyan"} style={{ fontSize: 10 }}>
-            {currentQ.mode === "vi-to-en" ? "🇻🇳 → 🇬🇧" : "🇬🇧 → 🇻🇳"}
-          </Tag>
+          
+          <span
+            style={{
+              fontSize: 10,
+              fontWeight: 800,
+              marginLeft: "auto",
+              padding: "2px 6px",
+              borderRadius: 6,
+              background: currentQ.mode === "vi-to-en" ? "rgba(139, 92, 246, 0.08)" : "rgba(6, 182, 212, 0.08)",
+              color: currentQ.mode === "vi-to-en" ? "var(--xp)" : "var(--info)",
+            }}
+          >
+            {currentQ.mode === "vi-to-en" ? "Việt → Anh" : "Anh → Việt"}
+          </span>
         </div>
 
-        {/* Question stem */}
-        <div style={{ marginBottom: 20 }}>
-          <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 4px" }}>
-            {currentQ.mode === "vi-to-en" ? "Chọn từ tiếng Anh đúng:" : "Chọn nghĩa tiếng Việt đúng:"}
-          </p>
-          <p style={{ fontSize: 18, fontWeight: 600, margin: 0, lineHeight: 1.4 }}>
+        {/* Question Topic Text */}
+        <div style={{ marginBottom: 24 }}>
+          <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)", display: "block", marginBottom: 6 }}>
+            {currentQ.mode === "vi-to-en" ? "Chọn từ tiếng Anh khớp với định nghĩa:" : "Chọn định nghĩa tiếng Việt tương ứng với từ:"}
+          </span>
+          <h2 style={{ fontSize: 20, fontWeight: 950, fontFamily: "var(--font-display)", color: "var(--text-primary)", margin: 0, lineHeight: 1.4 }}>
             {currentQ.mode === "vi-to-en" ? currentQ.word.overviewVi : currentQ.word.headword}
-          </p>
+          </h2>
         </div>
 
-        {/* Options */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        {/* Options Stack */}
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {currentQ.options.map((opt, oi) => {
             let borderColor = "var(--border)";
-            let bgColor = "transparent";
-            let textColor = "var(--text)";
-            let fontWeight = 400;
+            let bgColor = "var(--surface)";
+            let textColor = "var(--text-primary)";
+            let fontWeight = 700;
+            let iconElement = null;
 
             if (answered) {
               if (oi === currentQ.correctIndex) {
                 borderColor = "var(--success)";
-                bgColor = "color-mix(in srgb, var(--success) 8%, transparent)";
+                bgColor = "rgba(16, 185, 129, 0.08)";
                 textColor = "var(--success)";
-                fontWeight = 600;
+                iconElement = <CheckOutlined style={{ marginLeft: "auto", color: "var(--success)" }} />;
               } else if (oi === answers[currentIdx] && oi !== currentQ.correctIndex) {
                 borderColor = "var(--error)";
-                bgColor = "color-mix(in srgb, var(--error) 8%, transparent)";
+                bgColor = "rgba(239, 68, 68, 0.08)";
                 textColor = "var(--error)";
-                fontWeight = 600;
+                iconElement = <CloseOutlined style={{ marginLeft: "auto", color: "var(--error)" }} />;
+              } else {
+                bgColor = "var(--surface-alt)";
+                textColor = "var(--text-muted)";
+                borderColor = "var(--border)";
               }
             } else if (answers[currentIdx] === oi) {
               borderColor = "var(--accent)";
-              bgColor = "var(--accent-muted)";
+              bgColor = "var(--accent-light)";
               textColor = "var(--accent)";
-              fontWeight = 600;
             }
 
             return (
-              <button
+              <m.button
                 key={oi}
                 onClick={() => selectAnswer(oi)}
                 disabled={answered}
+                whileHover={answered ? {} : { x: 4, borderColor: "var(--accent)" }}
+                whileTap={answered ? {} : { scale: 0.98 }}
                 style={{
-                  padding: "12px 16px",
-                  borderRadius: 10,
-                  border: `2px solid ${borderColor}`,
+                  display: "flex",
+                  alignItems: "center",
+                  padding: "14px 16px",
+                  borderRadius: "var(--radius-lg)",
+                  border: "1.5px solid var(--border)",
+                  borderColor,
                   background: bgColor,
                   color: textColor,
                   textAlign: "left",
                   cursor: answered ? "default" : "pointer",
                   fontSize: 14,
                   fontWeight,
-                  transition: "all 0.2s",
+                  fontFamily: "var(--font-body)",
+                  transition: "border-color 0.2s, background-color 0.2s",
                 }}
               >
-                {String.fromCharCode(65 + oi)}. {opt}
-              </button>
+                <span style={{ marginRight: 10, opacity: 0.7 }}>
+                  {String.fromCharCode(65 + oi)}.
+                </span>
+                <span style={{ flex: 1 }}>{opt}</span>
+                {iconElement}
+              </m.button>
             );
           })}
         </div>
 
-        {/* Feedback after answering */}
-        {answered && (
-          <div
-            style={{
-              marginTop: 12,
-              padding: "10px 14px",
-              borderRadius: 8,
-              background: isCorrect ? "color-mix(in srgb, var(--success) 7%, transparent)" : "color-mix(in srgb, var(--error) 7%, transparent)",
-              border: `1px solid ${isCorrect ? "color-mix(in srgb, var(--success) 20%, transparent)" : "color-mix(in srgb, var(--error) 20%, transparent)"}`,
-              fontSize: 13,
-            }}
-          >
-            {isCorrect ? (
-              <span style={{ color: "var(--success)" }}><CheckCircleOutlined /> Chính xác!</span>
-            ) : (
-              <span style={{ color: "var(--error)" }}>
-                <CloseCircleOutlined /> Sai — Đáp án đúng: <strong>{currentQ.options[currentQ.correctIndex]}</strong>
-              </span>
-            )}
-          </div>
-        )}
+        {/* Answer results inline card */}
+        <AnimatePresence>
+          {answered && (
+            <m.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              style={{
+                marginTop: 16,
+                padding: "12px 16px",
+                borderRadius: "var(--radius-md)",
+                background: isCorrect ? "rgba(16, 185, 129, 0.06)" : "rgba(239, 68, 68, 0.06)",
+                border: `1px solid ${isCorrect ? "var(--success)" : "var(--error)"}22`,
+                fontSize: 13,
+                fontWeight: 650,
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+              }}
+            >
+              {isCorrect ? (
+                <>
+                  <CheckCircleFilled style={{ color: "var(--success)", fontSize: 16 }} />
+                  <span style={{ color: "var(--success)" }}>Tuyệt vời! Bạn trả lời rất chuẩn xác.</span>
+                </>
+              ) : (
+                <>
+                  <CloseCircleFilled style={{ color: "var(--error)", fontSize: 16 }} />
+                  <span style={{ color: "var(--error)" }}>
+                    Rất tiếc! Đáp án đúng: <strong style={{ textDecoration: "underline" }}>{currentQ.options[currentQ.correctIndex]}</strong>
+                  </span>
+                </>
+              )}
+            </m.div>
+          )}
+        </AnimatePresence>
 
-        {/* Next button */}
-        <div style={{ marginTop: 16 }}>
-          <button
+        {/* Controller panel */}
+        <div style={{ marginTop: 20 }}>
+          <m.button
             onClick={handleNext}
             disabled={!answered || submitting}
+            whileHover={answered && !submitting ? { scale: 1.02 } : {}}
+            whileTap={answered && !submitting ? { scale: 0.98 } : {}}
             style={{
               width: "100%",
-              padding: "12px",
-              borderRadius: 10,
+              padding: "14px",
+              borderRadius: "var(--radius-lg)",
               border: "none",
               background: answered ? "var(--accent)" : "var(--border)",
               color: answered ? "var(--text-on-accent)" : "var(--text-secondary)",
-              fontSize: 15,
-              fontWeight: 600,
+              fontSize: 14,
+              fontWeight: 800,
               cursor: answered ? "pointer" : "not-allowed",
+              transition: "background 0.25s, color 0.25s",
+              boxShadow: answered ? "0 4px 12px var(--accent-muted)" : "none",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 8,
             }}
           >
-            {submitting ? <LoadingOutlined /> : currentIdx < questions.length - 1 ? "Câu tiếp →" : "Hoàn thành ✓"}
-          </button>
+            {submitting ? (
+              <LoadingOutlined spin />
+            ) : (
+              <>
+                <span>{currentIdx < questions.length - 1 ? "Câu tiếp theo" : "Hoàn thành và tính điểm"}</span>
+                <ArrowRightOutlined />
+              </>
+            )}
+          </m.button>
         </div>
       </div>
     </div>
   );
 }
 
-// ─── Error Review Tab (existing, extracted) ──────────────────────
+// ─── Error Review Tab
 function ErrorReviewTab() {
   const [state, setState] = useState<ReviewState>("loading");
   const [errors, setErrors] = useState<ErrorEntry[]>([]);
@@ -612,26 +793,23 @@ function ErrorReviewTab() {
 
   if (state === "loading") {
     return (
-      <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", gap: 12 }}>
-        <LoadingOutlined style={{ fontSize: 32, color: "var(--accent)" }} />
-        <p style={{ color: "var(--text-secondary)" }}>Đang tải lỗi sai cần ôn...</p>
+      <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center", flexDirection: "column", gap: 14 }}>
+        <LoadingOutlined style={{ fontSize: 28, color: "var(--accent)" }} />
+        <span style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 700 }}>Đang chuẩn bị danh sách câu hỏi ôn lỗi sai...</span>
       </div>
     );
   }
 
   if (state === "empty") {
     return (
-      <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center", padding: 32 }}>
-        <Empty
-          description={
-            <div>
-              <p style={{ fontSize: 16, fontWeight: 600, margin: "0 0 8px" }}><SmileOutlined /> Không có lỗi nào cần ôn!</p>
-              <p style={{ color: "var(--text-secondary)", margin: 0, fontSize: 13 }}>
-                Hãy luyện tập Grammar Quiz hoặc Mock Test để hệ thống ghi nhận lỗi sai.
-              </p>
-            </div>
-          }
-        />
+      <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center", padding: "60px 20px" }}>
+        <div style={{ background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "var(--radius-xl)", padding: "48px 32px", textAlign: "center", maxWidth: 460, boxShadow: "var(--shadow-sm)" }}>
+          <SmileOutlined style={{ fontSize: 36, color: "var(--success)", marginBottom: 12 }} />
+          <h4 style={{ fontSize: 16, fontWeight: 900, color: "var(--text-primary)", margin: "0 0 6px" }}>Tuyệt vời! Không còn lỗi sai đến hạn</h4>
+          <p style={{ fontSize: 12.5, color: "var(--text-secondary)", lineHeight: 1.5, margin: 0, fontWeight: 500 }}>
+            Bạn đã ôn tập hoàn chỉnh các câu trả lời sai từ trước đến nay. Hãy tiếp tục làm các bài thi thử hoặc trắc nghiệm ngữ pháp để tích lũy dữ liệu.
+          </p>
+        </div>
       </div>
     );
   }
@@ -642,114 +820,146 @@ function ErrorReviewTab() {
     const scoreColor = percentage >= 80 ? "var(--success)" : percentage >= 50 ? "var(--warning)" : "var(--error)";
 
     return (
-      <div style={{ flex: 1, padding: 24, maxWidth: 640, margin: "0 auto", width: "100%", overflow: "auto" }}>
-        {/* Score hero card */}
+      <div style={{ flex: 1, padding: "20px 16px 80px", maxWidth: 560, margin: "0 auto", width: "100%", overflowY: "auto" }} className="anim-fade-up">
+        {/* Score summary panel */}
         <div style={{
-          textAlign: "center", padding: "36px 28px 32px", borderRadius: 20,
-          background: "linear-gradient(180deg, var(--card-bg) 0%, color-mix(in srgb, var(--accent) 4%, var(--surface)) 100%)",
-          border: "1px solid var(--border)", boxShadow: "var(--shadow-lg)", marginBottom: 20,
+          textAlign: "center", padding: "32px 20px", borderRadius: "var(--radius-xl)",
+          background: "linear-gradient(135deg, var(--surface) 0%, var(--surface-alt) 100%)",
+          border: "1.5px solid var(--border)", boxShadow: "var(--shadow-sm)", marginBottom: 24,
+          position: "relative", overflow: "hidden"
         }}>
+          <div style={{ position: "absolute", left: "50%", top: "0%", transform: "translateX(-50%)", width: 140, height: 140, borderRadius: "50%", background: "radial-gradient(circle, var(--accent) 5%, transparent 70%)", opacity: 0.15, pointerEvents: "none" }} />
+          
           <Progress
             type="circle"
             percent={percentage}
-            size={140}
+            size={120}
             strokeWidth={8}
             strokeColor={scoreColor}
             trailColor="var(--border)"
             format={() => (
               <div>
-                <div style={{ fontSize: 32, fontWeight: 800, color: "var(--ink)" }}>{correctCount}/{results.length}</div>
-                <div style={{ fontSize: 13, color: "var(--text-muted)", fontWeight: 600 }}>{percentage}%</div>
+                <div style={{ fontSize: 24, fontWeight: 950, color: "var(--text-primary)" }}>{correctCount}/{results.length}</div>
+                <div style={{ fontSize: 11.5, color: "var(--text-muted)", fontWeight: 800 }}>Vượt qua</div>
               </div>
             )}
           />
-          <h2 style={{ margin: "20px 0 6px", fontSize: 22, fontWeight: 800, color: "var(--ink)" }}>
-            {percentage >= 80 ? "Xuất sắc!" : percentage >= 50 ? "Khá tốt!" : "Cần ôn thêm!"}
-          </h2>
+          
+          <h3 style={{ margin: "16px 0 6px", fontSize: 18, fontWeight: 900, color: "var(--text-primary)" }}>
+            {percentage >= 80 ? "Nắm vững kiến thức!" : percentage >= 50 ? "Kết quả khá tốt!" : "Cần rèn luyện thêm!"}
+          </h3>
+
           {submitResult && (
-            <div style={{ display: "flex", justifyContent: "center", gap: 16, margin: "12px 0 20px", fontSize: 13 }}>
+            <div style={{ display: "flex", justifyContent: "center", gap: 10, margin: "6px 0 16px", fontSize: 12.5, flexWrap: "wrap" }}>
               {submitResult.resolved > 0 && (
-                <div style={{
-                  display: "inline-flex", alignItems: "center", gap: 5, padding: "6px 14px",
-                  borderRadius: 99, background: "color-mix(in srgb, var(--success) 10%, var(--surface))",
-                  color: "var(--success)", fontWeight: 700,
+                <span style={{
+                  display: "inline-flex", alignItems: "center", gap: 4, padding: "4px 12px",
+                  borderRadius: 12, background: "rgba(16, 185, 129, 0.08)",
+                  color: "var(--success)", fontWeight: 800, border: "1px solid rgba(16, 185, 129, 0.15)"
                 }}>
-                  <CheckCircleOutlined /> {submitResult.resolved} đã nắm vững
-                </div>
+                  <CheckCircleFilled style={{ fontSize: 12 }} /> Đã giải quyết: {submitResult.resolved}
+                </span>
               )}
               {submitResult.rescheduled > 0 && (
-                <div style={{
-                  display: "inline-flex", alignItems: "center", gap: 5, padding: "6px 14px",
-                  borderRadius: 99, background: "color-mix(in srgb, var(--warning) 10%, var(--surface))",
-                  color: "var(--warning)", fontWeight: 700,
+                <span style={{
+                  display: "inline-flex", alignItems: "center", gap: 4, padding: "4px 12px",
+                  borderRadius: 12, background: "rgba(245, 158, 11, 0.08)",
+                  color: "var(--warning)", fontWeight: 800, border: "1px solid rgba(245, 158, 11, 0.15)"
                 }}>
-                  <ReloadOutlined /> {submitResult.rescheduled} sẽ ôn lại
-                </div>
+                  <ReloadOutlined style={{ fontSize: 11 }} /> Cần ôn lại: {submitResult.rescheduled}
+                </span>
               )}
             </div>
           )}
-          <button
-            onClick={fetchDue}
-            style={{
-              padding: "12px 28px", borderRadius: 12, border: "none",
-              background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-              color: "var(--text-on-accent)", fontSize: 14, fontWeight: 700, cursor: "pointer",
-              boxShadow: "0 4px 12px color-mix(in srgb, var(--accent) 25%, transparent)",
-            }}
-          >
-            <ReloadOutlined style={{ marginRight: 6 }} /> Ôn tiếp
-          </button>
+
+          <div style={{ display: "flex", justifyContent: "center" }}>
+            <m.button
+              onClick={fetchDue}
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              style={{
+                display: "flex", alignItems: "center", gap: 8,
+                padding: "10px 24px", borderRadius: 10, border: "none",
+                background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+                color: "var(--text-on-accent)", fontSize: 13.5, fontWeight: 800, cursor: "pointer",
+                boxShadow: "0 4px 12px var(--accent-muted)"
+              }}
+            >
+              <ReloadOutlined /> Tiếp tục ôn lỗi
+            </m.button>
+          </div>
         </div>
 
-        {/* Section label */}
-        <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)", marginBottom: 10, paddingLeft: 4 }}>
-          <InfoCircleOutlined style={{ marginRight: 5 }} /> Chi tiết kết quả
-        </div>
+        {/* Detailed result cards */}
+        <h4 style={{ fontSize: 12, fontWeight: 850, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--text-muted)", marginBottom: 12, display: "flex", alignItems: "center", gap: 6 }}>
+          <InfoCircleOutlined />
+          <span>Chi tiết các câu hỏi đã ôn tập</span>
+        </h4>
 
-        {/* Result detail cards */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {errors.map((err, i) => {
             const correct = results[i]?.correct ?? false;
             return (
               <div
                 key={err.id}
                 style={{
-                  padding: "14px 16px", borderRadius: 14,
-                  border: "1px solid var(--border)",
+                  padding: "14px 16px", borderRadius: "var(--radius-lg)",
+                  border: "1.5px solid var(--border)",
                   borderLeft: `4px solid ${correct ? "var(--success)" : "var(--error)"}`,
-                  background: "var(--card-bg)", boxShadow: "var(--shadow-sm)",
-                  transition: "box-shadow 0.15s",
+                  background: "var(--surface)",
+                  boxShadow: "var(--shadow-sm)",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
-                  {correct
-                    ? <CheckCircleOutlined style={{ color: "var(--success)", fontSize: 16 }} />
-                    : <CloseCircleOutlined style={{ color: "var(--error)", fontSize: 16 }} />}
-                  <span style={{ fontSize: 13, fontWeight: 700, color: correct ? "var(--success)" : "var(--error)" }}>
-                    Câu {i + 1}: {correct ? "Đúng" : "Sai"}
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8, flexWrap: "wrap" }}>
+                  {correct ? (
+                    <CheckCircleFilled style={{ color: "var(--success)", fontSize: 15 }} />
+                  ) : (
+                    <CloseCircleFilled style={{ color: "var(--error)", fontSize: 15 }} />
+                  )}
+                  <span style={{ fontSize: 13.5, fontWeight: 900, color: correct ? "var(--success)" : "var(--error)" }}>
+                    Câu {i + 1}: {correct ? "Chính xác" : "Chưa chính xác"}
                   </span>
-                  {err.grammarTopic && <Tag color="blue" style={{ fontSize: 10, borderRadius: 6, margin: 0 }}>{err.grammarTopic}</Tag>}
-                  <Tag style={{ fontSize: 10, borderRadius: 6, margin: 0, marginLeft: "auto" }} color="default">Ôn lần {err.reviewCount + 1}</Tag>
+                  
+                  {err.grammarTopic && (
+                    <span style={{ fontSize: 10.5, fontWeight: 800, background: "rgba(59, 130, 246, 0.08)", color: "#2563eb", padding: "1px 6px", borderRadius: 6, border: "1px solid rgba(59, 130, 246, 0.15)" }}>
+                      {err.grammarTopic}
+                    </span>
+                  )}
+                  
+                  <span style={{ fontSize: 10.5, fontWeight: 700, background: "var(--surface-alt)", color: "var(--text-muted)", padding: "1px 6px", borderRadius: 6, border: "1px solid var(--border)", marginLeft: "auto" }}>
+                    Lần ôn: {err.reviewCount + 1}
+                  </span>
                 </div>
-                <p style={{ fontSize: 13, margin: "0 0 8px", lineHeight: 1.5, color: "var(--text)" }}>{err.questionStem}</p>
-                <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>
-                  Đáp án đúng: <strong style={{ color: "var(--success)" }}>{err.correctAnswer}</strong>
+
+                <p style={{ fontSize: 14, margin: "0 0 8px", lineHeight: 1.55, color: "var(--text-primary)", fontWeight: 500 }}>
+                  {err.questionStem}
+                </p>
+
+                <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 12.5, fontWeight: 700, color: "var(--text-secondary)" }}>
+                  <span>Đáp án chuẩn:</span>
+                  <strong style={{ color: "var(--success)" }}>{err.correctAnswer}</strong>
                 </div>
+
                 {(err.explanationEn || err.explanationVi) && (
-                  <Collapse
-                    size="small"
-                    style={{ marginTop: 8, borderRadius: 8 }}
-                    items={[{
-                      key: `exp-${i}`,
-                      label: <span style={{ fontSize: 12, fontWeight: 600 }}><BulbOutlined style={{ marginRight: 4 }} /> Giải thích</span>,
-                      children: (
-                        <div style={{ fontSize: 13, lineHeight: 1.6 }}>
-                          {err.explanationEn && <p style={{ margin: "0 0 4px" }}>{err.explanationEn}</p>}
-                          {err.explanationVi && <p style={{ margin: 0, color: "var(--text-secondary)", fontStyle: "italic" }}>{err.explanationVi}</p>}
-                        </div>
-                      ),
-                    }]}
-                  />
+                  <ExplanationAccordion
+                    title={
+                      <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                        <BulbOutlined style={{ color: "var(--warning)" }} />
+                        <span>Xem phần giải thích chi tiết</span>
+                      </span>
+                    }
+                  >
+                    {err.explanationEn && (
+                      <p style={{ margin: "0 0 6px", fontWeight: 700, color: "var(--text-primary)" }}>
+                        {err.explanationEn}
+                      </p>
+                    )}
+                    {err.explanationVi && (
+                      <p style={{ margin: 0, color: "var(--text-secondary)", fontStyle: "italic", fontWeight: 500 }}>
+                        {err.explanationVi}
+                      </p>
+                    )}
+                  </ExplanationAccordion>
                 )}
               </div>
             );
@@ -759,89 +969,186 @@ function ErrorReviewTab() {
     );
   }
 
-  // Quiz mode
   return (
-    <div style={{ flex: 1, padding: 24, maxWidth: 640, margin: "0 auto", width: "100%" }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 16 }}>
-        <Progress
-          percent={((currentIdx + 1) / errors.length) * 100}
-          size="small"
-          showInfo={false}
-          style={{ flex: 1 }}
-        />
-        <Tag color="orange" style={{ borderRadius: 99 }}>
-          {currentIdx + 1}/{errors.length}
-        </Tag>
+    <div style={{ flex: 1, padding: "20px 16px 80px", maxWidth: 520, margin: "0 auto", width: "100%" }} className="anim-fade-up">
+      {/* Progress indicators */}
+      <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 20 }}>
+        <div style={{ flex: 1, height: 6, background: "var(--border)", borderRadius: 3, position: "relative", overflow: "hidden" }}>
+          <m.div
+            initial={{ width: 0 }}
+            animate={{ width: `${((currentIdx + 1) / errors.length) * 100}%` }}
+            style={{ height: "100%", background: "linear-gradient(to right, var(--accent), var(--secondary))", borderRadius: 3 }}
+          />
+        </div>
+        <span
+          style={{
+            fontSize: 11,
+            fontWeight: 800,
+            padding: "2px 8px",
+            borderRadius: 8,
+            background: "var(--surface-alt)",
+            border: "1px solid var(--border)",
+            color: "var(--text-secondary)",
+          }}
+        >
+          {currentIdx + 1} / {errors.length}
+        </span>
       </div>
 
       {currentError && (
-        <div style={{ padding: 20, borderRadius: 14, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12, flexWrap: "wrap" }}>
-            <Tag color="default" style={{ fontSize: 12 }}>Câu {currentIdx + 1}</Tag>
-            {currentError.grammarTopic && <Tag color="blue" style={{ fontSize: 11 }}>{currentError.grammarTopic}</Tag>}
-            <Tag color="orange" style={{ fontSize: 10 }}>Ôn lần {currentError.reviewCount + 1}</Tag>
-            <Tag color="default" style={{ fontSize: 10 }}>{currentError.sourceModule}</Tag>
+        <div style={{
+          padding: 24,
+          borderRadius: "var(--radius-xl)",
+          background: "var(--surface)",
+          border: "1.5px solid var(--border)",
+          boxShadow: "var(--shadow-md)",
+          position: "relative",
+          overflow: "hidden"
+        }}>
+          {/* Decorative dynamic card glow */}
+          <div style={{ position: "absolute", right: "-10%", top: "-10%", width: 140, height: 140, borderRadius: "50%", background: "radial-gradient(circle, var(--accent) 5%, transparent 70%)", opacity: 0.05, pointerEvents: "none" }} />
+
+          {/* Error tags row */}
+          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 16, flexWrap: "wrap" }}>
+            <span style={{ fontSize: 10, fontWeight: 900, background: "var(--surface-alt)", color: "var(--text-secondary)", padding: "2px 6px", borderRadius: 6, border: "1px solid var(--border)" }}>
+              Câu số {currentIdx + 1}
+            </span>
+            {currentError.grammarTopic && (
+              <span style={{ fontSize: 10, fontWeight: 900, background: "rgba(59, 130, 246, 0.08)", color: "#2563eb", padding: "2px 6px", borderRadius: 6, border: "1px solid rgba(59, 130, 246, 0.15)" }}>
+                {currentError.grammarTopic}
+              </span>
+            )}
+            <span style={{ fontSize: 10, fontWeight: 800, background: "rgba(245, 158, 11, 0.08)", color: "var(--warning)", padding: "2px 6px", borderRadius: 6, border: "1px solid rgba(245, 158, 11, 0.15)" }}>
+              Lần ôn: {currentError.reviewCount + 1}
+            </span>
+            <span style={{ fontSize: 10, fontWeight: 700, color: "var(--text-muted)", marginLeft: "auto", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+              Nguồn: {currentError.sourceModule}
+            </span>
           </div>
 
-          <p style={{ fontSize: 15, fontWeight: 500, margin: "0 0 16px", lineHeight: 1.5 }}>
+          {/* Question stem */}
+          <p style={{ fontSize: 15.5, fontWeight: 700, color: "var(--text-primary)", margin: "0 0 20px", lineHeight: 1.55 }}>
             {currentError.questionStem}
           </p>
 
+          {/* Multiple options layout */}
           {currentError.options && currentError.options.length > 0 ? (
-            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-              {currentError.options.map((opt, oi) => (
-                <button
-                  key={oi}
-                  onClick={() => selectAnswer(oi)}
-                  style={{
-                    padding: "10px 14px", borderRadius: 8,
-                    border: answers[currentIdx] === oi ? "2px solid var(--accent)" : "1px solid var(--border)",
-                    background: answers[currentIdx] === oi ? "var(--accent-muted)" : "transparent",
-                    color: answers[currentIdx] === oi ? "var(--accent)" : "var(--text)",
-                    textAlign: "left", cursor: "pointer", fontSize: 14,
-                    fontWeight: answers[currentIdx] === oi ? 600 : 400,
-                  }}
-                >
-                  {String.fromCharCode(65 + oi)}. {opt}
-                </button>
-              ))}
+            <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+              {currentError.options.map((opt, oi) => {
+                const isSelected = answers[currentIdx] === oi;
+                return (
+                  <m.button
+                    key={oi}
+                    onClick={() => selectAnswer(oi)}
+                    disabled={submitting}
+                    whileHover={{ x: 3, borderColor: "var(--accent)" }}
+                    whileTap={{ scale: 0.98 }}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      padding: "12px 14px",
+                      borderRadius: "var(--radius-lg)",
+                      border: "1.5px solid var(--border)",
+                      borderColor: isSelected ? "var(--accent)" : "var(--border)",
+                      background: isSelected ? "var(--accent-light)" : "var(--surface)",
+                      color: isSelected ? "var(--accent)" : "var(--text-primary)",
+                      textAlign: "left",
+                      cursor: "pointer",
+                      fontSize: 14,
+                      fontWeight: isSelected ? 800 : 600,
+                      fontFamily: "var(--font-body)",
+                      transition: "border-color 0.2s, background-color 0.2s",
+                    }}
+                  >
+                    <span style={{ marginRight: 8, opacity: 0.6 }}>
+                      {String.fromCharCode(65 + oi)}.
+                    </span>
+                    <span>{opt}</span>
+                  </m.button>
+                );
+              })}
             </div>
           ) : (
-            <div style={{ padding: 12, background: "var(--surface-alt)", borderRadius: 8, fontSize: 13 }}>
-              Đáp án đúng là: <strong>{currentError.correctAnswer}</strong>
-              <br />
-              <span style={{ color: "var(--text-secondary)" }}>Bạn đã nhớ chưa?</span>
-              <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-                <button
-                  onClick={() => { setAnswers((prev) => ({ ...prev, [currentIdx]: 0 })); }}
-                  style={{ padding: "6px 16px", borderRadius: 6, border: "1px solid var(--success)44", background: answers[currentIdx] === 0 ? "color-mix(in srgb, var(--success) 13%, transparent)" : "transparent", cursor: "pointer", fontSize: 13, color: "var(--success)" }}
+            /* True/False flashcard style question when no options are seeded */
+            <div style={{ padding: 16, background: "var(--surface-alt)", borderRadius: "var(--radius-lg)", border: "1px dashed var(--border)" }}>
+              <span style={{ fontSize: 11.5, color: "var(--text-muted)", display: "block", marginBottom: 8, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                Đáp án chuẩn xác là:
+              </span>
+              <div style={{ fontSize: 15, fontWeight: 800, color: "var(--success)", marginBottom: 12 }}>
+                {currentError.correctAnswer}
+              </div>
+              <span style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 600, display: "block", marginBottom: 12 }}>
+                Bạn đã ghi nhớ cấu trúc ngữ pháp này chưa?
+              </span>
+              <div style={{ display: "flex", gap: 10 }}>
+                <m.button
+                  onClick={() => setAnswers((prev) => ({ ...prev, [currentIdx]: 0 }))}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  style={{
+                    flex: 1, padding: "8px 14px", borderRadius: 8,
+                    border: "1px solid rgba(16, 185, 129, 0.25)",
+                    background: answers[currentIdx] === 0 ? "rgba(16, 185, 129, 0.12)" : "var(--surface)",
+                    color: "var(--success)", fontWeight: 800, cursor: "pointer", fontSize: 13,
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                    fontFamily: "var(--font-body)",
+                  }}
                 >
-                  <CheckCircleOutlined /> Đã nhớ
-                </button>
-                <button
-                  onClick={() => { setAnswers((prev) => ({ ...prev, [currentIdx]: 1 })); }}
-                  style={{ padding: "6px 16px", borderRadius: 6, border: "1px solid var(--error)44", background: answers[currentIdx] === 1 ? "color-mix(in srgb, var(--error) 13%, transparent)" : "transparent", cursor: "pointer", fontSize: 13, color: "var(--error)" }}
+                  <CheckCircleFilled style={{ fontSize: 14 }} /> Đã nhớ bài
+                </m.button>
+                <m.button
+                  onClick={() => setAnswers((prev) => ({ ...prev, [currentIdx]: 1 }))}
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  style={{
+                    flex: 1, padding: "8px 14px", borderRadius: 8,
+                    border: "1px solid rgba(239, 68, 68, 0.25)",
+                    background: answers[currentIdx] === 1 ? "rgba(239, 68, 68, 0.12)" : "var(--surface)",
+                    color: "var(--error)", fontWeight: 800, cursor: "pointer", fontSize: 13,
+                    display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                    fontFamily: "var(--font-body)",
+                  }}
                 >
-                  <CloseCircleOutlined /> Chưa nhớ
-                </button>
+                  <CloseCircleFilled style={{ fontSize: 14 }} /> Chưa thuộc
+                </m.button>
               </div>
             </div>
           )}
 
-          <div style={{ marginTop: 16 }}>
-            <button
+          {/* Action button */}
+          <div style={{ marginTop: 20 }}>
+            <m.button
               onClick={handleNext}
               disabled={answers[currentIdx] === null || answers[currentIdx] === undefined || submitting}
+              whileHover={answers[currentIdx] !== null && answers[currentIdx] !== undefined && !submitting ? { scale: 1.02 } : {}}
+              whileTap={answers[currentIdx] !== null && answers[currentIdx] !== undefined && !submitting ? { scale: 0.98 } : {}}
               style={{
-                width: "100%", padding: "12px", borderRadius: 10, border: "none",
+                width: "100%",
+                padding: "14px",
+                borderRadius: "var(--radius-lg)",
+                border: "none",
                 background: (answers[currentIdx] !== null && answers[currentIdx] !== undefined) ? "var(--accent)" : "var(--border)",
                 color: (answers[currentIdx] !== null && answers[currentIdx] !== undefined) ? "var(--text-on-accent)" : "var(--text-secondary)",
-                fontSize: 15, fontWeight: 600,
+                fontSize: 14,
+                fontWeight: 800,
                 cursor: (answers[currentIdx] !== null && answers[currentIdx] !== undefined) ? "pointer" : "not-allowed",
+                transition: "background 0.25s, color 0.25s",
+                boxShadow: (answers[currentIdx] !== null && answers[currentIdx] !== undefined) ? "0 4px 12px var(--accent-muted)" : "none",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 8,
               }}
             >
-              {submitting ? <LoadingOutlined /> : currentIdx < errors.length - 1 ? "Câu tiếp →" : "Hoàn thành ✓"}
-            </button>
+              {submitting ? (
+                <LoadingOutlined spin />
+              ) : (
+                <>
+                  <span>{currentIdx < errors.length - 1 ? "Câu tiếp theo" : "Hoàn thành ôn tập"}</span>
+                  <ArrowRightOutlined />
+                </>
+              )}
+            </m.button>
           </div>
         </div>
       )}
@@ -849,62 +1156,93 @@ function ErrorReviewTab() {
   );
 }
 
-// ─── Main Page with Tabs ─────────────────────────────────────────
+// ─── Main Page with Tabs
 export default function ReviewQuizPage() {
   const [activeTab, setActiveTab] = useState<TabKey>("vocab");
   const [errorDue, setErrorDue] = useState(0);
   const [vocabDue, setVocabDue] = useState(0);
 
-  // Fetch badge counts
   useEffect(() => {
-    api.get<{ dueCount?: number }>("/review-quiz/due").then((d) => { if(d) setErrorDue(d.dueCount ?? 0) }).catch(() => {});
-    api.get<{ dueCount?: number }>("/vocabulary/due").then((d) => { if(d) setVocabDue(d.dueCount ?? 0) }).catch(() => {});
+    api.get<{ dueCount?: number }>("/review-quiz/due").then((d) => { if (d) setErrorDue(d.dueCount ?? 0); }).catch(() => {});
+    api.get<{ dueCount?: number }>("/vocabulary/due").then((d) => { if (d) setVocabDue(d.dueCount ?? 0); }).catch(() => {});
   }, []);
 
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%", overflow: "hidden" }}>
-      <ModuleHeader
-        icon={<BulbOutlined />}
-        gradient="var(--gradient-review)"
-        title="Ôn tập thông minh 🧠"
-        subtitle="SRS — Hệ thống ôn tập lặp lại cách quãng"
-      />
+      <div className="grain-overlay" style={{ opacity: 0.03, zIndex: 0 }} />
 
-      {/* Tab bar */}
-      <Tabs
-        activeKey={activeTab}
-        onChange={(key) => setActiveTab(key as TabKey)}
-        style={{ padding: "0 24px" }}
-        items={[
-          {
-            key: "vocab",
-            label: (
-              <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <BookOutlined />
-                Từ vựng
-                {vocabDue > 0 && (
-                  <Badge count={vocabDue} size="small" style={{ backgroundColor: "var(--accent)" }} />
-                )}
-              </span>
-            ),
-          },
-          {
-            key: "errors",
-            label: (
-              <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                <BulbOutlined />
-                Lỗi sai
-                {errorDue > 0 && (
-                  <Badge count={errorDue} size="small" style={{ backgroundColor: "var(--accent)" }} />
-                )}
-              </span>
-            ),
-          },
-        ]}
-      />
+      {/* Main header banner */}
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <ModuleHeader
+          icon={<BulbOutlined />}
+          gradient="var(--gradient-review)"
+          title="Luyện tập lặp lại cách quãng"
+          subtitle="Hệ thống SRS tự động giúp tối ưu hóa khả năng ghi nhớ từ vựng và khắc phục các lỗi sai ngữ pháp"
+        />
+      </div>
 
-      {/* Tab content */}
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "auto" }}>
+      {/* Styled custom glass tab list */}
+      <div style={{ padding: "8px 20px 0", position: "relative", zIndex: 1 }}>
+        <div style={{
+          display: "flex",
+          gap: 6,
+          background: "var(--surface)",
+          border: "1px solid var(--border)",
+          borderRadius: "var(--radius-xl)",
+          padding: "4px",
+          boxShadow: "var(--shadow-sm)",
+          maxWidth: 320,
+          margin: "0 auto 16px"
+        }}>
+          {([
+            { key: "vocab", label: "Từ vựng", icon: <BookOutlined />, due: vocabDue },
+            { key: "errors", label: "Lỗi sai", icon: <BulbOutlined />, due: errorDue }
+          ] as const).map((tabItem) => {
+            const isTabActive = activeTab === tabItem.key;
+            return (
+              <m.button
+                key={tabItem.key}
+                onClick={() => setActiveTab(tabItem.key)}
+                whileTap={{ scale: 0.97 }}
+                style={{
+                  flex: 1,
+                  padding: "8px 12px",
+                  borderRadius: "var(--radius-lg)",
+                  border: "none",
+                  background: isTabActive ? "var(--accent)" : "transparent",
+                  color: isTabActive ? "var(--text-on-accent)" : "var(--text-secondary)",
+                  fontSize: 13,
+                  fontWeight: 800,
+                  cursor: "pointer",
+                  transition: "color 0.2s, background 0.2s",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: 6,
+                }}
+              >
+                {tabItem.icon}
+                <span>{tabItem.label}</span>
+                {tabItem.due > 0 && (
+                  <span style={{
+                    fontSize: 10.5,
+                    fontWeight: 900,
+                    padding: "1px 5px",
+                    borderRadius: 8,
+                    background: isTabActive ? "rgba(255,255,255,0.25)" : "var(--accent)",
+                    color: isTabActive ? "var(--text-on-accent)" : "var(--text-on-accent)",
+                  }}>
+                    {tabItem.due}
+                  </span>
+                )}
+              </m.button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Tab content area */}
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", overflow: "hidden", position: "relative", zIndex: 1 }}>
         {activeTab === "vocab" ? <VocabReviewTab /> : <ErrorReviewTab />}
       </div>
     </div>

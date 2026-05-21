@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { headers } from "next/headers";
-import { Card, Tag } from "antd";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import {
@@ -13,6 +12,7 @@ import {
 import { and, asc, desc, eq, gte, isNotNull, lte, sql } from "drizzle-orm";
 import { TOEIC_SKILLS, getSkillLabel, type ToeicSkill } from "@repo/contracts";
 import { computePredictedScore, bandLabel } from "@/lib/toeic/predict";
+import { TrophyOutlined, CalendarOutlined, CheckCircleFilled, FireOutlined, StarFilled, ArrowRightOutlined } from "@ant-design/icons";
 
 const PART_5_6_SKILLS = new Set([
 	"toeic.part5.verb_form",
@@ -189,123 +189,252 @@ export async function HubWidgets() {
 	const predicted = computePredictedScore(toeicStates);
 	const lastMock = lastMockArr[0];
 
-	const priorityColor = (p: PlanItem["priority"]) =>
-		p === "high" ? "red" : p === "medium" ? "orange" : "default";
+	const priorityColors = (p: PlanItem["priority"]) =>
+		p === "high"
+			? { bg: "rgba(239, 68, 68, 0.08)", text: "var(--error)", border: "rgba(239, 68, 68, 0.2)" }
+			: p === "medium"
+			? { bg: "rgba(245, 158, 11, 0.08)", text: "var(--warning)", border: "rgba(245, 158, 11, 0.2)" }
+			: { bg: "var(--surface-alt)", text: "var(--text-muted)", border: "var(--border)" };
 
 	return (
-		<div style={{ display: "grid", gap: 12 }}>
+		<div style={{ display: "grid", gap: 16 }}>
 			{/* Daily Plan — full width on top */}
-			<Card
-				title="🎯 Hôm nay nên làm"
-				size="small"
-				extra={
-					<span style={{ fontSize: 12, color: "var(--text-muted, #94a3b8)" }}>
-						{planItems.reduce((s, i) => s + i.estimatedMinutes, 0)} phút
-					</span>
-				}
+			<div
+				style={{
+					background: "var(--surface)",
+					border: "1.5px solid var(--border)",
+					borderRadius: "var(--radius-xl)",
+					padding: "18px 20px",
+					boxShadow: "var(--shadow-sm)"
+				}}
 			>
+				<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
+					<h3 style={{
+						margin: 0,
+						fontSize: 15.5,
+						fontWeight: 900,
+						color: "var(--text-primary)",
+						display: "flex",
+						alignItems: "center",
+						gap: 6
+					}}>
+						<CalendarOutlined style={{ color: "var(--accent)" }} />
+						<span>🎯 Hôm nay nên làm</span>
+					</h3>
+					<span style={{
+						fontSize: 11,
+						color: "var(--text-muted)",
+						fontWeight: 800,
+						padding: "2px 8px",
+						borderRadius: 6,
+						background: "var(--surface-alt)",
+						border: "1px solid var(--border)"
+					}}>
+						{planItems.reduce((s, i) => s + i.estimatedMinutes, 0)} phút ước tính
+					</span>
+				</div>
+
 				{planItems.length === 0 ? (
-					<div style={{ color: "var(--text-muted, #94a3b8)", fontSize: 13 }}>
-						Hoàn thành diagnostic để có gợi ý cụ thể.
+					<div style={{ color: "var(--text-muted)", fontSize: 13, fontWeight: 500, padding: "8px 0" }}>
+						Hoàn thành bài kiểm tra đầu vào (diagnostic) để nhận gợi ý học tập cụ thể.
 					</div>
 				) : (
-					<div style={{ display: "grid", gap: 8 }}>
-						{planItems.map((item) => (
-							<Link
-								key={item.id}
-								href={item.href}
-								style={{
-									display: "grid",
-									gridTemplateColumns: "auto 1fr auto",
-									gap: 12,
-									alignItems: "center",
-									padding: 10,
-									borderRadius: 8,
-									background: "var(--surface-hover)",
-									border: "1px solid var(--border)",
-									textDecoration: "none",
-									color: "var(--ink)",
-								}}
-							>
-								<Tag color={priorityColor(item.priority)} style={{ margin: 0 }}>
-									{item.estimatedMinutes}p
-								</Tag>
-								<div>
-									<div style={{ fontWeight: 500 }}>{item.title}</div>
-									<div style={{ fontSize: 12, color: "var(--text-muted)" }}>
-										{item.reason}
+					<div style={{ display: "grid", gap: 10 }}>
+						{planItems.map((item) => {
+							const colorSet = priorityColors(item.priority);
+							return (
+								<Link
+									key={item.id}
+									href={item.href}
+									style={{
+										display: "grid",
+										gridTemplateColumns: "auto 1fr auto",
+										gap: 12,
+										alignItems: "center",
+										padding: "12px 14px",
+										borderRadius: "var(--radius-lg)",
+										background: "var(--surface-alt)",
+										border: "1.5px solid var(--border)",
+										textDecoration: "none",
+										color: "var(--text-primary)",
+										transition: "all 0.15s ease",
+									}}
+								>
+									<span style={{
+										fontSize: 10.5,
+										fontWeight: 900,
+										padding: "2px 8px",
+										borderRadius: 6,
+										background: colorSet.bg,
+										color: colorSet.text,
+										border: `1px solid ${colorSet.border}`
+									}}>
+										{item.estimatedMinutes}p
+									</span>
+									<div>
+										<div style={{ fontWeight: 800, fontSize: 13.5 }}>{item.title}</div>
+										<div style={{ fontSize: 11.5, color: "var(--text-muted)", fontWeight: 500, marginTop: 1 }}>
+											{item.reason}
+										</div>
 									</div>
-								</div>
-								<span style={{ color: "var(--accent)", fontSize: 13 }}>→</span>
-							</Link>
-						))}
+									<ArrowRightOutlined style={{ color: "var(--accent)", fontSize: 12 }} />
+								</Link>
+							);
+						})}
 					</div>
 				)}
-			</Card>
+			</div>
 
-			{/* Status widgets */}
+			{/* Status widgets grid */}
 			<div
 				style={{
 					display: "grid",
 					gap: 12,
-					gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+					gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))",
 				}}
 			>
-				<Card title="📈 Predicted Score" size="small">
-					{predicted ? (
-						<>
-							<div style={{ fontSize: 28, fontWeight: 700 }}>{predicted.total}</div>
-							<div style={{ color: "var(--text-muted)" }}>
-								{bandLabel(predicted.total)}
+				{/* Predicted Score Card */}
+				<div style={{
+					background: "var(--surface)",
+					border: "1.5px solid var(--border)",
+					borderRadius: "var(--radius-xl)",
+					padding: "16px 18px",
+					boxShadow: "var(--shadow-sm)",
+					display: "flex",
+					flexDirection: "column",
+					justifyContent: "space-between",
+					gap: 12
+				}}>
+					<div>
+						<span style={{ fontSize: 11, fontWeight: 850, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-secondary)" }}>
+							📈 Điểm dự đoán
+						</span>
+						{predicted ? (
+							<div style={{ marginTop: 8 }}>
+								<div style={{ fontSize: 26, fontWeight: 950, color: "var(--text-primary)", fontFamily: "var(--font-display)", lineHeight: 1.1 }}>
+									{predicted.total}
+								</div>
+								<div style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 650, marginTop: 2 }}>
+									{bandLabel(predicted.total)}
+								</div>
 							</div>
-							<Link href="/toeic/progress" style={{ color: "var(--accent)", fontSize: 12 }}>
-								Chi tiết →
-							</Link>
-						</>
-					) : (
-						<div style={{ color: "var(--text-muted, #94a3b8)", fontSize: 13 }}>
-							Cần thêm dữ liệu
-						</div>
-					)}
-				</Card>
-
-				<Card title="🎯 Mock gần nhất" size="small">
-					{lastMock?.totalScaled ? (
-						<>
-							<div style={{ fontSize: 28, fontWeight: 700 }}>{lastMock.totalScaled} / 990</div>
-							<Link
-								href={`/toeic/mock-test/${lastMock.id}/result`}
-								style={{ color: "var(--accent)", fontSize: 12 }}
-							>
-								Xem →
-							</Link>
-						</>
-					) : (
-						<Link href="/toeic/mock-test" style={{ color: "var(--accent)", fontSize: 13 }}>
-							Làm mock đầu tiên →
-						</Link>
-					)}
-				</Card>
-
-				<Card title="🔥 Hôm nay" size="small">
-					<div style={{ fontSize: 28, fontWeight: 700 }}>{todayActivity}</div>
-					<div style={{ color: "var(--text-muted, #94a3b8)", fontSize: 13 }}>
-						{todayActivity === 0 ? "Bắt đầu drill 10 câu" : "Giữ momentum 🔥"}
-					</div>
-				</Card>
-
-				<Card title="📚 Cần ôn lại" size="small">
-					<div style={{ fontSize: 28, fontWeight: 700 }}>{dueCount}</div>
-					<div style={{ color: "var(--text-muted)" }}>
-						{dueCount > 0 ? (
-							<Link href="/toeic/review" style={{ color: "var(--accent)" }}>
-								Ôn ngay →
-							</Link>
 						) : (
-							"Chưa có gì cần ôn"
+							<div style={{ fontSize: 12.5, color: "var(--text-muted)", fontWeight: 650, marginTop: 12 }}>
+								Cần thêm dữ liệu làm đề
+							</div>
 						)}
 					</div>
-				</Card>
+					{predicted && (
+						<Link href="/toeic/progress" style={{ color: "var(--accent)", fontSize: 12, fontWeight: 800, textDecoration: "none" }}>
+							Chi tiết biểu đồ →
+						</Link>
+					)}
+				</div>
+
+				{/* Last Mock Card */}
+				<div style={{
+					background: "var(--surface)",
+					border: "1.5px solid var(--border)",
+					borderRadius: "var(--radius-xl)",
+					padding: "16px 18px",
+					boxShadow: "var(--shadow-sm)",
+					display: "flex",
+					flexDirection: "column",
+					justifyContent: "space-between",
+					gap: 12
+				}}>
+					<div>
+						<span style={{ fontSize: 11, fontWeight: 850, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-secondary)" }}>
+							🎯 Mock gần nhất
+						</span>
+						{lastMock?.totalScaled ? (
+							<div style={{ marginTop: 8 }}>
+								<div style={{ fontSize: 26, fontWeight: 950, color: "var(--text-primary)", fontFamily: "var(--font-display)", lineHeight: 1.1 }}>
+									{lastMock.totalScaled} <span style={{ fontSize: 14, color: "var(--text-muted)", fontWeight: 700 }}>/ 990</span>
+								</div>
+							</div>
+						) : (
+							<div style={{ fontSize: 12.5, color: "var(--text-muted)", fontWeight: 650, marginTop: 12 }}>
+								Chưa làm Mock Test nào
+							</div>
+						)}
+					</div>
+					{lastMock?.totalScaled ? (
+						<Link
+							href={`/toeic/mock-test/${lastMock.id}/result`}
+							style={{ color: "var(--accent)", fontSize: 12, fontWeight: 800, textDecoration: "none" }}
+						>
+							Xem kết quả chi tiết →
+						</Link>
+					) : (
+						<Link href="/toeic/mock-test" style={{ color: "var(--accent)", fontSize: 12, fontWeight: 800, textDecoration: "none" }}>
+							Làm bài Mock test ngay →
+						</Link>
+					)}
+				</div>
+
+				{/* Activity Card */}
+				<div style={{
+					background: "var(--surface)",
+					border: "1.5px solid var(--border)",
+					borderRadius: "var(--radius-xl)",
+					padding: "16px 18px",
+					boxShadow: "var(--shadow-sm)",
+					display: "flex",
+					flexDirection: "column",
+					justifyContent: "space-between",
+					gap: 12
+				}}>
+					<div>
+						<span style={{ fontSize: 11, fontWeight: 850, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-secondary)" }}>
+							🔥 Hoạt động hôm nay
+						</span>
+						<div style={{ marginTop: 8 }}>
+							<div style={{ fontSize: 26, fontWeight: 950, color: "var(--text-primary)", fontFamily: "var(--font-display)", lineHeight: 1.1 }}>
+								{todayActivity}
+							</div>
+							<div style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 650, marginTop: 2 }}>
+								{todayActivity === 0 ? "Chưa làm bài nào" : "Giữ vững ngọn lửa 🔥"}
+							</div>
+						</div>
+					</div>
+					<Link href="/toeic/practice" style={{ color: "var(--accent)", fontSize: 12, fontWeight: 800, textDecoration: "none" }}>
+						Luyện đề thi mới →
+					</Link>
+				</div>
+
+				{/* Due Tasks Card */}
+				<div style={{
+					background: "var(--surface)",
+					border: "1.5px solid var(--border)",
+					borderRadius: "var(--radius-xl)",
+					padding: "16px 18px",
+					boxShadow: "var(--shadow-sm)",
+					display: "flex",
+					flexDirection: "column",
+					justifyContent: "space-between",
+					gap: 12
+				}}>
+					<div>
+						<span style={{ fontSize: 11, fontWeight: 850, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-secondary)" }}>
+							📚 Cần ôn tập
+						</span>
+						<div style={{ marginTop: 8 }}>
+							<div style={{ fontSize: 26, fontWeight: 950, color: "var(--text-primary)", fontFamily: "var(--font-display)", lineHeight: 1.1 }}>
+								{dueCount} <span style={{ fontSize: 14, color: "var(--text-muted)", fontWeight: 700 }}>câu</span>
+							</div>
+						</div>
+					</div>
+					{dueCount > 0 ? (
+						<Link href="/toeic/review" style={{ color: "var(--error)", fontSize: 12, fontWeight: 800, textDecoration: "none" }}>
+							Ôn tập ngay →
+						</Link>
+					) : (
+						<span style={{ color: "var(--text-muted)", fontSize: 12, fontWeight: 800 }}>
+							Sạch sẽ, không câu sai!
+						</span>
+					)}
+				</div>
 			</div>
 		</div>
 	);

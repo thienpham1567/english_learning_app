@@ -7,7 +7,8 @@ import {
   FireOutlined,
   StarOutlined,
 } from "@ant-design/icons";
-import { Statistic, Alert } from "antd";
+import { Alert } from "antd";
+import * as m from "motion/react-client";
 
 import { useExamMode } from "@/components/shared/ExamModeProvider";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
@@ -87,6 +88,8 @@ export default function GrammarLessonsPage() {
     };
   }, [examMode]);
 
+  const progressPct = tabStats.totalTopics > 0 ? Math.round((tabStats.completed / tabStats.totalTopics) * 100) : 0;
+
   return (
     <div
       style={{
@@ -99,20 +102,23 @@ export default function GrammarLessonsPage() {
         overflow: "hidden",
       }}
     >
+      <div className="grain-overlay" style={{ opacity: 0.03, zIndex: 0 }} />
+
       {/* Premium gradient header */}
-      <ModuleHeader
-        icon={<BookOutlined />}
-        gradient="var(--gradient-grammar)"
-        title={activeTopic ? activeTopic.title : "Ngữ pháp trọng tâm TOEIC"}
-        subtitle={
-          activeTopic
-            ? `${activeTopic.level} · TOEIC · Bài học chi tiết`
-            : recommendedTopic
-            ? `Gợi ý tiếp: ${recommendedTopic.title}`
-            : "Chinh phục ngữ pháp trọng tâm cho TOEIC"
-        }
-        action={undefined}
-      />
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <ModuleHeader
+          icon={<BookOutlined />}
+          gradient="var(--gradient-grammar)"
+          title={activeTopic ? activeTopic.title : "Ngữ pháp trọng tâm TOEIC"}
+          subtitle={
+            activeTopic
+              ? `${activeTopic.level} · TOEIC · Bài học chi tiết`
+              : recommendedTopic
+              ? `Gợi ý tiếp theo: ${recommendedTopic.title}`
+              : "Chinh phục ngữ pháp trọng tâm cho TOEIC"
+          }
+        />
+      </div>
 
       {/* Content area */}
       <div
@@ -121,7 +127,8 @@ export default function GrammarLessonsPage() {
           minHeight: 0,
           flex: 1,
           overflowY: "auto",
-          padding: "20px 16px",
+          padding: "24px 20px",
+          zIndex: 1,
         }}
       >
         {/* Soft gradient wash */}
@@ -130,7 +137,7 @@ export default function GrammarLessonsPage() {
             pointerEvents: "none",
             position: "absolute",
             inset: 0,
-            background: "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--accent) 6%, transparent) 0%, transparent 70%)",
+            background: "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--accent) 5%, transparent) 0%, transparent 70%)",
           }}
         />
 
@@ -148,58 +155,77 @@ export default function GrammarLessonsPage() {
               }}
             />
           ) : (
-            <>
+            <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
               {/* Stats strip */}
               <div
+                className="anim-fade-up"
                 style={{
                   display: "grid",
-                  gridTemplateColumns: "repeat(auto-fit, minmax(130px, 1fr))",
-                  gap: 10,
-                  marginBottom: 16,
+                  gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
+                  gap: 12,
                 }}
               >
                 {[
                   {
                     icon: <BookOutlined style={{ color: "var(--accent)" }} />,
-                    label: "Chủ đề",
+                    bgIcon: "var(--accent-light)",
+                    label: "Chủ đề cấu trúc",
                     value: `${tabStats.categories} nhóm · ${tabStats.totalTopics} bài`,
                   },
                   {
                     icon: <CheckCircleOutlined style={{ color: "var(--success)" }} />,
+                    bgIcon: "rgba(16, 185, 129, 0.08)",
                     label: "Đã hoàn thành",
-                    value: `${tabStats.completed}/${tabStats.totalTopics}`,
+                    value: `${tabStats.completed} / ${tabStats.totalTopics} bài học`,
                   },
                   {
-                    icon: tabStats.completed === tabStats.totalTopics && tabStats.totalTopics > 0
+                    icon: progressPct === 100 && tabStats.totalTopics > 0
                       ? <StarOutlined style={{ color: "var(--xp)" }} />
                       : <FireOutlined style={{ color: "var(--fire)" }} />,
-                    label: "Tiến độ",
-                    value: tabStats.totalTopics > 0
-                      ? `${Math.round((tabStats.completed / tabStats.totalTopics) * 100)}%`
-                      : "0%",
+                    bgIcon: progressPct === 100 ? "rgba(139, 92, 246, 0.08)" : "rgba(245, 158, 11, 0.08)",
+                    label: "Tiến độ học tập",
+                    value: `${progressPct}%`,
                   },
-                ].map((stat) => (
-                  <div
+                ].map((stat, idx) => (
+                  <m.div
                     key={stat.label}
+                    initial={{ opacity: 0, y: 12 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: idx * 0.08 }}
                     style={{
-                      flex: 1,
                       display: "flex",
                       alignItems: "center",
-                      gap: 10,
-                      padding: "12px 14px",
-                      borderRadius: 12,
-                      background: "var(--card-bg)",
+                      gap: 14,
+                      padding: "16px 20px",
+                      borderRadius: "var(--radius-xl)",
+                      background: "var(--surface)",
                       border: "1px solid var(--border)",
                       boxShadow: "var(--shadow-sm)",
                     }}
                   >
-                  <span style={{ fontSize: 18, lineHeight: 1 }}>{stat.icon}</span>
-                    <Statistic
-                      title={stat.label}
-                      value={stat.value}
-                      valueStyle={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}
-                    />
-                  </div>
+                    <div
+                      style={{
+                        width: 42,
+                        height: 42,
+                        borderRadius: "50%",
+                        background: stat.bgIcon,
+                        display: "grid",
+                        placeItems: "center",
+                        fontSize: 20,
+                        flexShrink: 0,
+                      }}
+                    >
+                      {stat.icon}
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", minWidth: 0 }}>
+                      <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                        {stat.label}
+                      </span>
+                      <span style={{ fontSize: 14.5, fontWeight: 800, color: "var(--text-primary)", marginTop: 2, textOverflow: "ellipsis", overflow: "hidden", whiteSpace: "nowrap" }}>
+                        {stat.value}
+                      </span>
+                    </div>
+                  </m.div>
                 ))}
               </div>
 
@@ -207,24 +233,77 @@ export default function GrammarLessonsPage() {
               {progressError && (
                 <Alert
                   type="warning"
+                  showIcon
                   message={progressError}
                   style={{
-                    marginBottom: 12,
-                    borderRadius: 10,
-                    fontSize: 12,
+                    borderRadius: "var(--radius-lg)",
+                    fontSize: 13,
+                    fontWeight: 600,
                   }}
                 />
               )}
 
+              {/* Recommended Topic Quick Action */}
+              {recommendedTopic && (
+                <m.div
+                  initial={{ opacity: 0, y: 12 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.24 }}
+                  whileHover={{ scale: 1.005, y: -1 }}
+                  style={{
+                    background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--surface))",
+                    border: "1.5px solid color-mix(in srgb, var(--accent) 15%, var(--border))",
+                    borderRadius: "var(--radius-xl)",
+                    padding: "16px 20px",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 14,
+                    boxShadow: "var(--shadow-sm)",
+                  }}
+                >
+                  <div style={{ width: 40, height: 40, borderRadius: "50%", background: "rgba(139, 92, 246, 0.08)", display: "grid", placeItems: "center", flexShrink: 0 }}>
+                    <StarOutlined style={{ fontSize: 18, color: "var(--accent)" }} />
+                  </div>
+                  <div style={{ flex: 1 }}>
+                    <span style={{ fontSize: 11, fontWeight: 900, color: "var(--accent)", textTransform: "uppercase", letterSpacing: "0.08em" }}>
+                      Bài học gợi ý tiếp theo
+                    </span>
+                    <h4 style={{ margin: "2px 0 0", fontSize: 15, fontWeight: 800, color: "var(--text-primary)" }}>
+                      {recommendedTopic.title}
+                    </h4>
+                  </div>
+                  <m.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => setActiveTopic({ id: recommendedTopic.id, title: recommendedTopic.title, level: recommendedTopic.level })}
+                    style={{
+                      padding: "8px 18px",
+                      borderRadius: 99,
+                      background: "var(--accent)",
+                      color: "var(--text-on-accent)",
+                      border: "none",
+                      fontWeight: 800,
+                      fontSize: 13,
+                      cursor: "pointer",
+                      boxShadow: "0 2px 8px var(--accent-muted)",
+                    }}
+                  >
+                    Học ngay
+                  </m.button>
+                </m.div>
+              )}
+
               {/* Topic grid */}
-              <TopicGrid
-                onSelectTopic={(id, title, level) => setActiveTopic({ id, title, level })}
-                completedTopics={completedTopics}
-                progressByTopic={progressByTopic}
-                recommendedTopicId={recommendedTopic?.id ?? null}
-                examFilter={examTab}
-              />
-            </>
+              <div className="anim-fade-up anim-delay-2">
+                <TopicGrid
+                  onSelectTopic={(id, title, level) => setActiveTopic({ id, title, level })}
+                  completedTopics={completedTopics}
+                  progressByTopic={progressByTopic}
+                  recommendedTopicId={recommendedTopic?.id ?? null}
+                  examFilter={examTab}
+                />
+              </div>
+            </div>
           )}
         </div>
       </div>

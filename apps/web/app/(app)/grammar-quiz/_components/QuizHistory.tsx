@@ -1,10 +1,7 @@
 "use client";
 
-import { Drawer, Empty, Flex, Tag, Typography } from "antd";
-
-const { Text } = Typography;
-
-const HISTORY_KEY = "grammar-quiz-history";
+import { Drawer, Empty } from "antd";
+import * as m from "motion/react-client";
 
 export type QuizHistoryEntry = {
   date: string;
@@ -13,11 +10,13 @@ export type QuizHistoryEntry = {
   total: number;
 };
 
-const LEVEL_LABELS: Record<string, { label: string; color: string }> = {
-  easy: { label: "A1–A2", color: "var(--accent)" },
-  medium: { label: "B1–B2", color: "var(--secondary)" },
-  hard: { label: "C1–C2", color: "var(--tertiary)" },
+const LEVEL_LABELS: Record<string, { label: string; color: string; bg: string }> = {
+  easy: { label: "Cơ bản A1–A2", color: "var(--success)", bg: "rgba(16, 185, 129, 0.08)" },
+  medium: { label: "Trung cấp B1–B2", color: "var(--accent)", bg: "var(--accent-light)" },
+  hard: { label: "Nâng cao C1–C2", color: "var(--error)", bg: "rgba(239, 68, 68, 0.08)" },
 };
+
+const HISTORY_KEY = "grammar-quiz-history";
 
 export function saveQuizHistory(entry: Omit<QuizHistoryEntry, "date">) {
   if (typeof window === "undefined") return;
@@ -61,73 +60,95 @@ export function QuizHistory({ open, onClose }: Props) {
 
   return (
     <Drawer
-      title="Lịch sử làm bài"
+      title={
+        <span style={{ fontSize: 16, fontWeight: 900, color: "var(--text-primary)", fontFamily: "var(--font-display)" }}>
+          Lịch sử làm bài
+        </span>
+      }
       open={open}
       onClose={onClose}
-      size="default"
-      styles={{ body: { padding: "12px 16px" } }}
+      width={360}
+      styles={{
+        body: { padding: "16px", background: "var(--surface)" },
+        header: { borderBottom: "1px solid var(--border)", background: "var(--surface)" },
+      }}
     >
+      <style>{`
+        .ant-drawer-content {
+          background-color: var(--surface) !important;
+        }
+        .ant-drawer-header-title .ant-drawer-close {
+          color: var(--text-secondary) !important;
+        }
+      `}</style>
+      
       {history.length === 0 ? (
-        <Empty description="Chưa có lịch sử" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+        <Empty description="Chưa có lịch sử làm bài" image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ marginTop: 40 }} />
       ) : (
-        <Flex vertical gap={8}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {history.map((entry, i) => {
             const pct = entry.total > 0 ? Math.round((entry.score / entry.total) * 100) : 0;
-            const levelInfo = LEVEL_LABELS[entry.level] ?? { label: entry.level, color: "var(--text-muted)" };
+            const levelInfo = LEVEL_LABELS[entry.level] ?? { label: entry.level, color: "var(--text-muted)", bg: "var(--surface-alt)" };
             return (
-              <div
+              <m.div
                 key={`${entry.date}-${i}`}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.04 }}
                 style={{
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "space-between",
-                  borderRadius: "var(--radius)",
+                  borderRadius: "var(--radius-lg)",
                   border: "1px solid var(--border)",
-                  background: "var(--surface)",
-                  padding: "10px 14px",
+                  background: "var(--surface-alt)",
+                  padding: "12px 14px",
+                  boxShadow: "var(--shadow-sm)",
                 }}
               >
-                <Flex vertical gap={2}>
-                  <Flex align="center" gap={6}>
-                    <Tag
+                <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                    <span
                       style={{
-                        margin: 0,
-                        fontSize: 11,
-                        fontWeight: 600,
-                        borderColor: levelInfo.color,
+                        fontSize: 10.5,
+                        fontWeight: 800,
                         color: levelInfo.color,
+                        background: levelInfo.bg,
+                        padding: "2px 8px",
+                        borderRadius: 6,
                       }}
                     >
                       {levelInfo.label}
-                    </Tag>
-                    <Text strong style={{ fontSize: 14 }}>
-                      {entry.score}/{entry.total}
-                    </Text>
-                  </Flex>
-                  <Text type="secondary" style={{ fontSize: 11 }}>
+                    </span>
+                    <span style={{ fontSize: 14, fontWeight: 800, color: "var(--text-primary)" }}>
+                      Đúng {entry.score}/{entry.total}
+                    </span>
+                  </div>
+                  <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 500 }}>
                     {formatDate(entry.date)}
-                  </Text>
-                </Flex>
+                  </span>
+                </div>
                 <div
                   style={{
-                    width: 36,
-                    height: 36,
+                    width: 38,
+                    height: 38,
                     borderRadius: "50%",
                     display: "grid",
                     placeItems: "center",
-                    background: pct >= 70 ? "color-mix(in srgb, var(--success) 8%, var(--surface))" : pct >= 50 ? "color-mix(in srgb, var(--warning) 8%, var(--surface))" : "var(--error-bg)",
-                    border: `1px solid ${pct >= 70 ? "var(--success)" : pct >= 50 ? "var(--warning)" : "var(--error)"}`,
+                    background: pct >= 80 ? "rgba(16, 185, 129, 0.08)" : pct >= 50 ? "rgba(245, 158, 11, 0.08)" : "rgba(239, 68, 68, 0.08)",
+                    border: `1.5px solid ${pct >= 80 ? "var(--success)" : pct >= 50 ? "var(--warning)" : "var(--error)"}`,
                     fontSize: 12,
-                    fontWeight: 700,
-                    color: pct >= 70 ? "var(--success)" : pct >= 50 ? "var(--warning)" : "var(--error)",
+                    fontWeight: 800,
+                    color: pct >= 80 ? "var(--success)" : pct >= 50 ? "var(--warning)" : "var(--error)",
+                    flexShrink: 0,
                   }}
                 >
                   {pct}%
                 </div>
-              </div>
+              </m.div>
             );
           })}
-        </Flex>
+        </div>
       )}
     </Drawer>
   );

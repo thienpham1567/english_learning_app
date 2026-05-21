@@ -2,15 +2,14 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Flex, Typography, Spin } from "antd";
+import { LoadingOutlined } from "@ant-design/icons";
+import * as m from "motion/react-client";
 
 import { api } from "@/lib/api-client";
 import type { DiagnosticStatus, Phase, Question, TestResult } from "./_components/types";
 import { WelcomeScreen } from "./_components/WelcomeScreen";
 import { TestScreen } from "./_components/TestScreen";
 import { ResultsScreen } from "./_components/ResultsScreen";
-
-const { Text } = Typography;
 
 export default function DiagnosticPage() {
   const router = useRouter();
@@ -110,10 +109,28 @@ export default function DiagnosticPage() {
   // ── Loading ──
   if (phase === "loading") {
     return (
-      <Flex align="center" justify="center" style={{ height: "100%", flexDirection: "column", gap: 16 }}>
-        <Spin size="large" />
-        <Text type="secondary">Đang chuẩn bị bài test...</Text>
-      </Flex>
+      <div
+        style={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 16,
+          background: "var(--bg-deep)",
+        }}
+      >
+        <m.div
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+          style={{ fontSize: 32, color: "var(--accent)" }}
+        >
+          <LoadingOutlined />
+        </m.div>
+        <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text-secondary)" }}>
+          Đang chuẩn bị bài test...
+        </span>
+      </div>
     );
   }
 
@@ -140,10 +157,28 @@ export default function DiagnosticPage() {
   // ── Submitting ──
   if (phase === "submitting") {
     return (
-      <Flex align="center" justify="center" style={{ height: "100%", flexDirection: "column", gap: 16 }}>
-        <Spin size="large" />
-        <Text type="secondary">Đang phân tích kết quả...</Text>
-      </Flex>
+      <div
+        style={{
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 16,
+          background: "var(--bg-deep)",
+        }}
+      >
+        <m.div
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+          style={{ fontSize: 32, color: "var(--accent)" }}
+        >
+          <LoadingOutlined />
+        </m.div>
+        <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text-secondary)" }}>
+          Đang phân tích kết quả bài thi thích ứng...
+        </span>
+      </div>
     );
   }
 

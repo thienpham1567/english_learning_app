@@ -2,12 +2,19 @@
 
 import { useState } from "react";
 import {
-  CheckCircleOutlined, RightOutlined, ClockCircleOutlined,
-  ShopOutlined, EnvironmentOutlined, MedicineBoxOutlined,
-  BookOutlined, GlobalOutlined, LaptopOutlined,
+  CheckCircleFilled,
+  RightOutlined,
+  ClockCircleOutlined,
+  ShopOutlined,
+  EnvironmentOutlined,
+  MedicineBoxOutlined,
+  BookOutlined,
+  GlobalOutlined,
+  LaptopOutlined,
+  CheckCircleOutlined,
 } from "@ant-design/icons";
 import type { ReactNode } from "react";
-import { Tag } from "antd";
+import * as m from "motion/react-client";
 
 export type StudyTopic = {
   id: string;
@@ -82,7 +89,11 @@ export const STUDY_TOPICS: StudyCategory[] = [
   },
 ];
 
-const LEVEL_COLORS: Record<string, string> = { A2: "green", B1: "blue", B2: "purple" };
+const LEVEL_COLORS: Record<string, { bg: string; text: string; border: string }> = {
+  A2: { bg: "rgba(16, 185, 129, 0.08)", text: "var(--success)", border: "rgba(16, 185, 129, 0.2)" },
+  B1: { bg: "var(--accent-light)", text: "var(--accent)", border: "var(--accent-muted)" },
+  B2: { bg: "rgba(139, 92, 246, 0.08)", text: "var(--xp)", border: "rgba(139, 92, 246, 0.2)" },
+};
 
 interface Props {
   onSelect: (topic: StudyTopic) => void;
@@ -93,55 +104,62 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
   const [hoveredTopic, setHoveredTopic] = useState<string | null>(null);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
-      {STUDY_TOPICS.map((cat) => {
+    <div style={{ display: "flex", flexDirection: "column", gap: 32 }} className="anim-fade-up">
+      {STUDY_TOPICS.map((cat, catIdx) => {
         const completedCount = cat.topics.filter((t) => completedTopics.has(t.id)).length;
         const allDone = completedCount === cat.topics.length;
 
         return (
-          <div key={cat.category}>
+          <m.div
+            key={cat.category}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: catIdx * 0.08 }}
+          >
             {/* Category header */}
             <div
               style={{
                 display: "flex",
                 alignItems: "center",
-                gap: 10,
-                marginBottom: 12,
-                paddingBottom: 10,
-                borderBottom: `2px solid ${cat.color}30`,
+                gap: 12,
+                marginBottom: 16,
+                paddingBottom: 12,
+                borderBottom: `2.5px solid ${allDone ? "var(--success)" : cat.color}25`,
               }}
             >
               <span
                 style={{
                   display: "grid",
-                  width: 36,
-                  height: 36,
+                  width: 38,
+                  height: 38,
                   placeItems: "center",
-                  borderRadius: 10,
+                  borderRadius: 12,
                   background: allDone
-                    ? "linear-gradient(135deg, var(--success), var(--success))"
-                    : `linear-gradient(135deg, ${cat.color}, ${cat.color}bb)`,
+                    ? "linear-gradient(135deg, var(--success), #10b981)"
+                    : `linear-gradient(135deg, ${cat.color}, ${cat.color}aa)`,
                   fontSize: 18,
+                  color: "var(--text-on-accent)",
                   flexShrink: 0,
-                  boxShadow: `0 2px 6px ${cat.color}40`,
+                  boxShadow: `0 4px 12px ${allDone ? "rgba(16, 185, 129, 0.25)" : `${cat.color}25`}`,
                 }}
               >
-                {allDone ? <CheckCircleOutlined style={{ color: "var(--text-on-accent)" }} /> : cat.icon}
+                {allDone ? <CheckCircleFilled style={{ color: "var(--text-on-accent)" }} /> : cat.icon}
               </span>
               <div>
                 <h3
                   style={{
                     margin: 0,
-                    fontSize: 15,
-                    fontWeight: 700,
-                    color: "var(--text)",
-                    lineHeight: 1.2,
+                    fontSize: 16,
+                    fontWeight: 900,
+                    color: "var(--text-primary)",
+                    fontFamily: "var(--font-display)",
+                    lineHeight: 1.25,
                   }}
                 >
                   {cat.category}
                 </h3>
-                <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 500 }}>
-                  {completedCount}/{cat.topics.length} hoàn thành
+                <span style={{ fontSize: 11.5, color: "var(--text-muted)", fontWeight: 700 }}>
+                  {completedCount}/{cat.topics.length} chủ đề đã hoàn thành
                 </span>
               </div>
             </div>
@@ -150,42 +168,43 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-                gap: 10,
+                gridTemplateColumns: "repeat(auto-fill, minmax(210px, 1fr))",
+                gap: 12,
               }}
             >
               {cat.topics.map((topic) => {
                 const isDone = completedTopics.has(topic.id);
                 const isHovered = hoveredTopic === topic.id;
+                const levelStyle = LEVEL_COLORS[topic.level] ?? { bg: "var(--surface-alt)", text: "var(--text-muted)", border: "var(--border)" };
 
                 return (
-                  <button
+                  <m.button
                     key={topic.id}
                     onClick={() => onSelect(topic)}
                     onMouseEnter={() => setHoveredTopic(topic.id)}
                     onMouseLeave={() => setHoveredTopic(null)}
+                    whileHover={{ y: -3, scale: 1.01 }}
+                    whileTap={{ scale: 0.98 }}
                     style={{
                       display: "flex",
                       flexDirection: "column",
-                      gap: 10,
-                      padding: "14px 16px 14px 18px",
-                      borderRadius: 12,
-                      border: "1px solid var(--border)",
+                      justifyContent: "space-between",
+                      gap: 12,
+                      padding: "16px 18px",
+                      borderRadius: "var(--radius-xl)",
+                      border: "1.5px solid var(--border)",
                       borderLeft: isDone
-                        ? "4px solid var(--success)"
-                        : `4px solid ${cat.color}`,
+                        ? "5px solid var(--success)"
+                        : `5px solid ${cat.color}`,
                       background: isDone
-                        ? "rgba(82, 196, 26, 0.06)"
+                        ? "rgba(16, 185, 129, 0.04)"
                         : isHovered
-                        ? `${cat.color}08`
-                        : "var(--card-bg)",
+                        ? "var(--surface-alt)"
+                        : "var(--surface)",
                       cursor: "pointer",
                       textAlign: "left",
-                      transition: "all 0.18s ease",
-                      transform: isHovered ? "translateY(-2px)" : "none",
-                      boxShadow: isHovered
-                        ? `0 4px 14px ${isDone ? "rgba(82,196,26,0.15)" : `${cat.color}25`}`
-                        : "0 1px 3px rgba(0,0,0,0.04)",
+                      boxShadow: isHovered ? "var(--shadow-md)" : "var(--shadow-sm)",
+                      transition: "background 0.2s, border-color 0.2s",
                     }}
                   >
                     <div
@@ -193,15 +212,17 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
                         display: "flex",
                         alignItems: "flex-start",
                         justifyContent: "space-between",
-                        gap: 8,
+                        gap: 10,
+                        width: "100%",
                       }}
                     >
                       <span
                         style={{
-                          fontSize: 14,
-                          fontWeight: 700,
-                          color: "var(--text)",
-                          lineHeight: 1.35,
+                          fontSize: 14.5,
+                          fontWeight: 800,
+                          color: "var(--text-primary)",
+                          lineHeight: 1.4,
+                          fontFamily: "var(--font-body)",
                         }}
                       >
                         {topic.title}
@@ -209,25 +230,25 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
                       {isDone ? (
                         <span
                           style={{
-                            width: 22,
-                            height: 22,
-                            borderRadius: 99,
+                            width: 20,
+                            height: 20,
+                            borderRadius: "50%",
                             background: "var(--success)",
                             display: "grid",
                             placeItems: "center",
                             flexShrink: 0,
                           }}
                         >
-                          <CheckCircleOutlined
-                            style={{ fontSize: 13, color: "var(--text-on-accent)" }}
+                          <CheckCircleFilled
+                            style={{ fontSize: 12, color: "var(--text-on-accent)" }}
                           />
                         </span>
                       ) : (
                         <RightOutlined
                           style={{
                             color: isHovered ? cat.color : "var(--text-muted)",
-                            fontSize: 11,
-                            marginTop: 2,
+                            fontSize: 10,
+                            marginTop: 4,
                             flexShrink: 0,
                             transition: "color 0.15s",
                           }}
@@ -235,42 +256,49 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
                       )}
                     </div>
 
-                    <div style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
-                      <Tag
-                        color={LEVEL_COLORS[topic.level] ?? "default"}
-                        style={{ margin: 0, fontSize: 11, borderRadius: 6 }}
+                    <div style={{ display: "flex", alignItems: "center", gap: 8, flexWrap: "wrap", width: "100%" }}>
+                      <span
+                        style={{
+                          margin: 0,
+                          fontSize: 10.5,
+                          fontWeight: 900,
+                          borderRadius: 6,
+                          padding: "2px 8px",
+                          background: levelStyle.bg,
+                          color: levelStyle.text,
+                          border: `1px solid ${levelStyle.border}`,
+                        }}
                       >
                         {topic.level}
-                      </Tag>
+                      </span>
                       <span
                         style={{
                           fontSize: 11,
                           color: "var(--text-muted)",
                           display: "flex",
                           alignItems: "center",
-                          gap: 3,
+                          gap: 4,
+                          fontWeight: 650,
                         }}
                       >
-                        <ClockCircleOutlined style={{ fontSize: 10 }} />
+                        <ClockCircleOutlined style={{ fontSize: 11 }} />
                         {topic.time}
                       </span>
                       <span
                         style={{
                           fontSize: 11,
                           color: "var(--text-muted)",
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 3,
+                          fontWeight: 650,
                         }}
                       >
-                        · 4 phần
+                        · 4 bài học
                       </span>
                     </div>
-                  </button>
+                  </m.button>
                 );
               })}
             </div>
-          </div>
+          </m.div>
         );
       })}
     </div>

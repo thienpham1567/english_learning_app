@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
-import { Alert, Skeleton, Button, Result } from "antd";
+import { Alert, Skeleton, Button, Result, Flex, Typography } from "antd";
 import {
   ReloadOutlined,
   LoadingOutlined,
@@ -9,6 +9,7 @@ import {
   ForwardOutlined,
   FireOutlined,
   ThunderboltOutlined,
+  ClockCircleOutlined,
 } from "@ant-design/icons";
 
 import { useDailyChallenge } from "@/hooks/useDailyChallenge";
@@ -18,6 +19,10 @@ import { ChallengeResults } from "@/app/(app)/daily-challenge/_components/Challe
 import { CompletedState } from "@/app/(app)/daily-challenge/_components/CompletedState";
 import { EXERCISE_TYPE_LABELS } from "@/app/(app)/daily-challenge/_components/constants";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
+import * as m from "motion/react-client";
+import { AnimatePresence } from "motion/react";
+
+const { Text } = Typography;
 
 // Live elapsed timer hook
 function useElapsedTimer(isRunning: boolean) {
@@ -44,95 +49,46 @@ function getTodayLabel(): string {
   });
 }
 
-/* ── Step Indicator — editorial numbered circles ── */
-function StepIndicator({ current, total }: { current: number; total: number }) {
+/* ── Modern Step Indicator ── */
+function StepIndicator({ current, total, isBonus }: { current: number; total: number; isBonus?: boolean }) {
+  const activeColor = isBonus ? "var(--xp)" : "var(--accent)";
   return (
-    <div style={{ display: "flex", alignItems: "center" }}>
-      {Array.from({ length: total }, (_, i) => {
-        const isDone = i < current;
-        const isActive = i === current;
-        const isLast = i === total - 1;
-        return (
-          <div
-            key={i}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              flex: isLast ? "none" : 1,
-            }}
-          >
-            <div
-              style={{
-                width: 44,
-                height: 44,
-                borderRadius: "50%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                border: `1.5px solid ${
-                  isDone
-                    ? "var(--sage)"
-                    : isActive
-                    ? "var(--accent)"
-                    : "var(--border)"
-                }`,
-                background: isDone
-                  ? "rgba(74,124,111,.08)"
-                  : isActive
-                  ? "rgba(200,75,49,.06)"
-                  : "transparent",
-                flexShrink: 0,
-                transition: "all 0.35s ease",
-                boxShadow: isActive
-                  ? "0 0 0 4px rgba(200,75,49,.08)"
-                  : "none",
-              }}
-            >
-              {isDone ? (
-                <svg
-                  width="13"
-                  height="13"
-                  viewBox="0 0 13 13"
-                  fill="none"
-                >
-                  <path
-                    d="M2.5 6.5l3 3 5-5"
-                    stroke="var(--sage)"
-                    strokeWidth="1.6"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              ) : (
-                <span
-                  style={{
-                    fontFamily: "var(--font-display)",
-                    fontSize: 14,
-                    fontWeight: isActive ? 700 : 300,
-                    color: isActive ? "var(--accent)" : "var(--text-muted)",
-                    lineHeight: 1,
-                    letterSpacing: "-.02em",
-                  }}
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-              )}
-            </div>
+    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      {/* Progress Track */}
+      <div
+        style={{
+          height: 6,
+          background: "var(--border)",
+          borderRadius: 99,
+          position: "relative",
+          overflow: "hidden",
+        }}
+      >
+        <m.div
+          initial={{ width: 0 }}
+          animate={{ width: `${((current) / total) * 100}%` }}
+          transition={{ type: "spring", stiffness: 80, damping: 15 }}
+          style={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            bottom: 0,
+            background: `linear-gradient(90deg, ${activeColor}, color-mix(in srgb, ${activeColor} 80%, var(--xp)))`,
+            borderRadius: 99,
+            boxShadow: `0 0 8px ${activeColor}`,
+          }}
+        />
+      </div>
 
-            {!isLast && (
-              <div
-                style={{
-                  flex: 1,
-                  height: 1,
-                  background: isDone ? "var(--sage)" : "var(--border)",
-                  transition: "background 0.35s ease",
-                  opacity: isDone ? 0.6 : 1,
-                }}
-              />
-            )}
-          </div>
-        );
-      })}
+      {/* Dots & Labels */}
+      <div style={{ display: "flex", justifySelf: "stretch", justifyContent: "space-between", alignItems: "center" }}>
+        <Text style={{ fontSize: 12, fontWeight: 700, color: "var(--text-secondary)" }}>
+          Tiến độ bài học
+        </Text>
+        <Text style={{ fontSize: 13, fontWeight: 800, color: activeColor, fontFamily: "var(--font-mono)" }}>
+          {current + 1} / {total} câu
+        </Text>
+      </div>
     </div>
   );
 }
@@ -170,66 +126,69 @@ function ExerciseFlow({
   const exerciseTypeLabel =
     EXERCISE_TYPE_LABELS[challenge.exercises[currentExercise]?.type] ?? "";
 
+  const activeColor = isBonus ? "var(--xp)" : "var(--accent)";
+
   return (
-    <div
-      className="anim-fade-up"
-      style={{ display: "flex", flexDirection: "column", gap: 24 }}
+    <m.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -15 }}
+      transition={{ duration: 0.25 }}
+      style={{ display: "flex", flexDirection: "column", gap: 20 }}
     >
       {/* Bonus label */}
       {isBonus && (
-        <div
+        <m.div
+          initial={{ scale: 0.9 }}
+          animate={{ scale: 1 }}
           style={{
             display: "flex",
             alignItems: "center",
             gap: 6,
-            padding: "5px 14px",
+            padding: "6px 14px",
             borderRadius: 99,
-            background: "color-mix(in srgb, var(--xp) 12%, transparent)",
-            border: "1px solid color-mix(in srgb, var(--xp) 25%, transparent)",
+            background: "linear-gradient(135deg, var(--xp), #d97706)",
+            border: "1px solid rgba(255,255,255,0.2)",
             alignSelf: "flex-start",
+            boxShadow: "0 4px 10px rgba(217, 119, 6, 0.3)",
           }}
         >
-          <ThunderboltOutlined style={{ fontSize: 11, color: "var(--xp)" }} />
+          <ThunderboltOutlined style={{ fontSize: 12, color: "#fff" }} />
           <span
             style={{
-              fontSize: 11,
-              fontWeight: 700,
-              color: "var(--xp)",
-              letterSpacing: ".06em",
+              fontSize: 10,
+              fontWeight: 800,
+              color: "#fff",
+              letterSpacing: ".08em",
             }}
           >
-            BONUS ROUND
+            VÒNG THỬ THÁCH BONUS
           </span>
-        </div>
+        </m.div>
       )}
 
       {/* Step indicator row */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
         <StepIndicator
           current={currentExercise}
           total={challenge.exercises.length}
+          isBonus={isBonus}
         />
 
         {/* Exercise type label */}
         {exerciseTypeLabel && (
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <div
-              style={{
-                width: 4,
-                height: 4,
-                borderRadius: "50%",
-                background: isBonus ? "var(--xp)" : "var(--accent)",
-                flexShrink: 0,
-              }}
-            />
             <span
               style={{
-                fontSize: 10,
-                fontWeight: 700,
-                letterSpacing: ".14em",
+                fontSize: 11,
+                fontWeight: 800,
+                letterSpacing: ".08em",
                 textTransform: "uppercase",
-                color: isBonus ? "var(--xp)" : "var(--accent)",
+                color: activeColor,
                 fontFamily: "var(--font-body)",
+                background: isBonus ? "rgba(245,158,11,0.12)" : "var(--accent-light)",
+                padding: "2px 10px",
+                borderRadius: 8,
               }}
             >
               {exerciseTypeLabel}
@@ -241,55 +200,52 @@ function ExerciseFlow({
                 background: "var(--border)",
               }}
             />
-            <span
-              style={{
-                fontSize: 11,
-                color: "var(--text-muted)",
-                fontFamily: "var(--font-mono)",
-              }}
-            >
-              {currentExercise + 1}/{challenge.exercises.length}
-            </span>
           </div>
         )}
       </div>
 
       {/* Exercise card */}
-      <div
-        key={currentExercise}
-        ref={exerciseWrapperRef}
-        className="anim-fade-up"
-        style={{
-          borderRadius: 20,
-          border: "1px solid var(--border)",
-          background: "var(--surface)",
-          padding: "28px 24px",
-          boxShadow: "var(--shadow-md)",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        {/* Thin editorial accent line */}
-        <div
+      <AnimatePresence mode="wait">
+        <m.div
+          key={currentExercise}
+          ref={exerciseWrapperRef}
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+          exit={{ opacity: 0, x: -20 }}
+          transition={{ duration: 0.25 }}
           style={{
-            position: "absolute",
-            top: 0,
-            left: 28,
-            width: 40,
-            height: 2,
-            background: isBonus ? "var(--xp)" : "var(--accent)",
-            borderRadius: "0 0 2px 2px",
+            borderRadius: "var(--radius-xl)",
+            border: `1px solid var(--border)`,
+            background: "var(--surface)",
+            padding: "28px 24px",
+            boxShadow: "var(--shadow-lg)",
+            position: "relative",
+            overflow: "hidden",
           }}
-        />
-        <ExerciseCard
-          exercise={challenge.exercises[currentExercise] as any}
-          onAnswer={handleAnswer}
-          disabled={false}
-        />
-      </div>
+        >
+          {/* Top glowing bar */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: 4,
+              background: `linear-gradient(90deg, ${activeColor}, var(--xp))`,
+            }}
+          />
+          <ExerciseCard
+            exercise={challenge.exercises[currentExercise] as any}
+            onAnswer={handleAnswer}
+            disabled={false}
+          />
+        </m.div>
+      </AnimatePresence>
 
       {/* Skip */}
-      <button
+      <m.button
+        whileHover={{ scale: 1.05, y: 1 }}
+        whileTap={{ scale: 0.95 }}
         type="button"
         onClick={onSkip}
         style={{
@@ -297,29 +253,23 @@ function ExerciseFlow({
           display: "inline-flex",
           alignItems: "center",
           gap: 6,
-          background: "none",
-          border: "none",
+          background: "var(--surface-alt)",
+          border: "1px solid var(--border)",
           cursor: "pointer",
           fontSize: 12,
-          fontWeight: 500,
-          color: "var(--text-muted)",
-          padding: "6px 16px",
-          borderRadius: 999,
-          transition: "color .2s",
+          fontWeight: 600,
+          color: "var(--text-secondary)",
+          padding: "8px 20px",
+          borderRadius: 99,
+          boxShadow: "var(--shadow-sm)",
+          transition: "all 0.2s",
           fontFamily: "var(--font-body)",
-          letterSpacing: ".02em",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.color = "var(--error)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.color = "var(--text-muted)";
         }}
       >
-        <ForwardOutlined style={{ fontSize: 10 }} />
-        Bỏ qua câu này
-      </button>
-    </div>
+        <ForwardOutlined style={{ fontSize: 11 }} />
+        Bỏ qua câu hỏi này
+      </m.button>
+    </m.div>
   );
 }
 
@@ -374,65 +324,65 @@ export default function DailyChallengePage() {
         minHeight: 0,
         flex: 1,
         overflow: "hidden",
-        background: "var(--bg)",
+        background: "var(--bg-deep)",
       }}
     >
       {/* ── Module Header ── */}
-      <div style={{ padding: "16px 16px 0", flexShrink: 0 }}>
-        <div style={{ maxWidth: 580, margin: "0 auto" }}>
+      <div style={{ padding: "20px 20px 0", flexShrink: 0 }}>
+        <div style={{ maxWidth: 640, margin: "0 auto" }}>
           <ModuleHeader
-            icon={<FireOutlined />}
-            gradient={isInBonusFlow ? "linear-gradient(135deg, var(--xp), color-mix(in srgb, var(--xp) 70%, var(--accent)))" : "var(--gradient-daily)"}
-            title={isInBonusFlow ? "Bonus Round" : "Thử Thách Hôm Nay"}
+            icon={<FireOutlined style={{ color: "#fff" }} />}
+            gradient={isInBonusFlow ? "linear-gradient(135deg, var(--xp), #d97706)" : "linear-gradient(135deg, #ea580c, #f97316)"}
+            title={isInBonusFlow ? "Bonus Round" : "Thử Thách Mỗi Ngày"}
             badge={isInBonusFlow ? "⚡ Bonus" : todayLabel}
-            subtitle={isInBonusFlow ? "Luyện thêm · Không ảnh hưởng streak" : "Luyện tiếng Anh mỗi ngày · Xây dựng thói quen"}
+            subtitle={isInBonusFlow ? "Nhận thêm XP · Rèn luyện phản xạ ngôn ngữ" : "Rèn luyện tiếng Anh hàng ngày để tạo thói quen học tập bền vững"}
             action={
               (streak.currentStreak > 0 || state === "active" || bonus.state === "active") ? (
-                <>
+                <Flex gap={8} align="center">
                   {streak.currentStreak > 0 && (
                     <span style={{
-                      display: "inline-flex", alignItems: "center", gap: 5,
-                      padding: "4px 12px", borderRadius: 999,
-                      background: "rgba(255,255,255,0.15)",
-                      border: "1px solid rgba(255,255,255,0.22)",
-                      fontSize: 12, fontWeight: 700,
-                      color: "rgba(255,255,255,0.9)",
-                      fontFamily: "var(--font-body)",
+                      display: "inline-flex", alignItems: "center", gap: 6,
+                      padding: "6px 14px", borderRadius: 99,
+                      background: "rgba(255,255,255,0.2)",
+                      border: "1px solid rgba(255,255,255,0.25)",
+                      fontSize: 12, fontWeight: 800,
+                      color: "#fff",
+                      textShadow: "0 1px 2px rgba(0,0,0,0.15)",
+                      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                     }}>
                       🔥 {streak.currentStreak} ngày
                     </span>
                   )}
                   {(state === "active" || bonus.state === "active") && (
                     <span style={{
-                      display: "inline-flex", alignItems: "center",
-                      padding: "4px 12px", borderRadius: 999,
-                      background: "rgba(255,255,255,0.12)",
-                      border: "1px solid rgba(255,255,255,0.18)",
-                      fontSize: 12, fontWeight: 500,
-                      color: "rgba(255,255,255,0.75)",
+                      display: "inline-flex", alignItems: "center", gap: 5,
+                      padding: "6px 14px", borderRadius: 99,
+                      background: "rgba(0,0,0,0.25)",
+                      border: "1px solid rgba(255,255,255,0.15)",
+                      fontSize: 12, fontWeight: 700,
+                      color: "#fff",
                       fontFamily: "var(--font-mono)",
-                      letterSpacing: "0.04em",
                     }}>
-                      ⏱ {formattedTime}
+                      <ClockCircleOutlined /> {formattedTime}
                     </span>
                   )}
-                </>
+                </Flex>
               ) : undefined
             }
           />
         </div>
       </div>
 
-      {/* ── Content ── */}
+      {/* ── Content Area ── */}
       <div
         style={{
           flex: 1,
           minHeight: 0,
           overflowY: "auto",
-          padding: "28px 16px 48px",
+          padding: "24px 20px 48px",
         }}
       >
-        <div style={{ width: "100%", maxWidth: 580, margin: "0 auto" }}>
+        <div style={{ width: "100%", maxWidth: 640, margin: "0 auto" }}>
 
           {/* Error banner */}
           {(error || bonus.error) && (
@@ -441,7 +391,7 @@ export default function DailyChallengePage() {
               type="error"
               showIcon
               message={error || bonus.error}
-              style={{ borderRadius: 14, marginBottom: 20 }}
+              style={{ borderRadius: "var(--radius-lg)", marginBottom: 20, boxShadow: "var(--shadow-sm)" }}
             />
           )}
 
@@ -465,16 +415,20 @@ export default function DailyChallengePage() {
                 flexDirection: "column",
                 alignItems: "center",
                 justifyContent: "center",
-                minHeight: 300,
-                gap: 14,
+                minHeight: 320,
+                gap: 16,
               }}
             >
-              <div style={{ width: 56, height: 56, borderRadius: "50%", border: "1.5px solid var(--border)", display: "grid", placeItems: "center" }}>
-                <CheckOutlined style={{ fontSize: 22, color: "var(--xp)" }} />
-              </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--text-secondary)", fontSize: 13 }}>
-                <LoadingOutlined spin style={{ fontSize: 13 }} />
-                Đang chấm điểm bonus...
+              <m.div
+                animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
+                transition={{ repeat: Infinity, duration: 1.5 }}
+                style={{ width: 64, height: 64, borderRadius: "50%", border: "2px solid var(--xp)", display: "grid", placeItems: "center", background: "var(--surface)" }}
+              >
+                <CheckOutlined style={{ fontSize: 24, color: "var(--xp)" }} />
+              </m.div>
+              <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--text-secondary)", fontSize: 14, fontWeight: 600 }}>
+                <LoadingOutlined spin />
+                Đang chấm điểm câu hỏi phụ...
               </div>
             </div>
           )}
@@ -505,7 +459,7 @@ export default function DailyChallengePage() {
                     padding: "24px 0",
                   }}
                 >
-                  <Skeleton active paragraph={{ rows: 5 }} />
+                  <Skeleton active paragraph={{ rows: 6 }} round />
                 </div>
               )}
 
@@ -514,15 +468,20 @@ export default function DailyChallengePage() {
                 <div
                   className="anim-fade-in"
                   style={{
-                    minHeight: 300,
+                    minHeight: 320,
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
+                    background: "var(--surface)",
+                    borderRadius: "var(--radius-xl)",
+                    border: "1px solid var(--border)",
+                    boxShadow: "var(--shadow-md)",
                   }}
                 >
                   <Result
                     status="error"
-                    title="Không thể tải thử thách"
+                    title="Không thể tải thử thách hôm nay"
+                    subTitle="Vui lòng kiểm tra lại kết nối mạng hoặc thử lại sau."
                     extra={
                       <Button
                         type="primary"
@@ -532,10 +491,12 @@ export default function DailyChallengePage() {
                           borderRadius: 12,
                           background: "var(--accent)",
                           border: "none",
-                          fontWeight: 600,
+                          fontWeight: 700,
+                          height: 40,
+                          padding: "0 24px",
                         }}
                       >
-                        Thử lại
+                        Thử tải lại trang
                       </Button>
                     }
                   />
@@ -562,36 +523,41 @@ export default function DailyChallengePage() {
                     flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
-                    minHeight: 300,
-                    gap: 14,
+                    minHeight: 320,
+                    gap: 16,
                   }}
                 >
-                  <div
+                  <m.div
+                    animate={{ scale: [1, 1.08, 1] }}
+                    transition={{ repeat: Infinity, duration: 1.2 }}
                     style={{
-                      width: 56,
-                      height: 56,
+                      width: 64,
+                      height: 64,
                       borderRadius: "50%",
-                      border: "1.5px solid var(--border)",
+                      border: "2px solid var(--accent)",
                       display: "grid",
                       placeItems: "center",
+                      background: "var(--surface)",
+                      boxShadow: "0 4px 12px var(--accent-muted)",
                     }}
                   >
                     <CheckOutlined
-                      style={{ fontSize: 22, color: "var(--sage, var(--success))" }}
+                      style={{ fontSize: 24, color: "var(--accent)" }}
                     />
-                  </div>
+                  </m.div>
                   <div
                     style={{
                       display: "flex",
                       alignItems: "center",
                       gap: 8,
                       color: "var(--text-secondary)",
-                      fontSize: 13,
+                      fontSize: 14,
+                      fontWeight: 600,
                       fontFamily: "var(--font-body)",
                     }}
                   >
-                    <LoadingOutlined spin style={{ fontSize: 13 }} />
-                    Đang chấm điểm...
+                    <LoadingOutlined spin />
+                    Hệ thống đang kiểm tra câu trả lời...
                   </div>
                 </div>
               )}
@@ -625,10 +591,10 @@ export default function DailyChallengePage() {
 
       <style>{`
         @keyframes answerFlash {
-          0%   { box-shadow: var(--shadow-md); }
-          40%  { box-shadow: 0 0 0 6px color-mix(in srgb, var(--success) 20%, transparent);
-                 border-color: var(--sage, var(--success)); }
-          100% { box-shadow: var(--shadow-md); border-color: var(--border); }
+          0%   { box-shadow: var(--shadow-lg); }
+          45%  { box-shadow: 0 0 0 8px color-mix(in srgb, var(--success) 22%, transparent);
+                 border-color: var(--success); }
+          100% { box-shadow: var(--shadow-lg); border-color: var(--border); }
         }
         .answer-flash { animation: answerFlash 0.55s ease-out; }
       `}</style>
