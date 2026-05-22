@@ -355,6 +355,23 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                     {saved.bookmarked ? "⭐" : "☆"}
                   </button>
 
+                  {/* Delete */}
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); dlg.deleteDialogue(saved.id); }}
+                    style={{
+                      background: "transparent", border: "none",
+                      fontSize: 14, cursor: "pointer", padding: 4,
+                      color: "var(--error)",
+                      opacity: 0.4,
+                      transition: "all 0.15s",
+                    }}
+                    onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => { e.currentTarget.style.opacity = "1"; }}
+                    onMouseLeave={(e: React.MouseEvent<HTMLButtonElement>) => { e.currentTarget.style.opacity = "0.4"; }}
+                  >
+                    🗑️
+                  </button>
+
                   {/* Time */}
                   <Text style={{ fontSize: 10, color: "var(--text-muted)", flexShrink: 0 }}>
                     {new Date(saved.createdAt).toLocaleDateString("vi-VN", { day: "numeric", month: "short" })}

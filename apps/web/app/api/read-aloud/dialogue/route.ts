@@ -13,21 +13,55 @@ const RATE_LIMIT_MAX = 15;
 const RATE_LIMIT_WINDOW_MS = 60_000;
 
 const DIALOGUE_TOPICS = [
-  "ordering food at a restaurant",
-  "checking in at a hotel",
-  "job interview conversation",
-  "asking for directions in a city",
+  // Daily life
+  "morning routine and getting ready for work",
+  "grocery shopping at the supermarket",
+  "cooking dinner together at home",
+  "doing household chores and cleaning",
+  "walking the dog in the park",
+  "chatting with a neighbor about the weather",
+  "picking up kids from school",
+  "planning meals for the week",
+  // Social
+  "catching up with an old friend at a café",
+  "meeting someone new at a party",
+  "planning a birthday surprise for a friend",
+  "discussing weekend plans with roommates",
+  "inviting friends over for a barbecue",
+  "talking about a movie you just watched",
+  // Work & school
+  "first day at a new job",
   "discussing a project at work",
-  "shopping for clothes",
-  "making a doctor's appointment",
-  "meeting a new colleague",
-  "negotiating a business deal",
-  "planning a vacation with friends",
-  "complaining about a product to customer service",
-  "discussing weekend plans",
-  "airport check-in and boarding",
-  "real estate agent showing a property",
+  "asking a teacher for help after class",
   "team meeting about a deadline",
+  "small talk with coworkers during lunch break",
+  // Shopping & services
+  "ordering food at a restaurant",
+  "shopping for clothes at the mall",
+  "returning a product at customer service",
+  "getting a haircut at the salon",
+  "calling to fix an internet problem",
+  // Travel & transport
+  "asking for directions in a city",
+  "checking in at a hotel",
+  "taking a taxi to the airport",
+  "renting a car for a road trip",
+  "booking a table at a restaurant by phone",
+  // Health & fitness
+  "making a doctor's appointment",
+  "talking to a pharmacist about medicine",
+  "discussing workout routines at the gym",
+  "visiting a dentist for a checkup",
+  // Home & living
+  "looking for an apartment to rent",
+  "discussing bills and expenses with a partner",
+  "calling a plumber to fix a leak",
+  "decorating a new room together",
+  // Fun & hobbies
+  "planning a vacation with friends",
+  "talking about a new hobby or interest",
+  "discussing what to watch on Netflix tonight",
+  "sharing recipes and cooking tips",
 ];
 
 const LENGTH_CONFIG: Record<string, { linesRange: string; desc: string }> = {
@@ -77,9 +111,10 @@ export async function POST(request: Request) {
   const length = body?.length && LENGTH_CONFIG[body.length] ? body.length : "medium";
   const { linesRange } = LENGTH_CONFIG[length];
 
+  const shuffledTopics = [...DIALOGUE_TOPICS].sort(() => Math.random() - 0.5).slice(0, 6);
   const topicInstruction = body?.topic?.trim()
     ? `Topic: ${body.topic.trim()}`
-    : `Pick a random topic from: ${DIALOGUE_TOPICS.slice(0, 8).join(", ")}`;
+    : `Pick ONE random topic from this list: ${shuffledTopics.join(", ")}`;
 
   // Pick speaker names from actual TTS voice names for consistency
   const VOICE_NAMES = [
@@ -119,9 +154,11 @@ export async function POST(request: Request) {
     .map((v, i) => `    { "speaker": "${speakerLabels[i]}", "name": "${v.name}", "text": "English dialogue line..." }`)
     .join(",\n");
 
-  const prompt = `Generate a natural English conversation between ${speakers} people for language learning practice.
+  const prompt = `Generate a natural ENGLISH conversation between ${speakers} people for language learning practice.
 
 ${topicInstruction}
+
+CRITICAL: All dialogue lines in "text" fields MUST be in ENGLISH. Only "title" and "context" are in Vietnamese.
 
 Requirements:
 - Exactly ${speakers} speakers: ${speakerNames}
@@ -130,8 +167,9 @@ Requirements:
 - Include greetings, reactions, follow-up questions
 - Vocabulary level: B1-B2 (intermediate English learner friendly)
 - Each line should be 1-3 sentences (keep it conversational)
-- Include a Vietnamese title describing the scene
-- Include a brief Vietnamese context description (1 sentence)
+- "title": a Vietnamese title describing the scene
+- "context": a brief Vietnamese context description (1 sentence)
+- "text": MUST BE IN ENGLISH — this is for English listening practice
 
 Return ONLY valid JSON:
 {

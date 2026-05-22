@@ -179,6 +179,18 @@ export function useDialogue() {
     } catch { /* silent */ }
   }, [savedDialogues]);
 
+  /* ── Delete saved dialogue ── */
+  const deleteDialogue = useCallback(async (id: string) => {
+    setSavedDialogues((prev) => prev.filter((d) => d.id !== id));
+    try {
+      await fetch("/api/read-aloud/dialogues", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id }),
+      });
+    } catch { /* silent */ }
+  }, []);
+
   /* ── TTS for a single line ── */
   const ttsLine = useCallback(async (text: string, voiceRole: string, speed: number, signal: AbortSignal): Promise<string> => {
     const res = await fetch("/api/read-aloud", {
@@ -311,6 +323,7 @@ export function useDialogue() {
     reset,
     loadDialogue,
     toggleBookmark,
+    deleteDialogue,
     fetchSavedDialogues,
   };
 }
