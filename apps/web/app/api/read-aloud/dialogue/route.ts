@@ -81,9 +81,43 @@ export async function POST(request: Request) {
     ? `Topic: ${body.topic.trim()}`
     : `Pick a random topic from: ${DIALOGUE_TOPICS.slice(0, 8).join(", ")}`;
 
-  const speakerNames = speakers === 2
-    ? "Speaker A (name: Sarah) and Speaker B (name: Tom)"
-    : "Speaker A (name: Sarah), Speaker B (name: Tom), and Speaker C (name: Lisa)";
+  // Pick speaker names from actual TTS voice names for consistency
+  const VOICE_NAMES = [
+    { name: "Austin", gender: "m", accent: "US" },
+    { name: "Autumn", gender: "f", accent: "US" },
+    { name: "Daniel", gender: "m", accent: "UK" },
+    { name: "Diana", gender: "f", accent: "UK" },
+    { name: "Troy", gender: "m", accent: "AU" },
+    { name: "Hannah", gender: "f", accent: "AU" },
+  ];
+
+  // Shuffle and pick, alternating genders for natural dialogue
+  const shuffled = [...VOICE_NAMES].sort(() => Math.random() - 0.5);
+  const picked: typeof VOICE_NAMES = [];
+  const genders = new Set<string>();
+  for (const v of shuffled) {
+    if (picked.length >= speakers) break;
+    // Prefer mixed genders
+    if (picked.length === 0 || !genders.has(v.gender) || picked.length === speakers - 1) {
+      picked.push(v);
+      genders.add(v.gender);
+    }
+  }
+  // Fill if not enough (fallback)
+  while (picked.length < speakers) {
+    const remaining = shuffled.find((v) => !picked.includes(v));
+    if (remaining) picked.push(remaining);
+    else break;
+  }
+
+  const speakerLabels = ["A", "B", "C"];
+  const speakerNames = picked
+    .map((v, i) => `Speaker ${speakerLabels[i]} (name: ${v.name})`)
+    .join(", ");
+
+  const speakerExamples = picked
+    .map((v, i) => `    { "speaker": "${speakerLabels[i]}", "name": "${v.name}", "text": "English dialogue line..." }`)
+    .join(",\n");
 
   const prompt = `Generate a natural English conversation between ${speakers} people for language learning practice.
 
@@ -104,8 +138,7 @@ Return ONLY valid JSON:
   "title": "Tiêu đề tiếng Việt",
   "context": "Mô tả ngữ cảnh bằng tiếng Việt (1 câu)",
   "lines": [
-    { "speaker": "A", "name": "Sarah", "text": "English dialogue line..." },
-    { "speaker": "B", "name": "Tom", "text": "English dialogue line..." }
+${speakerExamples}
   ]
 }`;
 

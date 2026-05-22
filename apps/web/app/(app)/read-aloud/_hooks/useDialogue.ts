@@ -56,28 +56,35 @@ export function useDialogue() {
   const abortRef = useRef<AbortController | null>(null);
   const stoppedRef = useRef(false);
 
-  /* ── Auto-assign contrasting voices ── */
+  /* ── Auto-assign voices: match by character name → TTS voice name ── */
   const assignVoices = useCallback((lines: DialogueLine[], primaryRole: string) => {
     const speakers = [...new Set(lines.map((l) => l.speaker))];
-    const primaryVoice = VOICES.find((v) => v.role === primaryRole) ?? VOICES[0];
 
-    // Pick contrasting voices (different accent/gender from primary)
-    const alternatives = VOICES.filter((v) => v.role !== primaryRole);
-    const contrastingVoices = [
-      // Prefer different gender first, then different accent
-      alternatives.find((v) => v.gender !== primaryVoice.gender && v.accent !== primaryVoice.accent),
-      alternatives.find((v) => v.gender !== primaryVoice.gender),
-      alternatives.find((v) => v.accent !== primaryVoice.accent),
-      alternatives[0],
-    ].filter(Boolean);
+    // Build a name → voice lookup from the 6 Groq voices
+    const nameToVoice = new Map(VOICES.map((v) => [v.name.toLowerCase(), v]));
 
-    const assignments: VoiceAssignment[] = speakers.map((s, i) => {
-      const voice = i === 0 ? primaryVoice : contrastingVoices[i - 1] ?? VOICES[i % VOICES.length];
+    // Try to find each speaker's character name in the dialogue lines
+    const assignments: VoiceAssignment[] = speakers.map((s) => {
+      const line = lines.find((l) => l.speaker === s);
+      const charName = line?.name?.toLowerCase() ?? "";
+      const matchedVoice = nameToVoice.get(charName);
+
+      if (matchedVoice) {
+        return {
+          speaker: s,
+          voiceRole: matchedVoice.role,
+          voiceName: matchedVoice.name,
+          flag: matchedVoice.flag,
+        };
+      }
+
+      // Fallback: assign by index (for old dialogues with non-matching names)
+      const fallback = VOICES[speakers.indexOf(s) % VOICES.length];
       return {
         speaker: s,
-        voiceRole: voice.role,
-        voiceName: voice.name,
-        flag: voice.flag,
+        voiceRole: fallback.role,
+        voiceName: fallback.name,
+        flag: fallback.flag,
       };
     });
 
