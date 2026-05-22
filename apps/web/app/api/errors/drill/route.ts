@@ -1,5 +1,6 @@
 import { headers } from "next/headers";
 import { eq, and, sql, desc } from "drizzle-orm";
+import { z } from "zod";
 
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
@@ -117,9 +118,27 @@ Return JSON: { "exercises": [...], "summary": "Brief analysis of the student's p
       return Response.json({ error: "Empty AI response" }, { status: 502 });
     }
 
+    const DrillResponseSchema = z.object({
+      exercises: z.array(z.object({
+        type: z.string(),
+        instruction: z.string(),
+        data: z.record(z.string(), z.unknown()),
+        targetWeakness: z.string(),
+        tip: z.string(),
+      })).min(1).max(15),
+      summary: z.string(),
+    });
+
     const parsed = JSON.parse(content);
+    const validated = DrillResponseSchema.safeParse(parsed);
+
+    if (!validated.success) {
+      log.warn({ errors: validated.error.flatten() }, "errors.drill.validation.failed");
+      return Response.json({ error: "Invalid AI response format" }, { status: 502 });
+    }
+
     return Response.json({
-      ...parsed,
+      ...validated.data,
       errorCount: errors.length,
       topTopics,
     });

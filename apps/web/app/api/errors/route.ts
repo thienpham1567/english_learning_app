@@ -12,7 +12,7 @@ import { errorLog } from "@repo/database";
  * GET /api/errors
  *
  * List user's error log with optional filters.
- * Query params: module, topic, resolved, limit, offset
+ * Query params: module, topic, resolved, search, limit, offset
  */
 export async function GET(request: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
@@ -24,6 +24,7 @@ export async function GET(request: Request) {
   const sourceModule = url.searchParams.get("module");
   const topic = url.searchParams.get("topic");
   const resolved = url.searchParams.get("resolved");
+  const search = url.searchParams.get("search");
   const limit = Math.min(parseInt(url.searchParams.get("limit") ?? "50"), 100);
   const offset = parseInt(url.searchParams.get("offset") ?? "0");
 
@@ -32,6 +33,7 @@ export async function GET(request: Request) {
   if (topic) conditions.push(ilike(errorLog.grammarTopic, `%${topic}%`));
   if (resolved === "true") conditions.push(eq(errorLog.isResolved, true));
   if (resolved === "false") conditions.push(eq(errorLog.isResolved, false));
+  if (search) conditions.push(ilike(errorLog.questionStem, `%${search}%`));
 
   const [rows, countResult, topics] = await Promise.all([
     db
@@ -47,6 +49,9 @@ export async function GET(request: Request) {
         grammarTopic: errorLog.grammarTopic,
         isResolved: errorLog.isResolved,
         deepExplanation: errorLog.deepExplanation,
+        reviewCount: errorLog.reviewCount,
+        nextReviewAt: errorLog.nextReviewAt,
+        lastReviewedAt: errorLog.lastReviewedAt,
         createdAt: errorLog.createdAt,
       })
       .from(errorLog)

@@ -41,11 +41,27 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
   const [rolePlayStep, setRolePlayStep] = useState<"idle" | "listening" | "recording" | "evaluating" | "result">("idle");
   const [rolePlayLineIndex, setRolePlayLineIndex] = useState(-1);
   const [rolePlayResult, setRolePlayResult] = useState<EvalResult | null>(null);
+  const [hasListenedOnce, setHasListenedOnce] = useState(false);
+  const [isListeningPreview, setIsListeningPreview] = useState(false);
   const voice = useVoiceInput({ autoTranscribe: false });
 
   const handleGenerate = useCallback(async () => {
+    setHasListenedOnce(false);
+    setIsListeningPreview(false);
     await dlg.generate({ topic: topic || undefined, speakers, length, primaryVoice: voiceRole });
   }, [dlg, topic, speakers, length, voiceRole]);
+
+  /* ── Listen preview: hear full dialogue before role-playing ── */
+  const listenPreview = useCallback(async () => {
+    setIsListeningPreview(true);
+    await dlg.playAll(speed);
+    setIsListeningPreview(false);
+    setHasListenedOnce(true);
+  }, [dlg, speed]);
+
+  const skipListenPreview = useCallback(() => {
+    setHasListenedOnce(true);
+  }, []);
 
   /* ── Role-play: play non-user lines, record user lines ── */
   const startRolePlay = useCallback(async (speakerKey: string) => {
@@ -401,8 +417,100 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
         })}
       </div>
 
-      {/* Role-play controls */}
-      {!rolePlaySpeaker && !dlg.isPlaying && (
+      {/* ── Step 1: Listen first CTA ── */}
+      {!hasListenedOnce && !rolePlaySpeaker && (
+        <m.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          style={{
+            background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), color-mix(in srgb, var(--secondary, #a78bfa) 5%, var(--surface)))",
+            borderRadius: "var(--radius-xl)",
+            border: "2px solid color-mix(in srgb, var(--accent) 25%, var(--border))",
+            padding: "20px",
+            textAlign: "center",
+          }}
+        >
+          <div style={{ fontSize: 36, marginBottom: 10 }}>🎧</div>
+          <Text style={{ fontSize: 16, fontWeight: 800, color: "var(--text-primary)", display: "block", marginBottom: 4 }}>
+            Nghe trước hội thoại
+          </Text>
+          <Text style={{ fontSize: 13, color: "var(--text-muted)", display: "block", marginBottom: 16, maxWidth: 360, margin: "0 auto 16px" }}>
+            Lắng nghe cuộc trò chuyện giữa những người bản xứ trước khi bạn đóng vai nhé!
+          </Text>
+
+          <Flex gap={10} justify="center" wrap="wrap">
+            <m.button
+              whileHover={{ scale: 1.03, y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              onClick={isListeningPreview ? dlg.stop : listenPreview}
+              disabled={dlg.isLoading}
+              style={{
+                display: "flex", alignItems: "center", gap: 8,
+                padding: "14px 28px", borderRadius: 14,
+                border: "none",
+                background: isListeningPreview
+                  ? "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 80%, #000))"
+                  : "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+                color: "#fff",
+                fontSize: 15, fontWeight: 800, cursor: "pointer", fontFamily: "var(--font-body)",
+                boxShadow: isListeningPreview
+                  ? "0 4px 14px rgba(239, 68, 68, 0.3)"
+                  : "0 4px 14px var(--accent-muted)",
+                minWidth: 200,
+                justifyContent: "center",
+              }}
+            >
+              {dlg.isLoading ? (
+                <><LoadingOutlined spin /> Đang tải...</>
+              ) : isListeningPreview ? (
+                <><PauseCircleOutlined /> Dừng nghe</>
+              ) : (
+                <><PlayCircleOutlined /> Nghe hội thoại</>
+              )}
+            </m.button>
+
+            <m.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={skipListenPreview}
+              style={{
+                display: "flex", alignItems: "center", gap: 6,
+                padding: "14px 20px", borderRadius: 14,
+                border: "1px solid var(--border)",
+                background: "var(--surface)",
+                color: "var(--text-muted)",
+                fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "var(--font-body)",
+              }}
+            >
+              Bỏ qua →
+            </m.button>
+          </Flex>
+
+          {/* Listening progress indicator */}
+          {isListeningPreview && dlg.dialogue && (
+            <m.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              style={{
+                marginTop: 14,
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 8,
+              }}
+            >
+              <m.div
+                animate={{ scale: [1, 1.4, 1], opacity: [0.5, 1, 0.5] }}
+                transition={{ repeat: Infinity, duration: 1.2 }}
+                style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--accent)" }}
+              />
+              <Text style={{ fontSize: 12, fontWeight: 700, color: "var(--accent)" }}>
+                Đang phát câu {Math.max(1, (dlg.activeLineIndex ?? 0) + 1)} / {dlg.dialogue.lines.length}
+              </Text>
+            </m.div>
+          )}
+        </m.div>
+      )}
+
+      {/* ── Step 2: Role-play controls (after listening) ── */}
+      {hasListenedOnce && !rolePlaySpeaker && !dlg.isPlaying && (
         <m.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
@@ -413,9 +521,27 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             padding: "16px 20px",
           }}
         >
-          <Text style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)", display: "block", marginBottom: 10 }}>
-            🎙️ Đóng vai — Chọn nhân vật bạn muốn đọc
-          </Text>
+          {/* Replay button */}
+          <Flex justify="space-between" align="center" style={{ marginBottom: 12 }}>
+            <Text style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)" }}>
+              🎙️ Đóng vai — Chọn nhân vật bạn muốn đọc
+            </Text>
+            <m.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={listenPreview}
+              style={{
+                display: "flex", alignItems: "center", gap: 4,
+                padding: "4px 12px", borderRadius: 8,
+                border: "1px solid var(--border)",
+                background: "var(--surface-alt)",
+                color: "var(--text-muted)",
+                fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "var(--font-body)",
+              }}
+            >
+              <PlayCircleOutlined /> Nghe lại
+            </m.button>
+          </Flex>
           <Flex gap={8}>
             {dlg.voiceAssignments.map((a) => {
               const line = dlg.dialogue!.lines.find((l) => l.speaker === a.speaker);
