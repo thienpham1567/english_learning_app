@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { message } from "antd";
+import { api } from "@/lib/api-client";
 import { VOICES } from "../_data/voices";
 
 export interface DialogueLine {
@@ -26,13 +27,30 @@ interface VoiceAssignment {
 /**
  * useDialogue — orchestrates multi-voice dialogue playback and generation.
  */
+/** Saved dialogue from DB */
+export interface SavedDialogue {
+  id: string;
+  title: string;
+  context: string | null;
+  topic: string | null;
+  speakerCount: number;
+  linesJson: DialogueLine[];
+  voiceConfigJson: VoiceAssignment[];
+  rolePlayCount: number;
+  bookmarked: boolean;
+  createdAt: string;
+}
+
 export function useDialogue() {
   const [dialogue, setDialogue] = useState<Dialogue | null>(null);
+  const [dialogueId, setDialogueId] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [activeLineIndex, setActiveLineIndex] = useState(-1);
   const [voiceAssignments, setVoiceAssignments] = useState<VoiceAssignment[]>([]);
+  const [savedDialogues, setSavedDialogues] = useState<SavedDialogue[]>([]);
+  const [loadingSaved, setLoadingSaved] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -67,6 +85,19 @@ export function useDialogue() {
     return assignments;
   }, []);
 
+  /* ── Fetch saved dialogues ── */
+  const fetchSavedDialogues = useCallback(async () => {
+    setLoadingSaved(true);
+    try {
+      const data = await api.get<{ dialogues: SavedDialogue[] }>("/read-aloud/dialogues?limit=20");
+      if (data?.dialogues) setSavedDialogues(data.dialogues);
+    } catch { /* silent */ }
+    finally { setLoadingSaved(false); }
+  }, []);
+
+  // Auto-fetch on mount
+  useEffect(() => { fetchSavedDialogues(); }, [fetchSavedDialogues]);
+
   /* ── Generate dialogue ── */
   const generate = useCallback(async (options: {
     topic?: string;
@@ -89,8 +120,25 @@ export function useDialogue() {
       if (!res.ok) throw new Error("Failed");
       const data: Dialogue = await res.json();
       setDialogue(data);
-      assignVoices(data.lines, options.primaryVoice);
+      const assignments = assignVoices(data.lines, options.primaryVoice);
       message.success(`✨ Đã tạo hội thoại: ${data.title}`);
+
+      // Auto-save to DB
+      try {
+        const saved = await api.post<{ id: string }>("/read-aloud/dialogues", {
+          title: data.title,
+          context: data.context,
+          topic: options.topic,
+          speakerCount: options.speakers ?? 2,
+          lines: data.lines,
+          voiceConfig: assignments,
+        });
+        if (saved?.id) {
+          setDialogueId(saved.id);
+          fetchSavedDialogues();
+        }
+      } catch { /* save failure is non-critical */ }
+
       return data;
     } catch {
       message.error("Không thể tạo hội thoại. Vui lòng thử lại.");
@@ -98,7 +146,31 @@ export function useDialogue() {
     } finally {
       setGenerating(false);
     }
-  }, [assignVoices]);
+  }, [assignVoices, fetchSavedDialogues]);
+
+  /* ── Load saved dialogue ── */
+  const loadDialogue = useCallback((saved: SavedDialogue) => {
+    setDialogue({
+      title: saved.title,
+      context: saved.context ?? "",
+      lines: saved.linesJson,
+    });
+    setDialogueId(saved.id);
+    setVoiceAssignments(saved.voiceConfigJson);
+  }, []);
+
+  /* ── Toggle bookmark ── */
+  const toggleBookmark = useCallback(async (id: string) => {
+    const dlg = savedDialogues.find((d) => d.id === id);
+    if (!dlg) return;
+    const newVal = !dlg.bookmarked;
+    setSavedDialogues((prev) =>
+      prev.map((d) => (d.id === id ? { ...d, bookmarked: newVal } : d)),
+    );
+    try {
+      await api.patch("/read-aloud/dialogues", { id, bookmarked: newVal });
+    } catch { /* silent */ }
+  }, [savedDialogues]);
 
   /* ── TTS for a single line ── */
   const ttsLine = useCallback(async (text: string, voiceRole: string, speed: number, signal: AbortSignal): Promise<string> => {
@@ -211,20 +283,27 @@ export function useDialogue() {
   const reset = useCallback(() => {
     stop();
     setDialogue(null);
+    setDialogueId(null);
     setVoiceAssignments([]);
   }, [stop]);
 
   return {
     dialogue,
+    dialogueId,
     generating,
     isPlaying,
     isLoading,
     activeLineIndex,
     voiceAssignments,
+    savedDialogues,
+    loadingSaved,
     generate,
     playAll,
     playSingleLine,
     stop,
     reset,
+    loadDialogue,
+    toggleBookmark,
+    fetchSavedDialogues,
   };
 }

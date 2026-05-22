@@ -9,7 +9,7 @@ import {
 } from "@ant-design/icons";
 import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
-import type { HistoryEntry } from "../_hooks/useHistory";
+import type { HistoryEntryCompat as HistoryEntry } from "../_hooks/useHistory";
 import { timeAgo } from "../_hooks/useHistory";
 import { isCached } from "../_hooks/useAudioPlayback";
 import { VOICES } from "../_data/voices";

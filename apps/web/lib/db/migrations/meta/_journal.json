@@ -197,6 +197,13 @@
       "when": 1778419646699,
       "tag": "0027_common_supernaut",
       "breakpoints": true
+    },
+    {
+      "idx": 28,
+      "version": "7",
+      "when": 1779433206949,
+      "tag": "0028_thin_magik",
+      "breakpoints": true
     }
   ]
 }

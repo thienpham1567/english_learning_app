@@ -272,6 +272,98 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             {dlg.generating ? <><LoadingOutlined spin /> Đang tạo hội thoại...</> : <>✨ Tạo hội thoại</>}
           </m.button>
         </m.div>
+
+        {/* Saved dialogues */}
+        {dlg.savedDialogues.length > 0 && (
+          <m.div
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.1 }}
+            style={{
+              background: "var(--surface)",
+              borderRadius: "var(--radius-xl)",
+              border: "1px solid var(--border)",
+              padding: "20px",
+            }}
+          >
+            <Text style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)", display: "block", marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.06em" }}>
+              📚 Hội thoại đã tạo ({dlg.savedDialogues.length})
+            </Text>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 300, overflowY: "auto" }}>
+              {dlg.savedDialogues.map((saved, idx) => (
+                <m.div
+                  key={saved.id}
+                  initial={{ opacity: 0, x: -8 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.03 }}
+                  whileHover={{ y: -1, boxShadow: "var(--shadow-sm)" }}
+                  onClick={() => dlg.loadDialogue(saved)}
+                  style={{
+                    display: "flex", alignItems: "center", gap: 12,
+                    padding: "12px 14px",
+                    borderRadius: 12,
+                    border: "1px solid var(--border)",
+                    background: "var(--surface-alt)",
+                    cursor: "pointer",
+                    transition: "all 0.15s",
+                  }}
+                >
+                  {/* Speaker flags */}
+                  <div style={{ display: "flex", gap: 2, flexShrink: 0 }}>
+                    {saved.voiceConfigJson.map((v) => (
+                      <span key={v.speaker} style={{ fontSize: 16 }}>{v.flag}</span>
+                    ))}
+                  </div>
+
+                  {/* Info */}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <Text style={{
+                      fontSize: 13, fontWeight: 700, color: "var(--text-primary)",
+                      display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                    }}>
+                      {saved.title}
+                    </Text>
+                    <div style={{ display: "flex", gap: 8, alignItems: "center", marginTop: 2 }}>
+                      {saved.topic && (
+                        <Text style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 500 }}>
+                          📌 {saved.topic}
+                        </Text>
+                      )}
+                      <Text style={{ fontSize: 11, color: "var(--text-muted)" }}>
+                        {saved.linesJson.length} câu
+                      </Text>
+                      {saved.rolePlayCount > 0 && (
+                        <Text style={{ fontSize: 11, color: "var(--accent)", fontWeight: 600 }}>
+                          🎙️ {saved.rolePlayCount}x
+                        </Text>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Bookmark */}
+                  <button
+                    type="button"
+                    onClick={(e) => { e.stopPropagation(); dlg.toggleBookmark(saved.id); }}
+                    style={{
+                      background: "transparent", border: "none",
+                      fontSize: 18, cursor: "pointer", padding: 4,
+                      color: saved.bookmarked ? "var(--accent)" : "var(--text-muted)",
+                      opacity: saved.bookmarked ? 1 : 0.4,
+                      transition: "all 0.15s",
+                    }}
+                  >
+                    {saved.bookmarked ? "⭐" : "☆"}
+                  </button>
+
+                  {/* Time */}
+                  <Text style={{ fontSize: 10, color: "var(--text-muted)", flexShrink: 0 }}>
+                    {new Date(saved.createdAt).toLocaleDateString("vi-VN", { day: "numeric", month: "short" })}
+                  </Text>
+                </m.div>
+              ))}
+            </div>
+          </m.div>
+        )}
       </div>
     );
   }

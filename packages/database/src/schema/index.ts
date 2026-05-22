@@ -1023,3 +1023,66 @@ export const toeicSpeakingResponse = pgTable(
 );
 
 export type ToeicSpeakingResponseRow = typeof toeicSpeakingResponse.$inferSelect;
+
+/** Read Aloud Dialogue — reusable AI-generated multi-speaker conversations */
+export interface ReadAloudDialogueLine {
+  speaker: string;
+  name: string;
+  text: string;
+}
+
+export interface ReadAloudVoiceAssignment {
+  speaker: string;
+  voiceRole: string;
+  voiceName: string;
+  flag: string;
+}
+
+export const readAloudDialogue = pgTable("read_aloud_dialogue", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  title: text("title").notNull(),
+  context: text("context"),
+  topic: text("topic"),
+  speakerCount: integer("speaker_count").notNull().default(2),
+  linesJson: jsonb("lines_json").$type<ReadAloudDialogueLine[]>().notNull(),
+  voiceConfigJson: jsonb("voice_config_json").$type<ReadAloudVoiceAssignment[]>().notNull(),
+  rolePlayCount: integer("role_play_count").notNull().default(0),
+  bookmarked: boolean("bookmarked").notNull().default(false),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  index("read_aloud_dialogue_user_created_idx").on(table.userId, table.createdAt),
+  index("read_aloud_dialogue_user_bookmarked_idx").on(table.userId, table.bookmarked),
+]);
+
+export type ReadAloudDialogueRow = typeof readAloudDialogue.$inferSelect;
+
+/** Read Aloud Session — tracks listen/shadow/dialogue practice events */
+export const readAloudSession = pgTable("read_aloud_session", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  userId: text("user_id").notNull(),
+  mode: text("mode").notNull(), // 'listen' | 'shadow' | 'dialogue'
+  /** Passage text for listen/shadow modes */
+  text: text("text"),
+  /** Reference to dialogue for dialogue mode */
+  dialogueId: uuid("dialogue_id").references(() => readAloudDialogue.id, { onDelete: "set null" }),
+  voiceRole: text("voice_role").notNull(),
+  speed: real("speed").notNull().default(1.0),
+  wordCount: integer("word_count").notNull().default(0),
+  durationMs: integer("duration_ms"),
+  /** Shadowing score (only for shadow mode) */
+  shadowScore: integer("shadow_score"),
+  shadowDetails: jsonb("shadow_details").$type<{
+    accuracy: number;
+    fluency: number;
+    pronunciation: number;
+  }>(),
+  /** Preview text for list display */
+  preview: text("preview"),
+  createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+}, (table) => [
+  index("read_aloud_session_user_created_idx").on(table.userId, table.createdAt),
+  index("read_aloud_session_user_mode_idx").on(table.userId, table.mode),
+]);
+
+export type ReadAloudSessionRow = typeof readAloudSession.$inferSelect;
