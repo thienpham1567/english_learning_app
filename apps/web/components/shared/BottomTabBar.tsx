@@ -46,7 +46,7 @@ const TABS: TabItem[] = [
     label: "TOEIC",
     icon: <AimOutlined />,
     activeIcon: <AimOutlined />,
-    href: "/toeic-skills",
+    href: "/toeic/skills",
   },
   {
     key: "exam",
@@ -72,7 +72,7 @@ const TABS: TabItem[] = [
 ];
 
 const EXAM_HUB_ITEMS = [
-  { label: "Luyện đề ETS", icon: <TrophyOutlined />, href: "/toeic/skills?tab=practice" },
+  { label: "Luyện đề ETS", icon: <TrophyOutlined />, href: "/toeic/practice" },
   {
     label: "TOEIC Part 5",
     icon: <QuestionCircleOutlined />,
@@ -92,8 +92,6 @@ const MORE_HUB_ITEMS = [
     href: "/daily-challenge",
   },
   { label: "AI Chatbot", icon: <MessageOutlined />, href: "/english-chatbot" },
-  { label: "Đọc sách TOEIC", icon: <FileTextOutlined />, href: "/pdf-reader" },
-
   {
     label: "Lộ trình ngữ pháp",
     icon: <NodeIndexOutlined />,
@@ -105,11 +103,8 @@ const MORE_HUB_ITEMS = [
 
 function getActiveTab(pathname: string): string {
   if (pathname.startsWith("/dashboard")) return "home";
-  if (pathname.startsWith("/toeic-skills")) return "toeic";
-  if (
-    pathname.startsWith("/toeic-practice") ||
-    pathname.startsWith("/grammar-quiz")
-  )
+  if (pathname.startsWith("/toeic")) return "toeic";
+  if (pathname.startsWith("/grammar-quiz"))
     return "exam";
   if (pathname.startsWith("/daily-challenge")) return "more";
   if (

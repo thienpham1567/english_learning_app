@@ -79,7 +79,6 @@ const navGroups: (NavItem | NavGroup)[] = [
     items: [
       { href: "/english-chatbot", label: "AI Chatbot", icon: MessageOutlined },
       { href: "/read-aloud", label: "Đọc to", icon: SoundOutlined },
-      { href: "/pdf-reader", label: "Đọc sách TOEIC", icon: FileTextOutlined },
     ],
   },
 ];

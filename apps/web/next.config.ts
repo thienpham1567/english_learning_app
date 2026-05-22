@@ -20,7 +20,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/toeic-practice",
-        destination: "/toeic/skills?tab=practice",
+        destination: "/toeic/practice",
         permanent: true,
       },
       {
@@ -41,6 +41,26 @@ const nextConfig: NextConfig = {
       {
         source: "/grammar-quiz",
         destination: "/toeic/skills?tab=part5",
+        permanent: true,
+      },
+      {
+        source: "/writing-practice/score",
+        destination: "/toeic/writing/score",
+        permanent: true,
+      },
+      {
+        source: "/writing-practice",
+        destination: "/toeic/skills?tab=writing",
+        permanent: true,
+      },
+      {
+        source: "/listening",
+        destination: "/toeic/skills?tab=listening",
+        permanent: true,
+      },
+      {
+        source: "/speaking-practice",
+        destination: "/toeic/skills?tab=speaking",
         permanent: true,
       },
     ];

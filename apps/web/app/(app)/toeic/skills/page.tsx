@@ -10,50 +10,42 @@ import {
 	FormOutlined,
 	LoadingOutlined,
 	QuestionCircleOutlined,
-	TrophyOutlined,
 } from "@ant-design/icons";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import * as m from "motion/react-client";
 
 const ListeningTab = dynamic(
 	() =>
-		import("@/app/(app)/toeic-skills/_components/ListeningTab").then(
+		import("./_components/ListeningTab").then(
 			(m) => m.ListeningTab,
 		),
 	{ ssr: false, loading: () => <TabLoader /> },
 );
 const ReadingTab = dynamic(
 	() =>
-		import("@/app/(app)/toeic-skills/_components/ReadingTab").then(
+		import("./_components/ReadingTab").then(
 			(m) => m.ReadingTab,
 		),
 	{ ssr: false, loading: () => <TabLoader /> },
 );
 const SpeakingTab = dynamic(
 	() =>
-		import("@/app/(app)/toeic-skills/_components/SpeakingTab").then(
+		import("./_components/SpeakingTab").then(
 			(m) => m.SpeakingTab,
 		),
 	{ ssr: false, loading: () => <TabLoader /> },
 );
 const WritingTab = dynamic(
 	() =>
-		import("@/app/(app)/toeic-skills/_components/WritingTab").then(
+		import("./_components/WritingTab").then(
 			(m) => m.WritingTab,
 		),
 	{ ssr: false, loading: () => <TabLoader /> },
 );
 const Part5Tab = dynamic(
 	() =>
-		import("@/app/(app)/toeic/skills/_components/Part5Tab").then(
+		import("./_components/Part5Tab").then(
 			(m) => m.Part5Tab,
-		),
-	{ ssr: false, loading: () => <TabLoader /> },
-);
-const PracticeTab = dynamic(
-	() =>
-		import("@/app/(app)/toeic/skills/_components/PracticeTab").then(
-			(m) => m.PracticeTab,
 		),
 	{ ssr: false, loading: () => <TabLoader /> },
 );
@@ -78,7 +70,7 @@ function TabLoader() {
 	);
 }
 
-type Skill = "listening" | "reading" | "speaking" | "writing" | "part5" | "practice";
+type Skill = "listening" | "reading" | "speaking" | "writing" | "part5";
 
 const SKILL_TABS: {
 	value: Skill;
@@ -91,7 +83,6 @@ const SKILL_TABS: {
 	{ value: "speaking", label: "Speaking", parts: "Part 1–6", icon: <AudioOutlined /> },
 	{ value: "writing", label: "Writing", parts: "Part 1–3", icon: <FormOutlined /> },
 	{ value: "part5", label: "Part 5", parts: "Grammar", icon: <QuestionCircleOutlined /> },
-	{ value: "practice", label: "Luyện đề", parts: "ETS", icon: <TrophyOutlined /> },
 ];
 
 const SUBTITLES: Record<Skill, string> = {
@@ -100,7 +91,6 @@ const SUBTITLES: Record<Skill, string> = {
 	speaking: "TOEIC Speaking · 11 câu · Nói",
 	writing: "TOEIC Writing · 8 câu · Viết",
 	part5: "TOEIC Part 5 · Incomplete Sentences · Ngữ pháp",
-	practice: "TOEIC Practice · Luyện đề ETS · Part 3–7",
 };
 
 const GRADIENTS: Record<Skill, string> = {
@@ -109,7 +99,6 @@ const GRADIENTS: Record<Skill, string> = {
 	speaking: "var(--gradient-toeic-speaking)",
 	writing: "var(--gradient-writing)",
 	part5: "var(--gradient-grammar-quiz)",
-	practice: "var(--gradient-mock-test)",
 };
 
 const TAB_COLORS: Record<Skill, { activeColor: string }> = {
@@ -118,7 +107,6 @@ const TAB_COLORS: Record<Skill, { activeColor: string }> = {
 	speaking: { activeColor: "var(--accent)" },
 	writing: { activeColor: "var(--xp)" },
 	part5: { activeColor: "var(--accent)" },
-	practice: { activeColor: "var(--accent)" },
 };
 
 export default function ToeicSkillsPage() {
@@ -211,7 +199,6 @@ export default function ToeicSkillsPage() {
 				{active === "speaking" && <SpeakingTab />}
 				{active === "writing" && <WritingTab />}
 				{active === "part5" && <Part5Tab />}
-				{active === "practice" && <PracticeTab />}
 			</div>
 		</div>
 	);

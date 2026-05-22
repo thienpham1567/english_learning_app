@@ -19,7 +19,6 @@ const BREADCRUMBS: Record<string, { eyebrow: string; title: string }> = {
   "/flashcards": { eyebrow: "Ôn tập từ vựng", title: "Flashcards" },
   "/daily-challenge": { eyebrow: "Thử thách mỗi ngày", title: "Daily Challenge" },
   "/error-notebook": { eyebrow: "Sổ lỗi sai", title: "Error Notebook" },
-  "/pdf-reader": { eyebrow: "Công cụ", title: "Đọc sách TOEIC" },
   "/reading": { eyebrow: "TOEIC Reading", title: "Luyện đọc" },
   "/ipa-chart": { eyebrow: "Phát âm", title: "Bảng IPA" },
   "/diagnostic": { eyebrow: "TOEIC", title: "Diagnostic Test" },
