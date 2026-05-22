@@ -162,11 +162,13 @@ CRITICAL: All dialogue lines in "text" fields MUST be in ENGLISH. Only "title" a
 
 Requirements:
 - Exactly ${speakers} speakers: ${speakerNames}
-- ${linesRange} lines total (dialogue turns)
-- Natural, realistic conversation — NOT robotic or overly formal
-- Include greetings, reactions, follow-up questions
+- ${linesRange} dialogue turns total
+- Write like REAL people talk — not textbook dialogues
+- Each turn can be 1 to 5 sentences depending on context. Some turns are short reactions ("Oh really? That's great!"), while others are longer explanations, stories, or opinions. Vary the length naturally.
+- Include natural speech patterns: filler words (well, you know, I mean), reactions (wow, oh, hmm), interruptions, follow-up questions
+- Speakers should share personal experiences, opinions, and ask each other questions
 - Vocabulary level: B1-B2 (intermediate English learner friendly)
-- Each line should be 1-3 sentences (keep it conversational)
+- Make it feel like overhearing a real conversation between friends or colleagues
 - "title": a Vietnamese title describing the scene
 - "context": a brief Vietnamese context description (1 sentence)
 - "text": MUST BE IN ENGLISH — this is for English listening practice

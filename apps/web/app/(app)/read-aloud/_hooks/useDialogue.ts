@@ -215,34 +215,76 @@ export function useDialogue() {
     });
   }, []);
 
-  /* ── Play all lines sequentially ── */
+  /* ── Play all lines with look-ahead prefetching ── */
+  const audioCacheRef = useRef<Map<string, string>>(new Map());
+
+  const prefetchLine = useCallback(async (
+    line: DialogueLine,
+    assignment: VoiceAssignment,
+    speed: number,
+    signal: AbortSignal,
+  ): Promise<string> => {
+    const cacheKey = `${line.speaker}|${line.text}|${assignment.voiceRole}|${speed}`;
+    const cached = audioCacheRef.current.get(cacheKey);
+    if (cached) return cached;
+
+    const url = await ttsLine(line.text, assignment.voiceRole, speed, signal);
+    audioCacheRef.current.set(cacheKey, url);
+    return url;
+  }, [ttsLine]);
+
   const playAll = useCallback(async (speed: number, startIndex = 0) => {
     if (!dialogue || voiceAssignments.length === 0) return;
 
     stoppedRef.current = false;
     setIsPlaying(true);
     abortRef.current = new AbortController();
+    const signal = abortRef.current.signal;
+
+    // Helper to get assignment for a line
+    const getAssignment = (line: DialogueLine) =>
+      voiceAssignments.find((a) => a.speaker === line.speaker) ?? voiceAssignments[0];
+
+    // Kick off prefetch for the first few lines immediately
+    const LOOK_AHEAD = 3;
+    const prefetchPromises = new Map<number, Promise<string>>();
+
+    const startPrefetch = (idx: number) => {
+      if (idx >= dialogue.lines.length || prefetchPromises.has(idx)) return;
+      const line = dialogue.lines[idx];
+      const assignment = getAssignment(line);
+      prefetchPromises.set(idx, prefetchLine(line, assignment, speed, signal));
+    };
+
+    // Pre-fetch first batch
+    for (let p = startIndex; p < Math.min(startIndex + LOOK_AHEAD, dialogue.lines.length); p++) {
+      startPrefetch(p);
+    }
 
     try {
       for (let i = startIndex; i < dialogue.lines.length; i++) {
         if (stoppedRef.current) break;
 
         setActiveLineIndex(i);
+
+        // Wait for current line's audio (likely already prefetched)
+        if (!prefetchPromises.has(i)) startPrefetch(i);
         setIsLoading(true);
-
-        const line = dialogue.lines[i];
-        const assignment = voiceAssignments.find((a) => a.speaker === line.speaker) ?? voiceAssignments[0];
-
-        const url = await ttsLine(line.text, assignment.voiceRole, speed, abortRef.current.signal);
+        const url = await prefetchPromises.get(i)!;
 
         if (stoppedRef.current) break;
         setIsLoading(false);
 
+        // Start prefetching next lines while this one plays
+        for (let p = i + 1; p <= Math.min(i + LOOK_AHEAD, dialogue.lines.length - 1); p++) {
+          startPrefetch(p);
+        }
+
         await playAudio(url);
 
-        // Small gap between speakers
+        // Small gap between speakers (shorter now since no TTS wait)
         if (i < dialogue.lines.length - 1 && !stoppedRef.current) {
-          await new Promise((r) => setTimeout(r, 300));
+          await new Promise((r) => setTimeout(r, 200));
         }
       }
     } catch (err) {
@@ -253,7 +295,7 @@ export function useDialogue() {
       setIsLoading(false);
       if (!stoppedRef.current) setActiveLineIndex(-1);
     }
-  }, [dialogue, voiceAssignments, ttsLine, playAudio]);
+  }, [dialogue, voiceAssignments, prefetchLine, playAudio]);
 
   /* ── Play single line ── */
   const playSingleLine = useCallback(async (index: number, speed: number) => {
