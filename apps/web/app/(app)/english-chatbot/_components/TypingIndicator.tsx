@@ -1,3 +1,7 @@
+"use client";
+
+import { Bot } from "lucide-react";
+
 type Props = {
   personaName?: string;
 };
@@ -5,53 +9,21 @@ type Props = {
 export function TypingIndicator({ personaName = "Gia sư" }: Props) {
   return (
     <div
-      className="anim-fade-up"
-      style={{ display: "flex", alignItems: "flex-end", gap: 12 }}
+      className="flex items-end gap-3 max-w-[80%] animate-in fade-in slide-in-from-bottom-2 duration-200"
       role="status"
       aria-live="polite"
-      aria-label={`${personaName} đang nhập phản hồi`}
+      aria-label={`${personaName} đang phản hồi`}
     >
-      <div
-        style={{
-          display: "grid",
-          placeItems: "center",
-          width: 40,
-          height: 40,
-          borderRadius: "50%",
-          background: "var(--accent-light)",
-          fontSize: 18,
-          boxShadow: "var(--shadow-sm)",
-        }}
-      >
-        👩‍🏫
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-slate-900 border border-slate-800 text-slate-400">
+        <Bot className="h-4 w-4 text-accent animate-pulse" />
       </div>
-      <div
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 5,
-          borderRadius: 22,
-          borderBottomLeftRadius: 6,
-          border: "1px solid var(--border)",
-          background: "var(--bubble-ai)",
-          padding: "14px 16px",
-          boxShadow: "var(--shadow-sm)",
-        }}
-      >
-        {[0, 1, 2].map((i) => (
-          <span
-            key={i}
-            style={{
-              display: "inline-block",
-              width: 5,
-              height: 5,
-              borderRadius: "50%",
-              background: "var(--text-muted)",
-              animation: "chatWave 1.4s ease-in-out infinite",
-              animationDelay: `${i * 0.14}s`,
-            }}
-          />
-        ))}
+      
+      <div className="inline-flex items-center gap-1.5 rounded-2xl rounded-bl-sm border border-slate-850 bg-slate-900/40 px-4 py-3 shadow-sm">
+        <div className="flex items-center gap-1">
+          <div className="h-1.5 w-1.5 rounded-full bg-slate-500 animate-bounce [animation-delay:-0.3s]" />
+          <div className="h-1.5 w-1.5 rounded-full bg-slate-500 animate-bounce [animation-delay:-0.15s]" />
+          <div className="h-1.5 w-1.5 rounded-full bg-slate-500 animate-bounce" />
+        </div>
       </div>
     </div>
   );

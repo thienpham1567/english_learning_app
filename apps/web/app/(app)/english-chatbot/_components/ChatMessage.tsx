@@ -2,7 +2,8 @@
 
 import { useState, type ReactNode } from "react";
 import ReactMarkdown from "react-markdown";
-import { CheckOutlined, CopyOutlined, TrophyOutlined, SoundOutlined, PauseCircleOutlined, ReloadOutlined, LoadingOutlined } from "@ant-design/icons";
+import { motion } from "motion/react";
+import { Copy, Check, Volume2, Pause, RotateCcw, Loader2 } from "lucide-react";
 import { useUser } from "@/components/shared/UserContext";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 import type { Persona } from "@/lib/chat/personas";
@@ -34,22 +35,14 @@ function CopyButton({ text }: { text: string }) {
 
   return (
     <button
-      style={{
-        borderRadius: "50%",
-        padding: 4,
-        color: "var(--text-muted)",
-        background: "none",
-        border: "none",
-        cursor: "pointer",
-        transition: "color 0.2s",
-      }}
+      className="rounded-full p-1.5 text-slate-500 hover:bg-slate-800 hover:text-slate-200 transition-all cursor-pointer"
       onClick={handleCopy}
       aria-label="Sao chép"
     >
       {copied ? (
-        <CheckOutlined style={{ fontSize: 13 }} />
+        <Check className="h-3 w-3" />
       ) : (
-        <CopyOutlined style={{ fontSize: 13 }} />
+        <Copy className="h-3 w-3" />
       )}
     </button>
   );
@@ -65,26 +58,19 @@ function SpeakButton({ text, onSpeak, isSpeaking, isLoading, onStop }: {
   const active = isSpeaking || isLoading;
   return (
     <button
-      style={{
-        borderRadius: "50%",
-        padding: 4,
-        color: active ? "var(--accent)" : "var(--text-muted)",
-        background: "none",
-        border: "none",
-        cursor: isLoading ? "wait" : "pointer",
-        transition: "color 0.2s",
-        animation: isSpeaking ? "pulse 1.5s infinite" : "none",
-      }}
+      className={`rounded-full p-1.5 transition-all cursor-pointer ${
+        active ? "text-accent bg-accent/10 animate-pulse" : "text-slate-500 hover:bg-slate-800 hover:text-slate-200"
+      }`}
       onClick={() => active ? onStop() : onSpeak(text)}
       disabled={isLoading}
       aria-label={isSpeaking ? "Dừng phát" : isLoading ? "Đang tải..." : "Nghe phát âm"}
     >
       {isLoading ? (
-        <LoadingOutlined spin style={{ fontSize: 12 }} />
+        <Loader2 className="h-3 w-3 animate-spin" />
       ) : isSpeaking ? (
-        <PauseCircleOutlined style={{ fontSize: 13 }} />
+        <Pause className="h-3 w-3" />
       ) : (
-        <SoundOutlined style={{ fontSize: 13 }} />
+        <Volume2 className="h-3 w-3" />
       )}
     </button>
   );
@@ -98,7 +84,7 @@ function UserAvatar() {
       <img
         src={user.image}
         alt={user.name}
-        style={{ width: 40, height: 40, borderRadius: "50%", objectFit: "cover" }}
+        className="w-8 h-8 rounded-full object-cover border border-slate-850 shadow-sm"
         referrerPolicy="no-referrer"
       />
     );
@@ -112,30 +98,18 @@ function UserAvatar() {
     .toUpperCase();
 
   return (
-    <div
-      style={{
-        display: "grid",
-        placeItems: "center",
-        width: 40,
-        height: 40,
-        borderRadius: "50%",
-        background: "var(--ink)",
-        fontSize: 12,
-        fontWeight: 600,
-        color: "var(--text-on-accent)",
-      }}
-    >
+    <div className="grid place-items-center w-8 h-8 rounded-full bg-slate-900 border border-slate-850 text-[10px] font-bold text-slate-300 shadow-sm">
       {initials}
     </div>
   );
 }
 
+// Helper to extract text content safely for copy/tts functions
 function extractText(children: ReactNode): string {
   if (typeof children === "string") return children;
   if (typeof children === "number") return String(children);
   if (Array.isArray(children)) return children.map(extractText).join("");
   if (children && typeof children === "object" && "props" in children) {
-    // biome-ignore lint/suspicious/noExplicitAny: ReactNode shape
     return extractText((children as unknown as { props?: { children?: ReactNode } }).props?.children);
   }
   return "";
@@ -143,16 +117,7 @@ function extractText(children: ReactNode): string {
 
 function InlineCode({ children }: { children: ReactNode }) {
   return (
-    <code
-      style={{
-        padding: "2px 6px",
-        borderRadius: 6,
-        background: "var(--bg-deep)",
-        fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-        fontSize: "0.9em",
-        color: "var(--ink)",
-      }}
-    >
+    <code className="px-1.5 py-0.5 rounded bg-slate-805 text-slate-100 font-mono text-[0.85em]">
       {children}
     </code>
   );
@@ -169,66 +134,24 @@ function CodeBlock({ children, className }: { children: ReactNode; className?: s
       setCopied(true);
       setTimeout(() => setCopied(false), 1600);
     } catch {
-      /* clipboard blocked — no-op */
+      /* clipboard blocked */
     }
   };
 
   return (
-    <div
-      style={{
-        position: "relative",
-        margin: "8px 0",
-        borderRadius: 12,
-        border: "1px solid var(--border)",
-        background: "var(--bg-deep)",
-        overflow: "hidden",
-      }}
-    >
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "6px 12px",
-          borderBottom: "1px solid var(--border)",
-          fontSize: 11,
-          color: "var(--text-muted)",
-          fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-          textTransform: "uppercase",
-          letterSpacing: 0.5,
-        }}
-      >
+    <div className="relative my-2.5 rounded-xl border border-slate-850 bg-slate-900 overflow-hidden shadow-sm">
+      <div className="flex items-center justify-between px-4 py-2 border-b border-slate-850 bg-slate-950/40 text-[10px] text-slate-500 font-mono font-bold uppercase tracking-wider">
         <span>{lang || "code"}</span>
         <button
           onClick={onCopy}
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 4,
-            padding: "2px 6px",
-            border: "none",
-            background: "none",
-            color: "var(--text-muted)",
-            cursor: "pointer",
-            fontSize: 11,
-          }}
+          className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer"
           aria-label="Sao chép"
         >
-          {copied ? <CheckOutlined /> : <CopyOutlined />}
-          {copied ? "Đã chép" : "Sao chép"}
+          {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
+          <span>{copied ? "Đã chép" : "Sao chép"}</span>
         </button>
       </div>
-      <pre
-        style={{
-          margin: 0,
-          padding: "12px 14px",
-          overflowX: "auto",
-          fontSize: 13,
-          lineHeight: 1.55,
-          fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-          color: "var(--text-primary)",
-        }}
-      >
+      <pre className="m-0 p-3.5 overflow-x-auto text-[12px] leading-relaxed font-mono text-slate-200">
         <code className={className}>{children}</code>
       </pre>
     </div>
@@ -238,20 +161,12 @@ function CodeBlock({ children, className }: { children: ReactNode; className?: s
 function RegenerateButton({ onRegenerate }: { onRegenerate: () => void }) {
   return (
     <button
-      style={{
-        borderRadius: "50%",
-        padding: 4,
-        color: "var(--text-muted)",
-        background: "none",
-        border: "none",
-        cursor: "pointer",
-        transition: "color 0.2s",
-      }}
+      className="rounded-full p-1.5 text-slate-500 hover:bg-slate-800 hover:text-slate-200 transition-all cursor-pointer"
       onClick={onRegenerate}
       aria-label="Tạo lại"
       title="Tạo lại phản hồi"
     >
-      <ReloadOutlined style={{ fontSize: 13 }} />
+      <RotateCcw className="h-3 w-3" />
     </button>
   );
 }
@@ -268,7 +183,6 @@ export function ChatMessage({
   isLastAssistant = false,
 }: {
   message: PageMessage;
-  className?: string;
   isStreaming?: boolean;
   persona?: Persona;
   onSpeak?: (text: string) => void;
@@ -280,10 +194,10 @@ export function ChatMessage({
 }) {
   if (message.role === "divider") {
     return (
-      <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 0" }}>
-        <div style={{ height: 1, flex: 1, background: "var(--border)" }} />
-        <span style={{ fontSize: 12, color: "var(--text-muted)" }}>{message.text}</span>
-        <div style={{ height: 1, flex: 1, background: "var(--border)" }} />
+      <div className="flex items-center gap-4 py-3">
+        <div className="h-px flex-1 bg-slate-850" />
+        <span className="text-[10px] font-bold tracking-wider uppercase text-slate-500 font-mono">{message.text}</span>
+        <div className="h-px flex-1 bg-slate-850" />
       </div>
     );
   }
@@ -295,63 +209,30 @@ export function ChatMessage({
   const time = formatTime();
 
   return (
-    <div
-      className="anim-fade-up"
-      style={{
-        display: "flex",
-        alignItems: "flex-end",
-        gap: 12,
-        justifyContent: isUser ? "flex-end" : "flex-start",
-      }}
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ type: "spring", stiffness: 260, damping: 25 }}
+      className={`group flex items-end gap-3 w-full ${isUser ? "justify-end" : "justify-start"}`}
     >
       {!isUser && (
-        <div
-          style={{
-            display: "grid",
-            placeItems: "center",
-            width: 32,
-            height: 32,
-            flexShrink: 0,
-            borderRadius: "50%",
-            overflow: "hidden",
-            boxShadow: "var(--shadow-sm)",
-          }}
-        >
-          {persona ? <persona.avatar size={32} /> : <TrophyOutlined style={{ fontSize: 14 }} />}
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full overflow-hidden border border-slate-850 shadow-sm">
+          {persona ? <persona.avatar size={32} /> : <div className="bg-slate-900 w-full h-full" />}
         </div>
       )}
 
-      <div
-        style={{
-          display: "flex",
-          maxWidth: "min(42rem, 80%)",
-          flexDirection: "column",
-          gap: 8,
-          alignItems: isUser ? "flex-end" : "flex-start",
-        }}
-      >
+      <div className={`flex flex-col gap-1.5 max-w-[80%] ${isUser ? "items-end" : "items-start"}`}>
         <div
-          style={{
-            borderRadius: 22,
-            padding: "12px 16px",
-            boxShadow: "var(--shadow-sm)",
-            ...(isUser
-              ? { borderBottomRightRadius: 6, background: "var(--bubble-user)", color: "var(--text-on-accent)" }
-              : {
-                  borderBottomLeftRadius: 6,
-                  border: "1px solid var(--border)",
-                  background: "var(--bubble-ai)",
-                  color: "var(--text-primary)",
-                }),
-          }}
+          className={`rounded-2xl px-4 py-3 text-sm shadow-sm leading-relaxed ${
+            isUser
+              ? "rounded-br-sm bg-accent text-white font-medium"
+              : "rounded-bl-sm border border-slate-850 bg-slate-900/40 text-slate-100"
+          }`}
         >
           {isUser ? (
-            <span style={{ whiteSpace: "pre-wrap" }}>{text}</span>
+            <span className="whitespace-pre-wrap">{text}</span>
           ) : (
-            <div
-              className="chat-markdown"
-              style={{ fontSize: 15, lineHeight: 2, color: "var(--text-primary)" }}
-            >
+            <div className="chat-markdown prose prose-invert prose-sm max-w-none text-slate-200">
               <ReactMarkdown
                 components={{
                   code: ({ className, children }) =>
@@ -365,37 +246,19 @@ export function ChatMessage({
               >
                 {text}
               </ReactMarkdown>
+              
               {isStreaming && (
                 <span
-                  style={{
-                    marginLeft: 2,
-                    display: "inline-block",
-                    height: "1em",
-                    width: 2,
-                    transform: "translateY(2px)",
-                    borderRadius: 1,
-                    background: "var(--accent)",
-                    verticalAlign: "middle",
-                    animation: "textCursor 0.7s ease-in-out infinite",
-                  }}
+                  className="inline-block h-3.5 w-1.5 bg-accent ml-0.5 align-middle animate-pulse rounded-sm"
                   aria-hidden="true"
                 />
               )}
             </div>
           )}
         </div>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            fontSize: 12,
-            color: "var(--text-muted)",
-            opacity: 0,
-            transition: "opacity 0.2s",
-          }}
-          className="chat-meta"
-        >
+        
+        {/* Metadata section (fades in on hover of message container) */}
+        <div className="flex items-center gap-2 text-[10px] font-semibold text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200 mt-0.5">
           {time && <span>{time}</span>}
           {!isUser && onSpeak && onStopSpeak && (
             <SpeakButton text={text} onSpeak={onSpeak} isSpeaking={isSpeaking} isLoading={isTtsLoading} onStop={onStopSpeak} />
@@ -408,25 +271,10 @@ export function ChatMessage({
       </div>
 
       {isUser && (
-        <div
-          style={{
-            display: "grid",
-            placeItems: "center",
-            width: 40,
-            height: 40,
-            flexShrink: 0,
-            overflow: "hidden",
-            borderRadius: "50%",
-            background: "var(--ink)",
-            fontSize: 12,
-            fontWeight: 600,
-            color: "var(--text-on-accent)",
-            boxShadow: "var(--shadow-sm)",
-          }}
-        >
+        <div className="shrink-0">
           <UserAvatar />
         </div>
       )}
-    </div>
+    </motion.div>
   );
 }

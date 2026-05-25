@@ -12,51 +12,29 @@ export function ChatHeader({ personaId, isLoading }: Props) {
   const Avatar = persona.avatar;
 
   return (
-    <div
-      style={{
-        display: "flex",
-        height: 56,
-        flexShrink: 0,
-        alignItems: "center",
-        gap: 12,
-        borderBottom: "1px solid var(--border)",
-        background: "var(--surface)",
-        padding: "0 16px",
-        backdropFilter: "blur(12px)",
-      }}
-    >
+    <div className="flex h-14 shrink-0 items-center justify-between border-b border-slate-900 bg-slate-950/60 px-4 md:px-6 backdrop-blur-md z-30">
       <div
-        className="anim-fade-in"
+        className="flex items-center gap-3 animate-in fade-in duration-300"
         key={personaId}
-        style={{ display: "flex", alignItems: "center", gap: 12 }}
       >
-        <div style={{ position: "relative" }}>
-          <Avatar size={28} />
-          {/* Online indicator */}
+        <div className="relative">
+          <Avatar size={32} />
+          {/* Online indicator dot */}
           <div
-            style={{
-              position: "absolute",
-              bottom: -1,
-              right: -1,
-              width: 8,
-              height: 8,
-              borderRadius: "50%",
-              background: isLoading ? "var(--accent)" : "var(--success)",
-              border: "2px solid var(--surface)",
-              animation: isLoading ? "pulse 1.5s infinite" : "none",
-            }}
+            className={`absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-slate-950 transition-colors duration-300 ${
+              isLoading ? "bg-accent animate-pulse" : "bg-emerald-500"
+            }`}
           />
         </div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <span style={{ fontSize: 14, fontWeight: 500, color: "var(--ink)", lineHeight: 1.3 }}>
+        
+        <div className="flex flex-col">
+          <span className="text-xs font-semibold text-slate-100 leading-tight tracking-wide">
             {persona.label}
           </span>
           <span
-            style={{
-              fontSize: 11,
-              color: isLoading ? "var(--accent)" : "var(--text-muted)",
-              transition: "color 0.2s",
-            }}
+            className={`text-[10px] transition-colors duration-300 leading-none mt-0.5 ${
+              isLoading ? "text-accent font-medium" : "text-slate-450"
+            }`}
           >
             {isLoading ? "đang trả lời..." : persona.specialty}
           </span>

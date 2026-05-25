@@ -1,16 +1,9 @@
 "use client";
 
 import { useRef, useCallback } from "react";
-import {
-  ArrowUpOutlined,
-  AudioOutlined,
-  PauseOutlined,
-  LoadingOutlined,
-  SoundOutlined,
-  CheckOutlined,
-} from "@ant-design/icons";
+import { Mic, MicOff, Send, Square, Loader2, Volume2, Check } from "lucide-react";
 
-import { PersonaSwitcher } from "@/app/(app)/english-chatbot/_components/PersonaSwitcher";
+import { PersonaSwitcher } from "./PersonaSwitcher";
 import type { useVoiceInput } from "@/hooks/useVoiceInput";
 import type { useTextToSpeech } from "@/hooks/useTextToSpeech";
 
@@ -84,98 +77,33 @@ export function ChatInputBar({
   }
 
   return (
-    <div
-      style={{
-        flexShrink: 0,
-        background: "var(--bg)",
-        padding: "16px",
-        backdropFilter: "blur(12px)",
-      }}
-    >
-      <div
-        style={{
-          margin: "0 auto",
-          maxWidth: 900,
-          display: "flex",
-          flexDirection: "column",
-          gap: 12,
-        }}
-      >
-        <div
-          className="chat-input-container"
-          style={{
-            display: "flex",
-            alignItems: "flex-end",
-            gap: 12,
-            borderRadius: "var(--radius-lg)",
-            border: "1px solid var(--border)",
-            background: "var(--surface)",
-            padding: 12,
-            boxShadow: "var(--shadow-md)",
-            transition: "border-color 0.2s, box-shadow 0.2s",
-          }}
-        >
-          <PersonaSwitcher
-            value={selectedPersonaId}
-            onChange={onPersonaChange}
-            disabled={isLoading}
-          />
+    <div className="flex-shrink-0 bg-slate-950 px-4 py-4 md:px-6 md:pb-6 z-25 border-t border-slate-900 bg-slate-950/60 backdrop-blur-md">
+      <div className="mx-auto max-w-3xl flex flex-col gap-3">
+        {/* Input Bar Container */}
+        <div className="flex items-end gap-2.5 rounded-2xl border border-slate-850 bg-slate-900/20 p-3 shadow-md focus-within:border-accent/40 focus-within:ring-1 focus-within:ring-accent/40 transition-all duration-200">
+          
+          <div className="pb-1">
+            <PersonaSwitcher
+              value={selectedPersonaId}
+              onChange={onPersonaChange}
+              disabled={isLoading}
+            />
+          </div>
+
           <textarea
             ref={textareaRef}
             value={input}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            placeholder="Nhập câu hỏi hoặc câu trả lời bằng tiếng Anh..."
+            placeholder="Hỏi bằng tiếng Anh hoặc chọn một gia sư bên trái..."
             disabled={isLoading}
             rows={1}
-            style={{
-              minHeight: 44,
-              flex: 1,
-              resize: "none",
-              border: 0,
-              background: "transparent",
-              padding: "8px",
-              fontSize: 15,
-              lineHeight: 1.6,
-              color: "var(--text-primary)",
-              outline: "none",
-            }}
+            className="flex-1 min-h-[38px] max-h-[160px] resize-none border-0 bg-transparent py-2 px-2 text-xs md:text-sm leading-relaxed text-slate-100 placeholder-slate-500 outline-none focus:ring-0 focus:outline-none"
           />
 
           {/* Mic Button */}
           {voice.isSupported && (
             <button
-              style={{
-                display: "grid",
-                width: 44,
-                height: 44,
-                flexShrink: 0,
-                placeItems: "center",
-                borderRadius: "50%",
-                border: voice.isListening
-                  ? "2px solid var(--error)"
-                  : voice.isTranscribing
-                    ? "2px solid var(--accent)"
-                    : "1.5px solid var(--border)",
-                color: voice.isListening
-                  ? "var(--error)"
-                  : voice.isTranscribing
-                    ? "var(--accent)"
-                    : "var(--text-muted)",
-                background: voice.isListening
-                  ? "var(--error-bg)"
-                  : voice.isTranscribing
-                    ? "var(--accent-muted)"
-                    : "transparent",
-                cursor:
-                  isLoading || voice.isTranscribing
-                    ? "not-allowed"
-                    : "pointer",
-                transition: "all 0.2s",
-                animation: voice.isListening || voice.isTranscribing
-                  ? "pulse 1.5s infinite"
-                  : "none",
-              }}
               onClick={() => {
                 if (voice.isListening) {
                   voice.stop();
@@ -184,6 +112,13 @@ export function ChatInputBar({
                 }
               }}
               disabled={isLoading || voice.isTranscribing}
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-all duration-200 cursor-pointer shadow-sm relative active:scale-95 ${
+                voice.isListening
+                  ? "border-red-500 text-red-500 bg-red-950/20 animate-pulse"
+                  : voice.isTranscribing
+                    ? "border-accent text-accent bg-accent/10"
+                    : "border-slate-800 text-slate-400 bg-slate-900/50 hover:border-slate-700 hover:text-slate-200"
+              } disabled:opacity-40 disabled:cursor-not-allowed`}
               aria-label={
                 voice.isListening
                   ? "Dừng ghi âm"
@@ -192,144 +127,84 @@ export function ChatInputBar({
                     : "Nói tiếng Anh"
               }
             >
-              <span style={{ fontSize: 18 }}>
-                {voice.isListening ? (
-                  <PauseOutlined />
-                ) : voice.isTranscribing ? (
-                  <LoadingOutlined spin />
-                ) : (
-                  <AudioOutlined />
-                )}
-              </span>
+              {voice.isListening ? (
+                <MicOff className="h-4 w-4" />
+              ) : voice.isTranscribing ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Mic className="h-4 w-4" />
+              )}
             </button>
           )}
 
           {/* Send / Stop button */}
           {isLoading ? (
             <button
-              style={{
-                display: "grid",
-                width: 44,
-                height: 44,
-                flexShrink: 0,
-                placeItems: "center",
-                borderRadius: "50%",
-                border: "none",
-                color: "var(--text-on-accent)",
-                boxShadow: "var(--shadow-sm)",
-                cursor: "pointer",
-                background: "var(--error)",
-                transition: "background 0.2s, transform 0.15s",
-              }}
               onClick={onStop}
-              aria-label="Dừng trả lời"
-              title="Dừng trả lời"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-500 hover:bg-red-600 text-white transition-all duration-200 cursor-pointer shadow-sm active:scale-95"
+              aria-label="Dừng phản hồi"
+              title="Dừng phản hồi"
             >
-              <PauseOutlined style={{ fontSize: 14 }} />
+              <Square className="h-4 w-4 fill-current" />
             </button>
           ) : (
             <button
-              style={{
-                display: "grid",
-                width: 44,
-                height: 44,
-                flexShrink: 0,
-                placeItems: "center",
-                borderRadius: "50%",
-                border: "none",
-                color: "var(--text-on-accent)",
-                boxShadow: "var(--shadow-sm)",
-                cursor: input.trim() ? "pointer" : "not-allowed",
-                background: input.trim() ? "var(--accent)" : "var(--ink)",
-                transition: "background 0.2s, transform 0.15s",
-                opacity: !input.trim() ? 0.6 : 1,
-              }}
               onClick={onSend}
               disabled={!input.trim()}
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all duration-200 cursor-pointer shadow-sm active:scale-95 ${
+                input.trim()
+                  ? "bg-accent text-white hover:bg-accent-hover"
+                  : "bg-slate-900 border border-slate-850 text-slate-650 cursor-not-allowed opacity-50"
+              }`}
             >
-              <ArrowUpOutlined style={{ fontSize: 18 }} />
+              <Send className="h-4 w-4" />
             </button>
           )}
         </div>
 
-        {/* Hints row */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 8,
-            flexWrap: "wrap",
-            fontSize: 12,
-            color: "var(--text-muted)",
-          }}
-        >
-          <span>
-            Enter để gửi · Shift+Enter xuống dòng
-            {voice.isSupported ? " · nói" : ""}
+        {/* Hints and pill controls row */}
+        <div className="flex items-center justify-between gap-4 flex-wrap text-[10px] text-slate-500 font-semibold px-1">
+          <span className="hidden sm:inline font-mono">
+            Enter để gửi · Shift+Enter để xuống dòng
           </span>
-          {voice.isSupported && tts.isSupported && (
-            <button
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 4,
-                padding: "3px 10px",
-                borderRadius: 999,
-                border: voiceMode
-                  ? "1.5px solid var(--accent)"
-                  : "1px solid var(--border)",
-                background: voiceMode
-                  ? "color-mix(in srgb, var(--accent) 10%, var(--surface))"
-                  : "var(--surface)",
-                color: voiceMode ? "var(--accent)" : "var(--text-muted)",
-                fontSize: 12,
-                fontWeight: 600,
-                cursor: "pointer",
-                transition: "all 0.2s",
-              }}
-              onClick={onToggleVoiceMode}
-            >
-              <AudioOutlined />{" "}
-              {voiceMode
-                ? `Chế độ nói (${voiceExchanges})`
-                : "Chế độ nói"}
-            </button>
-          )}
-          {voiceMode && (
-            <button
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                gap: 4,
-                padding: "3px 10px",
-                borderRadius: 999,
-                border: pronEnabled
-                  ? "1.5px solid var(--success)"
-                  : "1px solid var(--border)",
-                background: pronEnabled
-                  ? "color-mix(in srgb, var(--success) 8%, transparent)"
-                  : "var(--surface)",
-                color: pronEnabled
-                  ? "var(--success)"
-                  : "var(--text-muted)",
-                fontSize: 12,
-                fontWeight: 600,
-                cursor: "pointer",
-                transition: "all 0.2s",
-              }}
-              onClick={onTogglePronEnabled}
-            >
-              <SoundOutlined />{" "}
-              {pronEnabled ? (
-                <>
-                  Phản hồi phát âm <CheckOutlined />
-                </>
-              ) : (
-                "Phản hồi phát âm"
-              )}
-            </button>
-          )}
+          <span className="sm:hidden font-mono">
+            Nhấn Enter để gửi
+          </span>
+
+          <div className="flex items-center gap-2">
+            {/* Voice Mode toggle pill */}
+            {voice.isSupported && tts.isSupported && (
+              <button
+                onClick={onToggleVoiceMode}
+                className={`inline-flex items-center gap-1 px-3 py-1 rounded-full border text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
+                  voiceMode
+                    ? "border-accent bg-accent/10 text-accent font-bold"
+                    : "border-slate-800 bg-slate-900/30 text-slate-400 hover:border-slate-700 hover:text-slate-200"
+                }`}
+              >
+                <Mic className="h-3 w-3" />
+                <span>
+                  {voiceMode ? `Chế độ nói (${voiceExchanges})` : "Chế độ nói"}
+                </span>
+              </button>
+            )}
+
+            {/* Pronunciation Feedback toggle pill */}
+            {voiceMode && (
+              <button
+                onClick={onTogglePronEnabled}
+                className={`inline-flex items-center gap-1 px-3 py-1 rounded-full border text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
+                  pronEnabled
+                    ? "border-emerald-500/50 bg-emerald-950/20 text-emerald-450 font-bold"
+                    : "border-slate-800 bg-slate-900/30 text-slate-400 hover:border-slate-700 hover:text-slate-200"
+                }`}
+              >
+                <Volume2 className="h-3 w-3" />
+                <span>Phân tích phát âm</span>
+                {pronEnabled && <Check className="h-3 w-3 text-emerald-400" />}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -1,16 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import {
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  LoadingOutlined,
-  SoundOutlined,
-  DownOutlined,
-  UpOutlined,
-  BulbOutlined,
-} from "@ant-design/icons";
-import { Tag, Tooltip } from "antd";
+import { Loader2, Volume2, ChevronDown, ChevronUp, AlertCircle, Sparkles, CheckCircle2, XCircle } from "lucide-react";
 
 type WordAnalysis = {
   word: string;
@@ -35,15 +26,9 @@ interface Props {
 }
 
 function getScoreColor(score: number): string {
-  if (score >= 80) return "var(--success)";
-  if (score >= 50) return "var(--warning)";
-  return "var(--error)";
-}
-
-function getScoreBg(score: number): string {
-  if (score >= 80) return "color-mix(in srgb, var(--success) 8%, transparent)";
-  if (score >= 50) return "color-mix(in srgb, var(--warning) 8%, transparent)";
-  return "color-mix(in srgb, var(--error) 8%, transparent)";
+  if (score >= 80) return "text-emerald-450 border-emerald-950/80 bg-emerald-950/20";
+  if (score >= 50) return "text-amber-450 border-amber-950/80 bg-amber-950/20";
+  return "text-red-405 border-red-950/80 bg-red-950/20";
 }
 
 function getScoreLabel(score: number): string {
@@ -51,7 +36,7 @@ function getScoreLabel(score: number): string {
   if (score >= 80) return "Rất tốt";
   if (score >= 60) return "Khá tốt";
   if (score >= 40) return "Tạm được";
-  return "Cần luyện";
+  return "Cần luyện thêm";
 }
 
 export function PronunciationFeedback({ data, onListenCorrect }: Props) {
@@ -60,13 +45,8 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
   // Loading state
   if (data.status === "loading") {
     return (
-      <div style={{
-        display: "inline-flex", alignItems: "center", gap: 6,
-        padding: "4px 12px", borderRadius: 99, fontSize: 12,
-        background: "var(--accent-muted)", color: "var(--accent)",
-        marginTop: 4,
-      }}>
-        <LoadingOutlined style={{ fontSize: 11 }} />
+      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-slate-900 border border-slate-800 text-slate-400 mt-1 animate-pulse">
+        <Loader2 className="h-3 w-3 animate-spin text-accent" />
         <span>Đang phân tích phát âm...</span>
       </div>
     );
@@ -75,96 +55,95 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
   // Error state
   if (data.status === "error") {
     return (
-      <div style={{
-        display: "inline-flex", alignItems: "center", gap: 6,
-        padding: "4px 12px", borderRadius: 99, fontSize: 12,
-        background: "var(--error-bg)", color: "var(--error)",
-        marginTop: 4,
-      }}>
-        <CloseCircleOutlined style={{ fontSize: 11 }} />
-        <span>Không thể phân tích</span>
+      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-red-950/20 border border-red-900/30 text-red-400 mt-1">
+        <AlertCircle className="h-3 w-3" />
+        <span>Không thể phân tích phát âm</span>
       </div>
     );
   }
 
   // Done state
   const score = data.score ?? 0;
-  const color = getScoreColor(score);
-  const bg = getScoreBg(score);
+  const badgeStyle = getScoreColor(score);
 
   return (
-    <div style={{ marginTop: 4 }}>
+    <div className="mt-1.5 flex flex-col items-end">
       {/* Collapsed: Score badge */}
       <button
         onClick={() => setExpanded((e) => !e)}
-        style={{
-          display: "inline-flex", alignItems: "center", gap: 6,
-          padding: "4px 12px", borderRadius: 99, fontSize: 12, fontWeight: 500,
-          background: bg, color, border: `1px solid ${color}33`,
-          cursor: "pointer", transition: "all 0.2s",
-        }}
+        className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-98 shadow-sm ${badgeStyle}`}
       >
-        <SoundOutlined /> {score}/100 · {getScoreLabel(score)}
-        {expanded ? <UpOutlined style={{ fontSize: 10 }} /> : <DownOutlined style={{ fontSize: 10 }} />}
+        <Volume2 className="h-3.5 w-3.5" />
+        <span>{score}/100 · {getScoreLabel(score)}</span>
+        {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
       </button>
 
-      {/* Expanded */}
+      {/* Expanded view */}
       {expanded && (
-        <div style={{
-          marginTop: 8, padding: 12, borderRadius: 10,
-          background: "var(--surface)", border: "1px solid var(--border)",
-          fontSize: 13,
-        }}>
-          {/* Scores row */}
-          <div style={{ display: "flex", gap: 16, marginBottom: 10 }}>
-            <span style={{ color: "var(--text-secondary)" }}>
-              Chính xác: <strong style={{ color }}>{data.accuracy ?? 0}%</strong>
-            </span>
-            <span style={{ color: "var(--text-secondary)" }}>
-              Trôi chảy: <strong style={{ color }}>{data.fluency ?? 0}%</strong>
-            </span>
+        <div className="mt-2 w-full max-w-sm rounded-2xl border border-slate-850 bg-slate-900/60 p-4 text-xs text-slate-350 shadow-md animate-in fade-in slide-in-from-top-1 duration-200">
+          {/* Detailed Scores Grid */}
+          <div className="grid grid-cols-2 gap-4 mb-3 pb-3 border-b border-slate-800/60">
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Độ chính xác</span>
+              <span className="text-sm font-semibold text-slate-200">{data.accuracy ?? 0}%</span>
+            </div>
+            <div className="flex flex-col gap-0.5">
+              <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Độ trôi chảy</span>
+              <span className="text-sm font-semibold text-slate-200">{data.fluency ?? 0}%</span>
+            </div>
           </div>
 
-          {/* Word analysis */}
+          {/* Word Analysis Tags */}
           {data.wordAnalysis && data.wordAnalysis.length > 0 && (
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 4, marginBottom: 10 }}>
-              {data.wordAnalysis.map((w, i) => (
-                <Tooltip key={i} title={w.issue || "Chính xác!"}>
-                  <Tag
-                    color={w.correct ? "success" : "error"}
-                    style={{ fontSize: 12, padding: "2px 6px", cursor: "help", margin: 0 }}
+            <div className="mb-3.5">
+              <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1.5">Phân tích từng từ</div>
+              <div className="flex flex-wrap gap-1.5">
+                {data.wordAnalysis.map((w, i) => (
+                  <div
+                    key={i}
+                    className={`relative group inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border text-xs font-medium cursor-help ${
+                      w.correct
+                        ? "bg-emerald-950/20 border-emerald-900/40 text-emerald-450"
+                        : "bg-red-950/20 border-red-900/40 text-red-455"
+                    }`}
                   >
-                    {w.correct ? <CheckCircleOutlined style={{ fontSize: 10 }} /> : <CloseCircleOutlined style={{ fontSize: 10 }} />}
-                    {" "}{w.word}
-                  </Tag>
-                </Tooltip>
-              ))}
+                    {w.correct ? (
+                      <CheckCircle2 className="h-3 w-3" />
+                    ) : (
+                      <XCircle className="h-3 w-3" />
+                    )}
+                    <span>{w.word}</span>
+
+                    {/* Custom CSS Tooltip */}
+                    <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 hidden group-hover:block bg-slate-950 border border-slate-800 text-slate-200 text-[10px] font-semibold px-2 py-1 rounded-lg shadow-lg z-50 whitespace-nowrap">
+                      {w.issue || (w.correct ? "Chính xác!" : "Phát âm chưa chuẩn")}
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
 
-          {/* Tips */}
+          {/* Tips / Feedback */}
           {data.tips && data.tips.length > 0 && (
-            <div style={{ marginBottom: 8 }}>
+            <div className="mb-3.5 space-y-1 bg-slate-950/40 p-2.5 rounded-xl border border-slate-850">
               {data.tips.map((tip, i) => (
-                <p key={i} style={{ margin: "0 0 2px", fontSize: 12, color: "var(--text-secondary)" }}>
-                  <BulbOutlined style={{ fontSize: 11, color: "var(--accent)" }} /> {tip}
-                </p>
+                <div key={i} className="flex gap-1.5 text-slate-400 leading-relaxed items-start">
+                  <Sparkles className="h-3.5 w-3.5 text-accent shrink-0 mt-0.5" />
+                  <span>{tip}</span>
+                </div>
               ))}
             </div>
           )}
 
-          {/* Listen button */}
+          {/* Listen Button */}
           {onListenCorrect && (
             <button
               onClick={onListenCorrect}
-              style={{
-                display: "inline-flex", alignItems: "center", gap: 4,
-                padding: "4px 10px", borderRadius: 6, fontSize: 12,
-                border: "1px solid var(--border)", background: "transparent",
-                color: "var(--accent)", cursor: "pointer",
-              }}
+              className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-850 hover:text-white transition-all py-2 text-xs font-semibold text-slate-300 cursor-pointer shadow-sm active:scale-98"
             >
-              <SoundOutlined /> Nghe lại
+              <Volume2 className="h-3.5 w-3.5" />
+              <span>Nghe phát âm chuẩn</span>
             </button>
           )}
         </div>

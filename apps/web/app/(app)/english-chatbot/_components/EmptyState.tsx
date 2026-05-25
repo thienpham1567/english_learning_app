@@ -1,5 +1,7 @@
 "use client";
 
+import { motion } from "motion/react";
+import { Sparkles } from "lucide-react";
 import { PERSONAS, type Persona } from "@/lib/chat/personas";
 
 type Props = {
@@ -8,196 +10,143 @@ type Props = {
   onSuggestedPrompt: (text: string) => void;
 };
 
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.08,
+    },
+  },
+};
+
+const itemVariants = {
+  hidden: { y: 15, opacity: 0 },
+  visible: { 
+    y: 0, 
+    opacity: 1,
+    transition: { type: "spring" as const, stiffness: 120, damping: 14 }
+  },
+};
+
 export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedPrompt }: Props) {
   const activePersona = PERSONAS.find((p) => p.id === selectedPersonaId) ?? PERSONAS[0];
 
   return (
-    <div
-      className="anim-fade-in"
-      style={{
-        margin: "auto",
-        display: "flex",
-        maxWidth: 760,
-        flexDirection: "column",
-        alignItems: "center",
-        textAlign: "center",
-      }}
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="m-auto flex max-w-2xl flex-col items-center text-center px-4 py-8"
     >
-      <h2
-        className="anim-fade-up anim-delay-1"
-        style={{
-          fontSize: 36,
-          fontStyle: "italic",
-          fontFamily: "var(--font-display)",
-          color: "var(--ink)",
-        }}
+      <motion.div variants={itemVariants} className="flex items-center gap-2 mb-2 text-accent bg-accent/5 px-3 py-1 rounded-full border border-accent/10">
+        <Sparkles className="h-3.5 w-3.5 animate-pulse" />
+        <span className="text-[10px] font-semibold uppercase tracking-widest font-mono">English Chatbot</span>
+      </motion.div>
+
+      <motion.h2
+        variants={itemVariants}
+        className="font-display text-3xl md:text-4xl italic font-semibold text-slate-100 tracking-wide"
       >
         Chọn gia sư để bắt đầu
-      </h2>
-      <p
-        className="anim-fade-up anim-delay-2"
-        style={{
-          marginTop: 8,
-          maxWidth: 400,
-          fontSize: 15,
-          color: "var(--text-secondary)",
-        }}
+      </motion.h2>
+      
+      <motion.p
+        variants={itemVariants}
+        className="mt-3 max-w-md text-sm text-slate-400 leading-relaxed"
       >
-        Mỗi gia sư có phong cách riêng — chọn người phù hợp nhất với bạn.
-      </p>
+        Mỗi gia sư có chuyên môn và phong cách phản hồi riêng. Hãy chọn người phù hợp nhất để đồng hành cùng bạn.
+      </motion.p>
 
       {/* Persona cards grid */}
-      <div
-        style={{
-          marginTop: 24,
-          display: "grid",
-          width: "100%",
-          gap: 12,
-          gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-        }}
+      <motion.div
+        variants={itemVariants}
+        className="mt-8 grid w-full gap-4 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
       >
-        {PERSONAS.map((persona, i) => (
+        {PERSONAS.map((persona) => (
           <PersonaCard
             key={persona.id}
             persona={persona}
             isSelected={persona.id === selectedPersonaId}
-            animDelay={Math.min(i + 3, 8)}
             onSelect={() => onSelectPersona(persona.id)}
           />
         ))}
-      </div>
+      </motion.div>
 
       {/* Suggested prompts */}
-      <div
-        className="anim-fade-up anim-delay-5"
-        style={{
-          marginTop: 28,
-          display: "flex",
-          width: "100%",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: 8,
-        }}
+      <motion.div
+        variants={itemVariants}
+        className="mt-10 flex w-full flex-col items-center gap-3"
       >
-        <span
-          style={{
-            fontSize: 12,
-            fontWeight: 600,
-            textTransform: "uppercase",
-            letterSpacing: "0.08em",
-            color: "var(--text-muted)",
-          }}
-        >
-          Thử hỏi
+        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono">
+          Gợi ý hội thoại
         </span>
-        <div
-          style={{
-            display: "flex",
-            flexWrap: "wrap",
-            justifyContent: "center",
-            gap: 8,
-          }}
-        >
+        <div className="flex flex-wrap justify-center gap-2 max-w-xl">
           {activePersona.suggestedPrompts.map((prompt) => (
-            <button
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
               key={prompt}
               onClick={() => onSuggestedPrompt(prompt)}
-              style={{
-                padding: "8px 16px",
-                borderRadius: 999,
-                border: "1px solid var(--border)",
-                background: "var(--surface)",
-                color: "var(--text-secondary)",
-                fontSize: 13,
-                cursor: "pointer",
-                transition: "all 0.2s",
-                maxWidth: 300,
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
-              }}
+              className="px-4 py-2 rounded-full border border-slate-800 bg-slate-900/60 text-xs font-semibold text-slate-350 hover:border-slate-700 hover:text-white transition-all cursor-pointer max-w-[280px] truncate shadow-sm"
             >
               {prompt}
-            </button>
+            </motion.button>
           ))}
         </div>
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
 function PersonaCard({
   persona,
   isSelected,
-  animDelay,
   onSelect,
 }: {
   persona: Persona;
   isSelected: boolean;
-  animDelay: number;
   onSelect: () => void;
 }) {
   const Avatar = persona.avatar;
 
   return (
-    <button
-      className={`anim-fade-up anim-delay-${animDelay}`}
+    <motion.button
+      whileHover={{ y: -4, scale: 1.01 }}
+      whileTap={{ scale: 0.99 }}
       onClick={onSelect}
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        gap: 8,
-        borderRadius: "var(--radius-lg)",
-        border: isSelected
-          ? "2px solid var(--accent)"
-          : "1px solid var(--border)",
-        background: isSelected ? "var(--accent-light)" : "var(--surface)",
-        padding: "20px 16px",
-        textAlign: "center",
-        boxShadow: isSelected
-          ? "0 0 0 1px var(--accent)"
-          : "var(--shadow-sm)",
-        transition:
-          "border-color 0.2s, background 0.2s, box-shadow 0.2s, transform 0.15s",
-        cursor: "pointer",
-      }}
+      className={`flex flex-col items-center gap-3.5 rounded-2xl border p-5 text-center transition-all duration-300 cursor-pointer shadow-sm relative ${
+        isSelected
+          ? "border-accent bg-accent/5 ring-1 ring-accent text-white"
+          : "border-slate-800 bg-slate-900/40 text-slate-300 hover:border-slate-700 hover:bg-slate-900/80"
+      }`}
     >
-      <Avatar size={48} />
-      <span
-        style={{
-          marginTop: 4,
-          fontSize: 15,
-          fontWeight: 600,
-          color: "var(--ink)",
-        }}
-      >
-        {persona.label}
-      </span>
-      <span
-        style={{
-          display: "inline-block",
-          padding: "2px 10px",
-          borderRadius: 999,
-          fontSize: 11,
-          fontWeight: 500,
-          background: isSelected ? "var(--accent)" : "var(--bg-deep)",
-          color: isSelected ? "var(--text-on-accent)" : "var(--text-secondary)",
-          transition: "background 0.2s, color 0.2s",
-        }}
-      >
-        {persona.specialty}
-      </span>
-      <span
-        style={{
-          marginTop: 2,
-          fontSize: 13,
-          lineHeight: 1.5,
-          color: "var(--text-secondary)",
-        }}
-      >
+      {isSelected && (
+        <span className="absolute top-3 right-3 flex h-2 w-2 rounded-full bg-accent" />
+      )}
+      
+      <div className="p-1 rounded-full bg-slate-950/40">
+        <Avatar size={48} />
+      </div>
+
+      <div className="flex flex-col items-center gap-1.5">
+        <span className="text-sm font-semibold text-slate-100 leading-none">
+          {persona.label}
+        </span>
+        <span
+          className={`inline-block px-2.5 py-0.5 rounded-full text-[9px] font-bold tracking-wide transition-colors ${
+            isSelected
+              ? "bg-accent text-white"
+              : "bg-slate-800 text-slate-400"
+          }`}
+        >
+          {persona.specialty}
+        </span>
+      </div>
+
+      <p className="text-xs text-slate-450 leading-relaxed mt-1">
         {persona.description}
-      </span>
-    </button>
+      </p>
+    </motion.button>
   );
 }

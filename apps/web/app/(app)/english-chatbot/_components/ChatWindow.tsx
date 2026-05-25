@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowDownOutlined } from "@ant-design/icons";
+import { ArrowDown, AlertCircle } from "lucide-react";
 
 import { TypingIndicator } from "@/app/(app)/english-chatbot/_components/TypingIndicator";
 import { ChatMessage } from "@/app/(app)/english-chatbot/_components/ChatMessage";
@@ -17,36 +17,29 @@ import { useChatScroll } from "@/hooks/useChatScroll";
 import { useChatVoice } from "@/hooks/useChatVoice";
 
 import { DEFAULT_PERSONA_ID, PERSONAS } from "@/lib/chat/personas";
-import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 
-export function getMessageSpacingStyle(
+export function getMessageSpacingClass(
   currentMessage: PageMessage,
   previousMessage?: PageMessage,
-): React.CSSProperties {
-  if (!previousMessage) return {};
-  return { marginTop: currentMessage.role === previousMessage.role ? 4 : 28 };
+): string {
+  if (!previousMessage) return "";
+  return currentMessage.role === previousMessage.role ? "mt-1.5" : "mt-6";
 }
 
 function ChatSkeleton() {
   return (
-    <div style={{ maxWidth: 900, width: "100%", margin: "0 auto", padding: "24px 0" }}>
-      <div style={{ display: "flex", gap: 12, marginBottom: 24 }}>
-        <div
-          style={{
-            width: 32, height: 32, borderRadius: "50%",
-            background: "var(--bg-deep)", flexShrink: 0,
-            animation: "pulse 1.5s infinite",
-          }}
-        />
-        <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 8 }}>
-          <div style={{ height: 16, width: "75%", borderRadius: 8, background: "var(--bg-deep)", animation: "pulse 1.5s infinite" }} />
-          <div style={{ height: 16, width: "50%", borderRadius: 8, background: "var(--bg-deep)", animation: "pulse 1.5s infinite" }} />
+    <div className="max-w-2xl w-full mx-auto py-6 space-y-6">
+      <div className="flex gap-3">
+        <div className="w-8 h-8 rounded-full bg-slate-900 border border-slate-850 shrink-0 animate-pulse" />
+        <div className="flex-1 flex flex-col gap-2">
+          <div className="h-4 w-[75%] rounded-lg bg-slate-900 border border-slate-850 animate-pulse" />
+          <div className="h-4 w-[50%] rounded-lg bg-slate-900 border border-slate-850 animate-pulse" />
         </div>
       </div>
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 24 }}>
-        <div style={{ width: "66%", display: "flex", flexDirection: "column", gap: 8 }}>
-          <div style={{ height: 16, width: "100%", borderRadius: 8, background: "var(--bg-deep)", animation: "pulse 1.5s infinite" }} />
-          <div style={{ height: 16, width: "80%", borderRadius: 8, background: "var(--bg-deep)", animation: "pulse 1.5s infinite" }} />
+      <div className="flex justify-end">
+        <div className="w-[66%] flex flex-col gap-2 items-end">
+          <div className="h-4 w-full rounded-lg bg-slate-900 border border-slate-850 animate-pulse" />
+          <div className="h-4 w-[80%] rounded-lg bg-slate-900 border border-slate-850 animate-pulse" />
         </div>
       </div>
     </div>
@@ -139,55 +132,23 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const hasMessages = chat.messages.length > 0;
 
   return (
-    <div
-      style={{
-        position: "relative",
-        display: "flex",
-        height: "100%",
-        minHeight: 0,
-        flex: 1,
-        flexDirection: "column",
-        overflow: "hidden",
-        background: "linear-gradient(135deg, var(--surface), var(--bg))",
-      }}
-    >
+    <div className="relative flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-slate-950 z-10">
+      
       <ChatHeader personaId={selectedPersonaId} isLoading={chat.isLoading} />
 
       <div
         ref={scroll.scrollContainerRef}
         onScroll={scroll.handleScroll}
-        style={{
-          position: "relative",
-          flex: 1,
-          minHeight: 0,
-          overflowY: "auto",
-          padding: "24px 16px",
-        }}
+        className="relative flex-1 min-h-0 overflow-y-auto px-4 py-6 md:px-6 md:py-8 z-10"
       >
         {/* Grain overlay */}
-        <div className="grain-overlay" />
-        {/* Warm radial glow */}
-        <div
-          style={{
-            pointerEvents: "none",
-            position: "absolute",
-            inset: 0,
-            background:
-              "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--accent) 7%, transparent) 0%, transparent 70%)",
-          }}
-        />
+        <div className="grain-overlay opacity-30" />
+        
+        {/* Warm radial glow behind the conversations */}
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_0%,rgba(192,125,43,0.06),transparent_70%)] z-0" />
 
-        <div
-          style={{
-            position: "relative",
-            margin: "0 auto",
-            display: "flex",
-            minHeight: "100%",
-            width: "100%",
-            maxWidth: 900,
-            flexDirection: "column",
-          }}
-        >
+        <div className="relative mx-auto flex min-h-full w-full max-w-2xl flex-col z-10">
+          
           {chat.isLoadingMessages && conversationId && <ChatSkeleton />}
 
           {!hasMessages && !chat.isLoadingMessages && (
@@ -202,11 +163,11 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
           )}
 
           {hasMessages && !chat.isLoadingMessages && (
-            <div style={{ display: "flex", flexDirection: "column" }}>
+            <div className="flex flex-col">
               {chat.messages.map((m, index) => (
                 <div
                   key={m.id}
-                  style={getMessageSpacingStyle(m, chat.messages[index - 1])}
+                  className={getMessageSpacingClass(m, chat.messages[index - 1])}
                 >
                   <ChatMessage
                     message={m}
@@ -231,17 +192,12 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                     isLastAssistant={m.id === lastAssistantId}
                     onRegenerate={chat.regenerate}
                   />
+
                   {/* Inline pronunciation feedback for voice messages */}
                   {m.role === "user" &&
                     chatVoice.isVoiceMessage(m.id) &&
                     chatVoice.pronFeedback.has(m.id) && (
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                          paddingRight: 4,
-                        }}
-                      >
+                      <div className="flex justify-end pr-8">
                         <PronunciationFeedback
                           data={chatVoice.pronFeedback.get(m.id)!}
                           onListenCorrect={
@@ -254,8 +210,9 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                     )}
                 </div>
               ))}
+              
               {chat.isLoading && !streamingHasStarted && (
-                <div className="anim-fade-in" style={{ marginTop: 28 }}>
+                <div className="mt-6">
                   <TypingIndicator
                     personaName={activePersona.label.split(" —")[0]}
                   />
@@ -265,40 +222,26 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
           )}
 
           {chat.error && (
-            <div
-              className="anim-fade-up"
-              style={{
-                marginTop: 20,
-                borderRadius: "var(--radius)",
-                border: "1px solid color-mix(in srgb, var(--error) 16%, transparent)",
-                background: "var(--error-bg)",
-                padding: "12px 16px",
-                fontSize: 14,
-                color: "var(--error)",
-              }}
-            >
-              <p>{chat.error}</p>
-              <div style={{ display: "flex", gap: 12, marginTop: 8 }}>
-                {chat.lastSendRef.current && !chat.isLoading && (
+            <div className="mt-5 flex gap-3 rounded-2xl border border-red-950 bg-red-950/20 p-4 text-xs text-red-400 animate-in fade-in slide-in-from-bottom-1 duration-200">
+              <AlertCircle className="h-4.5 w-4.5 shrink-0" />
+              <div className="flex-1 flex flex-col gap-2">
+                <p className="font-semibold leading-relaxed">{chat.error}</p>
+                <div className="flex gap-4">
+                  {chat.lastSendRef.current && !chat.isLoading && (
+                    <button
+                      onClick={chat.retryLast}
+                      className="font-bold underline cursor-pointer text-red-450 hover:text-red-300 transition-colors"
+                    >
+                      Thử lại
+                    </button>
+                  )}
                   <button
-                    style={{
-                      fontWeight: 500, textDecoration: "underline",
-                      background: "none", border: "none", cursor: "pointer", color: "inherit",
-                    }}
-                    onClick={chat.retryLast}
+                    onClick={() => chat.setError(null)}
+                    className="font-bold underline cursor-pointer text-slate-400 hover:text-slate-200 transition-colors"
                   >
-                    Thử lại
+                    Đóng
                   </button>
-                )}
-                <button
-                  style={{
-                    fontWeight: 500, textDecoration: "underline",
-                    background: "none", border: "none", cursor: "pointer", color: "inherit",
-                  }}
-                  onClick={() => chat.setError(null)}
-                >
-                  Đóng
-                </button>
+                </div>
               </div>
             </div>
           )}
@@ -309,31 +252,11 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
 
       {scroll.showScrollBtn && (
         <button
-          className="anim-scale-in"
-          style={{
-            position: "absolute",
-            bottom: 88,
-            left: "50%",
-            transform: "translateX(-50%)",
-            zIndex: 10,
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            borderRadius: 999,
-            border: "1px solid var(--border)",
-            background: "var(--surface)",
-            padding: "6px 12px",
-            fontSize: 12,
-            fontWeight: 500,
-            color: "var(--text-secondary)",
-            boxShadow: "var(--shadow-lg)",
-            cursor: "pointer",
-            transition: "background 0.2s, color 0.2s",
-          }}
           onClick={scroll.scrollToBottom}
+          className="absolute bottom-24 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1.5 rounded-full border border-slate-800 bg-slate-900/90 backdrop-blur-md px-3.5 py-2 text-xs font-semibold text-slate-350 hover:text-white shadow-lg cursor-pointer transition-all duration-200 active:scale-95 animate-in fade-in zoom-in-90"
         >
-          <ArrowDownOutlined style={{ fontSize: 12 }} />
-          Xuống cuối
+          <ArrowDown className="h-3.5 w-3.5" />
+          <span>Xuống cuối</span>
         </button>
       )}
 
