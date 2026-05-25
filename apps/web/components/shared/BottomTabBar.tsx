@@ -6,9 +6,7 @@ import { Flex, Typography, Card } from "antd";
 import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
 import {
-  BookFilled,
   AppstoreOutlined,
-  BulbOutlined,
   FireOutlined,
   SyncOutlined,
   TrophyOutlined,
@@ -20,6 +18,8 @@ import {
   DashboardOutlined,
   NodeIndexOutlined,
   MessageOutlined,
+  SoundOutlined,
+  SolutionOutlined,
 } from "@ant-design/icons";
 
 const { Text } = Typography;
@@ -82,7 +82,7 @@ const EXAM_HUB_ITEMS = [
 
 const REVIEW_HUB_ITEMS = [
   { label: "Sổ lỗi sai", icon: <ExceptionOutlined />, href: "/error-notebook" },
-  { label: "Ôn tập Flashcard", icon: <BookFilled />, href: "/flashcards" },
+  { label: "Ôn tập Flashcard", icon: <SyncOutlined />, href: "/flashcards" },
 ];
 
 const MORE_HUB_ITEMS = [
@@ -92,12 +92,13 @@ const MORE_HUB_ITEMS = [
     href: "/daily-challenge",
   },
   { label: "AI Chatbot", icon: <MessageOutlined />, href: "/english-chatbot" },
+  { label: "Đọc to", icon: <SoundOutlined />, href: "/read-aloud" },
   {
     label: "Lộ trình ngữ pháp",
     icon: <NodeIndexOutlined />,
     href: "/grammar-roadmap",
   },
-  { label: "Ngữ pháp TOEIC", icon: <BulbOutlined />, href: "/grammar-lessons" },
+  { label: "Bài học ngữ pháp", icon: <SolutionOutlined />, href: "/grammar-lessons" },
   { label: "Từ vựng", icon: <StarOutlined />, href: "/my-vocabulary" },
 ];
 
@@ -114,6 +115,7 @@ function getActiveTab(pathname: string): string {
     return "review";
   if (
     pathname.startsWith("/english-chatbot") ||
+    pathname.startsWith("/read-aloud") ||
     pathname.startsWith("/grammar-roadmap") ||
     pathname.startsWith("/grammar-lessons") ||
     pathname.startsWith("/my-vocabulary") ||

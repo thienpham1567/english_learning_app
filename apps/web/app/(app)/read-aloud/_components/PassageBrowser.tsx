@@ -56,6 +56,7 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.15 }}
+      className="read-aloud-panel"
       style={{
         background: "var(--surface)",
         borderRadius: "var(--radius-xl)",

@@ -52,6 +52,7 @@ export function TextInputPanel({
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 }}
+      className="read-aloud-panel"
       style={{
         background: "var(--surface)",
         borderRadius: "var(--radius-xl)",
@@ -98,30 +99,16 @@ export function TextInputPanel({
           onChange={(e) => onTextChange(e.target.value)}
           placeholder={"Dán hoặc nhập một đoạn văn tiếng Anh vào đây để nghe đọc thử...\n\nNhấp vào các văn bản mẫu bên dưới để thử nhanh."}
           maxLength={MAX_CHARS}
+          className="read-aloud-textarea"
           style={{
             width: "100%",
             minHeight: 320,
             resize: "vertical",
-            border: "1px solid var(--border)",
-            borderRadius: "var(--radius-lg)",
             padding: "var(--space-4)",
             fontSize: 16,
             lineHeight: 1.75,
             fontFamily: "var(--font-body)",
-            color: "var(--text-primary)",
-            background: "var(--surface-alt)",
             outline: "none",
-            transition: "all 0.25s ease",
-          }}
-          onFocus={(e) => {
-            e.currentTarget.style.borderColor = "var(--accent)";
-            e.currentTarget.style.boxShadow = "0 0 0 4px var(--accent-muted)";
-            e.currentTarget.style.background = "var(--surface)";
-          }}
-          onBlur={(e) => {
-            e.currentTarget.style.borderColor = "var(--border)";
-            e.currentTarget.style.boxShadow = "none";
-            e.currentTarget.style.background = "var(--surface-alt)";
           }}
         />
       </div>

@@ -255,76 +255,41 @@ export default function ReadAloudPage() {
             </Flex>
           </div>
         )}
-
-        {/* Feature Highlights */}
-        <div
-          style={{
-            background: "var(--surface)",
-            borderRadius: "var(--radius-xl)",
-            border: "1px solid var(--border)",
-            padding: "var(--space-5)",
-            boxShadow: "var(--shadow-sm)",
-          }}
-        >
-          <Title level={5} style={{ margin: "0 0 16px 0", color: "var(--text-primary)", fontSize: 15 }}>
-            🚀 Luyện phát âm & luyện nghe hiệu quả cùng Read Aloud
-          </Title>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-              gap: 16,
-            }}
-          >
-            {[
-              {
-                title: "So sánh các giọng đọc",
-                desc: "Nghe cùng một đoạn văn với accent Mỹ, Anh hoặc Úc giúp bạn dễ nhận diện sự khác biệt ngữ điệu.",
-                emoji: "🌏",
-              },
-              {
-                title: "Bộ nhớ đệm thông minh",
-                desc: "Đoạn văn đã nghe sẽ được cache cả trên server và trình duyệt. Nghe lại không tốn thêm token AI!",
-                emoji: "⚡",
-              },
-              {
-                title: "Điều chỉnh tốc độ",
-                desc: "Giảm tốc độ đọc xuống 0.8x để nghe chi tiết nối âm, tăng tốc lên 1.2x - 1.5x để thử thách phản xạ.",
-                emoji: "🎚️",
-              },
-              {
-                title: "Lịch sử & tái sử dụng",
-                desc: "Mọi đoạn văn bạn đã nghe đều được lưu lại. Mở lại bất kỳ lúc nào mà không cần nhập lại từ đầu.",
-                emoji: "📋",
-              },
-            ].map((card, i) => (
-              <div
-                key={i}
-                style={{
-                  background: "var(--surface-alt)",
-                  padding: "14px 16px",
-                  borderRadius: "var(--radius-lg)",
-                  border: "1px solid var(--border)",
-                }}
-              >
-                <div style={{ fontSize: 20, marginBottom: 8 }}>{card.emoji}</div>
-                <Text strong style={{ fontSize: 13, display: "block", marginBottom: 4, color: "var(--text-primary)" }}>
-                  {card.title}
-                </Text>
-                <Paragraph style={{ fontSize: 12, color: "var(--text-secondary)", margin: 0, lineHeight: 1.5 }}>
-                  {card.desc}
-                </Paragraph>
-              </div>
-            ))}
-          </div>
-        </div>
       </Flex>
 
-      {/* Responsive adjustments */}
+      {/* CSS adjustments */}
       <style>{`
+        .read-aloud-textarea {
+          border: 1px solid var(--border);
+          border-radius: var(--radius-lg);
+          color: var(--text-primary);
+          background: var(--surface-alt);
+          transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
+        }
+        .read-aloud-textarea:focus {
+          border-color: var(--accent);
+          box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 15%, transparent);
+          background: var(--surface);
+        }
+        .voice-grid {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+        
         @media (max-width: 860px) {
           .read-aloud-grid {
             grid-template-columns: 1fr !important;
+          }
+        }
+        @media (max-width: 600px) {
+          .read-aloud-panel {
+            padding: var(--space-4) !important;
+          }
+          .voice-grid {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr !important;
+            gap: 10px !important;
           }
         }
       `}</style>

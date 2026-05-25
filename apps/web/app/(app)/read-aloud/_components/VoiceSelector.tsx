@@ -18,6 +18,7 @@ export function VoiceSelector({ selectedRole, onSelectRole }: VoiceSelectorProps
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
+      className="read-aloud-panel"
       style={{
         background: "var(--surface)",
         borderRadius: "var(--radius-xl)",
@@ -33,7 +34,7 @@ export function VoiceSelector({ selectedRole, onSelectRole }: VoiceSelectorProps
         🗣️ Chọn giọng đọc
       </Text>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      <div className="voice-grid">
         {VOICES.map((v) => (
           <VoiceCard key={v.role} voice={v} isActive={selectedRole === v.role} onSelect={() => onSelectRole(v.role)} />
         ))}
