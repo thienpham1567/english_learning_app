@@ -110,7 +110,8 @@ export default function WritingToolsPage() {
 					border: "1.5px solid var(--border)",
 					borderRadius: "var(--radius-xl)",
 					padding: 6,
-					width: "100%"
+					width: "100%",
+					minWidth: "max-content",
 				}}>
 					{TABS.map((t) => {
 						const isActive = active === t.value;

@@ -1206,3 +1206,33 @@ button:focus-visible {
   gap: 20px;
 }
 
+/* ── Global Custom Input/Textarea Enhancements ── */
+.app-textarea, .app-input {
+  border: 1px solid var(--border) !important;
+  border-radius: var(--radius-lg) !important;
+  color: var(--text-primary) !important;
+  background: var(--surface-alt) !important;
+  transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease !important;
+}
+
+.app-textarea:focus, .app-input:focus {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 15%, transparent) !important;
+  background: var(--surface) !important;
+  outline: none !important;
+}
+
+.app-textarea.border-error, .app-input.border-error {
+  border-color: var(--error) !important;
+}
+
+/* ── Chat Window Input Container Highlight ── */
+.chat-input-container {
+  transition: border-color 0.25s ease, box-shadow 0.25s ease !important;
+}
+.chat-input-container:focus-within {
+  border-color: var(--accent) !important;
+  box-shadow: var(--shadow-md), 0 0 0 4px color-mix(in srgb, var(--accent) 15%, transparent) !important;
+}
+
+

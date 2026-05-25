@@ -397,19 +397,15 @@ export function GrammarChecker() {
           }}
           onKeyDown={handleKeyDown}
           placeholder="Type or paste your English text here..."
+          className={`app-textarea ${overLimit ? "border-error" : ""}`}
           style={{
             width: "100%",
             minHeight: 180,
             padding: 16,
-            borderRadius: 12,
-            border: overLimit ? "1px solid var(--error)" : "1px solid var(--border)",
-            background: "var(--card-bg)",
-            color: "var(--text-primary)",
             fontSize: 15,
             lineHeight: 1.7,
             resize: "vertical",
             fontFamily: "inherit",
-            transition: "border-color 0.2s",
           }}
         />
       </div>

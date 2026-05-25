@@ -143,12 +143,28 @@ export async function POST(req: Request) {
       personaId?: unknown;
     } | null;
 
-    const messages = Array.isArray(body?.messages) ? body.messages.filter(isChatMessage) : [];
+    const MAX_MESSAGE_TEXT_LENGTH = 10_000;
+
+    const messages = Array.isArray(body?.messages)
+      ? body.messages
+          .filter(isChatMessage)
+          .map((m) => ({
+            ...m,
+            text: m.text.slice(0, MAX_MESSAGE_TEXT_LENGTH),
+          }))
+      : [];
+
+    if (messages.length === 0) {
+      return createErrorSseResponse();
+    }
+
     const conversationId = typeof body?.conversationId === "string" ? body.conversationId : null;
     const personaId =
       typeof body?.personaId === "string" && PERSONA_IDS.includes(body.personaId)
         ? body.personaId
         : DEFAULT_PERSONA_ID;
+
+    log.info({ personaId, messageCount: messages.length }, "chat.request");
 
     const { instructions, input } = buildChatRequest(messages, personaId);
     const encoder = new TextEncoder();

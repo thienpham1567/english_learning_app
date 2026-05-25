@@ -133,20 +133,15 @@ export function TtsReader() {
 					}}
 					placeholder="Type any English phrase, sentence or paragraph here to hear it spoken..."
 					maxLength={250}
+					className={`app-textarea ${isOverLimit ? "border-error" : ""}`}
 					style={{
 						width: "100%",
 						minHeight: 120,
 						padding: 16,
-						borderRadius: "var(--radius-xl)",
-						border: isOverLimit ? "1.5px solid var(--error)" : "1.5px solid var(--border)",
-						background: "var(--surface)",
-						color: "var(--text-primary)",
 						fontSize: 15,
 						lineHeight: 1.7,
 						resize: "none",
 						fontFamily: "inherit",
-						outline: "none",
-						transition: "border-color 0.2s",
 					}}
 				/>
 			</div>
