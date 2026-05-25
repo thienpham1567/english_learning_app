@@ -17,18 +17,20 @@ export function SpeakingTab() {
   const [activePart, setActivePart] = useState<SpeakingPart>("part3");
 
   return (
-    <div style={{ maxWidth: 800, margin: "0 auto", width: "100%" }}>
+    <div className="max-w-3xl mx-auto w-full">
       {/* Part selector */}
-      <div style={{ display: "flex", gap: 8, padding: "8px 14px", flexWrap: "wrap", marginBottom: 8 }}>
+      <div className="flex gap-2 py-2 pb-3.5 flex-wrap">
         {SPEAKING_PARTS.map(p => (
-          <button key={p.key} type="button" onClick={() => setActivePart(p.key)}
-            style={{
-              padding: "8px 14px", borderRadius: 10, fontSize: 13, fontWeight: 600,
-              border: `1.5px solid ${activePart === p.key ? "var(--accent)" : "var(--border)"}`,
-              background: activePart === p.key ? "color-mix(in srgb, var(--accent) 10%, var(--surface))" : "var(--surface)",
-              color: activePart === p.key ? "var(--accent)" : "var(--text-secondary)",
-              cursor: "pointer", transition: "all 0.15s",
-            }}>
+          <button
+            key={p.key}
+            type="button"
+            onClick={() => setActivePart(p.key)}
+            className={`px-3.5 py-2 rounded-xl text-xs font-semibold border cursor-pointer transition-all duration-150 active:scale-97 ${
+              activePart === p.key
+                ? "border-accent bg-accent/10 text-accent"
+                : "border-border bg-surface text-slate-400 hover:border-slate-800 hover:text-slate-200"
+            }`}
+          >
             {p.label}
           </button>
         ))}

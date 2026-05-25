@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AudioOutlined } from "@ant-design/icons";
+import { Mic } from "lucide-react";
 
 const OPINION_PROMPTS = [
   { id: "op1", question: "Do you agree or disagree that companies should allow employees to work from home?", topic: "Remote Work" },
@@ -16,55 +16,50 @@ export function ExpressOpinion() {
   const prompt = OPINION_PROMPTS.find(p => p.id === selected);
 
   return (
-    <div style={{ padding: "0 14px" }} className="anim-fade-up">
-      <div style={{ textAlign: "center", marginBottom: 20 }}>
-        <div style={{ width: 48, height: 48, borderRadius: "50%", background: "color-mix(in srgb, var(--info) 12%, var(--surface))", display: "grid", placeItems: "center", margin: "0 auto 10px" }}>
-          <AudioOutlined style={{ fontSize: 20, color: "var(--info)" }} />
+    <div className="px-3.5 animate-in fade-in slide-in-from-bottom-2 duration-200">
+      <div className="text-center mb-5">
+        <div className="w-12 h-12 rounded-full bg-(--info)/10 text-(--info) flex items-center justify-center mx-auto mb-2.5">
+          <Mic className="h-5 w-5" />
         </div>
-        <h3 style={{ margin: "0 0 4px", fontSize: 16, fontWeight: 700, color: "var(--ink)" }}>Express an Opinion · Part 5</h3>
-        <p style={{ margin: 0, fontSize: 13, color: "var(--text-muted)", maxWidth: 420, marginInline: "auto" }}>
+        <h3 className="m-0 mb-1 text-base font-bold text-ink">Express an Opinion · Part 5</h3>
+        <p className="m-0 text-xs text-slate-455 max-w-sm mx-auto leading-relaxed">
           Trình bày ý kiến của bạn về một chủ đề. Bạn có 30 giây chuẩn bị và 60 giây để nói.
         </p>
       </div>
 
       {!prompt ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <div className="flex flex-col gap-2.5">
           {OPINION_PROMPTS.map((p, i) => (
-            <button key={p.id} type="button" onClick={() => setSelected(p.id)}
-              className={`anim-fade-up anim-delay-${Math.min(i + 1, 5)}`}
-              style={{
-                padding: "14px 18px", borderRadius: 14, border: "1px solid var(--border)",
-                background: "var(--surface)", cursor: "pointer", textAlign: "left", width: "100%",
-              }}>
-              <div style={{ fontSize: 12, fontWeight: 700, color: "var(--info)", marginBottom: 4 }}>{p.topic}</div>
-              <div style={{ fontSize: 14, color: "var(--ink)", lineHeight: 1.5 }}>{p.question}</div>
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => setSelected(p.id)}
+              className="p-4.5 rounded-2xl border border-border bg-surface text-left w-full cursor-pointer transition-all duration-150 hover:border-accent/40 active:scale-99 block"
+              style={{ animationDelay: `${i * 0.05}s` }}
+            >
+              <div className="text-xs font-bold text-(--info) mb-1">{p.topic}</div>
+              <div className="text-sm text-ink leading-relaxed font-semibold">{p.question}</div>
             </button>
           ))}
         </div>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: 16, alignItems: "center" }}>
-          <div style={{
-            padding: "28px 24px", borderRadius: 16, border: "2px solid color-mix(in srgb, var(--info) 30%, transparent)",
-            background: "color-mix(in srgb, var(--info) 4%, var(--surface))",
-            width: "100%", maxWidth: 600, textAlign: "center",
-          }}>
-            <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--info)", marginBottom: 12 }}>
+        <div className="flex flex-col gap-4 items-center">
+          <div className="p-7 rounded-2xl border-2 border-(--info)/20 bg-(--info)/5 w-full max-w-xl text-center">
+            <div className="text-[11px] font-extrabold uppercase tracking-wider text-(--info) mb-3">
               {prompt.topic}
             </div>
-            <p style={{ fontSize: 17, lineHeight: 1.7, color: "var(--ink)", margin: 0, fontWeight: 500 }}>
+            <p className="text-base md:text-lg leading-relaxed text-ink m-0 font-semibold">
               {prompt.question}
             </p>
           </div>
-          <div style={{
-            padding: "12px 18px", borderRadius: 12, background: "var(--bg-deep)",
-            fontSize: 13, color: "var(--text-muted)", lineHeight: 1.6, maxWidth: 500, textAlign: "center",
-          }}>
-            💡 <strong>Gợi ý cấu trúc:</strong> Nêu quan điểm → Đưa lý do 1 + ví dụ → Lý do 2 → Kết luận
+          <div className="p-3 px-4.5 rounded-xl bg-slate-900/40 border border-slate-850/60 text-xs text-slate-350 leading-relaxed max-w-md text-center">
+            💡 <strong className="text-slate-200">Gợi ý cấu trúc:</strong> Nêu quan điểm → Đưa lý do 1 + ví dụ → Lý do 2 → Kết luận
           </div>
-          <button type="button" onClick={() => setSelected(null)} style={{
-            padding: "10px 24px", borderRadius: 12, border: "1px solid var(--border)",
-            background: "transparent", color: "var(--text-primary)", cursor: "pointer", fontSize: 13,
-          }}>
+          <button
+            type="button"
+            onClick={() => setSelected(null)}
+            className="px-6 py-2.5 rounded-xl border border-border bg-transparent text-slate-350 hover:text-slate-200 hover:border-slate-800 transition-colors text-xs font-bold cursor-pointer"
+          >
             ← Chọn chủ đề khác
           </button>
         </div>

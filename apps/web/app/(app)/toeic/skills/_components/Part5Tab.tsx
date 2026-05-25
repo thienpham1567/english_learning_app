@@ -1,8 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Tag } from "antd";
-import { ClockCircleOutlined, HistoryOutlined } from "@ant-design/icons";
+import { Clock, History } from "lucide-react";
 
 import { useGrammarQuiz } from "@/hooks/useGrammarQuiz";
 import { useExamMode } from "@/components/shared/ExamModeProvider";
@@ -71,53 +70,36 @@ export function Part5Tab() {
 
   return (
     <>
-      <div style={{ maxWidth: 700, margin: "0 auto", width: "100%" }}>
+      <div className="max-w-2xl mx-auto w-full">
         {/* Timer + History controls */}
         {state === "active" && (
-          <div style={{ display: "flex", justifyContent: "flex-end", gap: 8, marginBottom: 12 }}>
+          <div className="flex justify-end items-center gap-2 mb-3">
             {timedMode && (
-              <Tag
-                color={timeLeft <= 30 ? "error" : "default"}
-                style={{
-                  borderRadius: 99, margin: 0, fontSize: 12, fontWeight: 600,
-                  fontVariantNumeric: "tabular-nums",
-                }}
+              <span
+                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold tabular-nums border ${
+                  timeLeft <= 30
+                    ? "bg-red-950/20 border-red-900/30 text-red-400"
+                    : "bg-slate-900/40 border-border text-slate-400"
+                }`}
               >
-                <ClockCircleOutlined style={{ marginRight: 4 }} />
+                <Clock className="mr-1.5 h-3.5 w-3.5" />
                 {formatTime(timeLeft)}
-              </Tag>
+              </span>
             )}
             <button
               type="button"
               onClick={() => setHistoryOpen(true)}
-              style={{
-                width: 34, height: 34, borderRadius: 10,
-                border: "1px solid var(--border)", background: "var(--surface)",
-                color: "var(--text-secondary)", cursor: "pointer",
-                display: "grid", placeItems: "center", fontSize: 15,
-              }}
+              className="w-[34px] h-[34px] rounded-xl border border-border bg-surface text-slate-450 hover:text-slate-200 transition-colors flex items-center justify-center cursor-pointer"
             >
-              <HistoryOutlined />
+              <History className="h-4 w-4" />
             </button>
           </div>
         )}
 
         {(state === "idle" || state === "loading") && (
-          <div className="anim-fade-in" style={{ width: "100%" }}>
+          <div className="w-full animate-in fade-in duration-200">
             {error && (
-              <div
-                style={{
-                  margin: "0 auto 16px",
-                  maxWidth: 480,
-                  borderRadius: "var(--radius)",
-                  border: "1px solid color-mix(in srgb, var(--error) 30%, transparent)",
-                  background: "var(--error-bg)",
-                  padding: "10px 16px",
-                  textAlign: "center",
-                  fontSize: 14,
-                  color: "var(--error)",
-                }}
-              >
+              <div className="mx-auto mb-4 max-w-lg rounded-2xl border border-red-900/30 bg-red-950/20 p-3.5 text-center text-sm text-red-400">
                 {error}
               </div>
             )}
@@ -135,7 +117,7 @@ export function Part5Tab() {
         )}
 
         {state === "active" && currentQuestion && (
-          <div key={`q-${currentIndex}`} className="anim-slide-in-left" style={{ width: "100%" }}>
+          <div key={`q-${currentIndex}`} className="w-full animate-in fade-in slide-in-from-left-4 duration-200">
             <QuestionCard
               question={currentQuestion}
               questionNumber={currentIndex + 1}
@@ -150,7 +132,7 @@ export function Part5Tab() {
         )}
 
         {state === "summary" && (
-          <div className="anim-fade-in" style={{ width: "100%" }}>
+          <div className="w-full animate-in fade-in duration-200">
             <ScoreSummary
               questions={questions}
               answers={answers}

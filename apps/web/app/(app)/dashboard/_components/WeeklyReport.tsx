@@ -1,19 +1,18 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import * as m from "motion/react-client";
-import { Skeleton } from "antd";
+import { motion } from "motion/react";
 import {
-  BarChartOutlined,
-  LoadingOutlined,
-  CalendarOutlined,
-  ThunderboltOutlined,
-  FireOutlined,
-  BookOutlined,
-  TrophyOutlined,
-  WarningOutlined,
-  RightOutlined,
-} from "@ant-design/icons";
+  BarChart3,
+  Loader2,
+  Calendar,
+  Zap,
+  Flame,
+  BookOpen,
+  Trophy,
+  AlertTriangle,
+  ChevronRight,
+} from "lucide-react";
 import { api } from "@/lib/api-client";
 
 type WeeklyStats = {
@@ -60,79 +59,49 @@ export function WeeklyReport() {
   // CTA state
   if (!data && !loading) {
     return (
-      <m.button
+      <motion.button
         type="button"
         onClick={fetchReport}
-        whileHover={{ y: -3, scale: 1.01, boxShadow: "var(--shadow-md)" }}
+        whileHover={{ y: -3, scale: 1.01 }}
         whileTap={{ scale: 0.99 }}
-        style={{
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          gap: 14,
-          padding: "18px 20px",
-          borderRadius: "var(--radius-xl)",
-          border: "1px solid color-mix(in srgb, var(--accent) 25%, var(--border))",
-          background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--surface))",
-          cursor: "pointer",
-          textAlign: "left",
-          position: "relative",
-          overflow: "hidden",
-          boxShadow: "var(--shadow-sm)",
-        }}
+        className="w-full flex items-center gap-3.5 px-5 py-4.5 rounded-2xl border border-accent/25 bg-gradient-to-br from-accent/5 to-surface hover:from-accent/10 hover:to-surface text-left cursor-pointer relative overflow-hidden shadow-sm transition-all duration-200 active:scale-99"
       >
         {/* Glow backdrop */}
-        <div style={{ position: "absolute", right: -40, top: -40, width: 140, height: 140, borderRadius: "50%", background: "radial-gradient(circle, color-mix(in srgb, var(--accent) 15%, transparent) 0%, transparent 70%)", pointerEvents: "none" }} />
+        <div className="pointer-events-none absolute -right-10 -top-10 h-32 w-32 rounded-full bg-[radial-gradient(circle,rgba(192,125,43,0.15)_0%,transparent_70%)]" />
 
-        <div
-          style={{
-            width: 44,
-            height: 44,
-            borderRadius: "var(--radius-lg)",
-            background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexShrink: 0,
-            boxShadow: "0 4px 12px var(--accent-muted)",
-          }}
-        >
-          <BarChartOutlined style={{ fontSize: 20, color: "#fff" }} />
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-accent text-white shadow-sm">
+          <BarChart3 className="h-5 w-5" />
         </div>
         
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 15, fontWeight: 800, color: "var(--text-primary)", fontFamily: "var(--font-display)" }}>
+        <div className="flex-1 min-w-0">
+          <div className="font-display text-sm font-semibold text-slate-100 leading-tight">
             Báo cáo phân tích tuần
           </div>
-          <div style={{ fontSize: 12.5, color: "var(--text-muted)", marginTop: 3, fontWeight: 500 }}>
+          <div className="text-[11px] text-slate-400 mt-1 font-semibold leading-none">
             Nhận phân tích từ AI về tiến độ và thói quen học tập của bạn
           </div>
         </div>
 
-        <RightOutlined style={{ fontSize: 13, color: "var(--text-muted)", marginLeft: 6 }} />
-      </m.button>
+        <ChevronRight className="h-4 w-4 text-slate-500 shrink-0 ml-1.5" />
+      </motion.button>
     );
   }
 
   // Loading
   if (loading) {
     return (
-      <div
-        style={{
-          padding: 20,
-          borderRadius: "var(--radius-xl)",
-          background: "var(--surface)",
-          border: "1px solid var(--border)",
-          boxShadow: "var(--shadow-sm)",
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 16 }}>
-          <LoadingOutlined spin style={{ fontSize: 14, color: "var(--accent)" }} />
-          <span style={{ fontSize: 13.5, fontWeight: 700, color: "var(--text-primary)" }}>
+      <div className="p-5 rounded-2xl bg-surface border border-border shadow-sm flex flex-col gap-4">
+        <div className="flex items-center gap-2">
+          <Loader2 className="h-4 w-4 animate-spin text-accent" />
+          <span className="text-xs font-bold text-slate-200">
             AI đang tổng hợp và phân tích hoạt động của bạn...
           </span>
         </div>
-        <Skeleton active paragraph={{ rows: 4 }} round />
+        <div className="w-full space-y-2.5 animate-pulse">
+          <div className="h-3.5 bg-slate-900 border border-slate-850 rounded-lg w-3/4" />
+          <div className="h-3.5 bg-slate-900 border border-slate-850 rounded-lg w-1/2" />
+          <div className="h-3.5 bg-slate-900 border border-slate-850 rounded-lg w-5/6" />
+        </div>
       </div>
     );
   }
@@ -142,86 +111,43 @@ export function WeeklyReport() {
   const { stats, report, insufficient } = data;
 
   return (
-    <m.div
+    <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      style={{
-        borderRadius: "var(--radius-xl)",
-        background: "var(--surface)",
-        border: "1px solid var(--border)",
-        boxShadow: "var(--shadow-sm)",
-        overflow: "hidden",
-        display: "flex",
-        flexDirection: "column",
-      }}
+      className="rounded-2xl bg-surface border border-border shadow-sm overflow-hidden flex flex-col"
     >
       {/* Header */}
-      <div
-        style={{
-          padding: "16px 20px",
-          background: "var(--surface-alt)",
-          borderBottom: "1px solid var(--border)",
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-        }}
-      >
-        <BarChartOutlined style={{ fontSize: 14, color: "var(--accent)" }} />
-        <span style={{ fontSize: 14, fontWeight: 800, color: "var(--text-primary)", fontFamily: "var(--font-display)" }}>
+      <div className="px-5 py-4 bg-slate-900/30 border-b border-border flex items-center gap-2.5">
+        <BarChart3 className="h-4 w-4 text-accent" />
+        <span className="text-xs font-extrabold text-slate-100 font-display tracking-wide">
           Phân tích học tập tuần này
         </span>
-        <span style={{ marginLeft: "auto", fontSize: 11, color: "var(--text-muted)", fontWeight: 700 }}>
+        <span className="ml-auto text-[9px] font-bold text-slate-500 uppercase tracking-widest font-mono">
           7 ngày gần nhất
         </span>
       </div>
 
       {/* Quick Stats Floating Grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: 10,
-          padding: "16px 20px",
-        }}
-      >
+      <div className="grid grid-cols-3 gap-2.5 p-5">
         {[
-          { icon: <CalendarOutlined style={{ color: "var(--accent)" }} />, value: `${stats.daysActive}/7`, label: "Ngày học", bg: "var(--accent-light)" },
-          { icon: <ThunderboltOutlined style={{ color: "var(--xp)" }} />, value: stats.totalXP.toLocaleString(), label: "XP nhận được", bg: "rgba(245, 158, 11, 0.08)" },
-          { icon: <FireOutlined style={{ color: "var(--fire)" }} />, value: stats.currentStreak, label: "Chuỗi ngày", bg: "rgba(249, 115, 22, 0.08)" },
-          { icon: <BookOutlined style={{ color: "var(--success)" }} />, value: stats.newVocabulary, label: "Từ vựng mới", bg: "rgba(16, 185, 129, 0.08)" },
-          { icon: <TrophyOutlined style={{ color: "var(--xp)" }} />, value: stats.avgChallengeScore, label: "Điểm trung bình", bg: "rgba(245, 158, 11, 0.08)" },
-          { icon: <WarningOutlined style={{ color: "var(--error)" }} />, value: stats.unresolvedErrors, label: "Lỗi cần sửa", bg: "rgba(239, 68, 68, 0.06)" },
+          { icon: <Calendar className="h-4 w-4 text-accent" />, value: `${stats.daysActive}/7`, label: "Ngày học", bg: "bg-accent/10" },
+          { icon: <Zap className="h-4 w-4 text-amber-500 fill-current" />, value: stats.totalXP.toLocaleString(), label: "XP đạt được", bg: "bg-amber-500/10" },
+          { icon: <Flame className="h-4 w-4 text-orange-500 fill-current" />, value: stats.currentStreak, label: "Chuỗi ngày", bg: "bg-orange-500/10" },
+          { icon: <BookOpen className="h-4 w-4 text-emerald-500" />, value: stats.newVocabulary, label: "Từ vựng mới", bg: "bg-emerald-550/10" },
+          { icon: <Trophy className="h-4 w-4 text-amber-450" />, value: stats.avgChallengeScore, label: "Điểm TB", bg: "bg-amber-500/10" },
+          { icon: <AlertTriangle className="h-4 w-4 text-red-500" />, value: stats.unresolvedErrors, label: "Lỗi cần sửa", bg: "bg-red-500/10" },
         ].map((s) => (
           <div
             key={s.label}
-            style={{
-              padding: "12px 8px",
-              background: "var(--surface-alt)",
-              borderRadius: "var(--radius-lg)",
-              border: "1px solid var(--border)",
-              textAlign: "center",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 4,
-            }}
+            className="p-3 bg-slate-900/10 hover:bg-slate-900/30 rounded-xl border border-border text-center flex flex-col items-center gap-1.5 transition-colors duration-150"
           >
-            <div
-              style={{
-                width: 24,
-                height: 24,
-                borderRadius: "50%",
-                background: s.bg,
-                display: "grid",
-                placeItems: "center",
-              }}
-            >
+            <div className={`w-7 h-7 rounded-full ${s.bg} flex items-center justify-center shrink-0`}>
               {s.icon}
             </div>
-            <div style={{ fontSize: 18, fontWeight: 900, color: "var(--text-primary)", fontFamily: "var(--font-mono)", lineHeight: 1.2 }}>
+            <div className="text-base font-extrabold text-slate-100 font-mono leading-none">
               {s.value}
             </div>
-            <div style={{ fontSize: 10, color: "var(--text-muted)", fontWeight: 700 }}>
+            <div className="text-[9px] text-slate-550 font-bold uppercase tracking-wider leading-none">
               {s.label}
             </div>
           </div>
@@ -229,22 +155,16 @@ export function WeeklyReport() {
       </div>
 
       {/* Gradient divider */}
-      <div style={{ height: 1, background: "linear-gradient(90deg, transparent, var(--border), transparent)", marginInline: 20 }} />
+      <div className="mx-5 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
       {/* AI Report Block */}
       {report && (
-        <div style={{ padding: "18px 20px" }}>
+        <div className="p-5">
           <div
-            style={{
-              fontSize: 14,
-              lineHeight: 1.8,
-              color: "var(--text-primary)",
-              whiteSpace: "pre-wrap",
-              fontWeight: 500,
-            }}
+            className="text-xs md:text-sm leading-relaxed text-slate-300 font-semibold"
             dangerouslySetInnerHTML={{
               __html: report
-                .replace(/\*\*([^*]+)\*\*/g, '<strong style="color: var(--accent); fontWeight: 800;">$1</strong>')
+                .replace(/\*\*([^*]+)\*\*/g, '<strong class="text-accent font-extrabold">$1</strong>')
                 .replace(/\n/g, "<br />"),
             }}
           />
@@ -252,18 +172,18 @@ export function WeeklyReport() {
       )}
 
       {insufficient && (
-        <div style={{ padding: "24px 20px", textAlign: "center" }}>
-          <div style={{ fontSize: 32, opacity: 0.3, marginBottom: 12, color: "var(--text-muted)" }}>
-            <WarningOutlined />
+        <div className="px-5 py-8 text-center flex flex-col items-center justify-center">
+          <div className="w-10 h-10 rounded-full bg-slate-900 border border-slate-850 flex items-center justify-center mb-3">
+            <AlertTriangle className="h-5 w-5 text-slate-500" />
           </div>
-          <div style={{ fontSize: 14.5, fontWeight: 800, color: "var(--text-primary)" }}>
+          <div className="text-xs font-bold text-slate-200">
             Chưa có đủ dữ liệu học tập
           </div>
-          <div style={{ fontSize: 12.5, color: "var(--text-muted)", marginTop: 4, fontWeight: 500 }}>
-            Hãy tiếp tục luyện tập các bài học hàng ngày để mở khóa báo cáo phân tích chi tiết!
+          <div className="text-[11px] text-slate-500 mt-1.5 font-medium max-w-xs leading-relaxed">
+            Hãy tiếp tục luyện tập các bài học hàng ngày để mở khóa báo cáo phân tích chi tiết từ AI!
           </div>
         </div>
       )}
-    </m.div>
+    </motion.div>
   );
 }

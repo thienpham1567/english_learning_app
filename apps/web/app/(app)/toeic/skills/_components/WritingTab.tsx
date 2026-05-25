@@ -1,7 +1,7 @@
 "use client";
 
-import { Flex, Skeleton, Tabs } from "antd";
-import { FormOutlined, HighlightOutlined, AimOutlined } from "@ant-design/icons";
+import { useState } from "react";
+import { PenTool, Highlighter, Target } from "lucide-react";
 
 import { useWritingPractice } from "@/hooks/useWritingPractice";
 import { PromptGallery } from "./writing/PromptGallery";
@@ -11,6 +11,8 @@ import { SubmissionHistory } from "./writing/SubmissionHistory";
 import { RewritePanel } from "./writing/RewritePanel";
 import { GuidedWritingPanel } from "./writing/GuidedWritingPanel";
 
+type TabKey = "practice" | "rewrite" | "guided";
+
 export function WritingTab() {
   const {
     state, category, prompt, hints, writtenText, feedback,
@@ -18,62 +20,94 @@ export function WritingTab() {
     generatePrompt, submitWriting, viewSubmission, startNew,
   } = useWritingPractice();
 
+  const [activeTab, setActiveTab] = useState<TabKey>("practice");
+
+  const tabs = [
+    { key: "practice" as const, label: "Luyện viết", icon: <PenTool className="h-4 w-4" /> },
+    { key: "rewrite" as const, label: "Cải thiện câu", icon: <Highlighter className="h-4 w-4" /> },
+    { key: "guided" as const, label: "Viết có hướng dẫn", icon: <Target className="h-4 w-4" /> },
+  ];
+
   return (
-    <div style={{ maxWidth: 800, margin: "0 auto", width: "100%" }}>
-      <Tabs
-        defaultActiveKey="practice"
-        style={{ marginTop: 4 }}
-        items={[
-          {
-            key: "practice",
-            label: <><FormOutlined /> Luyện viết</>,
-            children: (
-              <div>
-                {error && (
-                  <div style={{ marginBottom: 16, border: "1px solid color-mix(in srgb, var(--error) 20%, transparent)", borderRadius: 10, background: "var(--error-bg)", color: "var(--error)", padding: "10px 16px", fontSize: 13 }}>{error}</div>
-                )}
-                {state === "prompt-selection" && (
-                  <div style={{ width: "100%" }}>
-                    <PromptGallery onSelect={generatePrompt} isLoading={false} loadingCategory={null} />
-                    <SubmissionHistory submissions={history} onView={viewSubmission} />
-                  </div>
-                )}
-                {state === "generating-prompt" && (
-                  <div style={{ width: "100%" }}>
-                    <PromptGallery onSelect={generatePrompt} isLoading={true} loadingCategory={loadingCategory} />
-                  </div>
-                )}
-                {state === "writing" && category && (
-                  <div style={{ width: "100%" }}>
-                    <WritingEditor prompt={prompt} category={category} hints={hints} onSubmit={submitWriting} isSubmitting={false} />
-                  </div>
-                )}
-                {state === "reviewing" && (
-                  <Flex vertical align="center" gap={16} style={{ paddingTop: 48 }}>
-                    <Skeleton active paragraph={{ rows: 5 }} style={{ maxWidth: 500 }} />
-                    <p style={{ color: "var(--text-secondary)", fontSize: 13 }}>Christine Ho đang chấm bài...</p>
-                  </Flex>
-                )}
-                {state === "feedback" && feedback && (
-                  <div style={{ width: "100%" }}>
-                    <FeedbackPanel text={writtenText} feedback={feedback} onNewWriting={startNew} />
-                  </div>
-                )}
+    <div className="max-w-3xl mx-auto w-full">
+      {/* Custom Tabs */}
+      <div className="flex gap-2 py-2 pb-3.5 border-b border-border mb-4 overflow-x-auto scrollbar-none">
+        {tabs.map((t) => {
+          const isActive = activeTab === t.key;
+          return (
+            <button
+              key={t.key}
+              type="button"
+              onClick={() => setActiveTab(t.key)}
+              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border cursor-pointer transition-all duration-150 active:scale-97 ${
+                isActive
+                  ? "border-accent bg-accent/10 text-accent font-bold"
+                  : "border-border bg-surface text-slate-400 hover:border-slate-800 hover:text-slate-200"
+              }`}
+            >
+              {t.icon}
+              <span>{t.label}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Tab Contents */}
+      <div className="w-full animate-in fade-in duration-200">
+        {activeTab === "practice" && (
+          <div>
+            {error && (
+              <div className="mb-4 rounded-xl border border-red-900/30 bg-red-950/20 px-4 py-2.5 text-xs text-red-400 text-center">
+                {error}
               </div>
-            ),
-          },
-          {
-            key: "rewrite",
-            label: <><HighlightOutlined /> Cải thiện câu</>,
-            children: <div style={{ paddingTop: 8 }}><RewritePanel /></div>,
-          },
-          {
-            key: "guided",
-            label: <><AimOutlined /> Viết có hướng dẫn</>,
-            children: <div style={{ paddingTop: 8 }}><GuidedWritingPanel /></div>,
-          },
-        ]}
-      />
+            )}
+            {state === "prompt-selection" && (
+              <div className="w-full">
+                <PromptGallery onSelect={generatePrompt} isLoading={false} loadingCategory={null} />
+                <SubmissionHistory submissions={history} onView={viewSubmission} />
+              </div>
+            )}
+            {state === "generating-prompt" && (
+              <div className="w-full">
+                <PromptGallery onSelect={generatePrompt} isLoading={true} loadingCategory={loadingCategory} />
+              </div>
+            )}
+            {state === "writing" && category && (
+              <div className="w-full">
+                <WritingEditor prompt={prompt} category={category} hints={hints} onSubmit={submitWriting} isSubmitting={false} />
+              </div>
+            )}
+            {state === "reviewing" && (
+              <div className="flex flex-col items-center gap-4 py-16 text-center">
+                <div className="w-full max-w-md space-y-3 animate-pulse">
+                  <div className="h-4 bg-slate-800 rounded w-3/4 mx-auto"></div>
+                  <div className="h-3 bg-slate-800 rounded w-5/6 mx-auto"></div>
+                  <div className="h-3 bg-slate-800 rounded w-4/5 mx-auto"></div>
+                  <div className="h-3 bg-slate-800 rounded w-3/5 mx-auto"></div>
+                </div>
+                <p className="text-xs text-slate-450 font-bold mt-2">Christine Ho đang chấm bài...</p>
+              </div>
+            )}
+            {state === "feedback" && feedback && (
+              <div className="w-full">
+                <FeedbackPanel text={writtenText} feedback={feedback} onNewWriting={startNew} />
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === "rewrite" && (
+          <div className="pt-2">
+            <RewritePanel />
+          </div>
+        )}
+
+        {activeTab === "guided" && (
+          <div className="pt-2">
+            <GuidedWritingPanel />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

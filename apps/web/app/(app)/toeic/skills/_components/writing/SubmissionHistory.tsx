@@ -1,6 +1,6 @@
 "use client";
 
-import { ClockCircleOutlined, FileTextOutlined } from "@ant-design/icons";
+import { Clock, FileText } from "lucide-react";
 import type { WritingSubmission } from "@/lib/writing-practice/types";
 import { CATEGORY_LABELS, type WritingCategory } from "@/lib/writing-practice/types";
 
@@ -13,20 +13,20 @@ export function SubmissionHistory({ submissions, onView }: Props) {
   if (submissions.length === 0) return null;
 
   return (
-    <div className="mx-auto mt-8 w-full max-w-lg">
-      <h3 className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
-        <ClockCircleOutlined style={{ fontSize: 12 }} />
+    <div className="mx-auto mt-8 w-full max-w-lg animate-in fade-in duration-200">
+      <h3 className="mb-3 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
+        <Clock className="h-3.5 w-3.5" />
         Bài viết gần đây
       </h3>
       <div className="space-y-2">
         {submissions.map((s) => (
           <button
             key={s.id}
-            className="flex w-full items-center justify-between rounded-lg border border-(--border) bg-(--surface) px-3.5 py-2.5 text-left transition hover:border-(--accent)/40 hover:shadow-(--shadow-sm)"
+            className="flex w-full items-center justify-between rounded-lg border border-(--border) bg-(--surface) px-3.5 py-2.5 text-left transition hover:border-(--accent)/40 hover:shadow-(--shadow-sm) cursor-pointer"
             onClick={() => onView(s)}
           >
             <div className="flex items-center gap-3">
-              <FileTextOutlined style={{ fontSize: 14, color: "var(--text-muted)" }} />
+              <FileText className="h-4 w-4 text-slate-450 shrink-0" />
               <div>
                 <span className="text-sm font-medium text-(--ink)">
                   {CATEGORY_LABELS[s.category as WritingCategory] ?? s.category}

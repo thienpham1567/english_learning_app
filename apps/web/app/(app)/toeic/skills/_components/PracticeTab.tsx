@@ -8,7 +8,7 @@ import { PracticeRunner } from "@/app/(app)/toeic/practice/_components/PracticeR
  */
 export function PracticeTab() {
   return (
-    <div style={{ maxWidth: 800, margin: "0 auto", width: "100%" }}>
+    <div className="max-w-3xl mx-auto w-full">
       <PracticeRunner />
     </div>
   );

@@ -1,16 +1,17 @@
 "use client";
 
 import { useEffect, useState, useRef, useCallback } from "react";
-import { Alert, Skeleton, Button, Result, Flex, Typography } from "antd";
 import {
-  ReloadOutlined,
-  LoadingOutlined,
-  CheckOutlined,
-  ForwardOutlined,
-  FireOutlined,
-  ThunderboltOutlined,
-  ClockCircleOutlined,
-} from "@ant-design/icons";
+  RotateCw,
+  Loader2,
+  Check,
+  ArrowRight,
+  Flame,
+  Zap,
+  Clock,
+  AlertCircle,
+  AlertTriangle,
+} from "lucide-react";
 
 import { useDailyChallenge } from "@/hooks/useDailyChallenge";
 import { useBonusChallenge } from "@/hooks/useBonusChallenge";
@@ -19,10 +20,8 @@ import { ChallengeResults } from "@/app/(app)/daily-challenge/_components/Challe
 import { CompletedState } from "@/app/(app)/daily-challenge/_components/CompletedState";
 import { EXERCISE_TYPE_LABELS } from "@/app/(app)/daily-challenge/_components/constants";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
-import * as m from "motion/react-client";
-import { AnimatePresence } from "motion/react";
-
-const { Text } = Typography;
+import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "motion/react";
 
 // Live elapsed timer hook
 function useElapsedTimer(isRunning: boolean) {
@@ -53,41 +52,29 @@ function getTodayLabel(): string {
 function StepIndicator({ current, total, isBonus }: { current: number; total: number; isBonus?: boolean }) {
   const activeColor = isBonus ? "var(--xp)" : "var(--accent)";
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+    <div className="flex flex-col gap-2.5">
       {/* Progress Track */}
-      <div
-        style={{
-          height: 6,
-          background: "var(--border)",
-          borderRadius: 99,
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        <m.div
+      <div className="h-1.5 bg-slate-900 border border-slate-850 rounded-full relative overflow-hidden shrink-0">
+        <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${((current) / total) * 100}%` }}
           transition={{ type: "spring", stiffness: 80, damping: 15 }}
           style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            bottom: 0,
             background: `linear-gradient(90deg, ${activeColor}, color-mix(in srgb, ${activeColor} 80%, var(--xp)))`,
-            borderRadius: 99,
             boxShadow: `0 0 8px ${activeColor}`,
           }}
+          className="absolute left-0 top-0 bottom-0 rounded-full"
         />
       </div>
 
       {/* Dots & Labels */}
-      <div style={{ display: "flex", justifySelf: "stretch", justifyContent: "space-between", alignItems: "center" }}>
-        <Text style={{ fontSize: 12, fontWeight: 700, color: "var(--text-secondary)" }}>
+      <div className="flex justify-between items-center text-xs">
+        <span className="font-semibold text-slate-400">
           Tiến độ bài học
-        </Text>
-        <Text style={{ fontSize: 13, fontWeight: 800, color: activeColor, fontFamily: "var(--font-mono)" }}>
+        </span>
+        <span style={{ color: activeColor }} className="font-extrabold font-mono text-sm leading-none">
           {current + 1} / {total} câu
-        </Text>
+        </span>
       </div>
     </div>
   );
@@ -99,7 +86,7 @@ function ExerciseFlow({
   currentExercise,
   onAnswer,
   onSkip,
-  formattedTime,
+  formattedTime: _formattedTime,
   isBonus,
 }: {
   challenge: { exercises: { type: string; data: unknown; instruction: string }[] };
@@ -129,46 +116,29 @@ function ExerciseFlow({
   const activeColor = isBonus ? "var(--xp)" : "var(--accent)";
 
   return (
-    <m.div
+    <motion.div
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -15 }}
       transition={{ duration: 0.25 }}
-      style={{ display: "flex", flexDirection: "column", gap: 20 }}
+      className="flex flex-col gap-5"
     >
       {/* Bonus label */}
       {isBonus && (
-        <m.div
+        <motion.div
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            padding: "6px 14px",
-            borderRadius: 99,
-            background: "linear-gradient(135deg, var(--xp), var(--xp))",
-            border: "1px solid rgba(255,255,255,0.2)",
-            alignSelf: "flex-start",
-            boxShadow: "0 4px 10px rgba(217, 119, 6, 0.3)",
-          }}
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 border border-white/10 self-start shadow-md text-white"
         >
-          <ThunderboltOutlined style={{ fontSize: 12, color: "#fff" }} />
-          <span
-            style={{
-              fontSize: 10,
-              fontWeight: 800,
-              color: "#fff",
-              letterSpacing: ".08em",
-            }}
-          >
+          <Zap className="h-3 w-3 fill-current text-white animate-pulse" />
+          <span className="text-[10px] font-extrabold uppercase tracking-widest font-mono">
             VÒNG THỬ THÁCH BONUS
           </span>
-        </m.div>
+        </motion.div>
       )}
 
       {/* Step indicator row */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+      <div className="flex flex-col gap-3.5">
         <StepIndicator
           current={currentExercise}
           total={challenge.exercises.length}
@@ -177,99 +147,59 @@ function ExerciseFlow({
 
         {/* Exercise type label */}
         {exerciseTypeLabel && (
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div className="flex items-center gap-2.5">
             <span
               style={{
-                fontSize: 11,
-                fontWeight: 800,
-                letterSpacing: ".08em",
-                textTransform: "uppercase",
                 color: activeColor,
-                fontFamily: "var(--font-body)",
-                background: isBonus ? "rgba(245,158,11,0.12)" : "var(--accent-light)",
-                padding: "2px 10px",
-                borderRadius: 8,
+                background: isBonus ? "rgba(245,158,11,0.1)" : "var(--accent-light)",
               }}
+              className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-lg font-mono shrink-0"
             >
               {exerciseTypeLabel}
             </span>
-            <div
-              style={{
-                flex: 1,
-                height: 1,
-                background: "var(--border)",
-              }}
-            />
+            <div className="flex-1 h-px bg-border" />
           </div>
         )}
       </div>
 
       {/* Exercise card */}
       <AnimatePresence mode="wait">
-        <m.div
+        <motion.div
           key={currentExercise}
           ref={exerciseWrapperRef}
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.25 }}
-          style={{
-            borderRadius: "var(--radius-xl)",
-            border: `1px solid var(--border)`,
-            background: "var(--surface)",
-            padding: "28px 24px",
-            boxShadow: "var(--shadow-lg)",
-            position: "relative",
-            overflow: "hidden",
-          }}
+          className="rounded-2xl border border-border bg-surface p-6 shadow-md relative overflow-hidden"
         >
           {/* Top glowing bar */}
           <div
             style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              height: 4,
               background: `linear-gradient(90deg, ${activeColor}, var(--xp))`,
             }}
+            className="absolute top-0 left-0 right-0 h-1"
           />
           <ExerciseCard
             exercise={challenge.exercises[currentExercise] as any}
             onAnswer={handleAnswer}
             disabled={false}
           />
-        </m.div>
+        </motion.div>
       </AnimatePresence>
 
       {/* Skip */}
-      <m.button
-        whileHover={{ scale: 1.05, y: 1 }}
-        whileTap={{ scale: 0.95 }}
+      <motion.button
+        whileHover={{ scale: 1.03 }}
+        whileTap={{ scale: 0.97 }}
         type="button"
         onClick={onSkip}
-        style={{
-          alignSelf: "center",
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 6,
-          background: "var(--surface-alt)",
-          border: "1px solid var(--border)",
-          cursor: "pointer",
-          fontSize: 12,
-          fontWeight: 600,
-          color: "var(--text-secondary)",
-          padding: "8px 20px",
-          borderRadius: 99,
-          boxShadow: "var(--shadow-sm)",
-          transition: "all 0.2s",
-          fontFamily: "var(--font-body)",
-        }}
+        className="self-center flex items-center gap-1.5 bg-slate-900 border border-slate-800 hover:border-slate-700 text-xs font-semibold text-slate-400 hover:text-white px-5 py-2 rounded-full cursor-pointer shadow-sm transition-all"
       >
-        <ForwardOutlined style={{ fontSize: 11 }} />
-        Bỏ qua câu hỏi này
-      </m.button>
-    </m.div>
+        <ArrowRight className="h-3.5 w-3.5" />
+        <span>Bỏ qua câu hỏi này</span>
+      </motion.button>
+    </motion.div>
   );
 }
 
@@ -316,57 +246,32 @@ export default function DailyChallengePage() {
   const formattedTime = useElapsedTimer(state === "active" || bonus.state === "active");
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        minHeight: 0,
-        flex: 1,
-        overflow: "hidden",
-        background: "var(--bg-deep)",
-      }}
-    >
+    <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden bg-slate-950">
+      
       {/* ── Module Header ── */}
-      <div style={{ padding: "20px 20px 0", flexShrink: 0 }}>
-        <div style={{ maxWidth: 640, margin: "0 auto" }}>
+      <div className="px-4 pt-5 shrink-0">
+        <div className="max-w-2xl mx-auto">
           <ModuleHeader
-            icon={<FireOutlined style={{ color: "#fff" }} />}
+            icon={<Flame className="h-6 w-6 text-white fill-current animate-pulse" />}
             gradient={isInBonusFlow ? "linear-gradient(135deg, var(--xp), var(--xp))" : "linear-gradient(135deg, var(--fire), #f97316)"}
             title={isInBonusFlow ? "Bonus Round" : "Thử Thách Mỗi Ngày"}
             badge={isInBonusFlow ? "⚡ Bonus" : todayLabel}
             subtitle={isInBonusFlow ? "Nhận thêm XP · Rèn luyện phản xạ ngôn ngữ" : "Rèn luyện tiếng Anh hàng ngày để tạo thói quen học tập bền vững"}
             action={
               (streak.currentStreak > 0 || state === "active" || bonus.state === "active") ? (
-                <Flex gap={8} align="center">
+                <div className="flex gap-2 items-center text-xs">
                   {streak.currentStreak > 0 && (
-                    <span style={{
-                      display: "inline-flex", alignItems: "center", gap: 6,
-                      padding: "6px 14px", borderRadius: 99,
-                      background: "rgba(255,255,255,0.2)",
-                      border: "1px solid rgba(255,255,255,0.25)",
-                      fontSize: 12, fontWeight: 800,
-                      color: "#fff",
-                      textShadow: "0 1px 2px rgba(0,0,0,0.15)",
-                      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
-                    }}>
+                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/20 border border-white/25 text-white font-extrabold shadow-sm">
                       🔥 {streak.currentStreak} ngày
                     </span>
                   )}
                   {(state === "active" || bonus.state === "active") && (
-                    <span style={{
-                      display: "inline-flex", alignItems: "center", gap: 5,
-                      padding: "6px 14px", borderRadius: 99,
-                      background: "rgba(0,0,0,0.25)",
-                      border: "1px solid rgba(255,255,255,0.15)",
-                      fontSize: 12, fontWeight: 700,
-                      color: "#fff",
-                      fontFamily: "var(--font-mono)",
-                    }}>
-                      <ClockCircleOutlined /> {formattedTime}
+                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/35 border border-white/10 text-white font-bold font-mono">
+                      <Clock className="h-3.5 w-3.5 text-slate-300" />
+                      <span>{formattedTime}</span>
                     </span>
                   )}
-                </Flex>
+                </div>
               ) : undefined
             }
           />
@@ -374,25 +279,15 @@ export default function DailyChallengePage() {
       </div>
 
       {/* ── Content Area ── */}
-      <div
-        style={{
-          flex: 1,
-          minHeight: 0,
-          overflowY: "auto",
-          padding: "24px 20px 48px",
-        }}
-      >
-        <div style={{ width: "100%", maxWidth: 640, margin: "0 auto" }}>
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 py-6 pb-12">
+        <div className="w-full max-w-2xl mx-auto">
 
           {/* Error banner */}
           {(error || bonus.error) && (
-            <Alert
-              className="anim-fade-in"
-              type="error"
-              showIcon
-              message={error || bonus.error}
-              style={{ borderRadius: "var(--radius-lg)", marginBottom: 20, boxShadow: "var(--shadow-sm)" }}
-            />
+            <div className="flex gap-3 rounded-2xl border border-red-950 bg-red-950/20 p-4 text-xs text-red-400 mb-5 shadow-sm animate-in fade-in duration-200">
+              <AlertCircle className="h-4 w-4 shrink-0" />
+              <span>{error || bonus.error}</span>
+            </div>
           )}
 
           {/* ── BONUS FLOW ── */}
@@ -408,27 +303,17 @@ export default function DailyChallengePage() {
           )}
 
           {bonus.state === "submitting" && (
-            <div
-              className="anim-fade-in"
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                minHeight: 320,
-                gap: 16,
-              }}
-            >
-              <m.div
+            <div className="flex flex-col items-center justify-center min-h-[320px] gap-4 animate-in fade-in duration-200">
+              <motion.div
                 animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
                 transition={{ repeat: Infinity, duration: 1.5 }}
-                style={{ width: 64, height: 64, borderRadius: "50%", border: "2px solid var(--xp)", display: "grid", placeItems: "center", background: "var(--surface)" }}
+                className="w-16 h-16 rounded-full border-2 border-amber-500 flex items-center justify-center bg-slate-900"
               >
-                <CheckOutlined style={{ fontSize: 24, color: "var(--xp)" }} />
-              </m.div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, color: "var(--text-secondary)", fontSize: 14, fontWeight: 600 }}>
-                <LoadingOutlined spin />
-                Đang chấm điểm câu hỏi phụ...
+                <Check className="h-6 w-6 text-amber-500" />
+              </motion.div>
+              <div className="flex items-center gap-2 text-slate-400 text-sm font-bold">
+                <Loader2 className="h-4 w-4 animate-spin text-amber-500" />
+                <span>Đang chấm điểm câu hỏi phụ...</span>
               </div>
             </div>
           )}
@@ -449,57 +334,24 @@ export default function DailyChallengePage() {
             <>
               {/* Loading */}
               {state === "loading" && (
-                <div
-                  className="anim-fade-in"
-                  style={{
-                    minHeight: 320,
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "center",
-                    padding: "24px 0",
-                  }}
-                >
-                  <Skeleton active paragraph={{ rows: 6 }} round />
+                <div className="min-h-[320px] flex flex-col justify-center py-6 animate-in fade-in duration-250">
+                  <div className="w-full space-y-3.5 animate-pulse">
+                    <div className="h-4 bg-slate-900 border border-slate-850 rounded-lg w-1/3" />
+                    <div className="h-24 bg-slate-900 border border-slate-850 rounded-2xl w-full" />
+                    <div className="h-10 bg-slate-900 border border-slate-850 rounded-xl w-1/2 mx-auto" />
+                  </div>
                 </div>
               )}
 
               {/* Error retry */}
               {state === "error" && (
-                <div
-                  className="anim-fade-in"
-                  style={{
-                    minHeight: 320,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    background: "var(--surface)",
-                    borderRadius: "var(--radius-xl)",
-                    border: "1px solid var(--border)",
-                    boxShadow: "var(--shadow-md)",
-                  }}
-                >
-                  <Result
-                    status="error"
-                    title="Không thể tải thử thách hôm nay"
-                    subTitle="Vui lòng kiểm tra lại kết nối mạng hoặc thử lại sau."
-                    extra={
-                      <Button
-                        type="primary"
-                        icon={<ReloadOutlined />}
-                        onClick={() => window.location.reload()}
-                        style={{
-                          borderRadius: 12,
-                          background: "var(--accent)",
-                          border: "none",
-                          fontWeight: 700,
-                          height: 40,
-                          padding: "0 24px",
-                        }}
-                      >
-                        Thử tải lại trang
-                      </Button>
-                    }
-                  />
+                <div className="p-8 text-center bg-surface border border-border rounded-2xl shadow-sm flex flex-col items-center animate-in fade-in duration-200">
+                  <AlertTriangle className="h-12 w-12 text-red-500 mb-3" />
+                  <h3 className="text-base font-bold text-slate-150 mb-1">Không thể tải thử thách hôm nay</h3>
+                  <p className="text-xs text-slate-550 mb-4">Vui lòng kiểm tra lại kết nối mạng hoặc thử lại sau.</p>
+                  <Button onClick={() => window.location.reload()}>
+                    <RotateCw className="h-3.5 w-3.5 mr-1.5" /> Thử tải lại trang
+                  </Button>
                 </div>
               )}
 
@@ -516,48 +368,17 @@ export default function DailyChallengePage() {
 
               {/* Submitting */}
               {state === "submitting" && (
-                <div
-                  className="anim-fade-in"
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    minHeight: 320,
-                    gap: 16,
-                  }}
-                >
-                  <m.div
+                <div className="flex flex-col items-center justify-center min-h-[320px] gap-4 animate-in fade-in duration-200">
+                  <motion.div
                     animate={{ scale: [1, 1.08, 1] }}
                     transition={{ repeat: Infinity, duration: 1.2 }}
-                    style={{
-                      width: 64,
-                      height: 64,
-                      borderRadius: "50%",
-                      border: "2px solid var(--accent)",
-                      display: "grid",
-                      placeItems: "center",
-                      background: "var(--surface)",
-                      boxShadow: "0 4px 12px var(--accent-muted)",
-                    }}
+                    className="w-16 h-16 rounded-full border-2 border-accent flex items-center justify-center bg-slate-900 shadow-sm shadow-accent/20"
                   >
-                    <CheckOutlined
-                      style={{ fontSize: 24, color: "var(--accent)" }}
-                    />
-                  </m.div>
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 8,
-                      color: "var(--text-secondary)",
-                      fontSize: 14,
-                      fontWeight: 600,
-                      fontFamily: "var(--font-body)",
-                    }}
-                  >
-                    <LoadingOutlined spin />
-                    Hệ thống đang kiểm tra câu trả lời...
+                    <Check className="h-6 w-6 text-accent" />
+                  </motion.div>
+                  <div className="flex items-center gap-2 text-slate-400 text-sm font-semibold">
+                    <Loader2 className="h-4 w-4 animate-spin text-accent" />
+                    <span>Hệ thống đang kiểm tra câu trả lời...</span>
                   </div>
                 </div>
               )}

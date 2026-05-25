@@ -3,15 +3,15 @@
 import { useState } from "react";
 import Link from "next/link";
 import {
-  BookOutlined,
-  TrophyOutlined,
-  RocketOutlined,
-  BulbOutlined,
-  ClockCircleOutlined,
-  ArrowRightOutlined,
-  ReadOutlined,
-  StarFilled,
-} from "@ant-design/icons";
+  BookOpen,
+  Trophy,
+  Rocket,
+  Lightbulb,
+  Clock,
+  ArrowRight,
+  Book,
+  Star,
+} from "lucide-react";
 
 // ── Types ────────────────────────────────────────────────────────
 type ReadingMode = "overview" | "strategy" | "drill";
@@ -47,7 +47,7 @@ const STRATEGIES: StrategyItem[] = [
       "Tìm collocations và fixed phrases quen thuộc",
       "Dành tối đa 20 giây/câu — Part 5 cần nhanh để dành thời gian cho Part 7",
     ],
-    icon: <BulbOutlined />, color: "var(--accent)",
+    icon: <Lightbulb className="h-5 w-5" />, color: "var(--accent)",
   },
   {
     id: "part6", part: "Part 6", title: "Text Completion",
@@ -58,7 +58,7 @@ const STRATEGIES: StrategyItem[] = [
       "Phân biệt thì (tense) dựa vào time markers trong đoạn",
       "Dành khoảng 2 phút/đoạn (8 phút tổng cho Part 6)",
     ],
-    icon: <ReadOutlined />, color: "var(--secondary)",
+    icon: <BookOpen className="h-5 w-5" />, color: "var(--secondary)",
   },
   {
     id: "part7", part: "Part 7", title: "Reading Comprehension",
@@ -69,7 +69,7 @@ const STRATEGIES: StrategyItem[] = [
       "Câu 'What is suggested/implied?' — tìm paraphrasing, không tìm exact words",
       "Phân bổ thời gian: ~1 phút/câu cho Part 7, bắt đầu từ single passages",
     ],
-    icon: <BookOutlined />, color: "var(--info)",
+    icon: <Book className="h-5 w-5" />, color: "var(--info)",
   },
 ];
 
@@ -80,116 +80,95 @@ const DRILLS: DrillOption[] = [
   { part: "Full", label: "Full Reading Test", description: "Part 5 + 6 + 7 (75 phút)", questionCount: 100, estimatedMinutes: 75, href: "/toeic/practice" },
 ];
 
-// ── Styles ───────────────────────────────────────────────────────
-const card: React.CSSProperties = {
-  borderRadius: 16, border: "1px solid var(--border)", background: "var(--surface)",
-  padding: "20px 18px", position: "relative", overflow: "hidden",
-  transition: "transform 0.15s, box-shadow 0.15s",
-};
-const sectionLabel: React.CSSProperties = {
-  fontSize: 11, fontWeight: 800, textTransform: "uppercase",
-  letterSpacing: "0.12em", color: "var(--accent)", marginBottom: 14,
-  display: "flex", alignItems: "center", gap: 8,
-};
-const pill: React.CSSProperties = {
-  padding: "6px 14px", borderRadius: 99, fontSize: 13, fontWeight: 600,
-  border: "1.5px solid var(--border)", background: "var(--surface)",
-  cursor: "pointer", transition: "all 0.15s", color: "var(--text-secondary)",
-};
-const pillActive: React.CSSProperties = {
-  ...pill, borderColor: "var(--accent)", background: "color-mix(in srgb, var(--accent) 10%, var(--surface))",
-  color: "var(--accent)",
-};
-
 // ── Component ────────────────────────────────────────────────────
 export function ReadingTab() {
   const [mode, setMode] = useState<ReadingMode>("overview");
   const [expandedStrategy, setExpandedStrategy] = useState<string | null>(null);
 
   return (
-    <div style={{ padding: "12px 14px 40px", maxWidth: 800, margin: "0 auto" }}>
+    <div className="px-3.5 pt-3 pb-10 max-w-3xl mx-auto w-full">
 
       {/* Mode selector pills */}
-      <div style={{ display: "flex", gap: 8, marginBottom: 20, flexWrap: "wrap" }}>
+      <div className="flex gap-2 mb-5 flex-wrap">
         {[
-          { key: "overview" as ReadingMode, label: "Tổng quan", icon: <BookOutlined /> },
-          { key: "strategy" as ReadingMode, label: "Chiến lược", icon: <BulbOutlined /> },
-          { key: "drill" as ReadingMode, label: "Luyện tập", icon: <RocketOutlined /> },
+          { key: "overview" as ReadingMode, label: "Tổng quan", icon: <Book className="h-4 w-4" /> },
+          { key: "strategy" as ReadingMode, label: "Chiến lược", icon: <Lightbulb className="h-4 w-4" /> },
+          { key: "drill" as ReadingMode, label: "Luyện tập", icon: <Rocket className="h-4 w-4" /> },
         ].map(m => (
-          <button key={m.key} type="button" onClick={() => setMode(m.key)}
-            style={mode === m.key ? pillActive : pill}>
-            {m.icon} <span style={{ marginLeft: 4 }}>{m.label}</span>
+          <button
+            key={m.key}
+            type="button"
+            onClick={() => setMode(m.key)}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold border cursor-pointer transition-all duration-150 active:scale-97 ${
+              mode === m.key
+                ? "border-accent bg-accent/10 text-accent"
+                : "border-border bg-surface text-slate-450 hover:border-slate-800 hover:text-slate-200"
+            }`}
+          >
+            {m.icon}
+            <span>{m.label}</span>
           </button>
         ))}
       </div>
 
       {/* ── Overview Mode ── */}
       {mode === "overview" && (
-        <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-200">
           {/* Quick stats */}
-          <div style={{ ...card, background: "linear-gradient(135deg, #1a2332 0%, #2d3748 50%, #4a5568 100%)", color: "#fff" }}>
-            <h3 style={{ margin: "0 0 8px", fontSize: 18, fontWeight: 800, fontFamily: "var(--font-display)" }}>
+          <div className="rounded-2xl border border-slate-800 bg-linear-to-br from-slate-900 to-slate-950 p-5 relative overflow-hidden shadow-md text-white">
+            <h3 className="m-0 mb-2 text-lg font-extrabold font-display">
               TOEIC Reading Section
             </h3>
-            <p style={{ margin: "0 0 14px", fontSize: 13, opacity: 0.8, lineHeight: 1.6 }}>
+            <p className="m-0 mb-3.5 text-xs text-slate-350 leading-relaxed">
               75 phút · 100 câu hỏi · 3 phần (Part 5, 6, 7) · Tối đa 495 điểm
             </p>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <div className="flex gap-2 flex-wrap">
               {[
                 { part: "Part 5", q: "30 câu", desc: "Incomplete Sentences" },
                 { part: "Part 6", q: "16 câu", desc: "Text Completion" },
                 { part: "Part 7", q: "54 câu", desc: "Reading Comprehension" },
               ].map(p => (
-                <div key={p.part} style={{
-                  flex: 1, minWidth: 100, padding: "10px 12px", borderRadius: 10,
-                  background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.12)",
-                }}>
-                  <div style={{ fontSize: 13, fontWeight: 700 }}>{p.part}</div>
-                  <div style={{ fontSize: 11, opacity: 0.7 }}>{p.q} · {p.desc}</div>
+                <div key={p.part} className="flex-1 min-w-[100px] p-2.5 rounded-xl bg-white/5 border border-white/10">
+                  <div className="text-xs font-bold text-slate-100">{p.part}</div>
+                  <div className="text-[10px] text-slate-400 font-medium mt-0.5">{p.q} · {p.desc}</div>
                 </div>
               ))}
             </div>
           </div>
 
           {/* CTA cards */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-            <button type="button" onClick={() => setMode("strategy")} style={{
-              ...card, cursor: "pointer", textAlign: "left",
-              background: "color-mix(in srgb, var(--accent) 5%, var(--surface))",
-            }}>
-              <BulbOutlined style={{ fontSize: 24, color: "var(--accent)", marginBottom: 8 }} />
-              <div style={{ fontSize: 15, fontWeight: 700, color: "var(--ink)" }}>Chiến lược làm bài</div>
-              <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 4 }}>Tips cho từng Part</div>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setMode("strategy")}
+              className="rounded-2xl border border-border bg-accent/5 p-5 text-left transition-all hover:scale-[1.01] hover:border-accent hover:bg-accent/10 duration-150 cursor-pointer shadow-xs"
+            >
+              <Lightbulb className="h-6 w-6 text-accent mb-2" />
+              <div className="text-sm font-bold text-ink">Chiến lược làm bài</div>
+              <div className="text-[11px] text-slate-450 mt-1">Tips cho từng Part</div>
             </button>
-            <button type="button" onClick={() => setMode("drill")} style={{
-              ...card, cursor: "pointer", textAlign: "left",
-              background: "color-mix(in srgb, var(--secondary) 5%, var(--surface))",
-            }}>
-              <RocketOutlined style={{ fontSize: 24, color: "var(--secondary)", marginBottom: 8 }} />
-              <div style={{ fontSize: 15, fontWeight: 700, color: "var(--ink)" }}>Quick Drill</div>
-              <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 4 }}>Luyện từng Part riêng</div>
+            <button
+              type="button"
+              onClick={() => setMode("drill")}
+              className="rounded-2xl border border-border bg-(--secondary)/5 p-5 text-left transition-all hover:scale-[1.01] hover:border-(--secondary) hover:bg-(--secondary)/10 duration-150 cursor-pointer shadow-xs"
+            >
+              <Rocket className="h-6 w-6 text-(--secondary) mb-2" />
+              <div className="text-sm font-bold text-ink">Quick Drill</div>
+              <div className="text-[11px] text-slate-450 mt-1">Luyện từng Part riêng</div>
             </button>
           </div>
 
           {/* Full practice CTA */}
-          <Link href="/toeic/practice" style={{ textDecoration: "none" }}>
-            <div style={{
-              ...card, display: "flex", alignItems: "center", gap: 14,
-              background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), color-mix(in srgb, var(--secondary) 6%, var(--surface)))",
-              cursor: "pointer",
-            }}>
-              <div style={{
-                width: 44, height: 44, borderRadius: 12, display: "grid", placeItems: "center",
-                background: "color-mix(in srgb, var(--accent) 12%, var(--surface))",
-                color: "var(--accent)", fontSize: 20,
-              }}>
-                <TrophyOutlined />
+          <Link href="/toeic/practice" className="no-underline block group">
+            <div className="rounded-2xl border border-border bg-linear-to-br from-(--accent)/5 to-(--secondary)/5 p-5 flex items-center gap-3.5 cursor-pointer shadow-xs transition-all duration-200 group-hover:border-(--accent)/40">
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-(--accent)/10 text-(--accent) text-xl flex-shrink-0 transition-transform duration-200 group-hover:scale-105">
+                <Trophy className="h-5 w-5" />
               </div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 15, fontWeight: 700, color: "var(--ink)" }}>Luyện đề ETS chính hãng</div>
-                <div style={{ fontSize: 12, color: "var(--text-muted)" }}>1,320 câu hỏi từ ETS 2020-2021</div>
+              <div className="flex-1">
+                <div className="text-sm font-bold text-ink">Luyện đề ETS chính hãng</div>
+                <div className="text-xs text-slate-450 mt-0.5">1,320 câu hỏi từ ETS 2020-2021</div>
               </div>
-              <ArrowRightOutlined style={{ color: "var(--text-muted)" }} />
+              <ArrowRight className="h-4 w-4 text-slate-400 transition-transform duration-200 group-hover:translate-x-1" />
             </div>
           </Link>
         </div>
@@ -197,47 +176,54 @@ export function ReadingTab() {
 
       {/* ── Strategy Mode ── */}
       {mode === "strategy" && (
-        <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          <div style={sectionLabel}>
-            <div style={{ width: 3, height: 14, borderRadius: 2, background: "var(--accent)" }} />
+        <div className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
+          <div className="text-[11px] font-extrabold uppercase tracking-wider text-accent mb-1 flex items-center gap-2">
+            <div className="w-1 h-3.5 rounded bg-(--accent)" />
             <span>Chiến lược từng phần</span>
           </div>
 
           {STRATEGIES.map(s => {
             const isExpanded = expandedStrategy === s.id;
             return (
-              <button key={s.id} type="button"
+              <button
+                key={s.id}
+                type="button"
                 onClick={() => setExpandedStrategy(isExpanded ? null : s.id)}
-                style={{ ...card, cursor: "pointer", textAlign: "left", width: "100%" }}>
-                <div style={{ position: "absolute", top: 0, left: 0, width: 4, height: "100%", background: s.color, borderRadius: "16px 0 0 16px" }} />
-                <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: isExpanded ? 14 : 0 }}>
-                  <div style={{
-                    width: 38, height: 38, borderRadius: 10, display: "grid", placeItems: "center",
-                    background: `color-mix(in srgb, ${s.color} 10%, var(--surface))`,
-                    color: s.color, fontSize: 16,
-                  }}>
+                className="rounded-2xl border border-border bg-surface p-5 relative overflow-hidden transition-all duration-150 shadow-xs cursor-pointer text-left w-full block active:scale-99"
+              >
+                <div
+                  className="absolute top-0 left-0 w-1 h-full rounded-l-2xl"
+                  style={{ backgroundColor: s.color }}
+                />
+                <div className={`flex items-center gap-3 ${isExpanded ? "mb-4.5" : ""}`}>
+                  <div
+                    className="w-9.5 h-9.5 rounded-xl flex items-center justify-center text-sm flex-shrink-0"
+                    style={{
+                      backgroundColor: `color-mix(in srgb, ${s.color} 10%, var(--surface))`,
+                      color: s.color,
+                    }}
+                  >
                     {s.icon}
                   </div>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 14, fontWeight: 700, color: "var(--ink)" }}>{s.part} — {s.title}</div>
-                    <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 2 }}>{s.description}</div>
+                  <div className="flex-1 min-w-0">
+                    <div className="text-sm font-bold text-ink">{s.part} — {s.title}</div>
+                    <div className="text-xs text-slate-455 mt-0.5 truncate">{s.description}</div>
                   </div>
-                  <ArrowRightOutlined style={{
-                    color: "var(--text-muted)", fontSize: 12,
-                    transform: isExpanded ? "rotate(90deg)" : "rotate(0deg)",
-                    transition: "transform 0.2s",
-                  }} />
+                  <ArrowRight
+                    className={`h-4.5 w-4.5 text-slate-400 transition-transform duration-200 ${
+                      isExpanded ? "rotate-90" : "rotate-0"
+                    }`}
+                  />
                 </div>
 
                 {isExpanded && (
-                  <div style={{ display: "flex", flexDirection: "column", gap: 8, paddingLeft: 50 }}>
+                  <div className="flex flex-col gap-2 pl-[42px] animate-in fade-in slide-in-from-top-1 duration-150">
                     {s.tips.map((tip, i) => (
-                      <div key={i} style={{
-                        display: "flex", gap: 8, alignItems: "flex-start",
-                        padding: "8px 12px", borderRadius: 10,
-                        background: "var(--bg-deep)", fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.5,
-                      }}>
-                        <StarFilled style={{ color: s.color, fontSize: 10, marginTop: 5, flexShrink: 0 }} />
+                      <div
+                        key={i}
+                        className="flex gap-2 items-start p-2.5 rounded-xl bg-slate-900/40 border border-slate-850/60 text-xs text-slate-350 leading-relaxed"
+                      >
+                        <Star className="h-3 w-3 text-current shrink-0 fill-current mt-0.5" style={{ color: s.color }} />
                         <span>{tip}</span>
                       </div>
                     ))}
@@ -251,34 +237,35 @@ export function ReadingTab() {
 
       {/* ── Drill Mode ── */}
       {mode === "drill" && (
-        <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-          <div style={sectionLabel}>
-            <div style={{ width: 3, height: 14, borderRadius: 2, background: "var(--accent)" }} />
+        <div className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
+          <div className="text-[11px] font-extrabold uppercase tracking-wider text-accent mb-1 flex items-center gap-2">
+            <div className="w-1 h-3.5 rounded bg-(--accent)" />
             <span>Chọn bài luyện</span>
           </div>
 
           {DRILLS.map(d => (
-            <Link key={d.label} href={d.href} style={{ textDecoration: "none" }}>
-              <div style={{
-                ...card, display: "flex", alignItems: "center", gap: 14, cursor: "pointer",
-              }}>
-                <div style={{
-                  width: 42, height: 42, borderRadius: 12, display: "grid", placeItems: "center",
-                  background: d.part === "Full" ? "linear-gradient(135deg, var(--accent), var(--secondary))" : "color-mix(in srgb, var(--accent) 10%, var(--surface))",
-                  color: d.part === "Full" ? "#fff" : "var(--accent)", fontSize: 16, fontWeight: 800,
-                }}>
-                  {d.part === "Full" ? <TrophyOutlined /> : <RocketOutlined />}
+            <Link key={d.label} href={d.href} className="no-underline block group">
+              <div className="rounded-2xl border border-border bg-surface p-4.5 flex items-center gap-3.5 cursor-pointer shadow-xs transition-all duration-150 group-hover:border-accent/40">
+                <div
+                  className={`w-10.5 h-10.5 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0 transition-transform duration-200 group-hover:scale-105 ${
+                    d.part === "Full"
+                      ? "bg-linear-to-br from-(--accent) to-(--secondary) text-white"
+                      : "bg-(--accent)/10 text-(--accent)"
+                  }`}
+                >
+                  {d.part === "Full" ? <Trophy className="h-4.5 w-4.5" /> : <Rocket className="h-4.5 w-4.5" />}
                 </div>
-                <div style={{ flex: 1 }}>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: "var(--ink)" }}>{d.label}</div>
-                  <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 2 }}>
+                <div className="flex-1 min-w-0">
+                  <div className="text-sm font-bold text-ink">{d.label}</div>
+                  <div className="text-xs text-slate-450 mt-0.5 truncate">
                     {d.description}
                   </div>
                 </div>
-                <div style={{ textAlign: "right", flexShrink: 0 }}>
-                  <div style={{ fontSize: 13, fontWeight: 700, color: "var(--accent)" }}>{d.questionCount} câu</div>
-                  <div style={{ fontSize: 11, color: "var(--text-muted)", display: "flex", alignItems: "center", gap: 3 }}>
-                    <ClockCircleOutlined style={{ fontSize: 10 }} />{d.estimatedMinutes}p
+                <div className="text-right flex-shrink-0">
+                  <div className="text-xs font-bold text-(--accent)">{d.questionCount} câu</div>
+                  <div className="text-[10px] text-slate-450 flex items-center justify-end gap-1 mt-0.5">
+                    <Clock className="h-3 w-3" />
+                    <span>{d.estimatedMinutes}p</span>
                   </div>
                 </div>
               </div>

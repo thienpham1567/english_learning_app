@@ -1,45 +1,54 @@
 "use client";
 
 import { useState } from "react";
-import { Spin } from "antd";
-import { MailOutlined, EditOutlined, PictureOutlined, StarOutlined } from "@ant-design/icons";
+import { Mail, PenTool, Image, Star, Loader2 } from "lucide-react";
 import type { WritingCategory } from "@/lib/writing-practice/types";
 import { CATEGORY_LABELS } from "@/lib/writing-practice/types";
 
 const CATEGORIES: {
   id: WritingCategory;
-  icon: typeof MailOutlined;
+  icon: React.ComponentType<{ className?: string }>;
   desc: string;
-  color: string;
-  bg: string;
+  colorClass: string;
+  borderClass: string;
+  bgClass: string;
+  iconBgClass: string;
 }[] = [
   {
     id: "email-response",
-    icon: MailOutlined,
+    icon: Mail,
     desc: "Trả lời email yêu cầu (TOEIC Q6-7)",
-    color: "var(--info)",
-    bg: "linear-gradient(135deg, var(--info), color-mix(in srgb, var(--info) 70%, white))",
+    colorClass: "text-(--info)",
+    borderClass: "border-slate-800 hover:border-(--info)/40",
+    bgClass: "hover:bg-(--info)/5 bg-surface",
+    iconBgClass: "bg-blue-500/10 text-blue-400",
   },
   {
     id: "opinion-essay",
-    icon: EditOutlined,
+    icon: PenTool,
     desc: "Viết luận trình bày quan điểm (TOEIC Q8)",
-    color: "var(--accent)",
-    bg: "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, white))",
+    colorClass: "text-(--accent)",
+    borderClass: "border-slate-800 hover:border-(--accent)/40",
+    bgClass: "hover:bg-(--accent)/5 bg-surface",
+    iconBgClass: "bg-accent/10 text-accent",
   },
   {
     id: "describe-picture",
-    icon: PictureOutlined,
+    icon: Image,
     desc: "Mô tả hình ảnh bằng câu (TOEIC Q1-5)",
-    color: "var(--warning)",
-    bg: "linear-gradient(135deg, var(--warning), color-mix(in srgb, var(--warning) 70%, white))",
+    colorClass: "text-(--warning)",
+    borderClass: "border-slate-800 hover:border-(--warning)/40",
+    bgClass: "hover:bg-(--warning)/5 bg-surface",
+    iconBgClass: "bg-amber-500/10 text-amber-400",
   },
   {
     id: "free",
-    icon: StarOutlined,
+    icon: Star,
     desc: "Tự do sáng tạo, chủ đề bất kỳ",
-    color: "var(--success)",
-    bg: "linear-gradient(135deg, var(--success), color-mix(in srgb, var(--success) 70%, white))",
+    colorClass: "text-(--success)",
+    borderClass: "border-slate-800 hover:border-(--success)/40",
+    bgClass: "hover:bg-(--success)/5 bg-surface",
+    iconBgClass: "bg-emerald-500/10 text-emerald-450",
   },
 ];
 
@@ -50,146 +59,62 @@ type Props = {
 };
 
 export function PromptGallery({ onSelect, isLoading, loadingCategory }: Props) {
-  const [hoveredId, setHoveredId] = useState<WritingCategory | null>(null);
-
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        width: "100%",
-        maxWidth: 520,
-        margin: "0 auto",
-        padding: "24px 20px",
-      }}
-    >
+    <div className="flex flex-col items-center w-full max-w-lg mx-auto p-5 py-6">
       {/* Header */}
-      <div style={{ textAlign: "center", marginBottom: 28 }}>
-        <div
-          style={{
-            display: "inline-grid",
-            placeItems: "center",
-            width: 60,
-            height: 60,
-            borderRadius: 18,
-            background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-            fontSize: 28,
-            marginBottom: 12,
-            boxShadow: "0 4px 16px rgba(154,177,122,0.35)",
-          }}
-        >
-          <EditOutlined />
+      <div className="text-center mb-7">
+        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-linear-to-br from-accent to-accent-hover text-white text-2xl mb-3.5 shadow-md shadow-accent/20">
+          <PenTool className="h-6 w-6" />
         </div>
-        <h2
-          style={{
-            margin: 0,
-            fontSize: 22,
-            fontWeight: 700,
-            color: "var(--text)",
-            fontFamily: "var(--font-display)",
-            fontStyle: "italic",
-          }}
-        >
+        <h2 className="m-0 text-xl font-bold font-display text-ink italic">
           Chọn loại bài viết
         </h2>
-        <p style={{ margin: "6px 0 0", color: "var(--text-muted)", fontSize: 14 }}>
+        <p className="m-0 mt-1.5 text-xs text-slate-455">
           Luyện viết theo format TOEIC Speaking &amp; Writing
         </p>
       </div>
 
       {/* Category cards grid */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: 12,
-          width: "100%",
-        }}
-      >
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-3 w-full">
         {CATEGORIES.map((cat) => {
           const Icon = cat.icon;
           const isBusy = isLoading && loadingCategory === cat.id;
-          const isHov = hoveredId === cat.id && !isLoading;
 
           return (
             <button
               key={cat.id}
-              onClick={() => !isLoading && onSelect(cat.id)}
-              onMouseEnter={() => setHoveredId(cat.id)}
-              onMouseLeave={() => setHoveredId(null)}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-start",
-                gap: 10,
-                padding: 18,
-                borderRadius: 14,
-                border: "1px solid var(--border)",
-                borderTop: `4px solid ${cat.color}`,
-                background: isHov
-                  ? `${cat.color}08`
-                  : "var(--card-bg)",
-                cursor: isLoading ? "not-allowed" : "pointer",
-                textAlign: "left",
-                transition: "all 0.18s ease",
-                opacity: isLoading && !isBusy ? 0.55 : 1,
-                transform: isHov ? "translateY(-3px)" : "none",
-                boxShadow: isHov
-                  ? `0 6px 18px ${cat.color}25`
-                  : "0 1px 4px rgba(0,0,0,0.05)",
-              }}
+              disabled={isLoading}
+              onClick={() => onSelect(cat.id)}
+              className={`flex flex-col items-start gap-2.5 p-4.5 rounded-2xl border text-left cursor-pointer transition-all duration-150 relative overflow-hidden active:scale-97 block w-full ${
+                cat.borderClass
+              } ${cat.bgClass} ${isLoading ? "opacity-55 cursor-not-allowed" : "hover:-translate-y-0.5 shadow-xs"}`}
             >
+              <div
+                className="absolute top-0 left-0 w-full h-1"
+                style={{ backgroundColor: `var(--${cat.id === "email-response" ? "info" : cat.id === "opinion-essay" ? "accent" : cat.id === "describe-picture" ? "warning" : "success"})` }}
+              />
+
               {/* Icon */}
-              <span
-                style={{
-                  display: "grid",
-                  width: 44,
-                  height: 44,
-                  placeItems: "center",
-                  borderRadius: 12,
-                  background: isBusy ? "var(--border)" : cat.bg,
-                  boxShadow: `0 2px 8px ${cat.color}40`,
-                  transition: "all 0.18s",
-                  flexShrink: 0,
-                }}
-              >
+              <span className={`w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0 ${cat.iconBgClass}`}>
                 {isBusy ? (
-                  <Spin size="small" />
+                  <Loader2 className="h-5 w-5 animate-spin" />
                 ) : (
-                  <Icon style={{ fontSize: 20, color: "var(--text-on-accent)" }} />
+                  <Icon className="h-5 w-5" />
                 )}
               </span>
 
               {/* Label */}
               <div>
-                <div
-                  style={{
-                    fontSize: 14,
-                    fontWeight: 700,
-                    color: "var(--text)",
-                    lineHeight: 1.3,
-                    marginBottom: 4,
-                  }}
-                >
+                <div className="text-sm font-bold text-ink leading-tight mb-1">
                   {CATEGORY_LABELS[cat.id]}
                 </div>
-                <div style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.4 }}>
+                <div className="text-xs text-slate-455 leading-relaxed">
                   {cat.desc}
                 </div>
               </div>
 
               {isBusy && (
-                <div
-                  style={{
-                    fontSize: 11,
-                    fontWeight: 600,
-                    color: cat.color,
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 4,
-                  }}
-                >
+                <div className="text-[11px] font-semibold mt-1 flex items-center gap-1.5" style={{ color: `var(--${cat.id === "email-response" ? "info" : cat.id === "opinion-essay" ? "accent" : cat.id === "describe-picture" ? "warning" : "success"})` }}>
                   Đang tạo đề...
                 </div>
               )}

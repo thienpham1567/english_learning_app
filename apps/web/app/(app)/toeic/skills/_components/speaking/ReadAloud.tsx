@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { SoundOutlined } from "@ant-design/icons";
+import { Volume2 } from "lucide-react";
 
 const READ_ALOUD_PASSAGES = [
   { id: "ra1", text: "The quarterly financial report indicates that revenue has increased by twelve percent compared to the same period last year, primarily driven by strong performance in the Asia-Pacific region.", topic: "Business Report" },
@@ -17,54 +17,52 @@ export function ReadAloud() {
   const passage = READ_ALOUD_PASSAGES.find(p => p.id === selected);
 
   return (
-    <div style={{ padding: "0 14px" }} className="anim-fade-up">
-      <div style={{ textAlign: "center", marginBottom: 20 }}>
-        <div style={{ width: 48, height: 48, borderRadius: "50%", background: "color-mix(in srgb, var(--secondary) 12%, var(--surface))", display: "grid", placeItems: "center", margin: "0 auto 10px" }}>
-          <SoundOutlined style={{ fontSize: 20, color: "var(--secondary)" }} />
+    <div className="px-3.5 animate-in fade-in slide-in-from-bottom-2 duration-200">
+      <div className="text-center mb-5">
+        <div className="w-12 h-12 rounded-full bg-(--secondary)/10 text-(--secondary) flex items-center justify-center mx-auto mb-2.5">
+          <Volume2 className="h-5 w-5" />
         </div>
-        <h3 style={{ margin: "0 0 4px", fontSize: 16, fontWeight: 700, color: "var(--ink)" }}>Read Aloud · Part 1</h3>
-        <p style={{ margin: 0, fontSize: 13, color: "var(--text-muted)", maxWidth: 400, marginInline: "auto" }}>
+        <h3 className="m-0 mb-1 text-base font-bold text-ink">Read Aloud · Part 1</h3>
+        <p className="m-0 text-xs text-slate-450 max-w-sm mx-auto leading-relaxed">
           Đọc to đoạn văn hiển thị. Bạn có 45 giây để chuẩn bị và 45 giây để đọc.
         </p>
       </div>
 
       {!passage ? (
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <div className="flex flex-col gap-2.5">
           {READ_ALOUD_PASSAGES.map((p, i) => (
-            <button key={p.id} type="button" onClick={() => setSelected(p.id)}
-              className={`anim-fade-up anim-delay-${Math.min(i + 1, 5)}`}
-              style={{
-                padding: "14px 18px", borderRadius: 14, border: "1px solid var(--border)",
-                background: "var(--surface)", cursor: "pointer", textAlign: "left", width: "100%",
-                transition: "all 0.15s",
-              }}>
-              <div style={{ fontSize: 14, fontWeight: 600, color: "var(--ink)" }}>{p.topic}</div>
-              <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 4, lineHeight: 1.5 }}>
+            <button
+              key={p.id}
+              type="button"
+              onClick={() => setSelected(p.id)}
+              className="p-4.5 rounded-2xl border border-border bg-surface text-left w-full cursor-pointer transition-all duration-150 hover:border-accent/40 active:scale-99 block"
+              style={{ animationDelay: `${i * 0.05}s` }}
+            >
+              <div className="text-sm font-bold text-ink">{p.topic}</div>
+              <div className="text-xs text-slate-455 mt-1 leading-relaxed">
                 {p.text.slice(0, 80)}...
               </div>
             </button>
           ))}
         </div>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: 16, alignItems: "center" }}>
-          <div style={{
-            padding: "24px 20px", borderRadius: 16, border: "1px solid var(--border)",
-            background: "var(--surface)", width: "100%", maxWidth: 600,
-          }}>
-            <div style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--accent)", marginBottom: 10 }}>
+        <div className="flex flex-col gap-4 items-center">
+          <div className="p-6 rounded-2xl border border-border bg-surface w-full max-w-xl">
+            <div className="text-[11px] font-extrabold uppercase tracking-wider text-accent mb-2.5">
               {passage.topic}
             </div>
-            <p style={{ fontSize: 18, lineHeight: 1.8, color: "var(--ink)", margin: 0, fontFamily: "var(--font-body)" }}>
+            <p className="text-base md:text-lg leading-relaxed text-ink m-0 font-body">
               {passage.text}
             </p>
           </div>
-          <p style={{ fontSize: 13, color: "var(--text-muted)", textAlign: "center" }}>
+          <p className="text-xs text-slate-450 text-center leading-relaxed">
             Đọc to đoạn văn trên. Chú ý phát âm rõ ràng, ngữ điệu tự nhiên.
           </p>
-          <button type="button" onClick={() => setSelected(null)} style={{
-            padding: "10px 24px", borderRadius: 12, border: "1px solid var(--border)",
-            background: "transparent", color: "var(--text-primary)", cursor: "pointer", fontSize: 13,
-          }}>
+          <button
+            type="button"
+            onClick={() => setSelected(null)}
+            className="px-6 py-2.5 rounded-xl border border-border bg-transparent text-slate-350 hover:text-slate-200 hover:border-slate-800 transition-colors text-xs font-bold cursor-pointer"
+          >
             ← Chọn đoạn khác
           </button>
         </div>

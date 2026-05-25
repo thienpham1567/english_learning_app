@@ -2,8 +2,15 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { diffWords } from "diff";
-import { Tag } from "antd";
-import { CopyOutlined, CheckOutlined, EditOutlined, LoadingOutlined, HighlightOutlined } from "@ant-design/icons";
+import {
+  Copy,
+  Check,
+  Highlighter,
+  Loader2,
+  MessageSquare,
+  FileText,
+  BookOpen,
+} from "lucide-react";
 
 import { api } from "@/lib/api-client";
 
@@ -27,10 +34,10 @@ type RewriteResponse = {
 
 /* ── Constants ──────────────────────────────────────────── */
 
-const LEVEL_META: Record<string, { label: string; color: string; emoji: string }> = {
-  natural: { label: "Natural", color: "var(--success)", emoji: "MessageOutlined" },
-  formal:  { label: "Formal",  color: "var(--info)", emoji: "ContainerOutlined" },
-  c1:      { label: "C1/Academic", color: "var(--accent)", emoji: "BookOutlined" },
+const LEVEL_META: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
+  natural: { label: "Natural", color: "var(--success)", icon: <MessageSquare className="h-3.5 w-3.5" /> },
+  formal:  { label: "Formal",  color: "var(--info)", icon: <FileText className="h-3.5 w-3.5" /> },
+  c1:      { label: "C1/Academic", color: "var(--accent)", icon: <BookOpen className="h-3.5 w-3.5" /> },
 };
 
 const MAX_CHARS = 400;
@@ -41,19 +48,13 @@ function WordDiff({ original, rewritten }: { original: string; rewritten: string
   const parts = useMemo(() => diffWords(original, rewritten), [original, rewritten]);
 
   return (
-    <span style={{ fontSize: 14, lineHeight: 1.8 }}>
+    <span className="text-sm leading-relaxed">
       {parts.map((part, i) => {
         if (part.added) {
           return (
             <span
               key={i}
-              style={{
-                color: "var(--success)",
-                backgroundColor: "color-mix(in srgb, var(--success) 8%, var(--surface))",
-                borderRadius: 3,
-                padding: "1px 3px",
-                fontWeight: 500,
-              }}
+              className="text-(--success) bg-(--success)/10 rounded px-1 font-medium"
             >
               {part.value}
             </span>
@@ -63,12 +64,7 @@ function WordDiff({ original, rewritten }: { original: string; rewritten: string
           return (
             <span
               key={i}
-              style={{
-                color: "var(--error)",
-                textDecoration: "line-through",
-                opacity: 0.6,
-                padding: "1px 1px",
-              }}
+              className="text-(--error) line-through opacity-60 px-0.5"
             >
               {part.value}
             </span>
@@ -95,18 +91,11 @@ function CopyButton({ text }: { text: string }) {
     <button
       onClick={copy}
       title="Copy to clipboard"
-      style={{
-        border: "none",
-        background: "transparent",
-        cursor: "pointer",
-        color: copied ? "var(--success)" : "var(--text-secondary)",
-        fontSize: 14,
-        padding: "2px 6px",
-        borderRadius: 4,
-        transition: "color 0.2s",
-      }}
+      className={`border-none bg-transparent cursor-pointer text-xs p-1 rounded-md transition-colors ${
+        copied ? "text-(--success)" : "text-slate-450 hover:text-slate-200"
+      }`}
     >
-      {copied ? <CheckOutlined /> : <CopyOutlined />}
+      {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
     </button>
   );
 }
@@ -121,48 +110,37 @@ function VariantCard({
   original: string;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const meta = LEVEL_META[variant.level] ?? { label: variant.level, color: "var(--text-muted)", emoji: "EditOutlined" };
+  const meta = LEVEL_META[variant.level] ?? { label: variant.level, color: "var(--text-secondary)", icon: <MessageSquare className="h-3.5 w-3.5" /> };
 
   return (
     <div
-      style={{
-        borderRadius: 12,
-        border: `1px solid ${meta.color}30`,
-        background: "var(--card-bg)",
-        overflow: "hidden",
-      }}
+      className="rounded-2xl border bg-surface overflow-hidden"
+      style={{ borderColor: `color-mix(in srgb, ${meta.color} 30%, transparent)` }}
     >
       {/* Header */}
       <div
+        className="flex items-center justify-between p-3 px-4 border-b"
         style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "10px 14px",
-          borderBottom: `1px solid ${meta.color}20`,
-          background: `${meta.color}08`,
+          borderColor: `color-mix(in srgb, ${meta.color} 20%, transparent)`,
+          backgroundColor: `color-mix(in srgb, ${meta.color} 8%, transparent)`,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span>{meta.emoji}</span>
-          <Tag color={meta.color} style={{ fontSize: 11, fontWeight: 600, margin: 0 }}>
+        <div className="flex items-center gap-2">
+          <span style={{ color: meta.color }}>{meta.icon}</span>
+          <span
+            className="px-2.5 py-0.5 rounded-full text-[10px] font-bold text-white uppercase tracking-wider"
+            style={{ backgroundColor: meta.color }}
+          >
             {meta.label}
-          </Tag>
-          <span style={{ fontSize: 11, color: "var(--text-secondary)" }}>
+          </span>
+          <span className="text-[10px] font-bold text-slate-450">
             {variant.changes.length} thay đổi
           </span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+        <div className="flex items-center gap-2">
           <button
             onClick={() => setExpanded((p) => !p)}
-            style={{
-              border: "none",
-              background: "transparent",
-              cursor: "pointer",
-              color: "var(--text-secondary)",
-              fontSize: 11,
-              padding: "2px 6px",
-            }}
+            className="border-none bg-transparent cursor-pointer text-[10px] font-bold text-slate-400 hover:text-slate-200"
           >
             {expanded ? "Ẩn chi tiết" : "Xem thay đổi"}
           </button>
@@ -171,35 +149,23 @@ function VariantCard({
       </div>
 
       {/* Diff view */}
-      <div style={{ padding: "12px 14px" }}>
+      <div className="p-3.5 px-4.5 bg-slate-900/10">
         <WordDiff original={original} rewritten={variant.rewrite} />
       </div>
 
       {/* Changes breakdown */}
       {expanded && variant.changes.length > 0 && (
-        <div
-          style={{
-            padding: "0 14px 12px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 6,
-          }}
-        >
+        <div className="p-3.5 pt-0 flex flex-col gap-1.5">
           {variant.changes.map((change, i) => (
             <div
               key={i}
-              style={{
-                fontSize: 12,
-                padding: "6px 10px",
-                borderRadius: 8,
-                background: "var(--surface)",
-                borderLeft: `3px solid ${meta.color}`,
-              }}
+              className="text-xs p-2.5 rounded-xl bg-slate-900/40 border-l-3"
+              style={{ borderLeftColor: meta.color }}
             >
-              <span style={{ textDecoration: "line-through", color: "var(--text-muted)" }}>{change.original}</span>
-              {" → "}
-              <span style={{ color: meta.color, fontWeight: 500 }}>{change.replacement}</span>
-              <span style={{ color: "var(--text-secondary)", marginLeft: 6 }}>— {change.reason}</span>
+              <span className="line-through text-slate-450">{change.original}</span>
+              <span className="text-slate-500 mx-1">→</span>
+              <span className="font-semibold" style={{ color: meta.color }}>{change.replacement}</span>
+              <span className="text-slate-400 ml-1.5">— {change.reason}</span>
             </div>
           ))}
         </div>
@@ -253,13 +219,13 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
   }, [sentence, overLimit]);
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+    <div className="flex flex-col gap-3">
       {/* Header */}
       {!compact && (
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <EditOutlined style={{ color: "var(--accent)" }} />
-          <span style={{ fontWeight: 600, fontSize: 14 }}>Cải thiện câu văn</span>
-          <span style={{ fontSize: 12, color: "var(--text-secondary)" }}>
+        <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+          <Highlighter className="h-4.5 w-4.5 text-accent" />
+          <span className="font-bold text-sm text-ink">Cải thiện câu văn</span>
+          <span className="text-xs text-slate-455">
             — 3 phiên bản: tự nhiên, trang trọng, học thuật
           </span>
         </div>
@@ -267,14 +233,12 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
 
       {/* Input */}
       <div>
-        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-          <span style={{ fontSize: 12, color: "var(--text-secondary)", fontWeight: 500 }}>Câu gốc</span>
+        <div className="flex justify-between items-center mb-1.5">
+          <span className="text-xs text-slate-455 font-bold">Câu gốc</span>
           <span
-            style={{
-              fontSize: 11,
-              color: overLimit ? "var(--error)" : "var(--text-secondary)",
-              fontWeight: overLimit ? 600 : 400,
-            }}
+            className={`text-[10px] ${
+              overLimit ? "text-red-400 font-bold" : "text-slate-455 font-semibold"
+            }`}
           >
             {charCount}/{MAX_CHARS}
           </span>
@@ -283,19 +247,9 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
           value={sentence}
           onChange={(e) => { setSentence(e.target.value); setVariants(null); setError(null); }}
           placeholder="Nhập câu cần cải thiện..."
-          style={{
-            width: "100%",
-            minHeight: 80,
-            padding: 12,
-            borderRadius: 10,
-            border: overLimit ? "1px solid var(--error)" : "1px solid var(--border)",
-            background: "var(--card-bg)",
-            color: "var(--text)",
-            fontSize: 14,
-            lineHeight: 1.6,
-            resize: "vertical",
-            fontFamily: "inherit",
-          }}
+          className={`w-full min-h-[80px] p-3 rounded-xl border bg-surface text-ink text-sm leading-relaxed resize-y focus:outline-none focus:ring-1 focus:ring-accent/30 font-body ${
+            overLimit ? "border-red-500 focus:border-red-500" : "border-border focus:border-accent"
+          }`}
         />
       </div>
 
@@ -303,41 +257,36 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
       <button
         onClick={rewrite}
         disabled={!sentence.trim() || overLimit || loading}
-        style={{
-          padding: "10px 24px",
-          borderRadius: 8,
-          border: "none",
-          background: !sentence.trim() || overLimit || loading ? "var(--border)" : "var(--accent)",
-          color: "var(--text-on-accent)",
-          fontSize: 14,
-          fontWeight: 600,
-          cursor: !sentence.trim() || overLimit || loading ? "not-allowed" : "pointer",
-          alignSelf: "flex-start",
-          display: "flex",
-          alignItems: "center",
-          gap: 6,
-        }}
+        className={`px-5 py-2.5 rounded-xl border-none text-xs font-bold text-white flex items-center gap-1.5 self-start cursor-pointer transition-all duration-155 active:scale-97 ${
+          !sentence.trim() || overLimit || loading
+            ? "bg-slate-900 text-slate-500 cursor-not-allowed border border-border"
+            : "bg-accent hover:bg-accent-hover shadow-sm"
+        }`}
       >
-        {loading ? <><LoadingOutlined /> Đang viết lại...</> : <><HighlightOutlined /> Viết lại</>}
+        {loading ? (
+          <>
+            <Loader2 className="h-4 w-4 animate-spin" />
+            <span>Đang viết lại...</span>
+          </>
+        ) : (
+          <>
+            <Highlighter className="h-4 w-4" />
+            <span>Viết lại</span>
+          </>
+        )}
       </button>
 
       {/* Error */}
       {error && (
-        <div style={{
-          padding: "8px 14px",
-          borderRadius: 8,
-          background: "var(--error-bg)",
-          color: "var(--error)",
-          fontSize: 13,
-        }}>
+        <div className="p-3 rounded-xl bg-red-950/20 border border-red-900/30 text-xs text-red-400">
           {error}
         </div>
       )}
 
       {/* Results */}
       {variants && variants.length > 0 && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: 0, fontWeight: 500 }}>
+        <div className="flex flex-col gap-2.5 mt-2 animate-in fade-in duration-200">
+          <p className="text-xs text-slate-455 m-0 font-bold">
             {variants.length} phiên bản được đề xuất
           </p>
           {variants.map((v) => (

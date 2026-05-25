@@ -1,19 +1,18 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import { Tag, Tooltip, Progress } from "antd";
 import {
-  BulbOutlined,
-  LoadingOutlined,
-  ReloadOutlined,
-  SendOutlined,
-  BookOutlined,
-  CheckCircleOutlined,
-  FormOutlined,
-  AimOutlined,
-  LinkOutlined,
-  CalculatorOutlined,
-} from "@ant-design/icons";
+  Lightbulb,
+  Loader2,
+  RefreshCw,
+  Send,
+  BookOpen,
+  CheckCircle,
+  PenTool,
+  Target,
+  Link,
+  PenSquare,
+} from "lucide-react";
 
 import { api } from "@/lib/api-client";
 import { useExamMode } from "@/components/shared/ExamModeProvider";
@@ -73,6 +72,27 @@ const EXAM_OPTIONS: { value: ExamType; label: string }[] = [
   { value: "ielts-task1", label: "IELTS Task 1" },
   { value: "toefl-independent", label: "TOEFL Independent" },
 ];
+
+/* ── Circular Progress ──────────────────────────────────── */
+
+function CircularProgress({ percent, overallScore, maxScore, size = 100, strokeWidth = 8, color = "var(--accent)" }: { percent: number; overallScore: number; maxScore: number; size?: number; strokeWidth?: number; color?: string }) {
+  const radius = (size - strokeWidth) / 2;
+  const circumference = radius * 2 * Math.PI;
+  const strokeDashoffset = circumference - (percent / 100) * circumference;
+
+  return (
+    <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
+      <svg className="w-full h-full transform -rotate-90" viewBox={`0 0 ${size} ${size}`}>
+        <circle cx={size / 2} cy={size / 2} r={radius} className="stroke-slate-850" strokeWidth={strokeWidth} fill="transparent" />
+        <circle cx={size / 2} cy={size / 2} r={radius} style={{ stroke: color, strokeDasharray: circumference, strokeDashoffset }} strokeWidth={strokeWidth} strokeLinecap="round" fill="transparent" className="transition-all duration-500 ease-out" />
+      </svg>
+      <div className="absolute flex flex-col items-center justify-center">
+        <span className="text-2xl font-extrabold text-ink leading-none">{overallScore}</span>
+        <span className="text-[10px] text-slate-450 font-bold mt-1">/{maxScore}</span>
+      </div>
+    </div>
+  );
+}
 
 /* ── Component ──────────────────────────────────────────── */
 
@@ -173,43 +193,39 @@ export function GuidedWritingPanel() {
   /* ── Render ─────────────────────────────── */
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+    <div className="flex flex-col gap-4">
       {/* Error */}
       {error && (
-        <div style={{
-          padding: "8px 14px", borderRadius: 8,
-          background: "var(--error-bg)", color: "var(--error)", fontSize: 13,
-        }}>
+        <div className="p-3 rounded-xl bg-red-950/20 border border-red-900/30 text-xs text-red-400">
           {error}
         </div>
       )}
 
       {/* ═══ SETUP ═══ */}
       {state === "setup" && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <BulbOutlined style={{ color: "var(--accent)", fontSize: 18 }} />
-            <span style={{ fontWeight: 600, fontSize: 15 }}>Viết có hướng dẫn</span>
+        <div className="flex flex-col gap-4 animate-in fade-in duration-200">
+          <div className="flex items-center gap-2">
+            <Lightbulb className="h-5 w-5 text-accent" />
+            <span className="font-bold text-sm text-ink">Viết có hướng dẫn</span>
           </div>
-          <p style={{ fontSize: 13, color: "var(--text-secondary)", margin: 0 }}>
+          <p className="text-xs text-slate-455 m-0 leading-relaxed">
             Chọn loại bài thi và chủ đề — AI sẽ tạo đề bài, dàn ý, và ngân hàng từ vựng cho bạn.
           </p>
 
           {/* Exam selector */}
           <div>
-            <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>Loại bài thi</p>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <p className="text-xs text-slate-455 font-bold mb-2">Loại bài thi</p>
+            <div className="flex gap-2 flex-wrap">
               {EXAM_OPTIONS.map((opt) => (
                 <button
                   key={opt.value}
+                  type="button"
                   onClick={() => setExam(opt.value)}
-                  style={{
-                    padding: "8px 16px", borderRadius: 8,
-                    border: exam === opt.value ? "2px solid var(--accent)" : "1px solid var(--border)",
-                    background: exam === opt.value ? "var(--accent-muted)" : "transparent",
-                    color: exam === opt.value ? "var(--accent)" : "var(--text-secondary)",
-                    fontWeight: exam === opt.value ? 600 : 400, cursor: "pointer", fontSize: 13,
-                  }}
+                  className={`px-4 py-2 rounded-xl text-xs font-semibold border cursor-pointer transition-all duration-150 active:scale-97 ${
+                    exam === opt.value
+                      ? "border-accent bg-accent/10 text-accent font-bold"
+                      : "border-border bg-surface text-slate-400 hover:border-slate-800 hover:text-slate-200"
+                  }`}
                 >
                   {opt.label}
                 </button>
@@ -219,21 +235,20 @@ export function GuidedWritingPanel() {
 
           {/* Category selector (AC4) */}
           <div>
-            <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
-              Chủ đề <span style={{ fontWeight: 400 }}>(bỏ trống = ngẫu nhiên)</span>
+            <p className="text-xs text-slate-455 font-bold mb-2">
+              Chủ đề <span className="font-normal text-slate-500">(bỏ trống = ngẫu nhiên)</span>
             </p>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(90px, 1fr))", gap: 8 }}>
+            <div className="grid grid-cols-[repeat(auto-fit,minmax(90px,1fr))] gap-2">
               {TOPIC_CATEGORIES.map((cat) => (
                 <button
                   key={cat.key}
+                  type="button"
                   onClick={() => setCategory(category === cat.key ? null : cat.key)}
+                  className="px-3 py-2.5 rounded-xl text-xs font-bold text-center border cursor-pointer transition-all duration-150 active:scale-97 block"
                   style={{
-                    padding: "10px 12px", borderRadius: 10,
-                    border: category === cat.key ? `2px solid ${cat.color}` : "1px solid var(--border)",
-                    background: category === cat.key ? `${cat.color}10` : "transparent",
+                    borderColor: category === cat.key ? cat.color : "var(--border)",
+                    backgroundColor: category === cat.key ? `color-mix(in srgb, ${cat.color} 15%, transparent)` : "var(--surface)",
                     color: category === cat.key ? cat.color : "var(--text-secondary)",
-                    fontWeight: category === cat.key ? 600 : 400,
-                    cursor: "pointer", fontSize: 13, textAlign: "center",
                   }}
                 >
                   {cat.label}
@@ -243,23 +258,21 @@ export function GuidedWritingPanel() {
           </div>
 
           <button
+            type="button"
             onClick={() => generatePrompt()}
-            style={{
-              padding: "12px 32px", borderRadius: 10, border: "none",
-              background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 15,
-              fontWeight: 600, cursor: "pointer", alignSelf: "center",
-            }}
+            className="px-8 py-3 rounded-xl border-none bg-accent hover:bg-accent-hover text-white text-xs font-bold flex items-center gap-1.5 self-center cursor-pointer shadow-sm active:scale-95 transition-all mt-2"
           >
-            <AimOutlined /> Tạo đề bài
+            <Target className="h-4 w-4" />
+            <span>Tạo đề bài</span>
           </button>
         </div>
       )}
 
       {/* ═══ LOADING ═══ */}
       {state === "loading-prompt" && (
-        <div style={{ textAlign: "center", padding: 48 }}>
-          <LoadingOutlined style={{ fontSize: 36, color: "var(--accent)" }} />
-          <p style={{ color: "var(--text-secondary)", marginTop: 16, fontSize: 14 }}>
+        <div className="text-center py-16 flex flex-col items-center justify-center">
+          <Loader2 className="h-9 w-9 text-accent animate-spin" />
+          <p className="text-xs text-slate-455 mt-4 font-bold">
             Đang tạo đề bài và từ vựng...
           </p>
         </div>
@@ -267,94 +280,82 @@ export function GuidedWritingPanel() {
 
       {/* ═══ WRITING ═══ */}
       {(state === "writing" || state === "scoring") && guided && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 14 }}>
+        <div className="flex flex-col gap-4 animate-in fade-in duration-200">
           {/* Prompt */}
-          <div style={{
-            padding: 16, borderRadius: 12,
-            background: "var(--card-bg)", border: "1px solid var(--border)",
-          }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-              <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: 0, fontWeight: 600 }}>
-                <FormOutlined /> Đề bài
+          <div className="p-4.5 rounded-2xl bg-surface border border-border">
+            <div className="flex justify-between items-center mb-2.5">
+              <p className="text-xs text-slate-455 m-0 font-bold flex items-center gap-1.5">
+                <PenTool className="h-4 w-4 text-accent" />
+                <span>Đề bài</span>
               </p>
-              <div style={{ display: "flex", gap: 6 }}>
+              <div className="flex gap-3">
                 {/* Shuffle (AC4) */}
-                <Tooltip title="Đổi đề cùng chủ đề">
-                  <button
-                    onClick={() => generatePrompt(category ?? undefined)}
-                    style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--text-secondary)", fontSize: 13 }}
-                  >
-                    <ReloadOutlined /> Đổi đề
-                  </button>
-                </Tooltip>
+                <button
+                  type="button"
+                  onClick={() => generatePrompt(category ?? undefined)}
+                  className="border-none bg-transparent cursor-pointer text-slate-455 hover:text-slate-200 text-xs font-semibold flex items-center gap-1"
+                >
+                  <RefreshCw className="h-3 w-3" />
+                  <span>Đổi đề</span>
+                </button>
                 {/* New category (AC4) */}
-                <Tooltip title="Chọn chủ đề mới">
-                  <button
-                    onClick={() => { setState("setup"); setGuided(null); }}
-                    style={{ border: "none", background: "transparent", cursor: "pointer", color: "var(--text-secondary)", fontSize: 13 }}
-                  >
-                    Chủ đề khác
-                  </button>
-                </Tooltip>
+                <button
+                  type="button"
+                  onClick={() => { setState("setup"); setGuided(null); }}
+                  className="border-none bg-transparent cursor-pointer text-slate-455 hover:text-slate-200 text-xs font-semibold"
+                >
+                  Chủ đề khác
+                </button>
               </div>
             </div>
-            <p style={{ fontSize: 14, margin: 0, lineHeight: 1.7 }}>{guided.prompt}</p>
+            <p className="text-sm m-0 leading-relaxed text-ink font-medium">{guided.prompt}</p>
           </div>
 
           {/* Outline + Vocab — side by side */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 12 }}>
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3">
             {/* Outline */}
-            <div style={{
-              padding: 14, borderRadius: 12,
-              background: "var(--card-bg)", border: "1px solid var(--border)",
-            }}>
-              <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
+            <div className="p-4.5 rounded-2xl bg-surface border border-border">
+              <p className="text-xs text-slate-455 m-0 mb-2.5 font-bold flex items-center gap-1.5">
                 📋 Dàn ý gợi ý
               </p>
-              <ol style={{ margin: 0, paddingLeft: 18, fontSize: 13, lineHeight: 1.8 }}>
+              <ol className="m-0 pl-4.5 text-xs text-slate-350 leading-relaxed list-decimal flex flex-col gap-1">
                 {guided.outline.map((item, i) => (
-                  <li key={i} style={{ color: "var(--text)" }}>{item}</li>
+                  <li key={i}>{item}</li>
                 ))}
               </ol>
             </div>
 
             {/* Vocab Bank */}
-            <div style={{
-              padding: 14, borderRadius: 12,
-              background: "var(--card-bg)", border: "1px solid var(--border)",
-            }}>
-              <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
-                <BookOutlined /> Ngân hàng từ vựng <span style={{ fontWeight: 400 }}>(click để chèn)</span>
+            <div className="p-4.5 rounded-2xl bg-surface border border-border">
+              <p className="text-xs text-slate-455 m-0 mb-3 font-bold flex items-center gap-1.5">
+                <BookOpen className="h-4 w-4 text-accent" />
+                <span>Ngân hàng từ vựng</span>
+                <span className="font-normal text-slate-500">(click để chèn)</span>
               </p>
-              <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+              <div className="flex flex-col gap-2">
                 {guided.vocabBank.map((v, i) => {
                   const isUsed = essayText.toLowerCase().includes(v.term.toLowerCase());
                   return (
-                    <Tooltip
-                      key={i}
-                      title={
-                        <div style={{ fontSize: 12 }}>
-                          <div style={{ fontWeight: 600 }}>{v.meaning}</div>
-                          <div style={{ color: "var(--text-muted)", marginTop: 4, fontStyle: "italic" }}>{v.example}</div>
-                        </div>
-                      }
-                    >
+                    <div key={i} className="relative group inline-block w-full">
                       <button
+                        type="button"
                         onClick={() => insertVocab(v.term)}
-                        style={{
-                          display: "flex", alignItems: "center", gap: 6,
-                          padding: "4px 8px", borderRadius: 6, fontSize: 12,
-                          border: isUsed ? "1px solid var(--success)" : "1px solid var(--border)",
-                          background: isUsed ? "color-mix(in srgb, var(--success) 8%, var(--surface))" : "transparent",
-                          color: isUsed ? "var(--success)" : "var(--text)",
-                          cursor: "pointer", textAlign: "left",
-                          fontWeight: isUsed ? 600 : 400,
-                        }}
+                        className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs text-left w-full transition-all duration-150 border cursor-pointer active:scale-97 ${
+                          isUsed
+                            ? "border-emerald-500/30 bg-emerald-500/10 text-emerald-455 font-bold"
+                            : "border-border bg-slate-900/40 text-slate-300 hover:border-slate-800"
+                        }`}
                       >
-                        {isUsed && <CheckCircleOutlined style={{ fontSize: 10 }} />}
-                        {v.term}
+                        {isUsed && <CheckCircle className="h-3 w-3 shrink-0 text-emerald-500" />}
+                        <span>{v.term}</span>
                       </button>
-                    </Tooltip>
+                      
+                      {/* Tooltip Content */}
+                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50 bg-slate-950 border border-slate-850 p-2.5 rounded-xl shadow-xl text-[11px] text-slate-300 w-52 pointer-events-none text-center">
+                        <div className="font-bold text-slate-100">{v.meaning}</div>
+                        <div className="text-[10px] text-slate-455 mt-1 font-medium italic">{v.example}</div>
+                      </div>
+                    </div>
                   );
                 })}
               </div>
@@ -363,13 +364,11 @@ export function GuidedWritingPanel() {
 
           {/* Essay textarea */}
           <div>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6 }}>
-              <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: 0, fontWeight: 600 }}>Bài viết</p>
-              <span style={{
-                fontSize: 11,
-                color: wordCount < 150 ? "var(--error)" : "var(--text-secondary)",
-                fontWeight: 500,
-              }}>
+            <div className="flex justify-between items-center mb-1.5">
+              <p className="text-xs text-slate-455 m-0 font-bold">Bài viết</p>
+              <span className={`text-[10px] font-semibold ${
+                wordCount < 150 ? "text-red-400" : "text-slate-455"
+              }`}>
                 {wordCount} từ {wordCount < 150 && "(cần ≥ 150)"}
               </span>
             </div>
@@ -379,33 +378,31 @@ export function GuidedWritingPanel() {
               onChange={(e) => setEssayText(e.target.value)}
               placeholder="Viết bài viết của bạn ở đây. Click vào từ vựng bên phải để chèn..."
               disabled={state === "scoring"}
-              style={{
-                width: "100%", minHeight: 280, padding: 16, borderRadius: 12,
-                border: "1px solid var(--border)", background: "var(--card-bg)",
-                color: "var(--text)", fontSize: 14, lineHeight: 1.8,
-                resize: "vertical", fontFamily: "inherit",
-                opacity: state === "scoring" ? 0.6 : 1,
-              }}
+              className="w-full min-h-[280px] p-4 rounded-2xl border border-border bg-surface text-ink text-sm leading-relaxed resize-y focus:outline-none focus:ring-1 focus:ring-accent/30 font-body disabled:opacity-60"
             />
           </div>
 
           {/* Submit */}
           <button
+            type="button"
             onClick={submitForScoring}
             disabled={wordCount < 150 || state === "scoring"}
-            style={{
-              padding: "12px 32px", borderRadius: 10, border: "none",
-              background: wordCount < 150 || state === "scoring" ? "var(--border)" : "var(--accent)",
-              color: "var(--text-on-accent)", fontSize: 15, fontWeight: 600,
-              cursor: wordCount < 150 || state === "scoring" ? "not-allowed" : "pointer",
-              alignSelf: "center",
-              display: "flex", alignItems: "center", gap: 8,
-            }}
+            className={`px-8 py-3 rounded-xl border-none text-xs font-bold text-white flex items-center gap-1.5 self-center cursor-pointer transition-all duration-155 active:scale-97 ${
+              wordCount < 150 || state === "scoring"
+                ? "bg-slate-900 text-slate-500 cursor-not-allowed border border-border"
+                : "bg-accent hover:bg-accent-hover shadow-sm"
+            }`}
           >
             {state === "scoring" ? (
-              <><LoadingOutlined /> Đang chấm bài...</>
+              <>
+                <Loader2 className="h-4 w-4 animate-spin" />
+                <span>Đang chấm bài...</span>
+              </>
             ) : (
-              <><SendOutlined /> Nộp bài & chấm điểm</>
+              <>
+                <Send className="h-4 w-4" />
+                <span>Nộp bài & chấm điểm</span>
+              </>
             )}
           </button>
         </div>
@@ -413,30 +410,16 @@ export function GuidedWritingPanel() {
 
       {/* ═══ RESULT ═══ */}
       {state === "result" && scoreResult && guided && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <div className="flex flex-col gap-4 animate-in fade-in duration-200">
           {/* Overall score */}
-          <div style={{
-            padding: 24, borderRadius: 16,
-            background: "var(--card-bg)", border: "1px solid var(--border)",
-            textAlign: "center",
-          }}>
-            <Progress
-              type="circle"
-              percent={(scoreResult.overall / maxScore) * 100}
-              size={100}
-              strokeColor={scoreColor(scoreResult.overall)}
-              format={() => (
-                <span style={{ fontSize: 22, fontWeight: 700 }}>
-                  {scoreResult.overall}{isIelts ? "" : `/${maxScore}`}
-                </span>
-              )}
-            />
-            <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 8 }}>
+          <div className="p-6 rounded-2xl bg-surface border border-border text-center flex flex-col items-center shadow-xs">
+            <CircularProgress percent={(scoreResult.overall / maxScore) * 100} overallScore={scoreResult.overall} maxScore={maxScore} color={scoreColor(scoreResult.overall)} />
+            <p className="text-xs text-slate-455 m-0 mt-3 font-semibold">
               {EXAM_OPTIONS.find((o) => o.value === exam)?.label} • {scoreResult.wordCount} từ
             </p>
 
             {/* Criteria scores */}
-            <div style={{ display: "flex", justifyContent: "center", gap: 20, marginTop: 16, flexWrap: "wrap" }}>
+            <div className="flex justify-center gap-6 mt-5 flex-wrap w-full border-t border-border pt-4">
               {([
                 { key: "taskResponse", label: "Task" },
                 { key: "coherence", label: "Coherence" },
@@ -445,38 +428,45 @@ export function GuidedWritingPanel() {
               ] as const).map((c) => {
                 const s = scoreResult.criteria[c.key];
                 return (
-                  <Tooltip key={c.key} title={s.feedback}>
-                    <div style={{ cursor: "pointer" }}>
-                      <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0 }}>{c.label}</p>
-                      <p style={{ fontSize: 18, fontWeight: 600, margin: 0, color: scoreColor(s.score) }}>
-                        {s.score}
-                      </p>
+                  <div key={c.key} className="relative group inline-block cursor-pointer flex-1 min-w-[70px]">
+                    <p className="text-[10px] text-slate-450 m-0 font-bold uppercase tracking-wider">{c.label}</p>
+                    <p
+                      className="text-base font-extrabold m-0 mt-1 font-display"
+                      style={{ color: scoreColor(s.score) }}
+                    >
+                      {s.score}
+                    </p>
+                    
+                    {/* Tooltip Content */}
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50 bg-slate-950 border border-slate-850 p-2.5 rounded-xl shadow-xl text-[11px] text-slate-300 w-48 pointer-events-none text-center">
+                      {s.feedback}
                     </div>
-                  </Tooltip>
+                  </div>
                 );
               })}
             </div>
           </div>
 
           {/* Vocab usage summary */}
-          <div style={{
-            padding: 14, borderRadius: 12,
-            background: "var(--card-bg)", border: "1px solid var(--border)",
-          }}>
-            <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
-              <BookOutlined /> Từ vựng đã sử dụng
+          <div className="p-4.5 rounded-2xl bg-surface border border-border">
+            <p className="text-xs text-slate-455 m-0 mb-2.5 font-bold flex items-center gap-1.5">
+              <BookOpen className="h-4 w-4 text-accent" />
+              <span>Từ vựng đã sử dụng</span>
             </p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            <div className="flex flex-wrap gap-1.5">
               {guided.vocabBank.map((v, i) => {
                 const isUsed = essayText.toLowerCase().includes(v.term.toLowerCase());
                 return (
-                  <Tag
+                  <span
                     key={i}
-                    color={isUsed ? "var(--success)" : "default"}
-                    style={{ fontSize: 12 }}
+                    className={`px-2.5 py-0.5 rounded-md text-[9px] font-extrabold tracking-wide uppercase border ${
+                      isUsed
+                        ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-450"
+                        : "bg-slate-900 border-slate-850 text-slate-450"
+                    }`}
                   >
                     {isUsed ? "✓" : "✗"} {v.term}
-                  </Tag>
+                  </span>
                 );
               })}
             </div>
@@ -484,54 +474,59 @@ export function GuidedWritingPanel() {
 
           {/* Criteria feedback */}
           {([
-            { key: "taskResponse", label: <><FormOutlined /> Task Response</> },
-            { key: "coherence", label: <><LinkOutlined /> Coherence &amp; Cohesion</> },
-            { key: "lexical", label: <><BookOutlined /> Lexical Resource</> },
-            { key: "grammar", label: <><CalculatorOutlined /> Grammar</> },
+            { key: "taskResponse", label: <><PenTool className="h-4 w-4" /> Task Response</> },
+            { key: "coherence", label: <><Link className="h-4 w-4" /> Coherence &amp; Cohesion</> },
+            { key: "lexical", label: <><BookOpen className="h-4 w-4" /> Lexical Resource</> },
+            { key: "grammar", label: <><PenSquare className="h-4 w-4" /> Grammar</> },
           ] as const).map((c) => {
             const s = scoreResult.criteria[c.key];
             return (
-              <div key={c.key} style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                  <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: 0, fontWeight: 600 }}>{c.label}</p>
-                  <Tag color={scoreColor(s.score)} style={{ fontSize: 12, fontWeight: 600 }}>{s.score}</Tag>
+              <div key={c.key} className="p-4.5 rounded-2xl bg-surface border border-border">
+                <div className="flex justify-between items-center mb-2">
+                  <p className="text-xs text-slate-455 m-0 font-bold flex items-center gap-1.5">{c.label}</p>
+                  <span
+                    className="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold tracking-wider text-white"
+                    style={{ backgroundColor: scoreColor(s.score) }}
+                  >
+                    {s.score}
+                  </span>
                 </div>
-                <p style={{ fontSize: 13, margin: 0, lineHeight: 1.6 }}>{s.feedback}</p>
+                <p className="text-xs text-slate-350 leading-relaxed m-0">{s.feedback}</p>
               </div>
             );
           })}
 
           {/* Strengths & Next Steps */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>
-            <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-              <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
-                <CheckCircleOutlined style={{ color: "var(--success)" }} /> Điểm mạnh
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3">
+            <div className="p-4.5 rounded-2xl bg-surface border border-border">
+              <p className="text-xs text-slate-455 m-0 mb-2 font-bold flex items-center gap-1.5">
+                <CheckCircle className="h-4 w-4 text-emerald-500" />
+                <span>Điểm mạnh</span>
               </p>
-              <ul style={{ margin: 0, paddingLeft: 16, fontSize: 13, lineHeight: 1.8 }}>
+              <ul className="m-0 pl-4.5 text-xs text-slate-350 leading-relaxed flex flex-col gap-1 list-disc">
                 {scoreResult.strengths.map((s, i) => <li key={i}>{s}</li>)}
               </ul>
             </div>
-            <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-              <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
-                <AimOutlined /> Cần cải thiện
+            <div className="p-4.5 rounded-2xl bg-surface border border-border">
+              <p className="text-xs text-slate-455 m-0 mb-2 font-bold flex items-center gap-1.5">
+                <Target className="h-4 w-4 text-accent" />
+                <span>Cần cải thiện</span>
               </p>
-              <ul style={{ margin: 0, paddingLeft: 16, fontSize: 13, lineHeight: 1.8 }}>
+              <ul className="m-0 pl-4.5 text-xs text-slate-350 leading-relaxed flex flex-col gap-1 list-disc">
                 {scoreResult.nextSteps.map((s, i) => <li key={i}>{s}</li>)}
               </ul>
             </div>
           </div>
 
           {/* Actions */}
-          <div style={{ display: "flex", justifyContent: "center", gap: 12 }}>
+          <div className="flex justify-center gap-3 mt-2">
             <button
+              type="button"
               onClick={() => { setState("setup"); setGuided(null); setEssayText(""); setScoreResult(null); }}
-              style={{
-                padding: "10px 24px", borderRadius: 8, border: "none",
-                background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 14,
-                fontWeight: 600, cursor: "pointer",
-              }}
+              className="px-6 py-2.5 rounded-xl border-none bg-accent hover:bg-accent-hover text-white text-xs font-bold cursor-pointer flex items-center gap-1.5 shadow-sm active:scale-97"
             >
-              <ReloadOutlined /> Bài mới
+              <RefreshCw className="h-3.5 w-3.5" />
+              <span>Bài mới</span>
             </button>
           </div>
         </div>

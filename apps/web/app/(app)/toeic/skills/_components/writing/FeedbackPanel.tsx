@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { EditOutlined } from "@ant-design/icons";
+import { PenTool } from "lucide-react";
 import type { WritingFeedback } from "@/lib/writing-practice/types";
 import { BandScoreRadar } from "./BandScoreRadar";
 import { AnnotatedText } from "./AnnotatedText";
@@ -51,11 +51,11 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
           </div>
 
           {/* Right: improved version */}
-          <div className="rounded-xl border border-emerald-200 bg-emerald-50/50 p-5 shadow-(--shadow-sm)">
-            <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-emerald-700">
+          <div className="rounded-xl border border-emerald-900/20 bg-emerald-950/10 p-5 shadow-(--shadow-sm)">
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-emerald-450">
               Bài mẫu (Band 7+)
             </h3>
-            <p className="whitespace-pre-wrap text-sm leading-relaxed text-emerald-900">
+            <p className="whitespace-pre-wrap text-sm leading-relaxed text-emerald-300">
               {feedback.improvedVersion}
             </p>
           </div>
@@ -85,31 +85,17 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
       {/* ── Mobile tabs (≤768px) ── */}
       <div className="md:hidden">
         {/* Tab bar */}
-        <div
-          style={{
-            display: "flex",
-            borderRadius: 10,
-            border: "1px solid var(--border)",
-            overflow: "hidden",
-            marginBottom: 16,
-          }}
-        >
+        <div className="flex rounded-xl border border-border overflow-hidden mb-4 bg-surface">
           {TABS.map((tab) => (
             <button
               key={tab.key}
               type="button"
               onClick={() => setActiveTab(tab.key)}
-              style={{
-                flex: 1,
-                padding: "8px 4px",
-                fontSize: 12,
-                fontWeight: activeTab === tab.key ? 700 : 500,
-                background: activeTab === tab.key ? "var(--accent)" : "var(--surface)",
-                color: activeTab === tab.key ? "var(--text-on-accent)" : "var(--text-secondary)",
-                border: "none",
-                cursor: "pointer",
-                transition: "all 0.15s",
-              }}
+              className={`flex-1 py-2 text-xs font-semibold border-none cursor-pointer transition-all duration-150 ${
+                activeTab === tab.key
+                  ? "bg-accent text-white font-bold"
+                  : "bg-surface text-slate-400 hover:text-slate-200"
+              }`}
             >
               {tab.label}
             </button>
@@ -127,11 +113,11 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
         )}
 
         {activeTab === "improved" && (
-          <div className="anim-fade-in rounded-xl border border-emerald-200 bg-emerald-50/50 p-4 shadow-(--shadow-sm)">
-            <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-emerald-700">
+          <div className="anim-fade-in rounded-xl border border-emerald-900/20 bg-emerald-950/10 p-4 shadow-(--shadow-sm)">
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-emerald-450">
               Bài mẫu (Band 7+)
             </h3>
-            <p className="whitespace-pre-wrap text-sm leading-relaxed text-emerald-900">
+            <p className="whitespace-pre-wrap text-sm leading-relaxed text-emerald-300">
               {feedback.improvedVersion}
             </p>
           </div>
@@ -162,9 +148,10 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
       <div className="mt-8 text-center">
         <button
           onClick={onNewWriting}
-          className="rounded-xl border border-(--border) bg-(--surface) px-6 py-2.5 text-sm font-medium text-(--text-secondary) shadow-(--shadow-sm) transition hover:border-(--accent)/40 hover:text-(--accent)"
+          className="rounded-xl border border-(--border) bg-(--surface) px-6 py-2.5 text-xs font-bold text-(--text-secondary) shadow-(--shadow-sm) transition hover:border-(--accent)/45 hover:text-(--accent) cursor-pointer flex items-center gap-1.5 mx-auto"
         >
-          <EditOutlined /> Viết bài mới
+          <PenTool className="h-4 w-4" />
+          <span>Viết bài mới</span>
         </button>
       </div>
     </div>

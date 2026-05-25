@@ -2,16 +2,15 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import {
-  AudioOutlined,
-  PictureOutlined,
-  PauseCircleOutlined,
-  LoadingOutlined,
-  CheckCircleOutlined,
-  ReloadOutlined,
-  SoundOutlined,
-  InfoCircleOutlined,
-} from "@ant-design/icons";
-import { Progress, Tag } from "antd";
+  Mic,
+  Image as ImageIcon,
+  Pause,
+  Loader2,
+  CheckCircle,
+  RefreshCw,
+  Volume2,
+  Info,
+} from "lucide-react";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { Waveform } from "@/components/speaking/Waveform";
 import { api } from "@/lib/api-client";
@@ -36,6 +35,43 @@ type FeedbackResult = {
   overall: number; transcript: string; summary: string; improvements: string[];
 };
 type PageState = "gallery" | "viewing" | "recording" | "evaluating" | "result";
+
+function CircularProgress({ percent, size = 100, strokeWidth = 8, color = "var(--accent)" }: { percent: number; size?: number; strokeWidth?: number; color?: string }) {
+  const radius = (size - strokeWidth) / 2;
+  const circumference = radius * 2 * Math.PI;
+  const strokeDashoffset = circumference - (percent / 100) * circumference;
+
+  return (
+    <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
+      <svg className="w-full h-full transform -rotate-90" viewBox={`0 0 ${size} ${size}`}>
+        {/* Background circle */}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          className="stroke-slate-850"
+          strokeWidth={strokeWidth}
+          fill="transparent"
+        />
+        {/* Progress circle */}
+        <circle
+          cx={size / 2}
+          cy={size / 2}
+          r={radius}
+          style={{ stroke: color, strokeDasharray: circumference, strokeDashoffset }}
+          strokeWidth={strokeWidth}
+          strokeLinecap="round"
+          fill="transparent"
+          className="transition-all duration-500 ease-out"
+        />
+      </svg>
+      <div className="absolute flex flex-col items-center justify-center">
+        <span className="text-2xl font-extrabold text-ink leading-none">{percent}</span>
+        <span className="text-[9px] text-slate-450 font-bold uppercase tracking-wider mt-1">Overall</span>
+      </div>
+    </div>
+  );
+}
 
 export function DescribePicture() {
   const [state, setState] = useState<PageState>("gallery");
@@ -91,31 +127,48 @@ export function DescribePicture() {
 
   return (
     <>
-      {error && <div style={{ padding: "10px 16px", borderRadius: 10, background: "var(--error-bg)", color: "var(--error)", marginBottom: 16, fontSize: 13, margin: "0 14px 16px" }}>{error}</div>}
+      {error && (
+        <div className="mx-3.5 mb-4 rounded-xl border border-red-900/30 bg-red-950/20 px-4 py-2.5 text-xs text-red-400">
+          {error}
+        </div>
+      )}
 
       {/* GALLERY */}
       {state === "gallery" && (
-        <div className="anim-fade-up">
-          <div style={{ textAlign: "center", marginBottom: 24 }}>
-            <div style={{ width: 56, height: 56, borderRadius: "50%", background: "color-mix(in srgb, var(--accent) 12%, var(--surface))", display: "grid", placeItems: "center", margin: "0 auto 12px" }}>
-              <PictureOutlined style={{ fontSize: 24, color: "var(--accent)" }} />
+        <div className="animate-in fade-in slide-in-from-bottom-2 duration-200">
+          <div className="text-center mb-6">
+            <div className="w-14 h-14 rounded-full bg-accent/10 text-accent flex items-center justify-center mx-auto mb-3 shadow-xs">
+              <ImageIcon className="h-6 w-6" />
             </div>
-            <h3 style={{ margin: "0 0 6px", fontSize: 18, fontWeight: 700, fontFamily: "var(--font-display)", color: "var(--ink)" }}>Chọn hình ảnh để mô tả</h3>
-            <p style={{ margin: 0, fontSize: 13, color: "var(--text-muted)", maxWidth: 440, marginInline: "auto", lineHeight: 1.5 }}>
+            <h3 className="m-0 mb-1.5 text-lg font-bold font-display text-ink">Chọn hình ảnh để mô tả</h3>
+            <p className="m-0 text-xs text-slate-455 max-w-sm mx-auto leading-relaxed">
               Bạn sẽ có 45 giây để mô tả bức hình bằng tiếng Anh. AI sẽ đánh giá phát âm, ngữ pháp và nội dung.
             </p>
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 12 }}>
+          <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3">
             {PICTURES.map((pic, i) => (
-              <button key={pic.id} className={`anim-fade-up anim-delay-${Math.min(i + 1, 8)}`} onClick={() => selectPicture(pic)}
-                style={{ padding: 0, border: "1px solid var(--border)", borderRadius: 14, background: "var(--bg)", overflow: "hidden", cursor: "pointer", textAlign: "left", transition: "all 0.15s" }}
-                onMouseEnter={(e) => { e.currentTarget.style.borderColor = "var(--accent)"; e.currentTarget.style.transform = "translateY(-2px)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border)"; e.currentTarget.style.transform = "none"; }}>
+              <button
+                key={pic.id}
+                onClick={() => selectPicture(pic)}
+                className="p-0 border border-border rounded-2xl bg-surface overflow-hidden cursor-pointer text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/40 shadow-xs active:scale-98 block group"
+                style={{ animationDelay: `${i * 0.05}s` }}
+              >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={imgUrl(pic.id)} alt={pic.scene} style={{ width: "100%", aspectRatio: "3/2", objectFit: "cover", display: "block" }} loading="lazy" />
-                <div style={{ padding: "10px 14px" }}>
-                  <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-primary)" }}>{pic.scene}</div>
-                  <div style={{ display: "flex", gap: 4, marginTop: 6 }}>{pic.tags.map((t) => <Tag key={t} style={{ margin: 0, borderRadius: 6, fontSize: 10 }}>{t}</Tag>)}</div>
+                <img
+                  src={imgUrl(pic.id)}
+                  alt={pic.scene}
+                  className="w-full aspect-3/2 object-cover block transition-transform duration-300 group-hover:scale-[1.02]"
+                  loading="lazy"
+                />
+                <div className="p-3">
+                  <div className="text-xs font-bold text-ink">{pic.scene}</div>
+                  <div className="flex gap-1.5 mt-2 flex-wrap">
+                    {pic.tags.map((t) => (
+                      <span key={t} className="px-2 py-0.5 rounded-md text-[9px] font-extrabold tracking-wide uppercase bg-slate-900 border border-slate-850 text-slate-450">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
                 </div>
               </button>
             ))}
@@ -125,76 +178,148 @@ export function DescribePicture() {
 
       {/* VIEWING / RECORDING / EVALUATING */}
       {selectedPic && (state === "viewing" || state === "recording" || state === "evaluating") && (
-        <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-          <div style={{ borderRadius: 16, overflow: "hidden", border: state === "recording" ? "2px solid var(--error)" : "1px solid var(--border)" }}>
+        <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-200">
+          <div className={`rounded-2xl overflow-hidden border ${
+            state === "recording" ? "border-red-500 ring-2 ring-red-500/20" : "border-border"
+          }`}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={imgUrl(selectedPic.id)} alt={selectedPic.scene} style={{ width: "100%", aspectRatio: "3/2", objectFit: "cover", display: "block" }} />
+            <img src={imgUrl(selectedPic.id)} alt={selectedPic.scene} className="w-full aspect-3/2 object-cover block" />
           </div>
           {state === "recording" && (
             <>
-              <div style={{ textAlign: "center" }}>
-                <div style={{ fontSize: 42, fontWeight: 800, fontVariantNumeric: "tabular-nums", color: timeLeft <= 10 ? "var(--error)" : "var(--text-primary)", fontFamily: "var(--font-display)" }}>{formatTime(timeLeft)}</div>
-                <p style={{ fontSize: 11, color: "var(--text-muted)", margin: "4px 0 0" }}>Thời gian còn lại</p>
+              <div className="text-center">
+                <div className={`text-4xl font-extrabold font-display tabular-nums ${
+                  timeLeft <= 10 ? "text-red-500" : "text-ink"
+                }`}>{formatTime(timeLeft)}</div>
+                <p className="text-[10px] text-slate-455 mt-1 uppercase tracking-wider font-bold">Thời gian còn lại</p>
               </div>
-              <div style={{ padding: 12, borderRadius: 12, background: "var(--surface)", border: "1px solid var(--border)" }}><Waveform getStream={voice.getStream} active={true} /></div>
+              <div className="p-3 rounded-2xl bg-surface border border-border"><Waveform getStream={voice.getStream} active={true} /></div>
             </>
           )}
           {state === "viewing" && (
-            <div style={{ padding: "14px 18px", borderRadius: 12, background: "color-mix(in srgb, var(--info) 6%, var(--surface))", border: "1px solid color-mix(in srgb, var(--info) 20%, transparent)", fontSize: 12, color: "var(--text-secondary)" }}>
-              <p style={{ margin: "0 0 6px", fontWeight: 600, color: "var(--info)" }}><InfoCircleOutlined /> Mẹo mô tả hình:</p>
-              <ul style={{ margin: 0, paddingLeft: 18, display: "flex", flexDirection: "column", gap: 3 }}>
+            <div className="p-4 rounded-xl bg-(--info)/5 border border-(--info)/20 text-xs text-slate-350 leading-relaxed">
+              <p className="m-0 mb-1.5 font-bold text-(--info) flex items-center gap-1.5">
+                <Info className="h-4 w-4 shrink-0" />
+                <span>Mẹo mô tả hình:</span>
+              </p>
+              <ul className="m-0 pl-4.5 flex flex-col gap-1 list-disc">
                 <li>Bắt đầu: &ldquo;In this picture, I can see...&rdquo;</li>
                 <li>Mô tả từ tổng quan đến chi tiết</li>
-                <li>Dùng thì hiện tại tiếp diễn cho hành động</li>
+                <li>Dùng thì hiện tại tiếp diễn cho hành động (e.g. &ldquo;people are talking&rdquo;)</li>
               </ul>
             </div>
           )}
-          <div style={{ textAlign: "center" }}>
+          <div className="text-center flex flex-col items-center justify-center gap-2">
             {state === "viewing" && (
-              <><button onClick={startRecording} style={{ width: 72, height: 72, borderRadius: "50%", border: "none", background: "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 70%, white))", color: "var(--text-on-accent)", fontSize: 26, cursor: "pointer", boxShadow: "0 4px 16px color-mix(in srgb, var(--error) 30%, transparent)" }}><AudioOutlined /></button>
-              <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 8 }}>Nhấn để bắt đầu mô tả (45s)</p>
-              <button onClick={backToGallery} style={{ marginTop: 8, padding: "6px 14px", borderRadius: 8, border: "1px solid var(--border)", background: "transparent", color: "var(--text-muted)", cursor: "pointer", fontSize: 12 }}>← Chọn hình khác</button></>
+              <>
+                <button
+                  onClick={startRecording}
+                  className="w-[72px] h-[72px] rounded-full border-none bg-linear-to-br from-red-500 to-red-600 text-white flex items-center justify-center text-2xl cursor-pointer shadow-lg shadow-red-500/20 hover:opacity-90 active:scale-95 transition-all"
+                >
+                  <Mic className="h-7 w-7" />
+                </button>
+                <p className="text-xs text-slate-455 mt-1 font-semibold">Nhấn để bắt đầu mô tả (45s)</p>
+                <button
+                  onClick={backToGallery}
+                  className="mt-1 px-4 py-2 rounded-xl border border-border bg-transparent text-slate-350 hover:text-slate-200 hover:border-slate-800 transition-colors text-xs font-bold cursor-pointer"
+                >
+                  ← Chọn hình khác
+                </button>
+              </>
             )}
             {state === "recording" && (
-              <><button onClick={stopRecording} style={{ width: 72, height: 72, borderRadius: "50%", border: "3px solid var(--error)", background: "var(--surface)", color: "var(--error)", fontSize: 22, cursor: "pointer", animation: "pulse 1s ease-in-out infinite" }}><PauseCircleOutlined /></button>
-              <p style={{ fontSize: 12, color: "var(--error)", marginTop: 8, fontWeight: 600 }}>Đang ghi âm...</p></>
+              <>
+                <button
+                  onClick={stopRecording}
+                  className="w-[72px] h-[72px] rounded-full border-3 border-red-500 bg-surface text-red-500 flex items-center justify-center text-xl cursor-pointer animate-pulse hover:opacity-90 active:scale-95 transition-all"
+                >
+                  <Pause className="h-6 w-6 fill-current" />
+                </button>
+                <p className="text-xs text-red-400 mt-1 font-bold">Đang ghi âm...</p>
+              </>
             )}
-            {state === "evaluating" && <div><LoadingOutlined style={{ fontSize: 32, color: "var(--accent)" }} /><p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 8 }}>Đang đánh giá...</p></div>}
+            {state === "evaluating" && (
+              <div className="flex flex-col items-center justify-center py-4">
+                <Loader2 className="h-8 w-8 text-accent animate-spin" />
+                <p className="text-xs text-slate-400 mt-2 font-bold">Đang chấm điểm và đánh giá...</p>
+              </div>
+            )}
           </div>
         </div>
       )}
 
       {/* RESULT */}
       {state === "result" && feedback && selectedPic && (
-        <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <div style={{ borderRadius: 12, overflow: "hidden", border: "1px solid var(--border)", maxHeight: 200 }}>
+        <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-200">
+          <div className="rounded-2xl overflow-hidden border border-border max-h-[160px]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={imgUrl(selectedPic.id)} alt={selectedPic.scene} style={{ width: "100%", objectFit: "cover", display: "block" }} />
+            <img src={imgUrl(selectedPic.id)} alt={selectedPic.scene} className="w-full object-cover block" />
           </div>
-          <div style={{ padding: 24, borderRadius: 20, background: "var(--surface)", border: "1px solid var(--border)", textAlign: "center" }}>
-            <Progress type="circle" percent={feedback.overall} size={100} strokeColor={scoreColor(feedback.overall)} format={(pct) => <span style={{ fontSize: 24, fontWeight: 700 }}>{pct}</span>} />
-            <div style={{ display: "flex", justifyContent: "center", gap: 24, marginTop: 16, flexWrap: "wrap" }}>
-              {[{ label: "Phát âm", score: feedback.pronunciation }, { label: "Ngữ điệu", score: feedback.intonation }, { label: "Ngữ pháp", score: feedback.grammar }, { label: "Từ vựng", score: feedback.vocabulary }].map((s) => (
-                <div key={s.label}><p style={{ fontSize: 11, color: "var(--text-muted)", margin: 0 }}>{s.label}</p><p style={{ fontSize: 18, fontWeight: 700, margin: 0, color: scoreColor(s.score), fontFamily: "var(--font-display)" }}>{s.score}</p></div>
+          
+          <div className="p-6 rounded-2xl bg-surface border border-border text-center flex flex-col items-center shadow-xs">
+            <CircularProgress percent={feedback.overall} color={scoreColor(feedback.overall)} />
+            <div className="flex justify-center gap-6 mt-5 flex-wrap w-full border-t border-border pt-4">
+              {[
+                { label: "Phát âm", score: feedback.pronunciation },
+                { label: "Ngữ điệu", score: feedback.intonation },
+                { label: "Ngữ pháp", score: feedback.grammar },
+                { label: "Từ vựng", score: feedback.vocabulary }
+              ].map((s) => (
+                <div key={s.label} className="flex-1 min-w-[70px]">
+                  <p className="text-[10px] text-slate-450 m-0 font-bold uppercase tracking-wider">{s.label}</p>
+                  <p
+                    className="text-base font-extrabold m-0 mt-1 font-display"
+                    style={{ color: scoreColor(s.score) }}
+                  >
+                    {s.score}
+                  </p>
+                </div>
               ))}
             </div>
           </div>
-          {feedback.summary && <div style={{ padding: "14px 18px", borderRadius: 14, background: "var(--surface)", border: "1px solid var(--border)" }}><p style={{ fontSize: 13, margin: 0, lineHeight: 1.6 }}>{feedback.summary}</p></div>}
+
+          {feedback.summary && (
+            <div className="p-4.5 rounded-2xl bg-surface border border-border">
+              <p className="text-xs text-ink leading-relaxed m-0 font-medium">{feedback.summary}</p>
+            </div>
+          )}
+
           {feedback.improvements?.length > 0 && (
-            <div style={{ padding: "14px 18px", borderRadius: 14, background: "var(--surface)", border: "1px solid var(--border)" }}>
-              <p style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.1em", color: "var(--accent)", margin: "0 0 8px" }}><SoundOutlined style={{ marginRight: 4 }} /> Cải thiện</p>
-              <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, lineHeight: 1.7, color: "var(--text-secondary)" }}>{feedback.improvements.map((imp, i) => <li key={i}>{imp}</li>)}</ul>
+            <div className="p-4.5 rounded-2xl bg-surface border border-border">
+              <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent m-0 mb-2.5 flex items-center gap-1.5">
+                <Volume2 className="h-4 w-4 shrink-0" />
+                <span>Điểm cần cải thiện</span>
+              </p>
+              <ul className="m-0 pl-4.5 text-xs text-slate-355 leading-relaxed flex flex-col gap-1 list-disc">
+                {feedback.improvements.map((imp, i) => (
+                  <li key={i}>{imp}</li>
+                ))}
+              </ul>
             </div>
           )}
+
           {feedback.transcript && (
-            <div style={{ padding: "14px 18px", borderRadius: 14, background: "var(--bg-deep)", border: "1px solid var(--border)" }}>
-              <p style={{ fontSize: 11, fontWeight: 600, color: "var(--text-muted)", margin: "0 0 6px" }}>Bạn đã nói:</p>
-              <p style={{ fontSize: 13, margin: 0, fontStyle: "italic", lineHeight: 1.6, color: "var(--text-secondary)" }}>&ldquo;{feedback.transcript}&rdquo;</p>
+            <div className="p-4.5 rounded-2xl bg-slate-900/40 border border-slate-850/60">
+              <p className="text-[10px] font-extrabold uppercase tracking-wider text-slate-455 m-0 mb-1.5">Bạn đã nói:</p>
+              <p className="text-xs italic leading-relaxed text-slate-300 m-0">&ldquo;{feedback.transcript}&rdquo;</p>
             </div>
           )}
-          <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-            <button onClick={retry} style={{ padding: "10px 20px", borderRadius: 12, border: "1px solid var(--border)", background: "transparent", color: "var(--text-primary)", cursor: "pointer", fontSize: 13 }}><ReloadOutlined /> Thử lại</button>
-            <button onClick={backToGallery} style={{ padding: "10px 24px", borderRadius: 12, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 13, fontWeight: 600, cursor: "pointer" }}>Hình khác <CheckCircleOutlined /></button>
+
+          <div className="flex gap-2.5 justify-center mt-2">
+            <button
+              onClick={retry}
+              className="px-5 py-2.5 rounded-xl border border-border bg-transparent text-slate-350 hover:text-slate-200 hover:border-slate-800 transition-colors text-xs font-bold cursor-pointer flex items-center gap-1.5"
+            >
+              <RefreshCw className="h-3.5 w-3.5" />
+              <span>Thử lại</span>
+            </button>
+            <button
+              onClick={backToGallery}
+              className="px-5 py-2.5 rounded-xl bg-accent text-white hover:bg-accent-hover transition-colors text-xs font-bold cursor-pointer flex items-center gap-1.5 border-none"
+            >
+              <span>Hình khác</span>
+              <CheckCircle className="h-3.5 w-3.5" />
+            </button>
           </div>
         </div>
       )}

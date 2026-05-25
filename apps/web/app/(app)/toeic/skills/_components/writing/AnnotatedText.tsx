@@ -4,9 +4,9 @@ import { useState } from "react";
 import type { InlineAnnotation } from "@/lib/writing-practice/types";
 
 const TYPE_COLORS: Record<string, string> = {
-  grammar: "bg-red-100 border-b-2 border-red-400 cursor-pointer",
-  vocabulary: "bg-blue-100 border-b-2 border-blue-400 cursor-pointer",
-  coherence: "bg-amber-100 border-b-2 border-amber-400 cursor-pointer",
+  grammar: "bg-red-500/10 border-b-2 border-red-500 text-red-400 cursor-pointer hover:bg-red-500/20 transition-all px-0.5 rounded-t-sm",
+  vocabulary: "bg-blue-500/10 border-b-2 border-blue-500 text-blue-400 cursor-pointer hover:bg-blue-500/20 transition-all px-0.5 rounded-t-sm",
+  coherence: "bg-amber-500/10 border-b-2 border-amber-500 text-amber-400 cursor-pointer hover:bg-amber-500/20 transition-all px-0.5 rounded-t-sm",
 };
 
 type Props = {
