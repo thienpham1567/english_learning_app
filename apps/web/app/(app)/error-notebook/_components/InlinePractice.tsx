@@ -1,11 +1,11 @@
 "use client";
 import { useState, useCallback } from "react";
 import {
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  LoadingOutlined,
-  ThunderboltOutlined,
-} from "@ant-design/icons";
+  CheckCircle,
+  XCircle,
+  Loader2,
+  Zap,
+} from "lucide-react";
 import { api } from "@/lib/api-client";
 
 type PracticeData = {
@@ -58,30 +58,9 @@ export function InlinePractice({ errorId, onResolved }: Props) {
       <button
         type="button"
         onClick={generate}
-        style={{
-          display: "inline-flex",
-          alignItems: "center",
-          gap: 6,
-          padding: "7px 14px",
-          borderRadius: 10,
-          border: "1px solid color-mix(in srgb, var(--accent) 25%, var(--border))",
-          background: "var(--card-bg)",
-          cursor: "pointer",
-          fontSize: 12,
-          fontWeight: 600,
-          color: "var(--accent)",
-          transition: "all 0.2s",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = "color-mix(in srgb, var(--accent) 8%, var(--surface))";
-          e.currentTarget.style.borderColor = "var(--accent)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = "var(--card-bg)";
-          e.currentTarget.style.borderColor = "color-mix(in srgb, var(--accent) 25%, var(--border))";
-        }}
+        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[10px] border border-accent/25 bg-(--card-bg) cursor-pointer text-xs font-semibold text-accent transition-all duration-200 hover:bg-accent/8 hover:border-accent"
       >
-        <ThunderboltOutlined /> Luyện lại
+        <Zap className="h-3.5 w-3.5" /> Luyện lại
       </button>
     );
   }
@@ -89,9 +68,9 @@ export function InlinePractice({ errorId, onResolved }: Props) {
   // Loading
   if (loading) {
     return (
-      <div style={{ padding: "16px 0", textAlign: "center" }}>
-        <LoadingOutlined style={{ fontSize: 18, color: "var(--accent)" }} />
-        <span style={{ marginLeft: 8, fontSize: 12, color: "var(--text-muted)" }}>Đang tạo bài tập...</span>
+      <div className="py-4 text-center">
+        <Loader2 className="h-4.5 w-4.5 text-accent animate-spin inline" />
+        <span className="ml-2 text-xs text-text-muted">Đang tạo bài tập...</span>
       </div>
     );
   }
@@ -99,12 +78,12 @@ export function InlinePractice({ errorId, onResolved }: Props) {
   // Error
   if (error) {
     return (
-      <div style={{ fontSize: 12, color: "var(--error)", padding: "8px 0" }}>
+      <div className="text-xs text-(--error) py-2">
         {error}{" "}
         <button
           type="button"
           onClick={generate}
-          style={{ border: "none", background: "none", color: "var(--accent)", cursor: "pointer", fontSize: 12, fontWeight: 600, textDecoration: "underline" }}
+          className="border-none bg-transparent text-accent cursor-pointer text-xs font-semibold underline"
         >
           Thử lại
         </button>
@@ -118,33 +97,29 @@ export function InlinePractice({ errorId, onResolved }: Props) {
 
   return (
     <div
-      className="anim-fade-up"
+      className="anim-fade-up mt-2.5 p-3.5 px-4 rounded-xl transition-all duration-200"
       style={{
-        marginTop: 10,
-        padding: "14px 16px",
-        borderRadius: 12,
         border: `1.5px solid ${submitted ? (isCorrect ? "var(--success)" : "var(--error)") : "color-mix(in srgb, var(--accent) 20%, var(--border))"}`,
         background: submitted
           ? isCorrect
             ? "color-mix(in srgb, var(--success) 4%, var(--surface))"
             : "color-mix(in srgb, var(--error) 4%, var(--surface))"
           : "var(--card-bg)",
-        transition: "all 0.2s",
       }}
     >
       {/* Question */}
-      <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 10 }}>
-        <ThunderboltOutlined style={{ color: "var(--accent)", fontSize: 13 }} />
-        <span style={{ fontSize: 11, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--accent)" }}>
+      <div className="flex items-center gap-1.5 mb-2.5">
+        <Zap className="h-3.5 w-3.5 text-accent" />
+        <span className="text-[11px] font-bold uppercase tracking-wide text-accent">
           Bài tập luyện lại
         </span>
       </div>
-      <p style={{ fontSize: 14, fontWeight: 500, margin: "0 0 12px", lineHeight: 1.5, color: "var(--ink)" }}>
+      <p className="text-sm font-medium m-0 mb-3 leading-snug text-ink">
         {data.questionStem}
       </p>
 
       {/* Options */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+      <div className="flex flex-col gap-1.5">
         {data.options.map((opt, i) => {
           let borderColor = "var(--border)";
           let bg = "transparent";
@@ -171,17 +146,13 @@ export function InlinePractice({ errorId, onResolved }: Props) {
               key={i}
               onClick={() => !submitted && setSelected(i)}
               disabled={submitted}
+              className="px-3 py-2.5 rounded-lg text-left text-[13px] transition-all duration-150"
               style={{
-                padding: "9px 12px",
-                borderRadius: 8,
                 border: `1.5px solid ${borderColor}`,
                 background: bg,
                 color: textColor,
-                textAlign: "left",
                 cursor: submitted ? "default" : "pointer",
-                fontSize: 13,
                 fontWeight: selected === i || (submitted && i === data.correctIndex) ? 600 : 400,
-                transition: "all 0.15s",
               }}
             >
               {String.fromCharCode(65 + i)}. {opt}
@@ -195,55 +166,32 @@ export function InlinePractice({ errorId, onResolved }: Props) {
         <button
           onClick={handleSubmit}
           disabled={selected === null}
-          style={{
-            width: "100%",
-            marginTop: 10,
-            padding: "10px",
-            borderRadius: 8,
-            border: "none",
-            background: selected !== null ? "var(--accent)" : "var(--border)",
-            color: selected !== null ? "var(--text-on-accent)" : "var(--text-muted)",
-            fontSize: 13,
-            fontWeight: 600,
-            cursor: selected !== null ? "pointer" : "not-allowed",
-          }}
+          className={`w-full mt-2.5 py-2.5 rounded-lg border-none text-[13px] font-semibold transition-all ${
+            selected !== null
+              ? "bg-accent text-(--text-on-accent) cursor-pointer"
+              : "bg-border text-text-muted cursor-not-allowed"
+          }`}
         >
           Kiểm tra
         </button>
       ) : (
-        <div style={{ marginTop: 10, display: "flex", flexDirection: "column", gap: 8 }}>
+        <div className="mt-2.5 flex flex-col gap-2">
           <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              padding: "8px 12px",
-              borderRadius: 8,
-              background: isCorrect ? "color-mix(in srgb, var(--success) 8%, transparent)" : "color-mix(in srgb, var(--error) 8%, transparent)",
-              fontSize: 13,
-              fontWeight: 600,
-              color: isCorrect ? "var(--success)" : "var(--error)",
-            }}
+            className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-semibold ${
+              isCorrect
+                ? "bg-[color-mix(in_srgb,var(--success)_8%,transparent)] text-(--success)"
+                : "bg-[color-mix(in_srgb,var(--error)_8%,transparent)] text-(--error)"
+            }`}
           >
-            {isCorrect ? <CheckCircleOutlined /> : <CloseCircleOutlined />}
+            {isCorrect ? <CheckCircle className="h-3.5 w-3.5" /> : <XCircle className="h-3.5 w-3.5" />}
             {isCorrect ? "Chính xác! 🎉" : "Sai rồi!"}
           </div>
-          <p style={{ margin: 0, fontSize: 12, lineHeight: 1.6, color: "var(--text-secondary)", fontStyle: "italic" }}>
+          <p className="m-0 text-xs leading-relaxed text-text-secondary italic">
             {data.explanation}
           </p>
           <button
             onClick={generate}
-            style={{
-              alignSelf: "flex-start",
-              padding: "6px 14px",
-              borderRadius: 8,
-              border: "1px solid var(--border)",
-              background: "var(--card-bg)",
-              cursor: "pointer",
-              fontSize: 12,
-              fontWeight: 600,
-              color: "var(--accent)",
-            }}
+            className="self-start px-3.5 py-1.5 rounded-lg border border-border bg-(--card-bg) cursor-pointer text-xs font-semibold text-accent hover:bg-accent/5"
           >
             Làm câu khác →
           </button>

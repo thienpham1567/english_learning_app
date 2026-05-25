@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import { CalendarOutlined, SoundOutlined } from "@ant-design/icons";
+import { Calendar, Volume2 } from "lucide-react";
 
 type Props = {
   onSelect: (word: string) => void;
@@ -65,123 +65,47 @@ export function WordOfTheDay({ onSelect }: Props) {
 
   return (
     <div
-      className="anim-fade-in"
-      style={{
-        borderRadius: "var(--radius)",
-        background: "linear-gradient(135deg, var(--accent-muted), var(--accent-light))",
-        border: "1px solid var(--accent)",
-        padding: "16px 18px",
-        cursor: "pointer",
-        transition: "box-shadow 0.2s, transform 0.2s",
-      }}
+      className="anim-fade-in rounded-lg bg-gradient-to-br from-accent-muted to-accent-light border border-accent p-4 px-4.5 cursor-pointer transition-all duration-200 hover:shadow-md hover:-translate-y-px"
       onClick={() => onSelect(daily.word)}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = "var(--shadow-md)";
-        e.currentTarget.style.transform = "translateY(-1px)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = "none";
-        e.currentTarget.style.transform = "translateY(0)";
-      }}
     >
       {/* Header */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            fontSize: 10,
-            fontWeight: 700,
-            textTransform: "uppercase",
-            letterSpacing: "0.16em",
-            color: "var(--accent)",
-          }}
-        >
-          <CalendarOutlined style={{ fontSize: 12 }} />
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-accent">
+          <Calendar className="h-3 w-3" />
           Từ vựng hôm nay
         </div>
-        <span
-          style={{
-            fontSize: 10,
-            fontWeight: 600,
-            padding: "2px 8px",
-            borderRadius: 999,
-            background: "var(--accent)",
-            color: "var(--text-on-accent)",
-          }}
-        >
+        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-accent text-(--text-on-accent)">
           {daily.pos}
         </span>
       </div>
 
       {/* Word */}
-      <div style={{ marginTop: 8 }}>
-        <span
-          style={{
-            fontSize: 22,
-            fontWeight: 700,
-            fontStyle: "italic",
-            fontFamily: "var(--font-display)",
-            color: "var(--ink)",
-            lineHeight: 1.2,
-          }}
-        >
+      <div className="mt-2">
+        <span className="text-[22px] font-bold italic font-display text-ink leading-tight">
           {daily.word}
         </span>
       </div>
 
       {/* Phonetic */}
-      <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 4 }}>
-        <SoundOutlined style={{ fontSize: 11, color: "var(--text-muted)" }} />
-        <span
-          style={{
-            fontSize: 12,
-            fontFamily: "var(--font-mono)",
-            color: "var(--text-secondary)",
-          }}
-        >
+      <div className="flex items-center gap-1.5 mt-1">
+        <Volume2 className="h-3 w-3 text-text-muted" />
+        <span className="text-xs font-mono text-text-secondary">
           {daily.phonetic}
         </span>
       </div>
 
       {/* Definition */}
-      <p
-        style={{
-          marginTop: 8,
-          fontSize: 13,
-          fontWeight: 600,
-          color: "var(--text-primary)",
-          margin: "8px 0 0",
-        }}
-      >
+      <p className="mt-2 text-[13px] font-semibold text-text-primary m-0">
         {daily.definitionVi}
       </p>
 
       {/* Example */}
-      <p
-        style={{
-          marginTop: 6,
-          fontSize: 12,
-          fontStyle: "italic",
-          color: "var(--text-muted)",
-          lineHeight: 1.5,
-          margin: "6px 0 0",
-        }}
-      >
+      <p className="mt-1.5 text-xs italic text-text-muted leading-snug m-0">
         &ldquo;{daily.example}&rdquo;
       </p>
 
       {/* CTA */}
-      <div
-        style={{
-          marginTop: 10,
-          fontSize: 11,
-          fontWeight: 600,
-          color: "var(--accent)",
-          textAlign: "right",
-        }}
-      >
+      <div className="mt-2.5 text-[11px] font-semibold text-accent text-right">
         Tra cứu chi tiết →
       </div>
     </div>

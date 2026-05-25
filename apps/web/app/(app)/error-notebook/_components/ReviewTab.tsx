@@ -1,23 +1,20 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Typography, message } from "antd";
 import {
-  LoadingOutlined,
-  BulbOutlined,
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  TrophyOutlined,
-  ReloadOutlined,
-} from "@ant-design/icons";
+  Loader2,
+  Lightbulb,
+  CheckCircle,
+  XCircle,
+  Trophy,
+  RefreshCw,
+} from "lucide-react";
 import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
 import { useErrorSRS } from "../_hooks/useErrorSRS";
 import { SRS_GRADE_OPTIONS, MODULE_LABELS, MODULE_ICONS } from "../_types/types";
 import type { SRSGrade } from "../_types/types";
 import { DeepExplanation } from "./DeepExplanation";
-
-const { Text, Title } = Typography;
 
 export function ReviewTab() {
   const srs = useErrorSRS();
@@ -47,9 +44,9 @@ export function ReviewTab() {
   /* ── Loading ── */
   if (srs.loading) {
     return (
-      <div style={{ padding: "60px 0", textAlign: "center" }}>
-        <LoadingOutlined spin style={{ fontSize: 28, color: "var(--accent)", marginBottom: 12 }} />
-        <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text-primary)" }}>
+      <div className="py-16 text-center">
+        <Loader2 className="h-7 w-7 text-accent animate-spin mx-auto mb-3" />
+        <div className="text-sm font-semibold text-text-primary">
           Đang tải hàng đợi ôn tập...
         </div>
       </div>
@@ -62,33 +59,22 @@ export function ReviewTab() {
       <m.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        style={{
-          padding: "60px 24px", textAlign: "center",
-          background: "var(--surface)",
-          borderRadius: "var(--radius-xl)",
-          border: "1px solid var(--border)",
-        }}
+        className="py-16 px-6 text-center bg-surface rounded-xl border border-border"
       >
-        <div style={{ fontSize: 48, marginBottom: 16 }}>🎉</div>
-        <Title level={4} style={{ margin: "0 0 8px", color: "var(--text-primary)" }}>
+        <div className="text-5xl mb-4">🎉</div>
+        <h4 className="text-lg font-extrabold text-text-primary m-0 mb-2">
           Không có lỗi cần ôn tập!
-        </Title>
-        <Text style={{ color: "var(--text-muted)", display: "block", maxWidth: 360, margin: "0 auto" }}>
+        </h4>
+        <span className="text-text-muted block max-w-[360px] mx-auto text-sm">
           Bạn đã ôn hết tất cả. Hãy tiếp tục làm bài tập để có thêm lỗi sai cần ghi nhớ.
-        </Text>
+        </span>
         <m.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={srs.fetchQueue}
-          style={{
-            marginTop: 20, display: "inline-flex", alignItems: "center", gap: 6,
-            padding: "10px 20px", borderRadius: 12,
-            border: "1px solid var(--border)", background: "var(--surface-alt)",
-            color: "var(--text-secondary)", fontSize: 13, fontWeight: 700,
-            cursor: "pointer", fontFamily: "var(--font-body)",
-          }}
+          className="mt-5 inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl border border-border bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body"
         >
-          <ReloadOutlined /> Kiểm tra lại
+          <RefreshCw className="h-3.5 w-3.5" /> Kiểm tra lại
         </m.button>
       </m.div>
     );
@@ -101,43 +87,30 @@ export function ReviewTab() {
       <m.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        style={{
-          padding: "40px 24px", textAlign: "center",
-          background: "var(--surface)",
-          borderRadius: "var(--radius-xl)",
-          border: "1px solid var(--border)",
-        }}
+        className="py-10 px-6 text-center bg-surface rounded-xl border border-border"
       >
-        <TrophyOutlined style={{ fontSize: 40, color: pct >= 80 ? "var(--success)" : "var(--accent)", marginBottom: 12 }} />
-        <Title level={3} style={{ margin: "0 0 4px", color: "var(--text-primary)" }}>
+        <Trophy className={`h-10 w-10 mx-auto mb-3 ${pct >= 80 ? "text-(--success)" : "text-accent"}`} />
+        <h3 className="text-xl font-black text-text-primary m-0 mb-1">
           Hoàn thành ôn tập!
-        </Title>
-        <div style={{ fontSize: 36, fontWeight: 900, color: "var(--accent)", fontFamily: "var(--font-display)" }}>
+        </h3>
+        <div className="text-4xl font-black text-accent font-display">
           {srs.correct}/{srs.reviewed}
         </div>
-        <Text style={{ fontSize: 14, color: "var(--text-secondary)", display: "block", margin: "8px 0 4px" }}>
+        <span className="text-sm text-text-secondary block mt-2 mb-1">
           {pct >= 80 ? "Xuất sắc! Bạn nhớ rất tốt! 🎉" : pct >= 50 ? "Khá tốt! Hãy tiếp tục ôn nhé." : "Cần ôn thêm. Đừng bỏ cuộc!"}
-        </Text>
-        <Text style={{ fontSize: 12, color: "var(--text-muted)" }}>
+        </span>
+        <span className="text-xs text-text-muted">
           Chính xác {pct}%
-        </Text>
+        </span>
 
-        <div style={{ display: "flex", gap: 8, justifyContent: "center", marginTop: 20 }}>
+        <div className="flex gap-2 justify-center mt-5">
           <m.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={() => { srs.resetSession(); srs.fetchQueue(); }}
-            style={{
-              display: "flex", alignItems: "center", gap: 6,
-              padding: "10px 20px", borderRadius: 12,
-              border: "none",
-              background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-              color: "var(--text-on-accent)", fontSize: 14, fontWeight: 800,
-              cursor: "pointer", fontFamily: "var(--font-body)",
-              boxShadow: "0 4px 14px var(--accent-muted)",
-            }}
+            className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl border-none bg-gradient-to-br from-accent to-accent-hover text-(--text-on-accent) text-sm font-extrabold cursor-pointer font-body shadow-[0_4px_14px_var(--accent-muted)]"
           >
-            <ReloadOutlined /> Ôn tiếp
+            <RefreshCw className="h-4 w-4" /> Ôn tiếp
           </m.button>
         </div>
       </m.div>
@@ -148,23 +121,17 @@ export function ReviewTab() {
   const error = srs.currentError!;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+    <div className="flex flex-col gap-4">
       {/* Progress */}
-      <div style={{
-        background: "var(--surface)",
-        borderRadius: "var(--radius-xl)",
-        border: "1px solid var(--border)",
-        padding: "14px 20px",
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-      }}>
-        <Text style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)" }}>
+      <div className="bg-surface rounded-xl border border-border px-5 py-3.5 flex items-center justify-between">
+        <span className="text-sm font-bold text-text-primary">
           🧠 Ôn tập: {srs.currentIndex + 1} / {srs.queue.length}
-        </Text>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 12, fontWeight: 700, color: "var(--success)" }}>
+        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-bold text-(--success)">
             ✓ {srs.correct}
           </span>
-          <span style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)" }}>
+          <span className="text-xs font-bold text-text-muted">
             / {srs.reviewed}
           </span>
         </div>
@@ -178,149 +145,99 @@ export function ReviewTab() {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -40 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          style={{
-            background: "var(--surface)",
-            borderRadius: "var(--radius-xl)",
-            border: flipped ? "2px solid var(--accent)" : "1px solid var(--border)",
-            overflow: "hidden",
-            transition: "border-color 0.2s",
-          }}
+          className={`bg-surface rounded-xl overflow-hidden transition-colors duration-200 ${
+            flipped ? "border-2 border-accent" : "border border-border"
+          }`}
         >
           {/* Card header */}
-          <div style={{
-            display: "flex", alignItems: "center", gap: 8,
-            padding: "12px 20px",
-            background: "var(--surface-alt)",
-            borderBottom: "1px solid var(--border)",
-          }}>
-            <span style={{ fontSize: 16 }}>{MODULE_ICONS[error.sourceModule] ?? "📄"}</span>
-            <Text style={{ fontSize: 12, fontWeight: 700, color: "var(--text-secondary)" }}>
+          <div className="flex items-center gap-2 px-5 py-3 bg-surface-alt border-b border-border">
+            <span className="text-base">{MODULE_ICONS[error.sourceModule] ?? "📄"}</span>
+            <span className="text-xs font-bold text-text-secondary">
               {MODULE_LABELS[error.sourceModule] ?? error.sourceModule}
-            </Text>
+            </span>
             {error.grammarTopic && (
-              <span style={{
-                fontSize: 10, fontWeight: 700, padding: "2px 8px", borderRadius: 6,
-                background: "var(--accent-light)", color: "var(--accent)",
-                border: "1px solid color-mix(in srgb, var(--accent) 15%, transparent)",
-              }}>
+              <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-accent-light text-accent border border-accent/15">
                 {error.grammarTopic}
               </span>
             )}
-            <span style={{ marginLeft: "auto", fontSize: 11, color: "var(--text-muted)" }}>
+            <span className="ml-auto text-[11px] text-text-muted">
               Ôn lần {error.reviewCount + 1}
             </span>
           </div>
 
           {/* Question */}
-          <div style={{ padding: "24px 20px" }}>
-            <Text style={{
-              fontSize: 17, fontWeight: 600, lineHeight: 1.7,
-              color: "var(--text-primary)", display: "block",
-            }}>
+          <div className="p-5 px-5">
+            <span className="text-[17px] font-semibold leading-relaxed text-text-primary block">
               {error.questionStem}
-            </Text>
+            </span>
 
             {/* Options (if exists) */}
             {error.options && error.options.length > 0 && (
-              <div style={{ marginTop: 16, display: "flex", flexDirection: "column", gap: 6 }}>
-                {error.options.map((opt, i) => (
-                  <div
-                    key={i}
-                    style={{
-                      padding: "8px 14px", borderRadius: 10,
-                      fontSize: 14,
-                      background: showAnswer && opt === error.correctAnswer
-                        ? "color-mix(in srgb, var(--success) 8%, var(--surface))"
-                        : showAnswer && opt === error.userAnswer && opt !== error.correctAnswer
-                          ? "color-mix(in srgb, var(--error) 8%, var(--surface))"
-                          : "var(--surface-alt)",
-                      border: showAnswer && opt === error.correctAnswer
-                        ? "1.5px solid var(--success)"
-                        : showAnswer && opt === error.userAnswer && opt !== error.correctAnswer
-                          ? "1.5px solid var(--error)"
-                          : "1px solid var(--border)",
-                      color: showAnswer && opt === error.correctAnswer
-                        ? "var(--success)"
-                        : showAnswer && opt === error.userAnswer && opt !== error.correctAnswer
-                          ? "var(--error)"
-                          : "var(--text-primary)",
-                      fontWeight: showAnswer && (opt === error.correctAnswer || opt === error.userAnswer) ? 700 : 500,
-                    }}
-                  >
-                    {showAnswer && opt === error.correctAnswer && <CheckCircleOutlined style={{ marginRight: 6, fontSize: 12 }} />}
-                    {showAnswer && opt === error.userAnswer && opt !== error.correctAnswer && <CloseCircleOutlined style={{ marginRight: 6, fontSize: 12 }} />}
-                    {String.fromCharCode(65 + i)}. {opt}
-                  </div>
-                ))}
+              <div className="mt-4 flex flex-col gap-1.5">
+                {error.options.map((opt, i) => {
+                  const isCorrect = showAnswer && opt === error.correctAnswer;
+                  const isWrong = showAnswer && opt === error.userAnswer && opt !== error.correctAnswer;
+                  return (
+                    <div
+                      key={i}
+                      className={`px-3.5 py-2 rounded-[10px] text-sm ${
+                        isCorrect
+                          ? "bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] border-[1.5px] border-(--success) text-(--success) font-bold"
+                          : isWrong
+                            ? "bg-[color-mix(in_srgb,var(--error)_8%,var(--surface))] border-[1.5px] border-(--error) text-(--error) font-bold"
+                            : "bg-surface-alt border border-border text-text-primary font-medium"
+                      }`}
+                    >
+                      {isCorrect && <CheckCircle className="h-3 w-3 inline mr-1.5" />}
+                      {isWrong && <XCircle className="h-3 w-3 inline mr-1.5" />}
+                      {String.fromCharCode(65 + i)}. {opt}
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>
 
           {/* Reveal / Answer section */}
           {!showAnswer ? (
-            <div style={{ padding: "0 20px 24px" }}>
+            <div className="px-5 pb-6">
               {/* Answer comparison (hidden) */}
-              <div style={{
-                padding: "12px 16px", borderRadius: 12,
-                background: "var(--surface-alt)", border: "1px dashed var(--border)",
-                textAlign: "center",
-              }}>
-                <Text style={{ fontSize: 13, color: "var(--text-muted)", fontWeight: 600 }}>
+              <div className="px-4 py-3 rounded-xl bg-surface-alt border border-dashed border-border text-center">
+                <span className="text-[13px] text-text-muted font-semibold">
                   🤔 Bạn có nhớ đáp án không?
-                </Text>
+                </span>
               </div>
 
               <m.button
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
                 onClick={handleReveal}
-                style={{
-                  width: "100%", marginTop: 12,
-                  display: "flex", alignItems: "center", justifyContent: "center",
-                  gap: 8, padding: "14px 20px",
-                  borderRadius: "var(--radius-lg)",
-                  border: "none",
-                  background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-                  color: "var(--text-on-accent)",
-                  fontSize: 15, fontWeight: 800,
-                  cursor: "pointer", fontFamily: "var(--font-body)",
-                  boxShadow: "0 4px 14px var(--accent-muted)",
-                }}
+                className="w-full mt-3 flex items-center justify-center gap-2 py-3.5 px-5 rounded-lg border-none bg-gradient-to-br from-accent to-accent-hover text-(--text-on-accent) text-[15px] font-extrabold cursor-pointer font-body shadow-[0_4px_14px_var(--accent-muted)]"
               >
-                <BulbOutlined /> Xem đáp án
+                <Lightbulb className="h-4 w-4" /> Xem đáp án
               </m.button>
             </div>
           ) : (
             <m.div
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
-              style={{ padding: "0 20px 24px" }}
+              className="px-5 pb-6"
             >
               {/* Answer comparison */}
-              <div style={{
-                display: "flex", gap: 8, marginBottom: 16,
-              }}>
-                <div style={{
-                  flex: 1, padding: "10px 14px", borderRadius: 10,
-                  background: "color-mix(in srgb, var(--error) 6%, var(--surface))",
-                  border: "1px solid color-mix(in srgb, var(--error) 18%, transparent)",
-                }}>
-                  <div style={{ fontSize: 10, fontWeight: 700, color: "var(--error)", textTransform: "uppercase", marginBottom: 4 }}>
-                    <CloseCircleOutlined style={{ fontSize: 9 }} /> Bạn chọn
+              <div className="flex gap-2 mb-4">
+                <div className="flex-1 px-3.5 py-2.5 rounded-[10px] bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--error)_18%,transparent)]">
+                  <div className="text-[10px] font-bold text-(--error) uppercase mb-1">
+                    <XCircle className="h-2.5 w-2.5 inline mr-1" /> Bạn chọn
                   </div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: "var(--error)" }}>
+                  <div className="text-sm font-bold text-(--error)">
                     {error.userAnswer || "(Trống)"}
                   </div>
                 </div>
-                <div style={{
-                  flex: 1, padding: "10px 14px", borderRadius: 10,
-                  background: "color-mix(in srgb, var(--success) 6%, var(--surface))",
-                  border: "1px solid color-mix(in srgb, var(--success) 18%, transparent)",
-                }}>
-                  <div style={{ fontSize: 10, fontWeight: 700, color: "var(--success)", textTransform: "uppercase", marginBottom: 4 }}>
-                    <CheckCircleOutlined style={{ fontSize: 9 }} /> Đáp án đúng
+                <div className="flex-1 px-3.5 py-2.5 rounded-[10px] bg-[color-mix(in_srgb,var(--success)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--success)_18%,transparent)]">
+                  <div className="text-[10px] font-bold text-(--success) uppercase mb-1">
+                    <CheckCircle className="h-2.5 w-2.5 inline mr-1" /> Đáp án đúng
                   </div>
-                  <div style={{ fontSize: 14, fontWeight: 700, color: "var(--success)" }}>
+                  <div className="text-sm font-bold text-(--success)">
                     {error.correctAnswer}
                   </div>
                 </div>
@@ -335,11 +252,11 @@ export function ReviewTab() {
               />
 
               {/* Grade buttons */}
-              <div style={{ marginTop: 16 }}>
-                <Text style={{ fontSize: 11, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em", display: "block", marginBottom: 8 }}>
+              <div className="mt-4">
+                <span className="text-[11px] font-bold text-text-muted uppercase tracking-wide block mb-2">
                   Bạn nhớ thế nào?
-                </Text>
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8 }}>
+                </span>
+                <div className="grid grid-cols-4 gap-2">
                   {SRS_GRADE_OPTIONS.map((opt) => (
                     <m.button
                       key={opt.grade}
@@ -347,21 +264,15 @@ export function ReviewTab() {
                       whileTap={{ scale: 0.97 }}
                       onClick={() => handleGrade(opt.grade)}
                       disabled={srs.grading}
+                      className="flex flex-col items-center gap-1 py-3 px-2 rounded-xl font-body transition-all duration-150 disabled:opacity-50 disabled:cursor-wait cursor-pointer"
                       style={{
-                        display: "flex", flexDirection: "column", alignItems: "center",
-                        gap: 4, padding: "12px 8px",
-                        borderRadius: 12,
                         border: `1.5px solid color-mix(in srgb, ${opt.color} 25%, var(--border))`,
                         background: `color-mix(in srgb, ${opt.color} 5%, var(--surface))`,
-                        cursor: srs.grading ? "wait" : "pointer",
-                        opacity: srs.grading ? 0.5 : 1,
-                        fontFamily: "var(--font-body)",
-                        transition: "all 0.15s",
                       }}
                     >
-                      <span style={{ fontSize: 22 }}>{opt.emoji}</span>
-                      <span style={{ fontSize: 12, fontWeight: 800, color: opt.color }}>{opt.label}</span>
-                      <span style={{ fontSize: 10, color: "var(--text-muted)" }}>{opt.desc}</span>
+                      <span className="text-[22px]">{opt.emoji}</span>
+                      <span className="text-xs font-extrabold" style={{ color: opt.color }}>{opt.label}</span>
+                      <span className="text-[10px] text-text-muted">{opt.desc}</span>
                     </m.button>
                   ))}
                 </div>
@@ -372,9 +283,9 @@ export function ReviewTab() {
       </AnimatePresence>
 
       {/* Remaining queue */}
-      <Text style={{ fontSize: 11, color: "var(--text-muted)", textAlign: "center", display: "block" }}>
+      <span className="text-[11px] text-text-muted text-center block">
         Còn {srs.queue.length - srs.currentIndex - 1} lỗi nữa trong phiên ôn tập này
-      </Text>
+      </span>
     </div>
   );
 }

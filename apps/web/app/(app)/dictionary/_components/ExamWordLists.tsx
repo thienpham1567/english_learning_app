@@ -2,20 +2,20 @@
 
 import { useState } from "react";
 import {
-  BankOutlined,
-  BarChartOutlined,
-  TeamOutlined,
-  DesktopOutlined,
-  MailOutlined,
-  CarOutlined,
-  BookOutlined,
-  GlobalOutlined,
-  BankFilled,
-  ExperimentOutlined,
-  MedicineBoxOutlined,
-  BulbOutlined,
-  DownOutlined,
-} from "@ant-design/icons";
+  Landmark,
+  BarChart2,
+  Users,
+  Monitor,
+  Mail,
+  Car,
+  BookOpen,
+  Globe,
+  Building2,
+  FlaskConical,
+  Pill,
+  Lightbulb,
+  ChevronDown,
+} from "lucide-react";
 
 type Props = {
   onSelect: (word: string) => void;
@@ -30,7 +30,7 @@ type WordCategory = {
 const TOEIC_CATEGORIES: WordCategory[] = [
   {
     label: "Business & Finance",
-    icon: <BankOutlined />,
+    icon: <Landmark className="h-3.5 w-3.5" />,
     words: [
       "negotiate", "acquisition", "revenue", "expenditure", "dividend",
       "invoice", "budget", "profit", "deficit", "surplus",
@@ -41,7 +41,7 @@ const TOEIC_CATEGORIES: WordCategory[] = [
   },
   {
     label: "Marketing & Sales",
-    icon: <BarChartOutlined />,
+    icon: <BarChart2 className="h-3.5 w-3.5" />,
     words: [
       "campaign", "advertisement", "promotion", "brochure", "consumer",
       "retail", "wholesale", "endorsement", "demographic", "competitor",
@@ -51,7 +51,7 @@ const TOEIC_CATEGORIES: WordCategory[] = [
   },
   {
     label: "Human Resources",
-    icon: <TeamOutlined />,
+    icon: <Users className="h-3.5 w-3.5" />,
     words: [
       "recruit", "candidate", "resume", "interview", "qualification",
       "appoint", "resign", "retire", "probation", "evaluation",
@@ -61,7 +61,7 @@ const TOEIC_CATEGORIES: WordCategory[] = [
   },
   {
     label: "Office & Technology",
-    icon: <DesktopOutlined />,
+    icon: <Monitor className="h-3.5 w-3.5" />,
     words: [
       "equipment", "maintenance", "installation", "implement", "upgrade",
       "database", "software", "hardware", "network", "compatible",
@@ -71,7 +71,7 @@ const TOEIC_CATEGORIES: WordCategory[] = [
   },
   {
     label: "Communication",
-    icon: <MailOutlined />,
+    icon: <Mail className="h-3.5 w-3.5" />,
     words: [
       "correspondence", "memorandum", "agenda", "minutes", "itinerary",
       "attachment", "inquiry", "confirmation", "notification", "proposal",
@@ -81,7 +81,7 @@ const TOEIC_CATEGORIES: WordCategory[] = [
   },
   {
     label: "Travel & Logistics",
-    icon: <CarOutlined />,
+    icon: <Car className="h-3.5 w-3.5" />,
     words: [
       "itinerary", "accommodation", "reservation", "departure", "destination",
       "shipment", "delivery", "warehouse", "inventory", "freight",
@@ -94,7 +94,7 @@ const TOEIC_CATEGORIES: WordCategory[] = [
 const IELTS_CATEGORIES: WordCategory[] = [
   {
     label: "Academic & Education",
-    icon: <BookOutlined />,
+    icon: <BookOpen className="h-3.5 w-3.5" />,
     words: [
       "curriculum", "dissertation", "hypothesis", "methodology", "empirical",
       "pedagogy", "enrollment", "scholarship", "thesis", "seminar",
@@ -105,7 +105,7 @@ const IELTS_CATEGORIES: WordCategory[] = [
   },
   {
     label: "Environment & Nature",
-    icon: <GlobalOutlined />,
+    icon: <Globe className="h-3.5 w-3.5" />,
     words: [
       "sustainability", "biodiversity", "ecosystem", "pollution", "conservation",
       "deforestation", "renewable", "emission", "habitat", "endangered",
@@ -116,7 +116,7 @@ const IELTS_CATEGORIES: WordCategory[] = [
   },
   {
     label: "Society & Culture",
-    icon: <BankFilled />,
+    icon: <Building2 className="h-3.5 w-3.5" />,
     words: [
       "globalization", "urbanization", "migration", "demographic", "inequality",
       "diversity", "discrimination", "integration", "heritage", "tradition",
@@ -127,7 +127,7 @@ const IELTS_CATEGORIES: WordCategory[] = [
   },
   {
     label: "Science & Technology",
-    icon: <ExperimentOutlined />,
+    icon: <FlaskConical className="h-3.5 w-3.5" />,
     words: [
       "phenomenon", "algorithm", "innovation", "paradigm", "correlation",
       "variable", "synthesis", "genome", "biotechnology", "nanotechnology",
@@ -138,7 +138,7 @@ const IELTS_CATEGORIES: WordCategory[] = [
   },
   {
     label: "Health & Medicine",
-    icon: <MedicineBoxOutlined />,
+    icon: <Pill className="h-3.5 w-3.5" />,
     words: [
       "diagnosis", "symptom", "therapy", "chronic", "acute",
       "epidemic", "pandemic", "vaccine", "immunity", "rehabilitation",
@@ -149,7 +149,7 @@ const IELTS_CATEGORIES: WordCategory[] = [
   },
   {
     label: "Abstract & Analysis",
-    icon: <BulbOutlined />,
+    icon: <Lightbulb className="h-3.5 w-3.5" />,
     words: [
       "ambiguous", "comprehensive", "contemporary", "controversial", "fundamental",
       "significant", "substantial", "prevalent", "inherent", "implicit",
@@ -169,17 +169,9 @@ export function ExamWordLists({ onSelect }: Props) {
   const categories = activeTab === "toeic" ? TOEIC_CATEGORIES : IELTS_CATEGORIES;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+    <div className="flex flex-col gap-3">
       {/* Tab header */}
-      <div
-        style={{
-          display: "flex",
-          borderRadius: "var(--radius)",
-          overflow: "hidden",
-          border: "1px solid var(--border)",
-          background: "var(--bg-deep)",
-        }}
-      >
+      <div className="flex rounded-lg overflow-hidden border border-border bg-bg-deep">
         {(["toeic", "ielts"] as const).map((tab) => (
           <button
             key={tab}
@@ -188,19 +180,11 @@ export function ExamWordLists({ onSelect }: Props) {
               setActiveTab(tab);
               setExpandedCategory(null);
             }}
-            style={{
-              flex: 1,
-              padding: "10px 0",
-              fontSize: 13,
-              fontWeight: 700,
-              letterSpacing: "0.08em",
-              textTransform: "uppercase",
-              border: "none",
-              cursor: "pointer",
-              transition: "all 0.2s",
-              background: activeTab === tab ? "var(--accent)" : "transparent",
-              color: activeTab === tab ? "var(--text-on-accent)" : "var(--text-muted)",
-            }}
+            className={`flex-1 py-2.5 text-[13px] font-bold tracking-wider uppercase border-none cursor-pointer transition-all duration-200 ${
+              activeTab === tab
+                ? "bg-accent text-(--text-on-accent)"
+                : "bg-transparent text-text-muted hover:text-text-primary"
+            }`}
           >
             {tab}
           </button>
@@ -208,14 +192,14 @@ export function ExamWordLists({ onSelect }: Props) {
       </div>
 
       {/* Description */}
-      <p style={{ fontSize: 12, color: "var(--text-muted)", lineHeight: 1.5, margin: 0 }}>
+      <p className="text-xs text-text-muted leading-snug m-0">
         {activeTab === "toeic"
           ? "Từ vựng thiết yếu cho kỳ thi TOEIC — chủ đề business, office & communication."
           : "Từ vựng học thuật cho IELTS — chủ đề environment, society & science."}
       </p>
 
       {/* Category list */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div className="flex flex-col gap-2">
         {categories.map((cat) => {
           const isExpanded = expandedCategory === cat.label;
           return (
@@ -223,88 +207,42 @@ export function ExamWordLists({ onSelect }: Props) {
               <button
                 type="button"
                 onClick={() => setExpandedCategory(isExpanded ? null : cat.label)}
-                style={{
-                  display: "flex",
-                  width: "100%",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  padding: "8px 12px",
-                  borderRadius: "var(--radius-sm)",
-                  border: "1px solid var(--border)",
-                  background: isExpanded ? "var(--accent-muted)" : "var(--surface)",
-                  cursor: "pointer",
-                  transition: "background 0.2s",
-                  fontSize: 13,
-                  fontWeight: 600,
-                  color: isExpanded ? "var(--accent)" : "var(--text-primary)",
-                }}
+                className={`flex w-full items-center justify-between px-3 py-2 rounded-sm border border-border cursor-pointer transition-all duration-200 text-[13px] font-semibold ${
+                  isExpanded
+                    ? "bg-accent-muted text-accent"
+                    : "bg-surface text-text-primary hover:bg-surface-alt"
+                }`}
               >
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-                  <span style={{ fontSize: 14, color: isExpanded ? "var(--accent)" : "var(--text-muted)" }}>
+                <span className="inline-flex items-center gap-2">
+                  <span className={isExpanded ? "text-accent" : "text-text-muted"}>
                     {cat.icon}
                   </span>
                   {cat.label}
                 </span>
-                <span style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+                <span className="inline-flex items-center gap-1.5">
                   <span
-                    style={{
-                      fontSize: 11,
-                      fontWeight: 600,
-                      padding: "1px 8px",
-                      borderRadius: 999,
-                      background: isExpanded ? "var(--accent)" : "var(--bg-deep)",
-                      color: isExpanded ? "var(--text-on-accent)" : "var(--text-muted)",
-                    }}
+                    className={`text-[11px] font-semibold px-2 py-0.5 rounded-full ${
+                      isExpanded
+                        ? "bg-accent text-(--text-on-accent)"
+                        : "bg-bg-deep text-text-muted"
+                    }`}
                   >
                     {cat.words.length}
                   </span>
-                  <DownOutlined
-                    style={{
-                      fontSize: 10,
-                      color: "var(--text-muted)",
-                      transition: "transform 0.2s",
-                      transform: isExpanded ? "rotate(180deg)" : "rotate(0)",
-                    }}
+                  <ChevronDown
+                    className={`h-3 w-3 text-text-muted transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
                   />
                 </span>
               </button>
 
               {isExpanded && (
-                <div
-                  className="anim-fade-in"
-                  style={{
-                    display: "flex",
-                    flexWrap: "wrap",
-                    gap: 6,
-                    padding: "10px 4px",
-                  }}
-                >
+                <div className="anim-fade-in flex flex-wrap gap-1.5 px-1 py-2.5">
                   {cat.words.map((word) => (
                     <button
                       key={word}
                       type="button"
                       onClick={() => onSelect(word)}
-                      style={{
-                        borderRadius: 999,
-                        border: "1px solid var(--border)",
-                        background: "var(--surface)",
-                        padding: "4px 12px",
-                        fontSize: 12,
-                        color: "var(--text-secondary)",
-                        cursor: "pointer",
-                        transition: "all 0.15s",
-                        whiteSpace: "nowrap",
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.borderColor = "var(--accent)";
-                        e.currentTarget.style.color = "var(--accent)";
-                        e.currentTarget.style.background = "var(--accent-muted)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.borderColor = "var(--border)";
-                        e.currentTarget.style.color = "var(--text-secondary)";
-                        e.currentTarget.style.background = "var(--surface)";
-                      }}
+                      className="rounded-full border border-border bg-surface px-3 py-1 text-xs text-text-secondary cursor-pointer transition-all duration-150 whitespace-nowrap hover:border-accent hover:text-accent hover:bg-accent-muted"
                     >
                       {word}
                     </button>

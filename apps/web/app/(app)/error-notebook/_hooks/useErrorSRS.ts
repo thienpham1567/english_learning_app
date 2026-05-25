@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from "react";
 import { api } from "@/lib/api-client";
-import { message } from "antd";
 import type { ErrorEntry, SRSGrade } from "../_types/types";
 
 interface UseErrorSRSReturn {
@@ -52,7 +51,7 @@ export function useErrorSRS(): UseErrorSRSReturn {
         setCorrect(0);
       }
     } catch {
-      message.error("Không thể tải hàng đợi ôn tập");
+      console.error("Không thể tải hàng đợi ôn tập");
     } finally {
       setLoading(false);
     }
@@ -74,7 +73,7 @@ export function useErrorSRS(): UseErrorSRSReturn {
       if (grade >= 3) setCorrect((c) => c + 1);
       setCurrentIndex((i) => i + 1);
     } catch {
-      message.error("Không thể lưu kết quả ôn tập");
+      console.error("Không thể lưu kết quả ôn tập");
     } finally {
       setGrading(false);
     }

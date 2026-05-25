@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import Link from "next/link";
-import { RightOutlined, CloseOutlined, CheckOutlined } from "@ant-design/icons";
+import { ChevronRight, X as XIcon, Check } from "lucide-react";
 import { summarizeErrorPatterns } from "@repo/modules/learning";
 import type { ErrorPatternInput } from "@repo/modules/learning";
 
@@ -19,111 +19,70 @@ export function ErrorPatternSummary({ errors }: Props) {
   return (
     <div>
       {/* Section label */}
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-        <div style={{ width: 3, height: 14, borderRadius: 2, background: "var(--warning)", flexShrink: 0 }} />
-        <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.14em", color: "var(--warning)" }}>
+      <div className="flex items-center gap-2.5 mb-3">
+        <div className="w-[3px] h-3.5 rounded-sm bg-(--warning) shrink-0" />
+        <span className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-(--warning)">
           Mẫu lỗi thường gặp
         </span>
-        <span style={{
-          fontSize: 11, fontWeight: 700, padding: "1px 8px", borderRadius: 99,
-          background: "color-mix(in srgb, var(--warning) 12%, var(--surface))",
-          color: "var(--warning)",
-          border: "1px solid color-mix(in srgb, var(--warning) 25%, transparent)",
-        }}>
+        <span className="text-[11px] font-bold px-2 py-px rounded-full bg-[color-mix(in_srgb,var(--warning)_12%,var(--surface))] text-(--warning) border border-[color-mix(in_srgb,var(--warning)_25%,transparent)]">
           {patterns.length} mẫu
         </span>
-        <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+        <div className="flex-1 h-px bg-border" />
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <div className="flex flex-col gap-2">
         {topPatterns.map((pattern) => (
           <div
             key={pattern.category.key}
-            style={{
-              borderRadius: 14,
-              background: "var(--surface)",
-              border: "1px solid var(--border)",
-              overflow: "hidden",
-              transition: "border-color 0.15s, box-shadow 0.15s",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = "color-mix(in srgb, var(--warning) 35%, var(--border))";
-              e.currentTarget.style.boxShadow = "var(--shadow-sm)";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = "var(--border)";
-              e.currentTarget.style.boxShadow = "none";
-            }}
+            className="rounded-[14px] bg-surface border border-border overflow-hidden transition-all duration-150 hover:border-[color-mix(in_srgb,var(--warning)_35%,var(--border))] hover:shadow-sm"
           >
             {/* Pattern header */}
-            <div style={{
-              display: "flex", alignItems: "center", gap: 12,
-              padding: "12px 16px",
-              background: "color-mix(in srgb, var(--warning) 5%, var(--bg))",
-              borderBottom: pattern.examples.length > 0 ? "1px solid var(--border)" : "none",
-            }}>
-              <span style={{ fontSize: 18, lineHeight: 1, flexShrink: 0 }}>{pattern.category.emoji}</span>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 14, fontWeight: 700, color: "var(--ink)", lineHeight: 1.3 }}>
+            <div className={`flex items-center gap-3 px-4 py-3 bg-[color-mix(in_srgb,var(--warning)_5%,var(--bg))] ${pattern.examples.length > 0 ? "border-b border-border" : ""}`}>
+              <span className="text-lg leading-none shrink-0">{pattern.category.emoji}</span>
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-bold text-ink leading-tight">
                   {pattern.category.labelVi}
                 </div>
-                <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>
+                <div className="text-[11px] text-text-muted mt-0.5">
                   {pattern.totalCount} lỗi · {pattern.unresolvedCount} chưa nắm
                   {pattern.recentCount > 0 && ` · ${pattern.recentCount} gần đây`}
                 </div>
               </div>
-              <div style={{ display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+              <div className="flex items-center gap-2 shrink-0">
                 {pattern.unresolvedCount > 0 && (
-                  <span style={{
-                    fontSize: 12, fontWeight: 800, minWidth: 22, textAlign: "center",
-                    padding: "2px 8px", borderRadius: 99,
-                    background: "var(--error-bg)", color: "var(--error)",
-                  }}>
+                  <span className="text-xs font-extrabold min-w-[22px] text-center px-2 py-0.5 rounded-full bg-(--error-bg) text-(--error)">
                     {pattern.unresolvedCount}
                   </span>
                 )}
                 <Link
                   href={pattern.nextAction.href}
-                  style={{
-                    display: "inline-flex", alignItems: "center", gap: 4,
-                    fontSize: 11, fontWeight: 700, color: "var(--accent)",
-                    textDecoration: "none",
-                    padding: "4px 10px", borderRadius: 99,
-                    border: "1.5px solid color-mix(in srgb, var(--accent) 25%, transparent)",
-                    background: "color-mix(in srgb, var(--accent) 8%, transparent)",
-                    transition: "all 0.15s",
-                  }}
+                  className="inline-flex items-center gap-1 text-[11px] font-bold text-accent no-underline px-2.5 py-1 rounded-full border-[1.5px] border-accent/25 bg-accent/8 transition-all duration-150 hover:bg-accent/15"
                 >
-                  {pattern.nextAction.label} <RightOutlined style={{ fontSize: 9 }} />
+                  {pattern.nextAction.label} <ChevronRight className="h-2.5 w-2.5" />
                 </Link>
               </div>
             </div>
 
             {/* Examples */}
             {pattern.examples.length > 0 && (
-              <div style={{ padding: "10px 16px", display: "flex", flexDirection: "column", gap: 6 }}>
+              <div className="px-4 py-2.5 flex flex-col gap-1.5">
                 {pattern.examples.slice(0, 2).map((ex) => (
                   <div
                     key={ex.id}
-                    style={{
-                      fontSize: 12, lineHeight: 1.55,
-                      padding: "8px 12px", borderRadius: 9,
-                      background: "var(--bg-deep)",
-                      borderLeft: "3px solid var(--border)",
-                    }}
+                    className="text-xs leading-relaxed px-3 py-2 rounded-[9px] bg-bg-deep border-l-3 border-border"
                   >
-                    <span style={{ color: "var(--text-secondary)" }}>
+                    <span className="text-text-secondary">
                       {ex.questionStem.slice(0, 80)}
                     </span>
-                    <span style={{ color: "var(--error)", fontWeight: 600, marginLeft: 8 }}>
-                      <CloseOutlined style={{ fontSize: 9 }} /> {ex.userAnswer}
+                    <span className="text-(--error) font-semibold ml-2">
+                      <XIcon className="h-2.5 w-2.5 inline" /> {ex.userAnswer}
                     </span>
-                    <span style={{ color: "var(--success)", fontWeight: 600, marginLeft: 6 }}>
-                      <CheckOutlined style={{ fontSize: 9 }} /> {ex.correctAnswer}
+                    <span className="text-(--success) font-semibold ml-1.5">
+                      <Check className="h-2.5 w-2.5 inline" /> {ex.correctAnswer}
                     </span>
                   </div>
                 ))}
-                <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2 }}>
+                <div className="text-[11px] text-text-muted mt-0.5">
                   Kỹ năng: {pattern.affectedSkillIds.join(", ")}
                 </div>
               </div>

@@ -1,16 +1,16 @@
 "use client";
 import { useState, useCallback } from "react";
 import {
-  BulbOutlined,
-  CloseCircleOutlined,
-  CheckCircleOutlined,
-  ThunderboltOutlined,
-  BookOutlined,
-  LoadingOutlined,
-  ExperimentOutlined,
-  UpOutlined,
-  DownOutlined,
-} from "@ant-design/icons";
+  Lightbulb,
+  XCircle,
+  CheckCircle,
+  Zap,
+  BookOpen,
+  Loader2,
+  FlaskConical,
+  ChevronUp,
+  ChevronDown,
+} from "lucide-react";
 import { api } from "@/lib/api-client";
 
 type DeepExplanationData = {
@@ -65,37 +65,26 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
   }, [data, generate]);
 
   return (
-    <div style={{ marginTop: 10 }}>
+    <div className="mt-2.5">
       {/* Toggle button */}
       <button
         type="button"
         onClick={toggle}
         disabled={loading}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          width: "100%",
-          padding: "10px 14px",
-          borderRadius: 10,
-          border: "1px solid color-mix(in srgb, var(--accent) 20%, var(--border))",
-          background: expanded
-            ? "color-mix(in srgb, var(--accent) 6%, var(--surface))"
-            : "var(--card-bg)",
-          cursor: loading ? "wait" : "pointer",
-          fontSize: 13,
-          fontWeight: 600,
-          color: "var(--accent)",
-          transition: "all 0.2s",
-          textAlign: "left",
-        }}
+        className={`flex items-center gap-2 w-full px-3.5 py-2.5 rounded-[10px] border border-accent/20 text-[13px] font-semibold text-accent transition-all duration-200 text-left ${
+          loading ? "cursor-wait" : "cursor-pointer"
+        } ${
+          expanded
+            ? "bg-accent/6"
+            : "bg-(--card-bg) hover:bg-accent/4"
+        }`}
       >
         {loading ? (
-          <LoadingOutlined style={{ fontSize: 15 }} />
+          <Loader2 className="h-4 w-4 animate-spin" />
         ) : (
-          <BulbOutlined style={{ fontSize: 15 }} />
+          <Lightbulb className="h-4 w-4" />
         )}
-        <span style={{ flex: 1 }}>
+        <span className="flex-1">
           {loading
             ? "Đang phân tích lỗi sai..."
             : data
@@ -105,38 +94,20 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
               : "Phân tích lỗi sai với AI"}
         </span>
         {data && (
-          <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 400 }}>
-            {expanded ? <UpOutlined /> : <DownOutlined />}
+          <span className="text-[11px] text-text-muted">
+            {expanded ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
           </span>
         )}
       </button>
 
       {/* Error state */}
       {error && (
-        <div
-          style={{
-            marginTop: 8,
-            padding: "8px 12px",
-            borderRadius: 8,
-            background: "color-mix(in srgb, var(--error) 6%, var(--surface))",
-            color: "var(--error)",
-            fontSize: 12,
-          }}
-        >
+        <div className="mt-2 px-3 py-2 rounded-lg bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] text-(--error) text-xs">
           {error}
           <button
             type="button"
             onClick={generate}
-            style={{
-              marginLeft: 8,
-              border: "none",
-              background: "none",
-              color: "var(--accent)",
-              cursor: "pointer",
-              fontSize: 12,
-              fontWeight: 600,
-              textDecoration: "underline",
-            }}
+            className="ml-2 border-none bg-transparent text-accent cursor-pointer text-xs font-semibold underline"
           >
             Thử lại
           </button>
@@ -145,166 +116,49 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
 
       {/* Expanded content */}
       {expanded && data && (
-        <div
-          className="anim-fade-up"
-          style={{
-            marginTop: 10,
-            display: "flex",
-            flexDirection: "column",
-            gap: 10,
-          }}
-        >
+        <div className="anim-fade-up mt-2.5 flex flex-col gap-2.5">
           {/* Why Wrong */}
-          <div
-            style={{
-              padding: "12px 14px",
-              borderRadius: 10,
-              background: "color-mix(in srgb, var(--error) 4%, var(--surface))",
-              borderLeft: "3px solid var(--error)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                marginBottom: 6,
-                fontSize: 12,
-                fontWeight: 700,
-                color: "var(--error)",
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-              }}
-            >
-              <CloseCircleOutlined /> Tại sao đáp án bạn chọn sai
+          <div className="px-3.5 py-3 rounded-[10px] bg-[color-mix(in_srgb,var(--error)_4%,var(--surface))] border-l-3 border-l-(--error)">
+            <div className="flex items-center gap-1.5 mb-1.5 text-xs font-bold text-(--error) uppercase tracking-wide">
+              <XCircle className="h-3 w-3" /> Tại sao đáp án bạn chọn sai
             </div>
-            <p style={{ margin: 0, fontSize: 13, lineHeight: 1.7, color: "var(--text)" }}>
+            <p className="m-0 text-[13px] leading-relaxed text-(--text)">
               {data.whyWrong}
             </p>
           </div>
 
           {/* Why Correct */}
-          <div
-            style={{
-              padding: "12px 14px",
-              borderRadius: 10,
-              background: "color-mix(in srgb, var(--success) 4%, var(--surface))",
-              borderLeft: "3px solid var(--success)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                marginBottom: 6,
-                fontSize: 12,
-                fontWeight: 700,
-                color: "var(--success)",
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-              }}
-            >
-              <CheckCircleOutlined /> Tại sao đáp án đúng là đúng
+          <div className="px-3.5 py-3 rounded-[10px] bg-[color-mix(in_srgb,var(--success)_4%,var(--surface))] border-l-3 border-l-(--success)">
+            <div className="flex items-center gap-1.5 mb-1.5 text-xs font-bold text-(--success) uppercase tracking-wide">
+              <CheckCircle className="h-3 w-3" /> Tại sao đáp án đúng là đúng
             </div>
-            <p style={{ margin: 0, fontSize: 13, lineHeight: 1.7, color: "var(--text)" }}>
+            <p className="m-0 text-[13px] leading-relaxed text-(--text)">
               {data.whyCorrect}
             </p>
           </div>
 
           {/* Grammar Rule — Formula Card */}
-          <div
-            style={{
-              padding: "12px 14px",
-              borderRadius: 10,
-              background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), color-mix(in srgb, var(--secondary) 6%, var(--surface)))",
-              border: "1px solid color-mix(in srgb, var(--accent) 15%, var(--border))",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                marginBottom: 8,
-                fontSize: 12,
-                fontWeight: 700,
-                color: "var(--accent)",
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-              }}
-            >
-              <BookOutlined /> Quy tắc ngữ pháp
+          <div className="px-3.5 py-3 rounded-[10px] bg-gradient-to-br from-accent/8 to-[color-mix(in_srgb,var(--secondary)_6%,var(--surface))] border border-accent/15">
+            <div className="flex items-center gap-1.5 mb-2 text-xs font-bold text-accent uppercase tracking-wide">
+              <BookOpen className="h-3 w-3" /> Quy tắc ngữ pháp
             </div>
-            <div
-              style={{
-                padding: "10px 14px",
-                borderRadius: 8,
-                background: "color-mix(in srgb, var(--accent) 6%, var(--surface))",
-                fontFamily: "var(--font-mono, 'Fira Code', monospace)",
-                fontSize: 13,
-                fontWeight: 600,
-                lineHeight: 1.6,
-                color: "var(--ink)",
-                letterSpacing: "0.02em",
-              }}
-            >
+            <div className="px-3.5 py-2.5 rounded-lg bg-accent/6 font-mono text-[13px] font-semibold leading-relaxed text-ink tracking-wide">
               {data.grammarRule}
             </div>
           </div>
 
           {/* Examples */}
-          <div
-            style={{
-              padding: "12px 14px",
-              borderRadius: 10,
-              background: "var(--card-bg)",
-              border: "1px solid var(--border)",
-            }}
-          >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                marginBottom: 8,
-                fontSize: 12,
-                fontWeight: 700,
-                color: "var(--secondary)",
-                textTransform: "uppercase",
-                letterSpacing: "0.05em",
-              }}
-            >
-              <ExperimentOutlined /> Ví dụ tương tự
+          <div className="px-3.5 py-3 rounded-[10px] bg-(--card-bg) border border-border">
+            <div className="flex items-center gap-1.5 mb-2 text-xs font-bold text-(--secondary) uppercase tracking-wide">
+              <FlaskConical className="h-3 w-3" /> Ví dụ tương tự
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            <div className="flex flex-col gap-1.5">
               {data.examples.map((ex, i) => (
                 <div
                   key={i}
-                  style={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: 8,
-                    fontSize: 13,
-                    lineHeight: 1.6,
-                    color: "var(--text)",
-                  }}
+                  className="flex items-start gap-2 text-[13px] leading-relaxed text-(--text)"
                 >
-                  <span
-                    style={{
-                      flexShrink: 0,
-                      width: 20,
-                      height: 20,
-                      borderRadius: "50%",
-                      background: "color-mix(in srgb, var(--secondary) 12%, var(--surface))",
-                      display: "grid",
-                      placeItems: "center",
-                      fontSize: 10,
-                      fontWeight: 700,
-                      color: "var(--secondary)",
-                      marginTop: 2,
-                    }}
-                  >
+                  <span className="shrink-0 w-5 h-5 rounded-full bg-[color-mix(in_srgb,var(--secondary)_12%,var(--surface))] grid place-items-center text-[10px] font-bold text-(--secondary) mt-0.5">
                     {i + 1}
                   </span>
                   <span>{ex}</span>
@@ -314,39 +168,13 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
           </div>
 
           {/* Tip */}
-          <div
-            style={{
-              padding: "10px 14px",
-              borderRadius: 10,
-              background: "linear-gradient(135deg, color-mix(in srgb, var(--warning) 8%, var(--surface)), color-mix(in srgb, var(--xp) 6%, var(--surface)))",
-              border: "1px solid color-mix(in srgb, var(--warning) 15%, var(--border))",
-              display: "flex",
-              alignItems: "flex-start",
-              gap: 10,
-            }}
-          >
-            <ThunderboltOutlined
-              style={{
-                fontSize: 16,
-                color: "var(--warning)",
-                marginTop: 2,
-                flexShrink: 0,
-              }}
-            />
+          <div className="px-3.5 py-2.5 rounded-[10px] bg-gradient-to-br from-[color-mix(in_srgb,var(--warning)_8%,var(--surface))] to-[color-mix(in_srgb,var(--xp)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--warning)_15%,var(--border))] flex items-start gap-2.5">
+            <Zap className="h-4 w-4 text-(--warning) mt-0.5 shrink-0" />
             <div>
-              <div
-                style={{
-                  fontSize: 11,
-                  fontWeight: 700,
-                  color: "var(--warning)",
-                  textTransform: "uppercase",
-                  letterSpacing: "0.05em",
-                  marginBottom: 3,
-                }}
-              >
+              <div className="text-[11px] font-bold text-(--warning) uppercase tracking-wide mb-1">
                 Mẹo ghi nhớ
               </div>
-              <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: "var(--text)" }}>
+              <p className="m-0 text-[13px] leading-relaxed text-(--text)">
                 {data.tip}
               </p>
             </div>
@@ -356,19 +184,9 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
 
       {/* Fallback: show old explanation if no deep data and not expanded */}
       {!data && !expanded && !loading && (fallbackEn || fallbackVi) && (
-        <div
-          style={{
-            marginTop: 8,
-            padding: "10px 14px",
-            borderRadius: 8,
-            background: "var(--card-bg)",
-            border: "1px solid var(--border)",
-            fontSize: 13,
-            lineHeight: 1.6,
-          }}
-        >
+        <div className="mt-2 px-3.5 py-2.5 rounded-lg bg-(--card-bg) border border-border text-[13px] leading-relaxed">
           {fallbackVi && (
-            <p style={{ margin: 0, color: "var(--text-secondary)", fontStyle: "italic" }}>
+            <p className="m-0 text-text-secondary italic">
               {fallbackVi}
             </p>
           )}

@@ -2,14 +2,14 @@
 
 import { useState } from "react";
 import {
-  BookOutlined,
-  BulbOutlined,
-  CodeOutlined,
-  EditOutlined,
-  LinkOutlined,
-  ThunderboltOutlined,
-  WarningOutlined,
-} from "@ant-design/icons";
+  BookOpen,
+  Lightbulb,
+  Code,
+  Pencil,
+  Link,
+  Zap,
+  AlertTriangle,
+} from "lucide-react";
 
 import type { DictionarySense } from "@/lib/schemas/vocabulary";
 import { parseBold } from "@/lib/utils/parse-bold";
@@ -20,26 +20,7 @@ type SensePanelProps = {
   onSearch?: (word: string) => void;
 };
 
-const SENSE_ITEM_STYLE: React.CSSProperties = {
-  borderLeft: "2px solid var(--accent-muted)",
-  paddingLeft: 16,
-  fontSize: 14,
-  fontStyle: "italic",
-  lineHeight: 1.6,
-  color: "var(--text-secondary)",
-};
-
-export const SENSE_HEADER_STYLE: React.CSSProperties = {
-  display: "flex",
-  alignItems: "center",
-  gap: 6,
-  fontSize: 12,
-  fontWeight: 600,
-  textTransform: "uppercase" as const,
-  letterSpacing: "0.14em",
-  color: "var(--accent)",
-  margin: 0,
-};
+export const SENSE_HEADER_STYLE = "flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-accent m-0";
 
 function BoldText({ text }: { text: string }) {
   const segments = parseBold(text);
@@ -47,7 +28,7 @@ function BoldText({ text }: { text: string }) {
     <>
       {segments.map((seg, i) =>
         seg.bold ? (
-          <strong key={i} style={{ fontWeight: 600, fontStyle: "normal" }}>
+          <strong key={i} className="font-semibold not-italic">
             {seg.text}
           </strong>
         ) : (
@@ -72,7 +53,7 @@ function HighlightWord({ text, headword }: { text: string; headword: string }) {
         const subParts = seg.text.split(headwordRegex);
         if (subParts.length <= 1) {
           return seg.bold ? (
-            <strong key={si} style={{ fontWeight: 600, fontStyle: "normal" }}>
+            <strong key={si} className="font-semibold not-italic">
               {seg.text}
             </strong>
           ) : (
@@ -83,13 +64,13 @@ function HighlightWord({ text, headword }: { text: string; headword: string }) {
           const key = `${si}-${pi}`;
           if (sub.toLowerCase() === headword.toLowerCase()) {
             return (
-              <span key={key} style={{ color: "var(--accent)", fontWeight: 600, fontStyle: "normal" }}>
+              <span key={key} className="text-accent font-semibold not-italic">
                 {sub}
               </span>
             );
           }
           return seg.bold ? (
-            <strong key={key} style={{ fontWeight: 600, fontStyle: "normal" }}>
+            <strong key={key} className="font-semibold not-italic">
               {sub}
             </strong>
           ) : (
@@ -107,43 +88,19 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
   const examplesVi = sense.examplesVi ?? [];
   const collocations = sense.collocations ?? [];
 
-  const sectionStyle: React.CSSProperties = {
-    display: "flex",
-    flexDirection: "column",
-    gap: 8,
-    borderRadius: "var(--radius)",
-    borderLeft: "3px solid var(--accent)",
-    background: "var(--bg-deep)",
-    padding: "16px 20px",
-  };
-
   const shortMeanings = sense.shortMeaningsVi ?? [];
 
   return (
-    <div className="anim-fade-up" style={{ display: "flex", flexDirection: "column", gap: 28 }}>
+    <div className="anim-fade-up flex flex-col gap-7">
       {shortMeanings.length > 0 && (
-        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 12, rowGap: 8 }}>
+        <div className="flex flex-wrap items-center gap-3 gap-y-2">
           {shortMeanings.map((meaning, i) => (
             <span
               key={meaning}
-              style={
+              className={
                 i === 0
-                  ? {
-                      borderRadius: 999,
-                      border: "1px solid var(--accent-muted)",
-                      background: "var(--accent-light)",
-                      padding: "4px 14px",
-                      fontSize: 14,
-                      fontStyle: "italic",
-                      fontFamily: "var(--font-display)",
-                      color: "var(--accent)",
-                      whiteSpace: "nowrap",
-                    }
-                  : {
-                      fontSize: 14,
-                      color: "var(--text-secondary)",
-                      lineHeight: 1.5,
-                    }
+                  ? "rounded-full border border-accent-muted bg-accent-light px-3.5 py-1 text-sm italic font-display text-accent whitespace-nowrap"
+                  : "text-sm text-text-secondary leading-snug"
               }
             >
               {meaning}
@@ -152,41 +109,32 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
         </div>
       )}
 
-      <section style={sectionStyle}>
-        <h3 style={SENSE_HEADER_STYLE}>
-          <BookOutlined style={{ fontSize: 12 }} />
+      <section className="flex flex-col gap-2 rounded-lg border-l-3 border-l-accent bg-bg-deep p-4 px-5">
+        <h3 className={SENSE_HEADER_STYLE}>
+          <BookOpen className="h-3 w-3" />
           Definition in English
         </h3>
-        <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
+        <p className="text-sm leading-relaxed text-text-primary m-0">
           <BoldText text={sense.definitionEn} />
         </p>
       </section>
 
       {(examples.length > 0 || examplesVi.length > 0) && (
-        <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <h3 style={SENSE_HEADER_STYLE}>
-            <EditOutlined style={{ fontSize: 12 }} />
+        <section className="flex flex-col gap-2">
+          <h3 className={SENSE_HEADER_STYLE}>
+            <Pencil className="h-3 w-3" />
             Ví dụ
           </h3>
-          <ul
-            style={{
-              listStyle: "none",
-              padding: 0,
-              margin: 0,
-              display: "flex",
-              flexDirection: "column",
-              gap: 8,
-            }}
-          >
+          <ul className="list-none p-0 m-0 flex flex-col gap-2">
             {examples.length > 0
               ? examples.map((example, i) => (
-                  <li key={`${example.en}-${example.vi ?? i}`} style={SENSE_ITEM_STYLE}>
-                    <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
+                  <li key={`${example.en}-${example.vi ?? i}`} className="border-l-2 border-l-accent-muted pl-4 text-sm italic leading-relaxed text-text-secondary">
+                    <div className="flex flex-col gap-0.5">
                       <span>
                         <HighlightWord text={example.en} headword={headword} />
                       </span>
                       {example.vi && (
-                        <span style={{ fontSize: 13, color: "var(--text-muted)", fontStyle: "normal" }}>
+                        <span className="text-[13px] text-text-muted not-italic">
                           <BoldText text={example.vi} />
                         </span>
                       )}
@@ -194,7 +142,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
                   </li>
                 ))
               : examplesVi.map((example) => (
-                  <li key={example} style={SENSE_ITEM_STYLE}>
+                  <li key={example} className="border-l-2 border-l-accent-muted pl-4 text-sm italic leading-relaxed text-text-secondary">
                     <BoldText text={example} />
                   </li>
                 ))}
@@ -203,37 +151,28 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
       )}
 
       {sense.usageNoteVi && (
-        <section style={{ ...sectionStyle, borderLeft: "none" }}>
-          <h3 style={SENSE_HEADER_STYLE}>
-            <BulbOutlined style={{ fontSize: 12 }} />
+        <section className="flex flex-col gap-2 rounded-lg bg-bg-deep p-4 px-5">
+          <h3 className={SENSE_HEADER_STYLE}>
+            <Lightbulb className="h-3 w-3" />
             Ghi chú sử dụng
           </h3>
-          <p style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text-primary)", margin: 0 }}>
+          <p className="text-sm leading-relaxed text-text-primary m-0">
             <BoldText text={sense.usageNoteVi} />
           </p>
         </section>
       )}
 
       {sense.patterns.length > 0 && (
-        <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <h3 style={SENSE_HEADER_STYLE}>
-            <CodeOutlined style={{ fontSize: 12 }} />
+        <section className="flex flex-col gap-2">
+          <h3 className={SENSE_HEADER_STYLE}>
+            <Code className="h-3 w-3" />
             Mẫu câu thường gặp
           </h3>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+          <div className="flex flex-wrap gap-1.5">
             {sense.patterns.map((pattern) => (
               <span
                 key={pattern}
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 12,
-                  background: "var(--bg-deep)",
-                  border: "1px solid var(--border)",
-                  borderRadius: 4,
-                  padding: "3px 10px",
-                  color: "var(--text-secondary)",
-                  whiteSpace: "nowrap",
-                }}
+                className="font-mono text-xs bg-bg-deep border border-border rounded px-2.5 py-1 text-text-secondary whitespace-nowrap"
               >
                 {pattern}
               </span>
@@ -243,29 +182,18 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
       )}
 
       {sense.relatedExpressions.length > 0 && (
-        <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <h3 style={SENSE_HEADER_STYLE}>
-            <LinkOutlined style={{ fontSize: 12 }} />
+        <section className="flex flex-col gap-2">
+          <h3 className={SENSE_HEADER_STYLE}>
+            <Link className="h-3 w-3" />
             Biểu đạt liên quan
           </h3>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+          <div className="flex flex-wrap gap-1.5">
             {sense.relatedExpressions.map((expr) => (
               <button
                 key={expr}
                 type="button"
                 onClick={() => onSearch?.(expr)}
-                style={{
-                  borderRadius: 999,
-                  border: "1px solid var(--border)",
-                  background: "var(--surface)",
-                  padding: "4px 14px",
-                  fontSize: 13,
-                  fontStyle: "italic",
-                  fontFamily: "var(--font-display)",
-                  color: "var(--accent)",
-                  cursor: onSearch ? "pointer" : "default",
-                  transition: "background 0.15s",
-                }}
+                className="rounded-full border border-border bg-surface px-3.5 py-1 text-[13px] italic font-display text-accent cursor-pointer transition-colors duration-150 hover:bg-accent/10"
               >
                 {expr}
               </button>
@@ -275,41 +203,16 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
       )}
 
       {sense.commonMistakesVi.length > 0 && (
-        <section
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            gap: 10,
-            borderRadius: "var(--radius)",
-            background: "var(--warning-bg)",
-            border: "1px solid var(--warning)",
-            padding: "14px 16px",
-          }}
-        >
-          <h3 style={{ ...SENSE_HEADER_STYLE, color: "var(--warning)" }}>
-            <WarningOutlined style={{ fontSize: 12 }} />
+        <section className="flex flex-col gap-2.5 rounded-lg bg-(--warning-bg) border border-(--warning) p-3.5 px-4">
+          <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-(--warning) m-0">
+            <AlertTriangle className="h-3 w-3" />
             Lỗi thường gặp
           </h3>
-          <ul
-            style={{
-              listStyle: "none",
-              padding: 0,
-              margin: 0,
-              display: "flex",
-              flexDirection: "column",
-              gap: 8,
-            }}
-          >
+          <ul className="list-none p-0 m-0 flex flex-col gap-2">
             {sense.commonMistakesVi.map((mistake) => (
               <li
                 key={mistake}
-                style={{
-                  borderLeft: "2px solid var(--warning)",
-                  paddingLeft: 12,
-                  fontSize: 13,
-                  lineHeight: 1.6,
-                  color: "var(--text-secondary)",
-                }}
+                className="border-l-2 border-l-(--warning) pl-3 text-[13px] leading-relaxed text-text-secondary"
               >
                 <BoldText text={mistake} />
               </li>
@@ -319,31 +222,22 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
       )}
 
       {collocations.length > 0 && (
-        <section style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          <h3 style={SENSE_HEADER_STYLE}>
-            <ThunderboltOutlined style={{ fontSize: 12 }} />
+        <section className="flex flex-col gap-2">
+          <h3 className={SENSE_HEADER_STYLE}>
+            <Zap className="h-3 w-3" />
             Collocations
           </h3>
-          <ul
-            style={{
-              listStyle: "none",
-              padding: 0,
-              margin: 0,
-              display: "flex",
-              flexDirection: "column",
-              gap: 6,
-            }}
-          >
+          <ul className="list-none p-0 m-0 flex flex-col gap-1.5">
             {(isCollocationsOpen ? collocations : collocations.slice(0, 3)).map((collocation) => (
               <li
                 key={`${collocation.en}-${collocation.vi}`}
-                style={{ fontSize: 14, lineHeight: 1.6 }}
+                className="text-sm leading-relaxed"
               >
-                <span style={{ color: "var(--text-primary)" }}>
+                <span className="text-text-primary">
                   <BoldText text={collocation.en} />
                 </span>
-                <span style={{ margin: "0 6px", color: "var(--text-muted)" }}>&mdash;</span>
-                <span style={{ color: "var(--text-secondary)" }}><BoldText text={collocation.vi} /></span>
+                <span className="mx-1.5 text-text-muted">&mdash;</span>
+                <span className="text-text-secondary"><BoldText text={collocation.vi} /></span>
               </li>
             ))}
           </ul>
@@ -352,19 +246,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
               type="button"
               aria-expanded={isCollocationsOpen}
               onClick={() => setIsCollocationsOpen((open) => !open)}
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                borderRadius: 999,
-                border: "1px solid var(--border)",
-                background: "var(--surface)",
-                padding: "4px 12px",
-                fontSize: 12,
-                fontWeight: 500,
-                color: "var(--accent)",
-                cursor: "pointer",
-                width: "fit-content",
-              }}
+              className="inline-flex items-center rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium text-accent cursor-pointer w-fit hover:bg-accent/10 transition-colors"
             >
               {isCollocationsOpen ? "Thu gọn" : `Xem thêm (${collocations.length - 3})`}
             </button>

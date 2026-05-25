@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { ExceptionOutlined, ClockCircleOutlined } from "@ant-design/icons";
+import { AlertTriangle, Clock } from "lucide-react";
 import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import * as m from "motion/react-client";
 import { api } from "@/lib/api-client";
@@ -55,17 +55,13 @@ export default function ErrorNotebookPage() {
   const resolvedCount = errors.filter((e) => e.isResolved).length;
 
   return (
-    <div style={{
-      display: "flex", flexDirection: "column",
-      height: "100%", minHeight: 0, flex: 1,
-      overflow: "hidden", position: "relative",
-    }}>
-      <div className="grain-overlay" style={{ opacity: 0.03, zIndex: 0 }} />
+    <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden relative">
+      <div className="grain-overlay opacity-[0.03] z-0" />
 
       {/* Header */}
-      <div style={{ position: "relative", zIndex: 1 }}>
+      <div className="relative z-[1]">
         <ModuleHeader
-          icon={<ExceptionOutlined />}
+          icon={<AlertTriangle className="h-5 w-5" />}
           gradient="var(--gradient-error-notebook)"
           title="Sổ lỗi sai"
           subtitle="Tổng hợp & ôn tập lỗi sai thông minh"
@@ -74,27 +70,14 @@ export default function ErrorNotebookPage() {
               <m.span
                 animate={{ scale: [1, 1.05, 1] }}
                 transition={{ repeat: Infinity, duration: 2, repeatDelay: 3 }}
-                style={{
-                  display: "inline-flex", alignItems: "center", gap: 6,
-                  background: "rgba(255,255,255,0.2)", backdropFilter: "blur(8px)",
-                  borderRadius: 99, padding: "5px 14px",
-                  fontSize: 13, fontWeight: 700, color: "#fff",
-                  border: "1px solid rgba(255,255,255,0.25)",
-                  cursor: "pointer",
-                }}
+                className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-sm rounded-full px-3.5 py-1.5 text-[13px] font-bold text-white border border-white/25 cursor-pointer"
                 onClick={() => setTab("review")}
               >
-                <ClockCircleOutlined style={{ fontSize: 12 }} />
+                <Clock className="h-3 w-3" />
                 {dueCount} cần ôn tập
               </m.span>
             ) : unresolvedCount > 0 ? (
-              <span style={{
-                display: "inline-flex", alignItems: "center", gap: 6,
-                background: "rgba(255,255,255,0.15)", backdropFilter: "blur(8px)",
-                borderRadius: 99, padding: "5px 14px",
-                fontSize: 13, fontWeight: 700, color: "#fff",
-                border: "1px solid rgba(255,255,255,0.2)",
-              }}>
+              <span className="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm rounded-full px-3.5 py-1.5 text-[13px] font-bold text-white border border-white/20">
                 ⚠️ {unresolvedCount} chưa nắm
               </span>
             ) : null
@@ -103,40 +86,22 @@ export default function ErrorNotebookPage() {
       </div>
 
       {/* Tabs */}
-      <div style={{
-        position: "relative", zIndex: 1,
-        display: "flex", gap: 4,
-        padding: "12px 20px 0",
-        borderBottom: "1px solid var(--border)",
-        background: "var(--bg)",
-      }}>
+      <div className="relative z-[1] flex gap-1 px-5 pt-3 border-b border-border bg-(--bg)">
         {TABS.map((t) => (
           <button
             key={t.key}
             onClick={() => setTab(t.key)}
-            style={{
-              display: "flex", alignItems: "center", gap: 6,
-              padding: "10px 18px", borderRadius: "10px 10px 0 0",
-              border: "none", borderBottom: tab === t.key ? "2px solid var(--accent)" : "2px solid transparent",
-              background: tab === t.key ? "var(--surface)" : "transparent",
-              color: tab === t.key ? "var(--accent)" : "var(--text-secondary)",
-              fontSize: 13, fontWeight: tab === t.key ? 800 : 600,
-              cursor: "pointer", transition: "all 0.15s",
-              position: "relative",
-              fontFamily: "var(--font-body)",
-            }}
+            className={`flex items-center gap-1.5 px-4.5 py-2.5 rounded-t-xl border-none border-b-2 text-[13px] cursor-pointer transition-all duration-150 font-body ${
+              tab === t.key
+                ? "border-b-accent bg-surface text-accent font-extrabold"
+                : "border-b-transparent bg-transparent text-text-secondary font-semibold hover:text-ink"
+            }`}
           >
-            <span style={{ fontSize: 15 }}>{t.icon}</span>
+            <span className="text-[15px]">{t.icon}</span>
             {t.label}
             {/* Due badge on Review tab */}
             {t.key === "review" && dueCount > 0 && (
-              <span style={{
-                fontSize: 10, fontWeight: 900,
-                padding: "1px 6px", borderRadius: 99,
-                background: "var(--error)", color: "#fff",
-                minWidth: 18, textAlign: "center",
-                lineHeight: "16px",
-              }}>
+              <span className="text-[10px] font-black px-1.5 rounded-full bg-(--error) text-white min-w-[18px] text-center leading-4">
                 {dueCount > 99 ? "99+" : dueCount}
               </span>
             )}
@@ -145,12 +110,8 @@ export default function ErrorNotebookPage() {
       </div>
 
       {/* Content */}
-      <div style={{
-        flex: 1, overflow: "auto",
-        padding: "20px",
-        position: "relative", zIndex: 1,
-      }}>
-        <div style={{ maxWidth: 900, margin: "0 auto", width: "100%" }}>
+      <div className="flex-1 overflow-auto p-5 relative z-[1]">
+        <div className="max-w-[900px] mx-auto w-full">
           {tab === "overview" && (
             <OverviewTab
               errors={errors}

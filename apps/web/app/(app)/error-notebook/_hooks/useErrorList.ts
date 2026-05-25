@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useRef } from "react";
 import { api } from "@/lib/api-client";
-import { message } from "antd";
 import type { ErrorEntry, ErrorFilters } from "../_types/types";
 import { INITIAL_FILTERS } from "../_types/types";
 
@@ -59,7 +58,7 @@ export function useErrorList(): UseErrorListReturn {
         offsetRef.current = data.errors.length;
       }
     } catch {
-      message.error("Không thể tải danh sách lỗi sai");
+      console.error("Không thể tải danh sách lỗi sai");
     } finally {
       setLoading(false);
     }
@@ -96,9 +95,8 @@ export function useErrorList(): UseErrorListReturn {
       setErrors((prev) =>
         prev.map((e) => (e.id === id ? { ...e, isResolved: true } : e)),
       );
-      message.success("Đã đánh dấu nắm rồi ✓");
     } catch {
-      message.error("Không thể cập nhật");
+      console.error("Không thể cập nhật");
     }
   }, []);
 
@@ -108,9 +106,8 @@ export function useErrorList(): UseErrorListReturn {
     try {
       await api.patch("/errors", { ids });
       setErrors((prev) => prev.map((e) => ({ ...e, isResolved: true })));
-      message.success(`Đã đánh dấu ${ids.length} lỗi đã hiểu`);
     } catch {
-      message.error("Không thể cập nhật");
+      console.error("Không thể cập nhật");
     }
   }, [errors]);
 

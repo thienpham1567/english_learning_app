@@ -1,14 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { Tag, Tooltip } from "antd";
 import {
-  LoadingOutlined,
-  ReadOutlined,
-  SoundOutlined,
-  StarFilled,
-  StarOutlined,
-} from "@ant-design/icons";
+  Loader2,
+  BookOpen,
+  Volume2,
+  Star,
+} from "lucide-react";
 
 import type { FrequencyBand, VocabularyWithNearby } from "@/lib/schemas/vocabulary";
 
@@ -40,38 +38,31 @@ const FREQUENCY_CONFIG: Record<FrequencyBand, { filled: number; labelVi: string;
 function FrequencyBar({ band }: { band: FrequencyBand }) {
   const { filled, labelVi, tooltipEn } = FREQUENCY_CONFIG[band];
   return (
-    <Tooltip title={tooltipEn} placement="top">
-      <div
-        className="anim-fade-in"
-        style={{ display: "inline-flex", alignItems: "center", gap: 8 }}
-      >
-        <div style={{ display: "flex", gap: 3 }}>
-          {Array.from({ length: 5 }, (_, i) => (
-            <div
-              key={i}
-              data-frequency-segment={i < filled ? "filled" : "empty"}
-              style={{
-                width: 20,
-                height: 5,
-                borderRadius: 999,
-                background: i < filled ? "var(--accent)" : "var(--border)",
-              }}
-            />
-          ))}
-        </div>
-        <span style={{ fontSize: 12, color: "var(--text-muted)" }}>{labelVi}</span>
+    <div className="anim-fade-in inline-flex items-center gap-2 relative group">
+      <div className="flex gap-1">
+        {Array.from({ length: 5 }, (_, i) => (
+          <div
+            key={i}
+            data-frequency-segment={i < filled ? "filled" : "empty"}
+            className={`w-5 h-1.5 rounded-full ${i < filled ? "bg-accent" : "bg-border"}`}
+          />
+        ))}
       </div>
-    </Tooltip>
+      <span className="text-xs text-text-muted">{labelVi}</span>
+      <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
+        {tooltipEn}
+      </span>
+    </div>
   );
 }
 
-const LEVEL_STYLES: Record<string, React.CSSProperties> = {
-  A1: { background: "var(--success-bg)", color: "var(--success)", borderColor: "var(--success)" },
-  A2: { background: "var(--success-bg)", color: "var(--success)", borderColor: "var(--success)" },
-  B1: { background: "var(--warning-bg)", color: "var(--warning)", borderColor: "var(--warning)" },
-  B2: { background: "var(--warning-bg)", color: "var(--warning)", borderColor: "var(--warning)" },
-  C1: { background: "var(--error-bg)", color: "var(--error)", borderColor: "var(--error)" },
-  C2: { background: "var(--error-bg)", color: "var(--error)", borderColor: "var(--error)" },
+const LEVEL_STYLES: Record<string, { bg: string; text: string; border: string }> = {
+  A1: { bg: "bg-(--success-bg)", text: "text-(--success)", border: "border-(--success)" },
+  A2: { bg: "bg-(--success-bg)", text: "text-(--success)", border: "border-(--success)" },
+  B1: { bg: "bg-(--warning-bg)", text: "text-(--warning)", border: "border-(--warning)" },
+  B2: { bg: "bg-(--warning-bg)", text: "text-(--warning)", border: "border-(--warning)" },
+  C1: { bg: "bg-(--error-bg)", text: "text-(--error)", border: "border-(--error)" },
+  C2: { bg: "bg-(--error-bg)", text: "text-(--error)", border: "border-(--error)" },
 };
 
 // Maps the prompt's allowed partOfSpeech values to learner-friendly Vietnamese.
@@ -120,23 +111,12 @@ function AudioButton({
       type="button"
       aria-label={locale === "en-US" ? "Play US pronunciation" : "Play UK pronunciation"}
       onClick={() => onSpeak(locale)}
-      style={{
-        display: "grid",
-        width: 24,
-        height: 24,
-        placeItems: "center",
-        borderRadius: 4,
-        color: "var(--text-muted)",
-        background: "none",
-        border: "none",
-        cursor: "pointer",
-        transition: "color 0.2s",
-      }}
+      className="grid w-6 h-6 place-items-center rounded border-none bg-transparent text-text-muted cursor-pointer transition-colors duration-200 hover:text-accent"
     >
       {speakingLocale === locale ? (
-        <LoadingOutlined style={{ fontSize: 13 }} spin />
+        <Loader2 className="h-3.5 w-3.5 animate-spin" />
       ) : (
-        <SoundOutlined style={{ fontSize: 13 }} />
+        <Volume2 className="h-3.5 w-3.5" />
       )}
     </button>
   );
@@ -168,27 +148,15 @@ export function DictionaryResultCard({
     speakAudio(vocabulary.headword, locale);
   }
 
-  const cardStyle: React.CSSProperties = {
-    borderRadius: "var(--radius-lg)",
-    background: "var(--surface)",
-    boxShadow: "var(--shadow-lg)",
-    minHeight: 400,
-  };
-
   if (isLoading) {
     return (
-      <div className="dictionary-result-card" style={cardStyle}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+      <div className="dictionary-result-card rounded-xl bg-surface shadow-lg min-h-[400px]">
+        <div className="flex flex-col gap-5">
           {[1, 2, 3, 4].map((i) => (
             <div
               key={i}
-              style={{
-                height: 16,
-                width: `${70 - i * 10}%`,
-                borderRadius: 8,
-                background: "var(--bg-deep)",
-                animation: "pulse 1.5s infinite",
-              }}
+              className="h-4 rounded-lg bg-bg-deep animate-pulse"
+              style={{ width: `${70 - i * 10}%` }}
             />
           ))}
         </div>
@@ -198,19 +166,10 @@ export function DictionaryResultCard({
 
   if (!hasSearched || !vocabulary) {
     return (
-      <div className="dictionary-result-card" style={cardStyle}>
-        <div
-          style={{
-            display: "flex",
-            minHeight: 360,
-            flexDirection: "column",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 12,
-          }}
-        >
-          <ReadOutlined style={{ fontSize: 32, color: "var(--text-muted)" }} />
-          <p style={{ fontSize: 14, color: "var(--text-muted)" }}>
+      <div className="dictionary-result-card rounded-xl bg-surface shadow-lg min-h-[400px]">
+        <div className="flex min-h-[360px] flex-col items-center justify-center gap-3">
+          <BookOpen className="h-8 w-8 text-text-muted" />
+          <p className="text-sm text-text-muted">
             {!hasSearched ? "Nhập từ cần tra" : "Chưa có kết quả để hiển thị"}
           </p>
         </div>
@@ -223,42 +182,15 @@ export function DictionaryResultCard({
   const numberLabel = vocabulary.numberInfo ? getNumberLabel(vocabulary.numberInfo) : "";
 
   return (
-    <div key={vocabulary.headword} className="anim-fade-up dictionary-result-card" style={cardStyle}>
+    <div key={vocabulary.headword} className="anim-fade-up dictionary-result-card rounded-xl bg-surface shadow-lg min-h-[400px]">
       {/* Header */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          gap: 16,
-          flexWrap: "wrap",
-        }}
-      >
-        <div style={{ minWidth: 0, flex: 1 }}>
-          <p
-            style={{
-              fontSize: 12,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.18em",
-              color: "var(--accent)",
-              margin: 0,
-            }}
-          >
+      <div className="flex items-start justify-between gap-4 flex-wrap">
+        <div className="min-w-0 flex-1">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent m-0">
             Kết quả tra cứu
           </p>
-          <div style={{ display: "flex", alignItems: "baseline", gap: 12, flexWrap: "wrap", marginTop: 8 }}>
-            <h2
-              className="dictionary-result-heading"
-              style={{
-                fontStyle: "italic",
-                lineHeight: 1.2,
-                fontFamily: "var(--font-display)",
-                color: "var(--ink)",
-                wordBreak: "break-word",
-                margin: 0,
-              }}
-            >
+          <div className="flex items-baseline gap-3 flex-wrap mt-2">
+            <h2 className="dictionary-result-heading italic leading-tight font-display text-ink break-words m-0">
               {vocabulary.headword}
             </h2>
             {(() => {
@@ -271,79 +203,46 @@ export function DictionaryResultCard({
               const posVi = posKey ? POS_LABELS_VI[posKey] : null;
               const display = posVi ?? posKey ?? "từ";
               const tooltip = posKey && posVi ? posKey : null;
-              const chip = (
-                <span
-                  style={{
-                    borderRadius: 999,
-                    padding: "3px 14px",
-                    fontSize: 13,
-                    fontWeight: 600,
-                    fontStyle: "italic",
-                    background: "var(--accent-muted)",
-                    color: "var(--accent)",
-                    border: "1px solid var(--border)",
-                    whiteSpace: "nowrap",
-                    lineHeight: 1.4,
-                  }}
-                >
+              return (
+                <span className="relative group rounded-full px-3.5 py-1 text-[13px] font-semibold italic bg-accent-muted text-accent border border-border whitespace-nowrap leading-snug">
                   {display}
+                  {tooltip && (
+                    <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg not-italic">
+                      {tooltip}
+                    </span>
+                  )}
                 </span>
               );
-              return tooltip ? <Tooltip title={tooltip}>{chip}</Tooltip> : chip;
             })()}
             {numberLabel && (
-              <span
-                style={{
-                  borderRadius: 999,
-                  padding: "2px 10px",
-                  fontSize: 12,
-                  fontWeight: 500,
-                  color: "var(--text-muted)",
-                  border: "1px solid var(--border)",
-                  whiteSpace: "nowrap",
-                }}
-              >
+              <span className="rounded-full px-2.5 py-0.5 text-xs font-medium text-text-muted border border-border whitespace-nowrap">
                 {numberLabel}
               </span>
             )}
           </div>
         </div>
-        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
-          {vocabulary.level && (
-            <span
-              style={{
-                borderRadius: 999,
-                padding: "2px 12px",
-                fontSize: 12,
-                fontWeight: 700,
-                letterSpacing: "0.06em",
-                border: `1px solid ${LEVEL_STYLES[vocabulary.level]?.borderColor ?? "var(--border)"}`,
-                background: LEVEL_STYLES[vocabulary.level]?.background ?? "var(--bg-deep)",
-                color: LEVEL_STYLES[vocabulary.level]?.color ?? "var(--text-secondary)",
-              }}
-            >
-              {vocabulary.level}
-            </span>
-          )}
+        <div className="flex flex-wrap items-center gap-2">
+          {vocabulary.level && (() => {
+            const style = LEVEL_STYLES[vocabulary.level];
+            return (
+              <span
+                className={`rounded-full px-3 py-0.5 text-xs font-bold tracking-wide border ${style?.bg ?? "bg-bg-deep"} ${style?.text ?? "text-text-secondary"} ${style?.border ?? "border-border"}`}
+              >
+                {vocabulary.level}
+              </span>
+            );
+          })()}
           {vocabulary.register && (() => {
             const info = REGISTER_INFO[vocabulary.register];
             const display = info?.vi ?? vocabulary.register;
             const tooltip = info ? `${vocabulary.register} — ${info.tooltipVi}` : vocabulary.register;
             return (
-              <Tooltip title={tooltip} placement="top">
-                <Tag
-                  variant="outlined"
-                  style={{
-                    borderRadius: 999,
-                    padding: "2px 12px",
-                    borderColor: "var(--border-strong)",
-                    color: "var(--text-secondary)",
-                    background: "var(--accent-light)",
-                  }}
-                >
-                  {display}
-                </Tag>
-              </Tooltip>
+              <span className="relative group rounded-full px-3 py-0.5 text-xs border border-(--border-strong) text-text-secondary bg-accent-light cursor-help">
+                {display}
+                <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
+                  {tooltip}
+                </span>
+              </span>
             );
           })()}
           {onOpenThesaurus && (
@@ -351,47 +250,19 @@ export function DictionaryResultCard({
               type="button"
               onClick={onOpenThesaurus}
               aria-label="Thesaurus"
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 6,
-                borderRadius: 999,
-                background: "var(--accent-light)",
-                padding: "4px 12px",
-                fontSize: 12,
-                fontWeight: 600,
-                color: "var(--accent)",
-                border: "1px solid var(--border-strong)",
-                cursor: "pointer",
-                transition: "background 0.2s",
-              }}
+              className="flex items-center gap-1.5 rounded-full bg-accent-light px-3 py-1 text-xs font-semibold text-accent border border-(--border-strong) cursor-pointer transition-colors duration-200 hover:bg-accent/15"
             >
-              <ReadOutlined style={{ fontSize: 12 }} />
+              <BookOpen className="h-3 w-3" />
               Thesaurus
             </button>
           )}
           {saved != null && onToggleSaved && (
             <button
               onClick={onToggleSaved}
-              style={{
-                display: "grid",
-                width: 32,
-                height: 32,
-                placeItems: "center",
-                borderRadius: "50%",
-                color: "var(--text-muted)",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                transition: "color 0.2s",
-              }}
+              className="grid w-8 h-8 place-items-center rounded-full bg-transparent border-none text-text-muted cursor-pointer transition-colors duration-200 hover:text-accent"
               aria-label={saved ? "Bỏ lưu từ này" : "Lưu từ này"}
             >
-              {saved ? (
-                <StarFilled style={{ fontSize: 18, color: "var(--accent)" }} />
-              ) : (
-                <StarOutlined style={{ fontSize: 18 }} />
-              )}
+              <Star className={`h-5 w-5 ${saved ? "fill-accent text-accent" : ""}`} />
             </button>
           )}
         </div>
@@ -399,50 +270,23 @@ export function DictionaryResultCard({
 
       {/* Pronunciation */}
       {hasDualPhonetics ? (
-        <div
-          className="anim-fade-in"
-          style={{
-            marginTop: 12,
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "center",
-            gap: 12,
-          }}
-        >
+        <div className="anim-fade-in mt-3 flex flex-wrap items-center gap-3">
           {vocabulary.phoneticsUs && (
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ fontSize: 16 }}>🇺🇸</span>
-              <span
-                style={{
-                  borderRadius: 4,
-                  background: "var(--bg-deep)",
-                  padding: "2px 8px",
-                  fontSize: 14,
-                  fontFamily: "var(--font-mono)",
-                  color: "var(--accent)",
-                }}
-              >
+            <div className="flex items-center gap-2">
+              <span className="text-base">🇺🇸</span>
+              <span className="rounded bg-bg-deep px-2 py-0.5 text-sm font-mono text-accent">
                 {vocabulary.phoneticsUs}
               </span>
               <AudioButton locale="en-US" speakingLocale={speakingLocale} onSpeak={speak} />
             </div>
           )}
           {vocabulary.phoneticsUs && vocabulary.phoneticsUk && (
-            <span style={{ color: "var(--text-muted)" }}>·</span>
+            <span className="text-text-muted">·</span>
           )}
           {vocabulary.phoneticsUk && (
-            <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-              <span style={{ fontSize: 16 }}>🇬🇧</span>
-              <span
-                style={{
-                  borderRadius: 4,
-                  background: "var(--bg-deep)",
-                  padding: "2px 8px",
-                  fontSize: 14,
-                  fontFamily: "var(--font-mono)",
-                  color: "var(--accent)",
-                }}
-              >
+            <div className="flex items-center gap-2">
+              <span className="text-base">🇬🇧</span>
+              <span className="rounded bg-bg-deep px-2 py-0.5 text-sm font-mono text-accent">
                 {vocabulary.phoneticsUk}
               </span>
               <AudioButton locale="en-GB" speakingLocale={speakingLocale} onSpeak={speak} />
@@ -450,41 +294,15 @@ export function DictionaryResultCard({
           )}
         </div>
       ) : vocabulary.phonetic ? (
-        <span
-          className="anim-fade-in"
-          style={{
-            marginTop: 12,
-            display: "inline-block",
-            borderRadius: 4,
-            background: "var(--bg-deep)",
-            padding: "2px 8px",
-            fontSize: 14,
-            fontFamily: "var(--font-mono)",
-            color: "var(--accent)",
-          }}
-        >
+        <span className="anim-fade-in mt-3 inline-block rounded bg-bg-deep px-2 py-0.5 text-sm font-mono text-accent">
           {vocabulary.phonetic}
         </span>
       ) : null}
 
       {/* ── Meta info strip: Word Family ── */}
       {vocabulary.wordFamily && vocabulary.wordFamily.length > 0 && onSearch && (
-        <div
-          className="anim-fade-up"
-          style={{
-            marginTop: 20,
-            display: "flex",
-            flexWrap: "wrap",
-            alignItems: "flex-start",
-            gap: 20,
-            background: "var(--bg-deep)",
-            border: "1px solid var(--border)",
-            borderLeft: "3px solid var(--accent)",
-            borderRadius: "var(--radius-sm)",
-            padding: "14px 18px",
-          }}
-        >
-          <div style={{ display: "flex", flexDirection: "column", gap: 4, flex: 1, minWidth: 0 }}>
+        <div className="anim-fade-up mt-5 flex flex-wrap items-start gap-5 bg-bg-deep border border-border border-l-3 border-l-accent rounded-sm p-3.5 px-4.5">
+          <div className="flex flex-col gap-1 flex-1 min-w-0">
             <WordFamilySection wordFamily={vocabulary.wordFamily} onSearch={onSearch} />
           </div>
         </div>
@@ -495,36 +313,19 @@ export function DictionaryResultCard({
       )}
 
       {/* Sense tabs */}
-      <div style={{ marginTop: 24 }}>
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            borderBottom: "1px solid var(--border)",
-            paddingBottom: 12,
-            marginBottom: 20,
-            overflowX: "auto",
-          }}
-        >
+      <div className="mt-6">
+        <div className="flex items-center gap-2 border-b border-border pb-3 mb-5 overflow-x-auto">
           {vocabulary.senses.map((sense) => (
             <button
               key={sense.id}
               type="button"
               aria-selected={activeKey === sense.id}
               onClick={() => setActiveKey(sense.id)}
-              style={{
-                flexShrink: 0,
-                borderRadius: 999,
-                padding: "6px 16px",
-                fontSize: 14,
-                fontWeight: 500,
-                border: "none",
-                cursor: "pointer",
-                transition: "background 0.2s, color 0.2s",
-                background: activeKey === sense.id ? "var(--accent-muted)" : "transparent",
-                color: activeKey === sense.id ? "var(--accent)" : "var(--text-secondary)",
-              }}
+              className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-medium border-none cursor-pointer transition-all duration-200 ${
+                activeKey === sense.id
+                  ? "bg-accent-muted text-accent"
+                  : "bg-transparent text-text-secondary hover:bg-surface-alt"
+              }`}
             >
               {sense.label}
             </button>
@@ -535,7 +336,7 @@ export function DictionaryResultCard({
 
       {/* Nearby words bar */}
       {vocabulary.nearbyWords.length > 0 && onSearch && (
-        <div style={{ marginTop: 24, borderTop: "1px solid var(--border)", paddingTop: 20 }}>
+        <div className="mt-6 border-t border-border pt-5">
           <NearbyWordsBar
             words={vocabulary.nearbyWords}
             headword={vocabulary.headword}

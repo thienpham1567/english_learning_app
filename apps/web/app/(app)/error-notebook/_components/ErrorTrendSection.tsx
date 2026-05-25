@@ -1,18 +1,17 @@
 "use client";
 
 import { useMemo } from "react";
-import { Tooltip } from "antd";
 import {
-  ArrowUpOutlined,
-  ArrowDownOutlined,
-  MinusOutlined,
-  QuestionCircleOutlined,
-  InfoCircleOutlined,
-  RiseOutlined,
-  FallOutlined,
-  BarChartOutlined,
-  LineChartOutlined,
-} from "@ant-design/icons";
+  ArrowUp,
+  ArrowDown,
+  Minus,
+  HelpCircle,
+  Info,
+  TrendingUp,
+  TrendingDown,
+  BarChart2,
+  LineChart,
+} from "lucide-react";
 import { computeErrorTrends } from "@repo/modules/learning";
 import type { TrendInput, CategoryTrend } from "@repo/modules/learning";
 
@@ -22,25 +21,25 @@ type Props = {
 
 const DIRECTION_CONFIG: Record<string, { icon: React.ReactNode; color: string; label: string; bg: string }> = {
   improved: {
-    icon: <ArrowDownOutlined style={{ fontSize: 10 }} />,
+    icon: <ArrowDown className="h-2.5 w-2.5" />,
     color: "var(--success)",
     bg: "var(--success-bg)",
     label: "Cải thiện",
   },
   worsened: {
-    icon: <ArrowUpOutlined style={{ fontSize: 10 }} />,
+    icon: <ArrowUp className="h-2.5 w-2.5" />,
     color: "var(--error)",
     bg: "var(--error-bg)",
     label: "Tăng lên",
   },
   stable: {
-    icon: <MinusOutlined style={{ fontSize: 10 }} />,
+    icon: <Minus className="h-2.5 w-2.5" />,
     color: "var(--text-muted)",
     bg: "var(--bg-deep)",
     label: "Ổn định",
   },
   new: {
-    icon: <QuestionCircleOutlined style={{ fontSize: 10 }} />,
+    icon: <HelpCircle className="h-2.5 w-2.5" />,
     color: "var(--warning)",
     bg: "color-mix(in srgb, var(--warning) 10%, var(--surface))",
     label: "Mới",
@@ -52,43 +51,36 @@ function TrendRow({ trend }: { trend: CategoryTrend }) {
   const pctResolved = Math.round(trend.resolutionRate * 100);
 
   return (
-    <div
-      style={{
-        display: "flex", alignItems: "center", gap: 12,
-        padding: "10px 14px", borderRadius: 10,
-        background: "var(--surface)", border: "1px solid var(--border)",
-        transition: "border-color 0.15s",
-      }}
-      onMouseEnter={(e) => { e.currentTarget.style.borderColor = `color-mix(in srgb, ${config.color} 30%, var(--border))`; }}
-      onMouseLeave={(e) => { e.currentTarget.style.borderColor = "var(--border)"; }}
-    >
-      <span style={{ fontSize: 16, flexShrink: 0 }}>{trend.category.emoji}</span>
+    <div className="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] bg-surface border border-border transition-all duration-150 hover:shadow-sm">
+      <span className="text-base shrink-0">{trend.category.emoji}</span>
 
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--ink)" }}>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-1.5">
+          <span className="text-[13px] font-bold text-ink">
             {trend.category.labelVi}
           </span>
           {!trend.confident && (
-            <Tooltip title="Cần thêm dữ liệu để đánh giá chính xác">
-              <InfoCircleOutlined style={{ fontSize: 11, color: "var(--text-muted)" }} />
-            </Tooltip>
+            <span className="relative group">
+              <Info className="h-3 w-3 text-text-muted cursor-help" />
+              <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
+                Cần thêm dữ liệu để đánh giá chính xác
+              </span>
+            </span>
           )}
         </div>
-        <div style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.4, marginTop: 1 }}>
+        <div className="text-[11px] text-text-muted leading-snug mt-0.5">
           {trend.explanation}
         </div>
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: 4, flexShrink: 0 }}>
-        <span style={{
-          display: "inline-flex", alignItems: "center", gap: 4,
-          fontSize: 11, fontWeight: 700, padding: "2px 9px", borderRadius: 99,
-          color: config.color, background: config.bg,
-        }}>
+      <div className="flex flex-col items-end gap-1 shrink-0">
+        <span
+          className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-0.5 rounded-full"
+          style={{ color: config.color, background: config.bg }}
+        >
           {config.icon} {config.label}
         </span>
-        <span style={{ fontSize: 10, color: "var(--text-muted)" }}>{pctResolved}% đã hiểu</span>
+        <span className="text-[10px] text-text-muted">{pctResolved}% đã hiểu</span>
       </div>
     </div>
   );
@@ -99,9 +91,9 @@ export function ErrorTrendSection({ errors }: Props) {
   if (!trends.hasData) return null;
 
   const sections: Array<{ key: string; icon: React.ReactNode; label: string; items: CategoryTrend[]; color: string }> = [
-    { key: "worsened", icon: <RiseOutlined />, label: "Cần chú ý", items: trends.worsened, color: "var(--error)" },
-    { key: "improved", icon: <FallOutlined />, label: "Cải thiện", items: trends.improved, color: "var(--success)" },
-    { key: "needsReview", icon: <BarChartOutlined />, label: "Cần ôn tập", items: trends.needsReview, color: "var(--text-muted)" },
+    { key: "worsened", icon: <TrendingUp className="h-3 w-3" />, label: "Cần chú ý", items: trends.worsened, color: "var(--error)" },
+    { key: "improved", icon: <TrendingDown className="h-3 w-3" />, label: "Cải thiện", items: trends.improved, color: "var(--success)" },
+    { key: "needsReview", icon: <BarChart2 className="h-3 w-3" />, label: "Cần ôn tập", items: trends.needsReview, color: "var(--text-muted)" },
   ].filter((s) => s.items.length > 0);
 
   if (sections.length === 0) return null;
@@ -109,25 +101,24 @@ export function ErrorTrendSection({ errors }: Props) {
   return (
     <div>
       {/* Section label */}
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-        <div style={{ width: 3, height: 14, borderRadius: 2, background: "var(--text-muted)", flexShrink: 0 }} />
-        <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.14em", color: "var(--text-secondary)", display: "flex", alignItems: "center", gap: 6 }}>
-          <LineChartOutlined style={{ fontSize: 12 }} /> Xu hướng lỗi sai
+      <div className="flex items-center gap-2.5 mb-3">
+        <div className="w-[3px] h-3.5 rounded-sm bg-text-muted shrink-0" />
+        <span className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-text-secondary flex items-center gap-1.5">
+          <LineChart className="h-3 w-3" /> Xu hướng lỗi sai
         </span>
-        <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+        <div className="flex-1 h-px bg-border" />
       </div>
 
-      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <div className="flex flex-col gap-4">
         {sections.map((section) => (
           <div key={section.key}>
-            <div style={{
-              display: "inline-flex", alignItems: "center", gap: 6,
-              fontSize: 11, fontWeight: 700, color: section.color,
-              marginBottom: 6,
-            }}>
+            <div
+              className="inline-flex items-center gap-1.5 text-[11px] font-bold mb-1.5"
+              style={{ color: section.color }}
+            >
               {section.icon} {section.label}
             </div>
-            <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+            <div className="flex flex-col gap-1.5">
               {section.items.slice(0, 3).map((trend) => (
                 <TrendRow key={trend.category.key} trend={trend} />
               ))}

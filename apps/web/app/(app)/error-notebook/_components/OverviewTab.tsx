@@ -1,20 +1,17 @@
 "use client";
 
 import { useMemo } from "react";
-import { Flex, Typography } from "antd";
 import {
-  ExclamationCircleOutlined,
-  CheckCircleOutlined,
-  ClockCircleOutlined,
-  DatabaseOutlined,
-} from "@ant-design/icons";
+  AlertCircle,
+  CheckCircle,
+  Clock,
+  Database,
+} from "lucide-react";
 import * as m from "motion/react-client";
 import type { ErrorEntry } from "../_types/types";
 import { MODULE_LABELS, MODULE_ICONS } from "../_types/types";
 import { ErrorPatternSummary } from "./ErrorPatternSummary";
 import { ErrorTrendSection } from "./ErrorTrendSection";
-
-const { Text } = Typography;
 
 interface OverviewTabProps {
   errors: ErrorEntry[];
@@ -49,9 +46,9 @@ export function OverviewTab({
 
   if (loading) {
     return (
-      <div style={{ padding: "40px 0", textAlign: "center" }}>
+      <div className="py-10 text-center">
         <m.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ repeat: Infinity, duration: 1.5 }}
-          style={{ fontSize: 14, color: "var(--text-muted)", fontWeight: 600 }}>
+          className="text-sm text-text-muted font-semibold">
           Đang tải dữ liệu...
         </m.div>
       </div>
@@ -59,33 +56,33 @@ export function OverviewTab({
   }
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+    <div className="flex flex-col gap-5">
       {/* Stats Cards */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: 12 }}>
+      <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-3">
         {[
           {
             label: "Chưa nắm", value: unresolvedCount,
-            color: unresolvedCount > 0 ? "var(--error)" : "var(--text-muted)",
-            icon: <ExclamationCircleOutlined />,
-            bg: "rgba(239, 68, 68, 0.05)", border: "rgba(239, 68, 68, 0.15)",
+            colorClass: unresolvedCount > 0 ? "text-(--error)" : "text-text-muted",
+            icon: <AlertCircle className="h-4 w-4" />,
+            bgClass: "bg-red-500/5", borderClass: "border-red-500/15",
           },
           {
             label: "Đã hiểu", value: resolvedCount,
-            color: "var(--success)",
-            icon: <CheckCircleOutlined />,
-            bg: "rgba(16, 185, 129, 0.05)", border: "rgba(16, 185, 129, 0.15)",
+            colorClass: "text-(--success)",
+            icon: <CheckCircle className="h-4 w-4" />,
+            bgClass: "bg-emerald-500/5", borderClass: "border-emerald-500/15",
           },
           {
             label: "Cần ôn tập", value: dueCount,
-            color: dueCount > 0 ? "var(--warning, #f59e0b)" : "var(--text-muted)",
-            icon: <ClockCircleOutlined />,
-            bg: "rgba(245, 158, 11, 0.05)", border: "rgba(245, 158, 11, 0.15)",
+            colorClass: dueCount > 0 ? "text-(--warning)" : "text-text-muted",
+            icon: <Clock className="h-4 w-4" />,
+            bgClass: "bg-amber-500/5", borderClass: "border-amber-500/15",
           },
           {
             label: "Tổng cộng", value: total,
-            color: "var(--accent)",
-            icon: <DatabaseOutlined />,
-            bg: "var(--accent-light)", border: "color-mix(in srgb, var(--accent) 15%, transparent)",
+            colorClass: "text-accent",
+            icon: <Database className="h-4 w-4" />,
+            bgClass: "bg-accent-light", borderClass: "border-accent/15",
           },
         ].map((stat) => (
           <m.div
@@ -93,30 +90,16 @@ export function OverviewTab({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             whileHover={{ y: -2, boxShadow: "var(--shadow-md)" }}
-            style={{
-              display: "flex", alignItems: "center", gap: 14,
-              padding: "18px 20px",
-              background: "var(--surface)",
-              borderRadius: "var(--radius-xl)",
-              border: `1.5px solid ${stat.border}`,
-              boxShadow: "var(--shadow-sm)",
-              cursor: "default",
-              transition: "all 0.2s",
-            }}
+            className={`flex items-center gap-3.5 p-4.5 bg-surface rounded-xl border-[1.5px] ${stat.borderClass} shadow-sm cursor-default transition-all duration-200`}
           >
-            <span style={{
-              fontSize: 16, color: stat.color,
-              width: 36, height: 36, borderRadius: 10,
-              background: stat.bg,
-              display: "grid", placeItems: "center",
-            }}>
+            <span className={`w-9 h-9 rounded-[10px] ${stat.bgClass} ${stat.colorClass} grid place-items-center`}>
               {stat.icon}
             </span>
             <div>
-              <div style={{ fontSize: 28, fontWeight: 900, color: stat.color, lineHeight: 1.1, fontFamily: "var(--font-display)" }}>
+              <div className={`text-[28px] font-black ${stat.colorClass} leading-none font-display`}>
                 {stat.value}
               </div>
-              <div style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 700, marginTop: 2 }}>
+              <div className="text-[11px] text-text-muted font-bold mt-0.5">
                 {stat.label}
               </div>
             </div>
@@ -132,23 +115,14 @@ export function OverviewTab({
           whileHover={{ scale: 1.01, y: -2 }}
           whileTap={{ scale: 0.99 }}
           onClick={onGoToReview}
-          style={{
-            display: "flex", alignItems: "center", justifyContent: "center",
-            gap: 12, padding: "18px 24px",
-            borderRadius: "var(--radius-xl)",
-            border: "2px solid var(--accent)",
-            background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), color-mix(in srgb, var(--xp) 5%, var(--surface)))",
-            cursor: "pointer",
-            boxShadow: "0 4px 14px var(--accent-muted)",
-            fontFamily: "var(--font-body)",
-          }}
+          className="flex items-center justify-center gap-3 p-4.5 rounded-xl border-2 border-accent bg-gradient-to-br from-accent/8 to-amber-500/5 cursor-pointer shadow-[0_4px_14px_var(--accent-muted)] font-body"
         >
-          <span style={{ fontSize: 28 }}>🧠</span>
-          <div style={{ textAlign: "left" }}>
-            <div style={{ fontSize: 16, fontWeight: 800, color: "var(--accent)" }}>
+          <span className="text-[28px]">🧠</span>
+          <div className="text-left">
+            <div className="text-base font-extrabold text-accent">
               Ôn tập ngay — {dueCount} lỗi cần nhớ
             </div>
-            <div style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 500 }}>
+            <div className="text-xs text-text-muted font-medium">
               Flash-card + AI giải thích giúp bạn ghi nhớ lâu hơn
             </div>
           </div>
@@ -157,16 +131,11 @@ export function OverviewTab({
 
       {/* Module Distribution */}
       {moduleStats.length > 0 && (
-        <div style={{
-          background: "var(--surface)",
-          borderRadius: "var(--radius-xl)",
-          border: "1px solid var(--border)",
-          padding: "var(--space-5)",
-        }}>
-          <Text style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.08em", display: "block", marginBottom: 14 }}>
+        <div className="bg-surface rounded-xl border border-border p-5">
+          <span className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3.5">
             📊 Phân bố theo nguồn
-          </Text>
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+          </span>
+          <div className="flex flex-col gap-2">
             {moduleStats.map(([mod, count], i) => {
               const pct = total > 0 ? Math.round((count / total) * 100) : 0;
               return (
@@ -175,25 +144,25 @@ export function OverviewTab({
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  style={{ display: "flex", alignItems: "center", gap: 10 }}
+                  className="flex items-center gap-2.5"
                 >
-                  <span style={{ fontSize: 16, width: 28, textAlign: "center" }}>
+                  <span className="text-base w-7 text-center">
                     {MODULE_ICONS[mod] ?? "📄"}
                   </span>
-                  <Text style={{ fontSize: 13, fontWeight: 600, color: "var(--text-primary)", width: 90, flexShrink: 0 }}>
+                  <span className="text-[13px] font-semibold text-text-primary w-[90px] shrink-0">
                     {MODULE_LABELS[mod] ?? mod}
-                  </Text>
-                  <div style={{ flex: 1, height: 8, borderRadius: 4, background: "var(--border)", overflow: "hidden" }}>
+                  </span>
+                  <div className="flex-1 h-2 rounded bg-border overflow-hidden">
                     <m.div
                       initial={{ width: 0 }}
                       animate={{ width: `${pct}%` }}
                       transition={{ duration: 0.5, delay: i * 0.05 }}
-                      style={{ height: "100%", borderRadius: 4, background: "var(--accent)", minWidth: 4 }}
+                      className="h-full rounded bg-accent min-w-1"
                     />
                   </div>
-                  <Text style={{ fontSize: 12, fontWeight: 800, color: "var(--accent)", width: 40, textAlign: "right" }}>
+                  <span className="text-xs font-extrabold text-accent w-10 text-right">
                     {count}
-                  </Text>
+                  </span>
                 </m.div>
               );
             })}

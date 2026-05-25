@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ReadOutlined, StarOutlined, CloseOutlined, BulbOutlined } from "@ant-design/icons";
+import { BookOpen, Star, X, Lightbulb } from "lucide-react";
 import { RecentLookups } from "@/app/(app)/dictionary/_components/RecentLookups";
 import { ExamWordLists } from "@/app/(app)/dictionary/_components/ExamWordLists";
 import { WordOfTheDay } from "@/app/(app)/dictionary/_components/WordOfTheDay";
@@ -117,109 +117,44 @@ export function DictionarySearchPanel({
   }
 
   return (
-    <section style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+    <section className="flex flex-col gap-5">
       {/* Word of the Day */}
       <WordOfTheDay onSelect={onSubmit} />
       <div
-        className="anim-fade-left dictionary-search-panel"
-        style={{
-          position: "relative",
-          borderRadius: "var(--radius-lg)",
-          background: "linear-gradient(135deg, var(--surface), var(--bg))",
-          boxShadow: "var(--shadow-lg)",
-          overflow: "hidden",
-          minWidth: 0,
-        }}
+        className="anim-fade-left dictionary-search-panel relative rounded-lg bg-gradient-to-br from-surface to-(--bg) shadow-lg overflow-hidden min-w-0"
       >
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 8,
-              fontSize: 12,
-              fontWeight: 600,
-              textTransform: "uppercase",
-              letterSpacing: "0.18em",
-              color: "var(--accent)",
-            }}
-          >
-            <StarOutlined style={{ fontSize: 14 }} />
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
+            <Star className="h-3.5 w-3.5" />
             <span>Tra cứu có cấu trúc</span>
           </div>
           <button
             type="button"
             onClick={() => setShowTips((v) => !v)}
-            style={{
-              display: "grid",
-              width: 32,
-              height: 32,
-              placeItems: "center",
-              borderRadius: "50%",
-              border: "none",
-              cursor: "pointer",
-              transition: "background 0.2s, color 0.2s",
-              background: showTips ? "var(--accent)" : "transparent",
-              color: showTips ? "var(--text-on-accent)" : "var(--text-muted)",
-            }}
+            className={`grid w-8 h-8 place-items-center rounded-full border-none cursor-pointer transition-all duration-200 ${
+              showTips ? "bg-accent text-(--text-on-accent)" : "bg-transparent text-text-muted hover:text-accent"
+            }`}
             aria-label="Mẹo sử dụng"
           >
             {showTips ? (
-              <CloseOutlined style={{ fontSize: 14 }} />
+              <X className="h-3.5 w-3.5" />
             ) : (
-              <ReadOutlined style={{ fontSize: 15 }} />
+              <BookOpen className="h-4 w-4" />
             )}
           </button>
         </div>
 
         {/* Tips dropdown */}
         {showTips && (
-          <div
-            className="anim-fade-in"
-            style={{
-              marginTop: 16,
-              overflow: "hidden",
-              borderRadius: "var(--radius)",
-              border: "1px solid var(--border)",
-              background: "var(--bg)",
-              padding: 16,
-              boxShadow: "var(--shadow-sm)",
-            }}
-          >
-            <p
-              style={{
-                marginBottom: 12,
-                fontSize: 12,
-                fontWeight: 600,
-                textTransform: "uppercase",
-                letterSpacing: "0.1em",
-                color: "var(--ink)",
-                margin: "0 0 12px",
-              }}
-            >
-              <BulbOutlined style={{ marginRight: 4, color: "var(--accent)" }} /> Mẹo sử dụng
+          <div className="anim-fade-in mt-4 overflow-hidden rounded-lg border border-border bg-(--bg) p-4 shadow-sm">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-ink m-0">
+              <Lightbulb className="h-3 w-3 inline mr-1 text-accent" /> Mẹo sử dụng
             </p>
-            <ul
-              style={{
-                listStyle: "none",
-                padding: 0,
-                margin: 0,
-                display: "flex",
-                flexDirection: "column",
-                gap: 10,
-              }}
-            >
+            <ul className="list-none p-0 m-0 flex flex-col gap-2.5">
               {HELPER_TIPS.map((tip, i) => (
                 <li
                   key={tip}
-                  className={`anim-fade-left anim-delay-${i + 1}`}
-                  style={{
-                    borderLeft: "2px solid var(--accent-muted)",
-                    paddingLeft: 12,
-                    fontSize: 14,
-                    lineHeight: 1.6,
-                    color: "var(--text-secondary)",
-                  }}
+                  className={`anim-fade-left anim-delay-${i + 1} border-l-2 border-l-accent-muted pl-3 text-sm leading-relaxed text-text-secondary`}
                 >
                   {tip}
                 </li>
@@ -228,38 +163,17 @@ export function DictionarySearchPanel({
           </div>
         )}
 
-        <h2
-          style={{
-            marginTop: 16,
-            fontSize: 24,
-            fontStyle: "italic",
-            fontFamily: "var(--font-display)",
-            color: "var(--ink)",
-          }}
-        >
+        <h2 className="mt-4 text-2xl italic font-display text-ink">
           Nhập mục từ cần tra cứu
         </h2>
-        <p style={{ marginTop: 12, fontSize: 13, lineHeight: 1.6, color: "var(--text-secondary)", wordBreak: "break-word" }}>
+        <p className="mt-3 text-[13px] leading-relaxed text-text-secondary break-words">
           Công cụ này hỗ trợ từ đơn, phrasal verb và idiom để bạn học theo ngữ cảnh rõ ràng hơn.
         </p>
 
-        <div ref={containerRef} style={{ position: "relative", marginTop: 20 }}>
+        <div ref={containerRef} className="relative mt-5">
           <input
             type="text"
-            style={{
-              width: "100%",
-              borderBottom: "1px solid var(--border)",
-              background: "transparent",
-              padding: "12px 4px",
-              fontSize: 15,
-              color: "var(--text-primary)",
-              outline: "none",
-              transition: "border-color 0.2s",
-              border: "none",
-              borderBottomWidth: 1,
-              borderBottomStyle: "solid",
-              borderBottomColor: "var(--border)",
-            }}
+            className="w-full border-none border-b border-b-border bg-transparent px-1 py-3 text-[15px] text-text-primary outline-none transition-colors duration-200 focus:border-b-accent focus:border-b-2"
             placeholder="Ví dụ: take off"
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
@@ -268,40 +182,12 @@ export function DictionarySearchPanel({
             disabled={isLoading}
             maxLength={80}
             autoComplete="off"
-            onFocus={(e) => {
-              e.currentTarget.style.borderBottomColor = "var(--accent)";
-              e.currentTarget.style.borderBottomWidth = "2px";
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.borderBottomColor = "var(--border)";
-              e.currentTarget.style.borderBottomWidth = "1px";
-              // Dismiss suggestions on blur (delay to allow suggestion click)
-              setTimeout(() => {
-                setSuggestions([]);
-                setHighlightedIndex(-1);
-              }, 200);
-            }}
           />
 
           {suggestions.length > 0 && (
             <ul
               role="listbox"
-              style={{
-                position: "absolute",
-                left: 0,
-                right: 0,
-                top: "100%",
-                zIndex: 10,
-                marginTop: 4,
-                overflow: "hidden",
-                borderRadius: "var(--radius)",
-                border: "1px solid var(--border)",
-                background: "var(--surface)",
-                boxShadow: "var(--shadow-lg)",
-                listStyle: "none",
-                padding: 0,
-                margin: 0,
-              }}
+              className="absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded-lg border border-border bg-surface shadow-lg list-none p-0 m-0"
             >
               {suggestions.map((s, i) => (
                 <li
@@ -312,14 +198,9 @@ export function DictionarySearchPanel({
                     e.preventDefault();
                     selectSuggestion(s);
                   }}
-                  style={{
-                    cursor: "pointer",
-                    padding: "10px 16px",
-                    fontSize: 14,
-                    color: "var(--text-primary)",
-                    transition: "background 0.15s",
-                    background: i === highlightedIndex ? "var(--surface-hover)" : "transparent",
-                  }}
+                  className={`cursor-pointer px-4 py-2.5 text-sm text-text-primary transition-colors duration-150 ${
+                    i === highlightedIndex ? "bg-(--surface-hover)" : "bg-transparent hover:bg-(--surface-hover)"
+                  }`}
                 >
                   <HighlightMatch text={s} query={draft} />
                 </li>
@@ -336,36 +217,17 @@ export function DictionarySearchPanel({
             onSubmit(draft.trim());
           }}
           disabled={isLoading}
-          style={{
-            marginTop: 20,
-            width: "100%",
-            borderRadius: 999,
-            background: "var(--accent)",
-            padding: "10px 0",
-            fontSize: 14,
-            fontWeight: 600,
-            color: "var(--text-on-accent)",
-            border: "none",
-            cursor: isLoading ? "not-allowed" : "pointer",
-            opacity: isLoading ? 0.5 : 1,
-            transition: "opacity 0.2s",
-          }}
+          className="mt-5 w-full rounded-full bg-accent py-2.5 text-sm font-semibold text-(--text-on-accent) border-none cursor-pointer transition-opacity duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? "Đang tra cứu..." : "Tra cứu"}
         </button>
 
-        <p style={{ marginTop: 16, fontSize: 12, color: "var(--text-muted)", wordBreak: "break-word" }}>
+        <p className="mt-4 text-xs text-text-muted break-words">
           Hỗ trợ tối đa 80 ký tự, bao gồm khoảng trắng và dấu nháy hợp lệ.
         </p>
 
         {recentWords.length > 0 && onSelectRecent && (
-          <div
-            style={{
-              marginTop: 20,
-              paddingTop: 16,
-              borderTop: "1px solid var(--border)",
-            }}
-          >
+          <div className="mt-5 pt-4 border-t border-border">
             <RecentLookups words={recentWords} onSelect={onSelectRecent} />
           </div>
         )}

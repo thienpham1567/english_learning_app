@@ -1,10 +1,10 @@
 "use client";
 
 import {
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  WarningOutlined,
-} from "@ant-design/icons";
+  CheckCircle,
+  XCircle,
+  AlertTriangle,
+} from "lucide-react";
 import * as m from "motion/react-client";
 import type { ErrorEntry } from "../_types/types";
 import { MODULE_LABELS, MODULE_ICONS } from "../_types/types";
@@ -23,100 +23,53 @@ export function ErrorCard({ error, onClick, index = 0 }: ErrorCardProps) {
       transition={{ delay: Math.min(index * 0.03, 0.3) }}
       whileHover={{ y: -2, boxShadow: "var(--shadow-md)" }}
       onClick={onClick}
-      style={{
-        background: "var(--surface)",
-        borderRadius: "var(--radius-xl)",
-        border: "1px solid var(--border)",
-        padding: "16px 18px",
-        cursor: "pointer",
-        transition: "all 0.15s",
-        position: "relative",
-        overflow: "hidden",
-      }}
+      className="bg-surface rounded-xl border border-border p-4 px-4.5 cursor-pointer transition-all duration-150 relative overflow-hidden"
     >
       {/* Accent bar */}
-      <div style={{
-        position: "absolute", top: 0, left: 0, width: 3, height: "100%",
-        borderRadius: "3px 0 0 3px",
-        background: error.isResolved ? "var(--success)" : "var(--error)",
-      }} />
+      <div className={`absolute top-0 left-0 w-[3px] h-full rounded-l ${error.isResolved ? "bg-(--success)" : "bg-(--error)"}`} />
 
       {/* Top row: status + module + date */}
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
+      <div className="flex items-center gap-2 mb-2.5">
         {error.isResolved ? (
-          <span style={{
-            display: "inline-flex", alignItems: "center", gap: 4,
-            fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 6,
-            background: "var(--success-bg)", color: "var(--success)",
-          }}>
-            <CheckCircleOutlined style={{ fontSize: 10 }} /> Đã hiểu
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-(--success-bg) text-(--success)">
+            <CheckCircle className="h-2.5 w-2.5" /> Đã hiểu
           </span>
         ) : (
-          <span style={{
-            display: "inline-flex", alignItems: "center", gap: 4,
-            fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 6,
-            background: "var(--error-bg)", color: "var(--error)",
-          }}>
-            <WarningOutlined style={{ fontSize: 10 }} /> Chưa nắm
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-(--error-bg) text-(--error)">
+            <AlertTriangle className="h-2.5 w-2.5" /> Chưa nắm
           </span>
         )}
-        <span style={{
-          display: "inline-flex", alignItems: "center", gap: 4,
-          fontSize: 11, fontWeight: 700, padding: "2px 8px", borderRadius: 6,
-          background: "color-mix(in srgb, var(--accent) 8%, transparent)",
-          color: "var(--accent)",
-        }}>
+        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-accent/8 text-accent">
           {MODULE_ICONS[error.sourceModule] ?? "📄"} {MODULE_LABELS[error.sourceModule] ?? error.sourceModule}
         </span>
         {error.grammarTopic && (
-          <span style={{
-            fontSize: 11, fontWeight: 600, color: "var(--text-muted)",
-            padding: "1px 6px", borderRadius: 4, background: "var(--surface-alt)",
-          }}>
+          <span className="text-[11px] font-semibold text-text-muted px-1.5 py-px rounded bg-surface-alt">
             {error.grammarTopic}
           </span>
         )}
-        <span style={{ marginLeft: "auto", fontSize: 11, color: "var(--text-muted)", fontWeight: 500, flexShrink: 0 }}>
+        <span className="ml-auto text-[11px] text-text-muted font-medium shrink-0">
           {new Date(error.createdAt).toLocaleDateString("vi-VN", { day: "numeric", month: "short" })}
         </span>
       </div>
 
       {/* Question */}
-      <div style={{
-        fontSize: 14, fontWeight: 600, lineHeight: 1.6,
-        color: "var(--text-primary)",
-        display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical",
-        overflow: "hidden",
-        marginBottom: 10,
-      }}>
+      <div className="text-sm font-semibold leading-relaxed text-text-primary line-clamp-2 mb-2.5">
         {error.questionStem}
       </div>
 
       {/* Answer comparison */}
-      <div style={{ display: "flex", gap: 8 }}>
-        <span style={{
-          display: "inline-flex", alignItems: "center", gap: 4,
-          padding: "3px 10px", borderRadius: 8,
-          background: "color-mix(in srgb, var(--error) 6%, var(--surface))",
-          border: "1px solid color-mix(in srgb, var(--error) 15%, transparent)",
-          fontSize: 12, fontWeight: 700, color: "var(--error)",
-        }}>
-          <CloseCircleOutlined style={{ fontSize: 9 }} /> {error.userAnswer || "(Trống)"}
+      <div className="flex gap-2">
+        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--error)_15%,transparent)] text-xs font-bold text-(--error)">
+          <XCircle className="h-2.5 w-2.5" /> {error.userAnswer || "(Trống)"}
         </span>
-        <span style={{
-          display: "inline-flex", alignItems: "center", gap: 4,
-          padding: "3px 10px", borderRadius: 8,
-          background: "color-mix(in srgb, var(--success) 6%, var(--surface))",
-          border: "1px solid color-mix(in srgb, var(--success) 15%, transparent)",
-          fontSize: 12, fontWeight: 700, color: "var(--success)",
-        }}>
-          <CheckCircleOutlined style={{ fontSize: 9 }} /> {error.correctAnswer}
+        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[color-mix(in_srgb,var(--success)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--success)_15%,transparent)] text-xs font-bold text-(--success)">
+          <CheckCircle className="h-2.5 w-2.5" /> {error.correctAnswer}
         </span>
       </div>
 
       {/* Review info */}
       {error.reviewCount > 0 && (
-        <div style={{ marginTop: 8, fontSize: 10, color: "var(--text-muted)", fontWeight: 600 }}>
+        <div className="mt-2 text-[10px] text-text-muted font-semibold">
           🧠 Đã ôn {error.reviewCount} lần
           {error.nextReviewAt && ` · Ôn lại: ${new Date(error.nextReviewAt).toLocaleDateString("vi-VN", { day: "numeric", month: "short" })}`}
         </div>

@@ -1,6 +1,8 @@
 "use client";
 
-import { Drawer } from "antd";
+import { X } from "lucide-react";
+import * as m from "motion/react-client";
+import { AnimatePresence } from "motion/react";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";
 
 type Props = {
@@ -8,38 +10,6 @@ type Props = {
   isOpen: boolean;
   onClose: () => void;
   onWordClick: (word: string) => void;
-};
-
-const SYNONYM_STYLE: React.CSSProperties = {
-  borderRadius: 999,
-  background: "var(--accent-light)",
-  padding: "4px 12px",
-  fontSize: 13,
-  fontWeight: 500,
-  color: "var(--success)",
-  border: "1px solid var(--success)",
-  cursor: "pointer",
-  transition: "background 0.15s, border-color 0.15s",
-};
-
-const ANTONYM_STYLE: React.CSSProperties = {
-  borderRadius: 999,
-  background: "var(--warm)",
-  padding: "4px 12px",
-  fontSize: 13,
-  fontWeight: 500,
-  color: "var(--warning)",
-  border: "1px dashed var(--warning)",
-  cursor: "pointer",
-  transition: "background 0.15s, border-color 0.15s",
-};
-
-const SECTION_LABEL: React.CSSProperties = {
-  fontSize: 10,
-  fontWeight: 600,
-  textTransform: "uppercase" as const,
-  letterSpacing: "0.16em",
-  margin: 0,
 };
 
 export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Props) {
@@ -54,106 +24,110 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
   }
 
   return (
-    <Drawer
-      title={
-        <div>
-          <p
-            style={{
-              fontSize: 10,
-              textTransform: "uppercase",
-              letterSpacing: "0.18em",
-              color: "var(--text-muted)",
-              margin: 0,
-            }}
+    <>
+      {/* Backdrop */}
+      <AnimatePresence>
+        {isOpen && (
+          <m.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 z-[900] bg-black/30 backdrop-blur-xs"
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Panel */}
+      <AnimatePresence>
+        {isOpen && (
+          <m.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="fixed top-0 right-0 bottom-0 w-[min(384px,90vw)] z-[901] bg-(--bg) border-l border-border shadow-[-8px_0_30px_rgba(0,0,0,0.1)] flex flex-col overflow-hidden"
           >
-            Từ đồng &amp; trái nghĩa
-          </p>
-          {vocabulary && (
-            <p
-              style={{
-                fontSize: 15,
-                fontWeight: 600,
-                fontStyle: "italic",
-                fontFamily: "var(--font-display)",
-                color: "var(--ink)",
-                margin: 0,
-              }}
-            >
-              {vocabulary.headword}
-            </p>
-          )}
-        </div>
-      }
-      placement="right"
-      onClose={onClose}
-      open={isOpen}
-      size={384}
-      styles={{ body: { padding: 20 } }}
-    >
-      {vocabulary && sensesWithData.length === 0 && (
-        <p style={{ fontSize: 14, color: "var(--text-muted)" }}>Chưa có dữ liệu đồng/trái nghĩa.</p>
-      )}
-
-      {vocabulary && sensesWithData.length > 0 && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 28 }}>
-          {sensesWithData.map((sense) => (
-            <div key={sense.id} style={{ display: "flex", flexDirection: "column", gap: 14 }}>
-              {/* Sense label */}
-              <p
-                style={{
-                  fontSize: 13,
-                  fontStyle: "italic",
-                  fontFamily: "var(--font-display)",
-                  color: "var(--accent)",
-                  margin: 0,
-                  paddingBottom: 10,
-                  borderBottom: "1px solid var(--border)",
-                }}
+            {/* Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-border bg-surface shrink-0">
+              <div>
+                <p className="text-[10px] uppercase tracking-[0.18em] text-text-muted m-0">
+                  Từ đồng &amp; trái nghĩa
+                </p>
+                {vocabulary && (
+                  <p className="text-[15px] font-semibold italic font-display text-ink m-0">
+                    {vocabulary.headword}
+                  </p>
+                )}
+              </div>
+              <button
+                onClick={onClose}
+                className="grid place-items-center w-8 h-8 rounded-lg border border-border bg-transparent text-text-muted cursor-pointer transition-all hover:bg-surface-alt"
               >
-                {sense.label}
-              </p>
+                <X className="h-4 w-4" />
+              </button>
+            </div>
 
-              {/* Synonyms */}
-              {(sense.synonyms?.length ?? 0) > 0 && (
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  <p style={{ ...SECTION_LABEL, color: "var(--success)" }}>Đồng nghĩa</p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                    {sense.synonyms.map((word) => (
-                      <button
-                        key={word}
-                        type="button"
-                        onClick={() => handleWordClick(word)}
-                        style={SYNONYM_STYLE}
-                      >
-                        {word}
-                      </button>
-                    ))}
-                  </div>
-                </div>
+            {/* Content */}
+            <div className="flex-1 overflow-auto p-5">
+              {vocabulary && sensesWithData.length === 0 && (
+                <p className="text-sm text-text-muted">Chưa có dữ liệu đồng/trái nghĩa.</p>
               )}
 
-              {/* Antonyms */}
-              {(sense.antonyms?.length ?? 0) > 0 && (
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-                  <p style={{ ...SECTION_LABEL, color: "var(--warning)" }}>Trái nghĩa</p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
-                    {sense.antonyms.map((word) => (
-                      <button
-                        key={word}
-                        type="button"
-                        onClick={() => handleWordClick(word)}
-                        style={ANTONYM_STYLE}
-                      >
-                        {word}
-                      </button>
-                    ))}
-                  </div>
+              {vocabulary && sensesWithData.length > 0 && (
+                <div className="flex flex-col gap-7">
+                  {sensesWithData.map((sense) => (
+                    <div key={sense.id} className="flex flex-col gap-3.5">
+                      {/* Sense label */}
+                      <p className="text-[13px] italic font-display text-accent m-0 pb-2.5 border-b border-border">
+                        {sense.label}
+                      </p>
+
+                      {/* Synonyms */}
+                      {(sense.synonyms?.length ?? 0) > 0 && (
+                        <div className="flex flex-col gap-2">
+                          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-(--success) m-0">Đồng nghĩa</p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {sense.synonyms.map((word) => (
+                              <button
+                                key={word}
+                                type="button"
+                                onClick={() => handleWordClick(word)}
+                                className="rounded-full bg-accent-light px-3 py-1 text-[13px] font-medium text-(--success) border border-(--success) cursor-pointer transition-all duration-150 hover:bg-(--success)/10"
+                              >
+                                {word}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Antonyms */}
+                      {(sense.antonyms?.length ?? 0) > 0 && (
+                        <div className="flex flex-col gap-2">
+                          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-(--warning) m-0">Trái nghĩa</p>
+                          <div className="flex flex-wrap gap-1.5">
+                            {sense.antonyms.map((word) => (
+                              <button
+                                key={word}
+                                type="button"
+                                onClick={() => handleWordClick(word)}
+                                className="rounded-full bg-(--warm) px-3 py-1 text-[13px] font-medium text-(--warning) border border-dashed border-(--warning) cursor-pointer transition-all duration-150 hover:bg-(--warning)/10"
+                              >
+                                {word}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
-          ))}
-        </div>
-      )}
-    </Drawer>
+          </m.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

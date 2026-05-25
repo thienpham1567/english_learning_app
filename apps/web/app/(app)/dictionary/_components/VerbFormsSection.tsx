@@ -1,42 +1,13 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { DownOutlined, LoadingOutlined, SoundOutlined } from "@ant-design/icons";
+import { ChevronDown, Loader2, Volume2 } from "lucide-react";
 import { api } from "@/lib/api-client";
 
 import type { VerbForm } from "@/lib/schemas/vocabulary";
 
 type Props = {
   verbForms: VerbForm[];
-};
-
-const CARD_BASE: React.CSSProperties = {
-  display: "flex",
-  flexDirection: "column",
-  gap: 6,
-  borderRadius: "var(--radius)",
-  padding: "14px 16px",
-  transition: "box-shadow 0.2s",
-  minHeight: 110,
-};
-
-const CARD_REGULAR: React.CSSProperties = {
-  ...CARD_BASE,
-  background: "var(--bg-deep)",
-  border: "1px solid var(--border)",
-};
-
-const CARD_INFINITIVE: React.CSSProperties = {
-  ...CARD_BASE,
-  background: "var(--accent-muted)",
-  border: "1px solid var(--accent)",
-  borderLeftWidth: 3,
-};
-
-const CARD_IRREGULAR: React.CSSProperties = {
-  ...CARD_BASE,
-  background: "var(--warning-bg)",
-  border: "1px solid var(--warning)",
 };
 
 export function VerbFormsSection({ verbForms }: Props) {
@@ -108,143 +79,60 @@ export function VerbFormsSection({ verbForms }: Props) {
   }
 
   return (
-    <div className="anim-fade-up" style={{ marginTop: 24 }}>
+    <div className="anim-fade-up mt-6">
       {/* ── Expand toggle — prominent section header ── */}
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-controls="verb-forms-grid"
-        style={{
-          display: "flex",
-          width: "100%",
-          alignItems: "center",
-          justifyContent: "space-between",
-          gap: 8,
-          background: "var(--surface)",
-          border: "1px solid var(--border)",
-          borderLeft: "3px solid var(--accent)",
-          borderRadius: "var(--radius-sm)",
-          cursor: "pointer",
-          padding: "10px 16px",
-          transition: "background 0.2s, box-shadow 0.2s",
-        }}
-        onMouseEnter={(e) => {
-          e.currentTarget.style.background = "var(--surface-hover)";
-          e.currentTarget.style.boxShadow = "var(--shadow-sm)";
-        }}
-        onMouseLeave={(e) => {
-          e.currentTarget.style.background = "var(--surface)";
-          e.currentTarget.style.boxShadow = "none";
-        }}
+        className="flex w-full items-center justify-between gap-2 bg-surface border border-border border-l-3 border-l-accent rounded-sm cursor-pointer px-4 py-2.5 transition-all duration-200 hover:bg-(--surface-hover) hover:shadow-sm"
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <span
-            style={{
-              fontSize: 13,
-              fontWeight: 700,
-              textTransform: "uppercase",
-              letterSpacing: "0.12em",
-              color: "var(--accent)",
-            }}
-          >
+        <div className="flex items-center gap-2.5">
+          <span className="text-[13px] font-bold uppercase tracking-[0.12em] text-accent">
             Dạng động từ
           </span>
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 600,
-              padding: "2px 10px",
-              borderRadius: 999,
-              background: "var(--accent-muted)",
-              color: "var(--accent)",
-            }}
-          >
+          <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-accent-muted text-accent">
             {verbForms.length} dạng
           </span>
         </div>
-        <DownOutlined
-          style={{
-            fontSize: 12,
-            color: "var(--accent)",
-            transition: "transform 0.25s ease",
-            transform: open ? "rotate(180deg)" : "rotate(0)",
-          }}
+        <ChevronDown
+          className={`h-3 w-3 text-accent transition-transform duration-300 ${open ? "rotate-180" : ""}`}
         />
       </button>
 
       {open && (
         <div
           id="verb-forms-grid"
-          className="anim-fade-in verb-forms-grid"
-          style={{
-            display: "grid",
-            gap: 10,
-            paddingTop: 14,
-          }}
+          className="anim-fade-in verb-forms-grid grid gap-2.5 pt-3.5"
         >
           {verbForms.map((vf, idx) => {
             const isInfinitive = idx === 0;
-            const cardStyle = isInfinitive
-              ? CARD_INFINITIVE
+            const cardClass = isInfinitive
+              ? "bg-accent-muted border border-accent border-l-3"
               : vf.isIrregular
-                ? CARD_IRREGULAR
-                : CARD_REGULAR;
+                ? "bg-(--warning-bg) border border-(--warning)"
+                : "bg-bg-deep border border-border";
 
             return (
-              <div key={vf.label} style={cardStyle}>
+              <div key={vf.label} className={`flex flex-col gap-1.5 rounded-lg p-3.5 px-4 transition-shadow duration-200 min-h-[110px] ${cardClass}`}>
                 {/* Label */}
-                <span
-                  style={{
-                    fontSize: 10,
-                    fontWeight: 700,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.1em",
-                    color: isInfinitive ? "var(--accent)" : "var(--text-muted)",
-                    lineHeight: 1,
-                  }}
-                >
+                <span className={`text-[10px] font-bold uppercase tracking-wider leading-none ${isInfinitive ? "text-accent" : "text-text-muted"}`}>
                   {vf.label}
                 </span>
 
                 {/* Form word */}
-                <span
-                  style={{
-                    fontSize: isInfinitive ? 16 : 14,
-                    fontWeight: isInfinitive ? 700 : 600,
-                    color: "var(--ink)",
-                    fontFamily: isInfinitive ? "var(--font-display)" : "inherit",
-                    fontStyle: isInfinitive ? "italic" : "normal",
-                    marginTop: 2,
-                  }}
-                >
+                <span className={`mt-0.5 ${isInfinitive ? "text-base font-bold font-display italic" : "text-sm font-semibold"} text-ink`}>
                   {vf.form}
                 </span>
 
                 {/* Phonetics with inline audio buttons */}
                 {(vf.phoneticsUs || vf.phoneticsUk) && (
-                  <div style={{ display: "flex", flexDirection: "column", gap: 3, marginTop: 2 }}>
+                  <div className="flex flex-col gap-1 mt-0.5">
                     {vf.phoneticsUs && (
-                      <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                        <span
-                          style={{
-                            fontSize: 10,
-                            fontWeight: 700,
-                            color: "var(--text-muted)",
-                            minWidth: 16,
-                          }}
-                        >
-                          US
-                        </span>
-                        <span
-                          style={{
-                            fontSize: 11,
-                            fontFamily: "var(--font-mono)",
-                            color: "var(--text-secondary)",
-                          }}
-                        >
-                          {vf.phoneticsUs}
-                        </span>
+                      <div className="flex items-center gap-1">
+                        <span className="text-[10px] font-bold text-text-muted min-w-4">US</span>
+                        <span className="text-[11px] font-mono text-text-secondary">{vf.phoneticsUs}</span>
                         <MiniAudioBtn
                           isPlaying={speakingKey === `${vf.form}-en-US`}
                           onClick={() => speak(vf.form, "en-US")}
@@ -253,26 +141,9 @@ export function VerbFormsSection({ verbForms }: Props) {
                       </div>
                     )}
                     {vf.phoneticsUk && (
-                      <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-                        <span
-                          style={{
-                            fontSize: 10,
-                            fontWeight: 700,
-                            color: "var(--text-muted)",
-                            minWidth: 16,
-                          }}
-                        >
-                          UK
-                        </span>
-                        <span
-                          style={{
-                            fontSize: 11,
-                            fontFamily: "var(--font-mono)",
-                            color: "var(--text-secondary)",
-                          }}
-                        >
-                          {vf.phoneticsUk}
-                        </span>
+                      <div className="flex items-center gap-1">
+                        <span className="text-[10px] font-bold text-text-muted min-w-4">UK</span>
+                        <span className="text-[11px] font-mono text-text-secondary">{vf.phoneticsUk}</span>
                         <MiniAudioBtn
                           isPlaying={speakingKey === `${vf.form}-en-GB`}
                           onClick={() => speak(vf.form, "en-GB")}
@@ -285,19 +156,8 @@ export function VerbFormsSection({ verbForms }: Props) {
 
                 {/* Footer: irregular badge — pushed to bottom */}
                 {vf.isIrregular && (
-                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: "auto", paddingTop: 4 }}>
-                    <span
-                      style={{
-                        fontSize: 10,
-                        fontWeight: 600,
-                        padding: "2px 8px",
-                        borderRadius: 6,
-                        background: "var(--warning-bg)",
-                        color: "var(--warning)",
-                        border: "1px solid var(--warning)",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
+                  <div className="flex items-center gap-1.5 mt-auto pt-1">
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-(--warning-bg) text-(--warning) border border-(--warning) whitespace-nowrap">
                       Bất quy tắc
                     </span>
                   </div>
@@ -326,31 +186,14 @@ function MiniAudioBtn({
       type="button"
       aria-label={label}
       onClick={onClick}
-      style={{
-        display: "inline-grid",
-        width: 18,
-        height: 18,
-        placeItems: "center",
-        borderRadius: 4,
-        color: isPlaying ? "var(--accent)" : "var(--text-muted)",
-        background: "none",
-        border: "none",
-        cursor: "pointer",
-        padding: 0,
-        transition: "color 0.15s",
-        flexShrink: 0,
-      }}
-      onMouseEnter={(e) => {
-        if (!isPlaying) e.currentTarget.style.color = "var(--accent)";
-      }}
-      onMouseLeave={(e) => {
-        if (!isPlaying) e.currentTarget.style.color = "var(--text-muted)";
-      }}
+      className={`inline-grid w-4.5 h-4.5 place-items-center rounded border-none bg-transparent p-0 cursor-pointer shrink-0 transition-colors duration-150 ${
+        isPlaying ? "text-accent" : "text-text-muted hover:text-accent"
+      }`}
     >
       {isPlaying ? (
-        <LoadingOutlined style={{ fontSize: 11 }} spin />
+        <Loader2 className="h-3 w-3 animate-spin" />
       ) : (
-        <SoundOutlined style={{ fontSize: 11 }} />
+        <Volume2 className="h-3 w-3" />
       )}
     </button>
   );
