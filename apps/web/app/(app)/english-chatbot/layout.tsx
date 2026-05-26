@@ -1,18 +1,14 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
-import { useParams } from "next/navigation";
 import { Menu, X } from "lucide-react";
+import { useParams } from "next/navigation";
+import { type ReactNode, useState } from "react";
 
 import { ChatConversationProvider } from "@/app/(app)/english-chatbot/_components/ChatConversationProvider";
-import { ConversationList } from "@/app/(app)/english-chatbot/_components/ConversationList";
 import { ChatWindow } from "@/app/(app)/english-chatbot/_components/ChatWindow";
+import { ConversationList } from "@/app/(app)/english-chatbot/_components/ConversationList";
 
-export default function EnglishChatbotLayout({
-  children: _children,
-}: {
-  children: ReactNode;
-}) {
+export default function EnglishChatbotLayout({ children: _children }: { children: ReactNode }) {
   const params = useParams<{ conversationId?: string }>();
   const activeId = params.conversationId ?? null;
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -20,7 +16,6 @@ export default function EnglishChatbotLayout({
   return (
     <ChatConversationProvider>
       <div className="relative flex h-[calc(100%+48px)] max-h-[calc(100%+48px)] min-h-0 flex-1 -m-6 overflow-hidden bg-(--chat-bg)">
-        
         {/* Desktop sidebar — always visible */}
         <div className="hidden md:block h-full">
           <ConversationList activeId={activeId} />
@@ -35,7 +30,7 @@ export default function EnglishChatbotLayout({
               className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-in fade-in duration-200"
             />
             {/* Sidebar panel */}
-            <div 
+            <div
               onClick={() => setSidebarOpen(false)}
               className="relative z-10 h-full animate-in slide-in-from-left duration-250 ease-out"
             >

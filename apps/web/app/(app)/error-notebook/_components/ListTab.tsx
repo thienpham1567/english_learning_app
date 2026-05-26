@@ -1,19 +1,11 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-import {
-  Search,
-  Filter,
-  CheckCircle,
-  Loader2,
-} from "lucide-react";
+import { CheckCircle, Filter, Loader2, Search } from "lucide-react";
 import * as m from "motion/react-client";
+import { useCallback, useEffect, useState } from "react";
 import { useErrorList } from "../_hooks/useErrorList";
-import {
-  FILTER_RESOLVED_OPTIONS,
-  MODULE_FILTER_OPTIONS,
-} from "../_types/types";
 import type { ErrorEntry } from "../_types/types";
+import { FILTER_RESOLVED_OPTIONS, MODULE_FILTER_OPTIONS } from "../_types/types";
 import { ErrorCard } from "./ErrorCard";
 import { ErrorDetailPanel } from "./ErrorDetailPanel";
 
@@ -46,11 +38,14 @@ export function ListTab() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [list.filters.search]);
 
-  const handleResolve = useCallback(async (id: string) => {
-    await list.resolveOne(id);
-    // Update selected error if it was resolved
-    setSelectedError((prev) => (prev?.id === id ? { ...prev, isResolved: true } : prev));
-  }, [list]);
+  const handleResolve = useCallback(
+    async (id: string) => {
+      await list.resolveOne(id);
+      // Update selected error if it was resolved
+      setSelectedError((prev) => (prev?.id === id ? { ...prev, isResolved: true } : prev));
+    },
+    [list],
+  );
 
   return (
     <>
@@ -127,7 +122,11 @@ export function ListTab() {
                 }`}
               >
                 <option value="">Chủ đề</option>
-                {list.topics.map((t) => <option key={t} value={t}>{t}</option>)}
+                {list.topics.map((t) => (
+                  <option key={t} value={t}>
+                    {t}
+                  </option>
+                ))}
               </select>
             )}
 
@@ -167,7 +166,9 @@ export function ListTab() {
               {list.filters.resolved === "false" ? "🎉" : "📭"}
             </div>
             <span className="text-base font-extrabold text-text-primary block mb-1.5">
-              {list.filters.resolved === "false" ? "Không còn lỗi sai chưa nắm!" : "Không tìm thấy kết quả"}
+              {list.filters.resolved === "false"
+                ? "Không còn lỗi sai chưa nắm!"
+                : "Không tìm thấy kết quả"}
             </span>
             <span className="text-[13px] text-text-muted">
               {list.filters.resolved === "false"
@@ -195,7 +196,13 @@ export function ListTab() {
                 disabled={list.loadingMore}
                 className="p-3 rounded-xl border-2 border-border bg-surface text-text-secondary text-[13px] font-bold cursor-pointer font-body text-center disabled:opacity-50"
               >
-                {list.loadingMore ? <><Loader2 className="h-4 w-4 animate-inline mr-1.5" /> Đang tải...</> : "Tải thêm"}
+                {list.loadingMore ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-inline mr-1.5" /> Đang tải...
+                  </>
+                ) : (
+                  "Tải thêm"
+                )}
               </m.button>
             )}
           </div>

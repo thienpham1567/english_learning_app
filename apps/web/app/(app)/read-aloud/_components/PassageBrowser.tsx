@@ -1,11 +1,16 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { Flex, Typography, message } from "antd";
+import { Flex, message, Typography } from "antd";
+import { Loader2 } from "lucide-react";
 
 import * as m from "motion/react-client";
-import { TOEIC_TOPICS, SAMPLE_TEXTS, type SampleText, type SampleLength } from "../_data/sample-passages";
-import { Loader2 } from "lucide-react";
+import { useCallback, useState } from "react";
+import {
+  SAMPLE_TEXTS,
+  type SampleLength,
+  type SampleText,
+  TOEIC_TOPICS,
+} from "../_data/sample-passages";
 
 const { Text } = Typography;
 
@@ -53,11 +58,17 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
   });
 
   return (
-    <m.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="read-aloud-panel bg-(--surface) rounded-(--radius-xl) border-2 border-border flex flex-col gap-4" style={{padding: "var(--space-5)", boxShadow: "var(--shadow-md)"}} >
+    <m.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.15 }}
+      className="read-aloud-panel bg-(--surface) rounded-(--radius-xl) border-2 border-border flex flex-col gap-4"
+      style={{ padding: "var(--space-5)", boxShadow: "var(--shadow-md)" }}
+    >
       {/* Header + AI Generate Button */}
       <Flex align="center" justify="space-between" wrap="wrap" gap={8}>
         <Flex align="center" gap={8}>
-          <Text className="text-xs font-bold text-text-muted uppercase tracking-wider" >
+          <Text className="text-xs font-bold text-text-muted uppercase tracking-wider">
             📚 Văn bản mẫu ({filteredPassages.length})
           </Text>
         </Flex>
@@ -65,9 +76,22 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
           whileHover={{ scale: 1.03, y: -1 }}
           whileTap={{ scale: 0.97 }}
           onClick={generateAiPassages}
-          disabled={aiLoading} className="flex items-center gap-1.5 rounded-xl text-accent font-bold font-body" style={{padding: "7px 16px", border: "1px solid var(--accent)", background: "var(--accent-light)", fontSize: 12.5, cursor: aiLoading ? "wait" : "pointer", opacity: aiLoading ? 0.6 : 1, transition: "all 0.2s"}} >
+          disabled={aiLoading}
+          className="flex items-center gap-1.5 rounded-xl text-accent font-bold font-body"
+          style={{
+            padding: "7px 16px",
+            border: "1px solid var(--accent)",
+            background: "var(--accent-light)",
+            fontSize: 12.5,
+            cursor: aiLoading ? "wait" : "pointer",
+            opacity: aiLoading ? 0.6 : 1,
+            transition: "all 0.2s",
+          }}
+        >
           {aiLoading ? (
-            <><Loader2 className="animate-spin" size={12} /> Đang tạo...</>
+            <>
+              <Loader2 className="animate-spin" size={12} /> Đang tạo...
+            </>
           ) : (
             <>✨ Tạo bằng AI</>
           )}
@@ -75,7 +99,7 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
       </Flex>
 
       {/* Topic filter chips */}
-      <div className="flex flex-wrap gap-1.5" >
+      <div className="flex flex-wrap gap-1.5">
         <FilterChip
           label="Tất cả"
           active={selectedTopic === "all"}
@@ -93,11 +117,19 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
 
       {/* Length filter */}
       <Flex gap={6} align="center">
-        <Text className="text-[11px] text-text-muted font-semibold" >Độ dài:</Text>
+        <Text className="text-[11px] text-text-muted font-semibold">Độ dài:</Text>
         {(["all", "short", "medium", "long"] as const).map((len) => (
           <FilterChip
             key={len}
-            label={len === "all" ? "Tất cả" : len === "short" ? "Ngắn (~30 từ)" : len === "medium" ? "Trung bình (~60 từ)" : "Dài (~120 từ)"}
+            label={
+              len === "all"
+                ? "Tất cả"
+                : len === "short"
+                  ? "Ngắn (~30 từ)"
+                  : len === "medium"
+                    ? "Trung bình (~60 từ)"
+                    : "Dài (~120 từ)"
+            }
             active={selectedLength === len}
             onClick={() => setSelectedLength(len)}
           />
@@ -105,9 +137,12 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
       </Flex>
 
       {/* Passage cards */}
-      <div className="flex flex-col gap-2 h-[400px] overflow-y-auto" >
+      <div className="flex flex-col gap-2 h-[400px] overflow-y-auto">
         {filteredPassages.length === 0 ? (
-          <div className="text-center text-text-muted text-[13px]" style={{padding: "24px 16px", borderRadius: 14, border: "1px dashed var(--border)"}} >
+          <div
+            className="text-center text-text-muted text-[13px]"
+            style={{ padding: "24px 16px", borderRadius: 14, border: "1px dashed var(--border)" }}
+          >
             Không có đoạn văn nào. Nhấn &quot;✨ Tạo bằng AI&quot; để tạo mới!
           </div>
         ) : (
@@ -121,22 +156,56 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
               onClick={() => {
                 onSelectPassage(sample.text, sample.title);
                 message.success(`Đã tải: ${sample.title}`);
-              }} className="flex items-start gap-3 rounded-(--radius-lg) border-2 border-border bg-surface-alt cursor-pointer" style={{padding: "12px 14px", transition: "all 0.15s"}} >
-              <div className="w-[36px] h-[36px] border-2 border-border grid text-lg shrink-0" style={{borderRadius: 10, background: "var(--accent-light)", placeItems: "center"}} >
+              }}
+              className="flex items-start gap-3 rounded-(--radius-lg) border-2 border-border bg-surface-alt cursor-pointer"
+              style={{ padding: "12px 14px", transition: "all 0.15s" }}
+            >
+              <div
+                className="w-[36px] h-[36px] border-2 border-border grid text-lg shrink-0"
+                style={{
+                  borderRadius: 10,
+                  background: "var(--accent-light)",
+                  placeItems: "center",
+                }}
+              >
                 {sample.icon}
               </div>
-              <div className="flex-1 w-[0px]" >
-                <div className="font-bold text-text-primary" style={{fontSize: 13.5, lineHeight: 1.3}} >
+              <div className="flex-1 w-[0px]">
+                <div
+                  className="font-bold text-text-primary"
+                  style={{ fontSize: 13.5, lineHeight: 1.3 }}
+                >
                   {sample.title}
                 </div>
-                <div className="text-xs text-text-muted overflow-hidden" style={{marginTop: 3, textOverflow: "ellipsis", whiteSpace: "nowrap"}} >
+                <div
+                  className="text-xs text-text-muted overflow-hidden"
+                  style={{ marginTop: 3, textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+                >
                   {sample.text.slice(0, 80)}...
                 </div>
-                <Flex gap={6} className="mt-1.5" >
-                  <span className="text-[10px] font-bold rounded-lg" style={{padding: "1px 8px", background: sample.length === "short" ? "rgba(16,185,129,0.1)" : sample.length === "long" ? "rgba(239,68,68,0.08)" : "rgba(59,130,246,0.1)", color: sample.length === "short" ? "var(--success)" : sample.length === "long" ? "var(--error)" : "var(--info)", border: `1px solid ${sample.length === "short" ? "rgba(16,185,129,0.2)" : sample.length === "long" ? "rgba(239,68,68,0.15)" : "rgba(59,130,246,0.2)"}`}} >
+                <Flex gap={6} className="mt-1.5">
+                  <span
+                    className="text-[10px] font-bold rounded-lg"
+                    style={{
+                      padding: "1px 8px",
+                      background:
+                        sample.length === "short"
+                          ? "rgba(16,185,129,0.1)"
+                          : sample.length === "long"
+                            ? "rgba(239,68,68,0.08)"
+                            : "rgba(59,130,246,0.1)",
+                      color:
+                        sample.length === "short"
+                          ? "var(--success)"
+                          : sample.length === "long"
+                            ? "var(--error)"
+                            : "var(--info)",
+                      border: `1px solid ${sample.length === "short" ? "rgba(16,185,129,0.2)" : sample.length === "long" ? "rgba(239,68,68,0.15)" : "rgba(59,130,246,0.2)"}`,
+                    }}
+                  >
                     {sample.length === "short" ? "Ngắn" : sample.length === "long" ? "Dài" : "TB"}
                   </span>
-                  <span className="text-[10px] font-semibold text-text-muted" >
+                  <span className="text-[10px] font-semibold text-text-muted">
                     ~{sample.text.split(/\s+/).length} từ
                   </span>
                 </Flex>
@@ -150,11 +219,31 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
 }
 
 /* ── Filter chip ── */
-function FilterChip({ label, active, onClick }: { label: string; active: boolean; onClick: () => void }) {
+function FilterChip({
+  label,
+  active,
+  onClick,
+}: {
+  label: string;
+  active: boolean;
+  onClick: () => void;
+}) {
   return (
     <button
       type="button"
-      onClick={onClick} className="rounded-full cursor-pointer font-body" style={{padding: "4px 12px", border: active ? "1px solid var(--accent)" : "1px solid var(--border)", background: active ? "var(--accent-muted)" : "transparent", color: active ? "var(--accent)" : "var(--text-muted)", fontSize: 11.5, fontWeight: active ? 700 : 500, transition: "all 0.2s", whiteSpace: "nowrap"}} >
+      onClick={onClick}
+      className="rounded-full cursor-pointer font-body"
+      style={{
+        padding: "4px 12px",
+        border: active ? "1px solid var(--accent)" : "1px solid var(--border)",
+        background: active ? "var(--accent-muted)" : "transparent",
+        color: active ? "var(--accent)" : "var(--text-muted)",
+        fontSize: 11.5,
+        fontWeight: active ? 700 : 500,
+        transition: "all 0.2s",
+        whiteSpace: "nowrap",
+      }}
+    >
       {label}
     </button>
   );

@@ -1,6 +1,5 @@
-import { eq, and } from "drizzle-orm";
-import { db } from "@repo/database";
-import { userSkillProfile } from "@repo/database";
+import { db, userSkillProfile } from "@repo/database";
+import { and, eq } from "drizzle-orm";
 
 /** Supported skill modules for adaptive difficulty */
 export type SkillModule = "grammar" | "listening" | "reading" | "writing" | "speaking";
@@ -37,10 +36,7 @@ export async function getSkillProfile(userId: string, module: SkillModule) {
   if (rows[0]) return rows[0];
 
   // Create default profile (handle race: another request may insert first)
-  await db
-    .insert(userSkillProfile)
-    .values({ userId, module })
-    .onConflictDoNothing();
+  await db.insert(userSkillProfile).values({ userId, module }).onConflictDoNothing();
 
   // Re-fetch to guarantee a full row with id/updatedAt
   const [refetched] = await db

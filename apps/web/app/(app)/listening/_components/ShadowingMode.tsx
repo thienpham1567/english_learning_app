@@ -1,11 +1,6 @@
 "use client";
-import { api } from "@/lib/api-client";
-import { useState, useCallback, useRef, useEffect } from "react";
 
 import { Progress, Tag, Tooltip } from "antd";
-
-import { useSentenceAudio } from "@/hooks/useSentenceAudio";
-import { AudioPlayer } from "@/app/(app)/listening/_components/AudioPlayer";
 import {
   ChevronRight,
   CircleCheckBig,
@@ -17,15 +12,31 @@ import {
   Volume2,
   XCircle,
 } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { AudioPlayer } from "@/app/(app)/listening/_components/AudioPlayer";
+import { useSentenceAudio } from "@/hooks/useSentenceAudio";
+import { api } from "@/lib/api-client";
 
 type Sentence = { text: string; ipa: string; tip: string };
 type WordAnalysis = { word: string; spoken: string; correct: boolean; issue?: string };
 type EvalResult = {
-  score: number; accuracy: number; fluency: number;
-  feedback: string; wordAnalysis: WordAnalysis[]; tips: string[];
+  score: number;
+  accuracy: number;
+  fluency: number;
+  feedback: string;
+  wordAnalysis: WordAnalysis[];
+  tips: string[];
 };
 
-type ShadowState = "idle" | "loading" | "ready" | "recording" | "transcribing" | "evaluating" | "result" | "summary";
+type ShadowState =
+  | "idle"
+  | "loading"
+  | "ready"
+  | "recording"
+  | "transcribing"
+  | "evaluating"
+  | "result"
+  | "summary";
 
 interface Props {
   examMode: string;
@@ -72,7 +83,9 @@ export default function ShadowingMode({ examMode }: Props) {
 
     try {
       const data = await api.post<{ sentences: Sentence[] }>("/pronunciation/sentences", {
-        level: "intermediate", count: 5, examMode,
+        level: "intermediate",
+        count: 5,
+        examMode,
       });
       if (!data.sentences?.length) throw new Error("No sentences");
       setSentences(data.sentences);
@@ -95,7 +108,9 @@ export default function ShadowingMode({ examMode }: Props) {
       const recorder = new MediaRecorder(stream, { mimeType });
       mediaRecorderRef.current = recorder;
       chunksRef.current = [];
-      recorder.ondataavailable = (e) => { if (e.data.size > 0) chunksRef.current.push(e.data); };
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) chunksRef.current.push(e.data);
+      };
       recorder.start();
       setState("recording");
     } catch {
@@ -121,7 +136,8 @@ export default function ShadowingMode({ examMode }: Props) {
 
           setState("evaluating");
           const result = await api.post<EvalResult>("/pronunciation/evaluate", {
-            targetText: currentSentence.text, spokenText: text,
+            targetText: currentSentence.text,
+            spokenText: text,
           });
           setEvalResult(result);
           setSessionScores((prev) => [...prev, result.score]);
@@ -162,17 +178,24 @@ export default function ShadowingMode({ examMode }: Props) {
     const scores = [...finalScores];
     const avg = scores.length ? Math.round(scores.reduce((a, b) => a + b, 0) / scores.length) : 0;
     try {
-      const data = await api.post<{ xpAwarded: number; skillUpdate: { cefr: string; levelUp: boolean } }>("/shadowing/complete", {
-        scores, avgScore: avg,
+      const data = await api.post<{
+        xpAwarded: number;
+        skillUpdate: { cefr: string; levelUp: boolean };
+      }>("/shadowing/complete", {
+        scores,
+        avgScore: avg,
       });
       setXpAwarded(data.xpAwarded);
       setSkillUpdate(data.skillUpdate);
-    } catch { /* continue to summary anyway */ }
+    } catch {
+      /* continue to summary anyway */
+    }
     setState("summary");
   }, []);
 
   const avgScore = sessionScores.length
-    ? Math.round(sessionScores.reduce((a, b) => a + b, 0) / sessionScores.length) : 0;
+    ? Math.round(sessionScores.reduce((a, b) => a + b, 0) / sessionScores.length)
+    : 0;
 
   // Noop handlers for AudioPlayer compat (unlimited replays in Shadowing)
   const handleReplay = useCallback(() => true, []);
@@ -180,25 +203,41 @@ export default function ShadowingMode({ examMode }: Props) {
 
   // ── RENDER ──
   return (
-    <div className="w-[600px] mx-auto w-full" >
+    <div className="w-[600px] mx-auto w-full">
       {error && (
-        <div className="py-2.5 px-4 rounded-lg text-destructive mb-4 text-[13px]" style={{background: "var(--error-bg)", border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)"}} >
+        <div
+          className="py-2.5 px-4 rounded-lg text-destructive mb-4 text-[13px]"
+          style={{
+            background: "var(--error-bg)",
+            border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)",
+          }}
+        >
           ⚠️ {error}
         </div>
       )}
 
       {/* ── Idle ── */}
       {state === "idle" && (
-        <div className="text-center p-8 border-2 border-border rounded-2xl" style={{background: "var(--card-bg)"}} >
+        <div
+          className="text-center p-8 border-2 border-border rounded-2xl"
+          style={{ background: "var(--card-bg)" }}
+        >
           <Volume2 size={48} className="text-accent" />
-          <h2 className="mb-2 text-lg" >Shadowing</h2>
-          <p className="text-text-secondary mb-2 text-[13px]" >
-            Nghe → Lặp lại → So sánh phát âm
-          </p>
-          <p className="text-text-secondary text-xs" style={{margin: "0 0 24px"}} >
+          <h2 className="mb-2 text-lg">Shadowing</h2>
+          <p className="text-text-secondary mb-2 text-[13px]">Nghe → Lặp lại → So sánh phát âm</p>
+          <p className="text-text-secondary text-xs" style={{ margin: "0 0 24px" }}>
             5 câu mỗi phiên · AI đánh giá chi tiết · +25 XP
           </p>
-          <button onClick={startSession} className="border-none text-[15px] font-semibold cursor-pointer" style={{padding: "12px 32px", borderRadius: 10, background: "var(--accent)", color: "var(--text-on-accent)"}} >
+          <button
+            onClick={startSession}
+            className="border-none text-[15px] font-semibold cursor-pointer"
+            style={{
+              padding: "12px 32px",
+              borderRadius: 10,
+              background: "var(--accent)",
+              color: "var(--text-on-accent)",
+            }}
+          >
             Bắt đầu Shadowing
           </button>
         </div>
@@ -206,27 +245,46 @@ export default function ShadowingMode({ examMode }: Props) {
 
       {/* ── Loading ── */}
       {state === "loading" && (
-        <div className="text-center" style={{padding: 40}} >
+        <div className="text-center" style={{ padding: 40 }}>
           <Loader2 className="animate-spin text-accent" size={32} />
-          <p className="text-text-secondary mt-3" >Đang tạo bài tập...</p>
+          <p className="text-text-secondary mt-3">Đang tạo bài tập...</p>
         </div>
       )}
 
       {/* ── Active: Ready / Recording / Processing ── */}
       {currentSentence && ["ready", "recording", "transcribing", "evaluating"].includes(state) && (
-        <div className="flex flex-col gap-5" >
+        <div className="flex flex-col gap-5">
           {/* Progress */}
-          <div className="flex items-center gap-2 text-[13px] text-text-secondary" >
-            <span>Câu {currentIdx + 1}/{sentences.length}</span>
-            <Progress percent={((currentIdx + 1) / sentences.length) * 100} size="small" showInfo={false} className="flex-1" />
+          <div className="flex items-center gap-2 text-[13px] text-text-secondary">
+            <span>
+              Câu {currentIdx + 1}/{sentences.length}
+            </span>
+            <Progress
+              percent={((currentIdx + 1) / sentences.length) * 100}
+              size="small"
+              showInfo={false}
+              className="flex-1"
+            />
           </div>
 
           {/* Sentence card */}
-          <div className="p-6 rounded-2xl text-center" style={{border: state === "recording" ? "2px solid var(--error)" : "1px solid var(--border)", background: "var(--card-bg)", animation: state === "recording" ? "pulse 1.5s ease-in-out infinite" : undefined}} >
-            <p className="text-xl font-semibold mb-2 leading-normal" >{currentSentence.text}</p>
-            <p className="text-sm text-text-secondary mb-3" style={{fontFamily: "serif"}} >{currentSentence.ipa}</p>
+          <div
+            className="p-6 rounded-2xl text-center"
+            style={{
+              border: state === "recording" ? "2px solid var(--error)" : "1px solid var(--border)",
+              background: "var(--card-bg)",
+              animation: state === "recording" ? "pulse 1.5s ease-in-out infinite" : undefined,
+            }}
+          >
+            <p className="text-xl font-semibold mb-2 leading-normal">{currentSentence.text}</p>
+            <p className="text-sm text-text-secondary mb-3" style={{ fontFamily: "serif" }}>
+              {currentSentence.ipa}
+            </p>
             <Tooltip title={currentSentence.tip}>
-              <p className="text-xs text-text-secondary" style={{margin: "8px 0 0", cursor: "help"}} >
+              <p
+                className="text-xs text-text-secondary"
+                style={{ margin: "8px 0 0", cursor: "help" }}
+              >
                 <Info /> Gợi ý phát âm
               </p>
             </Tooltip>
@@ -245,33 +303,54 @@ export default function ShadowingMode({ examMode }: Props) {
             />
           )}
           {sentenceAudio.isLoading && (
-            <div className="text-center text-xs text-text-muted" >
+            <div className="text-center text-xs text-text-muted">
               <Loader2 className="animate-spin" /> Đang tạo âm thanh...
             </div>
           )}
 
           {/* Record button */}
-          <div className="text-center" >
+          <div className="text-center">
             {state === "ready" && (
               <>
-                <button onClick={startRecording}  aria-label="Ghi âm" className="w-[80px] h-[80px] rounded-full border-none text-[28px] cursor-pointer" style={{background: "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 70%, white))", color: "var(--text-on-accent)", boxShadow: "0 4px 16px color-mix(in srgb, var(--error) 30%, transparent)"}} >
+                <button
+                  onClick={startRecording}
+                  aria-label="Ghi âm"
+                  className="w-[80px] h-[80px] rounded-full border-none text-[28px] cursor-pointer"
+                  style={{
+                    background:
+                      "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 70%, white))",
+                    color: "var(--text-on-accent)",
+                    boxShadow: "0 4px 16px color-mix(in srgb, var(--error) 30%, transparent)",
+                  }}
+                >
                   <Mic />
                 </button>
-                <p className="text-xs text-text-secondary mt-2" >Nhấn nút để ghi âm</p>
+                <p className="text-xs text-text-secondary mt-2">Nhấn nút để ghi âm</p>
               </>
             )}
             {state === "recording" && (
               <>
-                <button onClick={stopRecording}  aria-label="Dừng ghi âm" className="w-[80px] h-[80px] rounded-full text-destructive text-xl cursor-pointer" style={{border: "3px solid var(--error)", background: "var(--card-bg)", animation: "pulse 1s ease-in-out infinite"}} >
+                <button
+                  onClick={stopRecording}
+                  aria-label="Dừng ghi âm"
+                  className="w-[80px] h-[80px] rounded-full text-destructive text-xl cursor-pointer"
+                  style={{
+                    border: "3px solid var(--error)",
+                    background: "var(--card-bg)",
+                    animation: "pulse 1s ease-in-out infinite",
+                  }}
+                >
                   <Square />
                 </button>
-                <p className="text-xs text-destructive mt-2 font-semibold" >Đang ghi âm... Nhấn để dừng</p>
+                <p className="text-xs text-destructive mt-2 font-semibold">
+                  Đang ghi âm... Nhấn để dừng
+                </p>
               </>
             )}
             {(state === "transcribing" || state === "evaluating") && (
               <div>
                 <Loader2 className="animate-spin text-accent" size={32} />
-                <p className="text-[13px] text-text-secondary mt-2" >
+                <p className="text-[13px] text-text-secondary mt-2">
                   {state === "transcribing" ? "Đang nhận dạng..." : "Đang đánh giá..."}
                 </p>
               </div>
@@ -282,32 +361,62 @@ export default function ShadowingMode({ examMode }: Props) {
 
       {/* ── Result ── */}
       {state === "result" && evalResult && currentSentence && (
-        <div className="flex flex-col gap-4" >
+        <div className="flex flex-col gap-4">
           {/* Score */}
-          <div className="p-6 rounded-2xl border-2 border-border text-center" style={{background: "var(--card-bg)"}} >
-            <Progress type="circle" percent={evalResult.score} size={100}
-              strokeColor={evalResult.score >= 80 ? "var(--success)" : evalResult.score >= 50 ? "var(--warning)" : "var(--error)"}
-              format={(pct) => <span className="text-3xl font-bold" >{pct}</span>}
+          <div
+            className="p-6 rounded-2xl border-2 border-border text-center"
+            style={{ background: "var(--card-bg)" }}
+          >
+            <Progress
+              type="circle"
+              percent={evalResult.score}
+              size={100}
+              strokeColor={
+                evalResult.score >= 80
+                  ? "var(--success)"
+                  : evalResult.score >= 50
+                    ? "var(--warning)"
+                    : "var(--error)"
+              }
+              format={(pct) => <span className="text-3xl font-bold">{pct}</span>}
             />
-            <div className="flex justify-center gap-6 mt-4" >
-              <div><p className="text-[11px] text-text-secondary m-0" >Chính xác</p><p className="text-lg font-semibold m-0" >{evalResult.accuracy}%</p></div>
-              <div><p className="text-[11px] text-text-secondary m-0" >Trôi chảy</p><p className="text-lg font-semibold m-0" >{evalResult.fluency}%</p></div>
+            <div className="flex justify-center gap-6 mt-4">
+              <div>
+                <p className="text-[11px] text-text-secondary m-0">Chính xác</p>
+                <p className="text-lg font-semibold m-0">{evalResult.accuracy}%</p>
+              </div>
+              <div>
+                <p className="text-[11px] text-text-secondary m-0">Trôi chảy</p>
+                <p className="text-lg font-semibold m-0">{evalResult.fluency}%</p>
+              </div>
             </div>
           </div>
 
           {/* What you said */}
-          <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
-            <p className="text-xs text-text-secondary font-semibold" style={{margin: "0 0 4px"}} >Bạn đã nói:</p>
-            <p className="text-[15px] m-0 italic" >&ldquo;{spokenText}&rdquo;</p>
+          <div
+            className="p-4 rounded-xl border-2 border-border"
+            style={{ background: "var(--card-bg)" }}
+          >
+            <p className="text-xs text-text-secondary font-semibold" style={{ margin: "0 0 4px" }}>
+              Bạn đã nói:
+            </p>
+            <p className="text-[15px] m-0 italic">&ldquo;{spokenText}&rdquo;</p>
           </div>
 
           {/* Word analysis */}
-          <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
-            <p className="text-xs text-text-secondary mb-2 font-semibold" >Phân tích từng từ:</p>
-            <div className="flex flex-wrap gap-1.5" >
+          <div
+            className="p-4 rounded-xl border-2 border-border"
+            style={{ background: "var(--card-bg)" }}
+          >
+            <p className="text-xs text-text-secondary mb-2 font-semibold">Phân tích từng từ:</p>
+            <div className="flex flex-wrap gap-1.5">
               {evalResult.wordAnalysis.map((w, i) => (
                 <Tooltip key={i} title={w.issue || "Chính xác!"}>
-                  <Tag color={w.correct ? "success" : "error"} className="text-[13px]" style={{padding: "3px 8px", cursor: "help"}} >
+                  <Tag
+                    color={w.correct ? "success" : "error"}
+                    className="text-[13px]"
+                    style={{ padding: "3px 8px", cursor: "help" }}
+                  >
                     {w.correct ? <CircleCheckBig /> : <XCircle />} {w.word}
                   </Tag>
                 </Tooltip>
@@ -316,22 +425,47 @@ export default function ShadowingMode({ examMode }: Props) {
           </div>
 
           {/* Feedback + tips */}
-          <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
-            <p className="text-[13px] mb-2" >{evalResult.feedback}</p>
+          <div
+            className="p-4 rounded-xl border-2 border-border"
+            style={{ background: "var(--card-bg)" }}
+          >
+            <p className="text-[13px] mb-2">{evalResult.feedback}</p>
             {evalResult.tips.length > 0 && (
-              <ul className="m-0 text-[13px] text-text-secondary" style={{paddingLeft: 18}} >
-                {evalResult.tips.map((tip, i) => <li key={i}>{tip}</li>)}
+              <ul className="m-0 text-[13px] text-text-secondary" style={{ paddingLeft: 18 }}>
+                {evalResult.tips.map((tip, i) => (
+                  <li key={i}>{tip}</li>
+                ))}
               </ul>
             )}
           </div>
 
           {/* Actions */}
-          <div className="flex gap-3 justify-center" >
-            <button onClick={retryCurrent} className="rounded-lg border-2 border-border bg-transparent cursor-pointer text-[13px] font-medium" style={{padding: "10px 20px", color: "var(--text)"}} >
+          <div className="flex gap-3 justify-center">
+            <button
+              onClick={retryCurrent}
+              className="rounded-lg border-2 border-border bg-transparent cursor-pointer text-[13px] font-medium"
+              style={{ padding: "10px 20px", color: "var(--text)" }}
+            >
               <RefreshCw /> Thử lại
             </button>
-            <button onClick={nextSentence} className="rounded-lg border-none cursor-pointer text-[13px] font-semibold" style={{padding: "10px 20px", background: "var(--accent)", color: "var(--text-on-accent)"}} >
-              {currentIdx < sentences.length - 1 ? <>Câu tiếp <ChevronRight /></> : <>Hoàn thành <CircleCheckBig /></>}
+            <button
+              onClick={nextSentence}
+              className="rounded-lg border-none cursor-pointer text-[13px] font-semibold"
+              style={{
+                padding: "10px 20px",
+                background: "var(--accent)",
+                color: "var(--text-on-accent)",
+              }}
+            >
+              {currentIdx < sentences.length - 1 ? (
+                <>
+                  Câu tiếp <ChevronRight />
+                </>
+              ) : (
+                <>
+                  Hoàn thành <CircleCheckBig />
+                </>
+              )}
             </button>
           </div>
         </div>
@@ -339,32 +473,57 @@ export default function ShadowingMode({ examMode }: Props) {
 
       {/* ── Summary ── */}
       {state === "summary" && (
-        <div className="text-center p-8 border-2 border-border rounded-2xl" style={{background: "var(--card-bg)"}} >
-          <div className="mb-4" style={{fontSize: 48}} >
-            {avgScore >= 80 ? <CircleCheckBig className="text-emerald-500" /> :
-             avgScore >= 50 ? <Info style={{ color: "var(--warning)" }} /> :
-             <XCircle className="text-destructive" />}
+        <div
+          className="text-center p-8 border-2 border-border rounded-2xl"
+          style={{ background: "var(--card-bg)" }}
+        >
+          <div className="mb-4" style={{ fontSize: 48 }}>
+            {avgScore >= 80 ? (
+              <CircleCheckBig className="text-emerald-500" />
+            ) : avgScore >= 50 ? (
+              <Info style={{ color: "var(--warning)" }} />
+            ) : (
+              <XCircle className="text-destructive" />
+            )}
           </div>
-          <h2 className="mb-2" >Shadowing hoàn thành!</h2>
-          <p className="text-text-secondary mb-2" >
-            Điểm trung bình: <strong className="text-accent text-3xl" >{avgScore}</strong>/100
+          <h2 className="mb-2">Shadowing hoàn thành!</h2>
+          <p className="text-text-secondary mb-2">
+            Điểm trung bình: <strong className="text-accent text-3xl">{avgScore}</strong>/100
           </p>
           {xpAwarded > 0 && (
-            <p className="text-accent text-[13px] font-semibold mb-2" >+{xpAwarded} XP</p>
+            <p className="text-accent text-[13px] font-semibold mb-2">+{xpAwarded} XP</p>
           )}
           {skillUpdate && (
-            <p className="text-[13px] mb-4" style={{color: skillUpdate.levelUp ? "var(--success)" : "var(--text-secondary)"}} >
-              {skillUpdate.levelUp ? `🎉 Trình độ nghe: ${skillUpdate.cefr}!` : `📊 Trình độ nghe: ${skillUpdate.cefr}`}
+            <p
+              className="text-[13px] mb-4"
+              style={{ color: skillUpdate.levelUp ? "var(--success)" : "var(--text-secondary)" }}
+            >
+              {skillUpdate.levelUp
+                ? `🎉 Trình độ nghe: ${skillUpdate.cefr}!`
+                : `📊 Trình độ nghe: ${skillUpdate.cefr}`}
             </p>
           )}
-          <div className="flex gap-2 justify-center flex-wrap mb-5" >
+          <div className="flex gap-2 justify-center flex-wrap mb-5">
             {sessionScores.map((s, i) => (
-              <Tag key={i} color={s >= 80 ? "success" : s >= 50 ? "warning" : "error"} className="text-[13px]" style={{padding: "3px 10px"}} >
+              <Tag
+                key={i}
+                color={s >= 80 ? "success" : s >= 50 ? "warning" : "error"}
+                className="text-[13px]"
+                style={{ padding: "3px 10px" }}
+              >
                 Câu {i + 1}: {s}
               </Tag>
             ))}
           </div>
-          <button onClick={startSession} className="rounded-lg border-none text-sm font-semibold cursor-pointer" style={{padding: "10px 24px", background: "var(--accent)", color: "var(--text-on-accent)"}} >
+          <button
+            onClick={startSession}
+            className="rounded-lg border-none text-sm font-semibold cursor-pointer"
+            style={{
+              padding: "10px 24px",
+              background: "var(--accent)",
+              color: "var(--text-on-accent)",
+            }}
+          >
             <RefreshCw /> Luyện tiếp
           </button>
         </div>

@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("writing-practice/prompt");
+
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { PromptRequestSchema } from "@/lib/writing-practice/schema";

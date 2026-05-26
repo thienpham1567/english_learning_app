@@ -1,26 +1,25 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from "react";
 import {
-  RotateCw,
-  Loader2,
-  Check,
-  ArrowRight,
-  Flame,
-  Zap,
-  Clock,
   AlertCircle,
   AlertTriangle,
+  ArrowRight,
+  Check,
+  Clock,
+  Flame,
+  Loader2,
+  RotateCw,
+  Zap,
 } from "lucide-react";
-
-import { useDailyChallenge } from "@/hooks/useDailyChallenge";
-import { useBonusChallenge } from "@/hooks/useBonusChallenge";
-import { ExerciseCard } from "@/app/(app)/daily-challenge/_components/ExerciseCard";
+import { AnimatePresence, motion } from "motion/react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { ChallengeResults } from "@/app/(app)/daily-challenge/_components/ChallengeResults";
 import { CompletedState } from "@/app/(app)/daily-challenge/_components/CompletedState";
 import { EXERCISE_TYPE_LABELS } from "@/app/(app)/daily-challenge/_components/constants";
+import { ExerciseCard } from "@/app/(app)/daily-challenge/_components/ExerciseCard";
 import { Button } from "@/components/ui/button";
-import { motion, AnimatePresence } from "motion/react";
+import { useBonusChallenge } from "@/hooks/useBonusChallenge";
+import { useDailyChallenge } from "@/hooks/useDailyChallenge";
 
 // Live elapsed timer hook
 function useElapsedTimer(isRunning: boolean) {
@@ -48,7 +47,15 @@ function getTodayLabel(): string {
 }
 
 /* ── Modern Step Indicator ── */
-function StepIndicator({ current, total, isBonus }: { current: number; total: number; isBonus?: boolean }) {
+function StepIndicator({
+  current,
+  total,
+  isBonus,
+}: {
+  current: number;
+  total: number;
+  isBonus?: boolean;
+}) {
   const activeColor = isBonus ? "var(--xp)" : "var(--accent)";
   return (
     <div className="flex flex-col gap-2.5">
@@ -56,7 +63,7 @@ function StepIndicator({ current, total, isBonus }: { current: number; total: nu
       <div className="h-2 border-2 border-border bg-bg-deep rounded-full relative overflow-hidden shrink-0">
         <motion.div
           initial={{ width: 0 }}
-          animate={{ width: `${((current) / total) * 100}%` }}
+          animate={{ width: `${(current / total) * 100}%` }}
           transition={{ type: "spring", stiffness: 80, damping: 15 }}
           style={{
             background: `linear-gradient(90deg, ${activeColor}, color-mix(in srgb, ${activeColor} 80%, var(--xp)))`,
@@ -68,10 +75,11 @@ function StepIndicator({ current, total, isBonus }: { current: number; total: nu
 
       {/* Dots & Labels */}
       <div className="flex justify-between items-center text-xs">
-        <span className="font-semibold text-slate-400">
-          Tiến độ bài học
-        </span>
-        <span style={{ color: activeColor }} className="font-extrabold font-mono text-sm leading-none">
+        <span className="font-semibold text-text-secondary">Tiến độ bài học</span>
+        <span
+          style={{ color: activeColor }}
+          className="font-extrabold font-mono text-sm leading-none"
+        >
           {current + 1} / {total} câu
         </span>
       </div>
@@ -109,8 +117,7 @@ function ExerciseFlow({
     [onAnswer],
   );
 
-  const exerciseTypeLabel =
-    EXERCISE_TYPE_LABELS[challenge.exercises[currentExercise]?.type] ?? "";
+  const exerciseTypeLabel = EXERCISE_TYPE_LABELS[challenge.exercises[currentExercise]?.type] ?? "";
 
   const activeColor = isBonus ? "var(--xp)" : "var(--accent)";
 
@@ -127,9 +134,9 @@ function ExerciseFlow({
         <motion.div
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
-          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 border border-white/10 self-start shadow-md text-white"
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-warning border-2 border-border self-start shadow-(--shadow-sm) text-black"
         >
-          <Zap className="h-3 w-3 fill-current text-white animate-pulse" />
+          <Zap className="h-3 w-3 fill-current text-black animate-pulse" />
           <span className="text-[10px] font-extrabold uppercase tracking-widest font-mono">
             VÒNG THỬ THÁCH BONUS
           </span>
@@ -223,7 +230,9 @@ export default function DailyChallengePage() {
     try {
       const stored = localStorage.getItem(BEST_KEY);
       if (stored) setPersonalBest(stored);
-    } catch { /* ignore */ }
+    } catch {
+      /* ignore */
+    }
     setTodayLabel(getTodayLabel());
   }, []);
 
@@ -239,25 +248,23 @@ export default function DailyChallengePage() {
     }
   }, [state, results, timeElapsedMs, personalBest]);
 
-  const isInBonusFlow = bonus.state === "active" || bonus.state === "submitting" || bonus.state === "results";
+  const isInBonusFlow =
+    bonus.state === "active" || bonus.state === "submitting" || bonus.state === "results";
   const formattedTime = useElapsedTimer(state === "active" || bonus.state === "active");
 
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden">
-      
       {/* ── Module Header ── */}
       <div className="px-4 pt-5 shrink-0">
-        <div className="max-w-2xl mx-auto">
-        </div>
+        <div className="max-w-2xl mx-auto"></div>
       </div>
 
       {/* ── Content Area ── */}
       <div className="flex-1 min-h-0 overflow-y-auto px-4 py-6 pb-12">
         <div className="w-full max-w-2xl mx-auto">
-
           {/* Error banner */}
           {(error || bonus.error) && (
-            <div className="flex gap-3 rounded-2xl border border-red-950 bg-red-950/20 p-4 text-xs text-red-400 mb-5 shadow-sm animate-in fade-in duration-200">
+            <div className="flex gap-3 rounded-2xl border-2 border-border bg-error-bg p-4 text-xs text-error mb-5 shadow-(--shadow-sm) animate-in fade-in duration-200">
               <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{error || bonus.error}</span>
             </div>
@@ -280,12 +287,12 @@ export default function DailyChallengePage() {
               <motion.div
                 animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
                 transition={{ repeat: Infinity, duration: 1.5 }}
-                className="w-16 h-16 rounded-full border-2 border-amber-500 flex items-center justify-center bg-slate-900"
+                className="w-16 h-16 rounded-full border-2 border-border flex items-center justify-center bg-surface shadow-(--shadow-sm)"
               >
-                <Check className="h-6 w-6 text-amber-500" />
+                <Check className="h-6 w-6 text-warning" />
               </motion.div>
-              <div className="flex items-center gap-2 text-slate-400 text-sm font-bold">
-                <Loader2 className="h-4 w-4 animate-text-amber-500" />
+              <div className="flex items-center gap-2 text-text-secondary text-sm font-bold">
+                <Loader2 className="h-4 w-4 animate-spin text-warning" />
                 <span>Đang chấm điểm câu hỏi phụ...</span>
               </div>
             </div>
@@ -309,9 +316,9 @@ export default function DailyChallengePage() {
               {state === "loading" && (
                 <div className="min-h-[320px] flex flex-col justify-center py-6 animate-in fade-in duration-250">
                   <div className="w-full space-y-3.5 animate-pulse">
-                    <div className="h-4 bg-slate-900 border border-slate-850 rounded-lg w-1/3" />
-                    <div className="h-24 bg-slate-900 border border-slate-850 rounded-2xl w-full" />
-                    <div className="h-10 bg-slate-900 border border-slate-850 rounded-xl w-1/2 mx-auto" />
+                    <div className="h-4 bg-bg-deep border border-border/20 rounded-lg w-1/3" />
+                    <div className="h-24 bg-bg-deep border border-border/20 rounded-2xl w-full" />
+                    <div className="h-10 bg-bg-deep border border-border/20 rounded-xl w-1/2 mx-auto" />
                   </div>
                 </div>
               )}
@@ -319,9 +326,13 @@ export default function DailyChallengePage() {
               {/* Error retry */}
               {state === "error" && (
                 <div className="p-8 text-center bg-surface border-2 border-border rounded-2xl shadow-sm flex flex-col items-center animate-in fade-in duration-200">
-                  <AlertTriangle className="h-12 w-12 text-red-500 mb-3" />
-                  <h3 className="text-base font-bold text-slate-150 mb-1">Không thể tải thử thách hôm nay</h3>
-                  <p className="text-xs text-slate-550 mb-4">Vui lòng kiểm tra lại kết nối mạng hoặc thử lại sau.</p>
+                  <AlertTriangle className="h-12 w-12 text-error mb-3" />
+                  <h3 className="text-base font-bold text-text-primary mb-1">
+                    Không thể tải thử thách hôm nay
+                  </h3>
+                  <p className="text-xs text-text-muted mb-4">
+                    Vui lòng kiểm tra lại kết nối mạng hoặc thử lại sau.
+                  </p>
                   <Button onClick={() => window.location.reload()}>
                     <RotateCw className="h-3.5 w-3.5 mr-1.5" /> Thử tải lại trang
                   </Button>
@@ -345,12 +356,12 @@ export default function DailyChallengePage() {
                   <motion.div
                     animate={{ scale: [1, 1.08, 1] }}
                     transition={{ repeat: Infinity, duration: 1.2 }}
-                    className="w-16 h-16 rounded-full border-2 border-accent flex items-center justify-center bg-slate-900 shadow-sm shadow-accent/20"
+                    className="w-16 h-16 rounded-full border-2 border-border bg-surface flex items-center justify-center shadow-(--shadow-sm)"
                   >
                     <Check className="h-6 w-6 text-accent" />
                   </motion.div>
-                  <div className="flex items-center gap-2 text-slate-400 text-sm font-semibold">
-                    <Loader2 className="h-4 w-4 animate-text-accent" />
+                  <div className="flex items-center gap-2 text-text-secondary text-sm font-semibold">
+                    <Loader2 className="h-4 w-4 animate-spin text-accent" />
                     <span>Hệ thống đang kiểm tra câu trả lời...</span>
                   </div>
                 </div>

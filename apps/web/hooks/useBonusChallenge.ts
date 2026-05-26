@@ -1,11 +1,8 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useCallback, useRef, useState } from "react";
 import { api } from "@/lib/api-client";
-import type {
-  DailyChallenge,
-  ExerciseAnswer,
-} from "@/lib/daily-challenge/types";
+import type { DailyChallenge, ExerciseAnswer } from "@/lib/daily-challenge/types";
 
 type BonusState = "idle" | "loading" | "active" | "submitting" | "results" | "completed" | "error";
 
@@ -15,7 +12,11 @@ function getTodayKey() {
   return new Date().toISOString().slice(0, 10);
 }
 
-function loadBonusProgress(): { date: string; currentExercise: number; userAnswers: { exerciseIndex: number; answer: string }[] } | null {
+function loadBonusProgress(): {
+  date: string;
+  currentExercise: number;
+  userAnswers: { exerciseIndex: number; answer: string }[];
+} | null {
   try {
     const raw = localStorage.getItem(BONUS_PROGRESS_KEY);
     if (!raw) return null;
@@ -30,14 +31,26 @@ function loadBonusProgress(): { date: string; currentExercise: number; userAnswe
   }
 }
 
-function saveBonusProgress(currentExercise: number, userAnswers: { exerciseIndex: number; answer: string }[]) {
+function saveBonusProgress(
+  currentExercise: number,
+  userAnswers: { exerciseIndex: number; answer: string }[],
+) {
   try {
-    localStorage.setItem(BONUS_PROGRESS_KEY, JSON.stringify({ date: getTodayKey(), currentExercise, userAnswers }));
-  } catch { /* non-fatal */ }
+    localStorage.setItem(
+      BONUS_PROGRESS_KEY,
+      JSON.stringify({ date: getTodayKey(), currentExercise, userAnswers }),
+    );
+  } catch {
+    /* non-fatal */
+  }
 }
 
 function clearBonusProgress() {
-  try { localStorage.removeItem(BONUS_PROGRESS_KEY); } catch { /* ignore */ }
+  try {
+    localStorage.removeItem(BONUS_PROGRESS_KEY);
+  } catch {
+    /* ignore */
+  }
 }
 
 export function useBonusChallenge() {
@@ -63,7 +76,11 @@ export function useBonusChallenge() {
       } else {
         // Restore partial progress
         const saved = loadBonusProgress();
-        if (saved && saved.userAnswers.length > 0 && saved.currentExercise < (data.challenge.exercises?.length ?? 3)) {
+        if (
+          saved &&
+          saved.userAnswers.length > 0 &&
+          saved.currentExercise < (data.challenge.exercises?.length ?? 3)
+        ) {
           setCurrentExercise(saved.currentExercise);
           setUserAnswers(saved.userAnswers);
         }
@@ -84,10 +101,13 @@ export function useBonusChallenge() {
       const elapsed = Date.now() - startTime.current;
       setTimeElapsedMs(elapsed);
       try {
-        const data = await api.post<{ answers: ExerciseAnswer[]; score: number }>("/daily-challenge/bonus/submit", {
-          answers,
-          timeElapsedMs: elapsed,
-        });
+        const data = await api.post<{ answers: ExerciseAnswer[]; score: number }>(
+          "/daily-challenge/bonus/submit",
+          {
+            answers,
+            timeElapsedMs: elapsed,
+          },
+        );
         setResults(data);
         clearBonusProgress();
         setState("results");

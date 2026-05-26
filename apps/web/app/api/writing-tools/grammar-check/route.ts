@@ -4,10 +4,7 @@ import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import {
-  GrammarCheckRequestSchema,
-  GrammarCheckResponseSchema,
-} from "@/lib/writing-tools/schema";
+import { GrammarCheckRequestSchema, GrammarCheckResponseSchema } from "@/lib/writing-tools/schema";
 
 const log = routeLogger("writing-tools/grammar-check");
 
@@ -60,10 +57,7 @@ export async function POST(request: Request) {
   }
 
   if (isRateLimited(session.user.id)) {
-    return Response.json(
-      { error: "Quá nhiều yêu cầu. Vui lòng đợi 1 phút." },
-      { status: 429 },
-    );
+    return Response.json({ error: "Quá nhiều yêu cầu. Vui lòng đợi 1 phút." }, { status: 429 });
   }
 
   const body = await request.json();

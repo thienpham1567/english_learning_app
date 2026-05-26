@@ -1,16 +1,13 @@
-import { headers } from "next/headers";
-import { eq, desc } from "drizzle-orm";
-
-import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { desc, eq } from "drizzle-orm";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("pronunciation/minimal-pairs");
+
 import { minimalPairsSession } from "@repo/database";
-import {
-  CONTRAST_TAGS,
-  type MinimalPairTagStat,
-} from "@/lib/pronunciation/minimal-pairs";
+import { CONTRAST_TAGS, type MinimalPairTagStat } from "@/lib/pronunciation/minimal-pairs";
 
 /**
  * POST /api/pronunciation/minimal-pairs — Save session result (AC5)
@@ -54,7 +51,8 @@ function normalizeTagStats(value: unknown): MinimalPairTagStat[] {
     const candidate = item as { tag?: unknown; total?: unknown; correct?: unknown };
     if (!isKnownTag(candidate.tag)) continue;
     if (!isInteger(candidate.total) || !isInteger(candidate.correct)) continue;
-    if (candidate.total < 1 || candidate.correct < 0 || candidate.correct > candidate.total) continue;
+    if (candidate.total < 1 || candidate.correct < 0 || candidate.correct > candidate.total)
+      continue;
 
     const existing = stats.get(candidate.tag) ?? { tag: candidate.tag, total: 0, correct: 0 };
     existing.total += candidate.total;
@@ -65,9 +63,9 @@ function normalizeTagStats(value: unknown): MinimalPairTagStat[] {
   return [...stats.values()];
 }
 
-export function normalizeMinimalPairsPayload(body: unknown):
-  | { ok: true; value: MinimalPairsPayload }
-  | { ok: false; error: string } {
+export function normalizeMinimalPairsPayload(
+  body: unknown,
+): { ok: true; value: MinimalPairsPayload } | { ok: false; error: string } {
   if (!body || typeof body !== "object") {
     return { ok: false, error: "Invalid JSON body" };
   }
@@ -84,11 +82,11 @@ export function normalizeMinimalPairsPayload(body: unknown):
     return { ok: false, error: "mode must be 'listen' or 'speak'" };
   }
   if (
-    !isInteger(data.total)
-    || !isInteger(data.correct)
-    || data.total < 1
-    || data.correct < 0
-    || data.correct > data.total
+    !isInteger(data.total) ||
+    !isInteger(data.correct) ||
+    data.total < 1 ||
+    data.correct < 0 ||
+    data.correct > data.total
   ) {
     return { ok: false, error: "Invalid total/correct values" };
   }

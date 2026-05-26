@@ -20,7 +20,9 @@ export function WordFamilySection({ wordFamily, onSearch }: WordFamilySectionPro
       <div className="flex flex-wrap items-center gap-2">
         {wordFamily.map((group) => (
           <div key={group.pos} className="flex items-center gap-1.5">
-            <span className="text-[11px] font-semibold uppercase tracking-wider text-text-muted">{group.pos}</span>
+            <span className="text-[11px] font-semibold uppercase tracking-wider text-text-muted">
+              {group.pos}
+            </span>
             {group.words.map((word) => (
               <button
                 key={word}

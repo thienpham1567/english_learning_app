@@ -1,10 +1,11 @@
-import { headers } from "next/headers";
-import { eq, and, desc, isNotNull, sql } from "drizzle-orm";
-import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { and, desc, eq, isNotNull, sql } from "drizzle-orm";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("listening/history");
+
 import { listeningExercise } from "@repo/database";
 
 /**
@@ -25,7 +26,10 @@ export async function GET(request: Request) {
   const level = url.searchParams.get("level");
   const bookmarked = url.searchParams.get("bookmarked");
   const page = Math.max(1, parseInt(url.searchParams.get("page") ?? "1", 10));
-  const pageSize = Math.min(50, Math.max(1, parseInt(url.searchParams.get("pageSize") ?? "20", 10)));
+  const pageSize = Math.min(
+    50,
+    Math.max(1, parseInt(url.searchParams.get("pageSize") ?? "20", 10)),
+  );
 
   try {
     // Build conditions

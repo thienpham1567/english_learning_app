@@ -1,6 +1,5 @@
 "use client";
 
-import { useRef, useState, useEffect, useCallback } from "react";
 import {
   AlertTriangle,
   Eraser,
@@ -12,6 +11,7 @@ import {
   Scissors,
   Zap,
 } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 // ── Speed presets (AC1) ──
 const SPEED_OPTIONS = [0.5, 0.75, 1, 1.25, 1.5] as const;
@@ -132,7 +132,11 @@ export function AudioPlayer({
     if (Number.isFinite(audio.duration) && audio.duration > 0) return;
     // Set a delayed error only for truly stuck cases
     const timer = setTimeout(() => {
-      if (audioRef.current && audioRef.current.buffered.length === 0 && !Number.isFinite(audioRef.current.duration)) {
+      if (
+        audioRef.current &&
+        audioRef.current.buffered.length === 0 &&
+        !Number.isFinite(audioRef.current.duration)
+      ) {
         setIsLoading(false);
         setAudioError("Tải audio bị gián đoạn. Nhấn Nghe lại để thử lại.");
       }
@@ -249,12 +253,15 @@ export function AudioPlayer({
   }, [selfManagedSpeed, onCycleSpeed]);
 
   // ── Seek by delta ──
-  const seekDelta = useCallback((deltaSec: number) => {
-    if (!audioRef.current) return;
-    const newTime = Math.max(0, Math.min(audioRef.current.currentTime + deltaSec, duration));
-    audioRef.current.currentTime = newTime;
-    setCurrentTime(newTime);
-  }, [duration]);
+  const seekDelta = useCallback(
+    (deltaSec: number) => {
+      if (!audioRef.current) return;
+      const newTime = Math.max(0, Math.min(audioRef.current.currentTime + deltaSec, duration));
+      audioRef.current.currentTime = newTime;
+      setCurrentTime(newTime);
+    },
+    [duration],
+  );
 
   // ── Keyboard shortcuts (AC5) ──
   useEffect(() => {
@@ -263,7 +270,8 @@ export function AudioPlayer({
 
     const handler = (e: KeyboardEvent) => {
       // Only respond when player container or its children are focused
-      if (!container.contains(document.activeElement) && document.activeElement !== container) return;
+      if (!container.contains(document.activeElement) && document.activeElement !== container)
+        return;
       // Don't fire when typing in input/textarea
       const tag = (document.activeElement as HTMLElement)?.tagName;
       if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
@@ -342,7 +350,12 @@ export function AudioPlayer({
   const canLoop = markerA != null && markerB != null;
 
   return (
-    <div ref={containerRef} tabIndex={0} className={`${className} bg-(--surface) border-2 border-border rounded-(--radius-lg) flex flex-col gap-3.5`} style={{padding: "20px", outline: "none"}} >
+    <div
+      ref={containerRef}
+      tabIndex={0}
+      className={`${className} bg-(--surface) border-2 border-border rounded-(--radius-lg) flex flex-col gap-3.5`}
+      style={{ padding: "20px", outline: "none" }}
+    >
       {/* Hidden audio element */}
       <audio
         ref={audioRef}
@@ -360,39 +373,96 @@ export function AudioPlayer({
 
       {/* Audio error message */}
       {audioError && (
-        <div className="rounded-(--radius-sm) text-destructive text-xs text-center" style={{padding: "8px 14px", background: "var(--error-bg)", border: "1px solid color-mix(in srgb, var(--error) 20%, transparent)"}} >
+        <div
+          className="rounded-(--radius-sm) text-destructive text-xs text-center"
+          style={{
+            padding: "8px 14px",
+            background: "var(--error-bg)",
+            border: "1px solid color-mix(in srgb, var(--error) 20%, transparent)",
+          }}
+        >
           <AlertTriangle style={{ marginRight: 6 }} /> {audioError}
         </div>
       )}
 
       {/* Play button + seek bar */}
-      <div className="flex items-center gap-3" >
+      <div className="flex items-center gap-3">
         <button
           onClick={togglePlay}
-          disabled={isLoading} className="bg-none border-none text-accent text-[36px] leading-none flex" style={{cursor: isLoading ? "wait" : "pointer", padding: 0, transition: "transform 0.15s ease"}} >
+          disabled={isLoading}
+          className="bg-none border-none text-accent text-[36px] leading-none flex"
+          style={{
+            cursor: isLoading ? "wait" : "pointer",
+            padding: 0,
+            transition: "transform 0.15s ease",
+          }}
+        >
           {isPlaying ? <PauseCircle /> : <PlayCircle />}
         </button>
 
-        <div className="flex-1 flex flex-col gap-1" >
+        <div className="flex-1 flex flex-col gap-1">
           {/* Seek bar with marker ticks (Task 4 visual polish) */}
-          <div className="relative h-[6px]" style={{borderRadius: 3, background: "var(--border)", overflow: "visible"}} >
+          <div
+            className="relative h-[6px]"
+            style={{ borderRadius: 3, background: "var(--border)", overflow: "visible" }}
+          >
             {/* A-B highlighted region */}
             {markerAPos != null && markerBPos != null && (
-              <div className="absolute h-full" style={{left: `${markerAPos}%`, width: `${markerBPos - markerAPos}%`, top: 0, background: looping ? "color-mix(in srgb, var(--success) 30%, transparent)" : "color-mix(in srgb, var(--info) 20%, transparent)", borderRadius: 3, transition: "background 0.2s ease"}} />
+              <div
+                className="absolute h-full"
+                style={{
+                  left: `${markerAPos}%`,
+                  width: `${markerBPos - markerAPos}%`,
+                  top: 0,
+                  background: looping
+                    ? "color-mix(in srgb, var(--success) 30%, transparent)"
+                    : "color-mix(in srgb, var(--info) 20%, transparent)",
+                  borderRadius: 3,
+                  transition: "background 0.2s ease",
+                }}
+              />
             )}
             {/* Progress fill */}
-            <div className="absolute h-full" style={{left: 0, top: 0, width: `${progress}%`, background: "linear-gradient(90deg, var(--accent), var(--accent-hover))", borderRadius: 3, transition: "width 0.1s linear"}} />
+            <div
+              className="absolute h-full"
+              style={{
+                left: 0,
+                top: 0,
+                width: `${progress}%`,
+                background: "linear-gradient(90deg, var(--accent), var(--accent-hover))",
+                borderRadius: 3,
+                transition: "width 0.1s linear",
+              }}
+            />
             {/* Marker A tick */}
             {markerAPos != null && (
               <div
-                
-                title={`A: ${formatTime(markerA!)}`} className="absolute w-[3px] h-[12px]" style={{left: `${markerAPos}%`, top: -3, background: "var(--success)", borderRadius: 1, transform: "translateX(-50%)", zIndex: 2}} />
+                title={`A: ${formatTime(markerA!)}`}
+                className="absolute w-[3px] h-[12px]"
+                style={{
+                  left: `${markerAPos}%`,
+                  top: -3,
+                  background: "var(--success)",
+                  borderRadius: 1,
+                  transform: "translateX(-50%)",
+                  zIndex: 2,
+                }}
+              />
             )}
             {/* Marker B tick */}
             {markerBPos != null && (
               <div
-                
-                title={`B: ${formatTime(markerB!)}`} className="absolute w-[3px] h-[12px]" style={{left: `${markerBPos}%`, top: -3, background: "var(--error)", borderRadius: 1, transform: "translateX(-50%)", zIndex: 2}} />
+                title={`B: ${formatTime(markerB!)}`}
+                className="absolute w-[3px] h-[12px]"
+                style={{
+                  left: `${markerBPos}%`,
+                  top: -3,
+                  background: "var(--error)",
+                  borderRadius: 1,
+                  transform: "translateX(-50%)",
+                  zIndex: 2,
+                }}
+              />
             )}
             <input
               type="range"
@@ -400,11 +470,14 @@ export function AudioPlayer({
               max={duration || 0}
               step={0.1}
               value={currentTime}
-              onChange={handleSeek} className="absolute w-full h-[14px] cursor-pointer m-0" style={{top: -4, left: 0, opacity: 0}} />
+              onChange={handleSeek}
+              className="absolute w-full h-[14px] cursor-pointer m-0"
+              style={{ top: -4, left: 0, opacity: 0 }}
+            />
           </div>
 
           {/* Time display */}
-          <div className="flex justify-between text-[11px] text-text-muted" >
+          <div className="flex justify-between text-[11px] text-text-muted">
             <span>{formatTime(currentTime)}</span>
             <span>{isLoading ? "Loading..." : formatTime(duration)}</span>
           </div>
@@ -412,51 +485,102 @@ export function AudioPlayer({
       </div>
 
       {/* Controls row: replay + speed */}
-      <div className="flex justify-center gap-2.5 flex-wrap" >
+      <div className="flex justify-center gap-2.5 flex-wrap">
         {/* Replay button */}
         <button
           onClick={handleReplay}
-          disabled={replaysUsed >= maxReplays} className="flex items-center gap-1.5 rounded-(--radius-sm) border-2 border-border text-xs font-medium" style={{padding: "8px 14px", background: replaysUsed >= maxReplays ? "var(--border)" : "var(--surface)", color: replaysUsed >= maxReplays ? "var(--text-muted)" : "var(--text)", cursor: replaysUsed >= maxReplays ? "not-allowed" : "pointer", transition: "all 0.15s ease"}} >
+          disabled={replaysUsed >= maxReplays}
+          className="flex items-center gap-1.5 rounded-(--radius-sm) border-2 border-border text-xs font-medium"
+          style={{
+            padding: "8px 14px",
+            background: replaysUsed >= maxReplays ? "var(--border)" : "var(--surface)",
+            color: replaysUsed >= maxReplays ? "var(--text-muted)" : "var(--text)",
+            cursor: replaysUsed >= maxReplays ? "not-allowed" : "pointer",
+            transition: "all 0.15s ease",
+          }}
+        >
           <RefreshCw />
           Nghe lại ({maxReplays - replaysUsed}/{maxReplays})
         </button>
 
         {/* Speed control (AC1) */}
         <button
-          onClick={handleCycleSpeed} className="flex items-center gap-1.5 rounded-(--radius-sm) border-2 border-border cursor-pointer text-xs font-semibold w-[80px] justify-center" style={{padding: "8px 14px", background: speed !== 1 ? "var(--accent-surface, rgba(99,102,241,0.08))" : "var(--surface)", color: speed !== 1 ? "var(--accent)" : "var(--text)", transition: "all 0.15s ease"}} >
+          onClick={handleCycleSpeed}
+          className="flex items-center gap-1.5 rounded-(--radius-sm) border-2 border-border cursor-pointer text-xs font-semibold w-[80px] justify-center"
+          style={{
+            padding: "8px 14px",
+            background:
+              speed !== 1 ? "var(--accent-surface, rgba(99,102,241,0.08))" : "var(--surface)",
+            color: speed !== 1 ? "var(--accent)" : "var(--text)",
+            transition: "all 0.15s ease",
+          }}
+        >
           <Zap />
           {speed}×
         </button>
       </div>
 
       {/* A-B Loop controls (AC2) */}
-      <div className="flex justify-center gap-2 flex-wrap pt-3" style={{borderTop: "1px solid var(--border)"}} >
+      <div
+        className="flex justify-center gap-2 flex-wrap pt-3"
+        style={{ borderTop: "1px solid var(--border)" }}
+      >
         {/* Set A */}
         <button
           onClick={setA}
           disabled={isLoading}
-          
-          title="Set A marker [ [ ]" className="flex items-center gap-1 py-1.5 px-3 rounded-(--radius-sm) cursor-pointer text-[11px] font-semibold" style={{border: markerA != null ? "1px solid var(--success)" : "1px solid var(--border)", background: markerA != null ? "color-mix(in srgb, var(--success) 8%, transparent)" : "var(--surface)", color: markerA != null ? "var(--success)" : "var(--text-muted)", transition: "all 0.15s ease"}} >
-          <Scissors />
-          A{markerA != null ? ` ${formatTime(markerA)}` : ""}
+          title="Set A marker [ [ ]"
+          className="flex items-center gap-1 py-1.5 px-3 rounded-(--radius-sm) cursor-pointer text-[11px] font-semibold"
+          style={{
+            border: markerA != null ? "1px solid var(--success)" : "1px solid var(--border)",
+            background:
+              markerA != null
+                ? "color-mix(in srgb, var(--success) 8%, transparent)"
+                : "var(--surface)",
+            color: markerA != null ? "var(--success)" : "var(--text-muted)",
+            transition: "all 0.15s ease",
+          }}
+        >
+          <Scissors />A{markerA != null ? ` ${formatTime(markerA)}` : ""}
         </button>
 
         {/* Set B */}
         <button
           onClick={setB}
           disabled={!canSetB || isLoading}
-          
-          title="Set B marker [ ] ]" className="flex items-center gap-1 py-1.5 px-3 rounded-(--radius-sm) text-[11px] font-semibold" style={{border: markerB != null ? "1px solid var(--error)" : "1px solid var(--border)", background: markerB != null ? "color-mix(in srgb, var(--error) 8%, transparent)" : "var(--surface)", color: markerB != null ? "var(--error)" : canSetB ? "var(--text-muted)" : "var(--border)", cursor: canSetB ? "pointer" : "not-allowed", transition: "all 0.15s ease"}} >
-          <Scissors />
-          B{markerB != null ? ` ${formatTime(markerB)}` : ""}
+          title="Set B marker [ ] ]"
+          className="flex items-center gap-1 py-1.5 px-3 rounded-(--radius-sm) text-[11px] font-semibold"
+          style={{
+            border: markerB != null ? "1px solid var(--error)" : "1px solid var(--border)",
+            background:
+              markerB != null
+                ? "color-mix(in srgb, var(--error) 8%, transparent)"
+                : "var(--surface)",
+            color:
+              markerB != null ? "var(--error)" : canSetB ? "var(--text-muted)" : "var(--border)",
+            cursor: canSetB ? "pointer" : "not-allowed",
+            transition: "all 0.15s ease",
+          }}
+        >
+          <Scissors />B{markerB != null ? ` ${formatTime(markerB)}` : ""}
         </button>
 
         {/* Toggle Loop */}
         <button
           onClick={toggleLoop}
           disabled={!canLoop}
-          
-          title="Toggle loop [ L ]" className="flex items-center gap-1 py-1.5 px-3 rounded-(--radius-sm) text-[11px] font-semibold" style={{border: looping ? "1px solid var(--success)" : "1px solid var(--border)", background: looping ? "color-mix(in srgb, var(--success) 12%, transparent)" : "var(--surface)", color: looping ? "var(--success)" : canLoop ? "var(--text-muted)" : "var(--border)", cursor: canLoop ? "pointer" : "not-allowed", transition: "all 0.15s ease"}} >
+          title="Toggle loop [ L ]"
+          className="flex items-center gap-1 py-1.5 px-3 rounded-(--radius-sm) text-[11px] font-semibold"
+          style={{
+            border: looping ? "1px solid var(--success)" : "1px solid var(--border)",
+            background: looping
+              ? "color-mix(in srgb, var(--success) 12%, transparent)"
+              : "var(--surface)",
+            color: looping ? "var(--success)" : canLoop ? "var(--text-muted)" : "var(--border)",
+            cursor: canLoop ? "pointer" : "not-allowed",
+            transition: "all 0.15s ease",
+          }}
+        >
           <Repeat size={13} />
           {looping ? "Looping" : "Loop"}
         </button>
@@ -465,17 +589,28 @@ export function AudioPlayer({
         <button
           onClick={clearMarkers}
           disabled={markerA == null && markerB == null}
-          
-          title="Clear markers" className="flex items-center gap-1 py-1.5 px-3 rounded-(--radius-sm) border-2 border-border bg-(--surface) text-[11px] font-semibold" style={{color: markerA != null || markerB != null ? "var(--text)" : "var(--border)", cursor: markerA != null || markerB != null ? "pointer" : "not-allowed", transition: "all 0.15s ease"}} >
+          title="Clear markers"
+          className="flex items-center gap-1 py-1.5 px-3 rounded-(--radius-sm) border-2 border-border bg-(--surface) text-[11px] font-semibold"
+          style={{
+            color: markerA != null || markerB != null ? "var(--text)" : "var(--border)",
+            cursor: markerA != null || markerB != null ? "pointer" : "not-allowed",
+            transition: "all 0.15s ease",
+          }}
+        >
           <Eraser />
           Clear
         </button>
       </div>
 
       {/* preservesPitch note (AC3) */}
-      <div className="text-[10px] text-text-muted text-center" >
-        {speed !== 1 && <><Headphones className="mr-1" /> Pitch preserved · </>}
-        Shortcuts: [ ] Set A/B · L Loop · ←/→ ±3s{selfManagedSpeed ? " · ,/. Speed" : ""} · Space Play/Pause
+      <div className="text-[10px] text-text-muted text-center">
+        {speed !== 1 && (
+          <>
+            <Headphones className="mr-1" /> Pitch preserved ·{" "}
+          </>
+        )}
+        Shortcuts: [ ] Set A/B · L Loop · ←/→ ±3s{selfManagedSpeed ? " · ,/. Speed" : ""} · Space
+        Play/Pause
       </div>
     </div>
   );

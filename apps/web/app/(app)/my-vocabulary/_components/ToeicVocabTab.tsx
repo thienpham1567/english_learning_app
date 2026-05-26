@@ -1,12 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
-import Link from "next/link";
-import * as m from "motion/react-client";
-
 import { Progress } from "antd";
-import { api } from "@/lib/api-client";
-import { useAudioPlayer } from "@/hooks/useAudioPlayer";
 import {
   ArrowLeft,
   BookOpen,
@@ -17,6 +11,11 @@ import {
   Star,
   Volume2,
 } from "lucide-react";
+import * as m from "motion/react-client";
+import Link from "next/link";
+import { useCallback, useEffect, useState } from "react";
+import { useAudioPlayer } from "@/hooks/useAudioPlayer";
+import { api } from "@/lib/api-client";
 
 type ToeicWord = {
   id: string;
@@ -68,15 +67,16 @@ export function ToeicVocabTab() {
 
   // Load topic packs
   useEffect(() => {
-    api.get<{ packs: Pack[] }>("/toeic-vocab/due")
-      .then(data => {
+    api
+      .get<{ packs: Pack[] }>("/toeic-vocab/due")
+      .then((data) => {
         // The /due endpoint might not have packs, use a simpler approach
       })
       .catch(() => {});
 
     // Fetch topic counts from a simple endpoint
     fetch("/api/toeic-vocab/pack/office")
-      .then(r => r.json())
+      .then((r) => r.json())
       .then(() => {})
       .catch(() => {});
   }, []);
@@ -91,9 +91,10 @@ export function ToeicVocabTab() {
         const results: Pack[] = [];
         for (const topic of topics) {
           try {
-            const data = await api.get<{ words: ToeicWord[]; progress: Record<string, WordProgress> }>(
-              `/toeic-vocab/pack/${topic}`
-            );
+            const data = await api.get<{
+              words: ToeicWord[];
+              progress: Record<string, WordProgress>;
+            }>(`/toeic-vocab/pack/${topic}`);
             results.push({
               topic,
               total: data.words?.length ?? 0,
@@ -104,14 +105,16 @@ export function ToeicVocabTab() {
           }
         }
         if (!cancelled) {
-          setPacks(results.filter(p => p.total > 0));
+          setPacks(results.filter((p) => p.total > 0));
           setLoading(false);
         }
       } catch {
         if (!cancelled) setLoading(false);
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   // Load words for selected topic
@@ -122,7 +125,7 @@ export function ToeicVocabTab() {
     setSearchQuery("");
     try {
       const data = await api.get<{ words: ToeicWord[]; progress: Record<string, WordProgress> }>(
-        `/toeic-vocab/pack/${topic}`
+        `/toeic-vocab/pack/${topic}`,
       );
       setWords(data.words ?? []);
       setProgress(data.progress ?? {});
@@ -134,9 +137,11 @@ export function ToeicVocabTab() {
     }
   }, []);
 
-  const filteredWords = words.filter(w =>
-    !searchQuery || w.word.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    w.meaningVi.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredWords = words.filter(
+    (w) =>
+      !searchQuery ||
+      w.word.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      w.meaningVi.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const totalLearned = packs.reduce((acc, p) => acc + p.learned, 0);
@@ -145,7 +150,7 @@ export function ToeicVocabTab() {
 
   if (loading) {
     return (
-      <div className="flex justify-center" style={{padding: 60}} >
+      <div className="flex justify-center" style={{ padding: 60 }}>
         <Loader2 className="animate-spin text-accent" size={24} />
       </div>
     );
@@ -153,50 +158,74 @@ export function ToeicVocabTab() {
 
   // Topic detail view
   if (activeTopic) {
-    const meta = TOPIC_META[activeTopic] ?? { emoji: "📖", label: activeTopic, color: "var(--accent)" };
-    const topicPack = packs.find(p => p.topic === activeTopic);
-    const topicPct = topicPack && topicPack.total > 0
-      ? Math.round((topicPack.learned / topicPack.total) * 100) : 0;
+    const meta = TOPIC_META[activeTopic] ?? {
+      emoji: "📖",
+      label: activeTopic,
+      color: "var(--accent)",
+    };
+    const topicPack = packs.find((p) => p.topic === activeTopic);
+    const topicPct =
+      topicPack && topicPack.total > 0
+        ? Math.round((topicPack.learned / topicPack.total) * 100)
+        : 0;
 
     return (
-      <div className="w-[700px] mx-auto w-full" >
+      <div className="w-[700px] mx-auto w-full">
         {/* Back button + header */}
-        <div className="flex items-center gap-3 mb-5" >
+        <div className="flex items-center gap-3 mb-5">
           <button
             type="button"
-            onClick={() => setActiveTopic(null)} className="w-[36px] h-[36px] border-2 border-border bg-(--surface) text-text-secondary cursor-pointer grid text-sm" style={{borderRadius: 10, placeItems: "center"}} >
+            onClick={() => setActiveTopic(null)}
+            className="w-[36px] h-[36px] border-2 border-border bg-(--surface) text-text-secondary cursor-pointer grid text-sm"
+            style={{ borderRadius: 10, placeItems: "center" }}
+          >
             <ArrowLeft />
           </button>
           <div>
-            <div className="text-lg font-extrabold text-ink" >
+            <div className="text-lg font-extrabold text-ink">
               {meta.emoji} {meta.label}
             </div>
-            <div className="text-text-muted text-xs" >
+            <div className="text-text-muted text-xs">
               {topicPack?.learned ?? 0}/{topicPack?.total ?? 0} từ đã học · {topicPct}%
             </div>
           </div>
           <Link
-            href={`/toeic/vocab/learn?pack=${encodeURIComponent(activeTopic)}&mode=new`} className="rounded-full text-[13px] font-bold" style={{marginLeft: "auto", padding: "8px 18px", background: meta.color, color: "#fff", textDecoration: "none"}} >
+            href={`/toeic/vocab/learn?pack=${encodeURIComponent(activeTopic)}&mode=new`}
+            className="rounded-full text-[13px] font-bold"
+            style={{
+              marginLeft: "auto",
+              padding: "8px 18px",
+              background: meta.color,
+              color: "#fff",
+              textDecoration: "none",
+            }}
+          >
             Học ngay
           </Link>
         </div>
 
         {/* Search */}
-        <div className="relative mb-4" >
-          <Search className="absolute text-text-muted text-sm" style={{left: 14, top: "50%", transform: "translateY(-50%)"}} />
+        <div className="relative mb-4">
+          <Search
+            className="absolute text-text-muted text-sm"
+            style={{ left: 14, top: "50%", transform: "translateY(-50%)" }}
+          />
           <input
             type="text"
             placeholder="Tìm từ trong chủ đề..."
             value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)} className="w-full rounded-xl border-2 border-border bg-(--surface) text-sm text-ink" style={{padding: "10px 14px 10px 40px", outline: "none"}} />
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full rounded-xl border-2 border-border bg-(--surface) text-sm text-ink"
+            style={{ padding: "10px 14px 10px 40px", outline: "none" }}
+          />
         </div>
 
         {wordsLoading ? (
-          <div className="flex justify-center" style={{padding: 40}} >
+          <div className="flex justify-center" style={{ padding: 40 }}>
             <Loader2 className="animate-spin text-accent" size={24} />
           </div>
         ) : (
-          <div className="flex flex-col gap-1.5" >
+          <div className="flex flex-col gap-1.5">
             {filteredWords.map((w, i) => {
               const isLearned = !!progress[w.id];
               const isExpanded = expandedWord === w.id;
@@ -205,80 +234,130 @@ export function ToeicVocabTab() {
                   key={w.id}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: Math.min(i * 0.02, 0.5) }} className="border-2 border-border overflow-hidden" style={{borderRadius: 14, background: isExpanded
+                  transition={{ delay: Math.min(i * 0.02, 0.5) }}
+                  className="border-2 border-border overflow-hidden"
+                  style={{
+                    borderRadius: 14,
+                    background: isExpanded
                       ? "color-mix(in srgb, var(--accent) 4%, var(--surface))"
-                      : "var(--surface)", transition: "background 0.2s"}} >
+                      : "var(--surface)",
+                    transition: "background 0.2s",
+                  }}
+                >
                   {/* Row */}
                   <button
                     type="button"
-                    onClick={() => setExpandedWord(isExpanded ? null : w.id)} className="w-full flex items-center gap-3 py-3 px-4 border-none bg-transparent cursor-pointer text-left" >
-                    <div className="w-[28px] h-[28px] rounded-lg grid shrink-0 text-xs" style={{placeItems: "center", background: isLearned
-                        ? "color-mix(in srgb, var(--success) 12%, var(--surface))"
-                        : "var(--bg-deep)", color: isLearned ? "var(--success)" : "var(--text-muted)"}} >
-                      {isLearned ? <CheckCircle /> : <span className="font-extrabold text-[11px]" >{i + 1}</span>}
+                    onClick={() => setExpandedWord(isExpanded ? null : w.id)}
+                    className="w-full flex items-center gap-3 py-3 px-4 border-none bg-transparent cursor-pointer text-left"
+                  >
+                    <div
+                      className="w-[28px] h-[28px] rounded-lg grid shrink-0 text-xs"
+                      style={{
+                        placeItems: "center",
+                        background: isLearned
+                          ? "color-mix(in srgb, var(--success) 12%, var(--surface))"
+                          : "var(--bg-deep)",
+                        color: isLearned ? "var(--success)" : "var(--text-muted)",
+                      }}
+                    >
+                      {isLearned ? (
+                        <CheckCircle />
+                      ) : (
+                        <span className="font-extrabold text-[11px]">{i + 1}</span>
+                      )}
                     </div>
-                    <div className="flex-1 w-[0px]" >
-                      <div className="flex items-center gap-2" >
-                        <span className="text-[15px] font-bold text-ink" >
-                          {w.word}
-                        </span>
-                        <span className="text-[11px] text-text-muted italic" >
-                          {w.pos}
-                        </span>
+                    <div className="flex-1 w-[0px]">
+                      <div className="flex items-center gap-2">
+                        <span className="text-[15px] font-bold text-ink">{w.word}</span>
+                        <span className="text-[11px] text-text-muted italic">{w.pos}</span>
                       </div>
-                      <div className="text-[13px] text-text-secondary overflow-hidden" style={{marginTop: 2, textOverflow: "ellipsis", whiteSpace: "nowrap"}} >
+                      <div
+                        className="text-[13px] text-text-secondary overflow-hidden"
+                        style={{ marginTop: 2, textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+                      >
                         {w.meaningVi}
                       </div>
                     </div>
-                    <ChevronRight className="text-[10px] text-text-muted" style={{transform: isExpanded ? "rotate(90deg)" : "none", transition: "transform 0.2s"}} />
+                    <ChevronRight
+                      className="text-[10px] text-text-muted"
+                      style={{
+                        transform: isExpanded ? "rotate(90deg)" : "none",
+                        transition: "transform 0.2s",
+                      }}
+                    />
                   </button>
 
                   {/* Expanded detail */}
                   {isExpanded && (
-                    <div className="anim-fade-in flex flex-col gap-2.5" style={{padding: "0 16px 16px"}} >
-                      <div className="h-[1px]" style={{background: "var(--border)"}} />
+                    <div
+                      className="anim-fade-in flex flex-col gap-2.5"
+                      style={{ padding: "0 16px 16px" }}
+                    >
+                      <div className="h-[1px]" style={{ background: "var(--border)" }} />
 
                       {/* IPA + Audio */}
-                      <div className="flex items-center gap-2.5" >
+                      <div className="flex items-center gap-2.5">
                         {w.ipa && (
-                          <span className="rounded-md bg-bg-deep font-mono text-[13px] text-accent" style={{padding: "2px 8px"}} >
+                          <span
+                            className="rounded-md bg-bg-deep font-mono text-[13px] text-accent"
+                            style={{ padding: "2px 8px" }}
+                          >
                             {w.ipa}
                           </span>
                         )}
                         <button
                           type="button"
-                          onClick={(e) => { e.stopPropagation(); speak(w.word, "en-US"); }} className="w-[28px] h-[28px] rounded-md border-2 border-border bg-(--surface) cursor-pointer grid text-accent text-[13px]" style={{placeItems: "center"}} >
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            speak(w.word, "en-US");
+                          }}
+                          className="w-[28px] h-[28px] rounded-md border-2 border-border bg-(--surface) cursor-pointer grid text-accent text-[13px]"
+                          style={{ placeItems: "center" }}
+                        >
                           <Volume2 />
                         </button>
                       </div>
 
                       {/* Meanings */}
-                      <div className="flex flex-col gap-1.5" >
-                        <div className="text-xs font-bold text-text-muted uppercase tracking-widest" >
+                      <div className="flex flex-col gap-1.5">
+                        <div className="text-xs font-bold text-text-muted uppercase tracking-widest">
                           Nghĩa tiếng Anh
                         </div>
-                        <div className="text-sm text-ink leading-normal" >
-                          {w.meaningEn}
-                        </div>
+                        <div className="text-sm text-ink leading-normal">{w.meaningEn}</div>
                       </div>
 
                       {/* Example */}
                       {w.exampleEn && (
-                        <div className="bg-bg-deep" style={{padding: "10px 14px", borderRadius: 10, borderLeft: "3px solid var(--accent)"}} >
-                          <div className="text-[13px] text-ink italic leading-normal" >
+                        <div
+                          className="bg-bg-deep"
+                          style={{
+                            padding: "10px 14px",
+                            borderRadius: 10,
+                            borderLeft: "3px solid var(--accent)",
+                          }}
+                        >
+                          <div className="text-[13px] text-ink italic leading-normal">
                             &ldquo;{w.exampleEn}&rdquo;
                           </div>
                           {w.exampleVi && (
-                            <div className="text-xs text-text-muted mt-1" >
-                              → {w.exampleVi}
-                            </div>
+                            <div className="text-xs text-text-muted mt-1">→ {w.exampleVi}</div>
                           )}
                         </div>
                       )}
 
                       {/* Action */}
                       <Link
-                        href={`/toeic/vocab/learn?pack=${encodeURIComponent(activeTopic)}&mode=new`} className="items-center gap-1.5 rounded-full text-xs font-bold" style={{display: "inline-flex", padding: "7px 16px", background: meta.color, color: "#fff", textDecoration: "none", alignSelf: "flex-start"}} >
+                        href={`/toeic/vocab/learn?pack=${encodeURIComponent(activeTopic)}&mode=new`}
+                        className="items-center gap-1.5 rounded-full text-xs font-bold"
+                        style={{
+                          display: "inline-flex",
+                          padding: "7px 16px",
+                          background: meta.color,
+                          color: "#fff",
+                          textDecoration: "none",
+                          alignSelf: "flex-start",
+                        }}
+                      >
                         <BookOpen /> Học từ này
                       </Link>
                     </div>
@@ -294,32 +373,47 @@ export function ToeicVocabTab() {
 
   // Topics grid
   return (
-    <div className="w-[700px] mx-auto w-full" >
+    <div className="w-[700px] mx-auto w-full">
       {/* Overall progress */}
       <m.div
-        initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="bg-(--surface) border-2 border-border mb-5" style={{padding: "20px 22px", borderRadius: 18}} >
-        <div className="flex items-center justify-between mb-3" >
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="bg-(--surface) border-2 border-border mb-5"
+        style={{ padding: "20px 22px", borderRadius: 18 }}
+      >
+        <div className="flex items-center justify-between mb-3">
           <div>
-            <div className="text-sm font-bold text-ink" >
-              Tiến độ tổng thể
-            </div>
-            <div className="text-xs text-text-muted" style={{marginTop: 2}} >
+            <div className="text-sm font-bold text-ink">Tiến độ tổng thể</div>
+            <div className="text-xs text-text-muted" style={{ marginTop: 2 }}>
               {totalLearned} / {totalWords} từ đã học
             </div>
           </div>
-          <div className="text-[28px] font-black text-accent font-display" >
-            {overallPct}%
-          </div>
+          <div className="text-[28px] font-black text-accent font-display">{overallPct}%</div>
         </div>
-        <div className="h-[6px]" style={{borderRadius: 3, background: "var(--border)"}} >
-          <div className="h-full" style={{width: `${overallPct}%`, borderRadius: 3, background: "linear-gradient(90deg, var(--accent), var(--secondary))", transition: "width 0.5s ease"}} />
+        <div className="h-[6px]" style={{ borderRadius: 3, background: "var(--border)" }}>
+          <div
+            className="h-full"
+            style={{
+              width: `${overallPct}%`,
+              borderRadius: 3,
+              background: "linear-gradient(90deg, var(--accent), var(--secondary))",
+              transition: "width 0.5s ease",
+            }}
+          />
         </div>
       </m.div>
 
       {/* Topics grid */}
-      <div className="grid gap-2.5" style={{gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))"}} >
+      <div
+        className="grid gap-2.5"
+        style={{ gridTemplateColumns: "repeat(auto-fill, minmax(200px, 1fr))" }}
+      >
         {packs.map((pack, i) => {
-          const meta = TOPIC_META[pack.topic] ?? { emoji: "📖", label: pack.topic, color: "var(--accent)" };
+          const meta = TOPIC_META[pack.topic] ?? {
+            emoji: "📖",
+            label: pack.topic,
+            color: "var(--accent)",
+          };
           const pct = pack.total > 0 ? Math.round((pack.learned / pack.total) * 100) : 0;
           return (
             <m.button
@@ -330,16 +424,23 @@ export function ToeicVocabTab() {
               transition={{ delay: i * 0.04 }}
               whileHover={{ y: -3, boxShadow: "var(--shadow-md)" }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => loadTopic(pack.topic)} className="rounded-2xl text-left border-2 border-border bg-(--surface) cursor-pointer flex flex-col gap-2.5" style={{padding: "18px 16px"}} >
-              <div className="flex items-center gap-2.5" >
-                <div className="w-[40px] h-[40px] rounded-xl grid text-xl" style={{placeItems: "center", background: `color-mix(in srgb, ${meta.color} 10%, var(--surface))`}} >
+              onClick={() => loadTopic(pack.topic)}
+              className="rounded-2xl text-left border-2 border-border bg-(--surface) cursor-pointer flex flex-col gap-2.5"
+              style={{ padding: "18px 16px" }}
+            >
+              <div className="flex items-center gap-2.5">
+                <div
+                  className="w-[40px] h-[40px] rounded-xl grid text-xl"
+                  style={{
+                    placeItems: "center",
+                    background: `color-mix(in srgb, ${meta.color} 10%, var(--surface))`,
+                  }}
+                >
                   {meta.emoji}
                 </div>
                 <div>
-                  <div className="text-sm font-bold text-ink" >
-                    {meta.label}
-                  </div>
-                  <div className="text-text-muted text-[11px]" >
+                  <div className="text-sm font-bold text-ink">{meta.label}</div>
+                  <div className="text-text-muted text-[11px]">
                     {pack.learned}/{pack.total} từ
                   </div>
                 </div>
@@ -348,16 +449,28 @@ export function ToeicVocabTab() {
                 percent={pct}
                 size="small"
                 showInfo={false}
-                strokeColor={pct < 30 ? "var(--error)" : pct < 70 ? "var(--warning)" : "var(--success)"} className="m-0" />
+                strokeColor={
+                  pct < 30 ? "var(--error)" : pct < 70 ? "var(--warning)" : "var(--success)"
+                }
+                className="m-0"
+              />
             </m.button>
           );
         })}
       </div>
 
       {/* Learn button */}
-      <div className="flex justify-center mt-6" >
+      <div className="flex justify-center mt-6">
         <Link
-          href="/toeic/vocab/learn?mode=review" className="rounded-full text-sm font-bold" style={{padding: "12px 28px", background: "var(--accent)", color: "var(--text-on-accent)", textDecoration: "none"}} >
+          href="/toeic/vocab/learn?mode=review"
+          className="rounded-full text-sm font-bold"
+          style={{
+            padding: "12px 28px",
+            background: "var(--accent)",
+            color: "var(--text-on-accent)",
+            textDecoration: "none",
+          }}
+        >
           Ôn tập từ vựng
         </Link>
       </div>

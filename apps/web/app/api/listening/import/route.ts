@@ -1,16 +1,14 @@
-import { headers } from "next/headers";
+import ytdl from "@distube/ytdl-core";
+import { db, listeningImport } from "@repo/database";
 import { randomUUID } from "crypto";
 import { promises as fs } from "fs";
+import { headers } from "next/headers";
 import path from "path";
 import { z } from "zod";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { listeningImport } from "@repo/database";
+import { logger, routeLogger } from "@/lib/logger";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import ytdl from "@distube/ytdl-core";
-import { logger, routeLogger } from "@/lib/logger";
 
 // ── Constants ──
 const IMPORT_CACHE_DIR = path.join(
@@ -58,7 +56,13 @@ function isYouTubeUrl(urlStr: string): boolean {
 // ── Input schema ──
 const ImportInputSchema = z.object({
   url: z.string().url().max(2048),
-  maxDurationSec: z.number().int().min(30).max(MAX_DURATION_SEC).optional().default(MAX_DURATION_SEC),
+  maxDurationSec: z
+    .number()
+    .int()
+    .min(30)
+    .max(MAX_DURATION_SEC)
+    .optional()
+    .default(MAX_DURATION_SEC),
 });
 
 // ── Rate limiting (3/min/user — YouTube downloads are expensive) ──
@@ -79,13 +83,19 @@ function checkRateLimit(userId: string): boolean {
 }
 
 // ── YouTube audio download via @distube/ytdl-core (pure JS, works on Vercel) ──
-async function downloadYouTubeAudio(url: string, outPath: string, maxDurationSec: number): Promise<{ durationSec: number }> {
+async function downloadYouTubeAudio(
+  url: string,
+  outPath: string,
+  maxDurationSec: number,
+): Promise<{ durationSec: number }> {
   // Get video info first to check duration
   const info = await ytdl.getInfo(url);
   const durationSec = parseInt(info.videoDetails.lengthSeconds, 10);
 
   if (durationSec > maxDurationSec) {
-    throw new Error(`Video exceeds ${Math.floor(maxDurationSec / 60)} minute limit (${Math.round(durationSec / 60)} min).`);
+    throw new Error(
+      `Video exceeds ${Math.floor(maxDurationSec / 60)} minute limit (${Math.round(durationSec / 60)} min).`,
+    );
   }
 
   if (!info.videoDetails.isLiveContent === false && info.videoDetails.isLiveContent) {
@@ -124,7 +134,9 @@ async function downloadDirectAudio(url: string, outPath: string): Promise<{ dura
 
   const contentLength = parseInt(response.headers.get("content-length") ?? "0", 10);
   if (contentLength > MAX_FILE_SIZE) {
-    throw new Error(`File too large (${Math.round(contentLength / 1024 / 1024)}MB). Maximum is 25MB.`);
+    throw new Error(
+      `File too large (${Math.round(contentLength / 1024 / 1024)}MB). Maximum is 25MB.`,
+    );
   }
 
   const buf = Buffer.from(await response.arrayBuffer());
@@ -150,7 +162,12 @@ async function transcribeAudio(filePath: string): Promise<{
   const fileBuffer = await fs.readFile(filePath);
   const file = new File([fileBuffer], path.basename(filePath), { type: "audio/mpeg" });
 
-  const log = logger.child({ route: "listening/import", op: "transcribe", file: file.name, bytes: fileBuffer.length });
+  const log = logger.child({
+    route: "listening/import",
+    op: "transcribe",
+    file: file.name,
+    bytes: fileBuffer.length,
+  });
   log.info("whisper.request");
   const startMs = Date.now();
 
@@ -173,14 +190,18 @@ async function transcribeAudio(filePath: string): Promise<{
     throw new Error(`Groq Whisper ${response.status}: ${errText}`);
   }
 
-  const result = await response.json() as {
+  const result = (await response.json()) as {
     text: string;
     segments?: Array<{ start: number; end: number; text: string }>;
     duration?: number;
   };
 
   log.info(
-    { ms: Date.now() - startMs, chars: result.text?.length ?? 0, segments: result.segments?.length ?? 0 },
+    {
+      ms: Date.now() - startMs,
+      chars: result.text?.length ?? 0,
+      segments: result.segments?.length ?? 0,
+    },
     "whisper.done",
   );
 
@@ -264,7 +285,10 @@ export async function POST(request: Request) {
     const body = await request.json();
     const parsed = ImportInputSchema.safeParse(body);
     if (!parsed.success) {
-      return Response.json({ error: "Invalid input", details: parsed.error.flatten() }, { status: 400 });
+      return Response.json(
+        { error: "Invalid input", details: parsed.error.flatten() },
+        { status: 400 },
+      );
     }
 
     const { url, maxDurationSec } = parsed.data;
@@ -311,7 +335,10 @@ export async function POST(request: Request) {
     const transcription = await transcribeAudio(audioPath);
     if (!transcription.text.trim()) {
       await fs.unlink(audioPath).catch(() => {});
-      return Response.json({ error: "Could not transcribe audio — no speech detected." }, { status: 422 });
+      return Response.json(
+        { error: "Could not transcribe audio — no speech detected." },
+        { status: 422 },
+      );
     }
 
     if (transcription.duration > 0) {

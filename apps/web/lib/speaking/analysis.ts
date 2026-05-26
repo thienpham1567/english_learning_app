@@ -48,10 +48,7 @@ export function calculateWpm(transcript: string, durationMs: number): number {
  * C1 is open-ended ("150+"); use null for `max` to signal that no upper bound
  * should be used in the fluency penalty.
  */
-export const WPM_TARGETS: Record<
-  string,
-  { min: number; max: number | null; label: string }
-> = {
+export const WPM_TARGETS: Record<string, { min: number; max: number | null; label: string }> = {
   a2: { min: 90, max: 110, label: "A2: 90–110 wpm" },
   b1: { min: 110, max: 130, label: "B1: 110–130 wpm" },
   b2: { min: 130, max: 150, label: "B2: 130–150 wpm" },

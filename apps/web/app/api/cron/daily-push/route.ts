@@ -1,9 +1,7 @@
-import { NextResponse } from "next/server";
+import { db, errorLog, flashcardProgress, pushSubscription, userStreak } from "@repo/database";
 import { inArray, sql } from "drizzle-orm";
+import { NextResponse } from "next/server";
 import webpush from "web-push";
-
-import { db } from "@repo/database";
-import { pushSubscription, userStreak, flashcardProgress, errorLog } from "@repo/database";
 
 // VAPID keys — configured lazily to avoid build-time crash
 const VAPID_EMAIL = process.env.VAPID_EMAIL || "mailto:admin@thienglish.app";
@@ -23,8 +21,14 @@ function initWebPush() {
 // Streak-tier motivational messages for variety
 const STREAK_MESSAGES = {
   fire: [
-    { title: "🔥 Streak {n} ngày — phi thường!", body: "Tiếp tục đà chiến thắng! Bạn đang top 5% người dùng." },
-    { title: "⚡ {n} ngày liên tục!", body: "Mỗi ngày luyện tập là một bước gần hơn mục tiêu TOEIC." },
+    {
+      title: "🔥 Streak {n} ngày — phi thường!",
+      body: "Tiếp tục đà chiến thắng! Bạn đang top 5% người dùng.",
+    },
+    {
+      title: "⚡ {n} ngày liên tục!",
+      body: "Mỗi ngày luyện tập là một bước gần hơn mục tiêu TOEIC.",
+    },
   ],
   warm: [
     { title: "🔥 Streak {n} ngày!", body: "Đừng để mất streak! Hoàn thành 1 bài tập ngay." },
@@ -121,9 +125,10 @@ export async function GET(request: Request) {
 
     if (dueCount > 0) {
       title = `📚 ${dueCount} flashcard đang chờ bạn ôn`;
-      body = unresolvedErrors > 0
-        ? `Ôn tập ngay + ${unresolvedErrors} lỗi sai cần xem lại!`
-        : "Ôn tập ngay để không quên từ vựng!";
+      body =
+        unresolvedErrors > 0
+          ? `Ôn tập ngay + ${unresolvedErrors} lỗi sai cần xem lại!`
+          : "Ôn tập ngay để không quên từ vựng!";
     } else if (unresolvedErrors >= 5) {
       title = `📝 ${unresolvedErrors} lỗi sai chưa nắm`;
       body = "Mở Sổ lỗi sai để ôn lại những điểm yếu nhé!";
@@ -160,7 +165,12 @@ export async function GET(request: Request) {
     } catch (err: unknown) {
       failed++;
       // If subscription expired (410 Gone), mark for cleanup
-      if (err && typeof err === "object" && "statusCode" in err && (err as { statusCode: number }).statusCode === 410) {
+      if (
+        err &&
+        typeof err === "object" &&
+        "statusCode" in err &&
+        (err as { statusCode: number }).statusCode === 410
+      ) {
         staleEndpoints.push(sub.endpoint);
       }
     }

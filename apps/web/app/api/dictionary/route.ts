@@ -1,21 +1,21 @@
-import { NextResponse } from "next/server";
-import { toJSONSchema } from "zod";
+import { db } from "@repo/database";
 import { and, eq, gt } from "drizzle-orm";
 import { headers } from "next/headers";
-
+import { NextResponse } from "next/server";
+import { toJSONSchema } from "zod";
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("dictionary");
-import { vocabularyCache, userVocabulary } from "@repo/database";
+
+import { userVocabulary, vocabularyCache } from "@repo/database";
+import { classifyDictionaryEntry } from "@/lib/dictionary/classify-entry";
+import { getNearbyWords } from "@/lib/dictionary/nearby-words";
+import { ALLOWED_QUERY_PATTERN, normalizeDictionaryQuery } from "@/lib/dictionary/normalize-query";
+import { buildDictionaryInstructions } from "@/lib/dictionary/prompt";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { VocabularySchema, normalizeVocabulary, type Vocabulary } from "@/lib/schemas/vocabulary";
-import { ALLOWED_QUERY_PATTERN, normalizeDictionaryQuery } from "@/lib/dictionary/normalize-query";
-import { classifyDictionaryEntry } from "@/lib/dictionary/classify-entry";
-import { buildDictionaryInstructions } from "@/lib/dictionary/prompt";
-import { getNearbyWords } from "@/lib/dictionary/nearby-words";
+import { normalizeVocabulary, type Vocabulary, VocabularySchema } from "@/lib/schemas/vocabulary";
 
 /**
  * Returns true if the headword is plausibly related to the query.
@@ -87,8 +87,7 @@ export async function POST(req: Request) {
           (s) => !s.shortMeaningsVi || s.shortMeaningsVi.length === 0,
         );
         const isBadEntry =
-          cachedData.isNotEnglish ||
-          !isHeadwordConsistentWithQuery(cachedData.headword, cacheKey);
+          cachedData.isNotEnglish || !isHeadwordConsistentWithQuery(cachedData.headword, cacheKey);
 
         if (isBadEntry) {
           // Purge: LLM may also return isNotEnglish and short-circuit before the upsert.

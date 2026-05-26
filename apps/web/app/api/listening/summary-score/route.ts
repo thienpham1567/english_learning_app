@@ -1,23 +1,20 @@
+import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 
 import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("listening/summary-score");
-import { db } from "@repo/database";
-import { listeningExercise, listeningSummaryAttempt } from "@repo/database";
+
+import { db, listeningExercise, listeningSummaryAttempt } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 
 // ── Input validation (AC5) ──
 const SummaryScoreInputSchema = z.object({
   exerciseId: z.string().uuid(),
-  summary: z
-    .string()
-    .min(1, "Summary cannot be empty")
-    .max(2000, "Summary too long"), // server cap, word count checked below
+  summary: z.string().min(1, "Summary cannot be empty").max(2000, "Summary too long"), // server cap, word count checked below
 });
 
 // ── Rate limiting (AC5: 10/min/user) ──
@@ -110,7 +107,10 @@ export async function POST(request: Request) {
     const body = await request.json();
     const parsed = SummaryScoreInputSchema.safeParse(body);
     if (!parsed.success) {
-      return Response.json({ error: "Invalid input", details: parsed.error.flatten() }, { status: 400 });
+      return Response.json(
+        { error: "Invalid input", details: parsed.error.flatten() },
+        { status: 400 },
+      );
     }
 
     const { exerciseId, summary } = parsed.data;

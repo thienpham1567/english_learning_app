@@ -1,8 +1,7 @@
 import { headers } from "next/headers";
 import { z } from "zod";
-
-import { auth } from "@/lib/auth";
 import { getSkillProfile, levelToCefr, type SkillModule } from "@/lib/adaptive/difficulty";
+import { auth } from "@/lib/auth";
 
 const QuerySchema = z.object({
   module: z.enum(["grammar", "listening", "reading", "writing", "speaking"]),
@@ -22,7 +21,10 @@ export async function GET(request: Request) {
   const url = new URL(request.url);
   const parsed = QuerySchema.safeParse({ module: url.searchParams.get("module") });
   if (!parsed.success) {
-    return Response.json({ error: "Invalid module", details: parsed.error.flatten() }, { status: 400 });
+    return Response.json(
+      { error: "Invalid module", details: parsed.error.flatten() },
+      { status: 400 },
+    );
   }
 
   const profile = await getSkillProfile(session.user.id, parsed.data.module as SkillModule);

@@ -1,15 +1,15 @@
 "use client";
 
-import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-client";
+import { usePathname } from "next/navigation";
+import { ReactNode, useEffect, useState } from "react";
 import { AppSidebar } from "@/components/shared/AppSidebar";
 import { BottomTabBar } from "@/components/shared/BottomTabBar";
-import { UserMenu } from "@/components/shared/UserMenu";
-import { UserProvider } from "@/components/shared/UserContext";
-import { ToolbarBreadcrumb } from "@/components/shared/ToolbarBreadcrumb";
 import { FloatingDictionaryWidget } from "@/components/shared/FloatingDictionaryWidget";
-import { usePathname } from "next/navigation";
-import { useState, useEffect, ReactNode } from "react";
+import { ToolbarBreadcrumb } from "@/components/shared/ToolbarBreadcrumb";
+import { UserProvider } from "@/components/shared/UserContext";
+import { UserMenu } from "@/components/shared/UserMenu";
 
 export type AuthUser = {
   name: string;
@@ -29,13 +29,7 @@ function useIsMobile(breakpoint = 768): boolean | null {
   return isMobile;
 }
 
-export function AppShell({
-  children,
-  user,
-}: {
-  children: ReactNode;
-  user: AuthUser;
-}) {
+export function AppShell({ children, user }: { children: ReactNode; user: AuthUser }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const isMobile = useIsMobile();
   const pathname = usePathname();
@@ -62,9 +56,7 @@ export function AppShell({
       }}
     >
       {/* Desktop sidebar */}
-      {isMobile === false && (
-        <AppSidebar isExpanded={isExpanded} onToggle={handleToggle} />
-      )}
+      {isMobile === false && <AppSidebar isExpanded={isExpanded} onToggle={handleToggle} />}
 
       <div
         style={{

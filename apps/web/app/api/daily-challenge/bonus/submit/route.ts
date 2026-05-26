@@ -1,13 +1,11 @@
+import { dailyChallenge, db } from "@repo/database";
+import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, and } from "drizzle-orm";
-
-import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { dailyChallenge } from "@repo/database";
-import { SubmitAnswerSchema } from "@/lib/daily-challenge/schema";
-import { awardXP, XP_VALUES } from "@/lib/xp";
 import { logActivity } from "@/lib/activity-log";
+import { auth } from "@/lib/auth";
+import { SubmitAnswerSchema } from "@/lib/daily-challenge/schema";
 import type { Exercise, ExerciseAnswer } from "@/lib/daily-challenge/types";
+import { awardXP, XP_VALUES } from "@/lib/xp";
 
 function getVnDate(): string {
   return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Ho_Chi_Minh" });
@@ -22,54 +20,101 @@ function scoreExercise(
       const d = exercise.data;
       const correct = d.options[d.correctIndex];
       const isCorrect = correct?.toLowerCase() === answer.toLowerCase();
-      return { isCorrect, correctAnswer: correct, questionStem: d.sentence, explanation: isCorrect ? "Chính xác!" : `Đáp án đúng là "${correct}".` };
+      return {
+        isCorrect,
+        correctAnswer: correct,
+        questionStem: d.sentence,
+        explanation: isCorrect ? "Chính xác!" : `Đáp án đúng là "${correct}".`,
+      };
     }
     case "sentence-order": {
       const d = exercise.data;
       const correctSentence = d.correctOrder.join(" ");
       const isCorrect = correctSentence.toLowerCase() === answer.toLowerCase();
-      return { isCorrect, correctAnswer: correctSentence, questionStem: `Sắp xếp: ${d.scrambled.join(" / ")}`, explanation: isCorrect ? "Chính xác!" : `Thứ tự đúng: "${correctSentence}".` };
+      return {
+        isCorrect,
+        correctAnswer: correctSentence,
+        questionStem: `Sắp xếp: ${d.scrambled.join(" / ")}`,
+        explanation: isCorrect ? "Chính xác!" : `Thứ tự đúng: "${correctSentence}".`,
+      };
     }
     case "translation": {
       const d = exercise.data;
       const normalized = answer.toLowerCase().replace(/[.!?]/g, "").trim();
-      const isCorrect = d.acceptableAnswers.some((a) => a.toLowerCase().replace(/[.!?]/g, "").trim() === normalized);
-      return { isCorrect, correctAnswer: d.acceptableAnswers[0], questionStem: d.vietnamese, explanation: isCorrect ? "Chính xác!" : `Đáp án: "${d.acceptableAnswers[0]}".` };
+      const isCorrect = d.acceptableAnswers.some(
+        (a) => a.toLowerCase().replace(/[.!?]/g, "").trim() === normalized,
+      );
+      return {
+        isCorrect,
+        correctAnswer: d.acceptableAnswers[0],
+        questionStem: d.vietnamese,
+        explanation: isCorrect ? "Chính xác!" : `Đáp án: "${d.acceptableAnswers[0]}".`,
+      };
     }
     case "error-correction": {
       const d = exercise.data;
       const isCorrect = answer.toLowerCase().trim() === d.correction.toLowerCase().trim();
-      return { isCorrect, correctAnswer: d.correction, questionStem: d.sentence, explanation: isCorrect ? "Chính xác!" : `${d.explanation}` };
+      return {
+        isCorrect,
+        correctAnswer: d.correction,
+        questionStem: d.sentence,
+        explanation: isCorrect ? "Chính xác!" : `${d.explanation}`,
+      };
     }
     case "word-formation": {
       const d = exercise.data;
       const correct = d.options[d.correctIndex];
       const isCorrect = correct?.toLowerCase() === answer.toLowerCase();
-      return { isCorrect, correctAnswer: correct, questionStem: `${d.sentence} (gốc: ${d.rootWord})`, explanation: isCorrect ? "Chính xác!" : `Đáp án: "${correct}".` };
+      return {
+        isCorrect,
+        correctAnswer: correct,
+        questionStem: `${d.sentence} (gốc: ${d.rootWord})`,
+        explanation: isCorrect ? "Chính xác!" : `Đáp án: "${correct}".`,
+      };
     }
     case "dialogue-completion": {
       const d = exercise.data;
       const correct = d.options[d.correctIndex];
       const isCorrect = correct?.toLowerCase() === answer.toLowerCase();
-      return { isCorrect, correctAnswer: correct, questionStem: `Hội thoại: ${d.context}`, explanation: isCorrect ? "Chính xác!" : `Đáp án: "${correct}".` };
+      return {
+        isCorrect,
+        correctAnswer: correct,
+        questionStem: `Hội thoại: ${d.context}`,
+        explanation: isCorrect ? "Chính xác!" : `Đáp án: "${correct}".`,
+      };
     }
     case "synonym-antonym": {
       const d = exercise.data;
       const correct = d.options[d.correctIndex];
       const isCorrect = correct?.toLowerCase() === answer.toLowerCase();
-      return { isCorrect, correctAnswer: correct, questionStem: `${d.mode === "synonym" ? "Đồng nghĩa" : "Trái nghĩa"}: ${d.word}`, explanation: isCorrect ? "Chính xác!" : `Đáp án: "${correct}".` };
+      return {
+        isCorrect,
+        correctAnswer: correct,
+        questionStem: `${d.mode === "synonym" ? "Đồng nghĩa" : "Trái nghĩa"}: ${d.word}`,
+        explanation: isCorrect ? "Chính xác!" : `Đáp án: "${correct}".`,
+      };
     }
     case "reading-comprehension": {
       const d = exercise.data;
       const correct = d.options[d.correctIndex];
       const isCorrect = correct?.toLowerCase() === answer.toLowerCase();
-      return { isCorrect, correctAnswer: correct, questionStem: d.question, explanation: isCorrect ? "Chính xác!" : `Đáp án: "${correct}".` };
+      return {
+        isCorrect,
+        correctAnswer: correct,
+        questionStem: d.question,
+        explanation: isCorrect ? "Chính xác!" : `Đáp án: "${correct}".`,
+      };
     }
     case "collocation": {
       const d = exercise.data;
       const correct = d.options[d.correctIndex];
       const isCorrect = correct?.toLowerCase() === answer.toLowerCase();
-      return { isCorrect, correctAnswer: correct, questionStem: d.phrase, explanation: isCorrect ? "Chính xác!" : `${d.explanation}` };
+      return {
+        isCorrect,
+        correctAnswer: correct,
+        questionStem: d.phrase,
+        explanation: isCorrect ? "Chính xác!" : `${d.explanation}`,
+      };
     }
   }
 }
@@ -83,7 +128,10 @@ export async function POST(request: Request) {
   const body = await request.json();
   const parsed = SubmitAnswerSchema.safeParse(body);
   if (!parsed.success) {
-    return Response.json({ error: "Invalid input", details: parsed.error.flatten() }, { status: 400 });
+    return Response.json(
+      { error: "Invalid input", details: parsed.error.flatten() },
+      { status: 400 },
+    );
   }
 
   const vnToday = getVnDate();
@@ -93,7 +141,10 @@ export async function POST(request: Request) {
     .select()
     .from(dailyChallenge)
     .where(
-      and(eq(dailyChallenge.userId, session.user.id), eq(dailyChallenge.challengeDate, `${vnToday}-bonus`)),
+      and(
+        eq(dailyChallenge.userId, session.user.id),
+        eq(dailyChallenge.challengeDate, `${vnToday}-bonus`),
+      ),
     )
     .limit(1);
 

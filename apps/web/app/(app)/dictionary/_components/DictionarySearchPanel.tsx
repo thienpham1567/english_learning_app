@@ -1,9 +1,9 @@
 "use client";
 
+import { BookOpen, Lightbulb, Star, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
-import { BookOpen, Star, X, Lightbulb } from "lucide-react";
-import { RecentLookups } from "@/app/(app)/dictionary/_components/RecentLookups";
 import { ExamWordLists } from "@/app/(app)/dictionary/_components/ExamWordLists";
+import { RecentLookups } from "@/app/(app)/dictionary/_components/RecentLookups";
 import { WordOfTheDay } from "@/app/(app)/dictionary/_components/WordOfTheDay";
 
 import { api } from "@/lib/api-client";
@@ -52,7 +52,6 @@ export function DictionarySearchPanel({
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const [showTips, setShowTips] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-
 
   useEffect(() => {
     if (draft.length < 2) {
@@ -120,9 +119,7 @@ export function DictionarySearchPanel({
     <section className="flex flex-col gap-5">
       {/* Word of the Day */}
       <WordOfTheDay onSelect={onSubmit} />
-      <div
-        className="anim-fade-left dictionary-search-panel relative rounded-lg bg-gradient-to-br from-surface to-(--bg) shadow-lg overflow-hidden min-w-0"
-      >
+      <div className="anim-fade-left dictionary-search-panel relative rounded-lg bg-gradient-to-br from-surface to-(--bg) shadow-lg overflow-hidden min-w-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
             <Star className="h-3.5 w-3.5" />
@@ -132,15 +129,13 @@ export function DictionarySearchPanel({
             type="button"
             onClick={() => setShowTips((v) => !v)}
             className={`grid w-8 h-8 place-items-center rounded-full border-none cursor-pointer transition-all duration-200 ${
-              showTips ? "bg-accent text-(--text-on-accent)" : "bg-transparent text-text-muted hover:text-accent"
+              showTips
+                ? "bg-accent text-(--text-on-accent)"
+                : "bg-transparent text-text-muted hover:text-accent"
             }`}
             aria-label="Mẹo sử dụng"
           >
-            {showTips ? (
-              <X className="h-3.5 w-3.5" />
-            ) : (
-              <BookOpen className="h-4 w-4" />
-            )}
+            {showTips ? <X className="h-3.5 w-3.5" /> : <BookOpen className="h-4 w-4" />}
           </button>
         </div>
 
@@ -163,9 +158,7 @@ export function DictionarySearchPanel({
           </div>
         )}
 
-        <h2 className="mt-4 text-2xl italic font-display text-ink">
-          Nhập mục từ cần tra cứu
-        </h2>
+        <h2 className="mt-4 text-2xl italic font-display text-ink">Nhập mục từ cần tra cứu</h2>
         <p className="mt-3 text-[13px] leading-relaxed text-text-secondary break-words">
           Công cụ này hỗ trợ từ đơn, phrasal verb và idiom để bạn học theo ngữ cảnh rõ ràng hơn.
         </p>
@@ -199,7 +192,9 @@ export function DictionarySearchPanel({
                     selectSuggestion(s);
                   }}
                   className={`cursor-pointer px-4 py-2.5 text-sm text-text-primary transition-colors duration-150 ${
-                    i === highlightedIndex ? "bg-(--surface-hover)" : "bg-transparent hover:bg-(--surface-hover)"
+                    i === highlightedIndex
+                      ? "bg-(--surface-hover)"
+                      : "bg-transparent hover:bg-(--surface-hover)"
                   }`}
                 >
                   <HighlightMatch text={s} query={draft} />
@@ -231,7 +226,6 @@ export function DictionarySearchPanel({
             <RecentLookups words={recentWords} onSelect={onSelectRecent} />
           </div>
         )}
-
       </div>
     </section>
   );

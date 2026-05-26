@@ -1,20 +1,18 @@
-import { NextRequest } from "next/server";
 import { headers } from "next/headers";
+import { NextRequest } from "next/server";
 
 import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("reading/article/[id]");
+
 import { fetchGuardianArticle } from "@/lib/reading/utils";
 
 /**
  * GET /api/reading/article/[id]
  * Fetches a single article from Guardian by its encoded ID.
  */
-export async function GET(
-  _req: NextRequest,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function GET(_req: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });

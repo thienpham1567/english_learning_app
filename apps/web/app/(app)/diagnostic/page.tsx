@@ -1,16 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-
+import { Loader2 } from "lucide-react";
 import * as m from "motion/react-client";
-
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
 import { api } from "@/lib/api-client";
+import { ResultsScreen } from "./_components/ResultsScreen";
+import { TestScreen } from "./_components/TestScreen";
 import type { DiagnosticStatus, Phase, Question, TestResult } from "./_components/types";
 import { WelcomeScreen } from "./_components/WelcomeScreen";
-import { TestScreen } from "./_components/TestScreen";
-import { ResultsScreen } from "./_components/ResultsScreen";
-import { Loader2 } from "lucide-react";
 
 export default function DiagnosticPage() {
   const router = useRouter();
@@ -18,14 +16,17 @@ export default function DiagnosticPage() {
   const [status, setStatus] = useState<DiagnosticStatus | null>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<Array<{ questionId: string; selectedIndex: number; timeMs: number }>>([]);
+  const [answers, setAnswers] = useState<
+    Array<{ questionId: string; selectedIndex: number; timeMs: number }>
+  >([]);
   const [selectedOption, setSelectedOption] = useState<number | null>(null);
   const [questionStartTime, setQuestionStartTime] = useState(0);
   const [result, setResult] = useState<TestResult | null>(null);
 
   // Load diagnostic status
   useEffect(() => {
-    api.get<DiagnosticStatus>("/diagnostic")
+    api
+      .get<DiagnosticStatus>("/diagnostic")
       .then((d) => {
         if (d) {
           setStatus(d);
@@ -67,7 +68,8 @@ export default function DiagnosticPage() {
     } else {
       // Submit all answers
       setPhase("submitting");
-      api.post<TestResult>("/diagnostic", { action: "submit", answers: newAnswers })
+      api
+        .post<TestResult>("/diagnostic", { action: "submit", answers: newAnswers })
         .then((data) => {
           if (data) {
             setResult(data);
@@ -94,7 +96,8 @@ export default function DiagnosticPage() {
       setQuestionStartTime(Date.now());
     } else {
       setPhase("submitting");
-      api.post<TestResult>("/diagnostic", { action: "submit", answers: newAnswers })
+      api
+        .post<TestResult>("/diagnostic", { action: "submit", answers: newAnswers })
         .then((data) => {
           if (data) {
             setResult(data);
@@ -110,13 +113,15 @@ export default function DiagnosticPage() {
   // ── Loading ──
   if (phase === "loading") {
     return (
-      <div className="h-full flex flex-col items-center justify-center gap-4 bg-bg-deep" >
-        <m.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }} className="text-accent text-4xl" >
+      <div className="h-full flex flex-col items-center justify-center gap-4 bg-bg-deep">
+        <m.div
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+          className="text-accent text-4xl"
+        >
           <Loader2 className="animate-spin" />
         </m.div>
-        <span className="text-sm font-semibold text-text-secondary" >
-          Đang chuẩn bị bài test...
-        </span>
+        <span className="text-sm font-semibold text-text-secondary">Đang chuẩn bị bài test...</span>
       </div>
     );
   }
@@ -144,11 +149,15 @@ export default function DiagnosticPage() {
   // ── Submitting ──
   if (phase === "submitting") {
     return (
-      <div className="h-full flex flex-col items-center justify-center gap-4 bg-bg-deep" >
-        <m.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }} className="text-accent text-4xl" >
+      <div className="h-full flex flex-col items-center justify-center gap-4 bg-bg-deep">
+        <m.div
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+          className="text-accent text-4xl"
+        >
           <Loader2 className="animate-spin" />
         </m.div>
-        <span className="text-sm font-semibold text-text-secondary" >
+        <span className="text-sm font-semibold text-text-secondary">
           Đang phân tích kết quả bài thi thích ứng...
         </span>
       </div>

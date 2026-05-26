@@ -1,11 +1,9 @@
-import { NextResponse } from "next/server";
-import { toJSONSchema } from "zod";
+import { db, vocabularyCache } from "@repo/database";
 import { createHash } from "crypto";
 import { and, eq, gt } from "drizzle-orm";
-
+import { NextResponse } from "next/server";
+import { toJSONSchema } from "zod";
 import { routeLogger } from "@/lib/logger";
-import { db } from "@repo/database";
-import { vocabularyCache } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { TranslationSchema } from "@/lib/schemas/translation";
@@ -30,17 +28,11 @@ export async function POST(req: Request) {
     const context = typeof body?.context === "string" ? body.context.trim() : "";
 
     if (!text || text.length < 3) {
-      return NextResponse.json(
-        { error: "Vui lòng cung cấp câu cần dịch." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Vui lòng cung cấp câu cần dịch." }, { status: 400 });
     }
 
     if (text.length > 500) {
-      return NextResponse.json(
-        { error: "Câu quá dài. Tối đa 500 ký tự." },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Câu quá dài. Tối đa 500 ký tự." }, { status: 400 });
     }
 
     // ── Check cache ──────────────────────────────────────────────────────
@@ -50,12 +42,7 @@ export async function POST(req: Request) {
     const [hit] = await db
       .select({ data: vocabularyCache.data })
       .from(vocabularyCache)
-      .where(
-        and(
-          eq(vocabularyCache.query, cacheKey),
-          gt(vocabularyCache.expiresAt, new Date())
-        )
-      )
+      .where(and(eq(vocabularyCache.query, cacheKey), gt(vocabularyCache.expiresAt, new Date())))
       .limit(1);
 
     if (hit) {
@@ -64,9 +51,7 @@ export async function POST(req: Request) {
         return NextResponse.json(cached);
       } catch {
         // Invalid cache entry — delete and regenerate
-        await db
-          .delete(vocabularyCache)
-          .where(eq(vocabularyCache.query, cacheKey));
+        await db.delete(vocabularyCache).where(eq(vocabularyCache.query, cacheKey));
       }
     }
 
@@ -109,7 +94,7 @@ export async function POST(req: Request) {
     log.error({ err: error }, "translate.error");
     return NextResponse.json(
       { error: "Không thể dịch câu này lúc này. Vui lòng thử lại sau." },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -1,7 +1,6 @@
 import type { ComponentType } from "react";
-
-import { SimonAvatar } from "@/app/(app)/english-chatbot/_components/persona-avatars/SimonAvatar";
 import { EddieAvatar } from "@/app/(app)/english-chatbot/_components/persona-avatars/EddieAvatar";
+import { SimonAvatar } from "@/app/(app)/english-chatbot/_components/persona-avatars/SimonAvatar";
 
 export type PersonaInstructionInput = {
   consecutiveVietnameseTurns: number;

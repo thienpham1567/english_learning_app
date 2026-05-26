@@ -5,9 +5,9 @@ import { routeLogger } from "@/lib/logger";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import {
+  type ParaphraseMode,
   ParaphraseRequestSchema,
   ParaphraseResponseSchema,
-  type ParaphraseMode,
 } from "@/lib/writing-tools/schema";
 
 const log = routeLogger("writing-tools/paraphrase");
@@ -17,8 +17,7 @@ const log = routeLogger("writing-tools/paraphrase");
 const MODE_INSTRUCTIONS: Record<ParaphraseMode, string> = {
   standard:
     "Rewrite the text using different vocabulary and sentence structures while preserving the original meaning.",
-  fluency:
-    "Improve the text's natural flow and readability. Make it sound more native and smooth.",
+  fluency: "Improve the text's natural flow and readability. Make it sound more native and smooth.",
   formal:
     "Rephrase the text in a more sophisticated, professional, and polished manner suitable for business or official communication.",
   simple:
@@ -90,10 +89,7 @@ export async function POST(request: Request) {
   }
 
   if (isRateLimited(session.user.id)) {
-    return Response.json(
-      { error: "Quá nhiều yêu cầu. Vui lòng đợi 1 phút." },
-      { status: 429 },
-    );
+    return Response.json({ error: "Quá nhiều yêu cầu. Vui lòng đợi 1 phút." }, { status: 429 });
   }
 
   const body = await request.json();
@@ -138,8 +134,5 @@ export async function POST(request: Request) {
     }
   }
 
-  return Response.json(
-    { error: "Không thể viết lại văn bản. Vui lòng thử lại." },
-    { status: 502 },
-  );
+  return Response.json({ error: "Không thể viết lại văn bản. Vui lòng thử lại." }, { status: 502 });
 }

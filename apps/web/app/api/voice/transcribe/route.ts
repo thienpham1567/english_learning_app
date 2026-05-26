@@ -60,9 +60,19 @@ export async function POST(request: Request) {
   const openaiKey = process.env.OPENAI_DIRECT_API_KEY;
 
   const provider = groqKey
-    ? { key: groqKey, url: "https://api.groq.com/openai/v1/audio/transcriptions", model: "whisper-large-v3-turbo", name: "Groq" }
+    ? {
+        key: groqKey,
+        url: "https://api.groq.com/openai/v1/audio/transcriptions",
+        model: "whisper-large-v3-turbo",
+        name: "Groq",
+      }
     : openaiKey
-      ? { key: openaiKey, url: "https://api.openai.com/v1/audio/transcriptions", model: "whisper-1", name: "OpenAI" }
+      ? {
+          key: openaiKey,
+          url: "https://api.openai.com/v1/audio/transcriptions",
+          model: "whisper-1",
+          name: "OpenAI",
+        }
       : null;
 
   if (!provider) {
@@ -91,7 +101,10 @@ export async function POST(request: Request) {
   const mimeBase = (audioFile.type || "").split(";")[0]?.trim().toLowerCase() ?? "";
   const mimeFull = (audioFile.type || "").trim().toLowerCase();
   if (!ALLOWED_AUDIO_MIME.has(mimeFull) && !ALLOWED_AUDIO_MIME.has(mimeBase)) {
-    return Response.json({ error: `Unsupported audio type: ${audioFile.type || "unknown"}` }, { status: 415 });
+    return Response.json(
+      { error: `Unsupported audio type: ${audioFile.type || "unknown"}` },
+      { status: 415 },
+    );
   }
 
   const durationRaw = formData.get("durationMs");
@@ -135,7 +148,12 @@ export async function POST(request: Request) {
     if (!response.ok) {
       const errorText = await response.text().catch(() => "");
       log.error(
-        { status: response.status, elapsed, errorText, headers: Object.fromEntries(response.headers.entries()) },
+        {
+          status: response.status,
+          elapsed,
+          errorText,
+          headers: Object.fromEntries(response.headers.entries()),
+        },
         "whisper.failed",
       );
       return Response.json({ error: `Transcription failed: ${errorText}` }, { status: 502 });

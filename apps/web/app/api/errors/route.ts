@@ -1,11 +1,11 @@
-import { headers } from "next/headers";
-import { eq, desc, and, isNotNull, sql, ilike, inArray } from "drizzle-orm";
-
-import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { and, desc, eq, ilike, inArray, isNotNull, sql } from "drizzle-orm";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("errors");
+
 import { errorLog } from "@repo/database";
 
 /**

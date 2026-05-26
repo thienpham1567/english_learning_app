@@ -1,20 +1,10 @@
 "use client";
 
+import { Drawer, Empty, Pagination, Segmented, Select, Spin } from "antd";
+import { ChevronRight, FileText, Filter, History, Mic, Pencil, Star, Volume2 } from "lucide-react";
 import { useCallback, useState } from "react";
-
-import { Drawer, Segmented, Select, Empty, Pagination, Spin } from "antd";
 import { useListeningHistory } from "@/hooks/useListeningHistory";
 import type { ListeningHistoryItem } from "@/lib/listening/types";
-import {
-  ChevronRight,
-  FileText,
-  Filter,
-  History,
-  Mic,
-  Pencil,
-  Star,
-  Volume2,
-} from "lucide-react";
 
 const MODE_ICONS: Record<string, React.ReactNode> = {
   listening: <Volume2 />,
@@ -74,7 +64,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
   return (
     <Drawer
       title={
-        <div className="flex items-center gap-2" >
+        <div className="flex items-center gap-2">
           <History className="text-accent" />
           <span>Lịch sử luyện nghe</span>
         </div>
@@ -90,8 +80,14 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
       }}
     >
       {/* Filters */}
-      <div className="py-3 px-4 flex flex-col gap-2.5" style={{borderBottom: "1px solid var(--border)"}} >
-        <div className="flex items-center gap-1.5 text-[11px] text-text-muted font-semibold uppercase" style={{letterSpacing: "0.1em"}} >
+      <div
+        className="py-3 px-4 flex flex-col gap-2.5"
+        style={{ borderBottom: "1px solid var(--border)" }}
+      >
+        <div
+          className="flex items-center gap-1.5 text-[11px] text-text-muted font-semibold uppercase"
+          style={{ letterSpacing: "0.1em" }}
+        >
           <Filter /> Bộ lọc
         </div>
         <Segmented
@@ -107,12 +103,11 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
           size="small"
           block
         />
-        <div className="flex gap-2" >
+        <div className="flex gap-2">
           <Select
             value={history.level ?? "all"}
             onChange={(val) => history.setLevel(val === "all" ? null : val)}
             size="small"
-            
             options={[
               { value: "all", label: "Tất cả level" },
               { value: "A1", label: "A1" },
@@ -121,13 +116,21 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
               { value: "B2", label: "B2" },
               { value: "C1", label: "C1" },
               { value: "C2", label: "C2" },
-            ]} className="flex-1" />
+            ]}
+            className="flex-1"
+          />
           <button
-            onClick={() => history.setBookmarkedOnly(!history.bookmarkedOnly)} className="flex items-center gap-1 rounded-(--radius-sm) cursor-pointer text-xs font-semibold" style={{padding: "4px 10px", border: history.bookmarkedOnly
-                ? "1px solid var(--xp)"
-                : "1px solid var(--border)", background: history.bookmarkedOnly
+            onClick={() => history.setBookmarkedOnly(!history.bookmarkedOnly)}
+            className="flex items-center gap-1 rounded-(--radius-sm) cursor-pointer text-xs font-semibold"
+            style={{
+              padding: "4px 10px",
+              border: history.bookmarkedOnly ? "1px solid var(--xp)" : "1px solid var(--border)",
+              background: history.bookmarkedOnly
                 ? "color-mix(in srgb, var(--xp) 8%, transparent)"
-                : "transparent", color: history.bookmarkedOnly ? "var(--xp)" : "var(--text-muted)"}} >
+                : "transparent",
+              color: history.bookmarkedOnly ? "var(--xp)" : "var(--text-muted)",
+            }}
+          >
             {history.bookmarkedOnly ? <Star /> : <Star />}
             Đánh dấu
           </button>
@@ -135,9 +138,9 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-auto py-3 px-4" >
+      <div className="flex-1 overflow-auto py-3 px-4">
         {history.isLoading && (
-          <div className="text-center" style={{padding: 40}} >
+          <div className="text-center" style={{ padding: 40 }}>
             <Spin />
           </div>
         )}
@@ -151,7 +154,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
         )}
 
         {!history.isLoading && history.items.length > 0 && (
-          <div className="flex flex-col gap-2" >
+          <div className="flex flex-col gap-2">
             {history.items.map((item, idx) => (
               <HistoryCard
                 key={item.id}
@@ -167,7 +170,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
 
       {/* Pagination */}
       {history.total > history.pageSize && (
-        <div className="py-2.5 px-4 text-center" style={{borderTop: "1px solid var(--border)"}} >
+        <div className="py-2.5 px-4 text-center" style={{ borderTop: "1px solid var(--border)" }}>
           <Pagination
             current={history.page}
             pageSize={history.pageSize}
@@ -197,35 +200,65 @@ function HistoryCard({
 }) {
   return (
     <div
-      
-      onClick={onReplay} className="flex items-center gap-3 border-2 border-border bg-(--surface)" style={{padding: "12px 14px", borderRadius: "var(--radius-md)", cursor: onReplay ? "pointer" : "default", transition: "all 0.15s ease", animation: `fadeIn 0.2s ease ${index * 50}ms both`}} >
+      onClick={onReplay}
+      className="flex items-center gap-3 border-2 border-border bg-(--surface)"
+      style={{
+        padding: "12px 14px",
+        borderRadius: "var(--radius-md)",
+        cursor: onReplay ? "pointer" : "default",
+        transition: "all 0.15s ease",
+        animation: `fadeIn 0.2s ease ${index * 50}ms both`,
+      }}
+    >
       {/* Mode icon */}
-      <div className="w-[36px] h-[36px] grid text-base text-accent shrink-0" style={{borderRadius: 10, background: "color-mix(in srgb, var(--accent) 10%, transparent)", placeItems: "center"}} >
+      <div
+        className="w-[36px] h-[36px] grid text-base text-accent shrink-0"
+        style={{
+          borderRadius: 10,
+          background: "color-mix(in srgb, var(--accent) 10%, transparent)",
+          placeItems: "center",
+        }}
+      >
         {MODE_ICONS[item.mode] ?? <Volume2 />}
       </div>
 
       {/* Info */}
-      <div className="flex-1 w-[0px]" >
-        <div className="flex items-center gap-1.5" style={{marginBottom: 2}} >
-          <span className="text-[10px] font-extrabold text-accent font-mono rounded" style={{padding: "1px 5px", background: "color-mix(in srgb, var(--accent) 8%, transparent)"}} >
+      <div className="flex-1 w-[0px]">
+        <div className="flex items-center gap-1.5" style={{ marginBottom: 2 }}>
+          <span
+            className="text-[10px] font-extrabold text-accent font-mono rounded"
+            style={{
+              padding: "1px 5px",
+              background: "color-mix(in srgb, var(--accent) 8%, transparent)",
+            }}
+          >
             {item.level}
           </span>
-          <span className="text-xs font-semibold" style={{color: "var(--text)"}} >
+          <span className="text-xs font-semibold" style={{ color: "var(--text)" }}>
             {MODE_LABELS[item.mode] ?? item.mode}
           </span>
           {item.scriptRevealed && (
-            <span className="text-[9px] font-bold" style={{padding: "1px 4px", borderRadius: 3, background: "color-mix(in srgb, var(--warning) 12%, transparent)", color: "var(--warning)"}} >
+            <span
+              className="text-[9px] font-bold"
+              style={{
+                padding: "1px 4px",
+                borderRadius: 3,
+                background: "color-mix(in srgb, var(--warning) 12%, transparent)",
+                color: "var(--warning)",
+              }}
+            >
               📖
             </span>
           )}
         </div>
-        <div className="text-[11px] text-text-muted" >
-          {relativeTime(item.completedAt)}
-        </div>
+        <div className="text-[11px] text-text-muted">{relativeTime(item.completedAt)}</div>
       </div>
 
       {/* Score */}
-      <div className="text-lg font-extrabold font-mono w-[36px] text-right" style={{color: scoreColor(item.score)}} >
+      <div
+        className="text-lg font-extrabold font-mono w-[36px] text-right"
+        style={{ color: scoreColor(item.score) }}
+      >
         {item.score != null ? `${item.score}%` : "—"}
       </div>
 
@@ -234,13 +267,17 @@ function HistoryCard({
         onClick={(e) => {
           e.stopPropagation();
           onBookmark(!item.bookmarked);
-        }} className="bg-none border-none cursor-pointer p-1 text-sm" style={{color: item.bookmarked ? "var(--xp)" : "var(--border)", transition: "color 0.15s ease"}} >
+        }}
+        className="bg-none border-none cursor-pointer p-1 text-sm"
+        style={{
+          color: item.bookmarked ? "var(--xp)" : "var(--border)",
+          transition: "color 0.15s ease",
+        }}
+      >
         {item.bookmarked ? <Star /> : <Star />}
       </button>
 
-      {onReplay && (
-        <ChevronRight className="text-[10px] text-text-muted" />
-      )}
+      {onReplay && <ChevronRight className="text-[10px] text-text-muted" />}
     </div>
   );
 }

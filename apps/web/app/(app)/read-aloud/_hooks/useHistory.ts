@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { api } from "@/lib/api-client";
 
 /* ── Types ── */
@@ -77,23 +77,32 @@ export function useHistory() {
           const raw = localStorage.getItem("read-aloud-history");
           if (raw) {
             const old = JSON.parse(raw) as Array<{
-              id: string; text: string; voice: string; speed: number;
-              createdAt: string; wordCount: number; preview: string;
+              id: string;
+              text: string;
+              voice: string;
+              speed: number;
+              createdAt: string;
+              wordCount: number;
+              preview: string;
             }>;
-            setRawEntries(old.map((o) => ({
-              id: o.id,
-              mode: "listen",
-              text: o.text,
-              dialogueId: null,
-              voiceRole: o.voice,
-              speed: o.speed,
-              wordCount: o.wordCount,
-              shadowScore: null,
-              preview: o.preview,
-              createdAt: o.createdAt,
-            })));
+            setRawEntries(
+              old.map((o) => ({
+                id: o.id,
+                mode: "listen",
+                text: o.text,
+                dialogueId: null,
+                voiceRole: o.voice,
+                speed: o.speed,
+                wordCount: o.wordCount,
+                shadowScore: null,
+                preview: o.preview,
+                createdAt: o.createdAt,
+              })),
+            );
           }
-        } catch { /* ignore */ }
+        } catch {
+          /* ignore */
+        }
       } finally {
         setLoading(false);
       }
@@ -133,9 +142,7 @@ export function useHistory() {
       });
       if (result?.id) {
         // Replace temp with real id
-        setRawEntries((prev) =>
-          prev.map((e) => (e.id === tempId ? { ...e, id: result.id } : e)),
-        );
+        setRawEntries((prev) => prev.map((e) => (e.id === tempId ? { ...e, id: result.id } : e)));
       }
     } catch {
       // If API fails, keep optimistic entry
@@ -151,7 +158,9 @@ export function useHistory() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
       });
-    } catch { /* silent */ }
+    } catch {
+      /* silent */
+    }
   }, []);
 
   const clearAll = useCallback(async () => {
@@ -166,11 +175,17 @@ export function useHistory() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id }),
         });
-      } catch { /* silent */ }
+      } catch {
+        /* silent */
+      }
     }
 
     // Also clear old localStorage
-    try { localStorage.removeItem("read-aloud-history"); } catch { /* */ }
+    try {
+      localStorage.removeItem("read-aloud-history");
+    } catch {
+      /* */
+    }
   }, [rawEntries]);
 
   return { history, loading, add, remove, clearAll };

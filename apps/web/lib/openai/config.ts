@@ -34,13 +34,9 @@ export function getOpenAiConfig(): OpenAiConfig {
     apiKey,
     baseURL: process.env.OPENAI_BASE_URL ?? "https://openrouter.ai/api/v1",
     chatModel: process.env.OPENAI_CHAT_MODEL ?? "google/gemini-3.1-flash-lite-preview",
-    dictionaryModel:
-      process.env.OPENAI_DICTIONARY_MODEL ?? "google/gemini-3.1-flash-lite-preview",
-    listeningModel:
-      process.env.OPENAI_LISTENING_MODEL ?? "google/gemini-2.5-flash",
-    dictionaryCacheTtlMs: parseDictionaryCacheTtlMs(
-      process.env.DICTIONARY_CACHE_TTL_MS,
-    ),
+    dictionaryModel: process.env.OPENAI_DICTIONARY_MODEL ?? "google/gemini-3.1-flash-lite-preview",
+    listeningModel: process.env.OPENAI_LISTENING_MODEL ?? "google/gemini-2.5-flash",
+    dictionaryCacheTtlMs: parseDictionaryCacheTtlMs(process.env.DICTIONARY_CACHE_TTL_MS),
   };
 }
 

@@ -47,11 +47,12 @@ Overall = sum of 4 criteria scaled to 1–30 range (multiply sum/20 by 30, round
 function buildSystemPrompt(exam: ExamVariant): string {
   const isIelts = exam.startsWith("ielts");
   const criteria = isIelts ? IELTS_CRITERIA : TOEFL_CRITERIA;
-  const taskSpecific = exam === "ielts-task1"
-    ? "This is an IELTS Task 1 (report/letter). Evaluate how well the writer describes/summarizes data or writes a letter."
-    : exam === "ielts-task2"
-      ? "This is an IELTS Task 2 (essay). Evaluate argumentation, position, examples, and conclusion."
-      : "This is a TOEFL Independent Writing task. Evaluate the writer's ability to state and support an opinion.";
+  const taskSpecific =
+    exam === "ielts-task1"
+      ? "This is an IELTS Task 1 (report/letter). Evaluate how well the writer describes/summarizes data or writes a letter."
+      : exam === "ielts-task2"
+        ? "This is an IELTS Task 2 (essay). Evaluate argumentation, position, examples, and conclusion."
+        : "This is a TOEFL Independent Writing task. Evaluate the writer's ability to state and support an opinion.";
 
   return `You are an expert ${EXAM_LABELS[exam]} examiner.
 ${taskSpecific}

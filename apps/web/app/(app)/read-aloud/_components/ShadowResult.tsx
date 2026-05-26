@@ -1,6 +1,6 @@
 "use client";
 
-import { Typography, Flex } from "antd";
+import { Flex, Typography } from "antd";
 import * as m from "motion/react-client";
 
 const { Text } = Typography;
@@ -65,19 +65,31 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
     >
       {/* Overall Score Ring */}
       <Flex align="center" gap={20}>
-        <div style={{
-          width: 80, height: 80, borderRadius: "50%",
-          background: `conic-gradient(${grade.color} ${result.overall * 3.6}deg, var(--border) 0deg)`,
-          display: "grid", placeItems: "center",
-          flexShrink: 0,
-        }}>
-          <div style={{
-            width: 64, height: 64, borderRadius: "50%",
-            background: "var(--surface)",
-            display: "grid", placeItems: "center",
-          }}>
+        <div
+          style={{
+            width: 80,
+            height: 80,
+            borderRadius: "50%",
+            background: `conic-gradient(${grade.color} ${result.overall * 3.6}deg, var(--border) 0deg)`,
+            display: "grid",
+            placeItems: "center",
+            flexShrink: 0,
+          }}
+        >
+          <div
+            style={{
+              width: 64,
+              height: 64,
+              borderRadius: "50%",
+              background: "var(--surface)",
+              display: "grid",
+              placeItems: "center",
+            }}
+          >
             <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 22, fontWeight: 900, color: grade.color }}>{result.overall}</div>
+              <div style={{ fontSize: 22, fontWeight: 900, color: grade.color }}>
+                {result.overall}
+              </div>
               <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-muted)" }}>/ 100</div>
             </div>
           </div>
@@ -103,23 +115,31 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
         ].map((s) => {
           const g = getGrade(s.value);
           return (
-            <div key={s.label} style={{
-              padding: "10px 14px",
-              borderRadius: 12,
-              background: "var(--surface-alt)",
-              border: "1px solid var(--border)",
-            }}>
+            <div
+              key={s.label}
+              style={{
+                padding: "10px 14px",
+                borderRadius: 12,
+                background: "var(--surface-alt)",
+                border: "1px solid var(--border)",
+              }}
+            >
               <Flex justify="space-between" align="center">
-                <Text style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)" }}>{s.label}</Text>
+                <Text style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)" }}>
+                  {s.label}
+                </Text>
                 <Text style={{ fontSize: 16, fontWeight: 900, color: g.color }}>{s.value}</Text>
               </Flex>
               {/* Mini progress bar */}
-              <div style={{
-                height: 4, borderRadius: 2,
-                background: "var(--border)",
-                marginTop: 6,
-                overflow: "hidden",
-              }}>
+              <div
+                style={{
+                  height: 4,
+                  borderRadius: 2,
+                  background: "var(--border)",
+                  marginTop: 6,
+                  overflow: "hidden",
+                }}
+              >
                 <m.div
                   initial={{ width: 0 }}
                   animate={{ width: `${s.value}%` }}
@@ -135,7 +155,17 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
       {/* Word-level feedback */}
       {result.wordScores.length > 0 && (
         <div>
-          <Text style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: 10, display: "block" }}>
+          <Text
+            style={{
+              fontSize: 12,
+              fontWeight: 700,
+              color: "var(--text-muted)",
+              textTransform: "uppercase",
+              letterSpacing: "0.05em",
+              marginBottom: 10,
+              display: "block",
+            }}
+          >
             📝 Chi tiết từng từ
           </Text>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
@@ -166,18 +196,21 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
               {result.wordScores
                 .filter((w) => w.tip)
                 .map((w, i) => (
-                  <div key={i} style={{
-                    padding: "8px 12px",
-                    borderRadius: 10,
-                    background: "var(--surface-alt)",
-                    border: "1px solid var(--border)",
-                    fontSize: 12.5,
-                    color: "var(--text-secondary)",
-                    lineHeight: 1.5,
-                    display: "flex",
-                    gap: 8,
-                    alignItems: "flex-start",
-                  }}>
+                  <div
+                    key={i}
+                    style={{
+                      padding: "8px 12px",
+                      borderRadius: 10,
+                      background: "var(--surface-alt)",
+                      border: "1px solid var(--border)",
+                      fontSize: 12.5,
+                      color: "var(--text-secondary)",
+                      lineHeight: 1.5,
+                      display: "flex",
+                      gap: 8,
+                      alignItems: "flex-start",
+                    }}
+                  >
                     <span style={{ color: SCORE_COLORS[w.score], fontWeight: 800, flexShrink: 0 }}>
                       {w.word}:
                     </span>
@@ -190,22 +223,58 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
       )}
 
       {/* Transcript comparison */}
-      <div style={{
-        padding: "12px 14px",
-        borderRadius: 12,
-        background: "var(--surface-alt)",
-        border: "1px solid var(--border)",
-      }}>
-        <Text style={{ fontSize: 11, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", display: "block", marginBottom: 6 }}>
+      <div
+        style={{
+          padding: "12px 14px",
+          borderRadius: 12,
+          background: "var(--surface-alt)",
+          border: "1px solid var(--border)",
+        }}
+      >
+        <Text
+          style={{
+            fontSize: 11,
+            fontWeight: 700,
+            color: "var(--text-muted)",
+            textTransform: "uppercase",
+            display: "block",
+            marginBottom: 6,
+          }}
+        >
           🎯 Câu mẫu
         </Text>
-        <Text style={{ fontSize: 13, color: "var(--text-primary)", display: "block", marginBottom: 10, lineHeight: 1.5 }}>
+        <Text
+          style={{
+            fontSize: 13,
+            color: "var(--text-primary)",
+            display: "block",
+            marginBottom: 10,
+            lineHeight: 1.5,
+          }}
+        >
           {referenceText}
         </Text>
-        <Text style={{ fontSize: 11, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", display: "block", marginBottom: 6 }}>
+        <Text
+          style={{
+            fontSize: 11,
+            fontWeight: 700,
+            color: "var(--text-muted)",
+            textTransform: "uppercase",
+            display: "block",
+            marginBottom: 6,
+          }}
+        >
           🎙️ Bạn đã nói
         </Text>
-        <Text style={{ fontSize: 13, color: "var(--text-secondary)", display: "block", lineHeight: 1.5, fontStyle: "italic" }}>
+        <Text
+          style={{
+            fontSize: 13,
+            color: "var(--text-secondary)",
+            display: "block",
+            lineHeight: 1.5,
+            fontStyle: "italic",
+          }}
+        >
           {result.transcript || "Không nhận dạng được giọng nói"}
         </Text>
       </div>

@@ -1,11 +1,9 @@
+import { db, pronunciationAttempt } from "@repo/database";
 import { headers } from "next/headers";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { pronunciationAttempt } from "@repo/database";
+import { routeLogger } from "@/lib/logger";
 import { alignAndScore, tokenize, transcriptOverlap } from "@/lib/pronunciation/align";
 import { parseAccent } from "@/lib/tts/groq";
-import { routeLogger } from "@/lib/logger";
 
 /**
  * POST /api/pronunciation/score
@@ -76,7 +74,8 @@ export async function POST(request: Request) {
     return Response.json(
       {
         error: "off-topic",
-        message: "Spoken text doesn't match the reference closely enough. Please read the prompt again.",
+        message:
+          "Spoken text doesn't match the reference closely enough. Please read the prompt again.",
         overlap,
       },
       { status: 422 },

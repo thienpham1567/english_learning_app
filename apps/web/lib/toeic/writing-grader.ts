@@ -13,29 +13,29 @@ import { openAiClient } from "@/lib/openai/client";
 const MODEL = process.env.OPENAI_CHAT_MODEL ?? "google/gemini-2.5-flash";
 
 export type GradePromptInput = {
-	type: "q1_5_picture" | "q6_7_email" | "q8_opinion";
-	userText: string;
-	maxScore: number;
-	context: {
-		mandatoryWords?: string[];
-		imageUrl?: string;
-		emailSubject?: string;
-		emailBody?: string;
-		emailRequirements?: string[];
-		topic?: string;
-	};
+  type: "q1_5_picture" | "q6_7_email" | "q8_opinion";
+  userText: string;
+  maxScore: number;
+  context: {
+    mandatoryWords?: string[];
+    imageUrl?: string;
+    emailSubject?: string;
+    emailBody?: string;
+    emailRequirements?: string[];
+    topic?: string;
+  };
 };
 
 export type GradeResult = {
-	rawScore: number; // 0..maxScore
-	rubricScores: Record<string, number>;
-	feedbackVi: string;
+  rawScore: number; // 0..maxScore
+  rubricScores: Record<string, number>;
+  feedbackVi: string;
 };
 
 function buildPrompt(input: GradePromptInput): string {
-	const { type, userText, maxScore, context } = input;
-	if (type === "q1_5_picture") {
-		return `You are grading a TOEIC Writing Q1-5 (write a sentence based on a picture).
+  const { type, userText, maxScore, context } = input;
+  if (type === "q1_5_picture") {
+    return `You are grading a TOEIC Writing Q1-5 (write a sentence based on a picture).
 
 Mandatory words (must be used): ${JSON.stringify(context.mandatoryWords ?? [])}
 User's sentence:
@@ -54,9 +54,9 @@ Output strict JSON: {
   "rubricScores": {"grammar": <0-3>, "wordUsage": <0-3>},
   "feedbackVi": "<2-3 câu giải thích bằng tiếng Việt>"
 }`;
-	}
-	if (type === "q6_7_email") {
-		return `You are grading a TOEIC Writing Q6-7 (respond to an email).
+  }
+  if (type === "q6_7_email") {
+    return `You are grading a TOEIC Writing Q6-7 (respond to an email).
 
 Email subject: ${context.emailSubject ?? ""}
 Email body:
@@ -83,9 +83,9 @@ Output strict JSON: {
   "rubricScores": {"taskCompletion": <0-4>, "organization": <0-4>, "language": <0-4>},
   "feedbackVi": "<3-4 câu góp ý bằng tiếng Việt, ưu tiên điểm yếu nhất>"
 }`;
-	}
-	// q8_opinion
-	return `You are grading a TOEIC Writing Q8 (opinion essay).
+  }
+  // q8_opinion
+  return `You are grading a TOEIC Writing Q8 (opinion essay).
 
 Topic: ${context.topic ?? ""}
 
@@ -112,24 +112,24 @@ Output strict JSON: {
 }
 
 export async function gradeResponse(input: GradePromptInput): Promise<GradeResult> {
-	const t0 = Date.now();
-	const res = await openAiClient.chat.completions.create({
-		model: MODEL,
-		messages: [{ role: "user", content: buildPrompt(input) }],
-		response_format: { type: "json_object" },
-		temperature: 0.1,
-	});
-	console.log(
-		`[cost] toeic.grade_writing type=${input.type} duration=${Date.now() - t0}ms tokens=${res.usage?.total_tokens ?? "?"}`,
-	);
-	const raw = res.choices[0]?.message.content ?? "{}";
-	const parsed = JSON.parse(raw);
-	const rawScore = Math.min(input.maxScore, Math.max(0, Number(parsed.rawScore) || 0));
-	return {
-		rawScore,
-		rubricScores: parsed.rubricScores ?? {},
-		feedbackVi: parsed.feedbackVi ?? "",
-	};
+  const t0 = Date.now();
+  const res = await openAiClient.chat.completions.create({
+    model: MODEL,
+    messages: [{ role: "user", content: buildPrompt(input) }],
+    response_format: { type: "json_object" },
+    temperature: 0.1,
+  });
+  console.log(
+    `[cost] toeic.grade_writing type=${input.type} duration=${Date.now() - t0}ms tokens=${res.usage?.total_tokens ?? "?"}`,
+  );
+  const raw = res.choices[0]?.message.content ?? "{}";
+  const parsed = JSON.parse(raw);
+  const rawScore = Math.min(input.maxScore, Math.max(0, Number(parsed.rawScore) || 0));
+  return {
+    rawScore,
+    rubricScores: parsed.rubricScores ?? {},
+    feedbackVi: parsed.feedbackVi ?? "",
+  };
 }
 
 /**
@@ -137,6 +137,6 @@ export async function gradeResponse(input: GradePromptInput): Promise<GradeResul
  * Q8 max 5. Total max raw = 28. Scaled to 0-200 linearly.
  */
 export function rawToScaledWriting(rawSum: number): number {
-	const MAX_RAW = 28;
-	return Math.round((rawSum / MAX_RAW) * 200);
+  const MAX_RAW = 28;
+  return Math.round((rawSum / MAX_RAW) * 200);
 }

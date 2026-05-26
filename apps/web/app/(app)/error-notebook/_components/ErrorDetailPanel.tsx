@@ -1,16 +1,11 @@
 "use client";
 
-import { useCallback } from "react";
-import {
-  X,
-  CheckCircle,
-  XCircle,
-  AlertTriangle,
-} from "lucide-react";
-import * as m from "motion/react-client";
+import { AlertTriangle, CheckCircle, X, XCircle } from "lucide-react";
 import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-client";
+import { useCallback } from "react";
 import type { ErrorEntry } from "../_types/types";
-import { MODULE_LABELS, MODULE_ICONS } from "../_types/types";
+import { MODULE_ICONS, MODULE_LABELS } from "../_types/types";
 import { DeepExplanation } from "./DeepExplanation";
 import { InlinePractice } from "./InlinePractice";
 
@@ -64,7 +59,8 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
                   </span>
                 )}
                 <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-text-secondary">
-                  {MODULE_ICONS[error.sourceModule] ?? "📄"} {MODULE_LABELS[error.sourceModule] ?? error.sourceModule}
+                  {MODULE_ICONS[error.sourceModule] ?? "📄"}{" "}
+                  {MODULE_LABELS[error.sourceModule] ?? error.sourceModule}
                 </span>
               </div>
               <button
@@ -123,9 +119,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
                     <div className="text-[10px] font-bold text-(--success) uppercase mb-1">
                       <CheckCircle className="h-2.5 w-2.5 inline mr-1" /> Đáp án đúng
                     </div>
-                    <div className="text-sm font-bold text-(--success)">
-                      {error.correctAnswer}
-                    </div>
+                    <div className="text-sm font-bold text-(--success)">{error.correctAnswer}</div>
                   </div>
                 </div>
               )}
@@ -142,18 +136,28 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
 
               {/* Inline Practice */}
               <div className="mb-5">
-                <InlinePractice
-                  errorId={error.id}
-                  onResolved={() => onResolve(error.id)}
-                />
+                <InlinePractice errorId={error.id} onResolved={() => onResolve(error.id)} />
               </div>
 
               {/* Meta info */}
               <div className="px-3.5 py-3 rounded-[10px] bg-surface-alt border-2 border-border text-xs text-text-muted flex flex-col gap-1">
-                <div>📅 Ngày tạo: {new Date(error.createdAt).toLocaleDateString("vi-VN", { day: "numeric", month: "long", year: "numeric" })}</div>
+                <div>
+                  📅 Ngày tạo:{" "}
+                  {new Date(error.createdAt).toLocaleDateString("vi-VN", {
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </div>
                 {error.reviewCount > 0 && <div>🧠 Đã ôn: {error.reviewCount} lần</div>}
-                {error.lastReviewedAt && <div>📖 Ôn gần nhất: {new Date(error.lastReviewedAt).toLocaleDateString("vi-VN")}</div>}
-                {error.nextReviewAt && <div>⏰ Ôn lại: {new Date(error.nextReviewAt).toLocaleDateString("vi-VN")}</div>}
+                {error.lastReviewedAt && (
+                  <div>
+                    📖 Ôn gần nhất: {new Date(error.lastReviewedAt).toLocaleDateString("vi-VN")}
+                  </div>
+                )}
+                {error.nextReviewAt && (
+                  <div>⏰ Ôn lại: {new Date(error.nextReviewAt).toLocaleDateString("vi-VN")}</div>
+                )}
               </div>
             </div>
 

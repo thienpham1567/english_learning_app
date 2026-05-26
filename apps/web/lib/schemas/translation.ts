@@ -7,7 +7,7 @@ export const TranslationSchema = z.object({
       z.object({
         word: z.string(),
         meaning: z.string(),
-      })
+      }),
     )
     .default([]),
 });

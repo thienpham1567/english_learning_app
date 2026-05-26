@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useDashboard } from "@/hooks/useDashboard";
 import { api } from "@/lib/api-client";
 

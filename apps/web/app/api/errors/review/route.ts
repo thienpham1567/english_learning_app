@@ -1,9 +1,7 @@
+import { db, errorLog } from "@repo/database";
+import { and, desc, eq, isNull, lte, or, sql } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, and, sql, lte, desc, isNull, or } from "drizzle-orm";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { errorLog } from "@repo/database";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("errors/review");
@@ -83,10 +81,7 @@ export async function GET() {
         and(
           eq(errorLog.userId, session.user.id),
           eq(errorLog.isResolved, false),
-          or(
-            lte(errorLog.nextReviewAt, now),
-            isNull(errorLog.nextReviewAt),
-          ),
+          or(lte(errorLog.nextReviewAt, now), isNull(errorLog.nextReviewAt)),
         ),
       )
       .orderBy(
@@ -102,10 +97,7 @@ export async function GET() {
         and(
           eq(errorLog.userId, session.user.id),
           eq(errorLog.isResolved, false),
-          or(
-            lte(errorLog.nextReviewAt, now),
-            isNull(errorLog.nextReviewAt),
-          ),
+          or(lte(errorLog.nextReviewAt, now), isNull(errorLog.nextReviewAt)),
         ),
       ),
   ]);
@@ -126,7 +118,10 @@ export async function POST(request: Request) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) return Response.json({ error: "Unauthorized" }, { status: 401 });
 
-  const body = await request.json().catch(() => null) as { errorId?: string; grade?: number } | null;
+  const body = (await request.json().catch(() => null)) as {
+    errorId?: string;
+    grade?: number;
+  } | null;
 
   if (!body?.errorId || typeof body.grade !== "number" || body.grade < 0 || body.grade > 5) {
     return Response.json({ error: "Invalid body: need errorId and grade (0-5)" }, { status: 400 });
@@ -171,14 +166,17 @@ export async function POST(request: Request) {
     })
     .where(eq(errorLog.id, errorId));
 
-  log.info({
-    userId: session.user.id,
-    errorId,
-    grade,
-    interval,
-    nextReview: nextReview.toISOString(),
-    resolved: shouldResolve,
-  }, "review.graded");
+  log.info(
+    {
+      userId: session.user.id,
+      errorId,
+      grade,
+      interval,
+      nextReview: nextReview.toISOString(),
+      resolved: shouldResolve,
+    },
+    "review.graded",
+  );
 
   return Response.json({
     interval,

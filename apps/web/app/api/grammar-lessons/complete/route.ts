@@ -1,15 +1,13 @@
-import { headers } from "next/headers";
+import { activityLog, db, errorLog, grammarLessonProgress } from "@repo/database";
+import { recordLearningEvent } from "@repo/modules";
 import { and, eq } from "drizzle-orm";
-
+import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import {
   calculateGrammarLessonXp,
-  getGrammarLessonDifficulty,
   GrammarLessonCompleteRequestSchema,
+  getGrammarLessonDifficulty,
 } from "@/lib/grammar-lessons/schema";
-import { db } from "@repo/database";
-import { activityLog, errorLog, grammarLessonProgress } from "@repo/database";
-import { recordLearningEvent } from "@repo/modules";
 
 /**
  * POST /api/grammar-lessons/complete
@@ -34,26 +32,31 @@ export async function POST(request: Request) {
     );
   }
 
-  const { topic, topicTitle, examMode, level, correctCount, totalCount, durationMs, answers } = parsed.data;
+  const { topic, topicTitle, examMode, level, correctCount, totalCount, durationMs, answers } =
+    parsed.data;
   const scorePct = Math.round((correctCount / totalCount) * 100);
   const now = new Date();
 
   const [existing] = await db
     .select()
     .from(grammarLessonProgress)
-    .where(and(
-      eq(grammarLessonProgress.userId, userId),
-      eq(grammarLessonProgress.topicId, topic),
-      eq(grammarLessonProgress.examMode, examMode),
-    ))
+    .where(
+      and(
+        eq(grammarLessonProgress.userId, userId),
+        eq(grammarLessonProgress.topicId, topic),
+        eq(grammarLessonProgress.examMode, examMode),
+      ),
+    )
     .limit(1);
 
   const previousBest = existing?.scorePct ?? 0;
   const isBestAttempt = scorePct >= previousBest;
   const wasCompleted = existing?.status === "completed";
   const xpAmount = wasCompleted ? 0 : calculateGrammarLessonXp(correctCount, totalCount);
-  const mergedCorrectCount = isBestAttempt ? correctCount : existing?.correctCount ?? correctCount;
-  const mergedTotalCount = isBestAttempt ? totalCount : existing?.totalCount ?? totalCount;
+  const mergedCorrectCount = isBestAttempt
+    ? correctCount
+    : (existing?.correctCount ?? correctCount);
+  const mergedTotalCount = isBestAttempt ? totalCount : (existing?.totalCount ?? totalCount);
   const mergedScorePct = Math.max(previousBest, scorePct);
   const completedAt = existing?.completedAt ?? now;
 
@@ -100,17 +103,19 @@ export async function POST(request: Request) {
 
   const incorrectAnswers = answers.filter((answer) => !answer.correct);
   if (incorrectAnswers.length > 0) {
-    await db.insert(errorLog).values(incorrectAnswers.map((answer) => ({
-      userId,
-      sourceModule: "grammar-lessons",
-      questionStem: answer.questionStem,
-      options: answer.options ?? null,
-      userAnswer: answer.userAnswer,
-      correctAnswer: answer.correctAnswer,
-      explanationEn: answer.explanationEn ?? null,
-      explanationVi: answer.explanationVi ?? null,
-      grammarTopic: topicTitle ?? topic,
-    })));
+    await db.insert(errorLog).values(
+      incorrectAnswers.map((answer) => ({
+        userId,
+        sourceModule: "grammar-lessons",
+        questionStem: answer.questionStem,
+        options: answer.options ?? null,
+        userAnswer: answer.userAnswer,
+        correctAnswer: answer.correctAnswer,
+        explanationEn: answer.explanationEn ?? null,
+        explanationVi: answer.explanationVi ?? null,
+        grammarTopic: topicTitle ?? topic,
+      })),
+    );
   }
 
   void recordLearningEvent({

@@ -1,5 +1,5 @@
-import { ExerciseSchema } from "@/lib/daily-challenge/schema";
 import type { z } from "zod";
+import { ExerciseSchema } from "@/lib/daily-challenge/schema";
 
 const KNOWN_EXERCISE_TYPES = new Set([
   "fill-in-blank",
@@ -21,27 +21,27 @@ const RESERVED_KEYS = new Set(["type", "instruction"]);
  */
 const TYPE_ALIASES: Record<string, string> = {
   "fill-in-the-blank": "fill-in-blank",
-  "fill_in_blank": "fill-in-blank",
-  "fill_in_the_blank": "fill-in-blank",
+  fill_in_blank: "fill-in-blank",
+  fill_in_the_blank: "fill-in-blank",
   "gap-fill": "fill-in-blank",
   "multiple-choice": "fill-in-blank",
   "sentence-ordering": "sentence-order",
-  "sentence_order": "sentence-order",
+  sentence_order: "sentence-order",
   "word-order": "sentence-order",
-  "translate": "translation",
+  translate: "translation",
   "error-detection": "error-correction",
-  "error_correction": "error-correction",
-  "word_formation": "word-formation",
+  error_correction: "error-correction",
+  word_formation: "word-formation",
   "word-form": "word-formation",
-  "dialogue_completion": "dialogue-completion",
+  dialogue_completion: "dialogue-completion",
   "conversation-completion": "dialogue-completion",
-  "synonym_antonym": "synonym-antonym",
+  synonym_antonym: "synonym-antonym",
   "synonyms-antonyms": "synonym-antonym",
-  "synonym": "synonym-antonym",
-  "antonym": "synonym-antonym",
-  "reading_comprehension": "reading-comprehension",
-  "reading": "reading-comprehension",
-  "collocation_exercise": "collocation",
+  synonym: "synonym-antonym",
+  antonym: "synonym-antonym",
+  reading_comprehension: "reading-comprehension",
+  reading: "reading-comprehension",
+  collocation_exercise: "collocation",
 };
 
 export type ValidExercise = z.infer<typeof ExerciseSchema>;

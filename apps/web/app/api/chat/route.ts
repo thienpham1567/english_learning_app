@@ -1,15 +1,15 @@
+import { db } from "@repo/database";
 import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("chat");
+
 import { conversation, message } from "@repo/database";
 import { buildChatRequest } from "@/lib/chat/build-chat-input";
-import { DEFAULT_PERSONA_ID, PERSONA_IDS } from "@/lib/chat/personas";
 import { createChatSse } from "@/lib/chat/create-chat-sse";
+import { DEFAULT_PERSONA_ID, PERSONA_IDS } from "@/lib/chat/personas";
 import type { ChatMessage } from "@/lib/chat/types";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
@@ -146,12 +146,10 @@ export async function POST(req: Request) {
     const MAX_MESSAGE_TEXT_LENGTH = 10_000;
 
     const messages = Array.isArray(body?.messages)
-      ? body.messages
-          .filter(isChatMessage)
-          .map((m) => ({
-            ...m,
-            text: m.text.slice(0, MAX_MESSAGE_TEXT_LENGTH),
-          }))
+      ? body.messages.filter(isChatMessage).map((m) => ({
+          ...m,
+          text: m.text.slice(0, MAX_MESSAGE_TEXT_LENGTH),
+        }))
       : [];
 
     if (messages.length === 0) {
@@ -187,13 +185,7 @@ export async function POST(req: Request) {
           }
 
           // Persist only on successful completion — don't save half-streamed replies.
-          if (
-            result?.doneSent &&
-            result.fullText &&
-            conversationId &&
-            session &&
-            !signal.aborted
-          ) {
+          if (result?.doneSent && result.fullText && conversationId && session && !signal.aborted) {
             const lastUserMessage = messages[messages.length - 1];
             if (lastUserMessage) {
               try {

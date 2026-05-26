@@ -1,10 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
-import { useRouter } from "next/navigation";
-
-import { Card, Tag, Spin, Flex, Typography, Empty } from "antd";
-import { api } from "@/lib/api-client";
+import { Card, Empty, Flex, Spin, Tag, Typography } from "antd";
 import {
   Archive,
   BookOpen,
@@ -22,6 +18,9 @@ import {
   Star,
   Store,
 } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useCallback, useEffect, useState } from "react";
+import { api } from "@/lib/api-client";
 
 const { Text, Title } = Typography;
 
@@ -94,37 +93,55 @@ export default function GradedReaderPage() {
   const readCount = passages.filter((p) => p.isRead).length;
 
   return (
-    <div className="anim-fade-up h-full overflow-y-auto" style={{padding: "var(--space-6)"}} >
-      <Flex vertical gap={20} className="w-[800px] mx-auto" >
-
+    <div className="anim-fade-up h-full overflow-y-auto" style={{ padding: "var(--space-6)" }}>
+      <Flex vertical gap={20} className="w-[800px] mx-auto">
         {/* Hero header */}
         <Card
-          
-          styles={{ body: { padding: "24px 28px" } }} className="border-none" style={{borderRadius: 20, background: "linear-gradient(135deg, var(--accent), var(--secondary))"}} >
+          styles={{ body: { padding: "24px 28px" } }}
+          className="border-none"
+          style={{
+            borderRadius: 20,
+            background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+          }}
+        >
           <Flex align="center" gap={16}>
-            <div className="w-[48px] h-[48px] flex items-center justify-center" style={{borderRadius: 14, background: "rgba(255,255,255,0.2)"}} >
-              <BookOpen className="text-3xl" style={{color: "var(--text-on-accent)"}} />
+            <div
+              className="w-[48px] h-[48px] flex items-center justify-center"
+              style={{ borderRadius: 14, background: "rgba(255,255,255,0.2)" }}
+            >
+              <BookOpen className="text-3xl" style={{ color: "var(--text-on-accent)" }} />
             </div>
             <div>
-              <Text className="text-[11px] uppercase" style={{letterSpacing: "0.12em", color: "rgba(255,255,255,0.7)"}} >
+              <Text
+                className="text-[11px] uppercase"
+                style={{ letterSpacing: "0.12em", color: "rgba(255,255,255,0.7)" }}
+              >
                 GRADED READER
               </Text>
-              <Title level={4} className="m-0 font-display italic" style={{color: "var(--text-on-accent)"}} >
+              <Title
+                level={4}
+                className="m-0 font-display italic"
+                style={{ color: "var(--text-on-accent)" }}
+              >
                 Đọc theo cấp độ CEFR
               </Title>
             </div>
             {passages.length > 0 && (
-              <div className="text-center" style={{marginLeft: "auto"}} >
-                <Text className="text-2xl font-bold" style={{color: "var(--text-on-accent)"}} >{readCount}/{passages.length}</Text>
+              <div className="text-center" style={{ marginLeft: "auto" }}>
+                <Text className="text-2xl font-bold" style={{ color: "var(--text-on-accent)" }}>
+                  {readCount}/{passages.length}
+                </Text>
                 <br />
-                <Text className="text-[11px]" style={{color: "rgba(255,255,255,0.7)"}} >đã đọc</Text>
+                <Text className="text-[11px]" style={{ color: "rgba(255,255,255,0.7)" }}>
+                  đã đọc
+                </Text>
               </div>
             )}
           </Flex>
         </Card>
 
         {/* Level filter pills */}
-        <Card  styles={{ body: { padding: "12px 16px" } }} className="rounded-2xl" >
+        <Card styles={{ body: { padding: "12px 16px" } }} className="rounded-2xl">
           <Flex gap={8} wrap align="center">
             <Filter className="text-text-muted text-sm" />
             {LEVELS.map((lv) => {
@@ -133,7 +150,17 @@ export default function GradedReaderPage() {
               return (
                 <button
                   key={lv}
-                  onClick={() => setLevel(lv)} className="text-xs font-semibold cursor-pointer" style={{padding: "6px 16px", borderRadius: 20, border: active ? `2px solid ${color}` : "1px solid var(--border)", background: active ? color : "transparent", color: active ? "var(--text-on-accent)" : "var(--text-secondary)", transition: "all 0.2s ease"}} >
+                  onClick={() => setLevel(lv)}
+                  className="text-xs font-semibold cursor-pointer"
+                  style={{
+                    padding: "6px 16px",
+                    borderRadius: 20,
+                    border: active ? `2px solid ${color}` : "1px solid var(--border)",
+                    background: active ? color : "transparent",
+                    color: active ? "var(--text-on-accent)" : "var(--text-secondary)",
+                    transition: "all 0.2s ease",
+                  }}
+                >
                   {LEVEL_LABELS[lv]}
                 </button>
               );
@@ -148,7 +175,7 @@ export default function GradedReaderPage() {
           </Flex>
         ) : passages.length === 0 ? (
           <Empty
-            image={<BookOpen className="text-text-muted" style={{fontSize: 48}} />}
+            image={<BookOpen className="text-text-muted" style={{ fontSize: 48 }} />}
             description="Không có bài đọc nào cho cấp độ này"
             style={{ padding: 60 }}
           />
@@ -159,29 +186,49 @@ export default function GradedReaderPage() {
                 key={p.id}
                 hoverable
                 onClick={() => router.push(`/reading/graded/${p.id}`)}
-                
-                styles={{ body: { padding: "14px 20px" } }} className="rounded-2xl cursor-pointer" style={{opacity: p.isRead ? 0.75 : 1, transition: "all 0.2s ease"}} >
+                styles={{ body: { padding: "14px 20px" } }}
+                className="rounded-2xl cursor-pointer"
+                style={{ opacity: p.isRead ? 0.75 : 1, transition: "all 0.2s ease" }}
+              >
                 <Flex align="center" gap={14}>
                   {/* Read indicator icon */}
-                  <div className="w-[40px] h-[40px] rounded-xl flex items-center justify-center shrink-0" style={{background: p.isRead
-                      ? "linear-gradient(135deg, var(--success)20, var(--success)10)"
-                      : `linear-gradient(135deg, ${LEVEL_COLORS[p.cefrLevel] || "var(--accent)"}15, ${LEVEL_COLORS[p.cefrLevel] || "var(--accent)"}08)`}} >
-                    {p.isRead
-                      ? <CheckCircle className="text-xl text-emerald-500" />
-                      : <FileText className="text-lg" style={{color: LEVEL_COLORS[p.cefrLevel] || "var(--accent)"}} />
-                    }
+                  <div
+                    className="w-[40px] h-[40px] rounded-xl flex items-center justify-center shrink-0"
+                    style={{
+                      background: p.isRead
+                        ? "linear-gradient(135deg, var(--success)20, var(--success)10)"
+                        : `linear-gradient(135deg, ${LEVEL_COLORS[p.cefrLevel] || "var(--accent)"}15, ${LEVEL_COLORS[p.cefrLevel] || "var(--accent)"}08)`,
+                    }}
+                  >
+                    {p.isRead ? (
+                      <CheckCircle className="text-xl text-emerald-500" />
+                    ) : (
+                      <FileText
+                        className="text-lg"
+                        style={{ color: LEVEL_COLORS[p.cefrLevel] || "var(--accent)" }}
+                      />
+                    )}
                   </div>
 
                   {/* Content */}
-                  <div className="flex-1 w-[0px]" >
-                    <Text className="text-sm font-semibold block overflow-hidden" style={{textOverflow: "ellipsis", whiteSpace: "nowrap"}} >
+                  <div className="flex-1 w-[0px]">
+                    <Text
+                      className="text-sm font-semibold block overflow-hidden"
+                      style={{ textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+                    >
                       {p.title}
                     </Text>
-                    <Flex gap={8} align="center" className="mt-1" >
-                      <Tag className="m-0 text-[10px] font-bold rounded-md border-none" style={{background: LEVEL_COLORS[p.cefrLevel] || undefined, color: LEVEL_COLORS[p.cefrLevel] ? "var(--text-on-accent)" : undefined}} >
+                    <Flex gap={8} align="center" className="mt-1">
+                      <Tag
+                        className="m-0 text-[10px] font-bold rounded-md border-none"
+                        style={{
+                          background: LEVEL_COLORS[p.cefrLevel] || undefined,
+                          color: LEVEL_COLORS[p.cefrLevel] ? "var(--text-on-accent)" : undefined,
+                        }}
+                      >
                         {p.cefrLevel}
                       </Tag>
-                      <Text className="text-[11px] text-text-muted" >
+                      <Text className="text-[11px] text-text-muted">
                         {SECTION_ICONS[p.section]} {p.wordCount} từ
                       </Text>
                     </Flex>
@@ -189,7 +236,13 @@ export default function GradedReaderPage() {
 
                   {/* New words badge */}
                   {p.newWordsCount > 0 && (
-                    <Tag className="m-0 rounded-xl border-none text-accent font-semibold text-[11px] flex items-center gap-1" style={{background: "color-mix(in srgb, var(--accent) 12%, transparent)", padding: "2px 10px"}} >
+                    <Tag
+                      className="m-0 rounded-xl border-none text-accent font-semibold text-[11px] flex items-center gap-1"
+                      style={{
+                        background: "color-mix(in srgb, var(--accent) 12%, transparent)",
+                        padding: "2px 10px",
+                      }}
+                    >
                       <Star size={10} />
                       {p.newWordsCount} mới
                     </Tag>

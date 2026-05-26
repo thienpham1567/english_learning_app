@@ -1,9 +1,9 @@
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("daily-challenge/explain");
 

@@ -1,20 +1,13 @@
 "use client";
 
+import { BookOpen, Loader2, Star, Volume2 } from "lucide-react";
 import { useState } from "react";
-import {
-  Loader2,
-  BookOpen,
-  Volume2,
-  Star,
-} from "lucide-react";
-
-import type { FrequencyBand, VocabularyWithNearby } from "@/lib/schemas/vocabulary";
-
-import { useAudioPlayer } from "@/hooks/useAudioPlayer";
 import { NearbyWordsBar } from "@/app/(app)/dictionary/_components/NearbyWordsBar";
 import { SensePanel } from "@/app/(app)/dictionary/_components/SensePanel";
 import { VerbFormsSection } from "@/app/(app)/dictionary/_components/VerbFormsSection";
 import { WordFamilySection } from "@/app/(app)/dictionary/_components/WordFamilySection";
+import { useAudioPlayer } from "@/hooks/useAudioPlayer";
+import type { FrequencyBand, VocabularyWithNearby } from "@/lib/schemas/vocabulary";
 
 type DictionaryResultCardProps = {
   vocabulary: VocabularyWithNearby | null;
@@ -26,13 +19,15 @@ type DictionaryResultCardProps = {
   onSearch?: (word: string) => void;
 };
 
-
-const FREQUENCY_CONFIG: Record<FrequencyBand, { filled: number; labelVi: string; tooltipEn: string }> = {
-  top1k:  { filled: 5, labelVi: "Rất phổ biến", tooltipEn: "Top 1,000 most common words" },
-  top3k:  { filled: 4, labelVi: "Phổ biến",     tooltipEn: "Top 3,000 most common words" },
-  top5k:  { filled: 3, labelVi: "Khá phổ biến", tooltipEn: "Top 5,000 most common words" },
-  top10k: { filled: 2, labelVi: "Ít phổ biến",  tooltipEn: "Top 10,000 most common words" },
-  rare:   { filled: 1, labelVi: "Hiếm gặp",     tooltipEn: "Uncommon word" },
+const FREQUENCY_CONFIG: Record<
+  FrequencyBand,
+  { filled: number; labelVi: string; tooltipEn: string }
+> = {
+  top1k: { filled: 5, labelVi: "Rất phổ biến", tooltipEn: "Top 1,000 most common words" },
+  top3k: { filled: 4, labelVi: "Phổ biến", tooltipEn: "Top 3,000 most common words" },
+  top5k: { filled: 3, labelVi: "Khá phổ biến", tooltipEn: "Top 5,000 most common words" },
+  top10k: { filled: 2, labelVi: "Ít phổ biến", tooltipEn: "Top 10,000 most common words" },
+  rare: { filled: 1, labelVi: "Hiếm gặp", tooltipEn: "Uncommon word" },
 };
 
 function FrequencyBar({ band }: { band: FrequencyBand }) {
@@ -85,17 +80,19 @@ const POS_LABELS_VI: Record<string, string> = {
 
 // Maps the prompt's allowed register values to Vietnamese with tooltip context.
 const REGISTER_INFO: Record<string, { vi: string; tooltipVi: string }> = {
-  formal:      { vi: "trang trọng",  tooltipVi: "Dùng trong văn viết học thuật, pháp lý hoặc chuyên môn." },
-  informal:    { vi: "thân mật",     tooltipVi: "Dùng trong giao tiếp hàng ngày." },
-  slang:       { vi: "tiếng lóng",   tooltipVi: "Cách nói rất thân mật trong nhóm/cộng đồng nhất định." },
-  technical:   { vi: "chuyên ngành", tooltipVi: "Thuật ngữ trong một lĩnh vực cụ thể." },
-  literary:    { vi: "văn chương",   tooltipVi: "Hay gặp trong tác phẩm văn học." },
-  archaic:     { vi: "cổ",           tooltipVi: "Không còn được dùng phổ biến hiện nay." },
-  colloquial:  { vi: "khẩu ngữ",     tooltipVi: "Phong cách hội thoại, thoải mái." },
-  vulgar:      { vi: "thô tục",      tooltipVi: "Từ kiêng kỵ, nên tránh dùng." },
-  offensive:   { vi: "xúc phạm",     tooltipVi: "Có thể gây xúc phạm hoặc tổn thương người nghe." },
+  formal: {
+    vi: "trang trọng",
+    tooltipVi: "Dùng trong văn viết học thuật, pháp lý hoặc chuyên môn.",
+  },
+  informal: { vi: "thân mật", tooltipVi: "Dùng trong giao tiếp hàng ngày." },
+  slang: { vi: "tiếng lóng", tooltipVi: "Cách nói rất thân mật trong nhóm/cộng đồng nhất định." },
+  technical: { vi: "chuyên ngành", tooltipVi: "Thuật ngữ trong một lĩnh vực cụ thể." },
+  literary: { vi: "văn chương", tooltipVi: "Hay gặp trong tác phẩm văn học." },
+  archaic: { vi: "cổ", tooltipVi: "Không còn được dùng phổ biến hiện nay." },
+  colloquial: { vi: "khẩu ngữ", tooltipVi: "Phong cách hội thoại, thoải mái." },
+  vulgar: { vi: "thô tục", tooltipVi: "Từ kiêng kỵ, nên tránh dùng." },
+  offensive: { vi: "xúc phạm", tooltipVi: "Có thể gây xúc phạm hoặc tổn thương người nghe." },
 };
-
 
 function AudioButton({
   locale,
@@ -182,7 +179,10 @@ export function DictionaryResultCard({
   const numberLabel = vocabulary.numberInfo ? getNumberLabel(vocabulary.numberInfo) : "";
 
   return (
-    <div key={vocabulary.headword} className="anim-fade-up dictionary-result-card rounded-xl bg-surface shadow-lg min-h-[400px]">
+    <div
+      key={vocabulary.headword}
+      className="anim-fade-up dictionary-result-card rounded-xl bg-surface shadow-lg min-h-[400px]"
+    >
       {/* Header */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="min-w-0 flex-1">
@@ -222,29 +222,33 @@ export function DictionaryResultCard({
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          {vocabulary.level && (() => {
-            const style = LEVEL_STYLES[vocabulary.level];
-            return (
-              <span
-                className={`rounded-full px-3 py-0.5 text-xs font-bold tracking-wide border ${style?.bg ?? "bg-bg-deep"} ${style?.text ?? "text-text-secondary"} ${style?.border ?? "border-border"}`}
-              >
-                {vocabulary.level}
-              </span>
-            );
-          })()}
-          {vocabulary.register && (() => {
-            const info = REGISTER_INFO[vocabulary.register];
-            const display = info?.vi ?? vocabulary.register;
-            const tooltip = info ? `${vocabulary.register} — ${info.tooltipVi}` : vocabulary.register;
-            return (
-              <span className="relative group rounded-full px-3 py-0.5 text-xs border border-(--border-strong) text-text-secondary bg-accent-light cursor-help">
-                {display}
-                <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
-                  {tooltip}
+          {vocabulary.level &&
+            (() => {
+              const style = LEVEL_STYLES[vocabulary.level];
+              return (
+                <span
+                  className={`rounded-full px-3 py-0.5 text-xs font-bold tracking-wide border ${style?.bg ?? "bg-bg-deep"} ${style?.text ?? "text-text-secondary"} ${style?.border ?? "border-border"}`}
+                >
+                  {vocabulary.level}
                 </span>
-              </span>
-            );
-          })()}
+              );
+            })()}
+          {vocabulary.register &&
+            (() => {
+              const info = REGISTER_INFO[vocabulary.register];
+              const display = info?.vi ?? vocabulary.register;
+              const tooltip = info
+                ? `${vocabulary.register} — ${info.tooltipVi}`
+                : vocabulary.register;
+              return (
+                <span className="relative group rounded-full px-3 py-0.5 text-xs border border-(--border-strong) text-text-secondary bg-accent-light cursor-help">
+                  {display}
+                  <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
+                    {tooltip}
+                  </span>
+                </span>
+              );
+            })()}
           {onOpenThesaurus && (
             <button
               type="button"
@@ -331,7 +335,14 @@ export function DictionaryResultCard({
             </button>
           ))}
         </div>
-        {activeSense && <SensePanel key={activeSense.id} sense={activeSense} headword={vocabulary.headword} onSearch={onSearch} />}
+        {activeSense && (
+          <SensePanel
+            key={activeSense.id}
+            sense={activeSense}
+            headword={vocabulary.headword}
+            onSearch={onSearch}
+          />
+        )}
       </div>
 
       {/* Nearby words bar */}

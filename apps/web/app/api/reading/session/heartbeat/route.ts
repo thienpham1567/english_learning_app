@@ -1,9 +1,7 @@
+import { db, readingPassage, readingSession } from "@repo/database";
+import { and, eq, isNull } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, and, isNull } from "drizzle-orm";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { readingSession, readingPassage } from "@repo/database";
 
 /**
  * POST /api/reading/session/heartbeat

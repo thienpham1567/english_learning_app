@@ -1,15 +1,15 @@
+import { db } from "@repo/database";
 import { and, asc, eq } from "drizzle-orm";
 import { headers } from "next/headers";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("conversations/[id]/title");
+
 import { conversation, message } from "@repo/database";
+import { deriveTitle } from "@/lib/chat/derive-title";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { deriveTitle } from "@/lib/chat/derive-title";
 
 const TITLE_INSTRUCTIONS =
   "Generate a concise chat title in Vietnamese or English matching the user's language. " +

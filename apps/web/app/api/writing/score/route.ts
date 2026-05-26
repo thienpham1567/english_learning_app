@@ -4,20 +4,21 @@ import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("writing/score");
-import { db } from "@repo/database";
-import { writingAttempt, writingErrorPattern } from "@repo/database";
-import { eq, and } from "drizzle-orm";
+
+import { db, writingAttempt, writingErrorPattern } from "@repo/database";
+import { and, eq } from "drizzle-orm";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
+import { VALID_ERROR_TAGS } from "@/lib/writing/error-tags";
 import {
-  type ExamVariant,
   buildScoringPrompt,
   countWords,
-  MIN_WORD_COUNT,
+  type ExamVariant,
   MAX_WORD_COUNT,
+  MIN_WORD_COUNT,
   SCORE_RANGES,
 } from "@/lib/writing/rubric-prompts";
-import { VALID_ERROR_TAGS } from "@/lib/writing/error-tags";
+
 // Note: SCORE_RANGES used for targetScore validation below
 
 /**
@@ -54,7 +55,10 @@ export async function POST(request: Request) {
   const entry = rateLimitMap.get(userId);
   if (entry && entry.resetAt > now) {
     if (entry.count >= RATE_LIMIT_MAX) {
-      return Response.json({ error: "Rate limit exceeded. Try again in a minute." }, { status: 429 });
+      return Response.json(
+        { error: "Rate limit exceeded. Try again in a minute." },
+        { status: 429 },
+      );
     }
     entry.count++;
   } else {
@@ -84,7 +88,10 @@ export async function POST(request: Request) {
     }
     const range = SCORE_RANGES[exam as ExamVariant];
     if (range && (raw < range.min || raw > range.max)) {
-      return Response.json({ error: `targetScore out of range (${range.min}–${range.max}) for ${exam}` }, { status: 400 });
+      return Response.json(
+        { error: `targetScore out of range (${range.min}–${range.max}) for ${exam}` },
+        { status: 400 },
+      );
     }
     targetScore = raw;
   }
@@ -93,24 +100,41 @@ export async function POST(request: Request) {
     return Response.json({ error: "No essay text provided" }, { status: 400 });
   }
   if (!exam || !VALID_EXAMS.has(exam)) {
-    return Response.json({ error: "Invalid exam type (ielts-task2, ielts-task1, toefl-independent)" }, { status: 400 });
+    return Response.json(
+      { error: "Invalid exam type (ielts-task2, ielts-task1, toefl-independent)" },
+      { status: 400 },
+    );
   }
 
   // Word count guard (AC3)
   const wordCount = countWords(text);
   if (wordCount < MIN_WORD_COUNT) {
-    return Response.json({ error: "under-length", wordCount, minimum: MIN_WORD_COUNT }, { status: 422 });
+    return Response.json(
+      { error: "under-length", wordCount, minimum: MIN_WORD_COUNT },
+      { status: 422 },
+    );
   }
   if (wordCount > MAX_WORD_COUNT) {
-    return Response.json({ error: `Essay too long (max ${MAX_WORD_COUNT} words)`, wordCount }, { status: 400 });
+    return Response.json(
+      { error: `Essay too long (max ${MAX_WORD_COUNT} words)`, wordCount },
+      { status: 400 },
+    );
   }
 
   // Build prompts
   const rawVocab = body?.vocabBank;
   const vocabBank = Array.isArray(rawVocab)
-    ? rawVocab.filter((v): v is { term: string } => typeof v?.term === "string" && v.term.length > 0)
+    ? rawVocab.filter(
+        (v): v is { term: string } => typeof v?.term === "string" && v.term.length > 0,
+      )
     : undefined;
-  const { system, user: userPrompt } = buildScoringPrompt(exam, text, prompt, targetScore, vocabBank);
+  const { system, user: userPrompt } = buildScoringPrompt(
+    exam,
+    text,
+    prompt,
+    targetScore,
+    vocabBank,
+  );
 
   try {
     const completion = await openAiClient.chat.completions.create({
@@ -192,7 +216,7 @@ export async function POST(request: Request) {
 
     // AC1: Classify error tags and upsert writingErrorPattern (non-fatal, fire-and-forget)
     void classifyAndUpsertPatterns(userId, inlineIssues).catch((err) =>
-      log.error({ err }, "writing.score.pattern.classification.failed")
+      log.error({ err }, "writing.score.pattern.classification.failed"),
     );
 
     return Response.json(result);

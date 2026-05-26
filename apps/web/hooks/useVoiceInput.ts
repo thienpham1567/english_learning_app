@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api-client";
 
 export type VoiceWord = { word: string; startMs: number; endMs: number };
@@ -38,10 +38,7 @@ export function useVoiceInput(options: UseVoiceInputOptions = {}) {
   const [isSupported, setIsSupported] = useState(false);
 
   useEffect(() => {
-    setIsSupported(
-      !!navigator.mediaDevices?.getUserMedia &&
-      typeof MediaRecorder !== "undefined"
-    );
+    setIsSupported(!!navigator.mediaDevices?.getUserMedia && typeof MediaRecorder !== "undefined");
   }, []);
 
   useEffect(() => {

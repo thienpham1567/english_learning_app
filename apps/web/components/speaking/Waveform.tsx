@@ -29,9 +29,8 @@ export function Waveform({
 
     const AudioCtx =
       typeof window !== "undefined"
-        ? window.AudioContext ??
-          (window as unknown as { webkitAudioContext?: typeof AudioContext })
-            .webkitAudioContext
+        ? (window.AudioContext ??
+          (window as unknown as { webkitAudioContext?: typeof AudioContext }).webkitAudioContext)
         : undefined;
     if (!AudioCtx) return;
 

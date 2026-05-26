@@ -68,13 +68,7 @@ export default function OpenGraphImage() {
             strokeLinejoin="round"
             fill="none"
           />
-          <path
-            d="M16 8v17"
-            stroke="white"
-            strokeWidth="1.5"
-            strokeLinecap="round"
-            opacity="0.4"
-          />
+          <path d="M16 8v17" stroke="white" strokeWidth="1.5" strokeLinecap="round" opacity="0.4" />
           <circle cx="16" cy="4" r="1.8" fill="white" opacity="0.9" />
         </svg>
       </div>

@@ -1,8 +1,14 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { parseAccent, synthesizeTtsForVoice, VOICE_BY_ROLE, VOICES, type VoiceRole } from "@/lib/tts/groq";
-import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
 import { routeLogger } from "@/lib/logger";
+import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
+import {
+  parseAccent,
+  synthesizeTtsForVoice,
+  VOICE_BY_ROLE,
+  VOICES,
+  type VoiceRole,
+} from "@/lib/tts/groq";
 
 /**
  * POST /api/voice/synthesize
@@ -60,7 +66,13 @@ export async function POST(request: Request) {
   const voice = VOICE_BY_ROLE[role] || VOICES[accent] || "autumn";
   const cacheKey = `${voice}|${speed}|${text}`;
 
-  const log = routeLogger("voice/synthesize", { userId, accent, gender, speed, chars: text.length });
+  const log = routeLogger("voice/synthesize", {
+    userId,
+    accent,
+    gender,
+    speed,
+    chars: text.length,
+  });
 
   try {
     const cached = await readTtsCache("voice-synth", cacheKey, "wav");

@@ -33,7 +33,9 @@ export function PageHeader({
         ...style,
       }}
     >
-      <div style={{ display: "flex", alignItems: "flex-start", gap: "var(--space-3)", minWidth: 0 }}>
+      <div
+        style={{ display: "flex", alignItems: "flex-start", gap: "var(--space-3)", minWidth: 0 }}
+      >
         {icon && (
           <div
             style={{
@@ -66,7 +68,14 @@ export function PageHeader({
               {eyebrow}
             </div>
           )}
-          <div style={{ display: "flex", alignItems: "center", gap: "var(--space-2)", flexWrap: "wrap" }}>
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "var(--space-2)",
+              flexWrap: "wrap",
+            }}
+          >
             <h1
               style={{
                 margin: 0,
@@ -96,7 +105,13 @@ export function PageHeader({
             )}
           </div>
           {subtitle && (
-            <p style={{ margin: "4px 0 0", color: "var(--text-secondary)", fontSize: "var(--text-sm)" }}>
+            <p
+              style={{
+                margin: "4px 0 0",
+                color: "var(--text-secondary)",
+                fontSize: "var(--text-sm)",
+              }}
+            >
               {subtitle}
             </p>
           )}

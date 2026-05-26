@@ -1,9 +1,7 @@
+import { db, writingSubmission } from "@repo/database";
+import { desc, eq } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, desc } from "drizzle-orm";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { writingSubmission } from "@repo/database";
 
 export async function GET() {
   const session = await auth.api.getSession({ headers: await headers() });

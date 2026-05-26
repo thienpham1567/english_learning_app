@@ -1,16 +1,16 @@
 "use client";
-import { useState, useCallback } from "react";
 import {
-  Lightbulb,
-  XCircle,
-  CheckCircle,
-  Zap,
   BookOpen,
-  Loader2,
-  FlaskConical,
-  ChevronUp,
+  CheckCircle,
   ChevronDown,
+  ChevronUp,
+  FlaskConical,
+  Lightbulb,
+  Loader2,
+  XCircle,
+  Zap,
 } from "lucide-react";
+import { useCallback, useState } from "react";
 import { api } from "@/lib/api-client";
 
 type DeepExplanationData = {
@@ -45,7 +45,10 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
     setError(null);
 
     try {
-      const result = await api.post<{ explanation: DeepExplanationData }>(`/errors/${errorId}/explain`, {});
+      const result = await api.post<{ explanation: DeepExplanationData }>(
+        `/errors/${errorId}/explain`,
+        {},
+      );
       setData(result.explanation);
       setExpanded(true);
     } catch {
@@ -73,17 +76,9 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
         disabled={loading}
         className={`flex items-center gap-2 w-full px-3.5 py-2.5 rounded-[10px] border border-accent/20 text-[13px] font-semibold text-accent transition-all duration-200 text-left ${
           loading ? "cursor-wait" : "cursor-pointer"
-        } ${
-          expanded
-            ? "bg-accent/6"
-            : "bg-(--card-bg) hover:bg-accent/4"
-        }`}
+        } ${expanded ? "bg-accent/6" : "bg-(--card-bg) hover:bg-accent/4"}`}
       >
-        {loading ? (
-          <Loader2 className="h-4 w-4 animate-spin" />
-        ) : (
-          <Lightbulb className="h-4 w-4" />
-        )}
+        {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lightbulb className="h-4 w-4" />}
         <span className="flex-1">
           {loading
             ? "Đang phân tích lỗi sai..."
@@ -122,9 +117,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
             <div className="flex items-center gap-1.5 mb-1.5 text-xs font-bold text-(--error) uppercase tracking-wide">
               <XCircle className="h-3 w-3" /> Tại sao đáp án bạn chọn sai
             </div>
-            <p className="m-0 text-[13px] leading-relaxed text-(--text)">
-              {data.whyWrong}
-            </p>
+            <p className="m-0 text-[13px] leading-relaxed text-(--text)">{data.whyWrong}</p>
           </div>
 
           {/* Why Correct */}
@@ -132,9 +125,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
             <div className="flex items-center gap-1.5 mb-1.5 text-xs font-bold text-(--success) uppercase tracking-wide">
               <CheckCircle className="h-3 w-3" /> Tại sao đáp án đúng là đúng
             </div>
-            <p className="m-0 text-[13px] leading-relaxed text-(--text)">
-              {data.whyCorrect}
-            </p>
+            <p className="m-0 text-[13px] leading-relaxed text-(--text)">{data.whyCorrect}</p>
           </div>
 
           {/* Grammar Rule — Formula Card */}
@@ -174,9 +165,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
               <div className="text-[11px] font-bold text-(--warning) uppercase tracking-wide mb-1">
                 Mẹo ghi nhớ
               </div>
-              <p className="m-0 text-[13px] leading-relaxed text-(--text)">
-                {data.tip}
-              </p>
+              <p className="m-0 text-[13px] leading-relaxed text-(--text)">{data.tip}</p>
             </div>
           </div>
         </div>
@@ -185,11 +174,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
       {/* Fallback: show old explanation if no deep data and not expanded */}
       {!data && !expanded && !loading && (fallbackEn || fallbackVi) && (
         <div className="mt-2 px-3.5 py-2.5 rounded-lg bg-(--card-bg) border-2 border-border text-[13px] leading-relaxed">
-          {fallbackVi && (
-            <p className="m-0 text-text-secondary italic">
-              {fallbackVi}
-            </p>
-          )}
+          {fallbackVi && <p className="m-0 text-text-secondary italic">{fallbackVi}</p>}
         </div>
       )}
     </div>

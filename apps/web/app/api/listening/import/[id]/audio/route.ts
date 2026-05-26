@@ -1,11 +1,9 @@
-import { headers } from "next/headers";
+import { db, listeningImport } from "@repo/database";
+import { and, eq } from "drizzle-orm";
 import { promises as fs } from "fs";
+import { headers } from "next/headers";
 import path from "path";
-import { eq, and } from "drizzle-orm";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { listeningImport } from "@repo/database";
 
 const IMPORT_CACHE_DIR = path.join(process.cwd(), ".cache", "listening-imports");
 
@@ -15,10 +13,7 @@ const IMPORT_CACHE_DIR = path.join(process.cwd(), ".cache", "listening-imports")
  * Streams the imported audio file to the authenticated owner only (AC6).
  * Audio is never served publicly — ownership is verified per request.
  */
-export async function GET(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });

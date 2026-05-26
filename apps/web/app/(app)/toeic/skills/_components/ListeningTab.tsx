@@ -1,42 +1,62 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { AlertTriangle, Trophy, BarChart2 } from "lucide-react";
-import { api } from "@/lib/api-client";
-import { useListeningExercise } from "@/hooks/useListeningExercise";
-import { useExamMode } from "@/components/shared/ExamModeProvider";
-import { LevelSelector } from "@/app/(app)/listening/_components/LevelSelector";
+import { AlertTriangle, BarChart2, Trophy } from "lucide-react";
+import { motion } from "motion/react";
+import { useEffect, useState } from "react";
 import { AudioPlayer } from "@/app/(app)/listening/_components/AudioPlayer";
+import { DialogueGenerator } from "@/app/(app)/listening/_components/DialogueGenerator";
+import { LevelSelector } from "@/app/(app)/listening/_components/LevelSelector";
 import { QuestionCards } from "@/app/(app)/listening/_components/QuestionCards";
 import { Results } from "@/app/(app)/listening/_components/Results";
-import { DialogueGenerator } from "@/app/(app)/listening/_components/DialogueGenerator";
-import { SpeakerLegend } from "@/app/(app)/listening/_components/SpeakerLegend";
 import { ScriptPanel } from "@/app/(app)/listening/_components/ScriptPanel";
-import type { CefrLevel } from "@/lib/listening/types";
-import { motion } from "motion/react";
+import { SpeakerLegend } from "@/app/(app)/listening/_components/SpeakerLegend";
+import { useExamMode } from "@/components/shared/ExamModeProvider";
 import { Button } from "@/components/ui/button";
+import { useListeningExercise } from "@/hooks/useListeningExercise";
+import { api } from "@/lib/api-client";
+import type { CefrLevel } from "@/lib/listening/types";
 
 export function ListeningTab() {
   const {
-    state, exercise, result, error, selectedAnswers,
-    replaysUsed, maxReplays, selectedSpeed, allAnswered,
-    scriptRevealed, revealScript, generate, generateDialogue,
-    selectAnswer, submit, useReplay, cycleSpeed, reset,
+    state,
+    exercise,
+    result,
+    error,
+    selectedAnswers,
+    replaysUsed,
+    maxReplays,
+    selectedSpeed,
+    allAnswered,
+    scriptRevealed,
+    revealScript,
+    generate,
+    generateDialogue,
+    selectAnswer,
+    submit,
+    useReplay,
+    cycleSpeed,
+    reset,
   } = useListeningExercise();
 
   const { examMode } = useExamMode();
   const [profileRecommendedLevel, setProfileRecommendedLevel] = useState<CefrLevel | null>(null);
   const [selectedVoice, setSelectedVoice] = useState("austin");
 
-  const skillLevelUp = result?.skill ? { cefr: result.skill.cefr, levelUp: result.skill.levelUp } : null;
+  const skillLevelUp = result?.skill
+    ? { cefr: result.skill.cefr, levelUp: result.skill.levelUp }
+    : null;
 
   useEffect(() => {
-    api.get<{ cefr?: string }>("/skill-profile", { params: { module: "listening" } })
-      .then((data) => { if (data?.cefr) setProfileRecommendedLevel(data.cefr as CefrLevel); })
+    api
+      .get<{ cefr?: string }>("/skill-profile", { params: { module: "listening" } })
+      .then((data) => {
+        if (data?.cefr) setProfileRecommendedLevel(data.cefr as CefrLevel);
+      })
       .catch(() => {});
   }, []);
 
-  const recommendedLevel = (result?.skill?.cefr as CefrLevel | undefined) ?? profileRecommendedLevel;
+  const recommendedLevel =
+    (result?.skill?.cefr as CefrLevel | undefined) ?? profileRecommendedLevel;
   const [mode, setMode] = useState<"free" | "parts">("free");
 
   return (
@@ -46,7 +66,7 @@ export function ListeningTab() {
         {[
           { key: "free" as const, label: "🎧 Luyện nghe tự do" },
           { key: "parts" as const, label: "📋 TOEIC Parts 1–4" },
-        ].map(m => (
+        ].map((m) => (
           <button
             key={m.key}
             type="button"
@@ -66,10 +86,34 @@ export function ListeningTab() {
       {mode === "parts" && (
         <div className="flex flex-col gap-4 pb-5 animate-in fade-in duration-200">
           {[
-            { part: "Part 1", title: "Photographs", desc: "Nghe 4 mô tả, chọn mô tả đúng nhất cho bức hình", questions: 6, tips: "Nhìn hình trước khi audio bắt đầu. Chú ý chủ ngữ + hành động." },
-            { part: "Part 2", title: "Question-Response", desc: "Nghe câu hỏi, chọn câu trả lời phù hợp nhất", questions: 25, tips: "Nghe kỹ Wh-word đầu câu. Loại bỏ đáp án lặp từ (trap)." },
-            { part: "Part 3", title: "Conversations", desc: "Nghe hội thoại 2-3 người, trả lời 3 câu hỏi", questions: 39, tips: "Đọc câu hỏi + đáp án TRƯỚC khi audio phát. Chú ý intent & detail." },
-            { part: "Part 4", title: "Talks", desc: "Nghe bài nói/thông báo, trả lời 3 câu hỏi", questions: 30, tips: "Tập trung vào purpose, audience, next step. Đọc câu hỏi trước." },
+            {
+              part: "Part 1",
+              title: "Photographs",
+              desc: "Nghe 4 mô tả, chọn mô tả đúng nhất cho bức hình",
+              questions: 6,
+              tips: "Nhìn hình trước khi audio bắt đầu. Chú ý chủ ngữ + hành động.",
+            },
+            {
+              part: "Part 2",
+              title: "Question-Response",
+              desc: "Nghe câu hỏi, chọn câu trả lời phù hợp nhất",
+              questions: 25,
+              tips: "Nghe kỹ Wh-word đầu câu. Loại bỏ đáp án lặp từ (trap).",
+            },
+            {
+              part: "Part 3",
+              title: "Conversations",
+              desc: "Nghe hội thoại 2-3 người, trả lời 3 câu hỏi",
+              questions: 39,
+              tips: "Đọc câu hỏi + đáp án TRƯỚC khi audio phát. Chú ý intent & detail.",
+            },
+            {
+              part: "Part 4",
+              title: "Talks",
+              desc: "Nghe bài nói/thông báo, trả lời 3 câu hỏi",
+              questions: 30,
+              tips: "Tập trung vào purpose, audience, next step. Đọc câu hỏi trước.",
+            },
           ].map((p, i) => (
             <div
               key={p.part}
@@ -78,8 +122,12 @@ export function ListeningTab() {
             >
               <div className="absolute top-0 left-0 w-1 h-full bg-accent" />
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-black text-text-primary">{p.part} — {p.title}</span>
-                <span className="text-[10px] font-black text-ink px-2.5 py-0.5 border-2 border-border rounded-md bg-accent shadow-(--shadow-sm)">{p.questions} câu</span>
+                <span className="text-xs font-black text-text-primary">
+                  {p.part} — {p.title}
+                </span>
+                <span className="text-[10px] font-black text-ink px-2.5 py-0.5 border-2 border-border rounded-md bg-accent shadow-(--shadow-sm)">
+                  {p.questions} câu
+                </span>
               </div>
               <p className="text-xs text-text-secondary mb-2.5 leading-relaxed">{p.desc}</p>
               <div className="text-[11px] text-text-muted p-3 rounded-lg bg-surface-alt border-2 border-border leading-relaxed">
@@ -87,7 +135,7 @@ export function ListeningTab() {
               </div>
             </div>
           ))}
-          
+
           <Button
             onClick={() => setMode("free")}
             className="self-center mt-3 px-6 h-10 text-xs font-black"
@@ -127,8 +175,10 @@ export function ListeningTab() {
           {/* Active: Audio + Questions */}
           {(state === "active" || state === "submitting") && exercise && (
             <div className="flex flex-col gap-5 animate-in fade-in duration-200">
-              {exercise.turns && exercise.turns.length > 0 && <SpeakerLegend turns={exercise.turns} />}
-              
+              {exercise.turns && exercise.turns.length > 0 && (
+                <SpeakerLegend turns={exercise.turns} />
+              )}
+
               {(!exercise.turns || exercise.turns.length === 0) && (
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-text-muted font-bold">Giọng đọc:</span>
@@ -146,7 +196,7 @@ export function ListeningTab() {
                   </select>
                 </div>
               )}
-              
+
               <AudioPlayer
                 audioUrl={`${exercise.audioUrl}?voice=${selectedVoice}`}
                 speed={selectedSpeed}
@@ -155,7 +205,7 @@ export function ListeningTab() {
                 onReplay={useReplay}
                 onCycleSpeed={cycleSpeed}
               />
-              
+
               {exercise.passage && (
                 <ScriptPanel
                   passage={exercise.passage}
@@ -164,7 +214,7 @@ export function ListeningTab() {
                   onReveal={revealScript}
                 />
               )}
-              
+
               <QuestionCards
                 questions={exercise.questions}
                 selectedAnswers={selectedAnswers}
@@ -185,13 +235,15 @@ export function ListeningTab() {
                 dialogueTurns={exercise?.turns}
                 scriptRevealed={scriptRevealed}
               />
-              
+
               {skillLevelUp && (
-                <div className={`p-4 rounded-2xl border text-center text-xs font-semibold flex items-center justify-center gap-2 ${
-                  skillLevelUp.levelUp
-                    ? "bg-emerald-950/10 border-emerald-950/20 text-emerald-450"
-                    : "bg-amber-950/10 border-amber-950/20 text-amber-450"
-                }`}>
+                <div
+                  className={`p-4 rounded-2xl border text-center text-xs font-semibold flex items-center justify-center gap-2 ${
+                    skillLevelUp.levelUp
+                      ? "bg-emerald-950/10 border-emerald-950/20 text-emerald-450"
+                      : "bg-amber-950/10 border-amber-950/20 text-amber-450"
+                  }`}
+                >
                   {skillLevelUp.levelUp ? (
                     <>
                       <Trophy className="h-4 w-4 text-emerald-400 fill-current animate-bounce" />

@@ -1,11 +1,12 @@
+import { db } from "@repo/database";
+import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, and } from "drizzle-orm";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("listening/bookmark");
+
 import { listeningExercise } from "@repo/database";
 
 const BookmarkSchema = z.object({

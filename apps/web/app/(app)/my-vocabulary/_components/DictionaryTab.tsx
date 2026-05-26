@@ -1,12 +1,5 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
-
-import { api } from "@/lib/api-client";
-import { DictionarySearchPanel } from "@/app/(app)/dictionary/_components/DictionarySearchPanel";
-import { DictionaryResultCard } from "@/app/(app)/dictionary/_components/DictionaryResultCard";
-import { ThesaurusSheet } from "@/app/(app)/dictionary/_components/ThesaurusSheet";
-import type { VocabularyWithNearby } from "@/lib/schemas/vocabulary";
 import {
   CircleCheckBig,
   Clock,
@@ -17,6 +10,12 @@ import {
   Trash2,
   Undo,
 } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { DictionaryResultCard } from "@/app/(app)/dictionary/_components/DictionaryResultCard";
+import { DictionarySearchPanel } from "@/app/(app)/dictionary/_components/DictionarySearchPanel";
+import { ThesaurusSheet } from "@/app/(app)/dictionary/_components/ThesaurusSheet";
+import { api } from "@/lib/api-client";
+import type { VocabularyWithNearby } from "@/lib/schemas/vocabulary";
 
 const STORAGE_KEY = "dict_recent_searches";
 const MAX_RECENT = 15;
@@ -32,19 +31,33 @@ type SavedWord = {
 };
 
 const MASTERY_CONFIG: Record<string, { icon: React.ReactNode; label: string; color: string }> = {
-  new: { icon: <Star style={{ color: "var(--warning)" }} />, label: "Mới", color: "var(--warning)" },
-  learning: { icon: <RefreshCw className="text-accent" />, label: "Đang học", color: "var(--accent)" },
-  mastered: { icon: <CircleCheckBig className="text-emerald-500" />, label: "Thành thạo", color: "var(--success)" },
+  new: {
+    icon: <Star style={{ color: "var(--warning)" }} />,
+    label: "Mới",
+    color: "var(--warning)",
+  },
+  learning: {
+    icon: <RefreshCw className="text-accent" />,
+    label: "Đang học",
+    color: "var(--accent)",
+  },
+  mastered: {
+    icon: <CircleCheckBig className="text-emerald-500" />,
+    label: "Thành thạo",
+    color: "var(--success)",
+  },
 };
 
 function getRecentSearches(): string[] {
   try {
     return JSON.parse(localStorage.getItem(STORAGE_KEY) ?? "[]");
-  } catch { return []; }
+  } catch {
+    return [];
+  }
 }
 
 function addRecentSearch(word: string) {
-  const recent = getRecentSearches().filter(w => w !== word);
+  const recent = getRecentSearches().filter((w) => w !== word);
   recent.unshift(word);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(recent.slice(0, MAX_RECENT)));
 }
@@ -71,17 +84,20 @@ export function DictionaryTab() {
   // Load saved words from API
   useEffect(() => {
     let cancelled = false;
-    api.get<SavedWord[]>("/vocabulary")
-      .then(data => {
+    api
+      .get<SavedWord[]>("/vocabulary")
+      .then((data) => {
         if (!cancelled) {
-          setSavedWords(
-            (Array.isArray(data) ? data : []).filter(w => w.saved)
-          );
+          setSavedWords((Array.isArray(data) ? data : []).filter((w) => w.saved));
         }
       })
       .catch(() => {})
-      .finally(() => { if (!cancelled) setSavedLoading(false); });
-    return () => { cancelled = true; };
+      .finally(() => {
+        if (!cancelled) setSavedLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const doSearch = useCallback(async (word: string) => {
@@ -120,12 +136,23 @@ export function DictionaryTab() {
       // Refresh saved list
       if (next) {
         // Add to saved
-        setSavedWords(prev => {
-          if (prev.some(w => w.query === query)) return prev;
-          return [{ id: query, query, saved: true, lookedUpAt: new Date().toISOString(), headword: result?.headword ?? query, level: result?.level ?? null, mastery: "new" as const }, ...prev];
+        setSavedWords((prev) => {
+          if (prev.some((w) => w.query === query)) return prev;
+          return [
+            {
+              id: query,
+              query,
+              saved: true,
+              lookedUpAt: new Date().toISOString(),
+              headword: result?.headword ?? query,
+              level: result?.level ?? null,
+              mastery: "new" as const,
+            },
+            ...prev,
+          ];
         });
       } else {
-        setSavedWords(prev => prev.filter(w => w.query !== query));
+        setSavedWords((prev) => prev.filter((w) => w.query !== query));
       }
     } catch {
       setSaved(!next);
@@ -133,20 +160,23 @@ export function DictionaryTab() {
   };
 
   const removeSavedWord = async (word: SavedWord) => {
-    setSavedWords(prev => prev.filter(w => w.id !== word.id));
+    setSavedWords((prev) => prev.filter((w) => w.id !== word.id));
     try {
       await api.patch(`/vocabulary/${encodeURIComponent(word.query)}/saved`, { saved: false });
     } catch {
-      setSavedWords(prev => [...prev, word]);
+      setSavedWords((prev) => [...prev, word]);
     }
   };
 
   return (
-    <div className="w-[1100px] mx-auto w-full" >
+    <div className="w-[1100px] mx-auto w-full">
       {/* Two-column layout on desktop */}
-      <div className="dictionary-grid grid items-start" style={{gridTemplateColumns: "minmax(280px, 340px) minmax(0, 1fr)", gap: 28}} >
+      <div
+        className="dictionary-grid grid items-start"
+        style={{ gridTemplateColumns: "minmax(280px, 340px) minmax(0, 1fr)", gap: 28 }}
+      >
         {/* Left: Search + Recent */}
-        <div className="flex flex-col gap-4" >
+        <div className="flex flex-col gap-4">
           <DictionarySearchPanel
             initialValue={query}
             onSubmit={doSearch}
@@ -159,7 +189,13 @@ export function DictionaryTab() {
         {/* Right: Result */}
         <div>
           {error && (
-            <div className="py-3 px-4 rounded-xl text-destructive text-sm mb-4" style={{border: "1px solid color-mix(in srgb, var(--error) 30%, transparent)", background: "var(--error-bg)"}} >
+            <div
+              className="py-3 px-4 rounded-xl text-destructive text-sm mb-4"
+              style={{
+                border: "1px solid color-mix(in srgb, var(--error) 30%, transparent)",
+                background: "var(--error-bg)",
+              }}
+            >
               {error}
             </div>
           )}
@@ -176,50 +212,75 @@ export function DictionaryTab() {
       </div>
 
       {/* Saved words section */}
-      <div className="mt-8" style={{paddingTop: 24, borderTop: "1px solid var(--border)"}} >
-        <div className="flex items-center gap-2.5 mb-4" >
+      <div className="mt-8" style={{ paddingTop: 24, borderTop: "1px solid var(--border)" }}>
+        <div className="flex items-center gap-2.5 mb-4">
           <Star className="text-accent text-base" />
-          <span className="text-[13px] font-extrabold uppercase text-accent" style={{letterSpacing: "0.12em"}} >
+          <span
+            className="text-[13px] font-extrabold uppercase text-accent"
+            style={{ letterSpacing: "0.12em" }}
+          >
             Từ đã lưu ({savedWords.length})
           </span>
         </div>
 
         {savedLoading ? (
-          <div className="flex justify-center p-6" >
+          <div className="flex justify-center p-6">
             <Loader2 className="animate-spin text-accent" size={20} />
           </div>
         ) : savedWords.length === 0 ? (
-          <div className="text-center text-text-muted text-sm" style={{padding: "24px 16px", borderRadius: 14, border: "1px dashed var(--border)"}} >
+          <div
+            className="text-center text-text-muted text-sm"
+            style={{ padding: "24px 16px", borderRadius: 14, border: "1px dashed var(--border)" }}
+          >
             Chưa có từ nào được lưu. Tra từ và nhấn ⭐ để lưu!
           </div>
         ) : (
-          <div className="grid gap-1.5" style={{gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))"}} >
-            {savedWords.map(w => {
+          <div
+            className="grid gap-1.5"
+            style={{ gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))" }}
+          >
+            {savedWords.map((w) => {
               const mastery = MASTERY_CONFIG[w.mastery] ?? MASTERY_CONFIG.new;
               return (
                 <div
                   key={w.id}
-                  
                   onClick={() => doSearch(w.query)}
                   onKeyDown={() => {}}
                   role="button"
-                  tabIndex={0} className="rounded-xl border-2 border-border bg-(--surface) flex items-center gap-2.5 cursor-pointer" style={{padding: "12px 14px", transition: "border-color 0.2s"}} >
-                  <div className="w-[24px] h-[24px] rounded-md grid shrink-0 text-[11px]" style={{placeItems: "center", background: `color-mix(in srgb, ${mastery.color} 10%, var(--surface))`, color: mastery.color}} >
+                  tabIndex={0}
+                  className="rounded-xl border-2 border-border bg-(--surface) flex items-center gap-2.5 cursor-pointer"
+                  style={{ padding: "12px 14px", transition: "border-color 0.2s" }}
+                >
+                  <div
+                    className="w-[24px] h-[24px] rounded-md grid shrink-0 text-[11px]"
+                    style={{
+                      placeItems: "center",
+                      background: `color-mix(in srgb, ${mastery.color} 10%, var(--surface))`,
+                      color: mastery.color,
+                    }}
+                  >
                     {mastery.icon}
                   </div>
-                  <div className="flex-1 w-[0px]" >
-                    <div className="text-sm font-semibold text-ink overflow-hidden" style={{textOverflow: "ellipsis", whiteSpace: "nowrap"}} >
+                  <div className="flex-1 w-[0px]">
+                    <div
+                      className="text-sm font-semibold text-ink overflow-hidden"
+                      style={{ textOverflow: "ellipsis", whiteSpace: "nowrap" }}
+                    >
                       {w.headword ?? w.query}
                     </div>
                     {w.level && (
-                      <span className="text-[10px] text-text-muted font-semibold" >
-                        {w.level}
-                      </span>
+                      <span className="text-[10px] text-text-muted font-semibold">{w.level}</span>
                     )}
                   </div>
                   <button
                     type="button"
-                    onClick={(e) => { e.stopPropagation(); removeSavedWord(w); }} className="w-[24px] h-[24px] rounded-md border-none bg-transparent cursor-pointer text-text-muted text-xs grid" style={{placeItems: "center"}} >
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      removeSavedWord(w);
+                    }}
+                    className="w-[24px] h-[24px] rounded-md border-none bg-transparent cursor-pointer text-text-muted text-xs grid"
+                    style={{ placeItems: "center" }}
+                  >
                     <Trash2 />
                   </button>
                 </div>

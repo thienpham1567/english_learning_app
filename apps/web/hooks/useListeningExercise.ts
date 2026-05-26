@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
+import { api } from "@/lib/api-client";
 import type {
   CefrLevel,
   ExerciseType,
   ListeningExerciseResponse,
   ListeningSubmitResponse,
 } from "@/lib/listening/types";
-import { api } from "@/lib/api-client";
 
 type State = "idle" | "loading" | "active" | "submitting" | "submitted";
 
@@ -23,57 +23,65 @@ export function useListeningExercise() {
 
   const MAX_REPLAYS = 3;
 
-  const generate = useCallback(async (level: CefrLevel, exerciseType: ExerciseType, examMode?: string) => {
-    setState("loading");
-    setError(null);
-    setResult(null);
+  const generate = useCallback(
+    async (level: CefrLevel, exerciseType: ExerciseType, examMode?: string) => {
+      setState("loading");
+      setError(null);
+      setResult(null);
 
-    try {
-      const data = await api.post<ListeningExerciseResponse>("/listening/generate", {
-        level, exerciseType, examMode,
-      });
-      setExercise(data);
-      setSelectedAnswers(new Array(data.questions.length).fill(null));
-      setReplaysUsed(0);
-      setSelectedSpeed(1.0);
-      setScriptRevealed(false);
-      setState("active");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to generate exercise");
-      setState("idle");
-    }
-  }, []);
+      try {
+        const data = await api.post<ListeningExerciseResponse>("/listening/generate", {
+          level,
+          exerciseType,
+          examMode,
+        });
+        setExercise(data);
+        setSelectedAnswers(new Array(data.questions.length).fill(null));
+        setReplaysUsed(0);
+        setSelectedSpeed(1.0);
+        setScriptRevealed(false);
+        setState("active");
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to generate exercise");
+        setState("idle");
+      }
+    },
+    [],
+  );
 
-  const generateDialogue = useCallback(async (args: {
-    topic: string;
-    level: CefrLevel;
-    turns?: 6 | 8 | 10;
-    speakers?: 2 | 3;
-    examMode?: string;
-  }) => {
-    setState("loading");
-    setError(null);
-    setResult(null);
+  const generateDialogue = useCallback(
+    async (args: {
+      topic: string;
+      level: CefrLevel;
+      turns?: 6 | 8 | 10;
+      speakers?: 2 | 3;
+      examMode?: string;
+    }) => {
+      setState("loading");
+      setError(null);
+      setResult(null);
 
-    try {
-      const data = await api.post<ListeningExerciseResponse>("/listening/generate-dialogue", {
-        topic: args.topic,
-        level: args.level,
-        turns: args.turns ?? 8,
-        speakers: args.speakers ?? 2,
-        examMode: args.examMode,
-      });
-      setExercise(data);
-      setSelectedAnswers(new Array(data.questions.length).fill(null));
-      setReplaysUsed(0);
-      setSelectedSpeed(1.0);
-      setScriptRevealed(false);
-      setState("active");
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to generate dialogue");
-      setState("idle");
-    }
-  }, []);
+      try {
+        const data = await api.post<ListeningExerciseResponse>("/listening/generate-dialogue", {
+          topic: args.topic,
+          level: args.level,
+          turns: args.turns ?? 8,
+          speakers: args.speakers ?? 2,
+          examMode: args.examMode,
+        });
+        setExercise(data);
+        setSelectedAnswers(new Array(data.questions.length).fill(null));
+        setReplaysUsed(0);
+        setSelectedSpeed(1.0);
+        setScriptRevealed(false);
+        setState("active");
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Failed to generate dialogue");
+        setState("idle");
+      }
+    },
+    [],
+  );
 
   const selectAnswer = useCallback((questionIndex: number, optionIndex: number) => {
     setSelectedAnswers((prev) => {

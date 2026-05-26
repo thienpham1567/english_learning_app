@@ -1,9 +1,20 @@
-import type { CefrLevel, DiagnosticSkill, DiagnosticAnswer, DiagnosticTestResult, SkillResult } from "./types";
+import type {
+  CefrLevel,
+  DiagnosticAnswer,
+  DiagnosticSkill,
+  DiagnosticTestResult,
+  SkillResult,
+} from "./types";
 import { CEFR_LEVELS } from "./types";
 
 /** Numeric value for each CEFR level (maps to user_skill_profile scale) */
 const CEFR_TO_NUMERIC: Record<CefrLevel, number> = {
-  A1: 1.5, A2: 3.0, B1: 5.0, B2: 7.0, C1: 9.0, C2: 10.0,
+  A1: 1.5,
+  A2: 3.0,
+  B1: 5.0,
+  B2: 7.0,
+  C1: 9.0,
+  C2: 10.0,
 };
 
 /** Per-skill adaptive state during the test */

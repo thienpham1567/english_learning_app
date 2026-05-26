@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
 import { AlertTriangle, Clock } from "lucide-react";
 import * as m from "motion/react-client";
+import { useCallback, useEffect, useState } from "react";
 import { api } from "@/lib/api-client";
-import type { ErrorNotebookTab, ErrorEntry } from "./_types/types";
+import { AnalysisTab } from "./_components/AnalysisTab";
+import { ListTab } from "./_components/ListTab";
 import { OverviewTab } from "./_components/OverviewTab";
 import { ReviewTab } from "./_components/ReviewTab";
-import { ListTab } from "./_components/ListTab";
-import { AnalysisTab } from "./_components/AnalysisTab";
+import type { ErrorEntry, ErrorNotebookTab } from "./_types/types";
 
 const TABS: { key: ErrorNotebookTab; label: string; icon: string }[] = [
   { key: "overview", label: "Tổng quan", icon: "📊" },
@@ -58,8 +58,7 @@ export default function ErrorNotebookPage() {
       <div className="grain-overlay opacity-[0.03] z-0" />
 
       {/* Header */}
-      <div className="relative z-[1]">
-      </div>
+      <div className="relative z-[1]"></div>
 
       {/* Tabs */}
       <div className="relative z-[1] flex gap-1 px-5 pt-3 border-b-2 border-border bg-(--bg)">

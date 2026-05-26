@@ -1,20 +1,20 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
 import {
-  Pencil,
-  Loader2,
-  CheckCircle,
-  Zap,
-  Trophy,
-  ThumbsUp,
-  Flame,
   Check,
+  CheckCircle,
+  Flame,
+  Loader2,
+  Pencil,
+  ThumbsUp,
+  Trophy,
   X as XIcon,
+  Zap,
 } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
 
 import { api } from "@/lib/api-client";
-import { ERROR_TAG_LABELS, ERROR_TAG_DESCRIPTIONS, type ErrorTag } from "@/lib/writing/error-tags";
+import { ERROR_TAG_DESCRIPTIONS, ERROR_TAG_LABELS, type ErrorTag } from "@/lib/writing/error-tags";
 
 /* ── Types ──────────────────────────────────────────────── */
 
@@ -38,11 +38,21 @@ type QuizState = "idle" | "generating" | "active" | "done";
 
 /* ── Sub-component: inline quiz player ──────────────────── */
 
-function InlineQuiz({ items, errorLogIds, onDone }: { items: QuizItem[]; errorLogIds: string[]; onDone: (answers: Array<{ errorLogId: string; userAnswer: string; isCorrect: boolean }>) => void }) {
+function InlineQuiz({
+  items,
+  errorLogIds,
+  onDone,
+}: {
+  items: QuizItem[];
+  errorLogIds: string[];
+  onDone: (answers: Array<{ errorLogId: string; userAnswer: string; isCorrect: boolean }>) => void;
+}) {
   const [current, setCurrent] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
   const [results, setResults] = useState<boolean[]>([]);
-  const [answers, setAnswers] = useState<Array<{ errorLogId: string; userAnswer: string; isCorrect: boolean }>>([]);
+  const [answers, setAnswers] = useState<
+    Array<{ errorLogId: string; userAnswer: string; isCorrect: boolean }>
+  >([]);
 
   const item = items[current];
   const isAnswered = selected !== null;
@@ -55,11 +65,14 @@ function InlineQuiz({ items, errorLogIds, onDone }: { items: QuizItem[]; errorLo
     const correct = opt === item.correctAnswer;
     setResults((prev) => [...prev, correct]);
     if (errorLogIds[current]) {
-      setAnswers((prev) => [...prev, {
-        errorLogId: errorLogIds[current],
-        userAnswer: opt,
-        isCorrect: correct,
-      }]);
+      setAnswers((prev) => [
+        ...prev,
+        {
+          errorLogId: errorLogIds[current],
+          userAnswer: opt,
+          isCorrect: correct,
+        },
+      ]);
     }
   };
 
@@ -78,23 +91,38 @@ function InlineQuiz({ items, errorLogIds, onDone }: { items: QuizItem[]; errorLo
           <svg className="w-20 h-20 -rotate-90" viewBox="0 0 80 80">
             <circle cx="40" cy="40" r="34" fill="none" stroke="var(--border)" strokeWidth="6" />
             <circle
-              cx="40" cy="40" r="34" fill="none"
+              cx="40"
+              cy="40"
+              r="34"
+              fill="none"
               stroke={score === items.length ? "var(--success)" : "var(--warning)"}
-              strokeWidth="6" strokeLinecap="round"
+              strokeWidth="6"
+              strokeLinecap="round"
               strokeDasharray={`${2 * Math.PI * 34}`}
               strokeDashoffset={`${2 * Math.PI * 34 * (1 - pct / 100)}`}
               className="transition-all duration-700"
             />
           </svg>
-          <span className="absolute text-lg font-black text-ink">{score}/{items.length}</span>
+          <span className="absolute text-lg font-black text-ink">
+            {score}/{items.length}
+          </span>
         </div>
         <p className="mt-3 text-sm font-semibold">
           {score === items.length ? (
-            <><Trophy className="h-4 w-4 text-(--success) inline mr-1.5" />Hoàn hảo!</>
+            <>
+              <Trophy className="h-4 w-4 text-(--success) inline mr-1.5" />
+              Hoàn hảo!
+            </>
           ) : score >= items.length / 2 ? (
-            <><ThumbsUp className="h-4 w-4 text-accent inline mr-1.5" />Tốt!</>
+            <>
+              <ThumbsUp className="h-4 w-4 text-accent inline mr-1.5" />
+              Tốt!
+            </>
           ) : (
-            <><Flame className="h-4 w-4 text-(--warning) inline mr-1.5" />Cần ôn thêm!</>
+            <>
+              <Flame className="h-4 w-4 text-(--warning) inline mr-1.5" />
+              Cần ôn thêm!
+            </>
           )}
         </p>
         <button
@@ -110,7 +138,9 @@ function InlineQuiz({ items, errorLogIds, onDone }: { items: QuizItem[]; errorLo
   return (
     <div className="flex flex-col gap-3">
       <div className="flex justify-between text-[11px] text-text-secondary">
-        <span>Câu {current + 1}/{items.length}</span>
+        <span>
+          Câu {current + 1}/{items.length}
+        </span>
         <span>{results.filter(Boolean).length} đúng</span>
       </div>
 
@@ -122,8 +152,15 @@ function InlineQuiz({ items, errorLogIds, onDone }: { items: QuizItem[]; errorLo
           let border = "1px solid var(--border)";
           let color = "var(--text)";
           if (isAnswered) {
-            if (opt === item.correctAnswer) { bg = "color-mix(in srgb, var(--success) 8%, var(--surface))"; border = "1px solid var(--success)"; color = "var(--success)"; }
-            else if (opt === selected) { bg = "color-mix(in srgb, var(--error) 8%, var(--surface))"; border = "1px solid var(--error)"; color = "var(--error)"; }
+            if (opt === item.correctAnswer) {
+              bg = "color-mix(in srgb, var(--success) 8%, var(--surface))";
+              border = "1px solid var(--success)";
+              color = "var(--success)";
+            } else if (opt === selected) {
+              bg = "color-mix(in srgb, var(--error) 8%, var(--surface))";
+              border = "1px solid var(--error)";
+              color = "var(--error)";
+            }
           }
           return (
             <button
@@ -132,7 +169,9 @@ function InlineQuiz({ items, errorLogIds, onDone }: { items: QuizItem[]; errorLo
               disabled={isAnswered}
               className="px-3 py-2 rounded-lg text-left text-[13px] transition-all duration-150"
               style={{
-                border, background: bg, color,
+                border,
+                background: bg,
+                color,
                 cursor: isAnswered ? "default" : "pointer",
                 fontWeight: opt === item.correctAnswer && isAnswered ? 600 : 400,
               }}
@@ -147,13 +186,23 @@ function InlineQuiz({ items, errorLogIds, onDone }: { items: QuizItem[]; errorLo
         <div
           className="px-3 py-2 rounded-lg text-xs"
           style={{
-            background: isCorrect ? "color-mix(in srgb, var(--success) 8%, var(--surface))" : "color-mix(in srgb, var(--error) 8%, var(--surface))",
+            background: isCorrect
+              ? "color-mix(in srgb, var(--success) 8%, var(--surface))"
+              : "color-mix(in srgb, var(--error) 8%, var(--surface))",
             border: `1px solid color-mix(in srgb, ${isCorrect ? "var(--success)" : "var(--error)"} 27%, transparent)`,
             color: "var(--text)",
           }}
         >
           <p className="m-0 mb-1 font-semibold">
-            {isCorrect ? <><Check className="h-3 w-3 inline mr-1" /> Đúng!</> : <><XIcon className="h-3 w-3 inline mr-1" /> Sai</>}
+            {isCorrect ? (
+              <>
+                <Check className="h-3 w-3 inline mr-1" /> Đúng!
+              </>
+            ) : (
+              <>
+                <XIcon className="h-3 w-3 inline mr-1" /> Sai
+              </>
+            )}
           </p>
           <p className="m-0 mb-0.5">{item.explanationEn}</p>
           <p className="m-0 text-text-secondary">{item.explanationVi}</p>
@@ -200,10 +249,13 @@ export function WritingPatternSection() {
   const generateQuiz = useCallback(async (tag: string) => {
     setQuizState((prev) => ({ ...prev, [tag]: "generating" }));
     try {
-      const data = await api.post<{ items: QuizItem[]; insertedIds: string[] }>("/writing/pattern-quiz", {
-        tag,
-        exampleSentences: [], // AC6: no essay content sent
-      });
+      const data = await api.post<{ items: QuizItem[]; insertedIds: string[] }>(
+        "/writing/pattern-quiz",
+        {
+          tag,
+          exampleSentences: [], // AC6: no essay content sent
+        },
+      );
       setQuizItems((prev) => ({ ...prev, [tag]: data.items }));
       setQuizIds((prev) => ({ ...prev, [tag]: data.insertedIds ?? [] }));
       setQuizState((prev) => ({ ...prev, [tag]: "active" }));
@@ -213,17 +265,23 @@ export function WritingPatternSection() {
     }
   }, []);
 
-  const finishQuiz = useCallback(async (tag: string, answers: Array<{ errorLogId: string; userAnswer: string; isCorrect: boolean }>) => {
-    setQuizState((prev) => ({ ...prev, [tag]: "done" }));
-    // Submit answers to update error_log records (AC5)
-    if (answers.length > 0) {
-      try {
-        await api.patch("/writing/pattern-quiz", { answers });
-      } catch (err) {
-        console.error("Failed to submit quiz answers:", err);
+  const finishQuiz = useCallback(
+    async (
+      tag: string,
+      answers: Array<{ errorLogId: string; userAnswer: string; isCorrect: boolean }>,
+    ) => {
+      setQuizState((prev) => ({ ...prev, [tag]: "done" }));
+      // Submit answers to update error_log records (AC5)
+      if (answers.length > 0) {
+        try {
+          await api.patch("/writing/pattern-quiz", { answers });
+        } catch (err) {
+          console.error("Failed to submit quiz answers:", err);
+        }
       }
-    }
-  }, []);
+    },
+    [],
+  );
 
   if (loading) return null; // Don't show while loading
   if (patterns.length === 0) return null; // Don't show if no patterns
@@ -300,13 +358,18 @@ export function WritingPatternSection() {
               {/* Inline quiz */}
               {state === "active" && quizItems[p.tag] && (
                 <div className="px-4 pb-4 pt-3.5 border-t-2 border-border">
-                  <InlineQuiz items={quizItems[p.tag]} errorLogIds={quizIds[p.tag] ?? []} onDone={(answers) => finishQuiz(p.tag, answers)} />
+                  <InlineQuiz
+                    items={quizItems[p.tag]}
+                    errorLogIds={quizIds[p.tag] ?? []}
+                    onDone={(answers) => finishQuiz(p.tag, answers)}
+                  />
                 </div>
               )}
 
               {state === "done" && (
                 <div className="px-4 py-2 border-t-2 border-border bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] text-xs text-(--success) font-medium">
-                  <CheckCircle className="h-3 w-3 inline mr-1.5" /> Quiz đã hoàn thành — câu hỏi đã được lưu vào sổ lỗi sai để ôn tập sau.
+                  <CheckCircle className="h-3 w-3 inline mr-1.5" /> Quiz đã hoàn thành — câu hỏi đã
+                  được lưu vào sổ lỗi sai để ôn tập sau.
                 </div>
               )}
             </div>

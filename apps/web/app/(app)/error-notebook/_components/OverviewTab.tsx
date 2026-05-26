@@ -1,15 +1,10 @@
 "use client";
 
-import { useMemo } from "react";
-import {
-  AlertCircle,
-  CheckCircle,
-  Clock,
-  Database,
-} from "lucide-react";
+import { AlertCircle, CheckCircle, Clock, Database } from "lucide-react";
 import * as m from "motion/react-client";
+import { useMemo } from "react";
 import type { ErrorEntry } from "../_types/types";
-import { MODULE_LABELS, MODULE_ICONS } from "../_types/types";
+import { MODULE_ICONS, MODULE_LABELS } from "../_types/types";
 import { ErrorPatternSummary } from "./ErrorPatternSummary";
 import { ErrorTrendSection } from "./ErrorTrendSection";
 
@@ -47,8 +42,11 @@ export function OverviewTab({
   if (loading) {
     return (
       <div className="py-10 text-center">
-        <m.div animate={{ opacity: [0.4, 1, 0.4] }} transition={{ repeat: Infinity, duration: 1.5 }}
-          className="text-sm text-text-muted font-semibold">
+        <m.div
+          animate={{ opacity: [0.4, 1, 0.4] }}
+          transition={{ repeat: Infinity, duration: 1.5 }}
+          className="text-sm text-text-muted font-semibold"
+        >
           Đang tải dữ liệu...
         </m.div>
       </div>
@@ -61,28 +59,36 @@ export function OverviewTab({
       <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-3">
         {[
           {
-            label: "Chưa nắm", value: unresolvedCount,
+            label: "Chưa nắm",
+            value: unresolvedCount,
             colorClass: unresolvedCount > 0 ? "text-(--error)" : "text-text-muted",
             icon: <AlertCircle className="h-4 w-4" />,
-            bgClass: "bg-red-500/5", borderClass: "border-red-500/15",
+            bgClass: "bg-red-500/5",
+            borderClass: "border-red-500/15",
           },
           {
-            label: "Đã hiểu", value: resolvedCount,
+            label: "Đã hiểu",
+            value: resolvedCount,
             colorClass: "text-(--success)",
             icon: <CheckCircle className="h-4 w-4" />,
-            bgClass: "bg-emerald-500/5", borderClass: "border-emerald-500/15",
+            bgClass: "bg-emerald-500/5",
+            borderClass: "border-emerald-500/15",
           },
           {
-            label: "Cần ôn tập", value: dueCount,
+            label: "Cần ôn tập",
+            value: dueCount,
             colorClass: dueCount > 0 ? "text-(--warning)" : "text-text-muted",
             icon: <Clock className="h-4 w-4" />,
-            bgClass: "bg-amber-500/5", borderClass: "border-amber-500/15",
+            bgClass: "bg-amber-500/5",
+            borderClass: "border-amber-500/15",
           },
           {
-            label: "Tổng cộng", value: total,
+            label: "Tổng cộng",
+            value: total,
             colorClass: "text-accent",
             icon: <Database className="h-4 w-4" />,
-            bgClass: "bg-accent-light", borderClass: "border-accent/15",
+            bgClass: "bg-accent-light",
+            borderClass: "border-accent/15",
           },
         ].map((stat) => (
           <m.div
@@ -92,16 +98,18 @@ export function OverviewTab({
             whileHover={{ y: -2, boxShadow: "var(--shadow-md)" }}
             className={`flex items-center gap-3.5 p-4.5 bg-surface rounded-xl border-[1.5px] ${stat.borderClass} shadow-sm cursor-default transition-all duration-200`}
           >
-            <span className={`w-9 h-9 rounded-[10px] ${stat.bgClass} ${stat.colorClass} grid place-items-center`}>
+            <span
+              className={`w-9 h-9 rounded-[10px] ${stat.bgClass} ${stat.colorClass} grid place-items-center`}
+            >
               {stat.icon}
             </span>
             <div>
-              <div className={`text-[28px] font-black ${stat.colorClass} leading-none font-display`}>
+              <div
+                className={`text-[28px] font-black ${stat.colorClass} leading-none font-display`}
+              >
                 {stat.value}
               </div>
-              <div className="text-[11px] text-text-muted font-bold mt-0.5">
-                {stat.label}
-              </div>
+              <div className="text-[11px] text-text-muted font-bold mt-0.5">{stat.label}</div>
             </div>
           </m.div>
         ))}
@@ -146,9 +154,7 @@ export function OverviewTab({
                   transition={{ delay: i * 0.05 }}
                   className="flex items-center gap-2.5"
                 >
-                  <span className="text-base w-7 text-center">
-                    {MODULE_ICONS[mod] ?? "📄"}
-                  </span>
+                  <span className="text-base w-7 text-center">{MODULE_ICONS[mod] ?? "📄"}</span>
                   <span className="text-[13px] font-semibold text-text-primary w-[90px] shrink-0">
                     {MODULE_LABELS[mod] ?? mod}
                   </span>

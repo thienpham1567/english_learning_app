@@ -1,9 +1,7 @@
+import { activityLog, db } from "@repo/database";
+import { and, eq, gte, sql } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, and, gte, sql } from "drizzle-orm";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { activityLog } from "@repo/database";
 
 /**
  * GET /api/dashboard/heatmap
@@ -27,12 +25,7 @@ export async function GET() {
       xp: sql<number>`coalesce(sum(${activityLog.xpEarned}), 0)::int`,
     })
     .from(activityLog)
-    .where(
-      and(
-        eq(activityLog.userId, session.user.id),
-        gte(activityLog.createdAt, ninetyDaysAgo),
-      ),
-    )
+    .where(and(eq(activityLog.userId, session.user.id), gte(activityLog.createdAt, ninetyDaysAgo)))
     .groupBy(sql`${activityLog.createdAt}::date`)
     .orderBy(sql`${activityLog.createdAt}::date`);
 

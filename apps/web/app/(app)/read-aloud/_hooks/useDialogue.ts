@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { api } from "@/lib/api-client";
 import { VOICES } from "../_data/voices";
@@ -56,7 +56,9 @@ export function useDialogue() {
   const [savedDialogues, setSavedDialogues] = useState<SavedDialogue[]>([]);
   const [loadingSaved, setLoadingSaved] = useState(false);
   /** Progress: how many lines have been pre-loaded so far */
-  const [batchProgress, setBatchProgress] = useState<{ loaded: number; total: number } | null>(null);
+  const [batchProgress, setBatchProgress] = useState<{ loaded: number; total: number } | null>(
+    null,
+  );
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -109,62 +111,72 @@ export function useDialogue() {
     try {
       const data = await api.get<{ dialogues: SavedDialogue[] }>("/read-aloud/dialogues?limit=20");
       if (data?.dialogues) setSavedDialogues(data.dialogues);
-    } catch { /* silent */ }
-    finally { setLoadingSaved(false); }
+    } catch {
+      /* silent */
+    } finally {
+      setLoadingSaved(false);
+    }
   }, []);
 
   // Auto-fetch on mount
-  useEffect(() => { fetchSavedDialogues(); }, [fetchSavedDialogues]);
+  useEffect(() => {
+    fetchSavedDialogues();
+  }, [fetchSavedDialogues]);
 
   /* ── Generate dialogue ── */
-  const generate = useCallback(async (options: {
-    topic?: string;
-    speakers?: 2 | 3;
-    length?: "short" | "medium" | "long";
-    primaryVoice: string;
-  }) => {
-    setGenerating(true);
-    try {
-      const res = await fetch("/api/read-aloud/dialogue", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          topic: options.topic,
-          speakers: options.speakers ?? 2,
-          length: options.length ?? "medium",
-        }),
-      });
-
-      if (!res.ok) throw new Error("Failed");
-      const data: Dialogue = await res.json();
-      setDialogue(data);
-      const assignments = assignVoices(data.lines, options.primaryVoice);
-      /* toast: success */
-
-      // Auto-save to DB
+  const generate = useCallback(
+    async (options: {
+      topic?: string;
+      speakers?: 2 | 3;
+      length?: "short" | "medium" | "long";
+      primaryVoice: string;
+    }) => {
+      setGenerating(true);
       try {
-        const saved = await api.post<{ id: string }>("/read-aloud/dialogues", {
-          title: data.title,
-          context: data.context,
-          topic: options.topic,
-          speakerCount: options.speakers ?? 2,
-          lines: data.lines,
-          voiceConfig: assignments,
+        const res = await fetch("/api/read-aloud/dialogue", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            topic: options.topic,
+            speakers: options.speakers ?? 2,
+            length: options.length ?? "medium",
+          }),
         });
-        if (saved?.id) {
-          setDialogueId(saved.id);
-          fetchSavedDialogues();
-        }
-      } catch { /* save failure is non-critical */ }
 
-      return data;
-    } catch {
-      /* toast: error */
-      return null;
-    } finally {
-      setGenerating(false);
-    }
-  }, [assignVoices, fetchSavedDialogues]);
+        if (!res.ok) throw new Error("Failed");
+        const data: Dialogue = await res.json();
+        setDialogue(data);
+        const assignments = assignVoices(data.lines, options.primaryVoice);
+        /* toast: success */
+
+        // Auto-save to DB
+        try {
+          const saved = await api.post<{ id: string }>("/read-aloud/dialogues", {
+            title: data.title,
+            context: data.context,
+            topic: options.topic,
+            speakerCount: options.speakers ?? 2,
+            lines: data.lines,
+            voiceConfig: assignments,
+          });
+          if (saved?.id) {
+            setDialogueId(saved.id);
+            fetchSavedDialogues();
+          }
+        } catch {
+          /* save failure is non-critical */
+        }
+
+        return data;
+      } catch {
+        /* toast: error */
+        return null;
+      } finally {
+        setGenerating(false);
+      }
+    },
+    [assignVoices, fetchSavedDialogues],
+  );
 
   /* ── Load saved dialogue ── */
   const loadDialogue = useCallback((saved: SavedDialogue) => {
@@ -178,17 +190,22 @@ export function useDialogue() {
   }, []);
 
   /* ── Toggle bookmark ── */
-  const toggleBookmark = useCallback(async (id: string) => {
-    const dlg = savedDialogues.find((d) => d.id === id);
-    if (!dlg) return;
-    const newVal = !dlg.bookmarked;
-    setSavedDialogues((prev) =>
-      prev.map((d) => (d.id === id ? { ...d, bookmarked: newVal } : d)),
-    );
-    try {
-      await api.patch("/read-aloud/dialogues", { id, bookmarked: newVal });
-    } catch { /* silent */ }
-  }, [savedDialogues]);
+  const toggleBookmark = useCallback(
+    async (id: string) => {
+      const dlg = savedDialogues.find((d) => d.id === id);
+      if (!dlg) return;
+      const newVal = !dlg.bookmarked;
+      setSavedDialogues((prev) =>
+        prev.map((d) => (d.id === id ? { ...d, bookmarked: newVal } : d)),
+      );
+      try {
+        await api.patch("/read-aloud/dialogues", { id, bookmarked: newVal });
+      } catch {
+        /* silent */
+      }
+    },
+    [savedDialogues],
+  );
 
   /* ── Delete saved dialogue ── */
   const deleteDialogue = useCallback(async (id: string) => {
@@ -199,80 +216,85 @@ export function useDialogue() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
       });
-    } catch { /* silent */ }
+    } catch {
+      /* silent */
+    }
   }, []);
 
   /* ── Batch TTS: fetch ALL lines in one API call ── */
-  const batchFetchAudio = useCallback(async (
-    lines: DialogueLine[],
-    assignments: VoiceAssignment[],
-    speed: number,
-    signal: AbortSignal,
-  ): Promise<string[]> => {
-    const getVoiceRole = (line: DialogueLine) =>
-      assignments.find((a) => a.speaker === line.speaker)?.voiceRole ?? assignments[0].voiceRole;
+  const batchFetchAudio = useCallback(
+    async (
+      lines: DialogueLine[],
+      assignments: VoiceAssignment[],
+      speed: number,
+      signal: AbortSignal,
+    ): Promise<string[]> => {
+      const getVoiceRole = (line: DialogueLine) =>
+        assignments.find((a) => a.speaker === line.speaker)?.voiceRole ?? assignments[0].voiceRole;
 
-    // Check which lines are already cached on the client
-    const uncachedIndices: number[] = [];
-    for (let i = 0; i < lines.length; i++) {
-      const cacheKey = `${lines[i].speaker}|${lines[i].text}|${getVoiceRole(lines[i])}|${speed}`;
-      if (!audioCacheRef.current.has(cacheKey)) {
-        uncachedIndices.push(i);
+      // Check which lines are already cached on the client
+      const uncachedIndices: number[] = [];
+      for (let i = 0; i < lines.length; i++) {
+        const cacheKey = `${lines[i].speaker}|${lines[i].text}|${getVoiceRole(lines[i])}|${speed}`;
+        if (!audioCacheRef.current.has(cacheKey)) {
+          uncachedIndices.push(i);
+        }
       }
-    }
 
-    // If everything is cached, return immediately
-    if (uncachedIndices.length === 0) {
+      // If everything is cached, return immediately
+      if (uncachedIndices.length === 0) {
+        return lines.map((line) => {
+          const cacheKey = `${line.speaker}|${line.text}|${getVoiceRole(line)}|${speed}`;
+          return audioCacheRef.current.get(cacheKey)!;
+        });
+      }
+
+      // Build batch request for uncached lines only
+      const batchLines = uncachedIndices.map((i) => ({
+        text: lines[i].text,
+        voice: getVoiceRole(lines[i]),
+      }));
+
+      setBatchProgress({ loaded: lines.length - uncachedIndices.length, total: lines.length });
+
+      const res = await fetch("/api/read-aloud/batch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lines: batchLines, speed }),
+        signal,
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: "Unknown error" }));
+        throw new Error(err.error || `HTTP ${res.status}`);
+      }
+
+      const data: { segments: string[] } = await res.json();
+
+      // Decode base64 segments → blob URLs and cache them
+      for (let j = 0; j < uncachedIndices.length; j++) {
+        const i = uncachedIndices[j];
+        const line = lines[i];
+        const cacheKey = `${line.speaker}|${line.text}|${getVoiceRole(line)}|${speed}`;
+
+        const binary = atob(data.segments[j]);
+        const bytes = new Uint8Array(binary.length);
+        for (let k = 0; k < binary.length; k++) bytes[k] = binary.charCodeAt(k);
+        const blob = new Blob([bytes], { type: "audio/wav" });
+        const url = URL.createObjectURL(blob);
+        audioCacheRef.current.set(cacheKey, url);
+      }
+
+      setBatchProgress(null);
+
+      // Return all URLs in order
       return lines.map((line) => {
         const cacheKey = `${line.speaker}|${line.text}|${getVoiceRole(line)}|${speed}`;
         return audioCacheRef.current.get(cacheKey)!;
       });
-    }
-
-    // Build batch request for uncached lines only
-    const batchLines = uncachedIndices.map((i) => ({
-      text: lines[i].text,
-      voice: getVoiceRole(lines[i]),
-    }));
-
-    setBatchProgress({ loaded: lines.length - uncachedIndices.length, total: lines.length });
-
-    const res = await fetch("/api/read-aloud/batch", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ lines: batchLines, speed }),
-      signal,
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({ error: "Unknown error" }));
-      throw new Error(err.error || `HTTP ${res.status}`);
-    }
-
-    const data: { segments: string[] } = await res.json();
-
-    // Decode base64 segments → blob URLs and cache them
-    for (let j = 0; j < uncachedIndices.length; j++) {
-      const i = uncachedIndices[j];
-      const line = lines[i];
-      const cacheKey = `${line.speaker}|${line.text}|${getVoiceRole(line)}|${speed}`;
-
-      const binary = atob(data.segments[j]);
-      const bytes = new Uint8Array(binary.length);
-      for (let k = 0; k < binary.length; k++) bytes[k] = binary.charCodeAt(k);
-      const blob = new Blob([bytes], { type: "audio/wav" });
-      const url = URL.createObjectURL(blob);
-      audioCacheRef.current.set(cacheKey, url);
-    }
-
-    setBatchProgress(null);
-
-    // Return all URLs in order
-    return lines.map((line) => {
-      const cacheKey = `${line.speaker}|${line.text}|${getVoiceRole(line)}|${speed}`;
-      return audioCacheRef.current.get(cacheKey)!;
-    });
-  }, []);
+    },
+    [],
+  );
 
   /* ── Play single audio ── */
   const playAudio = useCallback((url: string): Promise<void> => {
@@ -286,101 +308,111 @@ export function useDialogue() {
   }, []);
 
   /* ── TTS for a single line (still needed for playSingleLine) ── */
-  const ttsLine = useCallback(async (text: string, voiceRole: string, speed: number, signal: AbortSignal): Promise<string> => {
-    const res = await fetch("/api/read-aloud", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: text.trim(), voice: voiceRole, speed }),
-      signal,
-    });
-    if (!res.ok) throw new Error("TTS failed");
-    const blob = await res.blob();
-    return URL.createObjectURL(blob);
-  }, []);
+  const ttsLine = useCallback(
+    async (
+      text: string,
+      voiceRole: string,
+      speed: number,
+      signal: AbortSignal,
+    ): Promise<string> => {
+      const res = await fetch("/api/read-aloud", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: text.trim(), voice: voiceRole, speed }),
+        signal,
+      });
+      if (!res.ok) throw new Error("TTS failed");
+      const blob = await res.blob();
+      return URL.createObjectURL(blob);
+    },
+    [],
+  );
 
   /* ── Play all lines — batch fetch first, then play sequentially ── */
-  const playAll = useCallback(async (speed: number, startIndex = 0) => {
-    if (!dialogue || voiceAssignments.length === 0) return;
+  const playAll = useCallback(
+    async (speed: number, startIndex = 0) => {
+      if (!dialogue || voiceAssignments.length === 0) return;
 
-    stoppedRef.current = false;
-    setIsPlaying(true);
-    setIsLoading(true);
-    abortRef.current = new AbortController();
-    const signal = abortRef.current.signal;
+      stoppedRef.current = false;
+      setIsPlaying(true);
+      setIsLoading(true);
+      abortRef.current = new AbortController();
+      const signal = abortRef.current.signal;
 
-    try {
-      // Get the lines we need to play
-      const linesToPlay = dialogue.lines.slice(startIndex);
+      try {
+        // Get the lines we need to play
+        const linesToPlay = dialogue.lines.slice(startIndex);
 
-      // Batch fetch ALL audio in one API call
-      const audioUrls = await batchFetchAudio(
-        linesToPlay,
-        voiceAssignments,
-        speed,
-        signal,
-      );
+        // Batch fetch ALL audio in one API call
+        const audioUrls = await batchFetchAudio(linesToPlay, voiceAssignments, speed, signal);
 
-      if (stoppedRef.current) return;
-      setIsLoading(false);
+        if (stoppedRef.current) return;
+        setIsLoading(false);
 
-      // Play all lines sequentially — audio is already loaded, no more API calls
-      for (let i = 0; i < linesToPlay.length; i++) {
-        if (stoppedRef.current) break;
+        // Play all lines sequentially — audio is already loaded, no more API calls
+        for (let i = 0; i < linesToPlay.length; i++) {
+          if (stoppedRef.current) break;
 
-        setActiveLineIndex(startIndex + i);
-        await playAudio(audioUrls[i]);
+          setActiveLineIndex(startIndex + i);
+          await playAudio(audioUrls[i]);
 
-        // Small gap between speakers
-        if (i < linesToPlay.length - 1 && !stoppedRef.current) {
-          await new Promise((r) => setTimeout(r, 200));
+          // Small gap between speakers
+          if (i < linesToPlay.length - 1 && !stoppedRef.current) {
+            await new Promise((r) => setTimeout(r, 200));
+          }
         }
+      } catch (err) {
+        if (err instanceof Error && err.name === "AbortError") return;
+        /* toast: error */
+      } finally {
+        setIsPlaying(false);
+        setIsLoading(false);
+        setBatchProgress(null);
+        if (!stoppedRef.current) setActiveLineIndex(-1);
       }
-    } catch (err) {
-      if (err instanceof Error && err.name === "AbortError") return;
-      /* toast: error */
-    } finally {
-      setIsPlaying(false);
-      setIsLoading(false);
-      setBatchProgress(null);
-      if (!stoppedRef.current) setActiveLineIndex(-1);
-    }
-  }, [dialogue, voiceAssignments, batchFetchAudio, playAudio]);
+    },
+    [dialogue, voiceAssignments, batchFetchAudio, playAudio],
+  );
 
   /* ── Play single line ── */
-  const playSingleLine = useCallback(async (index: number, speed: number) => {
-    if (!dialogue || voiceAssignments.length === 0) return;
+  const playSingleLine = useCallback(
+    async (index: number, speed: number) => {
+      if (!dialogue || voiceAssignments.length === 0) return;
 
-    stoppedRef.current = false;
-    setIsPlaying(true);
-    setActiveLineIndex(index);
-    abortRef.current = new AbortController();
+      stoppedRef.current = false;
+      setIsPlaying(true);
+      setActiveLineIndex(index);
+      abortRef.current = new AbortController();
 
-    try {
-      const line = dialogue.lines[index];
-      const assignment = voiceAssignments.find((a) => a.speaker === line.speaker) ?? voiceAssignments[0];
+      try {
+        const line = dialogue.lines[index];
+        const assignment =
+          voiceAssignments.find((a) => a.speaker === line.speaker) ?? voiceAssignments[0];
 
-      // Check client cache first
-      const cacheKey = `${line.speaker}|${line.text}|${assignment.voiceRole}|${speed}`;
-      let url = audioCacheRef.current.get(cacheKey);
+        // Check client cache first
+        const cacheKey = `${line.speaker}|${line.text}|${assignment.voiceRole}|${speed}`;
+        let url = audioCacheRef.current.get(cacheKey);
 
-      if (!url) {
-        setIsLoading(true);
-        url = await ttsLine(line.text, assignment.voiceRole, speed, abortRef.current.signal);
-        audioCacheRef.current.set(cacheKey, url);
+        if (!url) {
+          setIsLoading(true);
+          url = await ttsLine(line.text, assignment.voiceRole, speed, abortRef.current.signal);
+          audioCacheRef.current.set(cacheKey, url);
+        }
+
+        if (stoppedRef.current) return;
+        setIsLoading(false);
+
+        await playAudio(url);
+      } catch (err) {
+        if (err instanceof Error && err.name === "AbortError") return;
+        /* toast: error */
+      } finally {
+        setIsPlaying(false);
+        setIsLoading(false);
       }
-
-      if (stoppedRef.current) return;
-      setIsLoading(false);
-
-      await playAudio(url);
-    } catch (err) {
-      if (err instanceof Error && err.name === "AbortError") return;
-      /* toast: error */
-    } finally {
-      setIsPlaying(false);
-      setIsLoading(false);
-    }
-  }, [dialogue, voiceAssignments, ttsLine, playAudio]);
+    },
+    [dialogue, voiceAssignments, ttsLine, playAudio],
+  );
 
   /* ── Stop ── */
   const stop = useCallback(() => {

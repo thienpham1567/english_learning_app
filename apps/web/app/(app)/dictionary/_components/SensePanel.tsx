@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import {
-  BookOpen,
-  Lightbulb,
-  Code,
-  Pencil,
-  Link as LinkIcon,
-  Zap,
   AlertTriangle,
-} from "lucide-react";;
+  BookOpen,
+  Code,
+  Lightbulb,
+  Link as LinkIcon,
+  Pencil,
+  Zap,
+} from "lucide-react";
+import { useState } from "react";
 
 import type { DictionarySense } from "@/lib/schemas/vocabulary";
 import { parseBold } from "@/lib/utils/parse-bold";
@@ -20,7 +20,8 @@ type SensePanelProps = {
   onSearch?: (word: string) => void;
 };
 
-export const SENSE_HEADER_STYLE = "flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-accent m-0";
+export const SENSE_HEADER_STYLE =
+  "flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-accent m-0";
 
 function BoldText({ text }: { text: string }) {
   const segments = parseBold(text);
@@ -128,7 +129,10 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
           <ul className="list-none p-0 m-0 flex flex-col gap-2">
             {examples.length > 0
               ? examples.map((example, i) => (
-                  <li key={`${example.en}-${example.vi ?? i}`} className="border-l-2 border-l-accent-muted pl-4 text-sm italic leading-relaxed text-text-secondary">
+                  <li
+                    key={`${example.en}-${example.vi ?? i}`}
+                    className="border-l-2 border-l-accent-muted pl-4 text-sm italic leading-relaxed text-text-secondary"
+                  >
                     <div className="flex flex-col gap-0.5">
                       <span>
                         <HighlightWord text={example.en} headword={headword} />
@@ -142,7 +146,10 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
                   </li>
                 ))
               : examplesVi.map((example) => (
-                  <li key={example} className="border-l-2 border-l-accent-muted pl-4 text-sm italic leading-relaxed text-text-secondary">
+                  <li
+                    key={example}
+                    className="border-l-2 border-l-accent-muted pl-4 text-sm italic leading-relaxed text-text-secondary"
+                  >
                     <BoldText text={example} />
                   </li>
                 ))}
@@ -229,15 +236,14 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
           </h3>
           <ul className="list-none p-0 m-0 flex flex-col gap-1.5">
             {(isCollocationsOpen ? collocations : collocations.slice(0, 3)).map((collocation) => (
-              <li
-                key={`${collocation.en}-${collocation.vi}`}
-                className="text-sm leading-relaxed"
-              >
+              <li key={`${collocation.en}-${collocation.vi}`} className="text-sm leading-relaxed">
                 <span className="text-text-primary">
                   <BoldText text={collocation.en} />
                 </span>
                 <span className="mx-1.5 text-text-muted">&mdash;</span>
-                <span className="text-text-secondary"><BoldText text={collocation.vi} /></span>
+                <span className="text-text-secondary">
+                  <BoldText text={collocation.vi} />
+                </span>
               </li>
             ))}
           </ul>

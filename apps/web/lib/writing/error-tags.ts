@@ -33,8 +33,8 @@ export const ERROR_TAG_LABELS: Record<ErrorTag, string> = {
   "article-a-an-the": "Mạo từ (a/an/the)",
   "word-form-confusion": "Dạng từ sai",
   "comma-splice": "Nối mệnh đề sai",
-  "collocation": "Kết hợp từ",
-  "preposition": "Giới từ",
+  collocation: "Kết hợp từ",
+  preposition: "Giới từ",
   "tense-consistency": "Nhất quán thì động từ",
   "pronoun-reference": "Đại từ không rõ ràng",
   "sentence-fragment": "Câu thiếu thành phần",
@@ -44,9 +44,9 @@ export const ERROR_TAG_LABELS: Record<ErrorTag, string> = {
   "passive-voice-misuse": "Bị động dùng sai",
   "conditional-form": "Câu điều kiện",
   "countable-uncountable": "Danh từ đếm được/không đếm được",
-  "redundancy": "Thừa từ/ý",
+  redundancy: "Thừa từ/ý",
   "word-choice": "Chọn từ không phù hợp",
-  "punctuation": "Dấu câu",
+  punctuation: "Dấu câu",
 };
 
 export const ERROR_TAG_DESCRIPTIONS: Record<ErrorTag, string> = {
@@ -54,8 +54,8 @@ export const ERROR_TAG_DESCRIPTIONS: Record<ErrorTag, string> = {
   "article-a-an-the": "Incorrect or missing article (a, an, the, or zero article).",
   "word-form-confusion": "Using the wrong grammatical form of a word (noun/verb/adjective/adverb).",
   "comma-splice": "Two independent clauses joined with only a comma.",
-  "collocation": "Words that do not naturally go together in English.",
-  "preposition": "Wrong or missing preposition.",
+  collocation: "Words that do not naturally go together in English.",
+  preposition: "Wrong or missing preposition.",
   "tense-consistency": "Inconsistent verb tenses within a paragraph or essay.",
   "pronoun-reference": "A pronoun whose antecedent is ambiguous or missing.",
   "sentence-fragment": "A group of words punctuated as a sentence but lacking a main clause.",
@@ -65,9 +65,9 @@ export const ERROR_TAG_DESCRIPTIONS: Record<ErrorTag, string> = {
   "passive-voice-misuse": "Passive voice used where active is clearer, or formed incorrectly.",
   "conditional-form": "Incorrect form of conditional sentence (if-clause or result clause).",
   "countable-uncountable": "A countable noun used as uncountable or vice versa.",
-  "redundancy": "Unnecessary repetition of words or ideas.",
+  redundancy: "Unnecessary repetition of words or ideas.",
   "word-choice": "A word that is technically correct but unnatural or inappropriate in context.",
-  "punctuation": "Missing, extra, or incorrect punctuation mark.",
+  punctuation: "Missing, extra, or incorrect punctuation mark.",
 };
 
 /** Valid tag set for fast O(1) lookup */

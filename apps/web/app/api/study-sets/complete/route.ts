@@ -1,8 +1,6 @@
+import { activityLog, db } from "@repo/database";
 import { headers } from "next/headers";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { activityLog } from "@repo/database";
 
 /**
  * POST /api/study-sets/complete

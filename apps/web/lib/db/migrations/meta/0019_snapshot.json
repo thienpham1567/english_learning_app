@@ -745,12 +745,8 @@
           "name": "flashcard_progress_query_vocabulary_cache_query_fk",
           "tableFrom": "flashcard_progress",
           "tableTo": "vocabulary_cache",
-          "columnsFrom": [
-            "query"
-          ],
-          "columnsTo": [
-            "query"
-          ],
+          "columnsFrom": ["query"],
+          "columnsTo": ["query"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1530,12 +1526,8 @@
           "name": "listening_summary_attempt_exercise_id_listening_exercise_id_fk",
           "tableFrom": "listening_summary_attempt",
           "tableTo": "listening_exercise",
-          "columnsFrom": [
-            "exercise_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["exercise_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -1612,12 +1604,8 @@
           "name": "message_conversation_id_conversation_id_fk",
           "tableFrom": "message",
           "tableTo": "conversation",
-          "columnsFrom": [
-            "conversation_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["conversation_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2112,12 +2100,8 @@
           "name": "reading_progress_passage_id_reading_passage_id_fk",
           "tableFrom": "reading_progress",
           "tableTo": "reading_passage",
-          "columnsFrom": [
-            "passage_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["passage_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -2241,12 +2225,8 @@
           "name": "reading_session_passage_id_reading_passage_id_fk",
           "tableFrom": "reading_session",
           "tableTo": "reading_passage",
-          "columnsFrom": [
-            "passage_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["passage_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3027,12 +3007,8 @@
           "name": "user_vocabulary_query_vocabulary_cache_query_fk",
           "tableFrom": "user_vocabulary",
           "tableTo": "vocabulary_cache",
-          "columnsFrom": [
-            "query"
-          ],
-          "columnsTo": [
-            "query"
-          ],
+          "columnsFrom": ["query"],
+          "columnsTo": ["query"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -3392,18 +3368,12 @@
     "public.exam_mode": {
       "name": "exam_mode",
       "schema": "public",
-      "values": [
-        "toeic",
-        "ielts"
-      ]
+      "values": ["toeic", "ielts"]
     },
     "public.message_role": {
       "name": "message_role",
       "schema": "public",
-      "values": [
-        "user",
-        "assistant"
-      ]
+      "values": ["user", "assistant"]
     }
   },
   "schemas": {},

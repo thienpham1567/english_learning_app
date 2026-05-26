@@ -1,19 +1,14 @@
+import { db, listeningImport } from "@repo/database";
+import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, and } from "drizzle-orm";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { listeningImport } from "@repo/database";
 
 /**
  * GET /api/listening/import/[id]
  *
  * Returns the full import data for the authenticated owner.
  */
-export async function GET(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });

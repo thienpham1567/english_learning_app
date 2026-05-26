@@ -1,5 +1,5 @@
 "use client";
-import { createContext, useContext, type ReactNode } from "react";
+import { createContext, type ReactNode, useContext } from "react";
 
 export type ExamMode = "toeic";
 
@@ -27,11 +27,7 @@ const ExamModeContext = createContext<ExamModeContextType>(TOEIC_CONTEXT);
  * Provider interface is kept stable so no downstream changes are needed.
  */
 export function ExamModeProvider({ children }: { children: ReactNode }) {
-  return (
-    <ExamModeContext.Provider value={TOEIC_CONTEXT}>
-      {children}
-    </ExamModeContext.Provider>
-  );
+  return <ExamModeContext.Provider value={TOEIC_CONTEXT}>{children}</ExamModeContext.Provider>;
 }
 
 export function useExamMode() {

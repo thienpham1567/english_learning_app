@@ -1,9 +1,9 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { Check, Plus, Trash2, Trophy, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Plus, Trash2, Check, X, Trophy } from "lucide-react";
+import { useCallback, useState } from "react";
 
 import { useChatConversations } from "@/app/(app)/english-chatbot/_components/ChatConversationProvider";
 
@@ -89,9 +89,7 @@ export function ConversationList({ activeId }: Props) {
                   key={conv.id}
                   className="flex items-center gap-2 rounded-xl border border-red-950 bg-red-950/20 p-2.5 animate-in fade-in zoom-in-95 duration-150"
                 >
-                  <span className="flex-1 text-xs font-semibold text-red-405">
-                    Xóa cuộc chat?
-                  </span>
+                  <span className="flex-1 text-xs font-semibold text-red-405">Xóa cuộc chat?</span>
                   <button
                     onClick={() => {
                       deleteConversation(conv.id);
@@ -115,10 +113,7 @@ export function ConversationList({ activeId }: Props) {
             }
 
             return (
-              <div
-                key={conv.id}
-                className="group relative rounded-xl transition-all duration-150"
-              >
+              <div key={conv.id} className="group relative rounded-xl transition-all duration-150">
                 <Link
                   href={`/english-chatbot/${conv.id}`}
                   className={`flex w-full flex-col gap-1 rounded-xl px-3 py-2.5 text-left transition-all duration-180 ${

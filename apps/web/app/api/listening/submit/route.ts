@@ -1,18 +1,18 @@
+import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, and } from "drizzle-orm";
 
 import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("listening/submit");
-import { db } from "@repo/database";
-import { listeningExercise, errorLog } from "@repo/database";
+
 import type { ListeningQuestion } from "@repo/database";
-import { awardXP, XP_VALUES } from "@/lib/xp";
-import { logActivity } from "@/lib/activity-log";
-import { SubmitInputSchema } from "@/lib/listening/types";
-import { updateSkillProfile } from "@/lib/adaptive/difficulty";
+import { db, errorLog, listeningExercise } from "@repo/database";
 import { recordLearningEvent } from "@repo/modules";
+import { logActivity } from "@/lib/activity-log";
+import { updateSkillProfile } from "@/lib/adaptive/difficulty";
+import { SubmitInputSchema } from "@/lib/listening/types";
+import { awardXP, XP_VALUES } from "@/lib/xp";
 
 /**
  * POST /api/listening/submit
@@ -30,7 +30,10 @@ export async function POST(request: Request) {
     const body = await request.json();
     const parsed = SubmitInputSchema.safeParse(body);
     if (!parsed.success) {
-      return Response.json({ error: "Invalid input", details: parsed.error.flatten() }, { status: 400 });
+      return Response.json(
+        { error: "Invalid input", details: parsed.error.flatten() },
+        { status: 400 },
+      );
     }
 
     const { exerciseId, answers, scriptRevealed } = parsed.data;
@@ -126,7 +129,12 @@ export async function POST(request: Request) {
       result: score >= 80 ? "correct" : score >= 50 ? "partial" : "incorrect",
       score,
       durationMs: 0,
-      difficulty: exercise.level === "easy" ? "beginner" : exercise.level === "hard" ? "advanced" : "intermediate",
+      difficulty:
+        exercise.level === "easy"
+          ? "beginner"
+          : exercise.level === "hard"
+            ? "advanced"
+            : "intermediate",
     });
 
     // Update listening skill profile (adaptive difficulty)

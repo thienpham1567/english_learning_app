@@ -38,9 +38,10 @@ function editDistance<T>(a: readonly T[], b: readonly T[]): number {
   for (let j = 0; j <= n; j++) dp[0][j] = j;
   for (let i = 1; i <= m; i++) {
     for (let j = 1; j <= n; j++) {
-      dp[i][j] = a[i - 1] === b[j - 1]
-        ? dp[i - 1][j - 1]
-        : 1 + Math.min(dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1]);
+      dp[i][j] =
+        a[i - 1] === b[j - 1]
+          ? dp[i - 1][j - 1]
+          : 1 + Math.min(dp[i - 1][j - 1], dp[i - 1][j], dp[i][j - 1]);
     }
   }
   return dp[m][n];
@@ -53,8 +54,14 @@ function alignWords(ref: string[], spoken: string[]): Array<number | null> {
   const n = spoken.length;
   const dp = Array.from({ length: m + 1 }, () => new Array<number>(n + 1).fill(0));
   const back = Array.from({ length: m + 1 }, () => new Array<"d" | "u" | "l">(n + 1).fill("d"));
-  for (let i = 0; i <= m; i++) { dp[i][0] = i; back[i][0] = "u"; }
-  for (let j = 0; j <= n; j++) { dp[0][j] = j; back[0][j] = "l"; }
+  for (let i = 0; i <= m; i++) {
+    dp[i][0] = i;
+    back[i][0] = "u";
+  }
+  for (let j = 0; j <= n; j++) {
+    dp[0][j] = j;
+    back[0][j] = "l";
+  }
   back[0][0] = "d";
   for (let i = 1; i <= m; i++) {
     for (let j = 1; j <= n; j++) {
@@ -73,9 +80,15 @@ function alignWords(ref: string[], spoken: string[]): Array<number | null> {
   let j = n;
   while (i > 0 && j > 0) {
     const b = back[i][j];
-    if (b === "d") { map[i - 1] = j - 1; i--; j--; }
-    else if (b === "u") { i--; }
-    else { j--; }
+    if (b === "d") {
+      map[i - 1] = j - 1;
+      i--;
+      j--;
+    } else if (b === "u") {
+      i--;
+    } else {
+      j--;
+    }
   }
   return map;
 }
@@ -114,12 +127,33 @@ function scoreWord(refWord: string, spokenWord: string | null): WordScore {
     const phonemeSim = maxLen === 0 ? 1 : 1 - dist / maxLen;
     if (dist === 0) {
       // Homophone (e.g. "to" vs "two") — treat as OK.
-      return { word: refWord, spoken: spokenWord, score: 100, status: "ok", expectedPhonemes: expected, actualPhonemes: actual };
+      return {
+        word: refWord,
+        spoken: spokenWord,
+        score: 100,
+        status: "ok",
+        expectedPhonemes: expected,
+        actualPhonemes: actual,
+      };
     }
     if (dist <= 2 || phonemeSim >= 0.7) {
-      return { word: refWord, spoken: spokenWord, score: 60, status: "slightly-off", expectedPhonemes: expected, actualPhonemes: actual };
+      return {
+        word: refWord,
+        spoken: spokenWord,
+        score: 60,
+        status: "slightly-off",
+        expectedPhonemes: expected,
+        actualPhonemes: actual,
+      };
     }
-    return { word: refWord, spoken: spokenWord, score: 0, status: "wrong", expectedPhonemes: expected, actualPhonemes: actual };
+    return {
+      word: refWord,
+      spoken: spokenWord,
+      score: 0,
+      status: "wrong",
+      expectedPhonemes: expected,
+      actualPhonemes: actual,
+    };
   }
 
   // Fall back to string edit distance for out-of-dictionary words.
@@ -127,9 +161,23 @@ function scoreWord(refWord: string, spokenWord: string | null): WordScore {
   const maxLen = Math.max(refWord.length, spokenWord.length);
   const charSim = maxLen === 0 ? 1 : 1 - charDist / maxLen;
   if (charSim >= 0.7 || charDist <= 2) {
-    return { word: refWord, spoken: spokenWord, score: 60, status: "slightly-off", expectedPhonemes: expected, actualPhonemes: actual };
+    return {
+      word: refWord,
+      spoken: spokenWord,
+      score: 60,
+      status: "slightly-off",
+      expectedPhonemes: expected,
+      actualPhonemes: actual,
+    };
   }
-  return { word: refWord, spoken: spokenWord, score: 0, status: "wrong", expectedPhonemes: expected, actualPhonemes: actual };
+  return {
+    word: refWord,
+    spoken: spokenWord,
+    score: 0,
+    status: "wrong",
+    expectedPhonemes: expected,
+    actualPhonemes: actual,
+  };
 }
 
 /** Align spoken text against reference and produce a word-by-word score + overall. */
@@ -146,10 +194,7 @@ export function alignAndScore(referenceText: string, spokenText: string): Alignm
 
   // Weighted by word length (longer words count more).
   const totalWeight = wordScores.reduce((s, w) => s + Math.max(1, w.word.length), 0);
-  const weighted = wordScores.reduce(
-    (s, w) => s + w.score * Math.max(1, w.word.length),
-    0,
-  );
+  const weighted = wordScores.reduce((s, w) => s + w.score * Math.max(1, w.word.length), 0);
   const overall = referenceTokens.length === 0 ? 0 : Math.round(weighted / totalWeight);
 
   return { overall, wordScores, referenceTokens, spokenTokens };

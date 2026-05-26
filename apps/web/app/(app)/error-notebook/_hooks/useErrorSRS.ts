@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import { api } from "@/lib/api-client";
 import type { ErrorEntry, SRSGrade } from "../_types/types";
 
@@ -57,27 +57,30 @@ export function useErrorSRS(): UseErrorSRSReturn {
     }
   }, []);
 
-  const gradeAndNext = useCallback(async (grade: SRSGrade) => {
-    if (currentIndex >= queue.length) return;
+  const gradeAndNext = useCallback(
+    async (grade: SRSGrade) => {
+      if (currentIndex >= queue.length) return;
 
-    const error = queue[currentIndex];
-    setGrading(true);
+      const error = queue[currentIndex];
+      setGrading(true);
 
-    try {
-      await api.post("/errors/review", {
-        errorId: error.id,
-        grade,
-      });
+      try {
+        await api.post("/errors/review", {
+          errorId: error.id,
+          grade,
+        });
 
-      setReviewed((r) => r + 1);
-      if (grade >= 3) setCorrect((c) => c + 1);
-      setCurrentIndex((i) => i + 1);
-    } catch {
-      console.error("Không thể lưu kết quả ôn tập");
-    } finally {
-      setGrading(false);
-    }
-  }, [currentIndex, queue]);
+        setReviewed((r) => r + 1);
+        if (grade >= 3) setCorrect((c) => c + 1);
+        setCurrentIndex((i) => i + 1);
+      } catch {
+        console.error("Không thể lưu kết quả ôn tập");
+      } finally {
+        setGrading(false);
+      }
+    },
+    [currentIndex, queue],
+  );
 
   const resetSession = useCallback(() => {
     setCurrentIndex(0);

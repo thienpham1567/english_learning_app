@@ -26,7 +26,7 @@ export function SubmissionHistory({ submissions, onView }: Props) {
             onClick={() => onView(s)}
           >
             <div className="flex items-center gap-3">
-              <FileText className="h-4 w-4 text-slate-450 shrink-0" />
+              <FileText className="h-4 w-4 text-(--text-muted) shrink-0" />
               <div>
                 <span className="text-sm font-medium text-(--ink)">
                   {CATEGORY_LABELS[s.category as WritingCategory] ?? s.category}

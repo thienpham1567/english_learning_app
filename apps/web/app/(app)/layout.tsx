@@ -1,17 +1,17 @@
-import type { ReactNode } from "react";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import type { ReactNode } from "react";
 
 export const dynamic = "force-dynamic";
 
-import { auth } from "@/lib/auth";
 import { AppShell } from "@/components/shared/AppShell";
-import { ThemeProvider } from "@/components/shared/ThemeProvider";
-import { PWAProvider } from "@/components/shared/PWAProvider";
-import { ExamModeProvider } from "@/components/shared/ExamModeProvider";
-import { DashboardProvider } from "@/hooks/useDashboard";
 import { ErrorBoundary } from "@/components/shared/ErrorBoundary";
+import { ExamModeProvider } from "@/components/shared/ExamModeProvider";
+import { PWAProvider } from "@/components/shared/PWAProvider";
+import { ThemeProvider } from "@/components/shared/ThemeProvider";
+import { DashboardProvider } from "@/hooks/useDashboard";
+import { auth } from "@/lib/auth";
 
 export default async function AppLayout({ children }: { children: ReactNode }) {
   const session = await auth.api.getSession({

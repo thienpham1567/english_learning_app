@@ -1,9 +1,7 @@
-import { headers } from "next/headers";
+import { db, userVocabulary, vocabularyCache } from "@repo/database";
 import { eq } from "drizzle-orm";
-
+import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { userVocabulary, vocabularyCache } from "@repo/database";
 
 /**
  * POST /api/vocabulary/save

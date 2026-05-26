@@ -1,18 +1,17 @@
-import { headers } from "next/headers";
-import { eq, and, isNotNull, desc, ne } from "drizzle-orm";
-
-import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { and, desc, eq, isNotNull, ne } from "drizzle-orm";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("daily-challenge/bonus");
+
 import { dailyChallenge, userPreferences } from "@repo/database";
+import { normalizeChallenge } from "@/lib/daily-challenge/normalize";
+import { type ExamModeValue, getExamContext } from "@/lib/exam-mode/context";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-
-import { getExamContext, type ExamModeValue } from "@/lib/exam-mode/context";
 import { extractJson } from "@/lib/openai/extract-json";
-import { normalizeChallenge } from "@/lib/daily-challenge/normalize";
 
 function getVnDate(): string {
   return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Ho_Chi_Minh" });
@@ -41,9 +40,10 @@ function extractRecentStems(exercises: Record<string, unknown>[]): string[] {
 function buildBonusPrompt(examMode: ExamModeValue, recentStems: string[]): string {
   const ctx = getExamContext(examMode);
 
-  const antiRepetitionBlock = recentStems.length > 0
-    ? `\n\nCRITICAL — ANTI-REPETITION RULE:\nThe following sentences, words, and phrases were ALREADY used recently (including today's daily challenge). You MUST NOT reuse them. Generate completely NEW content:\n---\n${recentStems.join("\n")}\n---`
-    : "";
+  const antiRepetitionBlock =
+    recentStems.length > 0
+      ? `\n\nCRITICAL — ANTI-REPETITION RULE:\nThe following sentences, words, and phrases were ALREADY used recently (including today's daily challenge). You MUST NOT reuse them. Generate completely NEW content:\n---\n${recentStems.join("\n")}\n---`
+      : "";
 
   return `You are a bonus English challenge generator for ${ctx.label} preparation.
 Generate exactly 3 bonus exercises. Pick 3 DIFFERENT types from these 9 types:
@@ -83,10 +83,7 @@ export async function GET() {
       .select({ completedAt: dailyChallenge.completedAt })
       .from(dailyChallenge)
       .where(
-        and(
-          eq(dailyChallenge.userId, session.user.id),
-          eq(dailyChallenge.challengeDate, vnToday),
-        ),
+        and(eq(dailyChallenge.userId, session.user.id), eq(dailyChallenge.challengeDate, vnToday)),
       )
       .limit(1),
     db
@@ -108,10 +105,7 @@ export async function GET() {
 
   // Must complete daily first
   if (!dailyRows[0]?.completedAt) {
-    return Response.json(
-      { error: "Complete today's daily challenge first" },
-      { status: 409 },
-    );
+    return Response.json({ error: "Complete today's daily challenge first" }, { status: 409 });
   }
 
   // Already have bonus for today
@@ -138,12 +132,7 @@ export async function GET() {
     const recentChallenges = await db
       .select({ exercises: dailyChallenge.exercises })
       .from(dailyChallenge)
-      .where(
-        and(
-          eq(dailyChallenge.userId, session.user.id),
-          isNotNull(dailyChallenge.completedAt),
-        ),
-      )
+      .where(and(eq(dailyChallenge.userId, session.user.id), isNotNull(dailyChallenge.completedAt)))
       .orderBy(desc(dailyChallenge.challengeDate))
       .limit(7);
 

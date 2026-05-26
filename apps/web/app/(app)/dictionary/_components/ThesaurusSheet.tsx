@@ -1,8 +1,8 @@
 "use client";
 
 import { X } from "lucide-react";
-import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-client";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";
 
 type Props = {
@@ -86,7 +86,9 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                       {/* Synonyms */}
                       {(sense.synonyms?.length ?? 0) > 0 && (
                         <div className="flex flex-col gap-2">
-                          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-(--success) m-0">Đồng nghĩa</p>
+                          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-(--success) m-0">
+                            Đồng nghĩa
+                          </p>
                           <div className="flex flex-wrap gap-1.5">
                             {sense.synonyms.map((word) => (
                               <button
@@ -105,7 +107,9 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                       {/* Antonyms */}
                       {(sense.antonyms?.length ?? 0) > 0 && (
                         <div className="flex flex-col gap-2">
-                          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-(--warning) m-0">Trái nghĩa</p>
+                          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-(--warning) m-0">
+                            Trái nghĩa
+                          </p>
                           <div className="flex flex-wrap gap-1.5">
                             {sense.antonyms.map((word) => (
                               <button

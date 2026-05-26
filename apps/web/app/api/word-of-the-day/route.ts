@@ -1,9 +1,7 @@
+import { db, userVocabulary, vocabularyCache } from "@repo/database";
+import { and, eq, sql } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, and, sql } from "drizzle-orm";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { userVocabulary, vocabularyCache } from "@repo/database";
 
 /**
  * GET /api/word-of-the-day
@@ -76,12 +74,7 @@ export async function GET() {
   const [savedCheck] = await db
     .select({ saved: userVocabulary.saved })
     .from(userVocabulary)
-    .where(
-      and(
-        eq(userVocabulary.userId, userId),
-        eq(userVocabulary.query, wordQuery),
-      ),
-    )
+    .where(and(eq(userVocabulary.userId, userId), eq(userVocabulary.query, wordQuery)))
     .limit(1);
 
   return Response.json({

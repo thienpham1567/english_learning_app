@@ -65,10 +65,8 @@ export function useAudioPlayer() {
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = locale;
             utterance.rate = 0.9;
-            utterance.onend = () =>
-              setSpeakingLocale((curr) => (curr === locale ? null : curr));
-            utterance.onerror = () =>
-              setSpeakingLocale((curr) => (curr === locale ? null : curr));
+            utterance.onend = () => setSpeakingLocale((curr) => (curr === locale ? null : curr));
+            utterance.onerror = () => setSpeakingLocale((curr) => (curr === locale ? null : curr));
             window.speechSynthesis.cancel();
             window.speechSynthesis.speak(utterance);
             return;

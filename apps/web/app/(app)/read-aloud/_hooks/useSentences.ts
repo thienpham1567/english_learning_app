@@ -1,7 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
-
+import { useCallback, useRef, useState } from "react";
 
 /**
  * useSentences — splits text into sentences and manages per-sentence TTS playback
@@ -62,7 +61,9 @@ export function useSentences(): UseSentencesReturn {
   const [activeSentenceIndex, setActiveSentenceIndex] = useState(-1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [batchProgress, setBatchProgress] = useState<{ loaded: number; total: number } | null>(null);
+  const [batchProgress, setBatchProgress] = useState<{ loaded: number; total: number } | null>(
+    null,
+  );
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const abortRef = useRef<AbortController | null>(null);
@@ -89,206 +90,216 @@ export function useSentences(): UseSentencesReturn {
   }, []);
 
   /* ── Update sentence state helper ── */
-  const updateSentenceState = useCallback((index: number, state: SentenceState, audioUrl?: string) => {
-    setSentences((prev) =>
-      prev.map((s, i) => (i === index ? { ...s, state, ...(audioUrl ? { audioUrl } : {}) } : s)),
-    );
-  }, []);
+  const updateSentenceState = useCallback(
+    (index: number, state: SentenceState, audioUrl?: string) => {
+      setSentences((prev) =>
+        prev.map((s, i) => (i === index ? { ...s, state, ...(audioUrl ? { audioUrl } : {}) } : s)),
+      );
+    },
+    [],
+  );
 
   /* ── Batch fetch audio for multiple sentences ── */
-  const batchFetchSentenceAudio = useCallback(async (
-    sentenceTexts: string[],
-    voiceRole: string,
-    speed: number,
-    signal: AbortSignal,
-  ): Promise<string[]> => {
-    // Check which sentences are already cached
-    const uncachedIndices: number[] = [];
-    for (let i = 0; i < sentenceTexts.length; i++) {
-      const key = makeSentenceKey(sentenceTexts[i], voiceRole, speed);
-      if (!sentenceAudioCache.has(key)) {
-        uncachedIndices.push(i);
+  const batchFetchSentenceAudio = useCallback(
+    async (
+      sentenceTexts: string[],
+      voiceRole: string,
+      speed: number,
+      signal: AbortSignal,
+    ): Promise<string[]> => {
+      // Check which sentences are already cached
+      const uncachedIndices: number[] = [];
+      for (let i = 0; i < sentenceTexts.length; i++) {
+        const key = makeSentenceKey(sentenceTexts[i], voiceRole, speed);
+        if (!sentenceAudioCache.has(key)) {
+          uncachedIndices.push(i);
+        }
       }
-    }
 
-    // If everything is cached, return immediately
-    if (uncachedIndices.length === 0) {
+      // If everything is cached, return immediately
+      if (uncachedIndices.length === 0) {
+        return sentenceTexts.map((text) => {
+          const key = makeSentenceKey(text, voiceRole, speed);
+          return sentenceAudioCache.get(key)!;
+        });
+      }
+
+      // Build batch request for uncached sentences
+      const batchLines = uncachedIndices.map((i) => ({
+        text: sentenceTexts[i],
+        voice: voiceRole,
+      }));
+
+      setBatchProgress({
+        loaded: sentenceTexts.length - uncachedIndices.length,
+        total: sentenceTexts.length,
+      });
+
+      const res = await fetch("/api/read-aloud/batch", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ lines: batchLines, speed }),
+        signal,
+      });
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: "Unknown error" }));
+        throw new Error(err.error || `HTTP ${res.status}`);
+      }
+
+      const data: { segments: string[] } = await res.json();
+
+      // Decode base64 → blob URLs and cache
+      for (let j = 0; j < uncachedIndices.length; j++) {
+        const i = uncachedIndices[j];
+        const key = makeSentenceKey(sentenceTexts[i], voiceRole, speed);
+
+        const binary = atob(data.segments[j]);
+        const bytes = new Uint8Array(binary.length);
+        for (let k = 0; k < binary.length; k++) bytes[k] = binary.charCodeAt(k);
+        const blob = new Blob([bytes], { type: "audio/wav" });
+        const url = URL.createObjectURL(blob);
+        sentenceAudioCache.set(key, url);
+      }
+
+      setBatchProgress(null);
+
+      // Return all URLs in order
       return sentenceTexts.map((text) => {
         const key = makeSentenceKey(text, voiceRole, speed);
         return sentenceAudioCache.get(key)!;
       });
-    }
-
-    // Build batch request for uncached sentences
-    const batchLines = uncachedIndices.map((i) => ({
-      text: sentenceTexts[i],
-      voice: voiceRole,
-    }));
-
-    setBatchProgress({
-      loaded: sentenceTexts.length - uncachedIndices.length,
-      total: sentenceTexts.length,
-    });
-
-    const res = await fetch("/api/read-aloud/batch", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ lines: batchLines, speed }),
-      signal,
-    });
-
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({ error: "Unknown error" }));
-      throw new Error(err.error || `HTTP ${res.status}`);
-    }
-
-    const data: { segments: string[] } = await res.json();
-
-    // Decode base64 → blob URLs and cache
-    for (let j = 0; j < uncachedIndices.length; j++) {
-      const i = uncachedIndices[j];
-      const key = makeSentenceKey(sentenceTexts[i], voiceRole, speed);
-
-      const binary = atob(data.segments[j]);
-      const bytes = new Uint8Array(binary.length);
-      for (let k = 0; k < binary.length; k++) bytes[k] = binary.charCodeAt(k);
-      const blob = new Blob([bytes], { type: "audio/wav" });
-      const url = URL.createObjectURL(blob);
-      sentenceAudioCache.set(key, url);
-    }
-
-    setBatchProgress(null);
-
-    // Return all URLs in order
-    return sentenceTexts.map((text) => {
-      const key = makeSentenceKey(text, voiceRole, speed);
-      return sentenceAudioCache.get(key)!;
-    });
-  }, []);
+    },
+    [],
+  );
 
   /* ── Fetch audio for a single sentence (fallback for playSingle) ── */
-  const fetchSentenceAudio = useCallback(async (
-    sentence: string,
-    voiceRole: string,
-    speed: number,
-    signal: AbortSignal,
-  ): Promise<string> => {
-    const key = makeSentenceKey(sentence, voiceRole, speed);
-    const cached = sentenceAudioCache.get(key);
-    if (cached) return cached;
+  const fetchSentenceAudio = useCallback(
+    async (
+      sentence: string,
+      voiceRole: string,
+      speed: number,
+      signal: AbortSignal,
+    ): Promise<string> => {
+      const key = makeSentenceKey(sentence, voiceRole, speed);
+      const cached = sentenceAudioCache.get(key);
+      if (cached) return cached;
 
-    const res = await fetch("/api/read-aloud", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: sentence.trim(), voice: voiceRole, speed }),
-      signal,
-    });
+      const res = await fetch("/api/read-aloud", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: sentence.trim(), voice: voiceRole, speed }),
+        signal,
+      });
 
-    if (!res.ok) {
-      const err = await res.json().catch(() => ({ error: "Unknown error" }));
-      throw new Error(err.error || `HTTP ${res.status}`);
-    }
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: "Unknown error" }));
+        throw new Error(err.error || `HTTP ${res.status}`);
+      }
 
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    sentenceAudioCache.set(key, url);
-    return url;
-  }, []);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      sentenceAudioCache.set(key, url);
+      return url;
+    },
+    [],
+  );
 
   /* ── Play all sentences — batch fetch first, then play sequentially ── */
-  const playAll = useCallback(async (voiceRole: string, speed: number, startIndex = 0) => {
-    stoppedRef.current = false;
-    setIsPlaying(true);
-    setIsLoading(true);
-    abortRef.current = new AbortController();
-    const signal = abortRef.current.signal;
+  const playAll = useCallback(
+    async (voiceRole: string, speed: number, startIndex = 0) => {
+      stoppedRef.current = false;
+      setIsPlaying(true);
+      setIsLoading(true);
+      abortRef.current = new AbortController();
+      const signal = abortRef.current.signal;
 
-    try {
-      const sentenceTexts = sentences.slice(startIndex).map((s) => s.text);
+      try {
+        const sentenceTexts = sentences.slice(startIndex).map((s) => s.text);
 
-      // Mark all as loading
-      for (let i = startIndex; i < sentences.length; i++) {
-        updateSentenceState(i, "loading");
+        // Mark all as loading
+        for (let i = startIndex; i < sentences.length; i++) {
+          updateSentenceState(i, "loading");
+        }
+
+        // Batch fetch ALL audio in one API call
+        const audioUrls = await batchFetchSentenceAudio(sentenceTexts, voiceRole, speed, signal);
+
+        if (stoppedRef.current) return;
+
+        // Mark all as ready
+        for (let i = 0; i < sentenceTexts.length; i++) {
+          updateSentenceState(startIndex + i, "ready", audioUrls[i]);
+        }
+        setIsLoading(false);
+
+        // Play sequentially — all audio is already loaded
+        for (let i = 0; i < sentenceTexts.length; i++) {
+          if (stoppedRef.current) break;
+
+          const actualIndex = startIndex + i;
+          setActiveSentenceIndex(actualIndex);
+          updateSentenceState(actualIndex, "playing", audioUrls[i]);
+
+          await playOneSentence(audioUrls[i]);
+
+          if (stoppedRef.current) break;
+          updateSentenceState(actualIndex, "done");
+        }
+      } catch (err) {
+        if (err instanceof Error && err.name === "AbortError") return;
+        /* toast: error */
+      } finally {
+        setIsPlaying(false);
+        setIsLoading(false);
+        setBatchProgress(null);
+        if (!stoppedRef.current) {
+          setActiveSentenceIndex(-1);
+        }
       }
-
-      // Batch fetch ALL audio in one API call
-      const audioUrls = await batchFetchSentenceAudio(
-        sentenceTexts,
-        voiceRole,
-        speed,
-        signal,
-      );
-
-      if (stoppedRef.current) return;
-
-      // Mark all as ready
-      for (let i = 0; i < sentenceTexts.length; i++) {
-        updateSentenceState(startIndex + i, "ready", audioUrls[i]);
-      }
-      setIsLoading(false);
-
-      // Play sequentially — all audio is already loaded
-      for (let i = 0; i < sentenceTexts.length; i++) {
-        if (stoppedRef.current) break;
-
-        const actualIndex = startIndex + i;
-        setActiveSentenceIndex(actualIndex);
-        updateSentenceState(actualIndex, "playing", audioUrls[i]);
-
-        await playOneSentence(audioUrls[i]);
-
-        if (stoppedRef.current) break;
-        updateSentenceState(actualIndex, "done");
-      }
-    } catch (err) {
-      if (err instanceof Error && err.name === "AbortError") return;
-      /* toast: error */
-    } finally {
-      setIsPlaying(false);
-      setIsLoading(false);
-      setBatchProgress(null);
-      if (!stoppedRef.current) {
-        setActiveSentenceIndex(-1);
-      }
-    }
-  }, [sentences, batchFetchSentenceAudio, playOneSentence, updateSentenceState]);
+    },
+    [sentences, batchFetchSentenceAudio, playOneSentence, updateSentenceState],
+  );
 
   /* ── Play single sentence ── */
-  const playSingle = useCallback(async (index: number, voiceRole: string, speed: number) => {
-    stoppedRef.current = false;
-    setIsPlaying(true);
-    setActiveSentenceIndex(index);
-    abortRef.current = new AbortController();
+  const playSingle = useCallback(
+    async (index: number, voiceRole: string, speed: number) => {
+      stoppedRef.current = false;
+      setIsPlaying(true);
+      setActiveSentenceIndex(index);
+      abortRef.current = new AbortController();
 
-    try {
-      updateSentenceState(index, "loading");
-      setIsLoading(true);
+      try {
+        updateSentenceState(index, "loading");
+        setIsLoading(true);
 
-      const url = await fetchSentenceAudio(
-        sentences[index].text,
-        voiceRole,
-        speed,
-        abortRef.current.signal,
-      );
+        const url = await fetchSentenceAudio(
+          sentences[index].text,
+          voiceRole,
+          speed,
+          abortRef.current.signal,
+        );
 
-      if (stoppedRef.current) return;
+        if (stoppedRef.current) return;
 
-      updateSentenceState(index, "playing", url);
-      setIsLoading(false);
+        updateSentenceState(index, "playing", url);
+        setIsLoading(false);
 
-      await playOneSentence(url);
+        await playOneSentence(url);
 
-      if (!stoppedRef.current) {
-        updateSentenceState(index, "done");
+        if (!stoppedRef.current) {
+          updateSentenceState(index, "done");
+        }
+      } catch (err) {
+        if (err instanceof Error && err.name === "AbortError") return;
+        /* toast: error */
+      } finally {
+        setIsPlaying(false);
+        setIsLoading(false);
       }
-    } catch (err) {
-      if (err instanceof Error && err.name === "AbortError") return;
-      /* toast: error */
-    } finally {
-      setIsPlaying(false);
-      setIsLoading(false);
-    }
-  }, [sentences, fetchSentenceAudio, playOneSentence, updateSentenceState]);
+    },
+    [sentences, fetchSentenceAudio, playOneSentence, updateSentenceState],
+  );
 
   /* ── Stop ── */
   const stop = useCallback(() => {

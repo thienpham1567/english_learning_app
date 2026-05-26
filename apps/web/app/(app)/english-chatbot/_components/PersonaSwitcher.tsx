@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
 import { Check } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { PERSONAS } from "@/lib/chat/personas";
 
 type Props = {
@@ -55,7 +55,7 @@ export function PersonaSwitcher({ value, onChange, disabled }: Props) {
             Chọn gia sư
           </div>
           <div className="h-px bg-(--border) mx-2 mb-1" />
-          
+
           <div className="space-y-0.5">
             {PERSONAS.map((persona) => {
               const Avatar = persona.avatar;

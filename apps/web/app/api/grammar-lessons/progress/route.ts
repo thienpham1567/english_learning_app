@@ -1,14 +1,13 @@
-import { headers } from "next/headers";
+import { db, grammarLessonProgress } from "@repo/database";
 import { and, eq } from "drizzle-orm";
-
+import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
 import {
   buildGrammarLessonSummary,
-  getRecommendedGrammarTopic,
   type GrammarLessonProgressItem,
+  getRecommendedGrammarTopic,
 } from "@/lib/grammar-lessons/schema";
 import { GRAMMAR_TOPIC_CATEGORIES } from "@/lib/grammar-lessons/topics";
-import { db, grammarLessonProgress } from "@repo/database";
 
 /**
  * GET /api/grammar-lessons/progress
@@ -29,10 +28,12 @@ export async function GET(request: Request) {
   const rows = await db
     .select()
     .from(grammarLessonProgress)
-    .where(and(
-      eq(grammarLessonProgress.userId, session.user.id),
-      eq(grammarLessonProgress.examMode, examMode),
-    ));
+    .where(
+      and(
+        eq(grammarLessonProgress.userId, session.user.id),
+        eq(grammarLessonProgress.examMode, examMode),
+      ),
+    );
 
   const progress: GrammarLessonProgressItem[] = rows.map((row) => ({
     topicId: row.topicId,
@@ -45,7 +46,11 @@ export async function GET(request: Request) {
   }));
 
   const summary = buildGrammarLessonSummary(GRAMMAR_TOPIC_CATEGORIES, progress);
-  const recommendedTopic = getRecommendedGrammarTopic(GRAMMAR_TOPIC_CATEGORIES, progress, preferredLevel);
+  const recommendedTopic = getRecommendedGrammarTopic(
+    GRAMMAR_TOPIC_CATEGORIES,
+    progress,
+    preferredLevel,
+  );
 
   return Response.json({
     progress,

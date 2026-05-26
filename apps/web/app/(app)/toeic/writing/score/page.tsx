@@ -1,12 +1,6 @@
 "use client";
 
-import { api } from "@/lib/api-client";
-import { useState, useCallback, useMemo } from "react";
-
 import { Progress, Tag, Tooltip } from "antd";
-
-import { useExamMode } from "@/components/shared/ExamModeProvider";
-import { RewritePanel } from "@/app/(app)/toeic/skills/_components/writing/RewritePanel";
 import {
   AlertTriangle,
   BookOpen,
@@ -20,7 +14,11 @@ import {
   Pencil,
   RefreshCw,
   Target,
-} from "lucide-react";;
+} from "lucide-react";
+import { useCallback, useMemo, useState } from "react";
+import { RewritePanel } from "@/app/(app)/toeic/skills/_components/writing/RewritePanel";
+import { useExamMode } from "@/components/shared/ExamModeProvider";
+import { api } from "@/lib/api-client";
 
 /* ── Types ─────────────────────────────────────────────────── */
 
@@ -83,24 +81,41 @@ function InlineIssueItem({
 
   return (
     <div
-      
       onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave} className="text-[13px] rounded-lg overflow-hidden" style={{background: isHovered ? `${color}15` : "var(--surface)", borderLeft: `3px solid ${color}`}} >
-      <div className="py-2 px-3 cursor-pointer" >
-        <div className="flex justify-between items-start" >
+      onMouseLeave={onMouseLeave}
+      className="text-[13px] rounded-lg overflow-hidden"
+      style={{
+        background: isHovered ? `${color}15` : "var(--surface)",
+        borderLeft: `3px solid ${color}`,
+      }}
+    >
+      <div className="py-2 px-3 cursor-pointer">
+        <div className="flex justify-between items-start">
           <div>
-            <Tag color={color} className="text-[10px]" >{issue.category}</Tag>
-            <span className="text-text-muted" style={{textDecoration: "line-through"}} >{issue.quote}</span>
+            <Tag color={color} className="text-[10px]">
+              {issue.category}
+            </Tag>
+            <span className="text-text-muted" style={{ textDecoration: "line-through" }}>
+              {issue.quote}
+            </span>
             {" → "}
-            <span className="text-emerald-500 font-medium" >{issue.suggestion}</span>
+            <span className="text-emerald-500 font-medium">{issue.suggestion}</span>
           </div>
           <button
             onClick={() => setShowRewrite((p) => !p)}
-            title="Rewrite this sentence" className="border-none text-[11px] font-medium cursor-pointer rounded-md shrink-0 ml-2" style={{background: showRewrite ? `${color}20` : "transparent", color: showRewrite ? color : "var(--text-secondary)", padding: "2px 8px", whiteSpace: "nowrap"}} >
+            title="Rewrite this sentence"
+            className="border-none text-[11px] font-medium cursor-pointer rounded-md shrink-0 ml-2"
+            style={{
+              background: showRewrite ? `${color}20` : "transparent",
+              color: showRewrite ? color : "var(--text-secondary)",
+              padding: "2px 8px",
+              whiteSpace: "nowrap",
+            }}
+          >
             <Highlighter /> Viết lại
           </button>
         </div>
-        <p className="text-[11px] text-text-secondary" style={{margin: "4px 0 0"}} >
+        <p className="text-[11px] text-text-secondary" style={{ margin: "4px 0 0" }}>
           {issue.explanation}
         </p>
       </div>
@@ -135,7 +150,10 @@ export default function EssayScorePage() {
   const [error, setError] = useState<string | null>(null);
   const [hoveredIssue, setHoveredIssue] = useState<number | null>(null);
 
-  const wordCount = useMemo(() => essayText.trim().split(/\s+/).filter(Boolean).length, [essayText]);
+  const wordCount = useMemo(
+    () => essayText.trim().split(/\s+/).filter(Boolean).length,
+    [essayText],
+  );
 
   /* ── Submit ────────────────────────────────── */
 
@@ -204,23 +222,32 @@ export default function EssayScorePage() {
         <Tooltip
           key={idx}
           title={
-            <div className="text-xs" >
-              <div className="font-semibold mb-1" >
-                <Tag color={CATEGORY_COLORS[issue.category]} className="text-[10px]" >{issue.category}</Tag>
+            <div className="text-xs">
+              <div className="font-semibold mb-1">
+                <Tag color={CATEGORY_COLORS[issue.category]} className="text-[10px]">
+                  {issue.category}
+                </Tag>
               </div>
               <div>→ {issue.suggestion}</div>
-              <div className="text-text-muted mt-1" >{issue.explanation}</div>
+              <div className="text-text-muted mt-1">{issue.explanation}</div>
             </div>
           }
         >
           <span
             data-issue-idx={idx}
-            
             onMouseEnter={() => setHoveredIssue(idx)}
-            onMouseLeave={() => setHoveredIssue(null)} className="cursor-pointer rounded-sm" style={{backgroundColor: `${CATEGORY_COLORS[issue.category]}20`, borderBottom: `2px solid ${CATEGORY_COLORS[issue.category]}`, transition: "background 0.2s", padding: "1px 0"}} >
+            onMouseLeave={() => setHoveredIssue(null)}
+            className="cursor-pointer rounded-sm"
+            style={{
+              backgroundColor: `${CATEGORY_COLORS[issue.category]}20`,
+              borderBottom: `2px solid ${CATEGORY_COLORS[issue.category]}`,
+              transition: "background 0.2s",
+              padding: "1px 0",
+            }}
+          >
             {essayText.slice(issue.startOffset, issue.endOffset)}
           </span>
-        </Tooltip>
+        </Tooltip>,
       );
 
       cursor = issue.endOffset;
@@ -245,38 +272,50 @@ export default function EssayScorePage() {
   /* ── Render ──────────────────────────────── */
 
   return (
-    <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
+    <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
       {/* Header */}
       <div style={{ padding: "24px 24px 16px", borderBottom: "1px solid var(--border)" }}>
-        <div className="flex items-center gap-2.5 mb-1" >
+        <div className="flex items-center gap-2.5 mb-1">
           <Pencil size={22} className="text-accent" />
-          <h1 className="m-0 text-xl font-bold" >Chấm bài viết theo rubric</h1>
+          <h1 className="m-0 text-xl font-bold">Chấm bài viết theo rubric</h1>
         </div>
-        <p className="m-0 text-[13px] text-text-secondary" >
+        <p className="m-0 text-[13px] text-text-secondary">
           Nộp bài viết và nhận điểm chi tiết theo tiêu chí IELTS/TOEFL
         </p>
       </div>
 
       {/* Content */}
-      <div className="flex-1 p-6 w-[800px] mx-auto w-full" >
+      <div className="flex-1 p-6 w-[800px] mx-auto w-full">
         {/* Error */}
         {error && (
-          <div className="py-2.5 px-4 rounded-lg text-destructive mb-4 text-[13px]" style={{background: "var(--error-bg)"}} >
+          <div
+            className="py-2.5 px-4 rounded-lg text-destructive mb-4 text-[13px]"
+            style={{ background: "var(--error-bg)" }}
+          >
             {error}
           </div>
         )}
 
         {/* Input */}
         {state === "input" && (
-          <div className="flex flex-col gap-4" >
+          <div className="flex flex-col gap-4">
             {/* Exam selector */}
             <div>
-              <p className="text-xs text-text-secondary mb-2 font-semibold" >Loại bài thi</p>
-              <div className="flex gap-2 flex-wrap" >
+              <p className="text-xs text-text-secondary mb-2 font-semibold">Loại bài thi</p>
+              <div className="flex gap-2 flex-wrap">
                 {EXAM_OPTIONS.map((opt) => (
                   <button
                     key={opt.value}
-                    onClick={() => setExam(opt.value)} className="py-2 px-4 rounded-lg cursor-pointer text-[13px]" style={{border: exam === opt.value ? "2px solid var(--accent)" : "1px solid var(--border)", background: exam === opt.value ? "var(--accent-muted)" : "transparent", color: exam === opt.value ? "var(--accent)" : "var(--text-secondary)", fontWeight: exam === opt.value ? 600 : 400}} >
+                    onClick={() => setExam(opt.value)}
+                    className="py-2 px-4 rounded-lg cursor-pointer text-[13px]"
+                    style={{
+                      border:
+                        exam === opt.value ? "2px solid var(--accent)" : "1px solid var(--border)",
+                      background: exam === opt.value ? "var(--accent-muted)" : "transparent",
+                      color: exam === opt.value ? "var(--accent)" : "var(--text-secondary)",
+                      fontWeight: exam === opt.value ? 600 : 400,
+                    }}
+                  >
                     {opt.label}
                   </button>
                 ))}
@@ -285,32 +324,70 @@ export default function EssayScorePage() {
 
             {/* Prompt field */}
             <div>
-              <p className="text-xs text-text-secondary mb-2 font-semibold" >
-                Đề bài <span className="font-normal" >(không bắt buộc)</span>
+              <p className="text-xs text-text-secondary mb-2 font-semibold">
+                Đề bài <span className="font-normal">(không bắt buộc)</span>
               </p>
               <textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Dán đề bài vào đây để AI đánh giá Task Response chính xác hơn..." className="w-full h-[60px] p-3 border-2 border-border text-[13px]" style={{borderRadius: 10, background: "var(--card-bg)", color: "var(--text)", resize: "vertical", fontFamily: "inherit"}} />
+                placeholder="Dán đề bài vào đây để AI đánh giá Task Response chính xác hơn..."
+                className="w-full h-[60px] p-3 border-2 border-border text-[13px]"
+                style={{
+                  borderRadius: 10,
+                  background: "var(--card-bg)",
+                  color: "var(--text)",
+                  resize: "vertical",
+                  fontFamily: "inherit",
+                }}
+              />
             </div>
 
             {/* Essay textarea */}
             <div>
-              <div className="flex justify-between mb-2" >
-                <p className="text-xs text-text-secondary m-0 font-semibold" >Bài viết</p>
-                <span className="text-[11px] font-medium" style={{color: wordCount < 150 ? "var(--error)" : wordCount > 2000 ? "var(--error)" : "var(--text-secondary)"}} >
+              <div className="flex justify-between mb-2">
+                <p className="text-xs text-text-secondary m-0 font-semibold">Bài viết</p>
+                <span
+                  className="text-[11px] font-medium"
+                  style={{
+                    color:
+                      wordCount < 150
+                        ? "var(--error)"
+                        : wordCount > 2000
+                          ? "var(--error)"
+                          : "var(--text-secondary)",
+                  }}
+                >
                   {wordCount} từ {wordCount < 150 && "(cần ≥ 150)"}
                 </span>
               </div>
               <textarea
                 value={essayText}
                 onChange={(e) => setEssayText(e.target.value)}
-                placeholder="Viết hoặc dán bài viết của bạn vào đây..." className="w-full h-[280px] p-4 rounded-xl border-2 border-border text-sm" style={{background: "var(--card-bg)", color: "var(--text)", lineHeight: 1.8, resize: "vertical", fontFamily: "inherit"}} />
+                placeholder="Viết hoặc dán bài viết của bạn vào đây..."
+                className="w-full h-[280px] p-4 rounded-xl border-2 border-border text-sm"
+                style={{
+                  background: "var(--card-bg)",
+                  color: "var(--text)",
+                  lineHeight: 1.8,
+                  resize: "vertical",
+                  fontFamily: "inherit",
+                }}
+              />
             </div>
 
             <button
               onClick={submitEssay}
-              disabled={wordCount < 150} className="border-none text-[15px] font-semibold" style={{padding: "12px 32px", borderRadius: 10, background: wordCount < 150 ? "var(--border)" : "var(--accent)", color: "var(--text-on-accent)", cursor: wordCount < 150 ? "not-allowed" : "pointer", alignSelf: "center"}} >
+              disabled={wordCount < 150}
+              className="border-none text-[15px] font-semibold"
+              style={{
+                padding: "12px 32px",
+                borderRadius: 10,
+                background: wordCount < 150 ? "var(--border)" : "var(--accent)",
+                color: "var(--text-on-accent)",
+                cursor: wordCount < 150 ? "not-allowed" : "pointer",
+                alignSelf: "center",
+              }}
+            >
               <Pencil /> Chấm bài
             </button>
           </div>
@@ -318,51 +395,58 @@ export default function EssayScorePage() {
 
         {/* Scoring */}
         {state === "scoring" && (
-          <div className="text-center" style={{padding: 48}} >
+          <div className="text-center" style={{ padding: 48 }}>
             <Loader2 className="animate-spin text-accent" size={36} />
-            <p className="text-text-secondary mt-4 text-sm" >
+            <p className="text-text-secondary mt-4 text-sm">
               Đang chấm bài viết ({wordCount} từ)...
             </p>
-            <p className="text-text-secondary text-xs" >
-              Quá trình này có thể mất 10–20 giây
-            </p>
+            <p className="text-text-secondary text-xs">Quá trình này có thể mất 10–20 giây</p>
           </div>
         )}
 
         {/* Result */}
         {state === "result" && result && (
-          <div className="flex flex-col gap-4" >
+          <div className="flex flex-col gap-4">
             {/* Overall score */}
-            <div className="p-6 rounded-2xl border-2 border-border text-center" style={{background: "var(--card-bg)"}} >
+            <div
+              className="p-6 rounded-2xl border-2 border-border text-center"
+              style={{ background: "var(--card-bg)" }}
+            >
               <Progress
                 type="circle"
                 percent={(result.overall / maxScore) * 100}
                 size={100}
                 strokeColor={scoreColor(result.overall)}
                 format={() => (
-                  <span className="text-2xl font-bold" >
-                    {result.overall}{isIelts ? "" : `/${maxScore}`}
+                  <span className="text-2xl font-bold">
+                    {result.overall}
+                    {isIelts ? "" : `/${maxScore}`}
                   </span>
                 )}
               />
-              <p className="text-[13px] text-text-secondary mt-2" >
+              <p className="text-[13px] text-text-secondary mt-2">
                 {EXAM_OPTIONS.find((o) => o.value === exam)?.label} • {result.wordCount} từ
               </p>
 
               {/* Criteria scores */}
-              <div className="flex justify-center gap-5 mt-4 flex-wrap" >
-                {([
-                  { key: "taskResponse", label: "Task" },
-                  { key: "coherence", label: "Coherence" },
-                  { key: "lexical", label: "Lexical" },
-                  { key: "grammar", label: "Grammar" },
-                ] as const).map((c) => {
+              <div className="flex justify-center gap-5 mt-4 flex-wrap">
+                {(
+                  [
+                    { key: "taskResponse", label: "Task" },
+                    { key: "coherence", label: "Coherence" },
+                    { key: "lexical", label: "Lexical" },
+                    { key: "grammar", label: "Grammar" },
+                  ] as const
+                ).map((c) => {
                   const s = result.criteria[c.key];
                   return (
                     <Tooltip key={c.key} title={s.feedback}>
-                      <div className="cursor-pointer" >
-                        <p className="text-[11px] text-text-secondary m-0" >{c.label}</p>
-                        <p className="text-lg font-semibold m-0" style={{color: scoreColor(s.score)}} >
+                      <div className="cursor-pointer">
+                        <p className="text-[11px] text-text-secondary m-0">{c.label}</p>
+                        <p
+                          className="text-lg font-semibold m-0"
+                          style={{ color: scoreColor(s.score) }}
+                        >
                           {s.score}
                         </p>
                       </div>
@@ -373,48 +457,104 @@ export default function EssayScorePage() {
             </div>
 
             {/* Criteria feedback */}
-            {([
-              { key: "taskResponse", label: <><ClipboardList /> Task Response</>, icon: null },
-              { key: "coherence", label: <><LinkIcon /> Coherence &amp; Cohesion</>, icon: null },
-              { key: "lexical", label: <><BookOpen /> Lexical Resource</>, icon: null },
-              { key: "grammar", label: <><Calculator /> Grammar</>, icon: null },
-            ] as const).map((c) => {
+            {(
+              [
+                {
+                  key: "taskResponse",
+                  label: (
+                    <>
+                      <ClipboardList /> Task Response
+                    </>
+                  ),
+                  icon: null,
+                },
+                {
+                  key: "coherence",
+                  label: (
+                    <>
+                      <LinkIcon /> Coherence &amp; Cohesion
+                    </>
+                  ),
+                  icon: null,
+                },
+                {
+                  key: "lexical",
+                  label: (
+                    <>
+                      <BookOpen /> Lexical Resource
+                    </>
+                  ),
+                  icon: null,
+                },
+                {
+                  key: "grammar",
+                  label: (
+                    <>
+                      <Calculator /> Grammar
+                    </>
+                  ),
+                  icon: null,
+                },
+              ] as const
+            ).map((c) => {
               const s = result.criteria[c.key];
               return (
-                <div key={c.key} className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
-                  <div className="flex justify-between mb-1" >
-                    <p className="text-xs text-text-secondary m-0 font-semibold" >{c.label}</p>
-                    <Tag color={scoreColor(s.score)} className="text-xs font-semibold" >{s.score}</Tag>
+                <div
+                  key={c.key}
+                  className="p-4 rounded-xl border-2 border-border"
+                  style={{ background: "var(--card-bg)" }}
+                >
+                  <div className="flex justify-between mb-1">
+                    <p className="text-xs text-text-secondary m-0 font-semibold">{c.label}</p>
+                    <Tag color={scoreColor(s.score)} className="text-xs font-semibold">
+                      {s.score}
+                    </Tag>
                   </div>
-                  <p className="text-[13px] m-0 leading-relaxed" >{s.feedback}</p>
+                  <p className="text-[13px] m-0 leading-relaxed">{s.feedback}</p>
                 </div>
               );
             })}
 
             {/* Essay with inline highlights */}
-            <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
-              <div className="flex justify-between mb-2" >
-                <p className="text-xs text-text-secondary m-0 font-semibold" >
+            <div
+              className="p-4 rounded-xl border-2 border-border"
+              style={{ background: "var(--card-bg)" }}
+            >
+              <div className="flex justify-between mb-2">
+                <p className="text-xs text-text-secondary m-0 font-semibold">
                   <Info /> Bài viết (hover để xem gợi ý)
                 </p>
-                <div className="flex gap-1.5" >
+                <div className="flex gap-1.5">
                   {Object.entries(CATEGORY_COLORS).map(([cat, color]) => (
-                    <Tag key={cat}  color="default" className="text-[9px]" style={{borderColor: color, color}} >{cat}</Tag>
+                    <Tag
+                      key={cat}
+                      color="default"
+                      className="text-[9px]"
+                      style={{ borderColor: color, color }}
+                    >
+                      {cat}
+                    </Tag>
                   ))}
                 </div>
               </div>
-              <div className="text-sm" style={{lineHeight: 1.8, whiteSpace: "pre-wrap", wordBreak: "break-word"}} >
+              <div
+                className="text-sm"
+                style={{ lineHeight: 1.8, whiteSpace: "pre-wrap", wordBreak: "break-word" }}
+              >
                 {highlightSegments ?? essayText}
               </div>
             </div>
 
             {/* Inline issues list */}
             {result.inlineIssues.length > 0 && (
-              <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
-                <p className="text-xs text-text-secondary mb-2 font-semibold" >
+              <div
+                className="p-4 rounded-xl border-2 border-border"
+                style={{ background: "var(--card-bg)" }}
+              >
+                <p className="text-xs text-text-secondary mb-2 font-semibold">
                   <AlertTriangle /> Lỗi chi tiết ({result.inlineIssues.length})
                 </p>
-                <div className="flex flex-col gap-2" >
+                <div className="flex flex-col gap-2">
                   {result.inlineIssues.map((issue, i) => (
                     <InlineIssueItem
                       key={i}
@@ -429,29 +569,49 @@ export default function EssayScorePage() {
             )}
 
             {/* Strengths & Next Steps */}
-            <div className="grid gap-4" style={{gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))"}} >
-              <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
-                <p className="text-xs text-text-secondary mb-2 font-semibold" >
+            <div
+              className="grid gap-4"
+              style={{ gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}
+            >
+              <div
+                className="p-4 rounded-xl border-2 border-border"
+                style={{ background: "var(--card-bg)" }}
+              >
+                <p className="text-xs text-text-secondary mb-2 font-semibold">
                   <CircleCheckBig className="text-emerald-500" /> Điểm mạnh
                 </p>
-                <ul className="m-0 text-[13px]" style={{paddingLeft: 16, lineHeight: 1.8}} >
-                  {result.strengths.map((s, i) => <li key={i}>{s}</li>)}
+                <ul className="m-0 text-[13px]" style={{ paddingLeft: 16, lineHeight: 1.8 }}>
+                  {result.strengths.map((s, i) => (
+                    <li key={i}>{s}</li>
+                  ))}
                 </ul>
               </div>
-              <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
-                <p className="text-xs text-text-secondary mb-2 font-semibold" >
+              <div
+                className="p-4 rounded-xl border-2 border-border"
+                style={{ background: "var(--card-bg)" }}
+              >
+                <p className="text-xs text-text-secondary mb-2 font-semibold">
                   <Target /> Cần cải thiện
                 </p>
-                <ul className="m-0 text-[13px]" style={{paddingLeft: 16, lineHeight: 1.8}} >
-                  {result.nextSteps.map((s, i) => <li key={i}>{s}</li>)}
+                <ul className="m-0 text-[13px]" style={{ paddingLeft: 16, lineHeight: 1.8 }}>
+                  {result.nextSteps.map((s, i) => (
+                    <li key={i}>{s}</li>
+                  ))}
                 </ul>
               </div>
             </div>
 
             {/* Actions */}
-            <div className="text-center" >
+            <div className="text-center">
               <button
-                onClick={startNew} className="rounded-lg border-none text-sm font-semibold cursor-pointer" style={{padding: "10px 24px", background: "var(--accent)", color: "var(--text-on-accent)"}} >
+                onClick={startNew}
+                className="rounded-lg border-none text-sm font-semibold cursor-pointer"
+                style={{
+                  padding: "10px 24px",
+                  background: "var(--accent)",
+                  color: "var(--text-on-accent)",
+                }}
+              >
                 <RefreshCw /> Chấm bài mới
               </button>
             </div>

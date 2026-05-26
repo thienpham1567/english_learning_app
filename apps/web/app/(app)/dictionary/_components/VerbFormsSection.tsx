@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState } from "react";
 import { ChevronDown, Loader2, Volume2 } from "lucide-react";
+import { useRef, useState } from "react";
 import { api } from "@/lib/api-client";
 
 import type { VerbForm } from "@/lib/schemas/vocabulary";
@@ -14,7 +14,10 @@ export function VerbFormsSection({ verbForms }: Props) {
   const [open, setOpen] = useState(false);
   const [speakingKey, setSpeakingKey] = useState<string | null>(null);
   const activeUtteranceRef = useRef<SpeechSynthesisUtterance | null>(null);
-  const activeAudioRef = useRef<{ el: HTMLAudioElement | null; url: string | null }>({ el: null, url: null });
+  const activeAudioRef = useRef<{ el: HTMLAudioElement | null; url: string | null }>({
+    el: null,
+    url: null,
+  });
 
   async function speak(form: string, locale: "en-US" | "en-GB") {
     const key = `${form}-${locale}`;
@@ -102,10 +105,7 @@ export function VerbFormsSection({ verbForms }: Props) {
       </button>
 
       {open && (
-        <div
-          id="verb-forms-grid"
-          className="anim-fade-in verb-forms-grid grid gap-2.5 pt-3.5"
-        >
+        <div id="verb-forms-grid" className="anim-fade-in verb-forms-grid grid gap-2.5 pt-3.5">
           {verbForms.map((vf, idx) => {
             const isInfinitive = idx === 0;
             const cardClass = isInfinitive
@@ -115,14 +115,21 @@ export function VerbFormsSection({ verbForms }: Props) {
                 : "bg-bg-deep border-2 border-border";
 
             return (
-              <div key={vf.label} className={`flex flex-col gap-1.5 rounded-lg p-3.5 px-4 transition-shadow duration-200 min-h-[110px] ${cardClass}`}>
+              <div
+                key={vf.label}
+                className={`flex flex-col gap-1.5 rounded-lg p-3.5 px-4 transition-shadow duration-200 min-h-[110px] ${cardClass}`}
+              >
                 {/* Label */}
-                <span className={`text-[10px] font-bold uppercase tracking-wider leading-none ${isInfinitive ? "text-accent" : "text-text-muted"}`}>
+                <span
+                  className={`text-[10px] font-bold uppercase tracking-wider leading-none ${isInfinitive ? "text-accent" : "text-text-muted"}`}
+                >
                   {vf.label}
                 </span>
 
                 {/* Form word */}
-                <span className={`mt-0.5 ${isInfinitive ? "text-base font-bold font-display italic" : "text-sm font-semibold"} text-ink`}>
+                <span
+                  className={`mt-0.5 ${isInfinitive ? "text-base font-bold font-display italic" : "text-sm font-semibold"} text-ink`}
+                >
                   {vf.form}
                 </span>
 
@@ -132,7 +139,9 @@ export function VerbFormsSection({ verbForms }: Props) {
                     {vf.phoneticsUs && (
                       <div className="flex items-center gap-1">
                         <span className="text-[10px] font-bold text-text-muted min-w-4">US</span>
-                        <span className="text-[11px] font-mono text-text-secondary">{vf.phoneticsUs}</span>
+                        <span className="text-[11px] font-mono text-text-secondary">
+                          {vf.phoneticsUs}
+                        </span>
                         <MiniAudioBtn
                           isPlaying={speakingKey === `${vf.form}-en-US`}
                           onClick={() => speak(vf.form, "en-US")}
@@ -143,7 +152,9 @@ export function VerbFormsSection({ verbForms }: Props) {
                     {vf.phoneticsUk && (
                       <div className="flex items-center gap-1">
                         <span className="text-[10px] font-bold text-text-muted min-w-4">UK</span>
-                        <span className="text-[11px] font-mono text-text-secondary">{vf.phoneticsUk}</span>
+                        <span className="text-[11px] font-mono text-text-secondary">
+                          {vf.phoneticsUk}
+                        </span>
                         <MiniAudioBtn
                           isPlaying={speakingKey === `${vf.form}-en-GB`}
                           onClick={() => speak(vf.form, "en-GB")}
@@ -190,11 +201,7 @@ function MiniAudioBtn({
         isPlaying ? "text-accent" : "text-text-muted hover:text-accent"
       }`}
     >
-      {isPlaying ? (
-        <Loader2 className="h-3 w-3 animate-spin" />
-      ) : (
-        <Volume2 className="h-3 w-3" />
-      )}
+      {isPlaying ? <Loader2 className="h-3 w-3 animate-spin" /> : <Volume2 className="h-3 w-3" />}
     </button>
   );
 }

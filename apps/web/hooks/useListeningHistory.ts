@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { api } from "@/lib/api-client";
 import type { ListeningHistoryItem } from "@/lib/listening/types";
 
@@ -37,7 +37,9 @@ export function useListeningHistory(options: UseListeningHistoryOptions = {}) {
   });
 
   const fetchHistory = useCallback(
-    async (overrides?: Partial<Pick<HistoryState, "page" | "mode" | "level" | "bookmarkedOnly">>) => {
+    async (
+      overrides?: Partial<Pick<HistoryState, "page" | "mode" | "level" | "bookmarkedOnly">>,
+    ) => {
       const page = overrides?.page ?? state.page;
       const mode = overrides?.mode !== undefined ? overrides.mode : state.mode;
       const level = overrides?.level !== undefined ? overrides.level : state.level;
@@ -97,27 +99,19 @@ export function useListeningHistory(options: UseListeningHistoryOptions = {}) {
     [fetchHistory],
   );
 
-  const goToPage = useCallback(
-    (page: number) => fetchHistory({ page }),
-    [fetchHistory],
-  );
+  const goToPage = useCallback((page: number) => fetchHistory({ page }), [fetchHistory]);
 
-  const toggleBookmark = useCallback(
-    async (exerciseId: string, bookmarked: boolean) => {
-      try {
-        await api.post("/listening/bookmark", { exerciseId, bookmarked });
-        setState((prev) => ({
-          ...prev,
-          items: prev.items.map((item) =>
-            item.id === exerciseId ? { ...item, bookmarked } : item,
-          ),
-        }));
-      } catch {
-        // silent fail
-      }
-    },
-    [],
-  );
+  const toggleBookmark = useCallback(async (exerciseId: string, bookmarked: boolean) => {
+    try {
+      await api.post("/listening/bookmark", { exerciseId, bookmarked });
+      setState((prev) => ({
+        ...prev,
+        items: prev.items.map((item) => (item.id === exerciseId ? { ...item, bookmarked } : item)),
+      }));
+    } catch {
+      // silent fail
+    }
+  }, []);
 
   // Auto-fetch on mount if requested
   useEffect(() => {

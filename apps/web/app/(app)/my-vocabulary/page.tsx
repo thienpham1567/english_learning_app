@@ -1,38 +1,31 @@
 "use client";
 
-import { useState } from "react";
-import dynamic from "next/dynamic";
-
-import * as m from "motion/react-client";
 import { BookOpen, Loader2, Search, Star } from "lucide-react";
+import * as m from "motion/react-client";
+import dynamic from "next/dynamic";
+import { useState } from "react";
 
 const ToeicVocabTab = dynamic(
-  () =>
-    import("@/app/(app)/my-vocabulary/_components/ToeicVocabTab").then(
-      (m) => m.ToeicVocabTab,
-    ),
+  () => import("@/app/(app)/my-vocabulary/_components/ToeicVocabTab").then((m) => m.ToeicVocabTab),
   {
     ssr: false,
     loading: () => (
-      <div className="flex justify-center text-text-muted gap-2.5" style={{padding: 60}} >
+      <div className="flex justify-center text-text-muted gap-2.5" style={{ padding: 60 }}>
         <Loader2 className="animate-spin text-accent" size={20} />
-        <span className="font-bold text-sm" >Đang tải...</span>
+        <span className="font-bold text-sm">Đang tải...</span>
       </div>
     ),
   },
 );
 
 const DictionaryTab = dynamic(
-  () =>
-    import("@/app/(app)/my-vocabulary/_components/DictionaryTab").then(
-      (m) => m.DictionaryTab,
-    ),
+  () => import("@/app/(app)/my-vocabulary/_components/DictionaryTab").then((m) => m.DictionaryTab),
   {
     ssr: false,
     loading: () => (
-      <div className="flex justify-center text-text-muted gap-2.5" style={{padding: 60}} >
+      <div className="flex justify-center text-text-muted gap-2.5" style={{ padding: 60 }}>
         <Loader2 className="animate-spin text-accent" size={20} />
-        <span className="font-bold text-sm" >Đang tải...</span>
+        <span className="font-bold text-sm">Đang tải...</span>
       </div>
     ),
   },
@@ -64,11 +57,13 @@ export default function MyVocabularyPage() {
   const [active, setActive] = useState<TabKey>("toeic");
 
   return (
-    <div className="flex flex-col h-full h-[0px] flex-1 overflow-hidden" >
-
+    <div className="flex flex-col h-full h-[0px] flex-1 overflow-hidden">
       {/* Tab switcher */}
-      <div className="shrink-0" style={{padding: "12px 16px 6px"}} >
-        <div className="flex gap-1 bg-surface-alt rounded-(--radius-xl) p-1" style={{border: "1.5px solid var(--border)"}} >
+      <div className="shrink-0" style={{ padding: "12px 16px 6px" }}>
+        <div
+          className="flex gap-1 bg-surface-alt rounded-(--radius-xl) p-1"
+          style={{ border: "1.5px solid var(--border)" }}
+        >
           {TABS.map((t) => {
             const isActive = active === t.key;
             return (
@@ -76,7 +71,15 @@ export default function MyVocabularyPage() {
                 type="button"
                 key={t.key}
                 onClick={() => setActive(t.key)}
-                whileTap={{ scale: 0.98 }} className="flex-1 py-2.5 px-4 rounded-(--radius-lg) border-none cursor-pointer flex items-center justify-center gap-2 font-extrabold" style={{background: isActive ? TAB_COLORS[t.key] : "transparent", color: isActive ? "var(--text-on-accent)" : "var(--text-secondary)", fontSize: 13.5, transition: "color 0.2s, background 0.2s"}} >
+                whileTap={{ scale: 0.98 }}
+                className="flex-1 py-2.5 px-4 rounded-(--radius-lg) border-none cursor-pointer flex items-center justify-center gap-2 font-extrabold"
+                style={{
+                  background: isActive ? TAB_COLORS[t.key] : "transparent",
+                  color: isActive ? "var(--text-on-accent)" : "var(--text-secondary)",
+                  fontSize: 13.5,
+                  transition: "color 0.2s, background 0.2s",
+                }}
+              >
                 {t.icon}
                 <span>{t.label}</span>
               </m.button>
@@ -85,7 +88,7 @@ export default function MyVocabularyPage() {
         </div>
       </div>
 
-      <div className="flex-1 h-[0px] overflow-auto" style={{padding: "16px 16px 40px"}} >
+      <div className="flex-1 h-[0px] overflow-auto" style={{ padding: "16px 16px 40px" }}>
         {active === "toeic" && <ToeicVocabTab />}
         {active === "dictionary" && <DictionaryTab />}
       </div>

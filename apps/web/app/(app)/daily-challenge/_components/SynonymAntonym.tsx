@@ -1,8 +1,8 @@
 "use client";
 
+import * as m from "motion/react-client";
 import { useState } from "react";
 import type { SynonymAntonymData } from "@/lib/daily-challenge/types";
-import * as m from "motion/react-client";
 
 const LABELS = ["A", "B", "C", "D"] as const;
 
@@ -64,12 +64,10 @@ export function SynonymAntonym({ data, instruction, onAnswer, disabled }: Props)
             gap: 6,
             padding: "4px 14px",
             borderRadius: 99,
-            background: isSynonym
-              ? "rgba(16, 185, 129, 0.1)"
-              : "rgba(239, 68, 68, 0.08)",
-            border: `1px solid ${isSynonym
-              ? "rgba(16, 185, 129, 0.25)"
-              : "rgba(239, 68, 68, 0.2)"}`,
+            background: isSynonym ? "rgba(16, 185, 129, 0.1)" : "rgba(239, 68, 68, 0.08)",
+            border: `1px solid ${
+              isSynonym ? "rgba(16, 185, 129, 0.25)" : "rgba(239, 68, 68, 0.2)"
+            }`,
             fontSize: 11,
             fontWeight: 800,
             textTransform: "uppercase",
@@ -113,12 +111,8 @@ export function SynonymAntonym({ data, instruction, onAnswer, disabled }: Props)
                 justifyContent: "center",
                 gap: 10,
                 borderRadius: "var(--radius-lg)",
-                border: isSelected
-                  ? "2px solid var(--accent)"
-                  : "1px solid var(--border)",
-                background: isSelected
-                  ? "var(--accent-light)"
-                  : "var(--surface)",
+                border: isSelected ? "2px solid var(--accent)" : "1px solid var(--border)",
+                background: isSelected ? "var(--accent-light)" : "var(--surface)",
                 padding: "14px 12px",
                 textAlign: "center",
                 fontSize: 15,

@@ -1,16 +1,14 @@
-import { headers } from "next/headers";
-import { randomUUID } from "crypto";
-
-import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { listeningExercise } from "@repo/database";
 import type { DialogueTurn, ListeningQuestion } from "@repo/database";
+import { db, listeningExercise } from "@repo/database";
+import { randomUUID } from "crypto";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
+import { getExamContext, parseExamMode } from "@/lib/exam-mode/context";
+import { GenerateDialogueInputSchema } from "@/lib/listening/types";
+import { routeLogger } from "@/lib/logger";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { GenerateDialogueInputSchema } from "@/lib/listening/types";
-import { getExamContext, parseExamMode } from "@/lib/exam-mode/context";
 import { VOICE_BY_ROLE, type VoiceRole } from "@/lib/tts/groq";
-import { routeLogger } from "@/lib/logger";
 
 /**
  * POST /api/listening/generate-dialogue
@@ -169,7 +167,11 @@ export async function POST(request: Request) {
       .returning();
 
     log.info(
-      { exerciseId: exercise.id, turns: dialogueTurns.length, questions: generated.questions.length },
+      {
+        exerciseId: exercise.id,
+        turns: dialogueTurns.length,
+        questions: generated.questions.length,
+      },
       "dialogue.created",
     );
 

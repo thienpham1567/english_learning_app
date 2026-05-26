@@ -1,8 +1,8 @@
 "use client";
 
+import * as m from "motion/react-client";
 import { useState } from "react";
 import type { FillInBlankData } from "@/lib/daily-challenge/types";
-import * as m from "motion/react-client";
 
 const LABELS = ["A", "B", "C", "D"] as const;
 
@@ -49,7 +49,15 @@ export function FillInBlank({ data, instruction, onAnswer, disabled }: Props) {
           boxShadow: "inset 0 1px 3px rgba(0,0,0,0.03)",
         }}
       >
-        <p style={{ margin: 0, fontSize: 16, color: "var(--text-primary)", lineHeight: 1.8, fontWeight: 600 }}>
+        <p
+          style={{
+            margin: 0,
+            fontSize: 16,
+            color: "var(--text-primary)",
+            lineHeight: 1.8,
+            fontWeight: 600,
+          }}
+        >
           {data.sentence.split("_____").map((part, i, arr) => (
             <span key={i}>
               {part}
@@ -77,7 +85,13 @@ export function FillInBlank({ data, instruction, onAnswer, disabled }: Props) {
       </div>
 
       {/* Options grid */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: 12 }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: 12,
+        }}
+      >
         {data.options.map((opt, i) => {
           const isSelected = selected === i;
 
@@ -93,12 +107,8 @@ export function FillInBlank({ data, instruction, onAnswer, disabled }: Props) {
                 alignItems: "center",
                 gap: 12,
                 borderRadius: "var(--radius-lg)",
-                border: isSelected
-                  ? "2px solid var(--accent)"
-                  : "1px solid var(--border)",
-                background: isSelected
-                  ? "var(--accent-light)"
-                  : "var(--surface)",
+                border: isSelected ? "2px solid var(--accent)" : "1px solid var(--border)",
+                background: isSelected ? "var(--accent-light)" : "var(--surface)",
                 padding: "14px 18px",
                 textAlign: "left",
                 fontSize: 15,

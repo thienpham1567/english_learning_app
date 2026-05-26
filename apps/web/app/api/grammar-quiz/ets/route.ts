@@ -1,7 +1,7 @@
-import { headers } from "next/headers";
-import { z } from "zod";
 import fs from "fs";
+import { headers } from "next/headers";
 import path from "path";
+import { z } from "zod";
 
 import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
@@ -32,10 +32,7 @@ let cachedQuestions: EnrichedQuestion[] | null = null;
 function loadQuestions(): EnrichedQuestion[] {
   if (cachedQuestions) return cachedQuestions;
 
-  const filePath = path.join(
-    process.cwd(),
-    "data/toeic-exams/part5-enriched.json",
-  );
+  const filePath = path.join(process.cwd(), "data/toeic-exams/part5-enriched.json");
   try {
     const raw = fs.readFileSync(filePath, "utf-8");
     const data = JSON.parse(raw);
@@ -78,16 +75,11 @@ export async function POST(request: Request) {
   const allQuestions = loadQuestions();
 
   if (allQuestions.length === 0) {
-    return Response.json(
-      { error: "No ETS questions available" },
-      { status: 404 },
-    );
+    return Response.json({ error: "No ETS questions available" }, { status: 404 });
   }
 
   // Filter by exam name if specified
-  let pool = examName
-    ? allQuestions.filter((q) => q.examName === examName)
-    : allQuestions;
+  let pool = examName ? allQuestions.filter((q) => q.examName === examName) : allQuestions;
 
   if (pool.length === 0) pool = allQuestions;
 

@@ -1,13 +1,11 @@
+import { db, errorLog } from "@repo/database";
+import { and, desc, eq, sql } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, and, sql, desc } from "drizzle-orm";
 import { z } from "zod";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { errorLog } from "@repo/database";
+import { routeLogger } from "@/lib/logger";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("errors/drill");
 
@@ -119,13 +117,18 @@ Return JSON: { "exercises": [...], "summary": "Brief analysis of the student's p
     }
 
     const DrillResponseSchema = z.object({
-      exercises: z.array(z.object({
-        type: z.string(),
-        instruction: z.string(),
-        data: z.record(z.string(), z.unknown()),
-        targetWeakness: z.string(),
-        tip: z.string(),
-      })).min(1).max(15),
+      exercises: z
+        .array(
+          z.object({
+            type: z.string(),
+            instruction: z.string(),
+            data: z.record(z.string(), z.unknown()),
+            targetWeakness: z.string(),
+            tip: z.string(),
+          }),
+        )
+        .min(1)
+        .max(15),
       summary: z.string(),
     });
 

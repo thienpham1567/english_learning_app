@@ -1,25 +1,28 @@
 "use client";
 
-import { useMemo } from "react";
+import type { CategoryTrend, TrendInput } from "@repo/modules/learning";
+import { computeErrorTrends } from "@repo/modules/learning";
 import {
-  ArrowUp,
   ArrowDown,
-  Minus,
+  ArrowUp,
+  BarChart2,
   HelpCircle,
   Info,
-  TrendingUp,
-  TrendingDown,
-  BarChart2,
   LineChart,
+  Minus,
+  TrendingDown,
+  TrendingUp,
 } from "lucide-react";
-import { computeErrorTrends } from "@repo/modules/learning";
-import type { TrendInput, CategoryTrend } from "@repo/modules/learning";
+import { useMemo } from "react";
 
 type Props = {
   errors: TrendInput[];
 };
 
-const DIRECTION_CONFIG: Record<string, { icon: React.ReactNode; color: string; label: string; bg: string }> = {
+const DIRECTION_CONFIG: Record<
+  string,
+  { icon: React.ReactNode; color: string; label: string; bg: string }
+> = {
   improved: {
     icon: <ArrowDown className="h-2.5 w-2.5" />,
     color: "var(--success)",
@@ -56,9 +59,7 @@ function TrendRow({ trend }: { trend: CategoryTrend }) {
 
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5">
-          <span className="text-[13px] font-bold text-ink">
-            {trend.category.labelVi}
-          </span>
+          <span className="text-[13px] font-bold text-ink">{trend.category.labelVi}</span>
           {!trend.confident && (
             <span className="relative group">
               <Info className="h-3 w-3 text-text-muted cursor-help" />
@@ -68,9 +69,7 @@ function TrendRow({ trend }: { trend: CategoryTrend }) {
             </span>
           )}
         </div>
-        <div className="text-[11px] text-text-muted leading-snug mt-0.5">
-          {trend.explanation}
-        </div>
+        <div className="text-[11px] text-text-muted leading-snug mt-0.5">{trend.explanation}</div>
       </div>
 
       <div className="flex flex-col items-end gap-1 shrink-0">
@@ -90,10 +89,34 @@ export function ErrorTrendSection({ errors }: Props) {
   const trends = useMemo(() => computeErrorTrends(errors), [errors]);
   if (!trends.hasData) return null;
 
-  const sections: Array<{ key: string; icon: React.ReactNode; label: string; items: CategoryTrend[]; color: string }> = [
-    { key: "worsened", icon: <TrendingUp className="h-3 w-3" />, label: "Cần chú ý", items: trends.worsened, color: "var(--error)" },
-    { key: "improved", icon: <TrendingDown className="h-3 w-3" />, label: "Cải thiện", items: trends.improved, color: "var(--success)" },
-    { key: "needsReview", icon: <BarChart2 className="h-3 w-3" />, label: "Cần ôn tập", items: trends.needsReview, color: "var(--text-muted)" },
+  const sections: Array<{
+    key: string;
+    icon: React.ReactNode;
+    label: string;
+    items: CategoryTrend[];
+    color: string;
+  }> = [
+    {
+      key: "worsened",
+      icon: <TrendingUp className="h-3 w-3" />,
+      label: "Cần chú ý",
+      items: trends.worsened,
+      color: "var(--error)",
+    },
+    {
+      key: "improved",
+      icon: <TrendingDown className="h-3 w-3" />,
+      label: "Cải thiện",
+      items: trends.improved,
+      color: "var(--success)",
+    },
+    {
+      key: "needsReview",
+      icon: <BarChart2 className="h-3 w-3" />,
+      label: "Cần ôn tập",
+      items: trends.needsReview,
+      color: "var(--text-muted)",
+    },
   ].filter((s) => s.items.length > 0);
 
   if (sections.length === 0) return null;

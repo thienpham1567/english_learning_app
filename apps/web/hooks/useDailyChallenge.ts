@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api-client";
 import type {
-  DailyChallenge,
-  ChallengeState,
-  StreakInfo,
   Badge,
+  ChallengeState,
+  DailyChallenge,
   ExerciseAnswer,
+  StreakInfo,
 } from "@/lib/daily-challenge/types";
 
 const PROGRESS_KEY = "daily-challenge-progress";
@@ -38,18 +38,30 @@ function loadSavedProgress(): SavedProgress | null {
   }
 }
 
-function saveProgress(currentExercise: number, userAnswers: { exerciseIndex: number; answer: string }[]) {
+function saveProgress(
+  currentExercise: number,
+  userAnswers: { exerciseIndex: number; answer: string }[],
+) {
   try {
-    localStorage.setItem(PROGRESS_KEY, JSON.stringify({
-      date: getTodayKey(),
-      currentExercise,
-      userAnswers,
-    }));
-  } catch { /* localStorage full — non-fatal */ }
+    localStorage.setItem(
+      PROGRESS_KEY,
+      JSON.stringify({
+        date: getTodayKey(),
+        currentExercise,
+        userAnswers,
+      }),
+    );
+  } catch {
+    /* localStorage full — non-fatal */
+  }
 }
 
 function clearProgress() {
-  try { localStorage.removeItem(PROGRESS_KEY); } catch { /* ignore */ }
+  try {
+    localStorage.removeItem(PROGRESS_KEY);
+  } catch {
+    /* ignore */
+  }
 }
 
 export function useDailyChallenge() {
@@ -83,23 +95,27 @@ export function useDailyChallenge() {
         }>("/daily-challenge/today");
 
         setChallenge(data.challenge);
-          setStreak(data.streak);
-          setBadges(data.badges);
+        setStreak(data.streak);
+        setBadges(data.badges);
 
-          if (data.challenge.completedAt) {
-            clearProgress();
-            setState("completed");
-          } else {
-            // Restore partial progress if available
-            const saved = loadSavedProgress();
-            if (saved && saved.userAnswers.length > 0 && saved.currentExercise < (data.challenge.exercises?.length ?? 5)) {
-              setCurrentExercise(saved.currentExercise);
-              setUserAnswers(saved.userAnswers);
-            }
-            startTime.current = Date.now();
-            setTimeElapsedMs(0);
-            setState("active");
+        if (data.challenge.completedAt) {
+          clearProgress();
+          setState("completed");
+        } else {
+          // Restore partial progress if available
+          const saved = loadSavedProgress();
+          if (
+            saved &&
+            saved.userAnswers.length > 0 &&
+            saved.currentExercise < (data.challenge.exercises?.length ?? 5)
+          ) {
+            setCurrentExercise(saved.currentExercise);
+            setUserAnswers(saved.userAnswers);
           }
+          startTime.current = Date.now();
+          setTimeElapsedMs(0);
+          setState("active");
+        }
       } catch {
         setError("Không thể tải thử thách. Vui lòng thử lại.");
         setState("error");

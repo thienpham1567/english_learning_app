@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
+import { createContext, type ReactNode, useCallback, useContext, useEffect, useState } from "react";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 type ThemeMode = "light" | "dark";
@@ -48,9 +48,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   return (
     <ThemeContext.Provider value={{ mode, toggleTheme }}>
-      <TooltipProvider>
-        {children}
-      </TooltipProvider>
+      <TooltipProvider>{children}</TooltipProvider>
     </ThemeContext.Provider>
   );
 }

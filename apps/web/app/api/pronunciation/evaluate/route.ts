@@ -1,9 +1,9 @@
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { routeLogger } from "@/lib/logger";
 
 /**
  * POST /api/pronunciation/evaluate
@@ -65,7 +65,10 @@ Return ONLY valid JSON:
 }`;
 
     const model = openAiConfig.chatModel;
-    log.info({ model, targetChars: targetText.length, spokenChars: spokenText.length }, "llm.request");
+    log.info(
+      { model, targetChars: targetText.length, spokenChars: spokenText.length },
+      "llm.request",
+    );
     const t0 = Date.now();
 
     const completion = await openAiClient.chat.completions.create({

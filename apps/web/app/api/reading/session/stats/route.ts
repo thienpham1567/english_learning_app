@@ -1,9 +1,7 @@
+import { db, readingSession } from "@repo/database";
+import { and, eq, gte, isNotNull, sql } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, and, gte, isNotNull, sql } from "drizzle-orm";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { readingSession } from "@repo/database";
 
 /**
  * GET /api/reading/session/stats
@@ -72,12 +70,7 @@ export async function GET() {
   const [totalRow] = await db
     .select({ total: sql<number>`COALESCE(SUM(${readingSession.wordCount}), 0)` })
     .from(readingSession)
-    .where(
-      and(
-        eq(readingSession.userId, userId),
-        isNotNull(readingSession.completedAt),
-      ),
-    );
+    .where(and(eq(readingSession.userId, userId), isNotNull(readingSession.completedAt)));
   const totalWords = Number(totalRow?.total) || 0;
 
   // Streak calculation (consecutive days with completed sessions, ending today or yesterday)

@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("writing/rewrite");
+
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 
@@ -43,15 +44,15 @@ const MAX_SENTENCE_LENGTH = 400;
 const MAX_CONTEXT_LENGTH = 500;
 
 const LEVEL_DESCRIPTIONS: Record<RewriteLevel, string> = {
-  natural: "natural, conversational English — fluent but not stiff. Fix awkward phrasing, maintain the register of everyday communication.",
-  formal: "formal, professional English — suitable for business emails or reports. Elevate vocabulary and structure; keep it clear and direct.",
+  natural:
+    "natural, conversational English — fluent but not stiff. Fix awkward phrasing, maintain the register of everyday communication.",
+  formal:
+    "formal, professional English — suitable for business emails or reports. Elevate vocabulary and structure; keep it clear and direct.",
   c1: "academic/C1-level English — precise, sophisticated, varied sentence structures. Use advanced collocations and academic vocabulary where appropriate.",
 };
 
 function buildPrompt(sentence: string, levels: RewriteLevel[], context?: string): string {
-  const levelInstructions = levels
-    .map((l) => `- "${l}": ${LEVEL_DESCRIPTIONS[l]}`)
-    .join("\n");
+  const levelInstructions = levels.map((l) => `- "${l}": ${LEVEL_DESCRIPTIONS[l]}`).join("\n");
 
   return `You are an expert English writing coach. The learner wants to see how a sentence can be improved at different sophistication levels.
 
@@ -104,7 +105,10 @@ export async function POST(request: Request) {
   const entry = rateLimitMap.get(userId);
   if (entry && entry.resetAt > now) {
     if (entry.count >= RATE_LIMIT_MAX) {
-      return Response.json({ error: "Rate limit exceeded. Try again in a minute." }, { status: 429 });
+      return Response.json(
+        { error: "Rate limit exceeded. Try again in a minute." },
+        { status: 429 },
+      );
     }
     entry.count++;
   } else {
@@ -127,16 +131,22 @@ export async function POST(request: Request) {
 
   // AC6: sentence cap 400 chars
   if (sentence.length > MAX_SENTENCE_LENGTH) {
-    return Response.json({
-      error: `Sentence too long (max ${MAX_SENTENCE_LENGTH} characters, got ${sentence.length})`,
-    }, { status: 400 });
+    return Response.json(
+      {
+        error: `Sentence too long (max ${MAX_SENTENCE_LENGTH} characters, got ${sentence.length})`,
+      },
+      { status: 400 },
+    );
   }
 
   // Context length cap
   if (context && context.length > MAX_CONTEXT_LENGTH) {
-    return Response.json({
-      error: `Context too long (max ${MAX_CONTEXT_LENGTH} characters)`,
-    }, { status: 400 });
+    return Response.json(
+      {
+        error: `Context too long (max ${MAX_CONTEXT_LENGTH} characters)`,
+      },
+      { status: 400 },
+    );
   }
 
   // Determine levels
@@ -147,7 +157,10 @@ export async function POST(request: Request) {
   } else if (typeof rawLevel === "string" && VALID_LEVELS.has(rawLevel as RewriteLevel)) {
     levels = [rawLevel as RewriteLevel];
   } else {
-    return Response.json({ error: "Invalid targetLevel — must be 'natural', 'formal', or 'c1'" }, { status: 400 });
+    return Response.json(
+      { error: "Invalid targetLevel — must be 'natural', 'formal', or 'c1'" },
+      { status: 400 },
+    );
   }
 
   const prompt = buildPrompt(sentence, levels, context);
@@ -173,7 +186,7 @@ export async function POST(request: Request) {
 
     // AC2: drop variants with no changes (no-op rewrites)
     const variants = (parsed.variants ?? []).filter(
-      (v) => v.changes && v.changes.length > 0 && v.rewrite && v.rewrite.trim() !== sentence.trim()
+      (v) => v.changes && v.changes.length > 0 && v.rewrite && v.rewrite.trim() !== sentence.trim(),
     );
 
     return Response.json({ variants } satisfies RewriteResponse);

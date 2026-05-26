@@ -1,7 +1,7 @@
 "use client";
 
-import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-client";
 
 interface LogoProps {
   collapsed?: boolean;
@@ -139,10 +139,7 @@ export function Logo({ collapsed = false }: LogoProps) {
               }}
             >
               TOEIC
-              <m.span style={{ color: "var(--accent)", fontWeight: 900 }}>
-                {" "}
-                Master
-              </m.span>
+              <m.span style={{ color: "var(--accent)", fontWeight: 900 }}> Master</m.span>
             </m.span>
             <m.span
               style={{

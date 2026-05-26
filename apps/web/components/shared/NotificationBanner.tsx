@@ -1,7 +1,7 @@
 "use client";
-import { api } from "@/lib/api-client";
-import { useState, useEffect, useCallback } from "react";
 import { Bell, CheckCircle, X } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { api } from "@/lib/api-client";
 
 export function NotificationBanner() {
   const [visible, setVisible] = useState(false);
@@ -68,22 +68,37 @@ export function NotificationBanner() {
   if (!visible) return null;
 
   return (
-    <div className="fixed flex items-center gap-3 rounded-2xl bg-(--surface) border-2 border-border w-[360px]" style={{top: 16, right: 16, zIndex: 1000, padding: "14px 18px", boxShadow: "0 8px 32px rgba(0,0,0,0.2)", animation: "slideDown 0.4s ease-out"}} >
-      <div className="w-[40px] h-[40px] rounded-xl flex items-center justify-center shrink-0" style={{background: "linear-gradient(135deg, var(--accent), var(--accent-hover, var(--accent)))"}} >
-        <Bell className="text-lg" style={{color: "var(--text-on-accent)"}} />
+    <div
+      className="fixed flex items-center gap-3 rounded-2xl bg-(--surface) border-2 border-border w-[360px]"
+      style={{
+        top: 16,
+        right: 16,
+        zIndex: 1000,
+        padding: "14px 18px",
+        boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
+        animation: "slideDown 0.4s ease-out",
+      }}
+    >
+      <div
+        className="w-[40px] h-[40px] rounded-xl flex items-center justify-center shrink-0"
+        style={{
+          background: "linear-gradient(135deg, var(--accent), var(--accent-hover, var(--accent)))",
+        }}
+      >
+        <Bell className="text-lg" style={{ color: "var(--text-on-accent)" }} />
       </div>
 
-      <div className="flex-1 w-[0px]" >
+      <div className="flex-1 w-[0px]">
         {subscribed ? (
-          <div className="text-sm font-semibold text-emerald-500" >
+          <div className="text-sm font-semibold text-emerald-500">
             <CheckCircle className="mr-1" /> Đã bật thông báo!
           </div>
         ) : (
           <>
-            <div className="text-sm font-semibold" style={{color: "var(--text)"}} >
+            <div className="text-sm font-semibold" style={{ color: "var(--text)" }}>
               Bật nhắc nhở học tập
             </div>
-            <div className="text-xs text-text-muted" style={{marginTop: 2}} >
+            <div className="text-xs text-text-muted" style={{ marginTop: 2 }}>
               Nhận thông báo mỗi ngày để duy trì streak
             </div>
           </>
@@ -92,15 +107,26 @@ export function NotificationBanner() {
 
       {!subscribed && (
         <button
-          onClick={handleEnable} className="border-none text-[13px] font-bold cursor-pointer" style={{padding: "8px 14px", borderRadius: 10, background: "linear-gradient(135deg, var(--accent), var(--accent-hover, var(--accent)))", color: "var(--text-on-accent)", whiteSpace: "nowrap"}} >
+          onClick={handleEnable}
+          className="border-none text-[13px] font-bold cursor-pointer"
+          style={{
+            padding: "8px 14px",
+            borderRadius: 10,
+            background:
+              "linear-gradient(135deg, var(--accent), var(--accent-hover, var(--accent)))",
+            color: "var(--text-on-accent)",
+            whiteSpace: "nowrap",
+          }}
+        >
           Bật
         </button>
       )}
 
       <button
         onClick={handleDismiss}
-        
-        aria-label="Đóng" className="bg-none border-none text-text-muted cursor-pointer p-1 text-xs leading-none" >
+        aria-label="Đóng"
+        className="bg-none border-none text-text-muted cursor-pointer p-1 text-xs leading-none"
+      >
         <X />
       </button>
 

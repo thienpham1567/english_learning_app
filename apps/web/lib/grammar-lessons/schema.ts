@@ -139,7 +139,9 @@ export function isGrammarAnswerCorrect(
   return allAccepted.some((a) => normalizeGrammarAnswer(a) === normalized);
 }
 
-export function getGrammarLessonDifficulty(level: string): "elementary" | "intermediate" | "upper_intermediate" {
+export function getGrammarLessonDifficulty(
+  level: string,
+): "elementary" | "intermediate" | "upper_intermediate" {
   if (level === "A2") return "elementary";
   if (level === "B2") return "upper_intermediate";
   return "intermediate";
@@ -189,5 +191,5 @@ export function getRecommendedGrammarTopic(
     .filter((item) => item.status === "completed" && item.scorePct < 70)
     .sort((a, b) => a.scorePct - b.scorePct)[0];
 
-  return weakTopic ? topics.find((topic) => topic.id === weakTopic.topicId) ?? null : null;
+  return weakTopic ? (topics.find((topic) => topic.id === weakTopic.topicId) ?? null) : null;
 }

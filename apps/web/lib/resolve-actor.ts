@@ -1,5 +1,5 @@
-import { auth } from "@/lib/auth";
 import { createWebActorResolver } from "@repo/auth";
+import { auth } from "@/lib/auth";
 
 /**
  * Pre-configured web actor resolver for use in Next.js route handlers.

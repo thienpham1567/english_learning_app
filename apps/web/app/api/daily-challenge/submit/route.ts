@@ -1,15 +1,13 @@
-import { headers } from "next/headers";
+import { dailyChallenge, db, userStreak } from "@repo/database";
+import { and, eq } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
-import { eq, and } from "drizzle-orm";
-
-import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { dailyChallenge, userStreak } from "@repo/database";
-import { SubmitAnswerSchema } from "@/lib/daily-challenge/schema";
-import { getBadges, getNewlyUnlockedBadges } from "@/lib/daily-challenge/badges";
-import { awardXP, XP_VALUES } from "@/lib/xp";
+import { headers } from "next/headers";
 import { logActivity } from "@/lib/activity-log";
+import { auth } from "@/lib/auth";
+import { getBadges, getNewlyUnlockedBadges } from "@/lib/daily-challenge/badges";
+import { SubmitAnswerSchema } from "@/lib/daily-challenge/schema";
 import type { Exercise, ExerciseAnswer } from "@/lib/daily-challenge/types";
+import { awardXP, XP_VALUES } from "@/lib/xp";
 
 function getVnDate(): string {
   return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Ho_Chi_Minh" });
@@ -254,7 +252,10 @@ export async function POST(request: Request) {
 
   // Award XP for daily challenge completion
   void awardXP(session.user.id, XP_VALUES.DAILY_CHALLENGE).catch(() => {});
-  logActivity(session.user.id, "daily_challenge", XP_VALUES.DAILY_CHALLENGE, { score, streak: currentStreak });
+  logActivity(session.user.id, "daily_challenge", XP_VALUES.DAILY_CHALLENGE, {
+    score,
+    streak: currentStreak,
+  });
 
   // Drop the 60s dashboard cache so the next page load reflects new streak/XP.
   // Next 16: revalidateTag requires a CacheLifeConfig; { expire: 0 } purges now.

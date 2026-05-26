@@ -1,18 +1,18 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { motion } from "motion/react";
 import {
-  BarChart3,
-  Loader2,
-  Calendar,
-  Zap,
-  Flame,
-  BookOpen,
-  Trophy,
   AlertTriangle,
+  BarChart3,
+  BookOpen,
+  Calendar,
   ChevronRight,
+  Flame,
+  Loader2,
+  Trophy,
+  Zap,
 } from "lucide-react";
+import { motion } from "motion/react";
+import { useCallback, useState } from "react";
 import { api } from "@/lib/api-client";
 
 type WeeklyStats = {
@@ -69,7 +69,7 @@ export function WeeklyReport() {
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-accent text-(--text-on-accent) border-2 border-border shadow-[2px_2px_0_var(--shadow-color)]">
           <BarChart3 className="h-5 w-5" />
         </div>
-        
+
         <div className="flex-1 min-w-0">
           <div className="font-display text-sm font-semibold text-ink leading-tight">
             Báo cáo phân tích tuần
@@ -127,18 +127,50 @@ export function WeeklyReport() {
       {/* Quick Stats Floating Grid */}
       <div className="grid grid-cols-3 gap-2.5 p-5">
         {[
-          { icon: <Calendar className="h-4 w-4 text-accent" />, value: `${stats.daysActive}/7`, label: "Ngày học", bg: "bg-accent-muted" },
-          { icon: <Zap className="h-4 w-4 text-(--warning) fill-(--warning)" />, value: stats.totalXP.toLocaleString(), label: "XP đạt được", bg: "bg-(--warning-bg)" },
-          { icon: <Flame className="h-4 w-4 text-(--fire) fill-(--fire)" />, value: stats.currentStreak, label: "Chuỗi ngày", bg: "bg-(--warning-bg)" },
-          { icon: <BookOpen className="h-4 w-4 text-(--success)" />, value: stats.newVocabulary, label: "Từ vựng mới", bg: "bg-(--success-bg)" },
-          { icon: <Trophy className="h-4 w-4 text-(--warning)" />, value: stats.avgChallengeScore, label: "Điểm TB", bg: "bg-(--warning-bg)" },
-          { icon: <AlertTriangle className="h-4 w-4 text-(--error)" />, value: stats.unresolvedErrors, label: "Lỗi cần sửa", bg: "bg-(--error-bg)" },
+          {
+            icon: <Calendar className="h-4 w-4 text-accent" />,
+            value: `${stats.daysActive}/7`,
+            label: "Ngày học",
+            bg: "bg-accent-muted",
+          },
+          {
+            icon: <Zap className="h-4 w-4 text-(--warning) fill-(--warning)" />,
+            value: stats.totalXP.toLocaleString(),
+            label: "XP đạt được",
+            bg: "bg-(--warning-bg)",
+          },
+          {
+            icon: <Flame className="h-4 w-4 text-(--fire) fill-(--fire)" />,
+            value: stats.currentStreak,
+            label: "Chuỗi ngày",
+            bg: "bg-(--warning-bg)",
+          },
+          {
+            icon: <BookOpen className="h-4 w-4 text-(--success)" />,
+            value: stats.newVocabulary,
+            label: "Từ vựng mới",
+            bg: "bg-(--success-bg)",
+          },
+          {
+            icon: <Trophy className="h-4 w-4 text-(--warning)" />,
+            value: stats.avgChallengeScore,
+            label: "Điểm TB",
+            bg: "bg-(--warning-bg)",
+          },
+          {
+            icon: <AlertTriangle className="h-4 w-4 text-(--error)" />,
+            value: stats.unresolvedErrors,
+            label: "Lỗi cần sửa",
+            bg: "bg-(--error-bg)",
+          },
         ].map((s) => (
           <div
             key={s.label}
             className="p-3 bg-surface-alt rounded-lg border-2 border-border text-center flex flex-col items-center gap-1.5 shadow-[2px_2px_0_var(--shadow-color)] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[3px_3px_0_var(--shadow-color)] transition-all duration-150"
           >
-            <div className={`w-7 h-7 rounded-md ${s.bg} border-2 border-border flex items-center justify-center shrink-0`}>
+            <div
+              className={`w-7 h-7 rounded-md ${s.bg} border-2 border-border flex items-center justify-center shrink-0`}
+            >
               {s.icon}
             </div>
             <div className="text-base font-extrabold text-ink font-mono leading-none">
@@ -161,7 +193,10 @@ export function WeeklyReport() {
             className="text-xs md:text-sm leading-relaxed text-text-secondary font-semibold p-4 rounded-lg border-2 border-border bg-surface-alt shadow-[2px_2px_0_var(--shadow-color)]"
             dangerouslySetInnerHTML={{
               __html: report
-                .replace(/\*\*([^*]+)\*\*/g, '<strong class="text-accent font-extrabold">$1</strong>')
+                .replace(
+                  /\*\*([^*]+)\*\*/g,
+                  '<strong class="text-accent font-extrabold">$1</strong>',
+                )
                 .replace(/\n/g, "<br />"),
             }}
           />
@@ -173,11 +208,10 @@ export function WeeklyReport() {
           <div className="w-10 h-10 rounded-md bg-surface-alt border-2 border-border shadow-[2px_2px_0_var(--shadow-color)] flex items-center justify-center mb-3">
             <AlertTriangle className="h-5 w-5 text-text-muted" />
           </div>
-          <div className="text-xs font-bold text-text-secondary">
-            Chưa có đủ dữ liệu học tập
-          </div>
+          <div className="text-xs font-bold text-text-secondary">Chưa có đủ dữ liệu học tập</div>
           <div className="text-[11px] text-text-muted mt-1.5 font-medium max-w-xs leading-relaxed">
-            Hãy tiếp tục luyện tập các bài học hàng ngày để mở khóa báo cáo phân tích chi tiết từ AI!
+            Hãy tiếp tục luyện tập các bài học hàng ngày để mở khóa báo cáo phân tích chi tiết từ
+            AI!
           </div>
         </div>
       )}

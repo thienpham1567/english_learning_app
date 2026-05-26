@@ -1,15 +1,14 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-
-import type { PageMessage } from "@/app/(app)/english-chatbot/_components/ChatMessage";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useChatConversations } from "@/app/(app)/english-chatbot/_components/ChatConversationProvider";
+import type { PageMessage } from "@/app/(app)/english-chatbot/_components/ChatMessage";
+import { api } from "@/lib/api-client";
 import { deriveTitle } from "@/lib/chat/derive-title";
 import { parseAssistantStream } from "@/lib/chat/parse-assistant-stream";
 import { DEFAULT_PERSONA_ID, PERSONAS } from "@/lib/chat/personas";
 import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
-import { api } from "@/lib/api-client";
 
 const CHAT_ERROR_MESSAGE = "Gia sư đang gặp lỗi kỹ thuật. Bạn thử lại sau nhé.";
 
@@ -31,8 +30,7 @@ export function useChatMessages({
   onSendComplete,
 }: UseChatMessagesOptions) {
   const router = useRouter();
-  const { conversations, setConversations, loadConversations } =
-    useChatConversations();
+  const { conversations, setConversations, loadConversations } = useChatConversations();
 
   const [messages, setMessages] = useState<PageMessage[]>([]);
   const [input, setInput] = useState("");
@@ -68,9 +66,7 @@ export function useChatMessages({
           Array<{ id: string; role: "user" | "assistant"; content: string }>
         >(`/conversations/${conversationId}/messages`);
         if (cancelled) return;
-        setMessages(
-          rows.map((r) => ({ id: r.id, role: r.role, text: r.content })),
-        );
+        setMessages(rows.map((r) => ({ id: r.id, role: r.role, text: r.content })));
         setError(null);
       } catch {
         if (!cancelled) setError("Không thể tải cuộc trò chuyện này.");
@@ -86,11 +82,7 @@ export function useChatMessages({
   // ── Remove empty assistant placeholder on error ──
   const removeEmptyAssistantMessage = useCallback((messageId: string) => {
     setMessages((curr) =>
-      curr.filter(
-        (m) =>
-          m.id !== messageId ||
-          (m.role !== "divider" && m.text.trim().length > 0),
-      ),
+      curr.filter((m) => m.id !== messageId || (m.role !== "divider" && m.text.trim().length > 0)),
     );
   }, []);
 
@@ -174,11 +166,7 @@ export function useChatMessages({
           {
             onDelta: (delta) => {
               setMessages((curr) =>
-                curr.map((m) =>
-                  m.id === assistantMessageId
-                    ? { ...m, text: m.text + delta }
-                    : m,
-                ),
+                curr.map((m) => (m.id === assistantMessageId ? { ...m, text: m.text + delta } : m)),
               );
             },
             onDone: () => {

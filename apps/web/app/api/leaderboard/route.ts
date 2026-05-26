@@ -1,9 +1,7 @@
+import { activityLog, db } from "@repo/database";
+import { desc, gte, sql } from "drizzle-orm";
 import { headers } from "next/headers";
-import { sql, gte, desc } from "drizzle-orm";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { activityLog } from "@repo/database";
 
 /**
  * GET /api/leaderboard
@@ -55,9 +53,7 @@ export async function GET() {
         xp: sql<number>`coalesce(sum(${activityLog.xpEarned}), 0)::int`,
       })
       .from(activityLog)
-      .where(
-        sql`${activityLog.userId} = ${userId} AND ${activityLog.createdAt} >= ${mondayUtc}`,
-      );
+      .where(sql`${activityLog.userId} = ${userId} AND ${activityLog.createdAt} >= ${mondayUtc}`);
 
     const userXp = userXpRow?.xp ?? 0;
 
@@ -88,7 +84,7 @@ export async function GET() {
     entries,
     currentUser: userInTop
       ? { rank: entries.findIndex((e) => e.isCurrentUser) + 1, xp: userInTop.xp }
-      : userRank ?? { rank: entries.length + 1, xp: 0 },
+      : (userRank ?? { rank: entries.length + 1, xp: 0 }),
     weekStart: monday.toISOString().slice(0, 10),
   });
 }

@@ -4,13 +4,13 @@ import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("speaking/feedback");
-import { db } from "@repo/database";
-import { speakingAttempt } from "@repo/database";
+
+import { db, speakingAttempt } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import {
-  detectFillers,
   calculateWpm,
+  detectFillers,
   WPM_TARGETS,
   wpmDeviationPenalty,
 } from "@/lib/speaking/analysis";
@@ -126,10 +126,7 @@ export async function POST(request: Request) {
   const durationRaw = formData.get("durationMs");
   const durationMs = typeof durationRaw === "string" ? Number(durationRaw) : NaN;
   if (!Number.isFinite(durationMs) || durationMs <= 0 || durationMs > MAX_DURATION_MS) {
-    return Response.json(
-      { error: `Invalid durationMs (1..${MAX_DURATION_MS})` },
-      { status: 400 },
-    );
+    return Response.json({ error: `Invalid durationMs (1..${MAX_DURATION_MS})` }, { status: 400 });
   }
 
   // Transcribe server-side (AC3)
@@ -197,7 +194,10 @@ Grammar errors array: max ${MAX_GRAMMAR_ERRORS} most important. Vocabulary upgra
       {
         model: openAiConfig.chatModel,
         messages: [
-          { role: "system", content: "You are an expert English speaking coach. Return only valid JSON." },
+          {
+            role: "system",
+            content: "You are an expert English speaking coach. Return only valid JSON.",
+          },
           { role: "user", content: prompt },
         ],
         temperature: 0.3,
@@ -245,10 +245,7 @@ Grammar errors array: max ${MAX_GRAMMAR_ERRORS} most important. Vocabulary upgra
     const pauseCount = (transcript.match(/\.\.\./g) || []).length;
     const fluencyScore = Math.max(
       0,
-      Math.min(
-        100,
-        100 - fillerCount * 3 - pauseCount * 2 - wpmDeviationPenalty(wpm, wpmTarget),
-      ),
+      Math.min(100, 100 - fillerCount * 3 - pauseCount * 2 - wpmDeviationPenalty(wpm, wpmTarget)),
     );
     const fluencyScoreRounded = Math.round(fluencyScore);
 
@@ -285,10 +282,7 @@ Grammar errors array: max ${MAX_GRAMMAR_ERRORS} most important. Vocabulary upgra
       });
     } catch (err) {
       log.error({ err }, "speaking.feedback.persist.failed");
-      return Response.json(
-        { error: "Failed to save attempt" },
-        { status: 500 },
-      );
+      return Response.json({ error: "Failed to save attempt" }, { status: 500 });
     }
 
     return Response.json(result);

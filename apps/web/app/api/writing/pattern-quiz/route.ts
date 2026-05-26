@@ -4,12 +4,12 @@ import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("writing/pattern-quiz");
-import { db } from "@repo/database";
-import { writingErrorPattern, errorLog } from "@repo/database";
-import { eq, and, gte, desc } from "drizzle-orm";
+
+import { db, errorLog, writingErrorPattern } from "@repo/database";
+import { and, desc, eq, gte } from "drizzle-orm";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { VALID_ERROR_TAGS, ERROR_TAG_DESCRIPTIONS, type ErrorTag } from "@/lib/writing/error-tags";
+import { ERROR_TAG_DESCRIPTIONS, type ErrorTag, VALID_ERROR_TAGS } from "@/lib/writing/error-tags";
 
 /**
  * POST /api/writing/pattern-quiz
@@ -38,9 +38,10 @@ type QuizItem = {
 };
 
 function buildQuizPrompt(tag: ErrorTag, description: string, examples: string[]): string {
-  const exampleBlock = examples.length > 0
-    ? `\nExample errors from this learner (anonymised, do NOT copy verbatim):\n${examples.map((s, i) => `${i + 1}. "${s}"`).join("\n")}\n`
-    : "";
+  const exampleBlock =
+    examples.length > 0
+      ? `\nExample errors from this learner (anonymised, do NOT copy verbatim):\n${examples.map((s, i) => `${i + 1}. "${s}"`).join("\n")}\n`
+      : "";
 
   return `You are an expert English grammar quiz writer.
 
@@ -90,7 +91,10 @@ export async function POST(request: Request) {
   const entry = rateLimitMap.get(userId);
   if (entry && entry.resetAt > now) {
     if (entry.count >= RATE_LIMIT_MAX) {
-      return Response.json({ error: "Rate limit exceeded. Try again in a minute." }, { status: 429 });
+      return Response.json(
+        { error: "Rate limit exceeded. Try again in a minute." },
+        { status: 429 },
+      );
     }
     entry.count++;
   } else {
@@ -117,14 +121,17 @@ export async function POST(request: Request) {
         eq(writingErrorPattern.userId, userId),
         eq(writingErrorPattern.tag, tag),
         gte(writingErrorPattern.lastSeenAt, windowStart),
-      )
+      ),
     )
     .limit(1);
 
   if (patterns.length === 0 || patterns[0].count < MIN_PATTERN_COUNT) {
-    return Response.json({
-      error: `Pattern "${tag}" has not reached the minimum threshold (${MIN_PATTERN_COUNT} occurrences in ${PATTERN_WINDOW_DAYS} days)`,
-    }, { status: 400 });
+    return Response.json(
+      {
+        error: `Pattern "${tag}" has not reached the minimum threshold (${MIN_PATTERN_COUNT} occurrences in ${PATTERN_WINDOW_DAYS} days)`,
+      },
+      { status: 400 },
+    );
   }
 
   // AC6: only take up to 3 short example sentences, cap at 200 chars each
@@ -165,18 +172,21 @@ export async function POST(request: Request) {
     const insertedIds: string[] = [];
     for (const item of items) {
       try {
-        const [row] = await db.insert(errorLog).values({
-          userId,
-          sourceModule: "writing-pattern",
-          questionStem: item.questionStem,
-          options: item.options,
-          userAnswer: "",       // not yet answered
-          correctAnswer: item.correctAnswer,
-          explanationEn: item.explanationEn,
-          explanationVi: item.explanationVi,
-          grammarTopic: tag,
-          isResolved: false,
-        }).returning({ id: errorLog.id });
+        const [row] = await db
+          .insert(errorLog)
+          .values({
+            userId,
+            sourceModule: "writing-pattern",
+            questionStem: item.questionStem,
+            options: item.options,
+            userAnswer: "", // not yet answered
+            correctAnswer: item.correctAnswer,
+            explanationEn: item.explanationEn,
+            explanationVi: item.explanationVi,
+            grammarTopic: tag,
+            isResolved: false,
+          })
+          .returning({ id: errorLog.id });
         if (row) insertedIds.push(row.id);
       } catch (err) {
         log.error({ err }, "writing.pattern-quiz.insert.error-log.failed");
@@ -214,7 +224,7 @@ export async function GET() {
         eq(writingErrorPattern.userId, session.user.id),
         gte(writingErrorPattern.lastSeenAt, windowStart),
         gte(writingErrorPattern.count, MIN_PATTERN_COUNT), // Patch 3: filter server-side
-      )
+      ),
     )
     .orderBy(desc(writingErrorPattern.count));
 
@@ -249,12 +259,7 @@ export async function PATCH(request: Request) {
           isResolved: ans.isCorrect,
           resolvedAt: ans.isCorrect ? new Date() : null,
         })
-        .where(
-          and(
-            eq(errorLog.id, ans.errorLogId),
-            eq(errorLog.userId, session.user.id),
-          )
-        );
+        .where(and(eq(errorLog.id, ans.errorLogId), eq(errorLog.userId, session.user.id)));
       updated++;
     } catch (err) {
       log.error({ err }, "writing.pattern-quiz.patch.update.failed");

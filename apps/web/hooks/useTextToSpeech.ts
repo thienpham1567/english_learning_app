@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api-client";
 
 export type TtsAccent = "us" | "uk" | "au";
@@ -48,7 +48,8 @@ export function useTextToSpeech(defaultAccent: TtsAccent = "us") {
       setSpeaking(false);
 
       const makeRequest = () =>
-        api.post<Response>("/voice/synthesize",
+        api.post<Response>(
+          "/voice/synthesize",
           {
             text: text.slice(0, 200),
             speed: rate,

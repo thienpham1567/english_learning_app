@@ -1,9 +1,7 @@
-import { headers } from "next/headers";
+import { conversation, db } from "@repo/database";
 import { desc, eq } from "drizzle-orm";
-
+import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { conversation } from "@repo/database";
 import { DEFAULT_PERSONA_ID, PERSONA_IDS } from "@/lib/chat/personas";
 
 const DEFAULT_LIMIT = 20;

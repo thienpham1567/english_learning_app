@@ -1,8 +1,8 @@
 "use client";
 
+import * as m from "motion/react-client";
 import { useState } from "react";
 import type { CollocationData } from "@/lib/daily-challenge/types";
-import * as m from "motion/react-client";
 
 const LABELS = ["A", "B", "C", "D"] as const;
 
@@ -105,12 +105,8 @@ export function Collocation({ data, instruction, onAnswer, disabled }: Props) {
                 justifyContent: "center",
                 gap: 10,
                 borderRadius: "var(--radius-lg)",
-                border: isSelected
-                  ? "2px solid var(--accent)"
-                  : "1px solid var(--border)",
-                background: isSelected
-                  ? "var(--accent-light)"
-                  : "var(--surface)",
+                border: isSelected ? "2px solid var(--accent)" : "1px solid var(--border)",
+                background: isSelected ? "var(--accent-light)" : "var(--surface)",
                 padding: "14px 12px",
                 fontSize: 15,
                 fontWeight: isSelected ? 700 : 600,

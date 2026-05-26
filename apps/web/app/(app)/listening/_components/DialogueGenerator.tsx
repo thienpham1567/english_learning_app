@@ -1,12 +1,11 @@
 "use client";
 
+import { Loader2, Users } from "lucide-react";
 import { useState } from "react";
-
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { CEFR_LEVELS } from "@/lib/listening/types";
+import { Input } from "@/components/ui/input";
 import type { CefrLevel } from "@/lib/listening/types";
-import { Users, Loader2 } from "lucide-react";
+import { CEFR_LEVELS } from "@/lib/listening/types";
 
 type Props = {
   onStart: (args: { topic: string; level: CefrLevel; turns: 6 | 8 | 10; speakers: 2 | 3 }) => void;
@@ -26,14 +25,20 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
   const canSubmit = topic.trim().length >= 3 && !isLoading;
 
   return (
-    <div className="mt-6 w-[600px] border-2 border-border bg-(--surface) max-w-full" style={{margin: "24px auto 0", padding: "20px 24px", borderRadius: "var(--radius-lg, 16px)", boxShadow: "var(--shadow-sm)"}} >
-      <div className="flex items-center gap-2 mb-3" >
+    <div
+      className="mt-6 w-[600px] border-2 border-border bg-(--surface) max-w-full"
+      style={{
+        margin: "24px auto 0",
+        padding: "20px 24px",
+        borderRadius: "var(--radius-lg, 16px)",
+        boxShadow: "var(--shadow-sm)",
+      }}
+    >
+      <div className="flex items-center gap-2 mb-3">
         <Users className="text-accent text-lg" />
-        <div className="text-base font-bold text-text-primary" >
-          Multi-speaker dialogue
-        </div>
+        <div className="text-base font-bold text-text-primary">Multi-speaker dialogue</div>
       </div>
-      <div className="text-sm text-text-muted mb-4 font-medium" >
+      <div className="text-sm text-text-muted mb-4 font-medium">
         Luyện nghe hội thoại 2–3 giọng với các giọng Mỹ, Anh, Úc.
       </div>
 
@@ -44,21 +49,23 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
         className="mb-4 h-10 px-3 text-sm"
       />
 
-      <div className="flex gap-4 flex-wrap mb-5 items-center" >
-        <div className="flex items-center gap-2" >
-          <span className="text-[13px] text-text-muted font-bold" >Level</span>
+      <div className="flex gap-4 flex-wrap mb-5 items-center">
+        <div className="flex items-center gap-2">
+          <span className="text-[13px] text-text-muted font-bold">Level</span>
           <select
             value={level}
             onChange={(e) => setLevel(e.target.value as CefrLevel)}
             className="h-8 rounded-lg border-2 border-border bg-surface-alt px-2.5 py-0.5 text-xs font-bold text-ink outline-none focus-visible:shadow-(--shadow-sm) focus-visible:translate-x-[-1px] focus-visible:translate-y-[-1px] transition-all cursor-pointer"
           >
-            {CEFR_LEVELS.map(l => (
-              <option key={l} value={l}>{l}</option>
+            {CEFR_LEVELS.map((l) => (
+              <option key={l} value={l}>
+                {l}
+              </option>
             ))}
           </select>
         </div>
-        <div className="flex items-center gap-2" >
-          <span className="text-[13px] text-text-muted font-bold" >Turns</span>
+        <div className="flex items-center gap-2">
+          <span className="text-[13px] text-text-muted font-bold">Turns</span>
           <select
             value={turns}
             onChange={(e) => setTurns(Number(e.target.value) as 6 | 8 | 10)}
@@ -69,8 +76,8 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
             <option value={10}>10</option>
           </select>
         </div>
-        <div className="flex items-center gap-2" >
-          <span className="text-[13px] text-text-muted font-bold" >Speakers</span>
+        <div className="flex items-center gap-2">
+          <span className="text-[13px] text-text-muted font-bold">Speakers</span>
           <select
             value={speakers}
             onChange={(e) => setSpeakers(Number(e.target.value) as 2 | 3)}

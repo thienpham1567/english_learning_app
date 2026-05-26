@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { PenTool } from "lucide-react";
+import { useState } from "react";
 import type { WritingFeedback } from "@/lib/writing-practice/types";
-import { BandScoreRadar } from "./BandScoreRadar";
 import { AnnotatedText } from "./AnnotatedText";
+import { BandScoreRadar } from "./BandScoreRadar";
 
 type Props = {
   text: string;
@@ -51,11 +51,11 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
           </div>
 
           {/* Right: improved version */}
-          <div className="rounded-xl border border-emerald-900/20 bg-emerald-950/10 p-5 shadow-(--shadow-sm)">
-            <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-emerald-450">
+          <div className="rounded-xl border-2 border-success/30 bg-success-bg p-5 shadow-(--shadow-sm)">
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-success">
               Bài mẫu (Band 7+)
             </h3>
-            <p className="whitespace-pre-wrap text-sm leading-relaxed text-emerald-300">
+            <p className="whitespace-pre-wrap text-sm leading-relaxed text-text-primary">
               {feedback.improvedVersion}
             </p>
           </div>
@@ -93,8 +93,8 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
               onClick={() => setActiveTab(tab.key)}
               className={`flex-1 py-2 text-xs font-semibold border-none cursor-pointer transition-all duration-150 ${
                 activeTab === tab.key
-                  ? "bg-accent text-white font-bold"
-                  : "bg-surface text-slate-400 hover:text-slate-200"
+                  ? "bg-accent text-text-on-accent font-bold"
+                  : "bg-surface text-text-muted hover:text-text-primary hover:bg-surface-hover"
               }`}
             >
               {tab.label}
@@ -113,11 +113,11 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
         )}
 
         {activeTab === "improved" && (
-          <div className="anim-fade-in rounded-xl border border-emerald-900/20 bg-emerald-950/10 p-4 shadow-(--shadow-sm)">
-            <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-emerald-450">
+          <div className="anim-fade-in rounded-xl border-2 border-success/30 bg-success-bg p-4 shadow-(--shadow-sm)">
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-success">
               Bài mẫu (Band 7+)
             </h3>
-            <p className="whitespace-pre-wrap text-sm leading-relaxed text-emerald-300">
+            <p className="whitespace-pre-wrap text-sm leading-relaxed text-text-primary">
               {feedback.improvedVersion}
             </p>
           </div>

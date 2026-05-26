@@ -1,19 +1,18 @@
-import { headers } from "next/headers";
-import { eq, and, isNotNull, desc, ne } from "drizzle-orm";
-
-import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { and, desc, eq, isNotNull, ne } from "drizzle-orm";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("daily-challenge/today");
-import { dailyChallenge, userStreak, userPreferences } from "@repo/database";
+
+import { dailyChallenge, userPreferences, userStreak } from "@repo/database";
+import { getBadges } from "@/lib/daily-challenge/badges";
+import { normalizeChallenge } from "@/lib/daily-challenge/normalize";
+import { type ExamModeValue, getExamContext } from "@/lib/exam-mode/context";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-
-import { getBadges } from "@/lib/daily-challenge/badges";
-import { getExamContext, type ExamModeValue } from "@/lib/exam-mode/context";
 import { extractJson } from "@/lib/openai/extract-json";
-import { normalizeChallenge } from "@/lib/daily-challenge/normalize";
 
 function getVnDate(): string {
   return new Date().toLocaleDateString("en-CA", { timeZone: "Asia/Ho_Chi_Minh" });
@@ -54,12 +53,17 @@ function extractRecentStems(exercises: Record<string, unknown>[]): string[] {
   return stems;
 }
 
-function buildChallengeSystemPrompt(examMode: ExamModeValue, difficulty: Difficulty, recentStems: string[]): string {
+function buildChallengeSystemPrompt(
+  examMode: ExamModeValue,
+  difficulty: Difficulty,
+  recentStems: string[],
+): string {
   const ctx = getExamContext(examMode);
 
-  const antiRepetitionBlock = recentStems.length > 0
-    ? `\n\nCRITICAL — ANTI-REPETITION RULE:\nThe following sentences, words, and phrases were ALREADY used in recent challenges. You MUST NOT reuse them or create minor variations of them. Generate completely NEW and DIFFERENT content:\n---\n${recentStems.join("\n")}\n---\nCreate fresh sentences with different vocabulary, different grammar points, and different scenarios. Be creative and surprising.`
-    : "";
+  const antiRepetitionBlock =
+    recentStems.length > 0
+      ? `\n\nCRITICAL — ANTI-REPETITION RULE:\nThe following sentences, words, and phrases were ALREADY used in recent challenges. You MUST NOT reuse them or create minor variations of them. Generate completely NEW and DIFFERENT content:\n---\n${recentStems.join("\n")}\n---\nCreate fresh sentences with different vocabulary, different grammar points, and different scenarios. Be creative and surprising.`
+      : "";
 
   return `You are a daily English challenge generator for ${ctx.label} preparation.
 Generate exactly 10 mini-exercises. Pick 5-9 DIFFERENT types from these 9 types for variety:
@@ -135,11 +139,7 @@ export async function GET() {
         and(eq(dailyChallenge.userId, session.user.id), eq(dailyChallenge.challengeDate, vnToday)),
       )
       .limit(1),
-    db
-      .select()
-      .from(userStreak)
-      .where(eq(userStreak.userId, session.user.id))
-      .limit(1),
+    db.select().from(userStreak).where(eq(userStreak.userId, session.user.id)).limit(1),
   ]);
 
   const examMode: ExamModeValue = (prefRows[0]?.examMode as ExamModeValue) ?? "toeic";
@@ -194,8 +194,7 @@ export async function GET() {
     // Adaptive difficulty from the 7 most recent scores
     const recentScores = recentChallenges.slice(0, 7);
     if (recentScores.length >= 3) {
-      const avgScore =
-        recentScores.reduce((s, r) => s + (r.score ?? 0), 0) / recentScores.length;
+      const avgScore = recentScores.reduce((s, r) => s + (r.score ?? 0), 0) / recentScores.length;
       difficulty = avgScore >= 4.0 ? "hard" : avgScore >= 2.5 ? "medium" : "easy";
     }
 
@@ -223,7 +222,10 @@ export async function GET() {
         temperature: 0.8,
         response_format: { type: "json_object" },
         messages: [
-          { role: "system", content: buildChallengeSystemPrompt(examMode, difficulty, recentStems) },
+          {
+            role: "system",
+            content: buildChallengeSystemPrompt(examMode, difficulty, recentStems),
+          },
           {
             role: "user",
             content: `Generate today's daily English challenge with exactly 10 exercises. Date: ${vnToday}. Difficulty: ${difficulty}. Create UNIQUE questions that are completely different from any previous challenges. Surprise the learner with fresh content. Return JSON only, with a top-level "exercises" array.`,

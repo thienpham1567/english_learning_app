@@ -1,22 +1,20 @@
-import { headers } from "next/headers";
-import { eq, and } from "drizzle-orm";
-import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { and, eq } from "drizzle-orm";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("listening/history/[id]");
+
+import type { DialogueTurn, ListeningQuestion } from "@repo/database";
 import { listeningExercise } from "@repo/database";
-import type { ListeningQuestion, DialogueTurn } from "@repo/database";
 
 /**
  * GET /api/listening/history/[id]
  *
  * Returns full session detail for replay/review.
  */
-export async function GET(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });

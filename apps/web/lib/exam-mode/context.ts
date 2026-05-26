@@ -33,13 +33,7 @@ Use professional/workplace English appropriate for TOEIC listening sections (Par
 
     writingPromptSuffix: `Focus on TOEIC writing tasks: business emails, memos, short reports, meeting summaries, professional correspondence.`,
 
-    readingSections: [
-      "business",
-      "money",
-      "technology",
-      "world",
-      "education",
-    ],
+    readingSections: ["business", "money", "technology", "world", "education"],
   },
 
   ielts: {
@@ -55,14 +49,7 @@ Use academic/semi-formal English appropriate for IELTS listening sections (Secti
 
     writingPromptSuffix: `Focus on IELTS writing tasks: Task 1 (describe a graph/chart/diagram) and Task 2 (argumentative/discussion essay). Use academic register.`,
 
-    readingSections: [
-      "science",
-      "environment",
-      "education",
-      "society",
-      "culture",
-      "technology",
-    ],
+    readingSections: ["science", "environment", "education", "society", "culture", "technology"],
   },
 };
 

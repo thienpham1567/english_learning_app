@@ -1,19 +1,12 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
-import {
-  Loader2,
-  Lightbulb,
-  CheckCircle,
-  XCircle,
-  Trophy,
-  RefreshCw,
-} from "lucide-react";
-import * as m from "motion/react-client";
+import { CheckCircle, Lightbulb, Loader2, RefreshCw, Trophy, XCircle } from "lucide-react";
 import { AnimatePresence } from "motion/react";
+import * as m from "motion/react-client";
+import { useCallback, useEffect, useState } from "react";
 import { useErrorSRS } from "../_hooks/useErrorSRS";
-import { SRS_GRADE_OPTIONS, MODULE_LABELS, MODULE_ICONS } from "../_types/types";
 import type { SRSGrade } from "../_types/types";
+import { MODULE_ICONS, MODULE_LABELS, SRS_GRADE_OPTIONS } from "../_types/types";
 import { DeepExplanation } from "./DeepExplanation";
 
 export function ReviewTab() {
@@ -37,18 +30,19 @@ export function ReviewTab() {
     setFlipped(true);
   }, []);
 
-  const handleGrade = useCallback(async (grade: SRSGrade) => {
-    await srs.gradeAndNext(grade);
-  }, [srs]);
+  const handleGrade = useCallback(
+    async (grade: SRSGrade) => {
+      await srs.gradeAndNext(grade);
+    },
+    [srs],
+  );
 
   /* ── Loading ── */
   if (srs.loading) {
     return (
       <div className="py-16 text-center">
         <Loader2 className="h-7 w-7 text-accent animate-mx-auto mb-3" />
-        <div className="text-sm font-semibold text-text-primary">
-          Đang tải hàng đợi ôn tập...
-        </div>
+        <div className="text-sm font-semibold text-text-primary">Đang tải hàng đợi ôn tập...</div>
       </div>
     );
   }
@@ -89,25 +83,30 @@ export function ReviewTab() {
         animate={{ opacity: 1, scale: 1 }}
         className="py-10 px-6 text-center bg-surface rounded-xl border-2 border-border"
       >
-        <Trophy className={`h-10 w-10 mx-auto mb-3 ${pct >= 80 ? "text-(--success)" : "text-accent"}`} />
-        <h3 className="text-xl font-black text-text-primary m-0 mb-1">
-          Hoàn thành ôn tập!
-        </h3>
+        <Trophy
+          className={`h-10 w-10 mx-auto mb-3 ${pct >= 80 ? "text-(--success)" : "text-accent"}`}
+        />
+        <h3 className="text-xl font-black text-text-primary m-0 mb-1">Hoàn thành ôn tập!</h3>
         <div className="text-4xl font-black text-accent font-display">
           {srs.correct}/{srs.reviewed}
         </div>
         <span className="text-sm text-text-secondary block mt-2 mb-1">
-          {pct >= 80 ? "Xuất sắc! Bạn nhớ rất tốt! 🎉" : pct >= 50 ? "Khá tốt! Hãy tiếp tục ôn nhé." : "Cần ôn thêm. Đừng bỏ cuộc!"}
+          {pct >= 80
+            ? "Xuất sắc! Bạn nhớ rất tốt! 🎉"
+            : pct >= 50
+              ? "Khá tốt! Hãy tiếp tục ôn nhé."
+              : "Cần ôn thêm. Đừng bỏ cuộc!"}
         </span>
-        <span className="text-xs text-text-muted">
-          Chính xác {pct}%
-        </span>
+        <span className="text-xs text-text-muted">Chính xác {pct}%</span>
 
         <div className="flex gap-2 justify-center mt-5">
           <m.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => { srs.resetSession(); srs.fetchQueue(); }}
+            onClick={() => {
+              srs.resetSession();
+              srs.fetchQueue();
+            }}
             className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl border-none bg-gradient-to-br from-accent to-accent-hover text-(--text-on-accent) text-sm font-extrabold cursor-pointer font-body shadow-[0_4px_14px_var(--accent-muted)]"
           >
             <RefreshCw className="h-4 w-4" /> Ôn tiếp
@@ -128,12 +127,8 @@ export function ReviewTab() {
           🧠 Ôn tập: {srs.currentIndex + 1} / {srs.queue.length}
         </span>
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold text-(--success)">
-            ✓ {srs.correct}
-          </span>
-          <span className="text-xs font-bold text-text-muted">
-            / {srs.reviewed}
-          </span>
+          <span className="text-xs font-bold text-(--success)">✓ {srs.correct}</span>
+          <span className="text-xs font-bold text-text-muted">/ {srs.reviewed}</span>
         </div>
       </div>
 
@@ -176,7 +171,8 @@ export function ReviewTab() {
               <div className="mt-4 flex flex-col gap-1.5">
                 {error.options.map((opt, i) => {
                   const isCorrect = showAnswer && opt === error.correctAnswer;
-                  const isWrong = showAnswer && opt === error.userAnswer && opt !== error.correctAnswer;
+                  const isWrong =
+                    showAnswer && opt === error.userAnswer && opt !== error.correctAnswer;
                   return (
                     <div
                       key={i}
@@ -237,9 +233,7 @@ export function ReviewTab() {
                   <div className="text-[10px] font-bold text-(--success) uppercase mb-1">
                     <CheckCircle className="h-2.5 w-2.5 inline mr-1" /> Đáp án đúng
                   </div>
-                  <div className="text-sm font-bold text-(--success)">
-                    {error.correctAnswer}
-                  </div>
+                  <div className="text-sm font-bold text-(--success)">{error.correctAnswer}</div>
                 </div>
               </div>
 
@@ -271,7 +265,9 @@ export function ReviewTab() {
                       }}
                     >
                       <span className="text-[22px]">{opt.emoji}</span>
-                      <span className="text-xs font-extrabold" style={{ color: opt.color }}>{opt.label}</span>
+                      <span className="text-xs font-extrabold" style={{ color: opt.color }}>
+                        {opt.label}
+                      </span>
                       <span className="text-[10px] text-text-muted">{opt.desc}</span>
                     </m.button>
                   ))}

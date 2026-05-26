@@ -1,57 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { BookOpen, Headphones, HelpCircle, Loader2, Mic, PenTool } from "lucide-react";
+import { motion } from "motion/react";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
-import {
-  Headphones,
-  BookOpen,
-  Mic,
-  PenTool,
-  Loader2,
-  HelpCircle,
-} from "lucide-react";
-import { motion } from "motion/react";
+import { useState } from "react";
 
 const ListeningTab = dynamic(
-  () =>
-    import("./_components/ListeningTab").then(
-      (m) => m.ListeningTab,
-    ),
+  () => import("./_components/ListeningTab").then((m) => m.ListeningTab),
   { ssr: false, loading: () => <TabLoader /> },
 );
-const ReadingTab = dynamic(
-  () =>
-    import("./_components/ReadingTab").then(
-      (m) => m.ReadingTab,
-    ),
-  { ssr: false, loading: () => <TabLoader /> },
-);
-const SpeakingTab = dynamic(
-  () =>
-    import("./_components/SpeakingTab").then(
-      (m) => m.SpeakingTab,
-    ),
-  { ssr: false, loading: () => <TabLoader /> },
-);
-const WritingTab = dynamic(
-  () =>
-    import("./_components/WritingTab").then(
-      (m) => m.WritingTab,
-    ),
-  { ssr: false, loading: () => <TabLoader /> },
-);
-const Part5Tab = dynamic(
-  () =>
-    import("./_components/Part5Tab").then(
-      (m) => m.Part5Tab,
-    ),
-  { ssr: false, loading: () => <TabLoader /> },
-);
+const ReadingTab = dynamic(() => import("./_components/ReadingTab").then((m) => m.ReadingTab), {
+  ssr: false,
+  loading: () => <TabLoader />,
+});
+const SpeakingTab = dynamic(() => import("./_components/SpeakingTab").then((m) => m.SpeakingTab), {
+  ssr: false,
+  loading: () => <TabLoader />,
+});
+const WritingTab = dynamic(() => import("./_components/WritingTab").then((m) => m.WritingTab), {
+  ssr: false,
+  loading: () => <TabLoader />,
+});
+const Part5Tab = dynamic(() => import("./_components/Part5Tab").then((m) => m.Part5Tab), {
+  ssr: false,
+  loading: () => <TabLoader />,
+});
 
 function TabLoader() {
   return (
-    <div className="flex justify-center items-center py-16 text-slate-500 gap-2.5 font-bold text-sm">
+    <div className="flex justify-center items-center py-16 text-text-secondary gap-2.5 font-bold text-sm">
       <Loader2 className="h-5 w-5 animate-text-accent" />
       <span>Đang tải nội dung học...</span>
     </div>
@@ -66,7 +44,12 @@ const SKILL_TABS: {
   parts: string;
   icon: React.ReactNode;
 }[] = [
-  { value: "listening", label: "Listening", parts: "Part 1–4", icon: <Headphones className="h-4 w-4" /> },
+  {
+    value: "listening",
+    label: "Listening",
+    parts: "Part 1–4",
+    icon: <Headphones className="h-4 w-4" />,
+  },
   { value: "reading", label: "Reading", parts: "Part 5–7", icon: <BookOpen className="h-4 w-4" /> },
   { value: "speaking", label: "Speaking", parts: "Part 1–6", icon: <Mic className="h-4 w-4" /> },
   { value: "writing", label: "Writing", parts: "Part 1–3", icon: <PenTool className="h-4 w-4" /> },
@@ -101,16 +84,15 @@ export default function ToeicSkillsPage() {
   const searchParams = useSearchParams();
   const initialTab = (searchParams.get("tab") as Skill) || "listening";
   const [active, setActive] = useState<Skill>(
-    SKILL_TABS.some((t) => t.value === initialTab) ? initialTab : "listening"
+    SKILL_TABS.some((t) => t.value === initialTab) ? initialTab : "listening",
   );
 
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden">
       <div className="px-4 pt-5 shrink-0">
-        <div className="max-w-4xl mx-auto">
-        </div>
+        <div className="max-w-4xl mx-auto"></div>
       </div>
-      
+
       {/* Pill Tabs Row */}
       <div className="px-4 py-3 shrink-0 overflow-x-auto scrollbar-none">
         <div className="max-w-4xl mx-auto flex gap-1.5 bg-bg-deep border-2 border-border rounded-xl p-1 w-fit md:w-full">
@@ -124,8 +106,9 @@ export default function ToeicSkillsPage() {
                 onClick={() => setActive(t.value)}
                 whileTap={{ scale: 0.98 }}
                 className={`flex-1 min-w-[80px] flex flex-col items-center justify-center gap-1 py-2 px-3.5 rounded-lg cursor-pointer transition-all duration-100 border-2 border-transparent ${
-                  isActive 
-                    ? colors.activeColor + " border-border shadow-(--shadow-sm) -translate-y-0.5 font-bold" 
+                  isActive
+                    ? colors.activeColor +
+                      " border-border shadow-(--shadow-sm) -translate-y-0.5 font-bold"
                     : "text-text-secondary hover:bg-surface-hover hover:text-ink"
                 }`}
               >
@@ -133,7 +116,9 @@ export default function ToeicSkillsPage() {
                   {t.icon}
                   <span>{t.label}</span>
                 </div>
-                <span className={`text-[9px] font-bold leading-none ${isActive ? (t.value === "speaking" || t.value === "part5" ? "text-ink/80" : "text-white/80") : "text-text-muted"}`}>
+                <span
+                  className={`text-[9px] font-bold leading-none ${isActive ? (t.value === "speaking" || t.value === "part5" ? "text-ink/80" : "text-white/80") : "text-text-muted"}`}
+                >
                   {t.parts}
                 </span>
               </motion.button>

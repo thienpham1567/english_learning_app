@@ -24,14 +24,7 @@ export function parseAccent(value: unknown): Accent {
  */
 export type VoiceRole = "us-m" | "us-f" | "uk-m" | "uk-f" | "au-m" | "au-f";
 
-export const VOICE_ROLES: readonly VoiceRole[] = [
-  "us-m",
-  "us-f",
-  "uk-m",
-  "uk-f",
-  "au-m",
-  "au-f",
-];
+export const VOICE_ROLES: readonly VoiceRole[] = ["us-m", "us-f", "uk-m", "uk-f", "au-m", "au-f"];
 
 export const VOICE_BY_ROLE: Record<VoiceRole, string> = {
   "us-m": "austin",
@@ -140,7 +133,9 @@ export async function synthesizeTtsForVoice(args: {
   const MAX_CHARS = 200;
   if (args.text.length > MAX_CHARS) {
     const chunks = splitTextIntoChunks(args.text, MAX_CHARS);
-    console.log(`[Groq TTS] Chunking text: ${args.text.length} chars → ${chunks.length} chunks, voice=${args.voice}`);
+    console.log(
+      `[Groq TTS] Chunking text: ${args.text.length} chars → ${chunks.length} chunks, voice=${args.voice}`,
+    );
     // Serial dispatch: parallel chunks burst past Groq's per-second cap and
     // trigger 429s even when our sliding-window RPM count is well under the limit.
     const buffers: ArrayBuffer[] = [];
@@ -158,7 +153,9 @@ export async function synthesizeTtsForVoice(args: {
   for (let attempt = 0; attempt <= TTS_MAX_RETRIES; attempt++) {
     await acquireTtsSlot();
     const startMs = Date.now();
-    console.log(`[Groq TTS] Request (attempt ${attempt + 1}): voice=${args.voice}, format=${args.format ?? "wav"}, speed=${speed}, text="${args.text.slice(0, 60)}..."`);
+    console.log(
+      `[Groq TTS] Request (attempt ${attempt + 1}): voice=${args.voice}, format=${args.format ?? "wav"}, speed=${speed}, text="${args.text.slice(0, 60)}..."`,
+    );
 
     let res: Response;
     try {
@@ -186,7 +183,9 @@ export async function synthesizeTtsForVoice(args: {
     if (res.status === 429 && attempt < TTS_MAX_RETRIES) {
       const rawRetryAfter = Number(res.headers.get("retry-after")) || 7;
       const retryAfter = Math.min(rawRetryAfter, 15); // cap to avoid extreme waits (Groq sometimes returns 100s+)
-      console.warn(`[Groq TTS] 429 rate-limited — retrying in ${retryAfter}s (attempt ${attempt + 1}/${TTS_MAX_RETRIES})${rawRetryAfter > 15 ? ` (server wanted ${rawRetryAfter}s)` : ""}`);
+      console.warn(
+        `[Groq TTS] 429 rate-limited — retrying in ${retryAfter}s (attempt ${attempt + 1}/${TTS_MAX_RETRIES})${rawRetryAfter > 15 ? ` (server wanted ${rawRetryAfter}s)` : ""}`,
+      );
       await new Promise((r) => setTimeout(r, retryAfter * 1000));
       continue;
     }
@@ -198,7 +197,9 @@ export async function synthesizeTtsForVoice(args: {
     }
 
     const audioBuffer = await res.arrayBuffer();
-    console.log(`[Groq TTS] OK (${elapsed}ms): ${audioBuffer.byteLength} bytes, voice=${args.voice}`);
+    console.log(
+      `[Groq TTS] OK (${elapsed}ms): ${audioBuffer.byteLength} bytes, voice=${args.voice}`,
+    );
     return audioBuffer;
   }
 

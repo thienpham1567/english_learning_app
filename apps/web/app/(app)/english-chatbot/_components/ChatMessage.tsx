@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, type ReactNode } from "react";
-import ReactMarkdown from "react-markdown";
+import { Check, Copy, Loader2, Pause, RotateCcw, Volume2 } from "lucide-react";
 import { motion } from "motion/react";
-import { Copy, Check, Volume2, Pause, RotateCcw, Loader2 } from "lucide-react";
+import { type ReactNode, useState } from "react";
+import ReactMarkdown from "react-markdown";
 import { useUser } from "@/components/shared/UserContext";
-import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 import type { Persona } from "@/lib/chat/personas";
+import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 
 export type DividerMessage = {
   id: string;
@@ -39,16 +39,18 @@ function CopyButton({ text }: { text: string }) {
       onClick={handleCopy}
       aria-label="Sao chép"
     >
-      {copied ? (
-        <Check className="h-3 w-3" />
-      ) : (
-        <Copy className="h-3 w-3" />
-      )}
+      {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
     </button>
   );
 }
 
-function SpeakButton({ text, onSpeak, isSpeaking, isLoading, onStop }: {
+function SpeakButton({
+  text,
+  onSpeak,
+  isSpeaking,
+  isLoading,
+  onStop,
+}: {
   text: string;
   onSpeak: (text: string) => void;
   isSpeaking: boolean;
@@ -59,9 +61,11 @@ function SpeakButton({ text, onSpeak, isSpeaking, isLoading, onStop }: {
   return (
     <button
       className={`rounded-full p-1.5 transition-all cursor-pointer ${
-        active ? "text-accent bg-accent/10 animate-pulse" : "text-(--text-muted) hover:bg-(--chat-surface-hover) hover:text-(--text-primary)"
+        active
+          ? "text-accent bg-accent/10 animate-pulse"
+          : "text-(--text-muted) hover:bg-(--chat-surface-hover) hover:text-(--text-primary)"
       }`}
-      onClick={() => active ? onStop() : onSpeak(text)}
+      onClick={() => (active ? onStop() : onSpeak(text))}
       disabled={isLoading}
       aria-label={isSpeaking ? "Dừng phát" : isLoading ? "Đang tải..." : "Nghe phát âm"}
     >
@@ -110,7 +114,9 @@ function extractText(children: ReactNode): string {
   if (typeof children === "number") return String(children);
   if (Array.isArray(children)) return children.map(extractText).join("");
   if (children && typeof children === "object" && "props" in children) {
-    return extractText((children as unknown as { props?: { children?: ReactNode } }).props?.children);
+    return extractText(
+      (children as unknown as { props?: { children?: ReactNode } }).props?.children,
+    );
   }
   return "";
 }
@@ -196,7 +202,9 @@ export function ChatMessage({
     return (
       <div className="flex items-center gap-4 py-3">
         <div className="h-px flex-1 bg-(--border)" />
-        <span className="text-[10px] font-bold tracking-wider uppercase text-(--text-muted) font-mono">{message.text}</span>
+        <span className="text-[10px] font-bold tracking-wider uppercase text-(--text-muted) font-mono">
+          {message.text}
+        </span>
         <div className="h-px flex-1 bg-(--border)" />
       </div>
     );
@@ -217,7 +225,11 @@ export function ChatMessage({
     >
       {!isUser && (
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full overflow-hidden border-2 border-border shadow-sm">
-          {persona ? <persona.avatar size={32} /> : <div className="bg-(--chat-surface) w-full h-full" />}
+          {persona ? (
+            <persona.avatar size={32} />
+          ) : (
+            <div className="bg-(--chat-surface) w-full h-full" />
+          )}
         </div>
       )}
 
@@ -246,7 +258,7 @@ export function ChatMessage({
               >
                 {text}
               </ReactMarkdown>
-              
+
               {isStreaming && (
                 <span
                   className="inline-block h-3.5 w-1.5 bg-accent ml-0.5 align-middle animate-pulse rounded-sm"
@@ -256,12 +268,18 @@ export function ChatMessage({
             </div>
           )}
         </div>
-        
+
         {/* Metadata section (fades in on hover of message container) */}
         <div className="flex items-center gap-2 text-[10px] font-semibold text-(--text-muted) opacity-0 group-hover:opacity-100 transition-opacity duration-200 mt-0.5">
           {time && <span>{time}</span>}
           {!isUser && onSpeak && onStopSpeak && (
-            <SpeakButton text={text} onSpeak={onSpeak} isSpeaking={isSpeaking} isLoading={isTtsLoading} onStop={onStopSpeak} />
+            <SpeakButton
+              text={text}
+              onSpeak={onSpeak}
+              isSpeaking={isSpeaking}
+              isLoading={isTtsLoading}
+              onStop={onStopSpeak}
+            />
           )}
           {!isUser && isLastAssistant && onRegenerate && !isStreaming && (
             <RegenerateButton onRegenerate={onRegenerate} />

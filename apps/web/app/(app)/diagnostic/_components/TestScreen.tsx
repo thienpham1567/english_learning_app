@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
-import { Flex, Typography, Button, Tag } from "antd";
-import { CEFR_COLORS } from "@/lib/constants/cefr";
+import { Button, Flex, Tag, Typography } from "antd";
 import * as m from "motion/react-client";
+import { useCallback, useEffect } from "react";
+import { CEFR_COLORS } from "@/lib/constants/cefr";
 
 import type { Question } from "./types";
 
@@ -37,7 +37,7 @@ export function TestScreen({
   onSubmit,
   onSkip,
 }: Props) {
-  const progressPct = ((currentIndex) / total) * 100;
+  const progressPct = (currentIndex / total) * 100;
 
   // Keyboard navigation: A/B/C/D to select, Enter to submit
   const handleKeyDown = useCallback(
@@ -73,10 +73,16 @@ export function TestScreen({
       }}
     >
       <Flex vertical gap={20} style={{ maxWidth: 600, margin: "0 auto" }}>
-        
         {/* Progress & Metadata Header */}
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <div style={{ display: "flex", justifySelf: "stretch", justifyContent: "space-between", alignItems: "center" }}>
+          <div
+            style={{
+              display: "flex",
+              justifySelf: "stretch",
+              justifyContent: "space-between",
+              alignItems: "center",
+            }}
+          >
             <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-secondary)" }}>
               Câu hỏi {currentIndex + 1} / {total}
             </span>
@@ -178,12 +184,8 @@ export function TestScreen({
                   gap: 12,
                   padding: "14px 18px",
                   borderRadius: "var(--radius-lg)",
-                  border: isSelected
-                    ? "2px solid var(--accent)"
-                    : "1px solid var(--border)",
-                  background: isSelected
-                    ? "var(--accent-light)"
-                    : "var(--surface)",
+                  border: isSelected ? "2px solid var(--accent)" : "1px solid var(--border)",
+                  background: isSelected ? "var(--accent-light)" : "var(--surface)",
                   cursor: "pointer",
                   textAlign: "left",
                   fontSize: 14.5,
@@ -218,14 +220,76 @@ export function TestScreen({
         </Flex>
 
         {/* Keyboard hint */}
-        <div style={{ display: "flex", justifyContent: "center", alignItems: "center", gap: 6, opacity: 0.6, fontSize: 11, fontWeight: 500, color: "var(--text-muted)", marginTop: 4 }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            gap: 6,
+            opacity: 0.6,
+            fontSize: 11,
+            fontWeight: 500,
+            color: "var(--text-muted)",
+            marginTop: 4,
+          }}
+        >
           <span>Phím tắt:</span>
-          <kbd style={{ background: "var(--border)", padding: "2px 6px", borderRadius: 4, fontFamily: "var(--font-mono)", fontSize: 10 }}>A</kbd>
-          <kbd style={{ background: "var(--border)", padding: "2px 6px", borderRadius: 4, fontFamily: "var(--font-mono)", fontSize: 10 }}>B</kbd>
-          <kbd style={{ background: "var(--border)", padding: "2px 6px", borderRadius: 4, fontFamily: "var(--font-mono)", fontSize: 10 }}>C</kbd>
-          <kbd style={{ background: "var(--border)", padding: "2px 6px", borderRadius: 4, fontFamily: "var(--font-mono)", fontSize: 10 }}>D</kbd>
+          <kbd
+            style={{
+              background: "var(--border)",
+              padding: "2px 6px",
+              borderRadius: 4,
+              fontFamily: "var(--font-mono)",
+              fontSize: 10,
+            }}
+          >
+            A
+          </kbd>
+          <kbd
+            style={{
+              background: "var(--border)",
+              padding: "2px 6px",
+              borderRadius: 4,
+              fontFamily: "var(--font-mono)",
+              fontSize: 10,
+            }}
+          >
+            B
+          </kbd>
+          <kbd
+            style={{
+              background: "var(--border)",
+              padding: "2px 6px",
+              borderRadius: 4,
+              fontFamily: "var(--font-mono)",
+              fontSize: 10,
+            }}
+          >
+            C
+          </kbd>
+          <kbd
+            style={{
+              background: "var(--border)",
+              padding: "2px 6px",
+              borderRadius: 4,
+              fontFamily: "var(--font-mono)",
+              fontSize: 10,
+            }}
+          >
+            D
+          </kbd>
           <span>để chọn ·</span>
-          <kbd style={{ background: "var(--border)", padding: "2px 6px", borderRadius: 4, fontFamily: "var(--font-mono)", fontSize: 10 }}>Enter</kbd>
+          <kbd
+            style={{
+              background: "var(--border)",
+              padding: "2px 6px",
+              borderRadius: 4,
+              fontFamily: "var(--font-mono)",
+              fontSize: 10,
+            }}
+          >
+            Enter
+          </kbd>
           <span>để xác nhận</span>
         </div>
 
@@ -240,9 +304,10 @@ export function TestScreen({
               flex: 1,
               height: 48,
               borderRadius: "var(--radius-lg)",
-              background: selectedOption === null
-                ? "var(--border)"
-                : "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+              background:
+                selectedOption === null
+                  ? "var(--border)"
+                  : "linear-gradient(135deg, var(--accent), var(--accent-hover))",
               color: selectedOption === null ? "var(--text-muted)" : "var(--text-on-accent)",
               border: "none",
               fontSize: 15,

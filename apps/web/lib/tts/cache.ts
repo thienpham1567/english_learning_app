@@ -1,6 +1,6 @@
+import crypto from "crypto";
 import { promises as fs } from "fs";
 import path from "path";
-import crypto from "crypto";
 
 import { VOICE_SET_VERSION } from "@/lib/tts/groq";
 
@@ -14,9 +14,7 @@ import { VOICE_SET_VERSION } from "@/lib/tts/groq";
  * Keys are hashed to keep filenames filesystem-safe regardless of input.
  */
 
-const BASE_CACHE_DIR = process.env.VERCEL
-  ? "/tmp"
-  : path.join(process.cwd(), ".cache");
+const BASE_CACHE_DIR = process.env.VERCEL ? "/tmp" : path.join(process.cwd(), ".cache");
 
 export function ttsCacheDir(namespace: string): string {
   return path.join(BASE_CACHE_DIR, `tts-${namespace}`);
@@ -30,7 +28,11 @@ export function ttsCacheFile(namespace: string, key: string, ext: "wav" | "mp3" 
   return path.join(ttsCacheDir(namespace), `${hashKey(key)}-${VOICE_SET_VERSION}.${ext}`);
 }
 
-export async function readTtsCache(namespace: string, key: string, ext: "wav" | "mp3" = "wav"): Promise<Buffer | null> {
+export async function readTtsCache(
+  namespace: string,
+  key: string,
+  ext: "wav" | "mp3" = "wav",
+): Promise<Buffer | null> {
   try {
     return await fs.readFile(ttsCacheFile(namespace, key, ext));
   } catch {
@@ -38,7 +40,12 @@ export async function readTtsCache(namespace: string, key: string, ext: "wav" | 
   }
 }
 
-export async function writeTtsCache(namespace: string, key: string, buf: Buffer, ext: "wav" | "mp3" = "wav"): Promise<void> {
+export async function writeTtsCache(
+  namespace: string,
+  key: string,
+  buf: Buffer,
+  ext: "wav" | "mp3" = "wav",
+): Promise<void> {
   try {
     await fs.mkdir(ttsCacheDir(namespace), { recursive: true });
     await fs.writeFile(ttsCacheFile(namespace, key, ext), buf);

@@ -1,55 +1,138 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
 import {
-  Mic,
-  Image as ImageIcon,
-  Pause,
-  Loader2,
   CheckCircle,
+  Image as ImageIcon,
+  Info,
+  Loader2,
+  Mic,
+  Pause,
   RefreshCw,
   Volume2,
-  Info,
 } from "lucide-react";
-import { useVoiceInput } from "@/hooks/useVoiceInput";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Waveform } from "@/components/speaking/Waveform";
+import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { api } from "@/lib/api-client";
 
 const PICTURES = [
-  { id: "photo-1497366216548-37526070297c", scene: "Office meeting room", tags: ["business","meeting"], keyElements: ["people sitting around a table","laptop computers","presentation screen"] },
-  { id: "photo-1555396273-367ea4eb4db5", scene: "Restaurant dining", tags: ["food","restaurant"], keyElements: ["waitstaff serving food","dining tables","customers eating"] },
-  { id: "photo-1517248135467-4c7edcad34c4", scene: "Restaurant interior", tags: ["dining","indoor"], keyElements: ["wooden tables","dim lighting","wine glasses"] },
-  { id: "photo-1573497019940-1c28c88b4f3e", scene: "Construction site", tags: ["construction","outdoor"], keyElements: ["workers wearing helmets","building framework","construction equipment"] },
-  { id: "photo-1436491865332-7a61a109db05", scene: "Airport terminal", tags: ["travel","airport"], keyElements: ["passengers with luggage","departure board","check-in counters"] },
-  { id: "photo-1441986300917-64674bd600d8", scene: "Retail store", tags: ["shopping","indoor"], keyElements: ["shelves with products","customer browsing","store clerk"] },
-  { id: "photo-1503676260728-1c00da094a0b", scene: "Classroom", tags: ["education","indoor"], keyElements: ["students at desks","teacher at whiteboard","books and notebooks"] },
-  { id: "photo-1571019613454-1cb2f99b2d8b", scene: "Gym workout", tags: ["fitness","indoor"], keyElements: ["people exercising","gym equipment","weights and machines"] },
-  { id: "photo-1506905925346-21bda4d32df4", scene: "Mountain landscape", tags: ["nature","outdoor"], keyElements: ["snow-capped mountains","hiking trail","clear blue sky"] },
-  { id: "photo-1544620347-c4fd4a3d5957", scene: "City bus", tags: ["transport","urban"], keyElements: ["passengers sitting","driver at wheel","bus interior"] },
-  { id: "photo-1559136555-9303baea8ebd", scene: "Farmers market", tags: ["outdoor","food"], keyElements: ["fresh produce on display","vendor and customers","colorful fruits and vegetables"] },
-  { id: "photo-1521737711867-e3b97375f902", scene: "Team collaboration", tags: ["business","teamwork"], keyElements: ["coworkers discussing","sticky notes on board","standing around table"] },
+  {
+    id: "photo-1497366216548-37526070297c",
+    scene: "Office meeting room",
+    tags: ["business", "meeting"],
+    keyElements: ["people sitting around a table", "laptop computers", "presentation screen"],
+  },
+  {
+    id: "photo-1555396273-367ea4eb4db5",
+    scene: "Restaurant dining",
+    tags: ["food", "restaurant"],
+    keyElements: ["waitstaff serving food", "dining tables", "customers eating"],
+  },
+  {
+    id: "photo-1517248135467-4c7edcad34c4",
+    scene: "Restaurant interior",
+    tags: ["dining", "indoor"],
+    keyElements: ["wooden tables", "dim lighting", "wine glasses"],
+  },
+  {
+    id: "photo-1573497019940-1c28c88b4f3e",
+    scene: "Construction site",
+    tags: ["construction", "outdoor"],
+    keyElements: ["workers wearing helmets", "building framework", "construction equipment"],
+  },
+  {
+    id: "photo-1436491865332-7a61a109db05",
+    scene: "Airport terminal",
+    tags: ["travel", "airport"],
+    keyElements: ["passengers with luggage", "departure board", "check-in counters"],
+  },
+  {
+    id: "photo-1441986300917-64674bd600d8",
+    scene: "Retail store",
+    tags: ["shopping", "indoor"],
+    keyElements: ["shelves with products", "customer browsing", "store clerk"],
+  },
+  {
+    id: "photo-1503676260728-1c00da094a0b",
+    scene: "Classroom",
+    tags: ["education", "indoor"],
+    keyElements: ["students at desks", "teacher at whiteboard", "books and notebooks"],
+  },
+  {
+    id: "photo-1571019613454-1cb2f99b2d8b",
+    scene: "Gym workout",
+    tags: ["fitness", "indoor"],
+    keyElements: ["people exercising", "gym equipment", "weights and machines"],
+  },
+  {
+    id: "photo-1506905925346-21bda4d32df4",
+    scene: "Mountain landscape",
+    tags: ["nature", "outdoor"],
+    keyElements: ["snow-capped mountains", "hiking trail", "clear blue sky"],
+  },
+  {
+    id: "photo-1544620347-c4fd4a3d5957",
+    scene: "City bus",
+    tags: ["transport", "urban"],
+    keyElements: ["passengers sitting", "driver at wheel", "bus interior"],
+  },
+  {
+    id: "photo-1559136555-9303baea8ebd",
+    scene: "Farmers market",
+    tags: ["outdoor", "food"],
+    keyElements: [
+      "fresh produce on display",
+      "vendor and customers",
+      "colorful fruits and vegetables",
+    ],
+  },
+  {
+    id: "photo-1521737711867-e3b97375f902",
+    scene: "Team collaboration",
+    tags: ["business", "teamwork"],
+    keyElements: ["coworkers discussing", "sticky notes on board", "standing around table"],
+  },
 ];
 
 type FeedbackResult = {
-  pronunciation: number; intonation: number; grammar: number; vocabulary: number;
-  overall: number; transcript: string; summary: string; improvements: string[];
+  pronunciation: number;
+  intonation: number;
+  grammar: number;
+  vocabulary: number;
+  overall: number;
+  transcript: string;
+  summary: string;
+  improvements: string[];
 };
 type PageState = "gallery" | "viewing" | "recording" | "evaluating" | "result";
 
-function CircularProgress({ percent, size = 100, strokeWidth = 8, color = "var(--accent)" }: { percent: number; size?: number; strokeWidth?: number; color?: string }) {
+function CircularProgress({
+  percent,
+  size = 100,
+  strokeWidth = 8,
+  color = "var(--accent)",
+}: {
+  percent: number;
+  size?: number;
+  strokeWidth?: number;
+  color?: string;
+}) {
   const radius = (size - strokeWidth) / 2;
   const circumference = radius * 2 * Math.PI;
   const strokeDashoffset = circumference - (percent / 100) * circumference;
 
   return (
-    <div className="relative inline-flex items-center justify-center" style={{ width: size, height: size }}>
+    <div
+      className="relative inline-flex items-center justify-center"
+      style={{ width: size, height: size }}
+    >
       <svg className="w-full h-full transform -rotate-90" viewBox={`0 0 ${size} ${size}`}>
         {/* Background circle */}
         <circle
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          className="stroke-slate-850"
+          className="stroke-bg-deep"
           strokeWidth={strokeWidth}
           fill="transparent"
         />
@@ -67,7 +150,9 @@ function CircularProgress({ percent, size = 100, strokeWidth = 8, color = "var(-
       </svg>
       <div className="absolute flex flex-col items-center justify-center">
         <span className="text-2xl font-extrabold text-ink leading-none">{percent}</span>
-        <span className="text-[9px] text-slate-450 font-bold uppercase tracking-wider mt-1">Overall</span>
+        <span className="text-[9px] text-text-muted font-bold uppercase tracking-wider mt-1">
+          Overall
+        </span>
       </div>
     </div>
   );
@@ -75,7 +160,7 @@ function CircularProgress({ percent, size = 100, strokeWidth = 8, color = "var(-
 
 export function DescribePicture() {
   const [state, setState] = useState<PageState>("gallery");
-  const [selectedPic, setSelectedPic] = useState<typeof PICTURES[0] | null>(null);
+  const [selectedPic, setSelectedPic] = useState<(typeof PICTURES)[0] | null>(null);
   const [feedback, setFeedback] = useState<FeedbackResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [timeLeft, setTimeLeft] = useState(45);
@@ -84,45 +169,96 @@ export function DescribePicture() {
   const isEvaluatingRef = useRef(false);
   const voice = useVoiceInput({ autoTranscribe: false });
 
-  useEffect(() => () => { isMountedRef.current = false; if (timerRef.current) clearInterval(timerRef.current); }, []);
+  useEffect(
+    () => () => {
+      isMountedRef.current = false;
+      if (timerRef.current) clearInterval(timerRef.current);
+    },
+    [],
+  );
 
-  const imgUrl = (id: string) => `https://images.unsplash.com/${id}?w=600&h=400&fit=crop&auto=format&q=80`;
+  const imgUrl = (id: string) =>
+    `https://images.unsplash.com/${id}?w=600&h=400&fit=crop&auto=format&q=80`;
 
-  const selectPicture = (pic: typeof PICTURES[0]) => { setSelectedPic(pic); setFeedback(null); setError(null); setState("viewing"); };
+  const selectPicture = (pic: (typeof PICTURES)[0]) => {
+    setSelectedPic(pic);
+    setFeedback(null);
+    setError(null);
+    setState("viewing");
+  };
 
   const startRecording = useCallback(async () => {
     setError(null);
     try {
-      await voice.start(); setState("recording"); setTimeLeft(45);
-      timerRef.current = setInterval(() => { setTimeLeft((p) => { if (p <= 1) { if (timerRef.current) clearInterval(timerRef.current); return 0; } return p - 1; }); }, 1000);
-    } catch { setError("Không thể truy cập microphone."); }
+      await voice.start();
+      setState("recording");
+      setTimeLeft(45);
+      timerRef.current = setInterval(() => {
+        setTimeLeft((p) => {
+          if (p <= 1) {
+            if (timerRef.current) clearInterval(timerRef.current);
+            return 0;
+          }
+          return p - 1;
+        });
+      }, 1000);
+    } catch {
+      setError("Không thể truy cập microphone.");
+    }
   }, [voice]);
 
   const stopRecording = useCallback(() => {
     if (state !== "recording") return;
-    if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
     voice.stop();
   }, [voice, state]);
 
-  useEffect(() => { if (state === "recording" && timeLeft === 0 && timerRef.current === null) stopRecording(); }, [state, timeLeft, stopRecording]);
+  useEffect(() => {
+    if (state === "recording" && timeLeft === 0 && timerRef.current === null) stopRecording();
+  }, [state, timeLeft, stopRecording]);
 
   useEffect(() => {
     if (state !== "recording" || !voice.blob || isEvaluatingRef.current || !selectedPic) return;
-    isEvaluatingRef.current = true; setState("evaluating");
+    isEvaluatingRef.current = true;
+    setState("evaluating");
     const fd = new FormData();
     fd.append("audio", voice.blob, "recording.webm");
     fd.append("scene", selectedPic.scene);
     fd.append("keyElements", JSON.stringify(selectedPic.keyElements));
     fd.append("durationMs", String(Math.round(voice.durationMs)));
-    api.post<FeedbackResult>("/toeic-speaking/describe-picture", fd)
-      .then((r) => { if (isMountedRef.current) { setFeedback(r); setState("result"); } })
-      .catch(() => { if (isMountedRef.current) { setError("Có lỗi khi đánh giá."); setState("viewing"); } })
-      .finally(() => { isEvaluatingRef.current = false; });
+    api
+      .post<FeedbackResult>("/toeic-speaking/describe-picture", fd)
+      .then((r) => {
+        if (isMountedRef.current) {
+          setFeedback(r);
+          setState("result");
+        }
+      })
+      .catch(() => {
+        if (isMountedRef.current) {
+          setError("Có lỗi khi đánh giá.");
+          setState("viewing");
+        }
+      })
+      .finally(() => {
+        isEvaluatingRef.current = false;
+      });
   }, [state, voice.blob, voice.durationMs, selectedPic]);
 
-  const retry = () => { setFeedback(null); setState("viewing"); };
-  const backToGallery = () => { setSelectedPic(null); setFeedback(null); setState("gallery"); };
-  const scoreColor = (s: number) => s >= 80 ? "var(--success)" : s >= 50 ? "var(--warning)" : "var(--error)";
+  const retry = () => {
+    setFeedback(null);
+    setState("viewing");
+  };
+  const backToGallery = () => {
+    setSelectedPic(null);
+    setFeedback(null);
+    setState("gallery");
+  };
+  const scoreColor = (s: number) =>
+    s >= 80 ? "var(--success)" : s >= 50 ? "var(--warning)" : "var(--error)";
   const formatTime = (s: number) => `0:${String(s).padStart(2, "0")}`;
 
   return (
@@ -140,9 +276,12 @@ export function DescribePicture() {
             <div className="w-14 h-14 rounded-full bg-accent/10 text-accent flex items-center justify-center mx-auto mb-3 shadow-xs">
               <ImageIcon className="h-6 w-6" />
             </div>
-            <h3 className="m-0 mb-1.5 text-lg font-bold font-display text-ink">Chọn hình ảnh để mô tả</h3>
-            <p className="m-0 text-xs text-slate-455 max-w-sm mx-auto leading-relaxed">
-              Bạn sẽ có 45 giây để mô tả bức hình bằng tiếng Anh. AI sẽ đánh giá phát âm, ngữ pháp và nội dung.
+            <h3 className="m-0 mb-1.5 text-lg font-bold font-display text-ink">
+              Chọn hình ảnh để mô tả
+            </h3>
+            <p className="m-0 text-xs text-text-muted font-bold max-w-sm mx-auto leading-relaxed">
+              Bạn sẽ có 45 giây để mô tả bức hình bằng tiếng Anh. AI sẽ đánh giá phát âm, ngữ pháp
+              và nội dung.
             </p>
           </div>
           <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3">
@@ -164,7 +303,10 @@ export function DescribePicture() {
                   <div className="text-xs font-bold text-ink">{pic.scene}</div>
                   <div className="flex gap-1.5 mt-2 flex-wrap">
                     {pic.tags.map((t) => (
-                      <span key={t} className="px-2 py-0.5 rounded-md text-[9px] font-extrabold tracking-wide uppercase bg-slate-900 border border-slate-850 text-slate-450">
+                      <span
+                        key={t}
+                        className="px-2 py-0.5 rounded-none text-[9px] font-black tracking-widest uppercase bg-surface-alt border-2 border-border text-text-secondary"
+                      >
                         {t}
                       </span>
                     ))}
@@ -179,25 +321,39 @@ export function DescribePicture() {
       {/* VIEWING / RECORDING / EVALUATING */}
       {selectedPic && (state === "viewing" || state === "recording" || state === "evaluating") && (
         <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-200">
-          <div className={`rounded-2xl overflow-hidden border ${
-            state === "recording" ? "border-red-500 ring-2 ring-red-500/20" : "border-border"
-          }`}>
+          <div
+            className={`rounded-2xl overflow-hidden border ${
+              state === "recording" ? "border-red-500 ring-2 ring-red-500/20" : "border-border"
+            }`}
+          >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={imgUrl(selectedPic.id)} alt={selectedPic.scene} className="w-full aspect-3/2 object-cover block" />
+            <img
+              src={imgUrl(selectedPic.id)}
+              alt={selectedPic.scene}
+              className="w-full aspect-3/2 object-cover block"
+            />
           </div>
           {state === "recording" && (
             <>
               <div className="text-center">
-                <div className={`text-4xl font-extrabold font-display tabular-nums ${
-                  timeLeft <= 10 ? "text-red-500" : "text-ink"
-                }`}>{formatTime(timeLeft)}</div>
-                <p className="text-[10px] text-slate-455 mt-1 uppercase tracking-wider font-bold">Thời gian còn lại</p>
+                <div
+                  className={`text-4xl font-extrabold font-display tabular-nums ${
+                    timeLeft <= 10 ? "text-red-500" : "text-ink"
+                  }`}
+                >
+                  {formatTime(timeLeft)}
+                </div>
+                <p className="text-[10px] text-text-muted mt-1 uppercase tracking-wider font-bold">
+                  Thời gian còn lại
+                </p>
               </div>
-              <div className="p-3 rounded-2xl bg-surface border-2 border-border"><Waveform getStream={voice.getStream} active={true} /></div>
+              <div className="p-3 rounded-2xl bg-surface border-2 border-border">
+                <Waveform getStream={voice.getStream} active={true} />
+              </div>
             </>
           )}
           {state === "viewing" && (
-            <div className="p-4 rounded-xl bg-(--info)/5 border border-(--info)/20 text-xs text-slate-350 leading-relaxed">
+            <div className="p-4 rounded-xl bg-surface-alt border-2 border-border text-xs text-text-secondary leading-relaxed shadow-(--shadow-sm)">
               <p className="m-0 mb-1.5 font-bold text-(--info) flex items-center gap-1.5">
                 <Info className="h-4 w-4 shrink-0" />
                 <span>Mẹo mô tả hình:</span>
@@ -205,7 +361,9 @@ export function DescribePicture() {
               <ul className="m-0 pl-4.5 flex flex-col gap-1 list-disc">
                 <li>Bắt đầu: &ldquo;In this picture, I can see...&rdquo;</li>
                 <li>Mô tả từ tổng quan đến chi tiết</li>
-                <li>Dùng thì hiện tại tiếp diễn cho hành động (e.g. &ldquo;people are talking&rdquo;)</li>
+                <li>
+                  Dùng thì hiện tại tiếp diễn cho hành động (e.g. &ldquo;people are talking&rdquo;)
+                </li>
               </ul>
             </div>
           )}
@@ -218,10 +376,12 @@ export function DescribePicture() {
                 >
                   <Mic className="h-7 w-7" />
                 </button>
-                <p className="text-xs text-slate-455 mt-1 font-semibold">Nhấn để bắt đầu mô tả (45s)</p>
+                <p className="text-xs text-text-muted mt-1 font-semibold">
+                  Nhấn để bắt đầu mô tả (45s)
+                </p>
                 <button
                   onClick={backToGallery}
-                  className="mt-1 px-4 py-2 rounded-xl border-2 border-border bg-transparent text-slate-350 hover:text-slate-200 hover:border-slate-800 transition-colors text-xs font-bold cursor-pointer"
+                  className="mt-1 px-4 py-2 rounded-xl border-2 border-border bg-surface text-text-secondary hover:text-ink hover:bg-surface-hover hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow-sm) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-bold cursor-pointer"
                 >
                   ← Chọn hình khác
                 </button>
@@ -241,7 +401,9 @@ export function DescribePicture() {
             {state === "evaluating" && (
               <div className="flex flex-col items-center justify-center py-4">
                 <Loader2 className="h-8 w-8 text-accent animate-spin" />
-                <p className="text-xs text-slate-400 mt-2 font-bold">Đang chấm điểm và đánh giá...</p>
+                <p className="text-xs text-text-muted mt-2 font-bold">
+                  Đang chấm điểm và đánh giá...
+                </p>
               </div>
             )}
           </div>
@@ -253,9 +415,13 @@ export function DescribePicture() {
         <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-200">
           <div className="rounded-2xl overflow-hidden border-2 border-border max-h-[160px]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={imgUrl(selectedPic.id)} alt={selectedPic.scene} className="w-full object-cover block" />
+            <img
+              src={imgUrl(selectedPic.id)}
+              alt={selectedPic.scene}
+              className="w-full object-cover block"
+            />
           </div>
-          
+
           <div className="p-6 rounded-2xl bg-surface border-2 border-border text-center flex flex-col items-center shadow-xs">
             <CircularProgress percent={feedback.overall} color={scoreColor(feedback.overall)} />
             <div className="flex justify-center gap-6 mt-5 flex-wrap w-full border-t-2 border-border pt-4">
@@ -263,10 +429,12 @@ export function DescribePicture() {
                 { label: "Phát âm", score: feedback.pronunciation },
                 { label: "Ngữ điệu", score: feedback.intonation },
                 { label: "Ngữ pháp", score: feedback.grammar },
-                { label: "Từ vựng", score: feedback.vocabulary }
+                { label: "Từ vựng", score: feedback.vocabulary },
               ].map((s) => (
                 <div key={s.label} className="flex-1 min-w-[70px]">
-                  <p className="text-[10px] text-slate-450 m-0 font-bold uppercase tracking-wider">{s.label}</p>
+                  <p className="text-[10px] text-text-muted m-0 font-bold uppercase tracking-wider">
+                    {s.label}
+                  </p>
                   <p
                     className="text-base font-extrabold m-0 mt-1 font-display"
                     style={{ color: scoreColor(s.score) }}
@@ -290,7 +458,7 @@ export function DescribePicture() {
                 <Volume2 className="h-4 w-4 shrink-0" />
                 <span>Điểm cần cải thiện</span>
               </p>
-              <ul className="m-0 pl-4.5 text-xs text-slate-355 leading-relaxed flex flex-col gap-1 list-disc">
+              <ul className="m-0 pl-4.5 text-xs text-text-secondary leading-relaxed flex flex-col gap-1 list-disc font-bold">
                 {feedback.improvements.map((imp, i) => (
                   <li key={i}>{imp}</li>
                 ))}
@@ -299,23 +467,27 @@ export function DescribePicture() {
           )}
 
           {feedback.transcript && (
-            <div className="p-4.5 rounded-2xl bg-slate-900/40 border border-slate-850/60">
-              <p className="text-[10px] font-extrabold uppercase tracking-wider text-slate-455 m-0 mb-1.5">Bạn đã nói:</p>
-              <p className="text-xs italic leading-relaxed text-slate-300 m-0">&ldquo;{feedback.transcript}&rdquo;</p>
+            <div className="p-4.5 rounded-2xl bg-surface-alt border-2 border-border shadow-(--shadow-sm)">
+              <p className="text-[10px] font-extrabold uppercase tracking-wider text-text-muted m-0 mb-1.5">
+                Bạn đã nói:
+              </p>
+              <p className="text-xs italic leading-relaxed text-text-secondary m-0">
+                &ldquo;{feedback.transcript}&rdquo;
+              </p>
             </div>
           )}
 
           <div className="flex gap-2.5 justify-center mt-2">
             <button
               onClick={retry}
-              className="px-5 py-2.5 rounded-xl border-2 border-border bg-transparent text-slate-350 hover:text-slate-200 hover:border-slate-800 transition-colors text-xs font-bold cursor-pointer flex items-center gap-1.5"
+              className="px-5 py-2.5 rounded-xl border-2 border-border bg-surface text-text-secondary hover:text-ink hover:bg-surface-hover hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow-sm) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-bold cursor-pointer flex items-center gap-1.5"
             >
               <RefreshCw className="h-3.5 w-3.5" />
               <span>Thử lại</span>
             </button>
             <button
               onClick={backToGallery}
-              className="px-5 py-2.5 rounded-xl bg-accent text-white hover:bg-accent-hover transition-colors text-xs font-bold cursor-pointer flex items-center gap-1.5 border-none"
+              className="px-5 py-2.5 rounded-xl border-2 border-border bg-accent text-ink shadow-(--shadow-sm) hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-bold cursor-pointer flex items-center gap-1.5"
             >
               <span>Hình khác</span>
               <CheckCircle className="h-3.5 w-3.5" />

@@ -1,9 +1,7 @@
+import { db, readAloudDialogue } from "@repo/database";
+import { and, desc, eq } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, desc, and } from "drizzle-orm";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { readAloudDialogue } from "@repo/database";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("read-aloud/dialogues");

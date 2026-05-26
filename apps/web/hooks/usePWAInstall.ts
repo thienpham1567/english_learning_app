@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface BeforeInstallPromptEvent extends Event {
   prompt: () => Promise<void>;
@@ -10,9 +10,8 @@ interface BeforeInstallPromptEvent extends Event {
 export function usePWAInstall() {
   const [canInstall, setCanInstall] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
-  const [dismissed, setDismissed] = useState(() =>
-    typeof window !== "undefined" &&
-    sessionStorage.getItem("pwa-dismissed") !== null,
+  const [dismissed, setDismissed] = useState(
+    () => typeof window !== "undefined" && sessionStorage.getItem("pwa-dismissed") !== null,
   );
 
   useEffect(() => {

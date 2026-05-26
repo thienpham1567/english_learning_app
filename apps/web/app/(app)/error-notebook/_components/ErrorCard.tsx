@@ -1,13 +1,9 @@
 "use client";
 
-import {
-  CheckCircle,
-  XCircle,
-  AlertTriangle,
-} from "lucide-react";
+import { AlertTriangle, CheckCircle, XCircle } from "lucide-react";
 import * as m from "motion/react-client";
 import type { ErrorEntry } from "../_types/types";
-import { MODULE_LABELS, MODULE_ICONS } from "../_types/types";
+import { MODULE_ICONS, MODULE_LABELS } from "../_types/types";
 
 interface ErrorCardProps {
   error: ErrorEntry;
@@ -26,7 +22,9 @@ export function ErrorCard({ error, onClick, index = 0 }: ErrorCardProps) {
       className="bg-surface rounded-xl border-2 border-border p-4 px-4.5 cursor-pointer transition-all duration-150 relative overflow-hidden"
     >
       {/* Accent bar */}
-      <div className={`absolute top-0 left-0 w-[3px] h-full rounded-l ${error.isResolved ? "bg-(--success)" : "bg-(--error)"}`} />
+      <div
+        className={`absolute top-0 left-0 w-[3px] h-full rounded-l ${error.isResolved ? "bg-(--success)" : "bg-(--error)"}`}
+      />
 
       {/* Top row: status + module + date */}
       <div className="flex items-center gap-2 mb-2.5">
@@ -40,7 +38,8 @@ export function ErrorCard({ error, onClick, index = 0 }: ErrorCardProps) {
           </span>
         )}
         <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-accent/8 text-accent">
-          {MODULE_ICONS[error.sourceModule] ?? "📄"} {MODULE_LABELS[error.sourceModule] ?? error.sourceModule}
+          {MODULE_ICONS[error.sourceModule] ?? "📄"}{" "}
+          {MODULE_LABELS[error.sourceModule] ?? error.sourceModule}
         </span>
         {error.grammarTopic && (
           <span className="text-[11px] font-semibold text-text-muted px-1.5 py-px rounded bg-surface-alt">
@@ -48,7 +47,10 @@ export function ErrorCard({ error, onClick, index = 0 }: ErrorCardProps) {
           </span>
         )}
         <span className="ml-auto text-[11px] text-text-muted font-medium shrink-0">
-          {new Date(error.createdAt).toLocaleDateString("vi-VN", { day: "numeric", month: "short" })}
+          {new Date(error.createdAt).toLocaleDateString("vi-VN", {
+            day: "numeric",
+            month: "short",
+          })}
         </span>
       </div>
 
@@ -71,7 +73,8 @@ export function ErrorCard({ error, onClick, index = 0 }: ErrorCardProps) {
       {error.reviewCount > 0 && (
         <div className="mt-2 text-[10px] text-text-muted font-semibold">
           🧠 Đã ôn {error.reviewCount} lần
-          {error.nextReviewAt && ` · Ôn lại: ${new Date(error.nextReviewAt).toLocaleDateString("vi-VN", { day: "numeric", month: "short" })}`}
+          {error.nextReviewAt &&
+            ` · Ôn lại: ${new Date(error.nextReviewAt).toLocaleDateString("vi-VN", { day: "numeric", month: "short" })}`}
         </div>
       )}
     </m.div>

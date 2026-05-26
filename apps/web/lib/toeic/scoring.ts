@@ -13,23 +13,23 @@ const SCALE_MIN = 5;
 const SCALE_MAX = 495;
 
 function clamp(n: number, lo: number, hi: number): number {
-	return Math.max(lo, Math.min(hi, n));
+  return Math.max(lo, Math.min(hi, n));
 }
 
 function linearScale(ratio: number): number {
-	return Math.round(SCALE_MIN + clamp(ratio, 0, 1) * (SCALE_MAX - SCALE_MIN));
+  return Math.round(SCALE_MIN + clamp(ratio, 0, 1) * (SCALE_MAX - SCALE_MIN));
 }
 
 /** Convert raw correct count out of 100 (full Listening section) to 5-495. */
 export function rawToScaledListening(rawCorrect: number, totalQuestions: number): number {
-	if (totalQuestions <= 0) return SCALE_MIN;
-	return linearScale(rawCorrect / totalQuestions);
+  if (totalQuestions <= 0) return SCALE_MIN;
+  return linearScale(rawCorrect / totalQuestions);
 }
 
 /** Convert raw correct count out of 100 (full Reading section) to 5-495. */
 export function rawToScaledReading(rawCorrect: number, totalQuestions: number): number {
-	if (totalQuestions <= 0) return SCALE_MIN;
-	return linearScale(rawCorrect / totalQuestions);
+  if (totalQuestions <= 0) return SCALE_MIN;
+  return linearScale(rawCorrect / totalQuestions);
 }
 
 /**
@@ -38,41 +38,41 @@ export function rawToScaledReading(rawCorrect: number, totalQuestions: number): 
  * answers: list of { part, isCorrect } for every answered question
  */
 export function computeMockScore(answers: Array<{ part: number; isCorrect: boolean | null }>): {
-	rawListening: number;
-	rawReading: number;
-	scaledListening: number;
-	scaledReading: number;
-	totalScaled: number;
-	listeningTotal: number;
-	readingTotal: number;
+  rawListening: number;
+  rawReading: number;
+  scaledListening: number;
+  scaledReading: number;
+  totalScaled: number;
+  listeningTotal: number;
+  readingTotal: number;
 } {
-	let rawListening = 0;
-	let rawReading = 0;
-	let listeningTotal = 0;
-	let readingTotal = 0;
+  let rawListening = 0;
+  let rawReading = 0;
+  let listeningTotal = 0;
+  let readingTotal = 0;
 
-	for (const a of answers) {
-		const isListening = a.part >= 1 && a.part <= 4;
-		const isReading = a.part >= 5 && a.part <= 7;
-		if (isListening) {
-			listeningTotal++;
-			if (a.isCorrect === true) rawListening++;
-		} else if (isReading) {
-			readingTotal++;
-			if (a.isCorrect === true) rawReading++;
-		}
-	}
+  for (const a of answers) {
+    const isListening = a.part >= 1 && a.part <= 4;
+    const isReading = a.part >= 5 && a.part <= 7;
+    if (isListening) {
+      listeningTotal++;
+      if (a.isCorrect === true) rawListening++;
+    } else if (isReading) {
+      readingTotal++;
+      if (a.isCorrect === true) rawReading++;
+    }
+  }
 
-	const scaledListening = rawToScaledListening(rawListening, listeningTotal);
-	const scaledReading = rawToScaledReading(rawReading, readingTotal);
+  const scaledListening = rawToScaledListening(rawListening, listeningTotal);
+  const scaledReading = rawToScaledReading(rawReading, readingTotal);
 
-	return {
-		rawListening,
-		rawReading,
-		scaledListening,
-		scaledReading,
-		totalScaled: scaledListening + scaledReading,
-		listeningTotal,
-		readingTotal,
-	};
+  return {
+    rawListening,
+    rawReading,
+    scaledListening,
+    scaledReading,
+    totalScaled: scaledListening + scaledReading,
+    listeningTotal,
+    readingTotal,
+  };
 }

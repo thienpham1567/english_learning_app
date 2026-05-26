@@ -1,9 +1,9 @@
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("study-sets/generate");
 
@@ -26,9 +26,8 @@ export async function POST(request: Request) {
     return Response.json({ error: "topicTitle is required" }, { status: 400 });
   }
 
-  const examCtx = examMode === "ielts"
-    ? "IELTS Academic contexts"
-    : "TOEIC business/workplace contexts";
+  const examCtx =
+    examMode === "ielts" ? "IELTS Academic contexts" : "TOEIC business/workplace contexts";
 
   const systemPrompt = `You are an English content generator for Vietnamese learners preparing for ${examCtx}.
 Generate a complete study set about "${topicTitle}" at ${level || "B1"} level.

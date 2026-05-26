@@ -151,7 +151,10 @@ export async function POST(request: Request) {
     .join(", ");
 
   const speakerExamples = picked
-    .map((v, i) => `    { "speaker": "${speakerLabels[i]}", "name": "${v.name}", "text": "English dialogue line..." }`)
+    .map(
+      (v, i) =>
+        `    { "speaker": "${speakerLabels[i]}", "name": "${v.name}", "text": "English dialogue line..." }`,
+    )
     .join(",\n");
 
   const prompt = `Generate a natural ENGLISH conversation between ${speakers} people for language learning practice.
@@ -190,7 +193,10 @@ ${speakerExamples}
       {
         model: openAiConfig.chatModel,
         messages: [
-          { role: "system", content: "You are a dialogue writer for English learning apps. Return only valid JSON." },
+          {
+            role: "system",
+            content: "You are a dialogue writer for English learning apps. Return only valid JSON.",
+          },
           { role: "user", content: prompt },
         ],
         temperature: 0.85,
@@ -201,20 +207,29 @@ ${speakerExamples}
     );
 
     const raw = completion.choices[0]?.message?.content?.trim() ?? "";
-    const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
+    const cleaned = raw
+      .replace(/^```(?:json)?\s*/i, "")
+      .replace(/\s*```$/i, "")
+      .trim();
 
     let parsed: Record<string, unknown>;
     try {
       parsed = JSON.parse(cleaned) as Record<string, unknown>;
     } catch {
       log.error({ preview: cleaned.slice(0, 120) }, "dialogue.json.parse.failed");
-      return Response.json({ error: "Không thể tạo hội thoại. Vui lòng thử lại." }, { status: 502 });
+      return Response.json(
+        { error: "Không thể tạo hội thoại. Vui lòng thử lại." },
+        { status: 502 },
+      );
     }
 
     const rawLines = Array.isArray(parsed.lines) ? parsed.lines : [];
     const lines = rawLines
-      .filter((l): l is Record<string, unknown> =>
-        typeof l === "object" && l !== null && typeof (l as Record<string, unknown>).text === "string",
+      .filter(
+        (l): l is Record<string, unknown> =>
+          typeof l === "object" &&
+          l !== null &&
+          typeof (l as Record<string, unknown>).text === "string",
       )
       .map((l) => ({
         speaker: String(l.speaker ?? "A"),

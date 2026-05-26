@@ -1,8 +1,8 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import { synthesizeTtsForVoice, VOICES, parseAccent } from "@/lib/tts/groq";
-import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
 import { routeLogger } from "@/lib/logger";
+import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
+import { parseAccent, synthesizeTtsForVoice, VOICES } from "@/lib/tts/groq";
 
 /**
  * POST /api/reading/audio/paragraph
@@ -36,7 +36,7 @@ export async function POST(request: Request) {
   }
 
   try {
-    const body = await request.json() as { text?: string; voice?: string; accent?: string };
+    const body = (await request.json()) as { text?: string; voice?: string; accent?: string };
     const text = body.text?.trim();
 
     if (!text || text.length < 2) {
@@ -50,7 +50,12 @@ export async function POST(request: Request) {
     const voice = body.voice || VOICES[accent];
     const speed = 0.9;
     const cacheKey = `${voice}|${speed}|${text}`;
-    const log = routeLogger("reading/audio/paragraph", { userId, voice, accent, chars: text.length });
+    const log = routeLogger("reading/audio/paragraph", {
+      userId,
+      voice,
+      accent,
+      chars: text.length,
+    });
 
     const cached = await readTtsCache("reading-paragraph", cacheKey, "wav");
     if (cached) {

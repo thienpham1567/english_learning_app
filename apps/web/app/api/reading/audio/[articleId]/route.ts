@@ -1,15 +1,9 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import {
-  synthesizeTtsForVoice,
-  parseAccent,
-  VOICES,
-  VOICE_BY_ROLE,
-
-} from "@/lib/tts/groq";
+import { routeLogger } from "@/lib/logger";
 import { fetchGuardianArticle } from "@/lib/reading/utils";
 import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
-import { routeLogger } from "@/lib/logger";
+import { parseAccent, synthesizeTtsForVoice, VOICE_BY_ROLE, VOICES } from "@/lib/tts/groq";
 
 /**
  * GET /api/reading/audio/[articleId]?accent=us|uk|au
@@ -72,9 +66,7 @@ export async function GET(
 
   // Resolve voice: explicit voice name > accent default
   const allVoiceNames = Object.values(VOICE_BY_ROLE);
-  const voice = (voiceParam && allVoiceNames.includes(voiceParam))
-    ? voiceParam
-    : VOICES[accent];
+  const voice = voiceParam && allVoiceNames.includes(voiceParam) ? voiceParam : VOICES[accent];
 
   const cacheKey = `${articleId}|${voice}`;
   const log = routeLogger("reading/audio", { userId, articleId, voice, accent });

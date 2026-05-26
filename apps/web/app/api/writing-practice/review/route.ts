@@ -4,13 +4,13 @@ import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("writing-practice/review");
-import { db } from "@repo/database";
-import { writingSubmission } from "@repo/database";
+
+import { db, writingSubmission } from "@repo/database";
+import { logActivity } from "@/lib/activity-log";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 import { ReviewRequestSchema, WritingFeedbackSchema } from "@/lib/writing-practice/schema";
 import { awardXP, XP_VALUES } from "@/lib/xp";
-import { logActivity } from "@/lib/activity-log";
 
 const REVIEW_SYSTEM_PROMPT = `You are Christine Ho, an expert TOEIC Writing evaluator and English tutor.
 Review the student's writing based on TOEIC Writing scoring criteria.
@@ -117,12 +117,18 @@ export async function POST(request: Request) {
 
         // Award XP for writing submission
         void awardXP(session.user.id, XP_VALUES.WRITING_SUBMISSION).catch(() => {});
-        logActivity(session.user.id, "writing_practice", XP_VALUES.WRITING_SUBMISSION, { wordCount, overallBand: feedback.overallBand });
+        logActivity(session.user.id, "writing_practice", XP_VALUES.WRITING_SUBMISSION, {
+          wordCount,
+          overallBand: feedback.overallBand,
+        });
 
         return Response.json({ feedback });
       }
 
-      log.warn({ attempt: attempt + 1, errors: validated.error.flatten() }, "writing-practice.review.validation.failed");
+      log.warn(
+        { attempt: attempt + 1, errors: validated.error.flatten() },
+        "writing-practice.review.validation.failed",
+      );
     } catch (err) {
       log.error({ err, attempt: attempt + 1 }, "writing-practice.review.failed");
     }

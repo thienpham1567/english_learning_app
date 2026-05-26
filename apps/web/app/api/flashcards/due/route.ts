@@ -1,9 +1,7 @@
+import { db, flashcardProgress, userVocabulary, vocabularyCache } from "@repo/database";
+import { and, eq, sql } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, and, sql } from "drizzle-orm";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { userVocabulary, vocabularyCache, flashcardProgress } from "@repo/database";
 
 type VocabDataShape = {
   headword: string;

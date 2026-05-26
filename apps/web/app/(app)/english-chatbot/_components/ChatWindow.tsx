@@ -1,16 +1,15 @@
 "use client";
 
+import { AlertCircle, ArrowDown } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ArrowDown, AlertCircle } from "lucide-react";
-
-import { TypingIndicator } from "@/app/(app)/english-chatbot/_components/TypingIndicator";
-import { ChatMessage } from "@/app/(app)/english-chatbot/_components/ChatMessage";
-import type { PageMessage } from "@/app/(app)/english-chatbot/_components/ChatMessage";
 import { useChatConversations } from "@/app/(app)/english-chatbot/_components/ChatConversationProvider";
 import { ChatHeader } from "@/app/(app)/english-chatbot/_components/ChatHeader";
 import { ChatInputBar } from "@/app/(app)/english-chatbot/_components/ChatInputBar";
+import type { PageMessage } from "@/app/(app)/english-chatbot/_components/ChatMessage";
+import { ChatMessage } from "@/app/(app)/english-chatbot/_components/ChatMessage";
 import { EmptyState } from "@/app/(app)/english-chatbot/_components/EmptyState";
 import { PronunciationFeedback } from "@/app/(app)/english-chatbot/_components/PronunciationFeedback";
+import { TypingIndicator } from "@/app/(app)/english-chatbot/_components/TypingIndicator";
 
 import { useChatMessages } from "@/hooks/useChatMessages";
 import { useChatScroll } from "@/hooks/useChatScroll";
@@ -55,7 +54,9 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const [selectedPersonaId, setSelectedPersonaId] = useState(DEFAULT_PERSONA_ID);
 
   // ── Voice hook (needs sendRef for auto-send in voice mode) ──
-  const sendRef = useRef<(text?: string) => Promise<void>>(null as unknown as (text?: string) => Promise<void>);
+  const sendRef = useRef<(text?: string) => Promise<void>>(
+    null as unknown as (text?: string) => Promise<void>,
+  );
   const messagesRef = useRef<PageMessage[]>([]);
 
   const chatVoice = useChatVoice({
@@ -133,7 +134,6 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
 
   return (
     <div className="relative flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-(--chat-bg) z-10">
-      
       <ChatHeader personaId={selectedPersonaId} isLoading={chat.isLoading} />
 
       <div
@@ -143,12 +143,11 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       >
         {/* Grain overlay */}
         <div className="grain-overlay opacity-30" />
-        
+
         {/* Warm radial glow behind the conversations */}
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_0%,rgba(192,125,43,0.06),transparent_70%)] z-0" />
 
         <div className="relative mx-auto flex min-h-full w-full max-w-2xl flex-col z-10">
-          
           {chat.isLoadingMessages && conversationId && <ChatSkeleton />}
 
           {!hasMessages && !chat.isLoadingMessages && (
@@ -165,17 +164,12 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
           {hasMessages && !chat.isLoadingMessages && (
             <div className="flex flex-col">
               {chat.messages.map((m, index) => (
-                <div
-                  key={m.id}
-                  className={getMessageSpacingClass(m, chat.messages[index - 1])}
-                >
+                <div key={m.id} className={getMessageSpacingClass(m, chat.messages[index - 1])}>
                   <ChatMessage
                     message={m}
                     persona={activePersona}
                     isStreaming={
-                      chat.isLoading &&
-                      index === chat.messages.length - 1 &&
-                      m.role === "assistant"
+                      chat.isLoading && index === chat.messages.length - 1 && m.role === "assistant"
                     }
                     onSpeak={
                       chatVoice.tts.isSupported
@@ -185,9 +179,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                     isSpeaking={chatVoice.tts.isSpeaking && chatVoice.speakingMsgId === m.id}
                     isTtsLoading={chatVoice.tts.isLoading && chatVoice.speakingMsgId === m.id}
                     onStopSpeak={
-                      chatVoice.tts.isSupported
-                        ? () => chatVoice.stopSpeaking()
-                        : undefined
+                      chatVoice.tts.isSupported ? () => chatVoice.stopSpeaking() : undefined
                     }
                     isLastAssistant={m.id === lastAssistantId}
                     onRegenerate={chat.regenerate}
@@ -210,12 +202,10 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                     )}
                 </div>
               ))}
-              
+
               {chat.isLoading && !streamingHasStarted && (
                 <div className="mt-6">
-                  <TypingIndicator
-                    personaName={activePersona.label.split(" —")[0]}
-                  />
+                  <TypingIndicator personaName={activePersona.label.split(" —")[0]} />
                 </div>
               )}
             </div>

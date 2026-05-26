@@ -37,10 +37,14 @@ export function StreakFire({ streak, showCount = true }: StreakFireProps) {
       <div style={{ position: "relative", display: "inline-flex", alignItems: "center" }}>
         {/* Main flame */}
         <m.span
-          animate={{ 
+          animate={{
             scale: [1, 1.1, 1],
             rotate: [0, -3, 3, 0],
-            filter: ["drop-shadow(0 0 2px rgba(249,115,22,0.4))", "drop-shadow(0 0 8px rgba(249,115,22,0.7))", "drop-shadow(0 0 2px rgba(249,115,22,0.4))"]
+            filter: [
+              "drop-shadow(0 0 2px rgba(249,115,22,0.4))",
+              "drop-shadow(0 0 8px rgba(249,115,22,0.7))",
+              "drop-shadow(0 0 2px rgba(249,115,22,0.4))",
+            ],
           }}
           transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
           style={{
@@ -57,10 +61,10 @@ export function StreakFire({ streak, showCount = true }: StreakFireProps) {
         {/* Particles */}
         {config.particles >= 2 && (
           <m.span
-            animate={{ 
+            animate={{
               scale: [1, 1.2, 1],
               rotate: [0, 5, -5, 0],
-              opacity: [0.5, 0.8, 0.5]
+              opacity: [0.5, 0.8, 0.5],
             }}
             transition={{ repeat: Infinity, duration: 1.5, ease: "easeInOut", delay: 0.2 }}
             style={{
@@ -79,10 +83,10 @@ export function StreakFire({ streak, showCount = true }: StreakFireProps) {
         )}
         {config.particles >= 3 && (
           <m.span
-            animate={{ 
+            animate={{
               scale: [1, 1.1, 1],
               rotate: [0, -5, 5, 0],
-              opacity: [0.4, 0.7, 0.4]
+              opacity: [0.4, 0.7, 0.4],
             }}
             transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut", delay: 0.4 }}
             style={{

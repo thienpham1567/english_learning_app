@@ -1,14 +1,18 @@
-import { headers } from "next/headers";
 import { and, eq } from "drizzle-orm";
+import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("grammar-lessons/generate");
-import { GrammarLessonGenerateRequestSchema, GrammarLessonSchema } from "@/lib/grammar-lessons/schema";
+
+import { db, grammarLessonCache, grammarLessonProgress } from "@repo/database";
+import {
+  GrammarLessonGenerateRequestSchema,
+  GrammarLessonSchema,
+} from "@/lib/grammar-lessons/schema";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { db, grammarLessonCache, grammarLessonProgress } from "@repo/database";
 
 /**
  * POST /api/grammar-lessons/generate
@@ -39,11 +43,13 @@ export async function POST(request: Request) {
   const [existingProgress] = await db
     .select({ id: grammarLessonProgress.id, status: grammarLessonProgress.status })
     .from(grammarLessonProgress)
-    .where(and(
-      eq(grammarLessonProgress.userId, session.user.id),
-      eq(grammarLessonProgress.topicId, topic),
-      eq(grammarLessonProgress.examMode, examMode),
-    ))
+    .where(
+      and(
+        eq(grammarLessonProgress.userId, session.user.id),
+        eq(grammarLessonProgress.topicId, topic),
+        eq(grammarLessonProgress.examMode, examMode),
+      ),
+    )
     .limit(1);
 
   if (!existingProgress) {
@@ -67,12 +73,14 @@ export async function POST(request: Request) {
     const [cached] = await db
       .select({ content: grammarLessonCache.content })
       .from(grammarLessonCache)
-      .where(and(
-        eq(grammarLessonCache.topicId, topic),
-        eq(grammarLessonCache.examMode, examMode),
-        eq(grammarLessonCache.level, level),
-        eq(grammarLessonCache.lessonVersion, lessonVersion),
-      ))
+      .where(
+        and(
+          eq(grammarLessonCache.topicId, topic),
+          eq(grammarLessonCache.examMode, examMode),
+          eq(grammarLessonCache.level, level),
+          eq(grammarLessonCache.lessonVersion, lessonVersion),
+        ),
+      )
       .limit(1);
 
     const cachedLesson = cached ? GrammarLessonSchema.safeParse(cached.content) : null;
@@ -81,9 +89,10 @@ export async function POST(request: Request) {
     }
   }
 
-  const examContext = examMode === "ielts"
-    ? "IELTS Academic writing and speaking contexts"
-    : "TOEIC business and workplace contexts";
+  const examContext =
+    examMode === "ielts"
+      ? "IELTS Academic writing and speaking contexts"
+      : "TOEIC business and workplace contexts";
 
   const systemPrompt = `You are a world-class English grammar teacher who has helped thousands of Vietnamese learners achieve TOEIC 900+ scores.
 Generate an extremely comprehensive, detailed, bilingual grammar lesson for: "${topicTitle}" at ${level || "B1"} level, specifically for ${examContext}.
@@ -167,7 +176,6 @@ CRITICAL Rules:
 - "commonMistakes": exactly 4, with detailed Vietnamese (note) and English (noteEn) explanations (2-3 sentences each)
 - "examples": exactly 6, all in ${examContext} settings
 - Keep everything practical, exam-relevant, and accessible to Vietnamese learners`;
-
 
   for (let attempt = 0; attempt < 2; attempt++) {
     try {

@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
+import { saveQuizHistory } from "@/app/(app)/grammar-quiz/_components/QuizHistory";
 import { api } from "@/lib/api-client";
 import type { GrammarQuestion, QuizState } from "@/lib/grammar-quiz/types";
-import { saveQuizHistory } from "@/app/(app)/grammar-quiz/_components/QuizHistory";
 
 const STORAGE_KEY = "grammar-quiz-level";
 
@@ -41,16 +41,16 @@ export function useGrammarQuiz() {
 
         if (sourceMode === "ets") {
           // Fetch real ETS questions from static data
-          data = await api.post<{ questions: GrammarQuestion[] }>(
-            "/grammar-quiz/ets",
-            { count: 10 },
-          );
+          data = await api.post<{ questions: GrammarQuestion[] }>("/grammar-quiz/ets", {
+            count: 10,
+          });
         } else {
           // Generate AI questions
-          data = await api.post<{ questions: GrammarQuestion[] }>(
-            "/grammar-quiz/generate",
-            { level: targetLevel, count: 10, examMode },
-          );
+          data = await api.post<{ questions: GrammarQuestion[] }>("/grammar-quiz/generate", {
+            level: targetLevel,
+            count: 10,
+            examMode,
+          });
         }
 
         setQuestions(data.questions);

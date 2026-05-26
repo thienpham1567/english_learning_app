@@ -1,7 +1,16 @@
 "use client";
 
+import {
+  AlertCircle,
+  CheckCircle2,
+  ChevronDown,
+  ChevronUp,
+  Loader2,
+  Sparkles,
+  Volume2,
+  XCircle,
+} from "lucide-react";
 import { useState } from "react";
-import { Loader2, Volume2, ChevronDown, ChevronUp, AlertCircle, Sparkles, CheckCircle2, XCircle } from "lucide-react";
 
 type WordAnalysis = {
   word: string;
@@ -74,7 +83,9 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
         className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border cursor-pointer transition-all duration-200 hover:brightness-110 active:scale-98 shadow-sm ${badgeStyle}`}
       >
         <Volume2 className="h-3.5 w-3.5" />
-        <span>{score}/100 · {getScoreLabel(score)}</span>
+        <span>
+          {score}/100 · {getScoreLabel(score)}
+        </span>
         {expanded ? <ChevronUp className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}
       </button>
 
@@ -84,19 +95,29 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
           {/* Detailed Scores Grid */}
           <div className="grid grid-cols-2 gap-4 mb-3 pb-3 border-b-2 border-border/60">
             <div className="flex flex-col gap-0.5">
-              <span className="text-[10px] text-(--text-muted) font-bold uppercase tracking-wider">Độ chính xác</span>
-              <span className="text-sm font-semibold text-(--text-primary)">{data.accuracy ?? 0}%</span>
+              <span className="text-[10px] text-(--text-muted) font-bold uppercase tracking-wider">
+                Độ chính xác
+              </span>
+              <span className="text-sm font-semibold text-(--text-primary)">
+                {data.accuracy ?? 0}%
+              </span>
             </div>
             <div className="flex flex-col gap-0.5">
-              <span className="text-[10px] text-(--text-muted) font-bold uppercase tracking-wider">Độ trôi chảy</span>
-              <span className="text-sm font-semibold text-(--text-primary)">{data.fluency ?? 0}%</span>
+              <span className="text-[10px] text-(--text-muted) font-bold uppercase tracking-wider">
+                Độ trôi chảy
+              </span>
+              <span className="text-sm font-semibold text-(--text-primary)">
+                {data.fluency ?? 0}%
+              </span>
             </div>
           </div>
 
           {/* Word Analysis Tags */}
           {data.wordAnalysis && data.wordAnalysis.length > 0 && (
             <div className="mb-3.5">
-              <div className="text-[10px] text-(--text-muted) font-bold uppercase tracking-wider mb-1.5">Phân tích từng từ</div>
+              <div className="text-[10px] text-(--text-muted) font-bold uppercase tracking-wider mb-1.5">
+                Phân tích từng từ
+              </div>
               <div className="flex flex-wrap gap-1.5">
                 {data.wordAnalysis.map((w, i) => (
                   <div
@@ -128,7 +149,10 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
           {data.tips && data.tips.length > 0 && (
             <div className="mb-3.5 space-y-1 bg-(--chat-bg)/40 p-2.5 rounded-xl border-2 border-border">
               {data.tips.map((tip, i) => (
-                <div key={i} className="flex gap-1.5 text-(--text-secondary) leading-relaxed items-start">
+                <div
+                  key={i}
+                  className="flex gap-1.5 text-(--text-secondary) leading-relaxed items-start"
+                >
                   <Sparkles className="h-3.5 w-3.5 text-accent shrink-0 mt-0.5" />
                   <span>{tip}</span>
                 </div>

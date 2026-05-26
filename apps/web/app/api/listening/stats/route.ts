@@ -1,10 +1,11 @@
-import { headers } from "next/headers";
-import { eq, and, isNotNull, gte, sql } from "drizzle-orm";
-import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { and, eq, gte, isNotNull, sql } from "drizzle-orm";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("listening/stats");
+
 import { listeningExercise, userStreak } from "@repo/database";
 
 /**

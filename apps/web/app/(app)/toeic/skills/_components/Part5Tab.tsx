@@ -1,14 +1,13 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
 import { Clock, History } from "lucide-react";
-
-import { useGrammarQuiz } from "@/hooks/useGrammarQuiz";
-import { useExamMode } from "@/components/shared/ExamModeProvider";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { CEFRPath } from "@/app/(app)/grammar-quiz/_components/CEFRPath";
 import { QuestionCard } from "@/app/(app)/grammar-quiz/_components/QuestionCard";
-import { ScoreSummary } from "@/app/(app)/grammar-quiz/_components/ScoreSummary";
 import { QuizHistory } from "@/app/(app)/grammar-quiz/_components/QuizHistory";
+import { ScoreSummary } from "@/app/(app)/grammar-quiz/_components/ScoreSummary";
+import { useExamMode } from "@/components/shared/ExamModeProvider";
+import { useGrammarQuiz } from "@/hooks/useGrammarQuiz";
 
 /**
  * Embedded Part 5 quiz inside the unified TOEIC Skills page.
@@ -57,7 +56,9 @@ export function Part5Tab() {
         });
       }, 1000);
     }
-    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
   }, [state, timedMode, questions.length]);
 
   useEffect(() => {
@@ -66,7 +67,10 @@ export function Part5Tab() {
     }
   }, [timeLeft, timedMode, state, questions.length, nextQuestion]);
 
-  const formatTime = useCallback((s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`, []);
+  const formatTime = useCallback(
+    (s: number) => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, "0")}`,
+    [],
+  );
 
   return (
     <>
@@ -76,10 +80,10 @@ export function Part5Tab() {
           <div className="flex justify-end items-center gap-2 mb-3">
             {timedMode && (
               <span
-                className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold tabular-nums border ${
+                className={`inline-flex items-center px-3 py-1.5 rounded-lg text-xs font-bold tabular-nums border-2 ${
                   timeLeft <= 30
-                    ? "bg-red-950/20 border-red-900/30 text-red-400"
-                    : "bg-slate-900/40 border-border text-slate-400"
+                    ? "bg-error/10 border-error text-error"
+                    : "bg-surface-alt border-border text-text-muted"
                 }`}
               >
                 <Clock className="mr-1.5 h-3.5 w-3.5" />
@@ -89,7 +93,7 @@ export function Part5Tab() {
             <button
               type="button"
               onClick={() => setHistoryOpen(true)}
-              className="w-[34px] h-[34px] rounded-xl border-2 border-border bg-surface text-slate-450 hover:text-slate-200 transition-colors flex items-center justify-center cursor-pointer"
+              className="w-[34px] h-[34px] rounded-xl border-2 border-border bg-surface text-text-secondary hover:text-ink hover:bg-surface-hover hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow-sm) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all flex items-center justify-center cursor-pointer"
             >
               <History className="h-4 w-4" />
             </button>
@@ -117,7 +121,10 @@ export function Part5Tab() {
         )}
 
         {state === "active" && currentQuestion && (
-          <div key={`q-${currentIndex}`} className="w-full animate-in fade-in slide-in-from-left-4 duration-200">
+          <div
+            key={`q-${currentIndex}`}
+            className="w-full animate-in fade-in slide-in-from-left-4 duration-200"
+          >
             <QuestionCard
               question={currentQuestion}
               questionNumber={currentIndex + 1}

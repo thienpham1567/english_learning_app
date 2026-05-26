@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Source_Sans_3, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { JetBrains_Mono, Source_Sans_3, Space_Grotesk } from "next/font/google";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
@@ -49,11 +49,7 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={cn(
-        sourceSans.variable,
-        spaceGrotesk.variable,
-        jetbrainsMono.variable,
-      )}
+      className={cn(sourceSans.variable, spaceGrotesk.variable, jetbrainsMono.variable)}
       suppressHydrationWarning
     >
       <head>
@@ -63,9 +59,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
-      <body>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

@@ -1,9 +1,7 @@
+import { db, readingSession } from "@repo/database";
+import { and, eq, isNull } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, and, isNull } from "drizzle-orm";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { readingSession } from "@repo/database";
 
 /**
  * POST /api/reading/session/finish
@@ -22,7 +20,8 @@ export async function POST(request: Request) {
   const userId = session.user.id;
   const body = await request.json().catch(() => null);
   const passageId = body?.passageId;
-  const scrollPct = body?.scrollPct != null ? Math.min(100, Math.max(0, Number(body.scrollPct))) : undefined;
+  const scrollPct =
+    body?.scrollPct != null ? Math.min(100, Math.max(0, Number(body.scrollPct))) : undefined;
   const clickCount = body?.clickCount != null ? Math.max(0, Number(body.clickCount)) : undefined;
 
   if (!passageId || typeof passageId !== "string") {

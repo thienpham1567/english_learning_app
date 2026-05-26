@@ -1,8 +1,7 @@
 import type { DictionaryEntryType } from "@/lib/dictionary/classify-entry";
 
 const ENTRY_TYPE_CONTEXT: Record<DictionaryEntryType, string> = {
-  word:
-    "This entry is a regular word. Cover all major distinct senses. Set `verbForms` for verbs, `numberInfo` for nouns, `frequencyBand`, and `wordFamily` as applicable.",
+  word: "This entry is a regular word. Cover all major distinct senses. Set `verbForms` for verbs, `numberInfo` for nouns, `frequencyBand`, and `wordFamily` as applicable.",
   phrasal_verb:
     "This entry is a phrasal verb. Focus on the core figurative meaning, particle usage, and whether the verb is separable or inseparable. Set `verbForms` and `numberInfo` to null. Set `frequencyBand` and `wordFamily` to null.",
   idiom:
@@ -40,8 +39,8 @@ export function buildDictionaryInstructions(entryType: DictionaryEntryType) {
     "If partOfSpeech is 'noun', populate `numberInfo`: set `plural` to the standard plural form, or null if the noun is uncountable, plural-only, or singular-only. Set exactly one of `isUncountable`, `isPluralOnly`, `isSingularOnly` to true (the other two false) — these are mutually exclusive. For all non-noun parts of speech, set `numberInfo` to null.",
 
     // ── Frequency and word family ─────────────────────────────────────────
-    "Set `frequencyBand` to one of: \"top1k\", \"top3k\", \"top5k\", \"top10k\", \"rare\", reflecting general English corpus frequency (COCA / Oxford 5000 / CEFR word lists as reference). Set to null for phrasal verbs and idioms.",
-    "Set `wordFamily` to an array of related-form groups, each `{ pos, words }`. Allowed `pos` values: noun, verb, adjective, adverb. Include only standard, attested English words — never invent forms. Do not include the headword itself. Order groups noun → verb → adjective → adverb. Set to null for phrasal verbs, idioms, or words with no meaningful family. Example for 'decide': [{\"pos\":\"noun\",\"words\":[\"decision\",\"indecision\"]},{\"pos\":\"adjective\",\"words\":[\"decisive\",\"undecided\"]},{\"pos\":\"adverb\",\"words\":[\"decisively\"]}]",
+    'Set `frequencyBand` to one of: "top1k", "top3k", "top5k", "top10k", "rare", reflecting general English corpus frequency (COCA / Oxford 5000 / CEFR word lists as reference). Set to null for phrasal verbs and idioms.',
+    'Set `wordFamily` to an array of related-form groups, each `{ pos, words }`. Allowed `pos` values: noun, verb, adjective, adverb. Include only standard, attested English words — never invent forms. Do not include the headword itself. Order groups noun → verb → adjective → adverb. Set to null for phrasal verbs, idioms, or words with no meaningful family. Example for \'decide\': [{"pos":"noun","words":["decision","indecision"]},{"pos":"adjective","words":["decisive","undecided"]},{"pos":"adverb","words":["decisively"]}]',
 
     // ── Sense count and ordering ──────────────────────────────────────────
     "Provide between 1 and 4 senses. Each sense must represent a meaningfully distinct usage — different referents, different syntactic frames, or a clearly figurative vs literal split. Do not split one meaning into multiple senses for minor stylistic shades.",
@@ -77,7 +76,7 @@ export function buildDictionaryInstructions(entryType: DictionaryEntryType) {
     "Set `usageNoteVi` to a clear, concise Vietnamese usage note when the word has a learner-relevant pitfall: false friend, register trap, common confusion with another word, subject/object restriction, or grammatical quirk. 1–3 sentences, friendly tone, addressed to a Vietnamese self-learner. Set to null when there is no meaningful learner-critical note for this sense — do not pad.",
 
     // ── Sense: common mistakes ────────────────────────────────────────────
-    "List 1 to 3 common mistakes Vietnamese learners make with this sense in `commonMistakesVi`. Each item is a complete Vietnamese sentence describing the error and stating the correct usage. Example: 'Không dùng \"leave\" thay cho \"let\" trong câu cho phép — hãy dùng \"Let me go\", không phải \"Leave me go\".' Use [] when no recurring Vietnamese-learner mistake applies to this sense.",
+    'List 1 to 3 common mistakes Vietnamese learners make with this sense in `commonMistakesVi`. Each item is a complete Vietnamese sentence describing the error and stating the correct usage. Example: \'Không dùng "leave" thay cho "let" trong câu cho phép — hãy dùng "Let me go", không phải "Leave me go".\' Use [] when no recurring Vietnamese-learner mistake applies to this sense.',
 
     // ── Self-check ────────────────────────────────────────────────────────
     "Before responding, verify: every required field is present; sense `id` slugs are unique; bold formatting (`**`) appears only in the fields where it is allowed (English example sentences and English collocations); no markdown elsewhere; Vietnamese reads naturally.",

@@ -1,12 +1,8 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import {
-  synthesizeTtsForVoice,
-  VOICE_BY_ROLE,
-  type VoiceRole,
-} from "@/lib/tts/groq";
-import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
 import { routeLogger } from "@/lib/logger";
+import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
+import { synthesizeTtsForVoice, VOICE_BY_ROLE, type VoiceRole } from "@/lib/tts/groq";
 
 /**
  * POST /api/read-aloud
@@ -114,9 +110,6 @@ export async function POST(request: Request) {
   } catch (err) {
     const message = err instanceof Error ? err.message : String(err);
     log.error({ err: message }, "tts.failed");
-    return Response.json(
-      { error: `Lỗi tổng hợp giọng nói: ${message}` },
-      { status: 502 },
-    );
+    return Response.json({ error: `Lỗi tổng hợp giọng nói: ${message}` }, { status: 502 });
   }
 }

@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { Flex, Typography } from "antd";
 import * as m from "motion/react-client";
+import { useEffect, useState } from "react";
 
 const { Text } = Typography;
 

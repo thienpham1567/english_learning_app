@@ -2,7 +2,11 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 
-export function useChatScroll(deps: { messagesLength: number; isLoading: boolean; error: string | null }) {
+export function useChatScroll(deps: {
+  messagesLength: number;
+  isLoading: boolean;
+  error: string | null;
+}) {
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const bottomRef = useRef<HTMLDivElement>(null);
   const isNearBottomRef = useRef(true);

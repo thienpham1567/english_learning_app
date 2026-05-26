@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("speaking/topic");
+
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 
@@ -95,7 +96,11 @@ Return ONLY valid JSON:
       {
         model: openAiConfig.chatModel,
         messages: [
-          { role: "system", content: "You are an English speaking practice topic generator. Return only valid JSON." },
+          {
+            role: "system",
+            content:
+              "You are an English speaking practice topic generator. Return only valid JSON.",
+          },
           { role: "user", content: prompt },
         ],
         temperature: 0.9,
@@ -119,9 +124,12 @@ Return ONLY valid JSON:
     }
 
     const parsed = (parsedUnknown ?? {}) as Record<string, unknown>;
-    const topicValue = typeof parsed.topic === "string" ? parsed.topic.trim().slice(0, MAX_TOPIC_LEN) : "";
+    const topicValue =
+      typeof parsed.topic === "string" ? parsed.topic.trim().slice(0, MAX_TOPIC_LEN) : "";
     const descriptionValue =
-      typeof parsed.description === "string" ? parsed.description.trim().slice(0, MAX_TOPIC_LEN) : "";
+      typeof parsed.description === "string"
+        ? parsed.description.trim().slice(0, MAX_TOPIC_LEN)
+        : "";
 
     if (!topicValue) {
       return Response.json({ error: "Failed to generate topic" }, { status: 502 });

@@ -1,11 +1,10 @@
 "use client";
 
-import { useRef, useCallback } from "react";
-import { Mic, MicOff, Send, Square, Loader2, Volume2, Check } from "lucide-react";
-
-import { PersonaSwitcher } from "./PersonaSwitcher";
-import type { useVoiceInput } from "@/hooks/useVoiceInput";
+import { Check, Loader2, Mic, MicOff, Send, Square, Volume2 } from "lucide-react";
+import { useCallback, useRef } from "react";
 import type { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import type { useVoiceInput } from "@/hooks/useVoiceInput";
+import { PersonaSwitcher } from "./PersonaSwitcher";
 
 type Props = {
   input: string;
@@ -81,7 +80,6 @@ export function ChatInputBar({
       <div className="mx-auto max-w-3xl flex flex-col gap-3">
         {/* Input Bar Container */}
         <div className="flex items-end gap-2.5 rounded-2xl border-2 border-border bg-(--chat-input-bg) p-3 shadow-md focus-within:border-accent/40 focus-within:ring-1 focus-within:ring-accent/40 transition-all duration-200">
-          
           <div className="pb-1">
             <PersonaSwitcher
               value={selectedPersonaId}
@@ -167,9 +165,7 @@ export function ChatInputBar({
           <span className="hidden sm:inline font-mono">
             Enter để gửi · Shift+Enter để xuống dòng
           </span>
-          <span className="sm:hidden font-mono">
-            Nhấn Enter để gửi
-          </span>
+          <span className="sm:hidden font-mono">Nhấn Enter để gửi</span>
 
           <div className="flex items-center gap-2">
             {/* Voice Mode toggle pill */}
@@ -183,9 +179,7 @@ export function ChatInputBar({
                 }`}
               >
                 <Mic className="h-3 w-3" />
-                <span>
-                  {voiceMode ? `Chế độ nói (${voiceExchanges})` : "Chế độ nói"}
-                </span>
+                <span>{voiceMode ? `Chế độ nói (${voiceExchanges})` : "Chế độ nói"}</span>
               </button>
             )}
 

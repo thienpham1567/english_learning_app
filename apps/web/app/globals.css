@@ -18,6 +18,13 @@
   --color-text-secondary: var(--text-secondary);
   --color-text-muted: var(--text-muted);
 
+  --color-error: var(--error);
+  --color-error-bg: var(--error-bg);
+  --color-success: var(--success);
+  --color-success-bg: var(--success-bg);
+  --color-warning: var(--warning);
+  --color-warning-bg: var(--warning-bg);
+
   --font-display: var(--font-display);
   --font-body: var(--font-body);
   --font-mono: var(--font-mono);
@@ -29,7 +36,9 @@
   --radius-2xl: var(--radius-2xl);
 }
 
-@variant dark ([data-theme="dark"] &);
+@variant dark
+(
+[data-theme="dark"] &);
 
 :root {
   /* ══════════════════════════════════════════════

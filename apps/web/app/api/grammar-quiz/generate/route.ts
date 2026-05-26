@@ -5,11 +5,12 @@ import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("grammar-quiz/generate");
+
+import { recordLearningEvent } from "@repo/modules";
+import { getExamContext, parseExamMode } from "@/lib/exam-mode/context";
+import { QuizGenerationResponseSchema } from "@/lib/grammar-quiz/schema";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { QuizGenerationResponseSchema } from "@/lib/grammar-quiz/schema";
-import { getExamContext, parseExamMode } from "@/lib/exam-mode/context";
-import { recordLearningEvent } from "@repo/modules";
 
 const RequestBodySchema = z.object({
   level: z.enum(["easy", "medium", "hard"]),
@@ -122,14 +123,18 @@ export async function POST(request: Request) {
           result: "neutral",
           score: null,
           durationMs: 0,
-          difficulty: level === "easy" ? "beginner" : level === "hard" ? "advanced" : "intermediate",
+          difficulty:
+            level === "easy" ? "beginner" : level === "hard" ? "advanced" : "intermediate",
         });
 
         return Response.json({ questions: validated.data.questions });
       }
 
       // Invalid format — retry
-      log.warn({ attempt: attempt + 1, errors: validated.error.flatten() }, "grammar-quiz.generate.validation.failed");
+      log.warn(
+        { attempt: attempt + 1, errors: validated.error.flatten() },
+        "grammar-quiz.generate.validation.failed",
+      );
     } catch (err) {
       log.error({ err, attempt: attempt + 1 }, "grammar-quiz.generate.failed");
     }

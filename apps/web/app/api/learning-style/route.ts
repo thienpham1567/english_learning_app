@@ -1,11 +1,11 @@
-import { headers } from "next/headers";
-import { eq, sql } from "drizzle-orm";
-
-import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { eq, sql } from "drizzle-orm";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("learning-style");
+
 import { activityLog } from "@repo/database";
 
 /**
@@ -23,10 +23,22 @@ const STYLE_MAP: Record<string, string[]> = {
 };
 
 const STYLE_INFO: Record<string, { icon: string; name: string; description: string }> = {
-  visual: { icon: "👁️", name: "Học trực quan", description: "Bạn học tốt nhất qua hình ảnh và flashcard" },
+  visual: {
+    icon: "👁️",
+    name: "Học trực quan",
+    description: "Bạn học tốt nhất qua hình ảnh và flashcard",
+  },
   reading: { icon: "📖", name: "Học qua đọc", description: "Bạn thích đọc và phân tích ngữ pháp" },
-  conversational: { icon: "💬", name: "Học qua giao tiếp", description: "Bạn tiến bộ nhanh qua hội thoại và luyện nói" },
-  practice: { icon: "✍️", name: "Học qua thực hành", description: "Bạn học tốt nhất qua bài tập và thử thách" },
+  conversational: {
+    icon: "💬",
+    name: "Học qua giao tiếp",
+    description: "Bạn tiến bộ nhanh qua hội thoại và luyện nói",
+  },
+  practice: {
+    icon: "✍️",
+    name: "Học qua thực hành",
+    description: "Bạn học tốt nhất qua bài tập và thử thách",
+  },
 };
 
 const MODULE_LABELS: Record<string, { label: string; href: string }> = {
@@ -97,8 +109,9 @@ export async function GET() {
     const sortedModules = Object.entries(engagement).sort(([, a], [, b]) => b - a);
     const strongModule = sortedModules[0]?.[0];
     const allModules = Object.keys(MODULE_LABELS).filter((m) => m !== "diagnostic_test");
-    const weakModule = allModules.find((m) => !engagement[m] || engagement[m] === 0)
-      ?? sortedModules[sortedModules.length - 1]?.[0];
+    const weakModule =
+      allModules.find((m) => !engagement[m] || engagement[m] === 0) ??
+      sortedModules[sortedModules.length - 1]?.[0];
 
     const suggestions: Array<{ label: string; href: string; reason: string }> = [];
 

@@ -1,8 +1,7 @@
-import { unstable_cache } from "next/cache";
-
-import { resolveWebActor } from "@/lib/resolve-actor";
 import { drizzleDashboardQueryService } from "@repo/database";
 import { AppError, UnauthorizedError } from "@repo/shared";
+import { unstable_cache } from "next/cache";
+import { resolveWebActor } from "@/lib/resolve-actor";
 
 /**
  * GET /api/dashboard

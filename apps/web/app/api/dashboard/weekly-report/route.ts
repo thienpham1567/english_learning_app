@@ -1,19 +1,18 @@
-import { headers } from "next/headers";
-import { eq, and, gte, sql, desc } from "drizzle-orm";
-
-import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
 import {
-  dailyChallenge,
   activityLog,
-  userVocabulary,
-  listeningExercise,
+  dailyChallenge,
+  db,
   errorLog,
+  listeningExercise,
   userStreak,
+  userVocabulary,
 } from "@repo/database";
+import { and, desc, eq, gte, sql } from "drizzle-orm";
+import { headers } from "next/headers";
+import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("dashboard/weekly-report");
 
@@ -35,92 +34,86 @@ export async function GET() {
   sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
 
   // Parallel data aggregation
-  const [
-    activities,
-    challenges,
-    newVocab,
-    listeningResults,
-    unresolvedErrors,
-    streakData,
-  ] = await Promise.all([
-    // Total activities + XP
-    db
-      .select({
-        count: sql<number>`count(*)::int`,
-        totalXP: sql<number>`coalesce(sum(${activityLog.xpEarned}), 0)::int`,
-        avgPerDay: sql<number>`count(DISTINCT ${activityLog.createdAt}::date)::int`,
-      })
-      .from(activityLog)
-      .where(and(eq(activityLog.userId, userId), gte(activityLog.createdAt, sevenDaysAgo))),
+  const [activities, challenges, newVocab, listeningResults, unresolvedErrors, streakData] =
+    await Promise.all([
+      // Total activities + XP
+      db
+        .select({
+          count: sql<number>`count(*)::int`,
+          totalXP: sql<number>`coalesce(sum(${activityLog.xpEarned}), 0)::int`,
+          avgPerDay: sql<number>`count(DISTINCT ${activityLog.createdAt}::date)::int`,
+        })
+        .from(activityLog)
+        .where(and(eq(activityLog.userId, userId), gte(activityLog.createdAt, sevenDaysAgo))),
 
-    // Challenge scores
-    db
-      .select({
-        score: dailyChallenge.score,
-        date: dailyChallenge.challengeDate,
-      })
-      .from(dailyChallenge)
-      .where(
-        and(
-          eq(dailyChallenge.userId, userId),
-          gte(dailyChallenge.createdAt, sevenDaysAgo),
-          sql`${dailyChallenge.completedAt} IS NOT NULL`,
+      // Challenge scores
+      db
+        .select({
+          score: dailyChallenge.score,
+          date: dailyChallenge.challengeDate,
+        })
+        .from(dailyChallenge)
+        .where(
+          and(
+            eq(dailyChallenge.userId, userId),
+            gte(dailyChallenge.createdAt, sevenDaysAgo),
+            sql`${dailyChallenge.completedAt} IS NOT NULL`,
+          ),
+        )
+        .orderBy(desc(dailyChallenge.createdAt)),
+
+      // New vocabulary saved
+      db
+        .select({ count: sql<number>`count(*)::int` })
+        .from(userVocabulary)
+        .where(
+          and(
+            eq(userVocabulary.userId, userId),
+            gte(userVocabulary.lookedUpAt, sevenDaysAgo),
+            eq(userVocabulary.saved, true),
+          ),
         ),
-      )
-      .orderBy(desc(dailyChallenge.createdAt)),
 
-    // New vocabulary saved
-    db
-      .select({ count: sql<number>`count(*)::int` })
-      .from(userVocabulary)
-      .where(
-        and(
-          eq(userVocabulary.userId, userId),
-          gte(userVocabulary.lookedUpAt, sevenDaysAgo),
-          eq(userVocabulary.saved, true),
+      // Listening exercises
+      db
+        .select({
+          score: listeningExercise.score,
+          total: sql<number>`jsonb_array_length(${listeningExercise.questions})::int`,
+        })
+        .from(listeningExercise)
+        .where(
+          and(
+            eq(listeningExercise.userId, userId),
+            gte(listeningExercise.createdAt, sevenDaysAgo),
+            sql`${listeningExercise.score} IS NOT NULL`,
+          ),
         ),
-      ),
 
-    // Listening exercises
-    db
-      .select({
-        score: listeningExercise.score,
-        total: sql<number>`jsonb_array_length(${listeningExercise.questions})::int`,
-      })
-      .from(listeningExercise)
-      .where(
-        and(
-          eq(listeningExercise.userId, userId),
-          gte(listeningExercise.createdAt, sevenDaysAgo),
-          sql`${listeningExercise.score} IS NOT NULL`,
+      // Unresolved errors from this week
+      db
+        .select({
+          count: sql<number>`count(*)::int`,
+          topTopic: sql<string>`mode() WITHIN GROUP (ORDER BY ${errorLog.grammarTopic})`,
+        })
+        .from(errorLog)
+        .where(
+          and(
+            eq(errorLog.userId, userId),
+            gte(errorLog.createdAt, sevenDaysAgo),
+            eq(errorLog.isResolved, false),
+          ),
         ),
-      ),
 
-    // Unresolved errors from this week
-    db
-      .select({
-        count: sql<number>`count(*)::int`,
-        topTopic: sql<string>`mode() WITHIN GROUP (ORDER BY ${errorLog.grammarTopic})`,
-      })
-      .from(errorLog)
-      .where(
-        and(
-          eq(errorLog.userId, userId),
-          gte(errorLog.createdAt, sevenDaysAgo),
-          eq(errorLog.isResolved, false),
-        ),
-      ),
-
-    // Current streak
-    db
-      .select({
-        currentStreak: userStreak.currentStreak,
-        bestStreak: userStreak.bestStreak,
-      })
-      .from(userStreak)
-      .where(eq(userStreak.userId, userId))
-      .limit(1),
-  ]);
+      // Current streak
+      db
+        .select({
+          currentStreak: userStreak.currentStreak,
+          bestStreak: userStreak.bestStreak,
+        })
+        .from(userStreak)
+        .where(eq(userStreak.userId, userId))
+        .limit(1),
+    ]);
 
   const stats = {
     totalActivities: activities[0]?.count ?? 0,
@@ -196,6 +189,11 @@ Write the weekly report in Vietnamese.`,
     return Response.json({ report, stats, insufficient: false });
   } catch (err) {
     log.error({ err }, "dashboard.weekly-report.ai.failed");
-    return Response.json({ report: null, stats, insufficient: false, error: "AI generation failed" });
+    return Response.json({
+      report: null,
+      stats,
+      insufficient: false,
+      error: "AI generation failed",
+    });
   }
 }

@@ -18,10 +18,34 @@ export type PerformanceBadge = {
 };
 
 export const PERFORMANCE_BADGES: PerformanceBadge[] = [
-  { id: "perfect-day", icon: "StarFilled", label: "Ngày hoàn hảo", description: "5/5 đúng", condition: "perfect-day" },
-  { id: "speed-demon", icon: "ThunderboltOutlined", label: "Siêu tốc", description: "Hoàn thành < 60s", condition: "speed-demon" },
-  { id: "perfect-week", icon: "CrownOutlined", label: "Tuần hoàn hảo", description: "7 ngày 5/5 liên tiếp", condition: "perfect-week" },
-  { id: "bonus-warrior", icon: "RocketOutlined", label: "Chiến binh bonus", description: "Hoàn thành 10 bonus", condition: "bonus-warrior" },
+  {
+    id: "perfect-day",
+    icon: "StarFilled",
+    label: "Ngày hoàn hảo",
+    description: "5/5 đúng",
+    condition: "perfect-day",
+  },
+  {
+    id: "speed-demon",
+    icon: "ThunderboltOutlined",
+    label: "Siêu tốc",
+    description: "Hoàn thành < 60s",
+    condition: "speed-demon",
+  },
+  {
+    id: "perfect-week",
+    icon: "CrownOutlined",
+    label: "Tuần hoàn hảo",
+    description: "7 ngày 5/5 liên tiếp",
+    condition: "perfect-week",
+  },
+  {
+    id: "bonus-warrior",
+    icon: "RocketOutlined",
+    label: "Chiến binh bonus",
+    description: "Hoàn thành 10 bonus",
+    condition: "bonus-warrior",
+  },
 ];
 
 export function getBadges(bestStreak: number): Badge[] {
@@ -50,12 +74,12 @@ export function checkPerformanceBadges(context: {
 
   // Perfect Day: all correct
   if (context.score === context.totalExercises && context.totalExercises >= 5) {
-    earned.push(PERFORMANCE_BADGES.find(b => b.condition === "perfect-day")!);
+    earned.push(PERFORMANCE_BADGES.find((b) => b.condition === "perfect-day")!);
   }
 
   // Speed Demon: under 60s with at least 4/5 correct
   if (context.timeElapsedMs < 60000 && context.score >= 4) {
-    earned.push(PERFORMANCE_BADGES.find(b => b.condition === "speed-demon")!);
+    earned.push(PERFORMANCE_BADGES.find((b) => b.condition === "speed-demon")!);
   }
 
   return earned.filter(Boolean);

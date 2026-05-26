@@ -61,7 +61,14 @@ export function QuizHistory({ open, onClose }: Props) {
   return (
     <Drawer
       title={
-        <span style={{ fontSize: 16, fontWeight: 900, color: "var(--text-primary)", fontFamily: "var(--font-display)" }}>
+        <span
+          style={{
+            fontSize: 16,
+            fontWeight: 900,
+            color: "var(--text-primary)",
+            fontFamily: "var(--font-display)",
+          }}
+        >
           Lịch sử làm bài
         </span>
       }
@@ -81,14 +88,22 @@ export function QuizHistory({ open, onClose }: Props) {
           color: var(--text-secondary) !important;
         }
       `}</style>
-      
+
       {history.length === 0 ? (
-        <Empty description="Chưa có lịch sử làm bài" image={Empty.PRESENTED_IMAGE_SIMPLE} style={{ marginTop: 40 }} />
+        <Empty
+          description="Chưa có lịch sử làm bài"
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          style={{ marginTop: 40 }}
+        />
       ) : (
         <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
           {history.map((entry, i) => {
             const pct = entry.total > 0 ? Math.round((entry.score / entry.total) * 100) : 0;
-            const levelInfo = LEVEL_LABELS[entry.level] ?? { label: entry.level, color: "var(--text-muted)", bg: "var(--surface-alt)" };
+            const levelInfo = LEVEL_LABELS[entry.level] ?? {
+              label: entry.level,
+              color: "var(--text-muted)",
+              bg: "var(--surface-alt)",
+            };
             return (
               <m.div
                 key={`${entry.date}-${i}`}
@@ -135,11 +150,17 @@ export function QuizHistory({ open, onClose }: Props) {
                     borderRadius: "50%",
                     display: "grid",
                     placeItems: "center",
-                    background: pct >= 80 ? "rgba(16, 185, 129, 0.08)" : pct >= 50 ? "rgba(245, 158, 11, 0.08)" : "rgba(239, 68, 68, 0.08)",
+                    background:
+                      pct >= 80
+                        ? "rgba(16, 185, 129, 0.08)"
+                        : pct >= 50
+                          ? "rgba(245, 158, 11, 0.08)"
+                          : "rgba(239, 68, 68, 0.08)",
                     border: `1.5px solid ${pct >= 80 ? "var(--success)" : pct >= 50 ? "var(--warning)" : "var(--error)"}`,
                     fontSize: 12,
                     fontWeight: 800,
-                    color: pct >= 80 ? "var(--success)" : pct >= 50 ? "var(--warning)" : "var(--error)",
+                    color:
+                      pct >= 80 ? "var(--success)" : pct >= 50 ? "var(--warning)" : "var(--error)",
                     flexShrink: 0,
                   }}
                 >

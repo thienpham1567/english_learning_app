@@ -1,15 +1,13 @@
-import { headers } from "next/headers";
+import { db, flashcardProgress } from "@repo/database";
+import { recordLearningEvent } from "@repo/modules";
+import { and, eq } from "drizzle-orm";
 import { revalidateTag } from "next/cache";
-import { eq, and } from "drizzle-orm";
+import { headers } from "next/headers";
 import { z } from "zod";
-
+import { logActivity } from "@/lib/activity-log";
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { flashcardProgress } from "@repo/database";
 import { computeSm2, defaultSm2State } from "@/lib/flashcard/sm2";
 import { awardXP, XP_VALUES } from "@/lib/xp";
-import { logActivity } from "@/lib/activity-log";
-import { recordLearningEvent } from "@repo/modules";
 
 const ReviewBodySchema = z.object({
   query: z.string().min(1),

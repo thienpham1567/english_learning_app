@@ -1,15 +1,15 @@
 "use client";
 
 import type { Exercise } from "@/lib/daily-challenge/types";
-import { FillInBlank } from "./FillInBlank";
-import { SentenceOrder } from "./SentenceOrder";
-import { TranslationExercise } from "./TranslationExercise";
-import { ErrorCorrection } from "./ErrorCorrection";
-import { WordFormation } from "./WordFormation";
-import { DialogueCompletion } from "./DialogueCompletion";
-import { SynonymAntonym } from "./SynonymAntonym";
-import { ReadingComprehension } from "./ReadingComprehension";
 import { Collocation } from "./Collocation";
+import { DialogueCompletion } from "./DialogueCompletion";
+import { ErrorCorrection } from "./ErrorCorrection";
+import { FillInBlank } from "./FillInBlank";
+import { ReadingComprehension } from "./ReadingComprehension";
+import { SentenceOrder } from "./SentenceOrder";
+import { SynonymAntonym } from "./SynonymAntonym";
+import { TranslationExercise } from "./TranslationExercise";
+import { WordFormation } from "./WordFormation";
 
 type Props = {
   exercise: Exercise;

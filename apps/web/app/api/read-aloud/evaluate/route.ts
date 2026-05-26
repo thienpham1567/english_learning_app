@@ -93,10 +93,13 @@ export async function POST(request: Request) {
   const transcript = transcription.text.trim();
 
   if (!transcript || transcript.split(/\s+/).filter(Boolean).length < MIN_WORDS) {
-    return Response.json({
-      error: "no-speech",
-      message: "Không nhận dạng được giọng nói. Hãy nói rõ hơn và thử lại.",
-    }, { status: 422 });
+    return Response.json(
+      {
+        error: "no-speech",
+        message: "Không nhận dạng được giọng nói. Hãy nói rõ hơn và thử lại.",
+      },
+      { status: 422 },
+    );
   }
 
   // Step 2: LLM evaluation
@@ -128,7 +131,10 @@ The student listened to a native speaker read a sentence, then repeated it. Comp
   "stress": 0-100,
   "transcript": "${transcript}",
   "wordScores": [
-    ${refWords.slice(0, 15).map((w) => `{ "word": "${w}", "score": "good|fair|poor", "tip": "null or Vietnamese tip" }`).join(",\n    ")}
+    ${refWords
+      .slice(0, 15)
+      .map((w) => `{ "word": "${w}", "score": "good|fair|poor", "tip": "null or Vietnamese tip" }`)
+      .join(",\n    ")}
   ],
   "summary": "2-3 sentence feedback in Vietnamese. Be encouraging but specific about what to improve."
 }
@@ -144,7 +150,11 @@ Be fair — if the transcription closely matches the reference, give high scores
       {
         model: openAiConfig.chatModel,
         messages: [
-          { role: "system", content: "You are an English pronunciation coach. Return only valid JSON. Be encouraging but honest." },
+          {
+            role: "system",
+            content:
+              "You are an English pronunciation coach. Return only valid JSON. Be encouraging but honest.",
+          },
           { role: "user", content: prompt },
         ],
         temperature: 0.3,
@@ -155,7 +165,10 @@ Be fair — if the transcription closely matches the reference, give high scores
     );
 
     const raw = completion.choices[0]?.message?.content?.trim() ?? "";
-    const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
+    const cleaned = raw
+      .replace(/^```(?:json)?\s*/i, "")
+      .replace(/\s*```$/i, "")
+      .trim();
 
     let parsed: Record<string, unknown>;
     try {
@@ -171,17 +184,22 @@ Be fair — if the transcription closely matches the reference, give high scores
       .filter((w): w is Record<string, unknown> => typeof w === "object" && w !== null)
       .map((w) => ({
         word: String(w.word ?? ""),
-        score: (["good", "fair", "poor"].includes(String(w.score)) ? String(w.score) : "fair") as WordScore["score"],
+        score: (["good", "fair", "poor"].includes(String(w.score))
+          ? String(w.score)
+          : "fair") as WordScore["score"],
         tip: w.tip && w.tip !== "null" ? String(w.tip) : undefined,
       }))
       .slice(0, 30);
 
-    log.info({
-      userId,
-      overall: clampScore(parsed.overall),
-      refLen: referenceText.length,
-      transLen: transcript.length,
-    }, "evaluate.done");
+    log.info(
+      {
+        userId,
+        overall: clampScore(parsed.overall),
+        refLen: referenceText.length,
+        transLen: transcript.length,
+      },
+      "evaluate.done",
+    );
 
     return Response.json({
       overall: clampScore(parsed.overall),

@@ -19,9 +19,7 @@ async function request<T>(
   if (params) {
     const filtered = Object.entries(params).filter(([, v]) => v !== undefined);
     if (filtered.length > 0) {
-      const qs = new URLSearchParams(
-        filtered.map(([k, v]) => [k, String(v)]),
-      ).toString();
+      const qs = new URLSearchParams(filtered.map(([k, v]) => [k, String(v)])).toString();
       fullUrl += `${fullUrl.includes("?") ? "&" : "?"}${qs}`;
     }
   }
@@ -62,14 +60,12 @@ async function request<T>(
 }
 
 export const api = {
-  get: <T>(url: string, opts?: RequestOptions) =>
-    request<T>("GET", url, undefined, opts),
+  get: <T>(url: string, opts?: RequestOptions) => request<T>("GET", url, undefined, opts),
   post: <T>(url: string, body?: unknown, opts?: RequestOptions) =>
     request<T>("POST", url, body, opts),
   put: <T>(url: string, body?: unknown, opts?: RequestOptions) =>
     request<T>("PUT", url, body, opts),
   patch: <T>(url: string, body?: unknown, opts?: RequestOptions) =>
     request<T>("PATCH", url, body, opts),
-  delete: <T>(url: string, opts?: RequestOptions) =>
-    request<T>("DELETE", url, undefined, opts),
+  delete: <T>(url: string, opts?: RequestOptions) => request<T>("DELETE", url, undefined, opts),
 };

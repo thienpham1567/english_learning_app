@@ -1,18 +1,13 @@
+import { db, readingPassage, readingProgress } from "@repo/database";
+import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, and } from "drizzle-orm";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { readingPassage, readingProgress } from "@repo/database";
 
 /**
  * GET /api/reading/passages/[id]
  * Returns a single passage with read status for the current user.
  */
-export async function GET(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function GET(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });

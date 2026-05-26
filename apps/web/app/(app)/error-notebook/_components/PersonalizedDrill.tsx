@@ -1,16 +1,8 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import {
-  Zap,
-  Loader2,
-  CheckCircle,
-  XCircle,
-  Lightbulb,
-  Trophy,
-  RefreshCw,
-} from "lucide-react";
+import { CheckCircle, Lightbulb, Loader2, RefreshCw, Trophy, XCircle, Zap } from "lucide-react";
 import * as m from "motion/react-client";
+import { useCallback, useState } from "react";
 import { api } from "@/lib/api-client";
 
 type DrillExercise = {
@@ -32,7 +24,9 @@ export function PersonalizedDrill() {
   const [drill, setDrill] = useState<DrillData | null>(null);
   const [loading, setLoading] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [answers, setAnswers] = useState<Record<number, { selected: number; correct: boolean }>>({});
+  const [answers, setAnswers] = useState<Record<number, { selected: number; correct: boolean }>>(
+    {},
+  );
   const [showResults, setShowResults] = useState(false);
 
   const generateDrill = useCallback(async () => {
@@ -107,12 +101,8 @@ export function PersonalizedDrill() {
     return (
       <div className="py-8 px-5 rounded-2xl bg-surface border-2 border-border text-center">
         <Loader2 className="h-7 w-7 text-accent animate-mx-auto mb-3" />
-        <div className="text-sm font-semibold text-text-primary">
-          Đang phân tích lỗi sai...
-        </div>
-        <div className="text-xs text-text-muted mt-1">
-          AI đang tạo bài tập cá nhân hóa cho bạn
-        </div>
+        <div className="text-sm font-semibold text-text-primary">Đang phân tích lỗi sai...</div>
+        <div className="text-xs text-text-muted mt-1">AI đang tạo bài tập cá nhân hóa cho bạn</div>
       </div>
     );
   }
@@ -121,19 +111,26 @@ export function PersonalizedDrill() {
 
   // Results view
   if (showResults) {
-    const pct = drill.exercises.length > 0 ? Math.round((correctCount / drill.exercises.length) * 100) : 0;
+    const pct =
+      drill.exercises.length > 0 ? Math.round((correctCount / drill.exercises.length) * 100) : 0;
     return (
       <m.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         className="py-6 px-5 rounded-2xl bg-surface border-2 border-border text-center"
       >
-        <Trophy className={`h-9 w-9 mx-auto mb-3 ${pct >= 80 ? "text-(--success)" : "text-accent"}`} />
+        <Trophy
+          className={`h-9 w-9 mx-auto mb-3 ${pct >= 80 ? "text-(--success)" : "text-accent"}`}
+        />
         <div className="text-4xl font-black text-ink font-display">
           {correctCount}/{drill.exercises.length}
         </div>
         <div className="text-sm text-text-secondary mb-1">
-          {pct >= 80 ? "Xuất sắc! Bạn đã cải thiện rõ rệt!" : pct >= 50 ? "Khá tốt! Tiếp tục ôn tập nhé." : "Cần ôn thêm. Đừng bỏ cuộc!"}
+          {pct >= 80
+            ? "Xuất sắc! Bạn đã cải thiện rõ rệt!"
+            : pct >= 50
+              ? "Khá tốt! Tiếp tục ôn tập nhé."
+              : "Cần ôn thêm. Đừng bỏ cuộc!"}
         </div>
         <div className="text-xs text-text-muted mb-4">Chính xác {pct}%</div>
         <button
@@ -177,9 +174,7 @@ export function PersonalizedDrill() {
 
       {/* Body */}
       <div className="p-4 px-4">
-        <p className="text-xs text-text-muted font-semibold mb-2">
-          {exercise.instruction}
-        </p>
+        <p className="text-xs text-text-muted font-semibold mb-2">{exercise.instruction}</p>
         {data.sentence && (
           <p className="text-[15px] font-medium text-text-primary leading-relaxed mb-4">
             {data.sentence}
@@ -231,14 +226,20 @@ export function PersonalizedDrill() {
                         ? isCorrect
                           ? "var(--success)"
                           : isSelected
-                          ? "var(--error)"
-                          : "var(--border)"
+                            ? "var(--error)"
+                            : "var(--border)"
                         : "var(--border)",
                       color: answered && (isCorrect || isSelected) ? "#fff" : "var(--text-muted)",
                     }}
                   >
                     {answered ? (
-                      isCorrect ? <CheckCircle className="h-3 w-3" /> : isSelected ? <XCircle className="h-3 w-3" /> : String.fromCharCode(65 + i)
+                      isCorrect ? (
+                        <CheckCircle className="h-3 w-3" />
+                      ) : isSelected ? (
+                        <XCircle className="h-3 w-3" />
+                      ) : (
+                        String.fromCharCode(65 + i)
+                      )
                     ) : (
                       String.fromCharCode(65 + i)
                     )}
@@ -258,9 +259,7 @@ export function PersonalizedDrill() {
             className="mt-3.5 px-3.5 py-2.5 rounded-[10px] bg-accent/5 border border-accent/12 flex gap-2 items-start"
           >
             <Lightbulb className="h-3.5 w-3.5 text-accent mt-0.5 shrink-0" />
-            <p className="text-xs leading-relaxed text-text-secondary m-0">
-              {exercise.tip}
-            </p>
+            <p className="text-xs leading-relaxed text-text-secondary m-0">{exercise.tip}</p>
           </m.div>
         )}
 

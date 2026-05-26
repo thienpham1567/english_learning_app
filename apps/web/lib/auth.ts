@@ -1,7 +1,6 @@
+import { getRawPool } from "@repo/database";
 import { betterAuth } from "better-auth";
 import { nextCookies } from "better-auth/next-js";
-
-import { getRawPool } from "@repo/database";
 
 function createAuth() {
   return betterAuth({

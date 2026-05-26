@@ -1,11 +1,6 @@
 "use client";
-import { useState, useCallback } from "react";
-import {
-  CheckCircle,
-  XCircle,
-  Loader2,
-  Zap,
-} from "lucide-react";
+import { CheckCircle, Loader2, XCircle, Zap } from "lucide-react";
+import { useCallback, useState } from "react";
 import { api } from "@/lib/api-client";
 
 type PracticeData = {
@@ -114,9 +109,7 @@ export function InlinePractice({ errorId, onResolved }: Props) {
           Bài tập luyện lại
         </span>
       </div>
-      <p className="text-sm font-medium m-0 mb-3 leading-snug text-ink">
-        {data.questionStem}
-      </p>
+      <p className="text-sm font-medium m-0 mb-3 leading-snug text-ink">{data.questionStem}</p>
 
       {/* Options */}
       <div className="flex flex-col gap-1.5">
@@ -183,7 +176,11 @@ export function InlinePractice({ errorId, onResolved }: Props) {
                 : "bg-[color-mix(in_srgb,var(--error)_8%,transparent)] text-(--error)"
             }`}
           >
-            {isCorrect ? <CheckCircle className="h-3.5 w-3.5" /> : <XCircle className="h-3.5 w-3.5" />}
+            {isCorrect ? (
+              <CheckCircle className="h-3.5 w-3.5" />
+            ) : (
+              <XCircle className="h-3.5 w-3.5" />
+            )}
             {isCorrect ? "Chính xác! 🎉" : "Sai rồi!"}
           </div>
           <p className="m-0 text-xs leading-relaxed text-text-secondary italic">

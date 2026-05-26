@@ -1,7 +1,7 @@
 "use client";
 
-import { motion } from "motion/react";
 import { Sparkles } from "lucide-react";
+import { motion } from "motion/react";
 import { PERSONAS, type Persona } from "@/lib/chat/personas";
 
 type Props = {
@@ -22,10 +22,10 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { y: 15, opacity: 0 },
-  visible: { 
-    y: 0, 
+  visible: {
+    y: 0,
     opacity: 1,
-    transition: { type: "spring" as const, stiffness: 120, damping: 14 }
+    transition: { type: "spring" as const, stiffness: 120, damping: 14 },
   },
 };
 
@@ -39,9 +39,14 @@ export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedProm
       animate="visible"
       className="m-auto flex max-w-2xl flex-col items-center text-center px-4 py-8"
     >
-      <motion.div variants={itemVariants} className="flex items-center gap-2 mb-2 text-accent bg-accent/5 px-3 py-1 rounded-full border border-accent/10">
+      <motion.div
+        variants={itemVariants}
+        className="flex items-center gap-2 mb-2 text-accent bg-accent/5 px-3 py-1 rounded-full border border-accent/10"
+      >
         <Sparkles className="h-3.5 w-3.5 animate-pulse" />
-        <span className="text-[10px] font-semibold uppercase tracking-widest font-mono">English Chatbot</span>
+        <span className="text-[10px] font-semibold uppercase tracking-widest font-mono">
+          English Chatbot
+        </span>
       </motion.div>
 
       <motion.h2
@@ -50,12 +55,13 @@ export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedProm
       >
         Chọn gia sư để bắt đầu
       </motion.h2>
-      
+
       <motion.p
         variants={itemVariants}
         className="mt-3 max-w-md text-sm text-(--text-secondary) leading-relaxed"
       >
-        Mỗi gia sư có chuyên môn và phong cách phản hồi riêng. Hãy chọn người phù hợp nhất để đồng hành cùng bạn.
+        Mỗi gia sư có chuyên môn và phong cách phản hồi riêng. Hãy chọn người phù hợp nhất để đồng
+        hành cùng bạn.
       </motion.p>
 
       {/* Persona cards grid */}
@@ -74,10 +80,7 @@ export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedProm
       </motion.div>
 
       {/* Suggested prompts */}
-      <motion.div
-        variants={itemVariants}
-        className="mt-10 flex w-full flex-col items-center gap-3"
-      >
+      <motion.div variants={itemVariants} className="mt-10 flex w-full flex-col items-center gap-3">
         <span className="text-[10px] font-bold uppercase tracking-wider text-(--text-muted) font-mono">
           Gợi ý hội thoại
         </span>
@@ -124,29 +127,23 @@ function PersonaCard({
       {isSelected && (
         <span className="absolute top-3 right-3 flex h-2 w-2 rounded-full bg-accent" />
       )}
-      
+
       <div className="p-1 rounded-full bg-(--chat-bg)/40">
         <Avatar size={48} />
       </div>
 
       <div className="flex flex-col items-center gap-1.5">
-        <span className="text-sm font-semibold text-(--ink) leading-none">
-          {persona.label}
-        </span>
+        <span className="text-sm font-semibold text-(--ink) leading-none">{persona.label}</span>
         <span
           className={`inline-block px-2.5 py-0.5 rounded-full text-[9px] font-bold tracking-wide transition-colors ${
-            isSelected
-              ? "bg-accent text-white"
-              : "bg-(--bg-deep) text-(--text-secondary)"
+            isSelected ? "bg-accent text-white" : "bg-(--bg-deep) text-(--text-secondary)"
           }`}
         >
           {persona.specialty}
         </span>
       </div>
 
-      <p className="text-xs text-(--text-muted) leading-relaxed mt-1">
-        {persona.description}
-      </p>
+      <p className="text-xs text-(--text-muted) leading-relaxed mt-1">{persona.description}</p>
     </motion.button>
   );
 }

@@ -1,19 +1,10 @@
 "use client";
 
-import { Suspense, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { Bot, CheckCircle, ShieldCheck, Star, TrendingUp, Trophy, Zap } from "lucide-react";
 import * as m from "motion/react-client";
-
+import { useSearchParams } from "next/navigation";
+import { Suspense, useState } from "react";
 import { authClient } from "@/lib/auth-client";
-import {
-  Bot,
-  CheckCircle,
-  ShieldCheck,
-  Star,
-  TrendingUp,
-  Trophy,
-  Zap,
-} from "lucide-react";
 
 /* ── Shared animation variants ── */
 const fadeUp = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } };
@@ -44,8 +35,7 @@ const GoogleIcon = () => (
 /* ── Interactive Dashboard Mock Component for Left Panel ── */
 function DashboardMockup() {
   const days = Array.from({ length: 28 }, (_, i) => ({
-    level:
-      i % 7 === 0 ? 0 : i % 5 === 0 ? 3 : i % 3 === 0 ? 4 : i % 2 === 0 ? 2 : 1,
+    level: i % 7 === 0 ? 0 : i % 5 === 0 ? 3 : i % 3 === 0 ? 4 : i % 2 === 0 ? 2 : 1,
   }));
 
   return (
@@ -97,10 +87,7 @@ function DashboardMockup() {
           </div>
           <div className="text-xs mt-1 flex items-center gap-1 text-(--mockup-text-muted-dark)">
             <TrendingUp className="text-(--success)" />
-            <span className="font-semibold text-(--success)">
-              +125 Điểm
-            </span>{" "}
-            so với tuần trước
+            <span className="font-semibold text-(--success)">+125 Điểm</span> so với tuần trước
           </div>
         </div>
       </m.div>
@@ -120,9 +107,7 @@ function DashboardMockup() {
           <span className="text-xs font-bold tracking-wider text-(--mockup-text-muted)">
             TẦN SUẤT HỌC TẬP
           </span>
-          <span className="text-[11px] font-bold text-accent">
-            24 NGÀY LIÊN TỤC 🔥
-          </span>
+          <span className="text-[11px] font-bold text-accent">24 NGÀY LIÊN TỤC 🔥</span>
         </div>
         <div className="grid grid-cols-7 gap-2">
           {days.map((day, idx) => (
@@ -161,12 +146,9 @@ function DashboardMockup() {
           <Bot />
         </div>
         <div>
-          <div className="text-xs font-bold text-(--mockup-text)">
-            AI Phản Hồi Phát Âm
-          </div>
+          <div className="text-xs font-bold text-(--mockup-text)">AI Phản Hồi Phát Âm</div>
           <div className="text-[11px] text-(--mockup-text-muted) mt-0.5">
-            Phát âm từ &quot;negotiation&quot; đã cải thiện vượt bậc! Đạt 94%
-            chuẩn Mỹ.
+            Phát âm từ &quot;negotiation&quot; đã cải thiện vượt bậc! Đạt 94% chuẩn Mỹ.
           </div>
         </div>
       </m.div>
@@ -282,12 +264,8 @@ function SignInContent() {
       >
         Bắt đầu học ngay
       </m.h1>
-      <m.p
-        variants={fadeUp}
-        className="text-sm text-text-muted leading-normal font-medium mb-8"
-      >
-        Đăng nhập nhanh để lưu tiến độ học tập và nhận phân tích sửa lỗi từ Trợ
-        lý AI.
+      <m.p variants={fadeUp} className="text-sm text-text-muted leading-normal font-medium mb-8">
+        Đăng nhập nhanh để lưu tiến độ học tập và nhận phân tích sửa lỗi từ Trợ lý AI.
       </m.p>
 
       {/* Google button */}
@@ -302,20 +280,8 @@ function SignInContent() {
         >
           {isLoading ? (
             <span className="items-center gap-2 inline-flex">
-              <svg
-                width="18"
-                height="18"
-                viewBox="0 0 24 24"
-                fill="none"
-                className="animate-spin"
-              >
-                <circle
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="var(--border)"
-                  strokeWidth="3"
-                />
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="animate-spin">
+                <circle cx="12" cy="12" r="10" stroke="var(--border)" strokeWidth="3" />
                 <path
                   d="M12 2a10 10 0 0 1 10 10"
                   stroke="var(--accent)"
@@ -396,10 +362,7 @@ export default function SignInPage() {
           {/* Star review bar */}
           <m.div variants={fadeUp} className="flex gap-1.5 mb-6">
             {[1, 2, 3, 4, 5].map((i) => (
-              <Star
-                key={i}
-                className="text-sm text-accent opacity-85"
-              />
+              <Star key={i} className="text-sm text-accent opacity-85" />
             ))}
           </m.div>
 
@@ -416,17 +379,14 @@ export default function SignInPage() {
             </span>
           </m.h2>
 
-          <m.div
-            variants={fadeUp}
-            className="w-20 h-1 bg-accent border border-black my-8"
-          />
+          <m.div variants={fadeUp} className="w-20 h-1 bg-accent border border-black my-8" />
 
           <m.p
             variants={fadeUp}
             className="text-base max-w-[365px] font-normal mb-12 leading-[1.8] text-(--mockup-text-muted)"
           >
-            Hệ thống học tập thông minh tích hợp trợ lý AI để thông dịch, chỉnh
-            phát âm và chấm bài viết chuẩn đề thi ETS mới nhất.
+            Hệ thống học tập thông minh tích hợp trợ lý AI để thông dịch, chỉnh phát âm và chấm bài
+            viết chuẩn đề thi ETS mới nhất.
           </m.p>
 
           {/* Stats Metrics */}
@@ -461,9 +421,7 @@ export default function SignInPage() {
         <div className="w-full max-w-[440px] bg-(--surface) border-2 border-border rounded-xl p-[48px_40px] shadow-(--shadow-lg) relative z-10">
           <Suspense
             fallback={
-              <div className="text-text-muted p-6 text-center">
-                Đang tải form đăng nhập…
-              </div>
+              <div className="text-text-muted p-6 text-center">Đang tải form đăng nhập…</div>
             }
           >
             <SignInContent />

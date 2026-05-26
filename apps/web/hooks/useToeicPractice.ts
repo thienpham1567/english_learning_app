@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { api } from "@/lib/api-client";
 
 export type ToeicPartFilter = "3" | "4" | "5" | "6" | "7" | "listening" | "reading" | "all";
@@ -78,10 +78,7 @@ export function useToeicPractice() {
       if (selectedExam !== "random") {
         body.examName = selectedExam;
       }
-      const data = await api.post<{ questions: ToeicQuestion[] }>(
-        "/toeic-practice",
-        body,
-      );
+      const data = await api.post<{ questions: ToeicQuestion[] }>("/toeic-practice", body);
       setQuestions(data.questions);
       setAnswers(new Array(data.questions.length).fill(null));
       setCurrentIndex(0);
@@ -115,8 +112,7 @@ export function useToeicPractice() {
       const now = Date.now();
       setEndTime(now);
       const score = answers.reduce<number>(
-        (acc, ans, i) =>
-          ans !== null && ans === questions[i]?.correctIndex ? acc + 1 : acc,
+        (acc, ans, i) => (ans !== null && ans === questions[i]?.correctIndex ? acc + 1 : acc),
         0,
       );
       const entry: ToeicHistoryEntry = {
@@ -159,8 +155,7 @@ export function useToeicPractice() {
   }, [questions, answers]);
 
   const score = answers.reduce<number>(
-    (acc, ans, i) =>
-      ans !== null && ans === questions[i]?.correctIndex ? acc + 1 : acc,
+    (acc, ans, i) => (ans !== null && ans === questions[i]?.correctIndex ? acc + 1 : acc),
     0,
   );
 

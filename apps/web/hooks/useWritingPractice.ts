@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
-import { api } from "@/lib/api-client";
+import { useCallback, useEffect, useState } from "react";
 import { clearWritingDraft } from "@/app/(app)/toeic/skills/_components/writing/WritingEditor";
+import { api } from "@/lib/api-client";
 import type {
   WritingCategory,
   WritingFeedback,
@@ -42,10 +42,9 @@ export function useWritingPractice() {
     setState("generating-prompt");
     setError(null);
     try {
-      const data = await api.post<{ prompt: string; hints: string[] }>(
-        "/writing-practice/prompt",
-        { category: cat },
-      );
+      const data = await api.post<{ prompt: string; hints: string[] }>("/writing-practice/prompt", {
+        category: cat,
+      });
       setPrompt(data.prompt);
       setHints(data.hints ?? []);
       setState("writing");
@@ -64,10 +63,11 @@ export function useWritingPractice() {
       setState("reviewing");
       setError(null);
       try {
-        const data = await api.post<{ feedback: WritingFeedback }>(
-          "/writing-practice/review",
-          { prompt, category, text },
-        );
+        const data = await api.post<{ feedback: WritingFeedback }>("/writing-practice/review", {
+          prompt,
+          category,
+          text,
+        });
         setFeedback(data.feedback);
         setState("feedback");
         // Refresh history

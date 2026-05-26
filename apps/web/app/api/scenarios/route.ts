@@ -1,10 +1,8 @@
+import { activityLog, db, scenarioProgress } from "@repo/database";
+import { and, eq, sql } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, and, sql } from "drizzle-orm";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { scenarioProgress, activityLog } from "@repo/database";
-import { SCENARIOS, getScenarioById } from "@/lib/scenarios/data";
+import { getScenarioById, SCENARIOS } from "@/lib/scenarios/data";
 
 /**
  * GET /api/scenarios

@@ -1,20 +1,17 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { Flex, Typography, message } from "antd";
-
-
-import { getVoiceByRole } from "./_data/voices";
-import { useAudioPlayback, clearBlobCache } from "./_hooks/useAudioPlayback";
-import { useHistory } from "./_hooks/useHistory";
-
+import { Flex, message, Typography } from "antd";
+import { useCallback, useState } from "react";
+import { DialoguePlayer } from "./_components/DialoguePlayer";
+import { HistoryPanel } from "./_components/HistoryPanel";
+import { PassageBrowser } from "./_components/PassageBrowser";
+import { PlaybackControls } from "./_components/PlaybackControls";
+import { ShadowingMode } from "./_components/ShadowingMode";
 import { TextInputPanel } from "./_components/TextInputPanel";
 import { VoiceSelector } from "./_components/VoiceSelector";
-import { PlaybackControls } from "./_components/PlaybackControls";
-import { PassageBrowser } from "./_components/PassageBrowser";
-import { HistoryPanel } from "./_components/HistoryPanel";
-import { ShadowingMode } from "./_components/ShadowingMode";
-import { DialoguePlayer } from "./_components/DialoguePlayer";
+import { getVoiceByRole } from "./_data/voices";
+import { clearBlobCache, useAudioPlayback } from "./_hooks/useAudioPlayback";
+import { useHistory } from "./_hooks/useHistory";
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -54,12 +51,12 @@ export default function ReadAloudPage() {
   }, [audio]);
 
   /* ── History replay ── */
-  const handleReplayHistory = useCallback((entry: typeof history.history[number]) => {
+  const handleReplayHistory = useCallback((entry: (typeof history.history)[number]) => {
     setText(entry.text);
     setSelectedRole(entry.voice);
     setSpeed(entry.speed);
     setShowHistory(false);
-    message.info("Đã tải lại đoạn văn — nhấn \"Bắt đầu nghe đọc\" để phát");
+    message.info('Đã tải lại đoạn văn — nhấn "Bắt đầu nghe đọc" để phát');
   }, []);
 
   /* ── History clear all ── */
@@ -75,7 +72,6 @@ export default function ReadAloudPage() {
       className="anim-fade-up read-aloud-page-root"
     >
       <Flex vertical gap="var(--space-5)" style={{ maxWidth: 1080, margin: "0 auto" }}>
-
         {/* Mode Tabs */}
         <div className="read-aloud-mode-tabs" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {MODE_TABS.map((tab) => (
@@ -90,9 +86,10 @@ export default function ReadAloudPage() {
                 padding: "10px 18px",
                 borderRadius: 14,
                 border: mode === tab.key ? "2px solid var(--accent)" : "1px solid var(--border)",
-                background: mode === tab.key
-                  ? "color-mix(in srgb, var(--accent) 10%, var(--surface))"
-                  : "var(--surface)",
+                background:
+                  mode === tab.key
+                    ? "color-mix(in srgb, var(--accent) 10%, var(--surface))"
+                    : "var(--surface)",
                 cursor: "pointer",
                 transition: "all 0.2s",
                 fontFamily: "var(--font-body)",
@@ -101,14 +98,19 @@ export default function ReadAloudPage() {
             >
               <span style={{ fontSize: 18 }}>{tab.icon}</span>
               <div style={{ textAlign: "left" }}>
-                <div className="mode-label" style={{
-                  fontSize: 14,
-                  fontWeight: mode === tab.key ? 800 : 600,
-                  color: mode === tab.key ? "var(--accent)" : "var(--text-primary)",
-                }}>
+                <div
+                  className="mode-label"
+                  style={{
+                    fontSize: 14,
+                    fontWeight: mode === tab.key ? 800 : 600,
+                    color: mode === tab.key ? "var(--accent)" : "var(--text-primary)",
+                  }}
+                >
                   {tab.label}
                 </div>
-                <div className="mode-desc" style={{ fontSize: 11, color: "var(--text-muted)" }}>{tab.desc}</div>
+                <div className="mode-desc" style={{ fontSize: 11, color: "var(--text-muted)" }}>
+                  {tab.desc}
+                </div>
               </div>
             </button>
           ))}
@@ -145,17 +147,12 @@ export default function ReadAloudPage() {
                 onClearAll={handleClearAllHistory}
               />
 
-              <PassageBrowser
-                onSelectPassage={(passageText) => setText(passageText)}
-              />
+              <PassageBrowser onSelectPassage={(passageText) => setText(passageText)} />
             </Flex>
 
             {/* Right: Voice & Playback */}
             <Flex vertical gap="var(--space-4)">
-              <VoiceSelector
-                selectedRole={selectedRole}
-                onSelectRole={setSelectedRole}
-              />
+              <VoiceSelector selectedRole={selectedRole} onSelectRole={setSelectedRole} />
 
               <PlaybackControls
                 loading={audio.loading}
@@ -186,13 +183,23 @@ export default function ReadAloudPage() {
             <ShadowingMode text={text} voiceRole={selectedRole} speed={speed} />
             <Flex vertical gap="var(--space-4)">
               <VoiceSelector selectedRole={selectedRole} onSelectRole={setSelectedRole} />
-              <div style={{
-                background: "var(--surface)",
-                borderRadius: "var(--radius-xl)",
-                border: "1px solid var(--border)",
-                padding: "var(--space-4)",
-              }}>
-                <Text style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)", display: "block", marginBottom: 8 }}>
+              <div
+                style={{
+                  background: "var(--surface)",
+                  borderRadius: "var(--radius-xl)",
+                  border: "1px solid var(--border)",
+                  padding: "var(--space-4)",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: "var(--text-muted)",
+                    display: "block",
+                    marginBottom: 8,
+                  }}
+                >
                   💡 Hướng dẫn Shadowing
                 </Text>
                 {[
@@ -202,7 +209,15 @@ export default function ReadAloudPage() {
                   "4. AI chấm điểm phát âm",
                   "5. Thử lại hoặc sang câu tiếp",
                 ].map((tip, i) => (
-                  <Text key={i} style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 4 }}>
+                  <Text
+                    key={i}
+                    style={{
+                      fontSize: 12,
+                      color: "var(--text-secondary)",
+                      display: "block",
+                      marginBottom: 4,
+                    }}
+                  >
                     {tip}
                   </Text>
                 ))}
@@ -224,24 +239,42 @@ export default function ReadAloudPage() {
             <DialoguePlayer voiceRole={selectedRole} speed={speed} />
             <Flex vertical gap="var(--space-4)">
               <VoiceSelector selectedRole={selectedRole} onSelectRole={setSelectedRole} />
-              <div style={{
-                background: "var(--surface)",
-                borderRadius: "var(--radius-xl)",
-                border: "1px solid var(--border)",
-                padding: "var(--space-4)",
-                boxShadow: "var(--shadow-sm)",
-              }}>
-                <Text style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)", display: "block", marginBottom: 8 }}>
+              <div
+                style={{
+                  background: "var(--surface)",
+                  borderRadius: "var(--radius-xl)",
+                  border: "1px solid var(--border)",
+                  padding: "var(--space-4)",
+                  boxShadow: "var(--shadow-sm)",
+                }}
+              >
+                <Text
+                  style={{
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color: "var(--text-muted)",
+                    display: "block",
+                    marginBottom: 8,
+                  }}
+                >
                   💡 Hướng dẫn Hội thoại
                 </Text>
                 {[
                   "1. Chọn chủ đề & số người",
-                  "2. Nhấn \"Tạo hội thoại\"",
+                  '2. Nhấn "Tạo hội thoại"',
                   "3. Nghe toàn bộ hoặc từng câu",
                   "4. Đóng vai 1 nhân vật",
                   "5. Đọc vai của mình & được chấm điểm",
                 ].map((tip, i) => (
-                  <Text key={i} style={{ fontSize: 12, color: "var(--text-secondary)", display: "block", marginBottom: 4 }}>
+                  <Text
+                    key={i}
+                    style={{
+                      fontSize: 12,
+                      color: "var(--text-secondary)",
+                      display: "block",
+                      marginBottom: 4,
+                    }}
+                  >
                     {tip}
                   </Text>
                 ))}

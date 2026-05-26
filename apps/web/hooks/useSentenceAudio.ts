@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef, useEffect } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api-client";
 
 /**
@@ -38,7 +38,8 @@ export function useSentenceAudio(accent: "us" | "uk" | "au" = "us") {
       setAudioUrl(null);
 
       try {
-        const response = await api.post<Response>("/voice/synthesize",
+        const response = await api.post<Response>(
+          "/voice/synthesize",
           { text: text.slice(0, 200), speed: 1, accent },
           { raw: true, signal: controller.signal },
         );

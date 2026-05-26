@@ -1,10 +1,5 @@
 "use client";
 
-import { type ReactNode, useState } from "react";
-import { useRouter, usePathname } from "next/navigation";
-
-import * as m from "motion/react-client";
-import { AnimatePresence } from "motion/react";
 import {
   FileText,
   FileWarning,
@@ -21,8 +16,11 @@ import {
   Trophy,
   Volume2,
 } from "lucide-react";
+import { AnimatePresence } from "motion/react";
 
-
+import * as m from "motion/react-client";
+import { usePathname, useRouter } from "next/navigation";
+import { type ReactNode, useState } from "react";
 
 interface TabItem {
   key: string;
@@ -105,14 +103,9 @@ const MORE_HUB_ITEMS = [
 function getActiveTab(pathname: string): string {
   if (pathname.startsWith("/dashboard")) return "home";
   if (pathname.startsWith("/toeic")) return "toeic";
-  if (pathname.startsWith("/grammar-quiz"))
-    return "exam";
+  if (pathname.startsWith("/grammar-quiz")) return "exam";
   if (pathname.startsWith("/daily-challenge")) return "more";
-  if (
-    pathname.startsWith("/error-notebook") ||
-    pathname.startsWith("/flashcards")
-  )
-    return "review";
+  if (pathname.startsWith("/error-notebook") || pathname.startsWith("/flashcards")) return "review";
   if (
     pathname.startsWith("/english-chatbot") ||
     pathname.startsWith("/read-aloud") ||
@@ -134,9 +127,7 @@ export function BottomTabBar() {
   const router = useRouter();
   const pathname = usePathname();
   const activeTab = getActiveTab(pathname);
-  const [activeHub, setActiveHub] = useState<"exam" | "review" | "more" | null>(
-    null,
-  );
+  const [activeHub, setActiveHub] = useState<"exam" | "review" | "more" | null>(null);
 
   const handleTabClick = (tab: TabItem) => {
     if (tab.action === "exam-hub") {
@@ -174,7 +165,16 @@ export function BottomTabBar() {
               onClick={() => setActiveHub(null)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }} className="fixed border-none" style={{inset: 0, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)", padding: 0, zIndex: 20}} />
+              exit={{ opacity: 0 }}
+              className="fixed border-none"
+              style={{
+                inset: 0,
+                background: "rgba(0,0,0,0.6)",
+                backdropFilter: "blur(4px)",
+                padding: 0,
+                zIndex: 20,
+              }}
+            />
 
             {/* Hub cards */}
             <m.div
@@ -182,7 +182,16 @@ export function BottomTabBar() {
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 30 }} className="fixed grid gap-3" style={{bottom: 72, left: 16, right: 16, zIndex: 21, gridTemplateColumns: "1fr 1fr"}} >
+              transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              className="fixed grid gap-3"
+              style={{
+                bottom: 72,
+                left: 16,
+                right: 16,
+                zIndex: 21,
+                gridTemplateColumns: "1fr 1fr",
+              }}
+            >
               {hubItems.map((item, idx) => (
                 <m.div
                   key={item.href}
@@ -195,14 +204,17 @@ export function BottomTabBar() {
                     onClick={() => {
                       setActiveHub(null);
                       router.push(item.href);
-                    }} className="rounded text-center bg-(--surface) p-4 cursor-pointer" style={{border: "var(--brutal-border)", boxShadow: "var(--shadow-sm)", transition: "transform 0.1s, box-shadow 0.1s"}} >
-                    <span className="text-3xl text-accent" >
-                      {item.icon}
-                    </span>
+                    }}
+                    className="rounded text-center bg-(--surface) p-4 cursor-pointer"
+                    style={{
+                      border: "var(--brutal-border)",
+                      boxShadow: "var(--shadow-sm)",
+                      transition: "transform 0.1s, box-shadow 0.1s",
+                    }}
+                  >
+                    <span className="text-3xl text-accent">{item.icon}</span>
                     <br />
-                    <span className="text-[13px] font-bold text-ink" >
-                      {item.label}
-                    </span>
+                    <span className="text-[13px] font-bold text-ink">{item.label}</span>
                   </button>
                 </m.div>
               ))}
@@ -214,7 +226,19 @@ export function BottomTabBar() {
       {/* Tab Bar */}
       <m.nav
         initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }} className="fixed h-[64px] bg-(--surface) flex items-center justify-around" style={{bottom: 0, left: 0, right: 0, borderTop: "1px solid var(--border)", backdropFilter: "blur(12px)", zIndex: 22, paddingBottom: "env(safe-area-inset-bottom, 0px)", boxShadow: "0 -4px 20px rgba(0,0,0,0.05)"}} >
+        animate={{ y: 0, opacity: 1 }}
+        className="fixed h-[64px] bg-(--surface) flex items-center justify-around"
+        style={{
+          bottom: 0,
+          left: 0,
+          right: 0,
+          borderTop: "1px solid var(--border)",
+          backdropFilter: "blur(12px)",
+          zIndex: 22,
+          paddingBottom: "env(safe-area-inset-bottom, 0px)",
+          boxShadow: "0 -4px 20px rgba(0,0,0,0.05)",
+        }}
+      >
         {TABS.map((tab) => {
           const isActive = activeTab === tab.key;
           return (
@@ -223,22 +247,37 @@ export function BottomTabBar() {
               type="button"
               aria-label={tab.label}
               onClick={() => handleTabClick(tab)}
-              whileTap={{ scale: 0.9 }} className="flex-1 flex flex-col items-center justify-center border-none bg-transparent cursor-pointer" style={{gap: 2, padding: "8px 0", WebkitTapHighlightColor: "transparent"}} >
+              whileTap={{ scale: 0.9 }}
+              className="flex-1 flex flex-col items-center justify-center border-none bg-transparent cursor-pointer"
+              style={{ gap: 2, padding: "8px 0", WebkitTapHighlightColor: "transparent" }}
+            >
               <m.div
                 animate={{
                   scale: isActive ? 1.1 : 1,
                   y: isActive ? -2 : 0,
                   color: isActive ? "var(--accent)" : "var(--text-muted)",
                 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }} className="text-xl flex" >
+                transition={{ type: "spring", stiffness: 400, damping: 25 }}
+                className="text-xl flex"
+              >
                 {isActive ? tab.activeIcon : tab.icon}
               </m.div>
-              <span className="text-[11px] leading-none" style={{fontWeight: isActive ? 700 : 500, color: isActive ? "var(--accent)" : "var(--text-muted)", marginTop: 2}} >
+              <span
+                className="text-[11px] leading-none"
+                style={{
+                  fontWeight: isActive ? 700 : 500,
+                  color: isActive ? "var(--accent)" : "var(--text-muted)",
+                  marginTop: 2,
+                }}
+              >
                 {tab.label}
               </span>
               {isActive && (
                 <m.div
-                  layoutId="activeTab" className="absolute w-[4px] h-[4px] rounded-full" style={{bottom: 6, background: "var(--accent)"}} />
+                  layoutId="activeTab"
+                  className="absolute w-[4px] h-[4px] rounded-full"
+                  style={{ bottom: 6, background: "var(--accent)" }}
+                />
               )}
             </m.button>
           );

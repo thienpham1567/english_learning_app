@@ -1,13 +1,13 @@
-import { NextRequest } from "next/server";
-import { headers } from "next/headers";
 import { eq } from "drizzle-orm";
+import { headers } from "next/headers";
+import { NextRequest } from "next/server";
 
 import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("reading/passages");
-import { db } from "@repo/database";
-import { readingPassage, readingProgress, userVocabulary } from "@repo/database";
+
+import { db, readingPassage, readingProgress, userVocabulary } from "@repo/database";
 
 // CEFR level numeric ordering for "tooHard" calculation
 const CEFR_ORDER: Record<string, number> = { A1: 1, A2: 2, B1: 3, B2: 4, C1: 5, C2: 6 };

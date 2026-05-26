@@ -1,9 +1,9 @@
 import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
+import { routeLogger } from "@/lib/logger";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("flashcards/generate");
 
@@ -20,7 +20,11 @@ export async function POST(request: Request) {
   }
 
   const body = await request.json();
-  const { topic, type = "mixed", count = 10 } = body as {
+  const {
+    topic,
+    type = "mixed",
+    count = 10,
+  } = body as {
     topic?: string;
     type?: "vocab" | "grammar" | "mixed";
     count?: number;
@@ -36,8 +40,8 @@ export async function POST(request: Request) {
     type === "vocab"
       ? `Generate ONLY vocabulary flashcards.`
       : type === "grammar"
-      ? `Generate ONLY grammar flashcards.`
-      : `Generate a mix of vocabulary and grammar flashcards (roughly 70% vocab, 30% grammar).`;
+        ? `Generate ONLY grammar flashcards.`
+        : `Generate a mix of vocabulary and grammar flashcards (roughly 70% vocab, 30% grammar).`;
 
   const systemPrompt = `You are an expert TOEIC instructor who scored 900+ (Listening & Reading) and 350+ (Speaking & Writing).
 You create flashcards for Vietnamese learners preparing for TOEIC.

@@ -1,17 +1,17 @@
-import { headers } from "next/headers";
 import { randomUUID } from "crypto";
+import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("listening/generate");
-import { db } from "@repo/database";
-import { listeningExercise } from "@repo/database";
+
+import type { ListeningQuestion } from "@repo/database";
+import { db, listeningExercise } from "@repo/database";
+import { getExamContext, parseExamMode } from "@/lib/exam-mode/context";
+import { GenerateInputSchema } from "@/lib/listening/types";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { GenerateInputSchema } from "@/lib/listening/types";
-import type { ListeningQuestion } from "@repo/database";
-import { getExamContext, parseExamMode } from "@/lib/exam-mode/context";
 
 function buildListeningSystemPrompt(examMode: "toeic" | "ielts"): string {
   const ctx = getExamContext(examMode);
@@ -54,7 +54,10 @@ export async function POST(request: Request) {
     const body = await request.json();
     const parsed = GenerateInputSchema.safeParse(body);
     if (!parsed.success) {
-      return Response.json({ error: "Invalid input", details: parsed.error.flatten() }, { status: 400 });
+      return Response.json(
+        { error: "Invalid input", details: parsed.error.flatten() },
+        { status: 400 },
+      );
     }
 
     const { level, exerciseType, examMode: rawMode } = parsed.data;
@@ -66,7 +69,10 @@ export async function POST(request: Request) {
       model: openAiConfig.chatModel,
       messages: [
         { role: "system", content: buildListeningSystemPrompt(examMode) },
-        { role: "user", content: `Generate a ${level} level ${examMode.toUpperCase()} listening exercise. Exercise type: ${exerciseType}.` },
+        {
+          role: "user",
+          content: `Generate a ${level} level ${examMode.toUpperCase()} listening exercise. Exercise type: ${exerciseType}.`,
+        },
       ],
       temperature: 0.8,
       response_format: { type: "json_object" },
@@ -85,7 +91,11 @@ export async function POST(request: Request) {
       return Response.json({ error: "AI returned invalid JSON" }, { status: 502 });
     }
 
-    if (!generated.passage || !Array.isArray(generated.questions) || generated.questions.length === 0) {
+    if (
+      !generated.passage ||
+      !Array.isArray(generated.questions) ||
+      generated.questions.length === 0
+    ) {
       return Response.json({ error: "AI response missing required fields" }, { status: 502 });
     }
 

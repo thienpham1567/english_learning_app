@@ -1,4 +1,3 @@
-
 /* ── Voice configuration ── */
 export type Accent = "us" | "uk" | "au";
 export type Gender = "m" | "f";
@@ -16,12 +15,72 @@ export interface VoiceOption {
 }
 
 export const VOICES: VoiceOption[] = [
-  { accent: "us", gender: "m", role: "us-m", label: "US Male", name: "Austin", flag: "🇺🇸", avatar: "/avatars/austin.png", accentLabel: "Mỹ", description: "Giọng nam trầm ấm, phát âm rõ ràng chuẩn Mỹ." },
-  { accent: "us", gender: "f", role: "us-f", label: "US Female", name: "Autumn", flag: "🇺🇸", avatar: "/avatars/autumn.png", accentLabel: "Mỹ", description: "Giọng nữ tự nhiên, biểu cảm, dễ nghe." },
-  { accent: "uk", gender: "m", role: "uk-m", label: "UK Male", name: "Daniel", flag: "🇬🇧", avatar: "/avatars/daniel.png", accentLabel: "Anh", description: "Giọng nam Anh quý phái, thanh lịch, chuẩn mực." },
-  { accent: "uk", gender: "f", role: "uk-f", label: "UK Female", name: "Diana", flag: "🇬🇧", avatar: "/avatars/diana.png", accentLabel: "Anh", description: "Giọng nữ Anh ngọt ngào, tinh tế, truyền cảm." },
-  { accent: "au", gender: "m", role: "au-m", label: "AU Male", name: "Troy", flag: "🇦🇺", avatar: "/avatars/troy.png", accentLabel: "Úc", description: "Giọng nam Úc hào sảng, phóng khoáng, tự nhiên." },
-  { accent: "au", gender: "f", role: "au-f", label: "AU Female", name: "Hannah", flag: "🇦🇺", avatar: "/avatars/hannah.png", accentLabel: "Úc", description: "Giọng nữ Úc nhẹ nhàng, êm dịu, dễ đồng điệu." },
+  {
+    accent: "us",
+    gender: "m",
+    role: "us-m",
+    label: "US Male",
+    name: "Austin",
+    flag: "🇺🇸",
+    avatar: "/avatars/austin.png",
+    accentLabel: "Mỹ",
+    description: "Giọng nam trầm ấm, phát âm rõ ràng chuẩn Mỹ.",
+  },
+  {
+    accent: "us",
+    gender: "f",
+    role: "us-f",
+    label: "US Female",
+    name: "Autumn",
+    flag: "🇺🇸",
+    avatar: "/avatars/autumn.png",
+    accentLabel: "Mỹ",
+    description: "Giọng nữ tự nhiên, biểu cảm, dễ nghe.",
+  },
+  {
+    accent: "uk",
+    gender: "m",
+    role: "uk-m",
+    label: "UK Male",
+    name: "Daniel",
+    flag: "🇬🇧",
+    avatar: "/avatars/daniel.png",
+    accentLabel: "Anh",
+    description: "Giọng nam Anh quý phái, thanh lịch, chuẩn mực.",
+  },
+  {
+    accent: "uk",
+    gender: "f",
+    role: "uk-f",
+    label: "UK Female",
+    name: "Diana",
+    flag: "🇬🇧",
+    avatar: "/avatars/diana.png",
+    accentLabel: "Anh",
+    description: "Giọng nữ Anh ngọt ngào, tinh tế, truyền cảm.",
+  },
+  {
+    accent: "au",
+    gender: "m",
+    role: "au-m",
+    label: "AU Male",
+    name: "Troy",
+    flag: "🇦🇺",
+    avatar: "/avatars/troy.png",
+    accentLabel: "Úc",
+    description: "Giọng nam Úc hào sảng, phóng khoáng, tự nhiên.",
+  },
+  {
+    accent: "au",
+    gender: "f",
+    role: "au-f",
+    label: "AU Female",
+    name: "Hannah",
+    flag: "🇦🇺",
+    avatar: "/avatars/hannah.png",
+    accentLabel: "Úc",
+    description: "Giọng nữ Úc nhẹ nhàng, êm dịu, dễ đồng điệu.",
+  },
 ];
 
 export const SPEED_PRESETS = [0.8, 1.0, 1.2, 1.5];

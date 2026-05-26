@@ -1,12 +1,12 @@
-import { headers } from "next/headers";
-import { eq, and } from "drizzle-orm";
-import { z } from "zod";
-
-import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
+import { and, eq } from "drizzle-orm";
+import { headers } from "next/headers";
+import { z } from "zod";
+import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("errors/[id]/practice");
+
 import { errorLog } from "@repo/database";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
@@ -25,10 +25,7 @@ type Practice = z.infer<typeof PracticeSchema>;
  *
  * Generate a new practice question based on the same grammar pattern as the error.
  */
-export async function POST(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function POST(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });

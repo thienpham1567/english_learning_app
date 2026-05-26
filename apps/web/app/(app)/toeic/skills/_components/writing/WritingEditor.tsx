@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
-import { Send, Lightbulb, ChevronDown, PenSquare } from "lucide-react";
+import { ChevronDown, Lightbulb, PenSquare, Send } from "lucide-react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import type { WritingCategory } from "@/lib/writing-practice/types";
-import { MIN_WORDS, CATEGORY_LABELS } from "@/lib/writing-practice/types";
+import { CATEGORY_LABELS, MIN_WORDS } from "@/lib/writing-practice/types";
 
 const DRAFT_KEY = "writing-practice-draft";
 const AUTOSAVE_INTERVAL = 30_000;
@@ -61,23 +61,21 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
   const ratio = minWords > 0 ? wordCount / minWords : 1;
   const fillPct = Math.min(ratio * 100, 100);
 
-  let textColorClass = "text-slate-400";
-  let progressBgClass = "bg-slate-450";
+  let textColorClass = "text-text-muted";
+  let progressBgClass = "bg-border/30";
   if (ratio >= 1.2) {
-    textColorClass = "text-amber-500";
-    progressBgClass = "bg-amber-500";
+    textColorClass = "text-warning";
+    progressBgClass = "bg-warning";
   } else if (ratio >= 1) {
-    textColorClass = "text-emerald-500";
-    progressBgClass = "bg-emerald-500";
+    textColorClass = "text-success";
+    progressBgClass = "bg-success";
   }
 
   // Check for saved draft on mount
   useEffect(() => {
     const timeoutId = window.setTimeout(() => {
       const saved = loadDraft();
-      setDraftOffer(
-        saved && saved.prompt === prompt && saved.text.length > 0 ? saved : null,
-      );
+      setDraftOffer(saved && saved.prompt === prompt && saved.text.length > 0 ? saved : null);
     }, 0);
 
     return () => {
@@ -122,25 +120,23 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
     <div className="mx-auto w-full max-w-2xl">
       {/* Draft restore offer (AC #6) */}
       {draftOffer && (
-        <div
-          className="anim-fade-up mb-4 flex items-center justify-between gap-3 rounded-2xl border border-amber-900/30 bg-amber-950/20 px-4 py-3"
-        >
-          <span className="text-xs text-amber-400 flex items-center gap-1.5 font-semibold">
-            <PenSquare className="h-4 w-4 shrink-0" />
+        <div className="anim-fade-up mb-4 flex items-center justify-between gap-3 rounded-2xl border-2 border-border bg-warning-bg px-4 py-3 shadow-(--shadow-sm)">
+          <span className="text-xs text-text-primary flex items-center gap-1.5 font-semibold">
+            <PenSquare className="h-4 w-4 shrink-0 text-warning" />
             <span>Bạn có bản nháp chưa hoàn thành. Khôi phục?</span>
           </span>
           <div className="flex gap-2">
             <button
               type="button"
               onClick={restoreDraft}
-              className="rounded-xl bg-amber-505 bg-amber-600 px-3.5 py-1.5 text-xs font-bold text-white transition hover:bg-amber-700 cursor-pointer"
+              className="rounded-xl bg-warning px-3.5 py-1.5 text-xs font-bold text-black border-2 border-border shadow-(--shadow-sm) hover:translate-y-[-1px] transition-all cursor-pointer"
             >
               Khôi phục
             </button>
             <button
               type="button"
               onClick={dismissDraft}
-              className="rounded-xl border border-amber-900/40 px-3.5 py-1.5 text-xs font-bold text-amber-500 hover:bg-amber-950/20 transition cursor-pointer"
+              className="rounded-xl border-2 border-border bg-surface px-3.5 py-1.5 text-xs font-bold text-text-secondary hover:bg-surface-hover transition cursor-pointer"
             >
               Bỏ qua
             </button>
@@ -160,10 +156,10 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
       {hints.length > 0 && (
         <div className="mt-3">
           <button
-            className="flex w-full items-center gap-2 rounded-lg border border-amber-250 border-amber-900/20 bg-amber-950/5 px-3 py-2 text-left text-sm font-medium text-amber-600 hover:text-amber-500 transition hover:bg-amber-950/10 cursor-pointer"
+            className="flex w-full items-center gap-2 rounded-lg border-2 border-border bg-warning-bg px-3 py-2 text-left text-sm font-medium text-text-primary hover:bg-warning-bg/60 transition cursor-pointer"
             onClick={() => setShowHints(!showHints)}
           >
-            <Lightbulb className="h-4 w-4 shrink-0" />
+            <Lightbulb className="h-4 w-4 shrink-0 text-warning" />
             <span className="flex-1 text-xs font-bold">Gợi ý viết bài</span>
             <ChevronDown
               className={`h-4 w-4 shrink-0 transition-transform duration-250 ${
@@ -173,10 +169,10 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
           </button>
 
           {showHints && (
-            <div className="mt-1.5 space-y-1.5 rounded-lg border border-amber-900/10 bg-amber-950/5 px-3 py-2.5">
+            <div className="mt-1.5 space-y-1.5 rounded-lg border-2 border-border bg-warning-bg px-3 py-2.5">
               {hints.map((hint, i) => (
-                <p key={i} className="flex gap-2 text-[13px] leading-relaxed text-amber-500">
-                  <span className="shrink-0 font-semibold text-amber-600">{i + 1}.</span>
+                <p key={i} className="flex gap-2 text-[13px] leading-relaxed text-text-secondary">
+                  <span className="shrink-0 font-semibold text-warning">{i + 1}.</span>
                   {hint}
                 </p>
               ))}
@@ -198,7 +194,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
         <div className="mt-2">
           <div className="flex items-center gap-3">
             {/* Progress bar */}
-            <div className="flex-1 h-1.5 rounded-full bg-slate-900 overflow-hidden">
+            <div className="flex-1 h-1.5 rounded-full bg-bg-deep border border-border/20 overflow-hidden">
               <div
                 className={`h-full rounded-full transition-all duration-300 ease-out ${progressBgClass}`}
                 style={{
@@ -207,18 +203,16 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
               />
             </div>
             {/* Word count label */}
-            <span
-              className={`text-xs font-bold whitespace-nowrap ${textColorClass}`}
-            >
+            <span className={`text-xs font-bold whitespace-nowrap ${textColorClass}`}>
               {wordCount}/{minWords} từ
               {wordCount < minWords && (
-                <span className="text-[10px] text-slate-450 font-normal"> (tối thiểu)</span>
+                <span className="text-[10px] text-text-muted font-normal"> (tối thiểu)</span>
               )}
               {wordCount >= minWords && wordCount < minWords * 1.5 && (
-                <span className="text-[10px] text-emerald-450 font-normal"> ✓ đủ</span>
+                <span className="text-[10px] text-success font-normal"> ✓ đủ</span>
               )}
               {wordCount >= minWords * 1.5 && (
-                <span className="text-[10px] text-amber-450 font-normal"> (dài)</span>
+                <span className="text-[10px] text-warning font-normal"> (dài)</span>
               )}
             </span>
           </div>
@@ -227,13 +221,15 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
         {/* Submit row */}
         <div className="mt-3 flex items-center justify-between">
           {/* Autosave indicator (AC #4) */}
-          <span className={`text-[11px] text-slate-455 transition-opacity duration-300 ${
-            draftSaved ? "opacity-100" : "opacity-0"
-          }`}>
+          <span
+            className={`text-[11px] text-text-muted transition-opacity duration-300 ${
+              draftSaved ? "opacity-100" : "opacity-0"
+            }`}
+          >
             ✓ Bản nháp đã lưu
           </span>
           <button
-            className="flex items-center gap-2 rounded-lg bg-linear-to-br from-(--accent) to-amber-600 px-5 py-2.5 text-sm font-semibold text-white shadow-(--shadow-sm) transition enabled:hover:opacity-90 disabled:opacity-40 cursor-pointer"
+            className="flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-text-on-accent border-2 border-border shadow-(--shadow-sm) hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all disabled:opacity-40 cursor-pointer"
             disabled={wordCount < minWords || isSubmitting}
             onClick={handleSubmit}
           >

@@ -1,12 +1,8 @@
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
-import {
-  synthesizeTtsForVoice,
-  VOICE_BY_ROLE,
-  type VoiceRole,
-} from "@/lib/tts/groq";
-import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
 import { routeLogger } from "@/lib/logger";
+import { readTtsCache, writeTtsCache } from "@/lib/tts/cache";
+import { synthesizeTtsForVoice, VOICE_BY_ROLE, type VoiceRole } from "@/lib/tts/groq";
 
 /**
  * POST /api/read-aloud/batch
@@ -64,10 +60,7 @@ export async function POST(request: Request) {
     return Response.json({ error: "Chưa có dòng nào để TTS" }, { status: 400 });
   }
   if (body.lines.length > MAX_LINES) {
-    return Response.json(
-      { error: `Tối đa ${MAX_LINES} dòng mỗi batch` },
-      { status: 400 },
-    );
+    return Response.json({ error: `Tối đa ${MAX_LINES} dòng mỗi batch` }, { status: 400 });
   }
 
   const validRoles: VoiceRole[] = ["us-m", "us-f", "uk-m", "uk-f", "au-m", "au-f"];
@@ -135,9 +128,6 @@ export async function POST(request: Request) {
   } catch (err) {
     const errMsg = err instanceof Error ? err.message : String(err);
     log.error({ err: errMsg }, "batch.failed");
-    return Response.json(
-      { error: `Lỗi tổng hợp giọng nói: ${errMsg}` },
-      { status: 502 },
-    );
+    return Response.json({ error: `Lỗi tổng hợp giọng nói: ${errMsg}` }, { status: 502 });
   }
 }

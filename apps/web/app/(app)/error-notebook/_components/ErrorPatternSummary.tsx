@@ -1,10 +1,10 @@
 "use client";
 
-import { useMemo } from "react";
-import Link from "next/link";
-import { ChevronRight, X as XIcon, Check } from "lucide-react";
-import { summarizeErrorPatterns } from "@repo/modules/learning";
 import type { ErrorPatternInput } from "@repo/modules/learning";
+import { summarizeErrorPatterns } from "@repo/modules/learning";
+import { Check, ChevronRight, X as XIcon } from "lucide-react";
+import Link from "next/link";
+import { useMemo } from "react";
 
 type Props = {
   errors: ErrorPatternInput[];
@@ -37,7 +37,9 @@ export function ErrorPatternSummary({ errors }: Props) {
             className="rounded-[14px] bg-surface border-2 border-border overflow-hidden transition-all duration-150 hover:border-[color-mix(in_srgb,var(--warning)_35%,var(--border))] hover:shadow-sm"
           >
             {/* Pattern header */}
-            <div className={`flex items-center gap-3 px-4 py-3 bg-[color-mix(in_srgb,var(--warning)_5%,var(--bg))] ${pattern.examples.length > 0 ? "border-b-2 border-border" : ""}`}>
+            <div
+              className={`flex items-center gap-3 px-4 py-3 bg-[color-mix(in_srgb,var(--warning)_5%,var(--bg))] ${pattern.examples.length > 0 ? "border-b-2 border-border" : ""}`}
+            >
               <span className="text-lg leading-none shrink-0">{pattern.category.emoji}</span>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-bold text-ink leading-tight">
@@ -71,9 +73,7 @@ export function ErrorPatternSummary({ errors }: Props) {
                     key={ex.id}
                     className="text-xs leading-relaxed px-3 py-2 rounded-[9px] bg-bg-deep border-l-3 border-border"
                   >
-                    <span className="text-text-secondary">
-                      {ex.questionStem.slice(0, 80)}
-                    </span>
+                    <span className="text-text-secondary">{ex.questionStem.slice(0, 80)}</span>
                     <span className="text-(--error) font-semibold ml-2">
                       <XIcon className="h-2.5 w-2.5 inline" /> {ex.userAnswer}
                     </span>

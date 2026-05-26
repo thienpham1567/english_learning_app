@@ -1,7 +1,7 @@
 "use client";
 
-import { Component, type ErrorInfo, type ReactNode } from "react";
 import { AlertTriangle, RefreshCw } from "lucide-react";
+import { Component, type ErrorInfo, type ReactNode } from "react";
 
 interface Props {
   children: ReactNode;
@@ -34,14 +34,23 @@ export class ErrorBoundary extends Component<Props, State> {
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex flex-col items-center justify-center text-center h-[300px]" style={{padding: "48px 24px"}} >
-          <div className="w-[56px] h-[56px] rounded-full grid mb-4" style={{background: "var(--error-bg)", placeItems: "center"}} >
+        <div
+          className="flex flex-col items-center justify-center text-center h-[300px]"
+          style={{ padding: "48px 24px" }}
+        >
+          <div
+            className="w-[56px] h-[56px] rounded-full grid mb-4"
+            style={{ background: "var(--error-bg)", placeItems: "center" }}
+          >
             <AlertTriangle className="text-3xl text-destructive" />
           </div>
-          <h3 className="mb-2 text-lg font-bold text-ink font-display" >
+          <h3 className="mb-2 text-lg font-bold text-ink font-display">
             {this.props.fallbackTitle ?? "Đã xảy ra lỗi"}
           </h3>
-          <p className="text-[13px] text-text-muted w-[400px] leading-relaxed" style={{margin: "0 0 20px"}} >
+          <p
+            className="text-[13px] text-text-muted w-[400px] leading-relaxed"
+            style={{ margin: "0 0 20px" }}
+          >
             {this.state.error?.message ?? "Có lỗi không mong muốn. Hãy thử tải lại trang."}
           </p>
           <button
@@ -49,7 +58,14 @@ export class ErrorBoundary extends Component<Props, State> {
             onClick={() => {
               this.setState({ hasError: false, error: null });
               window.location.reload();
-            }} className="rounded-xl border-none text-sm font-semibold cursor-pointer flex items-center gap-2" style={{padding: "10px 24px", background: "var(--accent)", color: "var(--text-on-accent)"}} >
+            }}
+            className="rounded-xl border-none text-sm font-semibold cursor-pointer flex items-center gap-2"
+            style={{
+              padding: "10px 24px",
+              background: "var(--accent)",
+              color: "var(--text-on-accent)",
+            }}
+          >
             <RefreshCw /> Tải lại
           </button>
         </div>

@@ -1,7 +1,7 @@
 "use client";
 
-import type { ReactNode } from "react";
 import * as m from "motion/react-client";
+import type { ReactNode } from "react";
 
 interface ModuleHeaderProps {
   icon: ReactNode;
@@ -86,10 +86,7 @@ export function ModuleHeader({
       </svg>
 
       {/* Grain texture */}
-      <div
-        className="grain-overlay"
-        style={{ opacity: 0.045, borderRadius: "inherit" }}
-      />
+      <div className="grain-overlay" style={{ opacity: 0.045, borderRadius: "inherit" }} />
 
       {/* Radial light bloom — top right */}
       <m.div
@@ -102,8 +99,7 @@ export function ModuleHeader({
           width: 180,
           height: 180,
           borderRadius: "50%",
-          background:
-            "radial-gradient(circle, rgba(255,255,255,0.22) 0%, transparent 65%)",
+          background: "radial-gradient(circle, rgba(255,255,255,0.22) 0%, transparent 65%)",
           pointerEvents: "none",
         }}
       />
@@ -137,8 +133,7 @@ export function ModuleHeader({
             flexShrink: 0,
             fontSize: 24,
             color: "#fff",
-            boxShadow:
-              "0 4px 16px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.32)",
+            boxShadow: "0 4px 16px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.32)",
           }}
         >
           {icon}

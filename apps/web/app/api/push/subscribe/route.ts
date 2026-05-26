@@ -1,10 +1,8 @@
-import { NextResponse } from "next/server";
+import { db, pushSubscription } from "@repo/database";
+import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, and } from "drizzle-orm";
-
+import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { pushSubscription } from "@repo/database";
 
 /**
  * POST /api/push/subscribe
@@ -39,15 +37,18 @@ export async function POST(request: Request) {
   const { p256dh, auth: authKey } = keys as Record<string, string>;
 
   // Atomic upsert using ON CONFLICT (requires unique index on endpoint)
-  await db.insert(pushSubscription).values({
-    userId: session.user.id,
-    endpoint,
-    p256dh,
-    auth: authKey,
-  }).onConflictDoUpdate({
-    target: pushSubscription.endpoint,
-    set: { userId: session.user.id, p256dh, auth: authKey },
-  });
+  await db
+    .insert(pushSubscription)
+    .values({
+      userId: session.user.id,
+      endpoint,
+      p256dh,
+      auth: authKey,
+    })
+    .onConflictDoUpdate({
+      target: pushSubscription.endpoint,
+      set: { userId: session.user.id, p256dh, auth: authKey },
+    });
 
   return NextResponse.json({ ok: true });
 }
@@ -75,12 +76,11 @@ export async function DELETE(request: Request) {
     return NextResponse.json({ error: "Missing endpoint" }, { status: 400 });
   }
 
-  await db.delete(pushSubscription).where(
-    and(
-      eq(pushSubscription.userId, session.user.id),
-      eq(pushSubscription.endpoint, endpoint),
-    ),
-  );
+  await db
+    .delete(pushSubscription)
+    .where(
+      and(eq(pushSubscription.userId, session.user.id), eq(pushSubscription.endpoint, endpoint)),
+    );
 
   return NextResponse.json({ ok: true });
 }

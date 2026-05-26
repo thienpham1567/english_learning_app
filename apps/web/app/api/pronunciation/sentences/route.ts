@@ -1,15 +1,15 @@
-import { headers } from "next/headers";
 import { eq } from "drizzle-orm";
+import { headers } from "next/headers";
 
 import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("pronunciation/sentences");
-import { db } from "@repo/database";
-import { userPreferences } from "@repo/database";
+
+import { db, userPreferences } from "@repo/database";
+import { type ExamModeValue, getExamContext } from "@/lib/exam-mode/context";
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
-import { getExamContext, type ExamModeValue } from "@/lib/exam-mode/context";
 
 /**
  * POST /api/pronunciation/sentences
@@ -89,7 +89,10 @@ Return ONLY valid JSON:
       response_format: { type: "json_object" },
       messages: [
         { role: "system", content: systemPrompt },
-        { role: "user", content: `Generate ${count} ${level} pronunciation practice sentences for ${ctx.label}. Return JSON only.` },
+        {
+          role: "user",
+          content: `Generate ${count} ${level} pronunciation practice sentences for ${ctx.label}. Return JSON only.`,
+        },
       ],
     });
 

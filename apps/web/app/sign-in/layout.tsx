@@ -6,10 +6,6 @@ export const metadata: Metadata = {
     "Đăng nhập bằng Google để bắt đầu học tiếng Anh với gia sư AI, tra từ điển, flashcard và thử thách hàng ngày.",
 };
 
-export default function SignInLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function SignInLayout({ children }: { children: React.ReactNode }) {
   return children;
 }

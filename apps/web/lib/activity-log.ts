@@ -1,5 +1,4 @@
-import { db } from "@repo/database";
-import { activityLog } from "@repo/database";
+import { activityLog, db } from "@repo/database";
 
 export type ActivityType =
   | "flashcard_review"

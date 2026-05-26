@@ -1,14 +1,7 @@
+import { activityLog, dailyChallenge, db, listeningExercise, userVocabulary } from "@repo/database";
+import { and, desc, eq, gte, sql } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, and, sql, gte, desc } from "drizzle-orm";
-
 import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import {
-  dailyChallenge,
-  activityLog,
-  userVocabulary,
-  listeningExercise,
-} from "@repo/database";
 
 /**
  * GET /api/predicted-score
@@ -30,57 +23,44 @@ export async function GET() {
   fourWeeksAgo.setDate(fourWeeksAgo.getDate() - 28);
 
   // Parallel queries
-  const [
-    grammarScores,
-    listeningScores,
-    vocabCount,
-    weeklyHistory,
-  ] = await Promise.all([
+  const [grammarScores, listeningScores, vocabCount, weeklyHistory] = await Promise.all([
     // Grammar quiz scores (daily challenges)
-    db.select({
-      score: dailyChallenge.score,
-      completedAt: dailyChallenge.completedAt,
-    })
+    db
+      .select({
+        score: dailyChallenge.score,
+        completedAt: dailyChallenge.completedAt,
+      })
       .from(dailyChallenge)
-      .where(and(
-        eq(dailyChallenge.userId, userId),
-        sql`${dailyChallenge.completedAt} IS NOT NULL`,
-      ))
+      .where(and(eq(dailyChallenge.userId, userId), sql`${dailyChallenge.completedAt} IS NOT NULL`))
       .orderBy(desc(dailyChallenge.completedAt))
       .limit(20),
 
     // Listening exercise scores
-    db.select({
-      score: listeningExercise.score,
-      total: sql<number>`jsonb_array_length(${listeningExercise.questions})::int`,
-      createdAt: listeningExercise.createdAt,
-    })
+    db
+      .select({
+        score: listeningExercise.score,
+        total: sql<number>`jsonb_array_length(${listeningExercise.questions})::int`,
+        createdAt: listeningExercise.createdAt,
+      })
       .from(listeningExercise)
-      .where(and(
-        eq(listeningExercise.userId, userId),
-        sql`${listeningExercise.score} IS NOT NULL`,
-      ))
+      .where(and(eq(listeningExercise.userId, userId), sql`${listeningExercise.score} IS NOT NULL`))
       .orderBy(desc(listeningExercise.createdAt))
       .limit(20),
 
     // Total saved vocabulary
-    db.select({ count: sql<number>`count(*)::int` })
+    db
+      .select({ count: sql<number>`count(*)::int` })
       .from(userVocabulary)
-      .where(and(
-        eq(userVocabulary.userId, userId),
-        eq(userVocabulary.saved, true),
-      )),
+      .where(and(eq(userVocabulary.userId, userId), eq(userVocabulary.saved, true))),
 
     // Weekly XP for trend (last 4 weeks)
-    db.select({
-      week: sql<string>`to_char(date_trunc('week', ${activityLog.createdAt}), 'YYYY-MM-DD')`,
-      xp: sql<number>`coalesce(sum(${activityLog.xpEarned}), 0)::int`,
-    })
+    db
+      .select({
+        week: sql<string>`to_char(date_trunc('week', ${activityLog.createdAt}), 'YYYY-MM-DD')`,
+        xp: sql<number>`coalesce(sum(${activityLog.xpEarned}), 0)::int`,
+      })
       .from(activityLog)
-      .where(and(
-        eq(activityLog.userId, userId),
-        gte(activityLog.createdAt, fourWeeksAgo),
-      ))
+      .where(and(eq(activityLog.userId, userId), gte(activityLog.createdAt, fourWeeksAgo)))
       .groupBy(sql`date_trunc('week', ${activityLog.createdAt})`)
       .orderBy(sql`date_trunc('week', ${activityLog.createdAt})`),
   ]);
@@ -104,10 +84,11 @@ export async function GET() {
   const grammarAvg = grammarScores.reduce((sum, q) => sum + (q.score ?? 0), 0) / totalQuizzes;
 
   // 2. Listening accuracy (avg percentage)
-  const listeningAvg = listeningScores.reduce((sum, l) => {
-    const total = Math.max(l.total ?? 1, 1); // F4 fix: guard against 0-length questions
-    return sum + ((l.score ?? 0) / total) * 100;
-  }, 0) / totalListening;
+  const listeningAvg =
+    listeningScores.reduce((sum, l) => {
+      const total = Math.max(l.total ?? 1, 1); // F4 fix: guard against 0-length questions
+      return sum + ((l.score ?? 0) / total) * 100;
+    }, 0) / totalListening;
 
   // 3. Vocabulary score (normalized: 500 words = 100%)
   const totalVocab = vocabCount[0]?.count ?? 0;
@@ -115,7 +96,8 @@ export async function GET() {
 
   // 4. Mock test component (using best quiz scores as proxy)
   const sortedScores = grammarScores.map((q) => q.score ?? 0).sort((a, b) => b - a);
-  const topScoresAvg = sortedScores.slice(0, 3).reduce((s, v) => s + v, 0) / Math.min(3, sortedScores.length);
+  const topScoresAvg =
+    sortedScores.slice(0, 3).reduce((s, v) => s + v, 0) / Math.min(3, sortedScores.length);
 
   // Weighted prediction: grammar 40%, listening 30%, vocab 20%, top scores 10%
   const composite = grammarAvg * 0.4 + listeningAvg * 0.3 + vocabScore * 0.2 + topScoresAvg * 0.1;

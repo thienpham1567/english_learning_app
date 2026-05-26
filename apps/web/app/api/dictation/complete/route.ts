@@ -1,9 +1,7 @@
+import { activityLog, db } from "@repo/database";
 import { headers } from "next/headers";
-
-import { auth } from "@/lib/auth";
-import { db } from "@repo/database";
-import { activityLog } from "@repo/database";
 import { updateSkillProfile } from "@/lib/adaptive/difficulty";
+import { auth } from "@/lib/auth";
 
 /**
  * POST /api/dictation/complete

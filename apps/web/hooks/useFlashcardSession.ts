@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api-client";
 import type { DueCard } from "@/lib/flashcard/types";
 
@@ -25,8 +25,13 @@ export function useFlashcardSession() {
   const [nextReviewAt, setNextReviewAt] = useState<string | null>(null);
   const [sessionStartedAt, setSessionStartedAt] = useState<number | null>(null);
   const [stats, setStats] = useState<SessionStats>({
-    totalReviewed: 0, totalQuality: 0, forgottenCount: 0,
-    againCount: 0, hardCount: 0, goodCount: 0, easyCount: 0,
+    totalReviewed: 0,
+    totalQuality: 0,
+    forgottenCount: 0,
+    againCount: 0,
+    hardCount: 0,
+    goodCount: 0,
+    easyCount: 0,
   });
   const hasFetched = useRef(false);
 
@@ -80,7 +85,15 @@ export function useFlashcardSession() {
       setCards(data.cards);
       setNextReviewAt(data.nextReviewAt);
       setCurrentIndex(0);
-      setStats({ totalReviewed: 0, totalQuality: 0, forgottenCount: 0, againCount: 0, hardCount: 0, goodCount: 0, easyCount: 0 });
+      setStats({
+        totalReviewed: 0,
+        totalQuality: 0,
+        forgottenCount: 0,
+        againCount: 0,
+        hardCount: 0,
+        goodCount: 0,
+        easyCount: 0,
+      });
       setSessionStartedAt(data.cards.length > 0 ? Date.now() : null);
       setState(data.cards.length > 0 ? "active" : "empty");
     } catch {
@@ -128,7 +141,15 @@ export function useFlashcardSession() {
     setCards([]);
     setCurrentIndex(0);
     setSessionStartedAt(null);
-    setStats({ totalReviewed: 0, totalQuality: 0, forgottenCount: 0, againCount: 0, hardCount: 0, goodCount: 0, easyCount: 0 });
+    setStats({
+      totalReviewed: 0,
+      totalQuality: 0,
+      forgottenCount: 0,
+      againCount: 0,
+      hardCount: 0,
+      goodCount: 0,
+      easyCount: 0,
+    });
     setState("loading");
     // Trigger re-fetch on next render cycle
     setTimeout(() => {

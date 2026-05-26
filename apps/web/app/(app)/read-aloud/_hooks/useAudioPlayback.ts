@@ -2,7 +2,6 @@
 
 import { useCallback, useRef, useState } from "react";
 
-
 const MAX_CHARS = 10_000;
 const LRU_MAX = 15;
 

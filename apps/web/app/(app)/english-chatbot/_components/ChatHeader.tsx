@@ -13,10 +13,7 @@ export function ChatHeader({ personaId, isLoading }: Props) {
 
   return (
     <div className="flex h-14 shrink-0 items-center justify-between border-b-2 border-border bg-(--chat-surface)/60 px-4 md:px-6 backdrop-blur-md z-30">
-      <div
-        className="flex items-center gap-3 animate-in fade-in duration-300"
-        key={personaId}
-      >
+      <div className="flex items-center gap-3 animate-in fade-in duration-300" key={personaId}>
         <div className="relative">
           <Avatar size={32} />
           {/* Online indicator dot */}
@@ -26,7 +23,7 @@ export function ChatHeader({ personaId, isLoading }: Props) {
             }`}
           />
         </div>
-        
+
         <div className="flex flex-col">
           <span className="text-xs font-semibold text-(--ink) leading-tight tracking-wide">
             {persona.label}

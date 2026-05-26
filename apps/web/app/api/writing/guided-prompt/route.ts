@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("writing/guided-prompt");
+
 import { openAiClient } from "@/lib/openai/client";
 import { openAiConfig } from "@/lib/openai/config";
 
@@ -15,7 +16,13 @@ import { openAiConfig } from "@/lib/openai/config";
  * AC2: outline 3–5 bullets, vocab bank 6–10 B2/C1 terms
  */
 
-export type TopicCategory = "education" | "technology" | "environment" | "health" | "society" | "work";
+export type TopicCategory =
+  | "education"
+  | "technology"
+  | "environment"
+  | "health"
+  | "society"
+  | "work";
 
 export type VocabBankItem = {
   term: string;
@@ -30,7 +37,14 @@ export type GuidedPromptResponse = {
   topicCategory: TopicCategory;
 };
 
-const VALID_CATEGORIES = new Set<TopicCategory>(["education", "technology", "environment", "health", "society", "work"]);
+const VALID_CATEGORIES = new Set<TopicCategory>([
+  "education",
+  "technology",
+  "environment",
+  "health",
+  "society",
+  "work",
+]);
 const VALID_EXAMS = new Set(["ielts-task2", "ielts-task1", "toefl-independent"]);
 
 // Rate limiter: 20/min/user
@@ -46,7 +60,9 @@ const EXAM_LABELS: Record<string, string> = {
 
 function buildGuidedPrompt(exam: string, category: TopicCategory, targetBand?: number): string {
   const examLabel = EXAM_LABELS[exam] ?? exam;
-  const bandNote = targetBand ? `\nThe learner is targeting band ${targetBand}. Adjust complexity accordingly.` : "";
+  const bandNote = targetBand
+    ? `\nThe learner is targeting band ${targetBand}. Adjust complexity accordingly.`
+    : "";
 
   return `You are an expert ${examLabel} writing coach. Generate a practice prompt for the learner.
 
@@ -92,7 +108,10 @@ export async function POST(request: Request) {
   const entry = rateLimitMap.get(userId);
   if (entry && entry.resetAt > now) {
     if (entry.count >= RATE_LIMIT_MAX) {
-      return Response.json({ error: "Rate limit exceeded. Try again in a minute." }, { status: 429 });
+      return Response.json(
+        { error: "Rate limit exceeded. Try again in a minute." },
+        { status: 429 },
+      );
     }
     entry.count++;
   } else {
@@ -149,7 +168,10 @@ export async function POST(request: Request) {
 
     // Enforce minimum lengths (AC2)
     if (parsed.outline.length < 3 || parsed.vocabBank.length < 6) {
-      log.error({ outlineLen: parsed.outline.length, vocabLen: parsed.vocabBank.length }, "writing.guided-prompt.incomplete.response");
+      log.error(
+        { outlineLen: parsed.outline.length, vocabLen: parsed.vocabBank.length },
+        "writing.guided-prompt.incomplete.response",
+      );
       return Response.json({ error: "AI response incomplete — please try again" }, { status: 502 });
     }
 

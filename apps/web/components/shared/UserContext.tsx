@@ -1,7 +1,7 @@
 "use client";
 
-import { createContext, useContext } from "react";
 import type { ReactNode } from "react";
+import { createContext, useContext } from "react";
 import type { AuthUser } from "@/components/shared/AppShell";
 
 const UserContext = createContext<AuthUser | null>(null);

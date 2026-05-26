@@ -1,28 +1,32 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { motion } from "motion/react";
 import {
-  Flame,
-  Zap,
-  BookOpen,
-  RotateCw,
-  Target,
-  HelpCircle,
   AlertTriangle,
-  TrendingUp,
+  BookOpen,
   CheckCircle2,
-  Clock,
-  Star,
-  Rocket,
   ChevronRight,
+  Clock,
+  Flame,
+  HelpCircle,
+  Rocket,
+  RotateCw,
+  Star,
+  Target,
+  TrendingUp,
+  Zap,
 } from "lucide-react";
-import { useDashboard, type DashboardData } from "@/hooks/useDashboard";
-import { useDailyStudyPlan, type DailyPlanItem, type DailyPlanStats } from "@/hooks/useDailyStudyPlan";
-import { api } from "@/lib/api-client";
+import { motion } from "motion/react";
+import Link from "next/link";
+import { useEffect, useState } from "react";
 import { HeatmapCalendar } from "@/app/(app)/dashboard/_components/HeatmapCalendar";
 import { WeeklyReport } from "@/app/(app)/dashboard/_components/WeeklyReport";
+import {
+  type DailyPlanItem,
+  type DailyPlanStats,
+  useDailyStudyPlan,
+} from "@/hooks/useDailyStudyPlan";
+import { type DashboardData, useDashboard } from "@/hooks/useDashboard";
+import { api } from "@/lib/api-client";
 
 // ── Types ────────────────────────────────────────────────────────
 type PredictedScore = {
@@ -31,7 +35,12 @@ type PredictedScore = {
   confidence?: number;
   reading?: number;
   listening?: number;
-  components?: { grammar: number; listeningAccuracy: number; vocabulary: number; topScores: number };
+  components?: {
+    grammar: number;
+    listeningAccuracy: number;
+    vocabulary: number;
+    topScores: number;
+  };
   dataPoints?: { quizzes: number; listening: number; vocabulary: number };
   weeklyXP?: { week: string; xp: number }[];
   quizzesNeeded?: number;
@@ -42,12 +51,14 @@ const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.08 }
-  }
+    transition: { staggerChildren: 0.08 },
+  },
 };
 
-const cardClass = "relative overflow-hidden rounded-2xl border-2 border-border bg-surface shadow-sm p-6";
-const sectionLabelClass = "flex items-center gap-2.5 text-[10px] font-extrabold uppercase tracking-widest text-accent mb-4";
+const cardClass =
+  "relative overflow-hidden rounded-xl border-2 border-border bg-surface shadow-(--shadow) p-6";
+const sectionLabelClass =
+  "flex items-center gap-2.5 text-[10px] font-extrabold uppercase tracking-widest text-accent mb-4";
 const accentBarClass = "w-[3px] h-3.5 rounded-sm bg-accent shrink-0";
 
 // ── Component ────────────────────────────────────────────────────
@@ -59,11 +70,18 @@ export default function DashboardPage() {
 
   useEffect(() => {
     let cancelled = false;
-    api.get<PredictedScore>("/predicted-score")
-      .then((d) => { if (!cancelled) setScore(d); })
+    api
+      .get<PredictedScore>("/predicted-score")
+      .then((d) => {
+        if (!cancelled) setScore(d);
+      })
       .catch(() => {})
-      .finally(() => { if (!cancelled) setScoreLoading(false); });
-    return () => { cancelled = true; };
+      .finally(() => {
+        if (!cancelled) setScoreLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const dash: DashboardData | null = dashState.status === "ready" ? dashState.data : null;
@@ -72,8 +90,7 @@ export default function DashboardPage() {
   return (
     <div className="min-h-full overflow-y-auto px-4 py-4 pb-12">
       {/* ── Hero Header ── */}
-      <div className="max-w-5xl mx-auto mb-4">
-      </div>
+      <div className="max-w-5xl mx-auto mb-4"></div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1.62fr_1fr] gap-5 items-start max-w-5xl mx-auto px-1">
         {/* Left Column: Focus & Core Actions */}
@@ -102,7 +119,9 @@ export default function DashboardPage() {
             ) : score?.predicted ? (
               <ScoreDisplay score={score} />
             ) : (
-              <p className="text-xs text-slate-500 text-center py-6 font-semibold">Chưa có đủ dữ liệu</p>
+              <p className="text-xs text-text-muted text-center py-6 font-semibold">
+                Chưa có đủ dữ liệu
+              </p>
             )}
           </motion.div>
 
@@ -128,7 +147,9 @@ export default function DashboardPage() {
             ) : planReady ? (
               <StudyPlanSection items={planReady.plan.items} stats={planReady.stats} />
             ) : (
-              <p className="text-xs text-slate-500 text-center py-4 font-semibold">Hãy làm thêm bài tập để hệ thống gợi ý kế hoạch học!</p>
+              <p className="text-xs text-text-muted text-center py-4 font-semibold">
+                Hãy làm thêm bài tập để hệ thống gợi ý kế hoạch học!
+              </p>
             )}
           </motion.div>
 
@@ -234,7 +255,7 @@ export default function DashboardPage() {
           )}
 
           {/* ── Recent Badges ── */}
-          {dash && dash.badges.filter(b => b.unlocked).length > 0 && (
+          {dash && dash.badges.filter((b) => b.unlocked).length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
@@ -247,15 +268,17 @@ export default function DashboardPage() {
                 <div className="flex-1 h-px bg-border ml-2" />
               </div>
               <div className="flex flex-wrap gap-2">
-                {dash.badges.filter(b => b.unlocked).map(b => (
-                  <div
-                    key={b.id}
-                    className="px-3.5 py-2 rounded-xl bg-accent/5 border border-accent/15 flex items-center gap-2 text-xs font-semibold text-slate-200"
-                  >
-                    <span className="text-base leading-none">{b.icon}</span>
-                    <span>{b.label}</span>
-                  </div>
-                ))}
+                {dash.badges
+                  .filter((b) => b.unlocked)
+                  .map((b) => (
+                    <div
+                      key={b.id}
+                      className="px-3.5 py-2 rounded-lg bg-accent/5 border-2 border-border flex items-center gap-2 text-xs font-black text-text-primary shadow-(--shadow-sm)"
+                    >
+                      <span className="text-base leading-none">{b.icon}</span>
+                      <span>{b.label}</span>
+                    </div>
+                  ))}
               </div>
             </motion.div>
           )}
@@ -267,24 +290,43 @@ export default function DashboardPage() {
 
 // ── Sub-components ───────────────────────────────────────────────
 
-function StatCard({ icon, label, value, sub, loading }: {
-  icon: React.ReactNode; label: string; value: string; sub: string; loading: boolean;
+function StatCard({
+  icon,
+  label,
+  value,
+  sub,
+  loading,
+}: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  sub: string;
+  loading: boolean;
 }) {
   return (
     <motion.div
       variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }}
-      whileHover={{ y: -2 }}
+      whileHover={{ y: -2, x: -2, boxShadow: "var(--shadow-lg)" }}
+      whileTap={{ y: 2, x: 2, boxShadow: "none" }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className="flex-1 min-w-[90px] text-center rounded-2xl border-2 border-border bg-surface p-4 shadow-sm"
+      className="flex-1 min-w-[90px] text-center rounded-xl border-2 border-border bg-surface p-4 shadow-(--shadow) transition-all duration-100"
     >
       {loading ? (
-        <div className="h-10 bg-slate-900 border border-slate-850 rounded-md animate-pulse mx-auto w-12" />
+        <div className="h-10 bg-bg-deep border-2 border-border rounded-md animate-pulse mx-auto w-12" />
       ) : (
         <div className="flex flex-col items-center">
           <div className="text-lg mb-2">{icon}</div>
-          <div className="text-xl font-extrabold text-slate-100 font-mono tracking-tight leading-none">{value}</div>
-          <div className="text-[9px] font-bold uppercase tracking-wider text-slate-500 mt-2">{label}</div>
-          {sub && <div className="text-[8px] text-slate-550 font-semibold mt-1 truncate max-w-full">{sub}</div>}
+          <div className="text-xl font-black text-text-primary font-mono tracking-tight leading-none">
+            {value}
+          </div>
+          <div className="text-[9px] font-bold uppercase tracking-wider text-text-muted mt-2">
+            {label}
+          </div>
+          {sub && (
+            <div className="text-[8px] text-text-muted font-semibold mt-1 truncate max-w-full">
+              {sub}
+            </div>
+          )}
         </div>
       )}
     </motion.div>
@@ -329,10 +371,10 @@ function ScoreDisplay({ score }: { score: PredictedScore }) {
           />
         </svg>
         <div className="absolute flex flex-col items-center justify-center">
-          <span className="font-display text-2xl font-extrabold text-slate-100 leading-none">
+          <span className="font-display text-2xl font-black text-text-primary leading-none">
             {score.predicted}
           </span>
-          <span className="text-[9px] text-slate-550 font-bold uppercase tracking-wider mt-1">
+          <span className="text-[9px] text-text-muted font-bold uppercase tracking-wider mt-1">
             / 990
           </span>
         </div>
@@ -341,21 +383,34 @@ function ScoreDisplay({ score }: { score: PredictedScore }) {
       <div className="flex-1 min-w-[180px] flex flex-col gap-3">
         {/* L/R split */}
         <div className="flex gap-2">
-          <MiniScore label="Listening" value={score.listening ?? 0} max={495} color="var(--accent)" />
-          <MiniScore label="Reading" value={score.reading ?? 0} max={495} color="var(--secondary)" />
+          <MiniScore
+            label="Listening"
+            value={score.listening ?? 0}
+            max={495}
+            color="var(--accent)"
+          />
+          <MiniScore
+            label="Reading"
+            value={score.reading ?? 0}
+            max={495}
+            color="var(--secondary)"
+          />
         </div>
         {/* Components */}
         {score.components && (
-          <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 border-t border-slate-900 pt-2.5">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 border-t border-border pt-2.5">
             {[
               { k: "Ngữ pháp", v: score.components.grammar },
               { k: "Nghe hiểu", v: score.components.listeningAccuracy },
               { k: "Từ vựng", v: score.components.vocabulary },
               { k: "Điểm tốt", v: score.components.topScores },
-            ].map(c => (
-              <div key={c.k} className="text-[10px] text-slate-400 font-semibold flex justify-between">
+            ].map((c) => (
+              <div
+                key={c.k}
+                className="text-[10px] text-text-secondary font-semibold flex justify-between"
+              >
                 <span>{c.k}</span>
-                <span className="font-bold text-slate-200">{c.v}%</span>
+                <span className="font-bold text-text-primary">{c.v}%</span>
               </div>
             ))}
           </div>
@@ -365,17 +420,31 @@ function ScoreDisplay({ score }: { score: PredictedScore }) {
   );
 }
 
-function MiniScore({ label, value, max, color }: { label: string; value: number; max: number; color: string }) {
+function MiniScore({
+  label,
+  value,
+  max,
+  color,
+}: {
+  label: string;
+  value: number;
+  max: number;
+  color: string;
+}) {
   return (
     <div
       style={{
         background: `color-mix(in srgb, ${color} 6%, var(--surface))`,
         borderColor: `color-mix(in srgb, ${color} 15%, transparent)`,
       }}
-      className="flex-1 px-3 py-2 rounded-xl border text-center"
+      className="flex-1 px-3 py-2 rounded-xl border-2 border-border text-center"
     >
-      <div style={{ color }} className="text-lg font-extrabold font-mono leading-none">{value}</div>
-      <div className="text-[9px] text-slate-500 font-bold uppercase tracking-wider mt-1.5">{label}</div>
+      <div style={{ color }} className="text-lg font-extrabold font-mono leading-none">
+        {value}
+      </div>
+      <div className="text-[9px] text-text-muted font-bold uppercase tracking-wider mt-1.5">
+        {label}
+      </div>
     </div>
   );
 }
@@ -383,25 +452,25 @@ function MiniScore({ label, value, max, color }: { label: string; value: number;
 function InsufficientDataCard({ score }: { score: PredictedScore }) {
   return (
     <div className="text-center py-4 flex flex-col items-center">
-      <TrendingUp className="h-8 w-8 text-slate-650 mb-3" />
-      <p className="text-sm font-semibold text-slate-200 mb-1">Cần thêm dữ liệu để dự đoán</p>
-      <p className="text-xs text-slate-500 mb-4">
+      <TrendingUp className="h-8 w-8 text-text-muted mb-3" />
+      <p className="text-sm font-extrabold text-text-primary mb-1">Cần thêm dữ liệu để dự đoán</p>
+      <p className="text-xs text-text-muted font-bold mb-4">
         {score.quizzesNeeded ? `Cần thêm ${score.quizzesNeeded} bài quiz` : ""}
         {score.quizzesNeeded && score.listeningNeeded ? " và " : ""}
         {score.listeningNeeded ? `${score.listeningNeeded} bài nghe` : ""}
       </p>
-      
-      <div className="flex gap-2 justify-center flex-wrap">
+
+      <div className="flex gap-2.5 justify-center flex-wrap">
         <Link
           href="/toeic/skills?tab=part5"
-          className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-full text-xs font-bold bg-accent text-white hover:bg-accent-hover transition-colors shadow-sm active:scale-95 cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-lg text-xs font-black border-2 border-border bg-accent text-ink shadow-(--shadow-sm) hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all cursor-pointer"
         >
           <HelpCircle className="h-3.5 w-3.5" />
           <span>Làm Grammar Quiz</span>
         </Link>
         <Link
           href="/toeic/skills"
-          className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-full text-xs font-bold border border-slate-800 bg-slate-900/30 text-slate-350 hover:text-white hover:bg-slate-900 transition-colors shadow-sm active:scale-95 cursor-pointer"
+          className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-lg text-xs font-black border-2 border-border bg-surface text-text-primary shadow-(--shadow-sm) hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all cursor-pointer"
         >
           <Target className="h-3.5 w-3.5" />
           <span>Luyện Listening</span>
@@ -412,51 +481,70 @@ function InsufficientDataCard({ score }: { score: PredictedScore }) {
 }
 
 function StudyPlanSection({ items, stats }: { items: DailyPlanItem[]; stats: DailyPlanStats }) {
-  const completed = items.filter(i => i.completed).length;
+  const completed = items.filter((i) => i.completed).length;
   const pct = items.length > 0 ? Math.round((completed / items.length) * 100) : 0;
 
   return (
     <div className="flex flex-col gap-4">
       {/* Progress bar */}
       <div className="flex items-center gap-3">
-        <div className="flex-1 h-1.5 rounded-full bg-slate-900/60 overflow-hidden relative border border-slate-850">
+        <div className="flex-1 h-2 rounded-full bg-bg-deep overflow-hidden relative border-2 border-border">
           <div
             style={{ width: `${pct}%` }}
             className="h-full rounded-full bg-gradient-to-r from-accent to-secondary transition-all duration-500 ease-out"
           />
         </div>
-        <span className="text-xs font-extrabold text-accent font-mono leading-none">{completed}/{items.length}</span>
+        <span className="text-xs font-extrabold text-accent font-mono leading-none">
+          {completed}/{items.length}
+        </span>
       </div>
 
       {/* Task list */}
       <div className="flex flex-col gap-2.5">
-        {items.map(item => (
-          <Link key={item.id} href={item.actionUrl} className="block group">
-            <div className={`flex items-center gap-3.5 p-3 rounded-xl border transition-all duration-150 cursor-pointer ${
-              item.completed 
-                ? "bg-emerald-950/5 border-emerald-950/20 opacity-60 hover:opacity-80" 
-                : "bg-slate-900/10 border-border hover:bg-slate-900/30 hover:border-slate-800"
-            }`}>
-              <div className={`w-7 h-7 rounded-lg flex items-center justify-center shrink-0 text-xs font-bold ${
+        {items.map((item) => (
+          <Link
+            key={item.id}
+            href={item.actionUrl}
+            className="block group"
+            style={{ textDecoration: "none" }}
+          >
+            <div
+              className={`flex items-center gap-3.5 p-3 rounded-xl border-2 transition-all duration-100 cursor-pointer ${
                 item.completed
-                  ? "bg-emerald-500 text-white"
-                  : item.priority === "high"
-                    ? "bg-accent/10 text-accent"
-                    : "bg-slate-900 border border-slate-850 text-slate-500"
-              }`}>
-                {item.completed ? <CheckCircle2 className="h-4 w-4" /> : <Rocket className="h-4 w-4" />}
+                  ? "bg-success-bg border-success/30 opacity-60 hover:opacity-80"
+                  : "bg-surface border-border hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow-sm) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
+              }`}
+            >
+              <div
+                className={`w-7 h-7 rounded-lg border-2 border-border flex items-center justify-center shrink-0 text-xs font-black ${
+                  item.completed
+                    ? "bg-success text-text-on-accent"
+                    : item.priority === "high"
+                      ? "bg-accent text-ink"
+                      : "bg-bg-deep text-text-muted"
+                }`}
+              >
+                {item.completed ? (
+                  <CheckCircle2 className="h-4 w-4" />
+                ) : (
+                  <Rocket className="h-4 w-4" />
+                )}
               </div>
-              
+
               <div className="flex-1 min-w-0">
-                <div className="text-xs font-bold text-slate-100 group-hover:text-white transition-colors truncate">{item.title}</div>
-                <div className="text-[10px] text-slate-500 font-semibold mt-1 flex items-center gap-1.5">
+                <div className="text-xs font-black text-text-primary transition-colors truncate">
+                  {item.title}
+                </div>
+                <div className="text-[10px] text-text-muted font-bold mt-1 flex items-center gap-1.5">
                   <Clock className="h-3 w-3 shrink-0" />
-                  <span>{item.estimatedMinutes} phút · {item.reason}</span>
+                  <span>
+                    {item.estimatedMinutes} phút · {item.reason}
+                  </span>
                 </div>
               </div>
-              
+
               {item.priority === "high" && !item.completed && (
-                <span className="px-2.5 py-0.5 rounded-full text-[9px] font-extrabold bg-red-950/30 border border-red-900/30 text-red-400">
+                <span className="px-2.5 py-0.5 rounded-lg text-[9px] font-extrabold bg-error/10 border-2 border-error text-error">
                   Ưu tiên
                 </span>
               )}
@@ -467,15 +555,18 @@ function StudyPlanSection({ items, stats }: { items: DailyPlanItem[]; stats: Dai
 
       {/* XP level stats bar */}
       {stats && (
-        <div className="p-3 rounded-xl bg-slate-900/40 border border-slate-850 flex items-center gap-2.5">
+        <div className="p-3 rounded-xl bg-surface border-2 border-border flex items-center gap-2.5 shadow-(--shadow-sm)">
           <Star className="text-amber-500 h-4 w-4 fill-current shrink-0" />
-          <div className="flex-1 text-[11px] text-slate-400 font-semibold">
-            Cấp độ {stats.levelNumber} · <strong className="text-slate-200">{stats.totalXP.toLocaleString()} XP</strong>
+          <div className="flex-1 text-[11px] text-text-secondary font-bold">
+            Cấp độ {stats.levelNumber} ·{" "}
+            <strong className="text-text-primary">{stats.totalXP.toLocaleString()} XP</strong>
           </div>
-          <div className="w-20 h-1 bg-slate-900 rounded-full overflow-hidden border border-slate-850 shrink-0">
+          <div className="w-20 h-2 bg-bg-deep rounded-full overflow-hidden border-2 border-border shrink-0">
             <div
-              style={{ width: `${Math.min(100, (stats.currentLevelXP / stats.nextLevelXP) * 100)}%` }}
-              className="h-full bg-amber-550 rounded-full"
+              style={{
+                width: `${Math.min(100, (stats.currentLevelXP / stats.nextLevelXP) * 100)}%`,
+              }}
+              className="h-full bg-accent rounded-full"
             />
           </div>
         </div>
@@ -485,12 +576,42 @@ function StudyPlanSection({ items, stats }: { items: DailyPlanItem[]; stats: Dai
 }
 
 const QUICK_ACTIONS = [
-  { href: "/daily-challenge", icon: <Flame />, label: "Thử thách", color: "text-orange-500 bg-orange-500/10" },
-  { href: "/toeic/skills", icon: <Target />, label: "Luyện TOEIC", color: "text-accent bg-accent/10" },
-  { href: "/flashcards", icon: <BookOpen />, label: "Flashcard", color: "text-emerald-500 bg-emerald-550/10" },
-  { href: "/error-notebook", icon: <AlertTriangle />, label: "Sổ lỗi", color: "text-red-500 bg-red-500/10" },
-  { href: "/my-vocabulary", icon: <Star />, label: "Từ vựng", color: "text-amber-500 bg-amber-500/10" },
-  { href: "/grammar-lessons", icon: <BookOpen />, label: "Ngữ pháp", color: "text-secondary bg-secondary/10" },
+  {
+    href: "/daily-challenge",
+    icon: <Flame />,
+    label: "Thử thách",
+    color: "text-orange-500 bg-orange-500/10",
+  },
+  {
+    href: "/toeic/skills",
+    icon: <Target />,
+    label: "Luyện TOEIC",
+    color: "text-accent bg-accent/10",
+  },
+  {
+    href: "/flashcards",
+    icon: <BookOpen />,
+    label: "Flashcard",
+    color: "text-emerald-500 bg-emerald-550/10",
+  },
+  {
+    href: "/error-notebook",
+    icon: <AlertTriangle />,
+    label: "Sổ lỗi",
+    color: "text-red-500 bg-red-500/10",
+  },
+  {
+    href: "/my-vocabulary",
+    icon: <Star />,
+    label: "Từ vựng",
+    color: "text-amber-500 bg-amber-500/10",
+  },
+  {
+    href: "/grammar-lessons",
+    icon: <BookOpen />,
+    label: "Ngữ pháp",
+    color: "text-secondary bg-secondary/10",
+  },
 ];
 
 type QuickActionsProps = {
@@ -501,19 +622,21 @@ function QuickActions({ dash: _dash }: QuickActionsProps) {
   return (
     <div className="grid grid-cols-3 gap-2.5">
       {QUICK_ACTIONS.map((a, i) => (
-        <Link key={a.href} href={a.href} className="block">
+        <Link key={a.href} href={a.href} className="block" style={{ textDecoration: "none" }}>
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 * i }}
-            whileHover={{ y: -3 }}
-            whileTap={{ scale: 0.97 }}
-            className="p-4.5 rounded-2xl border-2 border-border bg-slate-900/10 hover:bg-slate-900/40 text-center cursor-pointer transition-colors duration-150 active:scale-97"
+            whileHover={{ y: -2, x: -2, boxShadow: "var(--shadow)" }}
+            whileTap={{ y: 2, x: 2, boxShadow: "none" }}
+            className="p-4.5 rounded-xl border-2 border-border bg-surface text-center cursor-pointer shadow-(--shadow-sm) transition-all duration-100"
           >
-            <div className={`w-9 h-9 rounded-xl flex items-center justify-center mx-auto mb-2 text-sm ${a.color}`}>
+            <div
+              className={`w-9 h-9 border-2 border-border rounded-lg flex items-center justify-center mx-auto mb-2 text-sm shadow-(--shadow-sm) ${a.color}`}
+            >
               {a.icon}
             </div>
-            <div className="text-xs font-bold text-slate-350">{a.label}</div>
+            <div className="text-xs font-black text-text-primary">{a.label}</div>
           </motion.div>
         </Link>
       ))}
@@ -522,7 +645,7 @@ function QuickActions({ dash: _dash }: QuickActionsProps) {
 }
 
 function WeeklyChart({ data }: { data: Array<{ day: string; count: number }> }) {
-  const max = Math.max(...data.map(d => d.count), 1);
+  const max = Math.max(...data.map((d) => d.count), 1);
   const dayLabels = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
 
   return (
@@ -531,7 +654,9 @@ function WeeklyChart({ data }: { data: Array<{ day: string; count: number }> }) 
         const h = Math.max(4, (d.count / max) * 64);
         return (
           <div key={d.day} className="flex-1 flex flex-col items-center gap-1.5">
-            <div className={`text-[9px] font-bold font-mono ${d.count > 0 ? "text-accent" : "text-slate-600"}`}>
+            <div
+              className={`text-[9px] font-bold font-mono ${d.count > 0 ? "text-accent" : "text-text-muted"}`}
+            >
               {d.count > 0 ? d.count : ""}
             </div>
             <motion.div
@@ -539,13 +664,15 @@ function WeeklyChart({ data }: { data: Array<{ day: string; count: number }> }) 
               animate={{ height: h }}
               transition={{ delay: 0.05 * i, duration: 0.5, ease: "easeOut" }}
               style={{ height: `${h}px` }}
-              className={`w-full max-w-[28px] rounded-t-md ${
-                d.count > 0 
-                  ? "bg-gradient-to-t from-accent/40 to-accent shadow-sm" 
-                  : "bg-slate-900"
+              className={`w-full max-w-[28px] rounded-t-lg ${
+                d.count > 0
+                  ? "bg-accent border-t-2 border-x-2 border-border shadow-(--shadow-sm)"
+                  : "bg-bg-deep border-t-2 border-x-2 border-border/10"
               }`}
             />
-            <div className="text-[10px] text-slate-500 font-bold font-mono">{dayLabels[i] ?? d.day}</div>
+            <div className="text-[10px] text-text-muted font-bold font-mono">
+              {dayLabels[i] ?? d.day}
+            </div>
           </div>
         );
       })}
@@ -554,22 +681,28 @@ function WeeklyChart({ data }: { data: Array<{ day: string; count: number }> }) 
 }
 
 function ScoreTimeline({ data }: { data: Array<{ week: string; xp: number }> }) {
-  const maxXP = Math.max(...data.map(d => d.xp), 1);
+  const maxXP = Math.max(...data.map((d) => d.xp), 1);
   const chartH = 100;
 
   // Build SVG polyline points
-  const points = data.map((d, i) => {
-    const x = data.length > 1 ? (i / (data.length - 1)) * 100 : 50;
-    const y = chartH - (d.xp / maxXP) * (chartH - 15) - 8;
-    return `${x},${y}`;
-  }).join(" ");
+  const points = data
+    .map((d, i) => {
+      const x = data.length > 1 ? (i / (data.length - 1)) * 100 : 50;
+      const y = chartH - (d.xp / maxXP) * (chartH - 15) - 8;
+      return `${x},${y}`;
+    })
+    .join(" ");
 
   // Gradient area
   const areaPoints = `0,${chartH} ${points} 100,${chartH}`;
 
   return (
     <div className="flex flex-col gap-3">
-      <svg viewBox={`0 0 100 ${chartH}`} className="w-full h-24 overflow-visible" preserveAspectRatio="none">
+      <svg
+        viewBox={`0 0 100 ${chartH}`}
+        className="w-full h-24 overflow-visible"
+        preserveAspectRatio="none"
+      >
         <defs>
           <linearGradient id="xpGradient" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.25" />
@@ -603,11 +736,16 @@ function ScoreTimeline({ data }: { data: Array<{ week: string; xp: number }> }) 
           );
         })}
       </svg>
-      <div className="flex justify-between border-t border-slate-900 pt-2.5">
+      <div className="flex justify-between border-t border-border pt-2.5">
         {data.map((d) => (
-          <div key={d.week} className="text-[10px] text-slate-500 font-bold font-mono text-center flex-1">
+          <div
+            key={d.week}
+            className="text-[10px] text-text-muted font-bold font-mono text-center flex-1"
+          >
             <div className="text-accent leading-none font-extrabold mb-1">{d.xp}</div>
-            <div className="text-[9px] text-slate-500 leading-none">T{new Date(d.week).getDate()}/{new Date(d.week).getMonth() + 1}</div>
+            <div className="text-[9px] text-text-muted leading-none">
+              T{new Date(d.week).getDate()}/{new Date(d.week).getMonth() + 1}
+            </div>
           </div>
         ))}
       </div>

@@ -1,11 +1,12 @@
-import { NextRequest } from "next/server";
 import { headers } from "next/headers";
+import { NextRequest } from "next/server";
 
 import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("reading/articles");
-import { stripHtml, estimateDifficulty, BoundedCache } from "@/lib/reading/utils";
+
+import { BoundedCache, estimateDifficulty, stripHtml } from "@/lib/reading/utils";
 
 const GUARDIAN_API_KEY = process.env.GUARDIAN_API_KEY ?? "test";
 const GUARDIAN_BASE = "https://content.guardianapis.com";

@@ -1,21 +1,20 @@
+import { and, eq, gte, sql } from "drizzle-orm";
 import { headers } from "next/headers";
-import { eq, sql, and, gte } from "drizzle-orm";
 import { z } from "zod";
 
 import { auth } from "@/lib/auth";
 import { routeLogger } from "@/lib/logger";
 
 const log = routeLogger("study-plan/daily");
-import { db } from "@repo/database";
-import { activityLog, errorLog, userPreferences } from "@repo/database";
-import { getAllUserSkillStates } from "@repo/database";
+
+import type { TimeBudgetValue } from "@repo/contracts";
+import { activityLog, db, errorLog, getAllUserSkillStates, userPreferences } from "@repo/database";
 import {
-  generateDailyPlan,
+  candidatesFromDefaultActions,
   candidatesFromDueReviews,
   candidatesFromWeakSkills,
-  candidatesFromDefaultActions,
+  generateDailyPlan,
 } from "@repo/modules";
-import type { TimeBudgetValue } from "@repo/contracts";
 
 const QuerySchema = z.object({
   budget: z.enum(["5", "10", "20"]).default("20"),
@@ -45,25 +44,26 @@ export async function GET(request: Request) {
 
   try {
     // Fetch user data in parallel
-    const [prefRows, unresolvedErrors, todayActivities, totalActivities, skillStates] = await Promise.all([
-      db.select().from(userPreferences).where(eq(userPreferences.userId, userId)).limit(1),
-      db
-        .select({ count: sql<number>`count(*)::int` })
-        .from(errorLog)
-        .where(and(eq(errorLog.userId, userId), eq(errorLog.isResolved, false))),
-      db
-        .select()
-        .from(activityLog)
-        .where(and(eq(activityLog.userId, userId), gte(activityLog.createdAt, today))),
-      db
-        .select({
-          count: sql<number>`count(*)::int`,
-          totalScore: sql<number>`coalesce(sum(xp_earned), 0)::int`,
-        })
-        .from(activityLog)
-        .where(eq(activityLog.userId, userId)),
-      getAllUserSkillStates(userId),
-    ]);
+    const [prefRows, unresolvedErrors, todayActivities, totalActivities, skillStates] =
+      await Promise.all([
+        db.select().from(userPreferences).where(eq(userPreferences.userId, userId)).limit(1),
+        db
+          .select({ count: sql<number>`count(*)::int` })
+          .from(errorLog)
+          .where(and(eq(errorLog.userId, userId), eq(errorLog.isResolved, false))),
+        db
+          .select()
+          .from(activityLog)
+          .where(and(eq(activityLog.userId, userId), gte(activityLog.createdAt, today))),
+        db
+          .select({
+            count: sql<number>`count(*)::int`,
+            totalScore: sql<number>`coalesce(sum(xp_earned), 0)::int`,
+          })
+          .from(activityLog)
+          .where(eq(activityLog.userId, userId)),
+        getAllUserSkillStates(userId),
+      ]);
 
     const examMode = (prefRows[0]?.examMode as string) ?? "toeic";
     const errorCount = unresolvedErrors[0]?.count ?? 0;
@@ -72,9 +72,10 @@ export async function GET(request: Request) {
 
     // ── Adaptive plan generation (Story 20.6) ──
     const nowMs = Date.now();
-    const goalSkillIds = examMode === "ielts"
-      ? ["listening", "reading", "writing", "speaking"]
-      : ["grammar", "listening", "vocabulary", "reading"];
+    const goalSkillIds =
+      examMode === "ielts"
+        ? ["listening", "reading", "writing", "speaking"]
+        : ["grammar", "listening", "vocabulary", "reading"];
 
     // Build candidates from mastery states
     const existingSkillIds = new Set(skillStates.map((s) => s.skillId));
@@ -101,7 +102,14 @@ export async function GET(request: Request) {
     const plan = generateDailyPlan(candidates, timeBudget, nowMs, todayModules);
 
     // ── Legacy tasks (backward compat, AC: 5) ──
-    type Task = { id: string; module: string; label: string; href: string; done: boolean; priority: "high" | "medium" | "low" };
+    type Task = {
+      id: string;
+      module: string;
+      label: string;
+      href: string;
+      done: boolean;
+      priority: "high" | "medium" | "low";
+    };
     const legacyTasks: Task[] = plan.items.map((item) => ({
       id: item.id,
       module: item.skillIds[0] ?? "general",
@@ -145,10 +153,7 @@ export async function GET(request: Request) {
     const message = err instanceof Error ? err.message : String(err);
     const stack = err instanceof Error ? err.stack : undefined;
     log.error({ err, message, stack }, "study-plan.daily.error");
-    return Response.json(
-      { error: "Failed to generate plan", detail: message },
-      { status: 500 },
-    );
+    return Response.json({ error: "Failed to generate plan", detail: message }, { status: 500 });
   }
 }
 

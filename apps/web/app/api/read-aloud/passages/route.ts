@@ -63,10 +63,7 @@ export async function POST(request: Request) {
   const entry = rateLimitMap.get(userId);
   if (entry && entry.resetAt > now) {
     if (entry.count >= RATE_LIMIT_MAX) {
-      return Response.json(
-        { error: "Đã vượt giới hạn. Vui lòng thử lại sau." },
-        { status: 429 },
-      );
+      return Response.json({ error: "Đã vượt giới hạn. Vui lòng thử lại sau." }, { status: 429 });
     }
     entry.count++;
   } else {
@@ -145,25 +142,19 @@ Return ONLY valid JSON array:
       parsed = JSON.parse(cleaned);
     } catch {
       log.error({ raw }, "read-aloud.passages.parse_error");
-      return Response.json(
-        { error: "Không thể tạo đoạn văn. Vui lòng thử lại." },
-        { status: 502 },
-      );
+      return Response.json({ error: "Không thể tạo đoạn văn. Vui lòng thử lại." }, { status: 502 });
     }
 
     // Handle both { passages: [...] } and direct array formats
     const passages: unknown[] = Array.isArray(parsed)
       ? parsed
       : Array.isArray((parsed as Record<string, unknown>)?.passages)
-        ? (parsed as Record<string, unknown>).passages as unknown[]
+        ? ((parsed as Record<string, unknown>).passages as unknown[])
         : [];
 
     if (passages.length === 0) {
       log.error({ parsed }, "read-aloud.passages.empty");
-      return Response.json(
-        { error: "Không thể tạo đoạn văn. Vui lòng thử lại." },
-        { status: 502 },
-      );
+      return Response.json({ error: "Không thể tạo đoạn văn. Vui lòng thử lại." }, { status: 502 });
     }
 
     // Sanitize & validate each passage
@@ -188,11 +179,15 @@ Return ONLY valid JSON array:
     const result = passages
       .filter(
         (p): p is Record<string, unknown> =>
-          typeof p === "object" && p !== null && typeof (p as Record<string, unknown>).text === "string",
+          typeof p === "object" &&
+          p !== null &&
+          typeof (p as Record<string, unknown>).text === "string",
       )
       .map((p) => {
         const text = String(p.text).trim();
-        const topic = String(p.topic ?? "office").toLowerCase().replace(/\s+/g, "_");
+        const topic = String(p.topic ?? "office")
+          .toLowerCase()
+          .replace(/\s+/g, "_");
         return {
           title: String(p.title ?? "Đoạn văn TOEIC").slice(0, 100),
           topic,
@@ -212,9 +207,7 @@ Return ONLY valid JSON array:
     );
     return Response.json(
       {
-        error: aborted
-          ? "Tạo đoạn văn quá thời gian. Vui lòng thử lại."
-          : "Không thể tạo đoạn văn",
+        error: aborted ? "Tạo đoạn văn quá thời gian. Vui lòng thử lại." : "Không thể tạo đoạn văn",
       },
       { status: aborted ? 504 : 502 },
     );

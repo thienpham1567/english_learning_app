@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api-client";
 
 const HEARTBEAT_INTERVAL = 30_000; // 30s
@@ -69,7 +69,8 @@ export function useReadingSession(passageId: string | undefined) {
 
     const handleScroll = () => {
       const scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-      const scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrollHeight =
+        document.documentElement.scrollHeight - document.documentElement.clientHeight;
       if (scrollHeight > 0) {
         scrollPctRef.current = Math.round((scrollTop / scrollHeight) * 100);
       }
@@ -111,4 +112,3 @@ export function useReadingSession(passageId: string | undefined) {
 
   return { finish, trackClick, isFinished };
 }
-
