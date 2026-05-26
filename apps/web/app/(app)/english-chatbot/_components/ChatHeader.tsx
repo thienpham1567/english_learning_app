@@ -12,7 +12,7 @@ export function ChatHeader({ personaId, isLoading }: Props) {
   const Avatar = persona.avatar;
 
   return (
-    <div className="flex h-14 shrink-0 items-center justify-between border-b border-slate-900 bg-slate-950/60 px-4 md:px-6 backdrop-blur-md z-30">
+    <div className="flex h-14 shrink-0 items-center justify-between border-b border-(--border) bg-(--chat-surface)/60 px-4 md:px-6 backdrop-blur-md z-30">
       <div
         className="flex items-center gap-3 animate-in fade-in duration-300"
         key={personaId}
@@ -21,19 +21,19 @@ export function ChatHeader({ personaId, isLoading }: Props) {
           <Avatar size={32} />
           {/* Online indicator dot */}
           <div
-            className={`absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-slate-950 transition-colors duration-300 ${
+            className={`absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-(--chat-bg) transition-colors duration-300 ${
               isLoading ? "bg-accent animate-pulse" : "bg-emerald-500"
             }`}
           />
         </div>
         
         <div className="flex flex-col">
-          <span className="text-xs font-semibold text-slate-100 leading-tight tracking-wide">
+          <span className="text-xs font-semibold text-(--ink) leading-tight tracking-wide">
             {persona.label}
           </span>
           <span
             className={`text-[10px] transition-colors duration-300 leading-none mt-0.5 ${
-              isLoading ? "text-accent font-medium" : "text-slate-450"
+              isLoading ? "text-accent font-medium" : "text-(--text-muted)"
             }`}
           >
             {isLoading ? "đang trả lời..." : persona.specialty}

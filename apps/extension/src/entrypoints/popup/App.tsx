@@ -43,15 +43,22 @@ function Popup() {
     setTimeout(() => setSaved(false), 2000);
   }
 
-  function handleSearch(e: React.FormEvent) {
+  async function handleSearch(e: React.FormEvent) {
     e.preventDefault();
     if (!query.trim()) return;
 
-    // Open side panel with the word
-    chrome.runtime.sendMessage({
-      type: "OPEN_SIDE_PANEL",
-      word: query.trim(),
-    });
+    // Open side panel directly from popup to preserve user gesture context.
+    // chrome.sidePanel.open() silently fails when called from the background
+    // service worker because the user gesture is lost during message passing.
+    try {
+      const currentWindow = await chrome.windows.getCurrent();
+      if (currentWindow.id != null) {
+        await chrome.sidePanel.open({ windowId: currentWindow.id });
+        await chrome.storage.session.set({ sidePanelWord: query.trim() });
+      }
+    } catch (err) {
+      console.error("Failed to open side panel:", err);
+    }
   }
 
   return (

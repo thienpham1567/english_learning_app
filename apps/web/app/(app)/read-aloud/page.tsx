@@ -104,6 +104,7 @@ export default function ReadAloudPage() {
                 cursor: "pointer",
                 transition: "all 0.2s",
                 fontFamily: "var(--font-body)",
+                boxShadow: mode === tab.key ? "0 2px 12px var(--accent-muted)" : "var(--shadow-sm)",
               }}
             >
               <span style={{ fontSize: 18 }}>{tab.icon}</span>
@@ -236,6 +237,7 @@ export default function ReadAloudPage() {
                 borderRadius: "var(--radius-xl)",
                 border: "1px solid var(--border)",
                 padding: "var(--space-4)",
+                boxShadow: "var(--shadow-sm)",
               }}>
                 <Text style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)", display: "block", marginBottom: 8 }}>
                   💡 Hướng dẫn Hội thoại

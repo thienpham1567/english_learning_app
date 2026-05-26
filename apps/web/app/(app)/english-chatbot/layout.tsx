@@ -19,7 +19,7 @@ export default function EnglishChatbotLayout({
 
   return (
     <ChatConversationProvider>
-      <div className="relative flex h-[calc(100%+48px)] max-h-[calc(100%+48px)] min-h-0 flex-1 -m-6 overflow-hidden bg-slate-950">
+      <div className="relative flex h-[calc(100%+48px)] max-h-[calc(100%+48px)] min-h-0 flex-1 -m-6 overflow-hidden bg-(--chat-bg)">
         
         {/* Desktop sidebar — always visible */}
         <div className="hidden md:block h-full">
@@ -47,7 +47,7 @@ export default function EnglishChatbotLayout({
         {/* Mobile hamburger button */}
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="md:hidden absolute top-4 left-4 z-40 flex h-9 w-9 items-center justify-center rounded-xl border border-slate-800 bg-slate-900/90 backdrop-blur-md text-slate-300 hover:text-white transition-all cursor-pointer shadow-md active:scale-95"
+          className="md:hidden absolute top-4 left-4 z-40 flex h-9 w-9 items-center justify-center rounded-xl border border-(--border) bg-(--chat-surface)/90 backdrop-blur-md text-(--text-secondary) hover:text-(--ink) transition-all cursor-pointer shadow-md active:scale-95"
           aria-label={sidebarOpen ? "Đóng menu" : "Mở menu"}
         >
           {sidebarOpen ? <X className="h-4.5 w-4.5" /> : <Menu className="h-4.5 w-4.5" />}

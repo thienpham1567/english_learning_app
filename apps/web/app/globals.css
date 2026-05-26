@@ -174,6 +174,17 @@
   --duration-fast: 180ms;
   --duration-normal: 280ms;
   --duration-slow: 450ms;
+
+  /* ── Chatbot-specific surfaces ── */
+  --chat-bg: var(--bg-deep);
+  --chat-surface: var(--surface);
+  --chat-surface-hover: var(--surface-hover);
+  --chat-bubble-ai: var(--surface);
+  --chat-sidebar-bg: var(--surface);
+  --chat-sidebar-border: var(--border);
+  --chat-input-bg: var(--surface-alt);
+  --chat-code-bg: var(--bg-deep);
+  --chat-code-header: var(--bg);
 }
 
 /* ── Dark Theme Tokens ── */
@@ -263,6 +274,17 @@
   --heatmap-2: rgba(96, 165, 250, 0.35);
   --heatmap-3: rgba(212, 150, 58, 0.6);
   --heatmap-4: rgba(212, 150, 58, 0.85);
+
+  /* ── Chatbot-specific surfaces (dark) ── */
+  --chat-bg: #0F1419;
+  --chat-surface: #131A24;
+  --chat-surface-hover: #1F2A3A;
+  --chat-bubble-ai: rgba(26, 35, 50, 0.4);
+  --chat-sidebar-bg: #0A0E13;
+  --chat-sidebar-border: rgba(100, 116, 139, 0.15);
+  --chat-input-bg: rgba(26, 35, 50, 0.2);
+  --chat-code-bg: #1A2332;
+  --chat-code-header: rgba(15, 20, 25, 0.4);
 }
 
 /* ── Global Reset ── */

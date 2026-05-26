@@ -26,6 +26,9 @@ interface VoiceAssignment {
 
 /**
  * useDialogue — orchestrates multi-voice dialogue playback and generation.
+ *
+ * Uses batch TTS to fetch ALL dialogue audio in a single API call,
+ * preventing 429 rate-limit errors from concurrent requests.
  */
 /** Saved dialogue from DB */
 export interface SavedDialogue {
@@ -51,10 +54,15 @@ export function useDialogue() {
   const [voiceAssignments, setVoiceAssignments] = useState<VoiceAssignment[]>([]);
   const [savedDialogues, setSavedDialogues] = useState<SavedDialogue[]>([]);
   const [loadingSaved, setLoadingSaved] = useState(false);
+  /** Progress: how many lines have been pre-loaded so far */
+  const [batchProgress, setBatchProgress] = useState<{ loaded: number; total: number } | null>(null);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const abortRef = useRef<AbortController | null>(null);
   const stoppedRef = useRef(false);
+
+  /* ── Audio cache: lineIndex → objectURL ── */
+  const audioCacheRef = useRef<Map<string, string>>(new Map());
 
   /* ── Auto-assign voices: match by character name → TTS voice name ── */
   const assignVoices = useCallback((lines: DialogueLine[], primaryRole: string) => {
@@ -191,17 +199,76 @@ export function useDialogue() {
     } catch { /* silent */ }
   }, []);
 
-  /* ── TTS for a single line ── */
-  const ttsLine = useCallback(async (text: string, voiceRole: string, speed: number, signal: AbortSignal): Promise<string> => {
-    const res = await fetch("/api/read-aloud", {
+  /* ── Batch TTS: fetch ALL lines in one API call ── */
+  const batchFetchAudio = useCallback(async (
+    lines: DialogueLine[],
+    assignments: VoiceAssignment[],
+    speed: number,
+    signal: AbortSignal,
+  ): Promise<string[]> => {
+    const getVoiceRole = (line: DialogueLine) =>
+      assignments.find((a) => a.speaker === line.speaker)?.voiceRole ?? assignments[0].voiceRole;
+
+    // Check which lines are already cached on the client
+    const uncachedIndices: number[] = [];
+    for (let i = 0; i < lines.length; i++) {
+      const cacheKey = `${lines[i].speaker}|${lines[i].text}|${getVoiceRole(lines[i])}|${speed}`;
+      if (!audioCacheRef.current.has(cacheKey)) {
+        uncachedIndices.push(i);
+      }
+    }
+
+    // If everything is cached, return immediately
+    if (uncachedIndices.length === 0) {
+      return lines.map((line) => {
+        const cacheKey = `${line.speaker}|${line.text}|${getVoiceRole(line)}|${speed}`;
+        return audioCacheRef.current.get(cacheKey)!;
+      });
+    }
+
+    // Build batch request for uncached lines only
+    const batchLines = uncachedIndices.map((i) => ({
+      text: lines[i].text,
+      voice: getVoiceRole(lines[i]),
+    }));
+
+    setBatchProgress({ loaded: lines.length - uncachedIndices.length, total: lines.length });
+
+    const res = await fetch("/api/read-aloud/batch", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: text.trim(), voice: voiceRole, speed }),
+      body: JSON.stringify({ lines: batchLines, speed }),
       signal,
     });
-    if (!res.ok) throw new Error("TTS failed");
-    const blob = await res.blob();
-    return URL.createObjectURL(blob);
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: "Unknown error" }));
+      throw new Error(err.error || `HTTP ${res.status}`);
+    }
+
+    const data: { segments: string[] } = await res.json();
+
+    // Decode base64 segments → blob URLs and cache them
+    for (let j = 0; j < uncachedIndices.length; j++) {
+      const i = uncachedIndices[j];
+      const line = lines[i];
+      const cacheKey = `${line.speaker}|${line.text}|${getVoiceRole(line)}|${speed}`;
+
+      const binary = atob(data.segments[j]);
+      const bytes = new Uint8Array(binary.length);
+      for (let k = 0; k < binary.length; k++) bytes[k] = binary.charCodeAt(k);
+      const blob = new Blob([bytes], { type: "audio/wav" });
+      const url = URL.createObjectURL(blob);
+      audioCacheRef.current.set(cacheKey, url);
+    }
+
+    setBatchProgress(null);
+
+    // Return all URLs in order
+    return lines.map((line) => {
+      const cacheKey = `${line.speaker}|${line.text}|${getVoiceRole(line)}|${speed}`;
+      return audioCacheRef.current.get(cacheKey)!;
+    });
   }, []);
 
   /* ── Play single audio ── */
@@ -215,75 +282,53 @@ export function useDialogue() {
     });
   }, []);
 
-  /* ── Play all lines with look-ahead prefetching ── */
-  const audioCacheRef = useRef<Map<string, string>>(new Map());
+  /* ── TTS for a single line (still needed for playSingleLine) ── */
+  const ttsLine = useCallback(async (text: string, voiceRole: string, speed: number, signal: AbortSignal): Promise<string> => {
+    const res = await fetch("/api/read-aloud", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: text.trim(), voice: voiceRole, speed }),
+      signal,
+    });
+    if (!res.ok) throw new Error("TTS failed");
+    const blob = await res.blob();
+    return URL.createObjectURL(blob);
+  }, []);
 
-  const prefetchLine = useCallback(async (
-    line: DialogueLine,
-    assignment: VoiceAssignment,
-    speed: number,
-    signal: AbortSignal,
-  ): Promise<string> => {
-    const cacheKey = `${line.speaker}|${line.text}|${assignment.voiceRole}|${speed}`;
-    const cached = audioCacheRef.current.get(cacheKey);
-    if (cached) return cached;
-
-    const url = await ttsLine(line.text, assignment.voiceRole, speed, signal);
-    audioCacheRef.current.set(cacheKey, url);
-    return url;
-  }, [ttsLine]);
-
+  /* ── Play all lines — batch fetch first, then play sequentially ── */
   const playAll = useCallback(async (speed: number, startIndex = 0) => {
     if (!dialogue || voiceAssignments.length === 0) return;
 
     stoppedRef.current = false;
     setIsPlaying(true);
+    setIsLoading(true);
     abortRef.current = new AbortController();
     const signal = abortRef.current.signal;
 
-    // Helper to get assignment for a line
-    const getAssignment = (line: DialogueLine) =>
-      voiceAssignments.find((a) => a.speaker === line.speaker) ?? voiceAssignments[0];
-
-    // Kick off prefetch for the first few lines immediately
-    const LOOK_AHEAD = 3;
-    const prefetchPromises = new Map<number, Promise<string>>();
-
-    const startPrefetch = (idx: number) => {
-      if (idx >= dialogue.lines.length || prefetchPromises.has(idx)) return;
-      const line = dialogue.lines[idx];
-      const assignment = getAssignment(line);
-      prefetchPromises.set(idx, prefetchLine(line, assignment, speed, signal));
-    };
-
-    // Pre-fetch first batch
-    for (let p = startIndex; p < Math.min(startIndex + LOOK_AHEAD, dialogue.lines.length); p++) {
-      startPrefetch(p);
-    }
-
     try {
-      for (let i = startIndex; i < dialogue.lines.length; i++) {
+      // Get the lines we need to play
+      const linesToPlay = dialogue.lines.slice(startIndex);
+
+      // Batch fetch ALL audio in one API call
+      const audioUrls = await batchFetchAudio(
+        linesToPlay,
+        voiceAssignments,
+        speed,
+        signal,
+      );
+
+      if (stoppedRef.current) return;
+      setIsLoading(false);
+
+      // Play all lines sequentially — audio is already loaded, no more API calls
+      for (let i = 0; i < linesToPlay.length; i++) {
         if (stoppedRef.current) break;
 
-        setActiveLineIndex(i);
+        setActiveLineIndex(startIndex + i);
+        await playAudio(audioUrls[i]);
 
-        // Wait for current line's audio (likely already prefetched)
-        if (!prefetchPromises.has(i)) startPrefetch(i);
-        setIsLoading(true);
-        const url = await prefetchPromises.get(i)!;
-
-        if (stoppedRef.current) break;
-        setIsLoading(false);
-
-        // Start prefetching next lines while this one plays
-        for (let p = i + 1; p <= Math.min(i + LOOK_AHEAD, dialogue.lines.length - 1); p++) {
-          startPrefetch(p);
-        }
-
-        await playAudio(url);
-
-        // Small gap between speakers (shorter now since no TTS wait)
-        if (i < dialogue.lines.length - 1 && !stoppedRef.current) {
+        // Small gap between speakers
+        if (i < linesToPlay.length - 1 && !stoppedRef.current) {
           await new Promise((r) => setTimeout(r, 200));
         }
       }
@@ -293,9 +338,10 @@ export function useDialogue() {
     } finally {
       setIsPlaying(false);
       setIsLoading(false);
+      setBatchProgress(null);
       if (!stoppedRef.current) setActiveLineIndex(-1);
     }
-  }, [dialogue, voiceAssignments, prefetchLine, playAudio]);
+  }, [dialogue, voiceAssignments, batchFetchAudio, playAudio]);
 
   /* ── Play single line ── */
   const playSingleLine = useCallback(async (index: number, speed: number) => {
@@ -310,8 +356,15 @@ export function useDialogue() {
       const line = dialogue.lines[index];
       const assignment = voiceAssignments.find((a) => a.speaker === line.speaker) ?? voiceAssignments[0];
 
-      setIsLoading(true);
-      const url = await ttsLine(line.text, assignment.voiceRole, speed, abortRef.current.signal);
+      // Check client cache first
+      const cacheKey = `${line.speaker}|${line.text}|${assignment.voiceRole}|${speed}`;
+      let url = audioCacheRef.current.get(cacheKey);
+
+      if (!url) {
+        setIsLoading(true);
+        url = await ttsLine(line.text, assignment.voiceRole, speed, abortRef.current.signal);
+        audioCacheRef.current.set(cacheKey, url);
+      }
 
       if (stoppedRef.current) return;
       setIsLoading(false);
@@ -337,6 +390,7 @@ export function useDialogue() {
     }
     setIsPlaying(false);
     setIsLoading(false);
+    setBatchProgress(null);
     setActiveLineIndex(-1);
   }, []);
 
@@ -358,6 +412,7 @@ export function useDialogue() {
     voiceAssignments,
     savedDialogues,
     loadingSaved,
+    batchProgress,
     generate,
     playAll,
     playSingleLine,

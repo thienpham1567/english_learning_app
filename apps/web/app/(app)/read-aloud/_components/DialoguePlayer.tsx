@@ -19,10 +19,10 @@ import { ShadowResult, type EvalResult } from "./ShadowResult";
 
 const { Text, Title } = Typography;
 
-const SPEAKER_COLORS: Record<string, { bg: string; border: string; text: string; accent: string }> = {
-  A: { bg: "rgba(59, 130, 246, 0.06)", border: "rgba(59, 130, 246, 0.15)", text: "var(--info)", accent: "#3b82f6" },
-  B: { bg: "rgba(236, 72, 153, 0.06)", border: "rgba(236, 72, 153, 0.15)", text: "#db2777", accent: "#ec4899" },
-  C: { bg: "rgba(16, 185, 129, 0.06)", border: "rgba(16, 185, 129, 0.15)", text: "var(--success)", accent: "#10b981" },
+const SPEAKER_COLORS: Record<string, { bg: string; border: string; text: string; accent: string; shadow: string }> = {
+  A: { bg: "rgba(59, 130, 246, 0.08)", border: "rgba(59, 130, 246, 0.2)", text: "#3b82f6", accent: "#3b82f6", shadow: "0 2px 8px rgba(59, 130, 246, 0.1)" },
+  B: { bg: "rgba(236, 72, 153, 0.08)", border: "rgba(236, 72, 153, 0.2)", text: "#db2777", accent: "#ec4899", shadow: "0 2px 8px rgba(236, 72, 153, 0.1)" },
+  C: { bg: "rgba(16, 185, 129, 0.08)", border: "rgba(16, 185, 129, 0.2)", text: "#10b981", accent: "#10b981", shadow: "0 2px 8px rgba(16, 185, 129, 0.1)" },
 };
 
 interface DialoguePlayerProps {
@@ -170,6 +170,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             display: "flex",
             flexDirection: "column",
             gap: 16,
+            boxShadow: "var(--shadow-md)",
           }}
         >
           <Title level={5} style={{ margin: 0, color: "var(--text-primary)" }}>
@@ -284,6 +285,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               borderRadius: "var(--radius-xl)",
               border: "1px solid var(--border)",
               padding: "20px",
+              boxShadow: "var(--shadow)",
             }}
           >
             <Text style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)", display: "block", marginBottom: 12, textTransform: "uppercase", letterSpacing: "0.06em" }}>
@@ -394,6 +396,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
         borderRadius: "var(--radius-xl)",
         border: "1px solid var(--border)",
         padding: "16px 20px",
+        boxShadow: "var(--shadow-md)",
       }}>
         <Flex justify="space-between" align="center">
           <div>
@@ -418,7 +421,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                 fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "var(--font-body)",
               }}
             >
-              {dlg.isPlaying ? <><PauseCircleOutlined /> Dừng</> : <><PlayCircleOutlined /> Phát tất cả</>}
+              {dlg.isLoading ? <><LoadingOutlined spin /> Đang tải...</> : dlg.isPlaying ? <><PauseCircleOutlined /> Dừng</> : <><PlayCircleOutlined /> Phát tất cả</>}
             </m.button>
             <m.button
               whileHover={{ scale: 1.02 }}
@@ -459,7 +462,14 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
       </div>
 
       {/* Chat bubbles */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      <div style={{
+        display: "flex", flexDirection: "column", gap: 14,
+        background: "var(--surface-alt)",
+        borderRadius: "var(--radius-xl)",
+        border: "1px solid var(--border)",
+        padding: "20px 16px",
+        boxShadow: "var(--shadow)",
+      }}>
         {dlg.dialogue.lines.map((line, i) => {
           const isLeft = line.speaker === "A";
           const colors = SPEAKER_COLORS[line.speaker] ?? SPEAKER_COLORS.A;
@@ -476,16 +486,18 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               style={{
                 display: "flex",
                 flexDirection: isLeft ? "row" : "row-reverse",
-                gap: 10,
+                gap: 12,
                 alignItems: "flex-start",
               }}
             >
               {/* Avatar */}
               <div style={{
-                width: 36, height: 36, borderRadius: 10,
-                background: colors.bg, border: `1px solid ${colors.border}`,
+                width: 40, height: 40, borderRadius: 12,
+                background: `color-mix(in srgb, ${colors.accent} 12%, var(--surface))`,
+                border: `1.5px solid ${colors.border}`,
                 display: "grid", placeItems: "center",
-                fontSize: 16, flexShrink: 0,
+                fontSize: 18, flexShrink: 0,
+                boxShadow: colors.shadow,
               }}>
                 {assignment?.flag ?? "🗣️"}
               </div>
@@ -494,31 +506,43 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               <div
                 onClick={() => !dlg.isPlaying && dlg.playSingleLine(i, speed)}
                 style={{
-                  maxWidth: "75%",
-                  padding: "12px 16px",
-                  borderRadius: isLeft ? "4px 16px 16px 16px" : "16px 4px 16px 16px",
+                  maxWidth: "78%",
+                  padding: "14px 18px",
+                  borderRadius: isLeft ? "4px 18px 18px 18px" : "18px 4px 18px 18px",
                   background: isActive
-                    ? `color-mix(in srgb, ${colors.accent} 12%, var(--surface))`
-                    : colors.bg,
+                    ? `color-mix(in srgb, ${colors.accent} 14%, var(--surface))`
+                    : "var(--surface)",
                   border: isActive
                     ? `2px solid ${colors.accent}`
                     : `1px solid ${colors.border}`,
+                  borderLeft: isLeft ? `3px solid ${colors.accent}` : undefined,
+                  borderRight: !isLeft ? `3px solid ${colors.accent}` : undefined,
                   cursor: dlg.isPlaying ? "default" : "pointer",
                   transition: "all 0.2s",
                   position: "relative",
+                  boxShadow: isActive
+                    ? `0 4px 16px color-mix(in srgb, ${colors.accent} 20%, transparent)`
+                    : colors.shadow,
                 }}
               >
-                <Text style={{ fontSize: 11, fontWeight: 700, color: colors.text, display: "block", marginBottom: 4 }}>
-                  {line.name}
-                </Text>
-                <Text style={{ fontSize: 14, color: "var(--text-primary)", lineHeight: 1.6, display: "block" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 6 }}>
+                  <div style={{
+                    width: 6, height: 6, borderRadius: "50%",
+                    background: colors.accent,
+                    flexShrink: 0,
+                  }} />
+                  <Text style={{ fontSize: 12, fontWeight: 800, color: colors.text, letterSpacing: "0.02em" }}>
+                    {line.name}
+                  </Text>
+                </div>
+                <Text style={{ fontSize: 15, color: "var(--text-primary)", lineHeight: 1.7, display: "block", fontWeight: 500 }}>
                   {line.text}
                 </Text>
                 {isActive && dlg.isLoading && (
-                  <LoadingOutlined style={{ position: "absolute", top: 8, right: 8, fontSize: 12, color: colors.accent }} spin />
+                  <LoadingOutlined style={{ position: "absolute", top: 10, right: 10, fontSize: 14, color: colors.accent }} spin />
                 )}
                 {isActive && !dlg.isLoading && dlg.isPlaying && (
-                  <SoundOutlined style={{ position: "absolute", top: 8, right: 8, fontSize: 12, color: colors.accent }} />
+                  <SoundOutlined style={{ position: "absolute", top: 10, right: 10, fontSize: 14, color: colors.accent }} />
                 )}
               </div>
             </m.div>
@@ -537,6 +561,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             border: "2px solid color-mix(in srgb, var(--accent) 25%, var(--border))",
             padding: "20px",
             textAlign: "center",
+            boxShadow: "0 4px 20px var(--accent-muted), var(--shadow)",
           }}
         >
           <div style={{ fontSize: 36, marginBottom: 10 }}>🎧</div>
@@ -595,7 +620,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             </m.button>
           </Flex>
 
-          {/* Listening progress indicator */}
+          {/* Listening / batch-loading progress indicator */}
           {isListeningPreview && dlg.dialogue && (
             <m.div
               initial={{ opacity: 0 }}
@@ -611,7 +636,11 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                 style={{ width: 8, height: 8, borderRadius: "50%", background: "var(--accent)" }}
               />
               <Text style={{ fontSize: 12, fontWeight: 700, color: "var(--accent)" }}>
-                Đang phát câu {Math.max(1, (dlg.activeLineIndex ?? 0) + 1)} / {dlg.dialogue.lines.length}
+                {dlg.isLoading && dlg.batchProgress
+                  ? `Đang tải audio ${dlg.batchProgress.loaded}/${dlg.batchProgress.total}...`
+                  : dlg.isLoading
+                    ? `Đang tải audio ${dlg.dialogue.lines.length} câu...`
+                    : `Đang phát câu ${Math.max(1, (dlg.activeLineIndex ?? 0) + 1)} / ${dlg.dialogue.lines.length}`}
               </Text>
             </m.div>
           )}
@@ -628,6 +657,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             borderRadius: "var(--radius-xl)",
             border: "1px solid var(--border)",
             padding: "16px 20px",
+            boxShadow: "var(--shadow)",
           }}
         >
           {/* Replay button */}
@@ -692,6 +722,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               display: "flex",
               flexDirection: "column",
               gap: 12,
+              boxShadow: "0 4px 20px var(--accent-muted), var(--shadow-md)",
             }}
           >
             <Flex justify="space-between" align="center">

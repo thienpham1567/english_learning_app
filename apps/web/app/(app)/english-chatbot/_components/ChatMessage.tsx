@@ -35,7 +35,7 @@ function CopyButton({ text }: { text: string }) {
 
   return (
     <button
-      className="rounded-full p-1.5 text-slate-500 hover:bg-slate-800 hover:text-slate-200 transition-all cursor-pointer"
+      className="rounded-full p-1.5 text-(--text-muted) hover:bg-(--chat-surface-hover) hover:text-(--text-primary) transition-all cursor-pointer"
       onClick={handleCopy}
       aria-label="Sao chép"
     >
@@ -59,7 +59,7 @@ function SpeakButton({ text, onSpeak, isSpeaking, isLoading, onStop }: {
   return (
     <button
       className={`rounded-full p-1.5 transition-all cursor-pointer ${
-        active ? "text-accent bg-accent/10 animate-pulse" : "text-slate-500 hover:bg-slate-800 hover:text-slate-200"
+        active ? "text-accent bg-accent/10 animate-pulse" : "text-(--text-muted) hover:bg-(--chat-surface-hover) hover:text-(--text-primary)"
       }`}
       onClick={() => active ? onStop() : onSpeak(text)}
       disabled={isLoading}
@@ -84,7 +84,7 @@ function UserAvatar() {
       <img
         src={user.image}
         alt={user.name}
-        className="w-8 h-8 rounded-full object-cover border border-slate-850 shadow-sm"
+        className="w-8 h-8 rounded-full object-cover border border-(--border) shadow-sm"
         referrerPolicy="no-referrer"
       />
     );
@@ -98,7 +98,7 @@ function UserAvatar() {
     .toUpperCase();
 
   return (
-    <div className="grid place-items-center w-8 h-8 rounded-full bg-slate-900 border border-slate-850 text-[10px] font-bold text-slate-300 shadow-sm">
+    <div className="grid place-items-center w-8 h-8 rounded-full bg-(--chat-surface) border border-(--border) text-[10px] font-bold text-(--text-secondary) shadow-sm">
       {initials}
     </div>
   );
@@ -117,7 +117,7 @@ function extractText(children: ReactNode): string {
 
 function InlineCode({ children }: { children: ReactNode }) {
   return (
-    <code className="px-1.5 py-0.5 rounded bg-slate-805 text-slate-100 font-mono text-[0.85em]">
+    <code className="px-1.5 py-0.5 rounded bg-(--chat-code-bg) text-(--ink) font-mono text-[0.85em]">
       {children}
     </code>
   );
@@ -139,19 +139,19 @@ function CodeBlock({ children, className }: { children: ReactNode; className?: s
   };
 
   return (
-    <div className="relative my-2.5 rounded-xl border border-slate-850 bg-slate-900 overflow-hidden shadow-sm">
-      <div className="flex items-center justify-between px-4 py-2 border-b border-slate-850 bg-slate-950/40 text-[10px] text-slate-500 font-mono font-bold uppercase tracking-wider">
+    <div className="relative my-2.5 rounded-xl border border-(--border) bg-(--chat-code-bg) overflow-hidden shadow-sm">
+      <div className="flex items-center justify-between px-4 py-2 border-b border-(--border) bg-(--chat-code-header) text-[10px] text-(--text-muted) font-mono font-bold uppercase tracking-wider">
         <span>{lang || "code"}</span>
         <button
           onClick={onCopy}
-          className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer"
+          className="flex items-center gap-1 hover:text-(--ink) transition-colors cursor-pointer"
           aria-label="Sao chép"
         >
           {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
           <span>{copied ? "Đã chép" : "Sao chép"}</span>
         </button>
       </div>
-      <pre className="m-0 p-3.5 overflow-x-auto text-[12px] leading-relaxed font-mono text-slate-200">
+      <pre className="m-0 p-3.5 overflow-x-auto text-[12px] leading-relaxed font-mono text-(--text-primary)">
         <code className={className}>{children}</code>
       </pre>
     </div>
@@ -161,7 +161,7 @@ function CodeBlock({ children, className }: { children: ReactNode; className?: s
 function RegenerateButton({ onRegenerate }: { onRegenerate: () => void }) {
   return (
     <button
-      className="rounded-full p-1.5 text-slate-500 hover:bg-slate-800 hover:text-slate-200 transition-all cursor-pointer"
+      className="rounded-full p-1.5 text-(--text-muted) hover:bg-(--chat-surface-hover) hover:text-(--text-primary) transition-all cursor-pointer"
       onClick={onRegenerate}
       aria-label="Tạo lại"
       title="Tạo lại phản hồi"
@@ -195,9 +195,9 @@ export function ChatMessage({
   if (message.role === "divider") {
     return (
       <div className="flex items-center gap-4 py-3">
-        <div className="h-px flex-1 bg-slate-850" />
-        <span className="text-[10px] font-bold tracking-wider uppercase text-slate-500 font-mono">{message.text}</span>
-        <div className="h-px flex-1 bg-slate-850" />
+        <div className="h-px flex-1 bg-(--border)" />
+        <span className="text-[10px] font-bold tracking-wider uppercase text-(--text-muted) font-mono">{message.text}</span>
+        <div className="h-px flex-1 bg-(--border)" />
       </div>
     );
   }
@@ -216,8 +216,8 @@ export function ChatMessage({
       className={`group flex items-end gap-3 w-full ${isUser ? "justify-end" : "justify-start"}`}
     >
       {!isUser && (
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full overflow-hidden border border-slate-850 shadow-sm">
-          {persona ? <persona.avatar size={32} /> : <div className="bg-slate-900 w-full h-full" />}
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full overflow-hidden border border-(--border) shadow-sm">
+          {persona ? <persona.avatar size={32} /> : <div className="bg-(--chat-surface) w-full h-full" />}
         </div>
       )}
 
@@ -226,13 +226,13 @@ export function ChatMessage({
           className={`rounded-2xl px-4 py-3 text-sm shadow-sm leading-relaxed ${
             isUser
               ? "rounded-br-sm bg-accent text-white font-medium"
-              : "rounded-bl-sm border border-slate-850 bg-slate-900/40 text-slate-100"
+              : "rounded-bl-sm border border-(--border) bg-(--chat-bubble-ai) text-(--text-primary)"
           }`}
         >
           {isUser ? (
             <span className="whitespace-pre-wrap">{text}</span>
           ) : (
-            <div className="chat-markdown prose prose-invert prose-sm max-w-none text-slate-200">
+            <div className="chat-markdown prose prose-sm max-w-none text-(--text-primary) dark:prose-invert">
               <ReactMarkdown
                 components={{
                   code: ({ className, children }) =>
@@ -258,7 +258,7 @@ export function ChatMessage({
         </div>
         
         {/* Metadata section (fades in on hover of message container) */}
-        <div className="flex items-center gap-2 text-[10px] font-semibold text-slate-500 opacity-0 group-hover:opacity-100 transition-opacity duration-200 mt-0.5">
+        <div className="flex items-center gap-2 text-[10px] font-semibold text-(--text-muted) opacity-0 group-hover:opacity-100 transition-opacity duration-200 mt-0.5">
           {time && <span>{time}</span>}
           {!isUser && onSpeak && onStopSpeak && (
             <SpeakButton text={text} onSpeak={onSpeak} isSpeaking={isSpeaking} isLoading={isTtsLoading} onStop={onStopSpeak} />

@@ -46,14 +46,14 @@ export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedProm
 
       <motion.h2
         variants={itemVariants}
-        className="font-display text-3xl md:text-4xl italic font-semibold text-slate-100 tracking-wide"
+        className="font-display text-3xl md:text-4xl italic font-semibold text-(--ink) tracking-wide"
       >
         Chọn gia sư để bắt đầu
       </motion.h2>
       
       <motion.p
         variants={itemVariants}
-        className="mt-3 max-w-md text-sm text-slate-400 leading-relaxed"
+        className="mt-3 max-w-md text-sm text-(--text-secondary) leading-relaxed"
       >
         Mỗi gia sư có chuyên môn và phong cách phản hồi riêng. Hãy chọn người phù hợp nhất để đồng hành cùng bạn.
       </motion.p>
@@ -78,7 +78,7 @@ export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedProm
         variants={itemVariants}
         className="mt-10 flex w-full flex-col items-center gap-3"
       >
-        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 font-mono">
+        <span className="text-[10px] font-bold uppercase tracking-wider text-(--text-muted) font-mono">
           Gợi ý hội thoại
         </span>
         <div className="flex flex-wrap justify-center gap-2 max-w-xl">
@@ -88,7 +88,7 @@ export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedProm
               whileTap={{ scale: 0.98 }}
               key={prompt}
               onClick={() => onSuggestedPrompt(prompt)}
-              className="px-4 py-2 rounded-full border border-slate-800 bg-slate-900/60 text-xs font-semibold text-slate-350 hover:border-slate-700 hover:text-white transition-all cursor-pointer max-w-[280px] truncate shadow-sm"
+              className="px-4 py-2 rounded-full border border-(--border) bg-(--chat-surface-hover) text-xs font-semibold text-(--text-secondary) hover:border-(--border-strong) hover:text-(--ink) transition-all cursor-pointer max-w-[280px] truncate shadow-sm"
             >
               {prompt}
             </motion.button>
@@ -117,34 +117,34 @@ function PersonaCard({
       onClick={onSelect}
       className={`flex flex-col items-center gap-3.5 rounded-2xl border p-5 text-center transition-all duration-300 cursor-pointer shadow-sm relative ${
         isSelected
-          ? "border-accent bg-accent/5 ring-1 ring-accent text-white"
-          : "border-slate-800 bg-slate-900/40 text-slate-300 hover:border-slate-700 hover:bg-slate-900/80"
+          ? "border-accent bg-accent/5 ring-1 ring-accent text-(--ink)"
+          : "border-(--border) bg-(--chat-bubble-ai) text-(--text-secondary) hover:border-(--border-strong) hover:bg-(--chat-surface-hover)"
       }`}
     >
       {isSelected && (
         <span className="absolute top-3 right-3 flex h-2 w-2 rounded-full bg-accent" />
       )}
       
-      <div className="p-1 rounded-full bg-slate-950/40">
+      <div className="p-1 rounded-full bg-(--chat-bg)/40">
         <Avatar size={48} />
       </div>
 
       <div className="flex flex-col items-center gap-1.5">
-        <span className="text-sm font-semibold text-slate-100 leading-none">
+        <span className="text-sm font-semibold text-(--ink) leading-none">
           {persona.label}
         </span>
         <span
           className={`inline-block px-2.5 py-0.5 rounded-full text-[9px] font-bold tracking-wide transition-colors ${
             isSelected
               ? "bg-accent text-white"
-              : "bg-slate-800 text-slate-400"
+              : "bg-(--bg-deep) text-(--text-secondary)"
           }`}
         >
           {persona.specialty}
         </span>
       </div>
 
-      <p className="text-xs text-slate-450 leading-relaxed mt-1">
+      <p className="text-xs text-(--text-muted) leading-relaxed mt-1">
         {persona.description}
       </p>
     </motion.button>

@@ -45,7 +45,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
   // Loading state
   if (data.status === "loading") {
     return (
-      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-slate-900 border border-slate-800 text-slate-400 mt-1 animate-pulse">
+      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-(--chat-surface) border border-(--border) text-(--text-secondary) mt-1 animate-pulse">
         <Loader2 className="h-3 w-3 animate-spin text-accent" />
         <span>Đang phân tích phát âm...</span>
       </div>
@@ -80,23 +80,23 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
 
       {/* Expanded view */}
       {expanded && (
-        <div className="mt-2 w-full max-w-sm rounded-2xl border border-slate-850 bg-slate-900/60 p-4 text-xs text-slate-350 shadow-md animate-in fade-in slide-in-from-top-1 duration-200">
+        <div className="mt-2 w-full max-w-sm rounded-2xl border border-(--border) bg-(--chat-surface)/60 p-4 text-xs text-(--text-secondary) shadow-md animate-in fade-in slide-in-from-top-1 duration-200">
           {/* Detailed Scores Grid */}
-          <div className="grid grid-cols-2 gap-4 mb-3 pb-3 border-b border-slate-800/60">
+          <div className="grid grid-cols-2 gap-4 mb-3 pb-3 border-b border-(--border)/60">
             <div className="flex flex-col gap-0.5">
-              <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Độ chính xác</span>
-              <span className="text-sm font-semibold text-slate-200">{data.accuracy ?? 0}%</span>
+              <span className="text-[10px] text-(--text-muted) font-bold uppercase tracking-wider">Độ chính xác</span>
+              <span className="text-sm font-semibold text-(--text-primary)">{data.accuracy ?? 0}%</span>
             </div>
             <div className="flex flex-col gap-0.5">
-              <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Độ trôi chảy</span>
-              <span className="text-sm font-semibold text-slate-200">{data.fluency ?? 0}%</span>
+              <span className="text-[10px] text-(--text-muted) font-bold uppercase tracking-wider">Độ trôi chảy</span>
+              <span className="text-sm font-semibold text-(--text-primary)">{data.fluency ?? 0}%</span>
             </div>
           </div>
 
           {/* Word Analysis Tags */}
           {data.wordAnalysis && data.wordAnalysis.length > 0 && (
             <div className="mb-3.5">
-              <div className="text-[10px] text-slate-500 font-bold uppercase tracking-wider mb-1.5">Phân tích từng từ</div>
+              <div className="text-[10px] text-(--text-muted) font-bold uppercase tracking-wider mb-1.5">Phân tích từng từ</div>
               <div className="flex flex-wrap gap-1.5">
                 {data.wordAnalysis.map((w, i) => (
                   <div
@@ -115,7 +115,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
                     <span>{w.word}</span>
 
                     {/* Custom CSS Tooltip */}
-                    <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 hidden group-hover:block bg-slate-950 border border-slate-800 text-slate-200 text-[10px] font-semibold px-2 py-1 rounded-lg shadow-lg z-50 whitespace-nowrap">
+                    <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 hidden group-hover:block bg-(--chat-bg) border border-(--border) text-(--text-primary) text-[10px] font-semibold px-2 py-1 rounded-lg shadow-lg z-50 whitespace-nowrap">
                       {w.issue || (w.correct ? "Chính xác!" : "Phát âm chưa chuẩn")}
                     </div>
                   </div>
@@ -126,9 +126,9 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
 
           {/* Tips / Feedback */}
           {data.tips && data.tips.length > 0 && (
-            <div className="mb-3.5 space-y-1 bg-slate-950/40 p-2.5 rounded-xl border border-slate-850">
+            <div className="mb-3.5 space-y-1 bg-(--chat-bg)/40 p-2.5 rounded-xl border border-(--border)">
               {data.tips.map((tip, i) => (
-                <div key={i} className="flex gap-1.5 text-slate-400 leading-relaxed items-start">
+                <div key={i} className="flex gap-1.5 text-(--text-secondary) leading-relaxed items-start">
                   <Sparkles className="h-3.5 w-3.5 text-accent shrink-0 mt-0.5" />
                   <span>{tip}</span>
                 </div>
@@ -140,7 +140,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
           {onListenCorrect && (
             <button
               onClick={onListenCorrect}
-              className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-slate-800 bg-slate-900 hover:bg-slate-850 hover:text-white transition-all py-2 text-xs font-semibold text-slate-300 cursor-pointer shadow-sm active:scale-98"
+              className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-(--border) bg-(--chat-surface) hover:brightness-110 hover:text-(--ink) transition-all py-2 text-xs font-semibold text-(--text-secondary) cursor-pointer shadow-sm active:scale-98"
             >
               <Volume2 className="h-3.5 w-3.5" />
               <span>Nghe phát âm chuẩn</span>
