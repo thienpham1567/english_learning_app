@@ -1,6 +1,5 @@
 import { headers } from "next/headers";
 import { BookOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { userSkillState, reviewTask, toeicQuestion } from "@repo/database";
@@ -88,12 +87,6 @@ export default async function ToeicGrammarPage() {
 				overflow: "auto",
 			}}
 		>
-			<ModuleHeader
-				icon={<BookOutlined />}
-				gradient="var(--gradient-grammar)"
-				title="TOEIC Grammar Drill"
-				subtitle="Part 5 & 6 · Phân loại theo kỹ năng nhỏ"
-			/>
 			<div style={{ padding: 16 }}>
 				<GrammarHub skills={skillsData} mistakeCount={mistakeCount} />
 			</div>

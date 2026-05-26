@@ -63,14 +63,19 @@ function VoiceCard({ voice: v, isActive, onSelect }: { voice: VoiceOption; isAct
         textAlign: "left",
       }}
     >
-      <span style={{ fontSize: 24, filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.15))" }}>
-        {v.flag}
-      </span>
+      <img
+          src={v.avatar}
+          alt={v.name}
+          width={36}
+          height={36}
+          style={{ borderRadius: 10, objectFit: "cover", flexShrink: 0 }}
+        />
       <div style={{ flex: 1, minWidth: 0 }}>
         <Flex align="center" gap={6}>
           <Text style={{ fontWeight: isActive ? 800 : 700, fontSize: 14, color: isActive ? "var(--accent)" : "var(--text-primary)" }}>
             {v.name}
           </Text>
+          <span style={{ fontSize: 13 }}>{v.flag}</span>
           <span
             style={{
               fontSize: 10,

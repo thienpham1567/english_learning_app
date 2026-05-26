@@ -398,7 +398,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
         padding: "16px 20px",
         boxShadow: "var(--shadow-md)",
       }}>
-        <Flex justify="space-between" align="center">
+        <Flex className="dialogue-header-actions" justify="space-between" align="center">
           <div>
             <Text style={{ fontSize: 16, fontWeight: 800, color: "var(--text-primary)", display: "block" }}>
               💬 {dlg.dialogue.title}
@@ -407,7 +407,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               {dlg.dialogue.context} • {dlg.dialogue.lines.length} câu
             </Text>
           </div>
-          <Flex gap={8}>
+          <Flex gap={8} className="dialogue-header-buttons">
             <m.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -442,19 +442,26 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
         </Flex>
 
         {/* Speaker badges */}
-        <Flex gap={8} style={{ marginTop: 12 }}>
+        <Flex gap={8} wrap="wrap" className="dialogue-speaker-badges" style={{ marginTop: 12 }}>
           {dlg.voiceAssignments.map((a) => {
             const colors = SPEAKER_COLORS[a.speaker] ?? SPEAKER_COLORS.A;
             return (
               <div key={a.speaker} style={{
-                display: "flex", alignItems: "center", gap: 6,
-                padding: "4px 12px", borderRadius: 10,
+                display: "flex", alignItems: "center", gap: 8,
+                padding: "4px 12px 4px 4px", borderRadius: 10,
                 background: colors.bg, border: `1px solid ${colors.border}`,
               }}>
-                <span style={{ fontSize: 14 }}>{a.flag}</span>
+                <img
+                  src={a.avatar}
+                  alt={a.voiceName}
+                  width={24}
+                  height={24}
+                  style={{ borderRadius: 8, objectFit: "cover" }}
+                />
                 <Text style={{ fontSize: 12, fontWeight: 700, color: colors.text }}>
                   {a.voiceName}
                 </Text>
+                <span style={{ fontSize: 12 }}>{a.flag}</span>
               </div>
             );
           })}
@@ -462,7 +469,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
       </div>
 
       {/* Chat bubbles */}
-      <div style={{
+      <div className="dialogue-bubbles" style={{
         display: "flex", flexDirection: "column", gap: 14,
         background: "var(--surface-alt)",
         borderRadius: "var(--radius-xl)",
@@ -491,19 +498,25 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               }}
             >
               {/* Avatar */}
-              <div style={{
-                width: 40, height: 40, borderRadius: 12,
-                background: `color-mix(in srgb, ${colors.accent} 12%, var(--surface))`,
-                border: `1.5px solid ${colors.border}`,
-                display: "grid", placeItems: "center",
-                fontSize: 18, flexShrink: 0,
+              <div className="dialogue-avatar" style={{
+                width: 42, height: 42, borderRadius: "50%",
+                overflow: "hidden",
+                border: `2px solid ${colors.border}`,
+                flexShrink: 0,
                 boxShadow: colors.shadow,
               }}>
-                {assignment?.flag ?? "🗣️"}
+                <img
+                  src={assignment?.avatar ?? "/avatars/austin.png"}
+                  alt={assignment?.voiceName ?? "Speaker"}
+                  width={42}
+                  height={42}
+                  style={{ objectFit: "cover", display: "block" }}
+                />
               </div>
 
               {/* Bubble */}
               <div
+                className="dialogue-bubble-content"
                 onClick={() => !dlg.isPlaying && dlg.playSingleLine(i, speed)}
                 style={{
                   maxWidth: "78%",
@@ -534,6 +547,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                   <Text style={{ fontSize: 12, fontWeight: 800, color: colors.text, letterSpacing: "0.02em" }}>
                     {line.name}
                   </Text>
+                  <span style={{ fontSize: 11 }}>{assignment?.flag ?? ""}</span>
                 </div>
                 <Text style={{ fontSize: 15, color: "var(--text-primary)", lineHeight: 1.7, display: "block", fontWeight: 500 }}>
                   {line.text}
@@ -572,7 +586,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             Lắng nghe cuộc trò chuyện giữa những người bản xứ trước khi bạn đóng vai nhé!
           </Text>
 
-          <Flex gap={10} justify="center" wrap="wrap">
+          <Flex gap={10} justify="center" wrap="wrap" className="listen-cta-buttons">
             <m.button
               whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.97 }}
@@ -681,7 +695,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               <PlayCircleOutlined /> Nghe lại
             </m.button>
           </Flex>
-          <Flex gap={8}>
+          <Flex gap={8} className="role-play-buttons">
             {dlg.voiceAssignments.map((a) => {
               const line = dlg.dialogue!.lines.find((l) => l.speaker === a.speaker);
               return (

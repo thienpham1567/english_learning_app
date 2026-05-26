@@ -22,6 +22,7 @@ interface VoiceAssignment {
   voiceRole: string;
   voiceName: string;
   flag: string;
+  avatar: string;
 }
 
 /**
@@ -83,6 +84,7 @@ export function useDialogue() {
           voiceRole: matchedVoice.role,
           voiceName: matchedVoice.name,
           flag: matchedVoice.flag,
+          avatar: matchedVoice.avatar,
         };
       }
 
@@ -93,6 +95,7 @@ export function useDialogue() {
         voiceRole: fallback.role,
         voiceName: fallback.name,
         flag: fallback.flag,
+        avatar: fallback.avatar,
       };
     });
 

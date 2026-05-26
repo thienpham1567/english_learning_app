@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button, Card, Tag, Input } from "antd";
 import { CustomerServiceOutlined, PlayCircleOutlined, PauseCircleOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { api } from "@/lib/api-client";
 
 type Item = {
@@ -88,12 +87,6 @@ export default function DictationDetailPage() {
 				overflow: "auto",
 			}}
 		>
-			<ModuleHeader
-				icon={<CustomerServiceOutlined />}
-				gradient="var(--gradient-dictation)"
-				title="Dictation"
-				subtitle={`${item.level} · ${item.topic}`}
-			/>
 			<div style={{ padding: 16, display: "grid", gap: 12, maxWidth: 720 }}>
 				<Card>
 					<div style={{ display: "flex", alignItems: "center", gap: 12 }}>

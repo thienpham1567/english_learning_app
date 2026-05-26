@@ -21,7 +21,6 @@ import {
 import { useDashboard, type DashboardData } from "@/hooks/useDashboard";
 import { useDailyStudyPlan, type DailyPlanItem, type DailyPlanStats } from "@/hooks/useDailyStudyPlan";
 import { api } from "@/lib/api-client";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { HeatmapCalendar } from "@/app/(app)/dashboard/_components/HeatmapCalendar";
 import { WeeklyReport } from "@/app/(app)/dashboard/_components/WeeklyReport";
 
@@ -74,12 +73,6 @@ export default function DashboardPage() {
     <div className="min-h-full overflow-y-auto px-4 py-4 pb-12">
       {/* ── Hero Header ── */}
       <div className="max-w-5xl mx-auto mb-4">
-        <ModuleHeader
-          icon={<Rocket className="h-6 w-6 text-white" />}
-          gradient="var(--gradient-dashboard)"
-          title="TOEIC Master"
-          subtitle="Tổng quan luyện thi của bạn"
-        />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1.62fr_1fr] gap-5 items-start max-w-5xl mx-auto px-1">

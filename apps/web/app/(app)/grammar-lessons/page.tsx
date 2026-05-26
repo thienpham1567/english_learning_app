@@ -15,7 +15,6 @@ import { Alert, Progress } from "antd";
 import * as m from "motion/react-client";
 
 import { useExamMode } from "@/components/shared/ExamModeProvider";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { TopicGrid } from "@/app/(app)/grammar-lessons/_components/TopicGrid";
 import { LessonView } from "@/app/(app)/grammar-lessons/_components/LessonView";
 import { api } from "@/lib/api-client";
@@ -112,21 +111,6 @@ export default function GrammarLessonsPage() {
     >
       <div className="grain-overlay" style={{ opacity: 0.03, zIndex: 0 }} />
 
-      {/* Premium gradient header */}
-      <div style={{ position: "relative", zIndex: 1 }}>
-        <ModuleHeader
-          icon={<BookOutlined />}
-          gradient="var(--gradient-grammar)"
-          title={activeTopic ? activeTopic.title : "Ngữ pháp trọng tâm TOEIC"}
-          subtitle={
-            activeTopic
-              ? `${activeTopic.level} · TOEIC · Bài học chi tiết`
-              : recommendedTopic
-              ? `Gợi ý tiếp theo: ${recommendedTopic.title}`
-              : "Chinh phục ngữ pháp trọng tâm cho TOEIC"
-          }
-        />
-      </div>
 
       {/* Content area */}
       <div

@@ -45,7 +45,6 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
         width: "100%",
       }}
     >
-      {/* Header removed as it is now handled by ModuleHeader in page.tsx */}
 
       {/* CEFR Level Grid */}
       <div>

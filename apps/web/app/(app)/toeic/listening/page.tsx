@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Card, Tag } from "antd";
 import { CustomerServiceOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { db } from "@repo/database";
 import { toeicQuestion, toeicDictationItem } from "@repo/database";
 import { eq, sql } from "drizzle-orm";
@@ -69,12 +68,6 @@ export default async function ToeicListeningPage() {
 				overflow: "auto",
 			}}
 		>
-			<ModuleHeader
-				icon={<CustomerServiceOutlined />}
-				gradient="var(--gradient-listening)"
-				title="TOEIC Listening"
-				subtitle="Part 1-4 + Dictation"
-			/>
 			<div
 				style={{
 					padding: 16,

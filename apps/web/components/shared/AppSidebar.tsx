@@ -25,6 +25,7 @@ import {
   SolutionOutlined,
   SoundOutlined,
   MessageOutlined,
+  EditOutlined,
 } from "@ant-design/icons";
 import { useTheme } from "@/components/shared/ThemeProvider";
 import { useSidebarBadges } from "@/hooks/useSidebarBadges";
@@ -79,6 +80,8 @@ const navGroups: (NavItem | NavGroup)[] = [
     items: [
       { href: "/english-chatbot", label: "AI Chatbot", icon: MessageOutlined },
       { href: "/read-aloud", label: "Đọc to", icon: SoundOutlined },
+      { href: "/ipa-chart", label: "Bảng IPA", icon: SoundOutlined },
+      { href: "/writing-tools", label: "Công cụ viết", icon: EditOutlined },
     ],
   },
 ];

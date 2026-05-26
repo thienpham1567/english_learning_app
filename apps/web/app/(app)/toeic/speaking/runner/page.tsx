@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Card, Tag, Progress, Modal } from "antd";
 import { AudioOutlined, AudioMutedOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { api } from "@/lib/api-client";
 
 type Prompt = {
@@ -225,12 +224,6 @@ export default function SpeakingRunnerPage() {
 				overflow: "auto",
 			}}
 		>
-			<ModuleHeader
-				icon={<AudioOutlined />}
-				gradient="var(--gradient-toeic-speaking)"
-				title={`Question ${current.questionNumber} / 11`}
-				subtitle={TYPE_LABEL[current.type]}
-			/>
 			<div style={{ padding: 16, display: "grid", gap: 12, maxWidth: 720 }}>
 				<div
 					style={{

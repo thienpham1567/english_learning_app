@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { AlertTriangle, Clock } from "lucide-react";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import * as m from "motion/react-client";
 import { api } from "@/lib/api-client";
 import type { ErrorNotebookTab, ErrorEntry } from "./_types/types";
@@ -60,29 +59,6 @@ export default function ErrorNotebookPage() {
 
       {/* Header */}
       <div className="relative z-[1]">
-        <ModuleHeader
-          icon={<AlertTriangle className="h-5 w-5" />}
-          gradient="var(--gradient-error-notebook)"
-          title="Sổ lỗi sai"
-          subtitle="Tổng hợp & ôn tập lỗi sai thông minh"
-          action={
-            dueCount > 0 ? (
-              <m.span
-                animate={{ scale: [1, 1.05, 1] }}
-                transition={{ repeat: Infinity, duration: 2, repeatDelay: 3 }}
-                className="inline-flex items-center gap-1.5 bg-white/20 backdrop-blur-sm rounded-full px-3.5 py-1.5 text-[13px] font-bold text-white border border-white/25 cursor-pointer"
-                onClick={() => setTab("review")}
-              >
-                <Clock className="h-3 w-3" />
-                {dueCount} cần ôn tập
-              </m.span>
-            ) : unresolvedCount > 0 ? (
-              <span className="inline-flex items-center gap-1.5 bg-white/15 backdrop-blur-sm rounded-full px-3.5 py-1.5 text-[13px] font-bold text-white border border-white/20">
-                ⚠️ {unresolvedCount} chưa nắm
-              </span>
-            ) : null
-          }
-        />
       </div>
 
       {/* Tabs */}

@@ -10,7 +10,6 @@ import {
   InfoCircleOutlined,
   ThunderboltOutlined,
 } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { CEFR_COLORS } from "@/lib/constants/cefr";
 import * as m from "motion/react-client";
 
@@ -43,13 +42,6 @@ export function WelcomeScreen({ status, onStart }: Props) {
     >
       <div style={{ padding: "20px 20px 0", flexShrink: 0 }}>
         <div style={{ maxWidth: 600, margin: "0 auto" }}>
-          <ModuleHeader
-            icon={<TrophyOutlined style={{ color: "#fff" }} />}
-            gradient="linear-gradient(135deg, var(--module-assessment), #3b82f6)"
-            title="Đánh giá trình độ CEFR"
-            badge="Placement Test"
-            subtitle="Bài kiểm tra thích ứng thông minh (Adaptive) tự động điều chỉnh độ khó để xác định chính xác trình độ tiếng Anh của bạn."
-          />
         </div>
       </div>
 

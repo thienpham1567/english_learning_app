@@ -4,7 +4,6 @@ import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { BookOutlined } from "@ant-design/icons";
 import { Button } from "antd";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { useToeicSession } from "@/hooks/useToeicSession";
 import { QuestionRunner } from "../../practice/_components/QuestionRunner";
 import { ResultSummary } from "../../practice/_components/ResultSummary";
@@ -74,12 +73,6 @@ export default function GrammarDrillPage() {
 				overflow: "auto",
 			}}
 		>
-			<ModuleHeader
-				icon={<BookOutlined />}
-				gradient="var(--gradient-grammar)"
-				title="Grammar Drill"
-				subtitle="Part 5 & 6"
-			/>
 			<div style={{ padding: 16, flex: 1 }}>
 				<Suspense fallback={<div>Loading…</div>}>
 					<DrillRunner />

@@ -4,7 +4,6 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button, Tag, Modal } from "antd";
 import { TrophyOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { api } from "@/lib/api-client";
 import type { ToeicSessionQuestion } from "@/hooks/useToeicSession";
 import { QuestionRunner } from "../../practice/_components/QuestionRunner";
@@ -256,12 +255,6 @@ export default function MockRunnerPage() {
 				overflow: "auto",
 			}}
 		>
-			<ModuleHeader
-				icon={<TrophyOutlined />}
-				gradient="var(--gradient-mock-test)"
-				title="Mock Test (đang thi)"
-				subtitle="Strict timing — không tua audio, không quay lại"
-			/>
 			<Suspense fallback={<div>Loading…</div>}>
 				<MockRunner />
 			</Suspense>

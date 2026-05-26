@@ -8,7 +8,6 @@ import {
   StarFilled,
   LoadingOutlined,
 } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import * as m from "motion/react-client";
 
 const ToeicVocabTab = dynamic(
@@ -79,12 +78,6 @@ export default function MyVocabularyPage() {
         overflow: "hidden",
       }}
     >
-      <ModuleHeader
-        icon={TABS.find((t) => t.key === active)?.icon ?? <BookOutlined />}
-        gradient={GRADIENTS[active]}
-        title="Từ vựng TOEIC"
-        subtitle={SUBTITLES[active]}
-      />
 
       {/* Tab switcher */}
       <div style={{

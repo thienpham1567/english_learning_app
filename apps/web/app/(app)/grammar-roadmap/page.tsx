@@ -23,7 +23,6 @@ import {
   QuestionCircleOutlined,
 } from "@ant-design/icons";
 import { Progress, Tooltip } from "antd";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { api } from "@/lib/api-client";
 import {
   getCategoriesForExam,
@@ -169,13 +168,7 @@ export default function GrammarRoadmapPage() {
   return (
     <div style={{ height: "100%", overflowY: "auto", padding: "var(--space-6)" }} className="anim-fade-up">
       <div style={{ maxWidth: 900, margin: "0 auto" }}>
-        {/* Header */}
-        <ModuleHeader
-          icon={<BookOutlined />}
-          gradient="var(--gradient-grammar)"
-          title="Lộ trình Ngữ pháp TOEIC"
-          subtitle="Bản đồ chinh phục 900 điểm — từ nền tảng đến chiến thuật phòng thi"
-        />
+
 
         {/* ── Overall Progress Card ── */}
         <m.div

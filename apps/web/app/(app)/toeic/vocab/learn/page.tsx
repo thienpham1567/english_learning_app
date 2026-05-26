@@ -4,7 +4,6 @@ import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ReadOutlined } from "@ant-design/icons";
 import { Button, Card, Tag, Progress } from "antd";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { api } from "@/lib/api-client";
 
 type VocabWord = {
@@ -196,12 +195,6 @@ export default function VocabLearnPage() {
 				overflow: "auto",
 			}}
 		>
-			<ModuleHeader
-				icon={<ReadOutlined />}
-				gradient="var(--gradient-vocab)"
-				title="Học từ vựng"
-				subtitle="Flashcard · SRS"
-			/>
 			<div style={{ padding: 16, flex: 1 }}>
 				<Suspense fallback={<div>Loading…</div>}>
 					<LearnRunner />

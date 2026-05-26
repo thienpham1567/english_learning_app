@@ -71,7 +71,7 @@ export function TextInputPanel({
           <FileTextOutlined style={{ color: "var(--accent)" }} />
           Nhập văn bản tiếng Anh
         </Text>
-        <Flex gap={8}>
+        <Flex gap={8} className="read-aloud-text-actions">
           <ToolButton
             icon={<HistoryOutlined />}
             label={`Lịch sử (${historyCount})`}
@@ -114,7 +114,7 @@ export function TextInputPanel({
       </div>
 
       {/* Text Stats */}
-      <Flex align="center" justify="space-between" style={{ padding: "0 4px" }}>
+      <Flex className="read-aloud-text-stats" align="center" justify="space-between" style={{ padding: "0 4px" }}>
         <Flex gap={16}>
           <Stat label="Số từ" value={wordCount.toLocaleString()} />
           <Stat label="Ký tự" value={`${charCount.toLocaleString()} / ${MAX_CHARS.toLocaleString()}`} />

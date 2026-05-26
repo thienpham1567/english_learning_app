@@ -231,7 +231,7 @@ function WaveformVisualizer({ loading, playing, selectedVoice }: { loading: bool
           gap: 16,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <div className="waveform-container" style={{ display: "flex", alignItems: "center", gap: 10 }}>
           <m.div
             animate={{ rotate: 360 }}
             transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
@@ -254,7 +254,7 @@ function WaveformVisualizer({ loading, playing, selectedVoice }: { loading: bool
         </div>
 
         {/* Dynamic Soundwave bars */}
-        <Flex gap={3} align="flex-end" style={{ height: 36 }}>
+        <Flex className="waveform-bars" gap={3} align="flex-end" style={{ height: 36 }}>
           {Array.from({ length: 28 }).map((_, i) => (
             <m.div
               key={i}

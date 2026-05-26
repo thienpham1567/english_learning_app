@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import { CompassOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 
 import { useExamMode } from "@/components/shared/ExamModeProvider";
 import { TopicSetGrid } from "@/app/(app)/study-sets/_components/TopicSetGrid";
@@ -26,17 +25,8 @@ export default function StudySetsPage() {
         overflow: "hidden",
       }}
     >
-      {/* Header */}
-      <ModuleHeader
-        icon={<CompassOutlined />}
-        gradient="var(--gradient-study-sets)"
-        title={activeTopic ? activeTopic.title : "Học theo chủ đề"}
-        subtitle={
-          activeTopic
-            ? `${activeTopic.level} · ${activeTopic.time} · 4 phần`
-            : `${completedTopics.size} chủ đề đã hoàn thành`
-        }
-      />
+
+
 
       {/* Content */}
       <div style={{ position: "relative", minHeight: 0, flex: 1, overflowY: "auto", padding: "20px 16px" }}>

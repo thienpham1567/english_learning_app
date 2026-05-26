@@ -1,7 +1,6 @@
 "use client";
 
 import { TrophyOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { useToeicSession } from "@/hooks/useToeicSession";
 import { DiagnosticIntro } from "./_components/DiagnosticIntro";
 import { DiagnosticResult } from "./_components/DiagnosticResult";
@@ -27,12 +26,6 @@ export default function DiagnosticPage() {
 				overflow: "auto",
 			}}
 		>
-			<ModuleHeader
-				icon={<TrophyOutlined />}
-				gradient="var(--gradient-diagnostic)"
-				title="Diagnostic Test"
-				subtitle="30 câu · 20 phút · Phủ Part 3–7"
-			/>
 			<div style={{ padding: 16, flex: 1 }}>
 				{session.state === "idle" && <DiagnosticIntro onStart={handleStart} />}
 				{(session.state === "loading") && <div>Đang tải đề…</div>}

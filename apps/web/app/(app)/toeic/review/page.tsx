@@ -2,7 +2,6 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { Card, Tag, Empty } from "antd";
 import { ReloadOutlined, AlertOutlined, ReadOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { reviewTask, toeicQuestion, toeicVocab } from "@repo/database";
@@ -71,12 +70,6 @@ export default async function ToeicReviewPage() {
 				overflow: "auto",
 			}}
 		>
-			<ModuleHeader
-				icon={<ReloadOutlined />}
-				gradient="var(--gradient-review)"
-				title="TOEIC Review"
-				subtitle={`${allDue.length} task cần ôn hôm nay`}
-			/>
 			<div style={{ padding: 16, display: "grid", gap: 16 }}>
 				<div
 					style={{

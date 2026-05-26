@@ -12,7 +12,7 @@ import { QuizHistory } from "@/app/(app)/grammar-quiz/_components/QuizHistory";
 
 /**
  * Embedded Part 5 quiz inside the unified TOEIC Skills page.
- * Same logic as /grammar-quiz/page.tsx but without its own ModuleHeader.
+ * Same logic as /grammar-quiz/page.tsx but without its own page header.
  */
 export function Part5Tab() {
   const {

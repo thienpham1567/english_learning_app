@@ -11,7 +11,6 @@ import {
   Loader2,
   HelpCircle,
 } from "lucide-react";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { motion } from "motion/react";
 
 const ListeningTab = dynamic(
@@ -109,12 +108,6 @@ export default function ToeicSkillsPage() {
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden bg-slate-950">
       <div className="px-4 pt-5 shrink-0">
         <div className="max-w-4xl mx-auto">
-          <ModuleHeader
-            icon={SKILL_TABS.find((t) => t.value === active)?.icon}
-            gradient={GRADIENTS[active]}
-            title="Luyện thi TOEIC"
-            subtitle={SUBTITLES[active]}
-          />
         </div>
       </div>
       

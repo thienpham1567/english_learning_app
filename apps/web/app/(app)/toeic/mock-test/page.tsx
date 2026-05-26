@@ -2,7 +2,6 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { Card, Tag } from "antd";
 import { TrophyOutlined, ClockCircleOutlined, RedoOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { toeicAttempt } from "@repo/database";
@@ -52,12 +51,6 @@ export default async function MockTestHubPage() {
 				overflow: "auto",
 			}}
 		>
-			<ModuleHeader
-				icon={<TrophyOutlined />}
-				gradient="var(--gradient-mock-test)"
-				title="TOEIC Mock Test"
-				subtitle="Đề thi giả lập · 5–495 mỗi section"
-			/>
 			<div style={{ padding: 16, display: "grid", gap: 16 }}>
 				{inProgress && (
 					<Link

@@ -3,7 +3,6 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { Alert, Card, Tag } from "antd";
 import { TrophyOutlined, WarningOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { toeicAttempt, toeicAnswer, toeicQuestion } from "@repo/database";
@@ -75,12 +74,6 @@ export default async function MockResultPage({
 				overflow: "auto",
 			}}
 		>
-			<ModuleHeader
-				icon={<TrophyOutlined />}
-				gradient="var(--gradient-mock-test)"
-				title="Mock Test Result"
-				subtitle={new Date(attempt.completedAt ?? attempt.startedAt).toLocaleString("vi-VN")}
-			/>
 			<div style={{ padding: 16, display: "grid", gap: 16, maxWidth: 720 }}>
 				{cheatTriggered && (
 					<Alert

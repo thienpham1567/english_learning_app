@@ -9,7 +9,6 @@ import {
 } from "@ant-design/icons";
 import * as m from "motion/react-client";
 
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { useFlashcardSession } from "@/hooks/useFlashcardSession";
 import { FlashcardCard } from "@/app/(app)/flashcards/_components/FlashcardCard";
 import { SessionProgress } from "@/app/(app)/flashcards/_components/SessionProgress";
@@ -64,12 +63,6 @@ export function FlashcardSession() {
       {/* Module header — hidden during immersive (active) mode */}
       {!isImmersive && (
         <div style={{ position: "relative", zIndex: 1 }}>
-          <ModuleHeader
-            icon={<BookOutlined />}
-            gradient="var(--gradient-flashcards)"
-            title="Flashcard TOEIC"
-            subtitle="AI-Powered · Spaced Repetition · Ghi nhớ lâu dài"
-          />
         </div>
       )}
 

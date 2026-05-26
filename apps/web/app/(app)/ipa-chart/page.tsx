@@ -2,7 +2,6 @@
 
 import { useState, useMemo, useCallback } from "react";
 import { FontSizeOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { useTextToSpeech, type TtsAccent } from "@/hooks/useTextToSpeech";
 import {
   CONSONANTS,
@@ -65,12 +64,6 @@ export default function IpaChartPage() {
 
       {/* Page Header */}
       <div style={{ position: "relative", zIndex: 1 }}>
-        <ModuleHeader
-          icon={<FontSizeOutlined />}
-          gradient="linear-gradient(135deg, var(--accent), var(--secondary))"
-          title="Bảng phiên âm IPA"
-          subtitle="International Phonetic Alphabet · Làm chủ 44 âm vị tiếng Anh chuẩn quốc tế"
-        />
       </div>
 
       {/* Control bar */}

@@ -3,7 +3,6 @@ import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { Card, Tag, Empty } from "antd";
 import { AudioOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import {
@@ -159,12 +158,6 @@ export default async function SpeakingResultPage({
 				overflow: "auto",
 			}}
 		>
-			<ModuleHeader
-				icon={<AudioOutlined />}
-				gradient="var(--gradient-toeic-speaking)"
-				title="Speaking Result"
-				subtitle={new Date(s.completedAt ?? s.startedAt).toLocaleString("vi-VN")}
-			/>
 			<div style={{ padding: 16, display: "grid", gap: 16, maxWidth: 800 }}>
 				<Card>
 					<div style={{ textAlign: "center" }}>

@@ -1,6 +1,5 @@
 import { headers } from "next/headers";
 import { ReadOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { toeicVocab, reviewTask } from "@repo/database";
@@ -84,12 +83,6 @@ export default async function ToeicVocabPage() {
 				overflow: "auto",
 			}}
 		>
-			<ModuleHeader
-				icon={<ReadOutlined />}
-				gradient="var(--gradient-vocab)"
-				title="TOEIC Vocab"
-				subtitle="600 từ thiết yếu · 10 chủ đề · SRS"
-			/>
 			<div style={{ padding: 16 }}>
 				<VocabHub packs={packs} dueCount={dueCount} />
 			</div>

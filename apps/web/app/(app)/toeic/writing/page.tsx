@@ -2,7 +2,6 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { Card, Tag, Empty } from "antd";
 import { FormOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { toeicWritingSession, toeicWritingPrompt } from "@repo/database";
@@ -46,12 +45,6 @@ export default async function ToeicWritingPage() {
 				overflow: "auto",
 			}}
 		>
-			<ModuleHeader
-				icon={<FormOutlined />}
-				gradient="var(--gradient-writing)"
-				title="TOEIC Writing"
-				subtitle={`8 câu · 60 phút · ${setCount[0]?.c ?? 0} sets`}
-			/>
 			<div style={{ padding: 16, display: "grid", gap: 16 }}>
 				{seeded ? (
 					<Link href="/toeic/writing/runner" style={{ textDecoration: "none" }}>

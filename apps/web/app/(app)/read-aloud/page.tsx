@@ -2,8 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { Flex, Typography, message } from "antd";
-import { SoundOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
+
 
 import { getVoiceByRole } from "./_data/voices";
 import { useAudioPlayback, clearBlobCache } from "./_hooks/useAudioPlayback";
@@ -73,19 +72,12 @@ export default function ReadAloudPage() {
   return (
     <div
       style={{ height: "100%", overflowY: "auto", padding: "var(--space-6)" }}
-      className="anim-fade-up"
+      className="anim-fade-up read-aloud-page-root"
     >
       <Flex vertical gap="var(--space-5)" style={{ maxWidth: 1080, margin: "0 auto" }}>
-        {/* Header */}
-        <ModuleHeader
-          icon={<SoundOutlined />}
-          gradient="linear-gradient(135deg, #4c1d95, #6d28d9 50%, #7c3aed)"
-          title="Đọc to — Read Aloud"
-          subtitle="Luyện nghe & nói tiếng Anh với giọng bản xứ — shadowing, chấm điểm phát âm, hội thoại đa giọng"
-        />
 
         {/* Mode Tabs */}
-        <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+        <div className="read-aloud-mode-tabs" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {MODE_TABS.map((tab) => (
             <button
               key={tab.key}
@@ -109,14 +101,14 @@ export default function ReadAloudPage() {
             >
               <span style={{ fontSize: 18 }}>{tab.icon}</span>
               <div style={{ textAlign: "left" }}>
-                <div style={{
+                <div className="mode-label" style={{
                   fontSize: 14,
                   fontWeight: mode === tab.key ? 800 : 600,
                   color: mode === tab.key ? "var(--accent)" : "var(--text-primary)",
                 }}>
                   {tab.label}
                 </div>
-                <div style={{ fontSize: 11, color: "var(--text-muted)" }}>{tab.desc}</div>
+                <div className="mode-desc" style={{ fontSize: 11, color: "var(--text-muted)" }}>{tab.desc}</div>
               </div>
             </button>
           ))}
@@ -278,20 +270,121 @@ export default function ReadAloudPage() {
           flex-direction: column;
           gap: 10px;
         }
-        
+
+        /* ── Medium screens (tablet landscape) ── */
         @media (max-width: 860px) {
           .read-aloud-grid {
             grid-template-columns: 1fr !important;
           }
         }
-        @media (max-width: 600px) {
+
+        /* ── Tablet (portrait) ── */
+        @media (max-width: 768px) {
+          .read-aloud-page-root {
+            padding: var(--space-4) !important;
+          }
           .read-aloud-panel {
             padding: var(--space-4) !important;
+          }
+          .read-aloud-mode-tabs {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr 1fr !important;
+          }
+          .read-aloud-mode-tabs button {
+            padding: 8px 10px !important;
+          }
+          .read-aloud-mode-tabs .mode-desc {
+            display: none !important;
+          }
+          .read-aloud-textarea {
+            min-height: 220px !important;
           }
           .voice-grid {
             display: grid !important;
             grid-template-columns: 1fr 1fr !important;
             gap: 10px !important;
+          }
+          .dialogue-bubbles {
+            padding: 14px 10px !important;
+          }
+          .dialogue-bubble-content {
+            max-width: 85% !important;
+          }
+          .dialogue-header-actions {
+            flex-direction: column !important;
+            align-items: stretch !important;
+          }
+          .dialogue-header-buttons {
+            justify-content: flex-start !important;
+          }
+        }
+
+        /* ── Mobile ── */
+        @media (max-width: 480px) {
+          .read-aloud-page-root {
+            padding: var(--space-3) !important;
+          }
+          .read-aloud-panel {
+            padding: var(--space-3) !important;
+          }
+          .read-aloud-mode-tabs {
+            gap: 6px !important;
+          }
+          .read-aloud-mode-tabs button {
+            padding: 8px !important;
+            border-radius: 10px !important;
+            gap: 4px !important;
+          }
+          .read-aloud-mode-tabs .mode-label {
+            font-size: 12px !important;
+          }
+          .read-aloud-textarea {
+            min-height: 180px !important;
+            font-size: 14px !important;
+          }
+          .read-aloud-text-stats {
+            flex-direction: column !important;
+            align-items: flex-start !important;
+            gap: 6px !important;
+          }
+          .read-aloud-text-actions {
+            flex-wrap: wrap !important;
+          }
+          .voice-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .dialogue-bubbles {
+            padding: 10px 8px !important;
+            gap: 10px !important;
+          }
+          .dialogue-bubble-content {
+            max-width: 88% !important;
+            padding: 10px 12px !important;
+          }
+          .dialogue-avatar {
+            width: 34px !important;
+            height: 34px !important;
+          }
+          .dialogue-avatar img {
+            width: 34px !important;
+            height: 34px !important;
+          }
+          .dialogue-speaker-badges {
+            flex-wrap: wrap !important;
+          }
+          .role-play-buttons {
+            flex-direction: column !important;
+          }
+          .listen-cta-buttons {
+            flex-direction: column !important;
+            align-items: stretch !important;
+          }
+          .waveform-container {
+            flex-direction: column !important;
+            gap: 10px !important;
+          }
+          .waveform-bars {
+            justify-content: center !important;
           }
         }
       `}</style>

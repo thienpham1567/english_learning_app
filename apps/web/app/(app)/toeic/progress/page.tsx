@@ -2,7 +2,6 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { Card, Tag, Empty, Progress } from "antd";
 import { LineChartOutlined, AlertOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { userSkillState, toeicAttempt, learningEvent, errorLog } from "@repo/database";
@@ -99,12 +98,6 @@ export default async function ToeicProgressPage() {
 				overflow: "auto",
 			}}
 		>
-			<ModuleHeader
-				icon={<LineChartOutlined />}
-				gradient="var(--gradient-progress)"
-				title="TOEIC Progress"
-				subtitle="Điểm dự đoán + xu hướng 30 ngày"
-			/>
 			<div style={{ padding: 16, display: "grid", gap: 16 }}>
 				{/* Predicted score */}
 				<Card title="📈 Điểm dự đoán (từ mastery)" size="small">

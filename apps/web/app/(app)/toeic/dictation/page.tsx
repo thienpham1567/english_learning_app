@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Card, Tag } from "antd";
 import { CustomerServiceOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { db } from "@repo/database";
 import { toeicDictationItem } from "@repo/database";
 import { asc } from "drizzle-orm";
@@ -47,12 +46,6 @@ export default async function ToeicDictationPage() {
 				overflow: "auto",
 			}}
 		>
-			<ModuleHeader
-				icon={<CustomerServiceOutlined />}
-				gradient="var(--gradient-dictation)"
-				title="TOEIC Dictation"
-				subtitle={`${items.length} câu · Nghe-chép theo cấp độ`}
-			/>
 			<div style={{ padding: 16, display: "grid", gap: 16 }}>
 				{["beginner", "intermediate", "advanced"].map((lv) => {
 					const list = grouped[lv] ?? [];

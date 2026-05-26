@@ -9,7 +9,6 @@ import {
 	SoundOutlined,
 	LoadingOutlined,
 } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import * as m from "motion/react-client";
 
 const GrammarChecker = dynamic(
@@ -87,12 +86,6 @@ export default function WritingToolsPage() {
 				overflow: "auto",
 			}}
 		>
-			<ModuleHeader
-				icon={TABS.find((t) => t.value === active)?.icon}
-				gradient={GRADIENTS[active]}
-				title="AI Writing Assistants"
-				subtitle="Bộ công cụ AI hỗ trợ viết, sửa lỗi và phát âm tự nhiên"
-			/>
 			
 			{/* High-end Pill Tabs Row */}
 			<div style={{

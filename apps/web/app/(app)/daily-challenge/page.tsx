@@ -19,7 +19,6 @@ import { ExerciseCard } from "@/app/(app)/daily-challenge/_components/ExerciseCa
 import { ChallengeResults } from "@/app/(app)/daily-challenge/_components/ChallengeResults";
 import { CompletedState } from "@/app/(app)/daily-challenge/_components/CompletedState";
 import { EXERCISE_TYPE_LABELS } from "@/app/(app)/daily-challenge/_components/constants";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "motion/react";
 
@@ -251,30 +250,6 @@ export default function DailyChallengePage() {
       {/* ── Module Header ── */}
       <div className="px-4 pt-5 shrink-0">
         <div className="max-w-2xl mx-auto">
-          <ModuleHeader
-            icon={<Flame className="h-6 w-6 text-white fill-current animate-pulse" />}
-            gradient={isInBonusFlow ? "linear-gradient(135deg, var(--xp), var(--xp))" : "linear-gradient(135deg, var(--fire), #f97316)"}
-            title={isInBonusFlow ? "Bonus Round" : "Thử Thách Mỗi Ngày"}
-            badge={isInBonusFlow ? "⚡ Bonus" : todayLabel}
-            subtitle={isInBonusFlow ? "Nhận thêm XP · Rèn luyện phản xạ ngôn ngữ" : "Rèn luyện tiếng Anh hàng ngày để tạo thói quen học tập bền vững"}
-            action={
-              (streak.currentStreak > 0 || state === "active" || bonus.state === "active") ? (
-                <div className="flex gap-2 items-center text-xs">
-                  {streak.currentStreak > 0 && (
-                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/20 border border-white/25 text-white font-extrabold shadow-sm">
-                      🔥 {streak.currentStreak} ngày
-                    </span>
-                  )}
-                  {(state === "active" || bonus.state === "active") && (
-                    <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-black/35 border border-white/10 text-white font-bold font-mono">
-                      <Clock className="h-3.5 w-3.5 text-slate-300" />
-                      <span>{formattedTime}</span>
-                    </span>
-                  )}
-                </div>
-              ) : undefined
-            }
-          />
         </div>
       </div>
 

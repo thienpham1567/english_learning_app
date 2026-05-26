@@ -4,7 +4,6 @@ import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Card, Tag, Input, Modal, Progress, message } from "antd";
 import { FormOutlined } from "@ant-design/icons";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { api } from "@/lib/api-client";
 
 type Prompt = {
@@ -137,12 +136,6 @@ export default function WritingRunnerPage() {
 				overflow: "auto",
 			}}
 		>
-			<ModuleHeader
-				icon={<FormOutlined />}
-				gradient="var(--gradient-writing)"
-				title={`Question ${current.questionNumber} / 8`}
-				subtitle={TYPE_LABEL[current.type]}
-			/>
 			<div style={{ padding: 16, display: "grid", gap: 12, maxWidth: 800 }}>
 				<div
 					style={{

@@ -15,7 +15,6 @@ import {
 import * as m from "motion/react-client";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { ModuleHeader } from "@/components/shared/ModuleHeader";
 import { api } from "@/lib/api-client";
 
 type Article = {
@@ -95,12 +94,6 @@ export default function ReadingPage() {
 
       {/* Styled Gradient Header */}
       <div style={{ position: "relative", zIndex: 1 }}>
-        <ModuleHeader
-          icon={<ReadOutlined />}
-          gradient="var(--gradient-reading)"
-          title="Luyện đọc hiểu"
-          subtitle="Rèn luyện kỹ năng đọc hiểu qua các bài viết thực tế từ The Guardian"
-        />
       </div>
 
       {/* Scrollable Container */}
