@@ -146,7 +146,7 @@ export function DictionarySearchPanel({
 
         {/* Tips dropdown */}
         {showTips && (
-          <div className="anim-fade-in mt-4 overflow-hidden rounded-lg border border-border bg-(--bg) p-4 shadow-sm">
+          <div className="anim-fade-in mt-4 overflow-hidden rounded-lg border-2 border-border bg-(--bg) p-4 shadow-sm">
             <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-ink m-0">
               <Lightbulb className="h-3 w-3 inline mr-1 text-accent" /> Mẹo sử dụng
             </p>
@@ -187,7 +187,7 @@ export function DictionarySearchPanel({
           {suggestions.length > 0 && (
             <ul
               role="listbox"
-              className="absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded-lg border border-border bg-surface shadow-lg list-none p-0 m-0"
+              className="absolute left-0 right-0 top-full z-10 mt-1 overflow-hidden rounded-lg border-2 border-border bg-surface shadow-lg list-none p-0 m-0"
             >
               {suggestions.map((s, i) => (
                 <li
@@ -227,7 +227,7 @@ export function DictionarySearchPanel({
         </p>
 
         {recentWords.length > 0 && onSelectRecent && (
-          <div className="mt-5 pt-4 border-t border-border">
+          <div className="mt-5 pt-4 border-t-2 border-border">
             <RecentLookups words={recentWords} onSelect={onSelectRecent} />
           </div>
         )}

@@ -135,7 +135,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
             <div className="flex flex-col gap-2.5" style={{padding: "4px 18px 18px"}} >
               {/* Question stem */}
               {answer.questionStem && (
-                <div className="rounded-(--radius) bg-surface-alt border border-(--border)" style={{padding: "12px 14px"}} >
+                <div className="rounded-(--radius) bg-surface-alt border-2 border-border" style={{padding: "12px 14px"}} >
                   <span className="text-[10px] font-extrabold uppercase text-text-muted block mb-1.5" style={{letterSpacing: ".08em"}} >
                     Đề bài câu hỏi
                   </span>
@@ -262,7 +262,7 @@ export function ChallengeResults({
 
       <div className="anim-scale-in w-[540px] mx-auto w-full flex flex-col gap-4" >
         {/* ── Score Hero Card ── */}
-        <div className="rounded-(--radius-xl) border border-(--border) bg-(--surface) text-center relative overflow-hidden" style={{padding: "36px 24px 28px", boxShadow: "var(--shadow-md)"}} >
+        <div className="rounded-(--radius-xl) border-2 border-border bg-(--surface) text-center relative overflow-hidden" style={{padding: "36px 24px 28px", boxShadow: "var(--shadow-md)"}} >
           {/* Top accent line */}
           <div className="absolute h-[4px]" style={{top: 0, left: 0, right: 0, background: `linear-gradient(90deg, var(--accent), var(--xp))`}} />
 
@@ -303,7 +303,7 @@ export function ChallengeResults({
               { icon: <Flame style={{ color: "var(--fire)" }} />, label: "Chuỗi ngày", value: streak.currentStreak },
             ].map((s, i) => (
               <div
-                key={s.label} className="flex flex-col items-center gap-1 rounded-(--radius) bg-surface-alt border border-(--border)" style={{padding: "10px 4px"}} >
+                key={s.label} className="flex flex-col items-center gap-1 rounded-(--radius) bg-surface-alt border-2 border-border" style={{padding: "10px 4px"}} >
                 <span className="text-base" >{s.icon}</span>
                 <span className="font-mono text-base font-extrabold text-text-primary" style={{lineHeight: 1.2}} >
                   {s.value}

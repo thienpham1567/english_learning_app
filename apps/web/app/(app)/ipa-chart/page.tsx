@@ -60,7 +60,7 @@ export default function IpaChartPage() {
       {/* Control bar */}
       <div className="flex items-center gap-3 flex-wrap bg-(--surface) shrink-0 z-[1]" style={{padding: "14px 20px", borderBottom: "1px solid var(--border)", boxShadow: "var(--shadow-sm)"}} >
         {/* Navigation Tabs */}
-        <div className="flex gap-1 bg-surface-alt rounded-(--radius-lg) border border-(--border)" style={{padding: "3px"}} >
+        <div className="flex gap-1 bg-surface-alt rounded-(--radius-lg) border-2 border-border" style={{padding: "3px"}} >
           {([
             { key: "consonants", label: "Phụ âm (Consonants)", count: CONSONANTS.length },
             { key: "vowels", label: "Nguyên âm (Vowels)", count: VOWELS.length },
@@ -85,7 +85,7 @@ export default function IpaChartPage() {
           <span className="text-[11px] text-text-muted font-extrabold uppercase tracking-widest" >
             Giọng đọc mặc định
           </span>
-          <div className="flex bg-surface-alt border border-(--border)" style={{gap: 3, padding: "3px", borderRadius: "var(--radius-md)"}} >
+          <div className="flex bg-surface-alt border-2 border-border" style={{gap: 3, padding: "3px", borderRadius: "var(--radius-md)"}} >
             {([
               { value: "us", label: "🇺🇸 US" },
               { value: "uk", label: "🇬🇧 UK" },

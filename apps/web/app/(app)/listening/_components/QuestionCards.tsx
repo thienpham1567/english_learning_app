@@ -24,7 +24,7 @@ export function QuestionCards({ questions, selectedAnswers, onSelectAnswer, onSu
 
       {questions.map((q, qi) => (
         <div
-          key={qi} className="bg-(--surface) border border-(--border) p-4" style={{borderRadius: "var(--radius-md)"}} >
+          key={qi} className="bg-(--surface) border-2 border-border p-4" style={{borderRadius: "var(--radius-md)"}} >
           <div className="text-sm font-semibold mb-3" style={{color: "var(--text)"}} >
             {qi + 1}. {q.question}
           </div>

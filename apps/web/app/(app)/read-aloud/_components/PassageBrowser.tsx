@@ -53,7 +53,7 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
   });
 
   return (
-    <m.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="read-aloud-panel bg-(--surface) rounded-(--radius-xl) border border-(--border) flex flex-col gap-4" style={{padding: "var(--space-5)", boxShadow: "var(--shadow-md)"}} >
+    <m.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="read-aloud-panel bg-(--surface) rounded-(--radius-xl) border-2 border-border flex flex-col gap-4" style={{padding: "var(--space-5)", boxShadow: "var(--shadow-md)"}} >
       {/* Header + AI Generate Button */}
       <Flex align="center" justify="space-between" wrap="wrap" gap={8}>
         <Flex align="center" gap={8}>
@@ -121,8 +121,8 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
               onClick={() => {
                 onSelectPassage(sample.text, sample.title);
                 message.success(`Đã tải: ${sample.title}`);
-              }} className="flex items-start gap-3 rounded-(--radius-lg) border border-(--border) bg-surface-alt cursor-pointer" style={{padding: "12px 14px", transition: "all 0.15s"}} >
-              <div className="w-[36px] h-[36px] border border-(--border) grid text-lg shrink-0" style={{borderRadius: 10, background: "var(--accent-light)", placeItems: "center"}} >
+              }} className="flex items-start gap-3 rounded-(--radius-lg) border-2 border-border bg-surface-alt cursor-pointer" style={{padding: "12px 14px", transition: "all 0.15s"}} >
+              <div className="w-[36px] h-[36px] border-2 border-border grid text-lg shrink-0" style={{borderRadius: 10, background: "var(--accent-light)", placeItems: "center"}} >
                 {sample.icon}
               </div>
               <div className="flex-1 w-[0px]" >

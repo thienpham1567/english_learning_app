@@ -55,7 +55,7 @@ export function CEFRPath({
 }: Props) {
   const isEts = sourceMode === "ets";
   return (
-    <div className="anim-fade-up w-[480px] mx-auto text-center bg-(--surface) rounded-(--radius-xl) border border-(--border) relative overflow-hidden" style={{padding: "32px 24px", boxShadow: "var(--shadow-sm)"}} >
+    <div className="anim-fade-up w-[480px] mx-auto text-center bg-(--surface) rounded-(--radius-xl) border-2 border-border relative overflow-hidden" style={{padding: "32px 24px", boxShadow: "var(--shadow-sm)"}} >
       <div className="absolute w-[180px] h-[180px] rounded-full" style={{left: "50%", top: "0%", transform: "translateX(-50%)", background: "radial-gradient(circle, var(--accent) 5%, transparent 70%)", pointerEvents: "none"}} />
 
       <h3 className="text-xl font-black font-display text-text-primary m-0" >
@@ -68,7 +68,7 @@ export function CEFRPath({
       {/* Source mode toggle */}
       {onSourceModeChange && (
         <div className="mt-5 mb-1 relative z-[1]" >
-          <Segmented value={sourceMode} onChange={(val) => onSourceModeChange(val as "ai" | "ets")} options={[ { value: "ai", label: ( <div className="flex items-center justify-center gap-1.5 font-bold rounded-(--radius-lg) border border-(--border) bg-surface-alt" style={{padding: "4px 12px"}} > <Zap size={13} /> <span>AI tạo đề</span> </div> ), }, { value: "ets", label: ( <div className="flex items-center justify-center gap-1.5 font-bold rounded-(--radius-lg) border border-(--border) bg-surface-alt" style={{padding: "4px 12px"}} > <BookOpen size={13} /> <span>Đề ETS thật</span> </div> ), }, ]} />
+          <Segmented value={sourceMode} onChange={(val) => onSourceModeChange(val as "ai" | "ets")} options={[ { value: "ai", label: ( <div className="flex items-center justify-center gap-1.5 font-bold rounded-(--radius-lg) border-2 border-border bg-surface-alt" style={{padding: "4px 12px"}} > <Zap size={13} /> <span>AI tạo đề</span> </div> ), }, { value: "ets", label: ( <div className="flex items-center justify-center gap-1.5 font-bold rounded-(--radius-lg) border-2 border-border bg-surface-alt" style={{padding: "4px 12px"}} > <BookOpen size={13} /> <span>Đề ETS thật</span> </div> ), }, ]} />
           {isEts && (
             <p className="mt-2 text-text-muted font-semibold" style={{fontSize: 11.5}} >
               240 câu hỏi trích xuất từ đề thi ETS thật · Tự động trộn ngẫu nhiên

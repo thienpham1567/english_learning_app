@@ -149,7 +149,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
       )}
 
       {/* Prompt display */}
-      <div className="rounded-xl border border-(--border) bg-(--bg-deep) p-4">
+      <div className="rounded-xl border-2 border-border bg-(--bg-deep) p-4">
         <span className="text-[11px] font-semibold uppercase tracking-widest text-(--accent)">
           {CATEGORY_LABELS[category]} · Đề bài
         </span>
@@ -188,7 +188,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
       {/* Editor */}
       <div className="relative mt-4">
         <textarea
-          className="min-h-[280px] w-full resize-y rounded-xl border border-(--border) bg-(--surface) p-4 text-sm leading-relaxed text-(--ink) placeholder:text-(--text-muted) focus:border-(--accent) focus:outline-none focus:ring-1 focus:ring-(--accent)/30 max-[720px]:min-h-[200px]"
+          className="min-h-[280px] w-full resize-y rounded-xl border-2 border-border bg-(--surface) p-4 text-sm leading-relaxed text-(--ink) placeholder:text-(--text-muted) focus:border-(--accent) focus:outline-none focus:ring-1 focus:ring-(--accent)/30 max-[720px]:min-h-[200px]"
           placeholder="Viết bài của bạn ở đây..."
           value={text}
           onChange={(e) => setText(e.target.value)}

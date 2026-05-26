@@ -12,6 +12,7 @@ import {
   Target,
   Volume2,
 } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const LEVEL_META: Record<CefrLevel, { label: string; color: string; desc: string }> = {
   A1: { label: "Beginner", color: "var(--success)", desc: "Câu ngắn, từ cơ bản" },
@@ -60,15 +61,19 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                 key={l}
                 onClick={() => setLevel(l)}
                 onMouseEnter={() => setHoveredLevel(l)}
-                onMouseLeave={() => setHoveredLevel(null)} className="relative cursor-pointer text-center" style={{padding: "14px 10px", borderRadius: 14, border: isSelected ? `2px solid ${meta.color}` : "1px solid var(--border)", background: isSelected
-                    ? `linear-gradient(135deg, ${meta.color}, color-mix(in srgb, ${meta.color} 80%, black))`
-                    : isHov
-                    ? `color-mix(in srgb, ${meta.color} 6%, transparent)`
-                    : "var(--surface)", transition: "all 0.2s ease", transform: isSelected ? "scale(1.04)" : isHov ? "scale(1.02)" : "scale(1)", boxShadow: isSelected
-                    ? `0 4px 16px color-mix(in srgb, ${meta.color} 35%, transparent)`
-                    : isHov
-                    ? "var(--shadow-md)"
-                    : "none"}} >
+                onMouseLeave={() => setHoveredLevel(null)}
+                className={`relative cursor-pointer text-center rounded-xl border-2 transition-all duration-100 ${
+                  isSelected
+                    ? "shadow-(--shadow-sm) -translate-y-0.5"
+                    : "border-border bg-surface text-text-secondary hover:bg-surface-hover"
+                }`}
+                style={{
+                  padding: "14px 10px",
+                  background: isSelected ? meta.color : undefined,
+                  borderColor: "var(--border)",
+                  color: isSelected ? "var(--text-on-accent)" : undefined,
+                }}
+              >
                 {/* Recommended badge */}
                 {recommendedLevel === l && (
                   <span className="absolute rounded-full text-[9px] font-extrabold" style={{top: -8, right: -8, background: "var(--xp)", color: "var(--text-on-accent)", padding: "2px 7px", boxShadow: "var(--shadow-sm)"}} >
@@ -106,7 +111,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                 key={t}
                 onClick={() => setExerciseType(t)}
                 onMouseEnter={() => setHoveredType(t)}
-                onMouseLeave={() => setHoveredType(null)} className="flex items-center gap-3.5 rounded-xl border border-(--border) cursor-pointer text-left" style={{padding: "13px 18px", borderLeft: isSelected
+                onMouseLeave={() => setHoveredType(null)} className="flex items-center gap-3.5 rounded-xl border-2 border-border cursor-pointer text-left" style={{padding: "13px 18px", borderLeft: isSelected
                     ? "4px solid var(--accent)"
                     : isHov
                     ? "4px solid var(--border)"
@@ -140,14 +145,14 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
       </div>
 
       {/* Start Button */}
-      <button
+      <Button
         onClick={() => activeLevel && onStart(activeLevel, exerciseType)}
-        disabled={!activeLevel || isLoading} className="flex items-center justify-center gap-2.5 border-none text-base font-bold" style={{padding: "15px 24px", borderRadius: 14, background: activeLevel
-            ? "linear-gradient(135deg, var(--accent), var(--accent-hover))"
-            : "var(--border)", color: activeLevel ? "var(--text-on-accent)" : "var(--text-muted)", cursor: activeLevel && !isLoading ? "pointer" : "not-allowed", transition: "all 0.2s ease", opacity: isLoading ? 0.75 : 1, boxShadow: activeLevel ? "var(--shadow-lg)" : "none"}} >
+        disabled={!activeLevel || isLoading}
+        className="w-full h-13 text-base font-black flex items-center justify-center gap-2.5"
+      >
         {isLoading ? <Loader2 className="animate-spin" /> : <Volume2 />}
         {isLoading ? "Đang tạo bài nghe..." : "Bắt đầu luyện nghe"}
-      </button>
+      </Button>
     </div>
   );
 }

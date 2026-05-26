@@ -77,10 +77,10 @@ export function ChatInputBar({
   }
 
   return (
-    <div className="flex-shrink-0 px-4 py-4 md:px-6 md:pb-6 z-25 border-t border-(--border) bg-(--chat-surface)/60 backdrop-blur-md">
+    <div className="flex-shrink-0 px-4 py-4 md:px-6 md:pb-6 z-25 border-t-2 border-border bg-(--chat-surface)/60 backdrop-blur-md">
       <div className="mx-auto max-w-3xl flex flex-col gap-3">
         {/* Input Bar Container */}
-        <div className="flex items-end gap-2.5 rounded-2xl border border-(--border) bg-(--chat-input-bg) p-3 shadow-md focus-within:border-accent/40 focus-within:ring-1 focus-within:ring-accent/40 transition-all duration-200">
+        <div className="flex items-end gap-2.5 rounded-2xl border-2 border-border bg-(--chat-input-bg) p-3 shadow-md focus-within:border-accent/40 focus-within:ring-1 focus-within:ring-accent/40 transition-all duration-200">
           
           <div className="pb-1">
             <PersonaSwitcher
@@ -154,7 +154,7 @@ export function ChatInputBar({
               className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all duration-200 cursor-pointer shadow-sm active:scale-95 ${
                 input.trim()
                   ? "bg-accent text-white hover:bg-accent-hover"
-                  : "bg-(--chat-surface-hover) border border-(--border) text-(--text-muted) cursor-not-allowed opacity-50"
+                  : "bg-(--chat-surface-hover) border-2 border-border text-(--text-muted) cursor-not-allowed opacity-50"
               }`}
             >
               <Send className="h-4 w-4" />

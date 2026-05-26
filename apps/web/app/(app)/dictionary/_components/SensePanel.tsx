@@ -172,7 +172,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
             {sense.patterns.map((pattern) => (
               <span
                 key={pattern}
-                className="font-mono text-xs bg-bg-deep border border-border rounded px-2.5 py-1 text-text-secondary whitespace-nowrap"
+                className="font-mono text-xs bg-bg-deep border-2 border-border rounded px-2.5 py-1 text-text-secondary whitespace-nowrap"
               >
                 {pattern}
               </span>
@@ -193,7 +193,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
                 key={expr}
                 type="button"
                 onClick={() => onSearch?.(expr)}
-                className="rounded-full border border-border bg-surface px-3.5 py-1 text-[13px] italic font-display text-accent cursor-pointer transition-colors duration-150 hover:bg-accent/10"
+                className="rounded-full border-2 border-border bg-surface px-3.5 py-1 text-[13px] italic font-display text-accent cursor-pointer transition-colors duration-150 hover:bg-accent/10"
               >
                 {expr}
               </button>
@@ -246,7 +246,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
               type="button"
               aria-expanded={isCollocationsOpen}
               onClick={() => setIsCollocationsOpen((open) => !open)}
-              className="inline-flex items-center rounded-full border border-border bg-surface px-3 py-1 text-xs font-medium text-accent cursor-pointer w-fit hover:bg-accent/10 transition-colors"
+              className="inline-flex items-center rounded-full border-2 border-border bg-surface px-3 py-1 text-xs font-medium text-accent cursor-pointer w-fit hover:bg-accent/10 transition-colors"
             >
               {isCollocationsOpen ? "Thu gọn" : `Xem thêm (${collocations.length - 3})`}
             </button>

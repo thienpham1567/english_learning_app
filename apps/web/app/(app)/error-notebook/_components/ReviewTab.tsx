@@ -59,7 +59,7 @@ export function ReviewTab() {
       <m.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        className="py-16 px-6 text-center bg-surface rounded-xl border border-border"
+        className="py-16 px-6 text-center bg-surface rounded-xl border-2 border-border"
       >
         <div className="text-5xl mb-4">🎉</div>
         <h4 className="text-lg font-extrabold text-text-primary m-0 mb-2">
@@ -72,7 +72,7 @@ export function ReviewTab() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={srs.fetchQueue}
-          className="mt-5 inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl border border-border bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body"
+          className="mt-5 inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl border-2 border-border bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body"
         >
           <RefreshCw className="h-3.5 w-3.5" /> Kiểm tra lại
         </m.button>
@@ -87,7 +87,7 @@ export function ReviewTab() {
       <m.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="py-10 px-6 text-center bg-surface rounded-xl border border-border"
+        className="py-10 px-6 text-center bg-surface rounded-xl border-2 border-border"
       >
         <Trophy className={`h-10 w-10 mx-auto mb-3 ${pct >= 80 ? "text-(--success)" : "text-accent"}`} />
         <h3 className="text-xl font-black text-text-primary m-0 mb-1">
@@ -123,7 +123,7 @@ export function ReviewTab() {
   return (
     <div className="flex flex-col gap-4">
       {/* Progress */}
-      <div className="bg-surface rounded-xl border border-border px-5 py-3.5 flex items-center justify-between">
+      <div className="bg-surface rounded-xl border-2 border-border px-5 py-3.5 flex items-center justify-between">
         <span className="text-sm font-bold text-text-primary">
           🧠 Ôn tập: {srs.currentIndex + 1} / {srs.queue.length}
         </span>
@@ -146,11 +146,11 @@ export function ReviewTab() {
           exit={{ opacity: 0, x: -40 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
           className={`bg-surface rounded-xl overflow-hidden transition-colors duration-200 ${
-            flipped ? "border-2 border-accent" : "border border-border"
+            flipped ? "border-2 border-accent" : "border-2 border-border"
           }`}
         >
           {/* Card header */}
-          <div className="flex items-center gap-2 px-5 py-3 bg-surface-alt border-b border-border">
+          <div className="flex items-center gap-2 px-5 py-3 bg-surface-alt border-b-2 border-border">
             <span className="text-base">{MODULE_ICONS[error.sourceModule] ?? "📄"}</span>
             <span className="text-xs font-bold text-text-secondary">
               {MODULE_LABELS[error.sourceModule] ?? error.sourceModule}
@@ -185,7 +185,7 @@ export function ReviewTab() {
                           ? "bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] border-[1.5px] border-(--success) text-(--success) font-bold"
                           : isWrong
                             ? "bg-[color-mix(in_srgb,var(--error)_8%,var(--surface))] border-[1.5px] border-(--error) text-(--error) font-bold"
-                            : "bg-surface-alt border border-border text-text-primary font-medium"
+                            : "bg-surface-alt border-2 border-border text-text-primary font-medium"
                       }`}
                     >
                       {isCorrect && <CheckCircle className="h-3 w-3 inline mr-1.5" />}

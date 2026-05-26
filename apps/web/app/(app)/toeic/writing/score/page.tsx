@@ -291,7 +291,7 @@ export default function EssayScorePage() {
               <textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Dán đề bài vào đây để AI đánh giá Task Response chính xác hơn..." className="w-full h-[60px] p-3 border border-(--border) text-[13px]" style={{borderRadius: 10, background: "var(--card-bg)", color: "var(--text)", resize: "vertical", fontFamily: "inherit"}} />
+                placeholder="Dán đề bài vào đây để AI đánh giá Task Response chính xác hơn..." className="w-full h-[60px] p-3 border-2 border-border text-[13px]" style={{borderRadius: 10, background: "var(--card-bg)", color: "var(--text)", resize: "vertical", fontFamily: "inherit"}} />
             </div>
 
             {/* Essay textarea */}
@@ -305,7 +305,7 @@ export default function EssayScorePage() {
               <textarea
                 value={essayText}
                 onChange={(e) => setEssayText(e.target.value)}
-                placeholder="Viết hoặc dán bài viết của bạn vào đây..." className="w-full h-[280px] p-4 rounded-xl border border-(--border) text-sm" style={{background: "var(--card-bg)", color: "var(--text)", lineHeight: 1.8, resize: "vertical", fontFamily: "inherit"}} />
+                placeholder="Viết hoặc dán bài viết của bạn vào đây..." className="w-full h-[280px] p-4 rounded-xl border-2 border-border text-sm" style={{background: "var(--card-bg)", color: "var(--text)", lineHeight: 1.8, resize: "vertical", fontFamily: "inherit"}} />
             </div>
 
             <button
@@ -333,7 +333,7 @@ export default function EssayScorePage() {
         {state === "result" && result && (
           <div className="flex flex-col gap-4" >
             {/* Overall score */}
-            <div className="p-6 rounded-2xl border border-(--border) text-center" style={{background: "var(--card-bg)"}} >
+            <div className="p-6 rounded-2xl border-2 border-border text-center" style={{background: "var(--card-bg)"}} >
               <Progress
                 type="circle"
                 percent={(result.overall / maxScore) * 100}
@@ -381,7 +381,7 @@ export default function EssayScorePage() {
             ] as const).map((c) => {
               const s = result.criteria[c.key];
               return (
-                <div key={c.key} className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+                <div key={c.key} className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
                   <div className="flex justify-between mb-1" >
                     <p className="text-xs text-text-secondary m-0 font-semibold" >{c.label}</p>
                     <Tag color={scoreColor(s.score)} className="text-xs font-semibold" >{s.score}</Tag>
@@ -392,7 +392,7 @@ export default function EssayScorePage() {
             })}
 
             {/* Essay with inline highlights */}
-            <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+            <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
               <div className="flex justify-between mb-2" >
                 <p className="text-xs text-text-secondary m-0 font-semibold" >
                   <Info /> Bài viết (hover để xem gợi ý)
@@ -410,7 +410,7 @@ export default function EssayScorePage() {
 
             {/* Inline issues list */}
             {result.inlineIssues.length > 0 && (
-              <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+              <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
                 <p className="text-xs text-text-secondary mb-2 font-semibold" >
                   <AlertTriangle /> Lỗi chi tiết ({result.inlineIssues.length})
                 </p>
@@ -430,7 +430,7 @@ export default function EssayScorePage() {
 
             {/* Strengths & Next Steps */}
             <div className="grid gap-4" style={{gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))"}} >
-              <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+              <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
                 <p className="text-xs text-text-secondary mb-2 font-semibold" >
                   <CircleCheckBig className="text-emerald-500" /> Điểm mạnh
                 </p>
@@ -438,7 +438,7 @@ export default function EssayScorePage() {
                   {result.strengths.map((s, i) => <li key={i}>{s}</li>)}
                 </ul>
               </div>
-              <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+              <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
                 <p className="text-xs text-text-secondary mb-2 font-semibold" >
                   <Target /> Cần cải thiện
                 </p>

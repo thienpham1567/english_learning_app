@@ -114,7 +114,7 @@ export default async function MockTestHubPage() {
 							{history.map((h) => (
 								<Link
 									key={h.id}
-									href={`/toeic/mock-test/${h.id}/result`} className="text-ink rounded-lg border border-(--border) flex justify-between items-center" style={{textDecoration: "none", padding: 10, background: "var(--surface-hover)"}} >
+									href={`/toeic/mock-test/${h.id}/result`} className="text-ink rounded-lg border-2 border-border flex justify-between items-center" style={{textDecoration: "none", padding: 10, background: "var(--surface-hover)"}} >
 									<span>
 										{new Date(h.completedAt!).toLocaleString("vi-VN")} · {h.questionCount} câu
 									</span>

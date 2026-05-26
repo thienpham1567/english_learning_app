@@ -102,7 +102,7 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
 
       {/* Weekly Trend */}
       {stats.weeklyTrend.length > 1 && (
-        <div className="py-4 px-5 rounded-(--radius-lg) border border-(--border) bg-(--surface)" >
+        <div className="py-4 px-5 rounded-(--radius-lg) border-2 border-border bg-(--surface)" >
           <div className="flex items-center gap-1.5 text-[11px] font-bold text-text-muted uppercase" style={{letterSpacing: "0.1em", marginBottom: 14}} >
             <TrendingUp /> Xu hướng 8 tuần
           </div>
@@ -131,7 +131,7 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
           {recommendedLevel ? `Luyện ${recommendedLevel}` : "Bài mới"}
         </button>
         <button
-          onClick={onOpenHistory} className="flex items-center justify-center gap-1.5 border border-(--border) bg-(--surface) text-text-secondary text-[13px] font-semibold cursor-pointer" style={{padding: "14px 18px", borderRadius: "var(--radius-md)", transition: "all 0.15s ease"}} >
+          onClick={onOpenHistory} className="flex items-center justify-center gap-1.5 border-2 border-border bg-(--surface) text-text-secondary text-[13px] font-semibold cursor-pointer" style={{padding: "14px 18px", borderRadius: "var(--radius-md)", transition: "all 0.15s ease"}} >
           <History />
           Lịch sử
         </button>
@@ -139,7 +139,7 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
 
       {/* Recent History */}
       {recentHistory.length > 0 && (
-        <div className="py-4 px-5 rounded-(--radius-lg) border border-(--border) bg-(--surface)" >
+        <div className="py-4 px-5 rounded-(--radius-lg) border-2 border-border bg-(--surface)" >
           <div className="flex items-center justify-between mb-3" >
             <span className="text-[11px] font-bold text-text-muted uppercase" style={{letterSpacing: "0.1em"}} >
               <History className="mr-1" /> Gần đây
@@ -175,14 +175,14 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
 
       {/* Level Breakdown */}
       {stats.byLevel.length > 0 && (
-        <div className="py-4 px-5 rounded-(--radius-lg) border border-(--border) bg-(--surface)" >
+        <div className="py-4 px-5 rounded-(--radius-lg) border-2 border-border bg-(--surface)" >
           <div className="text-[11px] font-bold text-text-muted uppercase mb-2.5" style={{letterSpacing: "0.1em"}} >
             <Trophy className="mr-1" /> Theo cấp độ
           </div>
           <div className="flex flex-wrap gap-2" >
             {stats.byLevel.map((bl) => (
               <div
-                key={bl.level} className="py-2 px-3 rounded-(--radius-sm) border border-(--border) text-center w-[70px]" style={{background: "color-mix(in srgb, var(--accent) 3%, transparent)"}} >
+                key={bl.level} className="py-2 px-3 rounded-(--radius-sm) border-2 border-border text-center w-[70px]" style={{background: "color-mix(in srgb, var(--accent) 3%, transparent)"}} >
                 <div className="text-sm font-extrabold text-accent font-mono" >
                   {bl.level}
                 </div>
@@ -216,7 +216,7 @@ function StatCard({
   valueColor?: string;
 }) {
   return (
-    <div className="border border-(--border) bg-(--surface) text-center" style={{padding: "14px 12px", borderRadius: "var(--radius-md)"}} >
+    <div className="border-2 border-border bg-(--surface) text-center" style={{padding: "14px 12px", borderRadius: "var(--radius-md)"}} >
       <div className="text-lg mb-1.5" style={{color: iconColor}} >{icon}</div>
       <div className="text-2xl font-extrabold font-mono leading-none" style={{color: valueColor ?? "var(--text)"}} >
         {value}

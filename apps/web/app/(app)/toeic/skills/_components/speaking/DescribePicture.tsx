@@ -150,7 +150,7 @@ export function DescribePicture() {
               <button
                 key={pic.id}
                 onClick={() => selectPicture(pic)}
-                className="p-0 border border-border rounded-2xl bg-surface overflow-hidden cursor-pointer text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/40 shadow-xs active:scale-98 block group"
+                className="p-0 border-2 border-border rounded-2xl bg-surface overflow-hidden cursor-pointer text-left transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/40 shadow-xs active:scale-98 block group"
                 style={{ animationDelay: `${i * 0.05}s` }}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -193,7 +193,7 @@ export function DescribePicture() {
                 }`}>{formatTime(timeLeft)}</div>
                 <p className="text-[10px] text-slate-455 mt-1 uppercase tracking-wider font-bold">Thời gian còn lại</p>
               </div>
-              <div className="p-3 rounded-2xl bg-surface border border-border"><Waveform getStream={voice.getStream} active={true} /></div>
+              <div className="p-3 rounded-2xl bg-surface border-2 border-border"><Waveform getStream={voice.getStream} active={true} /></div>
             </>
           )}
           {state === "viewing" && (
@@ -221,7 +221,7 @@ export function DescribePicture() {
                 <p className="text-xs text-slate-455 mt-1 font-semibold">Nhấn để bắt đầu mô tả (45s)</p>
                 <button
                   onClick={backToGallery}
-                  className="mt-1 px-4 py-2 rounded-xl border border-border bg-transparent text-slate-350 hover:text-slate-200 hover:border-slate-800 transition-colors text-xs font-bold cursor-pointer"
+                  className="mt-1 px-4 py-2 rounded-xl border-2 border-border bg-transparent text-slate-350 hover:text-slate-200 hover:border-slate-800 transition-colors text-xs font-bold cursor-pointer"
                 >
                   ← Chọn hình khác
                 </button>
@@ -251,14 +251,14 @@ export function DescribePicture() {
       {/* RESULT */}
       {state === "result" && feedback && selectedPic && (
         <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-200">
-          <div className="rounded-2xl overflow-hidden border border-border max-h-[160px]">
+          <div className="rounded-2xl overflow-hidden border-2 border-border max-h-[160px]">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={imgUrl(selectedPic.id)} alt={selectedPic.scene} className="w-full object-cover block" />
           </div>
           
-          <div className="p-6 rounded-2xl bg-surface border border-border text-center flex flex-col items-center shadow-xs">
+          <div className="p-6 rounded-2xl bg-surface border-2 border-border text-center flex flex-col items-center shadow-xs">
             <CircularProgress percent={feedback.overall} color={scoreColor(feedback.overall)} />
-            <div className="flex justify-center gap-6 mt-5 flex-wrap w-full border-t border-border pt-4">
+            <div className="flex justify-center gap-6 mt-5 flex-wrap w-full border-t-2 border-border pt-4">
               {[
                 { label: "Phát âm", score: feedback.pronunciation },
                 { label: "Ngữ điệu", score: feedback.intonation },
@@ -279,13 +279,13 @@ export function DescribePicture() {
           </div>
 
           {feedback.summary && (
-            <div className="p-4.5 rounded-2xl bg-surface border border-border">
+            <div className="p-4.5 rounded-2xl bg-surface border-2 border-border">
               <p className="text-xs text-ink leading-relaxed m-0 font-medium">{feedback.summary}</p>
             </div>
           )}
 
           {feedback.improvements?.length > 0 && (
-            <div className="p-4.5 rounded-2xl bg-surface border border-border">
+            <div className="p-4.5 rounded-2xl bg-surface border-2 border-border">
               <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent m-0 mb-2.5 flex items-center gap-1.5">
                 <Volume2 className="h-4 w-4 shrink-0" />
                 <span>Điểm cần cải thiện</span>
@@ -308,7 +308,7 @@ export function DescribePicture() {
           <div className="flex gap-2.5 justify-center mt-2">
             <button
               onClick={retry}
-              className="px-5 py-2.5 rounded-xl border border-border bg-transparent text-slate-350 hover:text-slate-200 hover:border-slate-800 transition-colors text-xs font-bold cursor-pointer flex items-center gap-1.5"
+              className="px-5 py-2.5 rounded-xl border-2 border-border bg-transparent text-slate-350 hover:text-slate-200 hover:border-slate-800 transition-colors text-xs font-bold cursor-pointer flex items-center gap-1.5"
             >
               <RefreshCw className="h-3.5 w-3.5" />
               <span>Thử lại</span>

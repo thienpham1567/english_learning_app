@@ -147,7 +147,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
 
   if (sentences.length === 0) {
     return (
-      <div className="bg-(--surface) rounded-(--radius-xl) border border-(--border) text-center" style={{padding: "40px 24px"}} >
+      <div className="bg-(--surface) rounded-(--radius-xl) border-2 border-border text-center" style={{padding: "40px 24px"}} >
         <div className="mb-4" style={{fontSize: 48}} >🎙️</div>
         <Title level={4} className="mb-2 text-text-primary" >
           Shadowing Mode
@@ -162,7 +162,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
   return (
     <div className="flex flex-col gap-4" >
       {/* Progress bar */}
-      <div className="bg-(--surface) rounded-(--radius-xl) border border-(--border) py-4 px-5" >
+      <div className="bg-(--surface) rounded-(--radius-xl) border-2 border-border py-4 px-5" >
         <Flex justify="space-between" align="center" className="mb-2" >
           <Text className="text-[13px] font-bold text-text-primary" >
             📖 Câu {currentIdx + 1} / {sentences.length}
@@ -240,7 +240,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                 <m.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  onClick={playReference} className="flex items-center justify-center gap-1.5 py-3 px-4 rounded-xl border border-(--border) bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body" style={{flex: "0 0 auto"}} >
+                  onClick={playReference} className="flex items-center justify-center gap-1.5 py-3 px-4 rounded-xl border-2 border-border bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body" style={{flex: "0 0 auto"}} >
                   <PlayCircle /> Nghe lại
                 </m.button>
                 <m.button
@@ -301,7 +301,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
               <m.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                onClick={retry} className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-(--border) bg-(--surface) text-text-primary text-sm font-bold cursor-pointer font-body" >
+                onClick={retry} className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-border bg-(--surface) text-text-primary text-sm font-bold cursor-pointer font-body" >
                 <Redo /> Thử lại
               </m.button>
               {currentIdx < sentences.length - 1 && (

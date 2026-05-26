@@ -51,7 +51,7 @@ function TrendRow({ trend }: { trend: CategoryTrend }) {
   const pctResolved = Math.round(trend.resolutionRate * 100);
 
   return (
-    <div className="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] bg-surface border border-border transition-all duration-150 hover:shadow-sm">
+    <div className="flex items-center gap-3 px-3.5 py-2.5 rounded-[10px] bg-surface border-2 border-border transition-all duration-150 hover:shadow-sm">
       <span className="text-base shrink-0">{trend.category.emoji}</span>
 
       <div className="flex-1 min-w-0">

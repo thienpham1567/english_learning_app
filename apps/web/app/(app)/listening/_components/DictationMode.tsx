@@ -198,7 +198,7 @@ export default function DictationMode({ examMode }: Props) {
 
       {/* ── Idle ── */}
       {state === "idle" && (
-        <div className="text-center p-8 border border-(--border) rounded-2xl" style={{background: "var(--card-bg)"}} >
+        <div className="text-center p-8 border-2 border-border rounded-2xl" style={{background: "var(--card-bg)"}} >
           <Pencil size={48} className="text-accent" />
           <h2 className="mb-2 text-lg" >Dictation</h2>
           <p className="text-text-secondary mb-2 text-[13px]" >
@@ -231,7 +231,7 @@ export default function DictationMode({ examMode }: Props) {
           </div>
 
           {/* Instruction */}
-          <div className="p-4 rounded-xl text-center border border-(--border)" style={{background: "var(--card-bg)"}} >
+          <div className="p-4 rounded-xl text-center border-2 border-border" style={{background: "var(--card-bg)"}} >
             <p className="text-sm text-text-secondary m-0" >
               🎧 Nghe và gõ lại câu bạn nghe được
             </p>
@@ -262,7 +262,7 @@ export default function DictationMode({ examMode }: Props) {
             onChange={(e) => setTypedText(e.target.value)}
             placeholder="Gõ lại câu bạn nghe được..."
             autoFocus
-            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); checkAnswer(); } }} className="w-full h-[100px] p-4 rounded-xl border border-(--border) text-[15px] leading-relaxed" style={{background: "var(--card-bg, var(--surface))", resize: "vertical", color: "var(--text)", fontFamily: "inherit"}} />
+            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); checkAnswer(); } }} className="w-full h-[100px] p-4 rounded-xl border-2 border-border text-[15px] leading-relaxed" style={{background: "var(--card-bg, var(--surface))", resize: "vertical", color: "var(--text)", fontFamily: "inherit"}} />
 
           {/* Check button */}
           <button onClick={checkAnswer} disabled={!typedText.trim()} className="border-none text-[15px] font-semibold" style={{padding: "12px 24px", borderRadius: 10, background: typedText.trim() ? "var(--accent)" : "var(--border)", color: "var(--text-on-accent)", cursor: typedText.trim() ? "pointer" : "not-allowed"}} >
@@ -275,7 +275,7 @@ export default function DictationMode({ examMode }: Props) {
       {state === "checked" && currentSentence && (
         <div className="flex flex-col gap-4" >
           {/* Score */}
-          <div className="p-6 rounded-2xl border border-(--border) text-center" style={{background: "var(--card-bg)"}} >
+          <div className="p-6 rounded-2xl border-2 border-border text-center" style={{background: "var(--card-bg)"}} >
             <Progress type="circle" percent={accuracy} size={100}
               strokeColor={accuracy >= 80 ? "var(--success)" : accuracy >= 50 ? "var(--warning)" : "var(--error)"}
               format={(pct) => <span className="text-3xl font-bold" >{pct}%</span>}
@@ -286,7 +286,7 @@ export default function DictationMode({ examMode }: Props) {
           </div>
 
           {/* Word diff */}
-          <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+          <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
             <p className="text-xs text-text-secondary mb-2 font-semibold" >
               Phân tích từng từ:
             </p>
@@ -311,7 +311,7 @@ export default function DictationMode({ examMode }: Props) {
           </div>
 
           {/* Revealed original */}
-          <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+          <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
             <p className="text-xs text-text-secondary font-semibold" style={{margin: "0 0 4px"}} >Câu gốc:</p>
             <p className="text-base font-semibold" style={{margin: "0 0 4px"}} >{currentSentence.text}</p>
             <p className="text-[13px] text-text-secondary mb-2" style={{fontFamily: "serif"}} >{currentSentence.ipa}</p>
@@ -321,14 +321,14 @@ export default function DictationMode({ examMode }: Props) {
           </div>
 
           {/* What you typed */}
-          <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+          <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
             <p className="text-xs text-text-secondary font-semibold" style={{margin: "0 0 4px"}} >Bạn đã gõ:</p>
             <p className="text-[15px] m-0 italic" >&ldquo;{typedText}&rdquo;</p>
           </div>
 
           {/* Actions */}
           <div className="flex gap-3 justify-center" >
-            <button onClick={retryCurrent} className="rounded-lg border border-(--border) bg-transparent cursor-pointer text-[13px] font-medium" style={{padding: "10px 20px", color: "var(--text)"}} >
+            <button onClick={retryCurrent} className="rounded-lg border-2 border-border bg-transparent cursor-pointer text-[13px] font-medium" style={{padding: "10px 20px", color: "var(--text)"}} >
               <RefreshCw /> Thử lại
             </button>
             <button onClick={nextSentence} className="rounded-lg border-none cursor-pointer text-[13px] font-semibold" style={{padding: "10px 20px", background: "var(--accent)", color: "var(--text-on-accent)"}} >
@@ -340,7 +340,7 @@ export default function DictationMode({ examMode }: Props) {
 
       {/* ── Summary ── */}
       {state === "summary" && (
-        <div className="text-center p-8 border border-(--border) rounded-2xl" style={{background: "var(--card-bg)"}} >
+        <div className="text-center p-8 border-2 border-border rounded-2xl" style={{background: "var(--card-bg)"}} >
           <div className="mb-4" style={{fontSize: 48}} >
             {avgScore >= 80 ? <CircleCheckBig className="text-emerald-500" /> :
              avgScore >= 50 ? <Info style={{ color: "var(--warning)" }} /> :

@@ -142,7 +142,7 @@ export default async function MockResultPage({
 
 				<div className="flex gap-2" >
 					<Link
-						href="/toeic/mock-test" className="py-2 px-4 rounded-lg text-ink border border-(--border)" style={{background: "var(--surface-hover)", textDecoration: "none"}} >
+						href="/toeic/mock-test" className="py-2 px-4 rounded-lg text-ink border-2 border-border" style={{background: "var(--surface-hover)", textDecoration: "none"}} >
 						Về Hub
 					</Link>
 					<Link

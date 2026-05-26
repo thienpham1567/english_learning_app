@@ -44,7 +44,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
           {/* Test Info Cards Grid */}
           <m.div
             initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }} className="rounded-(--radius-xl) border border-(--border) bg-(--surface)" style={{padding: "20px", boxShadow: "var(--shadow-sm)"}} >
+            animate={{ opacity: 1, y: 0 }} className="rounded-(--radius-xl) border-2 border-border bg-(--surface)" style={{padding: "20px", boxShadow: "var(--shadow-sm)"}} >
             <div className="flex items-center gap-2 mb-4" >
               <Info className="text-[13px] text-accent" />
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-accent" >
@@ -76,7 +76,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
                 },
               ].map((item, idx) => (
                 <div
-                  key={idx} className="bg-surface-alt rounded-(--radius-lg) border border-(--border) flex flex-col gap-1" style={{padding: "12px 14px"}} >
+                  key={idx} className="bg-surface-alt rounded-(--radius-lg) border-2 border-border flex flex-col gap-1" style={{padding: "12px 14px"}} >
                   <span className="text-xl" style={{marginBottom: 2}} >{item.icon}</span>
                   <span className="text-[13px] font-extrabold text-text-primary" >{item.label}</span>
                   <span className="text-[11px] text-text-muted font-medium" style={{lineHeight: 1.4}} >{item.desc}</span>
@@ -90,7 +90,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
             <m.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }} className="rounded-(--radius-xl) border border-(--border) bg-(--surface)" style={{padding: "20px", boxShadow: "var(--shadow-sm)"}} >
+              transition={{ delay: 0.1 }} className="rounded-(--radius-xl) border-2 border-border bg-(--surface)" style={{padding: "20px", boxShadow: "var(--shadow-sm)"}} >
               <div className="flex items-center gap-2 mb-4" >
                 <Trophy className="text-[13px] text-accent" />
                 <span className="text-[11px] font-extrabold uppercase tracking-widest text-accent" >
@@ -115,7 +115,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
 
                 {/* Previous skill breakdown */}
                 {status.lastResult.skillBreakdown && (
-                  <div className="grid gap-2 mt-1 p-3 rounded-(--radius-lg) bg-surface-alt border border-(--border)" style={{gridTemplateColumns: "1fr 1fr"}} >
+                  <div className="grid gap-2 mt-1 p-3 rounded-(--radius-lg) bg-surface-alt border-2 border-border" style={{gridTemplateColumns: "1fr 1fr"}} >
                     {Object.entries(status.lastResult.skillBreakdown).map(
                       ([skill, sr]) => {
                         const skillColor = CEFR_COLORS[sr.cefr] ?? "var(--accent)";
@@ -154,7 +154,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
           ) : (
             <m.div
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }} className="rounded-(--radius-xl) bg-surface-alt border border-(--border) text-center" style={{padding: "20px"}} >
+              animate={{ opacity: 1 }} className="rounded-(--radius-xl) bg-surface-alt border-2 border-border text-center" style={{padding: "20px"}} >
               <Clock className="text-3xl text-text-muted mb-2" />
               <div className="text-[13px] text-text-secondary font-semibold" >
                 Bạn đã hoàn thành bài test gần đây. Hãy ôn tập thêm và thử lại sau{" "}

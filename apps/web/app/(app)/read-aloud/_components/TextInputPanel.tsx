@@ -49,7 +49,7 @@ export function TextInputPanel({
   };
 
   return (
-    <m.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="read-aloud-panel bg-(--surface) rounded-(--radius-xl) border border-(--border) flex flex-col relative" style={{padding: "var(--space-5)", boxShadow: "var(--shadow-md)", gap: "var(--space-4)"}} >
+    <m.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="read-aloud-panel bg-(--surface) rounded-(--radius-xl) border-2 border-border flex flex-col relative" style={{padding: "var(--space-5)", boxShadow: "var(--shadow-md)", gap: "var(--space-4)"}} >
       {/* Header Actions */}
       <Flex align="center" justify="space-between">
         <Text className="text-sm font-bold text-text-primary flex items-center gap-1.5" >

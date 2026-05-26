@@ -17,7 +17,7 @@ export function EmptyState({ nextReviewAt }: Props) {
     <m.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ type: "spring", stiffness: 100, damping: 15 }} className="w-full w-[450px] bg-(--surface) rounded-(--radius-xl) border border-(--border) text-center relative overflow-hidden" style={{margin: "40px auto", padding: "48px 24px", boxShadow: "var(--shadow-sm)"}} >
+      transition={{ type: "spring", stiffness: 100, damping: 15 }} className="w-full w-[450px] bg-(--surface) rounded-(--radius-xl) border-2 border-border text-center relative overflow-hidden" style={{margin: "40px auto", padding: "48px 24px", boxShadow: "var(--shadow-sm)"}} >
       {/* Background soft accent glow */}
       <div className="absolute w-[220px] h-[220px] rounded-full" style={{left: "50%", top: "0%", transform: "translateX(-50%)", background: "radial-gradient(circle, var(--accent) 8%, transparent 70%)", pointerEvents: "none"}} />
 
@@ -65,7 +65,7 @@ function Countdown({ targetIso }: { targetIso: string }) {
     <m.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2 }} className="items-center gap-2 bg-surface-alt border border-(--border) rounded-full" style={{display: "inline-flex", padding: "8px 18px", boxShadow: "var(--shadow-sm)"}} >
+      transition={{ delay: 0.2 }} className="items-center gap-2 bg-surface-alt border-2 border-border rounded-full" style={{display: "inline-flex", padding: "8px 18px", boxShadow: "var(--shadow-sm)"}} >
       <Clock className="text-accent text-[13px]" />
       <span className="font-bold text-text-secondary" style={{fontSize: 12.5}} >
         Đợt ôn tập tiếp theo: <span className="text-accent" >{remaining}</span>

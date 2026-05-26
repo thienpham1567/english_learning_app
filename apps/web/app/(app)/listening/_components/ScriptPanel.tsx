@@ -133,7 +133,7 @@ export function ScriptPanel({
               Xem script
             </button>
             <button
-              onClick={handleCancel} className="flex-1 rounded-(--radius-sm) border border-(--border) bg-transparent text-xs font-medium cursor-pointer" style={{padding: "8px 14px", color: "var(--text)"}} >
+              onClick={handleCancel} className="flex-1 rounded-(--radius-sm) border-2 border-border bg-transparent text-xs font-medium cursor-pointer" style={{padding: "8px 14px", color: "var(--text)"}} >
               Hủy
             </button>
           </div>
@@ -142,7 +142,7 @@ export function ScriptPanel({
 
       {/* Script Content */}
       {revealLevel !== "hidden" && (
-        <div className="p-4 border border-(--border) text-sm" style={{borderRadius: "var(--radius-md)", background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 3%, var(--surface)), var(--surface))", backdropFilter: "blur(8px)", lineHeight: 1.8, color: "var(--text)", animation: "slideUp 0.25s ease"}} >
+        <div className="p-4 border-2 border-border text-sm" style={{borderRadius: "var(--radius-md)", background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 3%, var(--surface)), var(--surface))", backdropFilter: "blur(8px)", lineHeight: 1.8, color: "var(--text)", animation: "slideUp 0.25s ease"}} >
           <div className="flex items-center gap-1.5 mb-2.5 text-[11px] font-bold text-text-muted uppercase" style={{letterSpacing: "0.1em"}} >
             <FileText /> Script
             {revealLevel === "keywords" && (

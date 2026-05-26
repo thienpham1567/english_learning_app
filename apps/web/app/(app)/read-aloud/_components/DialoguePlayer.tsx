@@ -162,7 +162,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
       <div className="flex flex-col gap-4" >
         <m.div
           initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }} className="bg-(--surface) rounded-(--radius-xl) border border-(--border) flex flex-col gap-4" style={{padding: "24px 20px", boxShadow: "var(--shadow-md)"}} >
+          animate={{ opacity: 1, y: 0 }} className="bg-(--surface) rounded-(--radius-xl) border-2 border-border flex flex-col gap-4" style={{padding: "24px 20px", boxShadow: "var(--shadow-md)"}} >
           <Title level={5} className="m-0 text-text-primary" >
             💬 Tạo hội thoại mới
           </Title>
@@ -179,7 +179,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               placeholder="Ví dụ: ordering coffee, job interview..."
               
               onFocus={(e) => { e.currentTarget.style.borderColor = "var(--accent)"; }}
-              onBlur={(e) => { e.currentTarget.style.borderColor = "var(--border)"; }} className="w-full rounded-xl border border-(--border) bg-surface-alt text-text-primary text-sm font-body" style={{padding: "10px 14px", outline: "none"}} />
+              onBlur={(e) => { e.currentTarget.style.borderColor = "var(--border)"; }} className="w-full rounded-xl border-2 border-border bg-surface-alt text-text-primary text-sm font-body" style={{padding: "10px 14px", outline: "none"}} />
           </div>
 
           {/* Speaker count */}
@@ -231,7 +231,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
           <m.div
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }} className="bg-(--surface) rounded-(--radius-xl) border border-(--border)" style={{padding: "20px", boxShadow: "var(--shadow)"}} >
+            transition={{ delay: 0.1 }} className="bg-(--surface) rounded-(--radius-xl) border-2 border-border" style={{padding: "20px", boxShadow: "var(--shadow)"}} >
             <Text className="text-xs font-bold text-text-muted block mb-3 uppercase" style={{letterSpacing: "0.06em"}} >
               📚 Hội thoại đã tạo ({dlg.savedDialogues.length})
             </Text>
@@ -243,7 +243,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.03 }}
                   whileHover={{ y: -1, boxShadow: "var(--shadow-sm)" }}
-                  onClick={() => dlg.loadDialogue(saved)} className="flex items-center gap-3 rounded-xl border border-(--border) bg-surface-alt cursor-pointer" style={{padding: "12px 14px", transition: "all 0.15s"}} >
+                  onClick={() => dlg.loadDialogue(saved)} className="flex items-center gap-3 rounded-xl border-2 border-border bg-surface-alt cursor-pointer" style={{padding: "12px 14px", transition: "all 0.15s"}} >
                   {/* Speaker flags */}
                   <div className="flex shrink-0" style={{gap: 2}} >
                     {saved.voiceConfigJson.map((v) => (
@@ -307,7 +307,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
   return (
     <div className="flex flex-col gap-4" >
       {/* Header */}
-      <div className="bg-(--surface) rounded-(--radius-xl) border border-(--border) py-4 px-5" style={{boxShadow: "var(--shadow-md)"}} >
+      <div className="bg-(--surface) rounded-(--radius-xl) border-2 border-border py-4 px-5" style={{boxShadow: "var(--shadow-md)"}} >
         <Flex className="dialogue-header-actions" justify="space-between" align="center">
           <div>
             <Text className="text-base font-extrabold text-text-primary block" >
@@ -327,7 +327,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             <m.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={dlg.reset} className="flex items-center gap-1.5 rounded-xl border border-(--border) bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body" style={{padding: "8px 14px"}} >
+              onClick={dlg.reset} className="flex items-center gap-1.5 rounded-xl border-2 border-border bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body" style={{padding: "8px 14px"}} >
               <Redo /> Tạo mới
             </m.button>
           </Flex>
@@ -355,7 +355,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
       </div>
 
       {/* Chat bubbles */}
-      <div className="dialogue-bubbles flex flex-col gap-3.5 bg-surface-alt rounded-(--radius-xl) border border-(--border)" style={{padding: "20px 16px", boxShadow: "var(--shadow)"}} >
+      <div className="dialogue-bubbles flex flex-col gap-3.5 bg-surface-alt rounded-(--radius-xl) border-2 border-border" style={{padding: "20px 16px", boxShadow: "var(--shadow)"}} >
         {dlg.dialogue.lines.map((line, i) => {
           const isLeft = line.speaker === "A";
           const colors = SPEAKER_COLORS[line.speaker] ?? SPEAKER_COLORS.A;
@@ -443,7 +443,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             <m.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={skipListenPreview} className="flex items-center gap-1.5 border border-(--border) bg-(--surface) text-text-muted text-[13px] font-semibold cursor-pointer font-body" style={{padding: "14px 20px", borderRadius: 14}} >
+              onClick={skipListenPreview} className="flex items-center gap-1.5 border-2 border-border bg-(--surface) text-text-muted text-[13px] font-semibold cursor-pointer font-body" style={{padding: "14px 20px", borderRadius: 14}} >
               Bỏ qua →
             </m.button>
           </Flex>
@@ -472,7 +472,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
       {hasListenedOnce && !rolePlaySpeaker && !dlg.isPlaying && (
         <m.div
           initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }} className="bg-(--surface) rounded-(--radius-xl) border border-(--border) py-4 px-5" style={{boxShadow: "var(--shadow)"}} >
+          animate={{ opacity: 1, y: 0 }} className="bg-(--surface) rounded-(--radius-xl) border-2 border-border py-4 px-5" style={{boxShadow: "var(--shadow)"}} >
           {/* Replay button */}
           <Flex justify="space-between" align="center" className="mb-3" >
             <Text className="text-xs font-bold text-text-muted" >
@@ -481,7 +481,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             <m.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={listenPreview} className="flex items-center gap-1 rounded-lg border border-(--border) bg-surface-alt text-text-muted text-[11px] font-semibold cursor-pointer font-body" style={{padding: "4px 12px"}} >
+              onClick={listenPreview} className="flex items-center gap-1 rounded-lg border-2 border-border bg-surface-alt text-text-muted text-[11px] font-semibold cursor-pointer font-body" style={{padding: "4px 12px"}} >
               <PlayCircle /> Nghe lại
             </m.button>
           </Flex>
@@ -515,7 +515,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               </Text>
               <m.button
                 whileTap={{ scale: 0.95 }}
-                onClick={() => { setRolePlaySpeaker(null); setRolePlayStep("idle"); dlg.stop(); }} className="rounded-lg border border-(--border) bg-surface-alt text-text-muted text-xs font-semibold cursor-pointer" style={{padding: "4px 12px"}} >
+                onClick={() => { setRolePlaySpeaker(null); setRolePlayStep("idle"); dlg.stop(); }} className="rounded-lg border-2 border-border bg-surface-alt text-text-muted text-xs font-semibold cursor-pointer" style={{padding: "4px 12px"}} >
                 Thoát
               </m.button>
             </Flex>

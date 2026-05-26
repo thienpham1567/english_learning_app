@@ -217,7 +217,7 @@ export function ToeicVocabularySection({ className }: Props) {
           return (
             <div
               key={cat.id}
-              className="overflow-hidden rounded-xl border border-(--border) bg-(--surface)"
+              className="overflow-hidden rounded-xl border-2 border-border bg-(--surface)"
             >
               {/* Category header */}
               <button
@@ -234,12 +234,12 @@ export function ToeicVocabularySection({ className }: Props) {
 
               {isExpanded && (
                 <div className="overflow-hidden">
-                  <div className="flex flex-wrap gap-1.5 border-t border-(--border) px-4 py-3">
+                  <div className="flex flex-wrap gap-1.5 border-t-2 border-border px-4 py-3">
                     {cat.words.map((word) => (
                       <button
                         key={word}
                         onClick={() => handleWordClick(word)}
-                        className="group flex items-center gap-1 rounded-md border border-(--border) bg-(--bg-deep) px-2.5 py-1 text-[13px] text-(--ink) transition hover:border-(--accent) hover:bg-(--accent)/5 hover:text-(--accent)"
+                        className="group flex items-center gap-1 rounded-md border-2 border-border bg-(--bg-deep) px-2.5 py-1 text-[13px] text-(--ink) transition hover:border-(--accent) hover:bg-(--accent)/5 hover:text-(--accent)"
                       >
                         {word}
                         <LinkIcon className="text-[10px] shrink-0" style={{opacity: 0, transition: "opacity 0.2s"}} />

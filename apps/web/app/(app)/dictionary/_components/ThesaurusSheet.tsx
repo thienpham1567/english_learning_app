@@ -46,10 +46,10 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed top-0 right-0 bottom-0 w-[min(384px,90vw)] z-[901] bg-(--bg) border-l border-border shadow-[-8px_0_30px_rgba(0,0,0,0.1)] flex flex-col overflow-hidden"
+            className="fixed top-0 right-0 bottom-0 w-[min(384px,90vw)] z-[901] bg-(--bg) border-l-2 border-border shadow-[-8px_0_30px_rgba(0,0,0,0.1)] flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-border bg-surface shrink-0">
+            <div className="flex items-center justify-between px-5 py-4 border-b-2 border-border bg-surface shrink-0">
               <div>
                 <p className="text-[10px] uppercase tracking-[0.18em] text-text-muted m-0">
                   Từ đồng &amp; trái nghĩa
@@ -62,7 +62,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
               </div>
               <button
                 onClick={onClose}
-                className="grid place-items-center w-8 h-8 rounded-lg border border-border bg-transparent text-text-muted cursor-pointer transition-all hover:bg-surface-alt"
+                className="grid place-items-center w-8 h-8 rounded-lg border-2 border-border bg-transparent text-text-muted cursor-pointer transition-all hover:bg-surface-alt"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -79,7 +79,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                   {sensesWithData.map((sense) => (
                     <div key={sense.id} className="flex flex-col gap-3.5">
                       {/* Sense label */}
-                      <p className="text-[13px] italic font-display text-accent m-0 pb-2.5 border-b border-border">
+                      <p className="text-[13px] italic font-display text-accent m-0 pb-2.5 border-b-2 border-border">
                         {sense.label}
                       </p>
 

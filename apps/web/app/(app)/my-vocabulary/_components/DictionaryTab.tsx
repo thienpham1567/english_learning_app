@@ -203,7 +203,7 @@ export function DictionaryTab() {
                   onClick={() => doSearch(w.query)}
                   onKeyDown={() => {}}
                   role="button"
-                  tabIndex={0} className="rounded-xl border border-(--border) bg-(--surface) flex items-center gap-2.5 cursor-pointer" style={{padding: "12px 14px", transition: "border-color 0.2s"}} >
+                  tabIndex={0} className="rounded-xl border-2 border-border bg-(--surface) flex items-center gap-2.5 cursor-pointer" style={{padding: "12px 14px", transition: "border-color 0.2s"}} >
                   <div className="w-[24px] h-[24px] rounded-md grid shrink-0 text-[11px]" style={{placeItems: "center", background: `color-mix(in srgb, ${mastery.color} 10%, var(--surface))`, color: mastery.color}} >
                     {mastery.icon}
                   </div>

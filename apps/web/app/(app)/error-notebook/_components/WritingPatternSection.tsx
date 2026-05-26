@@ -250,7 +250,7 @@ export function WritingPatternSection() {
           return (
             <div
               key={p.id}
-              className="rounded-xl border border-border bg-(--card-bg) overflow-hidden"
+              className="rounded-xl border-2 border-border bg-(--card-bg) overflow-hidden"
             >
               {/* Pattern header */}
               <div className="px-4 py-3 flex items-center gap-2.5">
@@ -290,7 +290,7 @@ export function WritingPatternSection() {
                 {state === "done" && (
                   <button
                     onClick={() => generateQuiz(p.tag)}
-                    className="px-3.5 py-1.5 rounded-lg border border-border bg-transparent text-text-secondary text-xs cursor-pointer shrink-0 hover:bg-surface-alt transition-colors"
+                    className="px-3.5 py-1.5 rounded-lg border-2 border-border bg-transparent text-text-secondary text-xs cursor-pointer shrink-0 hover:bg-surface-alt transition-colors"
                   >
                     Làm lại
                   </button>
@@ -299,13 +299,13 @@ export function WritingPatternSection() {
 
               {/* Inline quiz */}
               {state === "active" && quizItems[p.tag] && (
-                <div className="px-4 pb-4 pt-3.5 border-t border-border">
+                <div className="px-4 pb-4 pt-3.5 border-t-2 border-border">
                   <InlineQuiz items={quizItems[p.tag]} errorLogIds={quizIds[p.tag] ?? []} onDone={(answers) => finishQuiz(p.tag, answers)} />
                 </div>
               )}
 
               {state === "done" && (
-                <div className="px-4 py-2 border-t border-border bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] text-xs text-(--success) font-medium">
+                <div className="px-4 py-2 border-t-2 border-border bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] text-xs text-(--success) font-medium">
                   <CheckCircle className="h-3 w-3 inline mr-1.5" /> Quiz đã hoàn thành — câu hỏi đã được lưu vào sổ lỗi sai để ôn tập sau.
                 </div>
               )}

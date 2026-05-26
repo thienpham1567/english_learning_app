@@ -48,7 +48,7 @@ export default async function ToeicDictationPage() {
 								{list.map((item, i) => (
 									<Link
 										key={item.id}
-										href={`/toeic/dictation/${item.id}`} className="rounded-lg text-ink border border-(--border) flex justify-between items-center text-[13px]" style={{padding: 10, background: "var(--surface-hover)", textDecoration: "none"}} >
+										href={`/toeic/dictation/${item.id}`} className="rounded-lg text-ink border-2 border-border flex justify-between items-center text-[13px]" style={{padding: 10, background: "var(--surface-hover)", textDecoration: "none"}} >
 										<span>#{i + 1}</span>
 										<Tag>{item.topic}</Tag>
 									</Link>

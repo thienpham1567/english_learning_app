@@ -43,7 +43,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
         {/* Top row: side-by-side */}
         <div className="grid gap-6 md:grid-cols-2">
           {/* Left: user's annotated text */}
-          <div className="rounded-xl border border-(--border) bg-(--surface) p-5 shadow-(--shadow-sm)">
+          <div className="rounded-xl border-2 border-border bg-(--surface) p-5 shadow-(--shadow-sm)">
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
               Bài viết của bạn
             </h3>
@@ -63,14 +63,14 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
 
         {/* Bottom row: radar + feedback full-width */}
         <div className="mt-6 grid gap-6 md:grid-cols-2">
-          <div className="rounded-xl border border-(--border) bg-(--surface) p-5 shadow-(--shadow-sm)">
+          <div className="rounded-xl border-2 border-border bg-(--surface) p-5 shadow-(--shadow-sm)">
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
               Điểm chi tiết
             </h3>
             <BandScoreRadar scores={feedback.scores} />
           </div>
 
-          <div className="rounded-xl border border-(--border) bg-(--surface) p-5 shadow-(--shadow-sm)">
+          <div className="rounded-xl border-2 border-border bg-(--surface) p-5 shadow-(--shadow-sm)">
             <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
               Nhận xét
             </h3>
@@ -85,7 +85,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
       {/* ── Mobile tabs (≤768px) ── */}
       <div className="md:hidden">
         {/* Tab bar */}
-        <div className="flex rounded-xl border border-border overflow-hidden mb-4 bg-surface">
+        <div className="flex rounded-xl border-2 border-border overflow-hidden mb-4 bg-surface">
           {TABS.map((tab) => (
             <button
               key={tab.key}
@@ -104,7 +104,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
 
         {/* Tab content */}
         {activeTab === "original" && (
-          <div className="anim-fade-in rounded-xl border border-(--border) bg-(--surface) p-4 shadow-(--shadow-sm)">
+          <div className="anim-fade-in rounded-xl border-2 border-border bg-(--surface) p-4 shadow-(--shadow-sm)">
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
               Bài viết của bạn
             </h3>
@@ -125,13 +125,13 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
 
         {activeTab === "review" && (
           <div className="anim-fade-in space-y-4">
-            <div className="rounded-xl border border-(--border) bg-(--surface) p-4 shadow-(--shadow-sm)">
+            <div className="rounded-xl border-2 border-border bg-(--surface) p-4 shadow-(--shadow-sm)">
               <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
                 Điểm chi tiết
               </h3>
               <BandScoreRadar scores={feedback.scores} />
             </div>
-            <div className="rounded-xl border border-(--border) bg-(--surface) p-4 shadow-(--shadow-sm)">
+            <div className="rounded-xl border-2 border-border bg-(--surface) p-4 shadow-(--shadow-sm)">
               <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
                 Nhận xét
               </h3>
@@ -148,7 +148,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
       <div className="mt-8 text-center">
         <button
           onClick={onNewWriting}
-          className="rounded-xl border border-(--border) bg-(--surface) px-6 py-2.5 text-xs font-bold text-(--text-secondary) shadow-(--shadow-sm) transition hover:border-(--accent)/45 hover:text-(--accent) cursor-pointer flex items-center gap-1.5 mx-auto"
+          className="rounded-xl border-2 border-border bg-(--surface) px-6 py-2.5 text-xs font-bold text-(--text-secondary) shadow-(--shadow-sm) transition hover:border-(--accent)/45 hover:text-(--accent) cursor-pointer flex items-center gap-1.5 mx-auto"
         >
           <PenTool className="h-4 w-4" />
           <span>Viết bài mới</span>

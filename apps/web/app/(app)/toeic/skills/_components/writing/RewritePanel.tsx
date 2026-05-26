@@ -259,7 +259,7 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
         disabled={!sentence.trim() || overLimit || loading}
         className={`px-5 py-2.5 rounded-xl border-none text-xs font-bold text-white flex items-center gap-1.5 self-start cursor-pointer transition-all duration-155 active:scale-97 ${
           !sentence.trim() || overLimit || loading
-            ? "bg-slate-900 text-slate-500 cursor-not-allowed border border-border"
+            ? "bg-slate-900 text-slate-500 cursor-not-allowed border-2 border-border"
             : "bg-accent hover:bg-accent-hover shadow-sm"
         }`}
       >

@@ -97,7 +97,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
           <m.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={onToggleSaved} className="items-center gap-1 rounded-lg border border-(--border) text-xs font-extrabold cursor-pointer" style={{display: "inline-flex", padding: "5px 12px", background: saved ? "var(--accent-light)" : "var(--surface-alt)", color: saved ? "var(--accent)" : "var(--text-secondary)"}} >
+            onClick={onToggleSaved} className="items-center gap-1 rounded-lg border-2 border-border text-xs font-extrabold cursor-pointer" style={{display: "inline-flex", padding: "5px 12px", background: saved ? "var(--accent-light)" : "var(--surface-alt)", color: saved ? "var(--accent)" : "var(--text-secondary)"}} >
             {saved ? <Star className="text-accent" /> : <Star />}
             <span>{saved ? "Đã lưu" : "Lưu"}</span>
           </m.button>
@@ -105,7 +105,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
           <m.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)} className="items-center gap-1 rounded-lg border border-(--border) bg-surface-alt text-text-secondary text-xs font-extrabold cursor-pointer" style={{display: "inline-flex", padding: "5px 12px"}} >
+            onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)} className="items-center gap-1 rounded-lg border-2 border-border bg-surface-alt text-text-secondary text-xs font-extrabold cursor-pointer" style={{display: "inline-flex", padding: "5px 12px"}} >
             <LinkIcon />
             <span>Tra cứu</span>
           </m.button>
@@ -154,7 +154,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
           </div>
 
           {(data.phoneticsUs || data.phoneticsUk) && (
-            <div className="flex gap-3.5 bg-surface-alt rounded-(--radius-lg) border border-(--border)" style={{padding: "10px 14px"}} >
+            <div className="flex gap-3.5 bg-surface-alt rounded-(--radius-lg) border-2 border-border" style={{padding: "10px 14px"}} >
               {data.phoneticsUs && (
                 <div className="flex items-center gap-1 text-[13px] text-text-secondary font-bold" >
                   <span>🇺🇸 {data.phoneticsUs}</span>
@@ -174,7 +174,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                 Trình độ: {data.level}
               </span>
             )}
-            <span className="text-[11px] font-extrabold rounded-md bg-surface-alt text-text-secondary border border-(--border)" style={{padding: "3px 8px"}} >
+            <span className="text-[11px] font-extrabold rounded-md bg-surface-alt text-text-secondary border-2 border-border" style={{padding: "3px 8px"}} >
               {getTypeLabel(data)}
             </span>
           </div>

@@ -49,10 +49,10 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed top-0 right-0 bottom-0 w-[min(520px,90vw)] z-[901] bg-(--bg) border-l border-border shadow-[-8px_0_30px_rgba(0,0,0,0.1)] flex flex-col overflow-hidden"
+            className="fixed top-0 right-0 bottom-0 w-[min(520px,90vw)] z-[901] bg-(--bg) border-l-2 border-border shadow-[-8px_0_30px_rgba(0,0,0,0.1)] flex flex-col overflow-hidden"
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-4 border-b border-border bg-surface shrink-0">
+            <div className="flex items-center justify-between px-5 py-4 border-b-2 border-border bg-surface shrink-0">
               <div className="flex items-center gap-2">
                 {error.isResolved ? (
                   <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-md bg-(--success-bg) text-(--success)">
@@ -69,7 +69,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
               </div>
               <button
                 onClick={onClose}
-                className="grid place-items-center w-8 h-8 rounded-lg border border-border bg-transparent text-text-muted cursor-pointer text-sm transition-all duration-150 hover:bg-surface-alt"
+                className="grid place-items-center w-8 h-8 rounded-lg border-2 border-border bg-transparent text-text-muted cursor-pointer text-sm transition-all duration-150 hover:bg-surface-alt"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -96,7 +96,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
                             ? "bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] border-[1.5px] border-(--success) text-(--success) font-bold"
                             : isWrong
                               ? "bg-[color-mix(in_srgb,var(--error)_8%,var(--surface))] border-[1.5px] border-(--error) text-(--error) font-bold"
-                              : "bg-surface-alt border border-border text-text-primary font-medium"
+                              : "bg-surface-alt border-2 border-border text-text-primary font-medium"
                         }`}
                       >
                         {isCorrect && <CheckCircle className="h-3 w-3 inline mr-1.5" />}
@@ -149,7 +149,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
               </div>
 
               {/* Meta info */}
-              <div className="px-3.5 py-3 rounded-[10px] bg-surface-alt border border-border text-xs text-text-muted flex flex-col gap-1">
+              <div className="px-3.5 py-3 rounded-[10px] bg-surface-alt border-2 border-border text-xs text-text-muted flex flex-col gap-1">
                 <div>📅 Ngày tạo: {new Date(error.createdAt).toLocaleDateString("vi-VN", { day: "numeric", month: "long", year: "numeric" })}</div>
                 {error.reviewCount > 0 && <div>🧠 Đã ôn: {error.reviewCount} lần</div>}
                 {error.lastReviewedAt && <div>📖 Ôn gần nhất: {new Date(error.lastReviewedAt).toLocaleDateString("vi-VN")}</div>}
@@ -159,7 +159,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
 
             {/* Footer */}
             {!error.isResolved && (
-              <div className="px-5 py-3 border-t border-border bg-surface shrink-0">
+              <div className="px-5 py-3 border-t-2 border-border bg-surface shrink-0">
                 <m.button
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}

@@ -174,7 +174,7 @@ export default function GrammarRoadmapPage() {
         <m.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }} className="bg-(--surface) rounded-(--radius-xl) border border-(--border) p-6 mt-5 mb-6 relative overflow-hidden" style={{boxShadow: "var(--shadow-md)"}} >
+          transition={{ delay: 0.1 }} className="bg-(--surface) rounded-(--radius-xl) border-2 border-border p-6 mt-5 mb-6 relative overflow-hidden" style={{boxShadow: "var(--shadow-md)"}} >
           <div className="absolute h-[3px]" style={{top: 0, left: 0, right: 0, background: "linear-gradient(90deg, var(--success), var(--accent), var(--error))"}} />
 
           <div className="flex items-center gap-5 flex-wrap" >
@@ -352,7 +352,7 @@ export default function GrammarRoadmapPage() {
         <m.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }} className="bg-(--surface) rounded-(--radius-xl) border border-(--border) p-6 mt-6" style={{boxShadow: "var(--shadow-sm)"}} >
+          transition={{ delay: 0.5 }} className="bg-(--surface) rounded-(--radius-xl) border-2 border-border p-6 mt-6" style={{boxShadow: "var(--shadow-sm)"}} >
           <div className="text-base font-black text-ink font-display mb-4 flex items-center gap-2" >
             <Trophy className="text-(--xp)" />
             Chiến lược từ người đạt 900 L&R
@@ -381,7 +381,7 @@ export default function GrammarRoadmapPage() {
               },
             ].map((tip, i) => (
               <div
-                key={i} className="rounded-(--radius-lg) bg-surface-alt border border-(--border)" style={{padding: "14px 16px"}} >
+                key={i} className="rounded-(--radius-lg) bg-surface-alt border-2 border-border" style={{padding: "14px 16px"}} >
                 <div className="text-xl mb-1.5" >{tip.emoji}</div>
                 <div className="font-extrabold text-ink mb-1" style={{fontSize: 13.5}} >{tip.title}</div>
                 <div className="text-xs text-text-secondary leading-normal font-medium" >{tip.desc}</div>
@@ -428,7 +428,7 @@ function CategoryCard({
     <m.div
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ delay }} className="bg-surface-alt rounded-(--radius-lg) border border-(--border)" style={{padding: "16px 18px"}} >
+      transition={{ delay }} className="bg-surface-alt rounded-(--radius-lg) border-2 border-border" style={{padding: "16px 18px"}} >
       {/* Category header */}
       <div className="flex items-center gap-2.5 mb-3" >
         <div className="w-[32px] h-[32px] grid text-[15px] shrink-0" style={{borderRadius: 10, background: `color-mix(in srgb, ${category.color} 10%, var(--surface))`, color: category.color, placeItems: "center"}} >
@@ -510,7 +510,7 @@ function QuickLinkCard({ href, emoji, label, desc }: { href: string; emoji: stri
     <Link href={href} style={{ textDecoration: "none", flex: "1 1 200px" }}>
       <m.div
         whileHover={{ y: -3, boxShadow: "var(--shadow-md)" }}
-        whileTap={{ scale: 0.98 }} className="rounded-(--radius-xl) bg-(--surface) border border-(--border) cursor-pointer flex items-center gap-3" style={{padding: "16px 18px", transition: "all 0.15s"}} >
+        whileTap={{ scale: 0.98 }} className="rounded-(--radius-xl) bg-(--surface) border-2 border-border cursor-pointer flex items-center gap-3" style={{padding: "16px 18px", transition: "all 0.15s"}} >
         <span className="text-2xl" >{emoji}</span>
         <div>
           <div className="font-extrabold text-ink" style={{fontSize: 13.5}} >{label}</div>

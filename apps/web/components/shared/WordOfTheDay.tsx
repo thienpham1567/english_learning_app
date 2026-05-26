@@ -74,7 +74,7 @@ export function WordOfTheDay() {
           key="loading"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }} className="p-6 border border-(--border) flex items-center justify-center h-[120px]" style={{borderRadius: "var(--radius-lg, 16px)", background: "var(--card-bg, var(--surface))"}} >
+          exit={{ opacity: 0 }} className="p-6 border-2 border-border flex items-center justify-center h-[120px]" style={{borderRadius: "var(--radius-lg, 16px)", background: "var(--card-bg, var(--surface))"}} >
           <Loader2 className="animate-spin text-accent" size={20} />
         </m.div>
       ) : word ? (
@@ -82,7 +82,7 @@ export function WordOfTheDay() {
           key="content"
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }} className="p-6 border border-(--border) relative overflow-hidden" style={{borderRadius: "var(--radius-lg, 16px)", background: "linear-gradient(135deg, var(--card-bg, var(--surface)), var(--surface))"}} >
+          transition={{ duration: 0.4, ease: "easeOut" }} className="p-6 border-2 border-border relative overflow-hidden" style={{borderRadius: "var(--radius-lg, 16px)", background: "linear-gradient(135deg, var(--card-bg, var(--surface)), var(--surface))"}} >
           {/* Decorative gradient accent */}
           <m.div
             animate={{ opacity: [0.1, 0.2, 0.1], scale: [1, 1.2, 1] }}

@@ -124,7 +124,7 @@ export function WordFamilyExplorer({ word }: { word: string }) {
                 <Card
                   size="small"
                   
-                  styles={{ body: { padding: "10px 12px" } }} className="bg-bg-deep border border-(--border)" style={{borderRadius: 10}} >
+                  styles={{ body: { padding: "10px 12px" } }} className="bg-bg-deep border-2 border-border" style={{borderRadius: 10}} >
                   <div className="flex items-center gap-1.5 mb-1 flex-wrap" >
                     <Text strong className="text-ink text-sm" >
                       {form.word}

@@ -148,7 +148,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
           </div>
 
           {/* Examples */}
-          <div className="px-3.5 py-3 rounded-[10px] bg-(--card-bg) border border-border">
+          <div className="px-3.5 py-3 rounded-[10px] bg-(--card-bg) border-2 border-border">
             <div className="flex items-center gap-1.5 mb-2 text-xs font-bold text-(--secondary) uppercase tracking-wide">
               <FlaskConical className="h-3 w-3" /> Ví dụ tương tự
             </div>
@@ -184,7 +184,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
 
       {/* Fallback: show old explanation if no deep data and not expanded */}
       {!data && !expanded && !loading && (fallbackEn || fallbackVi) && (
-        <div className="mt-2 px-3.5 py-2.5 rounded-lg bg-(--card-bg) border border-border text-[13px] leading-relaxed">
+        <div className="mt-2 px-3.5 py-2.5 rounded-lg bg-(--card-bg) border-2 border-border text-[13px] leading-relaxed">
           {fallbackVi && (
             <p className="m-0 text-text-secondary italic">
               {fallbackVi}

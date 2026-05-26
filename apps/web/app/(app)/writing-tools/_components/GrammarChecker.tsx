@@ -113,7 +113,7 @@ function ErrorCard({
   const meta = TYPE_META[error.type] ?? TYPE_META.grammar;
 
   return (
-    <div className="rounded-xl border border-(--border) overflow-hidden" style={{background: "var(--card-bg)", transition: "box-shadow 0.2s"}} >
+    <div className="rounded-xl border-2 border-border overflow-hidden" style={{background: "var(--card-bg)", transition: "box-shadow 0.2s"}} >
       {/* Header */}
       <div
         
@@ -315,7 +315,7 @@ export function GrammarChecker() {
                   e.currentTarget.style.borderLeftColor = ex.color;
                   e.currentTarget.style.transform = "none";
                   e.currentTarget.style.boxShadow = "none";
-                }} className="text-left border border-(--border) cursor-pointer flex flex-col gap-1" style={{padding: "10px 14px", borderRadius: 10, borderLeft: `3px solid ${ex.color}`, background: "var(--card-bg)", transition: "all 0.15s"}} >
+                }} className="text-left border-2 border-border cursor-pointer flex flex-col gap-1" style={{padding: "10px 14px", borderRadius: 10, borderLeft: `3px solid ${ex.color}`, background: "var(--card-bg)", transition: "all 0.15s"}} >
                 <span className="text-[11px] font-semibold" style={{color: ex.color}} >
                   {ex.label}
                 </span>

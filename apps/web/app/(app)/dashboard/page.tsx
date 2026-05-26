@@ -46,7 +46,7 @@ const containerVariants = {
   }
 };
 
-const cardClass = "relative overflow-hidden rounded-2xl border border-border bg-surface shadow-sm p-6";
+const cardClass = "relative overflow-hidden rounded-2xl border-2 border-border bg-surface shadow-sm p-6";
 const sectionLabelClass = "flex items-center gap-2.5 text-[10px] font-extrabold uppercase tracking-widest text-accent mb-4";
 const accentBarClass = "w-[3px] h-3.5 rounded-sm bg-accent shrink-0";
 
@@ -275,7 +275,7 @@ function StatCard({ icon, label, value, sub, loading }: {
       variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }}
       whileHover={{ y: -2 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className="flex-1 min-w-[90px] text-center rounded-2xl border border-border bg-surface p-4 shadow-sm"
+      className="flex-1 min-w-[90px] text-center rounded-2xl border-2 border-border bg-surface p-4 shadow-sm"
     >
       {loading ? (
         <div className="h-10 bg-slate-900 border border-slate-850 rounded-md animate-pulse mx-auto w-12" />
@@ -508,7 +508,7 @@ function QuickActions({ dash: _dash }: QuickActionsProps) {
             transition={{ delay: 0.05 * i }}
             whileHover={{ y: -3 }}
             whileTap={{ scale: 0.97 }}
-            className="p-4.5 rounded-2xl border border-border bg-slate-900/10 hover:bg-slate-900/40 text-center cursor-pointer transition-colors duration-150 active:scale-97"
+            className="p-4.5 rounded-2xl border-2 border-border bg-slate-900/10 hover:bg-slate-900/40 text-center cursor-pointer transition-colors duration-150 active:scale-97"
           >
             <div className={`w-9 h-9 rounded-xl flex items-center justify-center mx-auto mb-2 text-sm ${a.color}`}>
               {a.icon}

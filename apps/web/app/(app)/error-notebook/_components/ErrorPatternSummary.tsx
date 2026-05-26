@@ -34,10 +34,10 @@ export function ErrorPatternSummary({ errors }: Props) {
         {topPatterns.map((pattern) => (
           <div
             key={pattern.category.key}
-            className="rounded-[14px] bg-surface border border-border overflow-hidden transition-all duration-150 hover:border-[color-mix(in_srgb,var(--warning)_35%,var(--border))] hover:shadow-sm"
+            className="rounded-[14px] bg-surface border-2 border-border overflow-hidden transition-all duration-150 hover:border-[color-mix(in_srgb,var(--warning)_35%,var(--border))] hover:shadow-sm"
           >
             {/* Pattern header */}
-            <div className={`flex items-center gap-3 px-4 py-3 bg-[color-mix(in_srgb,var(--warning)_5%,var(--bg))] ${pattern.examples.length > 0 ? "border-b border-border" : ""}`}>
+            <div className={`flex items-center gap-3 px-4 py-3 bg-[color-mix(in_srgb,var(--warning)_5%,var(--bg))] ${pattern.examples.length > 0 ? "border-b-2 border-border" : ""}`}>
               <span className="text-lg leading-none shrink-0">{pattern.category.emoji}</span>
               <div className="flex-1 min-w-0">
                 <div className="text-sm font-bold text-ink leading-tight">

@@ -61,7 +61,7 @@ export function ConversationList({ activeId }: Props) {
 
         <button
           onClick={handleNew}
-          className="flex w-full items-center justify-center gap-2 rounded-xl border border-(--border) bg-(--chat-surface-hover) px-4 py-2.5 text-xs font-semibold text-(--text-primary) hover:brightness-110 hover:text-(--ink) transition-all duration-200 cursor-pointer shadow-sm active:scale-98"
+          className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-border bg-(--chat-surface-hover) px-4 py-2.5 text-xs font-semibold text-(--text-primary) hover:brightness-110 hover:text-(--ink) transition-all duration-200 cursor-pointer shadow-sm active:scale-98"
         >
           <Plus className="h-3.5 w-3.5" />
           Cuộc hội thoại mới

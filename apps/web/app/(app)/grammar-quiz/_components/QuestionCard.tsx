@@ -49,7 +49,7 @@ export function QuestionCard({
           <span className="font-bold text-text-secondary" style={{fontSize: 12.5}} >
             Câu hỏi {questionNumber} / {total}
           </span>
-          <span className="rounded-md bg-surface-alt border border-(--border) font-bold text-accent" style={{padding: "3px 8px", fontSize: 11.5}} >
+          <span className="rounded-md bg-surface-alt border-2 border-border font-bold text-accent" style={{padding: "3px 8px", fontSize: 11.5}} >
             {question.grammarTopic}
           </span>
         </div>
@@ -75,7 +75,7 @@ export function QuestionCard({
       )}
 
       {/* Stem Card */}
-      <div className="rounded-(--radius-xl) border border-(--border) bg-(--surface) p-6 relative overflow-hidden" style={{boxShadow: "var(--shadow-sm)"}} >
+      <div className="rounded-(--radius-xl) border-2 border-border bg-(--surface) p-6 relative overflow-hidden" style={{boxShadow: "var(--shadow-sm)"}} >
         <div className="absolute w-[4px]" style={{left: 0, top: 0, bottom: 0, background: "var(--accent)"}} />
 
         <p className="text-text-primary font-bold m-0" style={{fontSize: 16.5, lineHeight: 1.65}} >
@@ -175,7 +175,7 @@ export function QuestionCard({
                   <span className="text-[11px] font-extrabold uppercase text-accent flex items-center gap-1" style={{letterSpacing: "0.1em"}} >
                     <Lightbulb /> Lý do đáp án
                   </span>
-                  <div className="flex overflow-hidden rounded-md border border-(--border)" >
+                  <div className="flex overflow-hidden rounded-md border-2 border-border" >
                     {(["vi", "en"] as const).map((l) => (
                       <button
                         key={l}

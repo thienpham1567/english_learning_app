@@ -86,7 +86,7 @@ export function VerbFormsSection({ verbForms }: Props) {
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-controls="verb-forms-grid"
-        className="flex w-full items-center justify-between gap-2 bg-surface border border-border border-l-3 border-l-accent rounded-sm cursor-pointer px-4 py-2.5 transition-all duration-200 hover:bg-(--surface-hover) hover:shadow-sm"
+        className="flex w-full items-center justify-between gap-2 bg-surface border-2 border-border border-l-3 border-l-accent rounded-sm cursor-pointer px-4 py-2.5 transition-all duration-200 hover:bg-(--surface-hover) hover:shadow-sm"
       >
         <div className="flex items-center gap-2.5">
           <span className="text-[13px] font-bold uppercase tracking-[0.12em] text-accent">
@@ -112,7 +112,7 @@ export function VerbFormsSection({ verbForms }: Props) {
               ? "bg-accent-muted border border-accent border-l-3"
               : vf.isIrregular
                 ? "bg-(--warning-bg) border border-(--warning)"
-                : "bg-bg-deep border border-border";
+                : "bg-bg-deep border-2 border-border";
 
             return (
               <div key={vf.label} className={`flex flex-col gap-1.5 rounded-lg p-3.5 px-4 transition-shadow duration-200 min-h-[110px] ${cardClass}`}>

@@ -131,7 +131,7 @@ export function OverviewTab({
 
       {/* Module Distribution */}
       {moduleStats.length > 0 && (
-        <div className="bg-surface rounded-xl border border-border p-5">
+        <div className="bg-surface rounded-xl border-2 border-border p-5">
           <span className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3.5">
             📊 Phân bố theo nguồn
           </span>

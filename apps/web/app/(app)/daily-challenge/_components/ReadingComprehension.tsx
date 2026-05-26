@@ -42,7 +42,7 @@ export function ReadingComprehension({ data, instruction, onAnswer, disabled }: 
       </div>
 
       {/* Question */}
-      <div className="mb-4 py-3 px-4 rounded-(--radius-lg) bg-surface-alt border border-(--border)" >
+      <div className="mb-4 py-3 px-4 rounded-(--radius-lg) bg-surface-alt border-2 border-border" >
         <p className="m-0 text-[15px] font-bold text-text-primary leading-relaxed" >
           {data.question}
         </p>

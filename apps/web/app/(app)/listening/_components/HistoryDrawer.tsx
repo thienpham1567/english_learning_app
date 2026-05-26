@@ -198,7 +198,7 @@ function HistoryCard({
   return (
     <div
       
-      onClick={onReplay} className="flex items-center gap-3 border border-(--border) bg-(--surface)" style={{padding: "12px 14px", borderRadius: "var(--radius-md)", cursor: onReplay ? "pointer" : "default", transition: "all 0.15s ease", animation: `fadeIn 0.2s ease ${index * 50}ms both`}} >
+      onClick={onReplay} className="flex items-center gap-3 border-2 border-border bg-(--surface)" style={{padding: "12px 14px", borderRadius: "var(--radius-md)", cursor: onReplay ? "pointer" : "default", transition: "all 0.15s ease", animation: `fadeIn 0.2s ease ${index * 50}ms both`}} >
       {/* Mode icon */}
       <div className="w-[36px] h-[36px] grid text-base text-accent shrink-0" style={{borderRadius: 10, background: "color-mix(in srgb, var(--accent) 10%, transparent)", placeItems: "center"}} >
         {MODE_ICONS[item.mode] ?? <Volume2 />}

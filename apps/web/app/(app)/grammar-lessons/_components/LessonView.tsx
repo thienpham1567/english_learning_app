@@ -222,13 +222,13 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
       <m.button
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        onClick={onBack} className="items-center gap-2 py-2 px-4 border border-(--border) rounded-(--radius-lg) bg-(--surface) text-accent cursor-pointer text-[13px] font-bold mb-4" style={{display: "inline-flex", boxShadow: "var(--shadow-sm)", transition: "all 0.15s"}} >
+        onClick={onBack} className="items-center gap-2 py-2 px-4 border-2 border-border rounded-(--radius-lg) bg-(--surface) text-accent cursor-pointer text-[13px] font-bold mb-4" style={{display: "inline-flex", boxShadow: "var(--shadow-sm)", transition: "all 0.15s"}} >
         <ArrowLeft /> Danh sách bài học
       </m.button>
 
       {/* Loading state */}
       {state === "loading" && (
-        <div className="text-center rounded-(--radius-xl) bg-(--surface) border border-(--border)" style={{padding: "72px 24px", boxShadow: "var(--shadow-md)"}} >
+        <div className="text-center rounded-(--radius-xl) bg-(--surface) border-2 border-border" style={{padding: "72px 24px", boxShadow: "var(--shadow-md)"}} >
           <Loader2 className="animate-spin text-accent" size={38} />
           <p className="text-text-secondary mt-5 font-bold" style={{fontSize: 14.5}} >
             Đang biên soạn bài học: <strong className="text-accent" >{topicTitle}</strong>
@@ -260,7 +260,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           <m.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 }} className="rounded-(--radius-xl) border border-(--border) relative overflow-hidden" style={{padding: "28px 24px 24px", background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 6%, var(--surface)), var(--surface))", boxShadow: "var(--shadow-md)"}} >
+            transition={{ delay: 0.05 }} className="rounded-(--radius-xl) border-2 border-border relative overflow-hidden" style={{padding: "28px 24px 24px", background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 6%, var(--surface)), var(--surface))", boxShadow: "var(--shadow-md)"}} >
             {/* Top accent gradient bar */}
             <div className="absolute w-full h-[3px]" style={{left: 0, top: 0, background: "linear-gradient(90deg, var(--accent), var(--secondary), var(--success))"}} />
             {/* Decorative glow */}
@@ -286,7 +286,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 <m.button
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
-                  onClick={() => generateLesson(true)} className="border border-(--border) rounded-(--radius-lg) bg-(--surface) text-text-secondary cursor-pointer text-xs py-1.5 px-3.5 font-bold" style={{boxShadow: "var(--shadow-sm)"}} >
+                  onClick={() => generateLesson(true)} className="border-2 border-border rounded-(--radius-lg) bg-(--surface) text-text-secondary cursor-pointer text-xs py-1.5 px-3.5 font-bold" style={{boxShadow: "var(--shadow-sm)"}} >
                   <RefreshCw /> Tạo lại
                 </m.button>
               </div>
@@ -315,7 +315,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           )}
 
           {/* Explanation Card */}
-          <div className="rounded-(--radius-xl) bg-(--surface) border border-(--border)" style={{padding: 20, boxShadow: "var(--shadow-sm)"}} >
+          <div className="rounded-(--radius-xl) bg-(--surface) border-2 border-border" style={{padding: 20, boxShadow: "var(--shadow-sm)"}} >
             <span className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5 mb-3" style={{fontSize: 11.5}} >
               <BookOpen /> Phân tích lý thuyết
             </span>
@@ -334,14 +334,14 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
           {/* Usage Notes Card */}
           {lesson.usageNotes && lesson.usageNotes.length > 0 && (
-            <div className="rounded-(--radius-xl) bg-(--surface) border border-(--border)" style={{padding: 20, boxShadow: "var(--shadow-sm)"}} >
+            <div className="rounded-(--radius-xl) bg-(--surface) border-2 border-border" style={{padding: 20, boxShadow: "var(--shadow-sm)"}} >
               <span className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5" style={{fontSize: 11.5, marginBottom: 14}} >
                 📌 Cách dùng chi tiết
               </span>
               <div className="flex flex-col gap-2.5" >
                 {lesson.usageNotes.map((note, idx) => (
                   <div
-                    key={idx} className="flex gap-3 rounded-(--radius-lg) bg-surface-alt border border-(--border) items-start" style={{padding: "12px 14px"}} >
+                    key={idx} className="flex gap-3 rounded-(--radius-lg) bg-surface-alt border-2 border-border items-start" style={{padding: "12px 14px"}} >
                     <div className="w-[26px] h-[26px] rounded-lg text-accent grid text-xs font-black shrink-0" style={{background: "var(--accent-light)", placeItems: "center"}} >
                       {idx + 1}
                     </div>
@@ -363,7 +363,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               <div className="flex flex-col gap-2" >
                 {lesson.toeicTips.map((tip, idx) => (
                   <div
-                    key={idx} className="flex gap-2.5 rounded-(--radius-lg) bg-(--surface) border border-(--border) items-start" style={{padding: "12px 14px"}} >
+                    key={idx} className="flex gap-2.5 rounded-(--radius-lg) bg-(--surface) border-2 border-border items-start" style={{padding: "12px 14px"}} >
                     <span className="text-base shrink-0" style={{marginTop: 1}} >💡</span>
                     <p className="m-0 leading-relaxed text-text-primary font-semibold" style={{fontSize: 13.5}} >
                       {tip}
@@ -376,7 +376,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
           {/* Time Signals Card */}
           {lesson.timeSignals && lesson.timeSignals.length > 0 && (
-            <div className="rounded-(--radius-xl) bg-(--surface) border border-(--border)" style={{padding: 20, boxShadow: "var(--shadow-sm)"}} >
+            <div className="rounded-(--radius-xl) bg-(--surface) border-2 border-border" style={{padding: 20, boxShadow: "var(--shadow-sm)"}} >
               <span className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5" style={{fontSize: 11.5, marginBottom: 14}} >
                 ⏰ Dấu hiệu nhận biết (Time Signals / Keywords)
               </span>
@@ -394,14 +394,14 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
           {/* Confusion Pairs Card */}
           {lesson.confusionPairs && lesson.confusionPairs.length > 0 && (
-            <div className="rounded-(--radius-xl) bg-(--surface) border border-(--border)" style={{padding: 20, boxShadow: "var(--shadow-sm)"}} >
+            <div className="rounded-(--radius-xl) bg-(--surface) border-2 border-border" style={{padding: 20, boxShadow: "var(--shadow-sm)"}} >
               <span className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5" style={{fontSize: 11.5, marginBottom: 14}} >
                 ⚡ Phân biệt cấu trúc dễ nhầm
               </span>
               <div className="flex flex-col gap-3" >
                 {lesson.confusionPairs.map((pair, idx) => (
                   <div
-                    key={idx} className="rounded-(--radius-lg) border border-(--border) overflow-hidden" >
+                    key={idx} className="rounded-(--radius-lg) border-2 border-border overflow-hidden" >
                     {/* Pair header */}
                     <div className="grid" style={{gridTemplateColumns: "1fr 1fr", gap: 0}} >
                       <div style={{ padding: "10px 14px", background: "rgba(59, 130, 246, 0.06)", borderRight: "1px solid var(--border)" }}>
@@ -436,14 +436,14 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
           {/* Examples Card */}
           {lesson.examples && lesson.examples.length > 0 && (
-            <div className="rounded-(--radius-xl) bg-(--surface) border border-(--border)" style={{padding: 20, boxShadow: "var(--shadow-sm)"}} >
+            <div className="rounded-(--radius-xl) bg-(--surface) border-2 border-border" style={{padding: 20, boxShadow: "var(--shadow-sm)"}} >
               <span className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5" style={{fontSize: 11.5, marginBottom: 14}} >
                 <MessageSquare /> Ví dụ minh họa
               </span>
               <div className="flex flex-col gap-2.5" >
                 {lesson.examples.map((ex, idx) => (
                   <div
-                    key={idx} className="rounded-(--radius-lg) bg-surface-alt border border-(--border)" style={{padding: 14}} >
+                    key={idx} className="rounded-(--radius-lg) bg-surface-alt border-2 border-border" style={{padding: 14}} >
                     <div className="flex items-start gap-2.5" >
                       <p className="font-bold m-0 flex-1 text-text-primary leading-normal" style={{fontSize: 14.5}} >
                         {ex.en.split(ex.highlight).map((part, j, arr) => (
@@ -472,7 +472,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
           {/* Common Mistakes Card */}
           {lesson.commonMistakes && lesson.commonMistakes.length > 0 && (
-            <div className="rounded-(--radius-xl) bg-(--surface) border border-(--border)" style={{padding: 20, boxShadow: "var(--shadow-sm)"}} >
+            <div className="rounded-(--radius-xl) bg-(--surface) border-2 border-border" style={{padding: 20, boxShadow: "var(--shadow-sm)"}} >
               <span className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5" style={{fontSize: 11.5, marginBottom: 14}} >
                 <AlertTriangle style={{ color: "var(--warning)" }} /> Lưu ý tránh lỗi sai
               </span>
@@ -558,7 +558,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           )}
 
           {/* Main Question Box */}
-          <div className="p-6 rounded-(--radius-xl) bg-(--surface) border border-(--border) relative" style={{boxShadow: "var(--shadow-sm)"}} >
+          <div className="p-6 rounded-(--radius-xl) bg-(--surface) border-2 border-border relative" style={{boxShadow: "var(--shadow-sm)"}} >
             <div className="absolute w-[4px]" style={{left: 0, top: 0, bottom: 0, background: "var(--accent)", borderRadius: "4px 0 0 4px"}} />
 
             {/* Tags */}
@@ -679,7 +679,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             {/* Written response results comparison */}
             {revealed && currentExercise.type !== "multiple_choice" && (
               <div className="flex flex-col gap-2" style={{marginTop: 14}} >
-                <div className="rounded-(--radius-lg) border border-(--border) font-medium" style={{padding: "12px 14px", background: isGrammarAnswerCorrect(typedAnswer, currentExercise.answer, currentExercise.acceptedAnswers) ? "rgba(16, 185, 129, 0.06)" : "rgba(239, 68, 68, 0.06)", fontSize: 13.5}} >
+                <div className="rounded-(--radius-lg) border-2 border-border font-medium" style={{padding: "12px 14px", background: isGrammarAnswerCorrect(typedAnswer, currentExercise.answer, currentExercise.acceptedAnswers) ? "rgba(16, 185, 129, 0.06)" : "rgba(239, 68, 68, 0.06)", fontSize: 13.5}} >
                   <strong className="text-text-secondary" >Đáp án của bạn:</strong> {typedAnswer}
                 </div>
                 <div className="rounded-(--radius-lg) text-emerald-500 font-bold" style={{padding: "12px 14px", background: "rgba(16, 185, 129, 0.08)", border: "1px solid var(--success)", fontSize: 13.5}} >
@@ -698,7 +698,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   <span className="font-extrabold text-accent uppercase tracking-wider" style={{fontSize: 11.5}} >
                     <Lightbulb /> Lý do chọn đáp án
                   </span>
-                  <div className="flex overflow-hidden rounded-md border border-(--border)" >
+                  <div className="flex overflow-hidden rounded-md border-2 border-border" >
                     {(["vi", "en"] as const).map((langOpt) => (
                       <button
                         key={langOpt}
@@ -739,7 +739,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
         return (
           <m.div
             initial={{ opacity: 0, scale: 0.97 }}
-            animate={{ opacity: 1, scale: 1 }} className="rounded-(--radius-xl) bg-(--surface) border border-(--border) text-center relative overflow-hidden" style={{padding: "40px 24px", boxShadow: "var(--shadow-lg)"}} >
+            animate={{ opacity: 1, scale: 1 }} className="rounded-(--radius-xl) bg-(--surface) border-2 border-border text-center relative overflow-hidden" style={{padding: "40px 24px", boxShadow: "var(--shadow-lg)"}} >
             {/* Background glowing circle */}
             <div className="absolute w-[220px] h-[220px] rounded-full" style={{left: "50%", top: "25%", transform: "translate(-50%, -50%)", background: "radial-gradient(circle, var(--success) 10%, transparent 70%)", pointerEvents: "none"}} />
 
@@ -782,7 +782,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                     animate={{ opacity: 1, height: "auto" }} className="flex flex-col gap-2 mt-2 overflow-hidden" >
                     {wrongAnswers.map((wItem, idx) => (
                       <div
-                        key={idx} className="rounded-(--radius-lg) bg-surface-alt border border-(--border)" style={{padding: 14}} >
+                        key={idx} className="rounded-(--radius-lg) bg-surface-alt border-2 border-border" style={{padding: 14}} >
                         <p className="mb-2 font-bold text-text-primary" style={{fontSize: 13.5}} >
                           {wItem.questionStem}
                         </p>

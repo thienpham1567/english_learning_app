@@ -106,7 +106,7 @@ export default async function WritingResultPage({
 
 				<div className="flex gap-2" >
 					<Link
-						href="/toeic/writing" className="py-2 px-4 rounded-lg text-ink border border-(--border)" style={{background: "var(--surface-hover)", textDecoration: "none"}} >
+						href="/toeic/writing" className="py-2 px-4 rounded-lg text-ink border-2 border-border" style={{background: "var(--surface-hover)", textDecoration: "none"}} >
 						Về Hub
 					</Link>
 				</div>

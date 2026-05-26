@@ -30,7 +30,7 @@ export function HistoryPanel({ history, show, onClose, onReplay, onDelete, onCle
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }} className="overflow-hidden" >
-          <div className="bg-(--surface) rounded-(--radius-xl) border border-(--border)" style={{padding: "var(--space-5)", boxShadow: "var(--shadow-md)"}} >
+          <div className="bg-(--surface) rounded-(--radius-xl) border-2 border-border" style={{padding: "var(--space-5)", boxShadow: "var(--shadow-md)"}} >
             {/* History header */}
             <Flex align="center" justify="space-between" className="mb-4" >
               <Flex align="center" gap={8}>
@@ -51,7 +51,7 @@ export function HistoryPanel({ history, show, onClose, onReplay, onDelete, onCle
                 )}
                 <m.button
                   whileTap={{ scale: 0.95 }}
-                  onClick={onClose} className="grid w-[28px] h-[28px] rounded-lg border border-(--border) bg-surface-alt text-text-muted text-xs cursor-pointer" style={{placeItems: "center"}} >
+                  onClick={onClose} className="grid w-[28px] h-[28px] rounded-lg border-2 border-border bg-surface-alt text-text-muted text-xs cursor-pointer" style={{placeItems: "center"}} >
                   <X />
                 </m.button>
               </Flex>
@@ -81,9 +81,9 @@ export function HistoryPanel({ history, show, onClose, onReplay, onDelete, onCle
                       transition={{ delay: idx * 0.03 }}
                       
                       whileHover={{ x: 3, background: "var(--accent-light)" }}
-                      onClick={() => onReplay(entry)} className="flex items-center gap-3 rounded-(--radius-lg) border border-(--border) bg-surface-alt cursor-pointer" style={{padding: "12px 14px", transition: "all 0.15s"}} >
+                      onClick={() => onReplay(entry)} className="flex items-center gap-3 rounded-(--radius-lg) border-2 border-border bg-surface-alt cursor-pointer" style={{padding: "12px 14px", transition: "all 0.15s"}} >
                       {/* Voice flag */}
-                      <div className="w-[36px] h-[36px] bg-(--surface) border border-(--border) grid text-lg shrink-0" style={{borderRadius: 10, placeItems: "center"}} >
+                      <div className="w-[36px] h-[36px] bg-(--surface) border-2 border-border grid text-lg shrink-0" style={{borderRadius: 10, placeItems: "center"}} >
                         {voice?.flag ?? "🗣️"}
                       </div>
 

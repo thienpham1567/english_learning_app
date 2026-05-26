@@ -157,7 +157,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
           <m.button
             onClick={onBack}
             whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }} className="flex items-center gap-2 border border-(--border) bg-(--surface) text-text-primary cursor-pointer font-extrabold" style={{padding: "10px 20px", borderRadius: 10, fontSize: 13.5}} >
+            whileTap={{ scale: 0.98 }} className="flex items-center gap-2 border-2 border-border bg-(--surface) text-text-primary cursor-pointer font-extrabold" style={{padding: "10px 20px", borderRadius: 10, fontSize: 13.5}} >
             <ArrowLeft /> Quay lại danh sách
           </m.button>
         </div>
@@ -204,7 +204,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
         <span className="text-text-secondary font-bold" style={{fontSize: 12.5}} >
           Tiến trình chủ đề này:
         </span>
-        <span className="text-[11px] font-extrabold rounded-lg bg-(--surface) border border-(--border) text-text-secondary" style={{padding: "2px 8px"}} >
+        <span className="text-[11px] font-extrabold rounded-lg bg-(--surface) border-2 border-border text-text-secondary" style={{padding: "2px 8px"}} >
           {completedSections.size} / 4 phần học xong
         </span>
       </div>

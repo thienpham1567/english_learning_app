@@ -82,7 +82,7 @@ export function SessionSummary({
       <Flex vertical align="stretch" gap={20} className="anim-scale-in w-[500px] mx-auto w-full" >
         
         {/* Streak & Hero banner */}
-        <div className="rounded-(--radius-xl) border border-(--border) text-center relative overflow-hidden flex flex-col items-center gap-3" style={{background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--surface))", padding: "32px 24px", boxShadow: "var(--shadow-sm)"}} >
+        <div className="rounded-(--radius-xl) border-2 border-border text-center relative overflow-hidden flex flex-col items-center gap-3" style={{background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--surface))", padding: "32px 24px", boxShadow: "var(--shadow-sm)"}} >
           {/* Ambient glow behind streak */}
           <div className="absolute w-[220px] h-[220px] rounded-full" style={{left: "50%", top: "40%", transform: "translate(-50%, -50%)", background: "radial-gradient(circle, var(--accent) 12%, transparent 70%)", pointerEvents: "none"}} />
 
@@ -109,7 +109,7 @@ export function SessionSummary({
               key={stat.label}
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.15 + idx * 0.08 }} className="flex-1 bg-(--surface) border border-(--border) rounded-(--radius-lg) text-center" style={{padding: "16px 12px", boxShadow: "var(--shadow-sm)"}} >
+              transition={{ delay: 0.15 + idx * 0.08 }} className="flex-1 bg-(--surface) border-2 border-border rounded-(--radius-lg) text-center" style={{padding: "16px 12px", boxShadow: "var(--shadow-sm)"}} >
               <div className="text-2xl font-black font-display" style={{color: stat.color, lineHeight: 1.1}} >
                 {stat.value}
               </div>
@@ -125,7 +125,7 @@ export function SessionSummary({
           <m.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }} className="bg-(--surface) rounded-(--radius-xl) border border-(--border)" style={{padding: "18px 20px", boxShadow: "var(--shadow-sm)"}} >
+            transition={{ delay: 0.4 }} className="bg-(--surface) rounded-(--radius-xl) border-2 border-border" style={{padding: "18px 20px", boxShadow: "var(--shadow-sm)"}} >
             <span className="text-[13px] font-extrabold text-text-primary flex items-center gap-1.5 mb-4" >
               <BarChart3 className="text-accent" />
               Phân bố mức độ ghi nhớ

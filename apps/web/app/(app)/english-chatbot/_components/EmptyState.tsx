@@ -88,7 +88,7 @@ export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedProm
               whileTap={{ scale: 0.98 }}
               key={prompt}
               onClick={() => onSuggestedPrompt(prompt)}
-              className="px-4 py-2 rounded-full border border-(--border) bg-(--chat-surface-hover) text-xs font-semibold text-(--text-secondary) hover:border-(--border-strong) hover:text-(--ink) transition-all cursor-pointer max-w-[280px] truncate shadow-sm"
+              className="px-4 py-2 rounded-full border-2 border-border bg-(--chat-surface-hover) text-xs font-semibold text-(--text-secondary) hover:border-(--border-strong) hover:text-(--ink) transition-all cursor-pointer max-w-[280px] truncate shadow-sm"
             >
               {prompt}
             </motion.button>

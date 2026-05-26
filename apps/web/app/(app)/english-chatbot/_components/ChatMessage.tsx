@@ -84,7 +84,7 @@ function UserAvatar() {
       <img
         src={user.image}
         alt={user.name}
-        className="w-8 h-8 rounded-full object-cover border border-(--border) shadow-sm"
+        className="w-8 h-8 rounded-full object-cover border-2 border-border shadow-sm"
         referrerPolicy="no-referrer"
       />
     );
@@ -98,7 +98,7 @@ function UserAvatar() {
     .toUpperCase();
 
   return (
-    <div className="grid place-items-center w-8 h-8 rounded-full bg-(--chat-surface) border border-(--border) text-[10px] font-bold text-(--text-secondary) shadow-sm">
+    <div className="grid place-items-center w-8 h-8 rounded-full bg-(--chat-surface) border-2 border-border text-[10px] font-bold text-(--text-secondary) shadow-sm">
       {initials}
     </div>
   );
@@ -139,8 +139,8 @@ function CodeBlock({ children, className }: { children: ReactNode; className?: s
   };
 
   return (
-    <div className="relative my-2.5 rounded-xl border border-(--border) bg-(--chat-code-bg) overflow-hidden shadow-sm">
-      <div className="flex items-center justify-between px-4 py-2 border-b border-(--border) bg-(--chat-code-header) text-[10px] text-(--text-muted) font-mono font-bold uppercase tracking-wider">
+    <div className="relative my-2.5 rounded-xl border-2 border-border bg-(--chat-code-bg) overflow-hidden shadow-sm">
+      <div className="flex items-center justify-between px-4 py-2 border-b-2 border-border bg-(--chat-code-header) text-[10px] text-(--text-muted) font-mono font-bold uppercase tracking-wider">
         <span>{lang || "code"}</span>
         <button
           onClick={onCopy}
@@ -216,7 +216,7 @@ export function ChatMessage({
       className={`group flex items-end gap-3 w-full ${isUser ? "justify-end" : "justify-start"}`}
     >
       {!isUser && (
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full overflow-hidden border border-(--border) shadow-sm">
+        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full overflow-hidden border-2 border-border shadow-sm">
           {persona ? <persona.avatar size={32} /> : <div className="bg-(--chat-surface) w-full h-full" />}
         </div>
       )}
@@ -226,7 +226,7 @@ export function ChatMessage({
           className={`rounded-2xl px-4 py-3 text-sm shadow-sm leading-relaxed ${
             isUser
               ? "rounded-br-sm bg-accent text-white font-medium"
-              : "rounded-bl-sm border border-(--border) bg-(--chat-bubble-ai) text-(--text-primary)"
+              : "rounded-bl-sm border-2 border-border bg-(--chat-bubble-ai) text-(--text-primary)"
           }`}
         >
           {isUser ? (

@@ -84,7 +84,7 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
       </div>
 
       {/* Available word bank */}
-      <div className="rounded-(--radius-lg) border border-(--border) bg-(--surface) mb-5" style={{padding: "16px 18px", boxShadow: "var(--shadow-sm)"}} >
+      <div className="rounded-(--radius-lg) border-2 border-border bg-(--surface) mb-5" style={{padding: "16px 18px", boxShadow: "var(--shadow-sm)"}} >
         <div className="text-[10px] font-extrabold uppercase tracking-widest text-text-muted mb-3" >
           Ngân hàng từ vựng
         </div>

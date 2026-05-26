@@ -43,7 +43,7 @@ export function PlaybackControls({
   return (
     <>
       {/* Speed & Generate */}
-      <m.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="read-aloud-panel bg-(--surface) rounded-(--radius-xl) border border-(--border) flex flex-col" style={{padding: "var(--space-5)", boxShadow: "var(--shadow-md)", gap: "var(--space-4)"}} >
+      <m.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 }} className="read-aloud-panel bg-(--surface) rounded-(--radius-xl) border-2 border-border flex flex-col" style={{padding: "var(--space-5)", boxShadow: "var(--shadow-md)", gap: "var(--space-4)"}} >
         <Text className="text-xs font-bold text-text-muted uppercase tracking-widest block" >
           ⚙️ Cấu hình phát
         </Text>

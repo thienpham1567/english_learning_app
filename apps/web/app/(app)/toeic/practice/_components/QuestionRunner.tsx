@@ -400,7 +400,7 @@ export function QuestionRunner({
 			</div>
 			
 			<div className="mt-1.5 text-[11px] text-text-muted text-center font-semibold" >
-				⌨️ Phím tắt nhanh: <kbd className="bg-surface-alt rounded border border-(--border)" style={{padding: "2px 5px"}} >1-4</kbd> hoặc <kbd className="bg-surface-alt rounded border border-(--border)" style={{padding: "2px 5px"}} >A-D</kbd> để chọn · <kbd className="bg-surface-alt rounded border border-(--border)" style={{padding: "2px 5px"}} >Space</kbd> phát/dừng audio · <kbd className="bg-surface-alt rounded border border-(--border)" style={{padding: "2px 5px"}} >F</kbd> để flag · <kbd className="bg-surface-alt rounded border border-(--border)" style={{padding: "2px 5px"}} >Enter</kbd> tiếp tục
+				⌨️ Phím tắt nhanh: <kbd className="bg-surface-alt rounded border-2 border-border" style={{padding: "2px 5px"}} >1-4</kbd> hoặc <kbd className="bg-surface-alt rounded border-2 border-border" style={{padding: "2px 5px"}} >A-D</kbd> để chọn · <kbd className="bg-surface-alt rounded border-2 border-border" style={{padding: "2px 5px"}} >Space</kbd> phát/dừng audio · <kbd className="bg-surface-alt rounded border-2 border-border" style={{padding: "2px 5px"}} >F</kbd> để flag · <kbd className="bg-surface-alt rounded border-2 border-border" style={{padding: "2px 5px"}} >Enter</kbd> tiếp tục
 			</div>
 		</div>
 	);

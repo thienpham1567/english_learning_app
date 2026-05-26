@@ -62,7 +62,7 @@ export function FlashcardSession() {
           {!isImmersive && (
             <m.div
               initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }} className="flex gap-1 p-1 bg-surface-alt border border-(--border) mb-5" style={{borderRadius: 14, alignSelf: "center", boxShadow: "var(--shadow-sm)"}} >
+              animate={{ opacity: 1, y: 0 }} className="flex gap-1 p-1 bg-surface-alt border-2 border-border mb-5" style={{borderRadius: 14, alignSelf: "center", boxShadow: "var(--shadow-sm)"}} >
               {([
                 { key: "ai" as TabKey, label: "AI Tạo mới", icon: <Zap /> },
                 { key: "srs" as TabKey, label: "Ôn tập SRS", icon: <Clock /> },

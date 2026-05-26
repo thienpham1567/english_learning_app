@@ -287,7 +287,7 @@ export function AIFlashcardMode() {
       <div className="flex items-center justify-between" >
         <m.button
           whileTap={{ scale: 0.95 }}
-          onClick={resetToTopics} className="flex items-center gap-1.5 py-1.5 px-3.5 border border-(--border) bg-(--surface) text-text-secondary cursor-pointer text-xs font-bold" style={{borderRadius: 10}} >
+          onClick={resetToTopics} className="flex items-center gap-1.5 py-1.5 px-3.5 border-2 border-border bg-(--surface) text-text-secondary cursor-pointer text-xs font-bold" style={{borderRadius: 10}} >
           <ChevronLeft size={10} /> Chọn chủ đề khác
         </m.button>
         <span className="text-[13px] font-bold text-text-secondary" >
@@ -341,7 +341,7 @@ export function AIFlashcardMode() {
 
             {/* Phonetic */}
             {isVocab && card.phonetic && (
-              <span className="mt-2.5 text-sm font-mono text-text-secondary bg-surface-alt rounded-lg border border-(--border) relative" style={{padding: "4px 12px", zIndex: 2}} >
+              <span className="mt-2.5 text-sm font-mono text-text-secondary bg-surface-alt rounded-lg border-2 border-border relative" style={{padding: "4px 12px", zIndex: 2}} >
                 {card.phonetic}
               </span>
             )}
@@ -368,7 +368,7 @@ export function AIFlashcardMode() {
           </div>
 
           {/* Back */}
-          <div className="absolute rounded-(--radius-xl) border border-(--border) bg-(--surface) p-6 flex flex-col justify-start overflow-y-auto" style={{inset: 0, backfaceVisibility: "hidden", transform: "rotateY(180deg)", boxShadow: "var(--shadow-md)"}} >
+          <div className="absolute rounded-(--radius-xl) border-2 border-border bg-(--surface) p-6 flex flex-col justify-start overflow-y-auto" style={{inset: 0, backfaceVisibility: "hidden", transform: "rotateY(180deg)", boxShadow: "var(--shadow-md)"}} >
             {/* Vietnamese meaning */}
             <div className="text-center text-2xl font-black text-accent font-display mb-4" style={{borderBottom: "1.5px dashed var(--border)", paddingBottom: 14}} >
               {card.back}
@@ -376,7 +376,7 @@ export function AIFlashcardMode() {
 
             {/* Grammar explanation */}
             {!isVocab && card.explanation && (
-              <div className="rounded-(--radius-lg) bg-surface-alt border border-(--border) mb-3" style={{padding: "12px 14px"}} >
+              <div className="rounded-(--radius-lg) bg-surface-alt border-2 border-border mb-3" style={{padding: "12px 14px"}} >
                 <span className="text-[11px] font-extrabold text-text-muted uppercase tracking-widest block mb-1.5" >
                   📌 Giải thích
                 </span>
@@ -422,7 +422,7 @@ export function AIFlashcardMode() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={goPrev}
-          disabled={currentIdx === 0} className="w-[48px] h-[48px] border border-(--border) bg-(--surface) grid text-base" style={{borderRadius: 14, color: currentIdx === 0 ? "var(--text-muted)" : "var(--text-primary)", cursor: currentIdx === 0 ? "not-allowed" : "pointer", placeItems: "center", boxShadow: "var(--shadow-sm)"}} >
+          disabled={currentIdx === 0} className="w-[48px] h-[48px] border-2 border-border bg-(--surface) grid text-base" style={{borderRadius: 14, color: currentIdx === 0 ? "var(--text-muted)" : "var(--text-primary)", cursor: currentIdx === 0 ? "not-allowed" : "pointer", placeItems: "center", boxShadow: "var(--shadow-sm)"}} >
           <ChevronLeft />
         </m.button>
 
@@ -437,7 +437,7 @@ export function AIFlashcardMode() {
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           onClick={goNext}
-          disabled={currentIdx === cards.length - 1} className="w-[48px] h-[48px] border border-(--border) bg-(--surface) grid text-base" style={{borderRadius: 14, color: currentIdx === cards.length - 1 ? "var(--text-muted)" : "var(--text-primary)", cursor: currentIdx === cards.length - 1 ? "not-allowed" : "pointer", placeItems: "center", boxShadow: "var(--shadow-sm)"}} >
+          disabled={currentIdx === cards.length - 1} className="w-[48px] h-[48px] border-2 border-border bg-(--surface) grid text-base" style={{borderRadius: 14, color: currentIdx === cards.length - 1 ? "var(--text-muted)" : "var(--text-primary)", cursor: currentIdx === cards.length - 1 ? "not-allowed" : "pointer", placeItems: "center", boxShadow: "var(--shadow-sm)"}} >
           <ChevronRight />
         </m.button>
       </div>
@@ -460,7 +460,7 @@ export function AIFlashcardMode() {
               onClick={() => {
                 setCurrentIdx(0);
                 setFlipped(false);
-              }} className="border border-(--border) bg-(--surface) text-text-secondary cursor-pointer text-[13px] font-bold" style={{padding: "8px 18px", borderRadius: 10}} >
+              }} className="border-2 border-border bg-(--surface) text-text-secondary cursor-pointer text-[13px] font-bold" style={{padding: "8px 18px", borderRadius: 10}} >
               <RefreshCw /> Ôn lại
             </m.button>
             <m.button

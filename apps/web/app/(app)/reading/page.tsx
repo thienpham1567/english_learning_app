@@ -90,7 +90,7 @@ export default function ReadingPage() {
       <div className="relative h-[0px] flex-1 overflow-y-auto z-[1]" style={{padding: "24px 20px 80px"}} >
         <div className="w-[900px] mx-auto flex flex-col gap-5" >
           {/* Custom Category Segmented Switch */}
-          <div className="flex gap-1.5 bg-(--surface) border border-(--border) rounded-(--radius-xl) p-1" style={{boxShadow: "var(--shadow-sm)", overflowX: "auto", whiteSpace: "nowrap"}} >
+          <div className="flex gap-1.5 bg-(--surface) border-2 border-border rounded-(--radius-xl) p-1" style={{boxShadow: "var(--shadow-sm)", overflowX: "auto", whiteSpace: "nowrap"}} >
             {SECTIONS.map((secItem) => {
               const isTabActive = section === secItem.value;
               return (
@@ -110,7 +110,7 @@ export default function ReadingPage() {
             <div className="grid gap-5" style={{gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))"}} >
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div
-                  key={i} className="bg-(--surface) border border-(--border) rounded-(--radius-xl) h-[320px] p-4 flex flex-col gap-3" >
+                  key={i} className="bg-(--surface) border-2 border-border rounded-(--radius-xl) h-[320px] p-4 flex flex-col gap-3" >
                   <div className="h-[140px] rounded-(--radius-lg) bg-surface-alt" style={{animation: "pulse 1.5s infinite"}} />
                   <div className="h-[20px] rounded bg-surface-alt" style={{width: "60%", animation: "pulse 1.5s infinite"}} />
                   <div className="h-[32px] rounded bg-surface-alt" style={{animation: "pulse 1.5s infinite"}} />
@@ -119,7 +119,7 @@ export default function ReadingPage() {
               ))}
             </div>
           ) : articles.length === 0 ? (
-            <div className="bg-(--surface) border border-(--border) rounded-(--radius-xl) text-center" style={{padding: "80px 24px", boxShadow: "var(--shadow-sm)"}} >
+            <div className="bg-(--surface) border-2 border-border rounded-(--radius-xl) text-center" style={{padding: "80px 24px", boxShadow: "var(--shadow-sm)"}} >
               <BookOpenText className="text-[36px] text-text-muted mb-3" />
               <p className="text-base font-extrabold text-text-secondary" style={{margin: "0 0 6px"}} >
                 Không tìm thấy bài viết nào
@@ -155,7 +155,7 @@ export default function ReadingPage() {
                     <div className="flex-1 flex flex-col" style={{padding: "16px 18px"}} >
                       {/* Topic Tags */}
                       <div className="flex gap-1.5 mb-2.5 flex-wrap" >
-                        <span className="text-[10.5px] font-extrabold rounded-md bg-surface-alt border border-(--border) text-text-secondary" style={{padding: "2px 8px"}} >
+                        <span className="text-[10.5px] font-extrabold rounded-md bg-surface-alt border-2 border-border text-text-secondary" style={{padding: "2px 8px"}} >
                           {article.section}
                         </span>
 

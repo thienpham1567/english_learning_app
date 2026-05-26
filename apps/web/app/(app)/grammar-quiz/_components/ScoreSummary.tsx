@@ -59,7 +59,7 @@ export function ScoreSummary({
     .map(([topic]) => topic);
 
   return (
-    <div className="w-full w-[500px] mx-auto text-center bg-(--surface) rounded-(--radius-xl) border border-(--border) relative overflow-hidden" style={{padding: "36px 24px", boxShadow: "var(--shadow-lg)"}} >
+    <div className="w-full w-[500px] mx-auto text-center bg-(--surface) rounded-(--radius-xl) border-2 border-border relative overflow-hidden" style={{padding: "36px 24px", boxShadow: "var(--shadow-lg)"}} >
       <div className="absolute w-[220px] h-[220px] rounded-full" style={{left: "50%", top: "20%", transform: "translate(-50%, -50%)", background: "radial-gradient(circle, var(--accent) 5%, transparent 70%)", pointerEvents: "none"}} />
 
       <m.div
@@ -123,7 +123,7 @@ export function ScoreSummary({
                 key={topic}
                 initial={{ opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: idx * 0.05 + 0.2 }} className="flex items-center justify-between rounded-(--radius-lg) border border-(--border)" style={{padding: "12px 14px", background: isWeak ? "rgba(239, 68, 68, 0.03)" : "var(--surface-alt)"}} >
+                transition={{ delay: idx * 0.05 + 0.2 }} className="flex items-center justify-between rounded-(--radius-lg) border-2 border-border" style={{padding: "12px 14px", background: isWeak ? "rgba(239, 68, 68, 0.03)" : "var(--surface-alt)"}} >
                 <div className="flex items-center gap-2 w-[0px]" >
                   {isWeak ? (
                     <AlertTriangle className="text-destructive text-sm" />

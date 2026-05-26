@@ -12,7 +12,7 @@ export function ChatHeader({ personaId, isLoading }: Props) {
   const Avatar = persona.avatar;
 
   return (
-    <div className="flex h-14 shrink-0 items-center justify-between border-b border-(--border) bg-(--chat-surface)/60 px-4 md:px-6 backdrop-blur-md z-30">
+    <div className="flex h-14 shrink-0 items-center justify-between border-b-2 border-border bg-(--chat-surface)/60 px-4 md:px-6 backdrop-blur-md z-30">
       <div
         className="flex items-center gap-3 animate-in fade-in duration-300"
         key={personaId}

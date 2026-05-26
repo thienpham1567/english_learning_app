@@ -342,7 +342,7 @@ export function AudioPlayer({
   const canLoop = markerA != null && markerB != null;
 
   return (
-    <div ref={containerRef} tabIndex={0} className={`${className} bg-(--surface) border border-(--border) rounded-(--radius-lg) flex flex-col gap-3.5`} style={{padding: "20px", outline: "none"}} >
+    <div ref={containerRef} tabIndex={0} className={`${className} bg-(--surface) border-2 border-border rounded-(--radius-lg) flex flex-col gap-3.5`} style={{padding: "20px", outline: "none"}} >
       {/* Hidden audio element */}
       <audio
         ref={audioRef}
@@ -416,14 +416,14 @@ export function AudioPlayer({
         {/* Replay button */}
         <button
           onClick={handleReplay}
-          disabled={replaysUsed >= maxReplays} className="flex items-center gap-1.5 rounded-(--radius-sm) border border-(--border) text-xs font-medium" style={{padding: "8px 14px", background: replaysUsed >= maxReplays ? "var(--border)" : "var(--surface)", color: replaysUsed >= maxReplays ? "var(--text-muted)" : "var(--text)", cursor: replaysUsed >= maxReplays ? "not-allowed" : "pointer", transition: "all 0.15s ease"}} >
+          disabled={replaysUsed >= maxReplays} className="flex items-center gap-1.5 rounded-(--radius-sm) border-2 border-border text-xs font-medium" style={{padding: "8px 14px", background: replaysUsed >= maxReplays ? "var(--border)" : "var(--surface)", color: replaysUsed >= maxReplays ? "var(--text-muted)" : "var(--text)", cursor: replaysUsed >= maxReplays ? "not-allowed" : "pointer", transition: "all 0.15s ease"}} >
           <RefreshCw />
           Nghe lại ({maxReplays - replaysUsed}/{maxReplays})
         </button>
 
         {/* Speed control (AC1) */}
         <button
-          onClick={handleCycleSpeed} className="flex items-center gap-1.5 rounded-(--radius-sm) border border-(--border) cursor-pointer text-xs font-semibold w-[80px] justify-center" style={{padding: "8px 14px", background: speed !== 1 ? "var(--accent-surface, rgba(99,102,241,0.08))" : "var(--surface)", color: speed !== 1 ? "var(--accent)" : "var(--text)", transition: "all 0.15s ease"}} >
+          onClick={handleCycleSpeed} className="flex items-center gap-1.5 rounded-(--radius-sm) border-2 border-border cursor-pointer text-xs font-semibold w-[80px] justify-center" style={{padding: "8px 14px", background: speed !== 1 ? "var(--accent-surface, rgba(99,102,241,0.08))" : "var(--surface)", color: speed !== 1 ? "var(--accent)" : "var(--text)", transition: "all 0.15s ease"}} >
           <Zap />
           {speed}×
         </button>
@@ -466,7 +466,7 @@ export function AudioPlayer({
           onClick={clearMarkers}
           disabled={markerA == null && markerB == null}
           
-          title="Clear markers" className="flex items-center gap-1 py-1.5 px-3 rounded-(--radius-sm) border border-(--border) bg-(--surface) text-[11px] font-semibold" style={{color: markerA != null || markerB != null ? "var(--text)" : "var(--border)", cursor: markerA != null || markerB != null ? "pointer" : "not-allowed", transition: "all 0.15s ease"}} >
+          title="Clear markers" className="flex items-center gap-1 py-1.5 px-3 rounded-(--radius-sm) border-2 border-border bg-(--surface) text-[11px] font-semibold" style={{color: markerA != null || markerB != null ? "var(--text)" : "var(--border)", cursor: markerA != null || markerB != null ? "pointer" : "not-allowed", transition: "all 0.15s ease"}} >
           <Eraser />
           Clear
         </button>

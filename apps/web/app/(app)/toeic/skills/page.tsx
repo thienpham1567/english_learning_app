@@ -92,9 +92,9 @@ const GRADIENTS: Record<Skill, string> = {
 const TAB_COLORS: Record<Skill, { activeColor: string }> = {
   listening: { activeColor: "bg-[#3B82F6] text-white" },
   reading: { activeColor: "bg-[#0EA5E9] text-white" },
-  speaking: { activeColor: "bg-accent text-white" },
+  speaking: { activeColor: "bg-accent text-ink" },
   writing: { activeColor: "bg-[#C07D2B] text-white" },
-  part5: { activeColor: "bg-accent text-white" },
+  part5: { activeColor: "bg-accent text-ink" },
 };
 
 export default function ToeicSkillsPage() {
@@ -105,7 +105,7 @@ export default function ToeicSkillsPage() {
   );
 
   return (
-    <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden bg-slate-950">
+    <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden">
       <div className="px-4 pt-5 shrink-0">
         <div className="max-w-4xl mx-auto">
         </div>
@@ -113,7 +113,7 @@ export default function ToeicSkillsPage() {
       
       {/* Pill Tabs Row */}
       <div className="px-4 py-3 shrink-0 overflow-x-auto scrollbar-none">
-        <div className="max-w-4xl mx-auto flex gap-1 bg-slate-900/40 border border-slate-850 rounded-2xl p-1 w-fit md:w-full">
+        <div className="max-w-4xl mx-auto flex gap-1.5 bg-bg-deep border-2 border-border rounded-xl p-1 w-fit md:w-full">
           {SKILL_TABS.map((t) => {
             const isActive = active === t.value;
             const colors = TAB_COLORS[t.value];
@@ -123,17 +123,17 @@ export default function ToeicSkillsPage() {
                 key={t.value}
                 onClick={() => setActive(t.value)}
                 whileTap={{ scale: 0.98 }}
-                className={`flex-1 min-w-[80px] flex flex-col items-center justify-center gap-1 py-2 px-3.5 rounded-xl cursor-pointer transition-all duration-200 ${
+                className={`flex-1 min-w-[80px] flex flex-col items-center justify-center gap-1 py-2 px-3.5 rounded-lg cursor-pointer transition-all duration-100 border-2 border-transparent ${
                   isActive 
-                    ? colors.activeColor + " shadow-sm font-bold" 
-                    : "text-slate-400 hover:bg-slate-900/40 hover:text-slate-200"
+                    ? colors.activeColor + " border-border shadow-(--shadow-sm) -translate-y-0.5 font-bold" 
+                    : "text-text-secondary hover:bg-surface-hover hover:text-ink"
                 }`}
               >
                 <div className="flex items-center gap-1.5 text-xs font-extrabold leading-none">
                   {t.icon}
                   <span>{t.label}</span>
                 </div>
-                <span className={`text-[9px] font-bold leading-none ${isActive ? "text-white/80" : "text-slate-500"}`}>
+                <span className={`text-[9px] font-bold leading-none ${isActive ? (t.value === "speaking" || t.value === "part5" ? "text-ink/80" : "text-white/80") : "text-text-muted"}`}>
                   {t.parts}
                 </span>
               </motion.button>

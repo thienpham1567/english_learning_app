@@ -68,7 +68,7 @@ export function NotificationBanner() {
   if (!visible) return null;
 
   return (
-    <div className="fixed flex items-center gap-3 rounded-2xl bg-(--surface) border border-(--border) w-[360px]" style={{top: 16, right: 16, zIndex: 1000, padding: "14px 18px", boxShadow: "0 8px 32px rgba(0,0,0,0.2)", animation: "slideDown 0.4s ease-out"}} >
+    <div className="fixed flex items-center gap-3 rounded-2xl bg-(--surface) border-2 border-border w-[360px]" style={{top: 16, right: 16, zIndex: 1000, padding: "14px 18px", boxShadow: "0 8px 32px rgba(0,0,0,0.2)", animation: "slideDown 0.4s ease-out"}} >
       <div className="w-[40px] h-[40px] rounded-xl flex items-center justify-center shrink-0" style={{background: "linear-gradient(135deg, var(--accent), var(--accent-hover, var(--accent)))"}} >
         <Bell className="text-lg" style={{color: "var(--text-on-accent)"}} />
       </div>

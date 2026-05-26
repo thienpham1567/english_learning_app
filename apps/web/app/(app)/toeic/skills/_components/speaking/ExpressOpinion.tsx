@@ -34,7 +34,7 @@ export function ExpressOpinion() {
               key={p.id}
               type="button"
               onClick={() => setSelected(p.id)}
-              className="p-4.5 rounded-2xl border border-border bg-surface text-left w-full cursor-pointer transition-all duration-150 hover:border-accent/40 active:scale-99 block"
+              className="p-4.5 rounded-2xl border-2 border-border bg-surface text-left w-full cursor-pointer transition-all duration-150 hover:border-accent/40 active:scale-99 block"
               style={{ animationDelay: `${i * 0.05}s` }}
             >
               <div className="text-xs font-bold text-(--info) mb-1">{p.topic}</div>
@@ -58,7 +58,7 @@ export function ExpressOpinion() {
           <button
             type="button"
             onClick={() => setSelected(null)}
-            className="px-6 py-2.5 rounded-xl border border-border bg-transparent text-slate-350 hover:text-slate-200 hover:border-slate-800 transition-colors text-xs font-bold cursor-pointer"
+            className="px-6 py-2.5 rounded-xl border-2 border-border bg-transparent text-slate-350 hover:text-slate-200 hover:border-slate-800 transition-colors text-xs font-bold cursor-pointer"
           >
             ← Chọn chủ đề khác
           </button>

@@ -80,7 +80,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
             </h2>
 
             {card.phonetic && (
-              <span className="text-sm font-semibold font-mono text-text-secondary bg-surface-alt rounded-lg border border-(--border) relative" style={{padding: "4px 12px", zIndex: 2}} >
+              <span className="text-sm font-semibold font-mono text-text-secondary bg-surface-alt rounded-lg border-2 border-border relative" style={{padding: "4px 12px", zIndex: 2}} >
                 {card.phonetic}
               </span>
             )}
@@ -109,7 +109,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
           </div>
 
           {/* Back Side Card */}
-          <div className="absolute rounded-(--radius-xl) border border-(--border) bg-(--surface) p-6 flex flex-col justify-start overflow-y-auto" style={{inset: 0, backfaceVisibility: "hidden", transform: "rotateY(180deg)", boxShadow: "var(--shadow-md)"}} >
+          <div className="absolute rounded-(--radius-xl) border-2 border-border bg-(--surface) p-6 flex flex-col justify-start overflow-y-auto" style={{inset: 0, backfaceVisibility: "hidden", transform: "rotateY(180deg)", boxShadow: "var(--shadow-md)"}} >
             {/* Vietnamese overview meaning */}
             <div className="text-center text-xl font-extrabold text-accent font-display mb-4 pb-3" style={{borderBottom: "1.5px dashed var(--border)"}} >
               {card.overviewVi}

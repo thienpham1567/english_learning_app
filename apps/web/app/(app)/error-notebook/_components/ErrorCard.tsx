@@ -23,7 +23,7 @@ export function ErrorCard({ error, onClick, index = 0 }: ErrorCardProps) {
       transition={{ delay: Math.min(index * 0.03, 0.3) }}
       whileHover={{ y: -2, boxShadow: "var(--shadow-md)" }}
       onClick={onClick}
-      className="bg-surface rounded-xl border border-border p-4 px-4.5 cursor-pointer transition-all duration-150 relative overflow-hidden"
+      className="bg-surface rounded-xl border-2 border-border p-4 px-4.5 cursor-pointer transition-all duration-150 relative overflow-hidden"
     >
       {/* Accent bar */}
       <div className={`absolute top-0 left-0 w-[3px] h-full rounded-l ${error.isResolved ? "bg-(--success)" : "bg-(--error)"}`} />

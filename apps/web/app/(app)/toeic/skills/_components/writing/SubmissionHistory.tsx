@@ -22,7 +22,7 @@ export function SubmissionHistory({ submissions, onView }: Props) {
         {submissions.map((s) => (
           <button
             key={s.id}
-            className="flex w-full items-center justify-between rounded-lg border border-(--border) bg-(--surface) px-3.5 py-2.5 text-left transition hover:border-(--accent)/40 hover:shadow-(--shadow-sm) cursor-pointer"
+            className="flex w-full items-center justify-between rounded-lg border-2 border-border bg-(--surface) px-3.5 py-2.5 text-left transition hover:border-(--accent)/40 hover:shadow-(--shadow-sm) cursor-pointer"
             onClick={() => onView(s)}
           >
             <div className="flex items-center gap-3">

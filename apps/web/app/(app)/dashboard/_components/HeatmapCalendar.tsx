@@ -70,7 +70,7 @@ export function HeatmapCalendar() {
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: 0.3 }}
-      className="rounded-2xl border border-border bg-surface p-5 shadow-sm flex flex-col gap-4"
+      className="rounded-2xl border-2 border-border bg-surface p-5 shadow-sm flex flex-col gap-4"
     >
       {/* Header section with icon & stats */}
       <div className="flex flex-wrap gap-3 items-center justify-between">

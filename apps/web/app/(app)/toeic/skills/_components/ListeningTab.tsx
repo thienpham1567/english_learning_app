@@ -14,6 +14,7 @@ import { SpeakerLegend } from "@/app/(app)/listening/_components/SpeakerLegend";
 import { ScriptPanel } from "@/app/(app)/listening/_components/ScriptPanel";
 import type { CefrLevel } from "@/lib/listening/types";
 import { motion } from "motion/react";
+import { Button } from "@/components/ui/button";
 
 export function ListeningTab() {
   const {
@@ -41,7 +42,7 @@ export function ListeningTab() {
   return (
     <div className="max-w-2xl mx-auto w-full">
       {/* Mode toggle */}
-      <div className="flex gap-2 py-2 pb-3.5 flex-wrap">
+      <div className="flex gap-2.5 py-2 pb-4 flex-wrap">
         {[
           { key: "free" as const, label: "🎧 Luyện nghe tự do" },
           { key: "parts" as const, label: "📋 TOEIC Parts 1–4" },
@@ -50,10 +51,10 @@ export function ListeningTab() {
             key={m.key}
             type="button"
             onClick={() => setMode(m.key)}
-            className={`px-3.5 py-2 rounded-xl text-xs font-semibold border cursor-pointer transition-all duration-150 active:scale-97 ${
+            className={`px-4 py-2 rounded-lg text-xs font-black border-2 border-border cursor-pointer transition-all duration-100 ${
               mode === m.key
-                ? "border-accent bg-accent/10 text-accent"
-                : "border-border bg-surface text-slate-400 hover:border-slate-800 hover:text-slate-200"
+                ? "bg-accent text-ink shadow-(--shadow-sm) -translate-y-0.5"
+                : "bg-surface text-text-secondary hover:bg-surface-hover"
             }`}
           >
             {m.label}
@@ -63,7 +64,7 @@ export function ListeningTab() {
 
       {/* TOEIC Parts overview */}
       {mode === "parts" && (
-        <div className="flex flex-col gap-3 pb-5 animate-in fade-in duration-200">
+        <div className="flex flex-col gap-4 pb-5 animate-in fade-in duration-200">
           {[
             { part: "Part 1", title: "Photographs", desc: "Nghe 4 mô tả, chọn mô tả đúng nhất cho bức hình", questions: 6, tips: "Nhìn hình trước khi audio bắt đầu. Chú ý chủ ngữ + hành động." },
             { part: "Part 2", title: "Question-Response", desc: "Nghe câu hỏi, chọn câu trả lời phù hợp nhất", questions: 25, tips: "Nghe kỹ Wh-word đầu câu. Loại bỏ đáp án lặp từ (trap)." },
@@ -72,28 +73,27 @@ export function ListeningTab() {
           ].map((p, i) => (
             <div
               key={p.part}
-              className="p-4.5 rounded-2xl border border-border bg-surface relative overflow-hidden shadow-sm transition-all animate-in fade-in slide-in-from-bottom-2 duration-200"
+              className="p-5 rounded-xl border-2 border-border bg-surface relative overflow-hidden shadow-(--shadow) transition-all animate-in fade-in slide-in-from-bottom-2 duration-200"
               style={{ animationDelay: `${i * 0.05}s` }}
             >
-              <div className="absolute top-0 left-0 w-1 h-full bg-accent rounded-l-2xl" />
+              <div className="absolute top-0 left-0 w-1 h-full bg-accent" />
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-bold text-slate-100">{p.part} — {p.title}</span>
-                <span className="text-[10px] font-extrabold text-accent px-2.5 py-0.5 rounded-full bg-accent/10">{p.questions} câu</span>
+                <span className="text-xs font-black text-text-primary">{p.part} — {p.title}</span>
+                <span className="text-[10px] font-black text-ink px-2.5 py-0.5 border-2 border-border rounded-md bg-accent shadow-(--shadow-sm)">{p.questions} câu</span>
               </div>
-              <p className="text-xs text-slate-400 mb-2 leading-relaxed">{p.desc}</p>
-              <div className="text-[11px] text-slate-500 p-2 rounded-xl bg-slate-900/40 border border-slate-850/60 leading-relaxed">
-                💡 <strong className="text-slate-350">Tip:</strong> {p.tips}
+              <p className="text-xs text-text-secondary mb-2.5 leading-relaxed">{p.desc}</p>
+              <div className="text-[11px] text-text-muted p-3 rounded-lg bg-surface-alt border-2 border-border leading-relaxed">
+                💡 <strong className="text-text-primary">Tip:</strong> {p.tips}
               </div>
             </div>
           ))}
           
-          <button
-            type="button"
+          <Button
             onClick={() => setMode("free")}
-            className="px-6 py-2.5 rounded-xl border-none text-xs font-bold bg-accent text-white hover:bg-accent-hover cursor-pointer self-center mt-3 shadow-sm active:scale-95 transition-all"
+            className="self-center mt-3 px-6 h-10 text-xs font-black"
           >
             Bắt đầu luyện nghe →
-          </button>
+          </Button>
         </div>
       )}
 
@@ -131,11 +131,11 @@ export function ListeningTab() {
               
               {(!exercise.turns || exercise.turns.length === 0) && (
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-slate-500 font-semibold">Giọng đọc:</span>
+                  <span className="text-xs text-text-muted font-bold">Giọng đọc:</span>
                   <select
                     value={selectedVoice}
                     onChange={(e) => setSelectedVoice(e.target.value)}
-                    className="bg-slate-900 border border-slate-800 rounded-xl px-2.5 py-1.5 text-xs font-bold text-slate-350 outline-none focus:border-accent cursor-pointer"
+                    className="bg-surface-alt border-2 border-border rounded-lg px-2.5 py-1.5 text-xs font-bold text-ink outline-none focus-visible:shadow-(--shadow-sm) focus-visible:translate-x-[-1px] focus-visible:translate-y-[-1px] transition-all cursor-pointer"
                   >
                     <option value="austin">🇺🇸 US Male</option>
                     <option value="autumn">🇺🇸 US Female</option>

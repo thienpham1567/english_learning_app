@@ -151,7 +151,7 @@ export default function WritingRunnerPage() {
 								src={current.imageUrl}
 								alt="" className="h-[300px] rounded-lg" style={{maxWidth: "100%"}} />
 						)}
-						<Card size="small" className="border border-(--border)" style={{background: "color-mix(in srgb, var(--accent) 8%, var(--surface))"}} >
+						<Card size="small" className="border-2 border-border" style={{background: "color-mix(in srgb, var(--accent) 8%, var(--surface))"}} >
 							<div className="text-[13px] text-text-muted" >
 								Viết MỘT câu mô tả ảnh, bắt buộc dùng cả 2 từ:
 							</div>

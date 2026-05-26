@@ -32,13 +32,13 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
       </p>
 
       {/* Context badge */}
-      <div className="items-center gap-1.5 rounded-full bg-surface-alt border border-(--border) mb-4 text-[11px] font-semibold text-text-secondary" style={{display: "inline-flex", padding: "5px 14px"}} >
+      <div className="items-center gap-1.5 rounded-full bg-surface-alt border-2 border-border mb-4 text-[11px] font-semibold text-text-secondary" style={{display: "inline-flex", padding: "5px 14px"}} >
         <MessageSquare className="text-[11px] text-accent" />
         Bối cảnh: {data.context}
       </div>
 
       {/* Dialogue display */}
-      <div className="mb-6 rounded-(--radius-xl) bg-surface-alt border border-(--border) flex flex-col gap-3" style={{padding: "20px 16px"}} >
+      <div className="mb-6 rounded-(--radius-xl) bg-surface-alt border-2 border-border flex flex-col gap-3" style={{padding: "20px 16px"}} >
         {data.dialogue.map((line, i) => {
           const isMissing = i === data.missingIndex;
           const isEven = i % 2 === 0;

@@ -141,7 +141,7 @@ export function ReadingTab() {
             <button
               type="button"
               onClick={() => setMode("strategy")}
-              className="rounded-2xl border border-border bg-accent/5 p-5 text-left transition-all hover:scale-[1.01] hover:border-accent hover:bg-accent/10 duration-150 cursor-pointer shadow-xs"
+              className="rounded-2xl border-2 border-border bg-accent/5 p-5 text-left transition-all hover:scale-[1.01] hover:border-accent hover:bg-accent/10 duration-150 cursor-pointer shadow-xs"
             >
               <Lightbulb className="h-6 w-6 text-accent mb-2" />
               <div className="text-sm font-bold text-ink">Chiến lược làm bài</div>
@@ -150,7 +150,7 @@ export function ReadingTab() {
             <button
               type="button"
               onClick={() => setMode("drill")}
-              className="rounded-2xl border border-border bg-(--secondary)/5 p-5 text-left transition-all hover:scale-[1.01] hover:border-(--secondary) hover:bg-(--secondary)/10 duration-150 cursor-pointer shadow-xs"
+              className="rounded-2xl border-2 border-border bg-(--secondary)/5 p-5 text-left transition-all hover:scale-[1.01] hover:border-(--secondary) hover:bg-(--secondary)/10 duration-150 cursor-pointer shadow-xs"
             >
               <Rocket className="h-6 w-6 text-(--secondary) mb-2" />
               <div className="text-sm font-bold text-ink">Quick Drill</div>
@@ -160,7 +160,7 @@ export function ReadingTab() {
 
           {/* Full practice CTA */}
           <Link href="/toeic/practice" className="no-underline block group">
-            <div className="rounded-2xl border border-border bg-linear-to-br from-(--accent)/5 to-(--secondary)/5 p-5 flex items-center gap-3.5 cursor-pointer shadow-xs transition-all duration-200 group-hover:border-(--accent)/40">
+            <div className="rounded-2xl border-2 border-border bg-linear-to-br from-(--accent)/5 to-(--secondary)/5 p-5 flex items-center gap-3.5 cursor-pointer shadow-xs transition-all duration-200 group-hover:border-(--accent)/40">
               <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-(--accent)/10 text-(--accent) text-xl flex-shrink-0 transition-transform duration-200 group-hover:scale-105">
                 <Trophy className="h-5 w-5" />
               </div>
@@ -189,7 +189,7 @@ export function ReadingTab() {
                 key={s.id}
                 type="button"
                 onClick={() => setExpandedStrategy(isExpanded ? null : s.id)}
-                className="rounded-2xl border border-border bg-surface p-5 relative overflow-hidden transition-all duration-150 shadow-xs cursor-pointer text-left w-full block active:scale-99"
+                className="rounded-2xl border-2 border-border bg-surface p-5 relative overflow-hidden transition-all duration-150 shadow-xs cursor-pointer text-left w-full block active:scale-99"
               >
                 <div
                   className="absolute top-0 left-0 w-1 h-full rounded-l-2xl"
@@ -245,7 +245,7 @@ export function ReadingTab() {
 
           {DRILLS.map(d => (
             <Link key={d.label} href={d.href} className="no-underline block group">
-              <div className="rounded-2xl border border-border bg-surface p-4.5 flex items-center gap-3.5 cursor-pointer shadow-xs transition-all duration-150 group-hover:border-accent/40">
+              <div className="rounded-2xl border-2 border-border bg-surface p-4.5 flex items-center gap-3.5 cursor-pointer shadow-xs transition-all duration-150 group-hover:border-accent/40">
                 <div
                   className={`w-10.5 h-10.5 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0 transition-transform duration-200 group-hover:scale-105 ${
                     d.part === "Full"

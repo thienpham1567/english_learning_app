@@ -282,7 +282,7 @@ export function GuidedWritingPanel() {
       {(state === "writing" || state === "scoring") && guided && (
         <div className="flex flex-col gap-4 animate-in fade-in duration-200">
           {/* Prompt */}
-          <div className="p-4.5 rounded-2xl bg-surface border border-border">
+          <div className="p-4.5 rounded-2xl bg-surface border-2 border-border">
             <div className="flex justify-between items-center mb-2.5">
               <p className="text-xs text-slate-455 m-0 font-bold flex items-center gap-1.5">
                 <PenTool className="h-4 w-4 text-accent" />
@@ -314,7 +314,7 @@ export function GuidedWritingPanel() {
           {/* Outline + Vocab — side by side */}
           <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3">
             {/* Outline */}
-            <div className="p-4.5 rounded-2xl bg-surface border border-border">
+            <div className="p-4.5 rounded-2xl bg-surface border-2 border-border">
               <p className="text-xs text-slate-455 m-0 mb-2.5 font-bold flex items-center gap-1.5">
                 📋 Dàn ý gợi ý
               </p>
@@ -326,7 +326,7 @@ export function GuidedWritingPanel() {
             </div>
 
             {/* Vocab Bank */}
-            <div className="p-4.5 rounded-2xl bg-surface border border-border">
+            <div className="p-4.5 rounded-2xl bg-surface border-2 border-border">
               <p className="text-xs text-slate-455 m-0 mb-3 font-bold flex items-center gap-1.5">
                 <BookOpen className="h-4 w-4 text-accent" />
                 <span>Ngân hàng từ vựng</span>
@@ -378,7 +378,7 @@ export function GuidedWritingPanel() {
               onChange={(e) => setEssayText(e.target.value)}
               placeholder="Viết bài viết của bạn ở đây. Click vào từ vựng bên phải để chèn..."
               disabled={state === "scoring"}
-              className="w-full min-h-[280px] p-4 rounded-2xl border border-border bg-surface text-ink text-sm leading-relaxed resize-y focus:outline-none focus:ring-1 focus:ring-accent/30 font-body disabled:opacity-60"
+              className="w-full min-h-[280px] p-4 rounded-2xl border-2 border-border bg-surface text-ink text-sm leading-relaxed resize-y focus:outline-none focus:ring-1 focus:ring-accent/30 font-body disabled:opacity-60"
             />
           </div>
 
@@ -389,7 +389,7 @@ export function GuidedWritingPanel() {
             disabled={wordCount < 150 || state === "scoring"}
             className={`px-8 py-3 rounded-xl border-none text-xs font-bold text-white flex items-center gap-1.5 self-center cursor-pointer transition-all duration-155 active:scale-97 ${
               wordCount < 150 || state === "scoring"
-                ? "bg-slate-900 text-slate-500 cursor-not-allowed border border-border"
+                ? "bg-slate-900 text-slate-500 cursor-not-allowed border-2 border-border"
                 : "bg-accent hover:bg-accent-hover shadow-sm"
             }`}
           >
@@ -412,14 +412,14 @@ export function GuidedWritingPanel() {
       {state === "result" && scoreResult && guided && (
         <div className="flex flex-col gap-4 animate-in fade-in duration-200">
           {/* Overall score */}
-          <div className="p-6 rounded-2xl bg-surface border border-border text-center flex flex-col items-center shadow-xs">
+          <div className="p-6 rounded-2xl bg-surface border-2 border-border text-center flex flex-col items-center shadow-xs">
             <CircularProgress percent={(scoreResult.overall / maxScore) * 100} overallScore={scoreResult.overall} maxScore={maxScore} color={scoreColor(scoreResult.overall)} />
             <p className="text-xs text-slate-455 m-0 mt-3 font-semibold">
               {EXAM_OPTIONS.find((o) => o.value === exam)?.label} • {scoreResult.wordCount} từ
             </p>
 
             {/* Criteria scores */}
-            <div className="flex justify-center gap-6 mt-5 flex-wrap w-full border-t border-border pt-4">
+            <div className="flex justify-center gap-6 mt-5 flex-wrap w-full border-t-2 border-border pt-4">
               {([
                 { key: "taskResponse", label: "Task" },
                 { key: "coherence", label: "Coherence" },
@@ -448,7 +448,7 @@ export function GuidedWritingPanel() {
           </div>
 
           {/* Vocab usage summary */}
-          <div className="p-4.5 rounded-2xl bg-surface border border-border">
+          <div className="p-4.5 rounded-2xl bg-surface border-2 border-border">
             <p className="text-xs text-slate-455 m-0 mb-2.5 font-bold flex items-center gap-1.5">
               <BookOpen className="h-4 w-4 text-accent" />
               <span>Từ vựng đã sử dụng</span>
@@ -481,7 +481,7 @@ export function GuidedWritingPanel() {
           ] as const).map((c) => {
             const s = scoreResult.criteria[c.key];
             return (
-              <div key={c.key} className="p-4.5 rounded-2xl bg-surface border border-border">
+              <div key={c.key} className="p-4.5 rounded-2xl bg-surface border-2 border-border">
                 <div className="flex justify-between items-center mb-2">
                   <p className="text-xs text-slate-455 m-0 font-bold flex items-center gap-1.5">{c.label}</p>
                   <span
@@ -498,7 +498,7 @@ export function GuidedWritingPanel() {
 
           {/* Strengths & Next Steps */}
           <div className="grid grid-cols-[repeat(auto-fit,minmax(220px,1fr))] gap-3">
-            <div className="p-4.5 rounded-2xl bg-surface border border-border">
+            <div className="p-4.5 rounded-2xl bg-surface border-2 border-border">
               <p className="text-xs text-slate-455 m-0 mb-2 font-bold flex items-center gap-1.5">
                 <CheckCircle className="h-4 w-4 text-emerald-500" />
                 <span>Điểm mạnh</span>
@@ -507,7 +507,7 @@ export function GuidedWritingPanel() {
                 {scoreResult.strengths.map((s, i) => <li key={i}>{s}</li>)}
               </ul>
             </div>
-            <div className="p-4.5 rounded-2xl bg-surface border border-border">
+            <div className="p-4.5 rounded-2xl bg-surface border-2 border-border">
               <p className="text-xs text-slate-455 m-0 mb-2 font-bold flex items-center gap-1.5">
                 <Target className="h-4 w-4 text-accent" />
                 <span>Cần cải thiện</span>

@@ -127,7 +127,7 @@ export default function GrammarLessonsPage() {
               <m.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05 }} className="bg-(--surface) rounded-(--radius-xl) border border-(--border) p-6 relative overflow-hidden" style={{boxShadow: "var(--shadow-md)"}} >
+                transition={{ delay: 0.05 }} className="bg-(--surface) rounded-(--radius-xl) border-2 border-border p-6 relative overflow-hidden" style={{boxShadow: "var(--shadow-md)"}} >
                 {/* Top accent bar */}
                 <div className="absolute h-[3px]" style={{top: 0, left: 0, right: 0, background: "linear-gradient(90deg, var(--accent), var(--secondary), var(--success))"}} />
 
@@ -300,7 +300,7 @@ function StatCard({
   sub: string;
 }) {
   return (
-    <div className="flex flex-col items-center text-center rounded-(--radius-lg) bg-surface-alt border border-(--border)" style={{padding: "12px 8px"}} >
+    <div className="flex flex-col items-center text-center rounded-(--radius-lg) bg-surface-alt border-2 border-border" style={{padding: "12px 8px"}} >
       <div className="w-[34px] h-[34px] grid text-base mb-2" style={{borderRadius: 10, background: iconBg, placeItems: "center", color: iconColor}} >
         {icon}
       </div>
@@ -337,7 +337,7 @@ function QuickAction({
       href={href}
       whileHover={{ y: -2, boxShadow: "var(--shadow-md)" }}
       whileTap={{ scale: 0.98 }}
-      onClick={onClick} className="flex items-center gap-3 rounded-(--radius-xl) bg-(--surface) border border-(--border) cursor-pointer" style={{padding: "14px 16px", textDecoration: "none", transition: "all 0.15s"}} >
+      onClick={onClick} className="flex items-center gap-3 rounded-(--radius-xl) bg-(--surface) border-2 border-border cursor-pointer" style={{padding: "14px 16px", textDecoration: "none", transition: "all 0.15s"}} >
       <span className="text-2xl" >{emoji}</span>
       <div>
         <div className="font-extrabold text-ink" style={{fontSize: 13.5}} >{label}</div>

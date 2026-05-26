@@ -21,7 +21,7 @@ type Props = { badges: Badge[] };
 
 export function BadgeGallery({ badges }: Props) {
   return (
-    <div className="rounded-(--radius-xl) border border-(--border) bg-(--surface) py-4 px-5" style={{boxShadow: "var(--shadow-sm)"}} >
+    <div className="rounded-(--radius-xl) border-2 border-border bg-(--surface) py-4 px-5" style={{boxShadow: "var(--shadow-sm)"}} >
       <div className="flex items-center gap-1.5 mb-4" >
         <Trophy className="text-[13px] text-accent" />
         <span className="text-[11px] font-extrabold uppercase tracking-widest text-accent" >

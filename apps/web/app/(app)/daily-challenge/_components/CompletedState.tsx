@@ -82,7 +82,7 @@ function WeeklyChart({ scores }: { scores: { day: string; score: number }[] }) {
   const chartWidth = scores.length * (barWidth + barGap) - barGap;
 
   return (
-    <div className="rounded-(--radius-xl) border border-(--border) bg-(--surface) py-4 px-5" style={{boxShadow: "var(--shadow-sm)"}} >
+    <div className="rounded-(--radius-xl) border-2 border-border bg-(--surface) py-4 px-5" style={{boxShadow: "var(--shadow-sm)"}} >
       <div className="flex items-center gap-1.5 mb-4" >
         <BarChart3 size={13} className="text-accent" />
         <span className="text-[11px] font-extrabold uppercase tracking-widest text-accent" >
@@ -286,7 +286,7 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
       )}
 
       {bonusLoading && (
-        <div className="w-full rounded-(--radius-xl) py-4 px-5 bg-(--surface) border border-(--border) flex items-center justify-center gap-2.5 text-text-secondary text-[13px] font-semibold" >
+        <div className="w-full rounded-(--radius-xl) py-4 px-5 bg-(--surface) border-2 border-border flex items-center justify-center gap-2.5 text-text-secondary text-[13px] font-semibold" >
           <Loader2 className="animate-spin text-(--xp)" />
           Đang khởi tạo thử thách Bonus...
         </div>
@@ -312,7 +312,7 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
       <m.div
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.15 }} className="rounded-(--radius-xl) border border-(--border) bg-(--surface) py-4 px-5" style={{boxShadow: "var(--shadow-sm)"}} >
+        transition={{ delay: 0.15 }} className="rounded-(--radius-xl) border-2 border-border bg-(--surface) py-4 px-5" style={{boxShadow: "var(--shadow-sm)"}} >
         <div className="flex items-center gap-1.5 mb-3" >
           <Trophy size={13} className="text-accent" />
           <span className="text-[11px] font-extrabold uppercase tracking-widest text-accent" >
@@ -320,7 +320,7 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
           </span>
         </div>
         <div className="grid gap-2.5 text-center" style={{gridTemplateColumns: "repeat(3, 1fr)"}} >
-          <div className="rounded-(--radius-lg) bg-surface-alt border border-(--border)" style={{padding: "10px 4px"}} >
+          <div className="rounded-(--radius-lg) bg-surface-alt border-2 border-border" style={{padding: "10px 4px"}} >
             <div className="text-2xl font-black text-accent" style={{fontVariantNumeric: "tabular-nums"}} >
               {streak.currentStreak}
             </div>
@@ -328,7 +328,7 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
               Chuỗi ngày
             </div>
           </div>
-          <div className="rounded-(--radius-lg) bg-surface-alt border border-(--border)" style={{padding: "10px 4px"}} >
+          <div className="rounded-(--radius-lg) bg-surface-alt border-2 border-border" style={{padding: "10px 4px"}} >
             <div className="text-2xl font-black text-emerald-500" style={{fontVariantNumeric: "tabular-nums"}} >
               {score}/5
             </div>
@@ -336,7 +336,7 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
               Điểm hôm nay
             </div>
           </div>
-          <div className="rounded-(--radius-lg) bg-surface-alt border border-(--border)" style={{padding: "10px 4px"}} >
+          <div className="rounded-(--radius-lg) bg-surface-alt border-2 border-border" style={{padding: "10px 4px"}} >
             <div className="text-2xl font-black text-(--xp)" style={{fontVariantNumeric: "tabular-nums"}} >
               {(() => {
                 try {
@@ -409,7 +409,7 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }} className="flex flex-col gap-3.5 mt-2.5" >
         {/* Next challenge countdown */}
-        <div className="rounded-(--radius-xl) bg-surface-alt border border-(--border) py-3 px-4 flex items-center justify-center gap-2" >
+        <div className="rounded-(--radius-xl) bg-surface-alt border-2 border-border py-3 px-4 flex items-center justify-center gap-2" >
           <Clock size={12} className="text-text-muted" />
           <Text className="text-xs text-text-secondary font-medium" >
             Thử thách tiếp theo sẽ mở sau

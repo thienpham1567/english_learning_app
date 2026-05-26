@@ -122,7 +122,7 @@ function ChangesPanel({
   if (changes.length === 0) return null;
 
   return (
-    <div className="rounded-xl border border-(--border) overflow-hidden" style={{background: "var(--card-bg)"}} >
+    <div className="rounded-xl border-2 border-border overflow-hidden" style={{background: "var(--card-bg)"}} >
       <button
         onClick={() => setExpanded((p) => !p)} className="w-full flex items-center justify-between border-none bg-transparent cursor-pointer text-text-secondary text-[13px] font-medium" style={{padding: "10px 14px"}} >
         <span>
@@ -245,7 +245,7 @@ export function Paraphraser() {
       </div>
 
       {/* Synonym slider */}
-      <div className="flex items-center gap-3 py-2.5 px-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+      <div className="flex items-center gap-3 py-2.5 px-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
         <span className="text-xs text-text-secondary" style={{whiteSpace: "nowrap"}} >
           Mức thay đổi từ vựng:
         </span>
@@ -300,7 +300,7 @@ export function Paraphraser() {
                       e.currentTarget.style.borderColor = "var(--border)";
                       e.currentTarget.style.borderLeftColor = "var(--accent)";
                       e.currentTarget.style.transform = "none";
-                    }} className="text-left py-2 px-3 rounded-lg border border-(--border) cursor-pointer w-[360px]" style={{borderLeft: "3px solid var(--accent)", background: "var(--card-bg)", transition: "all 0.15s", flex: "1 1 200px"}} >
+                    }} className="text-left py-2 px-3 rounded-lg border-2 border-border cursor-pointer w-[360px]" style={{borderLeft: "3px solid var(--accent)", background: "var(--card-bg)", transition: "all 0.15s", flex: "1 1 200px"}} >
                     <span className="text-[11px] font-semibold text-accent" >
                       {ex.hint}
                     </span>
@@ -322,7 +322,7 @@ export function Paraphraser() {
             </span>
             {result && <CopyButton text={result.result} />}
           </div>
-          <div className="h-[220px] p-4 rounded-xl border border-(--border) text-[15px] overflow-auto" style={{background: result
+          <div className="h-[220px] p-4 rounded-xl border-2 border-border text-[15px] overflow-auto" style={{background: result
                 ? "color-mix(in srgb, var(--success) 3%, var(--card-bg))"
                 : "var(--surface)", lineHeight: 1.7, color: result ? "var(--text-primary)" : "var(--text-muted)", whiteSpace: "pre-wrap"}} >
             {loading ? (

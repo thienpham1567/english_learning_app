@@ -77,7 +77,7 @@ export function ResultSummary({
 										<span className="text-[13px] font-extrabold text-text-primary" >
 											Câu hỏi số {q.number}
 										</span>
-										<span className="text-[10px] font-black rounded-md bg-surface-alt text-text-secondary border border-(--border)" style={{padding: "2px 8px"}} >
+										<span className="text-[10px] font-black rounded-md bg-surface-alt text-text-secondary border-2 border-border" style={{padding: "2px 8px"}} >
 											Part {q.part}
 										</span>
 									</div>
@@ -107,7 +107,7 @@ export function ResultSummary({
 									</div>
 									
 									{q.explanationVi && (
-										<div className="bg-surface-alt border border-(--border) text-text-secondary font-medium" style={{padding: "10px 12px", borderRadius: "var(--radius-md)", fontSize: 12.5, lineHeight: 1.55}} >
+										<div className="bg-surface-alt border-2 border-border text-text-secondary font-medium" style={{padding: "10px 12px", borderRadius: "var(--radius-md)", fontSize: 12.5, lineHeight: 1.55}} >
 											<div className="flex items-center gap-1 font-extrabold text-text-primary mb-1" >
 												<Lightbulb style={{ color: "var(--warning)" }} />
 												<span>Giải thích:</span>

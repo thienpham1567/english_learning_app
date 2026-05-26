@@ -191,7 +191,7 @@ export function InlinePractice({ errorId, onResolved }: Props) {
           </p>
           <button
             onClick={generate}
-            className="self-start px-3.5 py-1.5 rounded-lg border border-border bg-(--card-bg) cursor-pointer text-xs font-semibold text-accent hover:bg-accent/5"
+            className="self-start px-3.5 py-1.5 rounded-lg border-2 border-border bg-(--card-bg) cursor-pointer text-xs font-semibold text-accent hover:bg-accent/5"
           >
             Làm câu khác →
           </button>

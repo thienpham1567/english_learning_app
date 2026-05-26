@@ -34,7 +34,7 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
         <m.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ type: "spring", stiffness: 100, damping: 15 }} className="rounded-(--radius-xl) border border-(--border) text-center relative overflow-hidden" style={{background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--surface))", padding: "40px 24px", boxShadow: "var(--shadow-sm)"}} >
+          transition={{ type: "spring", stiffness: 100, damping: 15 }} className="rounded-(--radius-xl) border-2 border-border text-center relative overflow-hidden" style={{background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--surface))", padding: "40px 24px", boxShadow: "var(--shadow-sm)"}} >
           {/* Radial ambient glow matching the CEFR level color */}
           <div className="absolute w-[280px] h-[280px] rounded-full" style={{left: "50%", top: "50%", transform: "translate(-50%, -50%)", background: `radial-gradient(circle, ${cefrColor}12 0%, transparent 70%)`, pointerEvents: "none"}} />
 
@@ -64,7 +64,7 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
         <m.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }} className="rounded-(--radius-xl) border border-(--border) bg-(--surface)" style={{padding: "20px", boxShadow: "var(--shadow-sm)"}} >
+          transition={{ delay: 0.25 }} className="rounded-(--radius-xl) border-2 border-border bg-(--surface)" style={{padding: "20px", boxShadow: "var(--shadow-sm)"}} >
           <div className="flex items-center gap-2" style={{marginBottom: 18}} >
             <Radar className="text-sm text-accent" />
             <span className="text-[13px] font-extrabold text-text-primary font-display" >
@@ -121,7 +121,7 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
           <m.button
             whileHover={{ scale: 1.02, y: -1 }}
             whileTap={{ scale: 0.98 }}
-            onClick={onViewProgress} className="h-[48px] rounded-(--radius-lg) bg-surface-alt border border-(--border) text-text-secondary text-[15px] font-bold cursor-pointer flex items-center gap-1.5" style={{padding: "0 20px", boxShadow: "var(--shadow-sm)"}} >
+            onClick={onViewProgress} className="h-[48px] rounded-(--radius-lg) bg-surface-alt border-2 border-border text-text-secondary text-[15px] font-bold cursor-pointer flex items-center gap-1.5" style={{padding: "0 20px", boxShadow: "var(--shadow-sm)"}} >
             <RefreshCw size={13} />
             Xem tiến trình học
           </m.button>

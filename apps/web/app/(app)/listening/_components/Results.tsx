@@ -84,7 +84,7 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
         <div className="text-[13px] font-semibold text-text-muted mb-2.5 uppercase" style={{letterSpacing: 1}} >
           <FileText style={{ marginRight: 6 }} /> Nguyên văn
         </div>
-        <div className="bg-(--surface) border border-(--border) p-4 text-sm italic" style={{borderRadius: "var(--radius-md)", lineHeight: 1.7, color: "var(--text)"}} >
+        <div className="bg-(--surface) border-2 border-border p-4 text-sm italic" style={{borderRadius: "var(--radius-md)", lineHeight: 1.7, color: "var(--text)"}} >
           {dialogueTurns && dialogueTurns.length > 0 ? (
             <DialogueTranscript turns={dialogueTurns} />
           ) : (

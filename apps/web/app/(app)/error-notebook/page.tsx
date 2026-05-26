@@ -62,7 +62,7 @@ export default function ErrorNotebookPage() {
       </div>
 
       {/* Tabs */}
-      <div className="relative z-[1] flex gap-1 px-5 pt-3 border-b border-border bg-(--bg)">
+      <div className="relative z-[1] flex gap-1 px-5 pt-3 border-b-2 border-border bg-(--bg)">
         {TABS.map((t) => (
           <button
             key={t.key}

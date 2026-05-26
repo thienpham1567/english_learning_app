@@ -164,7 +164,7 @@ export function ToeicVocabTab() {
         <div className="flex items-center gap-3 mb-5" >
           <button
             type="button"
-            onClick={() => setActiveTopic(null)} className="w-[36px] h-[36px] border border-(--border) bg-(--surface) text-text-secondary cursor-pointer grid text-sm" style={{borderRadius: 10, placeItems: "center"}} >
+            onClick={() => setActiveTopic(null)} className="w-[36px] h-[36px] border-2 border-border bg-(--surface) text-text-secondary cursor-pointer grid text-sm" style={{borderRadius: 10, placeItems: "center"}} >
             <ArrowLeft />
           </button>
           <div>
@@ -188,7 +188,7 @@ export function ToeicVocabTab() {
             type="text"
             placeholder="Tìm từ trong chủ đề..."
             value={searchQuery}
-            onChange={e => setSearchQuery(e.target.value)} className="w-full rounded-xl border border-(--border) bg-(--surface) text-sm text-ink" style={{padding: "10px 14px 10px 40px", outline: "none"}} />
+            onChange={e => setSearchQuery(e.target.value)} className="w-full rounded-xl border-2 border-border bg-(--surface) text-sm text-ink" style={{padding: "10px 14px 10px 40px", outline: "none"}} />
         </div>
 
         {wordsLoading ? (
@@ -205,7 +205,7 @@ export function ToeicVocabTab() {
                   key={w.id}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: Math.min(i * 0.02, 0.5) }} className="border border-(--border) overflow-hidden" style={{borderRadius: 14, background: isExpanded
+                  transition={{ delay: Math.min(i * 0.02, 0.5) }} className="border-2 border-border overflow-hidden" style={{borderRadius: 14, background: isExpanded
                       ? "color-mix(in srgb, var(--accent) 4%, var(--surface))"
                       : "var(--surface)", transition: "background 0.2s"}} >
                   {/* Row */}
@@ -247,7 +247,7 @@ export function ToeicVocabTab() {
                         )}
                         <button
                           type="button"
-                          onClick={(e) => { e.stopPropagation(); speak(w.word, "en-US"); }} className="w-[28px] h-[28px] rounded-md border border-(--border) bg-(--surface) cursor-pointer grid text-accent text-[13px]" style={{placeItems: "center"}} >
+                          onClick={(e) => { e.stopPropagation(); speak(w.word, "en-US"); }} className="w-[28px] h-[28px] rounded-md border-2 border-border bg-(--surface) cursor-pointer grid text-accent text-[13px]" style={{placeItems: "center"}} >
                           <Volume2 />
                         </button>
                       </div>
@@ -297,7 +297,7 @@ export function ToeicVocabTab() {
     <div className="w-[700px] mx-auto w-full" >
       {/* Overall progress */}
       <m.div
-        initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="bg-(--surface) border border-(--border) mb-5" style={{padding: "20px 22px", borderRadius: 18}} >
+        initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} className="bg-(--surface) border-2 border-border mb-5" style={{padding: "20px 22px", borderRadius: 18}} >
         <div className="flex items-center justify-between mb-3" >
           <div>
             <div className="text-sm font-bold text-ink" >
@@ -330,7 +330,7 @@ export function ToeicVocabTab() {
               transition={{ delay: i * 0.04 }}
               whileHover={{ y: -3, boxShadow: "var(--shadow-md)" }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => loadTopic(pack.topic)} className="rounded-2xl text-left border border-(--border) bg-(--surface) cursor-pointer flex flex-col gap-2.5" style={{padding: "18px 16px"}} >
+              onClick={() => loadTopic(pack.topic)} className="rounded-2xl text-left border-2 border-border bg-(--surface) cursor-pointer flex flex-col gap-2.5" style={{padding: "18px 16px"}} >
               <div className="flex items-center gap-2.5" >
                 <div className="w-[40px] h-[40px] rounded-xl grid text-xl" style={{placeItems: "center", background: `color-mix(in srgb, ${meta.color} 10%, var(--surface))`}} >
                   {meta.emoji}

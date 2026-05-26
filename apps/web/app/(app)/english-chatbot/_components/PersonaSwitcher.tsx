@@ -50,7 +50,7 @@ export function PersonaSwitcher({ value, onChange, disabled }: Props) {
       </button>
 
       {open && (
-        <div className="absolute bottom-11 left-0 z-50 min-w-[210px] rounded-2xl border border-(--border) bg-(--chat-bg) p-1.5 shadow-xl animate-in fade-in slide-in-from-bottom-2 duration-150">
+        <div className="absolute bottom-11 left-0 z-50 min-w-[210px] rounded-2xl border-2 border-border bg-(--chat-bg) p-1.5 shadow-xl animate-in fade-in slide-in-from-bottom-2 duration-150">
           <div className="text-[10px] font-bold text-(--text-muted) uppercase tracking-wider px-3 py-1.5 font-mono">
             Chọn gia sư
           </div>

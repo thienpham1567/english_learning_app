@@ -67,7 +67,7 @@ export default async function ToeicWritingPage() {
 							{history.map((h) => (
 								<Link
 									key={h.id}
-									href={`/toeic/writing/${h.id}/result`} className="text-ink rounded-lg flex justify-between border border-(--border)" style={{textDecoration: "none", padding: 10, background: "var(--surface-hover)"}} >
+									href={`/toeic/writing/${h.id}/result`} className="text-ink rounded-lg flex justify-between border-2 border-border" style={{textDecoration: "none", padding: 10, background: "var(--surface-hover)"}} >
 									<span>
 										{new Date(h.completedAt!).toLocaleString("vi-VN")} · {h.setCode}
 									</span>

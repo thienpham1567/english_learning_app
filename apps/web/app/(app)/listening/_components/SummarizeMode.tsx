@@ -141,7 +141,7 @@ export default function SummarizeMode({ examMode }: Props) {
 
       {/* ── Idle: level picker + start ── */}
       {state === "idle" && (
-        <div className="p-6 border border-(--border) rounded-2xl" style={{background: "var(--card-bg)"}} >
+        <div className="p-6 border-2 border-border rounded-2xl" style={{background: "var(--card-bg)"}} >
           <div className="text-center mb-6" >
             <FileText size={40} className="text-accent" />
             <h2 className="text-lg" style={{margin: "0 0 6px"}} >Listen &amp; Summarize</h2>
@@ -188,7 +188,7 @@ export default function SummarizeMode({ examMode }: Props) {
       {(state === "listening" || state === "writing") && exercise && (
         <>
           {/* Instruction */}
-          <div className="py-3 px-4 rounded-xl border border-(--border) text-[13px] text-text-secondary" style={{background: "var(--card-bg)"}} >
+          <div className="py-3 px-4 rounded-xl border-2 border-border text-[13px] text-text-secondary" style={{background: "var(--card-bg)"}} >
             🎧 <strong>Nghe đoạn văn bên dưới.</strong> Đoạn văn gốc sẽ được tiết lộ sau khi bạn nộp bài tóm tắt.
           </div>
 
@@ -215,7 +215,7 @@ export default function SummarizeMode({ examMode }: Props) {
                 value={summaryText}
                 onChange={(e) => setSummaryText(e.target.value)}
                 placeholder="Viết tóm tắt của bạn ở đây... (tối thiểu 30 từ, tối đa 400 từ)"
-                rows={6} className="w-full rounded-xl border border-(--border) text-sm" style={{padding: 14, background: "var(--card-bg, var(--surface))", lineHeight: 1.7, resize: "vertical", color: "var(--text)", fontFamily: "inherit"}} />
+                rows={6} className="w-full rounded-xl border-2 border-border text-sm" style={{padding: 14, background: "var(--card-bg, var(--surface))", lineHeight: 1.7, resize: "vertical", color: "var(--text)", fontFamily: "inherit"}} />
               {/* Word count indicator */}
               <div className="flex justify-between items-center text-xs" >
                 <span className="font-semibold" style={{color: wcColor}} >
@@ -255,7 +255,7 @@ export default function SummarizeMode({ examMode }: Props) {
         <div className="flex flex-col gap-4" >
 
           {/* Score overview */}
-          <div className="p-6 rounded-2xl border border-(--border) text-center" style={{background: "var(--card-bg)"}} >
+          <div className="p-6 rounded-2xl border-2 border-border text-center" style={{background: "var(--card-bg)"}} >
             <Progress
               type="circle"
               percent={result.overall}
@@ -282,7 +282,7 @@ export default function SummarizeMode({ examMode }: Props) {
 
           {/* Feedback */}
           {result.feedback && (
-            <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+            <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
               <p className="text-xs font-semibold text-text-secondary" style={{margin: "0 0 6px"}} >
                 <Info className="mr-1" />Nhận xét từ AI:
               </p>
@@ -291,7 +291,7 @@ export default function SummarizeMode({ examMode }: Props) {
           )}
 
           {/* Key ideas coverage (AC3 — color-coded) */}
-          <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+          <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
             <p className="text-xs font-semibold text-text-secondary mb-2.5" >
               Các ý chính trong đoạn văn:
             </p>
@@ -322,13 +322,13 @@ export default function SummarizeMode({ examMode }: Props) {
           </div>
 
           {/* Your summary */}
-          <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+          <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
             <p className="text-xs font-semibold text-text-secondary" style={{margin: "0 0 6px"}} >Bài tóm tắt của bạn:</p>
             <p className="text-sm m-0 italic" style={{lineHeight: 1.7}} >{summaryText}</p>
           </div>
 
           {/* Transcript reveal (AC3 — revealed after submission) */}
-          <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+          <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
             <button
               onClick={() => setShowPassage((p) => !p)} className="flex items-center gap-1.5 bg-none border-none cursor-pointer text-accent text-[13px] font-semibold" style={{padding: 0}} >
               <Eye />
@@ -344,7 +344,7 @@ export default function SummarizeMode({ examMode }: Props) {
           {/* Actions */}
           <div className="flex gap-3 justify-center" >
             <button
-              onClick={() => { setState("writing"); setResult(null); setSummaryText(""); setShowPassage(false); }} className="rounded-lg border border-(--border) bg-transparent cursor-pointer text-[13px] font-medium" style={{padding: "10px 20px", color: "var(--text)"}} >
+              onClick={() => { setState("writing"); setResult(null); setSummaryText(""); setShowPassage(false); }} className="rounded-lg border-2 border-border bg-transparent cursor-pointer text-[13px] font-medium" style={{padding: "10px 20px", color: "var(--text)"}} >
               <RefreshCw /> Viết lại
             </button>
             <button

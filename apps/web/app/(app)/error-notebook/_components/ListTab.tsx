@@ -56,9 +56,9 @@ export function ListTab() {
     <>
       <div className="flex flex-col gap-4">
         {/* Search + Filters */}
-        <div className="bg-surface rounded-xl border border-border p-3.5 flex flex-col gap-3">
+        <div className="bg-surface rounded-xl border-2 border-border p-3.5 flex flex-col gap-3">
           {/* Search bar */}
-          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-surface-alt border border-border">
+          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-surface-alt border-2 border-border">
             <Search className="h-3.5 w-3.5 text-text-muted shrink-0" />
             <input
               type="text"
@@ -161,7 +161,7 @@ export function ListTab() {
           <m.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="py-16 px-6 text-center bg-surface rounded-xl border border-border"
+            className="py-16 px-6 text-center bg-surface rounded-xl border-2 border-border"
           >
             <div className="text-[44px] mb-3">
               {list.filters.resolved === "false" ? "🎉" : "📭"}
@@ -193,7 +193,7 @@ export function ListTab() {
                 whileTap={{ scale: 0.99 }}
                 onClick={list.fetchMore}
                 disabled={list.loadingMore}
-                className="p-3 rounded-xl border border-border bg-surface text-text-secondary text-[13px] font-bold cursor-pointer font-body text-center disabled:opacity-50"
+                className="p-3 rounded-xl border-2 border-border bg-surface text-text-secondary text-[13px] font-bold cursor-pointer font-body text-center disabled:opacity-50"
               >
                 {list.loadingMore ? <><Loader2 className="h-4 w-4 animate-inline mr-1.5" /> Đang tải...</> : "Tải thêm"}
               </m.button>

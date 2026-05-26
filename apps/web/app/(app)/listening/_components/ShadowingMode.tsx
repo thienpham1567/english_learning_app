@@ -189,7 +189,7 @@ export default function ShadowingMode({ examMode }: Props) {
 
       {/* ── Idle ── */}
       {state === "idle" && (
-        <div className="text-center p-8 border border-(--border) rounded-2xl" style={{background: "var(--card-bg)"}} >
+        <div className="text-center p-8 border-2 border-border rounded-2xl" style={{background: "var(--card-bg)"}} >
           <Volume2 size={48} className="text-accent" />
           <h2 className="mb-2 text-lg" >Shadowing</h2>
           <p className="text-text-secondary mb-2 text-[13px]" >
@@ -284,7 +284,7 @@ export default function ShadowingMode({ examMode }: Props) {
       {state === "result" && evalResult && currentSentence && (
         <div className="flex flex-col gap-4" >
           {/* Score */}
-          <div className="p-6 rounded-2xl border border-(--border) text-center" style={{background: "var(--card-bg)"}} >
+          <div className="p-6 rounded-2xl border-2 border-border text-center" style={{background: "var(--card-bg)"}} >
             <Progress type="circle" percent={evalResult.score} size={100}
               strokeColor={evalResult.score >= 80 ? "var(--success)" : evalResult.score >= 50 ? "var(--warning)" : "var(--error)"}
               format={(pct) => <span className="text-3xl font-bold" >{pct}</span>}
@@ -296,13 +296,13 @@ export default function ShadowingMode({ examMode }: Props) {
           </div>
 
           {/* What you said */}
-          <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+          <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
             <p className="text-xs text-text-secondary font-semibold" style={{margin: "0 0 4px"}} >Bạn đã nói:</p>
             <p className="text-[15px] m-0 italic" >&ldquo;{spokenText}&rdquo;</p>
           </div>
 
           {/* Word analysis */}
-          <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+          <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
             <p className="text-xs text-text-secondary mb-2 font-semibold" >Phân tích từng từ:</p>
             <div className="flex flex-wrap gap-1.5" >
               {evalResult.wordAnalysis.map((w, i) => (
@@ -316,7 +316,7 @@ export default function ShadowingMode({ examMode }: Props) {
           </div>
 
           {/* Feedback + tips */}
-          <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+          <div className="p-4 rounded-xl border-2 border-border" style={{background: "var(--card-bg)"}} >
             <p className="text-[13px] mb-2" >{evalResult.feedback}</p>
             {evalResult.tips.length > 0 && (
               <ul className="m-0 text-[13px] text-text-secondary" style={{paddingLeft: 18}} >
@@ -327,7 +327,7 @@ export default function ShadowingMode({ examMode }: Props) {
 
           {/* Actions */}
           <div className="flex gap-3 justify-center" >
-            <button onClick={retryCurrent} className="rounded-lg border border-(--border) bg-transparent cursor-pointer text-[13px] font-medium" style={{padding: "10px 20px", color: "var(--text)"}} >
+            <button onClick={retryCurrent} className="rounded-lg border-2 border-border bg-transparent cursor-pointer text-[13px] font-medium" style={{padding: "10px 20px", color: "var(--text)"}} >
               <RefreshCw /> Thử lại
             </button>
             <button onClick={nextSentence} className="rounded-lg border-none cursor-pointer text-[13px] font-semibold" style={{padding: "10px 20px", background: "var(--accent)", color: "var(--text-on-accent)"}} >
@@ -339,7 +339,7 @@ export default function ShadowingMode({ examMode }: Props) {
 
       {/* ── Summary ── */}
       {state === "summary" && (
-        <div className="text-center p-8 border border-(--border) rounded-2xl" style={{background: "var(--card-bg)"}} >
+        <div className="text-center p-8 border-2 border-border rounded-2xl" style={{background: "var(--card-bg)"}} >
           <div className="mb-4" style={{fontSize: 48}} >
             {avgScore >= 80 ? <CircleCheckBig className="text-emerald-500" /> :
              avgScore >= 50 ? <Info style={{ color: "var(--warning)" }} /> :

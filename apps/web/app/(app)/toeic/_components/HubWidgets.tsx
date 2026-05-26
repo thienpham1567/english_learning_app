@@ -212,7 +212,7 @@ export async function HubWidgets() {
 						<Calendar className="text-accent" />
 						<span>🎯 Hôm nay nên làm</span>
 					</h3>
-					<span className="text-[11px] text-text-muted font-extrabold rounded-md bg-surface-alt border border-(--border)" style={{padding: "2px 8px"}} >
+					<span className="text-[11px] text-text-muted font-extrabold rounded-md bg-surface-alt border-2 border-border" style={{padding: "2px 8px"}} >
 						{planItems.reduce((s, i) => s + i.estimatedMinutes, 0)} phút ước tính
 					</span>
 				</div>

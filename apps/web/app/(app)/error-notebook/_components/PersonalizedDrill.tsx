@@ -105,7 +105,7 @@ export function PersonalizedDrill() {
   // Loading
   if (loading) {
     return (
-      <div className="py-8 px-5 rounded-2xl bg-surface border border-border text-center">
+      <div className="py-8 px-5 rounded-2xl bg-surface border-2 border-border text-center">
         <Loader2 className="h-7 w-7 text-accent animate-mx-auto mb-3" />
         <div className="text-sm font-semibold text-text-primary">
           Đang phân tích lỗi sai...
@@ -126,7 +126,7 @@ export function PersonalizedDrill() {
       <m.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="py-6 px-5 rounded-2xl bg-surface border border-border text-center"
+        className="py-6 px-5 rounded-2xl bg-surface border-2 border-border text-center"
       >
         <Trophy className={`h-9 w-9 mx-auto mb-3 ${pct >= 80 ? "text-(--success)" : "text-accent"}`} />
         <div className="text-4xl font-black text-ink font-display">
@@ -160,10 +160,10 @@ export function PersonalizedDrill() {
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.25 }}
-      className="rounded-2xl bg-surface border border-border overflow-hidden"
+      className="rounded-2xl bg-surface border-2 border-border overflow-hidden"
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-accent/5 border-b border-border">
+      <div className="flex items-center justify-between px-4 py-3 bg-accent/5 border-b-2 border-border">
         <div className="flex items-center gap-2">
           <Zap className="h-3.5 w-3.5 text-accent" />
           <span className="text-[13px] font-bold text-ink">

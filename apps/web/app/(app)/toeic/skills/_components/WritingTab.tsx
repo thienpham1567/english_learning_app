@@ -31,7 +31,7 @@ export function WritingTab() {
   return (
     <div className="max-w-3xl mx-auto w-full">
       {/* Custom Tabs */}
-      <div className="flex gap-2 py-2 pb-3.5 border-b border-border mb-4 overflow-x-auto scrollbar-none">
+      <div className="flex gap-2 py-2 pb-3.5 border-b-2 border-border mb-4 overflow-x-auto scrollbar-none">
         {tabs.map((t) => {
           const isActive = activeTab === t.key;
           return (

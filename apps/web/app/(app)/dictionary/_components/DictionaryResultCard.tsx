@@ -204,7 +204,7 @@ export function DictionaryResultCard({
               const display = posVi ?? posKey ?? "từ";
               const tooltip = posKey && posVi ? posKey : null;
               return (
-                <span className="relative group rounded-full px-3.5 py-1 text-[13px] font-semibold italic bg-accent-muted text-accent border border-border whitespace-nowrap leading-snug">
+                <span className="relative group rounded-full px-3.5 py-1 text-[13px] font-semibold italic bg-accent-muted text-accent border-2 border-border whitespace-nowrap leading-snug">
                   {display}
                   {tooltip && (
                     <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg not-italic">
@@ -215,7 +215,7 @@ export function DictionaryResultCard({
               );
             })()}
             {numberLabel && (
-              <span className="rounded-full px-2.5 py-0.5 text-xs font-medium text-text-muted border border-border whitespace-nowrap">
+              <span className="rounded-full px-2.5 py-0.5 text-xs font-medium text-text-muted border-2 border-border whitespace-nowrap">
                 {numberLabel}
               </span>
             )}
@@ -301,7 +301,7 @@ export function DictionaryResultCard({
 
       {/* ── Meta info strip: Word Family ── */}
       {vocabulary.wordFamily && vocabulary.wordFamily.length > 0 && onSearch && (
-        <div className="anim-fade-up mt-5 flex flex-wrap items-start gap-5 bg-bg-deep border border-border border-l-3 border-l-accent rounded-sm p-3.5 px-4.5">
+        <div className="anim-fade-up mt-5 flex flex-wrap items-start gap-5 bg-bg-deep border-2 border-border border-l-3 border-l-accent rounded-sm p-3.5 px-4.5">
           <div className="flex flex-col gap-1 flex-1 min-w-0">
             <WordFamilySection wordFamily={vocabulary.wordFamily} onSearch={onSearch} />
           </div>
@@ -314,7 +314,7 @@ export function DictionaryResultCard({
 
       {/* Sense tabs */}
       <div className="mt-6">
-        <div className="flex items-center gap-2 border-b border-border pb-3 mb-5 overflow-x-auto">
+        <div className="flex items-center gap-2 border-b-2 border-border pb-3 mb-5 overflow-x-auto">
           {vocabulary.senses.map((sense) => (
             <button
               key={sense.id}
@@ -336,7 +336,7 @@ export function DictionaryResultCard({
 
       {/* Nearby words bar */}
       {vocabulary.nearbyWords.length > 0 && onSearch && (
-        <div className="mt-6 border-t border-border pt-5">
+        <div className="mt-6 border-t-2 border-border pt-5">
           <NearbyWordsBar
             words={vocabulary.nearbyWords}
             headword={vocabulary.headword}

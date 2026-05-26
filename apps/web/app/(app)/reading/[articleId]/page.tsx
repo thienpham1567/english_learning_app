@@ -236,7 +236,7 @@ export default function ArticleReaderPage() {
             <m.button
               onClick={() => router.push("/reading")}
               whileHover={{ scale: 1.05, x: -2 }}
-              whileTap={{ scale: 0.95 }} className="items-center gap-2 py-1.5 px-3.5 rounded-lg border border-(--border) bg-(--surface) text-text-secondary font-extrabold cursor-pointer" style={{display: "inline-flex", fontSize: 12.5}} >
+              whileTap={{ scale: 0.95 }} className="items-center gap-2 py-1.5 px-3.5 rounded-lg border-2 border-border bg-(--surface) text-text-secondary font-extrabold cursor-pointer" style={{display: "inline-flex", fontSize: 12.5}} >
               <ArrowLeft />
               <span>Quay lại</span>
             </m.button>
@@ -329,7 +329,7 @@ export default function ArticleReaderPage() {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     
-                    title="Phân tích ngữ pháp" className="w-[26px] h-[26px] rounded-full border border-(--border) flex items-center justify-center" style={{background: grammarResults[idx]?.length
+                    title="Phân tích ngữ pháp" className="w-[26px] h-[26px] rounded-full border-2 border-border flex items-center justify-center" style={{background: grammarResults[idx]?.length
                         ? "linear-gradient(135deg, var(--accent), var(--secondary))"
                         : "var(--surface)", color: grammarResults[idx]?.length
                         ? "var(--text-on-accent)"
@@ -347,7 +347,7 @@ export default function ArticleReaderPage() {
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
                     
-                    title="Nghe đoạn này" className="w-[26px] h-[26px] rounded-full border border-(--border) flex items-center justify-center" style={{background: speakingIdx === idx
+                    title="Nghe đoạn này" className="w-[26px] h-[26px] rounded-full border-2 border-border flex items-center justify-center" style={{background: speakingIdx === idx
                           ? "linear-gradient(135deg, var(--info), var(--accent))"
                           : "var(--surface)", color: speakingIdx === idx ? "var(--text-on-accent)" : "var(--text-muted)", cursor: loadingAudioIdx === idx ? "wait" : "pointer"}} >
                     {loadingAudioIdx === idx ? (
@@ -398,7 +398,7 @@ export default function ArticleReaderPage() {
                         {pattern.name}
                       </span>
 
-                      <div className="bg-(--surface) rounded-md py-1.5 px-2.5 mb-2 font-bold text-text-primary border border-(--border)" style={{fontFamily: "var(--font-mono, monospace)", fontSize: 12.5}} >
+                      <div className="bg-(--surface) rounded-md py-1.5 px-2.5 mb-2 font-bold text-text-primary border-2 border-border" style={{fontFamily: "var(--font-mono, monospace)", fontSize: 12.5}} >
                         &quot;{pattern.phrase}&quot;
                       </div>
 
