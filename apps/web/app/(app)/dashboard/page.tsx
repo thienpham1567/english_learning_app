@@ -8,6 +8,7 @@ import {
   Clock,
   Flame,
   HelpCircle,
+  LayoutDashboard,
   Rocket,
   RotateCw,
   Star,
@@ -20,6 +21,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { HeatmapCalendar } from "@/app/(app)/dashboard/_components/HeatmapCalendar";
 import { WeeklyReport } from "@/app/(app)/dashboard/_components/WeeklyReport";
+import { PageHeader } from "@/components/shared/PageHeader";
 import {
   type DailyPlanItem,
   type DailyPlanStats,
@@ -90,7 +92,44 @@ export default function DashboardPage() {
   return (
     <div className="min-h-full overflow-y-auto px-4 py-4 pb-12">
       {/* ── Hero Header ── */}
-      <div className="max-w-5xl mx-auto mb-4"></div>
+      <div className="max-w-5xl mx-auto mb-5">
+        <PageHeader
+          title="Bảng điều khiển"
+          subtitle="Theo dõi tiến độ, kế hoạch học và điểm dự đoán của bạn"
+          icon={<LayoutDashboard className="h-6 w-6" />}
+          boxed
+        />
+
+        {/* ── Streak + XP Banner Row ── */}
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full"
+        >
+          <StatCard
+            icon={<Flame className="h-5 w-5 text-orange-500 fill-current" />}
+            label="Streak"
+            value={dash ? `${dash.streak.currentStreak} ngày` : "—"}
+            sub={dash ? `Kỷ lục: ${dash.streak.bestStreak}` : ""}
+            loading={!dash}
+          />
+          <StatCard
+            icon={<Zap className="h-5 w-5 text-amber-500 fill-current" />}
+            label="Tổng XP"
+            value={dash ? `${dash.totalXP.toLocaleString()}` : "—"}
+            sub="Kinh nghiệm tích lũy"
+            loading={!dash}
+          />
+          <StatCard
+            icon={<RotateCw className="h-5 w-5 text-accent" />}
+            label="Cần ôn"
+            value={dash ? `${dash.flashcardsDue + dash.vocabDue}` : "—"}
+            sub={dash ? `${dash.flashcardsDue} thẻ · ${dash.vocabDue} từ` : ""}
+            loading={!dash}
+          />
+        </motion.div>
+      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-[1.62fr_1fr] gap-5 items-start max-w-5xl mx-auto px-1">
         {/* Left Column: Focus & Core Actions */}
@@ -111,8 +150,8 @@ export default function DashboardPage() {
 
             {scoreLoading ? (
               <div className="space-y-3 animate-pulse">
-                <div className="h-4 bg-slate-900 border border-slate-850 rounded-md w-3/4" />
-                <div className="h-4 bg-slate-900 border border-slate-850 rounded-md w-1/2" />
+                <div className="h-4 bg-bg-deep border border-border/20 rounded-md w-3/4" />
+                <div className="h-4 bg-bg-deep border border-border/20 rounded-md w-1/2" />
               </div>
             ) : score?.insufficient ? (
               <InsufficientDataCard score={score} />
@@ -140,9 +179,9 @@ export default function DashboardPage() {
 
             {planState.status === "loading" ? (
               <div className="space-y-3 animate-pulse">
-                <div className="h-4 bg-slate-900 border border-slate-850 rounded-md w-4/5" />
-                <div className="h-4 bg-slate-900 border border-slate-850 rounded-md w-2/3" />
-                <div className="h-4 bg-slate-900 border border-slate-850 rounded-md w-3/4" />
+                <div className="h-4 bg-bg-deep border border-border/20 rounded-md w-4/5" />
+                <div className="h-4 bg-bg-deep border border-border/20 rounded-md w-2/3" />
+                <div className="h-4 bg-bg-deep border border-border/20 rounded-md w-3/4" />
               </div>
             ) : planReady ? (
               <StudyPlanSection items={planReady.plan.items} stats={planReady.stats} />
@@ -180,36 +219,6 @@ export default function DashboardPage() {
 
         {/* Right Column: Analytics & Motivation */}
         <div className="flex flex-col gap-5">
-          {/* ── Streak + XP Row ── */}
-          <motion.div
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="grid grid-cols-3 gap-2.5 w-full"
-          >
-            <StatCard
-              icon={<Flame className="h-5 w-5 text-orange-500 fill-current" />}
-              label="Streak"
-              value={dash ? `${dash.streak.currentStreak} ngày` : "—"}
-              sub={dash ? `Kỷ lục: ${dash.streak.bestStreak}` : ""}
-              loading={!dash}
-            />
-            <StatCard
-              icon={<Zap className="h-5 w-5 text-amber-500 fill-current" />}
-              label="Tổng XP"
-              value={dash ? `${dash.totalXP.toLocaleString()}` : "—"}
-              sub="Kinh nghiệm tích lũy"
-              loading={!dash}
-            />
-            <StatCard
-              icon={<RotateCw className="h-5 w-5 text-accent" />}
-              label="Cần ôn"
-              value={dash ? `${dash.flashcardsDue + dash.vocabDue}` : "—"}
-              sub={dash ? `${dash.flashcardsDue} thẻ · ${dash.vocabDue} từ` : ""}
-              loading={!dash}
-            />
-          </motion.div>
-
           {/* ── Weekly Activity ── */}
           {dash && dash.weeklyActivity.length > 0 && (
             <motion.div

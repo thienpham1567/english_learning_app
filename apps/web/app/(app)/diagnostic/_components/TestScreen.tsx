@@ -1,6 +1,7 @@
 "use client";
 
 import { Button, Flex, Tag, Typography } from "antd";
+import { Check } from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useEffect } from "react";
 import { CEFR_COLORS } from "@/lib/constants/cefr";
@@ -317,7 +318,20 @@ export function TestScreen({
               transition: "all 0.2s",
             }}
           >
-            {currentIndex < total - 1 ? "Câu tiếp theo →" : "Hoàn thành bài test ✓"}
+            {currentIndex < total - 1 ? (
+              "Câu tiếp theo →"
+            ) : (
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 6,
+                  justifyContent: "center",
+                }}
+              >
+                Hoàn thành bài test <Check size={16} />
+              </span>
+            )}
           </m.button>
 
           <m.button

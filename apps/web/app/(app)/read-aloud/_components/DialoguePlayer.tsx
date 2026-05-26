@@ -1,7 +1,16 @@
 "use client";
 
 import { Flex, message, Typography } from "antd";
-import { Loader2, Mic, PauseCircle, PlayCircle, Redo, StopCircle, Volume2 } from "lucide-react";
+import {
+  Loader2,
+  Mic,
+  PauseCircle,
+  PlayCircle,
+  Redo,
+  Star,
+  StopCircle,
+  Volume2,
+} from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { useCallback, useState } from "react";
@@ -359,12 +368,24 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                     }}
                     className="bg-transparent border-none text-lg cursor-pointer p-1"
                     style={{
-                      color: saved.bookmarked ? "var(--accent)" : "var(--text-muted)",
+                      color: saved.bookmarked
+                        ? "var(--warning, var(--accent))"
+                        : "var(--text-muted)",
                       opacity: saved.bookmarked ? 1 : 0.4,
                       transition: "all 0.15s",
                     }}
                   >
-                    {saved.bookmarked ? "⭐" : "☆"}
+                    <m.span
+                      animate={saved.bookmarked ? { scale: [1, 1.3, 1] } : { scale: 1 }}
+                      transition={{ duration: 0.3 }}
+                      className="flex items-center"
+                    >
+                      {saved.bookmarked ? (
+                        <Star size={16} fill="currentColor" />
+                      ) : (
+                        <Star size={16} />
+                      )}
+                    </m.span>
                   </button>
 
                   {/* Delete */}

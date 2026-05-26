@@ -1,6 +1,6 @@
 "use client";
 
-import { ChevronDown, Lightbulb, PenSquare, Send } from "lucide-react";
+import { Check, CheckCircle, ChevronDown, Lightbulb, PenSquare, Send } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { WritingCategory } from "@/lib/writing-practice/types";
 import { CATEGORY_LABELS, MIN_WORDS } from "@/lib/writing-practice/types";
@@ -203,13 +203,20 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
               />
             </div>
             {/* Word count label */}
-            <span className={`text-xs font-bold whitespace-nowrap ${textColorClass}`}>
-              {wordCount}/{minWords} từ
+            <span
+              className={`text-xs font-bold whitespace-nowrap flex items-center gap-1 ${textColorClass}`}
+            >
+              <span>
+                {wordCount}/{minWords} từ
+              </span>
               {wordCount < minWords && (
                 <span className="text-[10px] text-text-muted font-normal"> (tối thiểu)</span>
               )}
               {wordCount >= minWords && wordCount < minWords * 1.5 && (
-                <span className="text-[10px] text-success font-normal"> ✓ đủ</span>
+                <span className="text-[10px] text-success font-normal flex items-center gap-0.5">
+                  <Check className="h-3 w-3 shrink-0" />
+                  <span>đủ</span>
+                </span>
               )}
               {wordCount >= minWords * 1.5 && (
                 <span className="text-[10px] text-warning font-normal"> (dài)</span>
@@ -222,11 +229,12 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
         <div className="mt-3 flex items-center justify-between">
           {/* Autosave indicator (AC #4) */}
           <span
-            className={`text-[11px] text-text-muted transition-opacity duration-300 ${
+            className={`text-[11px] text-text-muted transition-opacity duration-300 flex items-center gap-1 ${
               draftSaved ? "opacity-100" : "opacity-0"
             }`}
           >
-            ✓ Bản nháp đã lưu
+            <CheckCircle className="h-3.5 w-3.5 text-success shrink-0 animate-pulse" />
+            <span>Bản nháp đã lưu</span>
           </span>
           <button
             className="flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-text-on-accent border-2 border-border shadow-(--shadow-sm) hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all disabled:opacity-40 cursor-pointer"

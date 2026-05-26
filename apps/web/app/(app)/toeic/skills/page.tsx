@@ -1,10 +1,11 @@
 "use client";
 
-import { BookOpen, Headphones, HelpCircle, Loader2, Mic, PenTool } from "lucide-react";
+import { BookOpen, Headphones, HelpCircle, Loader2, Mic, PenTool, Target } from "lucide-react";
 import { motion } from "motion/react";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { PageHeader } from "@/components/shared/PageHeader";
 
 const ListeningTab = dynamic(
   () => import("./_components/ListeningTab").then((m) => m.ListeningTab),
@@ -90,7 +91,14 @@ export default function ToeicSkillsPage() {
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden">
       <div className="px-4 pt-5 shrink-0">
-        <div className="max-w-4xl mx-auto"></div>
+        <div className="max-w-4xl mx-auto">
+          <PageHeader
+            title="Luyện thi TOEIC"
+            subtitle="Luyện tập các kỹ năng Listening, Reading, Speaking và Writing theo chuẩn đề thi"
+            icon={<Target className="h-6 w-6" />}
+            boxed
+          />
+        </div>
       </div>
 
       {/* Pill Tabs Row */}

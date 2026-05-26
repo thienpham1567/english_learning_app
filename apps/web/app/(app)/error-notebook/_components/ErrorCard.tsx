@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle, FileText, XCircle } from "lucide-react";
 import * as m from "motion/react-client";
 import type { ErrorEntry } from "../_types/types";
 import { MODULE_ICONS, MODULE_LABELS } from "../_types/types";
@@ -38,8 +38,10 @@ export function ErrorCard({ error, onClick, index = 0 }: ErrorCardProps) {
           </span>
         )}
         <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-accent/8 text-accent">
-          {MODULE_ICONS[error.sourceModule] ?? "📄"}{" "}
-          {MODULE_LABELS[error.sourceModule] ?? error.sourceModule}
+          {(() => {
+            const Icon = MODULE_ICONS[error.sourceModule] || FileText;
+            return <Icon className="h-3 w-3" />;
+          })()} {MODULE_LABELS[error.sourceModule] ?? error.sourceModule}
         </span>
         {error.grammarTopic && (
           <span className="text-[11px] font-semibold text-text-muted px-1.5 py-px rounded bg-surface-alt">

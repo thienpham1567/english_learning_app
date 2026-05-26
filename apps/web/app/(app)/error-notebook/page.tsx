@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, Clock } from "lucide-react";
+import { AlertTriangle, BarChart2, Brain, ClipboardList, Clock, FlaskConical } from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useEffect, useState } from "react";
 import { api } from "@/lib/api-client";
@@ -10,11 +10,15 @@ import { OverviewTab } from "./_components/OverviewTab";
 import { ReviewTab } from "./_components/ReviewTab";
 import type { ErrorEntry, ErrorNotebookTab } from "./_types/types";
 
-const TABS: { key: ErrorNotebookTab; label: string; icon: string }[] = [
-  { key: "overview", label: "Tổng quan", icon: "📊" },
-  { key: "review", label: "Ôn tập", icon: "🧠" },
-  { key: "list", label: "Danh sách", icon: "📋" },
-  { key: "analysis", label: "Phân tích", icon: "🔬" },
+const TABS: {
+  key: ErrorNotebookTab;
+  label: string;
+  icon: React.ComponentType<{ size?: number; className?: string }>;
+}[] = [
+  { key: "overview", label: "Tổng quan", icon: BarChart2 },
+  { key: "review", label: "Ôn tập", icon: Brain },
+  { key: "list", label: "Danh sách", icon: ClipboardList },
+  { key: "analysis", label: "Phân tích", icon: FlaskConical },
 ];
 
 export default function ErrorNotebookPage() {
@@ -72,7 +76,13 @@ export default function ErrorNotebookPage() {
                 : "border-b-transparent bg-transparent text-text-secondary font-semibold hover:text-ink"
             }`}
           >
-            <span className="text-[15px]">{t.icon}</span>
+            <m.span
+              className="text-[15px] flex items-center justify-center"
+              animate={tab === t.key ? { scale: 1.1, rotate: [0, -5, 5, 0] } : { scale: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <t.icon size={16} />
+            </m.span>
             {t.label}
             {/* Due badge on Review tab */}
             {t.key === "review" && dueCount > 0 && (

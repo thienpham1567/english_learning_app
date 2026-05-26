@@ -229,10 +229,11 @@ export function DictionaryTab() {
           </div>
         ) : savedWords.length === 0 ? (
           <div
-            className="text-center text-text-muted text-sm"
+            className="text-center text-text-muted text-sm flex items-center justify-center gap-1.5"
             style={{ padding: "24px 16px", borderRadius: 14, border: "1px dashed var(--border)" }}
           >
-            Chưa có từ nào được lưu. Tra từ và nhấn ⭐ để lưu!
+            Chưa có từ nào được lưu. Tra từ và nhấn{" "}
+            <Star size={14} className="inline text-accent" fill="currentColor" /> để lưu!
           </div>
         ) : (
           <div

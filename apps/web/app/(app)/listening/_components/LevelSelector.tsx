@@ -1,6 +1,7 @@
 "use client";
 
-import { Check, ClipboardList, Loader2, Pencil, Target, Volume2 } from "lucide-react";
+import { Check, ClipboardList, Loader2, Pencil, Star, Target, Volume2 } from "lucide-react";
+import { motion } from "motion/react";
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import type { CefrLevel, ExerciseType } from "@/lib/listening/types";
@@ -89,8 +90,11 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
               >
                 {/* Recommended badge */}
                 {recommendedLevel === l && (
-                  <span
-                    className="absolute rounded-full text-[9px] font-extrabold"
+                  <motion.span
+                    initial={{ scale: 0.9 }}
+                    animate={{ scale: [0.9, 1.05, 0.9] }}
+                    transition={{ repeat: Infinity, duration: 2 }}
+                    className="absolute rounded-full text-[9px] font-extrabold flex items-center gap-1"
                     style={{
                       top: -8,
                       right: -8,
@@ -100,8 +104,9 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                       boxShadow: "var(--shadow-sm)",
                     }}
                   >
-                    ★ Đề xuất
-                  </span>
+                    <Star className="h-2.5 w-2.5 fill-current text-[var(--text-on-accent)] shrink-0" />
+                    <span>Đề xuất</span>
+                  </motion.span>
                 )}
                 <div
                   className="text-xl font-black font-mono leading-none"

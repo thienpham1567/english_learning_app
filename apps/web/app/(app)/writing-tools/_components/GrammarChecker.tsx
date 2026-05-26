@@ -12,6 +12,7 @@ import {
   Loader2,
   Zap,
 } from "lucide-react";
+import { motion } from "motion/react";
 import { useCallback, useMemo, useState } from "react";
 import { api } from "@/lib/api-client";
 import type { GrammarCheckResponse, GrammarError } from "@/lib/writing-tools/schema";
@@ -529,19 +530,19 @@ export function GrammarChecker() {
                     label: "Ngữ pháp",
                     value: result.stats.grammar,
                     color: "var(--error)",
-                    icon: "✗",
+                    icon: <Bug size={14} />,
                   },
                   {
                     label: "Chính tả",
                     value: result.stats.spelling,
                     color: "var(--warning, #e8a838)",
-                    icon: "!",
+                    icon: <AlertTriangle size={14} />,
                   },
                   {
                     label: "Phong cách",
                     value: result.stats.style,
                     color: "var(--info, #5b8def)",
-                    icon: "~",
+                    icon: <Lightbulb size={14} />,
                   },
                 ].map((s) => (
                   <div
@@ -549,16 +550,17 @@ export function GrammarChecker() {
                     className="flex-1 flex items-center gap-3 bg-(--surface)"
                     style={{ padding: "18px 18px" }}
                   >
-                    <span
-                      className="text-[11px] font-black leading-none"
+                    <motion.span
+                      className="flex items-center"
                       style={{
                         color: s.value > 0 ? s.color : "var(--text-muted)",
-                        opacity: 0.6,
-                        fontFamily: "monospace",
+                        opacity: 0.8,
                       }}
+                      animate={s.value > 0 ? { scale: [1, 1.15, 1] } : { scale: 1 }}
+                      transition={{ duration: 0.3 }}
                     >
                       {s.icon}
-                    </span>
+                    </motion.span>
                     <div>
                       <div
                         className="text-3xl font-extrabold leading-none font-display"

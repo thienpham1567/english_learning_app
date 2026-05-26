@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, CheckCircle, Clock, Database } from "lucide-react";
+import { AlertCircle, CheckCircle, Clock, Database, FileText } from "lucide-react";
 import * as m from "motion/react-client";
 import { useMemo } from "react";
 import type { ErrorEntry } from "../_types/types";
@@ -154,7 +154,12 @@ export function OverviewTab({
                   transition={{ delay: i * 0.05 }}
                   className="flex items-center gap-2.5"
                 >
-                  <span className="text-base w-7 text-center">{MODULE_ICONS[mod] ?? "📄"}</span>
+                  <span className="text-base w-7 text-center flex items-center justify-center">
+                    {(() => {
+                      const Icon = MODULE_ICONS[mod] || FileText;
+                      return <Icon className="h-4 w-4 text-accent" />;
+                    })()}
+                  </span>
                   <span className="text-[13px] font-semibold text-text-primary w-[90px] shrink-0">
                     {MODULE_LABELS[mod] ?? mod}
                   </span>

@@ -36,9 +36,8 @@
   --radius-2xl: var(--radius-2xl);
 }
 
-@variant dark
-(
-[data-theme="dark"] &);
+/* biome-ignore format: tailwind custom variant */
+@variant dark ([data-theme="dark"] &);
 
 :root {
   /* ══════════════════════════════════════════════

@@ -6,7 +6,7 @@ import {
 } from "@repo/database";
 import { Card, Empty, Tag } from "antd";
 import { and, asc, eq, inArray } from "drizzle-orm";
-import { Mic } from "lucide-react";
+import { AlertTriangle, Check, Mic } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -47,7 +47,12 @@ function PronunciationSection({ metrics }: { metrics: PronMetrics }) {
         style={{ gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))" }}
       >
         <div>
-          Pace: <strong>{metrics.wpm} WPM</strong> {wpmOk ? "✓" : "⚠"}
+          Pace: <strong>{metrics.wpm} WPM</strong>{" "}
+          {wpmOk ? (
+            <Check size={14} className="inline text-(--success) ml-0.5" />
+          ) : (
+            <AlertTriangle size={14} className="inline text-(--warning) ml-0.5" />
+          )}
         </div>
         <div>
           Filler: <strong>{metrics.fillerCount}</strong>

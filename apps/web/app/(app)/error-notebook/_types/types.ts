@@ -1,3 +1,18 @@
+import {
+  AlertTriangle,
+  BookOpen,
+  CheckCircle,
+  ClipboardList,
+  FileText,
+  Flame,
+  Headphones,
+  PenTool,
+  Search,
+  Target,
+  Trophy,
+  Zap,
+} from "lucide-react";
+
 /* ── Shared types for Error Notebook ── */
 
 /** Deep AI explanation cached in DB */
@@ -93,17 +108,20 @@ export const MODULE_LABELS: Record<string, string> = {
 };
 
 /** Module icon mapping */
-export const MODULE_ICONS: Record<string, string> = {
-  "grammar-quiz": "📝",
-  "grammar-lessons": "📖",
-  "mock-test": "🎯",
-  "daily-challenge": "⚡",
-  listening: "🎧",
-  "toeic-practice": "📋",
-  "toeic-mock-test": "🏆",
-  "toeic-diagnostic": "🔍",
-  "toeic-drill": "💪",
-  "writing-practice": "✍️",
+export const MODULE_ICONS: Record<
+  string,
+  React.ComponentType<{ className?: string; size?: number }>
+> = {
+  "grammar-quiz": FileText,
+  "grammar-lessons": BookOpen,
+  "mock-test": Target,
+  "daily-challenge": Zap,
+  listening: Headphones,
+  "toeic-practice": ClipboardList,
+  "toeic-mock-test": Trophy,
+  "toeic-diagnostic": Search,
+  "toeic-drill": Flame,
+  "writing-practice": PenTool,
 };
 
 /** Filter state */
@@ -121,11 +139,15 @@ export const INITIAL_FILTERS: ErrorFilters = {
   search: "",
 };
 
-export const FILTER_RESOLVED_OPTIONS = [
-  { value: "false", label: "Chưa nắm", icon: "⚠️" },
-  { value: "true", label: "Đã hiểu", icon: "✅" },
-  { value: "", label: "Tất cả", icon: "📋" },
-] as const;
+export const FILTER_RESOLVED_OPTIONS: {
+  value: string;
+  label: string;
+  icon: React.ComponentType<{ className?: string; size?: number }>;
+}[] = [
+  { value: "false", label: "Chưa nắm", icon: AlertTriangle },
+  { value: "true", label: "Đã hiểu", icon: CheckCircle },
+  { value: "", label: "Tất cả", icon: ClipboardList },
+];
 
 export const MODULE_FILTER_OPTIONS = [
   { value: "", label: "Tất cả" },

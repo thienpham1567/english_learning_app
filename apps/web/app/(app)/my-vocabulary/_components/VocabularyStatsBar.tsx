@@ -1,5 +1,6 @@
 "use client";
 
+import { Star } from "lucide-react";
 import * as m from "motion/react-client";
 
 const LEVEL_COLORS: Record<string, string> = {
@@ -114,9 +115,12 @@ export function VocabularyStatsBar({ entries }: Props) {
               textTransform: "uppercase",
               letterSpacing: "0.1em",
               color: "var(--accent)",
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 4,
             }}
           >
-            Từ đã lưu ⭐
+            Từ đã lưu <Star size={10} fill="currentColor" />
           </span>
         </m.div>
       </div>

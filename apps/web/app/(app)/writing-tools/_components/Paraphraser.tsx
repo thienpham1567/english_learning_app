@@ -1,7 +1,17 @@
 "use client";
 
 import { diffWords } from "diff";
-import { ArrowLeftRight, Check, ChevronDown, ChevronRight, Copy, Loader2, Zap } from "lucide-react";
+import {
+  ArrowLeftRight,
+  Check,
+  ChevronDown,
+  ChevronRight,
+  ClipboardList,
+  Copy,
+  Loader2,
+  Zap,
+} from "lucide-react";
+import { motion } from "motion/react";
 import { useCallback, useMemo, useState } from "react";
 import { api } from "@/lib/api-client";
 import type { ParaphraseMode, ParaphraseResponse } from "@/lib/writing-tools/schema";
@@ -153,7 +163,16 @@ function ChangesPanel({ changes }: { changes: ParaphraseResponse["changes"] }) {
         className="w-full flex items-center justify-between border-none bg-transparent cursor-pointer text-text-secondary text-[13px] font-medium"
         style={{ padding: "10px 14px" }}
       >
-        <span>📋 {changes.length} thay đổi từ vựng</span>
+        <span className="flex items-center gap-1.5">
+          <motion.span
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.2 }}
+          >
+            <ClipboardList size={16} className="text-accent" />
+          </motion.span>
+          {changes.length} thay đổi từ vựng
+        </span>
         <span className="text-[10px]">{expanded ? <ChevronDown /> : <ChevronRight />}</span>
       </button>
 

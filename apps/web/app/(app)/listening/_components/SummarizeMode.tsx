@@ -265,8 +265,15 @@ export default function SummarizeMode({ examMode }: Props) {
               />
               {/* Word count indicator */}
               <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold" style={{ color: wcColor }}>
-                  {wc} từ {wc < 30 ? "(cần ít nhất 30)" : wc > 400 ? "(quá dài, tối đa 400)" : "✓"}
+                <span className="font-semibold flex items-center gap-1" style={{ color: wcColor }}>
+                  {wc} từ{" "}
+                  {wc < 30 ? (
+                    "(cần ít nhất 30)"
+                  ) : wc > 400 ? (
+                    "(quá dài, tối đa 400)"
+                  ) : (
+                    <CircleCheckBig size={14} className="inline text-emerald-500" />
+                  )}
                 </span>
                 <button
                   onClick={submitSummary}

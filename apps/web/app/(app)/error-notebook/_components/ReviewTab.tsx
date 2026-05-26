@@ -1,6 +1,14 @@
 "use client";
 
-import { CheckCircle, Lightbulb, Loader2, RefreshCw, Trophy, XCircle } from "lucide-react";
+import {
+  CheckCircle,
+  FileText,
+  Lightbulb,
+  Loader2,
+  RefreshCw,
+  Trophy,
+  XCircle,
+} from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { useCallback, useEffect, useState } from "react";
@@ -127,7 +135,9 @@ export function ReviewTab() {
           🧠 Ôn tập: {srs.currentIndex + 1} / {srs.queue.length}
         </span>
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold text-(--success)">✓ {srs.correct}</span>
+          <span className="text-xs font-bold text-(--success) flex items-center gap-1">
+            <CheckCircle className="h-3.5 w-3.5" /> {srs.correct}
+          </span>
           <span className="text-xs font-bold text-text-muted">/ {srs.reviewed}</span>
         </div>
       </div>
@@ -146,7 +156,12 @@ export function ReviewTab() {
         >
           {/* Card header */}
           <div className="flex items-center gap-2 px-5 py-3 bg-surface-alt border-b-2 border-border">
-            <span className="text-base">{MODULE_ICONS[error.sourceModule] ?? "📄"}</span>
+            <span className="text-base flex items-center">
+              {(() => {
+                const Icon = MODULE_ICONS[error.sourceModule] || FileText;
+                return <Icon className="h-4 w-4 text-accent" />;
+              })()}
+            </span>
             <span className="text-xs font-bold text-text-secondary">
               {MODULE_LABELS[error.sourceModule] ?? error.sourceModule}
             </span>

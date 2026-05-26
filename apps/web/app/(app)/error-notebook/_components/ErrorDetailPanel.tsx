@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, CheckCircle, X, XCircle } from "lucide-react";
+import { AlertTriangle, CheckCircle, FileText, X, XCircle } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { useCallback } from "react";
@@ -59,8 +59,10 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
                   </span>
                 )}
                 <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-text-secondary">
-                  {MODULE_ICONS[error.sourceModule] ?? "📄"}{" "}
-                  {MODULE_LABELS[error.sourceModule] ?? error.sourceModule}
+                  {(() => {
+                    const Icon = MODULE_ICONS[error.sourceModule] || FileText;
+                    return <Icon className="h-3 w-3" />;
+                  })()} {MODULE_LABELS[error.sourceModule] ?? error.sourceModule}
                 </span>
               </div>
               <button

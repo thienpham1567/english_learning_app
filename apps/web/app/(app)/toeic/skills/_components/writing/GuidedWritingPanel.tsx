@@ -2,7 +2,9 @@
 
 import {
   BookOpen,
+  Check,
   CheckCircle,
+  ClipboardList,
   Lightbulb,
   Link as LinkIcon,
   Loader2,
@@ -11,6 +13,7 @@ import {
   RefreshCw,
   Send,
   Target,
+  X,
 } from "lucide-react";
 import { useCallback, useRef, useState } from "react";
 import { useExamMode } from "@/components/shared/ExamModeProvider";
@@ -111,7 +114,11 @@ function CircularProgress({
           cx={size / 2}
           cy={size / 2}
           r={radius}
-          style={{ stroke: color, strokeDasharray: circumference, strokeDashoffset }}
+          style={{
+            stroke: color,
+            strokeDasharray: circumference,
+            strokeDashoffset,
+          }}
           strokeWidth={strokeWidth}
           strokeLinecap="round"
           fill="transparent"
@@ -360,7 +367,8 @@ export function GuidedWritingPanel() {
             {/* Outline */}
             <div className="p-4.5 rounded-2xl bg-surface border-2 border-border">
               <p className="text-xs text-text-primary m-0 mb-2.5 font-bold flex items-center gap-1.5">
-                📋 Dàn ý gợi ý
+                <ClipboardList className="h-4 w-4 text-accent" />
+                <span>Dàn ý gợi ý</span>
               </p>
               <ol className="m-0 pl-4.5 text-xs text-text-secondary leading-relaxed list-decimal flex flex-col gap-1">
                 {guided.outline.map((item, i) => (
@@ -426,7 +434,7 @@ export function GuidedWritingPanel() {
               onChange={(e) => setEssayText(e.target.value)}
               placeholder="Viết bài viết của bạn ở đây. Click vào từ vựng bên phải để chèn..."
               disabled={state === "scoring"}
-              className="w-full min-h-[280px] p-4 rounded-2xl border-2 border-border bg-surface text-ink text-sm leading-relaxed resize-y focus:outline-none focus:ring-1 focus:ring-accent/30 font-body disabled:opacity-60"
+              className="w-full min-h-70 p-4 rounded-2xl border-2 border-border bg-surface text-ink text-sm leading-relaxed resize-y focus:outline-none focus:ring-1 focus:ring-accent/30 font-body disabled:opacity-60"
             />
           </div>
 
@@ -519,13 +527,18 @@ export function GuidedWritingPanel() {
                 return (
                   <span
                     key={i}
-                    className={`px-2.5 py-0.5 rounded-md text-[9px] font-extrabold tracking-wide uppercase border ${
+                    className={`px-2.5 py-0.5 rounded-md text-[9px] font-extrabold tracking-wide uppercase border inline-flex items-center gap-1 ${
                       isUsed
                         ? "bg-success-bg border-success/20 text-success"
                         : "bg-bg-deep border-border/20 text-text-muted"
                     }`}
                   >
-                    {isUsed ? "✓" : "✗"} {v.term}
+                    {isUsed ? (
+                      <Check className="h-3 w-3 shrink-0" />
+                    ) : (
+                      <X className="h-3 w-3 shrink-0" />
+                    )}
+                    <span>{v.term}</span>
                   </span>
                 );
               })}

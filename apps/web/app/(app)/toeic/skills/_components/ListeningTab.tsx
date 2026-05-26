@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, BarChart2, Trophy } from "lucide-react";
+import { AlertTriangle, BarChart2, ClipboardList, Headphones, Trophy } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
 import { AudioPlayer } from "@/app/(app)/listening/_components/AudioPlayer";
@@ -64,22 +64,32 @@ export function ListeningTab() {
       {/* Mode toggle */}
       <div className="flex gap-2.5 py-2 pb-4 flex-wrap">
         {[
-          { key: "free" as const, label: "🎧 Luyện nghe tự do" },
-          { key: "parts" as const, label: "📋 TOEIC Parts 1–4" },
-        ].map((m) => (
-          <button
-            key={m.key}
-            type="button"
-            onClick={() => setMode(m.key)}
-            className={`px-4 py-2 rounded-lg text-xs font-black border-2 border-border cursor-pointer transition-all duration-100 ${
-              mode === m.key
-                ? "bg-accent text-ink shadow-(--shadow-sm) -translate-y-0.5"
-                : "bg-surface text-text-secondary hover:bg-surface-hover"
-            }`}
-          >
-            {m.label}
-          </button>
-        ))}
+          { key: "free" as const, label: "Luyện nghe tự do", icon: Headphones },
+          { key: "parts" as const, label: "TOEIC Parts 1–4", icon: ClipboardList },
+        ].map((m) => {
+          const Icon = m.icon;
+          return (
+            <button
+              key={m.key}
+              type="button"
+              onClick={() => setMode(m.key)}
+              className={`px-4 py-2 rounded-lg text-xs font-black border-2 border-border cursor-pointer transition-all duration-100 flex items-center gap-1.5 ${
+                mode === m.key
+                  ? "bg-accent text-ink shadow-(--shadow-sm) -translate-y-0.5"
+                  : "bg-surface text-text-secondary hover:bg-surface-hover"
+              }`}
+            >
+              <motion.span
+                animate={mode === m.key ? { scale: [1, 1.15, 1] } : { scale: 1 }}
+                transition={{ duration: 0.3 }}
+                className="flex items-center"
+              >
+                <Icon size={14} />
+              </motion.span>
+              {m.label}
+            </button>
+          );
+        })}
       </div>
 
       {/* TOEIC Parts overview */}

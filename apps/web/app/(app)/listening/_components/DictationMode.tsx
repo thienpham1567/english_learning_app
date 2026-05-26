@@ -2,6 +2,7 @@
 
 import { Progress, Tag } from "antd";
 import {
+  Check,
   ChevronRight,
   CircleCheckBig,
   Info,
@@ -10,6 +11,7 @@ import {
   RefreshCw,
   XCircle,
 } from "lucide-react";
+import { motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AudioPlayer } from "@/app/(app)/listening/_components/AudioPlayer";
 import { useSentenceAudio } from "@/hooks/useSentenceAudio";
@@ -313,7 +315,7 @@ export default function DictationMode({ examMode }: Props) {
           <button
             onClick={checkAnswer}
             disabled={!typedText.trim()}
-            className="border-none text-[15px] font-semibold"
+            className="border-none text-[15px] font-semibold flex items-center justify-center gap-1.5"
             style={{
               padding: "12px 24px",
               borderRadius: 10,
@@ -322,7 +324,14 @@ export default function DictationMode({ examMode }: Props) {
               cursor: typedText.trim() ? "pointer" : "not-allowed",
             }}
           >
-            Kiểm tra ✓
+            Kiểm tra{" "}
+            <motion.span
+              animate={typedText.trim() ? { scale: [1, 1.15, 1] } : { scale: 1 }}
+              transition={{ duration: 0.3 }}
+              className="flex items-center"
+            >
+              <Check size={16} />
+            </motion.span>
           </button>
         </div>
       )}

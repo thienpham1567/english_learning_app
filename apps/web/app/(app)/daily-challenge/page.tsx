@@ -17,6 +17,7 @@ import { ChallengeResults } from "@/app/(app)/daily-challenge/_components/Challe
 import { CompletedState } from "@/app/(app)/daily-challenge/_components/CompletedState";
 import { EXERCISE_TYPE_LABELS } from "@/app/(app)/daily-challenge/_components/constants";
 import { ExerciseCard } from "@/app/(app)/daily-challenge/_components/ExerciseCard";
+import { PageHeader } from "@/components/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { useBonusChallenge } from "@/hooks/useBonusChallenge";
 import { useDailyChallenge } from "@/hooks/useDailyChallenge";
@@ -256,7 +257,14 @@ export default function DailyChallengePage() {
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden">
       {/* ── Module Header ── */}
       <div className="px-4 pt-5 shrink-0">
-        <div className="max-w-2xl mx-auto"></div>
+        <div className="max-w-2xl mx-auto">
+          <PageHeader
+            title="Thử thách hàng ngày"
+            subtitle="Hoàn thành thử thách từ vựng, ngữ pháp và phát âm hôm nay để tăng streak"
+            icon={<Flame className="h-6 w-6 text-orange-500 fill-current animate-pulse" />}
+            boxed
+          />
+        </div>
       </div>
 
       {/* ── Content Area ── */}
