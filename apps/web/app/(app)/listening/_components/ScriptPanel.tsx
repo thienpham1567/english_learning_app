@@ -2,12 +2,13 @@
 
 import { useState, useCallback } from "react";
 import {
-  EyeOutlined,
-  EyeInvisibleOutlined,
-  WarningOutlined,
-  FileTextOutlined,
-  BulbOutlined,
-} from "@ant-design/icons";
+  AlertTriangle,
+  Eye,
+  EyeOff,
+  FileText,
+  Lightbulb,
+} from "lucide-react";
+
 type ScriptRevealLevel = "hidden" | "keywords" | "full";
 
 type Props = {
@@ -94,9 +95,9 @@ export function ScriptPanel({
 
   const buttonIcon =
     revealLevel === "hidden" ? (
-      <EyeOutlined />
+      <Eye />
     ) : (
-      <EyeInvisibleOutlined />
+      <EyeOff />
     );
 
   return (
@@ -166,7 +167,7 @@ export function ScriptPanel({
               fontWeight: 600,
             }}
           >
-            <WarningOutlined /> Xem script sẽ giảm 30% XP cho bài này
+            <AlertTriangle /> Xem script sẽ giảm 30% XP cho bài này
           </div>
           <div style={{ fontSize: 12, color: "var(--text-secondary)" }}>
             Bạn vẫn muốn xem script?
@@ -237,7 +238,7 @@ export function ScriptPanel({
               letterSpacing: "0.1em",
             }}
           >
-            <FileTextOutlined /> Script
+            <FileText /> Script
             {revealLevel === "keywords" && (
               <span
                 style={{
@@ -272,7 +273,7 @@ export function ScriptPanel({
                 fontStyle: "normal",
               }}
             >
-              <BulbOutlined style={{ marginRight: 6 }} />
+              <Lightbulb style={{ marginRight: 6 }} />
               Vào trang Từ điển để tra nghĩa chi tiết
             </div>
           )}

@@ -1,7 +1,7 @@
 "use client";
 
 import { Component, type ErrorInfo, type ReactNode } from "react";
-import { ReloadOutlined, WarningOutlined } from "@ant-design/icons";
+import { AlertTriangle, RefreshCw } from "lucide-react";
 
 interface Props {
   children: ReactNode;
@@ -56,7 +56,7 @@ export class ErrorBoundary extends Component<Props, State> {
               marginBottom: 16,
             }}
           >
-            <WarningOutlined style={{ fontSize: 24, color: "var(--error)" }} />
+            <AlertTriangle style={{ fontSize: 24, color: "var(--error)" }} />
           </div>
           <h3
             style={{
@@ -100,7 +100,7 @@ export class ErrorBoundary extends Component<Props, State> {
               gap: 8,
             }}
           >
-            <ReloadOutlined /> Tải lại
+            <RefreshCw /> Tải lại
           </button>
         </div>
       );

@@ -1,9 +1,10 @@
 "use client";
 
 import { Flex, Typography } from "antd";
-import { FireOutlined, TrophyOutlined, LockOutlined } from "@ant-design/icons";
+
 import type { Badge } from "@/lib/daily-challenge/types";
 import * as m from "motion/react-client";
+import { Flame, Lock, Trophy } from "lucide-react";
 
 const { Text } = Typography;
 
@@ -12,8 +13,8 @@ function BadgeIcon({ name, unlocked }: { name: string; unlocked: boolean }) {
     fontSize: 18,
     color: unlocked ? "var(--xp)" : "var(--text-muted)",
   };
-  if (name === "TrophyOutlined") return <TrophyOutlined style={iconStyle} />;
-  return <FireOutlined style={iconStyle} />;
+  if (name === "Trophy") return <Trophy style={iconStyle} />;
+  return <Flame style={iconStyle} />;
 }
 
 type Props = { badges: Badge[] };
@@ -30,7 +31,7 @@ export function BadgeGallery({ badges }: Props) {
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 16 }}>
-        <TrophyOutlined style={{ fontSize: 13, color: "var(--accent)" }} />
+        <Trophy style={{ fontSize: 13, color: "var(--accent)" }} />
         <span
           style={{
             fontSize: 11,
@@ -131,7 +132,7 @@ export function BadgeGallery({ badges }: Props) {
                     opacity: 0.5,
                   }}
                 >
-                  <LockOutlined />
+                  <Lock />
                 </div>
               )}
             </m.div>

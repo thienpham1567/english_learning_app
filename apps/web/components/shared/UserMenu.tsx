@@ -1,12 +1,12 @@
 "use client";
 
-import { LogoutOutlined, DownOutlined } from "@ant-design/icons";
 import { Avatar, Dropdown, Typography } from "antd";
 import type { MenuProps } from "antd";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import type { AuthUser } from "@/components/shared/AppShell";
 import * as m from "motion/react-client";
+import { ChevronDown, LogOut } from "lucide-react";
 
 const { Text } = Typography;
 
@@ -21,7 +21,7 @@ export function UserMenu({ user }: { user: AuthUser }) {
   const items: MenuProps["items"] = [
     {
       key: "sign-out",
-      icon: <LogoutOutlined />,
+      icon: <LogOut />,
       label: "Đăng xuất",
       onClick: handleSignOut,
     },
@@ -71,7 +71,7 @@ export function UserMenu({ user }: { user: AuthUser }) {
         <Text strong style={{ fontSize: 13, color: "var(--ink)" }}>
           {user.name}
         </Text>
-        <DownOutlined style={{ fontSize: 10, color: "var(--text-muted)", marginLeft: 2 }} />
+        <ChevronDown style={{ fontSize: 10, color: "var(--text-muted)", marginLeft: 2 }} />
       </m.button>
     </Dropdown>
   );

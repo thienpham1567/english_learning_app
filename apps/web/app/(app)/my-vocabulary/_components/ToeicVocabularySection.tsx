@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { DownOutlined, LinkOutlined } from "@ant-design/icons";
+import { ChevronDown, Link as LinkIcon } from "lucide-react";;
 
 type ToeicCategory = {
   id: string;
@@ -227,7 +227,7 @@ export function ToeicVocabularySection({ className }: Props) {
                 <span className="text-lg">{cat.emoji}</span>
                 <span className="flex-1 text-sm font-semibold text-(--ink)">{cat.label}</span>
                 <span className="text-[11px] text-(--text-muted)">{cat.words.length} từ</span>
-                <DownOutlined
+                <ChevronDown
                   style={{
                     fontSize: 14,
                     flexShrink: 0,
@@ -250,7 +250,7 @@ export function ToeicVocabularySection({ className }: Props) {
                         className="group flex items-center gap-1 rounded-md border border-(--border) bg-(--bg-deep) px-2.5 py-1 text-[13px] text-(--ink) transition hover:border-(--accent) hover:bg-(--accent)/5 hover:text-(--accent)"
                       >
                         {word}
-                        <LinkOutlined
+                        <LinkIcon
                           style={{
                             fontSize: 10,
                             flexShrink: 0,

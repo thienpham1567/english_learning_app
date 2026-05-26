@@ -1,12 +1,7 @@
 "use client";
 import { useState } from "react";
 import { Skeleton, Progress, Flex, Button, Result } from "antd";
-import {
-  BookOutlined,
-  ReloadOutlined,
-  ThunderboltOutlined,
-  ClockCircleOutlined,
-} from "@ant-design/icons";
+
 import * as m from "motion/react-client";
 
 import { useFlashcardSession } from "@/hooks/useFlashcardSession";
@@ -15,6 +10,7 @@ import { SessionProgress } from "@/app/(app)/flashcards/_components/SessionProgr
 import { SessionSummary } from "@/app/(app)/flashcards/_components/SessionSummary";
 import { EmptyState } from "@/app/(app)/flashcards/_components/EmptyState";
 import { AIFlashcardMode } from "@/app/(app)/flashcards/_components/AIFlashcardMode";
+import { BookOpen, Clock, RefreshCw, Zap } from "lucide-react";
 
 type TabKey = "srs" | "ai";
 
@@ -116,8 +112,8 @@ export function FlashcardSession() {
               }}
             >
               {([
-                { key: "ai" as TabKey, label: "AI Tạo mới", icon: <ThunderboltOutlined /> },
-                { key: "srs" as TabKey, label: "Ôn tập SRS", icon: <ClockCircleOutlined /> },
+                { key: "ai" as TabKey, label: "AI Tạo mới", icon: <Zap /> },
+                { key: "srs" as TabKey, label: "Ôn tập SRS", icon: <Clock /> },
               ]).map((tab) => (
                 <m.button
                   key={tab.key}
@@ -172,7 +168,7 @@ export function FlashcardSession() {
                     title="Không thể tải thẻ ôn tập"
                     subTitle="Kiểm tra kết nối mạng và thử lại."
                     extra={
-                      <Button type="primary" icon={<ReloadOutlined />} onClick={restart}>
+                      <Button type="primary" icon={<RefreshCw />} onClick={restart}>
                         Thử lại
                       </Button>
                     }

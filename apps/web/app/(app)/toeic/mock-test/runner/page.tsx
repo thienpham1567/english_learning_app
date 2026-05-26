@@ -3,10 +3,11 @@
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Button, Tag, Modal } from "antd";
-import { TrophyOutlined } from "@ant-design/icons";
+
 import { api } from "@/lib/api-client";
 import type { ToeicSessionQuestion } from "@/hooks/useToeicSession";
 import { QuestionRunner } from "../../practice/_components/QuestionRunner";
+import { Trophy } from "lucide-react";
 
 const FULL_LISTEN_MIN = 45;
 const FULL_READ_MIN = 75;

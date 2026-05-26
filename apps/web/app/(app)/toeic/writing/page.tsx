@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { Card, Tag, Empty } from "antd";
-import { FormOutlined } from "@ant-design/icons";
+
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { toeicWritingSession, toeicWritingPrompt } from "@repo/database";
 import { and, desc, eq, isNotNull, sql } from "drizzle-orm";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
+import { ClipboardList } from "lucide-react";
 
 export default async function ToeicWritingPage() {
 	await requireToeicBaseline();
@@ -50,7 +51,7 @@ export default async function ToeicWritingPage() {
 					<Link href="/toeic/writing/runner" style={{ textDecoration: "none" }}>
 						<Card hoverable>
 							<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-								<FormOutlined style={{ fontSize: 24, color: "var(--accent)" }} />
+								<ClipboardList style={{ fontSize: 24, color: "var(--accent)" }} />
 								<strong style={{ fontSize: 18, color: "var(--ink)" }}>Bắt đầu Writing test</strong>
 							</div>
 							<div style={{ color: "var(--text-muted)", marginTop: 6 }}>

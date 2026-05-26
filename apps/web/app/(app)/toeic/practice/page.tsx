@@ -1,6 +1,7 @@
-import { TrophyOutlined } from "@ant-design/icons";
+
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
 import { PracticeRunner } from "./_components/PracticeRunner";
+import { Trophy } from "lucide-react";
 
 export default async function PracticePage() {
 	await requireToeicBaseline();

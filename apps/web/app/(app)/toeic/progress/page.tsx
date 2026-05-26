@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { Card, Tag, Empty, Progress } from "antd";
-import { LineChartOutlined, AlertOutlined } from "@ant-design/icons";
+
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { userSkillState, toeicAttempt, learningEvent, errorLog } from "@repo/database";
@@ -10,6 +10,7 @@ import { TOEIC_SKILLS, getSkillLabel, type ToeicSkill } from "@repo/contracts";
 import { computePredictedScore, bandLabel } from "@/lib/toeic/predict";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
 import { summarizeErrorPatterns } from "@repo/modules";
+import { AlertTriangle, TrendingUp } from "lucide-react";
 
 export default async function ToeicProgressPage() {
 	await requireToeicBaseline();
@@ -205,7 +206,7 @@ export default async function ToeicProgressPage() {
 				<Card
 					title={
 						<span>
-							<AlertOutlined style={{ color: "var(--error)" }} /> Pattern lỗi gần đây
+							<AlertTriangle style={{ color: "var(--error)" }} /> Pattern lỗi gần đây
 						</span>
 					}
 					size="small"

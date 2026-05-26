@@ -2,16 +2,17 @@
 
 import { useState, useCallback } from "react";
 import { Tag, Card, Typography } from "antd";
-import {
-  ApartmentOutlined,
-  LoadingOutlined,
-  SoundOutlined,
-  StarFilled,
-  BulbOutlined,
-  AimOutlined,
-} from "@ant-design/icons";
+
 import * as m from "motion/react-client";
 import { api } from "@/lib/api-client";
+import {
+  Lightbulb,
+  Loader2,
+  Network,
+  Star,
+  Target,
+  Volume2,
+} from "lucide-react";
 
 const { Text } = Typography;
 
@@ -88,7 +89,7 @@ export function WordFamilyExplorer({ word }: { word: string }) {
           transition: "all 0.2s",
         }}
       >
-        <ApartmentOutlined style={{ fontSize: 12 }} />
+        <Network size={12} />
         Word Family Explorer
       </button>
     );
@@ -97,7 +98,7 @@ export function WordFamilyExplorer({ word }: { word: string }) {
   if (loading) {
     return (
       <div style={{ marginTop: 8, textAlign: "center", padding: "12px 0" }}>
-        <LoadingOutlined spin style={{ fontSize: 16, color: "var(--accent)" }} />
+        <Loader2 className="animate-spin text-[var(--accent)]" size={16} />
         <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 4 }}>
           Đang phân tích word family...
         </div>
@@ -136,7 +137,7 @@ export function WordFamilyExplorer({ word }: { word: string }) {
           letterSpacing: ".08em",
         }}
       >
-        <ApartmentOutlined />
+        <Network />
         Word Family: {data.rootWord}
         <span style={{ marginLeft: "auto", fontSize: 10, color: "var(--text-muted)" }}>
           {data.family.length} forms
@@ -168,7 +169,7 @@ export function WordFamilyExplorer({ word }: { word: string }) {
                   styles={{ body: { padding: "10px 12px" } }}
                 >
                   <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4, flexWrap: "wrap" }}>
-                    <Text strong style={{ fontSize: 14, color: "var(--ink)" }}>
+                    <Text strong className="text-[var(--ink)]" style={{ fontSize: 14 }}>
                       {form.word}
                     </Text>
                     <Tag
@@ -178,7 +179,7 @@ export function WordFamilyExplorer({ word }: { word: string }) {
                       {form.partOfSpeech}
                     </Tag>
                     <span style={{ fontSize: 10, color: freqInfo.color, fontWeight: 600 }}>
-                      <StarFilled style={{ fontSize: 8, marginRight: 2 }} />
+                      <Star style={{ fontSize: 8, marginRight: 2 }} />
                       {freqInfo.label}
                     </span>
                     {form.pronunciation && (
@@ -225,12 +226,12 @@ export function WordFamilyExplorer({ word }: { word: string }) {
             >
               {data.tip && (
                 <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: "0 0 4px", lineHeight: 1.5 }}>
-                  <BulbOutlined style={{ marginRight: 4 }} />{data.tip}
+                  <Lightbulb style={{ marginRight: 4 }} />{data.tip}
                 </p>
               )}
               {data.toeicNote && (
                 <p style={{ fontSize: 11, color: "var(--text-muted)", margin: 0, lineHeight: 1.5 }}>
-                  <AimOutlined style={{ marginRight: 4 }} />{data.toeicNote}
+                  <Target style={{ marginRight: 4 }} />{data.toeicNote}
                 </p>
               )}
             </div>

@@ -10,9 +10,9 @@ import {
   CheckCircle,
   PenTool,
   Target,
-  Link,
+  Link as LinkIcon,
   PenSquare,
-} from "lucide-react";
+} from "lucide-react";;
 
 import { api } from "@/lib/api-client";
 import { useExamMode } from "@/components/shared/ExamModeProvider";
@@ -475,7 +475,7 @@ export function GuidedWritingPanel() {
           {/* Criteria feedback */}
           {([
             { key: "taskResponse", label: <><PenTool className="h-4 w-4" /> Task Response</> },
-            { key: "coherence", label: <><Link className="h-4 w-4" /> Coherence &amp; Cohesion</> },
+            { key: "coherence", label: <><LinkIcon className="h-4 w-4" /> Coherence &amp; Cohesion</> },
             { key: "lexical", label: <><BookOpen className="h-4 w-4" /> Lexical Resource</> },
             { key: "grammar", label: <><PenSquare className="h-4 w-4" /> Grammar</> },
           ] as const).map((c) => {

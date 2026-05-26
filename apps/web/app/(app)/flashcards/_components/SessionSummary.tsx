@@ -3,23 +3,24 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Card, Flex, Space, Typography, Button } from "antd";
-import {
-  CheckCircleFilled,
-  WarningOutlined,
-  ReloadOutlined,
-  FireOutlined,
-  SmileOutlined,
-  BarChartOutlined,
-  LikeOutlined,
-  MehOutlined,
-  FrownOutlined,
-  TrophyOutlined,
-  RightOutlined,
-} from "@ant-design/icons";
+
 import * as m from "motion/react-client";
 
 import { CelebrationOverlay, StreakFire } from "@/components/shared";
 import { useDashboard } from "@/hooks/useDashboard";
+import {
+  AlertTriangle,
+  BarChart3,
+  CheckCircle,
+  ChevronRight,
+  Flame,
+  Frown,
+  Meh,
+  RefreshCw,
+  Smile,
+  ThumbsUp,
+  Trophy,
+} from "lucide-react";
 
 const { Title, Text } = Typography;
 
@@ -35,10 +36,10 @@ type Props = {
 };
 
 const DISTRIBUTION_ITEMS = [
-  { key: "easy", label: "Dễ", icon: <LikeOutlined />, color: "var(--success)" },
-  { key: "good", label: "Ổn", icon: <SmileOutlined />, color: "var(--accent)" },
-  { key: "hard", label: "Khó", icon: <MehOutlined />, color: "var(--warning)" },
-  { key: "again", label: "Quên", icon: <FrownOutlined />, color: "var(--error)" },
+  { key: "easy", label: "Dễ", icon: <ThumbsUp />, color: "var(--success)" },
+  { key: "good", label: "Ổn", icon: <Smile />, color: "var(--accent)" },
+  { key: "hard", label: "Khó", icon: <Meh />, color: "var(--warning)" },
+  { key: "again", label: "Quên", icon: <Frown />, color: "var(--error)" },
 ];
 
 function useSummaryContext() {
@@ -74,7 +75,7 @@ export function SessionSummary({
         onComplete={() => setShowCelebration(false)}
       >
         <Title level={3} style={{ color: "var(--text-on-accent)", margin: 0, textShadow: "0 2px 8px rgba(0,0,0,0.3)" }}>
-          <TrophyOutlined /> Bạn đã ôn xong!
+          <Trophy /> Bạn đã ôn xong!
         </Title>
       </CelebrationOverlay>
 
@@ -159,7 +160,7 @@ export function SessionSummary({
             }}
           >
             <span style={{ fontSize: 13, fontWeight: 800, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: 6, marginBottom: 16 }}>
-              <BarChartOutlined style={{ color: "var(--accent)" }} />
+              <BarChart3 style={{ color: "var(--accent)" }} />
               Phân bố mức độ ghi nhớ
             </span>
             <Flex gap={12}>
@@ -226,7 +227,7 @@ export function SessionSummary({
             }}
           >
             <div style={{ width: 44, height: 44, borderRadius: "50%", background: "rgba(245, 158, 11, 0.08)", display: "grid", placeItems: "center", flexShrink: 0 }}>
-              <FireOutlined style={{ fontSize: 22, color: "var(--xp)" }} />
+              <Flame style={{ fontSize: 22, color: "var(--xp)" }} />
             </div>
             <div style={{ flex: 1 }}>
               <h4 style={{ margin: 0, fontSize: 14, fontWeight: 800, color: "var(--text-primary)" }}>
@@ -236,7 +237,7 @@ export function SessionSummary({
                 Luyện tập ngay để duy trì chuỗi Streak!
               </p>
             </div>
-            <RightOutlined style={{ fontSize: 12, color: "var(--accent)" }} />
+            <ChevronRight style={{ fontSize: 12, color: "var(--accent)" }} />
           </m.button>
         )}
 
@@ -263,7 +264,7 @@ export function SessionSummary({
               marginTop: 10,
             }}
           >
-            <ReloadOutlined style={{ fontSize: 13 }} />
+            <RefreshCw size={13} />
             Bắt đầu lượt ôn tập mới
           </m.button>
         )}

@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Card, Tag, Progress, Modal } from "antd";
-import { AudioOutlined, AudioMutedOutlined } from "@ant-design/icons";
+
 import { api } from "@/lib/api-client";
+import { Mic, VolumeX } from "lucide-react";
 
 type Prompt = {
 	id: string;
@@ -236,12 +237,12 @@ export default function SpeakingRunnerPage() {
 						{phase === "prep" && `Chuẩn bị · ${sec}s`}
 						{phase === "recording" && (
 							<>
-								<AudioOutlined /> Đang ghi · {sec}s
+								<Mic /> Đang ghi · {sec}s
 							</>
 						)}
 						{phase === "uploading" && (
 							<>
-								<AudioMutedOutlined /> Đang upload + chấm…
+								<VolumeX /> Đang upload + chấm…
 							</>
 						)}
 					</Tag>

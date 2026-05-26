@@ -1,26 +1,26 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import {
-  HistoryOutlined,
-  SoundOutlined,
-  AudioOutlined,
-  EditOutlined,
-  FileTextOutlined,
-  StarFilled,
-  StarOutlined,
-  FilterOutlined,
-  RightOutlined,
-} from "@ant-design/icons";
+
 import { Drawer, Segmented, Select, Empty, Pagination, Spin } from "antd";
 import { useListeningHistory } from "@/hooks/useListeningHistory";
 import type { ListeningHistoryItem } from "@/lib/listening/types";
+import {
+  ChevronRight,
+  FileText,
+  Filter,
+  History,
+  Mic,
+  Pencil,
+  Star,
+  Volume2,
+} from "lucide-react";
 
 const MODE_ICONS: Record<string, React.ReactNode> = {
-  listening: <SoundOutlined />,
-  shadowing: <AudioOutlined />,
-  dictation: <EditOutlined />,
-  summarize: <FileTextOutlined />,
+  listening: <Volume2 />,
+  shadowing: <Mic />,
+  dictation: <Pencil />,
+  summarize: <FileText />,
 };
 
 const MODE_LABELS: Record<string, string> = {
@@ -75,7 +75,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
     <Drawer
       title={
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <HistoryOutlined style={{ color: "var(--accent)" }} />
+          <History style={{ color: "var(--accent)" }} />
           <span>Lịch sử luyện nghe</span>
         </div>
       }
@@ -100,7 +100,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 11, color: "var(--text-muted)", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em" }}>
-          <FilterOutlined /> Bộ lọc
+          <Filter /> Bộ lọc
         </div>
         <Segmented
           value={history.mode ?? "all"}
@@ -151,7 +151,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
               fontWeight: 600,
             }}
           >
-            {history.bookmarkedOnly ? <StarFilled /> : <StarOutlined />}
+            {history.bookmarkedOnly ? <Star /> : <Star />}
             Đánh dấu
           </button>
         </div>
@@ -254,7 +254,7 @@ function HistoryCard({
           flexShrink: 0,
         }}
       >
-        {MODE_ICONS[item.mode] ?? <SoundOutlined />}
+        {MODE_ICONS[item.mode] ?? <Volume2 />}
       </div>
 
       {/* Info */}
@@ -326,11 +326,11 @@ function HistoryCard({
           transition: "color 0.15s ease",
         }}
       >
-        {item.bookmarked ? <StarFilled /> : <StarOutlined />}
+        {item.bookmarked ? <Star /> : <Star />}
       </button>
 
       {onReplay && (
-        <RightOutlined style={{ fontSize: 10, color: "var(--text-muted)" }} />
+        <ChevronRight style={{ fontSize: 10, color: "var(--text-muted)" }} />
       )}
     </div>
   );

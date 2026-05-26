@@ -2,9 +2,10 @@
 
 import { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ReadOutlined } from "@ant-design/icons";
+
 import { Button, Card, Tag, Progress } from "antd";
 import { api } from "@/lib/api-client";
+import { BookOpenText } from "lucide-react";
 
 type VocabWord = {
 	id: string;

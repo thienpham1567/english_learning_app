@@ -1,14 +1,15 @@
 "use client";
 
 import { Flex, Typography, message } from "antd";
-import {
-  FileTextOutlined,
-  CopyOutlined,
-  DeleteOutlined,
-  HistoryOutlined,
-  FieldTimeOutlined,
-} from "@ant-design/icons";
+
 import * as m from "motion/react-client";
+import {
+  Copy,
+  FileText,
+  History,
+  Timer,
+  Trash2,
+} from "lucide-react";
 
 const { Text } = Typography;
 
@@ -68,23 +69,23 @@ export function TextInputPanel({
       {/* Header Actions */}
       <Flex align="center" justify="space-between">
         <Text style={{ fontSize: 14, fontWeight: 700, color: "var(--text-primary)", display: "flex", alignItems: "center", gap: 6 }}>
-          <FileTextOutlined style={{ color: "var(--accent)" }} />
+          <FileText style={{ color: "var(--accent)" }} />
           Nhập văn bản tiếng Anh
         </Text>
         <Flex gap={8} className="read-aloud-text-actions">
           <ToolButton
-            icon={<HistoryOutlined />}
+            icon={<History />}
             label={`Lịch sử (${historyCount})`}
             onClick={onToggleHistory}
             active={showHistory}
           />
           <ToolButton
-            icon={<CopyOutlined />}
+            icon={<Copy />}
             label="Dán văn bản"
             onClick={handlePaste}
           />
           <ToolButton
-            icon={<DeleteOutlined />}
+            icon={<Trash2 />}
             label="Xóa hết"
             onClick={onClear}
             danger
@@ -121,7 +122,7 @@ export function TextInputPanel({
         </Flex>
         {wordCount > 0 && (
           <Flex align="center" gap={6} style={{ background: "var(--accent-light)", padding: "4px 10px", borderRadius: 12 }}>
-            <FieldTimeOutlined style={{ fontSize: 12, color: "var(--accent)" }} />
+            <Timer style={{ fontSize: 12, color: "var(--accent)" }} />
             <Text style={{ fontSize: 12, color: "var(--accent)", fontWeight: 600 }}>
               Thời gian nghe ước tính: ~{estimatedMinutes} phút
             </Text>

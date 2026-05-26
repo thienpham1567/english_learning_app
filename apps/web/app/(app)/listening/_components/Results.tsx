@@ -1,15 +1,15 @@
 "use client";
 
-import {
-  CheckCircleFilled,
-  CloseCircleFilled,
-  TrophyOutlined,
-  ReloadOutlined,
-  FileTextOutlined,
-  BulbOutlined,
-} from "@ant-design/icons";
 import type { DialogueTurnPayload, ListeningSubmitResponse } from "@/lib/listening/types";
 import { DialogueTranscript } from "@/app/(app)/listening/_components/SpeakerLegend";
+import {
+  CheckCircle,
+  FileText,
+  Lightbulb,
+  RefreshCw,
+  Trophy,
+  XCircle,
+} from "lucide-react";
 
 type Props = {
   result: ListeningSubmitResponse;
@@ -56,7 +56,7 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
             fontWeight: 700,
           }}
         >
-          <TrophyOutlined /> +{result.xpEarned} XP
+          <Trophy /> +{result.xpEarned} XP
         </div>
         {scriptRevealed && (
           <div
@@ -96,9 +96,9 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
             >
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
                 {r.correct ? (
-                  <CheckCircleFilled style={{ color: "var(--success)", fontSize: 16 }} />
+                  <CheckCircle style={{ color: "var(--success)", fontSize: 16 }} />
                 ) : (
-                  <CloseCircleFilled style={{ color: "var(--error)", fontSize: 16 }} />
+                  <XCircle style={{ color: "var(--error)", fontSize: 16 }} />
                 )}
                 <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>
                   {i + 1}. {r.question}
@@ -123,7 +123,7 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
       {/* Transcript */}
       <div>
         <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-muted)", marginBottom: 10, textTransform: "uppercase", letterSpacing: 1 }}>
-          <FileTextOutlined style={{ marginRight: 6 }} /> Nguyên văn
+          <FileText style={{ marginRight: 6 }} /> Nguyên văn
         </div>
         <div
           style={{
@@ -164,7 +164,7 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
           transition: "all 0.2s ease",
         }}
       >
-        <ReloadOutlined /> Bài mới
+        <RefreshCw /> Bài mới
       </button>
     </div>
   );

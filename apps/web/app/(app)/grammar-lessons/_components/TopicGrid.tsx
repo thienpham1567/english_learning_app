@@ -1,28 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import {
-  CheckCircleOutlined,
-  RightOutlined,
-  ClockCircleOutlined,
-  BulbOutlined,
-  SwapOutlined,
-  SyncOutlined,
-  LinkOutlined,
-  PushpinOutlined,
-  CheckSquareOutlined,
-  FontSizeOutlined,
-  EnvironmentOutlined,
-  ApartmentOutlined,
-  PercentageOutlined,
-  FileTextOutlined,
-  UserOutlined,
-  BlockOutlined,
-  ColumnHeightOutlined,
-  FormOutlined,
-  ThunderboltOutlined,
-  StarFilled,
-} from "@ant-design/icons";
+
 import type { ReactNode } from "react";
 import { Tag, Tooltip } from "antd";
 import * as m from "motion/react-client";
@@ -35,6 +14,28 @@ import {
   type GrammarTopic,
   type GrammarTopicCategory,
 } from "@/lib/grammar-lessons/topics";
+import {
+  AlignVerticalSpaceAround,
+  ArrowLeftRight,
+  CheckSquare,
+  ChevronRight,
+  CircleCheckBig,
+  ClipboardList,
+  Clock,
+  FileText,
+  Lightbulb,
+  Link as LinkIcon,
+  MapPin,
+  Network,
+  Percent,
+  Pin,
+  RefreshCw,
+  Square,
+  Star,
+  Type,
+  User,
+  Zap,
+} from "lucide-react";;
 
 export type { GrammarTopic };
 
@@ -43,30 +44,30 @@ export type GrammarCategory = GrammarTopicCategory & {
 };
 
 const CATEGORY_ICONS: Record<string, ReactNode> = {
-  tenses: <ClockCircleOutlined />,
-  "subject-verb-agreement": <CheckSquareOutlined />,
-  "parts-of-speech": <FontSizeOutlined />,
-  modals: <BulbOutlined />,
-  prepositions: <EnvironmentOutlined />,
-  conjunctions: <ApartmentOutlined />,
-  conditionals: <SwapOutlined />,
-  comparatives: <PercentageOutlined />,
-  "gerunds-infinitives": <FileTextOutlined />,
-  passive: <SyncOutlined />,
-  pronouns: <UserOutlined />,
-  clauses: <LinkOutlined />,
-  determiners: <PushpinOutlined />,
-  "complex-sentences": <BlockOutlined />,
-  inversion: <ColumnHeightOutlined />,
-  nominalization: <FormOutlined />,
-  "advanced-structures": <ThunderboltOutlined />,
+  tenses: <Clock />,
+  "subject-verb-agreement": <CheckSquare />,
+  "parts-of-speech": <Type />,
+  modals: <Lightbulb />,
+  prepositions: <MapPin />,
+  conjunctions: <Network />,
+  conditionals: <ArrowLeftRight />,
+  comparatives: <Percent />,
+  "gerunds-infinitives": <FileText />,
+  passive: <RefreshCw />,
+  pronouns: <User />,
+  clauses: <LinkIcon />,
+  determiners: <Pin />,
+  "complex-sentences": <Square />,
+  inversion: <AlignVerticalSpaceAround />,
+  nominalization: <ClipboardList />,
+  "advanced-structures": <Zap />,
 };
 
 function buildCategories(exam?: ExamType): GrammarCategory[] {
   const source = exam ? getCategoriesForExam(exam) : GRAMMAR_TOPIC_CATEGORIES;
   return source.map((category) => ({
     ...category,
-    icon: CATEGORY_ICONS[category.id] ?? <BulbOutlined />,
+    icon: CATEGORY_ICONS[category.id] ?? <Lightbulb />,
   }));
 }
 
@@ -178,10 +179,10 @@ export function TopicGrid({
                   transform: isHovered ? "scale(1.05)" : "scale(1)",
                 }}
               >
-                {allDone ? <CheckCircleOutlined /> : cat.icon}
+                {allDone ? <CircleCheckBig /> : cat.icon}
                 {/* Completion sparkle */}
                 {allDone && (
-                  <StarFilled
+                  <Star
                     style={{
                       position: "absolute",
                       top: -3,
@@ -250,7 +251,7 @@ export function TopicGrid({
                 </div>
               </div>
 
-              <RightOutlined
+              <ChevronRight
                 style={{
                   fontSize: 11,
                   color: "var(--text-muted)",
@@ -332,7 +333,7 @@ export function TopicGrid({
                           fontWeight: 800,
                         }}
                       >
-                        {isDone ? <CheckCircleOutlined /> : topicIdx + 1}
+                        {isDone ? <CircleCheckBig /> : topicIdx + 1}
                       </span>
 
                       <span
@@ -371,7 +372,7 @@ export function TopicGrid({
                             boxShadow: "0 0 6px rgba(245, 158, 11, 0.3)",
                           }}
                         >
-                          <StarFilled style={{ marginRight: 3, fontSize: 9 }} />
+                          <Star style={{ marginRight: 3, fontSize: 9 }} />
                           GỢI Ý
                         </Tag>
                       )}
@@ -391,7 +392,7 @@ export function TopicGrid({
                         {topic.level}
                       </Tag>
 
-                      <RightOutlined
+                      <ChevronRight
                         style={{
                           fontSize: 9,
                           color: "var(--text-muted)",

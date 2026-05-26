@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { LoadingOutlined, SoundOutlined } from "@ant-design/icons";
+
 import { Tooltip } from "antd";
 import type { IpaPhoneme } from "../_data/phonemes";
 import type { TtsAccent } from "@/hooks/useTextToSpeech";
 import * as m from "motion/react-client";
+import { Loader2, Volume2 } from "lucide-react";
 
 type Props = {
   phoneme: IpaPhoneme;
@@ -201,9 +202,9 @@ export function PhonemeCard({ phoneme, accent, onSpeak, isBusy, index }: Props) 
               }}
             >
               {isBusy && accent === voiceAcc ? (
-                <LoadingOutlined spin style={{ fontSize: 9 }} />
+                <Loader2 className="animate-spin" size={9} />
               ) : (
-                <SoundOutlined style={{ fontSize: 10 }} />
+                <Volume2 size={10} />
               )}
               {voiceAcc.toUpperCase()}
             </m.button>

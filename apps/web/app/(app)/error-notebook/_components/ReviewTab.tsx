@@ -45,7 +45,7 @@ export function ReviewTab() {
   if (srs.loading) {
     return (
       <div className="py-16 text-center">
-        <Loader2 className="h-7 w-7 text-accent animate-spin mx-auto mb-3" />
+        <Loader2 className="h-7 w-7 text-accent animate-mx-auto mb-3" />
         <div className="text-sm font-semibold text-text-primary">
           Đang tải hàng đợi ôn tập...
         </div>

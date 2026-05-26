@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button, Card, Tag, Input } from "antd";
-import { CustomerServiceOutlined, PlayCircleOutlined, PauseCircleOutlined } from "@ant-design/icons";
+
 import { api } from "@/lib/api-client";
+import { Headphones, PauseCircle, PlayCircle } from "lucide-react";
 
 type Item = {
 	id: string;
@@ -91,7 +92,7 @@ export default function DictationDetailPage() {
 				<Card>
 					<div style={{ display: "flex", alignItems: "center", gap: 12 }}>
 						<Button
-							icon={playing ? <PauseCircleOutlined /> : <PlayCircleOutlined />}
+							icon={playing ? <PauseCircle /> : <PlayCircle />}
 							onClick={togglePlay}
 							size="large"
 						>

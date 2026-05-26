@@ -2,7 +2,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { Card, Tag, Empty } from "antd";
-import { AudioOutlined } from "@ant-design/icons";
+
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import {
@@ -11,6 +11,7 @@ import {
 	toeicSpeakingPrompt,
 } from "@repo/database";
 import { and, asc, eq, inArray } from "drizzle-orm";
+import { Mic } from "lucide-react";
 
 const TYPE_LABEL: Record<string, string> = {
 	q1_2_read_aloud: "Read aloud",

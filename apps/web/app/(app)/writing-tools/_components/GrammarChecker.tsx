@@ -1,27 +1,28 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
-import {
-  CheckCircleOutlined,
-  LoadingOutlined,
-  CopyOutlined,
-  CheckOutlined,
-  WarningOutlined,
-  BugOutlined,
-  BulbOutlined,
-  DownOutlined,
-  RightOutlined,
-  ThunderboltOutlined,
-} from "@ant-design/icons";
+
 import { api } from "@/lib/api-client";
 import type { GrammarCheckResponse, GrammarError } from "@/lib/writing-tools/schema";
+import {
+  AlertTriangle,
+  Bug,
+  Check,
+  ChevronDown,
+  ChevronRight,
+  CircleCheckBig,
+  Copy,
+  Lightbulb,
+  Loader2,
+  Zap,
+} from "lucide-react";
 
 const MAX_WORDS = 500;
 
 const TYPE_META: Record<string, { label: string; labelVi: string; color: string; icon: React.ReactNode }> = {
-  grammar: { label: "Grammar", labelVi: "Ngữ pháp", color: "var(--error)", icon: <BugOutlined /> },
-  spelling: { label: "Spelling", labelVi: "Chính tả", color: "var(--warning, #e8a838)", icon: <WarningOutlined /> },
-  style: { label: "Style", labelVi: "Phong cách", color: "var(--info, #5b8def)", icon: <BulbOutlined /> },
+  grammar: { label: "Grammar", labelVi: "Ngữ pháp", color: "var(--error)", icon: <Bug /> },
+  spelling: { label: "Spelling", labelVi: "Chính tả", color: "var(--warning, #e8a838)", icon: <AlertTriangle /> },
+  style: { label: "Style", labelVi: "Phong cách", color: "var(--info, #5b8def)", icon: <Lightbulb /> },
 };
 
 /* ── Example prompts for instant demo ──────────────────── */
@@ -112,7 +113,7 @@ function CopyButton({ text }: { text: string }) {
       }}
       title="Sao chép"
     >
-      {copied ? <CheckOutlined /> : <CopyOutlined />}
+      {copied ? <Check /> : <Copy />}
     </button>
   );
 }
@@ -168,14 +169,14 @@ function ErrorCard({
           <span style={{ fontSize: 13, color: "var(--text-muted)", textDecoration: "line-through" }}>
             {error.original}
           </span>
-          <span style={{ fontSize: 13, color: "var(--text-primary)" }}>→</span>
+          <span className="text-[var(--text-primary)]" style={{ fontSize: 13 }}>→</span>
           <span style={{ fontSize: 13, color: "var(--success)", fontWeight: 500 }}>
             {error.correction}
           </span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <span style={{ fontSize: 10, color: "var(--text-muted)" }}>
-            {expanded ? <DownOutlined /> : <RightOutlined />}
+          <span className="text-[var(--text-muted)]" style={{ fontSize: 10 }}>
+            {expanded ? <ChevronDown /> : <ChevronRight />}
           </span>
         </div>
       </div>
@@ -258,7 +259,7 @@ function ErrorCard({
               gap: 4,
             }}
           >
-            <CheckCircleOutlined /> Áp dụng sửa lỗi
+            <CircleCheckBig /> Áp dụng sửa lỗi
           </button>
         </div>
       )}
@@ -426,7 +427,7 @@ export function GrammarChecker() {
               marginBottom: 8,
             }}
           >
-            <ThunderboltOutlined style={{ fontSize: 10 }} />
+            <Zap size={10} />
             Thử ngay
           </span>
           <div
@@ -512,11 +513,11 @@ export function GrammarChecker() {
         >
           {loading ? (
             <>
-              <LoadingOutlined /> Đang kiểm tra...
+              <Loader2 className="animate-spin" /> Đang kiểm tra...
             </>
           ) : (
             <>
-              <CheckCircleOutlined /> Kiểm tra ngữ pháp
+              <CircleCheckBig /> Kiểm tra ngữ pháp
             </>
           )}
         </button>
@@ -538,7 +539,7 @@ export function GrammarChecker() {
               gap: 6,
             }}
           >
-            <CheckCircleOutlined /> Sửa tất cả ({totalErrors})
+            <CircleCheckBig /> Sửa tất cả ({totalErrors})
           </button>
         )}
 
@@ -611,7 +612,7 @@ export function GrammarChecker() {
                   background: "color-mix(in srgb, var(--success) 6%, var(--surface))",
                 }}
               >
-                <CheckCircleOutlined style={{ color: "var(--success)", fontSize: 20 }} />
+                <CircleCheckBig style={{ color: "var(--success)", fontSize: 20 }} />
                 <div>
                   <div
                     style={{

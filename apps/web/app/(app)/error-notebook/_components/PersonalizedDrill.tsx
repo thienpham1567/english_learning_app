@@ -106,7 +106,7 @@ export function PersonalizedDrill() {
   if (loading) {
     return (
       <div className="py-8 px-5 rounded-2xl bg-surface border border-border text-center">
-        <Loader2 className="h-7 w-7 text-accent animate-spin mx-auto mb-3" />
+        <Loader2 className="h-7 w-7 text-accent animate-mx-auto mb-3" />
         <div className="text-sm font-semibold text-text-primary">
           Đang phân tích lỗi sai...
         </div>

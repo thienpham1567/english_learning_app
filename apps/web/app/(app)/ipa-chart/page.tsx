@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import { FontSizeOutlined } from "@ant-design/icons";
+
 import { useTextToSpeech, type TtsAccent } from "@/hooks/useTextToSpeech";
 import {
   CONSONANTS,
@@ -12,6 +12,7 @@ import {
 } from "./_data/phonemes";
 import { PhonemeCard } from "./_components/PhonemeCard";
 import * as m from "motion/react-client";
+import { Type } from "lucide-react";
 
 type TabKey = "consonants" | "vowels";
 

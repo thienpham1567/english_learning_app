@@ -1,16 +1,17 @@
 "use client";
 
 import { Flex, Typography, Slider } from "antd";
-import {
-  SoundOutlined,
-  PauseCircleOutlined,
-  PlayCircleOutlined,
-  LoadingOutlined,
-  UndoOutlined,
-} from "@ant-design/icons";
+
 import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
 import { SPEED_PRESETS, type VoiceOption } from "../_data/voices";
+import {
+  Loader2,
+  PauseCircle,
+  PlayCircle,
+  Undo,
+  Volume2,
+} from "lucide-react";
 
 const { Text } = Typography;
 
@@ -140,9 +141,9 @@ export function PlaybackControls({
             }}
           >
             {loading ? (
-              <><LoadingOutlined spin /> Đang xử lý giọng nói...</>
+              <><Loader2 className="animate-spin" /> Đang xử lý giọng nói...</>
             ) : (
-              <><SoundOutlined /> Bắt đầu nghe đọc</>
+              <><Volume2 /> Bắt đầu nghe đọc</>
             )}
           </m.button>
 
@@ -174,7 +175,7 @@ export function PlaybackControls({
                     cursor: "pointer",
                   }}
                 >
-                  {playing ? <PauseCircleOutlined style={{ color: "var(--accent)" }} /> : <PlayCircleOutlined style={{ color: "var(--sage)" }} />}
+                  {playing ? <PauseCircle style={{ color: "var(--accent)" }} /> : <PlayCircle style={{ color: "var(--sage)" }} />}
                   {playing ? "Tạm dừng" : "Tiếp tục phát"}
                 </m.button>
                 <m.button
@@ -195,7 +196,7 @@ export function PlaybackControls({
                     cursor: "pointer",
                   }}
                 >
-                  <UndoOutlined />
+                  <Undo />
                 </m.button>
               </m.div>
             )}

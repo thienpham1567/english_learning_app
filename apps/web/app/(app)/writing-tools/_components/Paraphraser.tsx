@@ -2,17 +2,18 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { diffWords } from "diff";
-import {
-  LoadingOutlined,
-  CopyOutlined,
-  CheckOutlined,
-  SwapOutlined,
-  DownOutlined,
-  RightOutlined,
-  ThunderboltOutlined,
-} from "@ant-design/icons";
+
 import { api } from "@/lib/api-client";
 import type { ParaphraseResponse, ParaphraseMode } from "@/lib/writing-tools/schema";
+import {
+  ArrowLeftRight,
+  Check,
+  ChevronDown,
+  ChevronRight,
+  Copy,
+  Loader2,
+  Zap,
+} from "lucide-react";
 
 const MAX_WORDS = 500;
 
@@ -132,7 +133,7 @@ function CopyButton({ text }: { text: string }) {
       }}
       title="Sao chép"
     >
-      {copied ? <><CheckOutlined /> Đã chép</> : <><CopyOutlined /> Sao chép</>}
+      {copied ? <><Check /> Đã chép</> : <><Copy /> Sao chép</>}
     </button>
   );
 }
@@ -176,7 +177,7 @@ function ChangesPanel({
           📋 {changes.length} thay đổi từ vựng
         </span>
         <span style={{ fontSize: 10 }}>
-          {expanded ? <DownOutlined /> : <RightOutlined />}
+          {expanded ? <ChevronDown /> : <ChevronRight />}
         </span>
       </button>
 
@@ -464,7 +465,7 @@ export function Paraphraser() {
                   marginBottom: 6,
                 }}
               >
-                <ThunderboltOutlined style={{ fontSize: 10 }} />
+                <Zap size={10} />
                 Thử ngay
               </span>
               <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
@@ -561,7 +562,7 @@ export function Paraphraser() {
                   color: "var(--text-muted)",
                 }}
               >
-                <LoadingOutlined style={{ fontSize: 18 }} />
+                <Loader2 className="animate-spin" size={18} />
                 <span>Đang viết lại...</span>
               </div>
             ) : result ? (
@@ -607,17 +608,17 @@ export function Paraphraser() {
         >
           {loading ? (
             <>
-              <LoadingOutlined /> Đang xử lý...
+              <Loader2 className="animate-spin" /> Đang xử lý...
             </>
           ) : (
             <>
-              <SwapOutlined /> Viết lại
+              <ArrowLeftRight /> Viết lại
             </>
           )}
         </button>
 
         {result && (
-          <span style={{ fontSize: 12, color: "var(--text-muted)" }}>
+          <span className="text-[var(--text-muted)]" style={{ fontSize: 12 }}>
             {MODES.find((m) => m.key === mode)?.emoji}{" "}
             {MODES.find((m) => m.key === mode)?.label} · Mức thay đổi: {synonymLevel}%
           </span>

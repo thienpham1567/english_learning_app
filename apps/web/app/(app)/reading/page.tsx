@@ -1,21 +1,21 @@
 "use client";
 
-import {
-  AppstoreOutlined,
-  ArrowRightOutlined,
-  ClockCircleOutlined,
-  EnvironmentOutlined,
-  ExperimentOutlined,
-  GlobalOutlined,
-  LaptopOutlined,
-  LoadingOutlined,
-  ReadOutlined,
-  TeamOutlined,
-} from "@ant-design/icons";
 import * as m from "motion/react-client";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { api } from "@/lib/api-client";
+import {
+  ArrowRight,
+  BookOpenText,
+  Clock,
+  FlaskConical,
+  Globe,
+  Laptop,
+  LayoutGrid,
+  Loader2,
+  MapPin,
+  Users,
+} from "lucide-react";
 
 type Article = {
   id: string;
@@ -46,12 +46,12 @@ const DIFFICULTY_COLORS: Record<string, { bg: string; color: string; border: str
 };
 
 const SECTIONS = [
-  { label: "Tất cả", value: "", icon: <AppstoreOutlined /> },
-  { label: "Thế giới", value: "world", icon: <GlobalOutlined /> },
-  { label: "Khoa học", value: "science", icon: <ExperimentOutlined /> },
-  { label: "Công nghệ", value: "technology", icon: <LaptopOutlined /> },
-  { label: "Môi trường", value: "environment", icon: <EnvironmentOutlined /> },
-  { label: "Kinh doanh", value: "business", icon: <TeamOutlined /> },
+  { label: "Tất cả", value: "", icon: <LayoutGrid /> },
+  { label: "Thế giới", value: "world", icon: <Globe /> },
+  { label: "Khoa học", value: "science", icon: <FlaskConical /> },
+  { label: "Công nghệ", value: "technology", icon: <Laptop /> },
+  { label: "Môi trường", value: "environment", icon: <MapPin /> },
+  { label: "Kinh doanh", value: "business", icon: <Users /> },
 ];
 
 export default function ReadingPage() {
@@ -231,7 +231,7 @@ export default function ReadingPage() {
                 boxShadow: "var(--shadow-sm)",
               }}
             >
-              <ReadOutlined
+              <BookOpenText
                 style={{ fontSize: 36, color: "var(--text-muted)", marginBottom: 12 }}
               />
               <p
@@ -311,7 +311,7 @@ export default function ReadingPage() {
                           borderBottom: "1px solid var(--border)",
                         }}
                       >
-                        <ReadOutlined style={{ fontSize: 32 }} />
+                        <BookOpenText size={32} />
                       </div>
                     )}
 
@@ -417,7 +417,7 @@ export default function ReadingPage() {
                             fontWeight: 700,
                           }}
                         >
-                          <ClockCircleOutlined />
+                          <Clock />
                           <span>{article.readTime} phút đọc</span>
                         </div>
                       </div>

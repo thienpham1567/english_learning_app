@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Card, Progress, Tag } from "antd";
-import { AlertOutlined, BookOutlined } from "@ant-design/icons";
+import { AlertTriangle, BookOpen } from "lucide-react";
 
 type Pack = { topic: string; label: string; total: number; learned: number };
 
@@ -14,7 +14,7 @@ export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number 
 				<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
 					<div>
 						<div style={{ fontSize: 14, color: "var(--text-muted, #94a3b8)" }}>
-							<AlertOutlined /> Cần ôn hôm nay
+							<AlertTriangle /> Cần ôn hôm nay
 						</div>
 						<div style={{ fontSize: 28, fontWeight: 700 }}>{dueCount} từ</div>
 					</div>
@@ -55,7 +55,7 @@ export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number 
 						>
 							<Card hoverable size="small" style={{ height: "100%" }}>
 								<div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 16 }}>
-									<BookOutlined />
+									<BookOpen />
 									<span>{p.label}</span>
 								</div>
 								<div style={{ fontSize: 13, color: "var(--text-muted, #94a3b8)", marginTop: 6 }}>

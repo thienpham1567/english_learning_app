@@ -2,14 +2,15 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
-import {
-	EditOutlined,
-	CheckSquareOutlined,
-	SwapOutlined,
-	SoundOutlined,
-	LoadingOutlined,
-} from "@ant-design/icons";
+
 import * as m from "motion/react-client";
+import {
+  ArrowLeftRight,
+  CheckSquare,
+  Loader2,
+  Pencil,
+  Volume2,
+} from "lucide-react";
 
 const GrammarChecker = dynamic(
 	() =>
@@ -47,7 +48,7 @@ function Loader({ label }: { label: string }) {
 				fontSize: 14
 			}}
 		>
-			<LoadingOutlined style={{ fontSize: 20, color: "var(--accent)" }} />
+			<Loader2 className="animate-spin text-[var(--accent)]" size={20} />
 			<span>{label}</span>
 		</div>
 	);
@@ -61,9 +62,9 @@ const TABS: {
 	desc: string;
 	icon: React.ReactNode;
 }[] = [
-	{ value: "grammar", label: "Grammar Checker", desc: "Kiểm tra ngữ pháp", icon: <CheckSquareOutlined /> },
-	{ value: "paraphrase", label: "Paraphraser", desc: "Viết lại câu", icon: <SwapOutlined /> },
-	{ value: "tts", label: "Voice Generator", desc: "Đọc thành tiếng (Groq)", icon: <SoundOutlined /> },
+	{ value: "grammar", label: "Grammar Checker", desc: "Kiểm tra ngữ pháp", icon: <CheckSquare /> },
+	{ value: "paraphrase", label: "Paraphraser", desc: "Viết lại câu", icon: <ArrowLeftRight /> },
+	{ value: "tts", label: "Voice Generator", desc: "Đọc thành tiếng (Groq)", icon: <Volume2 /> },
 ];
 
 const GRADIENTS: Record<ToolTab, string> = {

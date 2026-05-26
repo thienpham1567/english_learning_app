@@ -52,7 +52,7 @@ const Part5Tab = dynamic(
 function TabLoader() {
   return (
     <div className="flex justify-center items-center py-16 text-slate-500 gap-2.5 font-bold text-sm">
-      <Loader2 className="h-5 w-5 animate-spin text-accent" />
+      <Loader2 className="h-5 w-5 animate-text-accent" />
       <span>Đang tải nội dung học...</span>
     </div>
   );

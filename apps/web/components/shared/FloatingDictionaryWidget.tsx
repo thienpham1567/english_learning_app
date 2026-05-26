@@ -3,13 +3,14 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { Modal } from "antd";
-import { SearchOutlined, CloseOutlined, LoadingOutlined, ArrowRightOutlined } from "@ant-design/icons";
+
 import { AppError } from "@repo/shared";
 import { api } from "@/lib/api-client";
 import { normalizeDictionaryQuery } from "@/lib/dictionary/normalize-query";
 import { DictionaryResultCard } from "@/app/(app)/dictionary/_components/DictionaryResultCard";
 import { ThesaurusSheet } from "@/app/(app)/dictionary/_components/ThesaurusSheet";
 import type { VocabularyWithNearby } from "@/lib/schemas/vocabulary";
+import { ArrowRight, Loader2, Search, X } from "lucide-react";
 
 const QUERY_PATTERN = /^[A-Za-z][A-Za-z\s'-]{0,79}$/;
 
@@ -158,7 +159,7 @@ export function FloatingDictionaryWidget() {
               transformOrigin: "bottom right",
             }}
           >
-            <SearchOutlined style={{ fontSize: 13, color: "var(--accent)", flexShrink: 0 }} />
+            <Search style={{ fontSize: 13, color: "var(--accent)", flexShrink: 0 }} />
             <input
               ref={inputRef}
               value={query}
@@ -179,7 +180,7 @@ export function FloatingDictionaryWidget() {
             />
             {isSearching ? (
               <div style={{ width: 30, height: 30, display: "grid", placeItems: "center", flexShrink: 0 }}>
-                <LoadingOutlined spin style={{ fontSize: 14, color: "var(--accent)" }} />
+                <Loader2 className="animate-spin text-[var(--accent)]" size={14} />
               </div>
             ) : (
               <button
@@ -199,7 +200,7 @@ export function FloatingDictionaryWidget() {
                 onMouseEnter={(e) => { if (query.trim()) (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.1)"; }}
                 onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)"; }}
               >
-                <ArrowRightOutlined style={{ fontSize: 11 }} />
+                <ArrowRight size={11} />
               </button>
             )}
             <button
@@ -215,7 +216,7 @@ export function FloatingDictionaryWidget() {
               onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--border)"; }}
               onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = "var(--bg-deep)"; }}
             >
-              <CloseOutlined style={{ fontSize: 9 }} />
+              <X size={9} />
             </button>
           </form>
         ) : (
@@ -295,7 +296,7 @@ export function FloatingDictionaryWidget() {
             display: "flex", alignItems: "center", justifyContent: "center",
             color: "var(--text-muted)",
           }}>
-            <CloseOutlined style={{ fontSize: 12 }} />
+            <X size={12} />
           </div>
         }
       >
@@ -314,7 +315,7 @@ export function FloatingDictionaryWidget() {
             onSubmit={(e) => { e.preventDefault(); const q = (e.currentTarget.elements.namedItem("q") as HTMLInputElement)?.value?.trim(); if (q) { setModalOpen(false); setTimeout(() => search(q), 80); } }}
             style={{ display: "flex", alignItems: "center", gap: 8, flex: 1 }}
           >
-            <SearchOutlined style={{ fontSize: 13, color: "var(--text-muted)" }} />
+            <Search size={13} className="text-[var(--text-muted)]" />
             <input
               name="q"
               defaultValue={result?.headword ?? ""}
@@ -343,7 +344,7 @@ export function FloatingDictionaryWidget() {
             onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--accent)"; (e.currentTarget as HTMLButtonElement).style.color = "var(--accent)"; }}
             onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border)"; (e.currentTarget as HTMLButtonElement).style.color = "var(--text-muted)"; }}
           >
-            Mở trang từ điển <ArrowRightOutlined style={{ fontSize: 10 }} />
+            Mở trang từ điển <ArrowRight size={10} />
           </button>
         </div>
 

@@ -2,9 +2,10 @@
 
 import { useState, useCallback } from "react";
 import { Flex, Typography, message } from "antd";
-import { LoadingOutlined } from "@ant-design/icons";
+
 import * as m from "motion/react-client";
 import { TOEIC_TOPICS, SAMPLE_TEXTS, type SampleText, type SampleLength } from "../_data/sample-passages";
+import { Loader2 } from "lucide-react";
 
 const { Text } = Typography;
 
@@ -98,7 +99,7 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
           }}
         >
           {aiLoading ? (
-            <><LoadingOutlined spin style={{ fontSize: 12 }} /> Đang tạo...</>
+            <><Loader2 className="animate-spin" size={12} /> Đang tạo...</>
           ) : (
             <>✨ Tạo bằng AI</>
           )}

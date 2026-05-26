@@ -1,20 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import {
-  CheckCircleFilled,
-  RightOutlined,
-  ClockCircleOutlined,
-  ShopOutlined,
-  EnvironmentOutlined,
-  MedicineBoxOutlined,
-  BookOutlined,
-  GlobalOutlined,
-  LaptopOutlined,
-  CheckCircleOutlined,
-} from "@ant-design/icons";
+
 import type { ReactNode } from "react";
 import * as m from "motion/react-client";
+import {
+  BookOpen,
+  CheckCircle,
+  ChevronRight,
+  CircleCheckBig,
+  Clock,
+  Globe,
+  Laptop,
+  MapPin,
+  Stethoscope,
+  Store,
+} from "lucide-react";
 
 export type StudyTopic = {
   id: string;
@@ -33,7 +34,7 @@ export type StudyCategory = {
 export const STUDY_TOPICS: StudyCategory[] = [
   {
     category: "Business & Office",
-    icon: <ShopOutlined />,
+    icon: <Store />,
     color: "var(--module-listening)",
     topics: [
       { id: "business-meetings", title: "Business Meetings", level: "B1", time: "15 min" },
@@ -43,7 +44,7 @@ export const STUDY_TOPICS: StudyCategory[] = [
   },
   {
     category: "Travel & Tourism",
-    icon: <EnvironmentOutlined />,
+    icon: <MapPin />,
     color: "var(--warning)",
     topics: [
       { id: "airport-travel", title: "Airport & Travel", level: "A2", time: "12 min" },
@@ -53,7 +54,7 @@ export const STUDY_TOPICS: StudyCategory[] = [
   },
   {
     category: "Health & Wellness",
-    icon: <MedicineBoxOutlined />,
+    icon: <Stethoscope />,
     color: "var(--error)",
     topics: [
       { id: "doctor-visit", title: "Doctor's Visit", level: "B1", time: "15 min" },
@@ -62,7 +63,7 @@ export const STUDY_TOPICS: StudyCategory[] = [
   },
   {
     category: "Education",
-    icon: <BookOutlined />,
+    icon: <BookOpen />,
     color: "var(--accent)",
     topics: [
       { id: "campus-life", title: "Campus Life", level: "B1", time: "15 min" },
@@ -71,7 +72,7 @@ export const STUDY_TOPICS: StudyCategory[] = [
   },
   {
     category: "Environment & Society",
-    icon: <GlobalOutlined />,
+    icon: <Globe />,
     color: "var(--success)",
     topics: [
       { id: "climate-change", title: "Climate Change", level: "B2", time: "20 min" },
@@ -80,7 +81,7 @@ export const STUDY_TOPICS: StudyCategory[] = [
   },
   {
     category: "Technology",
-    icon: <LaptopOutlined />,
+    icon: <Laptop />,
     color: "var(--module-reading)",
     topics: [
       { id: "artificial-intelligence", title: "Artificial Intelligence", level: "B2", time: "20 min" },
@@ -143,7 +144,7 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
                   boxShadow: `0 4px 12px ${allDone ? "rgba(16, 185, 129, 0.25)" : `${cat.color}25`}`,
                 }}
               >
-                {allDone ? <CheckCircleFilled style={{ color: "var(--text-on-accent)" }} /> : cat.icon}
+                {allDone ? <CheckCircle style={{ color: "var(--text-on-accent)" }} /> : cat.icon}
               </span>
               <div>
                 <h3
@@ -239,12 +240,12 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
                             flexShrink: 0,
                           }}
                         >
-                          <CheckCircleFilled
+                          <CheckCircle
                             style={{ fontSize: 12, color: "var(--text-on-accent)" }}
                           />
                         </span>
                       ) : (
-                        <RightOutlined
+                        <ChevronRight
                           style={{
                             color: isHovered ? cat.color : "var(--text-muted)",
                             fontSize: 10,
@@ -281,7 +282,7 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
                           fontWeight: 650,
                         }}
                       >
-                        <ClockCircleOutlined style={{ fontSize: 11 }} />
+                        <Clock size={11} />
                         {topic.time}
                       </span>
                       <span

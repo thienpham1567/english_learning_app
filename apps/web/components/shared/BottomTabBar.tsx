@@ -6,21 +6,21 @@ import { Flex, Typography, Card } from "antd";
 import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
 import {
-  AppstoreOutlined,
-  FireOutlined,
-  SyncOutlined,
-  TrophyOutlined,
-  FileTextOutlined,
-  StarOutlined,
-  ExceptionOutlined,
-  QuestionCircleOutlined,
-  AimOutlined,
-  DashboardOutlined,
-  NodeIndexOutlined,
-  MessageOutlined,
-  SoundOutlined,
-  SolutionOutlined,
-} from "@ant-design/icons";
+  FileText,
+  FileWarning,
+  Flame,
+  GitBranch,
+  GraduationCap,
+  HelpCircle,
+  LayoutDashboard,
+  LayoutGrid,
+  MessageSquare,
+  RefreshCw,
+  Star,
+  Target,
+  Trophy,
+  Volume2,
+} from "lucide-react";
 
 const { Text } = Typography;
 
@@ -37,69 +37,69 @@ const TABS: TabItem[] = [
   {
     key: "home",
     label: "Tổng quan",
-    icon: <DashboardOutlined />,
-    activeIcon: <DashboardOutlined />,
+    icon: <LayoutDashboard />,
+    activeIcon: <LayoutDashboard />,
     href: "/dashboard",
   },
   {
     key: "toeic",
     label: "TOEIC",
-    icon: <AimOutlined />,
-    activeIcon: <AimOutlined />,
+    icon: <Target />,
+    activeIcon: <Target />,
     href: "/toeic/skills",
   },
   {
     key: "exam",
     label: "Đề thi",
-    icon: <TrophyOutlined />,
-    activeIcon: <TrophyOutlined />,
+    icon: <Trophy />,
+    activeIcon: <Trophy />,
     action: "exam-hub",
   },
   {
     key: "review",
     label: "Ôn tập",
-    icon: <SyncOutlined />,
-    activeIcon: <SyncOutlined />,
+    icon: <RefreshCw />,
+    activeIcon: <RefreshCw />,
     action: "review-hub",
   },
   {
     key: "more",
     label: "Thêm",
-    icon: <AppstoreOutlined />,
-    activeIcon: <AppstoreOutlined />,
+    icon: <LayoutGrid />,
+    activeIcon: <LayoutGrid />,
     action: "more-hub",
   },
 ];
 
 const EXAM_HUB_ITEMS = [
-  { label: "Luyện đề ETS", icon: <TrophyOutlined />, href: "/toeic/practice" },
+  { label: "Luyện đề ETS", icon: <Trophy />, href: "/toeic/practice" },
   {
     label: "TOEIC Part 5",
-    icon: <QuestionCircleOutlined />,
+    icon: <HelpCircle />,
     href: "/toeic/skills?tab=part5",
   },
 ];
 
 const REVIEW_HUB_ITEMS = [
-  { label: "Sổ lỗi sai", icon: <ExceptionOutlined />, href: "/error-notebook" },
-  { label: "Ôn tập Flashcard", icon: <SyncOutlined />, href: "/flashcards" },
+  { label: "Sổ lỗi sai", icon: <FileWarning />, href: "/error-notebook" },
+  { label: "Ôn tập Flashcard", icon: <RefreshCw />, href: "/flashcards" },
 ];
 
 const MORE_HUB_ITEMS = [
   {
     label: "Thử thách hàng ngày",
-    icon: <FireOutlined />,
+    icon: <Flame />,
     href: "/daily-challenge",
   },
-  { label: "AI Chatbot", icon: <MessageOutlined />, href: "/english-chatbot" },
-  { label: "Đọc to", icon: <SoundOutlined />, href: "/read-aloud" },
+  { label: "AI Chatbot", icon: <MessageSquare />, href: "/english-chatbot" },
+  { label: "Đọc to", icon: <Volume2 />, href: "/read-aloud" },
   {
     label: "Lộ trình ngữ pháp",
-    icon: <NodeIndexOutlined />,
+    icon: <GitBranch />,
     href: "/grammar-roadmap",
   },
-  { label: "Bài học ngữ pháp", icon: <SolutionOutlined />, href: "/grammar-lessons" },
-  { label: "Từ vựng", icon: <StarOutlined />, href: "/my-vocabulary" },
+  { label: "Bài học ngữ pháp", icon: <GraduationCap />, href: "/grammar-lessons" },
+  { label: "Từ vựng", icon: <Star />, href: "/my-vocabulary" },
 ];
 
 function getActiveTab(pathname: string): string {

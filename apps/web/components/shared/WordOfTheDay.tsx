@@ -3,15 +3,16 @@ import { api } from "@/lib/api-client";
 import { useCallback, useEffect, useState } from "react";
 import { Tag, message } from "antd";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
-import {
-  SoundOutlined,
-  BookOutlined,
-  CheckCircleFilled,
-  LoadingOutlined,
-  StarFilled,
-} from "@ant-design/icons";
+
 import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
+import {
+  BookOpen,
+  CheckCircle,
+  Loader2,
+  Star,
+  Volume2,
+} from "lucide-react";
 
 type WordData = {
   query: string;
@@ -86,7 +87,7 @@ export function WordOfTheDay() {
             minHeight: 120,
           }}
         >
-          <LoadingOutlined style={{ fontSize: 20, color: "var(--accent)" }} />
+          <Loader2 className="animate-spin text-[var(--accent)]" size={20} />
         </m.div>
       ) : word ? (
         <m.div
@@ -126,7 +127,7 @@ export function WordOfTheDay() {
               transition={{ delay: 0.1 }}
               style={{ display: "flex", alignItems: "center", gap: 8 }}
             >
-              <StarFilled style={{ fontSize: 18, color: "var(--xp)" }} />
+              <Star size={18} className="text-[var(--xp)]" />
               <span style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-muted)" }}>Từ vựng hôm nay</span>
             </m.div>
             {word.level && (
@@ -161,7 +162,7 @@ export function WordOfTheDay() {
               }}
               aria-label="Phát âm"
             >
-              {isTtsLoading ? <LoadingOutlined spin style={{ fontSize: 18 }} /> : <SoundOutlined />}
+              {isTtsLoading ? <Loader2 className="animate-spin" size={18} /> : <Volume2 />}
             </m.button>
           </m.div>
 
@@ -257,11 +258,11 @@ export function WordOfTheDay() {
             }}
           >
             {saving ? (
-              <LoadingOutlined />
+              <Loader2 className="animate-spin" />
             ) : isSaved ? (
-              <CheckCircleFilled />
+              <CheckCircle />
             ) : (
-              <BookOutlined />
+              <BookOpen />
             )}
             {isSaved ? "Đã lưu vào kho từ vựng" : "Lưu vào kho từ vựng"}
           </m.button>

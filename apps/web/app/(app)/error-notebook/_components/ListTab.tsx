@@ -154,7 +154,7 @@ export function ListTab() {
         {/* Error Cards */}
         {list.loading ? (
           <div className="py-10 text-center">
-            <Loader2 className="h-6 w-6 text-accent animate-spin mx-auto mb-2" />
+            <Loader2 className="h-6 w-6 text-accent animate-mx-auto mb-2" />
             <div className="text-[13px] text-text-muted">Đang tải...</div>
           </div>
         ) : list.errors.length === 0 ? (
@@ -195,7 +195,7 @@ export function ListTab() {
                 disabled={list.loadingMore}
                 className="p-3 rounded-xl border border-border bg-surface text-text-secondary text-[13px] font-bold cursor-pointer font-body text-center disabled:opacity-50"
               >
-                {list.loadingMore ? <><Loader2 className="h-4 w-4 animate-spin inline mr-1.5" /> Đang tải...</> : "Tải thêm"}
+                {list.loadingMore ? <><Loader2 className="h-4 w-4 animate-inline mr-1.5" /> Đang tải...</> : "Tải thêm"}
               </m.button>
             )}
           </div>

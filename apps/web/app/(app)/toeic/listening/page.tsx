@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { Card, Tag } from "antd";
-import { CustomerServiceOutlined } from "@ant-design/icons";
+
 import { db } from "@repo/database";
 import { toeicQuestion, toeicDictationItem } from "@repo/database";
 import { eq, sql } from "drizzle-orm";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
+import { Headphones } from "lucide-react";
 
 export default async function ToeicListeningPage() {
 	await requireToeicBaseline();

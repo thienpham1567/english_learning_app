@@ -3,20 +3,21 @@
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import * as m from "motion/react-client";
-import {
-  SafetyCertificateOutlined,
-  CheckCircleFilled,
-  CustomerServiceOutlined,
-  ReadOutlined,
-  AudioOutlined,
-  FormOutlined,
-  ThunderboltOutlined,
-  StarFilled,
-  TrophyOutlined,
-  RiseOutlined,
-  RobotOutlined,
-} from "@ant-design/icons";
+
 import { authClient } from "@/lib/auth-client";
+import {
+  BookOpenText,
+  Bot,
+  CheckCircle,
+  ClipboardList,
+  Headphones,
+  Mic,
+  ShieldCheck,
+  Star,
+  TrendingUp,
+  Trophy,
+  Zap,
+} from "lucide-react";
 
 /* ── Shared animation variants ── */
 const fadeUp = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } };
@@ -102,12 +103,12 @@ function DashboardMockup() {
         </div>
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 4 }}>
-            <TrophyOutlined style={{ color: "#D4963A", fontSize: 14 }} />
+            <Trophy style={{ color: "#D4963A", fontSize: 14 }} />
             <span style={{ fontSize: 11, color: "#94A3B8", fontWeight: 700, letterSpacing: "0.05em", textTransform: "uppercase" }}>Mục tiêu thi</span>
           </div>
           <div style={{ fontSize: 18, fontWeight: 800, color: "#F8FAFC", fontFamily: "var(--font-display)" }}>TOEIC Target 850+</div>
           <div style={{ fontSize: 12, color: "#64748B", marginTop: 4, display: "flex", alignItems: "center", gap: 4 }}>
-            <RiseOutlined style={{ color: "#10B981" }} />
+            <TrendingUp style={{ color: "#10B981" }} />
             <span style={{ color: "#10B981", fontWeight: 600 }}>+125 Điểm</span> so với tuần trước
           </div>
         </div>
@@ -174,7 +175,7 @@ function DashboardMockup() {
           background: "rgba(192, 125, 43, 0.15)",
           display: "grid", placeItems: "center", color: "#D4963A", fontSize: 18
         }}>
-          <RobotOutlined />
+          <Bot />
         </div>
         <div>
           <div style={{ fontSize: 12, fontWeight: 700, color: "#F8FAFC" }}>AI Phản Hồi Phát Âm</div>
@@ -311,15 +312,15 @@ function SignInContent() {
         gap: 12 
       }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <CheckCircleFilled style={{ color: "var(--success)", fontSize: 13 }} />
+          <CheckCircle style={{ color: "var(--success)", fontSize: 13 }} />
           <span style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 600 }}>ETS 2024 & Kho đề cập nhật liên tục</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <ThunderboltOutlined style={{ color: "var(--accent)", fontSize: 13 }} />
+          <Zap style={{ color: "var(--accent)", fontSize: 13 }} />
           <span style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 600 }}>Phân tích sửa lỗi & gợi ý bằng AI</span>
         </div>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginTop: 4, paddingTop: 12, borderTop: "1px solid var(--border)" }}>
-          <SafetyCertificateOutlined style={{ fontSize: 13, color: "var(--text-muted)" }} />
+          <ShieldCheck style={{ fontSize: 13, color: "var(--text-muted)" }} />
           <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 500 }}>Hệ thống bảo mật & riêng tư tối đa</span>
         </div>
       </m.div>
@@ -373,7 +374,7 @@ export default function SignInPage() {
           {/* Star review bar */}
           <m.div variants={fadeUp} style={{ display: "flex", gap: 6, marginBottom: 24 }}>
             {[1, 2, 3, 4, 5].map(i => (
-              <StarFilled key={i} style={{ color: "#D4963A", fontSize: 14, opacity: 0.85 }} />
+              <Star key={i} style={{ color: "#D4963A", fontSize: 14, opacity: 0.85 }} />
             ))}
           </m.div>
           

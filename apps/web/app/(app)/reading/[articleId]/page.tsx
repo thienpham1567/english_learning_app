@@ -1,20 +1,19 @@
 "use client";
 
-import {
-  ArrowLeftOutlined,
-  BulbOutlined,
-  ClockCircleOutlined,
-  GlobalOutlined,
-  LoadingOutlined,
-  ReadOutlined,
-  SoundFilled,
-  SoundOutlined,
-} from "@ant-design/icons";
 import { Modal, Select } from "antd";
 import * as m from "motion/react-client";
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api-client";
+import {
+  ArrowLeft,
+  BookOpenText,
+  Clock,
+  Globe,
+  Lightbulb,
+  Loader2,
+  Volume2,
+} from "lucide-react";
 
 type Article = {
   id: string;
@@ -189,7 +188,7 @@ export default function ArticleReaderPage() {
           gap: 16,
         }}
       >
-        <LoadingOutlined spin style={{ fontSize: 32, color: "var(--accent)" }} />
+        <Loader2 className="animate-spin text-[var(--accent)]" size={32} />
         <span style={{ fontSize: 13.5, color: "var(--text-secondary)", fontWeight: 700 }}>
           Đang tải nội dung bài báo...
         </span>
@@ -316,7 +315,7 @@ export default function ArticleReaderPage() {
                 cursor: "pointer",
               }}
             >
-              <ArrowLeftOutlined />
+              <ArrowLeft />
               <span>Quay lại</span>
             </m.button>
 
@@ -333,7 +332,7 @@ export default function ArticleReaderPage() {
                 letterSpacing: "0.05em",
               }}
             >
-              <ReadOutlined style={{ marginRight: 6 }} /> {article.section}
+              <BookOpenText style={{ marginRight: 6 }} /> {article.section}
             </span>
           </div>
 
@@ -393,7 +392,7 @@ export default function ArticleReaderPage() {
                   fontWeight: 700,
                 }}
               >
-                <ClockCircleOutlined />
+                <Clock />
                 <span>{article.readTime} phút đọc</span>
               </div>
               <span style={{ color: "var(--border-strong)" }}>|</span>
@@ -519,9 +518,9 @@ export default function ArticleReaderPage() {
                     title="Phân tích ngữ pháp"
                   >
                     {grammarLoading.has(idx) ? (
-                      <LoadingOutlined spin style={{ fontSize: 10 }} />
+                      <Loader2 className="animate-spin" size={10} />
                     ) : (
-                      <BulbOutlined style={{ fontSize: 11.5 }} />
+                      <Lightbulb style={{ fontSize: 11.5 }} />
                     )}
                   </m.button>
 
@@ -548,11 +547,11 @@ export default function ArticleReaderPage() {
                     title="Nghe đoạn này"
                   >
                     {loadingAudioIdx === idx ? (
-                      <LoadingOutlined spin style={{ fontSize: 10 }} />
+                      <Loader2 className="animate-spin" size={10} />
                     ) : speakingIdx === idx ? (
-                      <SoundFilled style={{ fontSize: 11 }} />
+                      <Volume2 size={11} />
                     ) : (
-                      <SoundOutlined style={{ fontSize: 11 }} />
+                      <Volume2 size={11} />
                     )}
                   </m.button>
                 </div>
@@ -586,7 +585,7 @@ export default function ArticleReaderPage() {
                     gap: 8,
                   }}
                 >
-                  <BulbOutlined style={{ fontSize: 16 }} />
+                  <Lightbulb size={16} />
                   <span style={{ fontSize: 14.5, fontWeight: 900 }}>
                     Phân tích ngữ pháp của đoạn văn
                   </span>

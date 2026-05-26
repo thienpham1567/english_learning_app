@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import type { DialogueCompletionData } from "@/lib/daily-challenge/types";
-import { MessageOutlined } from "@ant-design/icons";
+
 import * as m from "motion/react-client";
+import { MessageSquare } from "lucide-react";
 
 const LABELS = ["A", "B", "C", "D"] as const;
 
@@ -55,7 +56,7 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
           color: "var(--text-secondary)",
         }}
       >
-        <MessageOutlined style={{ fontSize: 11, color: "var(--accent)" }} />
+        <MessageSquare style={{ fontSize: 11, color: "var(--accent)" }} />
         Bối cảnh: {data.context}
       </div>
 

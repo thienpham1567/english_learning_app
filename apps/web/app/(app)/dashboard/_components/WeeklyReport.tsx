@@ -92,7 +92,7 @@ export function WeeklyReport() {
     return (
       <div className="p-5 rounded-2xl bg-surface border border-border shadow-sm flex flex-col gap-4">
         <div className="flex items-center gap-2">
-          <Loader2 className="h-4 w-4 animate-spin text-accent" />
+          <Loader2 className="h-4 w-4 animate-text-accent" />
           <span className="text-xs font-bold text-slate-200">
             AI đang tổng hợp và phân tích hoạt động của bạn...
           </span>

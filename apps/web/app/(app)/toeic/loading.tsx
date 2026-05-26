@@ -1,6 +1,5 @@
 "use client";
-
-import { LoadingOutlined } from "@ant-design/icons";
+import { Loader2 } from "lucide-react";
 
 export default function ToeicLoading() {
 	return (
@@ -15,8 +14,7 @@ export default function ToeicLoading() {
 				gap: 14,
 			}}
 		>
-			<LoadingOutlined
-				style={{ fontSize: 28, color: "var(--accent)" }}
+			<Loader2 className="animate-spin text-[var(--accent)]" size={28}
 			/>
 			<span
 				style={{

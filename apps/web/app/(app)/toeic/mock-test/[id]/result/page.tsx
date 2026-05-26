@@ -2,13 +2,14 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { Alert, Card, Tag } from "antd";
-import { TrophyOutlined, WarningOutlined } from "@ant-design/icons";
+
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { toeicAttempt, toeicAnswer, toeicQuestion } from "@repo/database";
 import { and, eq, inArray } from "drizzle-orm";
 import { bandLabel } from "@/lib/toeic/predict";
 import { ReviewTabs } from "./ReviewTabs";
+import { AlertTriangle, Trophy } from "lucide-react";
 
 export default async function MockResultPage({
 	params,
@@ -79,7 +80,7 @@ export default async function MockResultPage({
 					<Alert
 						type="warning"
 						showIcon
-						icon={<WarningOutlined />}
+						icon={<AlertTriangle />}
 						message="Phát hiện hành vi bất thường trong quá trình làm bài"
 						description={
 							<div style={{ fontSize: 13 }}>

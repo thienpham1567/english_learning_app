@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { LoadingOutlined } from "@ant-design/icons";
+
 import * as m from "motion/react-client";
 
 import { api } from "@/lib/api-client";
@@ -10,6 +10,7 @@ import type { DiagnosticStatus, Phase, Question, TestResult } from "./_component
 import { WelcomeScreen } from "./_components/WelcomeScreen";
 import { TestScreen } from "./_components/TestScreen";
 import { ResultsScreen } from "./_components/ResultsScreen";
+import { Loader2 } from "lucide-react";
 
 export default function DiagnosticPage() {
   const router = useRouter();
@@ -123,9 +124,9 @@ export default function DiagnosticPage() {
         <m.div
           animate={{ rotate: 360 }}
           transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-          style={{ fontSize: 32, color: "var(--accent)" }}
+          className="text-[var(--accent)]" style={{ fontSize: 32 }}
         >
-          <LoadingOutlined />
+          <Loader2 className="animate-spin" />
         </m.div>
         <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text-secondary)" }}>
           Đang chuẩn bị bài test...
@@ -171,9 +172,9 @@ export default function DiagnosticPage() {
         <m.div
           animate={{ rotate: 360 }}
           transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-          style={{ fontSize: 32, color: "var(--accent)" }}
+          className="text-[var(--accent)]" style={{ fontSize: 32 }}
         >
-          <LoadingOutlined />
+          <Loader2 className="animate-spin" />
         </m.div>
         <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text-secondary)" }}>
           Đang phân tích kết quả bài thi thích ứng...

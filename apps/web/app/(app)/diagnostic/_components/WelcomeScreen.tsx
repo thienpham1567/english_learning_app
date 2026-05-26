@@ -1,19 +1,20 @@
 "use client";
 
 import { Card, Flex, Typography, Button, Tag } from "antd";
-import {
-  ClockCircleOutlined,
-  RightOutlined,
-  TrophyOutlined,
-  PlayCircleOutlined,
-  CalendarOutlined,
-  InfoCircleOutlined,
-  ThunderboltOutlined,
-} from "@ant-design/icons";
+
 import { CEFR_COLORS } from "@/lib/constants/cefr";
 import * as m from "motion/react-client";
 
 import type { DiagnosticStatus } from "./types";
+import {
+  Calendar,
+  ChevronRight,
+  Clock,
+  Info,
+  PlayCircle,
+  Trophy,
+  Zap,
+} from "lucide-react";
 
 const { Text } = Typography;
 
@@ -61,7 +62,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-              <InfoCircleOutlined style={{ fontSize: 13, color: "var(--accent)" }} />
+              <Info style={{ fontSize: 13, color: "var(--accent)" }} />
               <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--accent)" }}>
                 Cấu trúc bài đánh giá
               </span>
@@ -125,7 +126,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
               }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-                <TrophyOutlined style={{ fontSize: 13, color: "var(--accent)" }} />
+                <Trophy style={{ fontSize: 13, color: "var(--accent)" }} />
                 <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--accent)" }}>
                   Kết quả đánh giá gần nhất
                 </span>
@@ -239,9 +240,9 @@ export function WelcomeScreen({ status, onStart }: Props) {
                 gap: 8,
               }}
             >
-              <PlayCircleOutlined />
+              <PlayCircle />
               {status?.hasResult ? "Bắt đầu làm lại bài đánh giá" : "Bắt đầu bài đánh giá"}
-              <RightOutlined style={{ fontSize: 12 }} />
+              <ChevronRight size={12} />
             </m.button>
           ) : (
             <m.div
@@ -255,7 +256,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
                 textAlign: "center",
               }}
             >
-              <ClockCircleOutlined
+              <Clock
                 style={{
                   fontSize: 24,
                   color: "var(--text-muted)",

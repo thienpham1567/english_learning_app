@@ -2,7 +2,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { notFound } from "next/navigation";
 import { Card, Tag, Empty } from "antd";
-import { FormOutlined } from "@ant-design/icons";
+
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import {
@@ -11,6 +11,7 @@ import {
 	toeicWritingPrompt,
 } from "@repo/database";
 import { and, asc, eq, inArray } from "drizzle-orm";
+import { ClipboardList } from "lucide-react";
 
 export default async function WritingResultPage({
 	params,

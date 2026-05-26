@@ -2,13 +2,9 @@
 
 import { useState } from "react";
 import dynamic from "next/dynamic";
-import {
-  BookOutlined,
-  SearchOutlined,
-  StarFilled,
-  LoadingOutlined,
-} from "@ant-design/icons";
+
 import * as m from "motion/react-client";
+import { BookOpen, Loader2, Search, Star } from "lucide-react";
 
 const ToeicVocabTab = dynamic(
   () =>
@@ -19,7 +15,7 @@ const ToeicVocabTab = dynamic(
     ssr: false,
     loading: () => (
       <div style={{ display: "flex", justifyContent: "center", padding: 60, color: "var(--text-muted)", gap: 10 }}>
-        <LoadingOutlined style={{ fontSize: 20, color: "var(--accent)" }} />
+        <Loader2 className="animate-spin text-[var(--accent)]" size={20} />
         <span style={{ fontWeight: 700, fontSize: 14 }}>Đang tải...</span>
       </div>
     ),
@@ -35,7 +31,7 @@ const DictionaryTab = dynamic(
     ssr: false,
     loading: () => (
       <div style={{ display: "flex", justifyContent: "center", padding: 60, color: "var(--text-muted)", gap: 10 }}>
-        <LoadingOutlined style={{ fontSize: 20, color: "var(--accent)" }} />
+        <Loader2 className="animate-spin text-[var(--accent)]" size={20} />
         <span style={{ fontWeight: 700, fontSize: 14 }}>Đang tải...</span>
       </div>
     ),
@@ -45,8 +41,8 @@ const DictionaryTab = dynamic(
 type TabKey = "toeic" | "dictionary";
 
 const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
-  { key: "toeic", label: "TOEIC 600", icon: <BookOutlined /> },
-  { key: "dictionary", label: "Tra từ điển", icon: <SearchOutlined /> },
+  { key: "toeic", label: "TOEIC 600", icon: <BookOpen /> },
+  { key: "dictionary", label: "Tra từ điển", icon: <Search /> },
 ];
 
 const SUBTITLES: Record<TabKey, string> = {

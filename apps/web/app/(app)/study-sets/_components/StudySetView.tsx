@@ -2,28 +2,29 @@
 
 import { api } from "@/lib/api-client";
 import { useState, useEffect, useCallback } from "react";
-import {
-  ArrowLeftOutlined,
-  CheckCircleFilled,
-  CloseCircleFilled,
-  LoadingOutlined,
-  SoundOutlined,
-  BulbOutlined,
-  RightOutlined,
-  BookOutlined,
-  ReadOutlined,
-  EditOutlined,
-  CalculatorOutlined,
-  TrophyOutlined,
-  CheckOutlined,
-  CloseOutlined,
-  ArrowRightOutlined,
-} from "@ant-design/icons";
+
 import type { ReactNode } from "react";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
 import { Progress } from "antd";
+import {
+  ArrowLeft,
+  ArrowRight,
+  BookOpen,
+  BookOpenText,
+  Calculator,
+  Check,
+  CheckCircle,
+  ChevronRight,
+  Lightbulb,
+  Loader2,
+  Pencil,
+  Trophy,
+  Volume2,
+  X,
+  XCircle,
+} from "lucide-react";
 
 type VocabWord = { word: string; ipa: string; meaning: string; example: string; exampleVi: string };
 type GrammarData = { title: string; formula: string; explanation: string; topicExample: string; topicExampleVi: string };
@@ -40,10 +41,10 @@ type StudySetData = {
 
 type Section = "vocabulary" | "grammar" | "reading" | "exercises";
 const SECTIONS: { key: Section; label: string; icon: ReactNode }[] = [
-  { key: "vocabulary", label: "Từ vựng", icon: <BookOutlined /> },
-  { key: "grammar", label: "Ngữ pháp", icon: <CalculatorOutlined /> },
-  { key: "reading", label: "Đọc hiểu", icon: <ReadOutlined /> },
-  { key: "exercises", label: "Bài tập", icon: <EditOutlined /> },
+  { key: "vocabulary", label: "Từ vựng", icon: <BookOpen /> },
+  { key: "grammar", label: "Ngữ pháp", icon: <Calculator /> },
+  { key: "reading", label: "Đọc hiểu", icon: <BookOpenText /> },
+  { key: "exercises", label: "Bài tập", icon: <Pencil /> },
 ];
 
 interface Props {
@@ -112,7 +113,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
   if (loading) {
     return (
       <div style={{ textAlign: "center", padding: "60px 20px" }}>
-        <LoadingOutlined style={{ fontSize: 32, color: "var(--accent)", marginBottom: 12 }} />
+        <Loader2 className="animate-spin text-[var(--accent)]" size={32} />
         <p style={{ color: "var(--text-secondary)", fontSize: 13, fontWeight: 700 }}>Đang khởi tạo bài học chủ đề {topicTitle}...</p>
       </div>
     );
@@ -139,7 +140,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
   if (allDone) {
     return (
       <div style={{ textAlign: "center", padding: "40px 24px", borderRadius: "var(--radius-xl)", background: "var(--surface)", border: "1.5px solid var(--border)", boxShadow: "var(--shadow-md)" }} className="anim-fade-up">
-        <CheckCircleFilled style={{ fontSize: 48, color: "var(--success)", marginBottom: 16 }} />
+        <CheckCircle size={48} className="text-[var(--success)]" />
         <h2 style={{ fontSize: 20, fontWeight: 950, color: "var(--text-primary)", margin: "0 0 6px", fontFamily: "var(--font-display)" }}>
           Chủ đề đã hoàn thành!
         </h2>
@@ -155,7 +156,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
             color: "var(--accent)", fontSize: 14.5, fontWeight: 800, margin: "12px 0 24px",
             border: "1px solid var(--accent-muted)"
           }}>
-            <TrophyOutlined style={{ fontSize: 13 }} />
+            <Trophy size={13} />
             <span>+{xpAwarded} XP</span>
           </div>
         )}
@@ -172,7 +173,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
               fontSize: 13.5, fontWeight: 800
             }}
           >
-            <ArrowLeftOutlined /> Quay lại danh sách
+            <ArrowLeft /> Quay lại danh sách
           </m.button>
         </div>
       </div>
@@ -198,7 +199,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
           width: "fit-content"
         }}
       >
-        <ArrowLeftOutlined style={{ fontSize: 12 }} />
+        <ArrowLeft size={12} />
         <span>Quay về danh sách</span>
       </button>
 
@@ -245,7 +246,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                 transition: "color 0.2s, background 0.2s",
               }}
             >
-              {done ? <CheckCircleFilled style={{ fontSize: 13 }} /> : s.icon}
+              {done ? <CheckCircle size={13} /> : s.icon}
               <span>{s.label}</span>
             </m.button>
           );
@@ -309,7 +310,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                       padding: 0
                     }}
                   >
-                    <SoundOutlined style={{ fontSize: 12 }} />
+                    <Volume2 size={12} />
                   </m.button>
                 </div>
                 <p style={{ margin: "2px 0 6px", fontSize: 13.5, color: "var(--accent)", fontWeight: 800 }}>
@@ -350,7 +351,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
               }}
             >
               <span>Hoàn thành mục này</span>
-              <CheckCircleFilled />
+              <CheckCircle />
             </m.button>
           )}
         </div>
@@ -370,7 +371,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
             overflow: "hidden"
           }}>
             <p style={{ fontSize: 12, color: "var(--accent)", margin: "0 0 8px", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em" }}>
-              <CalculatorOutlined style={{ marginRight: 4 }} /> {data.grammar.title}
+              <Calculator style={{ marginRight: 4 }} /> {data.grammar.title}
             </p>
             <p style={{ fontSize: 20, fontWeight: 950, color: "var(--text-primary)", margin: 0, fontFamily: "var(--font-mono)", letterSpacing: "0.02em" }}>
               {data.grammar.formula}
@@ -414,7 +415,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                   padding: 0
                 }}
               >
-                <SoundOutlined style={{ fontSize: 12 }} />
+                <Volume2 size={12} />
               </m.button>
             </div>
             <p style={{ margin: "4px 0 0", fontSize: 13, color: "var(--text-secondary)", fontStyle: "italic", fontWeight: 500 }}>
@@ -445,7 +446,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
               }}
             >
               <span>Hoàn thành mục này</span>
-              <CheckCircleFilled />
+              <CheckCircle />
             </m.button>
           )}
         </div>
@@ -494,12 +495,12 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                         bg = "rgba(16, 185, 129, 0.08)";
                         border = "1.5px solid var(--success)";
                         color = "var(--success)";
-                        iconElement = <CheckOutlined style={{ marginLeft: "auto", color: "var(--success)" }} />;
+                        iconElement = <Check style={{ marginLeft: "auto", color: "var(--success)" }} />;
                       } else if (readingAnswers[qi] === oi) {
                         bg = "rgba(239, 68, 68, 0.08)";
                         border = "1.5px solid var(--error)";
                         color = "var(--error)";
-                        iconElement = <CloseOutlined style={{ marginLeft: "auto", color: "var(--error)" }} />;
+                        iconElement = <X style={{ marginLeft: "auto", color: "var(--error)" }} />;
                       } else {
                         bg = "var(--surface-alt)";
                         color = "var(--text-muted)";
@@ -554,7 +555,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                     lineHeight: 1.55
                   }}>
                     <p style={{ margin: 0, fontWeight: 700, display: "flex", alignItems: "center", gap: 4, marginBottom: 4 }}>
-                      <BulbOutlined style={{ color: "var(--warning)", fontSize: 13 }} />
+                      <Lightbulb style={{ color: "var(--warning)", fontSize: 13 }} />
                       <span>Giải thích đáp án:</span>
                     </p>
                     <p style={{ margin: 0 }}>{q.explanation}</p>
@@ -586,7 +587,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
               }}
             >
               <span>Kiểm tra kết quả</span>
-              <RightOutlined />
+              <ChevronRight />
             </m.button>
           )}
 
@@ -612,7 +613,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
               }}
             >
               <span>Hoàn thành mục này</span>
-              <CheckCircleFilled />
+              <CheckCircle />
             </m.button>
           )}
         </div>
@@ -657,12 +658,12 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                         bg = "rgba(16, 185, 129, 0.08)";
                         border = "1.5px solid var(--success)";
                         color = "var(--success)";
-                        iconElement = <CheckCircleFilled style={{ marginLeft: "auto", color: "var(--success)" }} />;
+                        iconElement = <CheckCircle style={{ marginLeft: "auto", color: "var(--success)" }} />;
                       } else if (isSel) {
                         bg = "rgba(239, 68, 68, 0.08)";
                         border = "1.5px solid var(--error)";
                         color = "var(--error)";
-                        iconElement = <CloseCircleFilled style={{ marginLeft: "auto", color: "var(--error)" }} />;
+                        iconElement = <XCircle style={{ marginLeft: "auto", color: "var(--error)" }} />;
                       } else {
                         bg = "var(--surface-alt)";
                         color = "var(--text-muted)";
@@ -721,7 +722,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                       }}
                     >
                       <p style={{ margin: 0, fontWeight: 700, display: "flex", alignItems: "center", gap: 4, marginBottom: 4 }}>
-                        <BulbOutlined style={{ color: "var(--warning)", fontSize: 13 }} />
+                        <Lightbulb style={{ color: "var(--warning)", fontSize: 13 }} />
                         <span>Giải thích đáp án:</span>
                       </p>
                       <p style={{ margin: 0 }}>{ex.explanation}</p>
@@ -762,7 +763,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
               }}
             >
               <span>{exIdx < data.exercises.length - 1 ? "Câu hỏi tiếp theo" : "Hoàn thành và tính điểm"}</span>
-              {exIdx < data.exercises.length - 1 ? <ArrowRightOutlined /> : <CheckCircleFilled />}
+              {exIdx < data.exercises.length - 1 ? <ArrowRight /> : <CheckCircle />}
             </m.button>
           )}
         </div>

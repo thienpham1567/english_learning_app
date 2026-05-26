@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Card, Tag, Input, Modal, Progress, message } from "antd";
-import { FormOutlined } from "@ant-design/icons";
+
 import { api } from "@/lib/api-client";
+import { ClipboardList } from "lucide-react";
 
 type Prompt = {
 	id: string;

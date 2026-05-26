@@ -4,24 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
-import {
-  BookOutlined,
-  CheckCircleFilled,
-  LockOutlined,
-  RocketOutlined,
-  StarFilled,
-  ThunderboltOutlined,
-  ArrowRightOutlined,
-  TrophyOutlined,
-  NodeIndexOutlined,
-  FireOutlined,
-  BulbOutlined,
-  AimOutlined,
-  GlobalOutlined,
-  ToolOutlined,
-  SafetyCertificateOutlined,
-  QuestionCircleOutlined,
-} from "@ant-design/icons";
+
 import { Progress, Tooltip } from "antd";
 import { api } from "@/lib/api-client";
 import {
@@ -30,6 +13,24 @@ import {
   type GrammarTopic,
 } from "@/lib/grammar-lessons/topics";
 import type { GrammarLessonProgressItem } from "@/lib/grammar-lessons/schema";
+import {
+  ArrowRight,
+  BookOpen,
+  CheckCircle,
+  Flame,
+  GitBranch,
+  Globe,
+  HelpCircle,
+  Lightbulb,
+  Lock,
+  Rocket,
+  ShieldCheck,
+  Star,
+  Target,
+  Trophy,
+  Wrench,
+  Zap,
+} from "lucide-react";
 
 // ── Progress response from API ──
 type ProgressResponse = {
@@ -80,19 +81,19 @@ const PHASE_CONFIG = [
 
 // Category icon mapping
 const CATEGORY_ICONS: Record<string, React.ReactNode> = {
-  tenses: <NodeIndexOutlined />,
-  "subject-verb-agreement": <SafetyCertificateOutlined />,
-  "parts-of-speech": <ToolOutlined />,
-  determiners: <GlobalOutlined />,
-  pronouns: <QuestionCircleOutlined />,
-  modals: <ThunderboltOutlined />,
-  prepositions: <AimOutlined />,
-  conjunctions: <BulbOutlined />,
-  conditionals: <FireOutlined />,
-  comparatives: <StarFilled />,
-  "gerunds-infinitives": <RocketOutlined />,
-  passive: <BookOutlined />,
-  clauses: <TrophyOutlined />,
+  tenses: <GitBranch />,
+  "subject-verb-agreement": <ShieldCheck />,
+  "parts-of-speech": <Wrench />,
+  determiners: <Globe />,
+  pronouns: <HelpCircle />,
+  modals: <Zap />,
+  prepositions: <Target />,
+  conjunctions: <Lightbulb />,
+  conditionals: <Flame />,
+  comparatives: <Star />,
+  "gerunds-infinitives": <Rocket />,
+  passive: <BookOpen />,
+  clauses: <Trophy />,
 };
 
 // ── Main Page ────────────────────────────────────────────
@@ -169,7 +170,6 @@ export default function GrammarRoadmapPage() {
     <div style={{ height: "100%", overflowY: "auto", padding: "var(--space-6)" }} className="anim-fade-up">
       <div style={{ maxWidth: 900, margin: "0 auto" }}>
 
-
         {/* ── Overall Progress Card ── */}
         <m.div
           initial={{ opacity: 0, y: 16 }}
@@ -212,9 +212,9 @@ export default function GrammarRoadmapPage() {
                 Tiến độ tổng quan
               </div>
               <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 12 }}>
-                <StatPill icon={<CheckCircleFilled style={{ color: "var(--success)" }} />} label="Đã hoàn thành" value={`${totalCompleted}/${totalTopics}`} />
-                <StatPill icon={<ThunderboltOutlined style={{ color: "var(--accent)" }} />} label="Đang học" value={String(totalInProgress)} />
-                <StatPill icon={<FireOutlined style={{ color: "var(--error)" }} />} label="Giai đoạn" value={`${currentPhase}/3`} />
+                <StatPill icon={<CheckCircle style={{ color: "var(--success)" }} />} label="Đã hoàn thành" value={`${totalCompleted}/${totalTopics}`} />
+                <StatPill icon={<Zap style={{ color: "var(--accent)" }} />} label="Đang học" value={String(totalInProgress)} />
+                <StatPill icon={<Flame style={{ color: "var(--error)" }} />} label="Giai đoạn" value={`${currentPhase}/3`} />
               </div>
 
               {/* Phase progress mini-bars */}
@@ -260,7 +260,7 @@ export default function GrammarRoadmapPage() {
                     minWidth: 200,
                   }}
                 >
-                  <RocketOutlined style={{ fontSize: 18 }} />
+                  <Rocket size={18} />
                   <div>
                     <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", opacity: 0.8 }}>
                       Gợi ý tiếp theo
@@ -269,7 +269,7 @@ export default function GrammarRoadmapPage() {
                       {recommendedTopic.title}
                     </div>
                   </div>
-                  <ArrowRightOutlined style={{ marginLeft: "auto", fontSize: 14 }} />
+                  <ArrowRight style={{ marginLeft: "auto", fontSize: 14 }} />
                 </m.div>
               </Link>
             )}
@@ -326,7 +326,7 @@ export default function GrammarRoadmapPage() {
                     flexShrink: 0,
                     fontSize: 22,
                   }}>
-                    {isPastPhase ? <CheckCircleFilled style={{ color: "#fff" }} /> : phase.emoji}
+                    {isPastPhase ? <CheckCircle style={{ color: "#fff" }} /> : phase.emoji}
                   </div>
 
                   {/* Phase info */}
@@ -372,7 +372,7 @@ export default function GrammarRoadmapPage() {
                     animate={{ rotate: isExpanded ? 90 : 0 }}
                     style={{ fontSize: 14, color: "var(--text-muted)", flexShrink: 0 }}
                   >
-                    <ArrowRightOutlined />
+                    <ArrowRight />
                   </m.div>
                 </m.button>
 
@@ -397,7 +397,7 @@ export default function GrammarRoadmapPage() {
                           alignItems: "flex-start",
                           gap: 10,
                         }}>
-                          <BulbOutlined style={{ color: phase.color, fontSize: 16, marginTop: 2 }} />
+                          <Lightbulb style={{ color: phase.color, fontSize: 16, marginTop: 2 }} />
                           <div>
                             <div style={{ fontSize: 11, fontWeight: 800, color: phase.color, textTransform: "uppercase", letterSpacing: "0.05em" }}>
                               Kinh nghiệm 900 điểm
@@ -443,7 +443,7 @@ export default function GrammarRoadmapPage() {
           }}
         >
           <div style={{ fontSize: 16, fontWeight: 900, color: "var(--ink)", fontFamily: "var(--font-display)", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
-            <TrophyOutlined style={{ color: "var(--xp)" }} />
+            <Trophy style={{ color: "var(--xp)" }} />
             Chiến lược từ người đạt 900 L&R
           </div>
           <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 12 }}>
@@ -526,7 +526,7 @@ function CategoryCard({
 }) {
   const completed = category.topics.filter((t) => completedSet.has(t.id)).length;
   const pct = category.topics.length > 0 ? Math.round((completed / category.topics.length) * 100) : 0;
-  const icon = CATEGORY_ICONS[category.id] ?? <BookOutlined />;
+  const icon = CATEGORY_ICONS[category.id] ?? <BookOpen />;
 
   return (
     <m.div
@@ -619,9 +619,9 @@ function CategoryCard({
                 }}
               >
                 {isDone ? (
-                  <CheckCircleFilled style={{ fontSize: 11, color: "var(--success)" }} />
+                  <CheckCircle style={{ fontSize: 11, color: "var(--success)" }} />
                 ) : isInProg ? (
-                  <ThunderboltOutlined style={{ fontSize: 11, color: "var(--accent)" }} />
+                  <Zap style={{ fontSize: 11, color: "var(--accent)" }} />
                 ) : (
                   <span style={{
                     fontSize: 8.5,

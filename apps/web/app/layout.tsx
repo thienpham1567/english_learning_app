@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Source_Sans_3, Fraunces, JetBrains_Mono } from "next/font/google";
+import { Source_Sans_3, Space_Grotesk, JetBrains_Mono } from "next/font/google";
+import { cn } from "@/lib/utils";
 import "./globals.css";
 
 const metadataBase = new URL(
@@ -12,7 +13,7 @@ const sourceSans = Source_Sans_3({
   variable: "--font-body",
 });
 
-const fraunces = Fraunces({
+const spaceGrotesk = Space_Grotesk({
   subsets: ["latin", "vietnamese"],
   display: "swap",
   variable: "--font-display",
@@ -23,8 +24,6 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
   variable: "--font-mono",
 });
-
-import { AntdRegistry } from "@ant-design/nextjs-registry";
 
 export const metadata: Metadata = {
   metadataBase,
@@ -50,18 +49,22 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={`${sourceSans.variable} ${fraunces.variable} ${jetbrainsMono.variable}`}
+      className={cn(
+        sourceSans.variable,
+        spaceGrotesk.variable,
+        jetbrainsMono.variable,
+      )}
       suppressHydrationWarning
     >
       <head>
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#6366f1" />
+        <meta name="theme-color" content="#C07D2B" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
       <body>
-        <AntdRegistry>{children}</AntdRegistry>
+        {children}
       </body>
     </html>
   );

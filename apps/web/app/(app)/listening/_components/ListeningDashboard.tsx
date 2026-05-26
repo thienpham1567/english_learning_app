@@ -1,18 +1,19 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import {
-  FireOutlined,
-  BarChartOutlined,
-  ThunderboltOutlined,
-  RiseOutlined,
-  SoundOutlined,
-  HistoryOutlined,
-  TrophyOutlined,
-} from "@ant-design/icons";
+
 import { Spin } from "antd";
 import { api } from "@/lib/api-client";
 import type { ListeningStats, ListeningHistoryItem } from "@/lib/listening/types";
+import {
+  BarChart3,
+  Flame,
+  History,
+  TrendingUp,
+  Trophy,
+  Volume2,
+  Zap,
+} from "lucide-react";
 
 type Props = {
   onStartExercise: () => void;
@@ -91,21 +92,21 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
         }}
       >
         <StatCard
-          icon={<FireOutlined />}
+          icon={<Flame />}
           iconColor="var(--error)"
           label="Streak"
           value={`${stats.currentStreak}`}
           suffix="ngày"
         />
         <StatCard
-          icon={<BarChartOutlined />}
+          icon={<BarChart3 />}
           iconColor="var(--accent)"
           label="Điểm TB"
           value={`${stats.avgScore}%`}
           valueColor={scoreColor(stats.avgScore)}
         />
         <StatCard
-          icon={<ThunderboltOutlined />}
+          icon={<Zap />}
           iconColor="var(--xp)"
           label="Tuần này"
           value={`${stats.sessionsThisWeek}`}
@@ -136,7 +137,7 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
               marginBottom: 14,
             }}
           >
-            <RiseOutlined /> Xu hướng 8 tuần
+            <TrendingUp /> Xu hướng 8 tuần
           </div>
           <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 60 }}>
             {stats.weeklyTrend.map((w, i) => (
@@ -193,7 +194,7 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
             boxShadow: "var(--shadow-md)",
           }}
         >
-          <SoundOutlined />
+          <Volume2 />
           {recommendedLevel ? `Luyện ${recommendedLevel}` : "Bài mới"}
         </button>
         <button
@@ -214,7 +215,7 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
             transition: "all 0.15s ease",
           }}
         >
-          <HistoryOutlined />
+          <History />
           Lịch sử
         </button>
       </div>
@@ -246,7 +247,7 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
                 letterSpacing: "0.1em",
               }}
             >
-              <HistoryOutlined style={{ marginRight: 4 }} /> Gần đây
+              <History style={{ marginRight: 4 }} /> Gần đây
             </span>
             <button
               onClick={onOpenHistory}
@@ -332,7 +333,7 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
               marginBottom: 10,
             }}
           >
-            <TrophyOutlined style={{ marginRight: 4 }} /> Theo cấp độ
+            <Trophy style={{ marginRight: 4 }} /> Theo cấp độ
           </div>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
             {stats.byLevel.map((bl) => (

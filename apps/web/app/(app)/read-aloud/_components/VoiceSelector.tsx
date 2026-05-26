@@ -1,9 +1,10 @@
 "use client";
 
 import { Flex, Typography, Tooltip } from "antd";
-import { ManOutlined, WomanOutlined, InfoCircleOutlined } from "@ant-design/icons";
+
 import * as m from "motion/react-client";
 import { VOICES, type VoiceOption } from "../_data/voices";
+import { Info, User } from "lucide-react";
 
 const { Text } = Typography;
 
@@ -89,7 +90,7 @@ function VoiceCard({ voice: v, isActive, onSelect }: { voice: VoiceOption; isAct
               gap: 2,
             }}
           >
-            {v.gender === "m" ? <ManOutlined /> : <WomanOutlined />}
+            {v.gender === "m" ? <User /> : <User />}
             {v.gender === "m" ? "Nam" : "Nữ"}
           </span>
         </Flex>
@@ -109,7 +110,7 @@ function VoiceCard({ voice: v, isActive, onSelect }: { voice: VoiceOption; isAct
       </div>
 
       <Tooltip title={v.description} placement="left">
-        <InfoCircleOutlined
+        <Info
           style={{ fontSize: 14, color: "var(--text-muted)", opacity: 0.6, cursor: "help" }}
           onClick={(e) => e.stopPropagation()}
         />

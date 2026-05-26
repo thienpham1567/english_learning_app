@@ -1,22 +1,22 @@
 "use client";
 
 import { useState, useCallback, useEffect, useRef } from "react";
-import {
-  SearchOutlined,
-  StarFilled,
-  StarOutlined,
-  DeleteOutlined,
-  ClockCircleOutlined,
-  LoadingOutlined,
-  UndoOutlined,
-  CheckCircleOutlined,
-  SyncOutlined,
-} from "@ant-design/icons";
+
 import { api } from "@/lib/api-client";
 import { DictionarySearchPanel } from "@/app/(app)/dictionary/_components/DictionarySearchPanel";
 import { DictionaryResultCard } from "@/app/(app)/dictionary/_components/DictionaryResultCard";
 import { ThesaurusSheet } from "@/app/(app)/dictionary/_components/ThesaurusSheet";
 import type { VocabularyWithNearby } from "@/lib/schemas/vocabulary";
+import {
+  CircleCheckBig,
+  Clock,
+  Loader2,
+  RefreshCw,
+  Search,
+  Star,
+  Trash2,
+  Undo,
+} from "lucide-react";
 
 const STORAGE_KEY = "dict_recent_searches";
 const MAX_RECENT = 15;
@@ -32,9 +32,9 @@ type SavedWord = {
 };
 
 const MASTERY_CONFIG: Record<string, { icon: React.ReactNode; label: string; color: string }> = {
-  new: { icon: <StarOutlined style={{ color: "var(--warning)" }} />, label: "Mới", color: "var(--warning)" },
-  learning: { icon: <SyncOutlined style={{ color: "var(--accent)" }} />, label: "Đang học", color: "var(--accent)" },
-  mastered: { icon: <CheckCircleOutlined style={{ color: "var(--success)" }} />, label: "Thành thạo", color: "var(--success)" },
+  new: { icon: <Star style={{ color: "var(--warning)" }} />, label: "Mới", color: "var(--warning)" },
+  learning: { icon: <RefreshCw style={{ color: "var(--accent)" }} />, label: "Đang học", color: "var(--accent)" },
+  mastered: { icon: <CircleCheckBig style={{ color: "var(--success)" }} />, label: "Thành thạo", color: "var(--success)" },
 };
 
 function getRecentSearches(): string[] {
@@ -194,7 +194,7 @@ export function DictionaryTab() {
           display: "flex", alignItems: "center", gap: 10,
           marginBottom: 16,
         }}>
-          <StarFilled style={{ color: "var(--accent)", fontSize: 16 }} />
+          <Star style={{ color: "var(--accent)", fontSize: 16 }} />
           <span style={{
             fontSize: 13, fontWeight: 800, textTransform: "uppercase",
             letterSpacing: "0.12em", color: "var(--accent)",
@@ -205,7 +205,7 @@ export function DictionaryTab() {
 
         {savedLoading ? (
           <div style={{ display: "flex", justifyContent: "center", padding: 24 }}>
-            <LoadingOutlined style={{ fontSize: 20, color: "var(--accent)" }} spin />
+            <Loader2 className="animate-spin text-[var(--accent)]" size={20} />
           </div>
         ) : savedWords.length === 0 ? (
           <div style={{
@@ -267,7 +267,7 @@ export function DictionaryTab() {
                       display: "grid", placeItems: "center",
                     }}
                   >
-                    <DeleteOutlined />
+                    <Trash2 />
                   </button>
                 </div>
               );

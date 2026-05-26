@@ -1,11 +1,12 @@
 import { headers } from "next/headers";
-import { ReadOutlined } from "@ant-design/icons";
+
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { toeicVocab, reviewTask } from "@repo/database";
 import { and, eq, lte, sql } from "drizzle-orm";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
 import { VocabHub } from "./_components/VocabHub";
+import { BookOpenText } from "lucide-react";
 
 const TOPIC_LABELS: Record<string, string> = {
 	office: "🏢 Văn phòng",

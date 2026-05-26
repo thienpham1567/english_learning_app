@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import type { ErrorCorrectionData } from "@/lib/daily-challenge/types";
-import { WarningOutlined, EditOutlined, CheckOutlined } from "@ant-design/icons";
+
 import * as m from "motion/react-client";
+import { AlertTriangle, Check, Pencil } from "lucide-react";
 
 type Props = {
   data: ErrorCorrectionData;
@@ -56,7 +57,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
             marginBottom: 8,
           }}
         >
-          <WarningOutlined style={{ fontSize: 12 }} /> Câu chứa lỗi sai ngữ pháp
+          <AlertTriangle size={12} /> Câu chứa lỗi sai ngữ pháp
         </span>
         <p
           style={{
@@ -84,7 +85,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
           marginBottom: 8,
         }}
       >
-        <EditOutlined style={{ fontSize: 12 }} /> Từ thay thế chính xác
+        <Pencil size={12} /> Từ thay thế chính xác
       </label>
       <input
         id="error-correction-input"
@@ -135,7 +136,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
             boxShadow: "0 6px 18px rgba(239, 68, 68, 0.25)",
           }}
         >
-          <CheckOutlined style={{ fontSize: 12 }} /> Xác nhận sửa lỗi
+          <Check size={12} /> Xác nhận sửa lỗi
         </m.button>
       )}
     </div>

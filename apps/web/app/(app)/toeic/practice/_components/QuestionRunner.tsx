@@ -2,9 +2,17 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Button, Tag } from "antd";
-import { CheckCircleFilled, CloseCircleFilled, SoundOutlined, PlayCircleOutlined, FlagFilled, FlagOutlined, LoadingOutlined } from "@ant-design/icons";
+
 import type { ToeicSessionQuestion } from "@/hooks/useToeicSession";
 import * as m from "motion/react-client";
+import {
+  CheckCircle,
+  Flag,
+  Loader2,
+  PlayCircle,
+  Volume2,
+  XCircle,
+} from "lucide-react";
 
 export type QuestionRunnerProps = {
 	question: ToeicSessionQuestion | null;
@@ -169,7 +177,7 @@ export function QuestionRunner({
 	if (!question) {
 		return (
 			<div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: 48, color: "var(--text-secondary)", fontWeight: 700 }}>
-				<LoadingOutlined style={{ fontSize: 20, marginRight: 8, color: "var(--accent)" }} /> Đang tải câu hỏi…
+				<Loader2 className="animate-spin" style={{ fontSize: 20, marginRight: 8, color: "var(--accent)" }} /> Đang tải câu hỏi…
 			</div>
 		);
 	}
@@ -291,7 +299,7 @@ export function QuestionRunner({
 							cursor: "pointer"
 						}}
 					>
-						<SoundOutlined />
+						<Volume2 />
 						<span>Nghe audio câu hỏi</span>
 					</m.button>
 					<audio ref={audioRef} src={question.audioUrl} />
@@ -346,7 +354,7 @@ export function QuestionRunner({
 							cursor: part2PlayingIdx >= 0 && part2PlayingIdx < 4 ? "not-allowed" : "pointer"
 						}}
 					>
-						<PlayCircleOutlined />
+						<PlayCircle />
 						<span>Nghe lại</span>
 					</m.button>
 					<audio ref={audioRef} />
@@ -397,12 +405,12 @@ export function QuestionRunner({
 							bg = "rgba(16, 185, 129, 0.08)";
 							border = "1.5px solid var(--success)";
 							color = "var(--success)";
-							iconElement = <CheckCircleFilled style={{ color: "var(--success)", fontSize: 16 }} />;
+							iconElement = <CheckCircle style={{ color: "var(--success)", fontSize: 16 }} />;
 						} else if (isPicked) {
 							bg = "rgba(239, 68, 68, 0.08)";
 							border = "1.5px solid var(--error)";
 							color = "var(--error)";
-							iconElement = <CloseCircleFilled style={{ color: "var(--error)", fontSize: 16 }} />;
+							iconElement = <XCircle style={{ color: "var(--error)", fontSize: 16 }} />;
 						} else {
 							bg = "var(--surface-alt)";
 							color = "var(--text-muted)";
@@ -465,7 +473,7 @@ export function QuestionRunner({
 					}}
 				>
 					<div style={{ display: "flex", alignItems: "center", gap: 6, fontWeight: 900, color: "var(--text-primary)", marginBottom: 6 }}>
-						<CheckCircleFilled style={{ color: "var(--success)" }} />
+						<CheckCircle style={{ color: "var(--success)" }} />
 						<span>Giải thích đáp án chi tiết:</span>
 					</div>
 					<p style={{ margin: 0 }}>{question.explanationVi}</p>
@@ -505,7 +513,7 @@ export function QuestionRunner({
 					}}
 					title="Phím tắt: F"
 				>
-					{isFlagged ? <FlagFilled /> : <FlagOutlined />}
+					{isFlagged ? <Flag /> : <Flag />}
 					<span>{isFlagged ? "Đã đánh dấu" : "Đánh dấu"}</span>
 				</m.button>
 				

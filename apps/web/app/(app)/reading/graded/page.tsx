@@ -2,25 +2,26 @@
 
 import { useState, useCallback, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import {
-  CheckCircleFilled,
-  StarFilled,
-  FilterOutlined,
-  BookOutlined,
-  FileTextOutlined,
-  RightOutlined,
-  HomeOutlined,
-  EnvironmentOutlined,
-  CoffeeOutlined,
-  HeartOutlined,
-  LaptopOutlined,
-  CloudOutlined,
-  ContainerOutlined,
-  ExperimentOutlined,
-  ShopOutlined,
-} from "@ant-design/icons";
+
 import { Card, Tag, Spin, Flex, Typography, Empty } from "antd";
 import { api } from "@/lib/api-client";
+import {
+  Archive,
+  BookOpen,
+  CheckCircle,
+  ChevronRight,
+  Cloud,
+  Coffee,
+  FileText,
+  Filter,
+  FlaskConical,
+  Heart,
+  Home,
+  Laptop,
+  MapPin,
+  Star,
+  Store,
+} from "lucide-react";
 
 const { Text, Title } = Typography;
 
@@ -55,15 +56,15 @@ const LEVEL_LABELS: Record<string, string> = {
 };
 
 const SECTION_ICONS: Record<string, React.ReactNode> = {
-  lifestyle: <HomeOutlined />,
-  travel: <EnvironmentOutlined />,
-  food: <CoffeeOutlined />,
-  health: <HeartOutlined />,
-  technology: <LaptopOutlined />,
-  environment: <CloudOutlined />,
-  education: <ContainerOutlined />,
-  science: <ExperimentOutlined />,
-  business: <ShopOutlined />,
+  lifestyle: <Home />,
+  travel: <MapPin />,
+  food: <Coffee />,
+  health: <Heart />,
+  technology: <Laptop />,
+  environment: <Cloud />,
+  education: <Archive />,
+  science: <FlaskConical />,
+  business: <Store />,
 };
 
 export default function GradedReaderPage() {
@@ -111,7 +112,7 @@ export default function GradedReaderPage() {
               background: "rgba(255,255,255,0.2)", display: "flex",
               alignItems: "center", justifyContent: "center",
             }}>
-              <BookOutlined style={{ fontSize: 24, color: "var(--text-on-accent)" }} />
+              <BookOpen style={{ fontSize: 24, color: "var(--text-on-accent)" }} />
             </div>
             <div>
               <Text style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.7)" }}>
@@ -134,7 +135,7 @@ export default function GradedReaderPage() {
         {/* Level filter pills */}
         <Card style={{ borderRadius: 16 }} styles={{ body: { padding: "12px 16px" } }}>
           <Flex gap={8} wrap align="center">
-            <FilterOutlined style={{ color: "var(--text-muted)", fontSize: 14 }} />
+            <Filter style={{ color: "var(--text-muted)", fontSize: 14 }} />
             {LEVELS.map((lv) => {
               const active = level === lv;
               const color = LEVEL_COLORS[lv] || "var(--accent)";
@@ -168,7 +169,7 @@ export default function GradedReaderPage() {
           </Flex>
         ) : passages.length === 0 ? (
           <Empty
-            image={<BookOutlined style={{ fontSize: 48, color: "var(--text-muted)" }} />}
+            image={<BookOpen style={{ fontSize: 48, color: "var(--text-muted)" }} />}
             description="Không có bài đọc nào cho cấp độ này"
             style={{ padding: 60 }}
           />
@@ -198,8 +199,8 @@ export default function GradedReaderPage() {
                     flexShrink: 0,
                   }}>
                     {p.isRead
-                      ? <CheckCircleFilled style={{ fontSize: 20, color: "var(--success)" }} />
-                      : <FileTextOutlined style={{ fontSize: 18, color: LEVEL_COLORS[p.cefrLevel] || "var(--accent)" }} />
+                      ? <CheckCircle style={{ fontSize: 20, color: "var(--success)" }} />
+                      : <FileText style={{ fontSize: 18, color: LEVEL_COLORS[p.cefrLevel] || "var(--accent)" }} />
                     }
                   </div>
 
@@ -236,12 +237,12 @@ export default function GradedReaderPage() {
                         padding: "2px 10px",
                       }}
                     >
-                      <StarFilled style={{ fontSize: 10 }} />
+                      <Star size={10} />
                       {p.newWordsCount} mới
                     </Tag>
                   )}
 
-                  <RightOutlined style={{ fontSize: 12, color: "var(--text-muted)", flexShrink: 0 }} />
+                  <ChevronRight style={{ fontSize: 12, color: "var(--text-muted)", flexShrink: 0 }} />
                 </Flex>
               </Card>
             ))}

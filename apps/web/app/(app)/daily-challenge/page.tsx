@@ -287,7 +287,7 @@ export default function DailyChallengePage() {
                 <Check className="h-6 w-6 text-amber-500" />
               </motion.div>
               <div className="flex items-center gap-2 text-slate-400 text-sm font-bold">
-                <Loader2 className="h-4 w-4 animate-spin text-amber-500" />
+                <Loader2 className="h-4 w-4 animate-text-amber-500" />
                 <span>Đang chấm điểm câu hỏi phụ...</span>
               </div>
             </div>
@@ -352,7 +352,7 @@ export default function DailyChallengePage() {
                     <Check className="h-6 w-6 text-accent" />
                   </motion.div>
                   <div className="flex items-center gap-2 text-slate-400 text-sm font-semibold">
-                    <Loader2 className="h-4 w-4 animate-spin text-accent" />
+                    <Loader2 className="h-4 w-4 animate-text-accent" />
                     <span>Hệ thống đang kiểm tra câu trả lời...</span>
                   </div>
                 </div>

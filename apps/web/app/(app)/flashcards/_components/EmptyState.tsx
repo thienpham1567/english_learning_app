@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { Card, Flex, Typography } from "antd";
-import { SmileOutlined, ClockCircleOutlined, CheckCircleOutlined } from "@ant-design/icons";
+
 import * as m from "motion/react-client";
+import { CircleCheckBig, Clock, Smile } from "lucide-react";
 
 const { Text, Title } = Typography;
 
@@ -40,7 +41,7 @@ export function EmptyState({ nextReviewAt }: Props) {
         style={{ display: "inline-flex", marginBottom: 20 }}
       >
         <div style={{ width: 64, height: 64, borderRadius: "50%", background: "var(--accent-light)", display: "grid", placeItems: "center" }}>
-          <CheckCircleOutlined style={{ fontSize: 32, color: "var(--accent)" }} />
+          <CircleCheckBig style={{ fontSize: 32, color: "var(--accent)" }} />
         </div>
       </m.div>
 
@@ -92,7 +93,7 @@ function Countdown({ targetIso }: { targetIso: string }) {
         boxShadow: "var(--shadow-sm)",
       }}
     >
-      <ClockCircleOutlined style={{ color: "var(--accent)", fontSize: 13 }} />
+      <Clock style={{ color: "var(--accent)", fontSize: 13 }} />
       <span style={{ fontSize: 12.5, fontWeight: 700, color: "var(--text-secondary)" }}>
         Đợt ôn tập tiếp theo: <span style={{ color: "var(--accent)" }}>{remaining}</span>
       </span>

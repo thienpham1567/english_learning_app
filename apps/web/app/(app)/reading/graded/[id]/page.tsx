@@ -2,19 +2,20 @@
 
 import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
-import {
-  ArrowLeftOutlined,
-  CheckCircleFilled,
-  LoadingOutlined,
-  BookOutlined,
-  EditOutlined,
-  FieldTimeOutlined,
-  StarOutlined,
-  FormOutlined,
-} from "@ant-design/icons";
+
 import { Card, Tag, Flex, Typography, Button, Spin } from "antd";
 import { api } from "@/lib/api-client";
 import { useReadingSession } from "@/hooks/useReadingSession";
+import {
+  ArrowLeft,
+  BookOpen,
+  CheckCircle,
+  ClipboardList,
+  Loader2,
+  Pencil,
+  Star,
+  Timer,
+} from "lucide-react";
 
 const { Text, Title } = Typography;
 
@@ -65,7 +66,7 @@ export default function GradedPassagePage() {
   if (loading) {
     return (
       <Flex align="center" justify="center" style={{ height: "100%", padding: 60 }}>
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 32, color: "var(--accent)" }} />} />
+        <Spin indicator={<Loader2 className="animate-spin text-[var(--accent)]" size={32} />} />
       </Flex>
     );
   }
@@ -73,9 +74,9 @@ export default function GradedPassagePage() {
   if (!passage) {
     return (
       <Flex vertical align="center" justify="center" gap={12} style={{ height: "100%", padding: 60 }}>
-        <BookOutlined style={{ fontSize: 48, color: "var(--text-muted)" }} />
+        <BookOpen size={48} className="text-[var(--text-muted)]" />
         <Text type="secondary">Không tìm thấy bài đọc</Text>
-        <Button type="link" icon={<ArrowLeftOutlined />} onClick={() => router.push("/reading/graded")}>
+        <Button type="link" icon={<ArrowLeft />} onClick={() => router.push("/reading/graded")}>
           Quay lại danh sách
         </Button>
       </Flex>
@@ -89,7 +90,7 @@ export default function GradedPassagePage() {
         {/* Back button */}
         <Button
           type="text"
-          icon={<ArrowLeftOutlined />}
+          icon={<ArrowLeft />}
           onClick={() => router.push("/reading/graded")}
           style={{ alignSelf: "flex-start", color: "var(--text-muted)", fontSize: 13, borderRadius: 10 }}
         >
@@ -112,12 +113,12 @@ export default function GradedPassagePage() {
                 {passage.cefrLevel}
               </Tag>
               <Flex align="center" gap={4}>
-                <FieldTimeOutlined style={{ fontSize: 12, color: "var(--text-muted)" }} />
-                <Text style={{ fontSize: 12, color: "var(--text-muted)" }}>{readTime} phút · {passage.wordCount} từ</Text>
+                <Timer size={12} className="text-[var(--text-muted)]" />
+                <Text className="text-[var(--text-muted)]" style={{ fontSize: 12 }}>{readTime} phút · {passage.wordCount} từ</Text>
               </Flex>
               {marked && (
                 <Tag style={{ margin: 0, marginLeft: "auto", borderRadius: 8, border: "none", background: "color-mix(in srgb, var(--success) 8%, transparent)", color: "var(--success)", fontWeight: 600 }}>
-                  <CheckCircleFilled style={{ marginRight: 4 }} /> Đã đọc
+                  <CheckCircle style={{ marginRight: 4 }} /> Đã đọc
                 </Tag>
               )}
             </Flex>
@@ -141,7 +142,7 @@ export default function GradedPassagePage() {
             <Button
               type="primary"
               size="large"
-              icon={<CheckCircleFilled />}
+              icon={<CheckCircle />}
               onClick={markRead}
               style={{ borderRadius: 12, fontWeight: 600, padding: "0 28px", height: 44 }}
             >
@@ -158,18 +159,18 @@ export default function GradedPassagePage() {
             >
               <Flex vertical align="center" gap={10}>
                 <Text style={{ color: "rgba(255,255,255,0.9)", fontSize: 14, fontWeight: 500 }}>
-                  <StarOutlined /> Bạn đã đọc xong! Kiểm tra từ vựng ngay?
+                  <Star /> Bạn đã đọc xong! Kiểm tra từ vựng ngay?
                 </Text>
                 <Button
                   size="large"
-                  icon={<EditOutlined />}
+                  icon={<Pencil />}
                   onClick={() => router.push(`/reading/graded/${id}/cloze`)}
                   style={{
                     borderRadius: 12, fontWeight: 700, border: "2px solid var(--surface)",
                     background: "rgba(255,255,255,0.15)", color: "var(--text-on-accent)", height: 44,
                   }}
                 >
-                  <FormOutlined /> Làm bài cloze test
+                  <ClipboardList /> Làm bài cloze test
                 </Button>
               </Flex>
             </Card>

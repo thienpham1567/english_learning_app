@@ -1,10 +1,11 @@
 import Link from "next/link";
 import { Card, Tag } from "antd";
-import { CustomerServiceOutlined } from "@ant-design/icons";
+
 import { db } from "@repo/database";
 import { toeicDictationItem } from "@repo/database";
 import { asc } from "drizzle-orm";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
+import { Headphones } from "lucide-react";
 
 const LEVEL_LABEL: Record<string, string> = {
 	beginner: "Cơ bản",

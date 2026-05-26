@@ -1,24 +1,25 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import {
-  ThunderboltOutlined,
-  LoadingOutlined,
-  SoundOutlined,
-  LeftOutlined,
-  RightOutlined,
-  ReloadOutlined,
-  BulbOutlined,
-  CheckCircleFilled,
-  BookOutlined,
-  FormOutlined,
-  AppstoreOutlined,
-} from "@ant-design/icons";
+
 import { Tag } from "antd";
 import * as m from "motion/react-client";
 
 import { api } from "@/lib/api-client";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
+import {
+  BookOpen,
+  CheckCircle,
+  ChevronLeft,
+  ChevronRight,
+  ClipboardList,
+  LayoutGrid,
+  Lightbulb,
+  Loader2,
+  RefreshCw,
+  Volume2,
+  Zap,
+} from "lucide-react";
 
 /* ── Types ── */
 type AICard = {
@@ -53,9 +54,9 @@ const TOEIC_TOPICS = [
 ];
 
 const TYPE_OPTIONS: { value: CardType; label: string; icon: React.ReactNode }[] = [
-  { value: "mixed", label: "Tổng hợp", icon: <AppstoreOutlined /> },
-  { value: "vocab", label: "Từ vựng", icon: <BookOutlined /> },
-  { value: "grammar", label: "Ngữ pháp", icon: <FormOutlined /> },
+  { value: "mixed", label: "Tổng hợp", icon: <LayoutGrid /> },
+  { value: "vocab", label: "Từ vựng", icon: <BookOpen /> },
+  { value: "grammar", label: "Ngữ pháp", icon: <ClipboardList /> },
 ];
 
 const COUNT_OPTIONS = [5, 10, 15, 20];
@@ -142,7 +143,7 @@ export function AIFlashcardMode() {
         {/* Topic Grid */}
         <div>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-            <ThunderboltOutlined style={{ color: "var(--accent)", fontSize: 16 }} />
+            <Zap style={{ color: "var(--accent)", fontSize: 16 }} />
             <h3 style={{ margin: 0, fontSize: 16, fontWeight: 900, color: "var(--ink)", fontFamily: "var(--font-display)" }}>
               Chọn chủ đề TOEIC
             </h3>
@@ -320,7 +321,7 @@ export function AIFlashcardMode() {
           {selectedTopic && (
             <div style={{ position: "absolute", top: "-50%", right: "-10%", width: 120, height: 120, borderRadius: "50%", background: "rgba(255,255,255,0.06)", pointerEvents: "none" }} />
           )}
-          <ThunderboltOutlined /> Tạo {cardCount} Flashcard bằng AI
+          <Zap /> Tạo {cardCount} Flashcard bằng AI
         </m.button>
       </div>
     );
@@ -335,7 +336,7 @@ export function AIFlashcardMode() {
           transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
           style={{ width: 64, height: 64, borderRadius: "50%", background: "var(--accent-light)", display: "grid", placeItems: "center" }}
         >
-          <LoadingOutlined style={{ fontSize: 28, color: "var(--accent)" }} />
+          <Loader2 className="animate-spin text-[var(--accent)]" size={28} />
         </m.div>
         <div style={{ textAlign: "center" }}>
           <h3 style={{ margin: "0 0 6px", fontSize: 18, fontWeight: 900, color: "var(--ink)", fontFamily: "var(--font-display)" }}>
@@ -377,7 +378,7 @@ export function AIFlashcardMode() {
             fontWeight: 700,
           }}
         >
-          <LeftOutlined style={{ fontSize: 10 }} /> Chọn chủ đề khác
+          <ChevronLeft size={10} /> Chọn chủ đề khác
         </m.button>
         <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-secondary)" }}>
           <span style={{ color: "var(--accent)" }}>{currentIdx + 1}</span> / {cards.length}
@@ -517,7 +518,7 @@ export function AIFlashcardMode() {
                   zIndex: 2,
                 }}
               >
-                {tts.isLoading ? <LoadingOutlined spin /> : <SoundOutlined />}
+                {tts.isLoading ? <Loader2 className="animate-spin" /> : <Volume2 />}
                 {tts.isSpeaking ? "Đang phát..." : "Nghe phát âm"}
               </m.button>
             )}
@@ -639,7 +640,7 @@ export function AIFlashcardMode() {
             boxShadow: "var(--shadow-sm)",
           }}
         >
-          <LeftOutlined />
+          <ChevronLeft />
         </m.button>
 
         <m.button
@@ -682,7 +683,7 @@ export function AIFlashcardMode() {
             boxShadow: "var(--shadow-sm)",
           }}
         >
-          <RightOutlined />
+          <ChevronRight />
         </m.button>
       </div>
 
@@ -699,7 +700,7 @@ export function AIFlashcardMode() {
             textAlign: "center",
           }}
         >
-          <CheckCircleFilled style={{ fontSize: 28, color: "var(--success)", marginBottom: 8 }} />
+          <CheckCircle size={28} className="text-[var(--success)]" />
           <h4 style={{ margin: "0 0 6px", fontSize: 15, fontWeight: 900, color: "var(--ink)" }}>
             🎉 Hoàn thành {cards.length} flashcard!
           </h4>
@@ -724,7 +725,7 @@ export function AIFlashcardMode() {
                 fontWeight: 700,
               }}
             >
-              <ReloadOutlined /> Ôn lại
+              <RefreshCw /> Ôn lại
             </m.button>
             <m.button
               whileTap={{ scale: 0.95 }}

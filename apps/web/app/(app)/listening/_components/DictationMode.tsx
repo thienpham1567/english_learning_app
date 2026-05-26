@@ -1,19 +1,20 @@
 "use client";
 import { api } from "@/lib/api-client";
 import { useState, useCallback, useRef, useEffect } from "react";
-import {
-  LoadingOutlined,
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  ReloadOutlined,
-  RightOutlined,
-  InfoCircleOutlined,
-  EditOutlined,
-} from "@ant-design/icons";
+
 import { Progress, Tag } from "antd";
 
 import { useSentenceAudio } from "@/hooks/useSentenceAudio";
 import { AudioPlayer } from "@/app/(app)/listening/_components/AudioPlayer";
+import {
+  ChevronRight,
+  CircleCheckBig,
+  Info,
+  Loader2,
+  Pencil,
+  RefreshCw,
+  XCircle,
+} from "lucide-react";
 
 type Sentence = { text: string; ipa: string; tip: string };
 
@@ -198,7 +199,7 @@ export default function DictationMode({ examMode }: Props) {
       {/* ── Idle ── */}
       {state === "idle" && (
         <div style={{ textAlign: "center", padding: 32, border: "1px solid var(--border)", borderRadius: 16, background: "var(--card-bg)" }}>
-          <EditOutlined style={{ fontSize: 48, color: "var(--accent)", marginBottom: 16 }} />
+          <Pencil size={48} className="text-[var(--accent)]" />
           <h2 style={{ margin: "0 0 8px", fontSize: 18 }}>Dictation</h2>
           <p style={{ color: "var(--text-secondary)", margin: "0 0 8px", fontSize: 13 }}>
             Nghe → Gõ lại → Kiểm tra từng từ
@@ -215,7 +216,7 @@ export default function DictationMode({ examMode }: Props) {
       {/* ── Loading ── */}
       {state === "loading" && (
         <div style={{ textAlign: "center", padding: 40 }}>
-          <LoadingOutlined style={{ fontSize: 32, color: "var(--accent)" }} />
+          <Loader2 className="animate-spin text-[var(--accent)]" size={32} />
           <p style={{ color: "var(--text-secondary)", marginTop: 12 }}>Đang tạo bài tập...</p>
         </div>
       )}
@@ -252,7 +253,7 @@ export default function DictationMode({ examMode }: Props) {
             />
           ) : sentenceAudio.isLoading ? (
             <div style={{ textAlign: "center", padding: 20 }}>
-              <LoadingOutlined style={{ fontSize: 24, color: "var(--accent)" }} />
+              <Loader2 className="animate-spin text-[var(--accent)]" size={24} />
               <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 8 }}>Đang tạo âm thanh...</p>
             </div>
           ) : null}
@@ -311,9 +312,9 @@ export default function DictationMode({ examMode }: Props) {
                   background: STATUS_BG[w.status], color: STATUS_COLORS[w.status],
                   fontSize: 14, fontWeight: 500, border: `1px solid ${STATUS_COLORS[w.status]}33`,
                 }}>
-                  {w.status === "correct" && <CheckCircleOutlined style={{ marginRight: 4, fontSize: 11 }} />}
-                  {w.status === "wrong" && <CloseCircleOutlined style={{ marginRight: 4, fontSize: 11 }} />}
-                  {w.status === "missing" && <InfoCircleOutlined style={{ marginRight: 4, fontSize: 11 }} />}
+                  {w.status === "correct" && <CircleCheckBig style={{ marginRight: 4, fontSize: 11 }} />}
+                  {w.status === "wrong" && <XCircle style={{ marginRight: 4, fontSize: 11 }} />}
+                  {w.status === "missing" && <Info style={{ marginRight: 4, fontSize: 11 }} />}
                   {w.word}
                   {w.status === "wrong" && w.typed && (
                     <span style={{ fontSize: 11, opacity: 0.7, marginLeft: 4 }}>({w.typed})</span>
@@ -334,7 +335,7 @@ export default function DictationMode({ examMode }: Props) {
             <p style={{ fontSize: 16, fontWeight: 600, margin: "0 0 4px" }}>{currentSentence.text}</p>
             <p style={{ fontSize: 13, color: "var(--text-secondary)", margin: "0 0 8px", fontFamily: "serif" }}>{currentSentence.ipa}</p>
             <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: 0 }}>
-              <InfoCircleOutlined style={{ marginRight: 4 }} />{currentSentence.tip}
+              <Info style={{ marginRight: 4 }} />{currentSentence.tip}
             </p>
           </div>
 
@@ -347,10 +348,10 @@ export default function DictationMode({ examMode }: Props) {
           {/* Actions */}
           <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
             <button onClick={retryCurrent} style={{ padding: "10px 20px", borderRadius: 8, border: "1px solid var(--border)", background: "transparent", color: "var(--text)", cursor: "pointer", fontSize: 13, fontWeight: 500 }}>
-              <ReloadOutlined /> Thử lại
+              <RefreshCw /> Thử lại
             </button>
             <button onClick={nextSentence} style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
-              {currentIdx < sentences.length - 1 ? <>Câu tiếp <RightOutlined /></> : <>Hoàn thành <CheckCircleOutlined /></>}
+              {currentIdx < sentences.length - 1 ? <>Câu tiếp <ChevronRight /></> : <>Hoàn thành <CircleCheckBig /></>}
             </button>
           </div>
         </div>
@@ -360,13 +361,13 @@ export default function DictationMode({ examMode }: Props) {
       {state === "summary" && (
         <div style={{ textAlign: "center", padding: 32, border: "1px solid var(--border)", borderRadius: 16, background: "var(--card-bg)" }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>
-            {avgScore >= 80 ? <CheckCircleOutlined style={{ color: "var(--success)" }} /> :
-             avgScore >= 50 ? <InfoCircleOutlined style={{ color: "var(--warning)" }} /> :
-             <CloseCircleOutlined style={{ color: "var(--error)" }} />}
+            {avgScore >= 80 ? <CircleCheckBig style={{ color: "var(--success)" }} /> :
+             avgScore >= 50 ? <Info style={{ color: "var(--warning)" }} /> :
+             <XCircle style={{ color: "var(--error)" }} />}
           </div>
           <h2 style={{ margin: "0 0 8px" }}>Dictation hoàn thành!</h2>
           <p style={{ color: "var(--text-secondary)", margin: "0 0 8px" }}>
-            Độ chính xác trung bình: <strong style={{ fontSize: 24, color: "var(--accent)" }}>{avgScore}%</strong>
+            Độ chính xác trung bình: <strong className="text-[var(--accent)]" style={{ fontSize: 24 }}>{avgScore}%</strong>
           </p>
           {xpAwarded > 0 && (
             <p style={{ color: "var(--accent)", fontSize: 13, fontWeight: 600, margin: "0 0 8px" }}>+{xpAwarded} XP</p>
@@ -384,7 +385,7 @@ export default function DictationMode({ examMode }: Props) {
             ))}
           </div>
           <button onClick={startSession} style={{ padding: "10px 24px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
-            <ReloadOutlined /> Luyện tiếp
+            <RefreshCw /> Luyện tiếp
           </button>
         </div>
       )}

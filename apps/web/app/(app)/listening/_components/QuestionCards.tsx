@@ -1,6 +1,5 @@
 "use client";
-
-import { CheckCircleOutlined, SendOutlined, LoadingOutlined, FormOutlined } from "@ant-design/icons";
+import { CircleCheckBig, ClipboardList, Loader2, Send } from "lucide-react";
 
 type Question = {
   question: string;
@@ -20,7 +19,7 @@ export function QuestionCards({ questions, selectedAnswers, onSelectAnswer, onSu
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
       <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: 1 }}>
-        <FormOutlined style={{ marginRight: 6 }} /> Câu hỏi ({questions.length})
+        <ClipboardList style={{ marginRight: 6 }} /> Câu hỏi ({questions.length})
       </div>
 
       {questions.map((q, qi) => (
@@ -75,7 +74,7 @@ export function QuestionCards({ questions, selectedAnswers, onSelectAnswer, onSu
                       flexShrink: 0,
                     }}
                   >
-                    {isSelected ? <CheckCircleOutlined /> : String.fromCharCode(65 + oi)}
+                    {isSelected ? <CircleCheckBig /> : String.fromCharCode(65 + oi)}
                   </span>
                   {opt}
                 </button>
@@ -106,7 +105,7 @@ export function QuestionCards({ questions, selectedAnswers, onSelectAnswer, onSu
           opacity: isSubmitting ? 0.7 : 1,
         }}
       >
-        {isSubmitting ? <LoadingOutlined spin /> : <SendOutlined />}
+        {isSubmitting ? <Loader2 className="animate-spin" /> : <Send />}
         {isSubmitting ? "Đang chấm điểm..." : "Nộp bài"}
       </button>
     </div>

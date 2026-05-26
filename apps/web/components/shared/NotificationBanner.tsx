@@ -1,7 +1,7 @@
 "use client";
 import { api } from "@/lib/api-client";
 import { useState, useEffect, useCallback } from "react";
-import { BellOutlined, CloseOutlined, CheckCircleFilled } from "@ant-design/icons";
+import { Bell, CheckCircle, X } from "lucide-react";
 
 export function NotificationBanner() {
   const [visible, setVisible] = useState(false);
@@ -98,13 +98,13 @@ export function NotificationBanner() {
           flexShrink: 0,
         }}
       >
-        <BellOutlined style={{ fontSize: 18, color: "var(--text-on-accent)" }} />
+        <Bell style={{ fontSize: 18, color: "var(--text-on-accent)" }} />
       </div>
 
       <div style={{ flex: 1, minWidth: 0 }}>
         {subscribed ? (
           <div style={{ fontSize: 14, fontWeight: 600, color: "var(--success)" }}>
-            <CheckCircleFilled style={{ marginRight: 4 }} /> Đã bật thông báo!
+            <CheckCircle style={{ marginRight: 4 }} /> Đã bật thông báo!
           </div>
         ) : (
           <>
@@ -150,7 +150,7 @@ export function NotificationBanner() {
         }}
         aria-label="Đóng"
       >
-        <CloseOutlined />
+        <X />
       </button>
 
       <style>{`

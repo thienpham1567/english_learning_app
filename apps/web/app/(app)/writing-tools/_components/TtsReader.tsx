@@ -1,14 +1,15 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import {
-	SoundOutlined,
-	LoadingOutlined,
-	PlayCircleOutlined,
-	InfoCircleOutlined,
-	CloseCircleOutlined
-} from "@ant-design/icons";
+
 import * as m from "motion/react-client";
+import {
+  Info,
+  Loader2,
+  PlayCircle,
+  Volume2,
+  XCircle,
+} from "lucide-react";
 
 type Accent = "us" | "uk" | "au";
 type Gender = "male" | "female";
@@ -287,7 +288,7 @@ export function TtsReader() {
 				alignItems: "flex-start",
 				gap: 8
 			}}>
-				<InfoCircleOutlined style={{ marginTop: 2 }} />
+				<Info style={{ marginTop: 2 }} />
 				<div>
 					<strong>Công nghệ giọng nói Groq Orpheus:</strong> Chuyển văn bản thành giọng đọc tự nhiên, chất lượng phòng thu chuẩn quốc tế. Giới hạn tối đa 200 ký tự mỗi lần phát âm.
 				</div>
@@ -319,17 +320,17 @@ export function TtsReader() {
 				>
 					{loading ? (
 						<>
-							<LoadingOutlined />
+							<Loader2 className="animate-spin" />
 							<span>Đang chuẩn bị giọng nói...</span>
 						</>
 					) : playing ? (
 						<>
-							<CloseCircleOutlined />
+							<XCircle />
 							<span>Dừng phát âm</span>
 						</>
 					) : (
 						<>
-							<PlayCircleOutlined />
+							<PlayCircle />
 							<span>Đọc văn bản (TTS)</span>
 						</>
 					)}
@@ -354,7 +355,7 @@ export function TtsReader() {
 							fontWeight: 800
 						}}
 					>
-						<SoundOutlined />
+						<Volume2 />
 						<span>Đang phát giọng đọc...</span>
 					</m.div>
 				)}

@@ -1,21 +1,22 @@
 "use client";
 import { api } from "@/lib/api-client";
 import { useState, useCallback, useRef, useEffect } from "react";
-import {
-  AudioOutlined,
-  SoundOutlined,
-  LoadingOutlined,
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  ReloadOutlined,
-  RightOutlined,
-  InfoCircleOutlined,
-  BorderOutlined,
-} from "@ant-design/icons";
+
 import { Progress, Tag, Tooltip } from "antd";
 
 import { useSentenceAudio } from "@/hooks/useSentenceAudio";
 import { AudioPlayer } from "@/app/(app)/listening/_components/AudioPlayer";
+import {
+  ChevronRight,
+  CircleCheckBig,
+  Info,
+  Loader2,
+  Mic,
+  RefreshCw,
+  Square,
+  Volume2,
+  XCircle,
+} from "lucide-react";
 
 type Sentence = { text: string; ipa: string; tip: string };
 type WordAnalysis = { word: string; spoken: string; correct: boolean; issue?: string };
@@ -189,7 +190,7 @@ export default function ShadowingMode({ examMode }: Props) {
       {/* ── Idle ── */}
       {state === "idle" && (
         <div style={{ textAlign: "center", padding: 32, border: "1px solid var(--border)", borderRadius: 16, background: "var(--card-bg)" }}>
-          <SoundOutlined style={{ fontSize: 48, color: "var(--accent)", marginBottom: 16 }} />
+          <Volume2 size={48} className="text-[var(--accent)]" />
           <h2 style={{ margin: "0 0 8px", fontSize: 18 }}>Shadowing</h2>
           <p style={{ color: "var(--text-secondary)", margin: "0 0 8px", fontSize: 13 }}>
             Nghe → Lặp lại → So sánh phát âm
@@ -206,7 +207,7 @@ export default function ShadowingMode({ examMode }: Props) {
       {/* ── Loading ── */}
       {state === "loading" && (
         <div style={{ textAlign: "center", padding: 40 }}>
-          <LoadingOutlined style={{ fontSize: 32, color: "var(--accent)" }} />
+          <Loader2 className="animate-spin text-[var(--accent)]" size={32} />
           <p style={{ color: "var(--text-secondary)", marginTop: 12 }}>Đang tạo bài tập...</p>
         </div>
       )}
@@ -231,7 +232,7 @@ export default function ShadowingMode({ examMode }: Props) {
             <p style={{ fontSize: 14, color: "var(--text-secondary)", margin: "0 0 12px", fontFamily: "serif" }}>{currentSentence.ipa}</p>
             <Tooltip title={currentSentence.tip}>
               <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "8px 0 0", cursor: "help" }}>
-                <InfoCircleOutlined /> Gợi ý phát âm
+                <Info /> Gợi ý phát âm
               </p>
             </Tooltip>
           </div>
@@ -250,7 +251,7 @@ export default function ShadowingMode({ examMode }: Props) {
           )}
           {sentenceAudio.isLoading && (
             <div style={{ textAlign: "center", fontSize: 12, color: "var(--text-muted)" }}>
-              <LoadingOutlined /> Đang tạo âm thanh...
+              <Loader2 className="animate-spin" /> Đang tạo âm thanh...
             </div>
           )}
 
@@ -259,7 +260,7 @@ export default function ShadowingMode({ examMode }: Props) {
             {state === "ready" && (
               <>
                 <button onClick={startRecording} style={{ width: 80, height: 80, borderRadius: "50%", border: "none", background: "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 70%, white))", color: "var(--text-on-accent)", fontSize: 28, cursor: "pointer", boxShadow: "0 4px 16px color-mix(in srgb, var(--error) 30%, transparent)" }} aria-label="Ghi âm">
-                  <AudioOutlined />
+                  <Mic />
                 </button>
                 <p style={{ fontSize: 12, color: "var(--text-secondary)", marginTop: 8 }}>Nhấn nút để ghi âm</p>
               </>
@@ -267,14 +268,14 @@ export default function ShadowingMode({ examMode }: Props) {
             {state === "recording" && (
               <>
                 <button onClick={stopRecording} style={{ width: 80, height: 80, borderRadius: "50%", border: "3px solid var(--error)", background: "var(--card-bg)", color: "var(--error)", fontSize: 20, cursor: "pointer", animation: "pulse 1s ease-in-out infinite" }} aria-label="Dừng ghi âm">
-                  <BorderOutlined />
+                  <Square />
                 </button>
                 <p style={{ fontSize: 12, color: "var(--error)", marginTop: 8, fontWeight: 600 }}>Đang ghi âm... Nhấn để dừng</p>
               </>
             )}
             {(state === "transcribing" || state === "evaluating") && (
               <div>
-                <LoadingOutlined style={{ fontSize: 32, color: "var(--accent)" }} />
+                <Loader2 className="animate-spin text-[var(--accent)]" size={32} />
                 <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 8 }}>
                   {state === "transcribing" ? "Đang nhận dạng..." : "Đang đánh giá..."}
                 </p>
@@ -312,7 +313,7 @@ export default function ShadowingMode({ examMode }: Props) {
               {evalResult.wordAnalysis.map((w, i) => (
                 <Tooltip key={i} title={w.issue || "Chính xác!"}>
                   <Tag color={w.correct ? "success" : "error"} style={{ fontSize: 13, padding: "3px 8px", cursor: "help" }}>
-                    {w.correct ? <CheckCircleOutlined /> : <CloseCircleOutlined />} {w.word}
+                    {w.correct ? <CircleCheckBig /> : <XCircle />} {w.word}
                   </Tag>
                 </Tooltip>
               ))}
@@ -332,10 +333,10 @@ export default function ShadowingMode({ examMode }: Props) {
           {/* Actions */}
           <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
             <button onClick={retryCurrent} style={{ padding: "10px 20px", borderRadius: 8, border: "1px solid var(--border)", background: "transparent", color: "var(--text)", cursor: "pointer", fontSize: 13, fontWeight: 500 }}>
-              <ReloadOutlined /> Thử lại
+              <RefreshCw /> Thử lại
             </button>
             <button onClick={nextSentence} style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
-              {currentIdx < sentences.length - 1 ? <>Câu tiếp <RightOutlined /></> : <>Hoàn thành <CheckCircleOutlined /></>}
+              {currentIdx < sentences.length - 1 ? <>Câu tiếp <ChevronRight /></> : <>Hoàn thành <CircleCheckBig /></>}
             </button>
           </div>
         </div>
@@ -345,13 +346,13 @@ export default function ShadowingMode({ examMode }: Props) {
       {state === "summary" && (
         <div style={{ textAlign: "center", padding: 32, border: "1px solid var(--border)", borderRadius: 16, background: "var(--card-bg)" }}>
           <div style={{ fontSize: 48, marginBottom: 16 }}>
-            {avgScore >= 80 ? <CheckCircleOutlined style={{ color: "var(--success)" }} /> :
-             avgScore >= 50 ? <InfoCircleOutlined style={{ color: "var(--warning)" }} /> :
-             <CloseCircleOutlined style={{ color: "var(--error)" }} />}
+            {avgScore >= 80 ? <CircleCheckBig style={{ color: "var(--success)" }} /> :
+             avgScore >= 50 ? <Info style={{ color: "var(--warning)" }} /> :
+             <XCircle style={{ color: "var(--error)" }} />}
           </div>
           <h2 style={{ margin: "0 0 8px" }}>Shadowing hoàn thành!</h2>
           <p style={{ color: "var(--text-secondary)", margin: "0 0 8px" }}>
-            Điểm trung bình: <strong style={{ fontSize: 24, color: "var(--accent)" }}>{avgScore}</strong>/100
+            Điểm trung bình: <strong className="text-[var(--accent)]" style={{ fontSize: 24 }}>{avgScore}</strong>/100
           </p>
           {xpAwarded > 0 && (
             <p style={{ color: "var(--accent)", fontSize: 13, fontWeight: 600, margin: "0 0 8px" }}>+{xpAwarded} XP</p>
@@ -369,7 +370,7 @@ export default function ShadowingMode({ examMode }: Props) {
             ))}
           </div>
           <button onClick={startSession} style={{ padding: "10px 24px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
-            <ReloadOutlined /> Luyện tiếp
+            <RefreshCw /> Luyện tiếp
           </button>
         </div>
       )}

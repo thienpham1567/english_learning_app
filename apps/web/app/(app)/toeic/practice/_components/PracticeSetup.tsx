@@ -2,15 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api-client";
-import {
-	CompassOutlined,
-	NumberOutlined,
-	ThunderboltOutlined,
-	TrophyOutlined,
-	CustomerServiceOutlined,
-	ReadOutlined,
-} from "@ant-design/icons";
+
 import * as m from "motion/react-client";
+import {
+  BookOpenText,
+  Compass,
+  Hash,
+  Headphones,
+  Trophy,
+  Zap,
+} from "lucide-react";
 
 /* ── Part chips ── */
 const PARTS: Array<{
@@ -23,13 +24,13 @@ const PARTS: Array<{
 	{
 		value: "listening",
 		label: "Listening",
-		icon: <CustomerServiceOutlined />,
+		icon: <Headphones />,
 		color: "var(--module-listening)",
 	},
 	{
 		value: "reading",
 		label: "Reading",
-		icon: <ReadOutlined />,
+		icon: <BookOpenText />,
 		color: "var(--module-reading)",
 	},
 	{ value: "3", label: "Part 3" },
@@ -337,7 +338,7 @@ export function PracticeSetup({
 							flexShrink: 0,
 						}}
 					>
-						<TrophyOutlined />
+						<Trophy />
 					</m.div>
 					<div>
 						<h3
@@ -369,7 +370,7 @@ export function PracticeSetup({
 				{/* ── Section 1: Exam selection ── */}
 				<div style={{ position: "relative", marginBottom: 24 }}>
 					<SectionLabel
-						icon={<TrophyOutlined />}
+						icon={<Trophy />}
 						text="Đề thi TOEIC"
 						badge={`${exams.length + 1} đề`}
 					/>
@@ -429,7 +430,7 @@ export function PracticeSetup({
 				{/* ── Section 2: Part selection ── */}
 				<div style={{ marginBottom: 24 }}>
 					<SectionLabel
-						icon={<CompassOutlined />}
+						icon={<Compass />}
 						text="Phần thi (Part)"
 					/>
 					<div
@@ -468,7 +469,7 @@ export function PracticeSetup({
 				{/* ── Section 3: Count selection ── */}
 				<div style={{ marginBottom: 28 }}>
 					<SectionLabel
-						icon={<NumberOutlined />}
+						icon={<Hash />}
 						text="Số lượng câu hỏi"
 					/>
 					<div style={{ display: "flex", gap: 10 }}>
@@ -548,7 +549,7 @@ export function PracticeSetup({
 							pointerEvents: "none",
 						}}
 					/>
-					<ThunderboltOutlined style={{ fontSize: 16 }} />
+					<Zap size={16} />
 					<span>Bắt đầu luyện tập ngay</span>
 				</m.button>
 

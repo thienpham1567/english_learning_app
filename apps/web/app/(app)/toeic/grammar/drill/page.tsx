@@ -2,11 +2,12 @@
 
 import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { BookOutlined } from "@ant-design/icons";
+
 import { Button } from "antd";
 import { useToeicSession } from "@/hooks/useToeicSession";
 import { QuestionRunner } from "../../practice/_components/QuestionRunner";
 import { ResultSummary } from "../../practice/_components/ResultSummary";
+import { BookOpen } from "lucide-react";
 
 function DrillRunner() {
 	const router = useRouter();

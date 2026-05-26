@@ -1,9 +1,19 @@
 "use client";
 
-import { ReloadOutlined, StarOutlined, WarningOutlined, TrophyOutlined, SmileOutlined, LikeOutlined, FireOutlined, ThunderboltOutlined, BookOutlined } from "@ant-design/icons";
 import { useRouter } from "next/navigation";
 import type { GrammarQuestion } from "@/lib/grammar-quiz/types";
 import * as m from "motion/react-client";
+import {
+  AlertTriangle,
+  BookOpen,
+  Flame,
+  RefreshCw,
+  Smile,
+  Star,
+  ThumbsUp,
+  Trophy,
+  Zap,
+} from "lucide-react";
 
 type Props = {
   questions: GrammarQuestion[];
@@ -29,12 +39,12 @@ export function ScoreSummary({
   const pct = total > 0 ? Math.round((score / total) * 100) : 0;
 
   const icon = pct >= 90 
-    ? <TrophyOutlined style={{ color: "var(--success)" }} /> 
+    ? <Trophy style={{ color: "var(--success)" }} /> 
     : pct >= 70 
-    ? <SmileOutlined style={{ color: "var(--accent)" }} /> 
+    ? <Smile style={{ color: "var(--accent)" }} /> 
     : pct >= 50 
-    ? <LikeOutlined style={{ color: "var(--warning)" }} /> 
-    : <ThunderboltOutlined style={{ color: "var(--error)" }} />;
+    ? <ThumbsUp style={{ color: "var(--warning)" }} /> 
+    : <Zap style={{ color: "var(--error)" }} />;
   
   const labelText = pct >= 90
     ? "Xuất sắc! Bạn đã làm chủ kiến thức."
@@ -137,7 +147,7 @@ export function ScoreSummary({
             boxShadow: "0 2px 10px rgba(245, 158, 11, 0.25)",
           }}
         >
-          <FireOutlined /> Combo liên tiếp tốt nhất: x{maxCombo}
+          <Flame /> Combo liên tiếp tốt nhất: x{maxCombo}
         </m.div>
       )}
 
@@ -167,7 +177,7 @@ export function ScoreSummary({
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 8, minWidth: 0 }}>
                   {isWeak ? (
-                    <WarningOutlined style={{ color: "var(--error)", fontSize: 14 }} />
+                    <AlertTriangle style={{ color: "var(--error)", fontSize: 14 }} />
                   ) : (
                     <div style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--accent)" }} />
                   )}
@@ -219,7 +229,7 @@ export function ScoreSummary({
           }}
         >
           <p style={{ fontSize: 13, color: "var(--warning)", fontWeight: 700, margin: 0, display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
-            <WarningOutlined /> Cần ôn lại: {weakTopics.join(", ")}
+            <AlertTriangle /> Cần ôn lại: {weakTopics.join(", ")}
           </p>
           <m.button
             whileHover={{ scale: 1.03 }}
@@ -241,7 +251,7 @@ export function ScoreSummary({
               gap: 4,
             }}
           >
-            <BookOutlined /> Học ngay lý thuyết
+            <BookOpen /> Học ngay lý thuyết
           </m.button>
         </m.div>
       )}
@@ -269,7 +279,7 @@ export function ScoreSummary({
             boxShadow: "var(--shadow-sm)",
           }}
         >
-          <ReloadOutlined /> Làm lại đề này
+          <RefreshCw /> Làm lại đề này
         </m.button>
         
         <m.button
@@ -293,7 +303,7 @@ export function ScoreSummary({
             boxShadow: "0 2px 8px var(--accent-muted)",
           }}
         >
-          <StarOutlined /> Đề mới ngẫu nhiên
+          <Star /> Đề mới ngẫu nhiên
         </m.button>
       </div>
     </div>

@@ -1,9 +1,17 @@
 "use client";
 
 import React, { useState } from "react";
-import { SoundOutlined, LoadingOutlined, CheckOutlined, AimOutlined, FormOutlined, EditOutlined } from "@ant-design/icons";
+
 import { CEFR_LEVELS, EXERCISE_TYPES } from "@/lib/listening/types";
 import type { CefrLevel, ExerciseType } from "@/lib/listening/types";
+import {
+  Check,
+  ClipboardList,
+  Loader2,
+  Pencil,
+  Target,
+  Volume2,
+} from "lucide-react";
 
 const LEVEL_META: Record<CefrLevel, { label: string; color: string; desc: string }> = {
   A1: { label: "Beginner", color: "var(--success)", desc: "Câu ngắn, từ cơ bản" },
@@ -15,9 +23,9 @@ const LEVEL_META: Record<CefrLevel, { label: string; color: string; desc: string
 };
 
 const TYPE_META: Record<ExerciseType, { label: string; icon: React.ReactNode; desc: string }> = {
-  comprehension: { label: "Nghe hiểu", icon: <AimOutlined />, desc: "Trả lời câu hỏi trắc nghiệm" },
-  dictation: { label: "Nghe chép", icon: <FormOutlined />, desc: "Viết lại nội dung nghe được" },
-  fill_blanks: { label: "Điền từ", icon: <EditOutlined />, desc: "Điền từ còn thiếu vào chỗ trống" },
+  comprehension: { label: "Nghe hiểu", icon: <Target />, desc: "Trả lời câu hỏi trắc nghiệm" },
+  dictation: { label: "Nghe chép", icon: <ClipboardList />, desc: "Viết lại nội dung nghe được" },
+  fill_blanks: { label: "Điền từ", icon: <Pencil />, desc: "Điền từ còn thiếu vào chỗ trống" },
 };
 
 type Props = {
@@ -241,7 +249,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                       flexShrink: 0,
                     }}
                   >
-                    <CheckOutlined style={{ fontSize: 11, color: "var(--text-on-accent)" }} />
+                    <Check size={11} className="text-[var(--text-on-accent)]" />
                   </span>
                 )}
               </button>
@@ -274,7 +282,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
           boxShadow: activeLevel ? "var(--shadow-lg)" : "none",
         }}
       >
-        {isLoading ? <LoadingOutlined spin /> : <SoundOutlined />}
+        {isLoading ? <Loader2 className="animate-spin" /> : <Volume2 />}
         {isLoading ? "Đang tạo bài nghe..." : "Bắt đầu luyện nghe"}
       </button>
     </div>

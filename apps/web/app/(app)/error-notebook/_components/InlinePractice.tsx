@@ -69,7 +69,7 @@ export function InlinePractice({ errorId, onResolved }: Props) {
   if (loading) {
     return (
       <div className="py-4 text-center">
-        <Loader2 className="h-4.5 w-4.5 text-accent animate-spin inline" />
+        <Loader2 className="h-4.5 w-4.5 text-accent animate-inline" />
         <span className="ml-2 text-xs text-text-muted">Đang tạo bài tập...</span>
       </div>
     );

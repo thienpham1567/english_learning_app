@@ -2,20 +2,21 @@
 
 import { useState, useCallback } from "react";
 import { Flex, Typography, message } from "antd";
-import {
-  PlayCircleOutlined,
-  PauseCircleOutlined,
-  LoadingOutlined,
-  SoundOutlined,
-  AudioOutlined,
-  StopOutlined,
-  RedoOutlined,
-} from "@ant-design/icons";
+
 import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
 import { useDialogue } from "../_hooks/useDialogue";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { ShadowResult, type EvalResult } from "./ShadowResult";
+import {
+  Loader2,
+  Mic,
+  PauseCircle,
+  PlayCircle,
+  Redo,
+  StopCircle,
+  Volume2,
+} from "lucide-react";
 
 const { Text, Title } = Typography;
 
@@ -270,7 +271,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               boxShadow: dlg.generating ? "none" : "0 4px 14px var(--accent-muted)",
             }}
           >
-            {dlg.generating ? <><LoadingOutlined spin /> Đang tạo hội thoại...</> : <>✨ Tạo hội thoại</>}
+            {dlg.generating ? <><Loader2 className="animate-spin" /> Đang tạo hội thoại...</> : <>✨ Tạo hội thoại</>}
           </m.button>
         </m.div>
 
@@ -331,7 +332,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                           📌 {saved.topic}
                         </Text>
                       )}
-                      <Text style={{ fontSize: 11, color: "var(--text-muted)" }}>
+                      <Text className="text-[var(--text-muted)]" style={{ fontSize: 11 }}>
                         {saved.linesJson.length} câu
                       </Text>
                       {saved.rolePlayCount > 0 && (
@@ -403,7 +404,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             <Text style={{ fontSize: 16, fontWeight: 800, color: "var(--text-primary)", display: "block" }}>
               💬 {dlg.dialogue.title}
             </Text>
-            <Text style={{ fontSize: 12, color: "var(--text-muted)" }}>
+            <Text className="text-[var(--text-muted)]" style={{ fontSize: 12 }}>
               {dlg.dialogue.context} • {dlg.dialogue.lines.length} câu
             </Text>
           </div>
@@ -421,7 +422,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                 fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "var(--font-body)",
               }}
             >
-              {dlg.isLoading ? <><LoadingOutlined spin /> Đang tải...</> : dlg.isPlaying ? <><PauseCircleOutlined /> Dừng</> : <><PlayCircleOutlined /> Phát tất cả</>}
+              {dlg.isLoading ? <><Loader2 className="animate-spin" /> Đang tải...</> : dlg.isPlaying ? <><PauseCircle /> Dừng</> : <><PlayCircle /> Phát tất cả</>}
             </m.button>
             <m.button
               whileHover={{ scale: 1.02 }}
@@ -436,7 +437,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                 fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "var(--font-body)",
               }}
             >
-              <RedoOutlined /> Tạo mới
+              <Redo /> Tạo mới
             </m.button>
           </Flex>
         </Flex>
@@ -553,10 +554,10 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                   {line.text}
                 </Text>
                 {isActive && dlg.isLoading && (
-                  <LoadingOutlined style={{ position: "absolute", top: 10, right: 10, fontSize: 14, color: colors.accent }} spin />
+                  <Loader2 className="animate-spin" style={{ position: "absolute", top: 10, right: 10, fontSize: 14, color: colors.accent }} />
                 )}
                 {isActive && !dlg.isLoading && dlg.isPlaying && (
-                  <SoundOutlined style={{ position: "absolute", top: 10, right: 10, fontSize: 14, color: colors.accent }} />
+                  <Volume2 style={{ position: "absolute", top: 10, right: 10, fontSize: 14, color: colors.accent }} />
                 )}
               </div>
             </m.div>
@@ -609,11 +610,11 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               }}
             >
               {dlg.isLoading ? (
-                <><LoadingOutlined spin /> Đang tải...</>
+                <><Loader2 className="animate-spin" /> Đang tải...</>
               ) : isListeningPreview ? (
-                <><PauseCircleOutlined /> Dừng nghe</>
+                <><PauseCircle /> Dừng nghe</>
               ) : (
-                <><PlayCircleOutlined /> Nghe hội thoại</>
+                <><PlayCircle /> Nghe hội thoại</>
               )}
             </m.button>
 
@@ -692,7 +693,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                 fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "var(--font-body)",
               }}
             >
-              <PlayCircleOutlined /> Nghe lại
+              <PlayCircle /> Nghe lại
             </m.button>
           </Flex>
           <Flex gap={8} className="role-play-buttons">
@@ -792,7 +793,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                     Lượt bạn! Hãy đọc câu của mình
                   </Text>
                 </Flex>
-                <Text style={{ fontSize: 13, color: "var(--text-secondary)", marginBottom: 4 }}>
+                <Text className="text-[var(--text-secondary)]" style={{ fontSize: 13 }}>
                   &quot;{dlg.dialogue.lines[rolePlayLineIndex]?.text}&quot;
                 </Text>
                 <m.button
@@ -807,14 +808,14 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                     cursor: "pointer", fontFamily: "var(--font-body)",
                   }}
                 >
-                  <StopOutlined /> Dừng & chấm điểm
+                  <StopCircle /> Dừng & chấm điểm
                 </m.button>
               </Flex>
             )}
 
             {rolePlayStep === "evaluating" && (
               <Flex align="center" justify="center" gap={8} style={{ padding: 16 }}>
-                <LoadingOutlined spin style={{ fontSize: 20, color: "var(--accent)" }} />
+                <Loader2 className="animate-spin text-[var(--accent)]" size={20} />
                 <Text style={{ fontSize: 14, fontWeight: 700, color: "var(--accent)" }}>
                   🤖 Đang chấm điểm...
                 </Text>

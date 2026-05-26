@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 import { Card, Flex, Space, Tag, Typography } from "antd";
-import { SoundOutlined, LoadingOutlined, BulbOutlined, ApartmentOutlined } from "@ant-design/icons";
+
 import type { DueCard } from "@/lib/flashcard/types";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { api } from "@/lib/api-client";
 import { WordFamilyExplorer } from "@/app/(app)/flashcards/_components/WordFamilyExplorer";
 import * as m from "motion/react-client";
+import { Lightbulb, Loader2, Network, Volume2 } from "lucide-react";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -189,9 +190,9 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
               }}
             >
               {tts.isLoading ? (
-                <LoadingOutlined spin />
+                <Loader2 className="animate-spin" />
               ) : (
-                <SoundOutlined />
+                <Volume2 />
               )}
               {tts.isSpeaking ? "Đang phát..." : "Nghe phát âm"}
             </m.button>
@@ -338,11 +339,11 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
               >
                 {contextLoading ? (
                   <>
-                    <LoadingOutlined spin /> Đang tạo ví dụ...
+                    <Loader2 className="animate-spin" /> Đang tạo ví dụ...
                   </>
                 ) : (
                   <>
-                    <BulbOutlined /> Xem thêm ví dụ TOEIC
+                    <Lightbulb /> Xem thêm ví dụ TOEIC
                   </>
                 )}
               </m.button>
@@ -351,7 +352,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
             {contextSentences.length > 0 && (
               <Flex vertical gap={8} style={{ marginTop: 16 }}>
                 <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".1em", color: "var(--accent)", display: "flex", alignItems: "center", gap: 4 }}>
-                  <BulbOutlined /> Ví dụ thực tế TOEIC
+                  <Lightbulb /> Ví dụ thực tế TOEIC
                 </span>
                 {contextSentences.slice(0, 3).map((s, i) => (
                   <div

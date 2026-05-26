@@ -2,21 +2,22 @@
 
 import { useState, useCallback, useRef } from "react";
 import { Flex, Typography, message } from "antd";
-import {
-  SoundOutlined,
-  AudioOutlined,
-  LoadingOutlined,
-  PlayCircleOutlined,
-  StopOutlined,
-  RedoOutlined,
-  RightOutlined,
-  CheckCircleOutlined,
-} from "@ant-design/icons";
+
 import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { splitIntoSentences } from "../_hooks/useSentences";
 import { ShadowResult, type EvalResult } from "./ShadowResult";
+import {
+  ChevronRight,
+  CircleCheckBig,
+  Loader2,
+  Mic,
+  PlayCircle,
+  Redo,
+  StopCircle,
+  Volume2,
+} from "lucide-react";
 
 const { Text, Title } = Typography;
 
@@ -209,7 +210,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                 transition: "all 0.15s",
               }}
             >
-              {sentenceResults[i] ? <CheckCircleOutlined style={{ fontSize: 11 }} /> : i + 1}
+              {sentenceResults[i] ? <CircleCheckBig size={11} /> : i + 1}
             </button>
           ))}
         </Flex>
@@ -265,7 +266,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                   boxShadow: "0 4px 14px var(--accent-muted)",
                 }}
               >
-                <SoundOutlined /> Nghe câu mẫu
+                <Volume2 /> Nghe câu mẫu
               </m.button>
             </m.div>
           )}
@@ -304,7 +305,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                     cursor: "pointer", fontFamily: "var(--font-body)",
                   }}
                 >
-                  <PlayCircleOutlined /> Nghe lại
+                  <PlayCircle /> Nghe lại
                 </m.button>
                 <m.button
                   whileHover={{ scale: 1.02 }}
@@ -320,7 +321,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                     boxShadow: "0 4px 14px rgba(239, 68, 68, 0.3)",
                   }}
                 >
-                  <AudioOutlined /> 🎙️ Đọc theo
+                  <Mic /> 🎙️ Đọc theo
                 </m.button>
               </Flex>
             </m.div>
@@ -355,7 +356,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                     cursor: "pointer", fontFamily: "var(--font-body)",
                   }}
                 >
-                  <StopOutlined /> Dừng & chấm điểm
+                  <StopCircle /> Dừng & chấm điểm
                 </m.button>
               </Flex>
             </m.div>
@@ -364,7 +365,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
           {step === "evaluating" && (
             <m.div key="evaluating" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               style={{ textAlign: "center", padding: "16px 0" }}>
-              <LoadingOutlined spin style={{ fontSize: 24, color: "var(--accent)", marginBottom: 8 }} />
+              <Loader2 className="animate-spin text-[var(--accent)]" size={24} />
               <div style={{ fontSize: 14, fontWeight: 700, color: "var(--accent)" }}>
                 🤖 AI đang chấm điểm phát âm...
               </div>
@@ -398,7 +399,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                   cursor: "pointer", fontFamily: "var(--font-body)",
                 }}
               >
-                <RedoOutlined /> Thử lại
+                <Redo /> Thử lại
               </m.button>
               {currentIdx < sentences.length - 1 && (
                 <m.button
@@ -415,7 +416,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                     boxShadow: "0 4px 14px var(--accent-muted)",
                   }}
                 >
-                  Câu tiếp theo <RightOutlined />
+                  Câu tiếp theo <ChevronRight />
                 </m.button>
               )}
             </Flex>

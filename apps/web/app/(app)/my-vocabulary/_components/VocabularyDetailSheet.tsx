@@ -1,18 +1,12 @@
 "use client";
 
-import {
-  ArrowRightOutlined,
-  LinkOutlined,
-  SoundOutlined,
-  StarFilled,
-  StarOutlined,
-} from "@ant-design/icons";
 import { Drawer, Skeleton } from "antd";
 import * as m from "motion/react-client";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api-client";
 import type { Vocabulary } from "@/lib/schemas/vocabulary";
+import { ArrowRight, Link as LinkIcon, Star, Volume2 } from "lucide-react";;
 
 type Props = {
   query: string | null;
@@ -125,7 +119,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
               cursor: "pointer",
             }}
           >
-            {saved ? <StarFilled style={{ color: "var(--accent)" }} /> : <StarOutlined />}
+            {saved ? <Star style={{ color: "var(--accent)" }} /> : <Star />}
             <span>{saved ? "Đã lưu" : "Lưu"}</span>
           </m.button>
 
@@ -147,7 +141,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
               cursor: "pointer",
             }}
           >
-            <LinkOutlined />
+            <LinkIcon />
             <span>Tra cứu</span>
           </m.button>
         </div>
@@ -192,7 +186,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
               gap: 6,
             }}
           >
-            <LinkOutlined /> Tra lại ngay
+            <LinkIcon /> Tra lại ngay
           </m.button>
         </div>
       )}
@@ -401,7 +395,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
             }}
           >
             <span>Xem chi tiết trong Từ điển</span>
-            <ArrowRightOutlined />
+            <ArrowRight />
           </m.button>
         </div>
       )}

@@ -1,16 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import {
-  BookOutlined,
-  CheckCircleFilled,
-  FireOutlined,
-  StarFilled,
-  RocketOutlined,
-  ArrowRightOutlined,
-  TrophyOutlined,
-  ThunderboltOutlined,
-} from "@ant-design/icons";
+
 import { Alert, Progress } from "antd";
 import * as m from "motion/react-client";
 
@@ -21,6 +12,16 @@ import { api } from "@/lib/api-client";
 import type { GrammarLessonProgressItem } from "@/lib/grammar-lessons/schema";
 import type { ExamType, GrammarTopic } from "@/lib/grammar-lessons/topics";
 import { getCategoriesForExam } from "@/lib/grammar-lessons/topics";
+import {
+  ArrowRight,
+  BookOpen,
+  CheckCircle,
+  Flame,
+  Rocket,
+  Star,
+  Trophy,
+  Zap,
+} from "lucide-react";
 
 type ProgressResponse = {
   progress: GrammarLessonProgressItem[];
@@ -111,7 +112,6 @@ export default function GrammarLessonsPage() {
     >
       <div className="grain-overlay" style={{ opacity: 0.03, zIndex: 0 }} />
 
-
       {/* Content area */}
       <div
         style={{
@@ -187,7 +187,7 @@ export default function GrammarLessonsPage() {
                   {/* Stats grid */}
                   <div style={{ flex: 1, minWidth: 200, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
                     <StatCard
-                      icon={<BookOutlined />}
+                      icon={<BookOpen />}
                       iconColor="var(--accent)"
                       iconBg="var(--accent-light)"
                       label="Chủ đề"
@@ -195,7 +195,7 @@ export default function GrammarLessonsPage() {
                       sub={`${tabStats.totalTopics} bài học`}
                     />
                     <StatCard
-                      icon={<CheckCircleFilled />}
+                      icon={<CheckCircle />}
                       iconColor="var(--success)"
                       iconBg="rgba(16, 185, 129, 0.08)"
                       label="Hoàn thành"
@@ -203,7 +203,7 @@ export default function GrammarLessonsPage() {
                       sub={`/${tabStats.totalTopics} bài`}
                     />
                     <StatCard
-                      icon={progressPct === 100 ? <TrophyOutlined /> : <FireOutlined />}
+                      icon={progressPct === 100 ? <Trophy /> : <Flame />}
                       iconColor={progressPct === 100 ? "var(--xp)" : "var(--fire)"}
                       iconBg={progressPct === 100 ? "rgba(139, 92, 246, 0.08)" : "rgba(245, 158, 11, 0.08)"}
                       label="Đang học"
@@ -270,13 +270,13 @@ export default function GrammarLessonsPage() {
                       placeItems: "center",
                       flexShrink: 0,
                     }}>
-                      <RocketOutlined style={{ fontSize: 22, color: "#fff" }} />
+                      <Rocket style={{ fontSize: 22, color: "#fff" }} />
                     </div>
 
                     {/* Text */}
                     <div style={{ flex: 1, position: "relative" }}>
                       <div style={{ fontSize: 10.5, fontWeight: 800, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
-                        <StarFilled style={{ fontSize: 9, marginRight: 4 }} />
+                        <Star style={{ fontSize: 9, marginRight: 4 }} />
                         Bài học gợi ý tiếp theo
                       </div>
                       <div style={{ fontSize: 17, fontWeight: 900, color: "#fff", fontFamily: "var(--font-display)", marginTop: 3 }}>
@@ -297,7 +297,7 @@ export default function GrammarLessonsPage() {
                       placeItems: "center",
                       flexShrink: 0,
                     }}>
-                      <ArrowRightOutlined style={{ fontSize: 14, color: "#fff" }} />
+                      <ArrowRight style={{ fontSize: 14, color: "#fff" }} />
                     </div>
                   </m.button>
                 </m.div>
@@ -335,7 +335,7 @@ export default function GrammarLessonsPage() {
                 transition={{ delay: 0.25 }}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-                  <ThunderboltOutlined style={{ color: "var(--accent)", fontSize: 16 }} />
+                  <Zap style={{ color: "var(--accent)", fontSize: 16 }} />
                   <h2 style={{ margin: 0, fontSize: 17, fontWeight: 900, color: "var(--ink)", fontFamily: "var(--font-display)" }}>
                     Thư viện chủ đề
                   </h2>

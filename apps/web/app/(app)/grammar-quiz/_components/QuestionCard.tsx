@@ -1,9 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { CheckOutlined, CloseOutlined, FireOutlined, CheckCircleOutlined, CloseCircleOutlined, BulbOutlined, TranslationOutlined } from "@ant-design/icons";
+
 import type { GrammarQuestion } from "@/lib/grammar-quiz/types";
 import * as m from "motion/react-client";
+import {
+  Check,
+  CircleCheckBig,
+  Flame,
+  Languages,
+  Lightbulb,
+  X,
+  XCircle,
+} from "lucide-react";
 
 const OPTION_LABELS = ["A", "B", "C", "D"] as const;
 
@@ -113,7 +122,7 @@ export function QuestionCard({
               boxShadow: "0 4px 14px rgba(245, 158, 11, 0.35)",
             }}
           >
-            <FireOutlined /> {combo} COMBO! 🔥
+            <Flame /> {combo} COMBO! 🔥
           </span>
         </m.div>
       )}
@@ -217,9 +226,9 @@ export function QuestionCard({
                   }}
                 >
                   {isRevealed && isCorrect ? (
-                    <CheckOutlined style={{ fontSize: 12 }} />
+                    <Check size={12} />
                   ) : isRevealed && isSelected && !isCorrect ? (
-                    <CloseOutlined style={{ fontSize: 12 }} />
+                    <X size={12} />
                   ) : (
                     OPTION_LABELS[i]
                   )}
@@ -246,7 +255,7 @@ export function QuestionCard({
               }}
             >
               <span style={{ fontSize: 16, display: "flex" }}>
-                {selectedAnswer === question.correctIndex ? <CheckCircleOutlined style={{ color: "var(--success)" }} /> : <CloseCircleOutlined style={{ color: "var(--error)" }} />}
+                {selectedAnswer === question.correctIndex ? <CircleCheckBig style={{ color: "var(--success)" }} /> : <XCircle style={{ color: "var(--error)" }} />}
               </span>
               <span
                 style={{
@@ -309,7 +318,7 @@ export function QuestionCard({
                       gap: 4,
                     }}
                   >
-                    <BulbOutlined /> Lý do đáp án
+                    <Lightbulb /> Lý do đáp án
                   </span>
                   <div
                     style={{

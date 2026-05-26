@@ -2,19 +2,20 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
-import {
-  ArrowLeftOutlined,
-  CheckCircleFilled,
-  CloseCircleFilled,
-  TrophyFilled,
-  ReloadOutlined,
-  SaveOutlined,
-  LoadingOutlined,
-  EditOutlined,
-  FireFilled,
-} from "@ant-design/icons";
+
 import { Card, Button, Flex, Typography, Spin, Tag, message } from "antd";
 import { api } from "@/lib/api-client";
+import {
+  ArrowLeft,
+  CheckCircle,
+  Flame,
+  Loader2,
+  Pencil,
+  RefreshCw,
+  Save,
+  Trophy,
+  XCircle,
+} from "lucide-react";
 
 const { Text, Title } = Typography;
 
@@ -87,7 +88,7 @@ export default function ClozeTestPage() {
   if (loading) {
     return (
       <Flex align="center" justify="center" style={{ height: "100%", padding: 60 }}>
-        <Spin indicator={<LoadingOutlined style={{ fontSize: 32, color: "var(--accent)" }} />} />
+        <Spin indicator={<Loader2 className="animate-spin text-[var(--accent)]" size={32} />} />
       </Flex>
     );
   }
@@ -95,9 +96,9 @@ export default function ClozeTestPage() {
   if (items.length === 0) {
     return (
       <Flex vertical align="center" justify="center" gap={12} style={{ height: "100%", padding: 60 }}>
-        <EditOutlined style={{ fontSize: 48, color: "var(--text-muted)" }} />
+        <Pencil size={48} className="text-[var(--text-muted)]" />
         <Text type="secondary">Không thể tạo bài kiểm tra cho bài đọc này</Text>
-        <Button type="link" icon={<ArrowLeftOutlined />} onClick={() => router.push(`/reading/graded/${id}`)}>
+        <Button type="link" icon={<ArrowLeft />} onClick={() => router.push(`/reading/graded/${id}`)}>
           Quay lại bài đọc
         </Button>
       </Flex>
@@ -112,7 +113,7 @@ export default function ClozeTestPage() {
         {/* Back */}
         <Button
           type="text"
-          icon={<ArrowLeftOutlined />}
+          icon={<ArrowLeft />}
           onClick={() => router.push(`/reading/graded/${id}`)}
           style={{ alignSelf: "flex-start", color: "var(--text-muted)", fontSize: 13, borderRadius: 10 }}
         >
@@ -134,7 +135,7 @@ export default function ClozeTestPage() {
               background: "rgba(255,255,255,0.2)", display: "flex",
               alignItems: "center", justifyContent: "center",
             }}>
-              <EditOutlined style={{ fontSize: 22, color: "var(--text-on-accent)" }} />
+              <Pencil size={22} className="text-[var(--text-on-accent)]" />
             </div>
             <div>
               <Text style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.1em", color: "rgba(255,255,255,0.7)" }}>
@@ -166,10 +167,10 @@ export default function ClozeTestPage() {
               background: score >= 80 ? "color-mix(in srgb, var(--success) 12%, transparent)" : score >= 50 ? "color-mix(in srgb, var(--warning) 12%, transparent)" : "color-mix(in srgb, var(--error) 12%, transparent)",
             }}>
               {score >= 80
-                ? <TrophyFilled style={{ fontSize: 28, color: "var(--success)" }} />
+                ? <Trophy size={28} className="text-[var(--success)]" />
                 : score >= 50
-                  ? <FireFilled style={{ fontSize: 28, color: "var(--warning)" }} />
-                  : <EditOutlined style={{ fontSize: 28, color: "var(--error)" }} />
+                  ? <Flame size={28} className="text-[var(--warning)]" />
+                  : <Pencil size={28} className="text-[var(--error)]" />
               }
             </div>
             <Title level={2} style={{ margin: "0 0 4px", color: score >= 80 ? "var(--success)" : score >= 50 ? "var(--warning)" : "var(--error)" }}>
@@ -181,13 +182,13 @@ export default function ClozeTestPage() {
             </Text>
 
             <Flex gap={10} justify="center" style={{ marginTop: 16 }}>
-              <Button icon={<ReloadOutlined />} onClick={handleRetry} style={{ borderRadius: 10 }}>
+              <Button icon={<RefreshCw />} onClick={handleRetry} style={{ borderRadius: 10 }}>
                 Làm lại
               </Button>
               {correctCount < totalCount && (
                 <Button
                   type="primary"
-                  icon={savingFlashcards ? <LoadingOutlined /> : <SaveOutlined />}
+                  icon={savingFlashcards ? <Loader2 className="animate-spin" /> : <Save />}
                   onClick={saveMissedToFlashcards}
                   disabled={savingFlashcards}
                   style={{ borderRadius: 10 }}
@@ -235,7 +236,7 @@ export default function ClozeTestPage() {
                       : "var(--text-muted)",
                   }}>
                     {showResult
-                      ? isCorrect ? <CheckCircleFilled /> : <CloseCircleFilled />
+                      ? isCorrect ? <CheckCircle /> : <XCircle />
                       : i + 1
                     }
                   </div>
@@ -280,7 +281,7 @@ export default function ClozeTestPage() {
 
                     {showResult && !isCorrect && (
                       <Text style={{ display: "block", marginTop: 6, fontSize: 12, color: "var(--success)" }}>
-                        <CheckCircleFilled style={{ marginRight: 4 }} />
+                        <CheckCircle style={{ marginRight: 4 }} />
                         Đáp án: <strong>{item.answer}</strong>
                       </Text>
                     )}
@@ -296,7 +297,7 @@ export default function ClozeTestPage() {
           <Button
             type="primary"
             size="large"
-            icon={<CheckCircleFilled />}
+            icon={<CheckCircle />}
             onClick={handleSubmit}
             style={{
               alignSelf: "center", borderRadius: 12, fontWeight: 700,

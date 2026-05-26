@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { CompassOutlined } from "@ant-design/icons";
 
 import { useExamMode } from "@/components/shared/ExamModeProvider";
 import { TopicSetGrid } from "@/app/(app)/study-sets/_components/TopicSetGrid";
 import { StudySetView } from "@/app/(app)/study-sets/_components/StudySetView";
 import type { StudyTopic } from "@/app/(app)/study-sets/_components/TopicSetGrid";
+import { Compass } from "lucide-react";
 
 export default function StudySetsPage() {
   const { examMode } = useExamMode();
@@ -25,8 +25,6 @@ export default function StudySetsPage() {
         overflow: "hidden",
       }}
     >
-
-
 
       {/* Content */}
       <div style={{ position: "relative", minHeight: 0, flex: 1, overflowY: "auto", padding: "20px 16px" }}>

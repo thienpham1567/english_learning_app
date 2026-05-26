@@ -1,7 +1,7 @@
 "use client";
 
-import { DownloadOutlined, CloseOutlined } from "@ant-design/icons";
 import { usePWAInstall } from "@/hooks/usePWAInstall";
+import { Download, X } from "lucide-react";
 
 export function PWAInstallBanner() {
   const { canInstall, install, dismiss } = usePWAInstall();
@@ -29,7 +29,7 @@ export function PWAInstallBanner() {
         animation: "slideUp 0.4s ease-out",
       }}
     >
-      <DownloadOutlined style={{ fontSize: 20, flexShrink: 0 }} />
+      <Download style={{ fontSize: 20, flexShrink: 0 }} />
       <div style={{ flex: 1, minWidth: 0 }}>
         <div style={{ fontSize: 14, fontWeight: 700 }}>Cài đặt TOEIC Master</div>
         <div style={{ fontSize: 12, opacity: 0.85 }}>Truy cập nhanh hơn</div>
@@ -63,7 +63,7 @@ export function PWAInstallBanner() {
         }}
         aria-label="Đóng"
       >
-        <CloseOutlined />
+        <X />
       </button>
 
       <style>{`

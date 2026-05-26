@@ -1,10 +1,10 @@
 "use client";
 
-import { TrophyOutlined } from "@ant-design/icons";
 import { useToeicSession } from "@/hooks/useToeicSession";
 import { DiagnosticIntro } from "./_components/DiagnosticIntro";
 import { DiagnosticResult } from "./_components/DiagnosticResult";
 import { QuestionRunner } from "../practice/_components/QuestionRunner";
+import { Trophy } from "lucide-react";
 
 const TIME_LIMIT_MS = 20 * 60 * 1000;
 

@@ -1,21 +1,22 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import {
-  FileTextOutlined,
-  LoadingOutlined,
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  InfoCircleOutlined,
-  ReloadOutlined,
-  SendOutlined,
-  EyeOutlined,
-} from "@ant-design/icons";
+
 import { Progress, Tag } from "antd";
 import { api } from "@/lib/api-client";
 import { AudioPlayer } from "./AudioPlayer";
 import { CEFR_LEVELS } from "@/lib/listening/types";
 import type { CefrLevel } from "@/lib/listening/types";
+import {
+  CircleCheckBig,
+  Eye,
+  FileText,
+  Info,
+  Loader2,
+  RefreshCw,
+  Send,
+  XCircle,
+} from "lucide-react";
 
 // ── Types ──
 type CoverageItem = {
@@ -142,7 +143,7 @@ export default function SummarizeMode({ examMode }: Props) {
       {state === "idle" && (
         <div style={{ padding: 24, border: "1px solid var(--border)", borderRadius: 16, background: "var(--card-bg)" }}>
           <div style={{ textAlign: "center", marginBottom: 24 }}>
-            <FileTextOutlined style={{ fontSize: 40, color: "var(--accent)", marginBottom: 12 }} />
+            <FileText size={40} className="text-[var(--accent)]" />
             <h2 style={{ margin: "0 0 6px", fontSize: 18 }}>Listen &amp; Summarize</h2>
             <p style={{ color: "var(--text-secondary)", margin: 0, fontSize: 13 }}>
               Nghe đoạn văn → Tóm tắt → AI chấm điểm ý chính
@@ -192,7 +193,7 @@ export default function SummarizeMode({ examMode }: Props) {
       {/* ── Loading audio ── */}
       {state === "listening" && !exercise && (
         <div style={{ textAlign: "center", padding: 40 }}>
-          <LoadingOutlined style={{ fontSize: 32, color: "var(--accent)" }} />
+          <Loader2 className="animate-spin text-[var(--accent)]" size={32} />
           <p style={{ color: "var(--text-secondary)", marginTop: 12 }}>Đang tạo bài nghe...</p>
         </div>
       )}
@@ -259,7 +260,7 @@ export default function SummarizeMode({ examMode }: Props) {
                     transition: "all 0.15s ease",
                   }}
                 >
-                  <SendOutlined /> Nộp bài
+                  <Send /> Nộp bài
                 </button>
               </div>
             </div>
@@ -285,7 +286,7 @@ export default function SummarizeMode({ examMode }: Props) {
       {/* ── Scoring ── */}
       {state === "scoring" && (
         <div style={{ textAlign: "center", padding: 40 }}>
-          <LoadingOutlined style={{ fontSize: 32, color: "var(--accent)" }} />
+          <Loader2 className="animate-spin text-[var(--accent)]" size={32} />
           <p style={{ color: "var(--text-secondary)", marginTop: 12 }}>AI đang chấm bài tóm tắt của bạn...</p>
         </div>
       )}
@@ -324,7 +325,7 @@ export default function SummarizeMode({ examMode }: Props) {
           {result.feedback && (
             <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
               <p style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", margin: "0 0 6px" }}>
-                <InfoCircleOutlined style={{ marginRight: 4 }} />Nhận xét từ AI:
+                <Info style={{ marginRight: 4 }} />Nhận xét từ AI:
               </p>
               <p style={{ fontSize: 13, margin: 0, lineHeight: 1.6 }}>{result.feedback}</p>
             </div>
@@ -348,8 +349,8 @@ export default function SummarizeMode({ examMode }: Props) {
                 >
                   <span style={{ fontSize: 14, flexShrink: 0, marginTop: 1 }}>
                     {item.covered
-                      ? <CheckCircleOutlined style={{ color: "var(--success)" }} />
-                      : <CloseCircleOutlined style={{ color: "var(--error)" }} />}
+                      ? <CircleCheckBig style={{ color: "var(--success)" }} />
+                      : <XCircle style={{ color: "var(--error)" }} />}
                   </span>
                   <div>
                     <p style={{ margin: 0, fontSize: 13, fontWeight: 500 }}>{item.idea}</p>
@@ -385,7 +386,7 @@ export default function SummarizeMode({ examMode }: Props) {
                 cursor: "pointer", color: "var(--accent)", fontSize: 13, fontWeight: 600, padding: 0,
               }}
             >
-              <EyeOutlined />
+              <Eye />
               {showPassage ? "Ẩn đoạn văn gốc" : "Xem đoạn văn gốc"}
             </button>
             {showPassage && (
@@ -401,7 +402,7 @@ export default function SummarizeMode({ examMode }: Props) {
               onClick={() => { setState("writing"); setResult(null); setSummaryText(""); setShowPassage(false); }}
               style={{ padding: "10px 20px", borderRadius: 8, border: "1px solid var(--border)", background: "transparent", color: "var(--text)", cursor: "pointer", fontSize: 13, fontWeight: 500 }}
             >
-              <ReloadOutlined /> Viết lại
+              <RefreshCw /> Viết lại
             </button>
             <button
               onClick={startSession}

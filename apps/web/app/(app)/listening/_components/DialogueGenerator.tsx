@@ -1,10 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { TeamOutlined } from "@ant-design/icons";
+
 import { Select, Input, Button } from "antd";
 import { CEFR_LEVELS } from "@/lib/listening/types";
 import type { CefrLevel } from "@/lib/listening/types";
+import { Users } from "lucide-react";
 
 type Props = {
   onStart: (args: { topic: string; level: CefrLevel; turns: 6 | 8 | 10; speakers: 2 | 3 }) => void;
@@ -36,7 +37,7 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-        <TeamOutlined style={{ color: "var(--accent)", fontSize: 18 }} />
+        <Users style={{ color: "var(--accent)", fontSize: 18 }} />
         <div style={{ fontSize: 16, fontWeight: 700, color: "var(--text)" }}>
           Multi-speaker dialogue
         </div>
@@ -99,7 +100,7 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
         onClick={() => canSubmit && onStart({ topic: topic.trim(), level, turns, speakers })}
         disabled={!canSubmit}
         loading={isLoading}
-        icon={<TeamOutlined />}
+        icon={<Users />}
         style={{
           background: canSubmit ? "var(--accent)" : "var(--border)",
           color: canSubmit ? "var(--text-on-accent)" : "var(--text-muted)",

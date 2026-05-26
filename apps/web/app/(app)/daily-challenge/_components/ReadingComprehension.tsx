@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import type { ReadingComprehensionData } from "@/lib/daily-challenge/types";
-import { ReadOutlined } from "@ant-design/icons";
+
 import * as m from "motion/react-client";
+import { BookOpenText } from "lucide-react";
 
 const LABELS = ["A", "B", "C", "D"] as const;
 
@@ -63,7 +64,7 @@ export function ReadingComprehension({ data, instruction, onAnswer, disabled }: 
             marginBottom: 10,
           }}
         >
-          <ReadOutlined style={{ fontSize: 11 }} /> Văn bản đọc hiểu
+          <BookOpenText size={11} /> Văn bản đọc hiểu
         </span>
         <p
           style={{

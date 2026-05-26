@@ -3,20 +3,20 @@
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
 import * as m from "motion/react-client";
-import {
-  BookOutlined,
-  SearchOutlined,
-  StarFilled,
-  StarOutlined,
-  SoundOutlined,
-  CheckCircleFilled,
-  LoadingOutlined,
-  RightOutlined,
-  ArrowLeftOutlined,
-} from "@ant-design/icons";
+
 import { Progress } from "antd";
 import { api } from "@/lib/api-client";
 import { useAudioPlayer } from "@/hooks/useAudioPlayer";
+import {
+  ArrowLeft,
+  BookOpen,
+  CheckCircle,
+  ChevronRight,
+  Loader2,
+  Search,
+  Star,
+  Volume2,
+} from "lucide-react";
 
 type ToeicWord = {
   id: string;
@@ -146,7 +146,7 @@ export function ToeicVocabTab() {
   if (loading) {
     return (
       <div style={{ display: "flex", justifyContent: "center", padding: 60 }}>
-        <LoadingOutlined style={{ fontSize: 24, color: "var(--accent)" }} spin />
+        <Loader2 className="animate-spin text-[var(--accent)]" size={24} />
       </div>
     );
   }
@@ -172,13 +172,13 @@ export function ToeicVocabTab() {
               display: "grid", placeItems: "center", fontSize: 14,
             }}
           >
-            <ArrowLeftOutlined />
+            <ArrowLeft />
           </button>
           <div>
             <div style={{ fontSize: 18, fontWeight: 800, color: "var(--ink)" }}>
               {meta.emoji} {meta.label}
             </div>
-            <div style={{ fontSize: 12, color: "var(--text-muted)" }}>
+            <div className="text-[var(--text-muted)]" style={{ fontSize: 12 }}>
               {topicPack?.learned ?? 0}/{topicPack?.total ?? 0} từ đã học · {topicPct}%
             </div>
           </div>
@@ -198,7 +198,7 @@ export function ToeicVocabTab() {
         <div style={{
           position: "relative", marginBottom: 16,
         }}>
-          <SearchOutlined style={{
+          <Search style={{
             position: "absolute", left: 14, top: "50%", transform: "translateY(-50%)",
             color: "var(--text-muted)", fontSize: 14,
           }} />
@@ -217,7 +217,7 @@ export function ToeicVocabTab() {
 
         {wordsLoading ? (
           <div style={{ display: "flex", justifyContent: "center", padding: 40 }}>
-            <LoadingOutlined style={{ fontSize: 24, color: "var(--accent)" }} spin />
+            <Loader2 className="animate-spin text-[var(--accent)]" size={24} />
           </div>
         ) : (
           <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
@@ -257,7 +257,7 @@ export function ToeicVocabTab() {
                         : "var(--bg-deep)",
                       color: isLearned ? "var(--success)" : "var(--text-muted)",
                     }}>
-                      {isLearned ? <CheckCircleFilled /> : <span style={{ fontWeight: 800, fontSize: 11 }}>{i + 1}</span>}
+                      {isLearned ? <CheckCircle /> : <span style={{ fontWeight: 800, fontSize: 11 }}>{i + 1}</span>}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -275,7 +275,7 @@ export function ToeicVocabTab() {
                         {w.meaningVi}
                       </div>
                     </div>
-                    <RightOutlined style={{
+                    <ChevronRight style={{
                       fontSize: 10, color: "var(--text-muted)",
                       transform: isExpanded ? "rotate(90deg)" : "none",
                       transition: "transform 0.2s",
@@ -309,7 +309,7 @@ export function ToeicVocabTab() {
                             placeItems: "center", color: "var(--accent)", fontSize: 13,
                           }}
                         >
-                          <SoundOutlined />
+                          <Volume2 />
                         </button>
                       </div>
 
@@ -350,7 +350,7 @@ export function ToeicVocabTab() {
                           alignSelf: "flex-start",
                         }}
                       >
-                        <BookOutlined /> Học từ này
+                        <BookOpen /> Học từ này
                       </Link>
                     </div>
                   )}
@@ -433,7 +433,7 @@ export function ToeicVocabTab() {
                   <div style={{ fontSize: 14, fontWeight: 700, color: "var(--ink)" }}>
                     {meta.label}
                   </div>
-                  <div style={{ fontSize: 11, color: "var(--text-muted)" }}>
+                  <div className="text-[var(--text-muted)]" style={{ fontSize: 11 }}>
                     {pack.learned}/{pack.total} từ
                   </div>
                 </div>

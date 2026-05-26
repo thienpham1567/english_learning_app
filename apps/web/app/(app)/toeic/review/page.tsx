@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { Card, Tag, Empty } from "antd";
-import { ReloadOutlined, AlertOutlined, ReadOutlined } from "@ant-design/icons";
+
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { reviewTask, toeicQuestion, toeicVocab } from "@repo/database";
 import { and, eq, lte, sql, inArray, desc } from "drizzle-orm";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
+import { AlertTriangle, BookOpenText, RefreshCw } from "lucide-react";
 
 export default async function ToeicReviewPage() {
 	await requireToeicBaseline();
@@ -83,7 +84,7 @@ export default async function ToeicReviewPage() {
 						style={toeicErrorIds.length === 0 ? { opacity: 0.6 } : undefined}
 					>
 						<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-							<AlertOutlined style={{ fontSize: 22, color: "var(--error)" }} />
+							<AlertTriangle style={{ fontSize: 22, color: "var(--error)" }} />
 							<strong>Câu sai TOEIC</strong>
 						</div>
 						<div style={{ fontSize: 32, fontWeight: 700, marginTop: 8, color: "var(--ink)" }}>
@@ -116,7 +117,7 @@ export default async function ToeicReviewPage() {
 						style={flashcardDue.length === 0 ? { opacity: 0.6 } : undefined}
 					>
 						<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-							<ReadOutlined style={{ fontSize: 22, color: "var(--accent)" }} />
+							<BookOpenText style={{ fontSize: 22, color: "var(--accent)" }} />
 							<strong>Từ vựng cần ôn</strong>
 						</div>
 						<div style={{ fontSize: 32, fontWeight: 700, marginTop: 8, color: "var(--ink)" }}>

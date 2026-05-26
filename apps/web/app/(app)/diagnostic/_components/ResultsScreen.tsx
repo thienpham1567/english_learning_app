@@ -1,16 +1,12 @@
 "use client";
 
 import { Card, Flex, Typography, Tag } from "antd";
-import {
-  CheckCircleFilled,
-  RadarChartOutlined,
-  RightOutlined,
-  ReloadOutlined,
-} from "@ant-design/icons";
+
 import { CEFR_COLORS } from "@/lib/constants/cefr";
 import * as m from "motion/react-client";
 
 import type { TestResult } from "./types";
+import { CheckCircle, ChevronRight, Radar, RefreshCw } from "lucide-react";
 
 const { Title, Text } = Typography;
 
@@ -60,7 +56,7 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
           {/* Radial ambient glow matching the CEFR level color */}
           <div style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", width: 280, height: 280, borderRadius: "50%", background: `radial-gradient(circle, ${cefrColor}12 0%, transparent 70%)`, pointerEvents: "none" }} />
 
-          <CheckCircleFilled
+          <CheckCircle
             style={{ fontSize: 44, color: cefrColor, marginBottom: 16 }}
             className="anim-scale-in"
           />
@@ -132,7 +128,7 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
           }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 18 }}>
-            <RadarChartOutlined style={{ fontSize: 14, color: "var(--accent)" }} />
+            <Radar style={{ fontSize: 14, color: "var(--accent)" }} />
             <span style={{ fontSize: 13, fontWeight: 800, color: "var(--text-primary)", fontFamily: "var(--font-display)" }}>
               Chi tiết năng lực từng kỹ năng
             </span>
@@ -226,7 +222,7 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
             }}
           >
             Về trang chủ
-            <RightOutlined style={{ fontSize: 11 }} />
+            <ChevronRight size={11} />
           </m.button>
           
           <m.button
@@ -249,7 +245,7 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
               gap: 6,
             }}
           >
-            <ReloadOutlined style={{ fontSize: 13 }} />
+            <RefreshCw size={13} />
             Xem tiến trình học
           </m.button>
         </Flex>

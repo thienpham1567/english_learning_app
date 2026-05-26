@@ -6,10 +6,10 @@ import {
   Lightbulb,
   Code,
   Pencil,
-  Link,
+  Link as LinkIcon,
   Zap,
   AlertTriangle,
-} from "lucide-react";
+} from "lucide-react";;
 
 import type { DictionarySense } from "@/lib/schemas/vocabulary";
 import { parseBold } from "@/lib/utils/parse-bold";
@@ -184,7 +184,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
       {sense.relatedExpressions.length > 0 && (
         <section className="flex flex-col gap-2">
           <h3 className={SENSE_HEADER_STYLE}>
-            <Link className="h-3 w-3" />
+            <LinkIcon className="h-3 w-3" />
             Biểu đạt liên quan
           </h3>
           <div className="flex flex-wrap gap-1.5">

@@ -1,15 +1,15 @@
 "use client";
 
-import {
-  BookOutlined,
-  CheckOutlined,
-  ClockCircleOutlined,
-  LoadingOutlined,
-  RocketOutlined,
-  ThunderboltOutlined,
-} from "@ant-design/icons";
 import { Button, Segmented, Switch } from "antd";
 import * as m from "motion/react-client";
+import {
+  BookOpen,
+  Check,
+  Clock,
+  Loader2,
+  Rocket,
+  Zap,
+} from "lucide-react";
 
 const CEFR_LEVELS = [
   { id: "A1", tier: "easy", label: "A1", desc: "Cơ bản" },
@@ -126,7 +126,7 @@ export function CEFRPath({
                       fontWeight: 700,
                     }}
                   >
-                    <ThunderboltOutlined style={{ fontSize: 13 }} />
+                    <Zap size={13} />
                     <span>AI tạo đề</span>
                   </div>
                 ),
@@ -144,7 +144,7 @@ export function CEFRPath({
                       fontWeight: 700,
                     }}
                   >
-                    <BookOutlined style={{ fontSize: 13 }} />
+                    <BookOpen size={13} />
                     <span>Đề ETS thật</span>
                   </div>
                 ),
@@ -222,7 +222,7 @@ export function CEFRPath({
                     }}
                   >
                     {isSelected ? (
-                      <CheckOutlined
+                      <Check
                         style={{ fontSize: 12, color: "var(--text-on-accent)", fontWeight: 900 }}
                       />
                     ) : (
@@ -291,7 +291,7 @@ export function CEFRPath({
             paddingTop: 16,
           }}
         >
-          <ClockCircleOutlined
+          <Clock
             style={{ fontSize: 14, color: timedMode ? "var(--accent)" : "var(--text-muted)" }}
           />
           <span style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 700 }}>
@@ -332,11 +332,11 @@ export function CEFRPath({
       >
         {isLoading ? (
           <>
-            <LoadingOutlined spin /> Đang lập đề...
+            <Loader2 className="animate-spin" /> Đang lập đề...
           </>
         ) : (
           <>
-            <RocketOutlined /> Bắt đầu luyện đề
+            <Rocket /> Bắt đầu luyện đề
           </>
         )}
       </m.button>

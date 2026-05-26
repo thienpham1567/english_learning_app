@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { Card, Tag, Empty } from "antd";
-import { AudioOutlined } from "@ant-design/icons";
+
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { toeicSpeakingSession, toeicSpeakingPrompt } from "@repo/database";
 import { and, desc, eq, isNotNull, sql } from "drizzle-orm";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
+import { Mic } from "lucide-react";
 
 export default async function ToeicSpeakingPage() {
 	await requireToeicBaseline();
@@ -50,7 +51,7 @@ export default async function ToeicSpeakingPage() {
 					<Link href="/toeic/speaking/runner" style={{ textDecoration: "none" }}>
 						<Card hoverable>
 							<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-								<AudioOutlined style={{ fontSize: 24, color: "var(--accent)" }} />
+								<Mic style={{ fontSize: 24, color: "var(--accent)" }} />
 								<strong style={{ fontSize: 18, color: "var(--ink)" }}>Bắt đầu Speaking test</strong>
 							</div>
 							<div style={{ color: "var(--text-muted)", marginTop: 6, fontSize: 13 }}>

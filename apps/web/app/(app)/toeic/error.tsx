@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
-import { ReloadOutlined, WarningOutlined } from "@ant-design/icons";
+import { AlertTriangle, RefreshCw } from "lucide-react";
 
 export default function ToeicError({
 	error,
@@ -38,7 +38,7 @@ export default function ToeicError({
 					marginBottom: 16,
 				}}
 			>
-				<WarningOutlined style={{ fontSize: 24, color: "var(--error)" }} />
+				<AlertTriangle style={{ fontSize: 24, color: "var(--error)" }} />
 			</div>
 			<h3
 				style={{
@@ -79,7 +79,7 @@ export default function ToeicError({
 					gap: 8,
 				}}
 			>
-				<ReloadOutlined /> Thử lại
+				<RefreshCw /> Thử lại
 			</button>
 		</div>
 	);

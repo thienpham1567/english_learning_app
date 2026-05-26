@@ -2,8 +2,15 @@
 
 import { Tag } from "antd";
 import type { SessionAnswer, ToeicSessionQuestion } from "@/hooks/useToeicSession";
-import { CheckCircleFilled, CloseCircleFilled, ReloadOutlined, BulbOutlined, WarningOutlined } from "@ant-design/icons";
+
 import * as m from "motion/react-client";
+import {
+  AlertTriangle,
+  CheckCircle,
+  Lightbulb,
+  RefreshCw,
+  XCircle,
+} from "lucide-react";
 
 export function ResultSummary({
 	score,
@@ -57,7 +64,7 @@ export function ResultSummary({
 						fontWeight: 800,
 						border: `1px solid ${percentage >= 70 ? "rgba(16, 185, 129, 0.2)" : "rgba(245, 158, 11, 0.2)"}`
 					}}>
-						{percentage >= 70 ? <CheckCircleFilled style={{ fontSize: 12 }} /> : <WarningOutlined style={{ fontSize: 12 }} />}
+						{percentage >= 70 ? <CheckCircle size={12} /> : <AlertTriangle size={12} />}
 						<span>Tỉ lệ chính xác: {percentage}%</span>
 					</div>
 				</div>
@@ -81,7 +88,7 @@ export function ResultSummary({
 						boxShadow: "0 4px 12px var(--accent-muted)"
 					}}
 				>
-					<ReloadOutlined />
+					<RefreshCw />
 					<span>Luyện đề tiếp</span>
 				</m.button>
 			</div>
@@ -90,7 +97,7 @@ export function ResultSummary({
 			{wrong.length > 0 ? (
 				<div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
 					<div style={{ display: "flex", alignItems: "center", gap: 8, paddingLeft: 4 }}>
-						<CloseCircleFilled style={{ color: "var(--error)", fontSize: 16 }} />
+						<XCircle style={{ color: "var(--error)", fontSize: 16 }} />
 						<h4 style={{ margin: 0, fontSize: 14.5, fontWeight: 900, color: "var(--text-primary)" }}>
 							Chi tiết {wrong.length} câu đã trả lời sai
 						</h4>
@@ -177,7 +184,7 @@ export function ResultSummary({
 											fontWeight: 500
 										}}>
 											<div style={{ display: "flex", alignItems: "center", gap: 4, fontWeight: 800, color: "var(--text-primary)", marginBottom: 4 }}>
-												<BulbOutlined style={{ color: "var(--warning)" }} />
+												<Lightbulb style={{ color: "var(--warning)" }} />
 												<span>Giải thích:</span>
 											</div>
 											<p style={{ margin: 0 }}>{q.explanationVi}</p>
@@ -197,7 +204,7 @@ export function ResultSummary({
 					borderRadius: "var(--radius-xl)",
 					color: "var(--success)"
 				}}>
-					<CheckCircleFilled style={{ fontSize: 32, marginBottom: 12 }} />
+					<CheckCircle style={{ fontSize: 32, marginBottom: 12 }} />
 					<p style={{ margin: 0, fontSize: 14.5, fontWeight: 800 }}>Xuất sắc! Bạn không trả lời sai câu nào trong lượt này.</p>
 				</div>
 			)}

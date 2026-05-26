@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import type { SentenceOrderData } from "@/lib/daily-challenge/types";
-import { CheckOutlined, CloseOutlined } from "@ant-design/icons";
+
 import * as m from "motion/react-client";
+import { Check, X } from "lucide-react";
 
 type Props = {
   data: SentenceOrderData;
@@ -119,7 +120,7 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
             >
               {w}
               {!disabled && (
-                <CloseOutlined
+                <X
                   style={{
                     fontSize: 8,
                     color: hoveredSel === i ? "var(--error)" : "var(--text-muted)",
@@ -207,7 +208,7 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
             boxShadow: "0 6px 18px var(--accent-muted)",
           }}
         >
-          <CheckOutlined style={{ fontSize: 12 }} /> Xác nhận đáp án
+          <Check size={12} /> Xác nhận đáp án
         </m.button>
       )}
     </div>

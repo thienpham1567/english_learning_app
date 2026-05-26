@@ -1,12 +1,13 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 import { Card, Tag } from "antd";
-import { TrophyOutlined, ClockCircleOutlined, RedoOutlined } from "@ant-design/icons";
+
 import { auth } from "@/lib/auth";
 import { db } from "@repo/database";
 import { toeicAttempt } from "@repo/database";
 import { and, desc, eq, isNotNull, isNull } from "drizzle-orm";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
+import { Clock, Redo, Trophy } from "lucide-react";
 
 export default async function MockTestHubPage() {
 	await requireToeicBaseline();
@@ -59,7 +60,7 @@ export default async function MockTestHubPage() {
 					>
 						<Card hoverable style={{ borderColor: "var(--warning)", borderWidth: 2 }}>
 							<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-								<RedoOutlined style={{ fontSize: 22, color: "var(--warning)" }} />
+								<Redo style={{ fontSize: 22, color: "var(--warning)" }} />
 								<strong style={{ fontSize: 18 }}>Tiếp tục mock test đang dở</strong>
 							</div>
 							<div style={{ marginTop: 8, color: "var(--text-muted, #94a3b8)" }}>
@@ -82,7 +83,7 @@ export default async function MockTestHubPage() {
 					>
 						<Card hoverable>
 							<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-								<TrophyOutlined style={{ fontSize: 22, color: "var(--accent)" }} />
+								<Trophy style={{ fontSize: 22, color: "var(--accent)" }} />
 								<strong style={{ fontSize: 18, color: "var(--ink)" }}>Full Mock</strong>
 							</div>
 							<div style={{ marginTop: 8, color: "var(--text-muted, #94a3b8)" }}>
@@ -102,7 +103,7 @@ export default async function MockTestHubPage() {
 					>
 						<Card hoverable>
 							<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-								<ClockCircleOutlined style={{ fontSize: 22, color: "var(--success)" }} />
+								<Clock style={{ fontSize: 22, color: "var(--success)" }} />
 								<strong style={{ fontSize: 18, color: "var(--ink)" }}>Mini Mock</strong>
 							</div>
 							<div style={{ marginTop: 8, color: "var(--text-muted, #94a3b8)" }}>

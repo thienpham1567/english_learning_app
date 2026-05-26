@@ -2,16 +2,16 @@
 
 import { useRef, useState, useEffect, useCallback } from "react";
 import {
-  PlayCircleOutlined,
-  PauseCircleOutlined,
-  ReloadOutlined,
-  ThunderboltOutlined,
-  RetweetOutlined,
-  ScissorOutlined,
-  ClearOutlined,
-  WarningOutlined,
-  CustomerServiceOutlined,
-} from "@ant-design/icons";
+  AlertTriangle,
+  Eraser,
+  Headphones,
+  PauseCircle,
+  PlayCircle,
+  RefreshCw,
+  Repeat,
+  Scissors,
+  Zap,
+} from "lucide-react";
 
 // ── Speed presets (AC1) ──
 const SPEED_OPTIONS = [0.5, 0.75, 1, 1.25, 1.5] as const;
@@ -385,7 +385,7 @@ export function AudioPlayer({
             textAlign: "center",
           }}
         >
-          <WarningOutlined style={{ marginRight: 6 }} /> {audioError}
+          <AlertTriangle style={{ marginRight: 6 }} /> {audioError}
         </div>
       )}
 
@@ -406,7 +406,7 @@ export function AudioPlayer({
             transition: "transform 0.15s ease",
           }}
         >
-          {isPlaying ? <PauseCircleOutlined /> : <PlayCircleOutlined />}
+          {isPlaying ? <PauseCircle /> : <PlayCircle />}
         </button>
 
         <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 4 }}>
@@ -523,7 +523,7 @@ export function AudioPlayer({
             transition: "all 0.15s ease",
           }}
         >
-          <ReloadOutlined />
+          <RefreshCw />
           Nghe lại ({maxReplays - replaysUsed}/{maxReplays})
         </button>
 
@@ -547,7 +547,7 @@ export function AudioPlayer({
             justifyContent: "center",
           }}
         >
-          <ThunderboltOutlined />
+          <Zap />
           {speed}×
         </button>
       </div>
@@ -583,7 +583,7 @@ export function AudioPlayer({
           }}
           title="Set A marker [ [ ]"
         >
-          <ScissorOutlined />
+          <Scissors />
           A{markerA != null ? ` ${formatTime(markerA)}` : ""}
         </button>
 
@@ -607,7 +607,7 @@ export function AudioPlayer({
           }}
           title="Set B marker [ ] ]"
         >
-          <ScissorOutlined />
+          <Scissors />
           B{markerB != null ? ` ${formatTime(markerB)}` : ""}
         </button>
 
@@ -631,7 +631,7 @@ export function AudioPlayer({
           }}
           title="Toggle loop [ L ]"
         >
-          <RetweetOutlined style={{ fontSize: 13 }} />
+          <Repeat size={13} />
           {looping ? "Looping" : "Loop"}
         </button>
 
@@ -655,14 +655,14 @@ export function AudioPlayer({
           }}
           title="Clear markers"
         >
-          <ClearOutlined />
+          <Eraser />
           Clear
         </button>
       </div>
 
       {/* preservesPitch note (AC3) */}
       <div style={{ fontSize: 10, color: "var(--text-muted)", textAlign: "center" }}>
-        {speed !== 1 && <><CustomerServiceOutlined style={{ marginRight: 4 }} /> Pitch preserved · </>}
+        {speed !== 1 && <><Headphones style={{ marginRight: 4 }} /> Pitch preserved · </>}
         Shortcuts: [ ] Set A/B · L Loop · ←/→ ±3s{selfManagedSpeed ? " · ,/. Speed" : ""} · Space Play/Pause
       </div>
     </div>

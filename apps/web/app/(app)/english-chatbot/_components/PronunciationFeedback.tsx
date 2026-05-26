@@ -46,7 +46,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
   if (data.status === "loading") {
     return (
       <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-(--chat-surface) border border-(--border) text-(--text-secondary) mt-1 animate-pulse">
-        <Loader2 className="h-3 w-3 animate-spin text-accent" />
+        <Loader2 className="h-3 w-3 animate-text-accent" />
         <span>Đang phân tích phát âm...</span>
       </div>
     );

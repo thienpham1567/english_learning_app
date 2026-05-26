@@ -5,32 +5,33 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Badge, Tooltip } from "antd";
 import { Logo } from "@/components/shared/Logo";
-import {
-  BookOutlined,
-  StarOutlined,
-  SyncOutlined,
-  FireOutlined,
-  ExceptionOutlined,
-  MenuFoldOutlined,
-  MenuUnfoldOutlined,
-  SunOutlined,
-  MoonOutlined,
-  DownOutlined,
-  RightOutlined,
-  CheckCircleOutlined,
-  FileTextOutlined,
-  AimOutlined,
-  DashboardOutlined,
-  NodeIndexOutlined,
-  SolutionOutlined,
-  SoundOutlined,
-  MessageOutlined,
-  EditOutlined,
-} from "@ant-design/icons";
+
 import { useTheme } from "@/components/shared/ThemeProvider";
 import { useSidebarBadges } from "@/hooks/useSidebarBadges";
 import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
+import {
+  BookOpen,
+  ChevronDown,
+  ChevronRight,
+  CircleCheckBig,
+  FileText,
+  FileWarning,
+  Flame,
+  GitBranch,
+  GraduationCap,
+  LayoutDashboard,
+  MessageSquare,
+  Moon,
+  PanelLeftClose,
+  PanelLeftOpen,
+  Pencil,
+  RefreshCw,
+  Star,
+  Sun,
+  Target,
+  Volume2,
+} from "lucide-react";
 
 type NavItem = {
   href: string;
@@ -45,8 +46,8 @@ type NavGroup = {
 };
 
 const navGroups: (NavItem | NavGroup)[] = [
-  { href: "/dashboard", label: "Tổng quan", icon: DashboardOutlined },
-  { href: "/toeic/skills", label: "Luyện thi TOEIC", icon: AimOutlined },
+  { href: "/dashboard", label: "Tổng quan", icon: LayoutDashboard },
+  { href: "/toeic/skills", label: "Luyện thi TOEIC", icon: Target },
   {
     key: "foundation",
     label: "Nền tảng",
@@ -54,11 +55,11 @@ const navGroups: (NavItem | NavGroup)[] = [
       {
         href: "/grammar-roadmap",
         label: "Lộ trình ngữ pháp",
-        icon: NodeIndexOutlined,
+        icon: GitBranch,
       },
-      { href: "/grammar-lessons", label: "Bài học ngữ pháp", icon: SolutionOutlined },
-      { href: "/my-vocabulary", label: "Từ vựng", icon: StarOutlined },
-      { href: "/flashcards", label: "Ôn tập Flashcard", icon: SyncOutlined },
+      { href: "/grammar-lessons", label: "Bài học ngữ pháp", icon: GraduationCap },
+      { href: "/my-vocabulary", label: "Từ vựng", icon: Star },
+      { href: "/flashcards", label: "Ôn tập Flashcard", icon: RefreshCw },
     ],
   },
   {
@@ -68,20 +69,20 @@ const navGroups: (NavItem | NavGroup)[] = [
       {
         href: "/daily-challenge",
         label: "Thử thách hàng ngày",
-        icon: FireOutlined,
+        icon: Flame,
       },
 
-      { href: "/error-notebook", label: "Sổ lỗi sai", icon: ExceptionOutlined },
+      { href: "/error-notebook", label: "Sổ lỗi sai", icon: FileWarning },
     ],
   },
   {
     key: "tools",
     label: "Công cụ",
     items: [
-      { href: "/english-chatbot", label: "AI Chatbot", icon: MessageOutlined },
-      { href: "/read-aloud", label: "Đọc to", icon: SoundOutlined },
-      { href: "/ipa-chart", label: "Bảng IPA", icon: SoundOutlined },
-      { href: "/writing-tools", label: "Công cụ viết", icon: EditOutlined },
+      { href: "/english-chatbot", label: "AI Chatbot", icon: MessageSquare },
+      { href: "/read-aloud", label: "Đọc to", icon: Volume2 },
+      { href: "/ipa-chart", label: "Bảng IPA", icon: Volume2 },
+      { href: "/writing-tools", label: "Công cụ viết", icon: Pencil },
     ],
   },
 ];
@@ -222,9 +223,9 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
           style={{ fontSize: 12, lineHeight: 1, marginLeft: "auto" }}
         >
           {badges.dailyChallengeCompleted ? (
-            <CheckCircleOutlined style={{ color: "var(--success)" }} />
+            <CircleCheckBig style={{ color: "var(--success)" }} />
           ) : (
-            <FireOutlined style={{ color: "var(--error)", opacity: 0.7 }} />
+            <Flame style={{ color: "var(--error)", opacity: 0.7 }} />
           )}
         </m.span>
       );
@@ -306,7 +307,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
                   cursor: "pointer",
                 }}
               >
-                <MenuFoldOutlined style={{ fontSize: 15 }} />
+                <PanelLeftClose size={15} />
               </m.button>
             </m.div>
           ) : (
@@ -333,7 +334,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
                 cursor: "pointer",
               }}
             >
-              <MenuUnfoldOutlined style={{ fontSize: 15 }} />
+              <PanelLeftOpen size={15} />
             </m.button>
           )}
         </AnimatePresence>
@@ -468,7 +469,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
                   {group.label}
                 </span>
                 <m.span animate={{ rotate: isGroupOpen ? 0 : -90 }}>
-                  <DownOutlined style={{ fontSize: 8 }} />
+                  <ChevronDown size={8} />
                 </m.span>
               </m.button>
 
@@ -558,7 +559,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
                 animate={{ rotate: mode === "light" ? 0 : 180 }}
                 style={{ fontSize: 15, display: "grid", placeItems: "center" }}
               >
-                {mode === "light" ? <MoonOutlined /> : <SunOutlined />}
+                {mode === "light" ? <Moon /> : <Sun />}
               </m.span>
               {isExpanded && (
                 <m.span initial={{ opacity: 0 }} animate={{ opacity: 1 }}>

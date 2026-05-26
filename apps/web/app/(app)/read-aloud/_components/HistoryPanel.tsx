@@ -1,18 +1,14 @@
 "use client";
 
 import { Flex, Typography, message } from "antd";
-import {
-  HistoryOutlined,
-  DeleteOutlined,
-  CloseOutlined,
-  ClockCircleOutlined,
-} from "@ant-design/icons";
+
 import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
 import type { HistoryEntryCompat as HistoryEntry } from "../_hooks/useHistory";
 import { timeAgo } from "../_hooks/useHistory";
 import { isCached } from "../_hooks/useAudioPlayback";
 import { VOICES } from "../_data/voices";
+import { Clock, History, Trash2, X } from "lucide-react";
 
 const { Text } = Typography;
 
@@ -48,7 +44,7 @@ export function HistoryPanel({ history, show, onClose, onReplay, onDelete, onCle
             {/* History header */}
             <Flex align="center" justify="space-between" style={{ marginBottom: 16 }}>
               <Flex align="center" gap={8}>
-                <HistoryOutlined style={{ color: "var(--accent)", fontSize: 16 }} />
+                <History style={{ color: "var(--accent)", fontSize: 16 }} />
                 <Text style={{ fontSize: 14, fontWeight: 800, color: "var(--text-primary)" }}>
                   Lịch sử đã nghe ({history.length})
                 </Text>
@@ -74,7 +70,7 @@ export function HistoryPanel({ history, show, onClose, onReplay, onDelete, onCle
                       fontFamily: "var(--font-body)",
                     }}
                   >
-                    <DeleteOutlined style={{ fontSize: 11 }} />
+                    <Trash2 size={11} />
                     Xóa tất cả
                   </m.button>
                 )}
@@ -94,7 +90,7 @@ export function HistoryPanel({ history, show, onClose, onReplay, onDelete, onCle
                     cursor: "pointer",
                   }}
                 >
-                  <CloseOutlined />
+                  <X />
                 </m.button>
               </Flex>
             </Flex>
@@ -108,7 +104,7 @@ export function HistoryPanel({ history, show, onClose, onReplay, onDelete, onCle
                   color: "var(--text-muted)",
                 }}
               >
-                <HistoryOutlined style={{ fontSize: 28, marginBottom: 8, opacity: 0.4 }} />
+                <History style={{ fontSize: 28, marginBottom: 8, opacity: 0.4 }} />
                 <div style={{ fontSize: 13, fontWeight: 600 }}>
                   Chưa có lịch sử nào
                 </div>
@@ -178,7 +174,7 @@ export function HistoryPanel({ history, show, onClose, onReplay, onDelete, onCle
                             {voice?.name ?? entry.voice} · {entry.speed}x · {entry.wordCount} từ
                           </span>
                           <span style={{ fontSize: 10.5, color: "var(--text-muted)" }}>
-                            <ClockCircleOutlined style={{ fontSize: 9, marginRight: 3 }} />
+                            <Clock style={{ fontSize: 9, marginRight: 3 }} />
                             {timeAgo(entry.createdAt)}
                           </span>
                           {cached && (
@@ -232,7 +228,7 @@ export function HistoryPanel({ history, show, onClose, onReplay, onDelete, onCle
                           e.currentTarget.style.background = "transparent";
                         }}
                       >
-                        <DeleteOutlined />
+                        <Trash2 />
                       </m.button>
                     </m.div>
                   );

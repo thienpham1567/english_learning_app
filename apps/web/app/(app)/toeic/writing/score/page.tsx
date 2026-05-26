@@ -2,24 +2,25 @@
 
 import { api } from "@/lib/api-client";
 import { useState, useCallback, useMemo } from "react";
-import {
-  EditOutlined,
-  LoadingOutlined,
-  CheckCircleOutlined,
-  ReloadOutlined,
-  InfoCircleOutlined,
-  WarningOutlined,
-  FormOutlined,
-  BookOutlined,
-  AimOutlined,
-  HighlightOutlined,
-  LinkOutlined,
-  CalculatorOutlined,
-} from "@ant-design/icons";
+
 import { Progress, Tag, Tooltip } from "antd";
 
 import { useExamMode } from "@/components/shared/ExamModeProvider";
 import { RewritePanel } from "@/app/(app)/toeic/skills/_components/writing/RewritePanel";
+import {
+  AlertTriangle,
+  BookOpen,
+  Calculator,
+  CircleCheckBig,
+  ClipboardList,
+  Highlighter,
+  Info,
+  Link as LinkIcon,
+  Loader2,
+  Pencil,
+  RefreshCw,
+  Target,
+} from "lucide-react";;
 
 /* ── Types ─────────────────────────────────────────────────── */
 
@@ -117,7 +118,7 @@ function InlineIssueItem({
               marginLeft: 8,
             }}
           >
-            <HighlightOutlined /> Viết lại
+            <Highlighter /> Viết lại
           </button>
         </div>
         <p style={{ margin: "4px 0 0", fontSize: 11, color: "var(--text-secondary)" }}>
@@ -277,7 +278,7 @@ export default function EssayScorePage() {
       {/* Header */}
       <div style={{ padding: "24px 24px 16px", borderBottom: "1px solid var(--border)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
-          <EditOutlined style={{ fontSize: 22, color: "var(--accent)" }} />
+          <Pencil size={22} className="text-[var(--accent)]" />
           <h1 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>Chấm bài viết theo rubric</h1>
         </div>
         <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)" }}>
@@ -377,7 +378,7 @@ export default function EssayScorePage() {
                 alignSelf: "center",
               }}
             >
-              <EditOutlined /> Chấm bài
+              <Pencil /> Chấm bài
             </button>
           </div>
         )}
@@ -385,7 +386,7 @@ export default function EssayScorePage() {
         {/* Scoring */}
         {state === "scoring" && (
           <div style={{ textAlign: "center", padding: 48 }}>
-            <LoadingOutlined style={{ fontSize: 36, color: "var(--accent)" }} />
+            <Loader2 className="animate-spin text-[var(--accent)]" size={36} />
             <p style={{ color: "var(--text-secondary)", marginTop: 16, fontSize: 14 }}>
               Đang chấm bài viết ({wordCount} từ)...
             </p>
@@ -444,10 +445,10 @@ export default function EssayScorePage() {
 
             {/* Criteria feedback */}
             {([
-              { key: "taskResponse", label: <><FormOutlined /> Task Response</>, icon: null },
-              { key: "coherence", label: <><LinkOutlined /> Coherence &amp; Cohesion</>, icon: null },
-              { key: "lexical", label: <><BookOutlined /> Lexical Resource</>, icon: null },
-              { key: "grammar", label: <><CalculatorOutlined /> Grammar</>, icon: null },
+              { key: "taskResponse", label: <><ClipboardList /> Task Response</>, icon: null },
+              { key: "coherence", label: <><LinkIcon /> Coherence &amp; Cohesion</>, icon: null },
+              { key: "lexical", label: <><BookOpen /> Lexical Resource</>, icon: null },
+              { key: "grammar", label: <><Calculator /> Grammar</>, icon: null },
             ] as const).map((c) => {
               const s = result.criteria[c.key];
               return (
@@ -465,7 +466,7 @@ export default function EssayScorePage() {
             <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
               <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
                 <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: 0, fontWeight: 600 }}>
-                  <InfoCircleOutlined /> Bài viết (hover để xem gợi ý)
+                  <Info /> Bài viết (hover để xem gợi ý)
                 </p>
                 <div style={{ display: "flex", gap: 6 }}>
                   {Object.entries(CATEGORY_COLORS).map(([cat, color]) => (
@@ -482,7 +483,7 @@ export default function EssayScorePage() {
             {result.inlineIssues.length > 0 && (
               <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
                 <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
-                  <WarningOutlined /> Lỗi chi tiết ({result.inlineIssues.length})
+                  <AlertTriangle /> Lỗi chi tiết ({result.inlineIssues.length})
                 </p>
                 <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
                   {result.inlineIssues.map((issue, i) => (
@@ -502,7 +503,7 @@ export default function EssayScorePage() {
             <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>
               <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
                 <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
-                  <CheckCircleOutlined style={{ color: "var(--success)" }} /> Điểm mạnh
+                  <CircleCheckBig style={{ color: "var(--success)" }} /> Điểm mạnh
                 </p>
                 <ul style={{ margin: 0, paddingLeft: 16, fontSize: 13, lineHeight: 1.8 }}>
                   {result.strengths.map((s, i) => <li key={i}>{s}</li>)}
@@ -510,7 +511,7 @@ export default function EssayScorePage() {
               </div>
               <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
                 <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
-                  <AimOutlined /> Cần cải thiện
+                  <Target /> Cần cải thiện
                 </p>
                 <ul style={{ margin: 0, paddingLeft: 16, fontSize: 13, lineHeight: 1.8 }}>
                   {result.nextSteps.map((s, i) => <li key={i}>{s}</li>)}
@@ -528,7 +529,7 @@ export default function EssayScorePage() {
                   fontWeight: 600, cursor: "pointer",
                 }}
               >
-                <ReloadOutlined /> Chấm bài mới
+                <RefreshCw /> Chấm bài mới
               </button>
             </div>
           </div>

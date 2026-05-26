@@ -9,28 +9,29 @@ import {
   type GrammarLessonData,
   type GrammarLessonProgressItem,
 } from "@/lib/grammar-lessons/schema";
-import {
-  ArrowLeftOutlined,
-  CheckCircleOutlined,
-  CloseCircleOutlined,
-  LoadingOutlined,
-  BulbOutlined,
-  SoundOutlined,
-  RightOutlined,
-  ReloadOutlined,
-  CalculatorOutlined,
-  BookOutlined,
-  MessageOutlined,
-  WarningOutlined,
-  TrophyOutlined,
-  StarFilled,
-  FireOutlined,
-  EyeOutlined,
-  TranslationOutlined,
-} from "@ant-design/icons";
+
 import { Tag } from "antd";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import * as m from "motion/react-client";
+import {
+  AlertTriangle,
+  ArrowLeft,
+  BookOpen,
+  Calculator,
+  ChevronRight,
+  CircleCheckBig,
+  Eye,
+  Flame,
+  Languages,
+  Lightbulb,
+  Loader2,
+  MessageSquare,
+  RefreshCw,
+  Star,
+  Trophy,
+  Volume2,
+  XCircle,
+} from "lucide-react";
 
 const OPTION_LABELS = ["A", "B", "C", "D"] as const;
 const TIER_LABELS: Record<string, { label: string; color: string }> = {
@@ -239,7 +240,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           transition: "all 0.15s",
         }}
       >
-        <ArrowLeftOutlined /> Danh sách bài học
+        <ArrowLeft /> Danh sách bài học
       </m.button>
 
       {/* Loading state */}
@@ -254,7 +255,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             boxShadow: "var(--shadow-md)",
           }}
         >
-          <LoadingOutlined style={{ fontSize: 38, color: "var(--accent)" }} />
+          <Loader2 className="animate-spin text-[var(--accent)]" size={38} />
           <p style={{ color: "var(--text-secondary)", marginTop: 20, fontSize: 14.5, fontWeight: 700 }}>
             Đang biên soạn bài học: <strong style={{ color: "var(--accent)" }}>{topicTitle}</strong>
           </p>
@@ -333,7 +334,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 flexShrink: 0,
                 boxShadow: "0 4px 14px var(--accent-muted)",
               }}>
-                <BookOutlined style={{ fontSize: 20, color: "#fff" }} />
+                <BookOpen size={20} className="text-[#fff]" />
               </div>
               <div style={{ flex: 1 }}>
                 <h2 style={{ margin: 0, fontSize: 20, fontWeight: 900, color: "var(--text-primary)", fontFamily: "var(--font-display)", lineHeight: 1.3 }}>
@@ -371,7 +372,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                     boxShadow: "var(--shadow-sm)",
                   }}
                 >
-                  <ReloadOutlined /> Tạo lại
+                  <RefreshCw /> Tạo lại
                 </m.button>
               </div>
             </div>
@@ -401,7 +402,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 <div style={{ width: 5, height: 5, borderRadius: "50%", background: "var(--success)" }} />
               </div>
               <span style={{ fontSize: 11, color: "var(--accent)", fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", display: "flex", alignItems: "center", justifyContent: "center", gap: 6, marginBottom: 10 }}>
-                <CalculatorOutlined /> Cấu trúc cốt lõi
+                <Calculator /> Cấu trúc cốt lõi
               </span>
               <p style={{ fontSize: 19, fontWeight: 900, color: "var(--accent)", margin: 0, fontFamily: "var(--font-mono)", wordBreak: "break-all", letterSpacing: "0.02em" }}>
                 {lesson.formula}
@@ -420,7 +421,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             }}
           >
             <span style={{ fontSize: 11.5, fontWeight: 800, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em", display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
-              <BookOutlined /> Phân tích lý thuyết
+              <BookOpen /> Phân tích lý thuyết
             </span>
             <p style={{ fontSize: 14.5, lineHeight: 1.7, color: "var(--text-primary)", margin: 0, fontWeight: 500 }}>
               {lesson.explanationEn ?? lesson.explanation}
@@ -616,7 +617,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                     {/* Difference explanation */}
                     <div style={{ padding: "10px 14px", background: "var(--surface-alt)", borderTop: "1px solid var(--border)" }}>
                       <p style={{ margin: 0, fontSize: 13, lineHeight: 1.6, color: "var(--text-secondary)", fontWeight: 500 }}>
-                        <BulbOutlined style={{ color: "var(--warning)", marginRight: 6 }} />
+                        <Lightbulb style={{ color: "var(--warning)", marginRight: 6 }} />
                         {pair.difference}
                       </p>
                     </div>
@@ -638,7 +639,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               }}
             >
               <span style={{ fontSize: 11.5, fontWeight: 800, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em", display: "flex", alignItems: "center", gap: 6, marginBottom: 14 }}>
-                <MessageOutlined /> Ví dụ minh họa
+                <MessageSquare /> Ví dụ minh họa
               </span>
               <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
                 {lesson.examples.map((ex, idx) => (
@@ -679,7 +680,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                           opacity: isSpeaking || isTtsLoading ? 0.5 : 1,
                         }}
                       >
-                        {isTtsLoading ? <LoadingOutlined spin /> : <SoundOutlined />}
+                        {isTtsLoading ? <Loader2 className="animate-spin" /> : <Volume2 />}
                       </m.button>
                     </div>
                     <p style={{ fontSize: 13, color: "var(--text-muted)", margin: "6px 0 0", fontWeight: 600 }}>
@@ -703,7 +704,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               }}
             >
               <span style={{ fontSize: 11.5, fontWeight: 800, color: "var(--text-secondary)", textTransform: "uppercase", letterSpacing: "0.08em", display: "flex", alignItems: "center", gap: 6, marginBottom: 14 }}>
-                <WarningOutlined style={{ color: "var(--warning)" }} /> Lưu ý tránh lỗi sai
+                <AlertTriangle style={{ color: "var(--warning)" }} /> Lưu ý tránh lỗi sai
               </span>
               {lesson.commonMistakes.map((mItem, idx) => (
                 <div
@@ -717,23 +718,23 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   }}
                 >
                   <div style={{ display: "flex", alignItems: "flex-start", gap: 6, fontSize: 13.5, fontWeight: 700, color: "var(--error)" }}>
-                    <CloseCircleOutlined style={{ marginTop: 3 }} />
+                    <XCircle style={{ marginTop: 3 }} />
                     <span style={{ textDecoration: "line-through" }}>{mItem.wrong}</span>
                   </div>
                   <div style={{ display: "flex", alignItems: "flex-start", gap: 6, fontSize: 13.5, fontWeight: 700, color: "var(--success)", marginTop: 6 }}>
-                    <CheckCircleOutlined style={{ marginTop: 3 }} />
+                    <CircleCheckBig style={{ marginTop: 3 }} />
                     <span>{mItem.correct}</span>
                   </div>
                   
                   {mItem.noteEn && (
                     <div style={{ marginTop: 10, fontSize: 12.5, color: "var(--text-primary)", fontWeight: 500, display: "flex", alignItems: "flex-start", gap: 6 }}>
-                      <TranslationOutlined style={{ color: "var(--accent)", marginTop: 3 }} />
+                      <Languages style={{ color: "var(--accent)", marginTop: 3 }} />
                       <span>{mItem.noteEn}</span>
                     </div>
                   )}
                   
                   <div style={{ marginTop: 6, fontSize: 12.5, color: "var(--text-muted)", fontWeight: 500, display: "flex", alignItems: "flex-start", gap: 6 }}>
-                    <BulbOutlined style={{ color: "var(--warning)", marginTop: 3 }} />
+                    <Lightbulb style={{ color: "var(--warning)", marginTop: 3 }} />
                     <span>{mItem.note}</span>
                   </div>
                 </div>
@@ -779,7 +780,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             <div style={{ position: "absolute", top: "-50%", right: "-10%", width: 120, height: 120, borderRadius: "50%", background: "rgba(255,255,255,0.06)", pointerEvents: "none" }} />
             <div style={{ position: "absolute", bottom: "-40%", left: "5%", width: 80, height: 80, borderRadius: "50%", background: "rgba(255,255,255,0.04)", pointerEvents: "none" }} />
             <span style={{ position: "relative" }}>🚀 Luyện tập ngay — {lesson.exercises.length} câu hỏi</span>
-            <RightOutlined style={{ position: "relative", fontSize: 14 }} />
+            <ChevronRight style={{ position: "relative", fontSize: 14 }} />
           </m.button>
         </div>
       )}
@@ -827,7 +828,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   boxShadow: "0 4px 14px rgba(245, 158, 11, 0.35)",
                 }}
               >
-                <FireOutlined /> {combo} COMBO! 🔥
+                <Flame /> {combo} COMBO! 🔥
               </span>
             </m.div>
           )}
@@ -906,7 +907,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   marginBottom: 16,
                 }}
               >
-                <EyeOutlined /> Xem gợi ý học tập
+                <Eye /> Xem gợi ý học tập
               </m.button>
             )}
 
@@ -925,7 +926,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   fontWeight: 500,
                 }}
               >
-                <BulbOutlined style={{ color: "var(--warning)", marginRight: 6 }} />
+                <Lightbulb style={{ color: "var(--warning)", marginRight: 6 }} />
                 {currentExercise.hint}
               </m.div>
             )}
@@ -1001,9 +1002,9 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                         }}
                       >
                         {revealed && isCorrect ? (
-                          <CheckCircleOutlined />
+                          <CircleCheckBig />
                         ) : revealed && isSelected && !isCorrect ? (
-                          <CloseCircleOutlined />
+                          <XCircle />
                         ) : (
                           OPTION_LABELS[idx]
                         )}
@@ -1056,7 +1057,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                       boxShadow: typedAnswer.trim() ? "0 2px 8px var(--accent-muted)" : "none",
                     }}
                   >
-                    Nộp câu trả lời <CheckCircleOutlined />
+                    Nộp câu trả lời <CircleCheckBig />
                   </m.button>
                 )}
               </div>
@@ -1069,7 +1070,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   <strong style={{ color: "var(--text-secondary)" }}>Đáp án của bạn:</strong> {typedAnswer}
                 </div>
                 <div style={{ padding: "12px 14px", borderRadius: "var(--radius-lg)", background: "rgba(16, 185, 129, 0.08)", border: "1px solid var(--success)", color: "var(--success)", fontSize: 13.5, fontWeight: 700 }}>
-                  <CheckCircleOutlined style={{ marginRight: 6 }} />
+                  <CircleCheckBig style={{ marginRight: 6 }} />
                   {currentExercise.answer}
                 </div>
               </div>
@@ -1090,7 +1091,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               >
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
                   <span style={{ fontSize: 11.5, fontWeight: 800, color: "var(--accent)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
-                    <BulbOutlined /> Lý do chọn đáp án
+                    <Lightbulb /> Lý do chọn đáp án
                   </span>
                   <div style={{ display: "flex", overflow: "hidden", borderRadius: 6, border: "1px solid var(--border)" }}>
                     {(["vi", "en"] as const).map((langOpt) => (
@@ -1139,9 +1140,9 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               }}
             >
               {exerciseIdx < lesson.exercises.length - 1 ? (
-                <>Câu tiếp theo <RightOutlined /></>
+                <>Câu tiếp theo <ChevronRight /></>
               ) : (
-                <>Xem kết quả bài học <CheckCircleOutlined /></>
+                <>Xem kết quả bài học <CircleCheckBig /></>
               )}
             </m.button>
           )}
@@ -1172,8 +1173,8 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             <div style={{ position: "absolute", left: "50%", top: "25%", transform: "translate(-50%, -50%)", width: 220, height: 220, borderRadius: "50%", background: "radial-gradient(circle, var(--success) 10%, transparent 70%)", pointerEvents: "none" }} />
 
             <div style={{ position: "relative", display: "inline-block", marginBottom: 20 }}>
-              <TrophyOutlined style={{ fontSize: 58, color: "var(--success)" }} />
-              <StarFilled style={{ position: "absolute", top: -4, right: -12, fontSize: 20, color: "var(--xp)", filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.15))" }} />
+              <Trophy size={58} className="text-[var(--success)]" />
+              <Star style={{ position: "absolute", top: -4, right: -12, fontSize: 20, color: "var(--xp)", filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.15))" }} />
             </div>
 
             <h2 style={{ margin: "0 0 8px", fontSize: 22, fontWeight: 900, color: "var(--text-primary)", fontFamily: "var(--font-display)" }}>
@@ -1187,7 +1188,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
             {xpAwarded > 0 && (
               <div style={{ display: "inline-flex", alignItems: "center", gap: 6, padding: "8px 20px", borderRadius: 99, background: "var(--accent-light)", color: "var(--accent)", fontSize: 16, fontWeight: 900, marginBottom: 24, boxShadow: "var(--shadow-sm)" }}>
-                <StarFilled /> +{xpAwarded} XP nhận được
+                <Star /> +{xpAwarded} XP nhận được
               </div>
             )}
             
@@ -1217,7 +1218,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                     color: "var(--error)",
                   }}
                 >
-                  <WarningOutlined /> Xem {wrongAnswers.length} lỗi sai đã lưu sổ lỗi · {showReview ? "Thu gọn" : "Xem chi tiết"}
+                  <AlertTriangle /> Xem {wrongAnswers.length} lỗi sai đã lưu sổ lỗi · {showReview ? "Thu gọn" : "Xem chi tiết"}
                 </button>
                 {showReview && (
                   <m.div
@@ -1239,14 +1240,14 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                           {wItem.questionStem}
                         </p>
                         <div style={{ display: "flex", alignItems: "center", gap: 6, color: "var(--error)", fontSize: 12.5, fontWeight: 700 }}>
-                          <CloseCircleOutlined /> Bạn đã chọn: {wItem.userAnswer}
+                          <XCircle /> Bạn đã chọn: {wItem.userAnswer}
                         </div>
                         <div style={{ display: "flex", alignItems: "center", gap: 6, color: "var(--success)", fontSize: 12.5, fontWeight: 700, marginTop: 4 }}>
-                          <CheckCircleOutlined /> Đáp án đúng: {wItem.correctAnswer}
+                          <CircleCheckBig /> Đáp án đúng: {wItem.correctAnswer}
                         </div>
                         {wItem.explanationVi && (
                           <div style={{ marginTop: 8, padding: 8, background: "var(--surface)", borderRadius: 6, fontSize: 12, color: "var(--text-muted)", fontWeight: 500 }}>
-                            <BulbOutlined style={{ color: "var(--accent)", marginRight: 4 }} />
+                            <Lightbulb style={{ color: "var(--accent)", marginRight: 4 }} />
                             {wItem.explanationVi}
                           </div>
                         )}
@@ -1275,7 +1276,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   boxShadow: "var(--shadow-sm)",
                 }}
               >
-                <ArrowLeftOutlined /> Quay lại
+                <ArrowLeft /> Quay lại
               </m.button>
               
               <m.button
@@ -1303,7 +1304,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   boxShadow: "var(--shadow-sm)",
                 }}
               >
-                <ReloadOutlined /> Làm lại bài tập
+                <RefreshCw /> Làm lại bài tập
               </m.button>
 
               <m.button

@@ -2,29 +2,7 @@
 
 import { useState, useCallback } from "react";
 import { api } from "@/lib/api-client";
-import {
-  CheckCircleFilled,
-  CloseCircleFilled,
-  DownOutlined,
-  TrophyOutlined,
-  FireOutlined,
-  ClockCircleOutlined,
-  StarOutlined,
-  ThunderboltOutlined,
-  EditOutlined,
-  SwapOutlined,
-  TranslationOutlined,
-  SearchOutlined,
-  QuestionCircleOutlined,
-  BulbOutlined,
-  RightOutlined,
-  ReadOutlined,
-  MessageOutlined,
-  LinkOutlined,
-  FontSizeOutlined,
-  BlockOutlined,
-  LoadingOutlined,
-} from "@ant-design/icons";
+
 import Link from "next/link";
 
 import type { ExerciseAnswer, StreakInfo, Badge } from "@/lib/daily-challenge/types";
@@ -32,6 +10,29 @@ import { CelebrationOverlay } from "@/components/shared";
 import { BadgeGallery } from "./BadgeGallery";
 import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
+import {
+  ArrowLeftRight,
+  BookOpenText,
+  CheckCircle,
+  ChevronDown,
+  ChevronRight,
+  Clock,
+  Flame,
+  HelpCircle,
+  Languages,
+  Lightbulb,
+  Link as LinkIcon,
+  Loader2,
+  MessageSquare,
+  Pencil,
+  Search,
+  Square,
+  Star,
+  Trophy,
+  Type,
+  XCircle,
+  Zap,
+} from "lucide-react";;
 
 /* ── Tier config ── */
 const TIERS = [
@@ -43,15 +44,15 @@ const TIERS = [
 
 /* ── Exercise type maps ── */
 const EXERCISE_ICONS: Record<string, React.ReactNode> = {
-  "fill-in-blank": <EditOutlined />,
-  "sentence-order": <SwapOutlined />,
-  "translation": <TranslationOutlined />,
-  "error-correction": <SearchOutlined />,
-  "word-formation": <FontSizeOutlined />,
-  "dialogue-completion": <MessageOutlined />,
-  "synonym-antonym": <LinkOutlined />,
-  "reading-comprehension": <ReadOutlined />,
-  "collocation": <BlockOutlined />,
+  "fill-in-blank": <Pencil />,
+  "sentence-order": <ArrowLeftRight />,
+  "translation": <Languages />,
+  "error-correction": <Search />,
+  "word-formation": <Type />,
+  "dialogue-completion": <MessageSquare />,
+  "synonym-antonym": <LinkIcon />,
+  "reading-comprehension": <BookOpenText />,
+  "collocation": <Square />,
 };
 
 const EXERCISE_LABELS: Record<string, string> = {
@@ -72,7 +73,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
   const [aiExplanation, setAiExplanation] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
   const ok = answer.isCorrect;
-  const exerciseIcon = answer.exerciseType ? EXERCISE_ICONS[answer.exerciseType] : <QuestionCircleOutlined />;
+  const exerciseIcon = answer.exerciseType ? EXERCISE_ICONS[answer.exerciseType] : <HelpCircle />;
   const exerciseLabel = answer.exerciseType ? EXERCISE_LABELS[answer.exerciseType] : "";
 
   const fetchAIExplanation = useCallback(async () => {
@@ -173,7 +174,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
           >
             {ok ? "Chính xác" : "Chưa đúng"}
           </span>
-          <DownOutlined
+          <ChevronDown
             style={{
               fontSize: 10,
               color: "var(--text-muted)",
@@ -323,7 +324,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                     alignItems: "flex-start",
                   }}
                 >
-                  <BulbOutlined
+                  <Lightbulb
                     style={{
                       color: "var(--accent)",
                       fontSize: 13,
@@ -370,9 +371,9 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                   }}
                 >
                   {aiLoading ? (
-                    <><LoadingOutlined spin style={{ fontSize: 12 }} /> AI đang phân tích...</>
+                    <><Loader2 className="animate-spin" size={12} /> AI đang phân tích...</>
                   ) : (
-                    <><BulbOutlined style={{ fontSize: 12 }} /> Hỏi AI giải thích chi tiết</>
+                    <><Lightbulb size={12} /> Hỏi AI giải thích chi tiết</>
                   )}
                 </m.button>
               )}
@@ -391,7 +392,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                   }}
                 >
                   <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-                    <BulbOutlined style={{ fontSize: 13, color: "var(--accent)" }} />
+                    <Lightbulb size={13} className="text-[var(--accent)]" />
                     <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".05em", color: "var(--accent)" }}>
                       Giải thích từ trợ lý AI
                     </span>
@@ -588,10 +589,10 @@ export function ChallengeResults({
             }}
           >
             {[
-              { icon: <CheckCircleFilled style={{ color: "var(--success)" }} />, label: "Đúng", value: correctCount },
-              { icon: <CloseCircleFilled style={{ color: "var(--error)" }} />, label: "Sai", value: wrongCount },
-              { icon: <ClockCircleOutlined style={{ color: "var(--accent)" }} />, label: "Thời gian", value: `${minutes}:${seconds.toString().padStart(2, "0")}` },
-              { icon: <FireOutlined style={{ color: "var(--fire)" }} />, label: "Chuỗi ngày", value: streak.currentStreak },
+              { icon: <CheckCircle style={{ color: "var(--success)" }} />, label: "Đúng", value: correctCount },
+              { icon: <XCircle style={{ color: "var(--error)" }} />, label: "Sai", value: wrongCount },
+              { icon: <Clock style={{ color: "var(--accent)" }} />, label: "Thời gian", value: `${minutes}:${seconds.toString().padStart(2, "0")}` },
+              { icon: <Flame style={{ color: "var(--fire)" }} />, label: "Chuỗi ngày", value: streak.currentStreak },
             ].map((s, i) => (
               <div
                 key={s.label}
@@ -648,7 +649,7 @@ export function ChallengeResults({
             }}
           >
             <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
-              <StarOutlined style={{ fontSize: 13, color: "var(--xp)" }} />
+              <Star size={13} className="text-[var(--xp)]" />
               <span
                 style={{
                   fontSize: 11,
@@ -679,10 +680,10 @@ export function ChallengeResults({
                     boxShadow: "var(--shadow-sm)",
                   }}
                 >
-                  {b.icon === "TrophyOutlined" ? (
-                    <TrophyOutlined style={{ color: "var(--xp)" }} />
+                  {b.icon === "Trophy" ? (
+                    <Trophy style={{ color: "var(--xp)" }} />
                   ) : (
-                    <FireOutlined style={{ color: "var(--xp)" }} />
+                    <Flame style={{ color: "var(--xp)" }} />
                   )}
                   {b.label}
                 </span>
@@ -758,7 +759,7 @@ export function ChallengeResults({
             }}
           >
             Hoàn tất & Tiếp tục
-            <RightOutlined style={{ fontSize: 12 }} />
+            <ChevronRight size={12} />
           </Link>
           <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 500 }}>
             Quay lại mai nhé!

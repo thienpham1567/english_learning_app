@@ -2,16 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { Typography } from "antd";
-import {
-  CloseCircleFilled,
-  TrophyOutlined,
-  ClockCircleOutlined,
-  StarFilled,
-  RightOutlined,
-  ThunderboltOutlined,
-  BarChartOutlined,
-  LoadingOutlined,
-} from "@ant-design/icons";
+
 import Link from "next/link";
 
 import type {
@@ -23,6 +14,16 @@ import type {
 import { StreakFire } from "@/components/shared";
 import { BadgeGallery } from "./BadgeGallery";
 import * as m from "motion/react-client";
+import {
+  BarChart3,
+  ChevronRight,
+  Clock,
+  Loader2,
+  Star,
+  Trophy,
+  XCircle,
+  Zap,
+} from "lucide-react";
 
 const { Title, Text, Paragraph } = Typography;
 
@@ -91,7 +92,7 @@ function WeeklyChart({ scores }: { scores: { day: string; score: number }[] }) {
       }}
     >
       <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 16 }}>
-        <BarChartOutlined style={{ fontSize: 13, color: "var(--accent)" }} />
+        <BarChart3 size={13} className="text-[var(--accent)]" />
         <span
           style={{
             fontSize: 11,
@@ -366,7 +367,7 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
               boxShadow: "0 4px 10px rgba(245, 158, 11, 0.25)",
             }}
           >
-            <ThunderboltOutlined style={{ fontSize: 20, color: "#fff" }} />
+            <Zap size={20} className="text-[#fff]" />
           </div>
           <div style={{ flex: 1, textAlign: "left" }}>
             <div style={{ fontSize: 15, fontWeight: 800, color: "var(--text-primary)", fontFamily: "var(--font-display)" }}>
@@ -376,7 +377,7 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
               Thêm 3 câu hỏi nhanh · Nhận thêm XP · Không phạt khi trả lời sai
             </div>
           </div>
-          <RightOutlined style={{ fontSize: 13, color: "var(--text-muted)" }} />
+          <ChevronRight size={13} className="text-[var(--text-muted)]" />
         </m.button>
       )}
 
@@ -397,7 +398,7 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
             fontWeight: 600,
           }}
         >
-          <LoadingOutlined spin style={{ color: "var(--xp)" }} />
+          <Loader2 className="animate-spin" style={{ color: "var(--xp)" }} />
           Đang khởi tạo thử thách Bonus...
         </div>
       )}
@@ -420,7 +421,7 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
             color: "var(--xp)",
           }}
         >
-          <ThunderboltOutlined style={{ fontSize: 15 }} />
+          <Zap size={15} />
           Bạn đã hoàn thành xuất sắc tất cả câu hỏi phụ hôm nay! ✨
         </m.div>
       )}
@@ -446,7 +447,7 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
-          <TrophyOutlined style={{ fontSize: 13, color: "var(--accent)" }} />
+          <Trophy size={13} className="text-[var(--accent)]" />
           <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--accent)" }}>
             Bảng thành tích cá nhân
           </span>
@@ -495,7 +496,7 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
           style={{ display: "flex", flexDirection: "column", gap: 8 }}
         >
           <div style={{ display: "flex", alignItems: "center", gap: 8, margin: "8px 0 4px" }}>
-            <StarFilled style={{ fontSize: 12, color: "var(--error)" }} />
+            <Star size={12} className="text-[var(--error)]" />
             <span
               style={{
                 fontSize: 11,
@@ -523,7 +524,7 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
                 boxShadow: "var(--shadow-sm)",
               }}
             >
-              <CloseCircleFilled style={{ color: "var(--error)", fontSize: 14, marginTop: 2, flexShrink: 0 }} />
+              <XCircle style={{ color: "var(--error)", fontSize: 14, marginTop: 2, flexShrink: 0 }} />
               <div style={{ flex: 1, minWidth: 0 }}>
                 {a.questionStem && (
                   <p style={{ margin: "0 0 6px", fontSize: 13, fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.5 }}>
@@ -576,7 +577,7 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
             gap: 8,
           }}
         >
-          <ClockCircleOutlined style={{ fontSize: 12, color: "var(--text-muted)" }} />
+          <Clock size={12} className="text-[var(--text-muted)]" />
           <Text style={{ fontSize: 12, color: "var(--text-secondary)", fontWeight: 500 }}>
             Thử thách tiếp theo sẽ mở sau
           </Text>
@@ -616,8 +617,8 @@ export function CompletedState({ challenge, streak, badges, onStartBonus, bonusS
             }}
             className="btn-shimmer"
           >
-            <ThunderboltOutlined /> Tra cứu từ điển & Luyện từ vựng
-            <RightOutlined style={{ fontSize: 12 }} />
+            <Zap /> Tra cứu từ điển & Luyện từ vựng
+            <ChevronRight size={12} />
           </Link>
         </div>
       </m.div>

@@ -12,7 +12,14 @@ import {
 import { and, asc, desc, eq, gte, isNotNull, lte, sql } from "drizzle-orm";
 import { TOEIC_SKILLS, getSkillLabel, type ToeicSkill } from "@repo/contracts";
 import { computePredictedScore, bandLabel } from "@/lib/toeic/predict";
-import { TrophyOutlined, CalendarOutlined, CheckCircleFilled, FireOutlined, StarFilled, ArrowRightOutlined } from "@ant-design/icons";
+import {
+  ArrowRight,
+  Calendar,
+  CheckCircle,
+  Flame,
+  Star,
+  Trophy,
+} from "lucide-react";
 
 const PART_5_6_SKILLS = new Set([
 	"toeic.part5.verb_form",
@@ -218,7 +225,7 @@ export async function HubWidgets() {
 						alignItems: "center",
 						gap: 6
 					}}>
-						<CalendarOutlined style={{ color: "var(--accent)" }} />
+						<Calendar style={{ color: "var(--accent)" }} />
 						<span>🎯 Hôm nay nên làm</span>
 					</h3>
 					<span style={{
@@ -277,7 +284,7 @@ export async function HubWidgets() {
 											{item.reason}
 										</div>
 									</div>
-									<ArrowRightOutlined style={{ color: "var(--accent)", fontSize: 12 }} />
+									<ArrowRight style={{ color: "var(--accent)", fontSize: 12 }} />
 								</Link>
 							);
 						})}
