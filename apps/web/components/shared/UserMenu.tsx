@@ -1,14 +1,16 @@
 "use client";
 
-import { Avatar, Dropdown, Typography } from "antd";
-import type { MenuProps } from "antd";
 import { useRouter } from "next/navigation";
 import { authClient } from "@/lib/auth-client";
 import type { AuthUser } from "@/components/shared/AppShell";
 import * as m from "motion/react-client";
 import { ChevronDown, LogOut } from "lucide-react";
-
-const { Text } = Typography;
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export function UserMenu({ user }: { user: AuthUser }) {
   const router = useRouter();
@@ -18,15 +20,6 @@ export function UserMenu({ user }: { user: AuthUser }) {
     router.push("/sign-in");
   };
 
-  const items: MenuProps["items"] = [
-    {
-      key: "sign-out",
-      icon: <LogOut />,
-      label: "Đăng xuất",
-      onClick: handleSignOut,
-    },
-  ];
-
   const initials = user.name
     .split(" ")
     .map((w) => w[0])
@@ -35,44 +28,75 @@ export function UserMenu({ user }: { user: AuthUser }) {
     .toUpperCase();
 
   return (
-    <Dropdown menu={{ items }} trigger={["click"]} placement="bottomRight" overlayClassName="user-menu-dropdown">
-      <m.button
-        whileHover={{ background: "var(--bg-deep)" }}
-        whileTap={{ scale: 0.95 }}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-          borderRadius: 999,
-          height: 40,
-          paddingLeft: 6,
-          paddingRight: 14,
-          background: "var(--surface)",
-          border: "1px solid var(--border)",
-          cursor: "pointer",
-          transition: "background 0.2s, border-color 0.2s",
-        }}
-      >
-        <m.div
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring", stiffness: 400, damping: 25 }}
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <m.button
+          whileHover={{ background: "var(--bg-deep)" }}
+          whileTap={{ scale: 0.95 }}
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 10,
+            borderRadius: 4,
+            height: 40,
+            paddingLeft: 6,
+            paddingRight: 14,
+            background: "var(--surface)",
+            border: "var(--brutal-border)",
+            cursor: "pointer",
+            boxShadow: "var(--shadow-sm)",
+            transition: "background 0.2s",
+          }}
         >
-          <Avatar
-            src={user.image || undefined}
-            size={28}
-            style={
-              !user.image ? { background: "var(--accent)", fontSize: 10, fontWeight: 700, border: "2px solid rgba(255,255,255,0.1)" } : undefined
-            }
+          <m.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
           >
-            {initials}
-          </Avatar>
-        </m.div>
-        <Text strong style={{ fontSize: 13, color: "var(--ink)" }}>
-          {user.name}
-        </Text>
-        <ChevronDown style={{ fontSize: 10, color: "var(--text-muted)", marginLeft: 2 }} />
-      </m.button>
-    </Dropdown>
+            {user.image ? (
+              <img
+                src={user.image}
+                alt={user.name}
+                style={{
+                  width: 28,
+                  height: 28,
+                  borderRadius: 2,
+                  objectFit: "cover",
+                  border: "2px solid var(--border)",
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  width: 28,
+                  height: 28,
+                  borderRadius: 2,
+                  background: "var(--accent)",
+                  color: "white",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  fontSize: 10,
+                  fontWeight: 700,
+                  border: "2px solid var(--border)",
+                }}
+              >
+                {initials}
+              </div>
+            )}
+          </m.div>
+          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--ink)" }}>
+            {user.name}
+          </span>
+          <ChevronDown style={{ fontSize: 10, color: "var(--text-muted)", marginLeft: 2 }} />
+        </m.button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="border-2 border-[var(--border)] shadow-[var(--shadow)]">
+        <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
+          <LogOut className="mr-2 h-4 w-4" />
+          Đăng xuất
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

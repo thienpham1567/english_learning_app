@@ -2,7 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { Modal } from "antd";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 
 import { AppError } from "@repo/shared";
 import { api } from "@/lib/api-client";
@@ -279,89 +279,75 @@ export function FloatingDictionaryWidget() {
       )}
 
       {/* Result modal */}
-      <Modal
-        open={modalOpen}
-        onCancel={() => setModalOpen(false)}
-        footer={null}
-        width={isMobile ? "100%" : 860}
-        style={{ top: isMobile ? 0 : 40 }}
-        styles={{
-          body: { padding: 0, maxHeight: isMobile ? "100dvh" : "82vh", overflowY: "auto" },
-          mask: { backdropFilter: "blur(4px)", background: "rgba(0,0,0,0.3)" },
-        }}
-        closeIcon={
+      <Dialog open={modalOpen} onOpenChange={setModalOpen}>
+        <DialogContent
+          className="p-0 gap-0 max-w-[860px] max-h-[82vh] overflow-hidden"
+          style={{
+            width: isMobile ? "100%" : 860,
+          }}
+        >
+          <DialogTitle className="sr-only">Tra từ điển</DialogTitle>
+          {/* Modal header bar */}
           <div style={{
-            width: 28, height: 28, borderRadius: "50%",
-            background: "var(--bg-deep)",
-            display: "flex", alignItems: "center", justifyContent: "center",
-            color: "var(--text-muted)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "12px 16px 12px 20px",
+            borderBottom: "var(--brutal-border)",
+            background: "var(--surface)",
+            gap: 12,
           }}>
-            <X size={12} />
-          </div>
-        }
-      >
-        {/* Modal header bar */}
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "12px 16px 12px 20px",
-          borderBottom: "1px solid var(--border)",
-          background: "var(--surface)",
-          gap: 12,
-        }}>
-          {/* Inline search in modal */}
-          <form
-            onSubmit={(e) => { e.preventDefault(); const q = (e.currentTarget.elements.namedItem("q") as HTMLInputElement)?.value?.trim(); if (q) { setModalOpen(false); setTimeout(() => search(q), 80); } }}
-            style={{ display: "flex", alignItems: "center", gap: 8, flex: 1 }}
-          >
-            <Search size={13} className="text-[var(--text-muted)]" />
-            <input
-              name="q"
-              defaultValue={result?.headword ?? ""}
-              key={result?.headword}
-              placeholder="Tra từ khác..."
+            {/* Inline search in modal */}
+            <form
+              onSubmit={(e) => { e.preventDefault(); const q = (e.currentTarget.elements.namedItem("q") as HTMLInputElement)?.value?.trim(); if (q) { setModalOpen(false); setTimeout(() => search(q), 80); } }}
+              style={{ display: "flex", alignItems: "center", gap: 8, flex: 1 }}
+            >
+              <Search size={13} className="text-[var(--text-muted)]" />
+              <input
+                name="q"
+                defaultValue={result?.headword ?? ""}
+                key={result?.headword}
+                placeholder="Tra từ khác..."
+                style={{
+                  border: "none", outline: "none", background: "transparent",
+                  fontSize: 13, fontFamily: "var(--font-body)",
+                  color: "var(--text-primary)", flex: 1,
+                }}
+              />
+            </form>
+            <button
+              onClick={handleOpenFullPage}
               style={{
-                border: "none", outline: "none", background: "transparent",
-                fontSize: 13, fontFamily: "var(--font-body)",
-                color: "var(--text-primary)", flex: 1,
+                display: "inline-flex", alignItems: "center", gap: 5,
+                padding: "5px 12px", borderRadius: 4,
+                border: "var(--brutal-border)",
+                background: "transparent",
+                color: "var(--text-muted)",
+                fontSize: 11, fontWeight: 600, cursor: "pointer",
+                transition: "all 0.15s",
+                flexShrink: 0,
+                whiteSpace: "nowrap",
               }}
-            />
-          </form>
-          <button
-            onClick={handleOpenFullPage}
-            style={{
-              display: "inline-flex", alignItems: "center", gap: 5,
-              padding: "5px 12px", borderRadius: 8,
-              border: "1px solid var(--border)",
-              background: "transparent",
-              color: "var(--text-muted)",
-              fontSize: 11, fontWeight: 600, cursor: "pointer",
-              transition: "all 0.15s",
-              flexShrink: 0,
-              whiteSpace: "nowrap",
-            }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--accent)"; (e.currentTarget as HTMLButtonElement).style.color = "var(--accent)"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border)"; (e.currentTarget as HTMLButtonElement).style.color = "var(--text-muted)"; }}
-          >
-            Mở trang từ điển <ArrowRight size={10} />
-          </button>
-        </div>
+            >
+              Mở trang từ điển <ArrowRight size={10} />
+            </button>
+          </div>
 
-        {/* Dictionary result */}
-        <div style={{ padding: 16 }}>
-          <DictionaryResultCard
-            key={result?.headword ?? "loading"}
-            vocabulary={result}
-            hasSearched={true}
-            isLoading={isSearching}
-            saved={saved}
-            onToggleSaved={handleToggleSaved}
-            onOpenThesaurus={() => setIsThesaurusOpen(true)}
-            onSearch={handleSearchInModal}
-          />
-        </div>
-      </Modal>
+          {/* Dictionary result */}
+          <div style={{ padding: 16, overflowY: "auto", maxHeight: "calc(82vh - 60px)" }}>
+            <DictionaryResultCard
+              key={result?.headword ?? "loading"}
+              vocabulary={result}
+              hasSearched={true}
+              isLoading={isSearching}
+              saved={saved}
+              onToggleSaved={handleToggleSaved}
+              onOpenThesaurus={() => setIsThesaurusOpen(true)}
+              onSearch={handleSearchInModal}
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
 
       {/* Thesaurus sheet */}
       <ThesaurusSheet

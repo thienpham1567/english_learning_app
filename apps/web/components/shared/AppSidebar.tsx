@@ -3,7 +3,8 @@
 import { useState, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Badge, Tooltip } from "antd";
+import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { Logo } from "@/components/shared/Logo";
 
 import { useTheme } from "@/components/shared/ThemeProvider";
@@ -207,10 +208,10 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
     if (href === "/flashcards" && badges.flashcardsDue > 0) {
       return (
         <Badge
-          count={badges.flashcardsDue}
-          size="small"
-          style={{ backgroundColor: "var(--accent)" }}
-        />
+          className="ml-auto px-1.5 py-0 text-[10px] bg-[var(--accent)] text-white border-0"
+        >
+          {badges.flashcardsDue}
+        </Badge>
       );
     }
 
@@ -385,8 +386,9 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
             return (
               <div key={href}>
                 {!isExpanded ? (
-                  <Tooltip placement="right" title={label}>
-                    {link}
+                  <Tooltip>
+                    <TooltipTrigger asChild>{link}</TooltipTrigger>
+                    <TooltipContent side="right">{label}</TooltipContent>
                   </Tooltip>
                 ) : (
                   link
@@ -423,12 +425,9 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
                     />
                   );
                   return (
-                    <Tooltip
-                      key={item.href}
-                      placement="right"
-                      title={item.label}
-                    >
-                      {link}
+                    <Tooltip key={item.href}>
+                      <TooltipTrigger asChild>{link}</TooltipTrigger>
+                      <TooltipContent side="right">{item.label}</TooltipContent>
                     </Tooltip>
                   );
                 })}
@@ -569,11 +568,9 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
             </m.button>
           );
           return !isExpanded ? (
-            <Tooltip
-              placement="right"
-              title={mode === "light" ? "Chế độ tối" : "Chế độ sáng"}
-            >
-              {themeBtn}
+            <Tooltip>
+              <TooltipTrigger asChild>{themeBtn}</TooltipTrigger>
+              <TooltipContent side="right">{mode === "light" ? "Chế độ tối" : "Chế độ sáng"}</TooltipContent>
             </Tooltip>
           ) : (
             themeBtn

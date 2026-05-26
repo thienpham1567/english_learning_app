@@ -2,7 +2,7 @@
 
 import { type ReactNode, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
-import { Flex, Typography, Card } from "antd";
+
 import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
 import {
@@ -22,7 +22,7 @@ import {
   Volume2,
 } from "lucide-react";
 
-const { Text } = Typography;
+
 
 interface TabItem {
   key: string;
@@ -211,28 +211,31 @@ export function BottomTabBar() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.04 }}
                 >
-                  <Card
-                    hoverable
+                  <button
+                    type="button"
                     onClick={() => {
                       setActiveHub(null);
                       router.push(item.href);
                     }}
                     style={{
-                      borderRadius: 20,
+                      borderRadius: 4,
                       textAlign: "center",
-                      border: "1px solid var(--border)",
+                      border: "var(--brutal-border)",
                       background: "var(--surface)",
+                      padding: 16,
+                      cursor: "pointer",
+                      boxShadow: "var(--shadow-sm)",
+                      transition: "transform 0.1s, box-shadow 0.1s",
                     }}
-                    styles={{ body: { padding: 16 } }}
                   >
-                    <Text style={{ fontSize: 24, color: "var(--accent)" }}>
+                    <span style={{ fontSize: 24, color: "var(--accent)" }}>
                       {item.icon}
-                    </Text>
+                    </span>
                     <br />
-                    <Text strong style={{ fontSize: 13, color: "var(--ink)" }}>
+                    <span style={{ fontSize: 13, fontWeight: 700, color: "var(--ink)" }}>
                       {item.label}
-                    </Text>
-                  </Card>
+                    </span>
+                  </button>
                 </m.div>
               ))}
             </m.div>
@@ -295,7 +298,7 @@ export function BottomTabBar() {
               >
                 {isActive ? tab.activeIcon : tab.icon}
               </m.div>
-              <Text
+              <span
                 style={{
                   fontSize: 11,
                   fontWeight: isActive ? 700 : 500,
@@ -305,7 +308,7 @@ export function BottomTabBar() {
                 }}
               >
                 {tab.label}
-              </Text>
+              </span>
               {isActive && (
                 <m.div
                   layoutId="activeTab"

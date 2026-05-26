@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { Typography } from "antd";
+
 import * as m from "motion/react-client";
 import { AnimatePresence } from "motion/react";
 import {
@@ -28,7 +28,7 @@ import {
   Zap,
 } from "lucide-react";
 
-const { Text, Title } = Typography;
+
 
 type BreadcrumbEntry = {
   eyebrow: string;
@@ -121,21 +121,21 @@ export function ToolbarBreadcrumb() {
 
         {/* Text */}
         <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          <Text
-            type="secondary"
+          <span
             style={{
               fontSize: 10,
               textTransform: "uppercase",
               letterSpacing: "0.15em",
               lineHeight: 1,
               fontWeight: 700,
+              color: "var(--text-muted)",
             }}
           >
             {crumb.eyebrow}
-          </Text>
-          <Title level={5} style={{ margin: "2px 0 0", fontSize: 13, fontWeight: 700, lineHeight: 1.2 }}>
+          </span>
+          <h5 style={{ margin: "2px 0 0", fontSize: 13, fontWeight: 700, lineHeight: 1.2, color: "var(--text-primary)" }}>
             {crumb.title}
-          </Title>
+          </h5>
         </div>
       </m.div>
     </AnimatePresence>

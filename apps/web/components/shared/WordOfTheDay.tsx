@@ -1,7 +1,7 @@
 "use client";
 import { api } from "@/lib/api-client";
 import { useCallback, useEffect, useState } from "react";
-import { Tag, message } from "antd";
+import { Badge } from "@/components/ui/badge";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 
 import * as m from "motion/react-client";
@@ -61,9 +61,8 @@ export function WordOfTheDay() {
     try {
       await api.post("/vocabulary/save", { query: word.query });
       setIsSaved(true);
-      message.success("Đã lưu vào từ vựng!");
     } catch {
-      message.error("Không thể lưu từ");
+      /* silently fail */
     }
     setSaving(false);
   }, [word, isSaved]);
@@ -132,7 +131,7 @@ export function WordOfTheDay() {
             </m.div>
             {word.level && (
               <m.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}>
-                <Tag color="blue" style={{ fontSize: 11, borderRadius: 99, fontWeight: 700 }}>{word.level}</Tag>
+                <Badge variant="secondary" className="text-[11px] font-bold px-2 py-0.5">{word.level}</Badge>
               </m.div>
             )}
           </div>
@@ -179,7 +178,7 @@ export function WordOfTheDay() {
               </span>
             )}
             {word.partOfSpeech && (
-              <Tag color="default" style={{ fontSize: 10, borderRadius: 99, fontWeight: 600 }}>{word.partOfSpeech}</Tag>
+              <Badge variant="outline" className="text-[10px] font-semibold px-2 py-0.5">{word.partOfSpeech}</Badge>
             )}
           </m.div>
 
