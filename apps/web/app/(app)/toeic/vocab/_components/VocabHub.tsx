@@ -8,27 +8,19 @@ type Pack = { topic: string; label: string; total: number; learned: number };
 
 export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number }) {
 	return (
-		<div style={{ display: "grid", gap: 16 }}>
+		<div className="grid gap-4" >
 			{/* Due review banner */}
 			<Card size="small">
-				<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+				<div className="flex justify-between items-center" >
 					<div>
-						<div style={{ fontSize: 14, color: "var(--text-muted, #94a3b8)" }}>
+						<div className="text-sm text-text-muted" >
 							<AlertTriangle /> Cần ôn hôm nay
 						</div>
-						<div style={{ fontSize: 28, fontWeight: 700 }}>{dueCount} từ</div>
+						<div className="text-[28px] font-bold" >{dueCount} từ</div>
 					</div>
 					{dueCount > 0 ? (
 						<Link
-							href="/toeic/vocab/learn?mode=review"
-							style={{
-								padding: "8px 16px",
-								borderRadius: 8,
-								background: "var(--error)",
-								color: "#fff",
-								textDecoration: "none",
-							}}
-						>
+							href="/toeic/vocab/learn?mode=review" className="py-2 px-4 rounded-lg" style={{background: "var(--error)", color: "#fff", textDecoration: "none"}} >
 							Ôn ngay
 						</Link>
 					) : (
@@ -38,13 +30,7 @@ export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number 
 			</Card>
 
 			{/* Topic packs grid */}
-			<div
-				style={{
-					display: "grid",
-					gap: 12,
-					gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-				}}
-			>
+			<div className="grid gap-3" style={{gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))"}} >
 				{packs.map((p) => {
 					const pct = p.total > 0 ? Math.round((p.learned / p.total) * 100) : 0;
 					return (
@@ -53,12 +39,12 @@ export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number 
 							href={`/toeic/vocab/learn?pack=${encodeURIComponent(p.topic)}&mode=new`}
 							style={{ textDecoration: "none" }}
 						>
-							<Card hoverable size="small" style={{ height: "100%" }}>
-								<div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 16 }}>
+							<Card hoverable size="small" className="h-full" >
+								<div className="flex items-center gap-2 text-base" >
 									<BookOpen />
 									<span>{p.label}</span>
 								</div>
-								<div style={{ fontSize: 13, color: "var(--text-muted, #94a3b8)", marginTop: 6 }}>
+								<div className="text-[13px] text-text-muted mt-1.5" >
 									{p.learned} / {p.total} từ
 								</div>
 								<Progress

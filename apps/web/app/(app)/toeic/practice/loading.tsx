@@ -3,26 +3,10 @@ import { Loader2 } from "lucide-react";
 
 export default function PracticeLoading() {
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				alignItems: "center",
-				justifyContent: "center",
-				padding: 64,
-				flex: 1,
-				gap: 14,
-			}}
-		>
-			<Loader2 className="animate-spin text-[var(--accent)]" size={28}
+		<div className="flex flex-col items-center justify-center flex-1 gap-3.5" style={{padding: 64}} >
+			<Loader2 className="animate-spin text-accent" size={28}
 			/>
-			<span
-				style={{
-					fontSize: 14,
-					fontWeight: 700,
-					color: "var(--text-muted)",
-				}}
-			>
+			<span className="text-sm font-bold text-text-muted" >
 				Đang tải đề luyện tập...
 			</span>
 		</div>

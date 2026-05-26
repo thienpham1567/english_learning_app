@@ -94,67 +94,46 @@ export default function GradedReaderPage() {
   const readCount = passages.filter((p) => p.isRead).length;
 
   return (
-    <div style={{ height: "100%", overflowY: "auto", padding: "var(--space-6)" }} className="anim-fade-up">
-      <Flex vertical gap={20} style={{ maxWidth: 800, margin: "0 auto" }}>
+    <div className="anim-fade-up h-full overflow-y-auto" style={{padding: "var(--space-6)"}} >
+      <Flex vertical gap={20} className="w-[800px] mx-auto" >
 
         {/* Hero header */}
         <Card
-          style={{
-            borderRadius: 20,
-            background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-            border: "none",
-          }}
-          styles={{ body: { padding: "24px 28px" } }}
-        >
+          
+          styles={{ body: { padding: "24px 28px" } }} className="border-none" style={{borderRadius: 20, background: "linear-gradient(135deg, var(--accent), var(--secondary))"}} >
           <Flex align="center" gap={16}>
-            <div style={{
-              width: 48, height: 48, borderRadius: 14,
-              background: "rgba(255,255,255,0.2)", display: "flex",
-              alignItems: "center", justifyContent: "center",
-            }}>
-              <BookOpen style={{ fontSize: 24, color: "var(--text-on-accent)" }} />
+            <div className="w-[48px] h-[48px] flex items-center justify-center" style={{borderRadius: 14, background: "rgba(255,255,255,0.2)"}} >
+              <BookOpen className="text-3xl" style={{color: "var(--text-on-accent)"}} />
             </div>
             <div>
-              <Text style={{ fontSize: 11, textTransform: "uppercase", letterSpacing: "0.12em", color: "rgba(255,255,255,0.7)" }}>
+              <Text className="text-[11px] uppercase" style={{letterSpacing: "0.12em", color: "rgba(255,255,255,0.7)"}} >
                 GRADED READER
               </Text>
-              <Title level={4} style={{ margin: 0, color: "var(--text-on-accent)", fontFamily: "var(--font-display)", fontStyle: "italic" }}>
+              <Title level={4} className="m-0 font-display italic" style={{color: "var(--text-on-accent)"}} >
                 Đọc theo cấp độ CEFR
               </Title>
             </div>
             {passages.length > 0 && (
-              <div style={{ marginLeft: "auto", textAlign: "center" }}>
-                <Text style={{ fontSize: 22, fontWeight: 700, color: "var(--text-on-accent)" }}>{readCount}/{passages.length}</Text>
+              <div className="text-center" style={{marginLeft: "auto"}} >
+                <Text className="text-2xl font-bold" style={{color: "var(--text-on-accent)"}} >{readCount}/{passages.length}</Text>
                 <br />
-                <Text style={{ fontSize: 11, color: "rgba(255,255,255,0.7)" }}>đã đọc</Text>
+                <Text className="text-[11px]" style={{color: "rgba(255,255,255,0.7)"}} >đã đọc</Text>
               </div>
             )}
           </Flex>
         </Card>
 
         {/* Level filter pills */}
-        <Card style={{ borderRadius: 16 }} styles={{ body: { padding: "12px 16px" } }}>
+        <Card  styles={{ body: { padding: "12px 16px" } }} className="rounded-2xl" >
           <Flex gap={8} wrap align="center">
-            <Filter style={{ color: "var(--text-muted)", fontSize: 14 }} />
+            <Filter className="text-text-muted text-sm" />
             {LEVELS.map((lv) => {
               const active = level === lv;
               const color = LEVEL_COLORS[lv] || "var(--accent)";
               return (
                 <button
                   key={lv}
-                  onClick={() => setLevel(lv)}
-                  style={{
-                    padding: "6px 16px",
-                    borderRadius: 20,
-                    border: active ? `2px solid ${color}` : "1px solid var(--border)",
-                    background: active ? color : "transparent",
-                    color: active ? "var(--text-on-accent)" : "var(--text-secondary)",
-                    fontSize: 12,
-                    fontWeight: 600,
-                    cursor: "pointer",
-                    transition: "all 0.2s ease",
-                  }}
-                >
+                  onClick={() => setLevel(lv)} className="text-xs font-semibold cursor-pointer" style={{padding: "6px 16px", borderRadius: 20, border: active ? `2px solid ${color}` : "1px solid var(--border)", background: active ? color : "transparent", color: active ? "var(--text-on-accent)" : "var(--text-secondary)", transition: "all 0.2s ease"}} >
                   {LEVEL_LABELS[lv]}
                 </button>
               );
@@ -169,7 +148,7 @@ export default function GradedReaderPage() {
           </Flex>
         ) : passages.length === 0 ? (
           <Empty
-            image={<BookOpen style={{ fontSize: 48, color: "var(--text-muted)" }} />}
+            image={<BookOpen className="text-text-muted" style={{fontSize: 48}} />}
             description="Không có bài đọc nào cho cấp độ này"
             style={{ padding: 60 }}
           />
@@ -180,47 +159,29 @@ export default function GradedReaderPage() {
                 key={p.id}
                 hoverable
                 onClick={() => router.push(`/reading/graded/${p.id}`)}
-                style={{
-                  borderRadius: 16,
-                  cursor: "pointer",
-                  opacity: p.isRead ? 0.75 : 1,
-                  transition: "all 0.2s ease",
-                }}
-                styles={{ body: { padding: "14px 20px" } }}
-              >
+                
+                styles={{ body: { padding: "14px 20px" } }} className="rounded-2xl cursor-pointer" style={{opacity: p.isRead ? 0.75 : 1, transition: "all 0.2s ease"}} >
                 <Flex align="center" gap={14}>
                   {/* Read indicator icon */}
-                  <div style={{
-                    width: 40, height: 40, borderRadius: 12,
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                    background: p.isRead
+                  <div className="w-[40px] h-[40px] rounded-xl flex items-center justify-center shrink-0" style={{background: p.isRead
                       ? "linear-gradient(135deg, var(--success)20, var(--success)10)"
-                      : `linear-gradient(135deg, ${LEVEL_COLORS[p.cefrLevel] || "var(--accent)"}15, ${LEVEL_COLORS[p.cefrLevel] || "var(--accent)"}08)`,
-                    flexShrink: 0,
-                  }}>
+                      : `linear-gradient(135deg, ${LEVEL_COLORS[p.cefrLevel] || "var(--accent)"}15, ${LEVEL_COLORS[p.cefrLevel] || "var(--accent)"}08)`}} >
                     {p.isRead
-                      ? <CheckCircle style={{ fontSize: 20, color: "var(--success)" }} />
-                      : <FileText style={{ fontSize: 18, color: LEVEL_COLORS[p.cefrLevel] || "var(--accent)" }} />
+                      ? <CheckCircle className="text-xl text-emerald-500" />
+                      : <FileText className="text-lg" style={{color: LEVEL_COLORS[p.cefrLevel] || "var(--accent)"}} />
                     }
                   </div>
 
                   {/* Content */}
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <Text style={{ fontSize: 14, fontWeight: 600, display: "block", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  <div className="flex-1 w-[0px]" >
+                    <Text className="text-sm font-semibold block overflow-hidden" style={{textOverflow: "ellipsis", whiteSpace: "nowrap"}} >
                       {p.title}
                     </Text>
-                    <Flex gap={8} align="center" style={{ marginTop: 4 }}>
-                      <Tag
-                        style={{
-                          margin: 0, fontSize: 10, fontWeight: 700, borderRadius: 6,
-                          background: LEVEL_COLORS[p.cefrLevel] || undefined,
-                          color: LEVEL_COLORS[p.cefrLevel] ? "var(--text-on-accent)" : undefined,
-                          border: "none",
-                        }}
-                      >
+                    <Flex gap={8} align="center" className="mt-1" >
+                      <Tag className="m-0 text-[10px] font-bold rounded-md border-none" style={{background: LEVEL_COLORS[p.cefrLevel] || undefined, color: LEVEL_COLORS[p.cefrLevel] ? "var(--text-on-accent)" : undefined}} >
                         {p.cefrLevel}
                       </Tag>
-                      <Text style={{ fontSize: 11, color: "var(--text-muted)" }}>
+                      <Text className="text-[11px] text-text-muted" >
                         {SECTION_ICONS[p.section]} {p.wordCount} từ
                       </Text>
                     </Flex>
@@ -228,21 +189,13 @@ export default function GradedReaderPage() {
 
                   {/* New words badge */}
                   {p.newWordsCount > 0 && (
-                    <Tag
-                      style={{
-                        margin: 0, borderRadius: 12, border: "none",
-                        background: "color-mix(in srgb, var(--accent) 12%, transparent)",
-                        color: "var(--accent)", fontWeight: 600, fontSize: 11,
-                        display: "flex", alignItems: "center", gap: 4,
-                        padding: "2px 10px",
-                      }}
-                    >
+                    <Tag className="m-0 rounded-xl border-none text-accent font-semibold text-[11px] flex items-center gap-1" style={{background: "color-mix(in srgb, var(--accent) 12%, transparent)", padding: "2px 10px"}} >
                       <Star size={10} />
                       {p.newWordsCount} mới
                     </Tag>
                   )}
 
-                  <ChevronRight style={{ fontSize: 12, color: "var(--text-muted)", flexShrink: 0 }} />
+                  <ChevronRight className="text-xs text-text-muted shrink-0" />
                 </Flex>
               </Card>
             ))}

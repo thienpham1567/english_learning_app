@@ -48,7 +48,7 @@ function ScoreGauge({ score, label }: { score: number; label: string }) {
     "var(--error)";
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+    <div className="flex flex-col items-center gap-1" >
       <svg width={96} height={96} viewBox="0 0 96 96">
         {/* Background ring */}
         <circle
@@ -68,25 +68,16 @@ function ScoreGauge({ score, label }: { score: number; label: string }) {
         {/* Score number */}
         <text
           x="48" y="44"
-          textAnchor="middle" dominantBaseline="central"
-          style={{
-            fontFamily: "var(--font-display)",
-            fontSize: 26,
-            fontWeight: 700,
-            fill: color,
-          }}
-        >
+          textAnchor="middle" dominantBaseline="central" className="font-display font-bold" style={{fontSize: 26, fill: color}} >
           {score}
         </text>
         <text
           x="48" y="62"
-          textAnchor="middle" dominantBaseline="central"
-          style={{ fontSize: 9, fill: "var(--text-muted)", fontWeight: 500 }}
-        >
+          textAnchor="middle" dominantBaseline="central" className="text-[9px] font-medium" style={{fill: "var(--text-muted)"}} >
           / 100
         </text>
       </svg>
-      <span style={{ fontSize: 12, fontWeight: 600, color }}>{label}</span>
+      <span className="text-xs font-semibold" style={{color}} >{label}</span>
     </div>
   );
 }
@@ -102,17 +93,8 @@ function CopyButton({ text }: { text: string }) {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       }}
-      style={{
-        border: "none",
-        background: "transparent",
-        cursor: "pointer",
-        color: copied ? "var(--success)" : "var(--text-secondary)",
-        fontSize: 13,
-        padding: "4px 8px",
-        borderRadius: 6,
-      }}
-      title="Sao chép"
-    >
+      
+      title="Sao chép" className="border-none bg-transparent cursor-pointer text-[13px] py-1 px-2 rounded-md" style={{color: copied ? "var(--success)" : "var(--text-secondary)"}} >
       {copied ? <Check /> : <Copy />}
     </button>
   );
@@ -131,51 +113,26 @@ function ErrorCard({
   const meta = TYPE_META[error.type] ?? TYPE_META.grammar;
 
   return (
-    <div
-      style={{
-        borderRadius: 12,
-        border: "1px solid var(--border)",
-        background: "var(--card-bg)",
-        overflow: "hidden",
-        transition: "box-shadow 0.2s",
-      }}
-    >
+    <div className="rounded-xl border border-(--border) overflow-hidden" style={{background: "var(--card-bg)", transition: "box-shadow 0.2s"}} >
       {/* Header */}
       <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "10px 14px",
-          borderLeft: `4px solid ${meta.color}`,
-          cursor: "pointer",
-        }}
-        onClick={() => setExpanded((p) => !p)}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ color: meta.color, fontSize: 13 }}>{meta.icon}</span>
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 600,
-              color: meta.color,
-              padding: "2px 8px",
-              borderRadius: 10,
-              background: `color-mix(in srgb, ${meta.color} 10%, transparent)`,
-            }}
-          >
+        
+        onClick={() => setExpanded((p) => !p)} className="flex items-center justify-between cursor-pointer" style={{padding: "10px 14px", borderLeft: `4px solid ${meta.color}`}} >
+        <div className="flex items-center gap-2" >
+          <span className="text-[13px]" style={{color: meta.color}} >{meta.icon}</span>
+          <span className="text-[11px] font-semibold" style={{color: meta.color, padding: "2px 8px", borderRadius: 10, background: `color-mix(in srgb, ${meta.color} 10%, transparent)`}} >
             {meta.labelVi}
           </span>
-          <span style={{ fontSize: 13, color: "var(--text-muted)", textDecoration: "line-through" }}>
+          <span className="text-[13px] text-text-muted" style={{textDecoration: "line-through"}} >
             {error.original}
           </span>
-          <span className="text-[var(--text-primary)]" style={{ fontSize: 13 }}>→</span>
-          <span style={{ fontSize: 13, color: "var(--success)", fontWeight: 500 }}>
+          <span className="text-text-primary text-[13px]" >→</span>
+          <span className="text-[13px] text-emerald-500 font-medium" >
             {error.correction}
           </span>
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <span className="text-[var(--text-muted)]" style={{ fontSize: 10 }}>
+        <div className="flex items-center gap-1.5" >
+          <span className="text-text-muted text-[10px]" >
             {expanded ? <ChevronDown /> : <ChevronRight />}
           </span>
         </div>
@@ -183,57 +140,28 @@ function ErrorCard({
 
       {/* Expanded detail */}
       {expanded && (
-        <div
-          style={{
-            padding: "0 14px 12px 22px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 8,
-          }}
-        >
+        <div className="flex flex-col gap-2" style={{padding: "0 14px 12px 22px"}} >
           {/* Rule tag */}
-          <span
-            style={{
-              fontSize: 11,
-              color: "var(--text-secondary)",
-              fontStyle: "italic",
-            }}
-          >
+          <span className="text-[11px] text-text-secondary italic" >
             Rule: {error.rule}
           </span>
 
           {/* Vietnamese explanation */}
-          <div
-            style={{
-              padding: "8px 12px",
-              borderRadius: 8,
-              background: "var(--surface)",
-              fontSize: 13,
-              lineHeight: 1.6,
-            }}
-          >
-            <span style={{ fontWeight: 600, color: "var(--text-secondary)", fontSize: 11 }}>
+          <div className="py-2 px-3 rounded-lg bg-(--surface) text-[13px] leading-relaxed" >
+            <span className="font-semibold text-text-secondary text-[11px]" >
               🇻🇳 Giải thích:
             </span>
-            <p style={{ margin: "4px 0 0", color: "var(--text-primary)" }}>
+            <p className="text-text-primary" style={{margin: "4px 0 0"}} >
               {error.explanationVi}
             </p>
           </div>
 
           {/* English explanation */}
-          <div
-            style={{
-              padding: "8px 12px",
-              borderRadius: 8,
-              background: "var(--surface)",
-              fontSize: 13,
-              lineHeight: 1.6,
-            }}
-          >
-            <span style={{ fontWeight: 600, color: "var(--text-secondary)", fontSize: 11 }}>
+          <div className="py-2 px-3 rounded-lg bg-(--surface) text-[13px] leading-relaxed" >
+            <span className="font-semibold text-text-secondary text-[11px]" >
               🇬🇧 Explanation:
             </span>
-            <p style={{ margin: "4px 0 0", color: "var(--text-primary)" }}>
+            <p className="text-text-primary" style={{margin: "4px 0 0"}} >
               {error.explanationEn}
             </p>
           </div>
@@ -243,22 +171,7 @@ function ErrorCard({
             onClick={(e) => {
               e.stopPropagation();
               onApply();
-            }}
-            style={{
-              alignSelf: "flex-start",
-              padding: "6px 14px",
-              borderRadius: 8,
-              border: "none",
-              background: "var(--accent)",
-              color: "var(--text-on-accent)",
-              fontSize: 12,
-              fontWeight: 600,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: 4,
-            }}
-          >
+            }} className="py-1.5 px-3.5 rounded-lg border-none text-xs font-semibold cursor-pointer flex items-center gap-1" style={{alignSelf: "flex-start", background: "var(--accent)", color: "var(--text-on-accent)"}} >
             <CircleCheckBig /> Áp dụng sửa lỗi
           </button>
         </div>
@@ -364,96 +277,34 @@ export function GrammarChecker() {
   );
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+    <div className="flex flex-col gap-4" >
       {/* Input area */}
       <div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-            marginBottom: 8,
-          }}
-        >
-          <span style={{ fontSize: 13, fontWeight: 500, color: "var(--text-secondary)" }}>
+        <div className="flex justify-between items-center mb-2" >
+          <span className="text-[13px] font-medium text-text-secondary" >
             Nhập hoặc dán văn bản cần kiểm tra
           </span>
-          <span
-            style={{
-              fontSize: 12,
-              color: overLimit ? "var(--error)" : "var(--text-muted)",
-              fontWeight: overLimit ? 600 : 400,
-            }}
-          >
+          <span className="text-xs" style={{color: overLimit ? "var(--error)" : "var(--text-muted)", fontWeight: overLimit ? 600 : 400}} >
             {wordCount}/{MAX_WORDS} từ
           </span>
         </div>
 
-        <textarea
-          value={text}
-          onChange={(e) => {
-            setText(e.target.value);
-            setResult(null);
-            setError(null);
-          }}
-          onKeyDown={handleKeyDown}
-          placeholder="Type or paste your English text here..."
-          className={`app-textarea ${overLimit ? "border-error" : ""}`}
-          style={{
-            width: "100%",
-            minHeight: 180,
-            padding: 16,
-            fontSize: 15,
-            lineHeight: 1.7,
-            resize: "vertical",
-            fontFamily: "inherit",
-          }}
-        />
+        <textarea value={text} onChange={(e) => { setText(e.target.value); setResult(null); setError(null); }} onKeyDown={handleKeyDown} placeholder="Type or paste your English text here..." className={`app-textarea ${overLimit ? "border-error" : ""} w-full h-[180px] p-4 text-[15px]`} style={{lineHeight: 1.7, resize: "vertical", fontFamily: "inherit"}} />
       </div>
 
       {/* Example prompts — only show when textarea is empty */}
       {!text.trim() && !result && (
         <div>
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 700,
-              textTransform: "uppercase",
-              letterSpacing: "0.12em",
-              color: "var(--text-muted)",
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              marginBottom: 8,
-            }}
-          >
+          <span className="text-[11px] font-bold uppercase text-text-muted flex items-center gap-1.5 mb-2" style={{letterSpacing: "0.12em"}} >
             <Zap size={10} />
             Thử ngay
           </span>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))",
-              gap: 8,
-            }}
-          >
+          <div className="grid gap-2" style={{gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))"}} >
             {EXAMPLE_PROMPTS.map((ex, i) => (
               <button
                 key={i}
                 onClick={() => setText(ex.text)}
-                style={{
-                  textAlign: "left",
-                  padding: "10px 14px",
-                  borderRadius: 10,
-                  border: "1px solid var(--border)",
-                  borderLeft: `3px solid ${ex.color}`,
-                  background: "var(--card-bg)",
-                  cursor: "pointer",
-                  transition: "all 0.15s",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: 4,
-                }}
+                
                 onMouseEnter={(e) => {
                   e.currentTarget.style.borderColor = "var(--accent)";
                   e.currentTarget.style.transform = "translateY(-1px)";
@@ -464,24 +315,11 @@ export function GrammarChecker() {
                   e.currentTarget.style.borderLeftColor = ex.color;
                   e.currentTarget.style.transform = "none";
                   e.currentTarget.style.boxShadow = "none";
-                }}
-              >
-                <span style={{ fontSize: 11, fontWeight: 600, color: ex.color }}>
+                }} className="text-left border border-(--border) cursor-pointer flex flex-col gap-1" style={{padding: "10px 14px", borderRadius: 10, borderLeft: `3px solid ${ex.color}`, background: "var(--card-bg)", transition: "all 0.15s"}} >
+                <span className="text-[11px] font-semibold" style={{color: ex.color}} >
                   {ex.label}
                 </span>
-                <span
-                  style={{
-                    fontSize: 13,
-                    color: "var(--text-secondary)",
-                    lineHeight: 1.5,
-                    fontStyle: "italic",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                    display: "-webkit-box",
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: "vertical",
-                  }}
-                >
+                <span className="text-[13px] text-text-secondary leading-normal italic overflow-hidden" style={{textOverflow: "ellipsis", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical"}} >
                   {ex.text}
                 </span>
               </button>
@@ -491,26 +329,10 @@ export function GrammarChecker() {
       )}
 
       {/* Action bar */}
-      <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap" }}>
+      <div className="flex items-center gap-2.5 flex-wrap" >
         <button
           onClick={check}
-          disabled={!text.trim() || overLimit || loading}
-          style={{
-            padding: "10px 24px",
-            borderRadius: 10,
-            border: "none",
-            background:
-              !text.trim() || overLimit || loading ? "var(--border)" : "var(--accent)",
-            color: "var(--text-on-accent)",
-            fontSize: 14,
-            fontWeight: 600,
-            cursor: !text.trim() || overLimit || loading ? "not-allowed" : "pointer",
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            transition: "background 0.2s",
-          }}
-        >
+          disabled={!text.trim() || overLimit || loading} className="border-none text-sm font-semibold flex items-center gap-1.5" style={{padding: "10px 24px", borderRadius: 10, background: !text.trim() || overLimit || loading ? "var(--border)" : "var(--accent)", color: "var(--text-on-accent)", cursor: !text.trim() || overLimit || loading ? "not-allowed" : "pointer", transition: "background 0.2s"}} >
           {loading ? (
             <>
               <Loader2 className="animate-spin" /> Đang kiểm tra...
@@ -524,28 +346,14 @@ export function GrammarChecker() {
 
         {result && totalErrors > 0 && (
           <button
-            onClick={applyAll}
-            style={{
-              padding: "10px 20px",
-              borderRadius: 10,
-              border: "1px solid var(--success)",
-              background: "transparent",
-              color: "var(--success)",
-              fontSize: 13,
-              fontWeight: 600,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-            }}
-          >
+            onClick={applyAll} className="bg-transparent text-emerald-500 text-[13px] font-semibold cursor-pointer flex items-center gap-1.5" style={{padding: "10px 20px", borderRadius: 10, border: "1px solid var(--success)"}} >
             <CircleCheckBig /> Sửa tất cả ({totalErrors})
           </button>
         )}
 
         {/* Keyboard shortcut hint */}
         {text.trim() && !result && (
-          <span style={{ fontSize: 11, color: "var(--text-muted)", fontStyle: "italic" }}>
+          <span className="text-[11px] text-text-muted italic" >
             ⌘/Ctrl + Enter
           </span>
         )}
@@ -553,78 +361,34 @@ export function GrammarChecker() {
 
       {/* Error message */}
       {error && (
-        <div
-          style={{
-            padding: "10px 16px",
-            borderRadius: 10,
-            background: "var(--error-bg)",
-            color: "var(--error)",
-            fontSize: 13,
-          }}
-        >
+        <div className="py-2.5 px-4 text-destructive text-[13px]" style={{borderRadius: 10, background: "var(--error-bg)"}} >
           {error}
         </div>
       )}
 
       {/* Results */}
       {result && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <div className="flex flex-col gap-3" >
           {/* Score + Stats dashboard */}
-          <div
-            className="anim-fade-up"
-            style={{
-              display: "flex",
-              gap: 1,
-              background: "var(--border)",
-              borderRadius: 16,
-              overflow: "hidden",
-              border: totalErrors === 0 ? "1px solid var(--success)" : "1px solid var(--border)",
-              boxShadow: "var(--shadow-sm)",
-            }}
-          >
+          <div className="anim-fade-up flex rounded-2xl overflow-hidden" style={{gap: 1, background: "var(--border)", border: totalErrors === 0 ? "1px solid var(--success)" : "1px solid var(--border)", boxShadow: "var(--shadow-sm)"}} >
             {/* Writing score gauge */}
             {writingScore !== null && (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: "16px 20px",
-                  background: totalErrors === 0
+              <div className="flex items-center justify-center py-4 px-5 w-[130px]" style={{background: totalErrors === 0
                     ? "color-mix(in srgb, var(--success) 6%, var(--surface))"
-                    : "var(--surface)",
-                  minWidth: 130,
-                }}
-              >
+                    : "var(--surface)"}} >
                 <ScoreGauge score={writingScore} label={scoreLabel} />
               </div>
             )}
 
             {/* Stats cells */}
             {totalErrors === 0 ? (
-              <div
-                style={{
-                  flex: 1,
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  padding: "18px 22px",
-                  background: "color-mix(in srgb, var(--success) 6%, var(--surface))",
-                }}
-              >
-                <CircleCheckBig style={{ color: "var(--success)", fontSize: 20 }} />
+              <div className="flex-1 flex items-center gap-2.5" style={{padding: "18px 22px", background: "color-mix(in srgb, var(--success) 6%, var(--surface))"}} >
+                <CircleCheckBig className="text-emerald-500 text-xl" />
                 <div>
-                  <div
-                    style={{
-                      fontSize: 16,
-                      fontWeight: 700,
-                      color: "var(--success)",
-                      fontFamily: "var(--font-display)",
-                    }}
-                  >
+                  <div className="text-base font-bold text-emerald-500 font-display" >
                     Tuyệt vời!
                   </div>
-                  <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 2 }}>
+                  <div className="text-xs text-text-muted" style={{marginTop: 2}} >
                     Không phát hiện lỗi nào
                   </div>
                 </div>
@@ -637,50 +401,15 @@ export function GrammarChecker() {
                   { label: "Phong cách", value: result.stats.style, color: "var(--info, #5b8def)", icon: "~" },
                 ].map((s) => (
                   <div
-                    key={s.label}
-                    style={{
-                      flex: 1,
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 12,
-                      padding: "18px 18px",
-                      background: "var(--surface)",
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: 11,
-                        fontWeight: 900,
-                        color: s.value > 0 ? s.color : "var(--text-muted)",
-                        opacity: 0.6,
-                        fontFamily: "monospace",
-                        lineHeight: 1,
-                      }}
-                    >
+                    key={s.label} className="flex-1 flex items-center gap-3 bg-(--surface)" style={{padding: "18px 18px"}} >
+                    <span className="text-[11px] font-black leading-none" style={{color: s.value > 0 ? s.color : "var(--text-muted)", opacity: 0.6, fontFamily: "monospace"}} >
                       {s.icon}
                     </span>
                     <div>
-                      <div
-                        style={{
-                          fontSize: 24,
-                          fontWeight: 800,
-                          color: s.value > 0 ? s.color : "var(--text-muted)",
-                          lineHeight: 1,
-                          fontFamily: "var(--font-display)",
-                        }}
-                      >
+                      <div className="text-3xl font-extrabold leading-none font-display" style={{color: s.value > 0 ? s.color : "var(--text-muted)"}} >
                         {s.value}
                       </div>
-                      <div
-                        style={{
-                          fontSize: 10,
-                          color: "var(--text-muted)",
-                          fontWeight: 500,
-                          marginTop: 2,
-                          textTransform: "uppercase",
-                          letterSpacing: "0.1em",
-                        }}
-                      >
+                      <div className="text-[10px] text-text-muted font-medium uppercase" style={{marginTop: 2, letterSpacing: "0.1em"}} >
                         {s.label}
                       </div>
                     </div>
@@ -698,31 +427,13 @@ export function GrammarChecker() {
           {/* Corrected text */}
           {totalErrors > 0 && (
             <div>
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  marginBottom: 6,
-                }}
-              >
-                <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)" }}>
+              <div className="flex justify-between items-center mb-1.5" >
+                <span className="text-xs font-semibold text-text-secondary" >
                   Văn bản đã sửa
                 </span>
                 <CopyButton text={result.correctedText} />
               </div>
-              <div
-                style={{
-                  padding: 16,
-                  borderRadius: 12,
-                  background: "color-mix(in srgb, var(--success) 5%, var(--card-bg))",
-                  border: "1px solid color-mix(in srgb, var(--success) 20%, var(--border))",
-                  fontSize: 14,
-                  lineHeight: 1.7,
-                  color: "var(--text-primary)",
-                  whiteSpace: "pre-wrap",
-                }}
-              >
+              <div className="p-4 rounded-xl text-sm text-text-primary" style={{background: "color-mix(in srgb, var(--success) 5%, var(--card-bg))", border: "1px solid color-mix(in srgb, var(--success) 20%, var(--border))", lineHeight: 1.7, whiteSpace: "pre-wrap"}} >
                 {result.correctedText}
               </div>
             </div>

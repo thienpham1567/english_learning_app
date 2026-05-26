@@ -174,17 +174,7 @@ export function BottomTabBar() {
               onClick={() => setActiveHub(null)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              style={{
-                position: "fixed",
-                inset: 0,
-                border: "none",
-                background: "rgba(0,0,0,0.6)",
-                backdropFilter: "blur(4px)",
-                padding: 0,
-                zIndex: 20,
-              }}
-            />
+              exit={{ opacity: 0 }} className="fixed border-none" style={{inset: 0, background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)", padding: 0, zIndex: 20}} />
 
             {/* Hub cards */}
             <m.div
@@ -192,18 +182,7 @@ export function BottomTabBar() {
               initial={{ opacity: 0, y: 20, scale: 0.95 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              style={{
-                position: "fixed",
-                bottom: 72,
-                left: 16,
-                right: 16,
-                zIndex: 21,
-                display: "grid",
-                gridTemplateColumns: "1fr 1fr",
-                gap: 12,
-              }}
-            >
+              transition={{ type: "spring", stiffness: 400, damping: 30 }} className="fixed grid gap-3" style={{bottom: 72, left: 16, right: 16, zIndex: 21, gridTemplateColumns: "1fr 1fr"}} >
               {hubItems.map((item, idx) => (
                 <m.div
                   key={item.href}
@@ -216,23 +195,12 @@ export function BottomTabBar() {
                     onClick={() => {
                       setActiveHub(null);
                       router.push(item.href);
-                    }}
-                    style={{
-                      borderRadius: 4,
-                      textAlign: "center",
-                      border: "var(--brutal-border)",
-                      background: "var(--surface)",
-                      padding: 16,
-                      cursor: "pointer",
-                      boxShadow: "var(--shadow-sm)",
-                      transition: "transform 0.1s, box-shadow 0.1s",
-                    }}
-                  >
-                    <span style={{ fontSize: 24, color: "var(--accent)" }}>
+                    }} className="rounded text-center bg-(--surface) p-4 cursor-pointer" style={{border: "var(--brutal-border)", boxShadow: "var(--shadow-sm)", transition: "transform 0.1s, box-shadow 0.1s"}} >
+                    <span className="text-3xl text-accent" >
                       {item.icon}
                     </span>
                     <br />
-                    <span style={{ fontSize: 13, fontWeight: 700, color: "var(--ink)" }}>
+                    <span className="text-[13px] font-bold text-ink" >
                       {item.label}
                     </span>
                   </button>
@@ -246,24 +214,7 @@ export function BottomTabBar() {
       {/* Tab Bar */}
       <m.nav
         initial={{ y: 20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        style={{
-          position: "fixed",
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: 64,
-          background: "var(--surface)",
-          borderTop: "1px solid var(--border)",
-          backdropFilter: "blur(12px)",
-          zIndex: 22,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-around",
-          paddingBottom: "env(safe-area-inset-bottom, 0px)",
-          boxShadow: "0 -4px 20px rgba(0,0,0,0.05)",
-        }}
-      >
+        animate={{ y: 0, opacity: 1 }} className="fixed h-[64px] bg-(--surface) flex items-center justify-around" style={{bottom: 0, left: 0, right: 0, borderTop: "1px solid var(--border)", backdropFilter: "blur(12px)", zIndex: 22, paddingBottom: "env(safe-area-inset-bottom, 0px)", boxShadow: "0 -4px 20px rgba(0,0,0,0.05)"}} >
         {TABS.map((tab) => {
           const isActive = activeTab === tab.key;
           return (
@@ -272,55 +223,22 @@ export function BottomTabBar() {
               type="button"
               aria-label={tab.label}
               onClick={() => handleTabClick(tab)}
-              whileTap={{ scale: 0.9 }}
-              style={{
-                flex: 1,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 2,
-                border: "none",
-                background: "transparent",
-                cursor: "pointer",
-                padding: "8px 0",
-                WebkitTapHighlightColor: "transparent",
-              }}
-            >
+              whileTap={{ scale: 0.9 }} className="flex-1 flex flex-col items-center justify-center border-none bg-transparent cursor-pointer" style={{gap: 2, padding: "8px 0", WebkitTapHighlightColor: "transparent"}} >
               <m.div
                 animate={{
                   scale: isActive ? 1.1 : 1,
                   y: isActive ? -2 : 0,
                   color: isActive ? "var(--accent)" : "var(--text-muted)",
                 }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                style={{ fontSize: 20, display: "flex" }}
-              >
+                transition={{ type: "spring", stiffness: 400, damping: 25 }} className="text-xl flex" >
                 {isActive ? tab.activeIcon : tab.icon}
               </m.div>
-              <span
-                style={{
-                  fontSize: 11,
-                  fontWeight: isActive ? 700 : 500,
-                  color: isActive ? "var(--accent)" : "var(--text-muted)",
-                  lineHeight: 1,
-                  marginTop: 2,
-                }}
-              >
+              <span className="text-[11px] leading-none" style={{fontWeight: isActive ? 700 : 500, color: isActive ? "var(--accent)" : "var(--text-muted)", marginTop: 2}} >
                 {tab.label}
               </span>
               {isActive && (
                 <m.div
-                  layoutId="activeTab"
-                  style={{
-                    position: "absolute",
-                    bottom: 6,
-                    width: 4,
-                    height: 4,
-                    borderRadius: "50%",
-                    background: "var(--accent)",
-                  }}
-                />
+                  layoutId="activeTab" className="absolute w-[4px] h-[4px] rounded-full" style={{bottom: 6, background: "var(--accent)"}} />
               )}
             </m.button>
           );

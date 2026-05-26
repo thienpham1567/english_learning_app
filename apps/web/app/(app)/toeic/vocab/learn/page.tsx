@@ -87,19 +87,19 @@ function LearnRunner() {
 	};
 
 	if (words.length === 0) {
-		return <div style={{ padding: 24 }}>Đang tải từ vựng… (hoặc pack rỗng)</div>;
+		return <div className="p-6" >Đang tải từ vựng… (hoặc pack rỗng)</div>;
 	}
 	if (done) {
 		return (
 			<Card>
-				<div style={{ fontSize: 28, fontWeight: 700 }}>Hoàn thành!</div>
-				<div style={{ marginTop: 8 }}>
+				<div className="text-[28px] font-bold" >Hoàn thành!</div>
+				<div className="mt-2" >
 					<Tag color="red">Again: {stats.again}</Tag>
 					<Tag color="orange">Hard: {stats.hard}</Tag>
 					<Tag color="green">Good: {stats.good}</Tag>
 					<Tag color="blue">Easy: {stats.easy}</Tag>
 				</div>
-				<Button type="primary" style={{ marginTop: 16 }} onClick={() => router.push("/toeic/vocab")}>
+				<Button type="primary"  onClick={() => router.push("/toeic/vocab")} className="mt-4" >
 					Về Vocab Hub
 				</Button>
 			</Card>
@@ -108,15 +108,8 @@ function LearnRunner() {
 	if (!current) return null;
 
 	return (
-		<div style={{ display: "grid", gap: 12, maxWidth: 600 }}>
-			<div
-				style={{
-					display: "flex",
-					justifyContent: "space-between",
-					color: "var(--text-muted, #94a3b8)",
-					fontSize: 14,
-				}}
-			>
+		<div className="grid gap-3 w-[600px]" >
+			<div className="flex justify-between text-text-muted text-sm" >
 				<span>
 					Từ {idx + 1} / {total}
 				</span>
@@ -125,45 +118,38 @@ function LearnRunner() {
 			<Progress percent={Math.round((idx / total) * 100)} showInfo={false} size="small" />
 
 			<Card>
-				<div style={{ textAlign: "center" }}>
-					<div style={{ fontSize: 32, fontWeight: 700 }}>{current.word}</div>
+				<div className="text-center" >
+					<div className="text-4xl font-bold" >{current.word}</div>
 					{current.ipa && (
-						<div style={{ color: "var(--text-muted, #94a3b8)", marginTop: 4 }}>
+						<div className="text-text-muted mt-1" >
 							{current.ipa} <Tag>{current.pos}</Tag>
 						</div>
 					)}
 				</div>
 
 				{!revealed ? (
-					<div style={{ textAlign: "center", marginTop: 24 }}>
+					<div className="text-center mt-6" >
 						<Button type="primary" size="large" onClick={() => setRevealed(true)}>
 							Hiện nghĩa
 						</Button>
 					</div>
 				) : (
-					<div style={{ marginTop: 16 }}>
-						<div style={{ fontSize: 18, fontWeight: 500 }}>{current.meaningVi}</div>
-						<div style={{ color: "var(--text-muted, #94a3b8)", marginTop: 4 }}>
+					<div className="mt-4" >
+						<div className="text-lg font-medium" >{current.meaningVi}</div>
+						<div className="text-text-muted mt-1" >
 							{current.meaningEn}
 						</div>
 						{current.exampleEn && (
-							<div
-								style={{
-									marginTop: 12,
-									padding: 12,
-									background: "var(--surface, #0f172a)",
-									borderRadius: 8,
-								}}
-							>
-								<div style={{ fontStyle: "italic" }}>{current.exampleEn}</div>
+							<div className="mt-3 p-3 bg-(--surface) rounded-lg" >
+								<div className="italic" >{current.exampleEn}</div>
 								{current.exampleVi && (
-									<div style={{ color: "var(--text-muted, #94a3b8)", fontSize: 13, marginTop: 4 }}>
+									<div className="text-text-muted text-[13px] mt-1" >
 										{current.exampleVi}
 									</div>
 								)}
 							</div>
 						)}
-						<div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 8, marginTop: 16 }}>
+						<div className="grid gap-2 mt-4" style={{gridTemplateColumns: "repeat(4, 1fr)"}} >
 							<Button danger disabled={submitting} onClick={() => submit("again")}>
 								Again
 							</Button>
@@ -186,17 +172,8 @@ function LearnRunner() {
 
 export default function VocabLearnPage() {
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				height: "100%",
-				minHeight: 0,
-				flex: 1,
-				overflow: "auto",
-			}}
-		>
-			<div style={{ padding: 16, flex: 1 }}>
+		<div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
+			<div className="p-4 flex-1" >
 				<Suspense fallback={<div>Loading…</div>}>
 					<LearnRunner />
 				</Suspense>

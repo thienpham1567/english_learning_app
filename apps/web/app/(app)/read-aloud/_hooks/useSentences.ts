@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef } from "react";
-import { message } from "antd";
+
 
 /**
  * useSentences — splits text into sentences and manages per-sentence TTS playback
@@ -242,7 +242,7 @@ export function useSentences(): UseSentencesReturn {
       }
     } catch (err) {
       if (err instanceof Error && err.name === "AbortError") return;
-      message.error(err instanceof Error ? err.message : "Lỗi phát audio");
+      /* toast: error */
     } finally {
       setIsPlaying(false);
       setIsLoading(false);
@@ -283,7 +283,7 @@ export function useSentences(): UseSentencesReturn {
       }
     } catch (err) {
       if (err instanceof Error && err.name === "AbortError") return;
-      message.error(err instanceof Error ? err.message : "Lỗi phát audio");
+      /* toast: error */
     } finally {
       setIsPlaying(false);
       setIsLoading(false);

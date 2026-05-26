@@ -189,25 +189,25 @@ export default function DictationMode({ examMode }: Props) {
 
   // ── RENDER ──
   return (
-    <div style={{ maxWidth: 600, margin: "0 auto", width: "100%" }}>
+    <div className="w-[600px] mx-auto w-full" >
       {error && (
-        <div style={{ padding: "10px 16px", borderRadius: 8, background: "var(--error-bg)", border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)", color: "var(--error)", marginBottom: 16, fontSize: 13 }}>
+        <div className="py-2.5 px-4 rounded-lg text-destructive mb-4 text-[13px]" style={{background: "var(--error-bg)", border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)"}} >
           ⚠️ {error}
         </div>
       )}
 
       {/* ── Idle ── */}
       {state === "idle" && (
-        <div style={{ textAlign: "center", padding: 32, border: "1px solid var(--border)", borderRadius: 16, background: "var(--card-bg)" }}>
-          <Pencil size={48} className="text-[var(--accent)]" />
-          <h2 style={{ margin: "0 0 8px", fontSize: 18 }}>Dictation</h2>
-          <p style={{ color: "var(--text-secondary)", margin: "0 0 8px", fontSize: 13 }}>
+        <div className="text-center p-8 border border-(--border) rounded-2xl" style={{background: "var(--card-bg)"}} >
+          <Pencil size={48} className="text-accent" />
+          <h2 className="mb-2 text-lg" >Dictation</h2>
+          <p className="text-text-secondary mb-2 text-[13px]" >
             Nghe → Gõ lại → Kiểm tra từng từ
           </p>
-          <p style={{ color: "var(--text-secondary)", margin: "0 0 24px", fontSize: 12 }}>
+          <p className="text-text-secondary text-xs" style={{margin: "0 0 24px"}} >
             5 câu mỗi phiên · Tối đa 3 lần nghe lại · +25 XP
           </p>
-          <button onClick={startSession} style={{ padding: "12px 32px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
+          <button onClick={startSession} className="border-none text-[15px] font-semibold cursor-pointer" style={{padding: "12px 32px", borderRadius: 10, background: "var(--accent)", color: "var(--text-on-accent)"}} >
             Bắt đầu Dictation
           </button>
         </div>
@@ -215,27 +215,24 @@ export default function DictationMode({ examMode }: Props) {
 
       {/* ── Loading ── */}
       {state === "loading" && (
-        <div style={{ textAlign: "center", padding: 40 }}>
-          <Loader2 className="animate-spin text-[var(--accent)]" size={32} />
-          <p style={{ color: "var(--text-secondary)", marginTop: 12 }}>Đang tạo bài tập...</p>
+        <div className="text-center" style={{padding: 40}} >
+          <Loader2 className="animate-spin text-accent" size={32} />
+          <p className="text-text-secondary mt-3" >Đang tạo bài tập...</p>
         </div>
       )}
 
       {/* ── Ready: Listen + Type ── */}
       {state === "ready" && currentSentence && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+        <div className="flex flex-col gap-5" >
           {/* Progress */}
-          <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "var(--text-secondary)" }}>
+          <div className="flex items-center gap-2 text-[13px] text-text-secondary" >
             <span>Câu {currentIdx + 1}/{sentences.length}</span>
-            <Progress percent={((currentIdx + 1) / sentences.length) * 100} size="small" showInfo={false} style={{ flex: 1 }} />
+            <Progress percent={((currentIdx + 1) / sentences.length) * 100} size="small" showInfo={false} className="flex-1" />
           </div>
 
           {/* Instruction */}
-          <div style={{
-            padding: 16, borderRadius: 12, textAlign: "center",
-            border: "1px solid var(--border)", background: "var(--card-bg)",
-          }}>
-            <p style={{ fontSize: 14, color: "var(--text-secondary)", margin: 0 }}>
+          <div className="p-4 rounded-xl text-center border border-(--border)" style={{background: "var(--card-bg)"}} >
+            <p className="text-sm text-text-secondary m-0" >
               🎧 Nghe và gõ lại câu bạn nghe được
             </p>
           </div>
@@ -252,9 +249,9 @@ export default function DictationMode({ examMode }: Props) {
               selfManagedSpeed
             />
           ) : sentenceAudio.isLoading ? (
-            <div style={{ textAlign: "center", padding: 20 }}>
-              <Loader2 className="animate-spin text-[var(--accent)]" size={24} />
-              <p style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 8 }}>Đang tạo âm thanh...</p>
+            <div className="text-center" style={{padding: 20}} >
+              <Loader2 className="animate-spin text-accent" size={24} />
+              <p className="text-xs text-text-muted mt-2" >Đang tạo âm thanh...</p>
             </div>
           ) : null}
 
@@ -265,22 +262,10 @@ export default function DictationMode({ examMode }: Props) {
             onChange={(e) => setTypedText(e.target.value)}
             placeholder="Gõ lại câu bạn nghe được..."
             autoFocus
-            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); checkAnswer(); } }}
-            style={{
-              width: "100%", minHeight: 100, padding: 16, borderRadius: 12,
-              border: "1px solid var(--border)", background: "var(--card-bg, var(--surface))",
-              fontSize: 15, lineHeight: 1.6, resize: "vertical", color: "var(--text)",
-              fontFamily: "inherit",
-            }}
-          />
+            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); checkAnswer(); } }} className="w-full h-[100px] p-4 rounded-xl border border-(--border) text-[15px] leading-relaxed" style={{background: "var(--card-bg, var(--surface))", resize: "vertical", color: "var(--text)", fontFamily: "inherit"}} />
 
           {/* Check button */}
-          <button onClick={checkAnswer} disabled={!typedText.trim()} style={{
-            padding: "12px 24px", borderRadius: 10, border: "none",
-            background: typedText.trim() ? "var(--accent)" : "var(--border)",
-            color: "var(--text-on-accent)", fontSize: 15, fontWeight: 600,
-            cursor: typedText.trim() ? "pointer" : "not-allowed",
-          }}>
+          <button onClick={checkAnswer} disabled={!typedText.trim()} className="border-none text-[15px] font-semibold" style={{padding: "12px 24px", borderRadius: 10, background: typedText.trim() ? "var(--accent)" : "var(--border)", color: "var(--text-on-accent)", cursor: typedText.trim() ? "pointer" : "not-allowed"}} >
             Kiểm tra ✓
           </button>
         </div>
@@ -288,41 +273,37 @@ export default function DictationMode({ examMode }: Props) {
 
       {/* ── Checked: Show diff ── */}
       {state === "checked" && currentSentence && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <div className="flex flex-col gap-4" >
           {/* Score */}
-          <div style={{ padding: 24, borderRadius: 16, background: "var(--card-bg)", border: "1px solid var(--border)", textAlign: "center" }}>
+          <div className="p-6 rounded-2xl border border-(--border) text-center" style={{background: "var(--card-bg)"}} >
             <Progress type="circle" percent={accuracy} size={100}
               strokeColor={accuracy >= 80 ? "var(--success)" : accuracy >= 50 ? "var(--warning)" : "var(--error)"}
-              format={(pct) => <span style={{ fontSize: 24, fontWeight: 700 }}>{pct}%</span>}
+              format={(pct) => <span className="text-3xl font-bold" >{pct}%</span>}
             />
-            <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 8 }}>
+            <p className="text-[13px] text-text-secondary mt-2" >
               {accuracy === 100 ? "Hoàn hảo! 🎉" : accuracy >= 80 ? "Rất tốt! 👏" : accuracy >= 50 ? "Khá tốt, cố lên! 💪" : "Cần luyện thêm 📝"}
             </p>
           </div>
 
           {/* Word diff */}
-          <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-            <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
+          <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+            <p className="text-xs text-text-secondary mb-2 font-semibold" >
               Phân tích từng từ:
             </p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+            <div className="flex flex-wrap gap-1.5" >
               {diff.map((w, i) => (
-                <span key={i} style={{
-                  display: "inline-block", padding: "4px 8px", borderRadius: 6,
-                  background: STATUS_BG[w.status], color: STATUS_COLORS[w.status],
-                  fontSize: 14, fontWeight: 500, border: `1px solid ${STATUS_COLORS[w.status]}33`,
-                }}>
-                  {w.status === "correct" && <CircleCheckBig style={{ marginRight: 4, fontSize: 11 }} />}
-                  {w.status === "wrong" && <XCircle style={{ marginRight: 4, fontSize: 11 }} />}
-                  {w.status === "missing" && <Info style={{ marginRight: 4, fontSize: 11 }} />}
+                <span key={i} className="inline-block py-1 px-2 rounded-md text-sm font-medium" style={{background: STATUS_BG[w.status], color: STATUS_COLORS[w.status], border: `1px solid ${STATUS_COLORS[w.status]}33`}} >
+                  {w.status === "correct" && <CircleCheckBig className="mr-1 text-[11px]" />}
+                  {w.status === "wrong" && <XCircle className="mr-1 text-[11px]" />}
+                  {w.status === "missing" && <Info className="mr-1 text-[11px]" />}
                   {w.word}
                   {w.status === "wrong" && w.typed && (
-                    <span style={{ fontSize: 11, opacity: 0.7, marginLeft: 4 }}>({w.typed})</span>
+                    <span className="text-[11px] ml-1" style={{opacity: 0.7}} >({w.typed})</span>
                   )}
                 </span>
               ))}
             </div>
-            <div style={{ marginTop: 12, display: "flex", gap: 16, fontSize: 11, color: "var(--text-secondary)" }}>
+            <div className="mt-3 flex gap-4 text-[11px] text-text-secondary" >
               <span><span style={{ color: STATUS_COLORS.correct }}>●</span> Đúng</span>
               <span><span style={{ color: STATUS_COLORS.wrong }}>●</span> Sai</span>
               <span><span style={{ color: STATUS_COLORS.missing }}>●</span> Thiếu</span>
@@ -330,27 +311,27 @@ export default function DictationMode({ examMode }: Props) {
           </div>
 
           {/* Revealed original */}
-          <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-            <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 4px", fontWeight: 600 }}>Câu gốc:</p>
-            <p style={{ fontSize: 16, fontWeight: 600, margin: "0 0 4px" }}>{currentSentence.text}</p>
-            <p style={{ fontSize: 13, color: "var(--text-secondary)", margin: "0 0 8px", fontFamily: "serif" }}>{currentSentence.ipa}</p>
-            <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: 0 }}>
-              <Info style={{ marginRight: 4 }} />{currentSentence.tip}
+          <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+            <p className="text-xs text-text-secondary font-semibold" style={{margin: "0 0 4px"}} >Câu gốc:</p>
+            <p className="text-base font-semibold" style={{margin: "0 0 4px"}} >{currentSentence.text}</p>
+            <p className="text-[13px] text-text-secondary mb-2" style={{fontFamily: "serif"}} >{currentSentence.ipa}</p>
+            <p className="text-xs text-text-secondary m-0" >
+              <Info className="mr-1" />{currentSentence.tip}
             </p>
           </div>
 
           {/* What you typed */}
-          <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-            <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 4px", fontWeight: 600 }}>Bạn đã gõ:</p>
-            <p style={{ fontSize: 15, margin: 0, fontStyle: "italic" }}>&ldquo;{typedText}&rdquo;</p>
+          <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+            <p className="text-xs text-text-secondary font-semibold" style={{margin: "0 0 4px"}} >Bạn đã gõ:</p>
+            <p className="text-[15px] m-0 italic" >&ldquo;{typedText}&rdquo;</p>
           </div>
 
           {/* Actions */}
-          <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-            <button onClick={retryCurrent} style={{ padding: "10px 20px", borderRadius: 8, border: "1px solid var(--border)", background: "transparent", color: "var(--text)", cursor: "pointer", fontSize: 13, fontWeight: 500 }}>
+          <div className="flex gap-3 justify-center" >
+            <button onClick={retryCurrent} className="rounded-lg border border-(--border) bg-transparent cursor-pointer text-[13px] font-medium" style={{padding: "10px 20px", color: "var(--text)"}} >
               <RefreshCw /> Thử lại
             </button>
-            <button onClick={nextSentence} style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
+            <button onClick={nextSentence} className="rounded-lg border-none cursor-pointer text-[13px] font-semibold" style={{padding: "10px 20px", background: "var(--accent)", color: "var(--text-on-accent)"}} >
               {currentIdx < sentences.length - 1 ? <>Câu tiếp <ChevronRight /></> : <>Hoàn thành <CircleCheckBig /></>}
             </button>
           </div>
@@ -359,32 +340,32 @@ export default function DictationMode({ examMode }: Props) {
 
       {/* ── Summary ── */}
       {state === "summary" && (
-        <div style={{ textAlign: "center", padding: 32, border: "1px solid var(--border)", borderRadius: 16, background: "var(--card-bg)" }}>
-          <div style={{ fontSize: 48, marginBottom: 16 }}>
-            {avgScore >= 80 ? <CircleCheckBig style={{ color: "var(--success)" }} /> :
+        <div className="text-center p-8 border border-(--border) rounded-2xl" style={{background: "var(--card-bg)"}} >
+          <div className="mb-4" style={{fontSize: 48}} >
+            {avgScore >= 80 ? <CircleCheckBig className="text-emerald-500" /> :
              avgScore >= 50 ? <Info style={{ color: "var(--warning)" }} /> :
-             <XCircle style={{ color: "var(--error)" }} />}
+             <XCircle className="text-destructive" />}
           </div>
-          <h2 style={{ margin: "0 0 8px" }}>Dictation hoàn thành!</h2>
-          <p style={{ color: "var(--text-secondary)", margin: "0 0 8px" }}>
-            Độ chính xác trung bình: <strong className="text-[var(--accent)]" style={{ fontSize: 24 }}>{avgScore}%</strong>
+          <h2 className="mb-2" >Dictation hoàn thành!</h2>
+          <p className="text-text-secondary mb-2" >
+            Độ chính xác trung bình: <strong className="text-accent text-3xl" >{avgScore}%</strong>
           </p>
           {xpAwarded > 0 && (
-            <p style={{ color: "var(--accent)", fontSize: 13, fontWeight: 600, margin: "0 0 8px" }}>+{xpAwarded} XP</p>
+            <p className="text-accent text-[13px] font-semibold mb-2" >+{xpAwarded} XP</p>
           )}
           {skillUpdate && (
-            <p style={{ fontSize: 13, color: skillUpdate.levelUp ? "var(--success)" : "var(--text-secondary)", margin: "0 0 16px" }}>
+            <p className="text-[13px] mb-4" style={{color: skillUpdate.levelUp ? "var(--success)" : "var(--text-secondary)"}} >
               {skillUpdate.levelUp ? `🎉 Trình độ nghe: ${skillUpdate.cefr}!` : `📊 Trình độ nghe: ${skillUpdate.cefr}`}
             </p>
           )}
-          <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: 20 }}>
+          <div className="flex gap-2 justify-center flex-wrap mb-5" >
             {sessionScores.map((s, i) => (
-              <Tag key={i} color={s >= 80 ? "success" : s >= 50 ? "warning" : "error"} style={{ fontSize: 13, padding: "3px 10px" }}>
+              <Tag key={i} color={s >= 80 ? "success" : s >= 50 ? "warning" : "error"} className="text-[13px]" style={{padding: "3px 10px"}} >
                 Câu {i + 1}: {s}%
               </Tag>
             ))}
           </div>
-          <button onClick={startSession} style={{ padding: "10px 24px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+          <button onClick={startSession} className="rounded-lg border-none text-sm font-semibold cursor-pointer" style={{padding: "10px 24px", background: "var(--accent)", color: "var(--text-on-accent)"}} >
             <RefreshCw /> Luyện tiếp
           </button>
         </div>

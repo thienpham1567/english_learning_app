@@ -25,24 +25,14 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
   const canSubmit = topic.trim().length >= 3 && !isLoading;
 
   return (
-    <div
-      style={{
-        marginTop: 24,
-        maxWidth: 600,
-        margin: "24px auto 0",
-        padding: "20px 24px",
-        border: "1px solid var(--border)",
-        borderRadius: "var(--radius-lg, 16px)",
-        background: "var(--surface)",
-      }}
-    >
-      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 12 }}>
-        <Users style={{ color: "var(--accent)", fontSize: 18 }} />
-        <div style={{ fontSize: 16, fontWeight: 700, color: "var(--text)" }}>
+    <div className="mt-6 w-[600px] border border-(--border) bg-(--surface)" style={{margin: "24px auto 0", padding: "20px 24px", borderRadius: "var(--radius-lg, 16px)"}} >
+      <div className="flex items-center gap-2 mb-3" >
+        <Users className="text-accent text-lg" />
+        <div className="text-base font-bold" style={{color: "var(--text)"}} >
           Multi-speaker dialogue
         </div>
       </div>
-      <div style={{ fontSize: 14, color: "var(--text-muted)", marginBottom: 16 }}>
+      <div className="text-sm text-text-muted mb-4" >
         Luyện nghe hội thoại 2–3 giọng với các giọng Mỹ, Anh, Úc.
       </div>
 
@@ -50,24 +40,18 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
         placeholder="Chủ đề (ví dụ: ordering coffee, job interview)"
         value={topic}
         onChange={(e) => setTopic(e.target.value)}
-        size="large"
-        style={{
-          marginBottom: 16,
-        }}
-      />
+        size="large" className="mb-4" />
 
-      <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 20, alignItems: "center" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 13, color: "var(--text-muted)" }}>Level</span>
+      <div className="flex gap-4 flex-wrap mb-5 items-center" >
+        <div className="flex items-center gap-2" >
+          <span className="text-[13px] text-text-muted" >Level</span>
           <Select
             value={level}
             onChange={(val) => setLevel(val as CefrLevel)}
-            options={CEFR_LEVELS.map(l => ({ value: l, label: l }))}
-            style={{ width: 80 }}
-          />
+            options={CEFR_LEVELS.map(l => ({ value: l, label: l }))} className="w-[80px]" />
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 13, color: "var(--text-muted)" }}>Turns</span>
+        <div className="flex items-center gap-2" >
+          <span className="text-[13px] text-text-muted" >Turns</span>
           <Select
             value={turns}
             onChange={(val) => setTurns(val as 6 | 8 | 10)}
@@ -75,21 +59,17 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
               { value: 6, label: "6" },
               { value: 8, label: "8" },
               { value: 10, label: "10" }
-            ]}
-            style={{ width: 70 }}
-          />
+            ]} className="w-[70px]" />
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 13, color: "var(--text-muted)" }}>Speakers</span>
+        <div className="flex items-center gap-2" >
+          <span className="text-[13px] text-text-muted" >Speakers</span>
           <Select
             value={speakers}
             onChange={(val) => setSpeakers(val as 2 | 3)}
             options={[
               { value: 2, label: "2" },
               { value: 3, label: "3" }
-            ]}
-            style={{ width: 70 }}
-          />
+            ]} className="w-[70px]" />
         </div>
       </div>
 
@@ -100,14 +80,7 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
         onClick={() => canSubmit && onStart({ topic: topic.trim(), level, turns, speakers })}
         disabled={!canSubmit}
         loading={isLoading}
-        icon={<Users />}
-        style={{
-          background: canSubmit ? "var(--accent)" : "var(--border)",
-          color: canSubmit ? "var(--text-on-accent)" : "var(--text-muted)",
-          fontWeight: 600,
-          border: "none",
-        }}
-      >
+        icon={<Users />} className="font-semibold border-none" style={{background: canSubmit ? "var(--accent)" : "var(--border)", color: canSubmit ? "var(--text-on-accent)" : "var(--text-muted)"}} >
         Generate dialogue
       </Button>
     </div>

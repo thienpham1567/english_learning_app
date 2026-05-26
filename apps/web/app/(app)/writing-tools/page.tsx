@@ -36,19 +36,8 @@ const TtsReader = dynamic(
 
 function Loader({ label }: { label: string }) {
 	return (
-		<div
-			style={{
-				display: "flex",
-				justifyContent: "center",
-				alignItems: "center",
-				padding: 64,
-				color: "var(--text-muted)",
-				gap: 10,
-				fontWeight: 700,
-				fontSize: 14
-			}}
-		>
-			<Loader2 className="animate-spin text-[var(--accent)]" size={20} />
+		<div className="flex justify-center items-center text-text-muted gap-2.5 font-bold text-sm" style={{padding: 64}} >
+			<Loader2 className="animate-spin text-accent" size={20} />
 			<span>{label}</span>
 		</div>
 	);
@@ -77,36 +66,11 @@ export default function WritingToolsPage() {
 	const [active, setActive] = useState<ToolTab>("grammar");
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				height: "100%",
-				minHeight: 0,
-				flex: 1,
-				overflow: "auto",
-			}}
-		>
+		<div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
 			
 			{/* High-end Pill Tabs Row */}
-			<div style={{
-				padding: "16px 20px 8px",
-				display: "flex",
-				gap: 8,
-				overflowX: "auto",
-				flexShrink: 0,
-				scrollbarWidth: "none"
-			}}>
-				<div style={{
-					display: "flex",
-					gap: 6,
-					background: "var(--surface-alt)",
-					border: "1.5px solid var(--border)",
-					borderRadius: "var(--radius-xl)",
-					padding: 6,
-					width: "100%",
-					minWidth: "max-content",
-				}}>
+			<div className="flex gap-2 shrink-0" style={{padding: "16px 20px 8px", overflowX: "auto", scrollbarWidth: "none"}} >
+				<div className="flex gap-1.5 bg-surface-alt rounded-(--radius-xl) w-full" style={{border: "1.5px solid var(--border)", padding: 6, minWidth: "max-content"}} >
 					{TABS.map((t) => {
 						const isActive = active === t.value;
 						return (
@@ -114,32 +78,12 @@ export default function WritingToolsPage() {
 								type="button"
 								key={t.value}
 								onClick={() => setActive(t.value)}
-								whileTap={{ scale: 0.98 }}
-								style={{
-									flex: 1,
-									padding: "8px 12px",
-									borderRadius: "var(--radius-lg)",
-									border: "none",
-									background: isActive ? "var(--accent)" : "transparent",
-									color: isActive ? "var(--text-on-accent)" : "var(--text-secondary)",
-									cursor: "pointer",
-									display: "flex",
-									flexDirection: "column",
-									alignItems: "center",
-									justifyContent: "center",
-									gap: 2,
-									transition: "color 0.2s, background 0.2s",
-								}}
-							>
-								<div style={{ display: "flex", alignItems: "center", gap: 6, fontSize: 13.5, fontWeight: 900 }}>
+								whileTap={{ scale: 0.98 }} className="flex-1 py-2 px-3 rounded-(--radius-lg) border-none cursor-pointer flex flex-col items-center justify-center" style={{background: isActive ? "var(--accent)" : "transparent", color: isActive ? "var(--text-on-accent)" : "var(--text-secondary)", gap: 2, transition: "color 0.2s, background 0.2s"}} >
+								<div className="flex items-center gap-1.5 font-black" style={{fontSize: 13.5}} >
 									{t.icon}
 									<span>{t.label}</span>
 								</div>
-								<span style={{
-									opacity: isActive ? 0.9 : 0.65,
-									fontSize: 10,
-									fontWeight: 700
-								}}>
+								<span className="text-[10px] font-bold" style={{opacity: isActive ? 0.9 : 0.65}} >
 									{t.desc}
 								</span>
 							</m.button>
@@ -148,8 +92,8 @@ export default function WritingToolsPage() {
 				</div>
 			</div>
 
-			<div style={{ flex: 1, minHeight: 0, overflow: "auto", padding: "12px 20px 40px" }} className="anim-fade-up">
-				<div style={{ maxWidth: 800, margin: "0 auto", width: "100%" }}>
+			<div className="anim-fade-up flex-1 h-[0px] overflow-auto" style={{padding: "12px 20px 40px"}} >
+				<div className="w-[800px] mx-auto w-full" >
 					{active === "grammar" && <GrammarChecker />}
 					{active === "paraphrase" && <Paraphraser />}
 					{active === "tts" && <TtsReader />}

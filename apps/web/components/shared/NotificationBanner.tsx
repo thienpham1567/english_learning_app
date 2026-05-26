@@ -68,50 +68,22 @@ export function NotificationBanner() {
   if (!visible) return null;
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 16,
-        right: 16,
-        zIndex: 1000,
-        display: "flex",
-        alignItems: "center",
-        gap: 12,
-        padding: "14px 18px",
-        borderRadius: 16,
-        background: "var(--surface)",
-        border: "1px solid var(--border)",
-        boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
-        maxWidth: 360,
-        animation: "slideDown 0.4s ease-out",
-      }}
-    >
-      <div
-        style={{
-          width: 40,
-          height: 40,
-          borderRadius: 12,
-          background: "linear-gradient(135deg, var(--accent), var(--accent-hover, var(--accent)))",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          flexShrink: 0,
-        }}
-      >
-        <Bell style={{ fontSize: 18, color: "var(--text-on-accent)" }} />
+    <div className="fixed flex items-center gap-3 rounded-2xl bg-(--surface) border border-(--border) w-[360px]" style={{top: 16, right: 16, zIndex: 1000, padding: "14px 18px", boxShadow: "0 8px 32px rgba(0,0,0,0.2)", animation: "slideDown 0.4s ease-out"}} >
+      <div className="w-[40px] h-[40px] rounded-xl flex items-center justify-center shrink-0" style={{background: "linear-gradient(135deg, var(--accent), var(--accent-hover, var(--accent)))"}} >
+        <Bell className="text-lg" style={{color: "var(--text-on-accent)"}} />
       </div>
 
-      <div style={{ flex: 1, minWidth: 0 }}>
+      <div className="flex-1 w-[0px]" >
         {subscribed ? (
-          <div style={{ fontSize: 14, fontWeight: 600, color: "var(--success)" }}>
-            <CheckCircle style={{ marginRight: 4 }} /> Đã bật thông báo!
+          <div className="text-sm font-semibold text-emerald-500" >
+            <CheckCircle className="mr-1" /> Đã bật thông báo!
           </div>
         ) : (
           <>
-            <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text)" }}>
+            <div className="text-sm font-semibold" style={{color: "var(--text)"}} >
               Bật nhắc nhở học tập
             </div>
-            <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 2 }}>
+            <div className="text-xs text-text-muted" style={{marginTop: 2}} >
               Nhận thông báo mỗi ngày để duy trì streak
             </div>
           </>
@@ -120,36 +92,15 @@ export function NotificationBanner() {
 
       {!subscribed && (
         <button
-          onClick={handleEnable}
-          style={{
-            padding: "8px 14px",
-            borderRadius: 10,
-            border: "none",
-            background: "linear-gradient(135deg, var(--accent), var(--accent-hover, var(--accent)))",
-            color: "var(--text-on-accent)",
-            fontSize: 13,
-            fontWeight: 700,
-            cursor: "pointer",
-            whiteSpace: "nowrap",
-          }}
-        >
+          onClick={handleEnable} className="border-none text-[13px] font-bold cursor-pointer" style={{padding: "8px 14px", borderRadius: 10, background: "linear-gradient(135deg, var(--accent), var(--accent-hover, var(--accent)))", color: "var(--text-on-accent)", whiteSpace: "nowrap"}} >
           Bật
         </button>
       )}
 
       <button
         onClick={handleDismiss}
-        style={{
-          background: "none",
-          border: "none",
-          color: "var(--text-muted)",
-          cursor: "pointer",
-          padding: 4,
-          fontSize: 12,
-          lineHeight: 1,
-        }}
-        aria-label="Đóng"
-      >
+        
+        aria-label="Đóng" className="bg-none border-none text-text-muted cursor-pointer p-1 text-xs leading-none" >
         <X />
       </button>
 

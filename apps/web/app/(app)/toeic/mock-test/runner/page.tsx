@@ -177,14 +177,14 @@ function MockRunner() {
 
 	if (error) {
 		return (
-			<div style={{ padding: 24 }}>
-				<div style={{ color: "var(--error)", marginBottom: 12 }}>{error}</div>
+			<div className="p-6" >
+				<div className="text-destructive mb-3" >{error}</div>
 				<Button onClick={() => router.push("/toeic/mock-test")}>Về Hub</Button>
 			</div>
 		);
 	}
 	if (questions.length === 0) {
-		return <div style={{ padding: 24 }}>Đang tải đề mock test…</div>;
+		return <div className="p-6" >Đang tải đề mock test…</div>;
 	}
 
 	const totalAnswered = idx + 1;
@@ -204,17 +204,10 @@ function MockRunner() {
 	})();
 
 	return (
-		<div style={{ padding: 16, flex: 1 }}>
-			<div
-				style={{
-					display: "flex",
-					justifyContent: "space-between",
-					alignItems: "center",
-					marginBottom: 12,
-				}}
-			>
+		<div className="p-4 flex-1" >
+			<div className="flex justify-between items-center mb-3" >
 				<Tag color={section === "listening" ? "orange" : "green"}>{sectionLabel}</Tag>
-				<span style={{ color: "var(--text-muted)" }}>
+				<span className="text-text-muted" >
 					{totalAnswered} / {questions.length}
 				</span>
 			</div>
@@ -231,7 +224,7 @@ function MockRunner() {
 				onComplete={submitFinal}
 			/>
 			{/* Hidden preload — browser fetches next 5 questions' media in background */}
-			<div style={{ display: "none" }} aria-hidden>
+			<div  aria-hidden className="hidden" >
 				{preloadUrls.map((u) => (
 					u.match(/\.(wav|mp3|webm|ogg)$/i) ? (
 						<audio key={u} preload="auto" src={u} />
@@ -246,16 +239,7 @@ function MockRunner() {
 
 export default function MockRunnerPage() {
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				height: "100%",
-				minHeight: 0,
-				flex: 1,
-				overflow: "auto",
-			}}
-		>
+		<div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
 			<Suspense fallback={<div>Loading…</div>}>
 				<MockRunner />
 			</Suspense>

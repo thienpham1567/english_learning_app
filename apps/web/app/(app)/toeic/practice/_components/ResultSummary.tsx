@@ -29,41 +29,19 @@ export function ResultSummary({
 	const percentage = Math.round((correct / Math.max(1, total)) * 100);
 
 	return (
-		<div style={{ display: "grid", gap: 20, maxWidth: 720, width: "100%", margin: "0 auto" }} className="anim-fade-up">
+		<div className="anim-fade-up grid gap-5 w-[720px] w-full mx-auto">
 			{/* Score Summary Card */}
-			<div style={{
-				background: "var(--surface)",
-				border: "1.5px solid var(--border)",
-				borderRadius: "var(--radius-xl)",
-				padding: 24,
-				boxShadow: "var(--shadow-md)",
-				display: "flex",
-				justifyContent: "space-between",
-				alignItems: "center",
-				gap: 16
-			}}>
+			<div className="bg-(--surface) rounded-(--radius-xl) p-6 flex justify-between items-center gap-4" style={{border: "1.5px solid var(--border)", boxShadow: "var(--shadow-md)"}} >
 				<div>
-					<div style={{ display: "flex", alignItems: "baseline", gap: 6 }}>
-						<span style={{ fontSize: 32, fontWeight: 950, color: "var(--text-primary)", fontFamily: "var(--font-display)" }}>
+					<div className="flex items-baseline gap-1.5" >
+						<span className="text-4xl text-text-primary font-display" style={{fontWeight: 950}} >
 							{correct}
 						</span>
-						<span style={{ fontSize: 16, color: "var(--text-muted)", fontWeight: 700 }}>
+						<span className="text-base text-text-muted font-bold" >
 							/ {total} câu đúng
 						</span>
 					</div>
-					<div style={{
-						display: "inline-flex",
-						alignItems: "center",
-						gap: 6,
-						marginTop: 6,
-						padding: "2px 10px",
-						borderRadius: 20,
-						background: percentage >= 70 ? "rgba(16, 185, 129, 0.08)" : "rgba(245, 158, 11, 0.08)",
-						color: percentage >= 70 ? "var(--success)" : "var(--warning)",
-						fontSize: 12.5,
-						fontWeight: 800,
-						border: `1px solid ${percentage >= 70 ? "rgba(16, 185, 129, 0.2)" : "rgba(245, 158, 11, 0.2)"}`
-					}}>
+					<div className="items-center gap-1.5 mt-1.5 font-extrabold" style={{display: "inline-flex", padding: "2px 10px", borderRadius: 20, background: percentage >= 70 ? "rgba(16, 185, 129, 0.08)" : "rgba(245, 158, 11, 0.08)", color: percentage >= 70 ? "var(--success)" : "var(--warning)", fontSize: 12.5, border: `1px solid ${percentage >= 70 ? "rgba(16, 185, 129, 0.2)" : "rgba(245, 158, 11, 0.2)"}`}} >
 						{percentage >= 70 ? <CheckCircle size={12} /> : <AlertTriangle size={12} />}
 						<span>Tỉ lệ chính xác: {percentage}%</span>
 					</div>
@@ -72,22 +50,7 @@ export function ResultSummary({
 				<m.button
 					onClick={onReset}
 					whileHover={{ scale: 1.03 }}
-					whileTap={{ scale: 0.97 }}
-					style={{
-						padding: "10px 20px",
-						background: "var(--accent)",
-						color: "var(--text-on-accent)",
-						border: "none",
-						borderRadius: "var(--radius-lg)",
-						fontSize: 13.5,
-						fontWeight: 850,
-						cursor: "pointer",
-						display: "inline-flex",
-						alignItems: "center",
-						gap: 6,
-						boxShadow: "0 4px 12px var(--accent-muted)"
-					}}
-				>
+					whileTap={{ scale: 0.97 }} className="border-none rounded-(--radius-lg) cursor-pointer items-center gap-1.5" style={{padding: "10px 20px", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 13.5, fontWeight: 850, display: "inline-flex", boxShadow: "0 4px 12px var(--accent-muted)"}} >
 					<RefreshCw />
 					<span>Luyện đề tiếp</span>
 				</m.button>
@@ -95,54 +58,38 @@ export function ResultSummary({
 
 			{/* Wrong answers detail panel */}
 			{wrong.length > 0 ? (
-				<div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-					<div style={{ display: "flex", alignItems: "center", gap: 8, paddingLeft: 4 }}>
-						<XCircle style={{ color: "var(--error)", fontSize: 16 }} />
-						<h4 style={{ margin: 0, fontSize: 14.5, fontWeight: 900, color: "var(--text-primary)" }}>
+				<div className="flex flex-col gap-3" >
+					<div className="flex items-center gap-2" style={{paddingLeft: 4}} >
+						<XCircle className="text-destructive text-base" />
+						<h4 className="m-0 font-black text-text-primary" style={{fontSize: 14.5}} >
 							Chi tiết {wrong.length} câu đã trả lời sai
 						</h4>
 					</div>
 
-					<div style={{ display: "grid", gap: 12 }}>
+					<div className="grid gap-3" >
 						{wrong.map((a) => {
 							const q = questions.find((qq) => qq.id === a.questionId);
 							if (!q) return null;
 							return (
 								<div
-									key={a.questionId}
-									style={{
-										padding: 16,
-										background: "var(--surface)",
-										border: "1.5px solid var(--border)",
-										borderRadius: "var(--radius-xl)",
-										boxShadow: "var(--shadow-sm)"
-									}}
-								>
-									<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
-										<span style={{ fontSize: 13, fontWeight: 800, color: "var(--text-primary)" }}>
+									key={a.questionId} className="p-4 bg-(--surface) rounded-(--radius-xl)" style={{border: "1.5px solid var(--border)", boxShadow: "var(--shadow-sm)"}} >
+									<div className="flex justify-between items-center mb-2.5" >
+										<span className="text-[13px] font-extrabold text-text-primary" >
 											Câu hỏi số {q.number}
 										</span>
-										<span style={{
-											fontSize: 10,
-											fontWeight: 900,
-											padding: "2px 8px",
-											borderRadius: 6,
-											background: "var(--surface-alt)",
-											color: "var(--text-secondary)",
-											border: "1px solid var(--border)"
-										}}>
+										<span className="text-[10px] font-black rounded-md bg-surface-alt text-text-secondary border border-(--border)" style={{padding: "2px 8px"}} >
 											Part {q.part}
 										</span>
 									</div>
 									
 									{q.questionText && (
-										<p style={{ margin: "0 0 12px", fontSize: 14, fontWeight: 700, color: "var(--text-primary)", lineHeight: 1.5 }}>
+										<p className="mb-3 text-sm font-bold text-text-primary leading-normal" >
 											{q.questionText}
 										</p>
 									)}
 
 									{/* Choices summary */}
-									<div style={{ display: "flex", flexDirection: "column", gap: 6, marginBottom: 12 }}>
+									<div className="flex flex-col gap-1.5 mb-3" >
 										{q.options.map((opt, oIdx) => {
 											const isCorrect = q.correctIndex === oIdx;
 											const isUserPick = a.selectedIndex === oIdx;
@@ -150,22 +97,9 @@ export function ResultSummary({
 
 											return (
 												<div
-													key={oIdx}
-													style={{
-														display: "flex",
-														alignItems: "center",
-														gap: 8,
-														fontSize: 12.5,
-														padding: "6px 12px",
-														borderRadius: "var(--radius-md)",
-														background: isCorrect ? "rgba(16, 185, 129, 0.06)" : "rgba(239, 68, 68, 0.06)",
-														color: isCorrect ? "var(--success)" : "var(--error)",
-														border: `1px solid ${isCorrect ? "rgba(16, 185, 129, 0.15)" : "rgba(239, 68, 68, 0.15)"}`,
-														fontWeight: 700
-													}}
-												>
+													key={oIdx} className="flex items-center gap-2 py-1.5 px-3 font-bold" style={{fontSize: 12.5, borderRadius: "var(--radius-md)", background: isCorrect ? "rgba(16, 185, 129, 0.06)" : "rgba(239, 68, 68, 0.06)", color: isCorrect ? "var(--success)" : "var(--error)", border: `1px solid ${isCorrect ? "rgba(16, 185, 129, 0.15)" : "rgba(239, 68, 68, 0.15)"}`}} >
 													<span style={{ opacity: 0.8 }}>{String.fromCharCode(65 + oIdx)}.</span>
-													<span style={{ flex: 1 }}>{opt}</span>
+													<span className="flex-1" >{opt}</span>
 													<span>{isCorrect ? "Đáp án đúng" : "Lựa chọn của bạn"}</span>
 												</div>
 											);
@@ -173,21 +107,12 @@ export function ResultSummary({
 									</div>
 									
 									{q.explanationVi && (
-										<div style={{
-											padding: "10px 12px",
-											borderRadius: "var(--radius-md)",
-											background: "var(--surface-alt)",
-											border: "1px solid var(--border)",
-											fontSize: 12.5,
-											color: "var(--text-secondary)",
-											lineHeight: 1.55,
-											fontWeight: 500
-										}}>
-											<div style={{ display: "flex", alignItems: "center", gap: 4, fontWeight: 800, color: "var(--text-primary)", marginBottom: 4 }}>
+										<div className="bg-surface-alt border border-(--border) text-text-secondary font-medium" style={{padding: "10px 12px", borderRadius: "var(--radius-md)", fontSize: 12.5, lineHeight: 1.55}} >
+											<div className="flex items-center gap-1 font-extrabold text-text-primary mb-1" >
 												<Lightbulb style={{ color: "var(--warning)" }} />
 												<span>Giải thích:</span>
 											</div>
-											<p style={{ margin: 0 }}>{q.explanationVi}</p>
+											<p className="m-0" >{q.explanationVi}</p>
 										</div>
 									)}
 								</div>
@@ -196,16 +121,9 @@ export function ResultSummary({
 					</div>
 				</div>
 			) : (
-				<div style={{
-					padding: "32px 20px",
-					textAlign: "center",
-					background: "rgba(16, 185, 129, 0.06)",
-					border: "1.5px dashed var(--success)",
-					borderRadius: "var(--radius-xl)",
-					color: "var(--success)"
-				}}>
-					<CheckCircle style={{ fontSize: 32, marginBottom: 12 }} />
-					<p style={{ margin: 0, fontSize: 14.5, fontWeight: 800 }}>Xuất sắc! Bạn không trả lời sai câu nào trong lượt này.</p>
+				<div className="text-center rounded-(--radius-xl) text-emerald-500" style={{padding: "32px 20px", background: "rgba(16, 185, 129, 0.06)", border: "1.5px dashed var(--success)"}} >
+					<CheckCircle className="text-4xl mb-3" />
+					<p className="m-0 font-extrabold" style={{fontSize: 14.5}} >Xuất sắc! Bạn không trả lời sai câu nào trong lượt này.</p>
 				</div>
 			)}
 		</div>

@@ -61,7 +61,7 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
 
   if (isLoading) {
     return (
-      <div style={{ textAlign: "center", padding: 60 }}>
+      <div className="text-center" style={{padding: 60}} >
         <Spin size="large" />
       </div>
     );
@@ -74,23 +74,9 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
   const maxTrendCount = Math.max(...(stats.weeklyTrend.map((w) => w.count) || [1]), 1);
 
   return (
-    <div
-      style={{
-        maxWidth: 600,
-        margin: "0 auto",
-        display: "flex",
-        flexDirection: "column",
-        gap: 16,
-      }}
-    >
+    <div className="w-[600px] mx-auto flex flex-col gap-4" >
       {/* Stats Row */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))",
-          gap: 10,
-        }}
-      >
+      <div className="grid gap-2.5" style={{gridTemplateColumns: "repeat(auto-fit, minmax(120px, 1fr))"}} >
         <StatCard
           icon={<Flame />}
           iconColor="var(--error)"
@@ -116,54 +102,19 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
 
       {/* Weekly Trend */}
       {stats.weeklyTrend.length > 1 && (
-        <div
-          style={{
-            padding: "16px 20px",
-            borderRadius: "var(--radius-lg)",
-            border: "1px solid var(--border)",
-            background: "var(--surface)",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-              fontSize: 11,
-              fontWeight: 700,
-              color: "var(--text-muted)",
-              textTransform: "uppercase",
-              letterSpacing: "0.1em",
-              marginBottom: 14,
-            }}
-          >
+        <div className="py-4 px-5 rounded-(--radius-lg) border border-(--border) bg-(--surface)" >
+          <div className="flex items-center gap-1.5 text-[11px] font-bold text-text-muted uppercase" style={{letterSpacing: "0.1em", marginBottom: 14}} >
             <TrendingUp /> Xu hướng 8 tuần
           </div>
-          <div style={{ display: "flex", alignItems: "flex-end", gap: 6, height: 60 }}>
+          <div className="flex items-end gap-1.5 h-[60px]" >
             {stats.weeklyTrend.map((w, i) => (
               <div
-                key={i}
-                style={{
-                  flex: 1,
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: 4,
-                }}
-              >
-                <span style={{ fontSize: 9, color: "var(--text-muted)", fontWeight: 600 }}>
+                key={i} className="flex-1 flex flex-col items-center gap-1" >
+                <span className="text-[9px] text-text-muted font-semibold" >
                   {w.avg}%
                 </span>
-                <div
-                  style={{
-                    width: "100%",
-                    height: `${Math.max((w.count / maxTrendCount) * 40, 4)}px`,
-                    borderRadius: 3,
-                    background: `linear-gradient(180deg, ${scoreColor(w.avg)}, color-mix(in srgb, ${scoreColor(w.avg)} 60%, transparent))`,
-                    transition: "height 0.3s ease",
-                  }}
-                />
-                <span style={{ fontSize: 8, color: "var(--text-muted)" }}>
+                <div className="w-full" style={{height: `${Math.max((w.count / maxTrendCount) * 40, 4)}px`, borderRadius: 3, background: `linear-gradient(180deg, ${scoreColor(w.avg)}, color-mix(in srgb, ${scoreColor(w.avg)} 60%, transparent))`, transition: "height 0.3s ease"}} />
+                <span className="text-text-muted" style={{fontSize: 8}} >
                   {w.count}
                 </span>
               </div>
@@ -173,48 +124,14 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
       )}
 
       {/* Quick Start */}
-      <div style={{ display: "flex", gap: 10 }}>
+      <div className="flex gap-2.5" >
         <button
-          onClick={onStartExercise}
-          style={{
-            flex: 1,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 8,
-            padding: "14px 20px",
-            borderRadius: "var(--radius-md)",
-            border: "none",
-            background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-            color: "var(--text-on-accent)",
-            fontSize: 14,
-            fontWeight: 700,
-            cursor: "pointer",
-            transition: "all 0.2s ease",
-            boxShadow: "var(--shadow-md)",
-          }}
-        >
+          onClick={onStartExercise} className="flex-1 flex items-center justify-center gap-2 border-none text-sm font-bold cursor-pointer" style={{padding: "14px 20px", borderRadius: "var(--radius-md)", background: "linear-gradient(135deg, var(--accent), var(--accent-hover))", color: "var(--text-on-accent)", transition: "all 0.2s ease", boxShadow: "var(--shadow-md)"}} >
           <Volume2 />
           {recommendedLevel ? `Luyện ${recommendedLevel}` : "Bài mới"}
         </button>
         <button
-          onClick={onOpenHistory}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 6,
-            padding: "14px 18px",
-            borderRadius: "var(--radius-md)",
-            border: "1px solid var(--border)",
-            background: "var(--surface)",
-            color: "var(--text-secondary)",
-            fontSize: 13,
-            fontWeight: 600,
-            cursor: "pointer",
-            transition: "all 0.15s ease",
-          }}
-        >
+          onClick={onOpenHistory} className="flex items-center justify-center gap-1.5 border border-(--border) bg-(--surface) text-text-secondary text-[13px] font-semibold cursor-pointer" style={{padding: "14px 18px", borderRadius: "var(--radius-md)", transition: "all 0.15s ease"}} >
           <History />
           Lịch sử
         </button>
@@ -222,87 +139,30 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
 
       {/* Recent History */}
       {recentHistory.length > 0 && (
-        <div
-          style={{
-            padding: "16px 20px",
-            borderRadius: "var(--radius-lg)",
-            border: "1px solid var(--border)",
-            background: "var(--surface)",
-          }}
-        >
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: 12,
-            }}
-          >
-            <span
-              style={{
-                fontSize: 11,
-                fontWeight: 700,
-                color: "var(--text-muted)",
-                textTransform: "uppercase",
-                letterSpacing: "0.1em",
-              }}
-            >
-              <History style={{ marginRight: 4 }} /> Gần đây
+        <div className="py-4 px-5 rounded-(--radius-lg) border border-(--border) bg-(--surface)" >
+          <div className="flex items-center justify-between mb-3" >
+            <span className="text-[11px] font-bold text-text-muted uppercase" style={{letterSpacing: "0.1em"}} >
+              <History className="mr-1" /> Gần đây
             </span>
             <button
-              onClick={onOpenHistory}
-              style={{
-                background: "none",
-                border: "none",
-                color: "var(--accent)",
-                fontSize: 11,
-                fontWeight: 600,
-                cursor: "pointer",
-              }}
-            >
+              onClick={onOpenHistory} className="bg-none border-none text-accent text-[11px] font-semibold cursor-pointer" >
               Xem tất cả →
             </button>
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          <div className="flex flex-col gap-1.5" >
             {recentHistory.map((item) => (
               <div
-                key={item.id}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 10,
-                  padding: "8px 10px",
-                  borderRadius: "var(--radius-sm)",
-                  background: "color-mix(in srgb, var(--accent) 3%, transparent)",
-                  fontSize: 12,
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: 9,
-                    fontWeight: 800,
-                    color: "var(--accent)",
-                    fontFamily: "var(--font-mono)",
-                    padding: "1px 5px",
-                    borderRadius: 3,
-                    background: "color-mix(in srgb, var(--accent) 10%, transparent)",
-                  }}
-                >
+                key={item.id} className="flex items-center gap-2.5 rounded-(--radius-sm) text-xs" style={{padding: "8px 10px", background: "color-mix(in srgb, var(--accent) 3%, transparent)"}} >
+                <span className="text-[9px] font-extrabold text-accent font-mono" style={{padding: "1px 5px", borderRadius: 3, background: "color-mix(in srgb, var(--accent) 10%, transparent)"}} >
                   {item.level}
                 </span>
-                <span style={{ flex: 1, color: "var(--text-secondary)", fontWeight: 500 }}>
+                <span className="flex-1 text-text-secondary font-medium" >
                   {item.mode === "listening" ? "Nghe hiểu" : item.mode === "shadowing" ? "Shadow" : item.mode === "dictation" ? "Dictation" : "Tóm tắt"}
                 </span>
-                <span
-                  style={{
-                    fontWeight: 700,
-                    color: scoreColor(item.score ?? 0),
-                    fontFamily: "var(--font-mono)",
-                  }}
-                >
+                <span className="font-bold font-mono" style={{color: scoreColor(item.score ?? 0)}} >
                   {item.score != null ? `${item.score}%` : "—"}
                 </span>
-                <span style={{ color: "var(--text-muted)", fontSize: 10 }}>
+                <span className="text-text-muted text-[10px]" >
                   {item.completedAt
                     ? new Date(item.completedAt).toLocaleDateString("vi-VN", { day: "2-digit", month: "2-digit" })
                     : ""}
@@ -315,43 +175,18 @@ export function ListeningDashboard({ onStartExercise, onOpenHistory, recommended
 
       {/* Level Breakdown */}
       {stats.byLevel.length > 0 && (
-        <div
-          style={{
-            padding: "16px 20px",
-            borderRadius: "var(--radius-lg)",
-            border: "1px solid var(--border)",
-            background: "var(--surface)",
-          }}
-        >
-          <div
-            style={{
-              fontSize: 11,
-              fontWeight: 700,
-              color: "var(--text-muted)",
-              textTransform: "uppercase",
-              letterSpacing: "0.1em",
-              marginBottom: 10,
-            }}
-          >
-            <Trophy style={{ marginRight: 4 }} /> Theo cấp độ
+        <div className="py-4 px-5 rounded-(--radius-lg) border border-(--border) bg-(--surface)" >
+          <div className="text-[11px] font-bold text-text-muted uppercase mb-2.5" style={{letterSpacing: "0.1em"}} >
+            <Trophy className="mr-1" /> Theo cấp độ
           </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+          <div className="flex flex-wrap gap-2" >
             {stats.byLevel.map((bl) => (
               <div
-                key={bl.level}
-                style={{
-                  padding: "8px 12px",
-                  borderRadius: "var(--radius-sm)",
-                  border: "1px solid var(--border)",
-                  background: "color-mix(in srgb, var(--accent) 3%, transparent)",
-                  textAlign: "center",
-                  minWidth: 70,
-                }}
-              >
-                <div style={{ fontSize: 14, fontWeight: 800, color: "var(--accent)", fontFamily: "var(--font-mono)" }}>
+                key={bl.level} className="py-2 px-3 rounded-(--radius-sm) border border-(--border) text-center w-[70px]" style={{background: "color-mix(in srgb, var(--accent) 3%, transparent)"}} >
+                <div className="text-sm font-extrabold text-accent font-mono" >
                   {bl.level}
                 </div>
-                <div style={{ fontSize: 11, color: "var(--text-secondary)" }}>
+                <div className="text-[11px] text-text-secondary" >
                   {bl.count} bài · {bl.avgScore}%
                 </div>
               </div>
@@ -381,23 +216,15 @@ function StatCard({
   valueColor?: string;
 }) {
   return (
-    <div
-      style={{
-        padding: "14px 12px",
-        borderRadius: "var(--radius-md)",
-        border: "1px solid var(--border)",
-        background: "var(--surface)",
-        textAlign: "center",
-      }}
-    >
-      <div style={{ fontSize: 18, color: iconColor, marginBottom: 6 }}>{icon}</div>
-      <div style={{ fontSize: 22, fontWeight: 800, color: valueColor ?? "var(--text)", fontFamily: "var(--font-mono)", lineHeight: 1 }}>
+    <div className="border border-(--border) bg-(--surface) text-center" style={{padding: "14px 12px", borderRadius: "var(--radius-md)"}} >
+      <div className="text-lg mb-1.5" style={{color: iconColor}} >{icon}</div>
+      <div className="text-2xl font-extrabold font-mono leading-none" style={{color: valueColor ?? "var(--text)"}} >
         {value}
       </div>
       {suffix && (
-        <span style={{ fontSize: 10, color: "var(--text-muted)", fontWeight: 500 }}> {suffix}</span>
+        <span className="text-[10px] text-text-muted font-medium" > {suffix}</span>
       )}
-      <div style={{ fontSize: 10, color: "var(--text-muted)", marginTop: 4, fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.08em" }}>
+      <div className="text-[10px] text-text-muted mt-1 font-semibold uppercase tracking-widest" >
         {label}
       </div>
     </div>

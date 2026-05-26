@@ -35,19 +35,19 @@ export function GrammarHub({
 		p < 0.3 ? "var(--error)" : p < 0.7 ? "var(--warning)" : "var(--success)";
 
 	return (
-		<div style={{ display: "grid", gap: 16 }}>
+		<div className="grid gap-4" >
 			{/* 3 quick-start cards */}
-			<div style={{ display: "grid", gap: 12, gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}>
+			<div className="grid gap-3" style={{gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))"}} >
 				<Card size="small" hoverable onClick={startDaily}>
-					<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-						<Calendar style={{ fontSize: 20, color: "var(--info)" }} />
+					<div className="flex items-center gap-2" >
+						<Calendar className="text-xl" style={{color: "var(--info)"}} />
 						<strong>Daily 15 câu</strong>
 					</div>
-					<div style={{ color: "var(--text-muted, #94a3b8)", fontSize: 13, marginTop: 6 }}>
+					<div className="text-text-muted text-[13px] mt-1.5" >
 						Tập trung vào kỹ năng yếu nhất
 					</div>
 					{weakest3[0] && (
-						<Tag style={{ marginTop: 8 }}>{getSkillLabel(weakest3[0].skill as ToeicSkill)}</Tag>
+						<Tag className="mt-2" >{getSkillLabel(weakest3[0].skill as ToeicSkill)}</Tag>
 					)}
 				</Card>
 				<Card
@@ -56,37 +56,26 @@ export function GrammarHub({
 					onClick={mistakeCount > 0 ? startMistake : undefined}
 					style={mistakeCount === 0 ? { opacity: 0.6, cursor: "not-allowed" } : undefined}
 				>
-					<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-						<AlertTriangle style={{ fontSize: 20, color: "var(--error)" }} />
+					<div className="flex items-center gap-2" >
+						<AlertTriangle className="text-xl text-destructive" />
 						<strong>Câu sai cần ôn</strong>
 					</div>
-					<div style={{ fontSize: 28, fontWeight: 700, marginTop: 6 }}>{mistakeCount}</div>
-					<div style={{ color: "var(--text-muted, #94a3b8)", fontSize: 13 }}>
+					<div className="text-[28px] font-bold mt-1.5" >{mistakeCount}</div>
+					<div className="text-text-muted text-[13px]" >
 						Spaced repetition cho câu sai
 					</div>
 				</Card>
 				<Card size="small">
-					<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-						<Zap style={{ fontSize: 20, color: "var(--warning)" }} />
+					<div className="flex items-center gap-2" >
+						<Zap className="text-xl" style={{color: "var(--warning)"}} />
 						<strong>Top 3 yếu nhất</strong>
 					</div>
-					<div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 4 }}>
+					<div className="mt-2 flex flex-col gap-1" >
 						{weakest3.map((s) => (
 							<button
 								type="button"
 								key={s.skill}
-								onClick={() => startDrill(s.skill)}
-								style={{
-									padding: "4px 8px",
-									borderRadius: 6,
-									border: "1px solid var(--border-color, #1f2937)",
-									background: "transparent",
-									color: "var(--text-primary, #fff)",
-									textAlign: "left",
-									fontSize: 13,
-									cursor: "pointer",
-								}}
-							>
+								onClick={() => startDrill(s.skill)} className="py-1 px-2 rounded-md bg-transparent text-left text-[13px] cursor-pointer" style={{border: "1px solid var(--border-color, #1f2937)", color: "var(--text-primary, #fff)"}} >
 								{getSkillLabel(s.skill as ToeicSkill)} · {Math.round(s.proficiency * 100)}/100
 							</button>
 						))}
@@ -96,14 +85,12 @@ export function GrammarHub({
 
 			{/* Skill matrix */}
 			<Card title="Tất cả kỹ năng Part 5 & 6" size="small">
-				<div style={{ display: "grid", gap: 10 }}>
+				<div className="grid gap-2.5" >
 					{skills.map((s) => (
 						<div
-							key={s.skill}
-							style={{ display: "grid", gridTemplateColumns: "1fr auto auto", gap: 12, alignItems: "center" }}
-						>
+							key={s.skill} className="grid gap-3 items-center" style={{gridTemplateColumns: "1fr auto auto"}} >
 							<div>
-								<div style={{ fontWeight: 500 }}>{getSkillLabel(s.skill as ToeicSkill)}</div>
+								<div className="font-medium" >{getSkillLabel(s.skill as ToeicSkill)}</div>
 								<Progress
 									percent={Math.round(s.proficiency * 100)}
 									showInfo={false}
@@ -111,7 +98,7 @@ export function GrammarHub({
 									size="small"
 								/>
 							</div>
-							<div style={{ fontSize: 12, color: "var(--text-muted, #94a3b8)" }}>{s.pool} câu</div>
+							<div className="text-xs text-text-muted" >{s.pool} câu</div>
 							<Button size="small" onClick={() => startDrill(s.skill)}>
 								Drill
 							</Button>

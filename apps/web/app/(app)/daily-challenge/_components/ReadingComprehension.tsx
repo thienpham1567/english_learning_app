@@ -27,84 +27,29 @@ export function ReadingComprehension({ data, instruction, onAnswer, disabled }: 
   return (
     <div>
       {/* Instruction */}
-      <p
-        style={{
-          marginBottom: 14,
-          fontSize: 11,
-          fontWeight: 800,
-          color: "var(--accent)",
-          textTransform: "uppercase",
-          letterSpacing: "0.08em",
-        }}
-      >
+      <p className="text-[11px] font-extrabold text-accent uppercase tracking-widest" style={{marginBottom: 14}} >
         📖 {instruction}
       </p>
 
       {/* Passage */}
-      <div
-        style={{
-          marginBottom: 20,
-          borderRadius: "var(--radius-xl)",
-          borderLeft: "4px solid var(--accent)",
-          background: "var(--surface-alt)",
-          padding: "18px 20px",
-          boxShadow: "var(--shadow-sm)",
-        }}
-      >
-        <span
-          style={{
-            fontSize: 10,
-            fontWeight: 800,
-            textTransform: "uppercase",
-            letterSpacing: "0.08em",
-            color: "var(--accent)",
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            marginBottom: 10,
-          }}
-        >
+      <div className="mb-5 rounded-(--radius-xl) bg-surface-alt" style={{borderLeft: "4px solid var(--accent)", padding: "18px 20px", boxShadow: "var(--shadow-sm)"}} >
+        <span className="text-[10px] font-extrabold uppercase tracking-widest text-accent flex items-center gap-1.5 mb-2.5" >
           <BookOpenText size={11} /> Văn bản đọc hiểu
         </span>
-        <p
-          style={{
-            margin: 0,
-            fontSize: 14.5,
-            color: "var(--text-primary)",
-            fontWeight: 500,
-            lineHeight: 1.8,
-            fontFamily: "var(--font-body)",
-          }}
-        >
+        <p className="m-0 text-text-primary font-medium font-body" style={{fontSize: 14.5, lineHeight: 1.8}} >
           {data.passage}
         </p>
       </div>
 
       {/* Question */}
-      <div
-        style={{
-          marginBottom: 16,
-          padding: "12px 16px",
-          borderRadius: "var(--radius-lg)",
-          background: "var(--surface-alt)",
-          border: "1px solid var(--border)",
-        }}
-      >
-        <p
-          style={{
-            margin: 0,
-            fontSize: 15,
-            fontWeight: 700,
-            color: "var(--text-primary)",
-            lineHeight: 1.6,
-          }}
-        >
+      <div className="mb-4 py-3 px-4 rounded-(--radius-lg) bg-surface-alt border border-(--border)" >
+        <p className="m-0 text-[15px] font-bold text-text-primary leading-relaxed" >
           {data.question}
         </p>
       </div>
 
       {/* Options */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+      <div className="flex flex-col gap-2.5" >
         {data.options.map((opt, i) => {
           const isSelected = selected === i;
 
@@ -114,47 +59,15 @@ export function ReadingComprehension({ data, instruction, onAnswer, disabled }: 
               whileHover={!disabled ? { scale: 1.01, x: 2 } : {}}
               whileTap={!disabled ? { scale: 0.99 } : {}}
               onClick={() => handleSelect(i)}
-              disabled={disabled}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 12,
-                borderRadius: "var(--radius-lg)",
-                border: isSelected
+              disabled={disabled} className="flex items-center gap-3 rounded-(--radius-lg) py-3 px-4 text-left text-sm leading-normal" style={{border: isSelected
                   ? "2px solid var(--accent)"
-                  : "1px solid var(--border)",
-                background: isSelected
+                  : "1px solid var(--border)", background: isSelected
                   ? "var(--accent-light)"
-                  : "var(--surface)",
-                padding: "12px 16px",
-                textAlign: "left",
-                fontSize: 14,
-                fontWeight: isSelected ? 700 : 600,
-                color: isSelected ? "var(--accent)" : "var(--text-primary)",
-                cursor: disabled ? "default" : "pointer",
-                transition: "border-color 0.2s, background-color 0.2s",
-                boxShadow: isSelected ? "0 4px 12px var(--accent-muted)" : "var(--shadow-sm)",
-                lineHeight: 1.5,
-              }}
-            >
-              <span
-                style={{
-                  width: 26,
-                  height: 26,
-                  borderRadius: "50%",
-                  display: "grid",
-                  placeItems: "center",
-                  flexShrink: 0,
-                  background: isSelected ? "var(--accent)" : "var(--border)",
-                  color: isSelected ? "var(--text-on-accent)" : "var(--text-secondary)",
-                  fontSize: 11,
-                  fontWeight: 800,
-                  transition: "all 0.15s",
-                }}
-              >
+                  : "var(--surface)", fontWeight: isSelected ? 700 : 600, color: isSelected ? "var(--accent)" : "var(--text-primary)", cursor: disabled ? "default" : "pointer", transition: "border-color 0.2s, background-color 0.2s", boxShadow: isSelected ? "0 4px 12px var(--accent-muted)" : "var(--shadow-sm)"}} >
+              <span className="w-[26px] h-[26px] rounded-full grid shrink-0 text-[11px] font-extrabold" style={{placeItems: "center", background: isSelected ? "var(--accent)" : "var(--border)", color: isSelected ? "var(--text-on-accent)" : "var(--text-secondary)", transition: "all 0.15s"}} >
                 {LABELS[i]}
               </span>
-              <span style={{ flex: 1 }}>{opt}</span>
+              <span className="flex-1" >{opt}</span>
             </m.button>
           );
         })}

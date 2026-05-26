@@ -27,88 +27,34 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
   const cefrColor = CEFR_COLORS[result.overallCefr] ?? "var(--accent)";
 
   return (
-    <div
-      style={{
-        height: "100%",
-        overflowY: "auto",
-        padding: "24px 20px 48px",
-        background: "var(--bg-deep)",
-      }}
-    >
-      <Flex vertical gap={20} style={{ maxWidth: 600, margin: "0 auto" }}>
+    <div className="h-full overflow-y-auto bg-bg-deep" style={{padding: "24px 20px 48px"}} >
+      <Flex vertical gap={20} className="w-[600px] mx-auto" >
         
         {/* Hero result card */}
         <m.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ type: "spring", stiffness: 100, damping: 15 }}
-          style={{
-            background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--surface))",
-            borderRadius: "var(--radius-xl)",
-            border: "1px solid var(--border)",
-            padding: "40px 24px",
-            textAlign: "center",
-            boxShadow: "var(--shadow-sm)",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
+          transition={{ type: "spring", stiffness: 100, damping: 15 }} className="rounded-(--radius-xl) border border-(--border) text-center relative overflow-hidden" style={{background: "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--surface))", padding: "40px 24px", boxShadow: "var(--shadow-sm)"}} >
           {/* Radial ambient glow matching the CEFR level color */}
-          <div style={{ position: "absolute", left: "50%", top: "50%", transform: "translate(-50%, -50%)", width: 280, height: 280, borderRadius: "50%", background: `radial-gradient(circle, ${cefrColor}12 0%, transparent 70%)`, pointerEvents: "none" }} />
+          <div className="absolute w-[280px] h-[280px] rounded-full" style={{left: "50%", top: "50%", transform: "translate(-50%, -50%)", background: `radial-gradient(circle, ${cefrColor}12 0%, transparent 70%)`, pointerEvents: "none"}} />
 
-          <CheckCircle
-            style={{ fontSize: 44, color: cefrColor, marginBottom: 16 }}
-            className="anim-scale-in"
-          />
-          <Title level={4} style={{ margin: "0 0 10px", color: "var(--text-primary)", fontWeight: 800 }}>
+          <CheckCircle className="anim-scale-in mb-4" style={{fontSize: 44, color: cefrColor}} />
+          <Title level={4} className="mb-2.5 text-text-primary font-extrabold" >
             Hoàn thành đánh giá trình độ!
           </Title>
           
           <m.div
             initial={{ scale: 0.6, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2, type: "spring", stiffness: 80 }}
-            style={{
-              fontSize: 68,
-              fontWeight: 900,
-              color: cefrColor,
-              letterSpacing: "-0.04em",
-              lineHeight: 1.1,
-              fontFamily: "var(--font-display)",
-              margin: "12px 0",
-              textShadow: `0 8px 24px ${cefrColor}33`,
-            }}
-          >
+            transition={{ delay: 0.2, type: "spring", stiffness: 80 }} className="font-black font-display" style={{fontSize: 68, color: cefrColor, letterSpacing: "-0.04em", lineHeight: 1.1, margin: "12px 0", textShadow: `0 8px 24px ${cefrColor}33`}} >
             {result.overallCefr}
           </m.div>
 
-          <Flex justify="center" gap={12} style={{ marginTop: 16 }}>
-            <span
-              style={{
-                borderRadius: 99,
-                padding: "4px 14px",
-                fontSize: 12,
-                fontWeight: 800,
-                border: "1px solid var(--accent)",
-                background: "var(--accent-light)",
-                color: "var(--accent)",
-                boxShadow: "var(--shadow-sm)",
-              }}
-            >
+          <Flex justify="center" gap={12} className="mt-4" >
+            <span className="rounded-full text-xs font-extrabold text-accent" style={{padding: "4px 14px", border: "1px solid var(--accent)", background: "var(--accent-light)", boxShadow: "var(--shadow-sm)"}} >
               Độ tin cậy: {Math.round(result.confidence * 100)}%
             </span>
-            <span
-              style={{
-                borderRadius: 99,
-                padding: "4px 14px",
-                fontSize: 12,
-                fontWeight: 800,
-                border: "1px solid var(--xp)",
-                background: "rgba(245, 158, 11, 0.08)",
-                color: "var(--xp)",
-                boxShadow: "var(--shadow-sm)",
-              }}
-            >
+            <span className="rounded-full text-xs font-extrabold text-(--xp)" style={{padding: "4px 14px", border: "1px solid var(--xp)", background: "rgba(245, 158, 11, 0.08)", boxShadow: "var(--shadow-sm)"}} >
               +{result.xpAwarded} XP nhận được
             </span>
           </Flex>
@@ -118,18 +64,10 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
         <m.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 }}
-          style={{
-            borderRadius: "var(--radius-xl)",
-            border: "1px solid var(--border)",
-            background: "var(--surface)",
-            padding: "20px",
-            boxShadow: "var(--shadow-sm)",
-          }}
-        >
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 18 }}>
-            <Radar style={{ fontSize: 14, color: "var(--accent)" }} />
-            <span style={{ fontSize: 13, fontWeight: 800, color: "var(--text-primary)", fontFamily: "var(--font-display)" }}>
+          transition={{ delay: 0.25 }} className="rounded-(--radius-xl) border border-(--border) bg-(--surface)" style={{padding: "20px", boxShadow: "var(--shadow-sm)"}} >
+          <div className="flex items-center gap-2" style={{marginBottom: 18}} >
+            <Radar className="text-sm text-accent" />
+            <span className="text-[13px] font-extrabold text-text-primary font-display" >
               Chi tiết năng lực từng kỹ năng
             </span>
           </div>
@@ -142,55 +80,27 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
               const skillColor = CEFR_COLORS[skillResult.cefr] ?? "var(--accent)";
 
               return (
-                <div key={skill} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+                <div key={skill} className="flex flex-col gap-1.5" >
                   <Flex justify="space-between" align="center">
-                    <span style={{ fontSize: 13.5, fontWeight: 700, color: "var(--text-primary)" }}>
+                    <span className="font-bold text-text-primary" style={{fontSize: 13.5}} >
                       {SKILL_LABELS[skill] ?? skill}
                     </span>
                     <Flex gap={8} align="center">
-                      <span
-                        style={{
-                          fontSize: 11,
-                          fontWeight: 800,
-                          color: skillColor,
-                          border: `1px solid ${skillColor}`,
-                          background: "var(--surface-alt)",
-                          padding: "2px 8px",
-                          borderRadius: 99,
-                        }}
-                      >
+                      <span className="text-[11px] font-extrabold bg-surface-alt rounded-full" style={{color: skillColor, border: `1px solid ${skillColor}`, padding: "2px 8px"}} >
                         {skillResult.cefr}
                       </span>
-                      <span style={{ fontSize: 11.5, color: "var(--text-muted)", fontWeight: 600 }}>
+                      <span className="text-text-muted font-semibold" style={{fontSize: 11.5}} >
                         {skillResult.correct}/{skillResult.total} ({pct}%)
                       </span>
                     </Flex>
                   </Flex>
 
                   {/* Custom Progress bar */}
-                  <div
-                    style={{
-                      height: 8,
-                      borderRadius: 99,
-                      background: "var(--border)",
-                      position: "relative",
-                      overflow: "hidden",
-                    }}
-                  >
+                  <div className="h-[8px] rounded-full relative overflow-hidden" style={{background: "var(--border)"}} >
                     <m.div
                       initial={{ width: 0 }}
                       animate={{ width: `${pct}%` }}
-                      transition={{ delay: 0.4 + idx * 0.1, duration: 0.6, ease: "easeOut" }}
-                      style={{
-                        position: "absolute",
-                        left: 0,
-                        top: 0,
-                        bottom: 0,
-                        background: skillColor,
-                        borderRadius: 99,
-                        boxShadow: `0 0 6px ${skillColor}33`,
-                      }}
-                    />
+                      transition={{ delay: 0.4 + idx * 0.1, duration: 0.6, ease: "easeOut" }} className="absolute rounded-full" style={{left: 0, top: 0, bottom: 0, background: skillColor, boxShadow: `0 0 6px ${skillColor}33`}} />
                   </div>
                 </div>
               );
@@ -203,24 +113,7 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
           <m.button
             whileHover={{ scale: 1.02, y: -1 }}
             whileTap={{ scale: 0.98 }}
-            onClick={onGoHome}
-            style={{
-              flex: 1,
-              height: 48,
-              borderRadius: "var(--radius-lg)",
-              background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-              color: "var(--text-on-accent)",
-              border: "none",
-              fontSize: 15,
-              fontWeight: 800,
-              cursor: "pointer",
-              boxShadow: "0 4px 14px var(--accent-muted)",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 6,
-            }}
-          >
+            onClick={onGoHome} className="flex-1 h-[48px] rounded-(--radius-lg) border-none text-[15px] font-extrabold cursor-pointer flex items-center justify-center gap-1.5" style={{background: "linear-gradient(135deg, var(--accent), var(--accent-hover))", color: "var(--text-on-accent)", boxShadow: "0 4px 14px var(--accent-muted)"}} >
             Về trang chủ
             <ChevronRight size={11} />
           </m.button>
@@ -228,23 +121,7 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
           <m.button
             whileHover={{ scale: 1.02, y: -1 }}
             whileTap={{ scale: 0.98 }}
-            onClick={onViewProgress}
-            style={{
-              height: 48,
-              borderRadius: "var(--radius-lg)",
-              background: "var(--surface-alt)",
-              border: "1px solid var(--border)",
-              color: "var(--text-secondary)",
-              fontSize: 15,
-              fontWeight: 700,
-              padding: "0 20px",
-              cursor: "pointer",
-              boxShadow: "var(--shadow-sm)",
-              display: "flex",
-              alignItems: "center",
-              gap: 6,
-            }}
-          >
+            onClick={onViewProgress} className="h-[48px] rounded-(--radius-lg) bg-surface-alt border border-(--border) text-text-secondary text-[15px] font-bold cursor-pointer flex items-center gap-1.5" style={{padding: "0 20px", boxShadow: "var(--shadow-sm)"}} >
             <RefreshCw size={13} />
             Xem tiến trình học
           </m.button>

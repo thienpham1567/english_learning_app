@@ -69,20 +69,12 @@ function WordDiff({ original, rewritten }: { original: string; rewritten: string
   const parts = useMemo(() => diffWords(original, rewritten), [original, rewritten]);
 
   return (
-    <span style={{ fontSize: 15, lineHeight: 1.8 }}>
+    <span className="text-[15px]" style={{lineHeight: 1.8}} >
       {parts.map((part, i) => {
         if (part.added) {
           return (
             <span
-              key={i}
-              style={{
-                color: "var(--success)",
-                backgroundColor: "color-mix(in srgb, var(--success) 10%, transparent)",
-                borderRadius: 4,
-                padding: "1px 3px",
-                fontWeight: 500,
-              }}
-            >
+              key={i} className="text-emerald-500 rounded font-medium" style={{backgroundColor: "color-mix(in srgb, var(--success) 10%, transparent)", padding: "1px 3px"}} >
               {part.value}
             </span>
           );
@@ -90,14 +82,7 @@ function WordDiff({ original, rewritten }: { original: string; rewritten: string
         if (part.removed) {
           return (
             <span
-              key={i}
-              style={{
-                color: "var(--error)",
-                textDecoration: "line-through",
-                opacity: 0.5,
-                padding: "1px 1px",
-              }}
-            >
+              key={i} className="text-destructive" style={{textDecoration: "line-through", opacity: 0.5, padding: "1px 1px"}} >
               {part.value}
             </span>
           );
@@ -119,20 +104,8 @@ function CopyButton({ text }: { text: string }) {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       }}
-      style={{
-        border: "none",
-        background: "transparent",
-        cursor: "pointer",
-        color: copied ? "var(--success)" : "var(--text-secondary)",
-        fontSize: 13,
-        padding: "4px 8px",
-        borderRadius: 6,
-        display: "flex",
-        alignItems: "center",
-        gap: 4,
-      }}
-      title="Sao chép"
-    >
+      
+      title="Sao chép" className="border-none bg-transparent cursor-pointer text-[13px] py-1 px-2 rounded-md flex items-center gap-1" style={{color: copied ? "var(--success)" : "var(--text-secondary)"}} >
       {copied ? <><Check /> Đã chép</> : <><Copy /> Sao chép</>}
     </button>
   );
@@ -149,82 +122,36 @@ function ChangesPanel({
   if (changes.length === 0) return null;
 
   return (
-    <div
-      style={{
-        borderRadius: 12,
-        border: "1px solid var(--border)",
-        background: "var(--card-bg)",
-        overflow: "hidden",
-      }}
-    >
+    <div className="rounded-xl border border-(--border) overflow-hidden" style={{background: "var(--card-bg)"}} >
       <button
-        onClick={() => setExpanded((p) => !p)}
-        style={{
-          width: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "10px 14px",
-          border: "none",
-          background: "transparent",
-          cursor: "pointer",
-          color: "var(--text-secondary)",
-          fontSize: 13,
-          fontWeight: 500,
-        }}
-      >
+        onClick={() => setExpanded((p) => !p)} className="w-full flex items-center justify-between border-none bg-transparent cursor-pointer text-text-secondary text-[13px] font-medium" style={{padding: "10px 14px"}} >
         <span>
           📋 {changes.length} thay đổi từ vựng
         </span>
-        <span style={{ fontSize: 10 }}>
+        <span className="text-[10px]" >
           {expanded ? <ChevronDown /> : <ChevronRight />}
         </span>
       </button>
 
       {expanded && (
-        <div
-          style={{
-            padding: "0 14px 12px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 6,
-          }}
-        >
+        <div className="flex flex-col gap-1.5" style={{padding: "0 14px 12px"}} >
           {changes.map((change, i) => (
             <div
-              key={i}
-              style={{
-                fontSize: 13,
-                padding: "8px 12px",
-                borderRadius: 8,
-                background: "var(--surface)",
-                borderLeft: "3px solid var(--accent)",
-                lineHeight: 1.6,
-              }}
-            >
+              key={i} className="text-[13px] py-2 px-3 rounded-lg bg-(--surface) leading-relaxed" style={{borderLeft: "3px solid var(--accent)"}} >
               <div>
-                <span
-                  style={{ textDecoration: "line-through", color: "var(--text-muted)" }}
-                >
+                <span className="text-text-muted" style={{textDecoration: "line-through"}} >
                   {change.original}
                 </span>
                 {" → "}
-                <span style={{ color: "var(--success)", fontWeight: 500 }}>
+                <span className="text-emerald-500 font-medium" >
                   {change.replacement}
                 </span>
               </div>
-              <div style={{ color: "var(--text-secondary)", fontSize: 12, marginTop: 2 }}>
+              <div className="text-text-secondary text-xs" style={{marginTop: 2}} >
                 {change.reason}
               </div>
               {change.definitionVi && (
-                <div
-                  style={{
-                    color: "var(--accent)",
-                    fontSize: 12,
-                    marginTop: 2,
-                    fontStyle: "italic",
-                  }}
-                >
+                <div className="text-accent text-xs italic" style={{marginTop: 2}} >
                   🇻🇳 {change.definitionVi}
                 </div>
               )}
@@ -290,29 +217,13 @@ export function Paraphraser() {
   const sliderLabel = synonymLevel <= 30 ? "Ít thay đổi" : synonymLevel <= 70 ? "Vừa phải" : "Nhiều thay đổi";
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+    <div className="flex flex-col gap-4" >
       {/* Mode pills */}
       <div>
-        <span
-          style={{
-            fontSize: 12,
-            fontWeight: 600,
-            color: "var(--text-secondary)",
-            marginBottom: 8,
-            display: "block",
-          }}
-        >
+        <span className="text-xs font-semibold text-text-secondary mb-2 block" >
           Chế độ viết lại
         </span>
-        <div
-          style={{
-            display: "flex",
-            gap: 6,
-            overflowX: "auto",
-            paddingBottom: 4,
-            WebkitOverflowScrolling: "touch",
-          }}
-        >
+        <div className="flex gap-1.5 pb-1" style={{overflowX: "auto", WebkitOverflowScrolling: "touch"}} >
           {MODES.map((m) => {
             const active = mode === m.key;
             return (
@@ -322,26 +233,9 @@ export function Paraphraser() {
                   setMode(m.key);
                   setResult(null);
                 }}
-                title={m.description}
-                style={{
-                  padding: "7px 14px",
-                  borderRadius: 20,
-                  border: active ? "2px solid var(--accent)" : "1px solid var(--border)",
-                  background: active
+                title={m.description} className="text-[13px] cursor-pointer flex items-center gap-1 shrink-0" style={{padding: "7px 14px", borderRadius: 20, border: active ? "2px solid var(--accent)" : "1px solid var(--border)", background: active
                     ? "color-mix(in srgb, var(--accent) 12%, var(--card-bg))"
-                    : "var(--card-bg)",
-                  color: active ? "var(--accent)" : "var(--text-secondary)",
-                  fontSize: 13,
-                  fontWeight: active ? 600 : 400,
-                  cursor: "pointer",
-                  whiteSpace: "nowrap",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 4,
-                  transition: "all 0.2s",
-                  flexShrink: 0,
-                }}
-              >
+                    : "var(--card-bg)", color: active ? "var(--accent)" : "var(--text-secondary)", fontWeight: active ? 600 : 400, whiteSpace: "nowrap", transition: "all 0.2s"}} >
                 <span>{m.emoji}</span>
                 {m.label}
               </button>
@@ -351,21 +245,11 @@ export function Paraphraser() {
       </div>
 
       {/* Synonym slider */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 12,
-          padding: "10px 16px",
-          borderRadius: 12,
-          background: "var(--card-bg)",
-          border: "1px solid var(--border)",
-        }}
-      >
-        <span style={{ fontSize: 12, color: "var(--text-secondary)", whiteSpace: "nowrap" }}>
+      <div className="flex items-center gap-3 py-2.5 px-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+        <span className="text-xs text-text-secondary" style={{whiteSpace: "nowrap"}} >
           Mức thay đổi từ vựng:
         </span>
-        <span style={{ fontSize: 11, color: "var(--text-muted)", minWidth: 30 }}>Ít</span>
+        <span className="text-[11px] text-text-muted w-[30px]" >Ít</span>
         <input
           type="range"
           min={0}
@@ -374,117 +258,40 @@ export function Paraphraser() {
           onChange={(e) => {
             setSynonymLevel(Number(e.target.value));
             setResult(null);
-          }}
-          style={{
-            flex: 1,
-            accentColor: "var(--accent)",
-            cursor: "pointer",
-          }}
-        />
-        <span style={{ fontSize: 11, color: "var(--text-muted)", minWidth: 40 }}>Nhiều</span>
-        <span
-          style={{
-            fontSize: 12,
-            fontWeight: 600,
-            color: "var(--accent)",
-            padding: "2px 10px",
-            borderRadius: 10,
-            background: "color-mix(in srgb, var(--accent) 10%, transparent)",
-            whiteSpace: "nowrap",
-          }}
-        >
+          }} className="flex-1 cursor-pointer" style={{accentColor: "var(--accent)"}} />
+        <span className="text-[11px] text-text-muted w-[40px]" >Nhiều</span>
+        <span className="text-xs font-semibold text-accent" style={{padding: "2px 10px", borderRadius: 10, background: "color-mix(in srgb, var(--accent) 10%, transparent)", whiteSpace: "nowrap"}} >
           {sliderLabel}
         </span>
       </div>
 
       {/* Split panels */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: 16,
-        }}
-        className="paraphraser-panels"
-      >
+      <div className="paraphraser-panels grid gap-4" style={{gridTemplateColumns: "1fr 1fr"}} >
         {/* Left: Input */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)" }}>
+        <div className="flex flex-col gap-1.5" >
+          <div className="flex justify-between items-center" >
+            <span className="text-xs font-semibold text-text-secondary" >
               Văn bản gốc
             </span>
-            <span
-              style={{
-                fontSize: 11,
-                color: overLimit ? "var(--error)" : "var(--text-muted)",
-                fontWeight: overLimit ? 600 : 400,
-              }}
-            >
+            <span className="text-[11px]" style={{color: overLimit ? "var(--error)" : "var(--text-muted)", fontWeight: overLimit ? 600 : 400}} >
               {wordCount}/{MAX_WORDS} từ
             </span>
           </div>
-          <textarea
-            value={text}
-            onChange={(e) => {
-              setText(e.target.value);
-              setResult(null);
-              setError(null);
-            }}
-            onKeyDown={handleKeyDown}
-            placeholder="Type or paste your English text here..."
-            className={`app-textarea ${overLimit ? "border-error" : ""}`}
-            style={{
-              width: "100%",
-              minHeight: 220,
-              padding: 16,
-              fontSize: 15,
-              lineHeight: 1.7,
-              resize: "vertical",
-              fontFamily: "inherit",
-            }}
-          />
+          <textarea value={text} onChange={(e) => { setText(e.target.value); setResult(null); setError(null); }} onKeyDown={handleKeyDown} placeholder="Type or paste your English text here..." className={`app-textarea ${overLimit ? "border-error" : ""} w-full h-[220px] p-4 text-[15px]`} style={{lineHeight: 1.7, resize: "vertical", fontFamily: "inherit"}} />
 
           {/* Example prompts — show when empty */}
           {!text.trim() && !result && (
-            <div style={{ marginTop: 8 }}>
-              <span
-                style={{
-                  fontSize: 11,
-                  fontWeight: 700,
-                  textTransform: "uppercase",
-                  letterSpacing: "0.12em",
-                  color: "var(--text-muted)",
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 6,
-                  marginBottom: 6,
-                }}
-              >
+            <div className="mt-2" >
+              <span className="text-[11px] font-bold uppercase text-text-muted flex items-center gap-1.5 mb-1.5" style={{letterSpacing: "0.12em"}} >
                 <Zap size={10} />
                 Thử ngay
               </span>
-              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+              <div className="flex gap-1.5 flex-wrap" >
                 {currentExamples.map((ex, i) => (
                   <button
                     key={i}
                     onClick={() => setText(ex.text)}
-                    style={{
-                      textAlign: "left",
-                      padding: "8px 12px",
-                      borderRadius: 8,
-                      border: "1px solid var(--border)",
-                      borderLeft: "3px solid var(--accent)",
-                      background: "var(--card-bg)",
-                      cursor: "pointer",
-                      transition: "all 0.15s",
-                      flex: "1 1 200px",
-                      maxWidth: 360,
-                    }}
+                    
                     onMouseEnter={(e) => {
                       e.currentTarget.style.borderColor = "var(--accent)";
                       e.currentTarget.style.transform = "translateY(-1px)";
@@ -493,24 +300,11 @@ export function Paraphraser() {
                       e.currentTarget.style.borderColor = "var(--border)";
                       e.currentTarget.style.borderLeftColor = "var(--accent)";
                       e.currentTarget.style.transform = "none";
-                    }}
-                  >
-                    <span style={{ fontSize: 11, fontWeight: 600, color: "var(--accent)" }}>
+                    }} className="text-left py-2 px-3 rounded-lg border border-(--border) cursor-pointer w-[360px]" style={{borderLeft: "3px solid var(--accent)", background: "var(--card-bg)", transition: "all 0.15s", flex: "1 1 200px"}} >
+                    <span className="text-[11px] font-semibold text-accent" >
                       {ex.hint}
                     </span>
-                    <span
-                      style={{
-                        display: "block",
-                        marginTop: 3,
-                        fontSize: 12,
-                        color: "var(--text-secondary)",
-                        lineHeight: 1.45,
-                        fontStyle: "italic",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
+                    <span className="block text-xs text-text-secondary italic overflow-hidden" style={{marginTop: 3, lineHeight: 1.45, textOverflow: "ellipsis", whiteSpace: "nowrap"}} >
                       {ex.text}
                     </span>
                   </button>
@@ -521,54 +315,25 @@ export function Paraphraser() {
         </div>
 
         {/* Right: Output */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)" }}>
+        <div className="flex flex-col gap-1.5" >
+          <div className="flex justify-between items-center" >
+            <span className="text-xs font-semibold text-text-secondary" >
               Kết quả viết lại
             </span>
             {result && <CopyButton text={result.result} />}
           </div>
-          <div
-            style={{
-              minHeight: 220,
-              padding: 16,
-              borderRadius: 12,
-              border: "1px solid var(--border)",
-              background: result
+          <div className="h-[220px] p-4 rounded-xl border border-(--border) text-[15px] overflow-auto" style={{background: result
                 ? "color-mix(in srgb, var(--success) 3%, var(--card-bg))"
-                : "var(--surface)",
-              fontSize: 15,
-              lineHeight: 1.7,
-              color: result ? "var(--text-primary)" : "var(--text-muted)",
-              whiteSpace: "pre-wrap",
-              overflow: "auto",
-            }}
-          >
+                : "var(--surface)", lineHeight: 1.7, color: result ? "var(--text-primary)" : "var(--text-muted)", whiteSpace: "pre-wrap"}} >
             {loading ? (
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  height: "100%",
-                  minHeight: 180,
-                  gap: 8,
-                  color: "var(--text-muted)",
-                }}
-              >
+              <div className="flex items-center justify-center h-full h-[180px] gap-2 text-text-muted" >
                 <Loader2 className="animate-spin" size={18} />
                 <span>Đang viết lại...</span>
               </div>
             ) : result ? (
               <WordDiff original={text.trim()} rewritten={result.result} />
             ) : (
-              <span style={{ fontStyle: "italic" }}>
+              <span className="italic" >
                 Kết quả viết lại sẽ hiển thị ở đây...
               </span>
             )}
@@ -586,26 +351,10 @@ export function Paraphraser() {
       `}</style>
 
       {/* Action bar */}
-      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+      <div className="flex items-center gap-2.5" >
         <button
           onClick={paraphrase}
-          disabled={!text.trim() || overLimit || loading}
-          style={{
-            padding: "10px 24px",
-            borderRadius: 10,
-            border: "none",
-            background:
-              !text.trim() || overLimit || loading ? "var(--border)" : "var(--accent)",
-            color: "var(--text-on-accent)",
-            fontSize: 14,
-            fontWeight: 600,
-            cursor: !text.trim() || overLimit || loading ? "not-allowed" : "pointer",
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            transition: "background 0.2s",
-          }}
-        >
+          disabled={!text.trim() || overLimit || loading} className="border-none text-sm font-semibold flex items-center gap-1.5" style={{padding: "10px 24px", borderRadius: 10, background: !text.trim() || overLimit || loading ? "var(--border)" : "var(--accent)", color: "var(--text-on-accent)", cursor: !text.trim() || overLimit || loading ? "not-allowed" : "pointer", transition: "background 0.2s"}} >
           {loading ? (
             <>
               <Loader2 className="animate-spin" /> Đang xử lý...
@@ -618,7 +367,7 @@ export function Paraphraser() {
         </button>
 
         {result && (
-          <span className="text-[var(--text-muted)]" style={{ fontSize: 12 }}>
+          <span className="text-text-muted text-xs" >
             {MODES.find((m) => m.key === mode)?.emoji}{" "}
             {MODES.find((m) => m.key === mode)?.label} · Mức thay đổi: {synonymLevel}%
           </span>
@@ -626,7 +375,7 @@ export function Paraphraser() {
 
         {/* Keyboard shortcut hint */}
         {text.trim() && !result && (
-          <span style={{ fontSize: 11, color: "var(--text-muted)", fontStyle: "italic" }}>
+          <span className="text-[11px] text-text-muted italic" >
             ⌘/Ctrl + Enter
           </span>
         )}
@@ -634,15 +383,7 @@ export function Paraphraser() {
 
       {/* Error message */}
       {error && (
-        <div
-          style={{
-            padding: "10px 16px",
-            borderRadius: 10,
-            background: "var(--error-bg)",
-            color: "var(--error)",
-            fontSize: 13,
-          }}
-        >
+        <div className="py-2.5 px-4 text-destructive text-[13px]" style={{borderRadius: 10, background: "var(--error-bg)"}} >
           {error}
         </div>
       )}

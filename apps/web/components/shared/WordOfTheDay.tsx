@@ -74,60 +74,28 @@ export function WordOfTheDay() {
           key="loading"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          style={{
-            padding: "24px",
-            borderRadius: "var(--radius-lg, 16px)",
-            border: "1px solid var(--border)",
-            background: "var(--card-bg, var(--surface))",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            minHeight: 120,
-          }}
-        >
-          <Loader2 className="animate-spin text-[var(--accent)]" size={20} />
+          exit={{ opacity: 0 }} className="p-6 border border-(--border) flex items-center justify-center h-[120px]" style={{borderRadius: "var(--radius-lg, 16px)", background: "var(--card-bg, var(--surface))"}} >
+          <Loader2 className="animate-spin text-accent" size={20} />
         </m.div>
       ) : word ? (
         <m.div
           key="content"
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.4, ease: "easeOut" }}
-          style={{
-            padding: "24px",
-            borderRadius: "var(--radius-lg, 16px)",
-            border: "1px solid var(--border)",
-            background: "linear-gradient(135deg, var(--card-bg, var(--surface)), var(--surface))",
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
+          transition={{ duration: 0.4, ease: "easeOut" }} className="p-6 border border-(--border) relative overflow-hidden" style={{borderRadius: "var(--radius-lg, 16px)", background: "linear-gradient(135deg, var(--card-bg, var(--surface)), var(--surface))"}} >
           {/* Decorative gradient accent */}
           <m.div
             animate={{ opacity: [0.1, 0.2, 0.1], scale: [1, 1.2, 1] }}
-            transition={{ repeat: Infinity, duration: 6 }}
-            style={{
-              position: "absolute",
-              top: 0,
-              right: 0,
-              width: 140,
-              height: 140,
-              background: "radial-gradient(circle at top right, var(--accent), transparent 70%)",
-              pointerEvents: "none",
-            }}
-          />
+            transition={{ repeat: Infinity, duration: 6 }} className="absolute w-[140px] h-[140px]" style={{top: 0, right: 0, background: "radial-gradient(circle at top right, var(--accent), transparent 70%)", pointerEvents: "none"}} />
 
           {/* Header */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16, position: "relative", zIndex: 1 }}>
+          <div className="flex items-center justify-between mb-4 relative z-[1]" >
             <m.div
               initial={{ opacity: 0, x: -5 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 }}
-              style={{ display: "flex", alignItems: "center", gap: 8 }}
-            >
-              <Star size={18} className="text-[var(--xp)]" />
-              <span style={{ fontSize: 13, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.05em", color: "var(--text-muted)" }}>Từ vựng hôm nay</span>
+              transition={{ delay: 0.1 }} className="flex items-center gap-2" >
+              <Star size={18} className="text-(--xp)" />
+              <span className="text-[13px] font-bold uppercase tracking-wider text-text-muted" >Từ vựng hôm nay</span>
             </m.div>
             {word.level && (
               <m.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: 0.2 }}>
@@ -140,27 +108,16 @@ export function WordOfTheDay() {
           <m.div
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 8, position: "relative", zIndex: 1 }}
-          >
-            <span style={{ fontSize: 32, fontWeight: 800, color: "var(--ink)", letterSpacing: "-0.02em" }}>
+            transition={{ delay: 0.15 }} className="flex items-baseline gap-3 mb-2 relative z-[1]" >
+            <span className="text-4xl font-extrabold text-ink tracking-tight" >
               {word.headword}
             </span>
             <m.button
               whileHover={{ scale: 1.1, color: "var(--accent)" }}
               whileTap={{ scale: 0.9 }}
               onClick={playAudio}
-              style={{
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                padding: 4,
-                color: "var(--accent-muted, var(--text-muted))",
-                fontSize: 20,
-                transition: "color 0.2s",
-              }}
-              aria-label="Phát âm"
-            >
+              
+              aria-label="Phát âm" className="bg-none border-none cursor-pointer p-1 text-xl" style={{color: "var(--accent-muted, var(--text-muted))", transition: "color 0.2s"}} >
               {isTtsLoading ? <Loader2 className="animate-spin" size={18} /> : <Volume2 />}
             </m.button>
           </m.div>
@@ -169,11 +126,9 @@ export function WordOfTheDay() {
           <m.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.2 }}
-            style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16, flexWrap: "wrap", position: "relative", zIndex: 1 }}
-          >
+            transition={{ delay: 0.2 }} className="flex items-center gap-2 mb-4 flex-wrap relative z-[1]" >
             {word.pronunciation && (
-              <span style={{ fontSize: 14, color: "var(--text-muted)", fontStyle: "italic", fontFamily: "var(--font-mono)" }}>
+              <span className="text-sm text-text-muted italic font-mono" >
                 /{word.pronunciation}/
               </span>
             )}
@@ -186,9 +141,7 @@ export function WordOfTheDay() {
           <m.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ delay: 0.25 }}
-            style={{ fontSize: 16, fontWeight: 600, color: "var(--ink)", margin: "0 0 8px", lineHeight: 1.5, position: "relative", zIndex: 1 }}
-          >
+            transition={{ delay: 0.25 }} className="text-base font-semibold text-ink mb-2 leading-normal relative z-[1]" >
             {word.overviewVi}
           </m.p>
 
@@ -197,9 +150,7 @@ export function WordOfTheDay() {
             <m.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.3 }}
-              style={{ fontSize: 14, color: "var(--text-muted)", margin: "0 0 16px", lineHeight: 1.5, position: "relative", zIndex: 1 }}
-            >
+              transition={{ delay: 0.3 }} className="text-sm text-text-muted mb-4 leading-normal relative z-[1]" >
               {word.overviewEn}
             </m.p>
           )}
@@ -209,20 +160,7 @@ export function WordOfTheDay() {
             <m.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.35 }}
-              style={{
-                padding: "12px 16px",
-                borderRadius: 12,
-                background: "var(--accent-muted, rgba(99,102,241,0.08))",
-                fontSize: 14,
-                fontStyle: "italic",
-                color: "var(--ink)",
-                marginBottom: 20,
-                borderLeft: "4px solid var(--accent)",
-                position: "relative",
-                zIndex: 1,
-              }}
-            >
+              transition={{ delay: 0.35 }} className="py-3 px-4 rounded-xl text-sm italic text-ink mb-5 relative z-[1]" style={{background: "var(--accent-muted, rgba(99,102,241,0.08))", borderLeft: "4px solid var(--accent)"}} >
               &ldquo;{word.example}&rdquo;
             </m.div>
           )}
@@ -235,27 +173,7 @@ export function WordOfTheDay() {
             whileHover={!isSaved ? { scale: 1.02, y: -2 } : {}}
             whileTap={!isSaved ? { scale: 0.98 } : {}}
             onClick={saveWord}
-            disabled={isSaved || saving}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: 10,
-              padding: "12px 20px",
-              borderRadius: 14,
-              border: isSaved ? "1px solid color-mix(in srgb, var(--success) 30%, transparent)" : "1px solid var(--accent)",
-              background: isSaved ? "color-mix(in srgb, var(--success) 10%, transparent)" : "var(--accent)",
-              color: isSaved ? "var(--success)" : "#fff",
-              fontSize: 14,
-              fontWeight: 700,
-              cursor: isSaved ? "default" : "pointer",
-              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-              width: "100%",
-              justifyContent: "center",
-              position: "relative",
-              zIndex: 1,
-              boxShadow: isSaved ? "none" : "0 4px 12px color-mix(in srgb, var(--accent) 30%, transparent)",
-            }}
-          >
+            disabled={isSaved || saving} className="flex items-center gap-2.5 py-3 px-5 text-sm font-bold w-full justify-center relative z-[1]" style={{borderRadius: 14, border: isSaved ? "1px solid color-mix(in srgb, var(--success) 30%, transparent)" : "1px solid var(--accent)", background: isSaved ? "color-mix(in srgb, var(--success) 10%, transparent)" : "var(--accent)", color: isSaved ? "var(--success)" : "#fff", cursor: isSaved ? "default" : "pointer", transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)", boxShadow: isSaved ? "none" : "0 4px 12px color-mix(in srgb, var(--accent) 30%, transparent)"}} >
             {saving ? (
               <Loader2 className="animate-spin" />
             ) : isSaved ? (

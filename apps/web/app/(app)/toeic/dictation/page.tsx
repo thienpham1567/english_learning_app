@@ -37,46 +37,18 @@ export default async function ToeicDictationPage() {
 	}
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				height: "100%",
-				minHeight: 0,
-				flex: 1,
-				overflow: "auto",
-			}}
-		>
-			<div style={{ padding: 16, display: "grid", gap: 16 }}>
+		<div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
+			<div className="p-4 grid gap-4" >
 				{["beginner", "intermediate", "advanced"].map((lv) => {
 					const list = grouped[lv] ?? [];
 					if (list.length === 0) return null;
 					return (
 						<Card key={lv} title={LEVEL_LABEL[lv]} size="small" extra={<Tag color={LEVEL_COLOR[lv]}>{list.length} câu</Tag>}>
-							<div
-								style={{
-									display: "grid",
-									gap: 8,
-									gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))",
-								}}
-							>
+							<div className="grid gap-2" style={{gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))"}} >
 								{list.map((item, i) => (
 									<Link
 										key={item.id}
-										href={`/toeic/dictation/${item.id}`}
-										style={{
-											padding: 10,
-											borderRadius: 8,
-											background: "var(--surface-hover)",
-											color: "var(--ink)",
-											border: "1px solid var(--border)",
-											textDecoration: "none",
-											display: "flex",
-											justifyContent: "space-between",
-											alignItems: "center",
-											fontSize: 13,
-										}}
-									>
+										href={`/toeic/dictation/${item.id}`} className="rounded-lg text-ink border border-(--border) flex justify-between items-center text-[13px]" style={{padding: 10, background: "var(--surface-hover)", textDecoration: "none"}} >
 										<span>#{i + 1}</span>
 										<Tag>{item.topic}</Tag>
 									</Link>

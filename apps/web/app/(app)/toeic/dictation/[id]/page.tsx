@@ -74,23 +74,14 @@ export default function DictationDetailPage() {
 	};
 
 	if (!item) {
-		return <div style={{ padding: 24 }}>Loading…</div>;
+		return <div className="p-6" >Loading…</div>;
 	}
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				height: "100%",
-				minHeight: 0,
-				flex: 1,
-				overflow: "auto",
-			}}
-		>
-			<div style={{ padding: 16, display: "grid", gap: 12, maxWidth: 720 }}>
+		<div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
+			<div className="p-4 grid gap-3 w-[720px]" >
 				<Card>
-					<div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+					<div className="flex items-center gap-3" >
 						<Button
 							icon={playing ? <PauseCircle /> : <PlayCircle />}
 							onClick={togglePlay}
@@ -98,7 +89,7 @@ export default function DictationDetailPage() {
 						>
 							{playing ? "Pause" : `Phát (${playCount})`}
 						</Button>
-						<span style={{ color: "var(--text-muted, #94a3b8)", fontSize: 13 }}>
+						<span className="text-text-muted text-[13px]" >
 							Nghe nhiều lần tùy ý
 						</span>
 					</div>
@@ -123,18 +114,17 @@ export default function DictationDetailPage() {
 						<Button
 							type="primary"
 							size="large"
-							style={{ marginTop: 12 }}
+							
 							loading={submitting}
 							disabled={!text.trim()}
-							onClick={submit}
-						>
+							onClick={submit} className="mt-3" >
 							Nộp bài
 						</Button>
 					</Card>
 				) : (
 					<>
 						<Card>
-							<div style={{ fontSize: 24, fontWeight: 700 }}>
+							<div className="text-3xl font-bold" >
 								{result.score}/100 ({result.matched}/{result.total} từ đúng)
 							</div>
 						</Card>
@@ -142,36 +132,25 @@ export default function DictationDetailPage() {
 							<div style={{ lineHeight: 2 }}>
 								{result.diff.map((e, i) => (
 									<span
-										key={i}
-										style={{
-											padding: "2px 6px",
-											marginRight: 4,
-											borderRadius: 4,
-											background:
-												e.type === "match"
+										key={i} className="mr-1 rounded" style={{padding: "2px 6px", background: e.type === "match"
 													? "color-mix(in srgb, var(--success) 15%, var(--surface))"
 													: e.type === "missing"
 														? "color-mix(in srgb, var(--error) 15%, var(--surface))"
-														: "color-mix(in srgb, var(--warning) 15%, var(--surface))",
-											color:
-												e.type === "match" ? "var(--success)" : e.type === "missing" ? "var(--error)" : "var(--warning)",
-											textDecoration: e.type === "extra" ? "line-through" : undefined,
-										}}
-									>
+														: "color-mix(in srgb, var(--warning) 15%, var(--surface))", color: e.type === "match" ? "var(--success)" : e.type === "missing" ? "var(--error)" : "var(--warning)", textDecoration: e.type === "extra" ? "line-through" : undefined}} >
 										{e.ref ?? e.user}
 									</span>
 								))}
 							</div>
-							<div style={{ marginTop: 12, fontSize: 12, color: "var(--text-muted)" }}>
-								<span style={{ color: "var(--success)" }}>● đúng</span> ·{" "}
-								<span style={{ color: "var(--error)" }}>● thiếu</span> ·{" "}
+							<div className="mt-3 text-xs text-text-muted" >
+								<span className="text-emerald-500" >● đúng</span> ·{" "}
+								<span className="text-destructive" >● thiếu</span> ·{" "}
 								<span style={{ color: "var(--warning)" }}>● thừa</span>
 							</div>
 						</Card>
 						<Card title="Bản gốc" size="small">
-							<div style={{ fontSize: 16 }}>{result.transcript}</div>
+							<div className="text-base" >{result.transcript}</div>
 							{result.vocabHints && result.vocabHints.length > 0 && (
-								<div style={{ marginTop: 12, display: "flex", gap: 8, flexWrap: "wrap" }}>
+								<div className="mt-3 flex gap-2 flex-wrap" >
 									{result.vocabHints.map((h) => (
 										<Tag key={h.word} color="blue">
 											{h.word} = {h.vi}
@@ -180,7 +159,7 @@ export default function DictationDetailPage() {
 								</div>
 							)}
 						</Card>
-						<div style={{ display: "flex", gap: 8 }}>
+						<div className="flex gap-2" >
 							<Button onClick={() => router.push("/toeic/dictation")}>Về danh sách</Button>
 							<Button
 								type="primary"

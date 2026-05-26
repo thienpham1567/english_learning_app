@@ -16,17 +16,8 @@ export default function DiagnosticPage() {
 	};
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				height: "100%",
-				minHeight: 0,
-				flex: 1,
-				overflow: "auto",
-			}}
-		>
-			<div style={{ padding: 16, flex: 1 }}>
+		<div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
+			<div className="p-4 flex-1" >
 				{session.state === "idle" && <DiagnosticIntro onStart={handleStart} />}
 				{(session.state === "loading") && <div>Đang tải đề…</div>}
 				{(session.state === "active" || session.state === "submitting") && (
@@ -47,7 +38,7 @@ export default function DiagnosticPage() {
 					<DiagnosticResult snapshot={session.baselineSnapshot} score={session.score} />
 				)}
 				{session.error && (
-					<div style={{ color: "var(--error)", marginTop: 8 }}>{session.error}</div>
+					<div className="text-destructive mt-2" >{session.error}</div>
 				)}
 			</div>
 		</div>

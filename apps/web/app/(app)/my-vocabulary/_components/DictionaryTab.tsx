@@ -33,8 +33,8 @@ type SavedWord = {
 
 const MASTERY_CONFIG: Record<string, { icon: React.ReactNode; label: string; color: string }> = {
   new: { icon: <Star style={{ color: "var(--warning)" }} />, label: "Mới", color: "var(--warning)" },
-  learning: { icon: <RefreshCw style={{ color: "var(--accent)" }} />, label: "Đang học", color: "var(--accent)" },
-  mastered: { icon: <CircleCheckBig style={{ color: "var(--success)" }} />, label: "Thành thạo", color: "var(--success)" },
+  learning: { icon: <RefreshCw className="text-accent" />, label: "Đang học", color: "var(--accent)" },
+  mastered: { icon: <CircleCheckBig className="text-emerald-500" />, label: "Thành thạo", color: "var(--success)" },
 };
 
 function getRecentSearches(): string[] {
@@ -142,16 +142,11 @@ export function DictionaryTab() {
   };
 
   return (
-    <div style={{ maxWidth: 1100, margin: "0 auto", width: "100%" }}>
+    <div className="w-[1100px] mx-auto w-full" >
       {/* Two-column layout on desktop */}
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "minmax(280px, 340px) minmax(0, 1fr)",
-        gap: 28,
-        alignItems: "start",
-      }} className="dictionary-grid">
+      <div className="dictionary-grid grid items-start" style={{gridTemplateColumns: "minmax(280px, 340px) minmax(0, 1fr)", gap: 28}} >
         {/* Left: Search + Recent */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <div className="flex flex-col gap-4" >
           <DictionarySearchPanel
             initialValue={query}
             onSubmit={doSearch}
@@ -164,12 +159,7 @@ export function DictionaryTab() {
         {/* Right: Result */}
         <div>
           {error && (
-            <div style={{
-              padding: "12px 16px", borderRadius: 12,
-              border: "1px solid color-mix(in srgb, var(--error) 30%, transparent)",
-              background: "var(--error-bg)", color: "var(--error)",
-              fontSize: 14, marginBottom: 16,
-            }}>
+            <div className="py-3 px-4 rounded-xl text-destructive text-sm mb-4" style={{border: "1px solid color-mix(in srgb, var(--error) 30%, transparent)", background: "var(--error-bg)"}} >
               {error}
             </div>
           )}
@@ -186,87 +176,50 @@ export function DictionaryTab() {
       </div>
 
       {/* Saved words section */}
-      <div style={{
-        marginTop: 32, paddingTop: 24,
-        borderTop: "1px solid var(--border)",
-      }}>
-        <div style={{
-          display: "flex", alignItems: "center", gap: 10,
-          marginBottom: 16,
-        }}>
-          <Star style={{ color: "var(--accent)", fontSize: 16 }} />
-          <span style={{
-            fontSize: 13, fontWeight: 800, textTransform: "uppercase",
-            letterSpacing: "0.12em", color: "var(--accent)",
-          }}>
+      <div className="mt-8" style={{paddingTop: 24, borderTop: "1px solid var(--border)"}} >
+        <div className="flex items-center gap-2.5 mb-4" >
+          <Star className="text-accent text-base" />
+          <span className="text-[13px] font-extrabold uppercase text-accent" style={{letterSpacing: "0.12em"}} >
             Từ đã lưu ({savedWords.length})
           </span>
         </div>
 
         {savedLoading ? (
-          <div style={{ display: "flex", justifyContent: "center", padding: 24 }}>
-            <Loader2 className="animate-spin text-[var(--accent)]" size={20} />
+          <div className="flex justify-center p-6" >
+            <Loader2 className="animate-spin text-accent" size={20} />
           </div>
         ) : savedWords.length === 0 ? (
-          <div style={{
-            padding: "24px 16px", textAlign: "center",
-            borderRadius: 14, border: "1px dashed var(--border)",
-            color: "var(--text-muted)", fontSize: 14,
-          }}>
+          <div className="text-center text-text-muted text-sm" style={{padding: "24px 16px", borderRadius: 14, border: "1px dashed var(--border)"}} >
             Chưa có từ nào được lưu. Tra từ và nhấn ⭐ để lưu!
           </div>
         ) : (
-          <div style={{
-            display: "grid", gap: 6,
-            gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))",
-          }}>
+          <div className="grid gap-1.5" style={{gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))"}} >
             {savedWords.map(w => {
               const mastery = MASTERY_CONFIG[w.mastery] ?? MASTERY_CONFIG.new;
               return (
                 <div
                   key={w.id}
-                  style={{
-                    padding: "12px 14px", borderRadius: 12,
-                    border: "1px solid var(--border)", background: "var(--surface)",
-                    display: "flex", alignItems: "center", gap: 10,
-                    cursor: "pointer", transition: "border-color 0.2s",
-                  }}
+                  
                   onClick={() => doSearch(w.query)}
                   onKeyDown={() => {}}
                   role="button"
-                  tabIndex={0}
-                >
-                  <div style={{
-                    width: 24, height: 24, borderRadius: 6, display: "grid",
-                    placeItems: "center", flexShrink: 0, fontSize: 11,
-                    background: `color-mix(in srgb, ${mastery.color} 10%, var(--surface))`,
-                    color: mastery.color,
-                  }}>
+                  tabIndex={0} className="rounded-xl border border-(--border) bg-(--surface) flex items-center gap-2.5 cursor-pointer" style={{padding: "12px 14px", transition: "border-color 0.2s"}} >
+                  <div className="w-[24px] h-[24px] rounded-md grid shrink-0 text-[11px]" style={{placeItems: "center", background: `color-mix(in srgb, ${mastery.color} 10%, var(--surface))`, color: mastery.color}} >
                     {mastery.icon}
                   </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{
-                      fontSize: 14, fontWeight: 600, color: "var(--ink)",
-                      overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                    }}>
+                  <div className="flex-1 w-[0px]" >
+                    <div className="text-sm font-semibold text-ink overflow-hidden" style={{textOverflow: "ellipsis", whiteSpace: "nowrap"}} >
                       {w.headword ?? w.query}
                     </div>
                     {w.level && (
-                      <span style={{ fontSize: 10, color: "var(--text-muted)", fontWeight: 600 }}>
+                      <span className="text-[10px] text-text-muted font-semibold" >
                         {w.level}
                       </span>
                     )}
                   </div>
                   <button
                     type="button"
-                    onClick={(e) => { e.stopPropagation(); removeSavedWord(w); }}
-                    style={{
-                      width: 24, height: 24, borderRadius: 6, border: "none",
-                      background: "transparent", cursor: "pointer",
-                      color: "var(--text-muted)", fontSize: 12,
-                      display: "grid", placeItems: "center",
-                    }}
-                  >
+                    onClick={(e) => { e.stopPropagation(); removeSavedWord(w); }} className="w-[24px] h-[24px] rounded-md border-none bg-transparent cursor-pointer text-text-muted text-xs grid" style={{placeItems: "center"}} >
                     <Trash2 />
                   </button>
                 </div>

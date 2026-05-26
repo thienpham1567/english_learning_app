@@ -82,14 +82,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
       open={query !== null}
       onClose={onClose}
       title={
-        <span
-          style={{
-            fontSize: 16,
-            fontWeight: 900,
-            color: "var(--text-primary)",
-            fontFamily: "var(--font-display)",
-          }}
-        >
+        <span className="text-base font-black text-text-primary font-display" >
           Chi tiết từ vựng
         </span>
       }
@@ -100,47 +93,19 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
         header: { borderBottom: "1px solid var(--border)", background: "var(--surface)" },
       }}
       extra={
-        <div style={{ display: "flex", gap: 6 }}>
+        <div className="flex gap-1.5" >
           <m.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={onToggleSaved}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 4,
-              padding: "5px 12px",
-              borderRadius: 8,
-              border: "1px solid var(--border)",
-              background: saved ? "var(--accent-light)" : "var(--surface-alt)",
-              color: saved ? "var(--accent)" : "var(--text-secondary)",
-              fontSize: 12,
-              fontWeight: 800,
-              cursor: "pointer",
-            }}
-          >
-            {saved ? <Star style={{ color: "var(--accent)" }} /> : <Star />}
+            onClick={onToggleSaved} className="items-center gap-1 rounded-lg border border-(--border) text-xs font-extrabold cursor-pointer" style={{display: "inline-flex", padding: "5px 12px", background: saved ? "var(--accent-light)" : "var(--surface-alt)", color: saved ? "var(--accent)" : "var(--text-secondary)"}} >
+            {saved ? <Star className="text-accent" /> : <Star />}
             <span>{saved ? "Đã lưu" : "Lưu"}</span>
           </m.button>
 
           <m.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 4,
-              padding: "5px 12px",
-              borderRadius: 8,
-              border: "1px solid var(--border)",
-              background: "var(--surface-alt)",
-              color: "var(--text-secondary)",
-              fontSize: 12,
-              fontWeight: 800,
-              cursor: "pointer",
-            }}
-          >
+            onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)} className="items-center gap-1 rounded-lg border border-(--border) bg-surface-alt text-text-secondary text-xs font-extrabold cursor-pointer" style={{display: "inline-flex", padding: "5px 12px"}} >
             <LinkIcon />
             <span>Tra cứu</span>
           </m.button>
@@ -159,211 +124,85 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
       {status === "loading" && <Skeleton active paragraph={{ rows: 6 }} />}
 
       {status === "error" && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <p style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 500, margin: 0 }}>
+        <div className="flex flex-col gap-3" >
+          <p className="text-[13px] text-text-secondary font-medium m-0" >
             Định nghĩa không còn trong bộ nhớ đệm hoặc bị lỗi.
           </p>
-          <p style={{ fontSize: 12, color: "var(--text-muted)", margin: 0 }}>
+          <p className="text-xs text-text-muted m-0" >
             Hãy tra lại từ này trong từ điển để xem chi tiết đầy đủ.
           </p>
           <m.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
-            style={{
-              marginTop: 8,
-              height: 38,
-              borderRadius: 8,
-              border: "none",
-              background: "var(--accent)",
-              color: "var(--text-on-accent)",
-              fontWeight: 800,
-              fontSize: 13,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 6,
-            }}
-          >
+            onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)} className="mt-2 h-[38px] rounded-lg border-none font-extrabold text-[13px] cursor-pointer flex items-center justify-center gap-1.5" style={{background: "var(--accent)", color: "var(--text-on-accent)"}} >
             <LinkIcon /> Tra lại ngay
           </m.button>
         </div>
       )}
 
       {status === "ok" && data && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+        <div className="flex flex-col gap-5" >
           <div>
-            <h3
-              style={{
-                fontSize: 26,
-                fontWeight: 900,
-                fontFamily: "var(--font-display)",
-                color: "var(--text-primary)",
-                margin: 0,
-              }}
-            >
+            <h3 className="font-black font-display text-text-primary m-0" style={{fontSize: 26}} >
               {data.headword}
             </h3>
             {data.partOfSpeech && (
-              <span
-                style={{
-                  fontSize: 13.5,
-                  fontStyle: "italic",
-                  color: "var(--text-muted)",
-                  fontWeight: 600,
-                }}
-              >
+              <span className="italic text-text-muted font-semibold" style={{fontSize: 13.5}} >
                 ({data.partOfSpeech})
               </span>
             )}
           </div>
 
           {(data.phoneticsUs || data.phoneticsUk) && (
-            <div
-              style={{
-                display: "flex",
-                gap: 14,
-                background: "var(--surface-alt)",
-                padding: "10px 14px",
-                borderRadius: "var(--radius-lg)",
-                border: "1px solid var(--border)",
-              }}
-            >
+            <div className="flex gap-3.5 bg-surface-alt rounded-(--radius-lg) border border-(--border)" style={{padding: "10px 14px"}} >
               {data.phoneticsUs && (
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 4,
-                    fontSize: 13,
-                    color: "var(--text-secondary)",
-                    fontWeight: 700,
-                  }}
-                >
+                <div className="flex items-center gap-1 text-[13px] text-text-secondary font-bold" >
                   <span>🇺🇸 {data.phoneticsUs}</span>
                 </div>
               )}
               {data.phoneticsUk && (
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 4,
-                    fontSize: 13,
-                    color: "var(--text-secondary)",
-                    fontWeight: 700,
-                  }}
-                >
+                <div className="flex items-center gap-1 text-[13px] text-text-secondary font-bold" >
                   <span>🇬🇧 {data.phoneticsUk}</span>
                 </div>
               )}
             </div>
           )}
 
-          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+          <div className="flex gap-1.5 flex-wrap" >
             {levelStyle && (
-              <span
-                style={{
-                  fontSize: 11,
-                  fontWeight: 800,
-                  padding: "3px 8px",
-                  borderRadius: 6,
-                  background: levelStyle.bg,
-                  color: levelStyle.color,
-                  border: `1px solid ${levelStyle.border}`,
-                }}
-              >
+              <span className="text-[11px] font-extrabold rounded-md" style={{padding: "3px 8px", background: levelStyle.bg, color: levelStyle.color, border: `1px solid ${levelStyle.border}`}} >
                 Trình độ: {data.level}
               </span>
             )}
-            <span
-              style={{
-                fontSize: 11,
-                fontWeight: 800,
-                padding: "3px 8px",
-                borderRadius: 6,
-                background: "var(--surface-alt)",
-                color: "var(--text-secondary)",
-                border: "1px solid var(--border)",
-              }}
-            >
+            <span className="text-[11px] font-extrabold rounded-md bg-surface-alt text-text-secondary border border-(--border)" style={{padding: "3px 8px"}} >
               {getTypeLabel(data)}
             </span>
           </div>
 
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              gap: 20,
-              borderTop: "1.5px dashed var(--border)",
-              paddingTop: 20,
-            }}
-          >
+          <div className="flex flex-col gap-5" style={{borderTop: "1.5px dashed var(--border)", paddingTop: 20}} >
             {data.senses.map((sense) => (
-              <div key={sense.id} style={{ display: "flex", flexDirection: "column", gap: 6 }}>
-                <span
-                  style={{
-                    fontSize: 10.5,
-                    fontWeight: 900,
-                    textTransform: "uppercase",
-                    letterSpacing: "0.08em",
-                    color: "var(--accent)",
-                  }}
-                >
+              <div key={sense.id} className="flex flex-col gap-1.5" >
+                <span className="text-[10.5px] font-black uppercase tracking-widest text-accent" >
                   {sense.label || "Nghĩa"}
                 </span>
 
-                <p
-                  style={{
-                    fontSize: 14.5,
-                    color: "var(--text-primary)",
-                    fontWeight: 700,
-                    margin: 0,
-                    lineHeight: 1.5,
-                  }}
-                >
+                <p className="text-text-primary font-bold m-0 leading-normal" style={{fontSize: 14.5}} >
                   {sense.definitionEn}
                 </p>
                 {sense.shortMeaningsVi && sense.shortMeaningsVi.length > 0 && (
-                  <p
-                    style={{
-                      fontSize: 13.5,
-                      color: "var(--text-secondary)",
-                      fontWeight: 500,
-                      margin: "2px 0 0",
-                      lineHeight: 1.5,
-                    }}
-                  >
+                  <p className="text-text-secondary font-medium leading-normal" style={{fontSize: 13.5, margin: "2px 0 0"}} >
                     {sense.shortMeaningsVi.join(", ")}
                   </p>
                 )}
 
                 {sense.examples.slice(0, 3).map((ex, i) => (
                   <div
-                    key={i}
-                    style={{
-                      borderLeft: "2.5px solid var(--accent-muted)",
-                      paddingLeft: 12,
-                      marginTop: 6,
-                      display: "flex",
-                      flexDirection: "column",
-                      gap: 2,
-                    }}
-                  >
-                    <span
-                      style={{
-                        fontSize: 13,
-                        fontStyle: "italic",
-                        color: "var(--text-secondary)",
-                        fontWeight: 600,
-                      }}
-                    >
+                    key={i} className="mt-1.5 flex flex-col" style={{borderLeft: "2.5px solid var(--accent-muted)", paddingLeft: 12, gap: 2}} >
+                    <span className="text-[13px] italic text-text-secondary font-semibold" >
                       {ex.en}
                     </span>
                     {ex.vi && (
-                      <span style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 500 }}>
+                      <span className="text-xs text-text-muted font-medium" >
                         {ex.vi}
                       </span>
                     )}
@@ -376,24 +215,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
           <m.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
-            style={{
-              marginTop: "auto",
-              height: 40,
-              borderRadius: "var(--radius-lg)",
-              border: "none",
-              background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-              color: "var(--text-on-accent)",
-              fontWeight: 800,
-              fontSize: 13.5,
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 6,
-              boxShadow: "0 2px 8px var(--accent-muted)",
-            }}
-          >
+            onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)} className="h-[40px] rounded-(--radius-lg) border-none font-extrabold cursor-pointer flex items-center justify-center gap-1.5" style={{marginTop: "auto", background: "linear-gradient(135deg, var(--accent), var(--secondary))", color: "var(--text-on-accent)", fontSize: 13.5, boxShadow: "0 2px 8px var(--accent-muted)"}} >
             <span>Xem chi tiết trong Từ điển</span>
             <ArrowRight />
           </m.button>

@@ -68,46 +68,15 @@ function SectionLabel({
 	badge?: string;
 }) {
 	return (
-		<div
-			style={{
-				display: "flex",
-				alignItems: "center",
-				gap: 8,
-				marginBottom: 12,
-			}}
-		>
-			<span
-				style={{
-					fontSize: 15,
-					color: "var(--accent)",
-					display: "grid",
-					placeItems: "center",
-				}}
-			>
+		<div className="flex items-center gap-2 mb-3" >
+			<span className="text-[15px] text-accent grid" style={{placeItems: "center"}} >
 				{icon}
 			</span>
-			<span
-				style={{
-					fontSize: 13,
-					fontWeight: 800,
-					color: "var(--text-primary)",
-					letterSpacing: "-0.01em",
-				}}
-			>
+			<span className="text-[13px] font-extrabold text-text-primary" style={{letterSpacing: "-0.01em"}} >
 				{text}
 			</span>
 			{badge && (
-				<span
-					style={{
-						fontSize: 10,
-						fontWeight: 700,
-						color: "var(--accent)",
-						background: "var(--accent-light)",
-						padding: "2px 8px",
-						borderRadius: 99,
-						marginLeft: "auto",
-					}}
-				>
+				<span className="text-[10px] font-bold text-accent rounded-full" style={{background: "var(--accent-light)", padding: "2px 8px", marginLeft: "auto"}} >
 					{badge}
 				</span>
 			)}
@@ -132,42 +101,15 @@ function Chip({
 		<m.button
 			type="button"
 			onClick={onClick}
-			whileTap={{ scale: 0.95 }}
-			style={{
-				flex: "0 0 auto",
-				padding: "8px 16px",
-				borderRadius: 12,
-				border: active
+			whileTap={{ scale: 0.95 }} className="py-2 px-4 rounded-xl cursor-pointer flex items-center relative overflow-hidden" style={{flex: "0 0 auto", border: active
 					? `1.5px solid ${color}`
-					: "1.5px solid var(--border)",
-				background: active
+					: "1.5px solid var(--border)", background: active
 					? `color-mix(in srgb, ${color} 12%, transparent)`
-					: "var(--surface-alt)",
-				color: active ? color : "var(--text-secondary)",
-				cursor: "pointer",
-				fontSize: 12.5,
-				fontWeight: active ? 800 : 600,
-				display: "flex",
-				alignItems: "center",
-				gap: 5,
-				transition: "all 0.2s ease",
-				whiteSpace: "nowrap",
-				position: "relative",
-				overflow: "hidden",
-			}}
-		>
+					: "var(--surface-alt)", color: active ? color : "var(--text-secondary)", fontSize: 12.5, fontWeight: active ? 800 : 600, gap: 5, transition: "all 0.2s ease", whiteSpace: "nowrap"}} >
 			{children}
 			{active && (
 				<m.div
-					layoutId="chip-glow"
-					style={{
-						position: "absolute",
-						inset: 0,
-						borderRadius: 12,
-						background: `radial-gradient(circle at center, color-mix(in srgb, ${color} 8%, transparent), transparent)`,
-						pointerEvents: "none",
-					}}
-				/>
+					layoutId="chip-glow" className="absolute rounded-xl" style={{inset: 0, background: `radial-gradient(circle at center, color-mix(in srgb, ${color} 8%, transparent), transparent)`, pointerEvents: "none"}} />
 			)}
 		</m.button>
 	);
@@ -188,47 +130,15 @@ function CountBtn({
 			type="button"
 			onClick={onClick}
 			whileTap={{ scale: 0.92 }}
-			whileHover={{ y: -2 }}
-			style={{
-				position: "relative",
-				flex: 1,
-				padding: "14px 0",
-				borderRadius: 14,
-				border: active
+			whileHover={{ y: -2 }} className="relative flex-1 cursor-pointer flex flex-col items-center" style={{padding: "14px 0", borderRadius: 14, border: active
 					? "1.5px solid var(--accent)"
-					: "1.5px solid var(--border)",
-				background: active ? "var(--accent)" : "var(--surface-alt)",
-				color: active ? "var(--text-on-accent)" : "var(--text-secondary)",
-				cursor: "pointer",
-				display: "flex",
-				flexDirection: "column",
-				alignItems: "center",
-				gap: 2,
-				transition: "all 0.25s ease",
-				boxShadow: active
+					: "1.5px solid var(--border)", background: active ? "var(--accent)" : "var(--surface-alt)", color: active ? "var(--text-on-accent)" : "var(--text-secondary)", gap: 2, transition: "all 0.25s ease", boxShadow: active
 					? "0 4px 16px color-mix(in srgb, var(--accent) 30%, transparent)"
-					: "none",
-			}}
-		>
-			<span
-				style={{
-					fontSize: 18,
-					fontWeight: 900,
-					lineHeight: 1,
-					fontFamily: "var(--font-display)",
-				}}
-			>
+					: "none"}} >
+			<span className="text-lg font-black leading-none font-display" >
 				{value}
 			</span>
-			<span
-				style={{
-					fontSize: 10,
-					fontWeight: 700,
-					opacity: active ? 0.85 : 0.6,
-					textTransform: "uppercase",
-					letterSpacing: "0.05em",
-				}}
-			>
+			<span className="text-[10px] font-bold uppercase tracking-wider" style={{opacity: active ? 0.85 : 0.6}} >
 				câu
 			</span>
 		</m.button>
@@ -261,134 +171,43 @@ export function PracticeSetup({
 		<m.div
 			initial={{ opacity: 0, y: 16 }}
 			animate={{ opacity: 1, y: 0 }}
-			transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-			style={{
-				maxWidth: 620,
-				width: "100%",
-				margin: "20px auto",
-			}}
-		>
+			transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }} className="w-[620px] w-full" style={{margin: "20px auto"}} >
 			{/* ── Glass card ── */}
-			<div
-				style={{
-					background:
-						"color-mix(in srgb, var(--surface) 85%, transparent)",
-					backdropFilter: "blur(20px)",
-					border: "1.5px solid var(--border)",
-					borderRadius: "var(--radius-2xl)",
-					padding: "28px 28px 24px",
-					boxShadow: "var(--shadow-lg)",
-					position: "relative",
-					overflow: "hidden",
-				}}
-			>
+			<div className="rounded-(--radius-2xl) relative overflow-hidden" style={{background: "color-mix(in srgb, var(--surface) 85%, transparent)", backdropFilter: "blur(20px)", border: "1.5px solid var(--border)", padding: "28px 28px 24px", boxShadow: "var(--shadow-lg)"}} >
 				{/* Ambient glow */}
-				<div
-					style={{
-						position: "absolute",
-						top: -60,
-						right: -60,
-						width: 200,
-						height: 200,
-						borderRadius: "50%",
-						background:
-							"radial-gradient(circle, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%)",
-						pointerEvents: "none",
-					}}
-				/>
-				<div
-					style={{
-						position: "absolute",
-						bottom: -80,
-						left: -40,
-						width: 180,
-						height: 180,
-						borderRadius: "50%",
-						background:
-							"radial-gradient(circle, color-mix(in srgb, var(--info) 6%, transparent), transparent 70%)",
-						pointerEvents: "none",
-					}}
-				/>
+				<div className="absolute w-[200px] h-[200px] rounded-full" style={{top: -60, right: -60, background: "radial-gradient(circle, color-mix(in srgb, var(--accent) 10%, transparent), transparent 70%)", pointerEvents: "none"}} />
+				<div className="absolute w-[180px] h-[180px] rounded-full" style={{bottom: -80, left: -40, background: "radial-gradient(circle, color-mix(in srgb, var(--info) 6%, transparent), transparent 70%)", pointerEvents: "none"}} />
 
 				{/* Header */}
-				<div
-					style={{
-						display: "flex",
-						alignItems: "center",
-						gap: 14,
-						marginBottom: 28,
-						position: "relative",
-					}}
-				>
+				<div className="flex items-center gap-3.5 relative" style={{marginBottom: 28}} >
 					<m.div
 						whileHover={{ rotate: 15, scale: 1.08 }}
-						transition={{ type: "spring", stiffness: 400 }}
-						style={{
-							width: 44,
-							height: 44,
-							borderRadius: 14,
-							background:
-								"linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #FFD700))",
-							boxShadow:
-								"0 6px 20px color-mix(in srgb, var(--accent) 25%, transparent)",
-							display: "grid",
-							placeItems: "center",
-							color: "var(--text-on-accent)",
-							fontSize: 20,
-							flexShrink: 0,
-						}}
-					>
+						transition={{ type: "spring", stiffness: 400 }} className="w-[44px] h-[44px] grid text-xl shrink-0" style={{borderRadius: 14, background: "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #FFD700))", boxShadow: "0 6px 20px color-mix(in srgb, var(--accent) 25%, transparent)", placeItems: "center", color: "var(--text-on-accent)"}} >
 						<Trophy />
 					</m.div>
 					<div>
-						<h3
-							style={{
-								margin: 0,
-								fontSize: 18,
-								fontWeight: 900,
-								color: "var(--ink)",
-								fontFamily: "var(--font-display)",
-								letterSpacing: "-0.02em",
-								lineHeight: 1.2,
-							}}
-						>
+						<h3 className="m-0 text-lg font-black text-ink font-display tracking-tight" style={{lineHeight: 1.2}} >
 							Cấu hình luyện đề
 						</h3>
-						<p
-							style={{
-								margin: "3px 0 0",
-								fontSize: 12,
-								color: "var(--text-muted)",
-								fontWeight: 600,
-							}}
-						>
+						<p className="text-xs text-text-muted font-semibold" style={{margin: "3px 0 0"}} >
 							Chọn đề, phần thi và số câu để bắt đầu
 						</p>
 					</div>
 				</div>
 
 				{/* ── Section 1: Exam selection ── */}
-				<div style={{ position: "relative", marginBottom: 24 }}>
+				<div className="relative mb-6" >
 					<SectionLabel
 						icon={<Trophy />}
 						text="Đề thi TOEIC"
 						badge={`${exams.length + 1} đề`}
 					/>
-					<div
-						style={{
-							display: "flex",
-							gap: 8,
-							overflowX: "auto",
-							paddingBottom: 4,
-							scrollbarWidth: "none",
-							WebkitOverflowScrolling: "touch",
-						}}
-					>
+					<div className="flex gap-2 pb-1" style={{overflowX: "auto", scrollbarWidth: "none", WebkitOverflowScrolling: "touch"}} >
 						<Chip
 							active={selectedExam === "random"}
 							onClick={() => setSelectedExam("random")}
 						>
-							<span style={{ fontSize: 14 }}>🎲</span>
+							<span className="text-sm" >🎲</span>
 							Ngẫu nhiên
 						</Chip>
 						{exams.map((e) => (
@@ -402,44 +221,19 @@ export function PracticeSetup({
 						))}
 					</div>
 					{/* Fade edge hint for scroll */}
-					<div
-						style={{
-							position: "absolute",
-							top: 32,
-							right: 0,
-							bottom: 4,
-							width: 40,
-							background:
-								"linear-gradient(90deg, transparent, color-mix(in srgb, var(--surface) 85%, transparent))",
-							pointerEvents: "none",
-							borderRadius: "0 12px 12px 0",
-						}}
-					/>
+					<div className="absolute w-[40px]" style={{top: 32, right: 0, bottom: 4, background: "linear-gradient(90deg, transparent, color-mix(in srgb, var(--surface) 85%, transparent))", pointerEvents: "none", borderRadius: "0 12px 12px 0"}} />
 				</div>
 
 				{/* Divider */}
-				<div
-					style={{
-						height: 1,
-						background:
-							"linear-gradient(90deg, transparent, var(--border), transparent)",
-						marginBottom: 24,
-					}}
-				/>
+				<div className="h-[1px] mb-6" style={{background: "linear-gradient(90deg, transparent, var(--border), transparent)"}} />
 
 				{/* ── Section 2: Part selection ── */}
-				<div style={{ marginBottom: 24 }}>
+				<div className="mb-6" >
 					<SectionLabel
 						icon={<Compass />}
 						text="Phần thi (Part)"
 					/>
-					<div
-						style={{
-							display: "grid",
-							gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))",
-							gap: 8,
-						}}
-					>
+					<div className="grid gap-2" style={{gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))"}} >
 						{PARTS.map((p) => (
 							<Chip
 								key={p.value}
@@ -448,7 +242,7 @@ export function PracticeSetup({
 								accentColor={p.color}
 							>
 								{p.icon && (
-									<span style={{ fontSize: 13 }}>{p.icon}</span>
+									<span className="text-[13px]" >{p.icon}</span>
 								)}
 								{p.label}
 							</Chip>
@@ -457,14 +251,7 @@ export function PracticeSetup({
 				</div>
 
 				{/* Divider */}
-				<div
-					style={{
-						height: 1,
-						background:
-							"linear-gradient(90deg, transparent, var(--border), transparent)",
-						marginBottom: 24,
-					}}
-				/>
+				<div className="h-[1px] mb-6" style={{background: "linear-gradient(90deg, transparent, var(--border), transparent)"}} />
 
 				{/* ── Section 3: Count selection ── */}
 				<div style={{ marginBottom: 28 }}>
@@ -472,7 +259,7 @@ export function PracticeSetup({
 						icon={<Hash />}
 						text="Số lượng câu hỏi"
 					/>
-					<div style={{ display: "flex", gap: 10 }}>
+					<div className="flex gap-2.5" >
 						{COUNTS.map((c) => (
 							<CountBtn
 								key={c}
@@ -504,29 +291,7 @@ export function PracticeSetup({
 							part: parsePart(selectedPart),
 							count,
 						})
-					}
-					style={{
-						width: "100%",
-						padding: "16px",
-						background:
-							"linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 80%, #FFD700))",
-						color: "var(--text-on-accent)",
-						fontSize: 15,
-						fontWeight: 900,
-						border: "none",
-						borderRadius: "var(--radius-lg)",
-						cursor: "pointer",
-						display: "flex",
-						justifyContent: "center",
-						alignItems: "center",
-						gap: 10,
-						boxShadow:
-							"0 4px 18px color-mix(in srgb, var(--accent) 30%, transparent)",
-						position: "relative",
-						overflow: "hidden",
-						letterSpacing: "-0.01em",
-					}}
-				>
+					} className="w-full p-4 text-[15px] font-black border-none rounded-(--radius-lg) cursor-pointer flex justify-center items-center gap-2.5 relative overflow-hidden" style={{background: "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 80%, #FFD700))", color: "var(--text-on-accent)", boxShadow: "0 4px 18px color-mix(in srgb, var(--accent) 30%, transparent)", letterSpacing: "-0.01em"}} >
 					{/* Shimmer overlay */}
 					<m.div
 						animate={{
@@ -537,32 +302,13 @@ export function PracticeSetup({
 							repeat: Infinity,
 							ease: "linear",
 							repeatDelay: 2,
-						}}
-						style={{
-							position: "absolute",
-							top: 0,
-							left: 0,
-							width: "40%",
-							height: "100%",
-							background:
-								"linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)",
-							pointerEvents: "none",
-						}}
-					/>
+						}} className="absolute h-full" style={{top: 0, left: 0, width: "40%", background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)", pointerEvents: "none"}} />
 					<Zap size={16} />
 					<span>Bắt đầu luyện tập ngay</span>
 				</m.button>
 
 				{/* ── Summary badge ── */}
-				<div
-					style={{
-						marginTop: 16,
-						display: "flex",
-						justifyContent: "center",
-						gap: 16,
-						flexWrap: "wrap",
-					}}
-				>
+				<div className="mt-4 flex justify-center gap-4 flex-wrap" >
 					{[
 						{
 							label: "Đề",
@@ -581,26 +327,9 @@ export function PracticeSetup({
 						{ label: "Câu", value: `${count}` },
 					].map((s) => (
 						<div
-							key={s.label}
-							style={{
-								display: "flex",
-								alignItems: "center",
-								gap: 5,
-								fontSize: 11,
-								color: "var(--text-muted)",
-								fontWeight: 600,
-							}}
-						>
-							<span
-								style={{
-									width: 4,
-									height: 4,
-									borderRadius: "50%",
-									background: "var(--accent)",
-									opacity: 0.6,
-								}}
-							/>
-							<span style={{ fontWeight: 700, color: "var(--text-secondary)" }}>
+							key={s.label} className="flex items-center text-[11px] text-text-muted font-semibold" style={{gap: 5}} >
+							<span className="w-[4px] h-[4px] rounded-full" style={{background: "var(--accent)", opacity: 0.6}} />
+							<span className="font-bold text-text-secondary" >
 								{s.label}:
 							</span>
 							<span>{s.value}</span>

@@ -227,15 +227,7 @@ export function ToeicVocabularySection({ className }: Props) {
                 <span className="text-lg">{cat.emoji}</span>
                 <span className="flex-1 text-sm font-semibold text-(--ink)">{cat.label}</span>
                 <span className="text-[11px] text-(--text-muted)">{cat.words.length} từ</span>
-                <ChevronDown
-                  style={{
-                    fontSize: 14,
-                    flexShrink: 0,
-                    color: "var(--text-muted)",
-                    transition: "transform 0.2s",
-                    transform: isExpanded ? "rotate(180deg)" : "rotate(0)",
-                  }}
-                />
+                <ChevronDown className="text-sm shrink-0 text-text-muted" style={{transition: "transform 0.2s", transform: isExpanded ? "rotate(180deg)" : "rotate(0)"}} />
               </button>
 
               {/* Word list */}
@@ -250,14 +242,7 @@ export function ToeicVocabularySection({ className }: Props) {
                         className="group flex items-center gap-1 rounded-md border border-(--border) bg-(--bg-deep) px-2.5 py-1 text-[13px] text-(--ink) transition hover:border-(--accent) hover:bg-(--accent)/5 hover:text-(--accent)"
                       >
                         {word}
-                        <LinkIcon
-                          style={{
-                            fontSize: 10,
-                            flexShrink: 0,
-                            opacity: 0,
-                            transition: "opacity 0.2s",
-                          }}
-                        />
+                        <LinkIcon className="text-[10px] shrink-0" style={{opacity: 0, transition: "opacity 0.2s"}} />
                       </button>
                     ))}
                   </div>

@@ -46,24 +46,15 @@ export default async function WritingResultPage({
 	const promptById = new Map(prompts.map((p) => [p.id, p]));
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				height: "100%",
-				minHeight: 0,
-				flex: 1,
-				overflow: "auto",
-			}}
-		>
-			<div style={{ padding: 16, display: "grid", gap: 16, maxWidth: 800 }}>
+		<div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
+			<div className="p-4 grid gap-4 w-[800px]" >
 				<Card>
-					<div style={{ textAlign: "center" }}>
-						<div style={{ fontSize: 56, fontWeight: 800, color: "var(--accent)" }}>
+					<div className="text-center" >
+						<div className="font-extrabold text-accent" style={{fontSize: 56}} >
 							{s.scaledScore ?? "—"}
 						</div>
-						<div style={{ color: "var(--text-muted)" }}>/ 200 (TOEIC Writing)</div>
-						<div style={{ marginTop: 6, color: "var(--text-muted)" }}>
+						<div className="text-text-muted" >/ 200 (TOEIC Writing)</div>
+						<div className="mt-1.5 text-text-muted" >
 							Raw: {s.rawScore ?? "—"} / 28
 						</div>
 					</div>
@@ -93,32 +84,15 @@ export default async function WritingResultPage({
 								{p.type === "q1_5_picture" && p.imageUrl && (
 									<img loading="lazy" decoding="async"
 										src={p.imageUrl}
-										alt=""
-										style={{ maxWidth: 200, borderRadius: 4, marginBottom: 8 }}
-									/>
+										alt="" className="w-[200px] rounded mb-2" />
 								)}
 								{r ? (
 									<>
-										<div
-											style={{
-												background: "var(--surface, #0f172a)",
-												padding: 10,
-												borderRadius: 6,
-												whiteSpace: "pre-wrap",
-												marginBottom: 8,
-											}}
-										>
-											{r.text || <em style={{ color: "var(--text-muted)" }}>(empty)</em>}
+										<div className="bg-(--surface) rounded-md mb-2" style={{padding: 10, whiteSpace: "pre-wrap"}} >
+											{r.text || <em className="text-text-muted" >(empty)</em>}
 										</div>
 										{r.feedbackVi && (
-											<div
-												style={{
-													fontSize: 13,
-													color: "var(--text-muted)",
-													borderLeft: "3px solid var(--accent)",
-													paddingLeft: 10,
-												}}
-											>
+											<div className="text-[13px] text-text-muted" style={{borderLeft: "3px solid var(--accent)", paddingLeft: 10}} >
 												<strong>Feedback:</strong> {r.feedbackVi}
 											</div>
 										)}
@@ -130,18 +104,9 @@ export default async function WritingResultPage({
 						);
 					})}
 
-				<div style={{ display: "flex", gap: 8 }}>
+				<div className="flex gap-2" >
 					<Link
-						href="/toeic/writing"
-						style={{
-							padding: "8px 16px",
-							borderRadius: 8,
-							background: "var(--surface-hover)",
-							color: "var(--ink)",
-							border: "1px solid var(--border)",
-							textDecoration: "none",
-						}}
-					>
+						href="/toeic/writing" className="py-2 px-4 rounded-lg text-ink border border-(--border)" style={{background: "var(--surface-hover)", textDecoration: "none"}} >
 						Về Hub
 					</Link>
 				</div>

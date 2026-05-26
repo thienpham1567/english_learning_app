@@ -180,25 +180,25 @@ export default function ShadowingMode({ examMode }: Props) {
 
   // ── RENDER ──
   return (
-    <div style={{ maxWidth: 600, margin: "0 auto", width: "100%" }}>
+    <div className="w-[600px] mx-auto w-full" >
       {error && (
-        <div style={{ padding: "10px 16px", borderRadius: 8, background: "var(--error-bg)", border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)", color: "var(--error)", marginBottom: 16, fontSize: 13 }}>
+        <div className="py-2.5 px-4 rounded-lg text-destructive mb-4 text-[13px]" style={{background: "var(--error-bg)", border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)"}} >
           ⚠️ {error}
         </div>
       )}
 
       {/* ── Idle ── */}
       {state === "idle" && (
-        <div style={{ textAlign: "center", padding: 32, border: "1px solid var(--border)", borderRadius: 16, background: "var(--card-bg)" }}>
-          <Volume2 size={48} className="text-[var(--accent)]" />
-          <h2 style={{ margin: "0 0 8px", fontSize: 18 }}>Shadowing</h2>
-          <p style={{ color: "var(--text-secondary)", margin: "0 0 8px", fontSize: 13 }}>
+        <div className="text-center p-8 border border-(--border) rounded-2xl" style={{background: "var(--card-bg)"}} >
+          <Volume2 size={48} className="text-accent" />
+          <h2 className="mb-2 text-lg" >Shadowing</h2>
+          <p className="text-text-secondary mb-2 text-[13px]" >
             Nghe → Lặp lại → So sánh phát âm
           </p>
-          <p style={{ color: "var(--text-secondary)", margin: "0 0 24px", fontSize: 12 }}>
+          <p className="text-text-secondary text-xs" style={{margin: "0 0 24px"}} >
             5 câu mỗi phiên · AI đánh giá chi tiết · +25 XP
           </p>
-          <button onClick={startSession} style={{ padding: "12px 32px", borderRadius: 10, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 15, fontWeight: 600, cursor: "pointer" }}>
+          <button onClick={startSession} className="border-none text-[15px] font-semibold cursor-pointer" style={{padding: "12px 32px", borderRadius: 10, background: "var(--accent)", color: "var(--text-on-accent)"}} >
             Bắt đầu Shadowing
           </button>
         </div>
@@ -206,32 +206,27 @@ export default function ShadowingMode({ examMode }: Props) {
 
       {/* ── Loading ── */}
       {state === "loading" && (
-        <div style={{ textAlign: "center", padding: 40 }}>
-          <Loader2 className="animate-spin text-[var(--accent)]" size={32} />
-          <p style={{ color: "var(--text-secondary)", marginTop: 12 }}>Đang tạo bài tập...</p>
+        <div className="text-center" style={{padding: 40}} >
+          <Loader2 className="animate-spin text-accent" size={32} />
+          <p className="text-text-secondary mt-3" >Đang tạo bài tập...</p>
         </div>
       )}
 
       {/* ── Active: Ready / Recording / Processing ── */}
       {currentSentence && ["ready", "recording", "transcribing", "evaluating"].includes(state) && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+        <div className="flex flex-col gap-5" >
           {/* Progress */}
-          <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 13, color: "var(--text-secondary)" }}>
+          <div className="flex items-center gap-2 text-[13px] text-text-secondary" >
             <span>Câu {currentIdx + 1}/{sentences.length}</span>
-            <Progress percent={((currentIdx + 1) / sentences.length) * 100} size="small" showInfo={false} style={{ flex: 1 }} />
+            <Progress percent={((currentIdx + 1) / sentences.length) * 100} size="small" showInfo={false} className="flex-1" />
           </div>
 
           {/* Sentence card */}
-          <div style={{
-            padding: 24, borderRadius: 16, textAlign: "center",
-            border: state === "recording" ? "2px solid var(--error)" : "1px solid var(--border)",
-            background: "var(--card-bg)",
-            animation: state === "recording" ? "pulse 1.5s ease-in-out infinite" : undefined,
-          }}>
-            <p style={{ fontSize: 20, fontWeight: 600, margin: "0 0 8px", lineHeight: 1.5 }}>{currentSentence.text}</p>
-            <p style={{ fontSize: 14, color: "var(--text-secondary)", margin: "0 0 12px", fontFamily: "serif" }}>{currentSentence.ipa}</p>
+          <div className="p-6 rounded-2xl text-center" style={{border: state === "recording" ? "2px solid var(--error)" : "1px solid var(--border)", background: "var(--card-bg)", animation: state === "recording" ? "pulse 1.5s ease-in-out infinite" : undefined}} >
+            <p className="text-xl font-semibold mb-2 leading-normal" >{currentSentence.text}</p>
+            <p className="text-sm text-text-secondary mb-3" style={{fontFamily: "serif"}} >{currentSentence.ipa}</p>
             <Tooltip title={currentSentence.tip}>
-              <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "8px 0 0", cursor: "help" }}>
+              <p className="text-xs text-text-secondary" style={{margin: "8px 0 0", cursor: "help"}} >
                 <Info /> Gợi ý phát âm
               </p>
             </Tooltip>
@@ -250,33 +245,33 @@ export default function ShadowingMode({ examMode }: Props) {
             />
           )}
           {sentenceAudio.isLoading && (
-            <div style={{ textAlign: "center", fontSize: 12, color: "var(--text-muted)" }}>
+            <div className="text-center text-xs text-text-muted" >
               <Loader2 className="animate-spin" /> Đang tạo âm thanh...
             </div>
           )}
 
           {/* Record button */}
-          <div style={{ textAlign: "center" }}>
+          <div className="text-center" >
             {state === "ready" && (
               <>
-                <button onClick={startRecording} style={{ width: 80, height: 80, borderRadius: "50%", border: "none", background: "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 70%, white))", color: "var(--text-on-accent)", fontSize: 28, cursor: "pointer", boxShadow: "0 4px 16px color-mix(in srgb, var(--error) 30%, transparent)" }} aria-label="Ghi âm">
+                <button onClick={startRecording}  aria-label="Ghi âm" className="w-[80px] h-[80px] rounded-full border-none text-[28px] cursor-pointer" style={{background: "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 70%, white))", color: "var(--text-on-accent)", boxShadow: "0 4px 16px color-mix(in srgb, var(--error) 30%, transparent)"}} >
                   <Mic />
                 </button>
-                <p style={{ fontSize: 12, color: "var(--text-secondary)", marginTop: 8 }}>Nhấn nút để ghi âm</p>
+                <p className="text-xs text-text-secondary mt-2" >Nhấn nút để ghi âm</p>
               </>
             )}
             {state === "recording" && (
               <>
-                <button onClick={stopRecording} style={{ width: 80, height: 80, borderRadius: "50%", border: "3px solid var(--error)", background: "var(--card-bg)", color: "var(--error)", fontSize: 20, cursor: "pointer", animation: "pulse 1s ease-in-out infinite" }} aria-label="Dừng ghi âm">
+                <button onClick={stopRecording}  aria-label="Dừng ghi âm" className="w-[80px] h-[80px] rounded-full text-destructive text-xl cursor-pointer" style={{border: "3px solid var(--error)", background: "var(--card-bg)", animation: "pulse 1s ease-in-out infinite"}} >
                   <Square />
                 </button>
-                <p style={{ fontSize: 12, color: "var(--error)", marginTop: 8, fontWeight: 600 }}>Đang ghi âm... Nhấn để dừng</p>
+                <p className="text-xs text-destructive mt-2 font-semibold" >Đang ghi âm... Nhấn để dừng</p>
               </>
             )}
             {(state === "transcribing" || state === "evaluating") && (
               <div>
-                <Loader2 className="animate-spin text-[var(--accent)]" size={32} />
-                <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 8 }}>
+                <Loader2 className="animate-spin text-accent" size={32} />
+                <p className="text-[13px] text-text-secondary mt-2" >
                   {state === "transcribing" ? "Đang nhận dạng..." : "Đang đánh giá..."}
                 </p>
               </div>
@@ -287,32 +282,32 @@ export default function ShadowingMode({ examMode }: Props) {
 
       {/* ── Result ── */}
       {state === "result" && evalResult && currentSentence && (
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <div className="flex flex-col gap-4" >
           {/* Score */}
-          <div style={{ padding: 24, borderRadius: 16, background: "var(--card-bg)", border: "1px solid var(--border)", textAlign: "center" }}>
+          <div className="p-6 rounded-2xl border border-(--border) text-center" style={{background: "var(--card-bg)"}} >
             <Progress type="circle" percent={evalResult.score} size={100}
               strokeColor={evalResult.score >= 80 ? "var(--success)" : evalResult.score >= 50 ? "var(--warning)" : "var(--error)"}
-              format={(pct) => <span style={{ fontSize: 24, fontWeight: 700 }}>{pct}</span>}
+              format={(pct) => <span className="text-3xl font-bold" >{pct}</span>}
             />
-            <div style={{ display: "flex", justifyContent: "center", gap: 24, marginTop: 16 }}>
-              <div><p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0 }}>Chính xác</p><p style={{ fontSize: 18, fontWeight: 600, margin: 0 }}>{evalResult.accuracy}%</p></div>
-              <div><p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0 }}>Trôi chảy</p><p style={{ fontSize: 18, fontWeight: 600, margin: 0 }}>{evalResult.fluency}%</p></div>
+            <div className="flex justify-center gap-6 mt-4" >
+              <div><p className="text-[11px] text-text-secondary m-0" >Chính xác</p><p className="text-lg font-semibold m-0" >{evalResult.accuracy}%</p></div>
+              <div><p className="text-[11px] text-text-secondary m-0" >Trôi chảy</p><p className="text-lg font-semibold m-0" >{evalResult.fluency}%</p></div>
             </div>
           </div>
 
           {/* What you said */}
-          <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-            <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 4px", fontWeight: 600 }}>Bạn đã nói:</p>
-            <p style={{ fontSize: 15, margin: 0, fontStyle: "italic" }}>&ldquo;{spokenText}&rdquo;</p>
+          <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+            <p className="text-xs text-text-secondary font-semibold" style={{margin: "0 0 4px"}} >Bạn đã nói:</p>
+            <p className="text-[15px] m-0 italic" >&ldquo;{spokenText}&rdquo;</p>
           </div>
 
           {/* Word analysis */}
-          <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-            <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>Phân tích từng từ:</p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+          <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+            <p className="text-xs text-text-secondary mb-2 font-semibold" >Phân tích từng từ:</p>
+            <div className="flex flex-wrap gap-1.5" >
               {evalResult.wordAnalysis.map((w, i) => (
                 <Tooltip key={i} title={w.issue || "Chính xác!"}>
-                  <Tag color={w.correct ? "success" : "error"} style={{ fontSize: 13, padding: "3px 8px", cursor: "help" }}>
+                  <Tag color={w.correct ? "success" : "error"} className="text-[13px]" style={{padding: "3px 8px", cursor: "help"}} >
                     {w.correct ? <CircleCheckBig /> : <XCircle />} {w.word}
                   </Tag>
                 </Tooltip>
@@ -321,21 +316,21 @@ export default function ShadowingMode({ examMode }: Props) {
           </div>
 
           {/* Feedback + tips */}
-          <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-            <p style={{ fontSize: 13, margin: "0 0 8px" }}>{evalResult.feedback}</p>
+          <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+            <p className="text-[13px] mb-2" >{evalResult.feedback}</p>
             {evalResult.tips.length > 0 && (
-              <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: "var(--text-secondary)" }}>
+              <ul className="m-0 text-[13px] text-text-secondary" style={{paddingLeft: 18}} >
                 {evalResult.tips.map((tip, i) => <li key={i}>{tip}</li>)}
               </ul>
             )}
           </div>
 
           {/* Actions */}
-          <div style={{ display: "flex", gap: 12, justifyContent: "center" }}>
-            <button onClick={retryCurrent} style={{ padding: "10px 20px", borderRadius: 8, border: "1px solid var(--border)", background: "transparent", color: "var(--text)", cursor: "pointer", fontSize: 13, fontWeight: 500 }}>
+          <div className="flex gap-3 justify-center" >
+            <button onClick={retryCurrent} className="rounded-lg border border-(--border) bg-transparent cursor-pointer text-[13px] font-medium" style={{padding: "10px 20px", color: "var(--text)"}} >
               <RefreshCw /> Thử lại
             </button>
-            <button onClick={nextSentence} style={{ padding: "10px 20px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", cursor: "pointer", fontSize: 13, fontWeight: 600 }}>
+            <button onClick={nextSentence} className="rounded-lg border-none cursor-pointer text-[13px] font-semibold" style={{padding: "10px 20px", background: "var(--accent)", color: "var(--text-on-accent)"}} >
               {currentIdx < sentences.length - 1 ? <>Câu tiếp <ChevronRight /></> : <>Hoàn thành <CircleCheckBig /></>}
             </button>
           </div>
@@ -344,32 +339,32 @@ export default function ShadowingMode({ examMode }: Props) {
 
       {/* ── Summary ── */}
       {state === "summary" && (
-        <div style={{ textAlign: "center", padding: 32, border: "1px solid var(--border)", borderRadius: 16, background: "var(--card-bg)" }}>
-          <div style={{ fontSize: 48, marginBottom: 16 }}>
-            {avgScore >= 80 ? <CircleCheckBig style={{ color: "var(--success)" }} /> :
+        <div className="text-center p-8 border border-(--border) rounded-2xl" style={{background: "var(--card-bg)"}} >
+          <div className="mb-4" style={{fontSize: 48}} >
+            {avgScore >= 80 ? <CircleCheckBig className="text-emerald-500" /> :
              avgScore >= 50 ? <Info style={{ color: "var(--warning)" }} /> :
-             <XCircle style={{ color: "var(--error)" }} />}
+             <XCircle className="text-destructive" />}
           </div>
-          <h2 style={{ margin: "0 0 8px" }}>Shadowing hoàn thành!</h2>
-          <p style={{ color: "var(--text-secondary)", margin: "0 0 8px" }}>
-            Điểm trung bình: <strong className="text-[var(--accent)]" style={{ fontSize: 24 }}>{avgScore}</strong>/100
+          <h2 className="mb-2" >Shadowing hoàn thành!</h2>
+          <p className="text-text-secondary mb-2" >
+            Điểm trung bình: <strong className="text-accent text-3xl" >{avgScore}</strong>/100
           </p>
           {xpAwarded > 0 && (
-            <p style={{ color: "var(--accent)", fontSize: 13, fontWeight: 600, margin: "0 0 8px" }}>+{xpAwarded} XP</p>
+            <p className="text-accent text-[13px] font-semibold mb-2" >+{xpAwarded} XP</p>
           )}
           {skillUpdate && (
-            <p style={{ fontSize: 13, color: skillUpdate.levelUp ? "var(--success)" : "var(--text-secondary)", margin: "0 0 16px" }}>
+            <p className="text-[13px] mb-4" style={{color: skillUpdate.levelUp ? "var(--success)" : "var(--text-secondary)"}} >
               {skillUpdate.levelUp ? `🎉 Trình độ nghe: ${skillUpdate.cefr}!` : `📊 Trình độ nghe: ${skillUpdate.cefr}`}
             </p>
           )}
-          <div style={{ display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap", marginBottom: 20 }}>
+          <div className="flex gap-2 justify-center flex-wrap mb-5" >
             {sessionScores.map((s, i) => (
-              <Tag key={i} color={s >= 80 ? "success" : s >= 50 ? "warning" : "error"} style={{ fontSize: 13, padding: "3px 10px" }}>
+              <Tag key={i} color={s >= 80 ? "success" : s >= 50 ? "warning" : "error"} className="text-[13px]" style={{padding: "3px 10px"}} >
                 Câu {i + 1}: {s}
               </Tag>
             ))}
           </div>
-          <button onClick={startSession} style={{ padding: "10px 24px", borderRadius: 8, border: "none", background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 14, fontWeight: 600, cursor: "pointer" }}>
+          <button onClick={startSession} className="rounded-lg border-none text-sm font-semibold cursor-pointer" style={{padding: "10px 24px", background: "var(--accent)", color: "var(--text-on-accent)"}} >
             <RefreshCw /> Luyện tiếp
           </button>
         </div>

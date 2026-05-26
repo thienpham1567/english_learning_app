@@ -113,42 +113,27 @@ export default function WritingRunnerPage() {
 
 	if (error) {
 		return (
-			<div style={{ padding: 24 }}>
-				<div style={{ color: "var(--error)", marginBottom: 12 }}>{error}</div>
+			<div className="p-6" >
+				<div className="text-destructive mb-3" >{error}</div>
 				<Button onClick={() => router.push("/toeic/writing")}>Về Hub</Button>
 			</div>
 		);
 	}
 	if (!current) {
-		return <div style={{ padding: 24 }}>{completing ? "Đang chấm bài…" : "Đang tải…"}</div>;
+		return <div className="p-6" >{completing ? "Đang chấm bài…" : "Đang tải…"}</div>;
 	}
 
 	const minRemaining = Math.floor(remaining / 60000);
 	const secRemaining = Math.floor((remaining % 60000) / 1000);
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				height: "100%",
-				minHeight: 0,
-				flex: 1,
-				overflow: "auto",
-			}}
-		>
-			<div style={{ padding: 16, display: "grid", gap: 12, maxWidth: 800 }}>
-				<div
-					style={{
-						display: "flex",
-						justifyContent: "space-between",
-						alignItems: "center",
-					}}
-				>
+		<div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
+			<div className="p-4 grid gap-3 w-[800px]" >
+				<div className="flex justify-between items-center" >
 					<Tag color={remaining < 60000 ? "red" : "orange"}>
 						⏱ {minRemaining}:{String(secRemaining).padStart(2, "0")}
 					</Tag>
-					<span style={{ color: "var(--text-muted)" }}>
+					<span className="text-text-muted" >
 						Max {current.maxScore} điểm
 					</span>
 				</div>
@@ -164,17 +149,15 @@ export default function WritingRunnerPage() {
 						{current.imageUrl && (
 							<img loading="lazy" decoding="async"
 								src={current.imageUrl}
-								alt=""
-								style={{ maxWidth: "100%", maxHeight: 300, borderRadius: 8 }}
-							/>
+								alt="" className="h-[300px] rounded-lg" style={{maxWidth: "100%"}} />
 						)}
-						<Card size="small" style={{ background: "color-mix(in srgb, var(--accent) 8%, var(--surface))", border: "1px solid var(--border)" }}>
-							<div style={{ fontSize: 13, color: "var(--text-muted)" }}>
+						<Card size="small" className="border border-(--border)" style={{background: "color-mix(in srgb, var(--accent) 8%, var(--surface))"}} >
+							<div className="text-[13px] text-text-muted" >
 								Viết MỘT câu mô tả ảnh, bắt buộc dùng cả 2 từ:
 							</div>
-							<div style={{ marginTop: 6 }}>
+							<div className="mt-1.5" >
 								{(current.mandatoryWords ?? []).map((w) => (
-									<Tag key={w} color="orange" style={{ fontSize: 14 }}>
+									<Tag key={w} color="orange" className="text-sm" >
 										{w}
 									</Tag>
 								))}
@@ -185,12 +168,12 @@ export default function WritingRunnerPage() {
 
 				{current.type === "q6_7_email" && (
 					<Card size="small">
-						<div style={{ fontSize: 13, color: "var(--text-muted)" }}>Subject</div>
-						<div style={{ fontWeight: 600, marginBottom: 8 }}>{current.emailSubject}</div>
-						<div style={{ whiteSpace: "pre-wrap", marginBottom: 12 }}>
+						<div className="text-[13px] text-text-muted" >Subject</div>
+						<div className="font-semibold mb-2" >{current.emailSubject}</div>
+						<div className="mb-3" style={{whiteSpace: "pre-wrap"}} >
 							{current.emailBody}
 						</div>
-						<div style={{ fontSize: 13, color: "var(--text-muted)", marginBottom: 4 }}>
+						<div className="text-[13px] text-text-muted mb-1" >
 							Phải đáp ứng:
 						</div>
 						<ul style={{ marginTop: 0 }}>
@@ -203,14 +186,14 @@ export default function WritingRunnerPage() {
 
 				{current.type === "q8_opinion" && (
 					<Card size="small">
-						<div style={{ fontSize: 13, color: "var(--text-muted)" }}>Topic</div>
-						<div style={{ fontSize: 16, fontWeight: 500, marginTop: 4 }}>{current.topic}</div>
+						<div className="text-[13px] text-text-muted" >Topic</div>
+						<div className="text-base font-medium mt-1" >{current.topic}</div>
 						{current.topicVi && (
-							<div style={{ color: "var(--text-muted)", fontSize: 13, marginTop: 4 }}>
+							<div className="text-text-muted text-[13px] mt-1" >
 								{current.topicVi}
 							</div>
 						)}
-						<div style={{ marginTop: 8, fontSize: 12, color: "var(--text-muted)" }}>
+						<div className="mt-2 text-xs text-text-muted" >
 							Mục tiêu: ≥300 từ · cấu trúc rõ ràng (intro / arguments / conclusion)
 						</div>
 					</Card>
@@ -227,7 +210,7 @@ export default function WritingRunnerPage() {
 					placeholder="Type your answer here..."
 					autoFocus
 				/>
-				<div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
+				<div className="flex gap-2 justify-end" >
 					<Button onClick={skipQuestion} disabled={submitting}>
 						Bỏ qua
 					</Button>

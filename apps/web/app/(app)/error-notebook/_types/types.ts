@@ -67,7 +67,7 @@ export type GradeOption = {
 
 export const SRS_GRADE_OPTIONS: GradeOption[] = [
   { grade: 0, label: "Quên hết", emoji: "😵", color: "var(--error)", desc: "Không nhớ gì" },
-  { grade: 2, label: "Mơ hồ", emoji: "🤔", color: "var(--warning, #f59e0b)", desc: "Nhớ mang máng" },
+  { grade: 2, label: "Mơ hồ", emoji: "🤔", color: "var(--warning, var(--warning))", desc: "Nhớ mang máng" },
   { grade: 4, label: "Nhớ", emoji: "😊", color: "var(--success)", desc: "Nhớ được" },
   { grade: 5, label: "Dễ dàng", emoji: "🎯", color: "var(--accent)", desc: "Rất dễ nhớ" },
 ];

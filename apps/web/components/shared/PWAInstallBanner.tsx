@@ -9,60 +9,20 @@ export function PWAInstallBanner() {
   if (!canInstall) return null;
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        bottom: 80,
-        left: "50%",
-        transform: "translateX(-50%)",
-        zIndex: 1000,
-        display: "flex",
-        alignItems: "center",
-        gap: 12,
-        padding: "12px 20px",
-        borderRadius: 16,
-        background: "linear-gradient(135deg, var(--accent), var(--accent-hover, var(--accent)))",
-        color: "var(--text-on-accent)",
-        boxShadow: "0 8px 32px color-mix(in srgb, var(--accent) 40%, transparent)",
-        maxWidth: "calc(100vw - 32px)",
-        width: "auto",
-        animation: "slideUp 0.4s ease-out",
-      }}
-    >
-      <Download style={{ fontSize: 20, flexShrink: 0 }} />
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <div style={{ fontSize: 14, fontWeight: 700 }}>Cài đặt TOEIC Master</div>
-        <div style={{ fontSize: 12, opacity: 0.85 }}>Truy cập nhanh hơn</div>
+    <div className="fixed flex items-center gap-3 py-3 px-5 rounded-2xl" style={{bottom: 80, left: "50%", transform: "translateX(-50%)", zIndex: 1000, background: "linear-gradient(135deg, var(--accent), var(--accent-hover, var(--accent)))", color: "var(--text-on-accent)", boxShadow: "0 8px 32px color-mix(in srgb, var(--accent) 40%, transparent)", maxWidth: "calc(100vw - 32px)", width: "auto", animation: "slideUp 0.4s ease-out"}} >
+      <Download className="text-xl shrink-0" />
+      <div className="flex-1 w-[0px]" >
+        <div className="text-sm font-bold" >Cài đặt TOEIC Master</div>
+        <div className="text-xs" style={{opacity: 0.85}} >Truy cập nhanh hơn</div>
       </div>
       <button
-        onClick={install}
-        style={{
-          padding: "8px 16px",
-          borderRadius: 10,
-          border: "none",
-          background: "rgba(255,255,255,0.2)",
-          color: "var(--text-on-accent)",
-          fontSize: 13,
-          fontWeight: 700,
-          cursor: "pointer",
-          whiteSpace: "nowrap",
-        }}
-      >
+        onClick={install} className="py-2 px-4 border-none text-[13px] font-bold cursor-pointer" style={{borderRadius: 10, background: "rgba(255,255,255,0.2)", color: "var(--text-on-accent)", whiteSpace: "nowrap"}} >
         Cài đặt
       </button>
       <button
         onClick={dismiss}
-        style={{
-          background: "none",
-          border: "none",
-          color: "rgba(255,255,255,0.7)",
-          cursor: "pointer",
-          padding: 4,
-          fontSize: 14,
-          lineHeight: 1,
-        }}
-        aria-label="Đóng"
-      >
+        
+        aria-label="Đóng" className="bg-none border-none cursor-pointer p-1 text-sm leading-none" style={{color: "rgba(255,255,255,0.7)"}} >
         <X />
       </button>
 

@@ -91,10 +91,9 @@ export function useTextToSpeech(defaultAccent: TtsAccent = "us") {
       } catch (err) {
         if ((err as Error).name !== "AbortError") {
           console.warn("[useTextToSpeech] Error:", err);
-          // Show user-facing error toast
+          // Show user-facing error
           if (typeof window !== "undefined") {
-            const { message: antMessage } = await import("antd");
-            antMessage.error("Không thể phát âm. Vui lòng thử lại.");
+            alert("Không thể phát âm. Vui lòng thử lại.");
           }
         }
         setIsLoading(false);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { message } from "antd";
+
 
 const MAX_CHARS = 10_000;
 const LRU_MAX = 15;
@@ -56,11 +56,11 @@ export function useAudioPlayback() {
 
   const generate = useCallback(async (text: string, voiceRole: string, speed: number) => {
     if (!text.trim()) {
-      message.warning("Hãy nhập văn bản trước!");
+      /* toast: warning */
       return;
     }
     if (text.length > MAX_CHARS) {
-      message.error(`Văn bản quá dài! Tối đa ${MAX_CHARS.toLocaleString()} ký tự.`);
+      console.warn(`Văn bản quá dài! Tối đa ${MAX_CHARS.toLocaleString()} ký tự.`);
       return;
     }
 
@@ -84,12 +84,12 @@ export function useAudioPlayback() {
       audio.onended = () => setPlaying(false);
       audio.onerror = () => {
         setPlaying(false);
-        message.error("Lỗi phát audio");
+        /* toast: error */
       };
       await audio.play();
       setPlaying(true);
       setLoading(false);
-      message.success("⚡ Phát từ bộ nhớ đệm — không tốn token!");
+      /* toast: success */
       return true; // cached
     }
 
@@ -122,14 +122,14 @@ export function useAudioPlayback() {
       audio.onended = () => setPlaying(false);
       audio.onerror = () => {
         setPlaying(false);
-        message.error("Lỗi phát audio");
+        /* toast: error */
       };
       await audio.play();
       setPlaying(true);
       return false; // not cached
     } catch (err: unknown) {
       if (err instanceof Error && err.name === "AbortError") return;
-      message.error(err instanceof Error ? err.message : "Lỗi tổng hợp giọng nói");
+      /* toast: error */
     } finally {
       setLoading(false);
     }

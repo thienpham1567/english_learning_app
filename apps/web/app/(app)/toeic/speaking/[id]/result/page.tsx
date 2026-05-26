@@ -41,23 +41,9 @@ type PronMetrics = {
 function PronunciationSection({ metrics }: { metrics: PronMetrics }) {
 	const wpmOk = metrics.wpm >= 110 && metrics.wpm <= 175;
 	return (
-		<div
-			style={{
-				background: "var(--surface, #0f172a)",
-				padding: 12,
-				borderRadius: 6,
-				marginTop: 8,
-			}}
-		>
-			<div style={{ fontWeight: 600, marginBottom: 6 }}>📊 Phát âm</div>
-			<div
-				style={{
-					display: "grid",
-					gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-					gap: 8,
-					fontSize: 13,
-				}}
-			>
+		<div className="bg-(--surface) p-3 rounded-md mt-2" >
+			<div className="font-semibold mb-1.5" >📊 Phát âm</div>
+			<div className="grid gap-2 text-[13px]" style={{gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))"}} >
 				<div>
 					Pace: <strong>{metrics.wpm} WPM</strong> {wpmOk ? "✓" : "⚠"}
 				</div>
@@ -73,8 +59,8 @@ function PronunciationSection({ metrics }: { metrics: PronMetrics }) {
 				</div>
 			</div>
 			{metrics.lowConfidenceWords.length > 0 && (
-				<div style={{ marginTop: 8, fontSize: 13 }}>
-					<span style={{ color: "var(--text-muted, #94a3b8)" }}>Từ phát âm không rõ: </span>
+				<div className="mt-2 text-[13px]" >
+					<span className="text-text-muted" >Từ phát âm không rõ: </span>
 					{metrics.lowConfidenceWords.map((w) => (
 						<Tag key={w} color="orange" style={{ margin: "2px 4px 2px 0" }}>
 							{w}
@@ -83,7 +69,7 @@ function PronunciationSection({ metrics }: { metrics: PronMetrics }) {
 				</div>
 			)}
 			{metrics.alignment && (
-				<div style={{ marginTop: 8, fontSize: 13 }}>
+				<div className="mt-2 text-[13px]" >
 					<div>
 						Accuracy:{" "}
 						<strong>
@@ -92,8 +78,8 @@ function PronunciationSection({ metrics }: { metrics: PronMetrics }) {
 						</strong>
 					</div>
 					{metrics.alignment.missingWords.length > 0 && (
-						<div style={{ marginTop: 4 }}>
-							<span style={{ color: "var(--text-muted, #94a3b8)" }}>Bỏ qua: </span>
+						<div className="mt-1" >
+							<span className="text-text-muted" >Bỏ qua: </span>
 							{metrics.alignment.missingWords.slice(0, 8).map((w) => (
 								<Tag key={w} color="red" style={{ margin: "2px 4px 2px 0" }}>
 									{w}
@@ -102,8 +88,8 @@ function PronunciationSection({ metrics }: { metrics: PronMetrics }) {
 						</div>
 					)}
 					{metrics.alignment.addedWords.length > 0 && (
-						<div style={{ marginTop: 4 }}>
-							<span style={{ color: "var(--text-muted, #94a3b8)" }}>Thêm: </span>
+						<div className="mt-1" >
+							<span className="text-text-muted" >Thêm: </span>
 							{metrics.alignment.addedWords.slice(0, 8).map((w) => (
 								<Tag key={w} color="purple" style={{ margin: "2px 4px 2px 0" }}>
 									{w}
@@ -149,24 +135,15 @@ export default async function SpeakingResultPage({
 		: [];
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				height: "100%",
-				minHeight: 0,
-				flex: 1,
-				overflow: "auto",
-			}}
-		>
-			<div style={{ padding: 16, display: "grid", gap: 16, maxWidth: 800 }}>
+		<div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
+			<div className="p-4 grid gap-4 w-[800px]" >
 				<Card>
-					<div style={{ textAlign: "center" }}>
-						<div style={{ fontSize: 56, fontWeight: 800, color: "var(--accent)" }}>
+					<div className="text-center" >
+						<div className="font-extrabold text-accent" style={{fontSize: 56}} >
 							{s.scaledScore ?? "—"}
 						</div>
-						<div style={{ color: "var(--text-muted, #94a3b8)" }}>/ 200 (TOEIC Speaking)</div>
-						<div style={{ marginTop: 6, color: "var(--text-muted)" }}>
+						<div className="text-text-muted" >/ 200 (TOEIC Speaking)</div>
+						<div className="mt-1.5 text-text-muted" >
 							Raw: {s.rawScore ?? "—"} / 35
 						</div>
 					</div>
@@ -190,41 +167,23 @@ export default async function SpeakingResultPage({
 								{p.imageUrl && (
 									<img loading="lazy" decoding="async"
 										src={p.imageUrl}
-										alt=""
-										style={{ maxWidth: 200, borderRadius: 4, marginBottom: 8 }}
-									/>
+										alt="" className="w-[200px] rounded mb-2" />
 								)}
 								{r ? (
 									<>
 										{r.audioPath && (
-											<audio controls style={{ width: "100%", marginBottom: 8 }}>
+											<audio controls className="w-full mb-2" >
 												<source
 													src={`/api/toeic-speaking/audio/${r.id}`}
 													type="audio/webm"
 												/>
 											</audio>
 										)}
-										<div
-											style={{
-												background: "var(--surface, #0f172a)",
-												padding: 10,
-												borderRadius: 6,
-												fontStyle: "italic",
-												marginBottom: 8,
-												fontSize: 14,
-											}}
-										>
-											{r.transcript ? `“${r.transcript}”` : <em style={{ color: "var(--text-muted)" }}>(no transcript)</em>}
+										<div className="bg-(--surface) rounded-md italic mb-2 text-sm" style={{padding: 10}} >
+											{r.transcript ? `“${r.transcript}”` : <em className="text-text-muted" >(no transcript)</em>}
 										</div>
 										{r.feedbackVi && (
-											<div
-												style={{
-													fontSize: 13,
-													color: "var(--text-muted)",
-													borderLeft: "3px solid var(--accent)",
-													paddingLeft: 10,
-												}}
-											>
+											<div className="text-[13px] text-text-muted" style={{borderLeft: "3px solid var(--accent)", paddingLeft: 10}} >
 												<strong>Feedback:</strong> {r.feedbackVi}
 											</div>
 										)}
@@ -241,18 +200,9 @@ export default async function SpeakingResultPage({
 						);
 					})}
 
-				<div style={{ display: "flex", gap: 8 }}>
+				<div className="flex gap-2" >
 					<Link
-						href="/toeic/speaking"
-						style={{
-							padding: "8px 16px",
-							borderRadius: 8,
-							background: "var(--surface-hover)",
-							color: "var(--ink)",
-							border: "1px solid var(--border)",
-							textDecoration: "none",
-						}}
-					>
+						href="/toeic/speaking" className="py-2 px-4 rounded-lg text-ink border border-(--border)" style={{background: "var(--surface-hover)", textDecoration: "none"}} >
 						Về Hub
 					</Link>
 				</div>

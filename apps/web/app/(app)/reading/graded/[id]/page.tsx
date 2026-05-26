@@ -65,16 +65,16 @@ export default function GradedPassagePage() {
 
   if (loading) {
     return (
-      <Flex align="center" justify="center" style={{ height: "100%", padding: 60 }}>
-        <Spin indicator={<Loader2 className="animate-spin text-[var(--accent)]" size={32} />} />
+      <Flex align="center" justify="center" className="h-full" style={{padding: 60}} >
+        <Spin indicator={<Loader2 className="animate-spin text-accent" size={32} />} />
       </Flex>
     );
   }
 
   if (!passage) {
     return (
-      <Flex vertical align="center" justify="center" gap={12} style={{ height: "100%", padding: 60 }}>
-        <BookOpen size={48} className="text-[var(--text-muted)]" />
+      <Flex vertical align="center" justify="center" gap={12} className="h-full" style={{padding: 60}} >
+        <BookOpen size={48} className="text-text-muted" />
         <Text type="secondary">Không tìm thấy bài đọc</Text>
         <Button type="link" icon={<ArrowLeft />} onClick={() => router.push("/reading/graded")}>
           Quay lại danh sách
@@ -84,51 +84,45 @@ export default function GradedPassagePage() {
   }
 
   return (
-    <div style={{ height: "100%", overflowY: "auto", padding: "var(--space-6)" }} className="anim-fade-up">
-      <Flex vertical gap={20} style={{ maxWidth: 720, margin: "0 auto" }}>
+    <div className="anim-fade-up h-full overflow-y-auto" style={{padding: "var(--space-6)"}} >
+      <Flex vertical gap={20} className="w-[720px] mx-auto" >
 
         {/* Back button */}
         <Button
           type="text"
           icon={<ArrowLeft />}
-          onClick={() => router.push("/reading/graded")}
-          style={{ alignSelf: "flex-start", color: "var(--text-muted)", fontSize: 13, borderRadius: 10 }}
-        >
+          onClick={() => router.push("/reading/graded")} className="text-text-muted text-[13px]" style={{alignSelf: "flex-start", borderRadius: 10}} >
           Quay lại danh sách
         </Button>
 
         {/* Article header card */}
-        <Card style={{ borderRadius: 20, overflow: "hidden" }} styles={{ body: { padding: 0 } }}>
+        <Card  styles={{ body: { padding: 0 } }} className="overflow-hidden" style={{borderRadius: 20}} >
           {/* Gradient banner */}
           <div style={{
             padding: "20px 24px 16px",
             background: `linear-gradient(135deg, ${LEVEL_COLORS[passage.cefrLevel] || "var(--accent)"}20, ${LEVEL_COLORS[passage.cefrLevel] || "var(--accent)"}08)`,
           }}>
-            <Flex gap={10} align="center" style={{ marginBottom: 12 }}>
-              <Tag style={{
-                margin: 0, fontWeight: 700, fontSize: 11, borderRadius: 8,
-                background: LEVEL_COLORS[passage.cefrLevel], color: "var(--text-on-accent)", border: "none",
-                padding: "2px 12px",
-              }}>
+            <Flex gap={10} align="center" className="mb-3" >
+              <Tag className="m-0 font-bold text-[11px] rounded-lg border-none" style={{background: LEVEL_COLORS[passage.cefrLevel], color: "var(--text-on-accent)", padding: "2px 12px"}} >
                 {passage.cefrLevel}
               </Tag>
               <Flex align="center" gap={4}>
-                <Timer size={12} className="text-[var(--text-muted)]" />
-                <Text className="text-[var(--text-muted)]" style={{ fontSize: 12 }}>{readTime} phút · {passage.wordCount} từ</Text>
+                <Timer size={12} className="text-text-muted" />
+                <Text className="text-text-muted text-xs" >{readTime} phút · {passage.wordCount} từ</Text>
               </Flex>
               {marked && (
-                <Tag style={{ margin: 0, marginLeft: "auto", borderRadius: 8, border: "none", background: "color-mix(in srgb, var(--success) 8%, transparent)", color: "var(--success)", fontWeight: 600 }}>
-                  <CheckCircle style={{ marginRight: 4 }} /> Đã đọc
+                <Tag className="m-0 rounded-lg border-none text-emerald-500 font-semibold" style={{marginLeft: "auto", background: "color-mix(in srgb, var(--success) 8%, transparent)"}} >
+                  <CheckCircle className="mr-1" /> Đã đọc
                 </Tag>
               )}
             </Flex>
-            <Title level={3} style={{ margin: 0, lineHeight: 1.4, fontFamily: "var(--font-display)" }}>
+            <Title level={3} className="m-0 font-display" style={{lineHeight: 1.4}} >
               {passage.title}
             </Title>
           </div>
 
           <div style={{ padding: "20px 24px 28px" }}>
-            <div style={{ fontSize: 16, lineHeight: 2, color: "var(--text)", fontFamily: "Georgia, 'Times New Roman', serif" }}>
+            <div className="text-base" style={{lineHeight: 2, color: "var(--text)", fontFamily: "Georgia, 'Times New Roman', serif"}} >
               {passage.body.split("\n").map((para, i) => (
                 <p key={i} style={{ margin: i === 0 ? 0 : "16px 0 0" }}>{para}</p>
               ))}
@@ -143,33 +137,21 @@ export default function GradedPassagePage() {
               type="primary"
               size="large"
               icon={<CheckCircle />}
-              onClick={markRead}
-              style={{ borderRadius: 12, fontWeight: 600, padding: "0 28px", height: 44 }}
-            >
+              onClick={markRead} className="rounded-xl font-semibold h-[44px]" style={{padding: "0 28px"}} >
               Đánh dấu đã đọc
             </Button>
           ) : (
             <Card
-              style={{
-                borderRadius: 16, width: "100%",
-                background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-                border: "none",
-              }}
-              styles={{ body: { padding: "20px 24px" } }}
-            >
+              
+              styles={{ body: { padding: "20px 24px" } }} className="rounded-2xl w-full border-none" style={{background: "linear-gradient(135deg, var(--accent), var(--secondary))"}} >
               <Flex vertical align="center" gap={10}>
-                <Text style={{ color: "rgba(255,255,255,0.9)", fontSize: 14, fontWeight: 500 }}>
+                <Text className="text-sm font-medium" style={{color: "rgba(255,255,255,0.9)"}} >
                   <Star /> Bạn đã đọc xong! Kiểm tra từ vựng ngay?
                 </Text>
                 <Button
                   size="large"
                   icon={<Pencil />}
-                  onClick={() => router.push(`/reading/graded/${id}/cloze`)}
-                  style={{
-                    borderRadius: 12, fontWeight: 700, border: "2px solid var(--surface)",
-                    background: "rgba(255,255,255,0.15)", color: "var(--text-on-accent)", height: 44,
-                  }}
-                >
+                  onClick={() => router.push(`/reading/graded/${id}/cloze`)} className="rounded-xl font-bold h-[44px]" style={{border: "2px solid var(--surface)", background: "rgba(255,255,255,0.15)", color: "var(--text-on-accent)"}} >
                   <ClipboardList /> Làm bài cloze test
                 </Button>
               </Flex>

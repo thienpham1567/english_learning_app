@@ -57,86 +57,26 @@ export function PhonemeCard({ phoneme, accent, onSpeak, isBusy, index }: Props) 
         boxShadow: `0 8px 24px color-mix(in srgb, ${accentColor} 12%, transparent)`,
       }}
       whileTap={{ scale: 0.98 }}
-      onClick={() => handleClick(accent)}
-      style={{
-        position: "relative",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        borderRadius: "var(--radius-xl)",
-        border: "1.5px solid var(--border)",
-        background: "var(--surface)",
-        cursor: isBusy ? "wait" : "pointer",
-        overflow: "hidden",
-        userSelect: "none",
-        padding: "16px 12px 14px",
-      }}
-    >
+      onClick={() => handleClick(accent)} className="relative flex flex-col items-center rounded-(--radius-xl) bg-(--surface) overflow-hidden" style={{border: "1.5px solid var(--border)", cursor: isBusy ? "wait" : "pointer", userSelect: "none", padding: "16px 12px 14px"}} >
       {/* Accent color bar */}
-      <div
-        style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          height: 3,
-          background: accentColor,
-        }}
-      />
+      <div className="absolute h-[3px]" style={{top: 0, left: 0, right: 0, background: accentColor}} />
 
       {/* Voice Type indicator */}
-      <span
-        style={{
-          fontSize: 9,
-          fontWeight: 800,
-          textTransform: "uppercase",
-          letterSpacing: "0.06em",
-          padding: "2px 6px",
-          borderRadius: 6,
-          background: `color-mix(in srgb, ${accentColor} 8%, transparent)`,
-          color: accentColor,
-          marginBottom: 10,
-          alignSelf: "flex-end",
-        }}
-      >
+      <span className="text-[9px] font-extrabold uppercase rounded-md mb-2.5" style={{letterSpacing: "0.06em", padding: "2px 6px", background: `color-mix(in srgb, ${accentColor} 8%, transparent)`, color: accentColor, alignSelf: "flex-end"}} >
         {typeLabel}
       </span>
 
       {/* Phoneme Symbol */}
       <m.div
         animate={pulsing ? { scale: [1, 1.15, 1], rotate: [0, 2, -2, 0] } : {}}
-        transition={{ duration: 0.4 }}
-        style={{
-          fontSize: 34,
-          fontWeight: 900,
-          fontFamily: "var(--font-mono)",
-          color: accentColor,
-          lineHeight: 1,
-          textAlign: "center",
-          marginBottom: 6,
-        }}
-      >
+        transition={{ duration: 0.4 }} className="font-black font-mono leading-none text-center mb-1.5" style={{fontSize: 34, color: accentColor}} >
         /{symbol}/
       </m.div>
 
       {/* Highlighted keyword */}
-      <div
-        style={{
-          fontSize: 13,
-          fontWeight: 700,
-          color: "var(--text-primary)",
-          marginBottom: 8,
-        }}
-      >
+      <div className="text-[13px] font-bold text-text-primary mb-2" >
         {before}
-        <span
-          style={{
-            color: accentColor,
-            borderBottom: `2px solid ${accentColor}`,
-            paddingBottom: 1,
-            fontWeight: 800,
-          }}
-        >
+        <span className="font-extrabold" style={{color: accentColor, borderBottom: `2px solid ${accentColor}`, paddingBottom: 1}} >
           {match}
         </span>
         {after}
@@ -144,35 +84,13 @@ export function PhonemeCard({ phoneme, accent, onSpeak, isBusy, index }: Props) 
 
       {/* Helper description / tip */}
       <Tooltip title={tip} placement="bottom" mouseEnterDelay={0.3}>
-        <p
-          style={{
-            fontSize: 11,
-            color: "var(--text-muted)",
-            textAlign: "center",
-            lineHeight: 1.4,
-            margin: "0 0 12px",
-            minHeight: 30,
-            display: "-webkit-box",
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: "vertical",
-            overflow: "hidden",
-            fontWeight: 500,
-          }}
-        >
+        <p className="text-[11px] text-text-muted text-center mb-3 h-[30px] overflow-hidden font-medium" style={{lineHeight: 1.4, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical"}} >
           {tip}
         </p>
       </Tooltip>
 
       {/* Play Accent triggers */}
-      <div
-        style={{
-          display: "flex",
-          gap: 6,
-          width: "100%",
-          justifyContent: "center",
-          marginTop: "auto",
-        }}
-      >
+      <div className="flex gap-1.5 w-full justify-center" style={{marginTop: "auto"}} >
         {(["us", "uk"] as TtsAccent[]).map((voiceAcc) => {
           const isActive = accent === voiceAcc;
           return (
@@ -181,26 +99,9 @@ export function PhonemeCard({ phoneme, accent, onSpeak, isBusy, index }: Props) 
               onClick={(e) => handleClick(voiceAcc, e)}
               disabled={isBusy}
               whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              style={{
-                flex: 1,
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 4,
-                padding: "5px 0",
-                borderRadius: 8,
-                border: `1.5px solid ${isActive ? accentColor : "var(--border)"}`,
-                background: isActive
+              whileTap={{ scale: 0.95 }} className="flex-1 items-center justify-center gap-1 rounded-lg text-[10.5px] font-bold" style={{display: "inline-flex", padding: "5px 0", border: `1.5px solid ${isActive ? accentColor : "var(--border)"}`, background: isActive
                   ? `color-mix(in srgb, ${accentColor} 8%, var(--surface))`
-                  : "var(--surface-alt)",
-                color: isActive ? accentColor : "var(--text-secondary)",
-                cursor: isBusy ? "wait" : "pointer",
-                fontSize: 10.5,
-                fontWeight: 700,
-                transition: "border-color 0.15s, background 0.15s, color 0.15s",
-              }}
-            >
+                  : "var(--surface-alt)", color: isActive ? accentColor : "var(--text-secondary)", cursor: isBusy ? "wait" : "pointer", transition: "border-color 0.15s, background 0.15s, color 0.15s"}} >
               {isBusy && accent === voiceAcc ? (
                 <Loader2 className="animate-spin" size={9} />
               ) : (

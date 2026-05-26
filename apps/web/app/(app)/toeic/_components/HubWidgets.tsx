@@ -204,87 +204,41 @@ export async function HubWidgets() {
 			: { bg: "var(--surface-alt)", text: "var(--text-muted)", border: "var(--border)" };
 
 	return (
-		<div style={{ display: "grid", gap: 16 }}>
+		<div className="grid gap-4" >
 			{/* Daily Plan — full width on top */}
-			<div
-				style={{
-					background: "var(--surface)",
-					border: "1.5px solid var(--border)",
-					borderRadius: "var(--radius-xl)",
-					padding: "18px 20px",
-					boxShadow: "var(--shadow-sm)"
-				}}
-			>
-				<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 14 }}>
-					<h3 style={{
-						margin: 0,
-						fontSize: 15.5,
-						fontWeight: 900,
-						color: "var(--text-primary)",
-						display: "flex",
-						alignItems: "center",
-						gap: 6
-					}}>
-						<Calendar style={{ color: "var(--accent)" }} />
+			<div className="bg-(--surface) rounded-(--radius-xl)" style={{border: "1.5px solid var(--border)", padding: "18px 20px", boxShadow: "var(--shadow-sm)"}} >
+				<div className="flex justify-between items-center" style={{marginBottom: 14}} >
+					<h3 className="m-0 font-black text-text-primary flex items-center gap-1.5" style={{fontSize: 15.5}} >
+						<Calendar className="text-accent" />
 						<span>🎯 Hôm nay nên làm</span>
 					</h3>
-					<span style={{
-						fontSize: 11,
-						color: "var(--text-muted)",
-						fontWeight: 800,
-						padding: "2px 8px",
-						borderRadius: 6,
-						background: "var(--surface-alt)",
-						border: "1px solid var(--border)"
-					}}>
+					<span className="text-[11px] text-text-muted font-extrabold rounded-md bg-surface-alt border border-(--border)" style={{padding: "2px 8px"}} >
 						{planItems.reduce((s, i) => s + i.estimatedMinutes, 0)} phút ước tính
 					</span>
 				</div>
 
 				{planItems.length === 0 ? (
-					<div style={{ color: "var(--text-muted)", fontSize: 13, fontWeight: 500, padding: "8px 0" }}>
+					<div className="text-text-muted text-[13px] font-medium" style={{padding: "8px 0"}} >
 						Hoàn thành bài kiểm tra đầu vào (diagnostic) để nhận gợi ý học tập cụ thể.
 					</div>
 				) : (
-					<div style={{ display: "grid", gap: 10 }}>
+					<div className="grid gap-2.5" >
 						{planItems.map((item) => {
 							const colorSet = priorityColors(item.priority);
 							return (
 								<Link
 									key={item.id}
-									href={item.href}
-									style={{
-										display: "grid",
-										gridTemplateColumns: "auto 1fr auto",
-										gap: 12,
-										alignItems: "center",
-										padding: "12px 14px",
-										borderRadius: "var(--radius-lg)",
-										background: "var(--surface-alt)",
-										border: "1.5px solid var(--border)",
-										textDecoration: "none",
-										color: "var(--text-primary)",
-										transition: "all 0.15s ease",
-									}}
-								>
-									<span style={{
-										fontSize: 10.5,
-										fontWeight: 900,
-										padding: "2px 8px",
-										borderRadius: 6,
-										background: colorSet.bg,
-										color: colorSet.text,
-										border: `1px solid ${colorSet.border}`
-									}}>
+									href={item.href} className="grid gap-3 items-center rounded-(--radius-lg) bg-surface-alt text-text-primary" style={{gridTemplateColumns: "auto 1fr auto", padding: "12px 14px", border: "1.5px solid var(--border)", textDecoration: "none", transition: "all 0.15s ease"}} >
+									<span className="text-[10.5px] font-black rounded-md" style={{padding: "2px 8px", background: colorSet.bg, color: colorSet.text, border: `1px solid ${colorSet.border}`}} >
 										{item.estimatedMinutes}p
 									</span>
 									<div>
-										<div style={{ fontWeight: 800, fontSize: 13.5 }}>{item.title}</div>
-										<div style={{ fontSize: 11.5, color: "var(--text-muted)", fontWeight: 500, marginTop: 1 }}>
+										<div className="font-extrabold" style={{fontSize: 13.5}} >{item.title}</div>
+										<div className="text-text-muted font-medium" style={{fontSize: 11.5, marginTop: 1}} >
 											{item.reason}
 										</div>
 									</div>
-									<ArrowRight style={{ color: "var(--accent)", fontSize: 12 }} />
+									<ArrowRight className="text-accent text-xs" />
 								</Link>
 							);
 						})}
@@ -293,151 +247,103 @@ export async function HubWidgets() {
 			</div>
 
 			{/* Status widgets grid */}
-			<div
-				style={{
-					display: "grid",
-					gap: 12,
-					gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))",
-				}}
-			>
+			<div className="grid gap-3" style={{gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))"}} >
 				{/* Predicted Score Card */}
-				<div style={{
-					background: "var(--surface)",
-					border: "1.5px solid var(--border)",
-					borderRadius: "var(--radius-xl)",
-					padding: "16px 18px",
-					boxShadow: "var(--shadow-sm)",
-					display: "flex",
-					flexDirection: "column",
-					justifyContent: "space-between",
-					gap: 12
-				}}>
+				<div className="bg-(--surface) rounded-(--radius-xl) flex flex-col justify-between gap-3" style={{border: "1.5px solid var(--border)", padding: "16px 18px", boxShadow: "var(--shadow-sm)"}} >
 					<div>
-						<span style={{ fontSize: 11, fontWeight: 850, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-secondary)" }}>
+						<span className="text-[11px] uppercase text-text-secondary" style={{fontWeight: 850, letterSpacing: "0.06em"}} >
 							📈 Điểm dự đoán
 						</span>
 						{predicted ? (
-							<div style={{ marginTop: 8 }}>
-								<div style={{ fontSize: 26, fontWeight: 950, color: "var(--text-primary)", fontFamily: "var(--font-display)", lineHeight: 1.1 }}>
+							<div className="mt-2" >
+								<div className="text-text-primary font-display" style={{fontSize: 26, fontWeight: 950, lineHeight: 1.1}} >
 									{predicted.total}
 								</div>
-								<div style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 650, marginTop: 2 }}>
+								<div className="text-xs text-text-muted" style={{fontWeight: 650, marginTop: 2}} >
 									{bandLabel(predicted.total)}
 								</div>
 							</div>
 						) : (
-							<div style={{ fontSize: 12.5, color: "var(--text-muted)", fontWeight: 650, marginTop: 12 }}>
+							<div className="text-text-muted mt-3" style={{fontSize: 12.5, fontWeight: 650}} >
 								Cần thêm dữ liệu làm đề
 							</div>
 						)}
 					</div>
 					{predicted && (
-						<Link href="/toeic/progress" style={{ color: "var(--accent)", fontSize: 12, fontWeight: 800, textDecoration: "none" }}>
+						<Link href="/toeic/progress" className="text-accent text-xs font-extrabold" style={{textDecoration: "none"}} >
 							Chi tiết biểu đồ →
 						</Link>
 					)}
 				</div>
 
 				{/* Last Mock Card */}
-				<div style={{
-					background: "var(--surface)",
-					border: "1.5px solid var(--border)",
-					borderRadius: "var(--radius-xl)",
-					padding: "16px 18px",
-					boxShadow: "var(--shadow-sm)",
-					display: "flex",
-					flexDirection: "column",
-					justifyContent: "space-between",
-					gap: 12
-				}}>
+				<div className="bg-(--surface) rounded-(--radius-xl) flex flex-col justify-between gap-3" style={{border: "1.5px solid var(--border)", padding: "16px 18px", boxShadow: "var(--shadow-sm)"}} >
 					<div>
-						<span style={{ fontSize: 11, fontWeight: 850, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-secondary)" }}>
+						<span className="text-[11px] uppercase text-text-secondary" style={{fontWeight: 850, letterSpacing: "0.06em"}} >
 							🎯 Mock gần nhất
 						</span>
 						{lastMock?.totalScaled ? (
-							<div style={{ marginTop: 8 }}>
-								<div style={{ fontSize: 26, fontWeight: 950, color: "var(--text-primary)", fontFamily: "var(--font-display)", lineHeight: 1.1 }}>
-									{lastMock.totalScaled} <span style={{ fontSize: 14, color: "var(--text-muted)", fontWeight: 700 }}>/ 990</span>
+							<div className="mt-2" >
+								<div className="text-text-primary font-display" style={{fontSize: 26, fontWeight: 950, lineHeight: 1.1}} >
+									{lastMock.totalScaled} <span className="text-sm text-text-muted font-bold" >/ 990</span>
 								</div>
 							</div>
 						) : (
-							<div style={{ fontSize: 12.5, color: "var(--text-muted)", fontWeight: 650, marginTop: 12 }}>
+							<div className="text-text-muted mt-3" style={{fontSize: 12.5, fontWeight: 650}} >
 								Chưa làm Mock Test nào
 							</div>
 						)}
 					</div>
 					{lastMock?.totalScaled ? (
 						<Link
-							href={`/toeic/mock-test/${lastMock.id}/result`}
-							style={{ color: "var(--accent)", fontSize: 12, fontWeight: 800, textDecoration: "none" }}
-						>
+							href={`/toeic/mock-test/${lastMock.id}/result`} className="text-accent text-xs font-extrabold" style={{textDecoration: "none"}} >
 							Xem kết quả chi tiết →
 						</Link>
 					) : (
-						<Link href="/toeic/mock-test" style={{ color: "var(--accent)", fontSize: 12, fontWeight: 800, textDecoration: "none" }}>
+						<Link href="/toeic/mock-test" className="text-accent text-xs font-extrabold" style={{textDecoration: "none"}} >
 							Làm bài Mock test ngay →
 						</Link>
 					)}
 				</div>
 
 				{/* Activity Card */}
-				<div style={{
-					background: "var(--surface)",
-					border: "1.5px solid var(--border)",
-					borderRadius: "var(--radius-xl)",
-					padding: "16px 18px",
-					boxShadow: "var(--shadow-sm)",
-					display: "flex",
-					flexDirection: "column",
-					justifyContent: "space-between",
-					gap: 12
-				}}>
+				<div className="bg-(--surface) rounded-(--radius-xl) flex flex-col justify-between gap-3" style={{border: "1.5px solid var(--border)", padding: "16px 18px", boxShadow: "var(--shadow-sm)"}} >
 					<div>
-						<span style={{ fontSize: 11, fontWeight: 850, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-secondary)" }}>
+						<span className="text-[11px] uppercase text-text-secondary" style={{fontWeight: 850, letterSpacing: "0.06em"}} >
 							🔥 Hoạt động hôm nay
 						</span>
-						<div style={{ marginTop: 8 }}>
-							<div style={{ fontSize: 26, fontWeight: 950, color: "var(--text-primary)", fontFamily: "var(--font-display)", lineHeight: 1.1 }}>
+						<div className="mt-2" >
+							<div className="text-text-primary font-display" style={{fontSize: 26, fontWeight: 950, lineHeight: 1.1}} >
 								{todayActivity}
 							</div>
-							<div style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 650, marginTop: 2 }}>
+							<div className="text-xs text-text-muted" style={{fontWeight: 650, marginTop: 2}} >
 								{todayActivity === 0 ? "Chưa làm bài nào" : "Giữ vững ngọn lửa 🔥"}
 							</div>
 						</div>
 					</div>
-					<Link href="/toeic/practice" style={{ color: "var(--accent)", fontSize: 12, fontWeight: 800, textDecoration: "none" }}>
+					<Link href="/toeic/practice" className="text-accent text-xs font-extrabold" style={{textDecoration: "none"}} >
 						Luyện đề thi mới →
 					</Link>
 				</div>
 
 				{/* Due Tasks Card */}
-				<div style={{
-					background: "var(--surface)",
-					border: "1.5px solid var(--border)",
-					borderRadius: "var(--radius-xl)",
-					padding: "16px 18px",
-					boxShadow: "var(--shadow-sm)",
-					display: "flex",
-					flexDirection: "column",
-					justifyContent: "space-between",
-					gap: 12
-				}}>
+				<div className="bg-(--surface) rounded-(--radius-xl) flex flex-col justify-between gap-3" style={{border: "1.5px solid var(--border)", padding: "16px 18px", boxShadow: "var(--shadow-sm)"}} >
 					<div>
-						<span style={{ fontSize: 11, fontWeight: 850, textTransform: "uppercase", letterSpacing: "0.06em", color: "var(--text-secondary)" }}>
+						<span className="text-[11px] uppercase text-text-secondary" style={{fontWeight: 850, letterSpacing: "0.06em"}} >
 							📚 Cần ôn tập
 						</span>
-						<div style={{ marginTop: 8 }}>
-							<div style={{ fontSize: 26, fontWeight: 950, color: "var(--text-primary)", fontFamily: "var(--font-display)", lineHeight: 1.1 }}>
-								{dueCount} <span style={{ fontSize: 14, color: "var(--text-muted)", fontWeight: 700 }}>câu</span>
+						<div className="mt-2" >
+							<div className="text-text-primary font-display" style={{fontSize: 26, fontWeight: 950, lineHeight: 1.1}} >
+								{dueCount} <span className="text-sm text-text-muted font-bold" >câu</span>
 							</div>
 						</div>
 					</div>
 					{dueCount > 0 ? (
-						<Link href="/toeic/review" style={{ color: "var(--error)", fontSize: 12, fontWeight: 800, textDecoration: "none" }}>
+						<Link href="/toeic/review" className="text-destructive text-xs font-extrabold" style={{textDecoration: "none"}} >
 							Ôn tập ngay →
 						</Link>
 					) : (
-						<span style={{ color: "var(--text-muted)", fontSize: 12, fontWeight: 800 }}>
+						<span className="text-text-muted text-xs font-extrabold" >
 							Sạch sẽ, không câu sai!
 						</span>
 					)}

@@ -14,9 +14,9 @@ const ToeicVocabTab = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div style={{ display: "flex", justifyContent: "center", padding: 60, color: "var(--text-muted)", gap: 10 }}>
-        <Loader2 className="animate-spin text-[var(--accent)]" size={20} />
-        <span style={{ fontWeight: 700, fontSize: 14 }}>Đang tải...</span>
+      <div className="flex justify-center text-text-muted gap-2.5" style={{padding: 60}} >
+        <Loader2 className="animate-spin text-accent" size={20} />
+        <span className="font-bold text-sm" >Đang tải...</span>
       </div>
     ),
   },
@@ -30,9 +30,9 @@ const DictionaryTab = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div style={{ display: "flex", justifyContent: "center", padding: 60, color: "var(--text-muted)", gap: 10 }}>
-        <Loader2 className="animate-spin text-[var(--accent)]" size={20} />
-        <span style={{ fontWeight: 700, fontSize: 14 }}>Đang tải...</span>
+      <div className="flex justify-center text-text-muted gap-2.5" style={{padding: 60}} >
+        <Loader2 className="animate-spin text-accent" size={20} />
+        <span className="font-bold text-sm" >Đang tải...</span>
       </div>
     ),
   },
@@ -64,30 +64,11 @@ export default function MyVocabularyPage() {
   const [active, setActive] = useState<TabKey>("toeic");
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        minHeight: 0,
-        flex: 1,
-        overflow: "hidden",
-      }}
-    >
+    <div className="flex flex-col h-full h-[0px] flex-1 overflow-hidden" >
 
       {/* Tab switcher */}
-      <div style={{
-        padding: "12px 16px 6px",
-        flexShrink: 0,
-      }}>
-        <div style={{
-          display: "flex",
-          gap: 4,
-          background: "var(--surface-alt)",
-          border: "1.5px solid var(--border)",
-          borderRadius: "var(--radius-xl)",
-          padding: 4,
-        }}>
+      <div className="shrink-0" style={{padding: "12px 16px 6px"}} >
+        <div className="flex gap-1 bg-surface-alt rounded-(--radius-xl) p-1" style={{border: "1.5px solid var(--border)"}} >
           {TABS.map((t) => {
             const isActive = active === t.key;
             return (
@@ -95,24 +76,7 @@ export default function MyVocabularyPage() {
                 type="button"
                 key={t.key}
                 onClick={() => setActive(t.key)}
-                whileTap={{ scale: 0.98 }}
-                style={{
-                  flex: 1,
-                  padding: "10px 16px",
-                  borderRadius: "var(--radius-lg)",
-                  border: "none",
-                  background: isActive ? TAB_COLORS[t.key] : "transparent",
-                  color: isActive ? "var(--text-on-accent)" : "var(--text-secondary)",
-                  cursor: "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 8,
-                  fontSize: 13.5,
-                  fontWeight: 800,
-                  transition: "color 0.2s, background 0.2s",
-                }}
-              >
+                whileTap={{ scale: 0.98 }} className="flex-1 py-2.5 px-4 rounded-(--radius-lg) border-none cursor-pointer flex items-center justify-center gap-2 font-extrabold" style={{background: isActive ? TAB_COLORS[t.key] : "transparent", color: isActive ? "var(--text-on-accent)" : "var(--text-secondary)", fontSize: 13.5, transition: "color 0.2s, background 0.2s"}} >
                 {t.icon}
                 <span>{t.label}</span>
               </m.button>
@@ -121,7 +85,7 @@ export default function MyVocabularyPage() {
         </div>
       </div>
 
-      <div style={{ flex: 1, minHeight: 0, overflow: "auto", padding: "16px 16px 40px" }}>
+      <div className="flex-1 h-[0px] overflow-auto" style={{padding: "16px 16px 40px"}} >
         {active === "toeic" && <ToeicVocabTab />}
         {active === "dictionary" && <DictionaryTab />}
       </div>

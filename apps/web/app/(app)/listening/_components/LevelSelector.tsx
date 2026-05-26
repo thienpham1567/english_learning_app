@@ -42,33 +42,14 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
   const activeLevel = level ?? recommendedLevel ?? null;
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 28,
-        padding: "24px 20px",
-        maxWidth: 600,
-        margin: "0 auto",
-        width: "100%",
-      }}
-    >
+    <div className="flex flex-col w-[600px] mx-auto w-full" style={{gap: 28, padding: "24px 20px"}} >
 
       {/* CEFR Level Grid */}
       <div>
-        <div
-          style={{
-            fontSize: 11,
-            fontWeight: 700,
-            color: "var(--text-muted)",
-            marginBottom: 12,
-            textTransform: "uppercase",
-            letterSpacing: "0.12em",
-          }}
-        >
+        <div className="text-[11px] font-bold text-text-muted mb-3 uppercase" style={{letterSpacing: "0.12em"}} >
           Cấp độ CEFR
         </div>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(90px, 1fr))", gap: 10 }}>
+        <div className="grid gap-2.5" style={{gridTemplateColumns: "repeat(auto-fit, minmax(90px, 1fr))"}} >
           {CEFR_LEVELS.map((l) => {
             const meta = LEVEL_META[l];
             const isSelected = activeLevel === l;
@@ -79,76 +60,28 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                 key={l}
                 onClick={() => setLevel(l)}
                 onMouseEnter={() => setHoveredLevel(l)}
-                onMouseLeave={() => setHoveredLevel(null)}
-                style={{
-                  position: "relative",
-                  padding: "14px 10px",
-                  borderRadius: 14,
-                  border: isSelected ? `2px solid ${meta.color}` : "1px solid var(--border)",
-                  background: isSelected
+                onMouseLeave={() => setHoveredLevel(null)} className="relative cursor-pointer text-center" style={{padding: "14px 10px", borderRadius: 14, border: isSelected ? `2px solid ${meta.color}` : "1px solid var(--border)", background: isSelected
                     ? `linear-gradient(135deg, ${meta.color}, color-mix(in srgb, ${meta.color} 80%, black))`
                     : isHov
                     ? `color-mix(in srgb, ${meta.color} 6%, transparent)`
-                    : "var(--surface)",
-                  cursor: "pointer",
-                  textAlign: "center",
-                  transition: "all 0.2s ease",
-                  transform: isSelected ? "scale(1.04)" : isHov ? "scale(1.02)" : "scale(1)",
-                  boxShadow: isSelected
+                    : "var(--surface)", transition: "all 0.2s ease", transform: isSelected ? "scale(1.04)" : isHov ? "scale(1.02)" : "scale(1)", boxShadow: isSelected
                     ? `0 4px 16px color-mix(in srgb, ${meta.color} 35%, transparent)`
                     : isHov
                     ? "var(--shadow-md)"
-                    : "none",
-                }}
-              >
+                    : "none"}} >
                 {/* Recommended badge */}
                 {recommendedLevel === l && (
-                  <span
-                    style={{
-                      position: "absolute",
-                      top: -8,
-                      right: -8,
-                      background: "var(--xp)",
-                      borderRadius: 99,
-                      fontSize: 9,
-                      fontWeight: 800,
-                      color: "var(--text-on-accent)",
-                      padding: "2px 7px",
-                      boxShadow: "var(--shadow-sm)",
-                    }}
-                  >
+                  <span className="absolute rounded-full text-[9px] font-extrabold" style={{top: -8, right: -8, background: "var(--xp)", color: "var(--text-on-accent)", padding: "2px 7px", boxShadow: "var(--shadow-sm)"}} >
                     ★ Đề xuất
                   </span>
                 )}
-                <div
-                  style={{
-                    fontSize: 20,
-                    fontWeight: 900,
-                    color: isSelected ? "var(--text-on-accent)" : meta.color,
-                    fontFamily: "var(--font-mono)",
-                    lineHeight: 1,
-                  }}
-                >
+                <div className="text-xl font-black font-mono leading-none" style={{color: isSelected ? "var(--text-on-accent)" : meta.color}} >
                   {l}
                 </div>
-                <div
-                  style={{
-                    fontSize: 10,
-                    fontWeight: 700,
-                    color: isSelected ? "rgba(255,255,255,0.9)" : "var(--text-secondary)",
-                    marginTop: 4,
-                  }}
-                >
+                <div className="text-[10px] font-bold mt-1" style={{color: isSelected ? "rgba(255,255,255,0.9)" : "var(--text-secondary)"}} >
                   {meta.label}
                 </div>
-                <div
-                  style={{
-                    fontSize: 9,
-                    color: isSelected ? "rgba(255,255,255,0.7)" : "var(--text-muted)",
-                    marginTop: 3,
-                    lineHeight: 1.3,
-                  }}
-                >
+                <div className="text-[9px]" style={{color: isSelected ? "rgba(255,255,255,0.7)" : "var(--text-muted)", marginTop: 3, lineHeight: 1.3}} >
                   {meta.desc}
                 </div>
               </button>
@@ -159,19 +92,10 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
 
       {/* Exercise Type */}
       <div>
-        <div
-          style={{
-            fontSize: 11,
-            fontWeight: 700,
-            color: "var(--text-muted)",
-            marginBottom: 12,
-            textTransform: "uppercase",
-            letterSpacing: "0.12em",
-          }}
-        >
+        <div className="text-[11px] font-bold text-text-muted mb-3 uppercase" style={{letterSpacing: "0.12em"}} >
           Loại bài tập
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+        <div className="flex flex-col gap-2" >
           {EXERCISE_TYPES.map((t) => {
             const meta = TYPE_META[t];
             const isSelected = exerciseType === t;
@@ -182,74 +106,31 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                 key={t}
                 onClick={() => setExerciseType(t)}
                 onMouseEnter={() => setHoveredType(t)}
-                onMouseLeave={() => setHoveredType(null)}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 14,
-                  padding: "13px 18px",
-                  borderRadius: 12,
-                  border: "1px solid var(--border)",
-                  borderLeft: isSelected
+                onMouseLeave={() => setHoveredType(null)} className="flex items-center gap-3.5 rounded-xl border border-(--border) cursor-pointer text-left" style={{padding: "13px 18px", borderLeft: isSelected
                     ? "4px solid var(--accent)"
                     : isHov
                     ? "4px solid var(--border)"
-                    : "4px solid transparent",
-                  background: isSelected
+                    : "4px solid transparent", background: isSelected
                     ? "color-mix(in srgb, var(--accent) 8%, var(--surface))"
                     : isHov
                     ? "var(--bg-deep, rgba(0,0,0,0.03))"
-                    : "var(--surface)",
-                  cursor: "pointer",
-                  textAlign: "left",
-                  transition: "all 0.18s ease",
-                }}
-              >
-                <span
-                  style={{
-                    display: "grid",
-                    width: 42,
-                    height: 42,
-                    placeItems: "center",
-                    borderRadius: 10,
-                    background: isSelected
+                    : "var(--surface)", transition: "all 0.18s ease"}} >
+                <span className="grid w-[42px] h-[42px] text-xl shrink-0" style={{placeItems: "center", borderRadius: 10, background: isSelected
                       ? "linear-gradient(135deg, var(--accent), var(--accent-hover))"
-                      : "var(--bg-deep, rgba(0,0,0,0.05))",
-                    fontSize: 20,
-                    flexShrink: 0,
-                    transition: "background 0.18s",
-                    boxShadow: isSelected ? "var(--shadow-md)" : "none",
-                  }}
-                >
+                      : "var(--bg-deep, rgba(0,0,0,0.05))", transition: "background 0.18s", boxShadow: isSelected ? "var(--shadow-md)" : "none"}} >
                   {meta.icon}
                 </span>
-                <div style={{ flex: 1 }}>
-                  <div
-                    style={{
-                      fontSize: 14,
-                      fontWeight: 700,
-                      color: isSelected ? "var(--accent)" : "var(--text)",
-                    }}
-                  >
+                <div className="flex-1" >
+                  <div className="text-sm font-bold" style={{color: isSelected ? "var(--accent)" : "var(--text)"}} >
                     {meta.label}
                   </div>
-                  <div style={{ fontSize: 12, color: "var(--text-muted)", marginTop: 1 }}>
+                  <div className="text-xs text-text-muted" style={{marginTop: 1}} >
                     {meta.desc}
                   </div>
                 </div>
                 {isSelected && (
-                  <span
-                    style={{
-                      width: 22,
-                      height: 22,
-                      borderRadius: 99,
-                      background: "var(--accent)",
-                      display: "grid",
-                      placeItems: "center",
-                      flexShrink: 0,
-                    }}
-                  >
-                    <Check size={11} className="text-[var(--text-on-accent)]" />
+                  <span className="w-[22px] h-[22px] rounded-full grid shrink-0" style={{background: "var(--accent)", placeItems: "center"}} >
+                    <Check size={11} className="text-(--text-on-accent)" />
                   </span>
                 )}
               </button>
@@ -261,27 +142,9 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
       {/* Start Button */}
       <button
         onClick={() => activeLevel && onStart(activeLevel, exerciseType)}
-        disabled={!activeLevel || isLoading}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 10,
-          padding: "15px 24px",
-          borderRadius: 14,
-          border: "none",
-          background: activeLevel
+        disabled={!activeLevel || isLoading} className="flex items-center justify-center gap-2.5 border-none text-base font-bold" style={{padding: "15px 24px", borderRadius: 14, background: activeLevel
             ? "linear-gradient(135deg, var(--accent), var(--accent-hover))"
-            : "var(--border)",
-          color: activeLevel ? "var(--text-on-accent)" : "var(--text-muted)",
-          fontSize: 16,
-          fontWeight: 700,
-          cursor: activeLevel && !isLoading ? "pointer" : "not-allowed",
-          transition: "all 0.2s ease",
-          opacity: isLoading ? 0.75 : 1,
-          boxShadow: activeLevel ? "var(--shadow-lg)" : "none",
-        }}
-      >
+            : "var(--border)", color: activeLevel ? "var(--text-on-accent)" : "var(--text-muted)", cursor: activeLevel && !isLoading ? "pointer" : "not-allowed", transition: "all 0.2s ease", opacity: isLoading ? 0.75 : 1, boxShadow: activeLevel ? "var(--shadow-lg)" : "none"}} >
         {isLoading ? <Loader2 className="animate-spin" /> : <Volume2 />}
         {isLoading ? "Đang tạo bài nghe..." : "Bắt đầu luyện nghe"}
       </button>

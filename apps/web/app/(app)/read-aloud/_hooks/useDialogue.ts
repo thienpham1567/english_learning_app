@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useCallback, useRef, useEffect } from "react";
-import { message } from "antd";
+
 import { api } from "@/lib/api-client";
 import { VOICES } from "../_data/voices";
 
@@ -139,7 +139,7 @@ export function useDialogue() {
       const data: Dialogue = await res.json();
       setDialogue(data);
       const assignments = assignVoices(data.lines, options.primaryVoice);
-      message.success(`✨ Đã tạo hội thoại: ${data.title}`);
+      /* toast: success */
 
       // Auto-save to DB
       try {
@@ -159,7 +159,7 @@ export function useDialogue() {
 
       return data;
     } catch {
-      message.error("Không thể tạo hội thoại. Vui lòng thử lại.");
+      /* toast: error */
       return null;
     } finally {
       setGenerating(false);
@@ -337,7 +337,7 @@ export function useDialogue() {
       }
     } catch (err) {
       if (err instanceof Error && err.name === "AbortError") return;
-      message.error("Lỗi phát audio");
+      /* toast: error */
     } finally {
       setIsPlaying(false);
       setIsLoading(false);
@@ -375,7 +375,7 @@ export function useDialogue() {
       await playAudio(url);
     } catch (err) {
       if (err instanceof Error && err.name === "AbortError") return;
-      message.error("Lỗi phát audio");
+      /* toast: error */
     } finally {
       setIsPlaying(false);
       setIsLoading(false);

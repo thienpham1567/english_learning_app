@@ -176,8 +176,8 @@ export function QuestionRunner({
 
 	if (!question) {
 		return (
-			<div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: 48, color: "var(--text-secondary)", fontWeight: 700 }}>
-				<Loader2 className="animate-spin" style={{ fontSize: 20, marginRight: 8, color: "var(--accent)" }} /> Đang tải câu hỏi…
+			<div className="flex justify-center items-center text-text-secondary font-bold" style={{padding: 48}} >
+				<Loader2 className="animate-spin text-xl mr-2 text-accent" /> Đang tải câu hỏi…
 			</div>
 		);
 	}
@@ -208,45 +208,18 @@ export function QuestionRunner({
 	const remainingSec = timeLimit && startedAt ? Math.max(0, Math.ceil((timeLimit - elapsed) / 1000)) : null;
 
 	return (
-		<div style={{ display: "flex", flexDirection: "column", gap: 16, maxWidth: 720, width: "100%", margin: "0 auto" }} className="anim-fade-up">
+		<div className="anim-fade-up flex flex-col gap-4 w-[720px] w-full mx-auto">
 			{/* Question metadata bar */}
-			<div
-				style={{
-					display: "flex",
-					justifyContent: "space-between",
-					alignItems: "center",
-					background: "var(--surface-alt)",
-					border: "1.5px solid var(--border)",
-					padding: "10px 14px",
-					borderRadius: "var(--radius-xl)",
-				}}
-			>
-				<span style={{ fontSize: 13.5, fontWeight: 900, color: "var(--text-secondary)" }}>
+			<div className="flex justify-between items-center bg-surface-alt rounded-(--radius-xl)" style={{border: "1.5px solid var(--border)", padding: "10px 14px"}} >
+				<span className="font-black text-text-secondary" style={{fontSize: 13.5}} >
 					Câu {currentIndex + 1} / {total}
 				</span>
-				<div style={{ display: "flex", gap: 6, alignItems: "center" }}>
-					<span style={{
-						fontSize: 10.5,
-						fontWeight: 900,
-						padding: "2px 8px",
-						borderRadius: 6,
-						background: "var(--accent-light)",
-						color: "var(--accent)",
-						border: "1px solid var(--accent-muted)"
-					}}>
+				<div className="flex gap-1.5 items-center" >
+					<span className="text-[10.5px] font-black rounded-md text-accent" style={{padding: "2px 8px", background: "var(--accent-light)", border: "1px solid var(--accent-muted)"}} >
 						Part {question.part}
 					</span>
 					{remainingSec !== null && (
-						<span style={{
-							fontSize: 11,
-							fontWeight: 900,
-							fontFamily: "var(--font-mono)",
-							padding: "2px 8px",
-							borderRadius: 6,
-							background: remainingSec < 60 ? "rgba(239, 68, 68, 0.08)" : "var(--surface)",
-							color: remainingSec < 60 ? "var(--error)" : "var(--text-secondary)",
-							border: `1px solid ${remainingSec < 60 ? "rgba(239, 68, 68, 0.2)" : "var(--border)"}`
-						}}>
+						<span className="text-[11px] font-black font-mono rounded-md" style={{padding: "2px 8px", background: remainingSec < 60 ? "rgba(239, 68, 68, 0.08)" : "var(--surface)", color: remainingSec < 60 ? "var(--error)" : "var(--text-secondary)", border: `1px solid ${remainingSec < 60 ? "rgba(239, 68, 68, 0.2)" : "var(--border)"}`}} >
 							{Math.floor(remainingSec / 60)}:{String(remainingSec % 60).padStart(2, "0")}
 						</span>
 					)}
@@ -255,50 +228,26 @@ export function QuestionRunner({
 
 			{/* Question Images */}
 			{question.imageUrls && question.imageUrls.length > 0 && (
-				<div style={{ display: "flex", gap: 8, flexWrap: "wrap", justifyContent: "center", background: "var(--surface)", border: "1.5px solid var(--border)", padding: 10, borderRadius: "var(--radius-xl)" }}>
+				<div className="flex gap-2 flex-wrap justify-center bg-(--surface) rounded-(--radius-xl)" style={{border: "1.5px solid var(--border)", padding: 10}} >
 					{question.imageUrls.map((src) => (
 						<img
 							key={src}
 							src={src}
 							alt=""
 							loading="lazy"
-							decoding="async"
-							style={{ maxWidth: "100%", maxHeight: 320, borderRadius: "var(--radius-lg)", objectFit: "contain" }}
-						/>
+							decoding="async" className="h-[320px] rounded-(--radius-lg)" style={{maxWidth: "100%", objectFit: "contain"}} />
 					))}
 				</div>
 			)}
 
 			{/* Audio block */}
 			{question.audioUrl && !question.audioSegments && (
-				<div style={{
-					display: "flex",
-					alignItems: "center",
-					gap: 12,
-					background: "var(--surface)",
-					border: "1.5px solid var(--border)",
-					padding: "12px 16px",
-					borderRadius: "var(--radius-xl)"
-				}}>
+				<div className="flex items-center gap-3 bg-(--surface) py-3 px-4 rounded-(--radius-xl)" style={{border: "1.5px solid var(--border)"}} >
 					<m.button
 						type="button"
 						onClick={() => audioRef.current?.play()}
 						whileHover={{ scale: 1.03 }}
-						whileTap={{ scale: 0.97 }}
-						style={{
-							display: "inline-flex",
-							alignItems: "center",
-							gap: 8,
-							padding: "10px 18px",
-							background: "var(--accent)",
-							color: "var(--text-on-accent)",
-							border: "none",
-							borderRadius: "var(--radius-lg)",
-							fontSize: 13,
-							fontWeight: 800,
-							cursor: "pointer"
-						}}
-					>
+						whileTap={{ scale: 0.97 }} className="items-center gap-2 border-none rounded-(--radius-lg) text-[13px] font-extrabold cursor-pointer" style={{display: "inline-flex", padding: "10px 18px", background: "var(--accent)", color: "var(--text-on-accent)"}} >
 						<Volume2 />
 						<span>Nghe audio câu hỏi</span>
 					</m.button>
@@ -308,19 +257,8 @@ export function QuestionRunner({
 
 			{/* Audio segment player for Part 2 */}
 			{question.audioSegments && (
-				<div
-					style={{
-						background: "var(--surface)",
-						border: "1.5px solid var(--border)",
-						padding: "14px 18px",
-						borderRadius: "var(--radius-xl)",
-						display: "flex",
-						justifyContent: "space-between",
-						alignItems: "center",
-						gap: 12
-					}}
-				>
-					<span style={{ fontSize: 13, fontWeight: 800, color: "var(--text-secondary)" }}>
+				<div className="bg-(--surface) rounded-(--radius-xl) flex justify-between items-center gap-3" style={{border: "1.5px solid var(--border)", padding: "14px 18px"}} >
+					<span className="text-[13px] font-extrabold text-text-secondary" >
 						{(() => {
 							const hasQ = (question.audioSegments?.question ?? "").length > 0;
 							const totalSegs = (hasQ ? 1 : 0) + (question.audioSegments?.options.length ?? 0);
@@ -339,21 +277,7 @@ export function QuestionRunner({
 							void playPart2Sequence();
 						}}
 						whileHover={{ scale: 1.03 }}
-						whileTap={{ scale: 0.97 }}
-						style={{
-							display: "inline-flex",
-							alignItems: "center",
-							gap: 6,
-							padding: "6px 12px",
-							background: "var(--surface-alt)",
-							color: "var(--text-primary)",
-							border: "1.5px solid var(--border)",
-							borderRadius: "var(--radius-md)",
-							fontSize: 12.5,
-							fontWeight: 800,
-							cursor: part2PlayingIdx >= 0 && part2PlayingIdx < 4 ? "not-allowed" : "pointer"
-						}}
-					>
+						whileTap={{ scale: 0.97 }} className="items-center gap-1.5 py-1.5 px-3 bg-surface-alt text-text-primary font-extrabold" style={{display: "inline-flex", border: "1.5px solid var(--border)", borderRadius: "var(--radius-md)", fontSize: 12.5, cursor: part2PlayingIdx >= 0 && part2PlayingIdx < 4 ? "not-allowed" : "pointer"}} >
 						<PlayCircle />
 						<span>Nghe lại</span>
 					</m.button>
@@ -363,32 +287,20 @@ export function QuestionRunner({
 
 			{/* Reading passage text */}
 			{question.passageText && (
-				<div
-					style={{
-						whiteSpace: "pre-wrap",
-						background: "var(--surface)",
-						border: "1.5px solid var(--border)",
-						padding: 16,
-						borderRadius: "var(--radius-xl)",
-						fontSize: 14.5,
-						lineHeight: 1.7,
-						color: "var(--text-primary)",
-						fontWeight: 500
-					}}
-				>
+				<div className="bg-(--surface) p-4 rounded-(--radius-xl) text-text-primary font-medium" style={{whiteSpace: "pre-wrap", border: "1.5px solid var(--border)", fontSize: 14.5, lineHeight: 1.7}} >
 					{question.passageText}
 				</div>
 			)}
 
 			{/* Question Text */}
 			{question.questionText && (
-				<div style={{ fontSize: 16, fontWeight: 900, color: "var(--text-primary)", fontFamily: "var(--font-display)", padding: "4px 2px" }}>
+				<div className="text-base font-black text-text-primary font-display" style={{padding: "4px 2px"}} >
 					{question.questionText}
 				</div>
 			)}
 
 			{/* Choices buttons grid */}
-			<div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+			<div className="flex flex-col gap-2.5" >
 				{question.options.map((opt, idx) => {
 					const isPicked = selected === idx;
 					const isCorrect = showExplanationNow && question.correctIndex === idx;
@@ -405,12 +317,12 @@ export function QuestionRunner({
 							bg = "rgba(16, 185, 129, 0.08)";
 							border = "1.5px solid var(--success)";
 							color = "var(--success)";
-							iconElement = <CheckCircle style={{ color: "var(--success)", fontSize: 16 }} />;
+							iconElement = <CheckCircle className="text-emerald-500 text-base" />;
 						} else if (isPicked) {
 							bg = "rgba(239, 68, 68, 0.08)";
 							border = "1.5px solid var(--error)";
 							color = "var(--error)";
-							iconElement = <XCircle style={{ color: "var(--error)", fontSize: 16 }} />;
+							iconElement = <XCircle className="text-destructive text-base" />;
 						} else {
 							bg = "var(--surface-alt)";
 							color = "var(--text-muted)";
@@ -429,27 +341,11 @@ export function QuestionRunner({
 							onClick={() => handlePick(idx)}
 							disabled={revealed && !hideExplanation}
 							whileHover={revealed && !hideExplanation ? {} : { x: 3, borderColor: "var(--accent)" }}
-							whileTap={revealed && !hideExplanation ? {} : { scale: 0.98 }}
-							style={{
-								padding: "14px 18px",
-								borderRadius: "var(--radius-xl)",
-								border,
-								background: bg,
-								color,
-								textAlign: "left",
-								cursor: revealed && !hideExplanation ? "default" : "pointer",
-								display: "flex",
-								gap: 10,
-								alignItems: "center",
-								fontSize: 14,
-								fontWeight: 700,
-								transition: "background 0.2s, border-color 0.2s",
-							}}
-						>
-							<span style={{ fontWeight: 900, minWidth: 22, opacity: 0.7 }}>
+							whileTap={revealed && !hideExplanation ? {} : { scale: 0.98 }} className="rounded-(--radius-xl) text-left flex gap-2.5 items-center text-sm font-bold" style={{padding: "14px 18px", border, background: bg, color, cursor: revealed && !hideExplanation ? "default" : "pointer", transition: "background 0.2s, border-color 0.2s"}} >
+							<span className="font-black w-[22px]" style={{opacity: 0.7}} >
 								{String.fromCharCode(65 + idx)}.
 							</span>
-							<span style={{ flex: 1 }}>{isLabelOnly ? "" : opt}</span>
+							<span className="flex-1" >{isLabelOnly ? "" : opt}</span>
 							{iconElement}
 						</m.button>
 					);
@@ -460,81 +356,35 @@ export function QuestionRunner({
 			{showExplanationNow && question.explanationVi && (
 				<m.div
 					initial={{ opacity: 0, y: 8 }}
-					animate={{ opacity: 1, y: 0 }}
-					style={{
-						background: "var(--surface-alt)",
-						border: "1.5px solid var(--border)",
-						padding: 16,
-						borderRadius: "var(--radius-xl)",
-						fontSize: 13.5,
-						color: "var(--text-secondary)",
-						lineHeight: 1.6,
-						fontWeight: 500
-					}}
-				>
-					<div style={{ display: "flex", alignItems: "center", gap: 6, fontWeight: 900, color: "var(--text-primary)", marginBottom: 6 }}>
-						<CheckCircle style={{ color: "var(--success)" }} />
+					animate={{ opacity: 1, y: 0 }} className="bg-surface-alt p-4 rounded-(--radius-xl) text-text-secondary leading-relaxed font-medium" style={{border: "1.5px solid var(--border)", fontSize: 13.5}} >
+					<div className="flex items-center gap-1.5 font-black text-text-primary mb-1.5" >
+						<CheckCircle className="text-emerald-500" />
 						<span>Giải thích đáp án chi tiết:</span>
 					</div>
-					<p style={{ margin: 0 }}>{question.explanationVi}</p>
+					<p className="m-0" >{question.explanationVi}</p>
 				</m.div>
 			)}
 
 			{/* Control actions bar */}
-			<div
-				style={{
-					display: "flex",
-					justifyContent: "space-between",
-					alignItems: "center",
-					gap: 12,
-					marginTop: 12,
-					borderTop: "1.5px dashed var(--border)",
-					paddingTop: 16
-				}}
-			>
+			<div className="flex justify-between items-center gap-3 mt-3 pt-4" style={{borderTop: "1.5px dashed var(--border)"}} >
 				<m.button
 					type="button"
 					onClick={() => void toggleFlag()}
 					disabled={!attemptId}
 					whileTap={{ scale: 0.95 }}
-					style={{
-						display: "inline-flex",
-						alignItems: "center",
-						gap: 6,
-						padding: "8px 16px",
-						borderRadius: "var(--radius-lg)",
-						border: "1.5px solid var(--border)",
-						background: isFlagged ? "rgba(239, 68, 68, 0.08)" : "var(--surface)",
-						color: isFlagged ? "var(--error)" : "var(--text-secondary)",
-						fontSize: 13,
-						fontWeight: 800,
-						cursor: attemptId ? "pointer" : "not-allowed",
-						transition: "all 0.15s"
-					}}
-					title="Phím tắt: F"
-				>
+					
+					title="Phím tắt: F" className="items-center gap-1.5 py-2 px-4 rounded-(--radius-lg) text-[13px] font-extrabold" style={{display: "inline-flex", border: "1.5px solid var(--border)", background: isFlagged ? "rgba(239, 68, 68, 0.08)" : "var(--surface)", color: isFlagged ? "var(--error)" : "var(--text-secondary)", cursor: attemptId ? "pointer" : "not-allowed", transition: "all 0.15s"}} >
 					{isFlagged ? <Flag /> : <Flag />}
 					<span>{isFlagged ? "Đã đánh dấu" : "Đánh dấu"}</span>
 				</m.button>
 				
-				<div style={{ display: "flex", gap: 10 }}>
+				<div className="flex gap-2.5" >
 					{hideExplanation && selected === null && (
 						<m.button
 							type="button"
 							onClick={() => void onAnswer(null)}
 							whileHover={{ scale: 1.02 }}
-							whileTap={{ scale: 0.98 }}
-							style={{
-								padding: "8px 16px",
-								borderRadius: "var(--radius-lg)",
-								border: "1.5px solid var(--border)",
-								background: "var(--surface)",
-								color: "var(--text-secondary)",
-								fontSize: 13,
-								fontWeight: 850,
-								cursor: "pointer"
-							}}
-						>
+							whileTap={{ scale: 0.98 }} className="py-2 px-4 rounded-(--radius-lg) bg-(--surface) text-text-secondary text-[13px] cursor-pointer" style={{border: "1.5px solid var(--border)", fontWeight: 850}} >
 							Bỏ qua
 						</m.button>
 					)}
@@ -543,35 +393,14 @@ export function QuestionRunner({
 						onClick={handleNext}
 						disabled={!canSubmit && !hideExplanation}
 						whileHover={!canSubmit && !hideExplanation ? {} : { scale: 1.02 }}
-						whileTap={!canSubmit && !hideExplanation ? {} : { scale: 0.98 }}
-						style={{
-							padding: "10px 24px",
-							borderRadius: "var(--radius-lg)",
-							border: "none",
-							background: !canSubmit && !hideExplanation ? "var(--border)" : "var(--accent)",
-							color: !canSubmit && !hideExplanation ? "var(--text-muted)" : "var(--text-on-accent)",
-							fontSize: 13,
-							fontWeight: 850,
-							cursor: !canSubmit && !hideExplanation ? "not-allowed" : "pointer",
-							boxShadow: !canSubmit && !hideExplanation ? "none" : "0 4px 12px var(--accent-muted)",
-							transition: "all 0.15s"
-						}}
-					>
+						whileTap={!canSubmit && !hideExplanation ? {} : { scale: 0.98 }} className="rounded-(--radius-lg) border-none text-[13px]" style={{padding: "10px 24px", background: !canSubmit && !hideExplanation ? "var(--border)" : "var(--accent)", color: !canSubmit && !hideExplanation ? "var(--text-muted)" : "var(--text-on-accent)", fontWeight: 850, cursor: !canSubmit && !hideExplanation ? "not-allowed" : "pointer", boxShadow: !canSubmit && !hideExplanation ? "none" : "0 4px 12px var(--accent-muted)", transition: "all 0.15s"}} >
 						<span>{isLast ? "Nộp bài" : "Câu tiếp theo"}</span>
 					</m.button>
 				</div>
 			</div>
 			
-			<div
-				style={{
-					marginTop: 6,
-					fontSize: 11,
-					color: "var(--text-muted)",
-					textAlign: "center",
-					fontWeight: 600
-				}}
-			>
-				⌨️ Phím tắt nhanh: <kbd style={{ background: "var(--surface-alt)", padding: "2px 5px", borderRadius: 4, border: "1px solid var(--border)" }}>1-4</kbd> hoặc <kbd style={{ background: "var(--surface-alt)", padding: "2px 5px", borderRadius: 4, border: "1px solid var(--border)" }}>A-D</kbd> để chọn · <kbd style={{ background: "var(--surface-alt)", padding: "2px 5px", borderRadius: 4, border: "1px solid var(--border)" }}>Space</kbd> phát/dừng audio · <kbd style={{ background: "var(--surface-alt)", padding: "2px 5px", borderRadius: 4, border: "1px solid var(--border)" }}>F</kbd> để flag · <kbd style={{ background: "var(--surface-alt)", padding: "2px 5px", borderRadius: 4, border: "1px solid var(--border)" }}>Enter</kbd> tiếp tục
+			<div className="mt-1.5 text-[11px] text-text-muted text-center font-semibold" >
+				⌨️ Phím tắt nhanh: <kbd className="bg-surface-alt rounded border border-(--border)" style={{padding: "2px 5px"}} >1-4</kbd> hoặc <kbd className="bg-surface-alt rounded border border-(--border)" style={{padding: "2px 5px"}} >A-D</kbd> để chọn · <kbd className="bg-surface-alt rounded border border-(--border)" style={{padding: "2px 5px"}} >Space</kbd> phát/dừng audio · <kbd className="bg-surface-alt rounded border border-(--border)" style={{padding: "2px 5px"}} >F</kbd> để flag · <kbd className="bg-surface-alt rounded border border-(--border)" style={{padding: "2px 5px"}} >Enter</kbd> tiếp tục
 			</div>
 		</div>
 	);

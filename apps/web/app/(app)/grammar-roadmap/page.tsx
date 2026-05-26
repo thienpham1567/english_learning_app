@@ -167,29 +167,17 @@ export default function GrammarRoadmapPage() {
   }, [getPhaseStats]);
 
   return (
-    <div style={{ height: "100%", overflowY: "auto", padding: "var(--space-6)" }} className="anim-fade-up">
-      <div style={{ maxWidth: 900, margin: "0 auto" }}>
+    <div className="anim-fade-up h-full overflow-y-auto" style={{padding: "var(--space-6)"}} >
+      <div className="w-[900px] mx-auto" >
 
         {/* ── Overall Progress Card ── */}
         <m.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          style={{
-            background: "var(--surface)",
-            borderRadius: "var(--radius-xl)",
-            border: "1px solid var(--border)",
-            padding: "24px",
-            boxShadow: "var(--shadow-md)",
-            marginTop: 20,
-            marginBottom: 24,
-            position: "relative",
-            overflow: "hidden",
-          }}
-        >
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "linear-gradient(90deg, var(--success), var(--accent), var(--error))" }} />
+          transition={{ delay: 0.1 }} className="bg-(--surface) rounded-(--radius-xl) border border-(--border) p-6 mt-5 mb-6 relative overflow-hidden" style={{boxShadow: "var(--shadow-md)"}} >
+          <div className="absolute h-[3px]" style={{top: 0, left: 0, right: 0, background: "linear-gradient(90deg, var(--success), var(--accent), var(--error))"}} />
 
-          <div style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap" }}>
+          <div className="flex items-center gap-5 flex-wrap" >
             {/* Circle progress */}
             <Progress
               type="circle"
@@ -199,38 +187,32 @@ export default function GrammarRoadmapPage() {
               strokeColor={{ "0%": "var(--success)", "50%": "var(--accent)", "100%": "var(--error)" }}
               trailColor="var(--border)"
               format={() => (
-                <div style={{ textAlign: "center" }}>
-                  <div style={{ fontSize: 22, fontWeight: 900, color: "var(--ink)", fontFamily: "var(--font-display)" }}>{overallPct}%</div>
-                  <div style={{ fontSize: 9.5, color: "var(--text-muted)", fontWeight: 700 }}>Hoàn thành</div>
+                <div className="text-center" >
+                  <div className="text-2xl font-black text-ink font-display" >{overallPct}%</div>
+                  <div className="text-text-muted font-bold" style={{fontSize: 9.5}} >Hoàn thành</div>
                 </div>
               )}
             />
 
             {/* Stats */}
-            <div style={{ flex: 1, minWidth: 200 }}>
-              <div style={{ fontSize: 18, fontWeight: 900, color: "var(--ink)", fontFamily: "var(--font-display)", marginBottom: 4 }}>
+            <div className="flex-1 w-[200px]" >
+              <div className="text-lg font-black text-ink font-display mb-1" >
                 Tiến độ tổng quan
               </div>
-              <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 12 }}>
-                <StatPill icon={<CheckCircle style={{ color: "var(--success)" }} />} label="Đã hoàn thành" value={`${totalCompleted}/${totalTopics}`} />
-                <StatPill icon={<Zap style={{ color: "var(--accent)" }} />} label="Đang học" value={String(totalInProgress)} />
-                <StatPill icon={<Flame style={{ color: "var(--error)" }} />} label="Giai đoạn" value={`${currentPhase}/3`} />
+              <div className="flex gap-4 flex-wrap mb-3" >
+                <StatPill icon={<CheckCircle className="text-emerald-500" />} label="Đã hoàn thành" value={`${totalCompleted}/${totalTopics}`} />
+                <StatPill icon={<Zap className="text-accent" />} label="Đang học" value={String(totalInProgress)} />
+                <StatPill icon={<Flame className="text-destructive" />} label="Giai đoạn" value={`${currentPhase}/3`} />
               </div>
 
               {/* Phase progress mini-bars */}
-              <div style={{ display: "flex", gap: 4 }}>
+              <div className="flex gap-1" >
                 {PHASE_CONFIG.map((phase) => {
                   const stats = getPhaseStats(phase.categoryIds);
                   return (
                     <Tooltip key={phase.id} title={`${phase.title}: ${stats.completed}/${stats.total} (${stats.pct}%)`}>
-                      <div style={{ flex: 1, height: 6, borderRadius: 3, background: "var(--border)", overflow: "hidden" }}>
-                        <div style={{
-                          width: `${stats.pct}%`,
-                          height: "100%",
-                          borderRadius: 3,
-                          background: phase.gradient,
-                          transition: "width 0.5s ease",
-                        }} />
+                      <div className="flex-1 h-[6px] overflow-hidden" style={{borderRadius: 3, background: "var(--border)"}} >
+                        <div className="h-full" style={{width: `${stats.pct}%`, borderRadius: 3, background: phase.gradient, transition: "width 0.5s ease"}} />
                       </div>
                     </Tooltip>
                   );
@@ -246,30 +228,17 @@ export default function GrammarRoadmapPage() {
               >
                 <m.div
                   whileHover={{ scale: 1.03, y: -2 }}
-                  whileTap={{ scale: 0.97 }}
-                  style={{
-                    padding: "14px 20px",
-                    borderRadius: "var(--radius-xl)",
-                    background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-                    color: "var(--text-on-accent)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 10,
-                    boxShadow: "0 6px 20px var(--accent-muted)",
-                    cursor: "pointer",
-                    minWidth: 200,
-                  }}
-                >
+                  whileTap={{ scale: 0.97 }} className="rounded-(--radius-xl) flex items-center gap-2.5 cursor-pointer w-[200px]" style={{padding: "14px 20px", background: "linear-gradient(135deg, var(--accent), var(--accent-hover))", color: "var(--text-on-accent)", boxShadow: "0 6px 20px var(--accent-muted)"}} >
                   <Rocket size={18} />
                   <div>
-                    <div style={{ fontSize: 10, fontWeight: 700, textTransform: "uppercase", letterSpacing: "0.08em", opacity: 0.8 }}>
+                    <div className="text-[10px] font-bold uppercase tracking-widest" style={{opacity: 0.8}} >
                       Gợi ý tiếp theo
                     </div>
-                    <div style={{ fontSize: 14, fontWeight: 800 }}>
+                    <div className="text-sm font-extrabold" >
                       {recommendedTopic.title}
                     </div>
                   </div>
-                  <ArrowRight style={{ marginLeft: "auto", fontSize: 14 }} />
+                  <ArrowRight className="text-sm" style={{marginLeft: "auto"}} />
                 </m.div>
               </Link>
             )}
@@ -277,7 +246,7 @@ export default function GrammarRoadmapPage() {
         </m.div>
 
         {/* ── Phase Accordion ── */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <div className="flex flex-col gap-4" >
           {PHASE_CONFIG.map((phase, phaseIdx) => {
             const stats = getPhaseStats(phase.categoryIds);
             const isExpanded = expandedPhase === phase.id;
@@ -290,88 +259,49 @@ export default function GrammarRoadmapPage() {
                 key={phase.id}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.15 + phaseIdx * 0.1 }}
-                style={{
-                  background: "var(--surface)",
-                  borderRadius: "var(--radius-xl)",
-                  border: isCurrentPhase ? `2px solid ${phase.color}` : "1px solid var(--border)",
-                  boxShadow: isCurrentPhase ? `0 6px 24px color-mix(in srgb, ${phase.color} 12%, transparent)` : "var(--shadow-sm)",
-                  overflow: "hidden",
-                }}
-              >
+                transition={{ delay: 0.15 + phaseIdx * 0.1 }} className="bg-(--surface) rounded-(--radius-xl) overflow-hidden" style={{border: isCurrentPhase ? `2px solid ${phase.color}` : "1px solid var(--border)", boxShadow: isCurrentPhase ? `0 6px 24px color-mix(in srgb, ${phase.color} 12%, transparent)` : "var(--shadow-sm)"}} >
                 {/* Phase Header (clickable) */}
                 <m.button
                   onClick={() => setExpandedPhase(isExpanded ? null : phase.id)}
-                  whileHover={{ backgroundColor: "var(--surface-hover)" }}
-                  style={{
-                    width: "100%",
-                    padding: "20px 24px",
-                    border: "none",
-                    background: "transparent",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 16,
-                    textAlign: "left",
-                  }}
-                >
+                  whileHover={{ backgroundColor: "var(--surface-hover)" }} className="w-full border-none bg-transparent cursor-pointer flex items-center gap-4 text-left" style={{padding: "20px 24px"}} >
                   {/* Phase number badge */}
-                  <div style={{
-                    width: 48,
-                    height: 48,
-                    borderRadius: 14,
-                    background: phase.gradient,
-                    display: "grid",
-                    placeItems: "center",
-                    flexShrink: 0,
-                    fontSize: 22,
-                  }}>
+                  <div className="w-[48px] h-[48px] grid shrink-0 text-2xl" style={{borderRadius: 14, background: phase.gradient, placeItems: "center"}} >
                     {isPastPhase ? <CheckCircle style={{ color: "#fff" }} /> : phase.emoji}
                   </div>
 
                   {/* Phase info */}
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 2 }}>
-                      <span style={{ fontSize: 10, fontWeight: 900, textTransform: "uppercase", letterSpacing: "0.12em", color: phase.color }}>
+                  <div className="flex-1 w-[0px]" >
+                    <div className="flex items-center gap-2" style={{marginBottom: 2}} >
+                      <span className="text-[10px] font-black uppercase" style={{letterSpacing: "0.12em", color: phase.color}} >
                         Giai đoạn {String(phase.id).padStart(2, "0")}
                       </span>
                       {isCurrentPhase && (
-                        <span style={{
-                          fontSize: 9,
-                          fontWeight: 800,
-                          padding: "2px 8px",
-                          borderRadius: 6,
-                          background: `color-mix(in srgb, ${phase.color} 12%, var(--surface))`,
-                          color: phase.color,
-                          border: `1px solid color-mix(in srgb, ${phase.color} 25%, transparent)`,
-                        }}>
+                        <span className="text-[9px] font-extrabold rounded-md" style={{padding: "2px 8px", background: `color-mix(in srgb, ${phase.color} 12%, var(--surface))`, color: phase.color, border: `1px solid color-mix(in srgb, ${phase.color} 25%, transparent)`}} >
                           ĐAng HỌC
                         </span>
                       )}
                     </div>
-                    <div style={{ fontSize: 16, fontWeight: 900, color: "var(--ink)", fontFamily: "var(--font-display)" }}>
+                    <div className="text-base font-black text-ink font-display" >
                       {phase.title}
                     </div>
-                    <div style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 600, marginTop: 2 }}>
+                    <div className="text-xs text-text-muted font-semibold" style={{marginTop: 2}} >
                       {phase.sub}
                     </div>
                   </div>
 
                   {/* Phase progress */}
-                  <div style={{ textAlign: "right", flexShrink: 0 }}>
-                    <div style={{ fontSize: 22, fontWeight: 900, color: phase.color, fontFamily: "var(--font-display)" }}>
+                  <div className="text-right shrink-0" >
+                    <div className="text-2xl font-black font-display" style={{color: phase.color}} >
                       {stats.pct}%
                     </div>
-                    <div style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 700 }}>
+                    <div className="text-[11px] text-text-muted font-bold" >
                       {stats.completed}/{stats.total} chủ đề
                     </div>
                   </div>
 
                   {/* Chevron */}
                   <m.div
-                    animate={{ rotate: isExpanded ? 90 : 0 }}
-                    style={{ fontSize: 14, color: "var(--text-muted)", flexShrink: 0 }}
-                  >
+                    animate={{ rotate: isExpanded ? 90 : 0 }} className="text-sm text-text-muted shrink-0" >
                     <ArrowRight />
                   </m.div>
                 </m.button>
@@ -383,26 +313,16 @@ export default function GrammarRoadmapPage() {
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
-                      transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                      style={{ overflow: "hidden" }}
-                    >
-                      <div style={{ padding: "0 24px 24px", display: "flex", flexDirection: "column", gap: 16 }}>
+                      transition={{ type: "spring", stiffness: 300, damping: 30 }} className="overflow-hidden" >
+                      <div className="flex flex-col gap-4" style={{padding: "0 24px 24px"}} >
                         {/* Expert tip */}
-                        <div style={{
-                          padding: "12px 16px",
-                          borderRadius: "var(--radius-lg)",
-                          background: `color-mix(in srgb, ${phase.color} 5%, var(--surface-alt))`,
-                          border: `1px solid color-mix(in srgb, ${phase.color} 15%, transparent)`,
-                          display: "flex",
-                          alignItems: "flex-start",
-                          gap: 10,
-                        }}>
-                          <Lightbulb style={{ color: phase.color, fontSize: 16, marginTop: 2 }} />
+                        <div className="py-3 px-4 rounded-(--radius-lg) flex items-start gap-2.5" style={{background: `color-mix(in srgb, ${phase.color} 5%, var(--surface-alt))`, border: `1px solid color-mix(in srgb, ${phase.color} 15%, transparent)`}} >
+                          <Lightbulb className="text-base" style={{color: phase.color, marginTop: 2}} />
                           <div>
-                            <div style={{ fontSize: 11, fontWeight: 800, color: phase.color, textTransform: "uppercase", letterSpacing: "0.05em" }}>
+                            <div className="text-[11px] font-extrabold uppercase tracking-wider" style={{color: phase.color}} >
                               Kinh nghiệm 900 điểm
                             </div>
-                            <div style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 600, lineHeight: 1.5, marginTop: 2 }}>
+                            <div className="text-[13px] text-text-secondary font-semibold leading-normal" style={{marginTop: 2}} >
                               {phase.tip}
                             </div>
                           </div>
@@ -432,21 +352,12 @@ export default function GrammarRoadmapPage() {
         <m.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          style={{
-            background: "var(--surface)",
-            borderRadius: "var(--radius-xl)",
-            border: "1px solid var(--border)",
-            padding: "24px",
-            boxShadow: "var(--shadow-sm)",
-            marginTop: 24,
-          }}
-        >
-          <div style={{ fontSize: 16, fontWeight: 900, color: "var(--ink)", fontFamily: "var(--font-display)", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
-            <Trophy style={{ color: "var(--xp)" }} />
+          transition={{ delay: 0.5 }} className="bg-(--surface) rounded-(--radius-xl) border border-(--border) p-6 mt-6" style={{boxShadow: "var(--shadow-sm)"}} >
+          <div className="text-base font-black text-ink font-display mb-4 flex items-center gap-2" >
+            <Trophy className="text-(--xp)" />
             Chiến lược từ người đạt 900 L&R
           </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: 12 }}>
+          <div className="grid gap-3" style={{gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))"}} >
             {[
               {
                 emoji: "🎯",
@@ -470,17 +381,10 @@ export default function GrammarRoadmapPage() {
               },
             ].map((tip, i) => (
               <div
-                key={i}
-                style={{
-                  padding: "14px 16px",
-                  borderRadius: "var(--radius-lg)",
-                  background: "var(--surface-alt)",
-                  border: "1px solid var(--border)",
-                }}
-              >
-                <div style={{ fontSize: 20, marginBottom: 6 }}>{tip.emoji}</div>
-                <div style={{ fontSize: 13.5, fontWeight: 800, color: "var(--ink)", marginBottom: 4 }}>{tip.title}</div>
-                <div style={{ fontSize: 12, color: "var(--text-secondary)", lineHeight: 1.5, fontWeight: 500 }}>{tip.desc}</div>
+                key={i} className="rounded-(--radius-lg) bg-surface-alt border border-(--border)" style={{padding: "14px 16px"}} >
+                <div className="text-xl mb-1.5" >{tip.emoji}</div>
+                <div className="font-extrabold text-ink mb-1" style={{fontSize: 13.5}} >{tip.title}</div>
+                <div className="text-xs text-text-secondary leading-normal font-medium" >{tip.desc}</div>
               </div>
             ))}
           </div>
@@ -490,15 +394,7 @@ export default function GrammarRoadmapPage() {
         <m.div
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          style={{
-            display: "flex",
-            gap: 10,
-            marginTop: 20,
-            marginBottom: 40,
-            flexWrap: "wrap",
-          }}
-        >
+          transition={{ delay: 0.6 }} className="flex gap-2.5 mt-5 flex-wrap" style={{marginBottom: 40}} >
           <QuickLinkCard href="/grammar-lessons" emoji="📖" label="Thư viện bài học" desc="50+ chủ đề AI-generated" />
           <QuickLinkCard href="/grammar-quiz" emoji="📝" label="Part 5 Quiz" desc="Luyện đề thực chiến" />
           <QuickLinkCard href="/toeic/grammar/drill" emoji="🎯" label="Grammar Drill" desc="Luyện theo kỹ năng yếu" />
@@ -532,52 +428,29 @@ function CategoryCard({
     <m.div
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
-      transition={{ delay }}
-      style={{
-        background: "var(--surface-alt)",
-        borderRadius: "var(--radius-lg)",
-        border: "1px solid var(--border)",
-        padding: "16px 18px",
-      }}
-    >
+      transition={{ delay }} className="bg-surface-alt rounded-(--radius-lg) border border-(--border)" style={{padding: "16px 18px"}} >
       {/* Category header */}
-      <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 12 }}>
-        <div style={{
-          width: 32,
-          height: 32,
-          borderRadius: 10,
-          background: `color-mix(in srgb, ${category.color} 10%, var(--surface))`,
-          color: category.color,
-          display: "grid",
-          placeItems: "center",
-          fontSize: 15,
-          flexShrink: 0,
-        }}>
+      <div className="flex items-center gap-2.5 mb-3" >
+        <div className="w-[32px] h-[32px] grid text-[15px] shrink-0" style={{borderRadius: 10, background: `color-mix(in srgb, ${category.color} 10%, var(--surface))`, color: category.color, placeItems: "center"}} >
           {icon}
         </div>
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 14, fontWeight: 800, color: "var(--ink)" }}>
+        <div className="flex-1 w-[0px]" >
+          <div className="text-sm font-extrabold text-ink" >
             {category.title}
           </div>
-          <div style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 600 }}>
+          <div className="text-[11px] text-text-muted font-semibold" >
             {completed}/{category.topics.length} · {pct}%
           </div>
         </div>
-        <div style={{ width: 60 }}>
-          <div style={{ height: 5, borderRadius: 3, background: "var(--border)" }}>
-            <div style={{
-              width: `${pct}%`,
-              height: "100%",
-              borderRadius: 3,
-              background: category.color,
-              transition: "width 0.4s ease",
-            }} />
+        <div className="w-[60px]" >
+          <div className="h-[5px]" style={{borderRadius: 3, background: "var(--border)"}} >
+            <div className="h-full" style={{width: `${pct}%`, borderRadius: 3, background: category.color, transition: "width 0.4s ease"}} />
           </div>
         </div>
       </div>
 
       {/* Topic chips */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+      <div className="flex flex-wrap gap-1.5" >
         {category.topics.map((topic) => {
           const isDone = completedSet.has(topic.id);
           const isInProg = inProgressSet.has(topic.id);
@@ -590,47 +463,25 @@ function CategoryCard({
             >
               <m.div
                 whileHover={{ scale: 1.04, y: -1 }}
-                whileTap={{ scale: 0.97 }}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 5,
-                  padding: "6px 12px",
-                  borderRadius: 10,
-                  fontSize: 12,
-                  fontWeight: 700,
-                  cursor: "pointer",
-                  transition: "all 0.15s",
-                  border: isDone
+                whileTap={{ scale: 0.97 }} className="flex items-center py-1.5 px-3 text-xs font-bold cursor-pointer" style={{gap: 5, borderRadius: 10, transition: "all 0.15s", border: isDone
                     ? "1px solid rgba(16, 185, 129, 0.3)"
                     : isInProg
                     ? "1px solid color-mix(in srgb, var(--accent) 30%, transparent)"
-                    : "1px solid var(--border)",
-                  background: isDone
+                    : "1px solid var(--border)", background: isDone
                     ? "rgba(16, 185, 129, 0.06)"
                     : isInProg
                     ? "color-mix(in srgb, var(--accent) 5%, var(--surface))"
-                    : "var(--surface)",
-                  color: isDone
+                    : "var(--surface)", color: isDone
                     ? "var(--success)"
                     : isInProg
                     ? "var(--accent)"
-                    : "var(--text-secondary)",
-                }}
-              >
+                    : "var(--text-secondary)"}} >
                 {isDone ? (
-                  <CheckCircle style={{ fontSize: 11, color: "var(--success)" }} />
+                  <CheckCircle className="text-[11px] text-emerald-500" />
                 ) : isInProg ? (
-                  <Zap style={{ fontSize: 11, color: "var(--accent)" }} />
+                  <Zap className="text-[11px] text-accent" />
                 ) : (
-                  <span style={{
-                    fontSize: 8.5,
-                    fontWeight: 800,
-                    padding: "1px 4px",
-                    borderRadius: 4,
-                    background: topic.level === "A2" ? "rgba(16, 185, 129, 0.1)" : topic.level === "B1" ? "rgba(59, 130, 246, 0.1)" : "rgba(245, 158, 11, 0.1)",
-                    color: topic.level === "A2" ? "var(--success)" : topic.level === "B1" ? "var(--info)" : "var(--warning)",
-                  }}>
+                  <span className="font-extrabold rounded" style={{fontSize: 8.5, padding: "1px 4px", background: topic.level === "A2" ? "rgba(16, 185, 129, 0.1)" : topic.level === "B1" ? "rgba(59, 130, 246, 0.1)" : "rgba(245, 158, 11, 0.1)", color: topic.level === "A2" ? "var(--success)" : topic.level === "B1" ? "var(--info)" : "var(--warning)"}} >
                     {topic.level}
                   </span>
                 )}
@@ -646,10 +497,10 @@ function CategoryCard({
 
 function StatPill({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+    <div className="flex items-center gap-1.5" >
       {icon}
-      <span style={{ fontSize: 12, color: "var(--text-muted)", fontWeight: 600 }}>{label}:</span>
-      <span style={{ fontSize: 13, fontWeight: 800, color: "var(--ink)" }}>{value}</span>
+      <span className="text-xs text-text-muted font-semibold" >{label}:</span>
+      <span className="text-[13px] font-extrabold text-ink" >{value}</span>
     </div>
   );
 }
@@ -659,23 +510,11 @@ function QuickLinkCard({ href, emoji, label, desc }: { href: string; emoji: stri
     <Link href={href} style={{ textDecoration: "none", flex: "1 1 200px" }}>
       <m.div
         whileHover={{ y: -3, boxShadow: "var(--shadow-md)" }}
-        whileTap={{ scale: 0.98 }}
-        style={{
-          padding: "16px 18px",
-          borderRadius: "var(--radius-xl)",
-          background: "var(--surface)",
-          border: "1px solid var(--border)",
-          cursor: "pointer",
-          transition: "all 0.15s",
-          display: "flex",
-          alignItems: "center",
-          gap: 12,
-        }}
-      >
-        <span style={{ fontSize: 22 }}>{emoji}</span>
+        whileTap={{ scale: 0.98 }} className="rounded-(--radius-xl) bg-(--surface) border border-(--border) cursor-pointer flex items-center gap-3" style={{padding: "16px 18px", transition: "all 0.15s"}} >
+        <span className="text-2xl" >{emoji}</span>
         <div>
-          <div style={{ fontSize: 13.5, fontWeight: 800, color: "var(--ink)" }}>{label}</div>
-          <div style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 600 }}>{desc}</div>
+          <div className="font-extrabold text-ink" style={{fontSize: 13.5}} >{label}</div>
+          <div className="text-[11px] text-text-muted font-semibold" >{desc}</div>
         </div>
       </m.div>
     </Link>

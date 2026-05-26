@@ -55,111 +55,22 @@ export function CEFRPath({
 }: Props) {
   const isEts = sourceMode === "ets";
   return (
-    <div
-      className="anim-fade-up"
-      style={{
-        maxWidth: 480,
-        margin: "0 auto",
-        textAlign: "center",
-        background: "var(--surface)",
-        padding: "32px 24px",
-        borderRadius: "var(--radius-xl)",
-        border: "1px solid var(--border)",
-        boxShadow: "var(--shadow-sm)",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
-      <div
-        style={{
-          position: "absolute",
-          left: "50%",
-          top: "0%",
-          transform: "translateX(-50%)",
-          width: 180,
-          height: 180,
-          borderRadius: "50%",
-          background: "radial-gradient(circle, var(--accent) 5%, transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
+    <div className="anim-fade-up w-[480px] mx-auto text-center bg-(--surface) rounded-(--radius-xl) border border-(--border) relative overflow-hidden" style={{padding: "32px 24px", boxShadow: "var(--shadow-sm)"}} >
+      <div className="absolute w-[180px] h-[180px] rounded-full" style={{left: "50%", top: "0%", transform: "translateX(-50%)", background: "radial-gradient(circle, var(--accent) 5%, transparent 70%)", pointerEvents: "none"}} />
 
-      <h3
-        style={{
-          fontSize: 20,
-          fontWeight: 900,
-          fontFamily: "var(--font-display)",
-          color: "var(--text-primary)",
-          margin: 0,
-        }}
-      >
+      <h3 className="text-xl font-black font-display text-text-primary m-0" >
         TOEIC Part 5 Quiz
       </h3>
-      <p
-        style={{
-          marginTop: 4,
-          fontSize: 13,
-          color: "var(--text-secondary)",
-          fontWeight: 500,
-        }}
-      >
+      <p className="mt-1 text-[13px] text-text-secondary font-medium" >
         Luyện tập trắc nghiệm Part 5 với câu hỏi biên soạn chuẩn đề thi
       </p>
 
       {/* Source mode toggle */}
       {onSourceModeChange && (
-        <div style={{ marginTop: 20, marginBottom: 4, position: "relative", zIndex: 1 }}>
-          <Segmented
-            value={sourceMode}
-            onChange={(val) => onSourceModeChange(val as "ai" | "ets")}
-            options={[
-              {
-                value: "ai",
-                label: (
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: 6,
-                      padding: "4px 12px",
-                      fontWeight: 700,
-                    }}
-                  >
-                    <Zap size={13} />
-                    <span>AI tạo đề</span>
-                  </div>
-                ),
-              },
-              {
-                value: "ets",
-                label: (
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: 6,
-                      padding: "4px 12px",
-                      fontWeight: 700,
-                    }}
-                  >
-                    <BookOpen size={13} />
-                    <span>Đề ETS thật</span>
-                  </div>
-                ),
-              },
-            ]}
-            style={{
-              borderRadius: "var(--radius-lg)",
-              border: "1px solid var(--border)",
-              background: "var(--surface-alt)",
-            }}
-          />
+        <div className="mt-5 mb-1 relative z-[1]" >
+          <Segmented value={sourceMode} onChange={(val) => onSourceModeChange(val as "ai" | "ets")} options={[ { value: "ai", label: ( <div className="flex items-center justify-center gap-1.5 font-bold rounded-(--radius-lg) border border-(--border) bg-surface-alt" style={{padding: "4px 12px"}} > <Zap size={13} /> <span>AI tạo đề</span> </div> ), }, { value: "ets", label: ( <div className="flex items-center justify-center gap-1.5 font-bold rounded-(--radius-lg) border border-(--border) bg-surface-alt" style={{padding: "4px 12px"}} > <BookOpen size={13} /> <span>Đề ETS thật</span> </div> ), }, ]} />
           {isEts && (
-            <p
-              style={{ marginTop: 8, fontSize: 11.5, color: "var(--text-muted)", fontWeight: 600 }}
-            >
+            <p className="mt-2 text-text-muted font-semibold" style={{fontSize: 11.5}} >
               240 câu hỏi trích xuất từ đề thi ETS thật · Tự động trộn ngẫu nhiên
             </p>
           )}
@@ -167,111 +78,47 @@ export function CEFRPath({
       )}
 
       {/* CEFR Path */}
-      <div
-        style={{
-          opacity: isEts ? 0.35 : 1,
-          pointerEvents: isEts ? "none" : "auto",
-          transition: "opacity 0.2s",
-          marginTop: 24,
-        }}
-      >
-        <div
-          style={{
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "center",
-            gap: 0,
-            padding: "4px 0 12px",
-          }}
-        >
+      <div className="mt-6" style={{opacity: isEts ? 0.35 : 1, pointerEvents: isEts ? "none" : "auto", transition: "opacity 0.2s"}} >
+        <div className="flex items-start justify-center" style={{gap: 0, padding: "4px 0 12px"}} >
           {CEFR_LEVELS.map((level, i) => {
             const isSelected = selected === level.tier;
             const tierColor = TIER_COLORS[level.tier];
             const isLast = i === CEFR_LEVELS.length - 1;
 
             return (
-              <div key={level.id} style={{ display: "flex", alignItems: "center" }}>
+              <div key={level.id} className="flex items-center" >
                 {/* Node wrapper */}
                 <m.button
                   whileHover={{ scale: 1.08 }}
                   whileTap={{ scale: 0.92 }}
                   type="button"
-                  onClick={() => onSelect(level.tier)}
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    gap: 6,
-                    background: "none",
-                    border: "none",
-                    cursor: "pointer",
-                    padding: "0",
-                  }}
-                >
-                  <div
-                    style={{
-                      width: 32,
-                      height: 32,
-                      borderRadius: "50%",
-                      border: `2px solid ${isSelected ? tierColor : "var(--border)"}`,
-                      background: isSelected ? tierColor : "var(--surface-alt)",
-                      display: "grid",
-                      placeItems: "center",
-                      boxShadow: isSelected ? `0 0 10px ${TIER_GLOWS[level.tier]}` : "none",
-                      transition: "all 0.2s ease",
-                    }}
-                  >
+                  onClick={() => onSelect(level.tier)} className="flex flex-col items-center gap-1.5 bg-none border-none cursor-pointer" style={{padding: "0"}} >
+                  <div className="w-[32px] h-[32px] rounded-full grid" style={{border: `2px solid ${isSelected ? tierColor : "var(--border)"}`, background: isSelected ? tierColor : "var(--surface-alt)", placeItems: "center", boxShadow: isSelected ? `0 0 10px ${TIER_GLOWS[level.tier]}` : "none", transition: "all 0.2s ease"}} >
                     {isSelected ? (
-                      <Check
-                        style={{ fontSize: 12, color: "var(--text-on-accent)", fontWeight: 900 }}
-                      />
+                      <Check className="text-xs font-black" style={{color: "var(--text-on-accent)"}} />
                     ) : (
-                      <span style={{ fontSize: 10, fontWeight: 800, color: "var(--text-muted)" }}>
+                      <span className="text-[10px] font-extrabold text-text-muted" >
                         {level.label}
                       </span>
                     )}
                   </div>
-                  <span
-                    style={{
-                      fontSize: 10.5,
-                      fontWeight: 800,
-                      color: isSelected ? tierColor : "var(--text-muted)",
-                      transition: "color 0.2s",
-                    }}
-                  >
+                  <span className="text-[10.5px] font-extrabold" style={{color: isSelected ? tierColor : "var(--text-muted)", transition: "color 0.2s"}} >
                     {level.desc}
                   </span>
                 </m.button>
 
                 {/* Line */}
                 {!isLast && (
-                  <div
-                    style={{
-                      width: 24,
-                      height: 2,
-                      alignSelf: "flex-start",
-                      marginTop: 15,
-                      background:
-                        isSelected && CEFR_LEVELS[i + 1]?.tier === level.tier
+                  <div className="w-[24px] h-[2px] rounded-full" style={{alignSelf: "flex-start", marginTop: 15, background: isSelected && CEFR_LEVELS[i + 1]?.tier === level.tier
                           ? tierColor
-                          : "var(--border)",
-                      borderRadius: 99,
-                    }}
-                  />
+                          : "var(--border)"}} />
                 )}
               </div>
             );
           })}
         </div>
 
-        <p
-          style={{
-            marginTop: 8,
-            fontSize: 12.5,
-            fontWeight: 800,
-            color: TIER_COLORS[selected] ?? "var(--text-secondary)",
-          }}
-        >
+        <p className="mt-2 font-extrabold" style={{fontSize: 12.5, color: TIER_COLORS[selected] ?? "var(--text-secondary)"}} >
           {selected === "easy" && "Độ khó: Ngữ pháp cơ bản (A1–A2)"}
           {selected === "medium" && "Độ khó: Ngữ pháp trung cấp (B1–B2)"}
           {selected === "hard" && "Độ khó: Ngữ pháp nâng cao (C1–C2)"}
@@ -280,26 +127,14 @@ export function CEFRPath({
 
       {/* Timer switches */}
       {onTimedModeChange && (
-        <div
-          style={{
-            marginTop: 20,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            gap: 10,
-            borderTop: "1.5px dashed var(--border)",
-            paddingTop: 16,
-          }}
-        >
-          <Clock
-            style={{ fontSize: 14, color: timedMode ? "var(--accent)" : "var(--text-muted)" }}
-          />
-          <span style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 700 }}>
+        <div className="mt-5 flex items-center justify-center gap-2.5 pt-4" style={{borderTop: "1.5px dashed var(--border)"}} >
+          <Clock className="text-sm" style={{color: timedMode ? "var(--accent)" : "var(--text-muted)"}} />
+          <span className="text-[13px] text-text-secondary font-bold" >
             Tính giờ làm bài
           </span>
           <Switch size="small" checked={timedMode} onChange={onTimedModeChange} />
           {timedMode && (
-            <span style={{ fontSize: 11.5, color: "var(--text-muted)", fontWeight: 600 }}>
+            <span className="text-text-muted font-semibold" style={{fontSize: 11.5}} >
               (30s / câu hỏi)
             </span>
           )}
@@ -311,25 +146,7 @@ export function CEFRPath({
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         onClick={onStart}
-        disabled={isLoading}
-        style={{
-          marginTop: 24,
-          height: 44,
-          width: "100%",
-          borderRadius: "var(--radius-lg)",
-          background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-          color: "var(--text-on-accent)",
-          border: "none",
-          fontWeight: 800,
-          fontSize: 14.5,
-          cursor: "pointer",
-          boxShadow: "0 4px 12px var(--accent-muted)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 6,
-        }}
-      >
+        disabled={isLoading} className="mt-6 h-[44px] w-full rounded-(--radius-lg) border-none font-extrabold cursor-pointer flex items-center justify-center gap-1.5" style={{background: "linear-gradient(135deg, var(--accent), var(--secondary))", color: "var(--text-on-accent)", fontSize: 14.5, boxShadow: "0 4px 12px var(--accent-muted)"}} >
         {isLoading ? (
           <>
             <Loader2 className="animate-spin" /> Đang lập đề...

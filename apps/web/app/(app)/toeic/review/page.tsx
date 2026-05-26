@@ -61,52 +61,26 @@ export default async function ToeicReviewPage() {
 	const vocabById = new Map(vocabRows.map((v) => [v.id, v]));
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				height: "100%",
-				minHeight: 0,
-				flex: 1,
-				overflow: "auto",
-			}}
-		>
-			<div style={{ padding: 16, display: "grid", gap: 16 }}>
-				<div
-					style={{
-						display: "grid",
-						gap: 12,
-						gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))",
-					}}
-				>
+		<div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
+			<div className="p-4 grid gap-4" >
+				<div className="grid gap-3" style={{gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))"}} >
 					<Card
 						hoverable={toeicErrorIds.length > 0}
 						style={toeicErrorIds.length === 0 ? { opacity: 0.6 } : undefined}
 					>
-						<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-							<AlertTriangle style={{ fontSize: 22, color: "var(--error)" }} />
+						<div className="flex items-center gap-2" >
+							<AlertTriangle className="text-2xl text-destructive" />
 							<strong>Câu sai TOEIC</strong>
 						</div>
-						<div style={{ fontSize: 32, fontWeight: 700, marginTop: 8, color: "var(--ink)" }}>
+						<div className="text-4xl font-bold mt-2 text-ink" >
 							{toeicErrorIds.length}
 						</div>
-						<div style={{ color: "var(--text-muted)", fontSize: 13 }}>
+						<div className="text-text-muted text-[13px]" >
 							Câu Part 5/6/7 bạn từng sai
 						</div>
 						{toeicErrorIds.length > 0 && (
 							<Link
-								href="/toeic/grammar/drill?mode=mistake&count=20"
-								style={{
-									display: "inline-block",
-									marginTop: 12,
-									padding: "6px 12px",
-									borderRadius: 6,
-									background: "var(--error)",
-									color: "#fff",
-									textDecoration: "none",
-									fontSize: 13,
-								}}
-							>
+								href="/toeic/grammar/drill?mode=mistake&count=20" className="inline-block mt-3 py-1.5 px-3 rounded-md text-[13px]" style={{background: "var(--error)", color: "#fff", textDecoration: "none"}} >
 								Drill ngay
 							</Link>
 						)}
@@ -116,30 +90,19 @@ export default async function ToeicReviewPage() {
 						hoverable={flashcardDue.length > 0}
 						style={flashcardDue.length === 0 ? { opacity: 0.6 } : undefined}
 					>
-						<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-							<BookOpenText style={{ fontSize: 22, color: "var(--accent)" }} />
+						<div className="flex items-center gap-2" >
+							<BookOpenText className="text-2xl text-accent" />
 							<strong>Từ vựng cần ôn</strong>
 						</div>
-						<div style={{ fontSize: 32, fontWeight: 700, marginTop: 8, color: "var(--ink)" }}>
+						<div className="text-4xl font-bold mt-2 text-ink" >
 							{flashcardDue.length}
 						</div>
-						<div style={{ color: "var(--text-muted)", fontSize: 13 }}>
+						<div className="text-text-muted text-[13px]" >
 							Từ TOEIC tới hạn SRS
 						</div>
 						{flashcardDue.length > 0 && (
 							<Link
-								href="/toeic/vocab/learn?mode=review"
-								style={{
-									display: "inline-block",
-									marginTop: 12,
-									padding: "6px 12px",
-									borderRadius: 6,
-									background: "var(--accent)",
-									color: "var(--text-on-accent)",
-									textDecoration: "none",
-									fontSize: 13,
-								}}
-							>
+								href="/toeic/vocab/learn?mode=review" className="inline-block mt-3 py-1.5 px-3 rounded-md text-[13px]" style={{background: "var(--accent)", color: "var(--text-on-accent)", textDecoration: "none"}} >
 								Ôn ngay
 							</Link>
 						)}
@@ -150,26 +113,18 @@ export default async function ToeicReviewPage() {
 					{recent.length === 0 ? (
 						<Empty description="Chưa có hoạt động ôn nào" />
 					) : (
-						<div style={{ display: "grid", gap: 6 }}>
+						<div className="grid gap-1.5" >
 							{recent.map((r) => {
 								const isVocab = r.sourceType === "flashcard_review";
 								const v = isVocab ? vocabById.get(r.sourceId) : null;
 								return (
 									<div
-										key={r.id}
-										style={{
-											display: "grid",
-											gridTemplateColumns: "100px 1fr auto",
-											gap: 12,
-											alignItems: "center",
-											fontSize: 13,
-										}}
-									>
+										key={r.id} className="grid gap-3 items-center text-[13px]" style={{gridTemplateColumns: "100px 1fr auto"}} >
 										<Tag color={isVocab ? "orange" : "red"}>
 											{isVocab ? "Vocab" : "Câu sai"}
 										</Tag>
-										<span style={{ color: "var(--ink)" }}>{v ? v.word : `Câu hỏi #${r.sourceId.slice(0, 8)}`}</span>
-										<span style={{ color: "var(--text-muted)" }}>
+										<span className="text-ink" >{v ? v.word : `Câu hỏi #${r.sourceId.slice(0, 8)}`}</span>
+										<span className="text-text-muted" >
 											{r.lastOutcome ?? "—"}
 										</span>
 									</div>

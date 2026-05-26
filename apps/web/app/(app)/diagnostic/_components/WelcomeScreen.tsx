@@ -32,43 +32,27 @@ type Props = {
 
 export function WelcomeScreen({ status, onStart }: Props) {
   return (
-    <div
-      style={{
-        height: "100%",
-        display: "flex",
-        flexDirection: "column",
-        overflow: "hidden",
-        background: "var(--bg-deep)",
-      }}
-    >
-      <div style={{ padding: "20px 20px 0", flexShrink: 0 }}>
-        <div style={{ maxWidth: 600, margin: "0 auto" }}>
+    <div className="h-full flex flex-col overflow-hidden bg-bg-deep" >
+      <div className="shrink-0" style={{padding: "20px 20px 0"}} >
+        <div className="w-[600px] mx-auto" >
         </div>
       </div>
 
-      <div style={{ flex: 1, overflowY: "auto", padding: "24px 20px 48px" }}>
-        <Flex vertical gap={20} style={{ maxWidth: 600, margin: "0 auto" }}>
+      <div className="flex-1 overflow-y-auto" style={{padding: "24px 20px 48px"}} >
+        <Flex vertical gap={20} className="w-[600px] mx-auto" >
           
           {/* Test Info Cards Grid */}
           <m.div
             initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            style={{
-              borderRadius: "var(--radius-xl)",
-              border: "1px solid var(--border)",
-              background: "var(--surface)",
-              padding: "20px",
-              boxShadow: "var(--shadow-sm)",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-              <Info style={{ fontSize: 13, color: "var(--accent)" }} />
-              <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--accent)" }}>
+            animate={{ opacity: 1, y: 0 }} className="rounded-(--radius-xl) border border-(--border) bg-(--surface)" style={{padding: "20px", boxShadow: "var(--shadow-sm)"}} >
+            <div className="flex items-center gap-2 mb-4" >
+              <Info className="text-[13px] text-accent" />
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-accent" >
                 Cấu trúc bài đánh giá
               </span>
             </div>
 
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div className="grid gap-3" style={{gridTemplateColumns: "1fr 1fr"}} >
               {[
                 {
                   icon: "📝",
@@ -92,20 +76,10 @@ export function WelcomeScreen({ status, onStart }: Props) {
                 },
               ].map((item, idx) => (
                 <div
-                  key={idx}
-                  style={{
-                    padding: "12px 14px",
-                    background: "var(--surface-alt)",
-                    borderRadius: "var(--radius-lg)",
-                    border: "1px solid var(--border)",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 4,
-                  }}
-                >
-                  <span style={{ fontSize: 20, marginBottom: 2 }}>{item.icon}</span>
-                  <span style={{ fontSize: 13, fontWeight: 800, color: "var(--text-primary)" }}>{item.label}</span>
-                  <span style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.4, fontWeight: 500 }}>{item.desc}</span>
+                  key={idx} className="bg-surface-alt rounded-(--radius-lg) border border-(--border) flex flex-col gap-1" style={{padding: "12px 14px"}} >
+                  <span className="text-xl" style={{marginBottom: 2}} >{item.icon}</span>
+                  <span className="text-[13px] font-extrabold text-text-primary" >{item.label}</span>
+                  <span className="text-[11px] text-text-muted font-medium" style={{lineHeight: 1.4}} >{item.desc}</span>
                 </div>
               ))}
             </div>
@@ -116,47 +90,24 @@ export function WelcomeScreen({ status, onStart }: Props) {
             <m.div
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              style={{
-                borderRadius: "var(--radius-xl)",
-                border: "1px solid var(--border)",
-                background: "var(--surface)",
-                padding: "20px",
-                boxShadow: "var(--shadow-sm)",
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 16 }}>
-                <Trophy style={{ fontSize: 13, color: "var(--accent)" }} />
-                <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: "0.08em", color: "var(--accent)" }}>
+              transition={{ delay: 0.1 }} className="rounded-(--radius-xl) border border-(--border) bg-(--surface)" style={{padding: "20px", boxShadow: "var(--shadow-sm)"}} >
+              <div className="flex items-center gap-2 mb-4" >
+                <Trophy className="text-[13px] text-accent" />
+                <span className="text-[11px] font-extrabold uppercase tracking-widest text-accent" >
                   Kết quả đánh giá gần nhất
                 </span>
               </div>
 
               <Flex vertical gap={14}>
                 <Flex align="center" gap={14}>
-                  <div
-                    style={{
-                      fontSize: 32,
-                      fontWeight: 900,
-                      color: CEFR_COLORS[status.lastResult.overallCefr] ?? "var(--accent)",
-                      background: "var(--surface-alt)",
-                      border: `2px solid ${CEFR_COLORS[status.lastResult.overallCefr] ?? "var(--accent)"}`,
-                      width: 58,
-                      height: 58,
-                      borderRadius: "50%",
-                      display: "grid",
-                      placeItems: "center",
-                      fontFamily: "var(--font-display)",
-                      boxShadow: `0 4px 12px ${CEFR_COLORS[status.lastResult.overallCefr]}33`,
-                    }}
-                  >
+                  <div className="text-4xl font-black bg-surface-alt w-[58px] h-[58px] rounded-full grid font-display" style={{color: CEFR_COLORS[status.lastResult.overallCefr] ?? "var(--accent)", border: `2px solid ${CEFR_COLORS[status.lastResult.overallCefr] ?? "var(--accent)"}`, placeItems: "center", boxShadow: `0 4px 12px ${CEFR_COLORS[status.lastResult.overallCefr]}33`}} >
                     {status.lastResult.overallCefr}
                   </div>
                   <div>
-                    <div style={{ fontSize: 14, fontWeight: 800, color: "var(--text-primary)" }}>
+                    <div className="text-sm font-extrabold text-text-primary" >
                       Trình độ {status.lastResult.overallCefr}
                     </div>
-                    <div style={{ fontSize: 11, color: "var(--text-muted)", marginTop: 2, fontWeight: 500 }}>
+                    <div className="text-[11px] text-text-muted font-medium" style={{marginTop: 2}} >
                       Độ tin cậy: {Math.round(status.lastResult.confidence * 100)}% · Ngày kiểm tra: {new Date(status.lastResult.completedAt).toLocaleDateString("vi-VN")}
                     </div>
                   </div>
@@ -164,44 +115,17 @@ export function WelcomeScreen({ status, onStart }: Props) {
 
                 {/* Previous skill breakdown */}
                 {status.lastResult.skillBreakdown && (
-                  <div
-                    style={{
-                      display: "grid",
-                      gridTemplateColumns: "1fr 1fr",
-                      gap: 8,
-                      marginTop: 4,
-                      padding: 12,
-                      borderRadius: "var(--radius-lg)",
-                      background: "var(--surface-alt)",
-                      border: "1px solid var(--border)",
-                    }}
-                  >
+                  <div className="grid gap-2 mt-1 p-3 rounded-(--radius-lg) bg-surface-alt border border-(--border)" style={{gridTemplateColumns: "1fr 1fr"}} >
                     {Object.entries(status.lastResult.skillBreakdown).map(
                       ([skill, sr]) => {
                         const skillColor = CEFR_COLORS[sr.cefr] ?? "var(--accent)";
                         return (
                           <div
-                            key={skill}
-                            style={{
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "space-between",
-                            }}
-                          >
-                            <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)" }}>
+                            key={skill} className="flex items-center justify-between" >
+                            <span className="text-xs font-semibold text-text-secondary" >
                               {SKILL_LABELS[skill] ?? skill}
                             </span>
-                            <span
-                              style={{
-                                fontSize: 11,
-                                fontWeight: 800,
-                                color: skillColor,
-                                background: "var(--surface)",
-                                border: `1px solid ${skillColor}`,
-                                padding: "2px 8px",
-                                borderRadius: 99,
-                              }}
-                            >
+                            <span className="text-[11px] font-extrabold bg-(--surface) rounded-full" style={{color: skillColor, border: `1px solid ${skillColor}`, padding: "2px 8px"}} >
                               {sr.cefr} ({sr.correct}/{sr.total})
                             </span>
                           </div>
@@ -222,24 +146,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
               transition={{ delay: 0.15 }}
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
-              onClick={onStart}
-              style={{
-                width: "100%",
-                height: 52,
-                borderRadius: "var(--radius-xl)",
-                background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-                color: "var(--text-on-accent)",
-                border: "none",
-                fontSize: 16,
-                fontWeight: 800,
-                cursor: "pointer",
-                boxShadow: "0 6px 20px var(--accent-muted)",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 8,
-              }}
-            >
+              onClick={onStart} className="w-full h-[52px] rounded-(--radius-xl) border-none text-base font-extrabold cursor-pointer flex items-center justify-center gap-2" style={{background: "linear-gradient(135deg, var(--accent), var(--accent-hover))", color: "var(--text-on-accent)", boxShadow: "0 6px 20px var(--accent-muted)"}} >
               <PlayCircle />
               {status?.hasResult ? "Bắt đầu làm lại bài đánh giá" : "Bắt đầu bài đánh giá"}
               <ChevronRight size={12} />
@@ -247,25 +154,11 @@ export function WelcomeScreen({ status, onStart }: Props) {
           ) : (
             <m.div
               initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              style={{
-                borderRadius: "var(--radius-xl)",
-                background: "var(--surface-alt)",
-                border: "1px solid var(--border)",
-                padding: "20px",
-                textAlign: "center",
-              }}
-            >
-              <Clock
-                style={{
-                  fontSize: 24,
-                  color: "var(--text-muted)",
-                  marginBottom: 8,
-                }}
-              />
-              <div style={{ fontSize: 13, color: "var(--text-secondary)", fontWeight: 600 }}>
+              animate={{ opacity: 1 }} className="rounded-(--radius-xl) bg-surface-alt border border-(--border) text-center" style={{padding: "20px"}} >
+              <Clock className="text-3xl text-text-muted mb-2" />
+              <div className="text-[13px] text-text-secondary font-semibold" >
                 Bạn đã hoàn thành bài test gần đây. Hãy ôn tập thêm và thử lại sau{" "}
-                <span style={{ color: "var(--accent)", fontWeight: 800 }}>{status?.daysUntilRetake}</span> ngày nữa!
+                <span className="text-accent font-extrabold" >{status?.daysUntilRetake}</span> ngày nữa!
               </div>
             </m.div>
           )}

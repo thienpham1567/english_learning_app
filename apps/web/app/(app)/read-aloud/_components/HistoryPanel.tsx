@@ -29,23 +29,13 @@ export function HistoryPanel({ history, show, onClose, onReplay, onDelete, onCle
           initial={{ opacity: 0, height: 0 }}
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          style={{ overflow: "hidden" }}
-        >
-          <div
-            style={{
-              background: "var(--surface)",
-              borderRadius: "var(--radius-xl)",
-              border: "1px solid var(--border)",
-              padding: "var(--space-5)",
-              boxShadow: "var(--shadow-md)",
-            }}
-          >
+          transition={{ type: "spring", stiffness: 300, damping: 30 }} className="overflow-hidden" >
+          <div className="bg-(--surface) rounded-(--radius-xl) border border-(--border)" style={{padding: "var(--space-5)", boxShadow: "var(--shadow-md)"}} >
             {/* History header */}
-            <Flex align="center" justify="space-between" style={{ marginBottom: 16 }}>
+            <Flex align="center" justify="space-between" className="mb-4" >
               <Flex align="center" gap={8}>
-                <History style={{ color: "var(--accent)", fontSize: 16 }} />
-                <Text style={{ fontSize: 14, fontWeight: 800, color: "var(--text-primary)" }}>
+                <History className="text-accent text-base" />
+                <Text className="text-sm font-extrabold text-text-primary" >
                   Lịch sử đã nghe ({history.length})
                 </Text>
               </Flex>
@@ -54,42 +44,14 @@ export function HistoryPanel({ history, show, onClose, onReplay, onDelete, onCle
                   <m.button
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
-                    onClick={onClearAll}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 4,
-                      padding: "5px 12px",
-                      borderRadius: 8,
-                      border: "1px solid rgba(239, 68, 68, 0.2)",
-                      background: "rgba(239, 68, 68, 0.06)",
-                      color: "var(--error)",
-                      fontSize: 11.5,
-                      fontWeight: 700,
-                      cursor: "pointer",
-                      fontFamily: "var(--font-body)",
-                    }}
-                  >
+                    onClick={onClearAll} className="flex items-center gap-1 rounded-lg text-destructive font-bold cursor-pointer font-body" style={{padding: "5px 12px", border: "1px solid rgba(239, 68, 68, 0.2)", background: "rgba(239, 68, 68, 0.06)", fontSize: 11.5}} >
                     <Trash2 size={11} />
                     Xóa tất cả
                   </m.button>
                 )}
                 <m.button
                   whileTap={{ scale: 0.95 }}
-                  onClick={onClose}
-                  style={{
-                    display: "grid",
-                    placeItems: "center",
-                    width: 28,
-                    height: 28,
-                    borderRadius: 8,
-                    border: "1px solid var(--border)",
-                    background: "var(--surface-alt)",
-                    color: "var(--text-muted)",
-                    fontSize: 12,
-                    cursor: "pointer",
-                  }}
-                >
+                  onClick={onClose} className="grid w-[28px] h-[28px] rounded-lg border border-(--border) bg-surface-alt text-text-muted text-xs cursor-pointer" style={{placeItems: "center"}} >
                   <X />
                 </m.button>
               </Flex>
@@ -97,23 +59,17 @@ export function HistoryPanel({ history, show, onClose, onReplay, onDelete, onCle
 
             {/* History list */}
             {history.length === 0 ? (
-              <div
-                style={{
-                  textAlign: "center",
-                  padding: "32px 16px",
-                  color: "var(--text-muted)",
-                }}
-              >
-                <History style={{ fontSize: 28, marginBottom: 8, opacity: 0.4 }} />
-                <div style={{ fontSize: 13, fontWeight: 600 }}>
+              <div className="text-center text-text-muted" style={{padding: "32px 16px"}} >
+                <History className="text-[28px] mb-2" style={{opacity: 0.4}} />
+                <div className="text-[13px] font-semibold" >
                   Chưa có lịch sử nào
                 </div>
-                <div style={{ fontSize: 11.5, marginTop: 4 }}>
+                <div className="mt-1" style={{fontSize: 11.5}} >
                   Khi bạn nghe đọc, các đoạn văn sẽ được lưu tại đây
                 </div>
               </div>
             ) : (
-              <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 380, overflowY: "auto" }}>
+              <div className="flex flex-col gap-2 h-[380px] overflow-y-auto" >
                 {history.map((entry, idx) => {
                   const voice = VOICES.find((v) => v.role === entry.voice);
                   const cached = isCached(entry.text, entry.voice, entry.speed);
@@ -123,72 +79,29 @@ export function HistoryPanel({ history, show, onClose, onReplay, onDelete, onCle
                       initial={{ opacity: 0, x: -8 }}
                       animate={{ opacity: 1, x: 0 }}
                       transition={{ delay: idx * 0.03 }}
-                      style={{
-                        display: "flex",
-                        alignItems: "center",
-                        gap: 12,
-                        padding: "12px 14px",
-                        borderRadius: "var(--radius-lg)",
-                        border: "1px solid var(--border)",
-                        background: "var(--surface-alt)",
-                        cursor: "pointer",
-                        transition: "all 0.15s",
-                      }}
+                      
                       whileHover={{ x: 3, background: "var(--accent-light)" }}
-                      onClick={() => onReplay(entry)}
-                    >
+                      onClick={() => onReplay(entry)} className="flex items-center gap-3 rounded-(--radius-lg) border border-(--border) bg-surface-alt cursor-pointer" style={{padding: "12px 14px", transition: "all 0.15s"}} >
                       {/* Voice flag */}
-                      <div
-                        style={{
-                          width: 36,
-                          height: 36,
-                          borderRadius: 10,
-                          background: "var(--surface)",
-                          border: "1px solid var(--border)",
-                          display: "grid",
-                          placeItems: "center",
-                          fontSize: 18,
-                          flexShrink: 0,
-                        }}
-                      >
+                      <div className="w-[36px] h-[36px] bg-(--surface) border border-(--border) grid text-lg shrink-0" style={{borderRadius: 10, placeItems: "center"}} >
                         {voice?.flag ?? "🗣️"}
                       </div>
 
                       {/* Content */}
-                      <div style={{ flex: 1, minWidth: 0 }}>
-                        <div
-                          style={{
-                            fontSize: 13.5,
-                            fontWeight: 700,
-                            color: "var(--text-primary)",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            lineHeight: 1.3,
-                          }}
-                        >
+                      <div className="flex-1 w-[0px]" >
+                        <div className="font-bold text-text-primary overflow-hidden" style={{fontSize: 13.5, whiteSpace: "nowrap", textOverflow: "ellipsis", lineHeight: 1.3}} >
                           {entry.preview}
                         </div>
                         <Flex align="center" gap={8} style={{ marginTop: 3 }}>
-                          <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 600 }}>
+                          <span className="text-[11px] text-text-muted font-semibold" >
                             {voice?.name ?? entry.voice} · {entry.speed}x · {entry.wordCount} từ
                           </span>
-                          <span style={{ fontSize: 10.5, color: "var(--text-muted)" }}>
-                            <Clock style={{ fontSize: 9, marginRight: 3 }} />
+                          <span className="text-[10.5px] text-text-muted" >
+                            <Clock className="text-[9px]" style={{marginRight: 3}} />
                             {timeAgo(entry.createdAt)}
                           </span>
                           {cached && (
-                            <span
-                              style={{
-                                fontSize: 9.5,
-                                fontWeight: 800,
-                                padding: "1px 6px",
-                                borderRadius: 6,
-                                background: "rgba(16, 185, 129, 0.1)",
-                                color: "var(--success)",
-                                border: "1px solid rgba(16, 185, 129, 0.2)",
-                              }}
-                            >
+                            <span className="font-extrabold rounded-md text-emerald-500" style={{fontSize: 9.5, padding: "1px 6px", background: "rgba(16, 185, 129, 0.1)", border: "1px solid rgba(16, 185, 129, 0.2)"}} >
                               ⚡ Cached
                             </span>
                           )}
@@ -204,21 +117,7 @@ export function HistoryPanel({ history, show, onClose, onReplay, onDelete, onCle
                           onDelete(entry.id);
                           message.success("Đã xóa mục lịch sử");
                         }}
-                        style={{
-                          display: "grid",
-                          placeItems: "center",
-                          width: 28,
-                          height: 28,
-                          borderRadius: 8,
-                          border: "1px solid rgba(239, 68, 68, 0.15)",
-                          background: "transparent",
-                          color: "var(--error)",
-                          fontSize: 12,
-                          cursor: "pointer",
-                          flexShrink: 0,
-                          opacity: 0.5,
-                          transition: "opacity 0.15s",
-                        }}
+                        
                         onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => {
                           e.currentTarget.style.opacity = "1";
                           e.currentTarget.style.background = "rgba(239, 68, 68, 0.08)";
@@ -226,8 +125,7 @@ export function HistoryPanel({ history, show, onClose, onReplay, onDelete, onCle
                         onMouseLeave={(e: React.MouseEvent<HTMLButtonElement>) => {
                           e.currentTarget.style.opacity = "0.5";
                           e.currentTarget.style.background = "transparent";
-                        }}
-                      >
+                        }} className="grid w-[28px] h-[28px] rounded-lg bg-transparent text-destructive text-xs cursor-pointer shrink-0" style={{placeItems: "center", border: "1px solid rgba(239, 68, 68, 0.15)", opacity: 0.5, transition: "opacity 0.15s"}} >
                         <Trash2 />
                       </m.button>
                     </m.div>

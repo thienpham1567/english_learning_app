@@ -53,26 +53,11 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
   });
 
   return (
-    <m.div
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.15 }}
-      className="read-aloud-panel"
-      style={{
-        background: "var(--surface)",
-        borderRadius: "var(--radius-xl)",
-        border: "1px solid var(--border)",
-        padding: "var(--space-5)",
-        boxShadow: "var(--shadow-md)",
-        display: "flex",
-        flexDirection: "column",
-        gap: 16,
-      }}
-    >
+    <m.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }} className="read-aloud-panel bg-(--surface) rounded-(--radius-xl) border border-(--border) flex flex-col gap-4" style={{padding: "var(--space-5)", boxShadow: "var(--shadow-md)"}} >
       {/* Header + AI Generate Button */}
       <Flex align="center" justify="space-between" wrap="wrap" gap={8}>
         <Flex align="center" gap={8}>
-          <Text style={{ fontSize: 12, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>
+          <Text className="text-xs font-bold text-text-muted uppercase tracking-wider" >
             📚 Văn bản mẫu ({filteredPassages.length})
           </Text>
         </Flex>
@@ -80,24 +65,7 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
           whileHover={{ scale: 1.03, y: -1 }}
           whileTap={{ scale: 0.97 }}
           onClick={generateAiPassages}
-          disabled={aiLoading}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 6,
-            padding: "7px 16px",
-            borderRadius: 12,
-            border: "1px solid var(--accent)",
-            background: "var(--accent-light)",
-            color: "var(--accent)",
-            fontSize: 12.5,
-            fontWeight: 700,
-            cursor: aiLoading ? "wait" : "pointer",
-            opacity: aiLoading ? 0.6 : 1,
-            fontFamily: "var(--font-body)",
-            transition: "all 0.2s",
-          }}
-        >
+          disabled={aiLoading} className="flex items-center gap-1.5 rounded-xl text-accent font-bold font-body" style={{padding: "7px 16px", border: "1px solid var(--accent)", background: "var(--accent-light)", fontSize: 12.5, cursor: aiLoading ? "wait" : "pointer", opacity: aiLoading ? 0.6 : 1, transition: "all 0.2s"}} >
           {aiLoading ? (
             <><Loader2 className="animate-spin" size={12} /> Đang tạo...</>
           ) : (
@@ -107,7 +75,7 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
       </Flex>
 
       {/* Topic filter chips */}
-      <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+      <div className="flex flex-wrap gap-1.5" >
         <FilterChip
           label="Tất cả"
           active={selectedTopic === "all"}
@@ -125,7 +93,7 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
 
       {/* Length filter */}
       <Flex gap={6} align="center">
-        <Text style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 600 }}>Độ dài:</Text>
+        <Text className="text-[11px] text-text-muted font-semibold" >Độ dài:</Text>
         {(["all", "short", "medium", "long"] as const).map((len) => (
           <FilterChip
             key={len}
@@ -137,13 +105,9 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
       </Flex>
 
       {/* Passage cards */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 8, maxHeight: 400, overflowY: "auto" }}>
+      <div className="flex flex-col gap-2 h-[400px] overflow-y-auto" >
         {filteredPassages.length === 0 ? (
-          <div style={{
-            padding: "24px 16px", textAlign: "center",
-            borderRadius: 14, border: "1px dashed var(--border)",
-            color: "var(--text-muted)", fontSize: 13,
-          }}>
+          <div className="text-center text-text-muted text-[13px]" style={{padding: "24px 16px", borderRadius: 14, border: "1px dashed var(--border)"}} >
             Không có đoạn văn nào. Nhấn &quot;✨ Tạo bằng AI&quot; để tạo mới!
           </div>
         ) : (
@@ -157,51 +121,22 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
               onClick={() => {
                 onSelectPassage(sample.text, sample.title);
                 message.success(`Đã tải: ${sample.title}`);
-              }}
-              style={{
-                display: "flex",
-                alignItems: "flex-start",
-                gap: 12,
-                padding: "12px 14px",
-                borderRadius: "var(--radius-lg)",
-                border: "1px solid var(--border)",
-                background: "var(--surface-alt)",
-                cursor: "pointer",
-                transition: "all 0.15s",
-              }}
-            >
-              <div style={{
-                width: 36, height: 36, borderRadius: 10,
-                background: "var(--accent-light)", border: "1px solid var(--border)",
-                display: "grid", placeItems: "center", fontSize: 18, flexShrink: 0,
-              }}>
+              }} className="flex items-start gap-3 rounded-(--radius-lg) border border-(--border) bg-surface-alt cursor-pointer" style={{padding: "12px 14px", transition: "all 0.15s"}} >
+              <div className="w-[36px] h-[36px] border border-(--border) grid text-lg shrink-0" style={{borderRadius: 10, background: "var(--accent-light)", placeItems: "center"}} >
                 {sample.icon}
               </div>
-              <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{
-                  fontSize: 13.5, fontWeight: 700, color: "var(--text-primary)",
-                  lineHeight: 1.3,
-                }}>
+              <div className="flex-1 w-[0px]" >
+                <div className="font-bold text-text-primary" style={{fontSize: 13.5, lineHeight: 1.3}} >
                   {sample.title}
                 </div>
-                <div style={{
-                  fontSize: 12, color: "var(--text-muted)", marginTop: 3,
-                  overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                }}>
+                <div className="text-xs text-text-muted overflow-hidden" style={{marginTop: 3, textOverflow: "ellipsis", whiteSpace: "nowrap"}} >
                   {sample.text.slice(0, 80)}...
                 </div>
-                <Flex gap={6} style={{ marginTop: 6 }}>
-                  <span style={{
-                    fontSize: 10, fontWeight: 700, padding: "1px 8px", borderRadius: 8,
-                    background: sample.length === "short" ? "rgba(16,185,129,0.1)" : sample.length === "long" ? "rgba(239,68,68,0.08)" : "rgba(59,130,246,0.1)",
-                    color: sample.length === "short" ? "var(--success)" : sample.length === "long" ? "var(--error)" : "var(--info)",
-                    border: `1px solid ${sample.length === "short" ? "rgba(16,185,129,0.2)" : sample.length === "long" ? "rgba(239,68,68,0.15)" : "rgba(59,130,246,0.2)"}`,
-                  }}>
+                <Flex gap={6} className="mt-1.5" >
+                  <span className="text-[10px] font-bold rounded-lg" style={{padding: "1px 8px", background: sample.length === "short" ? "rgba(16,185,129,0.1)" : sample.length === "long" ? "rgba(239,68,68,0.08)" : "rgba(59,130,246,0.1)", color: sample.length === "short" ? "var(--success)" : sample.length === "long" ? "var(--error)" : "var(--info)", border: `1px solid ${sample.length === "short" ? "rgba(16,185,129,0.2)" : sample.length === "long" ? "rgba(239,68,68,0.15)" : "rgba(59,130,246,0.2)"}`}} >
                     {sample.length === "short" ? "Ngắn" : sample.length === "long" ? "Dài" : "TB"}
                   </span>
-                  <span style={{
-                    fontSize: 10, fontWeight: 600, color: "var(--text-muted)",
-                  }}>
+                  <span className="text-[10px] font-semibold text-text-muted" >
                     ~{sample.text.split(/\s+/).length} từ
                   </span>
                 </Flex>
@@ -219,21 +154,7 @@ function FilterChip({ label, active, onClick }: { label: string; active: boolean
   return (
     <button
       type="button"
-      onClick={onClick}
-      style={{
-        padding: "4px 12px",
-        borderRadius: 999,
-        border: active ? "1px solid var(--accent)" : "1px solid var(--border)",
-        background: active ? "var(--accent-muted)" : "transparent",
-        color: active ? "var(--accent)" : "var(--text-muted)",
-        fontSize: 11.5,
-        fontWeight: active ? 700 : 500,
-        cursor: "pointer",
-        transition: "all 0.2s",
-        fontFamily: "var(--font-body)",
-        whiteSpace: "nowrap",
-      }}
-    >
+      onClick={onClick} className="rounded-full cursor-pointer font-body" style={{padding: "4px 12px", border: active ? "1px solid var(--accent)" : "1px solid var(--border)", background: active ? "var(--accent-muted)" : "transparent", color: active ? "var(--accent)" : "var(--text-muted)", fontSize: 11.5, fontWeight: active ? 700 : 500, transition: "all 0.2s", whiteSpace: "nowrap"}} >
       {label}
     </button>
   );

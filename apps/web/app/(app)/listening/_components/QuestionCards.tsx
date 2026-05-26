@@ -17,63 +17,25 @@ type Props = {
 
 export function QuestionCards({ questions, selectedAnswers, onSelectAnswer, onSubmit, allAnswered, isSubmitting }: Props) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: 1 }}>
+    <div className="flex flex-col gap-4" >
+      <div className="text-[13px] font-semibold text-text-muted uppercase" style={{letterSpacing: 1}} >
         <ClipboardList style={{ marginRight: 6 }} /> Câu hỏi ({questions.length})
       </div>
 
       {questions.map((q, qi) => (
         <div
-          key={qi}
-          style={{
-            background: "var(--surface)",
-            border: "1px solid var(--border)",
-            borderRadius: "var(--radius-md)",
-            padding: 16,
-          }}
-        >
-          <div style={{ fontSize: 14, fontWeight: 600, color: "var(--text)", marginBottom: 12 }}>
+          key={qi} className="bg-(--surface) border border-(--border) p-4" style={{borderRadius: "var(--radius-md)"}} >
+          <div className="text-sm font-semibold mb-3" style={{color: "var(--text)"}} >
             {qi + 1}. {q.question}
           </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+          <div className="flex flex-col gap-1.5" >
             {q.options.map((opt, oi) => {
               const isSelected = selectedAnswers[qi] === oi;
               return (
                 <button
                   key={oi}
-                  onClick={() => onSelectAnswer(qi, oi)}
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 10,
-                    padding: "10px 14px",
-                    borderRadius: "var(--radius-sm)",
-                    border: isSelected ? "2px solid var(--accent)" : "1px solid var(--border)",
-                    background: isSelected ? "var(--accent-surface)" : "transparent",
-                    color: "var(--text)",
-                    cursor: "pointer",
-                    fontSize: 13,
-                    textAlign: "left",
-                    transition: "all 0.15s ease",
-                    width: "100%",
-                  }}
-                >
-                  <span
-                    style={{
-                      width: 22,
-                      height: 22,
-                      borderRadius: "50%",
-                      border: isSelected ? "2px solid var(--accent)" : "1px solid var(--border)",
-                      background: isSelected ? "var(--accent)" : "transparent",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: 11,
-                      color: isSelected ? "var(--text-on-accent)" : "var(--text-muted)",
-                      fontWeight: 700,
-                      flexShrink: 0,
-                    }}
-                  >
+                  onClick={() => onSelectAnswer(qi, oi)} className="flex items-center gap-2.5 rounded-(--radius-sm) cursor-pointer text-[13px] text-left w-full" style={{padding: "10px 14px", border: isSelected ? "2px solid var(--accent)" : "1px solid var(--border)", background: isSelected ? "var(--accent-surface)" : "transparent", color: "var(--text)", transition: "all 0.15s ease"}} >
+                  <span className="w-[22px] h-[22px] rounded-full flex items-center justify-center text-[11px] font-bold shrink-0" style={{border: isSelected ? "2px solid var(--accent)" : "1px solid var(--border)", background: isSelected ? "var(--accent)" : "transparent", color: isSelected ? "var(--text-on-accent)" : "var(--text-muted)"}} >
                     {isSelected ? <CircleCheckBig /> : String.fromCharCode(65 + oi)}
                   </span>
                   {opt}
@@ -87,24 +49,7 @@ export function QuestionCards({ questions, selectedAnswers, onSelectAnswer, onSu
       {/* Submit button */}
       <button
         onClick={onSubmit}
-        disabled={!allAnswered || isSubmitting}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 10,
-          padding: "14px 24px",
-          borderRadius: "var(--radius-md)",
-          border: "none",
-          background: allAnswered ? "linear-gradient(135deg, var(--accent), var(--accent-hover))" : "var(--border)",
-          color: allAnswered ? "var(--text-on-accent)" : "var(--text-muted)",
-          fontSize: 15,
-          fontWeight: 700,
-          cursor: allAnswered && !isSubmitting ? "pointer" : "not-allowed",
-          transition: "all 0.2s ease",
-          opacity: isSubmitting ? 0.7 : 1,
-        }}
-      >
+        disabled={!allAnswered || isSubmitting} className="flex items-center justify-center gap-2.5 border-none text-[15px] font-bold" style={{padding: "14px 24px", borderRadius: "var(--radius-md)", background: allAnswered ? "linear-gradient(135deg, var(--accent), var(--accent-hover))" : "var(--border)", color: allAnswered ? "var(--text-on-accent)" : "var(--text-muted)", cursor: allAnswered && !isSubmitting ? "pointer" : "not-allowed", transition: "all 0.2s ease", opacity: isSubmitting ? 0.7 : 1}} >
         {isSubmitting ? <Loader2 className="animate-spin" /> : <Send />}
         {isSubmitting ? "Đang chấm điểm..." : "Nộp bài"}
       </button>

@@ -36,28 +36,19 @@ export default async function ToeicSpeakingPage() {
 	const seeded = (promptCount[0]?.c ?? 0) >= 11;
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				height: "100%",
-				minHeight: 0,
-				flex: 1,
-				overflow: "auto",
-			}}
-		>
-			<div style={{ padding: 16, display: "grid", gap: 16 }}>
+		<div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
+			<div className="p-4 grid gap-4" >
 				{seeded ? (
 					<Link href="/toeic/speaking/runner" style={{ textDecoration: "none" }}>
 						<Card hoverable>
-							<div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-								<Mic style={{ fontSize: 24, color: "var(--accent)" }} />
-								<strong style={{ fontSize: 18, color: "var(--ink)" }}>Bắt đầu Speaking test</strong>
+							<div className="flex items-center gap-2" >
+								<Mic className="text-3xl text-accent" />
+								<strong className="text-lg text-ink" >Bắt đầu Speaking test</strong>
 							</div>
-							<div style={{ color: "var(--text-muted)", marginTop: 6, fontSize: 13 }}>
+							<div className="text-text-muted mt-1.5 text-[13px]" >
 								Q1-2 đọc to · Q3-4 mô tả ảnh · Q5-7 trả lời câu hỏi · Q8-10 đọc context + trả lời · Q11 opinion
 							</div>
-							<div style={{ marginTop: 8 }}>
+							<div className="mt-2" >
 								<Tag color="orange">Cần microphone permission</Tag>
 								<Tag color="green">Whisper STT + Gemini grading</Tag>
 							</div>
@@ -73,26 +64,15 @@ export default async function ToeicSpeakingPage() {
 					{history.length === 0 ? (
 						<Empty description="Chưa có session nào" />
 					) : (
-						<div style={{ display: "grid", gap: 8 }}>
+						<div className="grid gap-2" >
 							{history.map((h) => (
 								<Link
 									key={h.id}
-									href={`/toeic/speaking/${h.id}/result`}
-									style={{
-										textDecoration: "none",
-										color: "var(--ink)",
-										padding: 10,
-										borderRadius: 8,
-										background: "var(--surface-hover)",
-										display: "flex",
-										justifyContent: "space-between",
-										border: "1px solid var(--border)",
-									}}
-								>
+									href={`/toeic/speaking/${h.id}/result`} className="text-ink rounded-lg flex justify-between border border-(--border)" style={{textDecoration: "none", padding: 10, background: "var(--surface-hover)"}} >
 									<span>
 										{new Date(h.completedAt!).toLocaleString("vi-VN")} · {h.setCode}
 									</span>
-									<span style={{ fontSize: 18, fontWeight: 700 }}>
+									<span className="text-lg font-bold" >
 										{h.scaledScore ?? "—"} / 200
 									</span>
 								</Link>

@@ -95,45 +95,21 @@ export function ToolbarBreadcrumb() {
         initial={{ opacity: 0, x: -8 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: 8 }}
-        transition={{ duration: 0.15, ease: "easeOut" }}
-        style={{ display: "flex", alignItems: "center", gap: 10 }}
-      >
+        transition={{ duration: 0.15, ease: "easeOut" }} className="flex items-center gap-2.5" >
         {/* Icon */}
         <m.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.05, type: "spring", stiffness: 400 }}
-          style={{
-            width: 30,
-            height: 30,
-            borderRadius: 8,
-            background: "var(--accent-light)",
-            border: "1px solid color-mix(in srgb, var(--accent) 20%, transparent)",
-            display: "grid",
-            placeItems: "center",
-            fontSize: 14,
-            color: "var(--accent)",
-            flexShrink: 0,
-          }}
-        >
+          transition={{ delay: 0.05, type: "spring", stiffness: 400 }} className="w-[30px] h-[30px] rounded-lg grid text-sm text-accent shrink-0" style={{background: "var(--accent-light)", border: "1px solid color-mix(in srgb, var(--accent) 20%, transparent)", placeItems: "center"}} >
           {crumb.icon}
         </m.div>
 
         {/* Text */}
-        <div style={{ display: "flex", flexDirection: "column", justifyContent: "center" }}>
-          <span
-            style={{
-              fontSize: 10,
-              textTransform: "uppercase",
-              letterSpacing: "0.15em",
-              lineHeight: 1,
-              fontWeight: 700,
-              color: "var(--text-muted)",
-            }}
-          >
+        <div className="flex flex-col justify-center" >
+          <span className="text-[10px] uppercase leading-none font-bold text-text-muted" style={{letterSpacing: "0.15em"}} >
             {crumb.eyebrow}
           </span>
-          <h5 style={{ margin: "2px 0 0", fontSize: 13, fontWeight: 700, lineHeight: 1.2, color: "var(--text-primary)" }}>
+          <h5 className="text-[13px] font-bold text-text-primary" style={{margin: "2px 0 0", lineHeight: 1.2}} >
             {crumb.title}
           </h5>
         </div>

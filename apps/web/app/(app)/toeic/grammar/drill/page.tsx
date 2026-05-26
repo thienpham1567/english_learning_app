@@ -28,12 +28,12 @@ function DrillRunner() {
 	}, []);
 
 	if (session.state === "loading" || session.state === "idle") {
-		return <div style={{ padding: 24 }}>Đang tải đề drill…</div>;
+		return <div className="p-6" >Đang tải đề drill…</div>;
 	}
 	if (session.error) {
 		return (
-			<div style={{ padding: 24 }}>
-				<div style={{ color: "var(--error)", marginBottom: 12 }}>{session.error}</div>
+			<div className="p-6" >
+				<div className="text-destructive mb-3" >{session.error}</div>
 				<Button onClick={() => router.push("/toeic/grammar")}>Về Grammar Hub</Button>
 			</div>
 		);
@@ -64,17 +64,8 @@ function DrillRunner() {
 
 export default function GrammarDrillPage() {
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				height: "100%",
-				minHeight: 0,
-				flex: 1,
-				overflow: "auto",
-			}}
-		>
-			<div style={{ padding: 16, flex: 1 }}>
+		<div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
+			<div className="p-4 flex-1" >
 				<Suspense fallback={<div>Loading…</div>}>
 					<DrillRunner />
 				</Suspense>

@@ -32,22 +32,7 @@ export function UserMenu({ user }: { user: AuthUser }) {
       <DropdownMenuTrigger asChild>
         <m.button
           whileHover={{ background: "var(--bg-deep)" }}
-          whileTap={{ scale: 0.95 }}
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 10,
-            borderRadius: 4,
-            height: 40,
-            paddingLeft: 6,
-            paddingRight: 14,
-            background: "var(--surface)",
-            border: "var(--brutal-border)",
-            cursor: "pointer",
-            boxShadow: "var(--shadow-sm)",
-            transition: "background 0.2s",
-          }}
-        >
+          whileTap={{ scale: 0.95 }} className="flex items-center gap-2.5 rounded h-[40px] bg-(--surface) cursor-pointer" style={{paddingLeft: 6, paddingRight: 14, border: "var(--brutal-border)", boxShadow: "var(--shadow-sm)", transition: "background 0.2s"}} >
           <m.div
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -56,42 +41,20 @@ export function UserMenu({ user }: { user: AuthUser }) {
             {user.image ? (
               <img
                 src={user.image}
-                alt={user.name}
-                style={{
-                  width: 28,
-                  height: 28,
-                  borderRadius: 2,
-                  objectFit: "cover",
-                  border: "2px solid var(--border)",
-                }}
-              />
+                alt={user.name} className="w-[28px] h-[28px] rounded-sm" style={{objectFit: "cover", border: "2px solid var(--border)"}} />
             ) : (
-              <div
-                style={{
-                  width: 28,
-                  height: 28,
-                  borderRadius: 2,
-                  background: "var(--accent)",
-                  color: "white",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  fontSize: 10,
-                  fontWeight: 700,
-                  border: "2px solid var(--border)",
-                }}
-              >
+              <div className="w-[28px] h-[28px] rounded-sm flex items-center justify-center text-[10px] font-bold" style={{background: "var(--accent)", color: "white", border: "2px solid var(--border)"}} >
                 {initials}
               </div>
             )}
           </m.div>
-          <span style={{ fontSize: 13, fontWeight: 700, color: "var(--ink)" }}>
+          <span className="text-[13px] font-bold text-ink" >
             {user.name}
           </span>
-          <ChevronDown style={{ fontSize: 10, color: "var(--text-muted)", marginLeft: 2 }} />
+          <ChevronDown className="text-[10px] text-text-muted" style={{marginLeft: 2}} />
         </m.button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="border-2 border-[var(--border)] shadow-[var(--shadow)]">
+      <DropdownMenuContent align="end" className="border-2 border-(--border) shadow-(--shadow)">
         <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
           <LogOut className="mr-2 h-4 w-4" />
           Đăng xuất

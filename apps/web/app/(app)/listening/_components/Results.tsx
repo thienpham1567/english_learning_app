@@ -23,56 +23,22 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
   const isGood = percentage >= 75;
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+    <div className="flex flex-col gap-5" >
       {/* Score Card */}
-      <div
-        style={{
-          background: isGood
+      <div className="rounded-(--radius-lg) p-6 text-center" style={{background: isGood
             ? "color-mix(in srgb, var(--success) 8%, var(--surface))"
-            : "color-mix(in srgb, var(--error) 8%, var(--surface))",
-          border: `2px solid ${isGood ? "var(--success)" : "var(--error)"}`,
-          borderRadius: "var(--radius-lg)",
-          padding: 24,
-          textAlign: "center",
-        }}
-      >
-        <div style={{ fontSize: 48, fontWeight: 800, color: isGood ? "var(--success)" : "var(--error)" }}>
+            : "color-mix(in srgb, var(--error) 8%, var(--surface))", border: `2px solid ${isGood ? "var(--success)" : "var(--error)"}`}} >
+        <div className="font-extrabold" style={{fontSize: 48, color: isGood ? "var(--success)" : "var(--error)"}} >
           {percentage}%
         </div>
-        <div style={{ fontSize: 16, fontWeight: 600, color: "var(--text)", marginTop: 4 }}>
+        <div className="text-base font-semibold mt-1" style={{color: "var(--text)"}} >
           {result.correct}/{result.total} câu đúng
         </div>
-        <div
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 6,
-            marginTop: 12,
-            padding: "6px 14px",
-            borderRadius: "var(--radius-sm)",
-            background: "var(--accent-surface)",
-            color: "var(--accent)",
-            fontSize: 13,
-            fontWeight: 700,
-          }}
-        >
+        <div className="items-center gap-1.5 mt-3 py-1.5 px-3.5 rounded-(--radius-sm) text-accent text-[13px] font-bold" style={{display: "inline-flex", background: "var(--accent-surface)"}} >
           <Trophy /> +{result.xpEarned} XP
         </div>
         {scriptRevealed && (
-          <div
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 4,
-              marginTop: 6,
-              padding: "3px 10px",
-              borderRadius: "var(--radius-sm)",
-              background: "color-mix(in srgb, var(--warning) 10%, transparent)",
-              color: "var(--warning)",
-              fontSize: 11,
-              fontWeight: 600,
-            }}
-          >
+          <div className="items-center gap-1 mt-1.5 rounded-(--radius-sm) text-[11px] font-semibold" style={{display: "inline-flex", padding: "3px 10px", background: "color-mix(in srgb, var(--warning) 10%, transparent)", color: "var(--warning)"}} >
             📖 Đã xem script (-30% XP)
           </div>
         )}
@@ -80,37 +46,30 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
 
       {/* Detailed Results */}
       <div>
-        <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-muted)", marginBottom: 10, textTransform: "uppercase", letterSpacing: 1 }}>
+        <div className="text-[13px] font-semibold text-text-muted mb-2.5 uppercase" style={{letterSpacing: 1}} >
           Chi tiết kết quả
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <div className="flex flex-col gap-2.5" >
           {result.results.map((r, i) => (
             <div
-              key={i}
-              style={{
-                background: "var(--surface)",
-                border: `1px solid ${r.correct ? "color-mix(in srgb, var(--success) 25%, transparent)" : "color-mix(in srgb, var(--error) 25%, transparent)"}`,
-                borderRadius: "var(--radius-md)",
-                padding: 14,
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+              key={i} className="bg-(--surface)" style={{border: `1px solid ${r.correct ? "color-mix(in srgb, var(--success) 25%, transparent)" : "color-mix(in srgb, var(--error) 25%, transparent)"}`, borderRadius: "var(--radius-md)", padding: 14}} >
+              <div className="flex items-center gap-2 mb-2" >
                 {r.correct ? (
-                  <CheckCircle style={{ color: "var(--success)", fontSize: 16 }} />
+                  <CheckCircle className="text-emerald-500 text-base" />
                 ) : (
-                  <XCircle style={{ color: "var(--error)", fontSize: 16 }} />
+                  <XCircle className="text-destructive text-base" />
                 )}
-                <span style={{ fontSize: 13, fontWeight: 600, color: "var(--text)" }}>
+                <span className="text-[13px] font-semibold" style={{color: "var(--text)"}} >
                   {i + 1}. {r.question}
                 </span>
               </div>
               {!r.correct && (
-                <div style={{ fontSize: 12, color: "var(--text-muted)", marginLeft: 24 }}>
-                  <span style={{ color: "var(--error)", textDecoration: "line-through" }}>
+                <div className="text-xs text-text-muted" style={{marginLeft: 24}} >
+                  <span className="text-destructive" style={{textDecoration: "line-through"}} >
                     {r.options[r.userAnswer]}
                   </span>
                   {" → "}
-                  <span style={{ color: "var(--success)", fontWeight: 600 }}>
+                  <span className="text-emerald-500 font-semibold" >
                     {r.options[r.correctIndex]}
                   </span>
                 </div>
@@ -122,21 +81,10 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
 
       {/* Transcript */}
       <div>
-        <div style={{ fontSize: 13, fontWeight: 600, color: "var(--text-muted)", marginBottom: 10, textTransform: "uppercase", letterSpacing: 1 }}>
+        <div className="text-[13px] font-semibold text-text-muted mb-2.5 uppercase" style={{letterSpacing: 1}} >
           <FileText style={{ marginRight: 6 }} /> Nguyên văn
         </div>
-        <div
-          style={{
-            background: "var(--surface)",
-            border: "1px solid var(--border)",
-            borderRadius: "var(--radius-md)",
-            padding: 16,
-            fontSize: 14,
-            lineHeight: 1.7,
-            color: "var(--text)",
-            fontStyle: "italic",
-          }}
-        >
+        <div className="bg-(--surface) border border-(--border) p-4 text-sm italic" style={{borderRadius: "var(--radius-md)", lineHeight: 1.7, color: "var(--text)"}} >
           {dialogueTurns && dialogueTurns.length > 0 ? (
             <DialogueTranscript turns={dialogueTurns} />
           ) : (
@@ -147,23 +95,7 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
 
       {/* New Exercise Button */}
       <button
-        onClick={onNewExercise}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 10,
-          padding: "14px 24px",
-          borderRadius: "var(--radius-md)",
-          border: "none",
-          background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-          color: "var(--text-on-accent)",
-          fontSize: 15,
-          fontWeight: 700,
-          cursor: "pointer",
-          transition: "all 0.2s ease",
-        }}
-      >
+        onClick={onNewExercise} className="flex items-center justify-center gap-2.5 border-none text-[15px] font-bold cursor-pointer" style={{padding: "14px 24px", borderRadius: "var(--radius-md)", background: "linear-gradient(135deg, var(--accent), var(--accent-hover))", color: "var(--text-on-accent)", transition: "all 0.2s ease"}} >
         <RefreshCw /> Bài mới
       </button>
     </div>

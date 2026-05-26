@@ -97,91 +97,30 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
     <m.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: Math.min(index + 1, 6) * 0.08 }}
-      style={{
-        borderRadius: "var(--radius-lg)",
-        border: `1px solid ${ok ? "rgba(16, 185, 129, 0.22)" : "rgba(239, 68, 68, 0.18)"}`,
-        background: "var(--surface)",
-        boxShadow: "var(--shadow-sm)",
-        overflow: "hidden",
-      }}
-    >
+      transition={{ delay: Math.min(index + 1, 6) * 0.08 }} className="rounded-(--radius-lg) bg-(--surface) overflow-hidden" style={{border: `1px solid ${ok ? "rgba(16, 185, 129, 0.22)" : "rgba(239, 68, 68, 0.18)"}`, boxShadow: "var(--shadow-sm)"}} >
       {/* Header bar */}
       <button
         type="button"
-        onClick={() => setIsExpanded((v) => !v)}
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          width: "100%",
-          padding: "14px 18px",
-          background: ok ? "rgba(16, 185, 129, 0.03)" : "rgba(239, 68, 68, 0.02)",
-          border: "none",
-          cursor: "pointer",
-          gap: 12,
-        }}
-      >
-        <div style={{ display: "flex", alignItems: "center", gap: 12, minWidth: 0 }}>
-          <div
-            style={{
-              width: 8,
-              height: 8,
-              borderRadius: "50%",
-              background: ok ? "var(--success)" : "var(--error)",
-              boxShadow: ok ? "0 0 8px var(--success)" : "0 0 8px var(--error)",
-              flexShrink: 0,
-            }}
-          />
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 2, minWidth: 0 }}>
-            <span
-              style={{
-                fontFamily: "var(--font-body)",
-                fontSize: 14,
-                fontWeight: 700,
-                color: "var(--text-primary)",
-              }}
-            >
+        onClick={() => setIsExpanded((v) => !v)} className="flex items-center justify-between w-full border-none cursor-pointer gap-3" style={{padding: "14px 18px", background: ok ? "rgba(16, 185, 129, 0.03)" : "rgba(239, 68, 68, 0.02)"}} >
+        <div className="flex items-center gap-3 w-[0px]" >
+          <div className="w-[8px] h-[8px] rounded-full shrink-0" style={{background: ok ? "var(--success)" : "var(--error)", boxShadow: ok ? "0 0 8px var(--success)" : "0 0 8px var(--error)"}} />
+          <div className="flex flex-col items-start w-[0px]" style={{gap: 2}} >
+            <span className="font-body text-sm font-bold text-text-primary" >
               Câu số {index + 1}
             </span>
             {exerciseLabel && (
-              <span
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 5,
-                  fontSize: 11,
-                  color: "var(--text-muted)",
-                  fontWeight: 500,
-                }}
-              >
+              <span className="items-center text-[11px] text-text-muted font-medium" style={{display: "inline-flex", gap: 5}} >
                 {exerciseIcon} {exerciseLabel}
               </span>
             )}
           </div>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", gap: 12, flexShrink: 0 }}>
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 800,
-              padding: "4px 10px",
-              borderRadius: 20,
-              background: ok ? "rgba(16, 185, 129, 0.12)" : "rgba(239, 68, 68, 0.1)",
-              color: ok ? "var(--success)" : "var(--error)",
-            }}
-          >
+        <div className="flex items-center gap-3 shrink-0" >
+          <span className="text-[11px] font-extrabold" style={{padding: "4px 10px", borderRadius: 20, background: ok ? "rgba(16, 185, 129, 0.12)" : "rgba(239, 68, 68, 0.1)", color: ok ? "var(--success)" : "var(--error)"}} >
             {ok ? "Chính xác" : "Chưa đúng"}
           </span>
-          <ChevronDown
-            style={{
-              fontSize: 10,
-              color: "var(--text-muted)",
-              transition: "transform 0.25s ease",
-              transform: isExpanded ? "rotate(180deg)" : "rotate(0)",
-            }}
-          />
+          <ChevronDown className="text-[10px] text-text-muted" style={{transition: "transform 0.25s ease", transform: isExpanded ? "rotate(180deg)" : "rotate(0)"}} />
         </div>
       </button>
 
@@ -192,123 +131,39 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
             initial={{ height: 0 }}
             animate={{ height: "auto" }}
             exit={{ height: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            style={{ overflow: "hidden" }}
-          >
-            <div
-              style={{
-                padding: "4px 18px 18px",
-                display: "flex",
-                flexDirection: "column",
-                gap: 10,
-              }}
-            >
+            transition={{ duration: 0.3, ease: "easeInOut" }} className="overflow-hidden" >
+            <div className="flex flex-col gap-2.5" style={{padding: "4px 18px 18px"}} >
               {/* Question stem */}
               {answer.questionStem && (
-                <div
-                  style={{
-                    borderRadius: "var(--radius)",
-                    background: "var(--surface-alt)",
-                    padding: "12px 14px",
-                    border: "1px solid var(--border)",
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize: 10,
-                      fontWeight: 800,
-                      textTransform: "uppercase",
-                      letterSpacing: ".08em",
-                      color: "var(--text-muted)",
-                      display: "block",
-                      marginBottom: 6,
-                    }}
-                  >
+                <div className="rounded-(--radius) bg-surface-alt border border-(--border)" style={{padding: "12px 14px"}} >
+                  <span className="text-[10px] font-extrabold uppercase text-text-muted block mb-1.5" style={{letterSpacing: ".08em"}} >
                     Đề bài câu hỏi
                   </span>
-                  <span
-                    style={{
-                      fontSize: 14,
-                      color: "var(--text-primary)",
-                      lineHeight: 1.7,
-                      fontWeight: 500,
-                      wordBreak: "break-word",
-                    }}
-                  >
+                  <span className="text-sm text-text-primary font-medium" style={{lineHeight: 1.7, wordBreak: "break-word"}} >
                     {answer.questionStem}
                   </span>
                 </div>
               )}
 
               {/* User answer */}
-              <div
-                style={{
-                  borderRadius: "var(--radius)",
-                  borderLeft: `3px solid ${ok ? "var(--success)" : "var(--error)"}`,
-                  padding: "11px 14px",
-                  background: ok
+              <div className="rounded-(--radius)" style={{borderLeft: `3px solid ${ok ? "var(--success)" : "var(--error)"}`, padding: "11px 14px", background: ok
                     ? "rgba(16, 185, 129, 0.06)"
-                    : "rgba(239, 68, 68, 0.05)",
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: 10,
-                    fontWeight: 800,
-                    textTransform: "uppercase",
-                    letterSpacing: ".08em",
-                    color: ok ? "var(--success)" : "var(--error)",
-                    display: "block",
-                    marginBottom: 4,
-                  }}
-                >
+                    : "rgba(239, 68, 68, 0.05)"}} >
+                <span className="text-[10px] font-extrabold uppercase block mb-1" style={{letterSpacing: ".08em", color: ok ? "var(--success)" : "var(--error)"}} >
                   {ok ? "Đáp án của bạn" : "Đáp án bạn chọn"}
                 </span>
-                <span
-                  style={{
-                    fontSize: 13.5,
-                    fontWeight: 600,
-                    color: "var(--text-primary)",
-                    wordBreak: "break-word",
-                    fontFamily: "var(--font-body)",
-                  }}
-                >
+                <span className="font-semibold text-text-primary font-body" style={{fontSize: 13.5, wordBreak: "break-word"}} >
                   {answer.answer || "(bỏ trống)"}
                 </span>
               </div>
 
               {/* Correct answer (wrong only) */}
               {!ok && answer.correctAnswer && (
-                <div
-                  style={{
-                    borderRadius: "var(--radius)",
-                    borderLeft: "3px solid var(--success)",
-                    padding: "11px 14px",
-                    background: "rgba(16, 185, 129, 0.06)",
-                  }}
-                >
-                  <span
-                    style={{
-                      fontSize: 10,
-                      fontWeight: 800,
-                      textTransform: "uppercase",
-                      letterSpacing: ".08em",
-                      color: "var(--success)",
-                      display: "block",
-                      marginBottom: 4,
-                    }}
-                  >
+                <div className="rounded-(--radius)" style={{borderLeft: "3px solid var(--success)", padding: "11px 14px", background: "rgba(16, 185, 129, 0.06)"}} >
+                  <span className="text-[10px] font-extrabold uppercase text-emerald-500 block mb-1" style={{letterSpacing: ".08em"}} >
                     Đáp án đúng chuẩn
                   </span>
-                  <span
-                    style={{
-                      fontSize: 13.5,
-                      fontWeight: 700,
-                      color: "var(--success)",
-                      wordBreak: "break-word",
-                      fontFamily: "var(--font-body)",
-                    }}
-                  >
+                  <span className="font-bold text-emerald-500 font-body" style={{fontSize: 13.5, wordBreak: "break-word"}} >
                     {answer.correctAnswer}
                   </span>
                 </div>
@@ -316,31 +171,9 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
 
               {/* Static explanation */}
               {answer.explanation && (
-                <div
-                  style={{
-                    display: "flex",
-                    gap: 8,
-                    padding: "6px 2px",
-                    alignItems: "flex-start",
-                  }}
-                >
-                  <Lightbulb
-                    style={{
-                      color: "var(--accent)",
-                      fontSize: 13,
-                      marginTop: 2,
-                      flexShrink: 0,
-                    }}
-                  />
-                  <p
-                    style={{
-                      fontSize: 12.5,
-                      lineHeight: 1.6,
-                      color: "var(--text-secondary)",
-                      margin: 0,
-                      wordBreak: "break-word",
-                    }}
-                  >
+                <div className="flex gap-2 items-start" style={{padding: "6px 2px"}} >
+                  <Lightbulb className="text-accent text-[13px] shrink-0" style={{marginTop: 2}} />
+                  <p className="leading-relaxed text-text-secondary m-0" style={{fontSize: 12.5, wordBreak: "break-word"}} >
                     {answer.explanation}
                   </p>
                 </div>
@@ -353,23 +186,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                   whileTap={{ scale: 0.98 }}
                   type="button"
                   onClick={(e) => { e.stopPropagation(); fetchAIExplanation(); }}
-                  disabled={aiLoading}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 6,
-                    padding: "8px 16px",
-                    borderRadius: 99,
-                    border: "1px solid color-mix(in srgb, var(--accent) 30%, var(--border))",
-                    background: "color-mix(in srgb, var(--accent) 8%, var(--surface))",
-                    color: "var(--accent)",
-                    cursor: aiLoading ? "wait" : "pointer",
-                    fontSize: 12,
-                    fontWeight: 700,
-                    width: "fit-content",
-                    marginTop: 4,
-                  }}
-                >
+                  disabled={aiLoading} className="items-center gap-1.5 py-2 px-4 rounded-full text-accent text-xs font-bold mt-1" style={{display: "inline-flex", border: "1px solid color-mix(in srgb, var(--accent) 30%, var(--border))", background: "color-mix(in srgb, var(--accent) 8%, var(--surface))", cursor: aiLoading ? "wait" : "pointer", width: "fit-content"}} >
                   {aiLoading ? (
                     <><Loader2 className="animate-spin" size={12} /> AI đang phân tích...</>
                   ) : (
@@ -382,31 +199,14 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
               {aiExplanation && (
                 <m.div
                   initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  style={{
-                    marginTop: 6,
-                    padding: "14px",
-                    borderRadius: "var(--radius-lg)",
-                    background: "linear-gradient(135deg, var(--accent-light), var(--surface-alt))",
-                    border: "1px solid color-mix(in srgb, var(--accent) 20%, var(--border))",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 8 }}>
-                    <Lightbulb size={13} className="text-[var(--accent)]" />
-                    <span style={{ fontSize: 11, fontWeight: 800, textTransform: "uppercase", letterSpacing: ".05em", color: "var(--accent)" }}>
+                  animate={{ opacity: 1, y: 0 }} className="mt-1.5 rounded-(--radius-lg)" style={{padding: "14px", background: "linear-gradient(135deg, var(--accent-light), var(--surface-alt))", border: "1px solid color-mix(in srgb, var(--accent) 20%, var(--border))"}} >
+                  <div className="flex items-center gap-1.5 mb-2" >
+                    <Lightbulb size={13} className="text-accent" />
+                    <span className="text-[11px] font-extrabold uppercase text-accent" style={{letterSpacing: ".05em"}} >
                       Giải thích từ trợ lý AI
                     </span>
                   </div>
-                  <p
-                    style={{
-                      fontSize: 13,
-                      lineHeight: 1.7,
-                      color: "var(--text-primary)",
-                      margin: 0,
-                      wordBreak: "break-word",
-                      fontFamily: "var(--font-body)",
-                    }}
-                  >
+                  <p className="text-[13px] text-text-primary m-0 font-body" style={{lineHeight: 1.7, wordBreak: "break-word"}} >
                     {aiExplanation}
                   </p>
                 </m.div>
@@ -454,180 +254,61 @@ export function ChallengeResults({
           visible={showCelebration}
           onComplete={() => setShowCelebration(false)}
         >
-          <span
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: 24,
-              fontWeight: 800,
-              color: matched.tier === "big" ? "var(--xp)" : "var(--accent)",
-            }}
-          >
+          <span className="font-display text-3xl font-extrabold" style={{color: matched.tier === "big" ? "var(--xp)" : "var(--accent)"}} >
             {matched.label}
           </span>
         </CelebrationOverlay>
       )}
 
-      <div
-        className="anim-scale-in"
-        style={{
-          maxWidth: 540,
-          margin: "0 auto",
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          gap: 16,
-        }}
-      >
+      <div className="anim-scale-in w-[540px] mx-auto w-full flex flex-col gap-4" >
         {/* ── Score Hero Card ── */}
-        <div
-          style={{
-            borderRadius: "var(--radius-xl)",
-            border: "1px solid var(--border)",
-            background: "var(--surface)",
-            padding: "36px 24px 28px",
-            textAlign: "center",
-            position: "relative",
-            overflow: "hidden",
-            boxShadow: "var(--shadow-md)",
-          }}
-        >
+        <div className="rounded-(--radius-xl) border border-(--border) bg-(--surface) text-center relative overflow-hidden" style={{padding: "36px 24px 28px", boxShadow: "var(--shadow-md)"}} >
           {/* Top accent line */}
-          <div
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              height: 4,
-              background: `linear-gradient(90deg, var(--accent), var(--xp))`,
-            }}
-          />
+          <div className="absolute h-[4px]" style={{top: 0, left: 0, right: 0, background: `linear-gradient(90deg, var(--accent), var(--xp))`}} />
 
           {/* Big score number */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "baseline",
-              justifyContent: "center",
-              gap: 4,
-              marginBottom: 8,
-            }}
-          >
+          <div className="flex items-baseline justify-center gap-1 mb-2" >
             <m.span
               initial={{ scale: 0.6, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ type: "spring", stiffness: 80, damping: 10 }}
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: 96,
-                fontWeight: 900,
-                lineHeight: 1,
-                color: correctCount === answers.length
+              transition={{ type: "spring", stiffness: 80, damping: 10 }} className="font-display font-black leading-none" style={{fontSize: 96, color: correctCount === answers.length
                   ? "var(--success)"
                   : correctCount >= answers.length * 0.6
                   ? "var(--text-primary)"
-                  : "var(--accent)",
-                letterSpacing: "-.04em",
-              }}
-            >
+                  : "var(--accent)", letterSpacing: "-.04em"}} >
               {correctCount}
             </m.span>
-            <span
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: 32,
-                fontWeight: 400,
-                color: "var(--text-muted)",
-                letterSpacing: "-.02em",
-                marginBottom: 8,
-              }}
-            >
+            <span className="font-display text-4xl font-normal text-text-muted mb-2" style={{letterSpacing: "-.02em"}} >
               /{answers.length}
             </span>
           </div>
 
           {/* Title */}
-          <p
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: 24,
-              fontWeight: 800,
-              color: "var(--text-primary)",
-              margin: "0 0 6px",
-            }}
-          >
+          <p className="font-display text-3xl font-extrabold text-text-primary" style={{margin: "0 0 6px"}} >
             {matched.label}
           </p>
-          <p
-            style={{
-              fontFamily: "var(--font-body)",
-              fontSize: 13.5,
-              color: "var(--text-muted)",
-              margin: 0,
-              fontWeight: 500,
-            }}
-          >
+          <p className="font-body text-text-muted m-0 font-medium" style={{fontSize: 13.5}} >
             {matched.sub} · Độ chính xác {pct}%
           </p>
 
           {/* Divider */}
-          <div
-            style={{
-              margin: "20px auto",
-              width: 50,
-              height: 1,
-              background: "var(--border)",
-            }}
-          />
+          <div className="w-[50px] h-[1px]" style={{margin: "20px auto", background: "var(--border)"}} />
 
           {/* Stats Grid */}
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(4, 1fr)",
-              gap: 8,
-            }}
-          >
+          <div className="grid gap-2" style={{gridTemplateColumns: "repeat(4, 1fr)"}} >
             {[
-              { icon: <CheckCircle style={{ color: "var(--success)" }} />, label: "Đúng", value: correctCount },
-              { icon: <XCircle style={{ color: "var(--error)" }} />, label: "Sai", value: wrongCount },
-              { icon: <Clock style={{ color: "var(--accent)" }} />, label: "Thời gian", value: `${minutes}:${seconds.toString().padStart(2, "0")}` },
+              { icon: <CheckCircle className="text-emerald-500" />, label: "Đúng", value: correctCount },
+              { icon: <XCircle className="text-destructive" />, label: "Sai", value: wrongCount },
+              { icon: <Clock className="text-accent" />, label: "Thời gian", value: `${minutes}:${seconds.toString().padStart(2, "0")}` },
               { icon: <Flame style={{ color: "var(--fire)" }} />, label: "Chuỗi ngày", value: streak.currentStreak },
             ].map((s, i) => (
               <div
-                key={s.label}
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  gap: 4,
-                  padding: "10px 4px",
-                  borderRadius: "var(--radius)",
-                  background: "var(--surface-alt)",
-                  border: "1px solid var(--border)",
-                }}
-              >
-                <span style={{ fontSize: 16 }}>{s.icon}</span>
-                <span
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: 16,
-                    fontWeight: 800,
-                    color: "var(--text-primary)",
-                    lineHeight: 1.2,
-                  }}
-                >
+                key={s.label} className="flex flex-col items-center gap-1 rounded-(--radius) bg-surface-alt border border-(--border)" style={{padding: "10px 4px"}} >
+                <span className="text-base" >{s.icon}</span>
+                <span className="font-mono text-base font-extrabold text-text-primary" style={{lineHeight: 1.2}} >
                   {s.value}
                 </span>
-                <span
-                  style={{
-                    fontSize: 9,
-                    fontWeight: 700,
-                    textTransform: "uppercase",
-                    letterSpacing: ".05em",
-                    color: "var(--text-muted)",
-                  }}
-                >
+                <span className="text-[9px] font-bold uppercase text-text-muted" style={{letterSpacing: ".05em"}} >
                   {s.label}
                 </span>
               </div>
@@ -639,51 +320,21 @@ export function ChallengeResults({
         {newBadges.length > 0 && (
           <m.div
             initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            style={{
-              borderRadius: "var(--radius-xl)",
-              border: "1.5px solid rgba(245, 158, 11, 0.35)",
-              background: "rgba(245, 158, 11, 0.06)",
-              padding: "16px 20px",
-              boxShadow: "var(--shadow-sm)",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 12 }}>
-              <Star size={13} className="text-[var(--xp)]" />
-              <span
-                style={{
-                  fontSize: 11,
-                  fontWeight: 800,
-                  textTransform: "uppercase",
-                  letterSpacing: ".08em",
-                  color: "var(--xp)",
-                }}
-              >
+            animate={{ opacity: 1, scale: 1 }} className="rounded-(--radius-xl) py-4 px-5" style={{border: "1.5px solid rgba(245, 158, 11, 0.35)", background: "rgba(245, 158, 11, 0.06)", boxShadow: "var(--shadow-sm)"}} >
+            <div className="flex items-center gap-1.5 mb-3" >
+              <Star size={13} className="text-(--xp)" />
+              <span className="text-[11px] font-extrabold uppercase text-(--xp)" style={{letterSpacing: ".08em"}} >
                 Mở khóa huy hiệu mới!
               </span>
             </div>
-            <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <div className="flex gap-2 flex-wrap" >
               {newBadges.map((b, i) => (
                 <span
-                  key={b.id}
-                  style={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 6,
-                    fontSize: 13,
-                    padding: "6px 16px",
-                    borderRadius: 99,
-                    border: "1px solid rgba(245, 158, 11, 0.4)",
-                    background: "var(--surface)",
-                    fontWeight: 700,
-                    color: "var(--text-primary)",
-                    boxShadow: "var(--shadow-sm)",
-                  }}
-                >
+                  key={b.id} className="items-center gap-1.5 text-[13px] rounded-full bg-(--surface) font-bold text-text-primary" style={{display: "inline-flex", padding: "6px 16px", border: "1px solid rgba(245, 158, 11, 0.4)", boxShadow: "var(--shadow-sm)"}} >
                   {b.icon === "Trophy" ? (
-                    <Trophy style={{ color: "var(--xp)" }} />
+                    <Trophy className="text-(--xp)" />
                   ) : (
-                    <Flame style={{ color: "var(--xp)" }} />
+                    <Flame className="text-(--xp)" />
                   )}
                   {b.label}
                 </span>
@@ -693,31 +344,15 @@ export function ChallengeResults({
         )}
 
         {/* ── Answer Breakdown header ── */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 12,
-            marginTop: 10,
-          }}
-        >
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 800,
-              textTransform: "uppercase",
-              letterSpacing: ".08em",
-              color: "var(--text-muted)",
-              whiteSpace: "nowrap",
-            }}
-          >
+        <div className="flex items-center gap-3 mt-2.5" >
+          <span className="text-[11px] font-extrabold uppercase text-text-muted" style={{letterSpacing: ".08em", whiteSpace: "nowrap"}} >
             Chi tiết các câu trả lời
           </span>
-          <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+          <div className="flex-1 h-[1px]" style={{background: "var(--border)"}} />
         </div>
 
         {/* Answer Cards */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        <div className="flex flex-col gap-2.5" >
           {answers.map((a, i) => (
             <AnswerDetailCard key={i} answer={a} index={i} />
           ))}
@@ -729,39 +364,14 @@ export function ChallengeResults({
         </div>
 
         {/* CTA */}
-        <div
-          style={{
-            marginTop: 10,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 12,
-          }}
-        >
+        <div className="mt-2.5 flex flex-col items-center gap-3" >
           <Link
             href="/daily-challenge"
-            prefetch={false}
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: 8,
-              width: "100%",
-              padding: "14px 28px",
-              borderRadius: "var(--radius-lg)",
-              background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-              color: "var(--text-on-accent)",
-              fontWeight: 800,
-              fontSize: 15,
-              textDecoration: "none",
-              boxShadow: "0 6px 18px var(--accent-muted)",
-              transition: "all 0.2s",
-            }}
-          >
+            prefetch={false} className="items-center justify-center gap-2 w-full rounded-(--radius-lg) font-extrabold text-[15px]" style={{display: "inline-flex", padding: "14px 28px", background: "linear-gradient(135deg, var(--accent), var(--accent-hover))", color: "var(--text-on-accent)", textDecoration: "none", boxShadow: "0 6px 18px var(--accent-muted)", transition: "all 0.2s"}} >
             Hoàn tất & Tiếp tục
             <ChevronRight size={12} />
           </Link>
-          <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 500 }}>
+          <span className="text-[11px] text-text-muted font-medium" >
             Quay lại mai nhé!
           </span>
         </div>

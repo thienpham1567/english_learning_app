@@ -185,16 +185,16 @@ export default function SpeakingRunnerPage() {
 
 	if (error) {
 		return (
-			<div style={{ padding: 24 }}>
-				<div style={{ color: "var(--error)", marginBottom: 12 }}>{error}</div>
+			<div className="p-6" >
+				<div className="text-destructive mb-3" >{error}</div>
 				<Button onClick={() => router.push("/toeic/speaking")}>Về Hub</Button>
 			</div>
 		);
 	}
 	if (permissionDenied) {
 		return (
-			<div style={{ padding: 24 }}>
-				<div style={{ color: "var(--error)", marginBottom: 12 }}>
+			<div className="p-6" >
+				<div className="text-destructive mb-3" >
 					Cần quyền microphone để làm Speaking test. Cho phép trong cài đặt browser rồi reload.
 				</div>
 				<Button onClick={() => router.push("/toeic/speaking")}>Về Hub</Button>
@@ -202,7 +202,7 @@ export default function SpeakingRunnerPage() {
 		);
 	}
 	if (!current) {
-		return <div style={{ padding: 24 }}>Đang khởi tạo…</div>;
+		return <div className="p-6" >Đang khởi tạo…</div>;
 	}
 
 	const phaseLimit =
@@ -215,24 +215,9 @@ export default function SpeakingRunnerPage() {
 	const sec = Math.ceil(remaining / 1000);
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				height: "100%",
-				minHeight: 0,
-				flex: 1,
-				overflow: "auto",
-			}}
-		>
-			<div style={{ padding: 16, display: "grid", gap: 12, maxWidth: 720 }}>
-				<div
-					style={{
-						display: "flex",
-						justifyContent: "space-between",
-						alignItems: "center",
-					}}
-				>
+		<div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
+			<div className="p-4 grid gap-3 w-[720px]" >
+				<div className="flex justify-between items-center" >
 					<Tag color={phase === "recording" ? "red" : phase === "prep" ? "orange" : "default"}>
 						{phase === "prep" && `Chuẩn bị · ${sec}s`}
 						{phase === "recording" && (
@@ -246,7 +231,7 @@ export default function SpeakingRunnerPage() {
 							</>
 						)}
 					</Tag>
-					<span style={{ color: "var(--text-muted, #94a3b8)" }}>Max {current.maxScore} điểm</span>
+					<span className="text-text-muted" >Max {current.maxScore} điểm</span>
 				</div>
 				<Progress
 					percent={Math.round((elapsed / Math.max(1, phaseLimit)) * 100)}
@@ -257,8 +242,8 @@ export default function SpeakingRunnerPage() {
 
 				{current.type === "q1_2_read_aloud" && (
 					<Card>
-						<div style={{ fontSize: 13, color: "var(--text-muted)" }}>Đọc to đoạn dưới</div>
-						<div style={{ fontSize: 18, lineHeight: 1.6, marginTop: 8 }}>
+						<div className="text-[13px] text-text-muted" >Đọc to đoạn dưới</div>
+						<div className="text-lg leading-relaxed mt-2" >
 							{current.textToRead}
 						</div>
 					</Card>
@@ -268,10 +253,8 @@ export default function SpeakingRunnerPage() {
 					<Card>
 						<img loading="lazy" decoding="async"
 							src={current.imageUrl}
-							alt=""
-							style={{ maxWidth: "100%", maxHeight: 320, borderRadius: 8 }}
-						/>
-						<div style={{ fontSize: 13, color: "var(--text-muted)", marginTop: 8 }}>
+							alt="" className="h-[320px] rounded-lg" style={{maxWidth: "100%"}} />
+						<div className="text-[13px] text-text-muted mt-2" >
 							Mô tả ảnh càng chi tiết càng tốt
 						</div>
 					</Card>
@@ -279,30 +262,30 @@ export default function SpeakingRunnerPage() {
 
 				{current.type === "q5_7_respond_question" && (
 					<Card>
-						<div style={{ fontSize: 13, color: "var(--text-muted)" }}>Trả lời câu hỏi</div>
-						<div style={{ fontSize: 18, marginTop: 8 }}>{current.questionText}</div>
+						<div className="text-[13px] text-text-muted" >Trả lời câu hỏi</div>
+						<div className="text-lg mt-2" >{current.questionText}</div>
 					</Card>
 				)}
 
 				{current.type === "q8_10_respond_info" && (
 					<>
 						<Card size="small">
-							<div style={{ fontSize: 13, color: "var(--text-muted)" }}>Context</div>
-							<div style={{ whiteSpace: "pre-wrap", marginTop: 6 }}>{current.contextText}</div>
+							<div className="text-[13px] text-text-muted" >Context</div>
+							<div className="mt-1.5" style={{whiteSpace: "pre-wrap"}} >{current.contextText}</div>
 						</Card>
 						<Card>
-							<div style={{ fontSize: 13, color: "var(--text-muted)" }}>Câu hỏi</div>
-							<div style={{ fontSize: 18, marginTop: 8 }}>{current.questionText}</div>
+							<div className="text-[13px] text-text-muted" >Câu hỏi</div>
+							<div className="text-lg mt-2" >{current.questionText}</div>
 						</Card>
 					</>
 				)}
 
 				{current.type === "q11_opinion" && (
 					<Card>
-						<div style={{ fontSize: 13, color: "var(--text-muted)" }}>Topic</div>
-						<div style={{ fontSize: 18, marginTop: 8 }}>{current.topic}</div>
+						<div className="text-[13px] text-text-muted" >Topic</div>
+						<div className="text-lg mt-2" >{current.topic}</div>
 						{current.topicVi && (
-							<div style={{ color: "var(--text-muted)", fontSize: 14, marginTop: 4 }}>
+							<div className="text-text-muted text-sm mt-1" >
 								{current.topicVi}
 							</div>
 						)}

@@ -110,25 +110,11 @@ export default function DiagnosticPage() {
   // ── Loading ──
   if (phase === "loading") {
     return (
-      <div
-        style={{
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 16,
-          background: "var(--bg-deep)",
-        }}
-      >
-        <m.div
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-          className="text-[var(--accent)]" style={{ fontSize: 32 }}
-        >
+      <div className="h-full flex flex-col items-center justify-center gap-4 bg-bg-deep" >
+        <m.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }} className="text-accent text-4xl" >
           <Loader2 className="animate-spin" />
         </m.div>
-        <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text-secondary)" }}>
+        <span className="text-sm font-semibold text-text-secondary" >
           Đang chuẩn bị bài test...
         </span>
       </div>
@@ -158,25 +144,11 @@ export default function DiagnosticPage() {
   // ── Submitting ──
   if (phase === "submitting") {
     return (
-      <div
-        style={{
-          height: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 16,
-          background: "var(--bg-deep)",
-        }}
-      >
-        <m.div
-          animate={{ rotate: 360 }}
-          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
-          className="text-[var(--accent)]" style={{ fontSize: 32 }}
-        >
+      <div className="h-full flex flex-col items-center justify-center gap-4 bg-bg-deep" >
+        <m.div animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 1, ease: "linear" }} className="text-accent text-4xl" >
           <Loader2 className="animate-spin" />
         </m.div>
-        <span style={{ fontSize: 14, fontWeight: 600, color: "var(--text-secondary)" }}>
+        <span className="text-sm font-semibold text-text-secondary" >
           Đang phân tích kết quả bài thi thích ứng...
         </span>
       </div>

@@ -65,17 +65,8 @@ export default async function MockResultPage({
 	}));
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				height: "100%",
-				minHeight: 0,
-				flex: 1,
-				overflow: "auto",
-			}}
-		>
-			<div style={{ padding: 16, display: "grid", gap: 16, maxWidth: 720 }}>
+		<div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
+			<div className="p-4 grid gap-4 w-[720px]" >
 				{cheatTriggered && (
 					<Alert
 						type="warning"
@@ -83,12 +74,12 @@ export default async function MockResultPage({
 						icon={<AlertTriangle />}
 						message="Phát hiện hành vi bất thường trong quá trình làm bài"
 						description={
-							<div style={{ fontSize: 13 }}>
+							<div className="text-[13px]" >
 								{cheat!.tabSwitches > 0 && (
 									<div>• Rời tab: {cheat!.tabSwitches} lần (tổng {Math.round(cheat!.longBlurMs / 1000)}s)</div>
 								)}
 								{cheat!.pasteAttempts > 0 && <div>• Paste: {cheat!.pasteAttempts} lần</div>}
-								<div style={{ marginTop: 4, color: "var(--text-muted, #94a3b8)" }}>
+								<div className="mt-1 text-text-muted" >
 									Điểm vẫn được ghi nhận, nhưng nên hạn chế để mô phỏng môi trường thi thật.
 								</div>
 							</div>
@@ -96,36 +87,29 @@ export default async function MockResultPage({
 					/>
 				)}
 				<Card>
-					<div style={{ textAlign: "center" }}>
-						<div style={{ fontSize: 56, fontWeight: 800, color: "var(--accent)" }}>{total}</div>
-						<div style={{ color: "var(--text-muted)" }}>/ 990</div>
-						<div style={{ marginTop: 8 }}>
+					<div className="text-center" >
+						<div className="font-extrabold text-accent" style={{fontSize: 56}} >{total}</div>
+						<div className="text-text-muted" >/ 990</div>
+						<div className="mt-2" >
 							<Tag color="orange">{bandLabel(total)}</Tag>
 						</div>
 					</div>
-					<div
-						style={{
-							display: "grid",
-							gap: 12,
-							gridTemplateColumns: "repeat(2, 1fr)",
-							marginTop: 16,
-						}}
-					>
-						<div style={{ textAlign: "center", padding: 12 }}>
-							<div style={{ fontSize: 13, color: "var(--text-muted, #94a3b8)" }}>Listening</div>
-							<div style={{ fontSize: 28, fontWeight: 700 }}>
+					<div className="grid gap-3 mt-4" style={{gridTemplateColumns: "repeat(2, 1fr)"}} >
+						<div className="text-center p-3" >
+							<div className="text-[13px] text-text-muted" >Listening</div>
+							<div className="text-[28px] font-bold" >
 								{attempt.scaledListening ?? "—"}
 							</div>
-							<div style={{ fontSize: 12, color: "var(--text-muted)" }}>
+							<div className="text-xs text-text-muted" >
 								{attempt.rawListening}/{(byPart[2]?.total ?? 0) + (byPart[3]?.total ?? 0) + (byPart[4]?.total ?? 0)} đúng
 							</div>
 						</div>
-						<div style={{ textAlign: "center", padding: 12 }}>
-							<div style={{ fontSize: 13, color: "var(--text-muted, #94a3b8)" }}>Reading</div>
-							<div style={{ fontSize: 28, fontWeight: 700 }}>
+						<div className="text-center p-3" >
+							<div className="text-[13px] text-text-muted" >Reading</div>
+							<div className="text-[28px] font-bold" >
 								{attempt.scaledReading ?? "—"}
 							</div>
-							<div style={{ fontSize: 12, color: "var(--text-muted)" }}>
+							<div className="text-xs text-text-muted" >
 								{attempt.rawReading}/{(byPart[5]?.total ?? 0) + (byPart[6]?.total ?? 0) + (byPart[7]?.total ?? 0)} đúng
 							</div>
 						</div>
@@ -133,39 +117,19 @@ export default async function MockResultPage({
 				</Card>
 
 				<Card title="Phân tích theo Part" size="small">
-					<div style={{ display: "grid", gap: 8 }}>
+					<div className="grid gap-2" >
 						{[2, 3, 4, 5, 6, 7].map((p) => {
 							const stats = byPart[p];
 							if (!stats) return null;
 							const pct = Math.round((stats.correct / stats.total) * 100);
 							return (
 								<div
-									key={p}
-									style={{
-										display: "grid",
-										gridTemplateColumns: "60px 1fr 80px",
-										gap: 12,
-										alignItems: "center",
-									}}
-								>
-									<div style={{ fontWeight: 600 }}>Part {p}</div>
-									<div
-										style={{
-											background: "var(--surface, #0f172a)",
-											borderRadius: 4,
-											height: 8,
-											overflow: "hidden",
-										}}
-									>
-										<div
-											style={{
-												width: `${pct}%`,
-												background: pct >= 80 ? "var(--success)" : pct >= 60 ? "var(--warning)" : "var(--error)",
-												height: "100%",
-											}}
-										/>
+									key={p} className="grid gap-3 items-center" style={{gridTemplateColumns: "60px 1fr 80px"}} >
+									<div className="font-semibold" >Part {p}</div>
+									<div className="bg-(--surface) rounded h-[8px] overflow-hidden" >
+										<div className="h-full" style={{width: `${pct}%`, background: pct >= 80 ? "var(--success)" : pct >= 60 ? "var(--warning)" : "var(--error)"}} />
 									</div>
-									<div style={{ fontSize: 13, textAlign: "right" }}>
+									<div className="text-[13px] text-right" >
 										{stats.correct}/{stats.total} ({pct}%)
 									</div>
 								</div>
@@ -176,30 +140,13 @@ export default async function MockResultPage({
 
 				<ReviewTabs questions={reviewQuestions} answers={reviewAnswers} />
 
-				<div style={{ display: "flex", gap: 8 }}>
+				<div className="flex gap-2" >
 					<Link
-						href="/toeic/mock-test"
-						style={{
-							padding: "8px 16px",
-							borderRadius: 8,
-							background: "var(--surface-hover)",
-							color: "var(--ink)",
-							border: "1px solid var(--border)",
-							textDecoration: "none",
-						}}
-					>
+						href="/toeic/mock-test" className="py-2 px-4 rounded-lg text-ink border border-(--border)" style={{background: "var(--surface-hover)", textDecoration: "none"}} >
 						Về Hub
 					</Link>
 					<Link
-						href="/toeic/progress"
-						style={{
-							padding: "8px 16px",
-							borderRadius: 8,
-							background: "var(--accent)",
-							color: "var(--text-on-accent)",
-							textDecoration: "none",
-						}}
-					>
+						href="/toeic/progress" className="py-2 px-4 rounded-lg" style={{background: "var(--accent)", color: "var(--text-on-accent)", textDecoration: "none"}} >
 						Xem trend
 					</Link>
 				</div>

@@ -59,36 +59,20 @@ export default async function ToeicListeningPage() {
 	];
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				height: "100%",
-				minHeight: 0,
-				flex: 1,
-				overflow: "auto",
-			}}
-		>
-			<div
-				style={{
-					padding: 16,
-					display: "grid",
-					gap: 12,
-					gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-				}}
-			>
+		<div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
+			<div className="p-4 grid gap-3" style={{gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))"}} >
 				{cards.map((c) => {
 					const inner = (
 						<Card hoverable={!c.disabled} style={c.disabled ? { opacity: 0.6, cursor: "not-allowed" } : undefined}>
-							<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+							<div className="flex justify-between items-center" >
 								<strong>{c.title}</strong>
 								<Tag>{c.count} câu</Tag>
 							</div>
-							<div style={{ color: "var(--text-muted)", fontSize: 13, marginTop: 6 }}>
+							<div className="text-text-muted text-[13px] mt-1.5" >
 								{c.subtitle}
 							</div>
 							{c.note && (
-								<div style={{ color: "var(--warning)", fontSize: 12, marginTop: 8 }}>{c.note}</div>
+								<div className="text-xs mt-2" style={{color: "var(--warning)"}} >{c.note}</div>
 							)}
 						</Card>
 					);

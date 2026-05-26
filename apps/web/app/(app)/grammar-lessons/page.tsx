@@ -99,41 +99,15 @@ export default function GrammarLessonsPage() {
   const progressPct = tabStats.totalTopics > 0 ? Math.round((tabStats.completed / tabStats.totalTopics) * 100) : 0;
 
   return (
-    <div
-      style={{
-        position: "relative",
-        display: "flex",
-        height: "100%",
-        minHeight: 0,
-        flex: 1,
-        flexDirection: "column",
-        overflow: "hidden",
-      }}
-    >
+    <div className="relative flex h-full h-[0px] flex-1 flex-col overflow-hidden" >
       <div className="grain-overlay" style={{ opacity: 0.03, zIndex: 0 }} />
 
       {/* Content area */}
-      <div
-        style={{
-          position: "relative",
-          minHeight: 0,
-          flex: 1,
-          overflowY: "auto",
-          padding: "24px 20px",
-          zIndex: 1,
-        }}
-      >
+      <div className="relative h-[0px] flex-1 overflow-y-auto z-[1]" style={{padding: "24px 20px"}} >
         {/* Soft gradient wash */}
-        <div
-          style={{
-            pointerEvents: "none",
-            position: "absolute",
-            inset: 0,
-            background: "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--accent) 5%, transparent) 0%, transparent 70%)",
-          }}
-        />
+        <div className="absolute" style={{pointerEvents: "none", inset: 0, background: "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--accent) 5%, transparent) 0%, transparent 70%)"}} />
 
-        <div style={{ position: "relative", margin: "0 auto", maxWidth: 720, width: "100%" }}>
+        <div className="relative mx-auto w-[720px] w-full" >
           {activeTopic ? (
             <LessonView
               topicId={activeTopic.id}
@@ -147,27 +121,17 @@ export default function GrammarLessonsPage() {
               }}
             />
           ) : (
-            <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+            <div className="flex flex-col gap-5" >
 
               {/* ── Hero Stats Dashboard ── */}
               <m.div
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05 }}
-                style={{
-                  background: "var(--surface)",
-                  borderRadius: "var(--radius-xl)",
-                  border: "1px solid var(--border)",
-                  padding: "24px",
-                  boxShadow: "var(--shadow-md)",
-                  position: "relative",
-                  overflow: "hidden",
-                }}
-              >
+                transition={{ delay: 0.05 }} className="bg-(--surface) rounded-(--radius-xl) border border-(--border) p-6 relative overflow-hidden" style={{boxShadow: "var(--shadow-md)"}} >
                 {/* Top accent bar */}
-                <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 3, background: "linear-gradient(90deg, var(--accent), var(--secondary), var(--success))" }} />
+                <div className="absolute h-[3px]" style={{top: 0, left: 0, right: 0, background: "linear-gradient(90deg, var(--accent), var(--secondary), var(--success))"}} />
 
-                <div style={{ display: "flex", alignItems: "center", gap: 24, flexWrap: "wrap" }}>
+                <div className="flex items-center gap-6 flex-wrap" >
                   {/* Circle progress */}
                   <Progress
                     type="circle"
@@ -177,15 +141,15 @@ export default function GrammarLessonsPage() {
                     strokeColor={{ "0%": "var(--accent)", "100%": "var(--success)" }}
                     trailColor="var(--border)"
                     format={() => (
-                      <div style={{ textAlign: "center" }}>
-                        <div style={{ fontSize: 22, fontWeight: 900, color: "var(--ink)", fontFamily: "var(--font-display)" }}>{progressPct}%</div>
-                        <div style={{ fontSize: 9, color: "var(--text-muted)", fontWeight: 700 }}>Hoàn thành</div>
+                      <div className="text-center" >
+                        <div className="text-2xl font-black text-ink font-display" >{progressPct}%</div>
+                        <div className="text-[9px] text-text-muted font-bold" >Hoàn thành</div>
                       </div>
                     )}
                   />
 
                   {/* Stats grid */}
-                  <div style={{ flex: 1, minWidth: 200, display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 12 }}>
+                  <div className="flex-1 w-[200px] grid gap-3" style={{gridTemplateColumns: "1fr 1fr 1fr"}} >
                     <StatCard
                       icon={<BookOpen />}
                       iconColor="var(--accent)"
@@ -219,13 +183,7 @@ export default function GrammarLessonsPage() {
                 <Alert
                   type="warning"
                   showIcon
-                  message={progressError}
-                  style={{
-                    borderRadius: "var(--radius-lg)",
-                    fontSize: 13,
-                    fontWeight: 600,
-                  }}
-                />
+                  message={progressError} className="rounded-(--radius-lg) text-[13px] font-semibold" />
               )}
 
               {/* ── Recommended Topic CTA ── */}
@@ -238,66 +196,33 @@ export default function GrammarLessonsPage() {
                   <m.button
                     onClick={() => setActiveTopic({ id: recommendedTopic.id, title: recommendedTopic.title, level: recommendedTopic.level })}
                     whileHover={{ scale: 1.01, y: -2 }}
-                    whileTap={{ scale: 0.99 }}
-                    style={{
-                      width: "100%",
-                      padding: "18px 24px",
-                      borderRadius: "var(--radius-xl)",
-                      border: "none",
-                      background: "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 80%, var(--secondary)))",
-                      cursor: "pointer",
-                      boxShadow: "0 8px 28px var(--accent-muted)",
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 16,
-                      position: "relative",
-                      overflow: "hidden",
-                      textAlign: "left",
-                    }}
-                  >
+                    whileTap={{ scale: 0.99 }} className="w-full rounded-(--radius-xl) border-none cursor-pointer flex items-center gap-4 relative overflow-hidden text-left" style={{padding: "18px 24px", background: "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 80%, var(--secondary)))", boxShadow: "0 8px 28px var(--accent-muted)"}} >
                     {/* Decorative glow */}
-                    <div style={{ position: "absolute", top: "-50%", right: "-10%", width: 200, height: 200, borderRadius: "50%", background: "rgba(255,255,255,0.06)", pointerEvents: "none" }} />
-                    <div style={{ position: "absolute", bottom: "-40%", left: "-5%", width: 150, height: 150, borderRadius: "50%", background: "rgba(255,255,255,0.04)", pointerEvents: "none" }} />
+                    <div className="absolute w-[200px] h-[200px] rounded-full" style={{top: "-50%", right: "-10%", background: "rgba(255,255,255,0.06)", pointerEvents: "none"}} />
+                    <div className="absolute w-[150px] h-[150px] rounded-full" style={{bottom: "-40%", left: "-5%", background: "rgba(255,255,255,0.04)", pointerEvents: "none"}} />
 
                     {/* Icon */}
-                    <div style={{
-                      width: 48,
-                      height: 48,
-                      borderRadius: 14,
-                      background: "rgba(255,255,255,0.15)",
-                      backdropFilter: "blur(10px)",
-                      display: "grid",
-                      placeItems: "center",
-                      flexShrink: 0,
-                    }}>
-                      <Rocket style={{ fontSize: 22, color: "#fff" }} />
+                    <div className="w-[48px] h-[48px] grid shrink-0" style={{borderRadius: 14, background: "rgba(255,255,255,0.15)", backdropFilter: "blur(10px)", placeItems: "center"}} >
+                      <Rocket className="text-2xl" style={{color: "#fff"}} />
                     </div>
 
                     {/* Text */}
-                    <div style={{ flex: 1, position: "relative" }}>
-                      <div style={{ fontSize: 10.5, fontWeight: 800, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: "0.1em" }}>
-                        <Star style={{ fontSize: 9, marginRight: 4 }} />
+                    <div className="flex-1 relative" >
+                      <div className="text-[10.5px] font-extrabold uppercase" style={{color: "rgba(255,255,255,0.7)", letterSpacing: "0.1em"}} >
+                        <Star className="text-[9px] mr-1" />
                         Bài học gợi ý tiếp theo
                       </div>
-                      <div style={{ fontSize: 17, fontWeight: 900, color: "#fff", fontFamily: "var(--font-display)", marginTop: 3 }}>
+                      <div className="font-black font-display" style={{fontSize: 17, color: "#fff", marginTop: 3}} >
                         {recommendedTopic.title}
                       </div>
-                      <div style={{ fontSize: 11.5, color: "rgba(255,255,255,0.65)", fontWeight: 600, marginTop: 2 }}>
+                      <div className="font-semibold" style={{fontSize: 11.5, color: "rgba(255,255,255,0.65)", marginTop: 2}} >
                         {recommendedTopic.level} · Bấm để bắt đầu học ngay
                       </div>
                     </div>
 
                     {/* Arrow */}
-                    <div style={{
-                      width: 36,
-                      height: 36,
-                      borderRadius: 10,
-                      background: "rgba(255,255,255,0.15)",
-                      display: "grid",
-                      placeItems: "center",
-                      flexShrink: 0,
-                    }}>
-                      <ArrowRight style={{ fontSize: 14, color: "#fff" }} />
+                    <div className="w-[36px] h-[36px] grid shrink-0" style={{borderRadius: 10, background: "rgba(255,255,255,0.15)", placeItems: "center"}} >
+                      <ArrowRight className="text-sm" style={{color: "#fff"}} />
                     </div>
                   </m.button>
                 </m.div>
@@ -307,9 +232,7 @@ export default function GrammarLessonsPage() {
               <m.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}
-              >
+                transition={{ delay: 0.2 }} className="grid gap-2.5" style={{gridTemplateColumns: "1fr 1fr"}} >
                 <QuickAction
                   href="/grammar-roadmap"
                   emoji="🗺️"
@@ -334,20 +257,12 @@ export default function GrammarLessonsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.25 }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
-                  <Zap style={{ color: "var(--accent)", fontSize: 16 }} />
-                  <h2 style={{ margin: 0, fontSize: 17, fontWeight: 900, color: "var(--ink)", fontFamily: "var(--font-display)" }}>
+                <div className="flex items-center gap-2" style={{marginBottom: 14}} >
+                  <Zap className="text-accent text-base" />
+                  <h2 className="m-0 font-black text-ink font-display" style={{fontSize: 17}} >
                     Thư viện chủ đề
                   </h2>
-                  <span style={{
-                    fontSize: 11,
-                    fontWeight: 700,
-                    padding: "2px 8px",
-                    borderRadius: 6,
-                    background: "var(--accent-light)",
-                    color: "var(--accent)",
-                    border: "1px solid color-mix(in srgb, var(--accent) 20%, transparent)",
-                  }}>
+                  <span className="text-[11px] font-bold rounded-md text-accent" style={{padding: "2px 8px", background: "var(--accent-light)", border: "1px solid color-mix(in srgb, var(--accent) 20%, transparent)"}} >
                     {tabStats.totalTopics} bài
                   </span>
                 </div>
@@ -385,36 +300,17 @@ function StatCard({
   sub: string;
 }) {
   return (
-    <div style={{
-      display: "flex",
-      flexDirection: "column",
-      alignItems: "center",
-      textAlign: "center",
-      padding: "12px 8px",
-      borderRadius: "var(--radius-lg)",
-      background: "var(--surface-alt)",
-      border: "1px solid var(--border)",
-    }}>
-      <div style={{
-        width: 34,
-        height: 34,
-        borderRadius: 10,
-        background: iconBg,
-        display: "grid",
-        placeItems: "center",
-        fontSize: 16,
-        color: iconColor,
-        marginBottom: 8,
-      }}>
+    <div className="flex flex-col items-center text-center rounded-(--radius-lg) bg-surface-alt border border-(--border)" style={{padding: "12px 8px"}} >
+      <div className="w-[34px] h-[34px] grid text-base mb-2" style={{borderRadius: 10, background: iconBg, placeItems: "center", color: iconColor}} >
         {icon}
       </div>
-      <div style={{ fontSize: 9.5, fontWeight: 700, color: "var(--text-muted)", textTransform: "uppercase", letterSpacing: "0.06em" }}>
+      <div className="font-bold text-text-muted uppercase" style={{fontSize: 9.5, letterSpacing: "0.06em"}} >
         {label}
       </div>
-      <div style={{ fontSize: 18, fontWeight: 900, color: "var(--ink)", fontFamily: "var(--font-display)", lineHeight: 1.1, marginTop: 2 }}>
+      <div className="text-lg font-black text-ink font-display" style={{lineHeight: 1.1, marginTop: 2}} >
         {value}
       </div>
-      <div style={{ fontSize: 11, fontWeight: 600, color: "var(--text-muted)", marginTop: 1 }}>
+      <div className="text-[11px] font-semibold text-text-muted" style={{marginTop: 1}} >
         {sub}
       </div>
     </div>
@@ -441,24 +337,11 @@ function QuickAction({
       href={href}
       whileHover={{ y: -2, boxShadow: "var(--shadow-md)" }}
       whileTap={{ scale: 0.98 }}
-      onClick={onClick}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 12,
-        padding: "14px 16px",
-        borderRadius: "var(--radius-xl)",
-        background: "var(--surface)",
-        border: "1px solid var(--border)",
-        textDecoration: "none",
-        cursor: "pointer",
-        transition: "all 0.15s",
-      }}
-    >
-      <span style={{ fontSize: 22 }}>{emoji}</span>
+      onClick={onClick} className="flex items-center gap-3 rounded-(--radius-xl) bg-(--surface) border border-(--border) cursor-pointer" style={{padding: "14px 16px", textDecoration: "none", transition: "all 0.15s"}} >
+      <span className="text-2xl" >{emoji}</span>
       <div>
-        <div style={{ fontSize: 13.5, fontWeight: 800, color: "var(--ink)" }}>{label}</div>
-        <div style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 600 }}>{desc}</div>
+        <div className="font-extrabold text-ink" style={{fontSize: 13.5}} >{label}</div>
+        <div className="text-[11px] text-text-muted font-semibold" >{desc}</div>
       </div>
     </m.a>
   );

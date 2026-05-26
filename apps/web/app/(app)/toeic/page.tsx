@@ -8,17 +8,8 @@ export default async function ToeicHubPage() {
 	await requireToeicBaseline();
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				height: "100%",
-				minHeight: 0,
-				flex: 1,
-				overflow: "auto",
-			}}
-		>
-			<div style={{ padding: 16, display: "grid", gap: 16 }}>
+		<div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
+			<div className="p-4 grid gap-4" >
 				<HubWidgets />
 				<QuickActions />
 			</div>

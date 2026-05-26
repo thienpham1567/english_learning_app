@@ -89,50 +89,34 @@ export default async function ToeicProgressPage() {
 	).slice(0, 5);
 
 	return (
-		<div
-			style={{
-				display: "flex",
-				flexDirection: "column",
-				height: "100%",
-				minHeight: 0,
-				flex: 1,
-				overflow: "auto",
-			}}
-		>
-			<div style={{ padding: 16, display: "grid", gap: 16 }}>
+		<div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
+			<div className="p-4 grid gap-4" >
 				{/* Predicted score */}
 				<Card title="📈 Điểm dự đoán (từ mastery)" size="small">
 					{predicted ? (
 						<>
-							<div style={{ textAlign: "center" }}>
-								<div style={{ fontSize: 56, fontWeight: 800, color: "var(--accent)" }}>
+							<div className="text-center" >
+								<div className="font-extrabold text-accent" style={{fontSize: 56}} >
 									{predicted.total}
 								</div>
-								<div style={{ color: "var(--text-muted)" }}>/ 990</div>
-								<Tag color="orange" style={{ marginTop: 8 }}>
+								<div className="text-text-muted" >/ 990</div>
+								<Tag color="orange" className="mt-2" >
 									{bandLabel(predicted.total)}
 								</Tag>
 							</div>
-							<div
-								style={{
-									display: "grid",
-									gap: 12,
-									gridTemplateColumns: "repeat(2, 1fr)",
-									marginTop: 12,
-								}}
-							>
-								<div style={{ textAlign: "center" }}>
-									<div style={{ fontSize: 13, color: "var(--text-muted)" }}>Listening</div>
-									<div style={{ fontSize: 22, fontWeight: 700 }}>
+							<div className="grid gap-3 mt-3" style={{gridTemplateColumns: "repeat(2, 1fr)"}} >
+								<div className="text-center" >
+									<div className="text-[13px] text-text-muted" >Listening</div>
+									<div className="text-2xl font-bold" >
 										{predicted.listeningScaled}
 									</div>
 								</div>
-								<div style={{ textAlign: "center" }}>
-									<div style={{ fontSize: 13, color: "var(--text-muted)" }}>Reading</div>
-									<div style={{ fontSize: 22, fontWeight: 700 }}>{predicted.readingScaled}</div>
+								<div className="text-center" >
+									<div className="text-[13px] text-text-muted" >Reading</div>
+									<div className="text-2xl font-bold" >{predicted.readingScaled}</div>
 								</div>
 							</div>
-							<div style={{ marginTop: 12, fontSize: 12, color: "var(--text-muted)" }}>
+							<div className="mt-3 text-xs text-text-muted" >
 								Confidence: {Math.round(predicted.confidence * 100)}% · Signals:{" "}
 								{predicted.signalCount} · Sai số ±50 ở phase MVP
 							</div>
@@ -145,35 +129,24 @@ export default async function ToeicProgressPage() {
 				{/* Last mock */}
 				<Card title="🎯 Mock test gần nhất" size="small">
 					{lastMock && lastMock.totalScaled !== null ? (
-						<div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+						<div className="flex justify-between items-center" >
 							<div>
-								<div style={{ fontSize: 28, fontWeight: 700 }}>
+								<div className="text-[28px] font-bold" >
 									{lastMock.totalScaled} / 990
 								</div>
-								<div style={{ color: "var(--text-muted)", fontSize: 13 }}>
+								<div className="text-text-muted text-[13px]" >
 									{new Date(lastMock.completedAt!).toLocaleDateString("vi-VN")} · L{" "}
 									{lastMock.scaledListening} · R {lastMock.scaledReading}
 								</div>
 							</div>
 							<Link
-								href={`/toeic/mock-test/${lastMock.id}/result`}
-								style={{
-									padding: "6px 12px",
-									borderRadius: 6,
-									background: "var(--surface-hover, #1f2937)",
-									color: "#fff",
-									textDecoration: "none",
-									fontSize: 13,
-								}}
-							>
+								href={`/toeic/mock-test/${lastMock.id}/result`} className="py-1.5 px-3 rounded-md text-[13px]" style={{background: "var(--surface-hover, #1f2937)", color: "#fff", textDecoration: "none"}} >
 								Xem chi tiết
 							</Link>
 						</div>
 					) : (
 						<Link
-							href="/toeic/mock-test"
-							style={{ color: "var(--accent)", textDecoration: "underline" }}
-						>
+							href="/toeic/mock-test" className="text-accent" style={{textDecoration: "underline"}} >
 							Làm mock test đầu tiên
 						</Link>
 					)}
@@ -184,19 +157,11 @@ export default async function ToeicProgressPage() {
 					{trend.length === 0 ? (
 						<Empty description="Chưa có hoạt động" />
 					) : (
-						<div style={{ display: "flex", gap: 2, alignItems: "flex-end", height: 100 }}>
+						<div className="flex items-end h-[100px]" style={{gap: 2}} >
 							{trend.map((d) => (
 								<div
 									key={d.day}
-									title={`${d.day}: ${d.c} events`}
-									style={{
-										flex: 1,
-										height: `${Math.round((d.c / maxCount) * 100)}%`,
-										minHeight: 4,
-										background: "var(--accent)",
-										borderRadius: 2,
-									}}
-								/>
+									title={`${d.day}: ${d.c} events`} className="flex-1 h-[4px] rounded-sm" style={{height: `${Math.round((d.c / maxCount) * 100)}%`, background: "var(--accent)"}} />
 							))}
 						</div>
 					)}
@@ -206,7 +171,7 @@ export default async function ToeicProgressPage() {
 				<Card
 					title={
 						<span>
-							<AlertTriangle style={{ color: "var(--error)" }} /> Pattern lỗi gần đây
+							<AlertTriangle className="text-destructive" /> Pattern lỗi gần đây
 						</span>
 					}
 					size="small"
@@ -214,50 +179,23 @@ export default async function ToeicProgressPage() {
 					{patterns.length === 0 ? (
 						<Empty description="Chưa có pattern lỗi nào" />
 					) : (
-						<div style={{ display: "grid", gap: 8 }}>
+						<div className="grid gap-2" >
 							{patterns.map((p) => (
 								<div
-									key={p.category.key}
-									style={{
-										display: "grid",
-										gridTemplateColumns: "1fr auto",
-										gap: 12,
-										alignItems: "center",
-										padding: 10,
-										borderRadius: 8,
-										background: "var(--surface, #0f172a)",
-									}}
-								>
+									key={p.category.key} className="grid gap-3 items-center rounded-lg bg-(--surface)" style={{gridTemplateColumns: "1fr auto", padding: 10}} >
 									<div>
-										<div style={{ fontWeight: 500 }}>{p.category.label}</div>
-										<div style={{ fontSize: 12, color: "var(--text-muted, #94a3b8)" }}>
+										<div className="font-medium" >{p.category.label}</div>
+										<div className="text-xs text-text-muted" >
 											{p.unresolvedCount}/{p.totalCount} chưa nắm · {p.recentCount} câu trong 7 ngày
 										</div>
 										{p.examples[0] && (
-											<div
-												style={{
-													fontSize: 12,
-													color: "var(--text-muted)",
-													marginTop: 4,
-													fontStyle: "italic",
-												}}
-											>
+											<div className="text-xs text-text-muted mt-1 italic" >
 												Ví dụ: "{p.examples[0].questionStem.slice(0, 80)}..."
 											</div>
 										)}
 									</div>
 									<Link
-										href={p.nextAction.href}
-										style={{
-											padding: "6px 12px",
-											borderRadius: 6,
-											background: "var(--error)",
-											color: "#fff",
-											textDecoration: "none",
-											fontSize: 13,
-											whiteSpace: "nowrap",
-										}}
-									>
+										href={p.nextAction.href} className="py-1.5 px-3 rounded-md text-[13px]" style={{background: "var(--error)", color: "#fff", textDecoration: "none", whiteSpace: "nowrap"}} >
 										{p.nextAction.label}
 									</Link>
 								</div>
@@ -267,23 +205,17 @@ export default async function ToeicProgressPage() {
 				</Card>
 
 				{/* Top weak/strong */}
-				<div
-					style={{
-						display: "grid",
-						gap: 12,
-						gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))",
-					}}
-				>
+				<div className="grid gap-3" style={{gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))"}} >
 					<Card title="🔻 5 yếu nhất" size="small">
 						{weakest.length === 0 ? (
 							<Empty description="—" />
 						) : (
-							<div style={{ display: "grid", gap: 6 }}>
+							<div className="grid gap-1.5" >
 								{weakest.map((s) => (
 									<div key={s.skillId}>
-										<div style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}>
+										<div className="flex justify-between text-[13px]" >
 											<span>{getSkillLabel(s.skillId as ToeicSkill)}</span>
-											<span style={{ color: "var(--text-muted)" }}>
+											<span className="text-text-muted" >
 												{Math.round(s.proficiency * 100)}/100
 											</span>
 										</div>
@@ -302,12 +234,12 @@ export default async function ToeicProgressPage() {
 						{strongest.length === 0 ? (
 							<Empty description="—" />
 						) : (
-							<div style={{ display: "grid", gap: 6 }}>
+							<div className="grid gap-1.5" >
 								{strongest.map((s) => (
 									<div key={s.skillId}>
-										<div style={{ display: "flex", justifyContent: "space-between", fontSize: 13 }}>
+										<div className="flex justify-between text-[13px]" >
 											<span>{getSkillLabel(s.skillId as ToeicSkill)}</span>
-											<span style={{ color: "var(--text-muted)" }}>
+											<span className="text-text-muted" >
 												{Math.round(s.proficiency * 100)}/100
 											</span>
 										</div>

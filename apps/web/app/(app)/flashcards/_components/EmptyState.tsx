@@ -17,39 +17,23 @@ export function EmptyState({ nextReviewAt }: Props) {
     <m.div
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
-      transition={{ type: "spring", stiffness: 100, damping: 15 }}
-      style={{
-        width: "100%",
-        maxWidth: 450,
-        margin: "40px auto",
-        padding: "48px 24px",
-        background: "var(--surface)",
-        borderRadius: "var(--radius-xl)",
-        border: "1px solid var(--border)",
-        boxShadow: "var(--shadow-sm)",
-        textAlign: "center",
-        position: "relative",
-        overflow: "hidden",
-      }}
-    >
+      transition={{ type: "spring", stiffness: 100, damping: 15 }} className="w-full w-[450px] bg-(--surface) rounded-(--radius-xl) border border-(--border) text-center relative overflow-hidden" style={{margin: "40px auto", padding: "48px 24px", boxShadow: "var(--shadow-sm)"}} >
       {/* Background soft accent glow */}
-      <div style={{ position: "absolute", left: "50%", top: "0%", transform: "translateX(-50%)", width: 220, height: 220, borderRadius: "50%", background: "radial-gradient(circle, var(--accent) 8%, transparent 70%)", pointerEvents: "none" }} />
+      <div className="absolute w-[220px] h-[220px] rounded-full" style={{left: "50%", top: "0%", transform: "translateX(-50%)", background: "radial-gradient(circle, var(--accent) 8%, transparent 70%)", pointerEvents: "none"}} />
 
       <m.div
         animate={{ y: [0, -6, 0] }}
-        transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-        style={{ display: "inline-flex", marginBottom: 20 }}
-      >
-        <div style={{ width: 64, height: 64, borderRadius: "50%", background: "var(--accent-light)", display: "grid", placeItems: "center" }}>
-          <CircleCheckBig style={{ fontSize: 32, color: "var(--accent)" }} />
+        transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }} className="mb-5" style={{display: "inline-flex"}} >
+        <div className="w-[64px] h-[64px] rounded-full grid" style={{background: "var(--accent-light)", placeItems: "center"}} >
+          <CircleCheckBig className="text-4xl text-accent" />
         </div>
       </m.div>
 
-      <Title level={3} style={{ fontFamily: "var(--font-display)", fontWeight: 800, margin: "0 0 10px", color: "var(--text-primary)" }}>
+      <Title level={3} className="font-display font-extrabold mb-2.5 text-text-primary" >
         Đã hoàn thành ôn tập!
       </Title>
       
-      <p style={{ margin: "0 0 24px", fontSize: 14.5, color: "var(--text-secondary)", fontWeight: 500, lineHeight: 1.6 }}>
+      <p className="text-text-secondary font-medium leading-relaxed" style={{margin: "0 0 24px", fontSize: 14.5}} >
         Tuyệt vời! Hiện tại bạn không còn thẻ nào cần ôn tập. Hãy nghỉ ngơi và quay lại sau nhé.
       </p>
 
@@ -81,21 +65,10 @@ function Countdown({ targetIso }: { targetIso: string }) {
     <m.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: 0.2 }}
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 8,
-        padding: "8px 18px",
-        background: "var(--surface-alt)",
-        border: "1px solid var(--border)",
-        borderRadius: 99,
-        boxShadow: "var(--shadow-sm)",
-      }}
-    >
-      <Clock style={{ color: "var(--accent)", fontSize: 13 }} />
-      <span style={{ fontSize: 12.5, fontWeight: 700, color: "var(--text-secondary)" }}>
-        Đợt ôn tập tiếp theo: <span style={{ color: "var(--accent)" }}>{remaining}</span>
+      transition={{ delay: 0.2 }} className="items-center gap-2 bg-surface-alt border border-(--border) rounded-full" style={{display: "inline-flex", padding: "8px 18px", boxShadow: "var(--shadow-sm)"}} >
+      <Clock className="text-accent text-[13px]" />
+      <span className="font-bold text-text-secondary" style={{fontSize: 12.5}} >
+        Đợt ôn tập tiếp theo: <span className="text-accent" >{remaining}</span>
       </span>
     </m.div>
   );

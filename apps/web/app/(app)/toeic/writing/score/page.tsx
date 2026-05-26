@@ -83,45 +83,24 @@ function InlineIssueItem({
 
   return (
     <div
-      style={{
-        fontSize: 13,
-        borderRadius: 8,
-        background: isHovered ? `${color}15` : "var(--surface)",
-        borderLeft: `3px solid ${color}`,
-        overflow: "hidden",
-      }}
+      
       onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
-      <div style={{ padding: "8px 12px", cursor: "pointer" }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+      onMouseLeave={onMouseLeave} className="text-[13px] rounded-lg overflow-hidden" style={{background: isHovered ? `${color}15` : "var(--surface)", borderLeft: `3px solid ${color}`}} >
+      <div className="py-2 px-3 cursor-pointer" >
+        <div className="flex justify-between items-start" >
           <div>
-            <Tag color={color} style={{ fontSize: 10 }}>{issue.category}</Tag>
-            <span style={{ textDecoration: "line-through", color: "var(--text-muted)" }}>{issue.quote}</span>
+            <Tag color={color} className="text-[10px]" >{issue.category}</Tag>
+            <span className="text-text-muted" style={{textDecoration: "line-through"}} >{issue.quote}</span>
             {" → "}
-            <span style={{ color: "var(--success)", fontWeight: 500 }}>{issue.suggestion}</span>
+            <span className="text-emerald-500 font-medium" >{issue.suggestion}</span>
           </div>
           <button
             onClick={() => setShowRewrite((p) => !p)}
-            title="Rewrite this sentence"
-            style={{
-              border: "none",
-              background: showRewrite ? `${color}20` : "transparent",
-              color: showRewrite ? color : "var(--text-secondary)",
-              fontSize: 11,
-              fontWeight: 500,
-              cursor: "pointer",
-              borderRadius: 6,
-              padding: "2px 8px",
-              whiteSpace: "nowrap",
-              flexShrink: 0,
-              marginLeft: 8,
-            }}
-          >
+            title="Rewrite this sentence" className="border-none text-[11px] font-medium cursor-pointer rounded-md shrink-0 ml-2" style={{background: showRewrite ? `${color}20` : "transparent", color: showRewrite ? color : "var(--text-secondary)", padding: "2px 8px", whiteSpace: "nowrap"}} >
             <Highlighter /> Viết lại
           </button>
         </div>
-        <p style={{ margin: "4px 0 0", fontSize: 11, color: "var(--text-secondary)" }}>
+        <p className="text-[11px] text-text-secondary" style={{margin: "4px 0 0"}} >
           {issue.explanation}
         </p>
       </div>
@@ -225,28 +204,20 @@ export default function EssayScorePage() {
         <Tooltip
           key={idx}
           title={
-            <div style={{ fontSize: 12 }}>
-              <div style={{ fontWeight: 600, marginBottom: 4 }}>
-                <Tag color={CATEGORY_COLORS[issue.category]} style={{ fontSize: 10 }}>{issue.category}</Tag>
+            <div className="text-xs" >
+              <div className="font-semibold mb-1" >
+                <Tag color={CATEGORY_COLORS[issue.category]} className="text-[10px]" >{issue.category}</Tag>
               </div>
               <div>→ {issue.suggestion}</div>
-              <div style={{ color: "var(--text-muted)", marginTop: 4 }}>{issue.explanation}</div>
+              <div className="text-text-muted mt-1" >{issue.explanation}</div>
             </div>
           }
         >
           <span
             data-issue-idx={idx}
-            style={{
-              backgroundColor: `${CATEGORY_COLORS[issue.category]}20`,
-              borderBottom: `2px solid ${CATEGORY_COLORS[issue.category]}`,
-              cursor: "pointer",
-              transition: "background 0.2s",
-              borderRadius: 2,
-              padding: "1px 0",
-            }}
+            
             onMouseEnter={() => setHoveredIssue(idx)}
-            onMouseLeave={() => setHoveredIssue(null)}
-          >
+            onMouseLeave={() => setHoveredIssue(null)} className="cursor-pointer rounded-sm" style={{backgroundColor: `${CATEGORY_COLORS[issue.category]}20`, borderBottom: `2px solid ${CATEGORY_COLORS[issue.category]}`, transition: "background 0.2s", padding: "1px 0"}} >
             {essayText.slice(issue.startOffset, issue.endOffset)}
           </span>
         </Tooltip>
@@ -274,50 +245,38 @@ export default function EssayScorePage() {
   /* ── Render ──────────────────────────────── */
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100%", minHeight: 0, flex: 1, overflow: "auto" }}>
+    <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto" >
       {/* Header */}
       <div style={{ padding: "24px 24px 16px", borderBottom: "1px solid var(--border)" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 4 }}>
-          <Pencil size={22} className="text-[var(--accent)]" />
-          <h1 style={{ margin: 0, fontSize: 20, fontWeight: 700 }}>Chấm bài viết theo rubric</h1>
+        <div className="flex items-center gap-2.5 mb-1" >
+          <Pencil size={22} className="text-accent" />
+          <h1 className="m-0 text-xl font-bold" >Chấm bài viết theo rubric</h1>
         </div>
-        <p style={{ margin: 0, fontSize: 13, color: "var(--text-secondary)" }}>
+        <p className="m-0 text-[13px] text-text-secondary" >
           Nộp bài viết và nhận điểm chi tiết theo tiêu chí IELTS/TOEFL
         </p>
       </div>
 
       {/* Content */}
-      <div style={{ flex: 1, padding: 24, maxWidth: 800, margin: "0 auto", width: "100%" }}>
+      <div className="flex-1 p-6 w-[800px] mx-auto w-full" >
         {/* Error */}
         {error && (
-          <div style={{
-            padding: "10px 16px", borderRadius: 8,
-            background: "var(--error-bg)", color: "var(--error)",
-            marginBottom: 16, fontSize: 13,
-          }}>
+          <div className="py-2.5 px-4 rounded-lg text-destructive mb-4 text-[13px]" style={{background: "var(--error-bg)"}} >
             {error}
           </div>
         )}
 
         {/* Input */}
         {state === "input" && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div className="flex flex-col gap-4" >
             {/* Exam selector */}
             <div>
-              <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>Loại bài thi</p>
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+              <p className="text-xs text-text-secondary mb-2 font-semibold" >Loại bài thi</p>
+              <div className="flex gap-2 flex-wrap" >
                 {EXAM_OPTIONS.map((opt) => (
                   <button
                     key={opt.value}
-                    onClick={() => setExam(opt.value)}
-                    style={{
-                      padding: "8px 16px", borderRadius: 8,
-                      border: exam === opt.value ? "2px solid var(--accent)" : "1px solid var(--border)",
-                      background: exam === opt.value ? "var(--accent-muted)" : "transparent",
-                      color: exam === opt.value ? "var(--accent)" : "var(--text-secondary)",
-                      fontWeight: exam === opt.value ? 600 : 400, cursor: "pointer", fontSize: 13,
-                    }}
-                  >
+                    onClick={() => setExam(opt.value)} className="py-2 px-4 rounded-lg cursor-pointer text-[13px]" style={{border: exam === opt.value ? "2px solid var(--accent)" : "1px solid var(--border)", background: exam === opt.value ? "var(--accent-muted)" : "transparent", color: exam === opt.value ? "var(--accent)" : "var(--text-secondary)", fontWeight: exam === opt.value ? 600 : 400}} >
                     {opt.label}
                   </button>
                 ))}
@@ -326,58 +285,32 @@ export default function EssayScorePage() {
 
             {/* Prompt field */}
             <div>
-              <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
-                Đề bài <span style={{ fontWeight: 400 }}>(không bắt buộc)</span>
+              <p className="text-xs text-text-secondary mb-2 font-semibold" >
+                Đề bài <span className="font-normal" >(không bắt buộc)</span>
               </p>
               <textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Dán đề bài vào đây để AI đánh giá Task Response chính xác hơn..."
-                style={{
-                  width: "100%", minHeight: 60, padding: 12, borderRadius: 10,
-                  border: "1px solid var(--border)", background: "var(--card-bg)",
-                  color: "var(--text)", fontSize: 13, resize: "vertical",
-                  fontFamily: "inherit",
-                }}
-              />
+                placeholder="Dán đề bài vào đây để AI đánh giá Task Response chính xác hơn..." className="w-full h-[60px] p-3 border border-(--border) text-[13px]" style={{borderRadius: 10, background: "var(--card-bg)", color: "var(--text)", resize: "vertical", fontFamily: "inherit"}} />
             </div>
 
             {/* Essay textarea */}
             <div>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-                <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: 0, fontWeight: 600 }}>Bài viết</p>
-                <span style={{
-                  fontSize: 11,
-                  color: wordCount < 150 ? "var(--error)" : wordCount > 2000 ? "var(--error)" : "var(--text-secondary)",
-                  fontWeight: 500,
-                }}>
+              <div className="flex justify-between mb-2" >
+                <p className="text-xs text-text-secondary m-0 font-semibold" >Bài viết</p>
+                <span className="text-[11px] font-medium" style={{color: wordCount < 150 ? "var(--error)" : wordCount > 2000 ? "var(--error)" : "var(--text-secondary)"}} >
                   {wordCount} từ {wordCount < 150 && "(cần ≥ 150)"}
                 </span>
               </div>
               <textarea
                 value={essayText}
                 onChange={(e) => setEssayText(e.target.value)}
-                placeholder="Viết hoặc dán bài viết của bạn vào đây..."
-                style={{
-                  width: "100%", minHeight: 280, padding: 16, borderRadius: 12,
-                  border: "1px solid var(--border)", background: "var(--card-bg)",
-                  color: "var(--text)", fontSize: 14, lineHeight: 1.8,
-                  resize: "vertical", fontFamily: "inherit",
-                }}
-              />
+                placeholder="Viết hoặc dán bài viết của bạn vào đây..." className="w-full h-[280px] p-4 rounded-xl border border-(--border) text-sm" style={{background: "var(--card-bg)", color: "var(--text)", lineHeight: 1.8, resize: "vertical", fontFamily: "inherit"}} />
             </div>
 
             <button
               onClick={submitEssay}
-              disabled={wordCount < 150}
-              style={{
-                padding: "12px 32px", borderRadius: 10, border: "none",
-                background: wordCount < 150 ? "var(--border)" : "var(--accent)",
-                color: "var(--text-on-accent)", fontSize: 15, fontWeight: 600,
-                cursor: wordCount < 150 ? "not-allowed" : "pointer",
-                alignSelf: "center",
-              }}
-            >
+              disabled={wordCount < 150} className="border-none text-[15px] font-semibold" style={{padding: "12px 32px", borderRadius: 10, background: wordCount < 150 ? "var(--border)" : "var(--accent)", color: "var(--text-on-accent)", cursor: wordCount < 150 ? "not-allowed" : "pointer", alignSelf: "center"}} >
               <Pencil /> Chấm bài
             </button>
           </div>
@@ -385,12 +318,12 @@ export default function EssayScorePage() {
 
         {/* Scoring */}
         {state === "scoring" && (
-          <div style={{ textAlign: "center", padding: 48 }}>
-            <Loader2 className="animate-spin text-[var(--accent)]" size={36} />
-            <p style={{ color: "var(--text-secondary)", marginTop: 16, fontSize: 14 }}>
+          <div className="text-center" style={{padding: 48}} >
+            <Loader2 className="animate-spin text-accent" size={36} />
+            <p className="text-text-secondary mt-4 text-sm" >
               Đang chấm bài viết ({wordCount} từ)...
             </p>
-            <p style={{ color: "var(--text-secondary)", fontSize: 12 }}>
+            <p className="text-text-secondary text-xs" >
               Quá trình này có thể mất 10–20 giây
             </p>
           </div>
@@ -398,30 +331,26 @@ export default function EssayScorePage() {
 
         {/* Result */}
         {state === "result" && result && (
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div className="flex flex-col gap-4" >
             {/* Overall score */}
-            <div style={{
-              padding: 24, borderRadius: 16,
-              background: "var(--card-bg)", border: "1px solid var(--border)",
-              textAlign: "center",
-            }}>
+            <div className="p-6 rounded-2xl border border-(--border) text-center" style={{background: "var(--card-bg)"}} >
               <Progress
                 type="circle"
                 percent={(result.overall / maxScore) * 100}
                 size={100}
                 strokeColor={scoreColor(result.overall)}
                 format={() => (
-                  <span style={{ fontSize: 22, fontWeight: 700 }}>
+                  <span className="text-2xl font-bold" >
                     {result.overall}{isIelts ? "" : `/${maxScore}`}
                   </span>
                 )}
               />
-              <p style={{ fontSize: 13, color: "var(--text-secondary)", marginTop: 8 }}>
+              <p className="text-[13px] text-text-secondary mt-2" >
                 {EXAM_OPTIONS.find((o) => o.value === exam)?.label} • {result.wordCount} từ
               </p>
 
               {/* Criteria scores */}
-              <div style={{ display: "flex", justifyContent: "center", gap: 20, marginTop: 16, flexWrap: "wrap" }}>
+              <div className="flex justify-center gap-5 mt-4 flex-wrap" >
                 {([
                   { key: "taskResponse", label: "Task" },
                   { key: "coherence", label: "Coherence" },
@@ -431,9 +360,9 @@ export default function EssayScorePage() {
                   const s = result.criteria[c.key];
                   return (
                     <Tooltip key={c.key} title={s.feedback}>
-                      <div style={{ cursor: "pointer" }}>
-                        <p style={{ fontSize: 11, color: "var(--text-secondary)", margin: 0 }}>{c.label}</p>
-                        <p style={{ fontSize: 18, fontWeight: 600, margin: 0, color: scoreColor(s.score) }}>
+                      <div className="cursor-pointer" >
+                        <p className="text-[11px] text-text-secondary m-0" >{c.label}</p>
+                        <p className="text-lg font-semibold m-0" style={{color: scoreColor(s.score)}} >
                           {s.score}
                         </p>
                       </div>
@@ -452,40 +381,40 @@ export default function EssayScorePage() {
             ] as const).map((c) => {
               const s = result.criteria[c.key];
               return (
-                <div key={c.key} style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
-                    <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: 0, fontWeight: 600 }}>{c.label}</p>
-                    <Tag color={scoreColor(s.score)} style={{ fontSize: 12, fontWeight: 600 }}>{s.score}</Tag>
+                <div key={c.key} className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+                  <div className="flex justify-between mb-1" >
+                    <p className="text-xs text-text-secondary m-0 font-semibold" >{c.label}</p>
+                    <Tag color={scoreColor(s.score)} className="text-xs font-semibold" >{s.score}</Tag>
                   </div>
-                  <p style={{ fontSize: 13, margin: 0, lineHeight: 1.6 }}>{s.feedback}</p>
+                  <p className="text-[13px] m-0 leading-relaxed" >{s.feedback}</p>
                 </div>
               );
             })}
 
             {/* Essay with inline highlights */}
-            <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 8 }}>
-                <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: 0, fontWeight: 600 }}>
+            <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+              <div className="flex justify-between mb-2" >
+                <p className="text-xs text-text-secondary m-0 font-semibold" >
                   <Info /> Bài viết (hover để xem gợi ý)
                 </p>
-                <div style={{ display: "flex", gap: 6 }}>
+                <div className="flex gap-1.5" >
                   {Object.entries(CATEGORY_COLORS).map(([cat, color]) => (
-                    <Tag key={cat} style={{ fontSize: 9, borderColor: color, color }} color="default">{cat}</Tag>
+                    <Tag key={cat}  color="default" className="text-[9px]" style={{borderColor: color, color}} >{cat}</Tag>
                   ))}
                 </div>
               </div>
-              <div style={{ fontSize: 14, lineHeight: 1.8, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
+              <div className="text-sm" style={{lineHeight: 1.8, whiteSpace: "pre-wrap", wordBreak: "break-word"}} >
                 {highlightSegments ?? essayText}
               </div>
             </div>
 
             {/* Inline issues list */}
             {result.inlineIssues.length > 0 && (
-              <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-                <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
+              <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+                <p className="text-xs text-text-secondary mb-2 font-semibold" >
                   <AlertTriangle /> Lỗi chi tiết ({result.inlineIssues.length})
                 </p>
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <div className="flex flex-col gap-2" >
                   {result.inlineIssues.map((issue, i) => (
                     <InlineIssueItem
                       key={i}
@@ -500,35 +429,29 @@ export default function EssayScorePage() {
             )}
 
             {/* Strengths & Next Steps */}
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", gap: 16 }}>
-              <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-                <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
-                  <CircleCheckBig style={{ color: "var(--success)" }} /> Điểm mạnh
+            <div className="grid gap-4" style={{gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))"}} >
+              <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+                <p className="text-xs text-text-secondary mb-2 font-semibold" >
+                  <CircleCheckBig className="text-emerald-500" /> Điểm mạnh
                 </p>
-                <ul style={{ margin: 0, paddingLeft: 16, fontSize: 13, lineHeight: 1.8 }}>
+                <ul className="m-0 text-[13px]" style={{paddingLeft: 16, lineHeight: 1.8}} >
                   {result.strengths.map((s, i) => <li key={i}>{s}</li>)}
                 </ul>
               </div>
-              <div style={{ padding: 16, borderRadius: 12, background: "var(--card-bg)", border: "1px solid var(--border)" }}>
-                <p style={{ fontSize: 12, color: "var(--text-secondary)", margin: "0 0 8px", fontWeight: 600 }}>
+              <div className="p-4 rounded-xl border border-(--border)" style={{background: "var(--card-bg)"}} >
+                <p className="text-xs text-text-secondary mb-2 font-semibold" >
                   <Target /> Cần cải thiện
                 </p>
-                <ul style={{ margin: 0, paddingLeft: 16, fontSize: 13, lineHeight: 1.8 }}>
+                <ul className="m-0 text-[13px]" style={{paddingLeft: 16, lineHeight: 1.8}} >
                   {result.nextSteps.map((s, i) => <li key={i}>{s}</li>)}
                 </ul>
               </div>
             </div>
 
             {/* Actions */}
-            <div style={{ textAlign: "center" }}>
+            <div className="text-center" >
               <button
-                onClick={startNew}
-                style={{
-                  padding: "10px 24px", borderRadius: 8, border: "none",
-                  background: "var(--accent)", color: "var(--text-on-accent)", fontSize: 14,
-                  fontWeight: 600, cursor: "pointer",
-                }}
-              >
+                onClick={startNew} className="rounded-lg border-none text-sm font-semibold cursor-pointer" style={{padding: "10px 24px", background: "var(--accent)", color: "var(--text-on-accent)"}} >
                 <RefreshCw /> Chấm bài mới
               </button>
             </div>
