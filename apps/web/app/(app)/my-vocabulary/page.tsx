@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpen, Loader2, Search, Star } from "lucide-react";
+import { BookOpen, Loader2, Search } from "lucide-react";
 import * as m from "motion/react-client";
 import dynamic from "next/dynamic";
 import { useState } from "react";
@@ -10,7 +10,7 @@ const ToeicVocabTab = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex justify-center text-text-muted gap-2.5" style={{ padding: 60 }}>
+      <div className="flex justify-center text-text-muted gap-2.5 py-[60px]">
         <Loader2 className="animate-spin text-accent" size={20} />
         <span className="font-bold text-sm">Loading...</span>
       </div>
@@ -23,7 +23,7 @@ const DictionaryTab = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="flex justify-center text-text-muted gap-2.5" style={{ padding: 60 }}>
+      <div className="flex justify-center text-text-muted gap-2.5 py-[60px]">
         <Loader2 className="animate-spin text-accent" size={20} />
         <span className="font-bold text-sm">Loading...</span>
       </div>
@@ -38,20 +38,6 @@ const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
   { key: "dictionary", label: "Dictionary Search", icon: <Search /> },
 ];
 
-const SUBTITLES: Record<TabKey, string> = {
-  toeic: "600 essential words · 10 topics · SRS",
-  dictionary: "Search · History · Saved Words",
-};
-
-const GRADIENTS: Record<TabKey, string> = {
-  toeic: "var(--gradient-vocab)",
-  dictionary: "var(--gradient-vocab)",
-};
-
-const TAB_COLORS: Record<TabKey, string> = {
-  toeic: "var(--accent)",
-  dictionary: "var(--secondary, var(--accent))",
-};
 
 export default function MyVocabularyPage() {
   const [active, setActive] = useState<TabKey>("toeic");

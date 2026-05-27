@@ -234,7 +234,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
-                    className="h-[42px] rounded-xl border-2 border-border font-black cursor-pointer flex items-center justify-center gap-1.5 bg-gradient-to-r from-accent to-secondary text-white shadow mt-4 mb-2"
+                  className="h-[42px] rounded-xl border-2 border-border font-black cursor-pointer flex items-center justify-center gap-1.5 bg-accent text-ink shadow mt-4 mb-2"
                   >
                     <span>View in Dictionary</span>
                     <ArrowRight className="h-4 w-4 shrink-0" />

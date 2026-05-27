@@ -253,10 +253,7 @@ export function ToeicVocabularySection({ className }: Props) {
                 <span className="flex-1 text-sm font-semibold text-ink">{cat.label}</span>
                 <span className="text-[11px] text-text-muted">{cat.words.length} words</span>
                 <ChevronDown
-                  className="text-sm shrink-0 text-text-muted transition-transform duration-200"
-                  style={{
-                    transform: isExpanded ? "rotate(180deg)" : "rotate(0)",
-                  }}
+                  className={`text-sm shrink-0 text-text-muted transition-transform duration-200 ${isExpanded ? "rotate-180" : ""}`}
                 />
               </button>
 

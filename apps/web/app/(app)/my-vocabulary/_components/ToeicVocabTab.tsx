@@ -199,11 +199,8 @@ export function ToeicVocabTab() {
 
           <Link
             href={`/toeic/vocab/learn?pack=${encodeURIComponent(activeTopic)}&mode=new`}
-            className="inline-flex items-center justify-center shrink-0 px-5 py-2.5 rounded-xl text-xs font-black text-white hover:-translate-y-0.5 transition-all cursor-pointer shadow-sm"
-            style={{
-              background: meta.color,
-              textDecoration: "none",
-            }}
+            className="inline-flex items-center justify-center shrink-0 px-5 py-2.5 rounded-xl text-xs font-black text-white hover:-translate-y-0.5 transition-all cursor-pointer shadow-sm no-underline"
+            style={{ background: meta.color }}
           >
             Learn Now
           </Link>
@@ -273,10 +270,7 @@ export function ToeicVocabTab() {
                       </div>
                     </div>
                     <ChevronRight
-                      className="text-text-muted h-4 w-4 transition-transform duration-200"
-                      style={{
-                        transform: isExpanded ? "rotate(90deg)" : "none",
-                      }}
+                      className={`text-text-muted h-4 w-4 transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
                     />
                   </button>
 
@@ -325,11 +319,8 @@ export function ToeicVocabTab() {
                       {/* Action */}
                       <Link
                         href={`/toeic/vocab/learn?pack=${encodeURIComponent(activeTopic)}&mode=new`}
-                        className="inline-flex items-center gap-2 rounded-xl text-xs font-black px-4 py-2 text-white hover:opacity-90 w-fit shadow-sm"
-                        style={{
-                          background: meta.color,
-                          textDecoration: "none",
-                        }}
+                        className="inline-flex items-center gap-2 rounded-xl text-xs font-black px-4 py-2 text-white hover:opacity-90 w-fit shadow-sm no-underline"
+                        style={{ background: meta.color }}
                       >
                         <BookOpen size={13} className="shrink-0" /> 
                         <span>Learn this word</span>
@@ -427,8 +418,7 @@ export function ToeicVocabTab() {
       <div className="flex justify-center mt-4">
         <Link
           href="/toeic/vocab/learn?mode=review"
-          className="rounded-2xl text-sm font-black px-8 py-3.5 bg-accent border-2 border-border text-ink shadow-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-100 cursor-pointer"
-          style={{ textDecoration: "none" }}
+          className="rounded-2xl text-sm font-black px-8 py-3.5 bg-accent border-2 border-border text-ink shadow-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-100 cursor-pointer no-underline"
         >
           Review Vocabulary
         </Link>
