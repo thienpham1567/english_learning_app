@@ -48,14 +48,14 @@ function WordDiff({ original, rewritten }: { original: string; rewritten: string
       {parts.map((part, i) => {
         if (part.added) {
           return (
-            <span key={i} className="text-(--success) bg-(--success)/10 rounded px-1 font-medium">
+            <span key={i} className="text-success bg-success/10 rounded px-1 font-medium">
               {part.value}
             </span>
           );
         }
         if (part.removed) {
           return (
-            <span key={i} className="text-(--error) line-through opacity-60 px-0.5">
+            <span key={i} className="text-error line-through opacity-60 px-0.5">
               {part.value}
             </span>
           );
@@ -82,7 +82,7 @@ function CopyButton({ text }: { text: string }) {
       onClick={copy}
       title="Copy to clipboard"
       className={`border-none bg-transparent cursor-pointer text-xs p-1 rounded-md transition-colors ${
-        copied ? "text-(--success)" : "text-text-secondary hover:text-ink"
+        copied ? "text-success" : "text-text-secondary hover:text-ink"
       }`}
     >
       {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
@@ -254,7 +254,7 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
         className={`px-5 py-2.5 rounded-lg border-2 border-border text-xs font-black flex items-center gap-1.5 self-start cursor-pointer transition-all duration-100 ${
           !sentence.trim() || overLimit || loading
             ? "bg-bg-deep text-text-muted cursor-not-allowed opacity-50"
-            : "bg-accent text-ink shadow-(--shadow-sm) hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
+            : "bg-accent text-ink shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none"
         }`}
       >
         {loading ? (

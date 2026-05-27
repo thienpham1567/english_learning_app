@@ -28,7 +28,7 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
 
       {/* Vietnamese source — quote block style */}
       <div
-        className="mb-5 rounded-(--radius-xl) bg-surface-alt py-4 px-5"
+        className="mb-5 rounded-xl bg-surface-alt py-4 px-5"
         style={{ borderLeft: "4px solid var(--accent)", boxShadow: "var(--shadow-sm)" }}
       >
         <span className="text-[10px] font-extrabold uppercase tracking-widest text-accent flex items-center gap-1.5 mb-2">
@@ -58,7 +58,7 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
         }}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        className="w-full rounded-(--radius-lg) bg-(--surface) py-3 px-4 text-text-primary font-medium"
+        className="w-full rounded-lg bg-surface py-3 px-4 text-text-primary font-medium"
         style={{
           border: focused ? "2px solid var(--accent)" : "1.5px solid var(--border)",
           fontSize: 14.5,
@@ -90,7 +90,7 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
           whileHover={{ scale: 1.02, y: -1 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => onAnswer(text.trim())}
-          className="w-full rounded-(--radius-lg) text-[15px] font-extrabold border-none cursor-pointer mt-2.5 flex items-center justify-center gap-1.5"
+          className="w-full rounded-lg text-[15px] font-extrabold border-none cursor-pointer mt-2.5 flex items-center justify-center gap-1.5"
           style={{
             background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
             padding: "14px 0",

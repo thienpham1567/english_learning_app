@@ -225,7 +225,7 @@ export default function ArticleReaderPage() {
               onClick={() => router.push("/reading")}
               whileHover={{ scale: 1.05, x: -2 }}
               whileTap={{ scale: 0.95 }}
-              className="items-center gap-2 py-1.5 px-3.5 rounded-lg border-2 border-border bg-(--surface) text-text-secondary font-extrabold cursor-pointer"
+              className="items-center gap-2 py-1.5 px-3.5 rounded-lg border-2 border-border bg-surface text-text-secondary font-extrabold cursor-pointer"
               style={{ display: "inline-flex", fontSize: 12.5 }}
             >
               <ArrowLeft />
@@ -319,7 +319,7 @@ export default function ArticleReaderPage() {
             <img
               src={article.thumbnail}
               alt={article.title}
-              className="w-full h-[340px] rounded-(--radius-xl)"
+              className="w-full h-[340px] rounded-xl"
               style={{ objectFit: "cover", border: "1.5px solid var(--border)" }}
             />
           )}

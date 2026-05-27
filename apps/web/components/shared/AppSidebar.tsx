@@ -142,8 +142,8 @@ function NavLink({
             : "py-[9px] px-2.5 text-sm"
         } ${
           active
-            ? "font-semibold bg-(--sidebar-active-bg) text-accent border-accent"
-            : "font-medium bg-transparent text-(--sidebar-text) border-transparent"
+            ? "font-semibold bg-sidebar-active-bg text-accent border-accent"
+            : "font-medium bg-transparent text-sidebar-text border-transparent"
         }`}
       >
         <m.span

@@ -176,11 +176,11 @@ export function ToeicVocabTab() {
     return (
       <div className="w-full max-w-3xl mx-auto flex flex-col gap-4">
         {/* Back button + header */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4 bg-surface border-2 border-border p-5 rounded-2xl shadow-(--shadow-sm) relative overflow-hidden">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-4 bg-surface border-2 border-border p-5 rounded-2xl shadow-sm relative overflow-hidden">
           <button
             type="button"
             onClick={() => setActiveTopic(null)}
-            className="w-9 h-9 border-2 border-border bg-surface hover:bg-surface-hover text-text-secondary cursor-pointer flex items-center justify-center rounded-xl shadow-(--shadow-sm) transition-colors shrink-0"
+            className="w-9 h-9 border-2 border-border bg-surface hover:bg-surface-hover text-text-secondary cursor-pointer flex items-center justify-center rounded-xl shadow-sm transition-colors shrink-0"
           >
             <ArrowLeft size={16} />
           </button>
@@ -199,7 +199,7 @@ export function ToeicVocabTab() {
 
           <Link
             href={`/toeic/vocab/learn?pack=${encodeURIComponent(activeTopic)}&mode=new`}
-            className="inline-flex items-center justify-center shrink-0 px-5 py-2.5 rounded-xl text-xs font-black text-white hover:-translate-y-0.5 transition-all cursor-pointer shadow-(--shadow-sm)"
+            className="inline-flex items-center justify-center shrink-0 px-5 py-2.5 rounded-xl text-xs font-black text-white hover:-translate-y-0.5 transition-all cursor-pointer shadow-sm"
             style={{
               background: meta.color,
               textDecoration: "none",
@@ -219,7 +219,7 @@ export function ToeicVocabTab() {
             placeholder="Search words in this topic..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full rounded-2xl border-2 border-border bg-surface text-xs font-bold text-ink pl-10 pr-4 py-3 shadow-(--shadow-sm) outline-none focus:border-accent transition-colors"
+            className="w-full rounded-2xl border-2 border-border bg-surface text-xs font-bold text-ink pl-10 pr-4 py-3 shadow-sm outline-none focus:border-accent transition-colors"
           />
         </div>
 
@@ -238,7 +238,7 @@ export function ToeicVocabTab() {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: Math.min(i * 0.02, 0.4) }}
-                  className={`border-2 border-border rounded-2xl overflow-hidden shadow-(--shadow-sm) transition-all ${
+                  className={`border-2 border-border rounded-2xl overflow-hidden shadow-sm transition-all ${
                     isExpanded
                       ? "bg-accent/5"
                       : "bg-surface"
@@ -296,7 +296,7 @@ export function ToeicVocabTab() {
                             e.stopPropagation();
                             speak(w.word, "en-US");
                           }}
-                          className="w-7 h-7 rounded-lg border-2 border-border bg-surface hover:bg-surface-hover text-accent cursor-pointer flex items-center justify-center shadow-(--shadow-sm) transition-colors"
+                          className="w-7 h-7 rounded-lg border-2 border-border bg-surface hover:bg-surface-hover text-text-secondary hover:text-accent hover:border-accent cursor-pointer flex items-center justify-center shadow-sm transition-colors"
                         >
                           <Volume2 className="h-4 w-4" />
                         </button>
@@ -312,7 +312,7 @@ export function ToeicVocabTab() {
 
                       {/* Example */}
                       {w.exampleEn && (
-                        <div className="bg-surface-alt p-3.5 rounded-xl border-2 border-border border-l-4 border-l-accent shadow-(--shadow-sm) flex flex-col gap-1">
+                        <div className="bg-surface-alt p-3.5 rounded-xl border-2 border-border border-l-4 border-l-accent shadow-sm flex flex-col gap-1">
                           <div className="text-xs md:text-sm text-text-primary italic leading-normal font-semibold">
                             &ldquo;{w.exampleEn}&rdquo;
                           </div>
@@ -325,7 +325,7 @@ export function ToeicVocabTab() {
                       {/* Action */}
                       <Link
                         href={`/toeic/vocab/learn?pack=${encodeURIComponent(activeTopic)}&mode=new`}
-                        className="inline-flex items-center gap-2 rounded-xl text-xs font-black px-4 py-2 text-white hover:opacity-90 w-fit shadow-(--shadow-sm)"
+                        className="inline-flex items-center gap-2 rounded-xl text-xs font-black px-4 py-2 text-white hover:opacity-90 w-fit shadow-sm"
                         style={{
                           background: meta.color,
                           textDecoration: "none",
@@ -352,7 +352,7 @@ export function ToeicVocabTab() {
       <m.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-surface border-2 border-border p-6 rounded-2xl shadow-(--shadow)"
+        className="bg-surface border-2 border-border p-6 rounded-2xl shadow"
       >
         <div className="flex items-center justify-between mb-3.5">
           <div>
@@ -361,7 +361,7 @@ export function ToeicVocabTab() {
               {totalLearned} / {totalWords} words learned
             </p>
           </div>
-          <div className="text-2xl font-black text-accent font-mono leading-none">{overallPct}%</div>
+          <div className="text-2xl font-black text-text-primary font-mono leading-none">{overallPct}%</div>
         </div>
         <div className="h-3 rounded-full bg-bg-deep overflow-hidden relative border-2 border-border">
           <div
@@ -390,11 +390,11 @@ export function ToeicVocabTab() {
               whileHover={{ y: -3, x: -1, rotate: i % 2 === 0 ? 0.5 : -0.5, boxShadow: "var(--shadow)" }}
               whileTap={{ scale: 0.98 }}
               onClick={() => loadTopic(pack.topic)}
-              className="rounded-2xl text-left border-2 border-border bg-surface cursor-pointer flex flex-col gap-3 p-5 shadow-(--shadow-sm) transition-all duration-100 group"
+              className="rounded-2xl text-left border-2 border-border bg-surface cursor-pointer flex flex-col gap-3 p-5 shadow-sm transition-all duration-100 group"
             >
               <div className="flex items-center gap-3.5 w-full">
                 <div
-                  className="w-11 h-11 rounded-xl border-2 border-border grid shrink-0 place-items-center text-xl shadow-(--shadow-sm)"
+                  className="w-11 h-11 rounded-xl border-2 border-border grid shrink-0 place-items-center text-xl shadow-sm"
                   style={{
                     background: `color-mix(in srgb, ${meta.color} 10%, var(--surface))`,
                     borderColor: `color-mix(in srgb, ${meta.color} 30%, var(--border))`,
@@ -427,7 +427,7 @@ export function ToeicVocabTab() {
       <div className="flex justify-center mt-4">
         <Link
           href="/toeic/vocab/learn?mode=review"
-          className="rounded-2xl text-sm font-black px-8 py-3.5 bg-accent border-2 border-border text-ink shadow-(--shadow-sm) hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-(--shadow) active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-100 cursor-pointer"
+          className="rounded-2xl text-sm font-black px-8 py-3.5 bg-accent border-2 border-border text-ink shadow-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-100 cursor-pointer"
           style={{ textDecoration: "none" }}
         >
           Review Vocabulary

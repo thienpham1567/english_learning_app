@@ -10,15 +10,15 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-accent border-border text-ink shadow-(--shadow-sm) hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none cursor-pointer duration-100 transition-all",
+          "bg-accent border-border text-ink shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none cursor-pointer duration-100 transition-all",
         outline:
-          "bg-surface border-border text-foreground shadow-(--shadow-sm) hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none cursor-pointer duration-100 transition-all",
+          "bg-surface border-border text-foreground shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none cursor-pointer duration-100 transition-all",
         secondary:
-          "bg-secondary border-border text-white shadow-(--shadow-sm) hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none cursor-pointer duration-100 transition-all",
+          "bg-secondary border-border text-white shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none cursor-pointer duration-100 transition-all",
         ghost:
           "border-transparent bg-transparent hover:bg-surface-hover hover:text-foreground cursor-pointer duration-100 transition-all",
         destructive:
-          "bg-destructive border-border text-white shadow-(--shadow-sm) hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none cursor-pointer duration-100 transition-all",
+          "bg-destructive border-border text-white shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none cursor-pointer duration-100 transition-all",
         link: "text-ink underline underline-offset-4 hover:text-accent cursor-pointer duration-100 transition-all",
       },
       size: {

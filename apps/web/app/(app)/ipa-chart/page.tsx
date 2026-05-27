@@ -54,7 +54,7 @@ export default function IpaChartPage() {
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden relative">
       {/* Control bar */}
-      <div className="flex items-center gap-3 flex-wrap bg-surface shrink-0 z-[1] py-3.5 px-5 border-b-2 border-border shadow-(--shadow-sm)">
+      <div className="flex items-center gap-3 flex-wrap bg-surface shrink-0 z-[1] py-3.5 px-5 border-b-2 border-border shadow-sm">
         {/* Navigation Tabs */}
         <div className="flex gap-1 bg-surface-alt rounded-lg border-2 border-border p-[3px]">
           {(
@@ -71,7 +71,7 @@ export default function IpaChartPage() {
                 whileTap={{ scale: 0.97 }}
                 className={`border-none cursor-pointer text-[13px] font-extrabold flex items-center gap-2 py-2 px-4.5 rounded-md transition-all duration-200 ${
                   isActive
-                    ? "bg-surface text-accent shadow-(--shadow-sm)"
+                    ? "bg-surface text-accent shadow-sm"
                     : "bg-transparent text-text-secondary hover:text-text-primary"
                 }`}
               >
@@ -110,7 +110,7 @@ export default function IpaChartPage() {
                   whileTap={{ scale: 0.95 }}
                   className={`rounded-md border-none cursor-pointer text-xs font-extrabold py-1.5 px-3.5 transition-all duration-150 ${
                     isActive
-                      ? "bg-surface text-accent shadow-(--shadow-sm)"
+                      ? "bg-surface text-accent shadow-sm"
                       : "bg-transparent text-text-secondary hover:text-text-primary"
                   }`}
                 >

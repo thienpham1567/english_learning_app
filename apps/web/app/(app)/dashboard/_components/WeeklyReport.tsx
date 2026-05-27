@@ -64,9 +64,9 @@ export function WeeklyReport() {
         onClick={fetchReport}
         whileHover={{ y: -2, x: -2, boxShadow: "var(--shadow-lg)" }}
         whileTap={{ y: 2, x: 2, boxShadow: "1px 1px 0 var(--shadow-color)" }}
-        className="w-full flex items-center gap-3.5 px-5 py-4 rounded-xl border-2 border-border bg-(--surface) text-left cursor-pointer relative overflow-hidden shadow-(--shadow) transition-all duration-150"
+        className="w-full flex items-center gap-3.5 px-5 py-4 rounded-xl border-2 border-border bg-surface text-left cursor-pointer relative overflow-hidden shadow transition-all duration-150"
       >
-        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-accent text-(--text-on-accent) border-2 border-border shadow-[2px_2px_0_var(--shadow-color)]">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-accent text-text-on-accent border-2 border-border shadow-[2px_2px_0_var(--shadow-color)]">
           <BarChart3 className="h-5 w-5" />
         </div>
 
@@ -87,7 +87,7 @@ export function WeeklyReport() {
   // Loading
   if (loading) {
     return (
-      <div className="p-5 rounded-xl bg-surface border-2 border-border shadow-(--shadow) flex flex-col gap-4">
+      <div className="p-5 rounded-xl bg-surface border-2 border-border shadow flex flex-col gap-4">
         <div className="flex items-center gap-2">
           <Loader2 className="h-4 w-4 animate-spin text-accent" />
           <span className="text-xs font-bold text-text-secondary">
@@ -111,7 +111,7 @@ export function WeeklyReport() {
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-xl bg-surface border-2 border-border shadow-(--shadow) overflow-hidden flex flex-col"
+      className="rounded-xl bg-surface border-2 border-border shadow overflow-hidden flex flex-col"
     >
       {/* Header */}
       <div className="px-5 py-4 bg-surface-alt border-b-2 border-border flex items-center gap-2.5">
@@ -134,40 +134,40 @@ export function WeeklyReport() {
             bg: "bg-accent-muted",
           },
           {
-            icon: <Zap className="h-4 w-4 text-(--warning) fill-(--warning)" />,
+            icon: <Zap className="h-4 w-4 text-warning fill-warning" />,
             value: stats.totalXP.toLocaleString(),
             label: "XP Earned",
-            bg: "bg-(--warning-bg)",
+            bg: "bg-warning-bg",
           },
           {
-            icon: <Flame className="h-4 w-4 text-(--fire) fill-(--fire)" />,
+            icon: <Flame className="h-4 w-4 text-fire fill-fire" />,
             value: stats.currentStreak,
             label: "Streak",
-            bg: "bg-(--warning-bg)",
+            bg: "bg-warning-bg",
           },
           {
-            icon: <BookOpen className="h-4 w-4 text-(--success)" />,
+            icon: <BookOpen className="h-4 w-4 text-success" />,
             value: stats.newVocabulary,
             label: "New Vocabulary",
-            bg: "bg-(--success-bg)",
+            bg: "bg-success-bg",
           },
           {
-            icon: <Trophy className="h-4 w-4 text-(--warning)" />,
+            icon: <Trophy className="h-4 w-4 text-warning" />,
             value: stats.avgChallengeScore,
             label: "Avg Score",
-            bg: "bg-(--warning-bg)",
+            bg: "bg-warning-bg",
           },
           {
-            icon: <AlertTriangle className="h-4 w-4 text-(--error)" />,
+            icon: <AlertTriangle className="h-4 w-4 text-error" />,
             value: stats.unresolvedErrors,
             label: "Errors to Fix",
-            bg: "bg-(--error-bg)",
+            bg: "bg-error-bg",
           },
         ].map((s) => (
           <motion.div
             key={s.label}
             whileHover={{ scale: 1.05, y: -2, x: -2, boxShadow: "var(--shadow)" }}
-            className="p-3 bg-surface-alt rounded-xl border-2 border-border text-center flex flex-col items-center gap-1.5 shadow-(--shadow-sm) transition-all duration-100 cursor-default"
+            className="p-3 bg-surface-alt rounded-xl border-2 border-border text-center flex flex-col items-center gap-1.5 shadow-sm transition-all duration-100 cursor-default"
           >
             <div
               className={`w-7 h-7 rounded-md ${s.bg} border-2 border-border flex items-center justify-center shrink-0`}

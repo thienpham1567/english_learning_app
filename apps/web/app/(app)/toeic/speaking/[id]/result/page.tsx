@@ -48,9 +48,9 @@ function PronunciationSection({ metrics }: { metrics: PronMetrics }) {
         <div>
           Pace: <strong>{metrics.wpm} WPM</strong>{" "}
           {wpmOk ? (
-            <Check size={14} className="inline text-(--success) ml-0.5" />
+            <Check size={14} className="inline text-success ml-0.5" />
           ) : (
-            <AlertTriangle size={14} className="inline text-(--warning) ml-0.5" />
+            <AlertTriangle size={14} className="inline text-warning ml-0.5" />
           )}
         </div>
         <div>

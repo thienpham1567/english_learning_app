@@ -32,19 +32,19 @@ type SavedWord = {
 
 const MASTERY_CONFIG: Record<string, { icon: React.ReactNode; label: string; colorClass: string }> = {
   new: {
-    icon: <Star size={11} className="fill-current text-amber-500" />,
+    icon: <Star size={11} className="fill-current text-amber-700 dark:text-amber-400" />,
     label: "New",
-    colorClass: "bg-amber-500/10 border-amber-500/20 text-amber-500",
+    colorClass: "text-amber-700 dark:text-amber-400 border-amber-500/30 bg-amber-500/5",
   },
   learning: {
-    icon: <RefreshCw size={11} className="text-accent" />,
+    icon: <RefreshCw size={11} className="text-sky-700 dark:text-sky-400" />,
     label: "Learning",
-    colorClass: "bg-accent/10 border-accent/20 text-accent",
+    colorClass: "text-sky-700 dark:text-sky-400 border-sky-500/30 bg-sky-500/5",
   },
   mastered: {
-    icon: <CircleCheckBig size={11} className="text-emerald-500" />,
+    icon: <CircleCheckBig size={11} className="text-emerald-700 dark:text-emerald-400" />,
     label: "Mastered",
-    colorClass: "bg-emerald-500/10 border-emerald-500/20 text-emerald-500",
+    colorClass: "text-emerald-700 dark:text-emerald-400 border-emerald-500/30 bg-emerald-500/5",
   },
 };
 
@@ -183,7 +183,7 @@ export function DictionaryTab() {
         {/* Right: Result */}
         <div className="w-full">
           {error && (
-            <div className="py-3 px-4 rounded-xl border-2 border-error/25 bg-error-bg text-error text-xs font-semibold mb-4 shadow-(--shadow-sm)">
+            <div className="py-3 px-4 rounded-xl border-2 border-error/25 bg-error-bg text-error text-xs font-semibold mb-4 shadow-sm">
               {error}
             </div>
           )}
@@ -202,8 +202,8 @@ export function DictionaryTab() {
       {/* Saved words section */}
       <div className="mt-6 pt-5 border-t-2 border-dashed border-border/40 w-full">
         <div className="flex items-center gap-2 mb-4.5">
-          <Star className="text-accent h-4.5 w-4.5 fill-current animate-pulse shrink-0" />
-          <span className="text-[10px] font-extrabold uppercase text-accent tracking-widest font-display">
+          <Star className="text-accent-hover h-4.5 w-4.5 fill-current animate-pulse shrink-0" />
+          <span className="text-[10px] font-extrabold uppercase text-text-secondary tracking-widest font-display">
             Saved Words ({savedWords.length})
           </span>
         </div>
@@ -213,8 +213,8 @@ export function DictionaryTab() {
             <Loader2 className="animate-spin text-accent" size={20} />
           </div>
         ) : savedWords.length === 0 ? (
-          <div className="text-center text-text-muted text-xs font-bold bg-surface border-2 border-dashed border-border/60 rounded-2xl py-8 px-4 flex flex-col items-center justify-center gap-2 max-w-md mx-auto shadow-(--shadow-sm)">
-            <Star size={18} className="text-accent fill-current" />
+          <div className="text-center text-text-muted text-xs font-bold bg-surface border-2 border-dashed border-border/60 rounded-2xl py-8 px-4 flex flex-col items-center justify-center gap-2 max-w-md mx-auto shadow-sm">
+            <Star size={18} className="text-accent-hover fill-current" />
             <p className="m-0 leading-relaxed font-semibold">No words saved yet.</p>
             <p className="m-0 text-[10px] text-text-secondary leading-normal">
               Search a word in the dictionary above and click save to start building your notebook!
@@ -231,15 +231,15 @@ export function DictionaryTab() {
                   onKeyDown={() => {}}
                   role="button"
                   tabIndex={0}
-                  className="rounded-xl border-2 border-border bg-surface flex items-center gap-2.5 cursor-pointer p-3 shadow-(--shadow-sm) hover:translate-y-[-2px] hover:translate-x-[-1px] hover:shadow-(--shadow) transition-all duration-100 group text-left min-w-0"
+                  className="rounded-xl border-2 border-border bg-surface flex items-center gap-2.5 cursor-pointer p-3 shadow-sm hover:translate-y-[-2px] hover:translate-x-[-1px] hover:shadow transition-all duration-100 group text-left min-w-0"
                 >
                   <div
-                    className={`w-7 h-7 rounded-lg border-2 grid shrink-0 place-items-center text-[10px] shadow-(--shadow-sm) ${mastery.colorClass}`}
+                    className={`w-7 h-7 rounded-lg border-2 grid shrink-0 place-items-center text-[10px] shadow-sm ${mastery.colorClass}`}
                   >
                     {mastery.icon}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs font-black text-text-primary truncate leading-tight group-hover:text-accent transition-colors">
+                    <div className="text-xs font-black text-text-primary truncate leading-tight group-hover:text-secondary transition-colors">
                       {w.headword ?? w.query}
                     </div>
                     {w.level && (

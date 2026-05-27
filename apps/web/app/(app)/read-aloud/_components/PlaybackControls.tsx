@@ -56,7 +56,7 @@ export function PlaybackControls({
         <div>
           <div className="flex items-center justify-between mb-1">
             <span className="text-[13px] text-text-secondary font-semibold">Reading Speed</span>
-            <span className="text-sm font-extrabold text-accent">{speed}x</span>
+            <span className="text-sm font-extrabold text-accent-hover">{speed}x</span>
           </div>
 
           {/* Custom range slider */}
@@ -68,7 +68,6 @@ export function PlaybackControls({
             value={speed}
             onChange={(e) => onSpeedChange(Number(e.target.value))}
             className="w-full h-1.5 rounded-full bg-border appearance-none cursor-pointer accent-accent"
-            style={{ accentColor: "var(--accent)" }}
           />
 
           {/* Preset Quick Select */}
@@ -79,10 +78,10 @@ export function PlaybackControls({
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => onSpeedChange(preset)}
-                className={`flex-1 text-[11px] font-bold rounded-lg cursor-pointer py-1 transition-all duration-200 ${
+                className={`flex-1 text-[11px] font-extrabold rounded-lg cursor-pointer py-1 transition-all duration-200 ${
                   speed === preset
-                    ? "border border-accent bg-accent-light text-accent"
-                    : "border border-border bg-surface-alt text-text-secondary"
+                    ? "border-2 border-border bg-accent text-ink shadow-sm"
+                    : "border border-border bg-surface-alt text-text-secondary hover:border-border-strong"
                 }`}
               >
                 {preset === 1.0 ? "Normal" : `${preset}x`}
@@ -96,20 +95,15 @@ export function PlaybackControls({
         {/* Action Buttons */}
         <div className="flex flex-col gap-2">
           <m.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+            whileHover={canStart ? { scale: 1.02 } : {}}
+            whileTap={canStart ? { scale: 0.98 } : {}}
             onClick={onGenerate}
             disabled={!canStart}
-            className={`flex items-center justify-center gap-2.5 py-4 px-5 rounded-lg border-none text-base font-extrabold font-body transition-all duration-200 ${
+            className={`flex items-center justify-center gap-2.5 py-4 px-5 rounded-xl border-2 border-border text-base font-black font-body transition-all duration-200 ${
               canStart
-                ? "cursor-pointer text-[var(--text-on-accent)] shadow-[0_4px_14px_var(--accent-muted)]"
-                : "cursor-not-allowed text-text-muted"
+                ? "cursor-pointer bg-accent text-ink shadow hover:bg-accent-hover"
+                : "cursor-not-allowed bg-bg-deep text-text-muted border-border/40"
             }`}
-            style={{
-              background: canStart
-                ? "linear-gradient(135deg, var(--accent), var(--accent-hover))"
-                : "var(--border)",
-            }}
           >
             {loading ? (
               <>
@@ -134,12 +128,12 @@ export function PlaybackControls({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={onTogglePlayback}
-                  className="flex-1 flex items-center justify-center gap-2 p-3 rounded-lg bg-surface text-text-primary text-sm font-bold cursor-pointer border border-border-strong"
+                  className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-surface text-text-primary text-sm font-bold cursor-pointer border-2 border-border shadow-sm hover:bg-surface-hover"
                 >
                   {playing ? (
-                    <PauseCircle className="text-accent" />
+                    <PauseCircle className="text-accent-hover" />
                   ) : (
-                    <PlayCircle className="text-[var(--sage)]" />
+                    <PlayCircle className="text-success" />
                   )}
                   {playing ? "Pause" : "Resume"}
                 </m.button>
@@ -147,9 +141,9 @@ export function PlaybackControls({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={onStop}
-                  className="flex items-center justify-center rounded-lg text-destructive text-sm font-bold cursor-pointer py-3 px-4.5 border border-[rgba(239,68,68,0.2)] bg-error-bg"
+                  className="flex items-center justify-center rounded-xl text-destructive text-sm font-bold cursor-pointer py-3 px-4.5 border-2 border-border bg-error/10 hover:bg-error/20 shadow-sm"
                 >
-                  <Undo />
+                  <Undo size={16} />
                 </m.button>
               </m.div>
             )}
@@ -181,11 +175,7 @@ function WaveformVisualizer({
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
-        className="rounded-xl flex items-center justify-between gap-4 p-4 px-5 shadow-md"
-        style={{
-          background: "linear-gradient(90deg, var(--surface), var(--surface-alt))",
-          border: "2px solid var(--accent-light)",
-        }}
+        className="rounded-xl flex items-center justify-between gap-4 p-4 px-5 shadow-md border-2 border-accent bg-gradient-to-r from-surface to-surface-alt"
       >
         <div className="waveform-container flex items-center gap-2.5">
           <m.div
@@ -199,7 +189,7 @@ function WaveformVisualizer({
             ) : (
               <span>
                 Reading with {selectedVoice.flag}{" "}
-                <strong className="text-accent">{selectedVoice.name}</strong> ({selectedVoice.label}
+                <strong className="text-accent-hover">{selectedVoice.name}</strong> ({selectedVoice.label}
                 )
               </span>
             )}
@@ -222,13 +212,11 @@ function WaveformVisualizer({
                 delay: i * 0.03,
                 ease: "easeInOut",
               }}
-              className="w-[3px] rounded-sm"
-              style={{
-                background: playing
-                  ? "linear-gradient(to top, var(--accent), var(--xp))"
-                  : "var(--border-strong)",
-                opacity: playing ? 0.8 : 0.4,
-              }}
+              className={`w-[3px] rounded-sm transition-all duration-150 ${
+                playing
+                  ? "bg-gradient-to-t from-accent to-xp opacity-80"
+                  : "bg-border-strong opacity-40"
+              }`}
             />
           ))}
         </div>

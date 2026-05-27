@@ -120,7 +120,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
     <div className="mx-auto w-full max-w-2xl">
       {/* Draft restore offer (AC #6) */}
       {draftOffer && (
-        <div className="anim-fade-up mb-4 flex items-center justify-between gap-3 rounded-2xl border-2 border-border bg-warning-bg px-4 py-3 shadow-(--shadow-sm)">
+        <div className="anim-fade-up mb-4 flex items-center justify-between gap-3 rounded-2xl border-2 border-border bg-warning-bg px-4 py-3 shadow-sm">
           <span className="text-xs text-text-primary flex items-center gap-1.5 font-semibold">
             <PenSquare className="h-4 w-4 shrink-0 text-warning" />
             <span>You have an unfinished draft. Restore?</span>
@@ -129,7 +129,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
             <button
               type="button"
               onClick={restoreDraft}
-              className="rounded-xl bg-warning px-3.5 py-1.5 text-xs font-bold text-black border-2 border-border shadow-(--shadow-sm) hover:translate-y-[-1px] transition-all cursor-pointer"
+              className="rounded-xl bg-warning px-3.5 py-1.5 text-xs font-bold text-black border-2 border-border shadow-sm hover:translate-y-[-1px] transition-all cursor-pointer"
             >
               Restore
             </button>
@@ -145,11 +145,11 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
       )}
 
       {/* Prompt display */}
-      <div className="rounded-xl border-2 border-border bg-(--bg-deep) p-4">
-        <span className="text-[11px] font-semibold uppercase tracking-widest text-(--accent)">
+      <div className="rounded-xl border-2 border-border bg-bg-deep p-4">
+        <span className="text-[11px] font-semibold uppercase tracking-widest text-accent">
           {CATEGORY_LABELS[category]} · Prompt
         </span>
-        <p className="mt-2 text-sm leading-relaxed text-(--ink)">{prompt}</p>
+        <p className="mt-2 text-sm leading-relaxed text-ink">{prompt}</p>
       </div>
 
       {/* Hints toggle */}
@@ -184,7 +184,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
       {/* Editor */}
       <div className="relative mt-4">
         <textarea
-          className="min-h-[280px] w-full resize-y rounded-xl border-2 border-border bg-(--surface) p-4 text-sm leading-relaxed text-(--ink) placeholder:text-(--text-muted) focus:border-(--accent) focus:outline-none focus:ring-1 focus:ring-(--accent)/30 max-[720px]:min-h-[200px]"
+          className="min-h-[280px] w-full resize-y rounded-xl border-2 border-border bg-surface p-4 text-sm leading-relaxed text-ink placeholder:text-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent/30 max-[720px]:min-h-[200px]"
           placeholder="Write your response here..."
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -237,7 +237,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
             <span>Draft saved</span>
           </span>
           <button
-            className="flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-text-on-accent border-2 border-border shadow-(--shadow-sm) hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all disabled:opacity-40 cursor-pointer"
+            className="flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-text-on-accent border-2 border-border shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all disabled:opacity-40 cursor-pointer"
             disabled={wordCount < minWords || isSubmitting}
             onClick={handleSubmit}
           >

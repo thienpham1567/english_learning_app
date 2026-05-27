@@ -62,7 +62,7 @@ export function FlashcardSession() {
             <m.div
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex gap-1 p-1 bg-surface-alt border-2 border-border mb-5 rounded-[14px] self-center shadow-(--shadow-sm)"
+              className="flex gap-1 p-1 bg-surface-alt border-2 border-border mb-5 rounded-[14px] self-center shadow-sm"
             >
               {[
                 { key: "ai" as TabKey, label: "AI Generation", icon: <Zap /> },
@@ -74,7 +74,7 @@ export function FlashcardSession() {
                   onClick={() => setActiveTab(tab.key)}
                   className={`flex items-center gap-1.5 border-none cursor-pointer text-[13px] py-2.5 px-5.5 rounded-[10px] transition-all duration-150 ${
                     activeTab === tab.key
-                      ? "bg-surface text-accent font-extrabold shadow-(--shadow-sm)"
+                      ? "bg-surface text-accent font-extrabold shadow-sm"
                       : "bg-transparent text-text-muted font-semibold hover:text-text-primary"
                   }`}
                 >

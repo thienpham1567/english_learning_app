@@ -110,7 +110,7 @@ function InlineQuiz({
         <p className="mt-3 text-sm font-semibold">
           {score === items.length ? (
             <>
-              <Trophy className="h-4 w-4 text-(--success) inline mr-1.5" />
+              <Trophy className="h-4 w-4 text-success inline mr-1.5" />
               Perfect!
             </>
           ) : score >= items.length / 2 ? (
@@ -120,14 +120,14 @@ function InlineQuiz({
             </>
           ) : (
             <>
-              <Flame className="h-4 w-4 text-(--warning) inline mr-1.5" />
+              <Flame className="h-4 w-4 text-warning inline mr-1.5" />
               Needs review!
             </>
           )}
         </p>
         <button
           onClick={() => onDone(answers)}
-          className="mt-2 px-5 py-2 rounded-lg border-none bg-accent text-(--text-on-accent) text-[13px] font-semibold cursor-pointer"
+          className="mt-2 px-5 py-2 rounded-lg border-none bg-accent text-text-on-accent text-[13px] font-semibold cursor-pointer"
         >
           Done
         </button>
@@ -212,7 +212,7 @@ function InlineQuiz({
       {isAnswered && (
         <button
           onClick={handleNext}
-          className="self-end px-5 py-2 rounded-lg border-none bg-accent text-(--text-on-accent) text-[13px] font-semibold cursor-pointer"
+          className="self-end px-5 py-2 rounded-lg border-none bg-accent text-text-on-accent text-[13px] font-semibold cursor-pointer"
         >
           {current + 1 < items.length ? "Next Question →" : "See Results"}
         </button>
@@ -308,7 +308,7 @@ export function WritingPatternSection() {
           return (
             <div
               key={p.id}
-              className="rounded-xl border-2 border-border bg-(--card-bg) overflow-hidden"
+              className="rounded-xl border-2 border-border bg-card-bg overflow-hidden"
             >
               {/* Pattern header */}
               <div className="px-4 py-3 flex items-center gap-2.5">
@@ -320,7 +320,7 @@ export function WritingPatternSection() {
                     <span className="text-[13px] font-semibold">{label}</span>
                     {p.quizGeneratedAt && (
                       <span className="relative group">
-                        <CheckCircle className="h-3 w-3 text-(--success) cursor-help" />
+                        <CheckCircle className="h-3 w-3 text-success cursor-help" />
                         <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
                           Quiz generated: {new Date(p.quizGeneratedAt).toLocaleDateString("en-US")}
                         </span>
@@ -333,7 +333,7 @@ export function WritingPatternSection() {
                 {state === "idle" && (
                   <button
                     onClick={() => generateQuiz(p.tag)}
-                    className="flex items-center gap-1 px-3.5 py-1.5 rounded-lg border-none bg-(--accent-muted) text-accent text-xs font-semibold cursor-pointer shrink-0 hover:bg-accent/15 transition-colors"
+                    className="flex items-center gap-1 px-3.5 py-1.5 rounded-lg border-none bg-accent-muted text-accent text-xs font-semibold cursor-pointer shrink-0 hover:bg-accent/15 transition-colors"
                   >
                     <Zap className="h-3 w-3" /> Practice
                   </button>
@@ -367,7 +367,7 @@ export function WritingPatternSection() {
               )}
 
               {state === "done" && (
-                <div className="px-4 py-2 border-t-2 border-border bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] text-xs text-(--success) font-medium">
+                <div className="px-4 py-2 border-t-2 border-border bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] text-xs text-success font-medium">
                   <CheckCircle className="h-3 w-3 inline mr-1.5" /> Quiz completed — questions saved to error notebook for future review.
                 </div>
               )}

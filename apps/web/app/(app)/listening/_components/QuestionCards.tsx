@@ -38,7 +38,7 @@ export function QuestionCards({
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: qi * 0.05, type: "spring", stiffness: 300, damping: 30 }}
-          className="bg-surface border-2 border-border rounded-lg p-4 shadow-(--shadow-sm)"
+          className="bg-surface border-2 border-border rounded-lg p-4 shadow-sm"
         >
           <div className="text-sm font-bold text-text-primary mb-3">
             {qi + 1}. {q.question}
@@ -54,7 +54,7 @@ export function QuestionCards({
                   whileTap={{ scale: 0.99 }}
                   className={`flex items-center gap-2.5 rounded-lg cursor-pointer text-[13px] text-left w-full p-2.5 px-3.5 transition-all duration-100 ${
                     isSelected
-                      ? "border-2 border-accent bg-accent-light text-text-primary shadow-(--shadow-sm) -translate-y-0.5"
+                      ? "border-2 border-accent bg-accent-light text-text-primary shadow-sm -translate-y-0.5"
                       : "border-2 border-border bg-transparent text-text-primary hover:bg-surface-hover"
                   }`}
                 >

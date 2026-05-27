@@ -18,36 +18,36 @@ const CATEGORIES: {
     id: "email-response",
     icon: Mail,
     desc: "Respond to a written request (TOEIC Q6-7)",
-    colorClass: "text-(--info)",
-    borderClass: "border-border hover:border-(--info)",
-    bgClass: "hover:bg-(--info)/5 bg-surface",
+    colorClass: "text-info",
+    borderClass: "border-border hover:border-info",
+    bgClass: "hover:bg-info/5 bg-surface",
     iconBgClass: "bg-info-bg text-info",
   },
   {
     id: "opinion-essay",
     icon: PenTool,
     desc: "Write an opinion essay (TOEIC Q8)",
-    colorClass: "text-(--accent)",
-    borderClass: "border-border hover:border-(--accent)",
-    bgClass: "hover:bg-(--accent)/5 bg-surface",
+    colorClass: "text-accent",
+    borderClass: "border-border hover:border-accent",
+    bgClass: "hover:bg-accent/5 bg-surface",
     iconBgClass: "bg-accent-muted text-accent",
   },
   {
     id: "describe-picture",
     icon: Image,
     desc: "Write a sentence based on a picture (TOEIC Q1-5)",
-    colorClass: "text-(--warning)",
-    borderClass: "border-border hover:border-(--warning)",
-    bgClass: "hover:bg-(--warning)/5 bg-surface",
+    colorClass: "text-warning",
+    borderClass: "border-border hover:border-warning",
+    bgClass: "hover:bg-warning/5 bg-surface",
     iconBgClass: "bg-warning-bg text-warning",
   },
   {
     id: "free",
     icon: Star,
     desc: "Free writing on any topic",
-    colorClass: "text-(--success)",
-    borderClass: "border-border hover:border-(--success)",
-    bgClass: "hover:bg-(--success)/5 bg-surface",
+    colorClass: "text-success",
+    borderClass: "border-border hover:border-success",
+    bgClass: "hover:bg-success/5 bg-surface",
     iconBgClass: "bg-success-bg text-success",
   },
 ];
@@ -63,7 +63,7 @@ export function PromptGallery({ onSelect, isLoading, loadingCategory }: Props) {
     <div className="flex flex-col items-center w-full max-w-lg mx-auto p-5 py-6">
       {/* Header */}
       <div className="text-center mb-7">
-        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-accent text-text-on-accent text-2xl mb-3.5 border-2 border-border shadow-(--shadow)">
+        <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-accent text-text-on-accent text-2xl mb-3.5 border-2 border-border shadow">
           <PenTool className="h-6 w-6" />
         </div>
         <h2 className="m-0 text-xl font-bold font-display text-ink italic">Choose Writing Type</h2>

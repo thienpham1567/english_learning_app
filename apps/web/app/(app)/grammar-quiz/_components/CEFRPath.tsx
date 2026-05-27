@@ -47,7 +47,7 @@ export function CEFRPath({
 }: Props) {
   const isEts = sourceMode === "ets";
   return (
-    <div className="anim-fade-up w-full max-w-[480px] mx-auto text-center bg-surface rounded-xl border-2 border-border relative overflow-hidden py-8 px-6 shadow-(--shadow-sm)">
+    <div className="anim-fade-up w-full max-w-[480px] mx-auto text-center bg-surface rounded-xl border-2 border-border relative overflow-hidden py-8 px-6 shadow-sm">
       <div
         className="absolute w-[180px] h-[180px] rounded-full left-1/2 top-0 -translate-x-1/2 pointer-events-none"
         style={{

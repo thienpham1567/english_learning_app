@@ -53,7 +53,7 @@ export function InlinePractice({ errorId, onResolved }: Props) {
       <button
         type="button"
         onClick={generate}
-        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[10px] border border-accent/25 bg-(--card-bg) cursor-pointer text-xs font-semibold text-accent transition-all duration-200 hover:bg-accent/8 hover:border-accent"
+        className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[10px] border border-accent/25 bg-card-bg cursor-pointer text-xs font-semibold text-accent transition-all duration-200 hover:bg-accent/8 hover:border-accent"
       >
         <Zap className="h-3.5 w-3.5" /> Practice Again
       </button>
@@ -73,7 +73,7 @@ export function InlinePractice({ errorId, onResolved }: Props) {
   // Error
   if (error) {
     return (
-      <div className="text-xs text-(--error) py-2">
+      <div className="text-xs text-error py-2">
         {error}{" "}
         <button
           type="button"
@@ -161,7 +161,7 @@ export function InlinePractice({ errorId, onResolved }: Props) {
           disabled={selected === null}
           className={`w-full mt-2.5 py-2.5 rounded-lg border-none text-[13px] font-semibold transition-all ${
             selected !== null
-              ? "bg-accent text-(--text-on-accent) cursor-pointer"
+              ? "bg-accent text-text-on-accent cursor-pointer"
               : "bg-border text-text-muted cursor-not-allowed"
           }`}
         >
@@ -172,8 +172,8 @@ export function InlinePractice({ errorId, onResolved }: Props) {
           <div
             className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-[13px] font-semibold ${
               isCorrect
-                ? "bg-[color-mix(in_srgb,var(--success)_8%,transparent)] text-(--success)"
-                : "bg-[color-mix(in_srgb,var(--error)_8%,transparent)] text-(--error)"
+                ? "bg-[color-mix(in_srgb,var(--success)_8%,transparent)] text-success"
+                : "bg-[color-mix(in_srgb,var(--error)_8%,transparent)] text-error"
             }`}
           >
             {isCorrect ? (
@@ -188,7 +188,7 @@ export function InlinePractice({ errorId, onResolved }: Props) {
           </p>
           <button
             onClick={generate}
-            className="self-start px-3.5 py-1.5 rounded-lg border-2 border-border bg-(--card-bg) cursor-pointer text-xs font-semibold text-accent hover:bg-accent/5"
+            className="self-start px-3.5 py-1.5 rounded-lg border-2 border-border bg-card-bg cursor-pointer text-xs font-semibold text-accent hover:bg-accent/5"
           >
             Try another question →
           </button>

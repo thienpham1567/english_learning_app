@@ -94,7 +94,7 @@ export function QuestionCard({
 
       {/* Stem Card */}
       <div
-        className="rounded-(--radius-xl) border-2 border-border bg-(--surface) p-6 relative overflow-hidden"
+        className="rounded-xl border-2 border-border bg-surface p-6 relative overflow-hidden"
         style={{ boxShadow: "var(--shadow-sm)" }}
       >
         <div
@@ -143,7 +143,7 @@ export function QuestionCard({
                 whileTap={isRevealed ? {} : { scale: 0.995 }}
                 onClick={() => onAnswer(i)}
                 disabled={isRevealed}
-                className="flex w-full items-center gap-3 rounded-(--radius-lg) py-3 px-4 text-left text-sm"
+                className="flex w-full items-center gap-3 rounded-lg py-3 px-4 text-left text-sm"
                 style={{
                   border: `1.5px solid ${borderColor}`,
                   fontWeight: isSelected || (isRevealed && isCorrect) ? 800 : 500,
@@ -193,7 +193,7 @@ export function QuestionCard({
           <div className="anim-fade-up mt-5">
             {/* Result Header Tag */}
             <div
-              className="flex items-center gap-2 rounded-(--radius-lg) py-2.5 px-4"
+              className="flex items-center gap-2 rounded-lg py-2.5 px-4"
               style={{
                 border: `1px solid ${selectedAnswer === question.correctIndex ? "var(--success)" : "var(--error)"}`,
                 background:
@@ -239,7 +239,7 @@ export function QuestionCard({
               <m.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-1.5 rounded-(--radius-lg) bg-surface-alt p-4"
+                className="mt-1.5 rounded-lg bg-surface-alt p-4"
                 style={{ border: "1px solid color-mix(in srgb, var(--accent) 15%, var(--border))" }}
               >
                 <div className="flex items-center justify-between">
@@ -308,7 +308,7 @@ export function QuestionCard({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           onClick={onNext}
-          className="mt-4 w-full rounded-(--radius-xl) font-extrabold border-none cursor-pointer flex items-center justify-center gap-1.5"
+          className="mt-4 w-full rounded-xl font-extrabold border-none cursor-pointer flex items-center justify-center gap-1.5"
           style={{
             background:
               "linear-gradient(135deg, var(--accent), var(--accent-hover, var(--accent)))",

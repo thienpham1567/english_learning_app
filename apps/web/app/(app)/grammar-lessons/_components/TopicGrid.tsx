@@ -163,7 +163,7 @@ export function TopicGrid({
                 {/* Completion sparkle */}
                 {allDone && (
                   <Star
-                    className="absolute text-xs text-(--xp)"
+                    className="absolute text-xs text-xp"
                     style={{ top: -3, right: -3, filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.2))" }}
                   />
                 )}

@@ -235,7 +235,7 @@ export default function DictationMode({ examMode }: Props) {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center p-8 border-2 border-border rounded-lg bg-surface shadow-(--shadow)"
+          className="text-center p-8 border-2 border-border rounded-lg bg-surface shadow"
         >
           <Pencil size={48} className="text-accent mx-auto mb-3" />
           <h2 className="mb-2 text-lg font-black text-text-primary">Dictation</h2>
@@ -311,7 +311,7 @@ export default function DictationMode({ examMode }: Props) {
                 checkAnswer();
               }
             }}
-            className="w-full h-[100px] p-4 rounded-lg border-2 border-border text-[15px] leading-relaxed bg-surface text-text-primary font-[inherit] resize-y outline-none focus-visible:shadow-(--shadow-sm) focus-visible:-translate-y-0.5 transition-all"
+            className="w-full h-[100px] p-4 rounded-lg border-2 border-border text-[15px] leading-relaxed bg-surface text-text-primary font-[inherit] resize-y outline-none focus-visible:shadow-sm focus-visible:-translate-y-0.5 transition-all"
           />
 
           {/* Check button */}
@@ -339,7 +339,7 @@ export default function DictationMode({ examMode }: Props) {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className={`p-6 rounded-lg border-2 border-border text-center bg-surface shadow-(--shadow)`}
+            className={`p-6 rounded-lg border-2 border-border text-center bg-surface shadow`}
           >
             {/* Custom circular progress */}
             <div className="relative w-[100px] h-[100px] mx-auto mb-3">
@@ -427,7 +427,7 @@ export default function DictationMode({ examMode }: Props) {
               onClick={retryCurrent}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.97 }}
-              className="rounded-lg border-2 border-border bg-surface cursor-pointer text-[13px] font-bold py-2.5 px-5 text-text-primary hover:bg-surface-hover hover:shadow-(--shadow-sm) transition-all duration-100 flex items-center gap-1.5"
+              className="rounded-lg border-2 border-border bg-surface cursor-pointer text-[13px] font-bold py-2.5 px-5 text-text-primary hover:bg-surface-hover hover:shadow-sm transition-all duration-100 flex items-center gap-1.5"
             >
               <RefreshCw size={14} /> Retry
             </motion.button>
@@ -454,7 +454,7 @@ export default function DictationMode({ examMode }: Props) {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center p-8 border-2 border-border rounded-lg bg-surface shadow-(--shadow)"
+          className="text-center p-8 border-2 border-border rounded-lg bg-surface shadow"
         >
           <div className="mb-4">
             {avgScore >= 80 ? (

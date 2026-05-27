@@ -28,7 +28,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
 
       {/* Error sentence — red quote block */}
       <div
-        className="mb-5 rounded-(--radius-xl) py-4 px-5"
+        className="mb-5 rounded-xl py-4 px-5"
         style={{
           borderLeft: "4px solid var(--error)",
           background: "var(--error-bg)",
@@ -61,7 +61,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
         }}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
-        className="w-full rounded-(--radius-lg) bg-(--surface) py-3 px-4 text-text-primary font-medium"
+        className="w-full rounded-lg bg-surface py-3 px-4 text-text-primary font-medium"
         style={{
           border: focused ? "2px solid var(--error)" : "1.5px solid var(--border)",
           fontSize: 14.5,
@@ -78,7 +78,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
           whileHover={{ scale: 1.02, y: -1 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => onAnswer(text.trim())}
-          className="mt-4 w-full rounded-(--radius-lg) text-[15px] font-extrabold border-none cursor-pointer flex items-center justify-center gap-1.5"
+          className="mt-4 w-full rounded-lg text-[15px] font-extrabold border-none cursor-pointer flex items-center justify-center gap-1.5"
           style={{
             background:
               "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 80%, white))",

@@ -29,7 +29,7 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ type: "spring", stiffness: 100, damping: 15 }}
-          className="rounded-xl border-2 border-border text-center relative overflow-hidden py-10 px-6 shadow-(--shadow-sm)"
+          className="rounded-xl border-2 border-border text-center relative overflow-hidden py-10 px-6 shadow-sm"
           style={{
             background:
               "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--surface))",
@@ -62,10 +62,10 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
           </m.div>
 
           <div className="flex justify-center gap-3 mt-4">
-            <span className="rounded-full text-xs font-extrabold text-accent py-1 px-3.5 border border-accent bg-accent-light shadow-(--shadow-sm)">
+            <span className="rounded-full text-xs font-extrabold text-accent py-1 px-3.5 border border-accent bg-accent-light shadow-sm">
               Confidence: {Math.round(result.confidence * 100)}%
             </span>
-            <span className="rounded-full text-xs font-extrabold text-[var(--xp)] py-1 px-3.5 border border-[var(--xp)] bg-[rgba(245,158,11,0.08)] shadow-(--shadow-sm)">
+            <span className="rounded-full text-xs font-extrabold text-[var(--xp)] py-1 px-3.5 border border-[var(--xp)] bg-[rgba(245,158,11,0.08)] shadow-sm">
               +{result.xpAwarded} XP earned
             </span>
           </div>
@@ -76,7 +76,7 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
-          className="rounded-xl border-2 border-border bg-surface p-5 shadow-(--shadow-sm)"
+          className="rounded-xl border-2 border-border bg-surface p-5 shadow-sm"
         >
           <div className="flex items-center gap-2 mb-4.5">
             <Radar className="text-sm text-accent" />
@@ -150,7 +150,7 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
             whileHover={{ scale: 1.02, y: -1 }}
             whileTap={{ scale: 0.98 }}
             onClick={onViewProgress}
-            className="h-12 rounded-lg bg-surface-alt border-2 border-border text-text-secondary text-[15px] font-bold cursor-pointer flex items-center gap-1.5 px-5 shadow-(--shadow-sm) hover:bg-surface-hover transition-colors"
+            className="h-12 rounded-lg bg-surface-alt border-2 border-border text-text-secondary text-[15px] font-bold cursor-pointer flex items-center gap-1.5 px-5 shadow-sm hover:bg-surface-hover transition-colors"
           >
             <RefreshCw size={13} />
             View Progress

@@ -59,11 +59,11 @@ export function ErrorPatternSummary({ errors }: Props) {
     <div>
       {/* Section label */}
       <div className="flex items-center gap-2.5 mb-3">
-        <div className="w-[3px] h-3.5 rounded-sm bg-(--warning) shrink-0" />
-        <span className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-(--warning)">
+        <div className="w-[3px] h-3.5 rounded-sm bg-warning shrink-0" />
+        <span className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-warning">
           Common Error Patterns
         </span>
-        <span className="text-[11px] font-bold px-2 py-px rounded-full bg-[color-mix(in_srgb,var(--warning)_12%,var(--surface))] text-(--warning) border border-[color-mix(in_srgb,var(--warning)_25%,transparent)]">
+        <span className="text-[11px] font-bold px-2 py-px rounded-full bg-[color-mix(in_srgb,var(--warning)_12%,var(--surface))] text-warning border border-[color-mix(in_srgb,var(--warning)_25%,transparent)]">
           {patterns.length} patterns
         </span>
         <div className="flex-1 h-px bg-border" />
@@ -98,7 +98,7 @@ export function ErrorPatternSummary({ errors }: Props) {
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   {pattern.unresolvedCount > 0 && (
-                    <span className="text-xs font-extrabold min-w-[22px] text-center px-2 py-0.5 rounded-full bg-(--error-bg) text-(--error)">
+                    <span className="text-xs font-extrabold min-w-[22px] text-center px-2 py-0.5 rounded-full bg-error-bg text-error">
                       {pattern.unresolvedCount}
                     </span>
                   )}
@@ -120,10 +120,10 @@ export function ErrorPatternSummary({ errors }: Props) {
                       className="text-xs leading-relaxed px-3 py-2 rounded-[9px] bg-bg-deep border-l-3 border-border"
                     >
                       <span className="text-text-secondary">{ex.questionStem.slice(0, 80)}</span>
-                      <span className="text-(--error) font-semibold ml-2">
+                      <span className="text-error font-semibold ml-2">
                         <XIcon className="h-2.5 w-2.5 inline" /> {ex.userAnswer}
                       </span>
-                      <span className="text-(--success) font-semibold ml-1.5">
+                      <span className="text-success font-semibold ml-1.5">
                         <Check className="h-2.5 w-2.5 inline" /> {ex.correctAnswer}
                       </span>
                     </div>

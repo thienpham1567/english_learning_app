@@ -137,7 +137,7 @@ export function ReadingTab() {
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold border cursor-pointer transition-all duration-100 active:scale-97 ${
               mode === m.key
                 ? "border-accent bg-accent/10 text-accent font-bold"
-                : "border-border bg-surface text-text-secondary hover:bg-surface-hover hover:text-ink hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow-sm) transition-all"
+                : "border-border bg-surface text-text-secondary hover:bg-surface-hover hover:text-ink hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-sm transition-all"
             }`}
           >
             {m.icon}
@@ -150,7 +150,7 @@ export function ReadingTab() {
       {mode === "overview" && (
         <div className="flex flex-col gap-4 animate-in fade-in slide-in-from-bottom-2 duration-200">
           {/* Quick stats */}
-          <div className="rounded-2xl border-2 border-border bg-surface-alt p-5 relative overflow-hidden shadow-(--shadow) text-text-primary">
+          <div className="rounded-2xl border-2 border-border bg-surface-alt p-5 relative overflow-hidden shadow text-text-primary">
             <h3 className="m-0 mb-2 text-lg font-extrabold font-display text-ink">
               TOEIC Reading Section
             </h3>
@@ -165,7 +165,7 @@ export function ReadingTab() {
               ].map((p) => (
                 <div
                   key={p.part}
-                  className="flex-1 min-w-[100px] p-2.5 rounded-xl bg-surface border-2 border-border shadow-(--shadow-sm)"
+                  className="flex-1 min-w-[100px] p-2.5 rounded-xl bg-surface border-2 border-border shadow-sm"
                 >
                   <div className="text-xs font-black text-ink">{p.part}</div>
                   <div className="text-[10px] text-text-muted font-bold mt-0.5">
@@ -190,9 +190,9 @@ export function ReadingTab() {
             <button
               type="button"
               onClick={() => setMode("drill")}
-              className="rounded-2xl border-2 border-border bg-(--secondary)/5 p-5 text-left transition-all hover:scale-[1.01] hover:border-(--secondary) hover:bg-(--secondary)/10 duration-150 cursor-pointer shadow-xs"
+              className="rounded-2xl border-2 border-border bg-secondary/5 p-5 text-left transition-all hover:scale-[1.01] hover:border-secondary hover:bg-secondary/10 duration-150 cursor-pointer shadow-xs"
             >
-              <Rocket className="h-6 w-6 text-(--secondary) mb-2" />
+              <Rocket className="h-6 w-6 text-secondary mb-2" />
               <div className="text-sm font-bold text-ink">Quick Drill</div>
               <div className="text-[11px] text-text-muted font-bold mt-1">
                 Practice individual parts
@@ -202,8 +202,8 @@ export function ReadingTab() {
 
           {/* Full practice CTA */}
           <Link href="/toeic/practice" className="no-underline block group">
-            <div className="rounded-2xl border-2 border-border bg-linear-to-br from-(--accent)/5 to-(--secondary)/5 p-5 flex items-center gap-3.5 cursor-pointer shadow-xs transition-all duration-200 group-hover:border-(--accent)/40">
-              <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-(--accent)/10 text-(--accent) text-xl flex-shrink-0 transition-transform duration-200 group-hover:scale-105">
+            <div className="rounded-2xl border-2 border-border bg-linear-to-br from-accent/5 to-secondary/5 p-5 flex items-center gap-3.5 cursor-pointer shadow-xs transition-all duration-200 group-hover:border-accent/40">
+              <div className="w-11 h-11 rounded-xl flex items-center justify-center bg-accent/10 text-accent text-xl flex-shrink-0 transition-transform duration-200 group-hover:scale-105">
                 <Trophy className="h-5 w-5" />
               </div>
               <div className="flex-1">
@@ -222,7 +222,7 @@ export function ReadingTab() {
       {mode === "strategy" && (
         <div className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
           <div className="text-[11px] font-extrabold uppercase tracking-wider text-accent mb-1 flex items-center gap-2">
-            <div className="w-1 h-3.5 rounded bg-(--accent)" />
+            <div className="w-1 h-3.5 rounded bg-accent" />
             <span>Section Strategies</span>
           </div>
 
@@ -269,7 +269,7 @@ export function ReadingTab() {
                     {s.tips.map((tip, i) => (
                       <div
                         key={i}
-                        className="flex gap-2 items-start p-2.5 rounded-xl bg-surface-alt border-2 border-border text-xs text-text-secondary leading-relaxed shadow-(--shadow-sm)"
+                        className="flex gap-2 items-start p-2.5 rounded-xl bg-surface-alt border-2 border-border text-xs text-text-secondary leading-relaxed shadow-sm"
                       >
                         <Star
                           className="h-3 w-3 text-current shrink-0 fill-current mt-0.5"
@@ -290,7 +290,7 @@ export function ReadingTab() {
       {mode === "drill" && (
         <div className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
           <div className="text-[11px] font-extrabold uppercase tracking-wider text-accent mb-1 flex items-center gap-2">
-            <div className="w-1 h-3.5 rounded bg-(--accent)" />
+            <div className="w-1 h-3.5 rounded bg-accent" />
             <span>Select Practice</span>
           </div>
 
@@ -300,8 +300,8 @@ export function ReadingTab() {
                 <div
                   className={`w-10.5 h-10.5 rounded-xl flex items-center justify-center text-sm font-bold flex-shrink-0 transition-transform duration-200 group-hover:scale-105 ${
                     d.part === "Full"
-                      ? "bg-linear-to-br from-(--accent) to-(--secondary) text-white"
-                      : "bg-(--accent)/10 text-(--accent)"
+                      ? "bg-linear-to-br from-accent to-secondary text-white"
+                      : "bg-accent/10 text-accent"
                   }`}
                 >
                   {d.part === "Full" ? (
@@ -317,7 +317,7 @@ export function ReadingTab() {
                   </div>
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <div className="text-xs font-bold text-(--accent)">{d.questionCount} Qs</div>
+                  <div className="text-xs font-bold text-accent">{d.questionCount} Qs</div>
                   <div className="text-[10px] text-text-muted font-bold flex items-center justify-end gap-1 mt-0.5">
                     <Clock className="h-3 w-3" />
                     <span>{d.estimatedMinutes}m</span>

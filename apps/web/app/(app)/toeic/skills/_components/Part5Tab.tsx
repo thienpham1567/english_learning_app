@@ -93,7 +93,7 @@ export function Part5Tab() {
             <button
               type="button"
               onClick={() => setHistoryOpen(true)}
-              className="w-[34px] h-[34px] rounded-xl border-2 border-border bg-surface text-text-secondary hover:text-ink hover:bg-surface-hover hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow-sm) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all flex items-center justify-center cursor-pointer"
+              className="w-[34px] h-[34px] rounded-xl border-2 border-border bg-surface text-text-secondary hover:text-ink hover:bg-surface-hover hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-sm active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all flex items-center justify-center cursor-pointer"
             >
               <History className="h-4 w-4" />
             </button>

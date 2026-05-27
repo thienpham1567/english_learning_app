@@ -116,7 +116,7 @@ export default function ToeicSkillsPage() {
                 className={`flex-1 min-w-[80px] flex flex-col items-center justify-center gap-1 py-2 px-3.5 rounded-lg cursor-pointer transition-all duration-100 border-2 border-transparent ${
                   isActive
                     ? colors.activeColor +
-                      " border-border shadow-(--shadow-sm) -translate-y-0.5 font-bold"
+                      " border-border shadow-sm -translate-y-0.5 font-bold"
                     : "text-text-secondary hover:bg-surface-hover hover:text-ink"
                 }`}
               >

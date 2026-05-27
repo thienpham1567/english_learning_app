@@ -88,7 +88,7 @@ export function PersonalizedDrill() {
         <button
           type="button"
           onClick={generateDrill}
-          className="inline-flex items-center gap-2 px-5.5 py-2.5 rounded-xl border-none bg-accent text-(--text-on-accent) cursor-pointer text-sm font-bold transition-opacity duration-200 hover:opacity-90"
+          className="inline-flex items-center gap-2 px-5.5 py-2.5 rounded-xl border-none bg-accent text-text-on-accent cursor-pointer text-sm font-bold transition-opacity duration-200 hover:opacity-90"
         >
           <Zap className="h-4 w-4" /> Generate Practice Session
         </button>
@@ -120,7 +120,7 @@ export function PersonalizedDrill() {
         className="py-6 px-5 rounded-2xl bg-surface border-2 border-border text-center"
       >
         <Trophy
-          className={`h-9 w-9 mx-auto mb-3 ${pct >= 80 ? "text-(--success)" : "text-accent"}`}
+          className={`h-9 w-9 mx-auto mb-3 ${pct >= 80 ? "text-success" : "text-accent"}`}
         />
         <div className="text-4xl font-black text-ink font-display">
           {correctCount}/{drill.exercises.length}
@@ -136,7 +136,7 @@ export function PersonalizedDrill() {
         <button
           type="button"
           onClick={generateDrill}
-          className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-[1.5px] border-accent bg-accent text-(--text-on-accent) cursor-pointer text-[13px] font-bold"
+          className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-[1.5px] border-accent bg-accent text-text-on-accent cursor-pointer text-[13px] font-bold"
         >
           <RefreshCw className="h-3.5 w-3.5" /> Generate New Drill
         </button>
@@ -269,7 +269,7 @@ export function PersonalizedDrill() {
             <button
               type="button"
               onClick={handleNext}
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-none bg-accent text-(--text-on-accent) cursor-pointer text-[13px] font-bold"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-none bg-accent text-text-on-accent cursor-pointer text-[13px] font-bold"
             >
               {currentIndex < drill.exercises.length - 1 ? "Next Question →" : "See Results"}
             </button>

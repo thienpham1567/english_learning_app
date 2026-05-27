@@ -116,7 +116,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                 tts.speak(card.headword);
               }}
               disabled={tts.isLoading || tts.isSpeaking}
-              className="mt-6 inline-flex items-center gap-2 rounded-full text-accent text-[13px] font-bold relative z-[2] py-2 px-5 shadow-(--shadow-sm) transition-all duration-200"
+              className="mt-6 inline-flex items-center gap-2 rounded-full text-accent text-[13px] font-bold relative z-[2] py-2 px-5 shadow-sm transition-all duration-200"
               style={{
                 border: "1.5px solid color-mix(in srgb, var(--accent) 30%, var(--border))",
                 background: tts.isSpeaking ? "var(--accent-light)" : "var(--surface)",
@@ -332,7 +332,7 @@ function RatingButtons({
             whileTap={{ scale: 0.94 }}
             disabled={isSubmitting}
             onClick={() => onRate(r.quality)}
-            className="flex flex-col items-center gap-1.5 w-[72px] rounded-lg cursor-pointer py-2.5 shadow-(--shadow-sm) transition-all duration-200"
+            className="flex flex-col items-center gap-1.5 w-[72px] rounded-lg cursor-pointer py-2.5 shadow-sm transition-all duration-200"
             style={{
               background: r.bg,
               border: `1.5px solid ${r.border}`,

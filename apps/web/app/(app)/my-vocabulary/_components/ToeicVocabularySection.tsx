@@ -201,6 +201,17 @@ const TOEIC_CATEGORIES: ToeicCategory[] = [
   },
 ];
 
+const CATEGORY_COLORS: Record<string, string> = {
+  business: "text-indigo-600 dark:text-indigo-400",
+  office: "text-sky-600 dark:text-sky-400",
+  hr: "text-rose-600 dark:text-rose-400",
+  finance: "text-amber-600 dark:text-amber-400",
+  travel: "text-teal-600 dark:text-teal-400",
+  technology: "text-purple-600 dark:text-purple-400",
+  marketing: "text-pink-600 dark:text-pink-400",
+  manufacturing: "text-stone-600 dark:text-stone-400",
+};
+
 type Props = {
   className?: string;
 };
@@ -225,6 +236,7 @@ export function ToeicVocabularySection({ className }: Props) {
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
         {TOEIC_CATEGORIES.map((cat, _i) => {
           const isExpanded = expandedId === cat.id;
+          const iconColor = CATEGORY_COLORS[cat.id] ?? "text-text-secondary";
           return (
             <div
               key={cat.id}
@@ -235,7 +247,7 @@ export function ToeicVocabularySection({ className }: Props) {
                 className="flex w-full items-center gap-2.5 px-4 py-3 text-left transition-colors hover:bg-surface-hover"
                 onClick={() => setExpandedId(isExpanded ? null : cat.id)}
               >
-                <span className="text-lg text-accent flex items-center justify-center">
+                <span className={`text-lg ${iconColor} flex items-center justify-center`}>
                   <cat.icon size={18} />
                 </span>
                 <span className="flex-1 text-sm font-semibold text-ink">{cat.label}</span>

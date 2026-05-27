@@ -35,7 +35,7 @@ export function ReadingComprehension({ data, instruction, onAnswer, disabled }: 
 
       {/* Passage */}
       <div
-        className="mb-5 rounded-(--radius-xl) bg-surface-alt"
+        className="mb-5 rounded-xl bg-surface-alt"
         style={{
           borderLeft: "4px solid var(--accent)",
           padding: "18px 20px",
@@ -54,7 +54,7 @@ export function ReadingComprehension({ data, instruction, onAnswer, disabled }: 
       </div>
 
       {/* Question */}
-      <div className="mb-4 py-3 px-4 rounded-(--radius-lg) bg-surface-alt border-2 border-border">
+      <div className="mb-4 py-3 px-4 rounded-lg bg-surface-alt border-2 border-border">
         <p className="m-0 text-[15px] font-bold text-text-primary leading-relaxed">
           {data.question}
         </p>
@@ -72,7 +72,7 @@ export function ReadingComprehension({ data, instruction, onAnswer, disabled }: 
               whileTap={!disabled ? { scale: 0.99 } : {}}
               onClick={() => handleSelect(i)}
               disabled={disabled}
-              className="flex items-center gap-3 rounded-(--radius-lg) py-3 px-4 text-left text-sm leading-normal"
+              className="flex items-center gap-3 rounded-lg py-3 px-4 text-left text-sm leading-normal"
               style={{
                 border: isSelected ? "2px solid var(--accent)" : "1px solid var(--border)",
                 background: isSelected ? "var(--accent-light)" : "var(--surface)",

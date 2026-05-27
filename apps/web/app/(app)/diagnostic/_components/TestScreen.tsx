@@ -100,7 +100,7 @@ export function TestScreen({
         </div>
 
         {/* Question excerpt */}
-        <div className="rounded-xl bg-surface p-6 shadow-(--shadow-sm) border border-border border-l-4 border-l-accent">
+        <div className="rounded-xl bg-surface p-6 shadow-sm border border-border border-l-4 border-l-accent">
           <p className="m-0 text-[16.5px] font-semibold leading-[1.8] text-text-primary break-words">
             {question.question}
           </p>
@@ -119,7 +119,7 @@ export function TestScreen({
                 className={`flex items-center gap-3 py-3.5 px-4.5 rounded-lg cursor-pointer text-left text-[14.5px] transition-all duration-200 ${
                   isSelected
                     ? "border-2 border-accent bg-accent-light font-bold text-accent shadow-[0_4px_12px_var(--accent-muted)]"
-                    : "border border-border bg-surface font-semibold text-text-primary shadow-(--shadow-sm)"
+                    : "border border-border bg-surface font-semibold text-text-primary shadow-sm"
                 }`}
               >
                 {/* Circle label */}
@@ -187,7 +187,7 @@ export function TestScreen({
             whileTap={{ scale: 0.97 }}
             type="button"
             onClick={onSkip}
-            className="bg-surface-alt border border-border cursor-pointer text-[13px] font-bold text-text-secondary px-5 h-12 rounded-lg shadow-(--shadow-sm) transition-all duration-200 hover:bg-surface-hover"
+            className="bg-surface-alt border border-border cursor-pointer text-[13px] font-bold text-text-secondary px-5 h-12 rounded-lg shadow-sm transition-all duration-200 hover:bg-surface-hover"
           >
             Skip
           </m.button>

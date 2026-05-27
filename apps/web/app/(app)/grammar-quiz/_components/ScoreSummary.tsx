@@ -64,7 +64,7 @@ export function ScoreSummary({
 
   return (
     <div
-      className="w-full w-[500px] mx-auto text-center bg-(--surface) rounded-(--radius-xl) border-2 border-border relative overflow-hidden"
+      className="w-full w-[500px] mx-auto text-center bg-surface rounded-xl border-2 border-border relative overflow-hidden"
       style={{ padding: "36px 24px", boxShadow: "var(--shadow-lg)" }}
     >
       <div
@@ -106,7 +106,7 @@ export function ScoreSummary({
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
-        className="rounded-(--radius-xl) flex items-center justify-between"
+        className="rounded-xl flex items-center justify-between"
         style={{
           background: "linear-gradient(135deg, var(--accent), var(--secondary))",
           padding: "20px 24px",
@@ -180,7 +180,7 @@ export function ScoreSummary({
                 initial={{ opacity: 0, x: -8 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.05 + 0.2 }}
-                className="flex items-center justify-between rounded-(--radius-lg) border-2 border-border"
+                className="flex items-center justify-between rounded-lg border-2 border-border"
                 style={{
                   padding: "12px 14px",
                   background: isWeak ? "rgba(239, 68, 68, 0.03)" : "var(--surface-alt)",
@@ -231,7 +231,7 @@ export function ScoreSummary({
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="mt-5 rounded-(--radius-lg) text-center"
+          className="mt-5 rounded-lg text-center"
           style={{
             padding: 14,
             background: "rgba(245, 158, 11, 0.05)",
@@ -267,7 +267,7 @@ export function ScoreSummary({
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           onClick={onRetry}
-          className="flex-1 h-[40px] rounded-(--radius-lg) bg-(--surface) text-text-primary font-extrabold cursor-pointer flex items-center justify-center gap-1.5"
+          className="flex-1 h-[40px] rounded-lg bg-surface text-text-primary font-extrabold cursor-pointer flex items-center justify-center gap-1.5"
           style={{
             border: "1.5px solid var(--border)",
             fontSize: 13.5,
@@ -281,7 +281,7 @@ export function ScoreSummary({
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
           onClick={onNewQuiz}
-          className="flex-1 h-[40px] rounded-(--radius-lg) border-none font-extrabold cursor-pointer flex items-center justify-center gap-1.5"
+          className="flex-1 h-[40px] rounded-lg border-none font-extrabold cursor-pointer flex items-center justify-center gap-1.5"
           style={{
             background: "linear-gradient(135deg, var(--accent), var(--secondary))",
             color: "var(--text-on-accent)",

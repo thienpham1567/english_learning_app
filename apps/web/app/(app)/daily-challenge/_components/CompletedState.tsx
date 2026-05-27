@@ -89,7 +89,7 @@ function WeeklyChart({ scores }: { scores: { day: string; score: number }[] }) {
   const chartWidth = scores.length * (barWidth + barGap) - barGap;
 
   return (
-    <div className="rounded-2xl border-2 border-border bg-surface py-4 px-5 shadow-(--shadow-sm)">
+    <div className="rounded-2xl border-2 border-border bg-surface py-4 px-5 shadow-sm">
       <div className="flex items-center gap-1.5 mb-4">
         <BarChart3 size={13} className="text-accent" />
         <span className="text-[10px] font-extrabold uppercase tracking-widest text-accent font-display">
@@ -242,7 +242,7 @@ export function CompletedState({
             ? "linear-gradient(135deg, #4c1d95, #6d28d9 60%, #7c3aed)"
             : "var(--surface)",
         }}
-        className={`w-full rounded-2xl border-2 border-border p-8 shadow-(--shadow) relative overflow-hidden flex flex-col items-center text-center ${
+        className={`w-full rounded-2xl border-2 border-border p-8 shadow relative overflow-hidden flex flex-col items-center text-center ${
           isGood ? "text-white border-none" : "text-text-primary"
         }`}
       >
@@ -311,10 +311,10 @@ export function CompletedState({
           whileHover={{ scale: 1.02, y: -2, boxShadow: "var(--shadow)" }}
           whileTap={{ scale: 0.98 }}
           onClick={onStartBonus}
-          className="w-full rounded-2xl py-4.5 px-5 cursor-pointer flex flex-col sm:flex-row items-center gap-4 bg-surface border-2 border-dashed border-accent shadow-(--shadow-sm) text-left group"
+          className="w-full rounded-2xl py-4.5 px-5 cursor-pointer flex flex-col sm:flex-row items-center gap-4 bg-surface border-2 border-dashed border-accent shadow-sm text-left group"
         >
           <div
-            className="w-12 h-12 rounded-xl grid shrink-0 bg-amber-500 place-items-center shadow-(--shadow-sm) text-white"
+            className="w-12 h-12 rounded-xl grid shrink-0 bg-amber-500 place-items-center shadow-sm text-white"
           >
             <Zap size={20} className="fill-current group-hover:animate-bounce" />
           </div>
@@ -332,7 +332,7 @@ export function CompletedState({
       )}
 
       {bonusLoading && (
-        <div className="w-full rounded-2xl py-4.5 px-5 bg-surface border-2 border-border flex items-center justify-center gap-2.5 text-text-secondary text-xs font-black shadow-(--shadow-sm)">
+        <div className="w-full rounded-2xl py-4.5 px-5 bg-surface border-2 border-border flex items-center justify-center gap-2.5 text-text-secondary text-xs font-black shadow-sm">
           <Loader2 className="animate-spin text-accent h-4 w-4" />
           <span>Initializing Bonus Challenge...</span>
         </div>
@@ -342,7 +342,7 @@ export function CompletedState({
         <m.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="w-full rounded-2xl py-4 px-5 flex items-center gap-2.5 text-xs font-black text-amber-600 bg-amber-500/10 border-2 border-amber-500/30 shadow-(--shadow-sm)"
+          className="w-full rounded-2xl py-4 px-5 flex items-center gap-2.5 text-xs font-black text-amber-600 bg-amber-500/10 border-2 border-amber-500/30 shadow-sm"
         >
           <Zap size={15} className="fill-current animate-pulse" />
           <span>You have completed all bonus questions today!</span>
@@ -366,7 +366,7 @@ export function CompletedState({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15 }}
-        className="rounded-2xl border-2 border-border bg-surface py-4.5 px-5 shadow-(--shadow-sm)"
+        className="rounded-2xl border-2 border-border bg-surface py-4.5 px-5 shadow-sm"
       >
         <div className="flex items-center gap-1.5 mb-3.5">
           <Trophy size={14} className="text-accent" />
@@ -375,7 +375,7 @@ export function CompletedState({
           </span>
         </div>
         <div className="grid grid-cols-3 gap-3 text-center">
-          <div className="rounded-xl bg-surface-alt border-2 border-border p-3 shadow-(--shadow-sm)">
+          <div className="rounded-xl bg-surface-alt border-2 border-border p-3 shadow-sm">
             <div className="text-xl md:text-2xl font-black text-accent font-mono leading-none">
               {streak.currentStreak}
             </div>
@@ -383,7 +383,7 @@ export function CompletedState({
               Streak
             </div>
           </div>
-          <div className="rounded-xl bg-surface-alt border-2 border-border p-3 shadow-(--shadow-sm)">
+          <div className="rounded-xl bg-surface-alt border-2 border-border p-3 shadow-sm">
             <div className="text-xl md:text-2xl font-black text-emerald-500 font-mono leading-none">
               {score}/5
             </div>
@@ -391,7 +391,7 @@ export function CompletedState({
               Today's Score
             </div>
           </div>
-          <div className="rounded-xl bg-surface-alt border-2 border-border p-3 shadow-(--shadow-sm)">
+          <div className="rounded-xl bg-surface-alt border-2 border-border p-3 shadow-sm">
             <div className="text-xl md:text-2xl font-black text-secondary font-mono leading-none">
               {(() => {
                 try {
@@ -429,7 +429,7 @@ export function CompletedState({
           {wrongAnswers.map((a, i) => (
             <div
               key={i}
-              className="flex items-start gap-3 py-3.5 px-4 rounded-xl bg-surface border-2 border-error/20 border-l-4 border-l-error shadow-(--shadow-sm)"
+              className="flex items-start gap-3 py-3.5 px-4 rounded-xl bg-surface border-2 border-error/20 border-l-4 border-l-error shadow-sm"
             >
               <XCircle className="text-error text-base shrink-0 mt-0.5" />
               <div className="flex-1 min-w-0">
@@ -477,12 +477,12 @@ export function CompletedState({
         className="flex flex-col gap-3.5 mt-2.5"
       >
         {/* Next challenge countdown */}
-        <div className="rounded-2xl bg-surface border-2 border-border py-4 px-5 flex items-center justify-center gap-3.5 shadow-(--shadow-sm)">
+        <div className="rounded-2xl bg-surface border-2 border-border py-4 px-5 flex items-center justify-center gap-3.5 shadow-sm">
           <Clock size={15} className="text-text-muted shrink-0 animate-pulse" />
           <div className="text-xs text-text-secondary font-extrabold uppercase tracking-wider font-display">
             Next challenge in
           </div>
-          <span className="font-mono text-base font-black text-accent tracking-wider bg-bg-deep border border-border/20 px-3 py-1 rounded-xl shadow-(--shadow-sm)">
+          <span className="font-mono text-base font-black text-accent tracking-wider bg-bg-deep border border-border/20 px-3 py-1 rounded-xl shadow-sm">
             {formatCountdown(countdown)}
           </span>
         </div>
@@ -492,7 +492,7 @@ export function CompletedState({
           <Link
             href="/dictionary"
             prefetch={false}
-            className="flex items-center justify-center gap-2.5 w-full rounded-2xl font-black text-[15px] px-6 py-4.5 bg-accent border-2 border-border text-ink shadow-(--shadow-sm) hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-(--shadow) active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-100 cursor-pointer"
+            className="flex items-center justify-center gap-2.5 w-full rounded-2xl font-black text-[15px] px-6 py-4.5 bg-accent border-2 border-border text-ink shadow-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-100 cursor-pointer"
           >
             <Zap className="h-4.5 w-4.5 fill-current" />
             <span>Lookup Dictionary & Practice Vocabulary</span>

@@ -25,7 +25,7 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
   const canSubmit = topic.trim().length >= 3 && !isLoading;
 
   return (
-    <div className="mt-6 w-full max-w-2xl mx-auto border-2 border-border bg-surface rounded-lg p-5 shadow-(--shadow-sm)">
+    <div className="mt-6 w-full max-w-2xl mx-auto border-2 border-border bg-surface rounded-lg p-5 shadow-sm">
       <div className="flex items-center gap-2 mb-3">
         <Users size={18} className="text-accent" />
         <div className="text-base font-bold text-text-primary">Multi-speaker dialogue</div>
@@ -47,7 +47,7 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
           <select
             value={level}
             onChange={(e) => setLevel(e.target.value as CefrLevel)}
-            className="h-8 rounded-lg border-2 border-border bg-surface-alt px-2.5 py-0.5 text-xs font-bold text-ink outline-none focus-visible:shadow-(--shadow-sm) focus-visible:-translate-y-0.5 transition-all cursor-pointer"
+            className="h-8 rounded-lg border-2 border-border bg-surface-alt px-2.5 py-0.5 text-xs font-bold text-ink outline-none focus-visible:shadow-sm focus-visible:-translate-y-0.5 transition-all cursor-pointer"
           >
             {CEFR_LEVELS.map((l) => (
               <option key={l} value={l}>
@@ -61,7 +61,7 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
           <select
             value={turns}
             onChange={(e) => setTurns(Number(e.target.value) as 6 | 8 | 10)}
-            className="h-8 rounded-lg border-2 border-border bg-surface-alt px-2.5 py-0.5 text-xs font-bold text-ink outline-none focus-visible:shadow-(--shadow-sm) focus-visible:-translate-y-0.5 transition-all cursor-pointer"
+            className="h-8 rounded-lg border-2 border-border bg-surface-alt px-2.5 py-0.5 text-xs font-bold text-ink outline-none focus-visible:shadow-sm focus-visible:-translate-y-0.5 transition-all cursor-pointer"
           >
             <option value={6}>6</option>
             <option value={8}>8</option>
@@ -73,7 +73,7 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
           <select
             value={speakers}
             onChange={(e) => setSpeakers(Number(e.target.value) as 2 | 3)}
-            className="h-8 rounded-lg border-2 border-border bg-surface-alt px-2.5 py-0.5 text-xs font-bold text-ink outline-none focus-visible:shadow-(--shadow-sm) focus-visible:-translate-y-0.5 transition-all cursor-pointer"
+            className="h-8 rounded-lg border-2 border-border bg-surface-alt px-2.5 py-0.5 text-xs font-bold text-ink outline-none focus-visible:shadow-sm focus-visible:-translate-y-0.5 transition-all cursor-pointer"
           >
             <option value={2}>2</option>
             <option value={3}>3</option>

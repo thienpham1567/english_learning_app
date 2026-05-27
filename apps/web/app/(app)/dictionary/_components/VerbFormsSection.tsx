@@ -89,18 +89,18 @@ export function VerbFormsSection({ verbForms }: Props) {
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-controls="verb-forms-grid"
-        className="flex w-full items-center justify-between gap-2 bg-surface border-2 border-border border-l-3 border-l-accent rounded-sm cursor-pointer px-4 py-2.5 transition-all duration-200 hover:bg-(--surface-hover) hover:shadow-sm"
+        className="flex w-full items-center justify-between gap-2 bg-surface border-2 border-border border-l-3 border-l-accent rounded-sm cursor-pointer px-4 py-2.5 transition-all duration-200 hover:bg-surface-hover hover:shadow-sm"
       >
         <div className="flex items-center gap-2.5">
-          <span className="text-[13px] font-bold uppercase tracking-[0.12em] text-accent">
+          <span className="text-[13px] font-black uppercase tracking-[0.12em] text-text-secondary">
             Verb Forms
           </span>
-          <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-accent-muted text-accent">
+          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-accent-light text-text-secondary border border-accent/20">
             {verbForms.length} forms
           </span>
         </div>
         <ChevronDown
-          className={`h-3 w-3 text-accent transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+          className={`h-3 w-3 text-text-secondary transition-transform duration-300 ${open ? "rotate-180" : ""}`}
         />
       </button>
 
@@ -109,10 +109,10 @@ export function VerbFormsSection({ verbForms }: Props) {
           {verbForms.map((vf, idx) => {
             const isInfinitive = idx === 0;
             const cardClass = isInfinitive
-              ? "bg-accent-muted border border-accent border-l-3"
+              ? "bg-accent-light border border-accent/50 border-l-4 border-l-accent"
               : vf.isIrregular
-                ? "bg-(--warning-bg) border border-(--warning)"
-                : "bg-bg-deep border-2 border-border";
+                ? "bg-amber-500/5 border border-amber-500/20"
+                : "bg-surface-alt border-2 border-border";
 
             return (
               <div
@@ -121,7 +121,7 @@ export function VerbFormsSection({ verbForms }: Props) {
               >
                 {/* Label */}
                 <span
-                  className={`text-[10px] font-bold uppercase tracking-wider leading-none ${isInfinitive ? "text-accent" : "text-text-muted"}`}
+                  className={`text-[10px] font-bold uppercase tracking-wider leading-none ${isInfinitive ? "text-text-secondary" : "text-text-muted"}`}
                 >
                   {vf.label}
                 </span>
@@ -168,7 +168,7 @@ export function VerbFormsSection({ verbForms }: Props) {
                 {/* Footer: irregular badge — pushed to bottom */}
                 {vf.isIrregular && (
                   <div className="flex items-center gap-1.5 mt-auto pt-1">
-                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-(--warning-bg) text-(--warning) border border-(--warning) whitespace-nowrap">
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-800 border border-amber-500/20 whitespace-nowrap">
                       Irregular
                     </span>
                   </div>

@@ -250,11 +250,11 @@ export function WordOfTheDay({ onSelect }: Props) {
     >
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-accent">
-          <Calendar className="h-3 w-3" />
+        <div className="flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-[0.16em] text-text-secondary">
+          <Calendar className="h-3 w-3 text-accent-hover" />
           Word of the Day
         </div>
-        <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-accent text-(--text-on-accent)">
+        <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-accent text-ink border border-border">
           {daily.pos}
         </span>
       </div>
@@ -281,7 +281,7 @@ export function WordOfTheDay({ onSelect }: Props) {
       </p>
 
       {/* CTA */}
-      <div className="mt-2.5 text-[11px] font-semibold text-accent text-right">
+      <div className="mt-2.5 text-[11px] font-bold text-secondary text-right">
         View details →
       </div>
     </div>

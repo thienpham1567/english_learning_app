@@ -134,7 +134,7 @@ function ExerciseFlow({
         <motion.div
           initial={{ scale: 0.9 }}
           animate={{ scale: 1 }}
-          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-warning border-2 border-border self-start shadow-(--shadow-sm) text-black"
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-warning border-2 border-border self-start shadow-sm text-black"
         >
           <Zap className="h-3.5 w-3.5 fill-current text-black animate-pulse" />
           <span className="text-[10px] font-extrabold uppercase tracking-widest font-mono">
@@ -177,7 +177,7 @@ function ExerciseFlow({
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.25 }}
-          className="rounded-2xl border-2 border-border bg-surface p-6 shadow-(--shadow) relative overflow-hidden"
+          className="rounded-2xl border-2 border-border bg-surface p-6 shadow relative overflow-hidden"
         >
           {/* Top glowing bar */}
           <div
@@ -198,7 +198,7 @@ function ExerciseFlow({
       <Button
         variant="outline"
         onClick={onSkip}
-        className="self-center flex items-center gap-2 text-xs px-6 py-2.5 rounded-xl border-2 border-border shadow-(--shadow-sm) hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-y-0 active:shadow-none transition-all cursor-pointer font-extrabold mt-2"
+        className="self-center flex items-center gap-2 text-xs px-6 py-2.5 rounded-xl border-2 border-border shadow-sm hover:translate-y-[-1px] hover:shadow active:translate-y-0 active:shadow-none transition-all cursor-pointer font-extrabold mt-2"
       >
         <ArrowRight className="h-4 w-4" />
         <span>Skip this question</span>
@@ -262,13 +262,13 @@ export default function DailyChallengePage() {
           <motion.div
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative overflow-hidden rounded-2xl border-2 border-border bg-surface p-5 shadow-(--shadow) flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+            className="relative overflow-hidden rounded-2xl border-2 border-border bg-surface p-5 shadow flex flex-col sm:flex-row sm:items-center justify-between gap-4"
           >
             {/* Subtle grid pattern background */}
             <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06] pointer-events-none bg-[linear-gradient(to_right,rgba(0,0,0,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.15)_1px,transparent_1px)] bg-[size:16px_16px]" />
             
             <div className="flex items-center gap-4 relative z-10">
-              <div className="w-12 h-12 rounded-xl border-2 border-border bg-accent text-text-on-accent flex items-center justify-center shrink-0 shadow-(--shadow-sm)">
+              <div className="w-12 h-12 rounded-xl border-2 border-border bg-accent text-text-on-accent flex items-center justify-center shrink-0 shadow-sm">
                 <Flame className="h-6 w-6 text-orange-500 fill-current animate-pulse" />
               </div>
               <div className="flex flex-col">
@@ -286,7 +286,7 @@ export default function DailyChallengePage() {
 
             {/* Live elapsed timer badge */}
             {isChallengeRunning && (
-              <div className="flex items-center gap-2 bg-accent-light border-2 border-border px-3.5 py-1.5 rounded-xl shadow-(--shadow-sm) font-mono text-xs font-black text-ink shrink-0 self-start sm:self-center relative z-10">
+              <div className="flex items-center gap-2 bg-accent-light border-2 border-border px-3.5 py-1.5 rounded-xl shadow-sm font-mono text-xs font-black text-ink shrink-0 self-start sm:self-center relative z-10">
                 <Clock className="h-4 w-4 text-accent fill-current animate-pulse" />
                 <span>TIME: {formattedTime}</span>
               </div>
@@ -300,7 +300,7 @@ export default function DailyChallengePage() {
         <div className="w-full max-w-2xl mx-auto">
           {/* Error banner */}
           {(error || bonus.error) && (
-            <div className="flex gap-3 rounded-2xl border-2 border-border bg-error-bg p-4 text-xs text-error mb-5 shadow-(--shadow-sm) animate-in fade-in duration-200">
+            <div className="flex gap-3 rounded-2xl border-2 border-border bg-error-bg p-4 text-xs text-error mb-5 shadow-sm animate-in fade-in duration-200">
               <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{error || bonus.error}</span>
             </div>
@@ -323,7 +323,7 @@ export default function DailyChallengePage() {
               <motion.div
                 animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
                 transition={{ repeat: Infinity, duration: 1.5 }}
-                className="w-16 h-16 rounded-full border-2 border-border flex items-center justify-center bg-surface shadow-(--shadow-sm)"
+                className="w-16 h-16 rounded-full border-2 border-border flex items-center justify-center bg-surface shadow-sm"
               >
                 <Check className="h-6 w-6 text-warning" />
               </motion.div>
@@ -361,7 +361,7 @@ export default function DailyChallengePage() {
 
               {/* Error retry */}
               {state === "error" && (
-                <div className="p-8 text-center bg-surface border-2 border-border rounded-2xl shadow-(--shadow-sm) flex flex-col items-center animate-in fade-in duration-200 max-w-md mx-auto">
+                <div className="p-8 text-center bg-surface border-2 border-border rounded-2xl shadow-sm flex flex-col items-center animate-in fade-in duration-200 max-w-md mx-auto">
                   <AlertTriangle className="h-12 w-12 text-error mb-3" />
                   <h3 className="text-base font-black text-text-primary mb-1 font-display">
                     Unable to Load Challenge
@@ -371,7 +371,7 @@ export default function DailyChallengePage() {
                   </p>
                   <Button
                     onClick={() => window.location.reload()}
-                    className="px-5 py-2 rounded-xl border-2 border-border bg-accent text-ink shadow-(--shadow-sm) hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-y-0 active:shadow-none transition-all font-extrabold cursor-pointer"
+                    className="px-5 py-2 rounded-xl border-2 border-border bg-accent text-ink shadow-sm hover:translate-y-[-1px] hover:shadow active:translate-y-0 active:shadow-none transition-all font-extrabold cursor-pointer"
                   >
                     <RotateCw className="h-3.5 w-3.5 mr-1.5" /> Try reloading page
                   </Button>
@@ -395,7 +395,7 @@ export default function DailyChallengePage() {
                   <motion.div
                     animate={{ scale: [1, 1.08, 1] }}
                     transition={{ repeat: Infinity, duration: 1.2 }}
-                    className="w-16 h-16 rounded-full border-2 border-border bg-surface flex items-center justify-center shadow-(--shadow-sm)"
+                    className="w-16 h-16 rounded-full border-2 border-border bg-surface flex items-center justify-center shadow-sm"
                   >
                     <Check className="h-6 w-6 text-accent" />
                   </motion.div>

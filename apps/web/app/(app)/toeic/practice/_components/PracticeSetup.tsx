@@ -196,7 +196,7 @@ export function PracticeSetup({ onStart }: { onStart: (params: PracticeStartPara
     >
       {/* ── Glass card ── */}
       <div
-        className="rounded-(--radius-2xl) relative overflow-hidden"
+        className="rounded-2xl relative overflow-hidden"
         style={{
           background: "color-mix(in srgb, var(--surface) 85%, transparent)",
           backdropFilter: "blur(20px)",
@@ -353,7 +353,7 @@ export function PracticeSetup({ onStart }: { onStart: (params: PracticeStartPara
               count,
             })
           }
-          className="w-full p-4 text-[15px] font-black border-none rounded-(--radius-lg) cursor-pointer flex justify-center items-center gap-2.5 relative overflow-hidden"
+          className="w-full p-4 text-[15px] font-black border-none rounded-lg cursor-pointer flex justify-center items-center gap-2.5 relative overflow-hidden"
           style={{
             background:
               "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 80%, #FFD700))",

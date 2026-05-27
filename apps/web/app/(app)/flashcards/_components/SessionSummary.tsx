@@ -83,7 +83,7 @@ export function SessionSummary({
       <div className="anim-scale-in w-full max-w-[500px] mx-auto flex flex-col gap-5">
         {/* Streak & Hero banner */}
         <div
-          className="rounded-xl border-2 border-border text-center relative overflow-hidden flex flex-col items-center gap-3 py-8 px-6 shadow-(--shadow-sm)"
+          className="rounded-xl border-2 border-border text-center relative overflow-hidden flex flex-col items-center gap-3 py-8 px-6 shadow-sm"
           style={{
             background:
               "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--surface))",
@@ -126,7 +126,7 @@ export function SessionSummary({
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 + idx * 0.08 }}
-              className="flex-1 bg-surface border-2 border-border rounded-lg text-center py-4 px-3 shadow-(--shadow-sm)"
+              className="flex-1 bg-surface border-2 border-border rounded-lg text-center py-4 px-3 shadow-sm"
             >
               <div
                 className="text-2xl font-black font-display leading-none"
@@ -145,7 +145,7 @@ export function SessionSummary({
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-surface rounded-xl border-2 border-border py-4.5 px-5 shadow-(--shadow-sm)"
+            className="bg-surface rounded-xl border-2 border-border py-4.5 px-5 shadow-sm"
           >
             <span className="text-[13px] font-extrabold text-text-primary flex items-center gap-1.5 mb-4">
               <BarChart3 className="text-accent" />
@@ -182,7 +182,7 @@ export function SessionSummary({
             whileHover={{ scale: 1.01, y: -1 }}
             whileTap={{ scale: 0.99 }}
             onClick={() => router.push("/daily-challenge")}
-            className="text-left rounded-xl py-4 px-5 cursor-pointer flex items-center gap-3.5 shadow-(--shadow-sm)"
+            className="text-left rounded-xl py-4 px-5 cursor-pointer flex items-center gap-3.5 shadow-sm"
             style={{
               background:
                 "linear-gradient(135deg, color-mix(in srgb, var(--accent) 6%, var(--surface)), var(--surface))",

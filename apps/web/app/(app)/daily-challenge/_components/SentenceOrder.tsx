@@ -48,7 +48,7 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
 
       {/* Drop zone — sentence being built */}
       <div
-        className="mb-5 flex flex-wrap h-[64px] gap-2 rounded-(--radius-lg) items-start"
+        className="mb-5 flex flex-wrap h-[64px] gap-2 rounded-lg items-start"
         style={{
           border: allSelected ? "2px solid var(--accent)" : "2px dashed var(--border)",
           background: allSelected ? "var(--accent-light)" : "var(--surface-alt)",
@@ -107,7 +107,7 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
 
       {/* Available word bank */}
       <div
-        className="rounded-(--radius-lg) border-2 border-border bg-(--surface) mb-5"
+        className="rounded-lg border-2 border-border bg-surface mb-5"
         style={{ padding: "16px 18px", boxShadow: "var(--shadow-sm)" }}
       >
         <div className="text-[10px] font-extrabold uppercase tracking-widest text-text-muted mb-3">
@@ -147,7 +147,7 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
           whileHover={{ scale: 1.02, y: -1 }}
           whileTap={{ scale: 0.98 }}
           onClick={handleSubmit}
-          className="w-full rounded-(--radius-lg) text-[15px] font-extrabold border-none cursor-pointer flex items-center justify-center gap-1.5"
+          className="w-full rounded-lg text-[15px] font-extrabold border-none cursor-pointer flex items-center justify-center gap-1.5"
           style={{
             background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
             padding: "14px 0",

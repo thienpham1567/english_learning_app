@@ -352,8 +352,8 @@ export function DescribePicture() {
             </>
           )}
           {state === "viewing" && (
-            <div className="p-4 rounded-xl bg-surface-alt border-2 border-border text-xs text-text-secondary leading-relaxed shadow-(--shadow-sm)">
-              <p className="m-0 mb-1.5 font-bold text-(--info) flex items-center gap-1.5">
+            <div className="p-4 rounded-xl bg-surface-alt border-2 border-border text-xs text-text-secondary leading-relaxed shadow-sm">
+              <p className="m-0 mb-1.5 font-bold text-info flex items-center gap-1.5">
                 <Info className="h-4 w-4 shrink-0" />
                 <span>Image Description Tips:</span>
               </p>
@@ -380,7 +380,7 @@ export function DescribePicture() {
                 </p>
                 <button
                   onClick={backToGallery}
-                  className="mt-1 px-4 py-2 rounded-xl border-2 border-border bg-surface text-text-secondary hover:text-ink hover:bg-surface-hover hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow-sm) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-bold cursor-pointer"
+                  className="mt-1 px-4 py-2 rounded-xl border-2 border-border bg-surface text-text-secondary hover:text-ink hover:bg-surface-hover hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-sm active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-bold cursor-pointer"
                 >
                   ← Choose another image
                 </button>
@@ -466,7 +466,7 @@ export function DescribePicture() {
           )}
 
           {feedback.transcript && (
-            <div className="p-4.5 rounded-2xl bg-surface-alt border-2 border-border shadow-(--shadow-sm)">
+            <div className="p-4.5 rounded-2xl bg-surface-alt border-2 border-border shadow-sm">
               <p className="text-[10px] font-extrabold uppercase tracking-wider text-text-muted m-0 mb-1.5">
                 You said:
               </p>
@@ -479,14 +479,14 @@ export function DescribePicture() {
           <div className="flex gap-2.5 justify-center mt-2">
             <button
               onClick={retry}
-              className="px-5 py-2.5 rounded-xl border-2 border-border bg-surface text-text-secondary hover:text-ink hover:bg-surface-hover hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow-sm) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-bold cursor-pointer flex items-center gap-1.5"
+              className="px-5 py-2.5 rounded-xl border-2 border-border bg-surface text-text-secondary hover:text-ink hover:bg-surface-hover hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-sm active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-bold cursor-pointer flex items-center gap-1.5"
             >
               <RefreshCw className="h-3.5 w-3.5" />
               <span>Retry</span>
             </button>
             <button
               onClick={backToGallery}
-              className="px-5 py-2.5 rounded-xl border-2 border-border bg-accent text-ink shadow-(--shadow-sm) hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-bold cursor-pointer flex items-center gap-1.5"
+              className="px-5 py-2.5 rounded-xl border-2 border-border bg-accent text-ink shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-bold cursor-pointer flex items-center gap-1.5"
             >
               <span>Choose another</span>
               <CheckCircle className="h-3.5 w-3.5" />

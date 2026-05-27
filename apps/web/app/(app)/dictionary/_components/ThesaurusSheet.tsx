@@ -46,7 +46,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed top-0 right-0 bottom-0 w-[min(384px,90vw)] z-[901] bg-(--bg) border-l-2 border-border shadow-[-8px_0_30px_rgba(0,0,0,0.1)] flex flex-col overflow-hidden"
+            className="fixed top-0 right-0 bottom-0 w-[min(384px,90vw)] z-[901] bg-surface border-l-2 border-border shadow-[-8px_0_30px_rgba(0,0,0,0.1)] flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-4 border-b-2 border-border bg-surface shrink-0">
@@ -79,14 +79,14 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                   {sensesWithData.map((sense) => (
                     <div key={sense.id} className="flex flex-col gap-3.5">
                       {/* Sense label */}
-                      <p className="text-[13px] italic font-display text-accent m-0 pb-2.5 border-b-2 border-border">
+                      <p className="text-[13px] italic font-display text-text-secondary m-0 pb-2.5 border-b-2 border-border">
                         {sense.label}
                       </p>
 
                       {/* Synonyms */}
                       {(sense.synonyms?.length ?? 0) > 0 && (
                         <div className="flex flex-col gap-2">
-                          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-(--success) m-0">
+                          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-emerald-700 m-0">
                             Synonyms
                           </p>
                           <div className="flex flex-wrap gap-1.5">
@@ -95,7 +95,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                                 key={word}
                                 type="button"
                                 onClick={() => handleWordClick(word)}
-                                className="rounded-full bg-accent-light px-3 py-1 text-[13px] font-medium text-(--success) border border-(--success) cursor-pointer transition-all duration-150 hover:bg-(--success)/10"
+                                className="rounded-full bg-emerald-500/5 px-3 py-1 text-[13px] font-bold text-emerald-700 border border-emerald-500/20 cursor-pointer transition-all duration-150 hover:bg-emerald-500/15 hover:border-emerald-500/40"
                               >
                                 {word}
                               </button>
@@ -107,7 +107,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                       {/* Antonyms */}
                       {(sense.antonyms?.length ?? 0) > 0 && (
                         <div className="flex flex-col gap-2">
-                          <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-(--warning) m-0">
+                          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-amber-700 m-0">
                             Antonyms
                           </p>
                           <div className="flex flex-wrap gap-1.5">
@@ -116,7 +116,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                                 key={word}
                                 type="button"
                                 onClick={() => handleWordClick(word)}
-                                className="rounded-full bg-(--warm) px-3 py-1 text-[13px] font-medium text-(--warning) border border-dashed border-(--warning) cursor-pointer transition-all duration-150 hover:bg-(--warning)/10"
+                                className="rounded-full bg-amber-500/5 px-3 py-1 text-[13px] font-bold text-amber-800 border border-dashed border-amber-500/20 cursor-pointer transition-all duration-150 hover:bg-amber-500/15 hover:border-amber-500/40"
                               >
                                 {word}
                               </button>

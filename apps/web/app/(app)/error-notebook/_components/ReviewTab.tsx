@@ -97,7 +97,7 @@ export function ReviewTab() {
         className="py-10 px-6 text-center bg-surface rounded-xl border-2 border-border"
       >
         <Trophy
-          className={`h-10 w-10 mx-auto mb-3 ${pct >= 80 ? "text-(--success)" : "text-accent"}`}
+          className={`h-10 w-10 mx-auto mb-3 ${pct >= 80 ? "text-success" : "text-accent"}`}
         />
         <h3 className="text-xl font-black text-text-primary m-0 mb-1">Review Complete!</h3>
         <div className="text-4xl font-black text-accent font-display">
@@ -120,7 +120,7 @@ export function ReviewTab() {
               srs.resetSession();
               srs.fetchQueue();
             }}
-            className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl border-none bg-gradient-to-br from-accent to-accent-hover text-(--text-on-accent) text-sm font-extrabold cursor-pointer font-body shadow-[0_4px_14px_var(--accent-muted)]"
+            className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl border-none bg-gradient-to-br from-accent to-accent-hover text-text-on-accent text-sm font-extrabold cursor-pointer font-body shadow-[0_4px_14px_var(--accent-muted)]"
           >
             <RefreshCw className="h-4 w-4" /> Continue
           </m.button>
@@ -140,7 +140,7 @@ export function ReviewTab() {
           <Brain className="h-4 w-4 text-accent" /> Review: {srs.currentIndex + 1} / {srs.queue.length}
         </span>
         <div className="flex items-center gap-2">
-          <span className="text-xs font-bold text-(--success) flex items-center gap-1">
+          <span className="text-xs font-bold text-success flex items-center gap-1">
             <CheckCircle className="h-3.5 w-3.5" /> {srs.correct}
           </span>
           <span className="text-xs font-bold text-text-muted">/ {srs.reviewed}</span>
@@ -198,9 +198,9 @@ export function ReviewTab() {
                       key={i}
                       className={`px-3.5 py-2 rounded-[10px] text-sm ${
                         isCorrect
-                          ? "bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] border-[1.5px] border-(--success) text-(--success) font-bold"
+                          ? "bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] border-[1.5px] border-success text-success font-bold"
                           : isWrong
-                            ? "bg-[color-mix(in_srgb,var(--error)_8%,var(--surface))] border-[1.5px] border-(--error) text-(--error) font-bold"
+                            ? "bg-[color-mix(in_srgb,var(--error)_8%,var(--surface))] border-[1.5px] border-error text-error font-bold"
                             : "bg-surface-alt border-2 border-border text-text-primary font-medium"
                       }`}
                     >
@@ -229,7 +229,7 @@ export function ReviewTab() {
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
                 onClick={handleReveal}
-                className="w-full mt-3 flex items-center justify-center gap-2 py-3.5 px-5 rounded-lg border-none bg-gradient-to-br from-accent to-accent-hover text-(--text-on-accent) text-[15px] font-extrabold cursor-pointer font-body shadow-[0_4px_14px_var(--accent-muted)]"
+                className="w-full mt-3 flex items-center justify-center gap-2 py-3.5 px-5 rounded-lg border-none bg-gradient-to-br from-accent to-accent-hover text-text-on-accent text-[15px] font-extrabold cursor-pointer font-body shadow-[0_4px_14px_var(--accent-muted)]"
               >
                 <Lightbulb className="h-4 w-4" /> Reveal Answer
               </m.button>
@@ -243,18 +243,18 @@ export function ReviewTab() {
               {/* Answer comparison */}
               <div className="flex gap-2 mb-4">
                 <div className="flex-1 px-3.5 py-2.5 rounded-[10px] bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--error)_18%,transparent)]">
-                  <div className="text-[10px] font-bold text-(--error) uppercase mb-1 flex items-center gap-1">
+                  <div className="text-[10px] font-bold text-error uppercase mb-1 flex items-center gap-1">
                     <XCircle className="h-2.5 w-2.5" /> Your Answer
                   </div>
-                  <div className="text-sm font-bold text-(--error)">
+                  <div className="text-sm font-bold text-error">
                     {error.userAnswer || "(Empty)"}
                   </div>
                 </div>
                 <div className="flex-1 px-3.5 py-2.5 rounded-[10px] bg-[color-mix(in_srgb,var(--success)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--success)_18%,transparent)]">
-                  <div className="text-[10px] font-bold text-(--success) uppercase mb-1 flex items-center gap-1">
+                  <div className="text-[10px] font-bold text-success uppercase mb-1 flex items-center gap-1">
                     <CheckCircle className="h-2.5 w-2.5" /> Correct Answer
                   </div>
-                  <div className="text-sm font-bold text-(--success)">{error.correctAnswer}</div>
+                  <div className="text-sm font-bold text-success">{error.correctAnswer}</div>
                 </div>
               </div>
 

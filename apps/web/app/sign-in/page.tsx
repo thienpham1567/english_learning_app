@@ -96,7 +96,7 @@ function FloatingCards() {
                 transition={{ delay: 1.2, duration: 2, ease: "easeOut" }}
               />
             </svg>
-            <span className="absolute inset-0 grid place-items-center font-display text-base font-extrabold text-(--mockup-text)">
+            <span className="absolute inset-0 grid place-items-center font-display text-base font-extrabold text-mockup-text">
               850
             </span>
           </div>
@@ -105,10 +105,10 @@ function FloatingCards() {
               <Trophy size={12} />
               <span>TARGET SCORE</span>
             </div>
-            <div className="font-display text-lg font-extrabold text-(--mockup-text)">
+            <div className="font-display text-lg font-extrabold text-mockup-text">
               TOEIC 850+
             </div>
-            <div className="flex items-center gap-1 text-xs text-(--mockup-text-muted-dark)">
+            <div className="flex items-center gap-1 text-xs text-mockup-text-muted-dark">
               <TrendingUp size={13} className="text-success" />
               <span className="text-success font-semibold">+125 pts</span>
               this month
@@ -130,7 +130,7 @@ function FloatingCards() {
           className="flex flex-col gap-3 items-stretch p-5 bg-black/70 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl"
         >
           <div className="flex justify-between items-center">
-            <div className="flex items-center gap-1.5 text-[10px] font-extrabold tracking-wider uppercase text-(--mockup-text-muted)">
+            <div className="flex items-center gap-1.5 text-[10px] font-extrabold tracking-wider uppercase text-mockup-text-muted">
               <BarChart3 size={13} />
               ACTIVITY
             </div>
@@ -166,11 +166,11 @@ function FloatingCards() {
             <Bot size={18} />
           </div>
           <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-1 text-xs font-extrabold text-(--mockup-text)">
+            <div className="flex items-center gap-1 text-xs font-extrabold text-mockup-text">
               <Sparkles size={11} className="text-accent" />
               AI Pronunciation Coach
             </div>
-            <div className="text-[11px] text-(--mockup-text-muted) leading-normal">
+            <div className="text-[11px] text-mockup-text-muted leading-normal">
               &quot;negotiation&quot; improved to{" "}
               <strong className="text-success font-extrabold">94%</strong> native accuracy!
             </div>
@@ -288,7 +288,7 @@ function SignInContent() {
           transition={{ type: "spring", stiffness: 400, damping: 22 }}
           onClick={handleGoogleSignIn}
           disabled={isLoading}
-          className="flex items-center justify-center gap-3 w-full h-14 text-sm font-extrabold font-body text-ink bg-card border-2 border-border rounded-xl cursor-pointer shadow-(--shadow) transition-all duration-150 relative overflow-hidden"
+          className="flex items-center justify-center gap-3 w-full h-14 text-sm font-extrabold font-body text-ink bg-card border-2 border-border rounded-xl cursor-pointer shadow transition-all duration-150 relative overflow-hidden"
           id="signin-google-button"
         >
           {isLoading ? (
@@ -316,7 +316,7 @@ function SignInContent() {
       {/* Trust Badges */}
       <m.div
         variants={fadeIn}
-        className="mt-6 p-4 md:p-5 bg-surface-alt border-2 border-border rounded-xl flex flex-col gap-2.5 shadow-(--shadow-sm)"
+        className="mt-6 p-4 md:p-5 bg-surface-alt border-2 border-border rounded-xl flex flex-col gap-2.5 shadow-sm"
       >
         <div className="flex items-center gap-2.5 text-xs md:text-sm font-bold text-text-secondary">
           <Award size={14} className="text-accent shrink-0" />
@@ -337,7 +337,7 @@ function SignInContent() {
         <m.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="mt-4 p-3.5 md:p-4 text-center text-xs md:text-sm font-bold text-error bg-error-bg border-2 border-border rounded-lg shadow-(--shadow-sm)"
+          className="mt-4 p-3.5 md:p-4 text-center text-xs md:text-sm font-bold text-error bg-error-bg border-2 border-border rounded-lg shadow-sm"
         >
           {error}
         </m.div>
@@ -351,7 +351,7 @@ export default function SignInPage() {
   return (
     <div className="flex min-h-screen bg-background overflow-hidden">
       {/* ── Left showcase panel (desktop) ── */}
-      <div className="hidden min-[1080px]:flex relative w-[52%] shrink-0 flex-col items-start justify-center overflow-hidden bg-(--mockup-bg-start) border-r-3 border-border">
+      <div className="hidden min-[1080px]:flex relative w-[52%] shrink-0 flex-col items-start justify-center overflow-hidden bg-mockup-bg-start border-r-3 border-border">
         {/* Background effects */}
         <div className="grain-overlay" />
         <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_60%_50%_at_15%_25%,rgba(var(--accent-rgb),0.14)_0%,transparent_70%),radial-gradient(ellipse_50%_40%_at_85%_75%,rgba(var(--info-rgb),0.08)_0%,transparent_70%)]" />
@@ -377,7 +377,7 @@ export default function SignInPage() {
 
           <m.h2
             variants={fadeUp}
-            className="m-0 font-display text-[56px] font-black leading-[1.08] tracking-tight text-(--mockup-text)"
+            className="m-0 font-display text-[56px] font-black leading-[1.08] tracking-tight text-mockup-text"
           >
             Conquer
             <br />
@@ -394,7 +394,7 @@ export default function SignInPage() {
 
           <m.p
             variants={fadeUp}
-            className="text-sm leading-relaxed text-(--mockup-text-muted) max-w-[380px] my-0 mb-10"
+            className="text-sm leading-relaxed text-mockup-text-muted max-w-[380px] my-0 mb-10"
           >
             A complete AI learning platform — practice listening, reading, writing & speaking with
             real-time feedback, adaptive drills, and mock tests modeled after the latest ETS format.
@@ -408,10 +408,10 @@ export default function SignInPage() {
               { value: "24/7", label: "AI Tutor" },
             ].map((s) => (
               <div key={s.label}>
-                <div className="font-display text-3xl font-extrabold leading-none text-(--mockup-text)">
+                <div className="font-display text-3xl font-extrabold leading-none text-mockup-text">
                   {s.value}
                 </div>
-                <div className="text-[10px] font-bold uppercase tracking-widest text-(--mockup-text-muted-dark) mt-1.5">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-mockup-text-muted-dark mt-1.5">
                   {s.label}
                 </div>
               </div>
@@ -430,7 +430,7 @@ export default function SignInPage() {
           className="absolute inset-0 pointer-events-none bg-[radial-gradient(color-mix(in_srgb,var(--border)_15%,transparent)_1px,transparent_1px)] bg-[size:22px_22px]"
         />
 
-        <div className="relative z-10 w-full max-w-[460px] bg-card border-2 border-border rounded-2xl p-8 md:p-10 shadow-lg shadow-(--shadow-lg)">
+        <div className="relative z-10 w-full max-w-[460px] bg-card border-2 border-border rounded-2xl p-8 md:p-10 shadow-lg shadow-lg">
           <Suspense fallback={<div className="text-text-muted text-center p-6">Loading...</div>}>
             <SignInContent />
           </Suspense>

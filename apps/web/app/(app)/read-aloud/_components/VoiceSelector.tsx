@@ -73,19 +73,18 @@ function VoiceCard({
         <div className="flex items-center gap-1.5">
           <span
             className={`text-sm ${
-              isActive ? "font-extrabold text-accent" : "font-bold text-text-primary"
+              isActive ? "font-extrabold text-ink" : "font-bold text-text-primary"
             }`}
           >
             {v.name}
           </span>
           <span className="text-[13px]">{v.flag}</span>
           <span
-            className="text-[10px] rounded-lg font-bold inline-flex items-center gap-0.5 py-px px-1.5"
-            style={{
-              background:
-                v.gender === "m" ? "rgba(59, 130, 246, 0.15)" : "rgba(236, 72, 153, 0.15)",
-              color: v.gender === "m" ? "var(--info)" : "#db2777",
-            }}
+            className={`text-[10px] rounded-lg font-bold inline-flex items-center gap-0.5 py-px px-1.5 ${
+              v.gender === "m"
+                ? "bg-blue-500/15 text-info"
+                : "bg-pink-500/15 text-pink-600"
+            }`}
           >
             <User size={10} />
             {v.gender === "m" ? "Male" : "Female"}
@@ -93,7 +92,7 @@ function VoiceCard({
         </div>
         <span
           className={`text-[11px] block overflow-hidden whitespace-nowrap text-ellipsis mt-0.5 ${
-            isActive ? "text-accent" : "text-text-muted"
+            isActive ? "text-text-secondary font-semibold" : "text-text-muted"
           }`}
         >
           {v.accentLabel} • {v.label}

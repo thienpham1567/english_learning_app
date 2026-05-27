@@ -121,17 +121,17 @@ export function DictionarySearchPanel({
       <WordOfTheDay onSelect={onSubmit} />
       <div className="anim-fade-left dictionary-search-panel relative rounded-lg bg-gradient-to-br from-surface to-background border-2 border-border shadow-md overflow-hidden min-w-0">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-accent">
-            <Star className="h-3.5 w-3.5 fill-current" />
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-text-secondary">
+            <Star className="h-3.5 w-3.5 fill-current text-accent-hover" />
             <span>Structured Lookup</span>
           </div>
           <button
             type="button"
             onClick={() => setShowTips((v) => !v)}
-            className={`grid w-8 h-8 place-items-center rounded-full border-none cursor-pointer transition-all duration-200 ${
+            className={`grid w-8 h-8 place-items-center rounded-full border cursor-pointer transition-all duration-200 ${
               showTips
-                ? "bg-accent text-[var(--text-on-accent)]"
-                : "bg-transparent text-text-muted hover:text-accent"
+                ? "bg-accent border-border text-ink"
+                : "bg-transparent border-transparent text-text-muted hover:text-ink hover:border-border/60"
             }`}
             aria-label="Usage Tips"
           >
@@ -212,7 +212,7 @@ export function DictionarySearchPanel({
             onSubmit(draft.trim());
           }}
           disabled={isLoading}
-          className="mt-5 w-full rounded-xl bg-accent py-2.5 text-sm font-extrabold text-[var(--text-on-accent)] border-2 border-border cursor-pointer transition-all duration-150 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-accent-hover active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50 disabled:cursor-not-allowed"
+          className="mt-5 w-full rounded-xl bg-accent py-2.5 text-sm font-black text-ink border-2 border-border cursor-pointer transition-all duration-150 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-accent-hover active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? "Searching..." : "Search"}
         </button>

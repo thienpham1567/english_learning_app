@@ -34,6 +34,54 @@
   --radius-lg: var(--radius-lg);
   --radius-xl: var(--radius-xl);
   --radius-2xl: var(--radius-2xl);
+
+  /* Added missing color tokens for Tailwind v4 compilation */
+  --color-secondary: var(--secondary);
+  --color-tertiary: var(--tertiary);
+  --color-warm: var(--warm);
+  --color-bg: var(--bg);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-text-disabled: var(--text-disabled);
+  --color-text-on-accent: var(--text-on-accent);
+  --color-card-bg: var(--card-bg);
+  --color-sidebar-bg: var(--sidebar-bg);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-text: var(--sidebar-text);
+  --color-sidebar-text-active: var(--sidebar-text-active);
+  --color-sidebar-text-muted: var(--sidebar-text-muted);
+  --color-sidebar-active-bg: var(--sidebar-active-bg);
+  --color-sidebar-item-hover: var(--sidebar-item-hover);
+  --color-chat-bg: var(--chat-bg);
+  --color-chat-surface: var(--chat-surface);
+  --color-chat-surface-hover: var(--chat-surface-hover);
+  --color-chat-bubble-ai: var(--chat-bubble-ai);
+  --color-chat-sidebar-bg: var(--chat-sidebar-bg);
+  --color-chat-sidebar-border: var(--chat-sidebar-border);
+  --color-chat-input-bg: var(--chat-input-bg);
+  --color-chat-code-bg: var(--chat-code-bg);
+  --color-chat-code-header: var(--chat-code-header);
+  --color-xp: var(--xp);
+  --color-fire: var(--fire);
+  --color-info: var(--info);
+  --color-info-bg: var(--info-bg);
+  --color-mockup-bg-start: var(--mockup-bg-start);
+  --color-mockup-text: var(--mockup-text);
+  --color-mockup-text-muted: var(--mockup-text-muted);
+  --color-mockup-text-muted-dark: var(--mockup-text-muted-dark);
+  --color-heatmap-0: var(--heatmap-0);
+  --color-heatmap-1: var(--heatmap-1);
+  --color-heatmap-2: var(--heatmap-2);
+  --color-heatmap-3: var(--heatmap-3);
+  --color-heatmap-4: var(--heatmap-4);
+
+  /* Added missing shadow tokens for Tailwind v4 compilation */
+  --shadow-sm: var(--shadow-sm);
+  --shadow-md: var(--shadow-md);
+  --shadow-lg: var(--shadow-lg);
+  --shadow-xl: var(--shadow-xl);
+  --shadow-default: var(--shadow);
 }
 
 /* biome-ignore format: tailwind custom variant */

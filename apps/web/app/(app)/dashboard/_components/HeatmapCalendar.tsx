@@ -62,12 +62,12 @@ export function HeatmapCalendar() {
 
   // Custom premium contribution colors
   function getIntensity(count: number): string {
-    if (count === 0) return "bg-(--heatmap-0)";
+    if (count === 0) return "bg-heatmap-0";
     const pct = count / maxCount;
-    if (pct <= 0.25) return "bg-(--heatmap-1)";
-    if (pct <= 0.5) return "bg-(--heatmap-2)";
-    if (pct <= 0.75) return "bg-(--heatmap-3)";
-    return "bg-(--heatmap-4)";
+    if (pct <= 0.25) return "bg-heatmap-1";
+    if (pct <= 0.5) return "bg-heatmap-2";
+    if (pct <= 0.75) return "bg-heatmap-3";
+    return "bg-heatmap-4";
   }
 
   const dayLabels = ["", "Mon", "", "Wed", "", "Fri", ""];
@@ -78,7 +78,7 @@ export function HeatmapCalendar() {
       animate={{ opacity: 1, scale: 1 }}
       whileHover={{ y: -2, x: -2, boxShadow: "var(--shadow)" }}
       transition={{ duration: 0.3 }}
-      className="rounded-2xl border-2 border-border bg-surface p-5 shadow-(--shadow-sm) flex flex-col gap-4 transition-all duration-100"
+      className="rounded-2xl border-2 border-border bg-surface p-5 shadow-sm flex flex-col gap-4 transition-all duration-100"
     >
       {/* Header section with icon & stats */}
       <div className="flex flex-wrap gap-3 items-center justify-between">
@@ -93,7 +93,7 @@ export function HeatmapCalendar() {
 
         {/* Mini stats capsules */}
         <div className="flex gap-2">
-          <div className="flex items-center gap-1.5 bg-surface-alt border-2 border-border px-3 py-1 rounded-xl shadow-(--shadow-sm)">
+          <div className="flex items-center gap-1.5 bg-surface-alt border-2 border-border px-3 py-1 rounded-xl shadow-sm">
             <Flame className="text-accent h-3 w-3" />
             <span className="text-xs font-extrabold text-text-primary font-mono">{activeDays}</span>
             <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider font-display">
@@ -101,7 +101,7 @@ export function HeatmapCalendar() {
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 bg-surface-alt border-2 border-border px-3 py-1 rounded-xl shadow-(--shadow-sm)">
+          <div className="flex items-center gap-1.5 bg-surface-alt border-2 border-border px-3 py-1 rounded-xl shadow-sm">
             <Star className="text-amber-400 h-3 w-3 fill-current" />
             <span className="text-xs font-extrabold text-text-primary font-mono">
               {totalXP.toLocaleString()}
@@ -175,14 +175,14 @@ export function HeatmapCalendar() {
             key={i}
             className={`w-2.5 h-2.5 rounded-[2px] ${
               pct === 0
-                ? "bg-(--heatmap-0) border border-border/20"
+                ? "bg-heatmap-0 border border-border/20"
                 : pct <= 0.25
-                  ? "bg-(--heatmap-1)"
+                  ? "bg-heatmap-1"
                   : pct <= 0.5
-                    ? "bg-(--heatmap-2)"
+                    ? "bg-heatmap-2"
                     : pct <= 0.75
-                      ? "bg-(--heatmap-3)"
-                      : "bg-(--heatmap-4)"
+                      ? "bg-heatmap-3"
+                      : "bg-heatmap-4"
             }`}
           />
         ))}

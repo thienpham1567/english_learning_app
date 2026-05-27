@@ -29,16 +29,16 @@ function ChatSkeleton() {
   return (
     <div className="max-w-2xl w-full mx-auto py-6 space-y-6">
       <div className="flex gap-3">
-        <div className="w-8 h-8 rounded-full bg-(--chat-surface) border-2 border-border shrink-0 animate-pulse" />
+        <div className="w-8 h-8 rounded-full bg-chat-surface border-2 border-border shrink-0 animate-pulse" />
         <div className="flex-1 flex flex-col gap-2">
-          <div className="h-4 w-[75%] rounded-lg bg-(--chat-surface) border-2 border-border animate-pulse" />
-          <div className="h-4 w-[50%] rounded-lg bg-(--chat-surface) border-2 border-border animate-pulse" />
+          <div className="h-4 w-[75%] rounded-lg bg-chat-surface border-2 border-border animate-pulse" />
+          <div className="h-4 w-[50%] rounded-lg bg-chat-surface border-2 border-border animate-pulse" />
         </div>
       </div>
       <div className="flex justify-end">
         <div className="w-[66%] flex flex-col gap-2 items-end">
-          <div className="h-4 w-full rounded-lg bg-(--chat-surface) border-2 border-border animate-pulse" />
-          <div className="h-4 w-[80%] rounded-lg bg-(--chat-surface) border-2 border-border animate-pulse" />
+          <div className="h-4 w-full rounded-lg bg-chat-surface border-2 border-border animate-pulse" />
+          <div className="h-4 w-[80%] rounded-lg bg-chat-surface border-2 border-border animate-pulse" />
         </div>
       </div>
     </div>
@@ -133,7 +133,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
   const hasMessages = chat.messages.length > 0;
 
   return (
-    <div className="relative flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-(--chat-bg) z-10">
+    <div className="relative flex h-full min-h-0 flex-1 flex-col overflow-hidden bg-chat-bg z-10">
       <ChatHeader personaId={selectedPersonaId} isLoading={chat.isLoading} />
 
       <div
@@ -227,7 +227,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                   )}
                   <button
                     onClick={() => chat.setError(null)}
-                    className="font-bold underline cursor-pointer text-(--text-secondary) hover:text-(--text-primary) transition-colors"
+                    className="font-bold underline cursor-pointer text-text-secondary hover:text-text-primary transition-colors"
                   >
                     Close
                   </button>
@@ -243,7 +243,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       {scroll.showScrollBtn && (
         <button
           onClick={scroll.scrollToBottom}
-          className="absolute bottom-24 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1.5 rounded-full border-2 border-border bg-(--chat-surface)/90 backdrop-blur-md px-3.5 py-2 text-xs font-semibold text-(--text-secondary) hover:text-(--ink) shadow-lg cursor-pointer transition-all duration-200 active:scale-95 animate-in fade-in zoom-in-90"
+          className="absolute bottom-24 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1.5 rounded-full border-2 border-border bg-chat-surface/90 backdrop-blur-md px-3.5 py-2 text-xs font-semibold text-text-secondary hover:text-ink shadow-lg cursor-pointer transition-all duration-200 active:scale-95 animate-in fade-in zoom-in-90"
         >
           <ArrowDown className="h-3.5 w-3.5" />
           <span>Scroll to bottom</span>

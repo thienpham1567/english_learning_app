@@ -61,7 +61,7 @@ export function OverviewTab({
           {
             label: "Unresolved",
             value: unresolvedCount,
-            colorClass: unresolvedCount > 0 ? "text-(--error)" : "text-text-muted",
+            colorClass: unresolvedCount > 0 ? "text-error" : "text-text-muted",
             icon: <AlertCircle className="h-4 w-4" />,
             bgClass: "bg-red-500/5",
             borderClass: "border-red-500/15",
@@ -69,7 +69,7 @@ export function OverviewTab({
           {
             label: "Resolved",
             value: resolvedCount,
-            colorClass: "text-(--success)",
+            colorClass: "text-success",
             icon: <CheckCircle className="h-4 w-4" />,
             bgClass: "bg-emerald-500/5",
             borderClass: "border-emerald-500/15",
@@ -77,7 +77,7 @@ export function OverviewTab({
           {
             label: "Needs Review",
             value: dueCount,
-            colorClass: dueCount > 0 ? "text-(--warning)" : "text-text-muted",
+            colorClass: dueCount > 0 ? "text-warning" : "text-text-muted",
             icon: <Clock className="h-4 w-4" />,
             bgClass: "bg-amber-500/5",
             borderClass: "border-amber-500/15",

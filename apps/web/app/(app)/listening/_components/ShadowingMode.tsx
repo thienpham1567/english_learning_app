@@ -240,7 +240,7 @@ export default function ShadowingMode({ examMode }: Props) {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center p-8 border-2 border-border rounded-lg bg-surface shadow-(--shadow)"
+          className="text-center p-8 border-2 border-border rounded-lg bg-surface shadow"
         >
           <Volume2 size={48} className="text-accent mx-auto mb-3" />
           <h2 className="mb-2 text-lg font-black text-text-primary">Shadowing</h2>
@@ -284,7 +284,7 @@ export default function ShadowingMode({ examMode }: Props) {
           <motion.div
             animate={state === "recording" ? { scale: [1, 1.01, 1] } : {}}
             transition={state === "recording" ? { repeat: Infinity, duration: 1.5 } : {}}
-            className={`p-6 rounded-lg text-center bg-surface shadow-(--shadow-sm) ${
+            className={`p-6 rounded-lg text-center bg-surface shadow-sm ${
               state === "recording"
                 ? "border-2 border-[var(--error)]"
                 : "border-2 border-border"
@@ -324,7 +324,7 @@ export default function ShadowingMode({ examMode }: Props) {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                   aria-label="Record"
-                  className="w-20 h-20 rounded-full border-2 border-border text-3xl cursor-pointer bg-[var(--error)] text-white shadow-(--shadow-md) hover:shadow-(--shadow-lg) transition-shadow"
+                  className="w-20 h-20 rounded-full border-2 border-border text-3xl cursor-pointer bg-[var(--error)] text-white shadow-md hover:shadow-lg transition-shadow"
                 >
                   <Mic size={28} className="mx-auto" />
                 </motion.button>
@@ -366,7 +366,7 @@ export default function ShadowingMode({ examMode }: Props) {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="p-6 rounded-lg border-2 border-border text-center bg-surface shadow-(--shadow)"
+            className="p-6 rounded-lg border-2 border-border text-center bg-surface shadow"
           >
             {/* Custom circular progress */}
             <div className="relative w-[100px] h-[100px] mx-auto mb-2">
@@ -444,7 +444,7 @@ export default function ShadowingMode({ examMode }: Props) {
               onClick={retryCurrent}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.97 }}
-              className="rounded-lg border-2 border-border bg-surface cursor-pointer text-[13px] font-bold py-2.5 px-5 text-text-primary hover:bg-surface-hover hover:shadow-(--shadow-sm) transition-all duration-100 flex items-center gap-1.5"
+              className="rounded-lg border-2 border-border bg-surface cursor-pointer text-[13px] font-bold py-2.5 px-5 text-text-primary hover:bg-surface-hover hover:shadow-sm transition-all duration-100 flex items-center gap-1.5"
             >
               <RefreshCw size={14} /> Retry
             </motion.button>
@@ -471,7 +471,7 @@ export default function ShadowingMode({ examMode }: Props) {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="text-center p-8 border-2 border-border rounded-lg bg-surface shadow-(--shadow)"
+          className="text-center p-8 border-2 border-border rounded-lg bg-surface shadow"
         >
           <div className="mb-4">
             {avgScore >= 80 ? (

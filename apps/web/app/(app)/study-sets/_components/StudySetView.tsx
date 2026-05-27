@@ -176,7 +176,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
           boxShadow: "var(--shadow-md)",
         }}
       >
-        <CheckCircle size={48} className="text-(--success)" />
+        <CheckCircle size={48} className="text-success" />
         <h2
           className="text-xl text-text-primary font-display"
           style={{ fontWeight: 950, margin: "0 0 6px" }}

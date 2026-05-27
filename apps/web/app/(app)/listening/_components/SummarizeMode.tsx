@@ -149,7 +149,7 @@ export default function SummarizeMode({ examMode }: Props) {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-6 border-2 border-border rounded-lg bg-surface shadow-(--shadow)"
+          className="p-6 border-2 border-border rounded-lg bg-surface shadow"
         >
           <div className="text-center mb-6">
             <FileText size={40} className="text-accent mx-auto mb-2" />
@@ -175,7 +175,7 @@ export default function SummarizeMode({ examMode }: Props) {
                   whileTap={{ scale: 0.97 }}
                   className={`py-1.5 px-3.5 rounded-lg font-bold text-[13px] cursor-pointer border-2 transition-all duration-100 ${
                     selectedLevel === l
-                      ? "border-accent bg-accent text-ink shadow-(--shadow-sm) -translate-y-0.5"
+                      ? "border-accent bg-accent text-ink shadow-sm -translate-y-0.5"
                       : "border-border bg-surface text-text-primary hover:bg-surface-hover"
                   }`}
                 >
@@ -240,7 +240,7 @@ export default function SummarizeMode({ examMode }: Props) {
                 onChange={(e) => setSummaryText(e.target.value)}
                 placeholder="Write your summary here... (minimum 30 words, maximum 400 words)"
                 rows={6}
-                className="w-full rounded-lg border-2 border-border text-sm p-3.5 bg-surface leading-[1.7] resize-y text-text-primary font-[inherit] outline-none focus-visible:shadow-(--shadow-sm) focus-visible:-translate-y-0.5 transition-all"
+                className="w-full rounded-lg border-2 border-border text-sm p-3.5 bg-surface leading-[1.7] resize-y text-text-primary font-[inherit] outline-none focus-visible:shadow-sm focus-visible:-translate-y-0.5 transition-all"
               />
               {/* Word count indicator */}
               <div className="flex justify-between items-center text-xs">
@@ -272,7 +272,7 @@ export default function SummarizeMode({ examMode }: Props) {
                 onClick={() => setState("writing")}
                 whileHover={{ y: -2 }}
                 whileTap={{ scale: 0.97 }}
-                className="rounded-lg bg-transparent text-accent text-[13px] font-black cursor-pointer py-2.5 px-6 border-2 border-accent hover:bg-accent-light hover:shadow-(--shadow-sm) transition-all duration-100"
+                className="rounded-lg bg-transparent text-accent text-[13px] font-black cursor-pointer py-2.5 px-6 border-2 border-accent hover:bg-accent-light hover:shadow-sm transition-all duration-100"
               >
                 Finished Listening → Start Summarizing
               </motion.button>
@@ -296,7 +296,7 @@ export default function SummarizeMode({ examMode }: Props) {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="p-6 rounded-lg border-2 border-border text-center bg-surface shadow-(--shadow)"
+            className="p-6 rounded-lg border-2 border-border text-center bg-surface shadow"
           >
             {/* Custom circular progress */}
             <div className="relative w-[110px] h-[110px] mx-auto mb-2">
@@ -424,7 +424,7 @@ export default function SummarizeMode({ examMode }: Props) {
               }}
               whileHover={{ y: -2 }}
               whileTap={{ scale: 0.97 }}
-              className="rounded-lg border-2 border-border bg-surface cursor-pointer text-[13px] font-bold py-2.5 px-5 text-text-primary hover:bg-surface-hover hover:shadow-(--shadow-sm) transition-all duration-100 flex items-center gap-1.5"
+              className="rounded-lg border-2 border-border bg-surface cursor-pointer text-[13px] font-bold py-2.5 px-5 text-text-primary hover:bg-surface-hover hover:shadow-sm transition-all duration-100 flex items-center gap-1.5"
             >
               <RefreshCw size={14} /> Rewrite
             </motion.button>

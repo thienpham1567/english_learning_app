@@ -26,7 +26,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
           <m.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl border-2 border-border bg-surface p-5 shadow-(--shadow-sm)"
+            className="rounded-xl border-2 border-border bg-surface p-5 shadow-sm"
           >
             <div className="flex items-center gap-2 mb-4">
               <Info className="text-[13px] text-accent" />
@@ -78,7 +78,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="rounded-xl border-2 border-border bg-surface p-5 shadow-(--shadow-sm)"
+              className="rounded-xl border-2 border-border bg-surface p-5 shadow-sm"
             >
               <div className="flex items-center gap-2 mb-4">
                 <Trophy className="text-[13px] text-accent" />

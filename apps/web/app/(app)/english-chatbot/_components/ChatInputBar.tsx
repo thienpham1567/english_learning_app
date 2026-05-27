@@ -76,10 +76,10 @@ export function ChatInputBar({
   }
 
   return (
-    <div className="flex-shrink-0 px-4 py-4 md:px-6 md:pb-6 z-25 border-t-2 border-border bg-(--chat-surface)/60 backdrop-blur-md">
+    <div className="flex-shrink-0 px-4 py-4 md:px-6 md:pb-6 z-25 border-t-2 border-border bg-chat-surface/60 backdrop-blur-md">
       <div className="mx-auto max-w-3xl flex flex-col gap-3">
         {/* Input Bar Container */}
-        <div className="flex items-end gap-2.5 rounded-2xl border-2 border-border bg-(--chat-input-bg) p-3 shadow-md focus-within:border-accent/40 focus-within:ring-1 focus-within:ring-accent/40 transition-all duration-200">
+        <div className="flex items-end gap-2.5 rounded-2xl border-2 border-border bg-chat-input-bg p-3 shadow-md focus-within:border-accent/40 focus-within:ring-1 focus-within:ring-accent/40 transition-all duration-200">
           <div className="pb-1">
             <PersonaSwitcher
               value={selectedPersonaId}
@@ -96,7 +96,7 @@ export function ChatInputBar({
             placeholder="Ask in English or choose a tutor on the left..."
             disabled={isLoading}
             rows={1}
-            className="flex-1 min-h-[38px] max-h-[160px] resize-none border-0 bg-transparent py-2 px-2 text-xs md:text-sm leading-relaxed text-(--ink) placeholder-(--text-muted) outline-none focus:ring-0 focus:outline-none"
+            className="flex-1 min-h-[38px] max-h-[160px] resize-none border-0 bg-transparent py-2 px-2 text-xs md:text-sm leading-relaxed text-ink placeholder-text-muted outline-none focus:ring-0 focus:outline-none"
           />
 
           {/* Mic Button */}
@@ -115,7 +115,7 @@ export function ChatInputBar({
                   ? "border-red-500 text-red-500 bg-red-950/20 animate-pulse"
                   : voice.isTranscribing
                     ? "border-accent text-accent bg-accent/10"
-                    : "border-(--border) text-(--text-secondary) bg-(--chat-surface-hover) hover:border-(--border-strong) hover:text-(--text-primary)"
+                    : "border-border text-text-secondary bg-chat-surface-hover hover:border-border-strong hover:text-text-primary"
               } disabled:opacity-40 disabled:cursor-not-allowed`}
               aria-label={
                 voice.isListening
@@ -152,7 +152,7 @@ export function ChatInputBar({
               className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full transition-all duration-200 cursor-pointer shadow-sm active:scale-95 ${
                 input.trim()
                   ? "bg-accent text-white hover:bg-accent-hover"
-                  : "bg-(--chat-surface-hover) border-2 border-border text-(--text-muted) cursor-not-allowed opacity-50"
+                  : "bg-chat-surface-hover border-2 border-border text-text-muted cursor-not-allowed opacity-50"
               }`}
             >
               <Send className="h-4 w-4" />
@@ -161,7 +161,7 @@ export function ChatInputBar({
         </div>
 
         {/* Hints and pill controls row */}
-        <div className="flex items-center justify-between gap-4 flex-wrap text-[10px] text-(--text-muted) font-semibold px-1">
+        <div className="flex items-center justify-between gap-4 flex-wrap text-[10px] text-text-muted font-semibold px-1">
           <span className="hidden sm:inline font-mono">
             Enter to send · Shift+Enter for new line
           </span>
@@ -175,7 +175,7 @@ export function ChatInputBar({
                 className={`inline-flex items-center gap-1 px-3 py-1 rounded-full border text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
                   voiceMode
                     ? "border-accent bg-accent/10 text-accent font-bold"
-                    : "border-(--border) bg-(--chat-surface-hover) text-(--text-secondary) hover:border-(--border-strong) hover:text-(--text-primary)"
+                    : "border-border bg-chat-surface-hover text-text-secondary hover:border-border-strong hover:text-text-primary"
                 }`}
               >
                 <Mic className="h-3 w-3" />
@@ -190,7 +190,7 @@ export function ChatInputBar({
                 className={`inline-flex items-center gap-1 px-3 py-1 rounded-full border text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
                   pronEnabled
                     ? "border-emerald-500/50 bg-emerald-950/20 text-emerald-450 font-bold"
-                    : "border-(--border) bg-(--chat-surface-hover) text-(--text-secondary) hover:border-(--border-strong) hover:text-(--text-primary)"
+                    : "border-border bg-chat-surface-hover text-text-secondary hover:border-border-strong hover:text-text-primary"
                 }`}
               >
                 <Volume2 className="h-3 w-3" />

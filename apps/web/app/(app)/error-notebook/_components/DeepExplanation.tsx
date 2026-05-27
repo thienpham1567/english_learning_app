@@ -76,7 +76,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
         disabled={loading}
         className={`flex items-center gap-2 w-full px-3.5 py-2.5 rounded-[10px] border border-accent/20 text-[13px] font-semibold text-accent transition-all duration-200 text-left ${
           loading ? "cursor-wait" : "cursor-pointer"
-        } ${expanded ? "bg-accent/6" : "bg-(--card-bg) hover:bg-accent/4"}`}
+        } ${expanded ? "bg-accent/6" : "bg-card-bg hover:bg-accent/4"}`}
       >
         {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lightbulb className="h-4 w-4" />}
         <span className="flex-1">
@@ -97,7 +97,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
 
       {/* Error state */}
       {error && (
-        <div className="mt-2 px-3 py-2 rounded-lg bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] text-(--error) text-xs">
+        <div className="mt-2 px-3 py-2 rounded-lg bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] text-error text-xs">
           {error}
           <button
             type="button"
@@ -113,19 +113,19 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
       {expanded && data && (
         <div className="anim-fade-up mt-2.5 flex flex-col gap-2.5">
           {/* Why Wrong */}
-          <div className="px-3.5 py-3 rounded-[10px] bg-[color-mix(in_srgb,var(--error)_4%,var(--surface))] border-l-3 border-l-(--error)">
-            <div className="flex items-center gap-1.5 mb-1.5 text-xs font-bold text-(--error) uppercase tracking-wide">
+          <div className="px-3.5 py-3 rounded-[10px] bg-[color-mix(in_srgb,var(--error)_4%,var(--surface))] border-l-3 border-l-error">
+            <div className="flex items-center gap-1.5 mb-1.5 text-xs font-bold text-error uppercase tracking-wide">
               <XCircle className="h-3 w-3" /> Why your answer is incorrect
             </div>
-            <p className="m-0 text-[13px] leading-relaxed text-(--text)">{data.whyWrong}</p>
+            <p className="m-0 text-[13px] leading-relaxed text-text">{data.whyWrong}</p>
           </div>
 
           {/* Why Correct */}
-          <div className="px-3.5 py-3 rounded-[10px] bg-[color-mix(in_srgb,var(--success)_4%,var(--surface))] border-l-3 border-l-(--success)">
-            <div className="flex items-center gap-1.5 mb-1.5 text-xs font-bold text-(--success) uppercase tracking-wide">
+          <div className="px-3.5 py-3 rounded-[10px] bg-[color-mix(in_srgb,var(--success)_4%,var(--surface))] border-l-3 border-l-success">
+            <div className="flex items-center gap-1.5 mb-1.5 text-xs font-bold text-success uppercase tracking-wide">
               <CheckCircle className="h-3 w-3" /> Why the correct answer is correct
             </div>
-            <p className="m-0 text-[13px] leading-relaxed text-(--text)">{data.whyCorrect}</p>
+            <p className="m-0 text-[13px] leading-relaxed text-text">{data.whyCorrect}</p>
           </div>
 
           {/* Grammar Rule — Formula Card */}
@@ -139,17 +139,17 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
           </div>
 
           {/* Examples */}
-          <div className="px-3.5 py-3 rounded-[10px] bg-(--card-bg) border-2 border-border">
-            <div className="flex items-center gap-1.5 mb-2 text-xs font-bold text-(--secondary) uppercase tracking-wide">
+          <div className="px-3.5 py-3 rounded-[10px] bg-card-bg border-2 border-border">
+            <div className="flex items-center gap-1.5 mb-2 text-xs font-bold text-secondary uppercase tracking-wide">
               <FlaskConical className="h-3 w-3" /> Similar Examples
             </div>
             <div className="flex flex-col gap-1.5">
               {data.examples.map((ex, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-2 text-[13px] leading-relaxed text-(--text)"
+                  className="flex items-start gap-2 text-[13px] leading-relaxed text-text"
                 >
-                  <span className="shrink-0 w-5 h-5 rounded-full bg-[color-mix(in_srgb,var(--secondary)_12%,var(--surface))] grid place-items-center text-[10px] font-bold text-(--secondary) mt-0.5">
+                  <span className="shrink-0 w-5 h-5 rounded-full bg-[color-mix(in_srgb,var(--secondary)_12%,var(--surface))] grid place-items-center text-[10px] font-bold text-secondary mt-0.5">
                     {i + 1}
                   </span>
                   <span>{ex}</span>
@@ -160,12 +160,12 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
 
           {/* Tip */}
           <div className="px-3.5 py-2.5 rounded-[10px] bg-gradient-to-br from-[color-mix(in_srgb,var(--warning)_8%,var(--surface))] to-[color-mix(in_srgb,var(--xp)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--warning)_15%,var(--border))] flex items-start gap-2.5">
-            <Zap className="h-4 w-4 text-(--warning) mt-0.5 shrink-0" />
+            <Zap className="h-4 w-4 text-warning mt-0.5 shrink-0" />
             <div>
-              <div className="text-[11px] font-bold text-(--warning) uppercase tracking-wide mb-1">
+              <div className="text-[11px] font-bold text-warning uppercase tracking-wide mb-1">
                 Memory Tip
               </div>
-              <p className="m-0 text-[13px] leading-relaxed text-(--text)">{data.tip}</p>
+              <p className="m-0 text-[13px] leading-relaxed text-text">{data.tip}</p>
             </div>
           </div>
         </div>
@@ -173,7 +173,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
 
       {/* Fallback: show old explanation if no deep data and not expanded */}
       {!data && !expanded && !loading && (fallbackEn || fallbackVi) && (
-        <div className="mt-2 px-3.5 py-2.5 rounded-lg bg-(--card-bg) border-2 border-border text-[13px] leading-relaxed">
+        <div className="mt-2 px-3.5 py-2.5 rounded-lg bg-card-bg border-2 border-border text-[13px] leading-relaxed">
           {fallbackVi && <p className="m-0 text-text-secondary italic">{fallbackVi}</p>}
         </div>
       )}

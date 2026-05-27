@@ -68,7 +68,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                 transition={{ delay: i * 0.04, type: "spring", stiffness: 400, damping: 25 }}
                 className={`relative cursor-pointer text-center rounded-lg border-2 border-border py-3.5 px-2.5 transition-all duration-100 ${
                   isSelected
-                    ? `${meta.twBg} shadow-(--shadow-sm) -translate-y-0.5 ${meta.darkText ? "text-ink" : "text-white"}`
+                    ? `${meta.twBg} shadow-sm -translate-y-0.5 ${meta.darkText ? "text-ink" : "text-white"}`
                     : "bg-surface text-text-secondary hover:bg-surface-hover"
                 }`}
               >
@@ -78,7 +78,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                     initial={{ scale: 0.9 }}
                     animate={{ scale: [0.9, 1.05, 0.9] }}
                     transition={{ repeat: Infinity, duration: 2 }}
-                    className="absolute -top-2 -right-2 rounded-full text-[9px] font-extrabold flex items-center gap-0.5 bg-accent text-ink py-0.5 px-1.5 border-2 border-border shadow-(--shadow-sm) z-10"
+                    className="absolute -top-2 -right-2 rounded-full text-[9px] font-extrabold flex items-center gap-0.5 bg-accent text-ink py-0.5 px-1.5 border-2 border-border shadow-sm z-10"
                   >
                     <Star size={9} className="fill-current" />
                     <span>Rec</span>
@@ -132,14 +132,14 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                 transition={{ delay: i * 0.05, type: "spring", stiffness: 350, damping: 25 }}
                 className={`flex items-center gap-3.5 rounded-lg border-2 border-border cursor-pointer text-left py-3 px-4 transition-all duration-100 ${
                   isSelected
-                    ? "bg-accent-light border-l-4 border-l-accent shadow-(--shadow-sm) -translate-y-0.5"
+                    ? "bg-accent-light border-l-4 border-l-accent shadow-sm -translate-y-0.5"
                     : "bg-surface hover:bg-surface-hover"
                 }`}
               >
                 <span
                   className={`grid w-[42px] h-[42px] shrink-0 rounded-lg place-items-center transition-all duration-150 ${
                     isSelected
-                      ? "bg-accent text-ink shadow-(--shadow-sm)"
+                      ? "bg-accent text-ink shadow-sm"
                       : "bg-bg-deep text-text-muted"
                   }`}
                 >

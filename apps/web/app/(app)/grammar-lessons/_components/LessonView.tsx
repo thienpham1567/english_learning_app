@@ -1199,9 +1199,9 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               />
 
               <div className="relative inline-block mb-5">
-                <Trophy size={58} className="text-(--success)" />
+                <Trophy size={58} className="text-success" />
                 <Star
-                  className="absolute text-xl text-(--xp)"
+                  className="absolute text-xl text-xp"
                   style={{ top: -4, right: -12, filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.15))" }}
                 />
               </div>

@@ -184,7 +184,7 @@ export default function GrammarRoadmapPage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-surface rounded-xl border-2 border-border p-6 mt-5 mb-6 relative overflow-hidden shadow-(--shadow-md)"
+          className="bg-surface rounded-xl border-2 border-border p-6 mt-5 mb-6 relative overflow-hidden shadow-md"
         >
           <div
             className="absolute top-0 left-0 right-0 h-[3px]"
@@ -438,7 +438,7 @@ export default function GrammarRoadmapPage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="bg-surface rounded-xl border-2 border-border p-6 mt-6 shadow-(--shadow-sm)"
+          className="bg-surface rounded-xl border-2 border-border p-6 mt-6 shadow-sm"
         >
           <div className="text-base font-black text-ink font-display mb-4 flex items-center gap-2">
             <Trophy className="text-[var(--xp)]" />

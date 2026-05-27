@@ -43,7 +43,7 @@ export function ReadAloud() {
   return (
     <div className="px-3.5 animate-in fade-in slide-in-from-bottom-2 duration-200">
       <div className="text-center mb-5">
-        <div className="w-12 h-12 rounded-full bg-(--secondary)/10 text-(--secondary) flex items-center justify-center mx-auto mb-2.5">
+        <div className="w-12 h-12 rounded-full bg-secondary/10 text-secondary flex items-center justify-center mx-auto mb-2.5">
           <Volume2 className="h-5 w-5" />
         </div>
         <h3 className="m-0 mb-1 text-base font-bold text-ink">Read Aloud · Part 1</h3>
@@ -85,7 +85,7 @@ export function ReadAloud() {
           <button
             type="button"
             onClick={() => setSelected(null)}
-            className="px-6 py-2.5 rounded-xl border-2 border-border bg-surface text-text-secondary hover:text-ink hover:bg-surface-hover hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow-sm) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-bold cursor-pointer"
+            className="px-6 py-2.5 rounded-xl border-2 border-border bg-surface text-text-secondary hover:text-ink hover:bg-surface-hover hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-sm active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-bold cursor-pointer"
           >
             ← Choose another passage
           </button>

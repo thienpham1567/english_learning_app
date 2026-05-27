@@ -85,7 +85,7 @@ export function BandScoreRadar({ scores, size = 200 }: Props) {
             y={p.y}
             textAnchor="middle"
             dominantBaseline="middle"
-            className="fill-(--text-secondary) text-[10px] font-medium"
+            className="fill-text-secondary text-[10px] font-medium"
           >
             {c.label}
           </text>
@@ -101,7 +101,7 @@ export function BandScoreRadar({ scores, size = 200 }: Props) {
             x={p.x}
             y={p.y - 10}
             textAnchor="middle"
-            className="fill-(--accent) text-[9px] font-bold"
+            className="fill-accent text-[9px] font-bold"
           >
             {scores[c.key].toFixed(1)}
           </text>

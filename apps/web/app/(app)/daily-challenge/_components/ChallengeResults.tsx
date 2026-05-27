@@ -96,7 +96,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: Math.min(index + 1, 6) * 0.08 }}
-      className={`rounded-2xl border-2 bg-surface overflow-hidden shadow-(--shadow-sm) ${
+      className={`rounded-2xl border-2 bg-surface overflow-hidden shadow-sm ${
         ok ? "border-success/30" : "border-error/25"
       }`}
     >
@@ -159,7 +159,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
             <div className="flex flex-col gap-3 p-4 pt-1.5">
               {/* Question stem */}
               {answer.questionStem && (
-                <div className="rounded-xl bg-surface-alt border-2 border-border p-3.5 shadow-(--shadow-sm)">
+                <div className="rounded-xl bg-surface-alt border-2 border-border p-3.5 shadow-sm">
                   <span className="text-[9px] font-extrabold uppercase text-text-muted block mb-1.5 tracking-wider font-display">
                     Question Stem
                   </span>
@@ -171,7 +171,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
 
               {/* User answer */}
               <div
-                className={`rounded-xl border-l-4 border-2 p-3.5 shadow-(--shadow-sm) ${
+                className={`rounded-xl border-l-4 border-2 p-3.5 shadow-sm ${
                   ok
                     ? "border-l-success border-success/20 bg-success/5"
                     : "border-l-error border-error/20 bg-error/5"
@@ -191,7 +191,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
 
               {/* Correct answer (wrong only) */}
               {!ok && answer.correctAnswer && (
-                <div className="rounded-xl border-l-4 border-2 border-border border-l-success bg-success/5 p-3.5 shadow-(--shadow-sm)">
+                <div className="rounded-xl border-l-4 border-2 border-border border-l-success bg-success/5 p-3.5 shadow-sm">
                   <span className="text-[9px] font-extrabold uppercase text-success block mb-1 tracking-wider font-display">
                     Correct Answer
                   </span>
@@ -222,7 +222,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                     fetchAIExplanation();
                   }}
                   disabled={aiLoading}
-                  className="inline-flex items-center gap-1.5 py-2.5 px-4.5 rounded-xl border border-accent/20 bg-accent/5 hover:bg-accent/10 text-accent text-[11px] font-black cursor-pointer shadow-(--shadow-sm) mt-1.5 w-fit"
+                  className="inline-flex items-center gap-1.5 py-2.5 px-4.5 rounded-xl border border-accent/20 bg-accent/5 hover:bg-accent/10 text-accent text-[11px] font-black cursor-pointer shadow-sm mt-1.5 w-fit"
                   style={{
                     cursor: aiLoading ? "wait" : "pointer",
                   }}
@@ -246,7 +246,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                 <m.div
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-1.5 rounded-xl p-4 bg-gradient-to-r from-accent-light/40 to-surface border-2 border-accent/20 shadow-(--shadow-sm) flex flex-col gap-1.5"
+                  className="mt-1.5 rounded-xl p-4 bg-gradient-to-r from-accent-light/40 to-surface border-2 border-accent/20 shadow-sm flex flex-col gap-1.5"
                 >
                   <div className="flex items-center gap-1.5">
                     <Lightbulb size={13} className="text-accent fill-current" />
@@ -310,7 +310,7 @@ export function ChallengeResults({
 
       <div className="anim-scale-in w-full max-w-2xl mx-auto flex flex-col gap-5">
         {/* ── Score Hero Card ── */}
-        <div className="rounded-2xl border-2 border-border bg-surface p-8 text-center relative overflow-hidden shadow-(--shadow) transition-all duration-200">
+        <div className="rounded-2xl border-2 border-border bg-surface p-8 text-center relative overflow-hidden shadow transition-all duration-200">
           {/* Top linear line */}
           <div className="absolute h-1.5 top-0 left-0 right-0 bg-gradient-to-r from-accent to-secondary" />
 
@@ -374,7 +374,7 @@ export function ChallengeResults({
             ].map((s) => (
               <div
                 key={s.label}
-                className="flex flex-col items-center gap-1.5 rounded-xl bg-surface-alt border-2 border-border p-3 shadow-(--shadow-sm)"
+                className="flex flex-col items-center gap-1.5 rounded-xl bg-surface-alt border-2 border-border p-3 shadow-sm"
               >
                 <span>{s.icon}</span>
                 <span className="font-mono text-base font-black text-text-primary leading-none mt-0.5">
@@ -393,7 +393,7 @@ export function ChallengeResults({
           <m.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="rounded-2xl border-2 border-accent bg-accent/5 p-4.5 shadow-(--shadow-sm) flex flex-col gap-3"
+            className="rounded-2xl border-2 border-accent bg-accent/5 p-4.5 shadow-sm flex flex-col gap-3"
           >
             <div className="flex items-center gap-1.5">
               <Star size={14} className="text-accent fill-current animate-pulse shrink-0" />
@@ -405,7 +405,7 @@ export function ChallengeResults({
               {newBadges.map((b) => (
                 <span
                   key={b.id}
-                  className="inline-flex items-center gap-1.5 text-xs rounded-xl bg-surface border-2 border-accent/30 font-black text-text-primary px-4 py-1.5 shadow-(--shadow-sm)"
+                  className="inline-flex items-center gap-1.5 text-xs rounded-xl bg-surface border-2 border-accent/30 font-black text-text-primary px-4 py-1.5 shadow-sm"
                 >
                   {b.icon === "Trophy" ? (
                     <Trophy className="text-accent h-4 w-4 shrink-0" />
@@ -444,7 +444,7 @@ export function ChallengeResults({
           <Link
             href="/daily-challenge"
             prefetch={false}
-            className="flex items-center justify-center gap-2.5 w-full rounded-2xl font-black text-[15px] px-6 py-4.5 bg-accent border-2 border-border text-ink shadow-(--shadow-sm) hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-(--shadow) active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-100 cursor-pointer"
+            className="flex items-center justify-center gap-2.5 w-full rounded-2xl font-black text-[15px] px-6 py-4.5 bg-accent border-2 border-border text-ink shadow-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-100 cursor-pointer"
           >
             <span>Done & Continue</span>
             <ChevronRight size={15} />

@@ -155,9 +155,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
 
   if (sentences.length === 0) {
     return (
-      <div className="bg-(--surface) rounded-(--radius-xl) border-2 border-border text-center"
-        style={{ padding: "40px 24px" }}
-      >
+      <div className="bg-surface rounded-xl border-2 border-border text-center py-10 px-6">
         <div className="flex justify-center mb-4"><Mic size={48} className="text-accent" /></div>
         <h3 className="mb-2 text-text-primary">
           Shadowing Mode
@@ -172,28 +170,22 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
   return (
     <div className="flex flex-col gap-4">
       {/* Progress bar */}
-      <div className="bg-(--surface) rounded-(--radius-xl) border-2 border-border py-4 px-5">
-        <div className="mb-2">
-          <span className="text-[13px] font-bold text-text-primary">
-            <BookOpen size={14} className="text-accent inline-block mr-1" /> Sentence {currentIdx + 1} of {sentences.length}
+      <div className="bg-surface rounded-xl border-2 border-border py-4 px-5">
+        <div className="mb-2 flex justify-between items-center">
+          <span className="text-[13px] font-bold text-text-primary flex items-center gap-1">
+            <BookOpen size={14} className="text-accent inline-block" /> Sentence {currentIdx + 1} of {sentences.length}
           </span>
           <span className="text-xs font-bold text-accent">{progress}% completed</span>
         </div>
-        <div className="h-[6px] overflow-hidden"
-          style={{ borderRadius: 3, background: "var(--border)" }}
-        >
+        <div className="h-[6px] overflow-hidden rounded-[3px] bg-border">
           <m.div
             animate={{ width: `${progress}%` }}
             transition={{ duration: 0.3 }}
-            className="h-full"
-            style={{
-              borderRadius: 3,
-              background: "linear-gradient(90deg, var(--accent), var(--xp))",
-            }}
+            className="h-full rounded-[3px] bg-gradient-to-r from-accent to-xp"
           />
         </div>
         {/* Sentence dots */}
-        <div className="mt-2.5">
+        <div className="mt-2.5 flex flex-wrap gap-1.5">
           {sentences.map((_, i) => (
             <button
               key={i}
@@ -203,22 +195,13 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                 setStep("idle");
                 setEvalResult(null);
               }}
-              className="w-[24px] h-[24px] rounded-md text-[10px] font-bold cursor-pointer grid"
-              style={{
-                border: i === currentIdx ? "2px solid var(--accent)" : "1px solid var(--border)",
-                background: sentenceResults[i]
-                  ? `color-mix(in srgb, var(--success) 15%, var(--surface))`
+              className={`w-6 h-6 rounded-md text-[10px] font-bold cursor-pointer grid place-items-center transition-all duration-150 ${
+                sentenceResults[i]
+                  ? "border border-success/30 bg-success/15 text-success"
                   : i === currentIdx
-                    ? "var(--accent-light)"
-                    : "var(--surface-alt)",
-                color: sentenceResults[i]
-                  ? "var(--success)"
-                  : i === currentIdx
-                    ? "var(--accent)"
-                    : "var(--text-muted)",
-                placeItems: "center",
-                transition: "all 0.15s",
-              }}
+                    ? "border-2 border-border bg-accent text-ink shadow-sm"
+                    : "border border-border/40 bg-surface-alt text-text-muted hover:border-border/60"
+              }`}
             >
               {sentenceResults[i] ? <CircleCheckBig size={11} /> : i + 1}
             </button>
@@ -231,17 +214,13 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
         key={currentIdx}
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
-        className="bg-(--surface) rounded-(--radius-xl) flex flex-col gap-5"
-        style={{
-          border:
-            step === "listening"
-              ? "2px solid var(--accent)"
-              : step === "recording"
-                ? "2px solid var(--error)"
-                : "1px solid var(--border)",
-          padding: "24px 20px",
-          transition: "border-color 0.2s",
-        }}
+        className={`bg-surface rounded-xl flex flex-col gap-5 py-6 px-5 border-2 transition-colors duration-200 ${
+          step === "listening"
+            ? "border-accent shadow"
+            : step === "recording"
+              ? "border-error shadow-sm"
+              : "border-border"
+        }`}
       >
         {/* Reference text */}
         <div>
@@ -269,14 +248,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={playReference}
-                className="w-full flex items-center justify-center gap-2.5 border-none text-[15px] font-extrabold cursor-pointer font-body"
-                style={{
-                  padding: "14px 20px",
-                  borderRadius: 14,
-                  background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-                  color: "var(--text-on-accent)",
-                  boxShadow: "0 4px 14px var(--accent-muted)",
-                }}
+                className="w-full flex items-center justify-center gap-2.5 border-2 border-border py-3.5 px-5 rounded-2xl bg-accent text-ink text-[15px] font-black cursor-pointer font-body shadow hover:bg-accent-hover"
               >
                 <Volume2 /> Listen to Model
               </m.button>
@@ -289,17 +261,15 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="text-center"
-              style={{ padding: "8px 0" }}
+              className="text-center py-2"
             >
-              <div>
+              <div className="flex items-center justify-center gap-2">
                 <m.div
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ repeat: Infinity, duration: 1.5 }}
-                  className="w-[12px] h-[12px] rounded-full"
-                  style={{ background: "var(--accent)" }}
+                  className="w-[12px] h-[12px] rounded-full bg-accent"
                 />
-                <span className="text-sm font-bold text-accent">
+                <span className="text-sm font-black text-accent-hover">
                   Playing model sentence... Listen carefully
                 </span>
               </div>
@@ -313,13 +283,12 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
             >
-              <div>
+              <div className="flex gap-3">
                 <m.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={playReference}
-                  className="flex items-center justify-center gap-1.5 py-3 px-4 rounded-xl border-2 border-border bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body"
-                  style={{ flex: "0 0 auto" }}
+                  className="flex items-center justify-center gap-1.5 py-3 px-4 rounded-xl border border-border bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body shrink-0"
                 >
                   <PlayCircle size={13} /> Listen Again
                 </m.button>
@@ -327,14 +296,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={startRecording}
-                  className="flex-1 flex items-center justify-center gap-2.5 border-none text-[15px] font-extrabold cursor-pointer font-body"
-                  style={{
-                    padding: "14px 20px",
-                    borderRadius: 14,
-                    background: "linear-gradient(135deg, #ef4444, #dc2626)",
-                    color: "#fff",
-                    boxShadow: "0 4px 14px rgba(239, 68, 68, 0.3)",
-                  }}
+                  className="flex-1 flex items-center justify-center gap-2.5 border-2 border-border py-3.5 px-5 rounded-2xl bg-error text-white text-[15px] font-black cursor-pointer font-body shadow-sm hover:bg-error/95"
                 >
                   <Mic size={14} /> Speak Now
                 </m.button>
@@ -349,13 +311,12 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
             >
-              <div>
-                <div>
+              <div className="flex flex-col items-center gap-3">
+                <div className="flex items-center gap-2">
                   <m.div
                     animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }}
                     transition={{ repeat: Infinity, duration: 1 }}
-                    className="w-[14px] h-[14px] rounded-full"
-                    style={{ background: "var(--error)" }}
+                    className="w-[14px] h-[14px] rounded-full bg-error"
                   />
                   <span className="text-sm font-bold text-destructive">
                     Recording... Read the sentence above
@@ -365,12 +326,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={stopAndEvaluate}
-                  className="flex items-center justify-center gap-2 rounded-xl text-destructive text-sm font-extrabold cursor-pointer font-body"
-                  style={{
-                    padding: "12px 28px",
-                    border: "2px solid var(--error)",
-                    background: "rgba(239, 68, 68, 0.08)",
-                  }}
+                  className="flex items-center justify-center gap-2 rounded-xl text-destructive text-sm font-extrabold cursor-pointer font-body py-3 px-7 border-2 border-error bg-error/10 hover:bg-error/20 transition-colors"
                 >
                   <StopCircle size={13} /> Stop & Grade
                 </m.button>
@@ -384,11 +340,10 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="text-center"
-              style={{ padding: "16px 0" }}
+              className="text-center py-4 flex flex-col items-center justify-center gap-2"
             >
-              <Loader2 className="animate-spin text-accent" size={24} />
-              <div className="text-sm font-bold text-accent flex items-center justify-center gap-1.5"><Loader2 className="animate-spin" size={14} /> AI is grading your pronunciation...</div>
+              <Loader2 className="animate-spin text-accent-hover" size={24} />
+              <div className="text-sm font-black text-accent-hover">AI is grading your pronunciation...</div>
             </m.div>
           )}
         </AnimatePresence>
@@ -406,12 +361,12 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
             <ShadowResult result={evalResult} referenceText={currentSentence} />
 
             {/* Action buttons */}
-            <div className="mt-3">
+            <div className="mt-3 flex gap-3">
               <m.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
                 onClick={retry}
-                className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-border bg-(--surface) text-text-primary text-sm font-bold cursor-pointer font-body"
+                className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl border border-border bg-surface text-text-primary text-sm font-bold cursor-pointer font-body hover:bg-surface-hover transition-colors"
               >
                 <Redo size={13} /> Retry
               </m.button>
@@ -420,14 +375,9 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={goToNext}
-                  className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-none text-sm font-extrabold cursor-pointer font-body"
-                  style={{
-                    background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-                    color: "var(--text-on-accent)",
-                    boxShadow: "0 4px 14px var(--accent-muted)",
-                  }}
+                  className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-border bg-accent text-ink text-sm font-black cursor-pointer font-body shadow-sm hover:bg-accent-hover"
                 >
-                  Next Sentence <ChevronRight />
+                  Next Sentence <ChevronRight size={14} />
                 </m.button>
               )}
             </div>
@@ -440,21 +390,15 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
         <m.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-(--radius-xl) text-center"
-          style={{
-            background:
-              "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), color-mix(in srgb, var(--xp) 6%, var(--surface)))",
-            border: "2px solid var(--accent)",
-            padding: "24px 20px",
-          }}
+          className="rounded-xl text-center border-2 border-accent p-6 shadow-md bg-gradient-to-br from-accent/10 to-xp/5"
         >
           <div className="flex justify-center mb-2"><Award size={40} className="text-accent" /></div>
-          <h3 className="mb-2 text-accent">
+          <h3 className="mb-2 text-accent-hover font-black">
             Completed!
           </h3>
           <span className="text-sm text-text-secondary block mb-3">
             Average Score:{" "}
-            <strong className="text-accent text-lg">
+            <strong className="text-accent-hover text-lg font-black">
               {Math.round(
                 sentenceResults.reduce((sum, r) => sum + (r?.overall ?? 0), 0) /
                   sentenceResults.length,
@@ -471,12 +415,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
               setEvalResult(null);
               setSentenceResults(new Array(sentences.length).fill(null));
             }}
-            className="rounded-xl text-accent text-[13px] font-bold cursor-pointer font-body"
-            style={{
-              padding: "10px 24px",
-              border: "1px solid var(--accent)",
-              background: "var(--accent-light)",
-            }}
+            className="rounded-xl text-ink text-[13px] font-black cursor-pointer font-body py-2.5 px-6 border-2 border-border bg-accent shadow-sm hover:bg-accent-hover"
           >
             Practice Again
           </m.button>

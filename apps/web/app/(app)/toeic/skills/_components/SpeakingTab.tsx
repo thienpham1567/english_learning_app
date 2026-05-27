@@ -28,7 +28,7 @@ export function SpeakingTab() {
             className={`px-3.5 py-2 rounded-xl text-xs font-semibold border cursor-pointer transition-all duration-150 active:scale-97 ${
               activePart === p.key
                 ? "border-accent bg-accent/10 text-accent"
-                : "border-border bg-surface text-text-secondary hover:bg-surface-hover hover:text-ink hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow-sm) transition-all duration-100"
+                : "border-border bg-surface text-text-secondary hover:bg-surface-hover hover:text-ink hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-sm transition-all duration-100"
             }`}
           >
             {p.label}

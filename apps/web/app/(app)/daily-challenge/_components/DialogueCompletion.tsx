@@ -44,7 +44,7 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
 
       {/* Dialogue display */}
       <div
-        className="mb-6 rounded-(--radius-xl) bg-surface-alt border-2 border-border flex flex-col gap-3"
+        className="mb-6 rounded-xl bg-surface-alt border-2 border-border flex flex-col gap-3"
         style={{ padding: "20px 16px" }}
       >
         {data.dialogue.map((line, i) => {
@@ -110,7 +110,7 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
               whileTap={!disabled ? { scale: 0.99 } : {}}
               onClick={() => handleSelect(i)}
               disabled={disabled}
-              className="flex items-center gap-3 rounded-(--radius-lg) py-3 px-4 text-left text-sm leading-normal"
+              className="flex items-center gap-3 rounded-lg py-3 px-4 text-left text-sm leading-normal"
               style={{
                 border: isSelected ? "2px solid var(--accent)" : "1px solid var(--border)",
                 background: isSelected ? "var(--accent-light)" : "var(--surface)",

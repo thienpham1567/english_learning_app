@@ -174,7 +174,7 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
                     onMouseLeave={() => setHoveredTopic(null)}
                     whileHover={{ y: -3, scale: 1.01 }}
                     whileTap={{ scale: 0.98 }}
-                    className="flex flex-col justify-between gap-3 rounded-(--radius-xl) cursor-pointer text-left"
+                    className="flex flex-col justify-between gap-3 rounded-xl cursor-pointer text-left"
                     style={{
                       padding: "16px 18px",
                       border: "1.5px solid var(--border)",

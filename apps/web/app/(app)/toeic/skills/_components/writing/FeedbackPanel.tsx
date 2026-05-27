@@ -27,14 +27,14 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
     <div className="mx-auto w-full max-w-4xl">
       {/* Overall band */}
       <div className="mb-6 text-center">
-        <span className="text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
+        <span className="text-xs font-semibold uppercase tracking-widest text-text-muted">
           Overall Band
         </span>
         <div className="mt-1 inline-flex items-baseline gap-1">
-          <span className="[font-family:var(--font-display)] text-5xl italic text-(--accent)">
+          <span className="[font-family:var(--font-display)] text-5xl italic text-accent">
             {feedback.overallBand.toFixed(1)}
           </span>
-          <span className="text-sm text-(--text-muted)">/ 9.0</span>
+          <span className="text-sm text-text-muted">/ 9.0</span>
         </div>
       </div>
 
@@ -43,15 +43,15 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
         {/* Top row: side-by-side */}
         <div className="grid gap-6 md:grid-cols-2">
           {/* Left: user's annotated text */}
-          <div className="rounded-xl border-2 border-border bg-(--surface) p-5 shadow-(--shadow-sm)">
-            <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
+          <div className="rounded-xl border-2 border-border bg-surface p-5 shadow-sm">
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-text-muted">
               Your Essay
             </h3>
             <AnnotatedText text={text} annotations={feedback.annotations} />
           </div>
 
           {/* Right: improved version */}
-          <div className="rounded-xl border-2 border-success/30 bg-success-bg p-5 shadow-(--shadow-sm)">
+          <div className="rounded-xl border-2 border-success/30 bg-success-bg p-5 shadow-sm">
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-success">
               Sample Answer (Band 7+)
             </h3>
@@ -63,18 +63,18 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
 
         {/* Bottom row: radar + feedback full-width */}
         <div className="mt-6 grid gap-6 md:grid-cols-2">
-          <div className="rounded-xl border-2 border-border bg-(--surface) p-5 shadow-(--shadow-sm)">
-            <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
+          <div className="rounded-xl border-2 border-border bg-surface p-5 shadow-sm">
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-text-muted">
               Detailed Scores
             </h3>
             <BandScoreRadar scores={feedback.scores} />
           </div>
 
-          <div className="rounded-xl border-2 border-border bg-(--surface) p-5 shadow-(--shadow-sm)">
-            <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
+          <div className="rounded-xl border-2 border-border bg-surface p-5 shadow-sm">
+            <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-text-muted">
               Comments
             </h3>
-            <p className="text-sm leading-relaxed text-(--ink)">{feedback.generalFeedback}</p>
+            <p className="text-sm leading-relaxed text-ink">{feedback.generalFeedback}</p>
           </div>
         </div>
       </div>
@@ -101,8 +101,8 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
 
         {/* Tab content */}
         {activeTab === "original" && (
-          <div className="anim-fade-in rounded-xl border-2 border-border bg-(--surface) p-4 shadow-(--shadow-sm)">
-            <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
+          <div className="anim-fade-in rounded-xl border-2 border-border bg-surface p-4 shadow-sm">
+            <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-text-muted">
               Your Essay
             </h3>
             <AnnotatedText text={text} annotations={feedback.annotations} />
@@ -110,7 +110,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
         )}
 
         {activeTab === "improved" && (
-          <div className="anim-fade-in rounded-xl border-2 border-success/30 bg-success-bg p-4 shadow-(--shadow-sm)">
+          <div className="anim-fade-in rounded-xl border-2 border-success/30 bg-success-bg p-4 shadow-sm">
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-success">
               Sample Answer (Band 7+)
             </h3>
@@ -122,17 +122,17 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
 
         {activeTab === "review" && (
           <div className="anim-fade-in space-y-4">
-            <div className="rounded-xl border-2 border-border bg-(--surface) p-4 shadow-(--shadow-sm)">
-              <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
+            <div className="rounded-xl border-2 border-border bg-surface p-4 shadow-sm">
+              <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-text-muted">
                 Detailed Scores
               </h3>
               <BandScoreRadar scores={feedback.scores} />
             </div>
-            <div className="rounded-xl border-2 border-border bg-(--surface) p-4 shadow-(--shadow-sm)">
-              <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
+            <div className="rounded-xl border-2 border-border bg-surface p-4 shadow-sm">
+              <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-text-muted">
                 Comments
               </h3>
-              <p className="text-sm leading-relaxed text-(--ink)">{feedback.generalFeedback}</p>
+              <p className="text-sm leading-relaxed text-ink">{feedback.generalFeedback}</p>
             </div>
           </div>
         )}
@@ -142,7 +142,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
       <div className="mt-8 text-center">
         <button
           onClick={onNewWriting}
-          className="rounded-xl border-2 border-border bg-(--surface) px-6 py-2.5 text-xs font-bold text-(--text-secondary) shadow-(--shadow-sm) transition hover:border-(--accent)/45 hover:text-(--accent) cursor-pointer flex items-center gap-1.5 mx-auto"
+          className="rounded-xl border-2 border-border bg-surface px-6 py-2.5 text-xs font-bold text-text-secondary shadow-sm transition hover:border-accent/45 hover:text-accent cursor-pointer flex items-center gap-1.5 mx-auto"
         >
           <PenTool className="h-4 w-4" />
           <span>Write New Essay</span>

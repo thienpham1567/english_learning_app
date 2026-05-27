@@ -63,7 +63,7 @@ const containerVariants = {
 };
 
 const cardClass =
-  "relative overflow-hidden rounded-2xl border-2 border-border bg-surface shadow-(--shadow) p-6 transition-all duration-200";
+  "relative overflow-hidden rounded-2xl border-2 border-border bg-surface shadow p-6 transition-all duration-200";
 const sectionLabelClass =
   "flex items-center gap-2.5 text-[10px] font-extrabold uppercase tracking-widest text-accent mb-4.5 font-display";
 const accentBarClass = "w-[3.5px] h-4 rounded-sm bg-accent shrink-0";
@@ -129,7 +129,7 @@ export default function DashboardPage() {
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden rounded-2xl border-2 border-border bg-surface p-6 shadow-(--shadow) flex flex-col md:flex-row md:items-center justify-between gap-6"
+          className="relative overflow-hidden rounded-2xl border-2 border-border bg-surface p-6 shadow flex flex-col md:flex-row md:items-center justify-between gap-6"
         >
           {/* Subtle grid pattern background */}
           <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06] pointer-events-none bg-[linear-gradient(to_right,rgba(0,0,0,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.15)_1px,transparent_1px)] bg-[size:16px_16px]" />
@@ -138,7 +138,7 @@ export default function DashboardPage() {
           <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
           
           <div className="flex items-start gap-4.5 relative z-10">
-            <div className="w-14 h-14 rounded-2xl border-2 border-border bg-accent text-text-on-accent flex items-center justify-center shrink-0 shadow-(--shadow-sm) relative overflow-hidden group">
+            <div className="w-14 h-14 rounded-2xl border-2 border-border bg-accent text-text-on-accent flex items-center justify-center shrink-0 shadow-sm relative overflow-hidden group">
               <motion.div
                 animate={{ rotate: [0, 8, -8, 8, 0] }}
                 transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
@@ -163,7 +163,7 @@ export default function DashboardPage() {
           <div className="flex items-center gap-3 shrink-0 relative z-10">
             <Link
               href="/daily-challenge"
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-black border-2 border-border bg-accent text-ink shadow-(--shadow-sm) hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-(--shadow) active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-black border-2 border-border bg-accent text-ink shadow-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all cursor-pointer"
             >
               <Flame className="h-4 w-4 fill-current text-orange-600 animate-pulse" />
               <span>Daily Challenge</span>
@@ -358,9 +358,9 @@ export default function DashboardPage() {
                       key={b.id}
                       whileHover={{ scale: 1.05, rotate: [0, -2, 2, -2, 0] }}
                       transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                      className="p-3.5 rounded-xl border-2 border-border bg-surface-alt flex flex-col items-center justify-center text-center shadow-(--shadow-sm) relative overflow-hidden"
+                      className="p-3.5 rounded-xl border-2 border-border bg-surface-alt flex flex-col items-center justify-center text-center shadow-sm relative overflow-hidden"
                     >
-                      <div className="w-11 h-11 rounded-full bg-accent/10 border-2 border-accent/20 flex items-center justify-center mb-2 shadow-(--shadow-sm) text-xl">
+                      <div className="w-11 h-11 rounded-full bg-accent/10 border-2 border-accent/20 flex items-center justify-center mb-2 shadow-sm text-xl">
                         {b.icon}
                       </div>
                       <div className="text-[10px] font-black text-text-primary font-display leading-tight truncate max-w-full px-0.5">
@@ -403,13 +403,13 @@ function StatCard({
       whileHover={{ y: -3, x: -3, boxShadow: "var(--shadow-md)" }}
       whileTap={{ y: 2, x: 2, boxShadow: "none" }}
       transition={{ type: "spring", stiffness: 350, damping: 25 }}
-      className="flex-1 min-w-[120px] rounded-2xl border-2 border-border bg-surface p-4.5 shadow-(--shadow) transition-all duration-100 relative overflow-hidden group"
+      className="flex-1 min-w-[120px] rounded-2xl border-2 border-border bg-surface p-4.5 shadow transition-all duration-100 relative overflow-hidden group"
     >
       {loading ? (
         <div className="h-12 bg-bg-deep border-2 border-border rounded-xl animate-pulse w-full" />
       ) : (
         <div className="flex items-center gap-4 relative z-10">
-          <div className={`w-12 h-12 rounded-xl border-2 border-border flex items-center justify-center shrink-0 shadow-(--shadow-sm) ${iconBg} transition-colors duration-200`}>
+          <div className={`w-12 h-12 rounded-xl border-2 border-border flex items-center justify-center shrink-0 shadow-sm ${iconBg} transition-colors duration-200`}>
             {icon}
           </div>
           <div className="text-left min-w-0 flex-1">
@@ -443,7 +443,7 @@ function ScoreDisplay({ score }: { score: PredictedScore }) {
 
   return (
     <div className="flex items-center gap-6 flex-wrap md:flex-nowrap">
-      <div className="relative flex items-center justify-center w-[130px] h-[130px] mx-auto shrink-0 bg-surface rounded-full p-2 border border-border/10 shadow-(--shadow-sm)">
+      <div className="relative flex items-center justify-center w-[130px] h-[130px] mx-auto shrink-0 bg-surface rounded-full p-2 border border-border/10 shadow-sm">
         <svg height={130} width={130} className="transform -rotate-90">
           <defs>
             <linearGradient id="scoreGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -553,7 +553,7 @@ function MiniScore({
         background: `color-mix(in srgb, ${color} 7%, var(--surface))`,
         borderColor: `color-mix(in srgb, ${color} 25%, var(--border))`,
       }}
-      className="flex-1 p-3 rounded-xl border-2 text-left flex items-center gap-3 shadow-(--shadow-sm) relative overflow-hidden"
+      className="flex-1 p-3 rounded-xl border-2 text-left flex items-center gap-3 shadow-sm relative overflow-hidden"
     >
       <div style={{ color }} className="w-8 h-8 rounded-lg border-2 border-current flex items-center justify-center shrink-0 bg-surface">
         {icon}
@@ -573,7 +573,7 @@ function MiniScore({
 function InsufficientDataCard({ score }: { score: PredictedScore }) {
   return (
     <div className="text-center py-6 px-4 bg-surface rounded-xl border-2 border-dashed border-border flex flex-col items-center justify-center">
-      <div className="w-12 h-12 rounded-2xl bg-bg-deep border-2 border-border flex items-center justify-center mb-3 shadow-(--shadow-sm)">
+      <div className="w-12 h-12 rounded-2xl bg-bg-deep border-2 border-border flex items-center justify-center mb-3 shadow-sm">
         <TrendingUp className="h-6 w-6 text-text-muted animate-pulse" />
       </div>
       <h3 className="text-sm font-black text-ink tracking-tight mb-1 font-display">
@@ -591,14 +591,14 @@ function InsufficientDataCard({ score }: { score: PredictedScore }) {
       <div className="flex gap-3 justify-center flex-wrap w-full">
         <Link
           href="/toeic/skills?tab=part5"
-          className="flex-1 min-w-[130px] inline-flex items-center justify-center gap-1.5 px-4.5 py-2.5 rounded-xl text-xs font-black border-2 border-border bg-accent text-ink shadow-(--shadow-sm) hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all cursor-pointer"
+          className="flex-1 min-w-[130px] inline-flex items-center justify-center gap-1.5 px-4.5 py-2.5 rounded-xl text-xs font-black border-2 border-border bg-accent text-ink shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all cursor-pointer"
         >
           <HelpCircle className="h-3.5 w-3.5" />
           <span>Grammar Quiz</span>
         </Link>
         <Link
           href="/toeic/skills"
-          className="flex-1 min-w-[130px] inline-flex items-center justify-center gap-1.5 px-4.5 py-2.5 rounded-xl text-xs font-black border-2 border-border bg-surface text-text-primary shadow-(--shadow-sm) hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all cursor-pointer"
+          className="flex-1 min-w-[130px] inline-flex items-center justify-center gap-1.5 px-4.5 py-2.5 rounded-xl text-xs font-black border-2 border-border bg-surface text-text-primary shadow-sm hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all cursor-pointer"
         >
           <Target className="h-3.5 w-3.5" />
           <span>Practice Listening</span>
@@ -640,7 +640,7 @@ function StudyPlanSection({ items, stats }: { items: DailyPlanItem[]; stats: Dai
               className={`flex items-center gap-3.5 p-3 rounded-xl border-2 transition-all duration-100 cursor-pointer ${
                 item.completed
                   ? "bg-success-bg border-success/30 opacity-60 hover:opacity-85"
-                  : "bg-surface border-border hover:translate-x-[2px] hover:shadow-(--shadow-sm) active:translate-x-0"
+                  : "bg-surface border-border hover:translate-x-[2px] hover:shadow-sm active:translate-x-0"
               }`}
             >
               <div
@@ -683,7 +683,7 @@ function StudyPlanSection({ items, stats }: { items: DailyPlanItem[]; stats: Dai
 
       {/* Level Banner */}
       {stats && (
-        <div className="p-3.5 rounded-xl bg-surface-alt border-2 border-border flex items-center gap-3 shadow-(--shadow-sm) mt-1">
+        <div className="p-3.5 rounded-xl bg-surface-alt border-2 border-border flex items-center gap-3 shadow-sm mt-1">
           <div className="w-9 h-9 rounded-lg border-2 border-border bg-amber-500/10 flex items-center justify-center shrink-0">
             <Star className="text-amber-500 h-4.5 w-4.5 fill-current shrink-0 animate-pulse" />
           </div>
@@ -763,10 +763,10 @@ function QuickActions({ dash: _dash }: QuickActionsProps) {
             transition={{ delay: 0.04 * i }}
             whileHover={{ scale: 1.04, rotate: i % 2 === 0 ? 1 : -1, boxShadow: "var(--shadow)" }}
             whileTap={{ y: 2, x: 2, boxShadow: "none" }}
-            className="p-4 rounded-xl border-2 border-border bg-surface text-center cursor-pointer shadow-(--shadow-sm) transition-all duration-100 group"
+            className="p-4 rounded-xl border-2 border-border bg-surface text-center cursor-pointer shadow-sm transition-all duration-100 group"
           >
             <div
-              className={`w-9 h-9 border-2 border-border rounded-lg flex items-center justify-center mx-auto mb-2 text-sm shadow-(--shadow-sm) transition-transform group-hover:scale-110 duration-200 ${a.color}`}
+              className={`w-9 h-9 border-2 border-border rounded-lg flex items-center justify-center mx-auto mb-2 text-sm shadow-sm transition-transform group-hover:scale-110 duration-200 ${a.color}`}
             >
               {a.icon}
             </div>
@@ -804,7 +804,7 @@ function WeeklyChart({ data }: { data: Array<{ day: string; count: number }> }) 
               style={{ height: `${h}px` }}
               className={`w-full max-w-[28px] rounded-t-lg transition-colors ${
                 d.count > 0
-                  ? "bg-gradient-to-t from-accent to-orange-500 border-2 border-border shadow-(--shadow-sm)"
+                  ? "bg-gradient-to-t from-accent to-orange-500 border-2 border-border shadow-sm"
                   : "bg-bg-deep border-2 border-border/10"
               }`}
             />

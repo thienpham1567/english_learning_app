@@ -23,17 +23,17 @@ export function ErrorCard({ error, onClick, index = 0 }: ErrorCardProps) {
     >
       {/* Accent bar */}
       <div
-        className={`absolute top-0 left-0 w-[3px] h-full rounded-l ${error.isResolved ? "bg-(--success)" : "bg-(--error)"}`}
+        className={`absolute top-0 left-0 w-[3px] h-full rounded-l ${error.isResolved ? "bg-success" : "bg-error"}`}
       />
 
       {/* Top row: status + module + date */}
       <div className="flex items-center gap-2 mb-2.5">
         {error.isResolved ? (
-          <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-(--success-bg) text-(--success)">
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-success-bg text-success">
             <CheckCircle className="h-2.5 w-2.5" /> Resolved
           </span>
         ) : (
-          <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-(--error-bg) text-(--error)">
+          <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-error-bg text-error">
             <AlertTriangle className="h-2.5 w-2.5" /> Unresolved
           </span>
         )}
@@ -63,10 +63,10 @@ export function ErrorCard({ error, onClick, index = 0 }: ErrorCardProps) {
 
       {/* Answer comparison */}
       <div className="flex gap-2">
-        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--error)_15%,transparent)] text-xs font-bold text-(--error)">
+        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--error)_15%,transparent)] text-xs font-bold text-error">
           <XCircle className="h-2.5 w-2.5" /> {error.userAnswer || "(Empty)"}
         </span>
-        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[color-mix(in_srgb,var(--success)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--success)_15%,transparent)] text-xs font-bold text-(--success)">
+        <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[color-mix(in_srgb,var(--success)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--success)_15%,transparent)] text-xs font-bold text-success">
           <CheckCircle className="h-2.5 w-2.5" /> {error.correctAnswer}
         </span>
       </div>

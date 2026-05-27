@@ -17,12 +17,12 @@ type Props = {
 type Status = "idle" | "loading" | "ok" | "error";
 
 const LEVEL_COLORS: Record<string, string> = {
-  A1: "bg-emerald-500/5 text-emerald-500 border-emerald-500/20",
-  A2: "bg-emerald-500/5 text-emerald-500 border-emerald-500/15",
-  B1: "bg-accent/5 text-accent border-accent/20",
-  B2: "bg-warning/5 text-warning border-warning/20",
-  C1: "bg-purple-500/5 text-purple-500 border-purple-500/20",
-  C2: "bg-error/5 text-error border-error/20",
+  A1: "text-emerald-700 dark:text-emerald-400 border-emerald-500/30 bg-emerald-500/5",
+  A2: "text-blue-700 dark:text-blue-400 border-blue-500/30 bg-blue-500/5",
+  B1: "text-amber-700 dark:text-amber-400 border-amber-500/30 bg-amber-500/5",
+  B2: "text-orange-700 dark:text-orange-400 border-orange-500/30 bg-orange-500/5",
+  C1: "text-purple-700 dark:text-purple-400 border-purple-500/30 bg-purple-500/5",
+  C2: "text-red-700 dark:text-red-400 border-red-500/30 bg-red-500/5",
 };
 
 function getTypeLabel(data: Vocabulary): string {
@@ -93,7 +93,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
               <button
                 type="button"
                 onClick={onClose}
-                className="w-8 h-8 rounded-lg border-2 border-border bg-surface hover:bg-surface-hover text-text-secondary cursor-pointer flex items-center justify-center shadow-(--shadow-sm) transition-colors shrink-0"
+                className="w-8 h-8 rounded-lg border-2 border-border bg-surface hover:bg-surface-hover text-text-secondary cursor-pointer flex items-center justify-center shadow-sm transition-colors shrink-0"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -105,8 +105,8 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={onToggleSaved}
-                className={`items-center gap-1.5 rounded-xl border-2 border-border text-xs font-black cursor-pointer px-4 py-2 flex shadow-(--shadow-sm) transition-all ${
-                  saved ? "bg-accent-light text-accent" : "bg-surface text-text-secondary"
+                className={`items-center gap-1.5 rounded-xl border-2 border-border text-xs font-black cursor-pointer px-4 py-2 flex shadow-sm transition-all ${
+                  saved ? "bg-accent text-ink" : "bg-surface text-text-secondary"
                 }`}
               >
                 <Star className={`h-4 w-4 shrink-0 ${saved ? "fill-current animate-pulse" : ""}`} />
@@ -117,7 +117,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                 whileHover={{ scale: 1.03 }}
                 whileTap={{ scale: 0.97 }}
                 onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
-                className="items-center gap-1.5 rounded-xl border-2 border-border bg-surface text-text-secondary text-xs font-black cursor-pointer px-4 py-2 flex shadow-(--shadow-sm) transition-all"
+                className="items-center gap-1.5 rounded-xl border-2 border-border bg-surface text-text-secondary text-xs font-black cursor-pointer px-4 py-2 flex shadow-sm transition-all"
               >
                 <LinkIcon className="h-4 w-4 shrink-0" />
                 <span>Search</span>
@@ -150,7 +150,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
-                    className="mt-2.5 h-[40px] rounded-xl border-2 border-border font-black text-xs cursor-pointer flex items-center justify-center gap-2 bg-accent text-ink shadow-(--shadow-sm) hover:translate-y-[-1px] hover:shadow-(--shadow) transition-all"
+                    className="mt-2.5 h-[40px] rounded-xl border-2 border-border font-black text-xs cursor-pointer flex items-center justify-center gap-2 bg-accent text-ink shadow-sm hover:translate-y-[-1px] hover:shadow transition-all"
                   >
                     <LinkIcon className="h-4 w-4" /> 
                     <span>Search Again</span>
@@ -172,7 +172,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                   </div>
 
                   {(data.phoneticsUs || data.phoneticsUk) && (
-                    <div className="flex gap-3.5 bg-surface-alt rounded-xl border-2 border-border p-3.5 shadow-(--shadow-sm)">
+                    <div className="flex gap-3.5 bg-surface-alt rounded-xl border-2 border-border p-3.5 shadow-sm">
                       {data.phoneticsUs && (
                         <div className="flex items-center gap-1.5 text-xs text-text-secondary font-bold">
                           <span className="px-1.5 py-0.5 rounded bg-surface border border-border/60 text-[9px] text-text-muted font-black">US</span>
@@ -190,11 +190,11 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
 
                   <div className="flex gap-2 flex-wrap">
                     {levelStyle && (
-                      <span className={`text-[10px] font-black rounded-lg border px-3 py-1 shadow-(--shadow-sm) ${levelStyle}`}>
+                      <span className={`text-[10px] font-black rounded-lg border px-3 py-1 shadow-sm ${levelStyle}`}>
                         Level: {data.level}
                       </span>
                     )}
-                    <span className="text-[10px] font-black rounded-lg bg-surface-alt text-text-secondary border-2 border-border px-3 py-1 shadow-(--shadow-sm)">
+                    <span className="text-[10px] font-black rounded-lg bg-surface-alt text-text-secondary border-2 border-border px-3 py-1 shadow-sm">
                       {getTypeLabel(data)}
                     </span>
                   </div>
@@ -202,7 +202,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                   <div className="flex flex-col gap-5.5 border-t-2 border-dashed border-border/40 pt-5">
                     {data.senses.map((sense) => (
                       <div key={sense.id} className="flex flex-col gap-2">
-                        <span className="text-[9px] font-extrabold uppercase tracking-wider text-accent font-display">
+                        <span className="text-[9px] font-extrabold uppercase tracking-wider text-text-secondary font-display">
                           {sense.label || "Definition"}
                         </span>
 
@@ -218,7 +218,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                         {sense.examples.slice(0, 3).map((ex, i) => (
                           <div
                             key={i}
-                            className="mt-1.5 flex flex-col gap-1 border-l-2 border-accent-hover/30 pl-3.5"
+                            className="mt-1.5 flex flex-col gap-1 border-l-2 border-accent/50 pl-3.5"
                           >
                             <span className="text-xs italic text-text-secondary font-semibold leading-relaxed">
                               &ldquo;{ex.en}&rdquo;
@@ -234,7 +234,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
-                    className="h-[42px] rounded-xl border-2 border-border font-black cursor-pointer flex items-center justify-center gap-1.5 bg-gradient-to-r from-accent to-secondary text-white shadow-(--shadow) mt-4 mb-2"
+                    className="h-[42px] rounded-xl border-2 border-border font-black cursor-pointer flex items-center justify-center gap-1.5 bg-gradient-to-r from-accent to-secondary text-white shadow mt-4 mb-2"
                   >
                     <span>View in Dictionary</span>
                     <ArrowRight className="h-4 w-4 shrink-0" />

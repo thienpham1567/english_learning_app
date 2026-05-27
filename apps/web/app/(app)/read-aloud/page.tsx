@@ -68,70 +68,54 @@ export default function ReadAloudPage() {
   }, [history]);
 
   return (
-    <div
-      style={{ height: "100%", overflowY: "auto", padding: "var(--space-6)" }}
-      className="anim-fade-up read-aloud-page-root"
-    >
-      <div  style={{ maxWidth: 1080, margin: "0 auto" }}>
+    <div className="anim-fade-up read-aloud-page-root h-full overflow-y-auto p-6">
+      <div className="max-w-[1080px] mx-auto">
         {/* Mode Tabs */}
-        <div className="read-aloud-mode-tabs" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-          {MODE_TABS.map((tab) => (
-            <button
-              key={tab.key}
-              type="button"
-              onClick={() => setMode(tab.key)}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: 8,
-                padding: "10px 18px",
-                borderRadius: 14,
-                border: mode === tab.key ? "2px solid var(--accent)" : "1px solid var(--border)",
-                background:
-                  mode === tab.key
-                    ? "color-mix(in srgb, var(--accent) 10%, var(--surface))"
-                    : "var(--surface)",
-                cursor: "pointer",
-                transition: "all 0.2s",
-                fontFamily: "var(--font-body)",
-                boxShadow: mode === tab.key ? "0 2px 12px var(--accent-muted)" : "var(--shadow-sm)",
-              }}
-            >
-              <motion.span
-                animate={{ scale: mode === tab.key ? 1.1 : 1 }}
-                transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                style={{ display: "inline-flex", color: mode === tab.key ? "var(--accent)" : "var(--text-muted)" }}
+        <div className="read-aloud-mode-tabs flex gap-2 flex-wrap">
+          {MODE_TABS.map((tab) => {
+            const isActive = mode === tab.key;
+            return (
+              <button
+                key={tab.key}
+                type="button"
+                onClick={() => setMode(tab.key)}
+                className={`flex items-center gap-2 px-4.5 py-2.5 rounded-xl transition-all duration-200 font-body cursor-pointer ${
+                  isActive
+                    ? "border-2 border-border bg-accent text-ink shadow"
+                    : "border border-border/30 bg-surface text-text-primary hover:bg-surface-hover hover:border-border/60"
+                }`}
               >
-                <tab.Icon size={18} />
-              </motion.span>
-              <div style={{ textAlign: "left" }}>
-                <div className="mode-label"
-                  style={{
-                    fontSize: 14,
-                    fontWeight: mode === tab.key ? 800 : 600,
-                    color: mode === tab.key ? "var(--accent)" : "var(--text-primary)",
-                  }}
+                <motion.span
+                  animate={{ scale: isActive ? 1.1 : 1 }}
+                  transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                  className={`inline-flex ${isActive ? "text-ink" : "text-text-muted"}`}
                 >
-                  {tab.label}
+                  <tab.Icon size={18} />
+                </motion.span>
+                <div className="text-left">
+                  <div
+                    className={`mode-label text-sm ${
+                      isActive ? "font-black text-ink" : "font-bold text-text-primary"
+                    }`}
+                  >
+                    {tab.label}
+                  </div>
+                  <div
+                    className={`mode-desc text-[11px] ${
+                      isActive ? "text-ink/75" : "text-text-muted"
+                    }`}
+                  >
+                    {tab.desc}
+                  </div>
                 </div>
-                <div className="mode-desc" style={{ fontSize: 11, color: "var(--text-muted)" }}>
-                  {tab.desc}
-                </div>
-              </div>
-            </button>
-          ))}
+              </button>
+            );
+          })}
         </div>
 
         {/* ── Listen Mode (existing functionality) ── */}
         {mode === "listen" && (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 340px",
-              gap: "var(--space-5)",
-            }}
-            className="read-aloud-grid"
-          >
+          <div className="read-aloud-grid mt-6 grid grid-cols-1 md:grid-cols-[1fr_340px] gap-5">
             {/* Left: Input & Samples */}
             <div>
               <TextInputPanel
@@ -178,40 +162,16 @@ export default function ReadAloudPage() {
 
         {/* ── Shadow Mode ── */}
         {mode === "shadow" && (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 340px",
-              gap: "var(--space-5)",
-            }}
-            className="read-aloud-grid"
-          >
+          <div className="read-aloud-grid mt-6 grid grid-cols-1 md:grid-cols-[1fr_340px] gap-5">
             <ShadowingMode text={text} voiceRole={selectedRole} speed={speed} />
             <div>
               <VoiceSelector selectedRole={selectedRole} onSelectRole={setSelectedRole} />
-              <div
-                style={{
-                  background: "var(--surface)",
-                  borderRadius: "var(--radius-xl)",
-                  border: "1px solid var(--border)",
-                  padding: "var(--space-4)",
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 700,
-                    color: "var(--text-muted)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 6,
-                    marginBottom: 8,
-                  }}
-                >
+              <div className="bg-surface rounded-xl border border-border p-4 shadow-sm">
+                <span className="text-xs font-bold text-text-muted flex items-center gap-1.5 mb-2">
                   <motion.span
                     animate={{ rotate: [0, 10, -10, 0] }}
                     transition={{ repeat: Infinity, duration: 2, repeatDelay: 4 }}
-                    style={{ display: "inline-flex", color: "var(--accent)" }}
+                    className="inline-flex text-accent-hover"
                   >
                     <Lightbulb size={14} />
                   </motion.span>
@@ -224,15 +184,7 @@ export default function ReadAloudPage() {
                   "4. AI grades your pronunciation",
                   "5. Retry or move to the next sentence",
                 ].map((tip, i) => (
-                  <span
-                    key={i}
-                    style={{
-                      fontSize: 12,
-                      color: "var(--text-secondary)",
-                      display: "block",
-                      marginBottom: 4,
-                    }}
-                  >
+                  <span key={i} className="text-xs text-text-secondary block mb-1 font-semibold">
                     {tip}
                   </span>
                 ))}
@@ -243,41 +195,16 @@ export default function ReadAloudPage() {
 
         {/* ── Dialogue Mode ── */}
         {mode === "dialogue" && (
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 340px",
-              gap: "var(--space-5)",
-            }}
-            className="read-aloud-grid"
-          >
+          <div className="read-aloud-grid mt-6 grid grid-cols-1 md:grid-cols-[1fr_340px] gap-5">
             <DialoguePlayer voiceRole={selectedRole} speed={speed} />
             <div>
               <VoiceSelector selectedRole={selectedRole} onSelectRole={setSelectedRole} />
-              <div
-                style={{
-                  background: "var(--surface)",
-                  borderRadius: "var(--radius-xl)",
-                  border: "1px solid var(--border)",
-                  padding: "var(--space-4)",
-                  boxShadow: "var(--shadow-sm)",
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: 12,
-                    fontWeight: 700,
-                    color: "var(--text-muted)",
-                    display: "flex",
-                    alignItems: "center",
-                    gap: 6,
-                    marginBottom: 8,
-                  }}
-                >
+              <div className="bg-surface rounded-xl border border-border p-4 shadow-sm">
+                <span className="text-xs font-bold text-text-muted flex items-center gap-1.5 mb-2">
                   <motion.span
                     animate={{ rotate: [0, 10, -10, 0] }}
                     transition={{ repeat: Infinity, duration: 2, repeatDelay: 4 }}
-                    style={{ display: "inline-flex", color: "var(--accent)" }}
+                    className="inline-flex text-accent-hover"
                   >
                     <Lightbulb size={14} />
                   </motion.span>
@@ -290,15 +217,7 @@ export default function ReadAloudPage() {
                   "4. Roleplay as a character",
                   "5. Read your part and get graded",
                 ].map((tip, i) => (
-                  <span
-                    key={i}
-                    style={{
-                      fontSize: 12,
-                      color: "var(--text-secondary)",
-                      display: "block",
-                      marginBottom: 4,
-                    }}
-                  >
+                  <span key={i} className="text-xs text-text-secondary block mb-1 font-semibold">
                     {tip}
                   </span>
                 ))}

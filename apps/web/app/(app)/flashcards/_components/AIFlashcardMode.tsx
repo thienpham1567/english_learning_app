@@ -158,7 +158,7 @@ export function AIFlashcardMode() {
                   className={`flex items-center gap-2.5 rounded-lg cursor-pointer text-left py-3 px-3.5 transition-all duration-150 ${
                     isSelected
                       ? "border-[1.5px] border-accent bg-accent-light shadow-[0_4px_14px_var(--accent-muted)]"
-                      : "border-[1.5px] border-border bg-surface shadow-(--shadow-sm)"
+                      : "border-[1.5px] border-border bg-surface shadow-sm"
                   }`}
                 >
                   <span className="text-xl">{topic.emoji}</span>
@@ -432,7 +432,7 @@ export function AIFlashcardMode() {
                   tts.speak(card.front);
                 }}
                 disabled={tts.isLoading || tts.isSpeaking}
-                className="mt-5 inline-flex items-center gap-2 rounded-full text-accent text-[13px] font-bold relative z-[2] py-2 px-4.5 shadow-(--shadow-sm) transition-all duration-200"
+                className="mt-5 inline-flex items-center gap-2 rounded-full text-accent text-[13px] font-bold relative z-[2] py-2 px-4.5 shadow-sm transition-all duration-200"
                 style={{
                   border: "1.5px solid color-mix(in srgb, var(--accent) 30%, var(--border))",
                   background: tts.isSpeaking ? "var(--accent-light)" : "var(--surface)",
@@ -518,7 +518,7 @@ export function AIFlashcardMode() {
           whileTap={{ scale: 0.95 }}
           onClick={goPrev}
           disabled={currentIdx === 0}
-          className={`w-12 h-12 border-2 border-border bg-surface grid place-items-center text-base rounded-[14px] shadow-(--shadow-sm) ${
+          className={`w-12 h-12 border-2 border-border bg-surface grid place-items-center text-base rounded-[14px] shadow-sm ${
             currentIdx === 0 ? "text-text-muted cursor-not-allowed" : "text-text-primary cursor-pointer"
           }`}
         >
@@ -529,7 +529,7 @@ export function AIFlashcardMode() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => setFlipped(!flipped)}
-          className="flex-1 max-w-[200px] h-12 text-accent cursor-pointer text-sm font-extrabold rounded-[14px] shadow-(--shadow-sm)"
+          className="flex-1 max-w-[200px] h-12 text-accent cursor-pointer text-sm font-extrabold rounded-[14px] shadow-sm"
           style={{
             border: "1.5px solid color-mix(in srgb, var(--accent) 20%, var(--border))",
             background: "var(--accent-light)",
@@ -543,7 +543,7 @@ export function AIFlashcardMode() {
           whileTap={{ scale: 0.95 }}
           onClick={goNext}
           disabled={currentIdx === cards.length - 1}
-          className={`w-12 h-12 border-2 border-border bg-surface grid place-items-center text-base rounded-[14px] shadow-(--shadow-sm) ${
+          className={`w-12 h-12 border-2 border-border bg-surface grid place-items-center text-base rounded-[14px] shadow-sm ${
             currentIdx === cards.length - 1
               ? "text-text-muted cursor-not-allowed"
               : "text-text-primary cursor-pointer"

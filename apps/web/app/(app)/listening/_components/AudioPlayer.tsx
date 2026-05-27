@@ -354,7 +354,7 @@ export function AudioPlayer({
     <div
       ref={containerRef}
       tabIndex={0}
-      className={`${className ?? ""} bg-surface border-2 border-border rounded-lg flex flex-col gap-3.5 p-5 outline-none shadow-(--shadow-sm) focus-visible:shadow-(--shadow)`}
+      className={`${className ?? ""} bg-surface border-2 border-border rounded-lg flex flex-col gap-3.5 p-5 outline-none shadow-sm focus-visible:shadow`}
     >
       {/* Hidden audio element */}
       <audio
@@ -455,7 +455,7 @@ export function AudioPlayer({
           className={`flex items-center gap-1.5 rounded-lg border-2 border-border text-xs font-bold py-2 px-3.5 transition-all duration-100 ${
             replaysUsed >= maxReplays
               ? "bg-bg-deep text-text-muted cursor-not-allowed"
-              : "bg-surface text-text-primary cursor-pointer hover:bg-surface-hover hover:shadow-(--shadow-sm) hover:-translate-y-0.5"
+              : "bg-surface text-text-primary cursor-pointer hover:bg-surface-hover hover:shadow-sm hover:-translate-y-0.5"
           }`}
         >
           <RefreshCw size={13} />

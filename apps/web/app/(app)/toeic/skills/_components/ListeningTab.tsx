@@ -75,7 +75,7 @@ export function ListeningTab() {
               onClick={() => setMode(m.key)}
               className={`px-4 py-2 rounded-lg text-xs font-black border-2 border-border cursor-pointer transition-all duration-100 flex items-center gap-1.5 ${
                 mode === m.key
-                  ? "bg-accent text-ink shadow-(--shadow-sm) -translate-y-0.5"
+                  ? "bg-accent text-ink shadow-sm -translate-y-0.5"
                   : "bg-surface text-text-secondary hover:bg-surface-hover"
               }`}
             >
@@ -127,7 +127,7 @@ export function ListeningTab() {
           ].map((p, i) => (
             <div
               key={p.part}
-              className="p-5 rounded-xl border-2 border-border bg-surface relative overflow-hidden shadow-(--shadow) transition-all animate-in fade-in slide-in-from-bottom-2 duration-200"
+              className="p-5 rounded-xl border-2 border-border bg-surface relative overflow-hidden shadow transition-all animate-in fade-in slide-in-from-bottom-2 duration-200"
               style={{ animationDelay: `${i * 0.05}s` }}
             >
               <div className="absolute top-0 left-0 w-1 h-full bg-accent" />
@@ -135,7 +135,7 @@ export function ListeningTab() {
                 <span className="text-xs font-black text-text-primary">
                   {p.part} — {p.title}
                 </span>
-                <span className="text-[10px] font-black text-ink px-2.5 py-0.5 border-2 border-border rounded-md bg-accent shadow-(--shadow-sm)">
+                <span className="text-[10px] font-black text-ink px-2.5 py-0.5 border-2 border-border rounded-md bg-accent shadow-sm">
                   {p.questions} questions
                 </span>
               </div>
@@ -195,7 +195,7 @@ export function ListeningTab() {
                   <select
                     value={selectedVoice}
                     onChange={(e) => setSelectedVoice(e.target.value)}
-                    className="bg-surface-alt border-2 border-border rounded-lg px-2.5 py-1.5 text-xs font-bold text-ink outline-none focus-visible:shadow-(--shadow-sm) focus-visible:translate-x-[-1px] focus-visible:translate-y-[-1px] transition-all cursor-pointer"
+                    className="bg-surface-alt border-2 border-border rounded-lg px-2.5 py-1.5 text-xs font-bold text-ink outline-none focus-visible:shadow-sm focus-visible:translate-x-[-1px] focus-visible:translate-y-[-1px] transition-all cursor-pointer"
                   >
                     <option value="austin">🇺🇸 US Male</option>
                     <option value="autumn">🇺🇸 US Female</option>

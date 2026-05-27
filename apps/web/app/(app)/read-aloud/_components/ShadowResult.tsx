@@ -55,6 +55,12 @@ function getGrade(score: number): { label: string; color: string } {
   return { label: "Needs Practice", color: "var(--error)" };
 }
 
+const WORD_SCORE_STYLES: Record<string, string> = {
+  good: "text-success bg-success/10 border-success/20",
+  fair: "text-warning bg-warning/10 border-warning/20",
+  poor: "text-error bg-error/10 border-error/20",
+};
+
 export function ShadowResult({ result, referenceText }: ShadowResultProps) {
   const grade = getGrade(result.overall);
 
@@ -148,13 +154,9 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
                 <span
                   key={i}
                   title={w.tip || undefined}
-                  className="py-1 px-2.5 rounded-lg text-sm font-bold inline-flex items-center gap-1 transition-transform duration-100"
-                  style={{
-                    color: SCORE_COLORS[w.score],
-                    background: `color-mix(in srgb, ${SCORE_COLORS[w.score]} 8%, var(--surface))`,
-                    border: `1px solid color-mix(in srgb, ${SCORE_COLORS[w.score]} 20%, transparent)`,
-                    cursor: w.tip ? "help" : "default",
-                  }}
+                  className={`py-1 px-2.5 rounded-lg text-sm font-bold inline-flex items-center gap-1 transition-transform duration-100 border ${
+                    WORD_SCORE_STYLES[w.score] ?? "text-text-secondary bg-surface-alt border-border"
+                  } ${w.tip ? "cursor-help" : "cursor-default"}`}
                 >
                   {IconComp && <IconComp size={13} />}
                   {w.word}
@@ -173,7 +175,9 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
                     key={i}
                     className="py-2 px-3 rounded-[10px] bg-surface-alt border border-border text-[12.5px] text-text-secondary leading-normal flex gap-2 items-start"
                   >
-                    <span className="font-extrabold shrink-0" style={{ color: SCORE_COLORS[w.score] }}>
+                    <span className={`font-extrabold shrink-0 ${
+                      w.score === "good" ? "text-success" : w.score === "fair" ? "text-warning" : "text-error"
+                    }`}>
                       {w.word}:
                     </span>
                     <span className="flex items-center gap-1">

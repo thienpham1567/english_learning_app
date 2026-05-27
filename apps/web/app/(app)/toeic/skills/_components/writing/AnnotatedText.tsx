@@ -62,7 +62,7 @@ export function AnnotatedText({ text, annotations }: Props) {
 
   return (
     <div className="relative">
-      <div className="whitespace-pre-wrap text-sm leading-relaxed text-(--ink)">
+      <div className="whitespace-pre-wrap text-sm leading-relaxed text-ink">
         {segments.map((seg, i) =>
           seg.annotation ? (
             <span
@@ -80,16 +80,16 @@ export function AnnotatedText({ text, annotations }: Props) {
 
       {/* Tooltip */}
       {activeAnnotation && (
-        <div className="mt-3 rounded-lg border-2 border-border bg-(--surface) p-3 shadow-(--shadow-md)">
+        <div className="mt-3 rounded-lg border-2 border-border bg-surface p-3 shadow-md">
           <div className="mb-1.5 flex items-center gap-2">
-            <span className="rounded bg-(--accent)/10 px-1.5 py-0.5 text-[10px] font-bold uppercase text-(--accent)">
+            <span className="rounded bg-accent/10 px-1.5 py-0.5 text-[10px] font-bold uppercase text-accent">
               {activeAnnotation.type}
             </span>
           </div>
-          <p className="text-sm text-(--ink)">
+          <p className="text-sm text-ink">
             <span className="font-medium">Suggestion:</span> {activeAnnotation.suggestion}
           </p>
-          <p className="mt-1 text-xs text-(--text-muted)">{activeAnnotation.explanation}</p>
+          <p className="mt-1 text-xs text-text-muted">{activeAnnotation.explanation}</p>
         </div>
       )}
     </div>

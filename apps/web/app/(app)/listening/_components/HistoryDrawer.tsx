@@ -105,7 +105,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 350, damping: 35 }}
-            className="fixed top-0 right-0 h-full w-full max-w-[400px] bg-surface border-l-2 border-border z-50 flex flex-col shadow-(--shadow-lg)"
+            className="fixed top-0 right-0 h-full w-full max-w-[400px] bg-surface border-l-2 border-border z-50 flex flex-col shadow-lg"
           >
             {/* Header */}
             <div className="flex items-center justify-between py-4 px-5 border-b-2 border-border shrink-0">
@@ -138,7 +138,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
                       onClick={() => history.setMode(m.value === "all" ? null : m.value)}
                       className={`flex-1 min-w-[60px] py-1.5 px-2 rounded-md text-[11px] font-bold cursor-pointer transition-all duration-100 ${
                         isActive
-                          ? "bg-accent text-ink border-2 border-border shadow-(--shadow-sm) -translate-y-0.5"
+                          ? "bg-accent text-ink border-2 border-border shadow-sm -translate-y-0.5"
                           : "bg-transparent text-text-secondary hover:bg-surface-hover"
                       }`}
                     >
@@ -151,7 +151,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
                 <select
                   value={history.level ?? "all"}
                   onChange={(e) => history.setLevel(e.target.value === "all" ? null : e.target.value)}
-                  className="flex-1 h-8 rounded-lg border-2 border-border bg-surface-alt px-2.5 text-xs font-bold text-ink outline-none focus-visible:shadow-(--shadow-sm) transition-all cursor-pointer"
+                  className="flex-1 h-8 rounded-lg border-2 border-border bg-surface-alt px-2.5 text-xs font-bold text-ink outline-none focus-visible:shadow-sm transition-all cursor-pointer"
                 >
                   <option value="all">All Levels</option>
                   <option value="A1">A1</option>
@@ -264,7 +264,7 @@ function HistoryCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.04, type: "spring", stiffness: 350, damping: 30 }}
       className={`flex items-center gap-3 border-2 border-border bg-surface py-3 px-3.5 rounded-lg transition-all duration-100 ${
-        onReplay ? "cursor-pointer hover:bg-surface-hover hover:shadow-(--shadow-sm) hover:-translate-y-0.5" : "cursor-default"
+        onReplay ? "cursor-pointer hover:bg-surface-hover hover:shadow-sm hover:-translate-y-0.5" : "cursor-default"
       }`}
     >
       {/* Mode icon */}

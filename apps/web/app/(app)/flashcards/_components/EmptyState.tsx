@@ -14,7 +14,7 @@ export function EmptyState({ nextReviewAt }: Props) {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ type: "spring", stiffness: 100, damping: 15 }}
-      className="w-full max-w-[450px] bg-surface rounded-xl border-2 border-border text-center relative overflow-hidden mx-auto my-10 py-12 px-6 shadow-(--shadow-sm)"
+      className="w-full max-w-[450px] bg-surface rounded-xl border-2 border-border text-center relative overflow-hidden mx-auto my-10 py-12 px-6 shadow-sm"
     >
       {/* Background soft accent glow */}
       <div
@@ -71,7 +71,7 @@ function Countdown({ targetIso }: { targetIso: string }) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="inline-flex items-center gap-2 bg-surface-alt border-2 border-border rounded-full py-2 px-4.5 shadow-(--shadow-sm)"
+      className="inline-flex items-center gap-2 bg-surface-alt border-2 border-border rounded-full py-2 px-4.5 shadow-sm"
     >
       <Clock className="text-accent text-[13px]" />
       <span className="font-bold text-text-secondary text-[12.5px]">

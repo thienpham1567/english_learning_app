@@ -124,7 +124,7 @@ export function ScriptPanel({ passage, keyPhrases = [], isRevealed, onReveal }: 
             <div className="flex gap-2">
               <button
                 onClick={handleConfirm}
-                className="flex-1 rounded-lg border-2 border-border text-xs font-bold cursor-pointer py-2 px-3.5 bg-[var(--warning)] text-ink shadow-(--shadow-sm) hover:-translate-y-0.5 transition-all duration-100"
+                className="flex-1 rounded-lg border-2 border-border text-xs font-bold cursor-pointer py-2 px-3.5 bg-[var(--warning)] text-ink shadow-sm hover:-translate-y-0.5 transition-all duration-100"
               >
                 Show Script
               </button>
@@ -149,7 +149,7 @@ export function ScriptPanel({ passage, keyPhrases = [], isRevealed, onReveal }: 
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className="overflow-hidden"
           >
-            <div className="p-4 border-2 border-border text-sm rounded-lg bg-surface leading-[1.8] text-text-primary shadow-(--shadow-sm)">
+            <div className="p-4 border-2 border-border text-sm rounded-lg bg-surface leading-[1.8] text-text-primary shadow-sm">
               <div className="flex items-center gap-1.5 mb-2.5 text-[11px] font-bold text-text-muted uppercase tracking-widest">
                 <FileText size={13} /> Script
                 {revealLevel === "keywords" && (

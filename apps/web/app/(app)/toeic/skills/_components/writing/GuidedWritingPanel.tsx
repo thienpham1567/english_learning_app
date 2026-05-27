@@ -308,7 +308,7 @@ export function GuidedWritingPanel() {
           <button
             type="button"
             onClick={() => generatePrompt()}
-            className="px-8 py-3 rounded-xl border-2 border-border bg-accent hover:bg-accent-hover text-text-on-accent text-xs font-bold flex items-center gap-1.5 self-center cursor-pointer shadow-(--shadow-sm) active:scale-95 transition-all mt-2"
+            className="px-8 py-3 rounded-xl border-2 border-border bg-accent hover:bg-accent-hover text-text-on-accent text-xs font-bold flex items-center gap-1.5 self-center cursor-pointer shadow-sm active:scale-95 transition-all mt-2"
           >
             <Target className="h-4 w-4" />
             <span>Generate Prompt</span>
@@ -403,7 +403,7 @@ export function GuidedWritingPanel() {
                       </button>
 
                       {/* Tooltip Content */}
-                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50 bg-foreground border-2 border-border text-background p-2.5 rounded-xl shadow-(--shadow-sm) text-[11px] w-52 pointer-events-none text-center">
+                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50 bg-foreground border-2 border-border text-background p-2.5 rounded-xl shadow-sm text-[11px] w-52 pointer-events-none text-center">
                         <div className="font-bold text-background">{v.meaning}</div>
                         <div className="text-[10px] text-background/80 mt-1 font-medium italic">
                           {v.example}
@@ -443,7 +443,7 @@ export function GuidedWritingPanel() {
             type="button"
             onClick={submitForScoring}
             disabled={wordCount < 150 || state === "scoring"}
-            className={`px-8 py-3 rounded-xl border-2 border-border text-xs font-bold flex items-center gap-1.5 self-center cursor-pointer transition-all duration-155 active:scale-97 shadow-(--shadow-sm) ${
+            className={`px-8 py-3 rounded-xl border-2 border-border text-xs font-bold flex items-center gap-1.5 self-center cursor-pointer transition-all duration-155 active:scale-97 shadow-sm ${
               wordCount < 150 || state === "scoring"
                 ? "bg-bg-deep text-text-muted cursor-not-allowed border-2 border-border/20"
                 : "bg-accent hover:bg-accent-hover text-text-on-accent"
@@ -506,7 +506,7 @@ export function GuidedWritingPanel() {
                     </p>
 
                     {/* Tooltip Content */}
-                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50 bg-foreground border-2 border-border text-background p-2.5 rounded-xl shadow-(--shadow-sm) text-[11px] w-48 pointer-events-none text-center">
+                    <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block z-50 bg-foreground border-2 border-border text-background p-2.5 rounded-xl shadow-sm text-[11px] w-48 pointer-events-none text-center">
                       {s.feedback}
                     </div>
                   </div>
@@ -637,7 +637,7 @@ export function GuidedWritingPanel() {
                 setEssayText("");
                 setScoreResult(null);
               }}
-              className="px-6 py-2.5 rounded-xl border-2 border-border bg-accent hover:bg-accent-hover text-text-on-accent text-xs font-bold cursor-pointer flex items-center gap-1.5 shadow-(--shadow-sm) active:scale-97"
+              className="px-6 py-2.5 rounded-xl border-2 border-border bg-accent hover:bg-accent-hover text-text-on-accent text-xs font-bold cursor-pointer flex items-center gap-1.5 shadow-sm active:scale-97"
             >
               <RefreshCw className="h-3.5 w-3.5" />
               <span>New Prompt</span>
