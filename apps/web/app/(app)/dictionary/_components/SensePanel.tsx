@@ -21,7 +21,7 @@ type SensePanelProps = {
 };
 
 export const SENSE_HEADER_STYLE =
-  "flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-accent m-0";
+  "flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.14em] text-ink m-0";
 
 function BoldText({ text }: { text: string }) {
   const segments = parseBold(text);
@@ -65,9 +65,9 @@ function HighlightWord({ text, headword }: { text: string; headword: string }) {
           const key = `${si}-${pi}`;
           if (sub.toLowerCase() === headword.toLowerCase()) {
             return (
-              <span key={key} className="text-accent font-semibold not-italic">
+              <mark key={key} className="bg-accent/20 text-ink px-1 rounded font-bold not-italic">
                 {sub}
-              </span>
+              </mark>
             );
           }
           return seg.bold ? (
@@ -100,8 +100,8 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
               key={meaning}
               className={
                 i === 0
-                  ? "rounded-full border border-accent-muted bg-accent-light px-3.5 py-1 text-sm italic font-display text-accent whitespace-nowrap"
-                  : "text-sm text-text-secondary leading-snug"
+                  ? "rounded-full border-2 border-border bg-accent-light px-3.5 py-1 text-sm font-extrabold font-display text-ink whitespace-nowrap shadow-sm"
+                  : "text-sm text-text-secondary font-semibold leading-snug"
               }
             >
               {meaning}
@@ -200,7 +200,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
                 key={expr}
                 type="button"
                 onClick={() => onSearch?.(expr)}
-                className="rounded-full border-2 border-border bg-surface px-3.5 py-1 text-[13px] italic font-display text-accent cursor-pointer transition-colors duration-150 hover:bg-accent/10"
+                className="rounded-full border-2 border-border bg-surface px-3.5 py-1 text-[13px] font-bold font-display text-ink cursor-pointer transition-colors duration-150 hover:bg-accent-light shadow-sm"
               >
                 {expr}
               </button>
@@ -210,8 +210,8 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
       )}
 
       {sense.commonMistakesVi.length > 0 && (
-        <section className="flex flex-col gap-2.5 rounded-lg bg-(--warning-bg) border border-(--warning) p-3.5 px-4">
-          <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-(--warning) m-0">
+        <section className="flex flex-col gap-2.5 rounded-lg bg-warning-bg border-2 border-warning p-3.5 px-4">
+          <h3 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.14em] text-warning m-0">
             <AlertTriangle className="h-3 w-3" />
             Common Mistakes
           </h3>
@@ -219,7 +219,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
             {sense.commonMistakesVi.map((mistake) => (
               <li
                 key={mistake}
-                className="border-l-2 border-l-(--warning) pl-3 text-[13px] leading-relaxed text-text-secondary"
+                className="border-l-2 border-l-warning pl-3 text-[13px] leading-relaxed text-text-secondary font-medium"
               >
                 <BoldText text={mistake} />
               </li>
@@ -252,7 +252,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
               type="button"
               aria-expanded={isCollocationsOpen}
               onClick={() => setIsCollocationsOpen((open) => !open)}
-              className="inline-flex items-center rounded-full border-2 border-border bg-surface px-3 py-1 text-xs font-medium text-accent cursor-pointer w-fit hover:bg-accent/10 transition-colors"
+              className="inline-flex items-center rounded-full border-2 border-border bg-surface px-3 py-1 text-xs font-bold text-ink cursor-pointer w-fit hover:bg-accent-light transition-colors shadow-sm"
             >
               {isCollocationsOpen ? "Show Less" : `Show More (${collocations.length - 3})`}
             </button>

@@ -216,10 +216,10 @@ export function ToeicVocabularySection({ className }: Props) {
   return (
     <div className={className}>
       <div className="mb-4">
-        <h3 className="[font-family:var(--font-display)] text-lg italic text-(--ink)">
+        <h3 className="font-display text-lg italic text-ink">
           TOEIC Vocabulary by Topic
         </h3>
-        <p className="mt-0.5 text-xs text-(--text-muted)">Click on a word for details</p>
+        <p className="mt-0.5 text-xs text-text-muted">Click on a word for details</p>
       </div>
 
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -228,42 +228,40 @@ export function ToeicVocabularySection({ className }: Props) {
           return (
             <div
               key={cat.id}
-              className="overflow-hidden rounded-xl border-2 border-border bg-(--surface)"
+              className="overflow-hidden rounded-xl border-2 border-border bg-surface"
             >
               {/* Category header */}
               <button
-                className="flex w-full items-center gap-2.5 px-4 py-3 text-left transition-colors hover:bg-(--surface-hover)"
+                className="flex w-full items-center gap-2.5 px-4 py-3 text-left transition-colors hover:bg-surface-hover"
                 onClick={() => setExpandedId(isExpanded ? null : cat.id)}
               >
                 <span className="text-lg text-accent flex items-center justify-center">
                   <cat.icon size={18} />
                 </span>
-                <span className="flex-1 text-sm font-semibold text-(--ink)">{cat.label}</span>
-                <span className="text-[11px] text-(--text-muted)">{cat.words.length} words</span>
+                <span className="flex-1 text-sm font-semibold text-ink">{cat.label}</span>
+                <span className="text-[11px] text-text-muted">{cat.words.length} words</span>
                 <ChevronDown
-                  className="text-sm shrink-0 text-text-muted"
+                  className="text-sm shrink-0 text-text-muted transition-transform duration-200"
                   style={{
-                    transition: "transform 0.2s",
                     transform: isExpanded ? "rotate(180deg)" : "rotate(0)",
                   }}
                 />
               </button>
 
               {/* Word list */}
-
               {isExpanded && (
-                <div className="overflow-hidden">
-                  <div className="flex flex-wrap gap-1.5 border-t-2 border-border px-4 py-3">
+                <div className="overflow-hidden animate-fade-in">
+                  <div className="flex flex-wrap gap-1.5 border-t-2 border-border px-4 py-3 bg-surface-alt">
                     {cat.words.map((word) => (
                       <button
                         key={word}
                         onClick={() => handleWordClick(word)}
-                        className="group flex items-center gap-1 rounded-md border-2 border-border bg-(--bg-deep) px-2.5 py-1 text-[13px] text-(--ink) transition hover:border-(--accent) hover:bg-(--accent)/5 hover:text-(--accent)"
+                        className="group flex items-center gap-1 rounded-md border-2 border-border bg-bg-deep px-2.5 py-1 text-[13px] text-ink font-semibold transition cursor-pointer hover:border-accent hover:bg-accent-light"
                       >
                         {word}
                         <LinkIcon
-                          className="text-[10px] shrink-0"
-                          style={{ opacity: 0, transition: "opacity 0.2s" }}
+                          size={10}
+                          className="shrink-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
                         />
                       </button>
                     ))}

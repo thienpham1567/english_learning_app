@@ -52,12 +52,12 @@ function FrequencyBar({ band }: { band: FrequencyBand }) {
 }
 
 const LEVEL_STYLES: Record<string, { bg: string; text: string; border: string }> = {
-  A1: { bg: "bg-(--success-bg)", text: "text-(--success)", border: "border-(--success)" },
-  A2: { bg: "bg-(--success-bg)", text: "text-(--success)", border: "border-(--success)" },
-  B1: { bg: "bg-(--warning-bg)", text: "text-(--warning)", border: "border-(--warning)" },
-  B2: { bg: "bg-(--warning-bg)", text: "text-(--warning)", border: "border-(--warning)" },
-  C1: { bg: "bg-(--error-bg)", text: "text-(--error)", border: "border-(--error)" },
-  C2: { bg: "bg-(--error-bg)", text: "text-(--error)", border: "border-(--error)" },
+  A1: { bg: "bg-success-bg", text: "text-success", border: "border-success" },
+  A2: { bg: "bg-success-bg", text: "text-success", border: "border-success" },
+  B1: { bg: "bg-warning-bg", text: "text-warning", border: "border-warning" },
+  B2: { bg: "bg-warning-bg", text: "text-warning", border: "border-warning" },
+  C1: { bg: "bg-error-bg", text: "text-error", border: "border-error" },
+  C2: { bg: "bg-error-bg", text: "text-error", border: "border-error" },
 };
 
 // Maps the prompt's allowed partOfSpeech values to learner-friendly labels.
@@ -205,7 +205,7 @@ export function DictionaryResultCard({
               const display = posEn ?? posKey ?? "word";
               const tooltip = posKey && posEn ? posKey : null;
               return (
-                <span className="relative group rounded-full px-3.5 py-1 text-[13px] font-semibold italic bg-accent-muted text-accent border-2 border-border whitespace-nowrap leading-snug">
+                <span className="relative group rounded-full px-3.5 py-1 text-[13px] font-extrabold italic bg-accent-light text-ink border-2 border-border whitespace-nowrap leading-snug">
                   {display}
                   {tooltip && (
                     <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg not-italic">
@@ -242,7 +242,7 @@ export function DictionaryResultCard({
                 ? `${vocabulary.register} — ${info.tooltipEn}`
                 : vocabulary.register;
               return (
-                <span className="relative group rounded-full px-3 py-0.5 text-xs border border-(--border-strong) text-text-secondary bg-accent-light cursor-help">
+                <span className="relative group rounded-full px-3 py-0.5 text-xs border border-border text-text-primary bg-accent-light font-bold cursor-help">
                   {display}
                   <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
                     {tooltip}
@@ -255,16 +255,16 @@ export function DictionaryResultCard({
               type="button"
               onClick={onOpenThesaurus}
               aria-label="Thesaurus"
-              className="flex items-center gap-1.5 rounded-full bg-accent-light px-3 py-1 text-xs font-semibold text-accent border border-(--border-strong) cursor-pointer transition-colors duration-200 hover:bg-accent/15"
+              className="flex items-center gap-1.5 rounded-full bg-accent-light px-3 py-1 text-xs font-bold text-ink border-2 border-border cursor-pointer transition-colors duration-200 hover:bg-accent/15 shadow-sm"
             >
-              <BookOpen className="h-3 w-3" />
+              <BookOpen className="h-3 w-3 text-accent" />
               Thesaurus
             </button>
           )}
           {saved != null && onToggleSaved && (
             <button
               onClick={onToggleSaved}
-              className="grid w-8 h-8 place-items-center rounded-full bg-transparent border-none text-text-muted cursor-pointer transition-colors duration-200 hover:text-accent"
+              className="grid w-8 h-8 place-items-center rounded-full bg-transparent border-none text-text-muted cursor-pointer transition-colors duration-200 hover:text-accent hover:bg-surface-alt"
               aria-label={saved ? "Remove word from saved" : "Save this word"}
             >
               <Star className={`h-5 w-5 ${saved ? "fill-accent text-accent" : ""}`} />
@@ -278,20 +278,20 @@ export function DictionaryResultCard({
         <div className="anim-fade-in mt-3 flex flex-wrap items-center gap-3">
           {vocabulary.phoneticsUs && (
             <div className="flex items-center gap-1.5">
-              <span className="px-1.5 py-0.5 rounded bg-surface-alt text-[10px] text-text-muted font-black border border-border">US</span>
-              <span className="rounded bg-bg-deep px-2 py-0.5 text-sm font-mono text-accent">
+              <span className="px-1.5 py-0.5 rounded bg-surface-alt text-[10px] text-text-secondary font-black border-2 border-border shadow-sm">US</span>
+              <span className="rounded bg-bg-deep px-2.5 py-0.5 text-sm font-mono text-ink font-bold border border-border/10">
                 {vocabulary.phoneticsUs}
               </span>
               <AudioButton locale="en-US" speakingLocale={speakingLocale} onSpeak={speak} />
             </div>
           )}
           {vocabulary.phoneticsUs && vocabulary.phoneticsUk && (
-            <span className="text-text-muted">·</span>
+            <span className="text-text-muted font-bold">·</span>
           )}
           {vocabulary.phoneticsUk && (
             <div className="flex items-center gap-1.5">
-              <span className="px-1.5 py-0.5 rounded bg-surface-alt text-[10px] text-text-muted font-black border border-border">UK</span>
-              <span className="rounded bg-bg-deep px-2 py-0.5 text-sm font-mono text-accent">
+              <span className="px-1.5 py-0.5 rounded bg-surface-alt text-[10px] text-text-secondary font-black border-2 border-border shadow-sm">UK</span>
+              <span className="rounded bg-bg-deep px-2.5 py-0.5 text-sm font-mono text-ink font-bold border border-border/10">
                 {vocabulary.phoneticsUk}
               </span>
               <AudioButton locale="en-GB" speakingLocale={speakingLocale} onSpeak={speak} />
@@ -306,7 +306,7 @@ export function DictionaryResultCard({
 
       {/* ── Meta info strip: Word Family ── */}
       {vocabulary.wordFamily && vocabulary.wordFamily.length > 0 && onSearch && (
-        <div className="anim-fade-up mt-5 flex flex-wrap items-start gap-5 bg-bg-deep border-2 border-border border-l-3 border-l-accent rounded-sm p-3.5 px-4.5">
+        <div className="anim-fade-up mt-5 flex flex-wrap items-start gap-5 bg-bg-deep border-2 border-border border-l-[3px] border-l-accent rounded-sm p-3.5 px-4.5">
           <div className="flex flex-col gap-1 flex-1 min-w-0">
             <WordFamilySection wordFamily={vocabulary.wordFamily} onSearch={onSearch} />
           </div>
@@ -326,10 +326,10 @@ export function DictionaryResultCard({
               type="button"
               aria-selected={activeKey === sense.id}
               onClick={() => setActiveKey(sense.id)}
-              className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-medium border-none cursor-pointer transition-all duration-200 ${
+              className={`shrink-0 rounded-full px-4 py-1.5 text-sm font-bold border-2 transition-all duration-200 ${
                 activeKey === sense.id
-                  ? "bg-accent-muted text-accent"
-                  : "bg-transparent text-text-secondary hover:bg-surface-alt"
+                  ? "bg-accent border-border text-ink shadow-sm cursor-default"
+                  : "bg-transparent border-transparent text-text-secondary hover:text-text-primary hover:bg-surface-alt cursor-pointer"
               }`}
             >
               {sense.label}

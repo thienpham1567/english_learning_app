@@ -286,7 +286,7 @@ export function ToeicVocabTab() {
                       {/* IPA + Audio */}
                       <div className="flex items-center gap-2 mt-1">
                         {w.ipa && (
-                          <span className="rounded-lg bg-bg-deep border border-border/20 font-mono text-[11px] font-extrabold text-accent px-2.5 py-0.5">
+                          <span className="rounded-lg bg-bg-deep border border-border/20 font-mono text-[11px] font-extrabold text-ink px-2.5 py-0.5">
                             /{w.ipa}/
                           </span>
                         )}

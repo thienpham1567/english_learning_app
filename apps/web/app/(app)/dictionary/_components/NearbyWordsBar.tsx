@@ -23,12 +23,12 @@ export function NearbyWordsBar({ words, headword, onSearch }: NearbyWordsBarProp
           key={word}
           type="button"
           onClick={() => onSearch(word)}
-          className="rounded-full border border-border bg-surface py-0.5 px-2.5 text-xs text-text-secondary cursor-pointer transition-colors duration-200 hover:border-accent hover:text-accent"
+          className="rounded-full border-2 border-border bg-surface py-0.5 px-2.5 text-xs font-semibold text-ink cursor-pointer transition-colors duration-150 hover:bg-accent-light shadow-sm"
         >
           {word}
         </button>
       ))}
-      <span className="rounded-full bg-accent-muted py-0.5 px-2.5 text-xs font-semibold text-accent">
+      <span className="rounded-full bg-accent py-0.5 px-2.5 text-xs font-extrabold text-[var(--text-on-accent)] border border-border shadow-sm">
         {headword}
       </span>
       {after.map((word) => (
@@ -36,7 +36,7 @@ export function NearbyWordsBar({ words, headword, onSearch }: NearbyWordsBarProp
           key={word}
           type="button"
           onClick={() => onSearch(word)}
-          className="rounded-full border border-border bg-surface py-0.5 px-2.5 text-xs text-text-secondary cursor-pointer transition-colors duration-200 hover:border-accent hover:text-accent"
+          className="rounded-full border-2 border-border bg-surface py-0.5 px-2.5 text-xs font-semibold text-ink cursor-pointer transition-colors duration-150 hover:bg-accent-light shadow-sm"
         >
           {word}
         </button>

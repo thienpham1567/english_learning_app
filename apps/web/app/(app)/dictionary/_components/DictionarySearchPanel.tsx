@@ -119,10 +119,10 @@ export function DictionarySearchPanel({
     <section className="flex flex-col gap-5">
       {/* Word of the Day */}
       <WordOfTheDay onSelect={onSubmit} />
-      <div className="anim-fade-left dictionary-search-panel relative rounded-lg bg-gradient-to-br from-surface to-(--bg) shadow-lg overflow-hidden min-w-0">
+      <div className="anim-fade-left dictionary-search-panel relative rounded-lg bg-gradient-to-br from-surface to-background border-2 border-border shadow-md overflow-hidden min-w-0">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
-            <Star className="h-3.5 w-3.5" />
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-accent">
+            <Star className="h-3.5 w-3.5 fill-current" />
             <span>Structured Lookup</span>
           </div>
           <button
@@ -130,7 +130,7 @@ export function DictionarySearchPanel({
             onClick={() => setShowTips((v) => !v)}
             className={`grid w-8 h-8 place-items-center rounded-full border-none cursor-pointer transition-all duration-200 ${
               showTips
-                ? "bg-accent text-(--text-on-accent)"
+                ? "bg-accent text-[var(--text-on-accent)]"
                 : "bg-transparent text-text-muted hover:text-accent"
             }`}
             aria-label="Usage Tips"
@@ -141,15 +141,15 @@ export function DictionarySearchPanel({
 
         {/* Tips dropdown */}
         {showTips && (
-          <div className="anim-fade-in mt-4 overflow-hidden rounded-lg border-2 border-border bg-(--bg) p-4 shadow-sm">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-ink m-0">
+          <div className="anim-fade-in mt-4 overflow-hidden rounded-lg border-2 border-border bg-background p-4 shadow-sm">
+            <p className="mb-3 text-xs font-bold uppercase tracking-wider text-ink m-0">
               <Lightbulb className="h-3 w-3 inline mr-1 text-accent" /> Usage Tips
             </p>
             <ul className="list-none p-0 m-0 flex flex-col gap-2.5">
               {HELPER_TIPS.map((tip, i) => (
                 <li
                   key={tip}
-                  className={`anim-fade-left anim-delay-${i + 1} border-l-2 border-l-accent-muted pl-3 text-sm leading-relaxed text-text-secondary`}
+                  className={`anim-fade-left anim-delay-${i + 1} border-l-2 border-l-accent pl-3 text-sm leading-relaxed text-text-secondary font-semibold`}
                 >
                   {tip}
                 </li>
@@ -193,8 +193,8 @@ export function DictionarySearchPanel({
                   }}
                   className={`cursor-pointer px-4 py-2.5 text-sm text-text-primary transition-colors duration-150 ${
                     i === highlightedIndex
-                      ? "bg-(--surface-hover)"
-                      : "bg-transparent hover:bg-(--surface-hover)"
+                      ? "bg-surface-hover"
+                      : "bg-transparent hover:bg-surface-hover"
                   }`}
                 >
                   <HighlightMatch text={s} query={draft} />
@@ -212,7 +212,7 @@ export function DictionarySearchPanel({
             onSubmit(draft.trim());
           }}
           disabled={isLoading}
-          className="mt-5 w-full rounded-full bg-accent py-2.5 text-sm font-semibold text-(--text-on-accent) border-none cursor-pointer transition-opacity duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="mt-5 w-full rounded-xl bg-accent py-2.5 text-sm font-extrabold text-[var(--text-on-accent)] border-2 border-border cursor-pointer transition-all duration-150 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-accent-hover active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {isLoading ? "Searching..." : "Search"}
         </button>
