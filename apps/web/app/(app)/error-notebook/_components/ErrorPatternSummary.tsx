@@ -58,12 +58,12 @@ export function ErrorPatternSummary({ errors }: Props) {
   return (
     <div>
       {/* Section label */}
-      <div className="flex items-center gap-2.5 mb-3">
-        <div className="w-[3px] h-3.5 rounded-sm bg-warning shrink-0" />
-        <span className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-warning">
+      <div className="flex items-center gap-2.5 mb-4">
+        <div className="w-1 h-5 rounded-full bg-warning shrink-0" />
+        <span className="text-[10px] font-extrabold uppercase tracking-widest text-warning font-display">
           Common Error Patterns
         </span>
-        <span className="text-[11px] font-bold px-2 py-px rounded-full bg-[color-mix(in_srgb,var(--warning)_12%,var(--surface))] text-warning border border-[color-mix(in_srgb,var(--warning)_25%,transparent)]">
+        <span className="text-[10px] font-extrabold px-2.5 py-0.5 rounded-full bg-warning/10 text-warning border border-warning/20">
           {patterns.length} patterns
         </span>
         <div className="flex-1 h-px bg-border" />
@@ -75,13 +75,13 @@ export function ErrorPatternSummary({ errors }: Props) {
           return (
             <div
               key={pattern.category.key}
-              className="rounded-[14px] bg-surface border-2 border-border overflow-hidden transition-all duration-150 hover:border-[color-mix(in_srgb,var(--warning)_35%,var(--border))] hover:shadow-sm"
+              className="rounded-2xl bg-surface border-2 border-border overflow-hidden transition-all duration-150 hover:border-warning/30 hover:shadow-sm"
             >
               {/* Pattern header */}
               <div
                 className={`flex items-center gap-3 px-4 py-3 bg-[color-mix(in_srgb,var(--warning)_5%,var(--bg))] ${pattern.examples.length > 0 ? "border-b-2 border-border" : ""}`}
               >
-                <span className="shrink-0 w-7 h-7 rounded-lg bg-accent/5 grid place-items-center text-accent">
+                <span className="shrink-0 w-8 h-8 rounded-xl bg-accent/8 border-2 border-accent/15 grid place-items-center text-accent">
                   {(() => {
                     const IconComponent = CATEGORY_ICONS[pattern.category.key] || HelpCircle;
                     return <IconComponent className="h-4 w-4" />;
@@ -117,7 +117,7 @@ export function ErrorPatternSummary({ errors }: Props) {
                   {pattern.examples.slice(0, 2).map((ex) => (
                     <div
                       key={ex.id}
-                      className="text-xs leading-relaxed px-3 py-2 rounded-[9px] bg-bg-deep border-l-3 border-border"
+                      className="text-xs leading-relaxed px-3 py-2.5 rounded-xl bg-bg-deep border-l-[3px] border-border"
                     >
                       <span className="text-text-secondary">{ex.questionStem.slice(0, 80)}</span>
                       <span className="text-error font-semibold ml-2">

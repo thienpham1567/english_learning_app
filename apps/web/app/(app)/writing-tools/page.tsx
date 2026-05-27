@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowLeftRight, CheckSquare, Loader2, Pencil, Volume2 } from "lucide-react";
+import { ArrowLeftRight, CheckSquare, Loader2, Volume2 } from "lucide-react";
 import * as m from "motion/react-client";
 import dynamic from "next/dynamic";
 import { useState } from "react";
@@ -20,10 +20,7 @@ const TtsReader = dynamic(() => import("./_components/TtsReader").then((m) => m.
 
 function Loader({ label }: { label: string }) {
   return (
-    <div
-      className="flex justify-center items-center text-text-muted gap-2.5 font-bold text-sm"
-      style={{ padding: 64 }}
-    >
+    <div className="flex justify-center items-center text-text-muted gap-2.5 font-bold text-sm py-16">
       <Loader2 className="animate-spin text-accent" size={20} />
       <span>{label}</span>
     </div>
@@ -37,32 +34,21 @@ const TABS: {
   label: string;
   desc: string;
   icon: React.ReactNode;
+  accent: string;
 }[] = [
-  { value: "grammar", label: "Grammar Checker", desc: "Check grammar", icon: <CheckSquare /> },
-  { value: "paraphrase", label: "Paraphraser", desc: "Paraphrase sentence", icon: <ArrowLeftRight /> },
-  { value: "tts", label: "Voice Generator", desc: "Text-to-speech (Groq)", icon: <Volume2 /> },
+  { value: "grammar", label: "Grammar Checker", desc: "Check grammar", icon: <CheckSquare size={16} />, accent: "var(--error)" },
+  { value: "paraphrase", label: "Paraphraser", desc: "Paraphrase sentence", icon: <ArrowLeftRight size={16} />, accent: "var(--secondary)" },
+  { value: "tts", label: "Voice Generator", desc: "Text-to-speech", icon: <Volume2 size={16} />, accent: "var(--module-grammar)" },
 ];
-
-const GRADIENTS: Record<ToolTab, string> = {
-  grammar: "linear-gradient(135deg, #ec4899 0%, #f43f5e 100%)",
-  paraphrase: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
-  tts: "linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)",
-};
 
 export default function WritingToolsPage() {
   const [active, setActive] = useState<ToolTab>("grammar");
 
   return (
-    <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
-      {/* High-end Pill Tabs Row */}
-      <div
-        className="flex gap-2 shrink-0"
-        style={{ padding: "16px 20px 8px", overflowX: "auto", scrollbarWidth: "none" }}
-      >
-        <div
-          className="flex gap-1.5 bg-surface-alt rounded-xl w-full"
-          style={{ border: "1.5px solid var(--border)", padding: 6, minWidth: "max-content" }}
-        >
+    <div className="flex flex-col h-full flex-1 overflow-hidden">
+      {/* Tab switcher */}
+      <div className="shrink-0 px-4 pt-3.5 pb-1.5 max-w-4xl w-full mx-auto">
+        <div className="flex gap-1 bg-surface-alt rounded-2xl p-1 border-2 border-border shadow-sm overflow-x-auto scrollbar-none">
           {TABS.map((t) => {
             const isActive = active === t.value;
             return (
@@ -71,32 +57,23 @@ export default function WritingToolsPage() {
                 key={t.value}
                 onClick={() => setActive(t.value)}
                 whileTap={{ scale: 0.98 }}
-                className="flex-1 py-2 px-3 rounded-lg border-none cursor-pointer flex flex-col items-center justify-center"
-                style={{
-                  background: isActive ? "var(--accent)" : "transparent",
-                  color: isActive ? "var(--text-on-accent)" : "var(--text-secondary)",
-                  gap: 2,
-                  transition: "color 0.2s, background 0.2s",
-                }}
+                className={`flex-1 py-2.5 px-4 rounded-xl cursor-pointer flex items-center justify-center gap-2 text-xs md:text-sm font-black transition-colors duration-150 min-w-max ${
+                  isActive
+                    ? "bg-accent text-text-on-accent border-none"
+                    : "bg-transparent text-text-secondary hover:text-text-primary"
+                }`}
               >
-                <div className="flex items-center gap-1.5 font-black" style={{ fontSize: 13.5 }}>
-                  {t.icon}
-                  <span>{t.label}</span>
-                </div>
-                <span className="text-[10px] font-bold" style={{ opacity: isActive ? 0.9 : 0.65 }}>
-                  {t.desc}
-                </span>
+                {t.icon}
+                <span className="hidden sm:inline">{t.label}</span>
+                <span className="sm:hidden">{t.label.split(" ")[0]}</span>
               </m.button>
             );
           })}
         </div>
       </div>
 
-      <div
-        className="anim-fade-up flex-1 h-[0px] overflow-auto"
-        style={{ padding: "12px 20px 40px" }}
-      >
-        <div className="w-[800px] mx-auto w-full">
+      <div className="flex-1 overflow-auto p-4 pb-12">
+        <div className="max-w-[800px] mx-auto w-full">
           {active === "grammar" && <GrammarChecker />}
           {active === "paraphrase" && <Paraphraser />}
           {active === "tts" && <TtsReader />}

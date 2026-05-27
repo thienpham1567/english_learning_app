@@ -1,10 +1,9 @@
 "use client";
 
 import { AlertTriangle, BarChart2, ClipboardList, Headphones, Trophy } from "lucide-react";
-import { motion } from "motion/react";
+import * as m from "motion/react-client";
 import { useEffect, useState } from "react";
 import { AudioPlayer } from "@/app/(app)/listening/_components/AudioPlayer";
-import { DialogueGenerator } from "@/app/(app)/listening/_components/DialogueGenerator";
 import { LevelSelector } from "@/app/(app)/listening/_components/LevelSelector";
 import { QuestionCards } from "@/app/(app)/listening/_components/QuestionCards";
 import { Results } from "@/app/(app)/listening/_components/Results";
@@ -30,7 +29,6 @@ export function ListeningTab() {
     scriptRevealed,
     revealScript,
     generate,
-    generateDialogue,
     selectAnswer,
     submit,
     useReplay,
@@ -61,40 +59,35 @@ export function ListeningTab() {
 
   return (
     <div className="max-w-2xl mx-auto w-full">
-      {/* Mode toggle */}
-      <div className="flex gap-2.5 py-2 pb-4 flex-wrap">
+      {/* ─── Mode toggle ─── */}
+      <div className="flex gap-1 p-1 bg-surface-alt border-2 border-border rounded-2xl shadow-sm mb-5 max-w-sm">
         {[
           { key: "free" as const, label: "Free Listening", icon: Headphones },
           { key: "parts" as const, label: "TOEIC Parts 1–4", icon: ClipboardList },
-        ].map((m) => {
-          const Icon = m.icon;
+        ].map((tab) => {
+          const Icon = tab.icon;
           return (
-            <button
-              key={m.key}
+            <m.button
+              key={tab.key}
               type="button"
-              onClick={() => setMode(m.key)}
-              className={`px-4 py-2 rounded-lg text-xs font-black border-2 border-border cursor-pointer transition-all duration-100 flex items-center gap-1.5 ${
-                mode === m.key
-                  ? "bg-accent text-ink shadow-sm -translate-y-0.5"
-                  : "bg-surface text-text-secondary hover:bg-surface-hover"
+              onClick={() => setMode(tab.key)}
+              whileTap={{ scale: 0.97 }}
+              className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs cursor-pointer transition-all duration-150 ${
+                mode === tab.key
+                  ? "bg-accent text-ink font-black shadow-sm"
+                  : "bg-transparent text-text-secondary font-bold hover:text-text-primary"
               }`}
             >
-              <motion.span
-                animate={mode === m.key ? { scale: [1, 1.15, 1] } : { scale: 1 }}
-                transition={{ duration: 0.3 }}
-                className="flex items-center"
-              >
-                <Icon size={14} />
-              </motion.span>
-              {m.label}
-            </button>
+              <Icon size={15} />
+              {tab.label}
+            </m.button>
           );
         })}
       </div>
 
-      {/* TOEIC Parts overview */}
+      {/* ─── TOEIC Parts overview ─── */}
       {mode === "parts" && (
-        <div className="flex flex-col gap-4 pb-5 animate-in fade-in duration-200">
+        <div className="flex flex-col gap-3.5 pb-5">
           {[
             {
               part: "Part 1",
@@ -125,25 +118,27 @@ export function ListeningTab() {
               tips: "Focus on purpose, audience, and next step. Read the questions first.",
             },
           ].map((p, i) => (
-            <div
+            <m.div
               key={p.part}
-              className="p-5 rounded-xl border-2 border-border bg-surface relative overflow-hidden shadow transition-all animate-in fade-in slide-in-from-bottom-2 duration-200"
-              style={{ animationDelay: `${i * 0.05}s` }}
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: i * 0.05, type: "spring", stiffness: 300, damping: 25 }}
+              className="p-5 rounded-2xl border-2 border-border bg-surface relative overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
             >
-              <div className="absolute top-0 left-0 w-1 h-full bg-accent" />
+              <div className="absolute top-0 left-0 w-1 h-full bg-accent rounded-r" />
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs font-black text-text-primary">
+                <span className="text-[13px] font-black text-ink">
                   {p.part} — {p.title}
                 </span>
-                <span className="text-[10px] font-black text-ink px-2.5 py-0.5 border-2 border-border rounded-md bg-accent shadow-sm">
+                <span className="text-[10px] font-black text-ink px-2.5 py-0.5 border-2 border-border rounded-lg bg-accent shadow-sm">
                   {p.questions} questions
                 </span>
               </div>
-              <p className="text-xs text-text-secondary mb-2.5 leading-relaxed">{p.desc}</p>
-              <div className="text-[11px] text-text-muted p-3 rounded-lg bg-surface-alt border-2 border-border leading-relaxed">
+              <p className="text-xs text-text-secondary mb-2.5 leading-relaxed font-medium">{p.desc}</p>
+              <div className="text-[11px] text-text-muted p-3 rounded-xl bg-bg-deep border-2 border-border/50 leading-relaxed">
                 💡 <strong className="text-text-primary">Tip:</strong> {p.tips}
               </div>
-            </div>
+            </m.div>
           ))}
 
           <Button
@@ -155,11 +150,11 @@ export function ListeningTab() {
         </div>
       )}
 
-      {/* Free practice mode */}
+      {/* ─── Free practice mode ─── */}
       {mode === "free" && (
         <>
           {error && (
-            <div className="flex gap-2 items-center bg-red-950/20 border border-red-900/30 rounded-2xl p-4 text-xs text-red-400 mb-4 animate-in fade-in duration-200">
+            <div className="flex gap-2 items-center bg-error/8 border-2 border-error/20 rounded-2xl p-4 text-xs text-error font-semibold mb-5">
               <AlertTriangle className="h-4 w-4 shrink-0" />
               <span>{error}</span>
             </div>
@@ -167,35 +162,27 @@ export function ListeningTab() {
 
           {/* Idle: Level Selector */}
           {(state === "idle" || state === "loading") && (
-            <div className="space-y-4">
-              <LevelSelector
-                onStart={(level, type) => generate(level, type, examMode)}
-                isLoading={state === "loading"}
-                recommendedLevel={recommendedLevel}
-              />
-              <DialogueGenerator
-                isLoading={state === "loading"}
-                onStart={({ topic, level, turns, speakers }) =>
-                  generateDialogue({ topic, level, turns, speakers, examMode })
-                }
-              />
-            </div>
+            <LevelSelector
+              onStart={(level, type) => generate(level, type, examMode)}
+              isLoading={state === "loading"}
+              recommendedLevel={recommendedLevel}
+            />
           )}
 
           {/* Active: Audio + Questions */}
           {(state === "active" || state === "submitting") && exercise && (
-            <div className="flex flex-col gap-5 animate-in fade-in duration-200">
+            <div className="flex flex-col gap-5">
               {exercise.turns && exercise.turns.length > 0 && (
                 <SpeakerLegend turns={exercise.turns} />
               )}
 
               {(!exercise.turns || exercise.turns.length === 0) && (
-                <div className="flex items-center gap-2">
-                  <span className="text-xs text-text-muted font-bold">Voice Accent:</span>
+                <div className="flex items-center gap-2.5">
+                  <span className="text-[10px] text-text-muted font-extrabold uppercase tracking-widest">Voice:</span>
                   <select
                     value={selectedVoice}
                     onChange={(e) => setSelectedVoice(e.target.value)}
-                    className="bg-surface-alt border-2 border-border rounded-lg px-2.5 py-1.5 text-xs font-bold text-ink outline-none focus-visible:shadow-sm focus-visible:translate-x-[-1px] focus-visible:translate-y-[-1px] transition-all cursor-pointer"
+                    className="bg-surface-alt border-2 border-border rounded-xl px-3 py-1.5 text-xs font-bold text-ink outline-none focus-visible:border-accent transition-all cursor-pointer"
                   >
                     <option value="austin">🇺🇸 US Male</option>
                     <option value="autumn">🇺🇸 US Female</option>
@@ -238,7 +225,7 @@ export function ListeningTab() {
 
           {/* Submitted: Results */}
           {state === "submitted" && result && (
-            <div className="space-y-4">
+            <div className="flex flex-col gap-4">
               <Results
                 result={result}
                 onNewExercise={reset}
@@ -248,20 +235,20 @@ export function ListeningTab() {
 
               {skillLevelUp && (
                 <div
-                  className={`p-4 rounded-2xl border text-center text-xs font-semibold flex items-center justify-center gap-2 ${
+                  className={`p-4 rounded-2xl border-2 text-center text-xs font-bold flex items-center justify-center gap-2 ${
                     skillLevelUp.levelUp
-                      ? "bg-emerald-950/10 border-emerald-950/20 text-emerald-450"
-                      : "bg-amber-950/10 border-amber-950/20 text-amber-450"
+                      ? "bg-success/8 border-success/20 text-success"
+                      : "bg-warning/8 border-warning/20 text-warning"
                   }`}
                 >
                   {skillLevelUp.levelUp ? (
                     <>
-                      <Trophy className="h-4 w-4 text-emerald-400 fill-current animate-bounce" />
+                      <Trophy className="h-4 w-4 fill-current animate-bounce" />
                       <span>Listening proficiency level upgraded to: {skillLevelUp.cefr}!</span>
                     </>
                   ) : (
                     <>
-                      <BarChart2 className="h-4 w-4 text-amber-400" />
+                      <BarChart2 className="h-4 w-4" />
                       <span>Current proficiency level: {skillLevelUp.cefr}</span>
                     </>
                   )}

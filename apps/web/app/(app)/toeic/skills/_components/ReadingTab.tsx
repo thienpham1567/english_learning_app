@@ -115,8 +115,8 @@ export function ReadingTab() {
 
   return (
     <div className="px-3.5 pt-3 pb-10 max-w-3xl mx-auto w-full">
-      {/* Mode selector pills */}
-      <div className="flex gap-2 mb-5 flex-wrap">
+      {/* Mode selector */}
+      <div className="flex gap-1 p-1 bg-surface-alt border-2 border-border rounded-2xl mb-5 max-w-sm">
         {[
           {
             key: "overview" as ReadingMode,
@@ -129,19 +129,19 @@ export function ReadingTab() {
             icon: <Lightbulb className="h-4 w-4" />,
           },
           { key: "drill" as ReadingMode, label: "Practice", icon: <Rocket className="h-4 w-4" /> },
-        ].map((m) => (
+        ].map((tab) => (
           <button
-            key={m.key}
+            key={tab.key}
             type="button"
-            onClick={() => setMode(m.key)}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold border cursor-pointer transition-all duration-100 active:scale-97 ${
-              mode === m.key
-                ? "border-accent bg-accent/10 text-accent font-bold"
-                : "border-border bg-surface text-text-secondary hover:bg-surface-hover hover:text-ink hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-sm transition-all"
+            onClick={() => setMode(tab.key)}
+            className={`flex-1 flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-xs cursor-pointer transition-all duration-150 ${
+              mode === tab.key
+                ? "bg-accent text-ink font-black shadow-sm"
+                : "bg-transparent text-text-secondary font-bold hover:text-text-primary"
             }`}
           >
-            {m.icon}
-            <span>{m.label}</span>
+            {tab.icon}
+            <span>{tab.label}</span>
           </button>
         ))}
       </div>

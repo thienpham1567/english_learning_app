@@ -18,6 +18,74 @@ interface OverviewTabProps {
   onGoToReview: () => void;
 }
 
+/* ─── Stat Card ─── */
+function StatCard({
+  label,
+  value,
+  icon,
+  color,
+  index,
+}: {
+  label: string;
+  value: number;
+  icon: React.ReactNode;
+  color: "error" | "success" | "warning" | "accent";
+  index: number;
+}) {
+  const colorMap = {
+    error: {
+      text: value > 0 ? "text-error" : "text-text-muted",
+      bg: "bg-error/8",
+      border: "border-error/20",
+      iconBg: "bg-error/10",
+      iconText: "text-error",
+    },
+    success: {
+      text: "text-success",
+      bg: "bg-success/8",
+      border: "border-success/20",
+      iconBg: "bg-success/10",
+      iconText: "text-success",
+    },
+    warning: {
+      text: value > 0 ? "text-warning" : "text-text-muted",
+      bg: "bg-warning/8",
+      border: "border-warning/20",
+      iconBg: "bg-warning/10",
+      iconText: "text-warning",
+    },
+    accent: {
+      text: "text-ink",
+      bg: "bg-accent-light",
+      border: "border-accent/15",
+      iconBg: "bg-accent/10",
+      iconText: "text-accent",
+    },
+  };
+
+  const c = colorMap[color];
+
+  return (
+    <m.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.05, type: "spring", stiffness: 250, damping: 20 }}
+      whileHover={{ y: -3 }}
+      className={`flex items-center gap-3.5 p-4 bg-surface rounded-2xl border-2 ${c.border} shadow-sm cursor-default transition-shadow duration-200 hover:shadow-md`}
+    >
+      <span className={`w-10 h-10 rounded-xl ${c.iconBg} ${c.iconText} grid place-items-center border-2 ${c.border}`}>
+        {icon}
+      </span>
+      <div>
+        <div className={`text-[28px] font-black ${c.text} leading-none font-display`}>
+          {value}
+        </div>
+        <div className="text-[10px] text-text-muted font-bold mt-0.5 uppercase tracking-wide">{label}</div>
+      </div>
+    </m.div>
+  );
+}
+
 export function OverviewTab({
   errors,
   total,
@@ -41,7 +109,7 @@ export function OverviewTab({
 
   if (loading) {
     return (
-      <div className="py-10 text-center">
+      <div className="py-16 text-center">
         <m.div
           animate={{ opacity: [0.4, 1, 0.4] }}
           transition={{ repeat: Infinity, duration: 1.5 }}
@@ -54,69 +122,16 @@ export function OverviewTab({
   }
 
   return (
-    <div className="flex flex-col gap-5">
-      {/* Stats Cards */}
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-3">
-        {[
-          {
-            label: "Unresolved",
-            value: unresolvedCount,
-            colorClass: unresolvedCount > 0 ? "text-error" : "text-text-muted",
-            icon: <AlertCircle className="h-4 w-4" />,
-            bgClass: "bg-red-500/5",
-            borderClass: "border-red-500/15",
-          },
-          {
-            label: "Resolved",
-            value: resolvedCount,
-            colorClass: "text-success",
-            icon: <CheckCircle className="h-4 w-4" />,
-            bgClass: "bg-emerald-500/5",
-            borderClass: "border-emerald-500/15",
-          },
-          {
-            label: "Needs Review",
-            value: dueCount,
-            colorClass: dueCount > 0 ? "text-warning" : "text-text-muted",
-            icon: <Clock className="h-4 w-4" />,
-            bgClass: "bg-amber-500/5",
-            borderClass: "border-amber-500/15",
-          },
-          {
-            label: "Total Errors",
-            value: total,
-            colorClass: "text-ink",
-            icon: <Database className="h-4 w-4" />,
-            bgClass: "bg-accent-light",
-            borderClass: "border-accent/15",
-            iconColorClass: "text-accent-hover",
-          },
-        ].map((stat: any) => (
-          <m.div
-            key={stat.label}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -2, boxShadow: "var(--shadow-md)" }}
-            className={`flex items-center gap-3.5 p-4.5 bg-surface rounded-xl border-[1.5px] ${stat.borderClass} shadow-sm cursor-default transition-all duration-200`}
-          >
-            <span
-              className={`w-9 h-9 rounded-[10px] ${stat.bgClass} ${stat.iconColorClass ?? stat.colorClass} grid place-items-center`}
-            >
-              {stat.icon}
-            </span>
-            <div>
-              <div
-                className={`text-[28px] font-black ${stat.colorClass} leading-none font-display`}
-              >
-                {stat.value}
-              </div>
-              <div className="text-[11px] text-text-muted font-bold mt-0.5">{stat.label}</div>
-            </div>
-          </m.div>
-        ))}
+    <div className="flex flex-col gap-6">
+      {/* ─── Stats Cards ─── */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+        <StatCard label="Unresolved" value={unresolvedCount} icon={<AlertCircle size={18} />} color="error" index={0} />
+        <StatCard label="Resolved" value={resolvedCount} icon={<CheckCircle size={18} />} color="success" index={1} />
+        <StatCard label="Needs Review" value={dueCount} icon={<Clock size={18} />} color="warning" index={2} />
+        <StatCard label="Total Errors" value={total} icon={<Database size={18} />} color="accent" index={3} />
       </div>
 
-      {/* SRS Review CTA */}
+      {/* ─── SRS Review CTA ─── */}
       {dueCount > 0 && (
         <m.button
           initial={{ opacity: 0, y: 10 }}
@@ -124,27 +139,30 @@ export function OverviewTab({
           whileHover={{ scale: 1.01, y: -2 }}
           whileTap={{ scale: 0.99 }}
           onClick={onGoToReview}
-          className="flex items-center justify-center gap-3 p-4.5 rounded-xl border-2 border-accent bg-gradient-to-br from-accent/8 to-amber-500/5 cursor-pointer shadow-[0_4px_14px_var(--accent-muted)] font-body"
+          className="flex items-center gap-4 p-5 rounded-2xl border-2 border-accent bg-accent-light cursor-pointer shadow-sm font-body transition-shadow duration-200 hover:shadow-md"
         >
-          <Brain className="h-7 w-7 text-accent-hover shrink-0" />
+          <div className="w-12 h-12 rounded-xl bg-accent/15 border-2 border-accent/20 grid place-items-center shrink-0">
+            <Brain className="h-6 w-6 text-accent" />
+          </div>
           <div className="text-left">
             <div className="text-base font-black text-ink">
               Review Now — {dueCount} errors to recall
             </div>
-            <div className="text-xs text-text-muted font-medium">
+            <div className="text-xs text-text-muted font-medium mt-0.5">
               Flashcards + AI explanations help you retain information longer
             </div>
           </div>
         </m.button>
       )}
 
-      {/* Module Distribution */}
+      {/* ─── Module Distribution ─── */}
       {moduleStats.length > 0 && (
-        <div className="bg-surface rounded-xl border-2 border-border p-5">
-          <span className="text-xs font-bold text-text-muted uppercase tracking-widest flex items-center gap-1.5 mb-3.5">
-            <BarChart2 className="h-4 w-4" /> Distribution by Source
+        <div className="bg-surface rounded-2xl border-2 border-border p-5 shadow-sm">
+          <span className="text-[10px] font-extrabold text-text-muted uppercase tracking-widest flex items-center gap-2 mb-4 font-display">
+            <BarChart2 className="h-4 w-4 text-accent" />
+            Distribution by Source
           </span>
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3">
             {moduleStats.map(([mod, count], i) => {
               const pct = total > 0 ? Math.round((count / total) * 100) : 0;
               return (
@@ -153,26 +171,26 @@ export function OverviewTab({
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: i * 0.05 }}
-                  className="flex items-center gap-2.5"
+                  className="flex items-center gap-3"
                 >
-                  <span className="text-base w-7 text-center flex items-center justify-center">
+                  <span className="shrink-0 w-8 h-8 rounded-lg bg-accent/8 border-2 border-accent/15 grid place-items-center">
                     {(() => {
                       const Icon = MODULE_ICONS[mod] || FileText;
                       return <Icon className="h-4 w-4 text-accent" />;
                     })()}
                   </span>
-                  <span className="text-[13px] font-semibold text-text-primary w-[90px] shrink-0">
+                  <span className="text-[13px] font-bold text-ink w-[110px] shrink-0 truncate">
                     {MODULE_LABELS[mod] ?? mod}
                   </span>
-                  <div className="flex-1 h-2 rounded bg-border overflow-hidden">
+                  <div className="flex-1 h-2.5 rounded-full bg-border/50 overflow-hidden">
                     <m.div
                       initial={{ width: 0 }}
-                      animate={{ width: `${pct}%` }}
-                      transition={{ duration: 0.5, delay: i * 0.05 }}
-                      className="h-full rounded bg-accent min-w-1"
+                      animate={{ width: `${Math.max(pct, 3)}%` }}
+                      transition={{ duration: 0.6, delay: i * 0.06, ease: "easeOut" }}
+                      className="h-full rounded-full bg-gradient-to-r from-accent to-accent-hover"
                     />
                   </div>
-                  <span className="text-xs font-extrabold text-ink w-10 text-right">
+                  <span className="text-xs font-black text-ink w-8 text-right tabular-nums">
                     {count}
                   </span>
                 </m.div>
@@ -182,10 +200,10 @@ export function OverviewTab({
         </div>
       )}
 
-      {/* Error Patterns */}
+      {/* ─── Error Patterns ─── */}
       {errors.length > 0 && <ErrorPatternSummary errors={errors} />}
 
-      {/* Error Trends */}
+      {/* ─── Error Trends ─── */}
       {errors.length > 0 && <ErrorTrendSection errors={errors} />}
     </div>
   );

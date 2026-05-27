@@ -3,13 +3,12 @@
 import {
   BookOpen,
   ChevronDown,
-  ChevronRight,
   CircleCheckBig,
-  FileText,
   FileWarning,
   Flame,
   GitBranch,
   GraduationCap,
+  Languages,
   LayoutDashboard,
   MessageSquare,
   Moon,
@@ -93,7 +92,7 @@ const navGroups: (NavItem | NavGroup)[] = [
     items: [
       { href: "/english-chatbot", label: "AI Chatbot", icon: MessageSquare },
       { href: "/read-aloud", label: "Read Aloud", icon: Volume2 },
-      { href: "/ipa-chart", label: "IPA Chart", icon: Volume2 },
+      { href: "/ipa-chart", label: "IPA Chart", icon: Languages },
       { href: "/writing-tools", label: "Writing Tools", icon: Pencil },
     ],
   },
@@ -104,6 +103,7 @@ type Props = {
   onToggle: () => void;
 };
 
+/* ─── Individual Nav Link ─── */
 function NavLink({
   href,
   label,
@@ -127,30 +127,50 @@ function NavLink({
   indented?: boolean;
   animDelay?: number;
 }) {
+  const iconSize = indented ? 16 : 18;
+
   return (
     <Link href={href} prefetch={false} className="no-underline">
       <m.div
-        initial={{ opacity: 0, x: -10 }}
+        initial={{ opacity: 0, x: -8 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: animDelay, duration: 0.3 }}
-        whileHover={{ x: 4, background: "var(--sidebar-item-hover)" }}
-        whileTap={{ scale: 0.98 }}
+        transition={{ delay: animDelay, duration: 0.25 }}
+        whileHover={
+          active
+            ? {}
+            : { x: 3, background: "var(--sidebar-item-hover)" }
+        }
+        whileTap={{ scale: 0.97 }}
         aria-current={active ? "page" : undefined}
-        className={`sidebar-nav-link flex items-center gap-2.5 overflow-hidden relative cursor-pointer rounded-[10px] transition-[background,color,border-color] duration-200 border-l-[3px] ${
+        className={`sidebar-nav-link flex items-center gap-3 overflow-hidden relative cursor-pointer transition-all duration-200 ${
           indented
-            ? "py-[7px] px-2.5 pl-3.5 text-[13px]"
-            : "py-[9px] px-2.5 text-sm"
+            ? "py-[8px] px-3 text-[13px] rounded-xl"
+            : "py-[9px] px-3 text-[13.5px] rounded-xl"
         } ${
           active
-            ? "font-semibold bg-sidebar-active-bg text-accent border-accent"
-            : "font-medium bg-transparent text-sidebar-text border-transparent"
+            ? "font-bold bg-[var(--sidebar-active-bg)] text-[var(--accent)]"
+            : "font-medium bg-transparent text-[var(--sidebar-text)]"
         }`}
       >
+        {/* Active indicator dot */}
+        {active && (
+          <m.div
+            layoutId="sidebar-active-indicator"
+            className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-[18px] rounded-r-full bg-[var(--accent)]"
+            transition={{ type: "spring", stiffness: 350, damping: 30 }}
+          />
+        )}
+
         <m.span
-          animate={{ scale: active ? 1.1 : 1, opacity: active ? 1 : 0.7 }}
-          className="grid place-items-center w-[18px] h-[18px] shrink-0"
+          animate={{
+            scale: active ? 1.12 : 1,
+            opacity: active ? 1 : 0.65,
+          }}
+          transition={{ type: "spring", stiffness: 400, damping: 20 }}
+          className="grid place-items-center shrink-0"
+          style={{ width: iconSize, height: iconSize }}
         >
-          <Icon size={indented ? 15 : 17} />
+          <Icon size={iconSize} />
         </m.span>
 
         <AnimatePresence>
@@ -160,7 +180,7 @@ function NavLink({
               initial={{ opacity: 0, width: 0 }}
               animate={{ opacity: 1, width: "auto" }}
               exit={{ opacity: 0, width: 0 }}
-              className="flex-1 whitespace-nowrap tracking-tight"
+              className="flex-1 whitespace-nowrap tracking-[-0.01em] leading-none"
             >
               {label}
             </m.span>
@@ -173,6 +193,7 @@ function NavLink({
   );
 }
 
+/* ─── Main Sidebar ─── */
 export function AppSidebar({ isExpanded, onToggle }: Props) {
   const pathname = usePathname();
   const { mode, toggleTheme } = useTheme();
@@ -208,7 +229,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
     if (!badges) return null;
     if (href === "/flashcards" && badges.flashcardsDue > 0) {
       return (
-        <Badge className="ml-auto px-1.5 py-0 text-[10px] bg-accent text-white border-0">
+        <Badge className="ml-auto px-1.5 py-0 text-[10px] bg-accent text-text-on-accent border-0 font-black shadow-sm">
           {badges.flashcardsDue}
         </Badge>
       );
@@ -218,14 +239,14 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
       return (
         <m.span
           initial={{ scale: 0.8 }}
-          animate={{ scale: [0.8, 1.2, 1] }}
+          animate={{ scale: [0.8, 1.15, 1] }}
           transition={{ repeat: Infinity, duration: 3 }}
           className="text-xs leading-none ml-auto"
         >
           {badges.dailyChallengeCompleted ? (
-            <CircleCheckBig className="text-emerald-500" />
+            <CircleCheckBig className="text-emerald-500" size={14} />
           ) : (
-            <Flame className="text-destructive opacity-70" />
+            <Flame className="text-[var(--fire)]" size={14} />
           )}
         </m.span>
       );
@@ -236,19 +257,22 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
   return (
     <m.aside
       initial={false}
-      animate={{ width: isExpanded ? 248 : 64 }}
+      animate={{ width: isExpanded ? 252 : 66 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="flex flex-col overflow-hidden sticky top-0 z-50 h-screen py-4 px-2.5 border-r border-[var(--sidebar-border)] bg-[var(--sidebar-bg)]"
+      className="flex flex-col overflow-hidden sticky top-0 z-50 h-screen py-3.5 px-2 border-r border-[var(--sidebar-border)] bg-[var(--sidebar-bg)] relative"
     >
-      {/* Accent glow */}
-      <m.div
+      {/* Subtle accent glow at top */}
+      <div
         aria-hidden
-        animate={{ opacity: isExpanded ? 1 : 0.6 }}
-        className="absolute inset-0 pointer-events-none z-0 bg-[var(--sidebar-glow)]"
+        className="absolute inset-0 pointer-events-none z-0"
+        style={{ background: "var(--sidebar-glow)" }}
       />
 
-      {/* Logo / toggle */}
-      <div className="relative z-[1] flex items-center h-[52px] pb-3 pt-0.5">
+      {/* Grain texture overlay for depth */}
+      <div className="grain-overlay" style={{ opacity: 0.02 }} />
+
+      {/* ─── Logo / toggle ─── */}
+      <div className="relative z-[1] flex items-center h-[52px] pb-2 pt-0.5 px-1">
         <AnimatePresence mode="wait">
           {isExpanded ? (
             <m.div
@@ -262,11 +286,11 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
                 <Logo collapsed={false} />
               </div>
               <m.button
-                whileHover={{ background: "var(--sidebar-item-hover)" }}
+                whileHover={{ background: "var(--sidebar-item-hover)", scale: 1.05 }}
                 whileTap={{ scale: 0.9 }}
                 onClick={onToggle}
                 aria-label="Collapse sidebar"
-                className="grid place-items-center w-7 h-7 shrink-0 rounded-lg bg-none border-none cursor-pointer ml-auto text-[var(--sidebar-text)]"
+                className="grid place-items-center w-7 h-7 shrink-0 rounded-lg bg-none border-none cursor-pointer ml-auto text-[var(--sidebar-text)] transition-colors"
               >
                 <PanelLeftClose size={15} />
               </m.button>
@@ -277,27 +301,28 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              whileHover={{ background: "var(--sidebar-item-hover)" }}
+              whileHover={{ background: "var(--sidebar-item-hover)", scale: 1.05 }}
               whileTap={{ scale: 0.9 }}
               onClick={onToggle}
               aria-label="Expand sidebar"
-              className="mx-auto grid place-items-center w-9 h-9 shrink-0 bg-none border-none cursor-pointer rounded-[10px] text-[var(--sidebar-text)]"
+              className="mx-auto grid place-items-center w-10 h-10 shrink-0 bg-none border-none cursor-pointer rounded-xl text-[var(--sidebar-text)] transition-colors"
             >
-              <PanelLeftOpen size={15} />
+              <PanelLeftOpen size={16} />
             </m.button>
           )}
         </AnimatePresence>
       </div>
 
-      <div className="h-px relative z-[1] mb-1.5 bg-[var(--sidebar-border)]" />
+      {/* Separator */}
+      <div className="relative z-[1] mx-2 mb-2 h-px bg-[var(--sidebar-border)]" />
 
-      {/* Nav */}
+      {/* ─── Navigation ─── */}
       <m.nav
         aria-label="App navigation"
-        className="relative z-[1] flex flex-col pt-1 flex-1 overflow-y-auto overflow-x-hidden gap-px scrollbar-none"
+        className="relative z-[1] flex flex-col pt-0.5 flex-1 overflow-y-auto overflow-x-hidden gap-0.5 scrollbar-none"
       >
         {navGroups.map((entry, groupIndex) => {
-          // Standalone (Home)
+          // ─── Standalone items (Dashboard, TOEIC) ───
           if ("href" in entry) {
             const { href, label, icon: Icon } = entry;
             const active = pathname === href || pathname.startsWith(`${href}/`);
@@ -309,7 +334,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
                 active={active}
                 isExpanded={isExpanded}
                 badge={getBadge(href)}
-                animDelay={0.05 + groupIndex * 0.05}
+                animDelay={0.05 + groupIndex * 0.04}
               />
             );
             return (
@@ -326,7 +351,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
             );
           }
 
-          // Group
+          // ─── Groups (Foundation, Daily, Tools) ───
           const group = entry as NavGroup;
           const groupHasActive = group.items.some(
             (item) =>
@@ -334,10 +359,12 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
           );
           const isGroupOpen = groupHasActive || !collapsedGroups.has(group.key);
 
-          // Collapsed sidebar: flat icons
+          // Collapsed sidebar: flat icons only
           if (!isExpanded) {
             return (
-              <div key={group.key} className="mt-0.5">
+              <div key={group.key} className="mt-1">
+                {/* Thin separator line */}
+                <div className="mx-3 mb-1.5 h-px bg-[var(--sidebar-border)] opacity-60" />
                 {group.items.map((item, itemIndex) => {
                   const active =
                     pathname === item.href ||
@@ -350,7 +377,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
                       active={active}
                       isExpanded={false}
                       badge={getBadge(item.href)}
-                      animDelay={0.05 + groupIndex * 0.05 + itemIndex * 0.02}
+                      animDelay={0.05 + groupIndex * 0.04 + itemIndex * 0.02}
                     />
                   );
                   return (
@@ -364,23 +391,34 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
             );
           }
 
-          // Expanded: collapsible group
+          // Expanded: collapsible group with header
           return (
             <m.div
               key={group.key}
-              initial={{ opacity: 0, x: -10 }}
+              initial={{ opacity: 0, x: -8 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.1 + groupIndex * 0.05 }}
-              className={groupIndex > 0 ? "mt-2.5" : "mt-1"}
+              transition={{ delay: 0.08 + groupIndex * 0.04 }}
+              className="mt-3"
             >
+              {/* Group header with decorative line */}
               <m.button
                 onClick={() => toggleGroup(group.key)}
-                whileHover={{ x: 2, opacity: 0.8 }}
-                className="flex items-center w-full border-none bg-none text-[10px] font-bold uppercase cursor-pointer py-1 px-2.5 pl-2.5 mb-0.5 tracking-[0.07em] opacity-55 text-[var(--sidebar-text)]"
+                whileHover={{ opacity: 0.9 }}
+                className="sidebar-group-label flex items-center w-full border-none bg-none text-[10px] font-extrabold uppercase cursor-pointer py-0.5 tracking-[0.1em] text-[var(--sidebar-text-muted)]"
               >
-                <span className="flex-1 text-left">{group.label}</span>
-                <m.span animate={{ rotate: isGroupOpen ? 0 : -90 }}>
-                  <ChevronDown size={8} />
+                <span className="shrink-0 flex items-center gap-1.5">
+                  <span
+                    className="w-1 h-1 rounded-full bg-[var(--accent)] opacity-50"
+                    aria-hidden
+                  />
+                  {group.label}
+                </span>
+                <m.span
+                  animate={{ rotate: isGroupOpen ? 0 : -90 }}
+                  transition={{ duration: 0.2 }}
+                  className="shrink-0 ml-auto"
+                >
+                  <ChevronDown size={10} />
                 </m.span>
               </m.button>
 
@@ -391,7 +429,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    className="flex flex-col overflow-hidden gap-px"
+                    className="flex flex-col overflow-hidden gap-0.5 mt-0.5"
                   >
                     {group.items.map((item, itemIndex) => {
                       const active =
@@ -419,14 +457,21 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
         })}
       </m.nav>
 
-      {/* Bottom: Theme */}
+      {/* ─── Bottom: Theme Toggle ─── */}
       <m.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.5 }}
-        className="pt-2 relative z-[1] mt-1"
+        className="relative z-[1] pt-2 mt-auto"
       >
-        <div className="h-px mb-2 bg-[var(--sidebar-border)]" />
+        {/* Gradient separator */}
+        <div
+          className="mx-2 mb-2.5 h-px"
+          style={{
+            background:
+              "linear-gradient(90deg, transparent, var(--sidebar-border), transparent)",
+          }}
+        />
 
         {/* Theme toggle */}
         {(() => {
@@ -435,7 +480,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
               whileHover={{ background: "var(--sidebar-item-hover)", x: 2 }}
               whileTap={{ scale: 0.95 }}
               onClick={toggleTheme}
-              className="theme-toggle-btn flex items-center gap-2.5 w-full border-none bg-transparent text-sm font-medium cursor-pointer py-[9px] px-2.5 rounded-[10px] transition-colors duration-150 text-[var(--sidebar-text)]"
+              className="theme-toggle-btn"
               aria-label={
                 mode === "light"
                   ? "Switch to dark mode"
@@ -444,15 +489,25 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
             >
               <m.span
                 animate={{ rotate: mode === "light" ? 0 : 180 }}
-                className="text-[15px] grid place-items-center"
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="grid place-items-center shrink-0"
+                style={{ width: 16, height: 16 }}
               >
-                {mode === "light" ? <Moon /> : <Sun />}
+                {mode === "light" ? <Moon size={16} /> : <Sun size={16} />}
               </m.span>
-              {isExpanded && (
-                <m.span initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                  {mode === "light" ? "Dark Mode" : "Light Mode"}
-                </m.span>
-              )}
+              <AnimatePresence>
+                {isExpanded && (
+                  <m.span
+                    key="theme-label"
+                    initial={{ opacity: 0, width: 0 }}
+                    animate={{ opacity: 1, width: "auto" }}
+                    exit={{ opacity: 0, width: 0 }}
+                    className="whitespace-nowrap text-[13px] font-semibold"
+                  >
+                    {mode === "light" ? "Dark Mode" : "Light Mode"}
+                  </m.span>
+                )}
+              </AnimatePresence>
             </m.button>
           );
           return !isExpanded ? (

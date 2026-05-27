@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, BarChart2, Brain, ClipboardList, Clock, FlaskConical } from "lucide-react";
+import { BarChart2, Brain, ClipboardList, FlaskConical } from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useEffect, useState } from "react";
 import { api } from "@/lib/api-client";
@@ -59,39 +59,34 @@ export default function ErrorNotebookPage() {
 
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden relative">
-
-
-      {/* Tabs */}
-      <div className="relative z-[1] flex gap-1 px-5 pt-3 border-b-2 border-border bg-bg">
-        {TABS.map((t) => (
-          <button
-            key={t.key}
-            onClick={() => setTab(t.key)}
-            className={`flex items-center gap-1.5 px-4.5 py-2.5 rounded-t-xl border-none border-b-2 text-[13px] cursor-pointer transition-all duration-150 font-body ${
-              tab === t.key
-                ? "border-b-accent bg-surface text-ink font-black"
-                : "border-b-transparent bg-transparent text-text-secondary font-semibold hover:text-ink"
-            }`}
-          >
-            <m.span
-              className="text-[15px] flex items-center justify-center"
-              animate={tab === t.key ? { scale: 1.1, rotate: [0, -5, 5, 0] } : { scale: 1 }}
-              transition={{ duration: 0.3 }}
+      {/* ─── Tab switcher ─── */}
+      <div className="relative z-[1] shrink-0 px-5 pt-3 pb-2">
+        <div className="flex gap-1 bg-surface-alt rounded-2xl p-1 border-2 border-border shadow-sm max-w-lg overflow-x-auto scrollbar-none">
+          {TABS.map((t) => (
+            <m.button
+              key={t.key}
+              onClick={() => setTab(t.key)}
+              whileTap={{ scale: 0.97 }}
+              className={`flex-1 flex items-center justify-center gap-1.5 px-3.5 py-2 rounded-xl text-[12.5px] cursor-pointer transition-all duration-150 min-w-0 ${
+                tab === t.key
+                  ? "bg-accent text-text-on-accent font-black border-none shadow-sm"
+                  : "bg-transparent text-text-secondary font-bold hover:text-text-primary"
+              }`}
             >
-              <t.icon size={16} />
-            </m.span>
-            {t.label}
-            {/* Due badge on Review tab */}
-            {t.key === "review" && dueCount > 0 && (
-              <span className="text-[10px] font-black px-1.5 rounded-full bg-error text-white min-w-[18px] text-center leading-4">
-                {dueCount > 99 ? "99+" : dueCount}
-              </span>
-            )}
-          </button>
-        ))}
+              <t.icon size={15} />
+              <span className="truncate">{t.label}</span>
+              {/* Due badge on Review tab */}
+              {t.key === "review" && dueCount > 0 && (
+                <span className="text-[9px] font-black px-1.5 rounded-full bg-error text-white min-w-[16px] text-center leading-4">
+                  {dueCount > 99 ? "99+" : dueCount}
+                </span>
+              )}
+            </m.button>
+          ))}
+        </div>
       </div>
 
-      {/* Content */}
+      {/* ─── Content ─── */}
       <div className="flex-1 overflow-auto p-5 relative z-[1]">
         <div className="max-w-[900px] mx-auto w-full">
           {tab === "overview" && (

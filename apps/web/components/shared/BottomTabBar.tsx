@@ -1,7 +1,6 @@
 "use client";
 
 import {
-  FileText,
   FileWarning,
   Flame,
   GitBranch,
@@ -15,91 +14,90 @@ import {
   Target,
   Trophy,
   Volume2,
+  X,
 } from "lucide-react";
 import { AnimatePresence } from "motion/react";
-
 import * as m from "motion/react-client";
 import { usePathname, useRouter } from "next/navigation";
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useCallback, useState } from "react";
 
+/* ─── Types ─── */
 interface TabItem {
   key: string;
   label: string;
   icon: ReactNode;
-  activeIcon: ReactNode;
   href?: string;
   action?: "exam-hub" | "review-hub" | "more-hub";
 }
 
+interface HubItem {
+  label: string;
+  icon: ReactNode;
+  href: string;
+  accent?: string;
+}
+
+/* ─── Tab Config ─── */
 const TABS: TabItem[] = [
   {
     key: "home",
-    label: "Dashboard",
-    icon: <LayoutDashboard />,
-    activeIcon: <LayoutDashboard />,
+    label: "Home",
+    icon: <LayoutDashboard size={21} />,
     href: "/dashboard",
   },
   {
     key: "toeic",
     label: "TOEIC",
-    icon: <Target />,
-    activeIcon: <Target />,
+    icon: <Target size={21} />,
     href: "/toeic/skills",
   },
   {
     key: "exam",
     label: "Exams",
-    icon: <Trophy />,
-    activeIcon: <Trophy />,
+    icon: <Trophy size={21} />,
     action: "exam-hub",
   },
   {
     key: "review",
     label: "Review",
-    icon: <RefreshCw />,
-    activeIcon: <RefreshCw />,
+    icon: <RefreshCw size={21} />,
     action: "review-hub",
   },
   {
     key: "more",
     label: "More",
-    icon: <LayoutGrid />,
-    activeIcon: <LayoutGrid />,
+    icon: <LayoutGrid size={21} />,
     action: "more-hub",
   },
 ];
 
-const EXAM_HUB_ITEMS = [
-  { label: "ETS Practice Tests", icon: <Trophy />, href: "/toeic/practice" },
-  {
-    label: "TOEIC Part 5",
-    icon: <HelpCircle />,
-    href: "/toeic/skills?tab=part5",
-  },
+/* ─── Hub Items Config ─── */
+const EXAM_HUB_ITEMS: HubItem[] = [
+  { label: "ETS Practice Tests", icon: <Trophy size={22} />, href: "/toeic/practice", accent: "var(--accent)" },
+  { label: "TOEIC Part 5", icon: <HelpCircle size={22} />, href: "/toeic/skills?tab=part5", accent: "var(--secondary)" },
 ];
 
-const REVIEW_HUB_ITEMS = [
-  { label: "Error Notebook", icon: <FileWarning />, href: "/error-notebook" },
-  { label: "Flashcard Review", icon: <RefreshCw />, href: "/flashcards" },
+const REVIEW_HUB_ITEMS: HubItem[] = [
+  { label: "Error Notebook", icon: <FileWarning size={22} />, href: "/error-notebook", accent: "var(--error)" },
+  { label: "Flashcard Review", icon: <RefreshCw size={22} />, href: "/flashcards", accent: "var(--info)" },
 ];
 
-const MORE_HUB_ITEMS = [
-  {
-    label: "Daily Challenge",
-    icon: <Flame />,
-    href: "/daily-challenge",
-  },
-  { label: "AI Chatbot", icon: <MessageSquare />, href: "/english-chatbot" },
-  { label: "Read Aloud", icon: <Volume2 />, href: "/read-aloud" },
-  {
-    label: "Grammar Roadmap",
-    icon: <GitBranch />,
-    href: "/grammar-roadmap",
-  },
-  { label: "Grammar Lessons", icon: <GraduationCap />, href: "/grammar-lessons" },
-  { label: "Vocabulary", icon: <Star />, href: "/my-vocabulary" },
+const MORE_HUB_ITEMS: HubItem[] = [
+  { label: "Daily Challenge", icon: <Flame size={22} />, href: "/daily-challenge", accent: "var(--fire)" },
+  { label: "AI Chatbot", icon: <MessageSquare size={22} />, href: "/english-chatbot", accent: "var(--secondary)" },
+  { label: "Read Aloud", icon: <Volume2 size={22} />, href: "/read-aloud", accent: "var(--info)" },
+  { label: "Grammar Roadmap", icon: <GitBranch size={22} />, href: "/grammar-roadmap", accent: "var(--module-grammar)" },
+  { label: "Grammar Lessons", icon: <GraduationCap size={22} />, href: "/grammar-lessons", accent: "var(--module-grammar)" },
+  { label: "Vocabulary", icon: <Star size={22} />, href: "/my-vocabulary", accent: "var(--accent)" },
 ];
 
+const HUB_MAP: Record<string, { title: string; items: HubItem[] }> = {
+  exam: { title: "Exams", items: EXAM_HUB_ITEMS },
+  review: { title: "Review", items: REVIEW_HUB_ITEMS },
+  more: { title: "More Features", items: MORE_HUB_ITEMS },
+};
+
+/* ─── Route Matching ─── */
 function getActiveTab(pathname: string): string {
   if (pathname.startsWith("/dashboard")) return "home";
   if (pathname.startsWith("/toeic")) return "toeic";
@@ -122,131 +120,191 @@ function getActiveTab(pathname: string): string {
   return "home";
 }
 
-/* ── Tab Bar ── */
+/* ─── Hub Card ─── */
+function HubCard({
+  item,
+  index,
+  onNavigate,
+}: {
+  item: HubItem;
+  index: number;
+  onNavigate: (href: string) => void;
+}) {
+  return (
+    <m.button
+      type="button"
+      initial={{ opacity: 0, y: 12, scale: 0.95 }}
+      animate={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ delay: index * 0.04, type: "spring", stiffness: 400, damping: 28 }}
+      whileTap={{ scale: 0.95 }}
+      onClick={() => onNavigate(item.href)}
+      className="flex flex-col items-center justify-center gap-2.5 rounded-2xl bg-surface border-2 border-border p-4 cursor-pointer shadow-sm active:shadow-none transition-shadow duration-100"
+    >
+      <div
+        className="w-11 h-11 rounded-xl border-2 border-border grid place-items-center shadow-sm"
+        style={{
+          background: `color-mix(in srgb, ${item.accent ?? "var(--accent)"} 10%, var(--surface))`,
+          borderColor: `color-mix(in srgb, ${item.accent ?? "var(--accent)"} 25%, var(--border))`,
+          color: item.accent ?? "var(--accent)",
+        }}
+      >
+        {item.icon}
+      </div>
+      <span className="text-[12px] font-black text-ink leading-tight text-center">
+        {item.label}
+      </span>
+    </m.button>
+  );
+}
+
+/* ─── Bottom Tab Bar ─── */
 export function BottomTabBar() {
   const router = useRouter();
   const pathname = usePathname();
   const activeTab = getActiveTab(pathname);
   const [activeHub, setActiveHub] = useState<"exam" | "review" | "more" | null>(null);
 
-  const handleTabClick = (tab: TabItem) => {
-    if (tab.action === "exam-hub") {
-      setActiveHub((prev) => (prev === "exam" ? null : "exam"));
-    } else if (tab.action === "review-hub") {
-      setActiveHub((prev) => (prev === "review" ? null : "review"));
-    } else if (tab.action === "more-hub") {
-      setActiveHub((prev) => (prev === "more" ? null : "more"));
-    } else if (tab.href) {
-      setActiveHub(null);
-      router.push(tab.href);
-    }
-  };
+  const handleTabClick = useCallback(
+    (tab: TabItem) => {
+      if (tab.action === "exam-hub") {
+        setActiveHub((prev) => (prev === "exam" ? null : "exam"));
+      } else if (tab.action === "review-hub") {
+        setActiveHub((prev) => (prev === "review" ? null : "review"));
+      } else if (tab.action === "more-hub") {
+        setActiveHub((prev) => (prev === "more" ? null : "more"));
+      } else if (tab.href) {
+        setActiveHub(null);
+        router.push(tab.href);
+      }
+    },
+    [router],
+  );
 
-  const hubItems =
-    activeHub === "exam"
-      ? EXAM_HUB_ITEMS
-      : activeHub === "review"
-        ? REVIEW_HUB_ITEMS
-        : activeHub === "more"
-          ? MORE_HUB_ITEMS
-          : [];
+  const handleHubNavigate = useCallback(
+    (href: string) => {
+      setActiveHub(null);
+      router.push(href);
+    },
+    [router],
+  );
+
+  const hubData = activeHub ? HUB_MAP[activeHub] : null;
 
   return (
     <>
-      {/* Learn Hub Overlay */}
+      {/* ─── Hub Overlay ─── */}
       <AnimatePresence>
-        {activeHub !== null && (
+        {activeHub !== null && hubData && (
           <>
             {/* Backdrop */}
-            <m.button
-              type="button"
+            <m.div
               key="backdrop"
-              aria-label="Close menu"
-              onClick={() => setActiveHub(null)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed inset-0 border-none p-0 z-20 bg-black/60 backdrop-blur-sm"
+              onClick={() => setActiveHub(null)}
+              className="fixed inset-0 z-20 bg-black/50 backdrop-blur-[2px]"
             />
 
-            {/* Hub cards */}
+            {/* Hub Panel */}
             <m.div
-              key="hub-cards"
-              initial={{ opacity: 0, y: 20, scale: 0.95 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: 20, scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              className="fixed grid gap-3 grid-cols-2 bottom-[72px] left-4 right-4 z-[21]"
+              key="hub-panel"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 40 }}
+              transition={{ type: "spring", stiffness: 380, damping: 30 }}
+              className="fixed bottom-[72px] left-3 right-3 z-[21] bg-bg rounded-2xl border-2 border-border shadow-lg overflow-hidden"
+              style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
             >
-              {hubItems.map((item, idx) => (
-                <m.div
-                  key={item.href}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: idx * 0.04 }}
+              {/* Hub header */}
+              <div className="flex items-center justify-between px-4 pt-3.5 pb-2">
+                <span className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-text-muted font-display">
+                  {hubData.title}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setActiveHub(null)}
+                  className="w-7 h-7 rounded-lg border-2 border-border bg-surface text-text-muted grid place-items-center cursor-pointer hover:bg-surface-hover hover:text-ink transition-colors"
                 >
-                  <button
-                    type="button"
-                    onClick={() => {
-                      setActiveHub(null);
-                      router.push(item.href);
-                    }}
-                    className="rounded text-center bg-surface p-4 cursor-pointer border-2 border-border shadow-sm transition-transform duration-100 active:scale-95 w-full"
-                  >
-                    <span className="text-3xl text-accent">{item.icon}</span>
-                    <br />
-                    <span className="text-[13px] font-bold text-ink">{item.label}</span>
-                  </button>
-                </m.div>
-              ))}
+                  <X size={13} />
+                </button>
+              </div>
+
+              {/* Hub grid */}
+              <div className={`grid gap-2.5 px-3.5 pb-4 ${hubData.items.length <= 2 ? "grid-cols-2" : "grid-cols-3"}`}>
+                {hubData.items.map((item, idx) => (
+                  <HubCard
+                    key={item.href}
+                    item={item}
+                    index={idx}
+                    onNavigate={handleHubNavigate}
+                  />
+                ))}
+              </div>
             </m.div>
           </>
         )}
       </AnimatePresence>
 
-      {/* Tab Bar */}
+      {/* ─── Tab Bar ─── */}
       <m.nav
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="fixed h-16 bg-surface flex items-center justify-around bottom-0 left-0 right-0 border-t border-border backdrop-blur-xl z-[22] shadow-[0_-4px_20px_rgba(0,0,0,0.05)]"
+        transition={{ delay: 0.1, type: "spring", stiffness: 300, damping: 25 }}
+        className="fixed h-[62px] bg-surface/95 backdrop-blur-xl flex items-center justify-around bottom-0 left-0 right-0 border-t-2 border-border z-[22]"
         style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
       >
         {TABS.map((tab) => {
           const isActive = activeTab === tab.key;
+          const isHubOpen = activeHub !== null && tab.action?.replace("-hub", "") === activeHub;
+
           return (
             <m.button
               key={tab.key}
               type="button"
               aria-label={tab.label}
               onClick={() => handleTabClick(tab)}
-              whileTap={{ scale: 0.9 }}
-              className="flex-1 flex flex-col items-center justify-center border-none bg-transparent cursor-pointer gap-0.5 py-2"
+              whileTap={{ scale: 0.88 }}
+              className="relative flex-1 flex flex-col items-center justify-center border-none bg-transparent cursor-pointer gap-[3px] py-2"
               style={{ WebkitTapHighlightColor: "transparent" }}
             >
-              <m.div
-                animate={{
-                  scale: isActive ? 1.1 : 1,
-                  y: isActive ? -2 : 0,
-                  color: isActive ? "var(--accent)" : "var(--text-muted)",
-                }}
-                transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                className="text-xl flex"
-              >
-                {isActive ? tab.activeIcon : tab.icon}
-              </m.div>
-              <span
-                className={`text-[11px] leading-none mt-0.5 ${isActive ? "font-bold" : "font-medium"}`}
-                style={{ color: isActive ? "var(--accent)" : "var(--text-muted)" }}
-              >
-                {tab.label}
-              </span>
+              {/* Active indicator line */}
               {isActive && (
                 <m.div
-                  layoutId="activeTab"
-                  className="absolute w-1 h-1 rounded-full bottom-1.5"
-                  style={{ background: "var(--accent)" }}
+                  layoutId="mobile-active-tab"
+                  className="absolute top-0 left-1/2 -translate-x-1/2 w-6 h-[3px] rounded-b-full bg-accent"
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               )}
+
+              <m.div
+                animate={{
+                  scale: isActive ? 1.15 : 1,
+                  y: isActive ? -1 : 0,
+                  color: isActive
+                    ? "var(--accent)"
+                    : isHubOpen
+                      ? "var(--text-primary)"
+                      : "var(--text-muted)",
+                }}
+                transition={{ type: "spring", stiffness: 400, damping: 22 }}
+                className="flex"
+              >
+                {tab.icon}
+              </m.div>
+
+              <m.span
+                animate={{
+                  color: isActive
+                    ? "var(--accent)"
+                    : isHubOpen
+                      ? "var(--text-primary)"
+                      : "var(--text-muted)",
+                }}
+                className={`text-[10px] leading-none ${isActive ? "font-extrabold" : "font-semibold"}`}
+              >
+                {tab.label}
+              </m.span>
             </m.button>
           );
         })}

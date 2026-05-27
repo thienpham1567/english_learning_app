@@ -69,18 +69,11 @@ function buildCategories(exam?: ExamType): GrammarCategory[] {
   }));
 }
 
-const LEVEL_COLORS: Record<string, string> = {
-  A2: "green",
-  B1: "blue",
-  B2: "purple",
-  C1: "magenta",
-};
-
-const LEVEL_GLOWS: Record<string, string> = {
-  A2: "rgba(16, 185, 129, 0.15)",
-  B1: "rgba(59, 130, 246, 0.15)",
-  B2: "rgba(139, 92, 246, 0.15)",
-  C1: "rgba(236, 72, 153, 0.15)",
+const LEVEL_BADGE_CLASSES: Record<string, string> = {
+  A2: "bg-success/12 text-success",
+  B1: "bg-secondary/12 text-secondary",
+  B2: "bg-xp/12 text-xp",
+  C1: "bg-error/12 text-error",
 };
 
 const EMPTY_PROGRESS_BY_TOPIC: Record<string, GrammarLessonProgressItem> = {};
@@ -102,8 +95,6 @@ export function TopicGrid({
 }: Props) {
   const categories = useMemo(() => buildCategories(examFilter), [examFilter]);
   const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
-  const [hoveredCat, setHoveredCat] = useState<string | null>(null);
-  const [hoveredTopic, setHoveredTopic] = useState<string | null>(null);
 
   const recommendedCategoryId = categories.find((cat) =>
     cat.topics.some((topic) => topic.id === recommendedTopicId),
@@ -114,7 +105,6 @@ export function TopicGrid({
     <div className="flex flex-col gap-3">
       {categories.map((cat, idx) => {
         const isExpanded = activeExpandedCategory === cat.id;
-        const isHovered = hoveredCat === cat.id;
         const completedCount = cat.topics.filter((t) => completedTopics.has(t.id)).length;
         const progressPct = (completedCount / cat.topics.length) * 100;
         const allDone = completedCount === cat.topics.length && completedCount > 0;
@@ -122,83 +112,59 @@ export function TopicGrid({
         return (
           <m.div
             key={cat.id}
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: idx * 0.05 }}
-            onMouseEnter={() => setHoveredCat(cat.id)}
-            onMouseLeave={() => setHoveredCat(null)}
-            className="rounded-xl bg-surface overflow-hidden"
-            style={{
-              border: isExpanded
-                ? `1px solid color-mix(in srgb, ${cat.color} 35%, var(--border))`
-                : "1px solid var(--border)",
-              boxShadow: isExpanded
-                ? `0 10px 30px color-mix(in srgb, ${cat.color} 8%, transparent)`
-                : isHovered
-                  ? "var(--shadow-md)"
-                  : "var(--shadow-sm)",
-              transition: "box-shadow 0.25s ease, border-color 0.25s ease",
-            }}
+            transition={{ delay: idx * 0.04, type: "spring", stiffness: 300, damping: 25 }}
+            className={`rounded-2xl bg-surface overflow-hidden border-2 transition-all duration-200 ${
+              isExpanded
+                ? "border-accent/30 shadow-md"
+                : "border-border shadow-sm hover:shadow-md"
+            }`}
           >
             {/* Category header button */}
             <button
               onClick={() => setExpandedCategory(isExpanded ? "__none" : cat.id)}
-              className="flex w-full items-center gap-3.5 py-4 px-5 border-none bg-transparent cursor-pointer text-left"
+              className="flex w-full items-center gap-3.5 py-4 px-5 border-none bg-transparent cursor-pointer text-left group"
             >
-              {/* Icon container with gradient */}
+              {/* Icon container */}
               <div
-                className="relative grid w-[46px] h-[46px] rounded-lg text-xl shrink-0"
+                className="relative grid w-11 h-11 rounded-xl text-lg shrink-0 place-items-center text-white shadow-sm transition-transform duration-200 group-hover:scale-105 border-2 border-white/10"
                 style={{
-                  placeItems: "center",
                   background: allDone
-                    ? "linear-gradient(135deg, var(--success), color-mix(in srgb, var(--success) 75%, black))"
-                    : `linear-gradient(135deg, ${cat.color}, color-mix(in srgb, ${cat.color} 75%, black))`,
-                  color: "var(--text-on-accent)",
-                  boxShadow: `0 4px 12px color-mix(in srgb, ${cat.color} 20%, transparent)`,
-                  transition: "transform 0.2s ease",
-                  transform: isHovered ? "scale(1.05)" : "scale(1)",
+                    ? "linear-gradient(135deg, var(--success), color-mix(in srgb, var(--success) 70%, black))"
+                    : `linear-gradient(135deg, ${cat.color}, color-mix(in srgb, ${cat.color} 70%, black))`,
                 }}
               >
-                {allDone ? <CircleCheckBig /> : cat.icon}
-                {/* Completion sparkle */}
+                {allDone ? <CircleCheckBig size={20} /> : cat.icon}
                 {allDone && (
                   <Star
-                    className="absolute text-xs text-xp"
-                    style={{ top: -3, right: -3, filter: "drop-shadow(0 1px 2px rgba(0,0,0,0.2))" }}
+                    size={10}
+                    className="absolute -top-1 -right-1 text-xp fill-current drop-shadow-sm"
                   />
                 )}
               </div>
 
-              <div className="flex-1 w-[0px]">
-                <div
-                  className="font-extrabold text-text-primary mb-1.5"
-                  style={{ fontSize: 14.5, lineHeight: 1.2 }}
-                >
+              <div className="flex-1 min-w-0">
+                <div className="font-black text-ink text-[14px] leading-tight mb-1.5 truncate">
                   {cat.title}
                 </div>
-                {/* Visual progress bar */}
+                {/* Progress bar */}
                 <div className="flex items-center gap-2.5">
-                  <div
-                    className="flex-1 h-[5px] rounded-full relative overflow-hidden"
-                    style={{ background: "var(--border)" }}
-                  >
+                  <div className="flex-1 h-[5px] rounded-full bg-border relative overflow-hidden">
                     <m.div
                       initial={{ width: 0 }}
                       animate={{ width: `${progressPct}%` }}
                       transition={{ type: "spring", stiffness: 80, damping: 15 }}
-                      className="h-full rounded-full absolute"
+                      className="absolute left-0 top-0 bottom-0 h-full rounded-full"
                       style={{
                         background: allDone
                           ? "linear-gradient(90deg, var(--success), color-mix(in srgb, var(--success) 65%, white))"
                           : `linear-gradient(90deg, ${cat.color}, color-mix(in srgb, ${cat.color} 65%, white))`,
-                        left: 0,
-                        top: 0,
-                        bottom: 0,
                       }}
                     />
                   </div>
                   <span
-                    className="text-xs font-extrabold shrink-0 w-[36px] text-right"
+                    className="text-xs font-black shrink-0 w-9 text-right tabular-nums"
                     style={{
                       color: allDone
                         ? "var(--success)"
@@ -213,31 +179,27 @@ export function TopicGrid({
               </div>
 
               <ChevronRight
-                className="text-[11px] text-text-muted shrink-0"
-                style={{
-                  transform: isExpanded ? "rotate(90deg)" : "none",
-                  transition: "transform 0.25s ease",
-                }}
+                size={16}
+                className={`text-text-muted shrink-0 transition-transform duration-200 ${
+                  isExpanded ? "rotate-90" : ""
+                }`}
               />
             </button>
 
-            {/* Expanded topic list using framer-motion for smooth height transition */}
+            {/* Expanded topic list */}
             <m.div
               initial={false}
               animate={{ height: isExpanded ? "auto" : 0 }}
               className="overflow-hidden"
             >
               <div
-                className="flex flex-col gap-1.5"
+                className="flex flex-col gap-1.5 border-t-2 border-border p-4"
                 style={{
-                  borderTop: "1px solid var(--border)",
-                  padding: "12px 16px 16px",
-                  background: `color-mix(in srgb, ${cat.color} 4%, var(--surface))`,
+                  background: `color-mix(in srgb, ${cat.color} 3%, var(--surface))`,
                 }}
               >
                 {cat.topics.map((topic, topicIdx) => {
                   const isDone = completedTopics.has(topic.id);
-                  const isTopicHovered = hoveredTopic === topic.id;
                   const progress = progressByTopic[topic.id];
                   const isRecommended = recommendedTopicId === topic.id;
 
@@ -245,51 +207,33 @@ export function TopicGrid({
                     <m.button
                       key={topic.id}
                       onClick={() => onSelectTopic(topic.id, topic.title, topic.level)}
-                      onMouseEnter={() => setHoveredTopic(topic.id)}
-                      onMouseLeave={() => setHoveredTopic(null)}
-                      whileHover={{ scale: 1.005, x: 2 }}
+                      whileHover={{ x: 3 }}
                       whileTap={{ scale: 0.995 }}
-                      className="flex w-full items-center gap-3 rounded-lg cursor-pointer text-left"
-                      style={{
-                        padding: "10px 14px",
-                        border: isRecommended
-                          ? "1.5px solid color-mix(in srgb, var(--accent) 30%, transparent)"
-                          : "1.5px solid transparent",
-                        background: isRecommended
-                          ? "var(--accent-light)"
-                          : isTopicHovered
-                            ? isDone
-                              ? `color-mix(in srgb, ${cat.color} 10%, var(--surface))`
-                              : "var(--surface-alt)"
-                            : isDone
-                              ? `color-mix(in srgb, ${cat.color} 5%, transparent)`
-                              : "var(--surface)",
-                        boxShadow: "var(--shadow-sm)",
-                        transition: "background 0.15s, border-color 0.15s",
-                      }}
+                      className={`flex w-full items-center gap-3 rounded-xl cursor-pointer text-left py-2.5 px-3.5 transition-all duration-150 group/topic border-2 ${
+                        isRecommended
+                          ? "border-accent/25 bg-accent-light"
+                          : isDone
+                            ? "border-transparent bg-surface/50 hover:bg-surface"
+                            : "border-transparent bg-surface hover:bg-surface-alt"
+                      }`}
                     >
                       {/* Step index circle */}
                       <span
-                        className="w-[26px] h-[26px] rounded-full grid shrink-0 font-extrabold"
-                        style={{
-                          placeItems: "center",
-                          background: isDone ? cat.color : "var(--surface-alt)",
-                          border: isDone ? "none" : "1px solid var(--border)",
-                          color: isDone ? "var(--text-on-accent)" : "var(--text-secondary)",
-                          fontSize: isDone ? 11 : 11.5,
-                        }}
+                        className={`w-7 h-7 rounded-lg grid place-items-center shrink-0 text-[11px] font-extrabold border-2 transition-all duration-150 ${
+                          isDone
+                            ? "bg-success text-white border-success/30"
+                            : "bg-bg-deep text-text-secondary border-border"
+                        }`}
                       >
-                        {isDone ? <CircleCheckBig /> : topicIdx + 1}
+                        {isDone ? <CircleCheckBig size={13} /> : topicIdx + 1}
                       </span>
 
                       <span
-                        className="flex-1"
-                        style={{
-                          fontSize: 13.5,
-                          color: isDone ? "var(--text-primary)" : "var(--text-secondary)",
-                          fontWeight: isDone || isRecommended ? 800 : 500,
-                          lineHeight: 1.3,
-                        }}
+                        className={`flex-1 text-[13px] leading-snug ${
+                          isDone || isRecommended
+                            ? "font-bold text-ink"
+                            : "font-medium text-text-secondary"
+                        }`}
                       >
                         {topic.title}
                       </span>
@@ -298,12 +242,12 @@ export function TopicGrid({
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <span
-                              className={`m-0 text-[10.5px] rounded-md font-bold border-none py-0.5 px-2 ${
+                              className={`text-[10px] rounded-lg font-bold py-0.5 px-2 ${
                                 progress.scorePct >= 80
-                                  ? "bg-emerald-500/15 text-emerald-600"
+                                  ? "bg-success/12 text-success"
                                   : progress.scorePct >= 50
-                                    ? "bg-amber-500/15 text-amber-600"
-                                    : "bg-red-500/15 text-red-600"
+                                    ? "bg-warning/12 text-warning"
+                                    : "bg-error/12 text-error"
                               }`}
                             >
                               {progress.scorePct >= 90
@@ -321,27 +265,23 @@ export function TopicGrid({
                       )}
 
                       {isRecommended && (
-                        <span
-                          className="m-0 text-[10px] rounded-md font-extrabold border-none py-0.5 px-2 bg-amber-500/15 text-amber-600 inline-flex items-center gap-1 shadow-[0_0_6px_rgba(245,158,11,0.3)]"
-                        >
-                          <Star size={9} />
-                          RECOMMENDED
+                        <span className="text-[9px] rounded-lg font-extrabold py-0.5 px-2 bg-warning/12 text-warning inline-flex items-center gap-1 shadow-[0_0_6px_rgba(245,158,11,0.25)]">
+                          <Star size={8} className="fill-current" />
+                          REC
                         </span>
                       )}
 
                       <span
-                        className="m-0 text-[10.5px] rounded-md font-extrabold border-none py-0.5 px-2"
-                        style={{
-                          background: LEVEL_GLOWS[topic.level] ?? "var(--surface-alt)",
-                          color: `var(--${LEVEL_COLORS[topic.level]})`,
-                        }}
+                        className={`text-[10px] rounded-lg font-extrabold py-0.5 px-2 ${
+                          LEVEL_BADGE_CLASSES[topic.level] ?? "bg-surface-alt text-text-muted"
+                        }`}
                       >
                         {topic.level}
                       </span>
 
                       <ChevronRight
-                        className="text-[9px] text-text-muted"
-                        style={{ opacity: isTopicHovered ? 1 : 0, transition: "opacity 0.15s" }}
+                        size={12}
+                        className="text-text-muted opacity-0 group-hover/topic:opacity-100 transition-opacity duration-150 shrink-0"
                       />
                     </m.button>
                   );

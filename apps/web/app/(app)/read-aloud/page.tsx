@@ -13,7 +13,7 @@ import { getVoiceByRole } from "./_data/voices";
 import { clearBlobCache, useAudioPlayback } from "./_hooks/useAudioPlayback";
 import { useHistory } from "./_hooks/useHistory";
 import { Headphones, Mic, MessageSquare, Lightbulb } from "lucide-react";
-import { motion } from "motion/react";
+import * as m from "motion/react-client";
 
 
 type AppMode = "listen" | "shadow" | "dialogue";
@@ -68,56 +68,49 @@ export default function ReadAloudPage() {
   }, [history]);
 
   return (
-    <div className="anim-fade-up read-aloud-page-root h-full overflow-y-auto p-6">
+    <div className="read-aloud-page-root h-full overflow-y-auto p-4 md:p-6">
       <div className="max-w-[1080px] mx-auto">
-        {/* Mode Tabs */}
-        <div className="read-aloud-mode-tabs flex gap-2 flex-wrap">
+        {/* ─── Mode Tabs ─── */}
+        <div className="read-aloud-mode-tabs flex gap-1.5 bg-surface-alt rounded-2xl p-1 border-2 border-border shadow-sm mb-6 max-w-2xl overflow-x-auto scrollbar-none">
           {MODE_TABS.map((tab) => {
             const isActive = mode === tab.key;
             return (
-              <button
+              <m.button
                 key={tab.key}
                 type="button"
                 onClick={() => setMode(tab.key)}
-                className={`flex items-center gap-2 px-4.5 py-2.5 rounded-xl transition-all duration-200 font-body cursor-pointer ${
+                whileTap={{ scale: 0.98 }}
+                className={`flex-1 flex items-center gap-2.5 px-4 py-2.5 rounded-xl cursor-pointer transition-all duration-200 min-w-0 ${
                   isActive
-                    ? "border-2 border-border bg-accent text-ink shadow"
-                    : "border border-border/30 bg-surface text-text-primary hover:bg-surface-hover hover:border-border/60"
+                    ? "bg-accent text-text-on-accent border-none shadow-sm"
+                    : "bg-transparent text-text-secondary hover:text-text-primary"
                 }`}
               >
-                <motion.span
+                <m.span
                   animate={{ scale: isActive ? 1.1 : 1 }}
                   transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                  className={`inline-flex ${isActive ? "text-ink" : "text-text-muted"}`}
+                  className="inline-flex shrink-0"
                 >
                   <tab.Icon size={18} />
-                </motion.span>
-                <div className="text-left">
-                  <div
-                    className={`mode-label text-sm ${
-                      isActive ? "font-black text-ink" : "font-bold text-text-primary"
-                    }`}
-                  >
+                </m.span>
+                <div className="text-left min-w-0">
+                  <div className={`mode-label text-sm ${isActive ? "font-black" : "font-bold"}`}>
                     {tab.label}
                   </div>
-                  <div
-                    className={`mode-desc text-[11px] ${
-                      isActive ? "text-ink/75" : "text-text-muted"
-                    }`}
-                  >
+                  <div className={`mode-desc text-[10px] truncate ${isActive ? "opacity-75" : "opacity-50"}`}>
                     {tab.desc}
                   </div>
                 </div>
-              </button>
+              </m.button>
             );
           })}
         </div>
 
-        {/* ── Listen Mode (existing functionality) ── */}
+        {/* ── Listen Mode ── */}
         {mode === "listen" && (
-          <div className="read-aloud-grid mt-6 grid grid-cols-1 md:grid-cols-[1fr_340px] gap-5">
+          <div className="read-aloud-grid grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5">
             {/* Left: Input & Samples */}
-            <div>
+            <div className="flex flex-col gap-5">
               <TextInputPanel
                 text={text}
                 onTextChange={setText}
@@ -141,9 +134,8 @@ export default function ReadAloudPage() {
             </div>
 
             {/* Right: Voice & Playback */}
-            <div>
+            <div className="flex flex-col gap-5">
               <VoiceSelector selectedRole={selectedRole} onSelectRole={setSelectedRole} />
-
               <PlaybackControls
                 loading={audio.loading}
                 playing={audio.playing}
@@ -162,208 +154,72 @@ export default function ReadAloudPage() {
 
         {/* ── Shadow Mode ── */}
         {mode === "shadow" && (
-          <div className="read-aloud-grid mt-6 grid grid-cols-1 md:grid-cols-[1fr_340px] gap-5">
+          <div className="read-aloud-grid grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5">
             <ShadowingMode text={text} voiceRole={selectedRole} speed={speed} />
-            <div>
+            <div className="flex flex-col gap-5">
               <VoiceSelector selectedRole={selectedRole} onSelectRole={setSelectedRole} />
-              <div className="bg-surface rounded-xl border border-border p-4 shadow-sm">
-                <span className="text-xs font-bold text-text-muted flex items-center gap-1.5 mb-2">
-                  <motion.span
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ repeat: Infinity, duration: 2, repeatDelay: 4 }}
-                    className="inline-flex text-accent-hover"
-                  >
-                    <Lightbulb size={14} />
-                  </motion.span>
-                  Shadowing Guide
-                </span>
-                {[
-                  "1. Enter text in the Listen tab",
-                  "2. Switch to the Shadowing tab",
-                  "3. Listen to the model sentence → Read along",
-                  "4. AI grades your pronunciation",
-                  "5. Retry or move to the next sentence",
-                ].map((tip, i) => (
-                  <span key={i} className="text-xs text-text-secondary block mb-1 font-semibold">
-                    {tip}
-                  </span>
-                ))}
-              </div>
+              <GuideCard
+                title="Shadowing Guide"
+                steps={[
+                  "Enter text in the Listen tab",
+                  "Switch to the Shadowing tab",
+                  "Listen to the model sentence → Read along",
+                  "AI grades your pronunciation",
+                  "Retry or move to the next sentence",
+                ]}
+              />
             </div>
           </div>
         )}
 
         {/* ── Dialogue Mode ── */}
         {mode === "dialogue" && (
-          <div className="read-aloud-grid mt-6 grid grid-cols-1 md:grid-cols-[1fr_340px] gap-5">
+          <div className="read-aloud-grid grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-5">
             <DialoguePlayer voiceRole={selectedRole} speed={speed} />
-            <div>
+            <div className="flex flex-col gap-5">
               <VoiceSelector selectedRole={selectedRole} onSelectRole={setSelectedRole} />
-              <div className="bg-surface rounded-xl border border-border p-4 shadow-sm">
-                <span className="text-xs font-bold text-text-muted flex items-center gap-1.5 mb-2">
-                  <motion.span
-                    animate={{ rotate: [0, 10, -10, 0] }}
-                    transition={{ repeat: Infinity, duration: 2, repeatDelay: 4 }}
-                    className="inline-flex text-accent-hover"
-                  >
-                    <Lightbulb size={14} />
-                  </motion.span>
-                  Dialogue Guide
-                </span>
-                {[
-                  "1. Select topic and number of speakers",
-                  '2. Click "Create conversation"',
-                  "3. Listen to the whole dialogue or sentence-by-sentence",
-                  "4. Roleplay as a character",
-                  "5. Read your part and get graded",
-                ].map((tip, i) => (
-                  <span key={i} className="text-xs text-text-secondary block mb-1 font-semibold">
-                    {tip}
-                  </span>
-                ))}
-              </div>
+              <GuideCard
+                title="Dialogue Guide"
+                steps={[
+                  "Select topic and number of speakers",
+                  'Click "Create conversation"',
+                  "Listen to the whole dialogue or sentence-by-sentence",
+                  "Roleplay as a character",
+                  "Read your part and get graded",
+                ]}
+              />
             </div>
           </div>
         )}
       </div>
+    </div>
+  );
+}
 
-      {/* CSS adjustments */}
-      <style>{`
-        .read-aloud-textarea {
-          border: 1px solid var(--border);
-          border-radius: var(--radius-lg);
-          color: var(--text-primary);
-          background: var(--surface-alt);
-          transition: border-color 0.25s ease, box-shadow 0.25s ease, background-color 0.25s ease;
-        }
-        .read-aloud-textarea:focus {
-          border-color: var(--accent);
-          box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 15%, transparent);
-          background: var(--surface);
-        }
-        .voice-grid {
-          display: flex;
-          flex-direction: column;
-          gap: 10px;
-        }
-
-        /* ── Medium screens (tablet landscape) ── */
-        @media (max-width: 860px) {
-          .read-aloud-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-
-        /* ── Tablet (portrait) ── */
-        @media (max-width: 768px) {
-          .read-aloud-page-root {
-            padding: var(--space-4) !important;
-          }
-          .read-aloud-panel {
-            padding: var(--space-4) !important;
-          }
-          .read-aloud-mode-tabs {
-            display: grid !important;
-            grid-template-columns: 1fr 1fr 1fr !important;
-          }
-          .read-aloud-mode-tabs button {
-            padding: 8px 10px !important;
-          }
-          .read-aloud-mode-tabs .mode-desc {
-            display: none !important;
-          }
-          .read-aloud-textarea {
-            min-height: 220px !important;
-          }
-          .voice-grid {
-            display: grid !important;
-            grid-template-columns: 1fr 1fr !important;
-            gap: 10px !important;
-          }
-          .dialogue-bubbles {
-            padding: 14px 10px !important;
-          }
-          .dialogue-bubble-content {
-            max-width: 85% !important;
-          }
-          .dialogue-header-actions {
-            flex-direction: column !important;
-            align-items: stretch !important;
-          }
-          .dialogue-header-buttons {
-            justify-content: flex-start !important;
-          }
-        }
-
-        /* ── Mobile ── */
-        @media (max-width: 480px) {
-          .read-aloud-page-root {
-            padding: var(--space-3) !important;
-          }
-          .read-aloud-panel {
-            padding: var(--space-3) !important;
-          }
-          .read-aloud-mode-tabs {
-            gap: 6px !important;
-          }
-          .read-aloud-mode-tabs button {
-            padding: 8px !important;
-            border-radius: 10px !important;
-            gap: 4px !important;
-          }
-          .read-aloud-mode-tabs .mode-label {
-            font-size: 12px !important;
-          }
-          .read-aloud-textarea {
-            min-height: 180px !important;
-            font-size: 14px !important;
-          }
-          .read-aloud-text-stats {
-            flex-direction: column !important;
-            align-items: flex-start !important;
-            gap: 6px !important;
-          }
-          .read-aloud-text-actions {
-            flex-wrap: wrap !important;
-          }
-          .voice-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .dialogue-bubbles {
-            padding: 10px 8px !important;
-            gap: 10px !important;
-          }
-          .dialogue-bubble-content {
-            max-width: 88% !important;
-            padding: 10px 12px !important;
-          }
-          .dialogue-avatar {
-            width: 34px !important;
-            height: 34px !important;
-          }
-          .dialogue-avatar img {
-            width: 34px !important;
-            height: 34px !important;
-          }
-          .dialogue-speaker-badges {
-            flex-wrap: wrap !important;
-          }
-          .role-play-buttons {
-            flex-direction: column !important;
-          }
-          .listen-cta-buttons {
-            flex-direction: column !important;
-            align-items: stretch !important;
-          }
-          .waveform-container {
-            flex-direction: column !important;
-            gap: 10px !important;
-          }
-          .waveform-bars {
-            justify-content: center !important;
-          }
-        }
-      `}</style>
+/* ─── Guide Card component ─── */
+function GuideCard({ title, steps }: { title: string; steps: string[] }) {
+  return (
+    <div className="bg-surface rounded-2xl border-2 border-border p-5 shadow-sm">
+      <span className="text-[10px] font-extrabold text-text-muted uppercase tracking-widest flex items-center gap-2 mb-3 font-display">
+        <m.span
+          animate={{ rotate: [0, 10, -10, 0] }}
+          transition={{ repeat: Infinity, duration: 2, repeatDelay: 4 }}
+          className="inline-flex text-accent"
+        >
+          <Lightbulb size={14} />
+        </m.span>
+        {title}
+      </span>
+      <ol className="flex flex-col gap-1.5 list-none p-0 m-0">
+        {steps.map((step, i) => (
+          <li key={i} className="flex items-start gap-2.5 text-[12px] text-text-secondary font-semibold leading-relaxed">
+            <span className="w-5 h-5 rounded-lg bg-accent-light border border-accent/15 text-accent text-[10px] font-black grid place-items-center shrink-0 mt-px">
+              {i + 1}
+            </span>
+            <span>{step}</span>
+          </li>
+        ))}
+      </ol>
     </div>
   );
 }

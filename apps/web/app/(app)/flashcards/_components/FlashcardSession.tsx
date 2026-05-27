@@ -62,20 +62,20 @@ export function FlashcardSession() {
             <m.div
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex gap-1 p-1 bg-surface-alt border-2 border-border mb-5 rounded-[14px] self-center shadow-sm"
+              className="flex gap-1 p-1 bg-surface-alt border-2 border-border mb-5 rounded-2xl self-center shadow-sm"
             >
               {[
-                { key: "ai" as TabKey, label: "AI Generation", icon: <Zap /> },
-                { key: "srs" as TabKey, label: "SRS Review", icon: <Clock /> },
+                { key: "ai" as TabKey, label: "AI Generation", icon: <Zap size={16} /> },
+                { key: "srs" as TabKey, label: "SRS Review", icon: <Clock size={16} /> },
               ].map((tab) => (
                 <m.button
                   key={tab.key}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => setActiveTab(tab.key)}
-                  className={`flex items-center gap-1.5 border-none cursor-pointer text-[13px] py-2.5 px-5.5 rounded-[10px] transition-all duration-150 ${
+                  className={`flex items-center gap-2 border-none cursor-pointer text-[13px] py-2.5 px-5 rounded-xl transition-all duration-150 ${
                     activeTab === tab.key
-                      ? "bg-surface text-accent font-extrabold shadow-sm"
-                      : "bg-transparent text-text-muted font-semibold hover:text-text-primary"
+                      ? "bg-accent text-ink font-black shadow-sm"
+                      : "bg-transparent text-text-secondary font-bold hover:text-text-primary"
                   }`}
                 >
                   {tab.icon} {tab.label}

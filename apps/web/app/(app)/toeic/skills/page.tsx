@@ -1,11 +1,10 @@
 "use client";
 
-import { BookOpen, Headphones, HelpCircle, Loader2, Mic, PenTool, Target } from "lucide-react";
-import { motion } from "motion/react";
+import { BookOpen, Headphones, HelpCircle, Loader2, Mic, PenTool } from "lucide-react";
+import * as m from "motion/react-client";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { PageHeader } from "@/components/shared/PageHeader";
 
 const ListeningTab = dynamic(
   () => import("./_components/ListeningTab").then((m) => m.ListeningTab),
@@ -31,7 +30,7 @@ const Part5Tab = dynamic(() => import("./_components/Part5Tab").then((m) => m.Pa
 function TabLoader() {
   return (
     <div className="flex justify-center items-center py-16 text-text-secondary gap-2.5 font-bold text-sm">
-      <Loader2 className="h-5 w-5 animate-text-accent" />
+      <Loader2 className="h-5 w-5 animate-spin text-accent" />
       <span>Loading learning content...</span>
     </div>
   );
@@ -43,43 +42,14 @@ const SKILL_TABS: {
   value: Skill;
   label: string;
   parts: string;
-  icon: React.ReactNode;
+  icon: React.ComponentType<{ className?: string }>;
 }[] = [
-  {
-    value: "listening",
-    label: "Listening",
-    parts: "Part 1–4",
-    icon: <Headphones className="h-4 w-4" />,
-  },
-  { value: "reading", label: "Reading", parts: "Part 5–7", icon: <BookOpen className="h-4 w-4" /> },
-  { value: "speaking", label: "Speaking", parts: "Part 1–6", icon: <Mic className="h-4 w-4" /> },
-  { value: "writing", label: "Writing", parts: "Part 1–3", icon: <PenTool className="h-4 w-4" /> },
-  { value: "part5", label: "Part 5", parts: "Grammar", icon: <HelpCircle className="h-4 w-4" /> },
+  { value: "listening", label: "Listening", parts: "Part 1–4", icon: Headphones },
+  { value: "reading", label: "Reading", parts: "Part 5–7", icon: BookOpen },
+  { value: "speaking", label: "Speaking", parts: "Part 1–6", icon: Mic },
+  { value: "writing", label: "Writing", parts: "Part 1–3", icon: PenTool },
+  { value: "part5", label: "Part 5", parts: "Grammar", icon: HelpCircle },
 ];
-
-const SUBTITLES: Record<Skill, string> = {
-  listening: "TOEIC Listening · Part 1–4 · Listening Comprehension",
-  reading: "TOEIC Reading · Part 5–7 · Reading Comprehension",
-  speaking: "TOEIC Speaking · 11 questions · Speaking",
-  writing: "TOEIC Writing · 8 questions · Writing",
-  part5: "TOEIC Part 5 · Incomplete Sentences · Grammar",
-};
-
-const GRADIENTS: Record<Skill, string> = {
-  listening: "var(--gradient-listening)",
-  reading: "var(--gradient-reading)",
-  speaking: "var(--gradient-toeic-speaking)",
-  writing: "var(--gradient-writing)",
-  part5: "var(--gradient-grammar-quiz)",
-};
-
-const TAB_COLORS: Record<Skill, { activeColor: string }> = {
-  listening: { activeColor: "bg-[#3B82F6] text-white" },
-  reading: { activeColor: "bg-[#0EA5E9] text-white" },
-  speaking: { activeColor: "bg-accent text-ink" },
-  writing: { activeColor: "bg-[#C07D2B] text-white" },
-  part5: { activeColor: "bg-accent text-ink" },
-};
 
 export default function ToeicSkillsPage() {
   const searchParams = useSearchParams();
@@ -90,52 +60,43 @@ export default function ToeicSkillsPage() {
 
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden">
-      <div className="px-4 pt-5 shrink-0">
-        <div className="max-w-4xl mx-auto">
-          <PageHeader
-            title="TOEIC Preparation"
-            subtitle="Practice Listening, Reading, Speaking, and Writing skills according to real exam standards"
-            icon={<Target className="h-6 w-6" />}
-            boxed
-          />
-        </div>
-      </div>
-
-      {/* Pill Tabs Row */}
-      <div className="px-4 py-3 shrink-0 overflow-x-auto scrollbar-none">
-        <div className="max-w-4xl mx-auto flex gap-1.5 bg-bg-deep border-2 border-border rounded-xl p-1 w-fit md:w-full">
+      {/* ─── Skill Tab Switcher ─── */}
+      <div className="px-4 pt-4 pb-2 shrink-0 overflow-x-auto scrollbar-none">
+        <div className="max-w-4xl mx-auto flex gap-1 bg-surface-alt border-2 border-border rounded-2xl p-1 w-fit md:w-full">
           {SKILL_TABS.map((t) => {
             const isActive = active === t.value;
-            const colors = TAB_COLORS[t.value];
+            const Icon = t.icon;
             return (
-              <motion.button
+              <m.button
                 type="button"
                 key={t.value}
                 onClick={() => setActive(t.value)}
-                whileTap={{ scale: 0.98 }}
-                className={`flex-1 min-w-[80px] flex flex-col items-center justify-center gap-1 py-2 px-3.5 rounded-lg cursor-pointer transition-all duration-100 border-2 border-transparent ${
+                whileTap={{ scale: 0.97 }}
+                className={`flex-1 min-w-[72px] flex flex-col items-center justify-center gap-0.5 py-2.5 px-3 rounded-xl cursor-pointer transition-all duration-150 ${
                   isActive
-                    ? colors.activeColor +
-                      " border-border shadow-sm -translate-y-0.5 font-bold"
-                    : "text-text-secondary hover:bg-surface-hover hover:text-ink"
+                    ? "bg-accent text-ink font-black shadow-sm"
+                    : "bg-transparent text-text-secondary font-bold hover:text-text-primary"
                 }`}
               >
-                <div className="flex items-center gap-1.5 text-xs font-extrabold leading-none">
-                  {t.icon}
+                <div className="flex items-center gap-1.5 text-[12px] leading-none">
+                  <Icon className="h-4 w-4" />
                   <span>{t.label}</span>
                 </div>
                 <span
-                  className={`text-[9px] font-bold leading-none ${isActive ? (t.value === "speaking" || t.value === "part5" ? "text-ink/80" : "text-white/80") : "text-text-muted"}`}
+                  className={`text-[9px] font-bold leading-none mt-0.5 ${
+                    isActive ? "text-ink/70" : "text-text-muted"
+                  }`}
                 >
                   {t.parts}
                 </span>
-              </motion.button>
+              </m.button>
             );
           })}
         </div>
       </div>
 
-      <div className="flex-1 min-h-0 overflow-y-auto px-4 py-3 pb-12 animate-in fade-in duration-300">
+      {/* ─── Content ─── */}
+      <div className="flex-1 min-h-0 overflow-y-auto px-4 py-4 pb-12">
         <div className="max-w-4xl mx-auto">
           {active === "listening" && <ListeningTab />}
           {active === "reading" && <ReadingTab />}

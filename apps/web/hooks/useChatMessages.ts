@@ -12,6 +12,9 @@ import type { ChatMessage as AppChatMessage } from "@/lib/chat/types";
 
 const CHAT_ERROR_MESSAGE = "Gia sư đang gặp lỗi kỹ thuật. Bạn thử lại sau nhé.";
 
+// Module-level flag — survives component remounts caused by router.replace()
+let _justCreatedConvId: string | null = null;
+
 export type UseChatMessagesOptions = {
   conversationId: string | null;
   selectedPersonaId: string;
@@ -38,7 +41,6 @@ export function useChatMessages({
   const [isLoadingMessages, setIsLoadingMessages] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const justCreatedRef = useRef(false);
   const abortCtrlRef = useRef<AbortController | null>(null);
   const lastSendRef = useRef<string | null>(null);
   const lastVoiceTextRef = useRef<string | null>(null);
@@ -48,13 +50,17 @@ export function useChatMessages({
   // ── Load messages when conversationId changes ──
   useEffect(() => {
     if (!conversationId) {
-      setMessages([]);
-      setError(null);
+      // Only clear if not currently sending (prevents race condition)
+      if (!isLoading) {
+        setMessages([]);
+        setError(null);
+      }
       return;
     }
 
-    if (justCreatedRef.current) {
-      justCreatedRef.current = false;
+    // Skip loading if we just created this conversation in send()
+    if (_justCreatedConvId === conversationId) {
+      _justCreatedConvId = null;
       return;
     }
 
@@ -77,6 +83,7 @@ export function useChatMessages({
     return () => {
       cancelled = true;
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [conversationId]);
 
   // ── Remove empty assistant placeholder on error ──
@@ -113,8 +120,8 @@ export function useChatMessages({
             },
             ...curr,
           ]);
-          justCreatedRef.current = true;
-          router.replace(`/english-chatbot/${created.id}`);
+          _justCreatedConvId = created.id;
+          router.replace(`/english-chatbot/${created.id}`, { scroll: false });
         } catch {
           // proceed without persistence
         }

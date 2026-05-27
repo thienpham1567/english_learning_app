@@ -15,9 +15,9 @@ export function VoiceSelector({ selectedRole, onSelectRole }: VoiceSelectorProps
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2 }}
-      className="read-aloud-panel bg-surface rounded-xl border-2 border-border flex flex-col p-5 gap-4 shadow-md"
+      className="read-aloud-panel bg-surface rounded-2xl border-2 border-border flex flex-col p-5 gap-3.5 shadow-sm"
     >
-      <span className="text-xs font-bold text-text-muted uppercase tracking-widest flex items-center gap-1.5">
+      <span className="text-[10px] font-extrabold text-text-muted uppercase tracking-widest flex items-center gap-2 font-display">
         <m.span
           animate={{ scale: [1, 1.15, 1] }}
           transition={{ repeat: Infinity, duration: 2, repeatDelay: 3 }}
@@ -53,26 +53,26 @@ function VoiceCard({
 }) {
   return (
     <m.button
-      whileHover={{ scale: 1.02, x: 2 }}
+      whileHover={{ scale: 1.01, x: 2 }}
       whileTap={{ scale: 0.98 }}
       onClick={onSelect}
-      className={`relative flex items-center gap-3 rounded-lg cursor-pointer text-left py-3 px-3.5 transition-all duration-250 ${
+      className={`relative flex items-center gap-3 rounded-xl cursor-pointer text-left py-3 px-3.5 transition-all duration-200 ${
         isActive
-          ? "border-2 border-accent bg-accent-light"
-          : "border border-border bg-surface-alt"
+          ? "border-2 border-accent bg-accent-light shadow-sm"
+          : "border-2 border-border bg-surface-alt hover:border-accent/30"
       }`}
     >
       <img
         src={v.avatar}
         alt={v.name}
-        width={36}
-        height={36}
-        className="shrink-0 rounded-[10px] object-cover"
+        width={40}
+        height={40}
+        className="shrink-0 rounded-xl object-cover border-2 border-border"
       />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5">
           <span
-            className={`text-sm ${
+            className={`text-[13px] ${
               isActive ? "font-extrabold text-ink" : "font-bold text-text-primary"
             }`}
           >
@@ -80,13 +80,13 @@ function VoiceCard({
           </span>
           <span className="text-[13px]">{v.flag}</span>
           <span
-            className={`text-[10px] rounded-lg font-bold inline-flex items-center gap-0.5 py-px px-1.5 ${
+            className={`text-[9.5px] rounded-md font-extrabold inline-flex items-center gap-0.5 py-0.5 px-1.5 border ${
               v.gender === "m"
-                ? "bg-blue-500/15 text-info"
-                : "bg-pink-500/15 text-pink-600"
+                ? "bg-info/10 text-info border-info/20"
+                : "bg-pink-500/10 text-pink-600 border-pink-500/20"
             }`}
           >
-            <User size={10} />
+            <User size={9} />
             {v.gender === "m" ? "Male" : "Female"}
           </span>
         </div>
@@ -99,14 +99,15 @@ function VoiceCard({
         </span>
       </div>
 
-      <span className="text-sm text-text-muted opacity-60 cursor-help" title={v.description}>
+      <span className="text-text-muted opacity-50 cursor-help hover:opacity-80 transition-opacity" title={v.description}>
         <Info size={14} onClick={(e) => e.stopPropagation()} />
       </span>
 
       {isActive && (
         <m.div
-          layoutId="selected-indicator"
-          className="absolute w-[3px] right-0 top-[30%] bottom-[30%] bg-accent rounded-l"
+          layoutId="selected-voice-indicator"
+          className="absolute w-[3px] right-0 top-[25%] bottom-[25%] bg-accent rounded-l-full"
+          transition={{ type: "spring", stiffness: 300, damping: 25 }}
         />
       )}
     </m.button>

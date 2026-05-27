@@ -103,7 +103,7 @@ export function Part5Tab() {
         {(state === "idle" || state === "loading") && (
           <div className="w-full animate-in fade-in duration-200">
             {error && (
-              <div className="mx-auto mb-4 max-w-lg rounded-2xl border border-red-900/30 bg-red-950/20 p-3.5 text-center text-sm text-red-400">
+              <div className="mx-auto mb-4 max-w-lg rounded-2xl border-2 border-error/20 bg-error/8 p-3.5 text-center text-sm text-error font-bold">
                 {error}
               </div>
             )}

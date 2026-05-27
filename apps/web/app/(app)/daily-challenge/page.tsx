@@ -57,32 +57,35 @@ function StepIndicator({
   isBonus?: boolean;
 }) {
   const activeColor = isBonus ? "var(--xp)" : "var(--accent)";
+  const pct = Math.round((current / total) * 100);
   return (
-    <div className="flex flex-col gap-2.5">
+    <div className="flex flex-col gap-2">
+      {/* Labels */}
+      <div className="flex justify-between items-center">
+        <span className="text-[10px] font-extrabold text-text-muted font-display uppercase tracking-widest">
+          {isBonus ? "Bonus Progress" : "Challenge Progress"}
+        </span>
+        <div className="flex items-center gap-2">
+          <span className="text-[10px] font-bold text-text-muted">{pct}%</span>
+          <span
+            style={{ color: activeColor }}
+            className="font-black font-mono text-xs leading-none bg-accent-light px-2 py-0.5 rounded-lg border border-accent/15"
+          >
+            {current + 1} / {total}
+          </span>
+        </div>
+      </div>
       {/* Progress Track */}
-      <div className="h-3 border-2 border-border bg-bg-deep rounded-full relative overflow-hidden shrink-0">
+      <div className="h-3 border-2 border-border bg-bg-deep rounded-full relative overflow-hidden">
         <motion.div
           initial={{ width: 0 }}
-          animate={{ width: `${(current / total) * 100}%` }}
+          animate={{ width: `${pct}%` }}
           transition={{ type: "spring", stiffness: 80, damping: 15 }}
           style={{
             background: `linear-gradient(90deg, ${activeColor}, color-mix(in srgb, ${activeColor} 80%, var(--xp)))`,
           }}
           className="absolute left-0 top-0 bottom-0 rounded-full"
         />
-      </div>
-
-      {/* Labels */}
-      <div className="flex justify-between items-center text-xs">
-        <span className="font-extrabold text-text-secondary font-display uppercase tracking-wider text-[10px]">
-          {isBonus ? "Bonus Progress" : "Challenge Progress"}
-        </span>
-        <span
-          style={{ color: activeColor }}
-          className="font-black font-mono text-sm leading-none"
-        >
-          {current + 1} / {total} questions
-        </span>
       </div>
     </div>
   );
@@ -155,11 +158,11 @@ function ExerciseFlow({
         {exerciseTypeLabel && (
           <div className="flex items-center gap-2.5 mt-1">
             <span
-              style={{
-                color: isBonus ? "#D97706" : "var(--ink)",
-                background: isBonus ? "rgba(245,158,11,0.15)" : "var(--accent-light)",
-              }}
-              className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg font-mono shrink-0 border border-border/10"
+              className={`text-[10px] font-black uppercase tracking-widest px-3.5 py-1 rounded-xl font-mono shrink-0 border-2 ${
+                isBonus
+                  ? "bg-warning/15 text-warning border-warning/25"
+                  : "bg-accent-light text-accent border-accent/15"
+              }`}
             >
               {exerciseTypeLabel}
             </span>
@@ -177,14 +180,19 @@ function ExerciseFlow({
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.25 }}
-          className="rounded-2xl border-2 border-border bg-surface p-6 shadow relative overflow-hidden"
+          className="rounded-2xl border-2 border-border bg-surface p-5 md:p-6 shadow-md relative overflow-hidden"
         >
-          {/* Top glowing bar */}
+          {/* Top accent gradient bar */}
           <div
             style={{
               background: `linear-gradient(90deg, ${activeColor}, var(--xp))`,
             }}
-            className="absolute top-0 left-0 right-0 h-1.5"
+            className="absolute top-0 left-0 right-0 h-1 group-hover:h-1.5 transition-all"
+          />
+          {/* Subtle glow behind the card */}
+          <div
+            className="absolute -top-12 left-1/2 -translate-x-1/2 w-[60%] h-24 rounded-full blur-3xl opacity-[0.06] pointer-events-none"
+            style={{ background: activeColor }}
           />
           <ExerciseCard
             exercise={challenge.exercises[currentExercise] as any}
@@ -256,41 +264,49 @@ export default function DailyChallengePage() {
 
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden">
-      {/* ── Bespoke Daily Challenge Header Banner ── */}
-      <div className="px-4 pt-5 shrink-0">
+      {/* ── Premium Header Banner ── */}
+      <div className="px-4 pt-4 shrink-0">
         <div className="max-w-2xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: -12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative overflow-hidden rounded-2xl border-2 border-border bg-surface p-5 shadow flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+            className="relative overflow-hidden rounded-2xl border-2 border-border bg-surface shadow-md"
           >
-            {/* Subtle grid pattern background */}
-            <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06] pointer-events-none bg-[linear-gradient(to_right,rgba(0,0,0,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.15)_1px,transparent_1px)] bg-[size:16px_16px]" />
-            
-            <div className="flex items-center gap-4 relative z-10">
-              <div className="w-12 h-12 rounded-xl border-2 border-border bg-accent text-text-on-accent flex items-center justify-center shrink-0 shadow-sm">
-                <Flame className="h-6 w-6 text-orange-500 fill-current animate-pulse" />
-              </div>
-              <div className="flex flex-col">
-                <span className="text-[9px] font-extrabold uppercase tracking-widest text-accent font-mono">
-                  {todayLabel}
-                </span>
-                <h1 className="m-0 text-xl font-black font-display text-ink tracking-tight leading-none mt-1">
-                  Daily Challenge
-                </h1>
-                <p className="m-0 mt-1 text-[11px] text-text-muted font-bold font-sans">
-                  Streak Booster Challenge
-                </p>
-              </div>
-            </div>
+            {/* Top accent gradient */}
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent via-fire to-xp" />
+            {/* Subtle radial glow */}
+            <div className="absolute top-0 left-0 w-1/2 h-full bg-[radial-gradient(ellipse_at_top_left,color-mix(in_srgb,var(--accent)_6%,transparent),transparent_60%)] pointer-events-none" />
 
-            {/* Live elapsed timer badge */}
-            {isChallengeRunning && (
-              <div className="flex items-center gap-2 bg-accent-light border-2 border-border px-3.5 py-1.5 rounded-xl shadow-sm font-mono text-xs font-black text-ink shrink-0 self-start sm:self-center relative z-10">
-                <Clock className="h-4 w-4 text-accent fill-current animate-pulse" />
-                <span>TIME: {formattedTime}</span>
+            <div className="relative z-10 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-4">
+                <div className="w-13 h-13 rounded-2xl border-2 border-accent/20 bg-gradient-to-br from-accent to-fire text-white flex items-center justify-center shrink-0 shadow-sm">
+                  <Flame className="h-7 w-7 fill-current" />
+                </div>
+                <div className="flex flex-col">
+                  <span className="text-[9px] font-extrabold uppercase tracking-widest text-text-muted font-mono">
+                    {todayLabel}
+                  </span>
+                  <h1 className="m-0 text-xl font-black font-display text-ink tracking-tight leading-none mt-1">
+                    Daily Challenge
+                  </h1>
+                  <p className="m-0 mt-1 text-[11px] text-text-muted font-bold">
+                    Streak Booster Challenge
+                  </p>
+                </div>
               </div>
-            )}
+
+              {/* Live elapsed timer */}
+              {isChallengeRunning && (
+                <motion.div
+                  initial={{ scale: 0.9 }}
+                  animate={{ scale: 1 }}
+                  className="flex items-center gap-2.5 bg-ink/5 backdrop-blur-sm border-2 border-border px-4 py-2 rounded-xl shadow-sm font-mono text-sm font-black text-ink shrink-0 self-start sm:self-center"
+                >
+                  <Clock className="h-4 w-4 text-accent animate-pulse" />
+                  <span>{formattedTime}</span>
+                </motion.div>
+              )}
+            </div>
           </motion.div>
         </div>
       </div>

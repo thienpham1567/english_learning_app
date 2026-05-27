@@ -175,15 +175,16 @@
   --font-mono: "JetBrains Mono", "Fira Code", monospace;
 
   /* ── Sidebar — dark brutalist ── */
-  --sidebar-bg: #000000;
+  --sidebar-bg: #0A0A0A;
   --sidebar-gradient: none;
-  --sidebar-glow: none;
-  --sidebar-text: #999999;
+  --sidebar-glow: radial-gradient(ellipse 60% 40% at 20% 0%, rgba(255, 184, 0, 0.06) 0%, transparent 70%);
+  --sidebar-text: #8A8A8A;
   --sidebar-text-active: #ffffff;
-  --sidebar-text-muted: #666666;
-  --sidebar-border: #222222;
-  --sidebar-item-hover: rgba(255, 255, 255, 0.08);
-  --sidebar-active-bg: rgba(255, 184, 0, 0.15);
+  --sidebar-text-muted: #555555;
+  --sidebar-border: #1E1E1E;
+  --sidebar-item-hover: rgba(255, 255, 255, 0.06);
+  --sidebar-active-bg: rgba(255, 184, 0, 0.12);
+  --sidebar-group-line: #1E1E1E;
 
   /* ── Semantic Colors ── */
   --accent-rgb: 255, 184, 0;
@@ -341,16 +342,17 @@
   --shadow-lg: 6px 6px 0 var(--shadow-color);
   --shadow-xl: 8px 8px 0 var(--shadow-color);
 
-  /* Sidebar — pure black */
-  --sidebar-bg: #020202;
+  /* Sidebar — deep dark */
+  --sidebar-bg: #060606;
   --sidebar-gradient: none;
-  --sidebar-glow: none;
+  --sidebar-glow: radial-gradient(ellipse 60% 40% at 20% 0%, rgba(255, 208, 67, 0.05) 0%, transparent 70%);
   --sidebar-text: #666666;
   --sidebar-text-active: #F5F5F5;
   --sidebar-text-muted: #444444;
-  --sidebar-border: #222222;
-  --sidebar-item-hover: rgba(255, 255, 255, 0.04);
+  --sidebar-border: #1A1A1A;
+  --sidebar-item-hover: rgba(255, 255, 255, 0.05);
   --sidebar-active-bg: rgba(255, 208, 67, 0.12);
+  --sidebar-group-line: #1A1A1A;
 
   /* Semantic colors — brighter for dark */
   --accent-rgb: 255, 208, 67;
@@ -786,27 +788,50 @@ body {
 .sidebar-nav-link:hover span {
   opacity: 1 !important;
 }
+/* Active sidebar link — pill with accent */
+.sidebar-nav-link[aria-current="page"] {
+  background: var(--sidebar-active-bg) !important;
+  color: var(--accent) !important;
+  font-weight: 700 !important;
+}
 
 /* ── Theme toggle button ── */
 .theme-toggle-btn {
   cursor: pointer;
   border: 1px solid var(--sidebar-border);
-  border-radius: var(--radius);
-  padding: 8px 12px;
+  border-radius: 10px;
+  padding: 9px 12px;
   background: transparent;
   color: var(--sidebar-text);
   font-size: 13px;
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   width: 100%;
   transition:
     background 0.2s,
-    color 0.2s;
+    color 0.2s,
+    border-color 0.2s;
 }
 .theme-toggle-btn:hover {
   background: var(--sidebar-item-hover);
   color: var(--sidebar-text-active);
+  border-color: var(--sidebar-text-muted);
+}
+
+/* ── Sidebar group divider with embedded label ── */
+.sidebar-group-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 10px;
+  margin-bottom: 4px;
+}
+.sidebar-group-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--sidebar-group-line, var(--sidebar-border));
 }
 
 /* ── Responsive breakpoints ── */

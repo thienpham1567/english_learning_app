@@ -19,16 +19,16 @@ export function SpeakingTab() {
   return (
     <div className="max-w-3xl mx-auto w-full">
       {/* Part selector */}
-      <div className="flex gap-2 py-2 pb-3.5 flex-wrap">
+      <div className="flex gap-1 p-1 bg-surface-alt border-2 border-border rounded-2xl mb-5 max-w-lg">
         {SPEAKING_PARTS.map((p) => (
           <button
             key={p.key}
             type="button"
             onClick={() => setActivePart(p.key)}
-            className={`px-3.5 py-2 rounded-xl text-xs font-semibold border cursor-pointer transition-all duration-150 active:scale-97 ${
+            className={`flex-1 px-3 py-2 rounded-xl text-xs cursor-pointer transition-all duration-150 ${
               activePart === p.key
-                ? "border-accent bg-accent/10 text-accent"
-                : "border-border bg-surface text-text-secondary hover:bg-surface-hover hover:text-ink hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-sm transition-all duration-100"
+                ? "bg-accent text-ink font-black shadow-sm"
+                : "bg-transparent text-text-secondary font-bold hover:text-text-primary"
             }`}
           >
             {p.label}

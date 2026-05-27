@@ -40,8 +40,8 @@ export function WritingTab() {
 
   return (
     <div className="max-w-3xl mx-auto w-full">
-      {/* Custom Tabs */}
-      <div className="flex gap-2 py-2 pb-3.5 border-b-2 border-border mb-4 overflow-x-auto scrollbar-none">
+      {/* Sub-tabs */}
+      <div className="flex gap-1 p-1 bg-surface-alt border-2 border-border rounded-2xl mb-5 max-w-md">
         {tabs.map((t) => {
           const isActive = activeTab === t.key;
           return (
@@ -49,10 +49,10 @@ export function WritingTab() {
               key={t.key}
               type="button"
               onClick={() => setActiveTab(t.key)}
-              className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold border cursor-pointer transition-all duration-150 active:scale-97 ${
+              className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl text-xs cursor-pointer transition-all duration-150 ${
                 isActive
-                  ? "border-accent bg-accent/10 text-accent font-bold"
-                  : "border-border bg-surface text-text-secondary hover:bg-surface-hover hover:text-ink hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-sm transition-all duration-100"
+                  ? "bg-accent text-ink font-black shadow-sm"
+                  : "bg-transparent text-text-secondary font-bold hover:text-text-primary"
               }`}
             >
               {t.icon}
