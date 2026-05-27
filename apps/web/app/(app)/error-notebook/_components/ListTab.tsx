@@ -101,7 +101,7 @@ export function ListTab() {
                   onClick={() => list.setFilter("module", opt.value)}
                   className={`px-3 py-1.5 rounded-full text-xs font-bold border-[1.5px] cursor-pointer transition-all duration-150 ${
                     list.filters.module === opt.value
-                      ? "border-accent bg-accent-light text-accent"
+                      ? "border-accent bg-accent-light text-ink font-extrabold"
                       : "border-border bg-transparent text-text-secondary hover:border-accent/40"
                   }`}
                 >
@@ -117,7 +117,7 @@ export function ListTab() {
                 onChange={(e) => list.setFilter("topic", e.target.value)}
                 className={`px-3 py-1.5 rounded-full text-xs font-bold border-[1.5px] border-border cursor-pointer outline-none ${
                   list.filters.topic
-                    ? "bg-accent-light text-accent"
+                    ? "bg-accent-light text-ink"
                     : "bg-surface text-text-secondary"
                 }`}
               >

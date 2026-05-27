@@ -118,7 +118,7 @@ export function TestScreen({
                 onClick={() => onSelectOption(i)}
                 className={`flex items-center gap-3 py-3.5 px-4.5 rounded-lg cursor-pointer text-left text-[14.5px] transition-all duration-200 ${
                   isSelected
-                    ? "border-2 border-accent bg-accent-light font-bold text-accent shadow-[0_4px_12px_var(--accent-muted)]"
+                    ? "border-2 border-accent bg-accent-light font-extrabold text-ink shadow-[0_4px_12px_var(--accent-muted)]"
                     : "border border-border bg-surface font-semibold text-text-primary shadow-sm"
                 }`}
               >

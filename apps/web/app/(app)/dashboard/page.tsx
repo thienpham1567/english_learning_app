@@ -176,7 +176,7 @@ export default function DashboardPage() {
           variants={containerVariants}
           initial="hidden"
           animate="visible"
-          className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full"
+          className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full mt-4"
         >
           <StatCard
             icon={<Flame className="h-5 w-5 text-orange-500 fill-current" />}

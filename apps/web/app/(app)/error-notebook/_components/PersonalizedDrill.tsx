@@ -167,9 +167,9 @@ export function PersonalizedDrill() {
             Question {currentIndex + 1}/{drill.exercises.length}
           </span>
         </div>
-        <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-accent/10 text-accent">
-          {exercise.targetWeakness}
-        </span>
+          <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-accent-light text-accent-hover border border-accent/15">
+            {exercise.targetWeakness}
+          </span>
       </div>
 
       {/* Body */}

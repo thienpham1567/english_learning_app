@@ -165,7 +165,7 @@ export function AIFlashcardMode() {
                   <span
                     className={`text-[12.5px] leading-snug ${
                       isSelected
-                        ? "font-extrabold text-accent"
+                        ? "font-extrabold text-ink"
                         : "font-semibold text-text-primary"
                     }`}
                   >
@@ -213,7 +213,7 @@ export function AIFlashcardMode() {
                   onClick={() => setCardType(opt.value)}
                   className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 cursor-pointer text-xs font-bold rounded-[10px] ${
                     cardType === opt.value
-                      ? "border-[1.5px] border-accent bg-accent-light text-accent"
+                      ? "border-[1.5px] border-accent bg-accent-light text-ink font-extrabold"
                       : "border-[1.5px] border-border bg-surface text-text-secondary"
                   }`}
                 >
@@ -236,7 +236,7 @@ export function AIFlashcardMode() {
                   onClick={() => setCardCount(c)}
                   className={`flex-1 cursor-pointer text-[13px] font-extrabold py-2 rounded-[10px] ${
                     cardCount === c
-                      ? "border-[1.5px] border-accent bg-accent-light text-accent"
+                      ? "border-[1.5px] border-accent bg-accent-light text-ink"
                       : "border-[1.5px] border-border bg-surface text-text-secondary"
                   }`}
                 >

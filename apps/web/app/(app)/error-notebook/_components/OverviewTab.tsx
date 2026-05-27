@@ -85,12 +85,13 @@ export function OverviewTab({
           {
             label: "Total Errors",
             value: total,
-            colorClass: "text-accent",
+            colorClass: "text-ink",
             icon: <Database className="h-4 w-4" />,
             bgClass: "bg-accent-light",
             borderClass: "border-accent/15",
+            iconColorClass: "text-accent-hover",
           },
-        ].map((stat) => (
+        ].map((stat: any) => (
           <m.div
             key={stat.label}
             initial={{ opacity: 0, y: 10 }}
@@ -99,7 +100,7 @@ export function OverviewTab({
             className={`flex items-center gap-3.5 p-4.5 bg-surface rounded-xl border-[1.5px] ${stat.borderClass} shadow-sm cursor-default transition-all duration-200`}
           >
             <span
-              className={`w-9 h-9 rounded-[10px] ${stat.bgClass} ${stat.colorClass} grid place-items-center`}
+              className={`w-9 h-9 rounded-[10px] ${stat.bgClass} ${stat.iconColorClass ?? stat.colorClass} grid place-items-center`}
             >
               {stat.icon}
             </span>
@@ -125,9 +126,9 @@ export function OverviewTab({
           onClick={onGoToReview}
           className="flex items-center justify-center gap-3 p-4.5 rounded-xl border-2 border-accent bg-gradient-to-br from-accent/8 to-amber-500/5 cursor-pointer shadow-[0_4px_14px_var(--accent-muted)] font-body"
         >
-          <Brain className="h-7 w-7 text-accent shrink-0" />
+          <Brain className="h-7 w-7 text-accent-hover shrink-0" />
           <div className="text-left">
-            <div className="text-base font-extrabold text-accent">
+            <div className="text-base font-black text-ink">
               Review Now — {dueCount} errors to recall
             </div>
             <div className="text-xs text-text-muted font-medium">
@@ -171,7 +172,7 @@ export function OverviewTab({
                       className="h-full rounded bg-accent min-w-1"
                     />
                   </div>
-                  <span className="text-xs font-extrabold text-accent w-10 text-right">
+                  <span className="text-xs font-extrabold text-ink w-10 text-right">
                     {count}
                   </span>
                 </m.div>

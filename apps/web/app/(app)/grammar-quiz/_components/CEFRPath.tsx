@@ -74,7 +74,7 @@ export function CEFRPath({
                 onClick={() => onSourceModeChange(opt.value)}
                 className={`flex items-center justify-center gap-1.5 font-bold rounded-lg border-2 py-1 px-3 text-xs cursor-pointer transition-all duration-150 ${
                   sourceMode === opt.value
-                    ? "border-accent bg-accent-light text-accent"
+                    ? "border-accent bg-accent-light text-ink font-extrabold"
                     : "border-border bg-surface-alt text-text-secondary hover:text-ink"
                 }`}
               >

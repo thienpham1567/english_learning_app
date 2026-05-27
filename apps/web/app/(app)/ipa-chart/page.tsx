@@ -71,7 +71,7 @@ export default function IpaChartPage() {
                 whileTap={{ scale: 0.97 }}
                 className={`border-none cursor-pointer text-[13px] font-extrabold flex items-center gap-2 py-2 px-4.5 rounded-md transition-all duration-200 ${
                   isActive
-                    ? "bg-surface text-accent shadow-sm"
+                    ? "bg-surface text-ink shadow-sm font-black"
                     : "bg-transparent text-text-secondary hover:text-text-primary"
                 }`}
               >
@@ -79,7 +79,7 @@ export default function IpaChartPage() {
                 <span
                   className={`text-[10.5px] rounded-full font-extrabold py-0.5 px-1.5 ${
                     isActive
-                      ? "bg-accent-light text-accent"
+                      ? "bg-accent text-[var(--text-on-accent)]"
                       : "bg-border text-text-muted"
                   }`}
                 >
@@ -110,7 +110,7 @@ export default function IpaChartPage() {
                   whileTap={{ scale: 0.95 }}
                   className={`rounded-md border-none cursor-pointer text-xs font-extrabold py-1.5 px-3.5 transition-all duration-150 ${
                     isActive
-                      ? "bg-surface text-accent shadow-sm"
+                      ? "bg-surface text-ink shadow-sm font-black"
                       : "bg-transparent text-text-secondary hover:text-text-primary"
                   }`}
                 >

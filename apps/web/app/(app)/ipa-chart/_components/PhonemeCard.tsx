@@ -142,14 +142,15 @@ export function PhonemeCard({ phoneme, accent, onSpeak, isBusy, index }: Props) 
                 background: isActive
                   ? `color-mix(in srgb, ${accentColor} 8%, var(--surface))`
                   : "var(--surface-alt)",
-                color: isActive ? accentColor : "var(--text-secondary)",
+                color: isActive ? "var(--ink)" : "var(--text-secondary)",
+                fontWeight: isActive ? "800" : "700",
                 cursor: isBusy ? "wait" : "pointer",
               }}
             >
               {isBusy && accent === voiceAcc ? (
                 <Loader2 className="animate-spin" size={9} />
               ) : (
-                <Volume2 size={10} />
+                <Volume2 size={10} style={{ color: isActive ? accentColor : "var(--text-muted)" }} />
               )}
               {voiceAcc.toUpperCase()}
             </m.button>

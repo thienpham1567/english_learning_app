@@ -69,7 +69,7 @@ export default function ErrorNotebookPage() {
             onClick={() => setTab(t.key)}
             className={`flex items-center gap-1.5 px-4.5 py-2.5 rounded-t-xl border-none border-b-2 text-[13px] cursor-pointer transition-all duration-150 font-body ${
               tab === t.key
-                ? "border-b-accent bg-surface text-accent font-extrabold"
+                ? "border-b-accent bg-surface text-ink font-black"
                 : "border-b-transparent bg-transparent text-text-secondary font-semibold hover:text-ink"
             }`}
           >

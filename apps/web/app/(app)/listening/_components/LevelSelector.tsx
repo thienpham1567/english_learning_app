@@ -147,13 +147,19 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                 </span>
                 <div className="flex-1">
                   <div
-                    className={`text-sm font-bold ${
-                      isSelected ? "text-accent" : "text-text-primary"
+                    className={`text-sm ${
+                      isSelected ? "font-extrabold text-ink" : "font-bold text-text-primary"
                     }`}
                   >
                     {meta.label}
                   </div>
-                  <div className="text-xs text-text-muted mt-0.5">{meta.desc}</div>
+                  <div
+                    className={`text-xs mt-0.5 ${
+                      isSelected ? "text-text-secondary font-medium" : "text-text-muted"
+                    }`}
+                  >
+                    {meta.desc}
+                  </div>
                 </div>
                 {isSelected && (
                   <motion.span

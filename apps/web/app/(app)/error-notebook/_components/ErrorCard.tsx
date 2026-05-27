@@ -37,7 +37,7 @@ export function ErrorCard({ error, onClick, index = 0 }: ErrorCardProps) {
             <AlertTriangle className="h-2.5 w-2.5" /> Unresolved
           </span>
         )}
-        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-accent/8 text-accent">
+        <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-accent-light text-accent-hover border border-accent/15">
           {(() => {
             const Icon = MODULE_ICONS[error.sourceModule] || FileText;
             return <Icon className="h-3 w-3" />;
