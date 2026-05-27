@@ -192,7 +192,7 @@ export function ToeicVocabTab() {
           </button>
           <div className="flex items-center gap-2">
             <div className="text-lg font-extrabold text-ink flex items-center gap-2">
-              <meta.icon size={20} style={{ color: meta.color }} />
+              <span style={{ color: meta.color }}><meta.icon size={20} /></span>
               <span>{meta.label}</span>
             </div>
             <div className="text-text-muted text-xs">

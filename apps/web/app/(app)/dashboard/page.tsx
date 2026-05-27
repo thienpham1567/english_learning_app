@@ -135,7 +135,13 @@ export default function DashboardPage() {
         {/* Left Column: Focus & Core Actions */}
         <div className="flex flex-col gap-5">
           {/* ── Predicted TOEIC Score ── */}
-                <div className={sectionLabelClass}>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+            className={cardClass}
+          >
+            <div className={sectionLabelClass}>
               <div className={accentBarClass} />
               <span>Predicted TOEIC Score</span>
               <div className="flex-1 h-px bg-border ml-2" />

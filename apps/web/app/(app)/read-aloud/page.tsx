@@ -13,7 +13,7 @@ import { getVoiceByRole } from "./_data/voices";
 import { clearBlobCache, useAudioPlayback } from "./_hooks/useAudioPlayback";
 import { useHistory } from "./_hooks/useHistory";
 import { Headphones, Mic, MessageSquare, Lightbulb } from "lucide-react";
-import { motion } from "framer-motion";
+import { motion } from "motion/react";
 
 const { Title, Paragraph, Text } = Typography;
 

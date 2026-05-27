@@ -1025,7 +1025,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   disabled={revealed}
                   rows={3}
                   placeholder={
-                    currentExercise.instructionEn ?? currentExercise.instructionVi ?? "Type your rewritten sentence here..."
+                    currentExercise.instructionVi ?? "Type your rewritten sentence here..."
                   }
                   onFocus={(e) => {
                     e.target.style.borderColor = "var(--accent)";
