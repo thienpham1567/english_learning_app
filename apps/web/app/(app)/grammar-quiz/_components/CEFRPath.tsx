@@ -1,6 +1,5 @@
 "use client";
 
-import { Button, Segmented, Switch } from "antd";
 import { BookOpen, Check, Clock, Loader2, Rocket, Zap } from "lucide-react";
 import * as m from "motion/react-client";
 
@@ -48,18 +47,11 @@ export function CEFRPath({
 }: Props) {
   const isEts = sourceMode === "ets";
   return (
-    <div
-      className="anim-fade-up w-[480px] mx-auto text-center bg-(--surface) rounded-(--radius-xl) border-2 border-border relative overflow-hidden"
-      style={{ padding: "32px 24px", boxShadow: "var(--shadow-sm)" }}
-    >
+    <div className="anim-fade-up w-full max-w-[480px] mx-auto text-center bg-surface rounded-xl border-2 border-border relative overflow-hidden py-8 px-6 shadow-(--shadow-sm)">
       <div
-        className="absolute w-[180px] h-[180px] rounded-full"
+        className="absolute w-[180px] h-[180px] rounded-full left-1/2 top-0 -translate-x-1/2 pointer-events-none"
         style={{
-          left: "50%",
-          top: "0%",
-          transform: "translateX(-50%)",
           background: "radial-gradient(circle, var(--accent) 5%, transparent 70%)",
-          pointerEvents: "none",
         }}
       />
 
@@ -71,38 +63,27 @@ export function CEFRPath({
       {/* Source mode toggle */}
       {onSourceModeChange && (
         <div className="mt-5 mb-1 relative z-[1]">
-          <Segmented
-            value={sourceMode}
-            onChange={(val) => onSourceModeChange(val as "ai" | "ets")}
-            options={[
-              {
-                value: "ai",
-                label: (
-                  <div
-                    className="flex items-center justify-center gap-1.5 font-bold rounded-(--radius-lg) border-2 border-border bg-surface-alt"
-                    style={{ padding: "4px 12px" }}
-                  >
-                    {" "}
-                    <Zap size={13} /> <span>AI Mode</span>{" "}
-                  </div>
-                ),
-              },
-              {
-                value: "ets",
-                label: (
-                  <div
-                    className="flex items-center justify-center gap-1.5 font-bold rounded-(--radius-lg) border-2 border-border bg-surface-alt"
-                    style={{ padding: "4px 12px" }}
-                  >
-                    {" "}
-                    <BookOpen size={13} /> <span>ETS Exam</span>{" "}
-                  </div>
-                ),
-              },
-            ]}
-          />
+          <div className="inline-flex gap-1 p-1 bg-surface-alt border-2 border-border rounded-xl">
+            {[
+              { value: "ai" as const, label: "AI Mode", icon: <Zap size={13} /> },
+              { value: "ets" as const, label: "ETS Exam", icon: <BookOpen size={13} /> },
+            ].map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => onSourceModeChange(opt.value)}
+                className={`flex items-center justify-center gap-1.5 font-bold rounded-lg border-2 py-1 px-3 text-xs cursor-pointer transition-all duration-150 ${
+                  sourceMode === opt.value
+                    ? "border-accent bg-accent-light text-accent"
+                    : "border-border bg-surface-alt text-text-secondary hover:text-ink"
+                }`}
+              >
+                {opt.icon} <span>{opt.label}</span>
+              </button>
+            ))}
+          </div>
           {isEts && (
-            <p className="mt-2 text-text-muted font-semibold" style={{ fontSize: 11.5 }}>
+            <p className="mt-2 text-text-muted font-semibold text-[11.5px]">
               240 questions extracted from real ETS exams · Shuffled randomly
             </p>
           )}
@@ -111,14 +92,13 @@ export function CEFRPath({
 
       {/* CEFR Path */}
       <div
-        className="mt-6"
+        className="mt-6 transition-opacity duration-200"
         style={{
           opacity: isEts ? 0.35 : 1,
           pointerEvents: isEts ? "none" : "auto",
-          transition: "opacity 0.2s",
         }}
       >
-        <div className="flex items-start justify-center" style={{ gap: 0, padding: "4px 0 12px" }}>
+        <div className="flex items-start justify-center py-1 pb-3">
           {CEFR_LEVELS.map((level, i) => {
             const isSelected = selected === level.tier;
             const tierColor = TIER_COLORS[level.tier];
@@ -132,24 +112,18 @@ export function CEFRPath({
                   whileTap={{ scale: 0.92 }}
                   type="button"
                   onClick={() => onSelect(level.tier)}
-                  className="flex flex-col items-center gap-1.5 bg-none border-none cursor-pointer"
-                  style={{ padding: "0" }}
+                  className="flex flex-col items-center gap-1.5 bg-none border-none cursor-pointer p-0"
                 >
                   <div
-                    className="w-[32px] h-[32px] rounded-full grid"
+                    className="w-8 h-8 rounded-full grid place-items-center transition-all duration-200"
                     style={{
                       border: `2px solid ${isSelected ? tierColor : "var(--border)"}`,
                       background: isSelected ? tierColor : "var(--surface-alt)",
-                      placeItems: "center",
                       boxShadow: isSelected ? `0 0 10px ${TIER_GLOWS[level.tier]}` : "none",
-                      transition: "all 0.2s ease",
                     }}
                   >
                     {isSelected ? (
-                      <Check
-                        className="text-xs font-black"
-                        style={{ color: "var(--text-on-accent)" }}
-                      />
+                      <Check className="text-xs font-black text-[var(--text-on-accent)]" />
                     ) : (
                       <span className="text-[10px] font-extrabold text-text-muted">
                         {level.label}
@@ -157,11 +131,8 @@ export function CEFRPath({
                     )}
                   </div>
                   <span
-                    className="text-[10.5px] font-extrabold"
-                    style={{
-                      color: isSelected ? tierColor : "var(--text-muted)",
-                      transition: "color 0.2s",
-                    }}
+                    className="text-[10.5px] font-extrabold transition-colors duration-200"
+                    style={{ color: isSelected ? tierColor : "var(--text-muted)" }}
                   >
                     {level.desc}
                   </span>
@@ -170,10 +141,8 @@ export function CEFRPath({
                 {/* Line */}
                 {!isLast && (
                   <div
-                    className="w-[24px] h-[2px] rounded-full"
+                    className="w-6 h-0.5 rounded-full self-start mt-[15px]"
                     style={{
-                      alignSelf: "flex-start",
-                      marginTop: 15,
                       background:
                         isSelected && CEFR_LEVELS[i + 1]?.tier === level.tier
                           ? tierColor
@@ -187,8 +156,8 @@ export function CEFRPath({
         </div>
 
         <p
-          className="mt-2 font-extrabold"
-          style={{ fontSize: 12.5, color: TIER_COLORS[selected] ?? "var(--text-secondary)" }}
+          className="mt-2 font-extrabold text-[12.5px]"
+          style={{ color: TIER_COLORS[selected] ?? "var(--text-secondary)" }}
         >
           {selected === "easy" && "Difficulty: Basic Grammar (A1–A2)"}
           {selected === "medium" && "Difficulty: Intermediate Grammar (B1–B2)"}
@@ -196,20 +165,29 @@ export function CEFRPath({
         </p>
       </div>
 
-      {/* Timer switches */}
+      {/* Timer toggle */}
       {onTimedModeChange && (
-        <div
-          className="mt-5 flex items-center justify-center gap-2.5 pt-4"
-          style={{ borderTop: "1.5px dashed var(--border)" }}
-        >
+        <div className="mt-5 flex items-center justify-center gap-2.5 pt-4 border-t border-dashed border-border">
           <Clock
             className="text-sm"
             style={{ color: timedMode ? "var(--accent)" : "var(--text-muted)" }}
           />
           <span className="text-[13px] text-text-secondary font-bold">Timed mode</span>
-          <Switch size="small" checked={timedMode} onChange={onTimedModeChange} />
+          <button
+            type="button"
+            onClick={() => onTimedModeChange(!timedMode)}
+            className={`relative w-9 h-5 rounded-full cursor-pointer border-none transition-colors duration-200 ${
+              timedMode ? "bg-accent" : "bg-border"
+            }`}
+          >
+            <span
+              className={`absolute top-0.5 left-0.5 w-4 h-4 rounded-full bg-white shadow-sm transition-transform duration-200 ${
+                timedMode ? "translate-x-4" : ""
+              }`}
+            />
+          </button>
           {timedMode && (
-            <span className="text-text-muted font-semibold" style={{ fontSize: 11.5 }}>
+            <span className="text-text-muted font-semibold text-[11.5px]">
               (30s / question)
             </span>
           )}
@@ -222,12 +200,9 @@ export function CEFRPath({
         whileTap={{ scale: 0.98 }}
         onClick={onStart}
         disabled={isLoading}
-        className="mt-6 h-[44px] w-full rounded-(--radius-lg) border-none font-extrabold cursor-pointer flex items-center justify-center gap-1.5"
+        className="mt-6 h-11 w-full rounded-lg border-none font-extrabold cursor-pointer flex items-center justify-center gap-1.5 text-[14.5px] text-[var(--text-on-accent)] shadow-[0_4px_12px_var(--accent-muted)]"
         style={{
           background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-          color: "var(--text-on-accent)",
-          fontSize: 14.5,
-          boxShadow: "0 4px 12px var(--accent-muted)",
         }}
       >
         {isLoading ? (

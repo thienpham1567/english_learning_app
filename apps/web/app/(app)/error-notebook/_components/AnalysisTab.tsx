@@ -5,7 +5,7 @@ import { WritingPatternSection } from "./WritingPatternSection";
 
 export function AnalysisTab() {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+    <div className="flex flex-col gap-5">
       {/* Personalized Drill */}
       <PersonalizedDrill />
 

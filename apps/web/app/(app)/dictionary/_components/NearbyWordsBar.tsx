@@ -6,17 +6,6 @@ type NearbyWordsBarProps = {
   onSearch: (word: string) => void;
 };
 
-const wordBtnStyle: React.CSSProperties = {
-  borderRadius: 999,
-  border: "1px solid var(--border)",
-  background: "var(--surface)",
-  padding: "2px 10px",
-  fontSize: 12,
-  color: "var(--text-secondary)",
-  cursor: "pointer",
-  transition: "border-color 0.2s, color 0.2s",
-};
-
 export function NearbyWordsBar({ words, headword, onSearch }: NearbyWordsBarProps) {
   if (words.length === 0) return null;
 
@@ -25,38 +14,30 @@ export function NearbyWordsBar({ words, headword, onSearch }: NearbyWordsBarProp
   const after = words.slice(half);
 
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 6 }}>
-      <span
-        style={{
-          fontSize: 10,
-          fontWeight: 600,
-          textTransform: "uppercase",
-          letterSpacing: "0.2em",
-          color: "var(--text-muted)",
-          marginRight: 4,
-        }}
-      >
+    <div className="flex flex-wrap items-center gap-1.5">
+      <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-text-muted mr-1">
         Nearby
       </span>
       {before.map((word) => (
-        <button key={word} type="button" onClick={() => onSearch(word)} style={wordBtnStyle}>
+        <button
+          key={word}
+          type="button"
+          onClick={() => onSearch(word)}
+          className="rounded-full border border-border bg-surface py-0.5 px-2.5 text-xs text-text-secondary cursor-pointer transition-colors duration-200 hover:border-accent hover:text-accent"
+        >
           {word}
         </button>
       ))}
-      <span
-        style={{
-          borderRadius: 999,
-          background: "var(--accent-muted)",
-          padding: "2px 10px",
-          fontSize: 12,
-          fontWeight: 600,
-          color: "var(--accent)",
-        }}
-      >
+      <span className="rounded-full bg-accent-muted py-0.5 px-2.5 text-xs font-semibold text-accent">
         {headword}
       </span>
       {after.map((word) => (
-        <button key={word} type="button" onClick={() => onSearch(word)} style={wordBtnStyle}>
+        <button
+          key={word}
+          type="button"
+          onClick={() => onSearch(word)}
+          className="rounded-full border border-border bg-surface py-0.5 px-2.5 text-xs text-text-secondary cursor-pointer transition-colors duration-200 hover:border-accent hover:text-accent"
+        >
           {word}
         </button>
       ))}

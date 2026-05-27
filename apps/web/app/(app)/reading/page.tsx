@@ -79,22 +79,20 @@ export default function ReadingPage() {
   }, [section, fetchArticles]);
 
   return (
-    <div className="relative flex h-full h-[0px] flex-1 flex-col overflow-hidden">
-      <div className="grain-overlay" style={{ opacity: 0.03, zIndex: 0 }} />
+    <div className="relative flex h-full flex-1 flex-col overflow-hidden">
+      <div className="grain-overlay opacity-[0.03] z-0" />
 
       {/* Styled Gradient Header */}
       <div className="relative z-[1]"></div>
 
       {/* Scrollable Container */}
       <div
-        className="relative h-[0px] flex-1 overflow-y-auto z-[1]"
-        style={{ padding: "24px 20px 80px" }}
+        className="relative h-0 flex-1 overflow-y-auto z-[1] pt-6 px-5 pb-20"
       >
         <div className="w-[900px] mx-auto flex flex-col gap-5">
           {/* Custom Category Segmented Switch */}
           <div
-            className="flex gap-1.5 bg-(--surface) border-2 border-border rounded-(--radius-xl) p-1"
-            style={{ boxShadow: "var(--shadow-sm)", overflowX: "auto", whiteSpace: "nowrap" }}
+            className="flex gap-1.5 bg-[var(--surface)] border-2 border-border rounded-xl p-1 shadow-sm overflow-x-auto whitespace-nowrap"
           >
             {SECTIONS.map((secItem) => {
               const isTabActive = section === secItem.value;
@@ -103,13 +101,11 @@ export default function ReadingPage() {
                   key={secItem.label}
                   onClick={() => setSection(secItem.value)}
                   whileTap={{ scale: 0.97 }}
-                  className="py-2.5 px-4 rounded-(--radius-lg) border-none text-[13px] font-extrabold cursor-pointer flex items-center gap-2"
-                  style={{
-                    flex: "1 0 auto",
-                    background: isTabActive ? "var(--accent)" : "transparent",
-                    color: isTabActive ? "var(--text-on-accent)" : "var(--text-secondary)",
-                    transition: "color 0.2s, background 0.2s",
-                  }}
+                  className={`py-2.5 px-4 rounded-lg border-none text-[13px] font-extrabold cursor-pointer flex items-center gap-2 transition-all duration-200 flex-none ${
+                    isTabActive
+                      ? "bg-accent text-[var(--text-on-accent)]"
+                      : "bg-transparent text-text-secondary hover:text-text-primary"
+                  }`}
                 >
                   {secItem.icon}
                   <span>{secItem.label}</span>
@@ -120,55 +116,31 @@ export default function ReadingPage() {
 
           {/* Articles Listing Grid */}
           {loading ? (
-            <div
-              className="grid gap-5"
-              style={{ gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}
-            >
+            <div className="grid gap-5 grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
               {[1, 2, 3, 4, 5, 6].map((i) => (
                 <div
                   key={i}
-                  className="bg-(--surface) border-2 border-border rounded-(--radius-xl) h-[320px] p-4 flex flex-col gap-3"
+                  className="bg-[var(--surface)] border-2 border-border rounded-xl h-[320px] p-4 flex flex-col gap-3"
                 >
-                  <div
-                    className="h-[140px] rounded-(--radius-lg) bg-surface-alt"
-                    style={{ animation: "pulse 1.5s infinite" }}
-                  />
-                  <div
-                    className="h-[20px] rounded bg-surface-alt"
-                    style={{ width: "60%", animation: "pulse 1.5s infinite" }}
-                  />
-                  <div
-                    className="h-[32px] rounded bg-surface-alt"
-                    style={{ animation: "pulse 1.5s infinite" }}
-                  />
-                  <div
-                    className="h-[16px] rounded bg-surface-alt"
-                    style={{ width: "40%", animation: "pulse 1.5s infinite" }}
-                  />
+                  <div className="h-[140px] rounded-lg bg-surface-alt animate-pulse" />
+                  <div className="h-5 rounded bg-surface-alt w-3/5 animate-pulse" />
+                  <div className="h-8 rounded bg-surface-alt animate-pulse" />
+                  <div className="h-4 rounded bg-surface-alt w-2/5 animate-pulse" />
                 </div>
               ))}
             </div>
           ) : articles.length === 0 ? (
-            <div
-              className="bg-(--surface) border-2 border-border rounded-(--radius-xl) text-center"
-              style={{ padding: "80px 24px", boxShadow: "var(--shadow-sm)" }}
-            >
-              <BookOpenText className="text-[36px] text-text-muted mb-3" />
-              <p
-                className="text-base font-extrabold text-text-secondary"
-                style={{ margin: "0 0 6px" }}
-              >
+            <div className="bg-[var(--surface)] border-2 border-border rounded-xl text-center py-20 px-6 shadow-sm">
+              <BookOpenText className="w-9 h-9 text-text-muted mx-auto mb-3" />
+              <p className="text-base font-extrabold text-text-secondary mb-1.5">
                 No articles found
               </p>
-              <p className="text-text-muted m-0 font-medium" style={{ fontSize: 12.5 }}>
+              <p className="text-text-muted text-[12.5px] font-medium">
                 Please check the GUARDIAN_API_KEY configuration in your system.
               </p>
             </div>
           ) : (
-            <div
-              className="grid gap-5"
-              style={{ gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))" }}
-            >
+            <div className="grid gap-5 grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
               {articles.map((article, idx) => {
                 const diffStyle = DIFFICULTY_COLORS[article.difficulty] ?? DIFFICULTY_COLORS.B1;
                 return (
@@ -179,12 +151,7 @@ export default function ReadingPage() {
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: Math.min(idx * 0.04, 0.4) }}
                     whileHover={{ y: -4, borderColor: "var(--accent)" }}
-                    className="flex flex-col bg-(--surface) rounded-(--radius-xl) overflow-hidden cursor-pointer"
-                    style={{
-                      border: "1.5px solid var(--border)",
-                      boxShadow: "var(--shadow-sm)",
-                      transition: "border-color 0.2s, box-shadow 0.2s",
-                    }}
+                    className="flex flex-col bg-[var(--surface)] border-2 border-border rounded-xl overflow-hidden cursor-pointer shadow-sm hover:border-accent hover:shadow-md transition-all duration-200"
                   >
                     {/* Thumbnail Card */}
                     {article.thumbnail ? (
@@ -197,40 +164,29 @@ export default function ReadingPage() {
                         }}
                       >
                         <div
-                          className="absolute"
-                          style={{
-                            inset: 0,
-                            background: "linear-gradient(to top, rgba(0,0,0,0.4), transparent)",
-                          }}
+                          className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"
                         />
                       </div>
                     ) : (
-                      <div
-                        className="w-full h-[150px] bg-surface-alt flex items-center justify-center text-text-muted"
-                        style={{ borderBottom: "1px solid var(--border)" }}
-                      >
+                      <div className="w-full h-[150px] bg-surface-alt flex items-center justify-center text-text-muted border-b border-border">
                         <BookOpenText size={32} />
                       </div>
                     )}
 
                     {/* Article Details */}
-                    <div className="flex-1 flex flex-col" style={{ padding: "16px 18px" }}>
+                    <div className="flex-1 flex flex-col p-4">
                       {/* Topic Tags */}
                       <div className="flex gap-1.5 mb-2.5 flex-wrap">
-                        <span
-                          className="text-[10.5px] font-extrabold rounded-md bg-surface-alt border-2 border-border text-text-secondary"
-                          style={{ padding: "2px 8px" }}
-                        >
+                        <span className="text-[10.5px] font-extrabold rounded-md bg-surface-alt border-2 border-border text-text-secondary px-2 py-0.5">
                           {article.section}
                         </span>
 
                         <span
-                          className="text-[10.5px] font-extrabold rounded-md"
+                          className="text-[10.5px] font-extrabold rounded-md px-2 py-0.5 border"
                           style={{
-                            padding: "2px 8px",
                             background: diffStyle.bg,
                             color: diffStyle.color,
-                            border: `1.5px solid ${diffStyle.border}`,
+                            borderColor: diffStyle.border,
                           }}
                         >
                           {article.difficulty}
@@ -238,48 +194,24 @@ export default function ReadingPage() {
                       </div>
 
                       {/* Header title */}
-                      <h4
-                        className="font-black text-text-primary overflow-hidden"
-                        style={{
-                          fontSize: 15.5,
-                          lineHeight: 1.4,
-                          margin: "0 0 6px",
-                          display: "-webkit-box",
-                          WebkitLineClamp: 2,
-                          WebkitBoxOrient: "vertical",
-                        }}
-                      >
+                      <h4 className="font-black text-text-primary text-[15.5px] leading-[1.4] mb-1.5 line-clamp-2">
                         {article.title}
                       </h4>
 
                       {/* Snippet text */}
                       {article.trailText && (
-                        <p
-                          className="text-text-muted leading-normal mb-4 font-medium overflow-hidden"
-                          style={{
-                            fontSize: 12.5,
-                            display: "-webkit-box",
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: "vertical",
-                          }}
-                        >
+                        <p className="text-text-muted leading-normal mb-4 font-medium text-[12.5px] line-clamp-2">
                           {article.trailText.replace(/<[^>]*>/g, "")}
                         </p>
                       )}
 
                       {/* Stats meta */}
-                      <div
-                        className="flex items-center justify-between pt-3"
-                        style={{ marginTop: "auto", borderTop: "1px dashed var(--border)" }}
-                      >
-                        <span className="text-text-muted font-bold" style={{ fontSize: 11.5 }}>
+                      <div className="flex items-center justify-between pt-3 mt-auto border-t border-dashed border-border">
+                        <span className="text-text-muted font-bold text-[11.5px]">
                           The Guardian
                         </span>
-                        <div
-                          className="flex items-center gap-1 text-text-muted font-bold"
-                          style={{ fontSize: 11.5 }}
-                        >
-                          <Clock />
+                        <div className="flex items-center gap-1 text-text-muted font-bold text-[11.5px]">
+                          <Clock size={13} />
                           <span>{article.readTime} min read</span>
                         </div>
                       </div>
@@ -291,10 +223,7 @@ export default function ReadingPage() {
           )}
 
           {/* Guardian Attribution footer */}
-          <div
-            className="flex justify-center mt-6"
-            style={{ padding: "16px 0", borderTop: "1px solid var(--border)" }}
-          >
+          <div className="flex justify-center mt-6 py-4 border-t border-border">
             <span className="text-[11px] text-text-muted font-semibold">
               Powered by The Guardian Open Platform API
             </span>

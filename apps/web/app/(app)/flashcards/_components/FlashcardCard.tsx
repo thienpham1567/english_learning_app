@@ -1,15 +1,12 @@
 "use client";
 
-import { Card, Flex, Space, Tag, Typography } from "antd";
-import { Frown, Lightbulb, Loader2, Meh, Network, Smile, Sparkles, Volume2 } from "lucide-react";
+import { Frown, Lightbulb, Loader2, Meh, Smile, Sparkles, Volume2 } from "lucide-react";
 import * as m from "motion/react-client";
 import { useState } from "react";
 import { WordFamilyExplorer } from "@/app/(app)/flashcards/_components/WordFamilyExplorer";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { api } from "@/lib/api-client";
 import type { DueCard } from "@/lib/flashcard/types";
-
-const { Title, Text, Paragraph } = Typography;
 
 const LEVEL_COLORS: Record<string, string> = {
   A1: "var(--success)",
@@ -52,7 +49,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
   const levelColor = LEVEL_COLORS[card.level ?? ""] ?? "var(--text-muted)";
 
   return (
-    <Flex vertical align="stretch" className="w-full w-[520px] mx-auto">
+    <div className="w-full max-w-[520px] mx-auto flex flex-col items-stretch">
       {/* 3D card layout container */}
       <div onClick={handleFlip} className="cursor-pointer w-full" style={{ perspective: 1200 }}>
         <m.div
@@ -65,63 +62,46 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
         >
           {/* Front Side Card */}
           <div
-            className="absolute rounded-(--radius-xl) flex flex-col items-center justify-center"
+            className="absolute inset-0 rounded-xl flex flex-col items-center justify-center py-10 px-8 shadow-md"
             style={{
-              inset: 0,
               backfaceVisibility: "hidden",
               border: `1.5px solid ${isFlipped ? "var(--border)" : "color-mix(in srgb, var(--accent) 15%, var(--border))"}`,
               background: CEFR_GRADIENTS[card.level ?? ""] ?? DEFAULT_GRADIENT,
-              padding: "40px 32px",
-              boxShadow: "var(--shadow-md)",
             }}
           >
             {/* Ambient overlay light */}
             <div
-              className="absolute w-[200px] h-[200px] rounded-full"
+              className="absolute w-[200px] h-[200px] rounded-full left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
               style={{
-                left: "50%",
-                top: "45%",
-                transform: "translate(-50%, -50%)",
                 background: `radial-gradient(circle, ${levelColor}10 0%, transparent 70%)`,
-                pointerEvents: "none",
               }}
             />
 
-            <div className="flex items-center gap-2 relative" style={{ zIndex: 2 }}>
+            <div className="flex items-center gap-2 relative z-[2]">
               {card.level && (
                 <span
-                  className="text-[11px] font-extrabold bg-(--surface) rounded-full"
+                  className="text-[11px] font-extrabold bg-surface rounded-full py-0.5 px-2.5"
                   style={{
                     color: levelColor,
                     border: `1px solid ${levelColor}`,
-                    padding: "2px 10px",
                   }}
                 >
                   {card.level}
                 </span>
               )}
               {card.partOfSpeech && (
-                <span
-                  className="font-bold text-text-muted bg-surface-alt rounded-md"
-                  style={{ fontSize: 11.5, padding: "2px 8px" }}
-                >
+                <span className="font-bold text-text-muted bg-surface-alt rounded-md text-[11.5px] py-0.5 px-2">
                   {card.partOfSpeech}
                 </span>
               )}
             </div>
 
-            <h2
-              className="mt-5 mb-2 font-black text-center font-display text-text-primary tracking-tight italic relative"
-              style={{ fontSize: 38, zIndex: 2 }}
-            >
+            <h2 className="mt-5 mb-2 font-black text-center font-display text-text-primary tracking-tight italic relative z-[2] text-[38px]">
               {card.headword}
             </h2>
 
             {card.phonetic && (
-              <span
-                className="text-sm font-semibold font-mono text-text-secondary bg-surface-alt rounded-lg border-2 border-border relative"
-                style={{ padding: "4px 12px", zIndex: 2 }}
-              >
+              <span className="text-sm font-semibold font-mono text-text-secondary bg-surface-alt rounded-lg border-2 border-border relative z-[2] py-1 px-3">
                 {card.phonetic}
               </span>
             )}
@@ -136,79 +116,58 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                 tts.speak(card.headword);
               }}
               disabled={tts.isLoading || tts.isSpeaking}
-              className="mt-6 items-center gap-2 rounded-full text-accent text-[13px] font-bold relative"
+              className="mt-6 inline-flex items-center gap-2 rounded-full text-accent text-[13px] font-bold relative z-[2] py-2 px-5 shadow-(--shadow-sm) transition-all duration-200"
               style={{
-                display: "inline-flex",
-                padding: "8px 20px",
                 border: "1.5px solid color-mix(in srgb, var(--accent) 30%, var(--border))",
                 background: tts.isSpeaking ? "var(--accent-light)" : "var(--surface)",
                 cursor: tts.isLoading ? "wait" : "pointer",
-                boxShadow: "var(--shadow-sm)",
-                transition: "all 0.2s",
-                zIndex: 2,
               }}
             >
               {tts.isLoading ? <Loader2 className="animate-spin" /> : <Volume2 />}
               {tts.isSpeaking ? "Playing..." : "Listen"}
             </m.button>
 
-            <span className="absolute text-xs font-semibold text-text-muted" style={{ bottom: 24 }}>
+            <span className="absolute bottom-6 text-xs font-semibold text-text-muted">
               Click card to flip
             </span>
           </div>
 
           {/* Back Side Card */}
           <div
-            className="absolute rounded-(--radius-xl) border-2 border-border bg-(--surface) p-6 flex flex-col justify-start overflow-y-auto"
+            className="absolute inset-0 rounded-xl border-2 border-border bg-surface p-6 flex flex-col justify-start overflow-y-auto shadow-md"
             style={{
-              inset: 0,
               backfaceVisibility: "hidden",
               transform: "rotateY(180deg)",
-              boxShadow: "var(--shadow-md)",
             }}
           >
             {/* Vietnamese overview meaning */}
-            <div
-              className="text-center text-xl font-extrabold text-accent font-display mb-4 pb-3"
-              style={{ borderBottom: "1.5px dashed var(--border)" }}
-            >
+            <div className="text-center text-xl font-extrabold text-accent font-display mb-4 pb-3 border-b border-dashed border-border">
               {card.overviewVi}
             </div>
 
             {firstSense && (
-              <Flex vertical gap={12}>
-                <p className="leading-relaxed m-0 text-text-primary" style={{ fontSize: 14.5 }}>
+              <div className="flex flex-col gap-3">
+                <p className="leading-relaxed m-0 text-text-primary text-[14.5px]">
                   <span className="font-extrabold text-text-secondary">{firstSense.label}:</span>{" "}
                   {firstSense.definitionVi}
                 </p>
 
                 {firstSense.examples.length > 0 && (
-                  <Flex vertical gap={8}>
+                  <div className="flex flex-col gap-2">
                     {firstSense.examples.slice(0, 2).map((ex, i) => (
                       <div
                         key={i}
-                        className="bg-surface-alt"
-                        style={{
-                          borderLeft: "3.5px solid var(--accent)",
-                          borderRadius: "var(--radius-md)",
-                          padding: "10px 14px",
-                        }}
+                        className="bg-surface-alt border-l-[3.5px] border-l-accent rounded-md py-2.5 px-3.5"
                       >
-                        <div
-                          className="font-bold text-text-primary leading-normal"
-                          style={{ fontSize: 13.5 }}
-                        >
+                        <div className="font-bold text-text-primary leading-normal text-[13.5px]">
                           {ex.en}
                         </div>
-                        <div
-                          className="text-xs text-text-muted font-semibold"
-                          style={{ marginTop: 3 }}
-                        >
+                        <div className="text-xs text-text-muted font-semibold mt-0.5">
                           {ex.vi}
                         </div>
                       </div>
                     ))}
-                  </Flex>
+                  </div>
                 )}
 
                 {firstSense.collocations.length > 0 && (
@@ -216,12 +175,10 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                     {firstSense.collocations.slice(0, 4).map((c, i) => (
                       <span
                         key={i}
-                        className="font-bold text-emerald-500 rounded-full"
+                        className="font-bold text-emerald-500 rounded-full text-[11.5px] py-0.5 px-2.5"
                         style={{
-                          fontSize: 11.5,
                           background: "var(--success-bg)",
                           border: "1px solid color-mix(in srgb, var(--success) 20%, transparent)",
-                          padding: "3px 10px",
                         }}
                       >
                         {c.en}
@@ -229,7 +186,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                     ))}
                   </div>
                 )}
-              </Flex>
+              </div>
             )}
 
             {/* AI TOEIC Examples section */}
@@ -257,12 +214,11 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                   setContextLoading(false);
                 }}
                 disabled={contextLoading}
-                className="mt-4 w-full flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-(--radius-lg) text-accent text-xs font-extrabold"
+                className="mt-4 w-full flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-lg text-accent text-xs font-extrabold transition-all duration-200"
                 style={{
                   border: "1.5px solid color-mix(in srgb, var(--accent) 20%, var(--border))",
                   background: "var(--accent-light)",
                   cursor: contextLoading ? "wait" : "pointer",
-                  transition: "all 0.2s",
                 }}
               >
                 {contextLoading ? (
@@ -278,19 +234,15 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
             )}
 
             {contextSentences.length > 0 && (
-              <Flex vertical gap={8} className="mt-4">
-                <span
-                  className="text-[11px] font-extrabold uppercase text-accent flex items-center gap-1"
-                  style={{ letterSpacing: ".1em" }}
-                >
+              <div className="flex flex-col gap-2 mt-4">
+                <span className="text-[11px] font-extrabold uppercase text-accent flex items-center gap-1 tracking-[.1em]">
                   <Lightbulb /> TOEIC Context Examples
                 </span>
                 {contextSentences.slice(0, 3).map((s, i) => (
                   <div
                     key={i}
-                    className="rounded-(--radius-lg)"
+                    className="rounded-lg py-2.5 px-3.5"
                     style={{
-                      padding: "10px 14px",
                       background:
                         "linear-gradient(135deg, color-mix(in srgb, var(--accent) 4%, var(--surface)), var(--surface-alt))",
                       border: "1px solid color-mix(in srgb, var(--accent) 12%, var(--border))",
@@ -305,12 +257,12 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                       }}
                       className="text-[13px] leading-relaxed text-text-primary"
                     />
-                    <div className="text-text-muted font-semibold mt-1" style={{ fontSize: 11.5 }}>
+                    <div className="text-text-muted font-semibold mt-1 text-[11.5px]">
                       {s.vi}
                     </div>
                   </div>
                 ))}
-              </Flex>
+              </div>
             )}
 
             {/* Word Family Tree Explorer */}
@@ -323,7 +275,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
 
       {/* Spaced Repetition score buttons below the card deck */}
       {isFlipped && <RatingButtons onRate={onRate} isSubmitting={isSubmitting} />}
-    </Flex>
+    </div>
   );
 }
 
@@ -370,8 +322,8 @@ function RatingButtons({
   isSubmitting: boolean;
 }) {
   return (
-    <div className="anim-fade-up flex gap-3 mt-6" style={{ alignSelf: "center" }}>
-      {RATINGS.map((r, idx) => {
+    <div className="anim-fade-up flex gap-3 mt-6 self-center">
+      {RATINGS.map((r) => {
         const IconComponent = r.icon;
         return (
           <m.button
@@ -380,14 +332,11 @@ function RatingButtons({
             whileTap={{ scale: 0.94 }}
             disabled={isSubmitting}
             onClick={() => onRate(r.quality)}
-            className="flex flex-col items-center gap-1.5 w-[72px] rounded-(--radius-lg) cursor-pointer"
+            className="flex flex-col items-center gap-1.5 w-[72px] rounded-lg cursor-pointer py-2.5 shadow-(--shadow-sm) transition-all duration-200"
             style={{
-              padding: "10px 0",
               background: r.bg,
               border: `1.5px solid ${r.border}`,
               color: r.color,
-              boxShadow: "var(--shadow-sm)",
-              transition: "all 0.2s",
             }}
           >
             <IconComponent className="h-5 w-5" />

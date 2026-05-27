@@ -1,7 +1,6 @@
 import { getSkillLabel, TOEIC_SKILLS, type ToeicSkill } from "@repo/contracts";
 import { db, errorLog, learningEvent, toeicAttempt, userSkillState } from "@repo/database";
 import { summarizeErrorPatterns } from "@repo/modules";
-import { Card, Empty, Progress, Tag } from "antd";
 import { and, desc, eq, gte, isNotNull, like, or, sql } from "drizzle-orm";
 import { AlertTriangle, TrendingUp } from "lucide-react";
 import { headers } from "next/headers";
@@ -87,7 +86,7 @@ export default async function ToeicProgressPage() {
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
       <div className="p-4 grid gap-4">
         {/* Predicted score */}
-        <Card title="📈 Predicted Score (from mastery)" size="small">
+        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
           {predicted ? (
             <>
               <div className="text-center">
@@ -95,9 +94,9 @@ export default async function ToeicProgressPage() {
                   {predicted.total}
                 </div>
                 <div className="text-text-muted">/ 990</div>
-                <Tag color="orange" className="mt-2">
+                <span className="mt-2 bg-amber-500/15 text-amber-600 py-0.5 px-2 inline-block">
                   {bandLabel(predicted.total)}
-                </Tag>
+                </span>
               </div>
               <div className="grid gap-3 mt-3" style={{ gridTemplateColumns: "repeat(2, 1fr)" }}>
                 <div className="text-center">
@@ -115,12 +114,15 @@ export default async function ToeicProgressPage() {
               </div>
             </>
           ) : (
-            <Empty description="Take diagnostic test + some drills to generate data" />
+            <div className="flex flex-col items-center justify-center py-12 text-text-muted">
+                <div className="text-4xl mb-3">📭</div>
+                <div className="text-sm font-semibold">No data available</div>
+              </div>
           )}
-        </Card>
+        </div>
 
         {/* Last mock */}
-        <Card title="🎯 Latest Mock Test" size="small">
+        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
           {lastMock && lastMock.totalScaled !== null ? (
             <div className="flex justify-between items-center">
               <div>
@@ -151,12 +153,15 @@ export default async function ToeicProgressPage() {
               Take your first mock test
             </Link>
           )}
-        </Card>
+        </div>
 
         {/* Trend chart */}
-        <Card title="🔥 30-Day Activity" size="small">
+        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
           {trend.length === 0 ? (
-            <Empty description="No activity yet" />
+            <div className="flex flex-col items-center justify-center py-12 text-text-muted">
+                <div className="text-4xl mb-3">📭</div>
+                <div className="text-sm font-semibold">No data available</div>
+              </div>
           ) : (
             <div className="flex items-end h-[100px]" style={{ gap: 2 }}>
               {trend.map((d) => (
@@ -172,25 +177,24 @@ export default async function ToeicProgressPage() {
               ))}
             </div>
           )}
-        </Card>
+        </div>
 
         {/* Error patterns */}
-        <Card
-          title={
-            <span>
-              <AlertTriangle className="text-destructive" /> Recent Error Patterns
-            </span>
-          }
-          size="small"
-        >
+        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+          <div className="flex items-center gap-2 mb-3 font-semibold text-sm">
+            <AlertTriangle size={16} className="text-destructive" /> Recent Error Patterns
+          </div>
           {patterns.length === 0 ? (
-            <Empty description="No error patterns found" />
+            <div className="flex flex-col items-center justify-center py-12 text-text-muted">
+                <div className="text-4xl mb-3">📭</div>
+                <div className="text-sm font-semibold">No data available</div>
+              </div>
           ) : (
             <div className="grid gap-2">
               {patterns.map((p) => (
                 <div
                   key={p.category.key}
-                  className="grid gap-3 items-center rounded-lg bg-(--surface)"
+                  className="grid gap-3 items-center rounded-lg bg-surface"
                   style={{ gridTemplateColumns: "1fr auto", padding: 10 }}
                 >
                   <div>
@@ -220,16 +224,19 @@ export default async function ToeicProgressPage() {
               ))}
             </div>
           )}
-        </Card>
+        </div>
 
         {/* Top weak/strong */}
         <div
           className="grid gap-3"
           style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}
         >
-          <Card title="🔻 5 Weakest Skills" size="small">
+          <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
             {weakest.length === 0 ? (
-              <Empty description="—" />
+              <div className="flex flex-col items-center justify-center py-12 text-text-muted">
+                <div className="text-4xl mb-3">📭</div>
+                <div className="text-sm font-semibold">No data available</div>
+              </div>
             ) : (
               <div className="grid gap-1.5">
                 {weakest.map((s) => (
@@ -238,20 +245,18 @@ export default async function ToeicProgressPage() {
                       <span>{getSkillLabel(s.skillId as ToeicSkill)}</span>
                       <span className="text-text-muted">{Math.round(s.proficiency * 100)}/100</span>
                     </div>
-                    <Progress
-                      percent={Math.round(s.proficiency * 100)}
-                      showInfo={false}
-                      size="small"
-                      strokeColor="var(--error)"
-                    />
+                    <div className="h-2 rounded-full bg-border overflow-hidden"><div className="h-full rounded-full bg-accent transition-all duration-500" style={{ width: `${Math.round(s.proficiency * 100)}%` }} /></div>
                   </div>
                 ))}
               </div>
             )}
-          </Card>
-          <Card title="🔺 5 Strongest Skills" size="small">
+          </div>
+          <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
             {strongest.length === 0 ? (
-              <Empty description="—" />
+              <div className="flex flex-col items-center justify-center py-12 text-text-muted">
+                <div className="text-4xl mb-3">📭</div>
+                <div className="text-sm font-semibold">No data available</div>
+              </div>
             ) : (
               <div className="grid gap-1.5">
                 {strongest.map((s) => (
@@ -260,17 +265,12 @@ export default async function ToeicProgressPage() {
                       <span>{getSkillLabel(s.skillId as ToeicSkill)}</span>
                       <span className="text-text-muted">{Math.round(s.proficiency * 100)}/100</span>
                     </div>
-                    <Progress
-                      percent={Math.round(s.proficiency * 100)}
-                      showInfo={false}
-                      size="small"
-                      strokeColor="var(--success)"
-                    />
+                    <div className="h-2 rounded-full bg-border overflow-hidden"><div className="h-full rounded-full bg-accent transition-all duration-500" style={{ width: `${Math.round(s.proficiency * 100)}%` }} /></div>
                   </div>
                 ))}
               </div>
             )}
-          </Card>
+          </div>
         </div>
       </div>
     </div>

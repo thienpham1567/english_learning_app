@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex, message, Typography } from "antd";
+import { toast } from "sonner";
 import {
   Loader2,
   Mic,
@@ -26,7 +26,6 @@ import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { useDialogue } from "../_hooks/useDialogue";
 import { type EvalResult, ShadowResult } from "./ShadowResult";
 
-const { Text, Title } = Typography;
 
 const SPEAKER_COLORS: Record<
   string,
@@ -143,7 +142,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
 
     const audioBlob = voice.blob;
     if (!audioBlob || !dlg.dialogue) {
-      message.error("No audio recording found");
+      toast.error("No audio recording found");
       setRolePlayStep("idle");
       return;
     }
@@ -164,7 +163,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: "Unknown" }));
         if (err.error === "no-speech") {
-          message.warning("Speech not recognized. Please try again.");
+          toast.warning("Speech not recognized. Please try again.");
           setRolePlayStep("idle");
           return;
         }
@@ -175,7 +174,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
       setRolePlayResult(result);
       setRolePlayStep("result");
     } catch {
-      message.error("AI grading failed");
+      toast.error("AI grading failed");
       setRolePlayStep("idle");
     }
   }, [voice, dlg, rolePlayLineIndex]);
@@ -189,7 +188,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
     } else {
       setRolePlayStep("idle");
       setRolePlaySpeaker(null);
-      message.success("Dialogue practice completed successfully!");
+      toast.success("Dialogue practice completed successfully!");
     }
   }, [dlg, rolePlayLineIndex, playRolePlayLine]);
 
@@ -203,15 +202,15 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
           className="bg-(--surface) rounded-(--radius-xl) border-2 border-border flex flex-col gap-4"
           style={{ padding: "24px 20px", boxShadow: "var(--shadow-md)" }}
         >
-          <Title level={5} className="m-0 text-text-primary">
+          <h3 className="m-0 text-text-primary">
             <MessageSquare size={16} className="text-accent" /> Create New Conversation
-          </Title>
+          </h3>
 
           {/* Topic input */}
           <div>
-            <Text className="text-xs font-bold text-text-muted block mb-1.5">
+            <span className="text-xs font-bold text-text-muted block mb-1.5">
               Topic (optional)
-            </Text>
+            </span>
             <input
               type="text"
               value={topic}
@@ -230,8 +229,8 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
 
           {/* Speaker count */}
           <div>
-            <Text className="text-xs font-bold text-text-muted block mb-1.5">Speakers</Text>
-            <Flex gap={8}>
+            <span className="text-xs font-bold text-text-muted block mb-1.5">Speakers</span>
+            <div>
               {([2, 3] as const).map((n) => (
                 <button
                   key={n}
@@ -248,13 +247,13 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                   {n === 2 ? "2 Speakers" : "3 Speakers"}
                 </button>
               ))}
-            </Flex>
+            </div>
           </div>
 
           {/* Length */}
           <div>
-            <Text className="text-xs font-bold text-text-muted block mb-1.5">Length</Text>
-            <Flex gap={8}>
+            <span className="text-xs font-bold text-text-muted block mb-1.5">Length</span>
+            <div>
               {(["short", "medium", "long"] as const).map((len) => (
                 <button
                   key={len}
@@ -275,7 +274,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                       : "Long (~16 lines)"}
                 </button>
               ))}
-            </Flex>
+            </div>
           </div>
 
           {/* Generate button */}
@@ -315,12 +314,12 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             className="bg-(--surface) rounded-(--radius-xl) border-2 border-border"
             style={{ padding: "20px", boxShadow: "var(--shadow)" }}
           >
-            <Text
+            <span
               className="text-xs font-bold text-text-muted block mb-3 uppercase"
               style={{ letterSpacing: "0.06em" }}
             >
               <Bookmark size={13} className="text-accent" /> Saved Conversations ({dlg.savedDialogues.length})
-            </Text>
+            </span>
             <div className="flex flex-col gap-2 h-[300px] overflow-y-auto">
               {dlg.savedDialogues.map((saved, idx) => (
                 <m.div
@@ -344,25 +343,25 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
 
                   {/* Info */}
                   <div className="flex-1 w-[0px]">
-                    <Text
+                    <span
                       className="text-[13px] font-bold text-text-primary block overflow-hidden"
                       style={{ textOverflow: "ellipsis", whiteSpace: "nowrap" }}
                     >
                       {saved.title}
-                    </Text>
+                    </span>
                     <div className="flex gap-2 items-center" style={{ marginTop: 2 }}>
                       {saved.topic && (
-                        <Text className="text-[11px] text-text-muted font-medium">
+                        <span className="text-[11px] text-text-muted font-medium">
                           <Pin size={10} /> {saved.topic}
-                        </Text>
+                        </span>
                       )}
-                      <Text className="text-text-muted text-[11px]">
+                      <span className="text-text-muted text-[11px]">
                         {saved.linesJson.length} lines
-                      </Text>
+                      </span>
                       {saved.rolePlayCount > 0 && (
-                        <Text className="text-[11px] text-accent font-semibold">
+                        <span className="text-[11px] text-accent font-semibold">
                           🎙️ {saved.rolePlayCount}x
-                        </Text>
+                        </span>
                       )}
                     </div>
                   </div>
@@ -416,12 +415,12 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                   </button>
 
                   {/* Time */}
-                  <Text className="text-[10px] text-text-muted shrink-0">
+                  <span className="text-[10px] text-text-muted shrink-0">
                     {new Date(saved.createdAt).toLocaleDateString("en-US", {
                       day: "numeric",
                       month: "short",
                     })}
-                  </Text>
+                  </span>
                 </m.div>
               ))}
             </div>
@@ -435,20 +434,19 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
   return (
     <div className="flex flex-col gap-4">
       {/* Header */}
-      <div
-        className="bg-(--surface) rounded-(--radius-xl) border-2 border-border py-4 px-5"
+      <div className="bg-(--surface) rounded-(--radius-xl) border-2 border-border py-4 px-5"
         style={{ boxShadow: "var(--shadow-md)" }}
       >
-        <Flex className="dialogue-header-actions" justify="space-between" align="center">
+        <div className="dialogue-header-actions"  >
           <div>
-            <Text className="text-base font-extrabold text-text-primary block">
+            <span className="text-base font-extrabold text-text-primary block">
               <MessageSquare size={16} className="text-accent" /> {dlg.dialogue.title}
-            </Text>
-            <Text className="text-text-muted text-xs">
+            </span>
+            <span className="text-text-muted text-xs">
               {dlg.dialogue.context} • {dlg.dialogue.lines.length} lines
-            </Text>
+            </span>
           </div>
-          <Flex gap={8} className="dialogue-header-buttons">
+          <div className="dialogue-header-buttons">
             <m.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -483,11 +481,11 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             >
               <Redo /> Reset
             </m.button>
-          </Flex>
-        </Flex>
+          </div>
+        </div>
 
         {/* Speaker badges */}
-        <Flex gap={8} wrap="wrap" className="dialogue-speaker-badges mt-3">
+        <div className="dialogue-speaker-badges mt-3">
           {dlg.voiceAssignments.map((a) => {
             const colors = SPEAKER_COLORS[a.speaker] ?? SPEAKER_COLORS.A;
             return (
@@ -509,19 +507,18 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                   className="rounded-lg"
                   style={{ objectFit: "cover" }}
                 />
-                <Text className="text-xs font-bold" style={{ color: colors.text }}>
+                <span className="text-xs font-bold" style={{ color: colors.text }}>
                   {a.voiceName}
-                </Text>
+                </span>
                 <span className="text-xs">{a.flag}</span>
               </div>
             );
           })}
-        </Flex>
+        </div>
       </div>
 
       {/* Chat bubbles */}
-      <div
-        className="dialogue-bubbles flex flex-col gap-3.5 bg-surface-alt rounded-(--radius-xl) border-2 border-border"
+      <div className="dialogue-bubbles flex flex-col gap-3.5 bg-surface-alt rounded-(--radius-xl) border-2 border-border"
         style={{ padding: "20px 16px", boxShadow: "var(--shadow)" }}
       >
         {dlg.dialogue.lines.map((line, i) => {
@@ -542,8 +539,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               style={{ flexDirection: isLeft ? "row" : "row-reverse" }}
             >
               {/* Avatar */}
-              <div
-                className="dialogue-avatar w-[42px] h-[42px] rounded-full overflow-hidden shrink-0"
+              <div className="dialogue-avatar w-[42px] h-[42px] rounded-full overflow-hidden shrink-0"
                 style={{ border: `2px solid ${colors.border}`, boxShadow: colors.shadow }}
               >
                 <img
@@ -557,8 +553,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               </div>
 
               {/* Bubble */}
-              <div
-                className="dialogue-bubble-content relative"
+              <div className="dialogue-bubble-content relative"
                 onClick={() => !dlg.isPlaying && dlg.playSingleLine(i, speed)}
                 style={{
                   maxWidth: "78%",
@@ -578,24 +573,23 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                 }}
               >
                 <div className="flex items-center gap-1.5 mb-1.5">
-                  <div
-                    className="w-[6px] h-[6px] rounded-full shrink-0"
+                  <div className="w-[6px] h-[6px] rounded-full shrink-0"
                     style={{ background: colors.accent }}
                   />
-                  <Text
+                  <span
                     className="text-xs font-extrabold"
                     style={{ color: colors.text, letterSpacing: "0.02em" }}
                   >
                     {line.name}
-                  </Text>
+                  </span>
                   <span className="text-[11px]">{assignment?.flag ?? ""}</span>
                 </div>
-                <Text
+                <span
                   className="text-[15px] text-text-primary block font-medium"
                   style={{ lineHeight: 1.7 }}
                 >
                   {line.text}
-                </Text>
+                </span>
                 {isActive && dlg.isLoading && (
                   <Loader2
                     className="animate-spin absolute text-sm"
@@ -629,17 +623,17 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
           }}
         >
           <div className="flex justify-center mb-2.5"><m.div animate={{ y: [0, -4, 0] }} transition={{ repeat: Infinity, duration: 2 }} style={{ display: "inline-flex", color: "var(--accent)" }}><Headphones size={36} /></m.div></div>
-          <Text className="text-base font-extrabold text-text-primary block mb-1">
+          <span className="text-base font-extrabold text-text-primary block mb-1">
             Listen to the Dialogue First
-          </Text>
-          <Text
+          </span>
+          <span
             className="text-[13px] text-text-muted block mb-4 w-[360px]"
             style={{ margin: "0 auto 16px" }}
           >
             Listen to the conversation between native speakers before you start roleplaying!
-          </Text>
+          </span>
 
-          <Flex gap={10} justify="center" wrap="wrap" className="listen-cta-buttons">
+          <div className="listen-cta-buttons">
             <m.button
               whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.97 }}
@@ -682,7 +676,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             >
               Skip →
             </m.button>
-          </Flex>
+          </div>
 
           {/* Listening / batch-loading progress indicator */}
           {isListeningPreview && dlg.dialogue && (
@@ -698,13 +692,13 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                 className="w-[8px] h-[8px] rounded-full"
                 style={{ background: "var(--accent)" }}
               />
-              <Text className="text-xs font-bold text-accent">
+              <span className="text-xs font-bold text-accent">
                 {dlg.isLoading && dlg.batchProgress
                   ? `Loading audio ${dlg.batchProgress.loaded}/${dlg.batchProgress.total}...`
                   : dlg.isLoading
                     ? `Loading audio ${dlg.dialogue.lines.length} lines...`
                     : `Playing line ${Math.max(1, (dlg.activeLineIndex ?? 0) + 1)} of ${dlg.dialogue.lines.length}`}
-              </Text>
+              </span>
             </m.div>
           )}
         </m.div>
@@ -719,10 +713,10 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
           style={{ boxShadow: "var(--shadow)" }}
         >
           {/* Replay button */}
-          <Flex justify="space-between" align="center" className="mb-3">
-            <Text className="text-xs font-bold text-text-muted">
+          <div className="mb-3">
+            <span className="text-xs font-bold text-text-muted">
               <Mic size={14} className="text-accent" /> Roleplay — Select the character you want to practice
-            </Text>
+            </span>
             <m.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -732,8 +726,8 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             >
               <PlayCircle /> Replay
             </m.button>
-          </Flex>
-          <Flex gap={8} className="role-play-buttons">
+          </div>
+          <div className="role-play-buttons">
             {dlg.voiceAssignments.map((a) => {
               const line = dlg.dialogue!.lines.find((l) => l.speaker === a.speaker);
               return (
@@ -753,7 +747,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                 </m.button>
               );
             })}
-          </Flex>
+          </div>
         </m.div>
       )}
 
@@ -770,11 +764,11 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               boxShadow: "0 4px 20px var(--accent-muted), var(--shadow-md)",
             }}
           >
-            <Flex justify="space-between" align="center">
-              <Text className="text-sm font-extrabold text-accent">
+            <div>
+              <span className="text-sm font-extrabold text-accent">
                 <Mic size={14} /> Roleplay Active — You are{" "}
                 {dlg.dialogue.lines.find((l) => l.speaker === rolePlaySpeaker)?.name ?? "..."}
-              </Text>
+              </span>
               <m.button
                 whileTap={{ scale: 0.95 }}
                 onClick={() => {
@@ -787,7 +781,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               >
                 Exit
               </m.button>
-            </Flex>
+            </div>
 
             {rolePlayStep === "idle" && (
               <m.button
@@ -805,33 +799,33 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             )}
 
             {rolePlayStep === "listening" && (
-              <Flex align="center" justify="center" gap={8} className="p-3">
+              <div className="p-3">
                 <m.div
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ repeat: Infinity, duration: 1.5 }}
                   className="w-[12px] h-[12px] rounded-full"
                   style={{ background: "var(--accent)" }}
                 />
-                <Text className="text-sm font-bold text-accent">Listening to speaker...</Text>
-              </Flex>
+                <span className="text-sm font-bold text-accent">Listening to speaker...</span>
+              </div>
             )}
 
             {rolePlayStep === "recording" && (
-              <Flex vertical gap={8} align="center" className="p-3">
-                <Flex align="center" gap={8}>
+              <div className="p-3">
+                <div>
                   <m.div
                     animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }}
                     transition={{ repeat: Infinity, duration: 1 }}
                     className="w-[14px] h-[14px] rounded-full"
                     style={{ background: "var(--error)" }}
                   />
-                  <Text className="text-sm font-bold text-destructive">
+                  <span className="text-sm font-bold text-destructive">
                     Your turn! Read your line
-                  </Text>
-                </Flex>
-                <Text className="text-text-secondary text-[13px]">
+                  </span>
+                </div>
+                <span className="text-text-secondary text-[13px]">
                   &quot;{dlg.dialogue.lines[rolePlayLineIndex]?.text}&quot;
-                </Text>
+                </span>
                 <m.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -845,14 +839,14 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                 >
                   <StopCircle /> Stop & Grade
                 </m.button>
-              </Flex>
+              </div>
             )}
 
             {rolePlayStep === "evaluating" && (
-              <Flex align="center" justify="center" gap={8} className="p-4">
+              <div className="p-4">
                 <Loader2 className="animate-spin text-accent" size={20} />
-                <Text className="text-sm font-bold text-accent">🤖 AI Grading...</Text>
-              </Flex>
+                <span className="text-sm font-bold text-accent">🤖 AI Grading...</span>
+              </div>
             )}
 
             {rolePlayStep === "result" && rolePlayResult && (

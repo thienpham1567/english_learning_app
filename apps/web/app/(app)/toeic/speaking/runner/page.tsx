@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, Modal, Progress, Tag } from "antd";
+
 import { Mic, VolumeX } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -186,7 +186,7 @@ export default function SpeakingRunnerPage() {
     return (
       <div className="p-6">
         <div className="text-destructive mb-3">{error}</div>
-        <Button onClick={() => router.push("/toeic/speaking")}>Về Hub</Button>
+        <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" onClick={() => router.push("/toeic/speaking")}>Về Hub</button>
       </div>
     );
   }
@@ -196,7 +196,7 @@ export default function SpeakingRunnerPage() {
         <div className="text-destructive mb-3">
           Cần quyền microphone để làm Speaking test. Cho phép trong cài đặt browser rồi reload.
         </div>
-        <Button onClick={() => router.push("/toeic/speaking")}>Về Hub</Button>
+        <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" onClick={() => router.push("/toeic/speaking")}>Về Hub</button>
       </div>
     );
   }
@@ -217,7 +217,7 @@ export default function SpeakingRunnerPage() {
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
       <div className="p-4 grid gap-3 w-[720px]">
         <div className="flex justify-between items-center">
-          <Tag color={phase === "recording" ? "red" : phase === "prep" ? "orange" : "default"}>
+          <span className="bg-red-500/15 text-red-600 py-0.5 px-2 inline-block">
             {phase === "prep" && `Chuẩn bị · ${sec}s`}
             {phase === "recording" && (
               <>
@@ -229,25 +229,28 @@ export default function SpeakingRunnerPage() {
                 <VolumeX /> Đang upload + chấm…
               </>
             )}
-          </Tag>
+          </span>
           <span className="text-text-muted">Max {current.maxScore} điểm</span>
         </div>
-        <Progress
-          percent={Math.round((elapsed / Math.max(1, phaseLimit)) * 100)}
-          showInfo={false}
-          size="small"
-          strokeColor={phase === "recording" ? "var(--error)" : "var(--accent)"}
-        />
+        <div className="h-2 rounded-full bg-border overflow-hidden">
+          <div
+            className="h-full rounded-full transition-all duration-300"
+            style={{
+              width: `${Math.round((elapsed / Math.max(1, phaseLimit)) * 100)}%`,
+              background: phase === "recording" ? "var(--error)" : "var(--accent)",
+            }}
+          />
+        </div>
 
         {current.type === "q1_2_read_aloud" && (
-          <Card>
+          <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
             <div className="text-[13px] text-text-muted">Đọc to đoạn dưới</div>
             <div className="text-lg leading-relaxed mt-2">{current.textToRead}</div>
-          </Card>
+          </div>
         )}
 
         {current.type === "q3_4_describe_picture" && current.imageUrl && (
-          <Card>
+          <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
             <img
               loading="lazy"
               decoding="async"
@@ -257,50 +260,50 @@ export default function SpeakingRunnerPage() {
               style={{ maxWidth: "100%" }}
             />
             <div className="text-[13px] text-text-muted mt-2">Mô tả ảnh càng chi tiết càng tốt</div>
-          </Card>
+          </div>
         )}
 
         {current.type === "q5_7_respond_question" && (
-          <Card>
+          <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
             <div className="text-[13px] text-text-muted">Trả lời câu hỏi</div>
             <div className="text-lg mt-2">{current.questionText}</div>
-          </Card>
+          </div>
         )}
 
         {current.type === "q8_10_respond_info" && (
           <>
-            <Card size="small">
+            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
               <div className="text-[13px] text-text-muted">Context</div>
               <div className="mt-1.5" style={{ whiteSpace: "pre-wrap" }}>
                 {current.contextText}
               </div>
-            </Card>
-            <Card>
+            </div>
+            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
               <div className="text-[13px] text-text-muted">Câu hỏi</div>
               <div className="text-lg mt-2">{current.questionText}</div>
-            </Card>
+            </div>
           </>
         )}
 
         {current.type === "q11_opinion" && (
-          <Card>
+          <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
             <div className="text-[13px] text-text-muted">Topic</div>
             <div className="text-lg mt-2">{current.topic}</div>
             {current.topicVi && (
               <div className="text-text-muted text-sm mt-1">{current.topicVi}</div>
             )}
-          </Card>
+          </div>
         )}
 
         {phase === "recording" && (
-          <Button danger onClick={() => void stopAndSubmit()}>
+          <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" onClick={() => void stopAndSubmit()}>
             Dừng + Nộp câu này
-          </Button>
+          </button>
         )}
         {phase === "prep" && (
-          <Button type="primary" onClick={() => void startRecording()}>
+          <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" onClick={() => void startRecording()}>
             Sẵn sàng — bắt đầu ghi sớm
-          </Button>
+          </button>
         )}
       </div>
     </div>

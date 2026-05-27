@@ -1,6 +1,5 @@
 "use client";
 
-import { Card } from "antd";
 import Link from "next/link";
 import * as m from "motion/react-client";
 import {
@@ -39,67 +38,33 @@ const ACTIONS: Array<{
 
 export function QuickActions() {
   return (
-    <Card title="Quick Actions" size="small">
-      <div
-        style={{
-          display: "grid",
-          gap: 8,
-          gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-        }}
-      >
+    <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+      <div className="grid gap-2 grid-cols-[repeat(auto-fit,minmax(140px,1fr))]">
         {ACTIONS.map((a) => {
           const Icon = a.icon;
           return a.available ? (
             <m.div key={a.href} whileHover={{ y: -2, scale: 1.02 }} whileTap={{ scale: 0.98 }}>
               <Link
                 href={a.href}
-                className="cursor-pointer"
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: 8,
-                  padding: 14,
-                  borderRadius: 10,
-                  background: "var(--surface-hover)",
-                  border: "1px solid var(--border)",
-                  color: "var(--ink)",
-                  textDecoration: "none",
-                  textAlign: "center",
-                  transition: "background 0.2s, border-color 0.2s",
-                }}
+                className="flex flex-col items-center justify-center gap-2 p-3.5 rounded-[10px] bg-surface-hover border border-border text-ink no-underline text-center cursor-pointer transition-all duration-200 hover:border-accent"
               >
                 <Icon size={20} className="text-accent" />
-                <div style={{ fontSize: 13, fontWeight: 700 }}>{a.label}</div>
+                <div className="text-[13px] font-bold">{a.label}</div>
               </Link>
             </m.div>
           ) : (
             <div
               key={a.href}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: 8,
-                padding: 14,
-                borderRadius: 10,
-                background: "var(--surface)",
-                border: "1px solid var(--border)",
-                color: "var(--text-muted)",
-                textAlign: "center",
-                cursor: "not-allowed",
-              }}
+              className="flex flex-col items-center justify-center gap-2 p-3.5 rounded-[10px] bg-surface border border-border text-text-muted text-center cursor-not-allowed"
               title="Coming Soon"
             >
               <Icon size={20} />
-              <div style={{ fontSize: 13, fontWeight: 700 }}>{a.label}</div>
-              <div style={{ fontSize: 11, opacity: 0.6 }}>Coming Soon</div>
+              <div className="text-[13px] font-bold">{a.label}</div>
+              <div className="text-xs opacity-60">Coming Soon</div>
             </div>
           );
         })}
       </div>
-    </Card>
+    </div>
   );
 }

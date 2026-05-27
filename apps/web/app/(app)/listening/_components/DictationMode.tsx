@@ -1,6 +1,5 @@
 "use client";
 
-import { Progress, Tag } from "antd";
 import {
   Check,
   ChevronRight,
@@ -14,6 +13,7 @@ import {
 import { motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AudioPlayer } from "@/app/(app)/listening/_components/AudioPlayer";
+import { Button } from "@/components/ui/button";
 import { useSentenceAudio } from "@/hooks/useSentenceAudio";
 import { api } from "@/lib/api-client";
 
@@ -34,15 +34,21 @@ interface Props {
 const MAX_REPLAYS = 3;
 
 const STATUS_COLORS: Record<string, string> = {
-  correct: "var(--success)",
-  wrong: "var(--error)",
-  missing: "var(--warning)",
+  correct: "text-[var(--success)]",
+  wrong: "text-[var(--error)]",
+  missing: "text-[var(--warning)]",
 };
 
 const STATUS_BG: Record<string, string> = {
-  correct: "color-mix(in srgb, var(--success) 8%, transparent)",
-  wrong: "color-mix(in srgb, var(--error) 8%, transparent)",
-  missing: "color-mix(in srgb, var(--warning) 8%, transparent)",
+  correct: "bg-success-bg border-[var(--success)]",
+  wrong: "bg-error-bg border-[var(--error)]",
+  missing: "bg-warning-bg border-[var(--warning)]",
+};
+
+const STATUS_DOT: Record<string, string> = {
+  correct: "bg-[var(--success)]",
+  wrong: "bg-[var(--error)]",
+  missing: "bg-[var(--warning)]",
 };
 
 /** Normalize text for comparison: lowercase, strip punctuation */
@@ -68,6 +74,24 @@ function diffWords(target: string, typed: string): DiffWord[] {
       return { word, status: "missing" };
     }
   });
+}
+
+function scoreColorClass(score: number): string {
+  if (score >= 80) return "text-[var(--success)]";
+  if (score >= 50) return "text-[var(--warning)]";
+  return "text-[var(--error)]";
+}
+
+function scoreBorderColor(score: number): string {
+  if (score >= 80) return "border-[var(--success)]";
+  if (score >= 50) return "border-[var(--warning)]";
+  return "border-[var(--error)]";
+}
+
+function scoreBgColor(score: number): string {
+  if (score >= 80) return "bg-success-bg";
+  if (score >= 50) return "bg-warning-bg";
+  return "bg-error-bg";
 }
 
 export default function DictationMode({ examMode }: Props) {
@@ -199,50 +223,36 @@ export default function DictationMode({ examMode }: Props) {
 
   // ── RENDER ──
   return (
-    <div className="w-[600px] mx-auto w-full">
+    <div className="w-full max-w-2xl mx-auto">
       {error && (
-        <div
-          className="py-2.5 px-4 rounded-lg text-destructive mb-4 text-[13px]"
-          style={{
-            background: "var(--error-bg)",
-            border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)",
-          }}
-        >
+        <div className="py-2.5 px-4 rounded-lg text-[var(--error)] mb-4 text-[13px] bg-error-bg border-2 border-[color-mix(in_srgb,var(--error)_25%,var(--border))] flex items-center gap-1.5">
           ⚠️ {error}
         </div>
       )}
 
       {/* ── Idle ── */}
       {state === "idle" && (
-        <div
-          className="text-center p-8 border-2 border-border rounded-2xl"
-          style={{ background: "var(--card-bg)" }}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center p-8 border-2 border-border rounded-lg bg-surface shadow-(--shadow)"
         >
-          <Pencil size={48} className="text-accent" />
-          <h2 className="mb-2 text-lg">Dictation</h2>
+          <Pencil size={48} className="text-accent mx-auto mb-3" />
+          <h2 className="mb-2 text-lg font-black text-text-primary">Dictation</h2>
           <p className="text-text-secondary mb-2 text-[13px]">Listen → Type → Check each word</p>
-          <p className="text-text-secondary text-xs" style={{ margin: "0 0 24px" }}>
+          <p className="text-text-secondary text-xs mb-6">
             5 sentences per session · Max 3 replays · +25 XP
           </p>
-          <button
-            onClick={startSession}
-            className="border-none text-[15px] font-semibold cursor-pointer"
-            style={{
-              padding: "12px 32px",
-              borderRadius: 10,
-              background: "var(--accent)",
-              color: "var(--text-on-accent)",
-            }}
-          >
+          <Button onClick={startSession} className="h-11 px-8 text-[15px] font-black">
             Start Dictation
-          </button>
-        </div>
+          </Button>
+        </motion.div>
       )}
 
       {/* ── Loading ── */}
       {state === "loading" && (
-        <div className="text-center" style={{ padding: 40 }}>
-          <Loader2 className="animate-spin text-accent" size={32} />
+        <div className="text-center py-10">
+          <Loader2 className="animate-spin text-accent mx-auto" size={32} />
           <p className="text-text-secondary mt-3">Generating exercise...</p>
         </div>
       )}
@@ -251,23 +261,22 @@ export default function DictationMode({ examMode }: Props) {
       {state === "ready" && currentSentence && (
         <div className="flex flex-col gap-5">
           {/* Progress */}
-          <div className="flex items-center gap-2 text-[13px] text-text-secondary">
-            <span>
+          <div className="flex items-center gap-3 text-[13px] text-text-secondary">
+            <span className="font-bold">
               Sentence {currentIdx + 1}/{sentences.length}
             </span>
-            <Progress
-              percent={((currentIdx + 1) / sentences.length) * 100}
-              size="small"
-              showInfo={false}
-              className="flex-1"
-            />
+            <div className="flex-1 h-1.5 rounded-full bg-bg-deep overflow-hidden">
+              <motion.div
+                className="h-full rounded-full bg-accent"
+                initial={{ width: 0 }}
+                animate={{ width: `${((currentIdx + 1) / sentences.length) * 100}%` }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              />
+            </div>
           </div>
 
           {/* Instruction */}
-          <div
-            className="p-4 rounded-xl text-center border-2 border-border"
-            style={{ background: "var(--card-bg)" }}
-          >
+          <div className="p-4 rounded-lg text-center border-2 border-border bg-surface">
             <p className="text-sm text-text-secondary m-0">🎧 Listen and type the sentence you hear</p>
           </div>
 
@@ -283,8 +292,8 @@ export default function DictationMode({ examMode }: Props) {
               selfManagedSpeed
             />
           ) : sentenceAudio.isLoading ? (
-            <div className="text-center" style={{ padding: 20 }}>
-              <Loader2 className="animate-spin text-accent" size={24} />
+            <div className="text-center py-5">
+              <Loader2 className="animate-spin text-accent mx-auto" size={24} />
               <p className="text-xs text-text-muted mt-2">Generating audio...</p>
             </div>
           ) : null}
@@ -302,27 +311,14 @@ export default function DictationMode({ examMode }: Props) {
                 checkAnswer();
               }
             }}
-            className="w-full h-[100px] p-4 rounded-xl border-2 border-border text-[15px] leading-relaxed"
-            style={{
-              background: "var(--card-bg, var(--surface))",
-              resize: "vertical",
-              color: "var(--text)",
-              fontFamily: "inherit",
-            }}
+            className="w-full h-[100px] p-4 rounded-lg border-2 border-border text-[15px] leading-relaxed bg-surface text-text-primary font-[inherit] resize-y outline-none focus-visible:shadow-(--shadow-sm) focus-visible:-translate-y-0.5 transition-all"
           />
 
           {/* Check button */}
-          <button
+          <Button
             onClick={checkAnswer}
             disabled={!typedText.trim()}
-            className="border-none text-[15px] font-semibold flex items-center justify-center gap-1.5"
-            style={{
-              padding: "12px 24px",
-              borderRadius: 10,
-              background: typedText.trim() ? "var(--accent)" : "var(--border)",
-              color: "var(--text-on-accent)",
-              cursor: typedText.trim() ? "pointer" : "not-allowed",
-            }}
+            className="h-11 text-[15px] font-black flex items-center justify-center gap-1.5"
           >
             Check{" "}
             <motion.span
@@ -332,7 +328,7 @@ export default function DictationMode({ examMode }: Props) {
             >
               <Check size={16} />
             </motion.span>
-          </button>
+          </Button>
         </div>
       )}
 
@@ -340,23 +336,31 @@ export default function DictationMode({ examMode }: Props) {
       {state === "checked" && currentSentence && (
         <div className="flex flex-col gap-4">
           {/* Score */}
-          <div
-            className="p-6 rounded-2xl border-2 border-border text-center"
-            style={{ background: "var(--card-bg)" }}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className={`p-6 rounded-lg border-2 border-border text-center bg-surface shadow-(--shadow)`}
           >
-            <Progress
-              type="circle"
-              percent={accuracy}
-              size={100}
-              strokeColor={
-                accuracy >= 80
-                  ? "var(--success)"
-                  : accuracy >= 50
-                    ? "var(--warning)"
-                    : "var(--error)"
-              }
-              format={(pct) => <span className="text-3xl font-bold">{pct}%</span>}
-            />
+            {/* Custom circular progress */}
+            <div className="relative w-[100px] h-[100px] mx-auto mb-3">
+              <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+                <circle cx="50" cy="50" r="42" fill="none" stroke="var(--bg-deep)" strokeWidth="8" />
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="42"
+                  fill="none"
+                  stroke={accuracy >= 80 ? "var(--success)" : accuracy >= 50 ? "var(--warning)" : "var(--error)"}
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  strokeDasharray={`${accuracy * 2.64} 264`}
+                  className="transition-all duration-700 ease-out"
+                />
+              </svg>
+              <span className={`absolute inset-0 flex items-center justify-center text-3xl font-black ${scoreColorClass(accuracy)}`}>
+                {accuracy}%
+              </span>
+            </div>
             <p className="text-[13px] text-text-secondary mt-2">
               {accuracy === 100
                 ? "Perfect! 🎉"
@@ -366,139 +370,113 @@ export default function DictationMode({ examMode }: Props) {
                     ? "Good job, keep it up! 💪"
                     : "Needs practice 📝"}
             </p>
-          </div>
+          </motion.div>
 
           {/* Word diff */}
-          <div
-            className="p-4 rounded-xl border-2 border-border"
-            style={{ background: "var(--card-bg)" }}
-          >
-            <p className="text-xs text-text-secondary mb-2 font-semibold">Word Analysis:</p>
+          <div className="p-4 rounded-lg border-2 border-border bg-surface">
+            <p className="text-xs text-text-secondary mb-2 font-bold">Word Analysis:</p>
             <div className="flex flex-wrap gap-1.5">
               {diff.map((w, i) => (
                 <span
                   key={i}
-                  className="inline-block py-1 px-2 rounded-md text-sm font-medium"
-                  style={{
-                    background: STATUS_BG[w.status],
-                    color: STATUS_COLORS[w.status],
-                    border: `1px solid ${STATUS_COLORS[w.status]}33`,
-                  }}
+                  className={`inline-flex items-center gap-0.5 py-1 px-2 rounded-lg text-sm font-medium border ${STATUS_BG[w.status]} ${STATUS_COLORS[w.status]}`}
                 >
-                  {w.status === "correct" && <CircleCheckBig className="mr-1 text-[11px]" />}
-                  {w.status === "wrong" && <XCircle className="mr-1 text-[11px]" />}
-                  {w.status === "missing" && <Info className="mr-1 text-[11px]" />}
+                  {w.status === "correct" && <CircleCheckBig size={11} />}
+                  {w.status === "wrong" && <XCircle size={11} />}
+                  {w.status === "missing" && <Info size={11} />}
                   {w.word}
                   {w.status === "wrong" && w.typed && (
-                    <span className="text-[11px] ml-1" style={{ opacity: 0.7 }}>
-                      ({w.typed})
-                    </span>
+                    <span className="text-[11px] ml-1 opacity-70">({w.typed})</span>
                   )}
                 </span>
               ))}
             </div>
             <div className="mt-3 flex gap-4 text-[11px] text-text-secondary">
-              <span>
-                <span style={{ color: STATUS_COLORS.correct }}>●</span> Correct
+              <span className="flex items-center gap-1">
+                <span className={`w-2 h-2 rounded-full ${STATUS_DOT.correct}`} /> Correct
               </span>
-              <span>
-                <span style={{ color: STATUS_COLORS.wrong }}>●</span> Incorrect
+              <span className="flex items-center gap-1">
+                <span className={`w-2 h-2 rounded-full ${STATUS_DOT.wrong}`} /> Incorrect
               </span>
-              <span>
-                <span style={{ color: STATUS_COLORS.missing }}>●</span> Missing
+              <span className="flex items-center gap-1">
+                <span className={`w-2 h-2 rounded-full ${STATUS_DOT.missing}`} /> Missing
               </span>
             </div>
           </div>
 
           {/* Revealed original */}
-          <div
-            className="p-4 rounded-xl border-2 border-border"
-            style={{ background: "var(--card-bg)" }}
-          >
-            <p className="text-xs text-text-secondary font-semibold" style={{ margin: "0 0 4px" }}>
-              Original Sentence:
-            </p>
-            <p className="text-base font-semibold" style={{ margin: "0 0 4px" }}>
-              {currentSentence.text}
-            </p>
-            <p className="text-[13px] text-text-secondary mb-2" style={{ fontFamily: "serif" }}>
-              {currentSentence.ipa}
-            </p>
-            <p className="text-xs text-text-secondary m-0">
-              <Info className="mr-1" />
+          <div className="p-4 rounded-lg border-2 border-border bg-surface">
+            <p className="text-xs text-text-secondary font-bold mb-1">Original Sentence:</p>
+            <p className="text-base font-bold mb-1 text-text-primary">{currentSentence.text}</p>
+            <p className="text-[13px] text-text-secondary mb-2 font-serif">{currentSentence.ipa}</p>
+            <p className="text-xs text-text-secondary m-0 flex items-center gap-1">
+              <Info size={11} />
               {currentSentence.tip}
             </p>
           </div>
 
           {/* What you typed */}
-          <div
-            className="p-4 rounded-xl border-2 border-border"
-            style={{ background: "var(--card-bg)" }}
-          >
-            <p className="text-xs text-text-secondary font-semibold" style={{ margin: "0 0 4px" }}>
-              You typed:
-            </p>
-            <p className="text-[15px] m-0 italic">&ldquo;{typedText}&rdquo;</p>
+          <div className="p-4 rounded-lg border-2 border-border bg-surface">
+            <p className="text-xs text-text-secondary font-bold mb-1">You typed:</p>
+            <p className="text-[15px] m-0 italic text-text-primary">&ldquo;{typedText}&rdquo;</p>
           </div>
 
           {/* Actions */}
           <div className="flex gap-3 justify-center">
-            <button
+            <motion.button
               onClick={retryCurrent}
-              className="rounded-lg border-2 border-border bg-transparent cursor-pointer text-[13px] font-medium"
-              style={{ padding: "10px 20px", color: "var(--text)" }}
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              className="rounded-lg border-2 border-border bg-surface cursor-pointer text-[13px] font-bold py-2.5 px-5 text-text-primary hover:bg-surface-hover hover:shadow-(--shadow-sm) transition-all duration-100 flex items-center gap-1.5"
             >
-              <RefreshCw /> Retry
-            </button>
-            <button
+              <RefreshCw size={14} /> Retry
+            </motion.button>
+            <Button
               onClick={nextSentence}
-              className="rounded-lg border-none cursor-pointer text-[13px] font-semibold"
-              style={{
-                padding: "10px 20px",
-                background: "var(--accent)",
-                color: "var(--text-on-accent)",
-              }}
+              className="text-[13px] font-black py-2.5 px-5 flex items-center gap-1.5"
             >
               {currentIdx < sentences.length - 1 ? (
                 <>
-                  Next Sentence <ChevronRight />
+                  Next Sentence <ChevronRight size={14} />
                 </>
               ) : (
                 <>
-                  Complete <CircleCheckBig />
+                  Complete <CircleCheckBig size={14} />
                 </>
               )}
-            </button>
+            </Button>
           </div>
         </div>
       )}
 
       {/* ── Summary ── */}
       {state === "summary" && (
-        <div
-          className="text-center p-8 border-2 border-border rounded-2xl"
-          style={{ background: "var(--card-bg)" }}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center p-8 border-2 border-border rounded-lg bg-surface shadow-(--shadow)"
         >
-          <div className="mb-4" style={{ fontSize: 48 }}>
+          <div className="mb-4">
             {avgScore >= 80 ? (
-              <CircleCheckBig className="text-emerald-500" />
+              <CircleCheckBig size={48} className="text-[var(--success)] mx-auto" />
             ) : avgScore >= 50 ? (
-              <Info style={{ color: "var(--warning)" }} />
+              <Info size={48} className="text-[var(--warning)] mx-auto" />
             ) : (
-              <XCircle className="text-destructive" />
+              <XCircle size={48} className="text-[var(--error)] mx-auto" />
             )}
           </div>
-          <h2 className="mb-2">Dictation Completed!</h2>
+          <h2 className="mb-2 text-lg font-black text-text-primary">Dictation Completed!</h2>
           <p className="text-text-secondary mb-2">
-            Average Accuracy: <strong className="text-accent text-3xl">{avgScore}%</strong>
+            Average Accuracy: <strong className={`text-3xl ${scoreColorClass(avgScore)}`}>{avgScore}%</strong>
           </p>
           {xpAwarded > 0 && (
-            <p className="text-accent text-[13px] font-semibold mb-2">+{xpAwarded} XP</p>
+            <p className="text-accent text-[13px] font-bold mb-2">+{xpAwarded} XP</p>
           )}
           {skillUpdate && (
             <p
-              className="text-[13px] mb-4"
-              style={{ color: skillUpdate.levelUp ? "var(--success)" : "var(--text-secondary)" }}
+              className={`text-[13px] mb-4 ${
+                skillUpdate.levelUp ? "text-[var(--success)]" : "text-text-secondary"
+              }`}
             >
               {skillUpdate.levelUp
                 ? `🎉 Listening Level: ${skillUpdate.cefr}!`
@@ -507,28 +485,18 @@ export default function DictationMode({ examMode }: Props) {
           )}
           <div className="flex gap-2 justify-center flex-wrap mb-5">
             {sessionScores.map((s, i) => (
-              <Tag
+              <span
                 key={i}
-                color={s >= 80 ? "success" : s >= 50 ? "warning" : "error"}
-                className="text-[13px]"
-                style={{ padding: "3px 10px" }}
+                className={`text-[13px] font-bold py-1 px-2.5 rounded-lg border-2 ${scoreBorderColor(s)} ${scoreBgColor(s)} ${scoreColorClass(s)}`}
               >
                 Sentence {i + 1}: {s}%
-              </Tag>
+              </span>
             ))}
           </div>
-          <button
-            onClick={startSession}
-            className="rounded-lg border-none text-sm font-semibold cursor-pointer"
-            style={{
-              padding: "10px 24px",
-              background: "var(--accent)",
-              color: "var(--text-on-accent)",
-            }}
-          >
-            <RefreshCw /> Practice Again
-          </button>
-        </div>
+          <Button onClick={startSession} className="h-10 px-6 text-sm font-black flex items-center gap-1.5 mx-auto">
+            <RefreshCw size={14} /> Practice Again
+          </Button>
+        </motion.div>
       )}
     </div>
   );

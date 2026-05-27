@@ -198,32 +198,19 @@ export async function HubWidgets() {
   return (
     <div className="grid gap-4">
       {/* Daily Plan — full width on top */}
-      <div
-        className="bg-(--surface) rounded-(--radius-xl)"
-        style={{
-          border: "1.5px solid var(--border)",
-          padding: "18px 20px",
-          boxShadow: "var(--shadow-sm)",
-        }}
-      >
-        <div className="flex justify-between items-center" style={{ marginBottom: 14 }}>
-          <h3
-            className="m-0 font-black text-text-primary flex items-center gap-1.5"
-            style={{ fontSize: 15.5 }}
-          >
-            <Calendar className="text-accent" />
+      <div className="bg-[var(--surface)] border-2 border-border rounded-xl p-[18px] shadow-sm">
+        <div className="flex justify-between items-center mb-3.5">
+          <h3 className="m-0 font-black text-text-primary flex items-center gap-1.5 text-[15.5px]">
+            <Calendar className="text-accent w-4.5 h-4.5" />
             <span>🎯 Recommended for Today</span>
           </h3>
-          <span
-            className="text-[11px] text-text-muted font-extrabold rounded-md bg-surface-alt border-2 border-border"
-            style={{ padding: "2px 8px" }}
-          >
+          <span className="text-[11px] text-text-muted font-extrabold rounded-md bg-surface-alt border-2 border-border px-2 py-0.5">
             {planItems.reduce((s, i) => s + i.estimatedMinutes, 0)} mins estimated
           </span>
         </div>
 
         {planItems.length === 0 ? (
-          <div className="text-text-muted text-[13px] font-medium" style={{ padding: "8px 0" }}>
+          <div className="text-text-muted text-[13px] font-medium py-2">
             Complete the diagnostic test to receive personalized study recommendations.
           </div>
         ) : (
@@ -234,34 +221,23 @@ export async function HubWidgets() {
                 <Link
                   key={item.id}
                   href={item.href}
-                  className="grid gap-3 items-center rounded-(--radius-lg) bg-surface-alt text-text-primary"
-                  style={{
-                    gridTemplateColumns: "auto 1fr auto",
-                    padding: "12px 14px",
-                    border: "1.5px solid var(--border)",
-                    textDecoration: "none",
-                    transition: "all 0.15s ease",
-                  }}
+                  className="grid gap-3 items-center rounded-lg bg-surface-alt text-text-primary grid-cols-[auto_1fr_auto] p-3 px-3.5 border-2 border-border no-underline transition-all duration-150 hover:border-accent"
                 >
                   <span
-                    className="text-[10.5px] font-black rounded-md"
+                    className="text-[10.5px] font-black rounded-md px-2 py-0.5 border"
                     style={{
-                      padding: "2px 8px",
                       background: colorSet.bg,
                       color: colorSet.text,
-                      border: `1px solid ${colorSet.border}`,
+                      borderColor: colorSet.border,
                     }}
                   >
                     {item.estimatedMinutes}m
                   </span>
                   <div>
-                    <div className="font-extrabold" style={{ fontSize: 13.5 }}>
+                    <div className="font-extrabold text-[13.5px]">
                       {item.title}
                     </div>
-                    <div
-                      className="text-text-muted font-medium"
-                      style={{ fontSize: 11.5, marginTop: 1 }}
-                    >
+                    <div className="text-text-muted font-medium text-[11.5px] mt-[1px]">
                       {item.reason}
                     </div>
                   </div>
@@ -274,40 +250,24 @@ export async function HubWidgets() {
       </div>
 
       {/* Status widgets grid */}
-      <div
-        className="grid gap-3"
-        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(210px, 1fr))" }}
-      >
+      <div className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(210px,1fr))]">
         {/* Predicted Score Card */}
-        <div
-          className="bg-(--surface) rounded-(--radius-xl) flex flex-col justify-between gap-3"
-          style={{
-            border: "1.5px solid var(--border)",
-            padding: "16px 18px",
-            boxShadow: "var(--shadow-sm)",
-          }}
-        >
+        <div className="bg-[var(--surface)] rounded-xl flex flex-col justify-between gap-3 border-2 border-border p-[18px] shadow-sm">
           <div>
-            <span
-              className="text-[11px] uppercase text-text-secondary"
-              style={{ fontWeight: 850, letterSpacing: "0.06em" }}
-            >
+            <span className="text-[11px] uppercase text-text-secondary font-[850] tracking-[0.06em]">
               📈 Predicted Score
             </span>
             {predicted ? (
               <div className="mt-2">
-                <div
-                  className="text-text-primary font-display"
-                  style={{ fontSize: 26, fontWeight: 950, lineHeight: 1.1 }}
-                >
+                <div className="text-text-primary font-display text-[26px] font-[950] leading-[1.1]">
                   {predicted.total}
                 </div>
-                <div className="text-xs text-text-muted" style={{ fontWeight: 650, marginTop: 2 }}>
+                <div className="text-xs text-text-muted font-[650] mt-0.5">
                   {bandLabel(predicted.total)}
                 </div>
               </div>
             ) : (
-              <div className="text-text-muted mt-3" style={{ fontSize: 12.5, fontWeight: 650 }}>
+              <div className="text-text-muted mt-3 text-[12.5px] font-[650]">
                 Need mock test data
               </div>
             )}
@@ -315,8 +275,7 @@ export async function HubWidgets() {
           {predicted && (
             <Link
               href="/toeic/progress"
-              className="text-accent text-xs font-extrabold"
-              style={{ textDecoration: "none" }}
+              className="text-accent text-xs font-extrabold no-underline hover:underline"
             >
               View detailed chart →
             </Link>
@@ -324,33 +283,20 @@ export async function HubWidgets() {
         </div>
 
         {/* Last Mock Card */}
-        <div
-          className="bg-(--surface) rounded-(--radius-xl) flex flex-col justify-between gap-3"
-          style={{
-            border: "1.5px solid var(--border)",
-            padding: "16px 18px",
-            boxShadow: "var(--shadow-sm)",
-          }}
-        >
+        <div className="bg-[var(--surface)] rounded-xl flex flex-col justify-between gap-3 border-2 border-border p-[18px] shadow-sm">
           <div>
-            <span
-              className="text-[11px] uppercase text-text-secondary"
-              style={{ fontWeight: 850, letterSpacing: "0.06em" }}
-            >
+            <span className="text-[11px] uppercase text-text-secondary font-[850] tracking-[0.06em]">
               🎯 Latest Mock Test
             </span>
             {lastMock?.totalScaled ? (
               <div className="mt-2">
-                <div
-                  className="text-text-primary font-display"
-                  style={{ fontSize: 26, fontWeight: 950, lineHeight: 1.1 }}
-                >
+                <div className="text-text-primary font-display text-[26px] font-[950] leading-[1.1]">
                   {lastMock.totalScaled}{" "}
                   <span className="text-sm text-text-muted font-bold">/ 990</span>
                 </div>
               </div>
             ) : (
-              <div className="text-text-muted mt-3" style={{ fontSize: 12.5, fontWeight: 650 }}>
+              <div className="text-text-muted mt-3 text-[12.5px] font-[650]">
                 No mock tests taken yet
               </div>
             )}
@@ -358,16 +304,14 @@ export async function HubWidgets() {
           {lastMock?.totalScaled ? (
             <Link
               href={`/toeic/mock-test/${lastMock.id}/result`}
-              className="text-accent text-xs font-extrabold"
-              style={{ textDecoration: "none" }}
+              className="text-accent text-xs font-extrabold no-underline hover:underline"
             >
               View detailed results →
             </Link>
           ) : (
             <Link
               href="/toeic/mock-test"
-              className="text-accent text-xs font-extrabold"
-              style={{ textDecoration: "none" }}
+              className="text-accent text-xs font-extrabold no-underline hover:underline"
             >
               Take mock test now →
             </Link>
@@ -375,63 +319,36 @@ export async function HubWidgets() {
         </div>
 
         {/* Activity Card */}
-        <div
-          className="bg-(--surface) rounded-(--radius-xl) flex flex-col justify-between gap-3"
-          style={{
-            border: "1.5px solid var(--border)",
-            padding: "16px 18px",
-            boxShadow: "var(--shadow-sm)",
-          }}
-        >
+        <div className="bg-[var(--surface)] rounded-xl flex flex-col justify-between gap-3 border-2 border-border p-[18px] shadow-sm">
           <div>
-            <span
-              className="text-[11px] uppercase text-text-secondary"
-              style={{ fontWeight: 850, letterSpacing: "0.06em" }}
-            >
+            <span className="text-[11px] uppercase text-text-secondary font-[850] tracking-[0.06em]">
               🔥 Today's Activity
             </span>
             <div className="mt-2">
-              <div
-                className="text-text-primary font-display"
-                style={{ fontSize: 26, fontWeight: 950, lineHeight: 1.1 }}
-              >
+              <div className="text-text-primary font-display text-[26px] font-[950] leading-[1.1]">
                 {todayActivity}
               </div>
-              <div className="text-xs text-text-muted" style={{ fontWeight: 650, marginTop: 2 }}>
+              <div className="text-xs text-text-muted font-[650] mt-0.5">
                 {todayActivity === 0 ? "No practice today" : "Keep the streak alive 🔥"}
               </div>
             </div>
           </div>
           <Link
             href="/toeic/practice"
-            className="text-accent text-xs font-extrabold"
-            style={{ textDecoration: "none" }}
+            className="text-accent text-xs font-extrabold no-underline hover:underline"
           >
             Practice new exam →
           </Link>
         </div>
 
         {/* Due Tasks Card */}
-        <div
-          className="bg-(--surface) rounded-(--radius-xl) flex flex-col justify-between gap-3"
-          style={{
-            border: "1.5px solid var(--border)",
-            padding: "16px 18px",
-            boxShadow: "var(--shadow-sm)",
-          }}
-        >
+        <div className="bg-[var(--surface)] rounded-xl flex flex-col justify-between gap-3 border-2 border-border p-[18px] shadow-sm">
           <div>
-            <span
-              className="text-[11px] uppercase text-text-secondary"
-              style={{ fontWeight: 850, letterSpacing: "0.06em" }}
-            >
+            <span className="text-[11px] uppercase text-text-secondary font-[850] tracking-[0.06em]">
               📚 Review Queue
             </span>
             <div className="mt-2">
-              <div
-                className="text-text-primary font-display"
-                style={{ fontSize: 26, fontWeight: 950, lineHeight: 1.1 }}
-              >
+              <div className="text-text-primary font-display text-[26px] font-[950] leading-[1.1]">
                 {dueCount} <span className="text-sm text-text-muted font-bold">questions</span>
               </div>
             </div>
@@ -439,8 +356,7 @@ export async function HubWidgets() {
           {dueCount > 0 ? (
             <Link
               href="/toeic/review"
-              className="text-destructive text-xs font-extrabold"
-              style={{ textDecoration: "none" }}
+              className="text-destructive text-xs font-extrabold no-underline hover:underline"
             >
               Review now →
             </Link>
@@ -452,3 +368,4 @@ export async function HubWidgets() {
     </div>
   );
 }
+

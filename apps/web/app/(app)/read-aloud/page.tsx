@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex, message, Typography } from "antd";
+import { toast } from "sonner";
 import { useCallback, useState } from "react";
 import { DialoguePlayer } from "./_components/DialoguePlayer";
 import { HistoryPanel } from "./_components/HistoryPanel";
@@ -15,7 +15,6 @@ import { useHistory } from "./_hooks/useHistory";
 import { Headphones, Mic, MessageSquare, Lightbulb } from "lucide-react";
 import { motion } from "motion/react";
 
-const { Title, Paragraph, Text } = Typography;
 
 type AppMode = "listen" | "shadow" | "dialogue";
 
@@ -58,14 +57,14 @@ export default function ReadAloudPage() {
     setSelectedRole(entry.voice);
     setSpeed(entry.speed);
     setShowHistory(false);
-    message.info('Passage reloaded — click "Start listening" to play');
+    toast.info('Passage reloaded — click "Start listening" to play');
   }, []);
 
   /* ── History clear all ── */
   const handleClearAllHistory = useCallback(() => {
     history.clearAll();
     clearBlobCache();
-    message.success("Successfully cleared all history");
+    toast.success("Successfully cleared all history");
   }, [history]);
 
   return (
@@ -73,7 +72,7 @@ export default function ReadAloudPage() {
       style={{ height: "100%", overflowY: "auto", padding: "var(--space-6)" }}
       className="anim-fade-up read-aloud-page-root"
     >
-      <Flex vertical gap="var(--space-5)" style={{ maxWidth: 1080, margin: "0 auto" }}>
+      <div  style={{ maxWidth: 1080, margin: "0 auto" }}>
         {/* Mode Tabs */}
         <div className="read-aloud-mode-tabs" style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {MODE_TABS.map((tab) => (
@@ -106,8 +105,7 @@ export default function ReadAloudPage() {
                 <tab.Icon size={18} />
               </motion.span>
               <div style={{ textAlign: "left" }}>
-                <div
-                  className="mode-label"
+                <div className="mode-label"
                   style={{
                     fontSize: 14,
                     fontWeight: mode === tab.key ? 800 : 600,
@@ -135,7 +133,7 @@ export default function ReadAloudPage() {
             className="read-aloud-grid"
           >
             {/* Left: Input & Samples */}
-            <Flex vertical gap="var(--space-4)">
+            <div>
               <TextInputPanel
                 text={text}
                 onTextChange={setText}
@@ -156,10 +154,10 @@ export default function ReadAloudPage() {
               />
 
               <PassageBrowser onSelectPassage={(passageText) => setText(passageText)} />
-            </Flex>
+            </div>
 
             {/* Right: Voice & Playback */}
-            <Flex vertical gap="var(--space-4)">
+            <div>
               <VoiceSelector selectedRole={selectedRole} onSelectRole={setSelectedRole} />
 
               <PlaybackControls
@@ -174,7 +172,7 @@ export default function ReadAloudPage() {
                 onTogglePlayback={audio.togglePlayback}
                 onStop={audio.stop}
               />
-            </Flex>
+            </div>
           </div>
         )}
 
@@ -189,7 +187,7 @@ export default function ReadAloudPage() {
             className="read-aloud-grid"
           >
             <ShadowingMode text={text} voiceRole={selectedRole} speed={speed} />
-            <Flex vertical gap="var(--space-4)">
+            <div>
               <VoiceSelector selectedRole={selectedRole} onSelectRole={setSelectedRole} />
               <div
                 style={{
@@ -199,7 +197,7 @@ export default function ReadAloudPage() {
                   padding: "var(--space-4)",
                 }}
               >
-                <Text
+                <span
                   style={{
                     fontSize: 12,
                     fontWeight: 700,
@@ -218,7 +216,7 @@ export default function ReadAloudPage() {
                     <Lightbulb size={14} />
                   </motion.span>
                   Shadowing Guide
-                </Text>
+                </span>
                 {[
                   "1. Enter text in the Listen tab",
                   "2. Switch to the Shadowing tab",
@@ -226,7 +224,7 @@ export default function ReadAloudPage() {
                   "4. AI grades your pronunciation",
                   "5. Retry or move to the next sentence",
                 ].map((tip, i) => (
-                  <Text
+                  <span
                     key={i}
                     style={{
                       fontSize: 12,
@@ -236,10 +234,10 @@ export default function ReadAloudPage() {
                     }}
                   >
                     {tip}
-                  </Text>
+                  </span>
                 ))}
               </div>
-            </Flex>
+            </div>
           </div>
         )}
 
@@ -254,7 +252,7 @@ export default function ReadAloudPage() {
             className="read-aloud-grid"
           >
             <DialoguePlayer voiceRole={selectedRole} speed={speed} />
-            <Flex vertical gap="var(--space-4)">
+            <div>
               <VoiceSelector selectedRole={selectedRole} onSelectRole={setSelectedRole} />
               <div
                 style={{
@@ -265,7 +263,7 @@ export default function ReadAloudPage() {
                   boxShadow: "var(--shadow-sm)",
                 }}
               >
-                <Text
+                <span
                   style={{
                     fontSize: 12,
                     fontWeight: 700,
@@ -284,7 +282,7 @@ export default function ReadAloudPage() {
                     <Lightbulb size={14} />
                   </motion.span>
                   Dialogue Guide
-                </Text>
+                </span>
                 {[
                   "1. Select topic and number of speakers",
                   '2. Click "Create conversation"',
@@ -292,7 +290,7 @@ export default function ReadAloudPage() {
                   "4. Roleplay as a character",
                   "5. Read your part and get graded",
                 ].map((tip, i) => (
-                  <Text
+                  <span
                     key={i}
                     style={{
                       fontSize: 12,
@@ -302,13 +300,13 @@ export default function ReadAloudPage() {
                     }}
                   >
                     {tip}
-                  </Text>
+                  </span>
                 ))}
               </div>
-            </Flex>
+            </div>
           </div>
         )}
-      </Flex>
+      </div>
 
       {/* CSS adjustments */}
       <style>{`

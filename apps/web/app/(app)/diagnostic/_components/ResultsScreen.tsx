@@ -1,18 +1,15 @@
 "use client";
 
-import { Card, Flex, Tag, Typography } from "antd";
 import { CheckCircle, ChevronRight, Radar, RefreshCw } from "lucide-react";
 import * as m from "motion/react-client";
 import { CEFR_COLORS } from "@/lib/constants/cefr";
 import type { TestResult } from "./types";
 
-const { Title, Text } = Typography;
-
 const SKILL_LABELS: Record<string, string> = {
-  grammar: "Ngữ pháp",
-  vocabulary: "Từ vựng",
-  reading: "Đọc hiểu",
-  listening: "Nghe hiểu",
+  grammar: "Grammar",
+  vocabulary: "Vocabulary",
+  reading: "Reading",
+  listening: "Listening",
 };
 
 type Props = {
@@ -25,79 +22,53 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
   const cefrColor = CEFR_COLORS[result.overallCefr] ?? "var(--accent)";
 
   return (
-    <div className="h-full overflow-y-auto bg-bg-deep" style={{ padding: "24px 20px 48px" }}>
-      <Flex vertical gap={20} className="w-[600px] mx-auto">
+    <div className="h-full overflow-y-auto bg-bg-deep py-6 px-5 pb-12">
+      <div className="w-full max-w-[600px] mx-auto flex flex-col gap-5">
         {/* Hero result card */}
         <m.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ type: "spring", stiffness: 100, damping: 15 }}
-          className="rounded-(--radius-xl) border-2 border-border text-center relative overflow-hidden"
+          className="rounded-xl border-2 border-border text-center relative overflow-hidden py-10 px-6 shadow-(--shadow-sm)"
           style={{
             background:
               "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--surface))",
-            padding: "40px 24px",
-            boxShadow: "var(--shadow-sm)",
           }}
         >
           {/* Radial ambient glow matching the CEFR level color */}
           <div
-            className="absolute w-[280px] h-[280px] rounded-full"
+            className="absolute w-[280px] h-[280px] rounded-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
             style={{
-              left: "50%",
-              top: "50%",
-              transform: "translate(-50%, -50%)",
               background: `radial-gradient(circle, ${cefrColor}12 0%, transparent 70%)`,
-              pointerEvents: "none",
             }}
           />
 
-          <CheckCircle className="anim-scale-in mb-4" style={{ fontSize: 44, color: cefrColor }} />
-          <Title level={4} className="mb-2.5 text-text-primary font-extrabold">
-            Hoàn thành đánh giá trình độ!
-          </Title>
+          <CheckCircle className="anim-scale-in mb-4 mx-auto" style={{ fontSize: 44, color: cefrColor }} />
+          <h4 className="mb-2.5 text-text-primary font-extrabold text-lg">
+            Assessment Completed!
+          </h4>
 
           <m.div
             initial={{ scale: 0.6, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.2, type: "spring", stiffness: 80 }}
-            className="font-black font-display"
+            className="font-black font-display text-[68px] tracking-tight leading-none my-3"
             style={{
-              fontSize: 68,
               color: cefrColor,
-              letterSpacing: "-0.04em",
-              lineHeight: 1.1,
-              margin: "12px 0",
               textShadow: `0 8px 24px ${cefrColor}33`,
             }}
           >
             {result.overallCefr}
           </m.div>
 
-          <Flex justify="center" gap={12} className="mt-4">
-            <span
-              className="rounded-full text-xs font-extrabold text-accent"
-              style={{
-                padding: "4px 14px",
-                border: "1px solid var(--accent)",
-                background: "var(--accent-light)",
-                boxShadow: "var(--shadow-sm)",
-              }}
-            >
-              Độ tin cậy: {Math.round(result.confidence * 100)}%
+          <div className="flex justify-center gap-3 mt-4">
+            <span className="rounded-full text-xs font-extrabold text-accent py-1 px-3.5 border border-accent bg-accent-light shadow-(--shadow-sm)">
+              Confidence: {Math.round(result.confidence * 100)}%
             </span>
-            <span
-              className="rounded-full text-xs font-extrabold text-(--xp)"
-              style={{
-                padding: "4px 14px",
-                border: "1px solid var(--xp)",
-                background: "rgba(245, 158, 11, 0.08)",
-                boxShadow: "var(--shadow-sm)",
-              }}
-            >
-              +{result.xpAwarded} XP nhận được
+            <span className="rounded-full text-xs font-extrabold text-[var(--xp)] py-1 px-3.5 border border-[var(--xp)] bg-[rgba(245,158,11,0.08)] shadow-(--shadow-sm)">
+              +{result.xpAwarded} XP earned
             </span>
-          </Flex>
+          </div>
         </m.div>
 
         {/* Skill breakdown card */}
@@ -105,58 +76,50 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.25 }}
-          className="rounded-(--radius-xl) border-2 border-border bg-(--surface)"
-          style={{ padding: "20px", boxShadow: "var(--shadow-sm)" }}
+          className="rounded-xl border-2 border-border bg-surface p-5 shadow-(--shadow-sm)"
         >
-          <div className="flex items-center gap-2" style={{ marginBottom: 18 }}>
+          <div className="flex items-center gap-2 mb-4.5">
             <Radar className="text-sm text-accent" />
             <span className="text-[13px] font-extrabold text-text-primary font-display">
-              Chi tiết năng lực từng kỹ năng
+              Skill Breakdown
             </span>
           </div>
 
-          <Flex vertical gap={16}>
+          <div className="flex flex-col gap-4">
             {Object.entries(result.skills).map(([skill, skillResult], idx) => {
               const pct = Math.round((skillResult.correct / Math.max(skillResult.total, 1)) * 100);
               const skillColor = CEFR_COLORS[skillResult.cefr] ?? "var(--accent)";
 
               return (
                 <div key={skill} className="flex flex-col gap-1.5">
-                  <Flex justify="space-between" align="center">
-                    <span className="font-bold text-text-primary" style={{ fontSize: 13.5 }}>
+                  <div className="flex justify-between items-center">
+                    <span className="font-bold text-text-primary text-[13.5px]">
                       {SKILL_LABELS[skill] ?? skill}
                     </span>
-                    <Flex gap={8} align="center">
+                    <div className="flex gap-2 items-center">
                       <span
-                        className="text-[11px] font-extrabold bg-surface-alt rounded-full"
+                        className="text-[11px] font-extrabold bg-surface-alt rounded-full py-0.5 px-2"
                         style={{
                           color: skillColor,
                           border: `1px solid ${skillColor}`,
-                          padding: "2px 8px",
                         }}
                       >
                         {skillResult.cefr}
                       </span>
-                      <span className="text-text-muted font-semibold" style={{ fontSize: 11.5 }}>
+                      <span className="text-text-muted font-semibold text-[11.5px]">
                         {skillResult.correct}/{skillResult.total} ({pct}%)
                       </span>
-                    </Flex>
-                  </Flex>
+                    </div>
+                  </div>
 
                   {/* Custom Progress bar */}
-                  <div
-                    className="h-[8px] rounded-full relative overflow-hidden"
-                    style={{ background: "var(--border)" }}
-                  >
+                  <div className="h-2 rounded-full relative overflow-hidden bg-border">
                     <m.div
                       initial={{ width: 0 }}
                       animate={{ width: `${pct}%` }}
                       transition={{ delay: 0.4 + idx * 0.1, duration: 0.6, ease: "easeOut" }}
-                      className="absolute rounded-full"
+                      className="absolute left-0 top-0 bottom-0 rounded-full"
                       style={{
-                        left: 0,
-                        top: 0,
-                        bottom: 0,
                         background: skillColor,
                         boxShadow: `0 0 6px ${skillColor}33`,
                       }}
@@ -165,23 +128,21 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
                 </div>
               );
             })}
-          </Flex>
+          </div>
         </m.div>
 
         {/* Action button row */}
-        <Flex gap={12}>
+        <div className="flex gap-3">
           <m.button
             whileHover={{ scale: 1.02, y: -1 }}
             whileTap={{ scale: 0.98 }}
             onClick={onGoHome}
-            className="flex-1 h-[48px] rounded-(--radius-lg) border-none text-[15px] font-extrabold cursor-pointer flex items-center justify-center gap-1.5"
+            className="flex-1 h-12 rounded-lg border-none text-[15px] font-extrabold cursor-pointer flex items-center justify-center gap-1.5 text-[var(--text-on-accent)] shadow-[0_4px_14px_var(--accent-muted)]"
             style={{
               background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-              color: "var(--text-on-accent)",
-              boxShadow: "0 4px 14px var(--accent-muted)",
             }}
           >
-            Về trang chủ
+            Go to Dashboard
             <ChevronRight size={11} />
           </m.button>
 
@@ -189,14 +150,13 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
             whileHover={{ scale: 1.02, y: -1 }}
             whileTap={{ scale: 0.98 }}
             onClick={onViewProgress}
-            className="h-[48px] rounded-(--radius-lg) bg-surface-alt border-2 border-border text-text-secondary text-[15px] font-bold cursor-pointer flex items-center gap-1.5"
-            style={{ padding: "0 20px", boxShadow: "var(--shadow-sm)" }}
+            className="h-12 rounded-lg bg-surface-alt border-2 border-border text-text-secondary text-[15px] font-bold cursor-pointer flex items-center gap-1.5 px-5 shadow-(--shadow-sm) hover:bg-surface-hover transition-colors"
           >
             <RefreshCw size={13} />
-            Xem tiến trình học
+            View Progress
           </m.button>
-        </Flex>
-      </Flex>
+        </div>
+      </div>
     </div>
   );
 }

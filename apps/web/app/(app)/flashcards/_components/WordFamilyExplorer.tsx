@@ -1,13 +1,9 @@
 "use client";
 
-import { Card, Tag, Typography } from "antd";
-import { Lightbulb, Loader2, Network, Star, Target, Volume2 } from "lucide-react";
-
+import { Lightbulb, Loader2, Network, Star, Target } from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useState } from "react";
 import { api } from "@/lib/api-client";
-
-const { Text } = Typography;
 
 type WordForm = {
   word: string;
@@ -28,11 +24,11 @@ type WordFamilyData = {
 };
 
 const POS_COLORS: Record<string, string> = {
-  noun: "blue",
-  verb: "green",
-  adjective: "orange",
-  adverb: "purple",
-  "phrasal verb": "cyan",
+  noun: "var(--info)",
+  verb: "var(--success)",
+  adjective: "var(--warning)",
+  adverb: "var(--tertiary, #8B5CF6)",
+  "phrasal verb": "var(--accent)",
 };
 
 const FREQ_LABELS: Record<string, { label: string; color: string }> = {
@@ -67,14 +63,11 @@ export function WordFamilyExplorer({ word }: { word: string }) {
           e.stopPropagation();
           fetchWordFamily();
         }}
-        className="mt-2 w-full flex items-center justify-center gap-1.5 cursor-pointer text-xs font-bold"
+        className="mt-2 w-full flex items-center justify-center gap-1.5 cursor-pointer text-xs font-bold py-2.5 px-4 rounded-[10px] transition-all duration-200 hover:opacity-80"
         style={{
-          padding: "9px 16px",
-          borderRadius: 10,
           border: "1.5px solid color-mix(in srgb, var(--secondary) 20%, var(--border))",
           background: "color-mix(in srgb, var(--secondary) 4%, var(--surface))",
           color: "var(--secondary, var(--accent))",
-          transition: "all 0.2s",
         }}
       >
         <Network size={12} />
@@ -85,7 +78,7 @@ export function WordFamilyExplorer({ word }: { word: string }) {
 
   if (loading) {
     return (
-      <div className="mt-2 text-center" style={{ padding: "12px 0" }}>
+      <div className="mt-2 text-center py-3">
         <Loader2 className="animate-spin text-accent" size={16} />
         <div className="text-[11px] text-text-muted mt-1">Analyzing word family...</div>
       </div>
@@ -106,17 +99,15 @@ export function WordFamilyExplorer({ word }: { word: string }) {
       <button
         type="button"
         onClick={() => setExpanded((v) => !v)}
-        className="w-full flex items-center gap-2 py-2 px-3 cursor-pointer text-[11px] font-bold text-accent uppercase"
+        className="w-full flex items-center gap-2 py-2 px-3 cursor-pointer text-[11px] font-bold text-accent uppercase tracking-[.08em] rounded-[10px]"
         style={{
-          borderRadius: 10,
           border: "1px solid color-mix(in srgb, var(--accent) 15%, var(--border))",
           background: "color-mix(in srgb, var(--accent) 4%, var(--surface))",
-          letterSpacing: ".08em",
         }}
       >
         <Network />
         Word Family: {data.rootWord}
-        <span className="text-[10px] text-text-muted" style={{ marginLeft: "auto" }}>
+        <span className="text-[10px] text-text-muted ml-auto">
           {data.family.length} forms
         </span>
       </button>
@@ -129,65 +120,65 @@ export function WordFamilyExplorer({ word }: { word: string }) {
         >
           {data.family.map((form, i) => {
             const freqInfo = FREQ_LABELS[form.toeicFrequency] ?? FREQ_LABELS.medium;
+            const posColor = POS_COLORS[form.partOfSpeech.toLowerCase()] ?? "var(--text-muted)";
             return (
               <m.div
                 key={form.word}
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.06 }}
+                className="bg-bg-deep border-2 border-border rounded-[10px] py-2.5 px-3"
               >
-                <Card
-                  size="small"
-                  styles={{ body: { padding: "10px 12px" } }}
-                  className="bg-bg-deep border-2 border-border"
-                  style={{ borderRadius: 10 }}
-                >
-                  <div className="flex items-center gap-1.5 mb-1 flex-wrap">
-                    <Text strong className="text-ink text-sm">
-                      {form.word}
-                    </Text>
-                    <Tag
-                      color={POS_COLORS[form.partOfSpeech.toLowerCase()] ?? "default"}
-                      className="text-[10px] rounded-full m-0"
-                    >
-                      {form.partOfSpeech}
-                    </Tag>
-                    <span className="text-[10px] font-semibold" style={{ color: freqInfo.color }}>
-                      <Star style={{ fontSize: 8, marginRight: 2 }} />
-                      {freqInfo.label}
-                    </span>
-                    {form.pronunciation && (
-                      <Text type="secondary" className="text-[10px] font-mono">
-                        {form.pronunciation}
-                      </Text>
-                    )}
-                  </div>
-                  <Text type="secondary" className="text-xs block mb-1">
-                    {form.meaningVi}
-                  </Text>
-                  <Text
-                    dangerouslySetInnerHTML={{
-                      __html: form.exampleEn.replace(
-                        /\*([^*]+)\*/g,
-                        '<strong style="color: var(--accent)">$1</strong>',
-                      ),
+                <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                  <span className="font-bold text-ink text-sm">{form.word}</span>
+                  <span
+                    className="text-[10px] font-bold rounded-full py-0.5 px-2"
+                    style={{
+                      color: posColor,
+                      background: `color-mix(in srgb, ${posColor} 10%, var(--surface))`,
+                      border: `1px solid color-mix(in srgb, ${posColor} 25%, transparent)`,
                     }}
-                    className="text-xs leading-normal"
-                  />
-                  <br />
-                  <Text type="secondary" className="text-[11px]">
-                    {form.exampleVi}
-                  </Text>
-                  {form.commonCollocations.length > 0 && (
-                    <div className="mt-1 flex gap-1 flex-wrap">
-                      {form.commonCollocations.map((c) => (
-                        <Tag key={c} className="text-[9px] rounded-full">
-                          {c}
-                        </Tag>
-                      ))}
-                    </div>
+                  >
+                    {form.partOfSpeech}
+                  </span>
+                  <span className="text-[10px] font-semibold inline-flex items-center gap-0.5" style={{ color: freqInfo.color }}>
+                    <Star size={8} />
+                    {freqInfo.label}
+                  </span>
+                  {form.pronunciation && (
+                    <span className="text-[10px] font-mono text-text-muted">
+                      {form.pronunciation}
+                    </span>
                   )}
-                </Card>
+                </div>
+                <span className="text-xs text-text-secondary block mb-1">
+                  {form.meaningVi}
+                </span>
+                <span
+                  dangerouslySetInnerHTML={{
+                    __html: form.exampleEn.replace(
+                      /\*([^*]+)\*/g,
+                      '<strong style="color: var(--accent)">$1</strong>',
+                    ),
+                  }}
+                  className="text-xs leading-normal"
+                />
+                <br />
+                <span className="text-[11px] text-text-muted">
+                  {form.exampleVi}
+                </span>
+                {form.commonCollocations.length > 0 && (
+                  <div className="mt-1 flex gap-1 flex-wrap">
+                    {form.commonCollocations.map((c) => (
+                      <span
+                        key={c}
+                        className="text-[9px] rounded-full py-0.5 px-2 bg-surface-alt border border-border text-text-muted font-medium"
+                      >
+                        {c}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </m.div>
             );
           })}
@@ -202,17 +193,14 @@ export function WordFamilyExplorer({ word }: { word: string }) {
               }}
             >
               {data.tip && (
-                <p
-                  className="text-[11px] text-text-secondary leading-normal"
-                  style={{ margin: "0 0 4px" }}
-                >
-                  <Lightbulb className="mr-1" />
+                <p className="text-[11px] text-text-secondary leading-normal m-0 mb-1">
+                  <Lightbulb className="mr-1 inline" size={12} />
                   {data.tip}
                 </p>
               )}
               {data.toeicNote && (
                 <p className="text-[11px] text-text-muted m-0 leading-normal">
-                  <Target className="mr-1" />
+                  <Target className="mr-1 inline" size={12} />
                   {data.toeicNote}
                 </p>
               )}

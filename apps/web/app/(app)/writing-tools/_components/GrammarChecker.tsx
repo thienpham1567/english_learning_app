@@ -197,7 +197,7 @@ function ErrorCard({ error, onApply }: { error: GrammarError; onApply: () => voi
           <span className="text-[11px] text-text-secondary italic">Rule: {error.rule}</span>
 
           {/* Explanation */}
-          <div className="py-2 px-3 rounded-lg bg-(--surface) text-[13px] leading-relaxed">
+          <div className="py-2 px-3 rounded-lg bg-surface text-[13px] leading-relaxed">
             <span className="font-semibold text-text-secondary text-[11px]">Explanation:</span>
             <p className="text-text-primary" style={{ margin: "4px 0 0" }}>
               {error.explanationEn}
@@ -537,7 +537,7 @@ export function GrammarChecker() {
                 ].map((s) => (
                   <div
                     key={s.label}
-                    className="flex-1 flex items-center gap-3 bg-(--surface)"
+                    className="flex-1 flex items-center gap-3 bg-surface"
                     style={{ padding: "18px 18px" }}
                   >
                     <motion.span

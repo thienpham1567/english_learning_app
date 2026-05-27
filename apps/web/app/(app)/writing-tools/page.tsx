@@ -60,7 +60,7 @@ export default function WritingToolsPage() {
         style={{ padding: "16px 20px 8px", overflowX: "auto", scrollbarWidth: "none" }}
       >
         <div
-          className="flex gap-1.5 bg-surface-alt rounded-(--radius-xl) w-full"
+          className="flex gap-1.5 bg-surface-alt rounded-xl w-full"
           style={{ border: "1.5px solid var(--border)", padding: 6, minWidth: "max-content" }}
         >
           {TABS.map((t) => {
@@ -71,7 +71,7 @@ export default function WritingToolsPage() {
                 key={t.value}
                 onClick={() => setActive(t.value)}
                 whileTap={{ scale: 0.98 }}
-                className="flex-1 py-2 px-3 rounded-(--radius-lg) border-none cursor-pointer flex flex-col items-center justify-center"
+                className="flex-1 py-2 px-3 rounded-lg border-none cursor-pointer flex flex-col items-center justify-center"
                 style={{
                   background: isActive ? "var(--accent)" : "transparent",
                   color: isActive ? "var(--text-on-accent)" : "var(--text-secondary)",

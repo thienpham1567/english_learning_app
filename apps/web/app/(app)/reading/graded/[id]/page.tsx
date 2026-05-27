@@ -1,6 +1,5 @@
 "use client";
 
-import { Button, Card, Flex, Spin, Tag, Typography } from "antd";
 import {
   ArrowLeft,
   BookOpen,
@@ -15,8 +14,6 @@ import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { useReadingSession } from "@/hooks/useReadingSession";
 import { api } from "@/lib/api-client";
-
-const { Text, Title } = Typography;
 
 type PassageDetail = {
   id: string;
@@ -74,93 +71,82 @@ export default function GradedPassagePage() {
 
   if (loading) {
     return (
-      <Flex align="center" justify="center" className="h-full" style={{ padding: 60 }}>
-        <Spin indicator={<Loader2 className="animate-spin text-accent" size={32} />} />
-      </Flex>
+      <div className="h-full flex items-center justify-center p-15">
+        <Loader2 className="animate-spin text-accent" size={32} />
+      </div>
     );
   }
 
   if (!passage) {
     return (
-      <Flex
-        vertical
-        align="center"
-        justify="center"
-        gap={12}
-        className="h-full"
-        style={{ padding: 60 }}
-      >
+      <div className="h-full flex flex-col items-center justify-center gap-4 p-15">
         <BookOpen size={48} className="text-text-muted" />
-        <Text type="secondary">Reading passage not found</Text>
-        <Button type="link" icon={<ArrowLeft />} onClick={() => router.push("/reading/graded")}>
-          Back to List
-        </Button>
-      </Flex>
+        <span className="text-text-secondary">Reading passage not found</span>
+        <button
+          type="button"
+          onClick={() => router.push("/reading/graded")}
+          className="text-accent font-bold cursor-pointer bg-transparent border-none flex items-center gap-1.5"
+        >
+          <ArrowLeft size={14} /> Back to List
+        </button>
+      </div>
     );
   }
 
   return (
-    <div className="anim-fade-up h-full overflow-y-auto" style={{ padding: "var(--space-6)" }}>
-      <Flex vertical gap={20} className="w-[720px] mx-auto">
+    <div className="anim-fade-up h-full overflow-y-auto p-6">
+      <div className="w-full max-w-[720px] mx-auto flex flex-col gap-5">
         {/* Back button */}
-        <Button
-          type="text"
-          icon={<ArrowLeft />}
+        <button
+          type="button"
           onClick={() => router.push("/reading/graded")}
-          className="text-text-muted text-[13px]"
-          style={{ alignSelf: "flex-start", borderRadius: 10 }}
+          className="text-text-muted text-[13px] self-start rounded-[10px] bg-transparent border-none cursor-pointer flex items-center gap-1.5"
         >
-          Back to List
-        </Button>
+          <ArrowLeft size={12} /> Back to List
+        </button>
 
         {/* Article header card */}
-        <Card
-          styles={{ body: { padding: 0 } }}
-          className="overflow-hidden"
-          style={{ borderRadius: 20 }}
-        >
+        <div className="overflow-hidden rounded-[20px] border border-border">
           {/* Gradient banner */}
           <div
+            className="py-5 px-6 pb-4"
             style={{
-              padding: "20px 24px 16px",
               background: `linear-gradient(135deg, ${LEVEL_COLORS[passage.cefrLevel] || "var(--accent)"}20, ${LEVEL_COLORS[passage.cefrLevel] || "var(--accent)"}08)`,
             }}
           >
-            <Flex gap={10} align="center" className="mb-3">
-              <Tag
-                className="m-0 font-bold text-[11px] rounded-lg border-none"
+            <div className="flex items-center gap-2 mb-3">
+              <span
+                className="m-0 font-bold text-[11px] rounded-lg border-none py-0.5 px-3"
                 style={{
                   background: LEVEL_COLORS[passage.cefrLevel],
                   color: "var(--text-on-accent)",
-                  padding: "2px 12px",
                 }}
               >
                 {passage.cefrLevel}
-              </Tag>
-              <Flex align="center" gap={4}>
+              </span>
+              <div className="flex items-center gap-1">
                 <Timer size={12} className="text-text-muted" />
-                <Text className="text-text-muted text-xs">
+                <span className="text-text-muted text-xs">
                   {readTime} min · {passage.wordCount} words
-                </Text>
-              </Flex>
+                </span>
+              </div>
               {marked && (
-                <Tag
-                  className="m-0 rounded-lg border-none text-emerald-500 font-semibold"
+                <span
+                  className="m-0 rounded-lg border-none text-emerald-500 font-semibold ml-auto flex items-center gap-1 text-xs py-0.5 px-2"
                   style={{
-                    marginLeft: "auto",
                     background: "color-mix(in srgb, var(--success) 8%, transparent)",
                   }}
                 >
-                  <CheckCircle className="mr-1" /> Read
-                </Tag>
+                  <CheckCircle size={12} /> Read
+                </span>
               )}
-            </Flex>
-            <Title level={3} className="m-0 font-display" style={{ lineHeight: 1.4 }}>
+            </div>
+            <h3 className="m-0 font-display leading-snug">
               {passage.title}
-            </Title>
+            </h3>
           </div>
 
-          <div style={{ padding: "20px 24px 28px" }}>
+          <div className="py-5 px-6 pb-7">
             <div
               className="text-base"
               style={{
@@ -176,49 +162,44 @@ export default function GradedPassagePage() {
               ))}
             </div>
           </div>
-        </Card>
+        </div>
 
         {/* Actions */}
-        <Flex gap={12} justify="center" wrap>
+        <div className="flex flex-wrap gap-3">
           {!marked ? (
-            <Button
-              type="primary"
-              size="large"
-              icon={<CheckCircle />}
+            <button
+              type="button"
               onClick={markRead}
-              className="rounded-xl font-semibold h-[44px]"
-              style={{ padding: "0 28px" }}
+              className="rounded-xl font-semibold h-11 px-7 border-none bg-accent text-[var(--text-on-accent)] cursor-pointer flex items-center gap-2"
             >
-              Mark as Read
-            </Button>
+              <CheckCircle size={16} /> Mark as Read
+            </button>
           ) : (
-            <Card
-              styles={{ body: { padding: "20px 24px" } }}
-              className="rounded-2xl w-full border-none"
+            <div
+              className="rounded-2xl w-full border-none py-5 px-6"
               style={{ background: "linear-gradient(135deg, var(--accent), var(--secondary))" }}
             >
-              <Flex vertical align="center" gap={10}>
-                <Text className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>
-                  <Star /> You've completed the reading! Check your vocabulary now?
-                </Text>
-                <Button
-                  size="large"
-                  icon={<Pencil />}
+              <div className="flex items-center justify-between flex-wrap gap-3">
+                <span className="text-sm font-medium flex items-center gap-1.5" style={{ color: "rgba(255,255,255,0.9)" }}>
+                  <Star size={16} /> You&apos;ve completed the reading! Check your vocabulary now?
+                </span>
+                <button
+                  type="button"
                   onClick={() => router.push(`/reading/graded/${id}/cloze`)}
-                  className="rounded-xl font-bold h-[44px]"
+                  className="rounded-xl font-bold h-11 px-5 cursor-pointer flex items-center gap-2"
                   style={{
                     border: "2px solid var(--surface)",
                     background: "rgba(255,255,255,0.15)",
                     color: "var(--text-on-accent)",
                   }}
                 >
-                  <ClipboardList /> Take Cloze Test
-                </Button>
-              </Flex>
-            </Card>
+                  <ClipboardList size={14} /> Take Cloze Test
+                </button>
+              </div>
+            </div>
           )}
-        </Flex>
-      </Flex>
+        </div>
+      </div>
     </div>
   );
 }

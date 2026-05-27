@@ -1,6 +1,5 @@
 "use client";
 
-import { Progress } from "antd";
 import {
   ArrowLeft,
   ArrowRight,
@@ -138,7 +137,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
   if (error) {
     return (
       <div
-        className="anim-fade-up p-6 rounded-(--radius-xl) text-destructive text-center"
+        className="anim-fade-up p-6 rounded-xl text-destructive text-center"
         style={{
           background: "rgba(239, 68, 68, 0.08)",
           border: "1px solid rgba(239, 68, 68, 0.2)",
@@ -170,7 +169,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
   if (allDone) {
     return (
       <div
-        className="anim-fade-up text-center rounded-(--radius-xl) bg-(--surface)"
+        className="anim-fade-up text-center rounded-xl bg-surface"
         style={{
           padding: "40px 24px",
           border: "1.5px solid var(--border)",
@@ -211,7 +210,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
             onClick={onBack}
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
-            className="flex items-center gap-2 border-2 border-border bg-(--surface) text-text-primary cursor-pointer font-extrabold"
+            className="flex items-center gap-2 border-2 border-border bg-surface text-text-primary cursor-pointer font-extrabold"
             style={{ padding: "10px 20px", borderRadius: 10, fontSize: 13.5 }}
           >
             <ArrowLeft /> Back to list
@@ -235,7 +234,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
 
       {/* Styled Section pill selector */}
       <div
-        className="flex gap-1.5 bg-surface-alt rounded-(--radius-xl) flex-wrap"
+        className="flex gap-1.5 bg-surface-alt rounded-xl flex-wrap"
         style={{ border: "1.5px solid var(--border)", padding: 5 }}
       >
         {SECTIONS.map((s) => {
@@ -246,7 +245,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
               key={s.key}
               onClick={() => setActiveSection(s.key)}
               whileTap={{ scale: 0.97 }}
-              className="flex items-center justify-center gap-1.5 py-2 px-4 rounded-(--radius-lg) text-[13px] font-extrabold border-none cursor-pointer"
+              className="flex items-center justify-center gap-1.5 py-2 px-4 rounded-lg text-[13px] font-extrabold border-none cursor-pointer"
               style={{
                 flex: "1 1 auto",
                 background: active
@@ -278,7 +277,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
           Topic progress:
         </span>
         <span
-          className="text-[11px] font-extrabold rounded-lg bg-(--surface) border-2 border-border text-text-secondary"
+          className="text-[11px] font-extrabold rounded-lg bg-surface border-2 border-border text-text-secondary"
           style={{ padding: "2px 8px" }}
         >
           {completedSections.size} / 4 sections completed
@@ -291,7 +290,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
           {data.vocabulary.map((w, i) => (
             <div
               key={i}
-              className="rounded-(--radius-xl) bg-(--surface) flex items-start gap-3.5 relative"
+              className="rounded-xl bg-surface flex items-start gap-3.5 relative"
               style={{
                 padding: "16px 18px",
                 border: "1.5px solid var(--border)",
@@ -340,7 +339,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
               onClick={() => markDone("vocabulary")}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="mt-3 rounded-(--radius-lg) border-none text-sm font-extrabold cursor-pointer flex items-center justify-center gap-2"
+              className="mt-3 rounded-lg border-none text-sm font-extrabold cursor-pointer flex items-center justify-center gap-2"
               style={{
                 padding: "14px",
                 background: "var(--accent)",
@@ -360,7 +359,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
         <div className="flex flex-col gap-3.5">
           {/* Formula Card */}
           <div
-            className="rounded-(--radius-xl) text-center relative overflow-hidden"
+            className="rounded-xl text-center relative overflow-hidden"
             style={{
               padding: "24px 20px",
               background: "linear-gradient(135deg, var(--accent-light) 0%, var(--surface) 100%)",
@@ -380,7 +379,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
 
           {/* Explanation panel */}
           <div
-            className="rounded-(--radius-xl) bg-(--surface)"
+            className="rounded-xl bg-surface"
             style={{
               padding: 18,
               border: "1.5px solid var(--border)",
@@ -400,7 +399,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
 
           {/* Example card */}
           <div
-            className="p-4 rounded-(--radius-xl) bg-surface-alt"
+            className="p-4 rounded-xl bg-surface-alt"
             style={{ border: "1.5px solid var(--border)" }}
           >
             <span
@@ -417,7 +416,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                 onClick={() => speakTts(data.grammar.topicExample)}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.9 }}
-                className="border-none bg-(--surface) rounded-full w-[24px] h-[24px] grid cursor-pointer text-accent"
+                className="border-none bg-surface rounded-full w-[24px] h-[24px] grid cursor-pointer text-accent"
                 style={{ placeItems: "center", boxShadow: "var(--shadow-sm)", padding: 0 }}
               >
                 <Volume2 size={12} />
@@ -436,7 +435,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
               onClick={() => markDone("grammar")}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="mt-3 rounded-(--radius-lg) border-none text-sm font-extrabold cursor-pointer flex items-center justify-center gap-2"
+              className="mt-3 rounded-lg border-none text-sm font-extrabold cursor-pointer flex items-center justify-center gap-2"
               style={{
                 padding: "14px",
                 background: "var(--accent)",
@@ -456,7 +455,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
         <div className="flex flex-col gap-4">
           {/* Reading passage card */}
           <div
-            className="rounded-(--radius-xl) bg-(--surface)"
+            className="rounded-xl bg-surface"
             style={{
               padding: 20,
               border: "1.5px solid var(--border)",
@@ -480,7 +479,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
             return (
               <div
                 key={qi}
-                className="rounded-(--radius-xl) bg-(--surface)"
+                className="rounded-xl bg-surface"
                 style={{
                   padding: 18,
                   border: "1.5px solid var(--border)",
@@ -533,7 +532,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                         disabled={readingRevealed}
                         whileHover={readingRevealed ? {} : { x: 3, borderColor: "var(--accent)" }}
                         whileTap={readingRevealed ? {} : { scale: 0.98 }}
-                        className="flex items-center rounded-(--radius-lg) text-left"
+                        className="flex items-center rounded-lg text-left"
                         style={{
                           padding: "12px 14px",
                           border,
@@ -583,7 +582,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                 onClick={() => setReadingRevealed(true)}
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
-                className="rounded-(--radius-lg) border-none text-sm font-extrabold cursor-pointer flex items-center justify-center gap-2"
+                className="rounded-lg border-none text-sm font-extrabold cursor-pointer flex items-center justify-center gap-2"
                 style={{
                   padding: "14px",
                   background: "var(--accent)",
@@ -601,7 +600,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
               onClick={() => markDone("reading")}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="rounded-(--radius-lg) border-none text-sm font-extrabold cursor-pointer flex items-center justify-center gap-2"
+              className="rounded-lg border-none text-sm font-extrabold cursor-pointer flex items-center justify-center gap-2"
               style={{
                 padding: "14px",
                 background: "var(--success)",
@@ -625,7 +624,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
             if (!ex) return null;
             return (
               <div
-                className="p-6 rounded-(--radius-xl) bg-(--surface) relative"
+                className="p-6 rounded-xl bg-surface relative"
                 style={{ border: "1.5px solid var(--border)", boxShadow: "var(--shadow-sm)" }}
               >
                 <div className="text-xs font-extrabold text-text-muted uppercase tracking-widest mb-3">
@@ -690,7 +689,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                         disabled={exRevealed}
                         whileHover={exRevealed ? {} : { x: 3, borderColor: "var(--accent)" }}
                         whileTap={exRevealed ? {} : { scale: 0.98 }}
-                        className="flex items-center rounded-(--radius-lg) text-left"
+                        className="flex items-center rounded-lg text-left"
                         style={{
                           padding: "12px 14px",
                           border,
@@ -747,7 +746,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
               }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="rounded-(--radius-lg) border-none text-sm font-extrabold cursor-pointer flex items-center justify-center gap-2"
+              className="rounded-lg border-none text-sm font-extrabold cursor-pointer flex items-center justify-center gap-2"
               style={{
                 padding: "14px",
                 background: "var(--accent)",

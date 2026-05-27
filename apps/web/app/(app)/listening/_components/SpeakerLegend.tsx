@@ -8,6 +8,12 @@ const SPEAKER_COLORS: Record<"A" | "B" | "C", string> = {
   C: "var(--success)",
 };
 
+const SPEAKER_BG: Record<"A" | "B" | "C", string> = {
+  A: "bg-accent",
+  B: "bg-[var(--xp)]",
+  C: "bg-[var(--success)]",
+};
+
 function describeVoice(t: DialogueTurnPayload): string {
   const accent = t.accent.toUpperCase();
   return `${accent} · ${t.voiceName}`;
@@ -30,38 +36,16 @@ export function SpeakerLegend({ turns }: Props) {
   if (entries.length === 0) return null;
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        gap: 10,
-        padding: "8px 12px",
-        background: "var(--surface)",
-        border: "1px solid var(--border)",
-        borderRadius: "var(--radius-sm)",
-        fontSize: 12,
-      }}
-    >
-      <span style={{ color: "var(--text-muted)", fontWeight: 600 }}>Speakers:</span>
+    <div className="flex flex-wrap gap-2.5 py-2 px-3 bg-surface border-2 border-border rounded-lg text-xs">
+      <span className="text-text-muted font-semibold">Speakers:</span>
       {entries.map(([id, turn]) => (
-        <span key={id} style={{ display: "inline-flex", alignItems: "center", gap: 6 }}>
+        <span key={id} className="inline-flex items-center gap-1.5">
           <span
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: 20,
-              height: 20,
-              borderRadius: "50%",
-              background: SPEAKER_COLORS[id],
-              color: "var(--text-on-accent)",
-              fontSize: 11,
-              fontWeight: 700,
-            }}
+            className={`inline-flex items-center justify-center w-5 h-5 rounded-full text-[11px] font-bold text-ink ${SPEAKER_BG[id]}`}
           >
             {id}
           </span>
-          <span style={{ color: "var(--text)" }}>{describeVoice(turn)}</span>
+          <span className="text-text-primary">{describeVoice(turn)}</span>
         </span>
       ))}
     </div>
@@ -77,28 +61,16 @@ type TranscriptProps = {
  */
 export function DialogueTranscript({ turns }: TranscriptProps) {
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+    <div className="flex flex-col gap-2.5">
       {turns.map((t, i) => (
-        <div key={i} style={{ display: "flex", gap: 10, alignItems: "flex-start" }}>
+        <div key={i} className="flex gap-2.5 items-start">
           <span
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              justifyContent: "center",
-              width: 26,
-              height: 26,
-              borderRadius: "50%",
-              background: SPEAKER_COLORS[t.speaker],
-              color: "var(--text-on-accent)",
-              fontSize: 12,
-              fontWeight: 700,
-              flexShrink: 0,
-            }}
+            className={`inline-flex items-center justify-center w-[26px] h-[26px] rounded-full text-xs font-bold text-ink shrink-0 ${SPEAKER_BG[t.speaker]}`}
           >
             {t.speaker}
           </span>
-          <div style={{ fontSize: 14, lineHeight: 1.6, color: "var(--text)" }}>
-            <span style={{ fontSize: 11, color: "var(--text-muted)", marginRight: 6 }}>
+          <div className="text-sm leading-relaxed text-text-primary">
+            <span className="text-[11px] text-text-muted mr-1.5">
               ({t.accent.toUpperCase()} · {t.voiceName})
             </span>
             {t.text}

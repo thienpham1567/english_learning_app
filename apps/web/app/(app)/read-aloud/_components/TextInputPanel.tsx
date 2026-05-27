@@ -1,10 +1,8 @@
 "use client";
 
-import { Flex, message, Typography } from "antd";
 import { Copy, FileText, History, Timer, Trash2 } from "lucide-react";
 import * as m from "motion/react-client";
-
-const { Text } = Typography;
+import { toast } from "sonner";
 
 const MAX_CHARS = 10_000;
 
@@ -35,9 +33,9 @@ export function TextInputPanel({
     try {
       const clipboard = await navigator.clipboard.readText();
       onTextChange(clipboard);
-      message.success("Pasted from clipboard!");
+      toast.success("Pasted from clipboard!");
     } catch {
-      message.error("Failed to access clipboard");
+      toast.error("Failed to access clipboard");
     }
   };
 
@@ -46,16 +44,15 @@ export function TextInputPanel({
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.1 }}
-      className="read-aloud-panel bg-(--surface) rounded-(--radius-xl) border-2 border-border flex flex-col relative"
-      style={{ padding: "var(--space-5)", boxShadow: "var(--shadow-md)", gap: "var(--space-4)" }}
+      className="read-aloud-panel bg-surface rounded-xl border-2 border-border flex flex-col relative p-5 gap-4 shadow-md"
     >
       {/* Header Actions */}
-      <Flex align="center" justify="space-between">
-        <Text className="text-sm font-bold text-text-primary flex items-center gap-1.5">
+      <div className="flex items-center justify-between">
+        <span className="text-sm font-bold text-text-primary flex items-center gap-1.5">
           <FileText className="text-accent" />
           English Passage Input
-        </Text>
-        <Flex gap={8} className="read-aloud-text-actions">
+        </span>
+        <div className="flex gap-2 read-aloud-text-actions">
           <ToolButton
             icon={<History />}
             label={`History (${historyCount})`}
@@ -64,8 +61,8 @@ export function TextInputPanel({
           />
           <ToolButton icon={<Copy />} label="Paste" onClick={handlePaste} />
           <ToolButton icon={<Trash2 />} label="Clear All" onClick={onClear} danger />
-        </Flex>
-      </Flex>
+        </div>
+      </div>
 
       {/* Input Area */}
       <div className="relative">
@@ -76,44 +73,29 @@ export function TextInputPanel({
             "Paste or enter an English passage here to listen...\n\nClick on sample passages below for a quick start."
           }
           maxLength={MAX_CHARS}
-          className="read-aloud-textarea w-full h-[320px] text-base font-body"
-          style={{
-            resize: "vertical",
-            padding: "var(--space-4)",
-            lineHeight: 1.75,
-            outline: "none",
-          }}
+          className="read-aloud-textarea w-full h-[320px] text-base font-body leading-[1.75] outline-none p-4"
+          style={{ resize: "vertical" }}
         />
       </div>
 
       {/* Text Stats */}
-      <Flex
-        className="read-aloud-text-stats"
-        align="center"
-        justify="space-between"
-        style={{ padding: "0 4px" }}
-      >
-        <Flex gap={16}>
+      <div className="read-aloud-text-stats flex items-center justify-between px-1">
+        <div className="flex gap-4">
           <Stat label="Words" value={wordCount.toLocaleString()} />
           <Stat
             label="Characters"
             value={`${charCount.toLocaleString()} / ${MAX_CHARS.toLocaleString()}`}
           />
-        </Flex>
+        </div>
         {wordCount > 0 && (
-          <Flex
-            align="center"
-            gap={6}
-            className="rounded-xl"
-            style={{ background: "var(--accent-light)", padding: "4px 10px" }}
-          >
+          <div className="flex items-center gap-1.5 rounded-xl bg-accent-light py-1 px-2.5">
             <Timer className="text-xs text-accent" />
-            <Text className="text-xs text-accent font-semibold">
+            <span className="text-xs text-accent font-semibold">
               Estimated duration: ~{estimatedMinutes} min
-            </Text>
-          </Flex>
+            </span>
+          </div>
         )}
-      </Flex>
+      </div>
     </m.div>
   );
 }
@@ -138,15 +120,13 @@ function ToolButton({
       whileHover={{ scale: 1.03, y: -1 }}
       whileTap={{ scale: 0.97 }}
       onClick={onClick}
-      className="flex items-center gap-1.5 py-1.5 px-3 font-semibold cursor-pointer font-body"
-      style={{
-        borderRadius: "var(--radius-md)",
-        border: active ? "1px solid var(--accent)" : "1px solid var(--border)",
-        background: active ? "var(--accent-light)" : "var(--surface-alt)",
-        color: danger ? "var(--error)" : active ? "var(--accent)" : "var(--text-secondary)",
-        fontSize: 12.5,
-        transition: "all 0.2s",
-      }}
+      className={`flex items-center gap-1.5 py-1.5 px-3 font-semibold cursor-pointer font-body text-[12.5px] rounded-md transition-all duration-200 ${
+        active
+          ? "border border-accent bg-accent-light text-accent"
+          : danger
+            ? "border border-border bg-surface-alt text-error"
+            : "border border-border bg-surface-alt text-text-secondary"
+      }`}
     >
       {icon}
       {label}
@@ -156,13 +136,9 @@ function ToolButton({
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <Flex align="center" gap={4}>
-      <Text className="text-text-muted" style={{ fontSize: 12.5 }}>
-        {label}:
-      </Text>
-      <Text className="font-bold text-text-secondary" style={{ fontSize: 12.5 }}>
-        {value}
-      </Text>
-    </Flex>
+    <div className="flex items-center gap-1">
+      <span className="text-text-muted text-[12.5px]">{label}:</span>
+      <span className="font-bold text-text-secondary text-[12.5px]">{value}</span>
+    </div>
   );
 }

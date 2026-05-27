@@ -427,12 +427,7 @@ export default function SignInPage() {
       <div className="flex-1 flex items-center justify-center relative p-6 md:p-12 bg-background overflow-y-auto">
         <div className="grain-overlay" />
         <div
-          className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage:
-              "radial-gradient(color-mix(in srgb, var(--border) 15%, transparent) 1px, transparent 1px)",
-            backgroundSize: "22px 22px",
-          }}
+          className="absolute inset-0 pointer-events-none bg-[radial-gradient(color-mix(in_srgb,var(--border)_15%,transparent)_1px,transparent_1px)] bg-[size:22px_22px]"
         />
 
         <div className="relative z-10 w-full max-w-[460px] bg-card border-2 border-border rounded-2xl p-8 md:p-10 shadow-lg shadow-(--shadow-lg)">

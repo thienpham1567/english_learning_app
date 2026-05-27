@@ -58,7 +58,7 @@ export function FloatingDictionaryWidget() {
     const { normalized, cacheKey } = normalizeDictionaryQuery(word);
     if (!normalized) return;
     if (!QUERY_PATTERN.test(normalized)) {
-      setErrorMsg("Chỉ hỗ trợ từ tiếng Anh.");
+      setErrorMsg("Only English words are supported.");
       return;
     }
 
@@ -87,7 +87,7 @@ export function FloatingDictionaryWidget() {
       if (err instanceof AppError && err.message) {
         setErrorMsg(err.message);
       } else {
-        setErrorMsg("Không tìm thấy từ này.");
+        setErrorMsg("Word not found.");
       }
     } finally {
       if (reqId === reqIdRef.current) setIsSearching(false);
@@ -132,20 +132,17 @@ export function FloatingDictionaryWidget() {
     <>
       {/* Floating button / expanded input */}
       <div
-        className="fixed flex items-center"
-        style={{ bottom: dictBottom, right: 20, zIndex: 900, gap: 0 }}
+        className="fixed flex items-center z-[900]"
+        style={{ bottom: dictBottom, right: 20 }}
       >
         {expanded ? (
           <form
             onSubmit={handleSubmit}
-            className="anim-scale-in flex items-center gap-1.5 bg-(--surface)"
+            className="anim-scale-in flex items-center gap-1.5 bg-surface rounded-[28px] py-[5px] pl-3.5 pr-1.5 origin-bottom-right"
             style={{
               border: "1.5px solid var(--accent)",
-              borderRadius: 28,
-              padding: "5px 6px 5px 14px",
               boxShadow:
                 "0 0 0 3px color-mix(in srgb, var(--accent) 15%, transparent), 0 6px 24px rgba(0,0,0,0.12)",
-              transformOrigin: "bottom right",
             }}
           >
             <Search className="text-[13px] text-accent shrink-0" />
@@ -156,34 +153,24 @@ export function FloatingDictionaryWidget() {
                 setQuery(e.target.value);
                 setErrorMsg(null);
               }}
-              placeholder="Tra từ..."
-              className="fdw-input border-none bg-transparent text-sm font-body text-text-primary w-[148px]"
-              style={{ outline: "none", boxShadow: "none", letterSpacing: "0.01em" }}
+              placeholder="Look up a word..."
+              className="fdw-input border-none bg-transparent text-sm font-body text-text-primary w-[148px] outline-none shadow-none tracking-tight"
             />
             {isSearching ? (
-              <div className="w-[30px] h-[30px] grid shrink-0" style={{ placeItems: "center" }}>
+              <div className="w-[30px] h-[30px] grid place-items-center shrink-0">
                 <Loader2 className="animate-spin text-accent" size={14} />
               </div>
             ) : (
               <button
                 type="submit"
                 disabled={!query.trim()}
-                onMouseEnter={(e) => {
-                  if (query.trim())
-                    (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.1)";
-                }}
-                onMouseLeave={(e) => {
-                  (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
-                }}
-                className="w-[30px] h-[30px] rounded-full border-none grid shrink-0"
+                className="w-[30px] h-[30px] rounded-full border-none grid place-items-center shrink-0 transition-all duration-150"
                 style={{
                   background: query.trim()
                     ? "linear-gradient(135deg, var(--accent), var(--accent-hover, color-mix(in srgb, var(--accent) 80%, black)))"
                     : "var(--bg-deep)",
                   color: query.trim() ? "#fff" : "var(--text-muted)",
-                  placeItems: "center",
                   cursor: query.trim() ? "pointer" : "default",
-                  transition: "background 0.18s, transform 0.15s",
                   boxShadow: query.trim()
                     ? "0 2px 8px color-mix(in srgb, var(--accent) 35%, transparent)"
                     : "none",
@@ -195,14 +182,7 @@ export function FloatingDictionaryWidget() {
             <button
               type="button"
               onClick={handleCollapse}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.background = "var(--border)";
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLButtonElement).style.background = "var(--bg-deep)";
-              }}
-              className="w-[26px] h-[26px] rounded-full border-none bg-bg-deep text-text-muted grid cursor-pointer shrink-0"
-              style={{ placeItems: "center", transition: "background 0.15s, color 0.15s" }}
+              className="w-[26px] h-[26px] rounded-full border-none bg-[var(--bg-deep)] text-text-muted grid place-items-center cursor-pointer shrink-0 transition-colors duration-150 hover:bg-border"
             >
               <X size={9} />
             </button>
@@ -210,23 +190,12 @@ export function FloatingDictionaryWidget() {
         ) : (
           <button
             onClick={handleExpand}
-            aria-label="Tra từ nhanh"
-            title="Tra từ nhanh"
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.08)";
-              (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--accent)";
-              (e.currentTarget as HTMLButtonElement).style.color = "var(--accent)";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)";
-              (e.currentTarget as HTMLButtonElement).style.borderColor = "var(--border)";
-              (e.currentTarget as HTMLButtonElement).style.color = "var(--text-secondary)";
-            }}
-            className="w-[44px] h-[44px] rounded-full cursor-pointer bg-(--surface) text-text-secondary flex items-center justify-center"
+            aria-label="Quick dictionary lookup"
+            title="Quick dictionary lookup"
+            className="w-11 h-11 rounded-full cursor-pointer bg-surface text-text-secondary flex items-center justify-center transition-all duration-150 hover:scale-105 hover:border-accent hover:text-accent"
             style={{
               border: "1.5px solid var(--border)",
               boxShadow: "0 3px 14px rgba(0,0,0,0.14)",
-              transition: "transform 0.18s, box-shadow 0.18s, border-color 0.18s",
             }}
           >
             <svg
@@ -251,15 +220,11 @@ export function FloatingDictionaryWidget() {
       {/* Inline error tooltip */}
       {errorMsg && expanded && (
         <div
-          className="fixed text-[11px] rounded-lg w-[220px]"
+          className="fixed text-[11px] rounded-lg w-[220px] z-[901] text-white py-[5px] px-2.5 shadow-md"
           style={{
             bottom: dictBottom + 52,
             right: 20,
-            zIndex: 901,
             background: "var(--error)",
-            color: "#fff",
-            padding: "5px 10px",
-            boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
           }}
         >
           {errorMsg}
@@ -270,15 +235,12 @@ export function FloatingDictionaryWidget() {
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
         <DialogContent
           className="p-0 gap-0 max-w-[860px] max-h-[82vh] overflow-hidden"
-          style={{
-            width: isMobile ? "100%" : 860,
-          }}
+          style={{ width: isMobile ? "100%" : 860 }}
         >
-          <DialogTitle className="sr-only">Tra từ điển</DialogTitle>
+          <DialogTitle className="sr-only">Dictionary Lookup</DialogTitle>
           {/* Modal header bar */}
           <div
-            className="flex items-center justify-between bg-(--surface) gap-3"
-            style={{ padding: "12px 16px 12px 20px", borderBottom: "var(--brutal-border)" }}
+            className="flex items-center justify-between bg-surface gap-3 py-3 pl-5 pr-4 border-b-2 border-border"
           >
             {/* Inline search in modal */}
             <form
@@ -299,29 +261,20 @@ export function FloatingDictionaryWidget() {
                 name="q"
                 defaultValue={result?.headword ?? ""}
                 key={result?.headword}
-                placeholder="Tra từ khác..."
-                className="border-none bg-transparent text-[13px] font-body text-text-primary flex-1"
-                style={{ outline: "none" }}
+                placeholder="Search another word..."
+                className="border-none bg-transparent text-[13px] font-body text-text-primary flex-1 outline-none"
               />
             </form>
             <button
               onClick={handleOpenFullPage}
-              className="items-center rounded bg-transparent text-text-muted text-[11px] font-semibold cursor-pointer shrink-0"
-              style={{
-                display: "inline-flex",
-                gap: 5,
-                padding: "5px 12px",
-                border: "var(--brutal-border)",
-                transition: "all 0.15s",
-                whiteSpace: "nowrap",
-              }}
+              className="inline-flex items-center gap-1.5 rounded bg-transparent text-text-muted text-[11px] font-semibold cursor-pointer shrink-0 whitespace-nowrap py-[5px] px-3 border-2 border-border transition-all duration-150 hover:text-accent hover:border-accent"
             >
-              Mở trang từ điển <ArrowRight size={10} />
+              Open full dictionary <ArrowRight size={10} />
             </button>
           </div>
 
           {/* Dictionary result */}
-          <div className="p-4 overflow-y-auto" style={{ maxHeight: "calc(82vh - 60px)" }}>
+          <div className="p-4 overflow-y-auto max-h-[calc(82vh-60px)]">
             <DictionaryResultCard
               key={result?.headword ?? "loading"}
               vocabulary={result}

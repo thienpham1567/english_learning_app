@@ -1,18 +1,15 @@
 "use client";
 
-import { Flex, message, Typography } from "antd";
 import { Loader2, BookOpen, Sparkles } from "lucide-react";
-
 import * as m from "motion/react-client";
 import { useCallback, useState } from "react";
+import { toast } from "sonner";
 import {
   SAMPLE_TEXTS,
   type SampleLength,
   type SampleText,
   TOEIC_TOPICS,
 } from "../_data/sample-passages";
-
-const { Text } = Typography;
 
 interface PassageBrowserProps {
   onSelectPassage: (text: string, title: string) => void;
@@ -40,10 +37,10 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
       const data = await res.json();
       if (data.passages?.length) {
         setAiPassages((prev) => [...data.passages, ...prev].slice(0, 30));
-        message.success(`Generated ${data.passages.length} new passages with AI!`);
+        toast.success(`Generated ${data.passages.length} new passages with AI!`);
       }
     } catch {
-      message.error("Failed to generate passages. Please try again.");
+      toast.error("Failed to generate passages. Please try again.");
     } finally {
       setAiLoading(false);
     }
@@ -62,32 +59,22 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.15 }}
-      className="read-aloud-panel bg-(--surface) rounded-(--radius-xl) border-2 border-border flex flex-col gap-4"
-      style={{ padding: "var(--space-5)", boxShadow: "var(--shadow-md)" }}
+      className="read-aloud-panel bg-surface rounded-xl border-2 border-border flex flex-col gap-4 p-5 shadow-md"
     >
       {/* Header + AI Generate Button */}
-      <Flex align="center" justify="space-between" wrap="wrap" gap={8}>
-        <Flex align="center" gap={8}>
-          <Text className="text-xs font-bold text-text-muted uppercase tracking-wider flex items-center gap-1.5">
-            <BookOpen size={14} className="text-accent" />
-            Sample Passages ({filteredPassages.length})
-          </Text>
-        </Flex>
+      <div className="flex items-center justify-between flex-wrap gap-2">
+        <span className="text-xs font-bold text-text-muted uppercase tracking-wider flex items-center gap-1.5">
+          <BookOpen size={14} className="text-accent" />
+          Sample Passages ({filteredPassages.length})
+        </span>
         <m.button
           whileHover={{ scale: 1.03, y: -1 }}
           whileTap={{ scale: 0.97 }}
           onClick={generateAiPassages}
           disabled={aiLoading}
-          className="flex items-center gap-1.5 rounded-xl text-accent font-bold font-body"
-          style={{
-            padding: "7px 16px",
-            border: "1px solid var(--accent)",
-            background: "var(--accent-light)",
-            fontSize: 12.5,
-            cursor: aiLoading ? "wait" : "pointer",
-            opacity: aiLoading ? 0.6 : 1,
-            transition: "all 0.2s",
-          }}
+          className={`flex items-center gap-1.5 rounded-xl text-accent font-bold font-body py-1.5 px-4 text-[12.5px] border border-accent bg-accent-light transition-all duration-200 ${
+            aiLoading ? "cursor-wait opacity-60" : "cursor-pointer opacity-100"
+          }`}
         >
           {aiLoading ? (
             <>
@@ -99,7 +86,7 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
             </>
           )}
         </m.button>
-      </Flex>
+      </div>
 
       {/* Topic filter chips */}
       <div className="flex flex-wrap gap-1.5">
@@ -119,8 +106,8 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
       </div>
 
       {/* Length filter */}
-      <Flex gap={6} align="center">
-        <Text className="text-[11px] text-text-muted font-semibold">Length:</Text>
+      <div className="flex gap-1.5 items-center">
+        <span className="text-[11px] text-text-muted font-semibold">Length:</span>
         {(["all", "short", "medium", "long"] as const).map((len) => (
           <FilterChip
             key={len}
@@ -137,16 +124,13 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
             onClick={() => setSelectedLength(len)}
           />
         ))}
-      </Flex>
+      </div>
 
       {/* Passage cards */}
       <div className="flex flex-col gap-2 h-[400px] overflow-y-auto">
         {filteredPassages.length === 0 ? (
-          <div
-            className="text-center text-text-muted text-[13px]"
-            style={{ padding: "24px 16px", borderRadius: 14, border: "1px dashed var(--border)" }}
-          >
-            No passages found. Click "Generate with AI" to create new ones!
+          <div className="text-center text-text-muted text-[13px] py-6 px-4 rounded-[14px] border border-dashed border-border">
+            No passages found. Click &quot;Generate with AI&quot; to create new ones!
           </div>
         ) : (
           filteredPassages.map((sample, idx) => (
@@ -158,39 +142,24 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
               whileHover={{ x: 3, background: "var(--accent-light)" }}
               onClick={() => {
                 onSelectPassage(sample.text, sample.title);
-                message.success(`Loaded: ${sample.title}`);
+                toast.success(`Loaded: ${sample.title}`);
               }}
-              className="flex items-start gap-3 rounded-(--radius-lg) border-2 border-border bg-surface-alt cursor-pointer"
-              style={{ padding: "12px 14px", transition: "all 0.15s" }}
+              className="flex items-start gap-3 rounded-lg border-2 border-border bg-surface-alt cursor-pointer py-3 px-3.5 transition-all duration-150"
             >
-              <div
-                className="w-[36px] h-[36px] border-2 border-border grid text-lg shrink-0"
-                style={{
-                  borderRadius: 10,
-                  background: "var(--accent-light)",
-                  placeItems: "center",
-                }}
-              >
+              <div className="w-9 h-9 border-2 border-border grid place-items-center text-lg shrink-0 rounded-[10px] bg-accent-light">
                 {sample.icon}
               </div>
-              <div className="flex-1 w-[0px]">
-                <div
-                  className="font-bold text-text-primary"
-                  style={{ fontSize: 13.5, lineHeight: 1.3 }}
-                >
+              <div className="flex-1 min-w-0">
+                <div className="font-bold text-text-primary text-[13.5px] leading-tight">
                   {sample.title}
                 </div>
-                <div
-                  className="text-xs text-text-muted overflow-hidden"
-                  style={{ marginTop: 3, textOverflow: "ellipsis", whiteSpace: "nowrap" }}
-                >
+                <div className="text-xs text-text-muted overflow-hidden text-ellipsis whitespace-nowrap mt-0.5">
                   {sample.text.slice(0, 80)}...
                 </div>
-                <Flex gap={6} className="mt-1.5">
+                <div className="flex gap-1.5 mt-1.5">
                   <span
-                    className="text-[10px] font-bold rounded-lg"
+                    className="text-[10px] font-bold rounded-lg py-px px-2"
                     style={{
-                      padding: "1px 8px",
                       background:
                         sample.length === "short"
                           ? "rgba(16,185,129,0.1)"
@@ -211,7 +180,7 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
                   <span className="text-[10px] font-semibold text-text-muted">
                     ~{sample.text.split(/\s+/).length} words
                   </span>
-                </Flex>
+                </div>
               </div>
             </m.div>
           ))
@@ -235,17 +204,11 @@ function FilterChip({
     <button
       type="button"
       onClick={onClick}
-      className="rounded-full cursor-pointer font-body"
-      style={{
-        padding: "4px 12px",
-        border: active ? "1px solid var(--accent)" : "1px solid var(--border)",
-        background: active ? "var(--accent-muted)" : "transparent",
-        color: active ? "var(--accent)" : "var(--text-muted)",
-        fontSize: 11.5,
-        fontWeight: active ? 700 : 500,
-        transition: "all 0.2s",
-        whiteSpace: "nowrap",
-      }}
+      className={`rounded-full cursor-pointer font-body py-1 px-3 text-[11.5px] whitespace-nowrap transition-all duration-200 ${
+        active
+          ? "border border-accent bg-accent-muted text-accent font-bold"
+          : "border border-border bg-transparent text-text-muted font-medium"
+      }`}
     >
       {label}
     </button>

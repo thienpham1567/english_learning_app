@@ -142,7 +142,7 @@ export function TtsReader() {
       >
         {/* Accent selector */}
         <div
-          className="bg-(--surface) rounded-(--radius-xl)"
+          className="bg-surface rounded-xl"
           style={{ border: "1.5px solid var(--border)", padding: "14px 16px" }}
         >
           <span
@@ -160,7 +160,7 @@ export function TtsReader() {
                   type="button"
                   onClick={() => setAccent(acc.key)}
                   whileTap={{ scale: 0.98 }}
-                  className="flex items-center gap-2 py-2 px-3 rounded-(--radius-lg) border-none font-extrabold text-[13px] cursor-pointer text-left"
+                  className="flex items-center gap-2 py-2 px-3 rounded-lg border-none font-extrabold text-[13px] cursor-pointer text-left"
                   style={{
                     background: isActive ? "var(--accent)" : "var(--surface-alt)",
                     color: isActive ? "var(--text-on-accent)" : "var(--text-secondary)",
@@ -185,7 +185,7 @@ export function TtsReader() {
 
         {/* Gender selector */}
         <div
-          className="bg-(--surface) rounded-(--radius-xl)"
+          className="bg-surface rounded-xl"
           style={{ border: "1.5px solid var(--border)", padding: "14px 16px" }}
         >
           <span
@@ -203,7 +203,7 @@ export function TtsReader() {
                   type="button"
                   onClick={() => setGender(g.key)}
                   whileTap={{ scale: 0.98 }}
-                  className="py-2 px-3 rounded-(--radius-lg) border-none font-extrabold text-[13px] cursor-pointer text-center"
+                  className="py-2 px-3 rounded-lg border-none font-extrabold text-[13px] cursor-pointer text-center"
                   style={{
                     background: isActive ? "var(--accent)" : "var(--surface-alt)",
                     color: isActive ? "var(--text-on-accent)" : "var(--text-secondary)",
@@ -219,7 +219,7 @@ export function TtsReader() {
 
         {/* Speed selector */}
         <div
-          className="bg-(--surface) rounded-(--radius-xl)"
+          className="bg-surface rounded-xl"
           style={{ border: "1.5px solid var(--border)", padding: "14px 16px" }}
         >
           <span
@@ -237,7 +237,7 @@ export function TtsReader() {
                   type="button"
                   onClick={() => setSpeed(s)}
                   whileTap={{ scale: 0.98 }}
-                  className="rounded-(--radius-lg) border-none font-extrabold cursor-pointer text-center"
+                  className="rounded-lg border-none font-extrabold cursor-pointer text-center"
                   style={{
                     padding: "8px 4px",
                     background: isActive ? "var(--accent)" : "var(--surface-alt)",
@@ -256,7 +256,7 @@ export function TtsReader() {
 
       {/* Info / Notice Panel */}
       <div
-        className="rounded-(--radius-lg) leading-normal flex items-start gap-2"
+        className="rounded-lg leading-normal flex items-start gap-2"
         style={{
           padding: "12px 14px",
           background: "rgba(59, 130, 246, 0.05)",
@@ -280,7 +280,7 @@ export function TtsReader() {
           disabled={!text.trim() || isOverLimit || loading}
           whileHover={!text.trim() || isOverLimit || loading ? {} : { scale: 1.02 }}
           whileTap={!text.trim() || isOverLimit || loading ? {} : { scale: 0.98 }}
-          className="rounded-(--radius-xl) border-none text-sm font-black flex items-center gap-2"
+          className="rounded-xl border-none text-sm font-black flex items-center gap-2"
           style={{
             padding: "12px 24px",
             background:
@@ -339,7 +339,7 @@ export function TtsReader() {
         <m.div
           initial={{ opacity: 0, y: -4 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-(--radius-lg) text-destructive text-[13px] font-bold"
+          className="rounded-lg text-destructive text-[13px] font-bold"
           style={{
             padding: "10px 14px",
             background: "rgba(239, 68, 68, 0.08)",

@@ -1,8 +1,7 @@
 "use client";
 
-import { Drawer, Skeleton } from "antd";
-import { ArrowRight, Link as LinkIcon, Star, Volume2 } from "lucide-react";
-import * as m from "motion/react-client";
+import { ArrowRight, Link as LinkIcon, Star, Volume2, X } from "lucide-react";
+import { AnimatePresence, motion } from "motion/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api-client";
@@ -17,25 +16,13 @@ type Props = {
 
 type Status = "idle" | "loading" | "ok" | "error";
 
-const LEVEL_COLORS: Record<string, { bg: string; color: string; border: string }> = {
-  A1: {
-    bg: "rgba(16, 185, 129, 0.08)",
-    color: "var(--success)",
-    border: "rgba(16, 185, 129, 0.2)",
-  },
-  A2: {
-    bg: "rgba(16, 185, 129, 0.06)",
-    color: "var(--success)",
-    border: "rgba(16, 185, 129, 0.15)",
-  },
-  B1: { bg: "var(--accent-light)", color: "var(--accent)", border: "var(--accent-muted)" },
-  B2: {
-    bg: "rgba(245, 158, 11, 0.08)",
-    color: "var(--warning)",
-    border: "rgba(245, 158, 11, 0.2)",
-  },
-  C1: { bg: "rgba(139, 92, 246, 0.08)", color: "var(--xp)", border: "rgba(139, 92, 246, 0.2)" },
-  C2: { bg: "rgba(239, 68, 68, 0.08)", color: "var(--error)", border: "rgba(239, 68, 68, 0.2)" },
+const LEVEL_COLORS: Record<string, string> = {
+  A1: "bg-emerald-500/5 text-emerald-500 border-emerald-500/20",
+  A2: "bg-emerald-500/5 text-emerald-500 border-emerald-500/15",
+  B1: "bg-accent/5 text-accent border-accent/20",
+  B2: "bg-warning/5 text-warning border-warning/20",
+  C1: "bg-purple-500/5 text-purple-500 border-purple-500/20",
+  C2: "bg-error/5 text-error border-error/20",
 };
 
 function getTypeLabel(data: Vocabulary): string {
@@ -78,200 +65,186 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
   const levelStyle = data?.level ? LEVEL_COLORS[data.level] : null;
 
   return (
-    <Drawer
-      open={query !== null}
-      onClose={onClose}
-      title={
-        <span className="text-base font-black text-text-primary font-display">
-          Vocabulary Details
-        </span>
-      }
-      placement="right"
-      width={380}
-      styles={{
-        body: { padding: "20px 24px", background: "var(--surface)" },
-        header: { borderBottom: "1px solid var(--border)", background: "var(--surface)" },
-      }}
-      extra={
-        <div className="flex gap-1.5">
-          <m.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={onToggleSaved}
-            className="items-center gap-1 rounded-lg border-2 border-border text-xs font-extrabold cursor-pointer"
-            style={{
-              display: "inline-flex",
-              padding: "5px 12px",
-              background: saved ? "var(--accent-light)" : "var(--surface-alt)",
-              color: saved ? "var(--accent)" : "var(--text-secondary)",
-            }}
+    <AnimatePresence>
+      {query !== null && (
+        <>
+          {/* Backdrop overlay */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 0.5 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 bg-black/60 z-50 cursor-pointer backdrop-blur-[1px]"
+          />
+
+          {/* Drawer Sheet */}
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 28, stiffness: 220 }}
+            className="fixed right-0 top-0 bottom-0 w-full max-w-[400px] bg-surface border-l-2 border-border shadow-2xl z-50 flex flex-col overflow-hidden"
           >
-            {saved ? <Star className="text-accent" /> : <Star />}
-            <span>{saved ? "Saved" : "Save"}</span>
-          </m.button>
-
-          <m.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
-            className="items-center gap-1 rounded-lg border-2 border-border bg-surface-alt text-text-secondary text-xs font-extrabold cursor-pointer"
-            style={{ display: "inline-flex", padding: "5px 12px" }}
-          >
-            <LinkIcon />
-            <span>Search</span>
-          </m.button>
-        </div>
-      }
-    >
-      <style>{`
-        .ant-drawer-content {
-          background-color: var(--surface) !important;
-        }
-        .ant-drawer-header-title .ant-drawer-close {
-          color: var(--text-secondary) !important;
-        }
-      `}</style>
-
-      {status === "loading" && <Skeleton active paragraph={{ rows: 6 }} />}
-
-      {status === "error" && (
-        <div className="flex flex-col gap-3">
-          <p className="text-[13px] text-text-secondary font-medium m-0">
-            Definition no longer cached or failed to load.
-          </p>
-          <p className="text-xs text-text-muted m-0">
-            Please search this word in the dictionary to view details.
-          </p>
-          <m.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
-            className="mt-2 h-[38px] rounded-lg border-none font-extrabold text-[13px] cursor-pointer flex items-center justify-center gap-1.5"
-            style={{ background: "var(--accent)", color: "var(--text-on-accent)" }}
-          >
-            <LinkIcon /> Search Again
-          </m.button>
-        </div>
-      )}
-
-      {status === "ok" && data && (
-        <div className="flex flex-col gap-5">
-          <div>
-            <h3 className="font-black font-display text-text-primary m-0" style={{ fontSize: 26 }}>
-              {data.headword}
-            </h3>
-            {data.partOfSpeech && (
-              <span className="italic text-text-muted font-semibold" style={{ fontSize: 13.5 }}>
-                ({data.partOfSpeech})
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-4.5 border-b-2 border-border bg-surface shrink-0">
+              <span className="text-base font-black text-text-primary font-display">
+                Vocabulary Details
               </span>
-            )}
-          </div>
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-8 h-8 rounded-lg border-2 border-border bg-surface hover:bg-surface-hover text-text-secondary cursor-pointer flex items-center justify-center shadow-(--shadow-sm) transition-colors shrink-0"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
 
-          {(data.phoneticsUs || data.phoneticsUk) && (
-            <div
-              className="flex gap-3.5 bg-surface-alt rounded-(--radius-lg) border-2 border-border"
-              style={{ padding: "10px 14px" }}
-            >
-              {data.phoneticsUs && (
-                <div className="flex items-center gap-1.5 text-[13px] text-text-secondary font-bold">
-                  <span className="px-1.5 py-0.5 rounded bg-surface-alt text-[10px] text-text-muted font-black border border-border">US</span>
-                  <span>{data.phoneticsUs}</span>
+            {/* Actions Bar */}
+            <div className="flex gap-2 px-6 py-3 border-b-2 border-dashed border-border/40 bg-surface-alt shrink-0">
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={onToggleSaved}
+                className={`items-center gap-1.5 rounded-xl border-2 border-border text-xs font-black cursor-pointer px-4 py-2 flex shadow-(--shadow-sm) transition-all ${
+                  saved ? "bg-accent-light text-accent" : "bg-surface text-text-secondary"
+                }`}
+              >
+                <Star className={`h-4 w-4 shrink-0 ${saved ? "fill-current animate-pulse" : ""}`} />
+                <span>{saved ? "Saved" : "Save"}</span>
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.03 }}
+                whileTap={{ scale: 0.97 }}
+                onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
+                className="items-center gap-1.5 rounded-xl border-2 border-border bg-surface text-text-secondary text-xs font-black cursor-pointer px-4 py-2 flex shadow-(--shadow-sm) transition-all"
+              >
+                <LinkIcon className="h-4 w-4 shrink-0" />
+                <span>Search</span>
+              </motion.button>
+            </div>
+
+            {/* Body Content */}
+            <div className="flex-1 overflow-y-auto p-6 flex flex-col">
+              {status === "loading" && (
+                <div className="space-y-4 animate-pulse py-4">
+                  <div className="h-6 bg-bg-deep border border-border/20 rounded-md w-3/4" />
+                  <div className="h-4 bg-bg-deep border border-border/20 rounded-md w-1/2" />
+                  <div className="space-y-3 mt-8">
+                    <div className="h-4 bg-bg-deep border border-border/20 rounded-md w-full" />
+                    <div className="h-4 bg-bg-deep border border-border/20 rounded-md w-5/6" />
+                    <div className="h-4 bg-bg-deep border border-border/20 rounded-md w-2/3" />
+                  </div>
                 </div>
               )}
-              {data.phoneticsUk && (
-                <div className="flex items-center gap-1.5 text-[13px] text-text-secondary font-bold">
-                  <span className="px-1.5 py-0.5 rounded bg-surface-alt text-[10px] text-text-muted font-black border border-border">UK</span>
-                  <span>{data.phoneticsUk}</span>
+
+              {status === "error" && (
+                <div className="flex flex-col gap-3.5 py-4 max-w-sm">
+                  <p className="text-xs md:text-sm text-text-secondary font-semibold m-0 leading-relaxed">
+                    Definition no longer cached or failed to load.
+                  </p>
+                  <p className="text-xs text-text-muted m-0 font-bold">
+                    Please search this word in the dictionary to view details.
+                  </p>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
+                    className="mt-2.5 h-[40px] rounded-xl border-2 border-border font-black text-xs cursor-pointer flex items-center justify-center gap-2 bg-accent text-ink shadow-(--shadow-sm) hover:translate-y-[-1px] hover:shadow-(--shadow) transition-all"
+                  >
+                    <LinkIcon className="h-4 w-4" /> 
+                    <span>Search Again</span>
+                  </motion.button>
+                </div>
+              )}
+
+              {status === "ok" && data && (
+                <div className="flex flex-col gap-5.5">
+                  <div>
+                    <h3 className="font-black font-display text-text-primary text-2xl m-0 leading-none">
+                      {data.headword}
+                    </h3>
+                    {data.partOfSpeech && (
+                      <span className="italic text-text-muted font-bold text-xs font-mono mt-2 block">
+                        ({data.partOfSpeech})
+                      </span>
+                    )}
+                  </div>
+
+                  {(data.phoneticsUs || data.phoneticsUk) && (
+                    <div className="flex gap-3.5 bg-surface-alt rounded-xl border-2 border-border p-3.5 shadow-(--shadow-sm)">
+                      {data.phoneticsUs && (
+                        <div className="flex items-center gap-1.5 text-xs text-text-secondary font-bold">
+                          <span className="px-1.5 py-0.5 rounded bg-surface border border-border/60 text-[9px] text-text-muted font-black">US</span>
+                          <span className="font-mono">/{data.phoneticsUs}/</span>
+                        </div>
+                      )}
+                      {data.phoneticsUk && (
+                        <div className="flex items-center gap-1.5 text-xs text-text-secondary font-bold">
+                          <span className="px-1.5 py-0.5 rounded bg-surface border border-border/60 text-[9px] text-text-muted font-black">UK</span>
+                          <span className="font-mono">/{data.phoneticsUk}/</span>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  <div className="flex gap-2 flex-wrap">
+                    {levelStyle && (
+                      <span className={`text-[10px] font-black rounded-lg border px-3 py-1 shadow-(--shadow-sm) ${levelStyle}`}>
+                        Level: {data.level}
+                      </span>
+                    )}
+                    <span className="text-[10px] font-black rounded-lg bg-surface-alt text-text-secondary border-2 border-border px-3 py-1 shadow-(--shadow-sm)">
+                      {getTypeLabel(data)}
+                    </span>
+                  </div>
+
+                  <div className="flex flex-col gap-5.5 border-t-2 border-dashed border-border/40 pt-5">
+                    {data.senses.map((sense) => (
+                      <div key={sense.id} className="flex flex-col gap-2">
+                        <span className="text-[9px] font-extrabold uppercase tracking-wider text-accent font-display">
+                          {sense.label || "Definition"}
+                        </span>
+
+                        <p className="text-text-primary font-black m-0 text-sm leading-relaxed">
+                          {sense.definitionEn}
+                        </p>
+                        {sense.shortMeaningsVi && sense.shortMeaningsVi.length > 0 && (
+                          <p className="text-text-secondary font-bold text-xs leading-normal mt-0.5">
+                            {sense.shortMeaningsVi.join(", ")}
+                          </p>
+                        )}
+
+                        {sense.examples.slice(0, 3).map((ex, i) => (
+                          <div
+                            key={i}
+                            className="mt-1.5 flex flex-col gap-1 border-l-2 border-accent-hover/30 pl-3.5"
+                          >
+                            <span className="text-xs italic text-text-secondary font-semibold leading-relaxed">
+                              &ldquo;{ex.en}&rdquo;
+                            </span>
+                            {ex.vi && <span className="text-[11px] text-text-muted font-bold leading-normal">→ {ex.vi}</span>}
+                          </div>
+                        ))}
+                      </div>
+                    ))}
+                  </div>
+
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
+                    className="h-[42px] rounded-xl border-2 border-border font-black cursor-pointer flex items-center justify-center gap-1.5 bg-gradient-to-r from-accent to-secondary text-white shadow-(--shadow) mt-4 mb-2"
+                  >
+                    <span>View in Dictionary</span>
+                    <ArrowRight className="h-4 w-4 shrink-0" />
+                  </motion.button>
                 </div>
               )}
             </div>
-          )}
-
-          <div className="flex gap-1.5 flex-wrap">
-            {levelStyle && (
-              <span
-                className="text-[11px] font-extrabold rounded-md"
-                style={{
-                  padding: "3px 8px",
-                  background: levelStyle.bg,
-                  color: levelStyle.color,
-                  border: `1px solid ${levelStyle.border}`,
-                }}
-              >
-                Level: {data.level}
-              </span>
-            )}
-            <span
-              className="text-[11px] font-extrabold rounded-md bg-surface-alt text-text-secondary border-2 border-border"
-              style={{ padding: "3px 8px" }}
-            >
-              {getTypeLabel(data)}
-            </span>
-          </div>
-
-          <div
-            className="flex flex-col gap-5"
-            style={{ borderTop: "1.5px dashed var(--border)", paddingTop: 20 }}
-          >
-            {data.senses.map((sense) => (
-              <div key={sense.id} className="flex flex-col gap-1.5">
-                <span className="text-[10.5px] font-black uppercase tracking-widest text-accent">
-                  {sense.label || "Definition"}
-                </span>
-
-                <p
-                  className="text-text-primary font-bold m-0 leading-normal"
-                  style={{ fontSize: 14.5 }}
-                >
-                  {sense.definitionEn}
-                </p>
-                {sense.shortMeaningsVi && sense.shortMeaningsVi.length > 0 && (
-                  <p
-                    className="text-text-secondary font-medium leading-normal"
-                    style={{ fontSize: 13.5, margin: "2px 0 0" }}
-                  >
-                    {sense.shortMeaningsVi.join(", ")}
-                  </p>
-                )}
-
-                {sense.examples.slice(0, 3).map((ex, i) => (
-                  <div
-                    key={i}
-                    className="mt-1.5 flex flex-col"
-                    style={{
-                      borderLeft: "2.5px solid var(--accent-muted)",
-                      paddingLeft: 12,
-                      gap: 2,
-                    }}
-                  >
-                    <span className="text-[13px] italic text-text-secondary font-semibold">
-                      {ex.en}
-                    </span>
-                    {ex.vi && <span className="text-xs text-text-muted font-medium">{ex.vi}</span>}
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-
-          <m.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
-            className="h-[40px] rounded-(--radius-lg) border-none font-extrabold cursor-pointer flex items-center justify-center gap-1.5"
-            style={{
-              marginTop: "auto",
-              background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-              color: "var(--text-on-accent)",
-              fontSize: 13.5,
-              boxShadow: "0 2px 8px var(--accent-muted)",
-            }}
-          >
-            <span>View details in Dictionary</span>
-            <ArrowRight />
-          </m.button>
-        </div>
+          </motion.div>
+        </>
       )}
-    </Drawer>
+    </AnimatePresence>
   );
 }

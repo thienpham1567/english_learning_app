@@ -34,7 +34,7 @@ interface TabItem {
 const TABS: TabItem[] = [
   {
     key: "home",
-    label: "Tổng quan",
+    label: "Dashboard",
     icon: <LayoutDashboard />,
     activeIcon: <LayoutDashboard />,
     href: "/dashboard",
@@ -48,21 +48,21 @@ const TABS: TabItem[] = [
   },
   {
     key: "exam",
-    label: "Đề thi",
+    label: "Exams",
     icon: <Trophy />,
     activeIcon: <Trophy />,
     action: "exam-hub",
   },
   {
     key: "review",
-    label: "Ôn tập",
+    label: "Review",
     icon: <RefreshCw />,
     activeIcon: <RefreshCw />,
     action: "review-hub",
   },
   {
     key: "more",
-    label: "Thêm",
+    label: "More",
     icon: <LayoutGrid />,
     activeIcon: <LayoutGrid />,
     action: "more-hub",
@@ -70,7 +70,7 @@ const TABS: TabItem[] = [
 ];
 
 const EXAM_HUB_ITEMS = [
-  { label: "Luyện đề ETS", icon: <Trophy />, href: "/toeic/practice" },
+  { label: "ETS Practice Tests", icon: <Trophy />, href: "/toeic/practice" },
   {
     label: "TOEIC Part 5",
     icon: <HelpCircle />,
@@ -79,25 +79,25 @@ const EXAM_HUB_ITEMS = [
 ];
 
 const REVIEW_HUB_ITEMS = [
-  { label: "Sổ lỗi sai", icon: <FileWarning />, href: "/error-notebook" },
-  { label: "Ôn tập Flashcard", icon: <RefreshCw />, href: "/flashcards" },
+  { label: "Error Notebook", icon: <FileWarning />, href: "/error-notebook" },
+  { label: "Flashcard Review", icon: <RefreshCw />, href: "/flashcards" },
 ];
 
 const MORE_HUB_ITEMS = [
   {
-    label: "Thử thách hàng ngày",
+    label: "Daily Challenge",
     icon: <Flame />,
     href: "/daily-challenge",
   },
   { label: "AI Chatbot", icon: <MessageSquare />, href: "/english-chatbot" },
-  { label: "Đọc to", icon: <Volume2 />, href: "/read-aloud" },
+  { label: "Read Aloud", icon: <Volume2 />, href: "/read-aloud" },
   {
-    label: "Lộ trình ngữ pháp",
+    label: "Grammar Roadmap",
     icon: <GitBranch />,
     href: "/grammar-roadmap",
   },
-  { label: "Bài học ngữ pháp", icon: <GraduationCap />, href: "/grammar-lessons" },
-  { label: "Từ vựng", icon: <Star />, href: "/my-vocabulary" },
+  { label: "Grammar Lessons", icon: <GraduationCap />, href: "/grammar-lessons" },
+  { label: "Vocabulary", icon: <Star />, href: "/my-vocabulary" },
 ];
 
 function getActiveTab(pathname: string): string {
@@ -161,19 +161,12 @@ export function BottomTabBar() {
             <m.button
               type="button"
               key="backdrop"
-              aria-label="Đóng menu"
+              aria-label="Close menu"
               onClick={() => setActiveHub(null)}
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="fixed border-none"
-              style={{
-                inset: 0,
-                background: "rgba(0,0,0,0.6)",
-                backdropFilter: "blur(4px)",
-                padding: 0,
-                zIndex: 20,
-              }}
+              className="fixed inset-0 border-none p-0 z-20 bg-black/60 backdrop-blur-sm"
             />
 
             {/* Hub cards */}
@@ -183,14 +176,7 @@ export function BottomTabBar() {
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: 20, scale: 0.95 }}
               transition={{ type: "spring", stiffness: 400, damping: 30 }}
-              className="fixed grid gap-3"
-              style={{
-                bottom: 72,
-                left: 16,
-                right: 16,
-                zIndex: 21,
-                gridTemplateColumns: "1fr 1fr",
-              }}
+              className="fixed grid gap-3 grid-cols-2 bottom-[72px] left-4 right-4 z-[21]"
             >
               {hubItems.map((item, idx) => (
                 <m.div
@@ -205,12 +191,7 @@ export function BottomTabBar() {
                       setActiveHub(null);
                       router.push(item.href);
                     }}
-                    className="rounded text-center bg-(--surface) p-4 cursor-pointer"
-                    style={{
-                      border: "var(--brutal-border)",
-                      boxShadow: "var(--shadow-sm)",
-                      transition: "transform 0.1s, box-shadow 0.1s",
-                    }}
+                    className="rounded text-center bg-surface p-4 cursor-pointer border-2 border-border shadow-sm transition-transform duration-100 active:scale-95 w-full"
                   >
                     <span className="text-3xl text-accent">{item.icon}</span>
                     <br />
@@ -227,17 +208,8 @@ export function BottomTabBar() {
       <m.nav
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        className="fixed h-[64px] bg-(--surface) flex items-center justify-around"
-        style={{
-          bottom: 0,
-          left: 0,
-          right: 0,
-          borderTop: "1px solid var(--border)",
-          backdropFilter: "blur(12px)",
-          zIndex: 22,
-          paddingBottom: "env(safe-area-inset-bottom, 0px)",
-          boxShadow: "0 -4px 20px rgba(0,0,0,0.05)",
-        }}
+        className="fixed h-16 bg-surface flex items-center justify-around bottom-0 left-0 right-0 border-t border-border backdrop-blur-xl z-[22] shadow-[0_-4px_20px_rgba(0,0,0,0.05)]"
+        style={{ paddingBottom: "env(safe-area-inset-bottom, 0px)" }}
       >
         {TABS.map((tab) => {
           const isActive = activeTab === tab.key;
@@ -248,8 +220,8 @@ export function BottomTabBar() {
               aria-label={tab.label}
               onClick={() => handleTabClick(tab)}
               whileTap={{ scale: 0.9 }}
-              className="flex-1 flex flex-col items-center justify-center border-none bg-transparent cursor-pointer"
-              style={{ gap: 2, padding: "8px 0", WebkitTapHighlightColor: "transparent" }}
+              className="flex-1 flex flex-col items-center justify-center border-none bg-transparent cursor-pointer gap-0.5 py-2"
+              style={{ WebkitTapHighlightColor: "transparent" }}
             >
               <m.div
                 animate={{
@@ -263,20 +235,16 @@ export function BottomTabBar() {
                 {isActive ? tab.activeIcon : tab.icon}
               </m.div>
               <span
-                className="text-[11px] leading-none"
-                style={{
-                  fontWeight: isActive ? 700 : 500,
-                  color: isActive ? "var(--accent)" : "var(--text-muted)",
-                  marginTop: 2,
-                }}
+                className={`text-[11px] leading-none mt-0.5 ${isActive ? "font-bold" : "font-medium"}`}
+                style={{ color: isActive ? "var(--accent)" : "var(--text-muted)" }}
               >
                 {tab.label}
               </span>
               {isActive && (
                 <m.div
                   layoutId="activeTab"
-                  className="absolute w-[4px] h-[4px] rounded-full"
-                  style={{ bottom: 6, background: "var(--accent)" }}
+                  className="absolute w-1 h-1 rounded-full bottom-1.5"
+                  style={{ background: "var(--accent)" }}
                 />
               )}
             </m.button>

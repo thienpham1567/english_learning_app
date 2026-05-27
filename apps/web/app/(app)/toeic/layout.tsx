@@ -3,17 +3,9 @@ import { SubNav } from "./_components/SubNav";
 
 export default function ToeicLayout({ children }: { children: ReactNode }) {
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100%",
-        minHeight: 0,
-        flex: 1,
-      }}
-    >
+    <div className="flex flex-col h-full min-h-0 flex-1">
       <SubNav />
-      <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
+      <div className="flex-1 min-h-0 flex flex-col">
         {children}
       </div>
     </div>

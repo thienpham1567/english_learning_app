@@ -30,13 +30,21 @@ import { useCallback, useState } from "react";
 import { Logo } from "@/components/shared/Logo";
 import { useTheme } from "@/components/shared/ThemeProvider";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useSidebarBadges } from "@/hooks/useSidebarBadges";
 
 type NavItem = {
   href: string;
   label: string;
-  icon: React.ComponentType<{ style?: React.CSSProperties }>;
+  icon: React.ComponentType<{
+    className?: string;
+    size?: number;
+    style?: React.CSSProperties;
+  }>;
 };
 
 type NavGroup = {
@@ -46,43 +54,47 @@ type NavGroup = {
 };
 
 const navGroups: (NavItem | NavGroup)[] = [
-  { href: "/dashboard", label: "Tổng quan", icon: LayoutDashboard },
-  { href: "/toeic/skills", label: "Luyện thi TOEIC", icon: Target },
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/toeic/skills", label: "TOEIC Practice", icon: Target },
   {
     key: "foundation",
-    label: "Nền tảng",
+    label: "Foundation",
     items: [
       {
         href: "/grammar-roadmap",
-        label: "Lộ trình ngữ pháp",
+        label: "Grammar Roadmap",
         icon: GitBranch,
       },
-      { href: "/grammar-lessons", label: "Bài học ngữ pháp", icon: GraduationCap },
-      { href: "/my-vocabulary", label: "Từ vựng", icon: Star },
-      { href: "/flashcards", label: "Ôn tập Flashcard", icon: RefreshCw },
+      {
+        href: "/grammar-lessons",
+        label: "Grammar Lessons",
+        icon: GraduationCap,
+      },
+      { href: "/my-vocabulary", label: "Vocabulary", icon: Star },
+      { href: "/flashcards", label: "Flashcard Review", icon: RefreshCw },
     ],
   },
   {
     key: "daily",
-    label: "Hàng ngày",
+    label: "Daily",
     items: [
       {
         href: "/daily-challenge",
-        label: "Thử thách hàng ngày",
+        label: "Daily Challenge",
         icon: Flame,
       },
 
-      { href: "/error-notebook", label: "Sổ lỗi sai", icon: FileWarning },
+      { href: "/error-notebook", label: "Error Notebook", icon: FileWarning },
     ],
   },
   {
     key: "tools",
-    label: "Công cụ",
+    label: "Tools",
     items: [
       { href: "/english-chatbot", label: "AI Chatbot", icon: MessageSquare },
-      { href: "/read-aloud", label: "Đọc to", icon: Volume2 },
-      { href: "/ipa-chart", label: "Bảng IPA", icon: Volume2 },
-      { href: "/writing-tools", label: "Công cụ viết", icon: Pencil },
+      { href: "/read-aloud", label: "Read Aloud", icon: Volume2 },
+      { href: "/ipa-chart", label: "IPA Chart", icon: Volume2 },
+      { href: "/writing-tools", label: "Writing Tools", icon: Pencil },
     ],
   },
 ];
@@ -104,7 +116,11 @@ function NavLink({
 }: {
   href: string;
   label: string;
-  icon: React.ComponentType<{ style?: React.CSSProperties }>;
+  icon: React.ComponentType<{
+    className?: string;
+    size?: number;
+    style?: React.CSSProperties;
+  }>;
   active: boolean;
   isExpanded: boolean;
   badge?: React.ReactNode;
@@ -112,7 +128,7 @@ function NavLink({
   animDelay?: number;
 }) {
   return (
-    <Link href={href} prefetch={false} style={{ textDecoration: "none" }}>
+    <Link href={href} prefetch={false} className="no-underline">
       <m.div
         initial={{ opacity: 0, x: -10 }}
         animate={{ opacity: 1, x: 0 }}
@@ -120,24 +136,21 @@ function NavLink({
         whileHover={{ x: 4, background: "var(--sidebar-item-hover)" }}
         whileTap={{ scale: 0.98 }}
         aria-current={active ? "page" : undefined}
-        className="sidebar-nav-link flex items-center gap-2.5 overflow-hidden relative cursor-pointer"
-        style={{
-          borderRadius: 10,
-          padding: indented ? "7px 10px 7px 14px" : "9px 10px",
-          fontSize: indented ? 13 : 14,
-          fontWeight: active ? 600 : 500,
-          background: active ? "var(--sidebar-active-bg)" : "transparent",
-          color: active ? "var(--accent)" : "var(--sidebar-text)",
-          borderLeft: active ? "3px solid var(--accent)" : "3px solid transparent",
-          transition: "background 0.2s, color 0.2s, border-color 0.2s",
-        }}
+        className={`sidebar-nav-link flex items-center gap-2.5 overflow-hidden relative cursor-pointer rounded-[10px] transition-[background,color,border-color] duration-200 border-l-[3px] ${
+          indented
+            ? "py-[7px] px-2.5 pl-3.5 text-[13px]"
+            : "py-[9px] px-2.5 text-sm"
+        } ${
+          active
+            ? "font-semibold bg-(--sidebar-active-bg) text-accent border-accent"
+            : "font-medium bg-transparent text-(--sidebar-text) border-transparent"
+        }`}
       >
         <m.span
           animate={{ scale: active ? 1.1 : 1, opacity: active ? 1 : 0.7 }}
-          className="grid w-[18px] h-[18px] shrink-0"
-          style={{ placeItems: "center" }}
+          className="grid place-items-center w-[18px] h-[18px] shrink-0"
         >
-          <Icon style={{ fontSize: indented ? 15 : 17 }} />
+          <Icon size={indented ? 15 : 17} />
         </m.span>
 
         <AnimatePresence>
@@ -147,8 +160,7 @@ function NavLink({
               initial={{ opacity: 0, width: 0 }}
               animate={{ opacity: 1, width: "auto" }}
               exit={{ opacity: 0, width: 0 }}
-              className="flex-1"
-              style={{ whiteSpace: "nowrap", letterSpacing: "-0.01em" }}
+              className="flex-1 whitespace-nowrap tracking-tight"
             >
               {label}
             </m.span>
@@ -208,13 +220,12 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
           initial={{ scale: 0.8 }}
           animate={{ scale: [0.8, 1.2, 1] }}
           transition={{ repeat: Infinity, duration: 3 }}
-          className="text-xs leading-none"
-          style={{ marginLeft: "auto" }}
+          className="text-xs leading-none ml-auto"
         >
           {badges.dailyChallengeCompleted ? (
             <CircleCheckBig className="text-emerald-500" />
           ) : (
-            <Flame className="text-destructive" style={{ opacity: 0.7 }} />
+            <Flame className="text-destructive opacity-70" />
           )}
         </m.span>
       );
@@ -227,27 +238,17 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
       initial={false}
       animate={{ width: isExpanded ? 248 : 64 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="flex flex-col overflow-hidden"
-      style={{
-        position: "sticky",
-        top: 0,
-        zIndex: 50,
-        borderRight: "1px solid var(--sidebar-border)",
-        background: "var(--sidebar-bg)",
-        padding: "16px 10px",
-        height: "100vh",
-      }}
+      className="flex flex-col overflow-hidden sticky top-0 z-50 h-screen py-4 px-2.5 border-r border-[var(--sidebar-border)] bg-[var(--sidebar-bg)]"
     >
       {/* Accent glow */}
       <m.div
         aria-hidden
         animate={{ opacity: isExpanded ? 1 : 0.6 }}
-        className="absolute"
-        style={{ inset: 0, pointerEvents: "none", background: "var(--sidebar-glow)", zIndex: 0 }}
+        className="absolute inset-0 pointer-events-none z-0 bg-[var(--sidebar-glow)]"
       />
 
       {/* Logo / toggle */}
-      <div className="relative z-[1] flex items-center h-[52px] pb-3" style={{ paddingTop: 2 }}>
+      <div className="relative z-[1] flex items-center h-[52px] pb-3 pt-0.5">
         <AnimatePresence mode="wait">
           {isExpanded ? (
             <m.div
@@ -265,8 +266,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
                 whileTap={{ scale: 0.9 }}
                 onClick={onToggle}
                 aria-label="Collapse sidebar"
-                className="grid w-[28px] h-[28px] shrink-0 rounded-lg bg-none border-none cursor-pointer"
-                style={{ marginLeft: "auto", placeItems: "center", color: "var(--sidebar-text)" }}
+                className="grid place-items-center w-7 h-7 shrink-0 rounded-lg bg-none border-none cursor-pointer ml-auto text-[var(--sidebar-text)]"
               >
                 <PanelLeftClose size={15} />
               </m.button>
@@ -281,8 +281,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
               whileTap={{ scale: 0.9 }}
               onClick={onToggle}
               aria-label="Expand sidebar"
-              className="mx-auto grid w-[36px] h-[36px] shrink-0 bg-none border-none cursor-pointer"
-              style={{ placeItems: "center", borderRadius: 10, color: "var(--sidebar-text)" }}
+              className="mx-auto grid place-items-center w-9 h-9 shrink-0 bg-none border-none cursor-pointer rounded-[10px] text-[var(--sidebar-text)]"
             >
               <PanelLeftOpen size={15} />
             </m.button>
@@ -290,16 +289,12 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
         </AnimatePresence>
       </div>
 
-      <div
-        className="h-[1px] relative z-[1] mb-1.5"
-        style={{ background: "var(--sidebar-border)" }}
-      />
+      <div className="h-px relative z-[1] mb-1.5 bg-[var(--sidebar-border)]" />
 
       {/* Nav */}
       <m.nav
-        aria-label="Các mục trong ứng dụng"
-        className="relative z-[1] flex flex-col pt-1 flex-1 overflow-y-auto"
-        style={{ gap: 1, overflowX: "hidden", scrollbarWidth: "none" }}
+        aria-label="App navigation"
+        className="relative z-[1] flex flex-col pt-1 flex-1 overflow-y-auto overflow-x-hidden gap-px scrollbar-none"
       >
         {navGroups.map((entry, groupIndex) => {
           // Standalone (Home)
@@ -334,16 +329,19 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
           // Group
           const group = entry as NavGroup;
           const groupHasActive = group.items.some(
-            (item) => pathname === item.href || pathname.startsWith(`${item.href}/`),
+            (item) =>
+              pathname === item.href || pathname.startsWith(`${item.href}/`),
           );
           const isGroupOpen = groupHasActive || !collapsedGroups.has(group.key);
 
           // Collapsed sidebar: flat icons
           if (!isExpanded) {
             return (
-              <div key={group.key} style={{ marginTop: 2 }}>
+              <div key={group.key} className="mt-0.5">
                 {group.items.map((item, itemIndex) => {
-                  const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                  const active =
+                    pathname === item.href ||
+                    pathname.startsWith(`${item.href}/`);
                   const link = (
                     <NavLink
                       href={item.href}
@@ -373,19 +371,12 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 + groupIndex * 0.05 }}
-              style={{ marginTop: groupIndex > 0 ? 10 : 4 }}
+              className={groupIndex > 0 ? "mt-2.5" : "mt-1"}
             >
               <m.button
                 onClick={() => toggleGroup(group.key)}
                 whileHover={{ x: 2, opacity: 0.8 }}
-                className="flex items-center w-full border-none bg-none text-[10px] font-bold uppercase cursor-pointer"
-                style={{
-                  padding: "4px 12px 4px 10px",
-                  color: "var(--sidebar-text)",
-                  opacity: 0.55,
-                  letterSpacing: "0.07em",
-                  marginBottom: 2,
-                }}
+                className="flex items-center w-full border-none bg-none text-[10px] font-bold uppercase cursor-pointer py-1 px-2.5 pl-2.5 mb-0.5 tracking-[0.07em] opacity-55 text-[var(--sidebar-text)]"
               >
                 <span className="flex-1 text-left">{group.label}</span>
                 <m.span animate={{ rotate: isGroupOpen ? 0 : -90 }}>
@@ -400,11 +391,12 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
                     animate={{ height: "auto", opacity: 1 }}
                     exit={{ height: 0, opacity: 0 }}
                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                    className="flex flex-col overflow-hidden"
-                    style={{ gap: 1 }}
+                    className="flex flex-col overflow-hidden gap-px"
                   >
                     {group.items.map((item, itemIndex) => {
-                      const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
+                      const active =
+                        pathname === item.href ||
+                        pathname.startsWith(`${item.href}/`);
                       return (
                         <NavLink
                           key={item.href}
@@ -434,7 +426,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
         transition={{ delay: 0.5 }}
         className="pt-2 relative z-[1] mt-1"
       >
-        <div className="h-[1px] mb-2" style={{ background: "var(--sidebar-border)" }} />
+        <div className="h-px mb-2 bg-[var(--sidebar-border)]" />
 
         {/* Theme toggle */}
         {(() => {
@@ -443,25 +435,22 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
               whileHover={{ background: "var(--sidebar-item-hover)", x: 2 }}
               whileTap={{ scale: 0.95 }}
               onClick={toggleTheme}
-              className="theme-toggle-btn flex items-center gap-2.5 w-full border-none bg-transparent text-sm font-medium cursor-pointer"
-              aria-label={mode === "light" ? "Bật chế độ tối" : "Bật chế độ sáng"}
-              style={{
-                padding: "9px 10px",
-                borderRadius: 10,
-                color: "var(--sidebar-text)",
-                transition: "color 0.18s",
-              }}
+              className="theme-toggle-btn flex items-center gap-2.5 w-full border-none bg-transparent text-sm font-medium cursor-pointer py-[9px] px-2.5 rounded-[10px] transition-colors duration-150 text-[var(--sidebar-text)]"
+              aria-label={
+                mode === "light"
+                  ? "Switch to dark mode"
+                  : "Switch to light mode"
+              }
             >
               <m.span
                 animate={{ rotate: mode === "light" ? 0 : 180 }}
-                className="text-[15px] grid"
-                style={{ placeItems: "center" }}
+                className="text-[15px] grid place-items-center"
               >
                 {mode === "light" ? <Moon /> : <Sun />}
               </m.span>
               {isExpanded && (
                 <m.span initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                  {mode === "light" ? "Chế độ tối" : "Chế độ sáng"}
+                  {mode === "light" ? "Dark Mode" : "Light Mode"}
                 </m.span>
               )}
             </m.button>
@@ -470,7 +459,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
             <Tooltip>
               <TooltipTrigger asChild>{themeBtn}</TooltipTrigger>
               <TooltipContent side="right">
-                {mode === "light" ? "Chế độ tối" : "Chế độ sáng"}
+                {mode === "light" ? "Dark Mode" : "Light Mode"}
               </TooltipContent>
             </Tooltip>
           ) : (

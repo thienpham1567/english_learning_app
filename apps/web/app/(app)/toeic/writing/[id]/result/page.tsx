@@ -1,5 +1,4 @@
 import { db, toeicWritingPrompt, toeicWritingResponse, toeicWritingSession } from "@repo/database";
-import { Card, Empty, Tag } from "antd";
 import { and, asc, eq, inArray } from "drizzle-orm";
 import { ClipboardList } from "lucide-react";
 import { headers } from "next/headers";
@@ -36,7 +35,7 @@ export default async function WritingResultPage({ params }: { params: Promise<{ 
   return (
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
       <div className="p-4 grid gap-4 w-[800px]">
-        <Card>
+        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
           <div className="text-center">
             <div className="font-extrabold text-accent" style={{ fontSize: 56 }}>
               {s.scaledScore ?? "—"}
@@ -44,29 +43,23 @@ export default async function WritingResultPage({ params }: { params: Promise<{ 
             <div className="text-text-muted">/ 200 (TOEIC Writing)</div>
             <div className="mt-1.5 text-text-muted">Raw: {s.rawScore ?? "—"} / 28</div>
           </div>
-        </Card>
+        </div>
 
         {prompts
           .sort((a, b) => a.questionNumber - b.questionNumber)
           .map((p) => {
             const r = responses.find((x) => x.promptId === p.id);
             return (
-              <Card
+              <div
                 key={p.id}
-                size="small"
-                title={`Q${p.questionNumber} · ${
-                  p.type === "q1_5_picture"
-                    ? "Picture"
-                    : p.type === "q6_7_email"
-                      ? "Email"
-                      : "Opinion"
-                }`}
-                extra={
-                  <Tag color="blue">
-                    {r?.rawScore ?? 0} / {p.maxScore}
-                  </Tag>
-                }
+                className="border-2 border-border rounded-xl bg-surface shadow-sm p-4"
               >
+                <div className="flex justify-between items-center mb-3">
+                  <strong>Q{p.questionNumber} · {p.type === "q1_5_picture" ? "Picture" : p.type === "q6_7_email" ? "Email" : "Opinion"}</strong>
+                  <span className="bg-blue-500/15 text-blue-600 py-0.5 px-2 rounded-md text-sm font-bold">
+                    {r?.rawScore ?? 0} / {p.maxScore}
+                  </span>
+                </div>
                 {p.type === "q1_5_picture" && p.imageUrl && (
                   <img
                     loading="lazy"
@@ -79,7 +72,7 @@ export default async function WritingResultPage({ params }: { params: Promise<{ 
                 {r ? (
                   <>
                     <div
-                      className="bg-(--surface) rounded-md mb-2"
+                      className="bg-surface rounded-md mb-2"
                       style={{ padding: 10, whiteSpace: "pre-wrap" }}
                     >
                       {r.text || <em className="text-text-muted">(empty)</em>}
@@ -94,9 +87,12 @@ export default async function WritingResultPage({ params }: { params: Promise<{ 
                     )}
                   </>
                 ) : (
-                  <Empty description="No response" />
+                  <div className="flex flex-col items-center justify-center py-12 text-text-muted">
+                <div className="text-4xl mb-3">📭</div>
+                <div className="text-sm font-semibold">No data available</div>
+              </div>
                 )}
-              </Card>
+              </div>
             );
           })}
 

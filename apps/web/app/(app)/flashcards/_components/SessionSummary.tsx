@@ -1,10 +1,7 @@
 "use client";
 
-import { Button, Card, Flex, Space, Typography } from "antd";
 import {
-  AlertTriangle,
   BarChart3,
-  CheckCircle,
   ChevronRight,
   Flame,
   Frown,
@@ -19,8 +16,6 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { CelebrationOverlay, StreakFire } from "@/components/shared";
 import { useDashboard } from "@/hooks/useDashboard";
-
-const { Title, Text } = Typography;
 
 type Props = {
   totalReviewed: number;
@@ -77,35 +72,28 @@ export function SessionSummary({
         visible={showCelebration}
         onComplete={() => setShowCelebration(false)}
       >
-        <Title
-          level={3}
-          className="m-0"
+        <h3
+          className="m-0 text-xl font-extrabold flex items-center gap-2"
           style={{ color: "var(--text-on-accent)", textShadow: "0 2px 8px rgba(0,0,0,0.3)" }}
         >
           <Trophy /> Session Completed!
-        </Title>
+        </h3>
       </CelebrationOverlay>
 
-      <Flex vertical align="stretch" gap={20} className="anim-scale-in w-[500px] mx-auto w-full">
+      <div className="anim-scale-in w-full max-w-[500px] mx-auto flex flex-col gap-5">
         {/* Streak & Hero banner */}
         <div
-          className="rounded-(--radius-xl) border-2 border-border text-center relative overflow-hidden flex flex-col items-center gap-3"
+          className="rounded-xl border-2 border-border text-center relative overflow-hidden flex flex-col items-center gap-3 py-8 px-6 shadow-(--shadow-sm)"
           style={{
             background:
               "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--surface))",
-            padding: "32px 24px",
-            boxShadow: "var(--shadow-sm)",
           }}
         >
           {/* Ambient glow behind streak */}
           <div
-            className="absolute w-[220px] h-[220px] rounded-full"
+            className="absolute w-[220px] h-[220px] rounded-full left-1/2 top-[40%] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
             style={{
-              left: "50%",
-              top: "40%",
-              transform: "translate(-50%, -50%)",
               background: "radial-gradient(circle, var(--accent) 12%, transparent 70%)",
-              pointerEvents: "none",
             }}
           />
 
@@ -113,17 +101,17 @@ export function SessionSummary({
             <StreakFire streak={streak} />
           </div>
 
-          <Title level={3} className="mt-3 mb-1 font-black text-text-primary">
+          <h3 className="mt-3 mb-1 font-black text-text-primary text-xl">
             Session Completed!
-          </Title>
-          <Text className="text-sm text-text-secondary font-medium">
+          </h3>
+          <p className="text-sm text-text-secondary font-medium m-0">
             You successfully reviewed <span className="text-accent font-bold">{totalReviewed}</span>{" "}
             vocabulary cards today.
-          </Text>
+          </p>
         </div>
 
         {/* Stats Grid cards */}
-        <Flex gap={12} className="w-full">
+        <div className="flex gap-3 w-full">
           {[
             { label: "Reviewed", value: totalReviewed, color: "var(--accent)" },
             { label: "Average Quality", value: `${averageQuality.toFixed(1)}/5`, color: "var(--xp)" },
@@ -138,19 +126,18 @@ export function SessionSummary({
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.15 + idx * 0.08 }}
-              className="flex-1 bg-(--surface) border-2 border-border rounded-(--radius-lg) text-center"
-              style={{ padding: "16px 12px", boxShadow: "var(--shadow-sm)" }}
+              className="flex-1 bg-surface border-2 border-border rounded-lg text-center py-4 px-3 shadow-(--shadow-sm)"
             >
               <div
-                className="text-2xl font-black font-display"
-                style={{ color: stat.color, lineHeight: 1.1 }}
+                className="text-2xl font-black font-display leading-none"
+                style={{ color: stat.color }}
               >
                 {stat.value}
               </div>
               <div className="text-[11px] text-text-muted font-bold mt-1">{stat.label}</div>
             </m.div>
           ))}
-        </Flex>
+        </div>
 
         {/* Distribution card */}
         {totalReviewed > 0 && (
@@ -158,24 +145,20 @@ export function SessionSummary({
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
-            className="bg-(--surface) rounded-(--radius-xl) border-2 border-border"
-            style={{ padding: "18px 20px", boxShadow: "var(--shadow-sm)" }}
+            className="bg-surface rounded-xl border-2 border-border py-4.5 px-5 shadow-(--shadow-sm)"
           >
             <span className="text-[13px] font-extrabold text-text-primary flex items-center gap-1.5 mb-4">
               <BarChart3 className="text-accent" />
               Retention Distribution
             </span>
-            <Flex gap={12}>
+            <div className="flex gap-3">
               {DISTRIBUTION_ITEMS.map((item) => {
                 const count = counts[item.key] ?? 0;
                 const pct = totalReviewed > 0 ? Math.round((count / totalReviewed) * 100) : 0;
                 return (
-                  <Flex key={item.key} vertical align="center" gap={6} className="flex-1">
+                  <div key={item.key} className="flex-1 flex flex-col items-center gap-1.5">
                     {/* Custom vertical bar graph */}
-                    <div
-                      className="w-[8px] h-[52px] rounded-full relative overflow-hidden flex flex-col justify-end"
-                      style={{ background: "var(--border)" }}
-                    >
+                    <div className="w-2 h-[52px] rounded-full relative overflow-hidden flex flex-col justify-end bg-border">
                       <m.div
                         initial={{ height: 0 }}
                         animate={{ height: `${pct}%` }}
@@ -186,10 +169,10 @@ export function SessionSummary({
                     </div>
                     <span className="text-[11px] font-bold text-text-primary">{count}</span>
                     <span className="text-[11px] text-text-muted font-semibold">{item.label}</span>
-                  </Flex>
+                  </div>
                 );
               })}
-            </Flex>
+            </div>
           </m.div>
         )}
 
@@ -199,19 +182,15 @@ export function SessionSummary({
             whileHover={{ scale: 1.01, y: -1 }}
             whileTap={{ scale: 0.99 }}
             onClick={() => router.push("/daily-challenge")}
-            className="text-left rounded-(--radius-xl) py-4 px-5 cursor-pointer flex items-center gap-3.5"
+            className="text-left rounded-xl py-4 px-5 cursor-pointer flex items-center gap-3.5 shadow-(--shadow-sm)"
             style={{
               background:
                 "linear-gradient(135deg, color-mix(in srgb, var(--accent) 6%, var(--surface)), var(--surface))",
               border: "1px solid color-mix(in srgb, var(--accent) 15%, var(--border))",
-              boxShadow: "var(--shadow-sm)",
             }}
           >
-            <div
-              className="w-[44px] h-[44px] rounded-full grid shrink-0"
-              style={{ background: "rgba(245, 158, 11, 0.08)", placeItems: "center" }}
-            >
-              <Flame className="text-2xl text-(--xp)" />
+            <div className="w-11 h-11 rounded-full grid shrink-0 place-items-center bg-[rgba(245,158,11,0.08)]">
+              <Flame className="text-2xl text-[var(--xp)]" />
             </div>
             <div className="flex-1">
               <h4 className="m-0 text-sm font-extrabold text-text-primary">Daily Challenge</h4>
@@ -229,18 +208,16 @@ export function SessionSummary({
             whileHover={{ scale: 1.02, y: -1 }}
             whileTap={{ scale: 0.98 }}
             onClick={onRestart}
-            className="h-[48px] rounded-(--radius-lg) border-none text-[15px] font-extrabold cursor-pointer flex items-center justify-center gap-2 mt-2.5"
+            className="h-12 rounded-lg border-none text-[15px] font-extrabold cursor-pointer flex items-center justify-center gap-2 mt-2.5 text-[var(--text-on-accent)] shadow-[0_4px_14px_var(--accent-muted)]"
             style={{
               background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-              color: "var(--text-on-accent)",
-              boxShadow: "0 4px 14px var(--accent-muted)",
             }}
           >
             <RefreshCw size={13} />
             Start New Review Session
           </m.button>
         )}
-      </Flex>
+      </div>
     </>
   );
 }

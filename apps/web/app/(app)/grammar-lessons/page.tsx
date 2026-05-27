@@ -1,7 +1,6 @@
 "use client";
 
-import { Alert, Progress } from "antd";
-import { ArrowRight, BookOpen, CheckCircle, Flame, Rocket, Star, Trophy, Zap } from "lucide-react";
+import { AlertTriangle, ArrowRight, BookOpen, CheckCircle, Flame, Rocket, Star, Trophy, Zap } from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { LessonView } from "@/app/(app)/grammar-lessons/_components/LessonView";
@@ -145,8 +144,7 @@ export default function GrammarLessonsPage() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 }}
-                className="bg-(--surface) rounded-(--radius-xl) border-2 border-border p-6 relative overflow-hidden"
-                style={{ boxShadow: "var(--shadow-md)" }}
+                className="bg-surface rounded-xl border-2 border-border p-6 relative overflow-hidden shadow-md"
               >
                 {/* Top accent bar */}
                 <div
@@ -162,22 +160,24 @@ export default function GrammarLessonsPage() {
 
                 <div className="flex items-center gap-6 flex-wrap">
                   {/* Circle progress */}
-                  <Progress
-                    type="circle"
-                    percent={progressPct}
-                    size={88}
-                    strokeWidth={8}
-                    strokeColor={{ "0%": "var(--accent)", "100%": "var(--success)" }}
-                    trailColor="var(--border)"
-                    format={() => (
-                      <div className="text-center">
-                        <div className="text-2xl font-black text-ink font-display">
-                          {progressPct}%
-                        </div>
-                        <div className="text-[9px] text-text-muted font-bold">Completed</div>
-                      </div>
-                    )}
-                  />
+                  {/* SVG Circle progress */}
+                  <div className="relative w-[88px] h-[88px] shrink-0">
+                    <svg viewBox="0 0 88 88" className="w-full h-full -rotate-90">
+                      <circle cx="44" cy="44" r="38" fill="none" stroke="var(--border)" strokeWidth="8" />
+                      <circle
+                        cx="44" cy="44" r="38" fill="none"
+                        stroke="var(--accent)" strokeWidth="8"
+                        strokeLinecap="round"
+                        strokeDasharray={`${2 * Math.PI * 38}`}
+                        strokeDashoffset={`${2 * Math.PI * 38 * (1 - progressPct / 100)}`}
+                        className="transition-all duration-700"
+                      />
+                    </svg>
+                    <div className="absolute inset-0 flex flex-col items-center justify-center">
+                      <div className="text-2xl font-black text-ink font-display">{progressPct}%</div>
+                      <div className="text-[9px] text-text-muted font-bold">Completed</div>
+                    </div>
+                  </div>
 
                   {/* Stats grid */}
                   <div
@@ -218,12 +218,9 @@ export default function GrammarLessonsPage() {
 
               {/* Progress error */}
               {progressError && (
-                <Alert
-                  type="warning"
-                  showIcon
-                  message={progressError}
-                  className="rounded-(--radius-lg) text-[13px] font-semibold"
-                />
+                <div className="flex items-center gap-2 rounded-lg text-[13px] font-semibold py-2.5 px-4 bg-amber-500/10 text-amber-700 border border-amber-500/20">
+                  <AlertTriangle size={14} /> {progressError}
+                </div>
               )}
 
               {/* ── Recommended Topic CTA ── */}
@@ -243,7 +240,7 @@ export default function GrammarLessonsPage() {
                     }
                     whileHover={{ scale: 1.01, y: -2 }}
                     whileTap={{ scale: 0.99 }}
-                    className="w-full rounded-(--radius-xl) border-none cursor-pointer flex items-center gap-4 relative overflow-hidden text-left"
+                    className="w-full rounded-xl border-none cursor-pointer flex items-center gap-4 relative overflow-hidden text-left"
                     style={{
                       padding: "18px 24px",
                       background:
@@ -405,8 +402,7 @@ function StatCard({
 }) {
   return (
     <div
-      className="flex flex-col items-center text-center rounded-(--radius-lg) bg-surface-alt border-2 border-border"
-      style={{ padding: "12px 8px" }}
+      className="flex flex-col items-center text-center rounded-lg bg-surface-alt border-2 border-border py-3 px-2"
     >
       <div
         className="w-[34px] h-[34px] grid text-base mb-2"
@@ -454,8 +450,7 @@ function QuickAction({
       whileHover={{ y: -2, boxShadow: "var(--shadow-md)" }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
-      className="flex items-center gap-3 rounded-(--radius-xl) bg-(--surface) border-2 border-border cursor-pointer"
-      style={{ padding: "14px 16px", textDecoration: "none", transition: "all 0.15s" }}
+      className="flex items-center gap-3 rounded-xl bg-surface border-2 border-border cursor-pointer py-3.5 px-4 no-underline transition-all duration-150"
     >
       <span className="text-2xl">{emoji}</span>
       <div>

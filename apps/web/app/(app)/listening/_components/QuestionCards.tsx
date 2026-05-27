@@ -1,5 +1,8 @@
 "use client";
+
 import { CircleCheckBig, ClipboardList, Loader2, Send } from "lucide-react";
+import { motion } from "motion/react";
+import { Button } from "@/components/ui/button";
 
 type Question = {
   question: string;
@@ -25,76 +28,62 @@ export function QuestionCards({
 }: Props) {
   return (
     <div className="flex flex-col gap-4">
-      <div
-        className="text-[13px] font-semibold text-text-muted uppercase"
-        style={{ letterSpacing: 1 }}
-      >
-        <ClipboardList style={{ marginRight: 6 }} /> Questions ({questions.length})
+      <div className="text-[11px] font-bold text-text-muted uppercase tracking-widest flex items-center gap-1.5">
+        <ClipboardList size={14} /> Questions ({questions.length})
       </div>
 
       {questions.map((q, qi) => (
-        <div
+        <motion.div
           key={qi}
-          className="bg-(--surface) border-2 border-border p-4"
-          style={{ borderRadius: "var(--radius-md)" }}
+          initial={{ opacity: 0, y: 8 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: qi * 0.05, type: "spring", stiffness: 300, damping: 30 }}
+          className="bg-surface border-2 border-border rounded-lg p-4 shadow-(--shadow-sm)"
         >
-          <div className="text-sm font-semibold mb-3" style={{ color: "var(--text)" }}>
+          <div className="text-sm font-bold text-text-primary mb-3">
             {qi + 1}. {q.question}
           </div>
           <div className="flex flex-col gap-1.5">
             {q.options.map((opt, oi) => {
               const isSelected = selectedAnswers[qi] === oi;
               return (
-                <button
+                <motion.button
                   key={oi}
                   onClick={() => onSelectAnswer(qi, oi)}
-                  className="flex items-center gap-2.5 rounded-(--radius-sm) cursor-pointer text-[13px] text-left w-full"
-                  style={{
-                    padding: "10px 14px",
-                    border: isSelected ? "2px solid var(--accent)" : "1px solid var(--border)",
-                    background: isSelected ? "var(--accent-surface)" : "transparent",
-                    color: "var(--text)",
-                    transition: "all 0.15s ease",
-                  }}
+                  whileHover={{ x: 2 }}
+                  whileTap={{ scale: 0.99 }}
+                  className={`flex items-center gap-2.5 rounded-lg cursor-pointer text-[13px] text-left w-full p-2.5 px-3.5 transition-all duration-100 ${
+                    isSelected
+                      ? "border-2 border-accent bg-accent-light text-text-primary shadow-(--shadow-sm) -translate-y-0.5"
+                      : "border-2 border-border bg-transparent text-text-primary hover:bg-surface-hover"
+                  }`}
                 >
                   <span
-                    className="w-[22px] h-[22px] rounded-full flex items-center justify-center text-[11px] font-bold shrink-0"
-                    style={{
-                      border: isSelected ? "2px solid var(--accent)" : "1px solid var(--border)",
-                      background: isSelected ? "var(--accent)" : "transparent",
-                      color: isSelected ? "var(--text-on-accent)" : "var(--text-muted)",
-                    }}
+                    className={`w-[22px] h-[22px] rounded-full flex items-center justify-center text-[11px] font-bold shrink-0 transition-all duration-100 ${
+                      isSelected
+                        ? "border-2 border-accent bg-accent text-ink"
+                        : "border-2 border-border bg-transparent text-text-muted"
+                    }`}
                   >
-                    {isSelected ? <CircleCheckBig /> : String.fromCharCode(65 + oi)}
+                    {isSelected ? <CircleCheckBig size={12} /> : String.fromCharCode(65 + oi)}
                   </span>
                   {opt}
-                </button>
+                </motion.button>
               );
             })}
           </div>
-        </div>
+        </motion.div>
       ))}
 
       {/* Submit button */}
-      <button
+      <Button
         onClick={onSubmit}
         disabled={!allAnswered || isSubmitting}
-        className="flex items-center justify-center gap-2.5 border-none text-[15px] font-bold"
-        style={{
-          padding: "14px 24px",
-          borderRadius: "var(--radius-md)",
-          background: allAnswered
-            ? "linear-gradient(135deg, var(--accent), var(--accent-hover))"
-            : "var(--border)",
-          color: allAnswered ? "var(--text-on-accent)" : "var(--text-muted)",
-          cursor: allAnswered && !isSubmitting ? "pointer" : "not-allowed",
-          transition: "all 0.2s ease",
-          opacity: isSubmitting ? 0.7 : 1,
-        }}
+        className="w-full h-12 text-[15px] font-black flex items-center justify-center gap-2.5"
       >
-        {isSubmitting ? <Loader2 className="animate-spin" /> : <Send />}
+        {isSubmitting ? <Loader2 className="animate-spin" /> : <Send size={16} />}
         {isSubmitting ? "Scoring..." : "Submit Answers"}
-      </button>
+      </Button>
     </div>
   );
 }

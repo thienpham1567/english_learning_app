@@ -46,46 +46,19 @@ export function AppShell({ children, user }: { children: ReactNode; user: AuthUs
   };
 
   return (
-    <div
-      style={{
-        display: "flex",
-        minHeight: "100vh",
-        maxHeight: "100vh",
-        overflow: "hidden",
-        background: "var(--bg)",
-      }}
-    >
+    <div className="flex min-h-screen max-h-screen overflow-hidden bg-[var(--bg)]">
       {/* Desktop sidebar */}
       {isMobile === false && <AppSidebar isExpanded={isExpanded} onToggle={handleToggle} />}
 
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          flex: 1,
-          minWidth: 0,
-        }}
-      >
+      <div className="flex flex-col flex-1 min-w-0">
         <UserProvider user={user}>
           <m.header
             initial={{ y: -20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              height: 52,
-              padding: "0 20px",
-              borderBottom: "1px solid var(--border)",
-              background: "var(--surface)",
-              backdropFilter: "blur(12px)",
-              zIndex: 120,
-              lineHeight: "normal",
-              flexShrink: 0,
-            }}
+            className="flex items-center justify-between h-[52px] px-5 border-b border-border bg-surface backdrop-blur-xl z-[120] leading-normal shrink-0"
           >
             <ToolbarBreadcrumb />
-            <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <div className="flex items-center gap-3">
               <UserMenu user={user} />
             </div>
           </m.header>
@@ -97,15 +70,7 @@ export function AppShell({ children, user }: { children: ReactNode; user: AuthUs
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2, ease: "easeOut" }}
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                flex: 1,
-                overflow: "hidden",
-                padding: isMobile ? 12 : 24,
-                minHeight: 0,
-                paddingBottom: isMobile ? 80 : 24,
-              }}
+              className={`flex flex-col flex-1 overflow-hidden min-h-0 ${isMobile ? "p-3 pb-20" : "p-6"}`}
             >
               {children}
             </m.main>

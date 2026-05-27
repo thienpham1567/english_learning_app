@@ -1,5 +1,4 @@
 import { db, toeicAttempt } from "@repo/database";
-import { Card, Tag } from "antd";
 import { and, desc, eq, isNotNull, isNull } from "drizzle-orm";
 import { Clock, Redo, Trophy } from "lucide-react";
 import { headers } from "next/headers";
@@ -47,7 +46,7 @@ export default async function MockTestHubPage() {
             href={`/toeic/mock-test/runner?resume=${inProgress.id}`}
             style={{ textDecoration: "none" }}
           >
-            <Card hoverable style={{ borderColor: "var(--warning)", borderWidth: 2 }}>
+            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4" style={{ borderColor: "var(--warning)", borderWidth: 2 }}>
               <div className="flex items-center gap-2">
                 <Redo className="text-2xl" style={{ color: "var(--warning)" }} />
                 <strong className="text-lg">Resume In-Progress Mock Test</strong>
@@ -56,7 +55,7 @@ export default async function MockTestHubPage() {
                 Started at {new Date(inProgress.startedAt).toLocaleString("en-US")} ·{" "}
                 {inProgress.questionCount} questions
               </div>
-            </Card>
+            </div>
           </Link>
         )}
         <div
@@ -64,38 +63,38 @@ export default async function MockTestHubPage() {
           style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}
         >
           <Link href="/toeic/mock-test/runner?mode=full" style={{ textDecoration: "none" }}>
-            <Card hoverable>
+            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
               <div className="flex items-center gap-2">
                 <Trophy className="text-2xl text-accent" />
                 <strong className="text-lg text-ink">Full Mock</strong>
               </div>
               <div className="mt-2 text-text-muted">194 questions · ~1h54 · Strict timer</div>
               <div className="mt-2">
-                <Tag color="orange">Part 1: no content yet</Tag>
+                <span className="bg-amber-500/15 text-amber-600 py-0.5 px-2 inline-block">Part 1: no content yet</span>
               </div>
               <div className="mt-1.5 text-[13px] text-text-muted">
                 25 P2 + 39 P3 + 30 P4 + 30 P5 + 16 P6 + 54 P7
               </div>
-            </Card>
+            </div>
           </Link>
           <Link href="/toeic/mock-test/runner?mode=mini" style={{ textDecoration: "none" }}>
-            <Card hoverable>
+            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
               <div className="flex items-center gap-2">
                 <Clock className="text-2xl text-emerald-500" />
                 <strong className="text-lg text-ink">Mini Mock</strong>
               </div>
               <div className="mt-2 text-text-muted">100 questions · ~1h · Daily practice</div>
               <div className="mt-2">
-                <Tag color="green">Recommended</Tag>
+                <span className="bg-emerald-500/15 text-emerald-600 py-0.5 px-2 inline-block">Recommended</span>
               </div>
               <div className="mt-1.5 text-[13px] text-text-muted">
                 13 P2 + 20 P3 + 15 P4 + 15 P5 + 8 P6 + 29 P7
               </div>
-            </Card>
+            </div>
           </Link>
         </div>
 
-        <Card title="Mock Test History" size="small">
+        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
           {history.length === 0 ? (
             <div className="text-text-muted">
               No mock tests taken yet. Start a mini mock to generate data for your predicted score.
@@ -121,7 +120,7 @@ export default async function MockTestHubPage() {
               ))}
             </div>
           )}
-        </Card>
+        </div>
       </div>
     </div>
   );

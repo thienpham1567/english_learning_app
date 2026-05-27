@@ -33,14 +33,7 @@ export function UserMenu({ user }: { user: AuthUser }) {
         <m.button
           whileHover={{ background: "var(--bg-deep)" }}
           whileTap={{ scale: 0.95 }}
-          className="flex items-center gap-2.5 rounded h-[40px] bg-(--surface) cursor-pointer"
-          style={{
-            paddingLeft: 6,
-            paddingRight: 14,
-            border: "var(--brutal-border)",
-            boxShadow: "var(--shadow-sm)",
-            transition: "background 0.2s",
-          }}
+          className="flex items-center gap-2.5 rounded h-10 bg-surface cursor-pointer pl-1.5 pr-3.5 border-2 border-border shadow-sm transition-colors duration-200"
         >
           <m.div
             initial={{ scale: 0.8, opacity: 0 }}
@@ -51,30 +44,22 @@ export function UserMenu({ user }: { user: AuthUser }) {
               <img
                 src={user.image}
                 alt={user.name}
-                className="w-[28px] h-[28px] rounded-sm"
-                style={{ objectFit: "cover", border: "2px solid var(--border)" }}
+                className="w-7 h-7 rounded-sm object-cover border-2 border-border"
               />
             ) : (
-              <div
-                className="w-[28px] h-[28px] rounded-sm flex items-center justify-center text-[10px] font-bold"
-                style={{
-                  background: "var(--accent)",
-                  color: "white",
-                  border: "2px solid var(--border)",
-                }}
-              >
+              <div className="w-7 h-7 rounded-sm flex items-center justify-center text-[10px] font-bold bg-accent text-white border-2 border-border">
                 {initials}
               </div>
             )}
           </m.div>
           <span className="text-[13px] font-bold text-ink">{user.name}</span>
-          <ChevronDown className="text-[10px] text-text-muted" style={{ marginLeft: 2 }} />
+          <ChevronDown className="text-[10px] text-text-muted ml-0.5" />
         </m.button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="border-2 border-(--border) shadow-(--shadow)">
+      <DropdownMenuContent align="end" className="border-2 border-border shadow-sm">
         <DropdownMenuItem onClick={handleSignOut} className="cursor-pointer">
           <LogOut className="mr-2 h-4 w-4" />
-          Đăng xuất
+          Sign out
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -4,7 +4,6 @@ import {
   toeicSpeakingResponse,
   toeicSpeakingSession,
 } from "@repo/database";
-import { Card, Empty, Tag } from "antd";
 import { and, asc, eq, inArray } from "drizzle-orm";
 import { AlertTriangle, Check, Mic } from "lucide-react";
 import { headers } from "next/headers";
@@ -40,7 +39,7 @@ type PronMetrics = {
 function PronunciationSection({ metrics }: { metrics: PronMetrics }) {
   const wpmOk = metrics.wpm >= 110 && metrics.wpm <= 175;
   return (
-    <div className="bg-(--surface) p-3 rounded-md mt-2">
+    <div className="bg-surface p-3 rounded-md mt-2">
       <div className="font-semibold mb-1.5">📊 Phát âm</div>
       <div
         className="grid gap-2 text-[13px]"
@@ -69,9 +68,9 @@ function PronunciationSection({ metrics }: { metrics: PronMetrics }) {
         <div className="mt-2 text-[13px]">
           <span className="text-text-muted">Từ phát âm không rõ: </span>
           {metrics.lowConfidenceWords.map((w) => (
-            <Tag key={w} color="orange" style={{ margin: "2px 4px 2px 0" }}>
+            <span key={w} className="bg-amber-500/15 text-amber-600 py-0.5 px-2 inline-block" style={{ margin: "2px 4px 2px 0" }}>
               {w}
-            </Tag>
+            </span>
           ))}
         </div>
       )}
@@ -88,9 +87,9 @@ function PronunciationSection({ metrics }: { metrics: PronMetrics }) {
             <div className="mt-1">
               <span className="text-text-muted">Bỏ qua: </span>
               {metrics.alignment.missingWords.slice(0, 8).map((w) => (
-                <Tag key={w} color="red" style={{ margin: "2px 4px 2px 0" }}>
+                <span key={w} className="bg-red-500/15 text-red-600 py-0.5 px-2 inline-block" style={{ margin: "2px 4px 2px 0" }}>
                   {w}
-                </Tag>
+                </span>
               ))}
             </div>
           )}
@@ -98,9 +97,9 @@ function PronunciationSection({ metrics }: { metrics: PronMetrics }) {
             <div className="mt-1">
               <span className="text-text-muted">Thêm: </span>
               {metrics.alignment.addedWords.slice(0, 8).map((w) => (
-                <Tag key={w} color="purple" style={{ margin: "2px 4px 2px 0" }}>
+                <span key={w} className="bg-purple-500/15 text-purple-600 py-0.5 px-2 inline-block" style={{ margin: "2px 4px 2px 0" }}>
                   {w}
-                </Tag>
+                </span>
               ))}
             </div>
           )}
@@ -138,7 +137,7 @@ export default async function SpeakingResultPage({ params }: { params: Promise<{
   return (
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
       <div className="p-4 grid gap-4 w-[800px]">
-        <Card>
+        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
           <div className="text-center">
             <div className="font-extrabold text-accent" style={{ fontSize: 56 }}>
               {s.scaledScore ?? "—"}
@@ -146,23 +145,23 @@ export default async function SpeakingResultPage({ params }: { params: Promise<{
             <div className="text-text-muted">/ 200 (TOEIC Speaking)</div>
             <div className="mt-1.5 text-text-muted">Raw: {s.rawScore ?? "—"} / 35</div>
           </div>
-        </Card>
+        </div>
 
         {prompts
           .sort((a, b) => a.questionNumber - b.questionNumber)
           .map((p) => {
             const r = responses.find((x) => x.promptId === p.id);
             return (
-              <Card
+              <div
                 key={p.id}
-                size="small"
-                title={`Q${p.questionNumber} · ${TYPE_LABEL[p.type] ?? p.type}`}
-                extra={
-                  <Tag color="blue">
-                    {r?.rawScore ?? 0} / {p.maxScore}
-                  </Tag>
-                }
+                className="border-2 border-border rounded-xl bg-surface shadow-sm p-4"
               >
+                <div className="flex justify-between items-center mb-3">
+                  <strong>Q{p.questionNumber} · {TYPE_LABEL[p.type] ?? p.type}</strong>
+                  <span className="bg-blue-500/15 text-blue-600 py-0.5 px-2 rounded-md text-sm font-bold">
+                    {r?.rawScore ?? 0} / {p.maxScore}
+                  </span>
+                </div>
                 {p.imageUrl && (
                   <img
                     loading="lazy"
@@ -180,7 +179,7 @@ export default async function SpeakingResultPage({ params }: { params: Promise<{
                       </audio>
                     )}
                     <div
-                      className="bg-(--surface) rounded-md italic mb-2 text-sm"
+                      className="bg-surface rounded-md italic mb-2 text-sm"
                       style={{ padding: 10 }}
                     >
                       {r.transcript ? (
@@ -204,9 +203,12 @@ export default async function SpeakingResultPage({ params }: { params: Promise<{
                     })()}
                   </>
                 ) : (
-                  <Empty description="No response" />
+                  <div className="flex flex-col items-center justify-center py-12 text-text-muted">
+                <div className="text-4xl mb-3">📭</div>
+                <div className="text-sm font-semibold">No data available</div>
+              </div>
                 )}
-              </Card>
+              </div>
             );
           })}
 

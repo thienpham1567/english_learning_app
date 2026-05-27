@@ -1,6 +1,5 @@
 "use client";
 
-import { Button, Card, Input, Tag } from "antd";
 import { Headphones, PauseCircle, PlayCircle } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -79,15 +78,14 @@ export default function DictationDetailPage() {
   return (
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
       <div className="p-4 grid gap-3 w-[720px]">
-        <Card>
+        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
           <div className="flex items-center gap-3">
-            <Button
-              icon={playing ? <PauseCircle /> : <PlayCircle />}
+            <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm flex items-center gap-2"
               onClick={togglePlay}
-              size="large"
             >
+              {playing ? <PauseCircle size={18} /> : <PlayCircle size={18} />}
               {playing ? "Pause" : `Play (${playCount})`}
-            </Button>
+            </button>
             <span className="text-text-muted text-[13px]">Listen as many times as you want</span>
           </div>
           <audio
@@ -97,36 +95,33 @@ export default function DictationDetailPage() {
             onPause={() => setPlaying(false)}
             onEnded={() => setPlaying(false)}
           />
-        </Card>
+        </div>
 
         {!result ? (
-          <Card title="Transcribe the audio you hear">
-            <Input.TextArea
+          <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+            <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
               rows={4}
               autoFocus
               placeholder="Type what you hear…"
-            />
-            <Button
-              type="primary"
-              size="large"
-              loading={submitting}
+             />
+            <button
               disabled={!text.trim()}
               onClick={submit}
               className="mt-3"
             >
               Submit
-            </Button>
-          </Card>
+            </button>
+          </div>
         ) : (
           <>
-            <Card>
+            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
               <div className="text-3xl font-bold">
                 {result.score}/100 ({result.matched}/{result.total} words correct)
               </div>
-            </Card>
-            <Card title="Word-by-word Comparison" size="small">
+            </div>
+            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
               <div style={{ lineHeight: 2 }}>
                 {result.diff.map((e, i) => (
                   <span
@@ -158,23 +153,22 @@ export default function DictationDetailPage() {
                 <span className="text-destructive">● missing</span> ·{" "}
                 <span style={{ color: "var(--warning)" }}>● extra</span>
               </div>
-            </Card>
-            <Card title="Original Transcript" size="small">
+            </div>
+            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
               <div className="text-base">{result.transcript}</div>
               {result.vocabHints && result.vocabHints.length > 0 && (
                 <div className="mt-3 flex gap-2 flex-wrap">
                   {result.vocabHints.map((h) => (
-                    <Tag key={h.word} color="blue">
+                    <span key={h.word} className="bg-blue-500/15 text-blue-600 py-0.5 px-2 inline-block">
                       {h.word} = {h.vi}
-                    </Tag>
+                    </span>
                   ))}
                 </div>
               )}
-            </Card>
+            </div>
             <div className="flex gap-2">
-              <Button onClick={() => router.push("/toeic/dictation")}>Back to List</Button>
-              <Button
-                type="primary"
+              <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" onClick={() => router.push("/toeic/dictation")}>Back to List</button>
+              <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
                 onClick={() => {
                   setText("");
                   setResult(null);
@@ -183,7 +177,7 @@ export default function DictationDetailPage() {
                 }}
               >
                 Retry
-              </Button>
+              </button>
             </div>
           </>
         )}

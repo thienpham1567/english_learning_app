@@ -1,12 +1,9 @@
 "use client";
 
-import { Flex, Slider, Typography } from "antd";
 import { Loader2, PauseCircle, PlayCircle, Undo, Volume2, Settings } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { SPEED_PRESETS, type VoiceOption } from "../_data/voices";
-
-const { Text } = Typography;
 
 interface PlaybackControlsProps {
   loading: boolean;
@@ -33,6 +30,8 @@ export function PlaybackControls({
   onTogglePlayback,
   onStop,
 }: PlaybackControlsProps) {
+  const canStart = !loading && text.trim();
+
   return (
     <>
       {/* Speed & Generate */}
@@ -40,81 +39,76 @@ export function PlaybackControls({
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.25 }}
-        className="read-aloud-panel bg-(--surface) rounded-(--radius-xl) border-2 border-border flex flex-col"
-        style={{ padding: "var(--space-5)", boxShadow: "var(--shadow-md)", gap: "var(--space-4)" }}
+        className="read-aloud-panel bg-surface rounded-xl border-2 border-border flex flex-col p-5 gap-4 shadow-md"
       >
-        <Text className="text-xs font-bold text-text-muted uppercase tracking-widest flex items-center gap-1.5">
+        <span className="text-xs font-bold text-text-muted uppercase tracking-widest flex items-center gap-1.5">
           <m.span
             animate={{ rotate: 360 }}
             transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
-            style={{ display: "inline-flex", color: "var(--text-muted)" }}
+            className="inline-flex text-text-muted"
           >
             <Settings size={13} />
           </m.span>
           Playback Configuration
-        </Text>
+        </span>
 
         {/* Speed Controller */}
         <div>
-          <Flex align="center" justify="space-between" className="mb-1">
-            <Text className="text-[13px] text-text-secondary font-semibold">Reading Speed</Text>
-            <Text className="text-sm font-extrabold text-accent">{speed}x</Text>
-          </Flex>
-          <Slider
+          <div className="flex items-center justify-between mb-1">
+            <span className="text-[13px] text-text-secondary font-semibold">Reading Speed</span>
+            <span className="text-sm font-extrabold text-accent">{speed}x</span>
+          </div>
+
+          {/* Custom range slider */}
+          <input
+            type="range"
             min={0.5}
             max={2.0}
             step={0.1}
             value={speed}
-            onChange={onSpeedChange}
-            tooltip={{ formatter: (val) => `${val}x` }}
-            styles={{
-              track: { background: "var(--accent)" },
-              handle: { borderColor: "var(--accent)", width: 14, height: 14 },
-            }}
+            onChange={(e) => onSpeedChange(Number(e.target.value))}
+            className="w-full h-1.5 rounded-full bg-border appearance-none cursor-pointer accent-accent"
+            style={{ accentColor: "var(--accent)" }}
           />
 
           {/* Preset Quick Select */}
-          <Flex justify="space-between" gap={6} className="mt-2">
+          <div className="flex justify-between gap-1.5 mt-2">
             {SPEED_PRESETS.map((preset) => (
               <m.button
                 key={preset}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => onSpeedChange(preset)}
-                className="flex-1 text-[11px] font-bold rounded-lg cursor-pointer"
-                style={{
-                  padding: "4px 0",
-                  border: speed === preset ? "1px solid var(--accent)" : "1px solid var(--border)",
-                  background: speed === preset ? "var(--accent-light)" : "var(--surface-alt)",
-                  color: speed === preset ? "var(--accent)" : "var(--text-secondary)",
-                  transition: "all 0.2s",
-                }}
+                className={`flex-1 text-[11px] font-bold rounded-lg cursor-pointer py-1 transition-all duration-200 ${
+                  speed === preset
+                    ? "border border-accent bg-accent-light text-accent"
+                    : "border border-border bg-surface-alt text-text-secondary"
+                }`}
               >
                 {preset === 1.0 ? "Normal" : `${preset}x`}
               </m.button>
             ))}
-          </Flex>
+          </div>
         </div>
 
-        <div className="h-[1px]" style={{ background: "var(--border)", margin: "4px 0" }} />
+        <div className="h-px bg-border my-1" />
 
         {/* Action Buttons */}
-        <Flex vertical gap={8}>
+        <div className="flex flex-col gap-2">
           <m.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
             onClick={onGenerate}
-            disabled={loading || !text.trim()}
-            className="flex items-center justify-center gap-2.5 py-4 px-5 rounded-(--radius-lg) border-none text-base font-extrabold font-body"
+            disabled={!canStart}
+            className={`flex items-center justify-center gap-2.5 py-4 px-5 rounded-lg border-none text-base font-extrabold font-body transition-all duration-200 ${
+              canStart
+                ? "cursor-pointer text-[var(--text-on-accent)] shadow-[0_4px_14px_var(--accent-muted)]"
+                : "cursor-not-allowed text-text-muted"
+            }`}
             style={{
-              background:
-                loading || !text.trim()
-                  ? "var(--border)"
-                  : "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-              color: loading || !text.trim() ? "var(--text-muted)" : "var(--text-on-accent)",
-              cursor: loading || !text.trim() ? "not-allowed" : "pointer",
-              boxShadow: !loading && text.trim() ? "0 4px 14px var(--accent-muted)" : "none",
-              transition: "all 0.2s ease",
+              background: canStart
+                ? "linear-gradient(135deg, var(--accent), var(--accent-hover))"
+                : "var(--border)",
             }}
           >
             {loading ? (
@@ -140,13 +134,12 @@ export function PlaybackControls({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={onTogglePlayback}
-                  className="flex-1 flex items-center justify-center gap-2 p-3 rounded-(--radius-lg) bg-(--surface) text-text-primary text-sm font-bold cursor-pointer"
-                  style={{ border: "1px solid var(--border-strong)" }}
+                  className="flex-1 flex items-center justify-center gap-2 p-3 rounded-lg bg-surface text-text-primary text-sm font-bold cursor-pointer border border-border-strong"
                 >
                   {playing ? (
                     <PauseCircle className="text-accent" />
                   ) : (
-                    <PlayCircle style={{ color: "var(--sage)" }} />
+                    <PlayCircle className="text-[var(--sage)]" />
                   )}
                   {playing ? "Pause" : "Resume"}
                 </m.button>
@@ -154,19 +147,14 @@ export function PlaybackControls({
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={onStop}
-                  className="flex items-center justify-center rounded-(--radius-lg) text-destructive text-sm font-bold cursor-pointer"
-                  style={{
-                    padding: "12px 18px",
-                    border: "1px solid rgba(239, 68, 68, 0.2)",
-                    background: "var(--error-bg)",
-                  }}
+                  className="flex items-center justify-center rounded-lg text-destructive text-sm font-bold cursor-pointer py-3 px-4.5 border border-[rgba(239,68,68,0.2)] bg-error-bg"
                 >
                   <Undo />
                 </m.button>
               </m.div>
             )}
           </AnimatePresence>
-        </Flex>
+        </div>
       </m.div>
 
       {/* Dynamic Waveform Visualizer */}
@@ -193,22 +181,19 @@ function WaveformVisualizer({
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
-        className="rounded-(--radius-xl) flex items-center justify-between gap-4"
+        className="rounded-xl flex items-center justify-between gap-4 p-4 px-5 shadow-md"
         style={{
           background: "linear-gradient(90deg, var(--surface), var(--surface-alt))",
           border: "2px solid var(--accent-light)",
-          padding: "var(--space-4) var(--space-5)",
-          boxShadow: "var(--shadow-md)",
         }}
       >
         <div className="waveform-container flex items-center gap-2.5">
           <m.div
             animate={{ rotate: 360 }}
             transition={{ repeat: Infinity, duration: 4, ease: "linear" }}
-            className="w-[24px] h-[24px] rounded-full flex items-center justify-center"
-            style={{ border: "3px solid var(--accent-light)", borderTopColor: "var(--accent)" }}
+            className="w-6 h-6 rounded-full flex items-center justify-center border-[3px] border-accent-light border-t-accent"
           />
-          <Text className="text-sm font-bold text-text-primary">
+          <span className="text-sm font-bold text-text-primary">
             {loading ? (
               "Compiling & generating audio..."
             ) : (
@@ -218,11 +203,11 @@ function WaveformVisualizer({
                 )
               </span>
             )}
-          </Text>
+          </span>
         </div>
 
         {/* Dynamic Soundwave bars */}
-        <Flex className="waveform-bars h-[36px]" gap={3} align="flex-end">
+        <div className="waveform-bars h-9 flex items-end gap-[3px]">
           {Array.from({ length: 28 }).map((_, i) => (
             <m.div
               key={i}
@@ -246,7 +231,7 @@ function WaveformVisualizer({
               }}
             />
           ))}
-        </Flex>
+        </div>
       </m.div>
     </AnimatePresence>
   );

@@ -1,5 +1,4 @@
 import { db, toeicDictationItem } from "@repo/database";
-import { Card, Tag } from "antd";
 import { asc } from "drizzle-orm";
 import { Headphones } from "lucide-react";
 import Link from "next/link";
@@ -41,12 +40,14 @@ export default async function ToeicDictationPage() {
           const list = grouped[lv] ?? [];
           if (list.length === 0) return null;
           return (
-            <Card
+            <div
               key={lv}
-              title={LEVEL_LABEL[lv]}
-              size="small"
-              extra={<Tag color={LEVEL_COLOR[lv]}>{list.length} sentences</Tag>}
+              className="border-2 border-border rounded-xl bg-surface shadow-sm p-4"
             >
+              <div className="flex justify-between items-center mb-3">
+                <strong>{LEVEL_LABEL[lv] ?? lv}</strong>
+                <span className="bg-accent/10 text-accent py-0.5 px-2 rounded-md text-sm font-bold">{list.length} sentences</span>
+              </div>
               <div
                 className="grid gap-2"
                 style={{ gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))" }}
@@ -63,11 +64,11 @@ export default async function ToeicDictationPage() {
                     }}
                   >
                     <span>#{i + 1}</span>
-                    <Tag>{item.topic}</Tag>
+                    <span className="bg-accent/10 text-accent py-0.5 px-2 inline-block">{item.topic}</span>
                   </Link>
                 ))}
               </div>
-            </Card>
+            </div>
           );
         })}
       </div>

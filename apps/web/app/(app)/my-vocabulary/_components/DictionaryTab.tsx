@@ -10,7 +10,7 @@ import {
   Trash2,
   Undo,
 } from "lucide-react";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { DictionaryResultCard } from "@/app/(app)/dictionary/_components/DictionaryResultCard";
 import { DictionarySearchPanel } from "@/app/(app)/dictionary/_components/DictionarySearchPanel";
 import { ThesaurusSheet } from "@/app/(app)/dictionary/_components/ThesaurusSheet";
@@ -30,21 +30,21 @@ type SavedWord = {
   mastery: "new" | "learning" | "mastered";
 };
 
-const MASTERY_CONFIG: Record<string, { icon: React.ReactNode; label: string; color: string }> = {
+const MASTERY_CONFIG: Record<string, { icon: React.ReactNode; label: string; colorClass: string }> = {
   new: {
-    icon: <Star style={{ color: "var(--warning)" }} />,
+    icon: <Star size={11} className="fill-current text-amber-500" />,
     label: "New",
-    color: "var(--warning)",
+    colorClass: "bg-amber-500/10 border-amber-500/20 text-amber-500",
   },
   learning: {
-    icon: <RefreshCw className="text-accent" />,
+    icon: <RefreshCw size={11} className="text-accent" />,
     label: "Learning",
-    color: "var(--accent)",
+    colorClass: "bg-accent/10 border-accent/20 text-accent",
   },
   mastered: {
-    icon: <CircleCheckBig className="text-emerald-500" />,
+    icon: <CircleCheckBig size={11} className="text-emerald-500" />,
     label: "Mastered",
-    color: "var(--success)",
+    colorClass: "bg-emerald-500/10 border-emerald-500/20 text-emerald-500",
   },
 };
 
@@ -72,7 +72,6 @@ export function DictionaryTab() {
   const [recentWords, setRecentWords] = useState<string[]>([]);
   const [thesaurusOpen, setThesaurusOpen] = useState(false);
 
-  // Saved words list
   const [savedWords, setSavedWords] = useState<SavedWord[]>([]);
   const [savedLoading, setSavedLoading] = useState(true);
 
@@ -133,9 +132,7 @@ export function DictionaryTab() {
     setSaved(next);
     try {
       await api.patch(`/vocabulary/${encodeURIComponent(query)}/saved`, { saved: next });
-      // Refresh saved list
       if (next) {
-        // Add to saved
         setSavedWords((prev) => {
           if (prev.some((w) => w.query === query)) return prev;
           return [
@@ -169,14 +166,11 @@ export function DictionaryTab() {
   };
 
   return (
-    <div className="w-[1100px] mx-auto w-full">
+    <div className="w-full max-w-5xl mx-auto flex flex-col gap-5 px-1">
       {/* Two-column layout on desktop */}
-      <div
-        className="dictionary-grid grid items-start"
-        style={{ gridTemplateColumns: "minmax(280px, 340px) minmax(0, 1fr)", gap: 28 }}
-      >
+      <div className="grid grid-cols-1 md:grid-cols-[320px_1fr] items-start gap-6 w-full">
         {/* Left: Search + Recent */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-4 w-full">
           <DictionarySearchPanel
             initialValue={query}
             onSubmit={doSearch}
@@ -187,15 +181,9 @@ export function DictionaryTab() {
         </div>
 
         {/* Right: Result */}
-        <div>
+        <div className="w-full">
           {error && (
-            <div
-              className="py-3 px-4 rounded-xl text-destructive text-sm mb-4"
-              style={{
-                border: "1px solid color-mix(in srgb, var(--error) 30%, transparent)",
-                background: "var(--error-bg)",
-              }}
-            >
+            <div className="py-3 px-4 rounded-xl border-2 border-error/25 bg-error-bg text-error text-xs font-semibold mb-4 shadow-(--shadow-sm)">
               {error}
             </div>
           )}
@@ -212,34 +200,28 @@ export function DictionaryTab() {
       </div>
 
       {/* Saved words section */}
-      <div className="mt-8" style={{ paddingTop: 24, borderTop: "1px solid var(--border)" }}>
-        <div className="flex items-center gap-2.5 mb-4">
-          <Star className="text-accent text-base" />
-          <span
-            className="text-[13px] font-extrabold uppercase text-accent"
-            style={{ letterSpacing: "0.12em" }}
-          >
+      <div className="mt-6 pt-5 border-t-2 border-dashed border-border/40 w-full">
+        <div className="flex items-center gap-2 mb-4.5">
+          <Star className="text-accent h-4.5 w-4.5 fill-current animate-pulse shrink-0" />
+          <span className="text-[10px] font-extrabold uppercase text-accent tracking-widest font-display">
             Saved Words ({savedWords.length})
           </span>
         </div>
 
         {savedLoading ? (
-          <div className="flex justify-center p-6">
+          <div className="flex justify-center py-8">
             <Loader2 className="animate-spin text-accent" size={20} />
           </div>
         ) : savedWords.length === 0 ? (
-          <div
-            className="text-center text-text-muted text-sm flex items-center justify-center gap-1.5"
-            style={{ padding: "24px 16px", borderRadius: 14, border: "1px dashed var(--border)" }}
-          >
-            No words saved yet. Search a word and click{" "}
-            <Star size={14} className="inline text-accent" fill="currentColor" /> to save!
+          <div className="text-center text-text-muted text-xs font-bold bg-surface border-2 border-dashed border-border/60 rounded-2xl py-8 px-4 flex flex-col items-center justify-center gap-2 max-w-md mx-auto shadow-(--shadow-sm)">
+            <Star size={18} className="text-accent fill-current" />
+            <p className="m-0 leading-relaxed font-semibold">No words saved yet.</p>
+            <p className="m-0 text-[10px] text-text-secondary leading-normal">
+              Search a word in the dictionary above and click save to start building your notebook!
+            </p>
           </div>
         ) : (
-          <div
-            className="grid gap-1.5"
-            style={{ gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))" }}
-          >
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 w-full">
             {savedWords.map((w) => {
               const mastery = MASTERY_CONFIG[w.mastery] ?? MASTERY_CONFIG.new;
               return (
@@ -249,28 +231,19 @@ export function DictionaryTab() {
                   onKeyDown={() => {}}
                   role="button"
                   tabIndex={0}
-                  className="rounded-xl border-2 border-border bg-(--surface) flex items-center gap-2.5 cursor-pointer"
-                  style={{ padding: "12px 14px", transition: "border-color 0.2s" }}
+                  className="rounded-xl border-2 border-border bg-surface flex items-center gap-2.5 cursor-pointer p-3 shadow-(--shadow-sm) hover:translate-y-[-2px] hover:translate-x-[-1px] hover:shadow-(--shadow) transition-all duration-100 group text-left min-w-0"
                 >
                   <div
-                    className="w-[24px] h-[24px] rounded-md grid shrink-0 text-[11px]"
-                    style={{
-                      placeItems: "center",
-                      background: `color-mix(in srgb, ${mastery.color} 10%, var(--surface))`,
-                      color: mastery.color,
-                    }}
+                    className={`w-7 h-7 rounded-lg border-2 grid shrink-0 place-items-center text-[10px] shadow-(--shadow-sm) ${mastery.colorClass}`}
                   >
                     {mastery.icon}
                   </div>
-                  <div className="flex-1 w-[0px]">
-                    <div
-                      className="text-sm font-semibold text-ink overflow-hidden"
-                      style={{ textOverflow: "ellipsis", whiteSpace: "nowrap" }}
-                    >
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs font-black text-text-primary truncate leading-tight group-hover:text-accent transition-colors">
                       {w.headword ?? w.query}
                     </div>
                     {w.level && (
-                      <span className="text-[10px] text-text-muted font-semibold">{w.level}</span>
+                      <span className="text-[9px] text-text-muted font-bold font-mono tracking-wide block mt-1 leading-none">{w.level}</span>
                     )}
                   </div>
                   <button
@@ -279,10 +252,9 @@ export function DictionaryTab() {
                       e.stopPropagation();
                       removeSavedWord(w);
                     }}
-                    className="w-[24px] h-[24px] rounded-md border-none bg-transparent cursor-pointer text-text-muted text-xs grid"
-                    style={{ placeItems: "center" }}
+                    className="w-7 h-7 rounded-lg hover:bg-error/10 hover:text-error border-none bg-transparent cursor-pointer text-text-muted text-xs flex items-center justify-center shrink-0 ml-auto transition-colors"
                   >
-                    <Trash2 />
+                    <Trash2 className="h-4 w-4" />
                   </button>
                 </div>
               );
@@ -300,14 +272,6 @@ export function DictionaryTab() {
           onWordClick={doSearch}
         />
       )}
-
-      <style>{`
-        @media (max-width: 768px) {
-          .dictionary-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </div>
   );
 }

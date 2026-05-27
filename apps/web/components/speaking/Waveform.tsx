@@ -87,7 +87,8 @@ export function Waveform({
       ref={canvasRef}
       width={600}
       height={height}
-      style={{ width: "100%", height, display: "block" }}
+      className="w-full block"
+      style={{ height }}
       aria-hidden="true"
     />
   );

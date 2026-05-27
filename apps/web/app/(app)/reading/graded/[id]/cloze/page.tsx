@@ -1,6 +1,6 @@
 "use client";
 
-import { Button, Card, Flex, message, Spin, Tag, Typography } from "antd";
+import { toast } from "sonner";
 import {
   ArrowLeft,
   CheckCircle,
@@ -15,8 +15,6 @@ import {
 import { useParams, useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api-client";
-
-const { Text, Title } = Typography;
 
 type ClozeItem = {
   blankIndex: number;
@@ -35,7 +33,6 @@ export default function ClozeTestPage() {
   const [submitted, setSubmitted] = useState(false);
   const [results, setResults] = useState<Record<number, boolean>>({});
   const [savingFlashcards, setSavingFlashcards] = useState(false);
-  const [msgApi, contextHolder] = message.useMessage();
   const inputRefs = useRef<Record<number, HTMLInputElement | null>>({});
 
   useEffect(() => {
@@ -76,8 +73,8 @@ export default function ClozeTestPage() {
       }
     }
     setSavingFlashcards(false);
-    msgApi.success(`Saved ${saved} words to notebook!`);
-  }, [items, results, msgApi]);
+    toast.success(`Saved ${saved} words to notebook!`);
+  }, [items, results]);
 
   const handleRetry = useCallback(() => {
     setAnswers({});
@@ -91,103 +88,85 @@ export default function ClozeTestPage() {
 
   if (loading) {
     return (
-      <Flex align="center" justify="center" className="h-full" style={{ padding: 60 }}>
-        <Spin indicator={<Loader2 className="animate-spin text-accent" size={32} />} />
-      </Flex>
+      <div className="h-full flex items-center justify-center p-15">
+        <Loader2 className="animate-spin text-accent" size={32} />
+      </div>
     );
   }
 
   if (items.length === 0) {
     return (
-      <Flex
-        vertical
-        align="center"
-        justify="center"
-        gap={12}
-        className="h-full"
-        style={{ padding: 60 }}
-      >
+      <div className="h-full flex flex-col items-center justify-center gap-4 p-15">
         <Pencil size={48} className="text-text-muted" />
-        <Text type="secondary">Unable to generate quiz for this passage</Text>
-        <Button
-          type="link"
-          icon={<ArrowLeft />}
+        <span className="text-text-secondary">Unable to generate quiz for this passage</span>
+        <button
+          type="button"
           onClick={() => router.push(`/reading/graded/${id}`)}
+          className="text-accent font-bold cursor-pointer bg-transparent border-none flex items-center gap-1.5"
         >
-          Back to Passage
-        </Button>
-      </Flex>
+          <ArrowLeft size={14} /> Back to Passage
+        </button>
+      </div>
     );
   }
 
   return (
-    <div className="h-full overflow-y-auto" style={{ padding: "var(--space-6)" }}>
-      {contextHolder}
-      <Flex vertical gap={20} className="w-[720px] mx-auto">
+    <div className="h-full overflow-y-auto p-6">
+      <div className="w-full max-w-[720px] mx-auto flex flex-col gap-5">
         {/* Back */}
-        <Button
-          type="text"
-          icon={<ArrowLeft />}
+        <button
+          type="button"
           onClick={() => router.push(`/reading/graded/${id}`)}
-          className="text-text-muted text-[13px]"
-          style={{ alignSelf: "flex-start", borderRadius: 10 }}
+          className="text-text-muted text-[13px] self-start rounded-[10px] bg-transparent border-none cursor-pointer flex items-center gap-1.5"
         >
-          Back to Passage
-        </Button>
+          <ArrowLeft size={12} /> Back to Passage
+        </button>
 
         {/* Header card */}
-        <Card
-          styles={{ body: { padding: "20px 24px" } }}
-          className="border-none"
+        <div
+          className="border-none rounded-[20px] py-5 px-6"
           style={{
-            borderRadius: 20,
             background: "linear-gradient(135deg, var(--accent), var(--secondary))",
           }}
         >
-          <Flex align="center" gap={14}>
+          <div className="flex items-center gap-3.5">
             <div
-              className="w-[44px] h-[44px] rounded-xl flex items-center justify-center"
+              className="w-11 h-11 rounded-xl flex items-center justify-center"
               style={{ background: "rgba(255,255,255,0.2)" }}
             >
-              <Pencil size={22} className="text-(--text-on-accent)" />
+              <Pencil size={22} className="text-[var(--text-on-accent)]" />
             </div>
             <div>
-              <Text
-                className="text-[11px] uppercase"
+              <span
+                className="text-[11px] uppercase block"
                 style={{ letterSpacing: "0.1em", color: "rgba(255,255,255,0.7)" }}
               >
                 CLOZE TEST
-              </Text>
-              <Title
-                level={4}
+              </span>
+              <h3
                 className="m-0 font-display italic"
                 style={{ color: "var(--text-on-accent)" }}
               >
                 Fill in the Blanks
-              </Title>
+              </h3>
             </div>
-            <Tag
-              className="border-none font-bold text-[13px]"
+            <span
+              className="border-none font-bold text-[13px] ml-auto rounded-[10px] py-1 px-3.5"
               style={{
-                marginLeft: "auto",
-                borderRadius: 10,
                 background: "rgba(255,255,255,0.2)",
                 color: "var(--text-on-accent)",
-                padding: "4px 14px",
               }}
             >
               {totalCount} questions
-            </Tag>
-          </Flex>
-        </Card>
+            </span>
+          </div>
+        </div>
 
         {/* Score card (after submit) */}
         {submitted && (
-          <Card
-            styles={{ body: { padding: "24px" } }}
-            className="text-center"
+          <div
+            className="text-center rounded-[20px] py-6 px-6"
             style={{
-              borderRadius: 20,
               border: `2px solid ${score >= 80 ? "var(--success)" : score >= 50 ? "var(--warning)" : "var(--error)"}`,
               background:
                 score >= 80
@@ -198,9 +177,8 @@ export default function ClozeTestPage() {
             }}
           >
             <div
-              className="w-[56px] h-[56px] rounded-2xl flex items-center justify-center"
+              className="w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-3"
               style={{
-                margin: "0 auto 12px",
                 background:
                   score >= 80
                     ? "color-mix(in srgb, var(--success) 12%, transparent)"
@@ -210,81 +188,81 @@ export default function ClozeTestPage() {
               }}
             >
               {score >= 80 ? (
-                <Trophy size={28} className="text-(--success)" />
+                <Trophy size={28} className="text-success" />
               ) : score >= 50 ? (
-                <Flame size={28} className="text-(--warning)" />
+                <Flame size={28} className="text-warning" />
               ) : (
-                <Pencil size={28} className="text-(--error)" />
+                <Pencil size={28} className="text-error" />
               )}
             </div>
-            <Title
-              level={2}
+            <h3
+              className="m-0 mb-1 text-3xl font-black"
               style={{
-                margin: "0 0 4px",
                 color:
                   score >= 80 ? "var(--success)" : score >= 50 ? "var(--warning)" : "var(--error)",
               }}
             >
               {score}%
-            </Title>
-            <Text type="secondary">
+            </h3>
+            <span className="text-text-secondary">
               {correctCount}/{totalCount} correct
-            </Text>
+            </span>
 
-            <Flex gap={10} justify="center" className="mt-4">
-              <Button icon={<RefreshCw />} onClick={handleRetry} style={{ borderRadius: 10 }}>
-                Retry
-              </Button>
+            <div className="mt-4 flex gap-2 justify-center">
+              <button
+                type="button"
+                onClick={handleRetry}
+                className="rounded-[10px] border border-border bg-surface text-text-secondary font-bold cursor-pointer py-2 px-4 flex items-center gap-1.5 text-sm"
+              >
+                <RefreshCw size={14} /> Retry
+              </button>
               {correctCount < totalCount && (
-                <Button
-                  type="primary"
-                  icon={savingFlashcards ? <Loader2 className="animate-spin" /> : <Save />}
+                <button
+                  type="button"
                   onClick={saveMissedToFlashcards}
                   disabled={savingFlashcards}
-                  style={{ borderRadius: 10 }}
+                  className="rounded-[10px] border-none bg-accent text-[var(--text-on-accent)] font-bold cursor-pointer py-2 px-4 flex items-center gap-1.5 text-sm"
                 >
+                  {savingFlashcards ? <Loader2 className="animate-spin" size={14} /> : <Save size={14} />}
                   Save {totalCount - correctCount} incorrect words
-                </Button>
+                </button>
               )}
-            </Flex>
-          </Card>
+            </div>
+          </div>
         )}
 
         {/* Cloze items */}
-        <Flex vertical gap={10}>
+        <div className="flex flex-col gap-3">
           {items.map((item, i) => {
             const isCorrect = results[item.blankIndex];
             const userAns = answers[item.blankIndex] || "";
             const showResult = submitted;
 
             return (
-              <Card
+              <div
                 key={item.blankIndex}
-                styles={{ body: { padding: "14px 20px" } }}
-                className="rounded-2xl"
+                className="rounded-2xl py-3.5 px-5 transition-all duration-200"
                 style={{
                   border: showResult
                     ? `1.5px solid ${isCorrect ? "var(--success)" : "var(--error)"}`
                     : "1px solid var(--border)",
                   background: showResult
                     ? isCorrect
-                      ? "var(--success)06"
-                      : "var(--error)06"
+                      ? "color-mix(in srgb, var(--success) 4%, transparent)"
+                      : "color-mix(in srgb, var(--error) 4%, transparent)"
                     : undefined,
-                  transition: "all 0.2s ease",
                 }}
               >
-                <Flex gap={10} align="flex-start">
+                <div className="flex gap-3">
                   {/* Number badge */}
                   <div
-                    className="w-[28px] h-[28px] rounded-lg flex items-center justify-center text-xs font-bold shrink-0"
+                    className="w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold shrink-0 mt-0.5"
                     style={{
                       background: showResult
                         ? isCorrect
                           ? "color-mix(in srgb, var(--success) 8%, transparent)"
                           : "color-mix(in srgb, var(--error) 8%, transparent)"
                         : "var(--surface)",
-                      marginTop: 2,
                       color: showResult
                         ? isCorrect
                           ? "var(--success)"
@@ -292,11 +270,11 @@ export default function ClozeTestPage() {
                         : "var(--text-muted)",
                     }}
                   >
-                    {showResult ? isCorrect ? <CheckCircle /> : <XCircle /> : i + 1}
+                    {showResult ? isCorrect ? <CheckCircle size={14} /> : <XCircle size={14} /> : i + 1}
                   </div>
 
                   <div className="flex-1">
-                    <Text className="text-sm" style={{ lineHeight: 1.8 }}>
+                    <span className="text-sm leading-[1.8]">
                       {item.before}{" "}
                       <input
                         ref={(el) => {
@@ -314,52 +292,47 @@ export default function ClozeTestPage() {
                             else handleSubmit();
                           }
                         }}
-                        className="rounded-lg bg-(--surface) text-sm font-semibold text-center"
+                        className="rounded-lg bg-surface text-sm font-semibold text-center outline-none transition-colors duration-200"
                         style={{
                           width: Math.max(90, item.answer.length * 12),
                           padding: "3px 10px",
                           border: showResult
                             ? `2px solid ${isCorrect ? "var(--success)" : "var(--error)"}`
                             : "1.5px dashed var(--accent)",
-                          outline: "none",
                           color: showResult
                             ? isCorrect
                               ? "var(--success)"
                               : "var(--error)"
                             : "var(--text)",
-                          transition: "border-color 0.2s",
                         }}
                       />{" "}
                       {item.after}
-                    </Text>
+                    </span>
 
                     {showResult && !isCorrect && (
-                      <Text className="block mt-1.5 text-xs text-emerald-500">
-                        <CheckCircle className="mr-1" />
+                      <span className="block mt-1.5 text-xs text-emerald-500">
+                        <CheckCircle className="mr-1 inline" size={12} />
                         Answer: <strong>{item.answer}</strong>
-                      </Text>
+                      </span>
                     )}
                   </div>
-                </Flex>
-              </Card>
+                </div>
+              </div>
             );
           })}
-        </Flex>
+        </div>
 
         {/* Submit button */}
         {!submitted && (
-          <Button
-            type="primary"
-            size="large"
-            icon={<CheckCircle />}
+          <button
+            type="button"
             onClick={handleSubmit}
-            className="rounded-xl font-bold h-[48px] text-[15px]"
-            style={{ alignSelf: "center", padding: "0 32px" }}
+            className="rounded-xl font-bold h-12 text-[15px] self-center px-8 border-none bg-accent text-[var(--text-on-accent)] cursor-pointer flex items-center gap-2 shadow-[0_4px_12px_var(--accent-muted)]"
           >
-            Submit Quiz ({totalCount} questions)
-          </Button>
+            <CheckCircle size={16} /> Submit Quiz ({totalCount} questions)
+          </button>
         )}
-      </Flex>
+      </div>
     </div>
   );
 }

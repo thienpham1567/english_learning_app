@@ -1,6 +1,5 @@
 "use client";
 
-import { Button } from "antd";
 import { BookOpen } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect } from "react";
@@ -33,7 +32,7 @@ function DrillRunner() {
     return (
       <div className="p-6">
         <div className="text-destructive mb-3">{session.error}</div>
-        <Button onClick={() => router.push("/toeic/grammar")}>Back to Grammar Hub</Button>
+        <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" onClick={() => router.push("/toeic/grammar")}>Back to Grammar Hub</button>
       </div>
     );
   }

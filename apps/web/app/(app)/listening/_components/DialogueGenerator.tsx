@@ -25,17 +25,9 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
   const canSubmit = topic.trim().length >= 3 && !isLoading;
 
   return (
-    <div
-      className="mt-6 w-[600px] border-2 border-border bg-(--surface) max-w-full"
-      style={{
-        margin: "24px auto 0",
-        padding: "20px 24px",
-        borderRadius: "var(--radius-lg, 16px)",
-        boxShadow: "var(--shadow-sm)",
-      }}
-    >
+    <div className="mt-6 w-full max-w-2xl mx-auto border-2 border-border bg-surface rounded-lg p-5 shadow-(--shadow-sm)">
       <div className="flex items-center gap-2 mb-3">
-        <Users className="text-accent text-lg" />
+        <Users size={18} className="text-accent" />
         <div className="text-base font-bold text-text-primary">Multi-speaker dialogue</div>
       </div>
       <div className="text-sm text-text-muted mb-4 font-medium">
@@ -55,7 +47,7 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
           <select
             value={level}
             onChange={(e) => setLevel(e.target.value as CefrLevel)}
-            className="h-8 rounded-lg border-2 border-border bg-surface-alt px-2.5 py-0.5 text-xs font-bold text-ink outline-none focus-visible:shadow-(--shadow-sm) focus-visible:translate-x-[-1px] focus-visible:translate-y-[-1px] transition-all cursor-pointer"
+            className="h-8 rounded-lg border-2 border-border bg-surface-alt px-2.5 py-0.5 text-xs font-bold text-ink outline-none focus-visible:shadow-(--shadow-sm) focus-visible:-translate-y-0.5 transition-all cursor-pointer"
           >
             {CEFR_LEVELS.map((l) => (
               <option key={l} value={l}>
@@ -69,7 +61,7 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
           <select
             value={turns}
             onChange={(e) => setTurns(Number(e.target.value) as 6 | 8 | 10)}
-            className="h-8 rounded-lg border-2 border-border bg-surface-alt px-2.5 py-0.5 text-xs font-bold text-ink outline-none focus-visible:shadow-(--shadow-sm) focus-visible:translate-x-[-1px] focus-visible:translate-y-[-1px] transition-all cursor-pointer"
+            className="h-8 rounded-lg border-2 border-border bg-surface-alt px-2.5 py-0.5 text-xs font-bold text-ink outline-none focus-visible:shadow-(--shadow-sm) focus-visible:-translate-y-0.5 transition-all cursor-pointer"
           >
             <option value={6}>6</option>
             <option value={8}>8</option>
@@ -81,7 +73,7 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
           <select
             value={speakers}
             onChange={(e) => setSpeakers(Number(e.target.value) as 2 | 3)}
-            className="h-8 rounded-lg border-2 border-border bg-surface-alt px-2.5 py-0.5 text-xs font-bold text-ink outline-none focus-visible:shadow-(--shadow-sm) focus-visible:translate-x-[-1px] focus-visible:translate-y-[-1px] transition-all cursor-pointer"
+            className="h-8 rounded-lg border-2 border-border bg-surface-alt px-2.5 py-0.5 text-xs font-bold text-ink outline-none focus-visible:shadow-(--shadow-sm) focus-visible:-translate-y-0.5 transition-all cursor-pointer"
           >
             <option value={2}>2</option>
             <option value={3}>3</option>

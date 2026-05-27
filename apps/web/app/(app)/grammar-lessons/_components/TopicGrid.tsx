@@ -1,6 +1,6 @@
 "use client";
 
-import { Tag, Tooltip } from "antd";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import {
   AlignVerticalSpaceAround,
   ArrowLeftRight,
@@ -127,7 +127,7 @@ export function TopicGrid({
             transition={{ delay: idx * 0.05 }}
             onMouseEnter={() => setHoveredCat(cat.id)}
             onMouseLeave={() => setHoveredCat(null)}
-            className="rounded-(--radius-xl) bg-(--surface) overflow-hidden"
+            className="rounded-xl bg-surface overflow-hidden"
             style={{
               border: isExpanded
                 ? `1px solid color-mix(in srgb, ${cat.color} 35%, var(--border))`
@@ -147,7 +147,7 @@ export function TopicGrid({
             >
               {/* Icon container with gradient */}
               <div
-                className="relative grid w-[46px] h-[46px] rounded-(--radius-lg) text-xl shrink-0"
+                className="relative grid w-[46px] h-[46px] rounded-lg text-xl shrink-0"
                 style={{
                   placeItems: "center",
                   background: allDone
@@ -249,7 +249,7 @@ export function TopicGrid({
                       onMouseLeave={() => setHoveredTopic(null)}
                       whileHover={{ scale: 1.005, x: 2 }}
                       whileTap={{ scale: 0.995 }}
-                      className="flex w-full items-center gap-3 rounded-(--radius-lg) cursor-pointer text-left"
+                      className="flex w-full items-center gap-3 rounded-lg cursor-pointer text-left"
                       style={{
                         padding: "10px 14px",
                         border: isRecommended
@@ -295,52 +295,49 @@ export function TopicGrid({
                       </span>
 
                       {progress && progress.totalCount > 0 && (
-                        <Tooltip
-                          title={`Correct answers: ${progress.correctCount}/${progress.totalCount}`}
-                        >
-                          <Tag
-                            color={
-                              progress.scorePct >= 80
-                                ? "success"
-                                : progress.scorePct >= 50
-                                  ? "warning"
-                                  : "error"
-                            }
-                            className="m-0 text-[10.5px] rounded-md font-bold border-none"
-                          >
-                            {progress.scorePct >= 90
-                              ? "🥇 "
-                              : progress.scorePct >= 70
-                                ? "🥈 "
-                                : progress.scorePct >= 50
-                                  ? "🥉 "
-                                  : ""}
-                            {progress.scorePct}%
-                          </Tag>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <span
+                              className={`m-0 text-[10.5px] rounded-md font-bold border-none py-0.5 px-2 ${
+                                progress.scorePct >= 80
+                                  ? "bg-emerald-500/15 text-emerald-600"
+                                  : progress.scorePct >= 50
+                                    ? "bg-amber-500/15 text-amber-600"
+                                    : "bg-red-500/15 text-red-600"
+                              }`}
+                            >
+                              {progress.scorePct >= 90
+                                ? "🥇 "
+                                : progress.scorePct >= 70
+                                  ? "🥈 "
+                                  : progress.scorePct >= 50
+                                    ? "🥉 "
+                                    : ""}
+                              {progress.scorePct}%
+                            </span>
+                          </TooltipTrigger>
+                          <TooltipContent>{`Correct answers: ${progress.correctCount}/${progress.totalCount}`}</TooltipContent>
                         </Tooltip>
                       )}
 
                       {isRecommended && (
-                        <Tag
-                          color="gold"
-                          className="m-0 text-[10px] rounded-md font-extrabold border-none"
-                          style={{ boxShadow: "0 0 6px rgba(245, 158, 11, 0.3)" }}
+                        <span
+                          className="m-0 text-[10px] rounded-md font-extrabold border-none py-0.5 px-2 bg-amber-500/15 text-amber-600 inline-flex items-center gap-1 shadow-[0_0_6px_rgba(245,158,11,0.3)]"
                         >
-                          <Star className="text-[9px]" style={{ marginRight: 3 }} />
+                          <Star size={9} />
                           RECOMMENDED
-                        </Tag>
+                        </span>
                       )}
 
-                      <Tag
-                        color={LEVEL_COLORS[topic.level] ?? "default"}
-                        className="m-0 text-[10.5px] rounded-md font-extrabold border-none"
+                      <span
+                        className="m-0 text-[10.5px] rounded-md font-extrabold border-none py-0.5 px-2"
                         style={{
                           background: LEVEL_GLOWS[topic.level] ?? "var(--surface-alt)",
                           color: `var(--${LEVEL_COLORS[topic.level]})`,
                         }}
                       >
                         {topic.level}
-                      </Tag>
+                      </span>
 
                       <ChevronRight
                         className="text-[9px] text-text-muted"

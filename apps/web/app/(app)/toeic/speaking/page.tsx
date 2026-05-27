@@ -1,5 +1,4 @@
 import { db, toeicSpeakingPrompt, toeicSpeakingSession } from "@repo/database";
-import { Card, Empty, Tag } from "antd";
 import { and, desc, eq, isNotNull, sql } from "drizzle-orm";
 import { Mic } from "lucide-react";
 import { headers } from "next/headers";
@@ -33,7 +32,7 @@ export default async function ToeicSpeakingPage() {
       <div className="p-4 grid gap-4">
         {seeded ? (
           <Link href="/toeic/speaking/runner" style={{ textDecoration: "none" }}>
-            <Card hoverable>
+            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
               <div className="flex items-center gap-2">
                 <Mic className="text-3xl text-accent" />
                 <strong className="text-lg text-ink">Start Speaking Test</strong>
@@ -43,20 +42,26 @@ export default async function ToeicSpeakingPage() {
                 Q11 Opinion
               </div>
               <div className="mt-2">
-                <Tag color="orange">Requires microphone permission</Tag>
-                <Tag color="green">Whisper STT + Gemini grading</Tag>
+                <span className="bg-amber-500/15 text-amber-600 py-0.5 px-2 inline-block">Requires microphone permission</span>
+                <span className="bg-emerald-500/15 text-emerald-600 py-0.5 px-2 inline-block">Whisper STT + Gemini grading</span>
               </div>
-            </Card>
+            </div>
           </Link>
         ) : (
-          <Card>
-            <Empty description="No prompts available. Run `pnpm seed:toeic-speaking`" />
-          </Card>
+          <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+            <div className="flex flex-col items-center justify-center py-12 text-text-muted">
+                <div className="text-4xl mb-3">📭</div>
+                <div className="text-sm font-semibold">No data available</div>
+              </div>
+          </div>
         )}
 
-        <Card title="Speaking Test History" size="small">
+        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
           {history.length === 0 ? (
-            <Empty description="No test sessions recorded yet" />
+            <div className="flex flex-col items-center justify-center py-12 text-text-muted">
+                <div className="text-4xl mb-3">📭</div>
+                <div className="text-sm font-semibold">No data available</div>
+              </div>
           ) : (
             <div className="grid gap-2">
               {history.map((h) => (
@@ -78,7 +83,7 @@ export default async function ToeicSpeakingPage() {
               ))}
             </div>
           )}
-        </Card>
+        </div>
       </div>
     </div>
   );

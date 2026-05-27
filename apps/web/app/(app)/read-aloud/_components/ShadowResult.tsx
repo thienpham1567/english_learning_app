@@ -1,6 +1,5 @@
 "use client";
 
-import { Flex, Typography } from "antd";
 import * as m from "motion/react-client";
 import {
   CheckCircle2,
@@ -14,8 +13,6 @@ import {
   FileText,
   Lightbulb,
 } from "lucide-react";
-
-const { Text } = Typography;
 
 export interface WordScore {
   word: string;
@@ -65,61 +62,42 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
     <m.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      style={{
-        background: "var(--surface)",
-        borderRadius: "var(--radius-xl)",
-        border: "1px solid var(--border)",
-        padding: "var(--space-5)",
-        display: "flex",
-        flexDirection: "column",
-        gap: 20,
-      }}
+      className="bg-surface rounded-xl border border-border p-5 flex flex-col gap-5"
     >
       {/* Overall Score Ring */}
-      <Flex align="center" gap={20}>
+      <div className="flex items-center gap-5">
         <div
+          className="w-20 h-20 rounded-full grid place-items-center shrink-0"
           style={{
-            width: 80,
-            height: 80,
-            borderRadius: "50%",
             background: `conic-gradient(${grade.color} ${result.overall * 3.6}deg, var(--border) 0deg)`,
-            display: "grid",
-            placeItems: "center",
-            flexShrink: 0,
           }}
         >
-          <div
-            style={{
-              width: 64,
-              height: 64,
-              borderRadius: "50%",
-              background: "var(--surface)",
-              display: "grid",
-              placeItems: "center",
-            }}
-          >
-            <div style={{ textAlign: "center" }}>
-              <div style={{ fontSize: 22, fontWeight: 900, color: grade.color }}>
+          <div className="w-16 h-16 rounded-full bg-surface grid place-items-center">
+            <div className="text-center">
+              <div className="text-[22px] font-black" style={{ color: grade.color }}>
                 {result.overall}
               </div>
-              <div style={{ fontSize: 9, fontWeight: 700, color: "var(--text-muted)" }}>/ 100</div>
+              <div className="text-[9px] font-bold text-text-muted">/ 100</div>
             </div>
           </div>
         </div>
 
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 16, fontWeight: 800, color: grade.color, marginBottom: 4, display: "flex", alignItems: "center", gap: 6 }}>
+        <div className="flex-1">
+          <div
+            className="text-base font-extrabold mb-1 flex items-center gap-1.5"
+            style={{ color: grade.color }}
+          >
             <Award size={18} />
             {grade.label}
           </div>
-          <Text style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.6 }}>
+          <span className="text-[13px] text-text-secondary leading-relaxed">
             {result.summary}
-          </Text>
+          </span>
         </div>
-      </Flex>
+      </div>
 
       {/* Sub-scores */}
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
+      <div className="grid grid-cols-2 gap-2">
         {[
           { label: "Pronunciation", Icon: Mic, value: result.pronunciation },
           { label: "Intonation", Icon: Music, value: result.intonation },
@@ -130,35 +108,25 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
           return (
             <div
               key={s.label}
-              style={{
-                padding: "10px 14px",
-                borderRadius: 12,
-                background: "var(--surface-alt)",
-                border: "1px solid var(--border)",
-              }}
+              className="py-2.5 px-3.5 rounded-xl bg-surface-alt border border-border"
             >
-              <Flex justify="space-between" align="center">
-                <Text style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", display: "flex", alignItems: "center", gap: 4 }}>
+              <div className="flex justify-between items-center">
+                <span className="text-xs font-semibold text-text-secondary flex items-center gap-1">
                   <s.Icon size={12} className="text-text-muted" />
                   {s.label}
-                </Text>
-                <Text style={{ fontSize: 16, fontWeight: 900, color: g.color }}>{s.value}</Text>
-              </Flex>
+                </span>
+                <span className="text-base font-black" style={{ color: g.color }}>
+                  {s.value}
+                </span>
+              </div>
               {/* Mini progress bar */}
-              <div
-                style={{
-                  height: 4,
-                  borderRadius: 2,
-                  background: "var(--border)",
-                  marginTop: 6,
-                  overflow: "hidden",
-                }}
-              >
+              <div className="h-1 rounded-sm bg-border mt-1.5 overflow-hidden">
                 <m.div
                   initial={{ width: 0 }}
                   animate={{ width: `${s.value}%` }}
                   transition={{ duration: 0.6, delay: 0.2 }}
-                  style={{ height: "100%", borderRadius: 2, background: g.color }}
+                  className="h-full rounded-sm"
+                  style={{ background: g.color }}
                 />
               </div>
             </div>
@@ -169,42 +137,23 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
       {/* Word-level feedback */}
       {result.wordScores.length > 0 && (
         <div>
-          <Text
-            style={{
-              fontSize: 12,
-              fontWeight: 700,
-              color: "var(--text-muted)",
-              textTransform: "uppercase",
-              letterSpacing: "0.05em",
-              marginBottom: 10,
-              display: "flex",
-              alignItems: "center",
-              gap: 4,
-            }}
-          >
+          <span className="text-xs font-bold text-text-muted uppercase tracking-[0.05em] mb-2.5 flex items-center gap-1">
             <FileText size={13} />
             Word-by-word Details
-          </Text>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
+          </span>
+          <div className="flex flex-wrap gap-1.5 mb-3">
             {result.wordScores.map((w, i) => {
               const IconComp = SCORE_ICONS[w.score];
               return (
                 <span
                   key={i}
                   title={w.tip || undefined}
+                  className="py-1 px-2.5 rounded-lg text-sm font-bold inline-flex items-center gap-1 transition-transform duration-100"
                   style={{
-                    padding: "4px 10px",
-                    borderRadius: 8,
-                    fontSize: 14,
-                    fontWeight: 700,
                     color: SCORE_COLORS[w.score],
                     background: `color-mix(in srgb, ${SCORE_COLORS[w.score]} 8%, var(--surface))`,
                     border: `1px solid color-mix(in srgb, ${SCORE_COLORS[w.score]} 20%, transparent)`,
                     cursor: w.tip ? "help" : "default",
-                    transition: "transform 0.1s",
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 4,
                   }}
                 >
                   {IconComp && <IconComp size={13} />}
@@ -216,29 +165,18 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
 
           {/* Tips for poor/fair words */}
           {result.wordScores.filter((w) => w.tip).length > 0 && (
-            <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
+            <div className="flex flex-col gap-1.5">
               {result.wordScores
                 .filter((w) => w.tip)
                 .map((w, i) => (
                   <div
                     key={i}
-                    style={{
-                      padding: "8px 12px",
-                      borderRadius: 10,
-                      background: "var(--surface-alt)",
-                      border: "1px solid var(--border)",
-                      fontSize: 12.5,
-                      color: "var(--text-secondary)",
-                      lineHeight: 1.5,
-                      display: "flex",
-                      gap: 8,
-                      alignItems: "flex-start",
-                    }}
+                    className="py-2 px-3 rounded-[10px] bg-surface-alt border border-border text-[12.5px] text-text-secondary leading-normal flex gap-2 items-start"
                   >
-                    <span style={{ color: SCORE_COLORS[w.score], fontWeight: 800, flexShrink: 0 }}>
+                    <span className="font-extrabold shrink-0" style={{ color: SCORE_COLORS[w.score] }}>
                       {w.word}:
                     </span>
-                    <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                    <span className="flex items-center gap-1">
                       <Lightbulb size={13} className="text-accent shrink-0" />
                       {w.tip}
                     </span>
@@ -250,66 +188,21 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
       )}
 
       {/* Transcript comparison */}
-      <div
-        style={{
-          padding: "12px 14px",
-          borderRadius: 12,
-          background: "var(--surface-alt)",
-          border: "1px solid var(--border)",
-        }}
-      >
-        <Text
-          style={{
-            fontSize: 11,
-            fontWeight: 700,
-            color: "var(--text-muted)",
-            textTransform: "uppercase",
-            display: "flex",
-            alignItems: "center",
-            gap: 4,
-            marginBottom: 6,
-          }}
-        >
+      <div className="py-3 px-3.5 rounded-xl bg-surface-alt border border-border">
+        <span className="text-[11px] font-bold text-text-muted uppercase flex items-center gap-1 mb-1.5">
           <Target size={12} />
           Reference Sentence
-        </Text>
-        <Text
-          style={{
-            fontSize: 13,
-            color: "var(--text-primary)",
-            display: "block",
-            marginBottom: 10,
-            lineHeight: 1.5,
-          }}
-        >
+        </span>
+        <span className="text-[13px] text-text-primary block mb-2.5 leading-normal">
           {referenceText}
-        </Text>
-        <Text
-          style={{
-            fontSize: 11,
-            fontWeight: 700,
-            color: "var(--text-muted)",
-            textTransform: "uppercase",
-            display: "flex",
-            alignItems: "center",
-            gap: 4,
-            marginBottom: 6,
-          }}
-        >
+        </span>
+        <span className="text-[11px] font-bold text-text-muted uppercase flex items-center gap-1 mb-1.5">
           <Mic size={12} />
           Your Speech
-        </Text>
-        <Text
-          style={{
-            fontSize: 13,
-            color: "var(--text-secondary)",
-            display: "block",
-            lineHeight: 1.5,
-            fontStyle: "italic",
-          }}
-        >
+        </span>
+        <span className="text-[13px] text-text-secondary block leading-normal italic">
           {result.transcript || "Speech not recognized"}
-        </Text>
+        </span>
       </div>
     </m.div>
   );

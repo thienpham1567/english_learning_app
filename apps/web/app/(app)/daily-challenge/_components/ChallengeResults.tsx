@@ -42,15 +42,15 @@ const TIERS = [
 
 /* ── Exercise type maps ── */
 const EXERCISE_ICONS: Record<string, React.ReactNode> = {
-  "fill-in-blank": <Pencil />,
-  "sentence-order": <ArrowLeftRight />,
-  translation: <Languages />,
-  "error-correction": <Search />,
-  "word-formation": <Type />,
-  "dialogue-completion": <MessageSquare />,
-  "synonym-antonym": <LinkIcon />,
-  "reading-comprehension": <BookOpenText />,
-  collocation: <Square />,
+  "fill-in-blank": <Pencil className="h-3.5 w-3.5" />,
+  "sentence-order": <ArrowLeftRight className="h-3.5 w-3.5" />,
+  translation: <Languages className="h-3.5 w-3.5" />,
+  "error-correction": <Search className="h-3.5 w-3.5" />,
+  "word-formation": <Type className="h-3.5 w-3.5" />,
+  "dialogue-completion": <MessageSquare className="h-3.5 w-3.5" />,
+  "synonym-antonym": <LinkIcon className="h-3.5 w-3.5" />,
+  "reading-comprehension": <BookOpenText className="h-3.5 w-3.5" />,
+  collocation: <Square className="h-3.5 w-3.5" />,
 };
 
 const EXERCISE_LABELS: Record<string, string> = {
@@ -71,7 +71,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
   const [aiExplanation, setAiExplanation] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
   const ok = answer.isCorrect;
-  const exerciseIcon = answer.exerciseType ? EXERCISE_ICONS[answer.exerciseType] : <HelpCircle />;
+  const exerciseIcon = answer.exerciseType ? EXERCISE_ICONS[answer.exerciseType] : <HelpCircle className="h-3.5 w-3.5" />;
   const exerciseLabel = answer.exerciseType ? EXERCISE_LABELS[answer.exerciseType] : "";
 
   const fetchAIExplanation = useCallback(async () => {
@@ -96,40 +96,32 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: Math.min(index + 1, 6) * 0.08 }}
-      className="rounded-(--radius-lg) bg-(--surface) overflow-hidden"
-      style={{
-        border: `1px solid ${ok ? "rgba(16, 185, 129, 0.22)" : "rgba(239, 68, 68, 0.18)"}`,
-        boxShadow: "var(--shadow-sm)",
-      }}
+      className={`rounded-2xl border-2 bg-surface overflow-hidden shadow-(--shadow-sm) ${
+        ok ? "border-success/30" : "border-error/25"
+      }`}
     >
       {/* Header bar */}
       <button
         type="button"
         onClick={() => setIsExpanded((v) => !v)}
-        className="flex items-center justify-between w-full border-none cursor-pointer gap-3"
-        style={{
-          padding: "14px 18px",
-          background: ok ? "rgba(16, 185, 129, 0.03)" : "rgba(239, 68, 68, 0.02)",
-        }}
+        className={`flex items-center justify-between w-full border-none cursor-pointer gap-3 p-4 text-left transition-colors duration-150 ${
+          ok ? "bg-success/5 hover:bg-success/10" : "bg-error/5 hover:bg-error/10"
+        }`}
       >
-        <div className="flex items-center gap-3 w-[0px]">
+        <div className="flex items-center gap-3 min-w-0 flex-1">
           <div
-            className="w-[8px] h-[8px] rounded-full shrink-0"
-            style={{
-              background: ok ? "var(--success)" : "var(--error)",
-              boxShadow: ok ? "0 0 8px var(--success)" : "0 0 8px var(--error)",
-            }}
+            className={`w-2.5 h-2.5 rounded-full shrink-0 ${
+              ok ? "bg-success shadow-[0_0_8px_var(--success)]" : "bg-error shadow-[0_0_8px_var(--error)]"
+            }`}
           />
-          <div className="flex flex-col items-start w-[0px]" style={{ gap: 2 }}>
-            <span className="font-body text-sm font-bold text-text-primary">
+          <div className="flex flex-col items-start min-w-0">
+            <span className="font-display text-sm font-black text-text-primary leading-none">
               Question #{index + 1}
             </span>
             {exerciseLabel && (
-              <span
-                className="items-center text-[11px] text-text-muted font-medium"
-                style={{ display: "inline-flex", gap: 5 }}
-              >
-                {exerciseIcon} {exerciseLabel}
+              <span className="items-center text-[10px] text-text-muted font-bold mt-1.5 flex gap-1.5 font-sans">
+                {exerciseIcon} 
+                <span>{exerciseLabel}</span>
               </span>
             )}
           </div>
@@ -137,20 +129,17 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
 
         <div className="flex items-center gap-3 shrink-0">
           <span
-            className="text-[11px] font-extrabold"
-            style={{
-              padding: "4px 10px",
-              borderRadius: 20,
-              background: ok ? "rgba(16, 185, 129, 0.12)" : "rgba(239, 68, 68, 0.1)",
-              color: ok ? "var(--success)" : "var(--error)",
-            }}
+            className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-0.5 rounded-lg border font-mono ${
+              ok
+                ? "bg-success-bg border-success/35 text-success"
+                : "bg-error-bg border-error/25 text-error"
+            }`}
           >
             {ok ? "Correct" : "Incorrect"}
           </span>
           <ChevronDown
-            className="text-[10px] text-text-muted"
+            className="text-text-muted h-4 w-4 transition-transform duration-200"
             style={{
-              transition: "transform 0.25s ease",
               transform: isExpanded ? "rotate(180deg)" : "rotate(0)",
             }}
           />
@@ -164,26 +153,17 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
             initial={{ height: 0 }}
             animate={{ height: "auto" }}
             exit={{ height: 0 }}
-            transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="overflow-hidden"
+            transition={{ duration: 0.25, ease: "easeInOut" }}
+            className="overflow-hidden bg-surface"
           >
-            <div className="flex flex-col gap-2.5" style={{ padding: "4px 18px 18px" }}>
+            <div className="flex flex-col gap-3 p-4 pt-1.5">
               {/* Question stem */}
               {answer.questionStem && (
-                <div
-                  className="rounded-(--radius) bg-surface-alt border-2 border-border"
-                  style={{ padding: "12px 14px" }}
-                >
-                  <span
-                    className="text-[10px] font-extrabold uppercase text-text-muted block mb-1.5"
-                    style={{ letterSpacing: ".08em" }}
-                  >
+                <div className="rounded-xl bg-surface-alt border-2 border-border p-3.5 shadow-(--shadow-sm)">
+                  <span className="text-[9px] font-extrabold uppercase text-text-muted block mb-1.5 tracking-wider font-display">
                     Question Stem
                   </span>
-                  <span
-                    className="text-sm text-text-primary font-medium"
-                    style={{ lineHeight: 1.7, wordBreak: "break-word" }}
-                  >
+                  <span className="text-xs md:text-sm text-text-primary font-semibold leading-relaxed break-words">
                     {answer.questionStem}
                   </span>
                 </div>
@@ -191,47 +171,31 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
 
               {/* User answer */}
               <div
-                className="rounded-(--radius)"
-                style={{
-                  borderLeft: `3px solid ${ok ? "var(--success)" : "var(--error)"}`,
-                  padding: "11px 14px",
-                  background: ok ? "rgba(16, 185, 129, 0.06)" : "rgba(239, 68, 68, 0.05)",
-                }}
+                className={`rounded-xl border-l-4 border-2 p-3.5 shadow-(--shadow-sm) ${
+                  ok
+                    ? "border-l-success border-success/20 bg-success/5"
+                    : "border-l-error border-error/20 bg-error/5"
+                }`}
               >
                 <span
-                  className="text-[10px] font-extrabold uppercase block mb-1"
-                  style={{ letterSpacing: ".08em", color: ok ? "var(--success)" : "var(--error)" }}
+                  className={`text-[9px] font-extrabold uppercase block mb-1 tracking-wider font-display ${
+                    ok ? "text-success" : "text-error"
+                  }`}
                 >
-                  {ok ? "Your Answer" : "Your Answer"}
+                  Your Answer
                 </span>
-                <span
-                  className="font-semibold text-text-primary font-body"
-                  style={{ fontSize: 13.5, wordBreak: "break-word" }}
-                >
+                <span className="font-bold text-text-primary font-body text-xs md:text-sm break-words">
                   {answer.answer || "(blank)"}
                 </span>
               </div>
 
               {/* Correct answer (wrong only) */}
               {!ok && answer.correctAnswer && (
-                <div
-                  className="rounded-(--radius)"
-                  style={{
-                    borderLeft: "3px solid var(--success)",
-                    padding: "11px 14px",
-                    background: "rgba(16, 185, 129, 0.06)",
-                  }}
-                >
-                  <span
-                    className="text-[10px] font-extrabold uppercase text-emerald-500 block mb-1"
-                    style={{ letterSpacing: ".08em" }}
-                  >
+                <div className="rounded-xl border-l-4 border-2 border-border border-l-success bg-success/5 p-3.5 shadow-(--shadow-sm)">
+                  <span className="text-[9px] font-extrabold uppercase text-success block mb-1 tracking-wider font-display">
                     Correct Answer
                   </span>
-                  <span
-                    className="font-bold text-emerald-500 font-body"
-                    style={{ fontSize: 13.5, wordBreak: "break-word" }}
-                  >
+                  <span className="font-bold text-success font-body text-xs md:text-sm break-words">
                     {answer.correctAnswer}
                   </span>
                 </div>
@@ -239,15 +203,9 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
 
               {/* Static explanation */}
               {answer.explanation && (
-                <div className="flex gap-2 items-start" style={{ padding: "6px 2px" }}>
-                  <Lightbulb
-                    className="text-accent text-[13px] shrink-0"
-                    style={{ marginTop: 2 }}
-                  />
-                  <p
-                    className="leading-relaxed text-text-secondary m-0"
-                    style={{ fontSize: 12.5, wordBreak: "break-word" }}
-                  >
+                <div className="flex gap-2.5 items-start p-1.5 mt-0.5 bg-surface-alt border border-border/20 rounded-xl">
+                  <Lightbulb className="text-accent h-4 w-4 shrink-0 mt-0.5" />
+                  <p className="leading-relaxed text-text-secondary text-xs font-semibold m-0 break-words">
                     {answer.explanation}
                   </p>
                 </div>
@@ -264,22 +222,20 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                     fetchAIExplanation();
                   }}
                   disabled={aiLoading}
-                  className="items-center gap-1.5 py-2 px-4 rounded-full text-accent text-xs font-bold mt-1"
+                  className="inline-flex items-center gap-1.5 py-2.5 px-4.5 rounded-xl border border-accent/20 bg-accent/5 hover:bg-accent/10 text-accent text-[11px] font-black cursor-pointer shadow-(--shadow-sm) mt-1.5 w-fit"
                   style={{
-                    display: "inline-flex",
-                    border: "1px solid color-mix(in srgb, var(--accent) 30%, var(--border))",
-                    background: "color-mix(in srgb, var(--accent) 8%, var(--surface))",
                     cursor: aiLoading ? "wait" : "pointer",
-                    width: "fit-content",
                   }}
                 >
                   {aiLoading ? (
                     <>
-                      <Loader2 className="animate-spin" size={12} /> AI is analyzing...
+                      <Loader2 className="animate-spin h-3.5 w-3.5" /> 
+                      <span>AI is analyzing...</span>
                     </>
                   ) : (
                     <>
-                      <Lightbulb size={12} /> Ask AI for details
+                      <Lightbulb className="h-3.5 w-3.5" /> 
+                      <span>Ask AI for details</span>
                     </>
                   )}
                 </m.button>
@@ -290,26 +246,15 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                 <m.div
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-1.5 rounded-(--radius-lg)"
-                  style={{
-                    padding: "14px",
-                    background: "linear-gradient(135deg, var(--accent-light), var(--surface-alt))",
-                    border: "1px solid color-mix(in srgb, var(--accent) 20%, var(--border))",
-                  }}
+                  className="mt-1.5 rounded-xl p-4 bg-gradient-to-r from-accent-light/40 to-surface border-2 border-accent/20 shadow-(--shadow-sm) flex flex-col gap-1.5"
                 >
-                  <div className="flex items-center gap-1.5 mb-2">
-                    <Lightbulb size={13} className="text-accent" />
-                    <span
-                      className="text-[11px] font-extrabold uppercase text-accent"
-                      style={{ letterSpacing: ".05em" }}
-                    >
+                  <div className="flex items-center gap-1.5">
+                    <Lightbulb size={13} className="text-accent fill-current" />
+                    <span className="text-[10px] font-extrabold uppercase text-accent tracking-wider font-display">
                       AI Assistant Explanation
                     </span>
                   </div>
-                  <p
-                    className="text-[13px] text-text-primary m-0 font-body"
-                    style={{ lineHeight: 1.7, wordBreak: "break-word" }}
-                  >
+                  <p className="text-xs md:text-sm text-text-primary m-0 font-body font-semibold leading-relaxed break-words">
                     {aiExplanation}
                   </p>
                 </m.div>
@@ -357,113 +302,85 @@ export function ChallengeResults({
           visible={showCelebration}
           onComplete={() => setShowCelebration(false)}
         >
-          <span
-            className="font-display text-3xl font-extrabold"
-            style={{ color: matched.tier === "big" ? "var(--xp)" : "var(--accent)" }}
-          >
+          <span className="font-display text-3xl font-black text-accent">
             {matched.label}
           </span>
         </CelebrationOverlay>
       )}
 
-      <div className="anim-scale-in w-[540px] mx-auto w-full flex flex-col gap-4">
+      <div className="anim-scale-in w-full max-w-2xl mx-auto flex flex-col gap-5">
         {/* ── Score Hero Card ── */}
-        <div
-          className="rounded-(--radius-xl) border-2 border-border bg-(--surface) text-center relative overflow-hidden"
-          style={{ padding: "36px 24px 28px", boxShadow: "var(--shadow-md)" }}
-        >
-          {/* Top accent line */}
-          <div
-            className="absolute h-[4px]"
-            style={{
-              top: 0,
-              left: 0,
-              right: 0,
-              background: `linear-gradient(90deg, var(--accent), var(--xp))`,
-            }}
-          />
+        <div className="rounded-2xl border-2 border-border bg-surface p-8 text-center relative overflow-hidden shadow-(--shadow) transition-all duration-200">
+          {/* Top linear line */}
+          <div className="absolute h-1.5 top-0 left-0 right-0 bg-gradient-to-r from-accent to-secondary" />
 
-          {/* Big score number */}
-          <div className="flex items-baseline justify-center gap-1 mb-2">
+          {/* Score Counter */}
+          <div className="flex items-baseline justify-center gap-1.5 mb-2.5">
             <m.span
               initial={{ scale: 0.6, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              transition={{ type: "spring", stiffness: 80, damping: 10 }}
-              className="font-display font-black leading-none"
+              transition={{ type: "spring", stiffness: 85, damping: 11 }}
+              className="font-display font-black leading-none text-8xl tracking-tighter"
               style={{
-                fontSize: 96,
                 color:
                   correctCount === answers.length
                     ? "var(--success)"
                     : correctCount >= answers.length * 0.6
                       ? "var(--text-primary)"
                       : "var(--accent)",
-                letterSpacing: "-.04em",
               }}
             >
               {correctCount}
             </m.span>
-            <span
-              className="font-display text-4xl font-normal text-text-muted mb-2"
-              style={{ letterSpacing: "-.02em" }}
-            >
+            <span className="font-display text-3xl font-normal text-text-muted tracking-tight">
               /{answers.length}
             </span>
           </div>
 
           {/* Title */}
-          <p
-            className="font-display text-3xl font-extrabold text-text-primary"
-            style={{ margin: "0 0 6px" }}
-          >
+          <h2 className="font-display text-2xl md:text-3xl font-black text-text-primary m-0 tracking-tight leading-none mb-1.5">
             {matched.label}
-          </p>
-          <p className="font-body text-text-muted m-0 font-medium" style={{ fontSize: 13.5 }}>
+          </h2>
+          <p className="font-sans text-text-muted m-0 font-bold text-xs md:text-sm">
             {matched.sub} · Accuracy {pct}%
           </p>
 
-          {/* Divider */}
-          <div
-            className="w-[50px] h-[1px]"
-            style={{ margin: "20px auto", background: "var(--border)" }}
-          />
+          {/* Dash */}
+          <div className="w-14 h-0.5 mx-auto my-5 bg-border/60" />
 
           {/* Stats Grid */}
-          <div className="grid gap-2" style={{ gridTemplateColumns: "repeat(4, 1fr)" }}>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
               {
-                icon: <CheckCircle className="text-emerald-500" />,
+                icon: <CheckCircle className="text-emerald-500 h-4.5 w-4.5" />,
                 label: "Correct",
                 value: correctCount,
               },
-              { icon: <XCircle className="text-destructive" />, label: "Wrong", value: wrongCount },
+              { 
+                icon: <XCircle className="text-error h-4.5 w-4.5" />, 
+                label: "Wrong", 
+                value: wrongCount 
+              },
               {
-                icon: <Clock className="text-accent" />,
-                label: "Time",
+                icon: <Clock className="text-accent h-4.5 w-4.5" />,
+                label: "Time Spent",
                 value: `${minutes}:${seconds.toString().padStart(2, "0")}`,
               },
               {
-                icon: <Flame style={{ color: "var(--fire)" }} />,
-                label: "Streak",
-                value: streak.currentStreak,
+                icon: <Flame className="h-4.5 w-4.5" style={{ color: "var(--fire)" }} />,
+                label: "Streak Days",
+                value: `${streak.currentStreak}d`,
               },
-            ].map((s, i) => (
+            ].map((s) => (
               <div
                 key={s.label}
-                className="flex flex-col items-center gap-1 rounded-(--radius) bg-surface-alt border-2 border-border"
-                style={{ padding: "10px 4px" }}
+                className="flex flex-col items-center gap-1.5 rounded-xl bg-surface-alt border-2 border-border p-3 shadow-(--shadow-sm)"
               >
-                <span className="text-base">{s.icon}</span>
-                <span
-                  className="font-mono text-base font-extrabold text-text-primary"
-                  style={{ lineHeight: 1.2 }}
-                >
+                <span>{s.icon}</span>
+                <span className="font-mono text-base font-black text-text-primary leading-none mt-0.5">
                   {s.value}
                 </span>
-                <span
-                  className="text-[9px] font-bold uppercase text-text-muted"
-                  style={{ letterSpacing: ".05em" }}
-                >
+                <span className="text-[9px] font-extrabold uppercase tracking-wider text-text-muted font-display mt-0.5">
                   {s.label}
                 </span>
               </div>
@@ -476,40 +393,26 @@ export function ChallengeResults({
           <m.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="rounded-(--radius-xl) py-4 px-5"
-            style={{
-              border: "1.5px solid rgba(245, 158, 11, 0.35)",
-              background: "rgba(245, 158, 11, 0.06)",
-              boxShadow: "var(--shadow-sm)",
-            }}
+            className="rounded-2xl border-2 border-accent bg-accent/5 p-4.5 shadow-(--shadow-sm) flex flex-col gap-3"
           >
-            <div className="flex items-center gap-1.5 mb-3">
-              <Star size={13} className="text-(--xp)" />
-              <span
-                className="text-[11px] font-extrabold uppercase text-(--xp)"
-                style={{ letterSpacing: ".08em" }}
-              >
+            <div className="flex items-center gap-1.5">
+              <Star size={14} className="text-accent fill-current animate-pulse shrink-0" />
+              <span className="text-[10px] font-extrabold uppercase text-accent tracking-widest font-display">
                 New Badge Unlocked!
               </span>
             </div>
             <div className="flex gap-2 flex-wrap">
-              {newBadges.map((b, i) => (
+              {newBadges.map((b) => (
                 <span
                   key={b.id}
-                  className="items-center gap-1.5 text-[13px] rounded-full bg-(--surface) font-bold text-text-primary"
-                  style={{
-                    display: "inline-flex",
-                    padding: "6px 16px",
-                    border: "1px solid rgba(245, 158, 11, 0.4)",
-                    boxShadow: "var(--shadow-sm)",
-                  }}
+                  className="inline-flex items-center gap-1.5 text-xs rounded-xl bg-surface border-2 border-accent/30 font-black text-text-primary px-4 py-1.5 shadow-(--shadow-sm)"
                 >
                   {b.icon === "Trophy" ? (
-                    <Trophy className="text-(--xp)" />
+                    <Trophy className="text-accent h-4 w-4 shrink-0" />
                   ) : (
-                    <Flame className="text-(--xp)" />
+                    <Flame className="text-orange-500 h-4 w-4 shrink-0" />
                   )}
-                  {b.label}
+                  <span>{b.label}</span>
                 </span>
               ))}
             </div>
@@ -518,17 +421,14 @@ export function ChallengeResults({
 
         {/* ── Answer Breakdown header ── */}
         <div className="flex items-center gap-3 mt-2.5">
-          <span
-            className="text-[11px] font-extrabold uppercase text-text-muted"
-            style={{ letterSpacing: ".08em", whiteSpace: "nowrap" }}
-          >
+          <span className="text-[10px] font-extrabold uppercase text-text-muted tracking-widest font-display">
             Answer Details
           </span>
-          <div className="flex-1 h-[1px]" style={{ background: "var(--border)" }} />
+          <div className="flex-1 h-[1px] bg-border/60" />
         </div>
 
         {/* Answer Cards */}
-        <div className="flex flex-col gap-2.5">
+        <div className="flex flex-col gap-3">
           {answers.map((a, i) => (
             <AnswerDetailCard key={i} answer={a} index={i} />
           ))}
@@ -540,25 +440,16 @@ export function ChallengeResults({
         </div>
 
         {/* CTA */}
-        <div className="mt-2.5 flex flex-col items-center gap-3">
+        <div className="mt-2.5 flex flex-col items-center gap-3 w-full">
           <Link
             href="/daily-challenge"
             prefetch={false}
-            className="items-center justify-center gap-2 w-full rounded-(--radius-lg) font-extrabold text-[15px]"
-            style={{
-              display: "inline-flex",
-              padding: "14px 28px",
-              background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-              color: "var(--text-on-accent)",
-              textDecoration: "none",
-              boxShadow: "0 6px 18px var(--accent-muted)",
-              transition: "all 0.2s",
-            }}
+            className="flex items-center justify-center gap-2.5 w-full rounded-2xl font-black text-[15px] px-6 py-4.5 bg-accent border-2 border-border text-ink shadow-(--shadow-sm) hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-(--shadow) active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-100 cursor-pointer"
           >
-            Done & Continue
-            <ChevronRight size={12} />
+            <span>Done & Continue</span>
+            <ChevronRight size={15} />
           </Link>
-          <span className="text-[11px] text-text-muted font-medium">Come back tomorrow!</span>
+          <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider font-display">Come back tomorrow!</span>
         </div>
       </div>
     </>

@@ -11,6 +11,7 @@ import {
   Scissors,
   Zap,
 } from "lucide-react";
+import { motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 // ── Speed presets (AC1) ──
@@ -353,8 +354,7 @@ export function AudioPlayer({
     <div
       ref={containerRef}
       tabIndex={0}
-      className={`${className} bg-(--surface) border-2 border-border rounded-(--radius-lg) flex flex-col gap-3.5`}
-      style={{ padding: "20px", outline: "none" }}
+      className={`${className ?? ""} bg-surface border-2 border-border rounded-lg flex flex-col gap-3.5 p-5 outline-none shadow-(--shadow-sm) focus-visible:shadow-(--shadow)`}
     >
       {/* Hidden audio element */}
       <audio
@@ -373,95 +373,56 @@ export function AudioPlayer({
 
       {/* Audio error message */}
       {audioError && (
-        <div
-          className="rounded-(--radius-sm) text-destructive text-xs text-center"
-          style={{
-            padding: "8px 14px",
-            background: "var(--error-bg)",
-            border: "1px solid color-mix(in srgb, var(--error) 20%, transparent)",
-          }}
-        >
-          <AlertTriangle style={{ marginRight: 6 }} /> {audioError}
+        <div className="rounded-lg text-[var(--error)] text-xs text-center py-2 px-3.5 bg-error-bg border-2 border-[color-mix(in_srgb,var(--error)_20%,var(--border))] flex items-center justify-center gap-1.5">
+          <AlertTriangle size={14} /> {audioError}
         </div>
       )}
 
       {/* Play button + seek bar */}
       <div className="flex items-center gap-3">
-        <button
+        <motion.button
           onClick={togglePlay}
           disabled={isLoading}
-          className="bg-none border-none text-accent text-[36px] leading-none flex"
-          style={{
-            cursor: isLoading ? "wait" : "pointer",
-            padding: 0,
-            transition: "transform 0.15s ease",
-          }}
+          whileHover={{ scale: 1.08 }}
+          whileTap={{ scale: 0.95 }}
+          className={`bg-transparent border-none text-accent text-4xl leading-none flex p-0 transition-transform duration-150 ${
+            isLoading ? "cursor-wait opacity-50" : "cursor-pointer"
+          }`}
         >
-          {isPlaying ? <PauseCircle /> : <PlayCircle />}
-        </button>
+          {isPlaying ? <PauseCircle size={36} /> : <PlayCircle size={36} />}
+        </motion.button>
 
         <div className="flex-1 flex flex-col gap-1">
-          {/* Seek bar with marker ticks (Task 4 visual polish) */}
-          <div
-            className="relative h-[6px]"
-            style={{ borderRadius: 3, background: "var(--border)", overflow: "visible" }}
-          >
+          {/* Seek bar with marker ticks */}
+          <div className="relative h-[6px] rounded-sm bg-border overflow-visible">
             {/* A-B highlighted region */}
             {markerAPos != null && markerBPos != null && (
               <div
-                className="absolute h-full"
-                style={{
-                  left: `${markerAPos}%`,
-                  width: `${markerBPos - markerAPos}%`,
-                  top: 0,
-                  background: looping
-                    ? "color-mix(in srgb, var(--success) 30%, transparent)"
-                    : "color-mix(in srgb, var(--info) 20%, transparent)",
-                  borderRadius: 3,
-                  transition: "background 0.2s ease",
-                }}
+                className={`absolute h-full rounded-sm transition-colors duration-200 ${
+                  looping ? "bg-[color-mix(in_srgb,var(--success)_30%,transparent)]" : "bg-[color-mix(in_srgb,var(--info)_20%,transparent)]"
+                }`}
+                style={{ left: `${markerAPos}%`, width: `${markerBPos - markerAPos}%`, top: 0 }}
               />
             )}
             {/* Progress fill */}
             <div
-              className="absolute h-full"
-              style={{
-                left: 0,
-                top: 0,
-                width: `${progress}%`,
-                background: "linear-gradient(90deg, var(--accent), var(--accent-hover))",
-                borderRadius: 3,
-                transition: "width 0.1s linear",
-              }}
+              className="absolute h-full rounded-sm bg-gradient-to-r from-accent to-accent-hover transition-[width] duration-100 ease-linear"
+              style={{ left: 0, top: 0, width: `${progress}%` }}
             />
             {/* Marker A tick */}
             {markerAPos != null && (
               <div
                 title={`A: ${formatTime(markerA!)}`}
-                className="absolute w-[3px] h-[12px]"
-                style={{
-                  left: `${markerAPos}%`,
-                  top: -3,
-                  background: "var(--success)",
-                  borderRadius: 1,
-                  transform: "translateX(-50%)",
-                  zIndex: 2,
-                }}
+                className="absolute w-[3px] h-[12px] bg-[var(--success)] rounded-sm -translate-x-1/2 z-[2]"
+                style={{ left: `${markerAPos}%`, top: -3 }}
               />
             )}
             {/* Marker B tick */}
             {markerBPos != null && (
               <div
                 title={`B: ${formatTime(markerB!)}`}
-                className="absolute w-[3px] h-[12px]"
-                style={{
-                  left: `${markerBPos}%`,
-                  top: -3,
-                  background: "var(--error)",
-                  borderRadius: 1,
-                  transform: "translateX(-50%)",
-                  zIndex: 2,
-                }}
+                className="absolute w-[3px] h-[12px] bg-[var(--error)] rounded-sm -translate-x-1/2 z-[2]"
+                style={{ left: `${markerBPos}%`, top: -3 }}
               />
             )}
             <input
@@ -471,13 +432,12 @@ export function AudioPlayer({
               step={0.1}
               value={currentTime}
               onChange={handleSeek}
-              className="absolute w-full h-[14px] cursor-pointer m-0"
-              style={{ top: -4, left: 0, opacity: 0 }}
+              className="absolute w-full h-[14px] cursor-pointer m-0 opacity-0 top-[-4px] left-0"
             />
           </div>
 
           {/* Time display */}
-          <div className="flex justify-between text-[11px] text-text-muted">
+          <div className="flex justify-between text-[11px] text-text-muted font-mono">
             <span>{formatTime(currentTime)}</span>
             <span>{isLoading ? "Loading..." : formatTime(duration)}</span>
           </div>
@@ -487,126 +447,111 @@ export function AudioPlayer({
       {/* Controls row: replay + speed */}
       <div className="flex justify-center gap-2.5 flex-wrap">
         {/* Replay button */}
-        <button
+        <motion.button
           onClick={handleReplay}
           disabled={replaysUsed >= maxReplays}
-          className="flex items-center gap-1.5 rounded-(--radius-sm) border-2 border-border text-xs font-medium"
-          style={{
-            padding: "8px 14px",
-            background: replaysUsed >= maxReplays ? "var(--border)" : "var(--surface)",
-            color: replaysUsed >= maxReplays ? "var(--text-muted)" : "var(--text)",
-            cursor: replaysUsed >= maxReplays ? "not-allowed" : "pointer",
-            transition: "all 0.15s ease",
-          }}
+          whileHover={replaysUsed < maxReplays ? { y: -2 } : {}}
+          whileTap={replaysUsed < maxReplays ? { scale: 0.97 } : {}}
+          className={`flex items-center gap-1.5 rounded-lg border-2 border-border text-xs font-bold py-2 px-3.5 transition-all duration-100 ${
+            replaysUsed >= maxReplays
+              ? "bg-bg-deep text-text-muted cursor-not-allowed"
+              : "bg-surface text-text-primary cursor-pointer hover:bg-surface-hover hover:shadow-(--shadow-sm) hover:-translate-y-0.5"
+          }`}
         >
-          <RefreshCw />
+          <RefreshCw size={13} />
           Replay ({maxReplays - replaysUsed}/{maxReplays})
-        </button>
+        </motion.button>
 
         {/* Speed control (AC1) */}
-        <button
+        <motion.button
           onClick={handleCycleSpeed}
-          className="flex items-center gap-1.5 rounded-(--radius-sm) border-2 border-border cursor-pointer text-xs font-semibold w-[80px] justify-center"
-          style={{
-            padding: "8px 14px",
-            background:
-              speed !== 1 ? "var(--accent-surface, rgba(99,102,241,0.08))" : "var(--surface)",
-            color: speed !== 1 ? "var(--accent)" : "var(--text)",
-            transition: "all 0.15s ease",
-          }}
+          whileHover={{ y: -2 }}
+          whileTap={{ scale: 0.97 }}
+          className={`flex items-center gap-1.5 rounded-lg border-2 border-border cursor-pointer text-xs font-bold w-[80px] justify-center py-2 px-3.5 transition-all duration-100 ${
+            speed !== 1
+              ? "bg-accent-muted text-accent"
+              : "bg-surface text-text-primary hover:bg-surface-hover"
+          }`}
         >
-          <Zap />
+          <Zap size={13} />
           {speed}×
-        </button>
+        </motion.button>
       </div>
 
       {/* A-B Loop controls (AC2) */}
-      <div
-        className="flex justify-center gap-2 flex-wrap pt-3"
-        style={{ borderTop: "1px solid var(--border)" }}
-      >
+      <div className="flex justify-center gap-2 flex-wrap pt-3 border-t-2 border-border">
         {/* Set A */}
-        <button
+        <motion.button
           onClick={setA}
           disabled={isLoading}
+          whileHover={{ y: -1 }}
           title="Set A marker [ [ ]"
-          className="flex items-center gap-1 py-1.5 px-3 rounded-(--radius-sm) cursor-pointer text-[11px] font-semibold"
-          style={{
-            border: markerA != null ? "1px solid var(--success)" : "1px solid var(--border)",
-            background:
-              markerA != null
-                ? "color-mix(in srgb, var(--success) 8%, transparent)"
-                : "var(--surface)",
-            color: markerA != null ? "var(--success)" : "var(--text-muted)",
-            transition: "all 0.15s ease",
-          }}
+          className={`flex items-center gap-1 py-1.5 px-3 rounded-lg cursor-pointer text-[11px] font-bold border-2 transition-all duration-100 ${
+            markerA != null
+              ? "border-[var(--success)] bg-success-bg text-[var(--success)]"
+              : "border-border bg-surface text-text-muted hover:bg-surface-hover"
+          }`}
         >
-          <Scissors />A{markerA != null ? ` ${formatTime(markerA)}` : ""}
-        </button>
+          <Scissors size={12} />A{markerA != null ? ` ${formatTime(markerA)}` : ""}
+        </motion.button>
 
         {/* Set B */}
-        <button
+        <motion.button
           onClick={setB}
           disabled={!canSetB || isLoading}
+          whileHover={canSetB ? { y: -1 } : {}}
           title="Set B marker [ ] ]"
-          className="flex items-center gap-1 py-1.5 px-3 rounded-(--radius-sm) text-[11px] font-semibold"
-          style={{
-            border: markerB != null ? "1px solid var(--error)" : "1px solid var(--border)",
-            background:
-              markerB != null
-                ? "color-mix(in srgb, var(--error) 8%, transparent)"
-                : "var(--surface)",
-            color:
-              markerB != null ? "var(--error)" : canSetB ? "var(--text-muted)" : "var(--border)",
-            cursor: canSetB ? "pointer" : "not-allowed",
-            transition: "all 0.15s ease",
-          }}
+          className={`flex items-center gap-1 py-1.5 px-3 rounded-lg text-[11px] font-bold border-2 transition-all duration-100 ${
+            markerB != null
+              ? "border-[var(--error)] bg-error-bg text-[var(--error)] cursor-pointer"
+              : canSetB
+                ? "border-border bg-surface text-text-muted cursor-pointer hover:bg-surface-hover"
+                : "border-border bg-surface text-border cursor-not-allowed"
+          }`}
         >
-          <Scissors />B{markerB != null ? ` ${formatTime(markerB)}` : ""}
-        </button>
+          <Scissors size={12} />B{markerB != null ? ` ${formatTime(markerB)}` : ""}
+        </motion.button>
 
         {/* Toggle Loop */}
-        <button
+        <motion.button
           onClick={toggleLoop}
           disabled={!canLoop}
+          whileHover={canLoop ? { y: -1 } : {}}
           title="Toggle loop [ L ]"
-          className="flex items-center gap-1 py-1.5 px-3 rounded-(--radius-sm) text-[11px] font-semibold"
-          style={{
-            border: looping ? "1px solid var(--success)" : "1px solid var(--border)",
-            background: looping
-              ? "color-mix(in srgb, var(--success) 12%, transparent)"
-              : "var(--surface)",
-            color: looping ? "var(--success)" : canLoop ? "var(--text-muted)" : "var(--border)",
-            cursor: canLoop ? "pointer" : "not-allowed",
-            transition: "all 0.15s ease",
-          }}
+          className={`flex items-center gap-1 py-1.5 px-3 rounded-lg text-[11px] font-bold border-2 transition-all duration-100 ${
+            looping
+              ? "border-[var(--success)] bg-success-bg text-[var(--success)] cursor-pointer"
+              : canLoop
+                ? "border-border bg-surface text-text-muted cursor-pointer hover:bg-surface-hover"
+                : "border-border bg-surface text-border cursor-not-allowed"
+          }`}
         >
           <Repeat size={13} />
           {looping ? "Looping" : "Loop"}
-        </button>
+        </motion.button>
 
         {/* Clear */}
-        <button
+        <motion.button
           onClick={clearMarkers}
           disabled={markerA == null && markerB == null}
+          whileHover={markerA != null || markerB != null ? { y: -1 } : {}}
           title="Clear markers"
-          className="flex items-center gap-1 py-1.5 px-3 rounded-(--radius-sm) border-2 border-border bg-(--surface) text-[11px] font-semibold"
-          style={{
-            color: markerA != null || markerB != null ? "var(--text)" : "var(--border)",
-            cursor: markerA != null || markerB != null ? "pointer" : "not-allowed",
-            transition: "all 0.15s ease",
-          }}
+          className={`flex items-center gap-1 py-1.5 px-3 rounded-lg border-2 border-border bg-surface text-[11px] font-bold transition-all duration-100 ${
+            markerA != null || markerB != null
+              ? "text-text-primary cursor-pointer hover:bg-surface-hover"
+              : "text-border cursor-not-allowed"
+          }`}
         >
-          <Eraser />
+          <Eraser size={12} />
           Clear
-        </button>
+        </motion.button>
       </div>
 
       {/* preservesPitch note (AC3) */}
-      <div className="text-[10px] text-text-muted text-center">
+      <div className="text-[10px] text-text-muted text-center flex items-center justify-center gap-1 flex-wrap">
         {speed !== 1 && (
           <>
-            <Headphones className="mr-1" /> Pitch preserved ·{" "}
+            <Headphones size={10} /> Pitch preserved ·{" "}
           </>
         )}
         Shortcuts: [ ] Set A/B · L Loop · ←/→ ±3s{selfManagedSpeed ? " · ,/. Speed" : ""} · Space

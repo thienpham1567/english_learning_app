@@ -1,6 +1,7 @@
 "use client";
 
-import { Button, Card, Input, Modal, message, Progress, Tag } from "antd";
+import { toast } from "sonner";
+
 import { ClipboardList } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -103,18 +104,16 @@ export default function WritingRunnerPage() {
   };
 
   const skipQuestion = () => {
-    Modal.confirm({
-      title: "Skip this question?",
-      content: "You will receive 0 points for this question. Continue?",
-      onOk: () => void submit(),
-    });
+    if (window.confirm("Skip this question?\n\nYou will receive 0 points for this question. Continue?")) {
+      void submit();
+    }
   };
 
   if (error) {
     return (
       <div className="p-6">
         <div className="text-destructive mb-3">{error}</div>
-        <Button onClick={() => router.push("/toeic/writing")}>Back to Hub</Button>
+        <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" onClick={() => router.push("/toeic/writing")}>Back to Hub</button>
       </div>
     );
   }
@@ -129,17 +128,20 @@ export default function WritingRunnerPage() {
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
       <div className="p-4 grid gap-3 w-[800px]">
         <div className="flex justify-between items-center">
-          <Tag color={remaining < 60000 ? "red" : "orange"}>
+          <span className="bg-red-500/15 text-red-600 py-0.5 px-2 inline-block">
             ⏱ {minRemaining}:{String(secRemaining).padStart(2, "0")}
-          </Tag>
+          </span>
           <span className="text-text-muted">Max {current.maxScore} points</span>
         </div>
-        <Progress
-          percent={Math.round((elapsed / (current.writeSeconds * 1000)) * 100)}
-          showInfo={false}
-          size="small"
-          strokeColor={remaining < 60000 ? "var(--error)" : "var(--accent)"}
-        />
+        <div className="h-2 rounded-full bg-border overflow-hidden">
+          <div
+            className="h-full rounded-full transition-all duration-300"
+            style={{
+              width: `${Math.round((elapsed / (current.writeSeconds * 1000)) * 100)}%`,
+              background: remaining < 60000 ? "var(--error)" : "var(--accent)",
+            }}
+          />
+        </div>
 
         {current.type === "q1_5_picture" && (
           <>
@@ -153,9 +155,8 @@ export default function WritingRunnerPage() {
                 style={{ maxWidth: "100%" }}
               />
             )}
-            <Card
-              size="small"
-              className="border-2 border-border"
+            <div
+              className="border-2 border-border rounded-xl bg-surface shadow-sm border-2 border-border"
               style={{ background: "color-mix(in srgb, var(--accent) 8%, var(--surface))" }}
             >
               <div className="text-[13px] text-text-muted">
@@ -163,17 +164,17 @@ export default function WritingRunnerPage() {
               </div>
               <div className="mt-1.5">
                 {(current.mandatoryWords ?? []).map((w) => (
-                  <Tag key={w} color="orange" className="text-sm">
+                  <span key={w} className="text-sm bg-amber-500/15 text-amber-600 py-0.5 px-2 inline-block">
                     {w}
-                  </Tag>
+                  </span>
                 ))}
               </div>
-            </Card>
+            </div>
           </>
         )}
 
         {current.type === "q6_7_email" && (
-          <Card size="small">
+          <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
             <div className="text-[13px] text-text-muted">Subject</div>
             <div className="font-semibold mb-2">{current.emailSubject}</div>
             <div className="mb-3" style={{ whiteSpace: "pre-wrap" }}>
@@ -185,11 +186,11 @@ export default function WritingRunnerPage() {
                 <li key={r}>{r}</li>
               ))}
             </ul>
-          </Card>
+          </div>
         )}
 
         {current.type === "q8_opinion" && (
-          <Card size="small">
+          <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
             <div className="text-[13px] text-text-muted">Topic</div>
             <div className="text-base font-medium mt-1">{current.topic}</div>
             {current.topicVi && (
@@ -198,27 +199,27 @@ export default function WritingRunnerPage() {
             <div className="mt-2 text-xs text-text-muted">
               Goal: ≥300 words · clear structure (intro / body arguments / conclusion)
             </div>
-          </Card>
+          </div>
         )}
 
-        <Input.TextArea
+        <textarea
           value={text}
           onChange={(e) => setText(e.target.value)}
           onPaste={(e) => {
             e.preventDefault();
-            void message.warning("Pasting is disabled — please type your response manually to practice writing.");
+            void toast.warning("Pasting is disabled — please type your response manually to practice writing.");
           }}
           rows={current.type === "q8_opinion" ? 14 : current.type === "q6_7_email" ? 8 : 3}
           placeholder="Type your answer here..."
           autoFocus
-        />
+         />
         <div className="flex gap-2 justify-end">
-          <Button onClick={skipQuestion} disabled={submitting}>
+          <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" onClick={skipQuestion} disabled={submitting}>
             Skip
-          </Button>
-          <Button type="primary" loading={submitting} disabled={!text.trim()} onClick={submit}>
+          </button>
+          <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" disabled={!text.trim()} onClick={submit}>
             {idx + 1 === prompts.length ? "Submit Test" : "Next Question"}
-          </Button>
+          </button>
         </div>
       </div>
     </div>

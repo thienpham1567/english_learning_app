@@ -152,8 +152,9 @@ export function DictionaryResultCard({
           {[1, 2, 3, 4].map((i) => (
             <div
               key={i}
-              className="h-4 rounded-lg bg-bg-deep animate-pulse"
-              style={{ width: `${70 - i * 10}%` }}
+              className={`h-4 rounded-lg bg-bg-deep animate-pulse ${
+                i === 1 ? "w-3/5" : i === 2 ? "w-2/5" : i === 3 ? "w-1/3" : "w-1/4"
+              }`}
             />
           ))}
         </div>

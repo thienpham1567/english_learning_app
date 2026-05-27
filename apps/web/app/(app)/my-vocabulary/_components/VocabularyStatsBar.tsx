@@ -1,15 +1,15 @@
 "use client";
 
-import { Star } from "lucide-react";
+import { Star, Trophy } from "lucide-react";
 import * as m from "motion/react-client";
 
 const LEVEL_COLORS: Record<string, string> = {
-  A1: "var(--success)",
-  A2: "var(--info)",
-  B1: "var(--accent)",
-  B2: "var(--warning)",
-  C1: "var(--xp)",
-  C2: "var(--error)",
+  A1: "text-emerald-600 border-emerald-500/20 bg-emerald-500/5",
+  A2: "text-blue-500 border-blue-500/20 bg-blue-500/5",
+  B1: "text-amber-500 border-amber-500/20 bg-amber-500/5",
+  B2: "text-orange-500 border-orange-500/20 bg-orange-500/5",
+  C1: "text-purple-500 border-purple-500/20 bg-purple-500/5",
+  C2: "text-red-500 border-red-500/20 bg-red-500/5",
 };
 
 const CEFR_LEVELS = ["A1", "A2", "B1", "B2", "C1", "C2"];
@@ -30,148 +30,55 @@ export function VocabularyStatsBar({ entries }: Props) {
   const hasLevels = Object.keys(levelCounts).length > 0;
 
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        gap: 16,
-        padding: "20px 0",
-      }}
-    >
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
-          gap: 12,
-        }}
-      >
+    <div className="flex flex-col gap-4 py-3 w-full">
+      <div className="grid grid-cols-2 gap-3.5 w-full">
         {/* Total stats card */}
         <m.div
-          whileHover={{ y: -2 }}
-          style={{
-            background: "var(--surface-alt)",
-            border: "1px solid var(--border)",
-            borderRadius: "var(--radius-xl)",
-            padding: "16px 20px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-            boxShadow: "var(--shadow-sm)",
-          }}
+          whileHover={{ y: -3, x: -1, rotate: -0.5, boxShadow: "var(--shadow)" }}
+          className="bg-surface border-2 border-border rounded-2xl p-5 flex flex-col gap-1.5 shadow-(--shadow-sm) transition-all duration-100"
         >
-          <span
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: 32,
-              fontWeight: 900,
-              color: "var(--text-primary)",
-              lineHeight: 1,
-            }}
-          >
+          <span className="font-display text-3xl font-black text-text-primary leading-none">
             {total}
           </span>
-          <span
-            style={{
-              fontSize: 10,
-              fontWeight: 800,
-              textTransform: "uppercase",
-              letterSpacing: "0.1em",
-              color: "var(--text-muted)",
-            }}
-          >
+          <span className="text-[10px] font-extrabold uppercase tracking-wider text-text-muted font-display mt-0.5">
             Words Looked Up
           </span>
         </m.div>
 
         {/* Saved stats card */}
         <m.div
-          whileHover={{ y: -2 }}
-          style={{
-            background: "var(--surface-alt)",
-            border: "1px solid var(--border)",
-            borderRadius: "var(--radius-xl)",
-            padding: "16px 20px",
-            display: "flex",
-            flexDirection: "column",
-            gap: 2,
-            boxShadow: "var(--shadow-sm)",
-          }}
+          whileHover={{ y: -3, x: 1, rotate: 0.5, boxShadow: "var(--shadow)" }}
+          className="bg-surface border-2 border-border rounded-2xl p-5 flex flex-col gap-1.5 shadow-(--shadow-sm) transition-all duration-100"
         >
-          <span
-            style={{
-              fontFamily: "var(--font-display)",
-              fontSize: 32,
-              fontWeight: 900,
-              color: "var(--accent)",
-              lineHeight: 1,
-            }}
-          >
+          <span className="font-display text-3xl font-black text-accent leading-none font-mono">
             {savedCount}
           </span>
-          <span
-            style={{
-              fontSize: 10,
-              fontWeight: 800,
-              textTransform: "uppercase",
-              letterSpacing: "0.1em",
-              color: "var(--accent)",
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 4,
-            }}
-          >
-            Saved Words <Star size={10} fill="currentColor" />
+          <span className="text-[10px] font-extrabold uppercase tracking-wider text-accent font-display mt-0.5 flex items-center gap-1">
+            <span>Saved Words</span>
+            <Star size={10} className="fill-current" />
           </span>
         </m.div>
       </div>
 
       {/* CEFR Level stats */}
       {hasLevels && (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: 8,
-            flexWrap: "wrap",
-            background: "var(--surface-alt)",
-            border: "1px solid var(--border)",
-            borderRadius: "var(--radius-lg)",
-            padding: "10px 14px",
-          }}
-        >
-          <span
-            style={{
-              fontSize: 11,
-              fontWeight: 800,
-              color: "var(--text-muted)",
-              textTransform: "uppercase",
-              letterSpacing: "0.05em",
-              marginRight: 6,
-            }}
-          >
-            Level Distribution:
-          </span>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3.5 bg-surface-alt border-2 border-border rounded-2xl p-4.5 shadow-(--shadow-sm) w-full">
+          <div className="flex items-center gap-1.5 shrink-0">
+            <Trophy className="h-4 w-4 text-accent" />
+            <span className="text-[10px] font-extrabold text-text-muted uppercase tracking-widest font-display">
+              Level Distribution
+            </span>
+          </div>
+          <div className="flex flex-wrap gap-2">
             {CEFR_LEVELS.filter((l) => levelCounts[l]).map((level) => {
-              const color = LEVEL_COLORS[level];
+              const colorClass = LEVEL_COLORS[level] ?? "text-text-secondary border-border/10 bg-bg-deep";
               return (
                 <span
                   key={level}
-                  style={{
-                    fontSize: 11,
-                    fontWeight: 800,
-                    color,
-                    background: `color-mix(in srgb, ${color} 8%, var(--surface))`,
-                    border: `1px solid color-mix(in srgb, ${color} 20%, transparent)`,
-                    padding: "3px 8px",
-                    borderRadius: 6,
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 4,
-                  }}
+                  className={`text-[10px] font-black border-2 px-3 py-1 rounded-xl flex items-center gap-1.5 shadow-(--shadow-sm) ${colorClass}`}
                 >
                   <span>{level}</span>
-                  <span style={{ opacity: 0.6, fontSize: 9.5 }}>({levelCounts[level]})</span>
+                  <span className="opacity-60 text-[9px] font-mono">({levelCounts[level]})</span>
                 </span>
               );
             })}

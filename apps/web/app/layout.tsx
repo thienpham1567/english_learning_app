@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { JetBrains_Mono, Source_Sans_3, Space_Grotesk } from "next/font/google";
+import { Toaster } from "sonner";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
@@ -59,7 +60,27 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Toaster
+          position="top-center"
+          gap={10}
+          toastOptions={{
+            unstyled: true,
+            classNames: {
+              toast: "neo-toast",
+              title: "neo-toast-title",
+              description: "neo-toast-description",
+              actionButton: "neo-toast-action",
+              cancelButton: "neo-toast-cancel",
+              success: "neo-toast--success",
+              error: "neo-toast--error",
+              warning: "neo-toast--warning",
+              info: "neo-toast--info",
+            },
+          }}
+        />
+      </body>
     </html>
   );
 }

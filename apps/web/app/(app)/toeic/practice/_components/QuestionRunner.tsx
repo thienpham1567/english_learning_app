@@ -1,6 +1,5 @@
 "use client";
 
-import { Button, Tag } from "antd";
 import { CheckCircle, Flag, Loader2, PlayCircle, Volume2, XCircle } from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -217,7 +216,7 @@ export function QuestionRunner({
     <div className="anim-fade-up flex flex-col gap-4 w-[720px] w-full mx-auto">
       {/* Question metadata bar */}
       <div
-        className="flex justify-between items-center bg-surface-alt rounded-(--radius-xl)"
+        className="flex justify-between items-center bg-surface-alt rounded-xl"
         style={{ border: "1.5px solid var(--border)", padding: "10px 14px" }}
       >
         <span className="font-black text-text-secondary" style={{ fontSize: 13.5 }}>
@@ -253,7 +252,7 @@ export function QuestionRunner({
       {/* Question Images */}
       {question.imageUrls && question.imageUrls.length > 0 && (
         <div
-          className="flex gap-2 flex-wrap justify-center bg-(--surface) rounded-(--radius-xl)"
+          className="flex gap-2 flex-wrap justify-center bg-surface rounded-xl"
           style={{ border: "1.5px solid var(--border)", padding: 10 }}
         >
           {question.imageUrls.map((src) => (
@@ -263,7 +262,7 @@ export function QuestionRunner({
               alt=""
               loading="lazy"
               decoding="async"
-              className="h-[320px] rounded-(--radius-lg)"
+              className="h-[320px] rounded-lg"
               style={{ maxWidth: "100%", objectFit: "contain" }}
             />
           ))}
@@ -273,7 +272,7 @@ export function QuestionRunner({
       {/* Audio block */}
       {question.audioUrl && !question.audioSegments && (
         <div
-          className="flex items-center gap-3 bg-(--surface) py-3 px-4 rounded-(--radius-xl)"
+          className="flex items-center gap-3 bg-surface py-3 px-4 rounded-xl"
           style={{ border: "1.5px solid var(--border)" }}
         >
           <m.button
@@ -281,7 +280,7 @@ export function QuestionRunner({
             onClick={() => audioRef.current?.play()}
             whileHover={{ scale: 1.03 }}
             whileTap={{ scale: 0.97 }}
-            className="items-center gap-2 border-none rounded-(--radius-lg) text-[13px] font-extrabold cursor-pointer"
+            className="items-center gap-2 border-none rounded-lg text-[13px] font-extrabold cursor-pointer"
             style={{
               display: "inline-flex",
               padding: "10px 18px",
@@ -299,7 +298,7 @@ export function QuestionRunner({
       {/* Audio segment player for Part 2 */}
       {question.audioSegments && (
         <div
-          className="bg-(--surface) rounded-(--radius-xl) flex justify-between items-center gap-3"
+          className="bg-surface rounded-xl flex justify-between items-center gap-3"
           style={{ border: "1.5px solid var(--border)", padding: "14px 18px" }}
         >
           <span className="text-[13px] font-extrabold text-text-secondary">
@@ -341,7 +340,7 @@ export function QuestionRunner({
       {/* Reading passage text */}
       {question.passageText && (
         <div
-          className="bg-(--surface) p-4 rounded-(--radius-xl) text-text-primary font-medium"
+          className="bg-surface p-4 rounded-xl text-text-primary font-medium"
           style={{
             whiteSpace: "pre-wrap",
             border: "1.5px solid var(--border)",
@@ -408,7 +407,7 @@ export function QuestionRunner({
                 revealed && !hideExplanation ? {} : { x: 3, borderColor: "var(--accent)" }
               }
               whileTap={revealed && !hideExplanation ? {} : { scale: 0.98 }}
-              className="rounded-(--radius-xl) text-left flex gap-2.5 items-center text-sm font-bold"
+              className="rounded-xl text-left flex gap-2.5 items-center text-sm font-bold"
               style={{
                 padding: "14px 18px",
                 border,
@@ -433,7 +432,7 @@ export function QuestionRunner({
         <m.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-surface-alt p-4 rounded-(--radius-xl) text-text-secondary leading-relaxed font-medium"
+          className="bg-surface-alt p-4 rounded-xl text-text-secondary leading-relaxed font-medium"
           style={{ border: "1.5px solid var(--border)", fontSize: 13.5 }}
         >
           <div className="flex items-center gap-1.5 font-black text-text-primary mb-1.5">
@@ -455,7 +454,7 @@ export function QuestionRunner({
           disabled={!attemptId}
           whileTap={{ scale: 0.95 }}
           title="Phím tắt: F"
-          className="items-center gap-1.5 py-2 px-4 rounded-(--radius-lg) text-[13px] font-extrabold"
+          className="items-center gap-1.5 py-2 px-4 rounded-lg text-[13px] font-extrabold"
           style={{
             display: "inline-flex",
             border: "1.5px solid var(--border)",
@@ -476,7 +475,7 @@ export function QuestionRunner({
               onClick={() => void onAnswer(null)}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              className="py-2 px-4 rounded-(--radius-lg) bg-(--surface) text-text-secondary text-[13px] cursor-pointer"
+              className="py-2 px-4 rounded-lg bg-surface text-text-secondary text-[13px] cursor-pointer"
               style={{ border: "1.5px solid var(--border)", fontWeight: 850 }}
             >
               Skip
@@ -488,7 +487,7 @@ export function QuestionRunner({
             disabled={!canSubmit && !hideExplanation}
             whileHover={!canSubmit && !hideExplanation ? {} : { scale: 1.02 }}
             whileTap={!canSubmit && !hideExplanation ? {} : { scale: 0.98 }}
-            className="rounded-(--radius-lg) border-none text-[13px]"
+            className="rounded-lg border-none text-[13px]"
             style={{
               padding: "10px 24px",
               background: !canSubmit && !hideExplanation ? "var(--border)" : "var(--accent)",

@@ -1,6 +1,7 @@
 "use client";
 
-import { Progress, Tag, Tooltip } from "antd";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+
 import {
   AlertTriangle,
   BookOpen,
@@ -92,9 +93,9 @@ function InlineIssueItem({
       <div className="py-2 px-3 cursor-pointer">
         <div className="flex justify-between items-start">
           <div>
-            <Tag color={color} className="text-[10px]">
+            <span className="text-[10px] bg-accent/10 text-accent py-0.5 px-2 inline-block">
               {issue.category}
-            </Tag>
+            </span>
             <span className="text-text-muted" style={{ textDecoration: "line-through" }}>
               {issue.quote}
             </span>
@@ -219,34 +220,34 @@ export default function EssayScorePage() {
       }
 
       segments.push(
-        <Tooltip
-          key={idx}
-          title={
+        <Tooltip key={idx}>
+          <TooltipTrigger asChild>
+            <span
+              data-issue-idx={idx}
+              onMouseEnter={() => setHoveredIssue(idx)}
+              onMouseLeave={() => setHoveredIssue(null)}
+              className="cursor-pointer rounded-sm"
+              style={{
+                backgroundColor: `${CATEGORY_COLORS[issue.category]}20`,
+                borderBottom: `2px solid ${CATEGORY_COLORS[issue.category]}`,
+                transition: "background 0.2s",
+                padding: "1px 0",
+              }}
+            >
+              {essayText.slice(issue.startOffset, issue.endOffset)}
+            </span>
+          </TooltipTrigger>
+          <TooltipContent>
             <div className="text-xs">
               <div className="font-semibold mb-1">
-                <Tag color={CATEGORY_COLORS[issue.category]} className="text-[10px]">
+                <span className="text-[10px] bg-accent/10 text-accent py-0.5 px-2 inline-block">
                   {issue.category}
-                </Tag>
+                </span>
               </div>
               <div>→ {issue.suggestion}</div>
               <div className="text-text-muted mt-1">{issue.explanation}</div>
             </div>
-          }
-        >
-          <span
-            data-issue-idx={idx}
-            onMouseEnter={() => setHoveredIssue(idx)}
-            onMouseLeave={() => setHoveredIssue(null)}
-            className="cursor-pointer rounded-sm"
-            style={{
-              backgroundColor: `${CATEGORY_COLORS[issue.category]}20`,
-              borderBottom: `2px solid ${CATEGORY_COLORS[issue.category]}`,
-              transition: "background 0.2s",
-              padding: "1px 0",
-            }}
-          >
-            {essayText.slice(issue.startOffset, issue.endOffset)}
-          </span>
+          </TooltipContent>
         </Tooltip>,
       );
 
@@ -412,18 +413,25 @@ export default function EssayScorePage() {
               className="p-6 rounded-2xl border-2 border-border text-center"
               style={{ background: "var(--card-bg)" }}
             >
-              <Progress
-                type="circle"
-                percent={(result.overall / maxScore) * 100}
-                size={100}
-                strokeColor={scoreColor(result.overall)}
-                format={() => (
+              <div className="relative w-[100px] h-[100px] mx-auto">
+                <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="var(--border)" strokeWidth="8" />
+                  <circle
+                    cx="50" cy="50" r="42" fill="none"
+                    stroke={scoreColor(result.overall)} strokeWidth="8"
+                    strokeLinecap="round"
+                    strokeDasharray={`${2 * Math.PI * 42}`}
+                    strokeDashoffset={`${2 * Math.PI * 42 * (1 - (result.overall / maxScore))}`}
+                    className="transition-all duration-700"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
                   <span className="text-2xl font-bold">
                     {result.overall}
                     {isIelts ? "" : `/${maxScore}`}
                   </span>
-                )}
-              />
+                </div>
+              </div>
               <p className="text-[13px] text-text-secondary mt-2">
                 {EXAM_OPTIONS.find((o) => o.value === exam)?.label} • {result.wordCount} words
               </p>
@@ -440,16 +448,19 @@ export default function EssayScorePage() {
                 ).map((c) => {
                   const s = result.criteria[c.key];
                   return (
-                    <Tooltip key={c.key} title={s.feedback}>
-                      <div className="cursor-pointer">
-                        <p className="text-[11px] text-text-secondary m-0">{c.label}</p>
-                        <p
-                          className="text-lg font-semibold m-0"
-                          style={{ color: scoreColor(s.score) }}
-                        >
-                          {s.score}
-                        </p>
-                      </div>
+                    <Tooltip key={c.key}>
+                      <TooltipTrigger asChild>
+                        <div className="cursor-pointer">
+                          <p className="text-[11px] text-text-secondary m-0">{c.label}</p>
+                          <p
+                            className="text-lg font-semibold m-0"
+                            style={{ color: scoreColor(s.score) }}
+                          >
+                            {s.score}
+                          </p>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent>{s.feedback}</TooltipContent>
                     </Tooltip>
                   );
                 })}
@@ -506,9 +517,9 @@ export default function EssayScorePage() {
                 >
                   <div className="flex justify-between mb-1">
                     <p className="text-xs text-text-secondary m-0 font-semibold">{c.label}</p>
-                    <Tag color={scoreColor(s.score)} className="text-xs font-semibold">
+                    <span className="text-xs font-semibold bg-accent/10 text-accent py-0.5 px-2 inline-block">
                       {s.score}
-                    </Tag>
+                    </span>
                   </div>
                   <p className="text-[13px] m-0 leading-relaxed">{s.feedback}</p>
                 </div>
@@ -526,14 +537,9 @@ export default function EssayScorePage() {
                 </p>
                 <div className="flex gap-1.5">
                   {Object.entries(CATEGORY_COLORS).map(([cat, color]) => (
-                    <Tag
-                      key={cat}
-                      color="default"
-                      className="text-[9px]"
-                      style={{ borderColor: color, color }}
-                    >
+                    <span key={cat} className="text-[9px] bg-gray-500/10 text-gray-600 py-0.5 px-2 inline-block" style={{ borderColor: color, color }}>
                       {cat}
-                    </Tag>
+                    </span>
                   ))}
                 </div>
               </div>

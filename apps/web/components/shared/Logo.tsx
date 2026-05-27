@@ -20,7 +20,7 @@ function LogoMark({ size = 20 }: { size?: number }) {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
-      style={{ display: "block" }}
+      className="block"
     >
       {/* 3D cover slab under the pages */}
       <path
@@ -78,33 +78,14 @@ export function Logo({ collapsed = false }: LogoProps) {
     <m.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 11,
-        userSelect: "none",
-      }}
+      className="flex items-center gap-[11px] select-none"
     >
       {/* Icon container */}
       <m.div
         whileHover={{ scale: 1.05, rotate: -3 }}
         whileTap={{ scale: 0.95 }}
         transition={{ type: "spring", stiffness: 400, damping: 15 }}
-        style={{
-          position: "relative",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          width: 38,
-          height: 38,
-          borderRadius: 8,
-          background: "var(--accent)",
-          border: "2.5px solid var(--ink, #000000)",
-          boxShadow: "3px 3px 0px var(--ink, #000000)",
-          flexShrink: 0,
-          cursor: "pointer",
-          color: "var(--text-on-accent)",
-        }}
+        className="relative flex items-center justify-center w-[38px] h-[38px] rounded-lg bg-accent border-[2.5px] border-ink shadow-[3px_3px_0px_var(--ink)] shrink-0 cursor-pointer text-[var(--text-on-accent)]"
       >
         <LogoMark size={20} />
       </m.div>
@@ -117,35 +98,16 @@ export function Logo({ collapsed = false }: LogoProps) {
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -10 }}
             transition={{ type: "spring", stiffness: 400, damping: 30 }}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-            }}
+            className="flex flex-col justify-center"
           >
             <m.span
-              style={{
-                fontFamily: "var(--font-display)",
-                fontSize: 18,
-                fontWeight: 900,
-                lineHeight: 1.1,
-                letterSpacing: "-0.03em",
-                color: "var(--ink)",
-                textTransform: "uppercase",
-              }}
+              className="font-display text-[18px] font-black leading-[1.1] tracking-[-0.03em] text-ink uppercase"
             >
               TOEIC
-              <m.span style={{ color: "var(--accent)" }}> Master</m.span>
+              <m.span className="text-accent"> Master</m.span>
             </m.span>
             <m.span
-              style={{
-                fontSize: 9.5,
-                fontWeight: 700,
-                textTransform: "uppercase",
-                letterSpacing: "0.16em",
-                color: "var(--text-muted)",
-                marginTop: 2,
-              }}
+              className="text-[9.5px] font-bold uppercase tracking-[0.16em] text-text-muted mt-0.5"
             >
               AI Study Hub
             </m.span>

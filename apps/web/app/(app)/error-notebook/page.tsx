@@ -59,13 +59,10 @@ export default function ErrorNotebookPage() {
 
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden relative">
-      <div className="grain-overlay opacity-[0.03] z-0" />
 
-      {/* Header */}
-      <div className="relative z-[1]"></div>
 
       {/* Tabs */}
-      <div className="relative z-[1] flex gap-1 px-5 pt-3 border-b-2 border-border bg-(--bg)">
+      <div className="relative z-[1] flex gap-1 px-5 pt-3 border-b-2 border-border bg-bg">
         {TABS.map((t) => (
           <button
             key={t.key}
@@ -86,7 +83,7 @@ export default function ErrorNotebookPage() {
             {t.label}
             {/* Due badge on Review tab */}
             {t.key === "review" && dueCount > 0 && (
-              <span className="text-[10px] font-black px-1.5 rounded-full bg-(--error) text-white min-w-[18px] text-center leading-4">
+              <span className="text-[10px] font-black px-1.5 rounded-full bg-error text-white min-w-[18px] text-center leading-4">
                 {dueCount > 99 ? "99+" : dueCount}
               </span>
             )}

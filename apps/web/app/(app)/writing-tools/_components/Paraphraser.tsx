@@ -187,7 +187,7 @@ function ChangesPanel({ changes }: { changes: ParaphraseResponse["changes"] }) {
           {changes.map((change, i) => (
             <div
               key={i}
-              className="text-[13px] py-2 px-3 rounded-lg bg-(--surface) leading-relaxed"
+              className="text-[13px] py-2 px-3 rounded-lg bg-surface leading-relaxed"
               style={{ borderLeft: "3px solid var(--accent)" }}
             >
               <div>

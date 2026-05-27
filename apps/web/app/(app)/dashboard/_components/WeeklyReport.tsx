@@ -164,9 +164,10 @@ export function WeeklyReport() {
             bg: "bg-(--error-bg)",
           },
         ].map((s) => (
-          <div
+          <motion.div
             key={s.label}
-            className="p-3 bg-surface-alt rounded-lg border-2 border-border text-center flex flex-col items-center gap-1.5 shadow-[2px_2px_0_var(--shadow-color)] hover:-translate-y-0.5 hover:-translate-x-0.5 hover:shadow-[3px_3px_0_var(--shadow-color)] transition-all duration-150"
+            whileHover={{ scale: 1.05, y: -2, x: -2, boxShadow: "var(--shadow)" }}
+            className="p-3 bg-surface-alt rounded-xl border-2 border-border text-center flex flex-col items-center gap-1.5 shadow-(--shadow-sm) transition-all duration-100 cursor-default"
           >
             <div
               className={`w-7 h-7 rounded-md ${s.bg} border-2 border-border flex items-center justify-center shrink-0`}
@@ -176,10 +177,10 @@ export function WeeklyReport() {
             <div className="text-base font-extrabold text-ink font-mono leading-none">
               {s.value}
             </div>
-            <div className="text-[9px] text-text-muted font-bold uppercase tracking-wider leading-none">
+            <div className="text-[9px] text-text-muted font-bold uppercase tracking-wider leading-none font-display">
               {s.label}
             </div>
-          </div>
+          </motion.div>
         ))}
       </div>
 

@@ -1,5 +1,4 @@
 import { db, toeicAnswer, toeicAttempt, toeicQuestion } from "@repo/database";
-import { Alert, Card, Tag } from "antd";
 import { and, eq, inArray } from "drizzle-orm";
 import { AlertTriangle, Trophy } from "lucide-react";
 import { headers } from "next/headers";
@@ -62,13 +61,11 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
       <div className="p-4 grid gap-4 w-[720px]">
         {cheatTriggered && (
-          <Alert
-            type="warning"
-            showIcon
-            icon={<AlertTriangle />}
-            message="Unusual activity detected during the test"
-            description={
-              <div className="text-[13px]">
+          <div className="flex items-start gap-3 rounded-xl py-3 px-4 bg-amber-500/10 text-amber-700 border border-amber-500/20">
+            <AlertTriangle className="shrink-0 mt-0.5" size={18} />
+            <div>
+              <div className="font-semibold text-sm">Unusual activity detected during the test</div>
+              <div className="text-[13px] mt-1">
                 {cheat!.tabSwitches > 0 && (
                   <div>
                     • Tab switches: {cheat!.tabSwitches} times (total {Math.round(cheat!.longBlurMs / 1000)}s)
@@ -79,17 +76,17 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
                   Score is still recorded, but you should minimize this to simulate a real exam environment.
                 </div>
               </div>
-            }
-          />
+            </div>
+          </div>
         )}
-        <Card>
+        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
           <div className="text-center">
             <div className="font-extrabold text-accent" style={{ fontSize: 56 }}>
               {total}
             </div>
             <div className="text-text-muted">/ 990</div>
             <div className="mt-2">
-              <Tag color="orange">{bandLabel(total)}</Tag>
+              <span className="bg-amber-500/15 text-amber-600 py-0.5 px-2 inline-block">{bandLabel(total)}</span>
             </div>
           </div>
           <div className="grid gap-3 mt-4" style={{ gridTemplateColumns: "repeat(2, 1fr)" }}>
@@ -110,9 +107,9 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
               </div>
             </div>
           </div>
-        </Card>
+        </div>
 
-        <Card title="Part Analysis" size="small">
+        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
           <div className="grid gap-2">
             {[2, 3, 4, 5, 6, 7].map((p) => {
               const stats = byPart[p];
@@ -125,7 +122,7 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
                   style={{ gridTemplateColumns: "60px 1fr 80px" }}
                 >
                   <div className="font-semibold">Part {p}</div>
-                  <div className="bg-(--surface) rounded h-[8px] overflow-hidden">
+                  <div className="bg-surface rounded h-[8px] overflow-hidden">
                     <div
                       className="h-full"
                       style={{
@@ -146,7 +143,7 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
               );
             })}
           </div>
-        </Card>
+        </div>
 
         <ReviewTabs questions={reviewQuestions} answers={reviewAnswers} />
 

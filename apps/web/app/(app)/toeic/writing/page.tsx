@@ -1,5 +1,4 @@
 import { db, toeicWritingPrompt, toeicWritingSession } from "@repo/database";
-import { Card, Empty, Tag } from "antd";
 import { and, desc, eq, isNotNull, sql } from "drizzle-orm";
 import { ClipboardList } from "lucide-react";
 import { headers } from "next/headers";
@@ -31,7 +30,7 @@ export default async function ToeicWritingPage() {
       <div className="p-4 grid gap-4">
         {seeded ? (
           <Link href="/toeic/writing/runner" style={{ textDecoration: "none" }}>
-            <Card hoverable>
+            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
               <div className="flex items-center gap-2">
                 <ClipboardList className="text-3xl text-accent" />
                 <strong className="text-lg text-ink">Start Writing Test</strong>
@@ -40,19 +39,25 @@ export default async function ToeicWritingPage() {
                 Q1-5 picture (8 mins) · Q6-7 email (20 mins) · Q8 opinion (30 mins)
               </div>
               <div className="mt-2">
-                <Tag color="orange">AI grading after submission</Tag>
+                <span className="bg-amber-500/15 text-amber-600 py-0.5 px-2 inline-block">AI grading after submission</span>
               </div>
-            </Card>
+            </div>
           </Link>
         ) : (
-          <Card>
-            <Empty description="No prompts found. Run `pnpm seed:toeic-writing`" />
-          </Card>
+          <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+            <div className="flex flex-col items-center justify-center py-12 text-text-muted">
+                <div className="text-4xl mb-3">📭</div>
+                <div className="text-sm font-semibold">No data available</div>
+              </div>
+          </div>
         )}
 
-        <Card title="Writing Test History" size="small">
+        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
           {history.length === 0 ? (
-            <Empty description="No sessions found" />
+            <div className="flex flex-col items-center justify-center py-12 text-text-muted">
+                <div className="text-4xl mb-3">📭</div>
+                <div className="text-sm font-semibold">No data available</div>
+              </div>
           ) : (
             <div className="grid gap-2">
               {history.map((h) => (
@@ -74,7 +79,7 @@ export default async function ToeicWritingPage() {
               ))}
             </div>
           )}
-        </Card>
+        </div>
       </div>
     </div>
   );

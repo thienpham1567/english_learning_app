@@ -1,6 +1,7 @@
 "use client";
 
 import { AlertTriangle, Eye, EyeOff, FileText, Lightbulb } from "lucide-react";
+import { motion, AnimatePresence } from "motion/react";
 import { useCallback, useState } from "react";
 
 type ScriptRevealLevel = "hidden" | "keywords" | "full";
@@ -68,7 +69,7 @@ export function ScriptPanel({ passage, keyPhrases = [], isRevealed, onReveal }: 
         );
       }
       return (
-        <span key={i} className="text-text-muted" style={{ letterSpacing: 1 }}>
+        <span key={i} className="text-text-muted tracking-wide">
           {"_".repeat(Math.max(token.length, 2))}
         </span>
       );
@@ -82,129 +83,96 @@ export function ScriptPanel({ passage, keyPhrases = [], isRevealed, onReveal }: 
         ? "Show Full"
         : "Hide Script";
 
-  const buttonIcon = revealLevel === "hidden" ? <Eye /> : <EyeOff />;
+  const buttonIcon = revealLevel === "hidden" ? <Eye size={15} /> : <EyeOff size={15} />;
 
   return (
     <div className="flex flex-col gap-2">
       {/* Toggle Button */}
-      <button
+      <motion.button
         onClick={handleToggle}
-        className="flex items-center justify-center gap-2 cursor-pointer text-[13px] font-semibold"
-        style={{
-          padding: "10px 18px",
-          borderRadius: "var(--radius-md)",
-          border: isRevealed
-            ? "1px solid color-mix(in srgb, var(--warning) 40%, transparent)"
-            : "1px solid var(--border)",
-          background: isRevealed
-            ? "color-mix(in srgb, var(--warning) 6%, var(--surface))"
-            : "var(--surface)",
-          color: isRevealed ? "var(--warning)" : "var(--text-secondary)",
-          transition: "all 0.2s ease",
-        }}
+        whileHover={{ y: -1 }}
+        whileTap={{ scale: 0.98 }}
+        className={`flex items-center justify-center gap-2 cursor-pointer text-[13px] font-bold py-2.5 px-4 rounded-lg border-2 border-border transition-all duration-100 ${
+          isRevealed
+            ? "bg-warning-bg text-[var(--warning)] border-[color-mix(in_srgb,var(--warning)_40%,var(--border))]"
+            : "bg-surface text-text-secondary hover:bg-surface-hover"
+        }`}
       >
         {buttonIcon}
         {buttonLabel}
         {isRevealed && (
-          <span
-            className="text-[10px] rounded-full font-bold"
-            style={{
-              padding: "1px 6px",
-              background: "color-mix(in srgb, var(--warning) 15%, transparent)",
-              color: "var(--warning)",
-            }}
-          >
+          <span className="text-[10px] rounded-full font-bold py-0.5 px-1.5 bg-warning-bg text-[var(--warning)]">
             -30% XP
           </span>
         )}
-      </button>
+      </motion.button>
 
       {/* Confirmation Dialog */}
-      {showConfirm && (
-        <div
-          className="flex flex-col gap-2.5"
-          style={{
-            padding: "14px 18px",
-            borderRadius: "var(--radius-md)",
-            border: "1px solid color-mix(in srgb, var(--warning) 30%, transparent)",
-            background: "color-mix(in srgb, var(--warning) 6%, var(--surface))",
-            animation: "fadeIn 0.2s ease",
-          }}
-        >
-          <div
-            className="flex items-center gap-2 text-[13px] font-semibold"
-            style={{ color: "var(--warning)" }}
+      <AnimatePresence>
+        {showConfirm && (
+          <motion.div
+            initial={{ opacity: 0, y: -6 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -6 }}
+            transition={{ type: "spring", stiffness: 400, damping: 30 }}
+            className="flex flex-col gap-2.5 p-3.5 px-4.5 rounded-lg border-2 border-[color-mix(in_srgb,var(--warning)_30%,var(--border))] bg-warning-bg"
           >
-            <AlertTriangle /> Viewing the script will reduce XP by 30% for this exercise
-          </div>
-          <div className="text-xs text-text-secondary">Do you still want to view the script?</div>
-          <div className="flex gap-2">
-            <button
-              onClick={handleConfirm}
-              className="flex-1 rounded-(--radius-sm) border-none text-xs font-semibold cursor-pointer"
-              style={{
-                padding: "8px 14px",
-                background: "var(--warning)",
-                color: "var(--text-on-accent)",
-              }}
-            >
-              Show Script
-            </button>
-            <button
-              onClick={handleCancel}
-              className="flex-1 rounded-(--radius-sm) border-2 border-border bg-transparent text-xs font-medium cursor-pointer"
-              style={{ padding: "8px 14px", color: "var(--text)" }}
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      )}
+            <div className="flex items-center gap-2 text-[13px] font-semibold text-[var(--warning)]">
+              <AlertTriangle size={15} /> Viewing the script will reduce XP by 30% for this exercise
+            </div>
+            <div className="text-xs text-text-secondary">Do you still want to view the script?</div>
+            <div className="flex gap-2">
+              <button
+                onClick={handleConfirm}
+                className="flex-1 rounded-lg border-2 border-border text-xs font-bold cursor-pointer py-2 px-3.5 bg-[var(--warning)] text-ink shadow-(--shadow-sm) hover:-translate-y-0.5 transition-all duration-100"
+              >
+                Show Script
+              </button>
+              <button
+                onClick={handleCancel}
+                className="flex-1 rounded-lg border-2 border-border bg-surface text-xs font-medium cursor-pointer py-2 px-3.5 text-text-primary hover:bg-surface-hover transition-all duration-100"
+              >
+                Cancel
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Script Content */}
-      {revealLevel !== "hidden" && (
-        <div
-          className="p-4 border-2 border-border text-sm"
-          style={{
-            borderRadius: "var(--radius-md)",
-            background:
-              "linear-gradient(135deg, color-mix(in srgb, var(--accent) 3%, var(--surface)), var(--surface))",
-            backdropFilter: "blur(8px)",
-            lineHeight: 1.8,
-            color: "var(--text)",
-            animation: "slideUp 0.25s ease",
-          }}
-        >
-          <div
-            className="flex items-center gap-1.5 mb-2.5 text-[11px] font-bold text-text-muted uppercase"
-            style={{ letterSpacing: "0.1em" }}
+      <AnimatePresence>
+        {revealLevel !== "hidden" && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="overflow-hidden"
           >
-            <FileText /> Script
-            {revealLevel === "keywords" && (
-              <span
-                className="text-[10px] rounded-full text-accent font-semibold ml-1"
-                style={{
-                  padding: "1px 6px",
-                  background: "color-mix(in srgb, var(--accent) 12%, transparent)",
-                }}
-              >
-                Keywords
-              </span>
-            )}
-          </div>
+            <div className="p-4 border-2 border-border text-sm rounded-lg bg-surface leading-[1.8] text-text-primary shadow-(--shadow-sm)">
+              <div className="flex items-center gap-1.5 mb-2.5 text-[11px] font-bold text-text-muted uppercase tracking-widest">
+                <FileText size={13} /> Script
+                {revealLevel === "keywords" && (
+                  <span className="text-[10px] rounded-full text-accent font-semibold ml-1 py-0.5 px-1.5 bg-accent-muted">
+                    Keywords
+                  </span>
+                )}
+              </div>
 
-          <div style={{ fontStyle: revealLevel === "full" ? "italic" : "normal" }}>
-            {revealLevel === "keywords" ? <div>{renderKeywordsOnly()}</div> : passage}
-          </div>
+              <div className={revealLevel === "full" ? "italic" : ""}>
+                {revealLevel === "keywords" ? <div>{renderKeywordsOnly()}</div> : passage}
+              </div>
 
-          {revealLevel === "full" && (
-            <div className="mt-2 text-[11px] text-text-muted" style={{ fontStyle: "normal" }}>
-              <Lightbulb style={{ marginRight: 6 }} />
-              Go to the Dictionary page for detailed lookups
+              {revealLevel === "full" && (
+                <div className="mt-2 text-[11px] text-text-muted flex items-center gap-1.5">
+                  <Lightbulb size={12} />
+                  Go to the Dictionary page for detailed lookups
+                </div>
+              )}
             </div>
-          )}
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

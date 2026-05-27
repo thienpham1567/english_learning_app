@@ -1,10 +1,7 @@
 "use client";
 
-import { Flex, Typography } from "antd";
 import * as m from "motion/react-client";
 import { useEffect, useState } from "react";
-
-const { Text } = Typography;
 
 const DEFAULT_SECONDS_PER_CARD = 12;
 
@@ -40,38 +37,25 @@ export function SessionProgress({ current, total, startTime }: Props) {
   }
 
   return (
-    <div style={{ width: "100%", marginBottom: 20 }}>
-      <Flex justify="space-between" align="center" style={{ marginBottom: 6 }}>
-        <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-secondary)" }}>
-          Reviewing: <span style={{ color: "var(--accent)" }}>{current}</span> / {total}
+    <div className="w-full mb-5">
+      <div className="flex justify-between items-center mb-1.5">
+        <span className="text-[13px] font-bold text-text-secondary">
+          Reviewing: <span className="text-accent">{current}</span> / {total}
         </span>
-        <span style={{ fontSize: 12.5, fontWeight: 600, color: "var(--text-muted)" }}>
+        <span className="text-[12.5px] font-semibold text-text-muted">
           {timeLabel}
         </span>
-      </Flex>
+      </div>
 
       {/* Modern custom animated progress bar */}
-      <div
-        style={{
-          height: 6,
-          background: "var(--border)",
-          borderRadius: 99,
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
+      <div className="h-1.5 bg-border rounded-full relative overflow-hidden">
         <m.div
           initial={{ width: 0 }}
           animate={{ width: `${pct}%` }}
           transition={{ type: "spring", stiffness: 80, damping: 15 }}
+          className="absolute left-0 top-0 bottom-0 rounded-full shadow-[0_0_6px_var(--accent)]"
           style={{
-            position: "absolute",
-            left: 0,
-            top: 0,
-            bottom: 0,
             background: "linear-gradient(90deg, var(--accent), var(--xp))",
-            borderRadius: 99,
-            boxShadow: "0 0 6px var(--accent)",
           }}
         />
       </div>

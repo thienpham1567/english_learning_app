@@ -1,6 +1,5 @@
 "use client";
 
-import { Progress, Tag } from "antd";
 import {
   CircleCheckBig,
   Eye,
@@ -11,7 +10,9 @@ import {
   Send,
   XCircle,
 } from "lucide-react";
+import { motion } from "motion/react";
 import { useCallback, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
 import { api } from "@/lib/api-client";
 import type { CefrLevel } from "@/lib/listening/types";
 import { CEFR_LEVELS } from "@/lib/listening/types";
@@ -48,7 +49,13 @@ interface Props {
   examMode: string;
 }
 
-function scoreColor(n: number): string {
+function scoreColorClass(n: number): string {
+  if (n >= 80) return "text-[var(--success)]";
+  if (n >= 60) return "text-[var(--warning)]";
+  return "text-[var(--error)]";
+}
+
+function scoreStroke(n: number): string {
   if (n >= 80) return "var(--success)";
   if (n >= 60) return "var(--warning)";
   return "var(--error)";
@@ -76,7 +83,7 @@ export default function SummarizeMode({ examMode }: Props) {
 
   const wc = wordCount(summaryText);
   const wcOk = wc >= 30 && wc <= 400;
-  const wcColor = wc < 30 ? "var(--text-muted)" : wc > 400 ? "var(--error)" : "var(--success)";
+  const wcColor = wc < 30 ? "text-text-muted" : wc > 400 ? "text-[var(--error)]" : "text-[var(--success)]";
 
   // ── Generate exercise ──
   const startSession = useCallback(async () => {
@@ -129,29 +136,24 @@ export default function SummarizeMode({ examMode }: Props) {
 
   // ── RENDER ──
   return (
-    <div className="w-[640px] mx-auto w-full flex flex-col gap-5">
+    <div className="w-full max-w-2xl mx-auto flex flex-col gap-5">
       {/* Error banner */}
       {error && (
-        <div
-          className="py-2.5 px-4 rounded-lg text-destructive text-[13px]"
-          style={{
-            background: "var(--error-bg)",
-            border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)",
-          }}
-        >
+        <div className="py-2.5 px-4 rounded-lg text-[var(--error)] text-[13px] bg-error-bg border-2 border-[color-mix(in_srgb,var(--error)_25%,var(--border))] flex items-center gap-1.5">
           ⚠️ {error}
         </div>
       )}
 
       {/* ── Idle: level picker + start ── */}
       {state === "idle" && (
-        <div
-          className="p-6 border-2 border-border rounded-2xl"
-          style={{ background: "var(--card-bg)" }}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="p-6 border-2 border-border rounded-lg bg-surface shadow-(--shadow)"
         >
           <div className="text-center mb-6">
-            <FileText size={40} className="text-accent" />
-            <h2 className="text-lg" style={{ margin: "0 0 6px" }}>
+            <FileText size={40} className="text-accent mx-auto mb-2" />
+            <h2 className="text-lg font-black m-0 mb-1.5 text-text-primary">
               Listen &amp; Summarize
             </h2>
             <p className="text-text-secondary m-0 text-[13px]">
@@ -161,54 +163,44 @@ export default function SummarizeMode({ examMode }: Props) {
 
           {/* Compact CEFR level selector */}
           <div className="mb-5">
-            <div
-              className="text-[11px] font-bold text-text-muted mb-2.5 uppercase"
-              style={{ letterSpacing: "0.1em" }}
-            >
+            <div className="text-[11px] font-bold text-text-muted mb-2.5 uppercase tracking-widest">
               CEFR Level
             </div>
             <div className="flex gap-2 flex-wrap">
               {CEFR_LEVELS.map((l) => (
-                <button
+                <motion.button
                   key={l}
                   onClick={() => setSelectedLevel(l)}
-                  className="py-1.5 px-3.5 rounded-lg font-bold text-[13px] cursor-pointer"
-                  style={{
-                    border:
-                      selectedLevel === l ? "2px solid var(--accent)" : "1px solid var(--border)",
-                    background: selectedLevel === l ? "var(--accent)" : "var(--surface)",
-                    color: selectedLevel === l ? "var(--text-on-accent)" : "var(--text)",
-                    transition: "all 0.15s ease",
-                  }}
+                  whileHover={{ y: -2 }}
+                  whileTap={{ scale: 0.97 }}
+                  className={`py-1.5 px-3.5 rounded-lg font-bold text-[13px] cursor-pointer border-2 transition-all duration-100 ${
+                    selectedLevel === l
+                      ? "border-accent bg-accent text-ink shadow-(--shadow-sm) -translate-y-0.5"
+                      : "border-border bg-surface text-text-primary hover:bg-surface-hover"
+                  }`}
                 >
                   {l}
-                </button>
+                </motion.button>
               ))}
             </div>
-            <p className="text-[11px] text-text-muted" style={{ margin: "6px 0 0" }}>
+            <p className="text-[11px] text-text-muted mt-1.5">
               Selected: <strong>{selectedLevel}</strong> · 3–5 sentences · 30–400 words
             </p>
           </div>
 
-          <button
+          <Button
             onClick={startSession}
-            className="w-full border-none text-[15px] font-semibold cursor-pointer"
-            style={{
-              padding: "12px 24px",
-              borderRadius: 10,
-              background: "var(--accent)",
-              color: "var(--text-on-accent)",
-            }}
+            className="w-full h-11 text-[15px] font-black"
           >
             Start
-          </button>
-        </div>
+          </Button>
+        </motion.div>
       )}
 
       {/* ── Loading audio ── */}
       {state === "listening" && !exercise && (
-        <div className="text-center" style={{ padding: 40 }}>
-          <Loader2 className="animate-spin text-accent" size={32} />
+        <div className="text-center py-10">
+          <Loader2 className="animate-spin text-accent mx-auto" size={32} />
           <p className="text-text-secondary mt-3">Generating listening exercise...</p>
         </div>
       )}
@@ -217,10 +209,7 @@ export default function SummarizeMode({ examMode }: Props) {
       {(state === "listening" || state === "writing") && exercise && (
         <>
           {/* Instruction */}
-          <div
-            className="py-3 px-4 rounded-xl border-2 border-border text-[13px] text-text-secondary"
-            style={{ background: "var(--card-bg)" }}
-          >
+          <div className="py-3 px-4 rounded-lg border-2 border-border text-[13px] text-text-secondary bg-surface">
             🎧 <strong>Listen to the passage below.</strong> The original transcript will be revealed after you submit your summary.
           </div>
 
@@ -240,8 +229,7 @@ export default function SummarizeMode({ examMode }: Props) {
             <div className="flex flex-col gap-2.5">
               <label
                 htmlFor="summarize-textarea"
-                className="text-[13px] font-semibold"
-                style={{ color: "var(--text)" }}
+                className="text-[13px] font-bold text-text-primary"
               >
                 Summarize the passage in your own words (3–5 sentences):
               </label>
@@ -252,42 +240,27 @@ export default function SummarizeMode({ examMode }: Props) {
                 onChange={(e) => setSummaryText(e.target.value)}
                 placeholder="Write your summary here... (minimum 30 words, maximum 400 words)"
                 rows={6}
-                className="w-full rounded-xl border-2 border-border text-sm"
-                style={{
-                  padding: 14,
-                  background: "var(--card-bg, var(--surface))",
-                  lineHeight: 1.7,
-                  resize: "vertical",
-                  color: "var(--text)",
-                  fontFamily: "inherit",
-                }}
+                className="w-full rounded-lg border-2 border-border text-sm p-3.5 bg-surface leading-[1.7] resize-y text-text-primary font-[inherit] outline-none focus-visible:shadow-(--shadow-sm) focus-visible:-translate-y-0.5 transition-all"
               />
               {/* Word count indicator */}
               <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold flex items-center gap-1" style={{ color: wcColor }}>
+                <span className={`font-bold flex items-center gap-1 ${wcColor}`}>
                   {wc} words{" "}
                   {wc < 30 ? (
                     "(minimum 30 required)"
                   ) : wc > 400 ? (
                     "(too long, maximum 400)"
                   ) : (
-                    <CircleCheckBig size={14} className="inline text-emerald-500" />
+                    <CircleCheckBig size={14} className="text-[var(--success)]" />
                   )}
                 </span>
-                <button
+                <Button
                   onClick={submitSummary}
                   disabled={!wcOk}
-                  className="flex items-center gap-1.5 rounded-lg border-none text-[13px] font-semibold"
-                  style={{
-                    padding: "10px 20px",
-                    background: wcOk ? "var(--accent)" : "var(--border)",
-                    color: "var(--text-on-accent)",
-                    cursor: wcOk ? "pointer" : "not-allowed",
-                    transition: "all 0.15s ease",
-                  }}
+                  className="text-[13px] font-black py-2.5 px-5 flex items-center gap-1.5"
                 >
-                  <Send /> Submit
-                </button>
+                  <Send size={14} /> Submit
+                </Button>
               </div>
             </div>
           )}
@@ -295,13 +268,14 @@ export default function SummarizeMode({ examMode }: Props) {
           {/* "Start writing" button — shows after listening */}
           {state === "listening" && (
             <div className="text-center">
-              <button
+              <motion.button
                 onClick={() => setState("writing")}
-                className="rounded-lg bg-transparent text-accent text-[13px] font-semibold cursor-pointer"
-                style={{ padding: "10px 24px", border: "1px solid var(--accent)" }}
+                whileHover={{ y: -2 }}
+                whileTap={{ scale: 0.97 }}
+                className="rounded-lg bg-transparent text-accent text-[13px] font-black cursor-pointer py-2.5 px-6 border-2 border-accent hover:bg-accent-light hover:shadow-(--shadow-sm) transition-all duration-100"
               >
                 Finished Listening → Start Summarizing
-              </button>
+              </motion.button>
             </div>
           )}
         </>
@@ -309,8 +283,8 @@ export default function SummarizeMode({ examMode }: Props) {
 
       {/* ── Scoring ── */}
       {state === "scoring" && (
-        <div className="text-center" style={{ padding: 40 }}>
-          <Loader2 className="animate-spin text-accent" size={32} />
+        <div className="text-center py-10">
+          <Loader2 className="animate-spin text-accent mx-auto" size={32} />
           <p className="text-text-secondary mt-3">AI is grading your summary...</p>
         </div>
       )}
@@ -319,27 +293,32 @@ export default function SummarizeMode({ examMode }: Props) {
       {state === "result" && result && (
         <div className="flex flex-col gap-4">
           {/* Score overview */}
-          <div
-            className="p-6 rounded-2xl border-2 border-border text-center"
-            style={{ background: "var(--card-bg)" }}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="p-6 rounded-lg border-2 border-border text-center bg-surface shadow-(--shadow)"
           >
-            <Progress
-              type="circle"
-              percent={result.overall}
-              size={110}
-              strokeColor={scoreColor(result.overall)}
-              format={(pct) => (
-                <span
-                  className="font-bold"
-                  style={{ fontSize: 26, color: scoreColor(result.overall) }}
-                >
-                  {pct}
-                </span>
-              )}
-            />
-            <p className="text-[13px] text-text-secondary" style={{ margin: "12px 0 0" }}>
-              Overall Score
-            </p>
+            {/* Custom circular progress */}
+            <div className="relative w-[110px] h-[110px] mx-auto mb-2">
+              <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+                <circle cx="50" cy="50" r="42" fill="none" stroke="var(--bg-deep)" strokeWidth="8" />
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="42"
+                  fill="none"
+                  stroke={scoreStroke(result.overall)}
+                  strokeWidth="8"
+                  strokeLinecap="round"
+                  strokeDasharray={`${result.overall * 2.64} 264`}
+                  className="transition-all duration-700 ease-out"
+                />
+              </svg>
+              <span className={`absolute inset-0 flex items-center justify-center text-[26px] font-black ${scoreColorClass(result.overall)}`}>
+                {result.overall}
+              </span>
+            </div>
+            <p className="text-[13px] text-text-secondary mt-3">Overall Score</p>
 
             {/* Sub-scores */}
             <div className="flex justify-center gap-6 mt-4">
@@ -349,145 +328,112 @@ export default function SummarizeMode({ examMode }: Props) {
                 { label: "Conciseness", value: result.concisenessScore },
               ].map(({ label, value }) => (
                 <div key={label}>
-                  <p className="text-[11px] text-text-secondary" style={{ margin: "0 0 4px" }}>
-                    {label}
-                  </p>
-                  <p className="text-lg font-bold m-0" style={{ color: scoreColor(value) }}>
-                    {value}
-                  </p>
+                  <p className="text-[11px] text-text-secondary mb-1">{label}</p>
+                  <p className={`text-lg font-black m-0 ${scoreColorClass(value)}`}>{value}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </motion.div>
 
           {/* Feedback */}
           {result.feedback && (
-            <div
-              className="p-4 rounded-xl border-2 border-border"
-              style={{ background: "var(--card-bg)" }}
-            >
-              <p
-                className="text-xs font-semibold text-text-secondary"
-                style={{ margin: "0 0 6px" }}
-              >
-                <Info className="mr-1" />
-                AI Feedback:
+            <div className="p-4 rounded-lg border-2 border-border bg-surface">
+              <p className="text-xs font-bold text-text-secondary mb-1.5 flex items-center gap-1">
+                <Info size={12} /> AI Feedback:
               </p>
-              <p className="text-[13px] m-0 leading-relaxed">{result.feedback}</p>
+              <p className="text-[13px] m-0 leading-relaxed text-text-primary">{result.feedback}</p>
             </div>
           )}
 
           {/* Key ideas coverage (AC3 — color-coded) */}
-          <div
-            className="p-4 rounded-xl border-2 border-border"
-            style={{ background: "var(--card-bg)" }}
-          >
-            <p className="text-xs font-semibold text-text-secondary mb-2.5">
+          <div className="p-4 rounded-lg border-2 border-border bg-surface">
+            <p className="text-xs font-bold text-text-secondary mb-2.5">
               Key ideas in the passage:
             </p>
             <div className="flex flex-col gap-2">
               {result.coverage.map((item, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-2 py-2 px-3 rounded-lg"
-                  style={{
-                    background: item.covered
-                      ? "color-mix(in srgb, var(--success) 6%, var(--surface))"
-                      : "color-mix(in srgb, var(--error) 6%, var(--surface))",
-                    border: `1px solid ${item.covered ? "color-mix(in srgb, var(--success) 20%, transparent)" : "color-mix(in srgb, var(--error) 20%, transparent)"}`,
-                  }}
+                  className={`flex items-start gap-2 py-2 px-3 rounded-lg border ${
+                    item.covered
+                      ? "bg-success-bg border-[color-mix(in_srgb,var(--success)_20%,transparent)]"
+                      : "bg-error-bg border-[color-mix(in_srgb,var(--error)_20%,transparent)]"
+                  }`}
                 >
-                  <span className="text-sm shrink-0" style={{ marginTop: 1 }}>
+                  <span className="text-sm shrink-0 mt-0.5">
                     {item.covered ? (
-                      <CircleCheckBig className="text-emerald-500" />
+                      <CircleCheckBig size={15} className="text-[var(--success)]" />
                     ) : (
-                      <XCircle className="text-destructive" />
+                      <XCircle size={15} className="text-[var(--error)]" />
                     )}
                   </span>
-                  <div>
-                    <p className="m-0 text-[13px] font-medium">{item.idea}</p>
+                  <div className="flex-1">
+                    <p className="m-0 text-[13px] font-medium text-text-primary">{item.idea}</p>
                     {item.covered && item.whereInSummary && (
-                      <p
-                        className="text-[11px] text-text-muted italic"
-                        style={{ margin: "2px 0 0" }}
-                      >
-                        {item.whereInSummary}
-                      </p>
+                      <p className="text-[11px] text-text-muted italic mt-0.5">{item.whereInSummary}</p>
                     )}
                   </div>
-                  <Tag
-                    color={item.covered ? "success" : "error"}
-                    className="shrink-0 text-[11px]"
-                    style={{ marginLeft: "auto" }}
+                  <span
+                    className={`shrink-0 text-[11px] font-bold py-0.5 px-2 rounded-lg border ml-auto ${
+                      item.covered
+                        ? "bg-success-bg border-[var(--success)] text-[var(--success)]"
+                        : "bg-error-bg border-[var(--error)] text-[var(--error)]"
+                    }`}
                   >
                     {item.covered ? "Covered" : "Missing"}
-                  </Tag>
+                  </span>
                 </div>
               ))}
             </div>
           </div>
 
           {/* Your summary */}
-          <div
-            className="p-4 rounded-xl border-2 border-border"
-            style={{ background: "var(--card-bg)" }}
-          >
-            <p className="text-xs font-semibold text-text-secondary" style={{ margin: "0 0 6px" }}>
-              Your summary:
-            </p>
-            <p className="text-sm m-0 italic" style={{ lineHeight: 1.7 }}>
-              {summaryText}
-            </p>
+          <div className="p-4 rounded-lg border-2 border-border bg-surface">
+            <p className="text-xs font-bold text-text-secondary mb-1.5">Your summary:</p>
+            <p className="text-sm m-0 italic leading-[1.7] text-text-primary">{summaryText}</p>
           </div>
 
           {/* Transcript reveal (AC3 — revealed after submission) */}
-          <div
-            className="p-4 rounded-xl border-2 border-border"
-            style={{ background: "var(--card-bg)" }}
-          >
+          <div className="p-4 rounded-lg border-2 border-border bg-surface">
             <button
               onClick={() => setShowPassage((p) => !p)}
-              className="flex items-center gap-1.5 bg-none border-none cursor-pointer text-accent text-[13px] font-semibold"
-              style={{ padding: 0 }}
+              className="flex items-center gap-1.5 bg-transparent border-none cursor-pointer text-accent text-[13px] font-bold p-0 hover:underline"
             >
-              <Eye />
+              <Eye size={14} />
               {showPassage ? "Hide original transcript" : "Show original transcript"}
             </button>
             {showPassage && (
-              <p
-                className="text-sm"
-                style={{ margin: "10px 0 0", lineHeight: 1.8, color: "var(--text)" }}
+              <motion.p
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: "auto" }}
+                className="text-sm mt-2.5 leading-[1.8] text-text-primary"
               >
                 {result.passage}
-              </p>
+              </motion.p>
             )}
           </div>
 
           {/* Actions */}
           <div className="flex gap-3 justify-center">
-            <button
+            <motion.button
               onClick={() => {
                 setState("writing");
                 setResult(null);
                 setSummaryText("");
                 setShowPassage(false);
               }}
-              className="rounded-lg border-2 border-border bg-transparent cursor-pointer text-[13px] font-medium"
-              style={{ padding: "10px 20px", color: "var(--text)" }}
+              whileHover={{ y: -2 }}
+              whileTap={{ scale: 0.97 }}
+              className="rounded-lg border-2 border-border bg-surface cursor-pointer text-[13px] font-bold py-2.5 px-5 text-text-primary hover:bg-surface-hover hover:shadow-(--shadow-sm) transition-all duration-100 flex items-center gap-1.5"
             >
-              <RefreshCw /> Rewrite
-            </button>
-            <button
+              <RefreshCw size={14} /> Rewrite
+            </motion.button>
+            <Button
               onClick={startSession}
-              className="rounded-lg border-none cursor-pointer text-[13px] font-semibold"
-              style={{
-                padding: "10px 20px",
-                background: "var(--accent)",
-                color: "var(--text-on-accent)",
-              }}
+              className="text-[13px] font-black py-2.5 px-5 flex items-center gap-1.5"
             >
               New Exercise
-            </button>
+            </Button>
           </div>
         </div>
       )}

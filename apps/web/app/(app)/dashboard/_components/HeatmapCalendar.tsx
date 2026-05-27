@@ -76,8 +76,9 @@ export function HeatmapCalendar() {
     <motion.div
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
+      whileHover={{ y: -2, x: -2, boxShadow: "var(--shadow)" }}
       transition={{ duration: 0.3 }}
-      className="rounded-2xl border-2 border-border bg-surface p-5 shadow-sm flex flex-col gap-4"
+      className="rounded-2xl border-2 border-border bg-surface p-5 shadow-(--shadow-sm) flex flex-col gap-4 transition-all duration-100"
     >
       {/* Header section with icon & stats */}
       <div className="flex flex-wrap gap-3 items-center justify-between">
@@ -92,20 +93,20 @@ export function HeatmapCalendar() {
 
         {/* Mini stats capsules */}
         <div className="flex gap-2">
-          <div className="flex items-center gap-1.5 bg-surface-alt border-2 border-border px-3 py-1 rounded-lg shadow-(--shadow-sm)">
+          <div className="flex items-center gap-1.5 bg-surface-alt border-2 border-border px-3 py-1 rounded-xl shadow-(--shadow-sm)">
             <Flame className="text-accent h-3 w-3" />
             <span className="text-xs font-extrabold text-text-primary font-mono">{activeDays}</span>
-            <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider">
+            <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider font-display">
               active days
             </span>
           </div>
 
-          <div className="flex items-center gap-1.5 bg-surface-alt border-2 border-border px-3 py-1 rounded-lg shadow-(--shadow-sm)">
+          <div className="flex items-center gap-1.5 bg-surface-alt border-2 border-border px-3 py-1 rounded-xl shadow-(--shadow-sm)">
             <Star className="text-amber-400 h-3 w-3 fill-current" />
             <span className="text-xs font-extrabold text-text-primary font-mono">
               {totalXP.toLocaleString()}
             </span>
-            <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider">
+            <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider font-display">
               XP
             </span>
           </div>

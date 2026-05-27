@@ -1,5 +1,4 @@
 import { db, toeicDictationItem, toeicQuestion } from "@repo/database";
-import { Card, Tag } from "antd";
 import { eq, sql } from "drizzle-orm";
 import { Headphones } from "lucide-react";
 import Link from "next/link";
@@ -57,31 +56,25 @@ export default async function ToeicListeningPage() {
   ];
 
   return (
-    <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
-      <div
-        className="p-4 grid gap-3"
-        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))" }}
-      >
+    <div className="flex flex-col h-full flex-1 overflow-auto">
+      <div className="p-4 grid gap-3 grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
         {cards.map((c) => {
           const inner = (
-            <Card
-              hoverable={!c.disabled}
-              style={c.disabled ? { opacity: 0.6, cursor: "not-allowed" } : undefined}
-            >
+            <div className={`border-2 border-border rounded-xl bg-surface shadow-sm p-4 ${!c.disabled ? "hover:shadow-md transition-shadow cursor-pointer hover:border-accent" : "opacity-60 cursor-not-allowed"}`}>
               <div className="flex justify-between items-center">
-                <strong>{c.title}</strong>
-                <Tag>{c.count} questions</Tag>
+                <strong className="font-extrabold text-[15px]">{c.title}</strong>
+                <span className="bg-accent-muted text-accent py-0.5 px-2.5 rounded-lg border border-accent/20 font-black text-xs inline-block">{c.count} items</span>
               </div>
-              <div className="text-text-muted text-[13px] mt-1.5">{c.subtitle}</div>
+              <div className="text-text-muted text-[13px] mt-1.5 font-medium">{c.subtitle}</div>
               {c.note && (
-                <div className="text-xs mt-2" style={{ color: "var(--warning)" }}>
+                <div className="text-xs mt-2 text-warning font-semibold">
                   {c.note}
                 </div>
               )}
-            </Card>
+            </div>
           );
           return c.href && !c.disabled ? (
-            <Link key={c.title} href={c.href} style={{ textDecoration: "none" }}>
+            <Link key={c.title} href={c.href} className="no-underline">
               {inner}
             </Link>
           ) : (

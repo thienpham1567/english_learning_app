@@ -1,6 +1,5 @@
 "use client";
 
-import { Tag } from "antd";
 import {
   BookOpen,
   CheckCircle,
@@ -62,10 +61,10 @@ const TYPE_OPTIONS: { value: CardType; label: string; icon: React.ReactNode }[] 
 const COUNT_OPTIONS = [5, 10, 15, 20];
 
 const LEVEL_COLORS: Record<string, string> = {
-  A2: "green",
-  B1: "blue",
-  B2: "purple",
-  C1: "magenta",
+  A2: "var(--success)",
+  B1: "var(--accent)",
+  B2: "var(--tertiary, #8B5CF6)",
+  C1: "var(--error)",
 };
 
 /* ── Main Component ── */
@@ -139,7 +138,7 @@ export function AIFlashcardMode() {
   /* ── PHASE: Topic Picker ── */
   if (phase === "pick") {
     return (
-      <div className="flex flex-col gap-5 w-[600px] mx-auto w-full">
+      <div className="flex flex-col gap-5 w-full max-w-[600px] mx-auto">
         {/* Topic Grid */}
         <div>
           <div className="flex items-center gap-2 mb-3">
@@ -147,10 +146,7 @@ export function AIFlashcardMode() {
             <h3 className="m-0 text-base font-black text-ink font-display">Choose a TOEIC Topic</h3>
           </div>
 
-          <div
-            className="grid gap-2.5"
-            style={{ gridTemplateColumns: "repeat(auto-fill, minmax(155px, 1fr))" }}
-          >
+          <div className="grid gap-2.5 grid-cols-[repeat(auto-fill,minmax(155px,1fr))]">
             {TOEIC_TOPICS.map((topic) => {
               const isSelected = selectedTopic === topic.id;
               return (
@@ -159,23 +155,19 @@ export function AIFlashcardMode() {
                   whileHover={{ scale: 1.02, y: -2 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => setSelectedTopic(isSelected ? null : topic.id)}
-                  className="flex items-center gap-2.5 rounded-(--radius-lg) cursor-pointer text-left"
-                  style={{
-                    padding: "12px 14px",
-                    border: isSelected ? "1.5px solid var(--accent)" : "1.5px solid var(--border)",
-                    background: isSelected ? "var(--accent-light)" : "var(--surface)",
-                    boxShadow: isSelected ? "0 4px 14px var(--accent-muted)" : "var(--shadow-sm)",
-                    transition: "all 0.15s",
-                  }}
+                  className={`flex items-center gap-2.5 rounded-lg cursor-pointer text-left py-3 px-3.5 transition-all duration-150 ${
+                    isSelected
+                      ? "border-[1.5px] border-accent bg-accent-light shadow-[0_4px_14px_var(--accent-muted)]"
+                      : "border-[1.5px] border-border bg-surface shadow-(--shadow-sm)"
+                  }`}
                 >
                   <span className="text-xl">{topic.emoji}</span>
                   <span
-                    style={{
-                      fontSize: 12.5,
-                      fontWeight: isSelected ? 800 : 600,
-                      color: isSelected ? "var(--accent)" : "var(--text-primary)",
-                      lineHeight: 1.3,
-                    }}
+                    className={`text-[12.5px] leading-snug ${
+                      isSelected
+                        ? "font-extrabold text-accent"
+                        : "font-semibold text-text-primary"
+                    }`}
                   >
                     {topic.label}
                   </span>
@@ -197,27 +189,20 @@ export function AIFlashcardMode() {
               if (e.target.value.trim()) setSelectedTopic("__custom");
               else if (selectedTopic === "__custom") setSelectedTopic(null);
             }}
-            placeholder="VD: Negotiation Skills, Supply Chain, Real Estate..."
-            className="w-full py-3 px-4 rounded-(--radius-lg) bg-(--surface) text-text-primary text-sm font-semibold"
-            style={{
-              border:
-                selectedTopic === "__custom"
-                  ? "1.5px solid var(--accent)"
-                  : "1.5px solid var(--border)",
-              outline: "none",
-              boxSizing: "border-box",
-            }}
+            placeholder="e.g. Negotiation Skills, Supply Chain, Real Estate..."
+            className={`w-full py-3 px-4 rounded-lg bg-surface text-text-primary text-sm font-semibold outline-none box-border ${
+              selectedTopic === "__custom"
+                ? "border-[1.5px] border-accent"
+                : "border-[1.5px] border-border"
+            }`}
           />
         </div>
 
         {/* Type & Count selector */}
         <div className="flex gap-3 flex-wrap">
           {/* Type */}
-          <div className="flex-1 w-[200px]">
-            <label
-              className="text-[11px] font-bold text-text-muted uppercase block mb-1.5"
-              style={{ letterSpacing: "0.06em" }}
-            >
+          <div className="flex-1 min-w-[200px]">
+            <label className="text-[11px] font-bold text-text-muted uppercase block mb-1.5 tracking-[0.06em]">
               Flashcard Type
             </label>
             <div className="flex gap-1.5">
@@ -226,16 +211,11 @@ export function AIFlashcardMode() {
                   key={opt.value}
                   whileTap={{ scale: 0.96 }}
                   onClick={() => setCardType(opt.value)}
-                  className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 cursor-pointer text-xs font-bold"
-                  style={{
-                    borderRadius: 10,
-                    border:
-                      cardType === opt.value
-                        ? "1.5px solid var(--accent)"
-                        : "1.5px solid var(--border)",
-                    background: cardType === opt.value ? "var(--accent-light)" : "var(--surface)",
-                    color: cardType === opt.value ? "var(--accent)" : "var(--text-secondary)",
-                  }}
+                  className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 cursor-pointer text-xs font-bold rounded-[10px] ${
+                    cardType === opt.value
+                      ? "border-[1.5px] border-accent bg-accent-light text-accent"
+                      : "border-[1.5px] border-border bg-surface text-text-secondary"
+                  }`}
                 >
                   {opt.icon} {opt.label}
                 </m.button>
@@ -245,10 +225,7 @@ export function AIFlashcardMode() {
 
           {/* Count */}
           <div className="w-[140px]">
-            <label
-              className="text-[11px] font-bold text-text-muted uppercase block mb-1.5"
-              style={{ letterSpacing: "0.06em" }}
-            >
+            <label className="text-[11px] font-bold text-text-muted uppercase block mb-1.5 tracking-[0.06em]">
               Quantity
             </label>
             <div className="flex gap-1.5">
@@ -257,15 +234,11 @@ export function AIFlashcardMode() {
                   key={c}
                   whileTap={{ scale: 0.96 }}
                   onClick={() => setCardCount(c)}
-                  className="flex-1 cursor-pointer text-[13px] font-extrabold"
-                  style={{
-                    padding: "8px 0",
-                    borderRadius: 10,
-                    border:
-                      cardCount === c ? "1.5px solid var(--accent)" : "1.5px solid var(--border)",
-                    background: cardCount === c ? "var(--accent-light)" : "var(--surface)",
-                    color: cardCount === c ? "var(--accent)" : "var(--text-secondary)",
-                  }}
+                  className={`flex-1 cursor-pointer text-[13px] font-extrabold py-2 rounded-[10px] ${
+                    cardCount === c
+                      ? "border-[1.5px] border-accent bg-accent-light text-accent"
+                      : "border-[1.5px] border-border bg-surface text-text-secondary"
+                  }`}
                 >
                   {c}
                 </m.button>
@@ -276,15 +249,7 @@ export function AIFlashcardMode() {
 
         {/* Error */}
         {error && (
-          <div
-            className="text-destructive text-[13px] font-semibold"
-            style={{
-              padding: "10px 14px",
-              borderRadius: 10,
-              background: "rgba(239, 68, 68, 0.06)",
-              border: "1px solid rgba(239, 68, 68, 0.15)",
-            }}
-          >
+          <div className="text-destructive text-[13px] font-semibold py-2.5 px-3.5 rounded-[10px] bg-[rgba(239,68,68,0.06)] border border-[rgba(239,68,68,0.15)]">
             {error}
           </div>
         )}
@@ -295,26 +260,19 @@ export function AIFlashcardMode() {
           whileTap={{ scale: 0.99 }}
           onClick={generate}
           disabled={!selectedTopic}
-          className="py-4 px-6 rounded-(--radius-xl) border-none text-[15px] font-black flex items-center justify-center gap-2.5 font-display relative overflow-hidden"
+          className={`py-4 px-6 rounded-xl border-none text-[15px] font-black flex items-center justify-center gap-2.5 font-display relative overflow-hidden ${
+            selectedTopic
+              ? "cursor-pointer text-white shadow-[0_8px_28px_var(--accent-muted)]"
+              : "cursor-not-allowed text-text-muted"
+          }`}
           style={{
             background: selectedTopic
               ? "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 80%, var(--secondary)))"
               : "var(--border)",
-            color: selectedTopic ? "#fff" : "var(--text-muted)",
-            cursor: selectedTopic ? "pointer" : "not-allowed",
-            boxShadow: selectedTopic ? "0 8px 28px var(--accent-muted)" : "none",
           }}
         >
           {selectedTopic && (
-            <div
-              className="absolute w-[120px] h-[120px] rounded-full"
-              style={{
-                top: "-50%",
-                right: "-10%",
-                background: "rgba(255,255,255,0.06)",
-                pointerEvents: "none",
-              }}
-            />
+            <div className="absolute w-[120px] h-[120px] rounded-full -top-1/2 -right-[10%] bg-white/[0.06] pointer-events-none" />
           )}
           <Zap /> Generate {cardCount} AI Flashcards
         </m.button>
@@ -325,20 +283,16 @@ export function AIFlashcardMode() {
   /* ── PHASE: Loading ── */
   if (phase === "loading") {
     return (
-      <div
-        className="flex flex-col items-center justify-center gap-5 w-[400px] mx-auto"
-        style={{ padding: "60px 24px" }}
-      >
+      <div className="flex flex-col items-center justify-center gap-5 max-w-[400px] mx-auto py-15 px-6">
         <m.div
           animate={{ rotate: 360 }}
           transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-          className="w-[64px] h-[64px] rounded-full grid"
-          style={{ background: "var(--accent-light)", placeItems: "center" }}
+          className="w-16 h-16 rounded-full grid place-items-center bg-accent-light"
         >
           <Loader2 className="animate-spin text-accent" size={28} />
         </m.div>
         <div className="text-center">
-          <h3 className="text-lg font-black text-ink font-display" style={{ margin: "0 0 6px" }}>
+          <h3 className="text-lg font-black text-ink font-display m-0 mb-1.5">
             Generating flashcards...
           </h3>
           <p className="m-0 text-sm text-text-secondary font-medium">
@@ -357,14 +311,13 @@ export function AIFlashcardMode() {
   const pct = cards.length > 0 ? Math.round(((currentIdx + 1) / cards.length) * 100) : 0;
 
   return (
-    <div className="flex flex-col gap-4 w-[520px] mx-auto w-full">
+    <div className="flex flex-col gap-4 w-full max-w-[520px] mx-auto">
       {/* Top bar */}
       <div className="flex items-center justify-between">
         <m.button
           whileTap={{ scale: 0.95 }}
           onClick={resetToTopics}
-          className="flex items-center gap-1.5 py-1.5 px-3.5 border-2 border-border bg-(--surface) text-text-secondary cursor-pointer text-xs font-bold"
-          style={{ borderRadius: 10 }}
+          className="flex items-center gap-1.5 py-1.5 px-3.5 border-2 border-border bg-surface text-text-secondary cursor-pointer text-xs font-bold rounded-[10px]"
         >
           <ChevronLeft size={10} /> Choose another topic
         </m.button>
@@ -374,7 +327,7 @@ export function AIFlashcardMode() {
       </div>
 
       {/* Progress bar */}
-      <div className="h-[5px] rounded-full overflow-hidden" style={{ background: "var(--border)" }}>
+      <div className="h-[5px] rounded-full overflow-hidden bg-border">
         <m.div
           animate={{ width: `${pct}%` }}
           transition={{ type: "spring", stiffness: 80, damping: 15 }}
@@ -400,68 +353,62 @@ export function AIFlashcardMode() {
         >
           {/* Front */}
           <div
-            className="absolute rounded-(--radius-xl) flex flex-col items-center justify-center"
+            className="absolute inset-0 rounded-xl flex flex-col items-center justify-center py-10 px-7 shadow-md"
             style={{
-              inset: 0,
               backfaceVisibility: "hidden",
               border: `1.5px solid color-mix(in srgb, var(--accent) 15%, var(--border))`,
               background: isVocab
                 ? "linear-gradient(135deg, color-mix(in srgb, var(--accent) 6%, var(--surface)), var(--surface))"
                 : "linear-gradient(135deg, color-mix(in srgb, var(--secondary) 6%, var(--surface)), var(--surface))",
-              padding: "40px 28px",
-              boxShadow: "var(--shadow-md)",
             }}
           >
             {/* Ambient glow */}
             <div
-              className="absolute w-[200px] h-[200px] rounded-full"
+              className="absolute w-[200px] h-[200px] rounded-full left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
               style={{
-                left: "50%",
-                top: "45%",
-                transform: "translate(-50%, -50%)",
                 background: `radial-gradient(circle, ${isVocab ? "var(--accent)" : "var(--secondary)"}10 0%, transparent 70%)`,
-                pointerEvents: "none",
               }}
             />
 
             {/* Type badge */}
-            <Tag
-              color={isVocab ? "blue" : "purple"}
-              className="text-[10px] font-extrabold rounded-md mb-3 border-none"
+            <span
+              className={`text-[10px] font-extrabold rounded-md mb-3 border-none py-1 px-2.5 ${
+                isVocab
+                  ? "bg-[rgba(59,130,246,0.1)] text-[#3B82F6]"
+                  : "bg-[rgba(139,92,246,0.1)] text-[#8B5CF6]"
+              }`}
             >
               {isVocab ? "📖 VOCABULARY" : "📐 GRAMMAR"}
-            </Tag>
+            </span>
 
             {/* Tags row */}
-            <div className="flex gap-1.5 mb-4 relative" style={{ zIndex: 2 }}>
+            <div className="flex gap-1.5 mb-4 relative z-[2]">
               {isVocab && card.partOfSpeech && (
-                <span
-                  className="text-[11px] font-bold text-text-muted bg-surface-alt rounded-md"
-                  style={{ padding: "2px 8px" }}
-                >
+                <span className="text-[11px] font-bold text-text-muted bg-surface-alt rounded-md py-0.5 px-2">
                   {card.partOfSpeech}
                 </span>
               )}
               {card.level && (
-                <Tag
-                  color={LEVEL_COLORS[card.level] ?? "default"}
-                  className="text-[10.5px] font-extrabold rounded-md m-0 border-none"
+                <span
+                  className="text-[10.5px] font-extrabold rounded-md py-0.5 px-2"
+                  style={{
+                    color: LEVEL_COLORS[card.level] ?? "var(--text-muted)",
+                    background: `color-mix(in srgb, ${LEVEL_COLORS[card.level] ?? "var(--text-muted)"} 10%, var(--surface))`,
+                  }}
                 >
                   {card.level}
-                </Tag>
+                </span>
               )}
             </div>
 
             {/* Front text */}
             <h2
-              className="m-0 font-black text-center font-display text-text-primary relative"
+              className="m-0 font-black text-center font-display text-text-primary relative z-[2] max-w-[90%]"
               style={{
                 fontSize: isVocab ? 36 : 22,
                 letterSpacing: isVocab ? "-0.02em" : "0",
                 fontStyle: isVocab ? "italic" : "normal",
                 lineHeight: 1.3,
-                zIndex: 2,
-                maxWidth: "90%",
               }}
             >
               {card.front}
@@ -469,10 +416,7 @@ export function AIFlashcardMode() {
 
             {/* Phonetic */}
             {isVocab && card.phonetic && (
-              <span
-                className="mt-2.5 text-sm font-mono text-text-secondary bg-surface-alt rounded-lg border-2 border-border relative"
-                style={{ padding: "4px 12px", zIndex: 2 }}
-              >
+              <span className="mt-2.5 text-sm font-mono text-text-secondary bg-surface-alt rounded-lg border-2 border-border relative z-[2] py-1 px-3">
                 {card.phonetic}
               </span>
             )}
@@ -488,15 +432,11 @@ export function AIFlashcardMode() {
                   tts.speak(card.front);
                 }}
                 disabled={tts.isLoading || tts.isSpeaking}
-                className="mt-5 items-center gap-2 rounded-full text-accent text-[13px] font-bold relative"
+                className="mt-5 inline-flex items-center gap-2 rounded-full text-accent text-[13px] font-bold relative z-[2] py-2 px-4.5 shadow-(--shadow-sm) transition-all duration-200"
                 style={{
-                  display: "inline-flex",
-                  padding: "8px 18px",
                   border: "1.5px solid color-mix(in srgb, var(--accent) 30%, var(--border))",
                   background: tts.isSpeaking ? "var(--accent-light)" : "var(--surface)",
                   cursor: tts.isLoading ? "wait" : "pointer",
-                  boxShadow: "var(--shadow-sm)",
-                  zIndex: 2,
                 }}
               >
                 {tts.isLoading ? <Loader2 className="animate-spin" /> : <Volume2 />}
@@ -504,56 +444,42 @@ export function AIFlashcardMode() {
               </m.button>
             )}
 
-            <span className="absolute text-xs font-semibold text-text-muted" style={{ bottom: 20 }}>
+            <span className="absolute bottom-5 text-xs font-semibold text-text-muted">
               Click card to flip
             </span>
           </div>
 
           {/* Back */}
           <div
-            className="absolute rounded-(--radius-xl) border-2 border-border bg-(--surface) p-6 flex flex-col justify-start overflow-y-auto"
+            className="absolute inset-0 rounded-xl border-2 border-border bg-surface p-6 flex flex-col justify-start overflow-y-auto shadow-md"
             style={{
-              inset: 0,
               backfaceVisibility: "hidden",
               transform: "rotateY(180deg)",
-              boxShadow: "var(--shadow-md)",
             }}
           >
             {/* Vietnamese meaning */}
-            <div
-              className="text-center text-2xl font-black text-accent font-display mb-4"
-              style={{ borderBottom: "1.5px dashed var(--border)", paddingBottom: 14 }}
-            >
+            <div className="text-center text-2xl font-black text-accent font-display mb-4 pb-3.5 border-b border-dashed border-border">
               {card.back}
             </div>
 
             {/* Grammar explanation */}
             {!isVocab && card.explanation && (
-              <div
-                className="rounded-(--radius-lg) bg-surface-alt border-2 border-border mb-3"
-                style={{ padding: "12px 14px" }}
-              >
+              <div className="rounded-lg bg-surface-alt border-2 border-border mb-3 py-3 px-3.5">
                 <span className="text-[11px] font-extrabold text-text-muted uppercase tracking-widest block mb-1.5">
                   <Pin className="h-3.5 w-3.5 inline mr-1" /> Explanation
                 </span>
-                <p
-                  className="m-0 text-text-primary font-medium"
-                  style={{ fontSize: 13.5, lineHeight: 1.65 }}
-                >
+                <p className="m-0 text-text-primary font-medium text-[13.5px] leading-[1.65]">
                   {card.explanation}
                 </p>
               </div>
             )}
 
             {/* Example */}
-            <div
-              className="rounded-(--radius-lg) bg-surface-alt mb-3"
-              style={{ padding: "12px 14px", borderLeft: "3.5px solid var(--accent)" }}
-            >
-              <div className="text-sm font-bold text-text-primary" style={{ lineHeight: 1.55 }}>
+            <div className="rounded-lg bg-surface-alt mb-3 py-3 px-3.5 border-l-[3.5px] border-l-accent">
+              <div className="text-sm font-bold text-text-primary leading-relaxed">
                 {card.example}
               </div>
-              <div className="text-text-muted font-semibold mt-1" style={{ fontSize: 12.5 }}>
+              <div className="text-text-muted font-semibold mt-1 text-[12.5px]">
                 {card.exampleVi}
               </div>
             </div>
@@ -561,29 +487,20 @@ export function AIFlashcardMode() {
             {/* TOEIC Tip */}
             {card.toeicTip && (
               <div
-                className="rounded-(--radius-lg)"
+                className="rounded-lg py-2.5 px-3.5"
                 style={{
-                  padding: "10px 14px",
                   background:
                     "linear-gradient(135deg, rgba(245, 158, 11, 0.04), rgba(239, 68, 68, 0.02))",
                   border: "1px solid rgba(245, 158, 11, 0.15)",
                 }}
               >
                 <div className="flex items-start gap-2">
-                  <span className="text-sm shrink-0" style={{ marginTop: 1 }}>
-                    🎯
-                  </span>
+                  <span className="text-sm shrink-0 mt-px">🎯</span>
                   <div>
-                    <span
-                      className="text-[10px] font-extrabold uppercase tracking-widest"
-                      style={{ color: "var(--warning)" }}
-                    >
+                    <span className="text-[10px] font-extrabold uppercase tracking-widest text-warning">
                       TOEIC Exam Tip
                     </span>
-                    <p
-                      className="text-text-primary font-semibold"
-                      style={{ margin: "4px 0 0", fontSize: 12.5, lineHeight: 1.55 }}
-                    >
+                    <p className="text-text-primary font-semibold m-0 mt-1 text-[12.5px] leading-relaxed">
                       {card.toeicTip}
                     </p>
                   </div>
@@ -601,14 +518,9 @@ export function AIFlashcardMode() {
           whileTap={{ scale: 0.95 }}
           onClick={goPrev}
           disabled={currentIdx === 0}
-          className="w-[48px] h-[48px] border-2 border-border bg-(--surface) grid text-base"
-          style={{
-            borderRadius: 14,
-            color: currentIdx === 0 ? "var(--text-muted)" : "var(--text-primary)",
-            cursor: currentIdx === 0 ? "not-allowed" : "pointer",
-            placeItems: "center",
-            boxShadow: "var(--shadow-sm)",
-          }}
+          className={`w-12 h-12 border-2 border-border bg-surface grid place-items-center text-base rounded-[14px] shadow-(--shadow-sm) ${
+            currentIdx === 0 ? "text-text-muted cursor-not-allowed" : "text-text-primary cursor-pointer"
+          }`}
         >
           <ChevronLeft />
         </m.button>
@@ -617,12 +529,10 @@ export function AIFlashcardMode() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => setFlipped(!flipped)}
-          className="flex-1 w-[200px] h-[48px] text-accent cursor-pointer text-sm font-extrabold"
+          className="flex-1 max-w-[200px] h-12 text-accent cursor-pointer text-sm font-extrabold rounded-[14px] shadow-(--shadow-sm)"
           style={{
-            borderRadius: 14,
             border: "1.5px solid color-mix(in srgb, var(--accent) 20%, var(--border))",
             background: "var(--accent-light)",
-            boxShadow: "var(--shadow-sm)",
           }}
         >
           {flipped ? "Show Front" : "Flip Card"}
@@ -633,14 +543,11 @@ export function AIFlashcardMode() {
           whileTap={{ scale: 0.95 }}
           onClick={goNext}
           disabled={currentIdx === cards.length - 1}
-          className="w-[48px] h-[48px] border-2 border-border bg-(--surface) grid text-base"
-          style={{
-            borderRadius: 14,
-            color: currentIdx === cards.length - 1 ? "var(--text-muted)" : "var(--text-primary)",
-            cursor: currentIdx === cards.length - 1 ? "not-allowed" : "pointer",
-            placeItems: "center",
-            boxShadow: "var(--shadow-sm)",
-          }}
+          className={`w-12 h-12 border-2 border-border bg-surface grid place-items-center text-base rounded-[14px] shadow-(--shadow-sm) ${
+            currentIdx === cards.length - 1
+              ? "text-text-muted cursor-not-allowed"
+              : "text-text-primary cursor-pointer"
+          }`}
         >
           <ChevronRight />
         </m.button>
@@ -651,17 +558,17 @@ export function AIFlashcardMode() {
         <m.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="py-4 px-5 rounded-(--radius-xl) text-center"
+          className="py-4 px-5 rounded-xl text-center"
           style={{
             background: "linear-gradient(135deg, rgba(16, 185, 129, 0.05), var(--surface))",
             border: "1px solid rgba(16, 185, 129, 0.15)",
           }}
         >
-            <CheckCircle size={28} className="text-(--success) mx-auto mb-2" />
-            <h4 className="text-[15px] font-black text-ink" style={{ margin: "0 0 6px" }}>
-              Completed {cards.length} flashcards!
-            </h4>
-            <p className="mb-3 text-[13px] text-text-secondary font-medium">Topic: {topicLabel}</p>
+          <CheckCircle size={28} className="text-success mx-auto mb-2" />
+          <h4 className="text-[15px] font-black text-ink m-0 mb-1.5">
+            Completed {cards.length} flashcards!
+          </h4>
+          <p className="mb-3 text-[13px] text-text-secondary font-medium">Topic: {topicLabel}</p>
           <div className="flex gap-2 justify-center">
             <m.button
               whileTap={{ scale: 0.95 }}
@@ -669,22 +576,14 @@ export function AIFlashcardMode() {
                 setCurrentIdx(0);
                 setFlipped(false);
               }}
-              className="border-2 border-border bg-(--surface) text-text-secondary cursor-pointer text-[13px] font-bold"
-              style={{ padding: "8px 18px", borderRadius: 10 }}
+              className="border-2 border-border bg-surface text-text-secondary cursor-pointer text-[13px] font-bold py-2 px-4.5 rounded-[10px] flex items-center gap-1.5"
             >
-              <RefreshCw /> Review Again
+              <RefreshCw size={12} /> Review Again
             </m.button>
             <m.button
               whileTap={{ scale: 0.95 }}
               onClick={resetToTopics}
-              className="border-none cursor-pointer text-[13px] font-extrabold"
-              style={{
-                padding: "8px 18px",
-                borderRadius: 10,
-                background: "var(--accent)",
-                color: "#fff",
-                boxShadow: "0 4px 12px var(--accent-muted)",
-              }}
+              className="border-none cursor-pointer text-[13px] font-extrabold py-2 px-4.5 rounded-[10px] bg-accent text-white shadow-[0_4px_12px_var(--accent-muted)]"
             >
               New Topic
             </m.button>

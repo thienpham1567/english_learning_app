@@ -1,6 +1,5 @@
 "use client";
 
-import { Button, Card, Progress, Tag } from "antd";
 import { BookOpenText } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
@@ -90,18 +89,18 @@ function LearnRunner() {
   }
   if (done) {
     return (
-      <Card>
+      <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
         <div className="text-[28px] font-bold">Completed!</div>
         <div className="mt-2">
-          <Tag color="red">Again: {stats.again}</Tag>
-          <Tag color="orange">Hard: {stats.hard}</Tag>
-          <Tag color="green">Good: {stats.good}</Tag>
-          <Tag color="blue">Easy: {stats.easy}</Tag>
+          <span className="bg-red-500/15 text-red-600 py-0.5 px-2 inline-block">Again: {stats.again}</span>
+          <span className="bg-amber-500/15 text-amber-600 py-0.5 px-2 inline-block">Hard: {stats.hard}</span>
+          <span className="bg-emerald-500/15 text-emerald-600 py-0.5 px-2 inline-block">Good: {stats.good}</span>
+          <span className="bg-blue-500/15 text-blue-600 py-0.5 px-2 inline-block">Easy: {stats.easy}</span>
         </div>
-        <Button type="primary" onClick={() => router.push("/toeic/vocab")} className="mt-4">
+        <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm mt-4" onClick={() => router.push("/toeic/vocab")}>
           Back to Vocab Hub
-        </Button>
-      </Card>
+        </button>
+      </div>
     );
   }
   if (!current) return null;
@@ -112,32 +111,32 @@ function LearnRunner() {
         <span>
           Word {idx + 1} / {total}
         </span>
-        <Tag>{current.topic}</Tag>
+        <span className="bg-accent/10 text-accent py-0.5 px-2 inline-block">{current.topic}</span>
       </div>
-      <Progress percent={Math.round((idx / total) * 100)} showInfo={false} size="small" />
+      <div className="h-2 rounded-full bg-border overflow-hidden"><div className="h-full rounded-full bg-accent transition-all duration-500" style={{ width: `${Math.round((idx / total) * 100)}%` }} /></div>
 
-      <Card>
+      <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
         <div className="text-center">
           <div className="text-4xl font-bold">{current.word}</div>
           {current.ipa && (
             <div className="text-text-muted mt-1">
-              {current.ipa} <Tag>{current.pos}</Tag>
+              {current.ipa} <span className="bg-accent/10 text-accent py-0.5 px-2 inline-block">{current.pos}</span>
             </div>
           )}
         </div>
 
         {!revealed ? (
           <div className="text-center mt-6">
-            <Button type="primary" size="large" onClick={() => setRevealed(true)}>
+            <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" onClick={() => setRevealed(true)}>
               Show Meaning
-            </Button>
+            </button>
           </div>
         ) : (
           <div className="mt-4">
             <div className="text-lg font-medium">{current.meaningVi}</div>
             <div className="text-text-muted mt-1">{current.meaningEn}</div>
             {current.exampleEn && (
-              <div className="mt-3 p-3 bg-(--surface) rounded-lg">
+              <div className="mt-3 p-3 bg-surface rounded-lg">
                 <div className="italic">{current.exampleEn}</div>
                 {current.exampleVi && (
                   <div className="text-text-muted text-[13px] mt-1">{current.exampleVi}</div>
@@ -145,22 +144,22 @@ function LearnRunner() {
               </div>
             )}
             <div className="grid gap-2 mt-4" style={{ gridTemplateColumns: "repeat(4, 1fr)" }}>
-              <Button danger disabled={submitting} onClick={() => submit("again")}>
+              <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" disabled={submitting} onClick={() => submit("again")}>
                 Again
-              </Button>
-              <Button disabled={submitting} onClick={() => submit("hard")}>
+              </button>
+              <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" disabled={submitting} onClick={() => submit("hard")}>
                 Hard
-              </Button>
-              <Button type="primary" disabled={submitting} onClick={() => submit("good")}>
+              </button>
+              <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" disabled={submitting} onClick={() => submit("good")}>
                 Good
-              </Button>
-              <Button disabled={submitting} onClick={() => submit("easy")}>
+              </button>
+              <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" disabled={submitting} onClick={() => submit("easy")}>
                 Easy
-              </Button>
+              </button>
             </div>
           </div>
         )}
-      </Card>
+      </div>
     </div>
   );
 }

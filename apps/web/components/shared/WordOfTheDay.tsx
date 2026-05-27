@@ -69,11 +69,7 @@ export function WordOfTheDay() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="p-6 border-2 border-border flex items-center justify-center h-[120px]"
-          style={{
-            borderRadius: "var(--radius-lg, 16px)",
-            background: "var(--card-bg, var(--surface))",
-          }}
+          className="p-6 border-2 border-border flex items-center justify-center h-[120px] rounded-xl bg-surface"
         >
           <Loader2 className="animate-spin text-accent" size={20} />
         </m.div>
@@ -83,23 +79,13 @@ export function WordOfTheDay() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          className="p-6 border-2 border-border relative overflow-hidden"
-          style={{
-            borderRadius: "var(--radius-lg, 16px)",
-            background: "linear-gradient(135deg, var(--card-bg, var(--surface)), var(--surface))",
-          }}
+          className="p-6 border-2 border-border relative overflow-hidden rounded-xl bg-gradient-to-br from-surface to-surface-alt"
         >
           {/* Decorative gradient accent */}
           <m.div
             animate={{ opacity: [0.1, 0.2, 0.1], scale: [1, 1.2, 1] }}
             transition={{ repeat: Infinity, duration: 6 }}
-            className="absolute w-[140px] h-[140px]"
-            style={{
-              top: 0,
-              right: 0,
-              background: "radial-gradient(circle at top right, var(--accent), transparent 70%)",
-              pointerEvents: "none",
-            }}
+            className="absolute w-[140px] h-[140px] top-0 right-0 pointer-events-none bg-[radial-gradient(circle_at_top_right,var(--accent),transparent_70%)]"
           />
 
           {/* Header */}
@@ -110,9 +96,9 @@ export function WordOfTheDay() {
               transition={{ delay: 0.1 }}
               className="flex items-center gap-2"
             >
-              <Star size={18} className="text-(--xp)" />
+              <Star size={18} className="text-[var(--xp)]" />
               <span className="text-[13px] font-bold uppercase tracking-wider text-text-muted">
-                Từ vựng hôm nay
+                Word of the Day
               </span>
             </m.div>
             {word.level && (
@@ -140,9 +126,8 @@ export function WordOfTheDay() {
               whileHover={{ scale: 1.1, color: "var(--accent)" }}
               whileTap={{ scale: 0.9 }}
               onClick={playAudio}
-              aria-label="Phát âm"
-              className="bg-none border-none cursor-pointer p-1 text-xl"
-              style={{ color: "var(--accent-muted, var(--text-muted))", transition: "color 0.2s" }}
+              aria-label="Pronounce"
+              className="bg-none border-none cursor-pointer p-1 text-xl text-text-muted hover:text-accent transition-colors duration-200"
             >
               {isTtsLoading ? <Loader2 className="animate-spin" size={18} /> : <Volume2 />}
             </m.button>
@@ -195,11 +180,7 @@ export function WordOfTheDay() {
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.35 }}
-              className="py-3 px-4 rounded-xl text-sm italic text-ink mb-5 relative z-[1]"
-              style={{
-                background: "var(--accent-muted, rgba(99,102,241,0.08))",
-                borderLeft: "4px solid var(--accent)",
-              }}
+              className="py-3 px-4 rounded-xl text-sm italic text-ink mb-5 relative z-[1] bg-accent-muted border-l-4 border-accent"
             >
               &ldquo;{word.example}&rdquo;
             </m.div>
@@ -214,22 +195,11 @@ export function WordOfTheDay() {
             whileTap={!isSaved ? { scale: 0.98 } : {}}
             onClick={saveWord}
             disabled={isSaved || saving}
-            className="flex items-center gap-2.5 py-3 px-5 text-sm font-bold w-full justify-center relative z-[1]"
-            style={{
-              borderRadius: 14,
-              border: isSaved
-                ? "1px solid color-mix(in srgb, var(--success) 30%, transparent)"
-                : "1px solid var(--accent)",
-              background: isSaved
-                ? "color-mix(in srgb, var(--success) 10%, transparent)"
-                : "var(--accent)",
-              color: isSaved ? "var(--success)" : "#fff",
-              cursor: isSaved ? "default" : "pointer",
-              transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-              boxShadow: isSaved
-                ? "none"
-                : "0 4px 12px color-mix(in srgb, var(--accent) 30%, transparent)",
-            }}
+            className={`flex items-center gap-2.5 py-3 px-5 text-sm font-bold w-full justify-center relative z-[1] rounded-[14px] transition-all duration-300 ${
+              isSaved
+                ? "border border-success/30 bg-success-bg text-success cursor-default shadow-none"
+                : "border-2 border-border bg-accent text-[var(--text-on-accent)] cursor-pointer shadow-[3px_3px_0px_var(--ink)] hover:bg-accent-hover hover:-translate-y-0.5 active:translate-y-0.5 active:shadow-none"
+            }`}
           >
             {saving ? (
               <Loader2 className="animate-spin" />
@@ -238,7 +208,7 @@ export function WordOfTheDay() {
             ) : (
               <BookOpen />
             )}
-            {isSaved ? "Đã lưu vào kho từ vựng" : "Lưu vào kho từ vựng"}
+            {isSaved ? "Saved to vocabulary" : "Save to vocabulary"}
           </m.button>
         </m.div>
       ) : null}

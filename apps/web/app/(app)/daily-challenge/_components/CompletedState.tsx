@@ -1,6 +1,5 @@
 "use client";
 
-import { Typography } from "antd";
 import { BarChart3, ChevronRight, Clock, Loader2, Star, Trophy, XCircle, Zap } from "lucide-react";
 import * as m from "motion/react-client";
 import Link from "next/link";
@@ -14,12 +13,9 @@ import type {
 } from "@/lib/daily-challenge/types";
 import { BadgeGallery } from "./BadgeGallery";
 
-const { Title, Text, Paragraph } = Typography;
-
 /** Milliseconds until midnight VN time (UTC+7). */
 function msUntilVnMidnight(): number {
   const now = new Date();
-  // Get current VN date string, build tomorrow midnight in VN
   const vnToday = now.toLocaleDateString("en-CA", { timeZone: "Asia/Ho_Chi_Minh" });
   const tomorrow = new Date(vnToday + "T00:00:00+07:00");
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -52,7 +48,13 @@ function MiniScoreRing({
   const size = 100;
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="block">
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="block transform -rotate-90">
+      <defs>
+        <linearGradient id="scoreRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="var(--accent)" />
+          <stop offset="100%" stopColor="var(--secondary)" />
+        </linearGradient>
+      </defs>
       <circle
         cx={size / 2}
         cy={size / 2}
@@ -66,20 +68,19 @@ function MiniScoreRing({
         cy={size / 2}
         r={radius}
         fill="none"
-        stroke={isGood ? "var(--text-on-accent)" : "var(--accent)"}
+        stroke={isGood ? "url(#scoreRingGrad)" : "var(--accent)"}
         strokeWidth={stroke}
         strokeLinecap="round"
         strokeDasharray={circumference}
         initial={{ strokeDashoffset: circumference }}
         animate={{ strokeDashoffset: offset }}
         transition={{ duration: 1.0, ease: "easeOut", delay: 0.2 }}
-        style={{ transform: "rotate(-90deg)", transformOrigin: "50% 50%" }}
       />
     </svg>
   );
 }
 
-/* ── Weekly Mini Bar Chart (pure SVG) ── */
+/* ── Weekly Mini Bar Chart ── */
 function WeeklyChart({ scores }: { scores: { day: string; score: number }[] }) {
   const maxScore = 5;
   const barWidth = 28;
@@ -88,18 +89,15 @@ function WeeklyChart({ scores }: { scores: { day: string; score: number }[] }) {
   const chartWidth = scores.length * (barWidth + barGap) - barGap;
 
   return (
-    <div
-      className="rounded-(--radius-xl) border-2 border-border bg-(--surface) py-4 px-5"
-      style={{ boxShadow: "var(--shadow-sm)" }}
-    >
+    <div className="rounded-2xl border-2 border-border bg-surface py-4 px-5 shadow-(--shadow-sm)">
       <div className="flex items-center gap-1.5 mb-4">
         <BarChart3 size={13} className="text-accent" />
-        <span className="text-[11px] font-extrabold uppercase tracking-widest text-accent">
+        <span className="text-[10px] font-extrabold uppercase tracking-widest text-accent font-display">
           Last 7 Days History
         </span>
       </div>
 
-      <svg width="100%" viewBox={`0 0 ${chartWidth} ${chartHeight + 22}`} className="block">
+      <svg width="100%" viewBox={`0 0 ${chartWidth} ${chartHeight + 22}`} className="block overflow-visible">
         {scores.map((s, i) => {
           const barHeight = (s.score / maxScore) * chartHeight;
           const x = i * (barWidth + barGap);
@@ -107,13 +105,13 @@ function WeeklyChart({ scores }: { scores: { day: string; score: number }[] }) {
           const pct = s.score / maxScore;
           const fill =
             pct >= 0.8
-              ? "var(--success)" // emerald green
+              ? "var(--success)"
               : pct >= 0.5
                 ? "var(--accent)"
                 : "var(--error)";
 
           return (
-            <g key={i}>
+            <g key={i} className="group/bar">
               {/* Background bar */}
               <rect
                 x={x}
@@ -122,6 +120,7 @@ function WeeklyChart({ scores }: { scores: { day: string; score: number }[] }) {
                 height={chartHeight}
                 rx={6}
                 fill="var(--surface-alt)"
+                className="stroke-1 stroke-border/5"
               />
               {/* Score bar */}
               {s.score > 0 && (
@@ -140,7 +139,7 @@ function WeeklyChart({ scores }: { scores: { day: string; score: number }[] }) {
                 x={x + barWidth / 2}
                 y={s.score > 0 ? y - 6 : chartHeight - 6}
                 textAnchor="middle"
-                className="text-[10px] font-extrabold font-mono"
+                className="text-[10px] font-black font-mono"
                 style={{ fill: s.score > 0 ? "var(--text-primary)" : "var(--text-muted)" }}
               >
                 {s.score > 0 ? s.score : "0"}
@@ -190,7 +189,6 @@ export function CompletedState({
     return () => clearInterval(id);
   }, []);
 
-  // Build weekly scores from localStorage (simple client-side only)
   const [weeklyScores, setWeeklyScores] = useState<{ day: string; score: number }[]>([]);
   useEffect(() => {
     try {
@@ -200,10 +198,8 @@ export function CompletedState({
       if (stored) {
         weekData = JSON.parse(stored);
       }
-      // Save today's score
       const today = new Date().toISOString().slice(0, 10);
       weekData[today] = score;
-      // Clean old entries (keep last 14 days)
       const cutoff = new Date();
       cutoff.setDate(cutoff.getDate() - 14);
       for (const key of Object.keys(weekData)) {
@@ -213,7 +209,6 @@ export function CompletedState({
       }
       localStorage.setItem(WEEK_KEY, JSON.stringify(weekData));
 
-      // Build last 7 days
       const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
       const result: { day: string; score: number }[] = [];
       for (let i = 6; i >= 0; i--) {
@@ -237,56 +232,42 @@ export function CompletedState({
   const bonusLoading = bonusState === "loading";
 
   return (
-    <div className="w-[540px] mx-auto flex flex-col gap-4">
+    <div className="w-full max-w-2xl mx-auto flex flex-col gap-5">
       {/* ── Hero Card ── */}
       <m.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="w-full rounded-(--radius-xl) relative overflow-hidden flex flex-col items-center text-center"
         style={{
-          padding: "36px 24px 32px",
           background: isGood
             ? "linear-gradient(135deg, #4c1d95, #6d28d9 60%, #7c3aed)"
-            : "linear-gradient(135deg, var(--surface) 0%, var(--surface-alt) 100%)",
-          boxShadow: isGood ? "0 12px 30px rgba(109, 40, 217, 0.35)" : "var(--shadow-md)",
-          border: isGood ? "none" : "1px solid var(--border)",
+            : "var(--surface)",
         }}
+        className={`w-full rounded-2xl border-2 border-border p-8 shadow-(--shadow) relative overflow-hidden flex flex-col items-center text-center ${
+          isGood ? "text-white border-none" : "text-text-primary"
+        }`}
       >
         {isGood && (
-          <>
-            <div
-              className="absolute"
-              style={{
-                inset: 0,
-                background:
-                  "radial-gradient(ellipse 80% 60% at 80% 0%, rgba(255,255,255,0.15) 0%, transparent 70%)",
-                pointerEvents: "none",
-              }}
-            />
-            <div className="grain-overlay" style={{ opacity: 0.04 }} />
-          </>
+          <div
+            className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_60%_at_80%_0%,rgba(255,255,255,0.15)_0%,transparent_70%)]"
+          />
         )}
 
         {/* Score ring */}
-        <div className="relative w-[100px] h-[100px] mb-3">
+        <div className="relative w-[100px] h-[100px] mb-3.5 flex items-center justify-center">
           <MiniScoreRing score={correctCount} total={answers.length} isGood={isGood} />
-          <div className="absolute flex flex-col items-center justify-center" style={{ inset: 0 }}>
+          <div className="absolute flex flex-col items-center justify-center">
             <span
-              className="text-4xl font-black leading-none"
+              className="text-4xl font-black font-mono leading-none tracking-tight"
               style={{
-                fontVariantNumeric: "tabular-nums",
-                color: isGood ? "var(--text-on-accent)" : "var(--accent)",
+                color: isGood ? "#ffffff" : "var(--accent)",
               }}
             >
               {score}
             </span>
             <span
-              className="text-[11px] font-bold"
-              style={{
-                opacity: 0.6,
-                color: isGood ? "var(--text-on-accent)" : "var(--text-secondary)",
-                marginTop: 2,
-              }}
+              className={`text-[9px] font-extrabold uppercase tracking-wider mt-1 ${
+                isGood ? "text-white/70" : "text-text-muted"
+              }`}
             >
               / {answers.length} correct
             </span>
@@ -294,32 +275,30 @@ export function CompletedState({
         </div>
 
         {/* Title */}
-        <Title
-          level={3}
-          className="mt-2 mb-1 font-display font-extrabold flex items-center gap-1.5"
-          style={{ color: isGood ? "var(--text-on-accent)" : "var(--text-primary)" }}
-        >
+        <h2 className="text-xl md:text-2xl font-black font-display tracking-tight leading-tight flex items-center gap-2 mt-2 mb-1.5">
           {isGood ? (
             <>
-              <Trophy className="inline mr-1" /> Incredible Work!
+              <Trophy className="h-5.5 w-5.5 text-accent animate-bounce shrink-0" />
+              <span>Incredible Work!</span>
             </>
           ) : (
             <>
-              <Star className="inline mr-1" /> Well Done!
+              <Star className="h-5.5 w-5.5 text-accent fill-current shrink-0" />
+              <span>Well Done!</span>
             </>
           )}
-        </Title>
-        <Text
-          className="text-[13px] w-[360px] block mb-4"
-          style={{ color: isGood ? "rgba(255,255,255,0.8)" : "var(--text-secondary)" }}
-        >
+        </h2>
+        
+        <p className={`text-xs md:text-sm font-semibold max-w-sm mb-4.5 leading-relaxed ${
+          isGood ? "text-white/80" : "text-text-secondary"
+        }`}>
           {isGood
             ? "You have successfully completed today's tough questions. Keep it up!"
             : "Congratulations on completing today's exercises. Consistency is key to success!"}
-        </Text>
+        </p>
 
-        {/* Streak */}
-        <div className="flex justify-center">
+        {/* Streak Indicator */}
+        <div className="flex justify-center mt-1">
           <StreakFire streak={streak.currentStreak} />
         </div>
       </m.div>
@@ -329,43 +308,33 @@ export function CompletedState({
         <m.button
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          whileHover={{ scale: 1.02, y: -2 }}
+          whileHover={{ scale: 1.02, y: -2, boxShadow: "var(--shadow)" }}
           whileTap={{ scale: 0.98 }}
           onClick={onStartBonus}
-          className="w-full rounded-(--radius-xl) py-4 px-5 cursor-pointer flex items-center gap-3.5"
-          style={{
-            background: "linear-gradient(135deg, var(--surface), var(--surface-alt))",
-            border: "2px dashed var(--xp)",
-            boxShadow: "0 6px 15px rgba(245, 158, 11, 0.08)",
-            transition: "border-color 0.2s",
-          }}
+          className="w-full rounded-2xl py-4.5 px-5 cursor-pointer flex flex-col sm:flex-row items-center gap-4 bg-surface border-2 border-dashed border-accent shadow-(--shadow-sm) text-left group"
         >
           <div
-            className="w-[46px] h-[46px] rounded-(--radius-lg) grid shrink-0"
-            style={{
-              background: "linear-gradient(135deg, var(--xp), var(--xp))",
-              placeItems: "center",
-              boxShadow: "0 4px 10px rgba(245, 158, 11, 0.25)",
-            }}
+            className="w-12 h-12 rounded-xl grid shrink-0 bg-amber-500 place-items-center shadow-(--shadow-sm) text-white"
           >
-            <Zap size={20} className="text-[#fff]" />
+            <Zap size={20} className="fill-current group-hover:animate-bounce" />
           </div>
-          <div className="flex-1 text-left">
-            <div className="text-[15px] font-extrabold text-text-primary font-display flex items-center gap-1">
-              <Zap size={14} className="text-accent" /> Bonus Round Challenge
+          <div className="flex-1">
+            <div className="text-sm font-black text-text-primary font-display flex items-center gap-1.5">
+              <Zap size={14} className="text-accent fill-current shrink-0" />
+              <span>Bonus Round Challenge</span>
             </div>
-            <div className="text-xs text-text-secondary" style={{ marginTop: 2 }}>
-              3 quick questions · Earn extra XP · No penalty for wrong answers
-            </div>
+            <p className="text-xs text-text-secondary font-bold mt-1 leading-none">
+              3 quick questions · Earn extra XP · No penalty for incorrect answers
+            </p>
           </div>
-          <ChevronRight size={13} className="text-text-muted" />
+          <ChevronRight size={15} className="text-text-muted shrink-0 ml-auto" />
         </m.button>
       )}
 
       {bonusLoading && (
-        <div className="w-full rounded-(--radius-xl) py-4 px-5 bg-(--surface) border-2 border-border flex items-center justify-center gap-2.5 text-text-secondary text-[13px] font-semibold">
-          <Loader2 className="animate-spin text-(--xp)" />
-          Initializing Bonus Challenge...
+        <div className="w-full rounded-2xl py-4.5 px-5 bg-surface border-2 border-border flex items-center justify-center gap-2.5 text-text-secondary text-xs font-black shadow-(--shadow-sm)">
+          <Loader2 className="animate-spin text-accent h-4 w-4" />
+          <span>Initializing Bonus Challenge...</span>
         </div>
       )}
 
@@ -373,14 +342,11 @@ export function CompletedState({
         <m.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="w-full rounded-(--radius-xl) py-4 px-5 flex items-center gap-2.5 text-[13px] font-bold text-(--xp)"
-          style={{
-            background: "rgba(245, 158, 11, 0.08)",
-            border: "1px solid rgba(245, 158, 11, 0.25)",
-          }}
+          className="w-full rounded-2xl py-4 px-5 flex items-center gap-2.5 text-xs font-black text-amber-600 bg-amber-500/10 border-2 border-amber-500/30 shadow-(--shadow-sm)"
         >
-          <Zap size={15} />
-          You have completed all bonus questions today! <Star size={12} className="text-accent ml-1" />
+          <Zap size={15} className="fill-current animate-pulse" />
+          <span>You have completed all bonus questions today!</span>
+          <Star size={12} className="text-amber-500 fill-current ml-1" />
         </m.div>
       )}
 
@@ -400,58 +366,33 @@ export function CompletedState({
         initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.15 }}
-        className="rounded-(--radius-xl) border-2 border-border bg-(--surface) py-4 px-5"
-        style={{ boxShadow: "var(--shadow-sm)" }}
+        className="rounded-2xl border-2 border-border bg-surface py-4.5 px-5 shadow-(--shadow-sm)"
       >
-        <div className="flex items-center gap-1.5 mb-3">
-          <Trophy size={13} className="text-accent" />
-          <span className="text-[11px] font-extrabold uppercase tracking-widest text-accent">
+        <div className="flex items-center gap-1.5 mb-3.5">
+          <Trophy size={14} className="text-accent" />
+          <span className="text-[10px] font-extrabold uppercase tracking-widest text-accent font-display">
             Personal Performance
           </span>
         </div>
-        <div className="grid gap-2.5 text-center" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
-          <div
-            className="rounded-(--radius-lg) bg-surface-alt border-2 border-border"
-            style={{ padding: "10px 4px" }}
-          >
-            <div
-              className="text-2xl font-black text-accent"
-              style={{ fontVariantNumeric: "tabular-nums" }}
-            >
+        <div className="grid grid-cols-3 gap-3 text-center">
+          <div className="rounded-xl bg-surface-alt border-2 border-border p-3 shadow-(--shadow-sm)">
+            <div className="text-xl md:text-2xl font-black text-accent font-mono leading-none">
               {streak.currentStreak}
             </div>
-            <div
-              className="text-[9px] font-bold uppercase tracking-wider text-text-muted"
-              style={{ marginTop: 2 }}
-            >
+            <div className="text-[9px] font-extrabold uppercase tracking-wider text-text-muted mt-2 font-display">
               Streak
             </div>
           </div>
-          <div
-            className="rounded-(--radius-lg) bg-surface-alt border-2 border-border"
-            style={{ padding: "10px 4px" }}
-          >
-            <div
-              className="text-2xl font-black text-emerald-500"
-              style={{ fontVariantNumeric: "tabular-nums" }}
-            >
+          <div className="rounded-xl bg-surface-alt border-2 border-border p-3 shadow-(--shadow-sm)">
+            <div className="text-xl md:text-2xl font-black text-emerald-500 font-mono leading-none">
               {score}/5
             </div>
-            <div
-              className="text-[9px] font-bold uppercase tracking-wider text-text-muted"
-              style={{ marginTop: 2 }}
-            >
+            <div className="text-[9px] font-extrabold uppercase tracking-wider text-text-muted mt-2 font-display">
               Today's Score
             </div>
           </div>
-          <div
-            className="rounded-(--radius-lg) bg-surface-alt border-2 border-border"
-            style={{ padding: "10px 4px" }}
-          >
-            <div
-              className="text-2xl font-black text-(--xp)"
-              style={{ fontVariantNumeric: "tabular-nums" }}
-            >
+          <div className="rounded-xl bg-surface-alt border-2 border-border p-3 shadow-(--shadow-sm)">
+            <div className="text-xl md:text-2xl font-black text-secondary font-mono leading-none">
               {(() => {
                 try {
                   const best = localStorage.getItem("daily-challenge-best");
@@ -463,10 +404,7 @@ export function CompletedState({
                 }
               })()}
             </div>
-            <div
-              className="text-[9px] font-bold uppercase tracking-wider text-text-muted"
-              style={{ marginTop: 2 }}
-            >
+            <div className="text-[9px] font-extrabold uppercase tracking-wider text-text-muted mt-2 font-display">
               Best Time
             </div>
           </div>
@@ -479,49 +417,42 @@ export function CompletedState({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
-          className="flex flex-col gap-2"
+          className="flex flex-col gap-2.5"
         >
           <div className="flex items-center gap-2 mt-2 mb-1">
-            <Star size={12} className="text-(--error)" />
-            <span className="text-[11px] font-extrabold uppercase tracking-widest text-destructive">
+            <Star size={12} className="text-error fill-current animate-pulse" />
+            <span className="text-[10px] font-extrabold uppercase tracking-widest text-error font-display">
               Review Wrong Answers ({wrongAnswers.length})
             </span>
-            <div className="flex-1 h-[1px]" style={{ background: "var(--border)" }} />
+            <div className="flex-1 h-[1px] bg-border" />
           </div>
           {wrongAnswers.map((a, i) => (
             <div
               key={i}
-              className="flex items-start gap-2.5 py-3 px-4 rounded-(--radius-lg) bg-(--surface)"
-              style={{ border: "1px solid rgba(239, 68, 68, 0.15)", boxShadow: "var(--shadow-sm)" }}
+              className="flex items-start gap-3 py-3.5 px-4 rounded-xl bg-surface border-2 border-error/20 border-l-4 border-l-error shadow-(--shadow-sm)"
             >
-              <XCircle className="text-destructive text-sm shrink-0" style={{ marginTop: 2 }} />
-              <div className="flex-1 w-[0px]">
+              <XCircle className="text-error text-base shrink-0 mt-0.5" />
+              <div className="flex-1 min-w-0">
                 {a.questionStem && (
-                  <p
-                    className="text-[13px] font-bold text-text-primary leading-normal"
-                    style={{ margin: "0 0 6px" }}
-                  >
+                  <p className="text-[13px] font-extrabold text-text-primary leading-normal mb-2.5">
                     {a.questionStem}
                   </p>
                 )}
-                <div className="flex flex-wrap gap-1.5 mb-1.5">
-                  <span
-                    className="text-[11px] text-destructive rounded-md font-bold"
-                    style={{ background: "var(--error-bg)", padding: "2px 8px" }}
-                  >
+                <div className="flex flex-wrap gap-2 mb-2.5">
+                  <span className="text-[10px] text-error bg-error/10 border border-error/20 rounded-lg font-black px-2.5 py-0.5 font-mono">
                     Your answer: {a.answer || "(blank)"}
                   </span>
                   {a.correctAnswer && (
-                    <span
-                      className="text-[11px] text-emerald-500 rounded-md font-bold"
-                      style={{ background: "rgba(16, 185, 129, 0.12)", padding: "2px 8px" }}
-                    >
+                    <span className="text-[10px] text-success bg-success-bg border border-success/20 rounded-lg font-black px-2.5 py-0.5 font-mono">
                       Correct answer: {a.correctAnswer}
                     </span>
                   )}
                 </div>
                 {a.explanation && a.explanation !== "Correct!" && (
-                  <p className="m-0 text-xs text-text-muted leading-relaxed">💡 {a.explanation}</p>
+                  <div className="m-0 text-xs text-text-secondary leading-relaxed bg-surface-alt p-2.5 rounded-lg border border-border/40 flex items-start gap-1.5">
+                    <span className="shrink-0 text-accent font-bold">💡</span>
+                    <span>{a.explanation}</span>
+                  </div>
                 )}
               </div>
             </div>
@@ -546,15 +477,12 @@ export function CompletedState({
         className="flex flex-col gap-3.5 mt-2.5"
       >
         {/* Next challenge countdown */}
-        <div className="rounded-(--radius-xl) bg-surface-alt border-2 border-border py-3 px-4 flex items-center justify-center gap-2">
-          <Clock size={12} className="text-text-muted" />
-          <Text className="text-xs text-text-secondary font-medium">
+        <div className="rounded-2xl bg-surface border-2 border-border py-4 px-5 flex items-center justify-center gap-3.5 shadow-(--shadow-sm)">
+          <Clock size={15} className="text-text-muted shrink-0 animate-pulse" />
+          <div className="text-xs text-text-secondary font-extrabold uppercase tracking-wider font-display">
             Next challenge in
-          </Text>
-          <span
-            className="font-mono text-sm font-extrabold text-accent"
-            style={{ fontVariantNumeric: "tabular-nums" }}
-          >
+          </div>
+          <span className="font-mono text-base font-black text-accent tracking-wider bg-bg-deep border border-border/20 px-3 py-1 rounded-xl shadow-(--shadow-sm)">
             {formatCountdown(countdown)}
           </span>
         </div>
@@ -564,19 +492,11 @@ export function CompletedState({
           <Link
             href="/dictionary"
             prefetch={false}
-            className="btn-shimmer items-center justify-center gap-2 w-full rounded-(--radius-lg) font-extrabold text-[15px]"
-            style={{
-              display: "inline-flex",
-              padding: "14px 28px",
-              background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-              color: "var(--text-on-accent)",
-              textDecoration: "none",
-              boxShadow: "0 6px 18px var(--accent-muted)",
-              transition: "all 0.2s",
-            }}
+            className="flex items-center justify-center gap-2.5 w-full rounded-2xl font-black text-[15px] px-6 py-4.5 bg-accent border-2 border-border text-ink shadow-(--shadow-sm) hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow-(--shadow) active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all duration-100 cursor-pointer"
           >
-            <Zap /> Lookup Dictionary & Practice Vocabulary
-            <ChevronRight size={12} />
+            <Zap className="h-4.5 w-4.5 fill-current" />
+            <span>Lookup Dictionary & Practice Vocabulary</span>
+            <ChevronRight size={15} className="shrink-0" />
           </Link>
         </div>
       </m.div>

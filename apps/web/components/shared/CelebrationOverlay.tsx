@@ -66,13 +66,9 @@ export function CelebrationOverlay({
     return (
       <div
         data-tier="small"
+        className="fixed inset-0 pointer-events-none rounded-lg z-[100]"
         style={{
-          position: "fixed",
-          inset: 0,
-          pointerEvents: "none",
-          borderRadius: "var(--radius-lg)",
           animation: "borderFlash var(--duration-fast) ease-out forwards", // A1 fix: --duration-fast = 200ms
-          zIndex: 100,
         }}
       />
     );
@@ -83,28 +79,13 @@ export function CelebrationOverlay({
     return (
       <div
         data-tier="medium"
-        style={{
-          position: "fixed",
-          inset: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          background: "rgba(0,0,0,0.45)",
-          zIndex: 200,
-          padding: "var(--space-6)",
-        }}
+        className="fixed inset-0 flex items-center justify-center bg-black/45 z-[200] p-6"
         onClick={() => onComplete?.()} // B2/E5 fix: safe optional call
       >
         <div
+          className="bg-surface rounded-2xl p-8 max-w-[380px] w-full shadow-xl text-center"
           style={{
-            background: "var(--surface)",
-            borderRadius: "var(--radius-2xl)",
-            padding: "var(--space-8)",
-            maxWidth: 380,
-            width: "100%",
-            boxShadow: "var(--shadow-xl)",
             animation: "scaleBounce var(--duration-slow) cubic-bezier(0.34,1.56,0.64,1) forwards",
-            textAlign: "center",
           }}
           onClick={(e) => e.stopPropagation()}
         >
@@ -118,17 +99,7 @@ export function CelebrationOverlay({
   return (
     <div
       data-tier="big"
-      style={{
-        position: "fixed",
-        inset: 0,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: "rgba(0,0,0,0.6)",
-        zIndex: 300,
-        overflow: "hidden",
-        padding: "var(--space-6)",
-      }}
+      className="fixed inset-0 flex items-center justify-center bg-black/60 z-[300] overflow-hidden p-6"
       onClick={() => onComplete?.()} // B2 fix: safe optional call
     >
       {/* Confetti particles — stable config via useMemo (E1 fix) */}
@@ -136,33 +107,23 @@ export function CelebrationOverlay({
         <div
           key={i}
           aria-hidden="true"
+          className="absolute top-0 pointer-events-none"
           style={{
-            position: "absolute",
-            top: 0,
             left: `${p.left}%`,
             width: p.width,
             height: p.height,
             borderRadius: p.isCircle ? "50%" : "2px",
             background: p.color,
             animation: `confettiFall ${p.duration}s ${p.delay}s ease-in forwards`,
-            pointerEvents: "none",
           }}
         />
       ))}
 
       {/* Content card */}
       <div
+        className="relative bg-surface rounded-2xl p-8 max-w-[400px] w-full shadow-xl text-center z-10"
         style={{
-          position: "relative",
-          background: "var(--surface)",
-          borderRadius: "var(--radius-2xl)",
-          padding: "var(--space-8)",
-          maxWidth: 400,
-          width: "100%",
-          boxShadow: "var(--shadow-xl)",
           animation: "scaleBounce var(--duration-slow) cubic-bezier(0.34,1.56,0.64,1) forwards",
-          textAlign: "center",
-          zIndex: 1,
         }}
         onClick={(e) => e.stopPropagation()}
       >

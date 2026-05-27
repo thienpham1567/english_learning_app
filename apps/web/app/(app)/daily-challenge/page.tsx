@@ -17,7 +17,6 @@ import { ChallengeResults } from "@/app/(app)/daily-challenge/_components/Challe
 import { CompletedState } from "@/app/(app)/daily-challenge/_components/CompletedState";
 import { EXERCISE_TYPE_LABELS } from "@/app/(app)/daily-challenge/_components/constants";
 import { ExerciseCard } from "@/app/(app)/daily-challenge/_components/ExerciseCard";
-import { PageHeader } from "@/components/shared/PageHeader";
 import { Button } from "@/components/ui/button";
 import { useBonusChallenge } from "@/hooks/useBonusChallenge";
 import { useDailyChallenge } from "@/hooks/useDailyChallenge";
@@ -47,7 +46,7 @@ function getTodayLabel(): string {
   });
 }
 
-/* ── Modern Step Indicator ── */
+/* ── Step Indicator ── */
 function StepIndicator({
   current,
   total,
@@ -61,25 +60,26 @@ function StepIndicator({
   return (
     <div className="flex flex-col gap-2.5">
       {/* Progress Track */}
-      <div className="h-2 border-2 border-border bg-bg-deep rounded-full relative overflow-hidden shrink-0">
+      <div className="h-3 border-2 border-border bg-bg-deep rounded-full relative overflow-hidden shrink-0">
         <motion.div
           initial={{ width: 0 }}
           animate={{ width: `${(current / total) * 100}%` }}
           transition={{ type: "spring", stiffness: 80, damping: 15 }}
           style={{
             background: `linear-gradient(90deg, ${activeColor}, color-mix(in srgb, ${activeColor} 80%, var(--xp)))`,
-            boxShadow: `0 0 8px ${activeColor}`,
           }}
           className="absolute left-0 top-0 bottom-0 rounded-full"
         />
       </div>
 
-      {/* Dots & Labels */}
+      {/* Labels */}
       <div className="flex justify-between items-center text-xs">
-        <span className="font-semibold text-text-secondary">Lesson Progress</span>
+        <span className="font-extrabold text-text-secondary font-display uppercase tracking-wider text-[10px]">
+          {isBonus ? "Bonus Progress" : "Challenge Progress"}
+        </span>
         <span
           style={{ color: activeColor }}
-          className="font-extrabold font-mono text-sm leading-none"
+          className="font-black font-mono text-sm leading-none"
         >
           {current + 1} / {total} questions
         </span>
@@ -88,13 +88,13 @@ function StepIndicator({
   );
 }
 
-/* ── Shared Exercise Flow — used by both daily & bonus ── */
+/* ── Exercise Flow ── */
 function ExerciseFlow({
   challenge,
   currentExercise,
   onAnswer,
   onSkip,
-  formattedTime: _formattedTime,
+  formattedTime,
   isBonus,
 }: {
   challenge: { exercises: { type: string; data: unknown; instruction: string }[] };
@@ -119,7 +119,6 @@ function ExerciseFlow({
   );
 
   const exerciseTypeLabel = EXERCISE_TYPE_LABELS[challenge.exercises[currentExercise]?.type] ?? "";
-
   const activeColor = isBonus ? "var(--xp)" : "var(--accent)";
 
   return (
@@ -128,7 +127,7 @@ function ExerciseFlow({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -15 }}
       transition={{ duration: 0.25 }}
-      className="flex flex-col gap-5"
+      className="flex flex-col gap-5 w-full max-w-2xl mx-auto"
     >
       {/* Bonus label */}
       {isBonus && (
@@ -137,7 +136,7 @@ function ExerciseFlow({
           animate={{ scale: 1 }}
           className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-warning border-2 border-border self-start shadow-(--shadow-sm) text-black"
         >
-          <Zap className="h-3 w-3 fill-current text-black animate-pulse" />
+          <Zap className="h-3.5 w-3.5 fill-current text-black animate-pulse" />
           <span className="text-[10px] font-extrabold uppercase tracking-widest font-mono">
             BONUS CHALLENGE ROUND
           </span>
@@ -154,13 +153,13 @@ function ExerciseFlow({
 
         {/* Exercise type label */}
         {exerciseTypeLabel && (
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2.5 mt-1">
             <span
               style={{
-                color: activeColor,
-                background: isBonus ? "rgba(245,158,11,0.1)" : "var(--accent-light)",
+                color: isBonus ? "#D97706" : "var(--ink)",
+                background: isBonus ? "rgba(245,158,11,0.15)" : "var(--accent-light)",
               }}
-              className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-lg font-mono shrink-0"
+              className="text-[10px] font-black uppercase tracking-widest px-3 py-1 rounded-lg font-mono shrink-0 border border-border/10"
             >
               {exerciseTypeLabel}
             </span>
@@ -178,14 +177,14 @@ function ExerciseFlow({
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.25 }}
-          className="rounded-2xl border-2 border-border bg-surface p-6 shadow-md relative overflow-hidden"
+          className="rounded-2xl border-2 border-border bg-surface p-6 shadow-(--shadow) relative overflow-hidden"
         >
           {/* Top glowing bar */}
           <div
             style={{
               background: `linear-gradient(90deg, ${activeColor}, var(--xp))`,
             }}
-            className="absolute top-0 left-0 right-0 h-1"
+            className="absolute top-0 left-0 right-0 h-1.5"
           />
           <ExerciseCard
             exercise={challenge.exercises[currentExercise] as any}
@@ -199,9 +198,9 @@ function ExerciseFlow({
       <Button
         variant="outline"
         onClick={onSkip}
-        className="self-center flex items-center gap-1.5 text-xs px-5 py-2"
+        className="self-center flex items-center gap-2 text-xs px-6 py-2.5 rounded-xl border-2 border-border shadow-(--shadow-sm) hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-y-0 active:shadow-none transition-all cursor-pointer font-extrabold mt-2"
       >
-        <ArrowRight className="h-3.5 w-3.5" />
+        <ArrowRight className="h-4 w-4" />
         <span>Skip this question</span>
       </Button>
     </motion.div>
@@ -253,17 +252,46 @@ export default function DailyChallengePage() {
     bonus.state === "active" || bonus.state === "submitting" || bonus.state === "results";
   const formattedTime = useElapsedTimer(state === "active" || bonus.state === "active");
 
+  const isChallengeRunning = state === "active" || bonus.state === "active";
+
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden">
-      {/* ── Module Header ── */}
+      {/* ── Bespoke Daily Challenge Header Banner ── */}
       <div className="px-4 pt-5 shrink-0">
         <div className="max-w-2xl mx-auto">
-          <PageHeader
-            title="Daily Challenge"
-            subtitle="Complete today's vocabulary, grammar, and pronunciation challenges to increase your streak"
-            icon={<Flame className="h-6 w-6 text-orange-500 fill-current animate-pulse" />}
-            boxed
-          />
+          <motion.div
+            initial={{ opacity: 0, y: -12 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="relative overflow-hidden rounded-2xl border-2 border-border bg-surface p-5 shadow-(--shadow) flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+          >
+            {/* Subtle grid pattern background */}
+            <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06] pointer-events-none bg-[linear-gradient(to_right,rgba(0,0,0,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.15)_1px,transparent_1px)] bg-[size:16px_16px]" />
+            
+            <div className="flex items-center gap-4 relative z-10">
+              <div className="w-12 h-12 rounded-xl border-2 border-border bg-accent text-text-on-accent flex items-center justify-center shrink-0 shadow-(--shadow-sm)">
+                <Flame className="h-6 w-6 text-orange-500 fill-current animate-pulse" />
+              </div>
+              <div className="flex flex-col">
+                <span className="text-[9px] font-extrabold uppercase tracking-widest text-accent font-mono">
+                  {todayLabel}
+                </span>
+                <h1 className="m-0 text-xl font-black font-display text-ink tracking-tight leading-none mt-1">
+                  Daily Challenge
+                </h1>
+                <p className="m-0 mt-1 text-[11px] text-text-muted font-bold font-sans">
+                  Streak Booster Challenge
+                </p>
+              </div>
+            </div>
+
+            {/* Live elapsed timer badge */}
+            {isChallengeRunning && (
+              <div className="flex items-center gap-2 bg-accent-light border-2 border-border px-3.5 py-1.5 rounded-xl shadow-(--shadow-sm) font-mono text-xs font-black text-ink shrink-0 self-start sm:self-center relative z-10">
+                <Clock className="h-4 w-4 text-accent fill-current animate-pulse" />
+                <span>TIME: {formattedTime}</span>
+              </div>
+            )}
+          </motion.div>
         </div>
       </div>
 
@@ -325,7 +353,7 @@ export default function DailyChallengePage() {
                 <div className="min-h-[320px] flex flex-col justify-center py-6 animate-in fade-in duration-250">
                   <div className="w-full space-y-3.5 animate-pulse">
                     <div className="h-4 bg-bg-deep border border-border/20 rounded-lg w-1/3" />
-                    <div className="h-24 bg-bg-deep border border-border/20 rounded-2xl w-full" />
+                    <div className="h-28 bg-bg-deep border border-border/20 rounded-2xl w-full" />
                     <div className="h-10 bg-bg-deep border border-border/20 rounded-xl w-1/2 mx-auto" />
                   </div>
                 </div>
@@ -333,15 +361,18 @@ export default function DailyChallengePage() {
 
               {/* Error retry */}
               {state === "error" && (
-                <div className="p-8 text-center bg-surface border-2 border-border rounded-2xl shadow-sm flex flex-col items-center animate-in fade-in duration-200">
+                <div className="p-8 text-center bg-surface border-2 border-border rounded-2xl shadow-(--shadow-sm) flex flex-col items-center animate-in fade-in duration-200 max-w-md mx-auto">
                   <AlertTriangle className="h-12 w-12 text-error mb-3" />
-                  <h3 className="text-base font-bold text-text-primary mb-1">
-                    Unable to load today's challenge
+                  <h3 className="text-base font-black text-text-primary mb-1 font-display">
+                    Unable to Load Challenge
                   </h3>
-                  <p className="text-xs text-text-muted mb-4">
+                  <p className="text-xs text-text-muted mb-4 font-semibold">
                     Please check your network connection or try again later.
                   </p>
-                  <Button onClick={() => window.location.reload()}>
+                  <Button
+                    onClick={() => window.location.reload()}
+                    className="px-5 py-2 rounded-xl border-2 border-border bg-accent text-ink shadow-(--shadow-sm) hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-y-0 active:shadow-none transition-all font-extrabold cursor-pointer"
+                  >
                     <RotateCw className="h-3.5 w-3.5 mr-1.5" /> Try reloading page
                   </Button>
                 </div>

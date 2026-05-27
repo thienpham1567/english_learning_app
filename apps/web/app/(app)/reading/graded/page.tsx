@@ -1,6 +1,5 @@
 "use client";
 
-import { Card, Empty, Flex, Spin, Tag, Typography } from "antd";
 import {
   Archive,
   BookOpen,
@@ -14,6 +13,7 @@ import {
   Heart,
   Home,
   Laptop,
+  Loader2,
   MapPin,
   Star,
   Store,
@@ -21,8 +21,6 @@ import {
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { api } from "@/lib/api-client";
-
-const { Text, Title } = Typography;
 
 type PassageItem = {
   id: string;
@@ -55,15 +53,15 @@ const LEVEL_LABELS: Record<string, string> = {
 };
 
 const SECTION_ICONS: Record<string, React.ReactNode> = {
-  lifestyle: <Home />,
-  travel: <MapPin />,
-  food: <Coffee />,
-  health: <Heart />,
-  technology: <Laptop />,
-  environment: <Cloud />,
-  education: <Archive />,
-  science: <FlaskConical />,
-  business: <Store />,
+  lifestyle: <Home size={12} />,
+  travel: <MapPin size={12} />,
+  food: <Coffee size={12} />,
+  health: <Heart size={12} />,
+  technology: <Laptop size={12} />,
+  environment: <Cloud size={12} />,
+  education: <Archive size={12} />,
+  science: <FlaskConical size={12} />,
+  business: <Store size={12} />,
 };
 
 export default function GradedReaderPage() {
@@ -93,56 +91,53 @@ export default function GradedReaderPage() {
   const readCount = passages.filter((p) => p.isRead).length;
 
   return (
-    <div className="anim-fade-up h-full overflow-y-auto" style={{ padding: "var(--space-6)" }}>
-      <Flex vertical gap={20} className="w-[800px] mx-auto">
+    <div className="anim-fade-up h-full overflow-y-auto p-6">
+      <div className="w-full max-w-[800px] mx-auto flex flex-col gap-5">
         {/* Hero header */}
-        <Card
-          styles={{ body: { padding: "24px 28px" } }}
-          className="border-none"
+        <div
+          className="border-none rounded-[20px] py-6 px-7"
           style={{
-            borderRadius: 20,
             background: "linear-gradient(135deg, var(--accent), var(--secondary))",
           }}
         >
-          <Flex align="center" gap={16}>
+          <div className="flex items-center gap-4">
             <div
-              className="w-[48px] h-[48px] flex items-center justify-center"
-              style={{ borderRadius: 14, background: "rgba(255,255,255,0.2)" }}
+              className="w-12 h-12 flex items-center justify-center rounded-[14px]"
+              style={{ background: "rgba(255,255,255,0.2)" }}
             >
               <BookOpen className="text-3xl" style={{ color: "var(--text-on-accent)" }} />
             </div>
             <div>
-              <Text
-                className="text-[11px] uppercase"
+              <span
+                className="text-[11px] uppercase block"
                 style={{ letterSpacing: "0.12em", color: "rgba(255,255,255,0.7)" }}
               >
                 GRADED READER
-              </Text>
-              <Title
-                level={4}
+              </span>
+              <h3
                 className="m-0 font-display italic"
                 style={{ color: "var(--text-on-accent)" }}
               >
                 Read by CEFR Level
-              </Title>
+              </h3>
             </div>
             {passages.length > 0 && (
-              <div className="text-center" style={{ marginLeft: "auto" }}>
-                <Text className="text-2xl font-bold" style={{ color: "var(--text-on-accent)" }}>
+              <div className="text-center ml-auto">
+                <span className="text-2xl font-bold" style={{ color: "var(--text-on-accent)" }}>
                   {readCount}/{passages.length}
-                </Text>
+                </span>
                 <br />
-                <Text className="text-[11px]" style={{ color: "rgba(255,255,255,0.7)" }}>
+                <span className="text-[11px]" style={{ color: "rgba(255,255,255,0.7)" }}>
                   read
-                </Text>
+                </span>
               </div>
             )}
-          </Flex>
-        </Card>
+          </div>
+        </div>
 
         {/* Level filter pills */}
-        <Card styles={{ body: { padding: "12px 16px" } }} className="rounded-2xl">
-          <Flex gap={8} wrap align="center">
+        <div className="rounded-2xl py-3 px-4 border border-border">
+          <div className="flex flex-wrap items-center gap-2">
             <Filter className="text-text-muted text-sm" />
             {LEVELS.map((lv) => {
               const active = level === lv;
@@ -150,50 +145,45 @@ export default function GradedReaderPage() {
               return (
                 <button
                   key={lv}
+                  type="button"
                   onClick={() => setLevel(lv)}
-                  className="text-xs font-semibold cursor-pointer"
+                  className="text-xs font-semibold cursor-pointer py-1.5 px-4 rounded-[20px] transition-all duration-200"
                   style={{
-                    padding: "6px 16px",
-                    borderRadius: 20,
                     border: active ? `2px solid ${color}` : "1px solid var(--border)",
                     background: active ? color : "transparent",
                     color: active ? "var(--text-on-accent)" : "var(--text-secondary)",
-                    transition: "all 0.2s ease",
                   }}
                 >
                   {LEVEL_LABELS[lv]}
                 </button>
               );
             })}
-          </Flex>
-        </Card>
+          </div>
+        </div>
 
         {/* Passages list */}
         {loading ? (
-          <Flex justify="center" align="center" style={{ padding: 80 }}>
-            <Spin size="large" />
-          </Flex>
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="animate-spin text-accent" size={32} />
+          </div>
         ) : passages.length === 0 ? (
-          <Empty
-            image={<BookOpen className="text-text-muted" style={{ fontSize: 48 }} />}
-            description="No passages available for this level"
-            style={{ padding: 60 }}
-          />
+          <div className="flex flex-col items-center justify-center gap-3 py-15">
+            <BookOpen className="text-text-muted" size={48} />
+            <span className="text-text-muted text-sm">No passages available for this level</span>
+          </div>
         ) : (
-          <Flex vertical gap={10}>
+          <div className="flex flex-col gap-2">
             {passages.map((p) => (
-              <Card
+              <div
                 key={p.id}
-                hoverable
                 onClick={() => router.push(`/reading/graded/${p.id}`)}
-                styles={{ body: { padding: "14px 20px" } }}
-                className="rounded-2xl cursor-pointer"
-                style={{ opacity: p.isRead ? 0.75 : 1, transition: "all 0.2s ease" }}
+                className="rounded-2xl cursor-pointer py-3.5 px-5 border border-border hover:border-accent hover:bg-accent-light transition-all duration-200"
+                style={{ opacity: p.isRead ? 0.75 : 1 }}
               >
-                <Flex align="center" gap={14}>
+                <div className="flex items-center gap-3.5">
                   {/* Read indicator icon */}
                   <div
-                    className="w-[40px] h-[40px] rounded-xl flex items-center justify-center shrink-0"
+                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
                     style={{
                       background: p.isRead
                         ? "linear-gradient(135deg, var(--success)20, var(--success)10)"
@@ -211,50 +201,46 @@ export default function GradedReaderPage() {
                   </div>
 
                   {/* Content */}
-                  <div className="flex-1 w-[0px]">
-                    <Text
-                      className="text-sm font-semibold block overflow-hidden"
-                      style={{ textOverflow: "ellipsis", whiteSpace: "nowrap" }}
-                    >
+                  <div className="flex-1 min-w-0">
+                    <span className="text-sm font-semibold overflow-hidden text-ellipsis whitespace-nowrap block">
                       {p.title}
-                    </Text>
-                    <Flex gap={8} align="center" className="mt-1">
-                      <Tag
-                        className="m-0 text-[10px] font-bold rounded-md border-none"
+                    </span>
+                    <div className="flex items-center gap-2 mt-1">
+                      <span
+                        className="m-0 text-[10px] font-bold rounded-md border-none py-px px-1.5"
                         style={{
                           background: LEVEL_COLORS[p.cefrLevel] || undefined,
                           color: LEVEL_COLORS[p.cefrLevel] ? "var(--text-on-accent)" : undefined,
                         }}
                       >
                         {p.cefrLevel}
-                      </Tag>
-                      <Text className="text-[11px] text-text-muted">
+                      </span>
+                      <span className="text-[11px] text-text-muted flex items-center gap-1">
                         {SECTION_ICONS[p.section]} {p.wordCount} words
-                      </Text>
-                    </Flex>
+                      </span>
+                    </div>
                   </div>
 
                   {/* New words badge */}
                   {p.newWordsCount > 0 && (
-                    <Tag
-                      className="m-0 rounded-xl border-none text-accent font-semibold text-[11px] flex items-center gap-1"
+                    <span
+                      className="m-0 rounded-xl border-none text-accent font-semibold text-[11px] flex items-center gap-1 py-0.5 px-2.5"
                       style={{
                         background: "color-mix(in srgb, var(--accent) 12%, transparent)",
-                        padding: "2px 10px",
                       }}
                     >
                       <Star size={10} />
                       {p.newWordsCount} new
-                    </Tag>
+                    </span>
                   )}
 
                   <ChevronRight className="text-xs text-text-muted shrink-0" />
-                </Flex>
-              </Card>
+                </div>
+              </div>
             ))}
-          </Flex>
+          </div>
         )}
-      </Flex>
+      </div>
     </div>
   );
 }

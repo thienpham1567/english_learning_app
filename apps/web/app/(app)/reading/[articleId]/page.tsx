@@ -1,6 +1,6 @@
 "use client";
 
-import { Modal, Select } from "antd";
+import { AnimatePresence } from "motion/react";
 import { ArrowLeft, BookOpenText, Clock, Globe, Lightbulb, Loader2, Volume2 } from "lucide-react";
 import * as m from "motion/react-client";
 import { useParams, useRouter } from "next/navigation";
@@ -213,24 +213,7 @@ export default function ArticleReaderPage() {
         className="relative h-[0px] flex-1 overflow-y-auto z-[1]"
         style={{ padding: "24px 20px 80px" }}
       >
-        <style>{`
-          .ant-select-selector {
-            background-color: var(--surface-alt) !important;
-            border-color: var(--border) !important;
-            color: var(--text-primary) !important;
-            font-weight: 700 !important;
-          }
-          .ant-select-arrow {
-            color: var(--text-muted) !important;
-          }
-          .ant-modal-content {
-            background-color: var(--surface) !important;
-            padding: 0 !important;
-            overflow: hidden;
-            border-radius: var(--radius-xl) !important;
-            border: 1px solid var(--border) !important;
-          }
-        `}</style>
+
 
         <div className="w-[720px] mx-auto flex flex-col gap-5">
           {/* Header Action Menu */}
@@ -307,10 +290,10 @@ export default function ArticleReaderPage() {
               </span>
 
               <div style={{ marginLeft: "auto" }}>
-                <Select
+                <select
                   value={ttsAccent}
-                  onChange={(v) => {
-                    setTtsAccent(v);
+                  onChange={(e) => {
+                    setTtsAccent(e.target.value);
                     if (speakingIdx !== null || paragraphAudioRef.current) {
                       if (paragraphAudioRef.current) paragraphAudioRef.current.pause();
                       if (paragraphAudioUrlRef.current)
@@ -320,14 +303,12 @@ export default function ArticleReaderPage() {
                       setSpeakingIdx(null);
                     }
                   }}
-                  size="small"
-                  options={[
-                    { value: "us", label: "🇺🇸 US English" },
-                    { value: "uk", label: "🇬🇧 UK English" },
-                    { value: "au", label: "🇦🇺 AU English" },
-                  ]}
-                  className="w-[140px]"
-                />
+                  className="w-[140px] py-1 px-2 rounded-lg border border-border bg-surface-alt text-text-primary text-sm font-bold cursor-pointer outline-none"
+                >
+                  <option value="us">🇺🇸 US English</option>
+                  <option value="uk">🇬🇧 UK English</option>
+                  <option value="au">🇦🇺 AU English</option>
+                </select>
               </div>
             </div>
           </div>
@@ -420,83 +401,80 @@ export default function ArticleReaderPage() {
           </div>
 
           {/* Grammar Popup Modal */}
-          <Modal
-            open={grammarPopup !== null}
-            onCancel={() => setGrammarPopup(null)}
-            footer={null}
-            centered
-            width={600}
-            closeIcon={
-              <span className="text-[13px] font-black" style={{ color: "var(--text-on-accent)" }}>
-                ✕
-              </span>
-            }
-          >
+          <AnimatePresence>
             {grammarPopup !== null && grammarResults[grammarPopup] && (
-              <div>
-                {/* Header banner */}
-                <div
-                  className="py-4 px-5 flex items-center gap-2"
-                  style={{
-                    background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-                    color: "var(--text-on-accent)",
-                  }}
+              <>
+                <m.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  onClick={() => setGrammarPopup(null)}
+                  className="fixed inset-0 z-[900] bg-black/50 backdrop-blur-sm"
+                />
+                <m.div
+                  initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                  animate={{ opacity: 1, scale: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                  className="fixed z-[901] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-[600px] bg-surface rounded-xl border border-border overflow-hidden shadow-xl"
                 >
-                  <Lightbulb size={16} />
-                  <span className="font-black" style={{ fontSize: 14.5 }}>
-                    Grammar Analysis
-                  </span>
-                  <span
-                    className="rounded-xl text-[10.5px] font-extrabold"
-                    style={{ background: "rgba(255,255,255,0.2)", padding: "2px 8px" }}
+                  {/* Header banner */}
+                  <div
+                    className="py-4 px-5 flex items-center gap-2 relative"
+                    style={{
+                      background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+                      color: "var(--text-on-accent)",
+                    }}
                   >
-                    {grammarResults[grammarPopup].length} patterns
-                  </span>
-                </div>
-
-                {/* Body details list */}
-                <div
-                  className="flex flex-col gap-3 h-[380px] overflow-y-auto bg-(--surface)"
-                  style={{ padding: 20 }}
-                >
-                  {grammarResults[grammarPopup].map((pattern, pi) => (
-                    <div
-                      key={pi}
-                      className="rounded-lg bg-surface-alt"
-                      style={{
-                        borderLeft: `4.5px solid ${PATTERN_COLORS[pattern.color] ?? "var(--border)"}`,
-                        borderTop: "1px solid var(--border)",
-                        borderRight: "1px solid var(--border)",
-                        borderBottom: "1px solid var(--border)",
-                        padding: "12px 14px",
-                      }}
+                    <Lightbulb size={16} />
+                    <span className="font-black text-[14.5px]">
+                      Grammar Analysis
+                    </span>
+                    <span
+                      className="rounded-xl text-[10.5px] font-extrabold py-0.5 px-2"
+                      style={{ background: "rgba(255,255,255,0.2)" }}
                     >
-                      <span
-                        className="font-black block mb-1.5"
+                      {grammarResults[grammarPopup].length} patterns
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => setGrammarPopup(null)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-[13px] font-black text-white/80 hover:text-white cursor-pointer bg-transparent border-none"
+                    >
+                      ✕
+                    </button>
+                  </div>
+
+                  {/* Body details list */}
+                  <div className="flex flex-col gap-3 max-h-[380px] overflow-y-auto bg-surface p-5">
+                    {grammarResults[grammarPopup].map((pattern, pi) => (
+                      <div
+                        key={pi}
+                        className="rounded-lg bg-surface-alt border border-border py-3 px-3.5"
                         style={{
-                          fontSize: 13.5,
-                          color: PATTERN_COLORS[pattern.color] ?? "var(--accent)",
+                          borderLeft: `4.5px solid ${PATTERN_COLORS[pattern.color] ?? "var(--border)"}`,
                         }}
                       >
-                        {pattern.name}
-                      </span>
+                        <span
+                          className="font-black block mb-1.5 text-[13.5px]"
+                          style={{ color: PATTERN_COLORS[pattern.color] ?? "var(--accent)" }}
+                        >
+                          {pattern.name}
+                        </span>
 
-                      <div
-                        className="bg-(--surface) rounded-md py-1.5 px-2.5 mb-2 font-bold text-text-primary border-2 border-border"
-                        style={{ fontFamily: "var(--font-mono, monospace)", fontSize: 12.5 }}
-                      >
-                        &quot;{pattern.phrase}&quot;
+                        <div className="bg-surface rounded-md py-1.5 px-2.5 mb-2 font-bold text-text-primary border-2 border-border font-mono text-[12.5px]">
+                          &quot;{pattern.phrase}&quot;
+                        </div>
+
+                        <p className="text-[13px] text-text-secondary leading-normal m-0 font-medium">
+                          {pattern.explanation}
+                        </p>
                       </div>
-
-                      <p className="text-[13px] text-text-secondary leading-normal m-0 font-medium">
-                        {pattern.explanation}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
+                    ))}
+                  </div>
+                </m.div>
+              </>
             )}
-          </Modal>
+          </AnimatePresence>
 
           {/* Footer attribution */}
           <div

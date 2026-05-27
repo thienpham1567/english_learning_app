@@ -69,37 +69,29 @@ export function NotificationBanner() {
 
   return (
     <div
-      className="fixed flex items-center gap-3 rounded-2xl bg-(--surface) border-2 border-border w-[360px]"
-      style={{
-        top: 16,
-        right: 16,
-        zIndex: 1000,
-        padding: "14px 18px",
-        boxShadow: "0 8px 32px rgba(0,0,0,0.2)",
-        animation: "slideDown 0.4s ease-out",
-      }}
+      className="fixed top-4 right-4 z-[1000] flex items-center gap-3 rounded-2xl bg-surface border-2 border-border w-[360px] py-3.5 px-4.5 shadow-[0_8px_32px_rgba(0,0,0,0.2)] animate-[slideDown_0.4s_ease-out]"
     >
       <div
-        className="w-[40px] h-[40px] rounded-xl flex items-center justify-center shrink-0"
+        className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
         style={{
           background: "linear-gradient(135deg, var(--accent), var(--accent-hover, var(--accent)))",
         }}
       >
-        <Bell className="text-lg" style={{ color: "var(--text-on-accent)" }} />
+        <Bell className="text-lg text-[var(--text-on-accent)]" />
       </div>
 
-      <div className="flex-1 w-[0px]">
+      <div className="flex-1 min-w-0">
         {subscribed ? (
           <div className="text-sm font-semibold text-emerald-500">
-            <CheckCircle className="mr-1" /> Đã bật thông báo!
+            <CheckCircle className="mr-1 inline" size={14} /> Notifications enabled!
           </div>
         ) : (
           <>
-            <div className="text-sm font-semibold" style={{ color: "var(--text)" }}>
-              Bật nhắc nhở học tập
+            <div className="text-sm font-semibold text-ink">
+              Enable study reminders
             </div>
-            <div className="text-xs text-text-muted" style={{ marginTop: 2 }}>
-              Nhận thông báo mỗi ngày để duy trì streak
+            <div className="text-xs text-text-muted mt-0.5">
+              Get daily reminders to keep your streak
             </div>
           </>
         )}
@@ -108,23 +100,19 @@ export function NotificationBanner() {
       {!subscribed && (
         <button
           onClick={handleEnable}
-          className="border-none text-[13px] font-bold cursor-pointer"
+          className="border-none text-[13px] font-bold cursor-pointer py-2 px-3.5 rounded-[10px] whitespace-nowrap text-[var(--text-on-accent)]"
           style={{
-            padding: "8px 14px",
-            borderRadius: 10,
             background:
               "linear-gradient(135deg, var(--accent), var(--accent-hover, var(--accent)))",
-            color: "var(--text-on-accent)",
-            whiteSpace: "nowrap",
           }}
         >
-          Bật
+          Enable
         </button>
       )}
 
       <button
         onClick={handleDismiss}
-        aria-label="Đóng"
+        aria-label="Close"
         className="bg-none border-none text-text-muted cursor-pointer p-1 text-xs leading-none"
       >
         <X />

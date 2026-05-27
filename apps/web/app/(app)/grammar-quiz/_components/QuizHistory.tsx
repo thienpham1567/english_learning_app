@@ -1,7 +1,8 @@
 "use client";
 
-import { Drawer, Empty } from "antd";
+import { ClipboardList, X } from "lucide-react";
 import * as m from "motion/react-client";
+import { AnimatePresence } from "motion/react";
 
 export type QuizHistoryEntry = {
   date: string;
@@ -59,118 +60,101 @@ export function QuizHistory({ open, onClose }: Props) {
   const history = open ? getQuizHistory() : [];
 
   return (
-    <Drawer
-      title={
-        <span
-          style={{
-            fontSize: 16,
-            fontWeight: 900,
-            color: "var(--text-primary)",
-            fontFamily: "var(--font-display)",
-          }}
-        >
-          Quiz History
-        </span>
-      }
-      open={open}
-      onClose={onClose}
-      width={360}
-      styles={{
-        body: { padding: "16px", background: "var(--surface)" },
-        header: { borderBottom: "1px solid var(--border)", background: "var(--surface)" },
-      }}
-    >
-      <style>{`
-        .ant-drawer-content {
-          background-color: var(--surface) !important;
-        }
-        .ant-drawer-header-title .ant-drawer-close {
-          color: var(--text-secondary) !important;
-        }
-      `}</style>
+    <AnimatePresence>
+      {open && (
+        <>
+          {/* Backdrop */}
+          <m.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 z-[900] bg-black/50 backdrop-blur-sm"
+          />
 
-      {history.length === 0 ? (
-        <Empty
-          description="No quiz history found"
-          image={Empty.PRESENTED_IMAGE_SIMPLE}
-          style={{ marginTop: 40 }}
-        />
-      ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          {history.map((entry, i) => {
-            const pct = entry.total > 0 ? Math.round((entry.score / entry.total) * 100) : 0;
-            const levelInfo = LEVEL_LABELS[entry.level] ?? {
-              label: entry.level,
-              color: "var(--text-muted)",
-              bg: "var(--surface-alt)",
-            };
-            return (
-              <m.div
-                key={`${entry.date}-${i}`}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.04 }}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  borderRadius: "var(--radius-lg)",
-                  border: "1px solid var(--border)",
-                  background: "var(--surface-alt)",
-                  padding: "12px 14px",
-                  boxShadow: "var(--shadow-sm)",
-                }}
+          {/* Sheet */}
+          <m.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            className="fixed top-0 right-0 bottom-0 w-[min(360px,90vw)] z-[901] bg-surface border-l-2 border-border shadow-[-8px_0_30px_rgba(0,0,0,0.1)] flex flex-col overflow-hidden"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between px-4 py-3 border-b-2 border-border shrink-0">
+              <h3 className="text-base font-black text-text-primary font-display m-0">
+                Quiz History
+              </h3>
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-8 h-8 rounded-lg grid place-items-center border-none bg-transparent text-text-muted cursor-pointer hover:bg-surface-alt hover:text-ink transition-colors"
               >
-                <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                    <span
-                      style={{
-                        fontSize: 10.5,
-                        fontWeight: 800,
-                        color: levelInfo.color,
-                        background: levelInfo.bg,
-                        padding: "2px 8px",
-                        borderRadius: 6,
-                      }}
-                    >
-                      {levelInfo.label}
-                    </span>
-                    <span style={{ fontSize: 14, fontWeight: 800, color: "var(--text-primary)" }}>
-                      {entry.score}/{entry.total} Correct
-                    </span>
-                  </div>
-                  <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 500 }}>
-                    {formatDate(entry.date)}
-                  </span>
+                <X size={16} />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto p-4">
+              {history.length === 0 ? (
+                <div className="flex flex-col items-center justify-center gap-3 mt-10 text-center">
+                  <ClipboardList className="w-8 h-8 text-text-muted" />
+                  <p className="text-sm text-text-muted">No quiz history found</p>
                 </div>
-                <div
-                  style={{
-                    width: 38,
-                    height: 38,
-                    borderRadius: "50%",
-                    display: "grid",
-                    placeItems: "center",
-                    background:
-                      pct >= 80
-                        ? "rgba(16, 185, 129, 0.08)"
-                        : pct >= 50
-                          ? "rgba(245, 158, 11, 0.08)"
-                          : "rgba(239, 68, 68, 0.08)",
-                    border: `1.5px solid ${pct >= 80 ? "var(--success)" : pct >= 50 ? "var(--warning)" : "var(--error)"}`,
-                    fontSize: 12,
-                    fontWeight: 800,
-                    color:
-                      pct >= 80 ? "var(--success)" : pct >= 50 ? "var(--warning)" : "var(--error)",
-                    flexShrink: 0,
-                  }}
-                >
-                  {pct}%
+              ) : (
+                <div className="flex flex-col gap-2.5">
+                  {history.map((entry, i) => {
+                    const pct = entry.total > 0 ? Math.round((entry.score / entry.total) * 100) : 0;
+                    const levelInfo = LEVEL_LABELS[entry.level] ?? {
+                      label: entry.level,
+                      color: "var(--text-muted)",
+                      bg: "var(--surface-alt)",
+                    };
+                    const scoreColor = pct >= 80 ? "var(--success)" : pct >= 50 ? "var(--warning)" : "var(--error)";
+                    const scoreBg = pct >= 80 ? "rgba(16, 185, 129, 0.08)" : pct >= 50 ? "rgba(245, 158, 11, 0.08)" : "rgba(239, 68, 68, 0.08)";
+                    return (
+                      <m.div
+                        key={`${entry.date}-${i}`}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: i * 0.04 }}
+                        className="flex items-center justify-between rounded-lg border border-border bg-surface-alt py-3 px-3.5 shadow-(--shadow-sm)"
+                      >
+                        <div className="flex flex-col gap-1">
+                          <div className="flex items-center gap-1.5">
+                            <span
+                              className="text-[10.5px] font-extrabold py-0.5 px-2 rounded-md"
+                              style={{ color: levelInfo.color, background: levelInfo.bg }}
+                            >
+                              {levelInfo.label}
+                            </span>
+                            <span className="text-sm font-extrabold text-text-primary">
+                              {entry.score}/{entry.total} Correct
+                            </span>
+                          </div>
+                          <span className="text-[11px] text-text-muted font-medium">
+                            {formatDate(entry.date)}
+                          </span>
+                        </div>
+                        <div
+                          className="w-[38px] h-[38px] rounded-full grid place-items-center text-xs font-extrabold shrink-0"
+                          style={{
+                            background: scoreBg,
+                            border: `1.5px solid ${scoreColor}`,
+                            color: scoreColor,
+                          }}
+                        >
+                          {pct}%
+                        </div>
+                      </m.div>
+                    );
+                  })}
                 </div>
-              </m.div>
-            );
-          })}
-        </div>
+              )}
+            </div>
+          </m.div>
+        </>
       )}
-    </Drawer>
+    </AnimatePresence>
   );
 }

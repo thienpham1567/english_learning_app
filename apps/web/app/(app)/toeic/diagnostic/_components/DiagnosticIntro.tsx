@@ -1,10 +1,9 @@
 "use client";
 
-import { Button, Card } from "antd";
 
 export function DiagnosticIntro({ onStart }: { onStart: () => void }) {
   return (
-    <Card title="TOEIC Diagnostic Test">
+    <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
       <p>
         You will complete <strong>30 questions in 20 minutes</strong> to determine your starting proficiency in each sub-skill. The results will shape your study path and daily recommendations.
       </p>
@@ -13,9 +12,9 @@ export function DiagnosticIntro({ onStart }: { onStart: () => void }) {
         <li>No explanations shown until submission</li>
         <li>Results will be saved to your profile (initial mastery levels)</li>
       </ul>
-      <Button type="primary" size="large" onClick={onStart}>
+      <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" onClick={onStart}>
         Start
-      </Button>
-    </Card>
+      </button>
+    </div>
   );
 }

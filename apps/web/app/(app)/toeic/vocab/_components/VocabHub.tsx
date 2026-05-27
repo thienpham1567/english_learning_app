@@ -1,6 +1,5 @@
 "use client";
 
-import { Card, Progress, Tag } from "antd";
 import { AlertTriangle, BookOpen } from "lucide-react";
 import Link from "next/link";
 
@@ -10,7 +9,7 @@ export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number 
   return (
     <div className="grid gap-4">
       {/* Due review banner */}
-      <Card size="small">
+      <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
         <div className="flex justify-between items-center">
           <div>
             <div className="text-sm text-text-muted">
@@ -27,10 +26,10 @@ export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number 
               Review Now
             </Link>
           ) : (
-            <Tag>Review completed today</Tag>
+            <span className="bg-accent/10 text-accent py-0.5 px-2 inline-block">Review completed today</span>
           )}
         </div>
-      </Card>
+      </div>
 
       {/* Topic packs grid */}
       <div
@@ -45,7 +44,7 @@ export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number 
               href={`/toeic/vocab/learn?pack=${encodeURIComponent(p.topic)}&mode=new`}
               style={{ textDecoration: "none" }}
             >
-              <Card hoverable size="small" className="h-full">
+              <div className="border-2 border-border rounded-xl bg-surface shadow-sm h-full">
                 <div className="flex items-center gap-2 text-base">
                   <BookOpen />
                   <span>{p.label}</span>
@@ -53,15 +52,8 @@ export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number 
                 <div className="text-[13px] text-text-muted mt-1.5">
                   {p.learned} / {p.total} words
                 </div>
-                <Progress
-                  percent={pct}
-                  size="small"
-                  showInfo={false}
-                  strokeColor={
-                    pct < 30 ? "var(--error)" : pct < 70 ? "var(--warning)" : "var(--success)"
-                  }
-                />
-              </Card>
+                <div className="h-2 rounded-full bg-border overflow-hidden"><div className="h-full rounded-full bg-accent transition-all duration-500" style={{ width: `${pct}%` }} /></div>
+              </div>
             </Link>
           );
         })}

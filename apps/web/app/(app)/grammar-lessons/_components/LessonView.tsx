@@ -1,6 +1,6 @@
 "use client";
 
-import { Tag } from "antd";
+
 import {
   AlertTriangle,
   ArrowLeft,
@@ -235,7 +235,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         onClick={onBack}
-        className="items-center gap-2 py-2 px-4 border-2 border-border rounded-(--radius-lg) bg-(--surface) text-accent cursor-pointer text-[13px] font-bold mb-4"
+        className="items-center gap-2 py-2 px-4 border-2 border-border rounded-lg bg-surface text-accent cursor-pointer text-[13px] font-bold mb-4"
         style={{ display: "inline-flex", boxShadow: "var(--shadow-sm)", transition: "all 0.15s" }}
       >
         <ArrowLeft /> Lesson List
@@ -244,7 +244,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
       {/* Loading state */}
       {state === "loading" && (
         <div
-          className="text-center rounded-(--radius-xl) bg-(--surface) border-2 border-border"
+          className="text-center rounded-xl bg-surface border-2 border-border"
           style={{ padding: "72px 24px", boxShadow: "var(--shadow-md)" }}
         >
           <Loader2 className="animate-spin text-accent" size={38} />
@@ -260,7 +260,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
       {/* Error state */}
       {error && (
         <div
-          className="p-6 rounded-(--radius-xl) text-destructive text-center"
+          className="p-6 rounded-xl text-destructive text-center"
           style={{
             background: "var(--error-bg)",
             border: "1px solid color-mix(in srgb, var(--error) 25%, transparent)",
@@ -271,7 +271,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => generateLesson(false)}
-            className="rounded-(--radius-lg) border-none cursor-pointer mt-3 font-extrabold"
+            className="rounded-lg border-none cursor-pointer mt-3 font-extrabold"
             style={{
               padding: "9px 18px",
               background: "var(--error)",
@@ -291,7 +291,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="rounded-(--radius-xl) border-2 border-border relative overflow-hidden"
+            className="rounded-xl border-2 border-border relative overflow-hidden"
             style={{
               padding: "28px 24px 24px",
               background:
@@ -363,7 +363,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => generateLesson(true)}
-                  className="border-2 border-border rounded-(--radius-lg) bg-(--surface) text-text-secondary cursor-pointer text-xs py-1.5 px-3.5 font-bold"
+                  className="border-2 border-border rounded-lg bg-surface text-text-secondary cursor-pointer text-xs py-1.5 px-3.5 font-bold"
                   style={{ boxShadow: "var(--shadow-sm)" }}
                 >
                   <RefreshCw /> Regenerate
@@ -378,7 +378,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               initial={{ opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 }}
-              className="rounded-(--radius-xl) text-center relative overflow-hidden"
+              className="rounded-xl text-center relative overflow-hidden"
               style={{
                 padding: "22px 24px",
                 background:
@@ -416,7 +416,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
           {/* Explanation Card */}
           <div
-            className="rounded-(--radius-xl) bg-(--surface) border-2 border-border"
+            className="rounded-xl bg-surface border-2 border-border"
             style={{ padding: 20, boxShadow: "var(--shadow-sm)" }}
           >
             <span
@@ -432,7 +432,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               {lesson.explanationEn ?? lesson.explanation}
             </p>
             <div
-              className="py-3 px-4 rounded-(--radius-lg) bg-surface-alt"
+              className="py-3 px-4 rounded-lg bg-surface-alt"
               style={{ marginTop: 14, borderLeft: "3.5px solid var(--accent)" }}
             >
               <span className="font-extrabold text-accent" style={{ fontSize: 11.5 }}>
@@ -450,7 +450,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           {/* Usage Notes Card */}
           {lesson.usageNotes && lesson.usageNotes.length > 0 && (
             <div
-              className="rounded-(--radius-xl) bg-(--surface) border-2 border-border"
+              className="rounded-xl bg-surface border-2 border-border"
               style={{ padding: 20, boxShadow: "var(--shadow-sm)" }}
             >
               <span
@@ -463,7 +463,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 {lesson.usageNotes.map((note, idx) => (
                   <div
                     key={idx}
-                    className="flex gap-3 rounded-(--radius-lg) bg-surface-alt border-2 border-border items-start"
+                    className="flex gap-3 rounded-lg bg-surface-alt border-2 border-border items-start"
                     style={{ padding: "12px 14px" }}
                   >
                     <div
@@ -487,7 +487,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           {/* TOEIC Tips Card */}
           {lesson.toeicTips && lesson.toeicTips.length > 0 && (
             <div
-              className="rounded-(--radius-xl)"
+              className="rounded-xl"
               style={{
                 padding: 20,
                 background:
@@ -506,7 +506,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 {lesson.toeicTips.map((tip, idx) => (
                   <div
                     key={idx}
-                    className="flex gap-2.5 rounded-(--radius-lg) bg-(--surface) border-2 border-border items-start"
+                    className="flex gap-2.5 rounded-lg bg-surface border-2 border-border items-start"
                     style={{ padding: "12px 14px" }}
                   >
                     <span className="text-base shrink-0" style={{ marginTop: 1 }}>
@@ -527,7 +527,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           {/* Time Signals Card */}
           {lesson.timeSignals && lesson.timeSignals.length > 0 && (
             <div
-              className="rounded-(--radius-xl) bg-(--surface) border-2 border-border"
+              className="rounded-xl bg-surface border-2 border-border"
               style={{ padding: 20, boxShadow: "var(--shadow-sm)" }}
             >
               <span
@@ -538,14 +538,12 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               </span>
               <div className="flex flex-wrap gap-2">
                 {lesson.timeSignals.map((signal, idx) => (
-                  <Tag
+                  <span
                     key={idx}
-                    color="blue"
-                    className="text-[13px] font-bold rounded-lg m-0"
-                    style={{ padding: "4px 14px" }}
+                    className="text-[13px] font-bold rounded-lg m-0 py-1 px-3.5 bg-[var(--info)] text-white border-2 border-border"
                   >
                     {signal}
-                  </Tag>
+                  </span>
                 ))}
               </div>
             </div>
@@ -554,7 +552,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           {/* Confusion Pairs Card */}
           {lesson.confusionPairs && lesson.confusionPairs.length > 0 && (
             <div
-              className="rounded-(--radius-xl) bg-(--surface) border-2 border-border"
+              className="rounded-xl bg-surface border-2 border-border"
               style={{ padding: 20, boxShadow: "var(--shadow-sm)" }}
             >
               <span
@@ -567,7 +565,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 {lesson.confusionPairs.map((pair, idx) => (
                   <div
                      key={idx}
-                     className="rounded-(--radius-lg) border-2 border-border overflow-hidden"
+                     className="rounded-lg border-2 border-border overflow-hidden"
                   >
                     {/* Pair header */}
                     <div className="grid" style={{ gridTemplateColumns: "1fr 1fr", gap: 0 }}>
@@ -622,7 +620,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           {/* Examples Card */}
           {lesson.examples && lesson.examples.length > 0 && (
             <div
-              className="rounded-(--radius-xl) bg-(--surface) border-2 border-border"
+              className="rounded-xl bg-surface border-2 border-border"
               style={{ padding: 20, boxShadow: "var(--shadow-sm)" }}
             >
               <span
@@ -635,7 +633,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 {lesson.examples.map((ex, idx) => (
                   <div
                     key={idx}
-                    className="rounded-(--radius-lg) bg-surface-alt border-2 border-border"
+                    className="rounded-lg bg-surface-alt border-2 border-border"
                     style={{ padding: 14 }}
                   >
                     <div className="flex items-start gap-2.5">
@@ -662,7 +660,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                         whileTap={{ scale: 0.95 }}
                         onClick={() => speakText(ex.en)}
                         disabled={isSpeaking || isTtsLoading}
-                        className="border-none bg-(--surface) rounded-lg w-[28px] h-[28px] grid text-accent"
+                        className="border-none bg-surface rounded-lg w-[28px] h-[28px] grid text-accent"
                         style={{
                           placeItems: "center",
                           cursor: isSpeaking || isTtsLoading ? "not-allowed" : "pointer",
@@ -688,7 +686,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           {/* Common Mistakes Card */}
           {lesson.commonMistakes && lesson.commonMistakes.length > 0 && (
             <div
-              className="rounded-(--radius-xl) bg-(--surface) border-2 border-border"
+              className="rounded-xl bg-surface border-2 border-border"
               style={{ padding: 20, boxShadow: "var(--shadow-sm)" }}
             >
               <span
@@ -700,7 +698,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               {lesson.commonMistakes.map((mItem, idx) => (
                 <div
                   key={idx}
-                  className="rounded-(--radius-lg)"
+                  className="rounded-lg"
                   style={{
                     padding: 14,
                     background: "rgba(239, 68, 68, 0.03)",
@@ -758,7 +756,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               setStartedAt(Date.now());
               resetExerciseInput();
             }}
-            className="rounded-(--radius-xl) border-none text-base font-black cursor-pointer text-center w-full flex items-center justify-center gap-2.5 relative overflow-hidden font-display"
+            className="rounded-xl border-none text-base font-black cursor-pointer text-center w-full flex items-center justify-center gap-2.5 relative overflow-hidden font-display"
             style={{
               padding: "18px 24px",
               background:
@@ -853,7 +851,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
           {/* Main Question Box */}
           <div
-            className="p-6 rounded-(--radius-xl) bg-(--surface) border-2 border-border relative"
+            className="p-6 rounded-xl bg-surface border-2 border-border relative"
             style={{ boxShadow: "var(--shadow-sm)" }}
           >
             <div
@@ -925,7 +923,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               <m.div
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="rounded-(--radius-lg) mb-4 text-[13px] text-text-secondary font-medium"
+                className="rounded-lg mb-4 text-[13px] text-text-secondary font-medium"
                 style={{
                   padding: "10px 14px",
                   background: "rgba(245, 158, 11, 0.05)",
@@ -973,7 +971,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                       disabled={revealed}
                       whileHover={revealed ? {} : { scale: 1.005, x: 2 }}
                       whileTap={revealed ? {} : { scale: 0.995 }}
-                      className="flex w-full items-center gap-3 py-3 px-4 rounded-(--radius-lg) text-sm text-left"
+                      className="flex w-full items-center gap-3 py-3 px-4 rounded-lg text-sm text-left"
                       style={{
                         border,
                         background: bg,
@@ -1033,7 +1031,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   onBlur={(e) => {
                     e.target.style.borderColor = "var(--border)";
                   }}
-                  className="w-full rounded-(--radius-lg) bg-(--surface) text-text-primary leading-normal py-3 px-4"
+                  className="w-full rounded-lg bg-surface text-text-primary leading-normal py-3 px-4"
                   style={{
                     border: "1.5px solid var(--border)",
                     fontSize: 14.5,
@@ -1067,7 +1065,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             {revealed && currentExercise.type !== "multiple_choice" && (
               <div className="flex flex-col gap-2" style={{ marginTop: 14 }}>
                 <div
-                  className="rounded-(--radius-lg) border-2 border-border font-medium"
+                  className="rounded-lg border-2 border-border font-medium"
                   style={{
                     padding: "12px 14px",
                     background: isGrammarAnswerCorrect(
@@ -1083,7 +1081,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   <strong className="text-text-secondary">Your Answer:</strong> {typedAnswer}
                 </div>
                 <div
-                  className="rounded-(--radius-lg) text-emerald-500 font-bold"
+                  className="rounded-lg text-emerald-500 font-bold"
                   style={{
                     padding: "12px 14px",
                     background: "rgba(16, 185, 129, 0.08)",
@@ -1102,7 +1100,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               <m.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="mt-4 rounded-(--radius-lg) bg-surface-alt p-4"
+                className="mt-4 rounded-lg bg-surface-alt p-4"
                 style={{ border: "1px solid color-mix(in srgb, var(--accent) 15%, var(--border))" }}
               >
                 <div className="flex items-center justify-between mb-2">
@@ -1150,7 +1148,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               whileHover={{ scale: 1.01 }}
               whileTap={{ scale: 0.99 }}
               onClick={nextExercise}
-              className="rounded-(--radius-xl) border-none text-[15px] font-extrabold cursor-pointer w-full"
+              className="rounded-xl border-none text-[15px] font-extrabold cursor-pointer w-full"
               style={{
                 padding: "12px 24px",
                 background:
@@ -1185,7 +1183,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             <m.div
               initial={{ opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="rounded-(--radius-xl) bg-(--surface) border-2 border-border text-center relative overflow-hidden"
+              className="rounded-xl bg-surface border-2 border-border text-center relative overflow-hidden"
               style={{ padding: "40px 24px", boxShadow: "var(--shadow-lg)" }}
             >
               {/* Background glowing circle */}
@@ -1252,7 +1250,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 <div className="mt-2 mb-6 text-left">
                   <button
                     onClick={() => setShowReview((v) => !v)}
-                    className="flex items-center gap-2 w-full py-3 px-4 rounded-(--radius-lg) cursor-pointer text-[13px] font-extrabold text-destructive"
+                    className="flex items-center gap-2 w-full py-3 px-4 rounded-lg cursor-pointer text-[13px] font-extrabold text-destructive"
                     style={{
                       border: "1.5px solid color-mix(in srgb, var(--error) 20%, var(--border))",
                       background: "rgba(239, 68, 68, 0.04)",
@@ -1270,7 +1268,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                       {wrongAnswers.map((wItem, idx) => (
                         <div
                           key={idx}
-                          className="rounded-(--radius-lg) bg-surface-alt border-2 border-border"
+                          className="rounded-lg bg-surface-alt border-2 border-border"
                           style={{ padding: 14 }}
                         >
                           <p
@@ -1292,7 +1290,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                             <CircleCheckBig /> Correct Answer: {wItem.correctAnswer}
                           </div>
                           {wItem.explanationVi && (
-                            <div className="mt-2 p-2 bg-(--surface) rounded-md text-xs text-text-muted font-medium">
+                            <div className="mt-2 p-2 bg-surface rounded-md text-xs text-text-muted font-medium">
                               <Lightbulb className="text-accent mr-1" />
                               {wItem.explanationVi}
                             </div>
@@ -1310,7 +1308,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={onBack}
-                  className="rounded-(--radius-lg) bg-(--surface) text-text-primary cursor-pointer font-extrabold"
+                  className="rounded-lg bg-surface text-text-primary cursor-pointer font-extrabold"
                   style={{
                     padding: "11px 22px",
                     border: "1.5px solid var(--border)",
@@ -1334,7 +1332,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                     resetExerciseInput();
                     setShowReview(false);
                   }}
-                  className="rounded-(--radius-lg) text-accent cursor-pointer font-extrabold"
+                  className="rounded-lg text-accent cursor-pointer font-extrabold"
                   style={{
                     padding: "11px 22px",
                     border: "1.5px solid var(--accent)",
@@ -1350,7 +1348,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={() => router.push("/grammar-quiz")}
-                  className="rounded-(--radius-lg) border-none cursor-pointer font-extrabold"
+                  className="rounded-lg border-none cursor-pointer font-extrabold"
                   style={{
                     padding: "11px 22px",
                     background: "linear-gradient(135deg, var(--accent), var(--secondary))",

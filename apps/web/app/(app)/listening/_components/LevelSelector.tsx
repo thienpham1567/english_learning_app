@@ -9,30 +9,29 @@ import { CEFR_LEVELS, EXERCISE_TYPES } from "@/lib/listening/types";
 
 const LEVEL_META: Record<
   CefrLevel,
-  { label: string; color: string; desc: string; darkText?: boolean }
+  { label: string; twBg: string; desc: string; darkText: boolean }
 > = {
-  A1: { label: "Beginner", color: "var(--success)", desc: "Short sentences, basic words", darkText: true },
-  A2: { label: "Elementary", color: "var(--success)", desc: "Simple conversations", darkText: true },
-  B1: { label: "Intermediate", color: "var(--accent)", desc: "Familiar topics", darkText: true },
-  B2: {
-    label: "Upper-Int",
-    color: "var(--secondary)",
-    desc: "Detailed discussions",
-    darkText: false,
-  },
-  C1: {
-    label: "Advanced",
-    color: "var(--tertiary, var(--secondary))",
-    desc: "In-depth analysis",
-    darkText: false,
-  },
-  C2: { label: "Proficiency", color: "var(--error)", desc: "Complex language", darkText: false },
+  A1: { label: "Beginner", twBg: "bg-[var(--success)]", desc: "Short sentences, basic words", darkText: true },
+  A2: { label: "Elementary", twBg: "bg-[var(--success)]", desc: "Simple conversations", darkText: true },
+  B1: { label: "Intermediate", twBg: "bg-accent", desc: "Familiar topics", darkText: true },
+  B2: { label: "Upper-Int", twBg: "bg-[var(--secondary)]", desc: "Detailed discussions", darkText: false },
+  C1: { label: "Advanced", twBg: "bg-[var(--tertiary)]", desc: "In-depth analysis", darkText: false },
+  C2: { label: "Proficiency", twBg: "bg-[var(--error)]", desc: "Complex language", darkText: false },
+};
+
+const LEVEL_ACCENT: Record<CefrLevel, string> = {
+  A1: "text-[var(--success)]",
+  A2: "text-[var(--success)]",
+  B1: "text-accent",
+  B2: "text-[var(--secondary)]",
+  C1: "text-[var(--tertiary)]",
+  C2: "text-[var(--error)]",
 };
 
 const TYPE_META: Record<ExerciseType, { label: string; icon: React.ReactNode; desc: string }> = {
-  comprehension: { label: "Comprehension", icon: <Target />, desc: "Answer multiple choice questions" },
-  dictation: { label: "Dictation", icon: <ClipboardList />, desc: "Transcribe the audio text" },
-  fill_blanks: { label: "Fill in Blanks", icon: <Pencil />, desc: "Fill in missing words in blanks" },
+  comprehension: { label: "Comprehension", icon: <Target size={18} />, desc: "Answer multiple choice questions" },
+  dictation: { label: "Dictation", icon: <ClipboardList size={18} />, desc: "Transcribe the audio text" },
+  fill_blanks: { label: "Fill in Blanks", icon: <Pencil size={18} />, desc: "Fill in missing words in blanks" },
 };
 
 type Props = {
@@ -44,49 +43,34 @@ type Props = {
 export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
   const [level, setLevel] = useState<CefrLevel | null>(null);
   const [exerciseType, setExerciseType] = useState<ExerciseType>("comprehension");
-  const [hoveredLevel, setHoveredLevel] = useState<CefrLevel | null>(null);
-  const [hoveredType, setHoveredType] = useState<ExerciseType | null>(null);
   const activeLevel = level ?? recommendedLevel ?? null;
 
   return (
-    <div
-      className="flex flex-col w-[600px] mx-auto w-full"
-      style={{ gap: 28, padding: "24px 20px" }}
-    >
+    <div className="flex flex-col gap-7 w-full max-w-2xl mx-auto py-6 px-5">
       {/* CEFR Level Grid */}
       <div>
-        <div
-          className="text-[11px] font-bold text-text-muted mb-3 uppercase"
-          style={{ letterSpacing: "0.12em" }}
-        >
+        <div className="text-[11px] font-bold text-text-muted mb-3 uppercase tracking-widest">
           CEFR Level
         </div>
-        <div
-          className="grid gap-2.5"
-          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(90px, 1fr))" }}
-        >
-          {CEFR_LEVELS.map((l) => {
+        <div className="grid grid-cols-3 sm:grid-cols-6 gap-2.5">
+          {CEFR_LEVELS.map((l, i) => {
             const meta = LEVEL_META[l];
             const isSelected = activeLevel === l;
-            const isHov = hoveredLevel === l && !isSelected;
 
             return (
-              <button
+              <motion.button
                 key={l}
                 onClick={() => setLevel(l)}
-                onMouseEnter={() => setHoveredLevel(l)}
-                onMouseLeave={() => setHoveredLevel(null)}
-                className={`relative cursor-pointer text-center rounded-xl border-2 transition-all duration-100 ${
+                whileHover={{ y: -3, scale: 1.02 }}
+                whileTap={{ scale: 0.97 }}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: i * 0.04, type: "spring", stiffness: 400, damping: 25 }}
+                className={`relative cursor-pointer text-center rounded-lg border-2 border-border py-3.5 px-2.5 transition-all duration-100 ${
                   isSelected
-                    ? "shadow-(--shadow-sm) -translate-y-0.5"
-                    : "border-border bg-surface text-text-secondary hover:bg-surface-hover"
+                    ? `${meta.twBg} shadow-(--shadow-sm) -translate-y-0.5 ${meta.darkText ? "text-ink" : "text-white"}`
+                    : "bg-surface text-text-secondary hover:bg-surface-hover"
                 }`}
-                style={{
-                  padding: "14px 10px",
-                  background: isSelected ? meta.color : undefined,
-                  borderColor: "var(--border)",
-                  color: isSelected ? (meta.darkText ? "var(--black)" : "var(--white)") : undefined,
-                }}
               >
                 {/* Recommended badge */}
                 {recommendedLevel === l && (
@@ -94,47 +78,34 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                     initial={{ scale: 0.9 }}
                     animate={{ scale: [0.9, 1.05, 0.9] }}
                     transition={{ repeat: Infinity, duration: 2 }}
-                    className="absolute rounded-full text-[9px] font-extrabold flex items-center gap-1"
-                    style={{
-                      top: -8,
-                      right: -8,
-                      background: "var(--xp)",
-                      color: "var(--text-on-accent)",
-                      padding: "2px 7px",
-                      boxShadow: "var(--shadow-sm)",
-                    }}
+                    className="absolute -top-2 -right-2 rounded-full text-[9px] font-extrabold flex items-center gap-0.5 bg-accent text-ink py-0.5 px-1.5 border-2 border-border shadow-(--shadow-sm) z-10"
                   >
-                    <Star className="h-2.5 w-2.5 fill-current text-[var(--text-on-accent)] shrink-0" />
-                    <span>Recommended</span>
+                    <Star size={9} className="fill-current" />
+                    <span>Rec</span>
                   </motion.span>
                 )}
                 <div
-                  className="text-xl font-black font-mono leading-none"
-                  style={{ color: isSelected ? "currentColor" : meta.color }}
+                  className={`text-xl font-black font-mono leading-none ${
+                    isSelected ? "" : LEVEL_ACCENT[l]
+                  }`}
                 >
                   {l}
                 </div>
                 <div
-                  className="text-[10px] font-bold mt-1"
-                  style={{
-                    color: isSelected ? "currentColor" : "var(--text-secondary)",
-                    opacity: isSelected ? 0.9 : 1,
-                  }}
+                  className={`text-[10px] font-bold mt-1 ${
+                    isSelected ? "opacity-90" : "text-text-secondary"
+                  }`}
                 >
                   {meta.label}
                 </div>
                 <div
-                  className="text-[9px]"
-                  style={{
-                    color: isSelected ? "currentColor" : "var(--text-muted)",
-                    opacity: isSelected ? 0.75 : 1,
-                    marginTop: 3,
-                    lineHeight: 1.3,
-                  }}
+                  className={`text-[9px] mt-0.5 leading-tight ${
+                    isSelected ? "opacity-75" : "text-text-muted"
+                  }`}
                 >
                   {meta.desc}
                 </div>
-              </button>
+              </motion.button>
             );
           })}
         </div>
@@ -142,74 +113,59 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
 
       {/* Exercise Type */}
       <div>
-        <div
-          className="text-[11px] font-bold text-text-muted mb-3 uppercase"
-          style={{ letterSpacing: "0.12em" }}
-        >
+        <div className="text-[11px] font-bold text-text-muted mb-3 uppercase tracking-widest">
           Exercise Type
         </div>
         <div className="flex flex-col gap-2">
-          {EXERCISE_TYPES.map((t) => {
+          {EXERCISE_TYPES.map((t, i) => {
             const meta = TYPE_META[t];
             const isSelected = exerciseType === t;
-            const isHov = hoveredType === t && !isSelected;
 
             return (
-              <button
+              <motion.button
                 key={t}
                 onClick={() => setExerciseType(t)}
-                onMouseEnter={() => setHoveredType(t)}
-                onMouseLeave={() => setHoveredType(null)}
-                className="flex items-center gap-3.5 rounded-xl border-2 border-border cursor-pointer text-left"
-                style={{
-                  padding: "13px 18px",
-                  borderLeft: isSelected
-                    ? "4px solid var(--accent)"
-                    : isHov
-                      ? "4px solid var(--border)"
-                      : "4px solid transparent",
-                  background: isSelected
-                    ? "color-mix(in srgb, var(--accent) 8%, var(--surface))"
-                    : isHov
-                      ? "var(--bg-deep, rgba(0,0,0,0.03))"
-                      : "var(--surface)",
-                  transition: "all 0.18s ease",
-                }}
+                whileHover={{ x: 3 }}
+                whileTap={{ scale: 0.99 }}
+                initial={{ opacity: 0, x: -8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: i * 0.05, type: "spring", stiffness: 350, damping: 25 }}
+                className={`flex items-center gap-3.5 rounded-lg border-2 border-border cursor-pointer text-left py-3 px-4 transition-all duration-100 ${
+                  isSelected
+                    ? "bg-accent-light border-l-4 border-l-accent shadow-(--shadow-sm) -translate-y-0.5"
+                    : "bg-surface hover:bg-surface-hover"
+                }`}
               >
                 <span
-                  className="grid w-[42px] h-[42px] text-xl shrink-0"
-                  style={{
-                    placeItems: "center",
-                    borderRadius: 10,
-                    background: isSelected
-                      ? "linear-gradient(135deg, var(--accent), var(--accent-hover))"
-                      : "var(--bg-deep, rgba(0,0,0,0.05))",
-                    transition: "background 0.18s",
-                    boxShadow: isSelected ? "var(--shadow-md)" : "none",
-                  }}
+                  className={`grid w-[42px] h-[42px] shrink-0 rounded-lg place-items-center transition-all duration-150 ${
+                    isSelected
+                      ? "bg-accent text-ink shadow-(--shadow-sm)"
+                      : "bg-bg-deep text-text-muted"
+                  }`}
                 >
                   {meta.icon}
                 </span>
                 <div className="flex-1">
                   <div
-                    className="text-sm font-bold"
-                    style={{ color: isSelected ? "var(--accent)" : "var(--text)" }}
+                    className={`text-sm font-bold ${
+                      isSelected ? "text-accent" : "text-text-primary"
+                    }`}
                   >
                     {meta.label}
                   </div>
-                  <div className="text-xs text-text-muted" style={{ marginTop: 1 }}>
-                    {meta.desc}
-                  </div>
+                  <div className="text-xs text-text-muted mt-0.5">{meta.desc}</div>
                 </div>
                 {isSelected && (
-                  <span
-                    className="w-[22px] h-[22px] rounded-full grid shrink-0"
-                    style={{ background: "var(--accent)", placeItems: "center" }}
+                  <motion.span
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1 }}
+                    transition={{ type: "spring", stiffness: 500, damping: 20 }}
+                    className="w-[22px] h-[22px] rounded-full grid shrink-0 bg-accent place-items-center"
                   >
-                    <Check size={11} className="text-(--text-on-accent)" />
-                  </span>
+                    <Check size={11} className="text-ink" />
+                  </motion.span>
                 )}
-              </button>
+              </motion.button>
             );
           })}
         </div>
@@ -221,7 +177,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
         disabled={!activeLevel || isLoading}
         className="w-full h-13 text-base font-black flex items-center justify-center gap-2.5"
       >
-        {isLoading ? <Loader2 className="animate-spin" /> : <Volume2 />}
+        {isLoading ? <Loader2 className="animate-spin" /> : <Volume2 size={18} />}
         {isLoading ? "Generating listening exercise..." : "Start Listening Practice"}
       </Button>
     </div>

@@ -1,5 +1,4 @@
 import { db, reviewTask, toeicQuestion, toeicVocab } from "@repo/database";
-import { Card, Empty, Tag } from "antd";
 import { and, desc, eq, inArray, lte, sql } from "drizzle-orm";
 import { AlertTriangle, BookOpenText, RefreshCw } from "lucide-react";
 import { headers } from "next/headers";
@@ -60,8 +59,7 @@ export default async function ToeicReviewPage() {
           className="grid gap-3"
           style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}
         >
-          <Card
-            hoverable={toeicErrorIds.length > 0}
+          <div className={`border-2 border-border rounded-xl bg-surface shadow-sm p-4 ${toeicErrorIds.length > 0 ? "hover:shadow-md transition-shadow" : ""}`}
             style={toeicErrorIds.length === 0 ? { opacity: 0.6 } : undefined}
           >
             <div className="flex items-center gap-2">
@@ -79,10 +77,9 @@ export default async function ToeicReviewPage() {
                 Drill Now
               </Link>
             )}
-          </Card>
+          </div>
 
-          <Card
-            hoverable={flashcardDue.length > 0}
+          <div className={`border-2 border-border rounded-xl bg-surface shadow-sm p-4 ${flashcardDue.length > 0 ? "hover:shadow-md transition-shadow" : ""}`}
             style={flashcardDue.length === 0 ? { opacity: 0.6 } : undefined}
           >
             <div className="flex items-center gap-2">
@@ -104,12 +101,15 @@ export default async function ToeicReviewPage() {
                 Review Now
               </Link>
             )}
-          </Card>
+          </div>
         </div>
 
-        <Card title="Recent Review History" size="small">
+        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
           {recent.length === 0 ? (
-            <Empty description="No recent review activity" />
+            <div className="flex flex-col items-center justify-center py-12 text-text-muted">
+                <div className="text-4xl mb-3">📭</div>
+                <div className="text-sm font-semibold">No data available</div>
+              </div>
           ) : (
             <div className="grid gap-1.5">
               {recent.map((r) => {
@@ -121,7 +121,7 @@ export default async function ToeicReviewPage() {
                     className="grid gap-3 items-center text-[13px]"
                     style={{ gridTemplateColumns: "100px 1fr auto" }}
                   >
-                    <Tag color={isVocab ? "orange" : "red"}>{isVocab ? "Vocab" : "Incorrect"}</Tag>
+                    <span className="bg-red-500/15 text-red-600 py-0.5 px-2 inline-block">{isVocab ? "Vocab" : "Incorrect"}</span>
                     <span className="text-ink">
                       {v ? v.word : `Câu hỏi #${r.sourceId.slice(0, 8)}`}
                     </span>
@@ -131,7 +131,7 @@ export default async function ToeicReviewPage() {
               })}
             </div>
           )}
-        </Card>
+        </div>
       </div>
     </div>
   );

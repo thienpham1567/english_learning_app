@@ -1,7 +1,6 @@
 "use client";
-import { Button, Flex, Progress, Result, Skeleton } from "antd";
-import { BookOpen, Clock, RefreshCw, Zap } from "lucide-react";
 
+import { AlertTriangle, BookOpen, Clock, Loader2, RefreshCw, Zap } from "lucide-react";
 import * as m from "motion/react-client";
 import { useState } from "react";
 import { AIFlashcardMode } from "@/app/(app)/flashcards/_components/AIFlashcardMode";
@@ -29,52 +28,41 @@ export function FlashcardSession() {
   } = useFlashcardSession();
 
   const isImmersive = activeTab === "srs" && state === "active";
+  const progressPct = totalDue > 0 ? Math.round(((currentIndex + 1) / totalDue) * 100) : 0;
 
   return (
-    <div className="relative flex h-full h-[0px] flex-1 flex-col overflow-hidden">
-      <div className="grain-overlay" style={{ opacity: 0.03, zIndex: 0 }} />
-
+    <div className="relative flex h-full min-h-0 flex-1 flex-col overflow-hidden">
       {/* Immersive mode: thin progress bar at the very top */}
       {isImmersive && (
-        <Progress
-          percent={totalDue > 0 ? Math.round(((currentIndex + 1) / totalDue) * 100) : 0}
-          showInfo={false}
-          strokeColor={{ from: "var(--accent)", to: "var(--xp)" }}
-          size={["100%", 4]}
-          style={{ lineHeight: 0 }}
-        />
+        <div className="h-1 bg-border shrink-0 relative overflow-hidden">
+          <m.div
+            initial={{ width: 0 }}
+            animate={{ width: `${progressPct}%` }}
+            transition={{ type: "spring", stiffness: 80, damping: 15 }}
+            className="absolute left-0 top-0 bottom-0 rounded-full"
+            style={{ background: "linear-gradient(90deg, var(--accent), var(--xp))" }}
+          />
+        </div>
       )}
 
-      {/* Module header — hidden during immersive (active) mode */}
-      {!isImmersive && <div className="relative z-[1]"></div>}
-
       {/* Content */}
-      <div
-        className="relative h-[0px] flex-1 overflow-y-auto z-[1]"
-        style={{ padding: "20px 16px" }}
-      >
+      <div className="relative min-h-0 flex-1 overflow-y-auto z-[1] py-5 px-4">
         {/* Ambient glow */}
         <div
-          className="absolute"
+          className="absolute inset-0 pointer-events-none"
           style={{
-            pointerEvents: "none",
-            inset: 0,
             background:
               "radial-gradient(ellipse 60% 40% at 50% 0%, color-mix(in srgb, var(--accent) 5%, transparent) 0%, transparent 70%)",
           }}
         />
 
-        <div
-          className="relative mx-auto flex w-full w-[720px] flex-col"
-          style={{ minHeight: "100%" }}
-        >
+        <div className="relative mx-auto flex w-full max-w-[720px] flex-col min-h-full">
           {/* ── Tab Switcher ── */}
           {!isImmersive && (
             <m.div
               initial={{ opacity: 0, y: -8 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex gap-1 p-1 bg-surface-alt border-2 border-border mb-5"
-              style={{ borderRadius: 14, alignSelf: "center", boxShadow: "var(--shadow-sm)" }}
+              className="flex gap-1 p-1 bg-surface-alt border-2 border-border mb-5 rounded-[14px] self-center shadow-(--shadow-sm)"
             >
               {[
                 { key: "ai" as TabKey, label: "AI Generation", icon: <Zap /> },
@@ -84,16 +72,11 @@ export function FlashcardSession() {
                   key={tab.key}
                   whileTap={{ scale: 0.97 }}
                   onClick={() => setActiveTab(tab.key)}
-                  className="flex items-center gap-1.5 border-none cursor-pointer text-[13px]"
-                  style={{
-                    padding: "10px 22px",
-                    borderRadius: 10,
-                    background: activeTab === tab.key ? "var(--surface)" : "transparent",
-                    color: activeTab === tab.key ? "var(--accent)" : "var(--text-muted)",
-                    fontWeight: activeTab === tab.key ? 800 : 600,
-                    boxShadow: activeTab === tab.key ? "var(--shadow-sm)" : "none",
-                    transition: "all 0.15s",
-                  }}
+                  className={`flex items-center gap-1.5 border-none cursor-pointer text-[13px] py-2.5 px-5.5 rounded-[10px] transition-all duration-150 ${
+                    activeTab === tab.key
+                      ? "bg-surface text-accent font-extrabold shadow-(--shadow-sm)"
+                      : "bg-transparent text-text-muted font-semibold hover:text-text-primary"
+                  }`}
                 >
                   {tab.icon} {tab.label}
                 </m.button>
@@ -112,24 +95,37 @@ export function FlashcardSession() {
           {activeTab === "srs" && (
             <div className="flex flex-1 flex-col items-center justify-center">
               {state === "loading" && (
-                <div className="anim-fade-in w-full w-[500px] p-6">
-                  <Skeleton active paragraph={{ rows: 4 }} />
+                <div className="anim-fade-in w-full max-w-[500px] p-6 flex flex-col gap-4">
+                  {[1, 2, 3, 4].map((i) => (
+                    <div
+                      key={i}
+                      className={`h-4 rounded-lg bg-border animate-pulse ${
+                        i === 1 ? "w-4/5" : i === 2 ? "w-3/5" : i === 3 ? "w-2/5" : "w-1/3"
+                      }`}
+                    />
+                  ))}
                 </div>
               )}
 
               {state === "error" && (
-                <Flex vertical align="center" gap={16} className="anim-fade-in text-center">
-                  <Result
-                    status="error"
-                    title="Could not load flashcards"
-                    subTitle="Please check your network connection and try again."
-                    extra={
-                      <Button type="primary" icon={<RefreshCw />} onClick={restart}>
-                        Try again
-                      </Button>
-                    }
-                  />
-                </Flex>
+                <div className="anim-fade-in text-center flex flex-col items-center gap-4">
+                  <AlertTriangle className="text-4xl text-error" />
+                  <h3 className="text-lg font-extrabold text-ink">Could not load flashcards</h3>
+                  <p className="text-sm text-text-secondary">
+                    Please check your network connection and try again.
+                  </p>
+                  <m.button
+                    whileHover={{ scale: 1.03, y: -1 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={restart}
+                    className="flex items-center gap-2 py-2.5 px-5 rounded-lg border-none text-sm font-bold cursor-pointer text-[var(--text-on-accent)] shadow-[0_4px_14px_var(--accent-muted)]"
+                    style={{
+                      background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+                    }}
+                  >
+                    <RefreshCw size={14} /> Try again
+                  </m.button>
+                </div>
               )}
 
               {state === "empty" && (

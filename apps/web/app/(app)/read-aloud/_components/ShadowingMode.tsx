@@ -1,6 +1,6 @@
 "use client";
 
-import { Flex, message, Typography } from "antd";
+import { toast } from "sonner";
 import {
   ChevronRight,
   CircleCheckBig,
@@ -23,7 +23,6 @@ import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { splitIntoSentences } from "../_hooks/useSentences";
 import { type EvalResult, ShadowResult } from "./ShadowResult";
 
-const { Text, Title } = Typography;
 
 type ShadowStep = "idle" | "listening" | "ready-to-record" | "recording" | "evaluating" | "result";
 
@@ -74,12 +73,12 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
         setStep("ready-to-record");
       };
       audio.onerror = () => {
-        message.error("Audio playback error");
+        toast.error("Audio playback error");
         setStep("idle");
       };
       await audio.play();
     } catch {
-      message.error("Unable to play model sentence");
+      toast.error("Unable to play model sentence");
       setStep("idle");
     }
   }, [currentSentence, voiceRole, speed]);
@@ -100,7 +99,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
 
     const audioBlob = voice.blob;
     if (!audioBlob) {
-      message.error("No audio recording found");
+      toast.error("No audio recording found");
       setStep("ready-to-record");
       return;
     }
@@ -119,7 +118,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: "Unknown" }));
         if (err.error === "no-speech") {
-          message.warning("Speech not recognized. Please speak clearly and try again.");
+          toast.warning("Speech not recognized. Please speak clearly and try again.");
           setStep("ready-to-record");
           return;
         }
@@ -135,7 +134,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
       });
       setStep("result");
     } catch (err) {
-      message.error(err instanceof Error ? err.message : "AI grading failed");
+      toast.error(err instanceof Error ? err.message : "AI grading failed");
       setStep("ready-to-record");
     }
   }, [voice, currentSentence, currentIdx]);
@@ -156,17 +155,16 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
 
   if (sentences.length === 0) {
     return (
-      <div
-        className="bg-(--surface) rounded-(--radius-xl) border-2 border-border text-center"
+      <div className="bg-(--surface) rounded-(--radius-xl) border-2 border-border text-center"
         style={{ padding: "40px 24px" }}
       >
         <div className="flex justify-center mb-4"><Mic size={48} className="text-accent" /></div>
-        <Title level={4} className="mb-2 text-text-primary">
+        <h3 className="mb-2 text-text-primary">
           Shadowing Mode
-        </Title>
-        <Text className="text-text-muted block w-[400px] mx-auto">
+        </h3>
+        <span className="text-text-muted block w-[400px] mx-auto">
           Please enter or select a passage in the "Listen" tab first, then return here to practice shadowing.
-        </Text>
+        </span>
       </div>
     );
   }
@@ -175,14 +173,13 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
     <div className="flex flex-col gap-4">
       {/* Progress bar */}
       <div className="bg-(--surface) rounded-(--radius-xl) border-2 border-border py-4 px-5">
-        <Flex justify="space-between" align="center" className="mb-2">
-          <Text className="text-[13px] font-bold text-text-primary">
+        <div className="mb-2">
+          <span className="text-[13px] font-bold text-text-primary">
             <BookOpen size={14} className="text-accent inline-block mr-1" /> Sentence {currentIdx + 1} of {sentences.length}
-          </Text>
-          <Text className="text-xs font-bold text-accent">{progress}% completed</Text>
-        </Flex>
-        <div
-          className="h-[6px] overflow-hidden"
+          </span>
+          <span className="text-xs font-bold text-accent">{progress}% completed</span>
+        </div>
+        <div className="h-[6px] overflow-hidden"
           style={{ borderRadius: 3, background: "var(--border)" }}
         >
           <m.div
@@ -196,7 +193,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
           />
         </div>
         {/* Sentence dots */}
-        <Flex gap={4} wrap="wrap" className="mt-2.5">
+        <div className="mt-2.5">
           {sentences.map((_, i) => (
             <button
               key={i}
@@ -226,7 +223,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
               {sentenceResults[i] ? <CircleCheckBig size={11} /> : i + 1}
             </button>
           ))}
-        </Flex>
+        </div>
       </div>
 
       {/* Current sentence card */}
@@ -248,15 +245,15 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
       >
         {/* Reference text */}
         <div>
-          <Text className="text-[11px] font-bold text-text-muted uppercase tracking-wider mb-2 block">
+          <span className="text-[11px] font-bold text-text-muted uppercase tracking-wider mb-2 block">
             Model Sentence
-          </Text>
-          <Text
+          </span>
+          <span
             className="text-lg text-text-primary font-semibold block"
             style={{ lineHeight: 1.7 }}
           >
             {currentSentence}
-          </Text>
+          </span>
         </div>
 
         {/* Action buttons based on step */}
@@ -295,17 +292,17 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
               className="text-center"
               style={{ padding: "8px 0" }}
             >
-              <Flex align="center" justify="center" gap={8}>
+              <div>
                 <m.div
                   animate={{ scale: [1, 1.2, 1] }}
                   transition={{ repeat: Infinity, duration: 1.5 }}
                   className="w-[12px] h-[12px] rounded-full"
                   style={{ background: "var(--accent)" }}
                 />
-                <Text className="text-sm font-bold text-accent">
+                <span className="text-sm font-bold text-accent">
                   Playing model sentence... Listen carefully
-                </Text>
-              </Flex>
+                </span>
+              </div>
             </m.div>
           )}
 
@@ -316,7 +313,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
             >
-              <Flex gap={8}>
+              <div>
                 <m.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -341,7 +338,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                 >
                   <Mic size={14} /> Speak Now
                 </m.button>
-              </Flex>
+              </div>
             </m.div>
           )}
 
@@ -352,18 +349,18 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0 }}
             >
-              <Flex vertical gap={12} align="center">
-                <Flex align="center" gap={8}>
+              <div>
+                <div>
                   <m.div
                     animate={{ scale: [1, 1.3, 1], opacity: [1, 0.5, 1] }}
                     transition={{ repeat: Infinity, duration: 1 }}
                     className="w-[14px] h-[14px] rounded-full"
                     style={{ background: "var(--error)" }}
                   />
-                  <Text className="text-sm font-bold text-destructive">
+                  <span className="text-sm font-bold text-destructive">
                     Recording... Read the sentence above
-                  </Text>
-                </Flex>
+                  </span>
+                </div>
                 <m.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
@@ -377,7 +374,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                 >
                   <StopCircle size={13} /> Stop & Grade
                 </m.button>
-              </Flex>
+              </div>
             </m.div>
           )}
 
@@ -409,7 +406,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
             <ShadowResult result={evalResult} referenceText={currentSentence} />
 
             {/* Action buttons */}
-            <Flex gap={8} className="mt-3">
+            <div className="mt-3">
               <m.button
                 whileHover={{ scale: 1.02 }}
                 whileTap={{ scale: 0.98 }}
@@ -433,7 +430,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                   Next Sentence <ChevronRight />
                 </m.button>
               )}
-            </Flex>
+            </div>
           </m.div>
         )}
       </AnimatePresence>
@@ -452,10 +449,10 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
           }}
         >
           <div className="flex justify-center mb-2"><Award size={40} className="text-accent" /></div>
-          <Title level={4} className="mb-2 text-accent">
+          <h3 className="mb-2 text-accent">
             Completed!
-          </Title>
-          <Text className="text-sm text-text-secondary block mb-3">
+          </h3>
+          <span className="text-sm text-text-secondary block mb-3">
             Average Score:{" "}
             <strong className="text-accent text-lg">
               {Math.round(
@@ -464,7 +461,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
               )}
             </strong>{" "}
             / 100
-          </Text>
+          </span>
           <m.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}

@@ -1,14 +1,10 @@
 "use client";
 
-import { Button, Flex, Tag, Typography } from "antd";
 import { Check } from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useEffect } from "react";
 import { CEFR_COLORS } from "@/lib/constants/cefr";
-
 import type { Question } from "./types";
-
-const { Text } = Typography;
 
 const LABELS = ["A", "B", "C", "D"] as const;
 
@@ -65,112 +61,53 @@ export function TestScreen({
   const levelColor = CEFR_COLORS[question.level] ?? "var(--accent)";
 
   return (
-    <div
-      style={{
-        height: "100%",
-        overflowY: "auto",
-        padding: "24px 20px 48px",
-        background: "var(--bg-deep)",
-      }}
-    >
-      <Flex vertical gap={20} style={{ maxWidth: 600, margin: "0 auto" }}>
+    <div className="h-full overflow-y-auto py-6 px-5 pb-12 bg-bg-deep">
+      <div className="w-full max-w-[600px] mx-auto flex flex-col gap-5">
         {/* Progress & Metadata Header */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
-          <div
-            style={{
-              display: "flex",
-              justifySelf: "stretch",
-              justifyContent: "space-between",
-              alignItems: "center",
-            }}
-          >
-            <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-secondary)" }}>
+        <div className="flex flex-col gap-2.5">
+          <div className="flex justify-between items-center">
+            <span className="text-[13px] font-bold text-text-secondary">
               Question {currentIndex + 1} / {total}
             </span>
-            <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+            <div className="flex gap-1.5 items-center">
               <span
+                className="text-[10px] font-extrabold bg-surface rounded-full py-0.5 px-2"
                 style={{
-                  fontSize: 10,
-                  fontWeight: 800,
                   color: levelColor,
                   border: `1px solid ${levelColor}`,
-                  background: "var(--surface)",
-                  padding: "2px 8px",
-                  borderRadius: 99,
                 }}
               >
                 {question.level}
               </span>
-              <span
-                style={{
-                  fontSize: 11,
-                  fontWeight: 700,
-                  color: "var(--text-muted)",
-                  background: "var(--surface-alt)",
-                  padding: "2px 8px",
-                  borderRadius: 6,
-                }}
-              >
+              <span className="text-[11px] font-bold text-text-muted bg-surface-alt py-0.5 px-2 rounded-md">
                 {SKILL_LABELS[question.skill] ?? question.skill}
               </span>
             </div>
           </div>
 
           {/* Animated Custom Progress Bar */}
-          <div
-            style={{
-              height: 6,
-              background: "var(--border)",
-              borderRadius: 99,
-              position: "relative",
-              overflow: "hidden",
-            }}
-          >
+          <div className="h-1.5 bg-border rounded-full relative overflow-hidden">
             <m.div
               initial={{ width: 0 }}
               animate={{ width: `${progressPct}%` }}
               transition={{ type: "spring", stiffness: 80, damping: 15 }}
+              className="absolute left-0 top-0 bottom-0 rounded-full shadow-[0_0_8px_var(--accent)]"
               style={{
-                position: "absolute",
-                left: 0,
-                top: 0,
-                bottom: 0,
                 background: "linear-gradient(90deg, var(--accent), var(--xp))",
-                borderRadius: 99,
-                boxShadow: "0 0 8px var(--accent)",
               }}
             />
           </div>
         </div>
 
         {/* Question excerpt */}
-        <div
-          style={{
-            borderRadius: "var(--radius-xl)",
-            borderLeft: "4px solid var(--accent)",
-            background: "var(--surface)",
-            padding: "24px",
-            boxShadow: "var(--shadow-sm)",
-            border: "1px solid var(--border)",
-            borderLeftColor: "var(--accent)",
-          }}
-        >
-          <p
-            style={{
-              margin: 0,
-              fontSize: 16.5,
-              fontWeight: 600,
-              lineHeight: 1.8,
-              color: "var(--text-primary)",
-              wordBreak: "break-word",
-            }}
-          >
+        <div className="rounded-xl bg-surface p-6 shadow-(--shadow-sm) border border-border border-l-4 border-l-accent">
+          <p className="m-0 text-[16.5px] font-semibold leading-[1.8] text-text-primary break-words">
             {question.question}
           </p>
         </div>
 
         {/* Options Stack */}
-        <Flex vertical gap={10}>
+        <div className="flex flex-col gap-2.5">
           {question.options.map((opt, i) => {
             const isSelected = selectedOption === i;
             return (
@@ -179,156 +116,67 @@ export function TestScreen({
                 whileHover={{ scale: 1.01, x: 2 }}
                 whileTap={{ scale: 0.99 }}
                 onClick={() => onSelectOption(i)}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: 12,
-                  padding: "14px 18px",
-                  borderRadius: "var(--radius-lg)",
-                  border: isSelected ? "2px solid var(--accent)" : "1px solid var(--border)",
-                  background: isSelected ? "var(--accent-light)" : "var(--surface)",
-                  cursor: "pointer",
-                  textAlign: "left",
-                  fontSize: 14.5,
-                  fontWeight: isSelected ? 700 : 600,
-                  color: isSelected ? "var(--accent)" : "var(--text-primary)",
-                  transition: "border-color 0.2s, background-color 0.2s",
-                  boxShadow: isSelected ? "0 4px 12px var(--accent-muted)" : "var(--shadow-sm)",
-                }}
+                className={`flex items-center gap-3 py-3.5 px-4.5 rounded-lg cursor-pointer text-left text-[14.5px] transition-all duration-200 ${
+                  isSelected
+                    ? "border-2 border-accent bg-accent-light font-bold text-accent shadow-[0_4px_12px_var(--accent-muted)]"
+                    : "border border-border bg-surface font-semibold text-text-primary shadow-(--shadow-sm)"
+                }`}
               >
                 {/* Circle label */}
                 <span
-                  style={{
-                    width: 26,
-                    height: 26,
-                    borderRadius: "50%",
-                    display: "grid",
-                    placeItems: "center",
-                    flexShrink: 0,
-                    background: isSelected ? "var(--accent)" : "var(--border)",
-                    color: isSelected ? "var(--text-on-accent)" : "var(--text-secondary)",
-                    fontSize: 11,
-                    fontWeight: 800,
-                    transition: "all 0.15s",
-                  }}
+                  className={`w-[26px] h-[26px] rounded-full grid place-items-center shrink-0 text-[11px] font-extrabold transition-all duration-150 ${
+                    isSelected
+                      ? "bg-accent text-[var(--text-on-accent)]"
+                      : "bg-border text-text-secondary"
+                  }`}
                 >
                   {LABELS[i]}
                 </span>
-                <span style={{ flex: 1 }}>{opt}</span>
+                <span className="flex-1">{opt}</span>
               </m.button>
             );
           })}
-        </Flex>
+        </div>
 
         {/* Keyboard hint */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: 6,
-            opacity: 0.6,
-            fontSize: 11,
-            fontWeight: 500,
-            color: "var(--text-muted)",
-            marginTop: 4,
-          }}
-        >
+        <div className="flex justify-center items-center gap-1.5 opacity-60 text-[11px] font-medium text-text-muted mt-1">
           <span>Shortcuts:</span>
-          <kbd
-            style={{
-              background: "var(--border)",
-              padding: "2px 6px",
-              borderRadius: 4,
-              fontFamily: "var(--font-mono)",
-              fontSize: 10,
-            }}
-          >
-            A
-          </kbd>
-          <kbd
-            style={{
-              background: "var(--border)",
-              padding: "2px 6px",
-              borderRadius: 4,
-              fontFamily: "var(--font-mono)",
-              fontSize: 10,
-            }}
-          >
-            B
-          </kbd>
-          <kbd
-            style={{
-              background: "var(--border)",
-              padding: "2px 6px",
-              borderRadius: 4,
-              fontFamily: "var(--font-mono)",
-              fontSize: 10,
-            }}
-          >
-            C
-          </kbd>
-          <kbd
-            style={{
-              background: "var(--border)",
-              padding: "2px 6px",
-              borderRadius: 4,
-              fontFamily: "var(--font-mono)",
-              fontSize: 10,
-            }}
-          >
-            D
-          </kbd>
+          {["A", "B", "C", "D"].map((k) => (
+            <kbd
+              key={k}
+              className="bg-border py-0.5 px-1.5 rounded font-mono text-[10px]"
+            >
+              {k}
+            </kbd>
+          ))}
           <span>to select ·</span>
-          <kbd
-            style={{
-              background: "var(--border)",
-              padding: "2px 6px",
-              borderRadius: 4,
-              fontFamily: "var(--font-mono)",
-              fontSize: 10,
-            }}
-          >
-            Enter
-          </kbd>
+          <kbd className="bg-border py-0.5 px-1.5 rounded font-mono text-[10px]">Enter</kbd>
           <span>to confirm</span>
         </div>
 
         {/* Actions Button Row */}
-        <Flex gap={12} style={{ marginTop: 10 }}>
+        <div className="flex gap-3 mt-2.5">
           <m.button
             whileHover={selectedOption !== null ? { scale: 1.02, y: -1 } : {}}
             whileTap={selectedOption !== null ? { scale: 0.98 } : {}}
             disabled={selectedOption === null}
             onClick={onSubmit}
+            className={`flex-1 h-12 rounded-lg border-none text-[15px] font-extrabold transition-all duration-200 ${
+              selectedOption === null
+                ? "bg-border text-text-muted cursor-default"
+                : "text-[var(--text-on-accent)] cursor-pointer shadow-[0_4px_14px_var(--accent-muted)]"
+            }`}
             style={{
-              flex: 1,
-              height: 48,
-              borderRadius: "var(--radius-lg)",
               background:
-                selectedOption === null
-                  ? "var(--border)"
-                  : "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-              color: selectedOption === null ? "var(--text-muted)" : "var(--text-on-accent)",
-              border: "none",
-              fontSize: 15,
-              fontWeight: 800,
-              cursor: selectedOption === null ? "default" : "pointer",
-              boxShadow: selectedOption === null ? "none" : "0 4px 14px var(--accent-muted)",
-              transition: "all 0.2s",
+                selectedOption !== null
+                  ? "linear-gradient(135deg, var(--accent), var(--accent-hover))"
+                  : undefined,
             }}
           >
             {currentIndex < total - 1 ? (
               "Next Question →"
             ) : (
-              <span
-                style={{
-                  display: "inline-flex",
-                  alignItems: "center",
-                  gap: 6,
-                  justifyContent: "center",
-                }}
-              >
+              <span className="inline-flex items-center gap-1.5 justify-center">
                 Complete Test <Check size={16} />
               </span>
             )}
@@ -339,24 +187,12 @@ export function TestScreen({
             whileTap={{ scale: 0.97 }}
             type="button"
             onClick={onSkip}
-            style={{
-              background: "var(--surface-alt)",
-              border: "1px solid var(--border)",
-              cursor: "pointer",
-              fontSize: 13,
-              fontWeight: 700,
-              color: "var(--text-secondary)",
-              padding: "0 20px",
-              height: 48,
-              borderRadius: "var(--radius-lg)",
-              boxShadow: "var(--shadow-sm)",
-              transition: "all 0.2s",
-            }}
+            className="bg-surface-alt border border-border cursor-pointer text-[13px] font-bold text-text-secondary px-5 h-12 rounded-lg shadow-(--shadow-sm) transition-all duration-200 hover:bg-surface-hover"
           >
             Skip
           </m.button>
-        </Flex>
-      </Flex>
+        </div>
+      </div>
     </div>
   );
 }

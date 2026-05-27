@@ -33,26 +33,8 @@ export function RecentLookups({ words, onSelect }: Props) {
   if (words.length === 0) return null;
 
   return (
-    <div
-      className="scrollbar-none"
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 8,
-        overflowX: "auto",
-        paddingBottom: 4,
-      }}
-    >
-      <span
-        style={{
-          flexShrink: 0,
-          fontSize: 11,
-          fontWeight: 600,
-          textTransform: "uppercase",
-          letterSpacing: "0.1em",
-          color: "var(--text-muted)",
-        }}
-      >
+    <div className="scrollbar-none flex items-center gap-2 overflow-x-auto pb-1">
+      <span className="shrink-0 text-[11px] font-semibold uppercase tracking-[0.1em] text-text-muted">
         Recent
       </span>
       {words.map((word) => (
@@ -60,19 +42,7 @@ export function RecentLookups({ words, onSelect }: Props) {
           key={word}
           type="button"
           onClick={() => onSelect(word)}
-          style={{
-            flexShrink: 0,
-            borderRadius: 999,
-            border: "1px solid var(--border)",
-            background: "var(--surface)",
-            padding: "4px 12px",
-            fontSize: 12,
-            fontWeight: 500,
-            color: "var(--accent)",
-            cursor: "pointer",
-            transition: "all 0.15s",
-            whiteSpace: "nowrap",
-          }}
+          className="shrink-0 rounded-full border border-border bg-surface py-1 px-3 text-xs font-medium text-accent cursor-pointer whitespace-nowrap transition-all duration-150 hover:border-accent hover:bg-accent-light"
         >
           {word}
         </button>

@@ -1,6 +1,5 @@
 "use client";
 
-import { Tag } from "antd";
 import { AlertTriangle, CheckCircle, Lightbulb, RefreshCw, XCircle } from "lucide-react";
 
 import * as m from "motion/react-client";
@@ -26,7 +25,7 @@ export function ResultSummary({
     <div className="anim-fade-up grid gap-5 w-[720px] w-full mx-auto">
       {/* Score Summary Card */}
       <div
-        className="bg-(--surface) rounded-(--radius-xl) p-6 flex justify-between items-center gap-4"
+        className="bg-surface rounded-xl p-6 flex justify-between items-center gap-4"
         style={{ border: "1.5px solid var(--border)", boxShadow: "var(--shadow-md)" }}
       >
         <div>
@@ -58,7 +57,7 @@ export function ResultSummary({
           onClick={onReset}
           whileHover={{ scale: 1.03 }}
           whileTap={{ scale: 0.97 }}
-          className="border-none rounded-(--radius-lg) cursor-pointer items-center gap-1.5"
+          className="border-none rounded-lg cursor-pointer items-center gap-1.5"
           style={{
             padding: "10px 20px",
             background: "var(--accent)",
@@ -91,7 +90,7 @@ export function ResultSummary({
               return (
                 <div
                   key={a.questionId}
-                  className="p-4 bg-(--surface) rounded-(--radius-xl)"
+                  className="p-4 bg-surface rounded-xl"
                   style={{ border: "1.5px solid var(--border)", boxShadow: "var(--shadow-sm)" }}
                 >
                   <div className="flex justify-between items-center mb-2.5">
@@ -165,7 +164,7 @@ export function ResultSummary({
         </div>
       ) : (
         <div
-          className="text-center rounded-(--radius-xl) text-emerald-500"
+          className="text-center rounded-xl text-emerald-500"
           style={{
             padding: "32px 20px",
             background: "rgba(16, 185, 129, 0.06)",

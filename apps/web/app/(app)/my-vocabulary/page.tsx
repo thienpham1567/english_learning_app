@@ -57,13 +57,10 @@ export default function MyVocabularyPage() {
   const [active, setActive] = useState<TabKey>("toeic");
 
   return (
-    <div className="flex flex-col h-full h-[0px] flex-1 overflow-hidden">
+    <div className="flex flex-col h-full flex-1 overflow-hidden">
       {/* Tab switcher */}
-      <div className="shrink-0" style={{ padding: "12px 16px 6px" }}>
-        <div
-          className="flex gap-1 bg-surface-alt rounded-(--radius-xl) p-1"
-          style={{ border: "1.5px solid var(--border)" }}
-        >
+      <div className="shrink-0 px-4 pt-3.5 pb-1.5 max-w-4xl w-full mx-auto">
+        <div className="flex gap-1 bg-surface-alt rounded-2xl p-1 border-2 border-border shadow-(--shadow-sm)">
           {TABS.map((t) => {
             const isActive = active === t.key;
             return (
@@ -72,13 +69,13 @@ export default function MyVocabularyPage() {
                 key={t.key}
                 onClick={() => setActive(t.key)}
                 whileTap={{ scale: 0.98 }}
-                className="flex-1 py-2.5 px-4 rounded-(--radius-lg) border-none cursor-pointer flex items-center justify-center gap-2 font-extrabold"
-                style={{
-                  background: isActive ? TAB_COLORS[t.key] : "transparent",
-                  color: isActive ? "var(--text-on-accent)" : "var(--text-secondary)",
-                  fontSize: 13.5,
-                  transition: "color 0.2s, background 0.2s",
-                }}
+                className={`flex-1 py-2.5 px-4 rounded-xl cursor-pointer flex items-center justify-center gap-2 text-xs md:text-sm font-black transition-colors duration-150 ${
+                  isActive
+                    ? t.key === "toeic"
+                      ? "bg-accent text-text-on-accent"
+                      : "bg-secondary text-white border-none"
+                    : "bg-transparent text-text-secondary hover:text-text-primary"
+                }`}
               >
                 {t.icon}
                 <span>{t.label}</span>
@@ -88,7 +85,7 @@ export default function MyVocabularyPage() {
         </div>
       </div>
 
-      <div className="flex-1 h-[0px] overflow-auto" style={{ padding: "16px 16px 40px" }}>
+      <div className="flex-1 overflow-auto p-4 pb-12">
         {active === "toeic" && <ToeicVocabTab />}
         {active === "dictionary" && <DictionaryTab />}
       </div>
