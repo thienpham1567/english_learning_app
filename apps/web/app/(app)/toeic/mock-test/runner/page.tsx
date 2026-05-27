@@ -49,7 +49,7 @@ function MockRunner() {
             } | null;
           }>("/toeic-mock/in-progress");
           if (!r.inProgress || r.inProgress.attemptId !== resumeId) {
-            setError("Không tìm thấy mock test đang dở");
+            setError("In-progress mock test not found");
             return;
           }
           setAttemptId(r.inProgress.attemptId);
@@ -77,7 +77,7 @@ function MockRunner() {
           questionShownAt.current = Date.now();
         }
       } catch (e) {
-        setError(e instanceof Error ? e.message : "Không thể bắt đầu");
+        setError(e instanceof Error ? e.message : "Unable to start");
       }
     })();
   }, [mode, resumeId]);
@@ -133,7 +133,7 @@ function MockRunner() {
       await api.post("/toeic-mock/complete", { attemptId });
       router.push(`/toeic/mock-test/${attemptId}/result`);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Không thể nộp bài");
+      setError(e instanceof Error ? e.message : "Unable to submit");
       setSubmitting(false);
     }
   };
@@ -170,8 +170,8 @@ function MockRunner() {
       Modal.info({
         title: "Reading section starts now",
         content:
-          "Listening đã kết thúc. Bắt đầu phần Reading. Bạn có 75 phút (Full) / 37 phút (Mini).",
-        okText: "Bắt đầu",
+          "Listening section has ended. Starting the Reading section. You have 75 minutes (Full) / 37 minutes (Mini).",
+        okText: "Start",
       });
     }
     setIdx(nextIdx);
@@ -182,12 +182,12 @@ function MockRunner() {
     return (
       <div className="p-6">
         <div className="text-destructive mb-3">{error}</div>
-        <Button onClick={() => router.push("/toeic/mock-test")}>Về Hub</Button>
+        <Button onClick={() => router.push("/toeic/mock-test")}>Back to Hub</Button>
       </div>
     );
   }
   if (questions.length === 0) {
-    return <div className="p-6">Đang tải đề mock test…</div>;
+    return <div className="p-6">Loading mock test...</div>;
   }
 
   const totalAnswered = idx + 1;

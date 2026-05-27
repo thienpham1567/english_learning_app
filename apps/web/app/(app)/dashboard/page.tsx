@@ -94,8 +94,8 @@ export default function DashboardPage() {
       {/* ── Hero Header ── */}
       <div className="max-w-5xl mx-auto mb-5">
         <PageHeader
-          title="Bảng điều khiển"
-          subtitle="Theo dõi tiến độ, kế hoạch học và điểm dự đoán của bạn"
+          title="Dashboard"
+          subtitle="Track your progress, daily study plan, and predicted score"
           icon={<LayoutDashboard className="h-6 w-6" />}
           boxed
         />
@@ -110,22 +110,22 @@ export default function DashboardPage() {
           <StatCard
             icon={<Flame className="h-5 w-5 text-orange-500 fill-current" />}
             label="Streak"
-            value={dash ? `${dash.streak.currentStreak} ngày` : "—"}
-            sub={dash ? `Kỷ lục: ${dash.streak.bestStreak}` : ""}
+            value={dash ? `${dash.streak.currentStreak} days` : "—"}
+            sub={dash ? `Record: ${dash.streak.bestStreak}` : ""}
             loading={!dash}
           />
           <StatCard
             icon={<Zap className="h-5 w-5 text-amber-500 fill-current" />}
-            label="Tổng XP"
+            label="Total XP"
             value={dash ? `${dash.totalXP.toLocaleString()}` : "—"}
-            sub="Kinh nghiệm tích lũy"
+            sub="Total experience points"
             loading={!dash}
           />
           <StatCard
             icon={<RotateCw className="h-5 w-5 text-accent" />}
-            label="Cần ôn"
+            label="Due"
             value={dash ? `${dash.flashcardsDue + dash.vocabDue}` : "—"}
-            sub={dash ? `${dash.flashcardsDue} thẻ · ${dash.vocabDue} từ` : ""}
+            sub={dash ? `${dash.flashcardsDue} cards · ${dash.vocabDue} words` : ""}
             loading={!dash}
           />
         </motion.div>
@@ -135,16 +135,9 @@ export default function DashboardPage() {
         {/* Left Column: Focus & Core Actions */}
         <div className="flex flex-col gap-5">
           {/* ── Predicted TOEIC Score ── */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            className={cardClass}
-          >
-            <div className="absolute top-0 left-0 right-0 h-[3px] bg-gradient-to-r from-accent to-secondary" />
-            <div className={sectionLabelClass}>
+                <div className={sectionLabelClass}>
               <div className={accentBarClass} />
-              <span>Điểm TOEIC dự đoán</span>
+              <span>Predicted TOEIC Score</span>
               <div className="flex-1 h-px bg-border ml-2" />
             </div>
 
@@ -159,7 +152,7 @@ export default function DashboardPage() {
               <ScoreDisplay score={score} />
             ) : (
               <p className="text-xs text-text-muted text-center py-6 font-semibold">
-                Chưa có đủ dữ liệu
+                No data available
               </p>
             )}
           </motion.div>
@@ -173,7 +166,7 @@ export default function DashboardPage() {
           >
             <div className={sectionLabelClass}>
               <div className={accentBarClass} />
-              <span>Kế hoạch hôm nay</span>
+              <span>Today's Plan</span>
               <div className="flex-1 h-px bg-border ml-2" />
             </div>
 
@@ -187,7 +180,7 @@ export default function DashboardPage() {
               <StudyPlanSection items={planReady.plan.items} stats={planReady.stats} />
             ) : (
               <p className="text-xs text-text-muted text-center py-4 font-semibold">
-                Hãy làm thêm bài tập để hệ thống gợi ý kế hoạch học!
+                Complete more exercises to unlock your personalized daily study plan!
               </p>
             )}
           </motion.div>
@@ -201,7 +194,7 @@ export default function DashboardPage() {
           >
             <div className={sectionLabelClass}>
               <div className={accentBarClass} />
-              <span>Truy cập nhanh</span>
+              <span>Quick Access</span>
               <div className="flex-1 h-px bg-border ml-2" />
             </div>
             <QuickActions dash={dash} />
@@ -229,7 +222,7 @@ export default function DashboardPage() {
             >
               <div className={sectionLabelClass}>
                 <div className={accentBarClass} />
-                <span>Hoạt động tuần này</span>
+                <span>Weekly Activity</span>
                 <div className="flex-1 h-px bg-border ml-2" />
               </div>
               <WeeklyChart data={dash.weeklyActivity} />
@@ -251,12 +244,12 @@ export default function DashboardPage() {
             <motion.div
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
+              transition={{ delay: 0.55 }}
               className={`${cardClass} w-full`}
             >
               <div className={sectionLabelClass}>
                 <div className={accentBarClass} />
-                <span>Xu hướng XP theo tuần</span>
+                <span>Weekly XP Trend</span>
                 <div className="flex-1 h-px bg-border ml-2" />
               </div>
               <ScoreTimeline data={score.weeklyXP} />
@@ -273,7 +266,7 @@ export default function DashboardPage() {
             >
               <div className={sectionLabelClass}>
                 <div className={accentBarClass} />
-                <span>Huy hiệu đã đạt</span>
+                <span>Unlocked Badges</span>
                 <div className="flex-1 h-px bg-border ml-2" />
               </div>
               <div className="flex flex-wrap gap-2">
@@ -409,10 +402,10 @@ function ScoreDisplay({ score }: { score: PredictedScore }) {
         {score.components && (
           <div className="grid grid-cols-2 gap-x-4 gap-y-1.5 border-t border-border pt-2.5">
             {[
-              { k: "Ngữ pháp", v: score.components.grammar },
-              { k: "Nghe hiểu", v: score.components.listeningAccuracy },
-              { k: "Từ vựng", v: score.components.vocabulary },
-              { k: "Điểm tốt", v: score.components.topScores },
+              { k: "Grammar", v: score.components.grammar },
+              { k: "Listening", v: score.components.listeningAccuracy },
+              { k: "Vocabulary", v: score.components.vocabulary },
+              { k: "Strengths", v: score.components.topScores },
             ].map((c) => (
               <div
                 key={c.k}
@@ -462,11 +455,11 @@ function InsufficientDataCard({ score }: { score: PredictedScore }) {
   return (
     <div className="text-center py-4 flex flex-col items-center">
       <TrendingUp className="h-8 w-8 text-text-muted mb-3" />
-      <p className="text-sm font-extrabold text-text-primary mb-1">Cần thêm dữ liệu để dự đoán</p>
+      <p className="text-sm font-extrabold text-text-primary mb-1">More data needed for prediction</p>
       <p className="text-xs text-text-muted font-bold mb-4">
-        {score.quizzesNeeded ? `Cần thêm ${score.quizzesNeeded} bài quiz` : ""}
-        {score.quizzesNeeded && score.listeningNeeded ? " và " : ""}
-        {score.listeningNeeded ? `${score.listeningNeeded} bài nghe` : ""}
+        {score.quizzesNeeded ? `${score.quizzesNeeded} more quiz${score.quizzesNeeded > 1 ? "zes" : ""}` : ""}
+        {score.quizzesNeeded && score.listeningNeeded ? " and " : ""}
+        {score.listeningNeeded ? `${score.listeningNeeded} more listening practice${score.listeningNeeded > 1 ? "s" : ""}` : ""}
       </p>
 
       <div className="flex gap-2.5 justify-center flex-wrap">
@@ -475,14 +468,14 @@ function InsufficientDataCard({ score }: { score: PredictedScore }) {
           className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-lg text-xs font-black border-2 border-border bg-accent text-ink shadow-(--shadow-sm) hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all cursor-pointer"
         >
           <HelpCircle className="h-3.5 w-3.5" />
-          <span>Làm Grammar Quiz</span>
+          <span>Start Grammar Quiz</span>
         </Link>
         <Link
           href="/toeic/skills"
           className="inline-flex items-center gap-1.5 px-4.5 py-2 rounded-lg text-xs font-black border-2 border-border bg-surface text-text-primary shadow-(--shadow-sm) hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all cursor-pointer"
         >
           <Target className="h-3.5 w-3.5" />
-          <span>Luyện Listening</span>
+          <span>Practice Listening</span>
         </Link>
       </div>
     </div>
@@ -547,14 +540,14 @@ function StudyPlanSection({ items, stats }: { items: DailyPlanItem[]; stats: Dai
                 <div className="text-[10px] text-text-muted font-bold mt-1 flex items-center gap-1.5">
                   <Clock className="h-3 w-3 shrink-0" />
                   <span>
-                    {item.estimatedMinutes} phút · {item.reason}
+                    {item.estimatedMinutes} mins · {item.reason}
                   </span>
                 </div>
               </div>
 
               {item.priority === "high" && !item.completed && (
                 <span className="px-2.5 py-0.5 rounded-lg text-[9px] font-extrabold bg-error/10 border-2 border-error text-error">
-                  Ưu tiên
+                  Priority
                 </span>
               )}
             </div>
@@ -567,7 +560,7 @@ function StudyPlanSection({ items, stats }: { items: DailyPlanItem[]; stats: Dai
         <div className="p-3 rounded-xl bg-surface border-2 border-border flex items-center gap-2.5 shadow-(--shadow-sm)">
           <Star className="text-amber-500 h-4 w-4 fill-current shrink-0" />
           <div className="flex-1 text-[11px] text-text-secondary font-bold">
-            Cấp độ {stats.levelNumber} ·{" "}
+            Level {stats.levelNumber} ·{" "}
             <strong className="text-text-primary">{stats.totalXP.toLocaleString()} XP</strong>
           </div>
           <div className="w-20 h-2 bg-bg-deep rounded-full overflow-hidden border-2 border-border shrink-0">
@@ -588,37 +581,37 @@ const QUICK_ACTIONS = [
   {
     href: "/daily-challenge",
     icon: <Flame />,
-    label: "Thử thách",
+    label: "Challenge",
     color: "text-orange-500 bg-orange-500/10",
   },
   {
     href: "/toeic/skills",
     icon: <Target />,
-    label: "Luyện TOEIC",
+    label: "TOEIC Practice",
     color: "text-accent bg-accent/10",
   },
   {
     href: "/flashcards",
     icon: <BookOpen />,
-    label: "Flashcard",
+    label: "Flashcards",
     color: "text-emerald-500 bg-emerald-550/10",
   },
   {
     href: "/error-notebook",
     icon: <AlertTriangle />,
-    label: "Sổ lỗi",
+    label: "Error Book",
     color: "text-red-500 bg-red-500/10",
   },
   {
     href: "/my-vocabulary",
     icon: <Star />,
-    label: "Từ vựng",
+    label: "Vocabulary",
     color: "text-amber-500 bg-amber-500/10",
   },
   {
     href: "/grammar-lessons",
     icon: <BookOpen />,
-    label: "Ngữ pháp",
+    label: "Grammar",
     color: "text-secondary bg-secondary/10",
   },
 ];
@@ -655,7 +648,7 @@ function QuickActions({ dash: _dash }: QuickActionsProps) {
 
 function WeeklyChart({ data }: { data: Array<{ day: string; count: number }> }) {
   const max = Math.max(...data.map((d) => d.count), 1);
-  const dayLabels = ["T2", "T3", "T4", "T5", "T6", "T7", "CN"];
+  const dayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
   return (
     <div className="flex items-end gap-1.5 h-20 pt-4">

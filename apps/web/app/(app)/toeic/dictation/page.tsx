@@ -6,9 +6,9 @@ import Link from "next/link";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
 
 const LEVEL_LABEL: Record<string, string> = {
-  beginner: "Cơ bản",
-  intermediate: "Trung bình",
-  advanced: "Nâng cao",
+  beginner: "Beginner",
+  intermediate: "Intermediate",
+  advanced: "Advanced",
 };
 const LEVEL_COLOR: Record<string, string> = {
   beginner: "green",
@@ -45,7 +45,7 @@ export default async function ToeicDictationPage() {
               key={lv}
               title={LEVEL_LABEL[lv]}
               size="small"
-              extra={<Tag color={LEVEL_COLOR[lv]}>{list.length} câu</Tag>}
+              extra={<Tag color={LEVEL_COLOR[lv]}>{list.length} sentences</Tag>}
             >
               <div
                 className="grid gap-2"

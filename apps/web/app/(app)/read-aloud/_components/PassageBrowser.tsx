@@ -1,7 +1,7 @@
 "use client";
 
 import { Flex, message, Typography } from "antd";
-import { Loader2 } from "lucide-react";
+import { Loader2, BookOpen, Sparkles } from "lucide-react";
 
 import * as m from "motion/react-client";
 import { useCallback, useState } from "react";
@@ -40,10 +40,10 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
       const data = await res.json();
       if (data.passages?.length) {
         setAiPassages((prev) => [...data.passages, ...prev].slice(0, 30));
-        message.success(`✨ Đã tạo ${data.passages.length} đoạn văn mới bằng AI!`);
+        message.success(`Generated ${data.passages.length} new passages with AI!`);
       }
     } catch {
-      message.error("Không thể tạo đoạn văn. Vui lòng thử lại.");
+      message.error("Failed to generate passages. Please try again.");
     } finally {
       setAiLoading(false);
     }
@@ -68,8 +68,9 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
       {/* Header + AI Generate Button */}
       <Flex align="center" justify="space-between" wrap="wrap" gap={8}>
         <Flex align="center" gap={8}>
-          <Text className="text-xs font-bold text-text-muted uppercase tracking-wider">
-            📚 Văn bản mẫu ({filteredPassages.length})
+          <Text className="text-xs font-bold text-text-muted uppercase tracking-wider flex items-center gap-1.5">
+            <BookOpen size={14} className="text-accent" />
+            Sample Passages ({filteredPassages.length})
           </Text>
         </Flex>
         <m.button
@@ -90,10 +91,12 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
         >
           {aiLoading ? (
             <>
-              <Loader2 className="animate-spin" size={12} /> Đang tạo...
+              <Loader2 className="animate-spin" size={12} /> Generating...
             </>
           ) : (
-            <>✨ Tạo bằng AI</>
+            <>
+              <Sparkles size={12} /> Generate with AI
+            </>
           )}
         </m.button>
       </Flex>
@@ -101,7 +104,7 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
       {/* Topic filter chips */}
       <div className="flex flex-wrap gap-1.5">
         <FilterChip
-          label="Tất cả"
+          label="All Topics"
           active={selectedTopic === "all"}
           onClick={() => setSelectedTopic("all")}
         />
@@ -117,18 +120,18 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
 
       {/* Length filter */}
       <Flex gap={6} align="center">
-        <Text className="text-[11px] text-text-muted font-semibold">Độ dài:</Text>
+        <Text className="text-[11px] text-text-muted font-semibold">Length:</Text>
         {(["all", "short", "medium", "long"] as const).map((len) => (
           <FilterChip
             key={len}
             label={
               len === "all"
-                ? "Tất cả"
+                ? "All"
                 : len === "short"
-                  ? "Ngắn (~30 từ)"
+                  ? "Short (~30 words)"
                   : len === "medium"
-                    ? "Trung bình (~60 từ)"
-                    : "Dài (~120 từ)"
+                    ? "Medium (~60 words)"
+                    : "Long (~120 words)"
             }
             active={selectedLength === len}
             onClick={() => setSelectedLength(len)}
@@ -143,7 +146,7 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
             className="text-center text-text-muted text-[13px]"
             style={{ padding: "24px 16px", borderRadius: 14, border: "1px dashed var(--border)" }}
           >
-            Không có đoạn văn nào. Nhấn &quot;✨ Tạo bằng AI&quot; để tạo mới!
+            No passages found. Click "Generate with AI" to create new ones!
           </div>
         ) : (
           filteredPassages.map((sample, idx) => (
@@ -155,7 +158,7 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
               whileHover={{ x: 3, background: "var(--accent-light)" }}
               onClick={() => {
                 onSelectPassage(sample.text, sample.title);
-                message.success(`Đã tải: ${sample.title}`);
+                message.success(`Loaded: ${sample.title}`);
               }}
               className="flex items-start gap-3 rounded-(--radius-lg) border-2 border-border bg-surface-alt cursor-pointer"
               style={{ padding: "12px 14px", transition: "all 0.15s" }}
@@ -203,10 +206,10 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
                       border: `1px solid ${sample.length === "short" ? "rgba(16,185,129,0.2)" : sample.length === "long" ? "rgba(239,68,68,0.15)" : "rgba(59,130,246,0.2)"}`,
                     }}
                   >
-                    {sample.length === "short" ? "Ngắn" : sample.length === "long" ? "Dài" : "TB"}
+                    {sample.length === "short" ? "Short" : sample.length === "long" ? "Long" : "Medium"}
                   </span>
                   <span className="text-[10px] font-semibold text-text-muted">
-                    ~{sample.text.split(/\s+/).length} từ
+                    ~{sample.text.split(/\s+/).length} words
                   </span>
                 </Flex>
               </div>

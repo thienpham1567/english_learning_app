@@ -51,7 +51,7 @@ export function useErrorSRS(): UseErrorSRSReturn {
         setCorrect(0);
       }
     } catch {
-      console.error("Không thể tải hàng đợi ôn tập");
+      console.error("Failed to load review queue");
     } finally {
       setLoading(false);
     }
@@ -74,7 +74,7 @@ export function useErrorSRS(): UseErrorSRSReturn {
         if (grade >= 3) setCorrect((c) => c + 1);
         setCurrentIndex((i) => i + 1);
       } catch {
-        console.error("Không thể lưu kết quả ôn tập");
+        console.error("Failed to save review results");
       } finally {
         setGrading(false);
       }

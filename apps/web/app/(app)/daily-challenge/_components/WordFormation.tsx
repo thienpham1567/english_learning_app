@@ -1,5 +1,6 @@
 "use client";
 
+import { BookOpen } from "lucide-react";
 import * as m from "motion/react-client";
 import { useState } from "react";
 import type { WordFormationData } from "@/lib/daily-challenge/types";
@@ -27,6 +28,9 @@ export function WordFormation({ data, instruction, onAnswer, disabled }: Props) 
       {/* Instruction */}
       <p
         style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
           marginBottom: 14,
           fontSize: 11,
           fontWeight: 800,
@@ -35,7 +39,7 @@ export function WordFormation({ data, instruction, onAnswer, disabled }: Props) 
           letterSpacing: "0.08em",
         }}
       >
-        📖 {instruction}
+        <BookOpen size={12} /> {instruction}
       </p>
 
       {/* Root word badge */}
@@ -60,7 +64,7 @@ export function WordFormation({ data, instruction, onAnswer, disabled }: Props) 
             color: "var(--text-muted)",
           }}
         >
-          Từ gốc:
+          Root word:
         </span>
         <span
           style={{

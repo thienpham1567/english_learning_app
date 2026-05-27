@@ -19,7 +19,7 @@ export default function DiagnosticPage() {
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
       <div className="p-4 flex-1">
         {session.state === "idle" && <DiagnosticIntro onStart={handleStart} />}
-        {session.state === "loading" && <div>Đang tải đề…</div>}
+        {session.state === "loading" && <div>Loading test...</div>}
         {(session.state === "active" || session.state === "submitting") && (
           <QuestionRunner
             question={session.currentQuestion}

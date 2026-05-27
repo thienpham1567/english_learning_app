@@ -70,7 +70,7 @@ export function HeatmapCalendar() {
     return "bg-(--heatmap-4)";
   }
 
-  const dayLabels = ["", "T2", "", "T4", "", "T6", ""];
+  const dayLabels = ["", "Mon", "", "Wed", "", "Fri", ""];
 
   return (
     <motion.div
@@ -86,7 +86,7 @@ export function HeatmapCalendar() {
             <Calendar className="h-4 w-4 text-accent" />
           </div>
           <span className="text-xs font-extrabold text-text-primary font-display tracking-wide">
-            Tần suất học tập
+            Learning Frequency
           </span>
         </div>
 
@@ -96,7 +96,7 @@ export function HeatmapCalendar() {
             <Flame className="text-accent h-3 w-3" />
             <span className="text-xs font-extrabold text-text-primary font-mono">{activeDays}</span>
             <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider">
-              ngày hoạt động
+              active days
             </span>
           </div>
 
@@ -135,7 +135,7 @@ export function HeatmapCalendar() {
                   return <div key={`empty-${di}`} className="w-3 h-3" />;
                 }
                 const dateObj = new Date(day.date);
-                const label = dateObj.toLocaleDateString("vi-VN", {
+                const label = dateObj.toLocaleDateString("en-US", {
                   day: "numeric",
                   month: "short",
                 });
@@ -154,7 +154,7 @@ export function HeatmapCalendar() {
                     <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 hidden group-hover:block bg-foreground border-2 border-border text-background text-[10px] font-semibold px-2.5 py-1.5 rounded-lg shadow-xl z-50 whitespace-nowrap">
                       <div className="font-extrabold mb-0.5 text-background">{label}</div>
                       <div className="text-background/80 font-bold">
-                        {day.count} hoạt động ·{" "}
+                        {day.count} activities ·{" "}
                         <span className="text-accent font-extrabold">{day.xp} XP</span>
                       </div>
                     </div>
@@ -168,7 +168,7 @@ export function HeatmapCalendar() {
 
       {/* Legend bar */}
       <div className="flex items-center gap-1 justify-end text-[10px] font-bold text-text-muted font-mono">
-        <span className="mr-1">Ít hoạt động</span>
+        <span className="mr-1">Less</span>
         {[0, 0.25, 0.5, 0.75, 1].map((pct, i) => (
           <div
             key={i}
@@ -185,7 +185,7 @@ export function HeatmapCalendar() {
             }`}
           />
         ))}
-        <span className="ml-1">Nhiều</span>
+        <span className="ml-1">More</span>
       </div>
     </motion.div>
   );

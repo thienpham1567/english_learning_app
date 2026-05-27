@@ -63,7 +63,7 @@ export function useErrorList(): UseErrorListReturn {
         offsetRef.current = data.errors.length;
       }
     } catch {
-      console.error("Không thể tải danh sách lỗi sai");
+      console.error("Failed to load error list");
     } finally {
       setLoading(false);
     }
@@ -101,7 +101,7 @@ export function useErrorList(): UseErrorListReturn {
       await api.patch("/errors", { ids: [id] });
       setErrors((prev) => prev.map((e) => (e.id === id ? { ...e, isResolved: true } : e)));
     } catch {
-      console.error("Không thể cập nhật");
+      console.error("Failed to update");
     }
   }, []);
 
@@ -112,7 +112,7 @@ export function useErrorList(): UseErrorListReturn {
       await api.patch("/errors", { ids });
       setErrors((prev) => prev.map((e) => ({ ...e, isResolved: true })));
     } catch {
-      console.error("Không thể cập nhật");
+      console.error("Failed to update");
     }
   }, [errors]);
 

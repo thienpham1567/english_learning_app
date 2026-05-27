@@ -8,9 +8,9 @@ import { ReadAloud } from "./speaking/ReadAloud";
 type SpeakingPart = "part3" | "part1" | "part5";
 
 const SPEAKING_PARTS: { key: SpeakingPart; label: string; desc: string }[] = [
-  { key: "part3", label: "Part 3 · Mô tả hình", desc: "Describe a Picture" },
-  { key: "part1", label: "Part 1 · Đọc to", desc: "Read Aloud" },
-  { key: "part5", label: "Part 5 · Ý kiến", desc: "Express an Opinion" },
+  { key: "part3", label: "Part 3 · Describe a Picture", desc: "Describe a Picture" },
+  { key: "part1", label: "Part 1 · Read Aloud", desc: "Read Aloud" },
+  { key: "part5", label: "Part 5 · Express an Opinion", desc: "Express an Opinion" },
 ];
 
 export function SpeakingTab() {

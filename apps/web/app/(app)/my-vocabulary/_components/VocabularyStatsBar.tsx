@@ -79,7 +79,7 @@ export function VocabularyStatsBar({ entries }: Props) {
               color: "var(--text-muted)",
             }}
           >
-            Từ đã tra cứu
+            Words Looked Up
           </span>
         </m.div>
 
@@ -120,7 +120,7 @@ export function VocabularyStatsBar({ entries }: Props) {
               gap: 4,
             }}
           >
-            Từ đã lưu <Star size={10} fill="currentColor" />
+            Saved Words <Star size={10} fill="currentColor" />
           </span>
         </m.div>
       </div>
@@ -149,7 +149,7 @@ export function VocabularyStatsBar({ entries }: Props) {
               marginRight: 6,
             }}
           >
-            Phân bố trình độ:
+            Level Distribution:
           </span>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
             {CEFR_LEVELS.filter((l) => levelCounts[l]).map((level) => {

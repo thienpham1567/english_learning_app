@@ -81,21 +81,21 @@ export function ListeningDashboard({
           iconColor="var(--error)"
           label="Streak"
           value={`${stats.currentStreak}`}
-          suffix="ngày"
+          suffix="days"
         />
         <StatCard
           icon={<BarChart3 />}
           iconColor="var(--accent)"
-          label="Điểm TB"
+          label="Avg Score"
           value={`${stats.avgScore}%`}
           valueColor={scoreColor(stats.avgScore)}
         />
         <StatCard
           icon={<Zap />}
           iconColor="var(--xp)"
-          label="Tuần này"
+          label="This Week"
           value={`${stats.sessionsThisWeek}`}
-          suffix="bài"
+          suffix="exercises"
         />
       </div>
 
@@ -106,7 +106,7 @@ export function ListeningDashboard({
             className="flex items-center gap-1.5 text-[11px] font-bold text-text-muted uppercase"
             style={{ letterSpacing: "0.1em", marginBottom: 14 }}
           >
-            <TrendingUp /> Xu hướng 8 tuần
+            <TrendingUp /> 8-Week Trend
           </div>
           <div className="flex items-end gap-1.5 h-[60px]">
             {stats.weeklyTrend.map((w, i) => (
@@ -145,7 +145,7 @@ export function ListeningDashboard({
           }}
         >
           <Volume2 />
-          {recommendedLevel ? `Luyện ${recommendedLevel}` : "Bài mới"}
+          {recommendedLevel ? `Practice ${recommendedLevel}` : "New Exercise"}
         </button>
         <button
           onClick={onOpenHistory}
@@ -157,7 +157,7 @@ export function ListeningDashboard({
           }}
         >
           <History />
-          Lịch sử
+          History
         </button>
       </div>
 
@@ -169,13 +169,13 @@ export function ListeningDashboard({
               className="text-[11px] font-bold text-text-muted uppercase"
               style={{ letterSpacing: "0.1em" }}
             >
-              <History className="mr-1" /> Gần đây
+              <History className="mr-1" /> Recent
             </span>
             <button
               onClick={onOpenHistory}
               className="bg-none border-none text-accent text-[11px] font-semibold cursor-pointer"
             >
-              Xem tất cả →
+              View All →
             </button>
           </div>
           <div className="flex flex-col gap-1.5">
@@ -200,12 +200,12 @@ export function ListeningDashboard({
                 </span>
                 <span className="flex-1 text-text-secondary font-medium">
                   {item.mode === "listening"
-                    ? "Nghe hiểu"
+                    ? "Comprehension"
                     : item.mode === "shadowing"
-                      ? "Shadow"
+                      ? "Shadowing"
                       : item.mode === "dictation"
                         ? "Dictation"
-                        : "Tóm tắt"}
+                        : "Summary"}
                 </span>
                 <span
                   className="font-bold font-mono"
@@ -215,7 +215,7 @@ export function ListeningDashboard({
                 </span>
                 <span className="text-text-muted text-[10px]">
                   {item.completedAt
-                    ? new Date(item.completedAt).toLocaleDateString("vi-VN", {
+                    ? new Date(item.completedAt).toLocaleDateString("en-US", {
                         day: "2-digit",
                         month: "2-digit",
                       })
@@ -234,7 +234,7 @@ export function ListeningDashboard({
             className="text-[11px] font-bold text-text-muted uppercase mb-2.5"
             style={{ letterSpacing: "0.1em" }}
           >
-            <Trophy className="mr-1" /> Theo cấp độ
+            <Trophy className="mr-1" /> By Level
           </div>
           <div className="flex flex-wrap gap-2">
             {stats.byLevel.map((bl) => (
@@ -245,7 +245,7 @@ export function ListeningDashboard({
               >
                 <div className="text-sm font-extrabold text-accent font-mono">{bl.level}</div>
                 <div className="text-[11px] text-text-secondary">
-                  {bl.count} bài · {bl.avgScore}%
+                  {bl.count} exercises · {bl.avgScore}%
                 </div>
               </div>
             ))}

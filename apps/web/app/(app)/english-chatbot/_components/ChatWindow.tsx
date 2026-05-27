@@ -222,14 +222,14 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                       onClick={chat.retryLast}
                       className="font-bold underline cursor-pointer text-red-450 hover:text-red-300 transition-colors"
                     >
-                      Thử lại
+                      Try again
                     </button>
                   )}
                   <button
                     onClick={() => chat.setError(null)}
                     className="font-bold underline cursor-pointer text-(--text-secondary) hover:text-(--text-primary) transition-colors"
                   >
-                    Đóng
+                    Close
                   </button>
                 </div>
               </div>
@@ -246,7 +246,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
           className="absolute bottom-24 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1.5 rounded-full border-2 border-border bg-(--chat-surface)/90 backdrop-blur-md px-3.5 py-2 text-xs font-semibold text-(--text-secondary) hover:text-(--ink) shadow-lg cursor-pointer transition-all duration-200 active:scale-95 animate-in fade-in zoom-in-90"
         >
           <ArrowDown className="h-3.5 w-3.5" />
-          <span>Xuống cuối</span>
+          <span>Scroll to bottom</span>
         </button>
       )}
 

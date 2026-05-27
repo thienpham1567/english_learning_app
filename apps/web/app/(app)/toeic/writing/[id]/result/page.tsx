@@ -106,7 +106,7 @@ export default async function WritingResultPage({ params }: { params: Promise<{ 
             className="py-2 px-4 rounded-lg text-ink border-2 border-border"
             style={{ background: "var(--surface-hover)", textDecoration: "none" }}
           >
-            Về Hub
+            Back to Hub
           </Link>
         </div>
       </div>

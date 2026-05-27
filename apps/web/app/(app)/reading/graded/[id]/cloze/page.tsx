@@ -76,7 +76,7 @@ export default function ClozeTestPage() {
       }
     }
     setSavingFlashcards(false);
-    msgApi.success(`Đã lưu ${saved} từ vào sổ tay!`);
+    msgApi.success(`Saved ${saved} words to notebook!`);
   }, [items, results, msgApi]);
 
   const handleRetry = useCallback(() => {
@@ -108,13 +108,13 @@ export default function ClozeTestPage() {
         style={{ padding: 60 }}
       >
         <Pencil size={48} className="text-text-muted" />
-        <Text type="secondary">Không thể tạo bài kiểm tra cho bài đọc này</Text>
+        <Text type="secondary">Unable to generate quiz for this passage</Text>
         <Button
           type="link"
           icon={<ArrowLeft />}
           onClick={() => router.push(`/reading/graded/${id}`)}
         >
-          Quay lại bài đọc
+          Back to Passage
         </Button>
       </Flex>
     );
@@ -132,7 +132,7 @@ export default function ClozeTestPage() {
           className="text-text-muted text-[13px]"
           style={{ alignSelf: "flex-start", borderRadius: 10 }}
         >
-          Quay lại bài đọc
+          Back to Passage
         </Button>
 
         {/* Header card */}
@@ -163,7 +163,7 @@ export default function ClozeTestPage() {
                 className="m-0 font-display italic"
                 style={{ color: "var(--text-on-accent)" }}
               >
-                Điền từ vào chỗ trống
+                Fill in the Blanks
               </Title>
             </div>
             <Tag
@@ -176,7 +176,7 @@ export default function ClozeTestPage() {
                 padding: "4px 14px",
               }}
             >
-              {totalCount} câu
+              {totalCount} questions
             </Tag>
           </Flex>
         </Card>
@@ -228,13 +228,12 @@ export default function ClozeTestPage() {
               {score}%
             </Title>
             <Text type="secondary">
-              {correctCount}/{totalCount} đúng
-              {score >= 80 ? "" : score >= 50 ? "" : ""}
+              {correctCount}/{totalCount} correct
             </Text>
 
             <Flex gap={10} justify="center" className="mt-4">
               <Button icon={<RefreshCw />} onClick={handleRetry} style={{ borderRadius: 10 }}>
-                Làm lại
+                Retry
               </Button>
               {correctCount < totalCount && (
                 <Button
@@ -244,7 +243,7 @@ export default function ClozeTestPage() {
                   disabled={savingFlashcards}
                   style={{ borderRadius: 10 }}
                 >
-                  Lưu {totalCount - correctCount} từ sai
+                  Save {totalCount - correctCount} incorrect words
                 </Button>
               )}
             </Flex>
@@ -337,7 +336,7 @@ export default function ClozeTestPage() {
                     {showResult && !isCorrect && (
                       <Text className="block mt-1.5 text-xs text-emerald-500">
                         <CheckCircle className="mr-1" />
-                        Đáp án: <strong>{item.answer}</strong>
+                        Answer: <strong>{item.answer}</strong>
                       </Text>
                     )}
                   </div>
@@ -357,7 +356,7 @@ export default function ClozeTestPage() {
             className="rounded-xl font-bold h-[48px] text-[15px]"
             style={{ alignSelf: "center", padding: "0 32px" }}
           >
-            Nộp bài ({totalCount} câu)
+            Submit Quiz ({totalCount} questions)
           </Button>
         )}
       </Flex>

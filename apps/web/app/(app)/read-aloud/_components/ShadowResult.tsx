@@ -2,6 +2,18 @@
 
 import { Flex, Typography } from "antd";
 import * as m from "motion/react-client";
+import {
+  CheckCircle2,
+  AlertTriangle,
+  XCircle,
+  Award,
+  Mic,
+  Music,
+  Gauge,
+  Target,
+  FileText,
+  Lightbulb,
+} from "lucide-react";
 
 const { Text } = Typography;
 
@@ -33,17 +45,17 @@ const SCORE_COLORS: Record<string, string> = {
   poor: "var(--error)",
 };
 
-const SCORE_ICONS: Record<string, string> = {
-  good: "✅",
-  fair: "⚠️",
-  poor: "❌",
+const SCORE_ICONS: Record<string, React.ComponentType<any>> = {
+  good: CheckCircle2,
+  fair: AlertTriangle,
+  poor: XCircle,
 };
 
 function getGrade(score: number): { label: string; color: string } {
-  if (score >= 85) return { label: "Xuất sắc", color: "var(--success)" };
-  if (score >= 70) return { label: "Tốt", color: "var(--info)" };
-  if (score >= 50) return { label: "Cần cải thiện", color: "var(--warning, #f59e0b)" };
-  return { label: "Cần luyện thêm", color: "var(--error)" };
+  if (score >= 85) return { label: "Excellent", color: "var(--success)" };
+  if (score >= 70) return { label: "Good", color: "var(--info)" };
+  if (score >= 50) return { label: "Needs Improvement", color: "var(--warning, #f59e0b)" };
+  return { label: "Needs Practice", color: "var(--error)" };
 }
 
 export function ShadowResult({ result, referenceText }: ShadowResultProps) {
@@ -96,8 +108,9 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
         </div>
 
         <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 16, fontWeight: 800, color: grade.color, marginBottom: 4 }}>
-            🎯 {grade.label}
+          <div style={{ fontSize: 16, fontWeight: 800, color: grade.color, marginBottom: 4, display: "flex", alignItems: "center", gap: 6 }}>
+            <Award size={18} />
+            {grade.label}
           </div>
           <Text style={{ fontSize: 13, color: "var(--text-secondary)", lineHeight: 1.6 }}>
             {result.summary}
@@ -108,10 +121,10 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
       {/* Sub-scores */}
       <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8 }}>
         {[
-          { label: "🗣️ Phát âm", value: result.pronunciation },
-          { label: "🎵 Ngữ điệu", value: result.intonation },
-          { label: "💨 Lưu loát", value: result.fluency },
-          { label: "💪 Nhấn nhá", value: result.stress },
+          { label: "Pronunciation", Icon: Mic, value: result.pronunciation },
+          { label: "Intonation", Icon: Music, value: result.intonation },
+          { label: "Fluency", Icon: Gauge, value: result.fluency },
+          { label: "Stress", Icon: Target, value: result.stress },
         ].map((s) => {
           const g = getGrade(s.value);
           return (
@@ -125,7 +138,8 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
               }}
             >
               <Flex justify="space-between" align="center">
-                <Text style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)" }}>
+                <Text style={{ fontSize: 12, fontWeight: 600, color: "var(--text-secondary)", display: "flex", alignItems: "center", gap: 4 }}>
+                  <s.Icon size={12} className="text-text-muted" />
                   {s.label}
                 </Text>
                 <Text style={{ fontSize: 16, fontWeight: 900, color: g.color }}>{s.value}</Text>
@@ -163,31 +177,41 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
               textTransform: "uppercase",
               letterSpacing: "0.05em",
               marginBottom: 10,
-              display: "block",
+              display: "flex",
+              alignItems: "center",
+              gap: 4,
             }}
           >
-            📝 Chi tiết từng từ
+            <FileText size={13} />
+            Word-by-word Details
           </Text>
           <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 12 }}>
-            {result.wordScores.map((w, i) => (
-              <span
-                key={i}
-                title={w.tip || undefined}
-                style={{
-                  padding: "4px 10px",
-                  borderRadius: 8,
-                  fontSize: 14,
-                  fontWeight: 700,
-                  color: SCORE_COLORS[w.score],
-                  background: `color-mix(in srgb, ${SCORE_COLORS[w.score]} 8%, var(--surface))`,
-                  border: `1px solid color-mix(in srgb, ${SCORE_COLORS[w.score]} 20%, transparent)`,
-                  cursor: w.tip ? "help" : "default",
-                  transition: "transform 0.1s",
-                }}
-              >
-                {SCORE_ICONS[w.score]} {w.word}
-              </span>
-            ))}
+            {result.wordScores.map((w, i) => {
+              const IconComp = SCORE_ICONS[w.score];
+              return (
+                <span
+                  key={i}
+                  title={w.tip || undefined}
+                  style={{
+                    padding: "4px 10px",
+                    borderRadius: 8,
+                    fontSize: 14,
+                    fontWeight: 700,
+                    color: SCORE_COLORS[w.score],
+                    background: `color-mix(in srgb, ${SCORE_COLORS[w.score]} 8%, var(--surface))`,
+                    border: `1px solid color-mix(in srgb, ${SCORE_COLORS[w.score]} 20%, transparent)`,
+                    cursor: w.tip ? "help" : "default",
+                    transition: "transform 0.1s",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 4,
+                  }}
+                >
+                  {IconComp && <IconComp size={13} />}
+                  {w.word}
+                </span>
+              );
+            })}
           </div>
 
           {/* Tips for poor/fair words */}
@@ -214,7 +238,10 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
                     <span style={{ color: SCORE_COLORS[w.score], fontWeight: 800, flexShrink: 0 }}>
                       {w.word}:
                     </span>
-                    <span>💡 {w.tip}</span>
+                    <span style={{ display: "flex", alignItems: "center", gap: 4 }}>
+                      <Lightbulb size={13} className="text-accent shrink-0" />
+                      {w.tip}
+                    </span>
                   </div>
                 ))}
             </div>
@@ -237,11 +264,14 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
             fontWeight: 700,
             color: "var(--text-muted)",
             textTransform: "uppercase",
-            display: "block",
+            display: "flex",
+            alignItems: "center",
+            gap: 4,
             marginBottom: 6,
           }}
         >
-          🎯 Câu mẫu
+          <Target size={12} />
+          Reference Sentence
         </Text>
         <Text
           style={{
@@ -260,11 +290,14 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
             fontWeight: 700,
             color: "var(--text-muted)",
             textTransform: "uppercase",
-            display: "block",
+            display: "flex",
+            alignItems: "center",
+            gap: 4,
             marginBottom: 6,
           }}
         >
-          🎙️ Bạn đã nói
+          <Mic size={12} />
+          Your Speech
         </Text>
         <Text
           style={{
@@ -275,7 +308,7 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
             fontStyle: "italic",
           }}
         >
-          {result.transcript || "Không nhận dạng được giọng nói"}
+          {result.transcript || "Speech not recognized"}
         </Text>
       </div>
     </m.div>

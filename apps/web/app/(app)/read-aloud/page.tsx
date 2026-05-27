@@ -12,15 +12,17 @@ import { VoiceSelector } from "./_components/VoiceSelector";
 import { getVoiceByRole } from "./_data/voices";
 import { clearBlobCache, useAudioPlayback } from "./_hooks/useAudioPlayback";
 import { useHistory } from "./_hooks/useHistory";
+import { Headphones, Mic, MessageSquare, Lightbulb } from "lucide-react";
+import { motion } from "framer-motion";
 
 const { Title, Paragraph, Text } = Typography;
 
 type AppMode = "listen" | "shadow" | "dialogue";
 
-const MODE_TABS: { key: AppMode; label: string; icon: string; desc: string }[] = [
-  { key: "listen", label: "Nghe", icon: "🎧", desc: "Nghe giọng bản xứ đọc đoạn văn" },
-  { key: "shadow", label: "Shadowing", icon: "🎙️", desc: "Đọc theo & được chấm điểm" },
-  { key: "dialogue", label: "Hội thoại", icon: "💬", desc: "Nghe & đóng vai hội thoại" },
+const MODE_TABS = [
+  { key: "listen" as AppMode, label: "Listen", Icon: Headphones, desc: "Listen to native speakers read passages" },
+  { key: "shadow" as AppMode, label: "Shadowing", Icon: Mic, desc: "Read along and get real-time feedback" },
+  { key: "dialogue" as AppMode, label: "Dialogue", Icon: MessageSquare, desc: "Interactive roleplay conversation practice" },
 ];
 
 export default function ReadAloudPage() {
@@ -56,14 +58,14 @@ export default function ReadAloudPage() {
     setSelectedRole(entry.voice);
     setSpeed(entry.speed);
     setShowHistory(false);
-    message.info('Đã tải lại đoạn văn — nhấn "Bắt đầu nghe đọc" để phát');
+    message.info('Passage reloaded — click "Start listening" to play');
   }, []);
 
   /* ── History clear all ── */
   const handleClearAllHistory = useCallback(() => {
     history.clearAll();
     clearBlobCache();
-    message.success("Đã xóa toàn bộ lịch sử");
+    message.success("Successfully cleared all history");
   }, [history]);
 
   return (
@@ -96,7 +98,13 @@ export default function ReadAloudPage() {
                 boxShadow: mode === tab.key ? "0 2px 12px var(--accent-muted)" : "var(--shadow-sm)",
               }}
             >
-              <span style={{ fontSize: 18 }}>{tab.icon}</span>
+              <motion.span
+                animate={{ scale: mode === tab.key ? 1.1 : 1 }}
+                transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                style={{ display: "inline-flex", color: mode === tab.key ? "var(--accent)" : "var(--text-muted)" }}
+              >
+                <tab.Icon size={18} />
+              </motion.span>
               <div style={{ textAlign: "left" }}>
                 <div
                   className="mode-label"
@@ -196,18 +204,27 @@ export default function ReadAloudPage() {
                     fontSize: 12,
                     fontWeight: 700,
                     color: "var(--text-muted)",
-                    display: "block",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
                     marginBottom: 8,
                   }}
                 >
-                  💡 Hướng dẫn Shadowing
+                  <motion.span
+                    animate={{ rotate: [0, 10, -10, 0] }}
+                    transition={{ repeat: Infinity, duration: 2, repeatDelay: 4 }}
+                    style={{ display: "inline-flex", color: "var(--accent)" }}
+                  >
+                    <Lightbulb size={14} />
+                  </motion.span>
+                  Shadowing Guide
                 </Text>
                 {[
-                  "1. Nhập văn bản ở tab Nghe",
-                  "2. Chuyển sang tab Shadowing",
-                  "3. Nghe câu mẫu → Đọc theo",
-                  "4. AI chấm điểm phát âm",
-                  "5. Thử lại hoặc sang câu tiếp",
+                  "1. Enter text in the Listen tab",
+                  "2. Switch to the Shadowing tab",
+                  "3. Listen to the model sentence → Read along",
+                  "4. AI grades your pronunciation",
+                  "5. Retry or move to the next sentence",
                 ].map((tip, i) => (
                   <Text
                     key={i}
@@ -253,18 +270,27 @@ export default function ReadAloudPage() {
                     fontSize: 12,
                     fontWeight: 700,
                     color: "var(--text-muted)",
-                    display: "block",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: 6,
                     marginBottom: 8,
                   }}
                 >
-                  💡 Hướng dẫn Hội thoại
+                  <motion.span
+                    animate={{ rotate: [0, 10, -10, 0] }}
+                    transition={{ repeat: Infinity, duration: 2, repeatDelay: 4 }}
+                    style={{ display: "inline-flex", color: "var(--accent)" }}
+                  >
+                    <Lightbulb size={14} />
+                  </motion.span>
+                  Dialogue Guide
                 </Text>
                 {[
-                  "1. Chọn chủ đề & số người",
-                  '2. Nhấn "Tạo hội thoại"',
-                  "3. Nghe toàn bộ hoặc từng câu",
-                  "4. Đóng vai 1 nhân vật",
-                  "5. Đọc vai của mình & được chấm điểm",
+                  "1. Select topic and number of speakers",
+                  '2. Click "Create conversation"',
+                  "3. Listen to the whole dialogue or sentence-by-sentence",
+                  "4. Roleplay as a character",
+                  "5. Read your part and get graded",
                 ].map((tip, i) => (
                   <Text
                     key={i}

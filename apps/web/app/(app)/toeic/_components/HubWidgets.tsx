@@ -50,8 +50,8 @@ async function getDailyPlan(userId: string): Promise<PlanItem[]> {
   if (dueCount > 0) {
     items.push({
       id: "review-due",
-      title: `Ôn ${Math.min(dueCount, 20)} câu`,
-      reason: "Câu sai + từ vựng tới hạn",
+      title: `Review ${Math.min(dueCount, 20)} items`,
+      reason: "Incorrect items + vocab due",
       href: "/toeic/review",
       estimatedMinutes: Math.min(20, dueCount),
       priority: "high",
@@ -71,8 +71,8 @@ async function getDailyPlan(userId: string): Promise<PlanItem[]> {
     if (isPart56) {
       items.push({
         id: `drill-${weakest.skillId}`,
-        title: `15 câu ${getSkillLabel(weakest.skillId as ToeicSkill)}`,
-        reason: `Mastery ${Math.round(weakest.proficiency * 100)}/100 — yếu nhất`,
+        title: `15 questions of ${getSkillLabel(weakest.skillId as ToeicSkill)}`,
+        reason: `Mastery ${Math.round(weakest.proficiency * 100)}/100 — weakest area`,
         href: `/toeic/grammar/drill?skill=${encodeURIComponent(weakest.skillId)}&count=15`,
         estimatedMinutes: 15,
         priority: "high",
@@ -80,8 +80,8 @@ async function getDailyPlan(userId: string): Promise<PlanItem[]> {
     } else if (isVocab) {
       items.push({
         id: "vocab-weakest",
-        title: "15 từ vựng",
-        reason: `Mastery vocab ${Math.round(weakest.proficiency * 100)}/100`,
+        title: "Learn 15 vocabulary words",
+        reason: `Vocab mastery: ${Math.round(weakest.proficiency * 100)}/100`,
         href: "/toeic/vocab",
         estimatedMinutes: 10,
         priority: "high",
@@ -89,8 +89,8 @@ async function getDailyPlan(userId: string): Promise<PlanItem[]> {
     } else {
       items.push({
         id: `practice-${weakest.skillId}`,
-        title: `Luyện ${getSkillLabel(weakest.skillId as ToeicSkill)}`,
-        reason: `Mastery ${Math.round(weakest.proficiency * 100)}/100`,
+        title: `Practice ${getSkillLabel(weakest.skillId as ToeicSkill)}`,
+        reason: `Skill mastery: ${Math.round(weakest.proficiency * 100)}/100`,
         href: "/toeic/practice",
         estimatedMinutes: 15,
         priority: "high",
@@ -103,7 +103,7 @@ async function getDailyPlan(userId: string): Promise<PlanItem[]> {
     if (studied >= 5) {
       items.push({
         id: "mock-mini",
-        title: "Mini mock test (100 câu)",
+        title: "Mini mock test (100 questions)",
         reason: "Calibrate predicted score",
         href: "/toeic/mock-test",
         estimatedMinutes: 60,
@@ -118,8 +118,8 @@ async function getDailyPlan(userId: string): Promise<PlanItem[]> {
       if (pack) {
         items.push({
           id: `vocab-${pack.topic}`,
-          title: `15 từ chủ đề ${pack.topic}`,
-          reason: "Mở rộng vốn từ TOEIC",
+          title: `15 words on topic: ${pack.topic}`,
+          reason: "Expand your TOEIC vocabulary",
           href: `/toeic/vocab/learn?pack=${encodeURIComponent(pack.topic)}&mode=new`,
           estimatedMinutes: 10,
           priority: "medium",
@@ -212,19 +212,19 @@ export async function HubWidgets() {
             style={{ fontSize: 15.5 }}
           >
             <Calendar className="text-accent" />
-            <span>🎯 Hôm nay nên làm</span>
+            <span>🎯 Recommended for Today</span>
           </h3>
           <span
             className="text-[11px] text-text-muted font-extrabold rounded-md bg-surface-alt border-2 border-border"
             style={{ padding: "2px 8px" }}
           >
-            {planItems.reduce((s, i) => s + i.estimatedMinutes, 0)} phút ước tính
+            {planItems.reduce((s, i) => s + i.estimatedMinutes, 0)} mins estimated
           </span>
         </div>
 
         {planItems.length === 0 ? (
           <div className="text-text-muted text-[13px] font-medium" style={{ padding: "8px 0" }}>
-            Hoàn thành bài kiểm tra đầu vào (diagnostic) để nhận gợi ý học tập cụ thể.
+            Complete the diagnostic test to receive personalized study recommendations.
           </div>
         ) : (
           <div className="grid gap-2.5">
@@ -252,7 +252,7 @@ export async function HubWidgets() {
                       border: `1px solid ${colorSet.border}`,
                     }}
                   >
-                    {item.estimatedMinutes}p
+                    {item.estimatedMinutes}m
                   </span>
                   <div>
                     <div className="font-extrabold" style={{ fontSize: 13.5 }}>
@@ -292,7 +292,7 @@ export async function HubWidgets() {
               className="text-[11px] uppercase text-text-secondary"
               style={{ fontWeight: 850, letterSpacing: "0.06em" }}
             >
-              📈 Điểm dự đoán
+              📈 Predicted Score
             </span>
             {predicted ? (
               <div className="mt-2">
@@ -308,7 +308,7 @@ export async function HubWidgets() {
               </div>
             ) : (
               <div className="text-text-muted mt-3" style={{ fontSize: 12.5, fontWeight: 650 }}>
-                Cần thêm dữ liệu làm đề
+                Need mock test data
               </div>
             )}
           </div>
@@ -318,7 +318,7 @@ export async function HubWidgets() {
               className="text-accent text-xs font-extrabold"
               style={{ textDecoration: "none" }}
             >
-              Chi tiết biểu đồ →
+              View detailed chart →
             </Link>
           )}
         </div>
@@ -337,7 +337,7 @@ export async function HubWidgets() {
               className="text-[11px] uppercase text-text-secondary"
               style={{ fontWeight: 850, letterSpacing: "0.06em" }}
             >
-              🎯 Mock gần nhất
+              🎯 Latest Mock Test
             </span>
             {lastMock?.totalScaled ? (
               <div className="mt-2">
@@ -351,7 +351,7 @@ export async function HubWidgets() {
               </div>
             ) : (
               <div className="text-text-muted mt-3" style={{ fontSize: 12.5, fontWeight: 650 }}>
-                Chưa làm Mock Test nào
+                No mock tests taken yet
               </div>
             )}
           </div>
@@ -361,7 +361,7 @@ export async function HubWidgets() {
               className="text-accent text-xs font-extrabold"
               style={{ textDecoration: "none" }}
             >
-              Xem kết quả chi tiết →
+              View detailed results →
             </Link>
           ) : (
             <Link
@@ -369,7 +369,7 @@ export async function HubWidgets() {
               className="text-accent text-xs font-extrabold"
               style={{ textDecoration: "none" }}
             >
-              Làm bài Mock test ngay →
+              Take mock test now →
             </Link>
           )}
         </div>
@@ -388,7 +388,7 @@ export async function HubWidgets() {
               className="text-[11px] uppercase text-text-secondary"
               style={{ fontWeight: 850, letterSpacing: "0.06em" }}
             >
-              🔥 Hoạt động hôm nay
+              🔥 Today's Activity
             </span>
             <div className="mt-2">
               <div
@@ -398,7 +398,7 @@ export async function HubWidgets() {
                 {todayActivity}
               </div>
               <div className="text-xs text-text-muted" style={{ fontWeight: 650, marginTop: 2 }}>
-                {todayActivity === 0 ? "Chưa làm bài nào" : "Giữ vững ngọn lửa 🔥"}
+                {todayActivity === 0 ? "No practice today" : "Keep the streak alive 🔥"}
               </div>
             </div>
           </div>
@@ -407,7 +407,7 @@ export async function HubWidgets() {
             className="text-accent text-xs font-extrabold"
             style={{ textDecoration: "none" }}
           >
-            Luyện đề thi mới →
+            Practice new exam →
           </Link>
         </div>
 
@@ -425,14 +425,14 @@ export async function HubWidgets() {
               className="text-[11px] uppercase text-text-secondary"
               style={{ fontWeight: 850, letterSpacing: "0.06em" }}
             >
-              📚 Cần ôn tập
+              📚 Review Queue
             </span>
             <div className="mt-2">
               <div
                 className="text-text-primary font-display"
                 style={{ fontSize: 26, fontWeight: 950, lineHeight: 1.1 }}
               >
-                {dueCount} <span className="text-sm text-text-muted font-bold">câu</span>
+                {dueCount} <span className="text-sm text-text-muted font-bold">questions</span>
               </div>
             </div>
           </div>
@@ -442,10 +442,10 @@ export async function HubWidgets() {
               className="text-destructive text-xs font-extrabold"
               style={{ textDecoration: "none" }}
             >
-              Ôn tập ngay →
+              Review now →
             </Link>
           ) : (
-            <span className="text-text-muted text-xs font-extrabold">Sạch sẽ, không câu sai!</span>
+            <span className="text-text-muted text-xs font-extrabold">Clean queue, no incorrect questions!</span>
           )}
         </div>
       </div>

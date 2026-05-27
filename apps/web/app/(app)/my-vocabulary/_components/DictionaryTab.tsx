@@ -33,17 +33,17 @@ type SavedWord = {
 const MASTERY_CONFIG: Record<string, { icon: React.ReactNode; label: string; color: string }> = {
   new: {
     icon: <Star style={{ color: "var(--warning)" }} />,
-    label: "Mới",
+    label: "New",
     color: "var(--warning)",
   },
   learning: {
     icon: <RefreshCw className="text-accent" />,
-    label: "Đang học",
+    label: "Learning",
     color: "var(--accent)",
   },
   mastered: {
     icon: <CircleCheckBig className="text-emerald-500" />,
-    label: "Thành thạo",
+    label: "Mastered",
     color: "var(--success)",
   },
 };
@@ -120,7 +120,7 @@ export function DictionaryTab() {
       setResult(res.data);
       setSaved(res.saved);
     } catch (err: unknown) {
-      const msg = (err as { message?: string })?.message ?? "Không thể tra cứu";
+      const msg = (err as { message?: string })?.message ?? "Unable to look up word";
       setError(msg);
     } finally {
       setIsLoading(false);
@@ -219,7 +219,7 @@ export function DictionaryTab() {
             className="text-[13px] font-extrabold uppercase text-accent"
             style={{ letterSpacing: "0.12em" }}
           >
-            Từ đã lưu ({savedWords.length})
+            Saved Words ({savedWords.length})
           </span>
         </div>
 
@@ -232,8 +232,8 @@ export function DictionaryTab() {
             className="text-center text-text-muted text-sm flex items-center justify-center gap-1.5"
             style={{ padding: "24px 16px", borderRadius: 14, border: "1px dashed var(--border)" }}
           >
-            Chưa có từ nào được lưu. Tra từ và nhấn{" "}
-            <Star size={14} className="inline text-accent" fill="currentColor" /> để lưu!
+            No words saved yet. Search a word and click{" "}
+            <Star size={14} className="inline text-accent" fill="currentColor" /> to save!
           </div>
         ) : (
           <div

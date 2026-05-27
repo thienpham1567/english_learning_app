@@ -3,12 +3,18 @@
 import { diffWords } from "diff";
 import {
   ArrowLeftRight,
+  BookOpen,
+  Briefcase,
   Check,
   ChevronDown,
   ChevronRight,
   ClipboardList,
   Copy,
+  FileText,
   Loader2,
+  Scissors,
+  Sparkles,
+  Wind,
   Zap,
 } from "lucide-react";
 import { motion } from "motion/react";
@@ -24,17 +30,17 @@ type ModeInfo = {
   key: ParaphraseMode;
   label: string;
   description: string;
-  emoji: string;
+  icon: React.ComponentType<{ className?: string; size?: number }>;
 };
 
 const MODES: ModeInfo[] = [
-  { key: "standard", label: "Chuẩn", description: "Viết lại với từ vựng mới", emoji: "📝" },
-  { key: "fluency", label: "Trôi chảy", description: "Cải thiện sự tự nhiên", emoji: "🌊" },
-  { key: "formal", label: "Trang trọng", description: "Phong cách chuyên nghiệp", emoji: "👔" },
-  { key: "simple", label: "Đơn giản", description: "Từ vựng dễ hiểu", emoji: "🎯" },
-  { key: "creative", label: "Sáng tạo", description: "Diễn đạt sinh động", emoji: "✨" },
-  { key: "expand", label: "Mở rộng", description: "Thêm chi tiết", emoji: "📖" },
-  { key: "shorten", label: "Rút gọn", description: "Ngắn gọn, súc tích", emoji: "✂️" },
+  { key: "standard", label: "Standard", description: "Rewrite with new vocabulary", icon: FileText },
+  { key: "fluency", label: "Fluency", description: "Improve natural flow", icon: Wind },
+  { key: "formal", label: "Formal", description: "Professional style", icon: Briefcase },
+  { key: "simple", label: "Simple", description: "Easy to understand vocabulary", icon: Check },
+  { key: "creative", label: "Creative", description: "Vibrant expression", icon: Sparkles },
+  { key: "expand", label: "Expand", description: "Add details", icon: BookOpen },
+  { key: "shorten", label: "Shorten", description: "Concise and brief", icon: Scissors },
 ];
 
 /* ── Mode-specific example prompts ────────────────────── */
@@ -43,17 +49,17 @@ const MODE_EXAMPLES: Record<string, { text: string; hint: string }[]> = {
   standard: [
     {
       text: "The students were very happy because they passed the difficult exam.",
-      hint: "Câu đơn giản → paraphrase",
+      hint: "Simple sentence → paraphrase",
     },
     {
       text: "Technology has changed the way people communicate with each other.",
-      hint: "Chủ đề phổ biến",
+      hint: "Common topic",
     },
   ],
   fluency: [
     {
       text: "The reason why I like this city is because it has many interesting places to visit.",
-      hint: "Câu dài dòng → tự nhiên hơn",
+      hint: "Wordy sentence → natural flow",
     },
   ],
   formal: [
@@ -65,17 +71,17 @@ const MODE_EXAMPLES: Record<string, { text: string; hint: string }[]> = {
   simple: [
     {
       text: "The proliferation of digital technologies has fundamentally transformed contemporary pedagogical methodologies.",
-      hint: "Phức tạp → dễ hiểu",
+      hint: "Complex → simple",
     },
   ],
   creative: [
-    { text: "The sunset was beautiful. The sky had many colors.", hint: "Nhạt → sinh động" },
+    { text: "The sunset was beautiful. The sky had many colors.", hint: "Bland → vibrant" },
   ],
-  expand: [{ text: "Climate change is a serious problem.", hint: "Ngắn → chi tiết hơn" }],
+  expand: [{ text: "Climate change is a serious problem.", hint: "Short → more detailed" }],
   shorten: [
     {
       text: "In my personal opinion, I believe that it is absolutely essential and critically important for students to develop strong reading habits.",
-      hint: "Dài dòng → súc tích",
+      hint: "Wordy → concise",
     },
   ],
 };
@@ -130,17 +136,17 @@ function CopyButton({ text }: { text: string }) {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       }}
-      title="Sao chép"
+      title="Copy"
       className="border-none bg-transparent cursor-pointer text-[13px] py-1 px-2 rounded-md flex items-center gap-1"
       style={{ color: copied ? "var(--success)" : "var(--text-secondary)" }}
     >
       {copied ? (
         <>
-          <Check /> Đã chép
+          <Check /> Copied
         </>
       ) : (
         <>
-          <Copy /> Sao chép
+          <Copy /> Copy
         </>
       )}
     </button>
@@ -171,7 +177,7 @@ function ChangesPanel({ changes }: { changes: ParaphraseResponse["changes"] }) {
           >
             <ClipboardList size={16} className="text-accent" />
           </motion.span>
-          {changes.length} thay đổi từ vựng
+          {changes.length} vocabulary change{changes.length === 1 ? "" : "s"}
         </span>
         <span className="text-[10px]">{expanded ? <ChevronDown /> : <ChevronRight />}</span>
       </button>
@@ -195,8 +201,8 @@ function ChangesPanel({ changes }: { changes: ParaphraseResponse["changes"] }) {
                 {change.reason}
               </div>
               {change.definitionVi && (
-                <div className="text-accent text-xs italic" style={{ marginTop: 2 }}>
-                  🇻🇳 {change.definitionVi}
+                <div className="text-accent text-xs italic flex items-center gap-1" style={{ marginTop: 2 }}>
+                  <span>Definition:</span> {change.definitionVi}
                 </div>
               )}
             </div>
@@ -234,10 +240,10 @@ export function Paraphraser() {
       });
       setResult(data);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Có lỗi xảy ra";
+      const msg = err instanceof Error ? err.message : "An error occurred";
       setError(
         msg.includes("Rate limit") || msg.includes("429")
-          ? "Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi 1 phút."
+          ? "Too many requests. Please wait 1 minute."
           : msg,
       );
     } finally {
@@ -259,14 +265,14 @@ export function Paraphraser() {
   const currentExamples = MODE_EXAMPLES[mode] ?? MODE_EXAMPLES.standard;
 
   const sliderLabel =
-    synonymLevel <= 30 ? "Ít thay đổi" : synonymLevel <= 70 ? "Vừa phải" : "Nhiều thay đổi";
+    synonymLevel <= 30 ? "Low changes" : synonymLevel <= 70 ? "Moderate changes" : "High changes";
 
   return (
     <div className="flex flex-col gap-4">
       {/* Mode pills */}
       <div>
         <span className="text-xs font-semibold text-text-secondary mb-2 block">
-          Chế độ viết lại
+          Paraphrase Mode
         </span>
         <div
           className="flex gap-1.5 pb-1"
@@ -282,7 +288,7 @@ export function Paraphraser() {
                   setResult(null);
                 }}
                 title={m.description}
-                className="text-[13px] cursor-pointer flex items-center gap-1 shrink-0"
+                className="text-[13px] cursor-pointer flex items-center gap-1.5 shrink-0"
                 style={{
                   padding: "7px 14px",
                   borderRadius: 20,
@@ -296,7 +302,7 @@ export function Paraphraser() {
                   transition: "all 0.2s",
                 }}
               >
-                <span>{m.emoji}</span>
+                <m.icon size={15} />
                 {m.label}
               </button>
             );
@@ -310,9 +316,9 @@ export function Paraphraser() {
         style={{ background: "var(--card-bg)" }}
       >
         <span className="text-xs text-text-secondary" style={{ whiteSpace: "nowrap" }}>
-          Mức thay đổi từ vựng:
+          Vocabulary change level:
         </span>
-        <span className="text-[11px] text-text-muted w-[30px]">Ít</span>
+        <span className="text-[11px] text-text-muted w-[30px]">Low</span>
         <input
           type="range"
           min={0}
@@ -325,7 +331,7 @@ export function Paraphraser() {
           className="flex-1 cursor-pointer"
           style={{ accentColor: "var(--accent)" }}
         />
-        <span className="text-[11px] text-text-muted w-[40px]">Nhiều</span>
+        <span className="text-[11px] text-text-muted w-[40px]">High</span>
         <span
           className="text-xs font-semibold text-accent"
           style={{
@@ -344,7 +350,7 @@ export function Paraphraser() {
         {/* Left: Input */}
         <div className="flex flex-col gap-1.5">
           <div className="flex justify-between items-center">
-            <span className="text-xs font-semibold text-text-secondary">Văn bản gốc</span>
+            <span className="text-xs font-semibold text-text-secondary">Original text</span>
             <span
               className="text-[11px]"
               style={{
@@ -352,7 +358,7 @@ export function Paraphraser() {
                 fontWeight: overLimit ? 600 : 400,
               }}
             >
-              {wordCount}/{MAX_WORDS} từ
+              {wordCount}/{MAX_WORDS} words
             </span>
           </div>
           <textarea
@@ -376,7 +382,7 @@ export function Paraphraser() {
                 style={{ letterSpacing: "0.12em" }}
               >
                 <Zap size={10} />
-                Thử ngay
+                Try now
               </span>
               <div className="flex gap-1.5 flex-wrap">
                 {currentExamples.map((ex, i) => (
@@ -422,7 +428,7 @@ export function Paraphraser() {
         {/* Right: Output */}
         <div className="flex flex-col gap-1.5">
           <div className="flex justify-between items-center">
-            <span className="text-xs font-semibold text-text-secondary">Kết quả viết lại</span>
+            <span className="text-xs font-semibold text-text-secondary">Paraphrased Result</span>
             {result && <CopyButton text={result.result} />}
           </div>
           <div
@@ -439,12 +445,12 @@ export function Paraphraser() {
             {loading ? (
               <div className="flex items-center justify-center h-full h-[180px] gap-2 text-text-muted">
                 <Loader2 className="animate-spin" size={18} />
-                <span>Đang viết lại...</span>
+                <span>Paraphrasing...</span>
               </div>
             ) : result ? (
               <WordDiff original={text.trim()} rewritten={result.result} />
             ) : (
-              <span className="italic">Kết quả viết lại sẽ hiển thị ở đây...</span>
+              <span className="italic">Paraphrased result will appear here...</span>
             )}
           </div>
         </div>
@@ -476,19 +482,26 @@ export function Paraphraser() {
         >
           {loading ? (
             <>
-              <Loader2 className="animate-spin" /> Đang xử lý...
+              <Loader2 className="animate-spin" /> Processing...
             </>
           ) : (
             <>
-              <ArrowLeftRight /> Viết lại
+              <ArrowLeftRight /> Paraphrase
             </>
           )}
         </button>
 
         {result && (
-          <span className="text-text-muted text-xs">
-            {MODES.find((m) => m.key === mode)?.emoji} {MODES.find((m) => m.key === mode)?.label} ·
-            Mức thay đổi: {synonymLevel}%
+          <span className="text-text-muted text-xs flex items-center gap-1.5">
+            {(() => {
+              const activeMode = MODES.find((m) => m.key === mode);
+              if (!activeMode) return null;
+              const Icon = activeMode.icon;
+              return <Icon size={12} />;
+            })()}
+            <span>
+              {MODES.find((m) => m.key === mode)?.label} · Changes: {synonymLevel}%
+            </span>
           </span>
         )}
 

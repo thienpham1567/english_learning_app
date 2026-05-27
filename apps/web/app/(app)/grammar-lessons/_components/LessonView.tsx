@@ -34,10 +34,10 @@ import {
 
 const OPTION_LABELS = ["A", "B", "C", "D"] as const;
 const TIER_LABELS: Record<string, { label: string; color: string }> = {
-  recognition: { label: "Nhận diện", color: "blue" },
-  application: { label: "Ứng dụng", color: "cyan" },
-  production: { label: "Tạo câu", color: "purple" },
-  context: { label: "Ngữ cảnh", color: "volcano" },
+  recognition: { label: "Recognition", color: "blue" },
+  application: { label: "Application", color: "cyan" },
+  production: { label: "Production", color: "purple" },
+  context: { label: "Context", color: "volcano" },
 };
 
 type LessonState = "loading" | "lesson" | "exercises" | "complete";
@@ -101,7 +101,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
         setLesson(data);
         setState("lesson");
       } catch {
-        setError("Không thể tạo bài học. Vui lòng thử lại.");
+        setError("Failed to generate lesson. Please try again.");
         setState("lesson");
       }
     },
@@ -122,7 +122,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
         }
       } catch {
         if (!cancelled) {
-          setError("Không thể tạo bài học. Vui lòng thử lại.");
+          setError("Failed to generate lesson. Please try again.");
           setState("lesson");
         }
       }
@@ -238,7 +238,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
         className="items-center gap-2 py-2 px-4 border-2 border-border rounded-(--radius-lg) bg-(--surface) text-accent cursor-pointer text-[13px] font-bold mb-4"
         style={{ display: "inline-flex", boxShadow: "var(--shadow-sm)", transition: "all 0.15s" }}
       >
-        <ArrowLeft /> Danh sách bài học
+        <ArrowLeft /> Lesson List
       </m.button>
 
       {/* Loading state */}
@@ -249,10 +249,10 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
         >
           <Loader2 className="animate-spin text-accent" size={38} />
           <p className="text-text-secondary mt-5 font-bold" style={{ fontSize: 14.5 }}>
-            Đang biên soạn bài học: <strong className="text-accent">{topicTitle}</strong>
+            Generating lesson: <strong className="text-accent">{topicTitle}</strong>
           </p>
           <p className="text-text-muted m-0 font-medium" style={{ fontSize: 12.5 }}>
-            AI đang phân tích kiến thức và biên soạn bài tập...
+            AI is analyzing concepts and compiling practice questions...
           </p>
         </div>
       )}
@@ -278,7 +278,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               color: "var(--text-on-accent)",
             }}
           >
-            Thử lại
+            Retry
           </m.button>
         </div>
       )}
@@ -366,7 +366,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   className="border-2 border-border rounded-(--radius-lg) bg-(--surface) text-text-secondary cursor-pointer text-xs py-1.5 px-3.5 font-bold"
                   style={{ boxShadow: "var(--shadow-sm)" }}
                 >
-                  <RefreshCw /> Tạo lại
+                  <RefreshCw /> Regenerate
                 </m.button>
               </div>
             </div>
@@ -403,7 +403,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 />
               </div>
               <span className="text-[11px] text-accent font-extrabold uppercase tracking-widest flex items-center justify-center gap-1.5 mb-2.5">
-                <Calculator /> Cấu trúc cốt lõi
+                <Calculator /> Core Structure
               </span>
               <p
                 className="font-black text-accent m-0 font-mono"
@@ -423,7 +423,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5 mb-3"
               style={{ fontSize: 11.5 }}
             >
-              <BookOpen /> Phân tích lý thuyết
+              <BookOpen /> Theoretical Analysis
             </span>
             <p
               className="text-text-primary m-0 font-medium"
@@ -436,7 +436,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               style={{ marginTop: 14, borderLeft: "3.5px solid var(--accent)" }}
             >
               <span className="font-extrabold text-accent" style={{ fontSize: 11.5 }}>
-                🇻🇳 Diễn giải tiếng Việt
+                📝 Explanation
               </span>
               <p
                 className="text-text-secondary font-medium"
@@ -457,7 +457,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5"
                 style={{ fontSize: 11.5, marginBottom: 14 }}
               >
-                📌 Cách dùng chi tiết
+                📌 Detailed Usage
               </span>
               <div className="flex flex-col gap-2.5">
                 {lesson.usageNotes.map((note, idx) => (
@@ -500,7 +500,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 className="font-extrabold uppercase tracking-widest flex items-center gap-1.5"
                 style={{ fontSize: 11.5, color: "var(--warning)", marginBottom: 14 }}
               >
-                🎯 Mẹo thi TOEIC — Kinh nghiệm 900 điểm
+                🎯 TOEIC Exam Tips — 900-Point Insight
               </span>
               <div className="flex flex-col gap-2">
                 {lesson.toeicTips.map((tip, idx) => (
@@ -534,7 +534,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5"
                 style={{ fontSize: 11.5, marginBottom: 14 }}
               >
-                ⏰ Dấu hiệu nhận biết (Time Signals / Keywords)
+                ⏰ Time Signals & Keywords
               </span>
               <div className="flex flex-wrap gap-2">
                 {lesson.timeSignals.map((signal, idx) => (
@@ -561,13 +561,13 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5"
                 style={{ fontSize: 11.5, marginBottom: 14 }}
               >
-                ⚡ Phân biệt cấu trúc dễ nhầm
+                ⚡ Commonly Confused Structures
               </span>
               <div className="flex flex-col gap-3">
                 {lesson.confusionPairs.map((pair, idx) => (
                   <div
-                    key={idx}
-                    className="rounded-(--radius-lg) border-2 border-border overflow-hidden"
+                     key={idx}
+                     className="rounded-(--radius-lg) border-2 border-border overflow-hidden"
                   >
                     {/* Pair header */}
                     <div className="grid" style={{ gridTemplateColumns: "1fr 1fr", gap: 0 }}>
@@ -629,7 +629,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5"
                 style={{ fontSize: 11.5, marginBottom: 14 }}
               >
-                <MessageSquare /> Ví dụ minh họa
+                <MessageSquare /> Illustrative Examples
               </span>
               <div className="flex flex-col gap-2.5">
                 {lesson.examples.map((ex, idx) => (
@@ -695,7 +695,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5"
                 style={{ fontSize: 11.5, marginBottom: 14 }}
               >
-                <AlertTriangle style={{ color: "var(--warning)" }} /> Lưu ý tránh lỗi sai
+                <AlertTriangle style={{ color: "var(--warning)" }} /> Common Pitfalls & Mistakes
               </span>
               {lesson.commonMistakes.map((mItem, idx) => (
                 <div
@@ -786,7 +786,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 pointerEvents: "none",
               }}
             />
-            <span className="relative">🚀 Luyện tập ngay — {lesson.exercises.length} câu hỏi</span>
+            <span className="relative">🚀 Start Practice — {lesson.exercises.length} questions</span>
             <ChevronRight className="relative text-sm" />
           </m.button>
         </div>
@@ -802,7 +802,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               style={{ justifySelf: "stretch", fontSize: 12.5 }}
             >
               <span>
-                Câu hỏi {exerciseIdx + 1} / {lesson.exercises.length}
+                Question {exerciseIdx + 1} of {lesson.exercises.length}
               </span>
               <span className="text-accent">
                 {Math.round(((exerciseIdx + 1) / lesson.exercises.length) * 100)}%
@@ -874,10 +874,10 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 style={{ background: "var(--accent-light)", padding: "2px 8px" }}
               >
                 {currentExercise.type === "multiple_choice"
-                  ? "Trắc nghiệm"
+                  ? "Multiple Choice"
                   : currentExercise.type === "error_correction"
-                    ? "Sửa lỗi"
-                    : "Viết lại câu"}
+                    ? "Error Correction"
+                    : "Sentence Rewriting"}
               </span>
 
               {currentExercise.tier && TIER_LABELS[currentExercise.tier] && (
@@ -917,7 +917,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   color: "var(--warning)",
                 }}
               >
-                <Eye /> Xem gợi ý học tập
+                <Eye /> View Hint
               </m.button>
             )}
 
@@ -1025,7 +1025,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   disabled={revealed}
                   rows={3}
                   placeholder={
-                    currentExercise.instructionVi ?? "Nhập câu trả lời viết lại của bạn vào đây..."
+                    currentExercise.instructionEn ?? currentExercise.instructionVi ?? "Type your rewritten sentence here..."
                   }
                   onFocus={(e) => {
                     e.target.style.borderColor = "var(--accent)";
@@ -1057,7 +1057,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                       boxShadow: typedAnswer.trim() ? "0 2px 8px var(--accent-muted)" : "none",
                     }}
                   >
-                    Nộp câu trả lời <CircleCheckBig />
+                    Submit Answer <CircleCheckBig />
                   </m.button>
                 )}
               </div>
@@ -1080,7 +1080,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                     fontSize: 13.5,
                   }}
                 >
-                  <strong className="text-text-secondary">Đáp án của bạn:</strong> {typedAnswer}
+                  <strong className="text-text-secondary">Your Answer:</strong> {typedAnswer}
                 </div>
                 <div
                   className="rounded-(--radius-lg) text-emerald-500 font-bold"
@@ -1110,7 +1110,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                     className="font-extrabold text-accent uppercase tracking-wider"
                     style={{ fontSize: 11.5 }}
                   >
-                    <Lightbulb /> Lý do chọn đáp án
+                    <Lightbulb /> Explanation & Rationale
                   </span>
                   <div className="flex overflow-hidden rounded-md border-2 border-border">
                     {(["vi", "en"] as const).map((langOpt) => (
@@ -1161,11 +1161,11 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             >
               {exerciseIdx < lesson.exercises.length - 1 ? (
                 <>
-                  Câu tiếp theo <ChevronRight />
+                  Next Question <ChevronRight />
                 </>
               ) : (
                 <>
-                  Xem kết quả bài học <CircleCheckBig />
+                  View Lesson Results <CircleCheckBig />
                 </>
               )}
             </m.button>
@@ -1209,15 +1209,15 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               </div>
 
               <h2 className="mb-2 text-2xl font-black text-text-primary font-display">
-                {medal} Hoàn thành bài học!
+                {medal} Lesson Completed!
               </h2>
               <p
                 className="text-text-secondary mb-4 font-medium leading-normal"
                 style={{ fontSize: 14.5 }}
               >
-                Chủ đề: <span className="text-accent font-bold">{lesson.title}</span>
+                Topic: <span className="text-accent font-bold">{lesson.title}</span>
                 <br />
-                Đạt điểm chính xác:{" "}
+                Accuracy Score:{" "}
                 <strong className="text-emerald-500">
                   {correctCount}/{lesson.exercises.length}
                 </strong>{" "}
@@ -1234,7 +1234,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                     boxShadow: "var(--shadow-sm)",
                   }}
                 >
-                  <Star /> +{xpAwarded} XP nhận được
+                  <Star /> +{xpAwarded} XP earned
                 </div>
               )}
 
@@ -1243,7 +1243,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   className="text-text-muted text-xs font-semibold"
                   style={{ margin: "-12px 0 24px" }}
                 >
-                  Bạn đã nhận thưởng XP cho bài học này trước đó.
+                  You have already earned XP for this lesson.
                 </p>
               )}
 
@@ -1258,8 +1258,8 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                       background: "rgba(239, 68, 68, 0.04)",
                     }}
                   >
-                    <AlertTriangle /> Xem {wrongAnswers.length} lỗi sai đã lưu sổ lỗi ·{" "}
-                    {showReview ? "Thu gọn" : "Xem chi tiết"}
+                    <AlertTriangle /> Review {wrongAnswers.length} saved incorrect items ·{" "}
+                    {showReview ? "Collapse" : "Expand"}
                   </button>
                   {showReview && (
                     <m.div
@@ -1283,13 +1283,13 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                             className="flex items-center gap-1.5 text-destructive font-bold"
                             style={{ fontSize: 12.5 }}
                           >
-                            <XCircle /> Bạn đã chọn: {wItem.userAnswer}
+                            <XCircle /> Your Choice: {wItem.userAnswer}
                           </div>
                           <div
                             className="flex items-center gap-1.5 text-emerald-500 font-bold mt-1"
                             style={{ fontSize: 12.5 }}
                           >
-                            <CircleCheckBig /> Đáp án đúng: {wItem.correctAnswer}
+                            <CircleCheckBig /> Correct Answer: {wItem.correctAnswer}
                           </div>
                           {wItem.explanationVi && (
                             <div className="mt-2 p-2 bg-(--surface) rounded-md text-xs text-text-muted font-medium">
@@ -1318,7 +1318,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                     boxShadow: "var(--shadow-sm)",
                   }}
                 >
-                  <ArrowLeft /> Quay lại
+                  <ArrowLeft /> Back
                 </m.button>
 
                 <m.button
@@ -1343,7 +1343,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                     boxShadow: "var(--shadow-sm)",
                   }}
                 >
-                  <RefreshCw /> Làm lại bài tập
+                  <RefreshCw /> Retry Practice
                 </m.button>
 
                 <m.button
@@ -1359,7 +1359,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                     boxShadow: "0 2px 8px var(--accent-muted)",
                   }}
                 >
-                  Quiz tổng hợp
+                  Review Quiz
                 </m.button>
               </div>
             </m.div>

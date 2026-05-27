@@ -27,10 +27,10 @@ export function ReadingComprehension({ data, instruction, onAnswer, disabled }: 
     <div>
       {/* Instruction */}
       <p
-        className="text-[11px] font-extrabold text-accent uppercase tracking-widest"
+        className="text-[11px] font-extrabold text-accent uppercase tracking-widest flex items-center gap-1.5"
         style={{ marginBottom: 14 }}
       >
-        📖 {instruction}
+        <BookOpenText size={12} /> {instruction}
       </p>
 
       {/* Passage */}
@@ -43,7 +43,7 @@ export function ReadingComprehension({ data, instruction, onAnswer, disabled }: 
         }}
       >
         <span className="text-[10px] font-extrabold uppercase tracking-widest text-accent flex items-center gap-1.5 mb-2.5">
-          <BookOpenText size={11} /> Văn bản đọc hiểu
+          <BookOpenText size={11} /> Reading Passage
         </span>
         <p
           className="m-0 text-text-primary font-medium font-body"

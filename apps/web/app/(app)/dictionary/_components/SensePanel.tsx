@@ -124,7 +124,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
         <section className="flex flex-col gap-2">
           <h3 className={SENSE_HEADER_STYLE}>
             <Pencil className="h-3 w-3" />
-            Ví dụ
+            Examples
           </h3>
           <ul className="list-none p-0 m-0 flex flex-col gap-2">
             {examples.length > 0
@@ -161,7 +161,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
         <section className="flex flex-col gap-2 rounded-lg bg-bg-deep p-4 px-5">
           <h3 className={SENSE_HEADER_STYLE}>
             <Lightbulb className="h-3 w-3" />
-            Ghi chú sử dụng
+            Usage Notes
           </h3>
           <p className="text-sm leading-relaxed text-text-primary m-0">
             <BoldText text={sense.usageNoteVi} />
@@ -173,7 +173,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
         <section className="flex flex-col gap-2">
           <h3 className={SENSE_HEADER_STYLE}>
             <Code className="h-3 w-3" />
-            Mẫu câu thường gặp
+            Common Patterns
           </h3>
           <div className="flex flex-wrap gap-1.5">
             {sense.patterns.map((pattern) => (
@@ -192,7 +192,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
         <section className="flex flex-col gap-2">
           <h3 className={SENSE_HEADER_STYLE}>
             <LinkIcon className="h-3 w-3" />
-            Biểu đạt liên quan
+            Related Expressions
           </h3>
           <div className="flex flex-wrap gap-1.5">
             {sense.relatedExpressions.map((expr) => (
@@ -213,7 +213,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
         <section className="flex flex-col gap-2.5 rounded-lg bg-(--warning-bg) border border-(--warning) p-3.5 px-4">
           <h3 className="flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-(--warning) m-0">
             <AlertTriangle className="h-3 w-3" />
-            Lỗi thường gặp
+            Common Mistakes
           </h3>
           <ul className="list-none p-0 m-0 flex flex-col gap-2">
             {sense.commonMistakesVi.map((mistake) => (
@@ -254,7 +254,7 @@ export function SensePanel({ sense, headword, onSearch }: SensePanelProps) {
               onClick={() => setIsCollocationsOpen((open) => !open)}
               className="inline-flex items-center rounded-full border-2 border-border bg-surface px-3 py-1 text-xs font-medium text-accent cursor-pointer w-fit hover:bg-accent/10 transition-colors"
             >
-              {isCollocationsOpen ? "Thu gọn" : `Xem thêm (${collocations.length - 3})`}
+              {isCollocationsOpen ? "Show Less" : `Show More (${collocations.length - 3})`}
             </button>
           )}
         </section>

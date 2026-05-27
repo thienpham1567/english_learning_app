@@ -442,16 +442,16 @@ export const VOWELS: IpaPhoneme[] = [
 
 // Subtype labels for UI grouping
 export const CONSONANT_SUBTYPE_LABELS: Record<ConsonantSubtype, string> = {
-  plosive: "Plosives (Âm tắc)",
-  fricative: "Fricatives (Âm xát)",
-  affricate: "Affricates (Âm tắc xát)",
-  nasal: "Nasals (Âm mũi)",
-  lateral: "Lateral (Âm bên)",
-  approximant: "Approximants (Âm tiếp cận)",
+  plosive: "Plosives",
+  fricative: "Fricatives",
+  affricate: "Affricates",
+  nasal: "Nasals",
+  lateral: "Lateral Consonants",
+  approximant: "Approximants",
 };
 
 export const VOWEL_SUBTYPE_LABELS: Record<VowelSubtype, string> = {
-  "monophthong-short": "Short Vowels (Nguyên âm ngắn)",
-  "monophthong-long": "Long Vowels (Nguyên âm dài)",
-  diphthong: "Diphthongs (Nguyên âm đôi)",
+  "monophthong-short": "Short Vowels",
+  "monophthong-long": "Long Vowels",
+  diphthong: "Diphthongs",
 };

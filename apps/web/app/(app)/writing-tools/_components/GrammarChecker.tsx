@@ -21,18 +21,16 @@ const MAX_WORDS = 500;
 
 const TYPE_META: Record<
   string,
-  { label: string; labelVi: string; color: string; icon: React.ReactNode }
+  { label: string; color: string; icon: React.ReactNode }
 > = {
-  grammar: { label: "Grammar", labelVi: "Ngữ pháp", color: "var(--error)", icon: <Bug /> },
+  grammar: { label: "Grammar", color: "var(--error)", icon: <Bug /> },
   spelling: {
     label: "Spelling",
-    labelVi: "Chính tả",
     color: "var(--warning, #e8a838)",
     icon: <AlertTriangle />,
   },
   style: {
     label: "Style",
-    labelVi: "Phong cách",
     color: "var(--info, #5b8def)",
     icon: <Lightbulb />,
   },
@@ -138,7 +136,7 @@ function CopyButton({ text }: { text: string }) {
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       }}
-      title="Sao chép"
+      title="Copy"
       className="border-none bg-transparent cursor-pointer text-[13px] py-1 px-2 rounded-md"
       style={{ color: copied ? "var(--success)" : "var(--text-secondary)" }}
     >
@@ -177,7 +175,7 @@ function ErrorCard({ error, onApply }: { error: GrammarError; onApply: () => voi
               background: `color-mix(in srgb, ${meta.color} 10%, transparent)`,
             }}
           >
-            {meta.labelVi}
+            {meta.label}
           </span>
           <span className="text-[13px] text-text-muted" style={{ textDecoration: "line-through" }}>
             {error.original}
@@ -198,17 +196,9 @@ function ErrorCard({ error, onApply }: { error: GrammarError; onApply: () => voi
           {/* Rule tag */}
           <span className="text-[11px] text-text-secondary italic">Rule: {error.rule}</span>
 
-          {/* Vietnamese explanation */}
+          {/* Explanation */}
           <div className="py-2 px-3 rounded-lg bg-(--surface) text-[13px] leading-relaxed">
-            <span className="font-semibold text-text-secondary text-[11px]">🇻🇳 Giải thích:</span>
-            <p className="text-text-primary" style={{ margin: "4px 0 0" }}>
-              {error.explanationVi}
-            </p>
-          </div>
-
-          {/* English explanation */}
-          <div className="py-2 px-3 rounded-lg bg-(--surface) text-[13px] leading-relaxed">
-            <span className="font-semibold text-text-secondary text-[11px]">🇬🇧 Explanation:</span>
+            <span className="font-semibold text-text-secondary text-[11px]">Explanation:</span>
             <p className="text-text-primary" style={{ margin: "4px 0 0" }}>
               {error.explanationEn}
             </p>
@@ -227,7 +217,7 @@ function ErrorCard({ error, onApply }: { error: GrammarError; onApply: () => voi
               color: "var(--text-on-accent)",
             }}
           >
-            <CircleCheckBig /> Áp dụng sửa lỗi
+            <CircleCheckBig /> Apply suggestion
           </button>
         </div>
       )}
@@ -258,10 +248,10 @@ export function GrammarChecker() {
       });
       setResult(data);
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Có lỗi xảy ra";
+      const msg = err instanceof Error ? err.message : "An error occurred";
       setError(
         msg.includes("Rate limit") || msg.includes("429")
-          ? "Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi 1 phút."
+          ? "Too many requests. Please wait 1 minute."
           : msg,
       );
     } finally {
@@ -316,10 +306,10 @@ export function GrammarChecker() {
 
   const scoreLabel = useMemo(() => {
     if (writingScore === null) return "";
-    if (writingScore >= 90) return "Tuyệt vời!";
-    if (writingScore >= 70) return "Khá tốt";
-    if (writingScore >= 50) return "Cần cải thiện";
-    return "Nhiều lỗi";
+    if (writingScore >= 90) return "Excellent!";
+    if (writingScore >= 70) return "Good";
+    if (writingScore >= 50) return "Needs Improvement";
+    return "Many errors";
   }, [writingScore]);
 
   // Keyboard handler — Ctrl/Cmd + Enter
@@ -339,7 +329,7 @@ export function GrammarChecker() {
       <div>
         <div className="flex justify-between items-center mb-2">
           <span className="text-[13px] font-medium text-text-secondary">
-            Nhập hoặc dán văn bản cần kiểm tra
+            Enter or paste your text to check
           </span>
           <span
             className="text-xs"
@@ -348,7 +338,7 @@ export function GrammarChecker() {
               fontWeight: overLimit ? 600 : 400,
             }}
           >
-            {wordCount}/{MAX_WORDS} từ
+            {wordCount}/{MAX_WORDS} words
           </span>
         </div>
 
@@ -374,7 +364,7 @@ export function GrammarChecker() {
             style={{ letterSpacing: "0.12em" }}
           >
             <Zap size={10} />
-            Thử ngay
+            Try now
           </span>
           <div
             className="grid gap-2"
@@ -441,11 +431,11 @@ export function GrammarChecker() {
         >
           {loading ? (
             <>
-              <Loader2 className="animate-spin" /> Đang kiểm tra...
+              <Loader2 className="animate-spin" /> Checking...
             </>
           ) : (
             <>
-              <CircleCheckBig /> Kiểm tra ngữ pháp
+              <CircleCheckBig /> Check Grammar
             </>
           )}
         </button>
@@ -456,7 +446,7 @@ export function GrammarChecker() {
             className="bg-transparent text-emerald-500 text-[13px] font-semibold cursor-pointer flex items-center gap-1.5"
             style={{ padding: "10px 20px", borderRadius: 10, border: "1px solid var(--success)" }}
           >
-            <CircleCheckBig /> Sửa tất cả ({totalErrors})
+            <CircleCheckBig /> Fix All ({totalErrors})
           </button>
         )}
 
@@ -516,10 +506,10 @@ export function GrammarChecker() {
                 <CircleCheckBig className="text-emerald-500 text-xl" />
                 <div>
                   <div className="text-base font-bold text-emerald-500 font-display">
-                    Tuyệt vời!
+                    Excellent!
                   </div>
                   <div className="text-xs text-text-muted" style={{ marginTop: 2 }}>
-                    Không phát hiện lỗi nào
+                    No errors detected
                   </div>
                 </div>
               </div>
@@ -527,19 +517,19 @@ export function GrammarChecker() {
               <>
                 {[
                   {
-                    label: "Ngữ pháp",
+                    label: "Grammar",
                     value: result.stats.grammar,
                     color: "var(--error)",
                     icon: <Bug size={14} />,
                   },
                   {
-                    label: "Chính tả",
+                    label: "Spelling",
                     value: result.stats.spelling,
                     color: "var(--warning, #e8a838)",
                     icon: <AlertTriangle size={14} />,
                   },
                   {
-                    label: "Phong cách",
+                    label: "Style",
                     value: result.stats.style,
                     color: "var(--info, #5b8def)",
                     icon: <Lightbulb size={14} />,
@@ -590,7 +580,7 @@ export function GrammarChecker() {
           {totalErrors > 0 && (
             <div>
               <div className="flex justify-between items-center mb-1.5">
-                <span className="text-xs font-semibold text-text-secondary">Văn bản đã sửa</span>
+                <span className="text-xs font-semibold text-text-secondary">Corrected text</span>
                 <CopyButton text={result.correctedText} />
               </div>
               <div

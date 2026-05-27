@@ -51,12 +51,12 @@ export function ScoreSummary({
 
   const labelText =
     pct >= 90
-      ? "Xuất sắc! Bạn đã làm chủ kiến thức."
+      ? "Excellent! You have mastered this."
       : pct >= 70
-        ? "Rất tốt! Tiếp tục phát huy nhé."
+        ? "Very good! Keep up the great work."
         : pct >= 50
-          ? "Khá tốt! Ôn thêm một chút nữa thôi."
-          : "Cố gắng lên! Bạn cần luyện tập thêm.";
+          ? "Good job! Just a little more review."
+          : "Keep it up! You need more practice.";
 
   const weakTopics = Object.entries(topicBreakdown)
     .filter(([, v]) => v.correct / v.total < 0.5)
@@ -92,7 +92,7 @@ export function ScoreSummary({
         className="text-2xl font-black text-text-primary font-display"
         style={{ margin: "0 0 6px" }}
       >
-        Kết quả bài Quiz
+        Quiz Results
       </h2>
       <p
         className="text-text-secondary font-semibold"
@@ -119,7 +119,7 @@ export function ScoreSummary({
             className="text-[11px] font-extrabold uppercase tracking-widest"
             style={{ opacity: 0.9 }}
           >
-            Điểm số chính xác
+            Accuracy Score
           </span>
           <div
             className="font-black flex items-baseline gap-1"
@@ -127,7 +127,7 @@ export function ScoreSummary({
           >
             <span>{score}</span>
             <span className="text-[15px]" style={{ opacity: 0.8 }}>
-              / {total} câu
+              / {total} questions
             </span>
           </div>
         </div>
@@ -136,7 +136,7 @@ export function ScoreSummary({
             className="text-[11px] font-extrabold uppercase tracking-widest"
             style={{ opacity: 0.9 }}
           >
-            Tỉ lệ đạt
+            Accuracy
           </span>
           <div className="font-black" style={{ fontSize: 26, marginTop: 2 }}>
             {pct}%
@@ -159,7 +159,7 @@ export function ScoreSummary({
             boxShadow: "0 2px 10px rgba(245, 158, 11, 0.25)",
           }}
         >
-          <Flame /> Combo liên tiếp tốt nhất: x{maxCombo}
+          <Flame /> Best Streak: x{maxCombo}
         </m.div>
       )}
 
@@ -169,7 +169,7 @@ export function ScoreSummary({
           className="font-extrabold uppercase tracking-widest text-text-secondary mb-2.5"
           style={{ fontSize: 11.5 }}
         >
-          Thống kê chi tiết chủ đề
+          Topic Breakdown
         </h4>
         <div className="flex flex-col gap-2">
           {Object.entries(topicBreakdown).map(([topic, { correct, total: t }], idx) => {
@@ -242,7 +242,7 @@ export function ScoreSummary({
             className="text-[13px] font-bold m-0 flex items-center justify-center gap-1.5"
             style={{ color: "var(--warning)" }}
           >
-            <AlertTriangle /> Cần ôn lại: {weakTopics.join(", ")}
+            <AlertTriangle /> Needs review: {weakTopics.join(", ")}
           </p>
           <m.button
             whileHover={{ scale: 1.03 }}
@@ -256,7 +256,7 @@ export function ScoreSummary({
               display: "inline-flex",
             }}
           >
-            <BookOpen /> Học ngay lý thuyết
+            <BookOpen /> Study Theory
           </m.button>
         </m.div>
       )}
@@ -274,7 +274,7 @@ export function ScoreSummary({
             boxShadow: "var(--shadow-sm)",
           }}
         >
-          <RefreshCw /> Làm lại đề này
+          <RefreshCw /> Retry This Quiz
         </m.button>
 
         <m.button
@@ -289,7 +289,7 @@ export function ScoreSummary({
             boxShadow: "0 2px 8px var(--accent-muted)",
           }}
         >
-          <Star /> Đề mới ngẫu nhiên
+          <Star /> New Quiz
         </m.button>
       </div>
     </div>

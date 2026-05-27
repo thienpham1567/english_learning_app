@@ -66,18 +66,17 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
             type="warning"
             showIcon
             icon={<AlertTriangle />}
-            message="Phát hiện hành vi bất thường trong quá trình làm bài"
+            message="Unusual activity detected during the test"
             description={
               <div className="text-[13px]">
                 {cheat!.tabSwitches > 0 && (
                   <div>
-                    • Rời tab: {cheat!.tabSwitches} lần (tổng {Math.round(cheat!.longBlurMs / 1000)}
-                    s)
+                    • Tab switches: {cheat!.tabSwitches} times (total {Math.round(cheat!.longBlurMs / 1000)}s)
                   </div>
                 )}
-                {cheat!.pasteAttempts > 0 && <div>• Paste: {cheat!.pasteAttempts} lần</div>}
+                {cheat!.pasteAttempts > 0 && <div>• Pastes: {cheat!.pasteAttempts} times</div>}
                 <div className="mt-1 text-text-muted">
-                  Điểm vẫn được ghi nhận, nhưng nên hạn chế để mô phỏng môi trường thi thật.
+                  Score is still recorded, but you should minimize this to simulate a real exam environment.
                 </div>
               </div>
             }
@@ -99,7 +98,7 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
               <div className="text-[28px] font-bold">{attempt.scaledListening ?? "—"}</div>
               <div className="text-xs text-text-muted">
                 {attempt.rawListening}/
-                {(byPart[2]?.total ?? 0) + (byPart[3]?.total ?? 0) + (byPart[4]?.total ?? 0)} đúng
+                {(byPart[2]?.total ?? 0) + (byPart[3]?.total ?? 0) + (byPart[4]?.total ?? 0)} correct
               </div>
             </div>
             <div className="text-center p-3">
@@ -107,13 +106,13 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
               <div className="text-[28px] font-bold">{attempt.scaledReading ?? "—"}</div>
               <div className="text-xs text-text-muted">
                 {attempt.rawReading}/
-                {(byPart[5]?.total ?? 0) + (byPart[6]?.total ?? 0) + (byPart[7]?.total ?? 0)} đúng
+                {(byPart[5]?.total ?? 0) + (byPart[6]?.total ?? 0) + (byPart[7]?.total ?? 0)} correct
               </div>
             </div>
           </div>
         </Card>
 
-        <Card title="Phân tích theo Part" size="small">
+        <Card title="Part Analysis" size="small">
           <div className="grid gap-2">
             {[2, 3, 4, 5, 6, 7].map((p) => {
               const stats = byPart[p];
@@ -157,7 +156,7 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
             className="py-2 px-4 rounded-lg text-ink border-2 border-border"
             style={{ background: "var(--surface-hover)", textDecoration: "none" }}
           >
-            Về Hub
+            Back to Hub
           </Link>
           <Link
             href="/toeic/progress"
@@ -168,7 +167,7 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
               textDecoration: "none",
             }}
           >
-            Xem trend
+            View Progress Trends
           </Link>
         </div>
       </div>

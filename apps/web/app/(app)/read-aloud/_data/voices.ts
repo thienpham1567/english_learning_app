@@ -23,8 +23,8 @@ export const VOICES: VoiceOption[] = [
     name: "Austin",
     flag: "🇺🇸",
     avatar: "/avatars/austin.png",
-    accentLabel: "Mỹ",
-    description: "Giọng nam trầm ấm, phát âm rõ ràng chuẩn Mỹ.",
+    accentLabel: "American",
+    description: "Warm male voice with clear American pronunciation.",
   },
   {
     accent: "us",
@@ -34,8 +34,8 @@ export const VOICES: VoiceOption[] = [
     name: "Autumn",
     flag: "🇺🇸",
     avatar: "/avatars/autumn.png",
-    accentLabel: "Mỹ",
-    description: "Giọng nữ tự nhiên, biểu cảm, dễ nghe.",
+    accentLabel: "American",
+    description: "Natural and expressive female voice, easy to understand.",
   },
   {
     accent: "uk",
@@ -45,8 +45,8 @@ export const VOICES: VoiceOption[] = [
     name: "Daniel",
     flag: "🇬🇧",
     avatar: "/avatars/daniel.png",
-    accentLabel: "Anh",
-    description: "Giọng nam Anh quý phái, thanh lịch, chuẩn mực.",
+    accentLabel: "British",
+    description: "Sophisticated and elegant British male voice.",
   },
   {
     accent: "uk",
@@ -56,8 +56,8 @@ export const VOICES: VoiceOption[] = [
     name: "Diana",
     flag: "🇬🇧",
     avatar: "/avatars/diana.png",
-    accentLabel: "Anh",
-    description: "Giọng nữ Anh ngọt ngào, tinh tế, truyền cảm.",
+    accentLabel: "British",
+    description: "Sweet and expressive British female voice.",
   },
   {
     accent: "au",
@@ -67,8 +67,8 @@ export const VOICES: VoiceOption[] = [
     name: "Troy",
     flag: "🇦🇺",
     avatar: "/avatars/troy.png",
-    accentLabel: "Úc",
-    description: "Giọng nam Úc hào sảng, phóng khoáng, tự nhiên.",
+    accentLabel: "Australian",
+    description: "Friendly and natural Australian male voice.",
   },
   {
     accent: "au",
@@ -78,8 +78,8 @@ export const VOICES: VoiceOption[] = [
     name: "Hannah",
     flag: "🇦🇺",
     avatar: "/avatars/hannah.png",
-    accentLabel: "Úc",
-    description: "Giọng nữ Úc nhẹ nhàng, êm dịu, dễ đồng điệu.",
+    accentLabel: "Australian",
+    description: "Soft and gentle Australian female voice.",
   },
 ];
 

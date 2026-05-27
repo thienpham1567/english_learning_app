@@ -17,7 +17,7 @@ const CATEGORIES: {
   {
     id: "email-response",
     icon: Mail,
-    desc: "Trả lời email yêu cầu (TOEIC Q6-7)",
+    desc: "Respond to a written request (TOEIC Q6-7)",
     colorClass: "text-(--info)",
     borderClass: "border-border hover:border-(--info)",
     bgClass: "hover:bg-(--info)/5 bg-surface",
@@ -26,7 +26,7 @@ const CATEGORIES: {
   {
     id: "opinion-essay",
     icon: PenTool,
-    desc: "Viết luận trình bày quan điểm (TOEIC Q8)",
+    desc: "Write an opinion essay (TOEIC Q8)",
     colorClass: "text-(--accent)",
     borderClass: "border-border hover:border-(--accent)",
     bgClass: "hover:bg-(--accent)/5 bg-surface",
@@ -35,7 +35,7 @@ const CATEGORIES: {
   {
     id: "describe-picture",
     icon: Image,
-    desc: "Mô tả hình ảnh bằng câu (TOEIC Q1-5)",
+    desc: "Write a sentence based on a picture (TOEIC Q1-5)",
     colorClass: "text-(--warning)",
     borderClass: "border-border hover:border-(--warning)",
     bgClass: "hover:bg-(--warning)/5 bg-surface",
@@ -44,7 +44,7 @@ const CATEGORIES: {
   {
     id: "free",
     icon: Star,
-    desc: "Tự do sáng tạo, chủ đề bất kỳ",
+    desc: "Free writing on any topic",
     colorClass: "text-(--success)",
     borderClass: "border-border hover:border-(--success)",
     bgClass: "hover:bg-(--success)/5 bg-surface",
@@ -66,9 +66,9 @@ export function PromptGallery({ onSelect, isLoading, loadingCategory }: Props) {
         <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-accent text-text-on-accent text-2xl mb-3.5 border-2 border-border shadow-(--shadow)">
           <PenTool className="h-6 w-6" />
         </div>
-        <h2 className="m-0 text-xl font-bold font-display text-ink italic">Chọn loại bài viết</h2>
+        <h2 className="m-0 text-xl font-bold font-display text-ink italic">Choose Writing Type</h2>
         <p className="m-0 mt-1.5 text-xs text-text-muted">
-          Luyện viết theo format TOEIC Speaking &amp; Writing
+          Practice writing according to the TOEIC format
         </p>
       </div>
 
@@ -120,7 +120,7 @@ export function PromptGallery({ onSelect, isLoading, loadingCategory }: Props) {
                     color: `var(--${cat.id === "email-response" ? "info" : cat.id === "opinion-essay" ? "accent" : cat.id === "describe-picture" ? "warning" : "success"})`,
                   }}
                 >
-                  Đang tạo đề...
+                  Generating prompt...
                 </div>
               )}
             </button>

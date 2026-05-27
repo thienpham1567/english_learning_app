@@ -48,7 +48,7 @@ export function ReadAloud() {
         </div>
         <h3 className="m-0 mb-1 text-base font-bold text-ink">Read Aloud · Part 1</h3>
         <p className="m-0 text-xs text-text-muted font-bold max-w-sm mx-auto leading-relaxed">
-          Đọc to đoạn văn hiển thị. Bạn có 45 giây để chuẩn bị và 45 giây để đọc.
+          Read the displayed passage aloud. You have 45 seconds to prepare and 45 seconds to read.
         </p>
       </div>
 
@@ -80,14 +80,14 @@ export function ReadAloud() {
             </p>
           </div>
           <p className="text-xs text-text-muted font-bold text-center leading-relaxed">
-            Đọc to đoạn văn trên. Chú ý phát âm rõ ràng, ngữ điệu tự nhiên.
+            Read the passage above aloud. Pay attention to clear pronunciation and natural intonation.
           </p>
           <button
             type="button"
             onClick={() => setSelected(null)}
             className="px-6 py-2.5 rounded-xl border-2 border-border bg-surface text-text-secondary hover:text-ink hover:bg-surface-hover hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow-sm) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-bold cursor-pointer"
           >
-            ← Chọn đoạn khác
+            ← Choose another passage
           </button>
         </div>
       )}

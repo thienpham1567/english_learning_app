@@ -86,9 +86,9 @@ export default function DictationDetailPage() {
               onClick={togglePlay}
               size="large"
             >
-              {playing ? "Pause" : `Phát (${playCount})`}
+              {playing ? "Pause" : `Play (${playCount})`}
             </Button>
-            <span className="text-text-muted text-[13px]">Nghe nhiều lần tùy ý</span>
+            <span className="text-text-muted text-[13px]">Listen as many times as you want</span>
           </div>
           <audio
             ref={audioRef}
@@ -100,7 +100,7 @@ export default function DictationDetailPage() {
         </Card>
 
         {!result ? (
-          <Card title="Chép lại đoạn nghe được">
+          <Card title="Transcribe the audio you hear">
             <Input.TextArea
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -116,17 +116,17 @@ export default function DictationDetailPage() {
               onClick={submit}
               className="mt-3"
             >
-              Nộp bài
+              Submit
             </Button>
           </Card>
         ) : (
           <>
             <Card>
               <div className="text-3xl font-bold">
-                {result.score}/100 ({result.matched}/{result.total} từ đúng)
+                {result.score}/100 ({result.matched}/{result.total} words correct)
               </div>
             </Card>
-            <Card title="So sánh từng từ" size="small">
+            <Card title="Word-by-word Comparison" size="small">
               <div style={{ lineHeight: 2 }}>
                 {result.diff.map((e, i) => (
                   <span
@@ -154,12 +154,12 @@ export default function DictationDetailPage() {
                 ))}
               </div>
               <div className="mt-3 text-xs text-text-muted">
-                <span className="text-emerald-500">● đúng</span> ·{" "}
-                <span className="text-destructive">● thiếu</span> ·{" "}
-                <span style={{ color: "var(--warning)" }}>● thừa</span>
+                <span className="text-emerald-500">● correct</span> ·{" "}
+                <span className="text-destructive">● missing</span> ·{" "}
+                <span style={{ color: "var(--warning)" }}>● extra</span>
               </div>
             </Card>
-            <Card title="Bản gốc" size="small">
+            <Card title="Original Transcript" size="small">
               <div className="text-base">{result.transcript}</div>
               {result.vocabHints && result.vocabHints.length > 0 && (
                 <div className="mt-3 flex gap-2 flex-wrap">
@@ -172,7 +172,7 @@ export default function DictationDetailPage() {
               )}
             </Card>
             <div className="flex gap-2">
-              <Button onClick={() => router.push("/toeic/dictation")}>Về danh sách</Button>
+              <Button onClick={() => router.push("/toeic/dictation")}>Back to List</Button>
               <Button
                 type="primary"
                 onClick={() => {
@@ -182,7 +182,7 @@ export default function DictationDetailPage() {
                   startTime.current = Date.now();
                 }}
               >
-                Làm lại câu này
+                Retry
               </Button>
             </div>
           </>

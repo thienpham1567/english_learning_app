@@ -93,7 +93,7 @@ export function ChatInputBar({
             value={input}
             onChange={handleInputChange}
             onKeyDown={handleKeyDown}
-            placeholder="Hỏi bằng tiếng Anh hoặc chọn một gia sư bên trái..."
+            placeholder="Ask in English or choose a tutor on the left..."
             disabled={isLoading}
             rows={1}
             className="flex-1 min-h-[38px] max-h-[160px] resize-none border-0 bg-transparent py-2 px-2 text-xs md:text-sm leading-relaxed text-(--ink) placeholder-(--text-muted) outline-none focus:ring-0 focus:outline-none"
@@ -119,10 +119,10 @@ export function ChatInputBar({
               } disabled:opacity-40 disabled:cursor-not-allowed`}
               aria-label={
                 voice.isListening
-                  ? "Dừng ghi âm"
+                  ? "Stop recording"
                   : voice.isTranscribing
-                    ? "Đang nhận dạng..."
-                    : "Nói tiếng Anh"
+                    ? "Transcribing..."
+                    : "Speak English"
               }
             >
               {voice.isListening ? (
@@ -140,8 +140,8 @@ export function ChatInputBar({
             <button
               onClick={onStop}
               className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-500 hover:bg-red-600 text-white transition-all duration-200 cursor-pointer shadow-sm active:scale-95"
-              aria-label="Dừng phản hồi"
-              title="Dừng phản hồi"
+              aria-label="Stop response"
+              title="Stop response"
             >
               <Square className="h-4 w-4 fill-current" />
             </button>
@@ -163,9 +163,9 @@ export function ChatInputBar({
         {/* Hints and pill controls row */}
         <div className="flex items-center justify-between gap-4 flex-wrap text-[10px] text-(--text-muted) font-semibold px-1">
           <span className="hidden sm:inline font-mono">
-            Enter để gửi · Shift+Enter để xuống dòng
+            Enter to send · Shift+Enter for new line
           </span>
-          <span className="sm:hidden font-mono">Nhấn Enter để gửi</span>
+          <span className="sm:hidden font-mono">Press Enter to send</span>
 
           <div className="flex items-center gap-2">
             {/* Voice Mode toggle pill */}
@@ -179,7 +179,7 @@ export function ChatInputBar({
                 }`}
               >
                 <Mic className="h-3 w-3" />
-                <span>{voiceMode ? `Chế độ nói (${voiceExchanges})` : "Chế độ nói"}</span>
+                <span>{voiceMode ? `Voice Mode (${voiceExchanges})` : "Voice Mode"}</span>
               </button>
             )}
 
@@ -194,7 +194,7 @@ export function ChatInputBar({
                 }`}
               >
                 <Volume2 className="h-3 w-3" />
-                <span>Phân tích phát âm</span>
+                <span>Pronunciation feedback</span>
                 {pronEnabled && <Check className="h-3 w-3 text-emerald-400" />}
               </button>
             )}

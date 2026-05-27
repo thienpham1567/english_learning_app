@@ -16,7 +16,7 @@ export function SubmissionHistory({ submissions, onView }: Props) {
     <div className="mx-auto mt-8 w-full max-w-lg animate-in fade-in duration-200">
       <h3 className="mb-3 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
         <Clock className="h-3.5 w-3.5" />
-        Bài viết gần đây
+        Recent Submissions
       </h3>
       <div className="space-y-2">
         {submissions.map((s) => (
@@ -32,12 +32,12 @@ export function SubmissionHistory({ submissions, onView }: Props) {
                   {CATEGORY_LABELS[s.category as WritingCategory] ?? s.category}
                 </span>
                 <span className="ml-2 text-xs text-(--text-muted)">
-                  {new Date(s.createdAt).toLocaleDateString("vi-VN")}
+                  {new Date(s.createdAt).toLocaleDateString("en-US")}
                 </span>
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <span className="text-xs text-(--text-muted)">{s.wordCount} từ</span>
+              <span className="text-xs text-(--text-muted)">{s.wordCount} words</span>
               <span className="rounded-full bg-(--accent)/10 px-2 py-0.5 text-xs font-bold text-(--accent)">
                 {s.overallBand.toFixed(1)}
               </span>

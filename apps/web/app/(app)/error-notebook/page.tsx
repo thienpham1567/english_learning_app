@@ -15,10 +15,10 @@ const TABS: {
   label: string;
   icon: React.ComponentType<{ size?: number; className?: string }>;
 }[] = [
-  { key: "overview", label: "Tổng quan", icon: BarChart2 },
-  { key: "review", label: "Ôn tập", icon: Brain },
-  { key: "list", label: "Danh sách", icon: ClipboardList },
-  { key: "analysis", label: "Phân tích", icon: FlaskConical },
+  { key: "overview", label: "Overview", icon: BarChart2 },
+  { key: "review", label: "Review", icon: Brain },
+  { key: "list", label: "Error List", icon: ClipboardList },
+  { key: "analysis", label: "AI Analysis", icon: FlaskConical },
 ];
 
 export default function ErrorNotebookPage() {

@@ -8,15 +8,15 @@ import { useEffect, useRef, useState } from "react";
 type Accent = "us" | "uk" | "au";
 type Gender = "male" | "female";
 
-const ACCENTS: { key: Accent; label: string; flag: string }[] = [
-  { key: "us", label: "Mỹ (US)", flag: "🇺🇸" },
-  { key: "uk", label: "Anh (UK)", flag: "🇬🇧" },
-  { key: "au", label: "Úc (AU)", flag: "🇦🇺" },
+const ACCENTS: { key: Accent; label: string; code: string }[] = [
+  { key: "us", label: "United States (US)", code: "US" },
+  { key: "uk", label: "United Kingdom (UK)", code: "UK" },
+  { key: "au", label: "Australia (AU)", code: "AU" },
 ];
 
 const GENDERS: { key: Gender; label: string }[] = [
-  { key: "male", label: "Nam (Male)" },
-  { key: "female", label: "Nữ (Female)" },
+  { key: "male", label: "Male" },
+  { key: "female", label: "Female" },
 ];
 
 const SPEEDS = [0.75, 1.0, 1.25, 1.5];
@@ -66,7 +66,7 @@ export function TtsReader() {
 
       if (!res.ok) {
         const errData = await res.json().catch(() => ({}));
-        throw new Error(errData.error || "Không thể phát âm văn bản.");
+        throw new Error(errData.error || "Unable to synthesize speech.");
       }
 
       const blob = await res.blob();
@@ -80,13 +80,13 @@ export function TtsReader() {
       audio.addEventListener("ended", () => setPlaying(false));
       audio.addEventListener("pause", () => setPlaying(false));
       audio.addEventListener("error", () => {
-        setError("Lỗi khi phát tệp âm thanh.");
+        setError("Error playing audio file.");
         setPlaying(false);
       });
 
       await audio.play();
     } catch (err: any) {
-      setError(err.message || "Đã xảy ra lỗi kết nối.");
+      setError(err.message || "Connection error occurred.");
       setPlaying(false);
     } finally {
       setLoading(false);
@@ -109,7 +109,7 @@ export function TtsReader() {
       <div>
         <div className="flex justify-between items-center mb-2">
           <span className="text-[13px] font-extrabold text-text-secondary">
-            Nhập văn bản cần đọc thành tiếng (Tối đa 200 ký tự)
+            Enter text to speak (Max 200 characters)
           </span>
           <span
             className="font-extrabold"
@@ -119,7 +119,7 @@ export function TtsReader() {
               transition: "color 0.2s",
             }}
           >
-            {text.length}/200 ký tự ({wordCount} từ)
+            {text.length}/200 characters ({wordCount} words)
           </span>
         </div>
         <textarea
@@ -149,7 +149,7 @@ export function TtsReader() {
             className="font-black uppercase text-text-muted block mb-2.5"
             style={{ fontSize: 11.5, letterSpacing: "0.06em" }}
           >
-            Giọng quốc gia
+            Accent
           </span>
           <div className="flex flex-col gap-1.5">
             {ACCENTS.map((acc) => {
@@ -167,7 +167,15 @@ export function TtsReader() {
                     transition: "background 0.2s, color 0.2s",
                   }}
                 >
-                  <span>{acc.flag}</span>
+                  <span
+                    className="text-[9px] px-1 py-0.5 rounded font-mono font-bold leading-none"
+                    style={{
+                      background: isActive ? "rgba(255,255,255,0.2)" : "var(--border)",
+                      color: isActive ? "var(--text-on-accent)" : "var(--text-secondary)",
+                    }}
+                  >
+                    {acc.code}
+                  </span>
                   <span>{acc.label}</span>
                 </m.button>
               );
@@ -184,7 +192,7 @@ export function TtsReader() {
             className="font-black uppercase text-text-muted block mb-2.5"
             style={{ fontSize: 11.5, letterSpacing: "0.06em" }}
           >
-            Giới tính giọng
+            Voice Gender
           </span>
           <div className="flex flex-col gap-1.5">
             {GENDERS.map((g) => {
@@ -218,7 +226,7 @@ export function TtsReader() {
             className="font-black uppercase text-text-muted block mb-2.5"
             style={{ fontSize: 11.5, letterSpacing: "0.06em" }}
           >
-            Tốc độ phát
+            Playback Speed
           </span>
           <div className="grid gap-1.5" style={{ gridTemplateColumns: "1fr 1fr" }}>
             {SPEEDS.map((s) => {
@@ -259,8 +267,8 @@ export function TtsReader() {
       >
         <Info style={{ marginTop: 2 }} />
         <div>
-          <strong>Công nghệ giọng nói Groq Orpheus:</strong> Chuyển văn bản thành giọng đọc tự
-          nhiên, chất lượng phòng thu chuẩn quốc tế. Giới hạn tối đa 200 ký tự mỗi lần phát âm.
+          <strong>Groq Orpheus Speech Technology:</strong> Converts text into natural,
+          studio-quality speech. Maximum limit of 200 characters per request.
         </div>
       </div>
 
@@ -293,17 +301,17 @@ export function TtsReader() {
           {loading ? (
             <>
               <Loader2 className="animate-spin" />
-              <span>Đang chuẩn bị giọng nói...</span>
+              <span>Preparing voice...</span>
             </>
           ) : playing ? (
             <>
               <XCircle />
-              <span>Dừng phát âm</span>
+              <span>Stop playback</span>
             </>
           ) : (
             <>
               <PlayCircle />
-              <span>Đọc văn bản (TTS)</span>
+              <span>Speak Text (TTS)</span>
             </>
           )}
         </m.button>
@@ -321,7 +329,7 @@ export function TtsReader() {
             className="flex items-center gap-1 text-emerald-500 text-[13px] font-extrabold"
           >
             <Volume2 />
-            <span>Đang phát giọng đọc...</span>
+            <span>Playing speech...</span>
           </m.div>
         )}
       </div>

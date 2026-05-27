@@ -52,7 +52,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
       setData(result.explanation);
       setExpanded(true);
     } catch {
-      setError("Không thể tạo giải thích. Thử lại sau.");
+      setError("Could not generate explanation. Try again later.");
     } finally {
       setLoading(false);
     }
@@ -81,12 +81,12 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
         {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Lightbulb className="h-4 w-4" />}
         <span className="flex-1">
           {loading
-            ? "Đang phân tích lỗi sai..."
+            ? "Analyzing error..."
             : data
               ? expanded
-                ? "Ẩn giải thích chi tiết"
-                : "Xem giải thích chi tiết"
-              : "Phân tích lỗi sai với AI"}
+                ? "Hide detailed explanation"
+                : "View detailed explanation"
+              : "Analyze error with AI"}
         </span>
         {data && (
           <span className="text-[11px] text-text-muted">
@@ -104,7 +104,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
             onClick={generate}
             className="ml-2 border-none bg-transparent text-accent cursor-pointer text-xs font-semibold underline"
           >
-            Thử lại
+            Try again
           </button>
         </div>
       )}
@@ -115,7 +115,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
           {/* Why Wrong */}
           <div className="px-3.5 py-3 rounded-[10px] bg-[color-mix(in_srgb,var(--error)_4%,var(--surface))] border-l-3 border-l-(--error)">
             <div className="flex items-center gap-1.5 mb-1.5 text-xs font-bold text-(--error) uppercase tracking-wide">
-              <XCircle className="h-3 w-3" /> Tại sao đáp án bạn chọn sai
+              <XCircle className="h-3 w-3" /> Why your answer is incorrect
             </div>
             <p className="m-0 text-[13px] leading-relaxed text-(--text)">{data.whyWrong}</p>
           </div>
@@ -123,7 +123,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
           {/* Why Correct */}
           <div className="px-3.5 py-3 rounded-[10px] bg-[color-mix(in_srgb,var(--success)_4%,var(--surface))] border-l-3 border-l-(--success)">
             <div className="flex items-center gap-1.5 mb-1.5 text-xs font-bold text-(--success) uppercase tracking-wide">
-              <CheckCircle className="h-3 w-3" /> Tại sao đáp án đúng là đúng
+              <CheckCircle className="h-3 w-3" /> Why the correct answer is correct
             </div>
             <p className="m-0 text-[13px] leading-relaxed text-(--text)">{data.whyCorrect}</p>
           </div>
@@ -131,7 +131,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
           {/* Grammar Rule — Formula Card */}
           <div className="px-3.5 py-3 rounded-[10px] bg-gradient-to-br from-accent/8 to-[color-mix(in_srgb,var(--secondary)_6%,var(--surface))] border border-accent/15">
             <div className="flex items-center gap-1.5 mb-2 text-xs font-bold text-accent uppercase tracking-wide">
-              <BookOpen className="h-3 w-3" /> Quy tắc ngữ pháp
+              <BookOpen className="h-3 w-3" /> Grammar Rule
             </div>
             <div className="px-3.5 py-2.5 rounded-lg bg-accent/6 font-mono text-[13px] font-semibold leading-relaxed text-ink tracking-wide">
               {data.grammarRule}
@@ -141,7 +141,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
           {/* Examples */}
           <div className="px-3.5 py-3 rounded-[10px] bg-(--card-bg) border-2 border-border">
             <div className="flex items-center gap-1.5 mb-2 text-xs font-bold text-(--secondary) uppercase tracking-wide">
-              <FlaskConical className="h-3 w-3" /> Ví dụ tương tự
+              <FlaskConical className="h-3 w-3" /> Similar Examples
             </div>
             <div className="flex flex-col gap-1.5">
               {data.examples.map((ex, i) => (
@@ -163,7 +163,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
             <Zap className="h-4 w-4 text-(--warning) mt-0.5 shrink-0" />
             <div>
               <div className="text-[11px] font-bold text-(--warning) uppercase tracking-wide mb-1">
-                Mẹo ghi nhớ
+                Memory Tip
               </div>
               <p className="m-0 text-[13px] leading-relaxed text-(--text)">{data.tip}</p>
             </div>

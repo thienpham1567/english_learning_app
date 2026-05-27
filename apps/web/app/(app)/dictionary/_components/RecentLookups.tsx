@@ -53,7 +53,7 @@ export function RecentLookups({ words, onSelect }: Props) {
           color: "var(--text-muted)",
         }}
       >
-        Gần đây
+        Recent
       </span>
       {words.map((word) => (
         <button

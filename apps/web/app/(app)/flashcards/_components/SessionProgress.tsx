@@ -36,14 +36,14 @@ export function SessionProgress({ current, total, startTime }: Props) {
       avgMs = DEFAULT_SECONDS_PER_CARD * 1000;
     }
     const minutesLeft = Math.ceil((remaining * avgMs) / 60000);
-    timeLabel = ` · ~${minutesLeft} phút còn lại`;
+    timeLabel = ` · ~${minutesLeft}m remaining`;
   }
 
   return (
     <div style={{ width: "100%", marginBottom: 20 }}>
       <Flex justify="space-between" align="center" style={{ marginBottom: 6 }}>
         <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-secondary)" }}>
-          Đang ôn tập: <span style={{ color: "var(--accent)" }}>{current}</span> / {total}
+          Reviewing: <span style={{ color: "var(--accent)" }}>{current}</span> / {total}
         </span>
         <span style={{ fontSize: 12.5, fontWeight: 600, color: "var(--text-muted)" }}>
           {timeLabel}

@@ -61,12 +61,12 @@ type ExamType = "ielts-task2" | "ielts-task1" | "toefl-independent";
 type GuidedState = "setup" | "loading-prompt" | "writing" | "scoring" | "result";
 
 const TOPIC_CATEGORIES = [
-  { key: "education", label: "Giáo dục", color: "var(--info)" },
-  { key: "technology", label: "Công nghệ", color: "var(--accent)" },
-  { key: "environment", label: "Môi trường", color: "var(--success)" },
-  { key: "health", label: "Sức khỏe", color: "var(--module-grammar)" },
-  { key: "society", label: "Xã hội", color: "var(--fire)" },
-  { key: "work", label: "Công việc", color: "var(--module-writing)" },
+  { key: "education", label: "Education", color: "var(--info)" },
+  { key: "technology", label: "Technology", color: "var(--accent)" },
+  { key: "environment", label: "Environment", color: "var(--success)" },
+  { key: "health", label: "Health", color: "var(--module-grammar)" },
+  { key: "society", label: "Society", color: "var(--fire)" },
+  { key: "work", label: "Work", color: "var(--module-writing)" },
 ];
 
 const EXAM_OPTIONS: { value: ExamType; label: string }[] = [
@@ -172,7 +172,7 @@ export function GuidedWritingPanel() {
         setScoreResult(null);
         setState("writing");
       } catch (err: unknown) {
-        setError(err instanceof Error ? err.message : "Có lỗi xảy ra");
+        setError(err instanceof Error ? err.message : "An error occurred");
         setState("setup");
       }
     },
@@ -223,7 +223,7 @@ export function GuidedWritingPanel() {
       setScoreResult(data);
       setState("result");
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Có lỗi xảy ra");
+      setError(err instanceof Error ? err.message : "An error occurred");
       setState("writing");
     }
   }, [essayText, exam, guided, wordCount]);
@@ -251,15 +251,15 @@ export function GuidedWritingPanel() {
         <div className="flex flex-col gap-4 animate-in fade-in duration-200">
           <div className="flex items-center gap-2">
             <Lightbulb className="h-5 w-5 text-accent" />
-            <span className="font-bold text-sm text-ink">Viết có hướng dẫn</span>
+            <span className="font-bold text-sm text-ink">Guided Writing</span>
           </div>
           <p className="text-xs text-text-secondary m-0 leading-relaxed">
-            Chọn loại bài thi và chủ đề — AI sẽ tạo đề bài, dàn ý, và ngân hàng từ vựng cho bạn.
+            Select exam type and topic — AI will generate the prompt, outline, and vocabulary bank for you.
           </p>
 
           {/* Exam selector */}
           <div>
-            <p className="text-xs text-text-primary font-bold mb-2">Loại bài thi</p>
+            <p className="text-xs text-text-primary font-bold mb-2">Exam Type</p>
             <div className="flex gap-2 flex-wrap">
               {EXAM_OPTIONS.map((opt) => (
                 <button
@@ -281,7 +281,7 @@ export function GuidedWritingPanel() {
           {/* Category selector (AC4) */}
           <div>
             <p className="text-xs text-text-primary font-bold mb-2">
-              Chủ đề <span className="font-normal text-text-muted">(bỏ trống = ngẫu nhiên)</span>
+              Topic <span className="font-normal text-text-muted">(leave blank = random)</span>
             </p>
             <div className="grid grid-cols-[repeat(auto-fit,minmax(90px,1fr))] gap-2">
               {TOPIC_CATEGORIES.map((cat) => (
@@ -311,7 +311,7 @@ export function GuidedWritingPanel() {
             className="px-8 py-3 rounded-xl border-2 border-border bg-accent hover:bg-accent-hover text-text-on-accent text-xs font-bold flex items-center gap-1.5 self-center cursor-pointer shadow-(--shadow-sm) active:scale-95 transition-all mt-2"
           >
             <Target className="h-4 w-4" />
-            <span>Tạo đề bài</span>
+            <span>Generate Prompt</span>
           </button>
         </div>
       )}
@@ -321,7 +321,7 @@ export function GuidedWritingPanel() {
         <div className="text-center py-16 flex flex-col items-center justify-center">
           <Loader2 className="h-9 w-9 text-accent animate-spin" />
           <p className="text-xs text-text-secondary mt-4 font-bold">
-            Đang tạo đề bài và từ vựng...
+            Generating prompt and vocabulary...
           </p>
         </div>
       )}
@@ -334,7 +334,7 @@ export function GuidedWritingPanel() {
             <div className="flex justify-between items-center mb-2.5">
               <p className="text-xs text-text-primary m-0 font-bold flex items-center gap-1.5">
                 <PenTool className="h-4 w-4 text-accent" />
-                <span>Đề bài</span>
+                <span>Prompt</span>
               </p>
               <div className="flex gap-3">
                 {/* Shuffle (AC4) */}
@@ -344,7 +344,7 @@ export function GuidedWritingPanel() {
                   className="border-none bg-transparent cursor-pointer text-text-muted hover:text-text-primary text-xs font-semibold flex items-center gap-1"
                 >
                   <RefreshCw className="h-3 w-3" />
-                  <span>Đổi đề</span>
+                  <span>Change Prompt</span>
                 </button>
                 {/* New category (AC4) */}
                 <button
@@ -355,7 +355,7 @@ export function GuidedWritingPanel() {
                   }}
                   className="border-none bg-transparent cursor-pointer text-text-muted hover:text-text-primary text-xs font-semibold"
                 >
-                  Chủ đề khác
+                  Other Topics
                 </button>
               </div>
             </div>
@@ -368,7 +368,7 @@ export function GuidedWritingPanel() {
             <div className="p-4.5 rounded-2xl bg-surface border-2 border-border">
               <p className="text-xs text-text-primary m-0 mb-2.5 font-bold flex items-center gap-1.5">
                 <ClipboardList className="h-4 w-4 text-accent" />
-                <span>Dàn ý gợi ý</span>
+                <span>Suggested Outline</span>
               </p>
               <ol className="m-0 pl-4.5 text-xs text-text-secondary leading-relaxed list-decimal flex flex-col gap-1">
                 {guided.outline.map((item, i) => (
@@ -381,8 +381,8 @@ export function GuidedWritingPanel() {
             <div className="p-4.5 rounded-2xl bg-surface border-2 border-border">
               <p className="text-xs text-text-primary m-0 mb-3 font-bold flex items-center gap-1.5">
                 <BookOpen className="h-4 w-4 text-accent" />
-                <span>Ngân hàng từ vựng</span>
-                <span className="font-normal text-text-muted">(click để chèn)</span>
+                <span>Vocabulary Bank</span>
+                <span className="font-normal text-text-muted">(click to insert)</span>
               </p>
               <div className="flex flex-col gap-2">
                 {guided.vocabBank.map((v, i) => {
@@ -419,20 +419,20 @@ export function GuidedWritingPanel() {
           {/* Essay textarea */}
           <div>
             <div className="flex justify-between items-center mb-1.5">
-              <p className="text-xs text-text-primary m-0 font-bold">Bài viết</p>
+              <p className="text-xs text-text-primary m-0 font-bold">Writing</p>
               <span
                 className={`text-[10px] font-semibold ${
                   wordCount < 150 ? "text-error" : "text-text-muted"
                 }`}
               >
-                {wordCount} từ {wordCount < 150 && "(cần ≥ 150)"}
+                {wordCount} words {wordCount < 150 && "(needs ≥ 150)"}
               </span>
             </div>
             <textarea
               ref={textareaRef}
               value={essayText}
               onChange={(e) => setEssayText(e.target.value)}
-              placeholder="Viết bài viết của bạn ở đây. Click vào từ vựng bên phải để chèn..."
+              placeholder="Write your essay here. Click vocabulary items on the right to insert..."
               disabled={state === "scoring"}
               className="w-full min-h-70 p-4 rounded-2xl border-2 border-border bg-surface text-ink text-sm leading-relaxed resize-y focus:outline-none focus:ring-1 focus:ring-accent/30 font-body disabled:opacity-60"
             />
@@ -452,12 +452,12 @@ export function GuidedWritingPanel() {
             {state === "scoring" ? (
               <>
                 <Loader2 className="h-4 w-4 animate-spin" />
-                <span>Đang chấm bài...</span>
+                <span>Scoring...</span>
               </>
             ) : (
               <>
                 <Send className="h-4 w-4" />
-                <span>Nộp bài & chấm điểm</span>
+                <span>Submit & Score</span>
               </>
             )}
           </button>
@@ -476,7 +476,7 @@ export function GuidedWritingPanel() {
               color={scoreColor(scoreResult.overall)}
             />
             <p className="text-xs text-text-secondary m-0 mt-3 font-semibold">
-              {EXAM_OPTIONS.find((o) => o.value === exam)?.label} • {scoreResult.wordCount} từ
+              {EXAM_OPTIONS.find((o) => o.value === exam)?.label} • {scoreResult.wordCount} words
             </p>
 
             {/* Criteria scores */}
@@ -519,7 +519,7 @@ export function GuidedWritingPanel() {
           <div className="p-4.5 rounded-2xl bg-surface border-2 border-border">
             <p className="text-xs text-text-primary m-0 mb-2.5 font-bold flex items-center gap-1.5">
               <BookOpen className="h-4 w-4 text-accent" />
-              <span>Từ vựng đã sử dụng</span>
+              <span>Vocabulary Used</span>
             </p>
             <div className="flex flex-wrap gap-1.5">
               {guided.vocabBank.map((v, i) => {
@@ -606,7 +606,7 @@ export function GuidedWritingPanel() {
             <div className="p-4.5 rounded-2xl bg-surface border-2 border-border">
               <p className="text-xs text-text-primary m-0 mb-2 font-bold flex items-center gap-1.5">
                 <CheckCircle className="h-4 w-4 text-success" />
-                <span>Điểm mạnh</span>
+                <span>Strengths</span>
               </p>
               <ul className="m-0 pl-4.5 text-xs text-text-secondary leading-relaxed flex flex-col gap-1 list-disc">
                 {scoreResult.strengths.map((s, i) => (
@@ -617,7 +617,7 @@ export function GuidedWritingPanel() {
             <div className="p-4.5 rounded-2xl bg-surface border-2 border-border">
               <p className="text-xs text-text-primary m-0 mb-2 font-bold flex items-center gap-1.5">
                 <Target className="h-4 w-4 text-accent" />
-                <span>Cần cải thiện</span>
+                <span>Areas for Improvement</span>
               </p>
               <ul className="m-0 pl-4.5 text-xs text-text-secondary leading-relaxed flex flex-col gap-1 list-disc">
                 {scoreResult.nextSteps.map((s, i) => (
@@ -640,7 +640,7 @@ export function GuidedWritingPanel() {
               className="px-6 py-2.5 rounded-xl border-2 border-border bg-accent hover:bg-accent-hover text-text-on-accent text-xs font-bold cursor-pointer flex items-center gap-1.5 shadow-(--shadow-sm) active:scale-97"
             >
               <RefreshCw className="h-3.5 w-3.5" />
-              <span>Bài mới</span>
+              <span>New Prompt</span>
             </button>
           </div>
         </div>

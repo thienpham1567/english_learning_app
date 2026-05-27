@@ -21,17 +21,17 @@ type DictionaryResultCardProps = {
 
 const FREQUENCY_CONFIG: Record<
   FrequencyBand,
-  { filled: number; labelVi: string; tooltipEn: string }
+  { filled: number; label: string; tooltipEn: string }
 > = {
-  top1k: { filled: 5, labelVi: "Rất phổ biến", tooltipEn: "Top 1,000 most common words" },
-  top3k: { filled: 4, labelVi: "Phổ biến", tooltipEn: "Top 3,000 most common words" },
-  top5k: { filled: 3, labelVi: "Khá phổ biến", tooltipEn: "Top 5,000 most common words" },
-  top10k: { filled: 2, labelVi: "Ít phổ biến", tooltipEn: "Top 10,000 most common words" },
-  rare: { filled: 1, labelVi: "Hiếm gặp", tooltipEn: "Uncommon word" },
+  top1k: { filled: 5, label: "Very Common", tooltipEn: "Top 1,000 most common words" },
+  top3k: { filled: 4, label: "Common", tooltipEn: "Top 3,000 most common words" },
+  top5k: { filled: 3, label: "Fairly Common", tooltipEn: "Top 5,000 most common words" },
+  top10k: { filled: 2, label: "Uncommon", tooltipEn: "Top 10,000 most common words" },
+  rare: { filled: 1, label: "Rare", tooltipEn: "Uncommon word" },
 };
 
 function FrequencyBar({ band }: { band: FrequencyBand }) {
-  const { filled, labelVi, tooltipEn } = FREQUENCY_CONFIG[band];
+  const { filled, label, tooltipEn } = FREQUENCY_CONFIG[band];
   return (
     <div className="anim-fade-in inline-flex items-center gap-2 relative group">
       <div className="flex gap-1">
@@ -43,7 +43,7 @@ function FrequencyBar({ band }: { band: FrequencyBand }) {
           />
         ))}
       </div>
-      <span className="text-xs text-text-muted">{labelVi}</span>
+      <span className="text-xs text-text-muted">{label}</span>
       <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
         {tooltipEn}
       </span>
@@ -60,38 +60,38 @@ const LEVEL_STYLES: Record<string, { bg: string; text: string; border: string }>
   C2: { bg: "bg-(--error-bg)", text: "text-(--error)", border: "border-(--error)" },
 };
 
-// Maps the prompt's allowed partOfSpeech values to learner-friendly Vietnamese.
-const POS_LABELS_VI: Record<string, string> = {
-  noun: "danh từ",
-  verb: "động từ",
-  adjective: "tính từ",
-  adverb: "trạng từ",
-  "phrasal verb": "cụm động từ",
-  idiom: "thành ngữ",
-  preposition: "giới từ",
-  conjunction: "liên từ",
-  determiner: "từ hạn định",
-  pronoun: "đại từ",
-  interjection: "thán từ",
-  "auxiliary verb": "trợ động từ",
-  "modal verb": "động từ khiếm khuyết",
-  article: "mạo từ",
+// Maps the prompt's allowed partOfSpeech values to learner-friendly labels.
+const POS_LABELS: Record<string, string> = {
+  noun: "noun",
+  verb: "verb",
+  adjective: "adjective",
+  adverb: "adverb",
+  "phrasal verb": "phrasal verb",
+  idiom: "idiom",
+  preposition: "preposition",
+  conjunction: "conjunction",
+  determiner: "determiner",
+  pronoun: "pronoun",
+  interjection: "interjection",
+  "auxiliary verb": "auxiliary verb",
+  "modal verb": "modal verb",
+  article: "article",
 };
 
-// Maps the prompt's allowed register values to Vietnamese with tooltip context.
-const REGISTER_INFO: Record<string, { vi: string; tooltipVi: string }> = {
+// Maps the prompt's allowed register values to English with tooltip context.
+const REGISTER_INFO: Record<string, { en: string; tooltipEn: string }> = {
   formal: {
-    vi: "trang trọng",
-    tooltipVi: "Dùng trong văn viết học thuật, pháp lý hoặc chuyên môn.",
+    en: "formal",
+    tooltipEn: "Used in academic, legal, or professional writing.",
   },
-  informal: { vi: "thân mật", tooltipVi: "Dùng trong giao tiếp hàng ngày." },
-  slang: { vi: "tiếng lóng", tooltipVi: "Cách nói rất thân mật trong nhóm/cộng đồng nhất định." },
-  technical: { vi: "chuyên ngành", tooltipVi: "Thuật ngữ trong một lĩnh vực cụ thể." },
-  literary: { vi: "văn chương", tooltipVi: "Hay gặp trong tác phẩm văn học." },
-  archaic: { vi: "cổ", tooltipVi: "Không còn được dùng phổ biến hiện nay." },
-  colloquial: { vi: "khẩu ngữ", tooltipVi: "Phong cách hội thoại, thoải mái." },
-  vulgar: { vi: "thô tục", tooltipVi: "Từ kiêng kỵ, nên tránh dùng." },
-  offensive: { vi: "xúc phạm", tooltipVi: "Có thể gây xúc phạm hoặc tổn thương người nghe." },
+  informal: { en: "informal", tooltipEn: "Used in everyday communication." },
+  slang: { en: "slang", tooltipEn: "Very informal language specific to a group or community." },
+  technical: { en: "technical", tooltipEn: "Terms specific to a particular field or industry." },
+  literary: { en: "literary", tooltipEn: "Often found in literary works." },
+  archaic: { en: "archaic", tooltipEn: "No longer in common use today." },
+  colloquial: { en: "colloquial", tooltipEn: "Conversational, relaxed style." },
+  vulgar: { en: "vulgar", tooltipEn: "Taboo word, should be avoided." },
+  offensive: { en: "offensive", tooltipEn: "May cause offense or hurt the listener." },
 };
 
 function AudioButton({
@@ -120,10 +120,10 @@ function AudioButton({
 }
 
 function getNumberLabel(numberInfo: NonNullable<VocabularyWithNearby["numberInfo"]>): string {
-  if (numberInfo.isUncountable) return "không đếm được";
-  if (numberInfo.isPluralOnly) return "chỉ số nhiều";
-  if (numberInfo.isSingularOnly) return "chỉ số ít";
-  if (numberInfo.plural) return `số nhiều: ${numberInfo.plural}`;
+  if (numberInfo.isUncountable) return "uncountable";
+  if (numberInfo.isPluralOnly) return "plural only";
+  if (numberInfo.isSingularOnly) return "singular only";
+  if (numberInfo.plural) return `plural: ${numberInfo.plural}`;
   return "";
 }
 
@@ -167,7 +167,7 @@ export function DictionaryResultCard({
         <div className="flex min-h-[360px] flex-col items-center justify-center gap-3">
           <BookOpen className="h-8 w-8 text-text-muted" />
           <p className="text-sm text-text-muted">
-            {!hasSearched ? "Nhập từ cần tra" : "Chưa có kết quả để hiển thị"}
+            {!hasSearched ? "Enter a word to search" : "No results to display"}
           </p>
         </div>
       </div>
@@ -187,7 +187,7 @@ export function DictionaryResultCard({
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="min-w-0 flex-1">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent m-0">
-            Kết quả tra cứu
+            Search Result
           </p>
           <div className="flex items-baseline gap-3 flex-wrap mt-2">
             <h2 className="dictionary-result-heading italic leading-tight font-display text-ink break-words m-0">
@@ -200,9 +200,9 @@ export function DictionaryResultCard({
                   : vocabulary.entryType === "phrasal_verb"
                     ? "phrasal verb"
                     : (vocabulary.partOfSpeech ?? null);
-              const posVi = posKey ? POS_LABELS_VI[posKey] : null;
-              const display = posVi ?? posKey ?? "từ";
-              const tooltip = posKey && posVi ? posKey : null;
+              const posEn = posKey ? POS_LABELS[posKey] : null;
+              const display = posEn ?? posKey ?? "word";
+              const tooltip = posKey && posEn ? posKey : null;
               return (
                 <span className="relative group rounded-full px-3.5 py-1 text-[13px] font-semibold italic bg-accent-muted text-accent border-2 border-border whitespace-nowrap leading-snug">
                   {display}
@@ -236,9 +236,9 @@ export function DictionaryResultCard({
           {vocabulary.register &&
             (() => {
               const info = REGISTER_INFO[vocabulary.register];
-              const display = info?.vi ?? vocabulary.register;
+              const display = info?.en ?? vocabulary.register;
               const tooltip = info
-                ? `${vocabulary.register} — ${info.tooltipVi}`
+                ? `${vocabulary.register} — ${info.tooltipEn}`
                 : vocabulary.register;
               return (
                 <span className="relative group rounded-full px-3 py-0.5 text-xs border border-(--border-strong) text-text-secondary bg-accent-light cursor-help">
@@ -264,7 +264,7 @@ export function DictionaryResultCard({
             <button
               onClick={onToggleSaved}
               className="grid w-8 h-8 place-items-center rounded-full bg-transparent border-none text-text-muted cursor-pointer transition-colors duration-200 hover:text-accent"
-              aria-label={saved ? "Bỏ lưu từ này" : "Lưu từ này"}
+              aria-label={saved ? "Remove word from saved" : "Save this word"}
             >
               <Star className={`h-5 w-5 ${saved ? "fill-accent text-accent" : ""}`} />
             </button>
@@ -276,8 +276,8 @@ export function DictionaryResultCard({
       {hasDualPhonetics ? (
         <div className="anim-fade-in mt-3 flex flex-wrap items-center gap-3">
           {vocabulary.phoneticsUs && (
-            <div className="flex items-center gap-2">
-              <span className="text-base">🇺🇸</span>
+            <div className="flex items-center gap-1.5">
+              <span className="px-1.5 py-0.5 rounded bg-surface-alt text-[10px] text-text-muted font-black border border-border">US</span>
               <span className="rounded bg-bg-deep px-2 py-0.5 text-sm font-mono text-accent">
                 {vocabulary.phoneticsUs}
               </span>
@@ -288,8 +288,8 @@ export function DictionaryResultCard({
             <span className="text-text-muted">·</span>
           )}
           {vocabulary.phoneticsUk && (
-            <div className="flex items-center gap-2">
-              <span className="text-base">🇬🇧</span>
+            <div className="flex items-center gap-1.5">
+              <span className="px-1.5 py-0.5 rounded bg-surface-alt text-[10px] text-text-muted font-black border border-border">UK</span>
               <span className="rounded bg-bg-deep px-2 py-0.5 text-sm font-mono text-accent">
                 {vocabulary.phoneticsUk}
               </span>

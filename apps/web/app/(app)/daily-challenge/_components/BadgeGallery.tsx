@@ -27,7 +27,7 @@ export function BadgeGallery({ badges }: Props) {
       <div className="flex items-center gap-1.5 mb-4">
         <Trophy className="text-[13px] text-accent" />
         <span className="text-[11px] font-extrabold uppercase tracking-widest text-accent">
-          Huy hiệu thành tựu
+          Achievement Badges
         </span>
       </div>
 
@@ -82,7 +82,7 @@ export function BadgeGallery({ badges }: Props) {
                   className="text-[10px] leading-none text-text-muted font-semibold block"
                   style={{ marginTop: 2 }}
                 >
-                  Chuỗi {b.requiredStreak} ngày
+                  {b.requiredStreak}-day streak
                 </Text>
               </div>
 

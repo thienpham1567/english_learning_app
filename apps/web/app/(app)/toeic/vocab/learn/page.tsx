@@ -86,12 +86,12 @@ function LearnRunner() {
   };
 
   if (words.length === 0) {
-    return <div className="p-6">Đang tải từ vựng… (hoặc pack rỗng)</div>;
+    return <div className="p-6">Loading vocabulary... (or empty pack)</div>;
   }
   if (done) {
     return (
       <Card>
-        <div className="text-[28px] font-bold">Hoàn thành!</div>
+        <div className="text-[28px] font-bold">Completed!</div>
         <div className="mt-2">
           <Tag color="red">Again: {stats.again}</Tag>
           <Tag color="orange">Hard: {stats.hard}</Tag>
@@ -99,7 +99,7 @@ function LearnRunner() {
           <Tag color="blue">Easy: {stats.easy}</Tag>
         </div>
         <Button type="primary" onClick={() => router.push("/toeic/vocab")} className="mt-4">
-          Về Vocab Hub
+          Back to Vocab Hub
         </Button>
       </Card>
     );
@@ -110,7 +110,7 @@ function LearnRunner() {
     <div className="grid gap-3 w-[600px]">
       <div className="flex justify-between text-text-muted text-sm">
         <span>
-          Từ {idx + 1} / {total}
+          Word {idx + 1} / {total}
         </span>
         <Tag>{current.topic}</Tag>
       </div>
@@ -129,7 +129,7 @@ function LearnRunner() {
         {!revealed ? (
           <div className="text-center mt-6">
             <Button type="primary" size="large" onClick={() => setRevealed(true)}>
-              Hiện nghĩa
+              Show Meaning
             </Button>
           </div>
         ) : (

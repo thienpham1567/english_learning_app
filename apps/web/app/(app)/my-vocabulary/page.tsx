@@ -12,7 +12,7 @@ const ToeicVocabTab = dynamic(
     loading: () => (
       <div className="flex justify-center text-text-muted gap-2.5" style={{ padding: 60 }}>
         <Loader2 className="animate-spin text-accent" size={20} />
-        <span className="font-bold text-sm">Đang tải...</span>
+        <span className="font-bold text-sm">Loading...</span>
       </div>
     ),
   },
@@ -25,7 +25,7 @@ const DictionaryTab = dynamic(
     loading: () => (
       <div className="flex justify-center text-text-muted gap-2.5" style={{ padding: 60 }}>
         <Loader2 className="animate-spin text-accent" size={20} />
-        <span className="font-bold text-sm">Đang tải...</span>
+        <span className="font-bold text-sm">Loading...</span>
       </div>
     ),
   },
@@ -35,12 +35,12 @@ type TabKey = "toeic" | "dictionary";
 
 const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
   { key: "toeic", label: "TOEIC 600", icon: <BookOpen /> },
-  { key: "dictionary", label: "Tra từ điển", icon: <Search /> },
+  { key: "dictionary", label: "Dictionary Search", icon: <Search /> },
 ];
 
 const SUBTITLES: Record<TabKey, string> = {
-  toeic: "600 từ thiết yếu · 10 chủ đề · SRS",
-  dictionary: "Tra cứu · Lịch sử · Từ đã lưu",
+  toeic: "600 essential words · 10 topics · SRS",
+  dictionary: "Search · History · Saved Words",
 };
 
 const GRADIENTS: Record<TabKey, string> = {

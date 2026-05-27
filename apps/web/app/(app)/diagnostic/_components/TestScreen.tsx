@@ -13,10 +13,10 @@ const { Text } = Typography;
 const LABELS = ["A", "B", "C", "D"] as const;
 
 const SKILL_LABELS: Record<string, string> = {
-  grammar: "Ngữ pháp",
-  vocabulary: "Từ vựng",
-  reading: "Đọc hiểu",
-  listening: "Nghe hiểu",
+  grammar: "Grammar",
+  vocabulary: "Vocabulary",
+  reading: "Reading",
+  listening: "Listening",
 };
 
 type Props = {
@@ -85,7 +85,7 @@ export function TestScreen({
             }}
           >
             <span style={{ fontSize: 13, fontWeight: 700, color: "var(--text-secondary)" }}>
-              Câu hỏi {currentIndex + 1} / {total}
+              Question {currentIndex + 1} / {total}
             </span>
             <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
               <span
@@ -234,7 +234,7 @@ export function TestScreen({
             marginTop: 4,
           }}
         >
-          <span>Phím tắt:</span>
+          <span>Shortcuts:</span>
           <kbd
             style={{
               background: "var(--border)",
@@ -279,7 +279,7 @@ export function TestScreen({
           >
             D
           </kbd>
-          <span>để chọn ·</span>
+          <span>to select ·</span>
           <kbd
             style={{
               background: "var(--border)",
@@ -291,7 +291,7 @@ export function TestScreen({
           >
             Enter
           </kbd>
-          <span>để xác nhận</span>
+          <span>to confirm</span>
         </div>
 
         {/* Actions Button Row */}
@@ -319,7 +319,7 @@ export function TestScreen({
             }}
           >
             {currentIndex < total - 1 ? (
-              "Câu tiếp theo →"
+              "Next Question →"
             ) : (
               <span
                 style={{
@@ -329,7 +329,7 @@ export function TestScreen({
                   justifyContent: "center",
                 }}
               >
-                Hoàn thành bài test <Check size={16} />
+                Complete Test <Check size={16} />
               </span>
             )}
           </m.button>
@@ -353,7 +353,7 @@ export function TestScreen({
               transition: "all 0.2s",
             }}
           >
-            Bỏ qua
+            Skip
           </m.button>
         </Flex>
       </Flex>

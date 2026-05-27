@@ -66,17 +66,17 @@ export default async function ToeicReviewPage() {
           >
             <div className="flex items-center gap-2">
               <AlertTriangle className="text-2xl text-destructive" />
-              <strong>Câu sai TOEIC</strong>
+              <strong>TOEIC Incorrect Questions</strong>
             </div>
             <div className="text-4xl font-bold mt-2 text-ink">{toeicErrorIds.length}</div>
-            <div className="text-text-muted text-[13px]">Câu Part 5/6/7 bạn từng sai</div>
+            <div className="text-text-muted text-[13px]">Part 5/6/7 questions you previously got wrong</div>
             {toeicErrorIds.length > 0 && (
               <Link
                 href="/toeic/grammar/drill?mode=mistake&count=20"
                 className="inline-block mt-3 py-1.5 px-3 rounded-md text-[13px]"
                 style={{ background: "var(--error)", color: "#fff", textDecoration: "none" }}
               >
-                Drill ngay
+                Drill Now
               </Link>
             )}
           </Card>
@@ -87,10 +87,10 @@ export default async function ToeicReviewPage() {
           >
             <div className="flex items-center gap-2">
               <BookOpenText className="text-2xl text-accent" />
-              <strong>Từ vựng cần ôn</strong>
+              <strong>Vocabulary to Review</strong>
             </div>
             <div className="text-4xl font-bold mt-2 text-ink">{flashcardDue.length}</div>
-            <div className="text-text-muted text-[13px]">Từ TOEIC tới hạn SRS</div>
+            <div className="text-text-muted text-[13px]">TOEIC words due for Spaced Repetition (SRS)</div>
             {flashcardDue.length > 0 && (
               <Link
                 href="/toeic/vocab/learn?mode=review"
@@ -101,15 +101,15 @@ export default async function ToeicReviewPage() {
                   textDecoration: "none",
                 }}
               >
-                Ôn ngay
+                Review Now
               </Link>
             )}
           </Card>
         </div>
 
-        <Card title="Lịch sử ôn gần đây" size="small">
+        <Card title="Recent Review History" size="small">
           {recent.length === 0 ? (
-            <Empty description="Chưa có hoạt động ôn nào" />
+            <Empty description="No recent review activity" />
           ) : (
             <div className="grid gap-1.5">
               {recent.map((r) => {
@@ -121,7 +121,7 @@ export default async function ToeicReviewPage() {
                     className="grid gap-3 items-center text-[13px]"
                     style={{ gridTemplateColumns: "100px 1fr auto" }}
                   >
-                    <Tag color={isVocab ? "orange" : "red"}>{isVocab ? "Vocab" : "Câu sai"}</Tag>
+                    <Tag color={isVocab ? "orange" : "red"}>{isVocab ? "Vocab" : "Incorrect"}</Tag>
                     <span className="text-ink">
                       {v ? v.word : `Câu hỏi #${r.sourceId.slice(0, 8)}`}
                     </span>

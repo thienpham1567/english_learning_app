@@ -91,7 +91,7 @@ export default function ShadowingMode({ examMode }: Props) {
       setSentences(data.sentences);
       setState("ready");
     } catch {
-      setError("Không thể tạo bài tập. Vui lòng thử lại.");
+      setError("Unable to generate exercise. Please try again.");
       setState("idle");
     }
   }, [examMode, sentenceAudio]);
@@ -99,7 +99,7 @@ export default function ShadowingMode({ examMode }: Props) {
   // ── Recording ──
   const startRecording = useCallback(async () => {
     if (!navigator.mediaDevices?.getUserMedia) {
-      setError("Trình duyệt không hỗ trợ ghi âm.");
+      setError("Browser does not support audio recording.");
       return;
     }
     try {
@@ -114,7 +114,7 @@ export default function ShadowingMode({ examMode }: Props) {
       recorder.start();
       setState("recording");
     } catch {
-      setError("Không thể truy cập microphone.");
+      setError("Cannot access microphone.");
     }
   }, []);
 
@@ -143,7 +143,7 @@ export default function ShadowingMode({ examMode }: Props) {
           setSessionScores((prev) => [...prev, result.score]);
           setState("result");
         } catch {
-          setError("Có lỗi khi xử lý. Vui lòng thử lại.");
+          setError("An error occurred during processing. Please try again.");
           setState("ready");
         }
         resolve();
@@ -224,9 +224,9 @@ export default function ShadowingMode({ examMode }: Props) {
         >
           <Volume2 size={48} className="text-accent" />
           <h2 className="mb-2 text-lg">Shadowing</h2>
-          <p className="text-text-secondary mb-2 text-[13px]">Nghe → Lặp lại → So sánh phát âm</p>
+          <p className="text-text-secondary mb-2 text-[13px]">Listen → Repeat → Compare Pronunciation</p>
           <p className="text-text-secondary text-xs" style={{ margin: "0 0 24px" }}>
-            5 câu mỗi phiên · AI đánh giá chi tiết · +25 XP
+            5 sentences per session · Detailed AI evaluation · +25 XP
           </p>
           <button
             onClick={startSession}
@@ -238,7 +238,7 @@ export default function ShadowingMode({ examMode }: Props) {
               color: "var(--text-on-accent)",
             }}
           >
-            Bắt đầu Shadowing
+            Start Shadowing
           </button>
         </div>
       )}
@@ -247,7 +247,7 @@ export default function ShadowingMode({ examMode }: Props) {
       {state === "loading" && (
         <div className="text-center" style={{ padding: 40 }}>
           <Loader2 className="animate-spin text-accent" size={32} />
-          <p className="text-text-secondary mt-3">Đang tạo bài tập...</p>
+          <p className="text-text-secondary mt-3">Generating exercise...</p>
         </div>
       )}
 
@@ -257,7 +257,7 @@ export default function ShadowingMode({ examMode }: Props) {
           {/* Progress */}
           <div className="flex items-center gap-2 text-[13px] text-text-secondary">
             <span>
-              Câu {currentIdx + 1}/{sentences.length}
+              Sentence {currentIdx + 1}/{sentences.length}
             </span>
             <Progress
               percent={((currentIdx + 1) / sentences.length) * 100}
@@ -285,7 +285,7 @@ export default function ShadowingMode({ examMode }: Props) {
                 className="text-xs text-text-secondary"
                 style={{ margin: "8px 0 0", cursor: "help" }}
               >
-                <Info /> Gợi ý phát âm
+                <Info /> Pronunciation Tip
               </p>
             </Tooltip>
           </div>
@@ -304,7 +304,7 @@ export default function ShadowingMode({ examMode }: Props) {
           )}
           {sentenceAudio.isLoading && (
             <div className="text-center text-xs text-text-muted">
-              <Loader2 className="animate-spin" /> Đang tạo âm thanh...
+              <Loader2 className="animate-spin" /> Generating audio...
             </div>
           )}
 
@@ -314,7 +314,7 @@ export default function ShadowingMode({ examMode }: Props) {
               <>
                 <button
                   onClick={startRecording}
-                  aria-label="Ghi âm"
+                  aria-label="Record"
                   className="w-[80px] h-[80px] rounded-full border-none text-[28px] cursor-pointer"
                   style={{
                     background:
@@ -325,14 +325,14 @@ export default function ShadowingMode({ examMode }: Props) {
                 >
                   <Mic />
                 </button>
-                <p className="text-xs text-text-secondary mt-2">Nhấn nút để ghi âm</p>
+                <p className="text-xs text-text-secondary mt-2">Press button to record</p>
               </>
             )}
             {state === "recording" && (
               <>
                 <button
                   onClick={stopRecording}
-                  aria-label="Dừng ghi âm"
+                  aria-label="Stop recording"
                   className="w-[80px] h-[80px] rounded-full text-destructive text-xl cursor-pointer"
                   style={{
                     border: "3px solid var(--error)",
@@ -343,7 +343,7 @@ export default function ShadowingMode({ examMode }: Props) {
                   <Square />
                 </button>
                 <p className="text-xs text-destructive mt-2 font-semibold">
-                  Đang ghi âm... Nhấn để dừng
+                  Recording... Click to stop
                 </p>
               </>
             )}
@@ -351,7 +351,7 @@ export default function ShadowingMode({ examMode }: Props) {
               <div>
                 <Loader2 className="animate-spin text-accent" size={32} />
                 <p className="text-[13px] text-text-secondary mt-2">
-                  {state === "transcribing" ? "Đang nhận dạng..." : "Đang đánh giá..."}
+                  {state === "transcribing" ? "Transcribing..." : "Evaluating..."}
                 </p>
               </div>
             )}
@@ -382,11 +382,11 @@ export default function ShadowingMode({ examMode }: Props) {
             />
             <div className="flex justify-center gap-6 mt-4">
               <div>
-                <p className="text-[11px] text-text-secondary m-0">Chính xác</p>
+                <p className="text-[11px] text-text-secondary m-0">Accuracy</p>
                 <p className="text-lg font-semibold m-0">{evalResult.accuracy}%</p>
               </div>
               <div>
-                <p className="text-[11px] text-text-secondary m-0">Trôi chảy</p>
+                <p className="text-[11px] text-text-secondary m-0">Fluency</p>
                 <p className="text-lg font-semibold m-0">{evalResult.fluency}%</p>
               </div>
             </div>
@@ -398,7 +398,7 @@ export default function ShadowingMode({ examMode }: Props) {
             style={{ background: "var(--card-bg)" }}
           >
             <p className="text-xs text-text-secondary font-semibold" style={{ margin: "0 0 4px" }}>
-              Bạn đã nói:
+              You said:
             </p>
             <p className="text-[15px] m-0 italic">&ldquo;{spokenText}&rdquo;</p>
           </div>
@@ -408,10 +408,10 @@ export default function ShadowingMode({ examMode }: Props) {
             className="p-4 rounded-xl border-2 border-border"
             style={{ background: "var(--card-bg)" }}
           >
-            <p className="text-xs text-text-secondary mb-2 font-semibold">Phân tích từng từ:</p>
+            <p className="text-xs text-text-secondary mb-2 font-semibold">Word Analysis:</p>
             <div className="flex flex-wrap gap-1.5">
               {evalResult.wordAnalysis.map((w, i) => (
-                <Tooltip key={i} title={w.issue || "Chính xác!"}>
+                <Tooltip key={i} title={w.issue || "Correct!"}>
                   <Tag
                     color={w.correct ? "success" : "error"}
                     className="text-[13px]"
@@ -446,7 +446,7 @@ export default function ShadowingMode({ examMode }: Props) {
               className="rounded-lg border-2 border-border bg-transparent cursor-pointer text-[13px] font-medium"
               style={{ padding: "10px 20px", color: "var(--text)" }}
             >
-              <RefreshCw /> Thử lại
+              <RefreshCw /> Retry
             </button>
             <button
               onClick={nextSentence}
@@ -459,11 +459,11 @@ export default function ShadowingMode({ examMode }: Props) {
             >
               {currentIdx < sentences.length - 1 ? (
                 <>
-                  Câu tiếp <ChevronRight />
+                  Next Sentence <ChevronRight />
                 </>
               ) : (
                 <>
-                  Hoàn thành <CircleCheckBig />
+                  Complete <CircleCheckBig />
                 </>
               )}
             </button>
@@ -486,9 +486,9 @@ export default function ShadowingMode({ examMode }: Props) {
               <XCircle className="text-destructive" />
             )}
           </div>
-          <h2 className="mb-2">Shadowing hoàn thành!</h2>
+          <h2 className="mb-2">Shadowing Completed!</h2>
           <p className="text-text-secondary mb-2">
-            Điểm trung bình: <strong className="text-accent text-3xl">{avgScore}</strong>/100
+            Average Score: <strong className="text-accent text-3xl">{avgScore}</strong>/100
           </p>
           {xpAwarded > 0 && (
             <p className="text-accent text-[13px] font-semibold mb-2">+{xpAwarded} XP</p>
@@ -499,8 +499,8 @@ export default function ShadowingMode({ examMode }: Props) {
               style={{ color: skillUpdate.levelUp ? "var(--success)" : "var(--text-secondary)" }}
             >
               {skillUpdate.levelUp
-                ? `🎉 Trình độ nghe: ${skillUpdate.cefr}!`
-                : `📊 Trình độ nghe: ${skillUpdate.cefr}`}
+                ? `🎉 Listening Level: ${skillUpdate.cefr}!`
+                : `📊 Listening Level: ${skillUpdate.cefr}`}
             </p>
           )}
           <div className="flex gap-2 justify-center flex-wrap mb-5">
@@ -511,7 +511,7 @@ export default function ShadowingMode({ examMode }: Props) {
                 className="text-[13px]"
                 style={{ padding: "3px 10px" }}
               >
-                Câu {i + 1}: {s}
+                Sentence {i + 1}: {s}
               </Tag>
             ))}
           </div>
@@ -524,7 +524,7 @@ export default function ShadowingMode({ examMode }: Props) {
               color: "var(--text-on-accent)",
             }}
           >
-            <RefreshCw /> Luyện tiếp
+            <RefreshCw /> Practice Again
           </button>
         </div>
       )}

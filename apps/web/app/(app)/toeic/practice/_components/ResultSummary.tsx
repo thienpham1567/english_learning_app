@@ -34,7 +34,7 @@ export function ResultSummary({
             <span className="text-4xl text-text-primary font-display" style={{ fontWeight: 950 }}>
               {correct}
             </span>
-            <span className="text-base text-text-muted font-bold">/ {total} câu đúng</span>
+            <span className="text-base text-text-muted font-bold">/ {total} correct answers</span>
           </div>
           <div
             className="items-center gap-1.5 mt-1.5 font-extrabold"
@@ -50,7 +50,7 @@ export function ResultSummary({
             }}
           >
             {percentage >= 70 ? <CheckCircle size={12} /> : <AlertTriangle size={12} />}
-            <span>Tỉ lệ chính xác: {percentage}%</span>
+            <span>Accuracy Rate: {percentage}%</span>
           </div>
         </div>
 
@@ -70,7 +70,7 @@ export function ResultSummary({
           }}
         >
           <RefreshCw />
-          <span>Luyện đề tiếp</span>
+          <span>Continue Practice</span>
         </m.button>
       </div>
 
@@ -80,7 +80,7 @@ export function ResultSummary({
           <div className="flex items-center gap-2" style={{ paddingLeft: 4 }}>
             <XCircle className="text-destructive text-base" />
             <h4 className="m-0 font-black text-text-primary" style={{ fontSize: 14.5 }}>
-              Chi tiết {wrong.length} câu đã trả lời sai
+              Details of {wrong.length} incorrect answers
             </h4>
           </div>
 
@@ -96,7 +96,7 @@ export function ResultSummary({
                 >
                   <div className="flex justify-between items-center mb-2.5">
                     <span className="text-[13px] font-extrabold text-text-primary">
-                      Câu hỏi số {q.number}
+                      Question #{q.number}
                     </span>
                     <span
                       className="text-[10px] font-black rounded-md bg-surface-alt text-text-secondary border-2 border-border"
@@ -135,7 +135,7 @@ export function ResultSummary({
                         >
                           <span style={{ opacity: 0.8 }}>{String.fromCharCode(65 + oIdx)}.</span>
                           <span className="flex-1">{opt}</span>
-                          <span>{isCorrect ? "Đáp án đúng" : "Lựa chọn của bạn"}</span>
+                          <span>{isCorrect ? "Correct Answer" : "Your Answer"}</span>
                         </div>
                       );
                     })}
@@ -153,7 +153,7 @@ export function ResultSummary({
                     >
                       <div className="flex items-center gap-1 font-extrabold text-text-primary mb-1">
                         <Lightbulb style={{ color: "var(--warning)" }} />
-                        <span>Giải thích:</span>
+                        <span>Explanation:</span>
                       </div>
                       <p className="m-0">{q.explanationVi}</p>
                     </div>
@@ -174,7 +174,7 @@ export function ResultSummary({
         >
           <CheckCircle className="text-4xl mb-3" />
           <p className="m-0 font-extrabold" style={{ fontSize: 14.5 }}>
-            Xuất sắc! Bạn không trả lời sai câu nào trong lượt này.
+            Excellent! You answered all questions correctly in this session.
           </p>
         </div>
       )}

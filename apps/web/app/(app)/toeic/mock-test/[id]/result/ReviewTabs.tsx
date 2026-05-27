@@ -43,7 +43,7 @@ export function ReviewTabs({
   const renderList = (list: ReviewQuestion[]) => {
     if (list.length === 0) {
       return (
-        <div style={{ padding: 12, color: "var(--text-muted, #94a3b8)" }}>Không có câu nào.</div>
+        <div style={{ padding: 12, color: "var(--text-muted, #94a3b8)" }}>No questions.</div>
       );
     }
     return (
@@ -55,11 +55,11 @@ export function ReviewTabs({
             <Card key={q.id} size="small">
               <div style={{ display: "flex", gap: 8, alignItems: "center", marginBottom: 8 }}>
                 <Tag color="blue">Part {q.part}</Tag>
-                <Tag>Câu {q.number}</Tag>
+                <Tag>Question {q.number}</Tag>
                 {a?.flagged && <Tag color="gold">Bookmarked</Tag>}
-                {a?.isCorrect === false && <Tag color="red">Sai</Tag>}
-                {a?.isCorrect === true && <Tag color="green">Đúng</Tag>}
-                {a?.isCorrect === null && <Tag>Bỏ qua</Tag>}
+                {a?.isCorrect === false && <Tag color="red">Incorrect</Tag>}
+                {a?.isCorrect === true && <Tag color="green">Correct</Tag>}
+                {a?.isCorrect === null && <Tag>Skipped</Tag>}
               </div>
               {q.questionText && <div style={{ marginBottom: 8 }}>{q.questionText}</div>}
               <div style={{ display: "grid", gap: 4 }}>
@@ -84,12 +84,12 @@ export function ReviewTabs({
                       {String.fromCharCode(65 + i)}. {opt}
                       {isCorrect && (
                         <Tag color="green" style={{ marginLeft: 8 }}>
-                          Đáp án
+                          Correct Answer
                         </Tag>
                       )}
                       {isPick && !isCorrect && (
                         <Tag color="red" style={{ marginLeft: 8 }}>
-                          Bạn chọn
+                          Your Answer
                         </Tag>
                       )}
                     </div>
@@ -107,7 +107,7 @@ export function ReviewTabs({
                     color: "var(--text-muted, #cbd5e1)",
                   }}
                 >
-                  <strong>Giải thích:</strong> {q.explanationVi}
+                  <strong>Explanation:</strong> {q.explanationVi}
                 </div>
               )}
             </Card>
@@ -123,8 +123,8 @@ export function ReviewTabs({
         activeKey={activeKey}
         onChange={setActiveKey}
         items={[
-          { key: "wrong", label: `Sai (${wrong.length})`, children: renderList(wrong) },
-          { key: "all", label: `Tất cả (${questions.length})`, children: renderList(questions) },
+          { key: "wrong", label: `Incorrect (${wrong.length})`, children: renderList(wrong) },
+          { key: "all", label: `All (${questions.length})`, children: renderList(questions) },
           {
             key: "bookmarked",
             label: `Bookmarked (${bookmarked.length})`,

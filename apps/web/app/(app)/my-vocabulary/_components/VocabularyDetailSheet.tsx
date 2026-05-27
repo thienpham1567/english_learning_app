@@ -83,7 +83,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
       onClose={onClose}
       title={
         <span className="text-base font-black text-text-primary font-display">
-          Chi tiết từ vựng
+          Vocabulary Details
         </span>
       }
       placement="right"
@@ -107,7 +107,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
             }}
           >
             {saved ? <Star className="text-accent" /> : <Star />}
-            <span>{saved ? "Đã lưu" : "Lưu"}</span>
+            <span>{saved ? "Saved" : "Save"}</span>
           </m.button>
 
           <m.button
@@ -118,7 +118,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
             style={{ display: "inline-flex", padding: "5px 12px" }}
           >
             <LinkIcon />
-            <span>Tra cứu</span>
+            <span>Search</span>
           </m.button>
         </div>
       }
@@ -137,10 +137,10 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
       {status === "error" && (
         <div className="flex flex-col gap-3">
           <p className="text-[13px] text-text-secondary font-medium m-0">
-            Định nghĩa không còn trong bộ nhớ đệm hoặc bị lỗi.
+            Definition no longer cached or failed to load.
           </p>
           <p className="text-xs text-text-muted m-0">
-            Hãy tra lại từ này trong từ điển để xem chi tiết đầy đủ.
+            Please search this word in the dictionary to view details.
           </p>
           <m.button
             whileHover={{ scale: 1.02 }}
@@ -149,7 +149,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
             className="mt-2 h-[38px] rounded-lg border-none font-extrabold text-[13px] cursor-pointer flex items-center justify-center gap-1.5"
             style={{ background: "var(--accent)", color: "var(--text-on-accent)" }}
           >
-            <LinkIcon /> Tra lại ngay
+            <LinkIcon /> Search Again
           </m.button>
         </div>
       )}
@@ -173,13 +173,15 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
               style={{ padding: "10px 14px" }}
             >
               {data.phoneticsUs && (
-                <div className="flex items-center gap-1 text-[13px] text-text-secondary font-bold">
-                  <span>🇺🇸 {data.phoneticsUs}</span>
+                <div className="flex items-center gap-1.5 text-[13px] text-text-secondary font-bold">
+                  <span className="px-1.5 py-0.5 rounded bg-surface-alt text-[10px] text-text-muted font-black border border-border">US</span>
+                  <span>{data.phoneticsUs}</span>
                 </div>
               )}
               {data.phoneticsUk && (
-                <div className="flex items-center gap-1 text-[13px] text-text-secondary font-bold">
-                  <span>🇬🇧 {data.phoneticsUk}</span>
+                <div className="flex items-center gap-1.5 text-[13px] text-text-secondary font-bold">
+                  <span className="px-1.5 py-0.5 rounded bg-surface-alt text-[10px] text-text-muted font-black border border-border">UK</span>
+                  <span>{data.phoneticsUk}</span>
                 </div>
               )}
             </div>
@@ -196,7 +198,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                   border: `1px solid ${levelStyle.border}`,
                 }}
               >
-                Trình độ: {data.level}
+                Level: {data.level}
               </span>
             )}
             <span
@@ -214,7 +216,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
             {data.senses.map((sense) => (
               <div key={sense.id} className="flex flex-col gap-1.5">
                 <span className="text-[10.5px] font-black uppercase tracking-widest text-accent">
-                  {sense.label || "Nghĩa"}
+                  {sense.label || "Definition"}
                 </span>
 
                 <p
@@ -265,7 +267,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
               boxShadow: "0 2px 8px var(--accent-muted)",
             }}
           >
-            <span>Xem chi tiết trong Từ điển</span>
+            <span>View details in Dictionary</span>
             <ArrowRight />
           </m.button>
         </div>

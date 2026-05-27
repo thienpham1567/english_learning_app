@@ -1,6 +1,6 @@
 "use client";
 
-import { BookOpenText, Compass, Hash, Headphones, Trophy, Zap } from "lucide-react";
+import { BookOpenText, Compass, Hash, Headphones, Trophy, Zap, Shuffle } from "lucide-react";
 import * as m from "motion/react-client";
 import { useEffect, useState } from "react";
 import { api } from "@/lib/api-client";
@@ -12,7 +12,7 @@ const PARTS: Array<{
   icon?: React.ReactNode;
   color?: string;
 }> = [
-  { value: "all", label: "Tất cả" },
+  { value: "all", label: "All" },
   {
     value: "listening",
     label: "Listening",
@@ -164,7 +164,7 @@ function CountBtn({
         className="text-[10px] font-bold uppercase tracking-wider"
         style={{ opacity: active ? 0.85 : 0.6 }}
       >
-        câu
+        questions
       </span>
     </m.button>
   );
@@ -249,24 +249,24 @@ export function PracticeSetup({ onStart }: { onStart: (params: PracticeStartPara
               className="m-0 text-lg font-black text-ink font-display tracking-tight"
               style={{ lineHeight: 1.2 }}
             >
-              Cấu hình luyện đề
+              Practice Setup
             </h3>
             <p className="text-xs text-text-muted font-semibold" style={{ margin: "3px 0 0" }}>
-              Chọn đề, phần thi và số câu để bắt đầu
+              Choose exam, part, and number of questions to start
             </p>
           </div>
         </div>
 
         {/* ── Section 1: Exam selection ── */}
         <div className="relative mb-6">
-          <SectionLabel icon={<Trophy />} text="Đề thi TOEIC" badge={`${exams.length + 1} đề`} />
+          <SectionLabel icon={<Trophy />} text="TOEIC Exam" badge={`${exams.length + 1} exams`} />
           <div
             className="flex gap-2 pb-1"
             style={{ overflowX: "auto", scrollbarWidth: "none", WebkitOverflowScrolling: "touch" }}
           >
             <Chip active={selectedExam === "random"} onClick={() => setSelectedExam("random")}>
-              <span className="text-sm">🎲</span>
-              Ngẫu nhiên
+              <Shuffle size={14} />
+              Random
             </Chip>
             {exams.map((e) => (
               <Chip
@@ -301,7 +301,7 @@ export function PracticeSetup({ onStart }: { onStart: (params: PracticeStartPara
 
         {/* ── Section 2: Part selection ── */}
         <div className="mb-6">
-          <SectionLabel icon={<Compass />} text="Phần thi (Part)" />
+          <SectionLabel icon={<Compass />} text="Exam Section (Part)" />
           <div
             className="grid gap-2"
             style={{ gridTemplateColumns: "repeat(auto-fill, minmax(100px, 1fr))" }}
@@ -328,7 +328,7 @@ export function PracticeSetup({ onStart }: { onStart: (params: PracticeStartPara
 
         {/* ── Section 3: Count selection ── */}
         <div style={{ marginBottom: 28 }}>
-          <SectionLabel icon={<Hash />} text="Số lượng câu hỏi" />
+          <SectionLabel icon={<Hash />} text="Number of Questions" />
           <div className="flex gap-2.5">
             {COUNTS.map((c) => (
               <CountBtn key={c} value={c} active={count === c} onClick={() => setCount(c)} />
@@ -384,24 +384,24 @@ export function PracticeSetup({ onStart }: { onStart: (params: PracticeStartPara
             }}
           />
           <Zap size={16} />
-          <span>Bắt đầu luyện tập ngay</span>
+          <span>Start Practice Now</span>
         </m.button>
 
         {/* ── Summary badge ── */}
         <div className="mt-4 flex justify-center gap-4 flex-wrap">
           {[
             {
-              label: "Đề",
+              label: "Exam",
               value:
                 selectedExam === "random"
-                  ? "Ngẫu nhiên"
+                  ? "Random"
                   : exams.find((e) => e.code === selectedExam)?.title || selectedExam,
             },
             {
-              label: "Phần",
+              label: "Section",
               value: PARTS.find((p) => p.value === selectedPart)?.label || selectedPart,
             },
-            { label: "Câu", value: `${count}` },
+            { label: "Questions", value: `${count}` },
           ].map((s) => (
             <div
               key={s.label}

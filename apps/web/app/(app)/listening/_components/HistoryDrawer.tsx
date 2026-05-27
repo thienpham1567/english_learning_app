@@ -14,23 +14,23 @@ const MODE_ICONS: Record<string, React.ReactNode> = {
 };
 
 const MODE_LABELS: Record<string, string> = {
-  listening: "Nghe",
-  shadowing: "Shadow",
+  listening: "Listening",
+  shadowing: "Shadowing",
   dictation: "Dictation",
-  summarize: "Tóm tắt",
+  summarize: "Summary",
 };
 
 function relativeTime(dateStr: string | null): string {
   if (!dateStr) return "";
   const diff = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diff / 60_000);
-  if (mins < 1) return "Vừa xong";
-  if (mins < 60) return `${mins} phút trước`;
+  if (mins < 1) return "Just now";
+  if (mins < 60) return `${mins}m ago`;
   const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours}h trước`;
+  if (hours < 24) return `${hours}h ago`;
   const days = Math.floor(hours / 24);
-  if (days < 7) return `${days} ngày trước`;
-  return new Date(dateStr).toLocaleDateString("vi-VN");
+  if (days < 7) return `${days}d ago`;
+  return new Date(dateStr).toLocaleDateString("en-US");
 }
 
 function scoreColor(score: number | null): string {
@@ -66,7 +66,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
       title={
         <div className="flex items-center gap-2">
           <History className="text-accent" />
-          <span>Lịch sử luyện nghe</span>
+          <span>Listening History</span>
         </div>
       }
       placement="right"
@@ -88,17 +88,17 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
           className="flex items-center gap-1.5 text-[11px] text-text-muted font-semibold uppercase"
           style={{ letterSpacing: "0.1em" }}
         >
-          <Filter /> Bộ lọc
+          <Filter /> Filters
         </div>
         <Segmented
           value={history.mode ?? "all"}
           onChange={(val) => history.setMode(val === "all" ? null : (val as string))}
           options={[
-            { value: "all", label: "Tất cả" },
-            { value: "listening", label: "Nghe" },
-            { value: "shadowing", label: "Shadow" },
+            { value: "all", label: "All" },
+            { value: "listening", label: "Listening" },
+            { value: "shadowing", label: "Shadowing" },
             { value: "dictation", label: "Dictation" },
-            { value: "summarize", label: "Tóm tắt" },
+            { value: "summarize", label: "Summary" },
           ]}
           size="small"
           block
@@ -109,7 +109,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
             onChange={(val) => history.setLevel(val === "all" ? null : val)}
             size="small"
             options={[
-              { value: "all", label: "Tất cả level" },
+              { value: "all", label: "All Levels" },
               { value: "A1", label: "A1" },
               { value: "A2", label: "A2" },
               { value: "B1", label: "B1" },
@@ -132,7 +132,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
             }}
           >
             {history.bookmarkedOnly ? <Star /> : <Star />}
-            Đánh dấu
+            Bookmarked
           </button>
         </div>
       </div>
@@ -147,7 +147,7 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
 
         {!history.isLoading && history.items.length === 0 && (
           <Empty
-            description="Chưa có bài nghe nào"
+            description="No listening history yet"
             image={Empty.PRESENTED_IMAGE_SIMPLE}
             style={{ marginTop: 40 }}
           />

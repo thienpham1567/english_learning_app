@@ -33,7 +33,7 @@ export function ChatHeader({ personaId, isLoading }: Props) {
               isLoading ? "text-accent font-medium" : "text-(--text-muted)"
             }`}
           >
-            {isLoading ? "đang trả lời..." : persona.specialty}
+            {isLoading ? "typing..." : persona.specialty}
           </span>
         </div>
       </div>

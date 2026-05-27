@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, CheckCircle, FileText, XCircle } from "lucide-react";
+import { AlertTriangle, Brain, CheckCircle, FileText, XCircle } from "lucide-react";
 import * as m from "motion/react-client";
 import type { ErrorEntry } from "../_types/types";
 import { MODULE_ICONS, MODULE_LABELS } from "../_types/types";
@@ -30,11 +30,11 @@ export function ErrorCard({ error, onClick, index = 0 }: ErrorCardProps) {
       <div className="flex items-center gap-2 mb-2.5">
         {error.isResolved ? (
           <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-(--success-bg) text-(--success)">
-            <CheckCircle className="h-2.5 w-2.5" /> Đã hiểu
+            <CheckCircle className="h-2.5 w-2.5" /> Resolved
           </span>
         ) : (
           <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-(--error-bg) text-(--error)">
-            <AlertTriangle className="h-2.5 w-2.5" /> Chưa nắm
+            <AlertTriangle className="h-2.5 w-2.5" /> Unresolved
           </span>
         )}
         <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2 py-0.5 rounded-md bg-accent/8 text-accent">
@@ -49,7 +49,7 @@ export function ErrorCard({ error, onClick, index = 0 }: ErrorCardProps) {
           </span>
         )}
         <span className="ml-auto text-[11px] text-text-muted font-medium shrink-0">
-          {new Date(error.createdAt).toLocaleDateString("vi-VN", {
+          {new Date(error.createdAt).toLocaleDateString("en-US", {
             day: "numeric",
             month: "short",
           })}
@@ -64,7 +64,7 @@ export function ErrorCard({ error, onClick, index = 0 }: ErrorCardProps) {
       {/* Answer comparison */}
       <div className="flex gap-2">
         <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--error)_15%,transparent)] text-xs font-bold text-(--error)">
-          <XCircle className="h-2.5 w-2.5" /> {error.userAnswer || "(Trống)"}
+          <XCircle className="h-2.5 w-2.5" /> {error.userAnswer || "(Empty)"}
         </span>
         <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[color-mix(in_srgb,var(--success)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--success)_15%,transparent)] text-xs font-bold text-(--success)">
           <CheckCircle className="h-2.5 w-2.5" /> {error.correctAnswer}
@@ -73,10 +73,13 @@ export function ErrorCard({ error, onClick, index = 0 }: ErrorCardProps) {
 
       {/* Review info */}
       {error.reviewCount > 0 && (
-        <div className="mt-2 text-[10px] text-text-muted font-semibold">
-          🧠 Đã ôn {error.reviewCount} lần
-          {error.nextReviewAt &&
-            ` · Ôn lại: ${new Date(error.nextReviewAt).toLocaleDateString("vi-VN", { day: "numeric", month: "short" })}`}
+        <div className="mt-2 text-[10px] text-text-muted font-semibold flex items-center gap-1">
+          <Brain className="h-3 w-3" />
+          <span>
+            Reviewed {error.reviewCount} {error.reviewCount === 1 ? "time" : "times"}
+            {error.nextReviewAt &&
+              ` · Next: ${new Date(error.nextReviewAt).toLocaleDateString("en-US", { day: "numeric", month: "short" })}`}
+          </span>
         </div>
       )}
     </m.div>

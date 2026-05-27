@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, CheckCircle, Clock, Database, FileText } from "lucide-react";
+import { AlertCircle, BarChart2, Brain, CheckCircle, Clock, Database, FileText } from "lucide-react";
 import * as m from "motion/react-client";
 import { useMemo } from "react";
 import type { ErrorEntry } from "../_types/types";
@@ -47,7 +47,7 @@ export function OverviewTab({
           transition={{ repeat: Infinity, duration: 1.5 }}
           className="text-sm text-text-muted font-semibold"
         >
-          Đang tải dữ liệu...
+          Loading data...
         </m.div>
       </div>
     );
@@ -59,7 +59,7 @@ export function OverviewTab({
       <div className="grid grid-cols-[repeat(auto-fit,minmax(180px,1fr))] gap-3">
         {[
           {
-            label: "Chưa nắm",
+            label: "Unresolved",
             value: unresolvedCount,
             colorClass: unresolvedCount > 0 ? "text-(--error)" : "text-text-muted",
             icon: <AlertCircle className="h-4 w-4" />,
@@ -67,7 +67,7 @@ export function OverviewTab({
             borderClass: "border-red-500/15",
           },
           {
-            label: "Đã hiểu",
+            label: "Resolved",
             value: resolvedCount,
             colorClass: "text-(--success)",
             icon: <CheckCircle className="h-4 w-4" />,
@@ -75,7 +75,7 @@ export function OverviewTab({
             borderClass: "border-emerald-500/15",
           },
           {
-            label: "Cần ôn tập",
+            label: "Needs Review",
             value: dueCount,
             colorClass: dueCount > 0 ? "text-(--warning)" : "text-text-muted",
             icon: <Clock className="h-4 w-4" />,
@@ -83,7 +83,7 @@ export function OverviewTab({
             borderClass: "border-amber-500/15",
           },
           {
-            label: "Tổng cộng",
+            label: "Total Errors",
             value: total,
             colorClass: "text-accent",
             icon: <Database className="h-4 w-4" />,
@@ -125,13 +125,13 @@ export function OverviewTab({
           onClick={onGoToReview}
           className="flex items-center justify-center gap-3 p-4.5 rounded-xl border-2 border-accent bg-gradient-to-br from-accent/8 to-amber-500/5 cursor-pointer shadow-[0_4px_14px_var(--accent-muted)] font-body"
         >
-          <span className="text-[28px]">🧠</span>
+          <Brain className="h-7 w-7 text-accent shrink-0" />
           <div className="text-left">
             <div className="text-base font-extrabold text-accent">
-              Ôn tập ngay — {dueCount} lỗi cần nhớ
+              Review Now — {dueCount} errors to recall
             </div>
             <div className="text-xs text-text-muted font-medium">
-              Flash-card + AI giải thích giúp bạn ghi nhớ lâu hơn
+              Flashcards + AI explanations help you retain information longer
             </div>
           </div>
         </m.button>
@@ -140,8 +140,8 @@ export function OverviewTab({
       {/* Module Distribution */}
       {moduleStats.length > 0 && (
         <div className="bg-surface rounded-xl border-2 border-border p-5">
-          <span className="text-xs font-bold text-text-muted uppercase tracking-widest block mb-3.5">
-            📊 Phân bố theo nguồn
+          <span className="text-xs font-bold text-text-muted uppercase tracking-widest flex items-center gap-1.5 mb-3.5">
+            <BarChart2 className="h-4 w-4" /> Distribution by Source
           </span>
           <div className="flex flex-col gap-2">
             {moduleStats.map(([mod, count], i) => {

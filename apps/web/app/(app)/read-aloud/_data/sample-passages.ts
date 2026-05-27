@@ -11,36 +11,36 @@ export interface SampleText {
 }
 
 export const TOEIC_TOPICS = [
-  { key: "office", label: "Văn phòng", icon: "🏢" },
-  { key: "hr", label: "Nhân sự", icon: "👥" },
-  { key: "finance", label: "Tài chính", icon: "💰" },
+  { key: "office", label: "Office", icon: "🏢" },
+  { key: "hr", label: "Human Resources", icon: "👥" },
+  { key: "finance", label: "Finance", icon: "💰" },
   { key: "marketing", label: "Marketing", icon: "📣" },
-  { key: "travel", label: "Du lịch", icon: "✈️" },
-  { key: "dining", label: "Ẩm thực", icon: "🍽️" },
-  { key: "health", label: "Sức khỏe", icon: "🏥" },
-  { key: "technology", label: "Công nghệ", icon: "💻" },
-  { key: "manufacturing", label: "Sản xuất", icon: "🏭" },
-  { key: "realestate", label: "Bất động sản", icon: "🏠" },
+  { key: "travel", label: "Travel", icon: "✈️" },
+  { key: "dining", label: "Dining", icon: "🍽️" },
+  { key: "health", label: "Health", icon: "🏥" },
+  { key: "technology", label: "Technology", icon: "💻" },
+  { key: "manufacturing", label: "Manufacturing", icon: "🏭" },
+  { key: "realestate", label: "Real Estate", icon: "🏠" },
 ] as const;
 
 export const SAMPLE_TEXTS: SampleText[] = [
   // ── Office & Workplace ──
   {
-    title: "Họp ngắn buổi sáng",
+    title: "Morning Briefing",
     topic: "office",
     length: "short",
     icon: "🏢",
     text: "Good morning, everyone. Before we start today's meeting, I'd like to remind all staff members that the monthly report is due by Friday afternoon.",
   },
   {
-    title: "Thông báo bảo trì văn phòng",
+    title: "Office Maintenance Notice",
     topic: "office",
     length: "medium",
     icon: "🏢",
     text: "Please be advised that the building management team will be conducting routine maintenance on the air conditioning system this Saturday. All employees are requested to ensure that their windows are closed and personal belongings are secured before leaving on Friday evening. We apologize for any inconvenience this may cause.",
   },
   {
-    title: "Chính sách làm việc từ xa",
+    title: "Remote Work Policy",
     topic: "office",
     length: "long",
     icon: "🏢",
@@ -49,21 +49,21 @@ export const SAMPLE_TEXTS: SampleText[] = [
 
   // ── Human Resources ──
   {
-    title: "Thông báo tuyển dụng",
+    title: "Hiring Announcement",
     topic: "hr",
     length: "short",
     icon: "👥",
     text: "We are currently seeking a qualified marketing coordinator to join our expanding team. Interested candidates should submit their résumés by the end of next week.",
   },
   {
-    title: "Chương trình đào tạo nhân viên",
+    title: "Employee Training Program",
     topic: "hr",
     length: "medium",
     icon: "👥",
     text: "The Human Resources department is pleased to announce a new professional development program for all full-time employees. The program includes workshops on leadership skills, time management, and effective communication. Registration will open on Monday, and spaces are limited to thirty participants per session. Early registration is strongly encouraged.",
   },
   {
-    title: "Đánh giá hiệu suất hàng năm",
+    title: "Annual Performance Review",
     topic: "hr",
     length: "long",
     icon: "👥",
@@ -72,21 +72,21 @@ export const SAMPLE_TEXTS: SampleText[] = [
 
   // ── Finance & Banking ──
   {
-    title: "Báo cáo quý",
+    title: "Quarterly Report",
     topic: "finance",
     length: "short",
     icon: "💰",
     text: "Our third-quarter revenue exceeded projections by twelve percent, driven primarily by strong sales in the Asia-Pacific region and increased demand for our premium product line.",
   },
   {
-    title: "Thay đổi chính sách hoàn tiền",
+    title: "Refund Policy Update",
     topic: "finance",
     length: "medium",
     icon: "💰",
     text: "Effective January first, our refund policy will be updated to allow customers a thirty-day return window for all purchases made online. Refunds will be processed within five to seven business days after the returned item has been received and inspected at our warehouse. Customers are responsible for return shipping costs unless the item is defective or was shipped incorrectly.",
   },
   {
-    title: "Kế hoạch ngân sách năm mới",
+    title: "New Year Budget Plan",
     topic: "finance",
     length: "long",
     icon: "💰",
@@ -95,21 +95,21 @@ export const SAMPLE_TEXTS: SampleText[] = [
 
   // ── Marketing & Advertising ──
   {
-    title: "Ra mắt chiến dịch mới",
+    title: "New Campaign Launch",
     topic: "marketing",
     length: "short",
     icon: "📣",
     text: "Our new social media campaign launches next Monday. The marketing team has prepared engaging content across all major platforms to maximize brand awareness and customer engagement.",
   },
   {
-    title: "Phân tích thị trường mục tiêu",
+    title: "Target Market Analysis",
     topic: "marketing",
     length: "medium",
     icon: "📣",
     text: "Recent market research indicates that our target demographic has shifted significantly over the past two years. Consumers between the ages of twenty-five and thirty-four now represent our fastest-growing customer segment. The marketing team recommends adjusting our advertising strategy to focus more heavily on digital channels, particularly short-form video content and influencer partnerships, to better reach this audience.",
   },
   {
-    title: "Kế hoạch tái định vị thương hiệu",
+    title: "Rebranding Plan",
     topic: "marketing",
     length: "long",
     icon: "📣",
@@ -118,21 +118,21 @@ export const SAMPLE_TEXTS: SampleText[] = [
 
   // ── Travel & Transportation ──
   {
-    title: "Thông báo chuyến bay",
+    title: "Flight Delay Announcement",
     topic: "travel",
     length: "short",
     icon: "✈️",
     text: "Attention all passengers. Flight seven-two-three to Singapore has been delayed by approximately forty-five minutes due to severe weather conditions. We apologize for the inconvenience.",
   },
   {
-    title: "Hướng dẫn đặt phòng khách sạn",
+    title: "Hotel Booking Instructions",
     topic: "travel",
     length: "medium",
     icon: "✈️",
     text: "For employees traveling on company business, please remember to book accommodations through our approved travel management system. The company will reimburse hotel expenses up to one hundred fifty dollars per night for domestic travel and two hundred dollars for international trips. All receipts must be submitted within ten business days of your return. Late submissions may result in delayed reimbursement.",
   },
   {
-    title: "Chính sách công tác nước ngoài",
+    title: "Business Travel Policy",
     topic: "travel",
     length: "long",
     icon: "✈️",
@@ -141,21 +141,21 @@ export const SAMPLE_TEXTS: SampleText[] = [
 
   // ── Dining & Restaurants ──
   {
-    title: "Đặt bàn nhà hàng",
+    title: "Restaurant Reservation",
     topic: "dining",
     length: "short",
     icon: "🍽️",
     text: "Good evening. I'd like to make a reservation for six people this Saturday at seven o'clock. Could you please seat us near the window if possible?",
   },
   {
-    title: "Thực đơn mới theo mùa",
+    title: "New Seasonal Menu",
     topic: "dining",
     length: "medium",
     icon: "🍽️",
     text: "We are delighted to introduce our new seasonal menu, featuring locally sourced ingredients and contemporary interpretations of classic dishes. Highlights include a roasted butternut squash soup, pan-seared salmon with citrus glaze, and a rich dark chocolate torte for dessert. Our sommelier has also curated a selection of wines to complement each course. Reservations for the tasting event can be made online.",
   },
   {
-    title: "Dịch vụ catering công ty",
+    title: "Corporate Catering Service",
     topic: "dining",
     length: "long",
     icon: "🍽️",
@@ -164,21 +164,21 @@ export const SAMPLE_TEXTS: SampleText[] = [
 
   // ── Health & Wellness ──
   {
-    title: "Thông báo kiểm tra sức khỏe",
+    title: "Health Screening Reminder",
     topic: "health",
     length: "short",
     icon: "🏥",
     text: "All employees are reminded that the annual health screening will take place next Thursday in the first-floor conference room. Please fast for eight hours before your appointment.",
   },
   {
-    title: "Chương trình sức khỏe nhân viên",
+    title: "Employee Wellness Program",
     topic: "health",
     length: "medium",
     icon: "🏥",
     text: "Our company wellness program has been expanded to include complimentary gym memberships, weekly yoga classes, and monthly nutrition workshops. Employees who participate in at least three wellness activities per quarter will be eligible for a premium discount on their health insurance. Sign-up sheets are available at the front desk, and more information can be found on the employee benefits portal.",
   },
   {
-    title: "Hướng dẫn an toàn lao động",
+    title: "Workplace Safety Guidelines",
     topic: "health",
     length: "long",
     icon: "🏥",
@@ -187,21 +187,21 @@ export const SAMPLE_TEXTS: SampleText[] = [
 
   // ── Technology & IT ──
   {
-    title: "Cập nhật hệ thống",
+    title: "System Upgrade Scheduled",
     topic: "technology",
     length: "short",
     icon: "💻",
     text: "The IT department will perform a scheduled system upgrade this weekend. All internal applications will be unavailable from Saturday evening until Sunday morning.",
   },
   {
-    title: "Chính sách bảo mật dữ liệu",
+    title: "Data Security Protocols",
     topic: "technology",
     length: "medium",
     icon: "💻",
     text: "In response to recent cybersecurity threats, the IT security team has implemented new data protection protocols. All employees must now use two-factor authentication when accessing company systems remotely. Passwords must be changed every sixty days and must include a combination of uppercase letters, lowercase letters, numbers, and special characters. Please contact the IT help desk if you experience any difficulties with the new security measures.",
   },
   {
-    title: "Triển khai phần mềm quản lý mới",
+    title: "New ERP Software Rollout",
     topic: "technology",
     length: "long",
     icon: "💻",
@@ -210,21 +210,21 @@ export const SAMPLE_TEXTS: SampleText[] = [
 
   // ── Manufacturing & Production ──
   {
-    title: "Báo cáo sản xuất",
+    title: "Production Report",
     topic: "manufacturing",
     length: "short",
     icon: "🏭",
     text: "Production output for the month of October increased by eight percent compared to the previous quarter, largely due to the installation of new automated assembly equipment.",
   },
   {
-    title: "Quy trình kiểm soát chất lượng",
+    title: "Quality Control Inspection",
     topic: "manufacturing",
     length: "medium",
     icon: "🏭",
     text: "The quality assurance department has introduced a new inspection protocol for all products leaving our manufacturing facility. Each batch will now undergo a three-stage testing process before being approved for shipment. Products that do not meet our strict quality standards will be flagged for review and may be returned to the production line for rework. This measure is expected to reduce customer complaints by approximately twenty percent.",
   },
   {
-    title: "Mở rộng nhà máy sản xuất",
+    title: "Manufacturing Plant Expansion",
     topic: "manufacturing",
     length: "long",
     icon: "🏭",
@@ -233,21 +233,21 @@ export const SAMPLE_TEXTS: SampleText[] = [
 
   // ── Real Estate & Housing ──
   {
-    title: "Thông báo cho thuê",
+    title: "Apartment for Lease",
     topic: "realestate",
     length: "short",
     icon: "🏠",
     text: "A newly renovated two-bedroom apartment is available for lease starting next month. The unit features modern appliances, hardwood floors, and a private balcony with city views.",
   },
   {
-    title: "Hướng dẫn mua nhà",
+    title: "Homebuyer's Guide",
     topic: "realestate",
     length: "medium",
     icon: "🏠",
     text: "For first-time homebuyers, navigating the mortgage process can seem overwhelming. It is advisable to obtain pre-approval from your bank before beginning your property search. This will give you a clear understanding of your budget and demonstrate to sellers that you are a serious buyer. Additionally, working with a licensed real estate agent can help you identify suitable properties and negotiate favorable terms on your behalf.",
   },
   {
-    title: "Dự án phát triển khu đô thị mới",
+    title: "Waterfront Urban Development",
     topic: "realestate",
     length: "long",
     icon: "🏠",

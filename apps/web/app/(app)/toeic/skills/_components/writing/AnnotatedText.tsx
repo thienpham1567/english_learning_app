@@ -87,7 +87,7 @@ export function AnnotatedText({ text, annotations }: Props) {
             </span>
           </div>
           <p className="text-sm text-(--ink)">
-            <span className="font-medium">Gợi ý:</span> {activeAnnotation.suggestion}
+            <span className="font-medium">Suggestion:</span> {activeAnnotation.suggestion}
           </p>
           <p className="mt-1 text-xs text-(--text-muted)">{activeAnnotation.explanation}</p>
         </div>

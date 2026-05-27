@@ -21,11 +21,11 @@ type Props = {
 function formatRelativeTime(dateStr: string): string {
   const diffMs = Date.now() - new Date(dateStr).getTime();
   const mins = Math.floor(diffMs / 60_000);
-  if (mins < 1) return "Vừa xong";
-  if (mins < 60) return `${mins} phút trước`;
+  if (mins < 1) return "Just now";
+  if (mins < 60) return `${mins}m ago`;
   const hours = Math.floor(mins / 60);
-  if (hours < 24) return `${hours} giờ trước`;
-  return `${Math.floor(hours / 24)} ngày trước`;
+  if (hours < 24) return `${hours}h ago`;
+  return `${Math.floor(hours / 24)}d ago`;
 }
 
 export function truncateTitle(title: string, max = 32): { text: string; truncated: boolean } {
@@ -55,7 +55,7 @@ export function ConversationList({ activeId }: Props) {
             <Trophy className="h-3.5 w-3.5" />
           </div>
           <span className="font-display text-sm font-semibold italic text-(--ink) tracking-wide">
-            Gia sư Tiếng Anh
+            English Tutors
           </span>
         </div>
 
@@ -64,7 +64,7 @@ export function ConversationList({ activeId }: Props) {
           className="flex w-full items-center justify-center gap-2 rounded-xl border-2 border-border bg-(--chat-surface-hover) px-4 py-2.5 text-xs font-semibold text-(--text-primary) hover:brightness-110 hover:text-(--ink) transition-all duration-200 cursor-pointer shadow-sm active:scale-98"
         >
           <Plus className="h-3.5 w-3.5" />
-          Cuộc hội thoại mới
+          New Conversation
         </button>
       </div>
 
@@ -75,7 +75,7 @@ export function ConversationList({ activeId }: Props) {
       <div className="relative z-10 flex-1 overflow-y-auto px-2 py-3 space-y-1 scrollbar-thin scrollbar-thumb-(--border-strong) scrollbar-track-transparent">
         {conversations.length === 0 ? (
           <div className="py-8 px-4 text-center text-xs text-(--text-muted) font-medium">
-            Chưa có cuộc trò chuyện nào
+            No conversations yet
           </div>
         ) : (
           conversations.map((conv) => {
@@ -89,7 +89,7 @@ export function ConversationList({ activeId }: Props) {
                   key={conv.id}
                   className="flex items-center gap-2 rounded-xl border border-red-950 bg-red-950/20 p-2.5 animate-in fade-in zoom-in-95 duration-150"
                 >
-                  <span className="flex-1 text-xs font-semibold text-red-405">Xóa cuộc chat?</span>
+                  <span className="flex-1 text-xs font-semibold text-red-405">Delete?</span>
                   <button
                     onClick={() => {
                       deleteConversation(conv.id);
@@ -97,14 +97,14 @@ export function ConversationList({ activeId }: Props) {
                       if (conv.id === activeId) router.push("/english-chatbot");
                     }}
                     className="flex h-6 w-6 items-center justify-center rounded-lg bg-red-500 text-white hover:bg-red-650 transition-colors cursor-pointer"
-                    aria-label="Xác nhận xóa"
+                    aria-label="Confirm delete"
                   >
                     <Check className="h-3 w-3" />
                   </button>
                   <button
                     onClick={() => setConfirmingId(null)}
                     className="flex h-6 w-6 items-center justify-center rounded-lg bg-(--chat-surface-hover) text-(--text-secondary) hover:text-(--ink) hover:brightness-110 transition-colors cursor-pointer"
-                    aria-label="Hủy xóa"
+                    aria-label="Cancel delete"
                   >
                     <X className="h-3 w-3" />
                   </button>
@@ -137,7 +137,7 @@ export function ConversationList({ activeId }: Props) {
                     setConfirmingId(conv.id);
                   }}
                   className="absolute right-2.5 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-lg text-(--text-muted) opacity-0 group-hover:opacity-100 hover:bg-(--chat-surface-hover) hover:text-red-400 transition-all duration-200 cursor-pointer"
-                  aria-label="Xóa cuộc trò chuyện"
+                  aria-label="Delete conversation"
                 >
                   <Trash2 className="h-3.5 w-3.5" />
                 </button>

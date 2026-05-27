@@ -50,11 +50,11 @@ export default async function MockTestHubPage() {
             <Card hoverable style={{ borderColor: "var(--warning)", borderWidth: 2 }}>
               <div className="flex items-center gap-2">
                 <Redo className="text-2xl" style={{ color: "var(--warning)" }} />
-                <strong className="text-lg">Tiếp tục mock test đang dở</strong>
+                <strong className="text-lg">Resume In-Progress Mock Test</strong>
               </div>
               <div className="mt-2 text-text-muted">
-                Bắt đầu lúc {new Date(inProgress.startedAt).toLocaleString("vi-VN")} ·{" "}
-                {inProgress.questionCount} câu
+                Started at {new Date(inProgress.startedAt).toLocaleString("en-US")} ·{" "}
+                {inProgress.questionCount} questions
               </div>
             </Card>
           </Link>
@@ -69,9 +69,9 @@ export default async function MockTestHubPage() {
                 <Trophy className="text-2xl text-accent" />
                 <strong className="text-lg text-ink">Full Mock</strong>
               </div>
-              <div className="mt-2 text-text-muted">194 câu · ~1h54 · Strict timer</div>
+              <div className="mt-2 text-text-muted">194 questions · ~1h54 · Strict timer</div>
               <div className="mt-2">
-                <Tag color="orange">Part 1: chưa có content</Tag>
+                <Tag color="orange">Part 1: no content yet</Tag>
               </div>
               <div className="mt-1.5 text-[13px] text-text-muted">
                 25 P2 + 39 P3 + 30 P4 + 30 P5 + 16 P6 + 54 P7
@@ -84,9 +84,9 @@ export default async function MockTestHubPage() {
                 <Clock className="text-2xl text-emerald-500" />
                 <strong className="text-lg text-ink">Mini Mock</strong>
               </div>
-              <div className="mt-2 text-text-muted">100 câu · ~1h · Luyện hằng ngày</div>
+              <div className="mt-2 text-text-muted">100 questions · ~1h · Daily practice</div>
               <div className="mt-2">
-                <Tag color="green">Khuyến nghị</Tag>
+                <Tag color="green">Recommended</Tag>
               </div>
               <div className="mt-1.5 text-[13px] text-text-muted">
                 13 P2 + 20 P3 + 15 P4 + 15 P5 + 8 P6 + 29 P7
@@ -95,10 +95,10 @@ export default async function MockTestHubPage() {
           </Link>
         </div>
 
-        <Card title="Lịch sử mock test" size="small">
+        <Card title="Mock Test History" size="small">
           {history.length === 0 ? (
             <div className="text-text-muted">
-              Chưa có mock test nào. Bắt đầu mini mock để có dữ liệu cho điểm dự đoán.
+              No mock tests taken yet. Start a mini mock to generate data for your predicted score.
             </div>
           ) : (
             <div className="grid gap-2">
@@ -114,7 +114,7 @@ export default async function MockTestHubPage() {
                   }}
                 >
                   <span>
-                    {new Date(h.completedAt!).toLocaleString("vi-VN")} · {h.questionCount} câu
+                    {new Date(h.completedAt!).toLocaleString("en-US")} · {h.questionCount} questions
                   </span>
                   <span className="text-lg font-bold">{h.totalScaled ?? "—"} / 990</span>
                 </Link>

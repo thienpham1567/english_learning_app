@@ -33,7 +33,7 @@ export function InlinePractice({ errorId, onResolved }: Props) {
       const res = await api.post<{ practice: PracticeData }>(`/errors/${errorId}/practice`, {});
       setData(res.practice);
     } catch {
-      setError("Không thể tạo bài tập. Thử lại sau.");
+      setError("Could not generate practice. Try again later.");
     } finally {
       setLoading(false);
     }
@@ -55,7 +55,7 @@ export function InlinePractice({ errorId, onResolved }: Props) {
         onClick={generate}
         className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-[10px] border border-accent/25 bg-(--card-bg) cursor-pointer text-xs font-semibold text-accent transition-all duration-200 hover:bg-accent/8 hover:border-accent"
       >
-        <Zap className="h-3.5 w-3.5" /> Luyện lại
+        <Zap className="h-3.5 w-3.5" /> Practice Again
       </button>
     );
   }
@@ -65,7 +65,7 @@ export function InlinePractice({ errorId, onResolved }: Props) {
     return (
       <div className="py-4 text-center">
         <Loader2 className="h-4.5 w-4.5 text-accent animate-inline" />
-        <span className="ml-2 text-xs text-text-muted">Đang tạo bài tập...</span>
+        <span className="ml-2 text-xs text-text-muted">Generating practice...</span>
       </div>
     );
   }
@@ -80,7 +80,7 @@ export function InlinePractice({ errorId, onResolved }: Props) {
           onClick={generate}
           className="border-none bg-transparent text-accent cursor-pointer text-xs font-semibold underline"
         >
-          Thử lại
+          Try again
         </button>
       </div>
     );
@@ -106,7 +106,7 @@ export function InlinePractice({ errorId, onResolved }: Props) {
       <div className="flex items-center gap-1.5 mb-2.5">
         <Zap className="h-3.5 w-3.5 text-accent" />
         <span className="text-[11px] font-bold uppercase tracking-wide text-accent">
-          Bài tập luyện lại
+          Practice Again
         </span>
       </div>
       <p className="text-sm font-medium m-0 mb-3 leading-snug text-ink">{data.questionStem}</p>
@@ -165,7 +165,7 @@ export function InlinePractice({ errorId, onResolved }: Props) {
               : "bg-border text-text-muted cursor-not-allowed"
           }`}
         >
-          Kiểm tra
+          Check
         </button>
       ) : (
         <div className="mt-2.5 flex flex-col gap-2">
@@ -181,7 +181,7 @@ export function InlinePractice({ errorId, onResolved }: Props) {
             ) : (
               <XCircle className="h-3.5 w-3.5" />
             )}
-            {isCorrect ? "Chính xác! 🎉" : "Sai rồi!"}
+            {isCorrect ? "Correct! 🎉" : "Incorrect!"}
           </div>
           <p className="m-0 text-xs leading-relaxed text-text-secondary italic">
             {data.explanation}
@@ -190,7 +190,7 @@ export function InlinePractice({ errorId, onResolved }: Props) {
             onClick={generate}
             className="self-start px-3.5 py-1.5 rounded-lg border-2 border-border bg-(--card-bg) cursor-pointer text-xs font-semibold text-accent hover:bg-accent/5"
           >
-            Làm câu khác →
+            Try another question →
           </button>
         </div>
       )}

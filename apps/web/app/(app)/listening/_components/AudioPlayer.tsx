@@ -118,7 +118,7 @@ export function AudioPlayer({
 
   const handleError = useCallback(() => {
     setIsLoading(false);
-    setAudioError("Không thể tải audio. Nhấn Nghe lại để thử lại.");
+    setAudioError("Unable to load audio. Click Replay to try again.");
   }, []);
 
   const handleStalled = useCallback(() => {
@@ -138,7 +138,7 @@ export function AudioPlayer({
         !Number.isFinite(audioRef.current.duration)
       ) {
         setIsLoading(false);
-        setAudioError("Tải audio bị gián đoạn. Nhấn Nghe lại để thử lại.");
+        setAudioError("Audio loading interrupted. Click Replay to try again.");
       }
     }, 5000);
     return () => clearTimeout(timer);
@@ -336,7 +336,7 @@ export function AudioPlayer({
     const timer = setTimeout(() => {
       if (isLoading && !audioRef.current?.duration) {
         setIsLoading(false);
-        setAudioError("Tải audio quá lâu. Nhấn Nghe lại để thử lại.");
+        setAudioError("Audio loading took too long. Click Replay to try again.");
       }
     }, 30_000);
     return () => clearTimeout(timer);
@@ -500,7 +500,7 @@ export function AudioPlayer({
           }}
         >
           <RefreshCw />
-          Nghe lại ({maxReplays - replaysUsed}/{maxReplays})
+          Replay ({maxReplays - replaysUsed}/{maxReplays})
         </button>
 
         {/* Speed control (AC1) */}

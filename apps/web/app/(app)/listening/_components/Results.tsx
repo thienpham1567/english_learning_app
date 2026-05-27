@@ -34,7 +34,7 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
           {percentage}%
         </div>
         <div className="text-base font-semibold mt-1" style={{ color: "var(--text)" }}>
-          {result.correct}/{result.total} câu đúng
+          {result.correct}/{result.total} correct answers
         </div>
         <div
           className="items-center gap-1.5 mt-3 py-1.5 px-3.5 rounded-(--radius-sm) text-accent text-[13px] font-bold"
@@ -52,7 +52,7 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
               color: "var(--warning)",
             }}
           >
-            📖 Đã xem script (-30% XP)
+            📖 Script viewed (-30% XP)
           </div>
         )}
       </div>
@@ -63,7 +63,7 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
           className="text-[13px] font-semibold text-text-muted mb-2.5 uppercase"
           style={{ letterSpacing: 1 }}
         >
-          Chi tiết kết quả
+          Result Details
         </div>
         <div className="flex flex-col gap-2.5">
           {result.results.map((r, i) => (
@@ -108,7 +108,7 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
           className="text-[13px] font-semibold text-text-muted mb-2.5 uppercase"
           style={{ letterSpacing: 1 }}
         >
-          <FileText style={{ marginRight: 6 }} /> Nguyên văn
+          <FileText style={{ marginRight: 6 }} /> Transcript
         </div>
         <div
           className="bg-(--surface) border-2 border-border p-4 text-sm italic"
@@ -134,7 +134,7 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
           transition: "all 0.2s ease",
         }}
       >
-        <RefreshCw /> Bài mới
+        <RefreshCw /> New Exercise
       </button>
     </div>
   );

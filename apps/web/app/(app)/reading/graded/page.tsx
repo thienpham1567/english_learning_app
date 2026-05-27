@@ -46,7 +46,7 @@ const LEVEL_COLORS: Record<string, string> = {
 };
 
 const LEVEL_LABELS: Record<string, string> = {
-  "": "Tất cả",
+  "": "All Levels",
   A2: "A2 · Elementary",
   B1: "B1 · Intermediate",
   B2: "B2 · Upper-Int",
@@ -123,7 +123,7 @@ export default function GradedReaderPage() {
                 className="m-0 font-display italic"
                 style={{ color: "var(--text-on-accent)" }}
               >
-                Đọc theo cấp độ CEFR
+                Read by CEFR Level
               </Title>
             </div>
             {passages.length > 0 && (
@@ -133,7 +133,7 @@ export default function GradedReaderPage() {
                 </Text>
                 <br />
                 <Text className="text-[11px]" style={{ color: "rgba(255,255,255,0.7)" }}>
-                  đã đọc
+                  read
                 </Text>
               </div>
             )}
@@ -176,7 +176,7 @@ export default function GradedReaderPage() {
         ) : passages.length === 0 ? (
           <Empty
             image={<BookOpen className="text-text-muted" style={{ fontSize: 48 }} />}
-            description="Không có bài đọc nào cho cấp độ này"
+            description="No passages available for this level"
             style={{ padding: 60 }}
           />
         ) : (
@@ -229,7 +229,7 @@ export default function GradedReaderPage() {
                         {p.cefrLevel}
                       </Tag>
                       <Text className="text-[11px] text-text-muted">
-                        {SECTION_ICONS[p.section]} {p.wordCount} từ
+                        {SECTION_ICONS[p.section]} {p.wordCount} words
                       </Text>
                     </Flex>
                   </div>
@@ -244,7 +244,7 @@ export default function GradedReaderPage() {
                       }}
                     >
                       <Star size={10} />
-                      {p.newWordsCount} mới
+                      {p.newWordsCount} new
                     </Tag>
                   )}
 

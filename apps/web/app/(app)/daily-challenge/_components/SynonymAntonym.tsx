@@ -1,5 +1,6 @@
 "use client";
 
+import { Contrast, Link } from "lucide-react";
 import * as m from "motion/react-client";
 import { useState } from "react";
 import type { SynonymAntonymData } from "@/lib/daily-challenge/types";
@@ -29,6 +30,9 @@ export function SynonymAntonym({ data, instruction, onAnswer, disabled }: Props)
       {/* Instruction */}
       <p
         style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 6,
           marginBottom: 14,
           fontSize: 11,
           fontWeight: 800,
@@ -37,7 +41,7 @@ export function SynonymAntonym({ data, instruction, onAnswer, disabled }: Props)
           letterSpacing: "0.08em",
         }}
       >
-        🔗 {instruction}
+        <Link size={12} /> {instruction}
       </p>
 
       {/* Target word + mode card */}
@@ -75,7 +79,15 @@ export function SynonymAntonym({ data, instruction, onAnswer, disabled }: Props)
             color: isSynonym ? "var(--success)" : "var(--error)",
           }}
         >
-          {isSynonym ? "🔗 Từ đồng nghĩa" : "↔️ Từ trái nghĩa"}
+          {isSynonym ? (
+            <>
+              <Link size={12} /> Synonym
+            </>
+          ) : (
+            <>
+              <Contrast size={12} /> Antonym
+            </>
+          )}
         </span>
 
         {/* Target word */}

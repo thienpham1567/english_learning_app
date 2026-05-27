@@ -27,13 +27,13 @@ const jetbrainsMono = JetBrains_Mono({
 
 export const metadata: Metadata = {
   metadataBase,
-  title: "TOEIC Master – Luyện thi TOEIC 4 Skills với AI",
+  title: "TOEIC Master – Master TOEIC 4 Skills with AI",
   description:
-    "Ứng dụng luyện thi TOEIC 4 Skills: Listening, Reading, Speaking, Writing. Luyện đề ETS chính hãng, AI chấm điểm, theo dõi tiến độ.",
+    "Complete TOEIC 4 Skills preparation application: Listening, Reading, Speaking, Writing. Practice authentic ETS tests, get AI-powered grading, and track score progress.",
   openGraph: {
-    title: "TOEIC Master – Luyện thi TOEIC 4 Skills với AI",
+    title: "TOEIC Master – Master TOEIC 4 Skills with AI",
     description:
-      "Ứng dụng luyện thi TOEIC 4 Skills: Listening, Reading, Speaking, Writing. Luyện đề ETS chính hãng, AI chấm điểm, theo dõi tiến độ.",
+      "Complete TOEIC 4 Skills preparation application: Listening, Reading, Speaking, Writing. Practice authentic ETS tests, get AI-powered grading, and track score progress.",
     type: "website",
   },
   twitter: {
@@ -48,7 +48,7 @@ export default function RootLayout({
 }>) {
   return (
     <html
-      lang="vi"
+      lang="en"
       className={cn(sourceSans.variable, spaceGrotesk.variable, jetbrainsMono.variable)}
       suppressHydrationWarning
     >

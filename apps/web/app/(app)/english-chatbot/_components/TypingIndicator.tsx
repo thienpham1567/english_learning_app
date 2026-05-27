@@ -6,13 +6,13 @@ type Props = {
   personaName?: string;
 };
 
-export function TypingIndicator({ personaName = "Gia sư" }: Props) {
+export function TypingIndicator({ personaName = "Tutor" }: Props) {
   return (
     <div
       className="flex items-end gap-3 max-w-[80%] animate-in fade-in slide-in-from-bottom-2 duration-200"
       role="status"
       aria-live="polite"
-      aria-label={`${personaName} đang phản hồi`}
+      aria-label={`${personaName} is replying...`}
     >
       <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-(--chat-surface) border-2 border-border text-(--text-secondary)">
         <Bot className="h-4 w-4 text-accent animate-pulse" />

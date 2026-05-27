@@ -64,7 +64,7 @@ export function ListeningTab() {
       {/* Mode toggle */}
       <div className="flex gap-2.5 py-2 pb-4 flex-wrap">
         {[
-          { key: "free" as const, label: "Luyện nghe tự do", icon: Headphones },
+          { key: "free" as const, label: "Free Listening", icon: Headphones },
           { key: "parts" as const, label: "TOEIC Parts 1–4", icon: ClipboardList },
         ].map((m) => {
           const Icon = m.icon;
@@ -99,30 +99,30 @@ export function ListeningTab() {
             {
               part: "Part 1",
               title: "Photographs",
-              desc: "Nghe 4 mô tả, chọn mô tả đúng nhất cho bức hình",
+              desc: "Listen to 4 descriptions, choose the best one describing the photo",
               questions: 6,
-              tips: "Nhìn hình trước khi audio bắt đầu. Chú ý chủ ngữ + hành động.",
+              tips: "Look at the photo before the audio starts. Focus on subject + action.",
             },
             {
               part: "Part 2",
               title: "Question-Response",
-              desc: "Nghe câu hỏi, chọn câu trả lời phù hợp nhất",
+              desc: "Listen to a question/statement, choose the best response",
               questions: 25,
-              tips: "Nghe kỹ Wh-word đầu câu. Loại bỏ đáp án lặp từ (trap).",
+              tips: "Listen carefully to the first Wh-word. Eliminate same-sound or repetitive word traps.",
             },
             {
               part: "Part 3",
               title: "Conversations",
-              desc: "Nghe hội thoại 2-3 người, trả lời 3 câu hỏi",
+              desc: "Listen to conversations between 2-3 people, answer 3 questions",
               questions: 39,
-              tips: "Đọc câu hỏi + đáp án TRƯỚC khi audio phát. Chú ý intent & detail.",
+              tips: "Read the questions + answers BEFORE the audio plays. Focus on intent & detail.",
             },
             {
               part: "Part 4",
               title: "Talks",
-              desc: "Nghe bài nói/thông báo, trả lời 3 câu hỏi",
+              desc: "Listen to talks/announcements, answer 3 questions",
               questions: 30,
-              tips: "Tập trung vào purpose, audience, next step. Đọc câu hỏi trước.",
+              tips: "Focus on purpose, audience, and next step. Read the questions first.",
             },
           ].map((p, i) => (
             <div
@@ -136,7 +136,7 @@ export function ListeningTab() {
                   {p.part} — {p.title}
                 </span>
                 <span className="text-[10px] font-black text-ink px-2.5 py-0.5 border-2 border-border rounded-md bg-accent shadow-(--shadow-sm)">
-                  {p.questions} câu
+                  {p.questions} questions
                 </span>
               </div>
               <p className="text-xs text-text-secondary mb-2.5 leading-relaxed">{p.desc}</p>
@@ -150,7 +150,7 @@ export function ListeningTab() {
             onClick={() => setMode("free")}
             className="self-center mt-3 px-6 h-10 text-xs font-black"
           >
-            Bắt đầu luyện nghe →
+            Start Listening →
           </Button>
         </div>
       )}
@@ -191,7 +191,7 @@ export function ListeningTab() {
 
               {(!exercise.turns || exercise.turns.length === 0) && (
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-text-muted font-bold">Giọng đọc:</span>
+                  <span className="text-xs text-text-muted font-bold">Voice Accent:</span>
                   <select
                     value={selectedVoice}
                     onChange={(e) => setSelectedVoice(e.target.value)}
@@ -257,12 +257,12 @@ export function ListeningTab() {
                   {skillLevelUp.levelUp ? (
                     <>
                       <Trophy className="h-4 w-4 text-emerald-400 fill-current animate-bounce" />
-                      <span>Trình độ nghe được nâng lên: {skillLevelUp.cefr}!</span>
+                      <span>Listening proficiency level upgraded to: {skillLevelUp.cefr}!</span>
                     </>
                   ) : (
                     <>
                       <BarChart2 className="h-4 w-4 text-amber-400" />
-                      <span>Trình độ hiện tại: {skillLevelUp.cefr}</span>
+                      <span>Current proficiency level: {skillLevelUp.cefr}</span>
                     </>
                   )}
                 </div>

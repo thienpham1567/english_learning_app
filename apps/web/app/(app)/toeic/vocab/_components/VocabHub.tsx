@@ -14,9 +14,9 @@ export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number 
         <div className="flex justify-between items-center">
           <div>
             <div className="text-sm text-text-muted">
-              <AlertTriangle /> Cần ôn hôm nay
+              <AlertTriangle /> Due for review today
             </div>
-            <div className="text-[28px] font-bold">{dueCount} từ</div>
+            <div className="text-[28px] font-bold">{dueCount} words</div>
           </div>
           {dueCount > 0 ? (
             <Link
@@ -24,10 +24,10 @@ export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number 
               className="py-2 px-4 rounded-lg"
               style={{ background: "var(--error)", color: "#fff", textDecoration: "none" }}
             >
-              Ôn ngay
+              Review Now
             </Link>
           ) : (
-            <Tag>Hoàn thành ôn hôm nay 🎉</Tag>
+            <Tag>Review completed today</Tag>
           )}
         </div>
       </Card>
@@ -51,7 +51,7 @@ export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number 
                   <span>{p.label}</span>
                 </div>
                 <div className="text-[13px] text-text-muted mt-1.5">
-                  {p.learned} / {p.total} từ
+                  {p.learned} / {p.total} words
                 </div>
                 <Progress
                   percent={pct}

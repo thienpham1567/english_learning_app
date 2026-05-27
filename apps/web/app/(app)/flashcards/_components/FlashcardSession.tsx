@@ -77,8 +77,8 @@ export function FlashcardSession() {
               style={{ borderRadius: 14, alignSelf: "center", boxShadow: "var(--shadow-sm)" }}
             >
               {[
-                { key: "ai" as TabKey, label: "AI Tạo mới", icon: <Zap /> },
-                { key: "srs" as TabKey, label: "Ôn tập SRS", icon: <Clock /> },
+                { key: "ai" as TabKey, label: "AI Generation", icon: <Zap /> },
+                { key: "srs" as TabKey, label: "SRS Review", icon: <Clock /> },
               ].map((tab) => (
                 <m.button
                   key={tab.key}
@@ -121,11 +121,11 @@ export function FlashcardSession() {
                 <Flex vertical align="center" gap={16} className="anim-fade-in text-center">
                   <Result
                     status="error"
-                    title="Không thể tải thẻ ôn tập"
-                    subTitle="Kiểm tra kết nối mạng và thử lại."
+                    title="Could not load flashcards"
+                    subTitle="Please check your network connection and try again."
                     extra={
                       <Button type="primary" icon={<RefreshCw />} onClick={restart}>
-                        Thử lại
+                        Try again
                       </Button>
                     }
                   />

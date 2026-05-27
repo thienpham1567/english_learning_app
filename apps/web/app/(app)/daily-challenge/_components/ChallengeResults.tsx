@@ -34,10 +34,10 @@ import { BadgeGallery } from "./BadgeGallery";
 
 /* ── Tier config ── */
 const TIERS = [
-  { min: 5, tier: "big" as const, label: "Hoàn hảo! 🌟", sub: "Tất cả câu trả lời đều chính xác" },
-  { min: 4, tier: "medium" as const, label: "Xuất sắc! 🎉", sub: "Gần như tuyệt đối" },
-  { min: 3, tier: "small" as const, label: "Tốt lắm! 👍", sub: "Bạn đang tiến bộ rất nhanh" },
-  { min: 0, tier: null, label: "Cố gắng lên! 💪", sub: "Luyện tập thêm để đạt điểm tuyệt đối nhé" },
+  { min: 5, tier: "big" as const, label: "Perfect!", sub: "All answers are correct" },
+  { min: 4, tier: "medium" as const, label: "Excellent!", sub: "Almost perfect score" },
+  { min: 3, tier: "small" as const, label: "Well Done!", sub: "You are progressing quickly" },
+  { min: 0, tier: null, label: "Keep Trying!", sub: "Practice more to get a perfect score" },
 ];
 
 /* ── Exercise type maps ── */
@@ -54,15 +54,15 @@ const EXERCISE_ICONS: Record<string, React.ReactNode> = {
 };
 
 const EXERCISE_LABELS: Record<string, string> = {
-  "fill-in-blank": "Điền từ vào chỗ trống",
-  "sentence-order": "Sắp xếp thứ tự câu",
-  translation: "Dịch thuật câu",
-  "error-correction": "Tìm và sửa lỗi sai",
-  "word-formation": "Cấu tạo từ vựng",
-  "dialogue-completion": "Hoàn thành hội thoại",
-  "synonym-antonym": "Từ đồng / trái nghĩa",
-  "reading-comprehension": "Đọc hiểu văn bản",
-  collocation: "Kết hợp từ (Collocation)",
+  "fill-in-blank": "Fill in the Blank",
+  "sentence-order": "Sentence Order",
+  translation: "Translation",
+  "error-correction": "Error Correction",
+  "word-formation": "Word Formation",
+  "dialogue-completion": "Dialogue Completion",
+  "synonym-antonym": "Synonym / Antonym",
+  "reading-comprehension": "Reading Comprehension",
+  collocation: "Collocation",
 };
 
 /* ── Answer Detail Card ── */
@@ -85,7 +85,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
       });
       setAiExplanation(data.explanation);
     } catch {
-      setAiExplanation("Không thể kết nối máy chủ AI để lấy giải thích. Vui lòng thử lại sau.");
+      setAiExplanation("Unable to connect to the AI server for explanations. Please try again later.");
     } finally {
       setAiLoading(false);
     }
@@ -122,7 +122,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
           />
           <div className="flex flex-col items-start w-[0px]" style={{ gap: 2 }}>
             <span className="font-body text-sm font-bold text-text-primary">
-              Câu số {index + 1}
+              Question #{index + 1}
             </span>
             {exerciseLabel && (
               <span
@@ -145,7 +145,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
               color: ok ? "var(--success)" : "var(--error)",
             }}
           >
-            {ok ? "Chính xác" : "Chưa đúng"}
+            {ok ? "Correct" : "Incorrect"}
           </span>
           <ChevronDown
             className="text-[10px] text-text-muted"
@@ -178,7 +178,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                     className="text-[10px] font-extrabold uppercase text-text-muted block mb-1.5"
                     style={{ letterSpacing: ".08em" }}
                   >
-                    Đề bài câu hỏi
+                    Question Stem
                   </span>
                   <span
                     className="text-sm text-text-primary font-medium"
@@ -202,13 +202,13 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                   className="text-[10px] font-extrabold uppercase block mb-1"
                   style={{ letterSpacing: ".08em", color: ok ? "var(--success)" : "var(--error)" }}
                 >
-                  {ok ? "Đáp án của bạn" : "Đáp án bạn chọn"}
+                  {ok ? "Your Answer" : "Your Answer"}
                 </span>
                 <span
                   className="font-semibold text-text-primary font-body"
                   style={{ fontSize: 13.5, wordBreak: "break-word" }}
                 >
-                  {answer.answer || "(bỏ trống)"}
+                  {answer.answer || "(blank)"}
                 </span>
               </div>
 
@@ -226,7 +226,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                     className="text-[10px] font-extrabold uppercase text-emerald-500 block mb-1"
                     style={{ letterSpacing: ".08em" }}
                   >
-                    Đáp án đúng chuẩn
+                    Correct Answer
                   </span>
                   <span
                     className="font-bold text-emerald-500 font-body"
@@ -275,11 +275,11 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                 >
                   {aiLoading ? (
                     <>
-                      <Loader2 className="animate-spin" size={12} /> AI đang phân tích...
+                      <Loader2 className="animate-spin" size={12} /> AI is analyzing...
                     </>
                   ) : (
                     <>
-                      <Lightbulb size={12} /> Hỏi AI giải thích chi tiết
+                      <Lightbulb size={12} /> Ask AI for details
                     </>
                   )}
                 </m.button>
@@ -303,7 +303,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                       className="text-[11px] font-extrabold uppercase text-accent"
                       style={{ letterSpacing: ".05em" }}
                     >
-                      Giải thích từ trợ lý AI
+                      AI Assistant Explanation
                     </span>
                   </div>
                   <p
@@ -419,7 +419,7 @@ export function ChallengeResults({
             {matched.label}
           </p>
           <p className="font-body text-text-muted m-0 font-medium" style={{ fontSize: 13.5 }}>
-            {matched.sub} · Độ chính xác {pct}%
+            {matched.sub} · Accuracy {pct}%
           </p>
 
           {/* Divider */}
@@ -433,18 +433,18 @@ export function ChallengeResults({
             {[
               {
                 icon: <CheckCircle className="text-emerald-500" />,
-                label: "Đúng",
+                label: "Correct",
                 value: correctCount,
               },
-              { icon: <XCircle className="text-destructive" />, label: "Sai", value: wrongCount },
+              { icon: <XCircle className="text-destructive" />, label: "Wrong", value: wrongCount },
               {
                 icon: <Clock className="text-accent" />,
-                label: "Thời gian",
+                label: "Time",
                 value: `${minutes}:${seconds.toString().padStart(2, "0")}`,
               },
               {
                 icon: <Flame style={{ color: "var(--fire)" }} />,
-                label: "Chuỗi ngày",
+                label: "Streak",
                 value: streak.currentStreak,
               },
             ].map((s, i) => (
@@ -489,7 +489,7 @@ export function ChallengeResults({
                 className="text-[11px] font-extrabold uppercase text-(--xp)"
                 style={{ letterSpacing: ".08em" }}
               >
-                Mở khóa huy hiệu mới!
+                New Badge Unlocked!
               </span>
             </div>
             <div className="flex gap-2 flex-wrap">
@@ -522,7 +522,7 @@ export function ChallengeResults({
             className="text-[11px] font-extrabold uppercase text-text-muted"
             style={{ letterSpacing: ".08em", whiteSpace: "nowrap" }}
           >
-            Chi tiết các câu trả lời
+            Answer Details
           </span>
           <div className="flex-1 h-[1px]" style={{ background: "var(--border)" }} />
         </div>
@@ -555,10 +555,10 @@ export function ChallengeResults({
               transition: "all 0.2s",
             }}
           >
-            Hoàn tất & Tiếp tục
+            Done & Continue
             <ChevronRight size={12} />
           </Link>
-          <span className="text-[11px] text-text-muted font-medium">Quay lại mai nhé!</span>
+          <span className="text-[11px] text-text-muted font-medium">Come back tomorrow!</span>
         </div>
       </div>
     </>

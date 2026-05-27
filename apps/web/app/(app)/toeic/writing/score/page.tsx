@@ -112,7 +112,7 @@ function InlineIssueItem({
               whiteSpace: "nowrap",
             }}
           >
-            <Highlighter /> Viết lại
+            <Highlighter /> Rewrite
           </button>
         </div>
         <p className="text-[11px] text-text-secondary" style={{ margin: "4px 0 0" }}>
@@ -159,7 +159,7 @@ export default function EssayScorePage() {
 
   const submitEssay = useCallback(async () => {
     if (wordCount < 150) {
-      setError("Bài viết cần ít nhất 150 từ.");
+      setError("Essay must be at least 150 words.");
       return;
     }
     setError(null);
@@ -174,11 +174,11 @@ export default function EssayScorePage() {
       setResult(data);
       setState("result");
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Có lỗi xảy ra";
+      const msg = err instanceof Error ? err.message : "An error occurred";
       if (msg.includes("under-length")) {
-        setError("Bài viết quá ngắn (cần ít nhất 150 từ).");
+        setError("Essay is too short (must be at least 150 words).");
       } else if (msg.includes("Rate limit")) {
-        setError("Bạn đã chấm quá nhiều bài. Vui lòng đợi 1 phút.");
+        setError("You have scored too many essays. Please wait 1 minute.");
       } else {
         setError(msg);
       }
@@ -277,10 +277,10 @@ export default function EssayScorePage() {
       <div style={{ padding: "24px 24px 16px", borderBottom: "1px solid var(--border)" }}>
         <div className="flex items-center gap-2.5 mb-1">
           <Pencil size={22} className="text-accent" />
-          <h1 className="m-0 text-xl font-bold">Chấm bài viết theo rubric</h1>
+          <h1 className="m-0 text-xl font-bold">Rubric Essay Scorer</h1>
         </div>
         <p className="m-0 text-[13px] text-text-secondary">
-          Nộp bài viết và nhận điểm chi tiết theo tiêu chí IELTS/TOEFL
+          Submit your essay and receive a detailed score breakdown according to IELTS/TOEFL rubrics
         </p>
       </div>
 
@@ -301,7 +301,7 @@ export default function EssayScorePage() {
           <div className="flex flex-col gap-4">
             {/* Exam selector */}
             <div>
-              <p className="text-xs text-text-secondary mb-2 font-semibold">Loại bài thi</p>
+              <p className="text-xs text-text-secondary mb-2 font-semibold">Exam Type</p>
               <div className="flex gap-2 flex-wrap">
                 {EXAM_OPTIONS.map((opt) => (
                   <button
@@ -325,12 +325,12 @@ export default function EssayScorePage() {
             {/* Prompt field */}
             <div>
               <p className="text-xs text-text-secondary mb-2 font-semibold">
-                Đề bài <span className="font-normal">(không bắt buộc)</span>
+                Prompt <span className="font-normal">(optional)</span>
               </p>
               <textarea
                 value={prompt}
                 onChange={(e) => setPrompt(e.target.value)}
-                placeholder="Dán đề bài vào đây để AI đánh giá Task Response chính xác hơn..."
+                placeholder="Paste the prompt here so that the AI can evaluate Task Response more accurately..."
                 className="w-full h-[60px] p-3 border-2 border-border text-[13px]"
                 style={{
                   borderRadius: 10,
@@ -345,7 +345,7 @@ export default function EssayScorePage() {
             {/* Essay textarea */}
             <div>
               <div className="flex justify-between mb-2">
-                <p className="text-xs text-text-secondary m-0 font-semibold">Bài viết</p>
+                <p className="text-xs text-text-secondary m-0 font-semibold">Essay</p>
                 <span
                   className="text-[11px] font-medium"
                   style={{
@@ -357,13 +357,13 @@ export default function EssayScorePage() {
                           : "var(--text-secondary)",
                   }}
                 >
-                  {wordCount} từ {wordCount < 150 && "(cần ≥ 150)"}
+                  {wordCount} words {wordCount < 150 && "(needs ≥ 150)"}
                 </span>
               </div>
               <textarea
                 value={essayText}
                 onChange={(e) => setEssayText(e.target.value)}
-                placeholder="Viết hoặc dán bài viết của bạn vào đây..."
+                placeholder="Write or paste your essay here..."
                 className="w-full h-[280px] p-4 rounded-xl border-2 border-border text-sm"
                 style={{
                   background: "var(--card-bg)",
@@ -388,7 +388,7 @@ export default function EssayScorePage() {
                 alignSelf: "center",
               }}
             >
-              <Pencil /> Chấm bài
+              <Pencil /> Score Essay
             </button>
           </div>
         )}
@@ -398,9 +398,9 @@ export default function EssayScorePage() {
           <div className="text-center" style={{ padding: 48 }}>
             <Loader2 className="animate-spin text-accent" size={36} />
             <p className="text-text-secondary mt-4 text-sm">
-              Đang chấm bài viết ({wordCount} từ)...
+              Scoring essay ({wordCount} words)...
             </p>
-            <p className="text-text-secondary text-xs">Quá trình này có thể mất 10–20 giây</p>
+            <p className="text-text-secondary text-xs">This process may take 10–20 seconds</p>
           </div>
         )}
 
@@ -425,7 +425,7 @@ export default function EssayScorePage() {
                 )}
               />
               <p className="text-[13px] text-text-secondary mt-2">
-                {EXAM_OPTIONS.find((o) => o.value === exam)?.label} • {result.wordCount} từ
+                {EXAM_OPTIONS.find((o) => o.value === exam)?.label} • {result.wordCount} words
               </p>
 
               {/* Criteria scores */}
@@ -522,7 +522,7 @@ export default function EssayScorePage() {
             >
               <div className="flex justify-between mb-2">
                 <p className="text-xs text-text-secondary m-0 font-semibold">
-                  <Info /> Bài viết (hover để xem gợi ý)
+                  <Info /> Essay (hover to see suggestions)
                 </p>
                 <div className="flex gap-1.5">
                   {Object.entries(CATEGORY_COLORS).map(([cat, color]) => (
@@ -552,7 +552,7 @@ export default function EssayScorePage() {
                 style={{ background: "var(--card-bg)" }}
               >
                 <p className="text-xs text-text-secondary mb-2 font-semibold">
-                  <AlertTriangle /> Lỗi chi tiết ({result.inlineIssues.length})
+                  <AlertTriangle /> Detailed Corrections ({result.inlineIssues.length})
                 </p>
                 <div className="flex flex-col gap-2">
                   {result.inlineIssues.map((issue, i) => (
@@ -578,7 +578,7 @@ export default function EssayScorePage() {
                 style={{ background: "var(--card-bg)" }}
               >
                 <p className="text-xs text-text-secondary mb-2 font-semibold">
-                  <CircleCheckBig className="text-emerald-500" /> Điểm mạnh
+                  <CircleCheckBig className="text-emerald-500" /> Strengths
                 </p>
                 <ul className="m-0 text-[13px]" style={{ paddingLeft: 16, lineHeight: 1.8 }}>
                   {result.strengths.map((s, i) => (
@@ -591,7 +591,7 @@ export default function EssayScorePage() {
                 style={{ background: "var(--card-bg)" }}
               >
                 <p className="text-xs text-text-secondary mb-2 font-semibold">
-                  <Target /> Cần cải thiện
+                  <Target /> Areas to Improve
                 </p>
                 <ul className="m-0 text-[13px]" style={{ paddingLeft: 16, lineHeight: 1.8 }}>
                   {result.nextSteps.map((s, i) => (
@@ -612,7 +612,7 @@ export default function EssayScorePage() {
                   color: "var(--text-on-accent)",
                 }}
               >
-                <RefreshCw /> Chấm bài mới
+                <RefreshCw /> Score New Essay
               </button>
             </div>
           </div>

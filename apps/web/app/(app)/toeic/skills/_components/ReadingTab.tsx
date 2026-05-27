@@ -33,12 +33,12 @@ const STRATEGIES: StrategyItem[] = [
     id: "part5",
     part: "Part 5",
     title: "Incomplete Sentences",
-    description: "Chọn từ/cụm từ đúng để hoàn thành câu. 30 câu, tập trung ngữ pháp và từ vựng.",
+    description: "Choose the correct word/phrase to complete the sentence. 30 questions, focused on grammar and vocabulary.",
     tips: [
-      "Đọc cả câu trước khi chọn — đừng chỉ nhìn chỗ trống",
-      "Xác định loại từ cần điền (noun/verb/adj/adv) bằng cấu trúc câu",
-      "Tìm collocations và fixed phrases quen thuộc",
-      "Dành tối đa 20 giây/câu — Part 5 cần nhanh để dành thời gian cho Part 7",
+      "Read the whole sentence before choosing — don't just look at the blank",
+      "Determine the part of speech needed (noun/verb/adj/adv) using sentence structure",
+      "Identify common collocations and fixed phrases",
+      "Spend at most 20 seconds per question — Part 5 needs speed to save time for Part 7",
     ],
     icon: <Lightbulb className="h-5 w-5" />,
     color: "var(--accent)",
@@ -47,12 +47,12 @@ const STRATEGIES: StrategyItem[] = [
     id: "part6",
     part: "Part 6",
     title: "Text Completion",
-    description: "Hoàn thành đoạn văn với từ/câu phù hợp. 4 đoạn × 4 câu hỏi.",
+    description: "Complete the passages with the correct word/phrase/sentence. 4 passages × 4 questions.",
     tips: [
-      "Đọc TOÀN BỘ đoạn văn trước — ngữ cảnh rất quan trọng",
-      "Câu hỏi chèn câu: chú ý linking words và logical flow",
-      "Phân biệt thì (tense) dựa vào time markers trong đoạn",
-      "Dành khoảng 2 phút/đoạn (8 phút tổng cho Part 6)",
+      "Read the ENTIRE passage first — context is extremely important",
+      "Sentence insertion questions: pay attention to linking words and logical flow",
+      "Distinguish tenses using time markers in the passage",
+      "Spend about 2 minutes per passage (8 minutes total for Part 6)",
     ],
     icon: <BookOpen className="h-5 w-5" />,
     color: "var(--secondary)",
@@ -61,12 +61,12 @@ const STRATEGIES: StrategyItem[] = [
     id: "part7",
     part: "Part 7",
     title: "Reading Comprehension",
-    description: "Đọc hiểu — single passage, double passage, triple passage. 54 câu hỏi.",
+    description: "Reading Comprehension — single, double, and triple passages. 54 questions.",
     tips: [
-      "ĐỌC CÂU HỎI TRƯỚC rồi mới đọc bài — tiết kiệm thời gian cực kỳ hiệu quả",
-      "Với double/triple passage: tìm mối liên hệ giữa các bài",
-      "Câu 'What is suggested/implied?' — tìm paraphrasing, không tìm exact words",
-      "Phân bổ thời gian: ~1 phút/câu cho Part 7, bắt đầu từ single passages",
+      "READ THE QUESTIONS FIRST before reading the passage — saves valuable time",
+      "For double/triple passages: find connection points between the passages",
+      "For 'What is suggested/implied?' questions: look for paraphrasing, not exact words",
+      "Time allocation: ~1 minute per question for Part 7, starting with single passages",
     ],
     icon: <Book className="h-5 w-5" />,
     color: "var(--info)",
@@ -77,7 +77,7 @@ const DRILLS: DrillOption[] = [
   {
     part: "Part 5",
     label: "Quick Drill · Part 5",
-    description: "30 câu Incomplete Sentences",
+    description: "30 Incomplete Sentences questions",
     questionCount: 10,
     estimatedMinutes: 5,
     href: "/toeic/practice",
@@ -85,7 +85,7 @@ const DRILLS: DrillOption[] = [
   {
     part: "Part 6",
     label: "Quick Drill · Part 6",
-    description: "4 đoạn Text Completion",
+    description: "4 Text Completion passages",
     questionCount: 16,
     estimatedMinutes: 8,
     href: "/toeic/practice",
@@ -101,7 +101,7 @@ const DRILLS: DrillOption[] = [
   {
     part: "Full",
     label: "Full Reading Test",
-    description: "Part 5 + 6 + 7 (75 phút)",
+    description: "Part 5 + 6 + 7 (75 minutes)",
     questionCount: 100,
     estimatedMinutes: 75,
     href: "/toeic/practice",
@@ -120,15 +120,15 @@ export function ReadingTab() {
         {[
           {
             key: "overview" as ReadingMode,
-            label: "Tổng quan",
+            label: "Overview",
             icon: <Book className="h-4 w-4" />,
           },
           {
             key: "strategy" as ReadingMode,
-            label: "Chiến lược",
+            label: "Strategy",
             icon: <Lightbulb className="h-4 w-4" />,
           },
-          { key: "drill" as ReadingMode, label: "Luyện tập", icon: <Rocket className="h-4 w-4" /> },
+          { key: "drill" as ReadingMode, label: "Practice", icon: <Rocket className="h-4 w-4" /> },
         ].map((m) => (
           <button
             key={m.key}
@@ -155,13 +155,13 @@ export function ReadingTab() {
               TOEIC Reading Section
             </h3>
             <p className="m-0 mb-3.5 text-xs text-text-secondary font-bold leading-relaxed">
-              75 phút · 100 câu hỏi · 3 phần (Part 5, 6, 7) · Tối đa 495 điểm
+              75 minutes · 100 questions · 3 parts (Part 5, 6, 7) · Max 495 points
             </p>
             <div className="flex gap-2.5 flex-wrap">
               {[
-                { part: "Part 5", q: "30 câu", desc: "Incomplete Sentences" },
-                { part: "Part 6", q: "16 câu", desc: "Text Completion" },
-                { part: "Part 7", q: "54 câu", desc: "Reading Comprehension" },
+                { part: "Part 5", q: "30 Qs", desc: "Incomplete Sentences" },
+                { part: "Part 6", q: "16 Qs", desc: "Text Completion" },
+                { part: "Part 7", q: "54 Qs", desc: "Reading Comprehension" },
               ].map((p) => (
                 <div
                   key={p.part}
@@ -184,8 +184,8 @@ export function ReadingTab() {
               className="rounded-2xl border-2 border-border bg-accent/5 p-5 text-left transition-all hover:scale-[1.01] hover:border-accent hover:bg-accent/10 duration-150 cursor-pointer shadow-xs"
             >
               <Lightbulb className="h-6 w-6 text-accent mb-2" />
-              <div className="text-sm font-bold text-ink">Chiến lược làm bài</div>
-              <div className="text-[11px] text-text-muted font-bold mt-1">Tips cho từng Part</div>
+              <div className="text-sm font-bold text-ink">Exam Strategies</div>
+              <div className="text-[11px] text-text-muted font-bold mt-1">Tips for each Part</div>
             </button>
             <button
               type="button"
@@ -195,7 +195,7 @@ export function ReadingTab() {
               <Rocket className="h-6 w-6 text-(--secondary) mb-2" />
               <div className="text-sm font-bold text-ink">Quick Drill</div>
               <div className="text-[11px] text-text-muted font-bold mt-1">
-                Luyện từng Part riêng
+                Practice individual parts
               </div>
             </button>
           </div>
@@ -207,9 +207,9 @@ export function ReadingTab() {
                 <Trophy className="h-5 w-5" />
               </div>
               <div className="flex-1">
-                <div className="text-sm font-bold text-ink">Luyện đề ETS chính hãng</div>
+                <div className="text-sm font-bold text-ink">Official ETS Practice</div>
                 <div className="text-xs text-text-muted font-bold mt-0.5">
-                  1,320 câu hỏi từ ETS 2020-2021
+                  1,320 questions from ETS 2020-2021
                 </div>
               </div>
               <ArrowRight className="h-4 w-4 text-text-muted transition-transform duration-200 group-hover:translate-x-1" />
@@ -223,7 +223,7 @@ export function ReadingTab() {
         <div className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
           <div className="text-[11px] font-extrabold uppercase tracking-wider text-accent mb-1 flex items-center gap-2">
             <div className="w-1 h-3.5 rounded bg-(--accent)" />
-            <span>Chiến lược từng phần</span>
+            <span>Section Strategies</span>
           </div>
 
           {STRATEGIES.map((s) => {
@@ -291,7 +291,7 @@ export function ReadingTab() {
         <div className="flex flex-col gap-3 animate-in fade-in slide-in-from-bottom-2 duration-200">
           <div className="text-[11px] font-extrabold uppercase tracking-wider text-accent mb-1 flex items-center gap-2">
             <div className="w-1 h-3.5 rounded bg-(--accent)" />
-            <span>Chọn bài luyện</span>
+            <span>Select Practice</span>
           </div>
 
           {DRILLS.map((d) => (
@@ -317,10 +317,10 @@ export function ReadingTab() {
                   </div>
                 </div>
                 <div className="text-right flex-shrink-0">
-                  <div className="text-xs font-bold text-(--accent)">{d.questionCount} câu</div>
+                  <div className="text-xs font-bold text-(--accent)">{d.questionCount} Qs</div>
                   <div className="text-[10px] text-text-muted font-bold flex items-center justify-end gap-1 mt-0.5">
                     <Clock className="h-3 w-3" />
-                    <span>{d.estimatedMinutes}p</span>
+                    <span>{d.estimatedMinutes}m</span>
                   </div>
                 </div>
               </div>

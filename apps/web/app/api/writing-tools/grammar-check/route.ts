@@ -8,7 +8,7 @@ import { GrammarCheckRequestSchema, GrammarCheckResponseSchema } from "@/lib/wri
 
 const log = routeLogger("writing-tools/grammar-check");
 
-const SYSTEM_PROMPT = `You are a professional English grammar checker for Vietnamese learners.
+const SYSTEM_PROMPT = `You are a professional English grammar checker.
 
 Analyze the given text and find ALL errors: grammar mistakes, spelling errors, and style issues.
 
@@ -18,8 +18,8 @@ For each error, provide:
 - type: "grammar", "spelling", or "style"
 - original: the exact erroneous text
 - correction: the corrected text
-- explanationVi: explanation in Vietnamese (clear, concise)
-- explanationEn: explanation in English
+- explanationVi: brief summary or note about the correction (in English)
+- explanationEn: detailed explanation in English
 - rule: the grammar rule name (e.g. "subject-verb agreement", "article usage", "word order")
 
 Also provide:
@@ -57,7 +57,7 @@ export async function POST(request: Request) {
   }
 
   if (isRateLimited(session.user.id)) {
-    return Response.json({ error: "Quá nhiều yêu cầu. Vui lòng đợi 1 phút." }, { status: 429 });
+    return Response.json({ error: "Too many requests. Please wait 1 minute." }, { status: 429 });
   }
 
   const body = await request.json();
@@ -103,7 +103,7 @@ export async function POST(request: Request) {
   }
 
   return Response.json(
-    { error: "Không thể kiểm tra ngữ pháp. Vui lòng thử lại." },
+    { error: "Unable to check grammar. Please try again." },
     { status: 502 },
   );
 }

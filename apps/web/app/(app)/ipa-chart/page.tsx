@@ -74,8 +74,8 @@ export default function IpaChartPage() {
         >
           {(
             [
-              { key: "consonants", label: "Phụ âm (Consonants)", count: CONSONANTS.length },
-              { key: "vowels", label: "Nguyên âm (Vowels)", count: VOWELS.length },
+              { key: "consonants", label: "Consonants", count: CONSONANTS.length },
+              { key: "vowels", label: "Vowels", count: VOWELS.length },
             ] as { key: TabKey; label: string; count: number }[]
           ).map(({ key, label, count }) => {
             const isActive = tab === key;
@@ -113,7 +113,7 @@ export default function IpaChartPage() {
         {/* Accent Picker */}
         <div className="flex items-center gap-2.5" style={{ marginLeft: "auto" }}>
           <span className="text-[11px] text-text-muted font-extrabold uppercase tracking-widest">
-            Giọng đọc mặc định
+            Default voice accent
           </span>
           <div
             className="flex bg-surface-alt border-2 border-border"
@@ -155,21 +155,21 @@ export default function IpaChartPage() {
       >
         {tab === "consonants" ? (
           <>
-            <LegendDot color="var(--success)" label="Hữu thanh (Voiced)" />
-            <LegendDot color="var(--warning)" label="Vô thanh (Voiceless)" />
+            <LegendDot color="var(--success)" label="Voiced" />
+            <LegendDot color="var(--warning)" label="Voiceless" />
           </>
         ) : (
           <>
-            <LegendDot color="var(--accent)" label="Nguyên âm ngắn (Short)" />
-            <LegendDot color="var(--info)" label="Nguyên âm dài (Long)" />
-            <LegendDot color="var(--tertiary, #8B5CF6)" label="Nguyên âm đôi (Diphthong)" />
+            <LegendDot color="var(--accent)" label="Short Vowels" />
+            <LegendDot color="var(--info)" label="Long Vowels" />
+            <LegendDot color="var(--tertiary, #8B5CF6)" label="Diphthongs" />
           </>
         )}
         <span
           className="text-text-muted font-semibold"
           style={{ fontSize: 11.5, marginLeft: "auto" }}
         >
-          💡 Nhấp vào mỗi âm vị bên dưới để nghe cách phát âm
+          💡 Click on each phoneme below to listen to its pronunciation
         </span>
       </div>
 
@@ -283,7 +283,7 @@ function SectionHeader({
           color: color,
         }}
       >
-        {count} âm
+        {count} phonemes
       </span>
       <div className="flex-1 h-[1px]" style={{ background: "var(--border)" }} />
     </div>

@@ -10,6 +10,11 @@ import {
   Redo,
   StopCircle,
   Volume2,
+  BookOpen,
+  Award,
+  Sparkles,
+  Lightbulb,
+  Headphones
 } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
@@ -69,12 +74,12 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
         setStep("ready-to-record");
       };
       audio.onerror = () => {
-        message.error("Lỗi phát audio");
+        message.error("Audio playback error");
         setStep("idle");
       };
       await audio.play();
     } catch {
-      message.error("Không thể phát câu mẫu");
+      message.error("Unable to play model sentence");
       setStep("idle");
     }
   }, [currentSentence, voiceRole, speed]);
@@ -95,7 +100,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
 
     const audioBlob = voice.blob;
     if (!audioBlob) {
-      message.error("Không có bản ghi âm");
+      message.error("No audio recording found");
       setStep("ready-to-record");
       return;
     }
@@ -114,7 +119,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: "Unknown" }));
         if (err.error === "no-speech") {
-          message.warning("Không nhận dạng được giọng nói. Hãy nói rõ hơn và thử lại.");
+          message.warning("Speech not recognized. Please speak clearly and try again.");
           setStep("ready-to-record");
           return;
         }
@@ -130,7 +135,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
       });
       setStep("result");
     } catch (err) {
-      message.error(err instanceof Error ? err.message : "Lỗi chấm điểm");
+      message.error(err instanceof Error ? err.message : "AI grading failed");
       setStep("ready-to-record");
     }
   }, [voice, currentSentence, currentIdx]);
@@ -155,15 +160,12 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
         className="bg-(--surface) rounded-(--radius-xl) border-2 border-border text-center"
         style={{ padding: "40px 24px" }}
       >
-        <div className="mb-4" style={{ fontSize: 48 }}>
-          🎙️
-        </div>
+        <div className="flex justify-center mb-4"><Mic size={48} className="text-accent" /></div>
         <Title level={4} className="mb-2 text-text-primary">
           Shadowing Mode
         </Title>
         <Text className="text-text-muted block w-[400px] mx-auto">
-          Hãy nhập hoặc chọn một đoạn văn ở tab &quot;Nghe&quot; trước, sau đó quay lại đây để luyện
-          đọc theo.
+          Please enter or select a passage in the "Listen" tab first, then return here to practice shadowing.
         </Text>
       </div>
     );
@@ -175,9 +177,9 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
       <div className="bg-(--surface) rounded-(--radius-xl) border-2 border-border py-4 px-5">
         <Flex justify="space-between" align="center" className="mb-2">
           <Text className="text-[13px] font-bold text-text-primary">
-            📖 Câu {currentIdx + 1} / {sentences.length}
+            <BookOpen size={14} className="text-accent inline-block mr-1" /> Sentence {currentIdx + 1} of {sentences.length}
           </Text>
-          <Text className="text-xs font-bold text-accent">{progress}% hoàn thành</Text>
+          <Text className="text-xs font-bold text-accent">{progress}% completed</Text>
         </Flex>
         <div
           className="h-[6px] overflow-hidden"
@@ -247,7 +249,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
         {/* Reference text */}
         <div>
           <Text className="text-[11px] font-bold text-text-muted uppercase tracking-wider mb-2 block">
-            🔊 Câu mẫu
+            Model Sentence
           </Text>
           <Text
             className="text-lg text-text-primary font-semibold block"
@@ -279,7 +281,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                   boxShadow: "0 4px 14px var(--accent-muted)",
                 }}
               >
-                <Volume2 /> Nghe câu mẫu
+                <Volume2 /> Listen to Model
               </m.button>
             </m.div>
           )}
@@ -301,7 +303,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                   style={{ background: "var(--accent)" }}
                 />
                 <Text className="text-sm font-bold text-accent">
-                  Đang phát câu mẫu... Hãy lắng nghe kỹ
+                  Playing model sentence... Listen carefully
                 </Text>
               </Flex>
             </m.div>
@@ -322,7 +324,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                   className="flex items-center justify-center gap-1.5 py-3 px-4 rounded-xl border-2 border-border bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body"
                   style={{ flex: "0 0 auto" }}
                 >
-                  <PlayCircle /> Nghe lại
+                  <PlayCircle size={13} /> Listen Again
                 </m.button>
                 <m.button
                   whileHover={{ scale: 1.02 }}
@@ -337,7 +339,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                     boxShadow: "0 4px 14px rgba(239, 68, 68, 0.3)",
                   }}
                 >
-                  <Mic /> 🎙️ Đọc theo
+                  <Mic size={14} /> Speak Now
                 </m.button>
               </Flex>
             </m.div>
@@ -359,7 +361,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                     style={{ background: "var(--error)" }}
                   />
                   <Text className="text-sm font-bold text-destructive">
-                    Đang ghi âm... Hãy đọc câu ở trên
+                    Recording... Read the sentence above
                   </Text>
                 </Flex>
                 <m.button
@@ -373,7 +375,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                     background: "rgba(239, 68, 68, 0.08)",
                   }}
                 >
-                  <StopCircle /> Dừng & chấm điểm
+                  <StopCircle size={13} /> Stop & Grade
                 </m.button>
               </Flex>
             </m.div>
@@ -389,7 +391,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
               style={{ padding: "16px 0" }}
             >
               <Loader2 className="animate-spin text-accent" size={24} />
-              <div className="text-sm font-bold text-accent">🤖 AI đang chấm điểm phát âm...</div>
+              <div className="text-sm font-bold text-accent flex items-center justify-center gap-1.5"><Loader2 className="animate-spin" size={14} /> AI is grading your pronunciation...</div>
             </m.div>
           )}
         </AnimatePresence>
@@ -414,7 +416,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                 onClick={retry}
                 className="flex-1 flex items-center justify-center gap-2 py-3 px-4 rounded-xl border-2 border-border bg-(--surface) text-text-primary text-sm font-bold cursor-pointer font-body"
               >
-                <Redo /> Thử lại
+                <Redo size={13} /> Retry
               </m.button>
               {currentIdx < sentences.length - 1 && (
                 <m.button
@@ -428,7 +430,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                     boxShadow: "0 4px 14px var(--accent-muted)",
                   }}
                 >
-                  Câu tiếp theo <ChevronRight />
+                  Next Sentence <ChevronRight />
                 </m.button>
               )}
             </Flex>
@@ -449,14 +451,12 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
             padding: "24px 20px",
           }}
         >
-          <div className="mb-2" style={{ fontSize: 40 }}>
-            🎉
-          </div>
+          <div className="flex justify-center mb-2"><Award size={40} className="text-accent" /></div>
           <Title level={4} className="mb-2 text-accent">
-            Hoàn thành!
+            Completed!
           </Title>
           <Text className="text-sm text-text-secondary block mb-3">
-            Điểm trung bình:{" "}
+            Average Score:{" "}
             <strong className="text-accent text-lg">
               {Math.round(
                 sentenceResults.reduce((sum, r) => sum + (r?.overall ?? 0), 0) /
@@ -481,7 +481,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
               background: "var(--accent-light)",
             }}
           >
-            🔄 Luyện lại từ đầu
+            Practice Again
           </m.button>
         </m.div>
       )}

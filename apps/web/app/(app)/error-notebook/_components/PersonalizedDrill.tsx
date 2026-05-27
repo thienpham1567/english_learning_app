@@ -79,18 +79,18 @@ export function PersonalizedDrill() {
         <div className="flex items-center gap-2.5 mb-2.5">
           <Zap className="h-4 w-4 text-accent" />
           <span className="text-[15px] font-bold text-ink font-display">
-            AI Drill — Luyện điểm yếu
+            AI Drill — Target Weaknesses
           </span>
         </div>
         <p className="text-[13px] text-text-secondary m-0 mb-3.5 leading-relaxed">
-          AI sẽ phân tích lỗi sai của bạn và tạo bài tập tập trung vào những điểm yếu nhất.
+          AI will analyze your errors and generate exercises focusing on your weakest areas.
         </p>
         <button
           type="button"
           onClick={generateDrill}
           className="inline-flex items-center gap-2 px-5.5 py-2.5 rounded-xl border-none bg-accent text-(--text-on-accent) cursor-pointer text-sm font-bold transition-opacity duration-200 hover:opacity-90"
         >
-          <Zap className="h-4 w-4" /> Tạo bài luyện tập
+          <Zap className="h-4 w-4" /> Generate Practice Session
         </button>
       </m.div>
     );
@@ -101,8 +101,8 @@ export function PersonalizedDrill() {
     return (
       <div className="py-8 px-5 rounded-2xl bg-surface border-2 border-border text-center">
         <Loader2 className="h-7 w-7 text-accent animate-mx-auto mb-3" />
-        <div className="text-sm font-semibold text-text-primary">Đang phân tích lỗi sai...</div>
-        <div className="text-xs text-text-muted mt-1">AI đang tạo bài tập cá nhân hóa cho bạn</div>
+        <div className="text-sm font-semibold text-text-primary">Analyzing errors...</div>
+        <div className="text-xs text-text-muted mt-1">AI is generating a personalized practice session for you</div>
       </div>
     );
   }
@@ -127,18 +127,18 @@ export function PersonalizedDrill() {
         </div>
         <div className="text-sm text-text-secondary mb-1">
           {pct >= 80
-            ? "Xuất sắc! Bạn đã cải thiện rõ rệt!"
+            ? "Excellent! You have made significant progress!"
             : pct >= 50
-              ? "Khá tốt! Tiếp tục ôn tập nhé."
-              : "Cần ôn thêm. Đừng bỏ cuộc!"}
+              ? "Good job! Keep reviewing to improve."
+              : "Keep practicing. Don't give up!"}
         </div>
-        <div className="text-xs text-text-muted mb-4">Chính xác {pct}%</div>
+        <div className="text-xs text-text-muted mb-4">Accuracy: {pct}%</div>
         <button
           type="button"
           onClick={generateDrill}
           className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-[1.5px] border-accent bg-accent text-(--text-on-accent) cursor-pointer text-[13px] font-bold"
         >
-          <RefreshCw className="h-3.5 w-3.5" /> Tạo drill mới
+          <RefreshCw className="h-3.5 w-3.5" /> Generate New Drill
         </button>
       </m.div>
     );
@@ -164,7 +164,7 @@ export function PersonalizedDrill() {
         <div className="flex items-center gap-2">
           <Zap className="h-3.5 w-3.5 text-accent" />
           <span className="text-[13px] font-bold text-ink">
-            Câu {currentIndex + 1}/{drill.exercises.length}
+            Question {currentIndex + 1}/{drill.exercises.length}
           </span>
         </div>
         <span className="text-[10px] font-semibold px-2.5 py-1 rounded-full bg-accent/10 text-accent">
@@ -271,7 +271,7 @@ export function PersonalizedDrill() {
               onClick={handleNext}
               className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-none bg-accent text-(--text-on-accent) cursor-pointer text-[13px] font-bold"
             >
-              {currentIndex < drill.exercises.length - 1 ? "Câu tiếp →" : "Xem kết quả"}
+              {currentIndex < drill.exercises.length - 1 ? "Next Question →" : "See Results"}
             </button>
           </m.div>
         )}

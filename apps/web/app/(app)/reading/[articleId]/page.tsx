@@ -173,7 +173,7 @@ export default function ArticleReaderPage() {
       <div className="flex flex-col h-full items-center justify-center gap-4">
         <Loader2 className="animate-spin text-accent" size={32} />
         <span className="text-text-secondary font-bold" style={{ fontSize: 13.5 }}>
-          Đang tải nội dung bài báo...
+          Loading article content...
         </span>
       </div>
     );
@@ -183,7 +183,7 @@ export default function ArticleReaderPage() {
     return (
       <div className="flex flex-col h-full items-center justify-center gap-4 p-8">
         <span className="text-base font-extrabold text-text-secondary">
-          Không tìm thấy bài viết yêu cầu.
+          Requested article not found.
         </span>
         <m.button
           onClick={() => router.push("/reading")}
@@ -196,7 +196,7 @@ export default function ArticleReaderPage() {
             color: "var(--text-on-accent)",
           }}
         >
-          Quay lại danh sách
+          Back to list
         </m.button>
       </div>
     );
@@ -246,7 +246,7 @@ export default function ArticleReaderPage() {
               style={{ display: "inline-flex", fontSize: 12.5 }}
             >
               <ArrowLeft />
-              <span>Quay lại</span>
+              <span>Back</span>
             </m.button>
 
             <span
@@ -291,7 +291,7 @@ export default function ArticleReaderPage() {
                 style={{ display: "inline-flex", fontSize: 12.5 }}
               >
                 <Clock />
-                <span>{article.readTime} phút đọc</span>
+                <span>{article.readTime} min read</span>
               </div>
               <span style={{ color: "var(--border-strong)" }}>|</span>
               <span
@@ -303,7 +303,7 @@ export default function ArticleReaderPage() {
                   border: `1.5px solid ${diffStyle.border}`,
                 }}
               >
-                Trình độ: {article.difficulty}
+                Level: {article.difficulty}
               </span>
 
               <div style={{ marginLeft: "auto" }}>
@@ -371,7 +371,7 @@ export default function ArticleReaderPage() {
                     }}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    title="Phân tích ngữ pháp"
+                    title="Analyze grammar"
                     className="w-[26px] h-[26px] rounded-full border-2 border-border flex items-center justify-center"
                     style={{
                       background: grammarResults[idx]?.length
@@ -395,7 +395,7 @@ export default function ArticleReaderPage() {
                     onClick={() => handleSpeakParagraph(idx, para)}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    title="Nghe đoạn này"
+                    title="Listen to this paragraph"
                     className="w-[26px] h-[26px] rounded-full border-2 border-border flex items-center justify-center"
                     style={{
                       background:
@@ -444,13 +444,13 @@ export default function ArticleReaderPage() {
                 >
                   <Lightbulb size={16} />
                   <span className="font-black" style={{ fontSize: 14.5 }}>
-                    Phân tích ngữ pháp của đoạn văn
+                    Grammar Analysis
                   </span>
                   <span
                     className="rounded-xl text-[10.5px] font-extrabold"
                     style={{ background: "rgba(255,255,255,0.2)", padding: "2px 8px" }}
                   >
-                    {grammarResults[grammarPopup].length} cấu trúc
+                    {grammarResults[grammarPopup].length} patterns
                   </span>
                 </div>
 

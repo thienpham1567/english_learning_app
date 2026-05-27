@@ -29,7 +29,7 @@ export function QuestionCards({
         className="text-[13px] font-semibold text-text-muted uppercase"
         style={{ letterSpacing: 1 }}
       >
-        <ClipboardList style={{ marginRight: 6 }} /> Câu hỏi ({questions.length})
+        <ClipboardList style={{ marginRight: 6 }} /> Questions ({questions.length})
       </div>
 
       {questions.map((q, qi) => (
@@ -93,7 +93,7 @@ export function QuestionCards({
         }}
       >
         {isSubmitting ? <Loader2 className="animate-spin" /> : <Send />}
-        {isSubmitting ? "Đang chấm điểm..." : "Nộp bài"}
+        {isSubmitting ? "Scoring..." : "Submit Answers"}
       </button>
     </div>
   );

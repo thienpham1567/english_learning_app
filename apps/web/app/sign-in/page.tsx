@@ -4,6 +4,7 @@ import { Bot, CheckCircle, ShieldCheck, Star, TrendingUp, Trophy, Zap } from "lu
 import * as m from "motion/react-client";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
+import { LogoMark } from "@/components/shared/Logo";
 import { authClient } from "@/lib/auth-client";
 
 /* ── Shared animation variants ── */
@@ -79,7 +80,7 @@ function DashboardMockup() {
           <div className="flex items-center gap-1.5 mb-1">
             <Trophy className="text-sm text-accent" />
             <span className="text-[11px] font-bold tracking-wider uppercase text-(--mockup-text-muted)">
-              Mục tiêu thi
+              TARGET SCORE
             </span>
           </div>
           <div className="text-lg font-extrabold font-display text-(--mockup-text)">
@@ -87,7 +88,7 @@ function DashboardMockup() {
           </div>
           <div className="text-xs mt-1 flex items-center gap-1 text-(--mockup-text-muted-dark)">
             <TrendingUp className="text-(--success)" />
-            <span className="font-semibold text-(--success)">+125 Điểm</span> so với tuần trước
+            <span className="font-semibold text-(--success)">+125 Points</span> compared to last week
           </div>
         </div>
       </m.div>
@@ -105,9 +106,9 @@ function DashboardMockup() {
       >
         <div className="flex justify-between items-center mb-3">
           <span className="text-xs font-bold tracking-wider text-(--mockup-text-muted)">
-            TẦN SUẤT HỌC TẬP
+            LEARNING FREQUENCY
           </span>
-          <span className="text-[11px] font-bold text-accent">24 NGÀY LIÊN TỤC 🔥</span>
+          <span className="text-[11px] font-bold text-accent">24-DAY STREAK 🔥</span>
         </div>
         <div className="grid grid-cols-7 gap-2">
           {days.map((day, idx) => (
@@ -146,9 +147,9 @@ function DashboardMockup() {
           <Bot />
         </div>
         <div>
-          <div className="text-xs font-bold text-(--mockup-text)">AI Phản Hồi Phát Âm</div>
+          <div className="text-xs font-bold text-(--mockup-text)">AI Pronunciation Feedback</div>
           <div className="text-[11px] text-(--mockup-text-muted) mt-0.5">
-            Phát âm từ &quot;negotiation&quot; đã cải thiện vượt bậc! Đạt 94% chuẩn Mỹ.
+            Pronunciation of &quot;negotiation&quot; improved dramatically! Reached 94% native accuracy.
           </div>
         </div>
       </m.div>
@@ -161,7 +162,7 @@ function SignInContent() {
   const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(
-    searchParams.get("error") ? "Đăng nhập thất bại. Vui lòng thử lại." : null,
+    searchParams.get("error") ? "Login failed. Please try again." : null,
   );
 
   const handleGoogleSignIn = async () => {
@@ -173,7 +174,7 @@ function SignInContent() {
         callbackURL: "/dashboard",
       });
     } catch {
-      setError("Không thể kết nối đến Google. Vui lòng thử lại.");
+      setError("Unable to connect to Google. Please try again.");
       setIsLoading(false);
     }
   };
@@ -193,62 +194,23 @@ function SignInContent() {
           whileHover={{
             scale: 1.05,
             rotate: -3,
-            boxShadow: "var(--shadow-md)",
+            boxShadow: "3px 3px 0 var(--ink)",
             y: -1,
             x: -1,
           }}
           whileTap={{
             scale: 0.98,
-            boxShadow: "1px 1px 0 var(--border)",
+            boxShadow: "1px 1px 0 var(--ink)",
             y: 1,
             x: 1,
           }}
           transition={{ type: "spring", stiffness: 400 }}
-          className="w-[46px] h-[46px] shrink-0 grid place-items-center rounded-(--radius) border-2 border-border bg-accent text-(--text-on-accent) shadow-(--shadow-sm) cursor-pointer transition-all duration-150"
+          className="w-[46px] h-[46px] shrink-0 grid place-items-center rounded-lg border-2 border-ink bg-accent text-ink shadow-[3px_3px_0px_var(--ink)] cursor-pointer transition-all duration-150"
         >
-          <svg
-            width="24"
-            height="24"
-            viewBox="0 0 32 32"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
-            <path
-              d="M16 8C12.5 6.5 8.5 6 4 7v17c4.5-1 8.5-0.5 12 1"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
-            />
-            <path
-              d="M16 8c3.5-1.5 7.5-2 12-1v17c-4.5-1-8.5-0.5-12 1"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              fill="none"
-            />
-            <path
-              d="M16 8v17"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              opacity="0.4"
-            />
-            <circle cx="16" cy="4" r="1.8" fill="currentColor" opacity="0.9" />
-            <path
-              d="M16 7V5.5"
-              stroke="currentColor"
-              strokeWidth="1.2"
-              strokeLinecap="round"
-              opacity="0.5"
-            />
-          </svg>
+          <LogoMark size={24} />
         </m.div>
         <div>
-          <div className="text-2xl font-black text-ink font-display leading-[1.1] tracking-[-0.03em]">
+          <div className="text-2xl font-black text-ink font-display leading-[1.1] tracking-[-0.03em] uppercase">
             TOEIC<span className="text-accent"> Master</span>
           </div>
           <div className="text-[10px] font-bold uppercase text-text-muted tracking-[0.15em] mt-0.5">
@@ -262,10 +224,10 @@ function SignInContent() {
         variants={fadeUp}
         className="mb-2.5 text-4xl font-extrabold font-display text-ink leading-[1.2] tracking-[-0.03em]"
       >
-        Bắt đầu học ngay
+        Start Learning Now
       </m.h1>
       <m.p variants={fadeUp} className="text-sm text-text-muted leading-normal font-medium mb-8">
-        Đăng nhập nhanh để lưu tiến độ học tập và nhận phân tích sửa lỗi từ Trợ lý AI.
+        Log in quickly to save your learning progress and receive error feedback from our AI Assistant.
       </m.p>
 
       {/* Google button */}
@@ -289,12 +251,12 @@ function SignInContent() {
                   strokeLinecap="round"
                 />
               </svg>
-              Đang kết nối...
+              Connecting...
             </span>
           ) : (
             <>
               <GoogleIcon />
-              Tiếp tục bằng Google
+              Continue with Google
             </>
           )}
         </m.button>
@@ -308,19 +270,19 @@ function SignInContent() {
         <div className="flex items-center gap-2.5">
           <CheckCircle className="text-(--success) text-[13px]" />
           <span className="text-[13px] text-text-secondary font-extrabold">
-            ETS 2024 & Kho đề cập nhật liên tục
+            ETS 2024 & Continuously Updated Question Bank
           </span>
         </div>
         <div className="flex items-center gap-2.5">
           <Zap className="text-accent text-[13px]" />
           <span className="text-[13px] text-text-secondary font-extrabold">
-            Phân tích sửa lỗi & gợi ý bằng AI
+            AI-Powered Error Analysis & Suggestions
           </span>
         </div>
         <div className="flex items-center gap-2.5 mt-1 pt-3 border-t-2 border-dashed border-border">
           <ShieldCheck className="text-[13px] text-text-muted" />
           <span className="text-[11px] text-text-muted font-bold">
-            Hệ thống bảo mật & riêng tư tối đa
+            Maximum System Security & Privacy
           </span>
         </div>
       </m.div>
@@ -370,12 +332,12 @@ export default function SignInPage() {
             variants={fadeUp}
             className="m-0 font-black font-display text-[52px] leading-[1.15] tracking-[-0.04em] text-(--mockup-text)"
           >
-            Chinh Phục
+            Conquer
             <br />
-            Điểm Số
+            Your Goal
             <br />
             <span className="bg-gradient-to-r from-accent to-accent bg-clip-text text-transparent drop-shadow-[0_4px_12px_rgba(var(--accent-rgb),0.25)]">
-              TOEIC 4 Kỹ Năng
+              TOEIC 4 Skills
             </span>
           </m.h2>
 
@@ -385,16 +347,15 @@ export default function SignInPage() {
             variants={fadeUp}
             className="text-base max-w-[365px] font-normal mb-12 leading-[1.8] text-(--mockup-text-muted)"
           >
-            Hệ thống học tập thông minh tích hợp trợ lý AI để thông dịch, chỉnh phát âm và chấm bài
-            viết chuẩn đề thi ETS mới nhất.
+            Smart learning system integrated with AI assistants for real-time translation, pronunciation grading, and essay scoring aligned with the latest ETS guidelines.
           </m.p>
 
           {/* Stats Metrics */}
           <m.div variants={fadeUp} className="flex gap-10">
             {[
-              { value: "10K+", label: "Học Viên" },
-              { value: "990", label: "Điểm Tối Đa" },
-              { value: "4.9★", label: "Đánh Giá" },
+              { value: "10K+", label: "Students" },
+              { value: "990", label: "Max Score" },
+              { value: "4.9★", label: "Reviews" },
             ].map((s) => (
               <div key={s.label}>
                 <div className="text-[28px] font-extrabold font-display leading-none text-(--mockup-text)">
@@ -421,7 +382,7 @@ export default function SignInPage() {
         <div className="w-full max-w-[440px] bg-(--surface) border-2 border-border rounded-xl p-[48px_40px] shadow-(--shadow-lg) relative z-10">
           <Suspense
             fallback={
-              <div className="text-text-muted p-6 text-center">Đang tải form đăng nhập…</div>
+              <div className="text-text-muted p-6 text-center">Loading login form...</div>
             }
           >
             <SignInContent />

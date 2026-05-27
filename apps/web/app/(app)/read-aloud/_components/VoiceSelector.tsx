@@ -1,7 +1,7 @@
 "use client";
 
 import { Flex, Tooltip, Typography } from "antd";
-import { Info, User } from "lucide-react";
+import { Info, User, Volume2 } from "lucide-react";
 import * as m from "motion/react-client";
 import { VOICES, type VoiceOption } from "../_data/voices";
 
@@ -21,8 +21,15 @@ export function VoiceSelector({ selectedRole, onSelectRole }: VoiceSelectorProps
       className="read-aloud-panel bg-(--surface) rounded-(--radius-xl) border-2 border-border flex flex-col"
       style={{ padding: "var(--space-5)", boxShadow: "var(--shadow-md)", gap: "var(--space-4)" }}
     >
-      <Text className="text-xs font-bold text-text-muted uppercase tracking-widest block">
-        🗣️ Chọn giọng đọc
+      <Text className="text-xs font-bold text-text-muted uppercase tracking-widest flex items-center gap-1.5">
+        <m.span
+          animate={{ scale: [1, 1.15, 1] }}
+          transition={{ repeat: Infinity, duration: 2, repeatDelay: 3 }}
+          style={{ display: "inline-flex", color: "var(--accent)" }}
+        >
+          <Volume2 size={13} />
+        </m.span>
+        Select Voice
       </Text>
 
       <div className="voice-grid">
@@ -93,7 +100,7 @@ function VoiceCard({
             }}
           >
             {v.gender === "m" ? <User /> : <User />}
-            {v.gender === "m" ? "Nam" : "Nữ"}
+            {v.gender === "m" ? "Male" : "Female"}
           </span>
         </Flex>
         <Text
@@ -105,7 +112,7 @@ function VoiceCard({
             textOverflow: "ellipsis",
           }}
         >
-          Giọng {v.accentLabel} • {v.label}
+          {v.accentLabel} • {v.label}
         </Text>
       </div>
 

@@ -25,12 +25,12 @@ export default function ToeicError({
       >
         <AlertTriangle className="text-3xl text-destructive" />
       </div>
-      <h3 className="mb-2 text-lg font-bold text-ink font-display">Không thể tải trang</h3>
+      <h3 className="mb-2 text-lg font-bold text-ink font-display">Unable to load page</h3>
       <p
         className="text-[13px] text-text-muted w-[400px] leading-relaxed"
         style={{ margin: "0 0 20px" }}
       >
-        Có lỗi xảy ra khi tải dữ liệu. Hãy thử lại.
+        An error occurred while loading data. Please try again.
       </p>
       <button
         type="button"
@@ -42,7 +42,7 @@ export default function ToeicError({
           color: "var(--text-on-accent)",
         }}
       >
-        <RefreshCw /> Thử lại
+        <RefreshCw /> Retry
       </button>
     </div>
   );

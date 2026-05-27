@@ -35,9 +35,9 @@ export function TextInputPanel({
     try {
       const clipboard = await navigator.clipboard.readText();
       onTextChange(clipboard);
-      message.success("Đã dán từ clipboard!");
+      message.success("Pasted from clipboard!");
     } catch {
-      message.error("Không thể truy cập clipboard");
+      message.error("Failed to access clipboard");
     }
   };
 
@@ -53,17 +53,17 @@ export function TextInputPanel({
       <Flex align="center" justify="space-between">
         <Text className="text-sm font-bold text-text-primary flex items-center gap-1.5">
           <FileText className="text-accent" />
-          Nhập văn bản tiếng Anh
+          English Passage Input
         </Text>
         <Flex gap={8} className="read-aloud-text-actions">
           <ToolButton
             icon={<History />}
-            label={`Lịch sử (${historyCount})`}
+            label={`History (${historyCount})`}
             onClick={onToggleHistory}
             active={showHistory}
           />
-          <ToolButton icon={<Copy />} label="Dán văn bản" onClick={handlePaste} />
-          <ToolButton icon={<Trash2 />} label="Xóa hết" onClick={onClear} danger />
+          <ToolButton icon={<Copy />} label="Paste" onClick={handlePaste} />
+          <ToolButton icon={<Trash2 />} label="Clear All" onClick={onClear} danger />
         </Flex>
       </Flex>
 
@@ -73,7 +73,7 @@ export function TextInputPanel({
           value={text}
           onChange={(e) => onTextChange(e.target.value)}
           placeholder={
-            "Dán hoặc nhập một đoạn văn tiếng Anh vào đây để nghe đọc thử...\n\nNhấp vào các văn bản mẫu bên dưới để thử nhanh."
+            "Paste or enter an English passage here to listen...\n\nClick on sample passages below for a quick start."
           }
           maxLength={MAX_CHARS}
           className="read-aloud-textarea w-full h-[320px] text-base font-body"
@@ -94,9 +94,9 @@ export function TextInputPanel({
         style={{ padding: "0 4px" }}
       >
         <Flex gap={16}>
-          <Stat label="Số từ" value={wordCount.toLocaleString()} />
+          <Stat label="Words" value={wordCount.toLocaleString()} />
           <Stat
-            label="Ký tự"
+            label="Characters"
             value={`${charCount.toLocaleString()} / ${MAX_CHARS.toLocaleString()}`}
           />
         </Flex>
@@ -109,7 +109,7 @@ export function TextInputPanel({
           >
             <Timer className="text-xs text-accent" />
             <Text className="text-xs text-accent font-semibold">
-              Thời gian nghe ước tính: ~{estimatedMinutes} phút
+              Estimated duration: ~{estimatedMinutes} min
             </Text>
           </Flex>
         )}

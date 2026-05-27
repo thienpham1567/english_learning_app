@@ -1,6 +1,6 @@
 "use client";
 
-import { CheckCircle, Filter, Loader2, Search } from "lucide-react";
+import { CheckCircle, Filter, Inbox, Loader2, Search, Sparkles } from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useEffect, useState } from "react";
 import { useErrorList } from "../_hooks/useErrorList";
@@ -59,7 +59,7 @@ export function ListTab() {
               type="text"
               value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
-              placeholder="Tìm kiếm câu hỏi..."
+              placeholder="Search questions..."
               className="flex-1 border-none bg-transparent text-sm text-text-primary outline-none font-body placeholder:text-text-muted"
             />
             {searchInput && (
@@ -121,7 +121,7 @@ export function ListTab() {
                     : "bg-surface text-text-secondary"
                 }`}
               >
-                <option value="">Chủ đề</option>
+                <option value="">Topic</option>
                 {list.topics.map((t) => (
                   <option key={t} value={t}>
                     {t}
@@ -131,7 +131,7 @@ export function ListTab() {
             )}
 
             <span className="ml-auto text-xs font-extrabold text-text-muted tabular-nums">
-              {list.total} kết quả
+              {list.total} results
             </span>
           </div>
         </div>
@@ -145,7 +145,7 @@ export function ListTab() {
               onClick={list.resolveAll}
               className="inline-flex items-center gap-1.5 px-4 py-2 rounded-full border-[1.5px] border-emerald-500/35 bg-(--success-bg) text-(--success) text-xs font-bold cursor-pointer font-body"
             >
-              <CheckCircle className="h-3.5 w-3.5" /> Đánh dấu tất cả đã hiểu
+              <CheckCircle className="h-3.5 w-3.5" /> Mark all as resolved
             </m.button>
           </div>
         )}
@@ -154,7 +154,7 @@ export function ListTab() {
         {list.loading ? (
           <div className="py-10 text-center">
             <Loader2 className="h-6 w-6 text-accent animate-mx-auto mb-2" />
-            <div className="text-[13px] text-text-muted">Đang tải...</div>
+            <div className="text-[13px] text-text-muted">Loading...</div>
           </div>
         ) : list.errors.length === 0 ? (
           <m.div
@@ -162,18 +162,22 @@ export function ListTab() {
             animate={{ opacity: 1, y: 0 }}
             className="py-16 px-6 text-center bg-surface rounded-xl border-2 border-border"
           >
-            <div className="text-[44px] mb-3">
-              {list.filters.resolved === "false" ? "🎉" : "📭"}
+            <div className="flex justify-center mb-3">
+              {list.filters.resolved === "false" ? (
+                <Sparkles className="h-10 w-10 text-emerald-450 animate-pulse" />
+              ) : (
+                <Inbox className="h-10 w-10 text-text-muted" />
+              )}
             </div>
             <span className="text-base font-extrabold text-text-primary block mb-1.5">
               {list.filters.resolved === "false"
-                ? "Không còn lỗi sai chưa nắm!"
-                : "Không tìm thấy kết quả"}
+                ? "No unresolved errors!"
+                : "No results found"}
             </span>
             <span className="text-[13px] text-text-muted">
               {list.filters.resolved === "false"
-                ? "Hãy tiếp tục phát huy nhé! 💪"
-                : "Hãy thử thay đổi bộ lọc."}
+                ? "Keep up the great work!"
+                : "Try changing your filters."}
             </span>
           </m.div>
         ) : (
@@ -198,10 +202,10 @@ export function ListTab() {
               >
                 {list.loadingMore ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-inline mr-1.5" /> Đang tải...
+                    <Loader2 className="h-4 w-4 animate-spin mr-1.5 inline" /> Loading...
                   </>
                 ) : (
-                  "Tải thêm"
+                  "Load More"
                 )}
               </m.button>
             )}

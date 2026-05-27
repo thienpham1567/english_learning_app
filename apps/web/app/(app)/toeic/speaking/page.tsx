@@ -36,27 +36,27 @@ export default async function ToeicSpeakingPage() {
             <Card hoverable>
               <div className="flex items-center gap-2">
                 <Mic className="text-3xl text-accent" />
-                <strong className="text-lg text-ink">Bắt đầu Speaking test</strong>
+                <strong className="text-lg text-ink">Start Speaking Test</strong>
               </div>
               <div className="text-text-muted mt-1.5 text-[13px]">
-                Q1-2 đọc to · Q3-4 mô tả ảnh · Q5-7 trả lời câu hỏi · Q8-10 đọc context + trả lời ·
-                Q11 opinion
+                Q1-2 Read Aloud · Q3-4 Describe a Picture · Q5-7 Respond to Questions · Q8-10 Respond using Information ·
+                Q11 Opinion
               </div>
               <div className="mt-2">
-                <Tag color="orange">Cần microphone permission</Tag>
+                <Tag color="orange">Requires microphone permission</Tag>
                 <Tag color="green">Whisper STT + Gemini grading</Tag>
               </div>
             </Card>
           </Link>
         ) : (
           <Card>
-            <Empty description="Chưa có prompt. Chạy `pnpm seed:toeic-speaking`" />
+            <Empty description="No prompts available. Run `pnpm seed:toeic-speaking`" />
           </Card>
         )}
 
-        <Card title="Lịch sử Speaking test" size="small">
+        <Card title="Speaking Test History" size="small">
           {history.length === 0 ? (
-            <Empty description="Chưa có session nào" />
+            <Empty description="No test sessions recorded yet" />
           ) : (
             <div className="grid gap-2">
               {history.map((h) => (
@@ -71,7 +71,7 @@ export default async function ToeicSpeakingPage() {
                   }}
                 >
                   <span>
-                    {new Date(h.completedAt!).toLocaleString("vi-VN")} · {h.setCode}
+                    {new Date(h.completedAt!).toLocaleString("en-US")} · {h.setCode}
                   </span>
                   <span className="text-lg font-bold">{h.scaledScore ?? "—"} / 200</span>
                 </Link>

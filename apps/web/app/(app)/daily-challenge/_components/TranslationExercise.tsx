@@ -20,10 +20,10 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
     <div>
       {/* Instruction */}
       <p
-        className="text-[11px] font-extrabold text-accent uppercase tracking-widest"
+        className="text-[11px] font-extrabold text-accent uppercase tracking-widest flex items-center gap-1.5"
         style={{ marginBottom: 14 }}
       >
-        ✍️ {instruction}
+        <Languages size={12} /> {instruction}
       </p>
 
       {/* Vietnamese source — quote block style */}
@@ -32,7 +32,7 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
         style={{ borderLeft: "4px solid var(--accent)", boxShadow: "var(--shadow-sm)" }}
       >
         <span className="text-[10px] font-extrabold uppercase tracking-widest text-accent flex items-center gap-1.5 mb-2">
-          <Languages size={11} /> Bản gốc tiếng Việt
+          <Languages size={11} /> Vietnamese Source Text
         </span>
         <p className="m-0 text-base text-text-primary font-semibold" style={{ lineHeight: 1.7 }}>
           {data.vietnamese}
@@ -42,14 +42,14 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
       {/* English input */}
       <label
         htmlFor="translation-input"
-        className="block text-[11px] font-extrabold uppercase tracking-widest text-text-muted mb-2"
+        className="block text-[11px] font-extrabold uppercase tracking-widest text-text-muted mb-2 flex items-center gap-1.5"
       >
-        <Languages size={11} /> Bản dịch tiếng Anh của bạn
+        <Languages size={11} /> Your English Translation
       </label>
       <textarea
         id="translation-input"
         rows={3}
-        placeholder="Nhập bản dịch tiếng Anh của bạn tại đây..."
+        placeholder="Type your English translation here..."
         value={text}
         onChange={(e) => setText(e.target.value)}
         disabled={disabled}
@@ -73,14 +73,14 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
       />
       {text.trim().length > 0 && (
         <div className="text-[11px] text-text-muted text-right mt-1.5 mb-3 font-medium">
-          Nhấn{" "}
+          Press{" "}
           <kbd
             className="rounded font-mono text-[10px]"
             style={{ background: "var(--border)", padding: "2px 6px" }}
           >
             Ctrl + Enter
           </kbd>{" "}
-          để xác nhận nhanh
+          to quickly confirm
         </div>
       )}
 
@@ -90,7 +90,7 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
           whileHover={{ scale: 1.02, y: -1 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => onAnswer(text.trim())}
-          className="w-full rounded-(--radius-lg) text-[15px] font-extrabold border-none cursor-pointer mt-2.5"
+          className="w-full rounded-(--radius-lg) text-[15px] font-extrabold border-none cursor-pointer mt-2.5 flex items-center justify-center gap-1.5"
           style={{
             background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
             padding: "14px 0",
@@ -98,7 +98,7 @@ export function TranslationExercise({ data, instruction, onAnswer, disabled }: P
             boxShadow: "0 6px 18px var(--accent-muted)",
           }}
         >
-          <Check size={12} /> Xác nhận đáp án
+          <Check size={12} /> Confirm Answer
         </m.button>
       )}
     </div>

@@ -39,11 +39,11 @@ export function DialogueGenerator({ onStart, isLoading }: Props) {
         <div className="text-base font-bold text-text-primary">Multi-speaker dialogue</div>
       </div>
       <div className="text-sm text-text-muted mb-4 font-medium">
-        Luyện nghe hội thoại 2–3 giọng với các giọng Mỹ, Anh, Úc.
+        Practice dialogue listening with 2–3 speakers featuring US, UK, and AU accents.
       </div>
 
       <Input
-        placeholder="Chủ đề (ví dụ: ordering coffee, job interview)"
+        placeholder="Topic (e.g., ordering coffee, job interview)"
         value={topic}
         onChange={(e) => setTopic(e.target.value)}
         className="mb-4 h-10 px-3 text-sm"

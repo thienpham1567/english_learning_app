@@ -87,7 +87,7 @@ export default async function ToeicProgressPage() {
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
       <div className="p-4 grid gap-4">
         {/* Predicted score */}
-        <Card title="📈 Điểm dự đoán (từ mastery)" size="small">
+        <Card title="📈 Predicted Score (from mastery)" size="small">
           {predicted ? (
             <>
               <div className="text-center">
@@ -111,22 +111,22 @@ export default async function ToeicProgressPage() {
               </div>
               <div className="mt-3 text-xs text-text-muted">
                 Confidence: {Math.round(predicted.confidence * 100)}% · Signals:{" "}
-                {predicted.signalCount} · Sai số ±50 ở phase MVP
+                {predicted.signalCount} · Margin of error ±50 in MVP phase
               </div>
             </>
           ) : (
-            <Empty description="Cần làm diagnostic + vài drill để có dữ liệu" />
+            <Empty description="Take diagnostic test + some drills to generate data" />
           )}
         </Card>
 
         {/* Last mock */}
-        <Card title="🎯 Mock test gần nhất" size="small">
+        <Card title="🎯 Latest Mock Test" size="small">
           {lastMock && lastMock.totalScaled !== null ? (
             <div className="flex justify-between items-center">
               <div>
                 <div className="text-[28px] font-bold">{lastMock.totalScaled} / 990</div>
                 <div className="text-text-muted text-[13px]">
-                  {new Date(lastMock.completedAt!).toLocaleDateString("vi-VN")} · L{" "}
+                  {new Date(lastMock.completedAt!).toLocaleDateString("en-US")} · L{" "}
                   {lastMock.scaledListening} · R {lastMock.scaledReading}
                 </div>
               </div>
@@ -148,15 +148,15 @@ export default async function ToeicProgressPage() {
               className="text-accent"
               style={{ textDecoration: "underline" }}
             >
-              Làm mock test đầu tiên
+              Take your first mock test
             </Link>
           )}
         </Card>
 
         {/* Trend chart */}
-        <Card title="🔥 Hoạt động 30 ngày" size="small">
+        <Card title="🔥 30-Day Activity" size="small">
           {trend.length === 0 ? (
-            <Empty description="Chưa có hoạt động" />
+            <Empty description="No activity yet" />
           ) : (
             <div className="flex items-end h-[100px]" style={{ gap: 2 }}>
               {trend.map((d) => (
@@ -178,13 +178,13 @@ export default async function ToeicProgressPage() {
         <Card
           title={
             <span>
-              <AlertTriangle className="text-destructive" /> Pattern lỗi gần đây
+              <AlertTriangle className="text-destructive" /> Recent Error Patterns
             </span>
           }
           size="small"
         >
           {patterns.length === 0 ? (
-            <Empty description="Chưa có pattern lỗi nào" />
+            <Empty description="No error patterns found" />
           ) : (
             <div className="grid gap-2">
               {patterns.map((p) => (
@@ -196,11 +196,11 @@ export default async function ToeicProgressPage() {
                   <div>
                     <div className="font-medium">{p.category.label}</div>
                     <div className="text-xs text-text-muted">
-                      {p.unresolvedCount}/{p.totalCount} chưa nắm · {p.recentCount} câu trong 7 ngày
+                      {p.unresolvedCount}/{p.totalCount} unmastered · {p.recentCount} questions in last 7 days
                     </div>
                     {p.examples[0] && (
                       <div className="text-xs text-text-muted mt-1 italic">
-                        Ví dụ: "{p.examples[0].questionStem.slice(0, 80)}..."
+                        Example: "{p.examples[0].questionStem.slice(0, 80)}..."
                       </div>
                     )}
                   </div>
@@ -227,7 +227,7 @@ export default async function ToeicProgressPage() {
           className="grid gap-3"
           style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}
         >
-          <Card title="🔻 5 yếu nhất" size="small">
+          <Card title="🔻 5 Weakest Skills" size="small">
             {weakest.length === 0 ? (
               <Empty description="—" />
             ) : (
@@ -249,7 +249,7 @@ export default async function ToeicProgressPage() {
               </div>
             )}
           </Card>
-          <Card title="🔺 5 mạnh nhất" size="small">
+          <Card title="🔺 5 Strongest Skills" size="small">
             {strongest.length === 0 ? (
               <Empty description="—" />
             ) : (

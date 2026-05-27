@@ -41,11 +41,11 @@ function getScoreColor(score: number): string {
 }
 
 function getScoreLabel(score: number): string {
-  if (score >= 90) return "Xuất sắc";
-  if (score >= 80) return "Rất tốt";
-  if (score >= 60) return "Khá tốt";
-  if (score >= 40) return "Tạm được";
-  return "Cần luyện thêm";
+  if (score >= 90) return "Excellent";
+  if (score >= 80) return "Very Good";
+  if (score >= 60) return "Good";
+  if (score >= 40) return "Acceptable";
+  return "Needs Practice";
 }
 
 export function PronunciationFeedback({ data, onListenCorrect }: Props) {
@@ -56,7 +56,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
     return (
       <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-(--chat-surface) border-2 border-border text-(--text-secondary) mt-1 animate-pulse">
         <Loader2 className="h-3 w-3 animate-text-accent" />
-        <span>Đang phân tích phát âm...</span>
+        <span>Analyzing pronunciation...</span>
       </div>
     );
   }
@@ -66,7 +66,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
     return (
       <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-red-950/20 border border-red-900/30 text-red-400 mt-1">
         <AlertCircle className="h-3 w-3" />
-        <span>Không thể phân tích phát âm</span>
+        <span>Could not analyze pronunciation</span>
       </div>
     );
   }
@@ -96,7 +96,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
           <div className="grid grid-cols-2 gap-4 mb-3 pb-3 border-b-2 border-border/60">
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] text-(--text-muted) font-bold uppercase tracking-wider">
-                Độ chính xác
+                Accuracy
               </span>
               <span className="text-sm font-semibold text-(--text-primary)">
                 {data.accuracy ?? 0}%
@@ -104,7 +104,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
             </div>
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] text-(--text-muted) font-bold uppercase tracking-wider">
-                Độ trôi chảy
+                Fluency
               </span>
               <span className="text-sm font-semibold text-(--text-primary)">
                 {data.fluency ?? 0}%
@@ -116,7 +116,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
           {data.wordAnalysis && data.wordAnalysis.length > 0 && (
             <div className="mb-3.5">
               <div className="text-[10px] text-(--text-muted) font-bold uppercase tracking-wider mb-1.5">
-                Phân tích từng từ
+                Word Analysis
               </div>
               <div className="flex flex-wrap gap-1.5">
                 {data.wordAnalysis.map((w, i) => (
@@ -137,7 +137,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
 
                     {/* Custom CSS Tooltip */}
                     <div className="pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 hidden group-hover:block bg-(--chat-bg) border-2 border-border text-(--text-primary) text-[10px] font-semibold px-2 py-1 rounded-lg shadow-lg z-50 whitespace-nowrap">
-                      {w.issue || (w.correct ? "Chính xác!" : "Phát âm chưa chuẩn")}
+                      {w.issue || (w.correct ? "Correct!" : "Incorrect pronunciation")}
                     </div>
                   </div>
                 ))}
@@ -167,7 +167,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
               className="flex w-full items-center justify-center gap-1.5 rounded-xl border-2 border-border bg-(--chat-surface) hover:brightness-110 hover:text-(--ink) transition-all py-2 text-xs font-semibold text-(--text-secondary) cursor-pointer shadow-sm active:scale-98"
             >
               <Volume2 className="h-3.5 w-3.5" />
-              <span>Nghe phát âm chuẩn</span>
+              <span>Listen to standard pronunciation</span>
             </button>
           )}
         </div>

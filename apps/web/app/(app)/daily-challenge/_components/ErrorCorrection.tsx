@@ -20,10 +20,10 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
     <div>
       {/* Instruction */}
       <p
-        className="text-[11px] font-extrabold text-destructive uppercase tracking-widest"
+        className="text-[11px] font-extrabold text-destructive uppercase tracking-widest flex items-center gap-1.5"
         style={{ marginBottom: 14 }}
       >
-        ⚠️ {instruction}
+        <AlertTriangle size={12} /> {instruction}
       </p>
 
       {/* Error sentence — red quote block */}
@@ -36,7 +36,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
         }}
       >
         <span className="text-[10px] font-extrabold uppercase tracking-widest text-destructive flex items-center gap-1.5 mb-2">
-          <AlertTriangle size={12} /> Câu chứa lỗi sai ngữ pháp
+          <AlertTriangle size={12} /> Sentence containing grammatical error
         </span>
         <p className="m-0 text-base text-destructive font-semibold" style={{ lineHeight: 1.7 }}>
           {data.sentence}
@@ -46,13 +46,13 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
       {/* Correction input */}
       <label
         htmlFor="error-correction-input"
-        className="block text-[11px] font-extrabold uppercase tracking-widest text-text-muted mb-2"
+        className="block text-[11px] font-extrabold uppercase tracking-widest text-text-muted mb-2 flex items-center gap-1.5"
       >
-        <Pencil size={12} /> Từ thay thế chính xác
+        <Pencil size={12} /> Correct Replacement Word
       </label>
       <input
         id="error-correction-input"
-        placeholder="Nhập từ đúng để sửa lỗi..."
+        placeholder="Type the correct word to fix the error..."
         value={text}
         onChange={(e) => setText(e.target.value)}
         disabled={disabled}
@@ -78,7 +78,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
           whileHover={{ scale: 1.02, y: -1 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => onAnswer(text.trim())}
-          className="mt-4 w-full rounded-(--radius-lg) text-[15px] font-extrabold border-none cursor-pointer"
+          className="mt-4 w-full rounded-(--radius-lg) text-[15px] font-extrabold border-none cursor-pointer flex items-center justify-center gap-1.5"
           style={{
             background:
               "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 80%, white))",
@@ -87,7 +87,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
             boxShadow: "0 6px 18px rgba(239, 68, 68, 0.25)",
           }}
         >
-          <Check size={12} /> Xác nhận sửa lỗi
+          <Check size={12} /> Confirm Correction
         </m.button>
       )}
     </div>

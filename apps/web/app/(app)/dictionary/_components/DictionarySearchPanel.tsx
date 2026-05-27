@@ -19,9 +19,9 @@ type DictionarySearchPanelProps = {
 const EMPTY_WORDS: string[] = [];
 
 const HELPER_TIPS = [
-  "Bạn có thể nhập từ đơn, phrasal verb hoặc idiom.",
-  "Nhấn Enter để tra cứu nhanh mà không cần bấm nút.",
-  "Mỗi nghĩa sẽ có định nghĩa tiếng Anh, ví dụ song ngữ và collocation thực tế.",
+  "You can enter a single word, phrasal verb, or idiom.",
+  "Press Enter to quick search without clicking the button.",
+  "Each meaning includes English definitions, bilingual examples, and practical collocations.",
 ];
 
 function HighlightMatch({ text, query }: { text: string; query: string }) {
@@ -123,7 +123,7 @@ export function DictionarySearchPanel({
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
             <Star className="h-3.5 w-3.5" />
-            <span>Tra cứu có cấu trúc</span>
+            <span>Structured Lookup</span>
           </div>
           <button
             type="button"
@@ -133,7 +133,7 @@ export function DictionarySearchPanel({
                 ? "bg-accent text-(--text-on-accent)"
                 : "bg-transparent text-text-muted hover:text-accent"
             }`}
-            aria-label="Mẹo sử dụng"
+            aria-label="Usage Tips"
           >
             {showTips ? <X className="h-3.5 w-3.5" /> : <BookOpen className="h-4 w-4" />}
           </button>
@@ -143,7 +143,7 @@ export function DictionarySearchPanel({
         {showTips && (
           <div className="anim-fade-in mt-4 overflow-hidden rounded-lg border-2 border-border bg-(--bg) p-4 shadow-sm">
             <p className="mb-3 text-xs font-semibold uppercase tracking-wider text-ink m-0">
-              <Lightbulb className="h-3 w-3 inline mr-1 text-accent" /> Mẹo sử dụng
+              <Lightbulb className="h-3 w-3 inline mr-1 text-accent" /> Usage Tips
             </p>
             <ul className="list-none p-0 m-0 flex flex-col gap-2.5">
               {HELPER_TIPS.map((tip, i) => (
@@ -158,19 +158,19 @@ export function DictionarySearchPanel({
           </div>
         )}
 
-        <h2 className="mt-4 text-2xl italic font-display text-ink">Nhập mục từ cần tra cứu</h2>
+        <h2 className="mt-4 text-2xl italic font-display text-ink">Search Dictionary</h2>
         <p className="mt-3 text-[13px] leading-relaxed text-text-secondary break-words">
-          Công cụ này hỗ trợ từ đơn, phrasal verb và idiom để bạn học theo ngữ cảnh rõ ràng hơn.
+          Search for words, phrasal verbs, and idioms to learn them in context.
         </p>
 
         <div ref={containerRef} className="relative mt-5">
           <input
             type="text"
             className="w-full border-none border-b border-b-border bg-transparent px-1 py-3 text-[15px] text-text-primary outline-none transition-colors duration-200 focus:border-b-accent focus:border-b-2"
-            placeholder="Ví dụ: take off"
+            placeholder="Example: take off"
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
-            aria-label="Nhập từ cần tra cứu"
+            aria-label="Enter word to search"
             onKeyDown={handleKeyDown}
             disabled={isLoading}
             maxLength={80}
@@ -214,11 +214,11 @@ export function DictionarySearchPanel({
           disabled={isLoading}
           className="mt-5 w-full rounded-full bg-accent py-2.5 text-sm font-semibold text-(--text-on-accent) border-none cursor-pointer transition-opacity duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {isLoading ? "Đang tra cứu..." : "Tra cứu"}
+          {isLoading ? "Searching..." : "Search"}
         </button>
 
         <p className="mt-4 text-xs text-text-muted break-words">
-          Hỗ trợ tối đa 80 ký tự, bao gồm khoảng trắng và dấu nháy hợp lệ.
+          Supports up to 80 characters, including spaces and apostrophes.
         </p>
 
         {recentWords.length > 0 && onSelectRecent && (

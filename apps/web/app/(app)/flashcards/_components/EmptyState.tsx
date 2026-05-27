@@ -48,14 +48,14 @@ export function EmptyState({ nextReviewAt }: Props) {
       </m.div>
 
       <Title level={3} className="font-display font-extrabold mb-2.5 text-text-primary">
-        Đã hoàn thành ôn tập!
+        Review Complete!
       </Title>
 
       <p
         className="text-text-secondary font-medium leading-relaxed"
         style={{ margin: "0 0 24px", fontSize: 14.5 }}
       >
-        Tuyệt vời! Hiện tại bạn không còn thẻ nào cần ôn tập. Hãy nghỉ ngơi và quay lại sau nhé.
+        Awesome! You have no cards left to review. Take a break and return later.
       </p>
 
       {nextReviewAt && <Countdown targetIso={nextReviewAt} />}
@@ -70,7 +70,7 @@ function Countdown({ targetIso }: { targetIso: string }) {
     const update = () => {
       const diff = new Date(targetIso).getTime() - Date.now();
       if (diff <= 0) {
-        setRemaining("Sẵn sàng!");
+        setRemaining("Ready!");
         return;
       }
       const h = Math.floor(diff / 3_600_000);
@@ -92,7 +92,7 @@ function Countdown({ targetIso }: { targetIso: string }) {
     >
       <Clock className="text-accent text-[13px]" />
       <span className="font-bold text-text-secondary" style={{ fontSize: 12.5 }}>
-        Đợt ôn tập tiếp theo: <span className="text-accent">{remaining}</span>
+        Next review session: <span className="text-accent">{remaining}</span>
       </span>
     </m.div>
   );

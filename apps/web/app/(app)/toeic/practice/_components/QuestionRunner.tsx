@@ -182,7 +182,7 @@ export function QuestionRunner({
         className="flex justify-center items-center text-text-secondary font-bold"
         style={{ padding: 48 }}
       >
-        <Loader2 className="animate-spin text-xl mr-2 text-accent" /> Đang tải câu hỏi…
+        <Loader2 className="animate-spin text-xl mr-2 text-accent" /> Loading question...
       </div>
     );
   }
@@ -221,7 +221,7 @@ export function QuestionRunner({
         style={{ border: "1.5px solid var(--border)", padding: "10px 14px" }}
       >
         <span className="font-black text-text-secondary" style={{ fontSize: 13.5 }}>
-          Câu {currentIndex + 1} / {total}
+          Question {currentIndex + 1} / {total}
         </span>
         <div className="flex gap-1.5 items-center">
           <span
@@ -290,7 +290,7 @@ export function QuestionRunner({
             }}
           >
             <Volume2 />
-            <span>Nghe audio câu hỏi</span>
+            <span>Play question audio</span>
           </m.button>
           <audio ref={audioRef} src={question.audioUrl} />
         </div>
@@ -306,11 +306,11 @@ export function QuestionRunner({
             {(() => {
               const hasQ = (question.audioSegments?.question ?? "").length > 0;
               const totalSegs = (hasQ ? 1 : 0) + (question.audioSegments?.options.length ?? 0);
-              if (part2PlayingIdx === -1) return "Audio đang chuẩn bị...";
-              if (part2PlayingIdx >= totalSegs) return "Audio đã phát xong — vui lòng chọn đáp án";
-              if (hasQ && part2PlayingIdx === 0) return "🔊 Đang phát: Câu hỏi";
+              if (part2PlayingIdx === -1) return "Audio preparing...";
+              if (part2PlayingIdx >= totalSegs) return "Audio finished — please select an answer";
+              if (hasQ && part2PlayingIdx === 0) return "🔊 Playing: Question";
               const optIdx = hasQ ? part2PlayingIdx - 1 : part2PlayingIdx;
-              return `🔊 Đang phát: Đáp án (${String.fromCharCode(65 + optIdx)})`;
+              return `🔊 Playing: Option (${String.fromCharCode(65 + optIdx)})`;
             })()}
           </span>
           <m.button
@@ -332,7 +332,7 @@ export function QuestionRunner({
             }}
           >
             <PlayCircle />
-            <span>Nghe lại</span>
+            <span>Replay</span>
           </m.button>
           <audio ref={audioRef} />
         </div>
@@ -438,7 +438,7 @@ export function QuestionRunner({
         >
           <div className="flex items-center gap-1.5 font-black text-text-primary mb-1.5">
             <CheckCircle className="text-emerald-500" />
-            <span>Giải thích đáp án chi tiết:</span>
+            <span>Detailed Explanation:</span>
           </div>
           <p className="m-0">{question.explanationVi}</p>
         </m.div>
@@ -466,7 +466,7 @@ export function QuestionRunner({
           }}
         >
           {isFlagged ? <Flag /> : <Flag />}
-          <span>{isFlagged ? "Đã đánh dấu" : "Đánh dấu"}</span>
+          <span>{isFlagged ? "Flagged" : "Flag"}</span>
         </m.button>
 
         <div className="flex gap-2.5">
@@ -479,7 +479,7 @@ export function QuestionRunner({
               className="py-2 px-4 rounded-(--radius-lg) bg-(--surface) text-text-secondary text-[13px] cursor-pointer"
               style={{ border: "1.5px solid var(--border)", fontWeight: 850 }}
             >
-              Bỏ qua
+              Skip
             </m.button>
           )}
           <m.button
@@ -499,48 +499,48 @@ export function QuestionRunner({
               transition: "all 0.15s",
             }}
           >
-            <span>{isLast ? "Nộp bài" : "Câu tiếp theo"}</span>
+            <span>{isLast ? "Submit" : "Next Question"}</span>
           </m.button>
         </div>
       </div>
 
       <div className="mt-1.5 text-[11px] text-text-muted text-center font-semibold">
-        ⌨️ Phím tắt nhanh:{" "}
+        Shortcuts:{" "}
         <kbd
           className="bg-surface-alt rounded border-2 border-border"
           style={{ padding: "2px 5px" }}
         >
           1-4
         </kbd>{" "}
-        hoặc{" "}
+        or{" "}
         <kbd
           className="bg-surface-alt rounded border-2 border-border"
           style={{ padding: "2px 5px" }}
         >
           A-D
         </kbd>{" "}
-        để chọn ·{" "}
+        to select ·{" "}
         <kbd
           className="bg-surface-alt rounded border-2 border-border"
           style={{ padding: "2px 5px" }}
         >
           Space
         </kbd>{" "}
-        phát/dừng audio ·{" "}
+        play/pause audio ·{" "}
         <kbd
           className="bg-surface-alt rounded border-2 border-border"
           style={{ padding: "2px 5px" }}
         >
           F
         </kbd>{" "}
-        để flag ·{" "}
+        to flag ·{" "}
         <kbd
           className="bg-surface-alt rounded border-2 border-border"
           style={{ padding: "2px 5px" }}
         >
           Enter
         </kbd>{" "}
-        tiếp tục
+        to continue
       </div>
     </div>
   );

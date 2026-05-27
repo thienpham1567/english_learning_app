@@ -40,13 +40,13 @@ export function PhonemeCard({ phoneme, accent, onSpeak, isBusy, index }: Props) 
 
   const typeLabel = isVowel
     ? isDiphthong
-      ? "nguyên âm đôi"
+      ? "diphthong"
       : isLong
-        ? "âm dài"
-        : "âm ngắn"
+        ? "long vowel"
+        : "short vowel"
     : voiced
-      ? "hữu thanh"
-      : "vô thanh";
+      ? "voiced"
+      : "voiceless";
 
   const handleClick = (selectedAccent: TtsAccent, e?: React.MouseEvent) => {
     e?.stopPropagation();

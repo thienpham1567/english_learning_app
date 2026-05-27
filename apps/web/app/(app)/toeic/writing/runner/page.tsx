@@ -23,8 +23,8 @@ type Prompt = {
 };
 
 const TYPE_LABEL: Record<Prompt["type"], string> = {
-  q1_5_picture: "Q1-5 · Mô tả ảnh",
-  q6_7_email: "Q6-7 · Trả lời email",
+  q1_5_picture: "Q1-5 · Describe a Picture",
+  q6_7_email: "Q6-7 · Respond to an Email Request",
   q8_opinion: "Q8 · Opinion essay",
 };
 
@@ -104,8 +104,8 @@ export default function WritingRunnerPage() {
 
   const skipQuestion = () => {
     Modal.confirm({
-      title: "Bỏ qua câu này?",
-      content: "Bạn sẽ nhận 0 điểm cho câu này. Tiếp tục?",
+      title: "Skip this question?",
+      content: "You will receive 0 points for this question. Continue?",
       onOk: () => void submit(),
     });
   };
@@ -114,12 +114,12 @@ export default function WritingRunnerPage() {
     return (
       <div className="p-6">
         <div className="text-destructive mb-3">{error}</div>
-        <Button onClick={() => router.push("/toeic/writing")}>Về Hub</Button>
+        <Button onClick={() => router.push("/toeic/writing")}>Back to Hub</Button>
       </div>
     );
   }
   if (!current) {
-    return <div className="p-6">{completing ? "Đang chấm bài…" : "Đang tải…"}</div>;
+    return <div className="p-6">{completing ? "Scoring essay..." : "Loading..."}</div>;
   }
 
   const minRemaining = Math.floor(remaining / 60000);
@@ -132,7 +132,7 @@ export default function WritingRunnerPage() {
           <Tag color={remaining < 60000 ? "red" : "orange"}>
             ⏱ {minRemaining}:{String(secRemaining).padStart(2, "0")}
           </Tag>
-          <span className="text-text-muted">Max {current.maxScore} điểm</span>
+          <span className="text-text-muted">Max {current.maxScore} points</span>
         </div>
         <Progress
           percent={Math.round((elapsed / (current.writeSeconds * 1000)) * 100)}
@@ -159,7 +159,7 @@ export default function WritingRunnerPage() {
               style={{ background: "color-mix(in srgb, var(--accent) 8%, var(--surface))" }}
             >
               <div className="text-[13px] text-text-muted">
-                Viết MỘT câu mô tả ảnh, bắt buộc dùng cả 2 từ:
+                Write ONE sentence describing the picture, using both of these words:
               </div>
               <div className="mt-1.5">
                 {(current.mandatoryWords ?? []).map((w) => (
@@ -179,7 +179,7 @@ export default function WritingRunnerPage() {
             <div className="mb-3" style={{ whiteSpace: "pre-wrap" }}>
               {current.emailBody}
             </div>
-            <div className="text-[13px] text-text-muted mb-1">Phải đáp ứng:</div>
+            <div className="text-[13px] text-text-muted mb-1">Requirements:</div>
             <ul style={{ marginTop: 0 }}>
               {(current.emailRequirements ?? []).map((r) => (
                 <li key={r}>{r}</li>
@@ -196,7 +196,7 @@ export default function WritingRunnerPage() {
               <div className="text-text-muted text-[13px] mt-1">{current.topicVi}</div>
             )}
             <div className="mt-2 text-xs text-text-muted">
-              Mục tiêu: ≥300 từ · cấu trúc rõ ràng (intro / arguments / conclusion)
+              Goal: ≥300 words · clear structure (intro / body arguments / conclusion)
             </div>
           </Card>
         )}
@@ -206,7 +206,7 @@ export default function WritingRunnerPage() {
           onChange={(e) => setText(e.target.value)}
           onPaste={(e) => {
             e.preventDefault();
-            void message.warning("Paste bị chặn — hãy gõ lại bằng tay để luyện viết.");
+            void message.warning("Pasting is disabled — please type your response manually to practice writing.");
           }}
           rows={current.type === "q8_opinion" ? 14 : current.type === "q6_7_email" ? 8 : 3}
           placeholder="Type your answer here..."
@@ -214,10 +214,10 @@ export default function WritingRunnerPage() {
         />
         <div className="flex gap-2 justify-end">
           <Button onClick={skipQuestion} disabled={submitting}>
-            Bỏ qua
+            Skip
           </Button>
           <Button type="primary" loading={submitting} disabled={!text.trim()} onClick={submit}>
-            {idx + 1 === prompts.length ? "Nộp bài cuối" : "Câu tiếp"}
+            {idx + 1 === prompts.length ? "Submit Test" : "Next Question"}
           </Button>
         </div>
       </div>

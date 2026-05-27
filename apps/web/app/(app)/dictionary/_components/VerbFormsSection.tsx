@@ -93,10 +93,10 @@ export function VerbFormsSection({ verbForms }: Props) {
       >
         <div className="flex items-center gap-2.5">
           <span className="text-[13px] font-bold uppercase tracking-[0.12em] text-accent">
-            Dạng động từ
+            Verb Forms
           </span>
           <span className="text-[11px] font-semibold px-2.5 py-0.5 rounded-full bg-accent-muted text-accent">
-            {verbForms.length} dạng
+            {verbForms.length} forms
           </span>
         </div>
         <ChevronDown
@@ -169,7 +169,7 @@ export function VerbFormsSection({ verbForms }: Props) {
                 {vf.isIrregular && (
                   <div className="flex items-center gap-1.5 mt-auto pt-1">
                     <span className="text-[10px] font-semibold px-2 py-0.5 rounded-md bg-(--warning-bg) text-(--warning) border border-(--warning) whitespace-nowrap">
-                      Bất quy tắc
+                      Irregular
                     </span>
                   </div>
                 )}

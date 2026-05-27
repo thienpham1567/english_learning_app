@@ -1,11 +1,14 @@
 "use client";
 
 import {
+  Brain,
   CheckCircle,
   FileText,
+  HelpCircle,
   Lightbulb,
   Loader2,
   RefreshCw,
+  Sparkles,
   Trophy,
   XCircle,
 } from "lucide-react";
@@ -50,7 +53,7 @@ export function ReviewTab() {
     return (
       <div className="py-16 text-center">
         <Loader2 className="h-7 w-7 text-accent animate-mx-auto mb-3" />
-        <div className="text-sm font-semibold text-text-primary">Đang tải hàng đợi ôn tập...</div>
+        <div className="text-sm font-semibold text-text-primary">Loading review queue...</div>
       </div>
     );
   }
@@ -63,12 +66,14 @@ export function ReviewTab() {
         animate={{ opacity: 1, y: 0 }}
         className="py-16 px-6 text-center bg-surface rounded-xl border-2 border-border"
       >
-        <div className="text-5xl mb-4">🎉</div>
+        <div className="flex justify-center mb-4 text-emerald-450">
+          <Sparkles className="h-12 w-12 animate-pulse" />
+        </div>
         <h4 className="text-lg font-extrabold text-text-primary m-0 mb-2">
-          Không có lỗi cần ôn tập!
+          No errors to review!
         </h4>
         <span className="text-text-muted block max-w-[360px] mx-auto text-sm">
-          Bạn đã ôn hết tất cả. Hãy tiếp tục làm bài tập để có thêm lỗi sai cần ghi nhớ.
+          You've reviewed everything. Keep practicing to identify more areas for improvement.
         </span>
         <m.button
           whileHover={{ scale: 1.02 }}
@@ -76,7 +81,7 @@ export function ReviewTab() {
           onClick={srs.fetchQueue}
           className="mt-5 inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl border-2 border-border bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body"
         >
-          <RefreshCw className="h-3.5 w-3.5" /> Kiểm tra lại
+          <RefreshCw className="h-3.5 w-3.5" /> Check again
         </m.button>
       </m.div>
     );
@@ -94,18 +99,18 @@ export function ReviewTab() {
         <Trophy
           className={`h-10 w-10 mx-auto mb-3 ${pct >= 80 ? "text-(--success)" : "text-accent"}`}
         />
-        <h3 className="text-xl font-black text-text-primary m-0 mb-1">Hoàn thành ôn tập!</h3>
+        <h3 className="text-xl font-black text-text-primary m-0 mb-1">Review Complete!</h3>
         <div className="text-4xl font-black text-accent font-display">
           {srs.correct}/{srs.reviewed}
         </div>
         <span className="text-sm text-text-secondary block mt-2 mb-1">
           {pct >= 80
-            ? "Xuất sắc! Bạn nhớ rất tốt! 🎉"
+            ? "Excellent! You remembered very well!"
             : pct >= 50
-              ? "Khá tốt! Hãy tiếp tục ôn nhé."
-              : "Cần ôn thêm. Đừng bỏ cuộc!"}
+              ? "Good job! Keep reviewing to reinforce your memory."
+              : "Needs more practice. Don't give up!"}
         </span>
-        <span className="text-xs text-text-muted">Chính xác {pct}%</span>
+        <span className="text-xs text-text-muted">Accuracy: {pct}%</span>
 
         <div className="flex gap-2 justify-center mt-5">
           <m.button
@@ -117,7 +122,7 @@ export function ReviewTab() {
             }}
             className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl border-none bg-gradient-to-br from-accent to-accent-hover text-(--text-on-accent) text-sm font-extrabold cursor-pointer font-body shadow-[0_4px_14px_var(--accent-muted)]"
           >
-            <RefreshCw className="h-4 w-4" /> Ôn tiếp
+            <RefreshCw className="h-4 w-4" /> Continue
           </m.button>
         </div>
       </m.div>
@@ -131,8 +136,8 @@ export function ReviewTab() {
     <div className="flex flex-col gap-4">
       {/* Progress */}
       <div className="bg-surface rounded-xl border-2 border-border px-5 py-3.5 flex items-center justify-between">
-        <span className="text-sm font-bold text-text-primary">
-          🧠 Ôn tập: {srs.currentIndex + 1} / {srs.queue.length}
+        <span className="text-sm font-bold text-text-primary flex items-center gap-1.5">
+          <Brain className="h-4 w-4 text-accent" /> Review: {srs.currentIndex + 1} / {srs.queue.length}
         </span>
         <div className="flex items-center gap-2">
           <span className="text-xs font-bold text-(--success) flex items-center gap-1">
@@ -171,7 +176,7 @@ export function ReviewTab() {
               </span>
             )}
             <span className="ml-auto text-[11px] text-text-muted">
-              Ôn lần {error.reviewCount + 1}
+              Review #{error.reviewCount + 1}
             </span>
           </div>
 
@@ -213,9 +218,10 @@ export function ReviewTab() {
           {!showAnswer ? (
             <div className="px-5 pb-6">
               {/* Answer comparison (hidden) */}
-              <div className="px-4 py-3 rounded-xl bg-surface-alt border border-dashed border-border text-center">
+              <div className="px-4 py-3 rounded-xl bg-surface-alt border border-dashed border-border flex items-center justify-center gap-1.5">
+                <HelpCircle className="h-4 w-4 text-text-muted" />
                 <span className="text-[13px] text-text-muted font-semibold">
-                  🤔 Bạn có nhớ đáp án không?
+                  Do you remember the correct answer?
                 </span>
               </div>
 
@@ -225,7 +231,7 @@ export function ReviewTab() {
                 onClick={handleReveal}
                 className="w-full mt-3 flex items-center justify-center gap-2 py-3.5 px-5 rounded-lg border-none bg-gradient-to-br from-accent to-accent-hover text-(--text-on-accent) text-[15px] font-extrabold cursor-pointer font-body shadow-[0_4px_14px_var(--accent-muted)]"
               >
-                <Lightbulb className="h-4 w-4" /> Xem đáp án
+                <Lightbulb className="h-4 w-4" /> Reveal Answer
               </m.button>
             </div>
           ) : (
@@ -237,16 +243,16 @@ export function ReviewTab() {
               {/* Answer comparison */}
               <div className="flex gap-2 mb-4">
                 <div className="flex-1 px-3.5 py-2.5 rounded-[10px] bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--error)_18%,transparent)]">
-                  <div className="text-[10px] font-bold text-(--error) uppercase mb-1">
-                    <XCircle className="h-2.5 w-2.5 inline mr-1" /> Bạn chọn
+                  <div className="text-[10px] font-bold text-(--error) uppercase mb-1 flex items-center gap-1">
+                    <XCircle className="h-2.5 w-2.5" /> Your Answer
                   </div>
                   <div className="text-sm font-bold text-(--error)">
-                    {error.userAnswer || "(Trống)"}
+                    {error.userAnswer || "(Empty)"}
                   </div>
                 </div>
                 <div className="flex-1 px-3.5 py-2.5 rounded-[10px] bg-[color-mix(in_srgb,var(--success)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--success)_18%,transparent)]">
-                  <div className="text-[10px] font-bold text-(--success) uppercase mb-1">
-                    <CheckCircle className="h-2.5 w-2.5 inline mr-1" /> Đáp án đúng
+                  <div className="text-[10px] font-bold text-(--success) uppercase mb-1 flex items-center gap-1">
+                    <CheckCircle className="h-2.5 w-2.5" /> Correct Answer
                   </div>
                   <div className="text-sm font-bold text-(--success)">{error.correctAnswer}</div>
                 </div>
@@ -263,7 +269,7 @@ export function ReviewTab() {
               {/* Grade buttons */}
               <div className="mt-4">
                 <span className="text-[11px] font-bold text-text-muted uppercase tracking-wide block mb-2">
-                  Bạn nhớ thế nào?
+                  How well did you recall?
                 </span>
                 <div className="grid grid-cols-4 gap-2">
                   {SRS_GRADE_OPTIONS.map((opt) => (
@@ -279,7 +285,10 @@ export function ReviewTab() {
                         background: `color-mix(in srgb, ${opt.color} 5%, var(--surface))`,
                       }}
                     >
-                      <span className="text-[22px]">{opt.emoji}</span>
+                      {(() => {
+                        const Icon = opt.icon;
+                        return <Icon className="h-5 w-5 mb-0.5" />;
+                      })()}
                       <span className="text-xs font-extrabold" style={{ color: opt.color }}>
                         {opt.label}
                       </span>
@@ -295,7 +304,7 @@ export function ReviewTab() {
 
       {/* Remaining queue */}
       <span className="text-[11px] text-text-muted text-center block">
-        Còn {srs.queue.length - srs.currentIndex - 1} lỗi nữa trong phiên ôn tập này
+        {srs.queue.length - srs.currentIndex - 1} errors remaining in this session
       </span>
     </div>
   );

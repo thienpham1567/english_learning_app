@@ -10,7 +10,9 @@ import {
   LayoutGrid,
   Lightbulb,
   Loader2,
+  Pin,
   RefreshCw,
+  Target,
   Volume2,
   Zap,
 } from "lucide-react";
@@ -52,9 +54,9 @@ const TOEIC_TOPICS = [
 ];
 
 const TYPE_OPTIONS: { value: CardType; label: string; icon: React.ReactNode }[] = [
-  { value: "mixed", label: "Tổng hợp", icon: <LayoutGrid /> },
-  { value: "vocab", label: "Từ vựng", icon: <BookOpen /> },
-  { value: "grammar", label: "Ngữ pháp", icon: <ClipboardList /> },
+  { value: "mixed", label: "Mixed", icon: <LayoutGrid /> },
+  { value: "vocab", label: "Vocabulary", icon: <BookOpen /> },
+  { value: "grammar", label: "Grammar", icon: <ClipboardList /> },
 ];
 
 const COUNT_OPTIONS = [5, 10, 15, 20];
@@ -97,7 +99,7 @@ export function AIFlashcardMode() {
         count: cardCount,
       });
       if (!data.cards || data.cards.length === 0) {
-        setError("AI không tạo được flashcard. Thử chủ đề khác.");
+        setError("AI could not generate flashcards. Please try another topic.");
         setPhase("pick");
         return;
       }
@@ -106,7 +108,7 @@ export function AIFlashcardMode() {
       setFlipped(false);
       setPhase("study");
     } catch {
-      setError("Lỗi kết nối. Vui lòng thử lại.");
+      setError("Connection error. Please try again.");
       setPhase("pick");
     }
   }, [selectedTopic, customTopic, topicLabel, cardType, cardCount]);
@@ -142,7 +144,7 @@ export function AIFlashcardMode() {
         <div>
           <div className="flex items-center gap-2 mb-3">
             <Zap className="text-accent text-base" />
-            <h3 className="m-0 text-base font-black text-ink font-display">Chọn chủ đề TOEIC</h3>
+            <h3 className="m-0 text-base font-black text-ink font-display">Choose a TOEIC Topic</h3>
           </div>
 
           <div
@@ -186,7 +188,7 @@ export function AIFlashcardMode() {
         {/* Custom topic */}
         <div>
           <label className="text-xs font-bold text-text-secondary block mb-1.5">
-            Hoặc nhập chủ đề tùy chỉnh:
+            Or enter a custom topic:
           </label>
           <input
             value={customTopic}
@@ -216,7 +218,7 @@ export function AIFlashcardMode() {
               className="text-[11px] font-bold text-text-muted uppercase block mb-1.5"
               style={{ letterSpacing: "0.06em" }}
             >
-              Loại flashcard
+              Flashcard Type
             </label>
             <div className="flex gap-1.5">
               {TYPE_OPTIONS.map((opt) => (
@@ -247,7 +249,7 @@ export function AIFlashcardMode() {
               className="text-[11px] font-bold text-text-muted uppercase block mb-1.5"
               style={{ letterSpacing: "0.06em" }}
             >
-              Số lượng
+              Quantity
             </label>
             <div className="flex gap-1.5">
               {COUNT_OPTIONS.map((c) => (
@@ -314,7 +316,7 @@ export function AIFlashcardMode() {
               }}
             />
           )}
-          <Zap /> Tạo {cardCount} Flashcard bằng AI
+          <Zap /> Generate {cardCount} AI Flashcards
         </m.button>
       </div>
     );
@@ -337,10 +339,10 @@ export function AIFlashcardMode() {
         </m.div>
         <div className="text-center">
           <h3 className="text-lg font-black text-ink font-display" style={{ margin: "0 0 6px" }}>
-            Đang tạo flashcard...
+            Generating flashcards...
           </h3>
           <p className="m-0 text-sm text-text-secondary font-medium">
-            AI đang sinh {cardCount} flashcard về &quot;{topicLabel}&quot;
+            AI is generating {cardCount} flashcards for &quot;{topicLabel}&quot;
           </p>
         </div>
       </div>
@@ -364,7 +366,7 @@ export function AIFlashcardMode() {
           className="flex items-center gap-1.5 py-1.5 px-3.5 border-2 border-border bg-(--surface) text-text-secondary cursor-pointer text-xs font-bold"
           style={{ borderRadius: 10 }}
         >
-          <ChevronLeft size={10} /> Chọn chủ đề khác
+          <ChevronLeft size={10} /> Choose another topic
         </m.button>
         <span className="text-[13px] font-bold text-text-secondary">
           <span className="text-accent">{currentIdx + 1}</span> / {cards.length}
@@ -498,12 +500,12 @@ export function AIFlashcardMode() {
                 }}
               >
                 {tts.isLoading ? <Loader2 className="animate-spin" /> : <Volume2 />}
-                {tts.isSpeaking ? "Đang phát..." : "Nghe phát âm"}
+                {tts.isSpeaking ? "Playing..." : "Listen"}
               </m.button>
             )}
 
             <span className="absolute text-xs font-semibold text-text-muted" style={{ bottom: 20 }}>
-              Nhấn thẻ để lật xem nghĩa
+              Click card to flip
             </span>
           </div>
 
@@ -532,7 +534,7 @@ export function AIFlashcardMode() {
                 style={{ padding: "12px 14px" }}
               >
                 <span className="text-[11px] font-extrabold text-text-muted uppercase tracking-widest block mb-1.5">
-                  📌 Giải thích
+                  <Pin className="h-3.5 w-3.5 inline mr-1" /> Explanation
                 </span>
                 <p
                   className="m-0 text-text-primary font-medium"
@@ -576,7 +578,7 @@ export function AIFlashcardMode() {
                       className="text-[10px] font-extrabold uppercase tracking-widest"
                       style={{ color: "var(--warning)" }}
                     >
-                      Mẹo thi TOEIC
+                      TOEIC Exam Tip
                     </span>
                     <p
                       className="text-text-primary font-semibold"
@@ -623,7 +625,7 @@ export function AIFlashcardMode() {
             boxShadow: "var(--shadow-sm)",
           }}
         >
-          {flipped ? "Xem mặt trước" : "Lật thẻ"}
+          {flipped ? "Show Front" : "Flip Card"}
         </m.button>
 
         <m.button
@@ -655,11 +657,11 @@ export function AIFlashcardMode() {
             border: "1px solid rgba(16, 185, 129, 0.15)",
           }}
         >
-          <CheckCircle size={28} className="text-(--success)" />
-          <h4 className="text-[15px] font-black text-ink" style={{ margin: "0 0 6px" }}>
-            🎉 Hoàn thành {cards.length} flashcard!
-          </h4>
-          <p className="mb-3 text-[13px] text-text-secondary font-medium">Chủ đề: {topicLabel}</p>
+            <CheckCircle size={28} className="text-(--success) mx-auto mb-2" />
+            <h4 className="text-[15px] font-black text-ink" style={{ margin: "0 0 6px" }}>
+              Completed {cards.length} flashcards!
+            </h4>
+            <p className="mb-3 text-[13px] text-text-secondary font-medium">Topic: {topicLabel}</p>
           <div className="flex gap-2 justify-center">
             <m.button
               whileTap={{ scale: 0.95 }}
@@ -670,7 +672,7 @@ export function AIFlashcardMode() {
               className="border-2 border-border bg-(--surface) text-text-secondary cursor-pointer text-[13px] font-bold"
               style={{ padding: "8px 18px", borderRadius: 10 }}
             >
-              <RefreshCw /> Ôn lại
+              <RefreshCw /> Review Again
             </m.button>
             <m.button
               whileTap={{ scale: 0.95 }}
@@ -684,7 +686,7 @@ export function AIFlashcardMode() {
                 boxShadow: "0 4px 12px var(--accent-muted)",
               }}
             >
-              Chủ đề mới
+              New Topic
             </m.button>
           </div>
         </m.div>

@@ -5,12 +5,12 @@ import { BookOpen, Check, Clock, Loader2, Rocket, Zap } from "lucide-react";
 import * as m from "motion/react-client";
 
 const CEFR_LEVELS = [
-  { id: "A1", tier: "easy", label: "A1", desc: "Cơ bản" },
-  { id: "A2", tier: "easy", label: "A2", desc: "Sơ cấp" },
-  { id: "B1", tier: "medium", label: "B1", desc: "Trung cấp" },
-  { id: "B2", tier: "medium", label: "B2", desc: "Khá" },
-  { id: "C1", tier: "hard", label: "C1", desc: "Nâng cao" },
-  { id: "C2", tier: "hard", label: "C2", desc: "Thành thạo" },
+  { id: "A1", tier: "easy", label: "A1", desc: "Basic" },
+  { id: "A2", tier: "easy", label: "A2", desc: "Elementary" },
+  { id: "B1", tier: "medium", label: "B1", desc: "Intermediate" },
+  { id: "B2", tier: "medium", label: "B2", desc: "Upper-Int" },
+  { id: "C1", tier: "hard", label: "C1", desc: "Advanced" },
+  { id: "C2", tier: "hard", label: "C2", desc: "Proficient" },
 ] as const;
 
 const TIER_COLORS: Record<string, string> = {
@@ -65,7 +65,7 @@ export function CEFRPath({
 
       <h3 className="text-xl font-black font-display text-text-primary m-0">TOEIC Part 5 Quiz</h3>
       <p className="mt-1 text-[13px] text-text-secondary font-medium">
-        Luyện tập trắc nghiệm Part 5 với câu hỏi biên soạn chuẩn đề thi
+        Practice Part 5 multiple choice questions designed to match real exam standards
       </p>
 
       {/* Source mode toggle */}
@@ -83,7 +83,7 @@ export function CEFRPath({
                     style={{ padding: "4px 12px" }}
                   >
                     {" "}
-                    <Zap size={13} /> <span>AI tạo đề</span>{" "}
+                    <Zap size={13} /> <span>AI Mode</span>{" "}
                   </div>
                 ),
               },
@@ -95,7 +95,7 @@ export function CEFRPath({
                     style={{ padding: "4px 12px" }}
                   >
                     {" "}
-                    <BookOpen size={13} /> <span>Đề ETS thật</span>{" "}
+                    <BookOpen size={13} /> <span>ETS Exam</span>{" "}
                   </div>
                 ),
               },
@@ -103,7 +103,7 @@ export function CEFRPath({
           />
           {isEts && (
             <p className="mt-2 text-text-muted font-semibold" style={{ fontSize: 11.5 }}>
-              240 câu hỏi trích xuất từ đề thi ETS thật · Tự động trộn ngẫu nhiên
+              240 questions extracted from real ETS exams · Shuffled randomly
             </p>
           )}
         </div>
@@ -190,9 +190,9 @@ export function CEFRPath({
           className="mt-2 font-extrabold"
           style={{ fontSize: 12.5, color: TIER_COLORS[selected] ?? "var(--text-secondary)" }}
         >
-          {selected === "easy" && "Độ khó: Ngữ pháp cơ bản (A1–A2)"}
-          {selected === "medium" && "Độ khó: Ngữ pháp trung cấp (B1–B2)"}
-          {selected === "hard" && "Độ khó: Ngữ pháp nâng cao (C1–C2)"}
+          {selected === "easy" && "Difficulty: Basic Grammar (A1–A2)"}
+          {selected === "medium" && "Difficulty: Intermediate Grammar (B1–B2)"}
+          {selected === "hard" && "Difficulty: Advanced Grammar (C1–C2)"}
         </p>
       </div>
 
@@ -206,11 +206,11 @@ export function CEFRPath({
             className="text-sm"
             style={{ color: timedMode ? "var(--accent)" : "var(--text-muted)" }}
           />
-          <span className="text-[13px] text-text-secondary font-bold">Tính giờ làm bài</span>
+          <span className="text-[13px] text-text-secondary font-bold">Timed mode</span>
           <Switch size="small" checked={timedMode} onChange={onTimedModeChange} />
           {timedMode && (
             <span className="text-text-muted font-semibold" style={{ fontSize: 11.5 }}>
-              (30s / câu hỏi)
+              (30s / question)
             </span>
           )}
         </div>
@@ -232,11 +232,11 @@ export function CEFRPath({
       >
         {isLoading ? (
           <>
-            <Loader2 className="animate-spin" /> Đang lập đề...
+            <Loader2 className="animate-spin" /> Generating quiz...
           </>
         ) : (
           <>
-            <Rocket /> Bắt đầu luyện đề
+            <Rocket /> Start Practice
           </>
         )}
       </m.button>

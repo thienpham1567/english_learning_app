@@ -41,7 +41,7 @@ function getSynonymInstruction(level: number): string {
 }
 
 function buildSystemPrompt(mode: ParaphraseMode, synonymLevel: number): string {
-  return `You are an expert English paraphrasing assistant for Vietnamese learners.
+  return `You are an expert English paraphrasing assistant.
 
 ## Task
 ${MODE_INSTRUCTIONS[mode]}
@@ -53,8 +53,8 @@ ${getSynonymInstruction(synonymLevel)}
 For each word or phrase you changed, provide:
 - original: the original word/phrase
 - replacement: the new word/phrase
-- reason: brief reason for the change (in Vietnamese)
-- definitionVi: Vietnamese definition of the new word (only for vocabulary changes, not structural ones)
+- reason: brief reason for the change (in English)
+- definitionVi: English definition of the new word (only for vocabulary changes, not structural ones)
 
 Return ONLY valid JSON:
 {
@@ -89,7 +89,7 @@ export async function POST(request: Request) {
   }
 
   if (isRateLimited(session.user.id)) {
-    return Response.json({ error: "Quá nhiều yêu cầu. Vui lòng đợi 1 phút." }, { status: 429 });
+    return Response.json({ error: "Too many requests. Please wait 1 minute." }, { status: 429 });
   }
 
   const body = await request.json();
@@ -134,5 +134,5 @@ export async function POST(request: Request) {
     }
   }
 
-  return Response.json({ error: "Không thể viết lại văn bản. Vui lòng thử lại." }, { status: 502 });
+  return Response.json({ error: "Unable to paraphrase text. Please try again." }, { status: 502 });
 }

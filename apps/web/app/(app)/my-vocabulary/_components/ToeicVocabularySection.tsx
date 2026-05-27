@@ -1,21 +1,32 @@
 "use client";
 
-import { ChevronDown, Link as LinkIcon } from "lucide-react";
+import {
+  Briefcase,
+  Building2,
+  ChevronDown,
+  Coins,
+  Factory,
+  Laptop,
+  Link as LinkIcon,
+  Megaphone,
+  Plane,
+  Users,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type ToeicCategory = {
   id: string;
   label: string;
-  emoji: string;
+  icon: React.ComponentType<{ className?: string; size?: number }>;
   words: string[];
 };
 
 const TOEIC_CATEGORIES: ToeicCategory[] = [
   {
     id: "business",
-    label: "Kinh doanh",
-    emoji: "💼",
+    label: "Business",
+    icon: Briefcase,
     words: [
       "negotiate",
       "revenue",
@@ -36,8 +47,8 @@ const TOEIC_CATEGORIES: ToeicCategory[] = [
   },
   {
     id: "office",
-    label: "Văn phòng",
-    emoji: "🏢",
+    label: "Office",
+    icon: Building2,
     words: [
       "memo",
       "cubicle",
@@ -58,8 +69,8 @@ const TOEIC_CATEGORIES: ToeicCategory[] = [
   },
   {
     id: "hr",
-    label: "Nhân sự",
-    emoji: "👥",
+    label: "Human Resources",
+    icon: Users,
     words: [
       "recruit",
       "candidate",
@@ -80,8 +91,8 @@ const TOEIC_CATEGORIES: ToeicCategory[] = [
   },
   {
     id: "finance",
-    label: "Tài chính",
-    emoji: "💰",
+    label: "Finance",
+    icon: Coins,
     words: [
       "invoice",
       "receipt",
@@ -102,8 +113,8 @@ const TOEIC_CATEGORIES: ToeicCategory[] = [
   },
   {
     id: "travel",
-    label: "Du lịch & Giao thông",
-    emoji: "✈️",
+    label: "Travel & Transport",
+    icon: Plane,
     words: [
       "itinerary",
       "boarding pass",
@@ -124,8 +135,8 @@ const TOEIC_CATEGORIES: ToeicCategory[] = [
   },
   {
     id: "technology",
-    label: "Công nghệ",
-    emoji: "💻",
+    label: "Technology",
+    icon: Laptop,
     words: [
       "software",
       "hardware",
@@ -147,7 +158,7 @@ const TOEIC_CATEGORIES: ToeicCategory[] = [
   {
     id: "marketing",
     label: "Marketing",
-    emoji: "📢",
+    icon: Megaphone,
     words: [
       "campaign",
       "brand",
@@ -168,8 +179,8 @@ const TOEIC_CATEGORIES: ToeicCategory[] = [
   },
   {
     id: "manufacturing",
-    label: "Sản xuất",
-    emoji: "🏭",
+    label: "Manufacturing",
+    icon: Factory,
     words: [
       "assembly line",
       "warehouse",
@@ -206,9 +217,9 @@ export function ToeicVocabularySection({ className }: Props) {
     <div className={className}>
       <div className="mb-4">
         <h3 className="[font-family:var(--font-display)] text-lg italic text-(--ink)">
-          Từ vựng TOEIC theo chủ đề
+          TOEIC Vocabulary by Topic
         </h3>
-        <p className="mt-0.5 text-xs text-(--text-muted)">Bấm vào từ để tra cứu chi tiết</p>
+        <p className="mt-0.5 text-xs text-(--text-muted)">Click on a word for details</p>
       </div>
 
       <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
@@ -224,9 +235,11 @@ export function ToeicVocabularySection({ className }: Props) {
                 className="flex w-full items-center gap-2.5 px-4 py-3 text-left transition-colors hover:bg-(--surface-hover)"
                 onClick={() => setExpandedId(isExpanded ? null : cat.id)}
               >
-                <span className="text-lg">{cat.emoji}</span>
+                <span className="text-lg text-accent flex items-center justify-center">
+                  <cat.icon size={18} />
+                </span>
                 <span className="flex-1 text-sm font-semibold text-(--ink)">{cat.label}</span>
-                <span className="text-[11px] text-(--text-muted)">{cat.words.length} từ</span>
+                <span className="text-[11px] text-(--text-muted)">{cat.words.length} words</span>
                 <ChevronDown
                   className="text-sm shrink-0 text-text-muted"
                   style={{

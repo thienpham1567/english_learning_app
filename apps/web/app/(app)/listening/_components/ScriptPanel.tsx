@@ -77,10 +77,10 @@ export function ScriptPanel({ passage, keyPhrases = [], isRevealed, onReveal }: 
 
   const buttonLabel =
     revealLevel === "hidden"
-      ? "Xem script"
+      ? "Show Script"
       : revealLevel === "keywords"
-        ? "Xem toàn bộ"
-        : "Ẩn script";
+        ? "Show Full"
+        : "Hide Script";
 
   const buttonIcon = revealLevel === "hidden" ? <Eye /> : <EyeOff />;
 
@@ -135,9 +135,9 @@ export function ScriptPanel({ passage, keyPhrases = [], isRevealed, onReveal }: 
             className="flex items-center gap-2 text-[13px] font-semibold"
             style={{ color: "var(--warning)" }}
           >
-            <AlertTriangle /> Xem script sẽ giảm 30% XP cho bài này
+            <AlertTriangle /> Viewing the script will reduce XP by 30% for this exercise
           </div>
-          <div className="text-xs text-text-secondary">Bạn vẫn muốn xem script?</div>
+          <div className="text-xs text-text-secondary">Do you still want to view the script?</div>
           <div className="flex gap-2">
             <button
               onClick={handleConfirm}
@@ -148,14 +148,14 @@ export function ScriptPanel({ passage, keyPhrases = [], isRevealed, onReveal }: 
                 color: "var(--text-on-accent)",
               }}
             >
-              Xem script
+              Show Script
             </button>
             <button
               onClick={handleCancel}
               className="flex-1 rounded-(--radius-sm) border-2 border-border bg-transparent text-xs font-medium cursor-pointer"
               style={{ padding: "8px 14px", color: "var(--text)" }}
             >
-              Hủy
+              Cancel
             </button>
           </div>
         </div>
@@ -188,7 +188,7 @@ export function ScriptPanel({ passage, keyPhrases = [], isRevealed, onReveal }: 
                   background: "color-mix(in srgb, var(--accent) 12%, transparent)",
                 }}
               >
-                Từ khóa
+                Keywords
               </span>
             )}
           </div>
@@ -200,7 +200,7 @@ export function ScriptPanel({ passage, keyPhrases = [], isRevealed, onReveal }: 
           {revealLevel === "full" && (
             <div className="mt-2 text-[11px] text-text-muted" style={{ fontStyle: "normal" }}>
               <Lightbulb style={{ marginRight: 6 }} />
-              Vào trang Từ điển để tra nghĩa chi tiết
+              Go to the Dictionary page for detailed lookups
             </div>
           )}
         </div>

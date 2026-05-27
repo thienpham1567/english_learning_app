@@ -5,9 +5,12 @@ import {
   ClipboardList,
   FileText,
   Flame,
+  Frown,
   Headphones,
+  HelpCircle,
   PenTool,
   Search,
+  Smile,
   Target,
   Trophy,
   Zap,
@@ -75,36 +78,36 @@ export type SRSGrade = 0 | 1 | 2 | 3 | 4 | 5;
 export type GradeOption = {
   grade: SRSGrade;
   label: string;
-  emoji: string;
+  icon: React.ComponentType<{ className?: string; size?: number }>;
   color: string;
   desc: string;
 };
 
 export const SRS_GRADE_OPTIONS: GradeOption[] = [
-  { grade: 0, label: "Quên hết", emoji: "😵", color: "var(--error)", desc: "Không nhớ gì" },
+  { grade: 0, label: "Forgot", icon: Frown, color: "var(--error)", desc: "No memory of this" },
   {
     grade: 2,
-    label: "Mơ hồ",
-    emoji: "🤔",
+    label: "Vague",
+    icon: HelpCircle,
     color: "var(--warning, var(--warning))",
-    desc: "Nhớ mang máng",
+    desc: "Partially remembered",
   },
-  { grade: 4, label: "Nhớ", emoji: "😊", color: "var(--success)", desc: "Nhớ được" },
-  { grade: 5, label: "Dễ dàng", emoji: "🎯", color: "var(--accent)", desc: "Rất dễ nhớ" },
+  { grade: 4, label: "Remembered", icon: Smile, color: "var(--success)", desc: "Recalled with effort" },
+  { grade: 5, label: "Easy", icon: Target, color: "var(--accent)", desc: "Perfectly easy recall" },
 ];
 
 /** Module label mapping */
 export const MODULE_LABELS: Record<string, string> = {
-  "grammar-quiz": "Ngữ pháp",
-  "grammar-lessons": "Bài học",
-  "mock-test": "Thi thử",
-  "daily-challenge": "Thử thách",
-  listening: "Nghe",
-  "toeic-practice": "TOEIC Luyện",
+  "grammar-quiz": "Grammar",
+  "grammar-lessons": "Lessons",
+  "mock-test": "Mock Test",
+  "daily-challenge": "Daily Challenge",
+  listening: "Listening",
+  "toeic-practice": "TOEIC Practice",
   "toeic-mock-test": "TOEIC Mock",
-  "toeic-diagnostic": "TOEIC Diag",
+  "toeic-diagnostic": "TOEIC Diagnostic",
   "toeic-drill": "TOEIC Drill",
-  "writing-practice": "Viết",
+  "writing-practice": "Writing",
 };
 
 /** Module icon mapping */
@@ -144,20 +147,20 @@ export const FILTER_RESOLVED_OPTIONS: {
   label: string;
   icon: React.ComponentType<{ className?: string; size?: number }>;
 }[] = [
-  { value: "false", label: "Chưa nắm", icon: AlertTriangle },
-  { value: "true", label: "Đã hiểu", icon: CheckCircle },
-  { value: "", label: "Tất cả", icon: ClipboardList },
+  { value: "false", label: "Unresolved", icon: AlertTriangle },
+  { value: "true", label: "Resolved", icon: CheckCircle },
+  { value: "", label: "All", icon: ClipboardList },
 ];
 
 export const MODULE_FILTER_OPTIONS = [
-  { value: "", label: "Tất cả" },
-  { value: "grammar-quiz", label: "Ngữ pháp" },
-  { value: "grammar-lessons", label: "Bài học" },
-  { value: "mock-test", label: "Thi thử" },
-  { value: "daily-challenge", label: "Thử thách" },
-  { value: "listening", label: "Nghe" },
+  { value: "", label: "All" },
+  { value: "grammar-quiz", label: "Grammar" },
+  { value: "grammar-lessons", label: "Lessons" },
+  { value: "mock-test", label: "Mock Test" },
+  { value: "daily-challenge", label: "Daily Challenge" },
+  { value: "listening", label: "Listening" },
   { value: "toeic-practice", label: "TOEIC" },
-  { value: "writing-practice", label: "Viết" },
+  { value: "writing-practice", label: "Writing" },
 ] as const;
 
 /** Tab keys */

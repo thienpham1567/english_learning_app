@@ -47,7 +47,7 @@ export function HistoryPanel({
               <Flex align="center" gap={8}>
                 <History className="text-accent text-base" />
                 <Text className="text-sm font-extrabold text-text-primary">
-                  Lịch sử đã nghe ({history.length})
+                  Listening History ({history.length})
                 </Text>
               </Flex>
               <Flex gap={8}>
@@ -65,7 +65,7 @@ export function HistoryPanel({
                     }}
                   >
                     <Trash2 size={11} />
-                    Xóa tất cả
+                    Clear All
                   </m.button>
                 )}
                 <m.button
@@ -83,9 +83,9 @@ export function HistoryPanel({
             {history.length === 0 ? (
               <div className="text-center text-text-muted" style={{ padding: "32px 16px" }}>
                 <History className="text-[28px] mb-2" style={{ opacity: 0.4 }} />
-                <div className="text-[13px] font-semibold">Chưa có lịch sử nào</div>
+                <div className="text-[13px] font-semibold">No history yet</div>
                 <div className="mt-1" style={{ fontSize: 11.5 }}>
-                  Khi bạn nghe đọc, các đoạn văn sẽ được lưu tại đây
+                  When you listen to passages, they will appear here
                 </div>
               </div>
             ) : (
@@ -127,7 +127,7 @@ export function HistoryPanel({
                         </div>
                         <Flex align="center" gap={8} style={{ marginTop: 3 }}>
                           <span className="text-[11px] text-text-muted font-semibold">
-                            {voice?.name ?? entry.voice} · {entry.speed}x · {entry.wordCount} từ
+                            {voice?.name ?? entry.voice} · {entry.speed}x · {entry.wordCount} words
                           </span>
                           <span className="text-[10.5px] text-text-muted">
                             <Clock className="text-[9px]" style={{ marginRight: 3 }} />
@@ -156,7 +156,7 @@ export function HistoryPanel({
                         onClick={(e) => {
                           e.stopPropagation();
                           onDelete(entry.id);
-                          message.success("Đã xóa mục lịch sử");
+                          message.success("Deleted history entry");
                         }}
                         onMouseEnter={(e: React.MouseEvent<HTMLButtonElement>) => {
                           e.currentTarget.style.opacity = "1";

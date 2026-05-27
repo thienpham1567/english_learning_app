@@ -4,18 +4,17 @@ import { Button, Card } from "antd";
 
 export function DiagnosticIntro({ onStart }: { onStart: () => void }) {
   return (
-    <Card title="Bài kiểm tra đầu vào TOEIC">
+    <Card title="TOEIC Diagnostic Test">
       <p>
-        Bạn sẽ làm <strong>30 câu trong 20 phút</strong> để xác định điểm khởi đầu của từng kỹ năng
-        nhỏ. Kết quả sẽ định hình lộ trình và gợi ý hằng ngày.
+        You will complete <strong>30 questions in 20 minutes</strong> to determine your starting proficiency in each sub-skill. The results will shape your study path and daily recommendations.
       </p>
       <ul>
-        <li>Phủ tất cả Part 3–7 (Part 1 & 2 sẽ thêm vào diagnostic_v2 ở sub-project sau)</li>
-        <li>Không xem giải thích cho đến khi nộp</li>
-        <li>Kết quả ghi vào hồ sơ học tập của bạn (mastery khởi đầu)</li>
+        <li>Covers Part 3–7 (Part 1 & 2 will be added in a future update)</li>
+        <li>No explanations shown until submission</li>
+        <li>Results will be saved to your profile (initial mastery levels)</li>
       </ul>
       <Button type="primary" size="large" onClick={onStart}>
-        Bắt đầu
+        Start
       </Button>
     </Card>
   );

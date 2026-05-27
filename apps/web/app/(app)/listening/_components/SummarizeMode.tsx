@@ -96,7 +96,7 @@ export default function SummarizeMode({ examMode }: Props) {
       });
       setExercise(data);
     } catch {
-      setError("Không thể tạo bài nghe. Vui lòng thử lại.");
+      setError("Unable to generate listening exercise. Please try again.");
       setState("idle");
     }
   }, [examMode, selectedLevel]);
@@ -121,7 +121,7 @@ export default function SummarizeMode({ examMode }: Props) {
       const msg =
         apiErr?.response?.data?.error ??
         apiErr?.message ??
-        "Có lỗi khi chấm bài. Vui lòng thử lại.";
+        "An error occurred while scoring. Please try again.";
       setError(msg);
       setState("writing");
     }
@@ -155,7 +155,7 @@ export default function SummarizeMode({ examMode }: Props) {
               Listen &amp; Summarize
             </h2>
             <p className="text-text-secondary m-0 text-[13px]">
-              Nghe đoạn văn → Tóm tắt → AI chấm điểm ý chính
+              Listen to the passage → Summarize → AI grades key ideas
             </p>
           </div>
 
@@ -165,7 +165,7 @@ export default function SummarizeMode({ examMode }: Props) {
               className="text-[11px] font-bold text-text-muted mb-2.5 uppercase"
               style={{ letterSpacing: "0.1em" }}
             >
-              Cấp độ CEFR
+              CEFR Level
             </div>
             <div className="flex gap-2 flex-wrap">
               {CEFR_LEVELS.map((l) => (
@@ -186,7 +186,7 @@ export default function SummarizeMode({ examMode }: Props) {
               ))}
             </div>
             <p className="text-[11px] text-text-muted" style={{ margin: "6px 0 0" }}>
-              Đang chọn: <strong>{selectedLevel}</strong> · 3–5 câu · 30–400 từ
+              Selected: <strong>{selectedLevel}</strong> · 3–5 sentences · 30–400 words
             </p>
           </div>
 
@@ -200,7 +200,7 @@ export default function SummarizeMode({ examMode }: Props) {
               color: "var(--text-on-accent)",
             }}
           >
-            Bắt đầu
+            Start
           </button>
         </div>
       )}
@@ -209,7 +209,7 @@ export default function SummarizeMode({ examMode }: Props) {
       {state === "listening" && !exercise && (
         <div className="text-center" style={{ padding: 40 }}>
           <Loader2 className="animate-spin text-accent" size={32} />
-          <p className="text-text-secondary mt-3">Đang tạo bài nghe...</p>
+          <p className="text-text-secondary mt-3">Generating listening exercise...</p>
         </div>
       )}
 
@@ -221,8 +221,7 @@ export default function SummarizeMode({ examMode }: Props) {
             className="py-3 px-4 rounded-xl border-2 border-border text-[13px] text-text-secondary"
             style={{ background: "var(--card-bg)" }}
           >
-            🎧 <strong>Nghe đoạn văn bên dưới.</strong> Đoạn văn gốc sẽ được tiết lộ sau khi bạn nộp
-            bài tóm tắt.
+            🎧 <strong>Listen to the passage below.</strong> The original transcript will be revealed after you submit your summary.
           </div>
 
           {/* AudioPlayer (AC1 — reuses 19.3.2 component with A-B loop + speed) */}
@@ -244,14 +243,14 @@ export default function SummarizeMode({ examMode }: Props) {
                 className="text-[13px] font-semibold"
                 style={{ color: "var(--text)" }}
               >
-                Tóm tắt đoạn văn bằng lời của bạn (3–5 câu):
+                Summarize the passage in your own words (3–5 sentences):
               </label>
               <textarea
                 id="summarize-textarea"
                 ref={textareaRef}
                 value={summaryText}
                 onChange={(e) => setSummaryText(e.target.value)}
-                placeholder="Viết tóm tắt của bạn ở đây... (tối thiểu 30 từ, tối đa 400 từ)"
+                placeholder="Write your summary here... (minimum 30 words, maximum 400 words)"
                 rows={6}
                 className="w-full rounded-xl border-2 border-border text-sm"
                 style={{
@@ -266,11 +265,11 @@ export default function SummarizeMode({ examMode }: Props) {
               {/* Word count indicator */}
               <div className="flex justify-between items-center text-xs">
                 <span className="font-semibold flex items-center gap-1" style={{ color: wcColor }}>
-                  {wc} từ{" "}
+                  {wc} words{" "}
                   {wc < 30 ? (
-                    "(cần ít nhất 30)"
+                    "(minimum 30 required)"
                   ) : wc > 400 ? (
-                    "(quá dài, tối đa 400)"
+                    "(too long, maximum 400)"
                   ) : (
                     <CircleCheckBig size={14} className="inline text-emerald-500" />
                   )}
@@ -287,7 +286,7 @@ export default function SummarizeMode({ examMode }: Props) {
                     transition: "all 0.15s ease",
                   }}
                 >
-                  <Send /> Nộp bài
+                  <Send /> Submit
                 </button>
               </div>
             </div>
@@ -301,7 +300,7 @@ export default function SummarizeMode({ examMode }: Props) {
                 className="rounded-lg bg-transparent text-accent text-[13px] font-semibold cursor-pointer"
                 style={{ padding: "10px 24px", border: "1px solid var(--accent)" }}
               >
-                Đã nghe xong → Viết tóm tắt
+                Finished Listening → Start Summarizing
               </button>
             </div>
           )}
@@ -312,7 +311,7 @@ export default function SummarizeMode({ examMode }: Props) {
       {state === "scoring" && (
         <div className="text-center" style={{ padding: 40 }}>
           <Loader2 className="animate-spin text-accent" size={32} />
-          <p className="text-text-secondary mt-3">AI đang chấm bài tóm tắt của bạn...</p>
+          <p className="text-text-secondary mt-3">AI is grading your summary...</p>
         </div>
       )}
 
@@ -339,15 +338,15 @@ export default function SummarizeMode({ examMode }: Props) {
               )}
             />
             <p className="text-[13px] text-text-secondary" style={{ margin: "12px 0 0" }}>
-              Điểm tổng thể
+              Overall Score
             </p>
 
             {/* Sub-scores */}
             <div className="flex justify-center gap-6 mt-4">
               {[
-                { label: "Chính xác", value: result.accuracyScore },
-                { label: "Bao phủ ý", value: result.coverageScore },
-                { label: "Súc tích", value: result.concisenessScore },
+                { label: "Accuracy", value: result.accuracyScore },
+                { label: "Coverage", value: result.coverageScore },
+                { label: "Conciseness", value: result.concisenessScore },
               ].map(({ label, value }) => (
                 <div key={label}>
                   <p className="text-[11px] text-text-secondary" style={{ margin: "0 0 4px" }}>
@@ -372,7 +371,7 @@ export default function SummarizeMode({ examMode }: Props) {
                 style={{ margin: "0 0 6px" }}
               >
                 <Info className="mr-1" />
-                Nhận xét từ AI:
+                AI Feedback:
               </p>
               <p className="text-[13px] m-0 leading-relaxed">{result.feedback}</p>
             </div>
@@ -384,7 +383,7 @@ export default function SummarizeMode({ examMode }: Props) {
             style={{ background: "var(--card-bg)" }}
           >
             <p className="text-xs font-semibold text-text-secondary mb-2.5">
-              Các ý chính trong đoạn văn:
+              Key ideas in the passage:
             </p>
             <div className="flex flex-col gap-2">
               {result.coverage.map((item, i) => (
@@ -421,7 +420,7 @@ export default function SummarizeMode({ examMode }: Props) {
                     className="shrink-0 text-[11px]"
                     style={{ marginLeft: "auto" }}
                   >
-                    {item.covered ? "Có" : "Thiếu"}
+                    {item.covered ? "Covered" : "Missing"}
                   </Tag>
                 </div>
               ))}
@@ -434,7 +433,7 @@ export default function SummarizeMode({ examMode }: Props) {
             style={{ background: "var(--card-bg)" }}
           >
             <p className="text-xs font-semibold text-text-secondary" style={{ margin: "0 0 6px" }}>
-              Bài tóm tắt của bạn:
+              Your summary:
             </p>
             <p className="text-sm m-0 italic" style={{ lineHeight: 1.7 }}>
               {summaryText}
@@ -452,7 +451,7 @@ export default function SummarizeMode({ examMode }: Props) {
               style={{ padding: 0 }}
             >
               <Eye />
-              {showPassage ? "Ẩn đoạn văn gốc" : "Xem đoạn văn gốc"}
+              {showPassage ? "Hide original transcript" : "Show original transcript"}
             </button>
             {showPassage && (
               <p
@@ -476,7 +475,7 @@ export default function SummarizeMode({ examMode }: Props) {
               className="rounded-lg border-2 border-border bg-transparent cursor-pointer text-[13px] font-medium"
               style={{ padding: "10px 20px", color: "var(--text)" }}
             >
-              <RefreshCw /> Viết lại
+              <RefreshCw /> Rewrite
             </button>
             <button
               onClick={startSession}
@@ -487,7 +486,7 @@ export default function SummarizeMode({ examMode }: Props) {
                 color: "var(--text-on-accent)",
               }}
             >
-              Bài mới
+              New Exercise
             </button>
           </div>
         </div>

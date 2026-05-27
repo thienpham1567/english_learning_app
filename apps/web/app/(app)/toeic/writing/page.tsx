@@ -34,25 +34,25 @@ export default async function ToeicWritingPage() {
             <Card hoverable>
               <div className="flex items-center gap-2">
                 <ClipboardList className="text-3xl text-accent" />
-                <strong className="text-lg text-ink">Bắt đầu Writing test</strong>
+                <strong className="text-lg text-ink">Start Writing Test</strong>
               </div>
               <div className="text-text-muted mt-1.5">
-                Q1-5 picture (8 phút) · Q6-7 email (20 phút) · Q8 opinion (30 phút)
+                Q1-5 picture (8 mins) · Q6-7 email (20 mins) · Q8 opinion (30 mins)
               </div>
               <div className="mt-2">
-                <Tag color="orange">AI grading sau khi nộp</Tag>
+                <Tag color="orange">AI grading after submission</Tag>
               </div>
             </Card>
           </Link>
         ) : (
           <Card>
-            <Empty description="Chưa có prompt nào. Chạy `pnpm seed:toeic-writing`" />
+            <Empty description="No prompts found. Run `pnpm seed:toeic-writing`" />
           </Card>
         )}
 
-        <Card title="Lịch sử Writing test" size="small">
+        <Card title="Writing Test History" size="small">
           {history.length === 0 ? (
-            <Empty description="Chưa có session nào" />
+            <Empty description="No sessions found" />
           ) : (
             <div className="grid gap-2">
               {history.map((h) => (
@@ -67,7 +67,7 @@ export default async function ToeicWritingPage() {
                   }}
                 >
                   <span>
-                    {new Date(h.completedAt!).toLocaleString("vi-VN")} · {h.setCode}
+                    {new Date(h.completedAt!).toLocaleString("en-US")} · {h.setCode}
                   </span>
                   <span className="text-lg font-bold">{h.scaledScore ?? "—"} / 200</span>
                 </Link>

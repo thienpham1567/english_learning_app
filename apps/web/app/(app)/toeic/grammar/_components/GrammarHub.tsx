@@ -37,9 +37,9 @@ export function GrammarHub({ skills, mistakeCount }: { skills: SkillRow[]; mista
         <Card size="small" hoverable onClick={startDaily}>
           <div className="flex items-center gap-2">
             <Calendar className="text-xl" style={{ color: "var(--info)" }} />
-            <strong>Daily 15 câu</strong>
+            <strong>Daily 15 Questions</strong>
           </div>
-          <div className="text-text-muted text-[13px] mt-1.5">Tập trung vào kỹ năng yếu nhất</div>
+          <div className="text-text-muted text-[13px] mt-1.5">Focus on your weakest skill</div>
           {weakest3[0] && (
             <Tag className="mt-2">{getSkillLabel(weakest3[0].skill as ToeicSkill)}</Tag>
           )}
@@ -52,15 +52,15 @@ export function GrammarHub({ skills, mistakeCount }: { skills: SkillRow[]; mista
         >
           <div className="flex items-center gap-2">
             <AlertTriangle className="text-xl text-destructive" />
-            <strong>Câu sai cần ôn</strong>
+            <strong>Incorrect questions to review</strong>
           </div>
           <div className="text-[28px] font-bold mt-1.5">{mistakeCount}</div>
-          <div className="text-text-muted text-[13px]">Spaced repetition cho câu sai</div>
+          <div className="text-text-muted text-[13px]">Spaced repetition for incorrect answers</div>
         </Card>
         <Card size="small">
           <div className="flex items-center gap-2">
             <Zap className="text-xl" style={{ color: "var(--warning)" }} />
-            <strong>Top 3 yếu nhất</strong>
+            <strong>Top 3 weakest skills</strong>
           </div>
           <div className="mt-2 flex flex-col gap-1">
             {weakest3.map((s) => (
@@ -82,7 +82,7 @@ export function GrammarHub({ skills, mistakeCount }: { skills: SkillRow[]; mista
       </div>
 
       {/* Skill matrix */}
-      <Card title="Tất cả kỹ năng Part 5 & 6" size="small">
+      <Card title="All Part 5 & 6 Skills" size="small">
         <div className="grid gap-2.5">
           {skills.map((s) => (
             <div
@@ -99,7 +99,7 @@ export function GrammarHub({ skills, mistakeCount }: { skills: SkillRow[]; mista
                   size="small"
                 />
               </div>
-              <div className="text-xs text-text-muted">{s.pool} câu</div>
+              <div className="text-xs text-text-muted">{s.pool} questions</div>
               <Button size="small" onClick={() => startDrill(s.skill)}>
                 Drill
               </Button>

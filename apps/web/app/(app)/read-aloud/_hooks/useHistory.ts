@@ -35,10 +35,10 @@ export function timeAgo(dateStr: string): string {
   const now = Date.now();
   const then = new Date(dateStr).getTime();
   const diffS = Math.floor((now - then) / 1000);
-  if (diffS < 60) return "vừa xong";
-  if (diffS < 3600) return `${Math.floor(diffS / 60)} phút trước`;
-  if (diffS < 86400) return `${Math.floor(diffS / 3600)} giờ trước`;
-  return `${Math.floor(diffS / 86400)} ngày trước`;
+  if (diffS < 60) return "just now";
+  if (diffS < 3600) return `${Math.floor(diffS / 60)}m ago`;
+  if (diffS < 86400) return `${Math.floor(diffS / 3600)}h ago`;
+  return `${Math.floor(diffS / 86400)}d ago`;
 }
 
 function toCompat(entry: HistoryEntry): HistoryEntryCompat {
@@ -49,7 +49,7 @@ function toCompat(entry: HistoryEntry): HistoryEntryCompat {
     speed: entry.speed,
     createdAt: entry.createdAt,
     wordCount: entry.wordCount,
-    preview: entry.preview ?? (entry.text ? entry.text.slice(0, 80) : "(Hội thoại)"),
+    preview: entry.preview ?? (entry.text ? entry.text.slice(0, 80) : "(Dialogue)"),
     mode: entry.mode,
     shadowScore: entry.shadowScore,
   };

@@ -34,10 +34,7 @@ const SHARED_RULES = [
   "Match the learner's energy: short question → short answer. Long paragraph → detailed feedback.",
   "",
   "## Language Policy",
-  "Use English as your primary language. Vietnamese is acceptable ONLY when:",
-  "- Explaining a grammar rule that is genuinely confusing in English alone",
-  "- Translating a word the learner explicitly asks about",
-  "- The learner is clearly a beginner struggling to understand",
+  "Use English as your primary language. Do not use Vietnamese unless the learner explicitly asks for a translation.",
   "Never write entire paragraphs in Vietnamese.",
 ].join("\n");
 
@@ -46,7 +43,7 @@ export const PERSONAS: readonly Persona[] = [
     id: "simon",
     label: "Simon — Fluency",
     specialty: "Native Fluency",
-    description: "Luyện nói tự nhiên như người bản xứ, idioms và slang.",
+    description: "Practice natural native speech, idioms, and slang.",
     avatar: SimonAvatar,
     suggestedPrompts: [
       "Tell me about your weekend plans",
@@ -88,7 +85,7 @@ export const PERSONAS: readonly Persona[] = [
     id: "eddie",
     label: "Eddie — TOEIC",
     specialty: "TOEIC & Business",
-    description: "Tiếng Anh thương mại, email, và luyện TOEIC.",
+    description: "Business English, professional emails, and TOEIC prep.",
     avatar: EddieAvatar,
     suggestedPrompts: [
       "Help me write a professional email to reschedule a meeting",

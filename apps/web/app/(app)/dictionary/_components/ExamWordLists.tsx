@@ -411,11 +411,10 @@ export function ExamWordLists({ onSelect }: Props) {
         ))}
       </div>
 
-      {/* Description */}
       <p className="text-xs text-text-muted leading-snug m-0">
         {activeTab === "toeic"
-          ? "Từ vựng thiết yếu cho kỳ thi TOEIC — chủ đề business, office & communication."
-          : "Từ vựng học thuật cho IELTS — chủ đề environment, society & science."}
+          ? "Essential vocabulary for the TOEIC exam — covering business, office & communication."
+          : "Academic vocabulary for IELTS — covering environment, society & science."}
       </p>
 
       {/* Category list */}

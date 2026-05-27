@@ -76,7 +76,7 @@ export default function GrammarLessonsPage() {
       setRecommendedTopic(data.recommendedTopic);
       setProgressError(null);
     } catch {
-      setProgressError("Chưa tải được tiến độ học.");
+      setProgressError("Failed to load learning progress.");
     }
   }, [examMode]);
 
@@ -94,7 +94,7 @@ export default function GrammarLessonsPage() {
         setProgressError(null);
       })
       .catch(() => {
-        if (!cancelled) setProgressError("Chưa tải được tiến độ học.");
+        if (!cancelled) setProgressError("Failed to load learning progress.");
       });
 
     return () => {
@@ -174,7 +174,7 @@ export default function GrammarLessonsPage() {
                         <div className="text-2xl font-black text-ink font-display">
                           {progressPct}%
                         </div>
-                        <div className="text-[9px] text-text-muted font-bold">Hoàn thành</div>
+                        <div className="text-[9px] text-text-muted font-bold">Completed</div>
                       </div>
                     )}
                   />
@@ -188,17 +188,17 @@ export default function GrammarLessonsPage() {
                       icon={<BookOpen />}
                       iconColor="var(--accent)"
                       iconBg="var(--accent-light)"
-                      label="Chủ đề"
-                      value={`${tabStats.categories} nhóm`}
-                      sub={`${tabStats.totalTopics} bài học`}
+                      label="Topics"
+                      value={`${tabStats.categories} groups`}
+                      sub={`${tabStats.totalTopics} lessons`}
                     />
                     <StatCard
                       icon={<CheckCircle />}
                       iconColor="var(--success)"
                       iconBg="rgba(16, 185, 129, 0.08)"
-                      label="Hoàn thành"
+                      label="Completed"
                       value={`${tabStats.completed}`}
-                      sub={`/${tabStats.totalTopics} bài`}
+                      sub={`/${tabStats.totalTopics} lessons`}
                     />
                     <StatCard
                       icon={progressPct === 100 ? <Trophy /> : <Flame />}
@@ -208,9 +208,9 @@ export default function GrammarLessonsPage() {
                           ? "rgba(139, 92, 246, 0.08)"
                           : "rgba(245, 158, 11, 0.08)"
                       }
-                      label="Đang học"
+                      label="In Progress"
                       value={`${inProgressTopics.size}`}
-                      sub="chủ đề"
+                      sub="topics"
                     />
                   </div>
                 </div>
@@ -291,7 +291,7 @@ export default function GrammarLessonsPage() {
                         style={{ color: "rgba(255,255,255,0.7)", letterSpacing: "0.1em" }}
                       >
                         <Star className="text-[9px] mr-1" />
-                        Bài học gợi ý tiếp theo
+                        Recommended Next Lesson
                       </div>
                       <div
                         className="font-black font-display"
@@ -303,7 +303,7 @@ export default function GrammarLessonsPage() {
                         className="font-semibold"
                         style={{ fontSize: 11.5, color: "rgba(255,255,255,0.65)", marginTop: 2 }}
                       >
-                        {recommendedTopic.level} · Bấm để bắt đầu học ngay
+                        {recommendedTopic.level} · Click to start learning now
                       </div>
                     </div>
 
@@ -333,16 +333,16 @@ export default function GrammarLessonsPage() {
                 <QuickAction
                   href="/grammar-roadmap"
                   emoji="🗺️"
-                  label="Lộ trình học"
-                  desc="Xem bản đồ 3 giai đoạn"
+                  label="Study Roadmap"
+                  desc="View 3-phase study map"
                   color="var(--accent)"
                   onClick={() => {}}
                 />
                 <QuickAction
                   href="/grammar-quiz"
                   emoji="📝"
-                  label="Quiz Part 5"
-                  desc="Luyện đề thực chiến"
+                  label="Part 5 Quiz"
+                  desc="Real exam practice"
                   color="var(--success)"
                   onClick={() => {}}
                 />
@@ -357,7 +357,7 @@ export default function GrammarLessonsPage() {
                 <div className="flex items-center gap-2" style={{ marginBottom: 14 }}>
                   <Zap className="text-accent text-base" />
                   <h2 className="m-0 font-black text-ink font-display" style={{ fontSize: 17 }}>
-                    Thư viện chủ đề
+                    Topic Library
                   </h2>
                   <span
                     className="text-[11px] font-bold rounded-md text-accent"
@@ -367,7 +367,7 @@ export default function GrammarLessonsPage() {
                       border: "1px solid color-mix(in srgb, var(--accent) 20%, transparent)",
                     }}
                   >
-                    {tabStats.totalTopics} bài
+                    {tabStats.totalTopics} lessons
                   </span>
                 </div>
                 <TopicGrid

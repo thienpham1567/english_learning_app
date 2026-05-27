@@ -91,9 +91,9 @@ export default function GradedPassagePage() {
         style={{ padding: 60 }}
       >
         <BookOpen size={48} className="text-text-muted" />
-        <Text type="secondary">Không tìm thấy bài đọc</Text>
+        <Text type="secondary">Reading passage not found</Text>
         <Button type="link" icon={<ArrowLeft />} onClick={() => router.push("/reading/graded")}>
-          Quay lại danh sách
+          Back to List
         </Button>
       </Flex>
     );
@@ -110,7 +110,7 @@ export default function GradedPassagePage() {
           className="text-text-muted text-[13px]"
           style={{ alignSelf: "flex-start", borderRadius: 10 }}
         >
-          Quay lại danh sách
+          Back to List
         </Button>
 
         {/* Article header card */}
@@ -140,7 +140,7 @@ export default function GradedPassagePage() {
               <Flex align="center" gap={4}>
                 <Timer size={12} className="text-text-muted" />
                 <Text className="text-text-muted text-xs">
-                  {readTime} phút · {passage.wordCount} từ
+                  {readTime} min · {passage.wordCount} words
                 </Text>
               </Flex>
               {marked && (
@@ -151,7 +151,7 @@ export default function GradedPassagePage() {
                     background: "color-mix(in srgb, var(--success) 8%, transparent)",
                   }}
                 >
-                  <CheckCircle className="mr-1" /> Đã đọc
+                  <CheckCircle className="mr-1" /> Read
                 </Tag>
               )}
             </Flex>
@@ -189,7 +189,7 @@ export default function GradedPassagePage() {
               className="rounded-xl font-semibold h-[44px]"
               style={{ padding: "0 28px" }}
             >
-              Đánh dấu đã đọc
+              Mark as Read
             </Button>
           ) : (
             <Card
@@ -199,7 +199,7 @@ export default function GradedPassagePage() {
             >
               <Flex vertical align="center" gap={10}>
                 <Text className="text-sm font-medium" style={{ color: "rgba(255,255,255,0.9)" }}>
-                  <Star /> Bạn đã đọc xong! Kiểm tra từ vựng ngay?
+                  <Star /> You've completed the reading! Check your vocabulary now?
                 </Text>
                 <Button
                   size="large"
@@ -212,7 +212,7 @@ export default function GradedPassagePage() {
                     color: "var(--text-on-accent)",
                   }}
                 >
-                  <ClipboardList /> Làm bài cloze test
+                  <ClipboardList /> Take Cloze Test
                 </Button>
               </Flex>
             </Card>

@@ -46,12 +46,12 @@ const DIFFICULTY_COLORS: Record<string, { bg: string; color: string; border: str
 };
 
 const SECTIONS = [
-  { label: "Tất cả", value: "", icon: <LayoutGrid /> },
-  { label: "Thế giới", value: "world", icon: <Globe /> },
-  { label: "Khoa học", value: "science", icon: <FlaskConical /> },
-  { label: "Công nghệ", value: "technology", icon: <Laptop /> },
-  { label: "Môi trường", value: "environment", icon: <MapPin /> },
-  { label: "Kinh doanh", value: "business", icon: <Users /> },
+  { label: "All Topics", value: "", icon: <LayoutGrid /> },
+  { label: "World", value: "world", icon: <Globe /> },
+  { label: "Science", value: "science", icon: <FlaskConical /> },
+  { label: "Technology", value: "technology", icon: <Laptop /> },
+  { label: "Environment", value: "environment", icon: <MapPin /> },
+  { label: "Business", value: "business", icon: <Users /> },
 ];
 
 export default function ReadingPage() {
@@ -158,10 +158,10 @@ export default function ReadingPage() {
                 className="text-base font-extrabold text-text-secondary"
                 style={{ margin: "0 0 6px" }}
               >
-                Không tìm thấy bài viết nào
+                No articles found
               </p>
               <p className="text-text-muted m-0 font-medium" style={{ fontSize: 12.5 }}>
-                Hãy kiểm tra cấu hình khóa GUARDIAN_API_KEY trong hệ thống.
+                Please check the GUARDIAN_API_KEY configuration in your system.
               </p>
             </div>
           ) : (
@@ -280,7 +280,7 @@ export default function ReadingPage() {
                           style={{ fontSize: 11.5 }}
                         >
                           <Clock />
-                          <span>{article.readTime} phút đọc</span>
+                          <span>{article.readTime} min read</span>
                         </div>
                       </div>
                     </div>

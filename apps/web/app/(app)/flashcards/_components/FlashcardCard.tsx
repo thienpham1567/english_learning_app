@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, Flex, Space, Tag, Typography } from "antd";
-import { Lightbulb, Loader2, Network, Volume2 } from "lucide-react";
+import { Frown, Lightbulb, Loader2, Meh, Network, Smile, Sparkles, Volume2 } from "lucide-react";
 import * as m from "motion/react-client";
 import { useState } from "react";
 import { WordFamilyExplorer } from "@/app/(app)/flashcards/_components/WordFamilyExplorer";
@@ -149,11 +149,11 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
               }}
             >
               {tts.isLoading ? <Loader2 className="animate-spin" /> : <Volume2 />}
-              {tts.isSpeaking ? "Đang phát..." : "Nghe phát âm"}
+              {tts.isSpeaking ? "Playing..." : "Listen"}
             </m.button>
 
             <span className="absolute text-xs font-semibold text-text-muted" style={{ bottom: 24 }}>
-              Nhấn thẻ để lật xem nghĩa
+              Click card to flip
             </span>
           </div>
 
@@ -267,11 +267,11 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
               >
                 {contextLoading ? (
                   <>
-                    <Loader2 className="animate-spin" /> Đang tạo ví dụ...
+                    <Loader2 className="animate-spin" /> Generating examples...
                   </>
                 ) : (
                   <>
-                    <Lightbulb /> Xem thêm ví dụ TOEIC
+                    <Lightbulb /> Show TOEIC Examples
                   </>
                 )}
               </m.button>
@@ -283,7 +283,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                   className="text-[11px] font-extrabold uppercase text-accent flex items-center gap-1"
                   style={{ letterSpacing: ".1em" }}
                 >
-                  <Lightbulb /> Ví dụ thực tế TOEIC
+                  <Lightbulb /> TOEIC Context Examples
                 </span>
                 {contextSentences.slice(0, 3).map((s, i) => (
                   <div
@@ -330,32 +330,32 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
 const RATINGS = [
   {
     quality: 0,
-    label: "Quên",
-    emoji: "😵",
+    label: "Forgot",
+    icon: Frown,
     color: "var(--error)",
     bg: "rgba(239, 68, 68, 0.08)",
     border: "rgba(239, 68, 68, 0.2)",
   },
   {
     quality: 2,
-    label: "Khó",
-    emoji: "😓",
+    label: "Hard",
+    icon: Meh,
     color: "var(--warning)",
     bg: "rgba(245, 158, 11, 0.08)",
     border: "rgba(245, 158, 11, 0.2)",
   },
   {
     quality: 3,
-    label: "Ổn",
-    emoji: "🙂",
+    label: "Good",
+    icon: Smile,
     color: "var(--accent)",
     bg: "var(--accent-light)",
     border: "color-mix(in srgb, var(--accent) 15%, transparent)",
   },
   {
     quality: 5,
-    label: "Dễ",
-    emoji: "🤩",
+    label: "Easy",
+    icon: Sparkles,
     color: "var(--success)",
     bg: "rgba(16, 185, 129, 0.08)",
     border: "rgba(16, 185, 129, 0.2)",
@@ -371,27 +371,30 @@ function RatingButtons({
 }) {
   return (
     <div className="anim-fade-up flex gap-3 mt-6" style={{ alignSelf: "center" }}>
-      {RATINGS.map((r, idx) => (
-        <m.button
-          key={r.quality}
-          whileHover={{ scale: 1.06, y: -2 }}
-          whileTap={{ scale: 0.94 }}
-          disabled={isSubmitting}
-          onClick={() => onRate(r.quality)}
-          className="flex flex-col items-center gap-1 w-[72px] rounded-(--radius-lg) cursor-pointer"
-          style={{
-            padding: "10px 0",
-            background: r.bg,
-            border: `1.5px solid ${r.border}`,
-            color: r.color,
-            boxShadow: "var(--shadow-sm)",
-            transition: "all 0.2s",
-          }}
-        >
-          <span className="text-2xl">{r.emoji}</span>
-          <span className="text-xs font-extrabold">{r.label}</span>
-        </m.button>
-      ))}
+      {RATINGS.map((r, idx) => {
+        const IconComponent = r.icon;
+        return (
+          <m.button
+            key={r.quality}
+            whileHover={{ scale: 1.06, y: -2 }}
+            whileTap={{ scale: 0.94 }}
+            disabled={isSubmitting}
+            onClick={() => onRate(r.quality)}
+            className="flex flex-col items-center gap-1.5 w-[72px] rounded-(--radius-lg) cursor-pointer"
+            style={{
+              padding: "10px 0",
+              background: r.bg,
+              border: `1.5px solid ${r.border}`,
+              color: r.color,
+              boxShadow: "var(--shadow-sm)",
+              transition: "all 0.2s",
+            }}
+          >
+            <IconComponent className="h-5 w-5" />
+            <span className="text-xs font-extrabold">{r.label}</span>
+          </m.button>
+        );
+      })}
     </div>
   );
 }

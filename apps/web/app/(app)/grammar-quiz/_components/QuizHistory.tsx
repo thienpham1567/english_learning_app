@@ -11,9 +11,9 @@ export type QuizHistoryEntry = {
 };
 
 const LEVEL_LABELS: Record<string, { label: string; color: string; bg: string }> = {
-  easy: { label: "Cơ bản A1–A2", color: "var(--success)", bg: "rgba(16, 185, 129, 0.08)" },
-  medium: { label: "Trung cấp B1–B2", color: "var(--accent)", bg: "var(--accent-light)" },
-  hard: { label: "Nâng cao C1–C2", color: "var(--error)", bg: "rgba(239, 68, 68, 0.08)" },
+  easy: { label: "Basic A1–A2", color: "var(--success)", bg: "rgba(16, 185, 129, 0.08)" },
+  medium: { label: "Intermediate B1–B2", color: "var(--accent)", bg: "var(--accent-light)" },
+  hard: { label: "Advanced C1–C2", color: "var(--error)", bg: "rgba(239, 68, 68, 0.08)" },
 };
 
 const HISTORY_KEY = "grammar-quiz-history";
@@ -42,7 +42,7 @@ function getQuizHistory(): QuizHistoryEntry[] {
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
-  return d.toLocaleDateString("vi-VN", {
+  return d.toLocaleDateString("en-US", {
     day: "2-digit",
     month: "2-digit",
     hour: "2-digit",
@@ -69,7 +69,7 @@ export function QuizHistory({ open, onClose }: Props) {
             fontFamily: "var(--font-display)",
           }}
         >
-          Lịch sử làm bài
+          Quiz History
         </span>
       }
       open={open}
@@ -91,7 +91,7 @@ export function QuizHistory({ open, onClose }: Props) {
 
       {history.length === 0 ? (
         <Empty
-          description="Chưa có lịch sử làm bài"
+          description="No quiz history found"
           image={Empty.PRESENTED_IMAGE_SIMPLE}
           style={{ marginTop: 40 }}
         />
@@ -136,7 +136,7 @@ export function QuizHistory({ open, onClose }: Props) {
                       {levelInfo.label}
                     </span>
                     <span style={{ fontSize: 14, fontWeight: 800, color: "var(--text-primary)" }}>
-                      Đúng {entry.score}/{entry.total}
+                      {entry.score}/{entry.total} Correct
                     </span>
                   </div>
                   <span style={{ fontSize: 11, color: "var(--text-muted)", fontWeight: 500 }}>

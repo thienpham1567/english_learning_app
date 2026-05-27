@@ -53,15 +53,14 @@ export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedProm
         variants={itemVariants}
         className="font-display text-3xl md:text-4xl italic font-semibold text-(--ink) tracking-wide"
       >
-        Chọn gia sư để bắt đầu
+        Choose a tutor to start
       </motion.h2>
 
       <motion.p
         variants={itemVariants}
         className="mt-3 max-w-md text-sm text-(--text-secondary) leading-relaxed"
       >
-        Mỗi gia sư có chuyên môn và phong cách phản hồi riêng. Hãy chọn người phù hợp nhất để đồng
-        hành cùng bạn.
+        Each tutor has their own expertise and communication style. Select the one that fits your learning goals.
       </motion.p>
 
       {/* Persona cards grid */}
@@ -82,7 +81,7 @@ export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedProm
       {/* Suggested prompts */}
       <motion.div variants={itemVariants} className="mt-10 flex w-full flex-col items-center gap-3">
         <span className="text-[10px] font-bold uppercase tracking-wider text-(--text-muted) font-mono">
-          Gợi ý hội thoại
+          Suggested Prompts
         </span>
         <div className="flex flex-wrap justify-center gap-2 max-w-xl">
           {activePersona.suggestedPrompts.map((prompt) => (

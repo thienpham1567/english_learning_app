@@ -11,28 +11,28 @@ const LEVEL_META: Record<
   CefrLevel,
   { label: string; color: string; desc: string; darkText?: boolean }
 > = {
-  A1: { label: "Beginner", color: "var(--success)", desc: "Câu ngắn, từ cơ bản", darkText: true },
-  A2: { label: "Elementary", color: "var(--success)", desc: "Hội thoại đơn giản", darkText: true },
-  B1: { label: "Intermediate", color: "var(--accent)", desc: "Chủ đề quen thuộc", darkText: true },
+  A1: { label: "Beginner", color: "var(--success)", desc: "Short sentences, basic words", darkText: true },
+  A2: { label: "Elementary", color: "var(--success)", desc: "Simple conversations", darkText: true },
+  B1: { label: "Intermediate", color: "var(--accent)", desc: "Familiar topics", darkText: true },
   B2: {
     label: "Upper-Int",
     color: "var(--secondary)",
-    desc: "Thảo luận chi tiết",
+    desc: "Detailed discussions",
     darkText: false,
   },
   C1: {
     label: "Advanced",
     color: "var(--tertiary, var(--secondary))",
-    desc: "Phân tích sâu",
+    desc: "In-depth analysis",
     darkText: false,
   },
-  C2: { label: "Proficiency", color: "var(--error)", desc: "Ngôn ngữ phức tạp", darkText: false },
+  C2: { label: "Proficiency", color: "var(--error)", desc: "Complex language", darkText: false },
 };
 
 const TYPE_META: Record<ExerciseType, { label: string; icon: React.ReactNode; desc: string }> = {
-  comprehension: { label: "Nghe hiểu", icon: <Target />, desc: "Trả lời câu hỏi trắc nghiệm" },
-  dictation: { label: "Nghe chép", icon: <ClipboardList />, desc: "Viết lại nội dung nghe được" },
-  fill_blanks: { label: "Điền từ", icon: <Pencil />, desc: "Điền từ còn thiếu vào chỗ trống" },
+  comprehension: { label: "Comprehension", icon: <Target />, desc: "Answer multiple choice questions" },
+  dictation: { label: "Dictation", icon: <ClipboardList />, desc: "Transcribe the audio text" },
+  fill_blanks: { label: "Fill in Blanks", icon: <Pencil />, desc: "Fill in missing words in blanks" },
 };
 
 type Props = {
@@ -59,7 +59,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
           className="text-[11px] font-bold text-text-muted mb-3 uppercase"
           style={{ letterSpacing: "0.12em" }}
         >
-          Cấp độ CEFR
+          CEFR Level
         </div>
         <div
           className="grid gap-2.5"
@@ -105,7 +105,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
                     }}
                   >
                     <Star className="h-2.5 w-2.5 fill-current text-[var(--text-on-accent)] shrink-0" />
-                    <span>Đề xuất</span>
+                    <span>Recommended</span>
                   </motion.span>
                 )}
                 <div
@@ -146,7 +146,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
           className="text-[11px] font-bold text-text-muted mb-3 uppercase"
           style={{ letterSpacing: "0.12em" }}
         >
-          Loại bài tập
+          Exercise Type
         </div>
         <div className="flex flex-col gap-2">
           {EXERCISE_TYPES.map((t) => {
@@ -222,7 +222,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
         className="w-full h-13 text-base font-black flex items-center justify-center gap-2.5"
       >
         {isLoading ? <Loader2 className="animate-spin" /> : <Volume2 />}
-        {isLoading ? "Đang tạo bài nghe..." : "Bắt đầu luyện nghe"}
+        {isLoading ? "Generating listening exercise..." : "Start Listening Practice"}
       </Button>
     </div>
   );

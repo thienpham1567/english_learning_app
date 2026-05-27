@@ -59,7 +59,7 @@ export function useAudioPlayback() {
       return;
     }
     if (text.length > MAX_CHARS) {
-      console.warn(`Văn bản quá dài! Tối đa ${MAX_CHARS.toLocaleString()} ký tự.`);
+      console.warn(`Text is too long! Maximum ${MAX_CHARS.toLocaleString()} characters.`);
       return;
     }
 
@@ -107,7 +107,7 @@ export function useAudioPlayback() {
       });
 
       if (!res.ok) {
-        const err = await res.json().catch(() => ({ error: "Lỗi không xác định" }));
+        const err = await res.json().catch(() => ({ error: "Unknown error" }));
         throw new Error(err.error || `HTTP ${res.status}`);
       }
 

@@ -33,9 +33,9 @@ export function WritingTab() {
   const [activeTab, setActiveTab] = useState<TabKey>("practice");
 
   const tabs = [
-    { key: "practice" as const, label: "Luyện viết", icon: <PenTool className="h-4 w-4" /> },
-    { key: "rewrite" as const, label: "Cải thiện câu", icon: <Highlighter className="h-4 w-4" /> },
-    { key: "guided" as const, label: "Viết có hướng dẫn", icon: <Target className="h-4 w-4" /> },
+    { key: "practice" as const, label: "Practice Writing", icon: <PenTool className="h-4 w-4" /> },
+    { key: "rewrite" as const, label: "Improve Sentences", icon: <Highlighter className="h-4 w-4" /> },
+    { key: "guided" as const, label: "Guided Writing", icon: <Target className="h-4 w-4" /> },
   ];
 
   return (
@@ -106,7 +106,7 @@ export function WritingTab() {
                   <div className="h-3 bg-bg-deep border border-border/20 rounded w-3/5 mx-auto"></div>
                 </div>
                 <p className="text-xs text-text-muted font-bold mt-2">
-                  Christine Ho đang chấm bài...
+                  Christine Ho is grading your writing...
                 </p>
               </div>
             )}

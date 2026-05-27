@@ -27,10 +27,10 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
     <div>
       {/* Instruction */}
       <p
-        className="text-[11px] font-extrabold text-accent uppercase tracking-widest"
+        className="text-[11px] font-extrabold text-accent uppercase tracking-widest flex items-center gap-1.5"
         style={{ marginBottom: 14 }}
       >
-        💬 {instruction}
+        <MessageSquare size={12} /> {instruction}
       </p>
 
       {/* Context badge */}
@@ -39,7 +39,7 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
         style={{ display: "inline-flex", padding: "5px 14px" }}
       >
         <MessageSquare className="text-[11px] text-accent" />
-        Bối cảnh: {data.context}
+        Context: {data.context}
       </div>
 
       {/* Dialogue display */}
@@ -91,7 +91,7 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
                   boxShadow: isMissing ? "none" : "var(--shadow-sm)",
                 }}
               >
-                {isMissing ? "❓ Hãy chọn phản hồi phù hợp..." : line.text}
+                {isMissing ? "Choose the appropriate response..." : line.text}
               </div>
             </div>
           );

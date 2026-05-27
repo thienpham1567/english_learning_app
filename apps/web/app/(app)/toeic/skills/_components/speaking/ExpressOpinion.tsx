@@ -46,7 +46,7 @@ export function ExpressOpinion() {
         </div>
         <h3 className="m-0 mb-1 text-base font-bold text-ink">Express an Opinion · Part 5</h3>
         <p className="m-0 text-xs text-text-muted font-bold max-w-sm mx-auto leading-relaxed">
-          Trình bày ý kiến của bạn về một chủ đề. Bạn có 30 giây chuẩn bị và 60 giây để nói.
+          Present your opinion on a topic. You have 30 seconds to prepare and 60 seconds to speak.
         </p>
       </div>
 
@@ -76,15 +76,14 @@ export function ExpressOpinion() {
             </p>
           </div>
           <div className="p-3 px-4.5 rounded-xl bg-surface-alt border-2 border-border text-xs text-text-secondary leading-relaxed max-w-md text-center shadow-(--shadow-sm)">
-            💡 <strong className="text-text-primary">Gợi ý cấu trúc:</strong> Nêu quan điểm → Đưa lý
-            do 1 + ví dụ → Lý do 2 → Kết luận
+            💡 <strong className="text-text-primary">Suggested Structure:</strong> State opinion → Give reason 1 + example → Reason 2 → Conclusion
           </div>
           <button
             type="button"
             onClick={() => setSelected(null)}
             className="px-6 py-2.5 rounded-xl border-2 border-border bg-surface text-text-secondary hover:text-ink hover:bg-surface-hover hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow-sm) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-bold cursor-pointer"
           >
-            ← Chọn chủ đề khác
+            ← Choose another topic
           </button>
         </div>
       )}

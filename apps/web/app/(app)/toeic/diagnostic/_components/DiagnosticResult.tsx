@@ -18,10 +18,10 @@ export function DiagnosticResult({
 
   return (
     <div style={{ display: "grid", gap: 12, maxWidth: 720 }}>
-      <Card title={`Kết quả: ${score?.correct ?? 0} / ${score?.total ?? 30}`}>
-        <p>Lộ trình của bạn sẽ tập trung vào các kỹ năng yếu nhất.</p>
+      <Card title={`Result: ${score?.correct ?? 0} / ${score?.total ?? 30}`}>
+        <p>Your study path will focus on your weakest skills.</p>
       </Card>
-      <Card title="3 kỹ năng yếu nhất (ưu tiên ôn)" size="small">
+      <Card title="Top 3 Weakest Skills (priority)" size="small">
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {weakest.map(([skill, val]) => (
             <Tag key={skill} color="red">
@@ -30,7 +30,7 @@ export function DiagnosticResult({
           ))}
         </div>
       </Card>
-      <Card title="3 kỹ năng mạnh nhất" size="small">
+      <Card title="Top 3 Strongest Skills" size="small">
         <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
           {strongest.map(([skill, val]) => (
             <Tag key={skill} color="green">
@@ -40,7 +40,7 @@ export function DiagnosticResult({
         </div>
       </Card>
       <Button type="primary" size="large" onClick={() => router.push("/toeic")}>
-        Bắt đầu lộ trình
+        Start Learning Path
       </Button>
     </div>
   );

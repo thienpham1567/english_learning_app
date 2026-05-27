@@ -27,13 +27,13 @@ function DrillRunner() {
   }, []);
 
   if (session.state === "loading" || session.state === "idle") {
-    return <div className="p-6">Đang tải đề drill…</div>;
+    return <div className="p-6">Loading drill questions…</div>;
   }
   if (session.error) {
     return (
       <div className="p-6">
         <div className="text-destructive mb-3">{session.error}</div>
-        <Button onClick={() => router.push("/toeic/grammar")}>Về Grammar Hub</Button>
+        <Button onClick={() => router.push("/toeic/grammar")}>Back to Grammar Hub</Button>
       </div>
     );
   }

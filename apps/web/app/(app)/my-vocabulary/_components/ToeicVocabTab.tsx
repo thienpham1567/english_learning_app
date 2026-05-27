@@ -2,13 +2,22 @@
 
 import { Progress } from "antd";
 import {
+  Activity,
   ArrowLeft,
+  BarChart3,
   BookOpen,
+  Building2,
   CheckCircle,
   ChevronRight,
+  Coins,
+  Factory,
+  Laptop,
   Loader2,
+  Megaphone,
+  Plane,
   Search,
   Star,
+  Utensils,
   Volume2,
 } from "lucide-react";
 import * as m from "motion/react-client";
@@ -39,17 +48,17 @@ type WordProgress = {
   easeFactor: number;
 };
 
-const TOPIC_META: Record<string, { emoji: string; label: string; color: string }> = {
-  office: { emoji: "🏢", label: "Văn phòng", color: "var(--module-assessment)" },
-  business: { emoji: "📊", label: "Kinh doanh", color: "#0ea5e9" },
-  finance: { emoji: "💰", label: "Tài chính", color: "var(--warning)" },
-  marketing: { emoji: "📣", label: "Marketing", color: "#ec4899" },
-  manufacturing: { emoji: "🏭", label: "Sản xuất", color: "#78716c" },
-  travel: { emoji: "✈️", label: "Du lịch", color: "#14b8a6" },
-  restaurants: { emoji: "🍽️", label: "Nhà hàng", color: "var(--fire)" },
-  health: { emoji: "🏥", label: "Sức khỏe", color: "#22c55e" },
-  technology: { emoji: "💻", label: "Công nghệ", color: "#8b5cf6" },
-  general: { emoji: "📚", label: "Chung", color: "#64748b" },
+const TOPIC_META: Record<string, { icon: React.ComponentType<{ className?: string; size?: number }>; label: string; color: string }> = {
+  office: { icon: Building2, label: "Office", color: "var(--module-assessment)" },
+  business: { icon: BarChart3, label: "Business", color: "#0ea5e9" },
+  finance: { icon: Coins, label: "Finance", color: "var(--warning)" },
+  marketing: { icon: Megaphone, label: "Marketing", color: "#ec4899" },
+  manufacturing: { icon: Factory, label: "Manufacturing", color: "#78716c" },
+  travel: { icon: Plane, label: "Travel", color: "#14b8a6" },
+  restaurants: { icon: Utensils, label: "Restaurants", color: "var(--fire)" },
+  health: { icon: Activity, label: "Health", color: "#22c55e" },
+  technology: { icon: Laptop, label: "Technology", color: "#8b5cf6" },
+  general: { icon: BookOpen, label: "General", color: "#64748b" },
 };
 
 type Pack = { topic: string; total: number; learned: number };
@@ -159,7 +168,7 @@ export function ToeicVocabTab() {
   // Topic detail view
   if (activeTopic) {
     const meta = TOPIC_META[activeTopic] ?? {
-      emoji: "📖",
+      icon: BookOpen,
       label: activeTopic,
       color: "var(--accent)",
     };
@@ -181,12 +190,13 @@ export function ToeicVocabTab() {
           >
             <ArrowLeft />
           </button>
-          <div>
-            <div className="text-lg font-extrabold text-ink">
-              {meta.emoji} {meta.label}
+          <div className="flex items-center gap-2">
+            <div className="text-lg font-extrabold text-ink flex items-center gap-2">
+              <meta.icon size={20} style={{ color: meta.color }} />
+              <span>{meta.label}</span>
             </div>
             <div className="text-text-muted text-xs">
-              {topicPack?.learned ?? 0}/{topicPack?.total ?? 0} từ đã học · {topicPct}%
+              {topicPack?.learned ?? 0}/{topicPack?.total ?? 0} words learned · {topicPct}%
             </div>
           </div>
           <Link
@@ -200,7 +210,7 @@ export function ToeicVocabTab() {
               textDecoration: "none",
             }}
           >
-            Học ngay
+            Learn Now
           </Link>
         </div>
 
@@ -212,7 +222,7 @@ export function ToeicVocabTab() {
           />
           <input
             type="text"
-            placeholder="Tìm từ trong chủ đề..."
+            placeholder="Search words in this topic..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full rounded-xl border-2 border-border bg-(--surface) text-sm text-ink"
@@ -321,7 +331,7 @@ export function ToeicVocabTab() {
                       {/* Meanings */}
                       <div className="flex flex-col gap-1.5">
                         <div className="text-xs font-bold text-text-muted uppercase tracking-widest">
-                          Nghĩa tiếng Anh
+                          English Definition
                         </div>
                         <div className="text-sm text-ink leading-normal">{w.meaningEn}</div>
                       </div>
@@ -358,7 +368,7 @@ export function ToeicVocabTab() {
                           alignSelf: "flex-start",
                         }}
                       >
-                        <BookOpen /> Học từ này
+                        <BookOpen size={14} /> Learn this word
                       </Link>
                     </div>
                   )}
@@ -383,9 +393,9 @@ export function ToeicVocabTab() {
       >
         <div className="flex items-center justify-between mb-3">
           <div>
-            <div className="text-sm font-bold text-ink">Tiến độ tổng thể</div>
+            <div className="text-sm font-bold text-ink">Overall Progress</div>
             <div className="text-xs text-text-muted" style={{ marginTop: 2 }}>
-              {totalLearned} / {totalWords} từ đã học
+              {totalLearned} / {totalWords} words learned
             </div>
           </div>
           <div className="text-[28px] font-black text-accent font-display">{overallPct}%</div>
@@ -410,7 +420,7 @@ export function ToeicVocabTab() {
       >
         {packs.map((pack, i) => {
           const meta = TOPIC_META[pack.topic] ?? {
-            emoji: "📖",
+            icon: BookOpen,
             label: pack.topic,
             color: "var(--accent)",
           };
@@ -430,18 +440,19 @@ export function ToeicVocabTab() {
             >
               <div className="flex items-center gap-2.5">
                 <div
-                  className="w-[40px] h-[40px] rounded-xl grid text-xl"
+                  className="w-[40px] h-[40px] rounded-xl grid shrink-0 text-xl"
                   style={{
                     placeItems: "center",
                     background: `color-mix(in srgb, ${meta.color} 10%, var(--surface))`,
+                    color: meta.color,
                   }}
                 >
-                  {meta.emoji}
+                  <meta.icon size={20} />
                 </div>
                 <div>
                   <div className="text-sm font-bold text-ink">{meta.label}</div>
                   <div className="text-text-muted text-[11px]">
-                    {pack.learned}/{pack.total} từ
+                    {pack.learned}/{pack.total} words
                   </div>
                 </div>
               </div>
@@ -471,7 +482,7 @@ export function ToeicVocabTab() {
             textDecoration: "none",
           }}
         >
-          Ôn tập từ vựng
+          Review Vocabulary
         </Link>
       </div>
     </div>

@@ -34,10 +34,10 @@ type Props = {
 };
 
 const DISTRIBUTION_ITEMS = [
-  { key: "easy", label: "Dễ", icon: <ThumbsUp />, color: "var(--success)" },
-  { key: "good", label: "Ổn", icon: <Smile />, color: "var(--accent)" },
-  { key: "hard", label: "Khó", icon: <Meh />, color: "var(--warning)" },
-  { key: "again", label: "Quên", icon: <Frown />, color: "var(--error)" },
+  { key: "easy", label: "Easy", icon: <ThumbsUp />, color: "var(--success)" },
+  { key: "good", label: "Good", icon: <Smile />, color: "var(--accent)" },
+  { key: "hard", label: "Hard", icon: <Meh />, color: "var(--warning)" },
+  { key: "again", label: "Forgot", icon: <Frown />, color: "var(--error)" },
 ];
 
 function useSummaryContext() {
@@ -82,7 +82,7 @@ export function SessionSummary({
           className="m-0"
           style={{ color: "var(--text-on-accent)", textShadow: "0 2px 8px rgba(0,0,0,0.3)" }}
         >
-          <Trophy /> Bạn đã ôn xong!
+          <Trophy /> Session Completed!
         </Title>
       </CelebrationOverlay>
 
@@ -114,21 +114,21 @@ export function SessionSummary({
           </div>
 
           <Title level={3} className="mt-3 mb-1 font-black text-text-primary">
-            Hoàn thành phiên ôn tập!
+            Session Completed!
           </Title>
           <Text className="text-sm text-text-secondary font-medium">
-            Bạn đã xuất sắc ghi nhớ <span className="text-accent font-bold">{totalReviewed}</span>{" "}
-            từ vựng hôm nay.
+            You successfully reviewed <span className="text-accent font-bold">{totalReviewed}</span>{" "}
+            vocabulary cards today.
           </Text>
         </div>
 
         {/* Stats Grid cards */}
         <Flex gap={12} className="w-full">
           {[
-            { label: "Đã ôn tập", value: totalReviewed, color: "var(--accent)" },
-            { label: "Chất lượng TB", value: `${averageQuality.toFixed(1)}/5`, color: "var(--xp)" },
+            { label: "Reviewed", value: totalReviewed, color: "var(--accent)" },
+            { label: "Average Quality", value: `${averageQuality.toFixed(1)}/5`, color: "var(--xp)" },
             {
-              label: "Số từ quên",
+              label: "Forgot",
               value: forgottenCount,
               color: forgottenCount > 0 ? "var(--error)" : "var(--success)",
             },
@@ -163,7 +163,7 @@ export function SessionSummary({
           >
             <span className="text-[13px] font-extrabold text-text-primary flex items-center gap-1.5 mb-4">
               <BarChart3 className="text-accent" />
-              Phân bố mức độ ghi nhớ
+              Retention Distribution
             </span>
             <Flex gap={12}>
               {DISTRIBUTION_ITEMS.map((item) => {
@@ -214,9 +214,9 @@ export function SessionSummary({
               <Flame className="text-2xl text-(--xp)" />
             </div>
             <div className="flex-1">
-              <h4 className="m-0 text-sm font-extrabold text-text-primary">Thử thách hàng ngày</h4>
+              <h4 className="m-0 text-sm font-extrabold text-text-primary">Daily Challenge</h4>
               <p className="m-0 text-xs text-text-muted font-medium">
-                Luyện tập ngay để duy trì chuỗi Streak!
+                Complete today's challenge to maintain your streak!
               </p>
             </div>
             <ChevronRight className="text-xs text-accent" />
@@ -237,7 +237,7 @@ export function SessionSummary({
             }}
           >
             <RefreshCw size={13} />
-            Bắt đầu lượt ôn tập mới
+            Start New Review Session
           </m.button>
         )}
       </Flex>

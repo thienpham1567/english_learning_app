@@ -36,9 +36,9 @@ const POS_COLORS: Record<string, string> = {
 };
 
 const FREQ_LABELS: Record<string, { label: string; color: string }> = {
-  high: { label: "Rất phổ biến", color: "var(--success)" },
-  medium: { label: "Phổ biến", color: "var(--accent)" },
-  low: { label: "Ít gặp", color: "var(--text-muted)" },
+  high: { label: "Very Common", color: "var(--success)" },
+  medium: { label: "Common", color: "var(--accent)" },
+  low: { label: "Rare", color: "var(--text-muted)" },
 };
 
 export function WordFamilyExplorer({ word }: { word: string }) {
@@ -87,7 +87,7 @@ export function WordFamilyExplorer({ word }: { word: string }) {
     return (
       <div className="mt-2 text-center" style={{ padding: "12px 0" }}>
         <Loader2 className="animate-spin text-accent" size={16} />
-        <div className="text-[11px] text-text-muted mt-1">Đang phân tích word family...</div>
+        <div className="text-[11px] text-text-muted mt-1">Analyzing word family...</div>
       </div>
     );
   }

@@ -9,10 +9,10 @@ import type { DiagnosticStatus } from "./types";
 const { Text } = Typography;
 
 const SKILL_LABELS: Record<string, string> = {
-  grammar: "Ngữ pháp",
-  vocabulary: "Từ vựng",
-  reading: "Đọc hiểu",
-  listening: "Nghe hiểu",
+  grammar: "Grammar",
+  vocabulary: "Vocabulary",
+  reading: "Reading",
+  listening: "Listening",
 };
 
 type Props = {
@@ -39,7 +39,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
             <div className="flex items-center gap-2 mb-4">
               <Info className="text-[13px] text-accent" />
               <span className="text-[11px] font-extrabold uppercase tracking-widest text-accent">
-                Cấu trúc bài đánh giá
+                Assessment Structure
               </span>
             </div>
 
@@ -47,23 +47,23 @@ export function WelcomeScreen({ status, onStart }: Props) {
               {[
                 {
                   icon: "📝",
-                  label: "30 câu hỏi",
-                  desc: "10 Ngữ pháp + 10 Từ vựng + 5 Đọc + 5 Nghe",
+                  label: "30 Questions",
+                  desc: "10 Grammar + 10 Vocabulary + 5 Reading + 5 Listening",
                 },
                 {
                   icon: "🎯",
-                  label: "Thích ứng thông minh",
-                  desc: "Độ khó tự động tăng/giảm dựa vào câu trước",
+                  label: "Smart Adaptive",
+                  desc: "Difficulty auto-adjusts based on your answers",
                 },
                 {
                   icon: "⏱️",
-                  label: "Khoảng 15 phút",
-                  desc: "Không giới hạn thời gian mỗi câu hỏi",
+                  label: "Approx. 15 Minutes",
+                  desc: "No time limit for individual questions",
                 },
                 {
                   icon: "📈",
-                  label: "Xếp loại CEFR",
-                  desc: "Đánh giá chi tiết trình độ A1 đến C2 kèm biểu đồ",
+                  label: "CEFR Placement",
+                  desc: "Detailed evaluation from A1 to C2 with reports",
                 },
               ].map((item, idx) => (
                 <div
@@ -98,7 +98,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
               <div className="flex items-center gap-2 mb-4">
                 <Trophy className="text-[13px] text-accent" />
                 <span className="text-[11px] font-extrabold uppercase tracking-widest text-accent">
-                  Kết quả đánh giá gần nhất
+                  Latest Assessment Result
                 </span>
               </div>
 
@@ -117,14 +117,14 @@ export function WelcomeScreen({ status, onStart }: Props) {
                   </div>
                   <div>
                     <div className="text-sm font-extrabold text-text-primary">
-                      Trình độ {status.lastResult.overallCefr}
+                      Level {status.lastResult.overallCefr}
                     </div>
                     <div
                       className="text-[11px] text-text-muted font-medium"
                       style={{ marginTop: 2 }}
                     >
-                      Độ tin cậy: {Math.round(status.lastResult.confidence * 100)}% · Ngày kiểm tra:{" "}
-                      {new Date(status.lastResult.completedAt).toLocaleDateString("vi-VN")}
+                      Confidence: {Math.round(status.lastResult.confidence * 100)}% · Date:{" "}
+                      {new Date(status.lastResult.completedAt).toLocaleDateString("en-US")}
                     </div>
                   </div>
                 </Flex>
@@ -178,7 +178,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
               }}
             >
               <PlayCircle />
-              {status?.hasResult ? "Bắt đầu làm lại bài đánh giá" : "Bắt đầu bài đánh giá"}
+              {status?.hasResult ? "Retake Diagnostic Test" : "Start Diagnostic Test"}
               <ChevronRight size={12} />
             </m.button>
           ) : (
@@ -190,9 +190,8 @@ export function WelcomeScreen({ status, onStart }: Props) {
             >
               <Clock className="text-3xl text-text-muted mb-2" />
               <div className="text-[13px] text-text-secondary font-semibold">
-                Bạn đã hoàn thành bài test gần đây. Hãy ôn tập thêm và thử lại sau{" "}
-                <span className="text-accent font-extrabold">{status?.daysUntilRetake}</span> ngày
-                nữa!
+                You have recently completed this test. Please practice more and try again in{" "}
+                <span className="text-accent font-extrabold">{status?.daysUntilRetake}</span> days!
               </div>
             </m.div>
           )}

@@ -24,34 +24,34 @@ export default async function ToeicListeningPage() {
       href: "/toeic/practice?part=1",
       title: "Part 1 — Photos",
       count: byPart.get(1) ?? 0,
-      subtitle: "Mô tả ảnh · 4 caption audio",
+      subtitle: "Photo descriptions · 4 audio captions",
       disabled: (byPart.get(1) ?? 0) === 0,
-      note: (byPart.get(1) ?? 0) === 0 ? "Chạy seed:toeic-part1 để có content" : undefined,
+      note: (byPart.get(1) ?? 0) === 0 ? "Run seed:toeic-part1 to add content" : undefined,
     },
     {
       href: "/toeic/practice?part=2",
       title: "Part 2 — Q-R",
       count: byPart.get(2) ?? 0,
-      subtitle: "Audio Q + 3 R · 25 câu/test",
+      subtitle: "Audio Q + 3 Responses · 25 questions/test",
       disabled: (byPart.get(2) ?? 0) === 0,
     },
     {
       href: "/toeic/practice?part=3",
       title: "Part 3 — Conversations",
       count: byPart.get(3) ?? 0,
-      subtitle: "Hội thoại · 39 câu/test",
+      subtitle: "Conversations · 39 questions/test",
     },
     {
       href: "/toeic/practice?part=4",
       title: "Part 4 — Talks",
       count: byPart.get(4) ?? 0,
-      subtitle: "Bài nói · 30 câu/test",
+      subtitle: "Short Talks · 30 questions/test",
     },
     {
       href: "/toeic/dictation",
       title: "Dictation",
       count: dictation,
-      subtitle: "Nghe-chép câu · luyện tai",
+      subtitle: "Sentence dictation · train your ear",
       disabled: dictation === 0,
     },
   ];
@@ -70,7 +70,7 @@ export default async function ToeicListeningPage() {
             >
               <div className="flex justify-between items-center">
                 <strong>{c.title}</strong>
-                <Tag>{c.count} câu</Tag>
+                <Tag>{c.count} questions</Tag>
               </div>
               <div className="text-text-muted text-[13px] mt-1.5">{c.subtitle}</div>
               {c.note && (

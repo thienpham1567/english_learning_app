@@ -7,15 +7,15 @@ import { useState } from "react";
 
 const GrammarChecker = dynamic(
   () => import("./_components/GrammarChecker").then((m) => m.GrammarChecker),
-  { ssr: false, loading: () => <Loader label="Đang tải trình kiểm tra lỗi..." /> },
+  { ssr: false, loading: () => <Loader label="Loading Grammar Checker..." /> },
 );
 const Paraphraser = dynamic(() => import("./_components/Paraphraser").then((m) => m.Paraphraser), {
   ssr: false,
-  loading: () => <Loader label="Đang tải trình viết lại câu..." />,
+  loading: () => <Loader label="Loading Paraphraser..." />,
 });
 const TtsReader = dynamic(() => import("./_components/TtsReader").then((m) => m.TtsReader), {
   ssr: false,
-  loading: () => <Loader label="Đang tải trình đọc văn bản..." />,
+  loading: () => <Loader label="Loading Text-to-Speech..." />,
 });
 
 function Loader({ label }: { label: string }) {
@@ -38,9 +38,9 @@ const TABS: {
   desc: string;
   icon: React.ReactNode;
 }[] = [
-  { value: "grammar", label: "Grammar Checker", desc: "Kiểm tra ngữ pháp", icon: <CheckSquare /> },
-  { value: "paraphrase", label: "Paraphraser", desc: "Viết lại câu", icon: <ArrowLeftRight /> },
-  { value: "tts", label: "Voice Generator", desc: "Đọc thành tiếng (Groq)", icon: <Volume2 /> },
+  { value: "grammar", label: "Grammar Checker", desc: "Check grammar", icon: <CheckSquare /> },
+  { value: "paraphrase", label: "Paraphraser", desc: "Paraphrase sentence", icon: <ArrowLeftRight /> },
+  { value: "tts", label: "Voice Generator", desc: "Text-to-speech (Groq)", icon: <Volume2 /> },
 ];
 
 const GRADIENTS: Record<ToolTab, string> = {

@@ -29,7 +29,7 @@ export function QuestionCard({
   onNext,
 }: Props) {
   const isLastQuestion = questionNumber === total;
-  const [lang, setLang] = useState<"en" | "vi">("vi");
+  const [lang, setLang] = useState<"en" | "vi">("en");
   const [showExplanation, setShowExplanation] = useState(false);
 
   return (
@@ -38,7 +38,7 @@ export function QuestionCard({
       <div className="mb-4">
         <div className="flex items-center justify-between mb-2">
           <span className="font-bold text-text-secondary" style={{ fontSize: 12.5 }}>
-            Câu hỏi {questionNumber} / {total}
+            Question {questionNumber} / {total}
           </span>
           <span
             className="rounded-md bg-surface-alt border-2 border-border font-bold text-accent"
@@ -216,8 +216,8 @@ export function QuestionCard({
                     selectedAnswer === question.correctIndex ? "var(--success)" : "var(--error)",
                 }}
               >
-                {selectedAnswer === question.correctIndex ? "Đúng chính xác!" : "Chưa chính xác!"}{" "}
-                Đáp án đúng:{" "}
+                {selectedAnswer === question.correctIndex ? "Correct!" : "Incorrect!"}{" "}
+                Correct answer:{" "}
                 <span style={{ textDecoration: "underline" }}>
                   {OPTION_LABELS[question.correctIndex]} — {question.options[question.correctIndex]}
                 </span>
@@ -231,7 +231,7 @@ export function QuestionCard({
               className="mt-2.5 items-center gap-1.5 bg-none border-none cursor-pointer text-[13px] font-bold text-accent"
               style={{ display: "inline-flex", padding: "4px 0" }}
             >
-              {showExplanation ? "▾ Ẩn lời giải thích" : "▸ Xem lời giải thích chi tiết"}
+              {showExplanation ? "▾ Hide Explanation" : "▸ Show Explanation"}
             </button>
 
             {/* Explanations block */}
@@ -247,7 +247,7 @@ export function QuestionCard({
                     className="text-[11px] font-extrabold uppercase text-accent flex items-center gap-1"
                     style={{ letterSpacing: "0.1em" }}
                   >
-                    <Lightbulb /> Lý do đáp án
+                    <Lightbulb /> Explanation Detail
                   </span>
                   <div className="flex overflow-hidden rounded-md border-2 border-border">
                     {(["vi", "en"] as const).map((l) => (
@@ -283,7 +283,7 @@ export function QuestionCard({
                       className="text-[11px] font-extrabold uppercase text-text-muted block mb-1.5"
                       style={{ letterSpacing: "0.1em" }}
                     >
-                      Ví dụ thực tế
+                      Real Examples
                     </span>
                     {question.examples.map((ex, idx) => (
                       <p
@@ -318,7 +318,7 @@ export function QuestionCard({
             boxShadow: "0 4px 12px var(--accent-muted)",
           }}
         >
-          {isLastQuestion ? "Hoàn thành và xem kết quả" : "Câu tiếp theo →"}
+          {isLastQuestion ? "Complete and view results" : "Next Question →"}
         </m.button>
       )}
     </div>

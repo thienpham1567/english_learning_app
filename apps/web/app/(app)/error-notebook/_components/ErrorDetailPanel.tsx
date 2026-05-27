@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertTriangle, CheckCircle, FileText, X, XCircle } from "lucide-react";
+import { AlertTriangle, Brain, Calendar, CheckCircle, Clock, FileText, X, XCircle } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { useCallback } from "react";
@@ -51,11 +51,11 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
               <div className="flex items-center gap-2">
                 {error.isResolved ? (
                   <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-md bg-(--success-bg) text-(--success)">
-                    <CheckCircle className="h-2.5 w-2.5" /> Đã hiểu
+                    <CheckCircle className="h-2.5 w-2.5" /> Resolved
                   </span>
                 ) : (
                   <span className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-md bg-(--error-bg) text-(--error)">
-                    <AlertTriangle className="h-2.5 w-2.5" /> Chưa nắm
+                    <AlertTriangle className="h-2.5 w-2.5" /> Unresolved
                   </span>
                 )}
                 <span className="inline-flex items-center gap-1 text-[11px] font-semibold text-text-secondary">
@@ -110,16 +110,16 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
               {(!error.options || error.options.length === 0) && (
                 <div className="flex gap-2 mb-5">
                   <div className="flex-1 px-3.5 py-3 rounded-[10px] bg-[color-mix(in_srgb,var(--error)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--error)_18%,transparent)]">
-                    <div className="text-[10px] font-bold text-(--error) uppercase mb-1">
-                      <XCircle className="h-2.5 w-2.5 inline mr-1" /> Bạn chọn
+                    <div className="text-[10px] font-bold text-(--error) uppercase mb-1 flex items-center gap-1">
+                      <XCircle className="h-2.5 w-2.5" /> Your Answer
                     </div>
                     <div className="text-sm font-bold text-(--error)">
-                      {error.userAnswer || "(Trống)"}
+                      {error.userAnswer || "(Empty)"}
                     </div>
                   </div>
                   <div className="flex-1 px-3.5 py-3 rounded-[10px] bg-[color-mix(in_srgb,var(--success)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--success)_18%,transparent)]">
-                    <div className="text-[10px] font-bold text-(--success) uppercase mb-1">
-                      <CheckCircle className="h-2.5 w-2.5 inline mr-1" /> Đáp án đúng
+                    <div className="text-[10px] font-bold text-(--success) uppercase mb-1 flex items-center gap-1">
+                      <CheckCircle className="h-2.5 w-2.5" /> Correct Answer
                     </div>
                     <div className="text-sm font-bold text-(--success)">{error.correctAnswer}</div>
                   </div>
@@ -142,23 +142,41 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
               </div>
 
               {/* Meta info */}
-              <div className="px-3.5 py-3 rounded-[10px] bg-surface-alt border-2 border-border text-xs text-text-muted flex flex-col gap-1">
-                <div>
-                  📅 Ngày tạo:{" "}
-                  {new Date(error.createdAt).toLocaleDateString("vi-VN", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
+              <div className="px-3.5 py-3 rounded-[10px] bg-surface-alt border-2 border-border text-xs text-text-muted flex flex-col gap-1.5">
+                <div className="flex items-center gap-1.5">
+                  <Calendar className="h-3.5 w-3.5" />
+                  <span>
+                    Created:{" "}
+                    {new Date(error.createdAt).toLocaleDateString("en-US", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </span>
                 </div>
-                {error.reviewCount > 0 && <div>🧠 Đã ôn: {error.reviewCount} lần</div>}
+                {error.reviewCount > 0 && (
+                  <div className="flex items-center gap-1.5">
+                    <Brain className="h-3.5 w-3.5" />
+                    <span>
+                      Reviewed: {error.reviewCount} {error.reviewCount === 1 ? "time" : "times"}
+                    </span>
+                  </div>
+                )}
                 {error.lastReviewedAt && (
-                  <div>
-                    📖 Ôn gần nhất: {new Date(error.lastReviewedAt).toLocaleDateString("vi-VN")}
+                  <div className="flex items-center gap-1.5">
+                    <CheckCircle className="h-3.5 w-3.5 text-emerald-500" />
+                    <span>
+                      Last reviewed: {new Date(error.lastReviewedAt).toLocaleDateString("en-US")}
+                    </span>
                   </div>
                 )}
                 {error.nextReviewAt && (
-                  <div>⏰ Ôn lại: {new Date(error.nextReviewAt).toLocaleDateString("vi-VN")}</div>
+                  <div className="flex items-center gap-1.5">
+                    <Clock className="h-3.5 w-3.5 text-amber-500" />
+                    <span>
+                      Next review: {new Date(error.nextReviewAt).toLocaleDateString("en-US")}
+                    </span>
+                  </div>
                 )}
               </div>
             </div>
@@ -172,7 +190,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
                   onClick={handleResolve}
                   className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl border-none bg-gradient-to-br from-(--success) to-[color-mix(in_srgb,var(--success)_80%,var(--accent))] text-white text-sm font-extrabold cursor-pointer font-body shadow-[0_4px_14px_rgba(16,185,129,0.3)]"
                 >
-                  <CheckCircle className="h-4 w-4" /> Đánh dấu đã hiểu
+                  <CheckCircle className="h-4 w-4" /> Mark as resolved
                 </m.button>
               </div>
             )}

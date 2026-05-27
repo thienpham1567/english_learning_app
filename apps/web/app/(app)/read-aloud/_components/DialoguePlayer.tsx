@@ -10,6 +10,14 @@ import {
   Star,
   StopCircle,
   Volume2,
+  MessageSquare,
+  Users,
+  Bookmark,
+  Sparkles,
+  Trash2,
+  Headphones,
+  Pin,
+  Lightbulb,
 } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
@@ -135,7 +143,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
 
     const audioBlob = voice.blob;
     if (!audioBlob || !dlg.dialogue) {
-      message.error("Không có bản ghi âm");
+      message.error("No audio recording found");
       setRolePlayStep("idle");
       return;
     }
@@ -156,7 +164,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: "Unknown" }));
         if (err.error === "no-speech") {
-          message.warning("Không nhận dạng được. Hãy thử lại.");
+          message.warning("Speech not recognized. Please try again.");
           setRolePlayStep("idle");
           return;
         }
@@ -167,7 +175,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
       setRolePlayResult(result);
       setRolePlayStep("result");
     } catch {
-      message.error("Lỗi chấm điểm");
+      message.error("AI grading failed");
       setRolePlayStep("idle");
     }
   }, [voice, dlg, rolePlayLineIndex]);
@@ -181,7 +189,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
     } else {
       setRolePlayStep("idle");
       setRolePlaySpeaker(null);
-      message.success("🎉 Hoàn thành hội thoại!");
+      message.success("Dialogue practice completed successfully!");
     }
   }, [dlg, rolePlayLineIndex, playRolePlayLine]);
 
@@ -196,19 +204,19 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
           style={{ padding: "24px 20px", boxShadow: "var(--shadow-md)" }}
         >
           <Title level={5} className="m-0 text-text-primary">
-            💬 Tạo hội thoại mới
+            <MessageSquare size={16} className="text-accent" /> Create New Conversation
           </Title>
 
           {/* Topic input */}
           <div>
             <Text className="text-xs font-bold text-text-muted block mb-1.5">
-              Chủ đề (tùy chọn)
+              Topic (optional)
             </Text>
             <input
               type="text"
               value={topic}
               onChange={(e) => setTopic(e.target.value)}
-              placeholder="Ví dụ: ordering coffee, job interview..."
+              placeholder="e.g., ordering coffee, job interview..."
               onFocus={(e) => {
                 e.currentTarget.style.borderColor = "var(--accent)";
               }}
@@ -222,7 +230,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
 
           {/* Speaker count */}
           <div>
-            <Text className="text-xs font-bold text-text-muted block mb-1.5">Số người</Text>
+            <Text className="text-xs font-bold text-text-muted block mb-1.5">Speakers</Text>
             <Flex gap={8}>
               {([2, 3] as const).map((n) => (
                 <button
@@ -237,7 +245,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                     color: speakers === n ? "var(--accent)" : "var(--text-secondary)",
                   }}
                 >
-                  {n === 2 ? "👫 2 người" : "👨‍👩‍👦 3 người"}
+                  {n === 2 ? "2 Speakers" : "3 Speakers"}
                 </button>
               ))}
             </Flex>
@@ -245,7 +253,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
 
           {/* Length */}
           <div>
-            <Text className="text-xs font-bold text-text-muted block mb-1.5">Độ dài</Text>
+            <Text className="text-xs font-bold text-text-muted block mb-1.5">Length</Text>
             <Flex gap={8}>
               {(["short", "medium", "long"] as const).map((len) => (
                 <button
@@ -261,10 +269,10 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                   }}
                 >
                   {len === "short"
-                    ? "Ngắn (~5 câu)"
+                    ? "Short (~5 lines)"
                     : len === "medium"
-                      ? "TB (~10 câu)"
-                      : "Dài (~16 câu)"}
+                      ? "Medium (~10 lines)"
+                      : "Long (~16 lines)"}
                 </button>
               ))}
             </Flex>
@@ -290,10 +298,10 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
           >
             {dlg.generating ? (
               <>
-                <Loader2 className="animate-spin" /> Đang tạo hội thoại...
+                <Loader2 className="animate-spin" /> Generating conversation...
               </>
             ) : (
-              <>✨ Tạo hội thoại</>
+              <><Sparkles size={16} /> Generate Conversation</>
             )}
           </m.button>
         </m.div>
@@ -311,7 +319,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               className="text-xs font-bold text-text-muted block mb-3 uppercase"
               style={{ letterSpacing: "0.06em" }}
             >
-              📚 Hội thoại đã tạo ({dlg.savedDialogues.length})
+              <Bookmark size={13} className="text-accent" /> Saved Conversations ({dlg.savedDialogues.length})
             </Text>
             <div className="flex flex-col gap-2 h-[300px] overflow-y-auto">
               {dlg.savedDialogues.map((saved, idx) => (
@@ -345,11 +353,11 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                     <div className="flex gap-2 items-center" style={{ marginTop: 2 }}>
                       {saved.topic && (
                         <Text className="text-[11px] text-text-muted font-medium">
-                          📌 {saved.topic}
+                          <Pin size={10} /> {saved.topic}
                         </Text>
                       )}
                       <Text className="text-text-muted text-[11px]">
-                        {saved.linesJson.length} câu
+                        {saved.linesJson.length} lines
                       </Text>
                       {saved.rolePlayCount > 0 && (
                         <Text className="text-[11px] text-accent font-semibold">
@@ -404,12 +412,12 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                     className="bg-transparent border-none text-sm cursor-pointer p-1 text-destructive"
                     style={{ opacity: 0.4, transition: "all 0.15s" }}
                   >
-                    🗑️
+                    <Trash2 size={13} />
                   </button>
 
                   {/* Time */}
                   <Text className="text-[10px] text-text-muted shrink-0">
-                    {new Date(saved.createdAt).toLocaleDateString("vi-VN", {
+                    {new Date(saved.createdAt).toLocaleDateString("en-US", {
                       day: "numeric",
                       month: "short",
                     })}
@@ -434,10 +442,10 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
         <Flex className="dialogue-header-actions" justify="space-between" align="center">
           <div>
             <Text className="text-base font-extrabold text-text-primary block">
-              💬 {dlg.dialogue.title}
+              <MessageSquare size={16} className="text-accent" /> {dlg.dialogue.title}
             </Text>
             <Text className="text-text-muted text-xs">
-              {dlg.dialogue.context} • {dlg.dialogue.lines.length} câu
+              {dlg.dialogue.context} • {dlg.dialogue.lines.length} lines
             </Text>
           </div>
           <Flex gap={8} className="dialogue-header-buttons">
@@ -454,15 +462,15 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             >
               {dlg.isLoading ? (
                 <>
-                  <Loader2 className="animate-spin" /> Đang tải...
+                  <Loader2 className="animate-spin" /> Loading...
                 </>
               ) : dlg.isPlaying ? (
                 <>
-                  <PauseCircle /> Dừng
+                  <PauseCircle /> Stop
                 </>
               ) : (
                 <>
-                  <PlayCircle /> Phát tất cả
+                  <PlayCircle /> Play All
                 </>
               )}
             </m.button>
@@ -473,7 +481,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               className="flex items-center gap-1.5 rounded-xl border-2 border-border bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body"
               style={{ padding: "8px 14px" }}
             >
-              <Redo /> Tạo mới
+              <Redo /> Reset
             </m.button>
           </Flex>
         </Flex>
@@ -620,15 +628,15 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             boxShadow: "0 4px 20px var(--accent-muted), var(--shadow)",
           }}
         >
-          <div className="text-[36px] mb-2.5">🎧</div>
+          <div className="flex justify-center mb-2.5"><m.div animate={{ y: [0, -4, 0] }} transition={{ repeat: Infinity, duration: 2 }} style={{ display: "inline-flex", color: "var(--accent)" }}><Headphones size={36} /></m.div></div>
           <Text className="text-base font-extrabold text-text-primary block mb-1">
-            Nghe trước hội thoại
+            Listen to the Dialogue First
           </Text>
           <Text
             className="text-[13px] text-text-muted block mb-4 w-[360px]"
             style={{ margin: "0 auto 16px" }}
           >
-            Lắng nghe cuộc trò chuyện giữa những người bản xứ trước khi bạn đóng vai nhé!
+            Listen to the conversation between native speakers before you start roleplaying!
           </Text>
 
           <Flex gap={10} justify="center" wrap="wrap" className="listen-cta-buttons">
@@ -652,15 +660,15 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             >
               {dlg.isLoading ? (
                 <>
-                  <Loader2 className="animate-spin" /> Đang tải...
+                  <Loader2 className="animate-spin" /> Loading...
                 </>
               ) : isListeningPreview ? (
                 <>
-                  <PauseCircle /> Dừng nghe
+                  <PauseCircle /> Stop Listening
                 </>
               ) : (
                 <>
-                  <PlayCircle /> Nghe hội thoại
+                  <PlayCircle /> Listen to Dialogue
                 </>
               )}
             </m.button>
@@ -672,7 +680,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               className="flex items-center gap-1.5 border-2 border-border bg-(--surface) text-text-muted text-[13px] font-semibold cursor-pointer font-body"
               style={{ padding: "14px 20px", borderRadius: 14 }}
             >
-              Bỏ qua →
+              Skip →
             </m.button>
           </Flex>
 
@@ -692,10 +700,10 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               />
               <Text className="text-xs font-bold text-accent">
                 {dlg.isLoading && dlg.batchProgress
-                  ? `Đang tải audio ${dlg.batchProgress.loaded}/${dlg.batchProgress.total}...`
+                  ? `Loading audio ${dlg.batchProgress.loaded}/${dlg.batchProgress.total}...`
                   : dlg.isLoading
-                    ? `Đang tải audio ${dlg.dialogue.lines.length} câu...`
-                    : `Đang phát câu ${Math.max(1, (dlg.activeLineIndex ?? 0) + 1)} / ${dlg.dialogue.lines.length}`}
+                    ? `Loading audio ${dlg.dialogue.lines.length} lines...`
+                    : `Playing line ${Math.max(1, (dlg.activeLineIndex ?? 0) + 1)} of ${dlg.dialogue.lines.length}`}
               </Text>
             </m.div>
           )}
@@ -713,7 +721,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
           {/* Replay button */}
           <Flex justify="space-between" align="center" className="mb-3">
             <Text className="text-xs font-bold text-text-muted">
-              🎙️ Đóng vai — Chọn nhân vật bạn muốn đọc
+              <Mic size={14} className="text-accent" /> Roleplay — Select the character you want to practice
             </Text>
             <m.button
               whileHover={{ scale: 1.02 }}
@@ -722,7 +730,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               className="flex items-center gap-1 rounded-lg border-2 border-border bg-surface-alt text-text-muted text-[11px] font-semibold cursor-pointer font-body"
               style={{ padding: "4px 12px" }}
             >
-              <PlayCircle /> Nghe lại
+              <PlayCircle /> Replay
             </m.button>
           </Flex>
           <Flex gap={8} className="role-play-buttons">
@@ -741,7 +749,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                     color: SPEAKER_COLORS[a.speaker]?.text ?? "var(--text-primary)",
                   }}
                 >
-                  {a.flag} Đóng vai {line?.name ?? a.voiceName}
+                  {a.flag} Roleplay as {line?.name ?? a.voiceName}
                 </m.button>
               );
             })}
@@ -764,7 +772,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
           >
             <Flex justify="space-between" align="center">
               <Text className="text-sm font-extrabold text-accent">
-                🎙️ Đang đóng vai — Bạn là{" "}
+                <Mic size={14} /> Roleplay Active — You are{" "}
                 {dlg.dialogue.lines.find((l) => l.speaker === rolePlaySpeaker)?.name ?? "..."}
               </Text>
               <m.button
@@ -777,7 +785,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                 className="rounded-lg border-2 border-border bg-surface-alt text-text-muted text-xs font-semibold cursor-pointer"
                 style={{ padding: "4px 12px" }}
               >
-                Thoát
+                Exit
               </m.button>
             </Flex>
 
@@ -792,7 +800,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                   color: "var(--text-on-accent)",
                 }}
               >
-                ▶ Bắt đầu hội thoại
+                Start Dialogue
               </m.button>
             )}
 
@@ -804,7 +812,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                   className="w-[12px] h-[12px] rounded-full"
                   style={{ background: "var(--accent)" }}
                 />
-                <Text className="text-sm font-bold text-accent">Đang nghe đối phương nói...</Text>
+                <Text className="text-sm font-bold text-accent">Listening to speaker...</Text>
               </Flex>
             )}
 
@@ -818,7 +826,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                     style={{ background: "var(--error)" }}
                   />
                   <Text className="text-sm font-bold text-destructive">
-                    Lượt bạn! Hãy đọc câu của mình
+                    Your turn! Read your line
                   </Text>
                 </Flex>
                 <Text className="text-text-secondary text-[13px]">
@@ -835,7 +843,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                     background: "rgba(239,68,68,0.08)",
                   }}
                 >
-                  <StopCircle /> Dừng & chấm điểm
+                  <StopCircle /> Stop & Grade
                 </m.button>
               </Flex>
             )}
@@ -843,7 +851,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             {rolePlayStep === "evaluating" && (
               <Flex align="center" justify="center" gap={8} className="p-4">
                 <Loader2 className="animate-spin text-accent" size={20} />
-                <Text className="text-sm font-bold text-accent">🤖 Đang chấm điểm...</Text>
+                <Text className="text-sm font-bold text-accent">🤖 AI Grading...</Text>
               </Flex>
             )}
 
@@ -864,8 +872,8 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                   }}
                 >
                   {rolePlayLineIndex < dlg.dialogue.lines.length - 1
-                    ? "➡️ Tiếp tục"
-                    : "🎉 Hoàn thành"}
+                    ? "Continue"
+                    : "Finish"}
                 </m.button>
               </>
             )}

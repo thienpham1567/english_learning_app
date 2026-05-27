@@ -8,54 +8,66 @@ interface LogoProps {
 }
 
 /**
- * Custom SVG logo mark — a stylised open-book with a rising spark,
- * representing learning & mastery. Renders at 1em so it scales with
- * the container's font-size.
+ * Custom SVG logo mark — a bold open-book with writing lines and a rising spark,
+ * representing AI study & mastery.
  */
-function LogoMark({ size = 22 }: { size?: number }) {
+function LogoMark({ size = 20 }: { size?: number }) {
   return (
     <svg
       width={size}
       height={size}
-      viewBox="0 0 32 32"
+      viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
+      style={{ display: "block" }}
     >
-      {/* Open book — left page */}
+      {/* 3D cover slab under the pages */}
       <path
-        d="M16 8C12.5 6.5 8.5 6 4 7v17c4.5-1 8.5-0.5 12 1"
+        d="M4 16 L4 18.5 L12 21.5 L20 18.5 L20 16 L12 19 Z"
+        fill="currentColor"
         stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
+        strokeWidth="2.5"
         strokeLinejoin="round"
-        fill="none"
       />
-      {/* Open book — right page */}
+      {/* Left Page (White) */}
       <path
-        d="M16 8c3.5-1.5 7.5-2 12-1v17c-4.5-1-8.5-0.5-12 1"
+        d="M4 6 L12 9 L12 19 L4 16 Z"
+        fill="#FFFFFF"
         stroke="currentColor"
-        strokeWidth="2"
-        strokeLinecap="round"
+        strokeWidth="2.5"
         strokeLinejoin="round"
-        fill="none"
       />
-      {/* Spine */}
+      {/* Right Page (Gold Accent) */}
       <path
-        d="M16 8v17"
+        d="M20 6 L12 9 L12 19 L20 16 Z"
+        fill="var(--accent, #FFB800)"
         stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        opacity="0.4"
+        strokeWidth="2.5"
+        strokeLinejoin="round"
       />
-      {/* Rising spark — the mastery accent */}
-      <circle cx="16" cy="4" r="1.8" fill="currentColor" opacity="0.9" />
+      {/* Left Page Text Lines */}
       <path
-        d="M16 7V5.5"
+        d="M6.5 11 L9.5 12.125 M6.5 13.5 L9.5 14.625"
         stroke="currentColor"
         strokeWidth="1.2"
         strokeLinecap="round"
-        opacity="0.5"
+        opacity="0.8"
+      />
+      {/* Right Page Text Lines */}
+      <path
+        d="M14.5 12.125 L17.5 11 M14.5 14.625 L17.5 13.5"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        opacity="0.8"
+      />
+      {/* Center Spine Crease */}
+      <path d="M12 9 V19" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      {/* Floating Sparkle (AI Spark) */}
+      <path
+        d="M12 1.5 Q12 3.8 14.3 3.8 Q12 3.8 12 6.1 Q12 3.8 9.7 3.8 Q12 3.8 12 1.5 Z"
+        fill="currentColor"
       />
     </svg>
   );
@@ -75,9 +87,9 @@ export function Logo({ collapsed = false }: LogoProps) {
     >
       {/* Icon container */}
       <m.div
-        whileHover={{ scale: 1.08, rotate: -4 }}
+        whileHover={{ scale: 1.05, rotate: -3 }}
         whileTap={{ scale: 0.95 }}
-        transition={{ type: "spring", stiffness: 400, damping: 20 }}
+        transition={{ type: "spring", stiffness: 400, damping: 15 }}
         style={{
           position: "relative",
           display: "flex",
@@ -85,33 +97,16 @@ export function Logo({ collapsed = false }: LogoProps) {
           justifyContent: "center",
           width: 38,
           height: 38,
-          borderRadius: 11,
-          background:
-            "linear-gradient(145deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #1a0a04))",
-          boxShadow:
-            "0 6px 18px color-mix(in srgb, var(--accent) 35%, transparent), inset 0 1px 1px rgba(255,255,255,0.15)",
+          borderRadius: 8,
+          background: "var(--accent)",
+          border: "2.5px solid var(--ink, #000000)",
+          boxShadow: "3px 3px 0px var(--ink, #000000)",
           flexShrink: 0,
           cursor: "pointer",
           color: "var(--text-on-accent)",
         }}
       >
-        <LogoMark size={22} />
-
-        {/* Pulse ring */}
-        <m.div
-          animate={{
-            scale: [1, 1.25, 1],
-            opacity: [0.25, 0.5, 0.25],
-          }}
-          transition={{ repeat: Infinity, duration: 4.5, ease: "easeInOut" }}
-          style={{
-            position: "absolute",
-            inset: -4,
-            borderRadius: 15,
-            border: "1.5px solid var(--accent)",
-            pointerEvents: "none",
-          }}
-        />
+        <LogoMark size={20} />
       </m.div>
 
       {/* Text */}
@@ -131,15 +126,16 @@ export function Logo({ collapsed = false }: LogoProps) {
             <m.span
               style={{
                 fontFamily: "var(--font-display)",
-                fontSize: 17,
-                fontWeight: 800,
-                lineHeight: 1.15,
-                letterSpacing: "-0.02em",
+                fontSize: 18,
+                fontWeight: 900,
+                lineHeight: 1.1,
+                letterSpacing: "-0.03em",
                 color: "var(--ink)",
+                textTransform: "uppercase",
               }}
             >
               TOEIC
-              <m.span style={{ color: "var(--accent)", fontWeight: 900 }}> Master</m.span>
+              <m.span style={{ color: "var(--accent)" }}> Master</m.span>
             </m.span>
             <m.span
               style={{
@@ -160,7 +156,4 @@ export function Logo({ collapsed = false }: LogoProps) {
   );
 }
 
-/**
- * Exportable logo mark for reuse in OG images, sign-in, etc.
- */
 export { LogoMark };

@@ -147,7 +147,7 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
                   {cat.category}
                 </h3>
                 <span className="text-text-muted font-bold" style={{ fontSize: 11.5 }}>
-                  {completedCount}/{cat.topics.length} chủ đề đã hoàn thành
+                  {completedCount}/{cat.topics.length} topics completed
                 </span>
               </div>
             </div>
@@ -236,7 +236,7 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
                         {topic.time}
                       </span>
                       <span className="text-[11px] text-text-muted" style={{ fontWeight: 650 }}>
-                        · 4 bài học
+                        · 4 lessons
                       </span>
                     </div>
                   </m.button>

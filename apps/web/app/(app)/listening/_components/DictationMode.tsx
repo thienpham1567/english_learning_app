@@ -120,7 +120,7 @@ export default function DictationMode({ examMode }: Props) {
       setSentences(data.sentences);
       setState("ready");
     } catch {
-      setError("Không thể tạo bài tập. Vui lòng thử lại.");
+      setError("Unable to generate exercise. Please try again.");
       setState("idle");
     }
   }, [examMode, sentenceAudio]);
@@ -220,9 +220,9 @@ export default function DictationMode({ examMode }: Props) {
         >
           <Pencil size={48} className="text-accent" />
           <h2 className="mb-2 text-lg">Dictation</h2>
-          <p className="text-text-secondary mb-2 text-[13px]">Nghe → Gõ lại → Kiểm tra từng từ</p>
+          <p className="text-text-secondary mb-2 text-[13px]">Listen → Type → Check each word</p>
           <p className="text-text-secondary text-xs" style={{ margin: "0 0 24px" }}>
-            5 câu mỗi phiên · Tối đa 3 lần nghe lại · +25 XP
+            5 sentences per session · Max 3 replays · +25 XP
           </p>
           <button
             onClick={startSession}
@@ -234,7 +234,7 @@ export default function DictationMode({ examMode }: Props) {
               color: "var(--text-on-accent)",
             }}
           >
-            Bắt đầu Dictation
+            Start Dictation
           </button>
         </div>
       )}
@@ -243,7 +243,7 @@ export default function DictationMode({ examMode }: Props) {
       {state === "loading" && (
         <div className="text-center" style={{ padding: 40 }}>
           <Loader2 className="animate-spin text-accent" size={32} />
-          <p className="text-text-secondary mt-3">Đang tạo bài tập...</p>
+          <p className="text-text-secondary mt-3">Generating exercise...</p>
         </div>
       )}
 
@@ -253,7 +253,7 @@ export default function DictationMode({ examMode }: Props) {
           {/* Progress */}
           <div className="flex items-center gap-2 text-[13px] text-text-secondary">
             <span>
-              Câu {currentIdx + 1}/{sentences.length}
+              Sentence {currentIdx + 1}/{sentences.length}
             </span>
             <Progress
               percent={((currentIdx + 1) / sentences.length) * 100}
@@ -268,7 +268,7 @@ export default function DictationMode({ examMode }: Props) {
             className="p-4 rounded-xl text-center border-2 border-border"
             style={{ background: "var(--card-bg)" }}
           >
-            <p className="text-sm text-text-secondary m-0">🎧 Nghe và gõ lại câu bạn nghe được</p>
+            <p className="text-sm text-text-secondary m-0">🎧 Listen and type the sentence you hear</p>
           </div>
 
           {/* AudioPlayer — sentence playback (AC4 migration) */}
@@ -285,7 +285,7 @@ export default function DictationMode({ examMode }: Props) {
           ) : sentenceAudio.isLoading ? (
             <div className="text-center" style={{ padding: 20 }}>
               <Loader2 className="animate-spin text-accent" size={24} />
-              <p className="text-xs text-text-muted mt-2">Đang tạo âm thanh...</p>
+              <p className="text-xs text-text-muted mt-2">Generating audio...</p>
             </div>
           ) : null}
 
@@ -294,7 +294,7 @@ export default function DictationMode({ examMode }: Props) {
             ref={inputRef}
             value={typedText}
             onChange={(e) => setTypedText(e.target.value)}
-            placeholder="Gõ lại câu bạn nghe được..."
+            placeholder="Type the sentence you hear..."
             autoFocus
             onKeyDown={(e) => {
               if (e.key === "Enter" && !e.shiftKey) {
@@ -324,7 +324,7 @@ export default function DictationMode({ examMode }: Props) {
               cursor: typedText.trim() ? "pointer" : "not-allowed",
             }}
           >
-            Kiểm tra{" "}
+            Check{" "}
             <motion.span
               animate={typedText.trim() ? { scale: [1, 1.15, 1] } : { scale: 1 }}
               transition={{ duration: 0.3 }}
@@ -359,12 +359,12 @@ export default function DictationMode({ examMode }: Props) {
             />
             <p className="text-[13px] text-text-secondary mt-2">
               {accuracy === 100
-                ? "Hoàn hảo! 🎉"
+                ? "Perfect! 🎉"
                 : accuracy >= 80
-                  ? "Rất tốt! 👏"
+                  ? "Very Good! 👏"
                   : accuracy >= 50
-                    ? "Khá tốt, cố lên! 💪"
-                    : "Cần luyện thêm 📝"}
+                    ? "Good job, keep it up! 💪"
+                    : "Needs practice 📝"}
             </p>
           </div>
 
@@ -373,7 +373,7 @@ export default function DictationMode({ examMode }: Props) {
             className="p-4 rounded-xl border-2 border-border"
             style={{ background: "var(--card-bg)" }}
           >
-            <p className="text-xs text-text-secondary mb-2 font-semibold">Phân tích từng từ:</p>
+            <p className="text-xs text-text-secondary mb-2 font-semibold">Word Analysis:</p>
             <div className="flex flex-wrap gap-1.5">
               {diff.map((w, i) => (
                 <span
@@ -399,13 +399,13 @@ export default function DictationMode({ examMode }: Props) {
             </div>
             <div className="mt-3 flex gap-4 text-[11px] text-text-secondary">
               <span>
-                <span style={{ color: STATUS_COLORS.correct }}>●</span> Đúng
+                <span style={{ color: STATUS_COLORS.correct }}>●</span> Correct
               </span>
               <span>
-                <span style={{ color: STATUS_COLORS.wrong }}>●</span> Sai
+                <span style={{ color: STATUS_COLORS.wrong }}>●</span> Incorrect
               </span>
               <span>
-                <span style={{ color: STATUS_COLORS.missing }}>●</span> Thiếu
+                <span style={{ color: STATUS_COLORS.missing }}>●</span> Missing
               </span>
             </div>
           </div>
@@ -416,7 +416,7 @@ export default function DictationMode({ examMode }: Props) {
             style={{ background: "var(--card-bg)" }}
           >
             <p className="text-xs text-text-secondary font-semibold" style={{ margin: "0 0 4px" }}>
-              Câu gốc:
+              Original Sentence:
             </p>
             <p className="text-base font-semibold" style={{ margin: "0 0 4px" }}>
               {currentSentence.text}
@@ -436,7 +436,7 @@ export default function DictationMode({ examMode }: Props) {
             style={{ background: "var(--card-bg)" }}
           >
             <p className="text-xs text-text-secondary font-semibold" style={{ margin: "0 0 4px" }}>
-              Bạn đã gõ:
+              You typed:
             </p>
             <p className="text-[15px] m-0 italic">&ldquo;{typedText}&rdquo;</p>
           </div>
@@ -448,7 +448,7 @@ export default function DictationMode({ examMode }: Props) {
               className="rounded-lg border-2 border-border bg-transparent cursor-pointer text-[13px] font-medium"
               style={{ padding: "10px 20px", color: "var(--text)" }}
             >
-              <RefreshCw /> Thử lại
+              <RefreshCw /> Retry
             </button>
             <button
               onClick={nextSentence}
@@ -461,11 +461,11 @@ export default function DictationMode({ examMode }: Props) {
             >
               {currentIdx < sentences.length - 1 ? (
                 <>
-                  Câu tiếp <ChevronRight />
+                  Next Sentence <ChevronRight />
                 </>
               ) : (
                 <>
-                  Hoàn thành <CircleCheckBig />
+                  Complete <CircleCheckBig />
                 </>
               )}
             </button>
@@ -488,9 +488,9 @@ export default function DictationMode({ examMode }: Props) {
               <XCircle className="text-destructive" />
             )}
           </div>
-          <h2 className="mb-2">Dictation hoàn thành!</h2>
+          <h2 className="mb-2">Dictation Completed!</h2>
           <p className="text-text-secondary mb-2">
-            Độ chính xác trung bình: <strong className="text-accent text-3xl">{avgScore}%</strong>
+            Average Accuracy: <strong className="text-accent text-3xl">{avgScore}%</strong>
           </p>
           {xpAwarded > 0 && (
             <p className="text-accent text-[13px] font-semibold mb-2">+{xpAwarded} XP</p>
@@ -501,8 +501,8 @@ export default function DictationMode({ examMode }: Props) {
               style={{ color: skillUpdate.levelUp ? "var(--success)" : "var(--text-secondary)" }}
             >
               {skillUpdate.levelUp
-                ? `🎉 Trình độ nghe: ${skillUpdate.cefr}!`
-                : `📊 Trình độ nghe: ${skillUpdate.cefr}`}
+                ? `🎉 Listening Level: ${skillUpdate.cefr}!`
+                : `📊 Listening Level: ${skillUpdate.cefr}`}
             </p>
           )}
           <div className="flex gap-2 justify-center flex-wrap mb-5">
@@ -513,7 +513,7 @@ export default function DictationMode({ examMode }: Props) {
                 className="text-[13px]"
                 style={{ padding: "3px 10px" }}
               >
-                Câu {i + 1}: {s}%
+                Sentence {i + 1}: {s}%
               </Tag>
             ))}
           </div>
@@ -526,7 +526,7 @@ export default function DictationMode({ examMode }: Props) {
               color: "var(--text-on-accent)",
             }}
           >
-            <RefreshCw /> Luyện tiếp
+            <RefreshCw /> Practice Again
           </button>
         </div>
       )}

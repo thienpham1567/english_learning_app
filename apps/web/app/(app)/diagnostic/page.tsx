@@ -121,7 +121,7 @@ export default function DiagnosticPage() {
         >
           <Loader2 className="animate-spin" />
         </m.div>
-        <span className="text-sm font-semibold text-text-secondary">Đang chuẩn bị bài test...</span>
+        <span className="text-sm font-semibold text-text-secondary">Preparing diagnostic test...</span>
       </div>
     );
   }
@@ -158,7 +158,7 @@ export default function DiagnosticPage() {
           <Loader2 className="animate-spin" />
         </m.div>
         <span className="text-sm font-semibold text-text-secondary">
-          Đang phân tích kết quả bài thi thích ứng...
+          Analyzing adaptive test results...
         </span>
       </div>
     );

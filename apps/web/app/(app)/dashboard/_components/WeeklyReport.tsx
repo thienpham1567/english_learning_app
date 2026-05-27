@@ -72,10 +72,10 @@ export function WeeklyReport() {
 
         <div className="flex-1 min-w-0">
           <div className="font-display text-sm font-semibold text-ink leading-tight">
-            Báo cáo phân tích tuần
+            Weekly Analytics Report
           </div>
           <div className="text-[11px] text-text-muted mt-1 font-semibold leading-none">
-            Nhận phân tích từ AI về tiến độ và thói quen học tập của bạn
+            Get AI analysis on your progress and study habits
           </div>
         </div>
 
@@ -91,7 +91,7 @@ export function WeeklyReport() {
         <div className="flex items-center gap-2">
           <Loader2 className="h-4 w-4 animate-spin text-accent" />
           <span className="text-xs font-bold text-text-secondary">
-            AI đang tổng hợp và phân tích hoạt động của bạn...
+            AI is compiling and analyzing your activity...
           </span>
         </div>
         <div className="w-full space-y-2.5 animate-pulse">
@@ -117,10 +117,10 @@ export function WeeklyReport() {
       <div className="px-5 py-4 bg-surface-alt border-b-2 border-border flex items-center gap-2.5">
         <BarChart3 className="h-4 w-4 text-accent" />
         <span className="text-xs font-extrabold text-ink font-display tracking-wide">
-          Phân tích học tập tuần này
+          This Week's Learning Analysis
         </span>
         <span className="ml-auto text-[9px] font-bold text-text-muted uppercase tracking-widest font-mono">
-          7 ngày gần nhất
+          Last 7 Days
         </span>
       </div>
 
@@ -130,37 +130,37 @@ export function WeeklyReport() {
           {
             icon: <Calendar className="h-4 w-4 text-accent" />,
             value: `${stats.daysActive}/7`,
-            label: "Ngày học",
+            label: "Study Days",
             bg: "bg-accent-muted",
           },
           {
             icon: <Zap className="h-4 w-4 text-(--warning) fill-(--warning)" />,
             value: stats.totalXP.toLocaleString(),
-            label: "XP đạt được",
+            label: "XP Earned",
             bg: "bg-(--warning-bg)",
           },
           {
             icon: <Flame className="h-4 w-4 text-(--fire) fill-(--fire)" />,
             value: stats.currentStreak,
-            label: "Chuỗi ngày",
+            label: "Streak",
             bg: "bg-(--warning-bg)",
           },
           {
             icon: <BookOpen className="h-4 w-4 text-(--success)" />,
             value: stats.newVocabulary,
-            label: "Từ vựng mới",
+            label: "New Vocabulary",
             bg: "bg-(--success-bg)",
           },
           {
             icon: <Trophy className="h-4 w-4 text-(--warning)" />,
             value: stats.avgChallengeScore,
-            label: "Điểm TB",
+            label: "Avg Score",
             bg: "bg-(--warning-bg)",
           },
           {
             icon: <AlertTriangle className="h-4 w-4 text-(--error)" />,
             value: stats.unresolvedErrors,
-            label: "Lỗi cần sửa",
+            label: "Errors to Fix",
             bg: "bg-(--error-bg)",
           },
         ].map((s) => (
@@ -208,10 +208,9 @@ export function WeeklyReport() {
           <div className="w-10 h-10 rounded-md bg-surface-alt border-2 border-border shadow-[2px_2px_0_var(--shadow-color)] flex items-center justify-center mb-3">
             <AlertTriangle className="h-5 w-5 text-text-muted" />
           </div>
-          <div className="text-xs font-bold text-text-secondary">Chưa có đủ dữ liệu học tập</div>
+          <div className="text-xs font-bold text-text-secondary">Insufficient learning data</div>
           <div className="text-[11px] text-text-muted mt-1.5 font-medium max-w-xs leading-relaxed">
-            Hãy tiếp tục luyện tập các bài học hàng ngày để mở khóa báo cáo phân tích chi tiết từ
-            AI!
+            Keep practicing daily lessons to unlock detailed analysis reports from the AI!
           </div>
         </div>
       )}

@@ -95,7 +95,7 @@ function WeeklyChart({ scores }: { scores: { day: string; score: number }[] }) {
       <div className="flex items-center gap-1.5 mb-4">
         <BarChart3 size={13} className="text-accent" />
         <span className="text-[11px] font-extrabold uppercase tracking-widest text-accent">
-          Lịch sử 7 ngày gần nhất
+          Last 7 Days History
         </span>
       </div>
 
@@ -214,7 +214,7 @@ export function CompletedState({
       localStorage.setItem(WEEK_KEY, JSON.stringify(weekData));
 
       // Build last 7 days
-      const days = ["CN", "T2", "T3", "T4", "T5", "T6", "T7"];
+      const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
       const result: { day: string; score: number }[] = [];
       for (let i = 6; i >= 0; i--) {
         const d = new Date();
@@ -288,7 +288,7 @@ export function CompletedState({
                 marginTop: 2,
               }}
             >
-              / {answers.length} đúng
+              / {answers.length} correct
             </span>
           </div>
         </div>
@@ -296,18 +296,26 @@ export function CompletedState({
         {/* Title */}
         <Title
           level={3}
-          className="mt-2 mb-1 font-display font-extrabold"
+          className="mt-2 mb-1 font-display font-extrabold flex items-center gap-1.5"
           style={{ color: isGood ? "var(--text-on-accent)" : "var(--text-primary)" }}
         >
-          {isGood ? "Độc cô cầu bại! 🏆" : "Hoàn thành xuất sắc! 🎉"}
+          {isGood ? (
+            <>
+              <Trophy className="inline mr-1" /> Incredible Work!
+            </>
+          ) : (
+            <>
+              <Star className="inline mr-1" /> Well Done!
+            </>
+          )}
         </Title>
         <Text
           className="text-[13px] w-[360px] block mb-4"
           style={{ color: isGood ? "rgba(255,255,255,0.8)" : "var(--text-secondary)" }}
         >
           {isGood
-            ? "Bạn đã xuất sắc vượt qua các câu hỏi khó của hôm nay. Hãy duy trì phong độ nhé!"
-            : "Chúc mừng bạn đã hoàn thành bài học hôm nay. Kiên trì là chìa khóa thành công."}
+            ? "You have successfully completed today's tough questions. Keep it up!"
+            : "Congratulations on completing today's exercises. Consistency is key to success!"}
         </Text>
 
         {/* Streak */}
@@ -343,11 +351,11 @@ export function CompletedState({
             <Zap size={20} className="text-[#fff]" />
           </div>
           <div className="flex-1 text-left">
-            <div className="text-[15px] font-extrabold text-text-primary font-display">
-              ⚡ Thử thách Bonus Round
+            <div className="text-[15px] font-extrabold text-text-primary font-display flex items-center gap-1">
+              <Zap size={14} className="text-accent" /> Bonus Round Challenge
             </div>
             <div className="text-xs text-text-secondary" style={{ marginTop: 2 }}>
-              Thêm 3 câu hỏi nhanh · Nhận thêm XP · Không phạt khi trả lời sai
+              3 quick questions · Earn extra XP · No penalty for wrong answers
             </div>
           </div>
           <ChevronRight size={13} className="text-text-muted" />
@@ -357,7 +365,7 @@ export function CompletedState({
       {bonusLoading && (
         <div className="w-full rounded-(--radius-xl) py-4 px-5 bg-(--surface) border-2 border-border flex items-center justify-center gap-2.5 text-text-secondary text-[13px] font-semibold">
           <Loader2 className="animate-spin text-(--xp)" />
-          Đang khởi tạo thử thách Bonus...
+          Initializing Bonus Challenge...
         </div>
       )}
 
@@ -372,7 +380,7 @@ export function CompletedState({
           }}
         >
           <Zap size={15} />
-          Bạn đã hoàn thành xuất sắc tất cả câu hỏi phụ hôm nay! ✨
+          You have completed all bonus questions today! <Star size={12} className="text-accent ml-1" />
         </m.div>
       )}
 
@@ -398,7 +406,7 @@ export function CompletedState({
         <div className="flex items-center gap-1.5 mb-3">
           <Trophy size={13} className="text-accent" />
           <span className="text-[11px] font-extrabold uppercase tracking-widest text-accent">
-            Bảng thành tích cá nhân
+            Personal Performance
           </span>
         </div>
         <div className="grid gap-2.5 text-center" style={{ gridTemplateColumns: "repeat(3, 1fr)" }}>
@@ -416,7 +424,7 @@ export function CompletedState({
               className="text-[9px] font-bold uppercase tracking-wider text-text-muted"
               style={{ marginTop: 2 }}
             >
-              Chuỗi ngày
+              Streak
             </div>
           </div>
           <div
@@ -433,7 +441,7 @@ export function CompletedState({
               className="text-[9px] font-bold uppercase tracking-wider text-text-muted"
               style={{ marginTop: 2 }}
             >
-              Điểm hôm nay
+              Today's Score
             </div>
           </div>
           <div
@@ -459,7 +467,7 @@ export function CompletedState({
               className="text-[9px] font-bold uppercase tracking-wider text-text-muted"
               style={{ marginTop: 2 }}
             >
-              Kỷ lục thời gian
+              Best Time
             </div>
           </div>
         </div>
@@ -476,7 +484,7 @@ export function CompletedState({
           <div className="flex items-center gap-2 mt-2 mb-1">
             <Star size={12} className="text-(--error)" />
             <span className="text-[11px] font-extrabold uppercase tracking-widest text-destructive">
-              Xem lại các câu trả lời sai ({wrongAnswers.length})
+              Review Wrong Answers ({wrongAnswers.length})
             </span>
             <div className="flex-1 h-[1px]" style={{ background: "var(--border)" }} />
           </div>
@@ -501,18 +509,18 @@ export function CompletedState({
                     className="text-[11px] text-destructive rounded-md font-bold"
                     style={{ background: "var(--error-bg)", padding: "2px 8px" }}
                   >
-                    Bạn ghi: {a.answer || "(trống)"}
+                    Your answer: {a.answer || "(blank)"}
                   </span>
                   {a.correctAnswer && (
                     <span
                       className="text-[11px] text-emerald-500 rounded-md font-bold"
                       style={{ background: "rgba(16, 185, 129, 0.12)", padding: "2px 8px" }}
                     >
-                      Đáp án đúng: {a.correctAnswer}
+                      Correct answer: {a.correctAnswer}
                     </span>
                   )}
                 </div>
-                {a.explanation && a.explanation !== "Chính xác!" && (
+                {a.explanation && a.explanation !== "Correct!" && (
                   <p className="m-0 text-xs text-text-muted leading-relaxed">💡 {a.explanation}</p>
                 )}
               </div>
@@ -541,7 +549,7 @@ export function CompletedState({
         <div className="rounded-(--radius-xl) bg-surface-alt border-2 border-border py-3 px-4 flex items-center justify-center gap-2">
           <Clock size={12} className="text-text-muted" />
           <Text className="text-xs text-text-secondary font-medium">
-            Thử thách tiếp theo sẽ mở sau
+            Next challenge in
           </Text>
           <span
             className="font-mono text-sm font-extrabold text-accent"
@@ -567,7 +575,7 @@ export function CompletedState({
               transition: "all 0.2s",
             }}
           >
-            <Zap /> Tra cứu từ điển & Luyện từ vựng
+            <Zap /> Lookup Dictionary & Practice Vocabulary
             <ChevronRight size={12} />
           </Link>
         </div>

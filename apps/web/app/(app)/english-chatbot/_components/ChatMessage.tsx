@@ -18,7 +18,7 @@ export type PageMessage = AppChatMessage | DividerMessage;
 
 function formatTime() {
   try {
-    return new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
+    return new Date().toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
   } catch {
     return "";
   }
@@ -37,7 +37,7 @@ function CopyButton({ text }: { text: string }) {
     <button
       className="rounded-full p-1.5 text-(--text-muted) hover:bg-(--chat-surface-hover) hover:text-(--text-primary) transition-all cursor-pointer"
       onClick={handleCopy}
-      aria-label="Sao chép"
+      aria-label="Copy"
     >
       {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
     </button>
@@ -67,7 +67,7 @@ function SpeakButton({
       }`}
       onClick={() => (active ? onStop() : onSpeak(text))}
       disabled={isLoading}
-      aria-label={isSpeaking ? "Dừng phát" : isLoading ? "Đang tải..." : "Nghe phát âm"}
+      aria-label={isSpeaking ? "Stop playback" : isLoading ? "Loading..." : "Listen to pronunciation"}
     >
       {isLoading ? (
         <Loader2 className="h-3 w-3 animate-spin" />
@@ -151,10 +151,10 @@ function CodeBlock({ children, className }: { children: ReactNode; className?: s
         <button
           onClick={onCopy}
           className="flex items-center gap-1 hover:text-(--ink) transition-colors cursor-pointer"
-          aria-label="Sao chép"
+          aria-label="Copy"
         >
           {copied ? <Check className="h-3 w-3" /> : <Copy className="h-3 w-3" />}
-          <span>{copied ? "Đã chép" : "Sao chép"}</span>
+          <span>{copied ? "Copied" : "Copy"}</span>
         </button>
       </div>
       <pre className="m-0 p-3.5 overflow-x-auto text-[12px] leading-relaxed font-mono text-(--text-primary)">
@@ -169,8 +169,8 @@ function RegenerateButton({ onRegenerate }: { onRegenerate: () => void }) {
     <button
       className="rounded-full p-1.5 text-(--text-muted) hover:bg-(--chat-surface-hover) hover:text-(--text-primary) transition-all cursor-pointer"
       onClick={onRegenerate}
-      aria-label="Tạo lại"
-      title="Tạo lại phản hồi"
+      aria-label="Regenerate"
+      title="Regenerate response"
     >
       <RotateCcw className="h-3 w-3" />
     </button>

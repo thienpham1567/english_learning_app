@@ -296,7 +296,7 @@ export function TopicGrid({
 
                       {progress && progress.totalCount > 0 && (
                         <Tooltip
-                          title={`Đáp án đúng: ${progress.correctCount}/${progress.totalCount}`}
+                          title={`Correct answers: ${progress.correctCount}/${progress.totalCount}`}
                         >
                           <Tag
                             color={
@@ -327,7 +327,7 @@ export function TopicGrid({
                           style={{ boxShadow: "0 0 6px rgba(245, 158, 11, 0.3)" }}
                         >
                           <Star className="text-[9px]" style={{ marginRight: 3 }} />
-                          GỢI Ý
+                          RECOMMENDED
                         </Tag>
                       )}
 

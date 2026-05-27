@@ -122,7 +122,7 @@ function VariantCard({ variant, original }: { variant: RewriteVariant; original:
             {meta.label}
           </span>
           <span className="text-[10px] font-bold text-text-muted">
-            {variant.changes.length} thay đổi
+            {variant.changes.length} changes
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -130,7 +130,7 @@ function VariantCard({ variant, original }: { variant: RewriteVariant; original:
             onClick={() => setExpanded((p) => !p)}
             className="border-none bg-transparent cursor-pointer text-[10px] font-bold text-text-secondary hover:text-ink"
           >
-            {expanded ? "Ẩn chi tiết" : "Xem thay đổi"}
+            {expanded ? "Hide details" : "Show changes"}
           </button>
           <CopyButton text={variant.rewrite} />
         </div>
@@ -194,12 +194,12 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
       });
       setVariants(data.variants);
       if (data.variants.length === 0) {
-        setError("Câu này đã tốt — không có cải tiến nào để đề xuất.");
+        setError("This sentence is already good — no improvements to suggest.");
       }
     } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : "Có lỗi xảy ra";
+      const msg = err instanceof Error ? err.message : "An error occurred";
       if (msg.includes("Rate limit")) {
-        setError("Bạn đã gửi quá nhiều yêu cầu. Vui lòng đợi 1 phút.");
+        setError("You have sent too many requests. Please wait 1 minute.");
       } else {
         setError(msg);
       }
@@ -214,9 +214,9 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
       {!compact && (
         <div className="flex items-center gap-2 mb-1.5 flex-wrap">
           <Highlighter className="h-4.5 w-4.5 text-accent" />
-          <span className="font-bold text-sm text-ink">Cải thiện câu văn</span>
+          <span className="font-bold text-sm text-ink">Improve Sentence</span>
           <span className="text-xs text-text-muted font-bold">
-            — 3 phiên bản: tự nhiên, trang trọng, học thuật
+            — 3 versions: natural, formal, academic
           </span>
         </div>
       )}
@@ -224,7 +224,7 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
       {/* Input */}
       <div>
         <div className="flex justify-between items-center mb-1.5">
-          <span className="text-xs text-text-muted font-bold">Câu gốc</span>
+          <span className="text-xs text-text-muted font-bold">Original Sentence</span>
           <span
             className={`text-[10px] ${
               overLimit ? "text-error font-bold" : "text-text-muted font-bold"
@@ -240,7 +240,7 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
             setVariants(null);
             setError(null);
           }}
-          placeholder="Nhập câu cần cải thiện..."
+          placeholder="Enter sentence to improve..."
           className={`w-full min-h-[80px] p-3 rounded-xl border bg-surface text-ink text-sm leading-relaxed resize-y focus:outline-none focus:ring-1 focus:ring-accent/30 font-body ${
             overLimit ? "border-red-500 focus:border-red-500" : "border-border focus:border-accent"
           }`}
@@ -260,12 +260,12 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
         {loading ? (
           <>
             <Loader2 className="h-4 w-4 animate-spin" />
-            <span>Đang viết lại...</span>
+            <span>Rewriting...</span>
           </>
         ) : (
           <>
             <Highlighter className="h-4 w-4" />
-            <span>Viết lại</span>
+            <span>Rewrite</span>
           </>
         )}
       </button>
@@ -281,7 +281,7 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
       {variants && variants.length > 0 && (
         <div className="flex flex-col gap-2.5 mt-2 animate-in fade-in duration-200">
           <p className="text-xs text-text-muted m-0 font-extrabold">
-            {variants.length} phiên bản được đề xuất
+            {variants.length} suggested versions
           </p>
           {variants.map((v) => (
             <VariantCard key={v.level} variant={v} original={sentence.trim()} />

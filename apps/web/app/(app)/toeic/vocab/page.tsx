@@ -7,16 +7,16 @@ import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
 import { VocabHub } from "./_components/VocabHub";
 
 const TOPIC_LABELS: Record<string, string> = {
-  office: "🏢 Văn phòng",
-  business: "📊 Kinh doanh",
-  finance: "💰 Tài chính",
-  marketing: "📣 Marketing",
-  manufacturing: "🏭 Sản xuất",
-  travel: "✈️ Du lịch",
-  restaurants: "🍽️ Nhà hàng",
-  health: "🏥 Sức khỏe",
-  technology: "💻 Công nghệ",
-  general: "📚 Chung",
+  office: "Office",
+  business: "Business",
+  finance: "Finance",
+  marketing: "Marketing",
+  manufacturing: "Manufacturing",
+  travel: "Travel",
+  restaurants: "Restaurants",
+  health: "Health",
+  technology: "Technology",
+  general: "General",
 };
 
 export default async function ToeicVocabPage() {

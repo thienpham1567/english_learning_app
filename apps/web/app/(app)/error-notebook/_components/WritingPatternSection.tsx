@@ -111,17 +111,17 @@ function InlineQuiz({
           {score === items.length ? (
             <>
               <Trophy className="h-4 w-4 text-(--success) inline mr-1.5" />
-              Hoàn hảo!
+              Perfect!
             </>
           ) : score >= items.length / 2 ? (
             <>
               <ThumbsUp className="h-4 w-4 text-accent inline mr-1.5" />
-              Tốt!
+              Good!
             </>
           ) : (
             <>
               <Flame className="h-4 w-4 text-(--warning) inline mr-1.5" />
-              Cần ôn thêm!
+              Needs review!
             </>
           )}
         </p>
@@ -129,7 +129,7 @@ function InlineQuiz({
           onClick={() => onDone(answers)}
           className="mt-2 px-5 py-2 rounded-lg border-none bg-accent text-(--text-on-accent) text-[13px] font-semibold cursor-pointer"
         >
-          Xong
+          Done
         </button>
       </div>
     );
@@ -139,9 +139,9 @@ function InlineQuiz({
     <div className="flex flex-col gap-3">
       <div className="flex justify-between text-[11px] text-text-secondary">
         <span>
-          Câu {current + 1}/{items.length}
+          Question {current + 1}/{items.length}
         </span>
-        <span>{results.filter(Boolean).length} đúng</span>
+        <span>{results.filter(Boolean).length} correct</span>
       </div>
 
       <p className="text-sm font-medium m-0 leading-relaxed">{item.questionStem}</p>
@@ -196,11 +196,11 @@ function InlineQuiz({
           <p className="m-0 mb-1 font-semibold">
             {isCorrect ? (
               <>
-                <Check className="h-3 w-3 inline mr-1" /> Đúng!
+                <Check className="h-3 w-3 inline mr-1" /> Correct!
               </>
             ) : (
               <>
-                <XIcon className="h-3 w-3 inline mr-1" /> Sai
+                <XIcon className="h-3 w-3 inline mr-1" /> Incorrect
               </>
             )}
           </p>
@@ -214,7 +214,7 @@ function InlineQuiz({
           onClick={handleNext}
           className="self-end px-5 py-2 rounded-lg border-none bg-accent text-(--text-on-accent) text-[13px] font-semibold cursor-pointer"
         >
-          {current + 1 < items.length ? "Câu tiếp →" : "Xem kết quả"}
+          {current + 1 < items.length ? "Next Question →" : "See Results"}
         </button>
       )}
     </div>
@@ -290,13 +290,13 @@ export function WritingPatternSection() {
     <div className="mb-6">
       <div className="flex items-center gap-2 mb-3">
         <Pencil className="h-4 w-4 text-accent" />
-        <h2 className="m-0 text-[15px] font-bold">Lỗi viết lặp lại</h2>
+        <h2 className="m-0 text-[15px] font-bold">Repeated Writing Errors</h2>
         <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-amber-500/15 text-amber-600 border border-amber-500/25">
-          {patterns.length} mẫu
+          {patterns.length} patterns
         </span>
       </div>
       <p className="text-xs text-text-secondary m-0 mb-3">
-        Các lỗi ngữ pháp bạn mắc ≥3 lần trong 14 ngày qua — luyện tập để khắc phục.
+        Grammar errors you made ≥3 times in the last 14 days — practice to improve.
       </p>
 
       <div className="flex flex-col gap-2.5">
@@ -322,7 +322,7 @@ export function WritingPatternSection() {
                       <span className="relative group">
                         <CheckCircle className="h-3 w-3 text-(--success) cursor-help" />
                         <span className="hidden group-hover:block absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2.5 py-1.5 rounded-lg bg-slate-900 text-white text-[10px] font-medium whitespace-nowrap z-50 shadow-lg">
-                          Quiz đã tạo: {new Date(p.quizGeneratedAt).toLocaleDateString("vi-VN")}
+                          Quiz generated: {new Date(p.quizGeneratedAt).toLocaleDateString("en-US")}
                         </span>
                       </span>
                     )}
@@ -335,13 +335,13 @@ export function WritingPatternSection() {
                     onClick={() => generateQuiz(p.tag)}
                     className="flex items-center gap-1 px-3.5 py-1.5 rounded-lg border-none bg-(--accent-muted) text-accent text-xs font-semibold cursor-pointer shrink-0 hover:bg-accent/15 transition-colors"
                   >
-                    <Zap className="h-3 w-3" /> Luyện tập
+                    <Zap className="h-3 w-3" /> Practice
                   </button>
                 )}
 
                 {state === "generating" && (
                   <span className="text-xs text-text-secondary flex items-center gap-1.5">
-                    <Loader2 className="h-3.5 w-3.5 animate-spin" /> Đang tạo...
+                    <Loader2 className="h-3.5 w-3.5 animate-spin" /> Generating...
                   </span>
                 )}
 
@@ -350,7 +350,7 @@ export function WritingPatternSection() {
                     onClick={() => generateQuiz(p.tag)}
                     className="px-3.5 py-1.5 rounded-lg border-2 border-border bg-transparent text-text-secondary text-xs cursor-pointer shrink-0 hover:bg-surface-alt transition-colors"
                   >
-                    Làm lại
+                    Retry
                   </button>
                 )}
               </div>
@@ -368,8 +368,7 @@ export function WritingPatternSection() {
 
               {state === "done" && (
                 <div className="px-4 py-2 border-t-2 border-border bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] text-xs text-(--success) font-medium">
-                  <CheckCircle className="h-3 w-3 inline mr-1.5" /> Quiz đã hoàn thành — câu hỏi đã
-                  được lưu vào sổ lỗi sai để ôn tập sau.
+                  <CheckCircle className="h-3 w-3 inline mr-1.5" /> Quiz completed — questions saved to error notebook for future review.
                 </div>
               )}
             </div>

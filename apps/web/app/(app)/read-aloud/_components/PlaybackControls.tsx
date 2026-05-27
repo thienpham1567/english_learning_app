@@ -1,7 +1,7 @@
 "use client";
 
 import { Flex, Slider, Typography } from "antd";
-import { Loader2, PauseCircle, PlayCircle, Undo, Volume2 } from "lucide-react";
+import { Loader2, PauseCircle, PlayCircle, Undo, Volume2, Settings } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { SPEED_PRESETS, type VoiceOption } from "../_data/voices";
@@ -43,14 +43,21 @@ export function PlaybackControls({
         className="read-aloud-panel bg-(--surface) rounded-(--radius-xl) border-2 border-border flex flex-col"
         style={{ padding: "var(--space-5)", boxShadow: "var(--shadow-md)", gap: "var(--space-4)" }}
       >
-        <Text className="text-xs font-bold text-text-muted uppercase tracking-widest block">
-          ⚙️ Cấu hình phát
+        <Text className="text-xs font-bold text-text-muted uppercase tracking-widest flex items-center gap-1.5">
+          <m.span
+            animate={{ rotate: 360 }}
+            transition={{ repeat: Infinity, duration: 10, ease: "linear" }}
+            style={{ display: "inline-flex", color: "var(--text-muted)" }}
+          >
+            <Settings size={13} />
+          </m.span>
+          Playback Configuration
         </Text>
 
         {/* Speed Controller */}
         <div>
           <Flex align="center" justify="space-between" className="mb-1">
-            <Text className="text-[13px] text-text-secondary font-semibold">Tốc độ đọc</Text>
+            <Text className="text-[13px] text-text-secondary font-semibold">Reading Speed</Text>
             <Text className="text-sm font-extrabold text-accent">{speed}x</Text>
           </Flex>
           <Slider
@@ -83,7 +90,7 @@ export function PlaybackControls({
                   transition: "all 0.2s",
                 }}
               >
-                {preset === 1.0 ? "Chuẩn" : `${preset}x`}
+                {preset === 1.0 ? "Normal" : `${preset}x`}
               </m.button>
             ))}
           </Flex>
@@ -112,11 +119,11 @@ export function PlaybackControls({
           >
             {loading ? (
               <>
-                <Loader2 className="animate-spin" /> Đang xử lý giọng nói...
+                <Loader2 className="animate-spin" /> Processing voice...
               </>
             ) : (
               <>
-                <Volume2 /> Bắt đầu nghe đọc
+                <Volume2 /> Start Listening
               </>
             )}
           </m.button>
@@ -141,7 +148,7 @@ export function PlaybackControls({
                   ) : (
                     <PlayCircle style={{ color: "var(--sage)" }} />
                   )}
-                  {playing ? "Tạm dừng" : "Tiếp tục phát"}
+                  {playing ? "Pause" : "Resume"}
                 </m.button>
                 <m.button
                   whileHover={{ scale: 1.02 }}
@@ -203,10 +210,10 @@ function WaveformVisualizer({
           />
           <Text className="text-sm font-bold text-text-primary">
             {loading ? (
-              "Đang nén & tạo tệp âm thanh..."
+              "Compiling & generating audio..."
             ) : (
               <span>
-                Đang đọc giọng {selectedVoice.flag}{" "}
+                Reading with {selectedVoice.flag}{" "}
                 <strong className="text-accent">{selectedVoice.name}</strong> ({selectedVoice.label}
                 )
               </span>

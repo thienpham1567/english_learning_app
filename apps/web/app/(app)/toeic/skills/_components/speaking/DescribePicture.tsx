@@ -203,7 +203,7 @@ export function DescribePicture() {
         });
       }, 1000);
     } catch {
-      setError("Không thể truy cập microphone.");
+      setError("Cannot access microphone.");
     }
   }, [voice]);
 
@@ -239,7 +239,7 @@ export function DescribePicture() {
       })
       .catch(() => {
         if (isMountedRef.current) {
-          setError("Có lỗi khi đánh giá.");
+          setError("Error evaluating response.");
           setState("viewing");
         }
       })
@@ -277,11 +277,10 @@ export function DescribePicture() {
               <ImageIcon className="h-6 w-6" />
             </div>
             <h3 className="m-0 mb-1.5 text-lg font-bold font-display text-ink">
-              Chọn hình ảnh để mô tả
+              Select an Image to Describe
             </h3>
             <p className="m-0 text-xs text-text-muted font-bold max-w-sm mx-auto leading-relaxed">
-              Bạn sẽ có 45 giây để mô tả bức hình bằng tiếng Anh. AI sẽ đánh giá phát âm, ngữ pháp
-              và nội dung.
+              You will have 45 seconds to describe the picture in English. The AI will evaluate your pronunciation, grammar, and content.
             </p>
           </div>
           <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3">
@@ -344,7 +343,7 @@ export function DescribePicture() {
                   {formatTime(timeLeft)}
                 </div>
                 <p className="text-[10px] text-text-muted mt-1 uppercase tracking-wider font-bold">
-                  Thời gian còn lại
+                  Time Remaining
                 </p>
               </div>
               <div className="p-3 rounded-2xl bg-surface border-2 border-border">
@@ -356,13 +355,13 @@ export function DescribePicture() {
             <div className="p-4 rounded-xl bg-surface-alt border-2 border-border text-xs text-text-secondary leading-relaxed shadow-(--shadow-sm)">
               <p className="m-0 mb-1.5 font-bold text-(--info) flex items-center gap-1.5">
                 <Info className="h-4 w-4 shrink-0" />
-                <span>Mẹo mô tả hình:</span>
+                <span>Image Description Tips:</span>
               </p>
               <ul className="m-0 pl-4.5 flex flex-col gap-1 list-disc">
-                <li>Bắt đầu: &ldquo;In this picture, I can see...&rdquo;</li>
-                <li>Mô tả từ tổng quan đến chi tiết</li>
+                <li>Start: &ldquo;In this picture, I can see...&rdquo;</li>
+                <li>Describe from overview to specific details</li>
                 <li>
-                  Dùng thì hiện tại tiếp diễn cho hành động (e.g. &ldquo;people are talking&rdquo;)
+                  Use present continuous for actions (e.g. &ldquo;people are talking&rdquo;)
                 </li>
               </ul>
             </div>
@@ -377,13 +376,13 @@ export function DescribePicture() {
                   <Mic className="h-7 w-7" />
                 </button>
                 <p className="text-xs text-text-muted mt-1 font-semibold">
-                  Nhấn để bắt đầu mô tả (45s)
+                  Press to start describing (45s)
                 </p>
                 <button
                   onClick={backToGallery}
                   className="mt-1 px-4 py-2 rounded-xl border-2 border-border bg-surface text-text-secondary hover:text-ink hover:bg-surface-hover hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow-sm) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-bold cursor-pointer"
                 >
-                  ← Chọn hình khác
+                  ← Choose another image
                 </button>
               </>
             )}
@@ -395,14 +394,14 @@ export function DescribePicture() {
                 >
                   <Pause className="h-6 w-6 fill-current" />
                 </button>
-                <p className="text-xs text-red-400 mt-1 font-bold">Đang ghi âm...</p>
+                <p className="text-xs text-red-400 mt-1 font-bold">Recording...</p>
               </>
             )}
             {state === "evaluating" && (
               <div className="flex flex-col items-center justify-center py-4">
                 <Loader2 className="h-8 w-8 text-accent animate-spin" />
                 <p className="text-xs text-text-muted mt-2 font-bold">
-                  Đang chấm điểm và đánh giá...
+                  Scoring and evaluating...
                 </p>
               </div>
             )}
@@ -426,10 +425,10 @@ export function DescribePicture() {
             <CircularProgress percent={feedback.overall} color={scoreColor(feedback.overall)} />
             <div className="flex justify-center gap-6 mt-5 flex-wrap w-full border-t-2 border-border pt-4">
               {[
-                { label: "Phát âm", score: feedback.pronunciation },
-                { label: "Ngữ điệu", score: feedback.intonation },
-                { label: "Ngữ pháp", score: feedback.grammar },
-                { label: "Từ vựng", score: feedback.vocabulary },
+                { label: "Pronunciation", score: feedback.pronunciation },
+                { label: "Intonation", score: feedback.intonation },
+                { label: "Grammar", score: feedback.grammar },
+                { label: "Vocabulary", score: feedback.vocabulary },
               ].map((s) => (
                 <div key={s.label} className="flex-1 min-w-[70px]">
                   <p className="text-[10px] text-text-muted m-0 font-bold uppercase tracking-wider">
@@ -456,7 +455,7 @@ export function DescribePicture() {
             <div className="p-4.5 rounded-2xl bg-surface border-2 border-border">
               <p className="text-[10px] font-extrabold uppercase tracking-wider text-accent m-0 mb-2.5 flex items-center gap-1.5">
                 <Volume2 className="h-4 w-4 shrink-0" />
-                <span>Điểm cần cải thiện</span>
+                <span>Areas to Improve</span>
               </p>
               <ul className="m-0 pl-4.5 text-xs text-text-secondary leading-relaxed flex flex-col gap-1 list-disc font-bold">
                 {feedback.improvements.map((imp, i) => (
@@ -469,7 +468,7 @@ export function DescribePicture() {
           {feedback.transcript && (
             <div className="p-4.5 rounded-2xl bg-surface-alt border-2 border-border shadow-(--shadow-sm)">
               <p className="text-[10px] font-extrabold uppercase tracking-wider text-text-muted m-0 mb-1.5">
-                Bạn đã nói:
+                You said:
               </p>
               <p className="text-xs italic leading-relaxed text-text-secondary m-0">
                 &ldquo;{feedback.transcript}&rdquo;
@@ -483,13 +482,13 @@ export function DescribePicture() {
               className="px-5 py-2.5 rounded-xl border-2 border-border bg-surface text-text-secondary hover:text-ink hover:bg-surface-hover hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow-sm) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-bold cursor-pointer flex items-center gap-1.5"
             >
               <RefreshCw className="h-3.5 w-3.5" />
-              <span>Thử lại</span>
+              <span>Retry</span>
             </button>
             <button
               onClick={backToGallery}
               className="px-5 py-2.5 rounded-xl border-2 border-border bg-accent text-ink shadow-(--shadow-sm) hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all text-xs font-bold cursor-pointer flex items-center gap-1.5"
             >
-              <span>Hình khác</span>
+              <span>Choose another</span>
               <CheckCircle className="h-3.5 w-3.5" />
             </button>
           </div>

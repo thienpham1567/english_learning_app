@@ -32,7 +32,7 @@ function TabLoader() {
   return (
     <div className="flex justify-center items-center py-16 text-text-secondary gap-2.5 font-bold text-sm">
       <Loader2 className="h-5 w-5 animate-text-accent" />
-      <span>Đang tải nội dung học...</span>
+      <span>Loading learning content...</span>
     </div>
   );
 }
@@ -58,11 +58,11 @@ const SKILL_TABS: {
 ];
 
 const SUBTITLES: Record<Skill, string> = {
-  listening: "TOEIC Listening · Part 1–4 · Nghe hiểu",
-  reading: "TOEIC Reading · Part 5–7 · Đọc hiểu",
-  speaking: "TOEIC Speaking · 11 câu · Nói",
-  writing: "TOEIC Writing · 8 câu · Viết",
-  part5: "TOEIC Part 5 · Incomplete Sentences · Ngữ pháp",
+  listening: "TOEIC Listening · Part 1–4 · Listening Comprehension",
+  reading: "TOEIC Reading · Part 5–7 · Reading Comprehension",
+  speaking: "TOEIC Speaking · 11 questions · Speaking",
+  writing: "TOEIC Writing · 8 questions · Writing",
+  part5: "TOEIC Part 5 · Incomplete Sentences · Grammar",
 };
 
 const GRADIENTS: Record<Skill, string> = {
@@ -93,8 +93,8 @@ export default function ToeicSkillsPage() {
       <div className="px-4 pt-5 shrink-0">
         <div className="max-w-4xl mx-auto">
           <PageHeader
-            title="Luyện thi TOEIC"
-            subtitle="Luyện tập các kỹ năng Listening, Reading, Speaking và Writing theo chuẩn đề thi"
+            title="TOEIC Preparation"
+            subtitle="Practice Listening, Reading, Speaking, and Writing skills according to real exam standards"
             icon={<Target className="h-6 w-6" />}
             boxed
           />

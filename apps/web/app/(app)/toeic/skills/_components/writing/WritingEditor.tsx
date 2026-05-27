@@ -123,7 +123,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
         <div className="anim-fade-up mb-4 flex items-center justify-between gap-3 rounded-2xl border-2 border-border bg-warning-bg px-4 py-3 shadow-(--shadow-sm)">
           <span className="text-xs text-text-primary flex items-center gap-1.5 font-semibold">
             <PenSquare className="h-4 w-4 shrink-0 text-warning" />
-            <span>Bạn có bản nháp chưa hoàn thành. Khôi phục?</span>
+            <span>You have an unfinished draft. Restore?</span>
           </span>
           <div className="flex gap-2">
             <button
@@ -131,14 +131,14 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
               onClick={restoreDraft}
               className="rounded-xl bg-warning px-3.5 py-1.5 text-xs font-bold text-black border-2 border-border shadow-(--shadow-sm) hover:translate-y-[-1px] transition-all cursor-pointer"
             >
-              Khôi phục
+              Restore
             </button>
             <button
               type="button"
               onClick={dismissDraft}
               className="rounded-xl border-2 border-border bg-surface px-3.5 py-1.5 text-xs font-bold text-text-secondary hover:bg-surface-hover transition cursor-pointer"
             >
-              Bỏ qua
+              Dismiss
             </button>
           </div>
         </div>
@@ -147,7 +147,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
       {/* Prompt display */}
       <div className="rounded-xl border-2 border-border bg-(--bg-deep) p-4">
         <span className="text-[11px] font-semibold uppercase tracking-widest text-(--accent)">
-          {CATEGORY_LABELS[category]} · Đề bài
+          {CATEGORY_LABELS[category]} · Prompt
         </span>
         <p className="mt-2 text-sm leading-relaxed text-(--ink)">{prompt}</p>
       </div>
@@ -160,7 +160,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
             onClick={() => setShowHints(!showHints)}
           >
             <Lightbulb className="h-4 w-4 shrink-0 text-warning" />
-            <span className="flex-1 text-xs font-bold">Gợi ý viết bài</span>
+            <span className="flex-1 text-xs font-bold">Writing Hints</span>
             <ChevronDown
               className={`h-4 w-4 shrink-0 transition-transform duration-250 ${
                 showHints ? "rotate-180" : "rotate-0"
@@ -185,7 +185,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
       <div className="relative mt-4">
         <textarea
           className="min-h-[280px] w-full resize-y rounded-xl border-2 border-border bg-(--surface) p-4 text-sm leading-relaxed text-(--ink) placeholder:text-(--text-muted) focus:border-(--accent) focus:outline-none focus:ring-1 focus:ring-(--accent)/30 max-[720px]:min-h-[200px]"
-          placeholder="Viết bài của bạn ở đây..."
+          placeholder="Write your response here..."
           value={text}
           onChange={(e) => setText(e.target.value)}
         />
@@ -207,19 +207,19 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
               className={`text-xs font-bold whitespace-nowrap flex items-center gap-1 ${textColorClass}`}
             >
               <span>
-                {wordCount}/{minWords} từ
+                {wordCount}/{minWords} words
               </span>
               {wordCount < minWords && (
-                <span className="text-[10px] text-text-muted font-normal"> (tối thiểu)</span>
+                <span className="text-[10px] text-text-muted font-normal"> (minimum)</span>
               )}
               {wordCount >= minWords && wordCount < minWords * 1.5 && (
                 <span className="text-[10px] text-success font-normal flex items-center gap-0.5">
                   <Check className="h-3 w-3 shrink-0" />
-                  <span>đủ</span>
+                  <span>sufficient</span>
                 </span>
               )}
               {wordCount >= minWords * 1.5 && (
-                <span className="text-[10px] text-warning font-normal"> (dài)</span>
+                <span className="text-[10px] text-warning font-normal"> (long)</span>
               )}
             </span>
           </div>
@@ -234,7 +234,7 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
             }`}
           >
             <CheckCircle className="h-3.5 w-3.5 text-success shrink-0 animate-pulse" />
-            <span>Bản nháp đã lưu</span>
+            <span>Draft saved</span>
           </span>
           <button
             className="flex items-center gap-2 rounded-lg bg-accent px-5 py-2.5 text-sm font-bold text-text-on-accent border-2 border-border shadow-(--shadow-sm) hover:translate-x-[-1px] hover:translate-y-[-1px] hover:shadow-(--shadow) active:translate-x-[1px] active:translate-y-[1px] active:shadow-none transition-all disabled:opacity-40 cursor-pointer"
@@ -242,11 +242,11 @@ export function WritingEditor({ prompt, category, hints, onSubmit, isSubmitting 
             onClick={handleSubmit}
           >
             {isSubmitting ? (
-              "Đang chấm bài..."
+              "Scoring..."
             ) : (
               <>
                 <Send className="h-4 w-4" />
-                <span>Nộp bài</span>
+                <span>Submit</span>
               </>
             )}
           </button>

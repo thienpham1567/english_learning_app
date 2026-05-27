@@ -48,33 +48,33 @@ type ProgressResponse = {
 const PHASE_CONFIG = [
   {
     id: 1,
-    title: "Nền Tảng Vững Chắc",
-    sub: "Xây dựng gốc rễ ngữ pháp — nền tảng bắt buộc trước khi chạm Part 5/6",
+    title: "Grammar Foundation",
+    sub: "Build your grammar roots — essential foundation before touching Part 5/6",
     color: "var(--success)",
     gradient: "linear-gradient(135deg, var(--success), #10b981)",
     emoji: "🌱",
     categoryIds: ["tenses", "subject-verb-agreement", "parts-of-speech", "determiners", "pronouns"],
-    tip: "Giai đoạn này quyết định 70% số điểm Part 5. Đừng bỏ qua!",
+    tip: "This stage determines 70% of your Part 5 score. Don't skip it!",
   },
   {
     id: 2,
-    title: "Cấu Trúc Chuyên Sâu",
-    sub: "Nắm vững cấu trúc nâng cao — chìa khóa để vượt 700+ điểm",
+    title: "Advanced Structures",
+    sub: "Master advanced structures — the key to exceeding 700+ points",
     color: "var(--accent)",
     gradient: "linear-gradient(135deg, #6d28d9, #7c3aed)",
     emoji: "⚡",
     categoryIds: ["modals", "prepositions", "conjunctions", "conditionals", "comparatives"],
-    tip: "Từ đây bắt đầu phân biệt được người 600 vs 800 điểm.",
+    tip: "This is where 600-point and 800-point scorers begin to diverge.",
   },
   {
     id: 3,
-    title: "Chinh Phục 800–900",
-    sub: "Cấu trúc phức tạp & chiến thuật phòng thi thực tế",
+    title: "Conquering 800–900",
+    sub: "Complex sentence structures & practical exam strategies",
     color: "var(--error)",
     gradient: "linear-gradient(135deg, var(--error), #f97316)",
     emoji: "🔥",
     categoryIds: ["gerunds-infinitives", "passive", "clauses"],
-    tip: "Đây là lúc bạn cần luyện đề thật để kiểm tra kiến thức.",
+    tip: "This is the time to practice with real exams to verify your knowledge.",
   },
 ];
 
@@ -216,7 +216,7 @@ export default function GrammarRoadmapPage() {
                 <div className="text-center">
                   <div className="text-2xl font-black text-ink font-display">{overallPct}%</div>
                   <div className="text-text-muted font-bold" style={{ fontSize: 9.5 }}>
-                    Hoàn thành
+                    Completed
                   </div>
                 </div>
               )}
@@ -224,21 +224,21 @@ export default function GrammarRoadmapPage() {
 
             {/* Stats */}
             <div className="flex-1 w-[200px]">
-              <div className="text-lg font-black text-ink font-display mb-1">Tiến độ tổng quan</div>
+              <div className="text-lg font-black text-ink font-display mb-1">Overall Progress</div>
               <div className="flex gap-4 flex-wrap mb-3">
                 <StatPill
                   icon={<CheckCircle className="text-emerald-500" />}
-                  label="Đã hoàn thành"
+                  label="Completed"
                   value={`${totalCompleted}/${totalTopics}`}
                 />
                 <StatPill
                   icon={<Zap className="text-accent" />}
-                  label="Đang học"
+                  label="In Progress"
                   value={String(totalInProgress)}
                 />
                 <StatPill
                   icon={<Flame className="text-destructive" />}
-                  label="Giai đoạn"
+                  label="Phase"
                   value={`${currentPhase}/3`}
                 />
               </div>
@@ -295,7 +295,7 @@ export default function GrammarRoadmapPage() {
                       className="text-[10px] font-bold uppercase tracking-widest"
                       style={{ opacity: 0.8 }}
                     >
-                      Gợi ý tiếp theo
+                      Next Recommended Topic
                     </div>
                     <div className="text-sm font-extrabold">{recommendedTopic.title}</div>
                   </div>
@@ -351,7 +351,7 @@ export default function GrammarRoadmapPage() {
                         className="text-[10px] font-black uppercase"
                         style={{ letterSpacing: "0.12em", color: phase.color }}
                       >
-                        Giai đoạn {String(phase.id).padStart(2, "0")}
+                        Phase {String(phase.id).padStart(2, "0")}
                       </span>
                       {isCurrentPhase && (
                         <span
@@ -363,7 +363,7 @@ export default function GrammarRoadmapPage() {
                             border: `1px solid color-mix(in srgb, ${phase.color} 25%, transparent)`,
                           }}
                         >
-                          ĐAng HỌC
+                          LEARNING
                         </span>
                       )}
                     </div>
@@ -382,7 +382,7 @@ export default function GrammarRoadmapPage() {
                       {stats.pct}%
                     </div>
                     <div className="text-[11px] text-text-muted font-bold">
-                      {stats.completed}/{stats.total} chủ đề
+                      {stats.completed}/{stats.total} topics
                     </div>
                   </div>
 
@@ -423,7 +423,7 @@ export default function GrammarRoadmapPage() {
                               className="text-[11px] font-extrabold uppercase tracking-wider"
                               style={{ color: phase.color }}
                             >
-                              Kinh nghiệm 900 điểm
+                              900-Point Scorer Insight
                             </div>
                             <div
                               className="text-[13px] text-text-secondary font-semibold leading-normal"
@@ -464,7 +464,7 @@ export default function GrammarRoadmapPage() {
         >
           <div className="text-base font-black text-ink font-display mb-4 flex items-center gap-2">
             <Trophy className="text-(--xp)" />
-            Chiến lược từ người đạt 900 L&R
+            Strategies from a 900 L&R Scorer
           </div>
           <div
             className="grid gap-3"
@@ -473,23 +473,23 @@ export default function GrammarRoadmapPage() {
             {[
               {
                 emoji: "🎯",
-                title: "Part 5: 20 giây/câu",
-                desc: "Nhận diện từ loại trước, loại trừ 2 đáp án ngay lập tức. 80% câu Part 5 test từ loại + thì + hòa hợp chủ vị.",
+                title: "Part 5: 20 Seconds/Question",
+                desc: "Identify parts of speech first, eliminating 2 choices instantly. 80% of Part 5 tests parts of speech, tenses, or subject-verb agreement.",
               },
               {
                 emoji: "📚",
-                title: "Học theo cặp đối lập",
-                desc: "Luôn học Because vs Because of, Although vs Despite cùng lúc. TOEIC thích test sự khác biệt giữa liên từ và giới từ.",
+                title: "Learn in Opposing Pairs",
+                desc: "Always learn Because vs Because of, Although vs Despite together. TOEIC loves testing the difference between conjunctions and prepositions.",
               },
               {
                 emoji: "🔁",
-                title: "Luyện lặp lại cách quãng",
-                desc: "Sau mỗi bài học, hệ thống AI sẽ tạo bài tập 4 tầng: nhận diện → áp dụng → tự viết → ngữ cảnh đề thi.",
+                title: "Spaced Repetition Practice",
+                desc: "After each lesson, our AI generates 4-tier exercises: recognition → application → active writing → exam context.",
               },
               {
                 emoji: "⚡",
-                title: "Đừng bỏ qua Passive Voice",
-                desc: "10–15% câu Part 5/6 test thể bị động. Nắm vững be + V3 và causative (have something done) là ăn điểm chắc.",
+                title: "Don't Overlook Passive Voice",
+                desc: "10-15% of Part 5/6 tests passive voice. Mastering be + V3 and causative structures (have something done) guarantees quick points.",
               },
             ].map((tip, i) => (
               <div
@@ -520,26 +520,26 @@ export default function GrammarRoadmapPage() {
           <QuickLinkCard
             href="/grammar-lessons"
             emoji="📖"
-            label="Thư viện bài học"
-            desc="50+ chủ đề AI-generated"
+            label="Lesson Library"
+            desc="50+ AI-generated topics"
           />
           <QuickLinkCard
             href="/grammar-quiz"
             emoji="📝"
             label="Part 5 Quiz"
-            desc="Luyện đề thực chiến"
+            desc="Real exam practice"
           />
           <QuickLinkCard
             href="/toeic/grammar/drill"
             emoji="🎯"
             label="Grammar Drill"
-            desc="Luyện theo kỹ năng yếu"
+            desc="Target weak areas"
           />
           <QuickLinkCard
             href="/toeic/practice"
             emoji="🏆"
-            label="Luyện đề TOEIC"
-            desc="Full test Part 3-7"
+            label="TOEIC Practice"
+            desc="Full test practice"
           />
         </m.div>
       </div>

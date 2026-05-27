@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, X } from "lucide-react";
+import { Check, Shuffle, X } from "lucide-react";
 import * as m from "motion/react-client";
 import { useState } from "react";
 import type { SentenceOrderData } from "@/lib/daily-challenge/types";
@@ -40,10 +40,10 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
     <div>
       {/* Instruction */}
       <p
-        className="text-[11px] font-extrabold text-accent uppercase tracking-widest"
+        className="text-[11px] font-extrabold text-accent uppercase tracking-widest flex items-center gap-1.5"
         style={{ marginBottom: 14 }}
       >
-        🔀 {instruction}
+        <Shuffle size={12} /> {instruction}
       </p>
 
       {/* Drop zone — sentence being built */}
@@ -62,7 +62,7 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
       >
         {selected.length === 0 ? (
           <span className="text-[13px] text-text-muted italic" style={{ padding: "6px 2px" }}>
-            Nhấn vào các từ bên dưới để ghép thành câu hoàn chỉnh...
+            Click the words below to form a complete sentence...
           </span>
         ) : (
           selected.map((w, i) => (
@@ -111,12 +111,12 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
         style={{ padding: "16px 18px", boxShadow: "var(--shadow-sm)" }}
       >
         <div className="text-[10px] font-extrabold uppercase tracking-widest text-text-muted mb-3">
-          Ngân hàng từ vựng
+          Word Bank
         </div>
         <div className="flex flex-wrap gap-2">
           {available.length === 0 ? (
             <span className="text-[13px] text-text-muted italic">
-              Đã sử dụng hết tất cả từ trong ngân hàng từ!
+              Used all words from the word bank!
             </span>
           ) : (
             available.map((w, i) => (
@@ -147,7 +147,7 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
           whileHover={{ scale: 1.02, y: -1 }}
           whileTap={{ scale: 0.98 }}
           onClick={handleSubmit}
-          className="w-full rounded-(--radius-lg) text-[15px] font-extrabold border-none cursor-pointer"
+          className="w-full rounded-(--radius-lg) text-[15px] font-extrabold border-none cursor-pointer flex items-center justify-center gap-1.5"
           style={{
             background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
             padding: "14px 0",
@@ -155,7 +155,7 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
             boxShadow: "0 6px 18px var(--accent-muted)",
           }}
         >
-          <Check size={12} /> Xác nhận đáp án
+          <Check size={12} /> Confirm Answer
         </m.button>
       )}
     </div>

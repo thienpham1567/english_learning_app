@@ -13,9 +13,9 @@ type Props = {
 };
 
 const TABS = [
-  { key: "original", label: "Bài của bạn" },
-  { key: "improved", label: "Bản cải thiện" },
-  { key: "review", label: "Đánh giá" },
+  { key: "original", label: "Your Essay" },
+  { key: "improved", label: "Improved Version" },
+  { key: "review", label: "Evaluation" },
 ] as const;
 
 type TabKey = (typeof TABS)[number]["key"];
@@ -28,7 +28,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
       {/* Overall band */}
       <div className="mb-6 text-center">
         <span className="text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
-          Điểm tổng
+          Overall Band
         </span>
         <div className="mt-1 inline-flex items-baseline gap-1">
           <span className="[font-family:var(--font-display)] text-5xl italic text-(--accent)">
@@ -45,7 +45,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
           {/* Left: user's annotated text */}
           <div className="rounded-xl border-2 border-border bg-(--surface) p-5 shadow-(--shadow-sm)">
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
-              Bài viết của bạn
+              Your Essay
             </h3>
             <AnnotatedText text={text} annotations={feedback.annotations} />
           </div>
@@ -53,7 +53,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
           {/* Right: improved version */}
           <div className="rounded-xl border-2 border-success/30 bg-success-bg p-5 shadow-(--shadow-sm)">
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-success">
-              Bài mẫu (Band 7+)
+              Sample Answer (Band 7+)
             </h3>
             <p className="whitespace-pre-wrap text-sm leading-relaxed text-text-primary">
               {feedback.improvedVersion}
@@ -65,19 +65,16 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
         <div className="mt-6 grid gap-6 md:grid-cols-2">
           <div className="rounded-xl border-2 border-border bg-(--surface) p-5 shadow-(--shadow-sm)">
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
-              Điểm chi tiết
+              Detailed Scores
             </h3>
             <BandScoreRadar scores={feedback.scores} />
           </div>
 
           <div className="rounded-xl border-2 border-border bg-(--surface) p-5 shadow-(--shadow-sm)">
             <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
-              Nhận xét
+              Comments
             </h3>
             <p className="text-sm leading-relaxed text-(--ink)">{feedback.generalFeedback}</p>
-            <p className="mt-3 text-sm leading-relaxed text-(--text-secondary)">
-              {feedback.generalFeedbackVi}
-            </p>
           </div>
         </div>
       </div>
@@ -106,7 +103,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
         {activeTab === "original" && (
           <div className="anim-fade-in rounded-xl border-2 border-border bg-(--surface) p-4 shadow-(--shadow-sm)">
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
-              Bài viết của bạn
+              Your Essay
             </h3>
             <AnnotatedText text={text} annotations={feedback.annotations} />
           </div>
@@ -115,7 +112,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
         {activeTab === "improved" && (
           <div className="anim-fade-in rounded-xl border-2 border-success/30 bg-success-bg p-4 shadow-(--shadow-sm)">
             <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-success">
-              Bài mẫu (Band 7+)
+              Sample Answer (Band 7+)
             </h3>
             <p className="whitespace-pre-wrap text-sm leading-relaxed text-text-primary">
               {feedback.improvedVersion}
@@ -127,18 +124,15 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
           <div className="anim-fade-in space-y-4">
             <div className="rounded-xl border-2 border-border bg-(--surface) p-4 shadow-(--shadow-sm)">
               <h3 className="mb-3 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
-                Điểm chi tiết
+                Detailed Scores
               </h3>
               <BandScoreRadar scores={feedback.scores} />
             </div>
             <div className="rounded-xl border-2 border-border bg-(--surface) p-4 shadow-(--shadow-sm)">
               <h3 className="mb-2 text-xs font-semibold uppercase tracking-widest text-(--text-muted)">
-                Nhận xét
+                Comments
               </h3>
               <p className="text-sm leading-relaxed text-(--ink)">{feedback.generalFeedback}</p>
-              <p className="mt-3 text-sm leading-relaxed text-(--text-secondary)">
-                {feedback.generalFeedbackVi}
-              </p>
             </div>
           </div>
         )}
@@ -151,7 +145,7 @@ export function FeedbackPanel({ text, feedback, onNewWriting }: Props) {
           className="rounded-xl border-2 border-border bg-(--surface) px-6 py-2.5 text-xs font-bold text-(--text-secondary) shadow-(--shadow-sm) transition hover:border-(--accent)/45 hover:text-(--accent) cursor-pointer flex items-center gap-1.5 mx-auto"
         >
           <PenTool className="h-4 w-4" />
-          <span>Viết bài mới</span>
+          <span>Write New Essay</span>
         </button>
       </div>
     </div>

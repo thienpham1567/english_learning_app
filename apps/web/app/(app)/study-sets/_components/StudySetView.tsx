@@ -46,10 +46,10 @@ type StudySetData = {
 
 type Section = "vocabulary" | "grammar" | "reading" | "exercises";
 const SECTIONS: { key: Section; label: string; icon: ReactNode }[] = [
-  { key: "vocabulary", label: "Từ vựng", icon: <BookOpen /> },
-  { key: "grammar", label: "Ngữ pháp", icon: <Calculator /> },
-  { key: "reading", label: "Đọc hiểu", icon: <BookOpenText /> },
-  { key: "exercises", label: "Bài tập", icon: <Pencil /> },
+  { key: "vocabulary", label: "Vocabulary", icon: <BookOpen /> },
+  { key: "grammar", label: "Grammar", icon: <Calculator /> },
+  { key: "reading", label: "Reading", icon: <BookOpenText /> },
+  { key: "exercises", label: "Practice", icon: <Pencil /> },
 ];
 
 interface Props {
@@ -92,7 +92,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
       });
       setData(payload);
     } catch {
-      setError("Không thể tạo nội dung học thử nghiệm. Vui lòng thử lại.");
+      setError("Unable to generate trial study content. Please try again.");
     } finally {
       setLoading(false);
     }
@@ -129,7 +129,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
       <div className="text-center" style={{ padding: "60px 20px" }}>
         <Loader2 className="animate-spin text-accent" size={32} />
         <p className="text-text-secondary text-[13px] font-bold">
-          Đang khởi tạo bài học chủ đề {topicTitle}...
+          Initializing lessons for {topicTitle}...
         </p>
       </div>
     );
@@ -159,7 +159,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
             color: "var(--text-on-accent)",
           }}
         >
-          Thử lại
+          Try Again
         </m.button>
       </div>
     );
@@ -182,10 +182,10 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
           className="text-xl text-text-primary font-display"
           style={{ fontWeight: 950, margin: "0 0 6px" }}
         >
-          Chủ đề đã hoàn thành!
+          Topic Completed!
         </h2>
         <p className="text-text-secondary text-[13px] font-semibold" style={{ margin: "0 0 4px" }}>
-          {topicTitle} · 4/4 phần
+          {topicTitle} · 4/4 sections
         </p>
 
         {xpAwarded > 0 && (
@@ -214,7 +214,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
             className="flex items-center gap-2 border-2 border-border bg-(--surface) text-text-primary cursor-pointer font-extrabold"
             style={{ padding: "10px 20px", borderRadius: 10, fontSize: 13.5 }}
           >
-            <ArrowLeft /> Quay lại danh sách
+            <ArrowLeft /> Back to list
           </m.button>
         </div>
       </div>
@@ -230,7 +230,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
         style={{ display: "inline-flex", padding: "6px 0", fontSize: 13.5, width: "fit-content" }}
       >
         <ArrowLeft size={12} />
-        <span>Quay về danh sách</span>
+        <span>Back to list</span>
       </button>
 
       {/* Styled Section pill selector */}
@@ -275,13 +275,13 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
         style={{ borderBottom: "1px dashed var(--border)", paddingBottom: 10 }}
       >
         <span className="text-text-secondary font-bold" style={{ fontSize: 12.5 }}>
-          Tiến trình chủ đề này:
+          Topic progress:
         </span>
         <span
           className="text-[11px] font-extrabold rounded-lg bg-(--surface) border-2 border-border text-text-secondary"
           style={{ padding: "2px 8px" }}
         >
-          {completedSections.size} / 4 phần học xong
+          {completedSections.size} / 4 sections completed
         </span>
       </div>
 
@@ -348,7 +348,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                 boxShadow: "0 4px 12px var(--accent-muted)",
               }}
             >
-              <span>Hoàn thành mục này</span>
+              <span>Complete this section</span>
               <CheckCircle />
             </m.button>
           )}
@@ -391,7 +391,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
               className="uppercase tracking-wider text-text-muted block mb-2"
               style={{ fontSize: 11.5, fontWeight: 850 }}
             >
-              Giải thích cấu trúc:
+              Structure explanation:
             </span>
             <p className="text-sm m-0 text-text-primary font-medium" style={{ lineHeight: 1.7 }}>
               {data.grammar.explanation}
@@ -407,7 +407,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
               className="uppercase tracking-wider text-text-muted block mb-2"
               style={{ fontSize: 11.5, fontWeight: 850 }}
             >
-              Ví dụ minh họa:
+              Illustrative example:
             </span>
             <div className="flex items-start gap-2.5">
               <p className="m-0 font-bold flex-1 text-text-primary" style={{ fontSize: 14.5 }}>
@@ -444,7 +444,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                 boxShadow: "0 4px 12px var(--accent-muted)",
               }}
             >
-              <span>Hoàn thành mục này</span>
+              <span>Complete this section</span>
               <CheckCircle />
             </m.button>
           )}
@@ -568,7 +568,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                   >
                     <p className="m-0 font-bold flex items-center gap-1 mb-1">
                       <Lightbulb className="text-[13px]" style={{ color: "var(--warning)" }} />
-                      <span>Giải thích đáp án:</span>
+                      <span>Explanation:</span>
                     </p>
                     <p className="m-0">{q.explanation}</p>
                   </div>
@@ -591,7 +591,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                   boxShadow: "0 4px 12px var(--accent-muted)",
                 }}
               >
-                <span>Kiểm tra kết quả</span>
+                <span>Check Result</span>
                 <ChevronRight />
               </m.button>
             )}
@@ -609,7 +609,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                 boxShadow: "0 4px 12px rgba(16, 185, 129, 0.25)",
               }}
             >
-              <span>Hoàn thành mục này</span>
+              <span>Complete this section</span>
               <CheckCircle />
             </m.button>
           )}
@@ -629,7 +629,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                 style={{ border: "1.5px solid var(--border)", boxShadow: "var(--shadow-sm)" }}
               >
                 <div className="text-xs font-extrabold text-text-muted uppercase tracking-widest mb-3">
-                  Câu hỏi luyện tập {exIdx + 1} / {data.exercises.length}
+                  Practice Question {exIdx + 1} / {data.exercises.length}
                 </div>
 
                 <p
@@ -724,7 +724,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                     >
                       <p className="m-0 font-bold flex items-center gap-1 mb-1">
                         <Lightbulb className="text-[13px]" style={{ color: "var(--warning)" }} />
-                        <span>Giải thích đáp án:</span>
+                        <span>Explanation:</span>
                       </p>
                       <p className="m-0">{ex.explanation}</p>
                     </m.div>
@@ -757,8 +757,8 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
             >
               <span>
                 {exIdx < data.exercises.length - 1
-                  ? "Câu hỏi tiếp theo"
-                  : "Hoàn thành và tính điểm"}
+                  ? "Next question"
+                  : "Complete and calculate score"}
               </span>
               {exIdx < data.exercises.length - 1 ? <ArrowRight /> : <CheckCircle />}
             </m.button>

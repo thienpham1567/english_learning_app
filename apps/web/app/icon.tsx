@@ -12,37 +12,66 @@ export default function Icon() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background: "white",
+        background: "#FFB800", // Brand Accent gold
         borderRadius: 14,
+        border: "3px solid #000000",
+        boxShadow: "3px 3px 0px #000000",
       }}
     >
       <svg
-        width="56"
-        height="56"
-        viewBox="0 0 64 64"
+        width="44"
+        height="44"
+        viewBox="0 0 24 24"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
-        <circle cx="32" cy="32" r="28" stroke="#D9A299" strokeWidth="1.5" fill="none" />
-        <line
-          x1="17"
-          y1="22"
-          x2="47"
-          y2="22"
-          stroke="#1c1917"
+        {/* 3D cover slab under the pages */}
+        <path
+          d="M4 16 L4 18.5 L12 21.5 L20 18.5 L20 16 L12 19 Z"
+          fill="#000000"
+          stroke="#000000"
           strokeWidth="2.5"
-          strokeLinecap="round"
+          strokeLinejoin="round"
         />
-        <line
-          x1="32"
-          y1="22"
-          x2="32"
-          y2="44"
-          stroke="#1c1917"
+        {/* Left Page (White) */}
+        <path
+          d="M4 6 L12 9 L12 19 L4 16 Z"
+          fill="#FFFFFF"
+          stroke="#000000"
           strokeWidth="2.5"
-          strokeLinecap="round"
+          strokeLinejoin="round"
         />
-        <circle cx="32" cy="44" r="2.8" fill="#D9A299" />
+        {/* Right Page (Gold Accent) */}
+        <path
+          d="M20 6 L12 9 L12 19 L20 16 Z"
+          fill="#FFB800"
+          stroke="#000000"
+          strokeWidth="2.5"
+          strokeLinejoin="round"
+        />
+        {/* Left Page Text Lines */}
+        <path
+          d="M6.5 11 L9.5 12.125 M6.5 13.5 L9.5 14.625"
+          stroke="#000000"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          opacity="0.8"
+        />
+        {/* Right Page Text Lines */}
+        <path
+          d="M14.5 12.125 L17.5 11 M14.5 14.625 L17.5 13.5"
+          stroke="#000000"
+          strokeWidth="1.2"
+          strokeLinecap="round"
+          opacity="0.8"
+        />
+        {/* Center Spine Crease */}
+        <path d="M12 9 V19" stroke="#000000" strokeWidth="1.2" strokeLinecap="round" />
+        {/* Floating Sparkle (AI Spark) */}
+        <path
+          d="M12 1.5 Q12 3.8 14.3 3.8 Q12 3.8 12 6.1 Q12 3.8 9.7 3.8 Q12 3.8 12 1.5 Z"
+          fill="#000000"
+        />
       </svg>
     </div>,
     { ...size },

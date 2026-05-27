@@ -40,7 +40,7 @@ function useElapsedTimer(isRunning: boolean) {
 }
 
 function getTodayLabel(): string {
-  return new Date().toLocaleDateString("vi-VN", {
+  return new Date().toLocaleDateString("en-US", {
     weekday: "long",
     day: "numeric",
     month: "long",
@@ -76,12 +76,12 @@ function StepIndicator({
 
       {/* Dots & Labels */}
       <div className="flex justify-between items-center text-xs">
-        <span className="font-semibold text-text-secondary">Tiến độ bài học</span>
+        <span className="font-semibold text-text-secondary">Lesson Progress</span>
         <span
           style={{ color: activeColor }}
           className="font-extrabold font-mono text-sm leading-none"
         >
-          {current + 1} / {total} câu
+          {current + 1} / {total} questions
         </span>
       </div>
     </div>
@@ -139,7 +139,7 @@ function ExerciseFlow({
         >
           <Zap className="h-3 w-3 fill-current text-black animate-pulse" />
           <span className="text-[10px] font-extrabold uppercase tracking-widest font-mono">
-            VÒNG THỬ THÁCH BONUS
+            BONUS CHALLENGE ROUND
           </span>
         </motion.div>
       )}
@@ -202,7 +202,7 @@ function ExerciseFlow({
         className="self-center flex items-center gap-1.5 text-xs px-5 py-2"
       >
         <ArrowRight className="h-3.5 w-3.5" />
-        <span>Bỏ qua câu hỏi này</span>
+        <span>Skip this question</span>
       </Button>
     </motion.div>
   );
@@ -259,8 +259,8 @@ export default function DailyChallengePage() {
       <div className="px-4 pt-5 shrink-0">
         <div className="max-w-2xl mx-auto">
           <PageHeader
-            title="Thử thách hàng ngày"
-            subtitle="Hoàn thành thử thách từ vựng, ngữ pháp và phát âm hôm nay để tăng streak"
+            title="Daily Challenge"
+            subtitle="Complete today's vocabulary, grammar, and pronunciation challenges to increase your streak"
             icon={<Flame className="h-6 w-6 text-orange-500 fill-current animate-pulse" />}
             boxed
           />
@@ -301,7 +301,7 @@ export default function DailyChallengePage() {
               </motion.div>
               <div className="flex items-center gap-2 text-text-secondary text-sm font-bold">
                 <Loader2 className="h-4 w-4 animate-spin text-warning" />
-                <span>Đang chấm điểm câu hỏi phụ...</span>
+                <span>Grading bonus question...</span>
               </div>
             </div>
           )}
@@ -336,13 +336,13 @@ export default function DailyChallengePage() {
                 <div className="p-8 text-center bg-surface border-2 border-border rounded-2xl shadow-sm flex flex-col items-center animate-in fade-in duration-200">
                   <AlertTriangle className="h-12 w-12 text-error mb-3" />
                   <h3 className="text-base font-bold text-text-primary mb-1">
-                    Không thể tải thử thách hôm nay
+                    Unable to load today's challenge
                   </h3>
                   <p className="text-xs text-text-muted mb-4">
-                    Vui lòng kiểm tra lại kết nối mạng hoặc thử lại sau.
+                    Please check your network connection or try again later.
                   </p>
                   <Button onClick={() => window.location.reload()}>
-                    <RotateCw className="h-3.5 w-3.5 mr-1.5" /> Thử tải lại trang
+                    <RotateCw className="h-3.5 w-3.5 mr-1.5" /> Try reloading page
                   </Button>
                 </div>
               )}
@@ -370,7 +370,7 @@ export default function DailyChallengePage() {
                   </motion.div>
                   <div className="flex items-center gap-2 text-text-secondary text-sm font-semibold">
                     <Loader2 className="h-4 w-4 animate-spin text-accent" />
-                    <span>Hệ thống đang kiểm tra câu trả lời...</span>
+                    <span>Checking your answer...</span>
                   </div>
                 </div>
               )}

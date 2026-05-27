@@ -52,7 +52,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
             <div className="flex items-center justify-between px-5 py-4 border-b-2 border-border bg-surface shrink-0">
               <div>
                 <p className="text-[10px] uppercase tracking-[0.18em] text-text-muted m-0">
-                  Từ đồng &amp; trái nghĩa
+                  Synonyms & Antonyms
                 </p>
                 {vocabulary && (
                   <p className="text-[15px] font-semibold italic font-display text-ink m-0">
@@ -71,7 +71,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
             {/* Content */}
             <div className="flex-1 overflow-auto p-5">
               {vocabulary && sensesWithData.length === 0 && (
-                <p className="text-sm text-text-muted">Chưa có dữ liệu đồng/trái nghĩa.</p>
+                <p className="text-sm text-text-muted">No synonym/antonym data available.</p>
               )}
 
               {vocabulary && sensesWithData.length > 0 && (
@@ -87,7 +87,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                       {(sense.synonyms?.length ?? 0) > 0 && (
                         <div className="flex flex-col gap-2">
                           <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-(--success) m-0">
-                            Đồng nghĩa
+                            Synonyms
                           </p>
                           <div className="flex flex-wrap gap-1.5">
                             {sense.synonyms.map((word) => (
@@ -108,7 +108,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                       {(sense.antonyms?.length ?? 0) > 0 && (
                         <div className="flex flex-col gap-2">
                           <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-(--warning) m-0">
-                            Trái nghĩa
+                            Antonyms
                           </p>
                           <div className="flex flex-wrap gap-1.5">
                             {sense.antonyms.map((word) => (
