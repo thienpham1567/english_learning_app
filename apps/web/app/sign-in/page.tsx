@@ -1,6 +1,21 @@
 "use client";
 
-import { Bot, CheckCircle, ShieldCheck, Star, TrendingUp, Trophy, Zap } from "lucide-react";
+import {
+  Award,
+  BarChart3,
+  BookOpen,
+  Bot,
+  CheckCircle,
+  Flame,
+  Headphones,
+  Mic,
+  Pen,
+  ShieldCheck,
+  Sparkles,
+  TrendingUp,
+  Trophy,
+  Zap,
+} from "lucide-react";
 import * as m from "motion/react-client";
 import { useSearchParams } from "next/navigation";
 import { Suspense, useState } from "react";
@@ -8,12 +23,13 @@ import { LogoMark } from "@/components/shared/Logo";
 import { authClient } from "@/lib/auth-client";
 
 /* ── Shared animation variants ── */
-const fadeUp = { hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } };
+const fadeUp = { hidden: { opacity: 0, y: 24 }, show: { opacity: 1, y: 0 } };
 const fadeIn = { hidden: { opacity: 0 }, show: { opacity: 1 } };
+const scaleUp = { hidden: { opacity: 0, scale: 0.92 }, show: { opacity: 1, scale: 1 } };
 
 /* ── Google icon ── */
 const GoogleIcon = () => (
-  <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+  <svg width="20" height="20" viewBox="0 0 18 18" fill="none">
     <path
       d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844a4.14 4.14 0 0 1-1.796 2.716v2.259h2.908c1.702-1.567 2.684-3.875 2.684-6.615Z"
       fill="#4285F4"
@@ -33,127 +49,135 @@ const GoogleIcon = () => (
   </svg>
 );
 
-/* ── Interactive Dashboard Mock Component for Left Panel ── */
-function DashboardMockup() {
-  const days = Array.from({ length: 28 }, (_, i) => ({
-    level: i % 7 === 0 ? 0 : i % 5 === 0 ? 3 : i % 3 === 0 ? 4 : i % 2 === 0 ? 2 : 1,
-  }));
+/* ── 4 Skills Showcase ── */
+const SKILLS = [
+  { icon: Headphones, label: "Listening", color: "var(--module-listening)" },
+  { icon: BookOpen, label: "Reading", color: "var(--module-reading)" },
+  { icon: Pen, label: "Writing", color: "var(--module-writing)" },
+  { icon: Mic, label: "Speaking", color: "var(--module-speaking)" },
+] as const;
 
+/* ── Heatmap Level Tailwind Mappings ── */
+const HEATMAP_LEVELS = ["bg-white/5", "bg-accent/15", "bg-accent/35", "bg-accent/60", "bg-accent"];
+
+/* ── Floating Feature Cards ── */
+function FloatingCards() {
   return (
-    <m.div
-      initial={{ opacity: 0, scale: 0.95 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ delay: 0.5, duration: 0.8, ease: "easeOut" }}
-      className="absolute w-[420px] flex flex-col gap-4 right-[-10%] top-[12%] pointer-events-none z-[2]"
-    >
-      {/* Target Progress Card */}
+    <div className="absolute -right-[8%] top-[10%] w-[400px] flex flex-col gap-4 pointer-events-none z-10">
+      {/* Score Progress Card */}
       <m.div
-        animate={{ y: [0, -6, 0] }}
-        transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="p-6 flex items-center gap-5 bg-black border-2 border-border rounded-xl shadow-(--shadow-md)"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.6, duration: 0.7, ease: "easeOut" }}
+        className="rounded-xl"
       >
-        <div className="relative w-[70px] h-[70px] shrink-0">
-          <svg viewBox="0 0 36 36" className="w-full h-full">
-            <path
-              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              fill="none"
-              stroke="rgba(var(--white-rgb), 0.06)"
-              strokeWidth="3.5"
-            />
-            <m.path
-              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              fill="none"
-              stroke="var(--accent)"
-              strokeDasharray="85, 100"
-              strokeWidth="3.5"
-              strokeLinecap="round"
-              initial={{ strokeDasharray: "0, 100" }}
-              animate={{ strokeDasharray: "85, 100" }}
-              transition={{ delay: 1.2, duration: 2, ease: "easeOut" }}
-            />
-          </svg>
-          <div className="absolute inset-0 grid place-items-center text-[15px] font-extrabold font-display text-(--mockup-text)">
-            85%
-          </div>
-        </div>
-        <div>
-          <div className="flex items-center gap-1.5 mb-1">
-            <Trophy className="text-sm text-accent" />
-            <span className="text-[11px] font-bold tracking-wider uppercase text-(--mockup-text-muted)">
-              TARGET SCORE
+        <m.div
+          animate={{ y: [0, -6, 0] }}
+          transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          className="flex items-center gap-4 p-5 bg-black/70 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl"
+        >
+          {/* Circular Progress */}
+          <div className="relative w-16 h-16 shrink-0">
+            <svg viewBox="0 0 36 36">
+              <path
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                fill="none"
+                stroke="rgba(255,255,255,0.06)"
+                strokeWidth="3"
+              />
+              <m.path
+                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                fill="none"
+                stroke="var(--accent)"
+                strokeWidth="3"
+                strokeLinecap="round"
+                initial={{ strokeDasharray: "0, 100" }}
+                animate={{ strokeDasharray: "85, 100" }}
+                transition={{ delay: 1.2, duration: 2, ease: "easeOut" }}
+              />
+            </svg>
+            <span className="absolute inset-0 grid place-items-center font-display text-base font-extrabold text-(--mockup-text)">
+              850
             </span>
           </div>
-          <div className="text-lg font-extrabold font-display text-(--mockup-text)">
-            TOEIC Target 850+
+          <div className="flex flex-col gap-1">
+            <div className="inline-flex items-center gap-1.5 text-[10px] font-extrabold tracking-wider uppercase text-accent">
+              <Trophy size={12} />
+              <span>TARGET SCORE</span>
+            </div>
+            <div className="font-display text-lg font-extrabold text-(--mockup-text)">
+              TOEIC 850+
+            </div>
+            <div className="flex items-center gap-1 text-xs text-(--mockup-text-muted-dark)">
+              <TrendingUp size={13} className="text-success" />
+              <span className="text-success font-semibold">+125 pts</span>
+              this month
+            </div>
           </div>
-          <div className="text-xs mt-1 flex items-center gap-1 text-(--mockup-text-muted-dark)">
-            <TrendingUp className="text-(--success)" />
-            <span className="font-semibold text-(--success)">+125 Points</span> compared to last week
-          </div>
-        </div>
+        </m.div>
       </m.div>
 
-      {/* Dynamic Activity Heatmap */}
+      {/* Streak + Heatmap Card */}
       <m.div
-        animate={{ y: [0, 6, 0] }}
-        transition={{
-          duration: 7,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 0.5,
-        }}
-        className="p-5 flex flex-col bg-black border-2 border-border rounded-xl shadow-(--shadow-md)"
+        initial={{ opacity: 0, y: 30 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.8, duration: 0.7, ease: "easeOut" }}
+        className="rounded-xl"
       >
-        <div className="flex justify-between items-center mb-3">
-          <span className="text-xs font-bold tracking-wider text-(--mockup-text-muted)">
-            LEARNING FREQUENCY
-          </span>
-          <span className="text-[11px] font-bold text-accent">24-DAY STREAK 🔥</span>
-        </div>
-        <div className="grid grid-cols-7 gap-2">
-          {days.map((day, idx) => (
-            <div
-              key={idx}
-              className="aspect-square rounded-md border border-black/30"
-              style={{
-                background:
-                  day.level === 0
-                    ? "rgba(var(--white-rgb), 0.04)"
-                    : day.level === 1
-                      ? "color-mix(in srgb, var(--accent) 20%, transparent)"
-                      : day.level === 2
-                        ? "color-mix(in srgb, var(--accent) 45%, transparent)"
-                        : day.level === 3
-                          ? "color-mix(in srgb, var(--accent) 70%, transparent)"
-                          : "var(--accent)",
-              }}
-            />
-          ))}
-        </div>
+        <m.div
+          animate={{ y: [0, 5, 0] }}
+          transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 0.3 }}
+          className="flex flex-col gap-3 items-stretch p-5 bg-black/70 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl"
+        >
+          <div className="flex justify-between items-center">
+            <div className="flex items-center gap-1.5 text-[10px] font-extrabold tracking-wider uppercase text-(--mockup-text-muted)">
+              <BarChart3 size={13} />
+              ACTIVITY
+            </div>
+            <div className="flex items-center gap-1 text-xs font-extrabold text-accent">
+              <Flame size={13} />
+              24-day streak
+            </div>
+          </div>
+          <div className="grid grid-cols-7 gap-1">
+            {Array.from({ length: 28 }, (_, i) => {
+              const lv = i % 7 === 0 ? 0 : i % 5 === 0 ? 3 : i % 3 === 0 ? 4 : i % 2 === 0 ? 2 : 1;
+              return (
+                <div key={i} className={`aspect-square rounded-[3px] ${HEATMAP_LEVELS[lv]}`} />
+              );
+            })}
+          </div>
+        </m.div>
       </m.div>
 
-      {/* Floating AI Feedback Notification */}
+      {/* AI Feedback Notification */}
       <m.div
-        animate={{ y: [0, -5, 0] }}
-        transition={{
-          duration: 5,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 1,
-        }}
-        className="p-4 flex gap-3 items-center w-[320px] bg-black border-2 border-border rounded-xl shadow-(--shadow-md) self-end mr-10"
+        initial={{ opacity: 0, x: 30 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 1.1, duration: 0.7, ease: "easeOut" }}
+        className="rounded-xl self-end mr-8 max-w-[320px]"
       >
-        <div className="w-9 h-9 shrink-0 grid place-items-center rounded-lg border-2 border-border bg-accent-muted text-accent">
-          <Bot />
-        </div>
-        <div>
-          <div className="text-xs font-bold text-(--mockup-text)">AI Pronunciation Feedback</div>
-          <div className="text-[11px] text-(--mockup-text-muted) mt-0.5">
-            Pronunciation of &quot;negotiation&quot; improved dramatically! Reached 94% native accuracy.
+        <m.div
+          animate={{ y: [0, -4, 0] }}
+          transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 0.6 }}
+          className="flex items-center gap-4 p-5 bg-black/70 backdrop-blur-xl border border-white/10 rounded-xl shadow-2xl"
+        >
+          <div className="w-9 h-9 shrink-0 grid place-items-center rounded-lg bg-accent/12 border border-accent/20 text-accent">
+            <Bot size={18} />
           </div>
-        </div>
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-1 text-xs font-extrabold text-(--mockup-text)">
+              <Sparkles size={11} className="text-accent" />
+              AI Pronunciation Coach
+            </div>
+            <div className="text-[11px] text-(--mockup-text-muted) leading-normal">
+              &quot;negotiation&quot; improved to{" "}
+              <strong className="text-success font-extrabold">94%</strong> native accuracy!
+            </div>
+          </div>
+        </m.div>
       </m.div>
-    </m.div>
+    </div>
   );
 }
 
@@ -184,37 +208,37 @@ function SignInContent() {
       initial="hidden"
       animate="show"
       variants={{
-        show: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+        show: { transition: { staggerChildren: 0.07, delayChildren: 0.05 } },
       }}
-      className="w-full flex flex-col"
+      className="flex flex-col w-full"
     >
       {/* Logo */}
-      <m.div variants={fadeUp} className="flex items-center gap-3 mb-9">
+      <m.div variants={fadeUp} className="flex items-center gap-3 mb-8">
         <m.div
           whileHover={{
-            scale: 1.05,
+            scale: 1.06,
             rotate: -3,
-            boxShadow: "3px 3px 0 var(--ink)",
-            y: -1,
-            x: -1,
+            boxShadow: "4px 4px 0 var(--ink)",
+            y: -2,
+            x: -2,
           }}
           whileTap={{
-            scale: 0.98,
+            scale: 0.96,
             boxShadow: "1px 1px 0 var(--ink)",
             y: 1,
             x: 1,
           }}
           transition={{ type: "spring", stiffness: 400 }}
-          className="w-[46px] h-[46px] shrink-0 grid place-items-center rounded-lg border-2 border-ink bg-accent text-ink shadow-[3px_3px_0px_var(--ink)] cursor-pointer transition-all duration-150"
+          className="w-11 h-11 shrink-0 grid place-items-center rounded-lg border-2 border-ink bg-accent text-ink shadow-[3px_3px_0px_var(--ink)] cursor-pointer"
         >
-          <LogoMark size={24} />
+          <LogoMark size={22} />
         </m.div>
-        <div>
-          <div className="text-2xl font-black text-ink font-display leading-[1.1] tracking-[-0.03em] uppercase">
-            TOEIC<span className="text-accent"> Master</span>
+        <div className="flex flex-col">
+          <div className="font-display text-xl font-black leading-none tracking-tight uppercase text-ink">
+            TOEIC<span className="text-accent">Master</span>
           </div>
-          <div className="text-[10px] font-bold uppercase text-text-muted tracking-[0.15em] mt-0.5">
-            AI Study Hub
+          <div className="text-[10px] font-bold uppercase tracking-widest text-text-muted mt-0.5">
+            AI-Powered Study Hub
           </div>
         </div>
       </m.div>
@@ -222,26 +246,53 @@ function SignInContent() {
       {/* Heading */}
       <m.h1
         variants={fadeUp}
-        className="mb-2.5 text-4xl font-extrabold font-display text-ink leading-[1.2] tracking-[-0.03em]"
+        className="font-display text-3xl md:text-4xl font-black leading-[1.15] tracking-tight text-ink mb-3"
       >
-        Start Learning Now
+        Your TOEIC Journey
+        <br />
+        <span className="bg-gradient-to-r from-accent to-amber-500 bg-clip-text text-transparent">
+          Starts Here
+        </span>
       </m.h1>
-      <m.p variants={fadeUp} className="text-sm text-text-muted leading-normal font-medium mb-8">
-        Log in quickly to save your learning progress and receive error feedback from our AI Assistant.
+
+      <m.p variants={fadeUp} className="text-sm leading-relaxed text-text-muted font-medium mb-5">
+        AI-driven practice for all 4 skills — Listening, Reading, Writing & Speaking. Track
+        progress, get instant feedback, and hit your target score.
       </m.p>
 
+      {/* 4 Skills Grid */}
+      <m.div variants={fadeUp} className="flex flex-wrap gap-2 mb-7">
+        {SKILLS.map((s) => (
+          <m.div
+            key={s.label}
+            whileHover={{ y: -3, boxShadow: "3px 3px 0 var(--ink)" }}
+            transition={{ type: "spring", stiffness: 400, damping: 20 }}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg border-2 transition-transform duration-150 cursor-default"
+            style={{
+              color: s.color,
+              backgroundColor: `color-mix(in srgb, ${s.color} 8%, transparent)`,
+              borderColor: `color-mix(in srgb, ${s.color} 25%, transparent)`,
+            }}
+          >
+            <s.icon size={14} />
+            <span>{s.label}</span>
+          </m.div>
+        ))}
+      </m.div>
+
       {/* Google button */}
-      <m.div variants={fadeUp}>
+      <m.div variants={scaleUp}>
         <m.button
-          whileHover={{ y: -2, x: -2, boxShadow: "var(--shadow-lg)" }}
+          whileHover={{ y: -3, x: -3, boxShadow: "var(--shadow-lg)" }}
           whileTap={{ y: 2, x: 2, boxShadow: "1px 1px 0 var(--shadow-color)" }}
           transition={{ type: "spring", stiffness: 400, damping: 22 }}
           onClick={handleGoogleSignIn}
           disabled={isLoading}
-          className="flex items-center justify-center gap-3 w-full h-14 text-[15px] font-extrabold border-2 border-border bg-(--surface) text-ink font-body rounded-lg cursor-pointer shadow-(--shadow) transition-all duration-150"
+          className="flex items-center justify-center gap-3 w-full h-14 text-sm font-extrabold font-body text-ink bg-card border-2 border-border rounded-xl cursor-pointer shadow-(--shadow) transition-all duration-150 relative overflow-hidden"
+          id="signin-google-button"
         >
           {isLoading ? (
-            <span className="items-center gap-2 inline-flex">
+            <span className="inline-flex items-center gap-2">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="animate-spin">
                 <circle cx="12" cy="12" r="10" stroke="var(--border)" strokeWidth="3" />
                 <path
@@ -256,34 +307,29 @@ function SignInContent() {
           ) : (
             <>
               <GoogleIcon />
-              Continue with Google
+              <span>Continue with Google</span>
             </>
           )}
         </m.button>
       </m.div>
 
-      {/* Security & Trust Info */}
+      {/* Trust Badges */}
       <m.div
         variants={fadeIn}
-        className="mt-7 p-[18px_20px] bg-surface-alt border-2 border-border rounded-lg flex flex-col gap-3 shadow-(--shadow-sm)"
+        className="mt-6 p-4 md:p-5 bg-surface-alt border-2 border-border rounded-xl flex flex-col gap-2.5 shadow-(--shadow-sm)"
       >
-        <div className="flex items-center gap-2.5">
-          <CheckCircle className="text-(--success) text-[13px]" />
-          <span className="text-[13px] text-text-secondary font-extrabold">
-            ETS 2024 & Continuously Updated Question Bank
-          </span>
+        <div className="flex items-center gap-2.5 text-xs md:text-sm font-bold text-text-secondary">
+          <Award size={14} className="text-accent shrink-0" />
+          <span>ETS-aligned question bank — continuously updated</span>
         </div>
-        <div className="flex items-center gap-2.5">
-          <Zap className="text-accent text-[13px]" />
-          <span className="text-[13px] text-text-secondary font-extrabold">
-            AI-Powered Error Analysis & Suggestions
-          </span>
+        <div className="flex items-center gap-2.5 text-xs md:text-sm font-bold text-text-secondary">
+          <Zap size={14} className="text-accent shrink-0" />
+          <span>Real-time AI error analysis & smart suggestions</span>
         </div>
-        <div className="flex items-center gap-2.5 mt-1 pt-3 border-t-2 border-dashed border-border">
-          <ShieldCheck className="text-[13px] text-text-muted" />
-          <span className="text-[11px] text-text-muted font-bold">
-            Maximum System Security & Privacy
-          </span>
+        <div className="border-t-2 border-dashed border-border my-0.5" />
+        <div className="flex items-center gap-2.5 text-[11px] font-bold text-text-muted">
+          <ShieldCheck size={13} />
+          <span>Your data is encrypted & never shared</span>
         </div>
       </m.div>
 
@@ -291,7 +337,7 @@ function SignInContent() {
         <m.div
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="mt-5 p-[14px_18px] text-(--error) border-2 border-border bg-(--error-bg) rounded-lg text-sm font-bold text-center shadow-(--shadow-sm)"
+          className="mt-4 p-3.5 md:p-4 text-center text-xs md:text-sm font-bold text-error bg-error-bg border-2 border-border rounded-lg shadow-(--shadow-sm)"
         >
           {error}
         </m.div>
@@ -303,65 +349,69 @@ function SignInContent() {
 /* ── Main page ── */
 export default function SignInPage() {
   return (
-    <div className="flex bg-(--bg) min-h-screen relative overflow-hidden">
-      {/* ── Left editorial panel (desktop only) ── */}
-      <div className="hidden min-[1181px]:flex w-1/2 relative shrink-0 flex flex-col items-start justify-center overflow-hidden border-r-2 border-border bg-(--mockup-bg-start)">
-        {/* Grain Overlay */}
+    <div className="flex min-h-screen bg-background overflow-hidden">
+      {/* ── Left showcase panel (desktop) ── */}
+      <div className="hidden min-[1080px]:flex relative w-[52%] shrink-0 flex-col items-start justify-center overflow-hidden bg-(--mockup-bg-start) border-r-3 border-border">
+        {/* Background effects */}
         <div className="grain-overlay" />
-
-        {/* Dynamic ambient glows */}
-        <div className="absolute pointer-events-none inset-0 bg-[radial-gradient(circle_at_10%_20%,rgba(var(--accent-rgb),0.15)_0%,transparent_60%),radial-gradient(circle_at_90%_80%,rgba(var(--info-rgb),0.1)_0%,transparent_60%)]" />
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_60%_50%_at_15%_25%,rgba(var(--accent-rgb),0.14)_0%,transparent_70%),radial-gradient(ellipse_50%_40%_at_85%_75%,rgba(var(--info-rgb),0.08)_0%,transparent_70%)]" />
+        <div className="absolute inset-0 pointer-events-none opacity-[0.04] bg-[linear-gradient(rgba(255,255,255,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.5)_1px,transparent_1px)] bg-[size:60px_60px]" />
 
         {/* Hero Content */}
         <m.div
           initial="hidden"
           animate="show"
           variants={{
-            show: { transition: { staggerChildren: 0.15, delayChildren: 0.3 } },
+            show: { transition: { staggerChildren: 0.12, delayChildren: 0.2 } },
           }}
           className="relative z-10 px-16 max-w-[520px]"
         >
-          {/* Star review bar */}
-          <m.div variants={fadeUp} className="flex gap-1.5 mb-6">
-            {[1, 2, 3, 4, 5].map((i) => (
-              <Star key={i} className="text-sm text-accent opacity-85" />
-            ))}
+          {/* Eyebrow */}
+          <m.div
+            variants={fadeUp}
+            className="inline-flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold tracking-wide text-accent bg-accent/10 border border-accent/20 rounded-full mb-7"
+          >
+            <CheckCircle size={14} />
+            <span>Trusted by 10,000+ learners</span>
           </m.div>
 
           <m.h2
             variants={fadeUp}
-            className="m-0 font-black font-display text-[52px] leading-[1.15] tracking-[-0.04em] text-(--mockup-text)"
+            className="m-0 font-display text-[56px] font-black leading-[1.08] tracking-tight text-(--mockup-text)"
           >
             Conquer
             <br />
-            Your Goal
-            <br />
-            <span className="bg-gradient-to-r from-accent to-accent bg-clip-text text-transparent drop-shadow-[0_4px_12px_rgba(var(--accent-rgb),0.25)]">
-              TOEIC 4 Skills
+            <span className="bg-gradient-to-r from-accent to-amber-500 bg-clip-text text-transparent filter drop-shadow-[0_4px_16px_rgba(var(--accent-rgb),0.3)]">
+              TOEIC
             </span>
+            <br />4 Skills
           </m.h2>
 
-          <m.div variants={fadeUp} className="w-20 h-1 bg-accent border border-black my-8" />
+          <m.div
+            variants={fadeUp}
+            className="w-16 h-1 bg-accent border border-black/30 my-8 rounded-sm"
+          />
 
           <m.p
             variants={fadeUp}
-            className="text-base max-w-[365px] font-normal mb-12 leading-[1.8] text-(--mockup-text-muted)"
+            className="text-sm leading-relaxed text-(--mockup-text-muted) max-w-[380px] my-0 mb-10"
           >
-            Smart learning system integrated with AI assistants for real-time translation, pronunciation grading, and essay scoring aligned with the latest ETS guidelines.
+            A complete AI learning platform — practice listening, reading, writing & speaking with
+            real-time feedback, adaptive drills, and mock tests modeled after the latest ETS format.
           </m.p>
 
-          {/* Stats Metrics */}
+          {/* Stats */}
           <m.div variants={fadeUp} className="flex gap-10">
             {[
-              { value: "10K+", label: "Students" },
               { value: "990", label: "Max Score" },
-              { value: "4.9★", label: "Reviews" },
+              { value: "4.9★", label: "User Rating" },
+              { value: "24/7", label: "AI Tutor" },
             ].map((s) => (
               <div key={s.label}>
-                <div className="text-[28px] font-extrabold font-display leading-none text-(--mockup-text)">
+                <div className="font-display text-3xl font-extrabold leading-none text-(--mockup-text)">
                   {s.value}
                 </div>
-                <div className="text-[10px] font-bold mt-1.5 uppercase text-(--mockup-text-muted-dark) tracking-widest">
+                <div className="text-[10px] font-bold uppercase tracking-widest text-(--mockup-text-muted-dark) mt-1.5">
                   {s.label}
                 </div>
               </div>
@@ -369,33 +419,28 @@ export default function SignInPage() {
           </m.div>
         </m.div>
 
-        {/* Dashboard Showcase Mockup elements */}
-        <DashboardMockup />
+        {/* Floating dashboard cards */}
+        <FloatingCards />
       </div>
 
       {/* ── Right form panel ── */}
-      <div className="grid-bg flex-1 flex items-center justify-center bg-(--bg) p-[48px_24px] overflow-y-auto relative">
-        {/* Grain overlay */}
+      <div className="flex-1 flex items-center justify-center relative p-6 md:p-12 bg-background overflow-y-auto">
         <div className="grain-overlay" />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            backgroundImage:
+              "radial-gradient(color-mix(in srgb, var(--border) 15%, transparent) 1px, transparent 1px)",
+            backgroundSize: "22px 22px",
+          }}
+        />
 
-        {/* Translucent glass container card */}
-        <div className="w-full max-w-[440px] bg-(--surface) border-2 border-border rounded-xl p-[48px_40px] shadow-(--shadow-lg) relative z-10">
-          <Suspense
-            fallback={
-              <div className="text-text-muted p-6 text-center">Loading login form...</div>
-            }
-          >
+        <div className="relative z-10 w-full max-w-[460px] bg-card border-2 border-border rounded-2xl p-8 md:p-10 shadow-lg shadow-(--shadow-lg)">
+          <Suspense fallback={<div className="text-text-muted text-center p-6">Loading...</div>}>
             <SignInContent />
           </Suspense>
         </div>
       </div>
-
-      <style>{`
-        .grid-bg {
-          background-image: radial-gradient(color-mix(in srgb, var(--border) 15%, transparent) 1px, transparent 1px);
-          background-size: 20px 20px;
-        }
-      `}</style>
     </div>
   );
 }

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Đăng nhập – English Learning App",
+  title: "Sign In – TOEIC Master",
   description:
-    "Đăng nhập bằng Google để bắt đầu học tiếng Anh với gia sư AI, tra từ điển, flashcard và thử thách hàng ngày.",
+    "Sign in with Google to start mastering TOEIC with AI-powered tutoring, smart flashcards, real-time pronunciation grading, and daily challenges.",
 };
 
 export default function SignInLayout({ children }: { children: React.ReactNode }) {
