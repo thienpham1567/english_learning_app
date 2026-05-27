@@ -12,7 +12,7 @@ import { VoiceSelector } from "./_components/VoiceSelector";
 import { getVoiceByRole } from "./_data/voices";
 import { clearBlobCache, useAudioPlayback } from "./_hooks/useAudioPlayback";
 import { useHistory } from "./_hooks/useHistory";
-import { Headphones, Mic, MessageSquare, Lightbulb } from "lucide-react";
+import { Headphones, Mic, MessageSquare } from "lucide-react";
 import * as m from "motion/react-client";
 
 
@@ -158,16 +158,6 @@ export default function ReadAloudPage() {
             <ShadowingMode text={text} voiceRole={selectedRole} speed={speed} />
             <div className="flex flex-col gap-5">
               <VoiceSelector selectedRole={selectedRole} onSelectRole={setSelectedRole} />
-              <GuideCard
-                title="Shadowing Guide"
-                steps={[
-                  "Enter text in the Listen tab",
-                  "Switch to the Shadowing tab",
-                  "Listen to the model sentence → Read along",
-                  "AI grades your pronunciation",
-                  "Retry or move to the next sentence",
-                ]}
-              />
             </div>
           </div>
         )}
@@ -178,16 +168,6 @@ export default function ReadAloudPage() {
             <DialoguePlayer voiceRole={selectedRole} speed={speed} />
             <div className="flex flex-col gap-5">
               <VoiceSelector selectedRole={selectedRole} onSelectRole={setSelectedRole} />
-              <GuideCard
-                title="Dialogue Guide"
-                steps={[
-                  "Select topic and number of speakers",
-                  'Click "Create conversation"',
-                  "Listen to the whole dialogue or sentence-by-sentence",
-                  "Roleplay as a character",
-                  "Read your part and get graded",
-                ]}
-              />
             </div>
           </div>
         )}
@@ -196,30 +176,3 @@ export default function ReadAloudPage() {
   );
 }
 
-/* ─── Guide Card component ─── */
-function GuideCard({ title, steps }: { title: string; steps: string[] }) {
-  return (
-    <div className="bg-surface rounded-2xl border-2 border-border p-5 shadow-sm">
-      <span className="text-[10px] font-extrabold text-text-muted uppercase tracking-widest flex items-center gap-2 mb-3 font-display">
-        <m.span
-          animate={{ rotate: [0, 10, -10, 0] }}
-          transition={{ repeat: Infinity, duration: 2, repeatDelay: 4 }}
-          className="inline-flex text-accent"
-        >
-          <Lightbulb size={14} />
-        </m.span>
-        {title}
-      </span>
-      <ol className="flex flex-col gap-1.5 list-none p-0 m-0">
-        {steps.map((step, i) => (
-          <li key={i} className="flex items-start gap-2.5 text-[12px] text-text-secondary font-semibold leading-relaxed">
-            <span className="w-5 h-5 rounded-lg bg-accent-light border border-accent/15 text-accent text-[10px] font-black grid place-items-center shrink-0 mt-px">
-              {i + 1}
-            </span>
-            <span>{step}</span>
-          </li>
-        ))}
-      </ol>
-    </div>
-  );
-}

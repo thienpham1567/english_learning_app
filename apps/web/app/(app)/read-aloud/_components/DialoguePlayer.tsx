@@ -29,28 +29,31 @@ import { type EvalResult, ShadowResult } from "./ShadowResult";
 
 const SPEAKER_COLORS: Record<
   string,
-  { bg: string; border: string; text: string; accent: string; shadow: string }
+  { bg: string; border: string; text: string; accent: string; shadow: string; tw: string }
 > = {
   A: {
-    bg: "rgba(59, 130, 246, 0.08)",
-    border: "rgba(59, 130, 246, 0.2)",
-    text: "#3b82f6",
-    accent: "#3b82f6",
-    shadow: "0 2px 8px rgba(59, 130, 246, 0.1)",
+    bg: "color-mix(in srgb, var(--secondary) 8%, transparent)",
+    border: "color-mix(in srgb, var(--secondary) 25%, transparent)",
+    text: "var(--secondary)",
+    accent: "var(--secondary)",
+    shadow: "0 2px 8px color-mix(in srgb, var(--secondary) 10%, transparent)",
+    tw: "border-secondary/25 bg-secondary/8",
   },
   B: {
-    bg: "rgba(236, 72, 153, 0.08)",
-    border: "rgba(236, 72, 153, 0.2)",
-    text: "#db2777",
-    accent: "#ec4899",
-    shadow: "0 2px 8px rgba(236, 72, 153, 0.1)",
+    bg: "color-mix(in srgb, var(--error) 8%, transparent)",
+    border: "color-mix(in srgb, var(--error) 25%, transparent)",
+    text: "var(--error)",
+    accent: "var(--error)",
+    shadow: "0 2px 8px color-mix(in srgb, var(--error) 10%, transparent)",
+    tw: "border-error/25 bg-error/8",
   },
   C: {
-    bg: "rgba(16, 185, 129, 0.08)",
-    border: "rgba(16, 185, 129, 0.2)",
-    text: "#10b981",
-    accent: "#10b981",
-    shadow: "0 2px 8px rgba(16, 185, 129, 0.1)",
+    bg: "color-mix(in srgb, var(--success) 8%, transparent)",
+    border: "color-mix(in srgb, var(--success) 25%, transparent)",
+    text: "var(--success)",
+    accent: "var(--success)",
+    shadow: "0 2px 8px color-mix(in srgb, var(--success) 10%, transparent)",
+    tw: "border-success/25 bg-success/8",
   },
 };
 
@@ -411,7 +414,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
     <div className="flex flex-col gap-4">
       {/* Header */}
       <div className="bg-surface rounded-xl border-2 border-border py-4 px-5 shadow-md">
-        <div className="dialogue-header-actions"  >
+        <div className="flex items-start justify-between gap-4 flex-wrap">
           <div>
             <span className="text-base font-extrabold text-text-primary block">
               <MessageSquare size={16} className="text-accent-hover" /> {dlg.dialogue.title}
@@ -420,7 +423,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               {dlg.dialogue.context} • {dlg.dialogue.lines.length} lines
             </span>
           </div>
-          <div className="dialogue-header-buttons">
+          <div className="flex gap-2 shrink-0">
             <m.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -433,15 +436,15 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             >
               {dlg.isLoading ? (
                 <>
-                  <Loader2 className="animate-spin" /> Loading...
+                  <Loader2 size={16} className="animate-spin" /> Loading...
                 </>
               ) : dlg.isPlaying ? (
                 <>
-                  <PauseCircle /> Stop
+                  <PauseCircle size={16} /> Stop
                 </>
               ) : (
                 <>
-                  <PlayCircle /> Play All
+                  <PlayCircle size={16} /> Play All
                 </>
               )}
             </m.button>
@@ -451,23 +454,19 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               onClick={dlg.reset}
               className="flex items-center gap-1.5 rounded-xl border-2 border-border bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body py-2 px-3.5"
             >
-              <Redo /> Reset
+              <Redo size={14} /> Reset
             </m.button>
           </div>
         </div>
 
         {/* Speaker badges */}
-        <div className="dialogue-speaker-badges mt-3">
+        <div className="flex flex-wrap gap-2 mt-3">
           {dlg.voiceAssignments.map((a) => {
             const colors = SPEAKER_COLORS[a.speaker] ?? SPEAKER_COLORS.A;
             return (
               <div
                 key={a.speaker}
-                className="flex items-center gap-2 py-1 pr-3 pl-1 rounded-[10px]"
-                style={{
-                  background: colors.bg,
-                  border: `1px solid ${colors.border}`,
-                }}
+                className={`flex items-center gap-2 py-1.5 pr-3 pl-1 rounded-xl border-2 ${colors.tw}`}
               >
                 <img
                   src={a.avatar}
@@ -487,7 +486,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
       </div>
 
       {/* Chat bubbles */}
-      <div className="dialogue-bubbles flex flex-col gap-3.5 bg-surface-alt rounded-xl border-2 border-border p-5 shadow">
+      <div className="flex flex-col gap-3.5 bg-surface-alt rounded-2xl border-2 border-border p-5 shadow-sm">
         {dlg.dialogue.lines.map((line, i) => {
           const isLeft = line.speaker === "A";
           const colors = SPEAKER_COLORS[line.speaker] ?? SPEAKER_COLORS.A;
@@ -594,7 +593,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             Listen to the conversation between native speakers before you start roleplaying!
           </span>
 
-          <div className="listen-cta-buttons">
+          <div className="flex items-center justify-center gap-3">
             <m.button
               whileHover={{ scale: 1.03, y: -2 }}
               whileTap={{ scale: 0.97 }}
@@ -608,15 +607,15 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             >
               {dlg.isLoading ? (
                 <>
-                  <Loader2 className="animate-spin" /> Loading...
+                  <Loader2 size={18} className="animate-spin" /> Loading...
                 </>
               ) : isListeningPreview ? (
                 <>
-                  <PauseCircle /> Stop Listening
+                  <PauseCircle size={18} /> Stop Listening
                 </>
               ) : (
                 <>
-                  <PlayCircle /> Listen to Dialogue
+                  <PlayCircle size={18} /> Listen to Dialogue
                 </>
               )}
             </m.button>
@@ -676,7 +675,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               <PlayCircle size={12} /> Replay
             </m.button>
           </div>
-          <div className="role-play-buttons">
+          <div className="flex gap-2 flex-wrap">
             {dlg.voiceAssignments.map((a) => {
               const line = dlg.dialogue!.lines.find((l) => l.speaker === a.speaker);
               return (

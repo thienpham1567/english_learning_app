@@ -28,7 +28,7 @@ export function VoiceSelector({ selectedRole, onSelectRole }: VoiceSelectorProps
         Select Voice
       </span>
 
-      <div className="voice-grid">
+      <div className="flex flex-col gap-2">
         {VOICES.map((v) => (
           <VoiceCard
             key={v.role}
