@@ -60,7 +60,8 @@ export function EmptyState({ selectedPersonaId, onSelectPersona, onSuggestedProm
         variants={itemVariants}
         className="mt-3 max-w-md text-sm text-text-secondary leading-relaxed"
       >
-        Each tutor has their own expertise and communication style. Select the one that fits your learning goals.
+        Each tutor has their own expertise and communication style. Select the one that fits your
+        learning goals.
       </motion.p>
 
       {/* Persona cards grid */}

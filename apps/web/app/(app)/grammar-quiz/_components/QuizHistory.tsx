@@ -110,8 +110,14 @@ export function QuizHistory({ open, onClose }: Props) {
                       color: "var(--text-muted)",
                       bg: "var(--surface-alt)",
                     };
-                    const scoreColor = pct >= 80 ? "var(--success)" : pct >= 50 ? "var(--warning)" : "var(--error)";
-                    const scoreBg = pct >= 80 ? "rgba(16, 185, 129, 0.08)" : pct >= 50 ? "rgba(245, 158, 11, 0.08)" : "rgba(239, 68, 68, 0.08)";
+                    const scoreColor =
+                      pct >= 80 ? "var(--success)" : pct >= 50 ? "var(--warning)" : "var(--error)";
+                    const scoreBg =
+                      pct >= 80
+                        ? "rgba(16, 185, 129, 0.08)"
+                        : pct >= 50
+                          ? "rgba(245, 158, 11, 0.08)"
+                          : "rgba(239, 68, 68, 0.08)";
                     return (
                       <m.div
                         key={`${entry.date}-${i}`}

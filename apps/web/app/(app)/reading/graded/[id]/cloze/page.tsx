@@ -143,10 +143,7 @@ export default function ClozeTestPage() {
               >
                 CLOZE TEST
               </span>
-              <h3
-                className="m-0 font-display italic"
-                style={{ color: "var(--text-on-accent)" }}
-              >
+              <h3 className="m-0 font-display italic" style={{ color: "var(--text-on-accent)" }}>
                 Fill in the Blanks
               </h3>
             </div>
@@ -223,7 +220,11 @@ export default function ClozeTestPage() {
                   disabled={savingFlashcards}
                   className="rounded-[10px] border-none bg-accent text-[var(--text-on-accent)] font-bold cursor-pointer py-2 px-4 flex items-center gap-1.5 text-sm"
                 >
-                  {savingFlashcards ? <Loader2 className="animate-spin" size={14} /> : <Save size={14} />}
+                  {savingFlashcards ? (
+                    <Loader2 className="animate-spin" size={14} />
+                  ) : (
+                    <Save size={14} />
+                  )}
                   Save {totalCount - correctCount} incorrect words
                 </button>
               )}
@@ -270,7 +271,15 @@ export default function ClozeTestPage() {
                         : "var(--text-muted)",
                     }}
                   >
-                    {showResult ? isCorrect ? <CheckCircle size={14} /> : <XCircle size={14} /> : i + 1}
+                    {showResult ? (
+                      isCorrect ? (
+                        <CheckCircle size={14} />
+                      ) : (
+                        <XCircle size={14} />
+                      )
+                    ) : (
+                      i + 1
+                    )}
                   </div>
 
                   <div className="flex-1">

@@ -81,7 +81,8 @@ export default function DictationDetailPage() {
       <div className="p-4 grid gap-3 w-[720px]">
         <Card shadowSize="sm" className="p-4">
           <div className="flex items-center gap-3">
-            <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm flex items-center gap-2"
+            <button
+              className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm flex items-center gap-2"
               onClick={togglePlay}
             >
               {playing ? <PauseCircle size={18} /> : <PlayCircle size={18} />}
@@ -106,12 +107,8 @@ export default function DictationDetailPage() {
               rows={4}
               autoFocus
               placeholder="Type what you hear…"
-             />
-            <button
-              disabled={!text.trim()}
-              onClick={submit}
-              className="mt-3"
-            >
+            />
+            <button disabled={!text.trim()} onClick={submit} className="mt-3">
               Submit
             </button>
           </Card>
@@ -160,7 +157,10 @@ export default function DictationDetailPage() {
               {result.vocabHints && result.vocabHints.length > 0 && (
                 <div className="mt-3 flex gap-2 flex-wrap">
                   {result.vocabHints.map((h) => (
-                    <span key={h.word} className="bg-blue-500/15 text-blue-600 py-0.5 px-2 inline-block">
+                    <span
+                      key={h.word}
+                      className="bg-blue-500/15 text-blue-600 py-0.5 px-2 inline-block"
+                    >
                       {h.word} = {h.vi}
                     </span>
                   ))}
@@ -168,8 +168,14 @@ export default function DictationDetailPage() {
               )}
             </Card>
             <div className="flex gap-2">
-              <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" onClick={() => router.push("/toeic/dictation")}>Back to List</button>
-              <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
+              <button
+                className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
+                onClick={() => router.push("/toeic/dictation")}
+              >
+                Back to List
+              </button>
+              <button
+                className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
                 onClick={() => {
                   setText("");
                   setResult(null);

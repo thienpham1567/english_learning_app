@@ -277,7 +277,9 @@ export default function DictationMode({ examMode }: Props) {
 
           {/* Instruction */}
           <div className="p-4 rounded-lg text-center border-2 border-border bg-surface">
-            <p className="text-sm text-text-secondary m-0">🎧 Listen and type the sentence you hear</p>
+            <p className="text-sm text-text-secondary m-0">
+              🎧 Listen and type the sentence you hear
+            </p>
           </div>
 
           {/* AudioPlayer — sentence playback (AC4 migration) */}
@@ -344,20 +346,35 @@ export default function DictationMode({ examMode }: Props) {
             {/* Custom circular progress */}
             <div className="relative w-[100px] h-[100px] mx-auto mb-3">
               <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-                <circle cx="50" cy="50" r="42" fill="none" stroke="var(--bg-deep)" strokeWidth="8" />
                 <circle
                   cx="50"
                   cy="50"
                   r="42"
                   fill="none"
-                  stroke={accuracy >= 80 ? "var(--success)" : accuracy >= 50 ? "var(--warning)" : "var(--error)"}
+                  stroke="var(--bg-deep)"
+                  strokeWidth="8"
+                />
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="42"
+                  fill="none"
+                  stroke={
+                    accuracy >= 80
+                      ? "var(--success)"
+                      : accuracy >= 50
+                        ? "var(--warning)"
+                        : "var(--error)"
+                  }
                   strokeWidth="8"
                   strokeLinecap="round"
                   strokeDasharray={`${accuracy * 2.64} 264`}
                   className="transition-all duration-700 ease-out"
                 />
               </svg>
-              <span className={`absolute inset-0 flex items-center justify-center text-3xl font-black ${scoreColorClass(accuracy)}`}>
+              <span
+                className={`absolute inset-0 flex items-center justify-center text-3xl font-black ${scoreColorClass(accuracy)}`}
+              >
                 {accuracy}%
               </span>
             </div>
@@ -467,7 +484,8 @@ export default function DictationMode({ examMode }: Props) {
           </div>
           <h2 className="mb-2 text-lg font-black text-text-primary">Dictation Completed!</h2>
           <p className="text-text-secondary mb-2">
-            Average Accuracy: <strong className={`text-3xl ${scoreColorClass(avgScore)}`}>{avgScore}%</strong>
+            Average Accuracy:{" "}
+            <strong className={`text-3xl ${scoreColorClass(avgScore)}`}>{avgScore}%</strong>
           </p>
           {xpAwarded > 0 && (
             <p className="text-accent text-[13px] font-bold mb-2">+{xpAwarded} XP</p>
@@ -493,7 +511,10 @@ export default function DictationMode({ examMode }: Props) {
               </span>
             ))}
           </div>
-          <Button onClick={startSession} className="h-10 px-6 text-sm font-black flex items-center gap-1.5 mx-auto">
+          <Button
+            onClick={startSession}
+            className="h-10 px-6 text-sm font-black flex items-center gap-1.5 mx-auto"
+          >
             <RefreshCw size={14} /> Practice Again
           </Button>
         </motion.div>

@@ -14,10 +14,7 @@ const log = routeLogger("errors/to-flashcard");
  * Generates a focused flashcard from an error entry using AI.
  * Returns the flashcard data (front/back/example/tip).
  */
-export async function POST(
-  _request: Request,
-  { params }: { params: Promise<{ id: string }> },
-) {
+export async function POST(_request: Request, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth.api.getSession({ headers: await headers() });
   if (!session) {
     return Response.json({ error: "Unauthorized" }, { status: 401 });
@@ -27,11 +24,7 @@ export async function POST(
   const userId = session.user!.id;
 
   // Fetch the error entry
-  const [entry] = await db
-    .select()
-    .from(errorLog)
-    .where(eq(errorLog.id, id))
-    .limit(1);
+  const [entry] = await db.select().from(errorLog).where(eq(errorLog.id, id)).limit(1);
 
   if (!entry || entry.userId !== userId) {
     return Response.json({ error: "Error not found" }, { status: 404 });

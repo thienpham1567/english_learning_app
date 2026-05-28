@@ -34,7 +34,11 @@ export function WritingTab() {
 
   const tabs = [
     { key: "practice" as const, label: "Practice Writing", icon: <PenTool className="h-4 w-4" /> },
-    { key: "rewrite" as const, label: "Improve Sentences", icon: <Highlighter className="h-4 w-4" /> },
+    {
+      key: "rewrite" as const,
+      label: "Improve Sentences",
+      icon: <Highlighter className="h-4 w-4" />,
+    },
     { key: "guided" as const, label: "Guided Writing", icon: <Target className="h-4 w-4" /> },
   ];
 

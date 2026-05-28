@@ -94,10 +94,7 @@ export function QuestionCard({
       )}
 
       {/* Stem Card */}
-      <Card
-        shadowSize="sm"
-        className="p-6 relative overflow-hidden"
-      >
+      <Card shadowSize="sm" className="p-6 relative overflow-hidden">
         <div
           className="absolute w-[4px]"
           style={{ left: 0, top: 0, bottom: 0, background: "var(--accent)" }}
@@ -217,8 +214,8 @@ export function QuestionCard({
                     selectedAnswer === question.correctIndex ? "var(--success)" : "var(--error)",
                 }}
               >
-                {selectedAnswer === question.correctIndex ? "Correct!" : "Incorrect!"}{" "}
-                Correct answer:{" "}
+                {selectedAnswer === question.correctIndex ? "Correct!" : "Incorrect!"} Correct
+                answer:{" "}
                 <span style={{ textDecoration: "underline" }}>
                   {OPTION_LABELS[question.correctIndex]} — {question.options[question.correctIndex]}
                 </span>

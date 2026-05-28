@@ -213,8 +213,6 @@ export default function ArticleReaderPage() {
         className="relative h-[0px] flex-1 overflow-y-auto z-[1]"
         style={{ padding: "24px 20px 80px" }}
       >
-
-
         <div className="w-[720px] mx-auto flex flex-col gap-5">
           {/* Header Action Menu */}
           <div
@@ -426,9 +424,7 @@ export default function ArticleReaderPage() {
                     }}
                   >
                     <Lightbulb size={16} />
-                    <span className="font-black text-[14.5px]">
-                      Grammar Analysis
-                    </span>
+                    <span className="font-black text-[14.5px]">Grammar Analysis</span>
                     <span
                       className="rounded-xl text-[10.5px] font-extrabold py-0.5 px-2"
                       style={{ background: "rgba(255,255,255,0.2)" }}

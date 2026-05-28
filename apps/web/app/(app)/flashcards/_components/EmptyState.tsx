@@ -25,8 +25,7 @@ export function EmptyState({ nextReviewAt }: Props) {
         <div
           className="absolute w-55 h-55 rounded-full left-1/2 top-0 -translate-x-1/2 pointer-events-none"
           style={{
-            background:
-              "radial-gradient(circle, var(--accent) 8%, transparent 70%)",
+            background: "radial-gradient(circle, var(--accent) 8%, transparent 70%)",
           }}
         />
 
@@ -45,8 +44,7 @@ export function EmptyState({ nextReviewAt }: Props) {
         </h3>
 
         <p className="text-text-secondary font-medium leading-relaxed text-[14.5px] mx-0 mb-6 mt-0">
-          Awesome! You have no cards left to review. Take a break and return
-          later.
+          Awesome! You have no cards left to review. Take a break and return later.
         </p>
 
         {nextReviewAt && <Countdown targetIso={nextReviewAt} />}
@@ -83,7 +81,7 @@ function Countdown({ targetIso }: { targetIso: string }) {
     >
       <Clock className="text-accent text-[13px]" />
       <span className="font-bold text-text-secondary text-[12.5px]">
-        Next review session: <span className="text-accent">{remaining}</span>
+        Next review session: <span className="text-accent-active">{remaining}</span>
       </span>
     </m.div>
   );

@@ -105,9 +105,7 @@ function FloatingCards() {
               <Trophy size={12} />
               <span>TARGET SCORE</span>
             </div>
-            <div className="font-display text-lg font-extrabold text-mockup-text">
-              TOEIC 850+
-            </div>
+            <div className="font-display text-lg font-extrabold text-mockup-text">TOEIC 850+</div>
             <div className="flex items-center gap-1 text-xs text-mockup-text-muted-dark">
               <TrendingUp size={13} className="text-success" />
               <span className="text-success font-semibold">+125 pts</span>
@@ -426,9 +424,7 @@ export default function SignInPage() {
       {/* ── Right form panel ── */}
       <div className="flex-1 flex items-center justify-center relative p-6 md:p-12 bg-background overflow-y-auto">
         <div className="grain-overlay" />
-        <div
-          className="absolute inset-0 pointer-events-none bg-[radial-gradient(color-mix(in_srgb,var(--border)_15%,transparent)_1px,transparent_1px)] bg-[size:22px_22px]"
-        />
+        <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(color-mix(in_srgb,var(--border)_15%,transparent)_1px,transparent_1px)] bg-[size:22px_22px]" />
 
         <div className="relative z-10 w-full max-w-[460px] bg-card border-2 border-border rounded-2xl p-8 md:p-10 shadow-lg shadow-lg">
           <Suspense fallback={<div className="text-text-muted text-center p-6">Loading...</div>}>

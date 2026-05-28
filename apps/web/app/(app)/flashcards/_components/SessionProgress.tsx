@@ -40,11 +40,9 @@ export function SessionProgress({ current, total, startTime }: Props) {
     <div className="w-full mb-5">
       <div className="flex justify-between items-center mb-1.5">
         <span className="text-[13px] font-bold text-text-secondary">
-          Reviewing: <span className="text-accent">{current}</span> / {total}
+          Reviewing: <span className="text-accent-active">{current}</span> / {total}
         </span>
-        <span className="text-[12.5px] font-semibold text-text-muted">
-          {timeLabel}
-        </span>
+        <span className="text-[12.5px] font-semibold text-text-muted">{timeLabel}</span>
       </div>
 
       {/* Modern custom animated progress bar */}

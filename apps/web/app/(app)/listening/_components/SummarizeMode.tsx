@@ -84,7 +84,8 @@ export default function SummarizeMode({ examMode }: Props) {
 
   const wc = wordCount(summaryText);
   const wcOk = wc >= 30 && wc <= 400;
-  const wcColor = wc < 30 ? "text-text-muted" : wc > 400 ? "text-[var(--error)]" : "text-[var(--success)]";
+  const wcColor =
+    wc < 30 ? "text-text-muted" : wc > 400 ? "text-[var(--error)]" : "text-[var(--success)]";
 
   // ── Generate exercise ──
   const startSession = useCallback(async () => {
@@ -190,10 +191,7 @@ export default function SummarizeMode({ examMode }: Props) {
             </p>
           </div>
 
-          <Button
-            onClick={startSession}
-            className="w-full h-11 text-[15px] font-black"
-          >
+          <Button onClick={startSession} className="w-full h-11 text-[15px] font-black">
             Start
           </Button>
         </motion.div>
@@ -212,7 +210,8 @@ export default function SummarizeMode({ examMode }: Props) {
         <>
           {/* Instruction */}
           <Card shadowSize="sm" className="py-3 px-4 text-[13px] text-text-secondary">
-            🎧 <strong>Listen to the passage below.</strong> The original transcript will be revealed after you submit your summary.
+            🎧 <strong>Listen to the passage below.</strong> The original transcript will be
+            revealed after you submit your summary.
           </Card>
 
           {/* AudioPlayer (AC1 — reuses 19.3.2 component with A-B loop + speed) */}
@@ -303,7 +302,14 @@ export default function SummarizeMode({ examMode }: Props) {
             {/* Custom circular progress */}
             <div className="relative w-[110px] h-[110px] mx-auto mb-2">
               <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-                <circle cx="50" cy="50" r="42" fill="none" stroke="var(--bg-deep)" strokeWidth="8" />
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="42"
+                  fill="none"
+                  stroke="var(--bg-deep)"
+                  strokeWidth="8"
+                />
                 <circle
                   cx="50"
                   cy="50"
@@ -316,7 +322,9 @@ export default function SummarizeMode({ examMode }: Props) {
                   className="transition-all duration-700 ease-out"
                 />
               </svg>
-              <span className={`absolute inset-0 flex items-center justify-center text-[26px] font-black ${scoreColorClass(result.overall)}`}>
+              <span
+                className={`absolute inset-0 flex items-center justify-center text-[26px] font-black ${scoreColorClass(result.overall)}`}
+              >
                 {result.overall}
               </span>
             </div>
@@ -372,7 +380,9 @@ export default function SummarizeMode({ examMode }: Props) {
                   <div className="flex-1">
                     <p className="m-0 text-[13px] font-medium text-text-primary">{item.idea}</p>
                     {item.covered && item.whereInSummary && (
-                      <p className="text-[11px] text-text-muted italic mt-0.5">{item.whereInSummary}</p>
+                      <p className="text-[11px] text-text-muted italic mt-0.5">
+                        {item.whereInSummary}
+                      </p>
                     )}
                   </div>
                   <span

@@ -1,6 +1,5 @@
 "use client";
 
-
 import { Trophy } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
@@ -168,7 +167,9 @@ function MockRunner() {
       setSection("reading");
       setSectionStartedAt(Date.now());
       // Use native alert for section transition notification
-      alert("Reading section starts now\n\nListening section has ended. Starting the Reading section. You have 75 minutes (Full) / 37 minutes (Mini).");
+      alert(
+        "Reading section starts now\n\nListening section has ended. Starting the Reading section. You have 75 minutes (Full) / 37 minutes (Mini).",
+      );
     }
     setIdx(nextIdx);
     questionShownAt.current = Date.now();
@@ -178,7 +179,12 @@ function MockRunner() {
     return (
       <div className="p-6">
         <div className="text-destructive mb-3">{error}</div>
-        <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" onClick={() => router.push("/toeic/mock-test")}>Back to Hub</button>
+        <button
+          className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
+          onClick={() => router.push("/toeic/mock-test")}
+        >
+          Back to Hub
+        </button>
       </div>
     );
   }
@@ -205,7 +211,9 @@ function MockRunner() {
   return (
     <div className="p-4 flex-1">
       <div className="flex justify-between items-center mb-3">
-        <span className="bg-emerald-500/15 text-emerald-600 py-0.5 px-2 inline-block">{sectionLabel}</span>
+        <span className="bg-emerald-500/15 text-emerald-600 py-0.5 px-2 inline-block">
+          {sectionLabel}
+        </span>
         <span className="text-text-muted">
           {totalAnswered} / {questions.length}
         </span>

@@ -56,7 +56,7 @@ export function PlaybackControls({
         <div>
           <div className="flex items-center justify-between mb-1">
             <span className="text-[13px] text-text-secondary font-semibold">Reading Speed</span>
-            <span className="text-sm font-extrabold text-accent-hover">{speed}x</span>
+            <span className="text-sm font-extrabold text-accent-active">{speed}x</span>
           </div>
 
           {/* Custom range slider */}
@@ -131,7 +131,7 @@ export function PlaybackControls({
                   className="flex-1 flex items-center justify-center gap-2 p-3 rounded-xl bg-surface text-text-primary text-sm font-bold cursor-pointer border-2 border-border shadow-sm hover:bg-surface-hover"
                 >
                   {playing ? (
-                    <PauseCircle className="text-accent-hover" />
+                    <PauseCircle className="text-accent-active" />
                   ) : (
                     <PlayCircle className="text-success" />
                   )}
@@ -189,8 +189,8 @@ function WaveformVisualizer({
             ) : (
               <span>
                 Reading with {selectedVoice.flag}{" "}
-                <strong className="text-accent-hover">{selectedVoice.name}</strong> ({selectedVoice.label}
-                )
+                <strong className="text-accent-active">{selectedVoice.name}</strong> (
+                {selectedVoice.label})
               </span>
             )}
           </span>

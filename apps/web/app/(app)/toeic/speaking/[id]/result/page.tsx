@@ -69,7 +69,11 @@ function PronunciationSection({ metrics }: { metrics: PronMetrics }) {
         <div className="mt-2 text-[13px]">
           <span className="text-text-muted">Từ phát âm không rõ: </span>
           {metrics.lowConfidenceWords.map((w) => (
-            <span key={w} className="bg-amber-500/15 text-amber-600 py-0.5 px-2 inline-block" style={{ margin: "2px 4px 2px 0" }}>
+            <span
+              key={w}
+              className="bg-amber-500/15 text-amber-600 py-0.5 px-2 inline-block"
+              style={{ margin: "2px 4px 2px 0" }}
+            >
               {w}
             </span>
           ))}
@@ -88,7 +92,11 @@ function PronunciationSection({ metrics }: { metrics: PronMetrics }) {
             <div className="mt-1">
               <span className="text-text-muted">Bỏ qua: </span>
               {metrics.alignment.missingWords.slice(0, 8).map((w) => (
-                <span key={w} className="bg-red-500/15 text-red-600 py-0.5 px-2 inline-block" style={{ margin: "2px 4px 2px 0" }}>
+                <span
+                  key={w}
+                  className="bg-red-500/15 text-red-600 py-0.5 px-2 inline-block"
+                  style={{ margin: "2px 4px 2px 0" }}
+                >
                   {w}
                 </span>
               ))}
@@ -98,7 +106,11 @@ function PronunciationSection({ metrics }: { metrics: PronMetrics }) {
             <div className="mt-1">
               <span className="text-text-muted">Thêm: </span>
               {metrics.alignment.addedWords.slice(0, 8).map((w) => (
-                <span key={w} className="bg-purple-500/15 text-purple-600 py-0.5 px-2 inline-block" style={{ margin: "2px 4px 2px 0" }}>
+                <span
+                  key={w}
+                  className="bg-purple-500/15 text-purple-600 py-0.5 px-2 inline-block"
+                  style={{ margin: "2px 4px 2px 0" }}
+                >
                   {w}
                 </span>
               ))}
@@ -153,13 +165,11 @@ export default async function SpeakingResultPage({ params }: { params: Promise<{
           .map((p) => {
             const r = responses.find((x) => x.promptId === p.id);
             return (
-              <Card
-                key={p.id}
-                shadowSize="sm"
-                className="p-4"
-              >
+              <Card key={p.id} shadowSize="sm" className="p-4">
                 <div className="flex justify-between items-center mb-3">
-                  <strong>Q{p.questionNumber} · {TYPE_LABEL[p.type] ?? p.type}</strong>
+                  <strong>
+                    Q{p.questionNumber} · {TYPE_LABEL[p.type] ?? p.type}
+                  </strong>
                   <span className="bg-blue-500/15 text-blue-600 py-0.5 px-2 rounded-md text-sm font-bold">
                     {r?.rawScore ?? 0} / {p.maxScore}
                   </span>
@@ -206,9 +216,9 @@ export default async function SpeakingResultPage({ params }: { params: Promise<{
                   </>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-12 text-text-muted">
-                <div className="text-4xl mb-3">📭</div>
-                <div className="text-sm font-semibold">No data available</div>
-              </div>
+                    <div className="text-4xl mb-3">📭</div>
+                    <div className="text-sm font-semibold">No data available</div>
+                  </div>
                 )}
               </Card>
             );

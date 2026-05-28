@@ -51,12 +51,10 @@ export default async function ToeicWritingPage() {
                   <ClipboardList className="text-info" size={24} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <CardTitle className="text-lg text-ink">
-                    Start Writing Test
-                  </CardTitle>
+                  <CardTitle className="text-lg text-ink">Start Writing Test</CardTitle>
                   <CardDescription className="text-xs text-text-secondary mt-1.5 leading-relaxed font-semibold">
-                    Q1-5 Describe a Photo (8 mins) · Q6-7 Respond to Email (20
-                    mins) · Q8 Opinion Essay (30 mins)
+                    Q1-5 Describe a Photo (8 mins) · Q6-7 Respond to Email (20 mins) · Q8 Opinion
+                    Essay (30 mins)
                   </CardDescription>
                   <div className="flex flex-wrap gap-1.5 mt-3">
                     <span className="text-[10px] font-extrabold rounded-lg bg-amber-500/10 text-amber-600 border border-amber-500/20 px-2 py-0.5">
@@ -129,9 +127,7 @@ export default async function ToeicWritingPage() {
                         <span className="text-lg font-black text-accent font-display tabular-nums">
                           {h.scaledScore ?? "—"}
                         </span>
-                        <span className="text-xs text-text-muted font-bold">
-                          / 200
-                        </span>
+                        <span className="text-xs text-text-muted font-bold">/ 200</span>
                         <ArrowRight
                           size={14}
                           className="text-text-muted group-hover:text-accent group-hover:translate-x-0.5 transition-all"

@@ -281,9 +281,7 @@ export function WordOfTheDay({ onSelect }: Props) {
       </p>
 
       {/* CTA */}
-      <div className="mt-2.5 text-[11px] font-bold text-secondary text-right">
-        View details →
-      </div>
+      <div className="mt-2.5 text-[11px] font-bold text-secondary text-right">View details →</div>
     </div>
   );
 }

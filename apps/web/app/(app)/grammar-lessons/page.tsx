@@ -1,6 +1,16 @@
 "use client";
 
-import { AlertTriangle, ArrowRight, BookOpen, CheckCircle, Flame, Rocket, Star, Trophy, Zap } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowRight,
+  BookOpen,
+  CheckCircle,
+  Flame,
+  Rocket,
+  Star,
+  Trophy,
+  Zap,
+} from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { LessonView } from "@/app/(app)/grammar-lessons/_components/LessonView";
@@ -134,57 +144,75 @@ export default function GrammarLessonsPage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 }}
               >
-                <Card shadowSize="md" className="rounded-2xl relative overflow-hidden bg-surface p-6">
-                {/* Top accent gradient bar */}
-                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent via-secondary to-success" />
+                <Card
+                  shadowSize="md"
+                  className="rounded-2xl relative overflow-hidden bg-surface p-6"
+                >
+                  {/* Top accent gradient bar */}
+                  <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent via-secondary to-success" />
 
-                <div className="flex items-center gap-6 flex-wrap">
-                  {/* SVG Circle progress */}
-                  <div className="relative w-[88px] h-[88px] shrink-0">
-                    <svg viewBox="0 0 88 88" className="w-full h-full -rotate-90">
-                      <circle cx="44" cy="44" r="38" fill="none" stroke="var(--border)" strokeWidth="8" />
-                      <circle
-                        cx="44" cy="44" r="38" fill="none"
-                        stroke="var(--accent)" strokeWidth="8"
-                        strokeLinecap="round"
-                        strokeDasharray={`${2 * Math.PI * 38}`}
-                        strokeDashoffset={`${2 * Math.PI * 38 * (1 - progressPct / 100)}`}
-                        className="transition-all duration-700"
+                  <div className="flex items-center gap-6 flex-wrap">
+                    {/* SVG Circle progress */}
+                    <div className="relative w-[88px] h-[88px] shrink-0">
+                      <svg viewBox="0 0 88 88" className="w-full h-full -rotate-90">
+                        <circle
+                          cx="44"
+                          cy="44"
+                          r="38"
+                          fill="none"
+                          stroke="var(--border)"
+                          strokeWidth="8"
+                        />
+                        <circle
+                          cx="44"
+                          cy="44"
+                          r="38"
+                          fill="none"
+                          stroke="var(--accent)"
+                          strokeWidth="8"
+                          strokeLinecap="round"
+                          strokeDasharray={`${2 * Math.PI * 38}`}
+                          strokeDashoffset={`${2 * Math.PI * 38 * (1 - progressPct / 100)}`}
+                          className="transition-all duration-700"
+                        />
+                      </svg>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center">
+                        <div className="text-2xl font-black text-ink font-display">
+                          {progressPct}%
+                        </div>
+                        <div className="text-[9px] text-text-muted font-bold uppercase tracking-wider">
+                          Completed
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Stats grid */}
+                    <div className="flex-1 min-w-[200px] grid grid-cols-3 gap-3">
+                      <StatCard
+                        icon={<BookOpen size={18} />}
+                        color="accent"
+                        label="Topics"
+                        value={`${tabStats.categories} groups`}
+                        sub={`${tabStats.totalTopics} lessons`}
                       />
-                    </svg>
-                    <div className="absolute inset-0 flex flex-col items-center justify-center">
-                      <div className="text-2xl font-black text-ink font-display">{progressPct}%</div>
-                      <div className="text-[9px] text-text-muted font-bold uppercase tracking-wider">Completed</div>
+                      <StatCard
+                        icon={<CheckCircle size={18} />}
+                        color="success"
+                        label="Completed"
+                        value={`${tabStats.completed}`}
+                        sub={`/${tabStats.totalTopics} lessons`}
+                      />
+                      <StatCard
+                        icon={progressPct === 100 ? <Trophy size={18} /> : <Flame size={18} />}
+                        color={progressPct === 100 ? "xp" : "fire"}
+                        label="In Progress"
+                        value={`${inProgressTopics.size}`}
+                        sub="topics"
+                      />
                     </div>
                   </div>
-
-                  {/* Stats grid */}
-                  <div className="flex-1 min-w-[200px] grid grid-cols-3 gap-3">
-                    <StatCard
-                      icon={<BookOpen size={18} />}
-                      color="accent"
-                      label="Topics"
-                      value={`${tabStats.categories} groups`}
-                      sub={`${tabStats.totalTopics} lessons`}
-                    />
-                    <StatCard
-                      icon={<CheckCircle size={18} />}
-                      color="success"
-                      label="Completed"
-                      value={`${tabStats.completed}`}
-                      sub={`/${tabStats.totalTopics} lessons`}
-                    />
-                    <StatCard
-                      icon={progressPct === 100 ? <Trophy size={18} /> : <Flame size={18} />}
-                      color={progressPct === 100 ? "xp" : "fire"}
-                      label="In Progress"
-                      value={`${inProgressTopics.size}`}
-                      sub="topics"
-                    />
-                  </div>
-                </div>
-              </Card>
-            </m.div>
+                </Card>
+              </m.div>
 
               {/* Progress error */}
               {progressError && (
@@ -320,19 +348,21 @@ function StatCard({
   const c = colorMap[color] ?? colorMap.accent;
 
   return (
-    <Card bgType="alt" shadowSize="none" className="flex flex-col items-center text-center rounded-2xl py-3.5 px-2">
-      <div className={`w-9 h-9 grid place-items-center rounded-xl ${c.iconBg} ${c.iconText} border-2 ${c.border} mb-2`}>
+    <Card
+      bgType="alt"
+      shadowSize="none"
+      className="flex flex-col items-center text-center rounded-2xl py-3.5 px-2"
+    >
+      <div
+        className={`w-9 h-9 grid place-items-center rounded-xl ${c.iconBg} ${c.iconText} border-2 ${c.border} mb-2`}
+      >
         {icon}
       </div>
       <div className="text-[9px] font-extrabold text-text-muted uppercase tracking-widest">
         {label}
       </div>
-      <div className="text-lg font-black text-ink font-display leading-none mt-1">
-        {value}
-      </div>
-      <div className="text-[11px] font-semibold text-text-muted mt-0.5">
-        {sub}
-      </div>
+      <div className="text-lg font-black text-ink font-display leading-none mt-1">{value}</div>
+      <div className="text-[11px] font-semibold text-text-muted mt-0.5">{sub}</div>
     </Card>
   );
 }

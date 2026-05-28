@@ -254,7 +254,8 @@ export function GuidedWritingPanel() {
             <span className="font-bold text-sm text-ink">Guided Writing</span>
           </div>
           <p className="text-xs text-text-secondary m-0 leading-relaxed">
-            Select exam type and topic — AI will generate the prompt, outline, and vocabulary bank for you.
+            Select exam type and topic — AI will generate the prompt, outline, and vocabulary bank
+            for you.
           </p>
 
           {/* Exam selector */}

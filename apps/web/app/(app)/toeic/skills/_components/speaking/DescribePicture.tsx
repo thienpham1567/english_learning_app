@@ -280,7 +280,8 @@ export function DescribePicture() {
               Select an Image to Describe
             </h3>
             <p className="m-0 text-xs text-text-muted font-bold max-w-sm mx-auto leading-relaxed">
-              You will have 45 seconds to describe the picture in English. The AI will evaluate your pronunciation, grammar, and content.
+              You will have 45 seconds to describe the picture in English. The AI will evaluate your
+              pronunciation, grammar, and content.
             </p>
           </div>
           <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-3">
@@ -360,9 +361,7 @@ export function DescribePicture() {
               <ul className="m-0 pl-4.5 flex flex-col gap-1 list-disc">
                 <li>Start: &ldquo;In this picture, I can see...&rdquo;</li>
                 <li>Describe from overview to specific details</li>
-                <li>
-                  Use present continuous for actions (e.g. &ldquo;people are talking&rdquo;)
-                </li>
+                <li>Use present continuous for actions (e.g. &ldquo;people are talking&rdquo;)</li>
               </ul>
             </div>
           )}
@@ -400,9 +399,7 @@ export function DescribePicture() {
             {state === "evaluating" && (
               <div className="flex flex-col items-center justify-center py-4">
                 <Loader2 className="h-8 w-8 text-accent animate-spin" />
-                <p className="text-xs text-text-muted mt-2 font-bold">
-                  Scoring and evaluating...
-                </p>
+                <p className="text-xs text-text-muted mt-2 font-bold">Scoring and evaluating...</p>
               </div>
             )}
           </div>

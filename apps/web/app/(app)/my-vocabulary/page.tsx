@@ -39,7 +39,6 @@ const TABS: { key: TabKey; label: string; icon: React.ReactNode }[] = [
   { key: "dictionary", label: "Dictionary Search", icon: <Search /> },
 ];
 
-
 export default function MyVocabularyPage() {
   const [active, setActive] = useState<TabKey>("toeic");
 

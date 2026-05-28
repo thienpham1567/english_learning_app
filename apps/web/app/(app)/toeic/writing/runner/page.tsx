@@ -105,7 +105,11 @@ export default function WritingRunnerPage() {
   };
 
   const skipQuestion = () => {
-    if (window.confirm("Skip this question?\n\nYou will receive 0 points for this question. Continue?")) {
+    if (
+      window.confirm(
+        "Skip this question?\n\nYou will receive 0 points for this question. Continue?",
+      )
+    ) {
       void submit();
     }
   };
@@ -114,7 +118,12 @@ export default function WritingRunnerPage() {
     return (
       <div className="p-6">
         <div className="text-destructive mb-3">{error}</div>
-        <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" onClick={() => router.push("/toeic/writing")}>Back to Hub</button>
+        <button
+          className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
+          onClick={() => router.push("/toeic/writing")}
+        >
+          Back to Hub
+        </button>
       </div>
     );
   }
@@ -166,7 +175,10 @@ export default function WritingRunnerPage() {
               </div>
               <div className="mt-1.5">
                 {(current.mandatoryWords ?? []).map((w) => (
-                  <span key={w} className="text-sm bg-amber-500/15 text-amber-600 py-0.5 px-2 inline-block">
+                  <span
+                    key={w}
+                    className="text-sm bg-amber-500/15 text-amber-600 py-0.5 px-2 inline-block"
+                  >
                     {w}
                   </span>
                 ))}
@@ -209,17 +221,27 @@ export default function WritingRunnerPage() {
           onChange={(e) => setText(e.target.value)}
           onPaste={(e) => {
             e.preventDefault();
-            void toast.warning("Pasting is disabled — please type your response manually to practice writing.");
+            void toast.warning(
+              "Pasting is disabled — please type your response manually to practice writing.",
+            );
           }}
           rows={current.type === "q8_opinion" ? 14 : current.type === "q6_7_email" ? 8 : 3}
           placeholder="Type your answer here..."
           autoFocus
-         />
+        />
         <div className="flex gap-2 justify-end">
-          <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" onClick={skipQuestion} disabled={submitting}>
+          <button
+            className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
+            onClick={skipQuestion}
+            disabled={submitting}
+          >
             Skip
           </button>
-          <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" disabled={!text.trim()} onClick={submit}>
+          <button
+            className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
+            disabled={!text.trim()}
+            onClick={submit}
+          >
             {idx + 1 === prompts.length ? "Submit Test" : "Next Question"}
           </button>
         </div>

@@ -245,7 +245,9 @@ export default function ShadowingMode({ examMode }: Props) {
         >
           <Volume2 size={48} className="text-accent mx-auto mb-3" />
           <h2 className="mb-2 text-lg font-black text-text-primary">Shadowing</h2>
-          <p className="text-text-secondary mb-2 text-[13px]">Listen → Repeat → Compare Pronunciation</p>
+          <p className="text-text-secondary mb-2 text-[13px]">
+            Listen → Repeat → Compare Pronunciation
+          </p>
           <p className="text-text-secondary text-xs mb-6">
             5 sentences per session · Detailed AI evaluation · +25 XP
           </p>
@@ -286,15 +288,19 @@ export default function ShadowingMode({ examMode }: Props) {
             animate={state === "recording" ? { scale: [1, 1.01, 1] } : {}}
             transition={state === "recording" ? { repeat: Infinity, duration: 1.5 } : {}}
             className={`p-6 rounded-lg text-center bg-surface shadow-sm ${
-              state === "recording"
-                ? "border-2 border-[var(--error)]"
-                : "border-2 border-border"
+              state === "recording" ? "border-2 border-[var(--error)]" : "border-2 border-border"
             }`}
           >
-            <p className="text-xl font-bold mb-2 leading-normal text-text-primary">{currentSentence.text}</p>
+            <p className="text-xl font-bold mb-2 leading-normal text-text-primary">
+              {currentSentence.text}
+            </p>
             <p className="text-sm text-text-secondary mb-3 font-serif">{currentSentence.ipa}</p>
-            <div className="text-xs text-text-muted flex items-center justify-center gap-1 cursor-help" title={currentSentence.tip}>
-              <Info size={12} /> Pronunciation Tip: <span className="font-medium">{currentSentence.tip}</span>
+            <div
+              className="text-xs text-text-muted flex items-center justify-center gap-1 cursor-help"
+              title={currentSentence.tip}
+            >
+              <Info size={12} /> Pronunciation Tip:{" "}
+              <span className="font-medium">{currentSentence.tip}</span>
             </div>
           </motion.div>
 
@@ -372,7 +378,14 @@ export default function ShadowingMode({ examMode }: Props) {
             {/* Custom circular progress */}
             <div className="relative w-[100px] h-[100px] mx-auto mb-2">
               <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-                <circle cx="50" cy="50" r="42" fill="none" stroke="var(--bg-deep)" strokeWidth="8" />
+                <circle
+                  cx="50"
+                  cy="50"
+                  r="42"
+                  fill="none"
+                  stroke="var(--bg-deep)"
+                  strokeWidth="8"
+                />
                 <circle
                   cx="50"
                   cy="50"
@@ -385,7 +398,9 @@ export default function ShadowingMode({ examMode }: Props) {
                   className="transition-all duration-700 ease-out"
                 />
               </svg>
-              <span className={`absolute inset-0 flex items-center justify-center text-3xl font-black ${scoreColorClass(evalResult.score)}`}>
+              <span
+                className={`absolute inset-0 flex items-center justify-center text-3xl font-black ${scoreColorClass(evalResult.score)}`}
+              >
                 {evalResult.score}
               </span>
             </div>
@@ -485,7 +500,8 @@ export default function ShadowingMode({ examMode }: Props) {
           </div>
           <h2 className="mb-2 text-lg font-black text-text-primary">Shadowing Completed!</h2>
           <p className="text-text-secondary mb-2">
-            Average Score: <strong className={`text-3xl ${scoreColorClass(avgScore)}`}>{avgScore}</strong>/100
+            Average Score:{" "}
+            <strong className={`text-3xl ${scoreColorClass(avgScore)}`}>{avgScore}</strong>/100
           </p>
           {xpAwarded > 0 && (
             <p className="text-accent text-[13px] font-bold mb-2">+{xpAwarded} XP</p>
@@ -511,7 +527,10 @@ export default function ShadowingMode({ examMode }: Props) {
               </span>
             ))}
           </div>
-          <Button onClick={startSession} className="h-10 px-6 text-sm font-black flex items-center gap-1.5 mx-auto">
+          <Button
+            onClick={startSession}
+            className="h-10 px-6 text-sm font-black flex items-center gap-1.5 mx-auto"
+          >
             <RefreshCw size={14} /> Practice Again
           </Button>
         </motion.div>

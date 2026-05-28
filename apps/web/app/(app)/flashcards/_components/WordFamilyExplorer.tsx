@@ -29,12 +29,12 @@ const POS_COLORS: Record<string, string> = {
   verb: "var(--success)",
   adjective: "var(--warning)",
   adverb: "var(--tertiary, #8B5CF6)",
-  "phrasal verb": "var(--accent)",
+  "phrasal verb": "var(--accent-active)",
 };
 
 const FREQ_LABELS: Record<string, { label: string; color: string }> = {
   high: { label: "Very Common", color: "var(--success)" },
-  medium: { label: "Common", color: "var(--accent)" },
+  medium: { label: "Common", color: "var(--accent-active)" },
   low: { label: "Rare", color: "var(--text-muted)" },
 };
 
@@ -68,7 +68,7 @@ export function WordFamilyExplorer({ word }: { word: string }) {
         style={{
           border: "1.5px solid color-mix(in srgb, var(--secondary) 20%, var(--border))",
           background: "color-mix(in srgb, var(--secondary) 4%, var(--surface))",
-          color: "var(--secondary, var(--accent))",
+          color: "var(--secondary, var(--accent-active))",
         }}
       >
         <Network size={12} />
@@ -80,7 +80,7 @@ export function WordFamilyExplorer({ word }: { word: string }) {
   if (loading) {
     return (
       <div className="mt-2 text-center py-3">
-        <Loader2 className="animate-spin text-accent" size={16} />
+        <Loader2 className="animate-spin text-accent-active" size={16} />
         <div className="text-[11px] text-text-muted mt-1">Analyzing word family...</div>
       </div>
     );
@@ -100,7 +100,7 @@ export function WordFamilyExplorer({ word }: { word: string }) {
       <button
         type="button"
         onClick={() => setExpanded((v) => !v)}
-        className="w-full flex items-center gap-2 py-2 px-3 cursor-pointer text-[11px] font-bold text-accent uppercase tracking-[.08em] rounded-[10px]"
+        className="w-full flex items-center gap-2 py-2 px-3 cursor-pointer text-[11px] font-bold text-accent-active uppercase tracking-[.08em] rounded-[10px]"
         style={{
           border: "1px solid color-mix(in srgb, var(--accent) 15%, var(--border))",
           background: "color-mix(in srgb, var(--accent) 4%, var(--surface))",
@@ -108,9 +108,7 @@ export function WordFamilyExplorer({ word }: { word: string }) {
       >
         <Network />
         Word Family: {data.rootWord}
-        <span className="text-[10px] text-text-muted ml-auto">
-          {data.family.length} forms
-        </span>
+        <span className="text-[10px] text-text-muted ml-auto">{data.family.length} forms</span>
       </button>
 
       {expanded && (
@@ -129,57 +127,61 @@ export function WordFamilyExplorer({ word }: { word: string }) {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.06 }}
               >
-                <Card size="sm" shadowSize="none" bgType="muted" className="py-2.5 px-3 gap-0.5 border-2 rounded-[10px]">
-                <div className="flex items-center gap-1.5 mb-1 flex-wrap">
-                  <span className="font-bold text-ink text-sm">{form.word}</span>
-                  <span
-                    className="text-[10px] font-bold rounded-full py-0.5 px-2"
-                    style={{
-                      color: posColor,
-                      background: `color-mix(in srgb, ${posColor} 10%, var(--surface))`,
-                      border: `1px solid color-mix(in srgb, ${posColor} 25%, transparent)`,
-                    }}
-                  >
-                    {form.partOfSpeech}
-                  </span>
-                  <span className="text-[10px] font-semibold inline-flex items-center gap-0.5" style={{ color: freqInfo.color }}>
-                    <Star size={8} />
-                    {freqInfo.label}
-                  </span>
-                  {form.pronunciation && (
-                    <span className="text-[10px] font-mono text-text-muted">
-                      {form.pronunciation}
+                <Card
+                  size="sm"
+                  shadowSize="none"
+                  bgType="muted"
+                  className="py-2.5 px-3 gap-0.5 border-2 rounded-[10px]"
+                >
+                  <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                    <span className="font-bold text-ink text-sm">{form.word}</span>
+                    <span
+                      className="text-[10px] font-bold rounded-full py-0.5 px-2"
+                      style={{
+                        color: posColor,
+                        background: `color-mix(in srgb, ${posColor} 10%, var(--surface))`,
+                        border: `1px solid color-mix(in srgb, ${posColor} 25%, transparent)`,
+                      }}
+                    >
+                      {form.partOfSpeech}
                     </span>
-                  )}
-                </div>
-                <span className="text-xs text-text-secondary block mb-1">
-                  {form.meaningVi}
-                </span>
-                <span
-                  dangerouslySetInnerHTML={{
-                    __html: form.exampleEn.replace(
-                      /\*([^*]+)\*/g,
-                      '<strong style="color: var(--accent)">$1</strong>',
-                    ),
-                  }}
-                  className="text-xs leading-normal"
-                />
-                <br />
-                <span className="text-[11px] text-text-muted">
-                  {form.exampleVi}
-                </span>
-                {form.commonCollocations.length > 0 && (
-                  <div className="mt-1 flex gap-1 flex-wrap">
-                    {form.commonCollocations.map((c) => (
-                      <span
-                        key={c}
-                        className="text-[9px] rounded-full py-0.5 px-2 bg-surface-alt border border-border text-text-muted font-medium"
-                      >
-                        {c}
+                    <span
+                      className="text-[10px] font-semibold inline-flex items-center gap-0.5"
+                      style={{ color: freqInfo.color }}
+                    >
+                      <Star size={8} />
+                      {freqInfo.label}
+                    </span>
+                    {form.pronunciation && (
+                      <span className="text-[10px] font-mono text-text-muted">
+                        {form.pronunciation}
                       </span>
-                    ))}
+                    )}
                   </div>
-                )}
+                  <span className="text-xs text-text-secondary block mb-1">{form.meaningVi}</span>
+                  <span
+                    dangerouslySetInnerHTML={{
+                      __html: form.exampleEn.replace(
+                        /\*([^*]+)\*/g,
+                        '<strong style="color: var(--accent-active)">$1</strong>',
+                      ),
+                    }}
+                    className="text-xs leading-normal"
+                  />
+                  <br />
+                  <span className="text-[11px] text-text-muted">{form.exampleVi}</span>
+                  {form.commonCollocations.length > 0 && (
+                    <div className="mt-1 flex gap-1 flex-wrap">
+                      {form.commonCollocations.map((c) => (
+                        <span
+                          key={c}
+                          className="text-[9px] rounded-full py-0.5 px-2 bg-surface-alt border border-border text-text-muted font-medium"
+                        >
+                          {c}
+                        </span>
+                      ))}
+                    </div>
+                  )}
                 </Card>
               </m.div>
             );

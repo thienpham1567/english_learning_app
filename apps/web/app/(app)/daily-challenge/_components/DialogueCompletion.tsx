@@ -44,7 +44,13 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
       </div>
 
       {/* Dialogue display */}
-      <Card shadowSize="sm" size="sm" bgType="alt" className="mb-6 gap-3" style={{ padding: "20px 16px" }}>
+      <Card
+        shadowSize="sm"
+        size="sm"
+        bgType="alt"
+        className="mb-6 gap-3"
+        style={{ padding: "20px 16px" }}
+      >
         {data.dialogue.map((line, i) => {
           const isMissing = i === data.missingIndex;
           const isEven = i % 2 === 0;

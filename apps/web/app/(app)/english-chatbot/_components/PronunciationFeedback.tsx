@@ -98,17 +98,13 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
               <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider">
                 Accuracy
               </span>
-              <span className="text-sm font-semibold text-text-primary">
-                {data.accuracy ?? 0}%
-              </span>
+              <span className="text-sm font-semibold text-text-primary">{data.accuracy ?? 0}%</span>
             </div>
             <div className="flex flex-col gap-0.5">
               <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider">
                 Fluency
               </span>
-              <span className="text-sm font-semibold text-text-primary">
-                {data.fluency ?? 0}%
-              </span>
+              <span className="text-sm font-semibold text-text-primary">{data.fluency ?? 0}%</span>
             </div>
           </div>
 

@@ -55,7 +55,14 @@ export default async function WritingResultPage({ params }: { params: Promise<{ 
                 className="border-2 border-border rounded-xl bg-surface shadow-sm p-4"
               >
                 <div className="flex justify-between items-center mb-3">
-                  <strong>Q{p.questionNumber} · {p.type === "q1_5_picture" ? "Picture" : p.type === "q6_7_email" ? "Email" : "Opinion"}</strong>
+                  <strong>
+                    Q{p.questionNumber} ·{" "}
+                    {p.type === "q1_5_picture"
+                      ? "Picture"
+                      : p.type === "q6_7_email"
+                        ? "Email"
+                        : "Opinion"}
+                  </strong>
                   <span className="bg-blue-500/15 text-blue-600 py-0.5 px-2 rounded-md text-sm font-bold">
                     {r?.rawScore ?? 0} / {p.maxScore}
                   </span>
@@ -88,9 +95,9 @@ export default async function WritingResultPage({ params }: { params: Promise<{ 
                   </>
                 ) : (
                   <div className="flex flex-col items-center justify-center py-12 text-text-muted">
-                <div className="text-4xl mb-3">📭</div>
-                <div className="text-sm font-semibold">No data available</div>
-              </div>
+                    <div className="text-4xl mb-3">📭</div>
+                    <div className="text-sm font-semibold">No data available</div>
+                  </div>
                 )}
               </div>
             );

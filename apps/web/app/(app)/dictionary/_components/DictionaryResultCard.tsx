@@ -187,7 +187,7 @@ export function DictionaryResultCard({
       {/* Header */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div className="min-w-0 flex-1">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent m-0">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-accent-active m-0">
             Search Result
           </p>
           <div className="flex items-baseline gap-3 flex-wrap mt-2">
@@ -278,7 +278,9 @@ export function DictionaryResultCard({
         <div className="anim-fade-in mt-3 flex flex-wrap items-center gap-3">
           {vocabulary.phoneticsUs && (
             <div className="flex items-center gap-1.5">
-              <span className="px-1.5 py-0.5 rounded bg-surface-alt text-[10px] text-text-secondary font-black border-2 border-border shadow-sm">US</span>
+              <span className="px-1.5 py-0.5 rounded bg-surface-alt text-[10px] text-text-secondary font-black border-2 border-border shadow-sm">
+                US
+              </span>
               <span className="rounded bg-bg-deep px-2.5 py-0.5 text-sm font-mono text-ink font-bold border border-border/10">
                 {vocabulary.phoneticsUs}
               </span>
@@ -290,7 +292,9 @@ export function DictionaryResultCard({
           )}
           {vocabulary.phoneticsUk && (
             <div className="flex items-center gap-1.5">
-              <span className="px-1.5 py-0.5 rounded bg-surface-alt text-[10px] text-text-secondary font-black border-2 border-border shadow-sm">UK</span>
+              <span className="px-1.5 py-0.5 rounded bg-surface-alt text-[10px] text-text-secondary font-black border-2 border-border shadow-sm">
+                UK
+              </span>
               <span className="rounded bg-bg-deep px-2.5 py-0.5 text-sm font-mono text-ink font-bold border border-border/10">
                 {vocabulary.phoneticsUk}
               </span>
@@ -299,17 +303,15 @@ export function DictionaryResultCard({
           )}
         </div>
       ) : vocabulary.phonetic ? (
-        <span className="anim-fade-in mt-3 inline-block rounded bg-bg-deep px-2 py-0.5 text-sm font-mono text-accent">
+        <span className="anim-fade-in mt-3 inline-block rounded bg-bg-deep px-2 py-0.5 text-sm font-mono text-accent-active">
           {vocabulary.phonetic}
         </span>
       ) : null}
 
       {/* ── Meta info strip: Word Family ── */}
       {vocabulary.wordFamily && vocabulary.wordFamily.length > 0 && onSearch && (
-        <div className="anim-fade-up mt-5 flex flex-wrap items-start gap-5 bg-bg-deep border-2 border-border border-l-[3px] border-l-accent rounded-sm p-3.5 px-4.5">
-          <div className="flex flex-col gap-1 flex-1 min-w-0">
-            <WordFamilySection wordFamily={vocabulary.wordFamily} onSearch={onSearch} />
-          </div>
+        <div className="anim-fade-up mt-5">
+          <WordFamilySection wordFamily={vocabulary.wordFamily} onSearch={onSearch} />
         </div>
       )}
 

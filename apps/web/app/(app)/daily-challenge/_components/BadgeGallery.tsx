@@ -42,9 +42,7 @@ export function BadgeGallery({ badges }: Props) {
               {/* Badge Icon Container */}
               <div
                 className={`w-11 h-11 rounded-full border-2 grid shrink-0 place-items-center shadow-sm mb-2.5 ${
-                  unlocked
-                    ? "bg-accent/10 border-accent/20"
-                    : "bg-border/5 border-border/10"
+                  unlocked ? "bg-accent/10 border-accent/20" : "bg-border/5 border-border/10"
                 }`}
               >
                 <BadgeIcon name={b.icon} unlocked={unlocked} />

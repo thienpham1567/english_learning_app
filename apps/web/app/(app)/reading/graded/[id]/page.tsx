@@ -141,9 +141,7 @@ export default function GradedPassagePage() {
                 </span>
               )}
             </div>
-            <h3 className="m-0 font-display leading-snug">
-              {passage.title}
-            </h3>
+            <h3 className="m-0 font-display leading-snug">{passage.title}</h3>
           </div>
 
           <div className="py-5 px-6 pb-7">
@@ -180,7 +178,10 @@ export default function GradedPassagePage() {
               style={{ background: "linear-gradient(135deg, var(--accent), var(--secondary))" }}
             >
               <div className="flex items-center justify-between flex-wrap gap-3">
-                <span className="text-sm font-medium flex items-center gap-1.5" style={{ color: "rgba(255,255,255,0.9)" }}>
+                <span
+                  className="text-sm font-medium flex items-center gap-1.5"
+                  style={{ color: "rgba(255,255,255,0.9)" }}
+                >
                   <Star size={16} /> You&apos;ve completed the reading! Check your vocabulary now?
                 </span>
                 <button

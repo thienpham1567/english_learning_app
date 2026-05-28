@@ -72,10 +72,7 @@ export function PersonalizedDrill() {
   // Not started yet — show CTA
   if (!drill && !loading) {
     return (
-      <m.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
+      <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
         <Card accentColor="accent" accentPosition="left" bgType="alt" className="gap-3.5">
           <div className="flex items-center gap-2.5">
             <Zap className="h-4 w-4 text-accent" />
@@ -106,7 +103,9 @@ export function PersonalizedDrill() {
       <Card className="py-8 text-center" shadowSize="default">
         <Loader2 className="h-7 w-7 text-accent animate-spin mx-auto" />
         <div className="text-sm font-semibold text-text-primary">Analyzing errors...</div>
-        <div className="text-xs text-text-muted">AI is generating a personalized practice session for you</div>
+        <div className="text-xs text-text-muted">
+          AI is generating a personalized practice session for you
+        </div>
       </Card>
     );
   }
@@ -118,14 +117,9 @@ export function PersonalizedDrill() {
     const pct =
       drill.exercises.length > 0 ? Math.round((correctCount / drill.exercises.length) * 100) : 0;
     return (
-      <m.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-      >
+      <m.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }}>
         <Card className="py-6 px-5 text-center gap-3" shadowSize="default">
-          <Trophy
-            className={`h-9 w-9 mx-auto ${pct >= 80 ? "text-success" : "text-accent"}`}
-          />
+          <Trophy className={`h-9 w-9 mx-auto ${pct >= 80 ? "text-success" : "text-accent"}`} />
           <div className="text-4xl font-black text-ink font-display">
             {correctCount}/{drill.exercises.length}
           </div>
@@ -192,101 +186,101 @@ export function PersonalizedDrill() {
             )}
           </div>
 
-        {/* Options */}
-        {data.options && (
-          <div className="flex flex-col gap-2">
-            {data.options.map((opt, i) => {
-              const isSelected = answered?.selected === i;
-              const isCorrect = data.correctIndex === i;
+          {/* Options */}
+          {data.options && (
+            <div className="flex flex-col gap-2">
+              {data.options.map((opt, i) => {
+                const isSelected = answered?.selected === i;
+                const isCorrect = data.correctIndex === i;
 
-              let bg = "var(--surface)";
-              let borderColor = "var(--border)";
-              let color = "var(--text-primary)";
+                let bg = "var(--surface)";
+                let borderColor = "var(--border)";
+                let color = "var(--text-primary)";
 
-              if (answered) {
-                if (isCorrect) {
-                  bg = "var(--success-bg)";
-                  borderColor = "var(--success)";
-                  color = "var(--success)";
-                } else if (isSelected && !answered.correct) {
-                  bg = "var(--error-bg)";
-                  borderColor = "var(--error)";
-                  color = "var(--error)";
+                if (answered) {
+                  if (isCorrect) {
+                    bg = "var(--success-bg)";
+                    borderColor = "var(--success)";
+                    color = "var(--success)";
+                  } else if (isSelected && !answered.correct) {
+                    bg = "var(--error-bg)";
+                    borderColor = "var(--error)";
+                    color = "var(--error)";
+                  }
                 }
-              }
 
-              return (
-                <button
-                  key={i}
-                  type="button"
-                  onClick={() => !answered && handleAnswer(currentIndex, i)}
-                  disabled={!!answered}
-                  className="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm text-left transition-all duration-200"
-                  style={{
-                    border: `1.5px solid ${borderColor}`,
-                    background: bg,
-                    color,
-                    cursor: answered ? "default" : "pointer",
-                    fontWeight: isSelected || isCorrect ? 700 : 500,
-                  }}
-                >
-                  <span
-                    className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-extrabold shrink-0"
+                return (
+                  <button
+                    key={i}
+                    type="button"
+                    onClick={() => !answered && handleAnswer(currentIndex, i)}
+                    disabled={!!answered}
+                    className="flex items-center gap-2.5 px-4 py-3 rounded-xl text-sm text-left transition-all duration-200"
                     style={{
-                      background: answered
-                        ? isCorrect
-                          ? "var(--success)"
-                          : isSelected
-                            ? "var(--error)"
-                            : "var(--border)"
-                        : "var(--border)",
-                      color: answered && (isCorrect || isSelected) ? "#fff" : "var(--text-muted)",
+                      border: `1.5px solid ${borderColor}`,
+                      background: bg,
+                      color,
+                      cursor: answered ? "default" : "pointer",
+                      fontWeight: isSelected || isCorrect ? 700 : 500,
                     }}
                   >
-                    {answered ? (
-                      isCorrect ? (
-                        <CheckCircle className="h-3 w-3" />
-                      ) : isSelected ? (
-                        <XCircle className="h-3 w-3" />
+                    <span
+                      className="w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-extrabold shrink-0"
+                      style={{
+                        background: answered
+                          ? isCorrect
+                            ? "var(--success)"
+                            : isSelected
+                              ? "var(--error)"
+                              : "var(--border)"
+                          : "var(--border)",
+                        color: answered && (isCorrect || isSelected) ? "#fff" : "var(--text-muted)",
+                      }}
+                    >
+                      {answered ? (
+                        isCorrect ? (
+                          <CheckCircle className="h-3 w-3" />
+                        ) : isSelected ? (
+                          <XCircle className="h-3 w-3" />
+                        ) : (
+                          String.fromCharCode(65 + i)
+                        )
                       ) : (
                         String.fromCharCode(65 + i)
-                      )
-                    ) : (
-                      String.fromCharCode(65 + i)
-                    )}
-                  </span>
-                  {opt}
-                </button>
-              );
-            })}
-          </div>
-        )}
+                      )}
+                    </span>
+                    {opt}
+                  </button>
+                );
+              })}
+            </div>
+          )}
 
-        {/* Tip (shown after answer) */}
-        {answered && exercise.tip && (
-          <m.div
-            initial={{ opacity: 0, y: 8 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="mt-3.5 px-3.5 py-2.5 rounded-[10px] bg-accent/5 border border-accent/12 flex gap-2 items-start"
-          >
-            <Lightbulb className="h-3.5 w-3.5 text-accent mt-0.5 shrink-0" />
-            <p className="text-xs leading-relaxed text-text-secondary m-0">{exercise.tip}</p>
-          </m.div>
-        )}
-
-        {/* Next button */}
-        {answered && (
-          <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-3.5 text-right">
-            <button
-              type="button"
-              onClick={handleNext}
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-none bg-accent text-text-on-accent cursor-pointer text-[13px] font-bold"
+          {/* Tip (shown after answer) */}
+          {answered && exercise.tip && (
+            <m.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-3.5 px-3.5 py-2.5 rounded-[10px] bg-accent/5 border border-accent/12 flex gap-2 items-start"
             >
-              {currentIndex < drill.exercises.length - 1 ? "Next Question →" : "See Results"}
-            </button>
-          </m.div>
-        )}
-      </div>
+              <Lightbulb className="h-3.5 w-3.5 text-accent mt-0.5 shrink-0" />
+              <p className="text-xs leading-relaxed text-text-secondary m-0">{exercise.tip}</p>
+            </m.div>
+          )}
+
+          {/* Next button */}
+          {answered && (
+            <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="mt-3.5 text-right">
+              <button
+                type="button"
+                onClick={handleNext}
+                className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-none bg-accent text-text-on-accent cursor-pointer text-[13px] font-bold"
+              >
+                {currentIndex < drill.exercises.length - 1 ? "Next Question →" : "See Results"}
+              </button>
+            </m.div>
+          )}
+        </div>
       </Card>
     </m.div>
   );

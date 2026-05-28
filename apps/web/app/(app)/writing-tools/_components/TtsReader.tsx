@@ -156,9 +156,7 @@ export function TtsReader() {
                 >
                   <span
                     className={`text-[9px] px-1 py-0.5 rounded font-mono font-bold leading-none ${
-                      isActive
-                        ? "bg-white/20 text-text-on-accent"
-                        : "bg-border text-text-secondary"
+                      isActive ? "bg-white/20 text-text-on-accent" : "bg-border text-text-secondary"
                     }`}
                   >
                     {acc.code}
@@ -287,11 +285,12 @@ export function TtsReader() {
 
       {/* Error messages */}
       {error && (
-        <m.div
-          initial={{ opacity: 0, y: -4 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          <Card shadowSize="none" size="sm" className="bg-error-bg border-error/20 text-destructive text-[13px] font-bold">
+        <m.div initial={{ opacity: 0, y: -4 }} animate={{ opacity: 1, y: 0 }}>
+          <Card
+            shadowSize="none"
+            size="sm"
+            className="bg-error-bg border-error/20 text-destructive text-[13px] font-bold"
+          >
             {error}
           </Card>
         </m.div>

@@ -76,7 +76,8 @@ export function ExpressOpinion() {
             </p>
           </div>
           <div className="p-3 px-4.5 rounded-xl bg-surface-alt border-2 border-border text-xs text-text-secondary leading-relaxed max-w-md text-center shadow-sm">
-            💡 <strong className="text-text-primary">Suggested Structure:</strong> State opinion → Give reason 1 + example → Reason 2 → Conclusion
+            💡 <strong className="text-text-primary">Suggested Structure:</strong> State opinion →
+            Give reason 1 + example → Reason 2 → Conclusion
           </div>
           <button
             type="button"

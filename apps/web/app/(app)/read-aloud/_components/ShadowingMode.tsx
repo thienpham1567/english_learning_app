@@ -14,7 +14,7 @@ import {
   Award,
   Sparkles,
   Lightbulb,
-  Headphones
+  Headphones,
 } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
@@ -23,7 +23,6 @@ import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { Card } from "@/components/ui/card";
 import { splitIntoSentences } from "../_hooks/useSentences";
 import { type EvalResult, ShadowResult } from "./ShadowResult";
-
 
 type ShadowStep = "idle" | "listening" | "ready-to-record" | "recording" | "evaluating" | "result";
 
@@ -157,12 +156,13 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
   if (sentences.length === 0) {
     return (
       <Card shadowSize="sm" className="text-center py-10 px-6">
-        <div className="flex justify-center mb-4"><Mic size={48} className="text-accent" /></div>
-        <h3 className="mb-2 text-text-primary">
-          Shadowing Mode
-        </h3>
+        <div className="flex justify-center mb-4">
+          <Mic size={48} className="text-accent" />
+        </div>
+        <h3 className="mb-2 text-text-primary">Shadowing Mode</h3>
         <span className="text-text-muted block w-[400px] mx-auto">
-          Please enter or select a passage in the "Listen" tab first, then return here to practice shadowing.
+          Please enter or select a passage in the "Listen" tab first, then return here to practice
+          shadowing.
         </span>
       </Card>
     );
@@ -174,7 +174,8 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
       <Card shadowSize="sm" className="py-4 px-5">
         <div className="mb-2 flex justify-between items-center">
           <span className="text-[13px] font-bold text-text-primary flex items-center gap-1">
-            <BookOpen size={14} className="text-accent inline-block" /> Sentence {currentIdx + 1} of {sentences.length}
+            <BookOpen size={14} className="text-accent inline-block" /> Sentence {currentIdx + 1} of{" "}
+            {sentences.length}
           </span>
           <span className="text-xs font-bold text-accent">{progress}% completed</span>
         </div>
@@ -270,7 +271,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
                   transition={{ repeat: Infinity, duration: 1.5 }}
                   className="w-[12px] h-[12px] rounded-full bg-accent"
                 />
-                <span className="text-sm font-black text-accent-hover">
+                <span className="text-sm font-black text-accent-active">
                   Playing model sentence... Listen carefully
                 </span>
               </div>
@@ -343,8 +344,10 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
               exit={{ opacity: 0 }}
               className="text-center py-4 flex flex-col items-center justify-center gap-2"
             >
-              <Loader2 className="animate-spin text-accent-hover" size={24} />
-              <div className="text-sm font-black text-accent-hover">AI is grading your pronunciation...</div>
+              <Loader2 className="animate-spin text-accent-active" size={24} />
+              <div className="text-sm font-black text-accent-active">
+                AI is grading your pronunciation...
+              </div>
             </m.div>
           )}
         </AnimatePresence>
@@ -393,13 +396,13 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
           animate={{ opacity: 1, y: 0 }}
           className="rounded-xl text-center border-2 border-accent p-6 shadow-md bg-gradient-to-br from-accent/10 to-xp/5"
         >
-          <div className="flex justify-center mb-2"><Award size={40} className="text-accent" /></div>
-          <h3 className="mb-2 text-accent-hover font-black">
-            Completed!
-          </h3>
+          <div className="flex justify-center mb-2">
+            <Award size={40} className="text-accent" />
+          </div>
+          <h3 className="mb-2 text-accent-active font-black">Completed!</h3>
           <span className="text-sm text-text-secondary block mb-3">
             Average Score:{" "}
-            <strong className="text-accent-hover text-lg font-black">
+            <strong className="text-accent-active text-lg font-black">
               {Math.round(
                 sentenceResults.reduce((sum, r) => sum + (r?.overall ?? 0), 0) /
                   sentenceResults.length,

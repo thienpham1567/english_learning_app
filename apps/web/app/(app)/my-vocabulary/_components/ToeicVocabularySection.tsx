@@ -227,9 +227,7 @@ export function ToeicVocabularySection({ className }: Props) {
   return (
     <div className={className}>
       <div className="mb-4">
-        <h3 className="font-display text-lg italic text-ink">
-          TOEIC Vocabulary by Topic
-        </h3>
+        <h3 className="font-display text-lg italic text-ink">TOEIC Vocabulary by Topic</h3>
         <p className="mt-0.5 text-xs text-text-muted">Click on a word for details</p>
       </div>
 

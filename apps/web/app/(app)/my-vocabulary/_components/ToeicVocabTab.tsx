@@ -48,7 +48,10 @@ type WordProgress = {
   easeFactor: number;
 };
 
-const TOPIC_META: Record<string, { icon: React.ComponentType<{ className?: string; size?: number }>; label: string; color: string }> = {
+const TOPIC_META: Record<
+  string,
+  { icon: React.ComponentType<{ className?: string; size?: number }>; label: string; color: string }
+> = {
   office: { icon: Building2, label: "Office", color: "var(--module-assessment)" },
   business: { icon: BarChart3, label: "Business", color: "#0ea5e9" },
   finance: { icon: Coins, label: "Finance", color: "var(--warning)" },
@@ -177,7 +180,10 @@ export function ToeicVocabTab() {
     return (
       <div className="w-full max-w-3xl mx-auto flex flex-col gap-4">
         {/* Back button + header */}
-        <Card className="flex-col sm:flex-row sm:items-center gap-4 bg-surface p-5 rounded-2xl" shadowSize="sm">
+        <Card
+          className="flex-col sm:flex-row sm:items-center gap-4 bg-surface p-5 rounded-2xl"
+          shadowSize="sm"
+        >
           <button
             type="button"
             onClick={() => setActiveTopic(null)}
@@ -185,13 +191,18 @@ export function ToeicVocabTab() {
           >
             <ArrowLeft size={16} />
           </button>
-          
+
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-lg flex items-center justify-center border border-border/10" style={{ color: meta.color }}>
+              <span
+                className="w-6 h-6 rounded-lg flex items-center justify-center border border-border/10"
+                style={{ color: meta.color }}
+              >
                 <meta.icon size={18} />
               </span>
-              <h2 className="text-lg font-black text-text-primary font-display leading-tight">{meta.label}</h2>
+              <h2 className="text-lg font-black text-text-primary font-display leading-tight">
+                {meta.label}
+              </h2>
             </div>
             <p className="text-text-muted text-[10px] font-extrabold uppercase mt-1 font-mono tracking-wider">
               {topicPack?.learned ?? 0}/{topicPack?.total ?? 0} words learned · {topicPct}% complete
@@ -209,9 +220,7 @@ export function ToeicVocabTab() {
 
         {/* Search */}
         <div className="relative w-full">
-          <Search
-            className="absolute text-text-muted h-4 w-4 left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"
-          />
+          <Search className="absolute text-text-muted h-4 w-4 left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             type="text"
             placeholder="Search words in this topic..."
@@ -242,99 +251,105 @@ export function ToeicVocabTab() {
                     bgType={isExpanded ? "accent-light" : "default"}
                     className="p-0 gap-0 overflow-hidden bg-surface"
                   >
-                  {/* Row */}
-                  <button
-                    type="button"
-                    onClick={() => setExpandedWord(isExpanded ? null : w.id)}
-                    className="w-full flex items-center gap-3 py-3 px-4 border-none bg-transparent cursor-pointer text-left"
-                  >
-                    <div
-                      className={`w-7 h-7 rounded-lg border-2 border-border grid shrink-0 text-xs font-black place-items-center ${
-                        isLearned
-                          ? "bg-success/10 border-success/30 text-success"
-                          : "bg-bg-deep text-text-muted"
-                      }`}
+                    {/* Row */}
+                    <button
+                      type="button"
+                      onClick={() => setExpandedWord(isExpanded ? null : w.id)}
+                      className="w-full flex items-center gap-3 py-3 px-4 border-none bg-transparent cursor-pointer text-left"
                     >
-                      {isLearned ? (
-                        <CheckCircle className="h-4 w-4" />
-                      ) : (
-                        <span className="font-mono text-[10px]">{i + 1}</span>
-                      )}
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-black text-text-primary">{w.word}</span>
-                        <span className="text-[10px] text-text-muted font-bold italic font-mono">({w.pos})</span>
-                      </div>
-                      <div className="text-xs text-text-secondary mt-1 truncate max-w-full font-semibold">
-                        {w.meaningVi}
-                      </div>
-                    </div>
-                    <ChevronRight
-                      className={`text-text-muted h-4 w-4 transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
-                    />
-                  </button>
-
-                  {/* Expanded detail */}
-                  {isExpanded && (
-                    <div className="flex flex-col gap-3.5 px-4 pb-4.5 pt-1.5 border-t-2 border-dashed border-border/40">
-                      {/* IPA + Audio */}
-                      <div className="flex items-center gap-2 mt-1">
-                        {w.ipa && (
-                          <span className="rounded-lg bg-bg-deep border border-border/20 font-mono text-[11px] font-extrabold text-ink px-2.5 py-0.5">
-                            /{w.ipa}/
-                          </span>
-                        )}
-                        <button
-                          type="button"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            speak(w.word, "en-US");
-                          }}
-                          className="w-7 h-7 rounded-lg border-2 border-border bg-surface hover:bg-surface-hover text-text-secondary hover:text-accent hover:border-accent cursor-pointer flex items-center justify-center shadow-sm transition-colors"
-                        >
-                          <Volume2 className="h-4 w-4" />
-                        </button>
-                      </div>
-
-                      {/* Meanings */}
-                      <div className="flex flex-col gap-1">
-                        <div className="text-[9px] font-extrabold text-text-muted uppercase tracking-wider font-display">
-                          English Definition
-                        </div>
-                        <div className="text-xs md:text-sm text-text-primary leading-normal font-semibold">{w.meaningEn}</div>
-                      </div>
-
-                      {/* Example */}
-                      {w.exampleEn && (
-                        <Card
-                          size="sm"
-                          bgType="alt"
-                          accentColor="accent"
-                          accentPosition="left"
-                          shadowSize="sm"
-                          className="gap-1 p-3.5"
-                        >
-                          <div className="text-xs md:text-sm text-text-primary italic leading-normal font-semibold">
-                            &ldquo;{w.exampleEn}&rdquo;
-                          </div>
-                          {w.exampleVi && (
-                            <div className="text-[10px] text-text-muted font-bold mt-1">→ {w.exampleVi}</div>
-                          )}
-                        </Card>
-                      )}
-
-                      {/* Action */}
-                      <Link
-                        href={`/toeic/vocab/learn?pack=${encodeURIComponent(activeTopic)}&mode=new`}
-                        className="inline-flex items-center gap-2 rounded-xl text-xs font-black px-4 py-2 text-white hover:opacity-90 w-fit shadow-sm no-underline"
-                        style={{ background: meta.color }}
+                      <div
+                        className={`w-7 h-7 rounded-lg border-2 border-border grid shrink-0 text-xs font-black place-items-center ${
+                          isLearned
+                            ? "bg-success/10 border-success/30 text-success"
+                            : "bg-bg-deep text-text-muted"
+                        }`}
                       >
-                        <BookOpen size={13} className="shrink-0" /> 
-                        <span>Learn this word</span>
-                      </Link>
-                    </div>
-                  )}
+                        {isLearned ? (
+                          <CheckCircle className="h-4 w-4" />
+                        ) : (
+                          <span className="font-mono text-[10px]">{i + 1}</span>
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm font-black text-text-primary">{w.word}</span>
+                          <span className="text-[10px] text-text-muted font-bold italic font-mono">
+                            ({w.pos})
+                          </span>
+                        </div>
+                        <div className="text-xs text-text-secondary mt-1 truncate max-w-full font-semibold">
+                          {w.meaningVi}
+                        </div>
+                      </div>
+                      <ChevronRight
+                        className={`text-text-muted h-4 w-4 transition-transform duration-200 ${isExpanded ? "rotate-90" : ""}`}
+                      />
+                    </button>
+
+                    {/* Expanded detail */}
+                    {isExpanded && (
+                      <div className="flex flex-col gap-3.5 px-4 pb-4.5 pt-1.5 border-t-2 border-dashed border-border/40">
+                        {/* IPA + Audio */}
+                        <div className="flex items-center gap-2 mt-1">
+                          {w.ipa && (
+                            <span className="rounded-lg bg-bg-deep border border-border/20 font-mono text-[11px] font-extrabold text-ink px-2.5 py-0.5">
+                              /{w.ipa}/
+                            </span>
+                          )}
+                          <button
+                            type="button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              speak(w.word, "en-US");
+                            }}
+                            className="w-7 h-7 rounded-lg border-2 border-border bg-surface hover:bg-surface-hover text-text-secondary hover:text-accent hover:border-accent cursor-pointer flex items-center justify-center shadow-sm transition-colors"
+                          >
+                            <Volume2 className="h-4 w-4" />
+                          </button>
+                        </div>
+
+                        {/* Meanings */}
+                        <div className="flex flex-col gap-1">
+                          <div className="text-[9px] font-extrabold text-text-muted uppercase tracking-wider font-display">
+                            English Definition
+                          </div>
+                          <div className="text-xs md:text-sm text-text-primary leading-normal font-semibold">
+                            {w.meaningEn}
+                          </div>
+                        </div>
+
+                        {/* Example */}
+                        {w.exampleEn && (
+                          <Card
+                            size="sm"
+                            bgType="alt"
+                            accentColor="accent"
+                            accentPosition="left"
+                            shadowSize="sm"
+                            className="gap-1 p-3.5"
+                          >
+                            <div className="text-xs md:text-sm text-text-primary italic leading-normal font-semibold">
+                              &ldquo;{w.exampleEn}&rdquo;
+                            </div>
+                            {w.exampleVi && (
+                              <div className="text-[10px] text-text-muted font-bold mt-1">
+                                → {w.exampleVi}
+                              </div>
+                            )}
+                          </Card>
+                        )}
+
+                        {/* Action */}
+                        <Link
+                          href={`/toeic/vocab/learn?pack=${encodeURIComponent(activeTopic)}&mode=new`}
+                          className="inline-flex items-center gap-2 rounded-xl text-xs font-black px-4 py-2 text-white hover:opacity-90 w-fit shadow-sm no-underline"
+                          style={{ background: meta.color }}
+                        >
+                          <BookOpen size={13} className="shrink-0" />
+                          <span>Learn this word</span>
+                        </Link>
+                      </div>
+                    )}
                   </Card>
                 </m.div>
               );
@@ -349,19 +364,20 @@ export function ToeicVocabTab() {
   return (
     <div className="w-full max-w-4xl mx-auto flex flex-col gap-5">
       {/* Overall progress */}
-      <m.div
-        initial={{ opacity: 0, y: 12 }}
-        animate={{ opacity: 1, y: 0 }}
-      >
+      <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
         <Card shadowSize="default" className="bg-surface p-6 gap-3.5 rounded-2xl">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-sm font-black text-text-primary font-display uppercase tracking-wider">Overall Progress</h3>
+              <h3 className="text-sm font-black text-text-primary font-display uppercase tracking-wider">
+                Overall Progress
+              </h3>
               <p className="text-xs text-text-secondary font-semibold mt-1">
                 {totalLearned} / {totalWords} words learned
               </p>
             </div>
-            <div className="text-2xl font-black text-text-primary font-mono leading-none">{overallPct}%</div>
+            <div className="text-2xl font-black text-text-primary font-mono leading-none">
+              {overallPct}%
+            </div>
           </div>
           <div className="h-3 rounded-full bg-bg-deep overflow-hidden relative border-2 border-border">
             <div
@@ -388,7 +404,12 @@ export function ToeicVocabTab() {
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.04 }}
-              whileHover={{ y: -3, x: -1, rotate: i % 2 === 0 ? 0.5 : -0.5, boxShadow: "var(--shadow)" }}
+              whileHover={{
+                y: -3,
+                x: -1,
+                rotate: i % 2 === 0 ? 0.5 : -0.5,
+                boxShadow: "var(--shadow)",
+              }}
               whileTap={{ scale: 0.98 }}
               onClick={() => loadTopic(pack.topic)}
               className="text-left border-none bg-transparent cursor-pointer p-0 block w-full"
@@ -406,7 +427,9 @@ export function ToeicVocabTab() {
                     <meta.icon size={20} className="group-hover:animate-bounce" />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <div className="text-sm font-black text-text-primary font-display truncate leading-tight">{meta.label}</div>
+                    <div className="text-sm font-black text-text-primary font-display truncate leading-tight">
+                      {meta.label}
+                    </div>
                     <div className="text-text-muted text-[10px] font-extrabold mt-1.5 uppercase font-mono leading-none tracking-wider">
                       {pack.learned}/{pack.total} words
                     </div>

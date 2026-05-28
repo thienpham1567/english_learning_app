@@ -433,7 +433,9 @@ export function ExamWordLists({ onSelect }: Props) {
                 }`}
               >
                 <span className="inline-flex items-center gap-2">
-                  <span className={isExpanded ? "text-accent-hover" : "text-text-muted"}>{cat.icon}</span>
+                  <span className={isExpanded ? "text-accent-hover" : "text-text-muted"}>
+                    {cat.icon}
+                  </span>
                   {cat.label}
                 </span>
                 <span className="inline-flex items-center gap-1.5">

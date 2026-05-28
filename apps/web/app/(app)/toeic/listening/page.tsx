@@ -61,17 +61,18 @@ export default async function ToeicListeningPage() {
       <div className="p-4 grid gap-3 grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
         {cards.map((c) => {
           const inner = (
-            <Card shadowSize="sm" className={`p-4 ${!c.disabled ? "hover:shadow-md transition-shadow cursor-pointer hover:border-accent" : "opacity-60 cursor-not-allowed"}`}>
+            <Card
+              shadowSize="sm"
+              className={`p-4 ${!c.disabled ? "hover:shadow-md transition-shadow cursor-pointer hover:border-accent" : "opacity-60 cursor-not-allowed"}`}
+            >
               <div className="flex justify-between items-center">
                 <strong className="font-extrabold text-[15px]">{c.title}</strong>
-                <span className="bg-accent-muted text-accent py-0.5 px-2.5 rounded-lg border border-accent/20 font-black text-xs inline-block">{c.count} items</span>
+                <span className="bg-accent-muted text-accent py-0.5 px-2.5 rounded-lg border border-accent/20 font-black text-xs inline-block">
+                  {c.count} items
+                </span>
               </div>
               <div className="text-text-muted text-[13px] mt-1.5 font-medium">{c.subtitle}</div>
-              {c.note && (
-                <div className="text-xs mt-2 text-warning font-semibold">
-                  {c.note}
-                </div>
-              )}
+              {c.note && <div className="text-xs mt-2 text-warning font-semibold">{c.note}</div>}
             </Card>
           );
           return c.href && !c.disabled ? (

@@ -26,7 +26,10 @@ import {
 import { Card } from "@/components/ui/card";
 import { useRoadmap } from "@/lib/curriculum/roadmap-context";
 
-const SKILL_ICONS: Record<Skill, React.ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>> = {
+const SKILL_ICONS: Record<
+  Skill,
+  React.ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>
+> = {
   grammar: BookOpen,
   listening: Headphones,
   reading: BookOpen,
@@ -80,7 +83,10 @@ export default function WeekDetailPage() {
       <div className="p-5 pb-16 max-w-[900px] mx-auto w-full flex flex-col gap-5">
         {/* Back + breadcrumb */}
         <div className="flex items-center gap-2 text-xs font-bold text-text-muted">
-          <Link href="/roadmap" className="no-underline flex items-center gap-1 text-text-muted hover:text-accent transition-colors">
+          <Link
+            href="/roadmap"
+            className="no-underline flex items-center gap-1 text-text-muted hover:text-accent transition-colors"
+          >
             <ArrowLeft size={14} />
             Roadmap
           </Link>
@@ -114,15 +120,10 @@ export default function WeekDetailPage() {
             </div>
 
             <div className="flex-1 min-w-0">
-              <h1 className="text-lg font-black text-ink font-display m-0">
-                {week.focusTopic}
-              </h1>
+              <h1 className="text-lg font-black text-ink font-display m-0">{week.focusTopic}</h1>
               <div className="flex items-center gap-3 mt-2 flex-wrap">
                 <div className="flex items-center gap-1.5">
-                  <FocusIcon
-                    size={13}
-                    style={{ color: SKILL_COLORS[week.focusSkill] }}
-                  />
+                  <FocusIcon size={13} style={{ color: SKILL_COLORS[week.focusSkill] }} />
                   <span
                     className="text-[10px] font-extrabold uppercase tracking-wider"
                     style={{ color: SKILL_COLORS[week.focusSkill] }}
@@ -151,7 +152,10 @@ export default function WeekDetailPage() {
                   <div className="w-20 h-2 rounded-full bg-bg-deep overflow-hidden">
                     <div
                       className="h-full rounded-full transition-all duration-500"
-                      style={{ width: `${weekProg.percent}%`, background: SKILL_COLORS[week.focusSkill] }}
+                      style={{
+                        width: `${weekProg.percent}%`,
+                        background: SKILL_COLORS[week.focusSkill],
+                      }}
                     />
                   </div>
                   <span className="text-xs font-black text-text-muted tabular-nums font-mono">
@@ -212,15 +216,17 @@ export default function WeekDetailPage() {
                         {isCompleted ? (
                           <Check size={18} className="text-success" />
                         ) : (
-                          <Circle size={18} className="text-text-muted hover:text-accent transition-colors" />
+                          <Circle
+                            size={18}
+                            className="text-text-muted hover:text-accent transition-colors"
+                          />
                         )}
                       </button>
 
-                      <UnitIcon
-                        size={16}
-                        style={{ color: SKILL_COLORS[unit.skill] }}
-                      />
-                      <span className={`text-sm font-extrabold flex-1 ${isCompleted ? "text-text-muted line-through" : "text-ink"}`}>
+                      <UnitIcon size={16} style={{ color: SKILL_COLORS[unit.skill] }} />
+                      <span
+                        className={`text-sm font-extrabold flex-1 ${isCompleted ? "text-text-muted line-through" : "text-ink"}`}
+                      >
                         {unit.title}
                       </span>
                       <span
@@ -242,18 +248,17 @@ export default function WeekDetailPage() {
                     {/* Exercise links */}
                     <div className="flex flex-wrap gap-2">
                       {unit.exercises.map((ex, exIdx) => (
-                        <Link
-                          key={exIdx}
-                          href={ex.routePath}
-                          className="no-underline group"
-                        >
+                        <Link key={exIdx} href={ex.routePath} className="no-underline group">
                           <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border-2 border-border bg-surface text-xs font-bold text-ink cursor-pointer hover:border-accent hover:text-accent hover:-translate-y-0.5 hover:shadow-sm transition-all duration-150">
                             <span className="text-[9px] font-extrabold text-text-muted uppercase tracking-wider">
                               {ex.type}
                             </span>
                             <span className="w-px h-3 bg-border" />
                             {ex.label}
-                            <ChevronRight size={12} className="text-text-muted group-hover:text-accent transition-colors" />
+                            <ChevronRight
+                              size={12}
+                              className="text-text-muted group-hover:text-accent transition-colors"
+                            />
                           </div>
                         </Link>
                       ))}

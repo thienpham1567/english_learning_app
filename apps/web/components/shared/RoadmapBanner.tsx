@@ -16,11 +16,7 @@ export function RoadmapBanner({ className = "" }: { className?: string }) {
   const week = getWeek(currentWeek);
 
   return (
-    <m.div
-      initial={{ opacity: 0, y: -6 }}
-      animate={{ opacity: 1, y: 0 }}
-      className={className}
-    >
+    <m.div initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} className={className}>
       <Link href={`/roadmap/week/${currentWeek}`} className="no-underline">
         <div className="flex items-center gap-3 px-4 py-2.5 rounded-xl border-2 border-accent/20 bg-accent/5 hover:bg-accent/8 transition-colors cursor-pointer">
           <Map size={14} className="text-accent shrink-0" />

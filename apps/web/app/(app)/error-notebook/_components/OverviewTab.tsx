@@ -1,6 +1,14 @@
 "use client";
 
-import { AlertCircle, BarChart2, Brain, CheckCircle, Clock, Database, FileText } from "lucide-react";
+import {
+  AlertCircle,
+  BarChart2,
+  Brain,
+  CheckCircle,
+  Clock,
+  Database,
+  FileText,
+} from "lucide-react";
 import * as m from "motion/react-client";
 import { useMemo } from "react";
 import type { ErrorEntry } from "../_types/types";
@@ -77,19 +85,25 @@ function StatCard({
       <Card
         size="sm"
         shadowSize="sm"
-        className={cn(
-          "flex-row items-center gap-3.5 cursor-default bg-surface border-2",
-          c.border
-        )}
+        className={cn("flex-row items-center gap-3.5 cursor-default bg-surface border-2", c.border)}
       >
-        <span className={cn("w-10 h-10 rounded-xl grid place-items-center border-2 shrink-0", c.iconBg, c.iconText, c.border)}>
+        <span
+          className={cn(
+            "w-10 h-10 rounded-xl grid place-items-center border-2 shrink-0",
+            c.iconBg,
+            c.iconText,
+            c.border,
+          )}
+        >
           {icon}
         </span>
         <div>
           <div className={cn("text-[28px] font-black leading-none font-display", c.text)}>
             {value}
           </div>
-          <div className="text-[10px] text-text-muted font-bold mt-0.5 uppercase tracking-wide">{label}</div>
+          <div className="text-[10px] text-text-muted font-bold mt-0.5 uppercase tracking-wide">
+            {label}
+          </div>
         </div>
       </Card>
     </m.div>
@@ -135,10 +149,34 @@ export function OverviewTab({
     <div className="flex flex-col gap-6">
       {/* ─── Stats Cards ─── */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
-        <StatCard label="Unresolved" value={unresolvedCount} icon={<AlertCircle size={18} />} color="error" index={0} />
-        <StatCard label="Resolved" value={resolvedCount} icon={<CheckCircle size={18} />} color="success" index={1} />
-        <StatCard label="Needs Review" value={dueCount} icon={<Clock size={18} />} color="warning" index={2} />
-        <StatCard label="Total Errors" value={total} icon={<Database size={18} />} color="accent" index={3} />
+        <StatCard
+          label="Unresolved"
+          value={unresolvedCount}
+          icon={<AlertCircle size={18} />}
+          color="error"
+          index={0}
+        />
+        <StatCard
+          label="Resolved"
+          value={resolvedCount}
+          icon={<CheckCircle size={18} />}
+          color="success"
+          index={1}
+        />
+        <StatCard
+          label="Needs Review"
+          value={dueCount}
+          icon={<Clock size={18} />}
+          color="warning"
+          index={2}
+        />
+        <StatCard
+          label="Total Errors"
+          value={total}
+          icon={<Database size={18} />}
+          color="accent"
+          index={3}
+        />
       </div>
 
       {/* ─── SRS Review CTA ─── */}

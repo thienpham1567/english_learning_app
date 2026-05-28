@@ -21,10 +21,7 @@ import type { GrammarCheckResponse, GrammarError } from "@/lib/writing-tools/sch
 
 const MAX_WORDS = 500;
 
-const TYPE_META: Record<
-  string,
-  { label: string; color: string; icon: React.ReactNode }
-> = {
+const TYPE_META: Record<string, { label: string; color: string; icon: React.ReactNode }> = {
   grammar: { label: "Grammar", color: "var(--error)", icon: <Bug /> },
   spelling: {
     label: "Spelling",
@@ -141,7 +138,15 @@ function CopyButton({ text }: { text: string }) {
       title="Copy"
       className={`border-2 border-border bg-surface cursor-pointer text-[12px] py-1 px-2.5 rounded-lg font-bold flex items-center gap-1.5 transition-all duration-100 hover:-translate-y-px hover:shadow-sm active:translate-y-px active:shadow-none ${copied ? "text-success border-success/30" : "text-text-secondary"}`}
     >
-      {copied ? <><Check size={13} /> Copied</> : <><Copy size={13} /> Copy</>}
+      {copied ? (
+        <>
+          <Check size={13} /> Copied
+        </>
+      ) : (
+        <>
+          <Copy size={13} /> Copy
+        </>
+      )}
     </button>
   );
 }
@@ -177,9 +182,7 @@ function ErrorCard({ error, onApply }: { error: GrammarError; onApply: () => voi
           >
             {meta.label}
           </span>
-          <span className="text-[13px] text-text-muted line-through">
-            {error.original}
-          </span>
+          <span className="text-[13px] text-text-muted line-through">{error.original}</span>
           <span className="text-text-primary text-[13px]">→</span>
           <span className="text-[13px] text-emerald-500 font-bold">{error.correction}</span>
         </div>
@@ -190,16 +193,19 @@ function ErrorCard({ error, onApply }: { error: GrammarError; onApply: () => voi
 
       {/* Expanded detail */}
       {expanded && (
-        <div className="flex flex-col gap-2.5 px-3.5 pb-3.5 pt-0 ml-1 border-l-4" style={{ borderLeftColor: meta.color }}>
+        <div
+          className="flex flex-col gap-2.5 px-3.5 pb-3.5 pt-0 ml-1 border-l-4"
+          style={{ borderLeftColor: meta.color }}
+        >
           {/* Rule tag */}
           <span className="text-[11px] text-text-secondary italic">Rule: {error.rule}</span>
 
           {/* Explanation */}
           <div className="py-2.5 px-3.5 rounded-lg bg-surface-alt border-2 border-border text-[13px] leading-relaxed">
-            <span className="font-bold text-text-secondary text-[11px] uppercase tracking-wide">Explanation:</span>
-            <p className="text-text-primary mt-1 mb-0">
-              {error.explanationEn}
-            </p>
+            <span className="font-bold text-text-secondary text-[11px] uppercase tracking-wide">
+              Explanation:
+            </span>
+            <p className="text-text-primary mt-1 mb-0">{error.explanationEn}</p>
           </div>
 
           {/* Apply button */}
@@ -325,9 +331,7 @@ export function GrammarChecker() {
           <span className="text-[13px] font-bold text-text-secondary">
             Enter or paste your text to check
           </span>
-          <span
-            className={`text-xs font-bold ${overLimit ? "text-error" : "text-text-muted"}`}
-          >
+          <span className={`text-xs font-bold ${overLimit ? "text-error" : "text-text-muted"}`}>
             {wordCount}/{MAX_WORDS} words
           </span>
         </div>
@@ -410,7 +414,11 @@ export function GrammarChecker() {
 
       {/* Error message */}
       {error && (
-        <Card shadowSize="none" size="sm" className="bg-error-bg border-error/30 text-destructive text-[13px] font-bold">
+        <Card
+          shadowSize="none"
+          size="sm"
+          className="bg-error-bg border-error/30 text-destructive text-[13px] font-bold"
+        >
           {error}
         </Card>
       )}
@@ -451,9 +459,7 @@ export function GrammarChecker() {
                     <div className="text-base font-black text-emerald-500 font-display">
                       Excellent!
                     </div>
-                    <div className="text-xs text-text-muted mt-0.5">
-                      No errors detected
-                    </div>
+                    <div className="text-xs text-text-muted mt-0.5">No errors detected</div>
                   </div>
                 </div>
               ) : (

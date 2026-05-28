@@ -6,7 +6,10 @@ import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
 import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
 import { Card } from "@/components/ui/card";
 
-const LEVEL_META: Record<string, { label: string; color: string; bgClass: string; borderClass: string; textClass: string }> = {
+const LEVEL_META: Record<
+  string,
+  { label: string; color: string; bgClass: string; borderClass: string; textClass: string }
+> = {
   beginner: {
     label: "Beginner",
     color: "var(--success)",
@@ -58,11 +61,7 @@ export default async function ToeicDictationPage() {
           const meta = LEVEL_META[lv] ?? LEVEL_META.beginner;
 
           return (
-            <Card
-              key={lv}
-              shadowSize="sm"
-              className="p-0 overflow-hidden"
-            >
+            <Card key={lv} shadowSize="sm" className="p-0 overflow-hidden">
               {/* Section header */}
               <div className="px-5 py-3.5 border-b-2 border-border bg-surface-alt flex items-center justify-between">
                 <div className="flex items-center gap-2.5">

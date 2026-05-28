@@ -175,7 +175,11 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
                       border: `1px solid ${sample.length === "short" ? "rgba(16,185,129,0.2)" : sample.length === "long" ? "rgba(239,68,68,0.15)" : "rgba(59,130,246,0.2)"}`,
                     }}
                   >
-                    {sample.length === "short" ? "Short" : sample.length === "long" ? "Long" : "Medium"}
+                    {sample.length === "short"
+                      ? "Short"
+                      : sample.length === "long"
+                        ? "Long"
+                        : "Medium"}
                   </span>
                   <span className="text-[10px] font-semibold text-text-muted">
                     ~{sample.text.split(/\s+/).length} words

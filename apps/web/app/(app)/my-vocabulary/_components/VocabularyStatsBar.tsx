@@ -63,7 +63,11 @@ export function VocabularyStatsBar({ entries }: Props) {
 
       {/* CEFR Level stats */}
       {hasLevels && (
-        <Card shadowSize="sm" bgType="alt" className="flex-col sm:flex-row sm:items-center gap-3.5 p-4.5 w-full">
+        <Card
+          shadowSize="sm"
+          bgType="alt"
+          className="flex-col sm:flex-row sm:items-center gap-3.5 p-4.5 w-full"
+        >
           <div className="flex items-center gap-1.5 shrink-0">
             <Trophy className="h-4 w-4 text-accent" />
             <span className="text-[10px] font-extrabold text-text-muted uppercase tracking-widest font-display">
@@ -72,7 +76,8 @@ export function VocabularyStatsBar({ entries }: Props) {
           </div>
           <div className="flex flex-wrap gap-2">
             {CEFR_LEVELS.filter((l) => levelCounts[l]).map((level) => {
-              const colorClass = LEVEL_COLORS[level] ?? "text-text-secondary border-border/10 bg-bg-deep";
+              const colorClass =
+                LEVEL_COLORS[level] ?? "text-text-secondary border-border/10 bg-bg-deep";
               return (
                 <span
                   key={level}

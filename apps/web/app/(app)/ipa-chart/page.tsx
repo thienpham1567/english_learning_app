@@ -79,9 +79,7 @@ export default function IpaChartPage() {
                 <span>{label}</span>
                 <span
                   className={`text-[10px] rounded-full font-extrabold py-0.5 px-2 ${
-                    isActive
-                      ? "bg-black/15 text-text-on-accent"
-                      : "bg-bg-deep text-text-muted"
+                    isActive ? "bg-black/15 text-text-on-accent" : "bg-bg-deep text-text-muted"
                   }`}
                 >
                   {count}
@@ -226,10 +224,7 @@ function SectionHeader({
 }) {
   return (
     <div className="flex items-center gap-3 mb-4">
-      <div
-        className="w-1.5 h-5 rounded-full shrink-0"
-        style={{ background: color }}
-      />
+      <div className="w-1.5 h-5 rounded-full shrink-0" style={{ background: color }} />
       <h3 className="m-0 font-black text-ink font-display text-sm uppercase tracking-wide">
         {label}
       </h3>

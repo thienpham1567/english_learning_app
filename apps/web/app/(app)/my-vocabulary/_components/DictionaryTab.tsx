@@ -30,23 +30,24 @@ type SavedWord = {
   mastery: "new" | "learning" | "mastered";
 };
 
-const MASTERY_CONFIG: Record<string, { icon: React.ReactNode; label: string; colorClass: string }> = {
-  new: {
-    icon: <Star size={11} className="fill-current text-amber-700 dark:text-amber-400" />,
-    label: "New",
-    colorClass: "text-amber-700 dark:text-amber-400 border-amber-500/30 bg-amber-500/5",
-  },
-  learning: {
-    icon: <RefreshCw size={11} className="text-sky-700 dark:text-sky-400" />,
-    label: "Learning",
-    colorClass: "text-sky-700 dark:text-sky-400 border-sky-500/30 bg-sky-500/5",
-  },
-  mastered: {
-    icon: <CircleCheckBig size={11} className="text-emerald-700 dark:text-emerald-400" />,
-    label: "Mastered",
-    colorClass: "text-emerald-700 dark:text-emerald-400 border-emerald-500/30 bg-emerald-500/5",
-  },
-};
+const MASTERY_CONFIG: Record<string, { icon: React.ReactNode; label: string; colorClass: string }> =
+  {
+    new: {
+      icon: <Star size={11} className="fill-current text-amber-700 dark:text-amber-400" />,
+      label: "New",
+      colorClass: "text-amber-700 dark:text-amber-400 border-amber-500/30 bg-amber-500/5",
+    },
+    learning: {
+      icon: <RefreshCw size={11} className="text-sky-700 dark:text-sky-400" />,
+      label: "Learning",
+      colorClass: "text-sky-700 dark:text-sky-400 border-sky-500/30 bg-sky-500/5",
+    },
+    mastered: {
+      icon: <CircleCheckBig size={11} className="text-emerald-700 dark:text-emerald-400" />,
+      label: "Mastered",
+      colorClass: "text-emerald-700 dark:text-emerald-400 border-emerald-500/30 bg-emerald-500/5",
+    },
+  };
 
 function getRecentSearches(): string[] {
   try {
@@ -243,7 +244,9 @@ export function DictionaryTab() {
                       {w.headword ?? w.query}
                     </div>
                     {w.level && (
-                      <span className="text-[9px] text-text-muted font-bold font-mono tracking-wide block mt-1 leading-none">{w.level}</span>
+                      <span className="text-[9px] text-text-muted font-bold font-mono tracking-wide block mt-1 leading-none">
+                        {w.level}
+                      </span>
                     )}
                   </div>
                   <button

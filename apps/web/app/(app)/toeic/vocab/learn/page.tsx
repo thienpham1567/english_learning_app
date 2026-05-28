@@ -104,10 +104,18 @@ function LearnRunner() {
           <div className="text-2xl font-black text-text-primary">Completed!</div>
         </div>
         <div className="flex gap-2 justify-center flex-wrap mb-4">
-          <span className="bg-red-500/10 text-red-600 py-1 px-3 rounded-lg text-sm font-bold">Again: {stats.again}</span>
-          <span className="bg-amber-500/10 text-amber-600 py-1 px-3 rounded-lg text-sm font-bold">Hard: {stats.hard}</span>
-          <span className="bg-emerald-500/10 text-emerald-600 py-1 px-3 rounded-lg text-sm font-bold">Good: {stats.good}</span>
-          <span className="bg-blue-500/10 text-blue-600 py-1 px-3 rounded-lg text-sm font-bold">Easy: {stats.easy}</span>
+          <span className="bg-red-500/10 text-red-600 py-1 px-3 rounded-lg text-sm font-bold">
+            Again: {stats.again}
+          </span>
+          <span className="bg-amber-500/10 text-amber-600 py-1 px-3 rounded-lg text-sm font-bold">
+            Hard: {stats.hard}
+          </span>
+          <span className="bg-emerald-500/10 text-emerald-600 py-1 px-3 rounded-lg text-sm font-bold">
+            Good: {stats.good}
+          </span>
+          <span className="bg-blue-500/10 text-blue-600 py-1 px-3 rounded-lg text-sm font-bold">
+            Easy: {stats.easy}
+          </span>
         </div>
         {roadmapWeek && (
           <a
@@ -137,29 +145,44 @@ function LearnRunner() {
         <span>
           Word {idx + 1} / {total}
         </span>
-        <span className="bg-accent/10 text-accent py-0.5 px-2 inline-block rounded-md font-bold">{current.topic}</span>
+        <span className="bg-accent/10 text-accent py-0.5 px-2 inline-block rounded-md font-bold">
+          {current.topic}
+        </span>
       </div>
-      <div className="h-2 rounded-full bg-border overflow-hidden"><div className="h-full rounded-full bg-accent transition-all duration-500" style={{ width: `${Math.round((idx / total) * 100)}%` }} /></div>
+      <div className="h-2 rounded-full bg-border overflow-hidden">
+        <div
+          className="h-full rounded-full bg-accent transition-all duration-500"
+          style={{ width: `${Math.round((idx / total) * 100)}%` }}
+        />
+      </div>
 
       <Card shadowSize="sm" className="p-6">
         <div className="text-center">
           <div className="text-4xl font-bold">{current.word}</div>
           {current.ipa && (
             <div className="text-text-muted mt-1 font-mono">
-              {current.ipa} <span className="bg-accent/10 text-accent py-0.5 px-2 inline-block rounded-md font-bold font-sans ml-1 text-xs">{current.pos}</span>
+              {current.ipa}{" "}
+              <span className="bg-accent/10 text-accent py-0.5 px-2 inline-block rounded-md font-bold font-sans ml-1 text-xs">
+                {current.pos}
+              </span>
             </div>
           )}
         </div>
 
         {!revealed ? (
           <div className="text-center mt-6">
-            <button className="py-2.5 px-5 rounded-xl border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm hover:translate-y-[-1px] active:translate-y-0 transition-transform" onClick={() => setRevealed(true)}>
+            <button
+              className="py-2.5 px-5 rounded-xl border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm hover:translate-y-[-1px] active:translate-y-0 transition-transform"
+              onClick={() => setRevealed(true)}
+            >
               Show Meaning
             </button>
           </div>
         ) : (
           <div className="mt-4">
-            <div className="text-lg font-medium border-t-2 border-border/10 pt-4">{current.meaningVi}</div>
+            <div className="text-lg font-medium border-t-2 border-border/10 pt-4">
+              {current.meaningVi}
+            </div>
             <div className="text-text-muted mt-1">{current.meaningEn}</div>
             {current.exampleEn && (
               <div className="mt-3 p-3 bg-surface-alt rounded-lg border border-border/10">
@@ -170,16 +193,32 @@ function LearnRunner() {
               </div>
             )}
             <div className="grid gap-2 mt-6" style={{ gridTemplateColumns: "repeat(4, 1fr)" }}>
-              <button className="py-2 px-3 rounded-lg border-2 border-border bg-error text-white font-bold text-xs cursor-pointer shadow-sm hover:translate-y-[-1px] active:translate-y-0 transition-transform" disabled={submitting} onClick={() => submit("again")}>
+              <button
+                className="py-2 px-3 rounded-lg border-2 border-border bg-error text-white font-bold text-xs cursor-pointer shadow-sm hover:translate-y-[-1px] active:translate-y-0 transition-transform"
+                disabled={submitting}
+                onClick={() => submit("again")}
+              >
                 Again
               </button>
-              <button className="py-2 px-3 rounded-lg border-2 border-border bg-warning text-black font-bold text-xs cursor-pointer shadow-sm hover:translate-y-[-1px] active:translate-y-0 transition-transform" disabled={submitting} onClick={() => submit("hard")}>
+              <button
+                className="py-2 px-3 rounded-lg border-2 border-border bg-warning text-black font-bold text-xs cursor-pointer shadow-sm hover:translate-y-[-1px] active:translate-y-0 transition-transform"
+                disabled={submitting}
+                onClick={() => submit("hard")}
+              >
                 Hard
               </button>
-              <button className="py-2 px-3 rounded-lg border-2 border-border bg-success text-white font-bold text-xs cursor-pointer shadow-sm hover:translate-y-[-1px] active:translate-y-0 transition-transform" disabled={submitting} onClick={() => submit("good")}>
+              <button
+                className="py-2 px-3 rounded-lg border-2 border-border bg-success text-white font-bold text-xs cursor-pointer shadow-sm hover:translate-y-[-1px] active:translate-y-0 transition-transform"
+                disabled={submitting}
+                onClick={() => submit("good")}
+              >
                 Good
               </button>
-              <button className="py-2 px-3 rounded-lg border-2 border-border bg-secondary text-white font-bold text-xs cursor-pointer shadow-sm hover:translate-y-[-1px] active:translate-y-0 transition-transform" disabled={submitting} onClick={() => submit("easy")}>
+              <button
+                className="py-2 px-3 rounded-lg border-2 border-border bg-secondary text-white font-bold text-xs cursor-pointer shadow-sm hover:translate-y-[-1px] active:translate-y-0 transition-transform"
+                disabled={submitting}
+                onClick={() => submit("easy")}
+              >
                 Easy
               </button>
             </div>

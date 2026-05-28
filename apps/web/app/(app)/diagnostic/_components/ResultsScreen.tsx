@@ -47,7 +47,11 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
               }}
             />
 
-            <CheckCircle className="anim-scale-in mb-4 mx-auto" size={44} style={{ color: cefrColor }} />
+            <CheckCircle
+              className="anim-scale-in mb-4 mx-auto"
+              size={44}
+              style={{ color: cefrColor }}
+            />
             <h4 className="mb-2.5 text-text-primary font-extrabold text-lg">
               Assessment Completed!
             </h4>
@@ -92,7 +96,9 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
 
             <div className="flex flex-col gap-4">
               {Object.entries(result.skills).map(([skill, skillResult], idx) => {
-                const pct = Math.round((skillResult.correct / Math.max(skillResult.total, 1)) * 100);
+                const pct = Math.round(
+                  (skillResult.correct / Math.max(skillResult.total, 1)) * 100,
+                );
                 const skillColor = CEFR_COLORS[skillResult.cefr] ?? "var(--accent)";
 
                 return (

@@ -62,12 +62,9 @@ export default async function MockTestHubPage() {
                   <Redo className="text-warning" size={20} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <CardTitle className="text-base text-ink">
-                    Resume In-Progress Mock Test
-                  </CardTitle>
+                  <CardTitle className="text-base text-ink">Resume In-Progress Mock Test</CardTitle>
                   <CardDescription className="text-xs mt-1 font-semibold">
-                    Started at{" "}
-                    {new Date(inProgress.startedAt).toLocaleString("en-US")} ·{" "}
+                    Started at {new Date(inProgress.startedAt).toLocaleString("en-US")} ·{" "}
                     {inProgress.questionCount} questions
                   </CardDescription>
                 </div>
@@ -83,10 +80,7 @@ export default async function MockTestHubPage() {
         {/* Test mode cards */}
         <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(280px,1fr))]">
           {/* Full Mock */}
-          <Link
-            href="/toeic/mock-test/runner?mode=full"
-            className="no-underline group"
-          >
+          <Link href="/toeic/mock-test/runner?mode=full" className="no-underline group">
             <Card
               interactive
               shadowSize="sm"
@@ -97,9 +91,7 @@ export default async function MockTestHubPage() {
                   <Trophy className="text-accent" size={20} />
                 </div>
                 <div>
-                  <CardTitle className="text-base text-ink">
-                    Full Mock
-                  </CardTitle>
+                  <CardTitle className="text-base text-ink">Full Mock</CardTitle>
                   <CardDescription className="text-xs font-semibold">
                     194 questions · ~1h54 · Strict timer
                   </CardDescription>
@@ -119,10 +111,7 @@ export default async function MockTestHubPage() {
           </Link>
 
           {/* Mini Mock */}
-          <Link
-            href="/toeic/mock-test/runner?mode=mini"
-            className="no-underline group"
-          >
+          <Link href="/toeic/mock-test/runner?mode=mini" className="no-underline group">
             <Card
               interactive
               shadowSize="sm"
@@ -133,9 +122,7 @@ export default async function MockTestHubPage() {
                   <Clock className="text-emerald-500" size={20} />
                 </div>
                 <div>
-                  <CardTitle className="text-base text-ink">
-                    Mini Mock
-                  </CardTitle>
+                  <CardTitle className="text-base text-ink">Mini Mock</CardTitle>
                   <CardDescription className="text-xs font-semibold">
                     100 questions · ~1h · Daily practice
                   </CardDescription>
@@ -197,9 +184,7 @@ export default async function MockTestHubPage() {
                         <span className="text-lg font-black text-accent font-display tabular-nums">
                           {h.totalScaled ?? "—"}
                         </span>
-                        <span className="text-xs text-text-muted font-bold">
-                          / 990
-                        </span>
+                        <span className="text-xs text-text-muted font-bold">/ 990</span>
                         <ArrowRight
                           size={14}
                           className="text-text-muted group-hover:text-accent group-hover:translate-x-0.5 transition-all"

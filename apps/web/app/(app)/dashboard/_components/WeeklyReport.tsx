@@ -108,114 +108,111 @@ export function WeeklyReport() {
   const { stats, report, insufficient } = data;
 
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-    >
+    <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
       <Card className="p-0 gap-0 overflow-hidden flex flex-col bg-surface shadow">
-      {/* Header */}
-      <div className="px-5 py-4 bg-surface-alt border-b-2 border-border flex items-center gap-2.5">
-        <BarChart3 className="h-4 w-4 text-accent" />
-        <span className="text-xs font-extrabold text-ink font-display tracking-wide">
-          This Week's Learning Analysis
-        </span>
-        <span className="ml-auto text-[9px] font-bold text-text-muted uppercase tracking-widest font-mono">
-          Last 7 Days
-        </span>
-      </div>
+        {/* Header */}
+        <div className="px-5 py-4 bg-surface-alt border-b-2 border-border flex items-center gap-2.5">
+          <BarChart3 className="h-4 w-4 text-accent" />
+          <span className="text-xs font-extrabold text-ink font-display tracking-wide">
+            This Week's Learning Analysis
+          </span>
+          <span className="ml-auto text-[9px] font-bold text-text-muted uppercase tracking-widest font-mono">
+            Last 7 Days
+          </span>
+        </div>
 
-      {/* Quick Stats Floating Grid */}
-      <div className="grid grid-cols-3 gap-2.5 p-5">
-        {[
-          {
-            icon: <Calendar className="h-4 w-4 text-accent" />,
-            value: `${stats.daysActive}/7`,
-            label: "Study Days",
-            bg: "bg-accent-muted",
-          },
-          {
-            icon: <Zap className="h-4 w-4 text-warning fill-warning" />,
-            value: stats.totalXP.toLocaleString(),
-            label: "XP Earned",
-            bg: "bg-warning-bg",
-          },
-          {
-            icon: <Flame className="h-4 w-4 text-fire fill-fire" />,
-            value: stats.currentStreak,
-            label: "Streak",
-            bg: "bg-warning-bg",
-          },
-          {
-            icon: <BookOpen className="h-4 w-4 text-success" />,
-            value: stats.newVocabulary,
-            label: "New Vocabulary",
-            bg: "bg-success-bg",
-          },
-          {
-            icon: <Trophy className="h-4 w-4 text-warning" />,
-            value: stats.avgChallengeScore,
-            label: "Avg Score",
-            bg: "bg-warning-bg",
-          },
-          {
-            icon: <AlertTriangle className="h-4 w-4 text-error" />,
-            value: stats.unresolvedErrors,
-            label: "Errors to Fix",
-            bg: "bg-error-bg",
-          },
-        ].map((s) => (
-          <Card
-            key={s.label}
-            bgType="alt"
-            shadowSize="sm"
-            className="p-3 text-center flex flex-col items-center gap-1.5 cursor-default"
-          >
-            <div
-              className={`w-7 h-7 rounded-md ${s.bg} border-2 border-border flex items-center justify-center shrink-0`}
+        {/* Quick Stats Floating Grid */}
+        <div className="grid grid-cols-3 gap-2.5 p-5">
+          {[
+            {
+              icon: <Calendar className="h-4 w-4 text-accent" />,
+              value: `${stats.daysActive}/7`,
+              label: "Study Days",
+              bg: "bg-accent-muted",
+            },
+            {
+              icon: <Zap className="h-4 w-4 text-warning fill-warning" />,
+              value: stats.totalXP.toLocaleString(),
+              label: "XP Earned",
+              bg: "bg-warning-bg",
+            },
+            {
+              icon: <Flame className="h-4 w-4 text-fire fill-fire" />,
+              value: stats.currentStreak,
+              label: "Streak",
+              bg: "bg-warning-bg",
+            },
+            {
+              icon: <BookOpen className="h-4 w-4 text-success" />,
+              value: stats.newVocabulary,
+              label: "New Vocabulary",
+              bg: "bg-success-bg",
+            },
+            {
+              icon: <Trophy className="h-4 w-4 text-warning" />,
+              value: stats.avgChallengeScore,
+              label: "Avg Score",
+              bg: "bg-warning-bg",
+            },
+            {
+              icon: <AlertTriangle className="h-4 w-4 text-error" />,
+              value: stats.unresolvedErrors,
+              label: "Errors to Fix",
+              bg: "bg-error-bg",
+            },
+          ].map((s) => (
+            <Card
+              key={s.label}
+              bgType="alt"
+              shadowSize="sm"
+              className="p-3 text-center flex flex-col items-center gap-1.5 cursor-default"
             >
-              {s.icon}
-            </div>
-            <div className="text-base font-extrabold text-ink font-mono leading-none">
-              {s.value}
-            </div>
-            <div className="text-[9px] text-text-muted font-bold uppercase tracking-wider leading-none font-display">
-              {s.label}
-            </div>
-          </Card>
-        ))}
-      </div>
-
-      {/* Dashed divider */}
-      <div className="mx-5 border-t-2 border-dashed border-border" />
-
-      {/* AI Report Block */}
-      {report && (
-        <div className="p-5 pt-0">
-          <div
-            className="text-xs md:text-sm leading-relaxed text-text-secondary font-semibold p-4 rounded-lg border-2 border-border bg-surface-alt shadow-[2px_2px_0_var(--shadow-color)]"
-            dangerouslySetInnerHTML={{
-              __html: report
-                .replace(
-                  /\*\*([^*]+)\*\*/g,
-                  '<strong class="text-accent font-extrabold">$1</strong>',
-                )
-                .replace(/\n/g, "<br />"),
-            }}
-          />
+              <div
+                className={`w-7 h-7 rounded-md ${s.bg} border-2 border-border flex items-center justify-center shrink-0`}
+              >
+                {s.icon}
+              </div>
+              <div className="text-base font-extrabold text-ink font-mono leading-none">
+                {s.value}
+              </div>
+              <div className="text-[9px] text-text-muted font-bold uppercase tracking-wider leading-none font-display">
+                {s.label}
+              </div>
+            </Card>
+          ))}
         </div>
-      )}
 
-      {insufficient && (
-        <div className="px-5 py-8 text-center flex flex-col items-center justify-center">
-          <div className="w-10 h-10 rounded-md bg-surface-alt border-2 border-border shadow-[2px_2px_0_var(--shadow-color)] flex items-center justify-center mb-3">
-            <AlertTriangle className="h-5 w-5 text-text-muted" />
+        {/* Dashed divider */}
+        <div className="mx-5 border-t-2 border-dashed border-border" />
+
+        {/* AI Report Block */}
+        {report && (
+          <div className="p-5 pt-0">
+            <div
+              className="text-xs md:text-sm leading-relaxed text-text-secondary font-semibold p-4 rounded-lg border-2 border-border bg-surface-alt shadow-[2px_2px_0_var(--shadow-color)]"
+              dangerouslySetInnerHTML={{
+                __html: report
+                  .replace(
+                    /\*\*([^*]+)\*\*/g,
+                    '<strong class="text-accent font-extrabold">$1</strong>',
+                  )
+                  .replace(/\n/g, "<br />"),
+              }}
+            />
           </div>
-          <div className="text-xs font-bold text-text-secondary">Insufficient learning data</div>
-          <div className="text-[11px] text-text-muted mt-1.5 font-medium max-w-xs leading-relaxed">
-            Keep practicing daily lessons to unlock detailed analysis reports from the AI!
+        )}
+
+        {insufficient && (
+          <div className="px-5 py-8 text-center flex flex-col items-center justify-center">
+            <div className="w-10 h-10 rounded-md bg-surface-alt border-2 border-border shadow-[2px_2px_0_var(--shadow-color)] flex items-center justify-center mb-3">
+              <AlertTriangle className="h-5 w-5 text-text-muted" />
+            </div>
+            <div className="text-xs font-bold text-text-secondary">Insufficient learning data</div>
+            <div className="text-[11px] text-text-muted mt-1.5 font-medium max-w-xs leading-relaxed">
+              Keep practicing daily lessons to unlock detailed analysis reports from the AI!
+            </div>
           </div>
-        </div>
-      )}
+        )}
       </Card>
     </motion.div>
   );

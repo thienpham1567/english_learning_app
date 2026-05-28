@@ -288,10 +288,7 @@ export default function DailyChallengePage() {
       {/* ── Premium Header Banner ── */}
       <div className="px-4 pt-4 shrink-0">
         <div className="max-w-2xl mx-auto">
-          <Card
-            shadowSize="md"
-            className="relative overflow-hidden p-0"
-          >
+          <Card shadowSize="md" className="relative overflow-hidden p-0">
             {/* Top accent gradient */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent via-fire to-xp" />
             {/* Subtle radial glow */}
@@ -336,7 +333,10 @@ export default function DailyChallengePage() {
         <div className="w-full max-w-2xl mx-auto">
           {/* Error banner */}
           {(error || bonus.error) && (
-            <Card shadowSize="sm" className="flex-row gap-3 bg-error-bg p-4 text-xs text-error mb-5 animate-in fade-in duration-200">
+            <Card
+              shadowSize="sm"
+              className="flex-row gap-3 bg-error-bg p-4 text-xs text-error mb-5 animate-in fade-in duration-200"
+            >
               <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{error || bonus.error}</span>
             </Card>
@@ -397,7 +397,10 @@ export default function DailyChallengePage() {
 
               {/* Error retry */}
               {state === "error" && (
-                <Card shadowSize="sm" className="p-8 text-center items-center animate-in fade-in duration-200 max-w-md mx-auto">
+                <Card
+                  shadowSize="sm"
+                  className="p-8 text-center items-center animate-in fade-in duration-200 max-w-md mx-auto"
+                >
                   <AlertTriangle className="h-12 w-12 text-error mb-3" />
                   <h3 className="text-base font-black text-text-primary mb-1 font-display">
                     Unable to Load Challenge

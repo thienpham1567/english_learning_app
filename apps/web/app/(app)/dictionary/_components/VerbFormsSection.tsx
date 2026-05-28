@@ -89,18 +89,18 @@ export function VerbFormsSection({ verbForms }: Props) {
         onClick={() => setOpen((o) => !o)}
         aria-expanded={open}
         aria-controls="verb-forms-grid"
-        className="flex w-full items-center justify-between gap-2 bg-surface border-2 border-border border-l-3 border-l-accent rounded-sm cursor-pointer px-4 py-2.5 transition-all duration-200 hover:bg-surface-hover hover:shadow-sm"
+        className="flex w-full items-center justify-between gap-2 bg-transparent border-none cursor-pointer py-1.5 p-0 transition-all duration-200 hover:opacity-80 text-left"
       >
         <div className="flex items-center gap-2.5">
           <span className="text-[13px] font-black uppercase tracking-[0.12em] text-text-secondary">
             Verb Forms
           </span>
-          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-accent-light text-text-secondary border border-accent/20">
+          <span className="text-[11px] font-bold px-2.5 py-0.5 rounded-full bg-accent-light text-accent-active border border-accent/20">
             {verbForms.length} forms
           </span>
         </div>
         <ChevronDown
-          className={`h-3 w-3 text-text-secondary transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+          className={`h-4 w-4 text-text-secondary transition-transform duration-300 ${open ? "rotate-180" : ""}`}
         />
       </button>
 

@@ -152,7 +152,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                     onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
                     className="mt-2.5 h-[40px] rounded-xl border-2 border-border font-black text-xs cursor-pointer flex items-center justify-center gap-2 bg-accent text-ink shadow-sm hover:translate-y-[-1px] hover:shadow transition-all"
                   >
-                    <LinkIcon className="h-4 w-4" /> 
+                    <LinkIcon className="h-4 w-4" />
                     <span>Search Again</span>
                   </motion.button>
                 </div>
@@ -175,13 +175,17 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                     <div className="flex gap-3.5 bg-surface-alt rounded-xl border-2 border-border p-3.5 shadow-sm">
                       {data.phoneticsUs && (
                         <div className="flex items-center gap-1.5 text-xs text-text-secondary font-bold">
-                          <span className="px-1.5 py-0.5 rounded bg-surface border border-border/60 text-[9px] text-text-muted font-black">US</span>
+                          <span className="px-1.5 py-0.5 rounded bg-surface border border-border/60 text-[9px] text-text-muted font-black">
+                            US
+                          </span>
                           <span className="font-mono">/{data.phoneticsUs}/</span>
                         </div>
                       )}
                       {data.phoneticsUk && (
                         <div className="flex items-center gap-1.5 text-xs text-text-secondary font-bold">
-                          <span className="px-1.5 py-0.5 rounded bg-surface border border-border/60 text-[9px] text-text-muted font-black">UK</span>
+                          <span className="px-1.5 py-0.5 rounded bg-surface border border-border/60 text-[9px] text-text-muted font-black">
+                            UK
+                          </span>
                           <span className="font-mono">/{data.phoneticsUk}/</span>
                         </div>
                       )}
@@ -190,7 +194,9 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
 
                   <div className="flex gap-2 flex-wrap">
                     {levelStyle && (
-                      <span className={`text-[10px] font-black rounded-lg border px-3 py-1 shadow-sm ${levelStyle}`}>
+                      <span
+                        className={`text-[10px] font-black rounded-lg border px-3 py-1 shadow-sm ${levelStyle}`}
+                      >
                         Level: {data.level}
                       </span>
                     )}
@@ -223,7 +229,11 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                             <span className="text-xs italic text-text-secondary font-semibold leading-relaxed">
                               &ldquo;{ex.en}&rdquo;
                             </span>
-                            {ex.vi && <span className="text-[11px] text-text-muted font-bold leading-normal">→ {ex.vi}</span>}
+                            {ex.vi && (
+                              <span className="text-[11px] text-text-muted font-bold leading-normal">
+                                → {ex.vi}
+                              </span>
+                            )}
                           </div>
                         ))}
                       </div>
@@ -234,7 +244,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                     onClick={() => router.push(`/dictionary?q=${encodeURIComponent(query ?? "")}`)}
-                  className="h-[42px] rounded-xl border-2 border-border font-black cursor-pointer flex items-center justify-center gap-1.5 bg-accent text-ink shadow mt-4 mb-2"
+                    className="h-[42px] rounded-xl border-2 border-border font-black cursor-pointer flex items-center justify-center gap-1.5 bg-accent text-ink shadow mt-4 mb-2"
                   >
                     <span>View in Dictionary</span>
                     <ArrowRight className="h-4 w-4 shrink-0" />

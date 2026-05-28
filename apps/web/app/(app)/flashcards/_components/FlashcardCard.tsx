@@ -12,8 +12,8 @@ import { Card } from "@/components/ui/card";
 const LEVEL_COLORS: Record<string, string> = {
   A1: "var(--success)",
   A2: "var(--success)",
-  B1: "var(--accent)",
-  B2: "var(--accent)",
+  B1: "var(--accent-active)",
+  B2: "var(--accent-active)",
   C1: "var(--error)",
   C2: "var(--error)",
 };
@@ -118,7 +118,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                 tts.speak(card.headword);
               }}
               disabled={tts.isLoading || tts.isSpeaking}
-              className="mt-6 inline-flex items-center gap-2 rounded-full text-accent text-[13px] font-bold relative z-[2] py-2 px-5 shadow-sm transition-all duration-200"
+              className="mt-6 inline-flex items-center gap-2 rounded-full text-accent-active text-[13px] font-bold relative z-[2] py-2 px-5 shadow-sm transition-all duration-200"
               style={{
                 border: "1.5px solid color-mix(in srgb, var(--accent) 30%, var(--border))",
                 background: tts.isSpeaking ? "var(--accent-light)" : "var(--surface)",
@@ -144,7 +144,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
             }}
           >
             {/* Vietnamese overview meaning */}
-            <div className="text-center text-xl font-extrabold text-accent font-display mb-4 pb-3 border-b border-dashed border-border">
+            <div className="text-center text-xl font-extrabold text-accent-active font-display mb-4 pb-3 border-b border-dashed border-border">
               {card.overviewVi}
             </div>
 
@@ -170,9 +170,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                         <div className="font-bold text-text-primary leading-normal text-[13.5px]">
                           {ex.en}
                         </div>
-                        <div className="text-xs text-text-muted font-semibold mt-0.5">
-                          {ex.vi}
-                        </div>
+                        <div className="text-xs text-text-muted font-semibold mt-0.5">{ex.vi}</div>
                       </Card>
                     ))}
                   </div>
@@ -222,7 +220,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                   setContextLoading(false);
                 }}
                 disabled={contextLoading}
-                className="mt-4 w-full flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-lg text-accent text-xs font-extrabold transition-all duration-200"
+                className="mt-4 w-full flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-lg text-accent-active text-xs font-extrabold transition-all duration-200"
                 style={{
                   border: "1.5px solid color-mix(in srgb, var(--accent) 20%, var(--border))",
                   background: "var(--accent-light)",
@@ -243,7 +241,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
 
             {contextSentences.length > 0 && (
               <div className="flex flex-col gap-2 mt-4">
-                <span className="text-[11px] font-extrabold uppercase text-accent flex items-center gap-1 tracking-[.1em]">
+                <span className="text-[11px] font-extrabold uppercase text-accent-active flex items-center gap-1 tracking-[.1em]">
                   <Lightbulb /> TOEIC Context Examples
                 </span>
                 {contextSentences.slice(0, 3).map((s, i) => (
@@ -258,14 +256,12 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                       dangerouslySetInnerHTML={{
                         __html: s.en.replace(
                           /\*([^*]+)\*/g,
-                          '<strong style="color: var(--accent); font-weight: 800;">$1</strong>',
+                          '<strong style="color: var(--accent-active); font-weight: 800;">$1</strong>',
                         ),
                       }}
                       className="text-[13px] leading-relaxed text-text-primary"
                     />
-                    <div className="text-text-muted font-semibold mt-1 text-[11.5px]">
-                      {s.vi}
-                    </div>
+                    <div className="text-text-muted font-semibold mt-1 text-[11.5px]">{s.vi}</div>
                   </Card>
                 ))}
               </div>
@@ -306,7 +302,7 @@ const RATINGS = [
     quality: 3,
     label: "Good",
     icon: Smile,
-    color: "var(--accent)",
+    color: "var(--accent-active)",
     bg: "var(--accent-light)",
     border: "color-mix(in srgb, var(--accent) 15%, transparent)",
   },

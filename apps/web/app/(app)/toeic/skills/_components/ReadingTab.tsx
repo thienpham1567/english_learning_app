@@ -33,7 +33,8 @@ const STRATEGIES: StrategyItem[] = [
     id: "part5",
     part: "Part 5",
     title: "Incomplete Sentences",
-    description: "Choose the correct word/phrase to complete the sentence. 30 questions, focused on grammar and vocabulary.",
+    description:
+      "Choose the correct word/phrase to complete the sentence. 30 questions, focused on grammar and vocabulary.",
     tips: [
       "Read the whole sentence before choosing — don't just look at the blank",
       "Determine the part of speech needed (noun/verb/adj/adv) using sentence structure",
@@ -47,7 +48,8 @@ const STRATEGIES: StrategyItem[] = [
     id: "part6",
     part: "Part 6",
     title: "Text Completion",
-    description: "Complete the passages with the correct word/phrase/sentence. 4 passages × 4 questions.",
+    description:
+      "Complete the passages with the correct word/phrase/sentence. 4 passages × 4 questions.",
     tips: [
       "Read the ENTIRE passage first — context is extremely important",
       "Sentence insertion questions: pay attention to linking words and logical flow",

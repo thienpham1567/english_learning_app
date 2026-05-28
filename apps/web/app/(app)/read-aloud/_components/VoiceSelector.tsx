@@ -99,7 +99,10 @@ function VoiceCard({
         </span>
       </div>
 
-      <span className="text-text-muted opacity-50 cursor-help hover:opacity-80 transition-opacity" title={v.description}>
+      <span
+        className="text-text-muted opacity-50 cursor-help hover:opacity-80 transition-opacity"
+        title={v.description}
+      >
         <Info size={14} onClick={(e) => e.stopPropagation()} />
       </span>
 

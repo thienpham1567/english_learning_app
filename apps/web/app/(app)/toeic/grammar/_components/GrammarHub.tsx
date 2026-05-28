@@ -41,10 +41,14 @@ export function GrammarHub({ skills, mistakeCount }: { skills: SkillRow[]; mista
           </div>
           <div className="text-text-muted text-[13px] mt-1.5">Focus on your weakest skill</div>
           {weakest3[0] && (
-            <span className="mt-2 bg-accent/10 text-accent py-0.5 px-2 inline-block">{getSkillLabel(weakest3[0].skill as ToeicSkill)}</span>
+            <span className="mt-2 bg-accent/10 text-accent py-0.5 px-2 inline-block">
+              {getSkillLabel(weakest3[0].skill as ToeicSkill)}
+            </span>
           )}
         </Card>
-        <Card shadowSize="sm" className={`p-4 ${mistakeCount > 0 ? "cursor-pointer hover:shadow-md" : ""}`}
+        <Card
+          shadowSize="sm"
+          className={`p-4 ${mistakeCount > 0 ? "cursor-pointer hover:shadow-md" : ""}`}
           onClick={mistakeCount > 0 ? startMistake : undefined}
           style={mistakeCount === 0 ? { opacity: 0.6, cursor: "not-allowed" } : undefined}
         >
@@ -90,10 +94,18 @@ export function GrammarHub({ skills, mistakeCount }: { skills: SkillRow[]; mista
             >
               <div>
                 <div className="font-medium">{getSkillLabel(s.skill as ToeicSkill)}</div>
-                <div className="h-2 rounded-full bg-border overflow-hidden"><div className="h-full rounded-full bg-accent transition-all duration-500" style={{ width: `${Math.round(s.proficiency * 100)}%` }} /></div>
+                <div className="h-2 rounded-full bg-border overflow-hidden">
+                  <div
+                    className="h-full rounded-full bg-accent transition-all duration-500"
+                    style={{ width: `${Math.round(s.proficiency * 100)}%` }}
+                  />
+                </div>
               </div>
               <div className="text-xs text-text-muted">{s.pool} questions</div>
-              <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" onClick={() => startDrill(s.skill)}>
+              <button
+                className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"
+                onClick={() => startDrill(s.skill)}
+              >
                 Drill
               </button>
             </div>

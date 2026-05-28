@@ -11,12 +11,37 @@ const LEVEL_META: Record<
   CefrLevel,
   { label: string; twBg: string; desc: string; darkText: boolean }
 > = {
-  A1: { label: "Beginner", twBg: "bg-[var(--success)]", desc: "Short sentences, basic words", darkText: true },
-  A2: { label: "Elementary", twBg: "bg-[var(--success)]", desc: "Simple conversations", darkText: true },
+  A1: {
+    label: "Beginner",
+    twBg: "bg-[var(--success)]",
+    desc: "Short sentences, basic words",
+    darkText: true,
+  },
+  A2: {
+    label: "Elementary",
+    twBg: "bg-[var(--success)]",
+    desc: "Simple conversations",
+    darkText: true,
+  },
   B1: { label: "Intermediate", twBg: "bg-accent", desc: "Familiar topics", darkText: true },
-  B2: { label: "Upper-Int", twBg: "bg-[var(--secondary)]", desc: "Detailed discussions", darkText: false },
-  C1: { label: "Advanced", twBg: "bg-[var(--tertiary)]", desc: "In-depth analysis", darkText: false },
-  C2: { label: "Proficiency", twBg: "bg-[var(--error)]", desc: "Complex language", darkText: false },
+  B2: {
+    label: "Upper-Int",
+    twBg: "bg-[var(--secondary)]",
+    desc: "Detailed discussions",
+    darkText: false,
+  },
+  C1: {
+    label: "Advanced",
+    twBg: "bg-[var(--tertiary)]",
+    desc: "In-depth analysis",
+    darkText: false,
+  },
+  C2: {
+    label: "Proficiency",
+    twBg: "bg-[var(--error)]",
+    desc: "Complex language",
+    darkText: false,
+  },
 };
 
 const LEVEL_ACCENT: Record<CefrLevel, string> = {
@@ -29,9 +54,21 @@ const LEVEL_ACCENT: Record<CefrLevel, string> = {
 };
 
 const TYPE_META: Record<ExerciseType, { label: string; icon: React.ReactNode; desc: string }> = {
-  comprehension: { label: "Comprehension", icon: <Target size={18} />, desc: "Answer multiple choice questions" },
-  dictation: { label: "Dictation", icon: <ClipboardList size={18} />, desc: "Transcribe the audio text" },
-  fill_blanks: { label: "Fill in Blanks", icon: <Pencil size={18} />, desc: "Fill in missing words in blanks" },
+  comprehension: {
+    label: "Comprehension",
+    icon: <Target size={18} />,
+    desc: "Answer multiple choice questions",
+  },
+  dictation: {
+    label: "Dictation",
+    icon: <ClipboardList size={18} />,
+    desc: "Transcribe the audio text",
+  },
+  fill_blanks: {
+    label: "Fill in Blanks",
+    icon: <Pencil size={18} />,
+    desc: "Fill in missing words in blanks",
+  },
 };
 
 type Props = {
@@ -138,9 +175,7 @@ export function LevelSelector({ onStart, isLoading, recommendedLevel }: Props) {
               >
                 <span
                   className={`grid w-[42px] h-[42px] shrink-0 rounded-lg place-items-center transition-all duration-150 ${
-                    isSelected
-                      ? "bg-accent text-ink shadow-sm"
-                      : "bg-bg-deep text-text-muted"
+                    isSelected ? "bg-accent text-ink shadow-sm" : "bg-bg-deep text-text-muted"
                   }`}
                 >
                   {meta.icon}

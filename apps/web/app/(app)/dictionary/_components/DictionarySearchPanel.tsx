@@ -120,7 +120,10 @@ export function DictionarySearchPanel({
     <section className="flex flex-col gap-5">
       {/* Word of the Day */}
       <WordOfTheDay onSelect={onSubmit} />
-      <Card shadowSize="md" className="anim-fade-left dictionary-search-panel relative bg-gradient-to-br from-surface to-background overflow-hidden min-w-0">
+      <Card
+        shadowSize="md"
+        className="anim-fade-left dictionary-search-panel relative bg-gradient-to-br from-surface to-background overflow-hidden min-w-0"
+      >
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-text-secondary">
             <Star className="h-3.5 w-3.5 fill-current text-accent-hover" />

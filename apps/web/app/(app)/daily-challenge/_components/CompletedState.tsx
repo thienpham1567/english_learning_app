@@ -49,7 +49,12 @@ function MiniScoreRing({
   const size = 100;
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="block transform -rotate-90">
+    <svg
+      width={size}
+      height={size}
+      viewBox={`0 0 ${size} ${size}`}
+      className="block transform -rotate-90"
+    >
       <defs>
         <linearGradient id="scoreRingGrad" x1="0%" y1="0%" x2="100%" y2="100%">
           <stop offset="0%" stopColor="var(--accent)" />
@@ -98,18 +103,18 @@ function WeeklyChart({ scores }: { scores: { day: string; score: number }[] }) {
         </span>
       </div>
 
-      <svg width="100%" viewBox={`0 0 ${chartWidth} ${chartHeight + 22}`} className="block overflow-visible">
+      <svg
+        width="100%"
+        viewBox={`0 0 ${chartWidth} ${chartHeight + 22}`}
+        className="block overflow-visible"
+      >
         {scores.map((s, i) => {
           const barHeight = (s.score / maxScore) * chartHeight;
           const x = i * (barWidth + barGap);
           const y = chartHeight - barHeight;
           const pct = s.score / maxScore;
           const fill =
-            pct >= 0.8
-              ? "var(--success)"
-              : pct >= 0.5
-                ? "var(--accent)"
-                : "var(--error)";
+            pct >= 0.8 ? "var(--success)" : pct >= 0.5 ? "var(--accent)" : "var(--error)";
 
           return (
             <g key={i} className="group/bar">
@@ -248,9 +253,7 @@ export function CompletedState({
         }`}
       >
         {isGood && (
-          <div
-            className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_60%_at_80%_0%,rgba(255,255,255,0.15)_0%,transparent_70%)]"
-          />
+          <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_80%_60%_at_80%_0%,rgba(255,255,255,0.15)_0%,transparent_70%)]" />
         )}
 
         {/* Score ring */}
@@ -289,10 +292,12 @@ export function CompletedState({
             </>
           )}
         </h2>
-        
-        <p className={`text-xs md:text-sm font-semibold max-w-sm mb-4.5 leading-relaxed ${
-          isGood ? "text-white/80" : "text-text-secondary"
-        }`}>
+
+        <p
+          className={`text-xs md:text-sm font-semibold max-w-sm mb-4.5 leading-relaxed ${
+            isGood ? "text-white/80" : "text-text-secondary"
+          }`}
+        >
           {isGood
             ? "You have successfully completed today's tough questions. Keep it up!"
             : "Congratulations on completing today's exercises. Consistency is key to success!"}
@@ -314,9 +319,7 @@ export function CompletedState({
           onClick={onStartBonus}
           className="w-full rounded-2xl py-4.5 px-5 cursor-pointer flex flex-col sm:flex-row items-center gap-4 bg-surface border-2 border-dashed border-accent shadow-sm text-left group"
         >
-          <div
-            className="w-12 h-12 rounded-xl grid shrink-0 bg-amber-500 place-items-center shadow-sm text-white"
-          >
+          <div className="w-12 h-12 rounded-xl grid shrink-0 bg-amber-500 place-items-center shadow-sm text-white">
             <Zap size={20} className="fill-current group-hover:animate-bounce" />
           </div>
           <div className="flex-1">
@@ -333,7 +336,10 @@ export function CompletedState({
       )}
 
       {bonusLoading && (
-        <Card shadowSize="sm" className="w-full py-4.5 px-5 flex-row items-center justify-center gap-2.5 text-text-secondary text-xs font-black">
+        <Card
+          shadowSize="sm"
+          className="w-full py-4.5 px-5 flex-row items-center justify-center gap-2.5 text-text-secondary text-xs font-black"
+        >
           <Loader2 className="animate-spin text-accent h-4 w-4" />
           <span>Initializing Bonus Challenge...</span>
         </Card>

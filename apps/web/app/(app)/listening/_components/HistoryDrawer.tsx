@@ -150,7 +150,9 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
               <div className="flex gap-2">
                 <select
                   value={history.level ?? "all"}
-                  onChange={(e) => history.setLevel(e.target.value === "all" ? null : e.target.value)}
+                  onChange={(e) =>
+                    history.setLevel(e.target.value === "all" ? null : e.target.value)
+                  }
                   className="flex-1 h-8 rounded-lg border-2 border-border bg-surface-alt px-2.5 text-xs font-bold text-ink outline-none focus-visible:shadow-sm transition-all cursor-pointer"
                 >
                   <option value="all">All Levels</option>
@@ -190,7 +192,9 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
                 <div className="text-center py-10">
                   <History size={40} className="text-text-muted mx-auto mb-3 opacity-30" />
                   <p className="text-sm text-text-muted font-medium">No listening history yet</p>
-                  <p className="text-xs text-text-muted mt-1">Complete exercises to see your history here</p>
+                  <p className="text-xs text-text-muted mt-1">
+                    Complete exercises to see your history here
+                  </p>
                 </div>
               )}
 
@@ -217,7 +221,9 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
                   disabled={history.page <= 1}
                   whileHover={history.page > 1 ? { x: -2 } : {}}
                   className={`p-1.5 rounded-lg border-2 border-border ${
-                    history.page <= 1 ? "text-border cursor-not-allowed" : "text-text-primary cursor-pointer hover:bg-surface-hover"
+                    history.page <= 1
+                      ? "text-border cursor-not-allowed"
+                      : "text-text-primary cursor-pointer hover:bg-surface-hover"
                   }`}
                 >
                   <ChevronLeft size={14} />
@@ -230,7 +236,9 @@ export function HistoryDrawer({ open, onClose, onReplay }: Props) {
                   disabled={history.page >= totalPages}
                   whileHover={history.page < totalPages ? { x: 2 } : {}}
                   className={`p-1.5 rounded-lg border-2 border-border ${
-                    history.page >= totalPages ? "text-border cursor-not-allowed" : "text-text-primary cursor-pointer hover:bg-surface-hover"
+                    history.page >= totalPages
+                      ? "text-border cursor-not-allowed"
+                      : "text-text-primary cursor-pointer hover:bg-surface-hover"
                   }`}
                 >
                   <ChevronRight size={14} />
@@ -264,7 +272,9 @@ function HistoryCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.04, type: "spring", stiffness: 350, damping: 30 }}
       className={`flex items-center gap-3 border-2 border-border bg-surface py-3 px-3.5 rounded-lg transition-all duration-100 ${
-        onReplay ? "cursor-pointer hover:bg-surface-hover hover:shadow-sm hover:-translate-y-0.5" : "cursor-default"
+        onReplay
+          ? "cursor-pointer hover:bg-surface-hover hover:shadow-sm hover:-translate-y-0.5"
+          : "cursor-default"
       }`}
     >
       {/* Mode icon */}

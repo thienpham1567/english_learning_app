@@ -49,12 +49,7 @@ export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number 
               href={`/toeic/vocab/learn?pack=${encodeURIComponent(p.topic)}&mode=new`}
               style={{ textDecoration: "none" }}
             >
-              <Card
-                interactive
-                shadowSize="sm"
-                size="sm"
-                className="h-full hover:border-accent/30"
-              >
+              <Card interactive shadowSize="sm" size="sm" className="h-full hover:border-accent/30">
                 <div className="flex items-center gap-2 text-base font-bold text-text-primary">
                   <BookOpen size={16} className="text-accent" />
                   <span className="flex-1">{p.label}</span>
@@ -72,9 +67,10 @@ export function VocabHub({ packs, dueCount }: { packs: Pack[]; dueCount: number 
                     className="h-full rounded-full transition-all duration-500"
                     style={{
                       width: `${pct}%`,
-                      background: pct >= 100
-                        ? "var(--success)"
-                        : "linear-gradient(90deg, var(--accent), var(--secondary))",
+                      background:
+                        pct >= 100
+                          ? "var(--success)"
+                          : "linear-gradient(90deg, var(--accent), var(--secondary))",
                     }}
                   />
                 </div>

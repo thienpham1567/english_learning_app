@@ -92,7 +92,13 @@ export const SRS_GRADE_OPTIONS: GradeOption[] = [
     color: "var(--warning, var(--warning))",
     desc: "Partially remembered",
   },
-  { grade: 4, label: "Remembered", icon: Smile, color: "var(--success)", desc: "Recalled with effort" },
+  {
+    grade: 4,
+    label: "Remembered",
+    icon: Smile,
+    color: "var(--success)",
+    desc: "Recalled with effort",
+  },
   { grade: 5, label: "Easy", icon: Target, color: "var(--accent)", desc: "Perfectly easy recall" },
 ];
 

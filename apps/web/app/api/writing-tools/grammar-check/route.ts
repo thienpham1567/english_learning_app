@@ -102,8 +102,5 @@ export async function POST(request: Request) {
     }
   }
 
-  return Response.json(
-    { error: "Unable to check grammar. Please try again." },
-    { status: 502 },
-  );
+  return Response.json({ error: "Unable to check grammar. Please try again." }, { status: 502 });
 }

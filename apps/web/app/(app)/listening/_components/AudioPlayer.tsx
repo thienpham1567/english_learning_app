@@ -401,7 +401,9 @@ export function AudioPlayer({
             {markerAPos != null && markerBPos != null && (
               <div
                 className={`absolute h-full rounded-sm transition-colors duration-200 ${
-                  looping ? "bg-[color-mix(in_srgb,var(--success)_30%,transparent)]" : "bg-[color-mix(in_srgb,var(--info)_20%,transparent)]"
+                  looping
+                    ? "bg-[color-mix(in_srgb,var(--success)_30%,transparent)]"
+                    : "bg-[color-mix(in_srgb,var(--info)_20%,transparent)]"
                 }`}
                 style={{ left: `${markerAPos}%`, width: `${markerBPos - markerAPos}%`, top: 0 }}
               />

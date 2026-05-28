@@ -69,12 +69,14 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
               <div className="text-[13px] mt-1">
                 {cheat!.tabSwitches > 0 && (
                   <div>
-                    • Tab switches: {cheat!.tabSwitches} times (total {Math.round(cheat!.longBlurMs / 1000)}s)
+                    • Tab switches: {cheat!.tabSwitches} times (total{" "}
+                    {Math.round(cheat!.longBlurMs / 1000)}s)
                   </div>
                 )}
                 {cheat!.pasteAttempts > 0 && <div>• Pastes: {cheat!.pasteAttempts} times</div>}
                 <div className="mt-1 text-text-muted">
-                  Score is still recorded, but you should minimize this to simulate a real exam environment.
+                  Score is still recorded, but you should minimize this to simulate a real exam
+                  environment.
                 </div>
               </div>
             </div>
@@ -87,7 +89,9 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
             </div>
             <div className="text-text-muted">/ 990</div>
             <div className="mt-2">
-              <span className="bg-amber-500/15 text-amber-600 py-0.5 px-2 inline-block">{bandLabel(total)}</span>
+              <span className="bg-amber-500/15 text-amber-600 py-0.5 px-2 inline-block">
+                {bandLabel(total)}
+              </span>
             </div>
           </div>
           <div className="grid gap-3 mt-4" style={{ gridTemplateColumns: "repeat(2, 1fr)" }}>
@@ -96,7 +100,8 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
               <div className="text-[28px] font-bold">{attempt.scaledListening ?? "—"}</div>
               <div className="text-xs text-text-muted">
                 {attempt.rawListening}/
-                {(byPart[2]?.total ?? 0) + (byPart[3]?.total ?? 0) + (byPart[4]?.total ?? 0)} correct
+                {(byPart[2]?.total ?? 0) + (byPart[3]?.total ?? 0) + (byPart[4]?.total ?? 0)}{" "}
+                correct
               </div>
             </div>
             <div className="text-center p-3">
@@ -104,7 +109,8 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
               <div className="text-[28px] font-bold">{attempt.scaledReading ?? "—"}</div>
               <div className="text-xs text-text-muted">
                 {attempt.rawReading}/
-                {(byPart[5]?.total ?? 0) + (byPart[6]?.total ?? 0) + (byPart[7]?.total ?? 0)} correct
+                {(byPart[5]?.total ?? 0) + (byPart[6]?.total ?? 0) + (byPart[7]?.total ?? 0)}{" "}
+                correct
               </div>
             </div>
           </div>

@@ -15,13 +15,27 @@ import { useHistory } from "./_hooks/useHistory";
 import { Headphones, Mic, MessageSquare } from "lucide-react";
 import * as m from "motion/react-client";
 
-
 type AppMode = "listen" | "shadow" | "dialogue";
 
 const MODE_TABS = [
-  { key: "listen" as AppMode, label: "Listen", Icon: Headphones, desc: "Listen to native speakers read passages" },
-  { key: "shadow" as AppMode, label: "Shadowing", Icon: Mic, desc: "Read along and get real-time feedback" },
-  { key: "dialogue" as AppMode, label: "Dialogue", Icon: MessageSquare, desc: "Interactive roleplay conversation practice" },
+  {
+    key: "listen" as AppMode,
+    label: "Listen",
+    Icon: Headphones,
+    desc: "Listen to native speakers read passages",
+  },
+  {
+    key: "shadow" as AppMode,
+    label: "Shadowing",
+    Icon: Mic,
+    desc: "Read along and get real-time feedback",
+  },
+  {
+    key: "dialogue" as AppMode,
+    label: "Dialogue",
+    Icon: MessageSquare,
+    desc: "Interactive roleplay conversation practice",
+  },
 ];
 
 export default function ReadAloudPage() {
@@ -97,7 +111,9 @@ export default function ReadAloudPage() {
                   <div className={`mode-label text-sm ${isActive ? "font-black" : "font-bold"}`}>
                     {tab.label}
                   </div>
-                  <div className={`mode-desc text-[10px] truncate ${isActive ? "opacity-75" : "opacity-50"}`}>
+                  <div
+                    className={`mode-desc text-[10px] truncate ${isActive ? "opacity-75" : "opacity-50"}`}
+                  >
                     {tab.desc}
                   </div>
                 </div>
@@ -175,4 +191,3 @@ export default function ReadAloudPage() {
     </div>
   );
 }
-

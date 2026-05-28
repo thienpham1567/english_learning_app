@@ -1,6 +1,5 @@
 "use client";
 
-
 import {
   AlertTriangle,
   ArrowLeft,
@@ -242,7 +241,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         onClick={onBack}
-        className="items-center gap-2 py-2 px-4 border-2 border-border rounded-lg bg-surface text-accent cursor-pointer text-[13px] font-bold mb-4"
+        className="items-center gap-2 py-2 px-4 border-2 border-border rounded-lg bg-surface text-accent-active cursor-pointer text-[13px] font-bold mb-4"
         style={{ display: "inline-flex", boxShadow: "var(--shadow-sm)", transition: "all 0.15s" }}
       >
         <ArrowLeft /> Lesson List
@@ -255,9 +254,9 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           className="text-center rounded-xl bg-surface"
           style={{ padding: "72px 24px" }}
         >
-          <Loader2 className="animate-spin text-accent" size={38} />
+          <Loader2 className="animate-spin text-accent-active" size={38} />
           <p className="text-text-secondary mt-5 font-bold" style={{ fontSize: 14.5 }}>
-            Generating lesson: <strong className="text-accent">{topicTitle}</strong>
+            Generating lesson: <strong className="text-accent-active">{topicTitle}</strong>
           </p>
           <p className="text-text-muted m-0 font-medium" style={{ fontSize: 12.5 }}>
             AI is analyzing concepts and compiling practice questions...
@@ -309,77 +308,77 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   "linear-gradient(135deg, color-mix(in srgb, var(--accent) 6%, var(--surface)), var(--surface))",
               }}
             >
-            {/* Top accent gradient bar */}
-            <div
-              className="absolute w-full h-[3px]"
-              style={{
-                left: 0,
-                top: 0,
-                background:
-                  "linear-gradient(90deg, var(--accent), var(--secondary), var(--success))",
-              }}
-            />
-            {/* Decorative glow */}
-            <div
-              className="absolute w-[180px] h-[180px] rounded-full"
-              style={{
-                top: "-30%",
-                right: "-10%",
-                background: "color-mix(in srgb, var(--accent) 4%, transparent)",
-                pointerEvents: "none",
-              }}
-            />
-
-            <div className="flex items-start gap-3.5 relative">
-              {/* Icon badge */}
+              {/* Top accent gradient bar */}
               <div
-                className="w-[46px] h-[46px] grid shrink-0"
+                className="absolute w-full h-[3px]"
                 style={{
-                  borderRadius: 14,
+                  left: 0,
+                  top: 0,
                   background:
-                    "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 75%, var(--secondary)))",
-                  placeItems: "center",
-                  boxShadow: "0 4px 14px var(--accent-muted)",
+                    "linear-gradient(90deg, var(--accent), var(--secondary), var(--success))",
                 }}
-              >
-                <BookOpen size={20} className="text-[#fff]" />
-              </div>
-              <div className="flex-1">
-                <h2
-                  className="m-0 text-xl font-black text-text-primary font-display"
-                  style={{ lineHeight: 1.3 }}
-                >
-                  {lesson.title}
-                </h2>
-                <p
-                  className="text-sm text-text-secondary font-medium leading-normal"
-                  style={{ margin: "4px 0 0" }}
-                >
-                  {lesson.titleVi}
-                </p>
-              </div>
-              <div className="flex gap-1.5 shrink-0 items-center">
-                <span
-                  className="text-[11px] font-extrabold text-accent rounded-full"
+              />
+              {/* Decorative glow */}
+              <div
+                className="absolute w-[180px] h-[180px] rounded-full"
+                style={{
+                  top: "-30%",
+                  right: "-10%",
+                  background: "color-mix(in srgb, var(--accent) 4%, transparent)",
+                  pointerEvents: "none",
+                }}
+              />
+
+              <div className="flex items-start gap-3.5 relative">
+                {/* Icon badge */}
+                <div
+                  className="w-[46px] h-[46px] grid shrink-0"
                   style={{
-                    background: "var(--accent-light)",
-                    border: "1px solid color-mix(in srgb, var(--accent) 20%, transparent)",
-                    padding: "4px 12px",
+                    borderRadius: 14,
+                    background:
+                      "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 75%, var(--secondary)))",
+                    placeItems: "center",
+                    boxShadow: "0 4px 14px var(--accent-muted)",
                   }}
                 >
-                  {level}
-                </span>
-                <m.button
-                  whileHover={{ scale: 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                  onClick={() => generateLesson(true)}
-                  className="border-2 border-border rounded-lg bg-surface text-text-secondary cursor-pointer text-xs py-1.5 px-3.5 font-bold"
-                  style={{ boxShadow: "var(--shadow-sm)" }}
-                >
-                  <RefreshCw /> Regenerate
-                </m.button>
+                  <BookOpen size={20} className="text-[#fff]" />
+                </div>
+                <div className="flex-1">
+                  <h2
+                    className="m-0 text-xl font-black text-text-primary font-display"
+                    style={{ lineHeight: 1.3 }}
+                  >
+                    {lesson.title}
+                  </h2>
+                  <p
+                    className="text-sm text-text-secondary font-medium leading-normal"
+                    style={{ margin: "4px 0 0" }}
+                  >
+                    {lesson.titleVi}
+                  </p>
+                </div>
+                <div className="flex gap-1.5 shrink-0 items-center">
+                  <span
+                    className="text-[11px] font-extrabold text-accent-active rounded-full"
+                    style={{
+                      background: "var(--accent-light)",
+                      border: "1px solid color-mix(in srgb, var(--accent) 20%, transparent)",
+                      padding: "4px 12px",
+                    }}
+                  >
+                    {level}
+                  </span>
+                  <m.button
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    onClick={() => generateLesson(true)}
+                    className="border-2 border-border rounded-lg bg-surface text-text-secondary cursor-pointer text-xs py-1.5 px-3.5 font-bold"
+                    style={{ boxShadow: "var(--shadow-sm)" }}
+                  >
+                    <RefreshCw /> Regenerate
+                  </m.button>
+                </div>
               </div>
-            </div>
             </Card>
           </m.div>
 
@@ -400,39 +399,36 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   boxShadow: "0 8px 24px color-mix(in srgb, var(--accent) 8%, transparent)",
                 }}
               >
-              {/* Decorative dots */}
-              <div className="absolute flex" style={{ top: 8, right: 12, gap: 3, opacity: 0.3 }}>
-                <div
-                  className="w-[5px] h-[5px] rounded-full"
-                  style={{ background: "var(--accent)" }}
-                />
-                <div
-                  className="w-[5px] h-[5px] rounded-full"
-                  style={{ background: "var(--secondary)" }}
-                />
-                <div
-                  className="w-[5px] h-[5px] rounded-full"
-                  style={{ background: "var(--success)" }}
-                />
-              </div>
-              <span className="text-[11px] text-accent font-extrabold uppercase tracking-widest flex items-center justify-center gap-1.5 mb-2.5">
-                <Calculator /> Core Structure
-              </span>
-              <p
-                className="font-black text-accent m-0 font-mono"
-                style={{ fontSize: 19, wordBreak: "break-all", letterSpacing: "0.02em" }}
-              >
-                {lesson.formula}
-              </p>
-            </Card>
+                {/* Decorative dots */}
+                <div className="absolute flex" style={{ top: 8, right: 12, gap: 3, opacity: 0.3 }}>
+                  <div
+                    className="w-[5px] h-[5px] rounded-full"
+                    style={{ background: "var(--accent)" }}
+                  />
+                  <div
+                    className="w-[5px] h-[5px] rounded-full"
+                    style={{ background: "var(--secondary)" }}
+                  />
+                  <div
+                    className="w-[5px] h-[5px] rounded-full"
+                    style={{ background: "var(--success)" }}
+                  />
+                </div>
+                <span className="text-[11px] text-accent-active font-extrabold uppercase tracking-widest flex items-center justify-center gap-1.5 mb-2.5">
+                  <Calculator /> Core Structure
+                </span>
+                <p
+                  className="font-black text-accent-active m-0 font-mono"
+                  style={{ fontSize: 19, wordBreak: "break-all", letterSpacing: "0.02em" }}
+                >
+                  {lesson.formula}
+                </p>
+              </Card>
             </m.div>
           )}
 
           {/* Explanation Card */}
-          <Card
-            shadowSize="sm"
-            className="rounded-xl bg-surface"
-          >
+          <Card shadowSize="sm" className="rounded-xl bg-surface">
             <span
               className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5 mb-3"
               style={{ fontSize: 11.5 }}
@@ -449,7 +445,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               className="py-3 px-4 rounded-lg bg-surface-alt"
               style={{ marginTop: 14, borderLeft: "3.5px solid var(--accent)" }}
             >
-              <span className="font-extrabold text-accent" style={{ fontSize: 11.5 }}>
+              <span className="font-extrabold text-accent-active" style={{ fontSize: 11.5 }}>
                 📝 Explanation
               </span>
               <p
@@ -463,10 +459,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
           {/* Usage Notes Card */}
           {lesson.usageNotes && lesson.usageNotes.length > 0 && (
-            <Card
-              shadowSize="sm"
-              className="rounded-xl bg-surface"
-            >
+            <Card shadowSize="sm" className="rounded-xl bg-surface">
               <span
                 className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5"
                 style={{ fontSize: 11.5, marginBottom: 14 }}
@@ -481,7 +474,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                     style={{ padding: "12px 14px" }}
                   >
                     <div
-                      className="w-[26px] h-[26px] rounded-lg text-accent grid text-xs font-black shrink-0"
+                      className="w-[26px] h-[26px] rounded-lg text-accent-active grid text-xs font-black shrink-0"
                       style={{ background: "var(--accent-light)", placeItems: "center" }}
                     >
                       {idx + 1}
@@ -540,10 +533,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
           {/* Time Signals Card */}
           {lesson.timeSignals && lesson.timeSignals.length > 0 && (
-            <Card
-              shadowSize="sm"
-              className="rounded-xl bg-surface"
-            >
+            <Card shadowSize="sm" className="rounded-xl bg-surface">
               <span
                 className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5"
                 style={{ fontSize: 11.5, marginBottom: 14 }}
@@ -565,10 +555,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
           {/* Confusion Pairs Card */}
           {lesson.confusionPairs && lesson.confusionPairs.length > 0 && (
-            <Card
-              shadowSize="sm"
-              className="rounded-xl bg-surface"
-            >
+            <Card shadowSize="sm" className="rounded-xl bg-surface">
               <span
                 className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5"
                 style={{ fontSize: 11.5, marginBottom: 14 }}
@@ -577,10 +564,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               </span>
               <div className="flex flex-col gap-3">
                 {lesson.confusionPairs.map((pair, idx) => (
-                  <div
-                     key={idx}
-                     className="rounded-lg border-2 border-border overflow-hidden"
-                  >
+                  <div key={idx} className="rounded-lg border-2 border-border overflow-hidden">
                     {/* Pair header */}
                     <div className="grid" style={{ gridTemplateColumns: "1fr 1fr", gap: 0 }}>
                       <div
@@ -604,7 +588,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                         </p>
                       </div>
                       <div style={{ padding: "10px 14px", background: "rgba(139, 92, 246, 0.06)" }}>
-                        <div className="text-xs font-extrabold text-accent mb-1">
+                        <div className="text-xs font-extrabold text-accent-active mb-1">
                           {pair.structureB}
                         </div>
                         <p
@@ -633,10 +617,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
           {/* Examples Card */}
           {lesson.examples && lesson.examples.length > 0 && (
-            <Card
-              shadowSize="sm"
-              className="rounded-xl bg-surface"
-            >
+            <Card shadowSize="sm" className="rounded-xl bg-surface">
               <span
                 className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5"
                 style={{ fontSize: 11.5, marginBottom: 14 }}
@@ -660,8 +641,8 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                             {part}
                             {j < arr.length - 1 && (
                               <strong
-                                className="text-accent"
-                                style={{ borderBottom: "1.5px solid var(--accent)" }}
+                                className="text-accent-active"
+                                style={{ borderBottom: "1.5px solid var(--accent-active)" }}
                               >
                                 {ex.highlight}
                               </strong>
@@ -674,7 +655,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                         whileTap={{ scale: 0.95 }}
                         onClick={() => speakText(ex.en)}
                         disabled={isSpeaking || isTtsLoading}
-                        className="border-none bg-surface rounded-lg w-[28px] h-[28px] grid text-accent"
+                        className="border-none bg-surface rounded-lg w-[28px] h-[28px] grid text-accent-active"
                         style={{
                           placeItems: "center",
                           cursor: isSpeaking || isTtsLoading ? "not-allowed" : "pointer",
@@ -699,10 +680,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
           {/* Common Mistakes Card */}
           {lesson.commonMistakes && lesson.commonMistakes.length > 0 && (
-            <Card
-              shadowSize="sm"
-              className="rounded-xl bg-surface"
-            >
+            <Card shadowSize="sm" className="rounded-xl bg-surface">
               <span
                 className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5"
                 style={{ fontSize: 11.5, marginBottom: 14 }}
@@ -740,7 +718,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                       className="mt-2.5 text-text-primary font-medium flex items-start gap-1.5"
                       style={{ fontSize: 12.5 }}
                     >
-                      <Languages className="text-accent" style={{ marginTop: 3 }} />
+                      <Languages className="text-accent-active" style={{ marginTop: 3 }} />
                       <span>{mItem.noteEn}</span>
                     </div>
                   )}
@@ -798,7 +776,9 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 pointerEvents: "none",
               }}
             />
-            <span className="relative">🚀 Start Practice — {lesson.exercises.length} questions</span>
+            <span className="relative">
+              🚀 Start Practice — {lesson.exercises.length} questions
+            </span>
             <ChevronRight className="relative text-sm" />
           </m.button>
         </div>
@@ -816,7 +796,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               <span>
                 Question {exerciseIdx + 1} of {lesson.exercises.length}
               </span>
-              <span className="text-accent">
+              <span className="text-accent-active">
                 {Math.round(((exerciseIdx + 1) / lesson.exercises.length) * 100)}%
               </span>
             </div>
@@ -873,7 +853,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             {/* Tags */}
             <div className="flex items-center gap-2" style={{ marginBottom: 14 }}>
               <span
-                className="text-[10.5px] font-extrabold text-accent rounded-md"
+                className="text-[10.5px] font-extrabold text-accent-active rounded-md"
                 style={{ background: "var(--accent-light)", padding: "2px 8px" }}
               >
                 {currentExercise.type === "multiple_choice"
@@ -966,7 +946,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   } else if (isSelected) {
                     bg = "var(--accent-light)";
                     border = "1.5px solid var(--accent)";
-                    color = "var(--accent)";
+                    color = "var(--accent-active)";
                   }
 
                   return (
@@ -1110,7 +1090,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               >
                 <div className="flex items-center justify-between mb-2">
                   <span
-                    className="font-extrabold text-accent uppercase tracking-wider"
+                    className="font-extrabold text-accent-active uppercase tracking-wider"
                     style={{ fontSize: 11.5 }}
                   >
                     <Lightbulb /> Explanation & Rationale
@@ -1185,213 +1165,212 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           const medal =
             scorePct >= 90 ? "🥇" : scorePct >= 70 ? "🥈" : scorePct >= 50 ? "🥉" : "🎓";
           return (
-            <m.div
-              initial={{ opacity: 0, scale: 0.97 }}
-              animate={{ opacity: 1, scale: 1 }}
-            >
+            <m.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}>
               <Card
                 shadowSize="lg"
                 className="rounded-xl bg-surface text-center relative overflow-hidden p-6 md:p-10"
               >
-              {/* Background glowing circle */}
-              <div
-                className="absolute w-[220px] h-[220px] rounded-full"
-                style={{
-                  left: "50%",
-                  top: "25%",
-                  transform: "translate(-50%, -50%)",
-                  background: "radial-gradient(circle, var(--success) 10%, transparent 70%)",
-                  pointerEvents: "none",
-                }}
-              />
-
-              <div className="relative inline-block mb-5">
-                <Trophy size={58} className="text-success" />
-                <Star
-                  className="absolute text-xl text-xp"
-                  style={{ top: -4, right: -12, filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.15))" }}
-                />
-              </div>
-
-              <h2 className="mb-2 text-2xl font-black text-text-primary font-display">
-                {medal} Lesson Completed!
-              </h2>
-              <p
-                className="text-text-secondary mb-4 font-medium leading-normal"
-                style={{ fontSize: 14.5 }}
-              >
-                Topic: <span className="text-accent font-bold">{lesson.title}</span>
-                <br />
-                Accuracy Score:{" "}
-                <strong className="text-emerald-500">
-                  {correctCount}/{lesson.exercises.length}
-                </strong>{" "}
-                ({scorePct}%)
-              </p>
-
-              {xpAwarded > 0 && (
+                {/* Background glowing circle */}
                 <div
-                  className="items-center gap-1.5 rounded-full text-accent text-base font-black mb-6"
+                  className="absolute w-[220px] h-[220px] rounded-full"
                   style={{
-                    display: "inline-flex",
-                    padding: "8px 20px",
-                    background: "var(--accent-light)",
-                    boxShadow: "var(--shadow-sm)",
+                    left: "50%",
+                    top: "25%",
+                    transform: "translate(-50%, -50%)",
+                    background: "radial-gradient(circle, var(--success) 10%, transparent 70%)",
+                    pointerEvents: "none",
                   }}
-                >
-                  <Star /> +{xpAwarded} XP earned
-                </div>
-              )}
+                />
 
-              {alreadyCompleted && (
-                <p
-                  className="text-text-muted text-xs font-semibold"
-                  style={{ margin: "-12px 0 24px" }}
-                >
-                  You have already earned XP for this lesson.
-                </p>
-              )}
-
-              {/* Roadmap auto-completion badge */}
-              {(() => {
-                const unitId = getUnitIdForGrammarTopic(topicId);
-                const mapping = unitId ? GRAMMAR_TOPIC_TO_WEEK[topicId] : null;
-                if (!unitId || !mapping) return null;
-                return (
-                  <m.div
-                    initial={{ opacity: 0, y: 8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.3 }}
-                    className="mb-5"
-                  >
-                    <a
-                      href={`/roadmap/week/${mapping.weekNumber}`}
-                      className="no-underline inline-flex items-center gap-2 rounded-xl border-2 border-emerald-500/30 bg-emerald-500/8 px-4 py-2.5 text-xs font-bold text-emerald-600 hover:bg-emerald-500/12 transition-colors"
-                    >
-                      <CircleCheckBig size={14} />
-                      <span>
-                        Roadmap Week {mapping.weekNumber} — unit auto-completed ✓
-                      </span>
-                    </a>
-                  </m.div>
-                );
-              })()}
-
-              {/* Error review logs */}
-              {wrongAnswers.length > 0 && (
-                <div className="mt-2 mb-6 text-left">
-                  <button
-                    onClick={() => setShowReview((v) => !v)}
-                    className="flex items-center gap-2 w-full py-3 px-4 rounded-lg cursor-pointer text-[13px] font-extrabold text-destructive"
+                <div className="relative inline-block mb-5">
+                  <Trophy size={58} className="text-success" />
+                  <Star
+                    className="absolute text-xl text-xp"
                     style={{
-                      border: "1.5px solid color-mix(in srgb, var(--error) 20%, var(--border))",
-                      background: "rgba(239, 68, 68, 0.04)",
+                      top: -4,
+                      right: -12,
+                      filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.15))",
+                    }}
+                  />
+                </div>
+
+                <h2 className="mb-2 text-2xl font-black text-text-primary font-display">
+                  {medal} Lesson Completed!
+                </h2>
+                <p
+                  className="text-text-secondary mb-4 font-medium leading-normal"
+                  style={{ fontSize: 14.5 }}
+                >
+                  Topic: <span className="text-accent-active font-bold">{lesson.title}</span>
+                  <br />
+                  Accuracy Score:{" "}
+                  <strong className="text-emerald-500">
+                    {correctCount}/{lesson.exercises.length}
+                  </strong>{" "}
+                  ({scorePct}%)
+                </p>
+
+                {xpAwarded > 0 && (
+                  <div
+                    className="items-center gap-1.5 rounded-full text-accent-active text-base font-black mb-6"
+                    style={{
+                      display: "inline-flex",
+                      padding: "8px 20px",
+                      background: "var(--accent-light)",
+                      boxShadow: "var(--shadow-sm)",
                     }}
                   >
-                    <AlertTriangle /> Review {wrongAnswers.length} saved incorrect items ·{" "}
-                    {showReview ? "Collapse" : "Expand"}
-                  </button>
-                  {showReview && (
+                    <Star /> +{xpAwarded} XP earned
+                  </div>
+                )}
+
+                {alreadyCompleted && (
+                  <p
+                    className="text-text-muted text-xs font-semibold"
+                    style={{ margin: "-12px 0 24px" }}
+                  >
+                    You have already earned XP for this lesson.
+                  </p>
+                )}
+
+                {/* Roadmap auto-completion badge */}
+                {(() => {
+                  const unitId = getUnitIdForGrammarTopic(topicId);
+                  const mapping = unitId ? GRAMMAR_TOPIC_TO_WEEK[topicId] : null;
+                  if (!unitId || !mapping) return null;
+                  return (
                     <m.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      className="flex flex-col gap-2 mt-2 overflow-hidden"
+                      initial={{ opacity: 0, y: 8 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.3 }}
+                      className="mb-5"
                     >
-                      {wrongAnswers.map((wItem, idx) => (
-                        <div
-                          key={idx}
-                          className="rounded-lg bg-surface-alt border-2 border-border"
-                          style={{ padding: 14 }}
-                        >
-                          <p
-                            className="mb-2 font-bold text-text-primary"
-                            style={{ fontSize: 13.5 }}
-                          >
-                            {wItem.questionStem}
-                          </p>
-                          <div
-                            className="flex items-center gap-1.5 text-destructive font-bold"
-                            style={{ fontSize: 12.5 }}
-                          >
-                            <XCircle /> Your Choice: {wItem.userAnswer}
-                          </div>
-                          <div
-                            className="flex items-center gap-1.5 text-emerald-500 font-bold mt-1"
-                            style={{ fontSize: 12.5 }}
-                          >
-                            <CircleCheckBig /> Correct Answer: {wItem.correctAnswer}
-                          </div>
-                          {wItem.explanationVi && (
-                            <div className="mt-2 p-2 bg-surface rounded-md text-xs text-text-muted font-medium">
-                              <Lightbulb className="text-accent mr-1" />
-                              {wItem.explanationVi}
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                      <a
+                        href={`/roadmap/week/${mapping.weekNumber}`}
+                        className="no-underline inline-flex items-center gap-2 rounded-xl border-2 border-emerald-500/30 bg-emerald-500/8 px-4 py-2.5 text-xs font-bold text-emerald-600 hover:bg-emerald-500/12 transition-colors"
+                      >
+                        <CircleCheckBig size={14} />
+                        <span>Roadmap Week {mapping.weekNumber} — unit auto-completed ✓</span>
+                      </a>
                     </m.div>
-                  )}
+                  );
+                })()}
+
+                {/* Error review logs */}
+                {wrongAnswers.length > 0 && (
+                  <div className="mt-2 mb-6 text-left">
+                    <button
+                      onClick={() => setShowReview((v) => !v)}
+                      className="flex items-center gap-2 w-full py-3 px-4 rounded-lg cursor-pointer text-[13px] font-extrabold text-destructive"
+                      style={{
+                        border: "1.5px solid color-mix(in srgb, var(--error) 20%, var(--border))",
+                        background: "rgba(239, 68, 68, 0.04)",
+                      }}
+                    >
+                      <AlertTriangle /> Review {wrongAnswers.length} saved incorrect items ·{" "}
+                      {showReview ? "Collapse" : "Expand"}
+                    </button>
+                    {showReview && (
+                      <m.div
+                        initial={{ opacity: 0, height: 0 }}
+                        animate={{ opacity: 1, height: "auto" }}
+                        className="flex flex-col gap-2 mt-2 overflow-hidden"
+                      >
+                        {wrongAnswers.map((wItem, idx) => (
+                          <div
+                            key={idx}
+                            className="rounded-lg bg-surface-alt border-2 border-border"
+                            style={{ padding: 14 }}
+                          >
+                            <p
+                              className="mb-2 font-bold text-text-primary"
+                              style={{ fontSize: 13.5 }}
+                            >
+                              {wItem.questionStem}
+                            </p>
+                            <div
+                              className="flex items-center gap-1.5 text-destructive font-bold"
+                              style={{ fontSize: 12.5 }}
+                            >
+                              <XCircle /> Your Choice: {wItem.userAnswer}
+                            </div>
+                            <div
+                              className="flex items-center gap-1.5 text-emerald-500 font-bold mt-1"
+                              style={{ fontSize: 12.5 }}
+                            >
+                              <CircleCheckBig /> Correct Answer: {wItem.correctAnswer}
+                            </div>
+                            {wItem.explanationVi && (
+                              <div className="mt-2 p-2 bg-surface rounded-md text-xs text-text-muted font-medium">
+                                <Lightbulb className="text-accent mr-1" />
+                                {wItem.explanationVi}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </m.div>
+                    )}
+                  </div>
+                )}
+
+                {/* Actions button */}
+                <div className="flex gap-2.5 justify-center flex-wrap">
+                  <m.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={onBack}
+                    className="rounded-lg bg-surface text-text-primary cursor-pointer font-extrabold"
+                    style={{
+                      padding: "11px 22px",
+                      border: "1.5px solid var(--border)",
+                      fontSize: 13.5,
+                      boxShadow: "var(--shadow-sm)",
+                    }}
+                  >
+                    <ArrowLeft /> Back
+                  </m.button>
+
+                  <m.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => {
+                      setState("exercises");
+                      setExerciseIdx(0);
+                      setCorrectCount(0);
+                      setCombo(0);
+                      setAnswers([]);
+                      setStartedAt(Date.now());
+                      resetExerciseInput();
+                      setShowReview(false);
+                    }}
+                    className="rounded-lg text-accent-active cursor-pointer font-extrabold"
+                    style={{
+                      padding: "11px 22px",
+                      border: "1.5px solid var(--accent)",
+                      background: "var(--accent-light)",
+                      fontSize: 13.5,
+                      boxShadow: "var(--shadow-sm)",
+                    }}
+                  >
+                    <RefreshCw /> Retry Practice
+                  </m.button>
+
+                  <m.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    onClick={() => router.push("/grammar-quiz")}
+                    className="rounded-lg border-none cursor-pointer font-extrabold"
+                    style={{
+                      padding: "11px 22px",
+                      background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+                      color: "var(--text-on-accent)",
+                      fontSize: 13.5,
+                      boxShadow: "0 2px 8px var(--accent-muted)",
+                    }}
+                  >
+                    Review Quiz
+                  </m.button>
                 </div>
-              )}
-
-              {/* Actions button */}
-              <div className="flex gap-2.5 justify-center flex-wrap">
-                <m.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={onBack}
-                  className="rounded-lg bg-surface text-text-primary cursor-pointer font-extrabold"
-                  style={{
-                    padding: "11px 22px",
-                    border: "1.5px solid var(--border)",
-                    fontSize: 13.5,
-                    boxShadow: "var(--shadow-sm)",
-                  }}
-                >
-                  <ArrowLeft /> Back
-                </m.button>
-
-                <m.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => {
-                    setState("exercises");
-                    setExerciseIdx(0);
-                    setCorrectCount(0);
-                    setCombo(0);
-                    setAnswers([]);
-                    setStartedAt(Date.now());
-                    resetExerciseInput();
-                    setShowReview(false);
-                  }}
-                  className="rounded-lg text-accent cursor-pointer font-extrabold"
-                  style={{
-                    padding: "11px 22px",
-                    border: "1.5px solid var(--accent)",
-                    background: "var(--accent-light)",
-                    fontSize: 13.5,
-                    boxShadow: "var(--shadow-sm)",
-                  }}
-                >
-                  <RefreshCw /> Retry Practice
-                </m.button>
-
-                <m.button
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => router.push("/grammar-quiz")}
-                  className="rounded-lg border-none cursor-pointer font-extrabold"
-                  style={{
-                    padding: "11px 22px",
-                    background: "linear-gradient(135deg, var(--accent), var(--secondary))",
-                    color: "var(--text-on-accent)",
-                    fontSize: 13.5,
-                    boxShadow: "0 2px 8px var(--accent-muted)",
-                  }}
-                >
-                  Review Quiz
-                </m.button>
-              </div>
               </Card>
             </m.div>
           );

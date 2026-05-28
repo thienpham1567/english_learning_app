@@ -398,9 +398,7 @@ export default function EssayScorePage() {
         {state === "scoring" && (
           <div className="text-center" style={{ padding: 48 }}>
             <Loader2 className="animate-spin text-accent" size={36} />
-            <p className="text-text-secondary mt-4 text-sm">
-              Scoring essay ({wordCount} words)...
-            </p>
+            <p className="text-text-secondary mt-4 text-sm">Scoring essay ({wordCount} words)...</p>
             <p className="text-text-secondary text-xs">This process may take 10–20 seconds</p>
           </div>
         )}
@@ -415,13 +413,24 @@ export default function EssayScorePage() {
             >
               <div className="relative w-[100px] h-[100px] mx-auto">
                 <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-                  <circle cx="50" cy="50" r="42" fill="none" stroke="var(--border)" strokeWidth="8" />
                   <circle
-                    cx="50" cy="50" r="42" fill="none"
-                    stroke={scoreColor(result.overall)} strokeWidth="8"
+                    cx="50"
+                    cy="50"
+                    r="42"
+                    fill="none"
+                    stroke="var(--border)"
+                    strokeWidth="8"
+                  />
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="42"
+                    fill="none"
+                    stroke={scoreColor(result.overall)}
+                    strokeWidth="8"
                     strokeLinecap="round"
                     strokeDasharray={`${2 * Math.PI * 42}`}
-                    strokeDashoffset={`${2 * Math.PI * 42 * (1 - (result.overall / maxScore))}`}
+                    strokeDashoffset={`${2 * Math.PI * 42 * (1 - result.overall / maxScore)}`}
                     className="transition-all duration-700"
                   />
                 </svg>
@@ -537,7 +546,11 @@ export default function EssayScorePage() {
                 </p>
                 <div className="flex gap-1.5">
                   {Object.entries(CATEGORY_COLORS).map(([cat, color]) => (
-                    <span key={cat} className="text-[9px] bg-gray-500/10 text-gray-600 py-0.5 px-2 inline-block" style={{ borderColor: color, color }}>
+                    <span
+                      key={cat}
+                      className="text-[9px] bg-gray-500/10 text-gray-600 py-0.5 px-2 inline-block"
+                      style={{ borderColor: color, color }}
+                    >
                       {cat}
                     </span>
                   ))}

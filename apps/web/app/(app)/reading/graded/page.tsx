@@ -114,10 +114,7 @@ export default function GradedReaderPage() {
               >
                 GRADED READER
               </span>
-              <h3
-                className="m-0 font-display italic"
-                style={{ color: "var(--text-on-accent)" }}
-              >
+              <h3 className="m-0 font-display italic" style={{ color: "var(--text-on-accent)" }}>
                 Read by CEFR Level
               </h3>
             </div>

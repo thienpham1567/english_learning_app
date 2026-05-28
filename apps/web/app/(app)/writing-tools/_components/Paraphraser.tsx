@@ -36,7 +36,12 @@ type ModeInfo = {
 };
 
 const MODES: ModeInfo[] = [
-  { key: "standard", label: "Standard", description: "Rewrite with new vocabulary", icon: FileText },
+  {
+    key: "standard",
+    label: "Standard",
+    description: "Rewrite with new vocabulary",
+    icon: FileText,
+  },
   { key: "fluency", label: "Fluency", description: "Improve natural flow", icon: Wind },
   { key: "formal", label: "Formal", description: "Professional style", icon: Briefcase },
   { key: "simple", label: "Simple", description: "Easy to understand vocabulary", icon: Check },
@@ -187,15 +192,11 @@ function ChangesPanel({ changes }: { changes: ParaphraseResponse["changes"] }) {
               className="text-[13px] py-2 px-3 rounded-lg bg-surface-alt leading-relaxed border-l-[3px] border-l-accent"
             >
               <div>
-                <span className="text-text-muted line-through">
-                  {change.original}
-                </span>
+                <span className="text-text-muted line-through">{change.original}</span>
                 {" → "}
                 <span className="text-emerald-500 font-bold">{change.replacement}</span>
               </div>
-              <div className="text-text-secondary text-xs mt-0.5">
-                {change.reason}
-              </div>
+              <div className="text-text-secondary text-xs mt-0.5">{change.reason}</div>
               {change.definitionVi && (
                 <div className="text-accent text-xs italic flex items-center gap-1 mt-0.5">
                   <span>Definition:</span> {change.definitionVi}
@@ -267,9 +268,7 @@ export function Paraphraser() {
     <div className="flex flex-col gap-4">
       {/* Mode pills */}
       <div>
-        <span className="text-xs font-bold text-text-secondary mb-2 block">
-          Paraphrase Mode
-        </span>
+        <span className="text-xs font-bold text-text-secondary mb-2 block">Paraphrase Mode</span>
         <div className="flex gap-1.5 pb-1 overflow-x-auto scrollbar-none">
           {MODES.map((m) => {
             const active = mode === m.key;
@@ -457,7 +456,11 @@ export function Paraphraser() {
 
       {/* Error message */}
       {error && (
-        <Card shadowSize="none" size="sm" className="bg-error-bg border-error/30 text-destructive text-[13px] font-bold">
+        <Card
+          shadowSize="none"
+          size="sm"
+          className="bg-error-bg border-error/30 text-destructive text-[13px] font-bold"
+        >
           {error}
         </Card>
       )}

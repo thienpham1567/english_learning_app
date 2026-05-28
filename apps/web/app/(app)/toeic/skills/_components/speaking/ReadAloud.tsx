@@ -80,7 +80,8 @@ export function ReadAloud() {
             </p>
           </div>
           <p className="text-xs text-text-muted font-bold text-center leading-relaxed">
-            Read the passage above aloud. Pay attention to clear pronunciation and natural intonation.
+            Read the passage above aloud. Pay attention to clear pronunciation and natural
+            intonation.
           </p>
           <button
             type="button"

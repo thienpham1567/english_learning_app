@@ -107,16 +107,21 @@ export function SessionSummary({
             Session Completed!
           </h3>
           <p className="text-sm text-text-secondary font-medium m-0 z-[1]">
-            You successfully reviewed <span className="text-accent font-bold">{totalReviewed}</span>{" "}
-            vocabulary cards today.
+            You successfully reviewed{" "}
+            <span className="text-accent-active font-bold">{totalReviewed}</span> vocabulary cards
+            today.
           </p>
         </Card>
 
         {/* Stats Grid cards */}
         <div className="flex gap-3 w-full">
           {[
-            { label: "Reviewed", value: totalReviewed, color: "var(--accent)" },
-            { label: "Average Quality", value: `${averageQuality.toFixed(1)}/5`, color: "var(--xp)" },
+            { label: "Reviewed", value: totalReviewed, color: "var(--accent-active)" },
+            {
+              label: "Average Quality",
+              value: `${averageQuality.toFixed(1)}/5`,
+              color: "var(--xp)",
+            },
             {
               label: "Forgot",
               value: forgottenCount,
@@ -152,7 +157,7 @@ export function SessionSummary({
           >
             <Card shadowSize="sm" className="bg-surface py-4.5 px-5 rounded-xl gap-4">
               <span className="text-[13px] font-extrabold text-text-primary flex items-center gap-1.5">
-                <BarChart3 className="text-accent" />
+                <BarChart3 className="text-accent-active" />
                 Retention Distribution
               </span>
               <div className="flex gap-3">
@@ -172,7 +177,9 @@ export function SessionSummary({
                         />
                       </div>
                       <span className="text-[11px] font-bold text-text-primary">{count}</span>
-                      <span className="text-[11px] text-text-muted font-semibold">{item.label}</span>
+                      <span className="text-[11px] text-text-muted font-semibold">
+                        {item.label}
+                      </span>
                     </div>
                   );
                 })}
@@ -207,7 +214,7 @@ export function SessionSummary({
                   Complete today's challenge to maintain your streak!
                 </p>
               </div>
-              <ChevronRight className="text-xs text-accent" />
+              <ChevronRight className="text-xs text-accent-active" />
             </Card>
           </m.button>
         )}

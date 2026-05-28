@@ -83,9 +83,7 @@ export default async function ToeicReviewPage() {
                 />
               </div>
               <div>
-                <CardTitle className="text-sm text-ink">
-                  TOEIC Incorrect Questions
-                </CardTitle>
+                <CardTitle className="text-sm text-ink">TOEIC Incorrect Questions</CardTitle>
                 <CardDescription className="text-[11px] font-semibold">
                   Part 5/6/7 questions you previously got wrong
                 </CardDescription>
@@ -97,10 +95,7 @@ export default async function ToeicReviewPage() {
             </div>
 
             {toeicErrorIds.length > 0 && (
-              <Link
-                href="/toeic/grammar/drill?mode=mistake&count=20"
-                className="no-underline"
-              >
+              <Link href="/toeic/grammar/drill?mode=mistake&count=20" className="no-underline">
                 <div className="inline-flex items-center gap-2 rounded-xl bg-error hover:bg-error/90 text-white px-4 py-2.5 text-xs font-black cursor-pointer transition-colors shadow-sm">
                   <RefreshCw size={13} />
                   Drill Now
@@ -131,9 +126,7 @@ export default async function ToeicReviewPage() {
                 />
               </div>
               <div>
-                <CardTitle className="text-sm text-ink">
-                  Vocabulary to Review
-                </CardTitle>
+                <CardTitle className="text-sm text-ink">Vocabulary to Review</CardTitle>
                 <CardDescription className="text-[11px] font-semibold">
                   TOEIC words due for Spaced Repetition (SRS)
                 </CardDescription>
@@ -145,10 +138,7 @@ export default async function ToeicReviewPage() {
             </div>
 
             {flashcardDue.length > 0 && (
-              <Link
-                href="/toeic/vocab/learn?mode=review"
-                className="no-underline"
-              >
+              <Link href="/toeic/vocab/learn?mode=review" className="no-underline">
                 <div className="inline-flex items-center gap-2 rounded-xl bg-accent hover:bg-accent/90 text-ink px-4 py-2.5 text-xs font-black cursor-pointer transition-colors shadow-sm">
                   <BookOpenText size={13} />
                   Review Now
@@ -172,9 +162,7 @@ export default async function ToeicReviewPage() {
                 <div className="w-14 h-14 rounded-2xl bg-surface-alt border-2 border-border grid place-items-center mb-3">
                   <RefreshCw className="text-text-muted" size={24} />
                 </div>
-                <p className="text-sm font-bold text-text-secondary mb-1">
-                  No review activity yet
-                </p>
+                <p className="text-sm font-bold text-text-secondary mb-1">No review activity yet</p>
                 <p className="text-xs text-text-muted font-medium">
                   Review errors and vocabulary to see activity here.
                 </p>

@@ -22,8 +22,8 @@ export const GRAMMAR_TOPIC_TO_WEEK: Record<string, { weekNumber: number; day: st
   "pos-compound-nouns": { weekNumber: 3, day: "mon" },
 
   // Week 4: Determiners & Pronouns
-  "articles": { weekNumber: 4, day: "mon" },
-  "quantifiers": { weekNumber: 4, day: "mon" },
+  articles: { weekNumber: 4, day: "mon" },
+  quantifiers: { weekNumber: 4, day: "mon" },
   "both-either-neither": { weekNumber: 4, day: "mon" },
   "pron-personal-possessive": { weekNumber: 4, day: "mon" },
   "pron-reflexive": { weekNumber: 4, day: "mon" },
@@ -48,7 +48,7 @@ export const GRAMMAR_TOPIC_TO_WEEK: Record<string, { weekNumber: number; day: st
   "third-conditional": { weekNumber: 9, day: "mon" },
   "passive-simple": { weekNumber: 9, day: "mon" },
   "passive-perfect": { weekNumber: 9, day: "mon" },
-  "causative": { weekNumber: 9, day: "mon" },
+  causative: { weekNumber: 9, day: "mon" },
   "passive-modals": { weekNumber: 9, day: "mon" },
 
   // Week 10: Gerunds, Infinitives & Participles

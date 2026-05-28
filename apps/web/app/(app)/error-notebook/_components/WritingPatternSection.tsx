@@ -368,7 +368,8 @@ export function WritingPatternSection() {
 
               {state === "done" && (
                 <div className="px-4 py-2 border-t-2 border-border bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] text-xs text-success font-medium">
-                  <CheckCircle className="h-3 w-3 inline mr-1.5" /> Quiz completed — questions saved to error notebook for future review.
+                  <CheckCircle className="h-3 w-3 inline mr-1.5" /> Quiz completed — questions saved
+                  to error notebook for future review.
                 </div>
               )}
             </div>

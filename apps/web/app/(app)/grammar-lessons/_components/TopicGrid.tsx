@@ -117,9 +117,7 @@ export function TopicGrid({
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.04, type: "spring", stiffness: 300, damping: 25 }}
             className={`rounded-2xl bg-surface overflow-hidden border-2 transition-all duration-200 ${
-              isExpanded
-                ? "border-accent/30 shadow-md"
-                : "border-border shadow-sm hover:shadow-md"
+              isExpanded ? "border-accent/30 shadow-md" : "border-border shadow-sm hover:shadow-md"
             }`}
           >
             {/* Category header button */}
@@ -153,7 +151,10 @@ export function TopicGrid({
                   {(() => {
                     const weeks = getCategoryRoadmapWeeks(cat.topics.map((t) => t.id));
                     if (weeks.length === 0) return null;
-                    const label = weeks.length === 1 ? `W${weeks[0]}` : `W${weeks[0]}-${weeks[weeks.length - 1]}`;
+                    const label =
+                      weeks.length === 1
+                        ? `W${weeks[0]}`
+                        : `W${weeks[0]}-${weeks[weeks.length - 1]}`;
                     return (
                       <span className="text-[8px] font-black rounded-md px-1.5 py-px bg-accent/10 text-accent border border-accent/15 shrink-0 uppercase tracking-wider">
                         📍 {label}

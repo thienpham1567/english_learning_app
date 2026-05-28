@@ -19,9 +19,7 @@ export function PWAInstallBanner() {
       <Download className="text-xl shrink-0" />
       <div className="flex-1 min-w-0">
         <div className="text-sm font-bold">Install TOEIC Master</div>
-        <div className="text-xs opacity-85">
-          Faster access
-        </div>
+        <div className="text-xs opacity-85">Faster access</div>
       </div>
       <button
         onClick={install}

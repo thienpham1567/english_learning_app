@@ -54,12 +54,10 @@ export default async function ToeicSpeakingPage() {
                   <Mic className="text-accent" size={24} />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <CardTitle className="text-lg text-ink">
-                    Start Speaking Test
-                  </CardTitle>
+                  <CardTitle className="text-lg text-ink">Start Speaking Test</CardTitle>
                   <CardDescription className="text-xs text-text-secondary mt-1.5 leading-relaxed font-semibold">
-                    Q1-2 Read Aloud · Q3-4 Describe a Picture · Q5-7 Respond to
-                    Questions · Q8-10 Respond using Information · Q11 Opinion
+                    Q1-2 Read Aloud · Q3-4 Describe a Picture · Q5-7 Respond to Questions · Q8-10
+                    Respond using Information · Q11 Opinion
                   </CardDescription>
                   <div className="flex flex-wrap gap-1.5 mt-3">
                     <span className="text-[10px] font-extrabold rounded-lg bg-amber-500/10 text-amber-600 border border-amber-500/20 px-2 py-0.5">
@@ -135,9 +133,7 @@ export default async function ToeicSpeakingPage() {
                         <span className="text-lg font-black text-accent font-display tabular-nums">
                           {h.scaledScore ?? "—"}
                         </span>
-                        <span className="text-xs text-text-muted font-bold">
-                          / 200
-                        </span>
+                        <span className="text-xs text-text-muted font-bold">/ 200</span>
                         <ArrowRight
                           size={14}
                           className="text-text-muted group-hover:text-accent group-hover:translate-x-0.5 transition-all"

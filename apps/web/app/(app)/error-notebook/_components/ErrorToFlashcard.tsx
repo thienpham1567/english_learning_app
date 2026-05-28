@@ -1,6 +1,15 @@
 "use client";
 
-import { ArrowRight, Check, CreditCard, Lightbulb, Loader2, Sparkles, Volume2, X } from "lucide-react";
+import {
+  ArrowRight,
+  Check,
+  CreditCard,
+  Lightbulb,
+  Loader2,
+  Sparkles,
+  Volume2,
+  X,
+} from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { useCallback, useState } from "react";
@@ -72,9 +81,7 @@ export function ErrorToFlashcard({ errorId }: ErrorToFlashcardProps) {
         </m.button>
       )}
 
-      {error && (
-        <p className="text-xs text-error font-semibold mt-2">{error}</p>
-      )}
+      {error && <p className="text-xs text-error font-semibold mt-2">{error}</p>}
 
       {/* Loading */}
       {state === "loading" && (
@@ -111,7 +118,9 @@ export function ErrorToFlashcard({ errorId }: ErrorToFlashcardProps) {
             <div className="p-4 flex flex-col gap-3">
               {/* Front */}
               <div>
-                <span className="text-[9px] font-extrabold text-text-muted uppercase tracking-widest">Front</span>
+                <span className="text-[9px] font-extrabold text-text-muted uppercase tracking-widest">
+                  Front
+                </span>
                 <div className="text-sm font-bold text-ink mt-1 leading-relaxed flex items-start gap-2">
                   <span className="flex-1">{card.front}</span>
                   <button
@@ -126,7 +135,9 @@ export function ErrorToFlashcard({ errorId }: ErrorToFlashcardProps) {
 
               {/* Back */}
               <div>
-                <span className="text-[9px] font-extrabold text-text-muted uppercase tracking-widest">Back</span>
+                <span className="text-[9px] font-extrabold text-text-muted uppercase tracking-widest">
+                  Back
+                </span>
                 <p className="text-[13px] text-text-secondary font-medium mt-1 leading-relaxed m-0">
                   {card.back}
                 </p>
@@ -134,13 +145,13 @@ export function ErrorToFlashcard({ errorId }: ErrorToFlashcardProps) {
 
               {/* Example */}
               <div className="px-3 py-2.5 rounded-lg bg-surface-alt border border-border">
-                <span className="text-[9px] font-extrabold text-accent uppercase tracking-widest">Example</span>
+                <span className="text-[9px] font-extrabold text-accent uppercase tracking-widest">
+                  Example
+                </span>
                 <p className="text-[13px] text-ink font-semibold mt-1 m-0 leading-relaxed">
                   {card.example}
                 </p>
-                <p className="text-[11px] text-text-muted font-medium mt-1 m-0">
-                  {card.exampleVi}
-                </p>
+                <p className="text-[11px] text-text-muted font-medium mt-1 m-0">{card.exampleVi}</p>
               </div>
 
               {/* Tip */}
@@ -185,8 +196,13 @@ export function ErrorToFlashcard({ errorId }: ErrorToFlashcardProps) {
           className="mt-3 flex items-center gap-2 px-4 py-3 rounded-xl border-2 border-emerald-500/30 bg-emerald-500/8 text-xs font-bold text-emerald-600"
         >
           <Check size={14} />
-          <span className="flex-1">Flashcard saved! It will appear in your next flashcard session.</span>
-          <a href="/flashcards" className="no-underline text-accent font-extrabold flex items-center gap-1 hover:underline">
+          <span className="flex-1">
+            Flashcard saved! It will appear in your next flashcard session.
+          </span>
+          <a
+            href="/flashcards"
+            className="no-underline text-accent font-extrabold flex items-center gap-1 hover:underline"
+          >
             Go <ArrowRight size={12} />
           </a>
         </m.div>

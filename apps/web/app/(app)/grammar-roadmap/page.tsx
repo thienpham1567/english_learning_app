@@ -200,13 +200,17 @@ export default function GrammarRoadmapPage() {
               <div className="relative w-[90px] h-[90px] shrink-0">
                 <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
                   <circle
-                    cx="50" cy="50" r="42"
+                    cx="50"
+                    cy="50"
+                    r="42"
                     fill="none"
                     stroke="var(--border)"
                     strokeWidth="8"
                   />
                   <circle
-                    cx="50" cy="50" r="42"
+                    cx="50"
+                    cy="50"
+                    r="42"
                     fill="none"
                     stroke="var(--accent)"
                     strokeWidth="8"
@@ -223,7 +227,9 @@ export default function GrammarRoadmapPage() {
 
               {/* Stats */}
               <div className="flex-1 min-w-[200px]">
-                <div className="text-lg font-black text-ink font-display mb-1">Overall Progress</div>
+                <div className="text-lg font-black text-ink font-display mb-1">
+                  Overall Progress
+                </div>
                 <div className="flex gap-4 flex-wrap mb-3">
                   <StatPill
                     icon={<CheckCircle className="text-emerald-500" />}
@@ -267,7 +273,10 @@ export default function GrammarRoadmapPage() {
 
               {/* Recommended action */}
               {recommendedTopic && (
-                <Link href={`/grammar-lessons?topic=${recommendedTopic.id}`} className="no-underline">
+                <Link
+                  href={`/grammar-lessons?topic=${recommendedTopic.id}`}
+                  className="no-underline"
+                >
                   <Card
                     interactive
                     shadowSize="sm"
@@ -353,9 +362,7 @@ export default function GrammarRoadmapPage() {
                       )}
                     </div>
                     <div className="text-base font-black text-ink font-display">{phase.title}</div>
-                    <div className="text-xs text-text-muted font-semibold mt-0.5">
-                      {phase.sub}
-                    </div>
+                    <div className="text-xs text-text-muted font-semibold mt-0.5">{phase.sub}</div>
                   </div>
 
                   {/* Phase progress */}
@@ -399,10 +406,7 @@ export default function GrammarRoadmapPage() {
                             border: `1px solid color-mix(in srgb, ${phase.color} 15%, transparent)`,
                           }}
                         >
-                          <Lightbulb
-                            className="text-base mt-0.5"
-                            style={{ color: phase.color }}
-                          />
+                          <Lightbulb className="text-base mt-0.5" style={{ color: phase.color }} />
                           <div>
                             <div
                               className="text-[11px] font-extrabold uppercase tracking-wider"
@@ -472,9 +476,7 @@ export default function GrammarRoadmapPage() {
               ].map((tip, i) => (
                 <Card key={i} shadowSize="sm" size="sm" bgType="alt">
                   <div className="text-xl mb-1.5">{tip.emoji}</div>
-                  <div className="font-extrabold text-ink mb-1 text-[13.5px]">
-                    {tip.title}
-                  </div>
+                  <div className="font-extrabold text-ink mb-1 text-[13.5px]">{tip.title}</div>
                   <div className="text-xs text-text-secondary leading-normal font-medium">
                     {tip.desc}
                   </div>
@@ -546,108 +548,104 @@ function CategoryCard({
   const icon = CATEGORY_ICONS[category.id] ?? <BookOpen />;
 
   return (
-    <m.div
-      initial={{ opacity: 0, x: -10 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay }}
-    >
-    <Card shadowSize="sm" size="sm" bgType="alt">
-      {/* Category header */}
-      <div className="flex items-center gap-2.5 mb-3">
-        <div
-          className="w-8 h-8 grid text-[15px] shrink-0 rounded-[10px] place-items-center"
-          style={{
-            background: `color-mix(in srgb, ${category.color} 10%, var(--surface))`,
-            color: category.color,
-          }}
-        >
-          {icon}
-        </div>
-        <div className="flex-1 min-w-0">
-          <div className="text-sm font-extrabold text-ink">{category.title}</div>
-          <div className="text-[11px] text-text-muted font-semibold">
-            {completed}/{category.topics.length} · {pct}%
+    <m.div initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} transition={{ delay }}>
+      <Card shadowSize="sm" size="sm" bgType="alt">
+        {/* Category header */}
+        <div className="flex items-center gap-2.5 mb-3">
+          <div
+            className="w-8 h-8 grid text-[15px] shrink-0 rounded-[10px] place-items-center"
+            style={{
+              background: `color-mix(in srgb, ${category.color} 10%, var(--surface))`,
+              color: category.color,
+            }}
+          >
+            {icon}
           </div>
-        </div>
-        <div className="w-[60px]">
-          <div className="h-[5px] rounded-sm bg-border">
-            <div
-              className="h-full rounded-sm transition-[width] duration-400 ease-out"
-              style={{
-                width: `${pct}%`,
-                background: category.color,
-              }}
-            />
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-extrabold text-ink">{category.title}</div>
+            <div className="text-[11px] text-text-muted font-semibold">
+              {completed}/{category.topics.length} · {pct}%
+            </div>
           </div>
-        </div>
-      </div>
-
-      {/* Topic chips */}
-      <div className="flex flex-wrap gap-1.5">
-        {category.topics.map((topic) => {
-          const isDone = completedSet.has(topic.id);
-          const isInProg = inProgressSet.has(topic.id);
-
-          return (
-            <Link
-              key={topic.id}
-              href={`/grammar-lessons?topic=${topic.id}`}
-              className="no-underline"
-            >
-              <m.div
-                whileHover={{ scale: 1.04, y: -1 }}
-                whileTap={{ scale: 0.97 }}
-                className="flex items-center gap-[5px] py-1.5 px-3 text-xs font-bold cursor-pointer rounded-[10px] transition-all duration-150"
+          <div className="w-[60px]">
+            <div className="h-[5px] rounded-sm bg-border">
+              <div
+                className="h-full rounded-sm transition-[width] duration-400 ease-out"
                 style={{
-                  border: isDone
-                    ? "1px solid rgba(16, 185, 129, 0.3)"
-                    : isInProg
-                      ? "1px solid color-mix(in srgb, var(--accent) 30%, transparent)"
-                      : "1px solid var(--border)",
-                  background: isDone
-                    ? "rgba(16, 185, 129, 0.06)"
-                    : isInProg
-                      ? "color-mix(in srgb, var(--accent) 5%, var(--surface))"
-                      : "var(--surface)",
-                  color: isDone
-                    ? "var(--success)"
-                    : isInProg
-                      ? "var(--accent)"
-                      : "var(--text-secondary)",
+                  width: `${pct}%`,
+                  background: category.color,
                 }}
+              />
+            </div>
+          </div>
+        </div>
+
+        {/* Topic chips */}
+        <div className="flex flex-wrap gap-1.5">
+          {category.topics.map((topic) => {
+            const isDone = completedSet.has(topic.id);
+            const isInProg = inProgressSet.has(topic.id);
+
+            return (
+              <Link
+                key={topic.id}
+                href={`/grammar-lessons?topic=${topic.id}`}
+                className="no-underline"
               >
-                {isDone ? (
-                  <CheckCircle className="text-[11px] text-emerald-500" />
-                ) : isInProg ? (
-                  <Zap className="text-[11px] text-accent" />
-                ) : (
-                  <span
-                    className="font-extrabold rounded text-[8.5px] py-px px-1"
-                    style={{
-                      background:
-                        topic.level === "A2"
-                          ? "rgba(16, 185, 129, 0.1)"
-                          : topic.level === "B1"
-                            ? "rgba(59, 130, 246, 0.1)"
-                            : "rgba(245, 158, 11, 0.1)",
-                      color:
-                        topic.level === "A2"
-                          ? "var(--success)"
-                          : topic.level === "B1"
-                            ? "var(--info)"
-                            : "var(--warning)",
-                    }}
-                  >
-                    {topic.level}
-                  </span>
-                )}
-                <span>{topic.title}</span>
-              </m.div>
-            </Link>
-          );
-        })}
-      </div>
-    </Card>
+                <m.div
+                  whileHover={{ scale: 1.04, y: -1 }}
+                  whileTap={{ scale: 0.97 }}
+                  className="flex items-center gap-[5px] py-1.5 px-3 text-xs font-bold cursor-pointer rounded-[10px] transition-all duration-150"
+                  style={{
+                    border: isDone
+                      ? "1px solid rgba(16, 185, 129, 0.3)"
+                      : isInProg
+                        ? "1px solid color-mix(in srgb, var(--accent) 30%, transparent)"
+                        : "1px solid var(--border)",
+                    background: isDone
+                      ? "rgba(16, 185, 129, 0.06)"
+                      : isInProg
+                        ? "color-mix(in srgb, var(--accent) 5%, var(--surface))"
+                        : "var(--surface)",
+                    color: isDone
+                      ? "var(--success)"
+                      : isInProg
+                        ? "var(--accent)"
+                        : "var(--text-secondary)",
+                  }}
+                >
+                  {isDone ? (
+                    <CheckCircle className="text-[11px] text-emerald-500" />
+                  ) : isInProg ? (
+                    <Zap className="text-[11px] text-accent" />
+                  ) : (
+                    <span
+                      className="font-extrabold rounded text-[8.5px] py-px px-1"
+                      style={{
+                        background:
+                          topic.level === "A2"
+                            ? "rgba(16, 185, 129, 0.1)"
+                            : topic.level === "B1"
+                              ? "rgba(59, 130, 246, 0.1)"
+                              : "rgba(245, 158, 11, 0.1)",
+                        color:
+                          topic.level === "A2"
+                            ? "var(--success)"
+                            : topic.level === "B1"
+                              ? "var(--info)"
+                              : "var(--warning)",
+                      }}
+                    >
+                      {topic.level}
+                    </span>
+                  )}
+                  <span>{topic.title}</span>
+                </m.div>
+              </Link>
+            );
+          })}
+        </div>
+      </Card>
     </m.div>
   );
 }

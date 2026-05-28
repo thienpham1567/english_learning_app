@@ -125,7 +125,10 @@ export function ListeningTab() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05, type: "spring", stiffness: 300, damping: 25 }}
             >
-              <Card shadowSize="sm" className="relative overflow-hidden hover:shadow-md transition-shadow duration-200">
+              <Card
+                shadowSize="sm"
+                className="relative overflow-hidden hover:shadow-md transition-shadow duration-200"
+              >
                 <div className="absolute top-0 left-0 w-1 h-full bg-accent rounded-r" />
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-[13px] font-black text-ink">
@@ -135,7 +138,9 @@ export function ListeningTab() {
                     {p.questions} questions
                   </span>
                 </div>
-                <p className="text-xs text-text-secondary mb-2.5 leading-relaxed font-medium">{p.desc}</p>
+                <p className="text-xs text-text-secondary mb-2.5 leading-relaxed font-medium">
+                  {p.desc}
+                </p>
                 <div className="text-[11px] text-text-muted p-3 rounded-xl bg-bg-deep border-2 border-border/50 leading-relaxed">
                   💡 <strong className="text-text-primary">Tip:</strong> {p.tips}
                 </div>
@@ -180,7 +185,9 @@ export function ListeningTab() {
 
               {(!exercise.turns || exercise.turns.length === 0) && (
                 <div className="flex items-center gap-2.5">
-                  <span className="text-[10px] text-text-muted font-extrabold uppercase tracking-widest">Voice:</span>
+                  <span className="text-[10px] text-text-muted font-extrabold uppercase tracking-widest">
+                    Voice:
+                  </span>
                   <select
                     value={selectedVoice}
                     onChange={(e) => setSelectedVoice(e.target.value)}

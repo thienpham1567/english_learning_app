@@ -96,9 +96,7 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
             <Award size={18} />
             {grade.label}
           </div>
-          <span className="text-[13px] text-text-secondary leading-relaxed">
-            {result.summary}
-          </span>
+          <span className="text-[13px] text-text-secondary leading-relaxed">{result.summary}</span>
         </div>
       </div>
 
@@ -175,9 +173,15 @@ export function ShadowResult({ result, referenceText }: ShadowResultProps) {
                     key={i}
                     className="py-2 px-3 rounded-[10px] bg-surface-alt border border-border text-[12.5px] text-text-secondary leading-normal flex gap-2 items-start"
                   >
-                    <span className={`font-extrabold shrink-0 ${
-                      w.score === "good" ? "text-success" : w.score === "fair" ? "text-warning" : "text-error"
-                    }`}>
+                    <span
+                      className={`font-extrabold shrink-0 ${
+                        w.score === "good"
+                          ? "text-success"
+                          : w.score === "fair"
+                            ? "text-warning"
+                            : "text-error"
+                      }`}
+                    >
                       {w.word}:
                     </span>
                     <span className="flex items-center gap-1">

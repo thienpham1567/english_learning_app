@@ -104,13 +104,17 @@ export default async function ToeicProgressPage() {
                 <div className="relative w-[110px] h-[110px] shrink-0">
                   <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
                     <circle
-                      cx="50" cy="50" r="42"
+                      cx="50"
+                      cy="50"
+                      r="42"
                       fill="none"
                       stroke="var(--border)"
                       strokeWidth="7"
                     />
                     <circle
-                      cx="50" cy="50" r="42"
+                      cx="50"
+                      cy="50"
+                      r="42"
                       fill="none"
                       stroke="var(--accent)"
                       strokeWidth="7"
@@ -166,9 +170,7 @@ export default async function ToeicProgressPage() {
               <div className="w-14 h-14 rounded-2xl bg-surface-alt border-2 border-border grid place-items-center mb-3">
                 <Trophy className="text-text-muted" size={24} />
               </div>
-              <p className="text-sm font-bold text-text-secondary mb-1">
-                No prediction data yet
-              </p>
+              <p className="text-sm font-bold text-text-secondary mb-1">No prediction data yet</p>
               <p className="text-xs text-text-muted font-medium">
                 Complete exercises and mock tests to generate your predicted score.
               </p>
@@ -272,12 +274,10 @@ export default async function ToeicProgressPage() {
                     className="flex items-center gap-3 px-4 py-3 rounded-xl border-2 border-border bg-surface-alt"
                   >
                     <div className="flex-1 min-w-0">
-                      <div className="text-sm font-extrabold text-ink">
-                        {p.category.label}
-                      </div>
+                      <div className="text-sm font-extrabold text-ink">{p.category.label}</div>
                       <div className="text-[11px] text-text-muted font-semibold mt-0.5">
-                        {p.unresolvedCount}/{p.totalCount} unmastered ·{" "}
-                        {p.recentCount} in last 7 days
+                        {p.unresolvedCount}/{p.totalCount} unmastered · {p.recentCount} in last 7
+                        days
                       </div>
                       {p.examples[0] && (
                         <div className="text-[10px] text-text-muted italic mt-1 truncate">
@@ -285,10 +285,7 @@ export default async function ToeicProgressPage() {
                         </div>
                       )}
                     </div>
-                    <Link
-                      href={p.nextAction.href}
-                      className="no-underline shrink-0"
-                    >
+                    <Link href={p.nextAction.href} className="no-underline shrink-0">
                       <div className="rounded-xl bg-error hover:bg-error/90 text-white px-3.5 py-2 text-xs font-black cursor-pointer transition-colors whitespace-nowrap">
                         {p.nextAction.label}
                       </div>
@@ -346,9 +343,7 @@ function SkillPanel({
       <div className="p-4">
         {skills.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-10 text-center">
-            <p className="text-xs text-text-muted font-medium">
-              No data available yet
-            </p>
+            <p className="text-xs text-text-muted font-medium">No data available yet</p>
           </div>
         ) : (
           <div className="flex flex-col gap-3">

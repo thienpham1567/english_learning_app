@@ -121,7 +121,9 @@ export default function DiagnosticPage() {
         >
           <Loader2 className="animate-spin" />
         </m.div>
-        <span className="text-sm font-semibold text-text-secondary">Preparing diagnostic test...</span>
+        <span className="text-sm font-semibold text-text-secondary">
+          Preparing diagnostic test...
+        </span>
       </div>
     );
   }

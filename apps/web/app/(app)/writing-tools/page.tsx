@@ -36,8 +36,18 @@ const TABS: {
   shortLabel: string;
   icon: React.ReactNode;
 }[] = [
-  { value: "grammar", label: "Grammar Checker", shortLabel: "Grammar", icon: <CheckSquare size={16} /> },
-  { value: "paraphrase", label: "Paraphraser", shortLabel: "Paraphrase", icon: <ArrowLeftRight size={16} /> },
+  {
+    value: "grammar",
+    label: "Grammar Checker",
+    shortLabel: "Grammar",
+    icon: <CheckSquare size={16} />,
+  },
+  {
+    value: "paraphrase",
+    label: "Paraphraser",
+    shortLabel: "Paraphrase",
+    icon: <ArrowLeftRight size={16} />,
+  },
   { value: "tts", label: "Voice Generator", shortLabel: "Voice", icon: <Volume2 size={16} /> },
 ];
 
@@ -48,7 +58,11 @@ export default function WritingToolsPage() {
     <div className="flex flex-col h-full flex-1 overflow-hidden">
       {/* ── Tab Switcher ── */}
       <div className="shrink-0 px-4 pt-4 pb-2 max-w-4xl w-full mx-auto">
-        <Card shadowSize="sm" size="sm" className="flex flex-row gap-1 p-1.5 overflow-x-auto scrollbar-none">
+        <Card
+          shadowSize="sm"
+          size="sm"
+          className="flex flex-row gap-1 p-1.5 overflow-x-auto scrollbar-none"
+        >
           {TABS.map((t) => {
             const isActive = active === t.value;
             return (

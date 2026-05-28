@@ -5,6 +5,7 @@
 
 @theme {
   --color-accent: var(--accent);
+  --color-accent-active: var(--accent-active);
   --color-accent-hover: var(--accent-hover);
   --color-accent-light: var(--accent-light);
   --color-accent-muted: var(--accent-muted);
@@ -119,6 +120,7 @@
   --accent-hover: #E5A500;
   --accent-light: #FFF9E6;
   --accent-muted: rgba(255, 184, 0, 0.08);
+  --accent-active: #B45309; /* Deep amber for high contrast text/links in light mode */
   --text-on-accent: #000000;
 
   --secondary: #2D5BFF;
@@ -250,6 +252,7 @@
   --accent-hover: #FFDE75;
   --accent-light: rgba(255, 208, 67, 0.1);
   --accent-muted: rgba(255, 208, 67, 0.06);
+  --accent-active: #FFD043; /* Bright gold for high contrast on dark backgrounds */
   --text-on-accent: #0A0A0A;
 
   --secondary: #60A5FA;
@@ -641,7 +644,7 @@ body {
   padding: 2px 6px;
   font-family: var(--font-mono);
   font-size: 0.86em;
-  color: var(--accent);
+  color: var(--accent-active);
 }
 .chat-markdown ul {
   margin: 8px 0;
@@ -820,6 +823,7 @@ button:focus-visible {
   --color-destructive: var(--destructive);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
+  --color-accent-active: var(--accent-active);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);
   --color-secondary-foreground: var(--secondary-foreground);

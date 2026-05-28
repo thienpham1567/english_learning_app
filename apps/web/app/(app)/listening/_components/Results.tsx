@@ -62,7 +62,9 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: i * 0.05, type: "spring", stiffness: 300, damping: 30 }}
               className={`bg-surface border-2 border-border rounded-lg p-3.5 ${
-                r.correct ? "border-l-4 border-l-[var(--success)]" : "border-l-4 border-l-[var(--error)]"
+                r.correct
+                  ? "border-l-4 border-l-[var(--success)]"
+                  : "border-l-4 border-l-[var(--error)]"
               }`}
             >
               <div className="flex items-center gap-2 mb-1.5">

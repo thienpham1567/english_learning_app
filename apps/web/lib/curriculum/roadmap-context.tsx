@@ -81,29 +81,23 @@ export function RoadmapProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   /** Find roadmap units whose exercises link to a given target module */
-  const getUnitsForModule = useCallback(
-    (targetModule: string) => {
-      const results: { unitId: string; weekNumber: number }[] = [];
-      for (const phase of CURRICULUM.phases) {
-        for (const week of phase.weeks) {
-          for (const day of week.dailyPlan) {
-            for (const unit of day.units) {
-              if (unit.exercises.some((e) => e.targetModule === targetModule)) {
-                results.push({ unitId: unit.id, weekNumber: week.weekNumber });
-              }
+  const getUnitsForModule = useCallback((targetModule: string) => {
+    const results: { unitId: string; weekNumber: number }[] = [];
+    for (const phase of CURRICULUM.phases) {
+      for (const week of phase.weeks) {
+        for (const day of week.dailyPlan) {
+          for (const unit of day.units) {
+            if (unit.exercises.some((e) => e.targetModule === targetModule)) {
+              results.push({ unitId: unit.id, weekNumber: week.weekNumber });
             }
           }
         }
       }
-      return results;
-    },
-    [],
-  );
+    }
+    return results;
+  }, []);
 
-  const isUnitCompleted = useCallback(
-    (unitId: string) => completedSet.has(unitId),
-    [completedSet],
-  );
+  const isUnitCompleted = useCallback((unitId: string) => completedSet.has(unitId), [completedSet]);
 
   const getWeekProgress = useCallback(
     (weekNumber: number) => {
@@ -115,7 +109,11 @@ export function RoadmapProvider({ children }: { children: React.ReactNode }) {
             (acc, d) => acc + d.units.filter((u) => completedSet.has(u.id)).length,
             0,
           );
-          return { completed, total, percent: total > 0 ? Math.round((completed / total) * 100) : 0 };
+          return {
+            completed,
+            total,
+            percent: total > 0 ? Math.round((completed / total) * 100) : 0,
+          };
         }
       }
       return { completed: 0, total: 0, percent: 0 };
@@ -134,10 +132,7 @@ export function RoadmapProvider({ children }: { children: React.ReactNode }) {
       const completed = phase.weeks.reduce(
         (acc, w) =>
           acc +
-          w.dailyPlan.reduce(
-            (a, d) => a + d.units.filter((u) => completedSet.has(u.id)).length,
-            0,
-          ),
+          w.dailyPlan.reduce((a, d) => a + d.units.filter((u) => completedSet.has(u.id)).length, 0),
         0,
       );
       return { completed, total, percent: total > 0 ? Math.round((completed / total) * 100) : 0 };

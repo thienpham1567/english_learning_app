@@ -77,20 +77,70 @@ const TABS: TabItem[] = [
 
 /* ─── Hub Items Config ─── */
 const REVIEW_HUB_ITEMS: HubItem[] = [
-  { label: "Error Notebook", icon: <FileWarning size={22} />, href: "/error-notebook", accent: "var(--error)" },
-  { label: "Flashcard Review", icon: <RefreshCw size={22} />, href: "/flashcards", accent: "var(--info)" },
-  { label: "Daily Challenge", icon: <Flame size={22} />, href: "/daily-challenge", accent: "var(--fire)" },
+  {
+    label: "Error Notebook",
+    icon: <FileWarning size={22} />,
+    href: "/error-notebook",
+    accent: "var(--error)",
+  },
+  {
+    label: "Flashcard Review",
+    icon: <RefreshCw size={22} />,
+    href: "/flashcards",
+    accent: "var(--info)",
+  },
+  {
+    label: "Daily Challenge",
+    icon: <Flame size={22} />,
+    href: "/daily-challenge",
+    accent: "var(--fire)",
+  },
 ];
 
 const MORE_HUB_ITEMS: HubItem[] = [
-  { label: "TOEIC Vocab", icon: <BookOpenText size={22} />, href: "/toeic/vocab", accent: "var(--accent)" },
-  { label: "Grammar Roadmap", icon: <GitBranch size={22} />, href: "/grammar-roadmap", accent: "var(--module-grammar)" },
-  { label: "Grammar Lessons", icon: <GraduationCap size={22} />, href: "/grammar-lessons", accent: "var(--module-grammar)" },
-  { label: "Vocabulary", icon: <Star size={22} />, href: "/my-vocabulary", accent: "var(--accent)" },
-  { label: "AI Chatbot", icon: <MessageSquare size={22} />, href: "/english-chatbot", accent: "var(--secondary)" },
+  {
+    label: "TOEIC Vocab",
+    icon: <BookOpenText size={22} />,
+    href: "/toeic/vocab",
+    accent: "var(--accent)",
+  },
+  {
+    label: "Grammar Roadmap",
+    icon: <GitBranch size={22} />,
+    href: "/grammar-roadmap",
+    accent: "var(--module-grammar)",
+  },
+  {
+    label: "Grammar Lessons",
+    icon: <GraduationCap size={22} />,
+    href: "/grammar-lessons",
+    accent: "var(--module-grammar)",
+  },
+  {
+    label: "Vocabulary",
+    icon: <Star size={22} />,
+    href: "/my-vocabulary",
+    accent: "var(--accent)",
+  },
+  {
+    label: "AI Chatbot",
+    icon: <MessageSquare size={22} />,
+    href: "/english-chatbot",
+    accent: "var(--secondary)",
+  },
   { label: "Read Aloud", icon: <Volume2 size={22} />, href: "/read-aloud", accent: "var(--info)" },
-  { label: "IPA Chart", icon: <Languages size={22} />, href: "/ipa-chart", accent: "var(--tertiary, #8B5CF6)" },
-  { label: "Writing Tools", icon: <Pencil size={22} />, href: "/writing-tools", accent: "var(--secondary)" },
+  {
+    label: "IPA Chart",
+    icon: <Languages size={22} />,
+    href: "/ipa-chart",
+    accent: "var(--tertiary, #8B5CF6)",
+  },
+  {
+    label: "Writing Tools",
+    icon: <Pencil size={22} />,
+    href: "/writing-tools",
+    accent: "var(--secondary)",
+  },
 ];
 
 const HUB_MAP: Record<string, { title: string; items: HubItem[] }> = {
@@ -235,14 +285,11 @@ export function BottomTabBar() {
               </div>
 
               {/* Hub grid */}
-              <div className={`grid gap-2.5 px-3.5 pb-4 ${hubData.items.length <= 2 ? "grid-cols-2" : "grid-cols-3"}`}>
+              <div
+                className={`grid gap-2.5 px-3.5 pb-4 ${hubData.items.length <= 2 ? "grid-cols-2" : "grid-cols-3"}`}
+              >
                 {hubData.items.map((item, idx) => (
-                  <HubCard
-                    key={item.href}
-                    item={item}
-                    index={idx}
-                    onNavigate={handleHubNavigate}
-                  />
+                  <HubCard key={item.href} item={item} index={idx} onNavigate={handleHubNavigate} />
                 ))}
               </div>
             </m.div>
@@ -286,7 +333,7 @@ export function BottomTabBar() {
                   scale: isActive ? 1.15 : 1,
                   y: isActive ? -1 : 0,
                   color: isActive
-                    ? "var(--accent)"
+                    ? "var(--accent-active)"
                     : isHubOpen
                       ? "var(--text-primary)"
                       : "var(--text-muted)",
@@ -300,7 +347,7 @@ export function BottomTabBar() {
               <m.span
                 animate={{
                   color: isActive
-                    ? "var(--accent)"
+                    ? "var(--accent-active)"
                     : isHubOpen
                       ? "var(--text-primary)"
                       : "var(--text-muted)",

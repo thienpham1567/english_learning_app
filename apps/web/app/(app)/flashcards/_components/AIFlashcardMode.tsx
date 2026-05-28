@@ -64,7 +64,7 @@ const COUNT_OPTIONS = [5, 10, 15, 20];
 
 const LEVEL_COLORS: Record<string, string> = {
   A2: "var(--success)",
-  B1: "var(--accent)",
+  B1: "var(--accent-active)",
   B2: "var(--tertiary, #8B5CF6)",
   C1: "var(--error)",
 };
@@ -174,7 +174,9 @@ export function AIFlashcardMode() {
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
             className="rounded-xl border-2 border-amber-500/25 overflow-hidden"
-            style={{ background: "linear-gradient(135deg, rgba(245, 158, 11, 0.04), var(--surface))" }}
+            style={{
+              background: "linear-gradient(135deg, rgba(245, 158, 11, 0.04), var(--surface))",
+            }}
           >
             <div className="px-4 py-3.5 flex items-center gap-3">
               <div
@@ -184,11 +186,10 @@ export function AIFlashcardMode() {
                 <AlertTriangle size={18} className="text-white" />
               </div>
               <div className="flex-1 min-w-0">
-                <h4 className="m-0 text-sm font-black text-ink">
-                  Error Review Deck
-                </h4>
+                <h4 className="m-0 text-sm font-black text-ink">Error Review Deck</h4>
                 <p className="m-0 text-xs text-text-muted font-medium">
-                  {errorFlashcards.length} flashcard{errorFlashcards.length > 1 ? "s" : ""} from your mistakes
+                  {errorFlashcards.length} flashcard{errorFlashcards.length > 1 ? "s" : ""} from
+                  your mistakes
                 </p>
               </div>
               <div className="flex items-center gap-1.5 shrink-0">
@@ -240,9 +241,7 @@ export function AIFlashcardMode() {
                   <span className="text-xl">{topic.emoji}</span>
                   <span
                     className={`text-[12.5px] leading-snug ${
-                      isSelected
-                        ? "font-extrabold text-ink"
-                        : "font-semibold text-text-primary"
+                      isSelected ? "font-extrabold text-ink" : "font-semibold text-text-primary"
                     }`}
                   >
                     {topic.label}
@@ -398,7 +397,7 @@ export function AIFlashcardMode() {
           <ChevronLeft size={10} /> Choose another topic
         </m.button>
         <span className="text-[13px] font-bold text-text-secondary">
-          <span className="text-accent">{currentIdx + 1}</span> / {cards.length}
+          <span className="text-accent-active">{currentIdx + 1}</span> / {cards.length}
         </span>
       </div>
 
@@ -508,7 +507,7 @@ export function AIFlashcardMode() {
                   tts.speak(card.front);
                 }}
                 disabled={tts.isLoading || tts.isSpeaking}
-                className="mt-5 inline-flex items-center gap-2 rounded-full text-accent text-[13px] font-bold relative z-[2] py-2 px-4.5 shadow-sm transition-all duration-200"
+                className="mt-5 inline-flex items-center gap-2 rounded-full text-accent-active text-[13px] font-bold relative z-[2] py-2 px-4.5 shadow-sm transition-all duration-200"
                 style={{
                   border: "1.5px solid color-mix(in srgb, var(--accent) 30%, var(--border))",
                   background: tts.isSpeaking ? "var(--accent-light)" : "var(--surface)",
@@ -534,7 +533,7 @@ export function AIFlashcardMode() {
             }}
           >
             {/* Vietnamese meaning */}
-            <div className="text-center text-2xl font-black text-accent font-display mb-4 pb-3.5 border-b border-dashed border-border">
+            <div className="text-center text-2xl font-black text-accent-active font-display mb-4 pb-3.5 border-b border-dashed border-border">
               {card.back}
             </div>
 
@@ -595,7 +594,9 @@ export function AIFlashcardMode() {
           onClick={goPrev}
           disabled={currentIdx === 0}
           className={`w-12 h-12 border-2 border-border bg-surface grid place-items-center text-base rounded-[14px] shadow-sm ${
-            currentIdx === 0 ? "text-text-muted cursor-not-allowed" : "text-text-primary cursor-pointer"
+            currentIdx === 0
+              ? "text-text-muted cursor-not-allowed"
+              : "text-text-primary cursor-pointer"
           }`}
         >
           <ChevronLeft />
@@ -605,7 +606,7 @@ export function AIFlashcardMode() {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
           onClick={() => setFlipped(!flipped)}
-          className="flex-1 max-w-[200px] h-12 text-accent cursor-pointer text-sm font-extrabold rounded-[14px] shadow-sm"
+          className="flex-1 max-w-[200px] h-12 text-accent-active cursor-pointer text-sm font-extrabold rounded-[14px] shadow-sm"
           style={{
             border: "1.5px solid color-mix(in srgb, var(--accent) 20%, var(--border))",
             background: "var(--accent-light)",

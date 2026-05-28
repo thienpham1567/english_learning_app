@@ -246,7 +246,9 @@ function StatCard({
       className="border-2 border-border bg-card text-card-foreground text-center py-3.5 px-3 rounded-lg shadow-sm cursor-default"
     >
       <div className={`text-lg mb-1.5 flex justify-center ${iconColor}`}>{icon}</div>
-      <div className={`text-2xl font-extrabold font-mono leading-none ${valueColor ?? "text-text-primary"}`}>
+      <div
+        className={`text-2xl font-extrabold font-mono leading-none ${valueColor ?? "text-text-primary"}`}
+      >
         {value}
       </div>
       {suffix && <span className="text-[10px] text-text-muted font-medium"> {suffix}</span>}

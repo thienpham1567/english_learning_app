@@ -133,10 +133,7 @@ export function FloatingDictionaryWidget() {
   return (
     <>
       {/* ─── Floating button / expanded input ─── */}
-      <div
-        className="fixed flex items-center z-[900]"
-        style={{ bottom: dictBottom, right: 20 }}
-      >
+      <div className="fixed flex items-center z-[900]" style={{ bottom: dictBottom, right: 20 }}>
         <AnimatePresence mode="wait">
           {expanded ? (
             <m.form
@@ -226,9 +223,7 @@ export function FloatingDictionaryWidget() {
 
       {/* ─── Result modal ─── */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
-        <DialogContent
-          className="p-0 gap-0 w-[calc(100vw-2rem)] sm:w-[90vw] md:w-[860px] sm:max-w-[860px] max-h-[85vh] overflow-hidden flex flex-col"
-        >
+        <DialogContent className="p-0 gap-0 w-[calc(100vw-2rem)] sm:w-[90vw] md:w-[860px] sm:max-w-[860px] max-h-[85vh] overflow-hidden flex flex-col">
           <DialogTitle className="sr-only">Dictionary Lookup</DialogTitle>
           {/* Modal header bar */}
           <div className="flex items-center justify-between bg-surface gap-2 sm:gap-3 py-2.5 sm:py-3 pl-4 sm:pl-5 pr-3 sm:pr-4 border-b-2 border-border shrink-0">

@@ -142,10 +142,7 @@ export function TestScreen({
         <div className="flex justify-center items-center gap-1.5 opacity-60 text-[11px] font-medium text-text-muted mt-1">
           <span>Shortcuts:</span>
           {["A", "B", "C", "D"].map((k) => (
-            <kbd
-              key={k}
-              className="bg-border py-0.5 px-1.5 rounded font-mono text-[10px]"
-            >
+            <kbd key={k} className="bg-border py-0.5 px-1.5 rounded font-mono text-[10px]">
               {k}
             </kbd>
           ))}

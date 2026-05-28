@@ -72,7 +72,11 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
   const [aiExplanation, setAiExplanation] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
   const ok = answer.isCorrect;
-  const exerciseIcon = answer.exerciseType ? EXERCISE_ICONS[answer.exerciseType] : <HelpCircle className="h-3.5 w-3.5" />;
+  const exerciseIcon = answer.exerciseType ? (
+    EXERCISE_ICONS[answer.exerciseType]
+  ) : (
+    <HelpCircle className="h-3.5 w-3.5" />
+  );
   const exerciseLabel = answer.exerciseType ? EXERCISE_LABELS[answer.exerciseType] : "";
 
   const fetchAIExplanation = useCallback(async () => {
@@ -86,7 +90,9 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
       });
       setAiExplanation(data.explanation);
     } catch {
-      setAiExplanation("Unable to connect to the AI server for explanations. Please try again later.");
+      setAiExplanation(
+        "Unable to connect to the AI server for explanations. Please try again later.",
+      );
     } finally {
       setAiLoading(false);
     }
@@ -112,7 +118,9 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
         <div className="flex items-center gap-3 min-w-0 flex-1">
           <div
             className={`w-2.5 h-2.5 rounded-full shrink-0 ${
-              ok ? "bg-success shadow-[0_0_8px_var(--success)]" : "bg-error shadow-[0_0_8px_var(--error)]"
+              ok
+                ? "bg-success shadow-[0_0_8px_var(--success)]"
+                : "bg-error shadow-[0_0_8px_var(--error)]"
             }`}
           />
           <div className="flex flex-col items-start min-w-0">
@@ -121,7 +129,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
             </span>
             {exerciseLabel && (
               <span className="items-center text-[10px] text-text-muted font-bold mt-1.5 flex gap-1.5 font-sans">
-                {exerciseIcon} 
+                {exerciseIcon}
                 <span>{exerciseLabel}</span>
               </span>
             )}
@@ -230,12 +238,12 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                 >
                   {aiLoading ? (
                     <>
-                      <Loader2 className="animate-spin h-3.5 w-3.5" /> 
+                      <Loader2 className="animate-spin h-3.5 w-3.5" />
                       <span>AI is analyzing...</span>
                     </>
                   ) : (
                     <>
-                      <Lightbulb className="h-3.5 w-3.5" /> 
+                      <Lightbulb className="h-3.5 w-3.5" />
                       <span>Ask AI for details</span>
                     </>
                   )}
@@ -303,15 +311,16 @@ export function ChallengeResults({
           visible={showCelebration}
           onComplete={() => setShowCelebration(false)}
         >
-          <span className="font-display text-3xl font-black text-accent">
-            {matched.label}
-          </span>
+          <span className="font-display text-3xl font-black text-accent">{matched.label}</span>
         </CelebrationOverlay>
       )}
 
       <div className="anim-scale-in w-full max-w-2xl mx-auto flex flex-col gap-5">
         {/* ── Score Hero Card ── */}
-        <Card shadowSize="md" className="p-8 text-center relative overflow-hidden transition-all duration-200">
+        <Card
+          shadowSize="md"
+          className="p-8 text-center relative overflow-hidden transition-all duration-200"
+        >
           {/* Top linear line */}
           <div className="absolute h-1.5 top-0 left-0 right-0 bg-gradient-to-r from-accent to-secondary" />
 
@@ -357,10 +366,10 @@ export function ChallengeResults({
                 label: "Correct",
                 value: correctCount,
               },
-              { 
-                icon: <XCircle className="text-error h-4.5 w-4.5" />, 
-                label: "Wrong", 
-                value: wrongCount 
+              {
+                icon: <XCircle className="text-error h-4.5 w-4.5" />,
+                label: "Wrong",
+                value: wrongCount,
               },
               {
                 icon: <Clock className="text-accent h-4.5 w-4.5" />,
@@ -450,7 +459,9 @@ export function ChallengeResults({
             <span>Done & Continue</span>
             <ChevronRight size={15} />
           </Link>
-          <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider font-display">Come back tomorrow!</span>
+          <span className="text-[10px] text-text-muted font-bold uppercase tracking-wider font-display">
+            Come back tomorrow!
+          </span>
         </div>
       </div>
     </>

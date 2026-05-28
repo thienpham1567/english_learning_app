@@ -67,7 +67,9 @@ function SpeakButton({
       }`}
       onClick={() => (active ? onStop() : onSpeak(text))}
       disabled={isLoading}
-      aria-label={isSpeaking ? "Stop playback" : isLoading ? "Loading..." : "Listen to pronunciation"}
+      aria-label={
+        isSpeaking ? "Stop playback" : isLoading ? "Loading..." : "Listen to pronunciation"
+      }
     >
       {isLoading ? (
         <Loader2 className="h-3 w-3 animate-spin" />

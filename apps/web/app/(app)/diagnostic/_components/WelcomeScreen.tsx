@@ -24,10 +24,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
       <div className="flex-1 overflow-y-auto py-6 px-5 pb-12">
         <div className="w-full max-w-[600px] mx-auto flex flex-col gap-5">
           {/* Test Info Cards Grid */}
-          <m.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
+          <m.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }}>
             <Card shadowSize="default" className="bg-surface p-5 rounded-xl gap-4">
               <div className="flex items-center gap-2">
                 <Info className="text-[13px] text-accent" />
@@ -67,7 +64,9 @@ export function WelcomeScreen({ status, onStart }: Props) {
                     className="flex flex-col gap-1 py-3 px-3.5 border-2 rounded-lg"
                   >
                     <span className="text-xl mb-0.5">{item.icon}</span>
-                    <span className="text-[13px] font-extrabold text-text-primary">{item.label}</span>
+                    <span className="text-[13px] font-extrabold text-text-primary">
+                      {item.label}
+                    </span>
                     <span className="text-[11px] text-text-muted font-medium leading-snug">
                       {item.desc}
                     </span>
@@ -168,15 +167,17 @@ export function WelcomeScreen({ status, onStart }: Props) {
               <ChevronRight size={12} />
             </m.button>
           ) : (
-            <m.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
-              <Card shadowSize="sm" bgType="alt" className="text-center p-5 rounded-xl border-2 gap-2">
+            <m.div initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+              <Card
+                shadowSize="sm"
+                bgType="alt"
+                className="text-center p-5 rounded-xl border-2 gap-2"
+              >
                 <Clock className="text-3xl text-text-muted mx-auto" />
                 <div className="text-[13px] text-text-secondary font-semibold">
                   You have recently completed this test. Please practice more and try again in{" "}
-                  <span className="text-accent font-extrabold">{status?.daysUntilRetake}</span> days!
+                  <span className="text-accent font-extrabold">{status?.daysUntilRetake}</span>{" "}
+                  days!
                 </div>
               </Card>
             </m.div>

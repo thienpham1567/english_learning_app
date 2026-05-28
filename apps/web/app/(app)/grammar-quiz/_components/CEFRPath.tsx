@@ -48,7 +48,10 @@ export function CEFRPath({
 }: Props) {
   const isEts = sourceMode === "ets";
   return (
-    <Card shadowSize="sm" className="anim-fade-up w-full max-w-[480px] mx-auto text-center relative overflow-hidden py-8 px-6">
+    <Card
+      shadowSize="sm"
+      className="anim-fade-up w-full max-w-[480px] mx-auto text-center relative overflow-hidden py-8 px-6"
+    >
       <div
         className="absolute w-[180px] h-[180px] rounded-full left-1/2 top-0 -translate-x-1/2 pointer-events-none"
         style={{
@@ -188,9 +191,7 @@ export function CEFRPath({
             />
           </button>
           {timedMode && (
-            <span className="text-text-muted font-semibold text-[11.5px]">
-              (30s / question)
-            </span>
+            <span className="text-text-muted font-semibold text-[11.5px]">(30s / question)</span>
           )}
         </div>
       )}

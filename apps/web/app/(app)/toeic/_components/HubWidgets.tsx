@@ -235,9 +235,7 @@ export async function HubWidgets() {
                     {item.estimatedMinutes}m
                   </span>
                   <div>
-                    <div className="font-extrabold text-[13.5px]">
-                      {item.title}
-                    </div>
+                    <div className="font-extrabold text-[13.5px]">{item.title}</div>
                     <div className="text-text-muted font-medium text-[11.5px] mt-[1px]">
                       {item.reason}
                     </div>
@@ -362,11 +360,12 @@ export async function HubWidgets() {
               Review now →
             </Link>
           ) : (
-            <span className="text-text-muted text-xs font-extrabold">Clean queue, no incorrect questions!</span>
+            <span className="text-text-muted text-xs font-extrabold">
+              Clean queue, no incorrect questions!
+            </span>
           )}
         </Card>
       </div>
     </div>
   );
 }
-

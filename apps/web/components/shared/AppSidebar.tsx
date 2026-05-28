@@ -31,11 +31,7 @@ import { useCallback, useState } from "react";
 import { Logo } from "@/components/shared/Logo";
 import { useTheme } from "@/components/shared/ThemeProvider";
 import { Badge } from "@/components/ui/badge";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import { useSidebarBadges } from "@/hooks/useSidebarBadges";
 
 type NavItem = {
@@ -138,11 +134,7 @@ function NavLink({
         initial={{ opacity: 0, x: -8 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ delay: animDelay, duration: 0.25 }}
-        whileHover={
-          active
-            ? {}
-            : { x: 3, background: "var(--sidebar-item-hover)" }
-        }
+        whileHover={active ? {} : { x: 3, background: "var(--sidebar-item-hover)" }}
         whileTap={{ scale: 0.97 }}
         aria-current={active ? "page" : undefined}
         className={`sidebar-nav-link flex items-center gap-3 overflow-hidden relative cursor-pointer transition-all duration-200 ${
@@ -357,8 +349,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
           // ─── Groups (Foundation, Daily, Tools) ───
           const group = entry as NavGroup;
           const groupHasActive = group.items.some(
-            (item) =>
-              pathname === item.href || pathname.startsWith(`${item.href}/`),
+            (item) => pathname === item.href || pathname.startsWith(`${item.href}/`),
           );
           const isGroupOpen = groupHasActive || !collapsedGroups.has(group.key);
 
@@ -369,9 +360,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
                 {/* Thin separator line */}
                 <div className="mx-3 mb-1.5 h-px bg-[var(--sidebar-border)] opacity-60" />
                 {group.items.map((item, itemIndex) => {
-                  const active =
-                    pathname === item.href ||
-                    pathname.startsWith(`${item.href}/`);
+                  const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
                   const link = (
                     <NavLink
                       href={item.href}
@@ -435,9 +424,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
                     className="flex flex-col overflow-hidden gap-0.5 mt-0.5"
                   >
                     {group.items.map((item, itemIndex) => {
-                      const active =
-                        pathname === item.href ||
-                        pathname.startsWith(`${item.href}/`);
+                      const active = pathname === item.href || pathname.startsWith(`${item.href}/`);
                       return (
                         <NavLink
                           key={item.href}
@@ -471,8 +458,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
         <div
           className="mx-2 mb-2.5 h-px"
           style={{
-            background:
-              "linear-gradient(90deg, transparent, var(--sidebar-border), transparent)",
+            background: "linear-gradient(90deg, transparent, var(--sidebar-border), transparent)",
           }}
         />
 
@@ -484,11 +470,7 @@ export function AppSidebar({ isExpanded, onToggle }: Props) {
               whileTap={{ scale: 0.95 }}
               onClick={toggleTheme}
               className="theme-toggle-btn"
-              aria-label={
-                mode === "light"
-                  ? "Switch to dark mode"
-                  : "Switch to light mode"
-              }
+              aria-label={mode === "light" ? "Switch to dark mode" : "Switch to light mode"}
             >
               <m.span
                 animate={{ rotate: mode === "light" ? 0 : 180 }}

@@ -26,7 +26,6 @@ import { useVoiceInput } from "@/hooks/useVoiceInput";
 import { useDialogue } from "../_hooks/useDialogue";
 import { type EvalResult, ShadowResult } from "./ShadowResult";
 
-
 const SPEAKER_COLORS: Record<
   string,
   { bg: string; border: string; text: string; accent: string; shadow: string; tw: string }
@@ -210,9 +209,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
 
           {/* Topic input */}
           <div>
-            <span className="text-xs font-bold text-text-muted block mb-1.5">
-              Topic (optional)
-            </span>
+            <span className="text-xs font-bold text-text-muted block mb-1.5">Topic (optional)</span>
             <input
               type="text"
               value={topic}
@@ -306,10 +303,9 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             transition={{ delay: 0.1 }}
             className="bg-surface rounded-xl border-2 border-border p-5 shadow"
           >
-            <span
-              className="text-xs font-bold text-text-muted block mb-3 uppercase tracking-wider"
-            >
-              <Bookmark size={13} className="text-accent-hover" /> Saved Conversations ({dlg.savedDialogues.length})
+            <span className="text-xs font-bold text-text-muted block mb-3 uppercase tracking-wider">
+              <Bookmark size={13} className="text-accent-hover" /> Saved Conversations (
+              {dlg.savedDialogues.length})
             </span>
             <div className="flex flex-col gap-2 h-[300px] overflow-y-auto">
               {dlg.savedDialogues.map((saved, idx) => (
@@ -333,9 +329,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
 
                   {/* Info */}
                   <div className="flex-1 w-[0px]">
-                    <span
-                      className="text-[13px] font-bold text-text-primary block overflow-hidden truncate"
-                    >
+                    <span className="text-[13px] font-bold text-text-primary block overflow-hidden truncate">
                       {saved.title}
                     </span>
                     <div className="flex gap-2 items-center mt-0.5">
@@ -348,7 +342,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                         {saved.linesJson.length} lines
                       </span>
                       {saved.rolePlayCount > 0 && (
-                        <span className="text-[11px] text-accent-hover font-semibold">
+                        <span className="text-[11px] text-accent-active font-semibold">
                           🎙️ {saved.rolePlayCount}x
                         </span>
                       )}
@@ -504,7 +498,8 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               className={`flex gap-3 items-start ${isLeft ? "flex-row" : "flex-row-reverse"}`}
             >
               {/* Avatar */}
-              <div className="dialogue-avatar w-[42px] h-[42px] rounded-full overflow-hidden shrink-0 border-2"
+              <div
+                className="dialogue-avatar w-[42px] h-[42px] rounded-full overflow-hidden shrink-0 border-2"
                 style={{ borderColor: colors.border, boxShadow: colors.shadow }}
               >
                 <img
@@ -517,7 +512,8 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
               </div>
 
               {/* Bubble */}
-              <div className="dialogue-bubble-content relative max-w-[78%] py-3.5 px-4.5 transition-all duration-200"
+              <div
+                className="dialogue-bubble-content relative max-w-[78%] py-3.5 px-4.5 transition-all duration-200"
                 onClick={() => !dlg.isPlaying && dlg.playSingleLine(i, speed)}
                 style={{
                   borderRadius: isLeft ? "4px 18px 18px 18px" : "18px 4px 18px 18px",
@@ -534,7 +530,8 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                 }}
               >
                 <div className="flex items-center gap-1.5 mb-1.5">
-                  <div className="w-[6px] h-[6px] rounded-full shrink-0"
+                  <div
+                    className="w-[6px] h-[6px] rounded-full shrink-0"
                     style={{ backgroundColor: colors.accent }}
                   />
                   <span
@@ -545,9 +542,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                   </span>
                   <span className="text-[11px]">{assignment?.flag ?? ""}</span>
                 </div>
-                <span
-                  className="text-[15px] text-text-primary block font-medium leading-relaxed"
-                >
+                <span className="text-[15px] text-text-primary block font-medium leading-relaxed">
                   {line.text}
                 </span>
                 {isActive && dlg.isLoading && (
@@ -579,7 +574,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             <m.div
               animate={{ y: [0, -4, 0] }}
               transition={{ repeat: Infinity, duration: 2 }}
-              className="inline-flex text-accent-hover"
+              className="inline-flex text-accent-active"
             >
               <Headphones size={36} />
             </m.div>
@@ -587,9 +582,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
           <span className="text-base font-extrabold text-text-primary block mb-1">
             Listen to the Dialogue First
           </span>
-          <span
-            className="mx-auto mb-4 text-xs text-text-muted max-w-[360px] block"
-          >
+          <span className="mx-auto mb-4 text-xs text-text-muted max-w-[360px] block">
             Listen to the conversation between native speakers before you start roleplaying!
           </span>
 
@@ -642,7 +635,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                 transition={{ repeat: Infinity, duration: 1.2 }}
                 className="w-2 h-2 rounded-full bg-accent-hover"
               />
-              <span className="text-xs font-bold text-accent-hover">
+              <span className="text-xs font-bold text-accent-active">
                 {dlg.isLoading && dlg.batchProgress
                   ? `Loading audio ${dlg.batchProgress.loaded}/${dlg.batchProgress.total}...`
                   : dlg.isLoading
@@ -664,7 +657,8 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
           {/* Replay button */}
           <div className="mb-3">
             <span className="text-xs font-bold text-text-muted">
-              <Mic size={14} className="text-accent" /> Roleplay — Select the character you want to practice
+              <Mic size={14} className="text-accent" /> Roleplay — Select the character you want to
+              practice
             </span>
             <m.button
               whileHover={{ scale: 1.02 }}
@@ -709,7 +703,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
             className="bg-surface rounded-xl border-2 border-accent py-4 px-5 flex flex-col gap-3 shadow-md"
           >
             <div className="flex justify-between items-center">
-              <span className="text-sm font-extrabold text-accent-hover flex items-center gap-1.5">
+              <span className="text-sm font-extrabold text-accent-active flex items-center gap-1.5">
                 <Mic size={14} /> Roleplay Active — You are{" "}
                 {dlg.dialogue!.lines.find((l) => l.speaker === rolePlaySpeaker)?.name ?? "..."}
               </span>
@@ -744,7 +738,9 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                   transition={{ repeat: Infinity, duration: 1.5 }}
                   className="w-[12px] h-[12px] rounded-full bg-accent"
                 />
-                <span className="text-sm font-black text-accent-hover">Listening to speaker...</span>
+                <span className="text-sm font-black text-accent-active">
+                  Listening to speaker...
+                </span>
               </div>
             )}
 
@@ -776,8 +772,8 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
 
             {rolePlayStep === "evaluating" && (
               <div className="p-4 flex items-center gap-2">
-                <Loader2 className="animate-spin text-accent-hover" size={20} />
-                <span className="text-sm font-black text-accent-hover">🤖 AI Grading...</span>
+                <Loader2 className="animate-spin text-accent-active" size={20} />
+                <span className="text-sm font-black text-accent-active">🤖 AI Grading...</span>
               </div>
             )}
 
@@ -793,9 +789,7 @@ export function DialoguePlayer({ voiceRole, speed }: DialoguePlayerProps) {
                   onClick={continueAfterRolePlay}
                   className="w-full p-3 rounded-xl border-2 border-border bg-accent text-ink text-sm font-black cursor-pointer font-body shadow-sm hover:bg-accent-hover"
                 >
-                  {rolePlayLineIndex < dlg.dialogue!.lines.length - 1
-                    ? "Continue"
-                    : "Finish"}
+                  {rolePlayLineIndex < dlg.dialogue!.lines.length - 1 ? "Continue" : "Finish"}
                 </m.button>
               </>
             )}

@@ -127,49 +127,46 @@ export default function DashboardPage() {
     <div className="min-h-full overflow-y-auto px-4 py-4 pb-12">
       {/* ── Bespoke Welcome Hero Header ── */}
       <div className="max-w-5xl mx-auto mb-6">
-        <motion.div
-          initial={{ opacity: 0, y: -16 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
+        <motion.div initial={{ opacity: 0, y: -16 }} animate={{ opacity: 1, y: 0 }}>
           <Card className="relative overflow-hidden rounded-2xl bg-surface flex flex-col md:flex-row md:items-center justify-between gap-6">
-          {/* Subtle grid pattern background */}
-          <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06] pointer-events-none bg-[linear-gradient(to_right,rgba(0,0,0,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.15)_1px,transparent_1px)] bg-[size:16px_16px]" />
-          
-          {/* Accent decoration blur */}
-          <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
-          
-          <div className="flex items-start gap-4.5 relative z-10">
-            <div className="w-14 h-14 rounded-2xl border-2 border-border bg-accent text-text-on-accent flex items-center justify-center shrink-0 shadow-sm relative overflow-hidden group">
-              <motion.div
-                animate={{ rotate: [0, 8, -8, 8, 0] }}
-                transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
-              >
-                <Rocket className="h-7 w-7 text-text-on-accent" />
-              </motion.div>
-            </div>
-            
-            <div className="flex flex-col">
-              <span className="text-[10px] font-extrabold uppercase tracking-widest text-accent mb-1 font-mono">
-                {formattedDate}
-              </span>
-              <h1 className="m-0 text-2xl md:text-3xl font-black font-display text-ink tracking-tight leading-none">
-                {greeting}, TOEIC Learner!
-              </h1>
-              <p className="m-0 mt-2 text-xs md:text-sm text-text-secondary font-semibold max-w-xl italic">
-                "{quote}"
-              </p>
-            </div>
-          </div>
+            {/* Subtle grid pattern background */}
+            <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06] pointer-events-none bg-[linear-gradient(to_right,rgba(0,0,0,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.15)_1px,transparent_1px)] bg-[size:16px_16px]" />
 
-          <div className="flex items-center gap-3 shrink-0 relative z-10">
-            <Link
-              href="/daily-challenge"
-              className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-black border-2 border-border bg-accent text-ink shadow-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all cursor-pointer"
-            >
-              <Flame className="h-4 w-4 fill-current text-orange-600 animate-pulse" />
-              <span>Daily Challenge</span>
-            </Link>
-          </div>
+            {/* Accent decoration blur */}
+            <div className="absolute top-0 right-0 w-32 h-32 bg-accent/10 rounded-full blur-3xl pointer-events-none" />
+
+            <div className="flex items-start gap-4.5 relative z-10">
+              <div className="w-14 h-14 rounded-2xl border-2 border-border bg-accent text-text-on-accent flex items-center justify-center shrink-0 shadow-sm relative overflow-hidden group">
+                <motion.div
+                  animate={{ rotate: [0, 8, -8, 8, 0] }}
+                  transition={{ repeat: Infinity, duration: 6, ease: "easeInOut" }}
+                >
+                  <Rocket className="h-7 w-7 text-text-on-accent" />
+                </motion.div>
+              </div>
+
+              <div className="flex flex-col">
+                <span className="text-[10px] font-extrabold uppercase tracking-widest text-accent mb-1 font-mono">
+                  {formattedDate}
+                </span>
+                <h1 className="m-0 text-2xl md:text-3xl font-black font-display text-ink tracking-tight leading-none">
+                  {greeting}, TOEIC Learner!
+                </h1>
+                <p className="m-0 mt-2 text-xs md:text-sm text-text-secondary font-semibold max-w-xl italic">
+                  "{quote}"
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 shrink-0 relative z-10">
+              <Link
+                href="/daily-challenge"
+                className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-black border-2 border-border bg-accent text-ink shadow-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all cursor-pointer"
+              >
+                <Flame className="h-4 w-4 fill-current text-orange-600 animate-pulse" />
+                <span>Daily Challenge</span>
+              </Link>
+            </div>
           </Card>
         </motion.div>
 
@@ -221,25 +218,25 @@ export default function DashboardPage() {
           >
             <Card className="rounded-2xl relative overflow-hidden bg-surface">
               <div className={sectionLabelClass}>
-              <div className={accentBarClass} />
-              <span>Predicted TOEIC Score</span>
-              <div className="flex-1 h-px bg-border ml-2" />
-            </div>
-
-            {scoreLoading ? (
-              <div className="space-y-4 animate-pulse py-4">
-                <div className="h-5 bg-bg-deep border border-border/20 rounded-md w-3/4" />
-                <div className="h-5 bg-bg-deep border border-border/20 rounded-md w-1/2" />
+                <div className={accentBarClass} />
+                <span>Predicted TOEIC Score</span>
+                <div className="flex-1 h-px bg-border ml-2" />
               </div>
-            ) : score?.insufficient ? (
-              <InsufficientDataCard score={score} />
-            ) : score?.predicted ? (
-              <ScoreDisplay score={score} />
-            ) : (
-              <p className="text-xs text-text-muted text-center py-8 font-semibold">
-                No score projection data available. Keep practicing to build stats!
-              </p>
-            )}
+
+              {scoreLoading ? (
+                <div className="space-y-4 animate-pulse py-4">
+                  <div className="h-5 bg-bg-deep border border-border/20 rounded-md w-3/4" />
+                  <div className="h-5 bg-bg-deep border border-border/20 rounded-md w-1/2" />
+                </div>
+              ) : score?.insufficient ? (
+                <InsufficientDataCard score={score} />
+              ) : score?.predicted ? (
+                <ScoreDisplay score={score} />
+              ) : (
+                <p className="text-xs text-text-muted text-center py-8 font-semibold">
+                  No score projection data available. Keep practicing to build stats!
+                </p>
+              )}
             </Card>
           </motion.div>
 
@@ -251,24 +248,24 @@ export default function DashboardPage() {
           >
             <Card className="rounded-2xl relative overflow-hidden bg-surface">
               <div className={sectionLabelClass}>
-              <div className={accentBarClass} />
-              <span>Today's Study Plan</span>
-              <div className="flex-1 h-px bg-border ml-2" />
-            </div>
-
-            {planState.status === "loading" ? (
-              <div className="space-y-3.5 animate-pulse py-2">
-                <div className="h-5 bg-bg-deep border border-border/20 rounded-md w-4/5" />
-                <div className="h-5 bg-bg-deep border border-border/20 rounded-md w-2/3" />
-                <div className="h-5 bg-bg-deep border border-border/20 rounded-md w-3/4" />
+                <div className={accentBarClass} />
+                <span>Today's Study Plan</span>
+                <div className="flex-1 h-px bg-border ml-2" />
               </div>
-            ) : planReady ? (
-              <StudyPlanSection items={planReady.plan.items} stats={planReady.stats} />
-            ) : (
-              <p className="text-xs text-text-muted text-center py-6 font-semibold">
-                Complete more exercises to unlock your personalized daily study plan!
-              </p>
-            )}
+
+              {planState.status === "loading" ? (
+                <div className="space-y-3.5 animate-pulse py-2">
+                  <div className="h-5 bg-bg-deep border border-border/20 rounded-md w-4/5" />
+                  <div className="h-5 bg-bg-deep border border-border/20 rounded-md w-2/3" />
+                  <div className="h-5 bg-bg-deep border border-border/20 rounded-md w-3/4" />
+                </div>
+              ) : planReady ? (
+                <StudyPlanSection items={planReady.plan.items} stats={planReady.stats} />
+              ) : (
+                <p className="text-xs text-text-muted text-center py-6 font-semibold">
+                  Complete more exercises to unlock your personalized daily study plan!
+                </p>
+              )}
             </Card>
           </motion.div>
 
@@ -280,11 +277,11 @@ export default function DashboardPage() {
           >
             <Card className="rounded-2xl relative overflow-hidden bg-surface">
               <div className={sectionLabelClass}>
-              <div className={accentBarClass} />
-              <span>Quick Access</span>
-              <div className="flex-1 h-px bg-border ml-2" />
-            </div>
-            <QuickActions dash={dash} />
+                <div className={accentBarClass} />
+                <span>Quick Access</span>
+                <div className="flex-1 h-px bg-border ml-2" />
+              </div>
+              <QuickActions dash={dash} />
             </Card>
           </motion.div>
 
@@ -309,11 +306,11 @@ export default function DashboardPage() {
             >
               <Card className="rounded-2xl relative overflow-hidden bg-surface">
                 <div className={sectionLabelClass}>
-                <div className={accentBarClass} />
-                <span>Weekly Activity</span>
-                <div className="flex-1 h-px bg-border ml-2" />
-              </div>
-              <WeeklyChart data={dash.weeklyActivity} />
+                  <div className={accentBarClass} />
+                  <span>Weekly Activity</span>
+                  <div className="flex-1 h-px bg-border ml-2" />
+                </div>
+                <WeeklyChart data={dash.weeklyActivity} />
               </Card>
             </motion.div>
           )}
@@ -337,11 +334,11 @@ export default function DashboardPage() {
             >
               <Card className="rounded-2xl relative overflow-hidden bg-surface">
                 <div className={sectionLabelClass}>
-                <div className={accentBarClass} />
-                <span>Weekly XP Trend</span>
-                <div className="flex-1 h-px bg-border ml-2" />
-              </div>
-              <ScoreTimeline data={score.weeklyXP} />
+                  <div className={accentBarClass} />
+                  <span>Weekly XP Trend</span>
+                  <div className="flex-1 h-px bg-border ml-2" />
+                </div>
+                <ScoreTimeline data={score.weeklyXP} />
               </Card>
             </motion.div>
           )}
@@ -355,33 +352,33 @@ export default function DashboardPage() {
             >
               <Card className="rounded-2xl relative overflow-hidden bg-surface">
                 <div className={sectionLabelClass}>
-                <div className={accentBarClass} />
-                <span>Unlocked Badges</span>
-                <div className="flex-1 h-px bg-border ml-2" />
-              </div>
-              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                {dash.badges
-                  .filter((b) => b.unlocked)
-                  .slice(0, 6)
-                  .map((b) => (
-                    <motion.div
-                      key={b.id}
-                      whileHover={{ scale: 1.05, rotate: [0, -2, 2, -2, 0] }}
-                      transition={{ type: "spring", stiffness: 300, damping: 15 }}
-                      className="p-3.5 rounded-xl border-2 border-border bg-surface-alt flex flex-col items-center justify-center text-center shadow-sm relative overflow-hidden"
-                    >
-                      <div className="w-11 h-11 rounded-full bg-accent/10 border-2 border-accent/20 flex items-center justify-center mb-2 shadow-sm text-xl">
-                        {b.icon}
-                      </div>
-                      <div className="text-[10px] font-black text-text-primary font-display leading-tight truncate max-w-full px-0.5">
-                        {b.label}
-                      </div>
-                      <span className="text-[7px] text-text-muted font-bold tracking-wider mt-1 uppercase font-mono">
-                        Unlocked
-                      </span>
-                    </motion.div>
-                  ))}
-              </div>
+                  <div className={accentBarClass} />
+                  <span>Unlocked Badges</span>
+                  <div className="flex-1 h-px bg-border ml-2" />
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                  {dash.badges
+                    .filter((b) => b.unlocked)
+                    .slice(0, 6)
+                    .map((b) => (
+                      <motion.div
+                        key={b.id}
+                        whileHover={{ scale: 1.05, rotate: [0, -2, 2, -2, 0] }}
+                        transition={{ type: "spring", stiffness: 300, damping: 15 }}
+                        className="p-3.5 rounded-xl border-2 border-border bg-surface-alt flex flex-col items-center justify-center text-center shadow-sm relative overflow-hidden"
+                      >
+                        <div className="w-11 h-11 rounded-full bg-accent/10 border-2 border-accent/20 flex items-center justify-center mb-2 shadow-sm text-xl">
+                          {b.icon}
+                        </div>
+                        <div className="text-[10px] font-black text-text-primary font-display leading-tight truncate max-w-full px-0.5">
+                          {b.label}
+                        </div>
+                        <span className="text-[7px] text-text-muted font-bold tracking-wider mt-1 uppercase font-mono">
+                          Unlocked
+                        </span>
+                      </motion.div>
+                    ))}
+                </div>
               </Card>
             </motion.div>
           )}
@@ -418,28 +415,30 @@ function StatCard({
         shadowSize="sm"
         className="flex-1 min-w-[120px] rounded-2xl p-4.5 bg-surface relative overflow-hidden"
       >
-      {loading ? (
-        <div className="h-12 bg-bg-deep border-2 border-border rounded-xl animate-pulse w-full" />
-      ) : (
-        <div className="flex items-center gap-4 relative z-10">
-          <div className={`w-12 h-12 rounded-xl border-2 border-border flex items-center justify-center shrink-0 shadow-sm ${iconBg} transition-colors duration-200`}>
-            {icon}
-          </div>
-          <div className="text-left min-w-0 flex-1">
-            <div className="text-xl md:text-2xl font-black text-text-primary font-mono tracking-tight leading-none truncate">
-              {value}
+        {loading ? (
+          <div className="h-12 bg-bg-deep border-2 border-border rounded-xl animate-pulse w-full" />
+        ) : (
+          <div className="flex items-center gap-4 relative z-10">
+            <div
+              className={`w-12 h-12 rounded-xl border-2 border-border flex items-center justify-center shrink-0 shadow-sm ${iconBg} transition-colors duration-200`}
+            >
+              {icon}
             </div>
-            <div className="text-[10px] font-extrabold uppercase tracking-wider text-text-muted mt-2 font-display">
-              {label}
-            </div>
-            {sub && (
-              <div className="text-[10px] text-text-secondary mt-1 font-sans truncate font-medium">
-                {sub}
+            <div className="text-left min-w-0 flex-1">
+              <div className="text-xl md:text-2xl font-black text-text-primary font-mono tracking-tight leading-none truncate">
+                {value}
               </div>
-            )}
+              <div className="text-[10px] font-extrabold uppercase tracking-wider text-text-muted mt-2 font-display">
+                {label}
+              </div>
+              {sub && (
+                <div className="text-[10px] text-text-secondary mt-1 font-sans truncate font-medium">
+                  {sub}
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      )}
+        )}
       </Card>
     </motion.div>
   );
@@ -516,7 +515,7 @@ function ScoreDisplay({ score }: { score: PredictedScore }) {
             icon={<BookOpen className="h-4.5 w-4.5" />}
           />
         </div>
-        
+
         {/* Components Breakdown */}
         {score.components && (
           <div className="grid grid-cols-2 gap-x-4 gap-y-3.5 border-t border-border pt-4">
@@ -569,7 +568,10 @@ function MiniScore({
       }}
       className="flex-1 p-3 rounded-xl border-2 text-left flex items-center gap-3 shadow-sm relative overflow-hidden"
     >
-      <div style={{ color }} className="w-8 h-8 rounded-lg border-2 border-current flex items-center justify-center shrink-0 bg-surface">
+      <div
+        style={{ color }}
+        className="w-8 h-8 rounded-lg border-2 border-current flex items-center justify-center shrink-0 bg-surface"
+      >
         {icon}
       </div>
       <div className="min-w-0">
@@ -596,9 +598,13 @@ function InsufficientDataCard({ score }: { score: PredictedScore }) {
       <p className="text-xs text-text-secondary font-semibold max-w-sm mb-4.5 leading-relaxed">
         We need a bit more activity to estimate your TOEIC score. Complete:
         <span className="block mt-1 font-bold text-accent font-mono text-xs">
-          {score.quizzesNeeded ? `${score.quizzesNeeded} more grammar quiz${score.quizzesNeeded > 1 ? "zes" : ""}` : ""}
+          {score.quizzesNeeded
+            ? `${score.quizzesNeeded} more grammar quiz${score.quizzesNeeded > 1 ? "zes" : ""}`
+            : ""}
           {score.quizzesNeeded && score.listeningNeeded ? " & " : ""}
-          {score.listeningNeeded ? `${score.listeningNeeded} more listening practice${score.listeningNeeded > 1 ? "s" : ""}` : ""}
+          {score.listeningNeeded
+            ? `${score.listeningNeeded} more listening practice${score.listeningNeeded > 1 ? "s" : ""}`
+            : ""}
         </span>
       </p>
 
@@ -706,7 +712,10 @@ function StudyPlanSection({ items, stats }: { items: DailyPlanItem[]; stats: Dai
               Level {stats.levelNumber}
             </div>
             <div className="text-[11px] text-text-secondary font-bold mt-1.5 leading-none">
-              <span className="text-text-primary font-black font-mono">{stats.totalXP.toLocaleString()}</span> / {stats.nextLevelXP.toLocaleString()} XP
+              <span className="text-text-primary font-black font-mono">
+                {stats.totalXP.toLocaleString()}
+              </span>{" "}
+              / {stats.nextLevelXP.toLocaleString()} XP
             </div>
           </div>
           <div className="w-24 h-3 bg-bg-deep rounded-full overflow-hidden border-2 border-border shrink-0 relative">
@@ -776,17 +785,15 @@ function QuickActions({ dash: _dash }: QuickActionsProps) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.04 * i }}
           >
-            <Card
-              interactive
-              shadowSize="sm"
-              className="p-4 text-center group bg-surface"
-            >
-            <div
-              className={`w-9 h-9 border-2 border-border rounded-lg flex items-center justify-center mx-auto mb-2 text-sm shadow-sm transition-transform group-hover:scale-110 duration-200 ${a.color}`}
-            >
-              {a.icon}
-            </div>
-            <div className="text-xs font-black text-text-primary leading-tight font-display">{a.label}</div>
+            <Card interactive shadowSize="sm" className="p-4 text-center group bg-surface">
+              <div
+                className={`w-9 h-9 border-2 border-border rounded-lg flex items-center justify-center mx-auto mb-2 text-sm shadow-sm transition-transform group-hover:scale-110 duration-200 ${a.color}`}
+              >
+                {a.icon}
+              </div>
+              <div className="text-xs font-black text-text-primary leading-tight font-display">
+                {a.label}
+              </div>
             </Card>
           </motion.div>
         </Link>
@@ -859,9 +866,10 @@ function ScoreTimeline({ data }: { data: Array<{ week: string; xp: number }> }) 
     }
   }
 
-  const areaPath = points.length > 0
-    ? `${linePath} L ${points[points.length - 1].x} ${chartH} L ${points[0].x} ${chartH} Z`
-    : "";
+  const areaPath =
+    points.length > 0
+      ? `${linePath} L ${points[points.length - 1].x} ${chartH} L ${points[0].x} ${chartH} Z`
+      : "";
 
   return (
     <div className="flex flex-col gap-4">
@@ -935,70 +943,79 @@ function RoadmapProgressCard() {
       transition={{ delay: 0.12 }}
     >
       <Card className="rounded-2xl relative overflow-hidden bg-surface">
-      <div
-        className="absolute top-0 left-0 right-0 h-[3px]"
-        style={{
-          background: "linear-gradient(90deg, #22c55e, #3b82f6, #f59e0b)",
-        }}
-      />
+        <div
+          className="absolute top-0 left-0 right-0 h-[3px]"
+          style={{
+            background: "linear-gradient(90deg, #22c55e, #3b82f6, #f59e0b)",
+          }}
+        />
 
-      <div className={sectionLabelClass}>
-        <div className={accentBarClass} />
-        <span>Learning Roadmap</span>
-        <span className="text-[9px] font-extrabold rounded-lg bg-accent/10 text-accent border border-accent/20 px-2 py-0.5 ml-1">
-          Week {currentWeek}/24
-        </span>
-        <div className="flex-1 h-px bg-border ml-2" />
-      </div>
-
-      <div className="flex items-center gap-5">
-        {/* Mini progress ring */}
-        <div className="relative w-[76px] h-[76px] shrink-0">
-          <svg viewBox="0 0 88 88" className="w-full h-full -rotate-90">
-            <circle cx="44" cy="44" r="38" fill="none" stroke="var(--border)" strokeWidth="7" />
-            <circle
-              cx="44" cy="44" r="38" fill="none" stroke="var(--accent)" strokeWidth="7"
-              strokeLinecap="round"
-              strokeDasharray={`${circumference}`}
-              strokeDashoffset={`${offset}`}
-              className="transition-all duration-700"
-            />
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="text-lg font-black text-ink font-display leading-none">{overall.percent}%</div>
-            <div className="text-[7px] text-text-muted font-bold uppercase tracking-wider mt-0.5">Overall</div>
-          </div>
+        <div className={sectionLabelClass}>
+          <div className={accentBarClass} />
+          <span>Learning Roadmap</span>
+          <span className="text-[9px] font-extrabold rounded-lg bg-accent/10 text-accent border border-accent/20 px-2 py-0.5 ml-1">
+            Week {currentWeek}/24
+          </span>
+          <div className="flex-1 h-px bg-border ml-2" />
         </div>
 
-        <div className="flex-1 min-w-0">
-          <div className="text-sm font-black text-ink font-display leading-tight truncate">
-            {week?.focusTopic ?? "Start your journey!"}
-          </div>
-          <div className="text-[10px] text-text-muted font-bold mt-1">
-            This week: {weekProg.completed}/{weekProg.total} units completed
-          </div>
-
-          {/* Week progress bar */}
-          <div className="flex items-center gap-2 mt-2">
-            <div className="flex-1 h-2 rounded-full bg-bg-deep overflow-hidden border border-border">
-              <div
-                className="h-full rounded-full bg-accent transition-all duration-500"
-                style={{ width: `${weekProg.percent}%` }}
+        <div className="flex items-center gap-5">
+          {/* Mini progress ring */}
+          <div className="relative w-[76px] h-[76px] shrink-0">
+            <svg viewBox="0 0 88 88" className="w-full h-full -rotate-90">
+              <circle cx="44" cy="44" r="38" fill="none" stroke="var(--border)" strokeWidth="7" />
+              <circle
+                cx="44"
+                cy="44"
+                r="38"
+                fill="none"
+                stroke="var(--accent)"
+                strokeWidth="7"
+                strokeLinecap="round"
+                strokeDasharray={`${circumference}`}
+                strokeDashoffset={`${offset}`}
+                className="transition-all duration-700"
               />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <div className="text-lg font-black text-ink font-display leading-none">
+                {overall.percent}%
+              </div>
+              <div className="text-[7px] text-text-muted font-bold uppercase tracking-wider mt-0.5">
+                Overall
+              </div>
             </div>
-            <span className="text-[10px] font-black text-text-muted tabular-nums font-mono">
-              {weekProg.percent}%
-            </span>
           </div>
 
-          <Link
-            href={`/roadmap/week/${currentWeek}`}
-            className="inline-flex items-center gap-1 mt-2.5 text-[11px] font-black text-accent hover:underline no-underline"
-          >
-            Continue Learning <ChevronRight size={12} />
-          </Link>
+          <div className="flex-1 min-w-0">
+            <div className="text-sm font-black text-ink font-display leading-tight truncate">
+              {week?.focusTopic ?? "Start your journey!"}
+            </div>
+            <div className="text-[10px] text-text-muted font-bold mt-1">
+              This week: {weekProg.completed}/{weekProg.total} units completed
+            </div>
+
+            {/* Week progress bar */}
+            <div className="flex items-center gap-2 mt-2">
+              <div className="flex-1 h-2 rounded-full bg-bg-deep overflow-hidden border border-border">
+                <div
+                  className="h-full rounded-full bg-accent transition-all duration-500"
+                  style={{ width: `${weekProg.percent}%` }}
+                />
+              </div>
+              <span className="text-[10px] font-black text-text-muted tabular-nums font-mono">
+                {weekProg.percent}%
+              </span>
+            </div>
+
+            <Link
+              href={`/roadmap/week/${currentWeek}`}
+              className="inline-flex items-center gap-1 mt-2.5 text-[11px] font-black text-accent hover:underline no-underline"
+            >
+              Continue Learning <ChevronRight size={12} />
+            </Link>
+          </div>
         </div>
-      </div>
       </Card>
     </motion.div>
   );

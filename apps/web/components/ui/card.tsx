@@ -73,7 +73,11 @@ function Card({
       className={cn(
         "group/card flex flex-col overflow-hidden border-2 border-border text-sm",
         // Padding/gap sizes
-        size === "sm" ? "p-4 gap-3 rounded-lg" : size === "lg" ? "p-8 gap-5 rounded-2xl" : "p-6 gap-4 rounded-xl",
+        size === "sm"
+          ? "p-4 gap-3 rounded-lg"
+          : size === "lg"
+            ? "p-8 gap-5 rounded-2xl"
+            : "p-6 gap-4 rounded-xl",
         // Background
         bgClasses[bgType],
         // Shadow
@@ -94,7 +98,7 @@ function Card({
           shadowSize === "default" && "active:shadow-sm",
           shadowSize === "md" && "active:shadow",
         ],
-        className
+        className,
       )}
       {...props}
     />
@@ -103,14 +107,7 @@ function Card({
 
 function CardHeader({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div
-      data-slot="card-header"
-      className={cn(
-        "flex flex-col gap-1.5",
-        className
-      )}
-      {...props}
-    />
+    <div data-slot="card-header" className={cn("flex flex-col gap-1.5", className)} {...props} />
   );
 }
 
@@ -120,7 +117,7 @@ function CardTitle({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="card-title"
       className={cn(
         "font-display text-lg font-bold leading-none tracking-tight text-ink",
-        className
+        className,
       )}
       {...props}
     />
@@ -149,11 +146,7 @@ function CardAction({ className, ...props }: React.ComponentProps<"div">) {
 
 function CardContent({ className, ...props }: React.ComponentProps<"div">) {
   return (
-    <div
-      data-slot="card-content"
-      className={cn("text-sm leading-relaxed", className)}
-      {...props}
-    />
+    <div data-slot="card-content" className={cn("text-sm leading-relaxed", className)} {...props} />
   );
 }
 
@@ -163,7 +156,7 @@ function CardFooter({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="card-footer"
       className={cn(
         "flex items-center gap-4 mt-auto border-t-2 border-border pt-4 -mx-6 -mb-6 px-6 py-4 bg-surface-alt group-data-[size=sm]/card:-mx-4 group-data-[size=sm]/card:-mb-4 group-data-[size=sm]/card:px-4 group-data-[size=sm]/card:py-3 group-data-[size=lg]/card:-mx-8 group-data-[size=lg]/card:-mb-8 group-data-[size=lg]/card:px-8 group-data-[size=lg]/card:py-5",
-        className
+        className,
       )}
       {...props}
     />

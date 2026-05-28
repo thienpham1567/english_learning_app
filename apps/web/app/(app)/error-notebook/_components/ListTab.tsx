@@ -54,7 +54,12 @@ export function ListTab() {
         {/* Search + Filters */}
         <Card shadowSize="sm" size="sm" className="gap-3">
           {/* Search bar */}
-          <Card shadowSize="none" size="sm" bgType="alt" className="flex-row items-center gap-2.5 px-3.5 py-2">
+          <Card
+            shadowSize="none"
+            size="sm"
+            bgType="alt"
+            className="flex-row items-center gap-2.5 px-3.5 py-2"
+          >
             <Search className="h-3.5 w-3.5 text-text-muted shrink-0" />
             <input
               type="text"
@@ -117,9 +122,7 @@ export function ListTab() {
                 value={list.filters.topic}
                 onChange={(e) => list.setFilter("topic", e.target.value)}
                 className={`px-3 py-1.5 rounded-full text-xs font-bold border-[1.5px] border-border cursor-pointer outline-none ${
-                  list.filters.topic
-                    ? "bg-accent-light text-ink"
-                    : "bg-surface text-text-secondary"
+                  list.filters.topic ? "bg-accent-light text-ink" : "bg-surface text-text-secondary"
                 }`}
               >
                 <option value="">Topic</option>
@@ -171,9 +174,7 @@ export function ListTab() {
               )}
             </div>
             <span className="text-base font-extrabold text-text-primary block mb-1.5">
-              {list.filters.resolved === "false"
-                ? "No unresolved errors!"
-                : "No results found"}
+              {list.filters.resolved === "false" ? "No unresolved errors!" : "No results found"}
             </span>
             <span className="text-[13px] text-text-muted">
               {list.filters.resolved === "false"
