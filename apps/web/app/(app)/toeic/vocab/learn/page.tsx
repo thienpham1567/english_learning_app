@@ -1,3 +1,5 @@
+"use client";
+
 import { BookOpenText, CheckCircle, MapPin } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
