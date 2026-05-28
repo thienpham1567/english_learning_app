@@ -19,6 +19,7 @@ import { useErrorSRS } from "../_hooks/useErrorSRS";
 import type { SRSGrade } from "../_types/types";
 import { MODULE_ICONS, MODULE_LABELS, SRS_GRADE_OPTIONS } from "../_types/types";
 import { DeepExplanation } from "./DeepExplanation";
+import { Card } from "@/components/ui/card";
 
 export function ReviewTab() {
   const srs = useErrorSRS();
@@ -51,10 +52,10 @@ export function ReviewTab() {
   /* ── Loading ── */
   if (srs.loading) {
     return (
-      <div className="py-16 text-center">
-        <Loader2 className="h-7 w-7 text-accent animate-mx-auto mb-3" />
+      <Card className="py-16 text-center" shadowSize="default">
+        <Loader2 className="h-7 w-7 text-accent animate-spin mx-auto mb-3" />
         <div className="text-sm font-semibold text-text-primary">Loading review queue...</div>
-      </div>
+      </Card>
     );
   }
 
@@ -64,25 +65,26 @@ export function ReviewTab() {
       <m.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        className="py-16 px-6 text-center bg-surface rounded-xl border-2 border-border"
       >
-        <div className="flex justify-center mb-4 text-emerald-450">
-          <Sparkles className="h-12 w-12 animate-pulse" />
-        </div>
-        <h4 className="text-lg font-extrabold text-text-primary m-0 mb-2">
-          No errors to review!
-        </h4>
-        <span className="text-text-muted block max-w-[360px] mx-auto text-sm">
-          You've reviewed everything. Keep practicing to identify more areas for improvement.
-        </span>
-        <m.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={srs.fetchQueue}
-          className="mt-5 inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl border-2 border-border bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body"
-        >
-          <RefreshCw className="h-3.5 w-3.5" /> Check again
-        </m.button>
+        <Card className="py-16 px-6 text-center" shadowSize="default">
+          <div className="flex justify-center mb-4 text-emerald-450">
+            <Sparkles className="h-12 w-12 animate-pulse" />
+          </div>
+          <h4 className="text-lg font-extrabold text-text-primary m-0 mb-2">
+            No errors to review!
+          </h4>
+          <span className="text-text-muted block max-w-[360px] mx-auto text-sm">
+            You've reviewed everything. Keep practicing to identify more areas for improvement.
+          </span>
+          <div>
+            <button
+              onClick={srs.fetchQueue}
+              className="mt-5 inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl border-2 border-border bg-surface-alt text-text-secondary text-[13px] font-bold cursor-pointer font-body transition-colors hover:bg-surface-alt/80"
+            >
+              <RefreshCw className="h-3.5 w-3.5" /> Check again
+            </button>
+          </div>
+        </Card>
       </m.div>
     );
   }
@@ -94,37 +96,38 @@ export function ReviewTab() {
       <m.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="py-10 px-6 text-center bg-surface rounded-xl border-2 border-border"
       >
-        <Trophy
-          className={`h-10 w-10 mx-auto mb-3 ${pct >= 80 ? "text-success" : "text-accent"}`}
-        />
-        <h3 className="text-xl font-black text-text-primary m-0 mb-1">Review Complete!</h3>
-        <div className="text-4xl font-black text-accent font-display">
-          {srs.correct}/{srs.reviewed}
-        </div>
-        <span className="text-sm text-text-secondary block mt-2 mb-1">
-          {pct >= 80
-            ? "Excellent! You remembered very well!"
-            : pct >= 50
-              ? "Good job! Keep reviewing to reinforce your memory."
-              : "Needs more practice. Don't give up!"}
-        </span>
-        <span className="text-xs text-text-muted">Accuracy: {pct}%</span>
+        <Card className="py-10 px-6 text-center gap-4" shadowSize="default">
+          <Trophy
+            className={`h-10 w-10 mx-auto ${pct >= 80 ? "text-success" : "text-accent"}`}
+          />
+          <h3 className="text-xl font-black text-text-primary m-0">Review Complete!</h3>
+          <div className="text-4xl font-black text-accent font-display">
+            {srs.correct}/{srs.reviewed}
+          </div>
+          <div>
+            <span className="text-sm text-text-secondary block mb-1">
+              {pct >= 80
+                ? "Excellent! You remembered very well!"
+                : pct >= 50
+                  ? "Good job! Keep reviewing to reinforce your memory."
+                  : "Needs more practice. Don't give up!"}
+            </span>
+            <span className="text-xs text-text-muted">Accuracy: {pct}%</span>
+          </div>
 
-        <div className="flex gap-2 justify-center mt-5">
-          <m.button
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => {
-              srs.resetSession();
-              srs.fetchQueue();
-            }}
-            className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl border-none bg-gradient-to-br from-accent to-accent-hover text-text-on-accent text-sm font-extrabold cursor-pointer font-body shadow-[0_4px_14px_var(--accent-muted)]"
-          >
-            <RefreshCw className="h-4 w-4" /> Continue
-          </m.button>
-        </div>
+          <div className="flex gap-2 justify-center mt-2">
+            <button
+              onClick={() => {
+                srs.resetSession();
+                srs.fetchQueue();
+              }}
+              className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl border-none bg-gradient-to-br from-accent to-accent-hover text-text-on-accent text-sm font-extrabold cursor-pointer font-body shadow-[0_4px_14px_var(--accent-muted)] transition-opacity hover:opacity-90"
+            >
+              <RefreshCw className="h-4 w-4" /> Continue
+            </button>
+          </div>
+        </Card>
       </m.div>
     );
   }
@@ -135,7 +138,7 @@ export function ReviewTab() {
   return (
     <div className="flex flex-col gap-4">
       {/* Progress */}
-      <div className="bg-surface rounded-xl border-2 border-border px-5 py-3.5 flex items-center justify-between">
+      <Card size="sm" shadowSize="default" className="flex-row items-center justify-between bg-surface">
         <span className="text-sm font-bold text-text-primary flex items-center gap-1.5">
           <Brain className="h-4 w-4 text-accent" /> Review: {srs.currentIndex + 1} / {srs.queue.length}
         </span>
@@ -145,7 +148,7 @@ export function ReviewTab() {
           </span>
           <span className="text-xs font-bold text-text-muted">/ {srs.reviewed}</span>
         </div>
-      </div>
+      </Card>
 
       {/* Flash Card */}
       <AnimatePresence mode="wait">
@@ -155,10 +158,13 @@ export function ReviewTab() {
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -40 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className={`bg-surface rounded-xl overflow-hidden transition-colors duration-200 ${
-            flipped ? "border-2 border-accent" : "border-2 border-border"
-          }`}
         >
+          <Card
+            shadowSize="default"
+            accentColor={flipped ? "accent" : undefined}
+            accentPosition="left"
+            className="p-0 gap-0 overflow-hidden bg-surface"
+          >
           {/* Card header */}
           <div className="flex items-center gap-2 px-5 py-3 bg-surface-alt border-b-2 border-border">
             <span className="text-base flex items-center">
@@ -299,6 +305,7 @@ export function ReviewTab() {
               </div>
             </m.div>
           )}
+          </Card>
         </m.div>
       </AnimatePresence>
 

@@ -4,6 +4,8 @@ import { CircleCheckBig, Clock } from "lucide-react";
 import * as m from "motion/react-client";
 import { useEffect, useState } from "react";
 
+import { Card } from "@/components/ui/card";
+
 type Props = {
   nextReviewAt: string | null;
 };
@@ -14,35 +16,41 @@ export function EmptyState({ nextReviewAt }: Props) {
       initial={{ opacity: 0, scale: 0.95 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ type: "spring", stiffness: 100, damping: 15 }}
-      className="w-full max-w-[450px] bg-surface rounded-xl border-2 border-border text-center relative overflow-hidden mx-auto my-10 py-12 px-6 shadow-sm"
     >
-      {/* Background soft accent glow */}
-      <div
-        className="absolute w-[220px] h-[220px] rounded-full left-1/2 top-0 -translate-x-1/2 pointer-events-none"
-        style={{
-          background: "radial-gradient(circle, var(--accent) 8%, transparent 70%)",
-        }}
-      />
-
-      <m.div
-        animate={{ y: [0, -6, 0] }}
-        transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
-        className="mb-5 inline-flex"
+      <Card
+        className="w-full max-w-112.5 text-center relative overflow-hidden mx-auto my-10 py-12 px-6"
+        shadowSize="sm"
       >
-        <div className="w-16 h-16 rounded-full grid place-items-center bg-accent-light">
-          <CircleCheckBig className="text-4xl text-accent" />
-        </div>
-      </m.div>
+        {/* Background soft accent glow */}
+        <div
+          className="absolute w-55 h-55 rounded-full left-1/2 top-0 -translate-x-1/2 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(circle, var(--accent) 8%, transparent 70%)",
+          }}
+        />
 
-      <h3 className="font-display font-extrabold mb-2.5 text-text-primary text-xl">
-        Review Complete!
-      </h3>
+        <m.div
+          animate={{ y: [0, -6, 0] }}
+          transition={{ repeat: Infinity, duration: 4, ease: "easeInOut" }}
+          className="mb-5 inline-flex mx-auto"
+        >
+          <div className="w-16 h-16 rounded-full grid place-items-center bg-accent-light mx-auto">
+            <CircleCheckBig className="text-4xl text-accent" />
+          </div>
+        </m.div>
 
-      <p className="text-text-secondary font-medium leading-relaxed text-[14.5px] mx-0 mb-6 mt-0">
-        Awesome! You have no cards left to review. Take a break and return later.
-      </p>
+        <h3 className="font-display font-extrabold mb-2.5 text-text-primary text-xl">
+          Review Complete!
+        </h3>
 
-      {nextReviewAt && <Countdown targetIso={nextReviewAt} />}
+        <p className="text-text-secondary font-medium leading-relaxed text-[14.5px] mx-0 mb-6 mt-0">
+          Awesome! You have no cards left to review. Take a break and return
+          later.
+        </p>
+
+        {nextReviewAt && <Countdown targetIso={nextReviewAt} />}
+      </Card>
     </m.div>
   );
 }

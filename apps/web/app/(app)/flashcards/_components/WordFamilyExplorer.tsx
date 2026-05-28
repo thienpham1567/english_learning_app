@@ -4,6 +4,7 @@ import { Lightbulb, Loader2, Network, Star, Target } from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useState } from "react";
 import { api } from "@/lib/api-client";
+import { Card } from "@/components/ui/card";
 
 type WordForm = {
   word: string;
@@ -127,8 +128,8 @@ export function WordFamilyExplorer({ word }: { word: string }) {
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: i * 0.06 }}
-                className="bg-bg-deep border-2 border-border rounded-[10px] py-2.5 px-3"
               >
+                <Card size="sm" shadowSize="none" bgType="muted" className="py-2.5 px-3 gap-0.5 border-2 rounded-[10px]">
                 <div className="flex items-center gap-1.5 mb-1 flex-wrap">
                   <span className="font-bold text-ink text-sm">{form.word}</span>
                   <span
@@ -179,18 +180,18 @@ export function WordFamilyExplorer({ word }: { word: string }) {
                     ))}
                   </div>
                 )}
+                </Card>
               </m.div>
             );
           })}
 
           {/* Tips */}
           {(data.tip || data.toeicNote) && (
-            <div
-              className="py-2 px-3 rounded-lg"
-              style={{
-                background: "color-mix(in srgb, var(--accent) 5%, var(--surface))",
-                border: "1px solid color-mix(in srgb, var(--accent) 10%, var(--border))",
-              }}
+            <Card
+              size="sm"
+              shadowSize="none"
+              bgType="accent-light"
+              className="py-2 px-3 border border-accent/15 rounded-lg gap-1"
             >
               {data.tip && (
                 <p className="text-[11px] text-text-secondary leading-normal m-0 mb-1">
@@ -204,7 +205,7 @@ export function WordFamilyExplorer({ word }: { word: string }) {
                   {data.toeicNote}
                 </p>
               )}
-            </div>
+            </Card>
           )}
         </m.div>
       )}

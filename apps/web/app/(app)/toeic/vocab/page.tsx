@@ -1,8 +1,8 @@
 import { db, reviewTask, toeicVocab } from "@repo/database";
 import { and, eq, lte, sql } from "drizzle-orm";
-import { BookOpenText } from "lucide-react";
 import { headers } from "next/headers";
 import { auth } from "@/lib/auth";
+import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
 import { VocabHub } from "./_components/VocabHub";
 
@@ -68,7 +68,10 @@ export default async function ToeicVocabPage() {
 
   return (
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
-      <div className="p-4">
+      <div className="p-4 max-w-3xl mx-auto w-full">
+        <div className="mb-4">
+          <RoadmapBanner />
+        </div>
         <VocabHub packs={packs} dueCount={dueCount} />
       </div>
     </div>

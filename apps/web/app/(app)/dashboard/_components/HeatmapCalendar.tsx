@@ -3,6 +3,7 @@
 import { Calendar, Flame, Star } from "lucide-react";
 import { motion } from "motion/react";
 import { useEffect, useState } from "react";
+import { Card } from "@/components/ui/card";
 import { api } from "@/lib/api-client";
 
 type DayData = { date: string; count: number; xp: number };
@@ -30,7 +31,7 @@ export function HeatmapCalendar() {
   if (loading) {
     return (
       <div className="py-4">
-        <div className="w-full h-32 rounded-2xl bg-bg-deep border-2 border-border animate-pulse" />
+        <Card className="w-full h-32 bg-bg-deep animate-pulse shadow-none" />
       </div>
     );
   }
@@ -76,10 +77,12 @@ export function HeatmapCalendar() {
     <motion.div
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      whileHover={{ y: -2, x: -2, boxShadow: "var(--shadow)" }}
       transition={{ duration: 0.3 }}
-      className="rounded-2xl border-2 border-border bg-surface p-5 shadow-sm flex flex-col gap-4 transition-all duration-100"
     >
+      <Card
+        shadowSize="sm"
+        className="rounded-2xl bg-surface p-5 flex flex-col gap-4"
+      >
       {/* Header section with icon & stats */}
       <div className="flex flex-wrap gap-3 items-center justify-between">
         <div className="flex items-center gap-2">
@@ -188,6 +191,7 @@ export function HeatmapCalendar() {
         ))}
         <span className="ml-1">More</span>
       </div>
+      </Card>
     </motion.div>
   );
 }

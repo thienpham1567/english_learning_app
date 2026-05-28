@@ -25,6 +25,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { useMemo } from "react";
+import { Card } from "@/components/ui/card";
 
 type Props = {
   errors: ErrorPatternInput[];
@@ -73,9 +74,10 @@ export function ErrorPatternSummary({ errors }: Props) {
         {topPatterns.map((pattern) => {
           const actionLabel = pattern.nextAction.label.replace("Luyện sửa lỗi:", "Practice:");
           return (
-            <div
+            <Card
               key={pattern.category.key}
-              className="rounded-2xl bg-surface border-2 border-border overflow-hidden transition-all duration-150 hover:border-warning/30 hover:shadow-sm"
+              shadowSize="sm"
+              className="p-0 gap-0 overflow-hidden bg-surface"
             >
               {/* Pattern header */}
               <div
@@ -133,7 +135,7 @@ export function ErrorPatternSummary({ errors }: Props) {
                   </div>
                 </div>
               )}
-            </div>
+            </Card>
           );
         })}
       </div>

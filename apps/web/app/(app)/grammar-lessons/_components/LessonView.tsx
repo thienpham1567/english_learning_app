@@ -23,6 +23,7 @@ import {
 import * as m from "motion/react-client";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { Card } from "@/components/ui/card";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { api } from "@/lib/api-client";
 import {
@@ -31,6 +32,8 @@ import {
   type GrammarLessonProgressItem,
   isGrammarAnswerCorrect,
 } from "@/lib/grammar-lessons/schema";
+import { useRoadmap } from "@/lib/curriculum/roadmap-context";
+import { getUnitIdForGrammarTopic, GRAMMAR_TOPIC_TO_WEEK } from "@/lib/curriculum/grammar-mapping";
 
 const OPTION_LABELS = ["A", "B", "C", "D"] as const;
 const TIER_LABELS: Record<string, { label: string; color: string }> = {
@@ -60,6 +63,7 @@ interface Props {
 
 export function LessonView({ topicId, topicTitle, level, examMode, onBack, onComplete }: Props) {
   const router = useRouter();
+  const { completeUnit } = useRoadmap();
   const [state, setState] = useState<LessonState>("loading");
   const [lesson, setLesson] = useState<GrammarLessonData | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -220,6 +224,9 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
       } catch {
         onComplete(topicId, fallbackProgress);
       }
+      // Auto-complete roadmap unit for this grammar topic
+      const roadmapUnitId = getUnitIdForGrammarTopic(topicId);
+      if (roadmapUnitId) completeUnit(roadmapUnitId);
       setState("complete");
     }
   };
@@ -243,9 +250,10 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
       {/* Loading state */}
       {state === "loading" && (
-        <div
-          className="text-center rounded-xl bg-surface border-2 border-border"
-          style={{ padding: "72px 24px", boxShadow: "var(--shadow-md)" }}
+        <Card
+          shadowSize="md"
+          className="text-center rounded-xl bg-surface"
+          style={{ padding: "72px 24px" }}
         >
           <Loader2 className="animate-spin text-accent" size={38} />
           <p className="text-text-secondary mt-5 font-bold" style={{ fontSize: 14.5 }}>
@@ -254,7 +262,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           <p className="text-text-muted m-0 font-medium" style={{ fontSize: 12.5 }}>
             AI is analyzing concepts and compiling practice questions...
           </p>
-        </div>
+        </Card>
       )}
 
       {/* Error state */}
@@ -291,14 +299,16 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.05 }}
-            className="rounded-xl border-2 border-border relative overflow-hidden"
-            style={{
-              padding: "28px 24px 24px",
-              background:
-                "linear-gradient(135deg, color-mix(in srgb, var(--accent) 6%, var(--surface)), var(--surface))",
-              boxShadow: "var(--shadow-md)",
-            }}
           >
+            <Card
+              shadowSize="md"
+              className="rounded-xl relative overflow-hidden bg-surface"
+              style={{
+                padding: "28px 24px 24px",
+                background:
+                  "linear-gradient(135deg, color-mix(in srgb, var(--accent) 6%, var(--surface)), var(--surface))",
+              }}
+            >
             {/* Top accent gradient bar */}
             <div
               className="absolute w-full h-[3px]"
@@ -370,6 +380,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 </m.button>
               </div>
             </div>
+            </Card>
           </m.div>
 
           {/* Formula Card — Glassmorphism */}
@@ -378,15 +389,17 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               initial={{ opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.1 }}
-              className="rounded-xl text-center relative overflow-hidden"
-              style={{
-                padding: "22px 24px",
-                background:
-                  "linear-gradient(135deg, var(--accent-light), color-mix(in srgb, var(--secondary) 6%, var(--surface)))",
-                border: "1.5px solid color-mix(in srgb, var(--accent) 20%, var(--border))",
-                boxShadow: "0 8px 24px color-mix(in srgb, var(--accent) 8%, transparent)",
-              }}
             >
+              <Card
+                className="rounded-xl text-center relative overflow-hidden"
+                style={{
+                  padding: "22px 24px",
+                  background:
+                    "linear-gradient(135deg, var(--accent-light), color-mix(in srgb, var(--secondary) 6%, var(--surface)))",
+                  border: "1.5px solid color-mix(in srgb, var(--accent) 20%, var(--border))",
+                  boxShadow: "0 8px 24px color-mix(in srgb, var(--accent) 8%, transparent)",
+                }}
+              >
               {/* Decorative dots */}
               <div className="absolute flex" style={{ top: 8, right: 12, gap: 3, opacity: 0.3 }}>
                 <div
@@ -411,13 +424,14 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               >
                 {lesson.formula}
               </p>
+            </Card>
             </m.div>
           )}
 
           {/* Explanation Card */}
-          <div
-            className="rounded-xl bg-surface border-2 border-border"
-            style={{ padding: 20, boxShadow: "var(--shadow-sm)" }}
+          <Card
+            shadowSize="sm"
+            className="rounded-xl bg-surface"
           >
             <span
               className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5 mb-3"
@@ -445,13 +459,13 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 {lesson.explanation}
               </p>
             </div>
-          </div>
+          </Card>
 
           {/* Usage Notes Card */}
           {lesson.usageNotes && lesson.usageNotes.length > 0 && (
-            <div
-              className="rounded-xl bg-surface border-2 border-border"
-              style={{ padding: 20, boxShadow: "var(--shadow-sm)" }}
+            <Card
+              shadowSize="sm"
+              className="rounded-xl bg-surface"
             >
               <span
                 className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5"
@@ -481,7 +495,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   </div>
                 ))}
               </div>
-            </div>
+            </Card>
           )}
 
           {/* TOEIC Tips Card */}
@@ -526,9 +540,9 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
           {/* Time Signals Card */}
           {lesson.timeSignals && lesson.timeSignals.length > 0 && (
-            <div
-              className="rounded-xl bg-surface border-2 border-border"
-              style={{ padding: 20, boxShadow: "var(--shadow-sm)" }}
+            <Card
+              shadowSize="sm"
+              className="rounded-xl bg-surface"
             >
               <span
                 className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5"
@@ -546,14 +560,14 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   </span>
                 ))}
               </div>
-            </div>
+            </Card>
           )}
 
           {/* Confusion Pairs Card */}
           {lesson.confusionPairs && lesson.confusionPairs.length > 0 && (
-            <div
-              className="rounded-xl bg-surface border-2 border-border"
-              style={{ padding: 20, boxShadow: "var(--shadow-sm)" }}
+            <Card
+              shadowSize="sm"
+              className="rounded-xl bg-surface"
             >
               <span
                 className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5"
@@ -614,14 +628,14 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   </div>
                 ))}
               </div>
-            </div>
+            </Card>
           )}
 
           {/* Examples Card */}
           {lesson.examples && lesson.examples.length > 0 && (
-            <div
-              className="rounded-xl bg-surface border-2 border-border"
-              style={{ padding: 20, boxShadow: "var(--shadow-sm)" }}
+            <Card
+              shadowSize="sm"
+              className="rounded-xl bg-surface"
             >
               <span
                 className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5"
@@ -680,14 +694,14 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   </div>
                 ))}
               </div>
-            </div>
+            </Card>
           )}
 
           {/* Common Mistakes Card */}
           {lesson.commonMistakes && lesson.commonMistakes.length > 0 && (
-            <div
-              className="rounded-xl bg-surface border-2 border-border"
-              style={{ padding: 20, boxShadow: "var(--shadow-sm)" }}
+            <Card
+              shadowSize="sm"
+              className="rounded-xl bg-surface"
             >
               <span
                 className="font-extrabold text-text-secondary uppercase tracking-widest flex items-center gap-1.5"
@@ -740,7 +754,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   </div>
                 </div>
               ))}
-            </div>
+            </Card>
           )}
 
           {/* Start Exercises Button — Premium CTA */}
@@ -850,21 +864,12 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
           )}
 
           {/* Main Question Box */}
-          <div
-            className="p-6 rounded-xl bg-surface border-2 border-border relative"
-            style={{ boxShadow: "var(--shadow-sm)" }}
+          <Card
+            accentColor="accent"
+            accentPosition="left"
+            shadowSize="sm"
+            className="relative p-6 bg-surface"
           >
-            <div
-              className="absolute w-[4px]"
-              style={{
-                left: 0,
-                top: 0,
-                bottom: 0,
-                background: "var(--accent)",
-                borderRadius: "4px 0 0 4px",
-              }}
-            />
-
             {/* Tags */}
             <div className="flex items-center gap-2" style={{ marginBottom: 14 }}>
               <span
@@ -1140,7 +1145,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 </p>
               </m.div>
             )}
-          </div>
+          </Card>
 
           {/* Action button */}
           {revealed && (
@@ -1183,9 +1188,11 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
             <m.div
               initial={{ opacity: 0, scale: 0.97 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="rounded-xl bg-surface border-2 border-border text-center relative overflow-hidden"
-              style={{ padding: "40px 24px", boxShadow: "var(--shadow-lg)" }}
             >
+              <Card
+                shadowSize="lg"
+                className="rounded-xl bg-surface text-center relative overflow-hidden p-6 md:p-10"
+              >
               {/* Background glowing circle */}
               <div
                 className="absolute w-[220px] h-[220px] rounded-full"
@@ -1244,6 +1251,31 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   You have already earned XP for this lesson.
                 </p>
               )}
+
+              {/* Roadmap auto-completion badge */}
+              {(() => {
+                const unitId = getUnitIdForGrammarTopic(topicId);
+                const mapping = unitId ? GRAMMAR_TOPIC_TO_WEEK[topicId] : null;
+                if (!unitId || !mapping) return null;
+                return (
+                  <m.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.3 }}
+                    className="mb-5"
+                  >
+                    <a
+                      href={`/roadmap/week/${mapping.weekNumber}`}
+                      className="no-underline inline-flex items-center gap-2 rounded-xl border-2 border-emerald-500/30 bg-emerald-500/8 px-4 py-2.5 text-xs font-bold text-emerald-600 hover:bg-emerald-500/12 transition-colors"
+                    >
+                      <CircleCheckBig size={14} />
+                      <span>
+                        Roadmap Week {mapping.weekNumber} — unit auto-completed ✓
+                      </span>
+                    </a>
+                  </m.div>
+                );
+              })()}
 
               {/* Error review logs */}
               {wrongAnswers.length > 0 && (
@@ -1360,6 +1392,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   Review Quiz
                 </m.button>
               </div>
+              </Card>
             </m.div>
           );
         })()}

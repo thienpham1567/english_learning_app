@@ -1,9 +1,10 @@
-"use client";
-
-import { BookOpenText } from "lucide-react";
+import { BookOpenText, CheckCircle, MapPin } from "lucide-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useRef, useState } from "react";
 import { api } from "@/lib/api-client";
+import { useRoadmap } from "@/lib/curriculum/roadmap-context";
+import { getUnitIdForVocabTopic, getVocabRoadmapWeek } from "@/lib/curriculum/vocab-mapping";
+import { Card } from "@/components/ui/card";
 
 type VocabWord = {
   id: string;
@@ -30,6 +31,7 @@ function LearnRunner() {
   const params = useSearchParams();
   const pack = params.get("pack");
   const mode = (params.get("mode") ?? "new") as "new" | "review";
+  const { completeUnit } = useRoadmap();
 
   const [words, setWords] = useState<VocabWord[]>([]);
   const [progress, setProgress] = useState<Record<string, Progress>>({});
@@ -88,78 +90,100 @@ function LearnRunner() {
     return <div className="p-6">Loading vocabulary... (or empty pack)</div>;
   }
   if (done) {
+    // Auto-complete roadmap unit for this vocab pack
+    const roadmapWeek = pack ? getVocabRoadmapWeek(pack) : null;
+    const unitId = pack ? getUnitIdForVocabTopic(pack) : null;
+    if (unitId) completeUnit(unitId);
+
     return (
-      <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
-        <div className="text-[28px] font-bold">Completed!</div>
-        <div className="mt-2">
-          <span className="bg-red-500/15 text-red-600 py-0.5 px-2 inline-block">Again: {stats.again}</span>
-          <span className="bg-amber-500/15 text-amber-600 py-0.5 px-2 inline-block">Hard: {stats.hard}</span>
-          <span className="bg-emerald-500/15 text-emerald-600 py-0.5 px-2 inline-block">Good: {stats.good}</span>
-          <span className="bg-blue-500/15 text-blue-600 py-0.5 px-2 inline-block">Easy: {stats.easy}</span>
+      <Card shadowSize="sm" className="p-6 max-w-[500px] mx-auto">
+        <div className="text-center mb-4">
+          <CheckCircle size={36} className="text-success mx-auto mb-2" />
+          <div className="text-2xl font-black text-text-primary">Completed!</div>
         </div>
-        <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm mt-4" onClick={() => router.push("/toeic/vocab")}>
-          Back to Vocab Hub
-        </button>
-      </div>
+        <div className="flex gap-2 justify-center flex-wrap mb-4">
+          <span className="bg-red-500/10 text-red-600 py-1 px-3 rounded-lg text-sm font-bold">Again: {stats.again}</span>
+          <span className="bg-amber-500/10 text-amber-600 py-1 px-3 rounded-lg text-sm font-bold">Hard: {stats.hard}</span>
+          <span className="bg-emerald-500/10 text-emerald-600 py-1 px-3 rounded-lg text-sm font-bold">Good: {stats.good}</span>
+          <span className="bg-blue-500/10 text-blue-600 py-1 px-3 rounded-lg text-sm font-bold">Easy: {stats.easy}</span>
+        </div>
+        {roadmapWeek && (
+          <a
+            href={`/roadmap/week/${roadmapWeek.weekNumber}`}
+            className="no-underline flex items-center gap-2 justify-center px-4 py-2.5 rounded-xl border-2 border-emerald-500/30 bg-emerald-500/8 text-xs font-bold text-emerald-600 hover:bg-emerald-500/12 transition-colors mb-4"
+          >
+            <MapPin size={12} />
+            Roadmap Week {roadmapWeek.weekNumber} — vocab unit auto-completed ✓
+          </a>
+        )}
+        <div className="text-center">
+          <button
+            className="py-2.5 px-5 rounded-xl border-none bg-accent text-[var(--text-on-accent)] font-extrabold text-sm cursor-pointer shadow-sm"
+            onClick={() => router.push("/toeic/vocab")}
+          >
+            Back to Vocab Hub
+          </button>
+        </div>
+      </Card>
     );
   }
   if (!current) return null;
 
   return (
-    <div className="grid gap-3 w-[600px]">
-      <div className="flex justify-between text-text-muted text-sm">
+    <div className="grid gap-3 w-[600px] mx-auto">
+      <div className="flex justify-between text-text-muted text-sm px-1">
         <span>
           Word {idx + 1} / {total}
         </span>
-        <span className="bg-accent/10 text-accent py-0.5 px-2 inline-block">{current.topic}</span>
+        <span className="bg-accent/10 text-accent py-0.5 px-2 inline-block rounded-md font-bold">{current.topic}</span>
       </div>
       <div className="h-2 rounded-full bg-border overflow-hidden"><div className="h-full rounded-full bg-accent transition-all duration-500" style={{ width: `${Math.round((idx / total) * 100)}%` }} /></div>
 
-      <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+      <Card shadowSize="sm" className="p-6">
         <div className="text-center">
           <div className="text-4xl font-bold">{current.word}</div>
           {current.ipa && (
-            <div className="text-text-muted mt-1">
-              {current.ipa} <span className="bg-accent/10 text-accent py-0.5 px-2 inline-block">{current.pos}</span>
+            <div className="text-text-muted mt-1 font-mono">
+              {current.ipa} <span className="bg-accent/10 text-accent py-0.5 px-2 inline-block rounded-md font-bold font-sans ml-1 text-xs">{current.pos}</span>
             </div>
           )}
         </div>
 
         {!revealed ? (
           <div className="text-center mt-6">
-            <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" onClick={() => setRevealed(true)}>
+            <button className="py-2.5 px-5 rounded-xl border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm hover:translate-y-[-1px] active:translate-y-0 transition-transform" onClick={() => setRevealed(true)}>
               Show Meaning
             </button>
           </div>
         ) : (
           <div className="mt-4">
-            <div className="text-lg font-medium">{current.meaningVi}</div>
+            <div className="text-lg font-medium border-t-2 border-border/10 pt-4">{current.meaningVi}</div>
             <div className="text-text-muted mt-1">{current.meaningEn}</div>
             {current.exampleEn && (
-              <div className="mt-3 p-3 bg-surface rounded-lg">
+              <div className="mt-3 p-3 bg-surface-alt rounded-lg border border-border/10">
                 <div className="italic">{current.exampleEn}</div>
                 {current.exampleVi && (
                   <div className="text-text-muted text-[13px] mt-1">{current.exampleVi}</div>
                 )}
               </div>
             )}
-            <div className="grid gap-2 mt-4" style={{ gridTemplateColumns: "repeat(4, 1fr)" }}>
-              <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" disabled={submitting} onClick={() => submit("again")}>
+            <div className="grid gap-2 mt-6" style={{ gridTemplateColumns: "repeat(4, 1fr)" }}>
+              <button className="py-2 px-3 rounded-lg border-2 border-border bg-error text-white font-bold text-xs cursor-pointer shadow-sm hover:translate-y-[-1px] active:translate-y-0 transition-transform" disabled={submitting} onClick={() => submit("again")}>
                 Again
               </button>
-              <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" disabled={submitting} onClick={() => submit("hard")}>
+              <button className="py-2 px-3 rounded-lg border-2 border-border bg-warning text-black font-bold text-xs cursor-pointer shadow-sm hover:translate-y-[-1px] active:translate-y-0 transition-transform" disabled={submitting} onClick={() => submit("hard")}>
                 Hard
               </button>
-              <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" disabled={submitting} onClick={() => submit("good")}>
+              <button className="py-2 px-3 rounded-lg border-2 border-border bg-success text-white font-bold text-xs cursor-pointer shadow-sm hover:translate-y-[-1px] active:translate-y-0 transition-transform" disabled={submitting} onClick={() => submit("good")}>
                 Good
               </button>
-              <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" disabled={submitting} onClick={() => submit("easy")}>
+              <button className="py-2 px-3 rounded-lg border-2 border-border bg-secondary text-white font-bold text-xs cursor-pointer shadow-sm hover:translate-y-[-1px] active:translate-y-0 transition-transform" disabled={submitting} onClick={() => submit("easy")}>
                 Easy
               </button>
             </div>
           </div>
         )}
-      </div>
+      </Card>
     </div>
   );
 }
@@ -167,7 +191,7 @@ function LearnRunner() {
 export default function VocabLearnPage() {
   return (
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
-      <div className="p-4 flex-1">
+      <div className="p-4 flex-1 flex justify-center items-start pt-12">
         <Suspense fallback={<div>Loading…</div>}>
           <LearnRunner />
         </Suspense>

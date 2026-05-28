@@ -4,6 +4,7 @@ import { CheckCircle, Lightbulb, Loader2, RefreshCw, Trophy, XCircle, Zap } from
 import * as m from "motion/react-client";
 import { useCallback, useState } from "react";
 import { api } from "@/lib/api-client";
+import { Card } from "@/components/ui/card";
 
 type DrillExercise = {
   type: string;
@@ -74,24 +75,27 @@ export function PersonalizedDrill() {
       <m.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="p-5 rounded-2xl bg-gradient-to-br from-accent/6 to-[color-mix(in_srgb,var(--secondary)_4%,var(--surface))] border border-accent/15"
       >
-        <div className="flex items-center gap-2.5 mb-2.5">
-          <Zap className="h-4 w-4 text-accent" />
-          <span className="text-[15px] font-bold text-ink font-display">
-            AI Drill — Target Weaknesses
-          </span>
-        </div>
-        <p className="text-[13px] text-text-secondary m-0 mb-3.5 leading-relaxed">
-          AI will analyze your errors and generate exercises focusing on your weakest areas.
-        </p>
-        <button
-          type="button"
-          onClick={generateDrill}
-          className="inline-flex items-center gap-2 px-5.5 py-2.5 rounded-xl border-none bg-accent text-text-on-accent cursor-pointer text-sm font-bold transition-opacity duration-200 hover:opacity-90"
-        >
-          <Zap className="h-4 w-4" /> Generate Practice Session
-        </button>
+        <Card accentColor="accent" accentPosition="left" bgType="alt" className="gap-3.5">
+          <div className="flex items-center gap-2.5">
+            <Zap className="h-4 w-4 text-accent" />
+            <span className="text-[15px] font-bold text-ink font-display">
+              AI Drill — Target Weaknesses
+            </span>
+          </div>
+          <p className="text-[13px] text-text-secondary m-0 leading-relaxed">
+            AI will analyze your errors and generate exercises focusing on your weakest areas.
+          </p>
+          <div>
+            <button
+              type="button"
+              onClick={generateDrill}
+              className="inline-flex items-center gap-2 px-5.5 py-2.5 rounded-xl border-none bg-accent text-text-on-accent cursor-pointer text-sm font-bold transition-opacity duration-200 hover:opacity-90"
+            >
+              <Zap className="h-4 w-4" /> Generate Practice Session
+            </button>
+          </div>
+        </Card>
       </m.div>
     );
   }
@@ -99,11 +103,11 @@ export function PersonalizedDrill() {
   // Loading
   if (loading) {
     return (
-      <div className="py-8 px-5 rounded-2xl bg-surface border-2 border-border text-center">
-        <Loader2 className="h-7 w-7 text-accent animate-mx-auto mb-3" />
+      <Card className="py-8 text-center" shadowSize="default">
+        <Loader2 className="h-7 w-7 text-accent animate-spin mx-auto" />
         <div className="text-sm font-semibold text-text-primary">Analyzing errors...</div>
-        <div className="text-xs text-text-muted mt-1">AI is generating a personalized practice session for you</div>
-      </div>
+        <div className="text-xs text-text-muted">AI is generating a personalized practice session for you</div>
+      </Card>
     );
   }
 
@@ -117,29 +121,34 @@ export function PersonalizedDrill() {
       <m.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="py-6 px-5 rounded-2xl bg-surface border-2 border-border text-center"
       >
-        <Trophy
-          className={`h-9 w-9 mx-auto mb-3 ${pct >= 80 ? "text-success" : "text-accent"}`}
-        />
-        <div className="text-4xl font-black text-ink font-display">
-          {correctCount}/{drill.exercises.length}
-        </div>
-        <div className="text-sm text-text-secondary mb-1">
-          {pct >= 80
-            ? "Excellent! You have made significant progress!"
-            : pct >= 50
-              ? "Good job! Keep reviewing to improve."
-              : "Keep practicing. Don't give up!"}
-        </div>
-        <div className="text-xs text-text-muted mb-4">Accuracy: {pct}%</div>
-        <button
-          type="button"
-          onClick={generateDrill}
-          className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-[1.5px] border-accent bg-accent text-text-on-accent cursor-pointer text-[13px] font-bold"
-        >
-          <RefreshCw className="h-3.5 w-3.5" /> Generate New Drill
-        </button>
+        <Card className="py-6 px-5 text-center gap-3" shadowSize="default">
+          <Trophy
+            className={`h-9 w-9 mx-auto ${pct >= 80 ? "text-success" : "text-accent"}`}
+          />
+          <div className="text-4xl font-black text-ink font-display">
+            {correctCount}/{drill.exercises.length}
+          </div>
+          <div>
+            <div className="text-sm text-text-secondary">
+              {pct >= 80
+                ? "Excellent! You have made significant progress!"
+                : pct >= 50
+                  ? "Good job! Keep reviewing to improve."
+                  : "Keep practicing. Don't give up!"}
+            </div>
+            <div className="text-xs text-text-muted font-bold mt-1">Accuracy: {pct}%</div>
+          </div>
+          <div>
+            <button
+              type="button"
+              onClick={generateDrill}
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-[1.5px] border-accent bg-accent text-text-on-accent cursor-pointer text-[13px] font-bold"
+            >
+              <RefreshCw className="h-3.5 w-3.5" /> Generate New Drill
+            </button>
+          </div>
+        </Card>
       </m.div>
     );
   }
@@ -157,29 +166,31 @@ export function PersonalizedDrill() {
       initial={{ opacity: 0, x: 20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.25 }}
-      className="rounded-2xl bg-surface border-2 border-border overflow-hidden"
     >
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-accent/5 border-b-2 border-border">
-        <div className="flex items-center gap-2">
-          <Zap className="h-3.5 w-3.5 text-accent" />
-          <span className="text-[13px] font-bold text-ink">
-            Question {currentIndex + 1}/{drill.exercises.length}
-          </span>
-        </div>
+      <Card className="p-0 gap-0 overflow-hidden" shadowSize="default">
+        {/* Header */}
+        <div className="flex items-center justify-between px-4 py-3 bg-accent/5 border-b-2 border-border">
+          <div className="flex items-center gap-2">
+            <Zap className="h-3.5 w-3.5 text-accent" />
+            <span className="text-[13px] font-bold text-ink">
+              Question {currentIndex + 1}/{drill.exercises.length}
+            </span>
+          </div>
           <span className="text-[10px] font-bold px-2.5 py-1 rounded-full bg-accent-light text-accent-hover border border-accent/15">
             {exercise.targetWeakness}
           </span>
-      </div>
+        </div>
 
-      {/* Body */}
-      <div className="p-4 px-4">
-        <p className="text-xs text-text-muted font-semibold mb-2">{exercise.instruction}</p>
-        {data.sentence && (
-          <p className="text-[15px] font-medium text-text-primary leading-relaxed mb-4">
-            {data.sentence}
-          </p>
-        )}
+        {/* Body */}
+        <div className="p-4 flex flex-col gap-4">
+          <div>
+            <p className="text-xs text-text-muted font-semibold mb-2">{exercise.instruction}</p>
+            {data.sentence && (
+              <p className="text-[15px] font-medium text-text-primary leading-relaxed">
+                {data.sentence}
+              </p>
+            )}
+          </div>
 
         {/* Options */}
         {data.options && (
@@ -276,6 +287,7 @@ export function PersonalizedDrill() {
           </m.div>
         )}
       </div>
+      </Card>
     </m.div>
   );
 }

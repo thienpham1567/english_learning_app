@@ -24,6 +24,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useState } from "react";
 import { useAudioPlayer } from "@/hooks/useAudioPlayer";
 import { api } from "@/lib/api-client";
+import { Card } from "@/components/ui/card";
 
 type ToeicWord = {
   id: string;
@@ -176,7 +177,7 @@ export function ToeicVocabTab() {
     return (
       <div className="w-full max-w-3xl mx-auto flex flex-col gap-4">
         {/* Back button + header */}
-        <div className="flex flex-col sm:flex-row sm:items-center gap-4 bg-surface border-2 border-border p-5 rounded-2xl shadow-sm relative overflow-hidden">
+        <Card className="flex-col sm:flex-row sm:items-center gap-4 bg-surface p-5 rounded-2xl" shadowSize="sm">
           <button
             type="button"
             onClick={() => setActiveTopic(null)}
@@ -204,7 +205,7 @@ export function ToeicVocabTab() {
           >
             Learn Now
           </Link>
-        </div>
+        </Card>
 
         {/* Search */}
         <div className="relative w-full">
@@ -235,12 +236,12 @@ export function ToeicVocabTab() {
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: Math.min(i * 0.02, 0.4) }}
-                  className={`border-2 border-border rounded-2xl overflow-hidden shadow-sm transition-all ${
-                    isExpanded
-                      ? "bg-accent/5"
-                      : "bg-surface"
-                  }`}
                 >
+                  <Card
+                    shadowSize="sm"
+                    bgType={isExpanded ? "accent-light" : "default"}
+                    className="p-0 gap-0 overflow-hidden bg-surface"
+                  >
                   {/* Row */}
                   <button
                     type="button"
@@ -306,14 +307,21 @@ export function ToeicVocabTab() {
 
                       {/* Example */}
                       {w.exampleEn && (
-                        <div className="bg-surface-alt p-3.5 rounded-xl border-2 border-border border-l-4 border-l-accent shadow-sm flex flex-col gap-1">
+                        <Card
+                          size="sm"
+                          bgType="alt"
+                          accentColor="accent"
+                          accentPosition="left"
+                          shadowSize="sm"
+                          className="gap-1 p-3.5"
+                        >
                           <div className="text-xs md:text-sm text-text-primary italic leading-normal font-semibold">
                             &ldquo;{w.exampleEn}&rdquo;
                           </div>
                           {w.exampleVi && (
                             <div className="text-[10px] text-text-muted font-bold mt-1">→ {w.exampleVi}</div>
                           )}
-                        </div>
+                        </Card>
                       )}
 
                       {/* Action */}
@@ -327,6 +335,7 @@ export function ToeicVocabTab() {
                       </Link>
                     </div>
                   )}
+                  </Card>
                 </m.div>
               );
             })}
@@ -343,23 +352,24 @@ export function ToeicVocabTab() {
       <m.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-surface border-2 border-border p-6 rounded-2xl shadow"
       >
-        <div className="flex items-center justify-between mb-3.5">
-          <div>
-            <h3 className="text-sm font-black text-text-primary font-display uppercase tracking-wider">Overall Progress</h3>
-            <p className="text-xs text-text-secondary font-semibold mt-1">
-              {totalLearned} / {totalWords} words learned
-            </p>
+        <Card shadowSize="default" className="bg-surface p-6 gap-3.5 rounded-2xl">
+          <div className="flex items-center justify-between">
+            <div>
+              <h3 className="text-sm font-black text-text-primary font-display uppercase tracking-wider">Overall Progress</h3>
+              <p className="text-xs text-text-secondary font-semibold mt-1">
+                {totalLearned} / {totalWords} words learned
+              </p>
+            </div>
+            <div className="text-2xl font-black text-text-primary font-mono leading-none">{overallPct}%</div>
           </div>
-          <div className="text-2xl font-black text-text-primary font-mono leading-none">{overallPct}%</div>
-        </div>
-        <div className="h-3 rounded-full bg-bg-deep overflow-hidden relative border-2 border-border">
-          <div
-            style={{ width: `${overallPct}%` }}
-            className="h-full rounded-full bg-gradient-to-r from-accent to-secondary transition-all duration-500 ease-out"
-          />
-        </div>
+          <div className="h-3 rounded-full bg-bg-deep overflow-hidden relative border-2 border-border">
+            <div
+              style={{ width: `${overallPct}%` }}
+              className="h-full rounded-full bg-gradient-to-r from-accent to-secondary transition-all duration-500 ease-out"
+            />
+          </div>
+        </Card>
       </m.div>
 
       {/* Topics grid */}
@@ -381,34 +391,36 @@ export function ToeicVocabTab() {
               whileHover={{ y: -3, x: -1, rotate: i % 2 === 0 ? 0.5 : -0.5, boxShadow: "var(--shadow)" }}
               whileTap={{ scale: 0.98 }}
               onClick={() => loadTopic(pack.topic)}
-              className="rounded-2xl text-left border-2 border-border bg-surface cursor-pointer flex flex-col gap-3 p-5 shadow-sm transition-all duration-100 group"
+              className="text-left border-none bg-transparent cursor-pointer p-0 block w-full"
             >
-              <div className="flex items-center gap-3.5 w-full">
-                <div
-                  className="w-11 h-11 rounded-xl border-2 border-border grid shrink-0 place-items-center text-xl shadow-sm"
-                  style={{
-                    background: `color-mix(in srgb, ${meta.color} 10%, var(--surface))`,
-                    borderColor: `color-mix(in srgb, ${meta.color} 30%, var(--border))`,
-                    color: meta.color,
-                  }}
-                >
-                  <meta.icon size={20} className="group-hover:animate-bounce" />
-                </div>
-                <div className="min-w-0 flex-1">
-                  <div className="text-sm font-black text-text-primary font-display truncate leading-tight">{meta.label}</div>
-                  <div className="text-text-muted text-[10px] font-extrabold mt-1.5 uppercase font-mono leading-none tracking-wider">
-                    {pack.learned}/{pack.total} words
+              <Card shadowSize="sm" className="bg-surface gap-3 p-5 h-full group text-left">
+                <div className="flex items-center gap-3.5 w-full">
+                  <div
+                    className="w-11 h-11 rounded-xl border-2 border-border grid shrink-0 place-items-center text-xl shadow-sm animate-none"
+                    style={{
+                      background: `color-mix(in srgb, ${meta.color} 10%, var(--surface))`,
+                      borderColor: `color-mix(in srgb, ${meta.color} 30%, var(--border))`,
+                      color: meta.color,
+                    }}
+                  >
+                    <meta.icon size={20} className="group-hover:animate-bounce" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm font-black text-text-primary font-display truncate leading-tight">{meta.label}</div>
+                    <div className="text-text-muted text-[10px] font-extrabold mt-1.5 uppercase font-mono leading-none tracking-wider">
+                      {pack.learned}/{pack.total} words
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="w-full h-2 rounded-full bg-bg-deep border border-border overflow-hidden mt-1 relative">
-                <div
-                  style={{ width: `${pct}%` }}
-                  className={`h-full rounded-full transition-all duration-500 ${
-                    pct < 30 ? "bg-error" : pct < 70 ? "bg-warning" : "bg-success"
-                  }`}
-                />
-              </div>
+                <div className="w-full h-2 rounded-full bg-bg-deep border border-border overflow-hidden relative">
+                  <div
+                    style={{ width: `${pct}%` }}
+                    className={`h-full rounded-full transition-all duration-500 ${
+                      pct < 30 ? "bg-error" : pct < 70 ? "bg-warning" : "bg-success"
+                    }`}
+                  />
+                </div>
+              </Card>
             </m.button>
           );
         })}

@@ -7,6 +7,7 @@ import { WordFamilyExplorer } from "@/app/(app)/flashcards/_components/WordFamil
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { api } from "@/lib/api-client";
 import type { DueCard } from "@/lib/flashcard/types";
+import { Card } from "@/components/ui/card";
 
 const LEVEL_COLORS: Record<string, string> = {
   A1: "var(--success)",
@@ -61,8 +62,9 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
           }}
         >
           {/* Front Side Card */}
-          <div
-            className="absolute inset-0 rounded-xl flex flex-col items-center justify-center py-10 px-8 shadow-md"
+          <Card
+            shadowSize="md"
+            className="absolute inset-0 flex flex-col items-center justify-center py-10 px-8 rounded-xl"
             style={{
               backfaceVisibility: "hidden",
               border: `1.5px solid ${isFlipped ? "var(--border)" : "color-mix(in srgb, var(--accent) 15%, var(--border))"}`,
@@ -130,11 +132,12 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
             <span className="absolute bottom-6 text-xs font-semibold text-text-muted">
               Click card to flip
             </span>
-          </div>
+          </Card>
 
           {/* Back Side Card */}
-          <div
-            className="absolute inset-0 rounded-xl border-2 border-border bg-surface p-6 flex flex-col justify-start overflow-y-auto shadow-md"
+          <Card
+            shadowSize="md"
+            className="absolute inset-0 p-6 flex flex-col justify-start overflow-y-auto rounded-xl"
             style={{
               backfaceVisibility: "hidden",
               transform: "rotateY(180deg)",
@@ -155,9 +158,14 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                 {firstSense.examples.length > 0 && (
                   <div className="flex flex-col gap-2">
                     {firstSense.examples.slice(0, 2).map((ex, i) => (
-                      <div
+                      <Card
                         key={i}
-                        className="bg-surface-alt border-l-[3.5px] border-l-accent rounded-md py-2.5 px-3.5"
+                        size="sm"
+                        bgType="alt"
+                        accentColor="accent"
+                        accentPosition="left"
+                        shadowSize="none"
+                        className="py-2.5 px-3.5 gap-0.5 border-l-4"
                       >
                         <div className="font-bold text-text-primary leading-normal text-[13.5px]">
                           {ex.en}
@@ -165,7 +173,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                         <div className="text-xs text-text-muted font-semibold mt-0.5">
                           {ex.vi}
                         </div>
-                      </div>
+                      </Card>
                     ))}
                   </div>
                 )}
@@ -239,14 +247,12 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                   <Lightbulb /> TOEIC Context Examples
                 </span>
                 {contextSentences.slice(0, 3).map((s, i) => (
-                  <div
+                  <Card
                     key={i}
-                    className="rounded-lg py-2.5 px-3.5"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, color-mix(in srgb, var(--accent) 4%, var(--surface)), var(--surface-alt))",
-                      border: "1px solid color-mix(in srgb, var(--accent) 12%, var(--border))",
-                    }}
+                    size="sm"
+                    shadowSize="none"
+                    bgType="alt"
+                    className="py-2.5 px-3.5 gap-1 border border-border/80"
                   >
                     <div
                       dangerouslySetInnerHTML={{
@@ -260,7 +266,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                     <div className="text-text-muted font-semibold mt-1 text-[11.5px]">
                       {s.vi}
                     </div>
-                  </div>
+                  </Card>
                 ))}
               </div>
             )}
@@ -269,7 +275,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
             <div className="mt-3">
               <WordFamilyExplorer word={card.headword} />
             </div>
-          </div>
+          </Card>
         </m.div>
       </div>
 

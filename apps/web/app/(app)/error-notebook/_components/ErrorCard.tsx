@@ -2,6 +2,7 @@
 
 import { AlertTriangle, Brain, CheckCircle, FileText, XCircle } from "lucide-react";
 import * as m from "motion/react-client";
+import { Card } from "@/components/ui/card";
 import type { ErrorEntry } from "../_types/types";
 import { MODULE_ICONS, MODULE_LABELS } from "../_types/types";
 
@@ -17,14 +18,15 @@ export function ErrorCard({ error, onClick, index = 0 }: ErrorCardProps) {
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: Math.min(index * 0.03, 0.3) }}
-      whileHover={{ y: -2, boxShadow: "var(--shadow-md)" }}
-      onClick={onClick}
-      className="bg-surface rounded-xl border-2 border-border p-4 px-4.5 cursor-pointer transition-all duration-150 relative overflow-hidden"
     >
-      {/* Accent bar */}
-      <div
-        className={`absolute top-0 left-0 w-[3px] h-full rounded-l ${error.isResolved ? "bg-success" : "bg-error"}`}
-      />
+      <Card
+        interactive
+        shadowSize="sm"
+        accentColor={error.isResolved ? "success" : "error"}
+        accentPosition="left"
+        className="p-4 px-4.5 cursor-pointer bg-surface relative overflow-hidden"
+        onClick={onClick}
+      >
 
       {/* Top row: status + module + date */}
       <div className="flex items-center gap-2 mb-2.5">
@@ -82,6 +84,7 @@ export function ErrorCard({ error, onClick, index = 0 }: ErrorCardProps) {
           </span>
         </div>
       )}
+      </Card>
     </m.div>
   );
 }

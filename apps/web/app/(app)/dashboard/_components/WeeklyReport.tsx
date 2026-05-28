@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { useCallback, useState } from "react";
+import { Card } from "@/components/ui/card";
 import { api } from "@/lib/api-client";
 
 type WeeklyStats = {
@@ -59,12 +60,11 @@ export function WeeklyReport() {
   // CTA state
   if (!data && !loading) {
     return (
-      <motion.button
-        type="button"
+      <Card
+        interactive
+        shadowSize="default"
+        className="w-full flex flex-row items-center gap-3.5 px-5 py-4 rounded-xl cursor-pointer relative overflow-hidden bg-surface text-left"
         onClick={fetchReport}
-        whileHover={{ y: -2, x: -2, boxShadow: "var(--shadow-lg)" }}
-        whileTap={{ y: 2, x: 2, boxShadow: "1px 1px 0 var(--shadow-color)" }}
-        className="w-full flex items-center gap-3.5 px-5 py-4 rounded-xl border-2 border-border bg-surface text-left cursor-pointer relative overflow-hidden shadow transition-all duration-150"
       >
         <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-lg bg-accent text-text-on-accent border-2 border-border shadow-[2px_2px_0_var(--shadow-color)]">
           <BarChart3 className="h-5 w-5" />
@@ -80,14 +80,14 @@ export function WeeklyReport() {
         </div>
 
         <ChevronRight className="h-4 w-4 text-text-muted shrink-0 ml-1.5" />
-      </motion.button>
+      </Card>
     );
   }
 
   // Loading
   if (loading) {
     return (
-      <div className="p-5 rounded-xl bg-surface border-2 border-border shadow flex flex-col gap-4">
+      <Card className="flex flex-col gap-4 bg-surface shadow">
         <div className="flex items-center gap-2">
           <Loader2 className="h-4 w-4 animate-spin text-accent" />
           <span className="text-xs font-bold text-text-secondary">
@@ -99,7 +99,7 @@ export function WeeklyReport() {
           <div className="h-3.5 bg-bg-deep border-2 border-border rounded-lg w-1/2" />
           <div className="h-3.5 bg-bg-deep border-2 border-border rounded-lg w-5/6" />
         </div>
-      </div>
+      </Card>
     );
   }
 
@@ -111,8 +111,8 @@ export function WeeklyReport() {
     <motion.div
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
-      className="rounded-xl bg-surface border-2 border-border shadow overflow-hidden flex flex-col"
     >
+      <Card className="p-0 gap-0 overflow-hidden flex flex-col bg-surface shadow">
       {/* Header */}
       <div className="px-5 py-4 bg-surface-alt border-b-2 border-border flex items-center gap-2.5">
         <BarChart3 className="h-4 w-4 text-accent" />
@@ -164,10 +164,11 @@ export function WeeklyReport() {
             bg: "bg-error-bg",
           },
         ].map((s) => (
-          <motion.div
+          <Card
             key={s.label}
-            whileHover={{ scale: 1.05, y: -2, x: -2, boxShadow: "var(--shadow)" }}
-            className="p-3 bg-surface-alt rounded-xl border-2 border-border text-center flex flex-col items-center gap-1.5 shadow-sm transition-all duration-100 cursor-default"
+            bgType="alt"
+            shadowSize="sm"
+            className="p-3 text-center flex flex-col items-center gap-1.5 cursor-default"
           >
             <div
               className={`w-7 h-7 rounded-md ${s.bg} border-2 border-border flex items-center justify-center shrink-0`}
@@ -180,7 +181,7 @@ export function WeeklyReport() {
             <div className="text-[9px] text-text-muted font-bold uppercase tracking-wider leading-none font-display">
               {s.label}
             </div>
-          </motion.div>
+          </Card>
         ))}
       </div>
 
@@ -215,6 +216,7 @@ export function WeeklyReport() {
           </div>
         </div>
       )}
+      </Card>
     </motion.div>
   );
 }

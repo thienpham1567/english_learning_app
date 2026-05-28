@@ -34,6 +34,7 @@ import {
   type GrammarTopicCategory,
   getCategoriesForExam,
 } from "@/lib/grammar-lessons/topics";
+import { getCategoryRoadmapWeeks } from "@/lib/curriculum/grammar-mapping";
 
 export type { GrammarTopic };
 
@@ -145,8 +146,20 @@ export function TopicGrid({
               </div>
 
               <div className="flex-1 min-w-0">
-                <div className="font-black text-ink text-[14px] leading-tight mb-1.5 truncate">
-                  {cat.title}
+                <div className="flex items-center gap-2 mb-1.5">
+                  <span className="font-black text-ink text-[14px] leading-tight truncate">
+                    {cat.title}
+                  </span>
+                  {(() => {
+                    const weeks = getCategoryRoadmapWeeks(cat.topics.map((t) => t.id));
+                    if (weeks.length === 0) return null;
+                    const label = weeks.length === 1 ? `W${weeks[0]}` : `W${weeks[0]}-${weeks[weeks.length - 1]}`;
+                    return (
+                      <span className="text-[8px] font-black rounded-md px-1.5 py-px bg-accent/10 text-accent border border-accent/15 shrink-0 uppercase tracking-wider">
+                        📍 {label}
+                      </span>
+                    );
+                  })()}
                 </div>
                 {/* Progress bar */}
                 <div className="flex items-center gap-2.5">

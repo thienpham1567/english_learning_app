@@ -25,6 +25,7 @@ import {
 import { motion } from "motion/react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Card } from "@/components/ui/card";
 import { HeatmapCalendar } from "@/app/(app)/dashboard/_components/HeatmapCalendar";
 import { WeeklyReport } from "@/app/(app)/dashboard/_components/WeeklyReport";
 import {
@@ -34,6 +35,8 @@ import {
 } from "@/hooks/useDailyStudyPlan";
 import { type DashboardData, useDashboard } from "@/hooks/useDashboard";
 import { api } from "@/lib/api-client";
+import { useRoadmap } from "@/lib/curriculum/roadmap-context";
+import { getWeek } from "@/lib/curriculum/data";
 
 // ── Types ────────────────────────────────────────────────────────
 type PredictedScore = {
@@ -62,8 +65,6 @@ const containerVariants = {
   },
 };
 
-const cardClass =
-  "relative overflow-hidden rounded-2xl border-2 border-border bg-surface shadow p-6 transition-all duration-200";
 const sectionLabelClass =
   "flex items-center gap-2.5 text-[10px] font-extrabold uppercase tracking-widest text-accent mb-4.5 font-display";
 const accentBarClass = "w-[3.5px] h-4 rounded-sm bg-accent shrink-0";
@@ -129,8 +130,8 @@ export default function DashboardPage() {
         <motion.div
           initial={{ opacity: 0, y: -16 }}
           animate={{ opacity: 1, y: 0 }}
-          className="relative overflow-hidden rounded-2xl border-2 border-border bg-surface p-6 shadow flex flex-col md:flex-row md:items-center justify-between gap-6"
         >
+          <Card className="relative overflow-hidden rounded-2xl bg-surface flex flex-col md:flex-row md:items-center justify-between gap-6">
           {/* Subtle grid pattern background */}
           <div className="absolute inset-0 opacity-[0.03] dark:opacity-[0.06] pointer-events-none bg-[linear-gradient(to_right,rgba(0,0,0,0.15)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.15)_1px,transparent_1px)] bg-[size:16px_16px]" />
           
@@ -169,6 +170,7 @@ export default function DashboardPage() {
               <span>Daily Challenge</span>
             </Link>
           </div>
+          </Card>
         </motion.div>
 
         {/* ── Streak + XP Banner Row ── */}
@@ -208,14 +210,17 @@ export default function DashboardPage() {
       <div className="grid grid-cols-1 lg:grid-cols-[1.62fr_1fr] gap-5 items-start max-w-5xl mx-auto px-1">
         {/* Left Column: Focus & Core Actions */}
         <div className="flex flex-col gap-5">
+          {/* ── Roadmap Progress ── */}
+          <RoadmapProgressCard />
+
           {/* ── Predicted TOEIC Score ── */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15 }}
-            className={cardClass}
           >
-            <div className={sectionLabelClass}>
+            <Card className="rounded-2xl relative overflow-hidden bg-surface">
+              <div className={sectionLabelClass}>
               <div className={accentBarClass} />
               <span>Predicted TOEIC Score</span>
               <div className="flex-1 h-px bg-border ml-2" />
@@ -235,6 +240,7 @@ export default function DashboardPage() {
                 No score projection data available. Keep practicing to build stats!
               </p>
             )}
+            </Card>
           </motion.div>
 
           {/* ── Daily Study Plan ── */}
@@ -242,9 +248,9 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.25 }}
-            className={cardClass}
           >
-            <div className={sectionLabelClass}>
+            <Card className="rounded-2xl relative overflow-hidden bg-surface">
+              <div className={sectionLabelClass}>
               <div className={accentBarClass} />
               <span>Today's Study Plan</span>
               <div className="flex-1 h-px bg-border ml-2" />
@@ -263,6 +269,7 @@ export default function DashboardPage() {
                 Complete more exercises to unlock your personalized daily study plan!
               </p>
             )}
+            </Card>
           </motion.div>
 
           {/* ── Quick Actions ── */}
@@ -270,14 +277,15 @@ export default function DashboardPage() {
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.35 }}
-            className={cardClass}
           >
-            <div className={sectionLabelClass}>
+            <Card className="rounded-2xl relative overflow-hidden bg-surface">
+              <div className={sectionLabelClass}>
               <div className={accentBarClass} />
               <span>Quick Access</span>
               <div className="flex-1 h-px bg-border ml-2" />
             </div>
             <QuickActions dash={dash} />
+            </Card>
           </motion.div>
 
           {/* ── AI Weekly Report ── */}
@@ -298,14 +306,15 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4 }}
-              className={cardClass}
             >
-              <div className={sectionLabelClass}>
+              <Card className="rounded-2xl relative overflow-hidden bg-surface">
+                <div className={sectionLabelClass}>
                 <div className={accentBarClass} />
                 <span>Weekly Activity</span>
                 <div className="flex-1 h-px bg-border ml-2" />
               </div>
               <WeeklyChart data={dash.weeklyActivity} />
+              </Card>
             </motion.div>
           )}
 
@@ -325,14 +334,15 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.55 }}
-              className={cardClass}
             >
-              <div className={sectionLabelClass}>
+              <Card className="rounded-2xl relative overflow-hidden bg-surface">
+                <div className={sectionLabelClass}>
                 <div className={accentBarClass} />
                 <span>Weekly XP Trend</span>
                 <div className="flex-1 h-px bg-border ml-2" />
               </div>
               <ScoreTimeline data={score.weeklyXP} />
+              </Card>
             </motion.div>
           )}
 
@@ -342,9 +352,9 @@ export default function DashboardPage() {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.55 }}
-              className={cardClass}
             >
-              <div className={sectionLabelClass}>
+              <Card className="rounded-2xl relative overflow-hidden bg-surface">
+                <div className={sectionLabelClass}>
                 <div className={accentBarClass} />
                 <span>Unlocked Badges</span>
                 <div className="flex-1 h-px bg-border ml-2" />
@@ -372,6 +382,7 @@ export default function DashboardPage() {
                     </motion.div>
                   ))}
               </div>
+              </Card>
             </motion.div>
           )}
         </div>
@@ -400,11 +411,13 @@ function StatCard({
   return (
     <motion.div
       variants={{ hidden: { opacity: 0, y: 12 }, visible: { opacity: 1, y: 0 } }}
-      whileHover={{ y: -3, x: -3, boxShadow: "var(--shadow-md)" }}
-      whileTap={{ y: 2, x: 2, boxShadow: "none" }}
       transition={{ type: "spring", stiffness: 350, damping: 25 }}
-      className="flex-1 min-w-[120px] rounded-2xl border-2 border-border bg-surface p-4.5 shadow transition-all duration-100 relative overflow-hidden group"
     >
+      <Card
+        interactive
+        shadowSize="sm"
+        className="flex-1 min-w-[120px] rounded-2xl p-4.5 bg-surface relative overflow-hidden"
+      >
       {loading ? (
         <div className="h-12 bg-bg-deep border-2 border-border rounded-xl animate-pulse w-full" />
       ) : (
@@ -420,13 +433,14 @@ function StatCard({
               {label}
             </div>
             {sub && (
-              <div className="text-[9px] text-text-muted font-bold mt-1 truncate max-w-full font-mono">
+              <div className="text-[10px] text-text-secondary mt-1 font-sans truncate font-medium">
                 {sub}
               </div>
             )}
           </div>
         </div>
       )}
+      </Card>
     </motion.div>
   );
 }
@@ -711,6 +725,12 @@ function StudyPlanSection({ items, stats }: { items: DailyPlanItem[]; stats: Dai
 
 const QUICK_ACTIONS = [
   {
+    href: "/roadmap",
+    icon: <Map />,
+    label: "Roadmap",
+    color: "text-blue-500 bg-blue-500/10 hover:bg-blue-500/15",
+  },
+  {
     href: "/daily-challenge",
     icon: <Flame />,
     label: "Challenge",
@@ -740,12 +760,6 @@ const QUICK_ACTIONS = [
     label: "Vocabulary",
     color: "text-amber-500 bg-amber-500/10 hover:bg-amber-500/15",
   },
-  {
-    href: "/grammar-lessons",
-    icon: <Map />,
-    label: "Grammar",
-    color: "text-secondary bg-secondary/10 hover:bg-secondary/15",
-  },
 ];
 
 type QuickActionsProps = {
@@ -761,16 +775,19 @@ function QuickActions({ dash: _dash }: QuickActionsProps) {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.04 * i }}
-            whileHover={{ scale: 1.04, rotate: i % 2 === 0 ? 1 : -1, boxShadow: "var(--shadow)" }}
-            whileTap={{ y: 2, x: 2, boxShadow: "none" }}
-            className="p-4 rounded-xl border-2 border-border bg-surface text-center cursor-pointer shadow-sm transition-all duration-100 group"
           >
+            <Card
+              interactive
+              shadowSize="sm"
+              className="p-4 text-center group bg-surface"
+            >
             <div
               className={`w-9 h-9 border-2 border-border rounded-lg flex items-center justify-center mx-auto mb-2 text-sm shadow-sm transition-transform group-hover:scale-110 duration-200 ${a.color}`}
             >
               {a.icon}
             </div>
             <div className="text-xs font-black text-text-primary leading-tight font-display">{a.label}</div>
+            </Card>
           </motion.div>
         </Link>
       ))}
@@ -898,5 +915,91 @@ function ScoreTimeline({ data }: { data: Array<{ week: string; xp: number }> }) 
         ))}
       </div>
     </div>
+  );
+}
+
+function RoadmapProgressCard() {
+  const { getCurrentWeek, getOverallProgress, getWeekProgress } = useRoadmap();
+  const currentWeek = getCurrentWeek();
+  const overall = getOverallProgress();
+  const weekProg = getWeekProgress(currentWeek);
+  const week = getWeek(currentWeek);
+
+  const circumference = 2 * Math.PI * 38;
+  const offset = circumference * (1 - overall.percent / 100);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.12 }}
+    >
+      <Card className="rounded-2xl relative overflow-hidden bg-surface">
+      <div
+        className="absolute top-0 left-0 right-0 h-[3px]"
+        style={{
+          background: "linear-gradient(90deg, #22c55e, #3b82f6, #f59e0b)",
+        }}
+      />
+
+      <div className={sectionLabelClass}>
+        <div className={accentBarClass} />
+        <span>Learning Roadmap</span>
+        <span className="text-[9px] font-extrabold rounded-lg bg-accent/10 text-accent border border-accent/20 px-2 py-0.5 ml-1">
+          Week {currentWeek}/24
+        </span>
+        <div className="flex-1 h-px bg-border ml-2" />
+      </div>
+
+      <div className="flex items-center gap-5">
+        {/* Mini progress ring */}
+        <div className="relative w-[76px] h-[76px] shrink-0">
+          <svg viewBox="0 0 88 88" className="w-full h-full -rotate-90">
+            <circle cx="44" cy="44" r="38" fill="none" stroke="var(--border)" strokeWidth="7" />
+            <circle
+              cx="44" cy="44" r="38" fill="none" stroke="var(--accent)" strokeWidth="7"
+              strokeLinecap="round"
+              strokeDasharray={`${circumference}`}
+              strokeDashoffset={`${offset}`}
+              className="transition-all duration-700"
+            />
+          </svg>
+          <div className="absolute inset-0 flex flex-col items-center justify-center">
+            <div className="text-lg font-black text-ink font-display leading-none">{overall.percent}%</div>
+            <div className="text-[7px] text-text-muted font-bold uppercase tracking-wider mt-0.5">Overall</div>
+          </div>
+        </div>
+
+        <div className="flex-1 min-w-0">
+          <div className="text-sm font-black text-ink font-display leading-tight truncate">
+            {week?.focusTopic ?? "Start your journey!"}
+          </div>
+          <div className="text-[10px] text-text-muted font-bold mt-1">
+            This week: {weekProg.completed}/{weekProg.total} units completed
+          </div>
+
+          {/* Week progress bar */}
+          <div className="flex items-center gap-2 mt-2">
+            <div className="flex-1 h-2 rounded-full bg-bg-deep overflow-hidden border border-border">
+              <div
+                className="h-full rounded-full bg-accent transition-all duration-500"
+                style={{ width: `${weekProg.percent}%` }}
+              />
+            </div>
+            <span className="text-[10px] font-black text-text-muted tabular-nums font-mono">
+              {weekProg.percent}%
+            </span>
+          </div>
+
+          <Link
+            href={`/roadmap/week/${currentWeek}`}
+            className="inline-flex items-center gap-1 mt-2.5 text-[11px] font-black text-accent hover:underline no-underline"
+          >
+            Continue Learning <ChevronRight size={12} />
+          </Link>
+        </div>
+      </div>
+      </Card>
+    </motion.div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  AlertTriangle,
   BookOpen,
   CheckCircle,
   ChevronLeft,
@@ -12,11 +13,12 @@ import {
   Pin,
   RefreshCw,
   Target,
+  Trash2,
   Volume2,
   Zap,
 } from "lucide-react";
 import * as m from "motion/react-client";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { api } from "@/lib/api-client";
 
@@ -78,6 +80,33 @@ export function AIFlashcardMode() {
   const [currentIdx, setCurrentIdx] = useState(0);
   const [flipped, setFlipped] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [errorFlashcards, setErrorFlashcards] = useState<AICard[]>([]);
+
+  // Load error-sourced flashcards from localStorage
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem("error-flashcards");
+      if (stored) {
+        const parsed = JSON.parse(stored) as AICard[];
+        setErrorFlashcards(parsed);
+      }
+    } catch {
+      // Ignore
+    }
+  }, []);
+
+  const clearErrorFlashcards = useCallback(() => {
+    localStorage.removeItem("error-flashcards");
+    setErrorFlashcards([]);
+  }, []);
+
+  const studyErrorDeck = useCallback(() => {
+    if (errorFlashcards.length === 0) return;
+    setCards(errorFlashcards);
+    setCurrentIdx(0);
+    setFlipped(false);
+    setPhase("study");
+  }, [errorFlashcards]);
 
   const tts = useTextToSpeech("us");
 
@@ -139,6 +168,53 @@ export function AIFlashcardMode() {
   if (phase === "pick") {
     return (
       <div className="flex flex-col gap-5 w-full max-w-[600px] mx-auto">
+        {/* Error Flashcard Deck */}
+        {errorFlashcards.length > 0 && (
+          <m.div
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="rounded-xl border-2 border-amber-500/25 overflow-hidden"
+            style={{ background: "linear-gradient(135deg, rgba(245, 158, 11, 0.04), var(--surface))" }}
+          >
+            <div className="px-4 py-3.5 flex items-center gap-3">
+              <div
+                className="w-10 h-10 rounded-lg grid place-items-center shrink-0"
+                style={{ background: "linear-gradient(135deg, var(--warning), var(--error))" }}
+              >
+                <AlertTriangle size={18} className="text-white" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <h4 className="m-0 text-sm font-black text-ink">
+                  Error Review Deck
+                </h4>
+                <p className="m-0 text-xs text-text-muted font-medium">
+                  {errorFlashcards.length} flashcard{errorFlashcards.length > 1 ? "s" : ""} from your mistakes
+                </p>
+              </div>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <m.button
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  onClick={studyErrorDeck}
+                  className="flex items-center gap-1.5 py-2 px-4 rounded-lg border-none text-xs font-extrabold cursor-pointer text-white shadow-sm"
+                  style={{ background: "linear-gradient(135deg, var(--warning), var(--error))" }}
+                >
+                  <Zap size={12} /> Study Now
+                </m.button>
+                <m.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={clearErrorFlashcards}
+                  className="w-8 h-8 grid place-items-center rounded-lg border-2 border-border bg-surface text-text-muted cursor-pointer text-xs hover:text-error transition-colors"
+                  title="Clear error deck"
+                >
+                  <Trash2 size={13} />
+                </m.button>
+              </div>
+            </div>
+          </m.div>
+        )}
+
         {/* Topic Grid */}
         <div>
           <div className="flex items-center gap-2 mb-3">

@@ -7,6 +7,8 @@ import type { ErrorEntry } from "../_types/types";
 import { MODULE_ICONS, MODULE_LABELS } from "../_types/types";
 import { ErrorPatternSummary } from "./ErrorPatternSummary";
 import { ErrorTrendSection } from "./ErrorTrendSection";
+import { Card } from "@/components/ui/card";
+import { cn } from "@/lib/utils";
 
 interface OverviewTabProps {
   errors: ErrorEntry[];
@@ -71,17 +73,25 @@ function StatCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05, type: "spring", stiffness: 250, damping: 20 }}
       whileHover={{ y: -3 }}
-      className={`flex items-center gap-3.5 p-4 bg-surface rounded-2xl border-2 ${c.border} shadow-sm cursor-default transition-shadow duration-200 hover:shadow-md`}
     >
-      <span className={`w-10 h-10 rounded-xl ${c.iconBg} ${c.iconText} grid place-items-center border-2 ${c.border}`}>
-        {icon}
-      </span>
-      <div>
-        <div className={`text-[28px] font-black ${c.text} leading-none font-display`}>
-          {value}
+      <Card
+        size="sm"
+        shadowSize="sm"
+        className={cn(
+          "flex-row items-center gap-3.5 cursor-default bg-surface border-2",
+          c.border
+        )}
+      >
+        <span className={cn("w-10 h-10 rounded-xl grid place-items-center border-2 shrink-0", c.iconBg, c.iconText, c.border)}>
+          {icon}
+        </span>
+        <div>
+          <div className={cn("text-[28px] font-black leading-none font-display", c.text)}>
+            {value}
+          </div>
+          <div className="text-[10px] text-text-muted font-bold mt-0.5 uppercase tracking-wide">{label}</div>
         </div>
-        <div className="text-[10px] text-text-muted font-bold mt-0.5 uppercase tracking-wide">{label}</div>
-      </div>
+      </Card>
     </m.div>
   );
 }
@@ -136,29 +146,36 @@ export function OverviewTab({
         <m.button
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          whileHover={{ scale: 1.01, y: -2 }}
-          whileTap={{ scale: 0.99 }}
           onClick={onGoToReview}
-          className="flex items-center gap-4 p-5 rounded-2xl border-2 border-accent bg-accent-light cursor-pointer shadow-sm font-body transition-shadow duration-200 hover:shadow-md"
+          className="w-full text-left p-0 border-none bg-transparent cursor-pointer font-body block"
         >
-          <div className="w-12 h-12 rounded-xl bg-accent/15 border-2 border-accent/20 grid place-items-center shrink-0">
-            <Brain className="h-6 w-6 text-accent" />
-          </div>
-          <div className="text-left">
-            <div className="text-base font-black text-ink">
-              Review Now — {dueCount} errors to recall
+          <Card
+            interactive
+            shadowSize="default"
+            accentColor="accent"
+            accentPosition="left"
+            bgType="accent-light"
+            className="flex-row items-center gap-4"
+          >
+            <div className="w-12 h-12 rounded-xl bg-accent/10 border-2 border-accent/15 grid place-items-center shrink-0">
+              <Brain className="h-6 w-6 text-accent" />
             </div>
-            <div className="text-xs text-text-muted font-medium mt-0.5">
-              Flashcards + AI explanations help you retain information longer
+            <div className="text-left">
+              <div className="text-base font-black text-ink font-display">
+                Review Now — {dueCount} errors to recall
+              </div>
+              <div className="text-xs text-text-muted font-medium mt-0.5">
+                Flashcards + AI explanations help you retain information longer
+              </div>
             </div>
-          </div>
+          </Card>
         </m.button>
       )}
 
       {/* ─── Module Distribution ─── */}
       {moduleStats.length > 0 && (
-        <div className="bg-surface rounded-2xl border-2 border-border p-5 shadow-sm">
-          <span className="text-[10px] font-extrabold text-text-muted uppercase tracking-widest flex items-center gap-2 mb-4 font-display">
+        <Card shadowSize="default">
+          <span className="text-[10px] font-extrabold text-text-muted uppercase tracking-widest flex items-center gap-2 font-display">
             <BarChart2 className="h-4 w-4 text-accent" />
             Distribution by Source
           </span>
@@ -197,7 +214,7 @@ export function OverviewTab({
               );
             })}
           </div>
-        </div>
+        </Card>
       )}
 
       {/* ─── Error Patterns ─── */}

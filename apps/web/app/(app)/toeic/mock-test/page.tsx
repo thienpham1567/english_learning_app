@@ -1,10 +1,12 @@
 import { db, toeicAttempt } from "@repo/database";
 import { and, desc, eq, isNotNull, isNull } from "drizzle-orm";
-import { Clock, Redo, Trophy } from "lucide-react";
+import { ArrowRight, Clock, Redo, Trophy } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { auth } from "@/lib/auth";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
+import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
+import { Card, CardTitle, CardDescription } from "@/components/ui/card";
 
 export default async function MockTestHubPage() {
   await requireToeicBaseline();
@@ -39,88 +41,177 @@ export default async function MockTestHubPage() {
     .limit(10);
 
   return (
-    <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
-      <div className="p-4 grid gap-4">
+    <div className="flex flex-col h-full min-h-0 flex-1 overflow-auto">
+      <div className="p-5 pb-16 max-w-[900px] mx-auto w-full flex flex-col gap-5">
+        <RoadmapBanner />
+        {/* Resume in-progress card */}
         {inProgress && (
           <Link
             href={`/toeic/mock-test/runner?resume=${inProgress.id}`}
-            style={{ textDecoration: "none" }}
+            className="no-underline group"
           >
-            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4" style={{ borderColor: "var(--warning)", borderWidth: 2 }}>
-              <div className="flex items-center gap-2">
-                <Redo className="text-2xl" style={{ color: "var(--warning)" }} />
-                <strong className="text-lg">Resume In-Progress Mock Test</strong>
+            <Card
+              interactive
+              shadowSize="sm"
+              accentColor="warning"
+              accentPosition="top"
+              className="p-5"
+            >
+              <div className="flex items-center gap-3.5">
+                <div className="w-11 h-11 rounded-xl grid place-items-center shrink-0 bg-warning/10 border-2 border-warning/30">
+                  <Redo className="text-warning" size={20} />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <CardTitle className="text-base text-ink">
+                    Resume In-Progress Mock Test
+                  </CardTitle>
+                  <CardDescription className="text-xs mt-1 font-semibold">
+                    Started at{" "}
+                    {new Date(inProgress.startedAt).toLocaleString("en-US")} ·{" "}
+                    {inProgress.questionCount} questions
+                  </CardDescription>
+                </div>
+                <ArrowRight
+                  size={18}
+                  className="text-warning shrink-0 group-hover:translate-x-1 transition-transform"
+                />
               </div>
-              <div className="mt-2 text-text-muted">
-                Started at {new Date(inProgress.startedAt).toLocaleString("en-US")} ·{" "}
-                {inProgress.questionCount} questions
-              </div>
-            </div>
+            </Card>
           </Link>
         )}
-        <div
-          className="grid gap-3"
-          style={{ gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))" }}
-        >
-          <Link href="/toeic/mock-test/runner?mode=full" style={{ textDecoration: "none" }}>
-            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
-              <div className="flex items-center gap-2">
-                <Trophy className="text-2xl text-accent" />
-                <strong className="text-lg text-ink">Full Mock</strong>
+
+        {/* Test mode cards */}
+        <div className="grid gap-4 grid-cols-[repeat(auto-fit,minmax(280px,1fr))]">
+          {/* Full Mock */}
+          <Link
+            href="/toeic/mock-test/runner?mode=full"
+            className="no-underline group"
+          >
+            <Card
+              interactive
+              shadowSize="sm"
+              className="hover:border-accent flex flex-col gap-3.5 h-full p-5"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-xl grid place-items-center shrink-0 bg-accent/10 border-2 border-accent/20">
+                  <Trophy className="text-accent" size={20} />
+                </div>
+                <div>
+                  <CardTitle className="text-base text-ink">
+                    Full Mock
+                  </CardTitle>
+                  <CardDescription className="text-xs font-semibold">
+                    194 questions · ~1h54 · Strict timer
+                  </CardDescription>
+                </div>
               </div>
-              <div className="mt-2 text-text-muted">194 questions · ~1h54 · Strict timer</div>
-              <div className="mt-2">
-                <span className="bg-amber-500/15 text-amber-600 py-0.5 px-2 inline-block">Part 1: no content yet</span>
+
+              <div className="flex flex-wrap gap-1.5">
+                <span className="text-[10px] font-extrabold rounded-lg bg-amber-500/10 text-amber-600 border border-amber-500/20 px-2 py-0.5">
+                  Part 1: no content yet
+                </span>
               </div>
-              <div className="mt-1.5 text-[13px] text-text-muted">
+
+              <div className="text-[11px] text-text-muted font-bold tracking-wide font-mono mt-auto">
                 25 P2 + 39 P3 + 30 P4 + 30 P5 + 16 P6 + 54 P7
               </div>
-            </div>
+            </Card>
           </Link>
-          <Link href="/toeic/mock-test/runner?mode=mini" style={{ textDecoration: "none" }}>
-            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
-              <div className="flex items-center gap-2">
-                <Clock className="text-2xl text-emerald-500" />
-                <strong className="text-lg text-ink">Mini Mock</strong>
+
+          {/* Mini Mock */}
+          <Link
+            href="/toeic/mock-test/runner?mode=mini"
+            className="no-underline group"
+          >
+            <Card
+              interactive
+              shadowSize="sm"
+              className="hover:border-emerald-500 flex flex-col gap-3.5 h-full p-5"
+            >
+              <div className="flex items-center gap-3">
+                <div className="w-11 h-11 rounded-xl grid place-items-center shrink-0 bg-emerald-500/10 border-2 border-emerald-500/20">
+                  <Clock className="text-emerald-500" size={20} />
+                </div>
+                <div>
+                  <CardTitle className="text-base text-ink">
+                    Mini Mock
+                  </CardTitle>
+                  <CardDescription className="text-xs font-semibold">
+                    100 questions · ~1h · Daily practice
+                  </CardDescription>
+                </div>
               </div>
-              <div className="mt-2 text-text-muted">100 questions · ~1h · Daily practice</div>
-              <div className="mt-2">
-                <span className="bg-emerald-500/15 text-emerald-600 py-0.5 px-2 inline-block">Recommended</span>
+
+              <div className="flex flex-wrap gap-1.5">
+                <span className="text-[10px] font-extrabold rounded-lg bg-emerald-500/10 text-emerald-600 border border-amber-500/20 px-2 py-0.5">
+                  Recommended
+                </span>
               </div>
-              <div className="mt-1.5 text-[13px] text-text-muted">
+
+              <div className="text-[11px] text-text-muted font-bold tracking-wide font-mono mt-auto">
                 13 P2 + 20 P3 + 15 P4 + 15 P5 + 8 P6 + 29 P7
               </div>
-            </div>
+            </Card>
           </Link>
         </div>
 
-        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
-          {history.length === 0 ? (
-            <div className="text-text-muted">
-              No mock tests taken yet. Start a mini mock to generate data for your predicted score.
-            </div>
-          ) : (
-            <div className="grid gap-2">
-              {history.map((h) => (
-                <Link
-                  key={h.id}
-                  href={`/toeic/mock-test/${h.id}/result`}
-                  className="text-ink rounded-lg border-2 border-border flex justify-between items-center"
-                  style={{
-                    textDecoration: "none",
-                    padding: 10,
-                    background: "var(--surface-hover)",
-                  }}
-                >
-                  <span>
-                    {new Date(h.completedAt!).toLocaleString("en-US")} · {h.questionCount} questions
-                  </span>
-                  <span className="text-lg font-bold">{h.totalScaled ?? "—"} / 990</span>
-                </Link>
-              ))}
-            </div>
-          )}
-        </div>
+        {/* History */}
+        <Card shadowSize="sm" className="p-0 overflow-hidden">
+          <div className="px-5 py-3.5 border-b-2 border-border bg-surface-alt">
+            <h3 className="text-sm font-black text-ink font-display uppercase tracking-wider m-0">
+              Test History
+            </h3>
+          </div>
+
+          <div className="p-4">
+            {history.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <div className="w-14 h-14 rounded-2xl bg-surface-alt border-2 border-border grid place-items-center mb-3">
+                  <Trophy className="text-text-muted" size={24} />
+                </div>
+                <p className="text-sm font-bold text-text-secondary mb-1">
+                  No mock tests taken yet
+                </p>
+                <p className="text-xs text-text-muted font-medium">
+                  Start a mini mock to generate data for your predicted score.
+                </p>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-2">
+                {history.map((h) => (
+                  <Link
+                    key={h.id}
+                    href={`/toeic/mock-test/${h.id}/result`}
+                    className="no-underline group"
+                  >
+                    <div className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border-2 border-border bg-surface-alt hover:border-accent hover:-translate-y-0.5 hover:shadow-sm transition-all duration-150 cursor-pointer">
+                      <div className="min-w-0">
+                        <div className="text-sm font-bold text-ink truncate">
+                          {new Date(h.completedAt!).toLocaleString("en-US")}
+                        </div>
+                        <div className="text-[11px] text-text-muted font-semibold mt-0.5">
+                          {h.questionCount} questions
+                        </div>
+                      </div>
+                      <div className="text-right shrink-0 flex items-center gap-2">
+                        <span className="text-lg font-black text-accent font-display tabular-nums">
+                          {h.totalScaled ?? "—"}
+                        </span>
+                        <span className="text-xs text-text-muted font-bold">
+                          / 990
+                        </span>
+                        <ArrowRight
+                          size={14}
+                          className="text-text-muted group-hover:text-accent group-hover:translate-x-0.5 transition-all"
+                        />
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        </Card>
       </div>
     </div>
   );

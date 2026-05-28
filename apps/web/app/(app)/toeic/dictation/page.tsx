@@ -1,18 +1,33 @@
 import { db, toeicDictationItem } from "@repo/database";
 import { asc } from "drizzle-orm";
-import { Headphones } from "lucide-react";
+import { ArrowRight, Headphones } from "lucide-react";
 import Link from "next/link";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
+import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
+import { Card } from "@/components/ui/card";
 
-const LEVEL_LABEL: Record<string, string> = {
-  beginner: "Beginner",
-  intermediate: "Intermediate",
-  advanced: "Advanced",
-};
-const LEVEL_COLOR: Record<string, string> = {
-  beginner: "green",
-  intermediate: "orange",
-  advanced: "red",
+const LEVEL_META: Record<string, { label: string; color: string; bgClass: string; borderClass: string; textClass: string }> = {
+  beginner: {
+    label: "Beginner",
+    color: "var(--success)",
+    bgClass: "bg-emerald-500/10",
+    borderClass: "border-emerald-500/20",
+    textClass: "text-emerald-600",
+  },
+  intermediate: {
+    label: "Intermediate",
+    color: "var(--warning)",
+    bgClass: "bg-amber-500/10",
+    borderClass: "border-amber-500/20",
+    textClass: "text-amber-600",
+  },
+  advanced: {
+    label: "Advanced",
+    color: "var(--error)",
+    bgClass: "bg-red-500/10",
+    borderClass: "border-red-500/20",
+    textClass: "text-red-500",
+  },
 };
 
 export default async function ToeicDictationPage() {
@@ -34,41 +49,63 @@ export default async function ToeicDictationPage() {
   }
 
   return (
-    <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
-      <div className="p-4 grid gap-4">
+    <div className="flex flex-col h-full min-h-0 flex-1 overflow-auto">
+      <div className="p-5 pb-16 max-w-[900px] mx-auto w-full flex flex-col gap-5">
+        <RoadmapBanner />
         {["beginner", "intermediate", "advanced"].map((lv) => {
           const list = grouped[lv] ?? [];
           if (list.length === 0) return null;
+          const meta = LEVEL_META[lv] ?? LEVEL_META.beginner;
+
           return (
-            <div
+            <Card
               key={lv}
-              className="border-2 border-border rounded-xl bg-surface shadow-sm p-4"
+              shadowSize="sm"
+              className="p-0 overflow-hidden"
             >
-              <div className="flex justify-between items-center mb-3">
-                <strong>{LEVEL_LABEL[lv] ?? lv}</strong>
-                <span className="bg-accent/10 text-accent py-0.5 px-2 rounded-md text-sm font-bold">{list.length} sentences</span>
-              </div>
-              <div
-                className="grid gap-2"
-                style={{ gridTemplateColumns: "repeat(auto-fit, minmax(160px, 1fr))" }}
-              >
-                {list.map((item, i) => (
-                  <Link
-                    key={item.id}
-                    href={`/toeic/dictation/${item.id}`}
-                    className="rounded-lg text-ink border-2 border-border flex justify-between items-center text-[13px]"
-                    style={{
-                      padding: 10,
-                      background: "var(--surface-hover)",
-                      textDecoration: "none",
-                    }}
+              {/* Section header */}
+              <div className="px-5 py-3.5 border-b-2 border-border bg-surface-alt flex items-center justify-between">
+                <div className="flex items-center gap-2.5">
+                  <div
+                    className={`w-8 h-8 rounded-lg grid place-items-center ${meta.bgClass} border ${meta.borderClass}`}
                   >
-                    <span>#{i + 1}</span>
-                    <span className="bg-accent/10 text-accent py-0.5 px-2 inline-block">{item.topic}</span>
-                  </Link>
-                ))}
+                    <Headphones size={16} className={meta.textClass} />
+                  </div>
+                  <h3 className="text-sm font-black text-ink font-display uppercase tracking-wider m-0">
+                    {meta.label}
+                  </h3>
+                </div>
+                <span
+                  className={`text-[10px] font-extrabold rounded-lg ${meta.bgClass} ${meta.textClass} border ${meta.borderClass} px-2.5 py-0.5`}
+                >
+                  {list.length} sentences
+                </span>
               </div>
-            </div>
+
+              {/* Items grid */}
+              <div className="p-4">
+                <div className="grid gap-2 grid-cols-[repeat(auto-fill,minmax(160px,1fr))]">
+                  {list.map((item, i) => (
+                    <Link
+                      key={item.id}
+                      href={`/toeic/dictation/${item.id}`}
+                      className="no-underline group"
+                    >
+                      <div className="flex items-center justify-between gap-2 px-3.5 py-2.5 rounded-xl border-2 border-border bg-surface-alt hover:border-accent hover:-translate-y-0.5 hover:shadow-sm transition-all duration-150 cursor-pointer">
+                        <span className="text-xs font-black text-text-muted font-mono">
+                          #{i + 1}
+                        </span>
+                        <span
+                          className={`text-[10px] font-extrabold rounded-lg ${meta.bgClass} ${meta.textClass} border ${meta.borderClass} px-2 py-0.5 truncate max-w-[100px]`}
+                        >
+                          {item.topic}
+                        </span>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </Card>
           );
         })}
       </div>

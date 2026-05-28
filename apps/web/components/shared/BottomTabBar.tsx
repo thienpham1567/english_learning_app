@@ -1,14 +1,18 @@
 "use client";
 
 import {
+  BookOpenText,
   FileWarning,
   Flame,
   GitBranch,
   GraduationCap,
   HelpCircle,
+  Languages,
   LayoutDashboard,
   LayoutGrid,
+  Map,
   MessageSquare,
+  Pencil,
   RefreshCw,
   Star,
   Target,
@@ -40,6 +44,12 @@ interface HubItem {
 /* ─── Tab Config ─── */
 const TABS: TabItem[] = [
   {
+    key: "roadmap",
+    label: "Roadmap",
+    icon: <Map size={21} />,
+    href: "/roadmap",
+  },
+  {
     key: "home",
     label: "Home",
     icon: <LayoutDashboard size={21} />,
@@ -50,12 +60,6 @@ const TABS: TabItem[] = [
     label: "TOEIC",
     icon: <Target size={21} />,
     href: "/toeic/skills",
-  },
-  {
-    key: "exam",
-    label: "Exams",
-    icon: <Trophy size={21} />,
-    action: "exam-hub",
   },
   {
     key: "review",
@@ -72,47 +76,49 @@ const TABS: TabItem[] = [
 ];
 
 /* ─── Hub Items Config ─── */
-const EXAM_HUB_ITEMS: HubItem[] = [
-  { label: "ETS Practice Tests", icon: <Trophy size={22} />, href: "/toeic/practice", accent: "var(--accent)" },
-  { label: "TOEIC Part 5", icon: <HelpCircle size={22} />, href: "/toeic/skills?tab=part5", accent: "var(--secondary)" },
-];
-
 const REVIEW_HUB_ITEMS: HubItem[] = [
   { label: "Error Notebook", icon: <FileWarning size={22} />, href: "/error-notebook", accent: "var(--error)" },
   { label: "Flashcard Review", icon: <RefreshCw size={22} />, href: "/flashcards", accent: "var(--info)" },
+  { label: "Daily Challenge", icon: <Flame size={22} />, href: "/daily-challenge", accent: "var(--fire)" },
 ];
 
 const MORE_HUB_ITEMS: HubItem[] = [
-  { label: "Daily Challenge", icon: <Flame size={22} />, href: "/daily-challenge", accent: "var(--fire)" },
-  { label: "AI Chatbot", icon: <MessageSquare size={22} />, href: "/english-chatbot", accent: "var(--secondary)" },
-  { label: "Read Aloud", icon: <Volume2 size={22} />, href: "/read-aloud", accent: "var(--info)" },
+  { label: "TOEIC Vocab", icon: <BookOpenText size={22} />, href: "/toeic/vocab", accent: "var(--accent)" },
   { label: "Grammar Roadmap", icon: <GitBranch size={22} />, href: "/grammar-roadmap", accent: "var(--module-grammar)" },
   { label: "Grammar Lessons", icon: <GraduationCap size={22} />, href: "/grammar-lessons", accent: "var(--module-grammar)" },
   { label: "Vocabulary", icon: <Star size={22} />, href: "/my-vocabulary", accent: "var(--accent)" },
+  { label: "AI Chatbot", icon: <MessageSquare size={22} />, href: "/english-chatbot", accent: "var(--secondary)" },
+  { label: "Read Aloud", icon: <Volume2 size={22} />, href: "/read-aloud", accent: "var(--info)" },
+  { label: "IPA Chart", icon: <Languages size={22} />, href: "/ipa-chart", accent: "var(--tertiary, #8B5CF6)" },
+  { label: "Writing Tools", icon: <Pencil size={22} />, href: "/writing-tools", accent: "var(--secondary)" },
 ];
 
 const HUB_MAP: Record<string, { title: string; items: HubItem[] }> = {
-  exam: { title: "Exams", items: EXAM_HUB_ITEMS },
-  review: { title: "Review", items: REVIEW_HUB_ITEMS },
+  review: { title: "Review & Practice", items: REVIEW_HUB_ITEMS },
   more: { title: "More Features", items: MORE_HUB_ITEMS },
 };
 
 /* ─── Route Matching ─── */
 function getActiveTab(pathname: string): string {
+  if (pathname.startsWith("/roadmap")) return "roadmap";
   if (pathname.startsWith("/dashboard")) return "home";
   if (pathname.startsWith("/toeic")) return "toeic";
-  if (pathname.startsWith("/grammar-quiz")) return "exam";
-  if (pathname.startsWith("/daily-challenge")) return "more";
-  if (pathname.startsWith("/error-notebook") || pathname.startsWith("/flashcards")) return "review";
+  if (
+    pathname.startsWith("/error-notebook") ||
+    pathname.startsWith("/flashcards") ||
+    pathname.startsWith("/daily-challenge")
+  )
+    return "review";
   if (
     pathname.startsWith("/english-chatbot") ||
     pathname.startsWith("/read-aloud") ||
     pathname.startsWith("/grammar-roadmap") ||
     pathname.startsWith("/grammar-lessons") ||
     pathname.startsWith("/my-vocabulary") ||
+    pathname.startsWith("/ipa-chart") ||
+    pathname.startsWith("/writing-tools") ||
     pathname.startsWith("/pdf-reader") ||
     pathname.startsWith("/reading") ||
-    pathname.startsWith("/ipa-chart") ||
     pathname.startsWith("/diagnostic") ||
     pathname.startsWith("/study-sets")
   )
@@ -162,13 +168,11 @@ export function BottomTabBar() {
   const router = useRouter();
   const pathname = usePathname();
   const activeTab = getActiveTab(pathname);
-  const [activeHub, setActiveHub] = useState<"exam" | "review" | "more" | null>(null);
+  const [activeHub, setActiveHub] = useState<"review" | "more" | null>(null);
 
   const handleTabClick = useCallback(
     (tab: TabItem) => {
-      if (tab.action === "exam-hub") {
-        setActiveHub((prev) => (prev === "exam" ? null : "exam"));
-      } else if (tab.action === "review-hub") {
+      if (tab.action === "review-hub") {
         setActiveHub((prev) => (prev === "review" ? null : "review"));
       } else if (tab.action === "more-hub") {
         setActiveHub((prev) => (prev === "more" ? null : "more"));

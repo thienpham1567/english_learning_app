@@ -7,6 +7,7 @@ import { useCallback } from "react";
 import type { ErrorEntry } from "../_types/types";
 import { MODULE_ICONS, MODULE_LABELS } from "../_types/types";
 import { DeepExplanation } from "./DeepExplanation";
+import { ErrorToFlashcard } from "./ErrorToFlashcard";
 import { InlinePractice } from "./InlinePractice";
 
 interface ErrorDetailPanelProps {
@@ -139,6 +140,11 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
               {/* Inline Practice */}
               <div className="mb-5">
                 <InlinePractice errorId={error.id} onResolved={() => onResolve(error.id)} />
+              </div>
+
+              {/* Error → Flashcard Pipeline */}
+              <div className="mb-5">
+                <ErrorToFlashcard errorId={error.id} />
               </div>
 
               {/* Meta info */}

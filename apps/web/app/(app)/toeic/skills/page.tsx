@@ -5,6 +5,7 @@ import * as m from "motion/react-client";
 import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
 
 const ListeningTab = dynamic(
   () => import("./_components/ListeningTab").then((m) => m.ListeningTab),
@@ -60,6 +61,12 @@ export default function ToeicSkillsPage() {
 
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden">
+      {/* ─── Roadmap Context ─── */}
+      <div className="px-4 pt-3.5 shrink-0">
+        <div className="max-w-4xl mx-auto">
+          <RoadmapBanner />
+        </div>
+      </div>
       {/* ─── Skill Tab Switcher ─── */}
       <div className="px-4 pt-4 pb-2 shrink-0 overflow-x-auto scrollbar-none">
         <div className="max-w-4xl mx-auto flex gap-1 bg-surface-alt border-2 border-border rounded-2xl p-1 w-fit md:w-full">

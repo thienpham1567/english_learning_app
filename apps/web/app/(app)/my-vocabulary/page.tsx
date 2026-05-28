@@ -4,6 +4,7 @@ import { BookOpen, Loader2, Search } from "lucide-react";
 import * as m from "motion/react-client";
 import dynamic from "next/dynamic";
 import { useState } from "react";
+import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
 
 const ToeicVocabTab = dynamic(
   () => import("@/app/(app)/my-vocabulary/_components/ToeicVocabTab").then((m) => m.ToeicVocabTab),
@@ -44,6 +45,8 @@ export default function MyVocabularyPage() {
 
   return (
     <div className="flex flex-col h-full flex-1 overflow-hidden">
+      {/* Roadmap context banner */}
+      <RoadmapBanner className="shrink-0 px-4 pt-3.5 max-w-4xl w-full mx-auto" />
       {/* Tab switcher */}
       <div className="shrink-0 px-4 pt-3.5 pb-1.5 max-w-4xl w-full mx-auto">
         <div className="flex gap-1 bg-surface-alt rounded-2xl p-1 border-2 border-border shadow-sm">

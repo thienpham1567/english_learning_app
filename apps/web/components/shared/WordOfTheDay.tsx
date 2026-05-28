@@ -4,6 +4,7 @@ import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { useCallback, useEffect, useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import { Card } from "@/components/ui/card";
 import { useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { api } from "@/lib/api-client";
 
@@ -69,9 +70,10 @@ export function WordOfTheDay() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="p-6 border-2 border-border flex items-center justify-center h-[120px] rounded-xl bg-surface"
         >
-          <Loader2 className="animate-spin text-accent" size={20} />
+          <Card shadowSize="sm" bgType="transparent" className="flex items-center justify-center h-[120px] bg-surface">
+            <Loader2 className="animate-spin text-accent" size={20} />
+          </Card>
         </m.div>
       ) : word ? (
         <m.div
@@ -79,8 +81,8 @@ export function WordOfTheDay() {
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, ease: "easeOut" }}
-          className="p-6 border-2 border-border relative overflow-hidden rounded-xl bg-gradient-to-br from-surface to-surface-alt"
         >
+          <Card bgType="transparent" className="relative overflow-hidden bg-gradient-to-br from-surface to-surface-alt">
           {/* Decorative gradient accent */}
           <m.div
             animate={{ opacity: [0.1, 0.2, 0.1], scale: [1, 1.2, 1] }}
@@ -210,6 +212,7 @@ export function WordOfTheDay() {
             )}
             {isSaved ? "Saved to vocabulary" : "Save to vocabulary"}
           </m.button>
+          </Card>
         </m.div>
       ) : null}
     </AnimatePresence>

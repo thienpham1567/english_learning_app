@@ -13,6 +13,8 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
+import { useRoadmap } from "@/lib/curriculum/roadmap-context";
 import { ChallengeResults } from "@/app/(app)/daily-challenge/_components/ChallengeResults";
 import { CompletedState } from "@/app/(app)/daily-challenge/_components/CompletedState";
 import { EXERCISE_TYPE_LABELS } from "@/app/(app)/daily-challenge/_components/constants";
@@ -256,6 +258,16 @@ export default function DailyChallengePage() {
     }
   }, [state, results, timeElapsedMs, personalBest]);
 
+  // Auto-complete roadmap unit when daily challenge finishes
+  const { completeUnit, getCurrentWeek } = useRoadmap();
+  useEffect(() => {
+    if (state !== "results" && state !== "completed") return;
+    // Daily challenge = Saturday review unit for current week
+    const week = getCurrentWeek();
+    const unitId = `w${week}-sat-0`;
+    completeUnit(unitId);
+  }, [state, completeUnit, getCurrentWeek]);
+
   const isInBonusFlow =
     bonus.state === "active" || bonus.state === "submitting" || bonus.state === "results";
   const formattedTime = useElapsedTimer(state === "active" || bonus.state === "active");
@@ -264,6 +276,14 @@ export default function DailyChallengePage() {
 
   return (
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-hidden">
+      {/* ── Roadmap Context ── */}
+      {!isChallengeRunning && (
+        <div className="px-4 pt-3.5 shrink-0">
+          <div className="max-w-2xl mx-auto">
+            <RoadmapBanner />
+          </div>
+        </div>
+      )}
       {/* ── Premium Header Banner ── */}
       <div className="px-4 pt-4 shrink-0">
         <div className="max-w-2xl mx-auto">

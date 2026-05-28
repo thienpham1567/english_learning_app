@@ -2,6 +2,7 @@
 
 import {
   BookOpen,
+  BookOpenText,
   ChevronDown,
   CircleCheckBig,
   FileWarning,
@@ -10,6 +11,7 @@ import {
   GraduationCap,
   Languages,
   LayoutDashboard,
+  Map,
   MessageSquare,
   Moon,
   PanelLeftClose,
@@ -53,6 +55,7 @@ type NavGroup = {
 };
 
 const navGroups: (NavItem | NavGroup)[] = [
+  { href: "/roadmap", label: "Roadmap", icon: Map },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { href: "/toeic/skills", label: "TOEIC Practice", icon: Target },
   {
@@ -69,6 +72,7 @@ const navGroups: (NavItem | NavGroup)[] = [
         label: "Grammar Lessons",
         icon: GraduationCap,
       },
+      { href: "/toeic/vocab", label: "TOEIC Vocab", icon: BookOpenText },
       { href: "/my-vocabulary", label: "Vocabulary", icon: Star },
       { href: "/flashcards", label: "Flashcard Review", icon: RefreshCw },
     ],
@@ -82,7 +86,6 @@ const navGroups: (NavItem | NavGroup)[] = [
         label: "Daily Challenge",
         icon: Flame,
       },
-
       { href: "/error-notebook", label: "Error Notebook", icon: FileWarning },
     ],
   },

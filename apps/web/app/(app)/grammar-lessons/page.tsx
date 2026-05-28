@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { LessonView } from "@/app/(app)/grammar-lessons/_components/LessonView";
 import { TopicGrid } from "@/app/(app)/grammar-lessons/_components/TopicGrid";
 import { useExamMode } from "@/components/shared/ExamModeProvider";
+import { Card } from "@/components/ui/card";
 import { api } from "@/lib/api-client";
 import type { GrammarLessonProgressItem } from "@/lib/grammar-lessons/schema";
 import type { ExamType, GrammarTopic } from "@/lib/grammar-lessons/topics";
@@ -131,8 +132,8 @@ export default function GrammarLessonsPage() {
                 initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05 }}
-                className="bg-surface rounded-2xl border-2 border-border p-6 relative overflow-hidden shadow-md"
               >
+                <Card shadowSize="md" className="rounded-2xl relative overflow-hidden bg-surface p-6">
                 {/* Top accent gradient bar */}
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent via-secondary to-success" />
 
@@ -181,7 +182,8 @@ export default function GrammarLessonsPage() {
                     />
                   </div>
                 </div>
-              </m.div>
+              </Card>
+            </m.div>
 
               {/* Progress error */}
               {progressError && (
@@ -197,7 +199,11 @@ export default function GrammarLessonsPage() {
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.15 }}
                 >
-                  <m.button
+                  <Card
+                    interactive
+                    bgType="transparent"
+                    shadowSize="sm"
+                    className="w-full rounded-2xl border-2 border-accent/30 cursor-pointer flex flex-row items-center gap-4 relative overflow-hidden text-left p-5 bg-gradient-to-br from-accent to-accent-hover"
                     onClick={() =>
                       setActiveTopic({
                         id: recommendedTopic.id,
@@ -205,9 +211,6 @@ export default function GrammarLessonsPage() {
                         level: recommendedTopic.level,
                       })
                     }
-                    whileHover={{ scale: 1.01, y: -2 }}
-                    whileTap={{ scale: 0.99 }}
-                    className="w-full rounded-2xl border-2 border-accent/30 cursor-pointer flex items-center gap-4 relative overflow-hidden text-left p-5 bg-gradient-to-br from-accent to-accent-hover shadow-sm"
                   >
                     {/* Decorative glows */}
                     <div className="absolute -top-1/2 -right-[10%] w-[200px] h-[200px] rounded-full bg-white/[0.06] pointer-events-none" />
@@ -236,11 +239,11 @@ export default function GrammarLessonsPage() {
                     <div className="w-9 h-9 grid shrink-0 rounded-xl bg-white/15 place-items-center">
                       <ArrowRight className="h-4 w-4 text-white" />
                     </div>
-                  </m.button>
+                  </Card>
                 </m.div>
               )}
 
-              {/* ── Quick Actions ── */}
+              {/* ── Roadmap Integration ── */}
               <m.div
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -248,10 +251,10 @@ export default function GrammarLessonsPage() {
                 className="grid grid-cols-2 gap-3"
               >
                 <QuickAction
-                  href="/grammar-roadmap"
+                  href="/roadmap"
                   emoji="🗺️"
-                  label="Study Roadmap"
-                  desc="View 3-phase study map"
+                  label="Learning Roadmap"
+                  desc="24-week TOEIC plan"
                 />
                 <QuickAction
                   href="/grammar-quiz"
@@ -316,7 +319,7 @@ function StatCard({
   const c = colorMap[color] ?? colorMap.accent;
 
   return (
-    <div className="flex flex-col items-center text-center rounded-2xl bg-surface-alt border-2 border-border py-3.5 px-2">
+    <Card bgType="alt" shadowSize="none" className="flex flex-col items-center text-center rounded-2xl py-3.5 px-2">
       <div className={`w-9 h-9 grid place-items-center rounded-xl ${c.iconBg} ${c.iconText} border-2 ${c.border} mb-2`}>
         {icon}
       </div>
@@ -329,7 +332,7 @@ function StatCard({
       <div className="text-[11px] font-semibold text-text-muted mt-0.5">
         {sub}
       </div>
-    </div>
+    </Card>
   );
 }
 
@@ -347,15 +350,19 @@ function QuickAction({
   return (
     <m.a
       href={href}
-      whileHover={{ y: -2 }}
-      whileTap={{ scale: 0.98 }}
-      className="flex items-center gap-3.5 rounded-2xl bg-surface border-2 border-border cursor-pointer py-3.5 px-4 no-underline transition-all duration-150 hover:shadow-md"
+      className="block no-underline"
     >
-      <span className="text-2xl">{emoji}</span>
-      <div>
-        <div className="font-extrabold text-ink text-[13.5px]">{label}</div>
-        <div className="text-[11px] text-text-muted font-semibold">{desc}</div>
-      </div>
+      <Card
+        interactive
+        shadowSize="md"
+        className="flex flex-row items-center gap-3.5 rounded-2xl py-3.5 px-4 bg-surface"
+      >
+        <span className="text-2xl">{emoji}</span>
+        <div>
+          <div className="font-extrabold text-ink text-[13.5px]">{label}</div>
+          <div className="text-[11px] text-text-muted font-semibold">{desc}</div>
+        </div>
+      </Card>
     </m.a>
   );
 }
