@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { RoadmapBanner } from "@/components/shared/RoadmapBanner";
+import { Card } from "@/components/ui/card";
 
 const ListeningTab = dynamic(
   () => import("./_components/ListeningTab").then((m) => m.ListeningTab),
@@ -69,7 +70,7 @@ export default function ToeicSkillsPage() {
       </div>
       {/* ─── Skill Tab Switcher ─── */}
       <div className="px-4 pt-4 pb-2 shrink-0 overflow-x-auto scrollbar-none">
-        <div className="max-w-4xl mx-auto flex gap-1 bg-surface-alt border-2 border-border rounded-2xl p-1 w-fit md:w-full">
+        <Card shadowSize="sm" size="sm" className="flex flex-row gap-1 p-1 w-fit md:w-full">
           {SKILL_TABS.map((t) => {
             const isActive = active === t.value;
             const Icon = t.icon;
@@ -99,7 +100,7 @@ export default function ToeicSkillsPage() {
               </m.button>
             );
           })}
-        </div>
+        </Card>
       </div>
 
       {/* ─── Content ─── */}

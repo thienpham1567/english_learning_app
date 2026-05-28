@@ -60,6 +60,7 @@ const BREADCRUMBS: Record<string, BreadcrumbEntry> = {
   "/writing-tools": { eyebrow: "Tools", title: "Writing Tools", icon: <Pencil /> },
   "/english-chatbot": { eyebrow: "Tools", title: "AI Chatbot", icon: <MessageSquare /> },
   "/listening": { eyebrow: "TOEIC Listening", title: "Listening Practice", icon: <Mic /> },
+  "/roadmap": { eyebrow: "Study Plan", title: "Learning Roadmap", icon: <Target /> },
 };
 
 /**
@@ -100,27 +101,19 @@ export function ToolbarBreadcrumb() {
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ delay: 0.05, type: "spring", stiffness: 400 }}
-          className="w-[30px] h-[30px] rounded-lg grid text-sm text-accent shrink-0"
-          style={{
-            background: "var(--accent-light)",
-            border: "1px solid color-mix(in srgb, var(--accent) 20%, transparent)",
-            placeItems: "center",
-          }}
+          className="w-[30px] h-[30px] rounded-lg grid text-sm text-accent shrink-0 bg-accent-light border-2 border-border shadow-sm place-items-center"
         >
           {crumb.icon}
         </m.div>
 
         {/* Text */}
         <div className="flex flex-col justify-center">
-          <span
-            className="text-[10px] uppercase leading-none font-bold text-text-muted"
-            style={{ letterSpacing: "0.15em" }}
-          >
+          <span className="text-[10px] uppercase leading-none font-black text-accent tracking-widest">
             {crumb.eyebrow}
           </span>
           <h5
-            className="text-[13px] font-bold text-text-primary"
-            style={{ margin: "2px 0 0", lineHeight: 1.2 }}
+            className="text-[13px] font-black font-display text-ink mt-0.5 leading-tight"
+            style={{ margin: "2px 0 0" }}
           >
             {crumb.title}
           </h5>

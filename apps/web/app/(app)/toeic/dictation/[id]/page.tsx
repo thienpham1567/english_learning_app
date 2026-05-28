@@ -3,6 +3,7 @@
 import { Headphones, PauseCircle, PlayCircle } from "lucide-react";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { Card } from "@/components/ui/card";
 import { api } from "@/lib/api-client";
 
 type Item = {
@@ -78,7 +79,7 @@ export default function DictationDetailPage() {
   return (
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
       <div className="p-4 grid gap-3 w-[720px]">
-        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+        <Card shadowSize="sm" className="p-4">
           <div className="flex items-center gap-3">
             <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm flex items-center gap-2"
               onClick={togglePlay}
@@ -95,10 +96,10 @@ export default function DictationDetailPage() {
             onPause={() => setPlaying(false)}
             onEnded={() => setPlaying(false)}
           />
-        </div>
+        </Card>
 
         {!result ? (
-          <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+          <Card shadowSize="sm" className="p-4">
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
@@ -113,15 +114,15 @@ export default function DictationDetailPage() {
             >
               Submit
             </button>
-          </div>
+          </Card>
         ) : (
           <>
-            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+            <Card shadowSize="sm" className="p-4">
               <div className="text-3xl font-bold">
                 {result.score}/100 ({result.matched}/{result.total} words correct)
               </div>
-            </div>
-            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+            </Card>
+            <Card shadowSize="sm" className="p-4">
               <div style={{ lineHeight: 2 }}>
                 {result.diff.map((e, i) => (
                   <span
@@ -153,8 +154,8 @@ export default function DictationDetailPage() {
                 <span className="text-destructive">● missing</span> ·{" "}
                 <span style={{ color: "var(--warning)" }}>● extra</span>
               </div>
-            </div>
-            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+            </Card>
+            <Card shadowSize="sm" className="p-4">
               <div className="text-base">{result.transcript}</div>
               {result.vocabHints && result.vocabHints.length > 0 && (
                 <div className="mt-3 flex gap-2 flex-wrap">
@@ -165,7 +166,7 @@ export default function DictationDetailPage() {
                   ))}
                 </div>
               )}
-            </div>
+            </Card>
             <div className="flex gap-2">
               <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" onClick={() => router.push("/toeic/dictation")}>Back to List</button>
               <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm"

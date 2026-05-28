@@ -3,6 +3,7 @@
 import { Lightbulb } from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useMemo, useState } from "react";
+import { Card } from "@/components/ui/card";
 import { type TtsAccent, useTextToSpeech } from "@/hooks/useTextToSpeech";
 import { PhonemeCard } from "./_components/PhonemeCard";
 import {
@@ -56,7 +57,7 @@ export default function IpaChartPage() {
       {/* ─── Control bar ─── */}
       <div className="flex items-center gap-3 flex-wrap shrink-0 z-[1] py-3 px-5">
         {/* Tab switcher */}
-        <div className="flex gap-1 bg-surface-alt rounded-2xl border-2 border-border p-1 shadow-sm">
+        <Card shadowSize="sm" size="sm" className="flex flex-row gap-1 p-1">
           {(
             [
               { key: "consonants", label: "Consonants", count: CONSONANTS.length },
@@ -69,10 +70,10 @@ export default function IpaChartPage() {
                 key={key}
                 onClick={() => setTab(key)}
                 whileTap={{ scale: 0.97 }}
-                className={`border-none cursor-pointer text-[13px] font-black flex items-center gap-2 py-2 px-4.5 rounded-xl transition-all duration-200 ${
+                className={`border-2 cursor-pointer text-[13px] font-black flex items-center gap-2 py-2 px-4.5 rounded-xl transition-all duration-100 ${
                   isActive
-                    ? "bg-accent text-text-on-accent shadow-sm"
-                    : "bg-transparent text-text-secondary hover:text-text-primary"
+                    ? "bg-accent text-text-on-accent border-border shadow-sm"
+                    : "bg-transparent text-text-secondary border-transparent hover:text-text-primary hover:bg-surface-hover"
                 }`}
               >
                 <span>{label}</span>
@@ -88,14 +89,14 @@ export default function IpaChartPage() {
               </m.button>
             );
           })}
-        </div>
+        </Card>
 
         {/* Accent Picker */}
         <div className="flex items-center gap-2.5 ml-auto">
           <span className="text-[10px] text-text-muted font-extrabold uppercase tracking-widest hidden sm:inline font-display">
             Default voice accent
           </span>
-          <div className="flex bg-surface-alt border-2 border-border gap-0.5 p-1 rounded-xl shadow-sm">
+          <Card shadowSize="sm" size="sm" className="flex flex-row gap-0.5 p-1">
             {(
               [
                 { value: "us", label: "🇺🇸 US" },
@@ -108,17 +109,17 @@ export default function IpaChartPage() {
                   key={value}
                   onClick={() => setAccent(value)}
                   whileTap={{ scale: 0.95 }}
-                  className={`rounded-lg border-none cursor-pointer text-xs font-black py-1.5 px-3.5 transition-all duration-150 ${
+                  className={`rounded-lg border-2 cursor-pointer text-xs font-black py-1.5 px-3.5 transition-all duration-100 ${
                     isActive
-                      ? "bg-surface text-ink shadow-sm border-2 border-border"
-                      : "bg-transparent text-text-secondary hover:text-text-primary"
+                      ? "bg-accent text-text-on-accent border-border shadow-sm"
+                      : "bg-transparent text-text-secondary border-transparent hover:text-text-primary"
                   }`}
                 >
                   {label}
                 </m.button>
               );
             })}
-          </div>
+          </Card>
         </div>
       </div>
 
@@ -153,7 +154,7 @@ export default function IpaChartPage() {
                 return (
                   <section key={key}>
                     <SectionHeader label={label} count={items.length} />
-                    <div className="grid gap-3 grid-cols-[repeat(auto-fill,minmax(140px,1fr))]">
+                    <div className="grid gap-3 grid-cols-[repeat(auto-fill,minmax(150px,1fr))]">
                       {items.map((p, idx) => (
                         <PhonemeCard
                           key={p.symbol}
@@ -177,7 +178,7 @@ export default function IpaChartPage() {
                 return (
                   <section key={key}>
                     <SectionHeader label={label} count={items.length} color={VOWEL_COLORS[key]} />
-                    <div className="grid gap-3 grid-cols-[repeat(auto-fill,minmax(140px,1fr))]">
+                    <div className="grid gap-3 grid-cols-[repeat(auto-fill,minmax(150px,1fr))]">
                       {items.map((p, idx) => (
                         <PhonemeCard
                           key={p.symbol}
@@ -205,7 +206,7 @@ function LegendDot({ color, label }: { color: string; label: string }) {
   return (
     <span className="flex items-center gap-1.5 text-text-secondary font-bold text-[11px]">
       <span
-        className="w-2.5 h-2.5 rounded-full shrink-0 border border-border"
+        className="w-2.5 h-2.5 rounded-full shrink-0 border-2 border-border shadow-sm"
         style={{ background: color }}
       />
       {label}
@@ -226,14 +227,14 @@ function SectionHeader({
   return (
     <div className="flex items-center gap-3 mb-4">
       <div
-        className="w-1 h-5 rounded-full shrink-0"
+        className="w-1.5 h-5 rounded-full shrink-0"
         style={{ background: color }}
       />
       <h3 className="m-0 font-black text-ink font-display text-sm uppercase tracking-wide">
         {label}
       </h3>
       <span
-        className="text-[10px] font-extrabold rounded-full py-0.5 px-2.5 border"
+        className="text-[10px] font-extrabold rounded-full py-0.5 px-2.5 border-2"
         style={{
           background: `color-mix(in srgb, ${color} 8%, var(--surface-alt))`,
           color: color,

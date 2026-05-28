@@ -2,6 +2,7 @@
 
 import { Star, Trophy } from "lucide-react";
 import * as m from "motion/react-client";
+import { Card } from "@/components/ui/card";
 
 const LEVEL_COLORS: Record<string, string> = {
   A1: "text-emerald-700 dark:text-emerald-400 border-emerald-500/30 bg-emerald-500/5",
@@ -62,7 +63,7 @@ export function VocabularyStatsBar({ entries }: Props) {
 
       {/* CEFR Level stats */}
       {hasLevels && (
-        <div className="flex flex-col sm:flex-row sm:items-center gap-3.5 bg-surface-alt border-2 border-border rounded-2xl p-4.5 shadow-sm w-full">
+        <Card shadowSize="sm" bgType="alt" className="flex-col sm:flex-row sm:items-center gap-3.5 p-4.5 w-full">
           <div className="flex items-center gap-1.5 shrink-0">
             <Trophy className="h-4 w-4 text-accent" />
             <span className="text-[10px] font-extrabold text-text-muted uppercase tracking-widest font-display">
@@ -83,7 +84,7 @@ export function VocabularyStatsBar({ entries }: Props) {
               );
             })}
           </div>
-        </div>
+        </Card>
       )}
     </div>
   );

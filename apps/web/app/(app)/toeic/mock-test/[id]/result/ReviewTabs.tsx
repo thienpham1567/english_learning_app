@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { Card } from "@/components/ui/card";
 
 type ReviewQuestion = {
   id: string;
@@ -51,7 +52,7 @@ export function ReviewTabs({
           const a = byId.get(q.id);
           const userPick = a?.selectedIndex ?? null;
           return (
-            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4" key={q.id}>
+            <Card shadowSize="sm" className="p-4" key={q.id}>
               <div className="flex gap-2 items-center mb-2.5 flex-wrap">
                 <span className="bg-blue-500/10 border border-blue-500/20 text-blue-600 py-0.5 px-2 rounded-md font-bold text-xs inline-block">Part {q.part}</span>
                 <span className="bg-accent/15 border border-accent/30 text-accent py-0.5 px-2 rounded-md font-bold text-xs inline-block">Question {q.number}</span>
@@ -106,7 +107,7 @@ export function ReviewTabs({
                   <strong className="text-text-primary">Explanation:</strong> {q.explanationVi}
                 </div>
               )}
-            </div>
+            </Card>
           );
         })}
       </div>
@@ -114,7 +115,7 @@ export function ReviewTabs({
   };
 
   return (
-    <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+    <Card shadowSize="sm" className="p-4">
       <div className="flex gap-1 mb-4 border-b border-border pb-2">
         {[
           { key: "wrong", label: `Incorrect (${wrong.length})` },
@@ -137,6 +138,6 @@ export function ReviewTabs({
       {activeKey === "wrong" && renderList(wrong)}
       {activeKey === "all" && renderList(questions)}
       {activeKey === "bookmarked" && renderList(bookmarked)}
-    </div>
+    </Card>
   );
 }

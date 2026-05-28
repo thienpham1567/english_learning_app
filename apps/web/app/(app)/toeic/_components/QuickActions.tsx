@@ -16,6 +16,7 @@ import {
   Pencil,
 } from "lucide-react";
 import type { ComponentType } from "react";
+import { Card } from "@/components/ui/card";
 
 const ACTIONS: Array<{
   href: string;
@@ -38,7 +39,7 @@ const ACTIONS: Array<{
 
 export function QuickActions() {
   return (
-    <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+    <Card shadowSize="sm" className="p-4">
       <div className="grid gap-2 grid-cols-[repeat(auto-fit,minmax(140px,1fr))]">
         {ACTIONS.map((a) => {
           const Icon = a.icon;
@@ -65,6 +66,6 @@ export function QuickActions() {
           );
         })}
       </div>
-    </div>
+    </Card>
   );
 }

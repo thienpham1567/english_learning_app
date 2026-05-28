@@ -2,6 +2,7 @@
 
 import { getSkillLabel, type ToeicSkill } from "@repo/contracts";
 import { useRouter } from "next/navigation";
+import { Card } from "@/components/ui/card";
 
 export function DiagnosticResult({
   snapshot,
@@ -17,11 +18,11 @@ export function DiagnosticResult({
 
   return (
     <div className="grid gap-3 max-w-[720px]">
-      <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+      <Card shadowSize="sm" className="p-4">
         <h3 className="font-bold text-ink mb-2">Score: {score?.correct ?? 0} / {score?.total ?? 30}</h3>
         <p className="text-sm text-text-muted font-medium">Your study path will focus on your weakest skills.</p>
-      </div>
-      <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+      </Card>
+      <Card shadowSize="sm" className="p-4">
         <h4 className="text-xs uppercase font-extrabold text-text-secondary tracking-wider mb-2.5">Weakest Areas</h4>
         <div className="flex gap-2 flex-wrap">
           {weakest.map(([skill, val]) => (
@@ -30,8 +31,8 @@ export function DiagnosticResult({
             </span>
           ))}
         </div>
-      </div>
-      <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+      </Card>
+      <Card shadowSize="sm" className="p-4">
         <h4 className="text-xs uppercase font-extrabold text-text-secondary tracking-wider mb-2.5">Strongest Areas</h4>
         <div className="flex gap-2 flex-wrap">
           {strongest.map(([skill, val]) => (
@@ -40,7 +41,7 @@ export function DiagnosticResult({
             </span>
           ))}
         </div>
-      </div>
+      </Card>
       <button 
         className="py-2.5 px-6 rounded-xl border-2 border-border bg-accent text-[var(--text-on-accent)] font-extrabold text-sm cursor-pointer shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:bg-accent-hover active:translate-x-[1px] active:translate-y-[1px] active:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all duration-150 w-fit" 
         onClick={() => router.push("/toeic")}

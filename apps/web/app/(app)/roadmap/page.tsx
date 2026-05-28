@@ -31,6 +31,7 @@ import {
   type Week,
 } from "@/lib/curriculum/data";
 import { useRoadmap } from "@/lib/curriculum/roadmap-context";
+import { Card } from "@/components/ui/card";
 
 const SKILL_ICONS: Record<Skill, React.ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>> = {
   grammar: BookOpen,
@@ -64,7 +65,7 @@ export default function RoadmapPage() {
     <div className="flex flex-col h-full min-h-0 flex-1 overflow-auto">
       <div className="p-5 pb-16 max-w-[900px] mx-auto w-full flex flex-col gap-6">
         {/* ─── Header ─── */}
-        <div className="border-2 border-border rounded-2xl bg-surface shadow-sm p-6 relative overflow-hidden">
+        <Card shadowSize="md" className="relative overflow-hidden">
           <div
             className="absolute top-0 left-0 right-0 h-[3px]"
             style={{
@@ -102,33 +103,34 @@ export default function RoadmapPage() {
               </div>
             </div>
           </div>
-        </div>
+        </Card>
 
         {/* ─── Today's Focus ─── */}
         <m.div
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="border-2 border-accent/30 rounded-2xl bg-accent/5 p-5 shadow-sm"
         >
-          <div className="flex items-center gap-2.5 mb-2">
-            <Zap className="text-accent" size={18} />
-            <span className="text-sm font-black text-ink font-display">
-              Today&apos;s Focus
-            </span>
-            <span className="text-[10px] font-extrabold rounded-lg bg-accent/10 text-accent border border-accent/20 px-2 py-0.5 ml-auto">
-              Week {currentWeek}
-            </span>
-          </div>
-          <p className="text-xs text-text-secondary font-semibold m-0">
-            {getWeek(currentWeek)?.focusTopic ?? "Start your learning journey!"}
-          </p>
-          <Link
-            href={`/roadmap/week/${currentWeek}`}
-            className="no-underline inline-flex items-center gap-1.5 mt-3 text-xs font-black text-accent hover:underline"
-          >
-            Continue Learning <ChevronRight size={14} />
-          </Link>
+          <Card shadowSize="sm" className="border-accent/30 bg-accent/5">
+            <div className="flex items-center gap-2.5 mb-2">
+              <Zap className="text-accent" size={18} />
+              <span className="text-sm font-black text-ink font-display">
+                Today&apos;s Focus
+              </span>
+              <span className="text-[10px] font-extrabold rounded-lg bg-accent/10 text-accent border border-accent/20 px-2 py-0.5 ml-auto">
+                Week {currentWeek}
+              </span>
+            </div>
+            <p className="text-xs text-text-secondary font-semibold m-0">
+              {getWeek(currentWeek)?.focusTopic ?? "Start your learning journey!"}
+            </p>
+            <Link
+              href={`/roadmap/week/${currentWeek}`}
+              className="no-underline inline-flex items-center gap-1.5 mt-3 text-xs font-black text-accent hover:underline"
+            >
+              Continue Learning <ChevronRight size={14} />
+            </Link>
+          </Card>
         </m.div>
 
         {/* ─── Phase Timeline ─── */}
@@ -144,8 +146,8 @@ export default function RoadmapPage() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 + phaseIndex * 0.08 }}
-                className="border-2 border-border rounded-2xl bg-surface shadow-sm overflow-hidden"
               >
+              <Card shadowSize="sm" className="overflow-hidden p-0">
                 {/* Phase header */}
                 <button
                   type="button"
@@ -403,6 +405,7 @@ export default function RoadmapPage() {
                     </div>
                   </div>
                 )}
+              </Card>
               </m.div>
             );
           })}

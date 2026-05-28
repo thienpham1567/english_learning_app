@@ -4,6 +4,7 @@ import { BarChart3, Flame, History, Loader2, TrendingUp, Trophy, Volume2, Zap } 
 import { motion } from "motion/react";
 import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { api } from "@/lib/api-client";
 import type { ListeningHistoryItem, ListeningStats } from "@/lib/listening/types";
 
@@ -106,7 +107,7 @@ export function ListeningDashboard({
 
       {/* Weekly Trend */}
       {stats.weeklyTrend.length > 1 && (
-        <div className="py-4 px-5 rounded-lg border-2 border-border bg-surface shadow-sm">
+        <Card shadowSize="sm" className="py-4 px-5">
           <div className="flex items-center gap-1.5 text-[11px] font-bold text-text-muted uppercase tracking-widest mb-3.5">
             <TrendingUp size={13} /> 8-Week Trend
           </div>
@@ -125,7 +126,7 @@ export function ListeningDashboard({
               </div>
             ))}
           </div>
-        </div>
+        </Card>
       )}
 
       {/* Quick Start */}
@@ -150,7 +151,7 @@ export function ListeningDashboard({
 
       {/* Recent History */}
       {recentHistory.length > 0 && (
-        <div className="py-4 px-5 rounded-lg border-2 border-border bg-surface shadow-sm">
+        <Card shadowSize="sm" className="py-4 px-5">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[11px] font-bold text-text-muted uppercase tracking-widest flex items-center gap-1.5">
               <History size={12} /> Recent
@@ -194,12 +195,12 @@ export function ListeningDashboard({
               </div>
             ))}
           </div>
-        </div>
+        </Card>
       )}
 
       {/* Level Breakdown */}
       {stats.byLevel.length > 0 && (
-        <div className="py-4 px-5 rounded-lg border-2 border-border bg-surface shadow-sm">
+        <Card shadowSize="sm" className="py-4 px-5">
           <div className="text-[11px] font-bold text-text-muted uppercase mb-2.5 tracking-widest flex items-center gap-1.5">
             <Trophy size={12} /> By Level
           </div>
@@ -216,7 +217,7 @@ export function ListeningDashboard({
               </div>
             ))}
           </div>
-        </div>
+        </Card>
       )}
     </div>
   );
@@ -242,7 +243,7 @@ function StatCard({
   return (
     <motion.div
       whileHover={{ y: -3, scale: 1.02 }}
-      className="border-2 border-border bg-surface text-center py-3.5 px-3 rounded-lg shadow-sm cursor-default"
+      className="border-2 border-border bg-card text-card-foreground text-center py-3.5 px-3 rounded-lg shadow-sm cursor-default"
     >
       <div className={`text-lg mb-1.5 flex justify-center ${iconColor}`}>{icon}</div>
       <div className={`text-2xl font-extrabold font-mono leading-none ${valueColor ?? "text-text-primary"}`}>

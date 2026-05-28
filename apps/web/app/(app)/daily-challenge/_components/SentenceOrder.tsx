@@ -3,6 +3,7 @@
 import { Check, Shuffle, X } from "lucide-react";
 import * as m from "motion/react-client";
 import { useState } from "react";
+import { Card } from "@/components/ui/card";
 import type { SentenceOrderData } from "@/lib/daily-challenge/types";
 
 type Props = {
@@ -106,10 +107,7 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
       </div>
 
       {/* Available word bank */}
-      <div
-        className="rounded-lg border-2 border-border bg-surface mb-5"
-        style={{ padding: "16px 18px", boxShadow: "var(--shadow-sm)" }}
-      >
+      <Card shadowSize="sm" size="sm" className="mb-5" style={{ padding: "16px 18px" }}>
         <div className="text-[10px] font-extrabold uppercase tracking-widest text-text-muted mb-3">
           Word Bank
         </div>
@@ -139,7 +137,7 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
             ))
           )}
         </div>
-      </div>
+      </Card>
 
       {/* Confirm button */}
       {allSelected && !disabled && (

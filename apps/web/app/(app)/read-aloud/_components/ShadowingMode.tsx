@@ -20,6 +20,7 @@ import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { useCallback, useRef, useState } from "react";
 import { useVoiceInput } from "@/hooks/useVoiceInput";
+import { Card } from "@/components/ui/card";
 import { splitIntoSentences } from "../_hooks/useSentences";
 import { type EvalResult, ShadowResult } from "./ShadowResult";
 
@@ -155,7 +156,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
 
   if (sentences.length === 0) {
     return (
-      <div className="bg-surface rounded-xl border-2 border-border text-center py-10 px-6">
+      <Card shadowSize="sm" className="text-center py-10 px-6">
         <div className="flex justify-center mb-4"><Mic size={48} className="text-accent" /></div>
         <h3 className="mb-2 text-text-primary">
           Shadowing Mode
@@ -163,14 +164,14 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
         <span className="text-text-muted block w-[400px] mx-auto">
           Please enter or select a passage in the "Listen" tab first, then return here to practice shadowing.
         </span>
-      </div>
+      </Card>
     );
   }
 
   return (
     <div className="flex flex-col gap-4">
       {/* Progress bar */}
-      <div className="bg-surface rounded-xl border-2 border-border py-4 px-5">
+      <Card shadowSize="sm" className="py-4 px-5">
         <div className="mb-2 flex justify-between items-center">
           <span className="text-[13px] font-bold text-text-primary flex items-center gap-1">
             <BookOpen size={14} className="text-accent inline-block" /> Sentence {currentIdx + 1} of {sentences.length}
@@ -207,7 +208,7 @@ export function ShadowingMode({ text, voiceRole, speed }: ShadowingModeProps) {
             </button>
           ))}
         </div>
-      </div>
+      </Card>
 
       {/* Current sentence card */}
       <m.div

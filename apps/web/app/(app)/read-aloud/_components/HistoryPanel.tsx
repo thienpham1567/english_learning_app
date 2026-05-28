@@ -4,6 +4,7 @@ import { Clock, History, Trash2, X } from "lucide-react";
 import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import { toast } from "sonner";
+import { Card } from "@/components/ui/card";
 import { VOICES } from "../_data/voices";
 import { isCached } from "../_hooks/useAudioPlayback";
 import type { HistoryEntryCompat as HistoryEntry } from "../_hooks/useHistory";
@@ -36,7 +37,7 @@ export function HistoryPanel({
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
           className="overflow-hidden"
         >
-          <div className="bg-surface rounded-xl border-2 border-border p-5 shadow-md">
+          <Card shadowSize="md" className="p-5">
             {/* History header */}
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
@@ -135,7 +136,7 @@ export function HistoryPanel({
                 })}
               </div>
             )}
-          </div>
+          </Card>
         </m.div>
       )}
     </AnimatePresence>

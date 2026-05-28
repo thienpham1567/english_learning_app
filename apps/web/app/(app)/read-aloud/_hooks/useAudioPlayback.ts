@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useCallback, useRef, useState } from "react";
 
 const MAX_CHARS = 10_000;
@@ -55,11 +56,11 @@ export function useAudioPlayback() {
 
   const generate = useCallback(async (text: string, voiceRole: string, speed: number) => {
     if (!text.trim()) {
-      /* toast: warning */
+      toast.warning("Please enter some text first.");
       return;
     }
     if (text.length > MAX_CHARS) {
-      console.warn(`Text is too long! Maximum ${MAX_CHARS.toLocaleString()} characters.`);
+      toast.warning(`Text is too long! Maximum ${MAX_CHARS.toLocaleString()} characters.`);
       return;
     }
 
@@ -83,13 +84,19 @@ export function useAudioPlayback() {
       audio.onended = () => setPlaying(false);
       audio.onerror = () => {
         setPlaying(false);
-        /* toast: error */
+        toast.error("Audio playback failed. Please try again.");
       };
-      await audio.play();
-      setPlaying(true);
-      setLoading(false);
-      /* toast: success */
-      return true; // cached
+      try {
+        await audio.play();
+        setPlaying(true);
+        setLoading(false);
+        return true; // cached
+      } catch {
+        setPlaying(false);
+        setLoading(false);
+        toast.error("Could not play cached audio.");
+        return;
+      }
     }
 
     abortRef.current = new AbortController();
@@ -121,14 +128,28 @@ export function useAudioPlayback() {
       audio.onended = () => setPlaying(false);
       audio.onerror = () => {
         setPlaying(false);
-        /* toast: error */
+        toast.error("Audio playback failed. Please try again.");
       };
       await audio.play();
       setPlaying(true);
       return false; // not cached
     } catch (err: unknown) {
       if (err instanceof Error && err.name === "AbortError") return;
-      /* toast: error */
+      const message = err instanceof Error ? err.message : "Could not generate audio.";
+      // Surface user-friendly messages for known errors
+      if (message.includes("429") || message.includes("giới hạn") || message.includes("rate")) {
+        toast.error("Rate limit reached. Please wait a moment and try again.", {
+          description: "The voice synthesis service is temporarily busy.",
+          duration: 6000,
+        });
+      } else if (message.includes("exhausted retries")) {
+        toast.error("Voice service is overloaded. Please try again in a few minutes.", {
+          description: "All retry attempts failed due to rate limiting.",
+          duration: 8000,
+        });
+      } else {
+        toast.error(message, { duration: 5000 });
+      }
     } finally {
       setLoading(false);
     }
@@ -166,3 +187,4 @@ export function useAudioPlayback() {
     stop,
   };
 }
+

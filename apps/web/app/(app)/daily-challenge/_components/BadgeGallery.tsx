@@ -2,6 +2,7 @@
 
 import { Flame, Lock, Trophy } from "lucide-react";
 import * as m from "motion/react-client";
+import { Card } from "@/components/ui/card";
 import type { Badge } from "@/lib/daily-challenge/types";
 
 function BadgeIcon({ name, unlocked }: { name: string; unlocked: boolean }) {
@@ -16,7 +17,7 @@ type Props = { badges: Badge[] };
 
 export function BadgeGallery({ badges }: Props) {
   return (
-    <div className="rounded-2xl border-2 border-border bg-surface p-5 shadow-sm flex flex-col gap-4">
+    <Card shadowSize="sm" className="gap-4">
       <div className="flex items-center gap-1.5 mb-2 shrink-0">
         <Trophy className="h-4 w-4 text-accent" />
         <span className="text-[10px] font-extrabold uppercase tracking-widest text-accent font-display">
@@ -73,6 +74,6 @@ export function BadgeGallery({ badges }: Props) {
           );
         })}
       </div>
-    </div>
+    </Card>
   );
 }

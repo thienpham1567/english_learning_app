@@ -13,6 +13,7 @@ import {
 import { motion } from "motion/react";
 import { useCallback, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { api } from "@/lib/api-client";
 import type { CefrLevel } from "@/lib/listening/types";
 import { CEFR_LEVELS } from "@/lib/listening/types";
@@ -149,8 +150,9 @@ export default function SummarizeMode({ examMode }: Props) {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="p-6 border-2 border-border rounded-lg bg-surface shadow"
+          className="p-6 shadow"
         >
+          {/* Wrap idle content in Card */}
           <div className="text-center mb-6">
             <FileText size={40} className="text-accent mx-auto mb-2" />
             <h2 className="text-lg font-black m-0 mb-1.5 text-text-primary">
@@ -209,9 +211,9 @@ export default function SummarizeMode({ examMode }: Props) {
       {(state === "listening" || state === "writing") && exercise && (
         <>
           {/* Instruction */}
-          <div className="py-3 px-4 rounded-lg border-2 border-border text-[13px] text-text-secondary bg-surface">
+          <Card shadowSize="sm" className="py-3 px-4 text-[13px] text-text-secondary">
             🎧 <strong>Listen to the passage below.</strong> The original transcript will be revealed after you submit your summary.
-          </div>
+          </Card>
 
           {/* AudioPlayer (AC1 — reuses 19.3.2 component with A-B loop + speed) */}
           <AudioPlayer
@@ -296,7 +298,7 @@ export default function SummarizeMode({ examMode }: Props) {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="p-6 rounded-lg border-2 border-border text-center bg-surface shadow"
+            className="p-6 text-center shadow"
           >
             {/* Custom circular progress */}
             <div className="relative w-[110px] h-[110px] mx-auto mb-2">
@@ -337,16 +339,16 @@ export default function SummarizeMode({ examMode }: Props) {
 
           {/* Feedback */}
           {result.feedback && (
-            <div className="p-4 rounded-lg border-2 border-border bg-surface">
+            <Card shadowSize="sm" className="p-4">
               <p className="text-xs font-bold text-text-secondary mb-1.5 flex items-center gap-1">
                 <Info size={12} /> AI Feedback:
               </p>
               <p className="text-[13px] m-0 leading-relaxed text-text-primary">{result.feedback}</p>
-            </div>
+            </Card>
           )}
 
           {/* Key ideas coverage (AC3 — color-coded) */}
-          <div className="p-4 rounded-lg border-2 border-border bg-surface">
+          <Card shadowSize="sm" className="p-4">
             <p className="text-xs font-bold text-text-secondary mb-2.5">
               Key ideas in the passage:
             </p>
@@ -385,16 +387,16 @@ export default function SummarizeMode({ examMode }: Props) {
                 </div>
               ))}
             </div>
-          </div>
+          </Card>
 
           {/* Your summary */}
-          <div className="p-4 rounded-lg border-2 border-border bg-surface">
+          <Card shadowSize="sm" className="p-4">
             <p className="text-xs font-bold text-text-secondary mb-1.5">Your summary:</p>
             <p className="text-sm m-0 italic leading-[1.7] text-text-primary">{summaryText}</p>
-          </div>
+          </Card>
 
           {/* Transcript reveal (AC3 — revealed after submission) */}
-          <div className="p-4 rounded-lg border-2 border-border bg-surface">
+          <Card shadowSize="sm" className="p-4">
             <button
               onClick={() => setShowPassage((p) => !p)}
               className="flex items-center gap-1.5 bg-transparent border-none cursor-pointer text-accent text-[13px] font-bold p-0 hover:underline"
@@ -411,7 +413,7 @@ export default function SummarizeMode({ examMode }: Props) {
                 {result.passage}
               </motion.p>
             )}
-          </div>
+          </Card>
 
           {/* Actions */}
           <div className="flex gap-3 justify-center">

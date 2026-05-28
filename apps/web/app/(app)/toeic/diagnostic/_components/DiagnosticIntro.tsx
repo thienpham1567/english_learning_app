@@ -1,9 +1,10 @@
 "use client";
 
+import { Card } from "@/components/ui/card";
 
 export function DiagnosticIntro({ onStart }: { onStart: () => void }) {
   return (
-    <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+    <Card shadowSize="sm" className="p-4">
       <p>
         You will complete <strong>30 questions in 20 minutes</strong> to determine your starting proficiency in each sub-skill. The results will shape your study path and daily recommendations.
       </p>
@@ -15,6 +16,6 @@ export function DiagnosticIntro({ onStart }: { onStart: () => void }) {
       <button className="py-2 px-4 rounded-lg border-2 border-border bg-accent text-[var(--text-on-accent)] font-bold text-sm cursor-pointer shadow-sm" onClick={onStart}>
         Start
       </button>
-    </div>
+    </Card>
   );
 }

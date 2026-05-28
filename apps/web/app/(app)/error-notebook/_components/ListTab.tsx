@@ -3,6 +3,7 @@
 import { CheckCircle, Filter, Inbox, Loader2, Search, Sparkles } from "lucide-react";
 import * as m from "motion/react-client";
 import { useCallback, useEffect, useState } from "react";
+import { Card } from "@/components/ui/card";
 import { useErrorList } from "../_hooks/useErrorList";
 import type { ErrorEntry } from "../_types/types";
 import { FILTER_RESOLVED_OPTIONS, MODULE_FILTER_OPTIONS } from "../_types/types";
@@ -51,9 +52,9 @@ export function ListTab() {
     <>
       <div className="flex flex-col gap-4">
         {/* Search + Filters */}
-        <div className="bg-surface rounded-xl border-2 border-border p-3.5 flex flex-col gap-3">
+        <Card shadowSize="sm" size="sm" className="gap-3">
           {/* Search bar */}
-          <div className="flex items-center gap-2.5 px-3.5 py-2 rounded-xl bg-surface-alt border-2 border-border">
+          <Card shadowSize="none" size="sm" bgType="alt" className="flex-row items-center gap-2.5 px-3.5 py-2">
             <Search className="h-3.5 w-3.5 text-text-muted shrink-0" />
             <input
               type="text"
@@ -70,7 +71,7 @@ export function ListTab() {
                 ✕
               </button>
             )}
-          </div>
+          </Card>
 
           {/* Filter chips */}
           <div className="flex items-center gap-2 flex-wrap">
@@ -134,7 +135,7 @@ export function ListTab() {
               {list.total} results
             </span>
           </div>
-        </div>
+        </Card>
 
         {/* Batch resolve */}
         {list.unresolvedCount > 1 && (
@@ -160,7 +161,7 @@ export function ListTab() {
           <m.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="py-16 px-6 text-center bg-surface rounded-xl border-2 border-border"
+            className="py-16 px-6 text-center"
           >
             <div className="flex justify-center mb-3">
               {list.filters.resolved === "false" ? (

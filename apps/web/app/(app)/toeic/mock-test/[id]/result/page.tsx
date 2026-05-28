@@ -4,6 +4,7 @@ import { AlertTriangle, Trophy } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Card } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
 import { bandLabel } from "@/lib/toeic/predict";
 import { ReviewTabs } from "./ReviewTabs";
@@ -79,7 +80,7 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
             </div>
           </div>
         )}
-        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+        <Card shadowSize="sm" className="p-4">
           <div className="text-center">
             <div className="font-extrabold text-accent" style={{ fontSize: 56 }}>
               {total}
@@ -107,9 +108,9 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
               </div>
             </div>
           </div>
-        </div>
+        </Card>
 
-        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+        <Card shadowSize="sm" className="p-4">
           <div className="grid gap-2">
             {[2, 3, 4, 5, 6, 7].map((p) => {
               const stats = byPart[p];
@@ -143,7 +144,7 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
               );
             })}
           </div>
-        </div>
+        </Card>
 
         <ReviewTabs questions={reviewQuestions} answers={reviewAnswers} />
 

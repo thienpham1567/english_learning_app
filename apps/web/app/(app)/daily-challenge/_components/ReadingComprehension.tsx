@@ -3,6 +3,7 @@
 import { BookOpenText } from "lucide-react";
 import * as m from "motion/react-client";
 import { useState } from "react";
+import { Card } from "@/components/ui/card";
 import type { ReadingComprehensionData } from "@/lib/daily-challenge/types";
 
 const LABELS = ["A", "B", "C", "D"] as const;
@@ -54,11 +55,11 @@ export function ReadingComprehension({ data, instruction, onAnswer, disabled }: 
       </div>
 
       {/* Question */}
-      <div className="mb-4 py-3 px-4 rounded-lg bg-surface-alt border-2 border-border">
+      <Card shadowSize="sm" size="sm" className="mb-4 py-3 px-4">
         <p className="m-0 text-[15px] font-bold text-text-primary leading-relaxed">
           {data.question}
         </p>
-      </div>
+      </Card>
 
       {/* Options */}
       <div className="flex flex-col gap-2.5">

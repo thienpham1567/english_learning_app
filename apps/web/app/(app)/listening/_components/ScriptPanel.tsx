@@ -3,6 +3,7 @@
 import { AlertTriangle, Eye, EyeOff, FileText, Lightbulb } from "lucide-react";
 import { motion, AnimatePresence } from "motion/react";
 import { useCallback, useState } from "react";
+import { Card } from "@/components/ui/card";
 
 type ScriptRevealLevel = "hidden" | "keywords" | "full";
 
@@ -149,7 +150,7 @@ export function ScriptPanel({ passage, keyPhrases = [], isRevealed, onReveal }: 
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
             className="overflow-hidden"
           >
-            <div className="p-4 border-2 border-border text-sm rounded-lg bg-surface leading-[1.8] text-text-primary shadow-sm">
+            <Card shadowSize="sm" className="p-4 text-sm leading-[1.8] text-text-primary">
               <div className="flex items-center gap-1.5 mb-2.5 text-[11px] font-bold text-text-muted uppercase tracking-widest">
                 <FileText size={13} /> Script
                 {revealLevel === "keywords" && (
@@ -169,7 +170,7 @@ export function ScriptPanel({ passage, keyPhrases = [], isRevealed, onReveal }: 
                   Go to the Dictionary page for detailed lookups
                 </div>
               )}
-            </div>
+            </Card>
           </motion.div>
         )}
       </AnimatePresence>

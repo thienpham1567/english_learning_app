@@ -11,6 +11,7 @@ import { and, asc, desc, eq, gte, isNotNull, lte, sql } from "drizzle-orm";
 import { ArrowRight, Calendar, CheckCircle, Flame, Star, Trophy } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
+import { Card } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
 import { bandLabel, computePredictedScore } from "@/lib/toeic/predict";
 
@@ -198,7 +199,7 @@ export async function HubWidgets() {
   return (
     <div className="grid gap-4">
       {/* Daily Plan — full width on top */}
-      <div className="bg-[var(--surface)] border-2 border-border rounded-xl p-[18px] shadow-sm">
+      <Card shadowSize="sm" className="p-[18px]">
         <div className="flex justify-between items-center mb-3.5">
           <h3 className="m-0 font-black text-text-primary flex items-center gap-1.5 text-[15.5px]">
             <Calendar className="text-accent w-4.5 h-4.5" />
@@ -247,12 +248,12 @@ export async function HubWidgets() {
             })}
           </div>
         )}
-      </div>
+      </Card>
 
       {/* Status widgets grid */}
       <div className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(210px,1fr))]">
         {/* Predicted Score Card */}
-        <div className="bg-[var(--surface)] rounded-xl flex flex-col justify-between gap-3 border-2 border-border p-[18px] shadow-sm">
+        <Card shadowSize="sm" className="flex-col justify-between gap-3 p-[18px]">
           <div>
             <span className="text-[11px] uppercase text-text-secondary font-[850] tracking-[0.06em]">
               📈 Predicted Score
@@ -280,10 +281,10 @@ export async function HubWidgets() {
               View detailed chart →
             </Link>
           )}
-        </div>
+        </Card>
 
         {/* Last Mock Card */}
-        <div className="bg-[var(--surface)] rounded-xl flex flex-col justify-between gap-3 border-2 border-border p-[18px] shadow-sm">
+        <Card shadowSize="sm" className="flex-col justify-between gap-3 p-[18px]">
           <div>
             <span className="text-[11px] uppercase text-text-secondary font-[850] tracking-[0.06em]">
               🎯 Latest Mock Test
@@ -316,10 +317,10 @@ export async function HubWidgets() {
               Take mock test now →
             </Link>
           )}
-        </div>
+        </Card>
 
         {/* Activity Card */}
-        <div className="bg-[var(--surface)] rounded-xl flex flex-col justify-between gap-3 border-2 border-border p-[18px] shadow-sm">
+        <Card shadowSize="sm" className="flex-col justify-between gap-3 p-[18px]">
           <div>
             <span className="text-[11px] uppercase text-text-secondary font-[850] tracking-[0.06em]">
               🔥 Today's Activity
@@ -339,10 +340,10 @@ export async function HubWidgets() {
           >
             Practice new exam →
           </Link>
-        </div>
+        </Card>
 
         {/* Due Tasks Card */}
-        <div className="bg-[var(--surface)] rounded-xl flex flex-col justify-between gap-3 border-2 border-border p-[18px] shadow-sm">
+        <Card shadowSize="sm" className="flex-col justify-between gap-3 p-[18px]">
           <div>
             <span className="text-[11px] uppercase text-text-secondary font-[850] tracking-[0.06em]">
               📚 Review Queue
@@ -363,7 +364,7 @@ export async function HubWidgets() {
           ) : (
             <span className="text-text-muted text-xs font-extrabold">Clean queue, no incorrect questions!</span>
           )}
-        </div>
+        </Card>
       </div>
     </div>
   );

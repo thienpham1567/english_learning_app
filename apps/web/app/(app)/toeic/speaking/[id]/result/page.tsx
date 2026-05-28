@@ -9,6 +9,7 @@ import { AlertTriangle, Check, Mic } from "lucide-react";
 import { headers } from "next/headers";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { Card } from "@/components/ui/card";
 import { auth } from "@/lib/auth";
 
 const TYPE_LABEL: Record<string, string> = {
@@ -137,7 +138,7 @@ export default async function SpeakingResultPage({ params }: { params: Promise<{
   return (
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
       <div className="p-4 grid gap-4 w-[800px]">
-        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+        <Card shadowSize="sm" className="p-4">
           <div className="text-center">
             <div className="font-extrabold text-accent" style={{ fontSize: 56 }}>
               {s.scaledScore ?? "—"}
@@ -145,16 +146,17 @@ export default async function SpeakingResultPage({ params }: { params: Promise<{
             <div className="text-text-muted">/ 200 (TOEIC Speaking)</div>
             <div className="mt-1.5 text-text-muted">Raw: {s.rawScore ?? "—"} / 35</div>
           </div>
-        </div>
+        </Card>
 
         {prompts
           .sort((a, b) => a.questionNumber - b.questionNumber)
           .map((p) => {
             const r = responses.find((x) => x.promptId === p.id);
             return (
-              <div
+              <Card
                 key={p.id}
-                className="border-2 border-border rounded-xl bg-surface shadow-sm p-4"
+                shadowSize="sm"
+                className="p-4"
               >
                 <div className="flex justify-between items-center mb-3">
                   <strong>Q{p.questionNumber} · {TYPE_LABEL[p.type] ?? p.type}</strong>
@@ -208,7 +210,7 @@ export default async function SpeakingResultPage({ params }: { params: Promise<{
                 <div className="text-sm font-semibold">No data available</div>
               </div>
                 )}
-              </div>
+              </Card>
             );
           })}
 

@@ -4,6 +4,8 @@ import { Info, Loader2, PlayCircle, Volume2, XCircle } from "lucide-react";
 
 import * as m from "motion/react-client";
 import { useEffect, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 
 type Accent = "us" | "uk" | "au";
 type Gender = "male" | "female";
@@ -108,16 +110,11 @@ export function TtsReader() {
       {/* Text Area Input */}
       <div>
         <div className="flex justify-between items-center mb-2">
-          <span className="text-[13px] font-extrabold text-text-secondary">
+          <span className="text-[13px] font-bold text-text-secondary">
             Enter text to speak (Max 200 characters)
           </span>
           <span
-            className="font-extrabold"
-            style={{
-              fontSize: 11.5,
-              color: isOverLimit ? "var(--error)" : "var(--text-muted)",
-              transition: "color 0.2s",
-            }}
+            className={`text-[11.5px] font-bold transition-colors duration-200 ${isOverLimit ? "text-error" : "text-text-muted"}`}
           >
             {text.length}/200 characters ({wordCount} words)
           </span>
@@ -136,19 +133,10 @@ export function TtsReader() {
       </div>
 
       {/* Configurations Cards Grid */}
-      <div
-        className="grid gap-3"
-        style={{ gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))" }}
-      >
+      <div className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(200px,1fr))]">
         {/* Accent selector */}
-        <div
-          className="bg-surface rounded-xl"
-          style={{ border: "1.5px solid var(--border)", padding: "14px 16px" }}
-        >
-          <span
-            className="font-black uppercase text-text-muted block mb-2.5"
-            style={{ fontSize: 11.5, letterSpacing: "0.06em" }}
-          >
+        <Card shadowSize="sm" size="sm">
+          <span className="font-black uppercase text-text-muted block mb-2.5 text-[11.5px] tracking-wider">
             Accent
           </span>
           <div className="flex flex-col gap-1.5">
@@ -160,19 +148,18 @@ export function TtsReader() {
                   type="button"
                   onClick={() => setAccent(acc.key)}
                   whileTap={{ scale: 0.98 }}
-                  className="flex items-center gap-2 py-2 px-3 rounded-lg border-none font-extrabold text-[13px] cursor-pointer text-left"
-                  style={{
-                    background: isActive ? "var(--accent)" : "var(--surface-alt)",
-                    color: isActive ? "var(--text-on-accent)" : "var(--text-secondary)",
-                    transition: "background 0.2s, color 0.2s",
-                  }}
+                  className={`flex items-center gap-2 py-2 px-3 rounded-lg font-extrabold text-[13px] cursor-pointer text-left border-2 transition-all duration-100 ${
+                    isActive
+                      ? "bg-accent text-text-on-accent border-border shadow-sm"
+                      : "bg-surface-alt text-text-secondary border-transparent hover:border-border hover:shadow-sm"
+                  }`}
                 >
                   <span
-                    className="text-[9px] px-1 py-0.5 rounded font-mono font-bold leading-none"
-                    style={{
-                      background: isActive ? "rgba(255,255,255,0.2)" : "var(--border)",
-                      color: isActive ? "var(--text-on-accent)" : "var(--text-secondary)",
-                    }}
+                    className={`text-[9px] px-1 py-0.5 rounded font-mono font-bold leading-none ${
+                      isActive
+                        ? "bg-white/20 text-text-on-accent"
+                        : "bg-border text-text-secondary"
+                    }`}
                   >
                     {acc.code}
                   </span>
@@ -181,17 +168,11 @@ export function TtsReader() {
               );
             })}
           </div>
-        </div>
+        </Card>
 
         {/* Gender selector */}
-        <div
-          className="bg-surface rounded-xl"
-          style={{ border: "1.5px solid var(--border)", padding: "14px 16px" }}
-        >
-          <span
-            className="font-black uppercase text-text-muted block mb-2.5"
-            style={{ fontSize: 11.5, letterSpacing: "0.06em" }}
-          >
+        <Card shadowSize="sm" size="sm">
+          <span className="font-black uppercase text-text-muted block mb-2.5 text-[11.5px] tracking-wider">
             Voice Gender
           </span>
           <div className="flex flex-col gap-1.5">
@@ -203,32 +184,25 @@ export function TtsReader() {
                   type="button"
                   onClick={() => setGender(g.key)}
                   whileTap={{ scale: 0.98 }}
-                  className="py-2 px-3 rounded-lg border-none font-extrabold text-[13px] cursor-pointer text-center"
-                  style={{
-                    background: isActive ? "var(--accent)" : "var(--surface-alt)",
-                    color: isActive ? "var(--text-on-accent)" : "var(--text-secondary)",
-                    transition: "background 0.2s, color 0.2s",
-                  }}
+                  className={`py-2 px-3 rounded-lg font-extrabold text-[13px] cursor-pointer text-center border-2 transition-all duration-100 ${
+                    isActive
+                      ? "bg-accent text-text-on-accent border-border shadow-sm"
+                      : "bg-surface-alt text-text-secondary border-transparent hover:border-border hover:shadow-sm"
+                  }`}
                 >
                   {g.label}
                 </m.button>
               );
             })}
           </div>
-        </div>
+        </Card>
 
         {/* Speed selector */}
-        <div
-          className="bg-surface rounded-xl"
-          style={{ border: "1.5px solid var(--border)", padding: "14px 16px" }}
-        >
-          <span
-            className="font-black uppercase text-text-muted block mb-2.5"
-            style={{ fontSize: 11.5, letterSpacing: "0.06em" }}
-          >
+        <Card shadowSize="sm" size="sm">
+          <span className="font-black uppercase text-text-muted block mb-2.5 text-[11.5px] tracking-wider">
             Playback Speed
           </span>
-          <div className="grid gap-1.5" style={{ gridTemplateColumns: "1fr 1fr" }}>
+          <div className="grid gap-1.5 grid-cols-2">
             {SPEEDS.map((s) => {
               const isActive = speed === s;
               return (
@@ -237,66 +211,43 @@ export function TtsReader() {
                   type="button"
                   onClick={() => setSpeed(s)}
                   whileTap={{ scale: 0.98 }}
-                  className="rounded-lg border-none font-extrabold cursor-pointer text-center"
-                  style={{
-                    padding: "8px 4px",
-                    background: isActive ? "var(--accent)" : "var(--surface-alt)",
-                    color: isActive ? "var(--text-on-accent)" : "var(--text-secondary)",
-                    fontSize: 12.5,
-                    transition: "background 0.2s, color 0.2s",
-                  }}
+                  className={`py-2 px-1 rounded-lg font-extrabold cursor-pointer text-center text-[12.5px] border-2 transition-all duration-100 ${
+                    isActive
+                      ? "bg-accent text-text-on-accent border-border shadow-sm"
+                      : "bg-surface-alt text-text-secondary border-transparent hover:border-border hover:shadow-sm"
+                  }`}
                 >
                   {s.toFixed(2)}x
                 </m.button>
               );
             })}
           </div>
-        </div>
+        </Card>
       </div>
 
       {/* Info / Notice Panel */}
-      <div
-        className="rounded-lg leading-normal flex items-start gap-2"
-        style={{
-          padding: "12px 14px",
-          background: "rgba(59, 130, 246, 0.05)",
-          border: "1.5px solid rgba(59, 130, 246, 0.15)",
-          color: "var(--info)",
-          fontSize: 12.5,
-        }}
+      <Card
+        shadowSize="none"
+        size="sm"
+        accentColor="info"
+        accentPosition="left"
+        className="text-info text-[12.5px] leading-normal flex flex-row items-start gap-2.5 bg-info-bg border-info/20"
       >
-        <Info style={{ marginTop: 2 }} />
+        <Info className="mt-0.5 shrink-0" size={16} />
         <div>
           <strong>Groq Orpheus Speech Technology:</strong> Converts text into natural,
           studio-quality speech. Maximum limit of 200 characters per request.
         </div>
-      </div>
+      </Card>
 
       {/* Action Control Button */}
       <div className="flex items-center gap-3">
-        <m.button
-          type="button"
+        <Button
+          size="lg"
+          variant={playing ? "destructive" : "default"}
           onClick={playing ? handleStop : handlePlay}
           disabled={!text.trim() || isOverLimit || loading}
-          whileHover={!text.trim() || isOverLimit || loading ? {} : { scale: 1.02 }}
-          whileTap={!text.trim() || isOverLimit || loading ? {} : { scale: 0.98 }}
-          className="rounded-xl border-none text-sm font-black flex items-center gap-2"
-          style={{
-            padding: "12px 24px",
-            background:
-              !text.trim() || isOverLimit || loading
-                ? "var(--border)"
-                : playing
-                  ? "var(--error)"
-                  : "var(--accent)",
-            color: "var(--text-on-accent)",
-            cursor: !text.trim() || isOverLimit || loading ? "not-allowed" : "pointer",
-            boxShadow:
-              !text.trim() || isOverLimit || loading
-                ? "none"
-                : `0 4px 14px ${playing ? "var(--error)" : "var(--accent-muted)"}`,
-            transition: "background 0.2s",
-          }}
+          className="px-6"
         >
           {loading ? (
             <>
@@ -314,7 +265,7 @@ export function TtsReader() {
               <span>Speak Text (TTS)</span>
             </>
           )}
-        </m.button>
+        </Button>
 
         {playing && (
           <m.div
@@ -339,14 +290,10 @@ export function TtsReader() {
         <m.div
           initial={{ opacity: 0, y: -4 }}
           animate={{ opacity: 1, y: 0 }}
-          className="rounded-lg text-destructive text-[13px] font-bold"
-          style={{
-            padding: "10px 14px",
-            background: "rgba(239, 68, 68, 0.08)",
-            border: "1.5px solid rgba(239, 68, 68, 0.15)",
-          }}
         >
-          {error}
+          <Card shadowSize="none" size="sm" className="bg-error-bg border-error/20 text-destructive text-[13px] font-bold">
+            {error}
+          </Card>
         </m.div>
       )}
     </div>

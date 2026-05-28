@@ -23,6 +23,7 @@ import {
   SKILL_LABELS,
   type Skill,
 } from "@/lib/curriculum/data";
+import { Card } from "@/components/ui/card";
 import { useRoadmap } from "@/lib/curriculum/roadmap-context";
 
 const SKILL_ICONS: Record<Skill, React.ComponentType<{ size?: number; className?: string; style?: React.CSSProperties }>> = {
@@ -55,12 +56,12 @@ export default function WeekDetailPage() {
     return (
       <div className="flex flex-col h-full min-h-0 flex-1 overflow-auto">
         <div className="p-5 pb-16 max-w-[900px] mx-auto w-full">
-          <div className="border-2 border-border rounded-2xl bg-surface shadow-sm p-6 text-center">
+          <Card shadowSize="sm" className="p-6 text-center">
             <p className="text-sm font-bold text-text-secondary">Week not found</p>
             <Link href="/roadmap" className="text-xs font-black text-accent mt-2 inline-block">
               ← Back to Roadmap
             </Link>
-          </div>
+          </Card>
         </div>
       </div>
     );

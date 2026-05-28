@@ -3,6 +3,7 @@
 import { getSkillLabel, type ToeicSkill } from "@repo/contracts";
 import { AlertTriangle, Calendar, Zap } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { Card } from "@/components/ui/card";
 
 type SkillRow = { skill: string; proficiency: number; pool: number };
 
@@ -33,7 +34,7 @@ export function GrammarHub({ skills, mistakeCount }: { skills: SkillRow[]; mista
         className="grid gap-3"
         style={{ gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))" }}
       >
-        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4" onClick={startDaily}>
+        <Card shadowSize="sm" interactive className="p-4 cursor-pointer" onClick={startDaily}>
           <div className="flex items-center gap-2">
             <Calendar className="text-xl" style={{ color: "var(--info)" }} />
             <strong>Daily 15 Questions</strong>
@@ -42,8 +43,8 @@ export function GrammarHub({ skills, mistakeCount }: { skills: SkillRow[]; mista
           {weakest3[0] && (
             <span className="mt-2 bg-accent/10 text-accent py-0.5 px-2 inline-block">{getSkillLabel(weakest3[0].skill as ToeicSkill)}</span>
           )}
-        </div>
-        <div className={`border-2 border-border rounded-xl bg-surface shadow-sm p-4 ${mistakeCount > 0 ? "cursor-pointer hover:shadow-md" : ""}`}
+        </Card>
+        <Card shadowSize="sm" className={`p-4 ${mistakeCount > 0 ? "cursor-pointer hover:shadow-md" : ""}`}
           onClick={mistakeCount > 0 ? startMistake : undefined}
           style={mistakeCount === 0 ? { opacity: 0.6, cursor: "not-allowed" } : undefined}
         >
@@ -53,8 +54,8 @@ export function GrammarHub({ skills, mistakeCount }: { skills: SkillRow[]; mista
           </div>
           <div className="text-[28px] font-bold mt-1.5">{mistakeCount}</div>
           <div className="text-text-muted text-[13px]">Spaced repetition for incorrect answers</div>
-        </div>
-        <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+        </Card>
+        <Card shadowSize="sm" className="p-4">
           <div className="flex items-center gap-2">
             <Zap className="text-xl" style={{ color: "var(--warning)" }} />
             <strong>Top 3 weakest skills</strong>
@@ -75,11 +76,11 @@ export function GrammarHub({ skills, mistakeCount }: { skills: SkillRow[]; mista
               </button>
             ))}
           </div>
-        </div>
+        </Card>
       </div>
 
       {/* Skill matrix */}
-      <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+      <Card shadowSize="sm" className="p-4">
         <div className="grid gap-2.5">
           {skills.map((s) => (
             <div
@@ -98,7 +99,7 @@ export function GrammarHub({ skills, mistakeCount }: { skills: SkillRow[]; mista
             </div>
           ))}
         </div>
-      </div>
+      </Card>
     </div>
   );
 }

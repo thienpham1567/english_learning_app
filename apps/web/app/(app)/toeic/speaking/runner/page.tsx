@@ -4,6 +4,7 @@
 import { Mic, VolumeX } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { Card } from "@/components/ui/card";
 import { api } from "@/lib/api-client";
 
 type Prompt = {
@@ -243,14 +244,14 @@ export default function SpeakingRunnerPage() {
         </div>
 
         {current.type === "q1_2_read_aloud" && (
-          <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+          <Card shadowSize="sm" className="p-4">
             <div className="text-[13px] text-text-muted">Đọc to đoạn dưới</div>
             <div className="text-lg leading-relaxed mt-2">{current.textToRead}</div>
-          </div>
+          </Card>
         )}
 
         {current.type === "q3_4_describe_picture" && current.imageUrl && (
-          <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+          <Card shadowSize="sm" className="p-4">
             <img
               loading="lazy"
               decoding="async"
@@ -260,39 +261,39 @@ export default function SpeakingRunnerPage() {
               style={{ maxWidth: "100%" }}
             />
             <div className="text-[13px] text-text-muted mt-2">Mô tả ảnh càng chi tiết càng tốt</div>
-          </div>
+          </Card>
         )}
 
         {current.type === "q5_7_respond_question" && (
-          <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+          <Card shadowSize="sm" className="p-4">
             <div className="text-[13px] text-text-muted">Trả lời câu hỏi</div>
             <div className="text-lg mt-2">{current.questionText}</div>
-          </div>
+          </Card>
         )}
 
         {current.type === "q8_10_respond_info" && (
           <>
-            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+            <Card shadowSize="sm" className="p-4">
               <div className="text-[13px] text-text-muted">Context</div>
               <div className="mt-1.5" style={{ whiteSpace: "pre-wrap" }}>
                 {current.contextText}
               </div>
-            </div>
-            <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+            </Card>
+            <Card shadowSize="sm" className="p-4">
               <div className="text-[13px] text-text-muted">Câu hỏi</div>
               <div className="text-lg mt-2">{current.questionText}</div>
-            </div>
+            </Card>
           </>
         )}
 
         {current.type === "q11_opinion" && (
-          <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+          <Card shadowSize="sm" className="p-4">
             <div className="text-[13px] text-text-muted">Topic</div>
             <div className="text-lg mt-2">{current.topic}</div>
             {current.topicVi && (
               <div className="text-text-muted text-sm mt-1">{current.topicVi}</div>
             )}
-          </div>
+          </Card>
         )}
 
         {phase === "recording" && (

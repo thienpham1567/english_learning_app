@@ -28,6 +28,7 @@ import * as m from "motion/react-client";
 import Link from "next/link";
 import { useCallback, useState } from "react";
 import { CelebrationOverlay } from "@/components/shared";
+import { Card } from "@/components/ui/card";
 import { api } from "@/lib/api-client";
 import type { Badge, ExerciseAnswer, StreakInfo } from "@/lib/daily-challenge/types";
 import { BadgeGallery } from "./BadgeGallery";
@@ -159,14 +160,14 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
             <div className="flex flex-col gap-3 p-4 pt-1.5">
               {/* Question stem */}
               {answer.questionStem && (
-                <div className="rounded-xl bg-surface-alt border-2 border-border p-3.5 shadow-sm">
+                <Card shadowSize="sm" size="sm" bgType="alt" className="p-3.5">
                   <span className="text-[9px] font-extrabold uppercase text-text-muted block mb-1.5 tracking-wider font-display">
                     Question Stem
                   </span>
                   <span className="text-xs md:text-sm text-text-primary font-semibold leading-relaxed break-words">
                     {answer.questionStem}
                   </span>
-                </div>
+                </Card>
               )}
 
               {/* User answer */}
@@ -310,7 +311,7 @@ export function ChallengeResults({
 
       <div className="anim-scale-in w-full max-w-2xl mx-auto flex flex-col gap-5">
         {/* ── Score Hero Card ── */}
-        <div className="rounded-2xl border-2 border-border bg-surface p-8 text-center relative overflow-hidden shadow transition-all duration-200">
+        <Card shadowSize="md" className="p-8 text-center relative overflow-hidden transition-all duration-200">
           {/* Top linear line */}
           <div className="absolute h-1.5 top-0 left-0 right-0 bg-gradient-to-r from-accent to-secondary" />
 
@@ -386,7 +387,7 @@ export function ChallengeResults({
               </div>
             ))}
           </div>
-        </div>
+        </Card>
 
         {/* ── New Badges ── */}
         {newBadges.length > 0 && (

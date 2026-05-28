@@ -2,6 +2,7 @@ import { db, toeicDictationItem, toeicQuestion } from "@repo/database";
 import { eq, sql } from "drizzle-orm";
 import { Headphones } from "lucide-react";
 import Link from "next/link";
+import { Card } from "@/components/ui/card";
 import { requireToeicBaseline } from "@/lib/toeic/require-baseline";
 
 export default async function ToeicListeningPage() {
@@ -60,7 +61,7 @@ export default async function ToeicListeningPage() {
       <div className="p-4 grid gap-3 grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
         {cards.map((c) => {
           const inner = (
-            <div className={`border-2 border-border rounded-xl bg-surface shadow-sm p-4 ${!c.disabled ? "hover:shadow-md transition-shadow cursor-pointer hover:border-accent" : "opacity-60 cursor-not-allowed"}`}>
+            <Card shadowSize="sm" className={`p-4 ${!c.disabled ? "hover:shadow-md transition-shadow cursor-pointer hover:border-accent" : "opacity-60 cursor-not-allowed"}`}>
               <div className="flex justify-between items-center">
                 <strong className="font-extrabold text-[15px]">{c.title}</strong>
                 <span className="bg-accent-muted text-accent py-0.5 px-2.5 rounded-lg border border-accent/20 font-black text-xs inline-block">{c.count} items</span>
@@ -71,7 +72,7 @@ export default async function ToeicListeningPage() {
                   {c.note}
                 </div>
               )}
-            </div>
+            </Card>
           );
           return c.href && !c.disabled ? (
             <Link key={c.title} href={c.href} className="no-underline">

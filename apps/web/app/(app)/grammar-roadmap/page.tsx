@@ -21,6 +21,8 @@ import { AnimatePresence } from "motion/react";
 import * as m from "motion/react-client";
 import Link from "next/link";
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import { QuickLinkCard } from "@/components/shared/QuickLinkCard";
+import { Card } from "@/components/ui/card";
 import { api } from "@/lib/api-client";
 import type { GrammarLessonProgressItem } from "@/lib/grammar-lessons/schema";
 import {
@@ -184,108 +186,109 @@ export default function GrammarRoadmapPage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
-          className="bg-surface rounded-xl border-2 border-border p-6 mt-5 mb-6 relative overflow-hidden shadow-md"
         >
-          <div
-            className="absolute top-0 left-0 right-0 h-[3px]"
-            style={{
-              background: "linear-gradient(90deg, var(--success), var(--accent), var(--error))",
-            }}
-          />
+          <Card shadowSize="md" className="mt-5 mb-6 relative overflow-hidden">
+            <div
+              className="absolute top-0 left-0 right-0 h-[3px]"
+              style={{
+                background: "linear-gradient(90deg, var(--success), var(--accent), var(--error))",
+              }}
+            />
 
-          <div className="flex items-center gap-5 flex-wrap">
-            {/* Custom SVG circle progress — replaces antd Progress */}
-            <div className="relative w-[90px] h-[90px] shrink-0">
-              <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-                <circle
-                  cx="50" cy="50" r="42"
-                  fill="none"
-                  stroke="var(--border)"
-                  strokeWidth="8"
-                />
-                <circle
-                  cx="50" cy="50" r="42"
-                  fill="none"
-                  stroke="var(--accent)"
-                  strokeWidth="8"
-                  strokeLinecap="round"
-                  strokeDasharray={`${overallPct * 2.64} 264`}
-                  className="transition-all duration-700 ease-out"
-                />
-              </svg>
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-2xl font-black text-ink font-display">{overallPct}%</span>
-                <span className="text-[9.5px] font-bold text-text-muted">Completed</span>
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div className="flex-1 min-w-[200px]">
-              <div className="text-lg font-black text-ink font-display mb-1">Overall Progress</div>
-              <div className="flex gap-4 flex-wrap mb-3">
-                <StatPill
-                  icon={<CheckCircle className="text-emerald-500" />}
-                  label="Completed"
-                  value={`${totalCompleted}/${totalTopics}`}
-                />
-                <StatPill
-                  icon={<Zap className="text-accent" />}
-                  label="In Progress"
-                  value={String(totalInProgress)}
-                />
-                <StatPill
-                  icon={<Flame className="text-destructive" />}
-                  label="Phase"
-                  value={`${currentPhase}/3`}
-                />
+            <div className="flex items-center gap-5 flex-wrap">
+              {/* Custom SVG circle progress */}
+              <div className="relative w-[90px] h-[90px] shrink-0">
+                <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+                  <circle
+                    cx="50" cy="50" r="42"
+                    fill="none"
+                    stroke="var(--border)"
+                    strokeWidth="8"
+                  />
+                  <circle
+                    cx="50" cy="50" r="42"
+                    fill="none"
+                    stroke="var(--accent)"
+                    strokeWidth="8"
+                    strokeLinecap="round"
+                    strokeDasharray={`${overallPct * 2.64} 264`}
+                    className="transition-all duration-700 ease-out"
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-2xl font-black text-ink font-display">{overallPct}%</span>
+                  <span className="text-[9.5px] font-bold text-text-muted">Completed</span>
+                </div>
               </div>
 
-              {/* Phase progress mini-bars */}
-              <div className="flex gap-1">
-                {PHASE_CONFIG.map((phase) => {
-                  const stats = getPhaseStats(phase.categoryIds);
-                  return (
-                    <div
-                      key={phase.id}
-                      className="flex-1 h-1.5 overflow-hidden rounded-sm bg-border"
-                      title={`${phase.title}: ${stats.completed}/${stats.total} (${stats.pct}%)`}
-                    >
+              {/* Stats */}
+              <div className="flex-1 min-w-[200px]">
+                <div className="text-lg font-black text-ink font-display mb-1">Overall Progress</div>
+                <div className="flex gap-4 flex-wrap mb-3">
+                  <StatPill
+                    icon={<CheckCircle className="text-emerald-500" />}
+                    label="Completed"
+                    value={`${totalCompleted}/${totalTopics}`}
+                  />
+                  <StatPill
+                    icon={<Zap className="text-accent" />}
+                    label="In Progress"
+                    value={String(totalInProgress)}
+                  />
+                  <StatPill
+                    icon={<Flame className="text-destructive" />}
+                    label="Phase"
+                    value={`${currentPhase}/3`}
+                  />
+                </div>
+
+                {/* Phase progress mini-bars */}
+                <div className="flex gap-1">
+                  {PHASE_CONFIG.map((phase) => {
+                    const stats = getPhaseStats(phase.categoryIds);
+                    return (
                       <div
-                        className="h-full rounded-sm transition-[width] duration-500 ease-out"
-                        style={{
-                          width: `${stats.pct}%`,
-                          background: phase.gradient,
-                        }}
-                      />
-                    </div>
-                  );
-                })}
+                        key={phase.id}
+                        className="flex-1 h-1.5 overflow-hidden rounded-sm bg-border"
+                        title={`${phase.title}: ${stats.completed}/${stats.total} (${stats.pct}%)`}
+                      >
+                        <div
+                          className="h-full rounded-sm transition-[width] duration-500 ease-out"
+                          style={{
+                            width: `${stats.pct}%`,
+                            background: phase.gradient,
+                          }}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
 
-            {/* Recommended action */}
-            {recommendedTopic && (
-              <Link href={`/grammar-lessons?topic=${recommendedTopic.id}`} className="no-underline">
-                <m.div
-                  whileHover={{ scale: 1.03, y: -2 }}
-                  whileTap={{ scale: 0.97 }}
-                  className="rounded-xl flex items-center gap-2.5 cursor-pointer w-[200px] py-3.5 px-5 text-[var(--text-on-accent)] shadow-[0_6px_20px_var(--accent-muted)]"
-                  style={{
-                    background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
-                  }}
-                >
-                  <Rocket size={18} />
-                  <div>
-                    <div className="text-[10px] font-bold uppercase tracking-widest opacity-80">
-                      Next Recommended Topic
+              {/* Recommended action */}
+              {recommendedTopic && (
+                <Link href={`/grammar-lessons?topic=${recommendedTopic.id}`} className="no-underline">
+                  <Card
+                    interactive
+                    shadowSize="sm"
+                    className="flex flex-row items-center gap-2.5 cursor-pointer w-[200px] py-3.5 px-5 text-[var(--text-on-accent)] border-transparent"
+                    style={{
+                      background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+                    }}
+                  >
+                    <Rocket size={18} />
+                    <div>
+                      <div className="text-[10px] font-bold uppercase tracking-widest opacity-80">
+                        Next Recommended Topic
+                      </div>
+                      <div className="text-sm font-extrabold">{recommendedTopic.title}</div>
                     </div>
-                    <div className="text-sm font-extrabold">{recommendedTopic.title}</div>
-                  </div>
-                  <ArrowRight className="text-sm ml-auto" />
-                </m.div>
-              </Link>
-            )}
-          </div>
+                    <ArrowRight className="text-sm ml-auto" />
+                  </Card>
+                </Link>
+              )}
+            </div>
+          </Card>
         </m.div>
 
         {/* ── Phase Accordion ── */}
@@ -438,49 +441,47 @@ export default function GrammarRoadmapPage() {
           initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5 }}
-          className="bg-surface rounded-xl border-2 border-border p-6 mt-6 shadow-sm"
         >
-          <div className="text-base font-black text-ink font-display mb-4 flex items-center gap-2">
-            <Trophy className="text-[var(--xp)]" />
-            Strategies from a 900 L&R Scorer
-          </div>
-          <div className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
-            {[
-              {
-                emoji: "🎯",
-                title: "Part 5: 20 Seconds/Question",
-                desc: "Identify parts of speech first, eliminating 2 choices instantly. 80% of Part 5 tests parts of speech, tenses, or subject-verb agreement.",
-              },
-              {
-                emoji: "📚",
-                title: "Learn in Opposing Pairs",
-                desc: "Always learn Because vs Because of, Although vs Despite together. TOEIC loves testing the difference between conjunctions and prepositions.",
-              },
-              {
-                emoji: "🔁",
-                title: "Spaced Repetition Practice",
-                desc: "After each lesson, our AI generates 4-tier exercises: recognition → application → active writing → exam context.",
-              },
-              {
-                emoji: "⚡",
-                title: "Don't Overlook Passive Voice",
-                desc: "10-15% of Part 5/6 tests passive voice. Mastering be + V3 and causative structures (have something done) guarantees quick points.",
-              },
-            ].map((tip, i) => (
-              <div
-                key={i}
-                className="rounded-lg bg-surface-alt border-2 border-border py-3.5 px-4"
-              >
-                <div className="text-xl mb-1.5">{tip.emoji}</div>
-                <div className="font-extrabold text-ink mb-1 text-[13.5px]">
-                  {tip.title}
-                </div>
-                <div className="text-xs text-text-secondary leading-normal font-medium">
-                  {tip.desc}
-                </div>
-              </div>
-            ))}
-          </div>
+          <Card shadowSize="sm" className="mt-6">
+            <div className="text-base font-black text-ink font-display mb-4 flex items-center gap-2">
+              <Trophy className="text-[var(--xp)]" />
+              Strategies from a 900 L&R Scorer
+            </div>
+            <div className="grid gap-3 grid-cols-[repeat(auto-fit,minmax(240px,1fr))]">
+              {[
+                {
+                  emoji: "🎯",
+                  title: "Part 5: 20 Seconds/Question",
+                  desc: "Identify parts of speech first, eliminating 2 choices instantly. 80% of Part 5 tests parts of speech, tenses, or subject-verb agreement.",
+                },
+                {
+                  emoji: "📚",
+                  title: "Learn in Opposing Pairs",
+                  desc: "Always learn Because vs Because of, Although vs Despite together. TOEIC loves testing the difference between conjunctions and prepositions.",
+                },
+                {
+                  emoji: "🔁",
+                  title: "Spaced Repetition Practice",
+                  desc: "After each lesson, our AI generates 4-tier exercises: recognition → application → active writing → exam context.",
+                },
+                {
+                  emoji: "⚡",
+                  title: "Don't Overlook Passive Voice",
+                  desc: "10-15% of Part 5/6 tests passive voice. Mastering be + V3 and causative structures (have something done) guarantees quick points.",
+                },
+              ].map((tip, i) => (
+                <Card key={i} shadowSize="sm" size="sm" bgType="alt">
+                  <div className="text-xl mb-1.5">{tip.emoji}</div>
+                  <div className="font-extrabold text-ink mb-1 text-[13.5px]">
+                    {tip.title}
+                  </div>
+                  <div className="text-xs text-text-secondary leading-normal font-medium">
+                    {tip.desc}
+                  </div>
+                </Card>
+              ))}
+            </div>
+          </Card>
         </m.div>
 
         {/* Quick links */}
@@ -495,24 +496,28 @@ export default function GrammarRoadmapPage() {
             emoji="📖"
             label="Lesson Library"
             desc="50+ AI-generated topics"
+            className="flex-[1_1_200px]"
           />
           <QuickLinkCard
             href="/grammar-quiz"
             emoji="📝"
             label="Part 5 Quiz"
             desc="Real exam practice"
+            className="flex-[1_1_200px]"
           />
           <QuickLinkCard
             href="/toeic/grammar/drill"
             emoji="🎯"
             label="Grammar Drill"
             desc="Target weak areas"
+            className="flex-[1_1_200px]"
           />
           <QuickLinkCard
             href="/toeic/practice"
             emoji="🏆"
             label="TOEIC Practice"
             desc="Full test practice"
+            className="flex-[1_1_200px]"
           />
         </m.div>
       </div>
@@ -545,8 +550,8 @@ function CategoryCard({
       initial={{ opacity: 0, x: -10 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ delay }}
-      className="bg-surface-alt rounded-lg border-2 border-border py-4 px-4.5"
     >
+    <Card shadowSize="sm" size="sm" bgType="alt">
       {/* Category header */}
       <div className="flex items-center gap-2.5 mb-3">
         <div
@@ -642,6 +647,7 @@ function CategoryCard({
           );
         })}
       </div>
+    </Card>
     </m.div>
   );
 }
@@ -653,35 +659,5 @@ function StatPill({ icon, label, value }: { icon: React.ReactNode; label: string
       <span className="text-xs text-text-muted font-semibold">{label}:</span>
       <span className="text-[13px] font-extrabold text-ink">{value}</span>
     </div>
-  );
-}
-
-function QuickLinkCard({
-  href,
-  emoji,
-  label,
-  desc,
-}: {
-  href: string;
-  emoji: string;
-  label: string;
-  desc: string;
-}) {
-  return (
-    <Link href={href} className="no-underline flex-[1_1_200px]">
-      <m.div
-        whileHover={{ y: -3, boxShadow: "var(--shadow-md)" }}
-        whileTap={{ scale: 0.98 }}
-        className="rounded-xl bg-surface border-2 border-border cursor-pointer flex items-center gap-3 py-4 px-4.5 transition-all duration-150"
-      >
-        <span className="text-2xl">{emoji}</span>
-        <div>
-          <div className="font-extrabold text-ink text-[13.5px]">
-            {label}
-          </div>
-          <div className="text-[11px] text-text-muted font-semibold">{desc}</div>
-        </div>
-      </m.div>
-    </Link>
   );
 }

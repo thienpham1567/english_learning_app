@@ -15,6 +15,7 @@ import {
 import * as m from "motion/react-client";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
+import { Card } from "@/components/ui/card";
 import { api } from "@/lib/api-client";
 
 type Article = {
@@ -130,7 +131,7 @@ export default function ReadingPage() {
               ))}
             </div>
           ) : articles.length === 0 ? (
-            <div className="bg-[var(--surface)] border-2 border-border rounded-xl text-center py-20 px-6 shadow-sm">
+            <Card shadowSize="sm" className="text-center py-20 px-6">
               <BookOpenText className="w-9 h-9 text-text-muted mx-auto mb-3" />
               <p className="text-base font-extrabold text-text-secondary mb-1.5">
                 No articles found
@@ -138,7 +139,7 @@ export default function ReadingPage() {
               <p className="text-text-muted text-[12.5px] font-medium">
                 Please check the GUARDIAN_API_KEY configuration in your system.
               </p>
-            </div>
+            </Card>
           ) : (
             <div className="grid gap-5 grid-cols-[repeat(auto-fill,minmax(280px,1fr))]">
               {articles.map((article, idx) => {

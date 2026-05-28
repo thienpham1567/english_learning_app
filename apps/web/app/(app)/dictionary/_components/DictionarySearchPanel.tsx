@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ExamWordLists } from "@/app/(app)/dictionary/_components/ExamWordLists";
 import { RecentLookups } from "@/app/(app)/dictionary/_components/RecentLookups";
 import { WordOfTheDay } from "@/app/(app)/dictionary/_components/WordOfTheDay";
+import { Card } from "@/components/ui/card";
 
 import { api } from "@/lib/api-client";
 
@@ -119,7 +120,7 @@ export function DictionarySearchPanel({
     <section className="flex flex-col gap-5">
       {/* Word of the Day */}
       <WordOfTheDay onSelect={onSubmit} />
-      <div className="anim-fade-left dictionary-search-panel relative rounded-lg bg-gradient-to-br from-surface to-background border-2 border-border shadow-md overflow-hidden min-w-0">
+      <Card shadowSize="md" className="anim-fade-left dictionary-search-panel relative bg-gradient-to-br from-surface to-background overflow-hidden min-w-0">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-[0.18em] text-text-secondary">
             <Star className="h-3.5 w-3.5 fill-current text-accent-hover" />
@@ -141,7 +142,7 @@ export function DictionarySearchPanel({
 
         {/* Tips dropdown */}
         {showTips && (
-          <div className="anim-fade-in mt-4 overflow-hidden rounded-lg border-2 border-border bg-background p-4 shadow-sm">
+          <Card shadowSize="sm" size="sm" className="anim-fade-in mt-4 bg-background">
             <p className="mb-3 text-xs font-bold uppercase tracking-wider text-ink m-0">
               <Lightbulb className="h-3 w-3 inline mr-1 text-accent" /> Usage Tips
             </p>
@@ -155,7 +156,7 @@ export function DictionarySearchPanel({
                 </li>
               ))}
             </ul>
-          </div>
+          </Card>
         )}
 
         <h2 className="mt-4 text-2xl italic font-display text-ink">Search Dictionary</h2>
@@ -226,7 +227,7 @@ export function DictionarySearchPanel({
             <RecentLookups words={recentWords} onSelect={onSelectRecent} />
           </div>
         )}
-      </div>
+      </Card>
     </section>
   );
 }

@@ -227,12 +227,11 @@ export function FloatingDictionaryWidget() {
       {/* ─── Result modal ─── */}
       <Dialog open={modalOpen} onOpenChange={setModalOpen}>
         <DialogContent
-          className="p-0 gap-0 max-w-[860px] max-h-[82vh] overflow-hidden"
-          style={{ width: isMobile ? "100%" : 860 }}
+          className="p-0 gap-0 w-[calc(100vw-2rem)] sm:w-[90vw] md:w-[860px] sm:max-w-[860px] max-h-[85vh] overflow-hidden flex flex-col"
         >
           <DialogTitle className="sr-only">Dictionary Lookup</DialogTitle>
           {/* Modal header bar */}
-          <div className="flex items-center justify-between bg-surface gap-3 py-3 pl-5 pr-4 border-b-2 border-border">
+          <div className="flex items-center justify-between bg-surface gap-2 sm:gap-3 py-2.5 sm:py-3 pl-4 sm:pl-5 pr-3 sm:pr-4 border-b-2 border-border shrink-0">
             {/* Inline search in modal */}
             <form
               onSubmit={(e) => {
@@ -245,7 +244,7 @@ export function FloatingDictionaryWidget() {
                   setTimeout(() => search(q), 80);
                 }
               }}
-              className="flex items-center gap-2 flex-1"
+              className="flex items-center gap-2 flex-1 min-w-0"
             >
               <Search size={14} className="text-text-muted shrink-0" />
               <input
@@ -253,19 +252,21 @@ export function FloatingDictionaryWidget() {
                 defaultValue={result?.headword ?? ""}
                 key={result?.headword}
                 placeholder="Search another word..."
-                className="border-none bg-transparent text-[13px] font-body text-ink flex-1 outline-none"
+                className="border-none bg-transparent text-[13px] font-body text-ink flex-1 min-w-0 outline-none"
               />
             </form>
             <button
               onClick={handleOpenFullPage}
-              className="inline-flex items-center gap-1.5 rounded-lg bg-transparent text-text-muted text-[11px] font-bold cursor-pointer shrink-0 whitespace-nowrap py-1.5 px-3 border-2 border-border transition-all duration-150 hover:text-accent hover:border-accent"
+              className="inline-flex items-center gap-1.5 rounded-lg bg-transparent text-text-muted text-[11px] font-bold cursor-pointer shrink-0 whitespace-nowrap py-1.5 px-2.5 sm:px-3 border-2 border-border transition-all duration-150 hover:text-accent hover:border-accent"
             >
-              Open full dictionary <ArrowRight size={10} />
+              <span className="hidden sm:inline">Open full dictionary</span>
+              <span className="sm:hidden">Full</span>
+              <ArrowRight size={10} />
             </button>
           </div>
 
           {/* Dictionary result */}
-          <div className="p-4 overflow-y-auto max-h-[calc(82vh-60px)]">
+          <div className="p-3 sm:p-4 overflow-y-auto flex-1 min-h-0">
             <DictionaryResultCard
               key={result?.headword ?? "loading"}
               vocabulary={result}

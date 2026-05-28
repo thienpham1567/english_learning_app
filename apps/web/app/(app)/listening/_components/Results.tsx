@@ -4,6 +4,7 @@ import { CheckCircle, FileText, RefreshCw, Trophy, XCircle } from "lucide-react"
 import { motion } from "motion/react";
 import { DialogueTranscript } from "@/app/(app)/listening/_components/SpeakerLegend";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import type { DialogueTurnPayload, ListeningSubmitResponse } from "@/lib/listening/types";
 
 type Props = {
@@ -95,13 +96,13 @@ export function Results({ result, onNewExercise, dialogueTurns, scriptRevealed }
         <div className="text-[11px] font-bold text-text-muted mb-2.5 uppercase tracking-widest flex items-center gap-1.5">
           <FileText size={13} /> Transcript
         </div>
-        <div className="bg-surface border-2 border-border p-4 text-sm italic rounded-lg leading-[1.7] text-text-primary shadow-sm">
+        <Card shadowSize="sm" className="p-4 text-sm italic leading-[1.7] text-text-primary">
           {dialogueTurns && dialogueTurns.length > 0 ? (
             <DialogueTranscript turns={dialogueTurns} />
           ) : (
             result.passage
           )}
-        </div>
+        </Card>
       </div>
 
       {/* New Exercise Button */}

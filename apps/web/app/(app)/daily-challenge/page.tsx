@@ -20,6 +20,7 @@ import { CompletedState } from "@/app/(app)/daily-challenge/_components/Complete
 import { EXERCISE_TYPE_LABELS } from "@/app/(app)/daily-challenge/_components/constants";
 import { ExerciseCard } from "@/app/(app)/daily-challenge/_components/ExerciseCard";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useBonusChallenge } from "@/hooks/useBonusChallenge";
 import { useDailyChallenge } from "@/hooks/useDailyChallenge";
 
@@ -182,7 +183,7 @@ function ExerciseFlow({
           animate={{ opacity: 1, x: 0 }}
           exit={{ opacity: 0, x: -20 }}
           transition={{ duration: 0.25 }}
-          className="rounded-2xl border-2 border-border bg-surface p-5 md:p-6 shadow-md relative overflow-hidden"
+          className="rounded-2xl border-2 border-border bg-card text-card-foreground p-5 md:p-6 shadow-md relative overflow-hidden"
         >
           {/* Top accent gradient bar */}
           <div
@@ -287,10 +288,9 @@ export default function DailyChallengePage() {
       {/* ── Premium Header Banner ── */}
       <div className="px-4 pt-4 shrink-0">
         <div className="max-w-2xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="relative overflow-hidden rounded-2xl border-2 border-border bg-surface shadow-md"
+          <Card
+            shadowSize="md"
+            className="relative overflow-hidden p-0"
           >
             {/* Top accent gradient */}
             <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-accent via-fire to-xp" />
@@ -327,7 +327,7 @@ export default function DailyChallengePage() {
                 </motion.div>
               )}
             </div>
-          </motion.div>
+          </Card>
         </div>
       </div>
 
@@ -336,10 +336,10 @@ export default function DailyChallengePage() {
         <div className="w-full max-w-2xl mx-auto">
           {/* Error banner */}
           {(error || bonus.error) && (
-            <div className="flex gap-3 rounded-2xl border-2 border-border bg-error-bg p-4 text-xs text-error mb-5 shadow-sm animate-in fade-in duration-200">
+            <Card shadowSize="sm" className="flex-row gap-3 bg-error-bg p-4 text-xs text-error mb-5 animate-in fade-in duration-200">
               <AlertCircle className="h-4 w-4 shrink-0" />
               <span>{error || bonus.error}</span>
-            </div>
+            </Card>
           )}
 
           {/* ── BONUS FLOW ── */}
@@ -359,7 +359,7 @@ export default function DailyChallengePage() {
               <motion.div
                 animate={{ scale: [1, 1.1, 1], rotate: [0, 5, -5, 0] }}
                 transition={{ repeat: Infinity, duration: 1.5 }}
-                className="w-16 h-16 rounded-full border-2 border-border flex items-center justify-center bg-surface shadow-sm"
+                className="w-16 h-16 rounded-full border-2 border-border flex items-center justify-center bg-card shadow-sm"
               >
                 <Check className="h-6 w-6 text-warning" />
               </motion.div>
@@ -397,7 +397,7 @@ export default function DailyChallengePage() {
 
               {/* Error retry */}
               {state === "error" && (
-                <div className="p-8 text-center bg-surface border-2 border-border rounded-2xl shadow-sm flex flex-col items-center animate-in fade-in duration-200 max-w-md mx-auto">
+                <Card shadowSize="sm" className="p-8 text-center items-center animate-in fade-in duration-200 max-w-md mx-auto">
                   <AlertTriangle className="h-12 w-12 text-error mb-3" />
                   <h3 className="text-base font-black text-text-primary mb-1 font-display">
                     Unable to Load Challenge
@@ -411,7 +411,7 @@ export default function DailyChallengePage() {
                   >
                     <RotateCw className="h-3.5 w-3.5 mr-1.5" /> Try reloading page
                   </Button>
-                </div>
+                </Card>
               )}
 
               {/* Active exercise */}
@@ -431,7 +431,7 @@ export default function DailyChallengePage() {
                   <motion.div
                     animate={{ scale: [1, 1.08, 1] }}
                     transition={{ repeat: Infinity, duration: 1.2 }}
-                    className="w-16 h-16 rounded-full border-2 border-border bg-surface flex items-center justify-center shadow-sm"
+                    className="w-16 h-16 rounded-full border-2 border-border bg-card flex items-center justify-center shadow-sm"
                   >
                     <Check className="h-6 w-6 text-accent" />
                   </motion.div>

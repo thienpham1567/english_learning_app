@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { Card } from "@/components/ui/card";
 
 // ── Speed presets (AC1) ──
 const SPEED_OPTIONS = [0.5, 0.75, 1, 1.25, 1.5] as const;
@@ -351,10 +352,11 @@ export function AudioPlayer({
   const canLoop = markerA != null && markerB != null;
 
   return (
-    <div
+    <Card
       ref={containerRef}
       tabIndex={0}
-      className={`${className ?? ""} bg-surface border-2 border-border rounded-lg flex flex-col gap-3.5 p-5 outline-none shadow-sm focus-visible:shadow`}
+      shadowSize="sm"
+      className={`${className ?? ""} gap-3.5 p-5 outline-none focus-visible:shadow`}
     >
       {/* Hidden audio element */}
       <audio
@@ -557,6 +559,6 @@ export function AudioPlayer({
         Shortcuts: [ ] Set A/B · L Loop · ←/→ ±3s{selfManagedSpeed ? " · ,/. Speed" : ""} · Space
         Play/Pause
       </div>
-    </div>
+    </Card>
   );
 }

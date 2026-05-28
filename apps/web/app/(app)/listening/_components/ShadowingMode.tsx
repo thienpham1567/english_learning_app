@@ -15,6 +15,7 @@ import { motion } from "motion/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AudioPlayer } from "@/app/(app)/listening/_components/AudioPlayer";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useSentenceAudio } from "@/hooks/useSentenceAudio";
 import { api } from "@/lib/api-client";
 
@@ -366,7 +367,7 @@ export default function ShadowingMode({ examMode }: Props) {
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
-            className="p-6 rounded-lg border-2 border-border text-center bg-surface shadow"
+            className="p-6 text-center shadow"
           >
             {/* Custom circular progress */}
             <div className="relative w-[100px] h-[100px] mx-auto mb-2">
@@ -401,13 +402,13 @@ export default function ShadowingMode({ examMode }: Props) {
           </motion.div>
 
           {/* What you said */}
-          <div className="p-4 rounded-lg border-2 border-border bg-surface">
+          <Card shadowSize="sm" className="p-4">
             <p className="text-xs text-text-secondary font-bold mb-1">You said:</p>
             <p className="text-[15px] m-0 italic text-text-primary">&ldquo;{spokenText}&rdquo;</p>
-          </div>
+          </Card>
 
           {/* Word analysis */}
-          <div className="p-4 rounded-lg border-2 border-border bg-surface">
+          <Card shadowSize="sm" className="p-4">
             <p className="text-xs text-text-secondary mb-2 font-bold">Word Analysis:</p>
             <div className="flex flex-wrap gap-1.5">
               {evalResult.wordAnalysis.map((w, i) => (
@@ -424,10 +425,10 @@ export default function ShadowingMode({ examMode }: Props) {
                 </span>
               ))}
             </div>
-          </div>
+          </Card>
 
           {/* Feedback + tips */}
-          <div className="p-4 rounded-lg border-2 border-border bg-surface">
+          <Card shadowSize="sm" className="p-4">
             <p className="text-[13px] mb-2 text-text-primary">{evalResult.feedback}</p>
             {evalResult.tips.length > 0 && (
               <ul className="m-0 text-[13px] text-text-secondary pl-4.5">
@@ -436,7 +437,7 @@ export default function ShadowingMode({ examMode }: Props) {
                 ))}
               </ul>
             )}
-          </div>
+          </Card>
 
           {/* Actions */}
           <div className="flex gap-3 justify-center">

@@ -3,6 +3,7 @@
 import { MessageSquare } from "lucide-react";
 import * as m from "motion/react-client";
 import { useState } from "react";
+import { Card } from "@/components/ui/card";
 import type { DialogueCompletionData } from "@/lib/daily-challenge/types";
 
 const LABELS = ["A", "B", "C", "D"] as const;
@@ -43,10 +44,7 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
       </div>
 
       {/* Dialogue display */}
-      <div
-        className="mb-6 rounded-xl bg-surface-alt border-2 border-border flex flex-col gap-3"
-        style={{ padding: "20px 16px" }}
-      >
+      <Card shadowSize="sm" size="sm" bgType="alt" className="mb-6 gap-3" style={{ padding: "20px 16px" }}>
         {data.dialogue.map((line, i) => {
           const isMissing = i === data.missingIndex;
           const isEven = i % 2 === 0;
@@ -96,7 +94,7 @@ export function DialogueCompletion({ data, instruction, onAnswer, disabled }: Pr
             </div>
           );
         })}
-      </div>
+      </Card>
 
       {/* Options */}
       <div className="flex flex-col gap-2.5">

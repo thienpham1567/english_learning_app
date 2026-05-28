@@ -2,6 +2,7 @@
 
 import { BookOpen, Check, Clock, Loader2, Rocket, Zap } from "lucide-react";
 import * as m from "motion/react-client";
+import { Card } from "@/components/ui/card";
 
 const CEFR_LEVELS = [
   { id: "A1", tier: "easy", label: "A1", desc: "Basic" },
@@ -47,7 +48,7 @@ export function CEFRPath({
 }: Props) {
   const isEts = sourceMode === "ets";
   return (
-    <div className="anim-fade-up w-full max-w-[480px] mx-auto text-center bg-surface rounded-xl border-2 border-border relative overflow-hidden py-8 px-6 shadow-sm">
+    <Card shadowSize="sm" className="anim-fade-up w-full max-w-[480px] mx-auto text-center relative overflow-hidden py-8 px-6">
       <div
         className="absolute w-[180px] h-[180px] rounded-full left-1/2 top-0 -translate-x-1/2 pointer-events-none"
         style={{
@@ -215,6 +216,6 @@ export function CEFRPath({
           </>
         )}
       </m.button>
-    </div>
+    </Card>
   );
 }

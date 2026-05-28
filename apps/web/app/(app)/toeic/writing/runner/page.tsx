@@ -5,6 +5,7 @@ import { toast } from "sonner";
 import { ClipboardList } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
+import { Card } from "@/components/ui/card";
 import { api } from "@/lib/api-client";
 
 type Prompt = {
@@ -155,8 +156,9 @@ export default function WritingRunnerPage() {
                 style={{ maxWidth: "100%" }}
               />
             )}
-            <div
-              className="border-2 border-border rounded-xl bg-surface shadow-sm border-2 border-border"
+            <Card
+              shadowSize="sm"
+              className="border-2 border-border"
               style={{ background: "color-mix(in srgb, var(--accent) 8%, var(--surface))" }}
             >
               <div className="text-[13px] text-text-muted">
@@ -169,12 +171,12 @@ export default function WritingRunnerPage() {
                   </span>
                 ))}
               </div>
-            </div>
+            </Card>
           </>
         )}
 
         {current.type === "q6_7_email" && (
-          <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+          <Card shadowSize="sm" className="p-4">
             <div className="text-[13px] text-text-muted">Subject</div>
             <div className="font-semibold mb-2">{current.emailSubject}</div>
             <div className="mb-3" style={{ whiteSpace: "pre-wrap" }}>
@@ -186,11 +188,11 @@ export default function WritingRunnerPage() {
                 <li key={r}>{r}</li>
               ))}
             </ul>
-          </div>
+          </Card>
         )}
 
         {current.type === "q8_opinion" && (
-          <div className="border-2 border-border rounded-xl bg-surface shadow-sm p-4">
+          <Card shadowSize="sm" className="p-4">
             <div className="text-[13px] text-text-muted">Topic</div>
             <div className="text-base font-medium mt-1">{current.topic}</div>
             {current.topicVi && (
@@ -199,7 +201,7 @@ export default function WritingRunnerPage() {
             <div className="mt-2 text-xs text-text-muted">
               Goal: ≥300 words · clear structure (intro / body arguments / conclusion)
             </div>
-          </div>
+          </Card>
         )}
 
         <textarea

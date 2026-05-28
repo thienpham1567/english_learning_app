@@ -11,6 +11,7 @@ import { ScriptPanel } from "@/app/(app)/listening/_components/ScriptPanel";
 import { SpeakerLegend } from "@/app/(app)/listening/_components/SpeakerLegend";
 import { useExamMode } from "@/components/shared/ExamModeProvider";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useListeningExercise } from "@/hooks/useListeningExercise";
 import { api } from "@/lib/api-client";
 import type { CefrLevel } from "@/lib/listening/types";
@@ -60,7 +61,7 @@ export function ListeningTab() {
   return (
     <div className="max-w-2xl mx-auto w-full">
       {/* ─── Mode toggle ─── */}
-      <div className="flex gap-1 p-1 bg-surface-alt border-2 border-border rounded-2xl shadow-sm mb-5 max-w-sm">
+      <Card shadowSize="sm" size="sm" className="flex flex-row gap-1 p-1 mb-5 max-w-sm">
         {[
           { key: "free" as const, label: "Free Listening", icon: Headphones },
           { key: "parts" as const, label: "TOEIC Parts 1–4", icon: ClipboardList },
@@ -83,7 +84,7 @@ export function ListeningTab() {
             </m.button>
           );
         })}
-      </div>
+      </Card>
 
       {/* ─── TOEIC Parts overview ─── */}
       {mode === "parts" && (
@@ -123,21 +124,22 @@ export function ListeningTab() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.05, type: "spring", stiffness: 300, damping: 25 }}
-              className="p-5 rounded-2xl border-2 border-border bg-surface relative overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-200"
             >
-              <div className="absolute top-0 left-0 w-1 h-full bg-accent rounded-r" />
-              <div className="flex items-center justify-between mb-2">
-                <span className="text-[13px] font-black text-ink">
-                  {p.part} — {p.title}
-                </span>
-                <span className="text-[10px] font-black text-ink px-2.5 py-0.5 border-2 border-border rounded-lg bg-accent shadow-sm">
-                  {p.questions} questions
-                </span>
-              </div>
-              <p className="text-xs text-text-secondary mb-2.5 leading-relaxed font-medium">{p.desc}</p>
-              <div className="text-[11px] text-text-muted p-3 rounded-xl bg-bg-deep border-2 border-border/50 leading-relaxed">
-                💡 <strong className="text-text-primary">Tip:</strong> {p.tips}
-              </div>
+              <Card shadowSize="sm" className="relative overflow-hidden hover:shadow-md transition-shadow duration-200">
+                <div className="absolute top-0 left-0 w-1 h-full bg-accent rounded-r" />
+                <div className="flex items-center justify-between mb-2">
+                  <span className="text-[13px] font-black text-ink">
+                    {p.part} — {p.title}
+                  </span>
+                  <span className="text-[10px] font-black text-ink px-2.5 py-0.5 border-2 border-border rounded-lg bg-accent shadow-sm">
+                    {p.questions} questions
+                  </span>
+                </div>
+                <p className="text-xs text-text-secondary mb-2.5 leading-relaxed font-medium">{p.desc}</p>
+                <div className="text-[11px] text-text-muted p-3 rounded-xl bg-bg-deep border-2 border-border/50 leading-relaxed">
+                  💡 <strong className="text-text-primary">Tip:</strong> {p.tips}
+                </div>
+              </Card>
             </m.div>
           ))}
 
@@ -234,8 +236,10 @@ export function ListeningTab() {
               />
 
               {skillLevelUp && (
-                <div
-                  className={`p-4 rounded-2xl border-2 text-center text-xs font-bold flex items-center justify-center gap-2 ${
+                <Card
+                  shadowSize="sm"
+                  size="sm"
+                  className={`text-center text-xs font-bold flex flex-row items-center justify-center gap-2 ${
                     skillLevelUp.levelUp
                       ? "bg-success/8 border-success/20 text-success"
                       : "bg-warning/8 border-warning/20 text-warning"
@@ -252,7 +256,7 @@ export function ListeningTab() {
                       <span>Current proficiency level: {skillLevelUp.cefr}</span>
                     </>
                   )}
-                </div>
+                </Card>
               )}
             </div>
           )}

@@ -6,6 +6,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import { LessonView } from "@/app/(app)/grammar-lessons/_components/LessonView";
 import { TopicGrid } from "@/app/(app)/grammar-lessons/_components/TopicGrid";
 import { useExamMode } from "@/components/shared/ExamModeProvider";
+import { QuickLinkCard } from "@/components/shared/QuickLinkCard";
 import { Card } from "@/components/ui/card";
 import { api } from "@/lib/api-client";
 import type { GrammarLessonProgressItem } from "@/lib/grammar-lessons/schema";
@@ -250,13 +251,13 @@ export default function GrammarLessonsPage() {
                 transition={{ delay: 0.2 }}
                 className="grid grid-cols-2 gap-3"
               >
-                <QuickAction
+                <QuickLinkCard
                   href="/roadmap"
                   emoji="🗺️"
                   label="Learning Roadmap"
                   desc="24-week TOEIC plan"
                 />
-                <QuickAction
+                <QuickLinkCard
                   href="/grammar-quiz"
                   emoji="📝"
                   label="Part 5 Quiz"
@@ -333,36 +334,5 @@ function StatCard({
         {sub}
       </div>
     </Card>
-  );
-}
-
-function QuickAction({
-  href,
-  emoji,
-  label,
-  desc,
-}: {
-  href: string;
-  emoji: string;
-  label: string;
-  desc: string;
-}) {
-  return (
-    <m.a
-      href={href}
-      className="block no-underline"
-    >
-      <Card
-        interactive
-        shadowSize="md"
-        className="flex flex-row items-center gap-3.5 rounded-2xl py-3.5 px-4 bg-surface"
-      >
-        <span className="text-2xl">{emoji}</span>
-        <div>
-          <div className="font-extrabold text-ink text-[13.5px]">{label}</div>
-          <div className="text-[11px] text-text-muted font-semibold">{desc}</div>
-        </div>
-      </Card>
-    </m.a>
   );
 }

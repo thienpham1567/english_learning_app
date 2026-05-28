@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import * as m from "motion/react-client";
 import { useRouter } from "next/navigation";
+import { Card } from "@/components/ui/card";
 import type { GrammarQuestion } from "@/lib/grammar-quiz/types";
 
 type Props = {
@@ -63,9 +64,10 @@ export function ScoreSummary({
     .map(([topic]) => topic);
 
   return (
-    <div
-      className="w-full w-[500px] mx-auto text-center bg-surface rounded-xl border-2 border-border relative overflow-hidden"
-      style={{ padding: "36px 24px", boxShadow: "var(--shadow-lg)" }}
+    <Card
+      shadowSize="lg"
+      className="w-full w-[500px] mx-auto text-center relative overflow-hidden"
+      style={{ padding: "36px 24px" }}
     >
       <div
         className="absolute w-[220px] h-[220px] rounded-full"
@@ -292,6 +294,6 @@ export function ScoreSummary({
           <Star /> New Quiz
         </m.button>
       </div>
-    </div>
+    </Card>
   );
 }

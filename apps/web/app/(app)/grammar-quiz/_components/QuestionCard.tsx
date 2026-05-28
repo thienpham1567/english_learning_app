@@ -3,6 +3,7 @@
 import { Check, CircleCheckBig, Flame, Languages, Lightbulb, X, XCircle } from "lucide-react";
 import * as m from "motion/react-client";
 import { useState } from "react";
+import { Card } from "@/components/ui/card";
 import type { GrammarQuestion } from "@/lib/grammar-quiz/types";
 
 const OPTION_LABELS = ["A", "B", "C", "D"] as const;
@@ -93,9 +94,9 @@ export function QuestionCard({
       )}
 
       {/* Stem Card */}
-      <div
-        className="rounded-xl border-2 border-border bg-surface p-6 relative overflow-hidden"
-        style={{ boxShadow: "var(--shadow-sm)" }}
+      <Card
+        shadowSize="sm"
+        className="p-6 relative overflow-hidden"
       >
         <div
           className="absolute w-[4px]"
@@ -300,7 +301,7 @@ export function QuestionCard({
             )}
           </div>
         )}
-      </div>
+      </Card>
 
       {/* Next button */}
       {isRevealed && (

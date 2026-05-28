@@ -14,6 +14,8 @@ import {
 } from "lucide-react";
 import { motion } from "motion/react";
 import { useCallback, useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { api } from "@/lib/api-client";
 import type { GrammarCheckResponse, GrammarError } from "@/lib/writing-tools/schema";
 
@@ -81,7 +83,7 @@ function ScoreGauge({ score, label }: { score: number; label: string }) {
     <div className="flex flex-col items-center gap-1">
       <svg width={96} height={96} viewBox="0 0 96 96">
         {/* Background ring */}
-        <circle cx="48" cy="48" r={radius} fill="none" stroke="var(--surface)" strokeWidth="6" />
+        <circle cx="48" cy="48" r={radius} fill="none" stroke="var(--border)" strokeWidth="6" />
         {/* Score arc */}
         <circle
           cx="48"
@@ -137,10 +139,9 @@ function CopyButton({ text }: { text: string }) {
         setTimeout(() => setCopied(false), 2000);
       }}
       title="Copy"
-      className="border-none bg-transparent cursor-pointer text-[13px] py-1 px-2 rounded-md"
-      style={{ color: copied ? "var(--success)" : "var(--text-secondary)" }}
+      className={`border-2 border-border bg-surface cursor-pointer text-[12px] py-1 px-2.5 rounded-lg font-bold flex items-center gap-1.5 transition-all duration-100 hover:-translate-y-px hover:shadow-sm active:translate-y-px active:shadow-none ${copied ? "text-success border-success/30" : "text-text-secondary"}`}
     >
-      {copied ? <Check /> : <Copy />}
+      {copied ? <><Check size={13} /> Copied</> : <><Copy size={13} /> Copy</>}
     </button>
   );
 }
@@ -152,76 +153,69 @@ function ErrorCard({ error, onApply }: { error: GrammarError; onApply: () => voi
   const meta = TYPE_META[error.type] ?? TYPE_META.grammar;
 
   return (
-    <div
-      className="rounded-xl border-2 border-border overflow-hidden"
-      style={{ background: "var(--card-bg)", transition: "box-shadow 0.2s" }}
+    <Card
+      shadowSize="sm"
+      size="sm"
+      className="p-0 overflow-hidden transition-shadow duration-150 hover:shadow"
     >
       {/* Header */}
       <div
         onClick={() => setExpanded((p) => !p)}
-        className="flex items-center justify-between cursor-pointer"
-        style={{ padding: "10px 14px", borderLeft: `4px solid ${meta.color}` }}
+        className="flex items-center justify-between cursor-pointer py-2.5 px-3.5 border-l-4"
+        style={{ borderLeftColor: meta.color }}
       >
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 flex-wrap min-w-0">
           <span className="text-[13px]" style={{ color: meta.color }}>
             {meta.icon}
           </span>
           <span
-            className="text-[11px] font-semibold"
+            className="text-[11px] font-bold py-0.5 px-2 rounded-md"
             style={{
               color: meta.color,
-              padding: "2px 8px",
-              borderRadius: 10,
               background: `color-mix(in srgb, ${meta.color} 10%, transparent)`,
             }}
           >
             {meta.label}
           </span>
-          <span className="text-[13px] text-text-muted" style={{ textDecoration: "line-through" }}>
+          <span className="text-[13px] text-text-muted line-through">
             {error.original}
           </span>
           <span className="text-text-primary text-[13px]">→</span>
-          <span className="text-[13px] text-emerald-500 font-medium">{error.correction}</span>
+          <span className="text-[13px] text-emerald-500 font-bold">{error.correction}</span>
         </div>
-        <div className="flex items-center gap-1.5">
-          <span className="text-text-muted text-[10px]">
-            {expanded ? <ChevronDown /> : <ChevronRight />}
-          </span>
-        </div>
+        <span className="text-text-muted text-[10px] shrink-0 ml-2">
+          {expanded ? <ChevronDown /> : <ChevronRight />}
+        </span>
       </div>
 
       {/* Expanded detail */}
       {expanded && (
-        <div className="flex flex-col gap-2" style={{ padding: "0 14px 12px 22px" }}>
+        <div className="flex flex-col gap-2.5 px-3.5 pb-3.5 pt-0 ml-1 border-l-4" style={{ borderLeftColor: meta.color }}>
           {/* Rule tag */}
           <span className="text-[11px] text-text-secondary italic">Rule: {error.rule}</span>
 
           {/* Explanation */}
-          <div className="py-2 px-3 rounded-lg bg-surface text-[13px] leading-relaxed">
-            <span className="font-semibold text-text-secondary text-[11px]">Explanation:</span>
-            <p className="text-text-primary" style={{ margin: "4px 0 0" }}>
+          <div className="py-2.5 px-3.5 rounded-lg bg-surface-alt border-2 border-border text-[13px] leading-relaxed">
+            <span className="font-bold text-text-secondary text-[11px] uppercase tracking-wide">Explanation:</span>
+            <p className="text-text-primary mt-1 mb-0">
               {error.explanationEn}
             </p>
           </div>
 
           {/* Apply button */}
-          <button
+          <Button
+            size="sm"
             onClick={(e) => {
               e.stopPropagation();
               onApply();
             }}
-            className="py-1.5 px-3.5 rounded-lg border-none text-xs font-semibold cursor-pointer flex items-center gap-1"
-            style={{
-              alignSelf: "flex-start",
-              background: "var(--accent)",
-              color: "var(--text-on-accent)",
-            }}
+            className="self-start"
           >
             <CircleCheckBig /> Apply suggestion
-          </button>
+          </Button>
         </div>
       )}
-    </div>
+    </Card>
   );
 }
 
@@ -328,15 +322,11 @@ export function GrammarChecker() {
       {/* Input area */}
       <div>
         <div className="flex justify-between items-center mb-2">
-          <span className="text-[13px] font-medium text-text-secondary">
+          <span className="text-[13px] font-bold text-text-secondary">
             Enter or paste your text to check
           </span>
           <span
-            className="text-xs"
-            style={{
-              color: overLimit ? "var(--error)" : "var(--text-muted)",
-              fontWeight: overLimit ? 600 : 400,
-            }}
+            className={`text-xs font-bold ${overLimit ? "text-error" : "text-text-muted"}`}
           >
             {wordCount}/{MAX_WORDS} words
           </span>
@@ -359,56 +349,29 @@ export function GrammarChecker() {
       {/* Example prompts — only show when textarea is empty */}
       {!text.trim() && !result && (
         <div>
-          <span
-            className="text-[11px] font-bold uppercase text-text-muted flex items-center gap-1.5 mb-2"
-            style={{ letterSpacing: "0.12em" }}
-          >
+          <span className="text-[11px] font-black uppercase text-text-muted flex items-center gap-1.5 mb-2.5 tracking-widest">
             <Zap size={10} />
             Try now
           </span>
-          <div
-            className="grid gap-2"
-            style={{ gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))" }}
-          >
+          <div className="grid gap-2.5 grid-cols-[repeat(auto-fill,minmax(240px,1fr))]">
             {EXAMPLE_PROMPTS.map((ex, i) => (
-              <button
+              <Card
                 key={i}
+                interactive
+                shadowSize="sm"
+                size="sm"
+                className="cursor-pointer p-0 overflow-hidden"
                 onClick={() => setText(ex.text)}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = "var(--accent)";
-                  e.currentTarget.style.transform = "translateY(-1px)";
-                  e.currentTarget.style.boxShadow = "0 3px 12px rgba(0,0,0,0.06)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = "var(--border)";
-                  e.currentTarget.style.borderLeftColor = ex.color;
-                  e.currentTarget.style.transform = "none";
-                  e.currentTarget.style.boxShadow = "none";
-                }}
-                className="text-left border-2 border-border cursor-pointer flex flex-col gap-1"
-                style={{
-                  padding: "10px 14px",
-                  borderRadius: 10,
-                  borderLeft: `3px solid ${ex.color}`,
-                  background: "var(--card-bg)",
-                  transition: "all 0.15s",
-                }}
               >
-                <span className="text-[11px] font-semibold" style={{ color: ex.color }}>
-                  {ex.label}
-                </span>
-                <span
-                  className="text-[13px] text-text-secondary leading-normal italic overflow-hidden"
-                  style={{
-                    textOverflow: "ellipsis",
-                    display: "-webkit-box",
-                    WebkitLineClamp: 2,
-                    WebkitBoxOrient: "vertical",
-                  }}
-                >
-                  {ex.text}
-                </span>
-              </button>
+                <div className="p-3 border-l-[3px] h-full" style={{ borderLeftColor: ex.color }}>
+                  <span className="text-[11px] font-bold block mb-1" style={{ color: ex.color }}>
+                    {ex.label}
+                  </span>
+                  <span className="text-[13px] text-text-secondary leading-normal italic line-clamp-2">
+                    {ex.text}
+                  </span>
+                </div>
+              </Card>
             ))}
           </div>
         </div>
@@ -416,18 +379,11 @@ export function GrammarChecker() {
 
       {/* Action bar */}
       <div className="flex items-center gap-2.5 flex-wrap">
-        <button
+        <Button
+          size="lg"
           onClick={check}
           disabled={!text.trim() || overLimit || loading}
-          className="border-none text-sm font-semibold flex items-center gap-1.5"
-          style={{
-            padding: "10px 24px",
-            borderRadius: 10,
-            background: !text.trim() || overLimit || loading ? "var(--border)" : "var(--accent)",
-            color: "var(--text-on-accent)",
-            cursor: !text.trim() || overLimit || loading ? "not-allowed" : "pointer",
-            transition: "background 0.2s",
-          }}
+          className="px-6"
         >
           {loading ? (
             <>
@@ -438,138 +394,122 @@ export function GrammarChecker() {
               <CircleCheckBig /> Check Grammar
             </>
           )}
-        </button>
+        </Button>
 
         {result && totalErrors > 0 && (
-          <button
-            onClick={applyAll}
-            className="bg-transparent text-emerald-500 text-[13px] font-semibold cursor-pointer flex items-center gap-1.5"
-            style={{ padding: "10px 20px", borderRadius: 10, border: "1px solid var(--success)" }}
-          >
+          <Button variant="outline" size="lg" onClick={applyAll} className="text-success">
             <CircleCheckBig /> Fix All ({totalErrors})
-          </button>
+          </Button>
         )}
 
         {/* Keyboard shortcut hint */}
         {text.trim() && !result && (
-          <span className="text-[11px] text-text-muted italic">⌘/Ctrl + Enter</span>
+          <span className="text-[11px] text-text-muted italic font-bold">⌘/Ctrl + Enter</span>
         )}
       </div>
 
       {/* Error message */}
       {error && (
-        <div
-          className="py-2.5 px-4 text-destructive text-[13px]"
-          style={{ borderRadius: 10, background: "var(--error-bg)" }}
-        >
+        <Card shadowSize="none" size="sm" className="bg-error-bg border-error/30 text-destructive text-[13px] font-bold">
           {error}
-        </div>
+        </Card>
       )}
 
       {/* Results */}
       {result && (
         <div className="flex flex-col gap-3">
           {/* Score + Stats dashboard */}
-          <div
-            className="anim-fade-up flex rounded-2xl overflow-hidden"
-            style={{
-              gap: 1,
-              background: "var(--border)",
-              border: totalErrors === 0 ? "1px solid var(--success)" : "1px solid var(--border)",
-              boxShadow: "var(--shadow-sm)",
-            }}
+          <Card
+            shadowSize="sm"
+            size="sm"
+            className={`p-0 overflow-hidden ${totalErrors === 0 ? "border-success/50" : ""}`}
           >
-            {/* Writing score gauge */}
-            {writingScore !== null && (
-              <div
-                className="flex items-center justify-center py-4 px-5 w-[130px]"
-                style={{
-                  background:
-                    totalErrors === 0
-                      ? "color-mix(in srgb, var(--success) 6%, var(--surface))"
-                      : "var(--surface)",
-                }}
-              >
-                <ScoreGauge score={writingScore} label={scoreLabel} />
-              </div>
-            )}
-
-            {/* Stats cells */}
-            {totalErrors === 0 ? (
-              <div
-                className="flex-1 flex items-center gap-2.5"
-                style={{
-                  padding: "18px 22px",
-                  background: "color-mix(in srgb, var(--success) 6%, var(--surface))",
-                }}
-              >
-                <CircleCheckBig className="text-emerald-500 text-xl" />
-                <div>
-                  <div className="text-base font-bold text-emerald-500 font-display">
-                    Excellent!
-                  </div>
-                  <div className="text-xs text-text-muted" style={{ marginTop: 2 }}>
-                    No errors detected
-                  </div>
+            <div className="flex" style={{ gap: 2 }}>
+              {/* Writing score gauge */}
+              {writingScore !== null && (
+                <div
+                  className="flex items-center justify-center py-4 px-5 w-[130px] shrink-0"
+                  style={{
+                    background:
+                      totalErrors === 0
+                        ? "color-mix(in srgb, var(--success) 6%, var(--surface))"
+                        : "var(--surface)",
+                  }}
+                >
+                  <ScoreGauge score={writingScore} label={scoreLabel} />
                 </div>
-              </div>
-            ) : (
-              <>
-                {[
-                  {
-                    label: "Grammar",
-                    value: result.stats.grammar,
-                    color: "var(--error)",
-                    icon: <Bug size={14} />,
-                  },
-                  {
-                    label: "Spelling",
-                    value: result.stats.spelling,
-                    color: "var(--warning, #e8a838)",
-                    icon: <AlertTriangle size={14} />,
-                  },
-                  {
-                    label: "Style",
-                    value: result.stats.style,
-                    color: "var(--info, #5b8def)",
-                    icon: <Lightbulb size={14} />,
-                  },
-                ].map((s) => (
-                  <div
-                    key={s.label}
-                    className="flex-1 flex items-center gap-3 bg-surface"
-                    style={{ padding: "18px 18px" }}
-                  >
-                    <motion.span
-                      className="flex items-center"
-                      style={{
-                        color: s.value > 0 ? s.color : "var(--text-muted)",
-                        opacity: 0.8,
-                      }}
-                      animate={s.value > 0 ? { scale: [1, 1.15, 1] } : { scale: 1 }}
-                      transition={{ duration: 0.3 }}
-                    >
-                      {s.icon}
-                    </motion.span>
-                    <div>
-                      <div
-                        className="text-3xl font-extrabold leading-none font-display"
-                        style={{ color: s.value > 0 ? s.color : "var(--text-muted)" }}
-                      >
-                        {s.value}
-                      </div>
-                      <div
-                        className="text-[10px] text-text-muted font-medium uppercase"
-                        style={{ marginTop: 2, letterSpacing: "0.1em" }}
-                      >
-                        {s.label}
-                      </div>
+              )}
+
+              {/* Stats cells */}
+              {totalErrors === 0 ? (
+                <div
+                  className="flex-1 flex items-center gap-2.5 py-5 px-6"
+                  style={{ background: "color-mix(in srgb, var(--success) 6%, var(--surface))" }}
+                >
+                  <CircleCheckBig className="text-emerald-500 text-xl" />
+                  <div>
+                    <div className="text-base font-black text-emerald-500 font-display">
+                      Excellent!
+                    </div>
+                    <div className="text-xs text-text-muted mt-0.5">
+                      No errors detected
                     </div>
                   </div>
-                ))}
-              </>
-            )}
-          </div>
+                </div>
+              ) : (
+                <>
+                  {[
+                    {
+                      label: "Grammar",
+                      value: result.stats.grammar,
+                      color: "var(--error)",
+                      icon: <Bug size={14} />,
+                    },
+                    {
+                      label: "Spelling",
+                      value: result.stats.spelling,
+                      color: "var(--warning, #e8a838)",
+                      icon: <AlertTriangle size={14} />,
+                    },
+                    {
+                      label: "Style",
+                      value: result.stats.style,
+                      color: "var(--info, #5b8def)",
+                      icon: <Lightbulb size={14} />,
+                    },
+                  ].map((s) => (
+                    <div
+                      key={s.label}
+                      className="flex-1 flex items-center gap-3 bg-surface py-5 px-4"
+                    >
+                      <motion.span
+                        className="flex items-center"
+                        style={{
+                          color: s.value > 0 ? s.color : "var(--text-muted)",
+                          opacity: 0.8,
+                        }}
+                        animate={s.value > 0 ? { scale: [1, 1.15, 1] } : { scale: 1 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        {s.icon}
+                      </motion.span>
+                      <div>
+                        <div
+                          className="text-3xl font-extrabold leading-none font-display"
+                          style={{ color: s.value > 0 ? s.color : "var(--text-muted)" }}
+                        >
+                          {s.value}
+                        </div>
+                        <div className="text-[10px] text-text-muted font-bold uppercase mt-0.5 tracking-wider">
+                          {s.label}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
+          </Card>
 
           {/* Error cards */}
           {result.errors.map((err, i) => (
@@ -580,20 +520,21 @@ export function GrammarChecker() {
           {totalErrors > 0 && (
             <div>
               <div className="flex justify-between items-center mb-1.5">
-                <span className="text-xs font-semibold text-text-secondary">Corrected text</span>
+                <span className="text-xs font-bold text-text-secondary">Corrected text</span>
                 <CopyButton text={result.correctedText} />
               </div>
-              <div
-                className="p-4 rounded-xl text-sm text-text-primary"
+              <Card
+                shadowSize="sm"
+                size="sm"
+                className="text-sm text-text-primary border-success/30"
                 style={{
                   background: "color-mix(in srgb, var(--success) 5%, var(--card-bg))",
-                  border: "1px solid color-mix(in srgb, var(--success) 20%, var(--border))",
                   lineHeight: 1.7,
                   whiteSpace: "pre-wrap",
                 }}
               >
                 {result.correctedText}
-              </div>
+              </Card>
             </div>
           )}
         </div>

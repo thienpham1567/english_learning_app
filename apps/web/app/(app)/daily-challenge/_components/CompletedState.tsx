@@ -5,6 +5,7 @@ import * as m from "motion/react-client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { StreakFire } from "@/components/shared";
+import { Card } from "@/components/ui/card";
 import type {
   Badge,
   DailyChallenge,
@@ -89,7 +90,7 @@ function WeeklyChart({ scores }: { scores: { day: string; score: number }[] }) {
   const chartWidth = scores.length * (barWidth + barGap) - barGap;
 
   return (
-    <div className="rounded-2xl border-2 border-border bg-surface py-4 px-5 shadow-sm">
+    <Card shadowSize="sm" className="py-4 px-5">
       <div className="flex items-center gap-1.5 mb-4">
         <BarChart3 size={13} className="text-accent" />
         <span className="text-[10px] font-extrabold uppercase tracking-widest text-accent font-display">
@@ -158,7 +159,7 @@ function WeeklyChart({ scores }: { scores: { day: string; score: number }[] }) {
           );
         })}
       </svg>
-    </div>
+    </Card>
   );
 }
 
@@ -332,10 +333,10 @@ export function CompletedState({
       )}
 
       {bonusLoading && (
-        <div className="w-full rounded-2xl py-4.5 px-5 bg-surface border-2 border-border flex items-center justify-center gap-2.5 text-text-secondary text-xs font-black shadow-sm">
+        <Card shadowSize="sm" className="w-full py-4.5 px-5 flex-row items-center justify-center gap-2.5 text-text-secondary text-xs font-black">
           <Loader2 className="animate-spin text-accent h-4 w-4" />
           <span>Initializing Bonus Challenge...</span>
-        </div>
+        </Card>
       )}
 
       {bonusCompleted && (
@@ -362,12 +363,7 @@ export function CompletedState({
       )}
 
       {/* ── Personal Stats ── */}
-      <m.div
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.15 }}
-        className="rounded-2xl border-2 border-border bg-surface py-4.5 px-5 shadow-sm"
-      >
+      <Card shadowSize="sm" className="py-4.5 px-5">
         <div className="flex items-center gap-1.5 mb-3.5">
           <Trophy size={14} className="text-accent" />
           <span className="text-[10px] font-extrabold uppercase tracking-widest text-accent font-display">
@@ -375,23 +371,23 @@ export function CompletedState({
           </span>
         </div>
         <div className="grid grid-cols-3 gap-3 text-center">
-          <div className="rounded-xl bg-surface-alt border-2 border-border p-3 shadow-sm">
+          <Card shadowSize="sm" size="sm" bgType="alt" className="p-3">
             <div className="text-xl md:text-2xl font-black text-accent font-mono leading-none">
               {streak.currentStreak}
             </div>
             <div className="text-[9px] font-extrabold uppercase tracking-wider text-text-muted mt-2 font-display">
               Streak
             </div>
-          </div>
-          <div className="rounded-xl bg-surface-alt border-2 border-border p-3 shadow-sm">
+          </Card>
+          <Card shadowSize="sm" size="sm" bgType="alt" className="p-3">
             <div className="text-xl md:text-2xl font-black text-emerald-500 font-mono leading-none">
               {score}/5
             </div>
             <div className="text-[9px] font-extrabold uppercase tracking-wider text-text-muted mt-2 font-display">
               Today's Score
             </div>
-          </div>
-          <div className="rounded-xl bg-surface-alt border-2 border-border p-3 shadow-sm">
+          </Card>
+          <Card shadowSize="sm" size="sm" bgType="alt" className="p-3">
             <div className="text-xl md:text-2xl font-black text-secondary font-mono leading-none">
               {(() => {
                 try {
@@ -407,9 +403,9 @@ export function CompletedState({
             <div className="text-[9px] font-extrabold uppercase tracking-wider text-text-muted mt-2 font-display">
               Best Time
             </div>
-          </div>
+          </Card>
         </div>
-      </m.div>
+      </Card>
 
       {/* ── Wrong Answer Review ── */}
       {wrongAnswers.length > 0 && (
@@ -477,7 +473,7 @@ export function CompletedState({
         className="flex flex-col gap-3.5 mt-2.5"
       >
         {/* Next challenge countdown */}
-        <div className="rounded-2xl bg-surface border-2 border-border py-4 px-5 flex items-center justify-center gap-3.5 shadow-sm">
+        <Card shadowSize="sm" className="flex-row items-center justify-center gap-3.5 py-4 px-5">
           <Clock size={15} className="text-text-muted shrink-0 animate-pulse" />
           <div className="text-xs text-text-secondary font-extrabold uppercase tracking-wider font-display">
             Next challenge in
@@ -485,7 +481,7 @@ export function CompletedState({
           <span className="font-mono text-base font-black text-accent tracking-wider bg-bg-deep border border-border/20 px-3 py-1 rounded-xl shadow-sm">
             {formatCountdown(countdown)}
           </span>
-        </div>
+        </Card>
 
         {/* Keep learning CTA link */}
         <div className="flex flex-col items-center gap-2">

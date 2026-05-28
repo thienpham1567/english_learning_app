@@ -3,6 +3,7 @@
 import { Loader2, Volume2 } from "lucide-react";
 import * as m from "motion/react-client";
 import { useState } from "react";
+import { Card } from "@/components/ui/card";
 import type { TtsAccent } from "@/hooks/useTextToSpeech";
 import type { IpaPhoneme } from "../_data/phonemes";
 
@@ -65,103 +66,100 @@ export function PhonemeCard({ phoneme, accent, onSpeak, isBusy, index }: Props) 
         stiffness: 220,
         damping: 20,
       }}
-      whileHover={{
-        y: -4,
-        boxShadow: `0 8px 24px color-mix(in srgb, ${accentColor} 15%, transparent)`,
-      }}
       whileTap={{ scale: 0.97 }}
       onClick={() => handleClick(accent)}
-      className={`relative flex flex-col items-center rounded-2xl bg-surface border-2 border-border overflow-hidden select-none pt-5 pb-3.5 px-3 shadow-sm hover:border-transparent transition-colors duration-200 group ${isBusy ? "cursor-wait" : "cursor-pointer"}`}
-      style={{
-        ["--card-accent" as string]: accentColor,
-      }}
     >
-      {/* Top accent bar */}
-      <div
-        className="absolute top-0 left-0 right-0 h-[3px] transition-all duration-200 group-hover:h-1"
-        style={{ background: accentColor }}
-      />
-
-      {/* Type label badge */}
-      <span
-        className="text-[8.5px] font-extrabold uppercase tracking-wider rounded-lg mb-3 self-end py-0.5 px-2 border"
-        style={{
-          background: `color-mix(in srgb, ${accentColor} 8%, transparent)`,
-          color: accentColor,
-          borderColor: `color-mix(in srgb, ${accentColor} 15%, transparent)`,
-        }}
+      <Card
+        interactive
+        shadowSize="sm"
+        className={`relative flex flex-col items-center overflow-hidden select-none pt-5 pb-3.5 px-3 group ${isBusy ? "cursor-wait" : "cursor-pointer"}`}
       >
-        {typeLabel}
-      </span>
+        {/* Top accent bar */}
+        <div
+          className="absolute top-0 left-0 right-0 h-[3px] transition-all duration-200 group-hover:h-1.5"
+          style={{ background: accentColor }}
+        />
 
-      {/* Phoneme Symbol */}
-      <m.div
-        animate={pulsing ? { scale: [1, 1.18, 1], rotate: [0, 2, -2, 0] } : {}}
-        transition={{ duration: 0.4 }}
-        className="font-black font-mono leading-none text-center text-[36px] mb-1.5"
-        style={{ color: accentColor }}
-      >
-        /{symbol}/
-      </m.div>
-
-      {/* Example word with highlight */}
-      <div className="text-[13px] font-bold text-text-primary mb-2">
-        {before}
+        {/* Type label badge */}
         <span
-          className="font-extrabold border-b-2 pb-px"
-          style={{ color: accentColor, borderColor: accentColor }}
+          className="text-[8.5px] font-black uppercase tracking-wider rounded-lg mb-3 self-end py-0.5 px-2 border-2"
+          style={{
+            background: `color-mix(in srgb, ${accentColor} 8%, transparent)`,
+            color: accentColor,
+            borderColor: `color-mix(in srgb, ${accentColor} 20%, var(--border))`,
+          }}
         >
-          {match}
+          {typeLabel}
         </span>
-        {after}
-      </div>
 
-      {/* Tip */}
-      <p
-        className="text-[10.5px] text-text-muted text-center mb-3.5 h-[28px] overflow-hidden font-medium leading-snug line-clamp-2"
-        title={tip}
-      >
-        {tip}
-      </p>
+        {/* Phoneme Symbol */}
+        <m.div
+          animate={pulsing ? { scale: [1, 1.18, 1], rotate: [0, 2, -2, 0] } : {}}
+          transition={{ duration: 0.4 }}
+          className="font-black font-mono leading-none text-center text-[36px] mb-1.5"
+          style={{ color: accentColor }}
+        >
+          /{symbol}/
+        </m.div>
 
-      {/* Accent play buttons */}
-      <div className="flex gap-1.5 w-full justify-center mt-auto">
-        {(["us", "uk"] as TtsAccent[]).map((voiceAcc) => {
-          const isActive = accent === voiceAcc;
-          return (
-            <m.button
-              key={voiceAcc}
-              onClick={(e) => handleClick(voiceAcc, e)}
-              disabled={isBusy}
-              whileHover={{ scale: 1.04 }}
-              whileTap={{ scale: 0.95 }}
-              className={`flex-1 inline-flex items-center justify-center gap-1 rounded-xl text-[10px] font-extrabold border-2 py-1.5 transition-all duration-150 ${isBusy ? "cursor-wait" : "cursor-pointer"} ${
-                isActive
-                  ? "border-transparent text-ink font-black"
-                  : "border-border bg-surface-alt text-text-secondary"
-              }`}
-              style={
-                isActive
-                  ? {
-                      borderColor: accentColor,
-                      background: `color-mix(in srgb, ${accentColor} 10%, var(--surface))`,
-                    }
-                  : undefined
-              }
-            >
-              {isBusy && accent === voiceAcc ? (
-                <Loader2 className="animate-spin" size={9} />
-              ) : (
-                <Volume2
-                  size={10}
-                  style={{ color: isActive ? accentColor : "var(--text-muted)" }}
-                />
-              )}
-              {voiceAcc.toUpperCase()}
-            </m.button>
-          );
-        })}
-      </div>
+        {/* Example word with highlight */}
+        <div className="text-[13px] font-bold text-text-primary mb-2">
+          {before}
+          <span
+            className="font-extrabold border-b-2 pb-px"
+            style={{ color: accentColor, borderColor: accentColor }}
+          >
+            {match}
+          </span>
+          {after}
+        </div>
+
+        {/* Tip */}
+        <p
+          className="text-[10.5px] text-text-muted text-center mb-3.5 h-[28px] overflow-hidden font-medium leading-snug line-clamp-2"
+          title={tip}
+        >
+          {tip}
+        </p>
+
+        {/* Accent play buttons */}
+        <div className="flex gap-1.5 w-full justify-center mt-auto">
+          {(["us", "uk"] as TtsAccent[]).map((voiceAcc) => {
+            const isActive = accent === voiceAcc;
+            return (
+              <m.button
+                key={voiceAcc}
+                onClick={(e) => handleClick(voiceAcc, e)}
+                disabled={isBusy}
+                whileHover={{ scale: 1.04 }}
+                whileTap={{ scale: 0.95 }}
+                className={`flex-1 inline-flex items-center justify-center gap-1 rounded-xl text-[10px] font-extrabold border-2 py-1.5 transition-all duration-100 ${isBusy ? "cursor-wait" : "cursor-pointer"} ${
+                  isActive
+                    ? "border-border text-ink font-black shadow-sm"
+                    : "border-border bg-surface-alt text-text-secondary hover:bg-surface-hover"
+                }`}
+                style={
+                  isActive
+                    ? {
+                        background: `color-mix(in srgb, ${accentColor} 12%, var(--surface))`,
+                      }
+                    : undefined
+                }
+              >
+                {isBusy && accent === voiceAcc ? (
+                  <Loader2 className="animate-spin" size={9} />
+                ) : (
+                  <Volume2
+                    size={10}
+                    style={{ color: isActive ? accentColor : "var(--text-muted)" }}
+                  />
+                )}
+                {voiceAcc.toUpperCase()}
+              </m.button>
+            );
+          })}
+        </div>
+      </Card>
     </m.div>
   );
 }
