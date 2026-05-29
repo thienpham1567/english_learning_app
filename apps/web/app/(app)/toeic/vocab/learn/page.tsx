@@ -104,23 +104,23 @@ function LearnRunner() {
           <div className="text-2xl font-black text-text-primary">Completed!</div>
         </div>
         <div className="flex gap-2 justify-center flex-wrap mb-4">
-          <span className="bg-red-500/10 text-red-600 py-1 px-3 rounded-lg text-sm font-bold">
+          <span className="bg-error/10 text-error py-1 px-3 rounded-lg text-sm font-bold">
             Again: {stats.again}
           </span>
-          <span className="bg-amber-500/10 text-amber-600 py-1 px-3 rounded-lg text-sm font-bold">
+          <span className="bg-warning/10 text-warning py-1 px-3 rounded-lg text-sm font-bold">
             Hard: {stats.hard}
           </span>
-          <span className="bg-emerald-500/10 text-emerald-600 py-1 px-3 rounded-lg text-sm font-bold">
+          <span className="bg-success/10 text-success py-1 px-3 rounded-lg text-sm font-bold">
             Good: {stats.good}
           </span>
-          <span className="bg-blue-500/10 text-blue-600 py-1 px-3 rounded-lg text-sm font-bold">
+          <span className="bg-info/10 text-info py-1 px-3 rounded-lg text-sm font-bold">
             Easy: {stats.easy}
           </span>
         </div>
         {roadmapWeek && (
           <a
             href={`/roadmap/week/${roadmapWeek.weekNumber}`}
-            className="no-underline flex items-center gap-2 justify-center px-4 py-2.5 rounded-xl border-2 border-emerald-500/30 bg-emerald-500/8 text-xs font-bold text-emerald-600 hover:bg-emerald-500/12 transition-colors mb-4"
+            className="no-underline flex items-center gap-2 justify-center px-4 py-2.5 rounded-xl border-2 border-success/30 bg-success/8 text-xs font-bold text-success hover:bg-success/12 transition-colors mb-4"
           >
             <MapPin size={12} />
             Roadmap Week {roadmapWeek.weekNumber} — vocab unit auto-completed ✓

@@ -88,12 +88,12 @@ export function SessionSummary({
           className="text-center relative overflow-hidden flex flex-col items-center gap-3 py-8 px-6 rounded-xl"
           style={{
             background:
-              "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--surface))",
+              "color-mix(in srgb, var(--accent) 8%, var(--surface))",
           }}
         >
           {/* Ambient glow behind streak */}
           <div
-            className="absolute w-[220px] h-[220px] rounded-full left-1/2 top-[40%] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+            className="absolute w-[220px] h-[220px] left-1/2 top-[40%] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
             style={{
               background: "radial-gradient(circle, var(--accent) 12%, transparent 70%)",
             }}
@@ -201,11 +201,11 @@ export function SessionSummary({
               className="flex-row items-center gap-3.5 py-4 px-5 rounded-xl text-left"
               style={{
                 background:
-                  "linear-gradient(135deg, color-mix(in srgb, var(--accent) 6%, var(--surface)), var(--surface))",
-                border: "1.5px solid color-mix(in srgb, var(--accent) 15%, var(--border))",
+                  "color-mix(in srgb, var(--accent) 6%, var(--surface))",
+                border: "2px solid color-mix(in srgb, var(--accent) 15%, var(--border))",
               }}
             >
-              <div className="w-11 h-11 rounded-full grid shrink-0 place-items-center bg-[rgba(245,158,11,0.08)]">
+              <div className="w-11 h-11 rounded-full grid shrink-0 place-items-center bg-[color-mix(in srgb, var(--warning) 8%, transparent)]">
                 <Flame className="text-2xl text-[var(--xp)]" />
               </div>
               <div className="flex-1">
@@ -225,9 +225,9 @@ export function SessionSummary({
             whileHover={{ scale: 1.02, y: -1 }}
             whileTap={{ scale: 0.98 }}
             onClick={onRestart}
-            className="h-12 rounded-lg border-none text-[15px] font-extrabold cursor-pointer flex items-center justify-center gap-2 mt-2.5 text-[var(--text-on-accent)] shadow-[0_4px_14px_var(--accent-muted)]"
+            className="h-12 rounded-lg border-2 border-border text-[15px] font-extrabold cursor-pointer flex items-center justify-center gap-2 mt-2.5 text-[var(--text-on-accent)] shadow-sm"
             style={{
-              background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+              background: "var(--accent)",
             }}
           >
             <RefreshCw size={13} />

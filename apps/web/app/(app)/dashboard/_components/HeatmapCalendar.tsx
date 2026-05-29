@@ -104,7 +104,7 @@ export function HeatmapCalendar() {
             </div>
 
             <div className="flex items-center gap-1.5 bg-surface-alt border-2 border-border px-3 py-1 rounded-xl shadow-sm">
-              <Star className="text-amber-400 h-3 w-3 fill-current" />
+              <Star className="text-warning h-3 w-3 fill-current" />
               <span className="text-xs font-extrabold text-text-primary font-mono">
                 {totalXP.toLocaleString()}
               </span>
@@ -150,7 +150,7 @@ export function HeatmapCalendar() {
                         whileHover={{ scale: 1.25, zIndex: 10 }}
                         className={`w-3 h-3 rounded-[3px] cursor-pointer transition-all duration-200 ${getIntensity(
                           day.count,
-                        )} ${isToday ? "border-[1.5px] border-accent shadow-[0_0_6px_var(--accent)]" : "border border-transparent"}`}
+                        )} ${isToday ? "border-2 border-accent" : "border border-transparent"}`}
                       />
 
                       {/* Custom HTML Hover Tooltip */}

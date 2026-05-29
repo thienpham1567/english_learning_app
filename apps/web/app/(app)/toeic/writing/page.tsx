@@ -57,7 +57,7 @@ export default async function ToeicWritingPage() {
                     Essay (30 mins)
                   </CardDescription>
                   <div className="flex flex-wrap gap-1.5 mt-3">
-                    <span className="text-[10px] font-extrabold rounded-lg bg-amber-500/10 text-amber-600 border border-amber-500/20 px-2 py-0.5">
+                    <span className="text-[10px] font-extrabold rounded-lg bg-warning/10 text-warning border border-warning/20 px-2 py-0.5">
                       AI grading after submission
                     </span>
                   </div>

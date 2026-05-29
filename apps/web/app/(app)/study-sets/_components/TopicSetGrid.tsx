@@ -95,9 +95,9 @@ export const STUDY_TOPICS: StudyCategory[] = [
 ];
 
 const LEVEL_COLORS: Record<string, { bg: string; text: string; border: string }> = {
-  A2: { bg: "rgba(16, 185, 129, 0.08)", text: "var(--success)", border: "rgba(16, 185, 129, 0.2)" },
+  A2: { bg: "color-mix(in srgb, var(--success) 8%, transparent)", text: "var(--success)", border: "color-mix(in srgb, var(--success) 20%, transparent)" },
   B1: { bg: "var(--accent-light)", text: "var(--accent)", border: "var(--accent-muted)" },
-  B2: { bg: "rgba(139, 92, 246, 0.08)", text: "var(--xp)", border: "rgba(139, 92, 246, 0.2)" },
+  B2: { bg: "color-mix(in srgb, var(--module-grammar) 8%, transparent)", text: "var(--xp)", border: "color-mix(in srgb, var(--module-grammar) 20%, transparent)" },
 };
 
 interface Props {
@@ -134,7 +134,7 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
                     ? "linear-gradient(135deg, var(--success), #10b981)"
                     : `linear-gradient(135deg, ${cat.color}, ${cat.color}aa)`,
                   color: "var(--text-on-accent)",
-                  boxShadow: `0 4px 12px ${allDone ? "rgba(16, 185, 129, 0.25)" : `${cat.color}25`}`,
+                  boxShadow: `0 4px 12px ${allDone ? "color-mix(in srgb, var(--success) 25%, transparent)" : `${cat.color}25`}`,
                 }}
               >
                 {allDone ? <CheckCircle style={{ color: "var(--text-on-accent)" }} /> : cat.icon}
@@ -180,7 +180,7 @@ export function TopicSetGrid({ onSelect, completedTopics }: Props) {
                       border: "1.5px solid var(--border)",
                       borderLeft: isDone ? "5px solid var(--success)" : `5px solid ${cat.color}`,
                       background: isDone
-                        ? "rgba(16, 185, 129, 0.04)"
+                        ? "color-mix(in srgb, var(--success) 4%, transparent)"
                         : isHovered
                           ? "var(--surface-alt)"
                           : "var(--surface)",

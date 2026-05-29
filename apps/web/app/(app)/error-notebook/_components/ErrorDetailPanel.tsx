@@ -40,7 +40,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-[900] bg-black/30 backdrop-blur-xs"
+            className="fixed inset-0 z-[900] bg-black/30"
           />
         )}
       </AnimatePresence>
@@ -101,9 +101,9 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
                         key={i}
                         className={`px-3.5 py-2.5 rounded-[10px] text-sm ${
                           isCorrect
-                            ? "bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] border-[1.5px] border-success text-success font-bold"
+                            ? "bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] border-2 border-success text-success font-bold"
                             : isWrong
-                              ? "bg-[color-mix(in_srgb,var(--error)_8%,var(--surface))] border-[1.5px] border-error text-error font-bold"
+                              ? "bg-[color-mix(in_srgb,var(--error)_8%,var(--surface))] border-2 border-error text-error font-bold"
                               : "bg-surface-alt border-2 border-border text-text-primary font-medium"
                         }`}
                       >
@@ -179,7 +179,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
                 )}
                 {error.lastReviewedAt && (
                   <div className="flex items-center gap-1.5">
-                    <CheckCircle className="h-3.5 w-3.5 text-emerald-500" />
+                    <CheckCircle className="h-3.5 w-3.5 text-success" />
                     <span>
                       Last reviewed: {new Date(error.lastReviewedAt).toLocaleDateString("en-US")}
                     </span>
@@ -187,7 +187,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
                 )}
                 {error.nextReviewAt && (
                   <div className="flex items-center gap-1.5">
-                    <Clock className="h-3.5 w-3.5 text-amber-500" />
+                    <Clock className="h-3.5 w-3.5 text-xp" />
                     <span>
                       Next review: {new Date(error.nextReviewAt).toLocaleDateString("en-US")}
                     </span>
@@ -203,7 +203,7 @@ export function ErrorDetailPanel({ error, onClose, onResolve }: ErrorDetailPanel
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleResolve}
-                  className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl border-none bg-gradient-to-br from-success to-[color-mix(in_srgb,var(--success)_80%,var(--accent))] text-white text-sm font-extrabold cursor-pointer font-body shadow-[0_4px_14px_rgba(16,185,129,0.3)]"
+                  className="w-full flex items-center justify-center gap-2 py-3 px-5 rounded-xl border-2 border-border bg-success text-white text-sm font-extrabold cursor-pointer font-body shadow-sm"
                 >
                   <CheckCircle className="h-4 w-4" /> Mark as resolved
                 </m.button>

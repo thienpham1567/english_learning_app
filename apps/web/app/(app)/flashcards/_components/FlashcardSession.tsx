@@ -118,9 +118,9 @@ export function FlashcardSession() {
                     whileHover={{ scale: 1.03, y: -1 }}
                     whileTap={{ scale: 0.97 }}
                     onClick={restart}
-                    className="flex items-center gap-2 py-2.5 px-5 rounded-lg border-none text-sm font-bold cursor-pointer text-[var(--text-on-accent)] shadow-[0_4px_14px_var(--accent-muted)]"
+                    className="flex items-center gap-2 py-2.5 px-5 rounded-lg border-2 border-border text-sm font-bold cursor-pointer text-[var(--text-on-accent)] shadow-sm"
                     style={{
-                      background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+                      background: "var(--accent)",
                     }}
                   >
                     <RefreshCw size={14} /> Try again

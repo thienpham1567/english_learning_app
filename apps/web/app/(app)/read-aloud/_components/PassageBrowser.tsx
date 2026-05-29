@@ -162,17 +162,17 @@ export function PassageBrowser({ onSelectPassage }: PassageBrowserProps) {
                     style={{
                       background:
                         sample.length === "short"
-                          ? "rgba(16,185,129,0.1)"
+                          ? "color-mix(in srgb, var(--success) 10%, transparent)"
                           : sample.length === "long"
-                            ? "rgba(239,68,68,0.08)"
-                            : "rgba(59,130,246,0.1)",
+                            ? "color-mix(in srgb, var(--error) 8%, transparent)"
+                            : "color-mix(in srgb, var(--info) 10%, transparent)",
                       color:
                         sample.length === "short"
                           ? "var(--success)"
                           : sample.length === "long"
                             ? "var(--error)"
                             : "var(--info)",
-                      border: `1px solid ${sample.length === "short" ? "rgba(16,185,129,0.2)" : sample.length === "long" ? "rgba(239,68,68,0.15)" : "rgba(59,130,246,0.2)"}`,
+                      border: `1px solid ${sample.length === "short" ? "color-mix(in srgb, var(--success) 20%, transparent)" : sample.length === "long" ? "color-mix(in srgb, var(--error) 15%, transparent)" : "color-mix(in srgb, var(--info) 20%, transparent)"}`,
                     }}
                   >
                     {sample.length === "short"

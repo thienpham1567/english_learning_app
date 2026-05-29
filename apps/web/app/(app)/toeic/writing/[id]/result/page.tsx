@@ -63,7 +63,7 @@ export default async function WritingResultPage({ params }: { params: Promise<{ 
                         ? "Email"
                         : "Opinion"}
                   </strong>
-                  <span className="bg-blue-500/15 text-blue-600 py-0.5 px-2 rounded-md text-sm font-bold">
+                  <span className="bg-info/15 text-info py-0.5 px-2 rounded-md text-sm font-bold">
                     {r?.rawScore ?? 0} / {p.maxScore}
                   </span>
                 </div>

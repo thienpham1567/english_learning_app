@@ -65,7 +65,7 @@ const COUNT_OPTIONS = [5, 10, 15, 20];
 const LEVEL_COLORS: Record<string, string> = {
   A2: "var(--success)",
   B1: "var(--accent-active)",
-  B2: "var(--tertiary, #8B5CF6)",
+  B2: "var(--tertiary)",
   C1: "var(--error)",
 };
 
@@ -173,15 +173,15 @@ export function AIFlashcardMode() {
           <m.div
             initial={{ opacity: 0, y: -8 }}
             animate={{ opacity: 1, y: 0 }}
-            className="rounded-xl border-2 border-amber-500/25 overflow-hidden"
+            className="rounded-xl border-2 border-warning/25 overflow-hidden"
             style={{
-              background: "linear-gradient(135deg, rgba(245, 158, 11, 0.04), var(--surface))",
+              background: "color-mix(in srgb, var(--warning) 6%, var(--surface))",
             }}
           >
             <div className="px-4 py-3.5 flex items-center gap-3">
               <div
                 className="w-10 h-10 rounded-lg grid place-items-center shrink-0"
-                style={{ background: "linear-gradient(135deg, var(--warning), var(--error))" }}
+                style={{ background: "var(--warning)" }}
               >
                 <AlertTriangle size={18} className="text-white" />
               </div>
@@ -197,8 +197,8 @@ export function AIFlashcardMode() {
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                   onClick={studyErrorDeck}
-                  className="flex items-center gap-1.5 py-2 px-4 rounded-lg border-none text-xs font-extrabold cursor-pointer text-white shadow-sm"
-                  style={{ background: "linear-gradient(135deg, var(--warning), var(--error))" }}
+                  className="flex items-center gap-1.5 py-2 px-4 rounded-lg border-2 border-border text-xs font-extrabold cursor-pointer text-white shadow-sm"
+                  style={{ background: "var(--warning)" }}
                 >
                   <Zap size={12} /> Study Now
                 </m.button>
@@ -234,8 +234,8 @@ export function AIFlashcardMode() {
                   onClick={() => setSelectedTopic(isSelected ? null : topic.id)}
                   className={`flex items-center gap-2.5 rounded-lg cursor-pointer text-left py-3 px-3.5 transition-all duration-150 ${
                     isSelected
-                      ? "border-[1.5px] border-accent bg-accent-light shadow-[0_4px_14px_var(--accent-muted)]"
-                      : "border-[1.5px] border-border bg-surface shadow-sm"
+                      ? "border-2 border-accent bg-accent-light shadow-sm"
+                      : "border-2 border-border bg-surface shadow-sm"
                   }`}
                 >
                   <span className="text-xl">{topic.emoji}</span>
@@ -267,8 +267,8 @@ export function AIFlashcardMode() {
             placeholder="e.g. Negotiation Skills, Supply Chain, Real Estate..."
             className={`w-full py-3 px-4 rounded-lg bg-surface text-text-primary text-sm font-semibold outline-none box-border ${
               selectedTopic === "__custom"
-                ? "border-[1.5px] border-accent"
-                : "border-[1.5px] border-border"
+                ? "border-2 border-accent"
+                : "border-2 border-border"
             }`}
           />
         </div>
@@ -288,8 +288,8 @@ export function AIFlashcardMode() {
                   onClick={() => setCardType(opt.value)}
                   className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 cursor-pointer text-xs font-bold rounded-[10px] ${
                     cardType === opt.value
-                      ? "border-[1.5px] border-accent bg-accent-light text-ink font-extrabold"
-                      : "border-[1.5px] border-border bg-surface text-text-secondary"
+                      ? "border-2 border-accent bg-accent-light text-ink font-extrabold"
+                      : "border-2 border-border bg-surface text-text-secondary"
                   }`}
                 >
                   {opt.icon} {opt.label}
@@ -311,8 +311,8 @@ export function AIFlashcardMode() {
                   onClick={() => setCardCount(c)}
                   className={`flex-1 cursor-pointer text-[13px] font-extrabold py-2 rounded-[10px] ${
                     cardCount === c
-                      ? "border-[1.5px] border-accent bg-accent-light text-ink"
-                      : "border-[1.5px] border-border bg-surface text-text-secondary"
+                      ? "border-2 border-accent bg-accent-light text-ink"
+                      : "border-2 border-border bg-surface text-text-secondary"
                   }`}
                 >
                   {c}
@@ -324,7 +324,7 @@ export function AIFlashcardMode() {
 
         {/* Error */}
         {error && (
-          <div className="text-destructive text-[13px] font-semibold py-2.5 px-3.5 rounded-[10px] bg-[rgba(239,68,68,0.06)] border border-[rgba(239,68,68,0.15)]">
+          <div className="text-destructive text-[13px] font-semibold py-2.5 px-3.5 rounded-[10px] bg-[color-mix(in srgb, var(--error) 6%, transparent)] border-2 border-[color-mix(in srgb, var(--error) 15%, transparent)]">
             {error}
           </div>
         )}
@@ -337,17 +337,15 @@ export function AIFlashcardMode() {
           disabled={!selectedTopic}
           className={`py-4 px-6 rounded-xl border-none text-[15px] font-black flex items-center justify-center gap-2.5 font-display relative overflow-hidden ${
             selectedTopic
-              ? "cursor-pointer text-white shadow-[0_8px_28px_var(--accent-muted)]"
+              ? "cursor-pointer text-white shadow-md"
               : "cursor-not-allowed text-text-muted"
           }`}
           style={{
-            background: selectedTopic
-              ? "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 80%, var(--secondary)))"
-              : "var(--border)",
+            background: selectedTopic ? "var(--accent)" : "var(--border)",
           }}
         >
           {selectedTopic && (
-            <div className="absolute w-[120px] h-[120px] rounded-full -top-1/2 -right-[10%] bg-white/[0.06] pointer-events-none" />
+            <div className="absolute w-[120px] h-[120px] -top-6 -right-6 rotate-12 bg-white/[0.06] pointer-events-none" />
           )}
           <Zap /> Generate {cardCount} AI Flashcards
         </m.button>
@@ -433,13 +431,13 @@ export function AIFlashcardMode() {
               backfaceVisibility: "hidden",
               border: `1.5px solid color-mix(in srgb, var(--accent) 15%, var(--border))`,
               background: isVocab
-                ? "linear-gradient(135deg, color-mix(in srgb, var(--accent) 6%, var(--surface)), var(--surface))"
-                : "linear-gradient(135deg, color-mix(in srgb, var(--secondary) 6%, var(--surface)), var(--surface))",
+                ? "color-mix(in srgb, var(--accent) 6%, var(--surface))"
+                : "color-mix(in srgb, var(--secondary) 6%, var(--surface))",
             }}
           >
             {/* Ambient glow */}
             <div
-              className="absolute w-[200px] h-[200px] rounded-full left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+              className="absolute w-[200px] h-[200px] left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2 pointer-events-none"
               style={{
                 background: `radial-gradient(circle, ${isVocab ? "var(--accent)" : "var(--secondary)"}10 0%, transparent 70%)`,
               }}
@@ -449,8 +447,8 @@ export function AIFlashcardMode() {
             <span
               className={`text-[10px] font-extrabold rounded-md mb-3 border-none py-1 px-2.5 ${
                 isVocab
-                  ? "bg-[rgba(59,130,246,0.1)] text-[#3B82F6]"
-                  : "bg-[rgba(139,92,246,0.1)] text-[#8B5CF6]"
+                  ? "bg-[color-mix(in srgb, var(--info) 10%, transparent)] text-info"
+                  : "bg-[color-mix(in srgb, var(--module-grammar) 10%, transparent)] text-[var(--module-grammar)]"
               }`}
             >
               {isVocab ? "📖 VOCABULARY" : "📐 GRAMMAR"}
@@ -509,7 +507,7 @@ export function AIFlashcardMode() {
                 disabled={tts.isLoading || tts.isSpeaking}
                 className="mt-5 inline-flex items-center gap-2 rounded-full text-accent-active text-[13px] font-bold relative z-[2] py-2 px-4.5 shadow-sm transition-all duration-200"
                 style={{
-                  border: "1.5px solid color-mix(in srgb, var(--accent) 30%, var(--border))",
+                  border: "2px solid color-mix(in srgb, var(--accent) 30%, var(--border))",
                   background: tts.isSpeaking ? "var(--accent-light)" : "var(--surface)",
                   cursor: tts.isLoading ? "wait" : "pointer",
                 }}
@@ -533,7 +531,7 @@ export function AIFlashcardMode() {
             }}
           >
             {/* Vietnamese meaning */}
-            <div className="text-center text-2xl font-black text-accent-active font-display mb-4 pb-3.5 border-b border-dashed border-border">
+            <div className="text-center text-2xl font-black text-accent-active font-display mb-4 pb-3.5 border-b-2 border-dashed border-border">
               {card.back}
             </div>
 
@@ -565,8 +563,8 @@ export function AIFlashcardMode() {
                 className="rounded-lg py-2.5 px-3.5"
                 style={{
                   background:
-                    "linear-gradient(135deg, rgba(245, 158, 11, 0.04), rgba(239, 68, 68, 0.02))",
-                  border: "1px solid rgba(245, 158, 11, 0.15)",
+                    "linear-gradient(135deg, color-mix(in srgb, var(--warning) 4%, transparent), color-mix(in srgb, var(--error) 2%, transparent))",
+                  border: "2px solid color-mix(in srgb, var(--warning) 15%, transparent)",
                 }}
               >
                 <div className="flex items-start gap-2">
@@ -608,7 +606,7 @@ export function AIFlashcardMode() {
           onClick={() => setFlipped(!flipped)}
           className="flex-1 max-w-[200px] h-12 text-accent-active cursor-pointer text-sm font-extrabold rounded-[14px] shadow-sm"
           style={{
-            border: "1.5px solid color-mix(in srgb, var(--accent) 20%, var(--border))",
+            border: "2px solid color-mix(in srgb, var(--accent) 20%, var(--border))",
             background: "var(--accent-light)",
           }}
         >
@@ -637,8 +635,8 @@ export function AIFlashcardMode() {
           animate={{ opacity: 1, y: 0 }}
           className="py-4 px-5 rounded-xl text-center"
           style={{
-            background: "linear-gradient(135deg, rgba(16, 185, 129, 0.05), var(--surface))",
-            border: "1px solid rgba(16, 185, 129, 0.15)",
+            background: "color-mix(in srgb, var(--success) 5%, var(--surface))",
+            border: "2px solid color-mix(in srgb, var(--success) 15%, transparent)",
           }}
         >
           <CheckCircle size={28} className="text-success mx-auto mb-2" />
@@ -660,7 +658,7 @@ export function AIFlashcardMode() {
             <m.button
               whileTap={{ scale: 0.95 }}
               onClick={resetToTopics}
-              className="border-none cursor-pointer text-[13px] font-extrabold py-2 px-4.5 rounded-[10px] bg-accent text-white shadow-[0_4px_12px_var(--accent-muted)]"
+              className="border-2 border-border cursor-pointer text-[13px] font-extrabold py-2 px-4.5 rounded-[10px] bg-accent text-white shadow-sm"
             >
               New Topic
             </m.button>

@@ -135,7 +135,7 @@ export default async function ToeicProgressPage() {
                   <div className="text-lg font-black text-ink font-display mb-1">
                     Predicted TOEIC Score
                   </div>
-                  <span className="text-[10px] font-extrabold rounded-lg bg-amber-500/10 text-amber-600 border border-amber-500/20 px-2.5 py-0.5">
+                  <span className="text-[10px] font-extrabold rounded-lg bg-warning/10 text-warning border border-warning/20 px-2.5 py-0.5">
                     {bandLabel(predicted.total)}
                   </span>
 
@@ -310,7 +310,7 @@ export default async function ToeicProgressPage() {
           {/* Strongest */}
           <SkillPanel
             title="Strongest Skills"
-            icon={<Zap size={15} className="text-emerald-500" />}
+            icon={<Zap size={15} className="text-success" />}
             skills={strongest}
             accentColor="var(--success)"
           />

@@ -100,7 +100,7 @@ function InlineIssueItem({
               {issue.quote}
             </span>
             {" → "}
-            <span className="text-emerald-500 font-medium">{issue.suggestion}</span>
+            <span className="text-success font-medium">{issue.suggestion}</span>
           </div>
           <button
             onClick={() => setShowRewrite((p) => !p)}
@@ -597,7 +597,7 @@ export default function EssayScorePage() {
                 style={{ background: "var(--card-bg)" }}
               >
                 <p className="text-xs text-text-secondary mb-2 font-semibold">
-                  <CircleCheckBig className="text-emerald-500" /> Strengths
+                  <CircleCheckBig className="text-success" /> Strengths
                 </p>
                 <ul className="m-0 text-[13px]" style={{ paddingLeft: 16, lineHeight: 1.8 }}>
                   {result.strengths.map((s, i) => (

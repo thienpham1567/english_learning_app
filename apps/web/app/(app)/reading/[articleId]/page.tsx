@@ -37,16 +37,16 @@ const PATTERN_COLORS: Record<string, string> = {
 
 const DIFFICULTY_COLORS: Record<string, { bg: string; color: string; border: string }> = {
   B1: {
-    bg: "rgba(16, 185, 129, 0.08)",
+    bg: "color-mix(in srgb, var(--success) 8%, transparent)",
     color: "var(--success)",
-    border: "rgba(16, 185, 129, 0.2)",
+    border: "color-mix(in srgb, var(--success) 20%, transparent)",
   },
   B2: {
-    bg: "rgba(245, 158, 11, 0.08)",
+    bg: "color-mix(in srgb, var(--warning) 8%, transparent)",
     color: "var(--warning)",
-    border: "rgba(245, 158, 11, 0.2)",
+    border: "color-mix(in srgb, var(--warning) 20%, transparent)",
   },
-  C1: { bg: "rgba(239, 68, 68, 0.08)", color: "var(--error)", border: "rgba(239, 68, 68, 0.2)" },
+  C1: { bg: "color-mix(in srgb, var(--error) 8%, transparent)", color: "var(--error)", border: "color-mix(in srgb, var(--error) 20%, transparent)" },
 };
 
 export default function ArticleReaderPage() {
@@ -407,7 +407,7 @@ export default function ArticleReaderPage() {
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   onClick={() => setGrammarPopup(null)}
-                  className="fixed inset-0 z-[900] bg-black/50 backdrop-blur-sm"
+                  className="fixed inset-0 z-[900] bg-black/50"
                 />
                 <m.div
                   initial={{ opacity: 0, scale: 0.95, y: 20 }}

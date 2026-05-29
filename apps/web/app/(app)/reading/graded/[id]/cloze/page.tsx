@@ -319,7 +319,7 @@ export default function ClozeTestPage() {
                     </span>
 
                     {showResult && !isCorrect && (
-                      <span className="block mt-1.5 text-xs text-emerald-500">
+                      <span className="block mt-1.5 text-xs text-success">
                         <CheckCircle className="mr-1 inline" size={12} />
                         Answer: <strong>{item.answer}</strong>
                       </span>
@@ -336,7 +336,7 @@ export default function ClozeTestPage() {
           <button
             type="button"
             onClick={handleSubmit}
-            className="rounded-xl font-bold h-12 text-[15px] self-center px-8 border-none bg-accent text-[var(--text-on-accent)] cursor-pointer flex items-center gap-2 shadow-[0_4px_12px_var(--accent-muted)]"
+            className="rounded-xl font-bold h-12 text-[15px] self-center px-8 border-2 border-border bg-accent text-[var(--text-on-accent)] cursor-pointer flex items-center gap-2 shadow-sm"
           >
             <CheckCircle size={16} /> Submit Quiz ({totalCount} questions)
           </button>

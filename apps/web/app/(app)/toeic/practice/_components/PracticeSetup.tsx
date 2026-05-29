@@ -236,7 +236,7 @@ export function PracticeSetup({ onStart }: { onStart: (params: PracticeStartPara
             style={{
               borderRadius: 14,
               background:
-                "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 70%, #FFD700))",
+                "var(--accent)",
               boxShadow: "0 6px 20px color-mix(in srgb, var(--accent) 25%, transparent)",
               placeItems: "center",
               color: "var(--text-on-accent)",
@@ -356,7 +356,7 @@ export function PracticeSetup({ onStart }: { onStart: (params: PracticeStartPara
           className="w-full p-4 text-[15px] font-black border-none rounded-lg cursor-pointer flex justify-center items-center gap-2.5 relative overflow-hidden"
           style={{
             background:
-              "linear-gradient(135deg, var(--accent), color-mix(in srgb, var(--accent) 80%, #FFD700))",
+              "var(--accent)",
             color: "var(--text-on-accent)",
             boxShadow: "0 4px 18px color-mix(in srgb, var(--accent) 30%, transparent)",
             letterSpacing: "-0.01em",
@@ -379,7 +379,7 @@ export function PracticeSetup({ onStart }: { onStart: (params: PracticeStartPara
               left: 0,
               width: "40%",
               background:
-                "linear-gradient(90deg, transparent, rgba(255,255,255,0.15), transparent)",
+                "none",
               pointerEvents: "none",
             }}
           />

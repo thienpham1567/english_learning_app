@@ -275,7 +275,7 @@ export function TtsReader() {
               repeat: Infinity,
               duration: 1.2,
             }}
-            className="flex items-center gap-1 text-emerald-500 text-[13px] font-extrabold"
+            className="flex items-center gap-1 text-success text-[13px] font-extrabold"
           >
             <Volume2 />
             <span>Playing speech...</span>

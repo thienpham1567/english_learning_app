@@ -105,7 +105,7 @@ function WordDiff({ original, rewritten }: { original: string; rewritten: string
           return (
             <span
               key={i}
-              className="text-emerald-500 rounded font-medium"
+              className="text-success rounded font-medium"
               style={{
                 backgroundColor: "color-mix(in srgb, var(--success) 10%, transparent)",
                 padding: "1px 3px",
@@ -194,7 +194,7 @@ function ChangesPanel({ changes }: { changes: ParaphraseResponse["changes"] }) {
               <div>
                 <span className="text-text-muted line-through">{change.original}</span>
                 {" → "}
-                <span className="text-emerald-500 font-bold">{change.replacement}</span>
+                <span className="text-success font-bold">{change.replacement}</span>
               </div>
               <div className="text-text-secondary text-xs mt-0.5">{change.reason}</div>
               {change.definitionVi && (

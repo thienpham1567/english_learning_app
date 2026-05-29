@@ -62,7 +62,7 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
     <div className="flex flex-col h-full h-[0px] flex-1 overflow-auto">
       <div className="p-4 grid gap-4 w-[720px]">
         {cheatTriggered && (
-          <div className="flex items-start gap-3 rounded-xl py-3 px-4 bg-amber-500/10 text-amber-700 border border-amber-500/20">
+          <div className="flex items-start gap-3 rounded-xl py-3 px-4 bg-warning/10 text-warning border border-warning/20">
             <AlertTriangle className="shrink-0 mt-0.5" size={18} />
             <div>
               <div className="font-semibold text-sm">Unusual activity detected during the test</div>
@@ -89,7 +89,7 @@ export default async function MockResultPage({ params }: { params: Promise<{ id:
             </div>
             <div className="text-text-muted">/ 990</div>
             <div className="mt-2">
-              <span className="bg-amber-500/15 text-amber-600 py-0.5 px-2 inline-block">
+              <span className="bg-warning/15 text-warning py-0.5 px-2 inline-block">
                 {bandLabel(total)}
               </span>
             </div>

@@ -52,24 +52,24 @@ export function ReviewTabs({
           return (
             <Card shadowSize="sm" className="p-4" key={q.id}>
               <div className="flex gap-2 items-center mb-2.5 flex-wrap">
-                <span className="bg-blue-500/10 border border-blue-500/20 text-blue-600 py-0.5 px-2 rounded-md font-bold text-xs inline-block">
+                <span className="bg-info/10 border border-info/20 text-info py-0.5 px-2 rounded-md font-bold text-xs inline-block">
                   Part {q.part}
                 </span>
                 <span className="bg-accent/15 border border-accent/30 text-accent py-0.5 px-2 rounded-md font-bold text-xs inline-block">
                   Question {q.number}
                 </span>
                 {a?.flagged && (
-                  <span className="bg-amber-500/10 border border-amber-500/20 text-amber-600 py-0.5 px-2 rounded-md font-bold text-xs inline-block">
+                  <span className="bg-warning/10 border border-warning/20 text-warning py-0.5 px-2 rounded-md font-bold text-xs inline-block">
                     Bookmarked
                   </span>
                 )}
                 {a?.isCorrect === false && (
-                  <span className="bg-red-500/10 border border-red-500/20 text-red-600 py-0.5 px-2 rounded-md font-bold text-xs inline-block">
+                  <span className="bg-error/10 border border-error/20 text-error py-0.5 px-2 rounded-md font-bold text-xs inline-block">
                     Incorrect
                   </span>
                 )}
                 {a?.isCorrect === true && (
-                  <span className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-600 py-0.5 px-2 rounded-md font-bold text-xs inline-block">
+                  <span className="bg-success/10 border border-success/20 text-success py-0.5 px-2 rounded-md font-bold text-xs inline-block">
                     Correct
                   </span>
                 )}
@@ -87,14 +87,14 @@ export function ReviewTabs({
                   const isCorrect = i === q.correctIndex;
                   const isPick = i === userPick;
                   const bg = isCorrect
-                    ? "rgba(16,185,129,0.12)"
+                    ? "color-mix(in srgb, var(--success) 12%, transparent)"
                     : isPick
-                      ? "rgba(239,68,68,0.12)"
+                      ? "color-mix(in srgb, var(--error) 12%, transparent)"
                       : "transparent";
                   const border = isCorrect
-                    ? "border-emerald-500/30"
+                    ? "border-success/30"
                     : isPick
-                      ? "border-red-500/30"
+                      ? "border-error/30"
                       : "border-transparent";
                   return (
                     <div
@@ -110,12 +110,12 @@ export function ReviewTabs({
                       </span>
                       <div className="flex gap-1.5">
                         {isCorrect && (
-                          <span className="bg-emerald-500/10 border border-emerald-500/25 text-emerald-600 py-0.5 px-2 rounded-md text-xs font-bold inline-block ml-2">
+                          <span className="bg-success/10 border border-success/25 text-success py-0.5 px-2 rounded-md text-xs font-bold inline-block ml-2">
                             Correct Answer
                           </span>
                         )}
                         {isPick && !isCorrect && (
-                          <span className="bg-red-500/10 border border-red-500/25 text-red-600 py-0.5 px-2 rounded-md text-xs font-bold inline-block ml-2">
+                          <span className="bg-error/10 border border-error/25 text-error py-0.5 px-2 rounded-md text-xs font-bold inline-block ml-2">
                             Your Answer
                           </span>
                         )}

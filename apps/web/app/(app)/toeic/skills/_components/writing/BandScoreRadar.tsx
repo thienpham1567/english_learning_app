@@ -64,7 +64,7 @@ export function BandScoreRadar({ scores, size = 200 }: Props) {
       {/* Data polygon */}
       <polygon
         points={polygonPoints}
-        fill="rgba(154,177,122,0.15)"
+        fill="color-mix(in srgb, var(--success) 15%, transparent)"
         stroke="var(--accent)"
         strokeWidth={2}
       />

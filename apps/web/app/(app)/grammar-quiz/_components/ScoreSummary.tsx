@@ -41,7 +41,7 @@ export function ScoreSummary({
 
   const icon =
     pct >= 90 ? (
-      <Trophy className="text-emerald-500" />
+      <Trophy className="text-success" />
     ) : pct >= 70 ? (
       <Smile className="text-accent" />
     ) : pct >= 50 ? (
@@ -70,7 +70,7 @@ export function ScoreSummary({
       style={{ padding: "36px 24px" }}
     >
       <div
-        className="absolute w-[220px] h-[220px] rounded-full"
+        className="absolute w-[220px] h-[220px]"
         style={{
           left: "50%",
           top: "20%",
@@ -110,9 +110,9 @@ export function ScoreSummary({
         transition={{ delay: 0.1 }}
         className="rounded-xl flex items-center justify-between"
         style={{
-          background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+          background: "var(--accent)",
           padding: "20px 24px",
-          boxShadow: "0 4px 14px var(--accent-muted)",
+          boxShadow: "var(--shadow-sm)",
           color: "var(--text-on-accent)",
         }}
       >
@@ -155,10 +155,10 @@ export function ScoreSummary({
           className="mt-3 items-center gap-1.5 rounded-full text-[13px] font-extrabold"
           style={{
             display: "inline-flex",
-            background: "linear-gradient(135deg, var(--fire), var(--xp))",
+            background: "var(--fire)",
             padding: "6px 18px",
             color: "var(--text-on-accent)",
-            boxShadow: "0 2px 10px rgba(245, 158, 11, 0.25)",
+            boxShadow: "var(--shadow-sm)",
           }}
         >
           <Flame /> Best Streak: x{maxCombo}
@@ -185,7 +185,7 @@ export function ScoreSummary({
                 className="flex items-center justify-between rounded-lg border-2 border-border"
                 style={{
                   padding: "12px 14px",
-                  background: isWeak ? "rgba(239, 68, 68, 0.03)" : "var(--surface-alt)",
+                  background: isWeak ? "color-mix(in srgb, var(--error) 3%, transparent)" : "var(--surface-alt)",
                 }}
               >
                 <div className="flex items-center gap-2 w-[0px]">
@@ -236,8 +236,8 @@ export function ScoreSummary({
           className="mt-5 rounded-lg text-center"
           style={{
             padding: 14,
-            background: "rgba(245, 158, 11, 0.05)",
-            border: "1px solid color-mix(in srgb, var(--warning) 25%, var(--border))",
+            background: "color-mix(in srgb, var(--warning) 5%, transparent)",
+            border: "2px solid color-mix(in srgb, var(--warning) 25%, var(--border))",
           }}
         >
           <p
@@ -254,7 +254,7 @@ export function ScoreSummary({
             style={{
               background: "var(--warning)",
               color: "var(--text-on-accent)",
-              boxShadow: "0 2px 6px rgba(245, 158, 11, 0.2)",
+              boxShadow: "var(--shadow-sm)",
               display: "inline-flex",
             }}
           >
@@ -271,7 +271,7 @@ export function ScoreSummary({
           onClick={onRetry}
           className="flex-1 h-[40px] rounded-lg bg-surface text-text-primary font-extrabold cursor-pointer flex items-center justify-center gap-1.5"
           style={{
-            border: "1.5px solid var(--border)",
+            border: "2px solid var(--border)",
             fontSize: 13.5,
             boxShadow: "var(--shadow-sm)",
           }}
@@ -285,10 +285,10 @@ export function ScoreSummary({
           onClick={onNewQuiz}
           className="flex-1 h-[40px] rounded-lg border-none font-extrabold cursor-pointer flex items-center justify-center gap-1.5"
           style={{
-            background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+            background: "var(--accent)",
             color: "var(--text-on-accent)",
             fontSize: 13.5,
-            boxShadow: "0 2px 8px var(--accent-muted)",
+            boxShadow: "var(--shadow-sm)",
           }}
         >
           <Star /> New Quiz

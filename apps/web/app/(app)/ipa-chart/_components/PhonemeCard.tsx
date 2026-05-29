@@ -30,7 +30,7 @@ export function PhonemeCard({ phoneme, accent, onSpeak, isBusy, index }: Props) 
 
   const accentColor = isVowel
     ? isDiphthong
-      ? "var(--tertiary, #8B5CF6)"
+      ? "var(--tertiary)"
       : isLong
         ? "var(--info)"
         : "var(--accent)"

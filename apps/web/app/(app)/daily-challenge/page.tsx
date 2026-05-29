@@ -296,7 +296,7 @@ export default function DailyChallengePage() {
 
             <div className="relative z-10 p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
               <div className="flex items-center gap-4">
-                <div className="w-13 h-13 rounded-2xl border-2 border-accent/20 bg-gradient-to-br from-accent to-fire text-white flex items-center justify-center shrink-0 shadow-sm">
+                <div className="w-13 h-13 rounded-2xl border-2 border-accent/20 bg-accent text-white flex items-center justify-center shrink-0 shadow-sm">
                   <Flame className="h-7 w-7 fill-current" />
                 </div>
                 <div className="flex flex-col">
@@ -317,7 +317,7 @@ export default function DailyChallengePage() {
                 <motion.div
                   initial={{ scale: 0.9 }}
                   animate={{ scale: 1 }}
-                  className="flex items-center gap-2.5 bg-ink/5 backdrop-blur-sm border-2 border-border px-4 py-2 rounded-xl shadow-sm font-mono text-sm font-black text-ink shrink-0 self-start sm:self-center"
+                  className="flex items-center gap-2.5 bg-ink/5 border-2 border-border px-4 py-2 rounded-xl shadow-sm font-mono text-sm font-black text-ink shrink-0 self-start sm:self-center"
                 >
                   <Clock className="h-4 w-4 text-accent animate-pulse" />
                   <span>{formattedTime}</span>

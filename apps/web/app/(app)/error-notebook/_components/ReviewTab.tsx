@@ -64,7 +64,7 @@ export function ReviewTab() {
     return (
       <m.div initial={{ opacity: 0, y: 15 }} animate={{ opacity: 1, y: 0 }}>
         <Card className="py-16 px-6 text-center" shadowSize="default">
-          <div className="flex justify-center mb-4 text-emerald-450">
+          <div className="flex justify-center mb-4 text-success">
             <Sparkles className="h-12 w-12 animate-pulse" />
           </div>
           <h4 className="text-lg font-extrabold text-text-primary m-0 mb-2">
@@ -114,7 +114,7 @@ export function ReviewTab() {
                 srs.resetSession();
                 srs.fetchQueue();
               }}
-              className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl border-none bg-gradient-to-br from-accent to-accent-hover text-text-on-accent text-sm font-extrabold cursor-pointer font-body shadow-[0_4px_14px_var(--accent-muted)] transition-opacity hover:opacity-90"
+              className="flex items-center gap-1.5 px-5 py-2.5 rounded-xl border-2 border-border bg-accent text-text-on-accent text-sm font-extrabold cursor-pointer font-body shadow-sm transition-opacity hover:opacity-90"
             >
               <RefreshCw className="h-4 w-4" /> Continue
             </button>
@@ -201,9 +201,9 @@ export function ReviewTab() {
                         key={i}
                         className={`px-3.5 py-2 rounded-[10px] text-sm ${
                           isCorrect
-                            ? "bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] border-[1.5px] border-success text-success font-bold"
+                            ? "bg-[color-mix(in_srgb,var(--success)_8%,var(--surface))] border-2 border-success text-success font-bold"
                             : isWrong
-                              ? "bg-[color-mix(in_srgb,var(--error)_8%,var(--surface))] border-[1.5px] border-error text-error font-bold"
+                              ? "bg-[color-mix(in_srgb,var(--error)_8%,var(--surface))] border-2 border-error text-error font-bold"
                               : "bg-surface-alt border-2 border-border text-text-primary font-medium"
                         }`}
                       >
@@ -232,7 +232,7 @@ export function ReviewTab() {
                   whileHover={{ scale: 1.01 }}
                   whileTap={{ scale: 0.99 }}
                   onClick={handleReveal}
-                  className="w-full mt-3 flex items-center justify-center gap-2 py-3.5 px-5 rounded-lg border-none bg-gradient-to-br from-accent to-accent-hover text-text-on-accent text-[15px] font-extrabold cursor-pointer font-body shadow-[0_4px_14px_var(--accent-muted)]"
+                  className="w-full mt-3 flex items-center justify-center gap-2 py-3.5 px-5 rounded-lg border-2 border-border bg-accent text-text-on-accent text-[15px] font-extrabold cursor-pointer font-body shadow-sm"
                 >
                   <Lightbulb className="h-4 w-4" /> Reveal Answer
                 </m.button>

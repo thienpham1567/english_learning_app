@@ -119,8 +119,8 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
           <div
             className={`w-2.5 h-2.5 rounded-full shrink-0 ${
               ok
-                ? "bg-success shadow-[0_0_8px_var(--success)]"
-                : "bg-error shadow-[0_0_8px_var(--error)]"
+                ? "bg-success border-2 border-success"
+                : "bg-error border-2 border-error"
             }`}
           />
           <div className="flex flex-col items-start min-w-0">
@@ -212,7 +212,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
 
               {/* Static explanation */}
               {answer.explanation && (
-                <div className="flex gap-2.5 items-start p-1.5 mt-0.5 bg-surface-alt border border-border/20 rounded-xl">
+                <div className="flex gap-2.5 items-start p-1.5 mt-0.5 bg-surface-alt border-2 border-border/20 rounded-xl">
                   <Lightbulb className="text-accent h-4 w-4 shrink-0 mt-0.5" />
                   <p className="leading-relaxed text-text-secondary text-xs font-semibold m-0 break-words">
                     {answer.explanation}
@@ -231,7 +231,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                     fetchAIExplanation();
                   }}
                   disabled={aiLoading}
-                  className="inline-flex items-center gap-1.5 py-2.5 px-4.5 rounded-xl border border-accent/20 bg-accent/5 hover:bg-accent/10 text-accent text-[11px] font-black cursor-pointer shadow-sm mt-1.5 w-fit"
+                  className="inline-flex items-center gap-1.5 py-2.5 px-4.5 rounded-xl border-2 border-accent/20 bg-accent/5 hover:bg-accent/10 text-accent text-[11px] font-black cursor-pointer shadow-sm mt-1.5 w-fit"
                   style={{
                     cursor: aiLoading ? "wait" : "pointer",
                   }}
@@ -255,7 +255,7 @@ function AnswerDetailCard({ answer, index }: { answer: ExerciseAnswer; index: nu
                 <m.div
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="mt-1.5 rounded-xl p-4 bg-gradient-to-r from-accent-light/40 to-surface border-2 border-accent/20 shadow-sm flex flex-col gap-1.5"
+                  className="mt-1.5 rounded-xl p-4 bg-accent-light/40 border-2 border-accent/20 shadow-sm flex flex-col gap-1.5"
                 >
                   <div className="flex items-center gap-1.5">
                     <Lightbulb size={13} className="text-accent fill-current" />
@@ -362,7 +362,7 @@ export function ChallengeResults({
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             {[
               {
-                icon: <CheckCircle className="text-emerald-500 h-4.5 w-4.5" />,
+                icon: <CheckCircle className="text-success h-4.5 w-4.5" />,
                 label: "Correct",
                 value: correctCount,
               },
@@ -420,7 +420,7 @@ export function ChallengeResults({
                   {b.icon === "Trophy" ? (
                     <Trophy className="text-accent h-4 w-4 shrink-0" />
                   ) : (
-                    <Flame className="text-orange-500 h-4 w-4 shrink-0" />
+                    <Flame className="text-fire h-4 w-4 shrink-0" />
                   )}
                   <span>{b.label}</span>
                 </span>

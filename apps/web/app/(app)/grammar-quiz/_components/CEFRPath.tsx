@@ -20,9 +20,9 @@ const TIER_COLORS: Record<string, string> = {
 };
 
 const TIER_GLOWS: Record<string, string> = {
-  easy: "rgba(16, 185, 129, 0.2)",
+  easy: "color-mix(in srgb, var(--success) 20%, transparent)",
   medium: "color-mix(in srgb, var(--accent) 20%, transparent)",
-  hard: "rgba(239, 68, 68, 0.2)",
+  hard: "color-mix(in srgb, var(--error) 20%, transparent)",
 };
 
 type Props = {
@@ -53,7 +53,7 @@ export function CEFRPath({
       className="anim-fade-up w-full max-w-[480px] mx-auto text-center relative overflow-hidden py-8 px-6"
     >
       <div
-        className="absolute w-[180px] h-[180px] rounded-full left-1/2 top-0 -translate-x-1/2 pointer-events-none"
+        className="absolute w-[180px] h-[180px] left-1/2 top-0 -translate-x-1/2 pointer-events-none"
         style={{
           background: "radial-gradient(circle, var(--accent) 5%, transparent 70%)",
         }}
@@ -123,7 +123,7 @@ export function CEFRPath({
                     style={{
                       border: `2px solid ${isSelected ? tierColor : "var(--border)"}`,
                       background: isSelected ? tierColor : "var(--surface-alt)",
-                      boxShadow: isSelected ? `0 0 10px ${TIER_GLOWS[level.tier]}` : "none",
+                      boxShadow: isSelected ? `2px 2px 0 ${TIER_GLOWS[level.tier]}` : "none",
                     }}
                   >
                     {isSelected ? (
@@ -171,7 +171,7 @@ export function CEFRPath({
 
       {/* Timer toggle */}
       {onTimedModeChange && (
-        <div className="mt-5 flex items-center justify-center gap-2.5 pt-4 border-t border-dashed border-border">
+        <div className="mt-5 flex items-center justify-center gap-2.5 pt-4 border-t-2 border-dashed border-border">
           <Clock
             className="text-sm"
             style={{ color: timedMode ? "var(--accent)" : "var(--text-muted)" }}
@@ -202,9 +202,9 @@ export function CEFRPath({
         whileTap={{ scale: 0.98 }}
         onClick={onStart}
         disabled={isLoading}
-        className="mt-6 h-11 w-full rounded-lg border-none font-extrabold cursor-pointer flex items-center justify-center gap-1.5 text-[14.5px] text-[var(--text-on-accent)] shadow-[0_4px_12px_var(--accent-muted)]"
+        className="mt-6 h-11 w-full rounded-lg border-2 border-border font-extrabold cursor-pointer flex items-center justify-center gap-1.5 text-[14.5px] text-[var(--text-on-accent)] shadow-sm"
         style={{
-          background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+          background: "var(--accent)",
         }}
       >
         {isLoading ? (

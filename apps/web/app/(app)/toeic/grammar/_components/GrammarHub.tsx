@@ -72,8 +72,8 @@ export function GrammarHub({ skills, mistakeCount }: { skills: SkillRow[]; mista
                 onClick={() => startDrill(s.skill)}
                 className="py-1 px-2 rounded-md bg-transparent text-left text-[13px] cursor-pointer"
                 style={{
-                  border: "1px solid var(--border-color, #1f2937)",
-                  color: "var(--text-primary, #fff)",
+                  border: "1px solid var(--border-color, var(--border))",
+                  color: "var(--text-primary, var(--text-primary))",
                 }}
               >
                 {getSkillLabel(s.skill as ToeicSkill)} · {Math.round(s.proficiency * 100)}/100

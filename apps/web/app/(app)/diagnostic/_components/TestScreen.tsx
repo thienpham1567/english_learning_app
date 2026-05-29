@@ -74,7 +74,7 @@ export function TestScreen({
                 className="text-[10px] font-extrabold bg-surface rounded-full py-0.5 px-2"
                 style={{
                   color: levelColor,
-                  border: `1px solid ${levelColor}`,
+                  border: `2px solid ${levelColor}`,
                 }}
               >
                 {question.level}
@@ -91,16 +91,16 @@ export function TestScreen({
               initial={{ width: 0 }}
               animate={{ width: `${progressPct}%` }}
               transition={{ type: "spring", stiffness: 80, damping: 15 }}
-              className="absolute left-0 top-0 bottom-0 rounded-full shadow-[0_0_8px_var(--accent)]"
+              className="absolute left-0 top-0 bottom-0 rounded-full"
               style={{
-                background: "linear-gradient(90deg, var(--accent), var(--xp))",
+                background: "var(--accent)",
               }}
             />
           </div>
         </div>
 
         {/* Question excerpt */}
-        <div className="rounded-xl bg-surface p-6 shadow-sm border border-border border-l-4 border-l-accent">
+        <div className="rounded-xl bg-surface p-6 shadow-sm border-2 border-border border-l-4 border-l-accent">
           <p className="m-0 text-[16.5px] font-semibold leading-[1.8] text-text-primary break-words">
             {question.question}
           </p>
@@ -118,8 +118,8 @@ export function TestScreen({
                 onClick={() => onSelectOption(i)}
                 className={`flex items-center gap-3 py-3.5 px-4.5 rounded-lg cursor-pointer text-left text-[14.5px] transition-all duration-200 ${
                   isSelected
-                    ? "border-2 border-accent bg-accent-light font-extrabold text-ink shadow-[0_4px_12px_var(--accent-muted)]"
-                    : "border border-border bg-surface font-semibold text-text-primary shadow-sm"
+                    ? "border-2 border-accent bg-accent-light font-extrabold text-ink shadow-sm"
+                    : "border-2 border-border bg-surface font-semibold text-text-primary shadow-sm"
                 }`}
               >
                 {/* Circle label */}
@@ -158,15 +158,15 @@ export function TestScreen({
             whileTap={selectedOption !== null ? { scale: 0.98 } : {}}
             disabled={selectedOption === null}
             onClick={onSubmit}
-            className={`flex-1 h-12 rounded-lg border-none text-[15px] font-extrabold transition-all duration-200 ${
+            className={`flex-1 h-12 rounded-lg border-2 border-border text-[15px] font-extrabold transition-all duration-200 ${
               selectedOption === null
                 ? "bg-border text-text-muted cursor-default"
-                : "text-[var(--text-on-accent)] cursor-pointer shadow-[0_4px_14px_var(--accent-muted)]"
+                : "text-[var(--text-on-accent)] cursor-pointer shadow-sm"
             }`}
             style={{
               background:
                 selectedOption !== null
-                  ? "linear-gradient(135deg, var(--accent), var(--accent-hover))"
+                  ? "var(--accent)"
                   : undefined,
             }}
           >
@@ -184,7 +184,7 @@ export function TestScreen({
             whileTap={{ scale: 0.97 }}
             type="button"
             onClick={onSkip}
-            className="bg-surface-alt border border-border cursor-pointer text-[13px] font-bold text-text-secondary px-5 h-12 rounded-lg shadow-sm transition-all duration-200 hover:bg-surface-hover"
+            className="bg-surface-alt border-2 border-border cursor-pointer text-[13px] font-bold text-text-secondary px-5 h-12 rounded-lg shadow-sm transition-all duration-200 hover:bg-surface-hover"
           >
             Skip
           </m.button>

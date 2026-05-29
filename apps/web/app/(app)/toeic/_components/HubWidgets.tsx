@@ -187,12 +187,12 @@ export async function HubWidgets() {
 
   const priorityColors = (p: PlanItem["priority"]) =>
     p === "high"
-      ? { bg: "rgba(239, 68, 68, 0.08)", text: "var(--error)", border: "rgba(239, 68, 68, 0.2)" }
+      ? { bg: "color-mix(in srgb, var(--error) 8%, transparent)", text: "var(--error)", border: "color-mix(in srgb, var(--error) 20%, transparent)" }
       : p === "medium"
         ? {
-            bg: "rgba(245, 158, 11, 0.08)",
+            bg: "color-mix(in srgb, var(--warning) 8%, transparent)",
             text: "var(--warning)",
-            border: "rgba(245, 158, 11, 0.2)",
+            border: "color-mix(in srgb, var(--warning) 20%, transparent)",
           }
         : { bg: "var(--surface-alt)", text: "var(--text-muted)", border: "var(--border)" };
 

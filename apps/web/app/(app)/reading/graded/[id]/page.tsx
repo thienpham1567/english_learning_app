@@ -132,7 +132,7 @@ export default function GradedPassagePage() {
               </div>
               {marked && (
                 <span
-                  className="m-0 rounded-lg border-none text-emerald-500 font-semibold ml-auto flex items-center gap-1 text-xs py-0.5 px-2"
+                  className="m-0 rounded-lg border-none text-success font-semibold ml-auto flex items-center gap-1 text-xs py-0.5 px-2"
                   style={{
                     background: "color-mix(in srgb, var(--success) 8%, transparent)",
                   }}

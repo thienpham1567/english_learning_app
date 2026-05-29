@@ -36,12 +36,12 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
             className="text-center relative overflow-hidden py-10 px-6 rounded-xl border-2"
             style={{
               background:
-                "linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, var(--surface)), var(--surface))",
+                "color-mix(in srgb, var(--accent) 8%, var(--surface))",
             }}
           >
             {/* Radial ambient glow matching the CEFR level color */}
             <div
-              className="absolute w-[280px] h-[280px] rounded-full left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
+              className="absolute w-[280px] h-[280px] left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none"
               style={{
                 background: `radial-gradient(circle, ${cefrColor}12 0%, transparent 70%)`,
               }}
@@ -63,17 +63,17 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
               className="font-black font-display text-[68px] tracking-tight leading-none my-3"
               style={{
                 color: cefrColor,
-                textShadow: `0 8px 24px ${cefrColor}33`,
+                textShadow: `4px 4px 0 ${cefrColor}33`,
               }}
             >
               {result.overallCefr}
             </m.div>
 
             <div className="flex justify-center gap-3 mt-4">
-              <span className="rounded-full text-xs font-extrabold text-accent py-1 px-3.5 border border-accent bg-accent-light shadow-sm">
+              <span className="rounded-full text-xs font-extrabold text-accent py-1 px-3.5 border-2 border-accent bg-accent-light shadow-sm">
                 Confidence: {Math.round(result.confidence * 100)}%
               </span>
-              <span className="rounded-full text-xs font-extrabold text-[var(--xp)] py-1 px-3.5 border border-[var(--xp)] bg-[rgba(245,158,11,0.08)] shadow-sm">
+              <span className="rounded-full text-xs font-extrabold text-[var(--xp)] py-1 px-3.5 border-2 border-[var(--xp)] bg-[color-mix(in srgb, var(--warning) 8%, transparent)] shadow-sm">
                 +{result.xpAwarded} XP earned
               </span>
             </div>
@@ -112,7 +112,7 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
                           className="text-[11px] font-extrabold bg-surface-alt rounded-full py-0.5 px-2"
                           style={{
                             color: skillColor,
-                            border: `1px solid ${skillColor}`,
+                            border: `2px solid ${skillColor}`,
                           }}
                         >
                           {skillResult.cefr}
@@ -132,7 +132,7 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
                         className="absolute left-0 top-0 bottom-0 rounded-full"
                         style={{
                           background: skillColor,
-                          boxShadow: `0 0 6px ${skillColor}33`,
+                          boxShadow: "none",
                         }}
                       />
                     </div>
@@ -149,9 +149,9 @@ export function ResultsScreen({ result, onGoHome, onViewProgress }: Props) {
             whileHover={{ scale: 1.02, y: -1 }}
             whileTap={{ scale: 0.98 }}
             onClick={onGoHome}
-            className="flex-1 h-12 rounded-lg border-none text-[15px] font-extrabold cursor-pointer flex items-center justify-center gap-1.5 text-[var(--text-on-accent)] shadow-[0_4px_14px_var(--accent-muted)]"
+            className="flex-1 h-12 rounded-lg border-2 border-border text-[15px] font-extrabold cursor-pointer flex items-center justify-center gap-1.5 text-[var(--text-on-accent)] shadow-sm"
             style={{
-              background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+              background: "var(--accent)",
             }}
           >
             Go to Dashboard

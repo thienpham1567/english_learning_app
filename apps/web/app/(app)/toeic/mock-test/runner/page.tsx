@@ -211,7 +211,7 @@ function MockRunner() {
   return (
     <div className="p-4 flex-1">
       <div className="flex justify-between items-center mb-3">
-        <span className="bg-emerald-500/15 text-emerald-600 py-0.5 px-2 inline-block">
+        <span className="bg-success/15 text-success py-0.5 px-2 inline-block">
           {sectionLabel}
         </span>
         <span className="text-text-muted">

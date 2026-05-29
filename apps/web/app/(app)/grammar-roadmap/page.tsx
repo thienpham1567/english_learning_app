@@ -236,7 +236,7 @@ export default function GrammarRoadmapPage() {
                 </div>
                 <div className="flex gap-4 flex-wrap mb-3">
                   <StatPill
-                    icon={<CheckCircle className="text-emerald-500" />}
+                    icon={<CheckCircle className="text-success" />}
                     label="Completed"
                     value={`${totalCompleted}/${totalTopics}`}
                   />
@@ -606,12 +606,12 @@ function CategoryCard({
                   className="flex items-center gap-[5px] py-1.5 px-3 text-xs font-bold cursor-pointer rounded-[10px] transition-all duration-150"
                   style={{
                     border: isDone
-                      ? "1px solid rgba(16, 185, 129, 0.3)"
+                      ? "1px solid color-mix(in srgb, var(--success) 30%, transparent)"
                       : isInProg
                         ? "1px solid color-mix(in srgb, var(--accent) 30%, transparent)"
                         : "1px solid var(--border)",
                     background: isDone
-                      ? "rgba(16, 185, 129, 0.06)"
+                      ? "color-mix(in srgb, var(--success) 6%, transparent)"
                       : isInProg
                         ? "color-mix(in srgb, var(--accent) 5%, var(--surface))"
                         : "var(--surface)",
@@ -623,7 +623,7 @@ function CategoryCard({
                   }}
                 >
                   {isDone ? (
-                    <CheckCircle className="text-[11px] text-emerald-500" />
+                    <CheckCircle className="text-[11px] text-success" />
                   ) : isInProg ? (
                     <Zap className="text-[11px] text-accent" />
                   ) : (
@@ -632,10 +632,10 @@ function CategoryCard({
                       style={{
                         background:
                           topic.level === "A2"
-                            ? "rgba(16, 185, 129, 0.1)"
+                            ? "color-mix(in srgb, var(--success) 10%, transparent)"
                             : topic.level === "B1"
-                              ? "rgba(59, 130, 246, 0.1)"
-                              : "rgba(245, 158, 11, 0.1)",
+                              ? "color-mix(in srgb, var(--info) 10%, transparent)"
+                              : "color-mix(in srgb, var(--warning) 10%, transparent)",
                         color:
                           topic.level === "A2"
                             ? "var(--success)"

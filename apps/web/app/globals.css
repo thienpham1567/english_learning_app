@@ -795,7 +795,7 @@ button:focus-visible {
 
 /* ── Global Custom Input/Textarea Enhancements ── */
 .app-textarea, .app-input {
-  border: 1px solid var(--border) !important;
+  border: 2px solid var(--border) !important;
   border-radius: var(--radius-lg) !important;
   color: var(--text-primary) !important;
   background: var(--surface-alt) !important;
@@ -804,7 +804,7 @@ button:focus-visible {
 
 .app-textarea:focus, .app-input:focus {
   border-color: var(--accent) !important;
-  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 15%, transparent) !important;
+  box-shadow: var(--shadow-sm) !important;
   background: var(--surface) !important;
   outline: none !important;
 }

@@ -68,9 +68,9 @@ export function SynonymAntonym({ data, instruction, onAnswer, disabled }: Props)
             gap: 6,
             padding: "4px 14px",
             borderRadius: 99,
-            background: isSynonym ? "rgba(16, 185, 129, 0.1)" : "rgba(239, 68, 68, 0.08)",
+            background: isSynonym ? "color-mix(in srgb, var(--success) 10%, transparent)" : "color-mix(in srgb, var(--error) 8%, transparent)",
             border: `1px solid ${
-              isSynonym ? "rgba(16, 185, 129, 0.25)" : "rgba(239, 68, 68, 0.2)"
+              isSynonym ? "color-mix(in srgb, var(--success) 25%, transparent)" : "color-mix(in srgb, var(--error) 20%, transparent)"
             }`,
             fontSize: 11,
             fontWeight: 800,

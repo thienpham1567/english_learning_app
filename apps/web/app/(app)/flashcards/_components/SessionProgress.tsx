@@ -51,7 +51,7 @@ export function SessionProgress({ current, total, startTime }: Props) {
           initial={{ width: 0 }}
           animate={{ width: `${pct}%` }}
           transition={{ type: "spring", stiffness: 80, damping: 15 }}
-          className="absolute left-0 top-0 bottom-0 rounded-full shadow-[0_0_6px_var(--accent)]"
+          className="absolute left-0 top-0 bottom-0 rounded-full shadow-sm"
           style={{
             background: "linear-gradient(90deg, var(--accent), var(--xp))",
           }}

@@ -130,8 +130,8 @@ export function TopicGrid({
                 className="relative grid w-11 h-11 rounded-xl text-lg shrink-0 place-items-center text-white shadow-sm transition-transform duration-200 group-hover:scale-105 border-2 border-white/10"
                 style={{
                   background: allDone
-                    ? "linear-gradient(135deg, var(--success), color-mix(in srgb, var(--success) 70%, black))"
-                    : `linear-gradient(135deg, ${cat.color}, color-mix(in srgb, ${cat.color} 70%, black))`,
+                    ? "var(--success)"
+                    : cat.color,
                 }}
               >
                 {allDone ? <CircleCheckBig size={20} /> : cat.icon}
@@ -156,7 +156,7 @@ export function TopicGrid({
                         ? `W${weeks[0]}`
                         : `W${weeks[0]}-${weeks[weeks.length - 1]}`;
                     return (
-                      <span className="text-[8px] font-black rounded-md px-1.5 py-px bg-accent/10 text-accent border border-accent/15 shrink-0 uppercase tracking-wider">
+                      <span className="text-[8px] font-black rounded-md px-1.5 py-px bg-accent/10 text-accent border-2 border-accent/15 shrink-0 uppercase tracking-wider">
                         📍 {label}
                       </span>
                     );
@@ -172,8 +172,8 @@ export function TopicGrid({
                       className="absolute left-0 top-0 bottom-0 h-full rounded-full"
                       style={{
                         background: allDone
-                          ? "linear-gradient(90deg, var(--success), color-mix(in srgb, var(--success) 65%, white))"
-                          : `linear-gradient(90deg, ${cat.color}, color-mix(in srgb, ${cat.color} 65%, white))`,
+                          ? "var(--success)"
+                          : cat.color,
                       }}
                     />
                   </div>
@@ -279,7 +279,7 @@ export function TopicGrid({
                       )}
 
                       {isRecommended && (
-                        <span className="text-[9px] rounded-lg font-extrabold py-0.5 px-2 bg-warning/12 text-warning inline-flex items-center gap-1 shadow-[0_0_6px_rgba(245,158,11,0.25)]">
+                        <span className="text-[9px] rounded-lg font-extrabold py-0.5 px-2 bg-warning/12 text-warning inline-flex items-center gap-1 border-2 border-warning/20">
                           <Star size={8} className="fill-current" />
                           REC
                         </span>

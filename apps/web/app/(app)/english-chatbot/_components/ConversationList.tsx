@@ -46,7 +46,7 @@ export function ConversationList({ activeId }: Props) {
   return (
     <div className="relative flex h-full w-[230px] shrink-0 flex-col overflow-hidden border-r border-chat-sidebar-border bg-chat-sidebar-bg text-text-secondary">
       {/* Background glow overlay */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_120%_30%_at_50%_95%,rgba(192,125,43,0.05),transparent_70%)] z-0" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_120%_30%_at_50%_95%,color-mix(in srgb, var(--warning) 5%, transparent),transparent_70%)] z-0" />
 
       {/* Header */}
       <div className="relative z-10 px-4 pt-5 pb-3">
@@ -87,16 +87,16 @@ export function ConversationList({ activeId }: Props) {
               return (
                 <div
                   key={conv.id}
-                  className="flex items-center gap-2 rounded-xl border border-red-950 bg-red-950/20 p-2.5 animate-in fade-in zoom-in-95 duration-150"
+                  className="flex items-center gap-2 rounded-xl border border-error bg-error/10 p-2.5 animate-in fade-in zoom-in-95 duration-150"
                 >
-                  <span className="flex-1 text-xs font-semibold text-red-405">Delete?</span>
+                  <span className="flex-1 text-xs font-semibold text-error">Delete?</span>
                   <button
                     onClick={() => {
                       deleteConversation(conv.id);
                       setConfirmingId(null);
                       if (conv.id === activeId) router.push("/english-chatbot");
                     }}
-                    className="flex h-6 w-6 items-center justify-center rounded-lg bg-red-500 text-white hover:bg-red-650 transition-colors cursor-pointer"
+                    className="flex h-6 w-6 items-center justify-center rounded-lg bg-error text-white hover:bg-error transition-colors cursor-pointer"
                     aria-label="Confirm delete"
                   >
                     <Check className="h-3 w-3" />
@@ -136,7 +136,7 @@ export function ConversationList({ activeId }: Props) {
                     e.preventDefault();
                     setConfirmingId(conv.id);
                   }}
-                  className="absolute right-2.5 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-lg text-text-muted opacity-0 group-hover:opacity-100 hover:bg-chat-surface-hover hover:text-red-400 transition-all duration-200 cursor-pointer"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 flex h-6 w-6 items-center justify-center rounded-lg text-text-muted opacity-0 group-hover:opacity-100 hover:bg-chat-surface-hover hover:text-error transition-all duration-200 cursor-pointer"
                   aria-label="Delete conversation"
                 >
                   <Trash2 className="h-3.5 w-3.5" />

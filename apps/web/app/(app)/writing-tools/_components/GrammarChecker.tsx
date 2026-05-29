@@ -184,7 +184,7 @@ function ErrorCard({ error, onApply }: { error: GrammarError; onApply: () => voi
           </span>
           <span className="text-[13px] text-text-muted line-through">{error.original}</span>
           <span className="text-text-primary text-[13px]">→</span>
-          <span className="text-[13px] text-emerald-500 font-bold">{error.correction}</span>
+          <span className="text-[13px] text-success font-bold">{error.correction}</span>
         </div>
         <span className="text-text-muted text-[10px] shrink-0 ml-2">
           {expanded ? <ChevronDown /> : <ChevronRight />}
@@ -454,9 +454,9 @@ export function GrammarChecker() {
                   className="flex-1 flex items-center gap-2.5 py-5 px-6"
                   style={{ background: "color-mix(in srgb, var(--success) 6%, var(--surface))" }}
                 >
-                  <CircleCheckBig className="text-emerald-500 text-xl" />
+                  <CircleCheckBig className="text-success text-xl" />
                   <div>
-                    <div className="text-base font-black text-emerald-500 font-display">
+                    <div className="text-base font-black text-success font-display">
                       Excellent!
                     </div>
                     <div className="text-xs text-text-muted mt-0.5">No errors detected</div>

@@ -106,7 +106,7 @@ export function ErrorPatternSummary({ errors }: Props) {
                   )}
                   <Link
                     href={pattern.nextAction.href}
-                    className="inline-flex items-center gap-1 text-[11px] font-bold text-accent no-underline px-2.5 py-1 rounded-full border-[1.5px] border-accent/25 bg-accent/8 transition-all duration-150 hover:bg-accent/15"
+                    className="inline-flex items-center gap-1 text-[11px] font-bold text-accent no-underline px-2.5 py-1 rounded-full border-2 border-accent/25 bg-accent/8 transition-all duration-150 hover:bg-accent/15"
                   >
                     {actionLabel} <ChevronRight className="h-2.5 w-2.5" />
                   </Link>

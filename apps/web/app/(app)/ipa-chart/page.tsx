@@ -31,7 +31,7 @@ function groupBy<T extends IpaPhoneme>(
 const VOWEL_COLORS: Record<string, string> = {
   "monophthong-short": "var(--accent)",
   "monophthong-long": "var(--info)",
-  diphthong: "var(--tertiary, #8B5CF6)",
+  diphthong: "var(--tertiary)",
 };
 
 export default function IpaChartPage() {
@@ -132,7 +132,7 @@ export default function IpaChartPage() {
           <>
             <LegendDot color="var(--accent)" label="Short Vowels" />
             <LegendDot color="var(--info)" label="Long Vowels" />
-            <LegendDot color="var(--tertiary, #8B5CF6)" label="Diphthongs" />
+            <LegendDot color="var(--tertiary)" label="Diphthongs" />
           </>
         )}
         <span className="text-text-muted font-semibold text-[11px] ml-auto hidden sm:flex items-center gap-1.5">

@@ -155,8 +155,8 @@ export function ErrorToFlashcard({ errorId }: ErrorToFlashcardProps) {
               </div>
 
               {/* Tip */}
-              <div className="flex items-start gap-2 px-3 py-2 rounded-lg bg-amber-500/5 border border-amber-500/15">
-                <Lightbulb size={13} className="text-amber-500 shrink-0 mt-0.5" />
+              <div className="flex items-start gap-2 px-3 py-2 rounded-lg bg-xp/5 border border-warning/15">
+                <Lightbulb size={13} className="text-xp shrink-0 mt-0.5" />
                 <p className="text-[12px] text-text-secondary font-medium m-0 leading-relaxed">
                   {card.tip}
                 </p>
@@ -193,7 +193,7 @@ export function ErrorToFlashcard({ errorId }: ErrorToFlashcardProps) {
         <m.div
           initial={{ opacity: 0, scale: 0.97 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="mt-3 flex items-center gap-2 px-4 py-3 rounded-xl border-2 border-emerald-500/30 bg-emerald-500/8 text-xs font-bold text-emerald-600"
+          className="mt-3 flex items-center gap-2 px-4 py-3 rounded-xl border-2 border-success/30 bg-success/8 text-xs font-bold text-success"
         >
           <Check size={14} />
           <span className="flex-1">

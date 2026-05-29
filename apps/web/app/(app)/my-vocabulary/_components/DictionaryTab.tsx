@@ -33,9 +33,9 @@ type SavedWord = {
 const MASTERY_CONFIG: Record<string, { icon: React.ReactNode; label: string; colorClass: string }> =
   {
     new: {
-      icon: <Star size={11} className="fill-current text-amber-700 dark:text-amber-400" />,
+      icon: <Star size={11} className="fill-current text-warning dark:text-warning" />,
       label: "New",
-      colorClass: "text-amber-700 dark:text-amber-400 border-amber-500/30 bg-amber-500/5",
+      colorClass: "text-warning dark:text-warning border-warning/30 bg-xp/5",
     },
     learning: {
       icon: <RefreshCw size={11} className="text-sky-700 dark:text-sky-400" />,
@@ -43,9 +43,9 @@ const MASTERY_CONFIG: Record<string, { icon: React.ReactNode; label: string; col
       colorClass: "text-sky-700 dark:text-sky-400 border-sky-500/30 bg-sky-500/5",
     },
     mastered: {
-      icon: <CircleCheckBig size={11} className="text-emerald-700 dark:text-emerald-400" />,
+      icon: <CircleCheckBig size={11} className="text-success dark:text-success" />,
       label: "Mastered",
-      colorClass: "text-emerald-700 dark:text-emerald-400 border-emerald-500/30 bg-emerald-500/5",
+      colorClass: "text-success dark:text-success border-success/30 bg-success/5",
     },
   };
 

@@ -34,7 +34,7 @@ export function DiagnosticResult({
           {weakest.map(([skill, val]) => (
             <span
               key={skill}
-              className="bg-red-500/10 border border-red-500/20 text-destructive text-xs font-extrabold py-1 px-2.5 rounded-lg"
+              className="bg-error/10 border border-error/20 text-destructive text-xs font-extrabold py-1 px-2.5 rounded-lg"
             >
               {getSkillLabel(skill as ToeicSkill)} · {val}/100
             </span>
@@ -49,7 +49,7 @@ export function DiagnosticResult({
           {strongest.map(([skill, val]) => (
             <span
               key={skill}
-              className="bg-emerald-500/10 border border-emerald-500/20 text-success text-xs font-extrabold py-1 px-2.5 rounded-lg"
+              className="bg-success/10 border border-success/20 text-success text-xs font-extrabold py-1 px-2.5 rounded-lg"
             >
               {getSkillLabel(skill as ToeicSkill)} · {val}/100
             </span>

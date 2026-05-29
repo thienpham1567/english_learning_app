@@ -76,7 +76,7 @@ export function ChatInputBar({
   }
 
   return (
-    <div className="flex-shrink-0 px-4 py-4 md:px-6 md:pb-6 z-25 border-t-2 border-border bg-chat-surface/60 backdrop-blur-md">
+    <div className="flex-shrink-0 px-4 py-4 md:px-6 md:pb-6 z-25 border-t-2 border-border bg-chat-surface">
       <div className="mx-auto max-w-3xl flex flex-col gap-3">
         {/* Input Bar Container */}
         <div className="flex items-end gap-2.5 rounded-2xl border-2 border-border bg-chat-input-bg p-3 shadow-md focus-within:border-accent/40 focus-within:ring-1 focus-within:ring-accent/40 transition-all duration-200">
@@ -112,7 +112,7 @@ export function ChatInputBar({
               disabled={isLoading || voice.isTranscribing}
               className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full border transition-all duration-200 cursor-pointer shadow-sm relative active:scale-95 ${
                 voice.isListening
-                  ? "border-red-500 text-red-500 bg-red-950/20 animate-pulse"
+                  ? "border-error text-error bg-error/10 animate-pulse"
                   : voice.isTranscribing
                     ? "border-accent text-accent bg-accent/10"
                     : "border-border text-text-secondary bg-chat-surface-hover hover:border-border-strong hover:text-text-primary"
@@ -139,7 +139,7 @@ export function ChatInputBar({
           {isLoading ? (
             <button
               onClick={onStop}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-red-500 hover:bg-red-600 text-white transition-all duration-200 cursor-pointer shadow-sm active:scale-95"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-error hover:bg-error text-white transition-all duration-200 cursor-pointer shadow-sm active:scale-95"
               aria-label="Stop response"
               title="Stop response"
             >
@@ -189,13 +189,13 @@ export function ChatInputBar({
                 onClick={onTogglePronEnabled}
                 className={`inline-flex items-center gap-1 px-3 py-1 rounded-full border text-[10px] font-bold tracking-wide transition-all cursor-pointer ${
                   pronEnabled
-                    ? "border-emerald-500/50 bg-emerald-950/20 text-emerald-450 font-bold"
+                    ? "border-success/50 bg-success/10 text-success font-bold"
                     : "border-border bg-chat-surface-hover text-text-secondary hover:border-border-strong hover:text-text-primary"
                 }`}
               >
                 <Volume2 className="h-3 w-3" />
                 <span>Pronunciation feedback</span>
-                {pronEnabled && <Check className="h-3 w-3 text-emerald-400" />}
+                {pronEnabled && <Check className="h-3 w-3 text-success" />}
               </button>
             )}
           </div>

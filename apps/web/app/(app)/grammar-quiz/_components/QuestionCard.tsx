@@ -62,7 +62,7 @@ export function QuestionCard({
               left: 0,
               top: 0,
               bottom: 0,
-              background: "linear-gradient(90deg, var(--accent), var(--secondary))",
+              background: "var(--accent)",
             }}
           />
         </div>
@@ -81,11 +81,11 @@ export function QuestionCard({
             className="items-center gap-1.5 rounded-full font-black"
             style={{
               display: "inline-flex",
-              background: "linear-gradient(135deg, var(--fire), var(--xp))",
+              background: "var(--fire)",
               padding: "6px 18px",
               fontSize: 13.5,
               color: "var(--text-on-accent)",
-              boxShadow: "0 4px 14px rgba(245, 158, 11, 0.35)",
+              boxShadow: "var(--shadow-sm)",
             }}
           >
             <Flame /> {combo} COMBO! 🔥
@@ -117,11 +117,11 @@ export function QuestionCard({
 
             if (isRevealed) {
               if (isCorrect) {
-                bg = "rgba(16, 185, 129, 0.08)";
+                bg = "color-mix(in srgb, var(--success) 8%, transparent)";
                 borderColor = "var(--success)";
                 color = "var(--success)";
               } else if (isSelected && !isCorrect) {
-                bg = "rgba(239, 68, 68, 0.08)";
+                bg = "color-mix(in srgb, var(--error) 8%, transparent)";
                 borderColor = "var(--error)";
                 color = "var(--error)";
               } else {
@@ -143,7 +143,7 @@ export function QuestionCard({
                 disabled={isRevealed}
                 className="flex w-full items-center gap-3 rounded-lg py-3 px-4 text-left text-sm"
                 style={{
-                  border: `1.5px solid ${borderColor}`,
+                  border: `2px solid ${borderColor}`,
                   fontWeight: isSelected || (isRevealed && isCorrect) ? 800 : 500,
                   background: bg,
                   color,
@@ -193,16 +193,16 @@ export function QuestionCard({
             <div
               className="flex items-center gap-2 rounded-lg py-2.5 px-4"
               style={{
-                border: `1px solid ${selectedAnswer === question.correctIndex ? "var(--success)" : "var(--error)"}`,
+                border: `2px solid ${selectedAnswer === question.correctIndex ? "var(--success)" : "var(--error)"}`,
                 background:
                   selectedAnswer === question.correctIndex
-                    ? "rgba(16, 185, 129, 0.08)"
-                    : "rgba(239, 68, 68, 0.08)",
+                    ? "color-mix(in srgb, var(--success) 8%, transparent)"
+                    : "color-mix(in srgb, var(--error) 8%, transparent)",
               }}
             >
               <span className="text-base flex">
                 {selectedAnswer === question.correctIndex ? (
-                  <CircleCheckBig className="text-emerald-500" />
+                  <CircleCheckBig className="text-success" />
                 ) : (
                   <XCircle className="text-destructive" />
                 )}
@@ -238,7 +238,7 @@ export function QuestionCard({
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="mt-1.5 rounded-lg bg-surface-alt p-4"
-                style={{ border: "1px solid color-mix(in srgb, var(--accent) 15%, var(--border))" }}
+                style={{ border: "2px solid color-mix(in srgb, var(--accent) 15%, var(--border))" }}
               >
                 <div className="flex items-center justify-between">
                   <span
@@ -275,7 +275,7 @@ export function QuestionCard({
                 {question.examples && question.examples.length > 0 && (
                   <div
                     className="pt-3"
-                    style={{ marginTop: 14, borderTop: "1.5px dashed var(--border)" }}
+                    style={{ marginTop: 14, borderTop: "2px dashed var(--border)" }}
                   >
                     <span
                       className="text-[11px] font-extrabold uppercase text-text-muted block mb-1.5"
@@ -306,14 +306,13 @@ export function QuestionCard({
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           onClick={onNext}
-          className="mt-4 w-full rounded-xl font-extrabold border-none cursor-pointer flex items-center justify-center gap-1.5"
+          className="mt-4 w-full rounded-xl font-extrabold border-2 border-border cursor-pointer flex items-center justify-center gap-1.5"
           style={{
-            background:
-              "linear-gradient(135deg, var(--accent), var(--accent-hover, var(--accent)))",
+            background: "var(--accent)",
             padding: "12px 0",
             fontSize: 14.5,
             color: "var(--text-on-accent)",
-            boxShadow: "0 4px 12px var(--accent-muted)",
+            boxShadow: "var(--shadow-sm)",
           }}
         >
           {isLastQuestion ? "Complete and view results" : "Next Question →"}

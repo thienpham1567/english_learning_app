@@ -98,7 +98,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
                       style={{
                         color: CEFR_COLORS[status.lastResult.overallCefr] ?? "var(--accent)",
                         borderColor: CEFR_COLORS[status.lastResult.overallCefr] ?? "var(--accent)",
-                        boxShadow: `0 4px 12px ${CEFR_COLORS[status.lastResult.overallCefr]}33`,
+                        boxShadow: `4px 4px 0 ${CEFR_COLORS[status.lastResult.overallCefr]}33`,
                       }}
                     >
                       {status.lastResult.overallCefr}
@@ -133,7 +133,7 @@ export function WelcomeScreen({ status, onStart }: Props) {
                               className="text-[11px] font-extrabold bg-surface rounded-full py-0.5 px-2"
                               style={{
                                 color: skillColor,
-                                border: `1px solid ${skillColor}`,
+                                border: `2px solid ${skillColor}`,
                               }}
                             >
                               {sr.cefr} ({sr.correct}/{sr.total})
@@ -157,9 +157,9 @@ export function WelcomeScreen({ status, onStart }: Props) {
               whileHover={{ scale: 1.02, y: -2 }}
               whileTap={{ scale: 0.98 }}
               onClick={onStart}
-              className="w-full h-[52px] rounded-xl border-none text-base font-extrabold cursor-pointer flex items-center justify-center gap-2 text-[var(--text-on-accent)] shadow-[0_6px_20px_var(--accent-muted)]"
+              className="w-full h-[52px] rounded-xl border-2 border-border text-base font-extrabold cursor-pointer flex items-center justify-center gap-2 text-[var(--text-on-accent)] shadow-sm"
               style={{
-                background: "linear-gradient(135deg, var(--accent), var(--accent-hover))",
+                background: "var(--accent)",
               }}
             >
               <PlayCircle />

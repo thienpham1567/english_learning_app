@@ -97,20 +97,20 @@ export default function GradedReaderPage() {
         <div
           className="border-none rounded-[20px] py-6 px-7"
           style={{
-            background: "linear-gradient(135deg, var(--accent), var(--secondary))",
+            background: "var(--accent)",
           }}
         >
           <div className="flex items-center gap-4">
             <div
               className="w-12 h-12 flex items-center justify-center rounded-[14px]"
-              style={{ background: "rgba(255,255,255,0.2)" }}
+              style={{ background: "color-mix(in srgb, var(--text-on-accent) 20%, var(--accent))" }}
             >
               <BookOpen className="text-3xl" style={{ color: "var(--text-on-accent)" }} />
             </div>
             <div>
               <span
                 className="text-[11px] uppercase block"
-                style={{ letterSpacing: "0.12em", color: "rgba(255,255,255,0.7)" }}
+                style={{ letterSpacing: "0.12em", color: "var(--text-on-accent)" }}
               >
                 GRADED READER
               </span>
@@ -124,7 +124,7 @@ export default function GradedReaderPage() {
                   {readCount}/{passages.length}
                 </span>
                 <br />
-                <span className="text-[11px]" style={{ color: "rgba(255,255,255,0.7)" }}>
+                <span className="text-[11px]" style={{ color: "var(--text-on-accent)" }}>
                   read
                 </span>
               </div>
@@ -133,7 +133,7 @@ export default function GradedReaderPage() {
         </div>
 
         {/* Level filter pills */}
-        <div className="rounded-2xl py-3 px-4 border border-border">
+        <div className="rounded-2xl py-3 px-4 border-2 border-border">
           <div className="flex flex-wrap items-center gap-2">
             <Filter className="text-text-muted text-sm" />
             {LEVELS.map((lv) => {
@@ -146,7 +146,7 @@ export default function GradedReaderPage() {
                   onClick={() => setLevel(lv)}
                   className="text-xs font-semibold cursor-pointer py-1.5 px-4 rounded-[20px] transition-all duration-200"
                   style={{
-                    border: active ? `2px solid ${color}` : "1px solid var(--border)",
+                    border: active ? `2px solid ${color}` : "2px solid var(--border)",
                     background: active ? color : "transparent",
                     color: active ? "var(--text-on-accent)" : "var(--text-secondary)",
                   }}
@@ -174,7 +174,7 @@ export default function GradedReaderPage() {
               <div
                 key={p.id}
                 onClick={() => router.push(`/reading/graded/${p.id}`)}
-                className="rounded-2xl cursor-pointer py-3.5 px-5 border border-border hover:border-accent hover:bg-accent-light transition-all duration-200"
+                className="rounded-2xl cursor-pointer py-3.5 px-5 border-2 border-border hover:border-accent hover:bg-accent-light transition-all duration-200"
                 style={{ opacity: p.isRead ? 0.75 : 1 }}
               >
                 <div className="flex items-center gap-3.5">
@@ -188,7 +188,7 @@ export default function GradedReaderPage() {
                     }}
                   >
                     {p.isRead ? (
-                      <CheckCircle className="text-xl text-emerald-500" />
+                      <CheckCircle className="text-xl text-success" />
                     ) : (
                       <FileText
                         className="text-lg"

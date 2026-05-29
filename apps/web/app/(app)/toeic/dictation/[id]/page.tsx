@@ -147,7 +147,7 @@ export default function DictationDetailPage() {
                 ))}
               </div>
               <div className="mt-3 text-xs text-text-muted">
-                <span className="text-emerald-500">● correct</span> ·{" "}
+                <span className="text-success">● correct</span> ·{" "}
                 <span className="text-destructive">● missing</span> ·{" "}
                 <span style={{ color: "var(--warning)" }}>● extra</span>
               </div>
@@ -159,7 +159,7 @@ export default function DictationDetailPage() {
                   {result.vocabHints.map((h) => (
                     <span
                       key={h.word}
-                      className="bg-blue-500/15 text-blue-600 py-0.5 px-2 inline-block"
+                      className="bg-info/15 text-info py-0.5 px-2 inline-block"
                     >
                       {h.word} = {h.vi}
                     </span>

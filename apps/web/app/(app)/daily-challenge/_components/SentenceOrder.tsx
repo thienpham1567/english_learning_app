@@ -78,11 +78,11 @@ export function SentenceOrder({ data, instruction, onAnswer, disabled }: Props) 
               className="rounded-lg py-1.5 px-3.5 text-sm font-semibold items-center"
               style={{
                 background:
-                  hoveredSel === i && !disabled ? "rgba(239, 68, 68, 0.1)" : "var(--surface)",
+                  hoveredSel === i && !disabled ? "color-mix(in srgb, var(--error) 10%, transparent)" : "var(--surface)",
                 color: hoveredSel === i && !disabled ? "var(--error)" : "var(--accent)",
                 border:
                   hoveredSel === i && !disabled
-                    ? "1px solid rgba(239, 68, 68, 0.3)"
+                    ? "1px solid color-mix(in srgb, var(--error) 30%, transparent)"
                     : "1px solid var(--border)",
                 cursor: disabled ? "default" : "pointer",
                 transition: "all 0.15s ease",

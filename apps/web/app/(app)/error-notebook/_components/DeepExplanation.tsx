@@ -74,7 +74,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
         type="button"
         onClick={toggle}
         disabled={loading}
-        className={`flex items-center gap-2 w-full px-3.5 py-2.5 rounded-[10px] border border-accent/30 text-[13px] font-bold text-accent-active transition-all duration-200 text-left ${
+        className={`flex items-center gap-2 w-full px-3.5 py-2.5 rounded-[10px] border-2 border-accent/30 text-[13px] font-bold text-accent-active transition-all duration-200 text-left ${
           loading ? "cursor-wait" : "cursor-pointer"
         } ${expanded ? "bg-accent/6" : "bg-card-bg hover:bg-accent/4"}`}
       >
@@ -129,7 +129,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
           </div>
 
           {/* Grammar Rule — Formula Card */}
-          <div className="px-3.5 py-3 rounded-[10px] bg-gradient-to-br from-accent/8 to-[color-mix(in_srgb,var(--secondary)_6%,var(--surface))] border border-accent/15">
+          <div className="px-3.5 py-3 rounded-[10px] bg-accent/8 border-2 border-accent/15">
             <div className="flex items-center gap-1.5 mb-2 text-xs font-bold text-accent-active uppercase tracking-wide">
               <BookOpen className="h-3 w-3" /> Grammar Rule
             </div>
@@ -159,7 +159,7 @@ export function DeepExplanation({ errorId, cached, fallbackEn, fallbackVi }: Pro
           </div>
 
           {/* Tip */}
-          <div className="px-3.5 py-2.5 rounded-[10px] bg-gradient-to-br from-[color-mix(in_srgb,var(--warning)_8%,var(--surface))] to-[color-mix(in_srgb,var(--xp)_6%,var(--surface))] border border-[color-mix(in_srgb,var(--warning)_15%,var(--border))] flex items-start gap-2.5">
+          <div className="px-3.5 py-2.5 rounded-[10px] bg-[color-mix(in_srgb,var(--warning)_8%,var(--surface))] border-2 border-[color-mix(in_srgb,var(--warning)_15%,var(--border))] flex items-start gap-2.5">
             <Zap className="h-4 w-4 text-warning mt-0.5 shrink-0" />
             <div>
               <div className="text-[11px] font-bold text-warning uppercase tracking-wide mb-1">

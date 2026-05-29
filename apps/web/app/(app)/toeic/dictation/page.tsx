@@ -13,23 +13,23 @@ const LEVEL_META: Record<
   beginner: {
     label: "Beginner",
     color: "var(--success)",
-    bgClass: "bg-emerald-500/10",
-    borderClass: "border-emerald-500/20",
-    textClass: "text-emerald-600",
+    bgClass: "bg-success/10",
+    borderClass: "border-success/20",
+    textClass: "text-success",
   },
   intermediate: {
     label: "Intermediate",
     color: "var(--warning)",
-    bgClass: "bg-amber-500/10",
-    borderClass: "border-amber-500/20",
-    textClass: "text-amber-600",
+    bgClass: "bg-warning/10",
+    borderClass: "border-warning/20",
+    textClass: "text-warning",
   },
   advanced: {
     label: "Advanced",
     color: "var(--error)",
-    bgClass: "bg-red-500/10",
-    borderClass: "border-red-500/20",
-    textClass: "text-red-500",
+    bgClass: "bg-error/10",
+    borderClass: "border-error/20",
+    textClass: "text-error",
   },
 };
 

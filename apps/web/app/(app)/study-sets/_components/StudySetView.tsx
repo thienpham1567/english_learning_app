@@ -139,8 +139,8 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
       <div
         className="anim-fade-up p-6 rounded-xl text-destructive text-center"
         style={{
-          background: "rgba(239, 68, 68, 0.08)",
-          border: "1px solid rgba(239, 68, 68, 0.2)",
+          background: "color-mix(in srgb, var(--error) 8%, transparent)",
+          border: "1px solid color-mix(in srgb, var(--error) 20%, transparent)",
         }}
       >
         <p className="text-sm mb-4" style={{ fontWeight: 650 }}>
@@ -251,7 +251,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                 background: active
                   ? "var(--accent)"
                   : done
-                    ? "rgba(16, 185, 129, 0.08)"
+                    ? "color-mix(in srgb, var(--success) 8%, transparent)"
                     : "transparent",
                 color: active
                   ? "var(--text-on-accent)"
@@ -499,14 +499,14 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
 
                     if (readingRevealed) {
                       if (oi === q.answer) {
-                        bg = "rgba(16, 185, 129, 0.08)";
+                        bg = "color-mix(in srgb, var(--success) 8%, transparent)";
                         border = "1.5px solid var(--success)";
                         color = "var(--success)";
                         iconElement = (
-                          <Check className="text-emerald-500" style={{ marginLeft: "auto" }} />
+                          <Check className="text-success" style={{ marginLeft: "auto" }} />
                         );
                       } else if (readingAnswers[qi] === oi) {
-                        bg = "rgba(239, 68, 68, 0.08)";
+                        bg = "color-mix(in srgb, var(--error) 8%, transparent)";
                         border = "1.5px solid var(--error)";
                         color = "var(--error)";
                         iconElement = (
@@ -605,7 +605,7 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
                 padding: "14px",
                 background: "var(--success)",
                 color: "var(--text-on-accent)",
-                boxShadow: "0 4px 12px rgba(16, 185, 129, 0.25)",
+                boxShadow: "0 4px 12px color-mix(in srgb, var(--success) 25%, transparent)",
               }}
             >
               <span>Complete this section</span>
@@ -650,17 +650,17 @@ export function StudySetView({ topicId, topicTitle, level, examMode, onBack, onC
 
                     if (exRevealed) {
                       if (isCorrect) {
-                        bg = "rgba(16, 185, 129, 0.08)";
+                        bg = "color-mix(in srgb, var(--success) 8%, transparent)";
                         border = "1.5px solid var(--success)";
                         color = "var(--success)";
                         iconElement = (
                           <CheckCircle
-                            className="text-emerald-500"
+                            className="text-success"
                             style={{ marginLeft: "auto" }}
                           />
                         );
                       } else if (isSel) {
-                        bg = "rgba(239, 68, 68, 0.08)";
+                        bg = "color-mix(in srgb, var(--error) 8%, transparent)";
                         border = "1.5px solid var(--error)";
                         color = "var(--error)";
                         iconElement = (

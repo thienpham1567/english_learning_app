@@ -68,7 +68,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
           outline: "none",
           transition: "all 0.2s ease",
           boxSizing: "border-box",
-          boxShadow: focused ? "0 4px 12px rgba(239, 68, 68, 0.15)" : "none",
+          boxShadow: focused ? "0 4px 12px color-mix(in srgb, var(--error) 15%, transparent)" : "none",
         }}
       />
 
@@ -84,7 +84,7 @@ export function ErrorCorrection({ data, instruction, onAnswer, disabled }: Props
               "linear-gradient(135deg, var(--error), color-mix(in srgb, var(--error) 80%, white))",
             padding: "14px 0",
             color: "var(--text-on-accent)",
-            boxShadow: "0 6px 18px rgba(239, 68, 68, 0.25)",
+            boxShadow: "0 6px 18px color-mix(in srgb, var(--error) 25%, transparent)",
           }}
         >
           <Check size={12} /> Confirm Correction

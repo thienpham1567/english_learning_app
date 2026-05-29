@@ -145,7 +145,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
         <div className="grain-overlay opacity-30" />
 
         {/* Warm radial glow behind the conversations */}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_0%,rgba(192,125,43,0.06),transparent_70%)] z-0" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_60%_40%_at_50%_0%,color-mix(in srgb, var(--warning) 6%, transparent),transparent_70%)] z-0" />
 
         <div className="relative mx-auto flex min-h-full w-full max-w-2xl flex-col z-10">
           {chat.isLoadingMessages && conversationId && <ChatSkeleton />}
@@ -212,7 +212,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
           )}
 
           {chat.error && (
-            <div className="mt-5 flex gap-3 rounded-2xl border border-red-950 bg-red-950/20 p-4 text-xs text-red-400 animate-in fade-in slide-in-from-bottom-1 duration-200">
+            <div className="mt-5 flex gap-3 rounded-2xl border border-error bg-error/10 p-4 text-xs text-error animate-in fade-in slide-in-from-bottom-1 duration-200">
               <AlertCircle className="h-4.5 w-4.5 shrink-0" />
               <div className="flex-1 flex flex-col gap-2">
                 <p className="font-semibold leading-relaxed">{chat.error}</p>
@@ -220,7 +220,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                   {chat.lastSendRef.current && !chat.isLoading && (
                     <button
                       onClick={chat.retryLast}
-                      className="font-bold underline cursor-pointer text-red-450 hover:text-red-300 transition-colors"
+                      className="font-bold underline cursor-pointer text-error hover:text-error transition-colors"
                     >
                       Try again
                     </button>
@@ -243,7 +243,7 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
       {scroll.showScrollBtn && (
         <button
           onClick={scroll.scrollToBottom}
-          className="absolute bottom-24 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1.5 rounded-full border-2 border-border bg-chat-surface/90 backdrop-blur-md px-3.5 py-2 text-xs font-semibold text-text-secondary hover:text-ink shadow-lg cursor-pointer transition-all duration-200 active:scale-95 animate-in fade-in zoom-in-90"
+          className="absolute bottom-24 left-1/2 -translate-x-1/2 z-40 flex items-center gap-1.5 rounded-full border-2 border-border bg-chat-surface px-3.5 py-2 text-xs font-semibold text-text-secondary hover:text-ink shadow-lg cursor-pointer transition-all duration-200 active:scale-95 animate-in fade-in zoom-in-90"
         >
           <ArrowDown className="h-3.5 w-3.5" />
           <span>Scroll to bottom</span>

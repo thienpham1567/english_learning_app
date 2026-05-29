@@ -12,9 +12,9 @@ export type QuizHistoryEntry = {
 };
 
 const LEVEL_LABELS: Record<string, { label: string; color: string; bg: string }> = {
-  easy: { label: "Basic A1–A2", color: "var(--success)", bg: "rgba(16, 185, 129, 0.08)" },
+  easy: { label: "Basic A1–A2", color: "var(--success)", bg: "color-mix(in srgb, var(--success) 8%, transparent)" },
   medium: { label: "Intermediate B1–B2", color: "var(--accent)", bg: "var(--accent-light)" },
-  hard: { label: "Advanced C1–C2", color: "var(--error)", bg: "rgba(239, 68, 68, 0.08)" },
+  hard: { label: "Advanced C1–C2", color: "var(--error)", bg: "color-mix(in srgb, var(--error) 8%, transparent)" },
 };
 
 const HISTORY_KEY = "grammar-quiz-history";
@@ -69,7 +69,7 @@ export function QuizHistory({ open, onClose }: Props) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-[900] bg-black/50 backdrop-blur-sm"
+            className="fixed inset-0 z-[900] bg-black/50"
           />
 
           {/* Sheet */}
@@ -78,7 +78,7 @@ export function QuizHistory({ open, onClose }: Props) {
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
             transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            className="fixed top-0 right-0 bottom-0 w-[min(360px,90vw)] z-[901] bg-surface border-l-2 border-border shadow-[-8px_0_30px_rgba(0,0,0,0.1)] flex flex-col overflow-hidden"
+            className="fixed top-0 right-0 bottom-0 w-[min(360px,90vw)] z-[901] bg-surface border-l-2 border-border shadow-lg flex flex-col overflow-hidden"
           >
             {/* Header */}
             <div className="flex items-center justify-between px-4 py-3 border-b-2 border-border shrink-0">
@@ -114,10 +114,10 @@ export function QuizHistory({ open, onClose }: Props) {
                       pct >= 80 ? "var(--success)" : pct >= 50 ? "var(--warning)" : "var(--error)";
                     const scoreBg =
                       pct >= 80
-                        ? "rgba(16, 185, 129, 0.08)"
+                        ? "color-mix(in srgb, var(--success) 8%, transparent)"
                         : pct >= 50
-                          ? "rgba(245, 158, 11, 0.08)"
-                          : "rgba(239, 68, 68, 0.08)";
+                          ? "color-mix(in srgb, var(--warning) 8%, transparent)"
+                          : "color-mix(in srgb, var(--error) 8%, transparent)";
                     return (
                       <m.div
                         key={`${entry.date}-${i}`}

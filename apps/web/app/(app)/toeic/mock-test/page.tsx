@@ -99,7 +99,7 @@ export default async function MockTestHubPage() {
               </div>
 
               <div className="flex flex-wrap gap-1.5">
-                <span className="text-[10px] font-extrabold rounded-lg bg-amber-500/10 text-amber-600 border border-amber-500/20 px-2 py-0.5">
+                <span className="text-[10px] font-extrabold rounded-lg bg-warning/10 text-warning border border-warning/20 px-2 py-0.5">
                   Part 1: no content yet
                 </span>
               </div>
@@ -115,11 +115,11 @@ export default async function MockTestHubPage() {
             <Card
               interactive
               shadowSize="sm"
-              className="hover:border-emerald-500 flex flex-col gap-3.5 h-full p-5"
+              className="hover:border-success flex flex-col gap-3.5 h-full p-5"
             >
               <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-xl grid place-items-center shrink-0 bg-emerald-500/10 border-2 border-emerald-500/20">
-                  <Clock className="text-emerald-500" size={20} />
+                <div className="w-11 h-11 rounded-xl grid place-items-center shrink-0 bg-success/10 border-2 border-success/20">
+                  <Clock className="text-success" size={20} />
                 </div>
                 <div>
                   <CardTitle className="text-base text-ink">Mini Mock</CardTitle>
@@ -130,7 +130,7 @@ export default async function MockTestHubPage() {
               </div>
 
               <div className="flex flex-wrap gap-1.5">
-                <span className="text-[10px] font-extrabold rounded-lg bg-emerald-500/10 text-emerald-600 border border-amber-500/20 px-2 py-0.5">
+                <span className="text-[10px] font-extrabold rounded-lg bg-success/10 text-success border border-warning/20 px-2 py-0.5">
                   Recommended
                 </span>
               </div>

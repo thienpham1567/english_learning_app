@@ -163,7 +163,7 @@ export default function DashboardPage() {
                 href="/daily-challenge"
                 className="inline-flex items-center gap-2 px-5 py-3 rounded-xl text-xs font-black border-2 border-border bg-accent text-ink shadow-sm hover:translate-x-[-2px] hover:translate-y-[-2px] hover:shadow active:translate-x-[2px] active:translate-y-[2px] active:shadow-none transition-all cursor-pointer"
               >
-                <Flame className="h-4 w-4 fill-current text-orange-600 animate-pulse" />
+                <Flame className="h-4 w-4 fill-current text-fire animate-pulse" />
                 <span>Daily Challenge</span>
               </Link>
             </div>
@@ -178,20 +178,20 @@ export default function DashboardPage() {
           className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full mt-4"
         >
           <StatCard
-            icon={<Flame className="h-5 w-5 text-orange-500 fill-current" />}
+            icon={<Flame className="h-5 w-5 text-fire fill-current" />}
             label="Streak"
             value={dash ? `${dash.streak.currentStreak} days` : "—"}
             sub={dash ? `Best: ${dash.streak.bestStreak} days` : ""}
             loading={!dash}
-            iconBg="bg-orange-500/10 border-orange-500/20"
+            iconBg="bg-fire/10 border-fire/20"
           />
           <StatCard
-            icon={<Zap className="h-5 w-5 text-amber-500 fill-current" />}
+            icon={<Zap className="h-5 w-5 text-xp fill-current" />}
             label="Total XP"
             value={dash ? `${dash.totalXP.toLocaleString()}` : "—"}
             sub="Experience points"
             loading={!dash}
-            iconBg="bg-amber-500/10 border-amber-500/20"
+            iconBg="bg-warning/10 border-warning/20"
           />
           <StatCard
             icon={<RotateCw className="h-5 w-5 text-accent" />}
@@ -504,14 +504,14 @@ function ScoreDisplay({ score }: { score: PredictedScore }) {
             label="Listening"
             value={score.listening ?? 0}
             max={495}
-            color="#2D5BFF"
+            color="var(--secondary)"
             icon={<Headphones className="h-4.5 w-4.5" />}
           />
           <MiniScore
             label="Reading"
             value={score.reading ?? 0}
             max={495}
-            color="#EC4899"
+            color="var(--module-review)"
             icon={<BookOpen className="h-4.5 w-4.5" />}
           />
         </div>
@@ -521,9 +521,9 @@ function ScoreDisplay({ score }: { score: PredictedScore }) {
           <div className="grid grid-cols-2 gap-x-4 gap-y-3.5 border-t border-border pt-4">
             {[
               { k: "Grammar", v: score.components.grammar, color: "bg-purple-500" },
-              { k: "Listening", v: score.components.listeningAccuracy, color: "bg-blue-500" },
-              { k: "Vocabulary", v: score.components.vocabulary, color: "bg-amber-500" },
-              { k: "Strengths", v: score.components.topScores, color: "bg-emerald-500" },
+              { k: "Listening", v: score.components.listeningAccuracy, color: "bg-info" },
+              { k: "Vocabulary", v: score.components.vocabulary, color: "bg-xp" },
+              { k: "Strengths", v: score.components.topScores, color: "bg-success" },
             ].map((c) => (
               <div key={c.k} className="space-y-1.5">
                 <div className="flex justify-between text-[10px] font-bold text-text-secondary">
@@ -704,8 +704,8 @@ function StudyPlanSection({ items, stats }: { items: DailyPlanItem[]; stats: Dai
       {/* Level Banner */}
       {stats && (
         <div className="p-3.5 rounded-xl bg-surface-alt border-2 border-border flex items-center gap-3 shadow-sm mt-1">
-          <div className="w-9 h-9 rounded-lg border-2 border-border bg-amber-500/10 flex items-center justify-center shrink-0">
-            <Star className="text-amber-500 h-4.5 w-4.5 fill-current shrink-0 animate-pulse" />
+          <div className="w-9 h-9 rounded-lg border-2 border-border bg-warning/10 flex items-center justify-center shrink-0">
+            <Star className="text-xp h-4.5 w-4.5 fill-current shrink-0 animate-pulse" />
           </div>
           <div className="flex-1 min-w-0">
             <div className="text-[10px] font-extrabold uppercase tracking-wider text-text-muted leading-none">
@@ -737,13 +737,13 @@ const QUICK_ACTIONS = [
     href: "/roadmap",
     icon: <Map />,
     label: "Roadmap",
-    color: "text-blue-500 bg-blue-500/10 hover:bg-blue-500/15",
+    color: "text-info bg-info/10 hover:bg-info/15",
   },
   {
     href: "/daily-challenge",
     icon: <Flame />,
     label: "Challenge",
-    color: "text-orange-500 bg-orange-500/10 hover:bg-orange-500/15",
+    color: "text-fire bg-fire/10 hover:bg-fire/15",
   },
   {
     href: "/toeic/skills",
@@ -755,19 +755,19 @@ const QUICK_ACTIONS = [
     href: "/flashcards",
     icon: <BookOpen />,
     label: "Flashcards",
-    color: "text-emerald-500 bg-emerald-500/10 hover:bg-emerald-500/15",
+    color: "text-success bg-success/10 hover:bg-success/15",
   },
   {
     href: "/error-notebook",
     icon: <AlertTriangle />,
     label: "Error Book",
-    color: "text-red-500 bg-red-500/10 hover:bg-red-500/15",
+    color: "text-error bg-error/10 hover:bg-error/15",
   },
   {
     href: "/my-vocabulary",
     icon: <Star />,
     label: "Vocabulary",
-    color: "text-amber-500 bg-amber-500/10 hover:bg-amber-500/15",
+    color: "text-xp bg-warning/10 hover:bg-warning/15",
   },
 ];
 

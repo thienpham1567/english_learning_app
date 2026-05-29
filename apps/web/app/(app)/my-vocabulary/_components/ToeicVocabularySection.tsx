@@ -205,7 +205,7 @@ const CATEGORY_COLORS: Record<string, string> = {
   business: "text-indigo-600 dark:text-indigo-400",
   office: "text-sky-600 dark:text-sky-400",
   hr: "text-rose-600 dark:text-rose-400",
-  finance: "text-amber-600 dark:text-amber-400",
+  finance: "text-warning dark:text-warning",
   travel: "text-teal-600 dark:text-teal-400",
   technology: "text-purple-600 dark:text-purple-400",
   marketing: "text-pink-600 dark:text-pink-400",

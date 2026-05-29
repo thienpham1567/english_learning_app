@@ -181,7 +181,7 @@ export function FlashcardCard({ card, onRate, isSubmitting }: Props) {
                     {firstSense.collocations.slice(0, 4).map((c, i) => (
                       <span
                         key={i}
-                        className="font-bold text-emerald-500 rounded-full text-[11.5px] py-0.5 px-2.5"
+                        className="font-bold text-success rounded-full text-[11.5px] py-0.5 px-2.5"
                         style={{
                           background: "var(--success-bg)",
                           border: "1px solid color-mix(in srgb, var(--success) 20%, transparent)",
@@ -287,16 +287,16 @@ const RATINGS = [
     label: "Forgot",
     icon: Frown,
     color: "var(--error)",
-    bg: "rgba(239, 68, 68, 0.08)",
-    border: "rgba(239, 68, 68, 0.2)",
+    bg: "color-mix(in srgb, var(--error) 8%, transparent)",
+    border: "color-mix(in srgb, var(--error) 20%, transparent)",
   },
   {
     quality: 2,
     label: "Hard",
     icon: Meh,
     color: "var(--warning)",
-    bg: "rgba(245, 158, 11, 0.08)",
-    border: "rgba(245, 158, 11, 0.2)",
+    bg: "color-mix(in srgb, var(--warning) 8%, transparent)",
+    border: "color-mix(in srgb, var(--warning) 20%, transparent)",
   },
   {
     quality: 3,
@@ -311,8 +311,8 @@ const RATINGS = [
     label: "Easy",
     icon: Sparkles,
     color: "var(--success)",
-    bg: "rgba(16, 185, 129, 0.08)",
-    border: "rgba(16, 185, 129, 0.2)",
+    bg: "color-mix(in srgb, var(--success) 8%, transparent)",
+    border: "color-mix(in srgb, var(--success) 20%, transparent)",
   },
 ] as const;
 

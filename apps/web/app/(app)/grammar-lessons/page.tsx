@@ -235,7 +235,7 @@ export default function GrammarLessonsPage() {
                     interactive
                     bgType="transparent"
                     shadowSize="sm"
-                    className="w-full rounded-2xl border-2 border-accent/30 cursor-pointer flex flex-row items-center gap-4 relative overflow-hidden text-left p-5 bg-gradient-to-br from-accent to-accent-hover"
+                    className="w-full rounded-2xl border-2 border-border cursor-pointer flex flex-row items-center gap-4 relative overflow-hidden text-left p-5 bg-accent"
                     onClick={() =>
                       setActiveTopic({
                         id: recommendedTopic.id,
@@ -244,12 +244,12 @@ export default function GrammarLessonsPage() {
                       })
                     }
                   >
-                    {/* Decorative glows */}
-                    <div className="absolute -top-1/2 -right-[10%] w-[200px] h-[200px] rounded-full bg-white/[0.06] pointer-events-none" />
-                    <div className="absolute -bottom-[40%] -left-[5%] w-[150px] h-[150px] rounded-full bg-white/[0.04] pointer-events-none" />
+                    {/* Decorative shapes — brutalist geometric */}
+                    <div className="absolute -top-6 -right-6 w-[120px] h-[120px] rotate-12 bg-white/[0.08] pointer-events-none" />
+                    <div className="absolute -bottom-4 -left-4 w-[80px] h-[80px] -rotate-6 bg-white/[0.05] pointer-events-none" />
 
                     {/* Icon */}
-                    <div className="w-12 h-12 grid shrink-0 rounded-xl bg-white/15 backdrop-blur-sm place-items-center border border-white/10">
+                    <div className="w-12 h-12 grid shrink-0 rounded-xl bg-white/15 place-items-center border-2 border-white/20">
                       <Rocket className="h-6 w-6 text-white" />
                     </div>
 
@@ -268,7 +268,7 @@ export default function GrammarLessonsPage() {
                     </div>
 
                     {/* Arrow */}
-                    <div className="w-9 h-9 grid shrink-0 rounded-xl bg-white/15 place-items-center">
+                    <div className="w-9 h-9 grid shrink-0 rounded-xl bg-white/15 place-items-center border-2 border-white/20">
                       <ArrowRight className="h-4 w-4 text-white" />
                     </div>
                   </Card>
@@ -308,7 +308,7 @@ export default function GrammarLessonsPage() {
                   <h2 className="m-0 font-black text-ink font-display text-[17px]">
                     Topic Library
                   </h2>
-                  <span className="text-[10px] font-extrabold rounded-lg text-accent px-2.5 py-0.5 bg-accent-light border border-accent/20">
+                  <span className="text-[10px] font-extrabold rounded-lg text-accent px-2.5 py-0.5 bg-accent-light border-2 border-accent/20">
                     {tabStats.totalTopics} lessons
                   </span>
                 </div>

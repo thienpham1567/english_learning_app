@@ -242,7 +242,7 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
           }}
           placeholder="Enter sentence to improve..."
           className={`w-full min-h-[80px] p-3 rounded-xl border bg-surface text-ink text-sm leading-relaxed resize-y focus:outline-none focus:ring-1 focus:ring-accent/30 font-body ${
-            overLimit ? "border-red-500 focus:border-red-500" : "border-border focus:border-accent"
+            overLimit ? "border-error focus:border-error" : "border-border focus:border-accent"
           }`}
         />
       </div>
@@ -272,7 +272,7 @@ export function RewritePanel({ initialSentence = "", compact = false }: Props) {
 
       {/* Error */}
       {error && (
-        <div className="p-3 rounded-xl bg-red-950/20 border border-red-900/30 text-xs text-red-400">
+        <div className="p-3 rounded-xl bg-error/10 border border-error/30 text-xs text-error">
           {error}
         </div>
       )}

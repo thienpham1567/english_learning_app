@@ -35,9 +35,9 @@ interface Props {
 }
 
 function getScoreColor(score: number): string {
-  if (score >= 80) return "text-emerald-450 border-emerald-950/80 bg-emerald-950/20";
-  if (score >= 50) return "text-amber-450 border-amber-950/80 bg-amber-950/20";
-  return "text-red-405 border-red-950/80 bg-red-950/20";
+  if (score >= 80) return "text-success border-success/80 bg-success/10";
+  if (score >= 50) return "text-warning border-warning/80 bg-warning/10";
+  return "text-error border-error/80 bg-error/10";
 }
 
 function getScoreLabel(score: number): string {
@@ -64,7 +64,7 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
   // Error state
   if (data.status === "error") {
     return (
-      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-red-950/20 border border-red-900/30 text-red-400 mt-1">
+      <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs bg-error/10 border border-error/30 text-error mt-1">
         <AlertCircle className="h-3 w-3" />
         <span>Could not analyze pronunciation</span>
       </div>
@@ -120,8 +120,8 @@ export function PronunciationFeedback({ data, onListenCorrect }: Props) {
                     key={i}
                     className={`relative group inline-flex items-center gap-1 px-2.5 py-1 rounded-lg border text-xs font-medium cursor-help ${
                       w.correct
-                        ? "bg-emerald-950/20 border-emerald-900/40 text-emerald-450"
-                        : "bg-red-950/20 border-red-900/40 text-red-455"
+                        ? "bg-success/10 border-success/40 text-success"
+                        : "bg-error/10 border-error/40 text-error"
                     }`}
                   >
                     {w.correct ? (

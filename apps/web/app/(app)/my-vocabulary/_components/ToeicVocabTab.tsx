@@ -53,15 +53,15 @@ const TOPIC_META: Record<
   { icon: React.ComponentType<{ className?: string; size?: number }>; label: string; color: string }
 > = {
   office: { icon: Building2, label: "Office", color: "var(--module-assessment)" },
-  business: { icon: BarChart3, label: "Business", color: "#0ea5e9" },
+  business: { icon: BarChart3, label: "Business", color: "var(--module-reading)" },
   finance: { icon: Coins, label: "Finance", color: "var(--warning)" },
-  marketing: { icon: Megaphone, label: "Marketing", color: "#ec4899" },
-  manufacturing: { icon: Factory, label: "Manufacturing", color: "#78716c" },
-  travel: { icon: Plane, label: "Travel", color: "#14b8a6" },
+  marketing: { icon: Megaphone, label: "Marketing", color: "var(--module-review)" },
+  manufacturing: { icon: Factory, label: "Manufacturing", color: "var(--tertiary)" },
+  travel: { icon: Plane, label: "Travel", color: "var(--module-reading)" },
   restaurants: { icon: Utensils, label: "Restaurants", color: "var(--fire)" },
-  health: { icon: Activity, label: "Health", color: "#22c55e" },
-  technology: { icon: Laptop, label: "Technology", color: "#8b5cf6" },
-  general: { icon: BookOpen, label: "General", color: "#64748b" },
+  health: { icon: Activity, label: "Health", color: "var(--success)" },
+  technology: { icon: Laptop, label: "Technology", color: "var(--module-grammar)" },
+  general: { icon: BookOpen, label: "General", color: "var(--text-muted)" },
 };
 
 type Pack = { topic: string; total: number; learned: number };

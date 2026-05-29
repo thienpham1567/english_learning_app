@@ -33,7 +33,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-[900] bg-black/30 backdrop-blur-xs"
+            className="fixed inset-0 z-[900] bg-black/30"
           />
         )}
       </AnimatePresence>
@@ -86,7 +86,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                       {/* Synonyms */}
                       {(sense.synonyms?.length ?? 0) > 0 && (
                         <div className="flex flex-col gap-2">
-                          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-emerald-700 m-0">
+                          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-success m-0">
                             Synonyms
                           </p>
                           <div className="flex flex-wrap gap-1.5">
@@ -95,7 +95,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                                 key={word}
                                 type="button"
                                 onClick={() => handleWordClick(word)}
-                                className="rounded-full bg-emerald-500/5 px-3 py-1 text-[13px] font-bold text-emerald-700 border border-emerald-500/20 cursor-pointer transition-all duration-150 hover:bg-emerald-500/15 hover:border-emerald-500/40"
+                                className="rounded-full bg-success/5 px-3 py-1 text-[13px] font-bold text-success border border-success/20 cursor-pointer transition-all duration-150 hover:bg-success/15 hover:border-success/40"
                               >
                                 {word}
                               </button>
@@ -107,7 +107,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                       {/* Antonyms */}
                       {(sense.antonyms?.length ?? 0) > 0 && (
                         <div className="flex flex-col gap-2">
-                          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-amber-700 m-0">
+                          <p className="text-[10px] font-bold uppercase tracking-[0.16em] text-warning m-0">
                             Antonyms
                           </p>
                           <div className="flex flex-wrap gap-1.5">
@@ -116,7 +116,7 @@ export function ThesaurusSheet({ vocabulary, isOpen, onClose, onWordClick }: Pro
                                 key={word}
                                 type="button"
                                 onClick={() => handleWordClick(word)}
-                                className="rounded-full bg-amber-500/5 px-3 py-1 text-[13px] font-bold text-amber-800 border border-dashed border-amber-500/20 cursor-pointer transition-all duration-150 hover:bg-amber-500/15 hover:border-amber-500/40"
+                                className="rounded-full bg-xp/5 px-3 py-1 text-[13px] font-bold text-warning border border-dashed border-warning/20 cursor-pointer transition-all duration-150 hover:bg-warning/15 hover:border-warning/40"
                               >
                                 {word}
                               </button>

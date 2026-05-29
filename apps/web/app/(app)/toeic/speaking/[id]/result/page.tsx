@@ -71,7 +71,7 @@ function PronunciationSection({ metrics }: { metrics: PronMetrics }) {
           {metrics.lowConfidenceWords.map((w) => (
             <span
               key={w}
-              className="bg-amber-500/15 text-amber-600 py-0.5 px-2 inline-block"
+              className="bg-warning/15 text-warning py-0.5 px-2 inline-block"
               style={{ margin: "2px 4px 2px 0" }}
             >
               {w}
@@ -94,7 +94,7 @@ function PronunciationSection({ metrics }: { metrics: PronMetrics }) {
               {metrics.alignment.missingWords.slice(0, 8).map((w) => (
                 <span
                   key={w}
-                  className="bg-red-500/15 text-red-600 py-0.5 px-2 inline-block"
+                  className="bg-error/15 text-error py-0.5 px-2 inline-block"
                   style={{ margin: "2px 4px 2px 0" }}
                 >
                   {w}
@@ -170,7 +170,7 @@ export default async function SpeakingResultPage({ params }: { params: Promise<{
                   <strong>
                     Q{p.questionNumber} · {TYPE_LABEL[p.type] ?? p.type}
                   </strong>
-                  <span className="bg-blue-500/15 text-blue-600 py-0.5 px-2 rounded-md text-sm font-bold">
+                  <span className="bg-info/15 text-info py-0.5 px-2 rounded-md text-sm font-bold">
                     {r?.rawScore ?? 0} / {p.maxScore}
                   </span>
                 </div>

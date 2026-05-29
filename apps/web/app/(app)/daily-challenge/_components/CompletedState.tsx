@@ -263,7 +263,7 @@ export function CompletedState({
             <span
               className="text-4xl font-black font-mono leading-none tracking-tight"
               style={{
-                color: isGood ? "#ffffff" : "var(--accent)",
+                color: isGood ? "var(--text-on-accent)" : "var(--accent)",
               }}
             >
               {score}
@@ -319,7 +319,7 @@ export function CompletedState({
           onClick={onStartBonus}
           className="w-full rounded-2xl py-4.5 px-5 cursor-pointer flex flex-col sm:flex-row items-center gap-4 bg-surface border-2 border-dashed border-accent shadow-sm text-left group"
         >
-          <div className="w-12 h-12 rounded-xl grid shrink-0 bg-amber-500 place-items-center shadow-sm text-white">
+          <div className="w-12 h-12 rounded-xl grid shrink-0 bg-xp place-items-center shadow-sm text-white">
             <Zap size={20} className="fill-current group-hover:animate-bounce" />
           </div>
           <div className="flex-1">
@@ -349,11 +349,11 @@ export function CompletedState({
         <m.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="w-full rounded-2xl py-4 px-5 flex items-center gap-2.5 text-xs font-black text-amber-600 bg-amber-500/10 border-2 border-amber-500/30 shadow-sm"
+          className="w-full rounded-2xl py-4 px-5 flex items-center gap-2.5 text-xs font-black text-warning bg-warning/10 border-2 border-warning/30 shadow-sm"
         >
           <Zap size={15} className="fill-current animate-pulse" />
           <span>You have completed all bonus questions today!</span>
-          <Star size={12} className="text-amber-500 fill-current ml-1" />
+          <Star size={12} className="text-xp fill-current ml-1" />
         </m.div>
       )}
 
@@ -386,7 +386,7 @@ export function CompletedState({
             </div>
           </Card>
           <Card shadowSize="sm" size="sm" bgType="alt" className="p-3">
-            <div className="text-xl md:text-2xl font-black text-emerald-500 font-mono leading-none">
+            <div className="text-xl md:text-2xl font-black text-success font-mono leading-none">
               {score}/5
             </div>
             <div className="text-[9px] font-extrabold uppercase tracking-wider text-text-muted mt-2 font-display">

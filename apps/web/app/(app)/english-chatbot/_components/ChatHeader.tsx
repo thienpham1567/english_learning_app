@@ -12,14 +12,14 @@ export function ChatHeader({ personaId, isLoading }: Props) {
   const Avatar = persona.avatar;
 
   return (
-    <div className="flex h-14 shrink-0 items-center justify-between border-b-2 border-border bg-chat-surface/60 px-4 md:px-6 backdrop-blur-md z-30">
+    <div className="flex h-14 shrink-0 items-center justify-between border-b-2 border-border bg-chat-surface px-4 md:px-6 z-30">
       <div className="flex items-center gap-3 animate-in fade-in duration-300" key={personaId}>
         <div className="relative">
           <Avatar size={32} />
           {/* Online indicator dot */}
           <div
             className={`absolute -bottom-0.5 -right-0.5 h-2.5 w-2.5 rounded-full border-2 border-chat-bg transition-colors duration-300 ${
-              isLoading ? "bg-accent animate-pulse" : "bg-emerald-500"
+              isLoading ? "bg-accent animate-pulse" : "bg-success"
             }`}
           />
         </div>

@@ -17,12 +17,12 @@ type Props = {
 type Status = "idle" | "loading" | "ok" | "error";
 
 const LEVEL_COLORS: Record<string, string> = {
-  A1: "text-emerald-700 dark:text-emerald-400 border-emerald-500/30 bg-emerald-500/5",
-  A2: "text-blue-700 dark:text-blue-400 border-blue-500/30 bg-blue-500/5",
-  B1: "text-amber-700 dark:text-amber-400 border-amber-500/30 bg-amber-500/5",
-  B2: "text-orange-700 dark:text-orange-400 border-orange-500/30 bg-orange-500/5",
+  A1: "text-success dark:text-success border-success/30 bg-success/5",
+  A2: "text-info dark:text-info border-info/30 bg-info/5",
+  B1: "text-warning dark:text-warning border-warning/30 bg-xp/5",
+  B2: "text-fire dark:text-fire border-fire/30 bg-fire/5",
   C1: "text-purple-700 dark:text-purple-400 border-purple-500/30 bg-purple-500/5",
-  C2: "text-red-700 dark:text-red-400 border-red-500/30 bg-red-500/5",
+  C2: "text-error dark:text-error border-error/30 bg-error/5",
 };
 
 function getTypeLabel(data: Vocabulary): string {
@@ -74,7 +74,7 @@ export function VocabularyDetailSheet({ query, onClose, saved, onToggleSaved }: 
             animate={{ opacity: 0.5 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 z-50 cursor-pointer backdrop-blur-[1px]"
+            className="fixed inset-0 bg-black/60 z-50 cursor-pointer"
           />
 
           {/* Drawer Sheet */}

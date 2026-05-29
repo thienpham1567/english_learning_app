@@ -238,9 +238,9 @@ export function QuestionRunner({
               className="text-[11px] font-black font-mono rounded-md"
               style={{
                 padding: "2px 8px",
-                background: remainingSec < 60 ? "rgba(239, 68, 68, 0.08)" : "var(--surface)",
+                background: remainingSec < 60 ? "color-mix(in srgb, var(--error) 8%, transparent)" : "var(--surface)",
                 color: remainingSec < 60 ? "var(--error)" : "var(--text-secondary)",
-                border: `1px solid ${remainingSec < 60 ? "rgba(239, 68, 68, 0.2)" : "var(--border)"}`,
+                border: `1px solid ${remainingSec < 60 ? "color-mix(in srgb, var(--error) 20%, transparent)" : "var(--border)"}`,
               }}
             >
               {Math.floor(remainingSec / 60)}:{String(remainingSec % 60).padStart(2, "0")}
@@ -377,12 +377,12 @@ export function QuestionRunner({
 
           if (showExplanationNow) {
             if (idx === question.correctIndex) {
-              bg = "rgba(16, 185, 129, 0.08)";
+              bg = "color-mix(in srgb, var(--success) 8%, transparent)";
               border = "1.5px solid var(--success)";
               color = "var(--success)";
-              iconElement = <CheckCircle className="text-emerald-500 text-base" />;
+              iconElement = <CheckCircle className="text-success text-base" />;
             } else if (isPicked) {
-              bg = "rgba(239, 68, 68, 0.08)";
+              bg = "color-mix(in srgb, var(--error) 8%, transparent)";
               border = "1.5px solid var(--error)";
               color = "var(--error)";
               iconElement = <XCircle className="text-destructive text-base" />;
@@ -436,7 +436,7 @@ export function QuestionRunner({
           style={{ border: "1.5px solid var(--border)", fontSize: 13.5 }}
         >
           <div className="flex items-center gap-1.5 font-black text-text-primary mb-1.5">
-            <CheckCircle className="text-emerald-500" />
+            <CheckCircle className="text-success" />
             <span>Detailed Explanation:</span>
           </div>
           <p className="m-0">{question.explanationVi}</p>
@@ -458,7 +458,7 @@ export function QuestionRunner({
           style={{
             display: "inline-flex",
             border: "1.5px solid var(--border)",
-            background: isFlagged ? "rgba(239, 68, 68, 0.08)" : "var(--surface)",
+            background: isFlagged ? "color-mix(in srgb, var(--error) 8%, transparent)" : "var(--surface)",
             color: isFlagged ? "var(--error)" : "var(--text-secondary)",
             cursor: attemptId ? "pointer" : "not-allowed",
             transition: "all 0.15s",

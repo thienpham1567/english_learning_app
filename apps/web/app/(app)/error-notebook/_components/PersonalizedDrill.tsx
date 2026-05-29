@@ -137,7 +137,7 @@ export function PersonalizedDrill() {
             <button
               type="button"
               onClick={generateDrill}
-              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-[1.5px] border-accent bg-accent text-text-on-accent cursor-pointer text-[13px] font-bold"
+              className="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-full border-2 border-accent bg-accent text-text-on-accent cursor-pointer text-[13px] font-bold"
             >
               <RefreshCw className="h-3.5 w-3.5" /> Generate New Drill
             </button>
@@ -234,7 +234,7 @@ export function PersonalizedDrill() {
                               ? "var(--error)"
                               : "var(--border)"
                           : "var(--border)",
-                        color: answered && (isCorrect || isSelected) ? "#fff" : "var(--text-muted)",
+                        color: answered && (isCorrect || isSelected) ? "var(--text-on-accent)" : "var(--text-muted)",
                       }}
                     >
                       {answered ? (

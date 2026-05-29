@@ -42,10 +42,10 @@ export function ResultSummary({
               padding: "2px 10px",
               borderRadius: 20,
               background:
-                percentage >= 70 ? "rgba(16, 185, 129, 0.08)" : "rgba(245, 158, 11, 0.08)",
+                percentage >= 70 ? "color-mix(in srgb, var(--success) 8%, transparent)" : "color-mix(in srgb, var(--warning) 8%, transparent)",
               color: percentage >= 70 ? "var(--success)" : "var(--warning)",
               fontSize: 12.5,
-              border: `1px solid ${percentage >= 70 ? "rgba(16, 185, 129, 0.2)" : "rgba(245, 158, 11, 0.2)"}`,
+              border: `1px solid ${percentage >= 70 ? "color-mix(in srgb, var(--success) 20%, transparent)" : "color-mix(in srgb, var(--warning) 20%, transparent)"}`,
             }}
           >
             {percentage >= 70 ? <CheckCircle size={12} /> : <AlertTriangle size={12} />}
@@ -126,10 +126,10 @@ export function ResultSummary({
                             fontSize: 12.5,
                             borderRadius: "var(--radius-md)",
                             background: isCorrect
-                              ? "rgba(16, 185, 129, 0.06)"
-                              : "rgba(239, 68, 68, 0.06)",
+                              ? "color-mix(in srgb, var(--success) 6%, transparent)"
+                              : "color-mix(in srgb, var(--error) 6%, transparent)",
                             color: isCorrect ? "var(--success)" : "var(--error)",
-                            border: `1px solid ${isCorrect ? "rgba(16, 185, 129, 0.15)" : "rgba(239, 68, 68, 0.15)"}`,
+                            border: `1px solid ${isCorrect ? "color-mix(in srgb, var(--success) 15%, transparent)" : "color-mix(in srgb, var(--error) 15%, transparent)"}`,
                           }}
                         >
                           <span style={{ opacity: 0.8 }}>{String.fromCharCode(65 + oIdx)}.</span>
@@ -164,10 +164,10 @@ export function ResultSummary({
         </div>
       ) : (
         <div
-          className="text-center rounded-xl text-emerald-500"
+          className="text-center rounded-xl text-success"
           style={{
             padding: "32px 20px",
-            background: "rgba(16, 185, 129, 0.06)",
+            background: "color-mix(in srgb, var(--success) 6%, transparent)",
             border: "1.5px dashed var(--success)",
           }}
         >

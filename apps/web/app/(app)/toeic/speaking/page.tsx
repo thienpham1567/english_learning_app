@@ -60,10 +60,10 @@ export default async function ToeicSpeakingPage() {
                     Respond using Information · Q11 Opinion
                   </CardDescription>
                   <div className="flex flex-wrap gap-1.5 mt-3">
-                    <span className="text-[10px] font-extrabold rounded-lg bg-amber-500/10 text-amber-600 border border-amber-500/20 px-2 py-0.5">
+                    <span className="text-[10px] font-extrabold rounded-lg bg-warning/10 text-warning border border-warning/20 px-2 py-0.5">
                       Requires microphone
                     </span>
-                    <span className="text-[10px] font-extrabold rounded-lg bg-emerald-500/10 text-emerald-600 border border-emerald-500/20 px-2 py-0.5">
+                    <span className="text-[10px] font-extrabold rounded-lg bg-success/10 text-success border border-success/20 px-2 py-0.5">
                       Whisper STT + Gemini grading
                     </span>
                   </div>

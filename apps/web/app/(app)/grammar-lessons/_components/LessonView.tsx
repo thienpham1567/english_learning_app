@@ -498,8 +498,8 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
               style={{
                 padding: 20,
                 background:
-                  "linear-gradient(135deg, rgba(245, 158, 11, 0.04), rgba(239, 68, 68, 0.02))",
-                border: "1px solid rgba(245, 158, 11, 0.15)",
+                  "linear-gradient(135deg, color-mix(in srgb, var(--warning) 4%, transparent), color-mix(in srgb, var(--error) 2%, transparent))",
+                border: "1px solid color-mix(in srgb, var(--warning) 15%, transparent)",
                 boxShadow: "var(--shadow-sm)",
               }}
             >
@@ -570,7 +570,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                       <div
                         style={{
                           padding: "10px 14px",
-                          background: "rgba(59, 130, 246, 0.06)",
+                          background: "color-mix(in srgb, var(--info) 6%, transparent)",
                           borderRight: "1px solid var(--border)",
                         }}
                       >
@@ -587,7 +587,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                           {pair.exampleA}
                         </p>
                       </div>
-                      <div style={{ padding: "10px 14px", background: "rgba(139, 92, 246, 0.06)" }}>
+                      <div style={{ padding: "10px 14px", background: "color-mix(in srgb, var(--module-grammar) 6%, transparent)" }}>
                         <div className="text-xs font-extrabold text-accent-active mb-1">
                           {pair.structureB}
                         </div>
@@ -697,7 +697,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   className="rounded-lg"
                   style={{
                     padding: 14,
-                    background: "rgba(239, 68, 68, 0.03)",
+                    background: "color-mix(in srgb, var(--error) 3%, transparent)",
                     border: "1px solid color-mix(in srgb, var(--error) 15%, var(--border))",
                     marginBottom: idx < lesson.commonMistakes.length - 1 ? 10 : 0,
                   }}
@@ -710,7 +710,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                     <span style={{ textDecoration: "line-through" }}>{mItem.wrong}</span>
                   </div>
                   <div
-                    className="flex items-start gap-1.5 font-bold text-emerald-500 mt-1.5"
+                    className="flex items-start gap-1.5 font-bold text-success mt-1.5"
                     style={{ fontSize: 13.5 }}
                   >
                     <CircleCheckBig style={{ marginTop: 3 }} />
@@ -839,7 +839,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   background: "linear-gradient(135deg, var(--fire), var(--xp))",
                   padding: "6px 18px",
                   color: "var(--text-on-accent)",
-                  boxShadow: "0 4px 14px rgba(245, 158, 11, 0.35)",
+                  boxShadow: "0 4px 14px color-mix(in srgb, var(--xp) 35%, transparent)",
                 }}
               >
                 <Flame /> {combo} COMBO! 🔥
@@ -900,7 +900,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   display: "inline-flex",
                   borderRadius: "var(--radius-md)",
                   border: "1px solid color-mix(in srgb, var(--warning) 30%, var(--border))",
-                  background: "rgba(245, 158, 11, 0.05)",
+                  background: "color-mix(in srgb, var(--warning) 5%, transparent)",
                   color: "var(--warning)",
                 }}
               >
@@ -915,7 +915,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                 className="rounded-lg mb-4 text-[13px] text-text-secondary font-medium"
                 style={{
                   padding: "10px 14px",
-                  background: "rgba(245, 158, 11, 0.05)",
+                  background: "color-mix(in srgb, var(--warning) 5%, transparent)",
                   border: "1px solid color-mix(in srgb, var(--warning) 20%, var(--border))",
                 }}
               >
@@ -937,11 +937,11 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
 
                   if (revealed) {
                     if (isCorrect) {
-                      bg = "rgba(16, 185, 129, 0.08)";
+                      bg = "color-mix(in srgb, var(--success) 8%, transparent)";
                       border = "1.5px solid var(--success)";
                       color = "var(--success)";
                     } else if (isSelected) {
-                      bg = "rgba(239, 68, 68, 0.08)";
+                      bg = "color-mix(in srgb, var(--error) 8%, transparent)";
                       border = "1.5px solid var(--error)";
                       color = "var(--error)";
                     } else {
@@ -1062,18 +1062,18 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                       currentExercise.answer,
                       currentExercise.acceptedAnswers,
                     )
-                      ? "rgba(16, 185, 129, 0.06)"
-                      : "rgba(239, 68, 68, 0.06)",
+                      ? "color-mix(in srgb, var(--success) 6%, transparent)"
+                      : "color-mix(in srgb, var(--error) 6%, transparent)",
                     fontSize: 13.5,
                   }}
                 >
                   <strong className="text-text-secondary">Your Answer:</strong> {typedAnswer}
                 </div>
                 <div
-                  className="rounded-lg text-emerald-500 font-bold"
+                  className="rounded-lg text-success font-bold"
                   style={{
                     padding: "12px 14px",
-                    background: "rgba(16, 185, 129, 0.08)",
+                    background: "color-mix(in srgb, var(--success) 8%, transparent)",
                     border: "1px solid var(--success)",
                     fontSize: 13.5,
                   }}
@@ -1208,7 +1208,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                   Topic: <span className="text-accent-active font-bold">{lesson.title}</span>
                   <br />
                   Accuracy Score:{" "}
-                  <strong className="text-emerald-500">
+                  <strong className="text-success">
                     {correctCount}/{lesson.exercises.length}
                   </strong>{" "}
                   ({scorePct}%)
@@ -1251,7 +1251,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                     >
                       <a
                         href={`/roadmap/week/${mapping.weekNumber}`}
-                        className="no-underline inline-flex items-center gap-2 rounded-xl border-2 border-emerald-500/30 bg-emerald-500/8 px-4 py-2.5 text-xs font-bold text-emerald-600 hover:bg-emerald-500/12 transition-colors"
+                        className="no-underline inline-flex items-center gap-2 rounded-xl border-2 border-success/30 bg-success/8 px-4 py-2.5 text-xs font-bold text-success hover:bg-success/12 transition-colors"
                       >
                         <CircleCheckBig size={14} />
                         <span>Roadmap Week {mapping.weekNumber} — unit auto-completed ✓</span>
@@ -1268,7 +1268,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                       className="flex items-center gap-2 w-full py-3 px-4 rounded-lg cursor-pointer text-[13px] font-extrabold text-destructive"
                       style={{
                         border: "1.5px solid color-mix(in srgb, var(--error) 20%, var(--border))",
-                        background: "rgba(239, 68, 68, 0.04)",
+                        background: "color-mix(in srgb, var(--error) 4%, transparent)",
                       }}
                     >
                       <AlertTriangle /> Review {wrongAnswers.length} saved incorrect items ·{" "}
@@ -1299,7 +1299,7 @@ export function LessonView({ topicId, topicTitle, level, examMode, onBack, onCom
                               <XCircle /> Your Choice: {wItem.userAnswer}
                             </div>
                             <div
-                              className="flex items-center gap-1.5 text-emerald-500 font-bold mt-1"
+                              className="flex items-center gap-1.5 text-success font-bold mt-1"
                               style={{ fontSize: 12.5 }}
                             >
                               <CircleCheckBig /> Correct Answer: {wItem.correctAnswer}
