@@ -26,6 +26,7 @@ import {
 import Link from "next/link";
 import { useMemo } from "react";
 import { Card } from "@/components/ui/card";
+import { getToeicImpact } from "@/lib/toeic-impact-map";
 
 type Props = {
   errors: ErrorPatternInput[];
@@ -97,6 +98,21 @@ export function ErrorPatternSummary({ errors }: Props) {
                     {pattern.totalCount} errors · {pattern.unresolvedCount} unresolved
                     {pattern.recentCount > 0 && ` · ${pattern.recentCount} recent`}
                   </div>
+                  {/* TOEIC Impact Badge */}
+                  {(() => {
+                    const impact = getToeicImpact(pattern.category.key);
+                    if (!impact) return null;
+                    return (
+                      <div className="flex items-center gap-1.5 mt-1.5">
+                        <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-lg bg-accent/8 text-accent border-2 border-accent/15">
+                          📈 ~{impact.estimatedPoints} pts
+                        </span>
+                        <span className="text-[9px] text-text-muted font-medium">
+                          {impact.parts.join(", ")}
+                        </span>
+                      </div>
+                    );
+                  })()}
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
                   {pattern.unresolvedCount > 0 && (

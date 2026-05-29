@@ -13,6 +13,7 @@ import * as m from "motion/react-client";
 import { useMemo } from "react";
 import type { ErrorEntry } from "../_types/types";
 import { MODULE_ICONS, MODULE_LABELS } from "../_types/types";
+import { BatchConvertToFlashcards } from "./BatchConvertToFlashcards";
 import { ErrorPatternSummary } from "./ErrorPatternSummary";
 import { ErrorTrendSection } from "./ErrorTrendSection";
 import { Card } from "@/components/ui/card";
@@ -257,6 +258,13 @@ export function OverviewTab({
 
       {/* ─── Error Patterns ─── */}
       {errors.length > 0 && <ErrorPatternSummary errors={errors} />}
+
+      {/* ─── Batch Convert to Flashcards ─── */}
+      {unresolvedCount > 0 && (
+        <BatchConvertToFlashcards
+          errorIds={errors.filter((e) => !e.isResolved).map((e) => e.id)}
+        />
+      )}
 
       {/* ─── Error Trends ─── */}
       {errors.length > 0 && <ErrorTrendSection errors={errors} />}

@@ -29,6 +29,7 @@ import {
   GraduationCap,
 } from "lucide-react";
 import { useMemo } from "react";
+import { Sparkline, computeWeeklyData } from "@/components/charts/Sparkline";
 
 const CATEGORY_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   tense: Clock,
@@ -83,10 +84,27 @@ const DIRECTION_CONFIG: Record<
   },
 };
 
-function TrendRow({ trend }: { trend: CategoryTrend }) {
+function TrendRow({ trend, errors }: { trend: CategoryTrend; errors: TrendInput[] }) {
   const config = DIRECTION_CONFIG[trend.direction]!;
   const pctResolved = Math.round(trend.resolutionRate * 100);
   const IconComponent = CATEGORY_ICONS[trend.category.key] || HelpCircle;
+
+  // Compute weekly sparkline data for this category
+  const sparkData = useMemo(() => {
+    const key = trend.category.key;
+    const categoryErrors = errors.filter(
+      (e) => e.grammarTopic === key || e.sourceModule === key,
+    );
+    const timestamps = categoryErrors.map((e) => e.createdAt);
+    return computeWeeklyData(timestamps, 6);
+  }, [errors, trend.category.key]);
+
+  const sparkColor =
+    trend.direction === "improved"
+      ? "var(--success)"
+      : trend.direction === "worsened"
+        ? "var(--error)"
+        : "var(--text-muted)";
 
   return (
     <div className="flex items-center gap-3 px-3.5 py-2.5 rounded-xl bg-surface border-2 border-border transition-all duration-150 hover:shadow-sm">
@@ -108,6 +126,13 @@ function TrendRow({ trend }: { trend: CategoryTrend }) {
         </div>
         <div className="text-[11px] text-text-muted leading-snug mt-0.5">{trend.explanation}</div>
       </div>
+
+      {/* Sparkline — 6-week trend */}
+      {sparkData.some((v) => v > 0) && (
+        <div className="shrink-0 hidden sm:block">
+          <Sparkline data={sparkData} width={56} height={18} color={sparkColor} />
+        </div>
+      )}
 
       <div className="flex flex-col items-end gap-1 shrink-0">
         <span
@@ -180,7 +205,7 @@ export function ErrorTrendSection({ errors }: Props) {
             </div>
             <div className="flex flex-col gap-1.5">
               {section.items.slice(0, 3).map((trend) => (
-                <TrendRow key={trend.category.key} trend={trend} />
+                <TrendRow key={trend.category.key} trend={trend} errors={errors} />
               ))}
             </div>
           </div>

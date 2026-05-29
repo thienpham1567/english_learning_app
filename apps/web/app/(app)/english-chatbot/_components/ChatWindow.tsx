@@ -9,6 +9,7 @@ import type { PageMessage } from "@/app/(app)/english-chatbot/_components/ChatMe
 import { ChatMessage } from "@/app/(app)/english-chatbot/_components/ChatMessage";
 import { EmptyState } from "@/app/(app)/english-chatbot/_components/EmptyState";
 import { PronunciationFeedback } from "@/app/(app)/english-chatbot/_components/PronunciationFeedback";
+import { SessionSummary } from "@/app/(app)/english-chatbot/_components/SessionSummary";
 import { TypingIndicator } from "@/app/(app)/english-chatbot/_components/TypingIndicator";
 
 import { useChatMessages } from "@/hooks/useChatMessages";
@@ -234,6 +235,14 @@ export function ChatWindow({ conversationId }: ChatWindowProps) {
                 </div>
               </div>
             </div>
+          )}
+
+          {/* Session Report Card — appears after 5+ exchanges */}
+          {!chat.isLoading && hasMessages && (
+            <SessionSummary
+              conversationId={conversationId}
+              messageCount={chat.messages.length}
+            />
           )}
 
           <div ref={scroll.bottomRef} />

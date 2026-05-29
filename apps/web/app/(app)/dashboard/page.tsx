@@ -28,6 +28,9 @@ import { useEffect, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { SectionHeader } from "@/components/ui/section-header";
+import { LevelUpOverlay, useLevelUpDetection } from "@/components/celebrations/LevelUpOverlay";
+import { ScoreCounter } from "@/components/celebrations/ScoreCounter";
+import { useStreakCelebration } from "@/components/celebrations/StreakCelebration";
 import { HeatmapCalendar } from "@/app/(app)/dashboard/_components/HeatmapCalendar";
 import { WeeklyReport } from "@/app/(app)/dashboard/_components/WeeklyReport";
 import {
@@ -39,6 +42,7 @@ import { type DashboardData, useDashboard } from "@/hooks/useDashboard";
 import { api } from "@/lib/api-client";
 import { useRoadmap } from "@/lib/curriculum/roadmap-context";
 import { getWeek } from "@/lib/curriculum/data";
+import { getMotivationalMessage, getSmartGreeting } from "@/lib/motivational-messages";
 
 // ── Types ────────────────────────────────────────────────────────
 type PredictedScore = {
@@ -75,18 +79,6 @@ export default function DashboardPage() {
   const { state: planState } = useDailyStudyPlan({ budget: "20" });
   const [score, setScore] = useState<PredictedScore | null>(null);
   const [scoreLoading, setScoreLoading] = useState(true);
-  const [greeting, setGreeting] = useState("Hello");
-  const [quote, setQuote] = useState("Every step counts on your TOEIC journey!");
-
-  const quotes = [
-    "Consistency is the key to mastering English. Keep going! 🚀",
-    "Focus on your vocabulary today—it is the foundation of reading success. 💡",
-    "Mistakes are opportunities. Review your Error Book! 📝",
-    "Ready to boost your score? Complete today's study plan! 🎯",
-    "Practice listening daily to capture every accent. 🎧",
-    "Grammar roadmap is your guide. Master the rules step-by-step! 🗺️",
-    "Your future self will thank you for studying English today. ✨",
-  ];
 
   useEffect(() => {
     let cancelled = false;
@@ -104,18 +96,22 @@ export default function DashboardPage() {
     };
   }, []);
 
-  useEffect(() => {
-    const hr = new Date().getHours();
-    if (hr < 12) setGreeting("Good morning");
-    else if (hr < 18) setGreeting("Good afternoon");
-    else setGreeting("Good evening");
-
-    const dayIndex = new Date().getDay();
-    setQuote(quotes[dayIndex % quotes.length]);
-  }, []);
-
   const dash: DashboardData | null = dashState.status === "ready" ? dashState.data : null;
   const planReady = planState.status === "ready" ? planState : null;
+
+  // ── Premium: Smart greeting & motivational message ──
+  const greeting = getSmartGreeting(dash?.streak.currentStreak ?? 0);
+  const quote = getMotivationalMessage(dash, score, planState);
+
+  // ── Premium: Streak celebration (confetti on milestones) ──
+  useStreakCelebration(dash?.streak.currentStreak);
+
+  // ── Premium: Level-up detection ──
+  const stats = planReady?.stats ?? null;
+  const { showLevelUp, levelUpData, closeLevelUp } = useLevelUpDetection(
+    stats?.levelNumber,
+    stats?.totalXP,
+  );
 
   const formattedDate = new Date().toLocaleDateString("en-US", {
     weekday: "long",
@@ -148,10 +144,10 @@ export default function DashboardPage() {
                   {formattedDate}
                 </span>
                 <h1 className="m-0 text-2xl md:text-3xl font-black font-display text-ink tracking-tight leading-none">
-                  {greeting}, TOEIC Learner!
+                  {greeting}!
                 </h1>
-                <p className="m-0 mt-2 text-xs md:text-sm text-text-secondary font-semibold max-w-xl italic">
-                  "{quote}"
+                <p className="m-0 mt-2 text-xs md:text-sm text-text-secondary font-semibold max-w-xl leading-relaxed">
+                  {quote}
                 </p>
               </div>
             </div>
@@ -185,7 +181,7 @@ export default function DashboardPage() {
           <StatCard
             icon={<Zap className="h-5 w-5 text-xp fill-current" />}
             label="Total XP"
-            value={dash ? `${dash.totalXP.toLocaleString()}` : "—"}
+            value={dash ? `${dash.totalXP.toLocaleString()} XP` : "—"}
             sub="Experience points"
             loading={!dash}
             iconBg="bg-warning/10 border-warning/20"
@@ -357,6 +353,13 @@ export default function DashboardPage() {
           )}
         </div>
       </div>
+      {/* ── Premium: Level-Up Celebration Overlay ── */}
+      <LevelUpOverlay
+        isOpen={showLevelUp}
+        onClose={closeLevelUp}
+        newLevel={levelUpData.level}
+        totalXP={levelUpData.xp}
+      />
     </div>
   );
 }
